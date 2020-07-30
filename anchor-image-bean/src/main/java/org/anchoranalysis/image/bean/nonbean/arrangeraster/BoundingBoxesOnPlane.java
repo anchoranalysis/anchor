@@ -32,19 +32,24 @@ import java.util.List;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 
-// Describes a set of bounding boxes on top of a plane
-public class BBoxSetOnPlane implements Iterable<BoundingBox> {
+/**
+ * Describes a set of bounding boxes on top of a plane
+ * 
+ * @author Owen Feehan
+ *
+ */
+public class BoundingBoxesOnPlane implements Iterable<BoundingBox> {
 
     private Extent extent;
 
     private List<BoundingBox> list = new ArrayList<>();
 
-    public BBoxSetOnPlane(Extent extent) {
+    public BoundingBoxesOnPlane(Extent extent) {
         super();
         this.extent = extent;
     }
 
-    public BBoxSetOnPlane(Extent extent, BoundingBox bbox) {
+    public BoundingBoxesOnPlane(Extent extent, BoundingBox bbox) {
         this(extent);
         add(bbox);
     }

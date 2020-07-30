@@ -40,9 +40,9 @@ class BufferArrList {
 
     public void init(NRGStack stack, int z) {
 
-        for (int c = 0; c < stack.getNumChnl(); c++) {
+        for (int c = 0; c < stack.getNumberChannels(); c++) {
             ByteBuffer bb =
-                    stack.getChnl(c)
+                    stack.getChannel(c)
                             .getVoxelBox()
                             .asByte()
                             .getPlaneAccess()

@@ -65,7 +65,7 @@ public abstract class ChannelConverter<T extends Buffer> {
 
         for (Channel chnl : stackIn) {
             try {
-                stackOut.addChnl(convert(chnl, changeExisting));
+                stackOut.addChannel(convert(chnl, changeExisting));
             } catch (IncorrectImageSizeException e) {
                 // Should never happen as sizes are correct in the incoming stack
                 assert false;

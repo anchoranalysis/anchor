@@ -71,7 +71,7 @@ public class ExtractedObjectGenerator extends RasterGenerator
         Stack chnlExtracted = chnlGenerator.getGenerator().generate();
 
         if (mip) {
-            chnlExtracted = chnlExtracted.maxIntensityProj();
+            chnlExtracted = chnlExtracted.maximumIntensityProjection();
         }
 
         // We apply the generator

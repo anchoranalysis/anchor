@@ -30,10 +30,10 @@ import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.image.channel.Channel;
 
-public interface ChnlGetter {
+public interface ChannelGetter {
 
-    boolean hasChnl(String chnlName);
+    boolean hasChannel(String channelName);
 
-    Channel getChnl(String chnlName, int t, ProgressReporter progressReporter)
+    Channel getChannel(String channelName, int t, ProgressReporter progressReporter)
             throws GetOperationFailedException;
 }

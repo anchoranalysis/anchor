@@ -50,7 +50,7 @@ import org.anchoranalysis.image.stack.TimeSequence;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class NamedChnlCollectionForSeriesMap implements NamedChnlCollectionForSeries {
+public class NamedChnlCollectionForSeriesMap implements NamedChannelsForSeries {
 
     // END REQUIRED ARGUMENTS
     // Null until the first time we request a channel
@@ -63,12 +63,12 @@ public class NamedChnlCollectionForSeriesMap implements NamedChnlCollectionForSe
     
     @Override
     public ImageDimensions dimensions() throws RasterIOException {
-        return openedRaster.dim(seriesNum);
+        return openedRaster.dimensionsForSeries(seriesNum);
     }
 
     // The outputManager is in case we want to do any debugging
     @Override
-    public Channel getChnl(String chnlName, int t, ProgressReporter progressReporter)
+    public Channel getChannel(String chnlName, int t, ProgressReporter progressReporter)
             throws GetOperationFailedException {
 
         int index = chnlMap.get(chnlName);
@@ -80,15 +80,15 @@ public class NamedChnlCollectionForSeriesMap implements NamedChnlCollectionForSe
         }
 
         try {
-            Stack stack = createTs(progressReporter).get(t);
+            Stack stack = createTimeSeries(progressReporter).get(t);
     
-            if (index >= stack.getNumChnl()) {
+            if (index >= stack.getNumberChannels()) {
                 throw new GetOperationFailedException(
                     chnlName,
                     String.format("Stack does not have a channel corresponding to '%s'", chnlName));
             }
     
-            return stack.getChnl(chnlMap.getException(chnlName));
+            return stack.getChannel(chnlMap.getException(chnlName));
             
         } catch( OperationFailedException e) {
             throw new GetOperationFailedException(chnlName, e);
@@ -97,7 +97,7 @@ public class NamedChnlCollectionForSeriesMap implements NamedChnlCollectionForSe
 
     // The outputManager is in case we want to do any debugging
     @Override
-    public Optional<Channel> getChnlOrNull(
+    public Optional<Channel> getChannelOptional(
             String chnlName, int t, ProgressReporter progressReporter)
             throws GetOperationFailedException {
 
@@ -107,13 +107,13 @@ public class NamedChnlCollectionForSeriesMap implements NamedChnlCollectionForSe
         }
 
         try {
-            Stack stack = createTs(progressReporter).get(t);
+            Stack stack = createTimeSeries(progressReporter).get(t);
     
-            if (index >= stack.getNumChnl()) {
+            if (index >= stack.getNumberChannels()) {
                 return Optional.empty();
             }
     
-            return Optional.of(stack.getChnl(index));
+            return Optional.of(stack.getChannel(index));
         } catch (OperationFailedException e) {
             throw new GetOperationFailedException(chnlName, e);
         }
@@ -122,24 +122,24 @@ public class NamedChnlCollectionForSeriesMap implements NamedChnlCollectionForSe
     @Override
     public int sizeT(ProgressReporter progressReporter) throws RasterIOException {
         try {
-            return createTs(progressReporter).size();
+            return createTimeSeries(progressReporter).size();
         } catch (OperationFailedException e) {
             throw new RasterIOException(e);
         }
     }
 
     @Override
-    public Set<String> chnlNames() {
+    public Set<String> channelNames() {
         return chnlMap.keySet();
     }
 
     @Override
-    public boolean hasChnl(String chnlName) {
+    public boolean hasChannel(String chnlName) {
         return chnlMap.keySet().contains(chnlName);
     }
 
     @Override
-    public void addAsSeparateChnls(
+    public void addAsSeparateChannels(
             NamedImgStackCollection stackCollection, int t, ProgressReporter progressReporter)
             throws OperationFailedException {
 
@@ -149,7 +149,7 @@ public class NamedChnlCollectionForSeriesMap implements NamedChnlCollectionForSe
 
                 // Populate our stack from all the channels
                 for (String chnlName : chnlMap.keySet()) {
-                    Channel image = getChnl(chnlName, t, new ProgressReporterOneOfMany(prm));
+                    Channel image = getChannel(chnlName, t, new ProgressReporterOneOfMany(prm));
                     stackCollection.addImageStack(chnlName, new Stack(image));
                     prm.incrWorker();
                 }
@@ -163,7 +163,7 @@ public class NamedChnlCollectionForSeriesMap implements NamedChnlCollectionForSe
     }
 
     @Override
-    public void addAsSeparateChnls(NamedProviderStore<TimeSequence> stackCollection, final int t)
+    public void addAsSeparateChannels(NamedProviderStore<TimeSequence> stackCollection, final int t)
             throws OperationFailedException {
         // Populate our stack from all the channels
         for (final String chnlName : chnlMap.keySet()) {
@@ -175,11 +175,11 @@ public class NamedChnlCollectionForSeriesMap implements NamedChnlCollectionForSe
     }
 
     @Override
-    public Operation<Stack, OperationFailedException> allChnlsAsStack(int t) {
+    public Operation<Stack, OperationFailedException> allChannelsAsStack(int t) {
         return new WrapOperationAsCached<>(() -> stackForAllChnls(t));
     }
 
-    private TimeSequence createTs(ProgressReporter progressReporter)
+    private TimeSequence createTimeSeries(ProgressReporter progressReporter)
             throws OperationFailedException {
         if (ts == null) {
             try {
@@ -196,7 +196,7 @@ public class NamedChnlCollectionForSeriesMap implements NamedChnlCollectionForSe
 
         for (ImgChnlMapEntry entry : chnlMap.entryCollection()) {
             try {
-                out.addChnl(getChnl(entry.getName(), t, ProgressReporterNull.get()));
+                out.addChannel(getChannel(entry.getName(), t, ProgressReporterNull.get()));
             } catch (IncorrectImageSizeException | GetOperationFailedException e) {
                 throw new OperationFailedException(e);
             }
@@ -208,7 +208,7 @@ public class NamedChnlCollectionForSeriesMap implements NamedChnlCollectionForSe
     private TimeSequence extractChnlAsTimeSequence(String chnlName, int t)
             throws OperationFailedException {
         try {
-            Channel image = getChnl(chnlName, t, ProgressReporterNull.get());
+            Channel image = getChannel(chnlName, t, ProgressReporterNull.get());
             return new TimeSequence(new Stack(image));
         } catch (GetOperationFailedException e) {
             throw new OperationFailedException(e);

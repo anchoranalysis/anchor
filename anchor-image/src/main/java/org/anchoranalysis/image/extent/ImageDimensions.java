@@ -51,6 +51,11 @@ public final class ImageDimensions implements Serializable {
     private final Extent extent;
 
     /** Construct with an explicit extent and default resolution (1.0 for each dimension) */
+    public ImageDimensions(int x, int y, int z) {
+        this( new Extent(x,y,z) );
+    }
+    
+    /** Construct with an explicit extent and default resolution (1.0 for each dimension) */
     public ImageDimensions(Extent extent) {
         this(extent, new ImageResolution());
     }

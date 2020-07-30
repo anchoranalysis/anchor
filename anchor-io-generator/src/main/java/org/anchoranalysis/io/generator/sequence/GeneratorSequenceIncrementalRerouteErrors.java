@@ -28,18 +28,13 @@ package org.anchoranalysis.io.generator.sequence;
 
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import lombok.AllArgsConstructor;
 
+@AllArgsConstructor
 public class GeneratorSequenceIncrementalRerouteErrors<T> {
 
     private GeneratorSequenceIncremental<T> delegate;
     private ErrorReporter errorReporter;
-
-    public GeneratorSequenceIncrementalRerouteErrors(
-            GeneratorSequenceIncremental<T> delegate, ErrorReporter errorReporter) {
-        super();
-        this.delegate = delegate;
-        this.errorReporter = errorReporter;
-    }
 
     public void start() {
         try {

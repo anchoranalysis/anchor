@@ -27,7 +27,7 @@
 package org.anchoranalysis.image.bean.arrangeraster;
 
 import java.util.List;
-import org.anchoranalysis.image.bean.nonbean.arrangeraster.BBoxSetOnPlane;
+import org.anchoranalysis.image.bean.nonbean.arrangeraster.BoundingBoxesOnPlane;
 import org.anchoranalysis.image.bean.nonbean.arrangeraster.TableItemArrangement;
 
 class MaxWidthHeight {
@@ -38,7 +38,7 @@ class MaxWidthHeight {
     private int totalWidth;
     private int maxZ;
 
-    public MaxWidthHeight(TableItemArrangement<BBoxSetOnPlane> firstGeneratedTable) {
+    public MaxWidthHeight(TableItemArrangement<BoundingBoxesOnPlane> firstGeneratedTable) {
 
         // We calculate a max width for every column
         rowMaxHeight = new int[firstGeneratedTable.getNumRowsUsed()];
@@ -48,7 +48,7 @@ class MaxWidthHeight {
         maxZ = 0;
 
         for (int i = 0; i < firstGeneratedTable.getNumRowsUsed(); i++) {
-            List<BBoxSetOnPlane> rowList = firstGeneratedTable.getRow(i);
+            List<BoundingBoxesOnPlane> rowList = firstGeneratedTable.getRow(i);
             int height = getMaxHeightFromList(rowList);
             rowMaxHeight[i] = height;
             totalHeight += height;
@@ -56,7 +56,7 @@ class MaxWidthHeight {
         }
 
         for (int i = 0; i < firstGeneratedTable.getNumColsUsed(); i++) {
-            List<BBoxSetOnPlane> colList = firstGeneratedTable.getCol(i);
+            List<BoundingBoxesOnPlane> colList = firstGeneratedTable.getCol(i);
             int width = getMaxWidthFromList(colList);
             colMaxWidth[i] = width;
             totalWidth += width;
@@ -96,24 +96,24 @@ class MaxWidthHeight {
         return totalHeight;
     }
 
-    private static int getMaxWidthFromList(List<BBoxSetOnPlane> list) {
+    private static int getMaxWidthFromList(List<BoundingBoxesOnPlane> list) {
         // Assumes dim are the same for all channels
 
         int max = -1;
 
-        for (BBoxSetOnPlane item : list) {
+        for (BoundingBoxesOnPlane item : list) {
             max = Math.max(max, item.getExtent().getX());
         }
 
         return max;
     }
 
-    private static int getMaxHeightFromList(List<BBoxSetOnPlane> list) {
+    private static int getMaxHeightFromList(List<BoundingBoxesOnPlane> list) {
         // Assumes dim are the same for all channels
 
         int max = -1;
 
-        for (BBoxSetOnPlane item : list) {
+        for (BoundingBoxesOnPlane item : list) {
             assert (item != null);
             max = Math.max(max, item.getExtent().getY());
         }
@@ -121,12 +121,12 @@ class MaxWidthHeight {
         return max;
     }
 
-    private static int getMaxZFromList(List<BBoxSetOnPlane> list) {
+    private static int getMaxZFromList(List<BoundingBoxesOnPlane> list) {
         // Assumes dim are the same for all channels
 
         int max = -1;
 
-        for (BBoxSetOnPlane item : list) {
+        for (BoundingBoxesOnPlane item : list) {
             assert (item != null);
             max = Math.max(max, item.getExtent().getZ());
         }

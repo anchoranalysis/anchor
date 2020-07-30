@@ -40,14 +40,14 @@ import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 
 public class RasterArranger {
 
-    private BBoxSetOnPlane bboxSetOnPlane;
+    private BoundingBoxesOnPlane boundingBoxes;
     private ImageDimensions dimensions;
 
     public void init(ArrangeRaster arrangeRaster, List<RGBStack> list) throws InitException {
 
         Iterator<RGBStack> rasterIterator = list.iterator();
         try {
-            this.bboxSetOnPlane = arrangeRaster.createBBoxSetOnPlane(rasterIterator);
+            this.boundingBoxes = arrangeRaster.createBoundingBoxesOnPlane(rasterIterator);
         } catch (ArrangeRasterException e) {
             throw new InitException(e);
         }
@@ -56,44 +56,44 @@ public class RasterArranger {
             throw new InitException("rasterIterator has more items than can be accomodated");
         }
 
-        dimensions = new ImageDimensions(bboxSetOnPlane.getExtent());
+        dimensions = new ImageDimensions(boundingBoxes.getExtent());
     }
 
-    public RGBStack createStack(List<RGBStack> list, ChannelFactorySingleType chnlfactory) {
-        RGBStack stackOut = new RGBStack(dimensions, chnlfactory);
+    public RGBStack createStack(List<RGBStack> list, ChannelFactorySingleType factory) {
+        RGBStack stackOut = new RGBStack(dimensions, factory);
         ppltStack(list, stackOut.asStack());
         return stackOut;
     }
 
-    private void ppltStack(List<RGBStack> generatedImages, Stack stackOut) {
+    private void ppltStack(List<RGBStack> generatedImages, Stack out) {
 
         int index = 0;
-        for (RGBStack img : generatedImages) {
+        for (RGBStack image : generatedImages) {
 
-            BoundingBox bbox = this.bboxSetOnPlane.get(index++);
+            BoundingBox bbox = this.boundingBoxes.get(index++);
 
             // NOTE
             // For a special case where our projection z-extent is different to our actual z-extent,
             // that means
             //   we should repeat
-            if (bbox.extent().getZ() != img.getDimensions().getZ()) {
+            if (bbox.extent().getZ() != image.getDimensions().getZ()) {
 
                 int zShift = 0;
                 do {
-                    projectImgOntoStackOut(bbox, img.asStack(), stackOut, zShift);
-                    zShift += img.getDimensions().getZ();
-                } while (zShift < stackOut.getDimensions().getZ());
+                    projectImageOntoStackOut(bbox, image.asStack(), out, zShift);
+                    zShift += image.getDimensions().getZ();
+                } while (zShift < out.getDimensions().getZ());
 
             } else {
-                projectImgOntoStackOut(bbox, img.asStack(), stackOut, 0);
+                projectImageOntoStackOut(bbox, image.asStack(), out, 0);
             }
         }
     }
 
-    private void projectImgOntoStackOut(
+    private void projectImageOntoStackOut(
             BoundingBox bbox, Stack stackIn, Stack stackOut, int zShift) {
 
-        assert (stackIn.getNumChnl() == stackOut.getNumChnl());
+        assert (stackIn.getNumberChannels() == stackOut.getNumberChannels());
 
         Extent extent = stackIn.getDimensions().getExtent();
         Extent extentOut = stackIn.getDimensions().getExtent();
@@ -102,7 +102,7 @@ public class RasterArranger {
         int xEnd = leftCrnr.getX() + bbox.extent().getX() - 1;
         int yEnd = leftCrnr.getY() + bbox.extent().getY() - 1;
 
-        int numC = stackIn.getNumChnl();
+        int numC = stackIn.getNumberChannels();
         VoxelBuffer<?>[] vbIn = new VoxelBuffer<?>[numC];
         VoxelBuffer<?>[] vbOut = new VoxelBuffer<?>[numC];
 
@@ -115,8 +115,8 @@ public class RasterArranger {
             }
 
             for (int c = 0; c < numC; c++) {
-                vbIn[c] = stackIn.getChnl(c).getVoxelBox().any().getPixelsForPlane(z);
-                vbOut[c] = stackOut.getChnl(c).getVoxelBox().any().getPixelsForPlane(outZ);
+                vbIn[c] = stackIn.getChannel(c).getVoxelBox().any().getPixelsForPlane(z);
+                vbOut[c] = stackOut.getChannel(c).getVoxelBox().any().getPixelsForPlane(outZ);
             }
 
             int src = 0;

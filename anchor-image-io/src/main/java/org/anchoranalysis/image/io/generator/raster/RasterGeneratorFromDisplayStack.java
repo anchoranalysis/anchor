@@ -34,23 +34,18 @@ import org.anchoranalysis.io.generator.IterableObjectGenerator;
 import org.anchoranalysis.io.generator.ObjectGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import lombok.AllArgsConstructor;
 
 /**
  * @author Owen Feehan
  * @param <T> iteration-type
  */
+@AllArgsConstructor
 public class RasterGeneratorFromDisplayStack<T> extends RasterGenerator
         implements IterableObjectGenerator<T, Stack> {
 
     private IterableObjectGenerator<T, DisplayStack> delegate;
     private boolean rgb;
-
-    public RasterGeneratorFromDisplayStack(
-            IterableObjectGenerator<T, DisplayStack> delegate, boolean rgb) {
-        super();
-        this.delegate = delegate;
-        this.rgb = rgb;
-    }
 
     @Override
     public void start() throws OutputWriteFailedException {
@@ -89,6 +84,6 @@ public class RasterGeneratorFromDisplayStack<T> extends RasterGenerator
 
     @Override
     public Stack generate() throws OutputWriteFailedException {
-        return delegate.getGenerator().generate().createImgStack(false);
+        return delegate.getGenerator().generate().deriveStack(false);
     }
 }

@@ -97,7 +97,7 @@ public class NamedImgStackCollection implements NamedProviderStore<Stack> {
         for (Entry<String, OperationWithProgressReporter<Stack, OperationFailedException>> entry :
                 map.entrySet()) {
             Stack projection =
-                    entry.getValue().doOperation(ProgressReporterNull.get()).maxIntensityProj();
+                    entry.getValue().doOperation(ProgressReporterNull.get()).maximumIntensityProjection();
             out.addImageStack(entry.getKey(), projection);
         }
 

@@ -26,11 +26,11 @@
 
 package org.anchoranalysis.image.io.bean.generator;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.error.InitException;
+import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.image.bean.arrangeraster.ArrangeRasterBean;
 import org.anchoranalysis.image.bean.nonbean.arrangeraster.RasterArranger;
@@ -121,11 +121,12 @@ class CombineGenerator<T> extends RasterGenerator implements IterableObjectGener
     }
 
     private List<RGBStack> generateAll() throws OutputWriteFailedException {
-        List<RGBStack> listOut = new ArrayList<>();
-        for (IterableObjectGenerator<T, Stack> generator : generatorList) {
-            Stack stackOut = generator.getGenerator().generate();
-            listOut.add(new RGBStack(stackOut));
-        }
-        return listOut;
+        return FunctionalList.mapToList(
+            generatorList,
+            OutputWriteFailedException.class,
+            generator -> new RGBStack(
+               generator.getGenerator().generate()
+            )
+        );
     }
 }

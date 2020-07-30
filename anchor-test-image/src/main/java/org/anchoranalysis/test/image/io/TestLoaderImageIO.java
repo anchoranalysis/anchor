@@ -184,10 +184,10 @@ public class TestLoaderImageIO {
     }
 
     private static Channel extractChnl(Stack stack) {
-        if (stack.getNumChnl() != 1) {
+        if (stack.getNumberChannels() != 1) {
             throw new TestDataLoadException(
                     "Loading a stack which contains more than one channel, when only one channel is intended");
         }
-        return stack.getChnl(0);
+        return stack.getChannel(0);
     }
 }

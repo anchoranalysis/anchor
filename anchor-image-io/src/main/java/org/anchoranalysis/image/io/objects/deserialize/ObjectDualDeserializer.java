@@ -76,11 +76,11 @@ class ObjectDualDeserializer implements Deserializer<ObjectMask> {
                                     VoxelDataTypeUnsignedByte.INSTANCE)
                             .get(0);
 
-            if (stack.getNumChnl() != 1) {
+            if (stack.getNumberChannels() != 1) {
                 throw new DeserializationFailedException("Raster file must have 1 channel exactly");
             }
 
-            Channel chnl = stack.getChnl(0);
+            Channel chnl = stack.getChannel(0);
 
             if (!chnl.getDimensions().getExtent().equals(bbox.extent())) {
                 throw new DeserializationFailedException(

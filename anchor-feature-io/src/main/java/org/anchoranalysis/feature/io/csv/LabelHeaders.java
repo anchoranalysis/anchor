@@ -28,7 +28,13 @@ package org.anchoranalysis.feature.io.csv;
 
 import org.apache.commons.lang3.ArrayUtils;
 
-public class MetadataHeaders {
+/**
+ * Headers in a CSV file for the non-results (i.e. labels) part of a feature-row
+ * 
+ * @author Owen Feehan
+ *
+ */
+public class LabelHeaders {
 
     /**
      * Headers describing the first few non-feature columns outputted in the CSV (2-3 columns with
@@ -44,7 +50,7 @@ public class MetadataHeaders {
      * @param group headers for the group
      * @param identifiers headers for identification
      */
-    public MetadataHeaders(String[] group, String[] identifiers) {
+    public LabelHeaders(String[] group, String[] identifiers) {
         super();
         this.group = group;
         this.identifiers = identifiers;

@@ -45,7 +45,7 @@ public class ImgStackSeries implements Iterable<Stack> {
 
         for (Stack stack : delegate) {
             for (Channel chnl : stack) {
-                stackOut.addChnl(chnl);
+                stackOut.addChannel(chnl);
             }
         }
 

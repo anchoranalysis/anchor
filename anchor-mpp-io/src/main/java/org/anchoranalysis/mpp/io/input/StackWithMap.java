@@ -96,7 +96,7 @@ public class StackWithMap implements MultiInputSubMap<TimeSequence> {
     }
 
     public int numFrames() throws OperationFailedException {
-        return mainInputObject.numFrames();
+        return mainInputObject.numberFrames();
     }
 
     @Override

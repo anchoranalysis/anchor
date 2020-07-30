@@ -86,7 +86,7 @@ public class StackOperationGenerator extends RasterGenerator
 
     @Override
     public boolean isRGB() throws OutputWriteFailedException {
-        return stackIn.doOperation().getNumChnl() == 3
-                || (stackIn.doOperation().getNumChnl() == 2 && padIfNec);
+        return stackIn.doOperation().getNumberChannels() == 3
+                || (stackIn.doOperation().getNumberChannels() == 2 && padIfNec);
     }
 }

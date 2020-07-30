@@ -54,7 +54,7 @@ import org.anchoranalysis.io.bioformats.copyconvert.ImageFileShape;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-public class BioformatsOpenedRaster extends OpenedRaster {
+public class BioformatsOpenedRaster implements OpenedRaster {
 
     private final IFormatReader reader;
     private final ReadOptions readOptions;
@@ -102,12 +102,12 @@ public class BioformatsOpenedRaster extends OpenedRaster {
     }
 
     @Override
-    public int numSeries() {
+    public int numberSeries() {
         return reader.getSeriesCount();
     }
 
     @Override
-    public int numFrames() {
+    public int numberFrames() {
         return sizeT;
     }
 
@@ -116,7 +116,7 @@ public class BioformatsOpenedRaster extends OpenedRaster {
         return channelNames;
     }
 
-    public int numChnl() {
+    public int numberChannels() {
         return numChnl;
     }
 
@@ -140,7 +140,7 @@ public class BioformatsOpenedRaster extends OpenedRaster {
     }
 
     @Override
-    public ImageDimensions dim(int seriesIndex) {
+    public ImageDimensions dimensionsForSeries(int seriesIndex) {
         return new DimensionsCreator(lociMetadata).apply(reader, readOptions, seriesIndex);
     }
 
@@ -158,7 +158,7 @@ public class BioformatsOpenedRaster extends OpenedRaster {
 
             TimeSequence ts = new TimeSequence();
 
-            ImageDimensions sd = dim(seriesIndex);
+            ImageDimensions sd = dimensionsForSeries(seriesIndex);
 
             // Assumes order of time first, and then channels
             List<Channel> listAllChnls =
@@ -191,7 +191,7 @@ public class BioformatsOpenedRaster extends OpenedRaster {
 
                 Channel chnl = factory.createEmptyUninitialised(dimensions);
 
-                stack.addChnl(chnl);
+                stack.addChannel(chnl);
                 listAllChnls.add(chnl);
             }
             ts.add(stack);

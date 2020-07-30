@@ -26,83 +26,103 @@
 
 package org.anchoranalysis.feature.nrg;
 
+import java.util.Optional;
+import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.OperationFailedRuntimeException;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.stack.Stack;
 
-//
-// A stack used to supply the NRG in a marked point processes routine
-//
-// We require all channels have the same size
-//
-// If the NRGStack is empty, then dimensions can be set
+
+/**
+ * A stack of channels used as context to calculate features (or calculating <i>energy</i> more broadly).
+ * <p>
+ * The stack can have 0 channels, in which case, explict dimensions must be set.
+ *  
+ * @author Owen Feehan
+ *
+ */
 public class NRGStack {
 
-    // Always one of the following two variables should be non-null and the other should be null.
-    private final Stack delegate;
-    private final ImageDimensions dimensions;
+    // START UNION: EITHER/OR
+    // Always one of the following two variables should be defined and the other should be empty.
+    
+    /** A delegate-stack if it exists (should NOT be set if {@code dimensions} are defined) */
+    private final Optional<Stack> stack;
+    
+    /** Dimensions if needed (should only be set if {@code stack} is empty) */
+    private final Optional<ImageDimensions> dimensions;
+    // END UNION: EITHER/OR
 
-    public NRGStack(ImageDimensions dimensions) {
-        this.dimensions = dimensions;
-        this.delegate = null;
-    }
-
-    public NRGStack(Channel chnl) {
+    /**
+     * Create a nrg-stack comprised of a single channel
+     * 
+     * @param channel
+     */
+    public NRGStack(Channel channel) {
         super();
-        this.dimensions = null;
-        this.delegate = new Stack(chnl);
+        this.dimensions = Optional.empty();
+        this.stack = Optional.of( new Stack(channel) );
     }
 
+    /**
+     * Create a nrg-stack comprised of all channels from a stack
+     * 
+     * @param stackIn
+     */
     public NRGStack(Stack stackIn) {
-        this.dimensions = null;
-        this.delegate = stackIn;
+        this.dimensions = Optional.empty();
+        this.stack = Optional.of(stackIn);
     }
 
-    public final int getNumChnl() {
-        if (delegate == null) {
-            return 0;
-        }
+    /**
+     * Create a nrg-stack with no channels - but with dimensions associated
+     * @param dimensions
+     */
+    public NRGStack(ImageDimensions dimensions) {
+        this.dimensions = Optional.of(dimensions);
+        this.stack = Optional.empty();
+    }
 
-        return delegate.getNumChnl();
+    
+    public final int getNumberChannels() {
+        return stack.map(Stack::getNumberChannels).orElse(0);
     }
 
     public ImageDimensions getDimensions() {
-        if (delegate == null) {
-            return dimensions;
-        }
-
-        return delegate.getDimensions();
+        return stack.map(Stack::getDimensions).orElseGet( dimensions::get ); // NOSONAR
     }
 
-    private void throwInvalidIndexException(int numChnls, int index) {
-        throw new OperationFailedRuntimeException(
-                String.format(
-                        "There are %d channels in the nrg-stack. Cannot access index %d.",
-                        numChnls, index));
-    }
+    public final Channel getChannel(int index) {
 
-    public final Channel getChnl(int index) {
-
-        if (delegate == null) {
+        if (!stack.isPresent()) {
             throwInvalidIndexException(0, index);
         }
 
-        if (index >= delegate.getNumChnl()) {
-            throwInvalidIndexException(delegate.getNumChnl(), index);
+        if (index >= stack.get().getNumberChannels()) {
+            throwInvalidIndexException(stack.get().getNumberChannels(), index);
         }
 
-        return delegate.getChnl(index);
+        return stack.get().getChannel(index);
     }
 
     public Stack asStack() {
-        if (delegate == null) {
-            return new Stack();
-        }
-        return delegate;
+        return stack.orElse( new Stack() );
     }
 
-    public NRGStack extractSlice(int z) {
-        return new NRGStack(delegate.extractSlice(z));
+    public NRGStack extractSlice(int z) throws OperationFailedException {
+        
+        if (!stack.isPresent()) {
+            throw new OperationFailedException("No slice can be extracted, as no channels existing in the nrg-stack");
+        }
+        
+        return new NRGStack(stack.get().extractSlice(z));
+    }
+    
+    private void throwInvalidIndexException(int numberChannels, int index) {
+        throw new OperationFailedRuntimeException(
+                String.format(
+                        "There are %d channels in the nrg-stack. Cannot access index %d.",
+                        numberChannels, index));
     }
 }

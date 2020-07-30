@@ -32,7 +32,7 @@ import org.anchoranalysis.core.name.store.NamedProviderStore;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.io.RasterIOException;
-import org.anchoranalysis.image.io.input.series.NamedChnlCollectionForSeries;
+import org.anchoranalysis.image.io.input.series.NamedChannelsForSeries;
 import org.anchoranalysis.image.stack.TimeSequence;
 
 /**
@@ -41,7 +41,7 @@ import org.anchoranalysis.image.stack.TimeSequence;
  *
  * @author Owen Feehan
  */
-public abstract class NamedChnlsInput extends ProvidesStackInput {
+public abstract class NamedChnlsInput implements ProvidesStackInput {
 
     /** Number of series */
     public abstract int numSeries() throws RasterIOException;
@@ -56,21 +56,21 @@ public abstract class NamedChnlsInput extends ProvidesStackInput {
     public abstract int bitDepth() throws RasterIOException;
 
     // Where most of our time is being taken up when opening a raster
-    public abstract NamedChnlCollectionForSeries createChnlCollectionForSeries(
+    public abstract NamedChannelsForSeries createChannelsForSeries(
             int seriesNum, ProgressReporter progressReporter) throws RasterIOException;
 
     @Override
-    public void addToStore(
+    public void addToStoreInferNames(
             NamedProviderStore<TimeSequence> stackCollection,
             int seriesNum,
             ProgressReporter progressReporter)
             throws OperationFailedException {
         // Adds each channel as a separate stack
         try {
-            NamedChnlCollectionForSeries ncc =
-                    createChnlCollectionForSeries(seriesNum, progressReporter);
+            NamedChannelsForSeries ncc =
+                    createChannelsForSeries(seriesNum, progressReporter);
             // Apply it only to first time-series frame
-            ncc.addAsSeparateChnls(stackCollection, 0);
+            ncc.addAsSeparateChannels(stackCollection, 0);
 
         } catch (RasterIOException e) {
             throw new OperationFailedException(e);
@@ -93,7 +93,7 @@ public abstract class NamedChnlsInput extends ProvidesStackInput {
     }
 
     @Override
-    public int numFrames() {
+    public int numberFrames() {
         return 1;
     }
 
@@ -101,9 +101,9 @@ public abstract class NamedChnlsInput extends ProvidesStackInput {
             int seriesNum, ProgressReporter progressReporter) throws OperationFailedException {
         // Apply it only to first time-series frame
         try {
-            NamedChnlCollectionForSeries ncc =
-                    createChnlCollectionForSeries(seriesNum, progressReporter);
-            return new TimeSequence(ncc.allChnlsAsStack(0).doOperation());
+            NamedChannelsForSeries ncc =
+                    createChannelsForSeries(seriesNum, progressReporter);
+            return new TimeSequence(ncc.allChannelsAsStack(0).doOperation());
 
         } catch (RasterIOException e) {
             throw new OperationFailedException(e);

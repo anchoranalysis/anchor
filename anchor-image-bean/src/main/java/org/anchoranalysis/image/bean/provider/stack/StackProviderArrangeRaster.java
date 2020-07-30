@@ -56,16 +56,6 @@ public class StackProviderArrangeRaster extends StackProvider {
     @BeanField @Getter @Setter private boolean createShort = false;
     // END BEAN
 
-    private void copyFirstChnlUntil3(Stack stack) {
-        while (stack.getNumChnl() < 3) {
-            try {
-                stack.addChnl(stack.getChnl(0).duplicate());
-            } catch (IncorrectImageSizeException e) {
-                assert false;
-            }
-        }
-    }
-
     @Override
     public Stack create() throws CreateException {
 
@@ -95,5 +85,15 @@ public class StackProviderArrangeRaster extends StackProvider {
                 createShort ? new ChannelFactoryShort() : new ChannelFactoryByte();
 
         return rasterArranger.createStack(rasterList, factory).asStack();
+    }
+    
+    private void copyFirstChnlUntil3(Stack stack) {
+        while (stack.getNumberChannels() < 3) {
+            try {
+                stack.addChannel(stack.getChannel(0).duplicate());
+            } catch (IncorrectImageSizeException e) {
+                assert false;
+            }
+        }
     }
 }

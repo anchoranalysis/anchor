@@ -44,9 +44,9 @@ public abstract class RasterWriter extends AnchorBean<RasterWriter> {
 
     public void writeStack(Stack stack, Path filePath, boolean makeRGB) throws RasterIOException {
 
-        if (stack.allChnlsHaveType(ChannelFactoryByte.staticDataType())) {
+        if (stack.allChannelsHaveType(ChannelFactoryByte.staticDataType())) {
             writeStackByte((Stack) stack, filePath, makeRGB);
-        } else if (stack.allChnlsHaveType(ChannelFactoryShort.staticDataType())) {
+        } else if (stack.allChannelsHaveType(ChannelFactoryShort.staticDataType())) {
             writeStackShort((Stack) stack, filePath, makeRGB);
         } else {
             throw new RasterIOException(

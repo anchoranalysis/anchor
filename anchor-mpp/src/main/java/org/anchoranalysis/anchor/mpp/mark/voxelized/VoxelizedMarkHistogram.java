@@ -149,7 +149,7 @@ class VoxelizedMarkHistogram implements VoxelizedMark {
         objectFlattened = new ObjectMask(bbox.flattenZ());
 
         Extent localExtent = bbox.extent();
-        partitionList.init(FACTORY, stack.getNumChnl(), regionMap.numRegions(), localExtent.getZ());
+        partitionList.init(FACTORY, stack.getNumberChannels(), regionMap.numRegions(), localExtent.getZ());
 
         ByteBuffer bufferMIP = getObjectFlattened().getVoxelBox().getPixelsForPlane(0).buffer();
 

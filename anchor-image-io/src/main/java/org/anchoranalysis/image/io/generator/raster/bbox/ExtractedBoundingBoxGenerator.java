@@ -94,7 +94,7 @@ public class ExtractedBoundingBoxGenerator extends RasterGenerator
 
     @Override
     public boolean isRGB() {
-        return stack.getNumChnl() == 3;
+        return stack.getNumberChannels() == 3;
     }
 
     private Stack createExtract(Stack stackIn) throws CreateException {
@@ -109,7 +109,7 @@ public class ExtractedBoundingBoxGenerator extends RasterGenerator
             Channel chnlExtracted =
                     ChannelFactory.instance().create(vbExtracted, stackIn.getDimensions().getRes());
             try {
-                stackOut.addChnl(chnlExtracted);
+                stackOut.addChannel(chnlExtracted);
             } catch (IncorrectImageSizeException e) {
                 throw new CreateException(e);
             }

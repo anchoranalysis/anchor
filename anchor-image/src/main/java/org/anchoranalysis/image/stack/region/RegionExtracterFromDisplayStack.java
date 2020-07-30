@@ -68,16 +68,16 @@ public class RegionExtracterFromDisplayStack implements RegionExtracter {
             throws OperationFailedException {
 
         Stack out = null;
-        for (int c = 0; c < stack.getNumChnl(); c++) {
+        for (int c = 0; c < stack.getNumberChannels(); c++) {
 
             Channel chnl =
-                    extractRegionFrom(stack.getChnl(c), bbox, zoomFactor, listChnlConverter.get(c));
+                    extractRegionFrom(stack.getChannel(c), bbox, zoomFactor, listChnlConverter.get(c));
 
             if (c == 0) {
                 out = new Stack(chnl);
             } else {
                 try {
-                    out.addChnl(chnl);
+                    out.addChannel(chnl);
                 } catch (IncorrectImageSizeException e) {
                     assert false;
                 }

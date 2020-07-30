@@ -74,7 +74,7 @@ public class StackProviderGenerateString extends StackProvider {
             Stack out = new Stack();
             for (Channel chnl : label2D) {
                 try {
-                    out.addChnl(createExpandedChnl(chnl, zHeight));
+                    out.addChannel(createExpandedChnl(chnl, zHeight));
                 } catch (IncorrectImageSizeException e) {
                     throw new CreateException(e);
                 }

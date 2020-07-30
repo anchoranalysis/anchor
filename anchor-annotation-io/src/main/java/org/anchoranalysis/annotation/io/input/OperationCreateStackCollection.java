@@ -67,7 +67,7 @@ class OperationCreateStackCollection
     private NamedImgStackCollection doOperationWithException(ProgressReporter progressReporter)
             throws OperationFailedException {
         NamedImgStackCollection stackCollection = new NamedImgStackCollection();
-        inputObject.addToStore(
+        inputObject.addToStoreInferNames(
                 new WrapStackAsTimeSequenceStore(stackCollection, t), seriesNum, progressReporter);
         return stackCollection;
     }

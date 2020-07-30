@@ -32,7 +32,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.bean.nonbean.arrangeraster.ArrangeRasterException;
-import org.anchoranalysis.image.bean.nonbean.arrangeraster.BBoxSetOnPlane;
+import org.anchoranalysis.image.bean.nonbean.arrangeraster.BoundingBoxesOnPlane;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.ImageDimensions;
@@ -62,7 +62,7 @@ public class ArrangeRasterOverlay extends ArrangeRasterBean {
         return getBeanName();
     }
 
-    private int calcHorizontalPos(BBoxSetOnPlane bboxSet, ImageDimensions dimensions) {
+    private int calcHorizontalPos(BoundingBoxesOnPlane bboxSet, ImageDimensions dimensions) {
 
         if (horizontalAlign.equalsIgnoreCase("left")) {
             return 0;
@@ -73,7 +73,7 @@ public class ArrangeRasterOverlay extends ArrangeRasterBean {
         }
     }
 
-    private int calcVerticalPos(BBoxSetOnPlane bboxSet, ImageDimensions dimensions) {
+    private int calcVerticalPos(BoundingBoxesOnPlane bboxSet, ImageDimensions dimensions) {
 
         if (verticalAlign.equalsIgnoreCase("top")) {
             return 0;
@@ -84,7 +84,7 @@ public class ArrangeRasterOverlay extends ArrangeRasterBean {
         }
     }
 
-    private int calcZPos(BBoxSetOnPlane bboxSet, ImageDimensions dimensions) {
+    private int calcZPos(BoundingBoxesOnPlane bboxSet, ImageDimensions dimensions) {
 
         if (zAlign.equalsIgnoreCase("bottom") || zAlign.equalsIgnoreCase("repeat")) {
             return 0;
@@ -96,7 +96,7 @@ public class ArrangeRasterOverlay extends ArrangeRasterBean {
     }
 
     @Override
-    public BBoxSetOnPlane createBBoxSetOnPlane(Iterator<RGBStack> rasterIterator)
+    public BoundingBoxesOnPlane createBoundingBoxesOnPlane(Iterator<RGBStack> rasterIterator)
             throws ArrangeRasterException {
 
         if (!rasterIterator.hasNext()) {
@@ -104,7 +104,7 @@ public class ArrangeRasterOverlay extends ArrangeRasterBean {
         }
 
         SingleRaster sr = new SingleRaster();
-        BBoxSetOnPlane bboxSet = sr.createBBoxSetOnPlane(rasterIterator);
+        BoundingBoxesOnPlane bboxSet = sr.createBoundingBoxesOnPlane(rasterIterator);
 
         if (!rasterIterator.hasNext()) {
             throw new ArrangeRasterException("No image in iterator for overlay");

@@ -36,28 +36,37 @@ import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.io.RasterIOException;
-import org.anchoranalysis.image.io.chnl.ChnlGetter;
+import org.anchoranalysis.image.io.chnl.ChannelGetter;
 import org.anchoranalysis.image.stack.NamedImgStackCollection;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.TimeSequence;
 
-public interface NamedChnlCollectionForSeries extends ChnlGetter {
+public interface NamedChannelsForSeries extends ChannelGetter {
 
-    Optional<Channel> getChnlOrNull(String chnlName, int t, ProgressReporter progressReporter)
+    /**
+     * Gets a channel if it exists, returning empty if it doesn't
+     * 
+     * @param channelName name of channel
+     * @param timeIndex timepoint
+     * @param progressReporter
+     * @return the channel if it exists, or empty otherwise
+     * @throws GetOperationFailedException if something goes wrong getting an existing channel (but never if a channel doesn't exist)
+     */
+    Optional<Channel> getChannelOptional(String channelName, int timeIndex, ProgressReporter progressReporter)
             throws GetOperationFailedException;
 
-    Set<String> chnlNames();
+    Set<String> channelNames();
 
     int sizeT(ProgressReporter progressReporter) throws RasterIOException;
 
     ImageDimensions dimensions() throws RasterIOException;
 
-    void addAsSeparateChnls(
-            NamedImgStackCollection stackCollection, int t, ProgressReporter progressReporter)
+    void addAsSeparateChannels(
+            NamedImgStackCollection stacks, int timeIndex, ProgressReporter progressReporter)
             throws OperationFailedException;
 
-    void addAsSeparateChnls(NamedProviderStore<TimeSequence> stackCollection, int t)
+    void addAsSeparateChannels(NamedProviderStore<TimeSequence> stacks, int timeIndex)
             throws OperationFailedException;
 
-    Operation<Stack, OperationFailedException> allChnlsAsStack(int t);
+    Operation<Stack, OperationFailedException> allChannelsAsStack(int timeIndex);
 }
