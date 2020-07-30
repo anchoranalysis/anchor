@@ -80,7 +80,7 @@ public class RGBStack {
      * 
      * @param stack
      */
-    public RGBStack(Stack stack) throws AnchorFriendlyRuntimeException {
+    public RGBStack(Stack stack) {
         int numberChannels = stack.getNumberChannels();
         if (numberChannels==3) {
             channels = stack;

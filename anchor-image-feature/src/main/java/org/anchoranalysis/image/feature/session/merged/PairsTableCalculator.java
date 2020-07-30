@@ -68,7 +68,7 @@ import org.anchoranalysis.image.feature.session.FeatureTableCalculator;
  * @author Owen Feehan
  */
 @RequiredArgsConstructor
-public class FeatureCalculatorMergedPairs
+public class PairsTableCalculator
         implements FeatureTableCalculator<FeatureInputPairObjects> {
 
     // START REQUIRED ARGUMENTS
@@ -79,7 +79,7 @@ public class FeatureCalculatorMergedPairs
 
     private CombinedCalculator calculator;
 
-    public FeatureCalculatorMergedPairs(MergedPairsFeatures features) {
+    public PairsTableCalculator(MergedPairsFeatures features) {
         this(features, new MergedPairsInclude(), true);
     }
 
@@ -110,7 +110,7 @@ public class FeatureCalculatorMergedPairs
         try {
             return calculator.calcForInput(input, Optional.of(errorReporter));
         } catch (NamedFeatureCalculationException e) {
-            errorReporter.recordError(FeatureCalculatorMergedPairs.class, e);
+            errorReporter.recordError(PairsTableCalculator.class, e);
 
             ResultsVector rv = new ResultsVector(sizeFeatures());
             rv.setErrorAll(e);
@@ -158,6 +158,6 @@ public class FeatureCalculatorMergedPairs
 
     @Override
     public FeatureTableCalculator<FeatureInputPairObjects> duplicateForNewThread() {
-        return new FeatureCalculatorMergedPairs(features.duplicate(), include, suppressErrors);
+        return new PairsTableCalculator(features.duplicate(), include, suppressErrors);
     }
 }

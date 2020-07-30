@@ -43,7 +43,7 @@ import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 
 @RequiredArgsConstructor
-public class SingleObjectTableSession implements FeatureTableCalculator<FeatureInputSingleObject> {
+public class SingleTableCalculator implements FeatureTableCalculator<FeatureInputSingleObject> {
 
     // START REQUIRED ARGUMENTS
     private final NamedFeatureStore<FeatureInputSingleObject> namedFeatureStore;
@@ -67,7 +67,7 @@ public class SingleObjectTableSession implements FeatureTableCalculator<FeatureI
 
     @Override
     public FeatureTableCalculator<FeatureInputSingleObject> duplicateForNewThread() {
-        return new SingleObjectTableSession(namedFeatureStore.deepCopy());
+        return new SingleTableCalculator(namedFeatureStore.deepCopy());
     }
 
     @Override
