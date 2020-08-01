@@ -27,9 +27,6 @@
 package org.anchoranalysis.image.io.generator.raster.bbox;
 
 import java.util.Optional;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
@@ -43,7 +40,6 @@ import org.anchoranalysis.io.generator.ObjectGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
-@RequiredArgsConstructor
 public class ExtractedBoundingBoxGenerator extends RasterGenerator
         implements IterableObjectGenerator<BoundingBox, Stack> {
 
@@ -51,13 +47,15 @@ public class ExtractedBoundingBoxGenerator extends RasterGenerator
     private final Stack stack;
     private final String manifestFunction;
     // END REQUIRED ARGUMENTS
-
+    
     private BoundingBox bbox;
 
-    @Getter @Setter private int paddingXY = 0;
-
-    @Getter @Setter private int paddingZ = 0;
-
+    public ExtractedBoundingBoxGenerator(Stack stack, String manifestFunction) {
+        super();
+        this.stack = stack;
+        this.manifestFunction = manifestFunction;
+    }    
+    
     @Override
     public Stack generate() throws OutputWriteFailedException {
 

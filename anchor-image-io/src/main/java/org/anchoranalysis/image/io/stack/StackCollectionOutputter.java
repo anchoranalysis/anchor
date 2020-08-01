@@ -35,7 +35,7 @@ import org.anchoranalysis.core.name.provider.NamedProvider;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.progress.OperationWithProgressReporter;
 import org.anchoranalysis.image.io.generator.raster.StackGenerator;
-import org.anchoranalysis.image.stack.NamedImgStackCollection;
+import org.anchoranalysis.image.stack.NamedStackCollection;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.generator.collection.IterableGeneratorOutputHelper;
 import org.anchoranalysis.io.output.bean.allowed.OutputAllowed;
@@ -96,7 +96,7 @@ public class StackCollectionOutputter {
     }
 
     public static void output(
-            NamedImgStackCollection namedCollection,
+            NamedStackCollection namedCollection,
             BoundOutputManager outputManager,
             String outputName,
             String prefix,
@@ -114,7 +114,7 @@ public class StackCollectionOutputter {
     }
 
     private static void outputWithException(
-            NamedImgStackCollection namedCollection,
+            NamedStackCollection namedCollection,
             BoundOutputManager outputManager,
             String outputName,
             String suffix,
@@ -130,10 +130,10 @@ public class StackCollectionOutputter {
                 suppressSubfoldersIn);
     }
 
-    public static NamedImgStackCollection subset(
+    public static NamedStackCollection subset(
             NamedProvider<Stack> stackCollection, OutputAllowed oa) {
 
-        NamedImgStackCollection out = new NamedImgStackCollection();
+        NamedStackCollection out = new NamedStackCollection();
 
         for (String name : stackCollection.keys()) {
 
@@ -162,7 +162,7 @@ public class StackCollectionOutputter {
         return new StackGenerator(true, manifestFunction);
     }
 
-    private static NamedImgStackCollection stackSubset(
+    private static NamedStackCollection stackSubset(
             NamedProvider<Stack> stacks,
             String secondLevelOutputKey,
             BoundOutputManagerRouteErrors outputManager) {

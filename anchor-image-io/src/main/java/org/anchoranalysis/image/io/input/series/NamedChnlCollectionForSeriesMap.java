@@ -44,7 +44,7 @@ import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.bean.channel.map.ImgChnlMapEntry;
 import org.anchoranalysis.image.io.chnl.map.ImgChnlMap;
 import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
-import org.anchoranalysis.image.stack.NamedImgStackCollection;
+import org.anchoranalysis.image.stack.NamedStackCollection;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.TimeSequence;
 import lombok.RequiredArgsConstructor;
@@ -140,7 +140,7 @@ public class NamedChnlCollectionForSeriesMap implements NamedChannelsForSeries {
 
     @Override
     public void addAsSeparateChannels(
-            NamedImgStackCollection stackCollection, int t, ProgressReporter progressReporter)
+            NamedStackCollection stackCollection, int t, ProgressReporter progressReporter)
             throws OperationFailedException {
 
         try {

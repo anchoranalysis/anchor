@@ -34,7 +34,7 @@ import org.anchoranalysis.anchor.overlay.writer.ObjectDrawAttributes;
 import org.anchoranalysis.core.color.ColorIndex;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.image.bean.size.Padding;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.io.stack.ConvertDisplayStackToRGB;
@@ -54,9 +54,7 @@ import org.anchoranalysis.image.stack.rgb.RGBStack;
  */
 public class DrawCroppedObjectsGenerator extends ObjectsOnRGBGenerator {
 
-    @Getter @Setter private int paddingXY = 0;
-
-    @Getter @Setter private int paddingZ = 0;
+    @Getter @Setter private Padding padding;
 
     private BoundingBox bbox;
 
@@ -93,14 +91,11 @@ public class DrawCroppedObjectsGenerator extends ObjectsOnRGBGenerator {
     }
 
     private BoundingBox growBBBox(BoundingBox bbox, Extent containingExtent) {
-        assert (paddingXY >= 0);
-        assert (paddingZ >= 0);
-
-        if (paddingXY == 0 && paddingZ == 0) {
+        if (padding.noPadding()) {
             return bbox;
         }
 
-        return bbox.growBy(new Point3i(paddingXY, paddingXY, paddingZ), containingExtent);
+        return bbox.growBy(padding.asPoint(), containingExtent);
     }
 
     private static ObjectCollectionWithProperties relTo(ObjectCollection objects, BoundingBox src) {

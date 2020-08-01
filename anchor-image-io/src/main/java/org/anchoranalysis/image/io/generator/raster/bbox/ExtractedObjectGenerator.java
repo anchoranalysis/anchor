@@ -28,6 +28,7 @@ package org.anchoranalysis.image.io.generator.raster.bbox;
 
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.anchoranalysis.core.color.ColorIndex;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.image.extent.BoundingBox;
@@ -37,24 +38,55 @@ import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.properties.ObjectCollectionWithProperties;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
+import org.anchoranalysis.io.bean.object.writer.Outline;
 import org.anchoranalysis.io.generator.IterableObjectGenerator;
 import org.anchoranalysis.io.generator.ObjectGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
+/**
+ * Creates images of an object drawn on a background only in a local region around its bounding box.
+ * 
+ * <p>This provides a visualization of an object and a small around of immediate background context.
+ * 
+ * @author Owen Feehan
+ *
+ */
 @RequiredArgsConstructor
 public class ExtractedObjectGenerator extends RasterGenerator
         implements IterableObjectGenerator<ObjectMask, Stack> {
 
     // START REQUIRED ARGUMENTS
-    private final DrawObjectsGenerator rgbObectGenerator;
-    private final IterableObjectGenerator<BoundingBox, Stack> chnlGenerator;
+    private final DrawObjectsGenerator drawObjectsGenerator;
+    private final IterableObjectGenerator<BoundingBox, Stack> backgroundGenerator;
     private final String manifestFunction;
     private final boolean mip;
     // END REQUIRED ARGUMENTS
 
     private ObjectMask element;
 
+    /**
+     * Creates an extracted-object generator that draws an outline
+     * 
+     * @param backgroundGenerator
+     * @param outlineWidth
+     * @param colorIndex
+     * @param mip
+     * @param manifestFunction
+     */
+    public ExtractedObjectGenerator(
+        IterableObjectGenerator<BoundingBox, Stack> backgroundGenerator,
+        int outlineWidth,
+        ColorIndex colorIndex,
+        boolean mip,
+        String manifestFunction
+    ) {
+        this.drawObjectsGenerator = new DrawObjectsGenerator(new Outline(outlineWidth), colorIndex);
+        this.backgroundGenerator = backgroundGenerator;
+        this.mip = mip;
+        this.manifestFunction = manifestFunction;
+    }
+    
     @Override
     public Stack generate() throws OutputWriteFailedException {
 
@@ -63,23 +95,19 @@ public class ExtractedObjectGenerator extends RasterGenerator
         }
 
         try {
-            chnlGenerator.setIterableElement(element.getBoundingBox());
+            backgroundGenerator.setIterableElement(element.getBoundingBox());
         } catch (SetOperationFailedException e) {
             throw new OutputWriteFailedException(e);
         }
 
-        Stack chnlExtracted = chnlGenerator.getGenerator().generate();
+        Stack channelExtracted = backgroundGenerator.getGenerator().generate();
 
         if (mip) {
-            chnlExtracted = chnlExtracted.maximumIntensityProjection();
+            channelExtracted = channelExtracted.maximumIntensityProjection();
         }
 
-        // We apply the generator
-        try {
-            rgbObectGenerator.setBackground(Optional.of(DisplayStack.create(chnlExtracted)));
-        } catch (CreateException e) {
-            throw new OutputWriteFailedException(e);
-        }
+        // Apply the generator
+        drawObjectsGenerator.setBackground( createBackground(channelExtracted) );
 
         ObjectMask object = this.getIterableElement();
 
@@ -87,15 +115,18 @@ public class ExtractedObjectGenerator extends RasterGenerator
             object = object.flattenZ();
         }
 
-        // We create a version that is relative to the extracted section
-        ObjectCollectionWithProperties objects =
-                new ObjectCollectionWithProperties(
-                        new ObjectMask(
-                                new BoundingBox(object.getVoxelBox().extent()),
-                                object.binaryVoxelBox()));
-        rgbObectGenerator.setIterableElement(objects);
+        // An object-mask that is relative to the extracted section
+        drawObjectsGenerator.setIterableElement( new ObjectCollectionWithProperties(changeBoundingBox(object)) );
 
-        return rgbObectGenerator.generate();
+        return drawObjectsGenerator.generate();
+    }
+    
+    private Optional<DisplayStack> createBackground(Stack channelExtracted) throws OutputWriteFailedException {
+        try {
+            return Optional.of(DisplayStack.create(channelExtracted));
+        } catch (CreateException e) {
+            throw new OutputWriteFailedException(e);
+        }
     }
 
     @Override
@@ -120,6 +151,13 @@ public class ExtractedObjectGenerator extends RasterGenerator
 
     @Override
     public boolean isRGB() {
-        return rgbObectGenerator.isRGB();
+        return drawObjectsGenerator.isRGB();
+    }
+    
+    /** Changes the bounding-box to match the object */
+    private ObjectMask changeBoundingBox(ObjectMask object) {
+        return new ObjectMask(
+                        new BoundingBox(object.getVoxelBox().extent()),
+                        object.binaryVoxelBox());
     }
 }

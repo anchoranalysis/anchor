@@ -45,10 +45,18 @@ import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
-// We can probably have a more efficient implementation by not using the CombinedListGenerator as a
-// delegate
-//  but we leave it for now
-// Should always have at least one item added
+/**
+ * Several iterable-generators combined together with a common iteration-type
+ * <p>
+ * One generator must always exist. Zero generators is never allowed.
+ * 
+ * TODO We can probably have a more efficient implementation by not using the CombinedListGenerator as a
+ * delegate but we leave it for now
+ * 
+ * @author Owen Feehan
+ *
+ * @param <T>
+ */
 public class IterableCombinedListGenerator<T>
         implements MultipleFileTypeGenerator, IterableGenerator<T> {
 

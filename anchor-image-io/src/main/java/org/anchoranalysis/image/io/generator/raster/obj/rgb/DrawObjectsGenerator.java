@@ -36,7 +36,7 @@ import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
 
 /**
- * Generates stacks of RGB unages using a {@link DrawObject} to draw objects on a background.
+ * Generates stacks of RGB images using a {@link DrawObject} to draw objects on a background.
  *
  * @param T pre-calculation type for the {@link DrawObject}
  * @author Owen Feehan

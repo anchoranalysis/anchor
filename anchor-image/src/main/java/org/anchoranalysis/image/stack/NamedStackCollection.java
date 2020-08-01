@@ -31,6 +31,7 @@ import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.UnaryOperator;
+import org.anchoranalysis.bean.StringSet;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.functional.IdentityOperation;
 import org.anchoranalysis.core.functional.Operation;
@@ -45,11 +46,11 @@ import org.anchoranalysis.core.progress.ProgressReporterNull;
 import org.anchoranalysis.image.extent.ImageDimensions;
 
 // A collection of Image Stacks each with a name
-public class NamedImgStackCollection implements NamedProviderStore<Stack> {
+public class NamedStackCollection implements NamedProviderStore<Stack> {
 
     private HashMap<String, OperationWithProgressReporter<Stack, OperationFailedException>> map;
 
-    public NamedImgStackCollection() {
+    public NamedStackCollection() {
         map = new HashMap<>();
     }
 
@@ -90,9 +91,9 @@ public class NamedImgStackCollection implements NamedProviderStore<Stack> {
         map.put(name, progressReporter -> getter.doOperation());
     }
 
-    public NamedImgStackCollection maxIntensityProj() throws OperationFailedException {
+    public NamedStackCollection maxIntensityProj() throws OperationFailedException {
 
-        NamedImgStackCollection out = new NamedImgStackCollection();
+        NamedStackCollection out = new NamedStackCollection();
 
         for (Entry<String, OperationWithProgressReporter<Stack, OperationFailedException>> entry :
                 map.entrySet()) {
@@ -105,11 +106,11 @@ public class NamedImgStackCollection implements NamedProviderStore<Stack> {
     }
 
     /** Applies an operation on each stack in the collection and returns a new derived collection */
-    public NamedImgStackCollection applyOperation(
+    public NamedStackCollection applyOperation(
             ImageDimensions dimensions, UnaryOperator<Stack> stackOperation)
             throws OperationFailedException {
 
-        NamedImgStackCollection out = new NamedImgStackCollection();
+        NamedStackCollection out = new NamedStackCollection();
 
         try {
             for (String key : keys()) {
@@ -143,6 +144,22 @@ public class NamedImgStackCollection implements NamedProviderStore<Stack> {
         for (final String name : src.keys()) {
             addImageStack(prefix + name, new OperationStack(src, name));
         }
+    }
+    
+    /**
+     * Creates a new collection containing only items whose keys exist in a particular set
+     * 
+     * @return the new collection
+     */
+    public NamedStackCollection subset( StringSet keyMustBeIn ) {
+        NamedStackCollection out = new NamedStackCollection();
+        
+        for( Entry<String, OperationWithProgressReporter<Stack, OperationFailedException>> entry : map.entrySet()) {
+            if (keyMustBeIn.contains(entry.getKey())) {
+                out.map.put(entry.getKey(), entry.getValue());
+            }
+        }
+        return out;
     }
 
     private static class OperationStack

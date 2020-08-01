@@ -41,13 +41,13 @@ import org.anchoranalysis.io.generator.serialized.ObjectOutputStreamGenerator;
  *
  * @author Owen Feehan
  */
-public class ObjWithBoundingBoxGenerator extends IterableCombinedListGenerator<ObjectMask> {
+public class ObjectWithBoundingBoxGenerator extends IterableCombinedListGenerator<ObjectMask> {
 
-    public ObjWithBoundingBoxGenerator(ImageResolution res) {
+    public ObjectWithBoundingBoxGenerator(ImageResolution res) {
         this(new ObjectsAsBinaryChnlGenerator(BinaryValuesByte.getDefault().getOnByte(), res));
     }
 
-    private ObjWithBoundingBoxGenerator(IterableGenerator<ObjectMask> generator) {
+    private ObjectWithBoundingBoxGenerator(IterableGenerator<ObjectMask> generator) {
         super(
                 generator,
                 // We create an iterable bridge from object-mask to BoundingBox

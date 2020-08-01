@@ -156,7 +156,7 @@ public class GroupedResultsVectorCollection implements Closeable {
         ResultsVectorWriter.writeResultsCsv(
                 OUTPUT_NAME_FEATURES_AGGREGATED,
                 map.entrySet(),
-                metadata.groupHeaders(),
+                metadata.getGroupHeaders(),
                 featuresAggregate.createFeatureNames(),
                 context,
                 (name, results, csvWriter) ->

@@ -27,6 +27,8 @@
 package org.anchoranalysis.feature.io.csv;
 
 import org.apache.commons.lang3.ArrayUtils;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 /**
  * Headers in a CSV file for the non-results (i.e. labels) part of a feature-row
@@ -34,33 +36,26 @@ import org.apache.commons.lang3.ArrayUtils;
  * @author Owen Feehan
  *
  */
+@AllArgsConstructor
 public class LabelHeaders {
 
     /**
-     * Headers describing the first few non-feature columns outputted in the CSV (2-3 columns with
-     * group and ID information)
+     * Headers describing the non-feature columns outputted in the CSV related to identifying a row (but not its group)
      */
-    private String[] identifiers;
-
-    private String[] group;
+    private String[] nonGroupHeaders;
 
     /**
-     * This constructor will include two group names in the outputting CSV file, but NO id column
-     *
-     * @param group headers for the group
-     * @param identifiers headers for identification
+     * Headers describing the non-feature columns outputted in the CSV related to identifying the group of a row
      */
-    public LabelHeaders(String[] group, String[] identifiers) {
-        super();
-        this.group = group;
-        this.identifiers = identifiers;
-    }
+    @Getter
+    private String[] groupHeaders;
 
-    public String[] groupHeaders() {
-        return group;
-    }
-
+    /**
+     * The non-group and group headers combined (in this order respectively)
+     * 
+     * @return the combined headers
+     */
     public String[] allHeaders() {
-        return ArrayUtils.addAll(identifiers, group);
+        return ArrayUtils.addAll(nonGroupHeaders, groupHeaders);
     }
 }
