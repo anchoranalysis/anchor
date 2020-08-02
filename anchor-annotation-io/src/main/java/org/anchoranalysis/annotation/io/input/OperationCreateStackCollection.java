@@ -32,7 +32,7 @@ import org.anchoranalysis.core.name.provider.NamedProvider;
 import org.anchoranalysis.core.progress.CachedOperationWithProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
-import org.anchoranalysis.image.stack.NamedStackCollection;
+import org.anchoranalysis.image.stack.NamedStacks;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.wrap.WrapStackAsTimeSequenceStore;
 
@@ -55,7 +55,7 @@ class OperationCreateStackCollection
     }
 
     @Override
-    protected NamedStackCollection execute(ProgressReporter progressReporter)
+    protected NamedStacks execute(ProgressReporter progressReporter)
             throws CreateException {
         try {
             return doOperationWithException(progressReporter);
@@ -64,9 +64,9 @@ class OperationCreateStackCollection
         }
     }
 
-    private NamedStackCollection doOperationWithException(ProgressReporter progressReporter)
+    private NamedStacks doOperationWithException(ProgressReporter progressReporter)
             throws OperationFailedException {
-        NamedStackCollection stackCollection = new NamedStackCollection();
+        NamedStacks stackCollection = new NamedStacks();
         inputObject.addToStoreInferNames(
                 new WrapStackAsTimeSequenceStore(stackCollection, t), seriesNum, progressReporter);
         return stackCollection;

@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-image-bean
+ * anchor-image-io
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -24,16 +24,54 @@
  * #L%
  */
 
-package org.anchoranalysis.image.bean.provider;
+package org.anchoranalysis.image.io.generator.raster.series;
 
-import org.anchoranalysis.bean.Provider;
-import org.anchoranalysis.image.bean.ImageBean;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import org.anchoranalysis.image.extent.IncorrectImageSizeException;
+import org.anchoranalysis.image.stack.Stack;
 
-/**
- * A provider base-class that as well as providing type S, also provide a stack
- *
- * @param <T> family-type common base-class for all beans in this category
- * @param <S> provider-type what is provided
- */
-public abstract class BeanImgStackProvider<T, S> extends ImageBean<T>
-        implements ProviderImgStack, Provider<S> {}
+public class StackSeries implements Iterable<Stack> {
+
+    private List<Stack> delegate = new ArrayList<>();
+
+    /** Puts all stacks in the series into a single image stack */
+    public Stack createSingleStack() throws IncorrectImageSizeException {
+
+        Stack out = new Stack();
+
+        for (Stack stack : delegate) {
+            out.addChannelsFrom(stack);
+        }
+
+        return out;
+    }
+
+    @Override
+    public Iterator<Stack> iterator() {
+        return delegate.iterator();
+    }
+
+    public boolean add(Stack e) {
+        return delegate.add(e);
+    }
+
+    public Stack get(int index) {
+        return delegate.get(index);
+    }
+
+    public int size() {
+        return delegate.size();
+    }
+
+    @Override
+    public String toString() {
+        return delegate.toString();
+    }
+
+    public Collection<Stack> asCollection() {
+        return delegate;
+    }
+}

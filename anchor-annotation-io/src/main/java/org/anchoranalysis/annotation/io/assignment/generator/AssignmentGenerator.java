@@ -146,7 +146,7 @@ public class AssignmentGenerator extends RasterGenerator {
         return createGenerator(
                         otherObjects,
                         colorPool.createColors(otherObjects.size()),
-                        ObjectCollectionFactory.from(matchedObjects, otherObjects))
+                        ObjectCollectionFactory.of(matchedObjects, otherObjects))
                 .generate();
     }
 

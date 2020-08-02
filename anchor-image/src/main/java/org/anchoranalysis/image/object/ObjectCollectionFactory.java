@@ -68,7 +68,7 @@ public class ObjectCollectionFactory {
      * @param object object-mask to add to collection
      */
     @SafeVarargs
-    public static ObjectCollection from(ObjectMask... object) {
+    public static ObjectCollection of(ObjectMask... object) {
         ObjectCollection out = new ObjectCollection();
         Arrays.stream(object).forEach(out::add);
         return out;
@@ -80,7 +80,7 @@ public class ObjectCollectionFactory {
      * @param objects existing collections to copy from
      */
     @SafeVarargs
-    public static ObjectCollection from(ObjectCollection... objects) {
+    public static ObjectCollection of(ObjectCollection... objects) {
         ObjectCollection out = new ObjectCollection();
         Arrays.stream(objects).forEach(out::addAll);
         return out;
@@ -106,7 +106,7 @@ public class ObjectCollectionFactory {
      * @param collection one or more collections to add items from
      */
     @SafeVarargs
-    public static ObjectCollection from(Collection<ObjectMask>... collection) {
+    public static ObjectCollection of(Collection<ObjectMask>... collection) {
         ObjectCollection out = new ObjectCollection();
         Arrays.stream(collection).forEach(out::addAll);
         return out;
@@ -162,11 +162,11 @@ public class ObjectCollectionFactory {
      * @param obj object-mask to add to collection
      */
     @SafeVarargs
-    public static ObjectCollection from(Mask... chnl) {
+    public static ObjectCollection of(Mask... masks) {
         ObjectCollection out = new ObjectCollection();
-        for (Mask bc : chnl) {
-            out.add(new ObjectMask(bc.binaryVoxelBox()));
-        }
+        Arrays.stream(masks).forEach( mask ->
+            out.add(new ObjectMask(mask.binaryVoxelBox()))
+        );
         return out;
     }
 

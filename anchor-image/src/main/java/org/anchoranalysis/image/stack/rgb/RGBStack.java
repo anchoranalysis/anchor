@@ -171,7 +171,7 @@ public class RGBStack {
     public void writeRGBMaskToSlice(
             ObjectMask mask,
             BoundingBox bbox,
-            RGBColor c,
+            RGBColor color,
             Point3i pointGlobal,
             int zLocal,
             ReadableTuple3i maxGlobal) {
@@ -207,7 +207,7 @@ public class RGBStack {
                 }
 
                 RGBOutputUtils.writeRGBColorToByteArr(
-                        c, pointGlobal, channels.getChannel(0).getDimensions(), red, blue, green);
+                        color, pointGlobal, channels.getChannel(0).getDimensions(), red, blue, green);
             }
         }
     }

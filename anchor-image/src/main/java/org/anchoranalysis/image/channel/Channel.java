@@ -173,7 +173,7 @@ public class Channel {
     }
 
     /**
-     * Flattens the voxel-box in the z direction
+     * Flattens the voxel-box in the z direction, only if necessary (i.e. there's more than 1 z dimension).
      *
      * @param voxelBox voxel-box to be flattened (i.e. 3D)
      * @param flattenFunc function to perform the flattening
@@ -181,7 +181,11 @@ public class Channel {
      */
     private Channel flattenZProjection(UnaryOperator<VoxelBox<? extends Buffer>> flattenFunc) {
         int prevZSize = delegate.extent().getZ();
-        return FACTORY.create(
+        if (prevZSize>1) {
+          return FACTORY.create(
                 flattenFunc.apply(delegate), getDimensions().getRes().duplicateFlattenZ(prevZSize));
+        } else {
+          return this;
+        }
     }
 }

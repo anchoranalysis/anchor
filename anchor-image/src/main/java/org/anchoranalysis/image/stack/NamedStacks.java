@@ -45,12 +45,19 @@ import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
 import org.anchoranalysis.image.extent.ImageDimensions;
 
-// A collection of Image Stacks each with a name
-public class NamedStackCollection implements NamedProviderStore<Stack> {
+// 
+
+/**
+ * A set of image-stacks each with a name
+ * 
+ * @author Owen Feehan
+ *
+ */
+public class NamedStacks implements NamedProviderStore<Stack> {
 
     private HashMap<String, OperationWithProgressReporter<Stack, OperationFailedException>> map;
 
-    public NamedStackCollection() {
+    public NamedStacks() {
         map = new HashMap<>();
     }
 
@@ -91,9 +98,9 @@ public class NamedStackCollection implements NamedProviderStore<Stack> {
         map.put(name, progressReporter -> getter.doOperation());
     }
 
-    public NamedStackCollection maxIntensityProj() throws OperationFailedException {
+    public NamedStacks maxIntensityProj() throws OperationFailedException {
 
-        NamedStackCollection out = new NamedStackCollection();
+        NamedStacks out = new NamedStacks();
 
         for (Entry<String, OperationWithProgressReporter<Stack, OperationFailedException>> entry :
                 map.entrySet()) {
@@ -106,11 +113,11 @@ public class NamedStackCollection implements NamedProviderStore<Stack> {
     }
 
     /** Applies an operation on each stack in the collection and returns a new derived collection */
-    public NamedStackCollection applyOperation(
+    public NamedStacks applyOperation(
             ImageDimensions dimensions, UnaryOperator<Stack> stackOperation)
             throws OperationFailedException {
 
-        NamedStackCollection out = new NamedStackCollection();
+        NamedStacks out = new NamedStacks();
 
         try {
             for (String key : keys()) {
@@ -151,8 +158,8 @@ public class NamedStackCollection implements NamedProviderStore<Stack> {
      * 
      * @return the new collection
      */
-    public NamedStackCollection subset( StringSet keyMustBeIn ) {
-        NamedStackCollection out = new NamedStackCollection();
+    public NamedStacks subset( StringSet keyMustBeIn ) {
+        NamedStacks out = new NamedStacks();
         
         for( Entry<String, OperationWithProgressReporter<Stack, OperationFailedException>> entry : map.entrySet()) {
             if (keyMustBeIn.contains(entry.getKey())) {

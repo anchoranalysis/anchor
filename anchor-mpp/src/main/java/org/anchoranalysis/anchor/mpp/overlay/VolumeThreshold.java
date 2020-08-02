@@ -45,10 +45,10 @@ class VolumeThreshold implements ScaledMaskCreator {
     @Override
     public ObjectWithProperties createScaledMask(
             DrawOverlay overlayWriter,
-            ObjectWithProperties omUnscaled,
+            ObjectWithProperties unscaled,
             double scaleFactor,
             Object originalObject,
-            ImageDimensions sdScaled,
+            ImageDimensions dimensionsScaled,
             BinaryValuesByte bvOut)
             throws CreateException {
 
@@ -59,10 +59,10 @@ class VolumeThreshold implements ScaledMaskCreator {
 
         if (zoomVolume > threshold) {
             return greaterThanEqualThreshold.createScaledMask(
-                    overlayWriter, omUnscaled, scaleFactor, originalObject, sdScaled, bvOut);
+                    overlayWriter, unscaled, scaleFactor, originalObject, dimensionsScaled, bvOut);
         } else {
             return lessThreshold.createScaledMask(
-                    overlayWriter, omUnscaled, scaleFactor, originalObject, sdScaled, bvOut);
+                    overlayWriter, unscaled, scaleFactor, originalObject, dimensionsScaled, bvOut);
         }
     }
 }

@@ -35,7 +35,7 @@ import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.object.ops.BinaryChnlFromObjects;
+import org.anchoranalysis.image.object.ops.MaskFromObjects;
 
 public class ProbMapObjectCollection implements ProbMap {
 
@@ -78,7 +78,7 @@ public class ProbMapObjectCollection implements ProbMap {
 
     @Override
     public Mask visualization() throws OptionalOperationUnsupportedException {
-        return BinaryChnlFromObjects.createFromObjects(
+        return MaskFromObjects.createFromObjects(
                 objects, dimensions, BinaryValues.getDefault());
     }
 

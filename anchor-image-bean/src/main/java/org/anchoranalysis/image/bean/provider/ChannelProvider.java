@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-image-io
+ * anchor-image-bean
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -24,57 +24,19 @@
  * #L%
  */
 
-package org.anchoranalysis.image.io.generator.raster.series;
+package org.anchoranalysis.image.bean.provider;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
+import org.anchoranalysis.bean.annotation.GroupingRoot;
+import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.stack.Stack;
 
-public class ImgStackSeries implements Iterable<Stack> {
+@GroupingRoot
+public abstract class ChannelProvider extends BeanProviderAsStackBase<ChannelProvider, Channel> {
 
-    private List<Stack> delegate = new ArrayList<>();
+    public abstract Channel create() throws CreateException;
 
-    /** Puts all stacks in the series into a single image stack */
-    public Stack createSingleImgStack() throws IncorrectImageSizeException {
-
-        Stack stackOut = new Stack();
-
-        for (Stack stack : delegate) {
-            for (Channel chnl : stack) {
-                stackOut.addChannel(chnl);
-            }
-        }
-
-        return stackOut;
-    }
-
-    @Override
-    public Iterator<Stack> iterator() {
-        return delegate.iterator();
-    }
-
-    public boolean add(Stack e) {
-        return delegate.add(e);
-    }
-
-    public Stack get(int index) {
-        return delegate.get(index);
-    }
-
-    public int size() {
-        return delegate.size();
-    }
-
-    @Override
-    public String toString() {
-        return delegate.toString();
-    }
-
-    public Collection<Stack> asCollection() {
-        return delegate;
+    public Stack createAsStack() throws CreateException {
+        return new Stack(create());
     }
 }

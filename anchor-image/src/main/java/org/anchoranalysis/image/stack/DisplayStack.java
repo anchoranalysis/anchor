@@ -152,7 +152,7 @@ public class DisplayStack {
 
     private void checkChnlNum(int numChnl) throws CreateException {
 
-        if (numChnl >= 4) {
+        if (numChnl > 3) {
             throw new CreateException(
                     String.format(
                             "Cannot convert to DisplayStack as there are %d channels. There must be 3 or less.",
@@ -280,7 +280,7 @@ public class DisplayStack {
         return stackOut;
     }
 
-    public Stack createImgStackDuplicate() {
+    public Stack createStackDuplicate() {
         Stack stackOut = new Stack();
         for (int c = 0; c < delegate.getNumberChannels(); c++) {
             try {

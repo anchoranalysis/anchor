@@ -46,7 +46,7 @@ public class ConvertDisplayStackToRGB {
                         background.createChnlDuplicate(0),
                         background.createChnlDuplicate(0));
             } else if (background.getNumberChannels() == 3) {
-                return new RGBStack(background.createImgStackDuplicate());
+                return new RGBStack(background.createStackDuplicate());
             } else {
                 throw new AnchorImpossibleSituationException();
             }

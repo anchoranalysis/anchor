@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-image-bean
+ * anchor-image-experiment
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -24,13 +24,16 @@
  * #L%
  */
 
-package org.anchoranalysis.image.bean.provider;
+package org.anchoranalysis.image.experiment.identifiers;
 
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.stack.Stack;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
-// Provides multiple channels
-public interface ProviderImgStack {
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
+public class StackIdentifiers {
 
-    Stack createStack() throws CreateException;
+    public static final String INPUT_IMAGE = "input_image";
+    public static final String INPUT_IMAGE_MASK = "input_image_mask";
+    public static final String INPUT_IMAGE_VISUAL = "input_image_visual";
+    public static final String NRG_STACK = "nrg_stack";
 }

@@ -61,7 +61,7 @@ public class StackGenerator extends RasterGenerator
         this.manifestFunction = manifestFunction;
     }
 
-    public static Stack generateImgStack(Stack stackIn, boolean padIfNec)
+    public static Stack generateStack(Stack stackIn, boolean padIfNec)
             throws OutputWriteFailedException {
         Stack stackOut = new Stack();
 
@@ -87,7 +87,7 @@ public class StackGenerator extends RasterGenerator
     @Override
     public Stack generate() throws OutputWriteFailedException {
         assert (stackIn != null);
-        return generateImgStack(stackIn, padIfNec);
+        return generateStack(stackIn, padIfNec);
     }
 
     @Override

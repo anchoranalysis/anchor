@@ -36,7 +36,7 @@ import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.bean.provider.stack.StackProviderReference;
-import org.anchoranalysis.image.experiment.identifiers.ImgStackIdentifiers;
+import org.anchoranalysis.image.experiment.identifiers.StackIdentifiers;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -44,7 +44,7 @@ public abstract class DefineOutputterWithNrg extends DefineOutputter {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private StackProvider nrgStackProvider =
-            new StackProviderReference(ImgStackIdentifiers.NRG_STACK);
+            new StackProviderReference(StackIdentifiers.NRG_STACK);
 
     @BeanField @OptionalBean @Getter @Setter private KeyValueParamsProvider nrgParamsProvider;
     // END BEAN PROPERTIES

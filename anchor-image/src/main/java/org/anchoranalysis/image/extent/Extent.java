@@ -53,6 +53,12 @@ public final class Extent implements Serializable {
     // Lengths in each dimension
     private final ReadableTuple3i len;
 
+    /** Constructor - create with only x and y dimensions (z dimension is assumed to be 1) */
+    public Extent(int x, int y) {
+        this(x,y,1);
+    }
+    
+    /** Constructor - create with x and y and z dimensions */
     public Extent(int x, int y, int z) {
         this(new Point3i(x, y, z));
     }
@@ -322,6 +328,22 @@ public final class Extent implements Serializable {
      */
     public Extent flattenZ() {
         return new Extent(new Point3i(len.getX(), len.getY(), 1));
+    }
+    
+    /**
+     * Returns true if any dimension in this extent is larger than the corresponding dimension in {@code other} extent
+     * 
+     * @param other extent to compare to
+     * @return true or false (if all dimensions or less than or equal to their corresponding dimension in {@code other})
+     */
+    public boolean anyDimensionIsLargerThan( Extent other ) {
+        if (getX()>other.getX()) {
+            return true;
+        }
+        if (getY()>other.getY()) {
+            return true;
+        }
+        return getZ()>other.getZ();
     }
 
     private Point3i immutablePointOperation(Consumer<Point3i> pointOperation) {

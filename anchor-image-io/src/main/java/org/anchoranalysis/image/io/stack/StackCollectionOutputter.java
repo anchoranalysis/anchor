@@ -35,7 +35,7 @@ import org.anchoranalysis.core.name.provider.NamedProvider;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.progress.OperationWithProgressReporter;
 import org.anchoranalysis.image.io.generator.raster.StackGenerator;
-import org.anchoranalysis.image.stack.NamedStackCollection;
+import org.anchoranalysis.image.stack.NamedStacks;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.generator.collection.IterableGeneratorOutputHelper;
 import org.anchoranalysis.io.output.bean.allowed.OutputAllowed;
@@ -96,7 +96,7 @@ public class StackCollectionOutputter {
     }
 
     public static void output(
-            NamedStackCollection namedCollection,
+            NamedStacks namedCollection,
             BoundOutputManager outputManager,
             String outputName,
             String prefix,
@@ -114,7 +114,7 @@ public class StackCollectionOutputter {
     }
 
     private static void outputWithException(
-            NamedStackCollection namedCollection,
+            NamedStacks namedCollection,
             BoundOutputManager outputManager,
             String outputName,
             String suffix,
@@ -130,10 +130,10 @@ public class StackCollectionOutputter {
                 suppressSubfoldersIn);
     }
 
-    public static NamedStackCollection subset(
+    public static NamedStacks subset(
             NamedProvider<Stack> stackCollection, OutputAllowed oa) {
 
-        NamedStackCollection out = new NamedStackCollection();
+        NamedStacks out = new NamedStacks();
 
         for (String name : stackCollection.keys()) {
 
@@ -162,7 +162,7 @@ public class StackCollectionOutputter {
         return new StackGenerator(true, manifestFunction);
     }
 
-    private static NamedStackCollection stackSubset(
+    private static NamedStacks stackSubset(
             NamedProvider<Stack> stacks,
             String secondLevelOutputKey,
             BoundOutputManagerRouteErrors outputManager) {

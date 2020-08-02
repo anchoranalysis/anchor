@@ -24,45 +24,39 @@
  * #L%
  */
 
-package org.anchoranalysis.image.voxel.buffer.max;
+package org.anchoranalysis.image.stack;
 
-import java.nio.Buffer;
-import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
-import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactoryTypeBound;
+import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.functional.IdentityOperation;
+import org.anchoranalysis.image.extent.ImageDimensions;
 
 /**
- * The buffer used when making a maximum-intensity projection
- *
+ * Like a @{link {@link NamedStacks} but enforces a condition that all stacks must have the same dimensions
+ * 
  * @author Owen Feehan
- * @param <T> type of buffer used, both as input and result, of the maximum intesnity projection
+ *
  */
-public abstract class MaxIntensityBuffer<T extends Buffer> {
+public class NamedStacksUniformSize {
 
-    /** Target buffer, where the maximum-intensity pixels are stored */
-    private VoxelBox<T> target;
+    /** Lazy initialization after first stack is added */
+    private ImageDimensions dimensions = null;
+    
+    private NamedStacks delegate = new NamedStacks();
 
-    public MaxIntensityBuffer(Extent srcExtent, VoxelBoxFactoryTypeBound<T> factory) {
-        target = factory.create(new Extent(srcExtent.getX(), srcExtent.getY()));
-    }
-
-    public void projectSlice(T pixels) {
-
-        T flatBuffer = target.getPixelsForPlane(0).buffer();
-
-        while (pixels.hasRemaining()) {
-            addBuffer(pixels, flatBuffer);
+    public void add(String name, Stack stack) throws OperationFailedException {
+        
+        if (dimensions == null) {
+            dimensions = stack.getDimensions();
+        } else {
+            if (!stack.getDimensions().equals(dimensions)) {
+                throw new OperationFailedException("Stack dimensions do not match");
+            }
         }
+        
+        delegate.add(name, new IdentityOperation<>(stack) );
     }
-
-    /**
-     * The target buffer
-     *
-     * @return the result of the maximum-intensity projection
-     */
-    public VoxelBox<T> getProjection() {
-        return target;
+    
+    public NamedStacks withoutUniformSizeConstraint() {
+        return delegate;
     }
-
-    protected abstract void addBuffer(T anySlice, T target);
 }

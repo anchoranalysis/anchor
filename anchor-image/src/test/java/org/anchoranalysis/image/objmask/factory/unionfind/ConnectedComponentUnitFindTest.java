@@ -131,7 +131,7 @@ public class ConnectedComponentUnitFindTest {
 
     private ObjectCollection createObjects(ObjectMaskFixture fixture) {
         Point3i running = new Point3i();
-        return ObjectCollectionFactory.from(
+        return ObjectCollectionFactory.of(
                 generateObjectsAndIncrementRunning(
                         NUM_NON_OVERLAPPING_OBJECTS, DISTANCE_BETWEEN, running, fixture),
                 generateObjectsAndIncrementRunning(

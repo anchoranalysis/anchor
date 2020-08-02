@@ -36,7 +36,7 @@ import org.anchoranalysis.bean.define.Define;
 import org.anchoranalysis.bean.xml.BeanXmlLoader;
 import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.bean.xml.error.BeanXmlException;
-import org.anchoranalysis.image.bean.provider.ChnlProvider;
+import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.test.TestLoader;
 import org.junit.Before;
@@ -69,7 +69,7 @@ public class DefineMPPTest {
 
     private void checkDefine(Define define) {
         // We assume an order of chnl1 before chnl2
-        assertTwoElements(define, ChnlProvider.class, "chnl");
+        assertTwoElements(define, ChannelProvider.class, "chnl");
 
         // We assume an order of stack1 before stack2
         assertTwoElements(define, StackProvider.class, "stack");

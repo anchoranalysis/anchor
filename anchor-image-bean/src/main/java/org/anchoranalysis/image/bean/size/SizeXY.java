@@ -58,6 +58,6 @@ public class SizeXY extends AnchorBean<SizeXY> {
     }
 
     public Extent asExtent() {
-        return new Extent(width, height, 1);
+        return new Extent(width, height);
     }
 }

@@ -39,7 +39,7 @@ import org.apache.commons.logging.LogFactory;
 
 //
 //  Note the difference between ImageStack (and ImageJ class)
-//   and ImgStack (one of our classes)
+//   and {@link Stack} (one of our classes)
 //
 public abstract class IJWriter extends RasterWriter {
 

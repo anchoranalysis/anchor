@@ -33,7 +33,9 @@ import org.anchoranalysis.io.generator.IterableObjectGenerator;
 import org.anchoranalysis.io.generator.ObjectGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import lombok.AllArgsConstructor;
 
+@AllArgsConstructor
 public class StackOperationGenerator extends RasterGenerator
         implements IterableObjectGenerator<Operation<Stack, OutputWriteFailedException>, Stack> {
 
@@ -47,21 +49,10 @@ public class StackOperationGenerator extends RasterGenerator
         this.manifestFunction = manifestFunction;
     }
 
-    // Notes pads the passed channel, would be better if it makes a new stack first
-    public StackOperationGenerator(
-            Operation<Stack, OutputWriteFailedException> stack,
-            boolean padIfNec,
-            String manifestFunction) {
-        super();
-        this.stackIn = stack;
-        this.padIfNec = padIfNec;
-        this.manifestFunction = manifestFunction;
-    }
-
     @Override
     public Stack generate() throws OutputWriteFailedException {
         assert (stackIn != null);
-        return StackGenerator.generateImgStack(stackIn.doOperation(), padIfNec);
+        return StackGenerator.generateStack(stackIn.doOperation(), padIfNec);
     }
 
     @Override

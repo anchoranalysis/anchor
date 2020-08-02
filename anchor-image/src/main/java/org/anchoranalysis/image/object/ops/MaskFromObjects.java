@@ -43,21 +43,27 @@ import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 
+/**
+ * Creates a mask from one or more objects
+ * 
+ * @author Owen Feehan
+ *
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class BinaryChnlFromObjects {
+public class MaskFromObjects {
 
     /** We look for space IN objects, and create channel to display it */
     public static Mask createFromObjects(
-            ObjectCollection masks, ImageDimensions sd, BinaryValues outVal) {
+            ObjectCollection objects, ImageDimensions dimensions, BinaryValues outVal) {
         return createChannelObjectCollectionHelper(
-                masks, sd, outVal, outVal.getOffInt(), outVal.createByte().getOnByte());
+                objects, dimensions, outVal, outVal.getOffInt(), outVal.createByte().getOnByte());
     }
 
     /** We look for space NOT in the objects, and create channel to display it */
     public static Mask createFromNotObjects(
-            ObjectCollection objects, ImageDimensions sd, BinaryValues outVal) {
+            ObjectCollection objects, ImageDimensions dimensions, BinaryValues outVal) {
         return createChannelObjectCollectionHelper(
-                objects, sd, outVal, outVal.getOnInt(), outVal.createByte().getOffByte());
+                objects, dimensions, outVal, outVal.getOnInt(), outVal.createByte().getOffByte());
     }
 
     // We look for the values that are NOT on the masks

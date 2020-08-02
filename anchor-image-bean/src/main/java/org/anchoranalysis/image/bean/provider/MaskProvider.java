@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-image-experiment
+ * anchor-image-bean
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -24,14 +24,20 @@
  * #L%
  */
 
-package org.anchoranalysis.image.experiment.identifiers;
+package org.anchoranalysis.image.bean.provider;
 
-public class ImgStackIdentifiers {
+import org.anchoranalysis.bean.annotation.GroupingRoot;
+import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.image.binary.mask.Mask;
+import org.anchoranalysis.image.stack.Stack;
 
-    private ImgStackIdentifiers() {}
+@GroupingRoot
+public abstract class MaskProvider extends BeanProviderAsStackBase<MaskProvider, Mask> {
+    
+    @Override
+    public abstract Mask create() throws CreateException;
 
-    public static final String INPUT_IMAGE = "input_image";
-    public static final String INPUT_IMAGE_MASK = "input_image_mask";
-    public static final String INPUT_IMAGE_VISUAL = "input_image_visual";
-    public static final String NRG_STACK = "nrg_stack";
+    public Stack createAsStack() throws CreateException {
+        return new Stack( create().getChannel() );
+    }
 }

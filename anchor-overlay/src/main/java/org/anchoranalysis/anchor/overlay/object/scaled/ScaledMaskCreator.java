@@ -43,20 +43,20 @@ public interface ScaledMaskCreator {
      * Creates a scaled-version of the mask
      *
      * @param overlayWriter what writes an overlay onto a raster
-     * @param omUnscaled unscaled object-mask
+     * @param unscaled unscaled object-mask
      * @param scaleFactor how much to scale by (e.g. 0.5 scales the X dimension to 50%)
      * @param originalObject the object from which omUnscaled was derived
-     * @param sdScaled the scene-dimensions when scaled to match scaleFactor
+     * @param dimensionsScaled the scene-dimensions when scaled to match scaleFactor
      * @param bv binary-values for creating the mask
      * @return the scaled object-mask
      * @throws CreateException
      */
     ObjectWithProperties createScaledMask(
             DrawOverlay overlayWriter,
-            ObjectWithProperties omUnscaled,
+            ObjectWithProperties unscaled,
             double scaleFactor,
             Object originalObject,
-            ImageDimensions sdScaled,
+            ImageDimensions dimensionsScaled,
             BinaryValuesByte bv)
             throws CreateException;
 }

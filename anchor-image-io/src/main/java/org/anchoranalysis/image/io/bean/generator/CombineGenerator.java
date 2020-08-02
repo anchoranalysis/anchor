@@ -63,7 +63,7 @@ class CombineGenerator<T> extends RasterGenerator implements IterableObjectGener
             throw new OutputWriteFailedException(e);
         }
 
-        // We get an ImgStack<ImgChnl> for each generator
+        // We get an image-stack for each generator
         //
         // Then we tile them
         //

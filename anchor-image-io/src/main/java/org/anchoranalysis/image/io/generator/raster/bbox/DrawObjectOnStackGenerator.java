@@ -26,9 +26,11 @@
 
 package org.anchoranalysis.image.io.generator.raster.bbox;
 
+import java.awt.Color;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.color.ColorIndex;
+import org.anchoranalysis.core.color.ColorList;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.image.extent.BoundingBox;
@@ -53,38 +55,61 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
  *
  */
 @RequiredArgsConstructor
-public class ExtractedObjectGenerator extends RasterGenerator
+public class DrawObjectOnStackGenerator extends RasterGenerator
         implements IterableObjectGenerator<ObjectMask, Stack> {
 
+    private static final ManifestDescription MANIFEST_DESCRIPTION = new ManifestDescription("raster", "extractedObjectOutline");
+
+    /** By default, the color GREEN is used for the outline of objects */
+    private static final ColorList DEFAULT_COLORS = new ColorList(Color.GREEN);
+    
     // START REQUIRED ARGUMENTS
     private final DrawObjectsGenerator drawObjectsGenerator;
     private final IterableObjectGenerator<BoundingBox, Stack> backgroundGenerator;
-    private final String manifestFunction;
-    private final boolean mip;
+    private final boolean flatten;
     // END REQUIRED ARGUMENTS
 
     private ObjectMask element;
 
+    
+    /**
+     * Creates an extracted-object generator that draws an outline - with default color green and flattened in Z
+     * 
+     * @param background stack that exists as a background for the object (or none, in which case a 0-valued grayscale background is assumed)
+     * @param outlineWidth width of the outline around an object
+     */
+    public DrawObjectOnStackGenerator(Optional<Stack> background, int outlineWidth) {
+        this(new ExtractBoundingBoxAreaFromStackGenerator(background), outlineWidth);
+    }
+    
+    
+    /**
+     * Creates an extracted-object generator that draws an outline - with default color green and flattened in Z
+     * 
+     * @param backgroundGenerator generates a background for a bounding-box
+     * @param outlineWidth width of the outline around an object
+     */
+    public DrawObjectOnStackGenerator(IterableObjectGenerator<BoundingBox, Stack> backgroundGenerator, int outlineWidth) {
+        this(backgroundGenerator, outlineWidth, DEFAULT_COLORS, true);
+    }
+            
     /**
      * Creates an extracted-object generator that draws an outline
      * 
-     * @param backgroundGenerator
-     * @param outlineWidth
-     * @param colorIndex
-     * @param mip
-     * @param manifestFunction
+     * @param backgroundGenerator generates a background for a bounding-box
+     * @param outlineWidth width of the outline around an object
+     * @param colorIndex the colors used by successive objects in rotation
+     * @param flatten whether to flatten in the z-dimension (maximum-intensity projection of stack and bounding-box)
      */
-    public ExtractedObjectGenerator(
+    public DrawObjectOnStackGenerator(
         IterableObjectGenerator<BoundingBox, Stack> backgroundGenerator,
         int outlineWidth,
         ColorIndex colorIndex,
-        boolean mip,
-        String manifestFunction
+        boolean flatten
     ) {
         this.drawObjectsGenerator = new DrawObjectsGenerator(new Outline(outlineWidth), colorIndex);
         this.backgroundGenerator = backgroundGenerator;
-        this.mip = mip;
-        this.manifestFunction = manifestFunction;
+        this.flatten = flatten;
     }
     
     @Override
@@ -102,7 +127,7 @@ public class ExtractedObjectGenerator extends RasterGenerator
 
         Stack channelExtracted = backgroundGenerator.getGenerator().generate();
 
-        if (mip) {
+        if (flatten) {
             channelExtracted = channelExtracted.maximumIntensityProjection();
         }
 
@@ -111,7 +136,7 @@ public class ExtractedObjectGenerator extends RasterGenerator
 
         ObjectMask object = this.getIterableElement();
 
-        if (mip) {
+        if (flatten) {
             object = object.flattenZ();
         }
 
@@ -146,7 +171,7 @@ public class ExtractedObjectGenerator extends RasterGenerator
 
     @Override
     public Optional<ManifestDescription> createManifestDescription() {
-        return Optional.of(new ManifestDescription("raster", manifestFunction));
+        return Optional.of(MANIFEST_DESCRIPTION);
     }
 
     @Override

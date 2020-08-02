@@ -65,7 +65,7 @@ class IntersectionWriter {
                 stack,
                 color,
                 intersection.shiftBackBy(stackBBox.cornerMin()),
-                mask.mapBoundingBox(bbox -> bbox.shiftBackBy(stackBBox.cornerMin())));
+                mask.mapBoundingBoxPreserveExtent(bbox -> bbox.shiftBackBy(stackBBox.cornerMin())));
     }
 
     private static void writeOnEachSlice(

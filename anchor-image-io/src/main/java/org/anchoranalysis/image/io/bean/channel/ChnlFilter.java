@@ -37,7 +37,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
-import org.anchoranalysis.image.bean.provider.ChnlProvider;
+import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.io.chnl.ChannelGetter;
 import org.anchoranalysis.image.io.input.ImageInitParamsFactory;
@@ -51,7 +51,7 @@ public class ChnlFilter extends AnchorBean<ChnlFilter> implements ChannelGetter 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private String channelName;
 
-    @BeanField @Getter @Setter private ChnlProvider channel;
+    @BeanField @Getter @Setter private ChannelProvider channel;
     // END BEAN PROPERTIES
 
     private ChannelGetter chnlCollection;
@@ -72,7 +72,7 @@ public class ChnlFilter extends AnchorBean<ChnlFilter> implements ChannelGetter 
                 return chnlCollection.getChannel(name, t, progressReporter);
             }
 
-            ChnlProvider chnlProviderDup = channel.duplicateBean();
+            ChannelProvider chnlProviderDup = channel.duplicateBean();
 
             Channel chnlIn = chnlCollection.getChannel(name, t, progressReporter);
 
