@@ -38,8 +38,6 @@ import org.anchoranalysis.feature.nrg.NRGStack;
 /**
  * Memoization of retrieving a {@VoxelizedMark} from a mark
  *
- * <p>This is avoid repeated expensive operations (rasterization of a mark). TODO switch from
- * inheritance to delegation.
  */
 public class VoxelizedMarkMemo {
 
@@ -86,12 +84,5 @@ public class VoxelizedMarkMemo {
     // Duplicates the current mark memo, resetting the calculation state
     public VoxelizedMarkMemo duplicateFresh() {
         return PxlMarkMemoFactory.create(this.mark.duplicate(), stack, regionMap);
-    }
-
-    public void cleanUp() {
-        VoxelizedMark pm = cachedMark.getResult();
-        if (pm != null) {
-            pm.cleanUp();
-        }
     }
 }

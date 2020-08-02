@@ -28,11 +28,7 @@ public abstract class CacheCallBase<T> {
     public synchronized boolean isEvaluated() {
         return evaluated;
     }
-    
-    public T getResult() {
-        return result;
-    }
-    
+     
     protected synchronized <E extends Exception> T call( SupplierWithException<T,E> supplier ) throws E {
 
         if (!evaluated) {
