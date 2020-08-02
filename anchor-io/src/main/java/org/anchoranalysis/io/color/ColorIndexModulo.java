@@ -24,19 +24,16 @@
  * #L%
  */
 
-package org.anchoranalysis.io.output.bean;
+package org.anchoranalysis.io.color;
 
 import org.anchoranalysis.core.color.ColorIndex;
 import org.anchoranalysis.core.color.RGBColor;
+import lombok.AllArgsConstructor;
 
-class ColorIndexModulo implements ColorIndex {
+@AllArgsConstructor
+public class ColorIndexModulo implements ColorIndex {
 
     private ColorIndex delegate;
-
-    public ColorIndexModulo(ColorIndex delegate) {
-        super();
-        this.delegate = delegate;
-    }
 
     @Override
     public RGBColor get(int i) {

@@ -32,10 +32,11 @@ import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class ConvertDisplayStackToRGB {
-
-    private ConvertDisplayStackToRGB() {}
 
     public static RGBStack convert(DisplayStack background) {
 

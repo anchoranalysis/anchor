@@ -40,6 +40,7 @@ import org.anchoranalysis.io.bean.color.generator.ColorSetGenerator;
 import org.anchoranalysis.io.bean.color.generator.HSBColorSetGenerator;
 import org.anchoranalysis.io.bean.color.generator.PrependColorSetGenerator;
 import org.anchoranalysis.io.bean.color.generator.ShuffleColorSetGenerator;
+import org.anchoranalysis.io.color.ColorIndexModulo;
 import lombok.Getter;
 import lombok.Setter;
 

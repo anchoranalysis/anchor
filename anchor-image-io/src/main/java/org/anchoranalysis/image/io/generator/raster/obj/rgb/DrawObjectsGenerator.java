@@ -55,25 +55,25 @@ public class DrawObjectsGenerator extends ObjectsOnRGBGenerator {
 
     public DrawObjectsGenerator(
             DrawObject drawObject,
-            ObjectCollectionWithProperties masks,
+            ObjectCollectionWithProperties objects,
             Either<ImageDimensions,DisplayStack> background,
             ColorIndex colorIndex) {
-        this(drawObject, masks, background, new ObjectDrawAttributes(colorIndex));
+        this(drawObject, objects, background, new ObjectDrawAttributes(colorIndex));
     }
 
     public DrawObjectsGenerator(
             DrawObject drawObject,
-            ObjectCollectionWithProperties masks,
+            ObjectCollectionWithProperties objects,
             Either<ImageDimensions,DisplayStack> background,
             ObjectDrawAttributes attributes) {
         super(drawObject, attributes, background);
-        this.setIterableElement(masks);
+        this.setIterableElement(objects);
     }
 
     @Override
     protected RGBStack generateBackground(Either<ImageDimensions,DisplayStack> background) {
         return background.fold(
-           dimensions -> createEmptyStackFor(dimensions),
+           DrawObjectsGenerator::createEmptyStackFor,
            ConvertDisplayStackToRGB::convert
         );
     }
