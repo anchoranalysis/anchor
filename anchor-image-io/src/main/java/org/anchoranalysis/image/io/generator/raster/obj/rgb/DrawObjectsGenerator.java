@@ -26,14 +26,15 @@
 
 package org.anchoranalysis.image.io.generator.raster.obj.rgb;
 
-import java.util.Optional;
 import org.anchoranalysis.anchor.overlay.bean.DrawObject;
 import org.anchoranalysis.anchor.overlay.writer.ObjectDrawAttributes;
 import org.anchoranalysis.core.color.ColorIndex;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.io.stack.ConvertDisplayStackToRGB;
 import org.anchoranalysis.image.object.properties.ObjectCollectionWithProperties;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
+import io.vavr.control.Either;
 
 /**
  * Generates stacks of RGB images using a {@link DrawObject} to draw objects on a background.
@@ -43,23 +44,19 @@ import org.anchoranalysis.image.stack.rgb.RGBStack;
  */
 public class DrawObjectsGenerator extends ObjectsOnRGBGenerator {
 
-    public DrawObjectsGenerator(DrawObject drawObject, ColorIndex colorIndex) {
-        this(drawObject, Optional.empty(), colorIndex);
-    }
-
     public DrawObjectsGenerator(
-            DrawObject drawObject, Optional<DisplayStack> background, ColorIndex colorIndex) {
+            DrawObject drawObject, ColorIndex colorIndex) {
         this(
                 drawObject,
                 null, // No element yet to iterate
-                background,
+                null,   // No background set yet
                 new ObjectDrawAttributes(colorIndex));
     }
 
     public DrawObjectsGenerator(
             DrawObject drawObject,
             ObjectCollectionWithProperties masks,
-            Optional<DisplayStack> background,
+            Either<ImageDimensions,DisplayStack> background,
             ColorIndex colorIndex) {
         this(drawObject, masks, background, new ObjectDrawAttributes(colorIndex));
     }
@@ -67,15 +64,18 @@ public class DrawObjectsGenerator extends ObjectsOnRGBGenerator {
     public DrawObjectsGenerator(
             DrawObject drawObject,
             ObjectCollectionWithProperties masks,
-            Optional<DisplayStack> background,
+            Either<ImageDimensions,DisplayStack> background,
             ObjectDrawAttributes attributes) {
         super(drawObject, attributes, background);
         this.setIterableElement(masks);
     }
 
     @Override
-    protected RGBStack generateBackground(DisplayStack background) {
-        return ConvertDisplayStackToRGB.convert(background);
+    protected RGBStack generateBackground(Either<ImageDimensions,DisplayStack> background) {
+        return background.fold(
+           dimensions -> createEmptyStackFor(dimensions),
+           ConvertDisplayStackToRGB::convert
+        );
     }
 
     @Override

@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.image.io.generator.raster.obj.rgb;
 
-import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.anchor.overlay.bean.DrawObject;
@@ -37,6 +36,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.size.Padding;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.io.stack.ConvertDisplayStackToRGB;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
@@ -44,6 +44,8 @@ import org.anchoranalysis.image.object.ops.ObjectMaskMerger;
 import org.anchoranalysis.image.object.properties.ObjectCollectionWithProperties;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
+import com.google.common.base.Functions;
+import io.vavr.control.Either;
 
 /**
  * Similar to {@link DrawObjectsGenerator}
@@ -53,19 +55,21 @@ import org.anchoranalysis.image.stack.rgb.RGBStack;
  * @author Owen Feehan
  */
 public class DrawCroppedObjectsGenerator extends ObjectsOnRGBGenerator {
-
+    
     @Getter @Setter private Padding padding;
 
     private BoundingBox bbox;
 
     public DrawCroppedObjectsGenerator(
             DrawObject drawObject, DisplayStack background, ColorIndex colorIndex) {
-        super(drawObject, new ObjectDrawAttributes(colorIndex), Optional.of(background));
+        super(drawObject, new ObjectDrawAttributes(colorIndex), Either.right(background));
     }
 
     @Override
-    protected RGBStack generateBackground(DisplayStack background) throws CreateException {
+    protected RGBStack generateBackground(Either<ImageDimensions,DisplayStack> background) throws CreateException {
         try {
+            Extent extent = background.fold(Functions.identity(), DisplayStack::getDimensions).getExtent();
+            
             ObjectCollection objects = getIterableElement().withoutProperties();
 
             if (objects.isEmpty()) {
@@ -75,10 +79,13 @@ public class DrawCroppedObjectsGenerator extends ObjectsOnRGBGenerator {
             // Get a bounding box that contains all the objects
             this.bbox = ObjectMaskMerger.mergeBoundingBoxes(objects);
 
-            bbox = growBBBox(bbox, background.getDimensions().getExtent());
+            bbox = growBBBox(bbox, extent);
 
             // Extract the relevant piece of background
-            return ConvertDisplayStackToRGB.convertCropped(background, bbox);
+            return background.fold(
+               dimensions -> createEmptyStackFor( new ImageDimensions(bbox.extent()) ),
+               stack -> ConvertDisplayStackToRGB.convertCropped(stack, bbox)
+            );
         } catch (OperationFailedException e) {
             throw new CreateException(e);
         }
@@ -87,7 +94,7 @@ public class DrawCroppedObjectsGenerator extends ObjectsOnRGBGenerator {
     @Override
     protected ObjectCollectionWithProperties generateMasks() throws CreateException {
         // Create a new set of object masks, relative to the bbox position
-        return relTo(getIterableElement().withoutProperties(), bbox);
+        return relativeTo(getIterableElement().withoutProperties(), bbox);
     }
 
     private BoundingBox growBBBox(BoundingBox bbox, Extent containingExtent) {
@@ -98,7 +105,7 @@ public class DrawCroppedObjectsGenerator extends ObjectsOnRGBGenerator {
         return bbox.growBy(padding.asPoint(), containingExtent);
     }
 
-    private static ObjectCollectionWithProperties relTo(ObjectCollection objects, BoundingBox src) {
+    private static ObjectCollectionWithProperties relativeTo(ObjectCollection objects, BoundingBox src) {
 
         ObjectCollectionWithProperties out = new ObjectCollectionWithProperties();
 

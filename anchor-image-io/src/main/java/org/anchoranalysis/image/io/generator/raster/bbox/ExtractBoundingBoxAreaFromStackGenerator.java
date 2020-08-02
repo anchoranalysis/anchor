@@ -30,9 +30,7 @@ import java.util.Optional;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
-import org.anchoranalysis.image.channel.factory.ChannelFactoryByte;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.io.generator.raster.RasterGenerator;
 import org.anchoranalysis.image.stack.Stack;
@@ -44,8 +42,7 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 /**
  * An iterable-generator that outputs the portion of a stack corresponding to a bounding-box
- * <p>
- * If the stack isn't defined, an empty grayscale (unsigned 8-bit) channel is returned of same-size as the bounding-box.
+ * 
  * @author Owen Feehan
  *
  */
@@ -54,15 +51,13 @@ public class ExtractBoundingBoxAreaFromStackGenerator extends RasterGenerator
 
     private static final String MANIFEST_FUNCTION = "boundingBoxExtract";
     
-    private static final ChannelFactoryByte CHANNEL_FACTORY = new ChannelFactoryByte();
-    
     // START REQUIRED ARGUMENTS
-    private final Optional<Stack> stack;
+    private final Stack stack;
     // END REQUIRED ARGUMENTS
     
     private BoundingBox bbox;
 
-    public ExtractBoundingBoxAreaFromStackGenerator(Optional<Stack> stack) {
+    public ExtractBoundingBoxAreaFromStackGenerator(Stack stack) {
         this.stack = stack;
     }    
     
@@ -74,11 +69,8 @@ public class ExtractBoundingBoxAreaFromStackGenerator extends RasterGenerator
         }
 
         try {
-            if (stack.isPresent()) {
-                return createExtract(stack.get());
-            } else {
-                return new Stack( createEmptyGrayscaleChannelForCurrentElement() );
-            }
+            return createExtract(stack);
+
         } catch (CreateException e) {
             throw new OutputWriteFailedException(e);
         }
@@ -106,7 +98,7 @@ public class ExtractBoundingBoxAreaFromStackGenerator extends RasterGenerator
 
     @Override
     public boolean isRGB() {
-        return stack.isPresent() && stack.get().getNumberChannels() == 3;
+        return stack.getNumberChannels() == 3;
     }
 
     private Stack createExtract(Stack stackIn) throws CreateException {
@@ -128,10 +120,5 @@ public class ExtractBoundingBoxAreaFromStackGenerator extends RasterGenerator
         }
 
         return stackOut;
-    }
-    
-    private Channel createEmptyGrayscaleChannelForCurrentElement() {
-        ImageDimensions dimensions = new ImageDimensions(bbox.extent());
-        return CHANNEL_FACTORY.createEmptyInitialised(dimensions);
     }
 }

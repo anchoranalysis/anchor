@@ -55,6 +55,7 @@ import org.anchoranalysis.io.bean.object.writer.IfElse;
 import org.anchoranalysis.io.bean.object.writer.Outline;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import io.vavr.control.Either;
 
 public class AssignmentGenerator extends RasterGenerator {
 
@@ -168,7 +169,7 @@ public class AssignmentGenerator extends RasterGenerator {
         return new DrawObjectsGenerator(
                 drawObject,
                 new ObjectCollectionWithProperties(objects),
-                Optional.of(background),
+                Either.right(background),
                 cols);
     }
 
