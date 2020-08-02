@@ -60,7 +60,7 @@ import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.bean.color.generator.ColorSetGenerator;
 import org.anchoranalysis.io.bean.color.generator.VeryBrightColorSetGenerator;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
-import org.apache.commons.lang3.tuple.Pair;
+import io.vavr.Tuple;
 
 /**
  * Allows comparison of an annotation with multiple other entities
@@ -161,7 +161,7 @@ public class MultipleComparer extends AnchorBean<MultipleComparer> {
                             assignment,
                             colorPool,
                             useMIP,
-                            Pair.of("annotator", rightName),
+                            Tuple.of("annotator", rightName),
                             3,
                             true);
 

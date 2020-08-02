@@ -26,19 +26,19 @@
 
 package org.anchoranalysis.anchor.mpp.feature.mark;
 
-import org.anchoranalysis.anchor.mpp.feature.addcriteria.PairCollectionAddCriteria;
+import org.anchoranalysis.anchor.mpp.feature.addcriteria.RandomCollectionWithAddCriteria;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
-import org.anchoranalysis.anchor.mpp.pair.Pair;
+import org.anchoranalysis.anchor.mpp.pair.IdentifiablePair;
 
 /**
- * A pair collection where the underlying type is a simple {@link Pair}
+ * A pair collection where the underlying type is a simple {@link IdentifiablePair}
  *
  * @author Owen Feehan
  */
-public class SimplePairCollection extends PairCollectionAddCriteria<Pair<Mark>> {
+public class MarkPairCollection extends RandomCollectionWithAddCriteria<IdentifiablePair<Mark>> {
 
-    public SimplePairCollection() {
-        super(Pair.class);
+    public MarkPairCollection() {
+        super(IdentifiablePair.class);
     }
 
     @Override

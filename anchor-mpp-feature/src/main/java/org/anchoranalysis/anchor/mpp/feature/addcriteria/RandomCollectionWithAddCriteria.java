@@ -39,7 +39,7 @@ import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.mark.set.UpdateMarkSetException;
 import org.anchoranalysis.anchor.mpp.mark.voxelized.memo.MemoForIndex;
 import org.anchoranalysis.anchor.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
-import org.anchoranalysis.anchor.mpp.pair.PairCollection;
+import org.anchoranalysis.anchor.mpp.pair.RandomCollection;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
@@ -57,11 +57,10 @@ import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.feature.shared.SharedFeatureMulti;
 
 /**
- * An implementation of a PairCollection that uses {@link AddCriteria} to determine how pairs are
- * formed.
+ * An implementation of a {@link RandomCollection} that uses {@link AddCriteria}
  *
  * <p>Note: this is not a valid-bean on its own, as there is no default public constructor So if we
- * use it in BeanXML, we must sub-class it with such a constructor.
+ * use it in BeanXML, we must sub-class it with such a constructor. However, it is a valid (non-bean) class on its own.
  *
  * <p>However, it is useful to keep the class non-abstract, as when the copy methods (shallowCopy,
  * deepCopy etc.) are called, we can instantiate an instance of this class
@@ -69,7 +68,7 @@ import org.anchoranalysis.feature.shared.SharedFeatureMulti;
  * @author Owen Feehan
  * @param <T> type of the pair
  */
-public class PairCollectionAddCriteria<T> extends PairCollection<T> {
+public class RandomCollectionWithAddCriteria<T> extends RandomCollection<T> {
 
     private GraphWithEdgeTypes<Mark, T> graph;
 
@@ -84,13 +83,13 @@ public class PairCollectionAddCriteria<T> extends PairCollection<T> {
     private Logger logger;
     private SharedFeatureMulti sharedFeatures;
 
-    public PairCollectionAddCriteria(Class<?> pairTypeClass) {
+    public RandomCollectionWithAddCriteria(Class<?> pairTypeClass) {
         this.pairTypeClass = pairTypeClass;
         graph = new GraphWithEdgeTypes<>(true);
     }
 
-    public PairCollectionAddCriteria<T> shallowCopy() {
-        PairCollectionAddCriteria<T> out = new PairCollectionAddCriteria<>(this.pairTypeClass);
+    public RandomCollectionWithAddCriteria<T> shallowCopy() {
+        RandomCollectionWithAddCriteria<T> out = new RandomCollectionWithAddCriteria<>(this.pairTypeClass);
         out.graph = this.graph.shallowCopy();
         out.addCriteria = this.addCriteria;
         out.nrgStack = this.nrgStack;
@@ -100,8 +99,8 @@ public class PairCollectionAddCriteria<T> extends PairCollection<T> {
         return out;
     }
 
-    public PairCollectionAddCriteria<T> deepCopy() {
-        PairCollectionAddCriteria<T> out = new PairCollectionAddCriteria<>(this.pairTypeClass);
+    public RandomCollectionWithAddCriteria<T> deepCopy() {
+        RandomCollectionWithAddCriteria<T> out = new RandomCollectionWithAddCriteria<>(this.pairTypeClass);
         out.graph = this.graph.shallowCopy();
         out.addCriteria = this.addCriteria;
         out.nrgStack = nrgStack;

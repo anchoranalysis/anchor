@@ -26,12 +26,13 @@
 
 package org.anchoranalysis.feature.nrg;
 
-import java.util.Optional;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.OperationFailedRuntimeException;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.stack.Stack;
+import com.google.common.base.Functions;
+import io.vavr.control.Either;
 
 
 /**
@@ -44,15 +45,8 @@ import org.anchoranalysis.image.stack.Stack;
  */
 public class NRGStack {
 
-    // START UNION: EITHER/OR
-    // Always one of the following two variables should be defined and the other should be empty.
-    
-    /** A delegate-stack if it exists (should NOT be set if {@code dimensions} are defined) */
-    private final Optional<Stack> stack;
-    
-    /** Dimensions if needed (should only be set if {@code stack} is empty) */
-    private final Optional<ImageDimensions> dimensions;
-    // END UNION: EITHER/OR
+    /** Either stack to delegate or dimensions (as they cannot be inferred from a stack)*/
+    private final Either<ImageDimensions, Stack> container;
 
     /**
      * Create a nrg-stack comprised of a single channel
@@ -60,19 +54,16 @@ public class NRGStack {
      * @param channel
      */
     public NRGStack(Channel channel) {
-        super();
-        this.dimensions = Optional.empty();
-        this.stack = Optional.of( new Stack(channel) );
+        this.container = Either.right( new Stack(channel) );
     }
 
     /**
      * Create a nrg-stack comprised of all channels from a stack
      * 
-     * @param stackIn
+     * @param stack the stack which is reused as the nrg-stack (i.e. it is not duplicated)
      */
-    public NRGStack(Stack stackIn) {
-        this.dimensions = Optional.empty();
-        this.stack = Optional.of(stackIn);
+    public NRGStack(Stack stack) {
+        this.container = Either.right(stack);
     }
 
     /**
@@ -80,43 +71,42 @@ public class NRGStack {
      * @param dimensions
      */
     public NRGStack(ImageDimensions dimensions) {
-        this.dimensions = Optional.of(dimensions);
-        this.stack = Optional.empty();
+        this.container = Either.left(dimensions);
     }
 
     
     public final int getNumberChannels() {
-        return stack.map(Stack::getNumberChannels).orElse(0);
+        return container.map(Stack::getNumberChannels).getOrElseGet( dimensions -> 0);
     }
 
     public ImageDimensions getDimensions() {
-        return stack.map(Stack::getDimensions).orElseGet( dimensions::get ); // NOSONAR
+        return container.map(Stack::getDimensions).getOrElseGet(Functions.identity());
     }
 
     public final Channel getChannel(int index) {
 
-        if (!stack.isPresent()) {
+        if (container.isLeft()) {
             throwInvalidIndexException(0, index);
         }
 
-        if (index >= stack.get().getNumberChannels()) {
-            throwInvalidIndexException(stack.get().getNumberChannels(), index);
+        if (index >= container.get().getNumberChannels()) {
+            throwInvalidIndexException(container.get().getNumberChannels(), index);
         }
 
-        return stack.get().getChannel(index);
+        return container.get().getChannel(index);
     }
 
     public Stack asStack() {
-        return stack.orElse( new Stack() );
+        return container.getOrElse(Stack::new);
     }
 
     public NRGStack extractSlice(int z) throws OperationFailedException {
         
-        if (!stack.isPresent()) {
+        if (container.isLeft()) {
             throw new OperationFailedException("No slice can be extracted, as no channels existing in the nrg-stack");
         }
         
-        return new NRGStack(stack.get().extractSlice(z));
+        return new NRGStack(container.get().extractSlice(z));
     }
     
     private void throwInvalidIndexException(int numberChannels, int index) {

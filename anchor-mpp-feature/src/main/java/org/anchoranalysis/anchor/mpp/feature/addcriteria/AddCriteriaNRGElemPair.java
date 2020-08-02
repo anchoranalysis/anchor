@@ -31,7 +31,7 @@ import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
 import org.anchoranalysis.anchor.mpp.feature.nrg.NRGPair;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
-import org.anchoranalysis.anchor.mpp.pair.Pair;
+import org.anchoranalysis.anchor.mpp.pair.IdentifiablePair;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.feature.bean.list.FeatureList;
@@ -109,7 +109,7 @@ public class AddCriteriaNRGElemPair implements AddCriteria<NRGPair> {
                                                         "No feature-evaluator exists"))
                                 .calc(params, nrgElemPairList);
 
-                Pair<Mark> pair = new Pair<>(mark1.getMark(), mark2.getMark());
+                IdentifiablePair<Mark> pair = new IdentifiablePair<>(mark1.getMark(), mark2.getMark());
                 return Optional.of(new NRGPair(pair, new NRGTotal(rv.total())));
             } catch (NamedFeatureCalculationException e) {
                 throw new CreateException(e);

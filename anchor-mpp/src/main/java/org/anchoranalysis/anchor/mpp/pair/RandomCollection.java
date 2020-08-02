@@ -32,13 +32,13 @@ import org.anchoranalysis.bean.annotation.GroupingRoot;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 
 /**
- * A collection of pairs, from which we can randomly sample
+ * A collection of items from which one can randomly sample
  *
  * @author Owen Feehan
- * @param <T> pair-type
+ * @param <T> item-type
  */
 @GroupingRoot
-public abstract class PairCollection<T> extends AnchorBean<PairCollection<T>>
+public abstract class RandomCollection<T> extends AnchorBean<RandomCollection<T>>
         implements UpdatableMarkSet {
 
     public abstract T sampleRandomPairNonUniform(RandomNumberGenerator randomNumberGenerator);

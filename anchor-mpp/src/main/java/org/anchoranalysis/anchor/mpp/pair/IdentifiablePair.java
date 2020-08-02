@@ -33,12 +33,12 @@ import org.anchoranalysis.anchor.overlay.id.Identifiable;
  *
  * @param <T> item-type
  */
-public class Pair<T extends Identifiable> {
+public class IdentifiablePair<T extends Identifiable> {
 
     private final T source;
     private final T destination;
 
-    public Pair(T source, T destination) {
+    public IdentifiablePair(T source, T destination) {
         super();
 
         if (source.getId() < destination.getId()) {
@@ -60,11 +60,11 @@ public class Pair<T extends Identifiable> {
         if (othero == this) {
             return true;
         }
-        if (!(othero instanceof Pair)) {
+        if (!(othero instanceof IdentifiablePair)) {
             return false;
         }
 
-        Pair<T> other = (Pair<T>) othero;
+        IdentifiablePair<T> other = (IdentifiablePair<T>) othero;
         return ((this.source.equals(other.source)) && (this.destination.equals(other.destination)));
     }
 

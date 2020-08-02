@@ -34,8 +34,8 @@ import org.anchoranalysis.anchor.mpp.bean.proposer.MarkProposer;
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkSplitProposer;
 import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
-import org.anchoranalysis.anchor.mpp.pair.Pair;
-import org.anchoranalysis.anchor.mpp.pair.PairCollection;
+import org.anchoranalysis.anchor.mpp.pair.IdentifiablePair;
+import org.anchoranalysis.anchor.mpp.pair.RandomCollection;
 import org.anchoranalysis.anchor.mpp.probmap.ProbMap;
 import org.anchoranalysis.bean.define.Define;
 import org.anchoranalysis.bean.init.params.BeanInitParams;
@@ -66,7 +66,7 @@ public class MPPInitParams implements BeanInitParams {
     private NamedProviderStore<MarkMergeProposer> storeMarkMergeProposer;
     private NamedProviderStore<MarkSplitProposer> storeMarkSplitProposer;
     private NamedProviderStore<ProbMap> storeProbMap;
-    private NamedProviderStore<PairCollection<Pair<Mark>>> storePairCollection;
+    private NamedProviderStore<RandomCollection<IdentifiablePair<Mark>>> storePairCollection;
     // END: Stores
 
     public MPPInitParams(ImageInitParams soImage, SharedObjects so) {
@@ -81,7 +81,7 @@ public class MPPInitParams implements BeanInitParams {
         storeMarkMergeProposer = so.getOrCreate(MarkMergeProposer.class);
         storeMarkSplitProposer = so.getOrCreate(MarkSplitProposer.class);
         storeProbMap = so.getOrCreate(ProbMap.class);
-        storePairCollection = so.getOrCreate(PairCollection.class);
+        storePairCollection = so.getOrCreate(RandomCollection.class);
     }
 
     public ImageInitParams getImage() {
@@ -128,7 +128,7 @@ public class MPPInitParams implements BeanInitParams {
         return storeProbMap;
     }
 
-    public NamedProviderStore<PairCollection<Pair<Mark>>> getSimplePairCollection() {
+    public NamedProviderStore<RandomCollection<IdentifiablePair<Mark>>> getSimplePairCollection() {
         return storePairCollection;
     }
 
@@ -154,7 +154,7 @@ public class MPPInitParams implements BeanInitParams {
         populater.copyInit(CfgProposer.class, getCfgProposerSet());
         populater.copyInit(MarkSplitProposer.class, getMarkSplitProposerSet());
         populater.copyInit(MarkMergeProposer.class, getMarkMergeProposerSet());
-        populater.copyWithoutInit(PairCollection.class, getSimplePairCollection());
+        populater.copyWithoutInit(RandomCollection.class, getSimplePairCollection());
 
         populater.copyProvider(CfgProvider.class, getCfgCollection());
 
