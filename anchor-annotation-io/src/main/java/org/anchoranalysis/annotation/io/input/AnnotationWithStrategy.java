@@ -101,6 +101,6 @@ public class AnnotationWithStrategy<T extends AnnotatorStrategy> implements Inpu
     }
 
     public CallableWithProgressReporter<NamedProvider<Stack>, CreateException> stacks() {
-        return CacheCallWithProgressReporter.of( new OperationCreateStackCollection(input) );
+        return CacheCallWithProgressReporter.of(new OperationCreateStackCollection(input));
     }
 }

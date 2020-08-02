@@ -26,11 +26,11 @@
 
 package org.anchoranalysis.annotation.io.assignment.generator;
 
+import io.vavr.Tuple2;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.annotation.io.assignment.Assignment;
 import org.anchoranalysis.image.stack.DisplayStack;
-import io.vavr.Tuple2;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class AssignmentGeneratorFactory {

@@ -87,7 +87,7 @@ public class ChnlFilter extends AnchorBean<ChnlFilter> implements ChannelGetter 
                 | OperationFailedException
                 | CreateException
                 | BeanDuplicateException e) {
-            throw new GetOperationFailedException(name,e);
+            throw new GetOperationFailedException(name, e);
         }
     }
 

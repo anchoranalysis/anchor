@@ -42,25 +42,24 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 /**
  * An iterable-generator that outputs the portion of a stack corresponding to a bounding-box
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class ExtractBoundingBoxAreaFromStackGenerator extends RasterGenerator
         implements IterableObjectGenerator<BoundingBox, Stack> {
 
     private static final String MANIFEST_FUNCTION = "boundingBoxExtract";
-    
+
     // START REQUIRED ARGUMENTS
     private final Stack stack;
     // END REQUIRED ARGUMENTS
-    
+
     private BoundingBox bbox;
 
     public ExtractBoundingBoxAreaFromStackGenerator(Stack stack) {
         this.stack = stack;
-    }    
-    
+    }
+
     @Override
     public Stack generate() throws OutputWriteFailedException {
 

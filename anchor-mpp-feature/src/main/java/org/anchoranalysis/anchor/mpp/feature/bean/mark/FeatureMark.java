@@ -34,7 +34,8 @@ import org.anchoranalysis.feature.input.FeatureInput;
 public abstract class FeatureMark extends Feature<FeatureInputMark> {
 
     @Override
-    public abstract double calc(SessionInput<FeatureInputMark> input) throws FeatureCalculationException;
+    public abstract double calc(SessionInput<FeatureInputMark> input)
+            throws FeatureCalculationException;
 
     @Override
     public Class<? extends FeatureInput> inputType() {

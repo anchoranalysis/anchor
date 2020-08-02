@@ -48,7 +48,8 @@ public interface FeatureCalculatorMulti<T extends FeatureInput> {
      * Performs one calculation on a sub-set of the feature list throwing an exception if something
      * goes wrong
      */
-    ResultsVector calc(T input, FeatureList<T> featuresSubset) throws NamedFeatureCalculationException;
+    ResultsVector calc(T input, FeatureList<T> featuresSubset)
+            throws NamedFeatureCalculationException;
 
     /**
      * Performs one calculation recording the error to an ErrorReporter if anything goes wrong, but

@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.image.io.generator.raster.obj.rgb;
 
+import io.vavr.control.Either;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
@@ -45,7 +46,6 @@ import org.anchoranalysis.io.generator.IterableObjectGenerator;
 import org.anchoranalysis.io.generator.ObjectGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
-import io.vavr.control.Either;
 
 /**
  * A base class for generators that draw objects on top of a RGB-Stack
@@ -56,7 +56,7 @@ public abstract class ObjectsOnRGBGenerator extends RasterGenerator
         implements IterableObjectGenerator<ObjectCollectionWithProperties, Stack> {
 
     private static final ChannelFactorySingleType CHANNEL_FACTORY = new ChannelFactoryByte();
-    
+
     private static final ManifestDescription MANIFEST_DESCRIPTION =
             new ManifestDescription("raster", "rgbObjects");
 
@@ -64,7 +64,7 @@ public abstract class ObjectsOnRGBGenerator extends RasterGenerator
     private final DrawObject drawObject;
     private final ObjectDrawAttributes attributes;
 
-    @Getter @Setter private Either<ImageDimensions,DisplayStack> background;
+    @Getter @Setter private Either<ImageDimensions, DisplayStack> background;
     // END REQUIRED ARGUMENTS
 
     // Iterable element
@@ -73,7 +73,7 @@ public abstract class ObjectsOnRGBGenerator extends RasterGenerator
     public ObjectsOnRGBGenerator(
             DrawObject drawObject,
             ObjectDrawAttributes attributes,
-            Either<ImageDimensions,DisplayStack> background) {
+            Either<ImageDimensions, DisplayStack> background) {
         super();
         this.drawObject = drawObject;
         this.attributes = attributes;
@@ -83,10 +83,11 @@ public abstract class ObjectsOnRGBGenerator extends RasterGenerator
     @Override
     public Stack generate() throws OutputWriteFailedException {
         try {
-            if (background==null) {
-                throw new OutputWriteFailedException("No background has been set, as is needed by this generator");
+            if (background == null) {
+                throw new OutputWriteFailedException(
+                        "No background has been set, as is needed by this generator");
             }
-            
+
             RGBStack backgroundRGB = generateBackground(background);
             drawObject.write(generateMasks(), backgroundRGB, attributes);
             return backgroundRGB.asStack();
@@ -130,10 +131,11 @@ public abstract class ObjectsOnRGBGenerator extends RasterGenerator
         return Optional.of(MANIFEST_DESCRIPTION);
     }
 
-    protected abstract RGBStack generateBackground(Either<ImageDimensions,DisplayStack> background) throws CreateException;
+    protected abstract RGBStack generateBackground(Either<ImageDimensions, DisplayStack> background)
+            throws CreateException;
 
     protected abstract ObjectCollectionWithProperties generateMasks() throws CreateException;
-    
+
     protected static RGBStack createEmptyStackFor(ImageDimensions dimensions) {
         return new RGBStack(dimensions, CHANNEL_FACTORY);
     }

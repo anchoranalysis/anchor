@@ -42,11 +42,12 @@ public class PermutePropertyStringSet extends PermutePropertyWithPath<String> {
 
     @Override
     public Iterator<String> propertyValues() throws OperationFailedException {
-        
+
         if (values.isEmpty()) {
-            throw new OperationFailedException("No values have been defined for permutation. At least one must exist!");
+            throw new OperationFailedException(
+                    "No values have been defined for permutation. At least one must exist!");
         }
-        
+
         return values.iterator();
     }
 

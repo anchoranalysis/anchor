@@ -4,9 +4,8 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 /**
  * Creates a writable-item to be outputted
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  * @param <T> writable-item
  */
 @FunctionalInterface

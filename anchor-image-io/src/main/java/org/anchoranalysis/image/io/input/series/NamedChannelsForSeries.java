@@ -45,14 +45,16 @@ public interface NamedChannelsForSeries extends ChannelGetter {
 
     /**
      * Gets a channel if it exists, returning empty if it doesn't
-     * 
+     *
      * @param channelName name of channel
      * @param timeIndex timepoint
      * @param progressReporter
      * @return the channel if it exists, or empty otherwise
-     * @throws GetOperationFailedException if something goes wrong getting an existing channel (but never if a channel doesn't exist)
+     * @throws GetOperationFailedException if something goes wrong getting an existing channel (but
+     *     never if a channel doesn't exist)
      */
-    Optional<Channel> getChannelOptional(String channelName, int timeIndex, ProgressReporter progressReporter)
+    Optional<Channel> getChannelOptional(
+            String channelName, int timeIndex, ProgressReporter progressReporter)
             throws GetOperationFailedException;
 
     Set<String> channelNames();
@@ -61,8 +63,7 @@ public interface NamedChannelsForSeries extends ChannelGetter {
 
     ImageDimensions dimensions() throws RasterIOException;
 
-    void addAsSeparateChannels(
-            NamedStacks stacks, int timeIndex, ProgressReporter progressReporter)
+    void addAsSeparateChannels(NamedStacks stacks, int timeIndex, ProgressReporter progressReporter)
             throws OperationFailedException;
 
     void addAsSeparateChannels(NamedProviderStore<TimeSequence> stacks, int timeIndex)

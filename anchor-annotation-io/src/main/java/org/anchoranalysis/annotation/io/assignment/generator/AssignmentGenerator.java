@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.annotation.io.assignment.generator;
 
+import io.vavr.control.Either;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -55,7 +56,6 @@ import org.anchoranalysis.io.bean.object.writer.IfElse;
 import org.anchoranalysis.io.bean.object.writer.Outline;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
-import io.vavr.control.Either;
 
 public class AssignmentGenerator extends RasterGenerator {
 

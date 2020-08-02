@@ -65,7 +65,8 @@ public class IterableGeneratorWriter {
             BoundOutputManagerRouteErrors outputManager,
             String outputNameFolder,
             String outputNameSubfolder,
-            CallableWithException<IterableGenerator<T>, OutputWriteFailedException> generatorIterable,
+            CallableWithException<IterableGenerator<T>, OutputWriteFailedException>
+                    generatorIterable,
             Collection<T> collection,
             boolean checkIfAllowed) {
         extractWriter(outputManager, checkIfAllowed)

@@ -26,9 +26,9 @@
 
 package org.anchoranalysis.io.generator.sequence;
 
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
-import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public class GeneratorSequenceIncrementalRerouteErrors<T> {

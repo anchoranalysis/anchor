@@ -51,7 +51,7 @@ public abstract class CacheableCalculation<S, T extends FeatureInput, E extends 
     private T input;
 
     // We delegate the actualy execution of the cache
-    private CacheCall<S, E> delegate = CacheCall.of( ()->CacheableCalculation.this.execute(input) );
+    private CacheCall<S, E> delegate = CacheCall.of(() -> CacheableCalculation.this.execute(input));
 
     /**
      * Executes the operation and returns a result, either by doing the calculation, or retrieving a

@@ -275,24 +275,26 @@ public final class ObjectMaskStream {
     public Set<ObjectMask> toSet() {
         return delegate.streamStandardJava().collect(Collectors.toCollection(HashSet::new));
     }
-    
+
     /**
      * Finds the maximum value of a function applied to each object in the collection
-     * 
+     *
      * @param function function to apply
-     * @return the maximum-int found by applying the function to each object (so long as the collection isn't empty)
+     * @return the maximum-int found by applying the function to each object (so long as the
+     *     collection isn't empty)
      */
-    public OptionalInt maxAsInt( ToIntFunction<ObjectMask> function ) {
+    public OptionalInt maxAsInt(ToIntFunction<ObjectMask> function) {
         return delegate.streamStandardJava().mapToInt(function).max();
     }
-    
+
     /**
      * Finds the minimum value of a function applied to each object in the collection
-     * 
+     *
      * @param function function to apply
-     * @return the minimum-int found by applying the function to each object (so long as the collection isn't empty)
+     * @return the minimum-int found by applying the function to each object (so long as the
+     *     collection isn't empty)
      */
-    public OptionalInt minAsInt( ToIntFunction<ObjectMask> function ) {
+    public OptionalInt minAsInt(ToIntFunction<ObjectMask> function) {
         return delegate.streamStandardJava().mapToInt(function).min();
     }
 }

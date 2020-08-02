@@ -26,12 +26,12 @@
 
 package org.anchoranalysis.io.manifest.deserializer.folder;
 
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.index.GetterFromIndex;
 import org.anchoranalysis.core.index.container.BoundChangeListener;
 import org.anchoranalysis.core.index.container.BoundedIndexContainer;
 import org.anchoranalysis.io.manifest.sequencetype.SequenceType;
-import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public class BoundsFromSequenceType<T> implements GetterFromIndex<T>, BoundedIndexContainer<T> {

@@ -26,6 +26,8 @@
 
 package org.anchoranalysis.anchor.mpp.overlay;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipWithFlags;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.overlay.Overlay;
@@ -42,18 +44,14 @@ import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.object.properties.ObjectWithProperties;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
 
 @EqualsAndHashCode(callSuper = false)
 public class OverlayMark extends Overlay {
 
-    @Getter
-    private final Mark mark;
+    @Getter private final Mark mark;
     private final RegionMembershipWithFlags regionMembership;
-    
-    @EqualsAndHashCode.Exclude
-    private final ScaledMaskCreator scaledMaskCreator;
+
+    @EqualsAndHashCode.Exclude private final ScaledMaskCreator scaledMaskCreator;
 
     public OverlayMark(Mark mark, RegionMembershipWithFlags regionMembership) {
         super();

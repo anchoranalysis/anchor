@@ -26,13 +26,13 @@
 
 package org.anchoranalysis.feature.session.calculator;
 
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.feature.calc.NamedFeatureCalculationException;
 import org.anchoranalysis.feature.calc.results.ResultsVector;
 import org.anchoranalysis.feature.input.FeatureInput;
-import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public class FeatureCalculatorMultiFromSingle<T extends FeatureInput>
@@ -50,8 +50,10 @@ public class FeatureCalculatorMultiFromSingle<T extends FeatureInput>
     }
 
     @Override
-    public ResultsVector calc(T input, FeatureList<T> featuresSubset) throws NamedFeatureCalculationException {
-        throw new NamedFeatureCalculationException("The calculation on feature-subsets operation is not supported");
+    public ResultsVector calc(T input, FeatureList<T> featuresSubset)
+            throws NamedFeatureCalculationException {
+        throw new NamedFeatureCalculationException(
+                "The calculation on feature-subsets operation is not supported");
     }
 
     @Override

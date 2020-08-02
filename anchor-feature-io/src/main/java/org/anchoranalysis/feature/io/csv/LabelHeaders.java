@@ -26,33 +26,33 @@
 
 package org.anchoranalysis.feature.io.csv;
 
-import org.apache.commons.lang3.ArrayUtils;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.apache.commons.lang3.ArrayUtils;
 
 /**
  * Headers in a CSV file for the non-results (i.e. labels) part of a feature-row
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 @AllArgsConstructor
 public class LabelHeaders {
 
     /**
-     * Headers describing the non-feature columns outputted in the CSV related to identifying a row (but not its group)
+     * Headers describing the non-feature columns outputted in the CSV related to identifying a row
+     * (but not its group)
      */
     private String[] nonGroupHeaders;
 
     /**
-     * Headers describing the non-feature columns outputted in the CSV related to identifying the group of a row
+     * Headers describing the non-feature columns outputted in the CSV related to identifying the
+     * group of a row
      */
-    @Getter
-    private String[] groupHeaders;
+    @Getter private String[] groupHeaders;
 
     /**
      * The non-group and group headers combined (in this order respectively)
-     * 
+     *
      * @return the combined headers
      */
     public String[] allHeaders() {

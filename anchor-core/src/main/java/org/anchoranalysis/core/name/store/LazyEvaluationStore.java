@@ -51,8 +51,7 @@ public class LazyEvaluationStore<T> implements NamedProviderStore<T> {
     private final String storeDisplayName;
     // END REQUIRED ARGUMENTS
 
-    private HashMap<String, CacheCall<T, OperationFailedException>> map =
-            new HashMap<>();
+    private HashMap<String, CacheCall<T, OperationFailedException>> map = new HashMap<>();
 
     @Override
     public T getException(String key) throws NamedProviderGetException {
@@ -74,8 +73,7 @@ public class LazyEvaluationStore<T> implements NamedProviderStore<T> {
     // We only refer to
     public Set<String> keysEvaluated() {
         HashSet<String> keysUsed = new HashSet<>();
-        for (Entry<String, CacheCall<T, OperationFailedException>> entry :
-                map.entrySet()) {
+        for (Entry<String, CacheCall<T, OperationFailedException>> entry : map.entrySet()) {
             if (entry.getValue().isEvaluated()) {
                 keysUsed.add(entry.getKey());
             }
@@ -92,6 +90,6 @@ public class LazyEvaluationStore<T> implements NamedProviderStore<T> {
     @Override
     public void add(String name, CallableWithException<T, OperationFailedException> getter)
             throws OperationFailedException {
-        map.put(name, CacheCall.of(getter) );
+        map.put(name, CacheCall.of(getter));
     }
 }

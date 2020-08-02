@@ -6,15 +6,14 @@ import org.anchoranalysis.image.orientation.DirectionVector;
 
 /**
  * A bean that creates a {@link DirectionVector}
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public abstract class DirectionVectorBean extends AnchorBean<DirectionVectorBean> {
 
     /**
      * Creates a vector in a particular direction
-     * 
+     *
      * @return the created vector
      */
     public abstract DirectionVector createVector() throws CreateException;

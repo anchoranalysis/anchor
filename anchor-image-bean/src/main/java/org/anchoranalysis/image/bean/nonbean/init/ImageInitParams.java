@@ -34,8 +34,8 @@ import org.anchoranalysis.bean.init.property.PropertyInitializer;
 import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsInitParams;
 import org.anchoranalysis.bean.store.BeanStoreAdder;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.functional.IdentityOperation;
 import org.anchoranalysis.core.functional.CallableWithException;
+import org.anchoranalysis.core.functional.IdentityOperation;
 import org.anchoranalysis.core.functional.function.FunctionWithException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.name.provider.NamedProvider;
@@ -45,9 +45,9 @@ import org.anchoranalysis.core.name.store.SharedObjects;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
-import org.anchoranalysis.image.bean.provider.MaskProvider;
 import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.bean.provider.HistogramProvider;
+import org.anchoranalysis.image.bean.provider.MaskProvider;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.bean.segment.binary.BinarySegmentation;
@@ -178,7 +178,8 @@ public class ImageInitParams implements BeanInitParams {
     }
 
     public void addToObjects(
-            String identifier, CallableWithException<ObjectCollection, OperationFailedException> opObjects)
+            String identifier,
+            CallableWithException<ObjectCollection, OperationFailedException> opObjects)
             throws OperationFailedException {
         getObjectCollection().add(identifier, opObjects);
     }

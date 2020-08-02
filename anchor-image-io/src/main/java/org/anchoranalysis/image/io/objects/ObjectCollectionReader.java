@@ -101,8 +101,8 @@ public class ObjectCollectionReader {
         }
     }
 
-    public static CallableWithException<ObjectCollection, OperationFailedException> createFromPathCached(
-            CallableWithException<Path, OperationFailedException> path) {
+    public static CallableWithException<ObjectCollection, OperationFailedException>
+            createFromPathCached(CallableWithException<Path, OperationFailedException> path) {
         return CacheCall.of(
                 () -> {
                     try {

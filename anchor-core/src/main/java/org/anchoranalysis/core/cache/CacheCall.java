@@ -1,8 +1,8 @@
 package org.anchoranalysis.core.cache;
 
-import org.anchoranalysis.core.functional.CallableWithException;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import org.anchoranalysis.core.functional.CallableWithException;
 
 /*
  * #%L
@@ -32,13 +32,14 @@ import lombok.RequiredArgsConstructor;
 
 /**
  * Memoizes (caches) a {@link CallableWithException}
- * 
+ *
  * @author Owen Feehan
  * @param <T> result-type
  * @param <E> exception that is thrown if something goes wrong
  */
-@RequiredArgsConstructor(access=AccessLevel.PRIVATE)
-public class CacheCall<T, E extends Exception> extends CacheCallBase<T> implements CallableWithException<T, E> {
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+public class CacheCall<T, E extends Exception> extends CacheCallBase<T>
+        implements CallableWithException<T, E> {
 
     // START: REQUIRED ARGUMENTS
     private final CallableWithException<T, E> callable;
@@ -46,16 +47,18 @@ public class CacheCall<T, E extends Exception> extends CacheCallBase<T> implemen
 
     /**
      * Creates a cached-version of a {@link CallableWithException}
-     * 
+     *
      * @param <T> return-type
      * @param <E> exception that may be thrown.
      * @param callable the callable to be cached
-     * @return a cached version, with the same interface, and additional functions to monitor progress, reset etc.
+     * @return a cached version, with the same interface, and additional functions to monitor
+     *     progress, reset etc.
      */
-    public static <T, E extends Exception> CacheCall<T, E> of(CallableWithException<T, E> callable) {
+    public static <T, E extends Exception> CacheCall<T, E> of(
+            CallableWithException<T, E> callable) {
         return new CacheCall<>(callable);
     }
-    
+
     @Override
     public T call() throws E {
         return super.call(callable::call);

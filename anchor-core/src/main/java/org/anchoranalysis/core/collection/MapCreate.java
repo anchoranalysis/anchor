@@ -54,7 +54,8 @@ public class MapCreate<K, V> {
     }
 
     public MapCreate(
-            CallableWithException<V, AnchorNeverOccursException> opCreateNew, Comparator<K> comparator) {
+            CallableWithException<V, AnchorNeverOccursException> opCreateNew,
+            Comparator<K> comparator) {
         super();
         this.map = new TreeMap<>(comparator);
         this.opCreateNew = opCreateNew;

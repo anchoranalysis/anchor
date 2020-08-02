@@ -31,20 +31,20 @@ import org.anchoranalysis.core.functional.IdentityOperation;
 import org.anchoranalysis.image.extent.ImageDimensions;
 
 /**
- * Like a @{link {@link NamedStacks} but enforces a condition that all stacks must have the same dimensions
- * 
- * @author Owen Feehan
+ * Like a @{link {@link NamedStacks} but enforces a condition that all stacks must have the same
+ * dimensions
  *
+ * @author Owen Feehan
  */
 public class NamedStacksUniformSize {
 
     /** Lazy initialization after first stack is added */
     private ImageDimensions dimensions = null;
-    
+
     private NamedStacks delegate = new NamedStacks();
 
     public void add(String name, Stack stack) throws OperationFailedException {
-        
+
         if (dimensions == null) {
             dimensions = stack.getDimensions();
         } else {
@@ -52,10 +52,10 @@ public class NamedStacksUniformSize {
                 throw new OperationFailedException("Stack dimensions do not match");
             }
         }
-        
-        delegate.add(name, new IdentityOperation<>(stack) );
+
+        delegate.add(name, new IdentityOperation<>(stack));
     }
-    
+
     public NamedStacks withoutUniformSizeConstraint() {
         return delegate;
     }

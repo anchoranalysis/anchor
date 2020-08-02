@@ -28,16 +28,17 @@ package org.anchoranalysis.feature.io.csv.name;
 
 import java.util.Iterator;
 import java.util.Optional;
-import org.apache.commons.collections.iterators.SingletonIterator;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
+import org.apache.commons.collections.iterators.SingletonIterator;
 
 /**
  * A name with only one part, and is always unique
  *
  * @author Owen Feehan
  */
-@AllArgsConstructor @EqualsAndHashCode
+@AllArgsConstructor
+@EqualsAndHashCode
 public class SimpleName implements MultiName {
 
     private String name;

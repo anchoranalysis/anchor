@@ -27,17 +27,18 @@
 package org.anchoranalysis.image.io.generator.raster;
 
 import java.util.Optional;
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.functional.CallableWithException;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.generator.IterableObjectGenerator;
 import org.anchoranalysis.io.generator.ObjectGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
-import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public class StackOperationGenerator extends RasterGenerator
-        implements IterableObjectGenerator<CallableWithException<Stack, OutputWriteFailedException>, Stack> {
+        implements IterableObjectGenerator<
+                CallableWithException<Stack, OutputWriteFailedException>, Stack> {
 
     private CallableWithException<Stack, OutputWriteFailedException> stackIn;
     private boolean padIfNec;
@@ -71,7 +72,8 @@ public class StackOperationGenerator extends RasterGenerator
     }
 
     @Override
-    public void setIterableElement(CallableWithException<Stack, OutputWriteFailedException> element) {
+    public void setIterableElement(
+            CallableWithException<Stack, OutputWriteFailedException> element) {
         this.stackIn = element;
     }
 

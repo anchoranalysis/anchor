@@ -79,7 +79,8 @@ public class CheckCacheForSpecificChildren implements FindChildStrategy {
     }
 
     private <V extends FeatureInput> FeatureSessionCache<V> useSessionFromSource(
-            ChildCacheName childName, V input, CacheCreator factory) throws FeatureCalculationException {
+            ChildCacheName childName, V input, CacheCreator factory)
+            throws FeatureCalculationException {
 
         for (CacheTransferSource<?> src : source) {
 

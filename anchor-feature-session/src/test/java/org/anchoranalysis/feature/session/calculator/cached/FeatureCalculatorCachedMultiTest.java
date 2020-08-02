@@ -55,7 +55,7 @@ public class FeatureCalculatorCachedMultiTest {
      * Checks the cache contains an item, when a new item with different object but identical to an
      * existing one is passed
      *
-     * @throws NamedFeatureCalculationException 
+     * @throws NamedFeatureCalculationException
      */
     @Test
     public void testCacheContainsExisting() throws NamedFeatureCalculationException {

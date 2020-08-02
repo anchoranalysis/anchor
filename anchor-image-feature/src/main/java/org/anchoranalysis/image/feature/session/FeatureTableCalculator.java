@@ -58,16 +58,16 @@ public interface FeatureTableCalculator<T extends FeatureInput> extends FeatureC
 
     /**
      * Makes a copy of the feature-store for a new thread.
-     * 
+     *
      * <p>Deep-copies the features. Shallow-copies everything else.
      *
      * @return the copied-feature-store
      */
     FeatureTableCalculator<T> duplicateForNewThread();
 
-    /** 
+    /**
      * Creates A list of names for each feature (columns of the table)
-     * 
+     *
      * @return the list of feature-names
      */
     FeatureNameList createFeatureNames();

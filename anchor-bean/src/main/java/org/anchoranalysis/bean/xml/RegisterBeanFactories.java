@@ -83,9 +83,9 @@ public final class RegisterBeanFactories {
         }
 
         register(FACTORY_STRING_SET, new StringSetFactory());
-        
+
         register(FACTORY_STRING_LIST, new StringListFactory());
-        
+
         register(FACTORY_INCLUDE, new IncludeBeanFactory());
         register(FACTORY_OBJECT_LIST_INCLUDE, new IncludeListFactory<>());
         register(FACTORY_DEFINE, new DefineFactory());

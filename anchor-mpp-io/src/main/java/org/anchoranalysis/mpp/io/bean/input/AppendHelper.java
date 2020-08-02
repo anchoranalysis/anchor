@@ -184,9 +184,8 @@ class AppendHelper {
             throws OperationFailedException {
         // Delayed-calculation of the appending path as it can be a bit expensive when multiplied by
         // so many items
-        CacheCall<Path, AnchorIOException> outPath = CacheCall.of(
-                new OperationOutFilePath(ni, inputObject::pathForBinding, debugMode)
-        );
+        CacheCall<Path, AnchorIOException> outPath =
+                CacheCall.of(new OperationOutFilePath(ni, inputObject::pathForBinding, debugMode));
 
         try {
             return reader.apply(outPath.call());

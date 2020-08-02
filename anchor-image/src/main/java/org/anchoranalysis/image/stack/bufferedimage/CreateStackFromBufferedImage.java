@@ -49,8 +49,7 @@ public class CreateStackFromBufferedImage {
         Stack stackOut = new Stack();
 
         ImageDimensions sd =
-                new ImageDimensions(
-                        bufferedImage.getWidth(), bufferedImage.getHeight(), 1);
+                new ImageDimensions(bufferedImage.getWidth(), bufferedImage.getHeight(), 1);
 
         byte[][] arr = bytesFromBufferedImage(bufferedImage);
 

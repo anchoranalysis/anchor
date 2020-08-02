@@ -146,7 +146,8 @@ public class SequentialSession<T extends FeatureInput> implements FeatureCalcula
     }
 
     @Override
-    public ResultsVector calc(T params, FeatureList<T> featuresSubset) throws NamedFeatureCalculationException {
+    public ResultsVector calc(T params, FeatureList<T> featuresSubset)
+            throws NamedFeatureCalculationException {
         checkIsStarted();
 
         try {
@@ -220,8 +221,9 @@ public class SequentialSession<T extends FeatureInput> implements FeatureCalcula
         }
     }
 
-    private ResultsVector calcCommonExceptionAsVector(T input) throws NamedFeatureCalculationException {
-        
+    private ResultsVector calcCommonExceptionAsVector(T input)
+            throws NamedFeatureCalculationException {
+
         SessionInput<T> sessionInput;
         try {
             sessionInput = replaceSession.createOrReuse(input);
@@ -237,9 +239,9 @@ public class SequentialSession<T extends FeatureInput> implements FeatureCalcula
                 double val = sessionInput.calc(feature);
                 res.set(i, val);
             } catch (FeatureCalculationException e) {
-                throw new NamedFeatureCalculationException(feature.getFriendlyName(), e.getMessage());
+                throw new NamedFeatureCalculationException(
+                        feature.getFriendlyName(), e.getMessage());
             }
-            
         }
 
         return res;

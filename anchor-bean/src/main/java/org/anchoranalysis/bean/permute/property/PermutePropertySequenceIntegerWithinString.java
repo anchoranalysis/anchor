@@ -27,10 +27,10 @@
 package org.anchoranalysis.bean.permute.property;
 
 import java.util.Iterator;
-import org.anchoranalysis.bean.annotation.AllowEmpty;
-import org.anchoranalysis.bean.annotation.BeanField;
 import lombok.Getter;
 import lombok.Setter;
+import org.anchoranalysis.bean.annotation.AllowEmpty;
+import org.anchoranalysis.bean.annotation.BeanField;
 
 /** @author Owen Feehan */
 public class PermutePropertySequenceIntegerWithinString extends PermutePropertySequence<String> {

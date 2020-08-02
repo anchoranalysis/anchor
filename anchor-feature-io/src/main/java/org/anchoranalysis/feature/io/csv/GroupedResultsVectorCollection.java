@@ -75,9 +75,7 @@ public class GroupedResultsVectorCollection implements Closeable {
                     Comparators.emptiesFirst(Comparator.naturalOrder()));
 
     public GroupedResultsVectorCollection(
-            LabelHeaders metadata,
-            FeatureNameList featureNamesNonAggregate,
-            BoundIOContext context)
+            LabelHeaders metadata, FeatureNameList featureNamesNonAggregate, BoundIOContext context)
             throws AnchorIOException {
         this.metadata = metadata;
         this.featureNamesNonAggregate = featureNamesNonAggregate;

@@ -41,6 +41,9 @@ public interface FeatureInputParams extends FeatureInputWithRes {
 
     default KeyValueParams getParamsRequired() throws FeatureCalculationException {
         return getParamsOptional()
-                .orElseThrow(() -> new FeatureCalculationException("Params are required for this input"));
+                .orElseThrow(
+                        () ->
+                                new FeatureCalculationException(
+                                        "Params are required for this input"));
     }
 }

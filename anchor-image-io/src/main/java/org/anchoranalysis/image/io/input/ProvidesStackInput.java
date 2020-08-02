@@ -41,24 +41,25 @@ import org.anchoranalysis.io.input.InputFromManager;
  * @author Owen Feehan
  */
 public interface ProvidesStackInput extends InputFromManager {
-    
+
     /**
      * Adds the current object to a named-store of stacks (using the default series)
-     * 
+     *
      * @param store the store
      * @throws OperationFailedException
      */
-    default void addToStoreInferNames(NamedProviderStore<Stack> store) throws OperationFailedException {
+    default void addToStoreInferNames(NamedProviderStore<Stack> store)
+            throws OperationFailedException {
         addToStoreInferNames(
                 new WrapStackAsTimeSequenceStore(store),
-                0,  // default series-number
+                0, // default series-number
                 ProgressReporterNull.get());
     }
-    
+
     /**
      * Adds the current object to a named-store of stacks
-     * 
-     * @param stacks 
+     *
+     * @param stacks
      * @param seriesNum
      * @param progressReporter
      * @throws OperationFailedException

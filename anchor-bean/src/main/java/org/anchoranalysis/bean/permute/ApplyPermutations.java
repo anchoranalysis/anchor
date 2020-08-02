@@ -29,6 +29,7 @@ package org.anchoranalysis.bean.permute;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.error.BeanDuplicateException;
 import org.anchoranalysis.bean.permute.property.PermuteProperty;
@@ -36,7 +37,6 @@ import org.anchoranalysis.bean.permute.setter.PermutationSetter;
 import org.anchoranalysis.bean.permute.setter.PermutationSetterException;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import lombok.AllArgsConstructor;
 
 /**
  * Applies a PermuteProperty to a bean to create new duplicated beans each with a permutation
@@ -98,7 +98,10 @@ public class ApplyPermutations<T extends AnchorBean<T>> {
 
             return listOut;
 
-        } catch (BeanDuplicateException | IllegalArgumentException | PermutationSetterException | OperationFailedException e) {
+        } catch (BeanDuplicateException
+                | IllegalArgumentException
+                | PermutationSetterException
+                | OperationFailedException e) {
             throw new CreateException(e);
         }
     }

@@ -71,7 +71,8 @@ public class RegionExtracterFromDisplayStack implements RegionExtracter {
         for (int c = 0; c < stack.getNumberChannels(); c++) {
 
             Channel chnl =
-                    extractRegionFrom(stack.getChannel(c), bbox, zoomFactor, listChnlConverter.get(c));
+                    extractRegionFrom(
+                            stack.getChannel(c), bbox, zoomFactor, listChnlConverter.get(c));
 
             if (c == 0) {
                 out = new Stack(chnl);

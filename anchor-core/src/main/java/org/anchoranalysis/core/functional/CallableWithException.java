@@ -28,9 +28,8 @@ package org.anchoranalysis.core.functional;
 
 /**
  * Like {@link java.util.concurrent.Callable} but throws a checked-exception of specified type.
- * 
+ *
  * @author Owen Feehan
- * 
  * @param <V> result-type
  * @param <E> exception that is thrown if something goes wrong
  */

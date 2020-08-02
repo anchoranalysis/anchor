@@ -29,7 +29,7 @@ package org.anchoranalysis.image.experiment.identifiers;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class StackIdentifiers {
 
     public static final String INPUT_IMAGE = "input_image";

@@ -43,7 +43,8 @@ class MeasuringSemaphoreExecutor<E extends Exception> {
     private long subExecTime = 0;
     private long subMem = 0;
 
-    public <T> T execute(CallableWithException<T, E> exec, String name, String storeDisplayName, Logger logger)
+    public <T> T execute(
+            CallableWithException<T, E> exec, String name, String storeDisplayName, Logger logger)
             throws E {
         cnt++;
 

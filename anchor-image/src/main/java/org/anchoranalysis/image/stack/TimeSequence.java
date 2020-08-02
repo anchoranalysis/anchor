@@ -29,9 +29,9 @@ package org.anchoranalysis.image.stack;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
-import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 public class TimeSequence implements Iterable<Stack> {

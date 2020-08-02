@@ -40,7 +40,8 @@ import org.junit.Test;
 public class FeatureSessionTest {
 
     @Test
-    public void testCalculateSimpleListOfFeatures() throws InitException, NamedFeatureCalculationException {
+    public void testCalculateSimpleListOfFeatures()
+            throws InitException, NamedFeatureCalculationException {
 
         SequentialSession<FeatureInput> session =
                 new SequentialSession<>(ConstantsInListFixture.create());

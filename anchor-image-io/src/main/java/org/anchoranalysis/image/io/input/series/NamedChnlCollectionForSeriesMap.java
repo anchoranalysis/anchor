@@ -28,6 +28,7 @@ package org.anchoranalysis.image.io.input.series;
 
 import java.util.Optional;
 import java.util.Set;
+import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.cache.CacheCall;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.functional.CallableWithException;
@@ -47,7 +48,6 @@ import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
 import org.anchoranalysis.image.stack.NamedStacks;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.TimeSequence;
-import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public class NamedChnlCollectionForSeriesMap implements NamedChannelsForSeries {
@@ -58,9 +58,9 @@ public class NamedChnlCollectionForSeriesMap implements NamedChannelsForSeries {
     private final ImgChnlMap chnlMap;
     private final int seriesNum;
     // END REQUIRED ARGUMENTS
-    
+
     private TimeSequence ts = null;
-    
+
     @Override
     public ImageDimensions dimensions() throws RasterIOException {
         return openedRaster.dimensionsForSeries(seriesNum);
@@ -74,23 +74,22 @@ public class NamedChnlCollectionForSeriesMap implements NamedChannelsForSeries {
         int index = chnlMap.get(chnlName);
         if (index == -1) {
             throw new GetOperationFailedException(
-                chnlName,
-                String.format("'%s' cannot be found", chnlName)
-            );
+                    chnlName, String.format("'%s' cannot be found", chnlName));
         }
 
         try {
             Stack stack = createTimeSeries(progressReporter).get(t);
-    
+
             if (index >= stack.getNumberChannels()) {
                 throw new GetOperationFailedException(
-                    chnlName,
-                    String.format("Stack does not have a channel corresponding to '%s'", chnlName));
+                        chnlName,
+                        String.format(
+                                "Stack does not have a channel corresponding to '%s'", chnlName));
             }
-    
+
             return stack.getChannel(chnlMap.getException(chnlName));
-            
-        } catch( OperationFailedException e) {
+
+        } catch (OperationFailedException e) {
             throw new GetOperationFailedException(chnlName, e);
         }
     }
@@ -108,11 +107,11 @@ public class NamedChnlCollectionForSeriesMap implements NamedChannelsForSeries {
 
         try {
             Stack stack = createTimeSeries(progressReporter).get(t);
-    
+
             if (index >= stack.getNumberChannels()) {
                 return Optional.empty();
             }
-    
+
             return Optional.of(stack.getChannel(index));
         } catch (OperationFailedException e) {
             throw new GetOperationFailedException(chnlName, e);
@@ -168,9 +167,7 @@ public class NamedChnlCollectionForSeriesMap implements NamedChannelsForSeries {
         // Populate our stack from all the channels
         for (final String chnlName : chnlMap.keySet()) {
             stackCollection.add(
-                    chnlName,
-                    CacheCall.of(
-                            () -> extractChnlAsTimeSequence(chnlName, t)));
+                    chnlName, CacheCall.of(() -> extractChnlAsTimeSequence(chnlName, t)));
         }
     }
 

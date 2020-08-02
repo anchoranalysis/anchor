@@ -74,10 +74,7 @@ public interface FeatureSessionCacheCalculator<T extends FeatureInput>
                 double val = calc(f, input);
                 out.set(i, val);
             } catch (FeatureCalculationException e) {
-                throw new NamedFeatureCalculationException(
-                     f.getFriendlyName(),
-                     e.getMessage()
-                );
+                throw new NamedFeatureCalculationException(f.getFriendlyName(), e.getMessage());
             }
         }
         return out;

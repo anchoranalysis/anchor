@@ -38,7 +38,8 @@ import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
 public class RatioFirstToSecond extends FeatureDeriveFromPair {
 
     @Override
-    public double calc(SessionInput<FeatureInputPairObjects> params) throws FeatureCalculationException {
+    public double calc(SessionInput<FeatureInputPairObjects> params)
+            throws FeatureCalculationException {
         return valueFromFirst(params) / valueFromSecond(params);
     }
 }

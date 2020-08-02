@@ -65,8 +65,7 @@ public class NamedChnlCollectionForSeriesConcatenate implements NamedChannelsFor
         }
 
         throw new GetOperationFailedException(
-                chnlName,
-                String.format("chnlName '%s' is not found", chnlName));
+                chnlName, String.format("chnlName '%s' is not found", chnlName));
     }
 
     @Override

@@ -29,6 +29,7 @@ package org.anchoranalysis.feature.session.calculator.cached;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.feature.calc.NamedFeatureCalculationException;
 import org.anchoranalysis.feature.calc.results.ResultsVector;
@@ -37,8 +38,11 @@ import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 
 class FeatureCalculatorMultiFixture {
 
-    /** Creates a feature-calculator than returns a constant result 
-     * @throws NamedFeatureCalculationException */
+    /**
+     * Creates a feature-calculator than returns a constant result
+     *
+     * @throws NamedFeatureCalculationException
+     */
     public static <T extends FeatureInput> FeatureCalculatorMulti<T> createFeatureCalculator(
             ResultsVector rv) {
 

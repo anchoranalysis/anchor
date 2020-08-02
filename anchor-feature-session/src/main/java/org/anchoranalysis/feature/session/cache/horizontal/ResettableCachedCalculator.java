@@ -60,7 +60,8 @@ class ResettableCachedCalculator<T extends FeatureInput>
     }
 
     @Override
-    public double calc(Feature<T> feature, SessionInput<T> input) throws FeatureCalculationException {
+    public double calc(Feature<T> feature, SessionInput<T> input)
+            throws FeatureCalculationException {
         double val = feature.calcCheckInit(input);
         if (Double.isNaN(val)) {
             logger.messageLogger()
@@ -88,7 +89,8 @@ class ResettableCachedCalculator<T extends FeatureInput>
     }
 
     @Override
-    public double calcFeatureByID(String id, SessionInput<T> input) throws FeatureCalculationException {
+    public double calcFeatureByID(String id, SessionInput<T> input)
+            throws FeatureCalculationException {
         try {
             Feature<T> feature = sharedFeatures.getException(id);
             return calc(feature, input);

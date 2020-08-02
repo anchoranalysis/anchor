@@ -70,9 +70,6 @@ public class RegionMap extends AnchorBean<RegionMap> {
     }
 
     public List<RegionMembershipWithFlags> createListMembershipWithFlags() {
-        return FunctionalList.mapToListWithIndex(
-            list,
-            RegionMembershipWithFlags::new
-        );
+        return FunctionalList.mapToListWithIndex(list, RegionMembershipWithFlags::new);
     }
 }

@@ -31,10 +31,11 @@ import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.UnaryOperator;
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.bean.StringSet;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.functional.IdentityOperation;
 import org.anchoranalysis.core.functional.CallableWithException;
+import org.anchoranalysis.core.functional.IdentityOperation;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.name.provider.NamedProvider;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
@@ -43,15 +44,13 @@ import org.anchoranalysis.core.progress.CallableWithProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
 import org.anchoranalysis.image.extent.ImageDimensions;
-import lombok.AllArgsConstructor;
 
-// 
+//
 
 /**
  * A set of image-stacks each with a name
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class NamedStacks implements NamedProviderStore<Stack> {
 
@@ -83,7 +82,7 @@ public class NamedStacks implements NamedProviderStore<Stack> {
     }
 
     public void addImageStack(String identifier, Stack inputImage) {
-        map.put(identifier, progresssReporter->inputImage);
+        map.put(identifier, progresssReporter -> inputImage);
     }
 
     public void addImageStack(
@@ -152,16 +151,17 @@ public class NamedStacks implements NamedProviderStore<Stack> {
             addImageStack(prefix + name, new OperationStack(src, name));
         }
     }
-    
+
     /**
      * Creates a new collection containing only items whose keys exist in a particular set
-     * 
+     *
      * @return the new collection
      */
-    public NamedStacks subset( StringSet keyMustBeIn ) {
+    public NamedStacks subset(StringSet keyMustBeIn) {
         NamedStacks out = new NamedStacks();
-        
-        for( Entry<String, CallableWithProgressReporter<Stack, OperationFailedException>> entry : map.entrySet()) {
+
+        for (Entry<String, CallableWithProgressReporter<Stack, OperationFailedException>> entry :
+                map.entrySet()) {
             if (keyMustBeIn.contains(entry.getKey())) {
                 out.map.put(entry.getKey(), entry.getValue());
             }
@@ -177,8 +177,7 @@ public class NamedStacks implements NamedProviderStore<Stack> {
         private String name;
 
         @Override
-        public Stack call(ProgressReporter progressReporter)
-                throws OperationFailedException {
+        public Stack call(ProgressReporter progressReporter) throws OperationFailedException {
             try {
                 return src.getException(name);
             } catch (NamedProviderGetException e) {

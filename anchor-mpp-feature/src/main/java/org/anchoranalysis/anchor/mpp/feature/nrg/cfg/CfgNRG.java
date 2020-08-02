@@ -101,7 +101,8 @@ public class CfgNRG implements Serializable {
         return delegate;
     }
 
-    public void updateTotal(MemoCollection pxlMarkMemoList, NRGStack stack) throws NamedFeatureCalculationException {
+    public void updateTotal(MemoCollection pxlMarkMemoList, NRGStack stack)
+            throws NamedFeatureCalculationException {
 
         // We calculate an all value
         this.calcMarkAll.calc(pxlMarkMemoList, delegate.getNrgScheme(), stack);

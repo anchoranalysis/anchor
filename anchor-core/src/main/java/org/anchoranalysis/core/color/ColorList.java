@@ -38,7 +38,7 @@ import lombok.NoArgsConstructor;
 public class ColorList implements ColorIndex, Iterable<RGBColor> {
 
     private List<RGBColor> list = new ArrayList<>();
-    
+
     public ColorList(Color color) {
         this(new RGBColor(color));
     }
@@ -115,7 +115,7 @@ public class ColorList implements ColorIndex, Iterable<RGBColor> {
     public void add(RGBColor color) {
         list.add(color);
     }
-    
+
     public void add(int index, RGBColor color) {
         list.add(index, color);
     }

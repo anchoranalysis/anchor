@@ -45,5 +45,6 @@ public interface MultiInputSubMap<T> {
     void addToStore(NamedProviderStore<T> namedStore) throws OperationFailedException;
 
     /** Returns null if non-existent */
-    CallableWithException<T, OperationFailedException> get(String name) throws OperationFailedException;
+    CallableWithException<T, OperationFailedException> get(String name)
+            throws OperationFailedException;
 }

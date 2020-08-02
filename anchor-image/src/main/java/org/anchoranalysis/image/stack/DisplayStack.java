@@ -31,6 +31,8 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
@@ -52,17 +54,16 @@ import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 
 /**
  * Byte Stack that contains 1 or 3 channels so that we cand display it as either or RGB 8-bit image
- * <p>
- * A voxelBoxConverter is optionally associated with each channel, used to convert the source images into 8-bit.
- * @author Owen Feehan
  *
+ * <p>A voxelBoxConverter is optionally associated with each channel, used to convert the source
+ * images into 8-bit.
+ *
+ * @author Owen Feehan
  */
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class DisplayStack {
 
     private Stack delegate;
@@ -264,9 +265,11 @@ public class DisplayStack {
 
     /**
      * Derives a {@link Stack} from the display-stack that will be converted to 8-bit if necessary.
-     * 
-     * @param alwaysNew iff TRUE channels are always created new during conversion, otherwise only if needed
-     * @return a stack with either 1 or 3 channels (depending on what's passed into display-stack), all of which are unsigned 8-bit.
+     *
+     * @param alwaysNew iff TRUE channels are always created new during conversion, otherwise only
+     *     if needed
+     * @return a stack with either 1 or 3 channels (depending on what's passed into display-stack),
+     *     all of which are unsigned 8-bit.
      */
     public Stack deriveStack(boolean alwaysNew) {
         Stack stackOut = new Stack();

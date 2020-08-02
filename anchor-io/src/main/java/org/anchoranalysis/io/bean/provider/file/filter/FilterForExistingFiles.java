@@ -30,18 +30,19 @@ import java.io.File;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.error.FileProviderException;
-import lombok.Getter;
-import lombok.Setter;
 
 public class FilterForExistingFiles extends FilterFileProvider {
 
     // START BEAN PROPERTIES
     /** All files need to be present */
-    @BeanField @Getter @Setter private List<FilePathGenerator> listFilePathGenerator = new ArrayList<>(); 
+    @BeanField @Getter @Setter
+    private List<FilePathGenerator> listFilePathGenerator = new ArrayList<>();
     // END BEAN PROPERTIES
 
     @Override

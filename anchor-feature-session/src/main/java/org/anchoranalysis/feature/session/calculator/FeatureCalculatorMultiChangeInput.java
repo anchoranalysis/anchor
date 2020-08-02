@@ -64,7 +64,8 @@ public class FeatureCalculatorMultiChangeInput<T extends FeatureInput>
     }
 
     @Override
-    public ResultsVector calc(T input, FeatureList<T> featuresSubset) throws NamedFeatureCalculationException {
+    public ResultsVector calc(T input, FeatureList<T> featuresSubset)
+            throws NamedFeatureCalculationException {
         funcToApplyChange.accept(input);
         return calculator.calc(input, featuresSubset);
     }

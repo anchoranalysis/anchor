@@ -43,8 +43,7 @@ public class FeatureCalculatorSingleFromMulti<T extends FeatureInput>
 
     private FeatureCalculatorMulti<T> delegate;
 
-    public FeatureCalculatorSingleFromMulti(FeatureCalculatorMulti<T> multi)
-            throws InitException {
+    public FeatureCalculatorSingleFromMulti(FeatureCalculatorMulti<T> multi) throws InitException {
         super();
         this.delegate = multi;
         if (delegate.sizeFeatures() != 1) {

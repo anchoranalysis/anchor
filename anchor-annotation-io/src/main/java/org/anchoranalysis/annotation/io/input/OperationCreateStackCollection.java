@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.annotation.io.input;
 
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.name.provider.NamedProvider;
@@ -35,7 +36,6 @@ import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.image.stack.NamedStacks;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.wrap.WrapStackAsTimeSequenceStore;
-import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 class OperationCreateStackCollection

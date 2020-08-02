@@ -42,7 +42,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 public class ResultsVector {
 
     private static final ArrayComparer DEFAULT_COMPARER = new ArrayComparer();
-    
+
     // Each object is either a Double or an Exception
     private Object[] arr;
 

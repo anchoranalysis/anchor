@@ -60,7 +60,8 @@ public class WrapStackAsTimeSequenceStore implements NamedProviderStore<TimeSequ
     }
 
     @Override
-    public void add(String name, CallableWithException<TimeSequence, OperationFailedException> getter)
+    public void add(
+            String name, CallableWithException<TimeSequence, OperationFailedException> getter)
             throws OperationFailedException {
         namedProvider.add(name, () -> getter.call().get(t));
     }

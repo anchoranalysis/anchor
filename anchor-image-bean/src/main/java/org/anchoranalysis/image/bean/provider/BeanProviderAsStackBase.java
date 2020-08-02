@@ -37,9 +37,8 @@ import org.anchoranalysis.image.stack.Stack;
  * @param <T> family-type common base-class for all beans in this category
  * @param <S> provider-type what is provided
  */
-public abstract class BeanProviderAsStackBase<T, S> extends ImageBean<T>
-        implements Provider<S> {
-    
+public abstract class BeanProviderAsStackBase<T, S> extends ImageBean<T> implements Provider<S> {
+
     /** Creates from the image-bean in the form of a stack */
     public abstract Stack createAsStack() throws CreateException;
 }

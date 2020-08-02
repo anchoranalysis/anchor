@@ -130,8 +130,7 @@ public class StackCollectionOutputter {
                 suppressSubfoldersIn);
     }
 
-    public static NamedStacks subset(
-            NamedProvider<Stack> stackCollection, OutputAllowed oa) {
+    public static NamedStacks subset(NamedProvider<Stack> stackCollection, OutputAllowed oa) {
 
         NamedStacks out = new NamedStacks();
 
@@ -145,8 +144,8 @@ public class StackCollectionOutputter {
         return out;
     }
 
-    private static CallableWithProgressReporter<Stack, OperationFailedException>
-            extractStackCached(NamedProvider<Stack> stackCollection, String name) {
+    private static CallableWithProgressReporter<Stack, OperationFailedException> extractStackCached(
+            NamedProvider<Stack> stackCollection, String name) {
         return CacheCallWithProgressReporter.of(
                 pr -> {
                     try {

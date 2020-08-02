@@ -26,6 +26,8 @@
 
 package org.anchoranalysis.image.io.generator.raster.obj.rgb;
 
+import com.google.common.base.Functions;
+import io.vavr.control.Either;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.anchor.overlay.bean.DrawObject;
@@ -44,8 +46,6 @@ import org.anchoranalysis.image.object.ops.ObjectMaskMerger;
 import org.anchoranalysis.image.object.properties.ObjectCollectionWithProperties;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
-import com.google.common.base.Functions;
-import io.vavr.control.Either;
 
 /**
  * Similar to {@link DrawObjectsGenerator}
@@ -55,7 +55,7 @@ import io.vavr.control.Either;
  * @author Owen Feehan
  */
 public class DrawCroppedObjectsGenerator extends ObjectsOnRGBGenerator {
-    
+
     @Getter @Setter private Padding padding;
 
     private BoundingBox bbox;
@@ -66,10 +66,12 @@ public class DrawCroppedObjectsGenerator extends ObjectsOnRGBGenerator {
     }
 
     @Override
-    protected RGBStack generateBackground(Either<ImageDimensions,DisplayStack> background) throws CreateException {
+    protected RGBStack generateBackground(Either<ImageDimensions, DisplayStack> background)
+            throws CreateException {
         try {
-            Extent extent = background.fold(Functions.identity(), DisplayStack::getDimensions).getExtent();
-            
+            Extent extent =
+                    background.fold(Functions.identity(), DisplayStack::getDimensions).getExtent();
+
             ObjectCollection objects = getIterableElement().withoutProperties();
 
             if (objects.isEmpty()) {
@@ -83,9 +85,8 @@ public class DrawCroppedObjectsGenerator extends ObjectsOnRGBGenerator {
 
             // Extract the relevant piece of background
             return background.fold(
-               dimensions -> createEmptyStackFor( new ImageDimensions(bbox.extent()) ),
-               stack -> ConvertDisplayStackToRGB.convertCropped(stack, bbox)
-            );
+                    dimensions -> createEmptyStackFor(new ImageDimensions(bbox.extent())),
+                    stack -> ConvertDisplayStackToRGB.convertCropped(stack, bbox));
         } catch (OperationFailedException e) {
             throw new CreateException(e);
         }
@@ -105,7 +106,8 @@ public class DrawCroppedObjectsGenerator extends ObjectsOnRGBGenerator {
         return bbox.growBy(padding.asPoint(), containingExtent);
     }
 
-    private static ObjectCollectionWithProperties relativeTo(ObjectCollection objects, BoundingBox src) {
+    private static ObjectCollectionWithProperties relativeTo(
+            ObjectCollection objects, BoundingBox src) {
 
         ObjectCollectionWithProperties out = new ObjectCollectionWithProperties();
 

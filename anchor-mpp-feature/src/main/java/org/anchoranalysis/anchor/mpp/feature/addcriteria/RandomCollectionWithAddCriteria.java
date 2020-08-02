@@ -60,7 +60,8 @@ import org.anchoranalysis.feature.shared.SharedFeatureMulti;
  * An implementation of a {@link RandomCollection} that uses {@link AddCriteria}
  *
  * <p>Note: this is not a valid-bean on its own, as there is no default public constructor So if we
- * use it in BeanXML, we must sub-class it with such a constructor. However, it is a valid (non-bean) class on its own.
+ * use it in BeanXML, we must sub-class it with such a constructor. However, it is a valid
+ * (non-bean) class on its own.
  *
  * <p>However, it is useful to keep the class non-abstract, as when the copy methods (shallowCopy,
  * deepCopy etc.) are called, we can instantiate an instance of this class
@@ -89,7 +90,8 @@ public class RandomCollectionWithAddCriteria<T> extends RandomCollection<T> {
     }
 
     public RandomCollectionWithAddCriteria<T> shallowCopy() {
-        RandomCollectionWithAddCriteria<T> out = new RandomCollectionWithAddCriteria<>(this.pairTypeClass);
+        RandomCollectionWithAddCriteria<T> out =
+                new RandomCollectionWithAddCriteria<>(this.pairTypeClass);
         out.graph = this.graph.shallowCopy();
         out.addCriteria = this.addCriteria;
         out.nrgStack = this.nrgStack;
@@ -100,7 +102,8 @@ public class RandomCollectionWithAddCriteria<T> extends RandomCollection<T> {
     }
 
     public RandomCollectionWithAddCriteria<T> deepCopy() {
-        RandomCollectionWithAddCriteria<T> out = new RandomCollectionWithAddCriteria<>(this.pairTypeClass);
+        RandomCollectionWithAddCriteria<T> out =
+                new RandomCollectionWithAddCriteria<>(this.pairTypeClass);
         out.graph = this.graph.shallowCopy();
         out.addCriteria = this.addCriteria;
         out.nrgStack = nrgStack;

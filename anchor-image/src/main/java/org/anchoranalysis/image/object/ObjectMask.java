@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.image.object;
 
+import com.google.common.base.Preconditions;
 import java.nio.ByteBuffer;
 import java.util.Optional;
 import java.util.function.UnaryOperator;
@@ -54,7 +55,6 @@ import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
 import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactoryTypeBound;
 import org.anchoranalysis.image.voxel.box.thresholder.VoxelBoxThresholder;
 import org.anchoranalysis.image.voxel.iterator.IterateVoxels;
-import com.google.common.base.Preconditions;
 
 /**
  * An object expressed in voxels, bounded within overall space
@@ -561,9 +561,11 @@ public class ObjectMask {
     }
 
     /**
-     * Applies a function to map the bounding-box to a new-value (whose extent should be unchanged in value)
+     * Applies a function to map the bounding-box to a new-value (whose extent should be unchanged
+     * in value)
      *
-     * <p>This is an almost IMMUTABLE operation: the existing voxel-buffers are reused in the new object.
+     * <p>This is an almost IMMUTABLE operation: the existing voxel-buffers are reused in the new
+     * object.
      *
      * @param mapFunc map function to perform mapping of bounding-box
      * @return a new object-mask with the updated bounding box (but unchanged voxel-box)
@@ -571,11 +573,13 @@ public class ObjectMask {
     public ObjectMask mapBoundingBoxPreserveExtent(UnaryOperator<BoundingBox> mapFunc) {
         return mapBoundingBoxPreserveExtent(mapFunc.apply(delegate.getBoundingBox()));
     }
-    
+
     /**
-     * Applies a function to map the bounding-box to a new-value (whose extent should be unchanged in value)
+     * Applies a function to map the bounding-box to a new-value (whose extent should be unchanged
+     * in value)
      *
-     * <p>This is an almost IMMUTABLE operation: the existing voxel-buffers are reused in the new object.
+     * <p>This is an almost IMMUTABLE operation: the existing voxel-buffers are reused in the new
+     * object.
      *
      * @param boundingBoxToAssign bounding-box to assign
      * @return a new object-mask with the updated bounding box (but unchanged voxel-box)
@@ -583,30 +587,34 @@ public class ObjectMask {
     public ObjectMask mapBoundingBoxPreserveExtent(BoundingBox boundingBoxToAssign) {
         return new ObjectMask(delegate.mapBoundingBoxPreserveExtent(boundingBoxToAssign), bv, bvb);
     }
-    
+
     /**
-     * Applies a function to map the bounding-box to a new-value (whose extent is expected to change in value)
-     * 
-     * <p>This is a almost IMMUTABLE operation, and NEW voxel-buffers are usually created for the new object,
-     * but not if the bounding-box or its extent need no change.
-     * <p>
-     * Precondition: the new bounding-box's extent must be greater than or equal to the existing extent in all dimensions.
-  
+     * Applies a function to map the bounding-box to a new-value (whose extent is expected to change
+     * in value)
+     *
+     * <p>This is a almost IMMUTABLE operation, and NEW voxel-buffers are usually created for the
+     * new object, but not if the bounding-box or its extent need no change.
+     *
+     * <p>Precondition: the new bounding-box's extent must be greater than or equal to the existing
+     * extent in all dimensions.
+     *
      * @param boxToAssign bounding-box to assign
      * @param function to perform mapping of bounding-box
      * @return a new object-mask with the updated bounding box (and changed voxel-box)
      */
     public ObjectMask mapBoundingBoxChangeExtent(BoundingBox boxToAssign) {
-        
-        Preconditions.checkArgument( !delegate.extent().anyDimensionIsLargerThan(boxToAssign.extent()) );
-        
+
+        Preconditions.checkArgument(
+                !delegate.extent().anyDimensionIsLargerThan(boxToAssign.extent()));
+
         if (delegate.getBoundingBox().equals(boxToAssign)) {
             // Nothing to do, bounding-boxes are equal, early exit
             return this;
         }
-        
+
         if (delegate.getBoundingBox().equals(boxToAssign)) {
-            // Nothing to do, extents are equal, take the easier path of mapping only the bounding box
+            // Nothing to do, extents are equal, take the easier path of mapping only the bounding
+            // box
             return mapBoundingBoxPreserveExtent(boxToAssign);
         }
 

@@ -26,9 +26,9 @@
 
 package org.anchoranalysis.io.color;
 
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.color.ColorIndex;
 import org.anchoranalysis.core.color.RGBColor;
-import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public class ColorIndexModulo implements ColorIndex {

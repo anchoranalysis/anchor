@@ -206,16 +206,18 @@ public class OptionalUtilities {
             return Optional.empty();
         }
     }
-    
+
     /**
-     * Creates an {@link Optional} from a boolean flag and a supplier that returns an {@link Optional}
+     * Creates an {@link Optional} from a boolean flag and a supplier that returns an {@link
+     * Optional}
      *
      * @param <T> type in Optional
      * @param flag iff TRUE an populated optional is returned, otherwise empty().
      * @param valueIfFlagTrue used to generate a positive value
      * @return a filled or empty optional depending on flag
      */
-    public static <T> Optional<T> createFromFlagOptional(boolean flag, Supplier<Optional<T>> valueIfFlagTrue) {
+    public static <T> Optional<T> createFromFlagOptional(
+            boolean flag, Supplier<Optional<T>> valueIfFlagTrue) {
         if (flag) {
             return valueIfFlagTrue.get();
         } else {

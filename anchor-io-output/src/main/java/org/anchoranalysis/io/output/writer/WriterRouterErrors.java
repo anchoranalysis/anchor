@@ -28,6 +28,7 @@ package org.anchoranalysis.io.output.writer;
 
 import java.nio.file.Path;
 import java.util.Optional;
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.manifest.ManifestFolderDescription;
@@ -35,7 +36,6 @@ import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.namestyle.OutputNameStyle;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
-import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public class WriterRouterErrors {
@@ -54,9 +54,7 @@ public class WriterRouterErrors {
         }
     }
 
-    public void writeSubfolder(
-            String outputName,
-            GenerateWritableItem<?> collectionGenerator) {
+    public void writeSubfolder(String outputName, GenerateWritableItem<?> collectionGenerator) {
         try {
             delegate.writeSubfolder(outputName, collectionGenerator);
         } catch (OutputWriteFailedException e) {
@@ -88,9 +86,7 @@ public class WriterRouterErrors {
         }
     }
 
-    public void write(
-            OutputNameStyle outputNameStyle,
-            GenerateWritableItem<?> generator) {
+    public void write(OutputNameStyle outputNameStyle, GenerateWritableItem<?> generator) {
         try {
             delegate.write(outputNameStyle, generator);
         } catch (OutputWriteFailedException e) {
@@ -98,8 +94,7 @@ public class WriterRouterErrors {
         }
     }
 
-    public void write(
-            String outputName, GenerateWritableItem<?> generator) {
+    public void write(String outputName, GenerateWritableItem<?> generator) {
         try {
             delegate.write(outputName, generator);
         } catch (OutputWriteFailedException e) {

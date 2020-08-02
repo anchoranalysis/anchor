@@ -62,7 +62,6 @@ public class SharedObjects {
     public <T> NamedProviderStore<T> getOrCreate(Class<?> key) {
         return (NamedProviderStore<T>)
                 setStores.computeIfAbsent(
-                        key,
-                        cls -> new LazyEvaluationStore<>(cls.getSimpleName()));
+                        key, cls -> new LazyEvaluationStore<>(cls.getSimpleName()));
     }
 }

@@ -27,6 +27,8 @@
 package org.anchoranalysis.io.output.bean;
 
 import java.util.List;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.NamedBean;
@@ -41,8 +43,6 @@ import org.anchoranalysis.io.bean.color.generator.HSBColorSetGenerator;
 import org.anchoranalysis.io.bean.color.generator.PrependColorSetGenerator;
 import org.anchoranalysis.io.bean.color.generator.ShuffleColorSetGenerator;
 import org.anchoranalysis.io.color.ColorIndexModulo;
-import lombok.Getter;
-import lombok.Setter;
 
 /*
  *
@@ -54,7 +54,7 @@ import lombok.Setter;
 public class OutputWriteSettings extends AnchorBean<OutputWriteSettings> {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter 
+    @BeanField @Getter @Setter
     private ColorSetGenerator defaultColorSetGenerator =
             new ShuffleColorSetGenerator(new HSBColorSetGenerator());
 

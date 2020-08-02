@@ -39,26 +39,29 @@ public class ManifestRecorderFile {
 
     private final File file;
     private final CallableWithException<ManifestRecorder, OperationFailedException> operation;
-    
+
     public ManifestRecorderFile(File file, ManifestDeserializer manifestDeserializer) {
         this.file = file;
-        this.operation = CacheCall.of( () -> {
-            try {
-                if (!file.exists()) {
-                    throw new OperationFailedException(
-                            String.format("File %s cannot be found", file.getPath()));
-                }
-                return manifestDeserializer.deserializeManifest(file);
-            } catch (DeserializationFailedException e) {
-                throw new OperationFailedException(e);
-            }
-        });
+        this.operation =
+                CacheCall.of(
+                        () -> {
+                            try {
+                                if (!file.exists()) {
+                                    throw new OperationFailedException(
+                                            String.format(
+                                                    "File %s cannot be found", file.getPath()));
+                                }
+                                return manifestDeserializer.deserializeManifest(file);
+                            } catch (DeserializationFailedException e) {
+                                throw new OperationFailedException(e);
+                            }
+                        });
     }
-    
+
     public ManifestRecorder call() throws OperationFailedException {
         return operation.call();
     }
-    
+
     public Path getRootPath() {
         // Returns the path of the root of the manifest file (or what it will become)
         return Paths.get(file.getParent());

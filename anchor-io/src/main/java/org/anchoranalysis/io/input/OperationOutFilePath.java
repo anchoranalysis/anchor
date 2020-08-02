@@ -29,11 +29,11 @@ package org.anchoranalysis.io.input;
 import java.nio.file.Path;
 import java.util.Optional;
 import java.util.function.Supplier;
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.core.functional.CallableWithException;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
 import org.anchoranalysis.io.error.AnchorIOException;
-import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public class OperationOutFilePath implements CallableWithException<Path, AnchorIOException> {

@@ -40,8 +40,7 @@ public class TypedGetFromIndexBridge<S, H> implements GetterFromIndex<S> {
     private BridgeElementWithIndex<H, S, ? extends Throwable> bridge;
 
     public TypedGetFromIndexBridge(
-            GetterFromIndex<H> delegate,
-            BridgeElementWithIndex<H, S, ? extends Throwable> bridge) {
+            GetterFromIndex<H> delegate, BridgeElementWithIndex<H, S, ? extends Throwable> bridge) {
         super();
         this.delegate = delegate;
         this.bridge = bridge;
@@ -52,7 +51,7 @@ public class TypedGetFromIndexBridge<S, H> implements GetterFromIndex<S> {
         try {
             return bridge.bridgeElement(index, delegate.get(index));
         } catch (Exception e) {
-            throw new GetOperationFailedException(index,e);
+            throw new GetOperationFailedException(index, e);
         }
     }
 }

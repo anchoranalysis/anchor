@@ -66,7 +66,8 @@ public class FeatureCalculatorMultiReuse<T extends FeatureInput>
     }
 
     @Override
-    public ResultsVector calc(T params, FeatureList<T> featuresSubset) throws NamedFeatureCalculationException {
+    public ResultsVector calc(T params, FeatureList<T> featuresSubset)
+            throws NamedFeatureCalculationException {
         throw new NamedFeatureCalculationException("This operation is not supported");
     }
 

@@ -63,16 +63,12 @@ public class AlwaysAllowed implements Writer {
     }
 
     @Override
-    public void writeSubfolder(
-            String outputName,
-            GenerateWritableItem<?> collectionGenerator)
+    public void writeSubfolder(String outputName, GenerateWritableItem<?> collectionGenerator)
             throws OutputWriteFailedException {
 
         preop.exec();
 
-        collectionGenerator
-                .generate()
-                .write(new IntegerSuffixOutputNameStyle(outputName, 3), bom);
+        collectionGenerator.generate().write(new IntegerSuffixOutputNameStyle(outputName, 3), bom);
     }
 
     @Override
@@ -88,9 +84,7 @@ public class AlwaysAllowed implements Writer {
 
     // Write a file without checking if the outputName is allowed
     @Override
-    public void write(
-            OutputNameStyle outputNameStyle,
-            GenerateWritableItem<?> generator)
+    public void write(OutputNameStyle outputNameStyle, GenerateWritableItem<?> generator)
             throws OutputWriteFailedException {
 
         preop.exec();

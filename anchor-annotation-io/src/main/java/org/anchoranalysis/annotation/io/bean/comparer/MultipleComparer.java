@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.annotation.io.bean.comparer;
 
+import io.vavr.Tuple;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -60,7 +61,6 @@ import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.bean.color.generator.ColorSetGenerator;
 import org.anchoranalysis.io.bean.color.generator.VeryBrightColorSetGenerator;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
-import io.vavr.Tuple;
 
 /**
  * Allows comparison of an annotation with multiple other entities

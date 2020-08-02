@@ -26,6 +26,8 @@
 
 package org.anchoranalysis.mpp.sgmn.bean.define;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsProvider;
@@ -37,14 +39,12 @@ import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.bean.provider.stack.StackProviderReference;
 import org.anchoranalysis.image.experiment.identifiers.StackIdentifiers;
-import lombok.Getter;
-import lombok.Setter;
 
 public abstract class DefineOutputterWithNrg extends DefineOutputter {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private StackProvider nrgStackProvider =
-            new StackProviderReference(StackIdentifiers.NRG_STACK);
+    @BeanField @Getter @Setter
+    private StackProvider nrgStackProvider = new StackProviderReference(StackIdentifiers.NRG_STACK);
 
     @BeanField @OptionalBean @Getter @Setter private KeyValueParamsProvider nrgParamsProvider;
     // END BEAN PROPERTIES

@@ -52,7 +52,8 @@ public abstract class FeatureConvertRes<T extends FeatureInputWithRes>
     }
 
     @Override
-    protected double calcWithRes(double value, ImageResolution res) throws FeatureCalculationException {
+    protected double calcWithRes(double value, ImageResolution res)
+            throws FeatureCalculationException {
         double valuePhysical = convertToPhysical(value, res);
         return convertToUnits(valuePhysical);
     }

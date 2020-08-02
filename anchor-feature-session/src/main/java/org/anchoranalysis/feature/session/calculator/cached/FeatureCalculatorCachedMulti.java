@@ -90,16 +90,15 @@ public class FeatureCalculatorCachedMulti<T extends FeatureInput>
         try {
             return cacheResults.get(input);
         } catch (GetOperationFailedException e) {
-            throw new NamedFeatureCalculationException(
-                 e.getKey(),
-                 e.getMessage()
-            );
+            throw new NamedFeatureCalculationException(e.getKey(), e.getMessage());
         }
     }
 
     @Override
-    public ResultsVector calc(T input, FeatureList<T> featuresSubset) throws NamedFeatureCalculationException {
-        throw new NamedFeatureCalculationException("This operation is not supported for subsets of features");
+    public ResultsVector calc(T input, FeatureList<T> featuresSubset)
+            throws NamedFeatureCalculationException {
+        throw new NamedFeatureCalculationException(
+                "This operation is not supported for subsets of features");
     }
 
     @Override

@@ -49,13 +49,15 @@ public class OperationMap<T> implements MultiInputSubMap<T> {
 
     @Override
     public void addToStore(NamedProviderStore<T> namedStore) throws OperationFailedException {
-        for (Entry<String, CallableWithException<T, OperationFailedException>> entry : map.entrySet()) {
+        for (Entry<String, CallableWithException<T, OperationFailedException>> entry :
+                map.entrySet()) {
             namedStore.add(entry.getKey(), entry.getValue());
         }
     }
 
     @Override
-    public CallableWithException<T, OperationFailedException> get(String name) throws OperationFailedException {
+    public CallableWithException<T, OperationFailedException> get(String name)
+            throws OperationFailedException {
         CallableWithException<T, OperationFailedException> ret = map.get(name);
         if (ret == null) {
             throw new OperationFailedException(String.format("Cannot find key '%s'", name));

@@ -168,8 +168,8 @@ public class MemoCollection implements Serializable, MemoForIndex {
             NRGSavedInd nrgSavedInd,
             VoxelizedMarkMemo pmm,
             NRGStack stack,
-            NRGSchemeWithSharedFeatures nrgScheme) throws NamedFeatureCalculationException
-            {
+            NRGSchemeWithSharedFeatures nrgScheme)
+            throws NamedFeatureCalculationException {
         NRGTotal nrg = nrgScheme.calcElemIndTotal(pmm, stack);
 
         // We calculate energy for individual components

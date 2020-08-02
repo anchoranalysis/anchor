@@ -34,9 +34,8 @@ import org.anchoranalysis.image.extent.Extent;
 
 /**
  * Describes a set of bounding boxes on top of a plane
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class BoundingBoxesOnPlane implements Iterable<BoundingBox> {
 

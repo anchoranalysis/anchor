@@ -27,12 +27,12 @@
 package org.anchoranalysis.image.extent;
 
 import java.io.Serializable;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.scale.ScaleFactor;
 import org.anchoranalysis.image.scale.ScaleFactorUtilities;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
 
 /**
  * The dimensions of an image (in voxels), together with the image resolution
@@ -46,15 +46,14 @@ public final class ImageDimensions implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private final ImageResolution res;
-    
-    @Getter
-    private final Extent extent;
+
+    @Getter private final Extent extent;
 
     /** Construct with an explicit extent and default resolution (1.0 for each dimension) */
     public ImageDimensions(int x, int y, int z) {
-        this( new Extent(x,y,z) );
+        this(new Extent(x, y, z));
     }
-    
+
     /** Construct with an explicit extent and default resolution (1.0 for each dimension) */
     public ImageDimensions(Extent extent) {
         this(extent, new ImageResolution());

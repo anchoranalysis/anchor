@@ -31,11 +31,12 @@ import org.apache.commons.configuration.beanutils.BeanDeclaration;
 
 /**
  * Creates a {@link StringList} from a XML element.
- * <p>
- * It uses:
+ *
+ * <p>It uses:
+ *
  * <ul>
- * <li>all "item" sub-elements, and
- * <li>the "items" attribute, split by commas, if it exists
+ *   <li>all "item" sub-elements, and
+ *   <li>the "items" attribute, split by commas, if it exists
  *
  * @author Owen Feehan
  */

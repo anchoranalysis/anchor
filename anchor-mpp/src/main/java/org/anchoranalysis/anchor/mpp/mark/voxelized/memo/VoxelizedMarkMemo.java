@@ -35,15 +35,13 @@ import org.anchoranalysis.core.cache.CacheCall;
 import org.anchoranalysis.core.error.AnchorNeverOccursException;
 import org.anchoranalysis.feature.nrg.NRGStack;
 
-/**
- * Memoization of retrieving a {@VoxelizedMark} from a mark
- *
- */
+/** Memoization of retrieving a {@VoxelizedMark} from a mark */
 public class VoxelizedMarkMemo {
 
     // START REQUIRED ARGUMENTS
     /** The associated mark */
     @Getter private Mark mark;
+
     private NRGStack stack;
 
     @Getter private final RegionMap regionMap;
@@ -55,7 +53,7 @@ public class VoxelizedMarkMemo {
         this.mark = mark;
         this.stack = stack;
         this.regionMap = regionMap;
-        this.cachedMark = CacheCall.of( ()->VoxelizedMarkFactory.create(mark, stack, regionMap) );
+        this.cachedMark = CacheCall.of(() -> VoxelizedMarkFactory.create(mark, stack, regionMap));
     }
 
     /**

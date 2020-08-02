@@ -28,15 +28,16 @@ package org.anchoranalysis.io.bean.file.matcher;
 
 import java.nio.file.Path;
 import java.util.function.Predicate;
-import org.anchoranalysis.bean.annotation.AllowEmpty;
-import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.io.params.InputContextParams;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.anchoranalysis.bean.annotation.AllowEmpty;
+import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.io.params.InputContextParams;
 
-@NoArgsConstructor @AllArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 public class MatchGlob extends FileMatcher {
 
     // START BEAN FIELDS

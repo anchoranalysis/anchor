@@ -53,7 +53,7 @@ public interface OpenedRaster extends AutoCloseable {
 
     /** Open when we don't have a specific-type */
     TimeSequence open(int seriesIndex, ProgressReporter progressReporter) throws RasterIOException;
-    
+
     int numberSeries();
 
     // Can be null if no channel names exist

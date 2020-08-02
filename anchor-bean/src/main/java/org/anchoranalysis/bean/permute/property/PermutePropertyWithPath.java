@@ -26,9 +26,9 @@
 
 package org.anchoranalysis.bean.permute.property;
 
+import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
-import java.util.Set;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.StringSet;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -51,7 +51,8 @@ public abstract class PermutePropertyWithPath<T> extends PermuteProperty<T> {
      * Either a direct property of a bean e.g. "someproperty" Or a nested-property with the children
      * separated by full-stops: e.g. "somechild1.somechild2.someproperty"
      *
-     * <p>Children must be single multiplicity, and always be a subclass of {@link org.anchoranalysis.bean.AnchorBean}
+     * <p>Children must be single multiplicity, and always be a subclass of {@link
+     * org.anchoranalysis.bean.AnchorBean}
      */
     @BeanField @Getter @Setter private String propertyPath;
 
@@ -67,15 +68,17 @@ public abstract class PermutePropertyWithPath<T> extends PermuteProperty<T> {
         PermutationSetterList out = new PermutationSetterList();
 
         addFromPath(out, parentBean, propertyPath);
-        
+
         if (additionalPropertyPaths != null) {
             addFromPathSet(out, parentBean, additionalPropertyPaths.set());
         }
 
         return out;
     }
-    
-    private void addFromPathSet(PermutationSetterList out, AnchorBean<?> parentBean, Set<String> paths) throws PermutationSetterException {
+
+    private void addFromPathSet(
+            PermutationSetterList out, AnchorBean<?> parentBean, Set<String> paths)
+            throws PermutationSetterException {
         for (String additionalPath : paths) {
             addFromPath(out, parentBean, additionalPath);
         }

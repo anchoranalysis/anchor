@@ -48,7 +48,8 @@ public abstract class FeatureHistogramStatistic extends FeatureHistogram {
     // END BEAN PROPERTIES
 
     @Override
-    public double calc(SessionInput<FeatureInputHistogram> input) throws FeatureCalculationException {
+    public double calc(SessionInput<FeatureInputHistogram> input)
+            throws FeatureCalculationException {
         Histogram histogram = input.get().getHistogram();
 
         if (histogram.isEmpty()) {
@@ -64,5 +65,6 @@ public abstract class FeatureHistogramStatistic extends FeatureHistogram {
         return calcStatisticFrom(histogram);
     }
 
-    protected abstract double calcStatisticFrom(Histogram histogram) throws FeatureCalculationException;
+    protected abstract double calcStatisticFrom(Histogram histogram)
+            throws FeatureCalculationException;
 }

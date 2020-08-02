@@ -55,9 +55,7 @@ public interface Writer {
             Optional<FolderWriteWithPath> folder)
             throws OutputWriteFailedException;
 
-    void writeSubfolder(
-            String outputName,
-            GenerateWritableItem<?> collectionGenerator)
+    void writeSubfolder(String outputName, GenerateWritableItem<?> collectionGenerator)
             throws OutputWriteFailedException;
 
     int write(
@@ -66,23 +64,17 @@ public interface Writer {
             String index)
             throws OutputWriteFailedException;
 
-    void write(
-            OutputNameStyle outputNameStyle,
-            GenerateWritableItem<?> generator)
+    void write(OutputNameStyle outputNameStyle, GenerateWritableItem<?> generator)
             throws OutputWriteFailedException;
 
-    default void write(
-            String outputName,
-            GenerateWritableItem<?> generator)
+    default void write(String outputName, GenerateWritableItem<?> generator)
             throws OutputWriteFailedException {
         write(new SimpleOutputNameStyle(outputName), generator);
     }
 
     // Write a file with an index represented by an int, returns the number of files created
     default int write(
-            IndexableOutputNameStyle outputNameStyle,
-            GenerateWritableItem<?> generator,
-            int index)
+            IndexableOutputNameStyle outputNameStyle, GenerateWritableItem<?> generator, int index)
             throws OutputWriteFailedException {
         return write(outputNameStyle, generator, Integer.toString(index));
     }

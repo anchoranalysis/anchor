@@ -50,8 +50,7 @@ import lombok.experimental.Accessors;
 @Accessors(fluent = true)
 public class StringList extends AnchorBean<StringList> implements StringBeanCollection {
 
-    @Getter
-    private List<String> list = new ArrayList<>();
+    @Getter private List<String> list = new ArrayList<>();
 
     @Override
     public void add(String s) {

@@ -164,9 +164,7 @@ public class ObjectCollectionFactory {
     @SafeVarargs
     public static ObjectCollection of(Mask... masks) {
         ObjectCollection out = new ObjectCollection();
-        Arrays.stream(masks).forEach( mask ->
-            out.add(new ObjectMask(mask.binaryVoxelBox()))
-        );
+        Arrays.stream(masks).forEach(mask -> out.add(new ObjectMask(mask.binaryVoxelBox())));
         return out;
     }
 

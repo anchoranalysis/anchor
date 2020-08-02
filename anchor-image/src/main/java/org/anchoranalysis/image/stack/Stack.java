@@ -59,7 +59,7 @@ public class Stack implements Iterable<Channel> {
     public Stack(Channel channel) {
         delegate = new StackNotUniformSized(channel);
     }
-    
+
     public Stack(ImageDimensions sd, ChannelFactorySingleType factory, int numberChannels) {
         this();
         for (int i = 0; i < numberChannels; i++) {
@@ -67,7 +67,8 @@ public class Stack implements Iterable<Channel> {
         }
     }
 
-    public Stack(Channel channel0, Channel channel1, Channel channel2) throws IncorrectImageSizeException {
+    public Stack(Channel channel0, Channel channel1, Channel channel2)
+            throws IncorrectImageSizeException {
         this();
         addChannel(channel0);
         addChannel(channel1);
@@ -149,7 +150,7 @@ public class Stack implements Iterable<Channel> {
 
         delegate.addChannel(channel);
     }
-    
+
     public final void addChannelsFrom(Stack stack) throws IncorrectImageSizeException {
         for (int index = 0; index < stack.getNumberChannels(); index++) {
             addChannel(stack.getChannel(index));

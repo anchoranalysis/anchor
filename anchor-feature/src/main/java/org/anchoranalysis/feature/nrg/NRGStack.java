@@ -26,40 +26,39 @@
 
 package org.anchoranalysis.feature.nrg;
 
+import com.google.common.base.Functions;
+import io.vavr.control.Either;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.OperationFailedRuntimeException;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.stack.Stack;
-import com.google.common.base.Functions;
-import io.vavr.control.Either;
-
 
 /**
- * A stack of channels used as context to calculate features (or calculating <i>energy</i> more broadly).
- * <p>
- * The stack can have 0 channels, in which case, explict dimensions must be set.
- *  
- * @author Owen Feehan
+ * A stack of channels used as context to calculate features (or calculating <i>energy</i> more
+ * broadly).
  *
+ * <p>The stack can have 0 channels, in which case, explict dimensions must be set.
+ *
+ * @author Owen Feehan
  */
 public class NRGStack {
 
-    /** Either stack to delegate or dimensions (as they cannot be inferred from a stack)*/
+    /** Either stack to delegate or dimensions (as they cannot be inferred from a stack) */
     private final Either<ImageDimensions, Stack> container;
 
     /**
      * Create a nrg-stack comprised of a single channel
-     * 
+     *
      * @param channel
      */
     public NRGStack(Channel channel) {
-        this.container = Either.right( new Stack(channel) );
+        this.container = Either.right(new Stack(channel));
     }
 
     /**
      * Create a nrg-stack comprised of all channels from a stack
-     * 
+     *
      * @param stack the stack which is reused as the nrg-stack (i.e. it is not duplicated)
      */
     public NRGStack(Stack stack) {
@@ -68,15 +67,15 @@ public class NRGStack {
 
     /**
      * Create a nrg-stack with no channels - but with dimensions associated
+     *
      * @param dimensions
      */
     public NRGStack(ImageDimensions dimensions) {
         this.container = Either.left(dimensions);
     }
 
-    
     public final int getNumberChannels() {
-        return container.map(Stack::getNumberChannels).getOrElseGet( dimensions -> 0);
+        return container.map(Stack::getNumberChannels).getOrElseGet(dimensions -> 0);
     }
 
     public ImageDimensions getDimensions() {
@@ -101,14 +100,15 @@ public class NRGStack {
     }
 
     public NRGStack extractSlice(int z) throws OperationFailedException {
-        
+
         if (container.isLeft()) {
-            throw new OperationFailedException("No slice can be extracted, as no channels existing in the nrg-stack");
+            throw new OperationFailedException(
+                    "No slice can be extracted, as no channels existing in the nrg-stack");
         }
-        
+
         return new NRGStack(container.get().extractSlice(z));
     }
-    
+
     private void throwInvalidIndexException(int numberChannels, int index) {
         throw new OperationFailedRuntimeException(
                 String.format(

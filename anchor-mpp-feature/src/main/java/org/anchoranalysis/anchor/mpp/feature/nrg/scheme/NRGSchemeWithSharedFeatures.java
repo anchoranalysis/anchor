@@ -92,10 +92,10 @@ public class NRGSchemeWithSharedFeatures {
                                 new FeatureInitParams(kvp),
                                 sharedFeatures,
                                 logger);
-    
+
                 FeatureInputSingleMemo params =
                         new FeatureInputSingleMemo(pmm, new NRGStackWithParams(raster, kvp));
-    
+
                 return new NRGTotal(session.calc(params).total());
             } catch (InitException e) {
                 throw new NamedFeatureCalculationException(e);
@@ -118,24 +118,25 @@ public class NRGSchemeWithSharedFeatures {
 
         try {
             NRGStackWithParams nrgStack = createNRGStack(raster);
-    
+
             FeatureCalculatorMulti<FeatureInputAllMemo> session =
                     FeatureSession.with(
                             nrgScheme.getElemAllAsFeatureList(),
                             new FeatureInitParams(nrgStack.getParams()),
                             sharedFeatures,
                             logger);
-    
+
             FeatureInputAllMemo params = new FeatureInputAllMemo(pxlMarkMemoList, nrgStack);
-    
+
             return new NRGTotal(session.calc(params).total());
-            
+
         } catch (InitException | FeatureCalculationException e) {
             throw new NamedFeatureCalculationException(e);
         }
     }
 
-    public NRGTotal calcElemIndTotal(VoxelizedMarkMemo pmm, NRGStack raster) throws NamedFeatureCalculationException {
+    public NRGTotal calcElemIndTotal(VoxelizedMarkMemo pmm, NRGStack raster)
+            throws NamedFeatureCalculationException {
         try {
             operationIndCalc.update(pmm, raster);
             return operationIndCalc.calc();

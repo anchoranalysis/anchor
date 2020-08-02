@@ -68,8 +68,7 @@ import org.anchoranalysis.image.feature.session.FeatureTableCalculator;
  * @author Owen Feehan
  */
 @RequiredArgsConstructor
-public class PairsTableCalculator
-        implements FeatureTableCalculator<FeatureInputPairObjects> {
+public class PairsTableCalculator implements FeatureTableCalculator<FeatureInputPairObjects> {
 
     // START REQUIRED ARGUMENTS
     private final MergedPairsFeatures features;
@@ -93,7 +92,8 @@ public class PairsTableCalculator
     }
 
     @Override
-    public ResultsVector calc(FeatureInputPairObjects input) throws NamedFeatureCalculationException {
+    public ResultsVector calc(FeatureInputPairObjects input)
+            throws NamedFeatureCalculationException {
         return calculator.calcForInput(input, Optional.empty());
     }
 

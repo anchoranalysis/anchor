@@ -41,7 +41,8 @@ public abstract class FeatureObjectCollection extends Feature<FeatureInputObject
     }
 
     // Calculates an NRG element for a set of pixels
-    public abstract double calc(FeatureInputObjectCollection params) throws FeatureCalculationException;
+    public abstract double calc(FeatureInputObjectCollection params)
+            throws FeatureCalculationException;
 
     @Override
     public Class<? extends FeatureInput> inputType() {

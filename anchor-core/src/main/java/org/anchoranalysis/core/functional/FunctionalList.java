@@ -77,7 +77,7 @@ public class FunctionalList {
     public static <S, T> List<T> mapToList(Collection<S> collection, Function<S, T> mapFunction) {
         return collection.stream().map(mapFunction).collect(Collectors.toList());
     }
-    
+
     /**
      * Maps a collection to a list with each element derived from a corresponding element in the
      * original collection - and also letting the map function use an index.
@@ -89,10 +89,11 @@ public class FunctionalList {
      * @return a list with the same size and same order, but using derived elements that are a
      *     result of the mapping
      */
-    public static <S, T> List<T> mapToListWithIndex(List<S> list, BiFunction<S, Integer, T> mapFunction) {
-        return IntStream.range(0, list.size()).mapToObj( index ->
-            mapFunction.apply(list.get(index), index)
-        ).collect(Collectors.toList());
+    public static <S, T> List<T> mapToListWithIndex(
+            List<S> list, BiFunction<S, Integer, T> mapFunction) {
+        return IntStream.range(0, list.size())
+                .mapToObj(index -> mapFunction.apply(list.get(index), index))
+                .collect(Collectors.toList());
     }
 
     /**

@@ -78,8 +78,7 @@ public class ProbMapObjectCollection implements ProbMap {
 
     @Override
     public Mask visualization() throws OptionalOperationUnsupportedException {
-        return MaskFromObjects.createFromObjects(
-                objects, dimensions, BinaryValues.getDefault());
+        return MaskFromObjects.createFromObjects(objects, dimensions, BinaryValues.getDefault());
     }
 
     private Point3d sampleFromObject(

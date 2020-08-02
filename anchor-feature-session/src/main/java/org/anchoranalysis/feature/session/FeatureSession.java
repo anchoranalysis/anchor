@@ -66,7 +66,7 @@ public class FeatureSession {
      * @param logger a logger
      * @return a calculator that will calculate just this feature for each parameter.
      * @throws FeatureCalculationException
-     * @throws InitException 
+     * @throws InitException
      */
     public static <T extends FeatureInput> FeatureCalculatorSingle<T> with(
             Feature<T> feature, Logger logger) throws InitException {

@@ -68,9 +68,7 @@ public class CheckIfAllowed implements Writer {
     }
 
     @Override
-    public void writeSubfolder(
-            String outputName,
-            GenerateWritableItem<?> collectionGenerator)
+    public void writeSubfolder(String outputName, GenerateWritableItem<?> collectionGenerator)
             throws OutputWriteFailedException {
 
         if (!outputManager.isOutputAllowed(outputName)) {
@@ -99,9 +97,7 @@ public class CheckIfAllowed implements Writer {
     }
 
     @Override
-    public void write(
-            OutputNameStyle outputNameStyle,
-            GenerateWritableItem<?> generator)
+    public void write(OutputNameStyle outputNameStyle, GenerateWritableItem<?> generator)
             throws OutputWriteFailedException {
 
         if (!outputManager.isOutputAllowed(outputNameStyle.getOutputName())) return;

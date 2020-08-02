@@ -27,6 +27,7 @@
 package org.anchoranalysis.io.generator.sequence;
 
 import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
@@ -39,7 +40,6 @@ import org.anchoranalysis.io.output.bound.BoundOutputManager;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.writer.GenerateWritableItem;
 import org.anchoranalysis.io.output.writer.Writer;
-import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public class SubfolderWriter implements SequenceWriter {
@@ -51,9 +51,9 @@ public class SubfolderWriter implements SequenceWriter {
     private final ManifestDescription folderManifestDescription;
     private final boolean checkIfAllowed;
     // END: REQUIRED ARGUMENTS
-    
+
     private Optional<BoundOutputManager> subFolderOutputManager = Optional.empty();
-  
+
     private Optional<BoundOutputManager> createSubfolder(
             boolean suppressSubfolder,
             ManifestFolderDescription folderDescription,

@@ -74,7 +74,8 @@ class HorizontalFeatureCacheCalculator<T extends FeatureInput>
     }
 
     @Override
-    public double calc(Feature<T> feature, SessionInput<T> input) throws FeatureCalculationException {
+    public double calc(Feature<T> feature, SessionInput<T> input)
+            throws FeatureCalculationException {
 
         // if there's no custom name, then we don't consider caching
         if (feature.getCustomName() == null || feature.getCustomName().isEmpty()) {
@@ -114,7 +115,8 @@ class HorizontalFeatureCacheCalculator<T extends FeatureInput>
     }
 
     @Override
-    public double calcFeatureByID(String id, SessionInput<T> input) throws FeatureCalculationException {
+    public double calcFeatureByID(String id, SessionInput<T> input)
+            throws FeatureCalculationException {
 
         // Let's first check if it's in our cache
         Double res = map.getResultFor(id);

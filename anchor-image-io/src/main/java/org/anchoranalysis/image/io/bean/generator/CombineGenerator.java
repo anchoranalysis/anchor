@@ -122,11 +122,8 @@ class CombineGenerator<T> extends RasterGenerator implements IterableObjectGener
 
     private List<RGBStack> generateAll() throws OutputWriteFailedException {
         return FunctionalList.mapToList(
-            generatorList,
-            OutputWriteFailedException.class,
-            generator -> new RGBStack(
-               generator.getGenerator().generate()
-            )
-        );
+                generatorList,
+                OutputWriteFailedException.class,
+                generator -> new RGBStack(generator.getGenerator().generate()));
     }
 }

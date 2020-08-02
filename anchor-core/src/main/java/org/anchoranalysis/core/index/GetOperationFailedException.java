@@ -1,7 +1,5 @@
 package org.anchoranalysis.core.index;
 
-import org.anchoranalysis.core.error.OperationFailedException;
-
 /*
  * #%L
  * anchor-core
@@ -28,44 +26,40 @@ import org.anchoranalysis.core.error.OperationFailedException;
  * #L%
  */
 
-import org.anchoranalysis.core.error.friendly.AnchorFriendlyCheckedException;
 import lombok.Getter;
+import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.error.friendly.AnchorFriendlyCheckedException;
 
 /**
  * When a get operation fails for a particular key
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class GetOperationFailedException extends AnchorFriendlyCheckedException {
 
     /** */
     private static final long serialVersionUID = 4847382915351464834L;
 
-    @Getter
-    private final String key;
-    
-    @Getter
-    private final String message;
-    
+    @Getter private final String key;
+
+    @Getter private final String message;
+
     public GetOperationFailedException(Exception e) {
         super(e);
         this.key = "";
         this.message = e.getMessage();
     }
-    
+
     public GetOperationFailedException(int key, String message) {
-        this( String.valueOf(key), message );
+        this(String.valueOf(key), message);
     }
-    
+
     public GetOperationFailedException(int key, Throwable exc) {
-        this( String.valueOf(key), exc );
+        this(String.valueOf(key), exc);
     }
-    
+
     public GetOperationFailedException(String key, String message) {
-        super(
-            String.format("An exception occurred getting '%s':%n%s", key, message)
-        );
+        super(String.format("An exception occurred getting '%s':%n%s", key, message));
         this.key = key;
         this.message = message;
     }
@@ -73,8 +67,8 @@ public class GetOperationFailedException extends AnchorFriendlyCheckedException 
     public GetOperationFailedException(String key, Throwable exc) {
         this(key, exc.toString());
     }
-    
+
     public OperationFailedException asOperationFailedException() {
-        return new OperationFailedException( getMessage() );
+        return new OperationFailedException(getMessage());
     }
 }

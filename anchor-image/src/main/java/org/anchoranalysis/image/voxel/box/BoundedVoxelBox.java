@@ -424,7 +424,8 @@ public class BoundedVoxelBox<T extends Buffer> {
     }
 
     /**
-     * Applies a function to map the bounding-box to a new-value (whose extent should be unchanged in value)
+     * Applies a function to map the bounding-box to a new-value (whose extent should be unchanged
+     * in value)
      *
      * <p>This is an IMMUTABLE operation, but the existing voxel-buffers are reused in the new
      * object.
@@ -432,11 +433,12 @@ public class BoundedVoxelBox<T extends Buffer> {
      * @return a new object-mask with the updated bounding box
      */
     public BoundedVoxelBox<T> mapBoundingBoxPreserveExtent(BoundingBox boundingBoxToAssign) {
-        
+
         if (!boundingBoxToAssign.extent().equals(boundingBox.extent())) {
-            throw new OperationFailedRuntimeException("The extent changed while mapping bounding-box, which is not allowed.");
+            throw new OperationFailedRuntimeException(
+                    "The extent changed while mapping bounding-box, which is not allowed.");
         }
-        
+
         return new BoundedVoxelBox<>(boundingBoxToAssign, voxelBox);
     }
 

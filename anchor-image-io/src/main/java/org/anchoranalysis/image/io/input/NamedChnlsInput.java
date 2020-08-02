@@ -67,8 +67,7 @@ public abstract class NamedChnlsInput implements ProvidesStackInput {
             throws OperationFailedException {
         // Adds each channel as a separate stack
         try {
-            NamedChannelsForSeries ncc =
-                    createChannelsForSeries(seriesNum, progressReporter);
+            NamedChannelsForSeries ncc = createChannelsForSeries(seriesNum, progressReporter);
             // Apply it only to first time-series frame
             ncc.addAsSeparateChannels(stackCollection, 0);
 
@@ -88,8 +87,7 @@ public abstract class NamedChnlsInput implements ProvidesStackInput {
         // Adds this stack (cached) under the given name
         stackCollection.add(
                 name,
-                CacheCall.of(
-                        () -> chnlCollectionAsTimeSequence(seriesNum, progressReporter)));
+                CacheCall.of(() -> chnlCollectionAsTimeSequence(seriesNum, progressReporter)));
     }
 
     @Override
@@ -101,8 +99,7 @@ public abstract class NamedChnlsInput implements ProvidesStackInput {
             int seriesNum, ProgressReporter progressReporter) throws OperationFailedException {
         // Apply it only to first time-series frame
         try {
-            NamedChannelsForSeries ncc =
-                    createChannelsForSeries(seriesNum, progressReporter);
+            NamedChannelsForSeries ncc = createChannelsForSeries(seriesNum, progressReporter);
             return new TimeSequence(ncc.allChannelsAsStack(0).call());
 
         } catch (RasterIOException e) {

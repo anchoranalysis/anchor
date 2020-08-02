@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.image.io.generator.raster.bbox;
 
+import io.vavr.control.Either;
 import java.awt.Color;
 import java.util.Optional;
 import org.anchoranalysis.core.color.ColorIndex;
@@ -45,24 +46,23 @@ import org.anchoranalysis.io.generator.IterableObjectGenerator;
 import org.anchoranalysis.io.generator.ObjectGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
-import io.vavr.control.Either;
 
 /**
  * Creates images of an object drawn on a background only in a local region around its bounding box.
- * 
- * <p>This provides a visualization of an object and a small around of immediate background context.
- * 
- * @author Owen Feehan
  *
+ * <p>This provides a visualization of an object and a small around of immediate background context.
+ *
+ * @author Owen Feehan
  */
 public class DrawObjectOnStackGenerator extends RasterGenerator
         implements IterableObjectGenerator<ObjectMask, Stack> {
 
-    private static final ManifestDescription MANIFEST_DESCRIPTION = new ManifestDescription("raster", "extractedObjectOutline");
+    private static final ManifestDescription MANIFEST_DESCRIPTION =
+            new ManifestDescription("raster", "extractedObjectOutline");
 
     /** By default, the color GREEN is used for the outline of objects */
     private static final ColorList DEFAULT_COLORS = new ColorList(Color.GREEN);
-    
+
     // START REQUIRED ARGUMENTS
     private final DrawObjectsGenerator drawObjectsGenerator;
     private final Optional<IterableObjectGenerator<BoundingBox, Stack>> backgroundGenerator;
@@ -70,21 +70,23 @@ public class DrawObjectOnStackGenerator extends RasterGenerator
     // END REQUIRED ARGUMENTS
 
     private ObjectMask element;
-    
-    
+
     /**
-     * Creates the generator with a stack as the background - and with default color green and flattened in Z
-     * 
+     * Creates the generator with a stack as the background - and with default color green and
+     * flattened in Z
+     *
      * @param background stack that exists as a background for the object
      * @param outlineWidth width of the outline around an object
      */
     public static DrawObjectOnStackGenerator createFromStack(Stack background, int outlineWidth) {
-        return createFromGenerator( new ExtractBoundingBoxAreaFromStackGenerator(background), outlineWidth);
+        return createFromGenerator(
+                new ExtractBoundingBoxAreaFromStackGenerator(background), outlineWidth);
     }
-    
+
     /**
-     * Creates the generator with an empty background - and with default color green and flattened in Z
-     * 
+     * Creates the generator with an empty background - and with default color green and flattened
+     * in Z
+     *
      * @param outlineWidth width of the outline around an object
      * @return
      */
@@ -93,48 +95,55 @@ public class DrawObjectOnStackGenerator extends RasterGenerator
     }
 
     /**
-     * Creates the generator with maybe a stack as the background, or else an empty background - and with default color green and flattened in Z
-     * 
-     * @param background stack that exists as a background for the object (or none, in which case a 0-valued grayscale background is assumed)
+     * Creates the generator with maybe a stack as the background, or else an empty background - and
+     * with default color green and flattened in Z
+     *
+     * @param background stack that exists as a background for the object (or none, in which case a
+     *     0-valued grayscale background is assumed)
      * @param outlineWidth width of the outline around an object
      */
-    public static DrawObjectOnStackGenerator createFromStack(Optional<Stack> background, int outlineWidth) {
+    public static DrawObjectOnStackGenerator createFromStack(
+            Optional<Stack> background, int outlineWidth) {
         if (background.isPresent()) {
             return createFromStack(background.get(), outlineWidth);
         } else {
             return createWithEmptyBackground(outlineWidth);
         }
     }
-    
+
     /**
-     * Creates an extracted-object generator that draws an outline - with default color green and flattened in Z
-     * 
+     * Creates an extracted-object generator that draws an outline - with default color green and
+     * flattened in Z
+     *
      * @param backgroundGenerator generates a background for a bounding-box
      * @param outlineWidth width of the outline around an object
      */
-    public static DrawObjectOnStackGenerator createFromGenerator(IterableObjectGenerator<BoundingBox, Stack> backgroundGenerator, int outlineWidth) {
-        return new DrawObjectOnStackGenerator(Optional.of(backgroundGenerator), outlineWidth, DEFAULT_COLORS, true);
+    public static DrawObjectOnStackGenerator createFromGenerator(
+            IterableObjectGenerator<BoundingBox, Stack> backgroundGenerator, int outlineWidth) {
+        return new DrawObjectOnStackGenerator(
+                Optional.of(backgroundGenerator), outlineWidth, DEFAULT_COLORS, true);
     }
-            
+
     /**
      * Creates an extracted-object generator that draws an outline
-     * 
-     * @param backgroundGenerator generates a background for a bounding-box, otherwise the background is set to all zeros
+     *
+     * @param backgroundGenerator generates a background for a bounding-box, otherwise the
+     *     background is set to all zeros
      * @param outlineWidth width of the outline around an object
      * @param colorIndex the colors used by successive objects in rotation
-     * @param flatten whether to flatten in the z-dimension (maximum-intensity projection of stack and bounding-box)
+     * @param flatten whether to flatten in the z-dimension (maximum-intensity projection of stack
+     *     and bounding-box)
      */
     private DrawObjectOnStackGenerator(
-        Optional<IterableObjectGenerator<BoundingBox, Stack>> backgroundGenerator,
-        int outlineWidth,
-        ColorIndex colorIndex,
-        boolean flatten
-    ) {
+            Optional<IterableObjectGenerator<BoundingBox, Stack>> backgroundGenerator,
+            int outlineWidth,
+            ColorIndex colorIndex,
+            boolean flatten) {
         this.drawObjectsGenerator = new DrawObjectsGenerator(new Outline(outlineWidth), colorIndex);
         this.backgroundGenerator = backgroundGenerator;
         this.flatten = flatten;
     }
-    
+
     @Override
     public Stack generate() throws OutputWriteFailedException {
 
@@ -143,7 +152,7 @@ public class DrawObjectOnStackGenerator extends RasterGenerator
         }
 
         // Apply the generator
-        drawObjectsGenerator.setBackground( createBackground() );
+        drawObjectsGenerator.setBackground(createBackground());
 
         ObjectMask object = this.getIterableElement();
 
@@ -152,18 +161,20 @@ public class DrawObjectOnStackGenerator extends RasterGenerator
         }
 
         // An object-mask that is relative to the extracted section
-        drawObjectsGenerator.setIterableElement( new ObjectCollectionWithProperties(changeBoundingBox(object)) );
+        drawObjectsGenerator.setIterableElement(
+                new ObjectCollectionWithProperties(changeBoundingBox(object)));
 
         return drawObjectsGenerator.generate();
     }
-    
-    private Either<ImageDimensions,DisplayStack> createBackground() throws OutputWriteFailedException {
+
+    private Either<ImageDimensions, DisplayStack> createBackground()
+            throws OutputWriteFailedException {
 
         if (!backgroundGenerator.isPresent()) {
             // Exit early if there's no background to be extracted
-            return Either.left( new ImageDimensions(element.getBoundingBox().extent()) );
+            return Either.left(new ImageDimensions(element.getBoundingBox().extent()));
         }
-        
+
         try {
             backgroundGenerator.get().setIterableElement(element.getBoundingBox());
         } catch (SetOperationFailedException e) {
@@ -175,7 +186,7 @@ public class DrawObjectOnStackGenerator extends RasterGenerator
         if (flatten) {
             channelExtracted = channelExtracted.maximumIntensityProjection();
         }
-        
+
         try {
             return Either.right(DisplayStack.create(channelExtracted));
         } catch (CreateException e) {
@@ -207,11 +218,10 @@ public class DrawObjectOnStackGenerator extends RasterGenerator
     public boolean isRGB() {
         return drawObjectsGenerator.isRGB();
     }
-    
+
     /** Changes the bounding-box to match the object */
     private ObjectMask changeBoundingBox(ObjectMask object) {
         return new ObjectMask(
-                        new BoundingBox(object.getVoxelBox().extent()),
-                        object.binaryVoxelBox());
+                new BoundingBox(object.getVoxelBox().extent()), object.binaryVoxelBox());
     }
 }

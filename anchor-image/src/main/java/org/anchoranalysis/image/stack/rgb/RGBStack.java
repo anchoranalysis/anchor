@@ -27,9 +27,9 @@
 package org.anchoranalysis.image.stack.rgb;
 
 import com.google.common.base.Preconditions;
+import java.nio.ByteBuffer;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import java.nio.ByteBuffer;
 import org.anchoranalysis.core.color.RGBColor;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
@@ -50,55 +50,54 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 
 /**
  * A stack with exactly three channels, respectively for Red, Green and Blue colors.
- * 
- * TODO create three explicit channels for red, green, blue only if needed, otherwise keep as grayscale.
- * 
- * @author Owen Feehan
  *
+ * <p>TODO create three explicit channels for red, green, blue only if needed, otherwise keep as
+ * grayscale.
+ *
+ * @author Owen Feehan
  */
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class RGBStack {
 
     private Stack channels;
 
     /**
      * Constructor - creates a particularly-sized stack with all channels initialized to 0.
-     * 
+     *
      * @param dimensions dimensions of each channel
      * @param factory factory to create the channel
      */
     public RGBStack(ImageDimensions dimensions, ChannelFactorySingleType factory) {
         channels = new Stack(dimensions, factory, 3);
     }
-    
+
     /**
      * Constructor - creates a RGB stack from an existing stack (which must have 1 or 3 channels)
-     * <p>
-     * The channel order is: red, green, blue.
-     * <p>
-     * A single channel is treated as grayscale, and duplicated to form red, green, blue channels.
-     * 
+     *
+     * <p>The channel order is: red, green, blue.
+     *
+     * <p>A single channel is treated as grayscale, and duplicated to form red, green, blue
+     * channels.
+     *
      * @param stack
      */
     public RGBStack(Stack stack) {
         int numberChannels = stack.getNumberChannels();
-        if (numberChannels==3) {
+        if (numberChannels == 3) {
             channels = stack;
-        } else if (numberChannels==1) {
+        } else if (numberChannels == 1) {
             channels = convertGrayscaleIntoColor(stack);
         } else {
             throw new AnchorFriendlyRuntimeException(
-              String.format(
-                 "Cannot create a RGB-stack from this stack, as it has %d number of channels. Only a single-channel or three channels (representing red, green, blue) are supported.",
-                 stack.getNumberChannels()
-              )
-            );
+                    String.format(
+                            "Cannot create a RGB-stack from this stack, as it has %d number of channels. Only a single-channel or three channels (representing red, green, blue) are supported.",
+                            stack.getNumberChannels()));
         }
     }
 
     /**
      * Copy constructor
-     * 
+     *
      * @param source where to copy from
      */
     private RGBStack(RGBStack source) {
@@ -177,7 +176,8 @@ public class RGBStack {
             ReadableTuple3i maxGlobal) {
         Preconditions.checkArgument(pointGlobal.getZ() >= 0);
         Preconditions.checkArgument(channels.getNumberChannels() == 3);
-        Preconditions.checkArgument(channels.allChannelsHaveType(VoxelDataTypeUnsignedByte.INSTANCE));
+        Preconditions.checkArgument(
+                channels.allChannelsHaveType(VoxelDataTypeUnsignedByte.INSTANCE));
 
         byte maskOn = mask.getBinaryValuesByte().getOnByte();
 
@@ -207,7 +207,12 @@ public class RGBStack {
                 }
 
                 RGBOutputUtils.writeRGBColorToByteArr(
-                        color, pointGlobal, channels.getChannel(0).getDimensions(), red, blue, green);
+                        color,
+                        pointGlobal,
+                        channels.getChannel(0).getDimensions(),
+                        red,
+                        blue,
+                        green);
             }
         }
     }
@@ -220,7 +225,7 @@ public class RGBStack {
                 .getPixelsForPlane(zIndex)
                 .buffer();
     }
-    
+
     private static Stack convertGrayscaleIntoColor(Stack stack) {
         Channel orig = stack.getChannel(0);
         Stack out = new Stack(orig);
@@ -232,5 +237,4 @@ public class RGBStack {
         }
         return out;
     }
-
 }

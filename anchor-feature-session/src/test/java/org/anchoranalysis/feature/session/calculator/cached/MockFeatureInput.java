@@ -26,12 +26,13 @@
 
 package org.anchoranalysis.feature.session.calculator.cached;
 
-import org.anchoranalysis.feature.input.FeatureInput;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
+import org.anchoranalysis.feature.input.FeatureInput;
 
 /** An input with well defined equals() and hash-code() */
-@AllArgsConstructor @EqualsAndHashCode
+@AllArgsConstructor
+@EqualsAndHashCode
 class MockFeatureInput implements FeatureInput {
     private String id;
 }

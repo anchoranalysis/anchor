@@ -38,7 +38,7 @@ import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDimensions;
 
 /** Functions to calculate a bounding-box for a point surrounded by some form of radii */
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class BoundingBoxCalculator {
 
     /**

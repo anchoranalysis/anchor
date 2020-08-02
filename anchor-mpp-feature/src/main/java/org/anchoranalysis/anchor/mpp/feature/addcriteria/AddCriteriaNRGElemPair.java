@@ -109,7 +109,8 @@ public class AddCriteriaNRGElemPair implements AddCriteria<NRGPair> {
                                                         "No feature-evaluator exists"))
                                 .calc(params, nrgElemPairList);
 
-                IdentifiablePair<Mark> pair = new IdentifiablePair<>(mark1.getMark(), mark2.getMark());
+                IdentifiablePair<Mark> pair =
+                        new IdentifiablePair<>(mark1.getMark(), mark2.getMark());
                 return Optional.of(new NRGPair(pair, new NRGTotal(rv.total())));
             } catch (NamedFeatureCalculationException e) {
                 throw new CreateException(e);

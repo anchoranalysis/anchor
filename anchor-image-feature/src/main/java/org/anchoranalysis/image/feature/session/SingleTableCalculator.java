@@ -55,14 +55,13 @@ public class SingleTableCalculator implements FeatureTableCalculator<FeatureInpu
     public void start(ImageInitParams soImage, Optional<NRGStackWithParams> nrgStack, Logger logger)
             throws InitException {
 
-        session = FeatureSession.with(
-            namedFeatureStore.listFeatures(),
-            InitParamsHelper.createInitParams(
-                    Optional.of(soImage.getSharedObjects()
-            ), nrgStack),
-            soImage.getFeature().getSharedFeatureSet(),
-            logger
-        );
+        session =
+                FeatureSession.with(
+                        namedFeatureStore.listFeatures(),
+                        InitParamsHelper.createInitParams(
+                                Optional.of(soImage.getSharedObjects()), nrgStack),
+                        soImage.getFeature().getSharedFeatureSet(),
+                        logger);
     }
 
     @Override
@@ -71,7 +70,8 @@ public class SingleTableCalculator implements FeatureTableCalculator<FeatureInpu
     }
 
     @Override
-    public ResultsVector calc(FeatureInputSingleObject input) throws NamedFeatureCalculationException {
+    public ResultsVector calc(FeatureInputSingleObject input)
+            throws NamedFeatureCalculationException {
         return session.calc(input);
     }
 

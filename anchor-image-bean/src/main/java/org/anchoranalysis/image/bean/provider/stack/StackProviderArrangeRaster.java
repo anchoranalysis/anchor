@@ -86,7 +86,7 @@ public class StackProviderArrangeRaster extends StackProvider {
 
         return rasterArranger.createStack(rasterList, factory).asStack();
     }
-    
+
     private void copyFirstChnlUntil3(Stack stack) {
         while (stack.getNumberChannels() < 3) {
             try {
