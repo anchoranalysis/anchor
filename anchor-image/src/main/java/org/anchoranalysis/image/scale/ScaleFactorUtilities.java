@@ -39,8 +39,8 @@ public class ScaleFactorUtilities {
      *
      * <p>i.e. the scale-factor is target/source for each XY dimension
      *
-     * @param source source extent
-     * @param target target extent
+     * @param source source extent (only X and Y dimensions are considered)
+     * @param target target extent (only X and Y dimensions are considered)
      * @return the scaling-factor to scale the source to be the same size as the target
      */
     public static ScaleFactor calcRelativeScale(Extent source, Extent target) {
@@ -64,10 +64,10 @@ public class ScaleFactorUtilities {
      *
      * @param scalingFactor the scaling-factor
      * @param quantity the quantity
-     * @return the scaled-quantity, floored to an integer
+     * @return the scaled-quantity, rounded up or down an integer
      */
     public static int scaleQuantity(double scalingFactor, int quantity) {
-        int val = (int) (scalingFactor * quantity);
+        int val = (int) Math.round(scalingFactor * quantity);
         return Math.max(val, 1);
     }
 

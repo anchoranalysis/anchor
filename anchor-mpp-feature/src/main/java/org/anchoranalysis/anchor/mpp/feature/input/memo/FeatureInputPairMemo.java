@@ -28,7 +28,7 @@ package org.anchoranalysis.anchor.mpp.feature.input.memo;
 
 import java.util.Optional;
 import lombok.EqualsAndHashCode;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
+import org.anchoranalysis.anchor.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.feature.input.FeatureInputNRG;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 

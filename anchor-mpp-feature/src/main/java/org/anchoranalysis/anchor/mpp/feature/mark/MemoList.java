@@ -29,8 +29,8 @@ package org.anchoranalysis.anchor.mpp.feature.mark;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.EqualsAndHashCode;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.MemoForIndex;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
+import org.anchoranalysis.anchor.mpp.mark.voxelized.memo.MemoForIndex;
+import org.anchoranalysis.anchor.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 
 @EqualsAndHashCode(callSuper = false)
 public class MemoList implements MemoForIndex {

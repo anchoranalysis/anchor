@@ -27,13 +27,15 @@
 package org.anchoranalysis.io.bioformats.bean.options;
 
 import loci.formats.IFormatReader;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Positive;
 
 public class ForceBitsPerPixel extends ReadOptionsDelegate {
 
     // START BEAN PROPERTIES
-    @BeanField @Positive private int bitsPerPixel = 0;
+    @BeanField @Positive @Getter @Setter private int bitsPerPixel = 0;
     // END BEAN PROPERTIES
 
     @Override
@@ -43,13 +45,5 @@ public class ForceBitsPerPixel extends ReadOptionsDelegate {
         } else {
             return false;
         }
-    }
-
-    public int getBitsPerPixel() {
-        return bitsPerPixel;
-    }
-
-    public void setBitsPerPixel(int bitsPerPixel) {
-        this.bitsPerPixel = bitsPerPixel;
     }
 }

@@ -97,6 +97,12 @@ public class FeatureListStoreUtilities {
     }
 
     private static String featureDescription(Feature<?> feature, boolean paramsOnlyInDescription) {
+
+        // If there's a custom-name on the feature this always takes precedence over the description
+        if (!feature.getCustomName().isEmpty()) {
+            return feature.getCustomName();
+        }
+
         if (paramsOnlyInDescription) {
             return feature.getParamDscr();
         } else {

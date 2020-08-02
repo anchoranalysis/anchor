@@ -67,6 +67,6 @@ public class NRGStackFixture {
 
     private static void addChnl(Stack stack, Extent size, IntensityFunction intensityFunction)
             throws IncorrectImageSizeException {
-        stack.addChnl(ChnlFixture.createChnl(size, intensityFunction));
+        stack.addChannel(ChnlFixture.createChnl(size, intensityFunction));
     }
 }

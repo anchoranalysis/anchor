@@ -32,9 +32,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import org.anchoranalysis.core.cache.WrapOperationAsCached;
+import org.anchoranalysis.core.cache.CacheCall;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.functional.Operation;
+import org.anchoranalysis.core.functional.CallableWithException;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
 import org.anchoranalysis.core.progress.ProgressReporter;
@@ -44,42 +44,38 @@ import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.io.RasterIOException;
-import org.anchoranalysis.image.stack.NamedImgStackCollection;
+import org.anchoranalysis.image.stack.NamedStacks;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.TimeSequence;
 
-public class NamedChnlCollectionForSeriesConcatenate implements NamedChnlCollectionForSeries {
+public class NamedChnlCollectionForSeriesConcatenate implements NamedChannelsForSeries {
 
-    private List<NamedChnlCollectionForSeries> list = new ArrayList<>();
-
-    public NamedChnlCollectionForSeriesConcatenate() {
-        super();
-    }
+    private List<NamedChannelsForSeries> list = new ArrayList<>();
 
     @Override
-    public Channel getChnl(String chnlName, int t, ProgressReporter progressReporter)
+    public Channel getChannel(String chnlName, int t, ProgressReporter progressReporter)
             throws GetOperationFailedException {
 
-        for (NamedChnlCollectionForSeries item : list) {
+        for (NamedChannelsForSeries item : list) {
 
-            Optional<Channel> c = item.getChnlOrNull(chnlName, t, progressReporter);
+            Optional<Channel> c = item.getChannelOptional(chnlName, t, progressReporter);
             if (c.isPresent()) {
                 return c.get();
             }
         }
 
         throw new GetOperationFailedException(
-                String.format("chnlName '%s' is not found", chnlName));
+                chnlName, String.format("chnlName '%s' is not found", chnlName));
     }
 
     @Override
-    public Optional<Channel> getChnlOrNull(
+    public Optional<Channel> getChannelOptional(
             String chnlName, int t, ProgressReporter progressReporter)
             throws GetOperationFailedException {
 
-        for (NamedChnlCollectionForSeries item : list) {
+        for (NamedChannelsForSeries item : list) {
 
-            Optional<Channel> c = item.getChnlOrNull(chnlName, t, progressReporter);
+            Optional<Channel> c = item.getChannelOptional(chnlName, t, progressReporter);
             if (c.isPresent()) {
                 return c;
             }
@@ -88,35 +84,35 @@ public class NamedChnlCollectionForSeriesConcatenate implements NamedChnlCollect
         return Optional.empty();
     }
 
-    public void addAsSeparateChnls(
-            NamedImgStackCollection stackCollection, int t, ProgressReporter progressReporter)
+    public void addAsSeparateChannels(
+            NamedStacks stackCollection, int t, ProgressReporter progressReporter)
             throws OperationFailedException {
 
         try (ProgressReporterMultiple prm =
                 new ProgressReporterMultiple(progressReporter, list.size())) {
 
-            for (NamedChnlCollectionForSeries item : list) {
-                item.addAsSeparateChnls(stackCollection, t, new ProgressReporterOneOfMany(prm));
+            for (NamedChannelsForSeries item : list) {
+                item.addAsSeparateChannels(stackCollection, t, new ProgressReporterOneOfMany(prm));
                 prm.incrWorker();
             }
         }
     }
 
-    public void addAsSeparateChnls(NamedProviderStore<TimeSequence> stackCollection, int t)
+    public void addAsSeparateChannels(NamedProviderStore<TimeSequence> stackCollection, int t)
             throws OperationFailedException {
-        for (NamedChnlCollectionForSeries item : list) {
-            item.addAsSeparateChnls(stackCollection, t);
+        for (NamedChannelsForSeries item : list) {
+            item.addAsSeparateChannels(stackCollection, t);
         }
     }
 
-    public boolean add(NamedChnlCollectionForSeries e) {
+    public boolean add(NamedChannelsForSeries e) {
         return list.add(e);
     }
 
-    public Set<String> chnlNames() {
+    public Set<String> channelNames() {
         HashSet<String> set = new HashSet<>();
-        for (NamedChnlCollectionForSeries item : list) {
-            set.addAll(item.chnlNames());
+        for (NamedChannelsForSeries item : list) {
+            set.addAll(item.channelNames());
         }
         return set;
     }
@@ -126,7 +122,7 @@ public class NamedChnlCollectionForSeriesConcatenate implements NamedChnlCollect
         int series = 0;
         boolean first = true;
 
-        for (NamedChnlCollectionForSeries item : list) {
+        for (NamedChannelsForSeries item : list) {
             if (first) {
                 series = item.sizeT(progressReporter);
                 first = false;
@@ -138,9 +134,9 @@ public class NamedChnlCollectionForSeriesConcatenate implements NamedChnlCollect
     }
 
     @Override
-    public boolean hasChnl(String chnlName) {
-        for (NamedChnlCollectionForSeries item : list) {
-            if (item.chnlNames().contains(chnlName)) {
+    public boolean hasChannel(String chnlName) {
+        for (NamedChannelsForSeries item : list) {
+            if (item.channelNames().contains(chnlName)) {
                 return true;
             }
         }
@@ -152,20 +148,20 @@ public class NamedChnlCollectionForSeriesConcatenate implements NamedChnlCollect
         return list.get(0).dimensions();
     }
 
-    public Iterator<NamedChnlCollectionForSeries> iteratorFromRaster() {
+    public Iterator<NamedChannelsForSeries> iteratorFromRaster() {
         return list.iterator();
     }
 
     @Override
-    public Operation<Stack, OperationFailedException> allChnlsAsStack(int t) {
-        return new WrapOperationAsCached<>(() -> stackAllChnls(t));
+    public CallableWithException<Stack, OperationFailedException> allChannelsAsStack(int t) {
+        return CacheCall.of(() -> stackAllChnls(t));
     }
 
     private Stack stackAllChnls(int t) throws OperationFailedException {
         Stack out = new Stack();
-        for (NamedChnlCollectionForSeries ncc : list) {
+        for (NamedChannelsForSeries ncc : list) {
             try {
-                addAllChnlsFrom(ncc.allChnlsAsStack(t).doOperation(), out);
+                addAllChnlsFrom(ncc.allChannelsAsStack(t).call(), out);
             } catch (IncorrectImageSizeException e) {
                 throw new OperationFailedException(e);
             }
@@ -175,7 +171,7 @@ public class NamedChnlCollectionForSeriesConcatenate implements NamedChnlCollect
 
     private static void addAllChnlsFrom(Stack src, Stack dest) throws IncorrectImageSizeException {
         for (Channel c : src) {
-            dest.addChnl(c);
+            dest.addChannel(c);
         }
     }
 }

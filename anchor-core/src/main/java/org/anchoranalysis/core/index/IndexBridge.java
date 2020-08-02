@@ -31,9 +31,9 @@ import org.anchoranalysis.core.functional.function.FunctionWithException;
 public class IndexBridge<T>
         implements FunctionWithException<Integer, T, GetOperationFailedException> {
 
-    private ITypedGetFromIndex<T> cntr;
+    private GetterFromIndex<T> cntr;
 
-    public IndexBridge(ITypedGetFromIndex<T> cntr) {
+    public IndexBridge(GetterFromIndex<T> cntr) {
         super();
         this.cntr = cntr;
     }
@@ -44,7 +44,7 @@ public class IndexBridge<T>
     }
 
     // Updates the cntr associated with the bridge
-    public void setCntr(ITypedGetFromIndex<T> cntr) {
+    public void setCntr(GetterFromIndex<T> cntr) {
         this.cntr = cntr;
     }
 }

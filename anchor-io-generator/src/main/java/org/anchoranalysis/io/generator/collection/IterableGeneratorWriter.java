@@ -27,7 +27,7 @@
 package org.anchoranalysis.io.generator.collection;
 
 import java.util.Collection;
-import org.anchoranalysis.core.functional.Operation;
+import org.anchoranalysis.core.functional.CallableWithException;
 import org.anchoranalysis.io.generator.IterableGenerator;
 import org.anchoranalysis.io.generator.sequence.CollectionGenerator;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
@@ -65,7 +65,8 @@ public class IterableGeneratorWriter {
             BoundOutputManagerRouteErrors outputManager,
             String outputNameFolder,
             String outputNameSubfolder,
-            Operation<IterableGenerator<T>, OutputWriteFailedException> generatorIterable,
+            CallableWithException<IterableGenerator<T>, OutputWriteFailedException>
+                    generatorIterable,
             Collection<T> collection,
             boolean checkIfAllowed) {
         extractWriter(outputManager, checkIfAllowed)
@@ -75,7 +76,7 @@ public class IterableGeneratorWriter {
                                 createOutputWriter(
                                         collection,
                                         outputNameFolder,
-                                        generatorIterable.doOperation(),
+                                        generatorIterable.call(),
                                         outputManager.getDelegate(),
                                         checkIfAllowed));
     }

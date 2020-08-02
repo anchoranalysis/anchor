@@ -31,6 +31,6 @@ import org.anchoranalysis.image.stack.rgb.RGBStack;
 
 public interface ArrangeRaster {
 
-    BBoxSetOnPlane createBBoxSetOnPlane(Iterator<RGBStack> rasterIterator)
+    BoundingBoxesOnPlane createBoundingBoxesOnPlane(Iterator<RGBStack> rasterIterator)
             throws ArrangeRasterException;
 }

@@ -27,7 +27,7 @@
 package org.anchoranalysis.bean.store;
 
 import lombok.AllArgsConstructor;
-import org.anchoranalysis.core.functional.Operation;
+import org.anchoranalysis.core.functional.CallableWithException;
 import org.anchoranalysis.core.functional.function.FunctionWithException;
 
 /**
@@ -37,13 +37,13 @@ import org.anchoranalysis.core.functional.function.FunctionWithException;
  * @param <E> exception-type if something goes wrong
  */
 @AllArgsConstructor
-class CurriedObjectBridge<S, D, E extends Exception> implements Operation<D, E> {
+class CurriedObjectBridge<S, D, E extends Exception> implements CallableWithException<D, E> {
 
     private FunctionWithException<S, D, E> bridge;
     private S sourceObject;
 
     @Override
-    public D doOperation() throws E {
+    public D call() throws E {
         return bridge.apply(sourceObject);
     }
 }

@@ -29,30 +29,37 @@ package org.anchoranalysis.io.manifest;
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import lombok.AllArgsConstructor;
-import org.anchoranalysis.core.cache.CachedOperation;
+import org.anchoranalysis.core.cache.CacheCall;
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.functional.CallableWithException;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
 import org.anchoranalysis.io.manifest.deserializer.ManifestDeserializer;
 
-@AllArgsConstructor
-public class ManifestRecorderFile
-        extends CachedOperation<ManifestRecorder, OperationFailedException> {
+public class ManifestRecorderFile {
 
     private final File file;
-    private final ManifestDeserializer manifestDeserializer;
+    private final CallableWithException<ManifestRecorder, OperationFailedException> operation;
 
-    @Override
-    protected ManifestRecorder execute() throws OperationFailedException {
-        try {
-            if (!file.exists()) {
-                throw new OperationFailedException(
-                        String.format("File %s cannot be found", file.getPath()));
-            }
-            return manifestDeserializer.deserializeManifest(file);
-        } catch (DeserializationFailedException e) {
-            throw new OperationFailedException(e);
-        }
+    public ManifestRecorderFile(File file, ManifestDeserializer manifestDeserializer) {
+        this.file = file;
+        this.operation =
+                CacheCall.of(
+                        () -> {
+                            try {
+                                if (!file.exists()) {
+                                    throw new OperationFailedException(
+                                            String.format(
+                                                    "File %s cannot be found", file.getPath()));
+                                }
+                                return manifestDeserializer.deserializeManifest(file);
+                            } catch (DeserializationFailedException e) {
+                                throw new OperationFailedException(e);
+                            }
+                        });
+    }
+
+    public ManifestRecorder call() throws OperationFailedException {
+        return operation.call();
     }
 
     public Path getRootPath() {

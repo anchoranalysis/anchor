@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.annotation.io.bean.comparer;
 
+import io.vavr.Tuple;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -49,7 +50,7 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.name.value.NameValue;
 import org.anchoranalysis.core.name.value.SimpleNameValue;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
 import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
@@ -60,7 +61,6 @@ import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.bean.color.generator.ColorSetGenerator;
 import org.anchoranalysis.io.bean.color.generator.VeryBrightColorSetGenerator;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
-import org.apache.commons.lang3.tuple.Pair;
 
 /**
  * Allows comparison of an annotation with multiple other entities
@@ -161,13 +161,13 @@ public class MultipleComparer extends AnchorBean<MultipleComparer> {
                             assignment,
                             colorPool,
                             useMIP,
-                            Pair.of("annotator", rightName),
+                            Tuple.of("annotator", rightName),
                             3,
                             true);
 
             return new SimpleNameValue<>(rightName, generator.generate());
 
-        } catch (FeatureCalcException | OutputWriteFailedException e1) {
+        } catch (FeatureCalculationException | OutputWriteFailedException e1) {
             throw new CreateException(e1);
         }
     }

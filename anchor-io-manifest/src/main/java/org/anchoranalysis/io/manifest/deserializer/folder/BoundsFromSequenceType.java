@@ -26,24 +26,18 @@
 
 package org.anchoranalysis.io.manifest.deserializer.folder;
 
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.index.GetOperationFailedException;
-import org.anchoranalysis.core.index.ITypedGetFromIndex;
+import org.anchoranalysis.core.index.GetterFromIndex;
 import org.anchoranalysis.core.index.container.BoundChangeListener;
 import org.anchoranalysis.core.index.container.BoundedIndexContainer;
 import org.anchoranalysis.io.manifest.sequencetype.SequenceType;
 
-public class BoundsFromSequenceType<T> implements ITypedGetFromIndex<T>, BoundedIndexContainer<T> {
+@AllArgsConstructor
+public class BoundsFromSequenceType<T> implements GetterFromIndex<T>, BoundedIndexContainer<T> {
 
-    private ITypedGetFromIndex<T> typedIndexGetter;
-
+    private GetterFromIndex<T> typedIndexGetter;
     private SequenceType sequenceType;
-
-    public BoundsFromSequenceType(
-            ITypedGetFromIndex<T> typedIndexGetter, SequenceType sequenceType) {
-        super();
-        this.typedIndexGetter = typedIndexGetter;
-        this.sequenceType = sequenceType;
-    }
 
     @Override
     public T get(int index) throws GetOperationFailedException {

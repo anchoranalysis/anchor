@@ -47,7 +47,7 @@ public class ObjectCollectionWithProperties implements Iterable<ObjectWithProper
     }
 
     public ObjectCollectionWithProperties(ObjectMask object) {
-        this(ObjectCollectionFactory.from(object));
+        this(ObjectCollectionFactory.of(object));
     }
 
     public ObjectCollectionWithProperties(ObjectCollection objects) {

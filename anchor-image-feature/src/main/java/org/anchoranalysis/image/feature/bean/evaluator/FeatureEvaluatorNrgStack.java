@@ -27,6 +27,8 @@
 package org.anchoranalysis.image.feature.bean.evaluator;
 
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsProvider;
@@ -47,9 +49,9 @@ import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 public class FeatureEvaluatorNrgStack<T extends FeatureInput> extends FeatureEvaluator<T> {
 
     // START BEAN PROPERTIES
-    @BeanField @OptionalBean private StackProvider stackProviderNRG;
+    @BeanField @OptionalBean @Getter @Setter private StackProvider stackProviderNRG;
 
-    @BeanField @OptionalBean private KeyValueParamsProvider keyValueParamsProvider;
+    @BeanField @OptionalBean @Getter @Setter private KeyValueParamsProvider keyValueParamsProvider;
     // END BEAN PROPERTIES
 
     @Override
@@ -94,21 +96,5 @@ public class FeatureEvaluatorNrgStack<T extends FeatureInput> extends FeatureEva
         } else {
             return new KeyValueParams();
         }
-    }
-
-    public StackProvider getStackProviderNRG() {
-        return stackProviderNRG;
-    }
-
-    public void setStackProviderNRG(StackProvider stackProviderNRG) {
-        this.stackProviderNRG = stackProviderNRG;
-    }
-
-    public KeyValueParamsProvider getKeyValueParamsProvider() {
-        return keyValueParamsProvider;
-    }
-
-    public void setKeyValueParamsProvider(KeyValueParamsProvider keyValueParamsProvider) {
-        this.keyValueParamsProvider = keyValueParamsProvider;
     }
 }

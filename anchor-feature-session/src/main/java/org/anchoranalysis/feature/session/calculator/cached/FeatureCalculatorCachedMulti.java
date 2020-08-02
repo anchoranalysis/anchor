@@ -31,7 +31,7 @@ import org.anchoranalysis.core.cache.LRUCache;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.feature.bean.list.FeatureList;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.NamedFeatureCalculationException;
 import org.anchoranalysis.feature.calc.results.ResultsVector;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
@@ -85,18 +85,20 @@ public class FeatureCalculatorCachedMulti<T extends FeatureInput>
     }
 
     @Override
-    public ResultsVector calc(T input) throws FeatureCalcException {
+    public ResultsVector calc(T input) throws NamedFeatureCalculationException {
         this.errorReporter = Optional.empty(); // Do not suppress errors in cache
         try {
             return cacheResults.get(input);
         } catch (GetOperationFailedException e) {
-            throw new FeatureCalcException(e.getCause());
+            throw new NamedFeatureCalculationException(e.getKey(), e.getMessage());
         }
     }
 
     @Override
-    public ResultsVector calc(T input, FeatureList<T> featuresSubset) throws FeatureCalcException {
-        throw new FeatureCalcException("This operation is not supported for subsets of features");
+    public ResultsVector calc(T input, FeatureList<T> featuresSubset)
+            throws NamedFeatureCalculationException {
+        throw new NamedFeatureCalculationException(
+                "This operation is not supported for subsets of features");
     }
 
     @Override
@@ -121,7 +123,7 @@ public class FeatureCalculatorCachedMulti<T extends FeatureInput>
         return rv;
     }
 
-    private ResultsVector calcInsideCache(T index) throws FeatureCalcException {
+    private ResultsVector calcInsideCache(T index) throws NamedFeatureCalculationException {
         if (errorReporter.isPresent()) {
             return source.calcSuppressErrors(index, errorReporter.get());
         } else {

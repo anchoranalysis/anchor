@@ -37,44 +37,44 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
-import org.anchoranalysis.image.bean.provider.ChnlProvider;
+import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.io.chnl.ChnlGetter;
+import org.anchoranalysis.image.io.chnl.ChannelGetter;
 import org.anchoranalysis.image.io.input.ImageInitParamsFactory;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 
 // Applies a filter to a particular channel
 // Uses a ChnlProvider initialised with a stack called "input_chnl"
-public class ChnlFilter extends AnchorBean<ChnlFilter> implements ChnlGetter {
+public class ChnlFilter extends AnchorBean<ChnlFilter> implements ChannelGetter {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private String channelName;
 
-    @BeanField @Getter @Setter private ChnlProvider channel;
+    @BeanField @Getter @Setter private ChannelProvider channel;
     // END BEAN PROPERTIES
 
-    private ChnlGetter chnlCollection;
+    private ChannelGetter chnlCollection;
 
     private BoundIOContext context;
 
-    public void init(ChnlGetter chnlCollection, BoundIOContext context) {
+    public void init(ChannelGetter chnlCollection, BoundIOContext context) {
         this.chnlCollection = chnlCollection;
         this.context = context;
     }
 
     @Override
-    public Channel getChnl(String name, int t, ProgressReporter progressReporter)
+    public Channel getChannel(String name, int t, ProgressReporter progressReporter)
             throws GetOperationFailedException {
 
         try {
             if (!name.equals(channelName)) {
-                return chnlCollection.getChnl(name, t, progressReporter);
+                return chnlCollection.getChannel(name, t, progressReporter);
             }
 
-            ChnlProvider chnlProviderDup = channel.duplicateBean();
+            ChannelProvider chnlProviderDup = channel.duplicateBean();
 
-            Channel chnlIn = chnlCollection.getChnl(name, t, progressReporter);
+            Channel chnlIn = chnlCollection.getChannel(name, t, progressReporter);
 
             ImageInitParams soImage = ImageInitParamsFactory.create(context);
             soImage.addToStackCollection("input_chnl", new Stack(chnlIn));
@@ -87,12 +87,12 @@ public class ChnlFilter extends AnchorBean<ChnlFilter> implements ChnlGetter {
                 | OperationFailedException
                 | CreateException
                 | BeanDuplicateException e) {
-            throw new GetOperationFailedException(e);
+            throw new GetOperationFailedException(name, e);
         }
     }
 
     @Override
-    public boolean hasChnl(String chnlName) {
-        return chnlCollection.hasChnl(chnlName);
+    public boolean hasChannel(String chnlName) {
+        return chnlCollection.hasChannel(chnlName);
     }
 }

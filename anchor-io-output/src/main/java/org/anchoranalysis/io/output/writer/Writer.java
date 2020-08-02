@@ -28,7 +28,6 @@ package org.anchoranalysis.io.output.writer;
 
 import java.nio.file.Path;
 import java.util.Optional;
-import org.anchoranalysis.core.functional.Operation;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.manifest.ManifestFolderDescription;
 import org.anchoranalysis.io.manifest.folder.FolderWriteWithPath;
@@ -56,34 +55,26 @@ public interface Writer {
             Optional<FolderWriteWithPath> folder)
             throws OutputWriteFailedException;
 
-    void writeSubfolder(
-            String outputName,
-            Operation<? extends WritableItem, OutputWriteFailedException> collectionGenerator)
+    void writeSubfolder(String outputName, GenerateWritableItem<?> collectionGenerator)
             throws OutputWriteFailedException;
 
     int write(
             IndexableOutputNameStyle outputNameStyle,
-            Operation<? extends WritableItem, OutputWriteFailedException> generator,
+            GenerateWritableItem<?> generator,
             String index)
             throws OutputWriteFailedException;
 
-    void write(
-            OutputNameStyle outputNameStyle,
-            Operation<? extends WritableItem, OutputWriteFailedException> generator)
+    void write(OutputNameStyle outputNameStyle, GenerateWritableItem<?> generator)
             throws OutputWriteFailedException;
 
-    default void write(
-            String outputName,
-            Operation<? extends WritableItem, OutputWriteFailedException> generator)
+    default void write(String outputName, GenerateWritableItem<?> generator)
             throws OutputWriteFailedException {
         write(new SimpleOutputNameStyle(outputName), generator);
     }
 
     // Write a file with an index represented by an int, returns the number of files created
     default int write(
-            IndexableOutputNameStyle outputNameStyle,
-            Operation<? extends WritableItem, OutputWriteFailedException> generator,
-            int index)
+            IndexableOutputNameStyle outputNameStyle, GenerateWritableItem<?> generator, int index)
             throws OutputWriteFailedException {
         return write(outputNameStyle, generator, Integer.toString(index));
     }

@@ -42,7 +42,7 @@ import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.stack.TimeSequence;
 import org.anchoranalysis.image.stack.wrap.WrapStackAsTimeSequenceStore;
 
-public class MultiInput extends ProvidesStackInput implements InputForMPPBean {
+public class MultiInput implements ProvidesStackInput, InputForMPPBean {
 
     public static final String DEFAULT_IMAGE_INPUT_NAME = "input_image";
 
@@ -63,7 +63,7 @@ public class MultiInput extends ProvidesStackInput implements InputForMPPBean {
     }
 
     @Override
-    public void addToStore(
+    public void addToStoreInferNames(
             NamedProviderStore<TimeSequence> stackCollection,
             int seriesNum,
             ProgressReporter progressReporter)
@@ -146,7 +146,7 @@ public class MultiInput extends ProvidesStackInput implements InputForMPPBean {
     }
 
     @Override
-    public int numFrames() throws OperationFailedException {
+    public int numberFrames() throws OperationFailedException {
         return stackWithMap.numFrames();
     }
 }

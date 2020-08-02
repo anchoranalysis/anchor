@@ -28,7 +28,7 @@ package org.anchoranalysis.image.bean.arrangeraster;
 
 import java.util.Iterator;
 import org.anchoranalysis.image.bean.nonbean.arrangeraster.ArrangeRasterException;
-import org.anchoranalysis.image.bean.nonbean.arrangeraster.BBoxSetOnPlane;
+import org.anchoranalysis.image.bean.nonbean.arrangeraster.BoundingBoxesOnPlane;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
@@ -36,7 +36,7 @@ import org.anchoranalysis.image.stack.rgb.RGBStack;
 public class SingleRaster extends ArrangeRasterBean {
 
     @Override
-    public BBoxSetOnPlane createBBoxSetOnPlane(Iterator<RGBStack> rasterIterator)
+    public BoundingBoxesOnPlane createBoundingBoxesOnPlane(Iterator<RGBStack> rasterIterator)
             throws ArrangeRasterException {
 
         if (!rasterIterator.hasNext()) {
@@ -47,6 +47,6 @@ public class SingleRaster extends ArrangeRasterBean {
 
         Extent extent = stack.getChnl(0).getDimensions().getExtent();
 
-        return new BBoxSetOnPlane(extent, new BoundingBox(extent));
+        return new BoundingBoxesOnPlane(extent, new BoundingBox(extent));
     }
 }

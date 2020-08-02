@@ -28,14 +28,14 @@ package org.anchoranalysis.image.io.stack;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.cache.WrapOperationWithProgressReporterAsCached;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.name.provider.NamedProvider;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
-import org.anchoranalysis.core.progress.OperationWithProgressReporter;
+import org.anchoranalysis.core.progress.CacheCallWithProgressReporter;
+import org.anchoranalysis.core.progress.CallableWithProgressReporter;
 import org.anchoranalysis.image.io.generator.raster.StackGenerator;
-import org.anchoranalysis.image.stack.NamedImgStackCollection;
+import org.anchoranalysis.image.stack.NamedStacks;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.generator.collection.IterableGeneratorOutputHelper;
 import org.anchoranalysis.io.output.bean.allowed.OutputAllowed;
@@ -96,7 +96,7 @@ public class StackCollectionOutputter {
     }
 
     public static void output(
-            NamedImgStackCollection namedCollection,
+            NamedStacks namedCollection,
             BoundOutputManager outputManager,
             String outputName,
             String prefix,
@@ -114,7 +114,7 @@ public class StackCollectionOutputter {
     }
 
     private static void outputWithException(
-            NamedImgStackCollection namedCollection,
+            NamedStacks namedCollection,
             BoundOutputManager outputManager,
             String outputName,
             String suffix,
@@ -130,10 +130,9 @@ public class StackCollectionOutputter {
                 suppressSubfoldersIn);
     }
 
-    public static NamedImgStackCollection subset(
-            NamedProvider<Stack> stackCollection, OutputAllowed oa) {
+    public static NamedStacks subset(NamedProvider<Stack> stackCollection, OutputAllowed oa) {
 
-        NamedImgStackCollection out = new NamedImgStackCollection();
+        NamedStacks out = new NamedStacks();
 
         for (String name : stackCollection.keys()) {
 
@@ -145,10 +144,10 @@ public class StackCollectionOutputter {
         return out;
     }
 
-    private static OperationWithProgressReporter<Stack, OperationFailedException>
-            extractStackCached(NamedProvider<Stack> stackCollection, String name) {
-        return new WrapOperationWithProgressReporterAsCached<>(
-                () -> {
+    private static CallableWithProgressReporter<Stack, OperationFailedException> extractStackCached(
+            NamedProvider<Stack> stackCollection, String name) {
+        return CacheCallWithProgressReporter.of(
+                pr -> {
                     try {
                         return stackCollection.getException(name);
                     } catch (NamedProviderGetException e) {
@@ -162,7 +161,7 @@ public class StackCollectionOutputter {
         return new StackGenerator(true, manifestFunction);
     }
 
-    private static NamedImgStackCollection stackSubset(
+    private static NamedStacks stackSubset(
             NamedProvider<Stack> stacks,
             String secondLevelOutputKey,
             BoundOutputManagerRouteErrors outputManager) {

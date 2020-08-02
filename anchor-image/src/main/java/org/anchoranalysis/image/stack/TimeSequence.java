@@ -29,14 +29,14 @@ package org.anchoranalysis.image.stack;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 
+@NoArgsConstructor
 public class TimeSequence implements Iterable<Stack> {
 
     private final List<Stack> list = new ArrayList<>();
-
-    public TimeSequence() {}
 
     public TimeSequence(Stack s) {
         add(s);
@@ -66,7 +66,7 @@ public class TimeSequence implements Iterable<Stack> {
     public boolean allChnlsHaveType(VoxelDataType chnlDataType) {
 
         for (Stack stack : this) {
-            if (!stack.allChnlsHaveType(chnlDataType)) {
+            if (!stack.allChannelsHaveType(chnlDataType)) {
                 return false;
             }
         }

@@ -31,7 +31,7 @@ import java.util.Map;
 import org.anchoranalysis.core.cache.LRUCache;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.index.GetOperationFailedException;
-import org.anchoranalysis.core.index.ITypedGetFromIndex;
+import org.anchoranalysis.core.index.GetterFromIndex;
 import org.anchoranalysis.core.index.container.OrderProvider;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
 import org.anchoranalysis.io.manifest.deserializer.bundle.Bundle;
@@ -40,7 +40,7 @@ import org.anchoranalysis.io.manifest.deserializer.bundle.BundleUtilities;
 import org.anchoranalysis.io.manifest.folder.FolderWrite;
 
 public class DeserializedObjectFromFolderBundle<T extends Serializable>
-        implements ITypedGetFromIndex<T> {
+        implements GetterFromIndex<T> {
 
     private LRUCache<Integer, Map<Integer, T>> cache;
     private BundleParameters bundleParameters;
@@ -93,7 +93,7 @@ public class DeserializedObjectFromFolderBundle<T extends Serializable>
 
         if (!hashMap.containsKey(index)) {
             throw new GetOperationFailedException(
-                    String.format("Cannot find index %i in bundle", index));
+                    index, String.format("Cannot find index %i in bundle", index));
         }
 
         return hashMap.get(index);

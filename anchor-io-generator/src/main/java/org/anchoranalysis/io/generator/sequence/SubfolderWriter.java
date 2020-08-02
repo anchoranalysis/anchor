@@ -27,8 +27,8 @@
 package org.anchoranalysis.io.generator.sequence;
 
 import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.functional.Operation;
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.manifest.ManifestFolderDescription;
@@ -38,31 +38,21 @@ import org.anchoranalysis.io.manifest.sequencetype.SequenceType;
 import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import org.anchoranalysis.io.output.writer.GenerateWritableItem;
 import org.anchoranalysis.io.output.writer.Writer;
 
+@RequiredArgsConstructor
 public class SubfolderWriter implements SequenceWriter {
 
-    private BoundOutputManager parentOutputManager;
-    private IndexableOutputNameStyle outputNameStyle;
-    private ManifestDescription folderManifestDescription;
+    // START: REQUIRED ARGUMENTS
+    private final BoundOutputManager parentOutputManager;
+    private final String subfolderName;
+    private final IndexableOutputNameStyle outputNameStyle;
+    private final ManifestDescription folderManifestDescription;
+    private final boolean checkIfAllowed;
+    // END: REQUIRED ARGUMENTS
 
     private Optional<BoundOutputManager> subFolderOutputManager = Optional.empty();
-    private boolean checkIfAllowed;
-    private String subfolderName;
-
-    public SubfolderWriter(
-            BoundOutputManager outputManager,
-            String subfolderName,
-            IndexableOutputNameStyle outputNameStyle,
-            ManifestDescription folderManifestDescription,
-            boolean checkIfAllowed) {
-        super();
-        this.parentOutputManager = outputManager;
-        this.outputNameStyle = outputNameStyle;
-        this.folderManifestDescription = folderManifestDescription;
-        this.checkIfAllowed = checkIfAllowed;
-        this.subfolderName = subfolderName;
-    }
 
     private Optional<BoundOutputManager> createSubfolder(
             boolean suppressSubfolder,
@@ -113,7 +103,7 @@ public class SubfolderWriter implements SequenceWriter {
     }
 
     @Override
-    public void write(Operation<Generator, OutputWriteFailedException> generator, String index)
+    public void write(GenerateWritableItem<Generator> generator, String index)
             throws OutputWriteFailedException {
 
         if (!isOn()) {

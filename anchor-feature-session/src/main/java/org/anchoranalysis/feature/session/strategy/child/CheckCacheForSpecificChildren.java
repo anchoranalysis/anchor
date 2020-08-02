@@ -28,12 +28,13 @@ package org.anchoranalysis.feature.session.strategy.child;
 
 import java.util.Optional;
 import java.util.Set;
+import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.cache.calculation.CacheCreator;
 import org.anchoranalysis.feature.cache.calculation.FeatureSessionCache;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.session.strategy.replace.CacheAndReuseStrategy;
 
@@ -68,7 +69,7 @@ public class CheckCacheForSpecificChildren implements FindChildStrategy {
             CacheCreator factory,
             ChildCacheName childName,
             V input)
-            throws FeatureCalcException {
+            throws FeatureCalculationException {
 
         if (cacheInputType.isAssignableFrom(input.getClass()) && source.contains(childName)) {
             return useSessionFromSource(childName, input, factory);
@@ -78,7 +79,9 @@ public class CheckCacheForSpecificChildren implements FindChildStrategy {
     }
 
     private <V extends FeatureInput> FeatureSessionCache<V> useSessionFromSource(
-            ChildCacheName childName, V input, CacheCreator factory) throws FeatureCalcException {
+            ChildCacheName childName, V input, CacheCreator factory)
+            throws FeatureCalculationException {
+
         for (CacheTransferSource<?> src : source) {
 
             if (src.containsChild(childName)) {
@@ -92,19 +95,23 @@ public class CheckCacheForSpecificChildren implements FindChildStrategy {
                         return opt.get().getCache();
                     }
                 } catch (OperationFailedException e) {
-                    throw new FeatureCalcException(e);
+                    throw new FeatureCalculationException(e);
                 }
             }
         }
 
         // If we haven't found a session-input in any of our existing caches, then we create a new
         // session-input of our own
-        return useFallbackCache(input, factory);
+        try {
+            return useFallbackCache(input, factory);
+        } catch (CreateException e) {
+            throw new FeatureCalculationException(e);
+        }
     }
 
     @SuppressWarnings("unchecked")
     private <V extends FeatureInput> FeatureSessionCache<V> useFallbackCache(
-            V input, CacheCreator factory) throws FeatureCalcException {
+            V input, CacheCreator factory) throws CreateException {
         if (fallbackCache == null) {
             fallbackCache = new CacheAndReuseStrategy<>(factory);
         }

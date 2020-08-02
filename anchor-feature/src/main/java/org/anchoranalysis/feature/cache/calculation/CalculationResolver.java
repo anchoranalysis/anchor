@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.feature.cache.calculation;
 
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
@@ -58,5 +58,5 @@ public interface CalculationResolver<T extends FeatureInput> {
      * @return
      */
     <S, U> ResolvedCalculationMap<S, T, U> search(
-            CacheableCalculationMap<S, T, U, FeatureCalcException> cc);
+            CacheableCalculationMap<S, T, U, FeatureCalculationException> cc);
 }

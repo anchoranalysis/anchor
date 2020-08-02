@@ -211,7 +211,7 @@ public class IJWrap {
 
     public static ImagePlus createImagePlus(Stack stack, boolean makeRGB) {
 
-        ImageDimensions sd = stack.getChnl(0).getDimensions();
+        ImageDimensions sd = stack.getChannel(0).getDimensions();
 
         // If we're making an RGB then we need to convert our stack
 
@@ -222,7 +222,7 @@ public class IJWrap {
             stackNew = createInterleavedStack(sd.getExtent(), stack);
         }
 
-        ImagePlus imp = createImagePlus(stackNew, sd, stack.getNumChnl(), 1, !makeRGB);
+        ImagePlus imp = createImagePlus(stackNew, sd, stack.getNumberChannels(), 1, !makeRGB);
 
         maybeCorrectComposite(stack, imp);
 
@@ -327,7 +327,7 @@ public class IJWrap {
     private static void maybeCorrectComposite(Stack stack, ImagePlus imp) {
 
         // Avoids IMP being set to composite mode, if it's a single channel stack
-        if (stack.getNumChnl() == 1 && imp instanceof CompositeImage) {
+        if (stack.getNumberChannels() == 1 && imp instanceof CompositeImage) {
             ((CompositeImage) imp).setMode(IJ.GRAYSCALE);
         }
     }
@@ -367,8 +367,8 @@ public class IJWrap {
 
         for (int z = 0; z < e.getZ(); z++) {
 
-            for (int c = 0; c < stack.getNumChnl(); c++) {
-                Channel chnl = stack.getChnl(c);
+            for (int c = 0; c < stack.getNumberChannels(); c++) {
+                Channel chnl = stack.getChannel(c);
                 VoxelBoxWrapper vb = chnl.getVoxelBox();
 
                 ImageProcessor ip = IJWrap.imageProcessor(vb, z);

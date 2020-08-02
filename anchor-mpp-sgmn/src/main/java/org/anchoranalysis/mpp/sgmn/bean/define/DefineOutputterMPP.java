@@ -31,7 +31,7 @@ import org.anchoranalysis.bean.define.Define;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
-import org.anchoranalysis.image.io.input.series.NamedChnlCollectionForSeries;
+import org.anchoranalysis.image.io.input.series.NamedChannelsForSeries;
 import org.anchoranalysis.image.stack.wrap.WrapStackAsTimeSequenceStore;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
@@ -50,11 +50,11 @@ public class DefineOutputterMPP extends DefineOutputter {
         void process(T initParams) throws OperationFailedException;
     }
 
-    public void processInput(NamedChnlCollectionForSeries ncc, BoundIOContext context)
+    public void processInput(NamedChannelsForSeries ncc, BoundIOContext context)
             throws OperationFailedException {
         try {
             MPPInitParams initParams = super.createInitParams(context);
-            ncc.addAsSeparateChnls(
+            ncc.addAsSeparateChannels(
                     new WrapStackAsTimeSequenceStore(initParams.getImage().getStackCollection()),
                     0);
 

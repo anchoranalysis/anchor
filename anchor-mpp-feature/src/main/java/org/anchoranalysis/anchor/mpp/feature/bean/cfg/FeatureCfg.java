@@ -28,18 +28,18 @@ package org.anchoranalysis.anchor.mpp.feature.bean.cfg;
 
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 public abstract class FeatureCfg extends Feature<FeatureInputCfg> {
 
     @Override
-    public double calc(SessionInput<FeatureInputCfg> input) throws FeatureCalcException {
+    public double calc(SessionInput<FeatureInputCfg> input) throws FeatureCalculationException {
         return calc(input.get());
     }
 
     // Calculates an NRG element for a set of pixels
-    public abstract double calc(FeatureInputCfg params) throws FeatureCalcException;
+    public abstract double calc(FeatureInputCfg params) throws FeatureCalculationException;
 
     @Override
     public Class<? extends FeatureInput> inputType() {

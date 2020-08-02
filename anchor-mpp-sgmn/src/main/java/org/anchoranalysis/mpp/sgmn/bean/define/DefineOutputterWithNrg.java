@@ -26,6 +26,8 @@
 
 package org.anchoranalysis.mpp.sgmn.bean.define;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsProvider;
@@ -36,16 +38,15 @@ import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.bean.provider.stack.StackProviderReference;
-import org.anchoranalysis.image.experiment.identifiers.ImgStackIdentifiers;
+import org.anchoranalysis.image.experiment.identifiers.StackIdentifiers;
 
 public abstract class DefineOutputterWithNrg extends DefineOutputter {
 
     // START BEAN PROPERTIES
-    @BeanField
-    private StackProvider nrgStackProvider =
-            new StackProviderReference(ImgStackIdentifiers.NRG_STACK);
+    @BeanField @Getter @Setter
+    private StackProvider nrgStackProvider = new StackProviderReference(StackIdentifiers.NRG_STACK);
 
-    @BeanField @OptionalBean private KeyValueParamsProvider nrgParamsProvider;
+    @BeanField @OptionalBean @Getter @Setter private KeyValueParamsProvider nrgParamsProvider;
     // END BEAN PROPERTIES
 
     protected NRGStackWithParams createNRGStack(ImageInitParams so, Logger logger)
@@ -61,21 +62,5 @@ public abstract class DefineOutputterWithNrg extends DefineOutputter {
             stack.setParams(nrgParamsProvider.create());
         }
         return stack;
-    }
-
-    public StackProvider getNrgStackProvider() {
-        return nrgStackProvider;
-    }
-
-    public void setNrgStackProvider(StackProvider nrgStackProvider) {
-        this.nrgStackProvider = nrgStackProvider;
-    }
-
-    public KeyValueParamsProvider getNrgParamsProvider() {
-        return nrgParamsProvider;
-    }
-
-    public void setNrgParamsProvider(KeyValueParamsProvider nrgParamsProvider) {
-        this.nrgParamsProvider = nrgParamsProvider;
     }
 }

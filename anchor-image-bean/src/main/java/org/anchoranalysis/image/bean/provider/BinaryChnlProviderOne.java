@@ -32,10 +32,10 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.binary.mask.Mask;
 
-public abstract class BinaryChnlProviderOne extends BinaryChnlProvider {
+public abstract class BinaryChnlProviderOne extends MaskProvider {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private BinaryChnlProvider binaryChnl;
+    @BeanField @Getter @Setter private MaskProvider binaryChnl;
     // END BEAN PROPERTIES
 
     @Override

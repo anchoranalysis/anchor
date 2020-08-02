@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.feature.nrg;
 
+import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.ImageDimensions;
@@ -70,7 +71,7 @@ public class NRGStackWithParams {
         this.params = new KeyValueParams();
     }
 
-    public NRGStackWithParams extractSlice(int z) {
+    public NRGStackWithParams extractSlice(int z) throws OperationFailedException {
         return new NRGStackWithParams(nrgStack.extractSlice(z), params);
     }
 
@@ -94,7 +95,11 @@ public class NRGStackWithParams {
         return new NRGStackWithParams(nrgStack, paramsToAssign);
     }
 
-    public Channel getChnl(int index) {
-        return nrgStack.getChnl(index);
+    public Channel getChannel(int index) {
+        return nrgStack.getChannel(index);
+    }
+
+    public Stack asStack() {
+        return nrgStack.asStack();
     }
 }

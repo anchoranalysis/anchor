@@ -27,6 +27,8 @@
 package org.anchoranalysis.io.output.bean;
 
 import java.util.List;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.NamedBean;
@@ -40,6 +42,7 @@ import org.anchoranalysis.io.bean.color.generator.ColorSetGenerator;
 import org.anchoranalysis.io.bean.color.generator.HSBColorSetGenerator;
 import org.anchoranalysis.io.bean.color.generator.PrependColorSetGenerator;
 import org.anchoranalysis.io.bean.color.generator.ShuffleColorSetGenerator;
+import org.anchoranalysis.io.color.ColorIndexModulo;
 
 /*
  *
@@ -51,7 +54,7 @@ import org.anchoranalysis.io.bean.color.generator.ShuffleColorSetGenerator;
 public class OutputWriteSettings extends AnchorBean<OutputWriteSettings> {
 
     // START BEAN PROPERTIES
-    @BeanField
+    @BeanField @Getter @Setter
     private ColorSetGenerator defaultColorSetGenerator =
             new ShuffleColorSetGenerator(new HSBColorSetGenerator());
 
@@ -59,7 +62,7 @@ public class OutputWriteSettings extends AnchorBean<OutputWriteSettings> {
      * Specifies a writer bean instance for a particular type of writer (identified by the writer
      * bean class)
      */
-    @BeanField @OptionalBean private List<NamedBean<?>> writers;
+    @BeanField @OptionalBean @Getter @Setter private List<NamedBean<?>> writers;
     // END BEAN PROPERTIES
 
     private static final String HTML_EXTENSION = "html";
@@ -143,22 +146,5 @@ public class OutputWriteSettings extends AnchorBean<OutputWriteSettings> {
 
     public String getExtensionText() {
         return TEXT_EXTENSION;
-    }
-
-    // START BEAN GETTERS AND SETTERS
-    public ColorSetGenerator getDefaultColorSetGenerator() {
-        return defaultColorSetGenerator;
-    }
-
-    public void setDefaultColorSetGenerator(ColorSetGenerator defaultColorSetGenerator) {
-        this.defaultColorSetGenerator = defaultColorSetGenerator;
-    }
-
-    public List<NamedBean<?>> getWriters() {
-        return writers;
-    }
-
-    public void setWriters(List<NamedBean<?>> writers) {
-        this.writers = writers;
     }
 }

@@ -60,7 +60,7 @@ public class GroupedResultsVectorCollection implements Closeable {
     private static final ManifestFolderDescription MANIFEST_GROUP_SUBROOT =
             new ManifestFolderDescription("groupedResults", "featureCsv", new SetSequenceType());
 
-    private final MetadataHeaders metadata;
+    private final LabelHeaders metadata;
     private final FeatureNameList featureNamesNonAggregate;
 
     private Optional<FeatureCSVWriter> writer;
@@ -75,9 +75,7 @@ public class GroupedResultsVectorCollection implements Closeable {
                     Comparators.emptiesFirst(Comparator.naturalOrder()));
 
     public GroupedResultsVectorCollection(
-            MetadataHeaders metadata,
-            FeatureNameList featureNamesNonAggregate,
-            BoundIOContext context)
+            LabelHeaders metadata, FeatureNameList featureNamesNonAggregate, BoundIOContext context)
             throws AnchorIOException {
         this.metadata = metadata;
         this.featureNamesNonAggregate = featureNamesNonAggregate;
@@ -91,14 +89,14 @@ public class GroupedResultsVectorCollection implements Closeable {
                         featureNamesNonAggregate);
     }
 
-    public void addResultsFor(StringLabelsForCsvRow identifier, ResultsVector rv) {
+    public void addResultsFor(StringLabelsForCsvRow labels, ResultsVector results) {
 
         // Place into the aggregate structure
-        map.getOrCreateNew(identifier.getGroup()).add(rv);
+        map.getOrCreateNew(labels.getGroup()).add(results);
 
         // Write feature-value directly into CSV
         if (writer.isPresent()) {
-            writer.get().addResultsVector(identifier, rv);
+            writer.get().addResultsVector(labels, results);
         }
     }
 
@@ -156,7 +154,7 @@ public class GroupedResultsVectorCollection implements Closeable {
         ResultsVectorWriter.writeResultsCsv(
                 OUTPUT_NAME_FEATURES_AGGREGATED,
                 map.entrySet(),
-                metadata.groupHeaders(),
+                metadata.getGroupHeaders(),
                 featuresAggregate.createFeatureNames(),
                 context,
                 (name, results, csvWriter) ->

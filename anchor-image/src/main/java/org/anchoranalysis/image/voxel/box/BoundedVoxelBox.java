@@ -29,9 +29,9 @@ package org.anchoranalysis.image.voxel.box;
 import com.google.common.base.Preconditions;
 import java.nio.Buffer;
 import java.util.Optional;
-import java.util.function.UnaryOperator;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.error.OperationFailedRuntimeException;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.extent.BoundingBox;
@@ -424,15 +424,22 @@ public class BoundedVoxelBox<T extends Buffer> {
     }
 
     /**
-     * Applies a function to map the bounding-box to a new-value
+     * Applies a function to map the bounding-box to a new-value (whose extent should be unchanged
+     * in value)
      *
      * <p>This is an IMMUTABLE operation, but the existing voxel-buffers are reused in the new
      * object.
      *
      * @return a new object-mask with the updated bounding box
      */
-    public BoundedVoxelBox<T> mapBoundingBox(UnaryOperator<BoundingBox> mapFunc) {
-        return new BoundedVoxelBox<>(mapFunc.apply(boundingBox), voxelBox);
+    public BoundedVoxelBox<T> mapBoundingBoxPreserveExtent(BoundingBox boundingBoxToAssign) {
+
+        if (!boundingBoxToAssign.extent().equals(boundingBox.extent())) {
+            throw new OperationFailedRuntimeException(
+                    "The extent changed while mapping bounding-box, which is not allowed.");
+        }
+
+        return new BoundedVoxelBox<>(boundingBoxToAssign, voxelBox);
     }
 
     /**

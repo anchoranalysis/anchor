@@ -30,7 +30,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.image.feature.bean.FeatureHistogram;
 import org.anchoranalysis.image.histogram.Histogram;
 
@@ -48,13 +48,14 @@ public abstract class FeatureHistogramStatistic extends FeatureHistogram {
     // END BEAN PROPERTIES
 
     @Override
-    public double calc(SessionInput<FeatureInputHistogram> input) throws FeatureCalcException {
+    public double calc(SessionInput<FeatureInputHistogram> input)
+            throws FeatureCalculationException {
         Histogram histogram = input.get().getHistogram();
 
         if (histogram.isEmpty()) {
 
             if (exceptionIfEmpty) {
-                throw new FeatureCalcException(
+                throw new FeatureCalculationException(
                         "Histogram is empty, so abandoning feature calculation.");
             } else {
                 return valueIfEmpty;
@@ -64,5 +65,6 @@ public abstract class FeatureHistogramStatistic extends FeatureHistogram {
         return calcStatisticFrom(histogram);
     }
 
-    protected abstract double calcStatisticFrom(Histogram histogram) throws FeatureCalcException;
+    protected abstract double calcStatisticFrom(Histogram histogram)
+            throws FeatureCalculationException;
 }

@@ -38,7 +38,7 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListFactory;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.feature.calc.FeatureInitParams;
 import org.anchoranalysis.feature.input.FeatureInput;
 
@@ -132,9 +132,9 @@ public abstract class Feature<T extends FeatureInput>
         }
     }
 
-    public double calcCheckInit(SessionInput<T> input) throws FeatureCalcException {
+    public double calcCheckInit(SessionInput<T> input) throws FeatureCalculationException {
         if (!isInitialized()) {
-            throw new FeatureCalcException(
+            throw new FeatureCalculationException(
                     String.format("The feature (%s) has not been initialized", this.toString()));
         }
 
@@ -147,7 +147,7 @@ public abstract class Feature<T extends FeatureInput>
     }
 
     // Calculates a value for some parameters
-    protected abstract double calc(SessionInput<T> input) throws FeatureCalcException;
+    protected abstract double calc(SessionInput<T> input) throws FeatureCalculationException;
 
     protected void duplicateHelper(Feature<FeatureInput> out) {
         out.customName = customName;

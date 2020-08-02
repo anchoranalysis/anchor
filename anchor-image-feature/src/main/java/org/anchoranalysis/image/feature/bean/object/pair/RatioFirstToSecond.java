@@ -27,7 +27,7 @@
 package org.anchoranalysis.image.feature.bean.object.pair;
 
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
 
 /**
@@ -38,7 +38,8 @@ import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
 public class RatioFirstToSecond extends FeatureDeriveFromPair {
 
     @Override
-    public double calc(SessionInput<FeatureInputPairObjects> params) throws FeatureCalcException {
+    public double calc(SessionInput<FeatureInputPairObjects> params)
+            throws FeatureCalculationException {
         return valueFromFirst(params) / valueFromSecond(params);
     }
 }

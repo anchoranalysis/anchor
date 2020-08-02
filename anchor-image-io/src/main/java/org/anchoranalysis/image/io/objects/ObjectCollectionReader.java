@@ -31,9 +31,9 @@ import static org.anchoranalysis.image.io.objects.deserialize.ObjectCollectionDe
 import java.nio.file.Path;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.cache.WrapOperationAsCached;
+import org.anchoranalysis.core.cache.CacheCall;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.functional.Operation;
+import org.anchoranalysis.core.functional.CallableWithException;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
 
@@ -101,12 +101,12 @@ public class ObjectCollectionReader {
         }
     }
 
-    public static Operation<ObjectCollection, OperationFailedException> createFromPathCached(
-            Operation<Path, OperationFailedException> path) {
-        return new WrapOperationAsCached<>(
+    public static CallableWithException<ObjectCollection, OperationFailedException>
+            createFromPathCached(CallableWithException<Path, OperationFailedException> path) {
+        return CacheCall.of(
                 () -> {
                     try {
-                        return createFromPath(path.doOperation());
+                        return createFromPath(path.call());
                     } catch (DeserializationFailedException e) {
                         throw new OperationFailedException(e);
                     }

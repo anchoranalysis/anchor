@@ -38,9 +38,9 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 public class RGBTimeSeriesGenerator extends SingleFileTypeGenerator {
 
-    private ImgStackSeries stackSeries;
+    private StackSeries stackSeries;
 
-    public RGBTimeSeriesGenerator(ImgStackSeries stackSeries) {
+    public RGBTimeSeriesGenerator(StackSeries stackSeries) {
         super();
         this.stackSeries = stackSeries;
     }

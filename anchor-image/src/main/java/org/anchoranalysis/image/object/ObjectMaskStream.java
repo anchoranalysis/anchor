@@ -30,11 +30,13 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.OptionalInt;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.function.ToIntFunction;
 import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 import org.anchoranalysis.core.functional.CheckedStream;
@@ -85,7 +87,7 @@ public final class ObjectMaskStream {
      * @return a newly created object-collection
      */
     public ObjectCollection mapBoundingBox(UnaryOperator<BoundingBox> mapFunc) {
-        return map(object -> object.mapBoundingBox(mapFunc));
+        return map(object -> object.mapBoundingBoxPreserveExtent(mapFunc));
     }
 
     /**
@@ -272,5 +274,27 @@ public final class ObjectMaskStream {
     /** Converts to a {@link HashSet} (newly-created) */
     public Set<ObjectMask> toSet() {
         return delegate.streamStandardJava().collect(Collectors.toCollection(HashSet::new));
+    }
+
+    /**
+     * Finds the maximum value of a function applied to each object in the collection
+     *
+     * @param function function to apply
+     * @return the maximum-int found by applying the function to each object (so long as the
+     *     collection isn't empty)
+     */
+    public OptionalInt maxAsInt(ToIntFunction<ObjectMask> function) {
+        return delegate.streamStandardJava().mapToInt(function).max();
+    }
+
+    /**
+     * Finds the minimum value of a function applied to each object in the collection
+     *
+     * @param function function to apply
+     * @return the minimum-int found by applying the function to each object (so long as the
+     *     collection isn't empty)
+     */
+    public OptionalInt minAsInt(ToIntFunction<ObjectMask> function) {
+        return delegate.streamStandardJava().mapToInt(function).min();
     }
 }

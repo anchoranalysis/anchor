@@ -31,7 +31,7 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.function.Function;
 import org.anchoranalysis.bean.NamedBean;
-import org.anchoranalysis.core.cache.CachedOperation;
+import org.anchoranalysis.core.cache.CacheCall;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
@@ -184,11 +184,11 @@ class AppendHelper {
             throws OperationFailedException {
         // Delayed-calculation of the appending path as it can be a bit expensive when multiplied by
         // so many items
-        CachedOperation<Path, AnchorIOException> outPath =
-                new OperationOutFilePath(ni, inputObject::pathForBinding, debugMode);
+        CacheCall<Path, AnchorIOException> outPath =
+                CacheCall.of(new OperationOutFilePath(ni, inputObject::pathForBinding, debugMode));
 
         try {
-            return reader.apply(outPath.doOperation());
+            return reader.apply(outPath.call());
         } catch (Exception e) {
             throw new OperationFailedException("An error occured appending to the multi-input", e);
         }

@@ -75,6 +75,12 @@
 	    <version>0.0.1</version>
 	</dependency>
 	
+	<dependency>
+        <groupId>io.vavr</groupId>
+        <artifactId>vavr</artifactId>
+        <version>${vavr.version}</version>
+    </dependency>
+	
 	<!-- For Advanced manipulation of streams -->
 	<dependency>
 	    <groupId>one.util</groupId>

@@ -37,12 +37,12 @@ import org.anchoranalysis.image.channel.Channel;
  *
  * @author Owen Feehan
  */
-public abstract class ChnlProviderTwo extends ChnlProvider {
+public abstract class ChnlProviderTwo extends ChannelProvider {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private ChnlProvider chnl1;
+    @BeanField @Getter @Setter private ChannelProvider chnl1;
 
-    @BeanField @Getter @Setter private ChnlProvider chnl2;
+    @BeanField @Getter @Setter private ChannelProvider chnl2;
     // END BEAN PROPERTIES
 
     @Override

@@ -26,11 +26,11 @@
 
 package org.anchoranalysis.annotation.io.assignment.generator;
 
+import io.vavr.Tuple2;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.annotation.io.assignment.Assignment;
 import org.anchoranalysis.image.stack.DisplayStack;
-import org.apache.commons.lang3.tuple.Pair;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class AssignmentGeneratorFactory {
@@ -40,7 +40,7 @@ public class AssignmentGeneratorFactory {
             Assignment assignment,
             ColorPool colorPool,
             boolean useMIP,
-            Pair<String, String> names,
+            Tuple2<String, String> names,
             int outlineWidth,
             boolean appendNumberBrackets) {
 
@@ -57,11 +57,11 @@ public class AssignmentGeneratorFactory {
             AssignmentGenerator generator,
             Assignment assignment,
             boolean appendNumberBrackets,
-            Pair<String, String> names) {
+            Tuple2<String, String> names) {
         generator.setLeftName(
-                maybeAppendNumber(appendNumberBrackets, names.getLeft(), assignment, true));
+                maybeAppendNumber(appendNumberBrackets, names._1(), assignment, true));
         generator.setRightName(
-                maybeAppendNumber(appendNumberBrackets, names.getRight(), assignment, false));
+                maybeAppendNumber(appendNumberBrackets, names._2(), assignment, false));
     }
 
     private static String maybeAppendNumber(

@@ -30,15 +30,14 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import lombok.NoArgsConstructor;
 
-public class ColorList extends ArrayList<RGBColor> implements ColorIndex {
+@NoArgsConstructor
+public class ColorList implements ColorIndex, Iterable<RGBColor> {
 
-    /** */
-    private static final long serialVersionUID = 8370813904227905624L;
-
-    public ColorList() {
-        super();
-    }
+    private List<RGBColor> list = new ArrayList<>();
 
     public ColorList(Color color) {
         this(new RGBColor(color));
@@ -59,7 +58,7 @@ public class ColorList extends ArrayList<RGBColor> implements ColorIndex {
     }
 
     public void shuffle() {
-        Collections.shuffle(this);
+        Collections.shuffle(list);
     }
 
     public int addWithIndex(RGBColor color) {
@@ -111,5 +110,35 @@ public class ColorList extends ArrayList<RGBColor> implements ColorIndex {
     @Override
     public boolean has(int i) {
         return i < size();
+    }
+
+    public void add(RGBColor color) {
+        list.add(color);
+    }
+
+    public void add(int index, RGBColor color) {
+        list.add(index, color);
+    }
+
+    public int size() {
+        return list.size();
+    }
+
+    @Override
+    public Iterator<RGBColor> iterator() {
+        return list.iterator();
+    }
+
+    @Override
+    public RGBColor get(int i) {
+        return list.get(i);
+    }
+
+    public boolean addAll(ColorList other) {
+        return list.addAll(other.list);
+    }
+
+    public RGBColor remove(int index) {
+        return list.remove(index);
     }
 }

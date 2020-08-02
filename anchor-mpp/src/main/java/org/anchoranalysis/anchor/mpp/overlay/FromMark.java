@@ -47,19 +47,19 @@ class FromMark implements ScaledMaskCreator {
     @Override
     public ObjectWithProperties createScaledMask(
             DrawOverlay overlayWriter,
-            ObjectWithProperties omUnscaled,
+            ObjectWithProperties unscaled,
             double scaleFactor,
             Object originalObject,
-            ImageDimensions sdScaled,
+            ImageDimensions dimensionsScaled,
             BinaryValuesByte bv)
             throws CreateException {
 
         Mark originalMark = (Mark) originalObject;
 
         ObjectWithProperties omScaled =
-                originalMark.calcMaskScaledXY(sdScaled, regionMembership, bv, scaleFactor);
+                originalMark.calcMaskScaledXY(dimensionsScaled, regionMembership, bv, scaleFactor);
 
         // We keep the properties the same
-        return new ObjectWithProperties(omScaled.getMask(), omUnscaled.getProperties());
+        return new ObjectWithProperties(omScaled.getMask(), unscaled.getProperties());
     }
 }

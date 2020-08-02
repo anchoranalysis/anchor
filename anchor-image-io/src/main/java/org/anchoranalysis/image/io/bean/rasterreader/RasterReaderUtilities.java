@@ -44,7 +44,7 @@ public class RasterReaderUtilities {
         OpenedRaster openedRaster = rasterReader.openFile(path);
 
         try {
-            if (openedRaster.numSeries() != 1) {
+            if (openedRaster.numberSeries() != 1) {
                 throw new RasterIOException("there must be exactly one series");
             }
 
@@ -60,13 +60,13 @@ public class RasterReaderUtilities {
 
         Stack stack = openStackFromPath(rasterReader, path);
 
-        if (stack.getNumChnl() != 1) {
+        if (stack.getNumberChannels() != 1) {
             throw new RasterIOException(
                     String.format(
                             "There must be exactly one channel, but there are %d",
-                            stack.getNumChnl()));
+                            stack.getNumberChannels()));
         }
 
-        return new Mask(stack.getChnl(0), bv);
+        return new Mask(stack.getChannel(0), bv);
     }
 }

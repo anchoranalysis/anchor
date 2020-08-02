@@ -29,7 +29,6 @@ package org.anchoranalysis.io.output.writer;
 import java.nio.file.Path;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import org.anchoranalysis.core.functional.Operation;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.manifest.ManifestFolderDescription;
 import org.anchoranalysis.io.manifest.folder.FolderWriteWithPath;
@@ -69,9 +68,7 @@ public class CheckIfAllowed implements Writer {
     }
 
     @Override
-    public void writeSubfolder(
-            String outputName,
-            Operation<? extends WritableItem, OutputWriteFailedException> collectionGenerator)
+    public void writeSubfolder(String outputName, GenerateWritableItem<?> collectionGenerator)
             throws OutputWriteFailedException {
 
         if (!outputManager.isOutputAllowed(outputName)) {
@@ -86,7 +83,7 @@ public class CheckIfAllowed implements Writer {
     @Override
     public int write(
             IndexableOutputNameStyle outputNameStyle,
-            Operation<? extends WritableItem, OutputWriteFailedException> generator,
+            GenerateWritableItem<?> generator,
             String index)
             throws OutputWriteFailedException {
 
@@ -100,9 +97,7 @@ public class CheckIfAllowed implements Writer {
     }
 
     @Override
-    public void write(
-            OutputNameStyle outputNameStyle,
-            Operation<? extends WritableItem, OutputWriteFailedException> generator)
+    public void write(OutputNameStyle outputNameStyle, GenerateWritableItem<?> generator)
             throws OutputWriteFailedException {
 
         if (!outputManager.isOutputAllowed(outputNameStyle.getOutputName())) return;

@@ -69,6 +69,12 @@ public abstract class Tuple3i implements ReadableTuple3i {
         this.z = this.z * factor;
     }
 
+    public final void scale(double factor) {
+        this.x = (int) (factor * this.x);
+        this.y = (int) (factor * this.y);
+        this.z = (int) (factor * this.z);
+    }
+
     public final void divideBy(int factor) {
         this.x = this.x / factor;
         this.y = this.y / factor;
@@ -120,7 +126,7 @@ public abstract class Tuple3i implements ReadableTuple3i {
         } else if (dimIndex == 2) {
             return z;
         } else {
-            throw new AnchorFriendlyRuntimeException(AxisTypeConverter.INVALID_AXIS_INDEX);
+            throw new AnchorFriendlyRuntimeException(AxisTypeConverter.INVALID_AXIS_STRING);
         }
     }
 
@@ -134,7 +140,7 @@ public abstract class Tuple3i implements ReadableTuple3i {
             case Z:
                 return z;
             default:
-                throw new AnchorFriendlyRuntimeException(AxisTypeConverter.UNKNOWN_AXIS_TYPE);
+                throw new AnchorFriendlyRuntimeException(AxisTypeConverter.INVALID_AXIS_INDEX);
         }
     }
 

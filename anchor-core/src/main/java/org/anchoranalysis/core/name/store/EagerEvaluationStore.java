@@ -29,7 +29,7 @@ package org.anchoranalysis.core.name.store;
 import java.util.Optional;
 import java.util.Set;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.functional.Operation;
+import org.anchoranalysis.core.functional.CallableWithException;
 import org.anchoranalysis.core.name.provider.NameValueSet;
 import org.anchoranalysis.core.name.value.SimpleNameValue;
 
@@ -49,10 +49,10 @@ public class EagerEvaluationStore<T> implements NamedProviderStore<T> {
     }
 
     @Override
-    public void add(String name, Operation<T, OperationFailedException> getter)
+    public void add(String name, CallableWithException<T, OperationFailedException> getter)
             throws OperationFailedException {
 
-        SimpleNameValue<T> item = new SimpleNameValue<>(name, getter.doOperation());
+        SimpleNameValue<T> item = new SimpleNameValue<>(name, getter.call());
 
         delegate.add(item);
     }

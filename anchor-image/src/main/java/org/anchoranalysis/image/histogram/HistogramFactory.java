@@ -114,7 +114,7 @@ public class HistogramFactory {
     }
 
     public static Histogram create(Channel chnl, ObjectMask object) {
-        return create(chnl, ObjectCollectionFactory.from(object));
+        return create(chnl, ObjectCollectionFactory.of(object));
     }
 
     public static Histogram create(Channel chnl, ObjectCollection objects) {

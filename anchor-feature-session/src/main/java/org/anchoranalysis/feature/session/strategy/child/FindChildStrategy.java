@@ -31,7 +31,7 @@ import java.util.Set;
 import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.feature.cache.calculation.CacheCreator;
 import org.anchoranalysis.feature.cache.calculation.FeatureSessionCache;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 public interface FindChildStrategy {
@@ -54,7 +54,7 @@ public interface FindChildStrategy {
             CacheCreator factory,
             ChildCacheName childCacheName,
             V input)
-            throws FeatureCalcException;
+            throws FeatureCalculationException;
 
     /**
      * What strategy to use for children-of-children?

@@ -41,10 +41,10 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  */
 public class ResultsVector {
 
+    private static final ArrayComparer DEFAULT_COMPARER = new ArrayComparer();
+
     // Each object is either a Double or an Exception
     private Object[] arr;
-
-    private static ArrayComparer defaultComparer = new ArrayComparer();
 
     public ResultsVector(int size) {
         arr = new Object[size];
@@ -156,7 +156,7 @@ public class ResultsVector {
 
     // Checks if the ResultsVector has exactly the values passed
     public boolean equals(Object... vals) {
-        return defaultComparer.compareArrays(arr, vals);
+        return DEFAULT_COMPARER.compareArrays(arr, vals);
     }
 
     // Checks if the ResultsVector has exactly the values passed to a particular precision
@@ -176,7 +176,7 @@ public class ResultsVector {
 
         ResultsVector other = (ResultsVector) obj;
 
-        return defaultComparer.compareArrays(arr, other.arr);
+        return DEFAULT_COMPARER.compareArrays(arr, other.arr);
     }
 
     @Override

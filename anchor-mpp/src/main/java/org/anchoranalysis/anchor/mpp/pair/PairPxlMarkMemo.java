@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.anchor.mpp.pair;
 
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
+import org.anchoranalysis.anchor.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 
 public class PairPxlMarkMemo {
 

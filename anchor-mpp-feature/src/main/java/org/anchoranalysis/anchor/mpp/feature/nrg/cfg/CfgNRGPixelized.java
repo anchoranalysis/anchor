@@ -36,10 +36,10 @@ import org.anchoranalysis.anchor.mpp.feature.mark.MemoList;
 import org.anchoranalysis.anchor.mpp.feature.nrg.scheme.NRGSchemeWithSharedFeatures;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.mark.set.UpdateMarkSetException;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
+import org.anchoranalysis.anchor.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.NamedFeatureCalculationException;
 import org.anchoranalysis.feature.nrg.NRGStack;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.shared.SharedFeatureMulti;
@@ -69,7 +69,7 @@ public final class CfgNRGPixelized {
             NRGStackWithParams nrgStack,
             SharedFeatureMulti sharedFeatures,
             Logger logger)
-            throws InitException, FeatureCalcException {
+            throws NamedFeatureCalculationException {
         this(cfgNRG, createMemoCollection(cfgNRG, nrgStack, sharedFeatures, logger), logger);
     }
 
@@ -95,20 +95,23 @@ public final class CfgNRGPixelized {
         return cfgNRG.getNrgScheme();
     }
 
-    public void add(VoxelizedMarkMemo newPxlMark, NRGStack stack) throws FeatureCalcException {
+    public void add(VoxelizedMarkMemo newPxlMark, NRGStack stack)
+            throws NamedFeatureCalculationException {
         cfgNRG.add(memoMarks, newPxlMark, stack);
     }
 
-    public void rmv(int index, NRGStack stack) throws FeatureCalcException {
+    public void rmv(int index, NRGStack stack) throws NamedFeatureCalculationException {
         VoxelizedMarkMemo memoRmv = getMemoForIndex(index);
         cfgNRG.rmv(memoMarks, index, memoRmv, stack);
     }
 
-    public void rmv(VoxelizedMarkMemo memoRmv, NRGStack stack) throws FeatureCalcException {
+    public void rmv(VoxelizedMarkMemo memoRmv, NRGStack stack)
+            throws NamedFeatureCalculationException {
         cfgNRG.rmv(memoMarks, memoRmv, stack);
     }
 
-    public void rmvTwo(int index1, int index2, NRGStack stack) throws FeatureCalcException {
+    public void rmvTwo(int index1, int index2, NRGStack stack)
+            throws NamedFeatureCalculationException {
         cfgNRG.rmvTwo(memoMarks, index1, index2, stack);
     }
 
@@ -120,7 +123,7 @@ public final class CfgNRGPixelized {
     // calculates a new energy and configuration based upon a mark at a particular index
     //   changing into new mark
     public void exchange(int index, VoxelizedMarkMemo newMark, NRGStackWithParams nrgStack)
-            throws FeatureCalcException {
+            throws NamedFeatureCalculationException {
         cfgNRG.exchange(memoMarks, index, newMark, nrgStack);
     }
 
@@ -203,23 +206,26 @@ public final class CfgNRGPixelized {
             NRGStackWithParams nrgStack,
             SharedFeatureMulti sharedFeatures,
             Logger logger)
-            throws InitException, FeatureCalcException {
+            throws NamedFeatureCalculationException {
+        try {
+            cfgNRG.init();
 
-        cfgNRG.init();
+            MemoCollection memo =
+                    new MemoCollection(
+                            cfgNRG.getCalcMarkInd(),
+                            nrgStack.getNrgStack(),
+                            cfgNRG.getCfg(),
+                            cfgNRG.getNrgScheme());
 
-        MemoCollection memo =
-                new MemoCollection(
-                        cfgNRG.getCalcMarkInd(),
-                        nrgStack.getNrgStack(),
-                        cfgNRG.getCfg(),
-                        cfgNRG.getNrgScheme());
+            cfgNRG.getCalcMarkPair().initUpdatableMarkSet(memo, nrgStack, logger, sharedFeatures);
 
-        cfgNRG.getCalcMarkPair().initUpdatableMarkSet(memo, nrgStack, logger, sharedFeatures);
+            // Some nrg components need to be calculated in terms of interactions
+            //  this we need to track in an intelligent way
+            cfgNRG.updateTotal(memo, nrgStack.getNrgStack());
 
-        // Some nrg components need to be calculated in terms of interactions
-        //  this we need to track in an intelligent way
-        cfgNRG.updateTotal(memo, nrgStack.getNrgStack());
-
-        return memo;
+            return memo;
+        } catch (InitException e) {
+            throw new NamedFeatureCalculationException(e);
+        }
     }
 }

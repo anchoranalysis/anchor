@@ -28,12 +28,12 @@ package org.anchoranalysis.io.generator.sequence;
 
 import java.util.Optional;
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.functional.Operation;
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.manifest.file.FileType;
 import org.anchoranalysis.io.manifest.sequencetype.SequenceType;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import org.anchoranalysis.io.output.writer.GenerateWritableItem;
 
 public interface SequenceWriter {
 
@@ -42,7 +42,7 @@ public interface SequenceWriter {
 
     boolean isOn();
 
-    void write(Operation<Generator, OutputWriteFailedException> generator, String index)
+    void write(GenerateWritableItem<Generator> generator, String index)
             throws OutputWriteFailedException;
 
     Optional<BoundOutputManager> getOutputManagerForFiles();

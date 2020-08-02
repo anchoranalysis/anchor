@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.image.object;
 
+import com.google.common.base.Preconditions;
 import java.nio.ByteBuffer;
 import java.util.Optional;
 import java.util.function.UnaryOperator;
@@ -212,33 +213,6 @@ public class ObjectMask {
         return new DetermineWhetherIntersectingVoxelsBinary(
                         getBinaryValuesByte(), other.getBinaryValuesByte())
                 .hasIntersectingVoxels(delegate, other.delegate);
-    }
-
-    // Scales an object-mask making sure to create a duplicate first
-    public ObjectMask scaleNew(ScaleFactor factor, Interpolator interpolator)
-            throws OperationFailedException {
-
-        if ((bv.getOnInt() == 255 && bv.getOffInt() == 0)
-                || (bv.getOnInt() == 0 && bv.getOffInt() == 255)) {
-
-            BoundedVoxelBox<ByteBuffer> boxNew = delegate.scale(factor, interpolator);
-
-            // We should do a thresholding afterwards to make sure our values correspond to the two
-            // binary values
-            if (interpolator != null && interpolator.isNewValuesPossible()) {
-
-                // We threshold to make sure it's still binary
-                int thresholdVal = (bv.getOnInt() + bv.getOffInt()) / 2;
-
-                VoxelBoxThresholder.thresholdForLevel(
-                        boxNew.getVoxelBox(), thresholdVal, bv.createByte());
-            }
-
-            return new ObjectMask(boxNew, bv);
-
-        } else {
-            throw new OperationFailedException("Operation not supported for these binary values");
-        }
     }
 
     /**
@@ -587,15 +561,71 @@ public class ObjectMask {
     }
 
     /**
-     * Applies a function to map the bounding-box to a new-value
+     * Applies a function to map the bounding-box to a new-value (whose extent should be unchanged
+     * in value)
      *
-     * <p>This is an IMMUTABLE operation, but the existing voxel-buffers are reused in the new
+     * <p>This is an almost IMMUTABLE operation: the existing voxel-buffers are reused in the new
      * object.
      *
-     * @return a new object-mask with the updated bounding box
+     * @param mapFunc map function to perform mapping of bounding-box
+     * @return a new object-mask with the updated bounding box (but unchanged voxel-box)
      */
-    public ObjectMask mapBoundingBox(UnaryOperator<BoundingBox> mapFunc) {
-        return new ObjectMask(delegate.mapBoundingBox(mapFunc), bv, bvb);
+    public ObjectMask mapBoundingBoxPreserveExtent(UnaryOperator<BoundingBox> mapFunc) {
+        return mapBoundingBoxPreserveExtent(mapFunc.apply(delegate.getBoundingBox()));
+    }
+
+    /**
+     * Applies a function to map the bounding-box to a new-value (whose extent should be unchanged
+     * in value)
+     *
+     * <p>This is an almost IMMUTABLE operation: the existing voxel-buffers are reused in the new
+     * object.
+     *
+     * @param boundingBoxToAssign bounding-box to assign
+     * @return a new object-mask with the updated bounding box (but unchanged voxel-box)
+     */
+    public ObjectMask mapBoundingBoxPreserveExtent(BoundingBox boundingBoxToAssign) {
+        return new ObjectMask(delegate.mapBoundingBoxPreserveExtent(boundingBoxToAssign), bv, bvb);
+    }
+
+    /**
+     * Applies a function to map the bounding-box to a new-value (whose extent is expected to change
+     * in value)
+     *
+     * <p>This is a almost IMMUTABLE operation, and NEW voxel-buffers are usually created for the
+     * new object, but not if the bounding-box or its extent need no change.
+     *
+     * <p>Precondition: the new bounding-box's extent must be greater than or equal to the existing
+     * extent in all dimensions.
+     *
+     * @param boxToAssign bounding-box to assign
+     * @param function to perform mapping of bounding-box
+     * @return a new object-mask with the updated bounding box (and changed voxel-box)
+     */
+    public ObjectMask mapBoundingBoxChangeExtent(BoundingBox boxToAssign) {
+
+        Preconditions.checkArgument(
+                !delegate.extent().anyDimensionIsLargerThan(boxToAssign.extent()));
+
+        if (delegate.getBoundingBox().equals(boxToAssign)) {
+            // Nothing to do, bounding-boxes are equal, early exit
+            return this;
+        }
+
+        if (delegate.getBoundingBox().equals(boxToAssign)) {
+            // Nothing to do, extents are equal, take the easier path of mapping only the bounding
+            // box
+            return mapBoundingBoxPreserveExtent(boxToAssign);
+        }
+
+        VoxelBox<ByteBuffer> voxelBoxLarge = VoxelBoxFactory.getByte().create(boxToAssign.extent());
+
+        BoundingBox bbLocal = delegate.getBoundingBox().relPosToBox(boxToAssign);
+
+        voxelBoxLarge.setPixelsCheckMask(
+                new ObjectMask(bbLocal, binaryVoxelBox()), bvb.getOnByte());
+
+        return new ObjectMask(boxToAssign, voxelBoxLarge, bvb);
     }
 
     /**

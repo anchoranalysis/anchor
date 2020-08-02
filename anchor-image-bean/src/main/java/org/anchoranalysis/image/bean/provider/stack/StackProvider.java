@@ -28,16 +28,17 @@ package org.anchoranalysis.image.bean.provider.stack;
 
 import org.anchoranalysis.bean.annotation.GroupingRoot;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.BeanImgStackProvider;
+import org.anchoranalysis.image.bean.provider.BeanProviderAsStackBase;
 import org.anchoranalysis.image.stack.Stack;
 
 @GroupingRoot
-public abstract class StackProvider extends BeanImgStackProvider<StackProvider, Stack> {
+public abstract class StackProvider extends BeanProviderAsStackBase<StackProvider, Stack> {
 
     @Override
     public abstract Stack create() throws CreateException;
 
-    public Stack createStack() throws CreateException {
+    @Override
+    public Stack createAsStack() throws CreateException {
         return create();
     }
 }

@@ -26,14 +26,17 @@
 
 package org.anchoranalysis.image.io.generator.raster.obj.rgb;
 
+import io.vavr.control.Either;
 import java.util.Optional;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.anchor.overlay.bean.DrawObject;
 import org.anchoranalysis.anchor.overlay.writer.ObjectDrawAttributes;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.image.channel.factory.ChannelFactoryByte;
+import org.anchoranalysis.image.channel.factory.ChannelFactorySingleType;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.io.generator.raster.RasterGenerator;
 import org.anchoranalysis.image.object.properties.ObjectCollectionWithProperties;
 import org.anchoranalysis.image.stack.DisplayStack;
@@ -49,9 +52,10 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
  *
  * @author Owen Feehan
  */
-@RequiredArgsConstructor
 public abstract class ObjectsOnRGBGenerator extends RasterGenerator
         implements IterableObjectGenerator<ObjectCollectionWithProperties, Stack> {
+
+    private static final ChannelFactorySingleType CHANNEL_FACTORY = new ChannelFactoryByte();
 
     private static final ManifestDescription MANIFEST_DESCRIPTION =
             new ManifestDescription("raster", "rgbObjects");
@@ -60,7 +64,7 @@ public abstract class ObjectsOnRGBGenerator extends RasterGenerator
     private final DrawObject drawObject;
     private final ObjectDrawAttributes attributes;
 
-    @Getter @Setter private Optional<DisplayStack> background;
+    @Getter @Setter private Either<ImageDimensions, DisplayStack> background;
     // END REQUIRED ARGUMENTS
 
     // Iterable element
@@ -69,7 +73,7 @@ public abstract class ObjectsOnRGBGenerator extends RasterGenerator
     public ObjectsOnRGBGenerator(
             DrawObject drawObject,
             ObjectDrawAttributes attributes,
-            Optional<DisplayStack> background) {
+            Either<ImageDimensions, DisplayStack> background) {
         super();
         this.drawObject = drawObject;
         this.attributes = attributes;
@@ -79,12 +83,12 @@ public abstract class ObjectsOnRGBGenerator extends RasterGenerator
     @Override
     public Stack generate() throws OutputWriteFailedException {
         try {
-            if (!background.isPresent()) {
+            if (background == null) {
                 throw new OutputWriteFailedException(
-                        "A background is required for this generator, but has not been set.");
+                        "No background has been set, as is needed by this generator");
             }
 
-            RGBStack backgroundRGB = generateBackground(background.get());
+            RGBStack backgroundRGB = generateBackground(background);
             drawObject.write(generateMasks(), backgroundRGB, attributes);
             return backgroundRGB.asStack();
         } catch (OperationFailedException | CreateException e) {
@@ -127,7 +131,12 @@ public abstract class ObjectsOnRGBGenerator extends RasterGenerator
         return Optional.of(MANIFEST_DESCRIPTION);
     }
 
-    protected abstract RGBStack generateBackground(DisplayStack background) throws CreateException;
+    protected abstract RGBStack generateBackground(Either<ImageDimensions, DisplayStack> background)
+            throws CreateException;
 
     protected abstract ObjectCollectionWithProperties generateMasks() throws CreateException;
+
+    protected static RGBStack createEmptyStackFor(ImageDimensions dimensions) {
+        return new RGBStack(dimensions, CHANNEL_FACTORY);
+    }
 }

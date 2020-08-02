@@ -27,6 +27,8 @@
 package org.anchoranalysis.bean.permute.property;
 
 import java.util.Iterator;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 
@@ -34,30 +36,14 @@ import org.anchoranalysis.bean.annotation.BeanField;
 public class PermutePropertySequenceIntegerWithinString extends PermutePropertySequence<String> {
 
     // START BEAN PROPERTIES
-    @BeanField @AllowEmpty private String prefix = "";
+    @BeanField @AllowEmpty @Getter @Setter private String prefix = "";
 
-    @BeanField @AllowEmpty private String suffix = "";
+    @BeanField @AllowEmpty @Getter @Setter private String suffix = "";
     // END BEAN PROPERTIES
 
     @Override
     public Iterator<String> propertyValues() {
         return new IteratorIntegerWithPrefixSuffix(range(), prefix, suffix);
-    }
-
-    public String getPrefix() {
-        return prefix;
-    }
-
-    public void setPrefix(String prefix) {
-        this.prefix = prefix;
-    }
-
-    public String getSuffix() {
-        return suffix;
-    }
-
-    public void setSuffix(String suffix) {
-        this.suffix = suffix;
     }
 
     @Override

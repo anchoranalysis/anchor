@@ -30,7 +30,7 @@ import java.nio.file.Path;
 import java.util.Optional;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
-import org.anchoranalysis.core.functional.Operation;
+import org.anchoranalysis.core.functional.CallableWithException;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
@@ -74,7 +74,7 @@ public class StackWithMap implements MultiInputSubMap<TimeSequence> {
     }
 
     @Override
-    public void add(String name, Operation<TimeSequence, OperationFailedException> op) {
+    public void add(String name, CallableWithException<TimeSequence, OperationFailedException> op) {
         map.add(name, op);
     }
 
@@ -96,11 +96,11 @@ public class StackWithMap implements MultiInputSubMap<TimeSequence> {
     }
 
     public int numFrames() throws OperationFailedException {
-        return mainInputObject.numFrames();
+        return mainInputObject.numberFrames();
     }
 
     @Override
-    public Operation<TimeSequence, OperationFailedException> get(String name)
+    public CallableWithException<TimeSequence, OperationFailedException> get(String name)
             throws OperationFailedException {
 
         if (name.equals(mainObjectName)) {

@@ -65,7 +65,7 @@ public class DisplayStackGenerator extends ObjectGenerator<DisplayStack>
     public void setIterableElement(DisplayStack element) throws SetOperationFailedException {
         this.item = element;
 
-        delegate.setIterableElement(element.createImgStack(false));
+        delegate.setIterableElement(element.deriveStack(false));
     }
 
     @Override

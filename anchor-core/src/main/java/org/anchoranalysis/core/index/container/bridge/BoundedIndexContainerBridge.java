@@ -57,7 +57,7 @@ public abstract class BoundedIndexContainerBridge<H, S, E extends Exception>
         try {
             return bridge(index, internalState);
         } catch (Exception e) {
-            throw new GetOperationFailedException(e);
+            throw new GetOperationFailedException(index, e);
         }
     }
 

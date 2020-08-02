@@ -26,6 +26,8 @@
 
 package org.anchoranalysis.feature.cache;
 
+import lombok.EqualsAndHashCode;
+
 /**
  * A unique identifier for a child-cache name, that uses a class and optionally additionally a
  * part-name
@@ -35,6 +37,7 @@ package org.anchoranalysis.feature.cache;
  *   division of the class into different caches
  * </ul>
  */
+@EqualsAndHashCode
 public class ChildCacheName {
 
     private Class<?> cls;
@@ -68,30 +71,6 @@ public class ChildCacheName {
         super();
         this.cls = cls;
         this.part = part;
-    }
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((cls == null) ? 0 : cls.getCanonicalName().hashCode());
-        result = prime * result + ((part == null) ? 0 : part.hashCode());
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (obj == null) return false;
-        if (getClass() != obj.getClass()) return false;
-        ChildCacheName other = (ChildCacheName) obj;
-        if (cls == null) {
-            if (other.cls != null) return false;
-        } else if (!cls.getCanonicalName().equals(other.cls.getCanonicalName())) return false;
-        if (part == null) {
-            if (other.part != null) return false;
-        } else if (!part.equals(other.part)) return false;
-        return true;
     }
 
     @Override

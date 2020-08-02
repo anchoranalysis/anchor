@@ -56,23 +56,23 @@ public class Stack implements Iterable<Channel> {
         delegate = new StackNotUniformSized();
     }
 
-    public Stack(ImageDimensions sd, ChannelFactorySingleType factory, int numChnls) {
-        delegate = new StackNotUniformSized();
-        for (int i = 0; i < numChnls; i++) {
-            delegate.addChnl(factory.createEmptyInitialised(sd));
+    public Stack(Channel channel) {
+        delegate = new StackNotUniformSized(channel);
+    }
+
+    public Stack(ImageDimensions sd, ChannelFactorySingleType factory, int numberChannels) {
+        this();
+        for (int i = 0; i < numberChannels; i++) {
+            delegate.addChannel(factory.createEmptyInitialised(sd));
         }
     }
 
-    public Stack(Channel chnl) {
-        delegate = new StackNotUniformSized(chnl);
-    }
-
-    public Stack(Channel chnl0, Channel chnl1, Channel chnl2) throws IncorrectImageSizeException {
-        super();
-        delegate = new StackNotUniformSized();
-        addChnl(chnl0);
-        addChnl(chnl1);
-        addChnl(chnl2);
+    public Stack(Channel channel0, Channel channel1, Channel channel2)
+            throws IncorrectImageSizeException {
+        this();
+        addChannel(channel0);
+        addChannel(channel1);
+        addChannel(channel2);
     }
 
     private Stack(StackNotUniformSized stack) {
@@ -94,12 +94,12 @@ public class Stack implements Iterable<Channel> {
      * @return a new stack (after any modification by {@code mapFunc}) preserving the channel order
      * @throws OperationFailedException if the channels produced have non-uniform sizes
      */
-    public Stack mapChnl(UnaryOperatorWithException<Channel, OperationFailedException> mapping)
+    public Stack mapChannel(UnaryOperatorWithException<Channel, OperationFailedException> mapping)
             throws OperationFailedException {
         Stack out = new Stack();
-        for (Channel c : this) {
+        for (Channel channel : this) {
             try {
-                out.addChnl(mapping.apply(c));
+                out.addChannel(mapping.apply(channel));
             } catch (IncorrectImageSizeException e) {
                 throw new OperationFailedException(e);
             }
@@ -112,14 +112,14 @@ public class Stack implements Iterable<Channel> {
         return new Stack(delegate.extractSlice(z));
     }
 
-    public Stack maxIntensityProj() {
+    public Stack maximumIntensityProjection() {
         // We know the sizes will be correct
-        return new Stack(delegate.maxIntensityProj());
+        return new Stack(delegate.maximumIntensityProjection());
     }
 
-    public void addBlankChnl() throws OperationFailedException {
+    public void addBlankChannel() throws OperationFailedException {
 
-        if (getNumChnl() == 0) {
+        if (getNumberChannels() == 0) {
             throw new OperationFailedException(
                     "At least one channel must exist from which to guess dimensions");
         }
@@ -133,46 +133,52 @@ public class Stack implements Iterable<Channel> {
             throw new OperationFailedException("Other channels do not have the same type.");
         }
 
-        Channel first = getChnl(0);
-        delegate.addChnl(
+        Channel first = getChannel(0);
+        delegate.addChannel(
                 ChannelFactory.instance()
                         .createEmptyInitialised(first.getDimensions(), first.getVoxelDataType()));
     }
 
-    public final void addChnl(Channel chnl) throws IncorrectImageSizeException {
+    public final void addChannel(Channel channel) throws IncorrectImageSizeException {
 
         // We ensure that this channel has the same size as the first
-        if (delegate.getNumChnl() >= 1
-                && !chnl.getDimensions().equals(delegate.getChnl(0).getDimensions())) {
+        if (delegate.getNumberChannels() >= 1
+                && !channel.getDimensions().equals(delegate.getChannel(0).getDimensions())) {
             throw new IncorrectImageSizeException(
                     "Dimensions of channel do not match existing channel");
         }
 
-        delegate.addChnl(chnl);
+        delegate.addChannel(channel);
     }
 
-    public final Channel getChnl(int index) {
-        return delegate.getChnl(index);
+    public final void addChannelsFrom(Stack stack) throws IncorrectImageSizeException {
+        for (int index = 0; index < stack.getNumberChannels(); index++) {
+            addChannel(stack.getChannel(index));
+        }
     }
 
-    public final int getNumChnl() {
-        return delegate.getNumChnl();
+    public final Channel getChannel(int index) {
+        return delegate.getChannel(index);
+    }
+
+    public final int getNumberChannels() {
+        return delegate.getNumberChannels();
     }
 
     public ImageDimensions getDimensions() {
-        return delegate.getChnl(0).getDimensions();
+        return delegate.getChannel(0).getDimensions();
     }
 
     public Stack duplicate() {
         return new Stack(this);
     }
 
-    public Stack extractUpToThreeChnls() {
+    public Stack extractUpToThreeChannels() {
         Stack out = new Stack();
-        int maxNum = Math.min(3, delegate.getNumChnl());
+        int maxNum = Math.min(3, delegate.getNumberChannels());
         for (int i = 0; i < maxNum; i++) {
             try {
-                out.addChnl(delegate.getChnl(i));
+                out.addChannel(delegate.getChannel(i));
             } catch (IncorrectImageSizeException e) {
                 throw new AnchorImpossibleSituationException();
             }
@@ -185,19 +191,19 @@ public class Stack implements Iterable<Channel> {
         return delegate.iterator();
     }
 
-    public List<Channel> asListChnls() {
+    public List<Channel> asListChannels() {
         ArrayList<Channel> list = new ArrayList<>();
-        for (int i = 0; i < delegate.getNumChnl(); i++) {
-            list.add(delegate.getChnl(i));
+        for (int i = 0; i < delegate.getNumberChannels(); i++) {
+            list.add(delegate.getChannel(i));
         }
         return list;
     }
 
     // Returns true if the data type of all channels is equal to
-    public boolean allChnlsHaveType(VoxelDataType chnlDataType) {
+    public boolean allChannelsHaveType(VoxelDataType channelDataType) {
 
-        for (Channel chnl : this) {
-            if (!chnl.getVoxelDataType().equals(chnlDataType)) {
+        for (Channel channel : this) {
+            if (!channel.getVoxelDataType().equals(channelDataType)) {
                 return false;
             }
         }
@@ -220,12 +226,12 @@ public class Stack implements Iterable<Channel> {
 
         Stack objCast = (Stack) obj;
 
-        if (getNumChnl() != objCast.getNumChnl()) {
+        if (getNumberChannels() != objCast.getNumberChannels()) {
             return false;
         }
 
-        for (int i = 0; i < getNumChnl(); i++) {
-            if (!getChnl(i).equalsDeep(objCast.getChnl(i))) {
+        for (int i = 0; i < getNumberChannels(); i++) {
+            if (!getChannel(i).equalsDeep(objCast.getChannel(i))) {
                 return false;
             }
         }
@@ -235,18 +241,18 @@ public class Stack implements Iterable<Channel> {
     @Override
     public int hashCode() {
 
-        HashCodeBuilder builder = new HashCodeBuilder().append(getNumChnl());
+        HashCodeBuilder builder = new HashCodeBuilder().append(getNumberChannels());
 
-        for (int i = 0; i < getNumChnl(); i++) {
-            builder.append(getChnl(i));
+        for (int i = 0; i < getNumberChannels(); i++) {
+            builder.append(getChannel(i));
         }
 
         return builder.toHashCode();
     }
 
     public void updateResolution(ImageResolution res) {
-        for (int i = 0; i < getNumChnl(); i++) {
-            getChnl(i).updateResolution(res);
+        for (int i = 0; i < getNumberChannels(); i++) {
+            getChannel(i).updateResolution(res);
         }
     }
 }

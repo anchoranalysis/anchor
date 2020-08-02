@@ -37,7 +37,7 @@ import org.anchoranalysis.bean.annotation.Positive;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.bean.nonbean.arrangeraster.ArrangeRaster;
 import org.anchoranalysis.image.bean.nonbean.arrangeraster.ArrangeRasterException;
-import org.anchoranalysis.image.bean.nonbean.arrangeraster.BBoxSetOnPlane;
+import org.anchoranalysis.image.bean.nonbean.arrangeraster.BoundingBoxesOnPlane;
 import org.anchoranalysis.image.bean.nonbean.arrangeraster.TableItemArrangement;
 import org.anchoranalysis.image.bean.nonbean.arrangeraster.TableItemException;
 import org.anchoranalysis.image.extent.BoundingBox;
@@ -57,7 +57,7 @@ public class ArrangeRasterTile extends ArrangeRasterBean {
     @BeanField @Getter @Setter private ArrangeRasterBean cellDefault = new SingleRaster();
     // END BEAN PROPERTIES
 
-    private class CreateTable implements TableItemArrangement.TableCreator<BBoxSetOnPlane> {
+    private class CreateTable implements TableItemArrangement.TableCreator<BoundingBoxesOnPlane> {
 
         private Iterator<RGBStack> rasterIterator;
 
@@ -90,10 +90,10 @@ public class ArrangeRasterTile extends ArrangeRasterBean {
         }
 
         @Override
-        public BBoxSetOnPlane createNext(int rowPos, int colPos) throws TableItemException {
+        public BoundingBoxesOnPlane createNext(int rowPos, int colPos) throws TableItemException {
             try {
                 return createArrangeRasterForItem(rowPos, colPos)
-                        .createBBoxSetOnPlane(rasterIterator);
+                        .createBoundingBoxesOnPlane(rasterIterator);
             } catch (ArrangeRasterException e) {
                 throw new TableItemException(e);
             }
@@ -101,7 +101,7 @@ public class ArrangeRasterTile extends ArrangeRasterBean {
     }
 
     private static void addShifted(
-            Iterable<BoundingBox> src, BBoxSetOnPlane dest, int shiftX, int shiftY) {
+            Iterable<BoundingBox> src, BoundingBoxesOnPlane dest, int shiftX, int shiftY) {
 
         // We now loop through each item in the cell, and add to our output set with
         //   the correct offset
@@ -115,11 +115,11 @@ public class ArrangeRasterTile extends ArrangeRasterBean {
         }
     }
 
-    private static BBoxSetOnPlane createSet(
-            TableItemArrangement<BBoxSetOnPlane> table, MaxWidthHeight maxWidthHeight) {
+    private static BoundingBoxesOnPlane createSet(
+            TableItemArrangement<BoundingBoxesOnPlane> table, MaxWidthHeight maxWidthHeight) {
 
-        BBoxSetOnPlane set =
-                new BBoxSetOnPlane(
+        BoundingBoxesOnPlane set =
+                new BoundingBoxesOnPlane(
                         new Extent(
                                 maxWidthHeight.getTotalWidth(),
                                 maxWidthHeight.getTotalHeight(),
@@ -133,7 +133,7 @@ public class ArrangeRasterTile extends ArrangeRasterBean {
                     break;
                 }
 
-                BBoxSetOnPlane bboxSet = table.get(rowPos, colPos);
+                BoundingBoxesOnPlane bboxSet = table.get(rowPos, colPos);
 
                 int rowHeight = maxWidthHeight.getMaxHeightForRow(rowPos);
                 int colWidth = maxWidthHeight.getMaxWidthForCol(colPos);
@@ -151,16 +151,14 @@ public class ArrangeRasterTile extends ArrangeRasterBean {
     }
 
     @Override
-    public BBoxSetOnPlane createBBoxSetOnPlane(final Iterator<RGBStack> rasterIterator)
+    public BoundingBoxesOnPlane createBoundingBoxesOnPlane(final Iterator<RGBStack> rasterIterator)
             throws ArrangeRasterException {
 
         try {
-            TableItemArrangement<BBoxSetOnPlane> table =
+            TableItemArrangement<BoundingBoxesOnPlane> table =
                     new TableItemArrangement<>(new CreateTable(rasterIterator), numRows, numCols);
 
-            MaxWidthHeight maxWidthHeight = new MaxWidthHeight(table);
-
-            return createSet(table, maxWidthHeight);
+            return createSet(table, new MaxWidthHeight(table));
 
         } catch (TableItemException e) {
             throw new ArrangeRasterException(e);

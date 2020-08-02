@@ -30,21 +30,30 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
+import org.anchoranalysis.feature.calc.NamedFeatureCalculationException;
 import org.anchoranalysis.feature.calc.results.ResultsVector;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 
 class FeatureCalculatorMultiFixture {
 
-    /** Creates a feature-calculator than returns a constant result */
+    /**
+     * Creates a feature-calculator than returns a constant result
+     *
+     * @throws NamedFeatureCalculationException
+     */
     public static <T extends FeatureInput> FeatureCalculatorMulti<T> createFeatureCalculator(
-            ResultsVector rv) throws FeatureCalcException {
+            ResultsVector rv) {
 
-        @SuppressWarnings("unchecked")
-        FeatureCalculatorMulti<T> calculator = mock(FeatureCalculatorMulti.class);
-        when(calculator.calc(any())).thenReturn(rv);
-        when(calculator.calcSuppressErrors(any(), any())).thenReturn(rv);
-        return calculator;
+        try {
+            @SuppressWarnings("unchecked")
+            FeatureCalculatorMulti<T> calculator = mock(FeatureCalculatorMulti.class);
+            when(calculator.calc(any())).thenReturn(rv);
+            when(calculator.calcSuppressErrors(any(), any())).thenReturn(rv);
+            return calculator;
+        } catch (NamedFeatureCalculationException e) {
+            throw new AnchorFriendlyRuntimeException(e);
+        }
     }
 }

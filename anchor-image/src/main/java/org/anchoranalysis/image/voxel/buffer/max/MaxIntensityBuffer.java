@@ -43,7 +43,7 @@ public abstract class MaxIntensityBuffer<T extends Buffer> {
     private VoxelBox<T> target;
 
     public MaxIntensityBuffer(Extent srcExtent, VoxelBoxFactoryTypeBound<T> factory) {
-        target = factory.create(new Extent(srcExtent.getX(), srcExtent.getY(), 1));
+        target = factory.create(new Extent(srcExtent.getX(), srcExtent.getY()));
     }
 
     public void projectSlice(T pixels) {

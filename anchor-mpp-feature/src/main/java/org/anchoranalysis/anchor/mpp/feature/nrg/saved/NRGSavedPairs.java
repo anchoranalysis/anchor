@@ -29,13 +29,13 @@ package org.anchoranalysis.anchor.mpp.feature.nrg.saved;
 import java.util.Set;
 import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 import org.anchoranalysis.anchor.mpp.feature.addcriteria.AddCriteria;
-import org.anchoranalysis.anchor.mpp.feature.addcriteria.PairCollectionAddCriteria;
+import org.anchoranalysis.anchor.mpp.feature.addcriteria.RandomCollectionWithAddCriteria;
 import org.anchoranalysis.anchor.mpp.feature.nrg.NRGPair;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.mark.set.UpdatableMarkSet;
 import org.anchoranalysis.anchor.mpp.mark.set.UpdateMarkSetException;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.MemoForIndex;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
+import org.anchoranalysis.anchor.mpp.mark.voxelized.memo.MemoForIndex;
+import org.anchoranalysis.anchor.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.graph.EdgeTypeWithVertices;
 import org.anchoranalysis.core.log.Logger;
@@ -47,11 +47,11 @@ public class NRGSavedPairs implements UpdatableMarkSet {
     // Pairwise total
     private double nrgTotal;
 
-    private PairCollectionAddCriteria<NRGPair> pairCollection;
+    private RandomCollectionWithAddCriteria<NRGPair> pairCollection;
 
     // START CONSTRUCTORS
     public NRGSavedPairs(AddCriteria<NRGPair> addCriteria) {
-        this.pairCollection = new PairCollectionAddCriteria<>(NRGPair.class);
+        this.pairCollection = new RandomCollectionWithAddCriteria<>(NRGPair.class);
         this.pairCollection.setAddCriteria(addCriteria);
     }
 

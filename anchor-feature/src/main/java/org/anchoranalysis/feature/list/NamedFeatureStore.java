@@ -63,7 +63,7 @@ public class NamedFeatureStore<T extends FeatureInput> implements Iterable<Named
         Integer index = mapIndex.get(name);
         if (index == null) {
             throw new GetOperationFailedException(
-                    String.format("The key '%s' is not found in the featureStore", name));
+                    name, String.format("The key '%s' is not found in the featureStore", name));
         }
         return index;
     }

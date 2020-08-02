@@ -36,71 +36,70 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 public class StackNotUniformSized implements Iterable<Channel> {
 
     // We store our values in an arraylist of channels
-    private final List<Channel> chnls;
+    private final List<Channel> channels;
 
     // Image stack
     public StackNotUniformSized() {
-        chnls = new ArrayList<>();
+        channels = new ArrayList<>();
     }
 
     // Create a stack from a channel
-    public StackNotUniformSized(Channel chnl) {
+    public StackNotUniformSized(Channel channel) {
         this();
-        addChnl(chnl);
+        addChannel(channel);
     }
 
     public StackNotUniformSized extractSlice(int z) {
 
         StackNotUniformSized stackOut = new StackNotUniformSized();
-        for (int c = 0; c < chnls.size(); c++) {
-            stackOut.addChnl(chnls.get(c).extractSlice(z));
+        for (int c = 0; c < channels.size(); c++) {
+            stackOut.addChannel(channels.get(c).extractSlice(z));
         }
         return stackOut;
     }
 
-    // TODO MAKE MORE EFFICIENT
-    public StackNotUniformSized maxIntensityProj() {
+    public StackNotUniformSized maximumIntensityProjection() {
 
         StackNotUniformSized stackOut = new StackNotUniformSized();
-        for (int c = 0; c < chnls.size(); c++) {
-            // TODO make more efficient than duplicateByte()
-            stackOut.addChnl(chnls.get(c).duplicate().maxIntensityProjection());
+        for (int c = 0; c < channels.size(); c++) {
+            // TODO make more efficient than duplicate()
+            stackOut.addChannel(channels.get(c).duplicate().maxIntensityProjection());
         }
         return stackOut;
     }
 
     public void clear() {
-        chnls.clear();
+        channels.clear();
     }
 
-    public final void addChnl(Channel chnl) {
-        chnls.add(chnl);
+    public final void addChannel(Channel chnl) {
+        channels.add(chnl);
     }
 
-    public final Channel getChnl(int index) {
-        return chnls.get(index);
+    public final Channel getChannel(int index) {
+        return channels.get(index);
     }
 
-    public final int getNumChnl() {
-        return chnls.size();
+    public final int getNumberChannels() {
+        return channels.size();
     }
 
     public ImageDimensions getFirstDimensions() {
-        assert (getNumChnl() > 0);
-        return chnls.get(0).getDimensions();
+        assert (getNumberChannels() > 0);
+        return channels.get(0).getDimensions();
     }
 
     public boolean isUniformSized() {
 
-        if (chnls.size() <= 1) {
+        if (channels.size() <= 1) {
             return true;
         }
 
-        ImageDimensions sd = chnls.get(0).getDimensions();
+        ImageDimensions dimensions = channels.get(0).getDimensions();
 
-        for (int c = 1; c < chnls.size(); c++) {
+        for (int c = 1; c < channels.size(); c++) {
 
-            if (!sd.equals(chnls.get(c).getDimensions())) {
+            if (!dimensions.equals(channels.get(c).getDimensions())) {
                 return false;
             }
         }
@@ -110,15 +109,15 @@ public class StackNotUniformSized implements Iterable<Channel> {
 
     public boolean isUniformTyped() {
 
-        if (chnls.size() <= 1) {
+        if (channels.size() <= 1) {
             return true;
         }
 
-        VoxelDataType dataType = chnls.get(0).getVoxelDataType();
+        VoxelDataType dataType = channels.get(0).getVoxelDataType();
 
-        for (int c = 1; c < chnls.size(); c++) {
+        for (int c = 1; c < channels.size(); c++) {
 
-            if (!dataType.equals(chnls.get(c).getVoxelDataType())) {
+            if (!dataType.equals(channels.get(c).getVoxelDataType())) {
                 return false;
             }
         }
@@ -128,13 +127,13 @@ public class StackNotUniformSized implements Iterable<Channel> {
 
     @Override
     public Iterator<Channel> iterator() {
-        return chnls.iterator();
+        return channels.iterator();
     }
 
     public StackNotUniformSized duplicate() {
         StackNotUniformSized out = new StackNotUniformSized();
-        for (Channel chnl : this) {
-            out.addChnl(chnl.duplicate());
+        for (Channel channel : this) {
+            out.addChannel(channel.duplicate());
         }
         return out;
     }

@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.annotation.io.assignment.generator;
 
+import io.vavr.control.Either;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -146,7 +147,7 @@ public class AssignmentGenerator extends RasterGenerator {
         return createGenerator(
                         otherObjects,
                         colorPool.createColors(otherObjects.size()),
-                        ObjectCollectionFactory.from(matchedObjects, otherObjects))
+                        ObjectCollectionFactory.of(matchedObjects, otherObjects))
                 .generate();
     }
 
@@ -168,7 +169,7 @@ public class AssignmentGenerator extends RasterGenerator {
         return new DrawObjectsGenerator(
                 drawObject,
                 new ObjectCollectionWithProperties(objects),
-                Optional.of(background),
+                Either.right(background),
                 cols);
     }
 

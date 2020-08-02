@@ -30,9 +30,11 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -74,6 +76,24 @@ public class FunctionalList {
      */
     public static <S, T> List<T> mapToList(Collection<S> collection, Function<S, T> mapFunction) {
         return collection.stream().map(mapFunction).collect(Collectors.toList());
+    }
+
+    /**
+     * Maps a collection to a list with each element derived from a corresponding element in the
+     * original collection - and also letting the map function use an index.
+     *
+     * @param <S> parameter-type for function
+     * @param <T> return-type for function
+     * @param collection the collection to be mapped
+     * @param mapFunction function to do the mapping
+     * @return a list with the same size and same order, but using derived elements that are a
+     *     result of the mapping
+     */
+    public static <S, T> List<T> mapToListWithIndex(
+            List<S> list, BiFunction<S, Integer, T> mapFunction) {
+        return IntStream.range(0, list.size())
+                .mapToObj(index -> mapFunction.apply(list.get(index), index))
+                .collect(Collectors.toList());
     }
 
     /**

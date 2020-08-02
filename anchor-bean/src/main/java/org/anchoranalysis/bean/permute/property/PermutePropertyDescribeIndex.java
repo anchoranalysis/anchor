@@ -55,7 +55,7 @@ public class PermutePropertyDescribeIndex extends PermuteProperty<Integer> {
     // END BEAN FIELDS
 
     @Override
-    public Iterator<Integer> propertyValues() {
+    public Iterator<Integer> propertyValues() throws OperationFailedException {
         return permuteProperty.propertyValues();
     }
 

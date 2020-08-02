@@ -28,7 +28,6 @@ package org.anchoranalysis.anchor.overlay.object.scaled;
 
 import org.anchoranalysis.anchor.overlay.writer.DrawOverlay;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.interpolator.Interpolator;
@@ -39,7 +38,8 @@ import org.anchoranalysis.image.scale.ScaleFactor;
 
 public class FromMask implements ScaledMaskCreator {
 
-    private static Interpolator interpolator = InterpolatorFactory.getInstance().binaryResizing();
+    private static final Interpolator INTERPOLATOR =
+            InterpolatorFactory.getInstance().binaryResizing();
 
     @Override
     public ObjectWithProperties createScaledMask(
@@ -47,23 +47,17 @@ public class FromMask implements ScaledMaskCreator {
             ObjectWithProperties unscaled,
             double scaleFactor,
             Object originalObject,
-            ImageDimensions sdScaled,
+            ImageDimensions dimensionsScaled,
             BinaryValuesByte bvOut)
             throws CreateException {
 
-        try {
-            // Then we have to create the scaled-object fresh
-            // We store it for next-time
-            ObjectMask scaled =
-                    unscaled.getMask().scaleNew(new ScaleFactor(scaleFactor), interpolator);
+        // Then we have to create the scaled-object fresh
+        // We store it for next-time
+        ObjectMask scaled = unscaled.getMask().scale(new ScaleFactor(scaleFactor), INTERPOLATOR);
 
-            assert (scaled.hasPixelsGreaterThan(0));
+        assert (scaled.hasPixelsGreaterThan(0));
 
-            // We keep the properties the same
-            return new ObjectWithProperties(scaled, unscaled.getProperties());
-
-        } catch (OperationFailedException e) {
-            throw new CreateException(e);
-        }
+        // We keep the properties the same
+        return new ObjectWithProperties(scaled, unscaled.getProperties());
     }
 }

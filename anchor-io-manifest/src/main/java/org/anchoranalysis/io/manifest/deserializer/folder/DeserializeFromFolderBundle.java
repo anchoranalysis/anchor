@@ -27,7 +27,7 @@
 package org.anchoranalysis.io.manifest.deserializer.folder;
 
 import java.io.Serializable;
-import org.anchoranalysis.core.index.ITypedGetFromIndex;
+import org.anchoranalysis.core.index.GetterFromIndex;
 import org.anchoranalysis.core.index.container.BoundedIndexContainer;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
 import org.anchoranalysis.io.manifest.folder.FolderWrite;
@@ -68,7 +68,7 @@ public abstract class DeserializeFromFolderBundle<T, S extends Serializable>
         return history;
     }
 
-    protected abstract ITypedGetFromIndex<T> createCntr(
+    protected abstract GetterFromIndex<T> createCntr(
             DeserializedObjectFromFolderBundle<S> deserializeFromBundle);
 
     private boolean expensiveLoad() {

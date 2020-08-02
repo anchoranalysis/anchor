@@ -29,7 +29,8 @@ package org.anchoranalysis.image.feature.session.merged;
 import java.util.Optional;
 import java.util.function.Function;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calc.NamedFeatureCalculationException;
 import org.anchoranalysis.feature.calc.results.ResultsVector;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
@@ -62,7 +63,7 @@ class ResultsVectorBuilder {
             FeatureInputPairObjects inputPair,
             Function<FeatureInputPairObjects, ObjectMask> extractObj,
             FeatureCalculatorMulti<FeatureInputSingleObject> calc)
-            throws FeatureCalcException {
+            throws NamedFeatureCalculationException {
         FeatureInputSingleObject inputSingle =
                 new FeatureInputSingleObject(extractObj.apply(inputPair));
         calcAndInsert(inputSingle, calc);
@@ -73,10 +74,10 @@ class ResultsVectorBuilder {
      *
      * @param input
      * @param calc
-     * @throws FeatureCalcException
+     * @throws FeatureCalculationException
      */
     public <T extends FeatureInput> void calcAndInsert(T input, FeatureCalculatorMulti<T> calc)
-            throws FeatureCalcException {
+            throws NamedFeatureCalculationException {
         ResultsVector rvImage =
                 errorReporter.isPresent()
                         ? calc.calcSuppressErrors(input, errorReporter.get())

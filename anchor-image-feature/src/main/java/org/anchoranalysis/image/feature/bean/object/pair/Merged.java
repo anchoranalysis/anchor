@@ -28,7 +28,7 @@ package org.anchoranalysis.image.feature.bean.object.pair;
 
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 
@@ -48,7 +48,8 @@ public class Merged extends FeatureDeriveFromPair {
     }
 
     @Override
-    public double calc(SessionInput<FeatureInputPairObjects> params) throws FeatureCalcException {
+    public double calc(SessionInput<FeatureInputPairObjects> params)
+            throws FeatureCalculationException {
         return valueFromMerged(params);
     }
 }

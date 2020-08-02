@@ -30,6 +30,8 @@ import java.io.File;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
 import org.anchoranalysis.io.error.AnchorIOException;
@@ -38,9 +40,9 @@ import org.anchoranalysis.io.error.FileProviderException;
 public class FilterForExistingFiles extends FilterFileProvider {
 
     // START BEAN PROPERTIES
-    @BeanField
-    private List<FilePathGenerator> listFilePathGenerator =
-            new ArrayList<>(); // All files need to be present
+    /** All files need to be present */
+    @BeanField @Getter @Setter
+    private List<FilePathGenerator> listFilePathGenerator = new ArrayList<>();
     // END BEAN PROPERTIES
 
     @Override
@@ -59,13 +61,5 @@ public class FilterForExistingFiles extends FilterFileProvider {
         } catch (AnchorIOException e) {
             throw new FileProviderException(e);
         }
-    }
-
-    public List<FilePathGenerator> getListFilePathGenerator() {
-        return listFilePathGenerator;
-    }
-
-    public void setListFilePathGenerator(List<FilePathGenerator> listFilePathGenerator) {
-        this.listFilePathGenerator = listFilePathGenerator;
     }
 }

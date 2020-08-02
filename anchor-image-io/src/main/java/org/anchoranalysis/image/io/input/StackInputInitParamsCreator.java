@@ -26,29 +26,20 @@
 
 package org.anchoranalysis.image.io.input;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.progress.ProgressReporterNull;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
-import org.anchoranalysis.image.stack.wrap.WrapStackAsTimeSequenceStore;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class StackInputInitParamsCreator {
-
-    private StackInputInitParamsCreator() {}
 
     public static ImageInitParams createInitParams(
             ProvidesStackInput inputObject, BoundIOContext context)
             throws OperationFailedException {
         ImageInitParams soImage = ImageInitParamsFactory.create(context);
-        addInput(soImage, inputObject);
+        inputObject.addToStoreInferNames(soImage.getStackCollection());
         return soImage;
-    }
-
-    private static void addInput(ImageInitParams soImage, ProvidesStackInput inputObject)
-            throws OperationFailedException {
-        inputObject.addToStore(
-                new WrapStackAsTimeSequenceStore(soImage.getStackCollection()),
-                0,
-                ProgressReporterNull.get());
     }
 }

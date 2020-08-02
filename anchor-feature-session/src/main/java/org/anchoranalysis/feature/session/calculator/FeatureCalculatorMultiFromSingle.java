@@ -26,30 +26,34 @@
 
 package org.anchoranalysis.feature.session.calculator;
 
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.feature.bean.list.FeatureList;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calc.NamedFeatureCalculationException;
 import org.anchoranalysis.feature.calc.results.ResultsVector;
 import org.anchoranalysis.feature.input.FeatureInput;
 
+@AllArgsConstructor
 public class FeatureCalculatorMultiFromSingle<T extends FeatureInput>
         implements FeatureCalculatorMulti<T> {
 
-    private FeatureCalculatorSingle<T> delegate;
+    private final FeatureCalculatorSingle<T> delegate;
 
-    public FeatureCalculatorMultiFromSingle(FeatureCalculatorSingle<T> delegate) {
-        super();
-        this.delegate = delegate;
+    @Override
+    public ResultsVector calc(T input) throws NamedFeatureCalculationException {
+        try {
+            return vectorFor(delegate.calc(input));
+        } catch (FeatureCalculationException e) {
+            throw new NamedFeatureCalculationException(e);
+        }
     }
 
     @Override
-    public ResultsVector calc(T input) throws FeatureCalcException {
-        return vectorFor(delegate.calc(input));
-    }
-
-    @Override
-    public ResultsVector calc(T input, FeatureList<T> featuresSubset) throws FeatureCalcException {
-        throw new FeatureCalcException("This operation is not supported");
+    public ResultsVector calc(T input, FeatureList<T> featuresSubset)
+            throws NamedFeatureCalculationException {
+        throw new NamedFeatureCalculationException(
+                "The calculation on feature-subsets operation is not supported");
     }
 
     @Override

@@ -27,7 +27,7 @@ package org.anchoranalysis.core.functional.function;
  */
 
 /**
- * Like {@java.util.BiFunction} but can also thrown an exception.
+ * Like {@java.util.BiFunction} but can also throw a checked exception.
  *
  * @author Owen Feehan
  * @param <S> first parameter-type

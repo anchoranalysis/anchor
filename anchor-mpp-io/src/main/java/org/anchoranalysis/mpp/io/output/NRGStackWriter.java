@@ -42,7 +42,7 @@ public class NRGStackWriter {
         GeneratorSequenceUtilities.generateListAsSubfolder(
                 "nrgStack",
                 2,
-                nrgStack.getNrgStack().asStack().asListChnls(),
+                nrgStack.getNrgStack().asStack().asListChannels(),
                 new ChnlGenerator("nrgStackChnl"),
                 context);
 

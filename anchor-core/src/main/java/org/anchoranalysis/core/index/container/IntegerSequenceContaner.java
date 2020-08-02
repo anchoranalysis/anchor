@@ -76,7 +76,7 @@ public class IntegerSequenceContaner implements BoundedIndexContainer<Integer> {
     public Integer get(int index) throws GetOperationFailedException {
 
         if (index < 0 || index >= size) {
-            throw new GetOperationFailedException(String.format("Invalid index: %d", index));
+            throw new GetOperationFailedException(index, String.format("Invalid index: %d", index));
         }
 
         return index;

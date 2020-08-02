@@ -40,7 +40,7 @@ import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 
 /**
- * The list of features that can be used in a {@link FeatureCalculatorMergedPairs}
+ * The list of features that can be used in a {@link PairsTableCalculator}
  *
  * @author Owen Feehan
  */

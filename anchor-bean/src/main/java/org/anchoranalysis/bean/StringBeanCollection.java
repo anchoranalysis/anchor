@@ -31,4 +31,6 @@ public interface StringBeanCollection extends Iterable<String> {
     void add(String s);
 
     boolean contains(String s);
+
+    boolean isEmpty();
 }

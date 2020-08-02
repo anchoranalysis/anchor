@@ -31,7 +31,6 @@ import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.bean.list.FeatureList;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.FeatureInitParams;
 import org.anchoranalysis.feature.input.FeatureInputNRG;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
@@ -109,18 +108,12 @@ class CreateCalculatorHelper {
             ImageInitParams soImage,
             BoundReplaceStrategy<T, ? extends ReplaceStrategy<T>> replacePolicyFactory)
             throws InitException {
-
-        try {
-            return FeatureSession.with(
-                    features,
-                    createInitParams(soImage),
-                    Optional.empty(),
-                    logger,
-                    replacePolicyFactory);
-
-        } catch (FeatureCalcException e) {
-            throw new InitException(e);
-        }
+        return FeatureSession.with(
+                features,
+                createInitParams(soImage),
+                Optional.empty(),
+                logger,
+                replacePolicyFactory);
     }
 
     /** Ensures any input-parameters have the NRG-stack attached */

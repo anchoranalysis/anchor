@@ -27,11 +27,16 @@
 package org.anchoranalysis.bean.xml.factory;
 
 import org.anchoranalysis.bean.StringList;
-import org.anchoranalysis.bean.StringSet;
 import org.apache.commons.configuration.beanutils.BeanDeclaration;
 
 /**
- * A factory for creating {@link StringSet} beans
+ * Creates a {@link StringList} from a XML element.
+ *
+ * <p>It uses:
+ *
+ * <ul>
+ *   <li>all "item" sub-elements, and
+ *   <li>the "items" attribute, split by commas, if it exists
  *
  * @author Owen Feehan
  */
@@ -42,6 +47,6 @@ public class StringListFactory extends AnchorBeanFactory {
     @SuppressWarnings("rawtypes")
     public synchronized Object createBean(Class beanClass, BeanDeclaration decl, Object param)
             throws Exception {
-        return HelperUtilities.populateStringCollectionFromXml(new StringList(), decl);
+        return HelperUtilities.populateStringCollection(new StringList(), decl);
     }
 }

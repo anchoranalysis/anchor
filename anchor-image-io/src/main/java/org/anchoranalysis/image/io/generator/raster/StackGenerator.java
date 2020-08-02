@@ -61,21 +61,21 @@ public class StackGenerator extends RasterGenerator
         this.manifestFunction = manifestFunction;
     }
 
-    public static Stack generateImgStack(Stack stackIn, boolean padIfNec)
+    public static Stack generateStack(Stack stackIn, boolean padIfNec)
             throws OutputWriteFailedException {
         Stack stackOut = new Stack();
 
         try {
-            for (int c = 0; c < stackIn.getNumChnl(); c++) {
-                stackOut.addChnl(stackIn.getChnl(c));
+            for (int c = 0; c < stackIn.getNumberChannels(); c++) {
+                stackOut.addChannel(stackIn.getChannel(c));
             }
         } catch (IncorrectImageSizeException e) {
             throw new OutputWriteFailedException(e);
         }
 
         try {
-            if (padIfNec && stackOut.getNumChnl() == 2) {
-                stackOut.addBlankChnl();
+            if (padIfNec && stackOut.getNumberChannels() == 2) {
+                stackOut.addBlankChannel();
             }
         } catch (OperationFailedException e) {
             throw new OutputWriteFailedException(e);
@@ -87,7 +87,7 @@ public class StackGenerator extends RasterGenerator
     @Override
     public Stack generate() throws OutputWriteFailedException {
         assert (stackIn != null);
-        return generateImgStack(stackIn, padIfNec);
+        return generateStack(stackIn, padIfNec);
     }
 
     @Override
@@ -117,6 +117,6 @@ public class StackGenerator extends RasterGenerator
 
     @Override
     public boolean isRGB() {
-        return stackIn.getNumChnl() == 3 || (stackIn.getNumChnl() == 2 && padIfNec);
+        return stackIn.getNumberChannels() == 3 || (stackIn.getNumberChannels() == 2 && padIfNec);
     }
 }

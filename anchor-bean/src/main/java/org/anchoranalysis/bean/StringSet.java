@@ -70,7 +70,10 @@ public class StringSet extends AnchorBean<StringSet> implements StringBeanCollec
         return set.iterator();
     }
 
-    //
+    @Override
+    public boolean isEmpty() {
+        return set.isEmpty();
+    }
 
     /**
      * Duplicate the bean

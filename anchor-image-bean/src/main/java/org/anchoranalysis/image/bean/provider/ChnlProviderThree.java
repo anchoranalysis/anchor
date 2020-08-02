@@ -32,14 +32,14 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.channel.Channel;
 
-public abstract class ChnlProviderThree extends ChnlProvider {
+public abstract class ChnlProviderThree extends ChannelProvider {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private ChnlProvider chnl1;
+    @BeanField @Getter @Setter private ChannelProvider chnl1;
 
-    @BeanField @Getter @Setter private ChnlProvider chnl2;
+    @BeanField @Getter @Setter private ChannelProvider chnl2;
 
-    @BeanField @Getter @Setter private ChnlProvider chnl3;
+    @BeanField @Getter @Setter private ChannelProvider chnl3;
     // END BEAN PROPERTIES
 
     @Override

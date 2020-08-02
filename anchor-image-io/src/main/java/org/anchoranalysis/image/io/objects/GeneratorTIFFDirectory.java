@@ -28,7 +28,7 @@ package org.anchoranalysis.image.io.objects;
 
 import java.util.List;
 import org.anchoranalysis.image.extent.ImageResolution;
-import org.anchoranalysis.image.io.generator.raster.obj.ObjWithBoundingBoxGenerator;
+import org.anchoranalysis.image.io.generator.raster.obj.ObjectWithBoundingBoxGenerator;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.io.generator.IterableGeneratorBridge;
@@ -47,7 +47,7 @@ public class GeneratorTIFFDirectory
     public GeneratorTIFFDirectory() {
         super(
                 new SubfolderGenerator<ObjectMask, List<ObjectMask>>(
-                        new ObjWithBoundingBoxGenerator(
+                        new ObjectWithBoundingBoxGenerator(
                                 new ImageResolution()), // We don't specify a sceneres as we don't
                         // know what images they belong to
                         "obj"),

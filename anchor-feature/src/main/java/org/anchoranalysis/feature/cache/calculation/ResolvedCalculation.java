@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.feature.cache.calculation;
 
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
@@ -41,14 +41,14 @@ import org.anchoranalysis.feature.input.FeatureInput;
  */
 public class ResolvedCalculation<S, T extends FeatureInput> {
 
-    private CacheableCalculation<S, T, FeatureCalcException> calc;
+    private CacheableCalculation<S, T, FeatureCalculationException> calc;
 
     /**
      * Constructor
      *
      * @param calc the cacheable-calculation that is now considered resolved
      */
-    public ResolvedCalculation(CacheableCalculation<S, T, FeatureCalcException> calc) {
+    public ResolvedCalculation(CacheableCalculation<S, T, FeatureCalculationException> calc) {
         super();
         this.calc = calc;
     }
@@ -60,9 +60,9 @@ public class ResolvedCalculation<S, T extends FeatureInput> {
      * @param input If there is no existing cached-value, and the calculation occurs, these
      *     parameters are used. Otherwise ignored.
      * @return the result of the calculation
-     * @throws FeatureCalcException if the calculation cannot finish, for whatever reason
+     * @throws FeatureCalculationException if the calculation cannot finish, for whatever reason
      */
-    public S getOrCalculate(T input) throws FeatureCalcException {
+    public S getOrCalculate(T input) throws FeatureCalculationException {
         return calc.getOrCalculate(input);
     }
 

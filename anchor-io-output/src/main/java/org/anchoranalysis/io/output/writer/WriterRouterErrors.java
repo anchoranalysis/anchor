@@ -28,8 +28,8 @@ package org.anchoranalysis.io.output.writer;
 
 import java.nio.file.Path;
 import java.util.Optional;
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
-import org.anchoranalysis.core.functional.Operation;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.manifest.ManifestFolderDescription;
 import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
@@ -37,16 +37,11 @@ import org.anchoranalysis.io.namestyle.OutputNameStyle;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
+@AllArgsConstructor
 public class WriterRouterErrors {
 
     private Writer delegate;
     private ErrorReporter errorReporter;
-
-    public WriterRouterErrors(Writer delegate, ErrorReporter errorReporter) {
-        super();
-        this.delegate = delegate;
-        this.errorReporter = errorReporter;
-    }
 
     public Optional<BoundOutputManagerRouteErrors> bindAsSubdirectory(
             String outputName, ManifestFolderDescription manifestDescription) {
@@ -59,9 +54,7 @@ public class WriterRouterErrors {
         }
     }
 
-    public void writeSubfolder(
-            String outputName,
-            Operation<WritableItem, OutputWriteFailedException> collectionGenerator) {
+    public void writeSubfolder(String outputName, GenerateWritableItem<?> collectionGenerator) {
         try {
             delegate.writeSubfolder(outputName, collectionGenerator);
         } catch (OutputWriteFailedException e) {
@@ -71,7 +64,7 @@ public class WriterRouterErrors {
 
     public int write(
             IndexableOutputNameStyle outputNameStyle,
-            Operation<WritableItem, OutputWriteFailedException> generator,
+            GenerateWritableItem<?> generator,
             String index) {
         try {
             return delegate.write(outputNameStyle, generator, index);
@@ -83,7 +76,7 @@ public class WriterRouterErrors {
 
     public int write(
             IndexableOutputNameStyle outputNameStyle,
-            Operation<WritableItem, OutputWriteFailedException> generator,
+            GenerateWritableItem<?> generator,
             int index) {
         try {
             return delegate.write(outputNameStyle, generator, index);
@@ -93,9 +86,7 @@ public class WriterRouterErrors {
         }
     }
 
-    public void write(
-            OutputNameStyle outputNameStyle,
-            Operation<WritableItem, OutputWriteFailedException> generator) {
+    public void write(OutputNameStyle outputNameStyle, GenerateWritableItem<?> generator) {
         try {
             delegate.write(outputNameStyle, generator);
         } catch (OutputWriteFailedException e) {
@@ -103,8 +94,7 @@ public class WriterRouterErrors {
         }
     }
 
-    public void write(
-            String outputName, Operation<WritableItem, OutputWriteFailedException> generator) {
+    public void write(String outputName, GenerateWritableItem<?> generator) {
         try {
             delegate.write(outputName, generator);
         } catch (OutputWriteFailedException e) {

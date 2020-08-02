@@ -47,7 +47,7 @@ class IntersectionWriter {
         if (!stackBBox.intersection().existsWith(mask.getBoundingBox())) {
             throw new OperationFailedException(
                     String.format(
-                            "The bounding-box of the mask (%s) does not intersect with the stack (%s)",
+                            "The bounding-box of the object-mask (%s) does not intersect with the stack (%s)",
                             mask.getBoundingBox().toString(), stackBBox.toString()));
         }
         // Intersection of the mask and stackBBox
@@ -65,7 +65,7 @@ class IntersectionWriter {
                 stack,
                 color,
                 intersection.shiftBackBy(stackBBox.cornerMin()),
-                mask.mapBoundingBox(bbox -> bbox.shiftBackBy(stackBBox.cornerMin())));
+                mask.mapBoundingBoxPreserveExtent(bbox -> bbox.shiftBackBy(stackBBox.cornerMin())));
     }
 
     private static void writeOnEachSlice(

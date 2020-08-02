@@ -26,18 +26,49 @@ package org.anchoranalysis.core.index;
  * #L%
  */
 
+import lombok.Getter;
+import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyCheckedException;
 
+/**
+ * When a get operation fails for a particular key
+ *
+ * @author Owen Feehan
+ */
 public class GetOperationFailedException extends AnchorFriendlyCheckedException {
 
     /** */
     private static final long serialVersionUID = 4847382915351464834L;
 
-    public GetOperationFailedException(String string) {
-        super(string);
+    @Getter private final String key;
+
+    @Getter private final String message;
+
+    public GetOperationFailedException(Exception e) {
+        super(e);
+        this.key = "";
+        this.message = e.getMessage();
     }
 
-    public GetOperationFailedException(Throwable exc) {
-        super(exc);
+    public GetOperationFailedException(int key, String message) {
+        this(String.valueOf(key), message);
+    }
+
+    public GetOperationFailedException(int key, Throwable exc) {
+        this(String.valueOf(key), exc);
+    }
+
+    public GetOperationFailedException(String key, String message) {
+        super(String.format("An exception occurred getting '%s':%n%s", key, message));
+        this.key = key;
+        this.message = message;
+    }
+
+    public GetOperationFailedException(String key, Throwable exc) {
+        this(key, exc.toString());
+    }
+
+    public OperationFailedException asOperationFailedException() {
+        return new OperationFailedException(getMessage());
     }
 }

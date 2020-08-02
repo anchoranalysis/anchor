@@ -33,15 +33,14 @@ import org.anchoranalysis.core.bridge.BridgeElementWithIndex;
  * @param <S> external-type
  * @param <H> hidden-type
  */
-public class TypedGetFromIndexBridge<S, H> implements ITypedGetFromIndex<S> {
+public class TypedGetFromIndexBridge<S, H> implements GetterFromIndex<S> {
 
-    private ITypedGetFromIndex<H> delegate;
+    private GetterFromIndex<H> delegate;
 
     private BridgeElementWithIndex<H, S, ? extends Throwable> bridge;
 
     public TypedGetFromIndexBridge(
-            ITypedGetFromIndex<H> delegate,
-            BridgeElementWithIndex<H, S, ? extends Throwable> bridge) {
+            GetterFromIndex<H> delegate, BridgeElementWithIndex<H, S, ? extends Throwable> bridge) {
         super();
         this.delegate = delegate;
         this.bridge = bridge;
@@ -52,7 +51,7 @@ public class TypedGetFromIndexBridge<S, H> implements ITypedGetFromIndex<S> {
         try {
             return bridge.bridgeElement(index, delegate.get(index));
         } catch (Exception e) {
-            throw new GetOperationFailedException(e);
+            throw new GetOperationFailedException(index, e);
         }
     }
 }

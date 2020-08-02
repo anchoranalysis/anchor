@@ -2,7 +2,7 @@ package org.anchoranalysis.core.axis;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
+import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
 
 /*
  * #%L
@@ -39,12 +39,12 @@ import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class AxisTypeConverter {
 
-    public static final String INVALID_AXIS_INDEX = "Index must be >=0 and <3";
+    public static final String INVALID_AXIS_STRING = "axis must be: x or y or z";
 
-    public static final String UNKNOWN_AXIS_TYPE = "Unknown axis type";
+    public static final String INVALID_AXIS_INDEX = "the index for axis must be: 0 or 1 or 2";
 
     /** Maps a string of x, y, z (case ignored) to a corresponding axis type */
-    public static AxisType createFromString(String axis) {
+    public static AxisType createFromString(String axis) throws AxisTypeException {
         if ("x".equalsIgnoreCase(axis)) {
             return AxisType.X;
 
@@ -55,12 +55,12 @@ public class AxisTypeConverter {
             return AxisType.Z;
 
         } else {
-            throw new AnchorFriendlyRuntimeException(INVALID_AXIS_INDEX);
+            throw new AxisTypeException(INVALID_AXIS_STRING);
         }
     }
 
     /** An index representing each dimension where X->0, Y->1, Z->2 */
-    public static int dimensionIndexFor(AxisType axis) {
+    public static int dimensionIndexFor(AxisType axis) throws AxisTypeException {
         switch (axis) {
             case X:
                 return 0;
@@ -69,7 +69,7 @@ public class AxisTypeConverter {
             case Z:
                 return 2;
             default:
-                throw new AnchorFriendlyRuntimeException(UNKNOWN_AXIS_TYPE);
+                throw new AxisTypeException(INVALID_AXIS_INDEX);
         }
     }
 
@@ -83,7 +83,7 @@ public class AxisTypeConverter {
             case Z:
                 return z;
             default:
-                throw new AnchorFriendlyRuntimeException(UNKNOWN_AXIS_TYPE);
+                throw new AnchorImpossibleSituationException();
         }
     }
 }

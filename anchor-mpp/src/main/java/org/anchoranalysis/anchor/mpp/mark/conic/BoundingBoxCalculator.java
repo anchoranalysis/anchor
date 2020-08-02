@@ -29,6 +29,8 @@ package org.anchoranalysis.anchor.mpp.mark.conic;
 import static org.anchoranalysis.anchor.mpp.mark.conic.TensorUtilities.*;
 
 import cern.colt.matrix.DoubleMatrix1D;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.anchor.mpp.points.PointClipper;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
@@ -36,9 +38,8 @@ import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDimensions;
 
 /** Functions to calculate a bounding-box for a point surrounded by some form of radii */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class BoundingBoxCalculator {
-
-    private BoundingBoxCalculator() {}
 
     /**
      * Calculates a bounding box for a point with a scalar radius in all dimensions

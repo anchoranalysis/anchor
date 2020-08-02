@@ -29,7 +29,7 @@ package org.anchoranalysis.anchor.mpp.feature.nrg.cfg;
 import java.io.Serializable;
 import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 import org.anchoranalysis.anchor.mpp.feature.nrg.scheme.NRGSchemeWithSharedFeatures;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
+import org.anchoranalysis.anchor.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 
 public class CfgWithNRGTotal implements Serializable {
 

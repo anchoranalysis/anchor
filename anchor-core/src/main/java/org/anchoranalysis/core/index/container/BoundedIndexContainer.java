@@ -26,7 +26,7 @@ package org.anchoranalysis.core.index.container;
  * #L%
  */
 
-import org.anchoranalysis.core.index.ITypedGetFromIndex;
+import org.anchoranalysis.core.index.GetterFromIndex;
 
 public interface BoundedIndexContainer<T>
-        extends BoundedRangeIncompleteDynamic, ITypedGetFromIndex<T> {}
+        extends BoundedRangeIncompleteDynamic, GetterFromIndex<T> {}
