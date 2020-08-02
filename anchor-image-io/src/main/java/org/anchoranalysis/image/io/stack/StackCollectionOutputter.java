@@ -32,7 +32,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.name.provider.NamedProvider;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
-import org.anchoranalysis.core.progress.CachedOperationWithProgressReporter;
+import org.anchoranalysis.core.progress.CacheCallWithProgressReporter;
 import org.anchoranalysis.core.progress.CallableWithProgressReporter;
 import org.anchoranalysis.image.io.generator.raster.StackGenerator;
 import org.anchoranalysis.image.stack.NamedStacks;
@@ -147,7 +147,7 @@ public class StackCollectionOutputter {
 
     private static CallableWithProgressReporter<Stack, OperationFailedException>
             extractStackCached(NamedProvider<Stack> stackCollection, String name) {
-        return CachedOperationWithProgressReporter.wrap(
+        return CacheCallWithProgressReporter.of(
                 pr -> {
                     try {
                         return stackCollection.getException(name);

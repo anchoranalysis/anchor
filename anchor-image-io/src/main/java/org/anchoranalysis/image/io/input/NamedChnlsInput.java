@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.image.io.input;
 
-import org.anchoranalysis.core.cache.CachedOperation;
+import org.anchoranalysis.core.cache.CacheCall;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
 import org.anchoranalysis.core.progress.ProgressReporter;
@@ -88,7 +88,7 @@ public abstract class NamedChnlsInput implements ProvidesStackInput {
         // Adds this stack (cached) under the given name
         stackCollection.add(
                 name,
-                CachedOperation.of(
+                CacheCall.of(
                         () -> chnlCollectionAsTimeSequence(seriesNum, progressReporter)));
     }
 

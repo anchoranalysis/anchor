@@ -35,6 +35,7 @@ import org.anchoranalysis.annotation.io.bean.strategy.AnnotatorStrategy;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.name.provider.NamedProvider;
+import org.anchoranalysis.core.progress.CacheCallWithProgressReporter;
 import org.anchoranalysis.core.progress.CallableWithProgressReporter;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.image.stack.Stack;
@@ -100,6 +101,6 @@ public class AnnotationWithStrategy<T extends AnnotatorStrategy> implements Inpu
     }
 
     public CallableWithProgressReporter<NamedProvider<Stack>, CreateException> stacks() {
-        return new OperationCreateStackCollection(input);
+        return CacheCallWithProgressReporter.of( new OperationCreateStackCollection(input) );
     }
 }

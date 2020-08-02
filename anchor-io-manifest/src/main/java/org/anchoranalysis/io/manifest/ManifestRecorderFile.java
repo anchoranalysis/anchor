@@ -29,7 +29,7 @@ package org.anchoranalysis.io.manifest;
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import org.anchoranalysis.core.cache.CachedOperation;
+import org.anchoranalysis.core.cache.CacheCall;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.functional.CallableWithException;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
@@ -42,7 +42,7 @@ public class ManifestRecorderFile {
     
     public ManifestRecorderFile(File file, ManifestDeserializer manifestDeserializer) {
         this.file = file;
-        this.operation = CachedOperation.of( () -> {
+        this.operation = CacheCall.of( () -> {
             try {
                 if (!file.exists()) {
                     throw new OperationFailedException(

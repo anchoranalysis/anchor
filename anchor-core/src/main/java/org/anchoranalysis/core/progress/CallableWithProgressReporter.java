@@ -26,6 +26,8 @@
 
 package org.anchoranalysis.core.progress;
 
+import org.anchoranalysis.core.functional.CallableWithException;
+
 /**
  * Like {@link CallableWithProgressReporter} but can update a progress-reporter as the operation progresses.
  * 
@@ -37,4 +39,8 @@ package org.anchoranalysis.core.progress;
 public interface CallableWithProgressReporter<R, E extends Exception> {
     
     R call(ProgressReporter progressReporter) throws E;
+    
+    default CallableWithException<R, E> withoutProgressReporter() {
+        return () -> this.call(ProgressReporterNull.get());
+    }
 }

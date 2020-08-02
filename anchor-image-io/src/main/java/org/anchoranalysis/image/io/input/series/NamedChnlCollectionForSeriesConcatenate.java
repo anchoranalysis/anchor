@@ -32,7 +32,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import org.anchoranalysis.core.cache.CachedOperation;
+import org.anchoranalysis.core.cache.CacheCall;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.functional.CallableWithException;
 import org.anchoranalysis.core.index.GetOperationFailedException;
@@ -155,7 +155,7 @@ public class NamedChnlCollectionForSeriesConcatenate implements NamedChannelsFor
 
     @Override
     public CallableWithException<Stack, OperationFailedException> allChannelsAsStack(int t) {
-        return CachedOperation.of(() -> stackAllChnls(t));
+        return CacheCall.of(() -> stackAllChnls(t));
     }
 
     private Stack stackAllChnls(int t) throws OperationFailedException {

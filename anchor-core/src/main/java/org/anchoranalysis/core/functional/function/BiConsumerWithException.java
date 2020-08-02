@@ -1,4 +1,4 @@
-package org.anchoranalysis.core.index.container;
+package org.anchoranalysis.core.functional.function;
 
 /*-
  * #%L
@@ -26,7 +26,24 @@ package org.anchoranalysis.core.index.container;
  * #L%
  */
 
-import org.anchoranalysis.core.index.GetterFromIndex;
+/**
+ * Like {@java.util.BiConsumer} but can also throw a checked exception.
+ *
+ * @author Owen Feehan
+ * @param <S> first parameter-type
+ * @param <T> second parameter-type
+ * @param <E> exception-type that can be thrown
+ */
+@FunctionalInterface
+public interface BiConsumerWithException<S, T, E extends Exception> {
 
-public interface BoundedIndexContainer<T>
-        extends BoundedRangeIncompleteDynamic, GetterFromIndex<T> {}
+    /**
+     * Calls the function
+     *
+     * @param first first parameter
+     * @param second second parameter
+     * @return return-value
+     * @throws E an exception that may be thrown
+     */
+    void accept(S first, T second) throws E;
+}

@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.io.manifest.deserializer.folder;
 
-import org.anchoranalysis.core.index.ITypedGetFromIndex;
+import org.anchoranalysis.core.index.GetterFromIndex;
 import org.anchoranalysis.core.index.container.BoundedIndexContainer;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
 import org.anchoranalysis.io.manifest.folder.SequencedFolder;
@@ -44,7 +44,7 @@ public abstract class DeserializeFromFolder<T> implements HistoryCreator<T> {
     public LoadContainer<T> create() throws DeserializationFailedException {
 
         SequenceType sequenceType = folder.getAssociatedSequence();
-        ITypedGetFromIndex<T> cntr = createCtnr(folder);
+        GetterFromIndex<T> cntr = createCtnr(folder);
 
         assert (sequenceType != null);
 
@@ -58,5 +58,5 @@ public abstract class DeserializeFromFolder<T> implements HistoryCreator<T> {
         return history;
     }
 
-    protected abstract ITypedGetFromIndex<T> createCtnr(SequencedFolder folder);
+    protected abstract GetterFromIndex<T> createCtnr(SequencedFolder folder);
 }

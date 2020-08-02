@@ -39,11 +39,11 @@ import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.name.provider.NamedProvider;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
-import org.anchoranalysis.core.progress.IdentityOperationWithProgressReporter;
 import org.anchoranalysis.core.progress.CallableWithProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
 import org.anchoranalysis.image.extent.ImageDimensions;
+import lombok.AllArgsConstructor;
 
 // 
 
@@ -83,7 +83,7 @@ public class NamedStacks implements NamedProviderStore<Stack> {
     }
 
     public void addImageStack(String identifier, Stack inputImage) {
-        map.put(identifier, new IdentityOperationWithProgressReporter<>(inputImage));
+        map.put(identifier, progresssReporter->inputImage);
     }
 
     public void addImageStack(
@@ -169,17 +169,12 @@ public class NamedStacks implements NamedProviderStore<Stack> {
         return out;
     }
 
+    @AllArgsConstructor
     private static class OperationStack
             implements CallableWithProgressReporter<Stack, OperationFailedException> {
 
         private NamedProvider<Stack> src;
         private String name;
-
-        public OperationStack(NamedProvider<Stack> src, String name) {
-            super();
-            this.src = src;
-            this.name = name;
-        }
 
         @Override
         public Stack call(ProgressReporter progressReporter)

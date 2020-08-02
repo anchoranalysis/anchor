@@ -31,11 +31,11 @@ import java.util.ArrayList;
 import java.util.List;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.index.GetOperationFailedException;
-import org.anchoranalysis.core.index.ITypedGetFromIndex;
+import org.anchoranalysis.core.index.GetterFromIndex;
 import org.anchoranalysis.io.manifest.file.FileWrite;
 import org.anchoranalysis.io.manifest.folder.SequencedFolder;
 
-public abstract class SequencedFolderCntrCreator<T> implements ITypedGetFromIndex<T> {
+public abstract class SequencedFolderCntrCreator<T> implements GetterFromIndex<T> {
 
     private SequencedFolder rootFolder;
 

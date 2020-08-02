@@ -27,6 +27,6 @@ package org.anchoranalysis.core.index;
  */
 
 @FunctionalInterface
-public interface ITypedGetFromIndex<T> {
+public interface GetterFromIndex<T> {
     T get(int index) throws GetOperationFailedException;
 }

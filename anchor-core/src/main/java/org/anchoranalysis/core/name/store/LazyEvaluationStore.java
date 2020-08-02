@@ -32,7 +32,7 @@ import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
-import org.anchoranalysis.core.cache.CachedOperation;
+import org.anchoranalysis.core.cache.CacheCall;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.functional.CallableWithException;
 import org.anchoranalysis.core.functional.OptionalUtilities;
@@ -51,7 +51,7 @@ public class LazyEvaluationStore<T> implements NamedProviderStore<T> {
     private final String storeDisplayName;
     // END REQUIRED ARGUMENTS
 
-    private HashMap<String, CachedOperation<T, OperationFailedException>> map =
+    private HashMap<String, CacheCall<T, OperationFailedException>> map =
             new HashMap<>();
 
     @Override
@@ -74,9 +74,9 @@ public class LazyEvaluationStore<T> implements NamedProviderStore<T> {
     // We only refer to
     public Set<String> keysEvaluated() {
         HashSet<String> keysUsed = new HashSet<>();
-        for (Entry<String, CachedOperation<T, OperationFailedException>> entry :
+        for (Entry<String, CacheCall<T, OperationFailedException>> entry :
                 map.entrySet()) {
-            if (entry.getValue().isDone()) {
+            if (entry.getValue().isEvaluated()) {
                 keysUsed.add(entry.getKey());
             }
         }
@@ -92,6 +92,6 @@ public class LazyEvaluationStore<T> implements NamedProviderStore<T> {
     @Override
     public void add(String name, CallableWithException<T, OperationFailedException> getter)
             throws OperationFailedException {
-        map.put(name, CachedOperation.of(getter) );
+        map.put(name, CacheCall.of(getter) );
     }
 }

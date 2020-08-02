@@ -31,7 +31,7 @@ import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.mark.voxelized.VoxelizedMark;
 import org.anchoranalysis.anchor.mpp.mark.voxelized.VoxelizedMarkFactory;
-import org.anchoranalysis.core.cache.CachedOperation;
+import org.anchoranalysis.core.cache.CacheCall;
 import org.anchoranalysis.core.error.AnchorNeverOccursException;
 import org.anchoranalysis.feature.nrg.NRGStack;
 
@@ -44,28 +44,20 @@ import org.anchoranalysis.feature.nrg.NRGStack;
 public class VoxelizedMarkMemo {
 
     // START REQUIRED ARGUMENTS
-    private Mark mark;
+    /** The associated mark */
+    @Getter private Mark mark;
     private NRGStack stack;
 
     @Getter private final RegionMap regionMap;
     // END REQUIRED ARGUMENTS
 
-    private CachedOperation<VoxelizedMark, AnchorNeverOccursException> op;
+    private CacheCall<VoxelizedMark, AnchorNeverOccursException> cachedMark;
 
     public VoxelizedMarkMemo(Mark mark, NRGStack stack, RegionMap regionMap) {
-        this(mark, stack, regionMap, null);
-    }
-
-    public VoxelizedMarkMemo(Mark mark, NRGStack stack, RegionMap regionMap, VoxelizedMark result) {
         this.mark = mark;
         this.stack = stack;
         this.regionMap = regionMap;
-        this.op = CachedOperation.of( ()->VoxelizedMarkFactory.create(mark, stack, regionMap), result );
-    }
-
-    // The associated mark
-    public Mark getMark() {
-        return mark;
+        this.cachedMark = CacheCall.of( ()->VoxelizedMarkFactory.create(mark, stack, regionMap) );
     }
 
     /**
@@ -74,11 +66,11 @@ public class VoxelizedMarkMemo {
      * @return
      */
     public VoxelizedMark voxelized() {
-        return op.call();
+        return cachedMark.call();
     }
 
     public void reset() {
-        op.reset();
+        cachedMark.reset();
     }
 
     /**
@@ -97,7 +89,7 @@ public class VoxelizedMarkMemo {
     }
 
     public void cleanUp() {
-        VoxelizedMark pm = op.getResult();
+        VoxelizedMark pm = cachedMark.getResult();
         if (pm != null) {
             pm.cleanUp();
         }

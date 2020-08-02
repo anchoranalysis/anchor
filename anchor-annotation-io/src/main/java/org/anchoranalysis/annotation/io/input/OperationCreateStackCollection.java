@@ -29,34 +29,28 @@ package org.anchoranalysis.annotation.io.input;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.name.provider.NamedProvider;
-import org.anchoranalysis.core.progress.CachedOperationWithProgressReporter;
+import org.anchoranalysis.core.progress.CallableWithProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.image.stack.NamedStacks;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.wrap.WrapStackAsTimeSequenceStore;
+import lombok.AllArgsConstructor;
 
+@AllArgsConstructor
 class OperationCreateStackCollection
-        extends CachedOperationWithProgressReporter<NamedProvider<Stack>, CreateException> {
+        implements CallableWithProgressReporter<NamedProvider<Stack>, CreateException> {
 
-    private ProvidesStackInput inputObject;
-    private int seriesNum;
-    private int t;
+    private final ProvidesStackInput inputObject;
+    private final int seriesNum;
+    private final int t;
 
     public OperationCreateStackCollection(ProvidesStackInput inputObject) {
         this(inputObject, 0, 0);
     }
 
-    public OperationCreateStackCollection(ProvidesStackInput inputObject, int seriesNum, int t) {
-        super();
-        this.inputObject = inputObject;
-        this.seriesNum = seriesNum;
-        this.t = t;
-    }
-
     @Override
-    protected NamedStacks execute(ProgressReporter progressReporter)
-            throws CreateException {
+    public NamedStacks call(ProgressReporter progressReporter) throws CreateException {
         try {
             return doOperationWithException(progressReporter);
         } catch (OperationFailedException e) {

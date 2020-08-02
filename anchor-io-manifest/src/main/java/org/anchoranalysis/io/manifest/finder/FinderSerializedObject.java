@@ -29,7 +29,7 @@ package org.anchoranalysis.io.manifest.finder;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
-import org.anchoranalysis.core.cache.CachedOperation;
+import org.anchoranalysis.core.cache.CacheCall;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.functional.CallableWithException;
 import org.anchoranalysis.io.bean.deserializer.Deserializer;
@@ -51,7 +51,7 @@ public class FinderSerializedObject<T> extends FinderSingleFile {
     private String function;
 
     private CallableWithException<Optional<T>, IOException> operation =
-            CachedOperation.of(
+            CacheCall.of(
                     () -> {
                         if (!exists()) {
                             return Optional.empty();
