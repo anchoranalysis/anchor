@@ -28,12 +28,12 @@ package org.anchoranalysis.image.io.stack;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.cache.WrapOperationWithProgressReporterAsCached;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.name.provider.NamedProvider;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
-import org.anchoranalysis.core.progress.OperationWithProgressReporter;
+import org.anchoranalysis.core.progress.CachedOperationWithProgressReporter;
+import org.anchoranalysis.core.progress.CallableWithProgressReporter;
 import org.anchoranalysis.image.io.generator.raster.StackGenerator;
 import org.anchoranalysis.image.stack.NamedStacks;
 import org.anchoranalysis.image.stack.Stack;
@@ -145,10 +145,10 @@ public class StackCollectionOutputter {
         return out;
     }
 
-    private static OperationWithProgressReporter<Stack, OperationFailedException>
+    private static CallableWithProgressReporter<Stack, OperationFailedException>
             extractStackCached(NamedProvider<Stack> stackCollection, String name) {
-        return new WrapOperationWithProgressReporterAsCached<>(
-                () -> {
+        return CachedOperationWithProgressReporter.wrap(
+                pr -> {
                     try {
                         return stackCollection.getException(name);
                     } catch (NamedProviderGetException e) {

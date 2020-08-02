@@ -1,6 +1,6 @@
 package org.anchoranalysis.core.cache;
 
-import org.anchoranalysis.core.functional.Operation;
+import org.anchoranalysis.core.functional.CallableWithException;
 
 /*
  * #%L
@@ -30,16 +30,26 @@ import org.anchoranalysis.core.functional.Operation;
 
 /**
  * @author Owen Feehan
- * @param <R> result-type
+ * @param <T> result-type
  * @param <E> exception that is thrown if something goes wrong
  */
-public abstract class CachedOperation<R, E extends Exception> implements Operation<R, E> {
+public class CachedOperation<T, E extends Exception> implements CallableWithException<T, E> {
 
-    private R result;
+    private T result;
     private boolean done;
+    private CallableWithException<T, E> callable;
 
+    public static <T, E extends Exception> CachedOperation<T, E> of(CallableWithException<T, E> callable) {
+        return new CachedOperation<>(callable);
+    }
+    
+    public static <T, E extends Exception> CachedOperation<T, E> of(CallableWithException<T, E> callable, T result) {
+        return new CachedOperation<>(callable, result);
+    }
+    
     /** Constructor - with no result calculated yet */
-    public CachedOperation() {
+    private CachedOperation(CallableWithException<T, E> callable) {
+        this.callable = callable;
         result = null;
         done = false;
     }
@@ -51,13 +61,14 @@ public abstract class CachedOperation<R, E extends Exception> implements Operati
      *
      * @param result if non-null the result of the cached operation.
      */
-    public CachedOperation(R result) {
+    private CachedOperation(CallableWithException<T, E> callable, T result) {
+        this.callable = callable;
         this.result = result;
         this.done = result != null;
     }
 
     @Override
-    public synchronized R doOperation() throws E {
+    public synchronized T call() throws E {
 
         if (!done) {
             result = execute();
@@ -65,8 +76,13 @@ public abstract class CachedOperation<R, E extends Exception> implements Operati
         }
         return result;
     }
+    
+    public synchronized void assignFrom(T result) {
+        this.result = result;
+        this.done = result != null;
+    }
 
-    public synchronized void assignFrom(CachedOperation<R, E> src) {
+    public synchronized void assignFrom(CachedOperation<T, E> src) {
         this.result = src.result;
         this.done = src.done;
     }
@@ -80,19 +96,11 @@ public abstract class CachedOperation<R, E extends Exception> implements Operati
         return done;
     }
 
-    protected abstract R execute() throws E;
-
-    public R getResult() {
-        return result;
+    protected T execute() throws E {
+        return callable.call();
     }
 
-    public static <T, E extends Exception> CachedOperation<T, E> wrap(Operation<T, E> op) {
-        return new CachedOperation<T, E>() {
-
-            @Override
-            protected T execute() throws E {
-                return op.doOperation();
-            }
-        };
+    public T getResult() {
+        return result;
     }
 }

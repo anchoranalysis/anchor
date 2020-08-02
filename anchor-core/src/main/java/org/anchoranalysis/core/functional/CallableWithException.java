@@ -1,4 +1,4 @@
-package org.anchoranalysis.core.cache;
+package org.anchoranalysis.core.functional;
 
 /*
  * #%L
@@ -27,13 +27,15 @@ package org.anchoranalysis.core.cache;
  */
 
 /**
+ * Like {@link java.util.concurrent.Callable} but throws a checked-exception of specified type.
+ * 
  * @author Owen Feehan
- * @param <V> value-type
- * @param <K> key-type
+ * 
+ * @param <V> result-type
  * @param <E> exception that is thrown if something goes wrong
  */
-public abstract class IndexableCachedOperation<V, K, E extends Exception>
-        extends CachedOperation<V, E> {
+@FunctionalInterface
+public interface CallableWithException<V, E extends Exception> {
 
-    public abstract K getKey();
+    V call() throws E;
 }

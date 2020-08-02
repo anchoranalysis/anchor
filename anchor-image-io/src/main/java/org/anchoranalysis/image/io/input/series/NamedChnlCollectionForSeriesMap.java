@@ -28,9 +28,9 @@ package org.anchoranalysis.image.io.input.series;
 
 import java.util.Optional;
 import java.util.Set;
-import org.anchoranalysis.core.cache.WrapOperationAsCached;
+import org.anchoranalysis.core.cache.CachedOperation;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.functional.Operation;
+import org.anchoranalysis.core.functional.CallableWithException;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
 import org.anchoranalysis.core.progress.ProgressReporter;
@@ -169,14 +169,14 @@ public class NamedChnlCollectionForSeriesMap implements NamedChannelsForSeries {
         for (final String chnlName : chnlMap.keySet()) {
             stackCollection.add(
                     chnlName,
-                    new WrapOperationAsCached<TimeSequence, OperationFailedException>(
+                    CachedOperation.of(
                             () -> extractChnlAsTimeSequence(chnlName, t)));
         }
     }
 
     @Override
-    public Operation<Stack, OperationFailedException> allChannelsAsStack(int t) {
-        return new WrapOperationAsCached<>(() -> stackForAllChnls(t));
+    public CallableWithException<Stack, OperationFailedException> allChannelsAsStack(int t) {
+        return CachedOperation.of(() -> stackForAllChnls(t));
     }
 
     private TimeSequence createTimeSeries(ProgressReporter progressReporter)

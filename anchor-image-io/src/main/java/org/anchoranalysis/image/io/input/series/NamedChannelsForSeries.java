@@ -29,7 +29,7 @@ package org.anchoranalysis.image.io.input.series;
 import java.util.Optional;
 import java.util.Set;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.functional.Operation;
+import org.anchoranalysis.core.functional.CallableWithException;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
 import org.anchoranalysis.core.progress.ProgressReporter;
@@ -68,5 +68,5 @@ public interface NamedChannelsForSeries extends ChannelGetter {
     void addAsSeparateChannels(NamedProviderStore<TimeSequence> stacks, int timeIndex)
             throws OperationFailedException;
 
-    Operation<Stack, OperationFailedException> allChannelsAsStack(int timeIndex);
+    CallableWithException<Stack, OperationFailedException> allChannelsAsStack(int timeIndex);
 }

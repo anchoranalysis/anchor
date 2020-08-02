@@ -32,13 +32,11 @@ import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
-import org.anchoranalysis.core.cache.WrapOperationAsCached;
+import org.anchoranalysis.core.cache.CachedOperation;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.functional.Operation;
+import org.anchoranalysis.core.functional.CallableWithException;
 import org.anchoranalysis.core.functional.OptionalUtilities;
-import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
-import org.anchoranalysis.core.name.store.cachedgetter.ProfiledCachedGetter;
 
 /**
  * Items are evaluated only when they are first needed. The value is thereafter stored.
@@ -50,11 +48,10 @@ import org.anchoranalysis.core.name.store.cachedgetter.ProfiledCachedGetter;
 public class LazyEvaluationStore<T> implements NamedProviderStore<T> {
 
     // START REQUIRED ARGUMENTS
-    private final Logger logger;
     private final String storeDisplayName;
     // END REQUIRED ARGUMENTS
 
-    private HashMap<String, WrapOperationAsCached<T, OperationFailedException>> map =
+    private HashMap<String, CachedOperation<T, OperationFailedException>> map =
             new HashMap<>();
 
     @Override
@@ -68,7 +65,7 @@ public class LazyEvaluationStore<T> implements NamedProviderStore<T> {
     public Optional<T> getOptional(String key) throws NamedProviderGetException {
         try {
             return OptionalUtilities.map(
-                    Optional.ofNullable(map.get(key)), WrapOperationAsCached::doOperation);
+                    Optional.ofNullable(map.get(key)), CallableWithException::call);
         } catch (Exception e) {
             throw NamedProviderGetException.wrap(key, e);
         }
@@ -77,7 +74,7 @@ public class LazyEvaluationStore<T> implements NamedProviderStore<T> {
     // We only refer to
     public Set<String> keysEvaluated() {
         HashSet<String> keysUsed = new HashSet<>();
-        for (Entry<String, WrapOperationAsCached<T, OperationFailedException>> entry :
+        for (Entry<String, CachedOperation<T, OperationFailedException>> entry :
                 map.entrySet()) {
             if (entry.getValue().isDone()) {
                 keysUsed.add(entry.getKey());
@@ -93,8 +90,8 @@ public class LazyEvaluationStore<T> implements NamedProviderStore<T> {
     }
 
     @Override
-    public void add(String name, Operation<T, OperationFailedException> getter)
+    public void add(String name, CallableWithException<T, OperationFailedException> getter)
             throws OperationFailedException {
-        map.put(name, new ProfiledCachedGetter<>(getter, name, storeDisplayName, logger));
+        map.put(name, CachedOperation.of(getter) );
     }
 }

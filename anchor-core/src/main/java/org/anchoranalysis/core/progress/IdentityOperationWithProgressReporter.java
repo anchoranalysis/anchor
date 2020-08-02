@@ -27,7 +27,7 @@
 package org.anchoranalysis.core.progress;
 
 public class IdentityOperationWithProgressReporter<T, E extends Exception>
-        implements OperationWithProgressReporter<T, E> {
+        implements CallableWithProgressReporter<T, E> {
 
     private T obj;
 
@@ -37,7 +37,7 @@ public class IdentityOperationWithProgressReporter<T, E extends Exception>
     }
 
     @Override
-    public T doOperation(ProgressReporter progressReporter) throws E {
+    public T call(ProgressReporter progressReporter) throws E {
         return obj;
     }
 }

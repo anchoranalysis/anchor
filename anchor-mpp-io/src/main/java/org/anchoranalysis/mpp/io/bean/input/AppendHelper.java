@@ -184,11 +184,12 @@ class AppendHelper {
             throws OperationFailedException {
         // Delayed-calculation of the appending path as it can be a bit expensive when multiplied by
         // so many items
-        CachedOperation<Path, AnchorIOException> outPath =
-                new OperationOutFilePath(ni, inputObject::pathForBinding, debugMode);
+        CachedOperation<Path, AnchorIOException> outPath = CachedOperation.of(
+                new OperationOutFilePath(ni, inputObject::pathForBinding, debugMode)
+        );
 
         try {
-            return reader.apply(outPath.doOperation());
+            return reader.apply(outPath.call());
         } catch (Exception e) {
             throw new OperationFailedException("An error occured appending to the multi-input", e);
         }

@@ -29,9 +29,9 @@ package org.anchoranalysis.io.manifest.finder;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
-import org.anchoranalysis.core.cache.WrapOperationAsCached;
+import org.anchoranalysis.core.cache.CachedOperation;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
-import org.anchoranalysis.core.functional.Operation;
+import org.anchoranalysis.core.functional.CallableWithException;
 import org.anchoranalysis.io.bean.deserializer.Deserializer;
 import org.anchoranalysis.io.bean.deserializer.KeyValueParamsDeserializer;
 import org.anchoranalysis.io.bean.deserializer.ObjectInputStreamDeserializer;
@@ -50,8 +50,8 @@ public class FinderSerializedObject<T> extends FinderSingleFile {
     private Optional<T> deserializedObject = Optional.empty();
     private String function;
 
-    private Operation<Optional<T>, IOException> operation =
-            new WrapOperationAsCached<>(
+    private CallableWithException<Optional<T>, IOException> operation =
+            CachedOperation.of(
                     () -> {
                         if (!exists()) {
                             return Optional.empty();
@@ -111,7 +111,7 @@ public class FinderSerializedObject<T> extends FinderSingleFile {
         return Optional.of(files.get(0));
     }
 
-    public Operation<Optional<T>, IOException> operation() {
+    public CallableWithException<Optional<T>, IOException> operation() {
         return operation;
     }
 }

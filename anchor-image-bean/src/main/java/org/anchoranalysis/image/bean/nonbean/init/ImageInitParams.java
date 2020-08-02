@@ -35,7 +35,7 @@ import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsInitParams;
 import org.anchoranalysis.bean.store.BeanStoreAdder;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.functional.IdentityOperation;
-import org.anchoranalysis.core.functional.Operation;
+import org.anchoranalysis.core.functional.CallableWithException;
 import org.anchoranalysis.core.functional.function.FunctionWithException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.name.provider.NamedProvider;
@@ -178,7 +178,7 @@ public class ImageInitParams implements BeanInitParams {
     }
 
     public void addToObjects(
-            String identifier, Operation<ObjectCollection, OperationFailedException> opObjects)
+            String identifier, CallableWithException<ObjectCollection, OperationFailedException> opObjects)
             throws OperationFailedException {
         getObjectCollection().add(identifier, opObjects);
     }

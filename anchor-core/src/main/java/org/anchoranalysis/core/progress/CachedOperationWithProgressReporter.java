@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.core.progress;
 
-import org.anchoranalysis.core.functional.Operation;
+import org.anchoranalysis.core.functional.CallableWithException;
 
 /**
  * @author Owen Feehan
@@ -34,13 +34,13 @@ import org.anchoranalysis.core.functional.Operation;
  * @param <E> exception thrown during operation
  */
 public abstract class CachedOperationWithProgressReporter<R, E extends Exception>
-        implements OperationWithProgressReporter<R, E>, Operation<R, E> {
+        implements CallableWithProgressReporter<R, E>, CallableWithException<R, E> {
 
     private R result = null;
     private boolean done = false;
 
     @Override
-    public synchronized R doOperation(ProgressReporter progressReporter) throws E {
+    public synchronized R call(ProgressReporter progressReporter) throws E {
 
         if (!done) {
             result = execute(progressReporter);
@@ -71,7 +71,17 @@ public abstract class CachedOperationWithProgressReporter<R, E extends Exception
     }
 
     @Override
-    public R doOperation() throws E {
-        return doOperation(ProgressReporterNull.get());
+    public R call() throws E {
+        return call(ProgressReporterNull.get());
+    }
+    
+    public static <T, E extends Exception> CachedOperationWithProgressReporter<T, E> wrap(CallableWithProgressReporter<T, E> op) {
+        return new CachedOperationWithProgressReporter<T, E>() {
+
+            @Override
+            protected T execute(ProgressReporter progressReporter) throws E {
+                return op.call(progressReporter);
+            }
+        };
     }
 }

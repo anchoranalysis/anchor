@@ -51,14 +51,7 @@ public abstract class CacheableCalculation<S, T extends FeatureInput, E extends 
     private T input;
 
     // We delegate the actualy execution of the cache
-    private CachedOperation<S, E> delegate =
-            new CachedOperation<S, E>() {
-
-                @Override
-                protected S execute() throws E {
-                    return CacheableCalculation.this.execute(input);
-                }
-            };
+    private CachedOperation<S, E> delegate = CachedOperation.of( ()->CacheableCalculation.this.execute(input) );
 
     /**
      * Executes the operation and returns a result, either by doing the calculation, or retrieving a
@@ -77,7 +70,7 @@ public abstract class CacheableCalculation<S, T extends FeatureInput, E extends 
         assert (checkParamsMatchesInput(input));
 
         initParams(input);
-        return delegate.doOperation();
+        return delegate.call();
     }
 
     @Override

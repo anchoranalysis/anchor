@@ -27,12 +27,14 @@
 package org.anchoranalysis.core.progress;
 
 /**
+ * Like {@link CallableWithProgressReporter} but can update a progress-reporter as the operation progresses.
+ * 
  * @author Owen Feehan
  * @param <R> result-type
  * @param <E> exception throw if operation fails
  */
 @FunctionalInterface
-public interface OperationWithProgressReporter<R, E extends Exception> {
+public interface CallableWithProgressReporter<R, E extends Exception> {
     
-    R doOperation(ProgressReporter progressReporter) throws E;
+    R call(ProgressReporter progressReporter) throws E;
 }

@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.core.name.store.cachedgetter;
 
-import org.anchoranalysis.core.functional.Operation;
+import org.anchoranalysis.core.functional.CallableWithException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.memory.MemoryUtilities;
 import org.apache.commons.lang.time.StopWatch;
@@ -43,7 +43,7 @@ class MeasuringSemaphoreExecutor<E extends Exception> {
     private long subExecTime = 0;
     private long subMem = 0;
 
-    public <T> T execute(Operation<T, E> exec, String name, String storeDisplayName, Logger logger)
+    public <T> T execute(CallableWithException<T, E> exec, String name, String storeDisplayName, Logger logger)
             throws E {
         cnt++;
 
@@ -52,7 +52,7 @@ class MeasuringSemaphoreExecutor<E extends Exception> {
 
         long memoryBefore = MemoryUtilities.calcMemoryUsage();
 
-        T obj = exec.doOperation();
+        T obj = exec.call();
         long timeTaken = Math.max(sw.getTime() - subExecTime, 0);
 
         long memoryAfter = MemoryUtilities.calcMemoryUsage();

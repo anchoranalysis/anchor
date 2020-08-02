@@ -29,7 +29,6 @@ package org.anchoranalysis.io.output.writer;
 import java.nio.file.Path;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import org.anchoranalysis.core.functional.Operation;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.manifest.ManifestFolderDescription;
 import org.anchoranalysis.io.manifest.folder.FolderWriteWithPath;
@@ -66,36 +65,36 @@ public class AlwaysAllowed implements Writer {
     @Override
     public void writeSubfolder(
             String outputName,
-            Operation<? extends WritableItem, OutputWriteFailedException> collectionGenerator)
+            GenerateWritableItem<?> collectionGenerator)
             throws OutputWriteFailedException {
 
         preop.exec();
 
         collectionGenerator
-                .doOperation()
+                .generate()
                 .write(new IntegerSuffixOutputNameStyle(outputName, 3), bom);
     }
 
     @Override
     public int write(
             IndexableOutputNameStyle outputNameStyle,
-            Operation<? extends WritableItem, OutputWriteFailedException> generator,
+            GenerateWritableItem<?> generator,
             String index)
             throws OutputWriteFailedException {
 
         preop.exec();
-        return generator.doOperation().write(outputNameStyle, index, bom);
+        return generator.generate().write(outputNameStyle, index, bom);
     }
 
     // Write a file without checking if the outputName is allowed
     @Override
     public void write(
             OutputNameStyle outputNameStyle,
-            Operation<? extends WritableItem, OutputWriteFailedException> generator)
+            GenerateWritableItem<?> generator)
             throws OutputWriteFailedException {
 
         preop.exec();
-        generator.doOperation().write(outputNameStyle, bom);
+        generator.generate().write(outputNameStyle, bom);
     }
 
     // A non-generator way of creating outputs, that are still included in the manifest

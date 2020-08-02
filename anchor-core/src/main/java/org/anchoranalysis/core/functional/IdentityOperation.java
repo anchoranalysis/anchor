@@ -29,12 +29,12 @@ import lombok.AllArgsConstructor;
  */
 
 @AllArgsConstructor
-public class IdentityOperation<T, E extends Exception> implements Operation<T, E> {
+public class IdentityOperation<T, E extends Exception> implements CallableWithException<T, E> {
 
     private final T obj;
 
     @Override
-    public T doOperation() throws E {
+    public T call() throws E {
         return obj;
     }
 }

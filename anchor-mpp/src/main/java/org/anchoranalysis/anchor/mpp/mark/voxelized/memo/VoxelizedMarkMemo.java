@@ -60,13 +60,7 @@ public class VoxelizedMarkMemo {
         this.mark = mark;
         this.stack = stack;
         this.regionMap = regionMap;
-        this.op =
-                new CachedOperation<VoxelizedMark, AnchorNeverOccursException>(result) {
-                    @Override
-                    protected VoxelizedMark execute() {
-                        return VoxelizedMarkFactory.create(mark, stack, regionMap);
-                    }
-                };
+        this.op = CachedOperation.of( ()->VoxelizedMarkFactory.create(mark, stack, regionMap), result );
     }
 
     // The associated mark
@@ -80,7 +74,7 @@ public class VoxelizedMarkMemo {
      * @return
      */
     public VoxelizedMark voxelized() {
-        return op.doOperation();
+        return op.call();
     }
 
     public void reset() {

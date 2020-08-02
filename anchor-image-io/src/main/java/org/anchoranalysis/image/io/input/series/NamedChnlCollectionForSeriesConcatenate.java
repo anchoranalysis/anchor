@@ -32,9 +32,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import org.anchoranalysis.core.cache.WrapOperationAsCached;
+import org.anchoranalysis.core.cache.CachedOperation;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.functional.Operation;
+import org.anchoranalysis.core.functional.CallableWithException;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
 import org.anchoranalysis.core.progress.ProgressReporter;
@@ -154,15 +154,15 @@ public class NamedChnlCollectionForSeriesConcatenate implements NamedChannelsFor
     }
 
     @Override
-    public Operation<Stack, OperationFailedException> allChannelsAsStack(int t) {
-        return new WrapOperationAsCached<>(() -> stackAllChnls(t));
+    public CallableWithException<Stack, OperationFailedException> allChannelsAsStack(int t) {
+        return CachedOperation.of(() -> stackAllChnls(t));
     }
 
     private Stack stackAllChnls(int t) throws OperationFailedException {
         Stack out = new Stack();
         for (NamedChannelsForSeries ncc : list) {
             try {
-                addAllChnlsFrom(ncc.allChannelsAsStack(t).doOperation(), out);
+                addAllChnlsFrom(ncc.allChannelsAsStack(t).call(), out);
             } catch (IncorrectImageSizeException e) {
                 throw new OperationFailedException(e);
             }
