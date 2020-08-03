@@ -79,18 +79,8 @@ public abstract class OutputManagerWithPrefixer extends OutputManager {
         // Calculate a prefix from the incoming file, and create a file path generator
         FilePathPrefix fpp = filePathPrefixer.outFilePrefix(input, expIdentifier, context);
 
-        PathDifferenceFromBase fpd;
-        try {
-            fpd =
-                    PathDifferenceFromBase.differenceFrom(
-                            this.filePathPrefixer
-                                    .rootFolderPrefix(expIdentifier, context)
-                                    .getCombinedPrefix(),
-                            fpp.getCombinedPrefix());
-        } catch (AnchorIOException e) {
-            throw new FilePathPrefixerException(e);
-        }
-
+        PathDifferenceFromBase fpd = differenceFromPrefixer(expIdentifier, context, fpp.getCombinedPrefix());
+       
         experimentalManifestRecorder.ifPresent(mr -> writeRootFolderInManifest(mr, fpd.combined()));
 
         manifestRecorder.ifPresent(mr -> mr.init(fpp.getFolderPath()));
@@ -126,5 +116,17 @@ public abstract class OutputManagerWithPrefixer extends OutputManager {
         manifestRecorderExperiment
                 .getRootFolder()
                 .writeFolder(rootPath, MANIFEST_FOLDER_ROOT, new ExperimentFileFolder());
+    }
+    
+    private PathDifferenceFromBase differenceFromPrefixer(String expIdentifier, FilePathPrefixerParams context, Path combinedPrefix) throws FilePathPrefixerException {
+        try {
+            return PathDifferenceFromBase.differenceFrom(
+                            this.filePathPrefixer
+                                    .rootFolderPrefix(expIdentifier, context)
+                                    .getCombinedPrefix(),
+                            combinedPrefix);
+        } catch (AnchorIOException e) {
+            throw new FilePathPrefixerException(e);
+        }
     }
 }

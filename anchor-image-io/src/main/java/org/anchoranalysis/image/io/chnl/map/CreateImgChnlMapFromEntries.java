@@ -28,11 +28,11 @@ package org.anchoranalysis.image.io.chnl.map;
 
 import java.util.List;
 import org.anchoranalysis.core.error.AnchorNeverOccursException;
-import org.anchoranalysis.core.functional.function.FunctionWithException;
+import org.anchoranalysis.core.functional.function.CheckedFunction;
 import org.anchoranalysis.image.io.bean.channel.map.ImgChnlMapEntry;
 
 public class CreateImgChnlMapFromEntries
-        implements FunctionWithException<
+        implements CheckedFunction<
                 List<ImgChnlMapEntry>, ImgChnlMap, AnchorNeverOccursException> {
 
     @Override

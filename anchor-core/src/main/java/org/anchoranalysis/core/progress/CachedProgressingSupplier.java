@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-bean
+ * anchor-core
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -24,26 +24,43 @@
  * #L%
  */
 
-package org.anchoranalysis.bean.store;
+package org.anchoranalysis.core.progress;
 
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import org.anchoranalysis.core.functional.CallableWithException;
-import org.anchoranalysis.core.functional.function.FunctionWithException;
+import org.anchoranalysis.core.cache.CachedSupplierBase;
 
 /**
+ * Memoizes (caches) a call to {@link CheckedProgressingSupplier}
+ *
  * @author Owen Feehan
- * @param <S> source-type
- * @param <D> destination-type
- * @param <E> exception-type if something goes wrong
+ * @param <T> result-type
+ * @param <E> exception thrown during operation
  */
-@AllArgsConstructor
-class CurriedObjectBridge<S, D, E extends Exception> implements CallableWithException<D, E> {
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+public class CachedProgressingSupplier<T, E extends Exception> extends CachedSupplierBase<T>
+        implements CheckedProgressingSupplier<T, E> {
 
-    private FunctionWithException<S, D, E> bridge;
-    private S sourceObject;
+    // START: REQUIRED ARGUMENTS
+    private final CheckedProgressingSupplier<T, E> supplier;
+    // END: REQUIRED ARGUMENTS
+
+    /**
+     * Creates a cached-version of a {@link CheckedProgressingSupplier}
+     *
+     * @param <T> return-type
+     * @param <E> exception that may be thrown.
+     * @param supplier the supplier to be cached
+     * @return a cached version, with the same interface, and additional functions to monitor
+     *     progress, reset etc.
+     */
+    public static <T, E extends Exception> CachedProgressingSupplier<T, E> cache(
+            CheckedProgressingSupplier<T, E> op) {
+        return new CachedProgressingSupplier<>(op);
+    }
 
     @Override
-    public D call() throws E {
-        return bridge.apply(sourceObject);
+    public T get(ProgressReporter progressReporter) throws E {
+        return super.call(() -> supplier.get(progressReporter));
     }
 }

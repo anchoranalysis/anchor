@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.feature.cache.calculation;
 
-import org.anchoranalysis.core.cache.CacheCall;
+import org.anchoranalysis.core.cache.CachedSupplier;
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.feature.input.FeatureInput;
 
@@ -51,7 +51,7 @@ public abstract class CacheableCalculation<S, T extends FeatureInput, E extends 
     private T input;
 
     // We delegate the actualy execution of the cache
-    private CacheCall<S, E> delegate = CacheCall.of(() -> CacheableCalculation.this.execute(input));
+    private CachedSupplier<S, E> delegate = CachedSupplier.cache(() -> CacheableCalculation.this.execute(input));
 
     /**
      * Executes the operation and returns a result, either by doing the calculation, or retrieving a
@@ -70,7 +70,7 @@ public abstract class CacheableCalculation<S, T extends FeatureInput, E extends 
         assert (checkParamsMatchesInput(input));
 
         initParams(input);
-        return delegate.call();
+        return delegate.get();
     }
 
     @Override

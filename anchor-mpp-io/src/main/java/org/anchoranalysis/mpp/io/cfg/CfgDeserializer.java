@@ -34,12 +34,7 @@ import org.anchoranalysis.io.deserializer.DeserializationFailedException;
 
 public class CfgDeserializer implements Deserializer<Cfg> {
 
-    private XStreamDeserializer<Cfg> delegate;
-
-    public CfgDeserializer() {
-        super();
-        delegate = new XStreamDeserializer<>();
-    }
+    private XStreamDeserializer<Cfg> delegate = new XStreamDeserializer<>();
 
     @Override
     public Cfg deserialize(Path filePath) throws DeserializationFailedException {

@@ -27,21 +27,21 @@ package org.anchoranalysis.core.functional.function;
  */
 
 /**
- * Like {@java.util.Predicate} but can also throw an exception.
+ * Like {@java.util.ToIntFunction} but can also thrown an exception.
  *
  * @author Owen Feehan
- * @param <T> type of object to test
- * @param <E> exception-type if testing fails
+ * @param <S> argument-type
+ * @param <E> exception-type that can be thrown
  */
 @FunctionalInterface
-public interface PredicateWithException<T, E extends Exception> {
+public interface CheckedToIntFunction<S, E extends Exception> {
 
     /**
-     * Applies a predicate like with {@link Predicate#apply).
+     * Calls the function
      *
-     * @param source object to be tested
-     * @return true if predicate is satisfied, false otherwise
+     * @param parameter parameter object
+     * @return return-value
      * @throws E an exception that may be thrown
      */
-    boolean test(T source) throws E;
+    int apply(S parameter) throws E;
 }

@@ -29,12 +29,15 @@ package org.anchoranalysis.io.filepath.prefixer;
 import java.nio.file.Path;
 import java.util.Optional;
 import org.anchoranalysis.io.error.FilePathPrefixerException;
+import lombok.Getter;
 
 public class FilePathPrefixerParams {
 
+    @Getter
     private boolean debugMode;
 
     /** A directory indicating where inputs can be located */
+    @Getter
     private final Optional<Path> outputDirectory;
 
     public FilePathPrefixerParams(boolean debugMode, Optional<Path> outputDirectory)
@@ -43,14 +46,6 @@ public class FilePathPrefixerParams {
         this.debugMode = debugMode;
         this.outputDirectory = outputDirectory;
         checkAbsolutePath();
-    }
-
-    public boolean isDebugMode() {
-        return debugMode;
-    }
-
-    public Optional<Path> getOutputDirectory() {
-        return outputDirectory;
     }
 
     private void checkAbsolutePath() throws FilePathPrefixerException {

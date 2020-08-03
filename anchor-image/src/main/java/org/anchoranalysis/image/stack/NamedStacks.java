@@ -34,13 +34,12 @@ import java.util.function.UnaryOperator;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.bean.StringSet;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.functional.CallableWithException;
-import org.anchoranalysis.core.functional.IdentityOperation;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.name.provider.NamedProvider;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
-import org.anchoranalysis.core.progress.CallableWithProgressReporter;
+import org.anchoranalysis.core.name.store.StoreSupplier;
+import org.anchoranalysis.core.progress.CheckedProgressingSupplier;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
 import org.anchoranalysis.image.extent.ImageDimensions;
@@ -54,23 +53,23 @@ import org.anchoranalysis.image.extent.ImageDimensions;
  */
 public class NamedStacks implements NamedProviderStore<Stack> {
 
-    private HashMap<String, CallableWithProgressReporter<Stack, OperationFailedException>> map;
+    private HashMap<String, CheckedProgressingSupplier<Stack, OperationFailedException>> map;
 
     public NamedStacks() {
         map = new HashMap<>();
     }
 
-    public Optional<CallableWithProgressReporter<Stack, OperationFailedException>> getAsOperation(
+    public Optional<CheckedProgressingSupplier<Stack, OperationFailedException>> getAsOperation(
             String identifier) {
         return Optional.ofNullable(map.get(identifier));
     }
 
     @Override
     public Optional<Stack> getOptional(String identifier) throws NamedProviderGetException {
-        Optional<CallableWithProgressReporter<Stack, OperationFailedException>> ret =
+        Optional<CheckedProgressingSupplier<Stack, OperationFailedException>> ret =
                 getAsOperation(identifier);
         try {
-            return OptionalUtilities.map(ret, op -> op.call(ProgressReporterNull.get()));
+            return OptionalUtilities.map(ret, op -> op.get(ProgressReporterNull.get()));
         } catch (OperationFailedException e) {
             throw NamedProviderGetException.wrap(identifier, e);
         }
@@ -87,24 +86,23 @@ public class NamedStacks implements NamedProviderStore<Stack> {
 
     public void addImageStack(
             String identifier,
-            CallableWithProgressReporter<Stack, OperationFailedException> inputImage) {
+            CheckedProgressingSupplier<Stack, OperationFailedException> inputImage) {
         map.put(identifier, inputImage);
     }
 
     @Override
-    public void add(String name, CallableWithException<Stack, OperationFailedException> getter)
-            throws OperationFailedException {
-        map.put(name, progressReporter -> getter.call());
+    public void add(String name, StoreSupplier<Stack> getter) throws OperationFailedException {
+        map.put(name, progressReporter -> getter.get());
     }
 
     public NamedStacks maxIntensityProj() throws OperationFailedException {
 
         NamedStacks out = new NamedStacks();
 
-        for (Entry<String, CallableWithProgressReporter<Stack, OperationFailedException>> entry :
+        for (Entry<String, CheckedProgressingSupplier<Stack, OperationFailedException>> entry :
                 map.entrySet()) {
             Stack projection =
-                    entry.getValue().call(ProgressReporterNull.get()).maximumIntensityProjection();
+                    entry.getValue().get(ProgressReporterNull.get()).maximumIntensityProjection();
             out.addImageStack(entry.getKey(), projection);
         }
 
@@ -129,7 +127,7 @@ public class NamedStacks implements NamedProviderStore<Stack> {
                                     key, img.getDimensions(), dimensions));
                 }
 
-                out.add(key, new IdentityOperation<>(stackOperation.apply(img)));
+                out.add(key, () -> stackOperation.apply(img) );
             }
             return out;
 
@@ -160,7 +158,7 @@ public class NamedStacks implements NamedProviderStore<Stack> {
     public NamedStacks subset(StringSet keyMustBeIn) {
         NamedStacks out = new NamedStacks();
 
-        for (Entry<String, CallableWithProgressReporter<Stack, OperationFailedException>> entry :
+        for (Entry<String, CheckedProgressingSupplier<Stack, OperationFailedException>> entry :
                 map.entrySet()) {
             if (keyMustBeIn.contains(entry.getKey())) {
                 out.map.put(entry.getKey(), entry.getValue());
@@ -171,13 +169,13 @@ public class NamedStacks implements NamedProviderStore<Stack> {
 
     @AllArgsConstructor
     private static class OperationStack
-            implements CallableWithProgressReporter<Stack, OperationFailedException> {
+            implements CheckedProgressingSupplier<Stack, OperationFailedException> {
 
         private NamedProvider<Stack> src;
         private String name;
 
         @Override
-        public Stack call(ProgressReporter progressReporter) throws OperationFailedException {
+        public Stack get(ProgressReporter progressReporter) throws OperationFailedException {
             try {
                 return src.getException(name);
             } catch (NamedProviderGetException e) {

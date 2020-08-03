@@ -27,8 +27,8 @@
 package org.anchoranalysis.mpp.io.input;
 
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.functional.CallableWithException;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
+import org.anchoranalysis.core.name.store.StoreSupplier;
 
 /**
  * a sub-item of multi-input which: 1. involves a map of objects of type T 2. can have its contents
@@ -39,12 +39,11 @@ import org.anchoranalysis.core.name.store.NamedProviderStore;
 public interface MultiInputSubMap<T> {
 
     /** Adds an entry to the map */
-    void add(String name, CallableWithException<T, OperationFailedException> op);
+    void add(String name, StoreSupplier<T> supplier);
 
     /** Copies all the existing entries into a NamedProvierStore */
     void addToStore(NamedProviderStore<T> namedStore) throws OperationFailedException;
 
     /** Returns null if non-existent */
-    CallableWithException<T, OperationFailedException> get(String name)
-            throws OperationFailedException;
+    StoreSupplier<T> get(String name) throws OperationFailedException;
 }

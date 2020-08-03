@@ -32,8 +32,8 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.name.provider.NamedProvider;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
-import org.anchoranalysis.core.progress.CacheCallWithProgressReporter;
-import org.anchoranalysis.core.progress.CallableWithProgressReporter;
+import org.anchoranalysis.core.progress.CachedProgressingSupplier;
+import org.anchoranalysis.core.progress.CheckedProgressingSupplier;
 import org.anchoranalysis.image.io.generator.raster.StackGenerator;
 import org.anchoranalysis.image.stack.NamedStacks;
 import org.anchoranalysis.image.stack.Stack;
@@ -51,7 +51,7 @@ public class StackCollectionOutputter {
     private static final String PREFIX = "";
 
     /**
-     * Only outputs stacks whose names are allowed by the StackCollection part of the OutputManager
+     * Only outputs stacks whose names are allowed by the output-manager - and logs if anything goes wrong
      */
     public static void outputSubset(
             NamedProvider<Stack> stacks,
@@ -71,9 +71,9 @@ public class StackCollectionOutputter {
     }
 
     /**
-     * Only outputs stacks whose names are allowed by the StackCollection part of the OutputManager
+     * Only outputs stacks whose names are allowed by the output-manager - and throws an exception if anything goes wrong
      *
-     * @throws OutputWriteFailedException
+     * @throws OutputWriteFailedException if anything goes wrong
      */
     public static void outputSubsetWithException(
             NamedProvider<Stack> stacks,
@@ -144,9 +144,9 @@ public class StackCollectionOutputter {
         return out;
     }
 
-    private static CallableWithProgressReporter<Stack, OperationFailedException> extractStackCached(
+    private static CheckedProgressingSupplier<Stack, OperationFailedException> extractStackCached(
             NamedProvider<Stack> stackCollection, String name) {
-        return CacheCallWithProgressReporter.of(
+        return CachedProgressingSupplier.cache(
                 pr -> {
                     try {
                         return stackCollection.getException(name);

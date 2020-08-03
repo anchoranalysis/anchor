@@ -46,19 +46,21 @@ import org.anchoranalysis.io.output.bound.BoundIOContext;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class MPPInitParamsFactory {
 
+    private static final String KEY_VALUE_PARAMS_IDENTIFIER = "input_params";
+    
     public static MPPInitParams create(
             BoundIOContext context,
             Optional<Define> define,
             Optional<? extends InputForMPPBean> input)
             throws CreateException {
 
-        SharedObjects so = new SharedObjects(context.common());
-        ImageInitParams soImage = new ImageInitParams(so);
-        MPPInitParams soMPP = new MPPInitParams(soImage, so);
+        SharedObjects sharedObjects = new SharedObjects(context.common());
+        ImageInitParams imageInit = new ImageInitParams(sharedObjects);
+        MPPInitParams mppInit = new MPPInitParams(imageInit, sharedObjects);
 
         if (input.isPresent()) {
             try {
-                input.get().addToSharedObjects(soMPP, soImage);
+                input.get().addToSharedObjects(mppInit, imageInit);
             } catch (OperationFailedException e) {
                 throw new CreateException(e);
             }
@@ -69,15 +71,15 @@ public class MPPInitParamsFactory {
                 // Tries to initialize any properties (of type MPPInitParams) found in the
                 // NamedDefinitions
                 PropertyInitializer<MPPInitParams> pi = MPPBean.initializerForMPPBeans();
-                pi.setParam(soMPP);
-                soMPP.populate(pi, define.get(), context.getLogger());
+                pi.setParam(mppInit);
+                mppInit.populate(pi, define.get(), context.getLogger());
 
             } catch (OperationFailedException e) {
                 throw new CreateException(e);
             }
         }
 
-        return soMPP;
+        return mppInit;
     }
 
     public static MPPInitParams createFromExistingCollections(
@@ -102,7 +104,7 @@ public class MPPInitParamsFactory {
             }
 
             if (keyValueParams.isPresent()) {
-                soImage.addToKeyValueParamsCollection("input_params", keyValueParams.get());
+                soImage.addToKeyValueParamsCollection(KEY_VALUE_PARAMS_IDENTIFIER, keyValueParams.get());
             }
 
             return soMPP;

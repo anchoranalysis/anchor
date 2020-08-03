@@ -1,8 +1,10 @@
+package org.anchoranalysis.core.functional.function;
+
 /*-
  * #%L
  * anchor-core
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
+ * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,24 +26,25 @@
  * #L%
  */
 
-package org.anchoranalysis.core.progress;
-
-import org.anchoranalysis.core.functional.CallableWithException;
-
 /**
- * Like {@link CallableWithProgressReporter} but can update a progress-reporter as the operation
- * progresses.
+ * Like {@java.util.BiFunction} but can also throw a checked exception.
  *
  * @author Owen Feehan
- * @param <R> result-type
- * @param <E> exception throw if operation fails
+ * @param <S> first parameter-type
+ * @param <T> second parameter-type
+ * @param <V> return-type
+ * @param <E> exception-type that can be thrown
  */
 @FunctionalInterface
-public interface CallableWithProgressReporter<R, E extends Exception> {
+public interface CheckedBiFunction<S, T, V, E extends Exception> {
 
-    R call(ProgressReporter progressReporter) throws E;
-
-    default CallableWithException<R, E> withoutProgressReporter() {
-        return () -> this.call(ProgressReporterNull.get());
-    }
+    /**
+     * Calls the function
+     *
+     * @param first first parameter
+     * @param second second parameter
+     * @return return-value
+     * @throws E an exception that may be thrown
+     */
+    V apply(S first, T second) throws E;
 }

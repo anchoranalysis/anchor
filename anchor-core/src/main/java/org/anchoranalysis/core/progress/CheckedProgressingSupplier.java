@@ -26,41 +26,22 @@
 
 package org.anchoranalysis.core.progress;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import org.anchoranalysis.core.cache.CacheCallBase;
+import org.anchoranalysis.core.functional.function.CheckedSupplier;
 
 /**
- * Memoizes (caches) a call to {@link CallableWithProgressReporter}
+ * Like {@link CheckedSupplier} but can update a progress-reporter as the operation
+ * progresses.
  *
  * @author Owen Feehan
- * @param <T> result-type
- * @param <E> exception thrown during operation
+ * @param <R> result-type
+ * @param <E> exception throw if operation fails
  */
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class CacheCallWithProgressReporter<T, E extends Exception> extends CacheCallBase<T>
-        implements CallableWithProgressReporter<T, E> {
+@FunctionalInterface
+public interface CheckedProgressingSupplier<R, E extends Exception> {
 
-    // START: REQUIRED ARGUMENTS
-    private final CallableWithProgressReporter<T, E> callable;
-    // END: REQUIRED ARGUMENTS
+    R get(ProgressReporter progressReporter) throws E;
 
-    /**
-     * Creates a cached-version of a {@link CallableWithProgressReporter}
-     *
-     * @param <T> return-type
-     * @param <E> exception that may be thrown.
-     * @param callable the callable to be cached
-     * @return a cached version, with the same interface, and additional functions to monitor
-     *     progress, reset etc.
-     */
-    public static <T, E extends Exception> CacheCallWithProgressReporter<T, E> of(
-            CallableWithProgressReporter<T, E> op) {
-        return new CacheCallWithProgressReporter<>(op);
-    }
-
-    @Override
-    public T call(ProgressReporter progressReporter) throws E {
-        return super.call(() -> callable.call(progressReporter));
+    default CheckedSupplier<R, E> withoutProgressReporter() {
+        return () -> this.get(ProgressReporterNull.get());
     }
 }

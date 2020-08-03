@@ -27,7 +27,6 @@
 package org.anchoranalysis.image.stack;
 
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.functional.IdentityOperation;
 import org.anchoranalysis.image.extent.ImageDimensions;
 
 /**
@@ -39,7 +38,7 @@ import org.anchoranalysis.image.extent.ImageDimensions;
 public class NamedStacksUniformSize {
 
     /** Lazy initialization after first stack is added */
-    private ImageDimensions dimensions = null;
+    private ImageDimensions dimensions;
 
     private NamedStacks delegate = new NamedStacks();
 
@@ -53,7 +52,7 @@ public class NamedStacksUniformSize {
             }
         }
 
-        delegate.add(name, new IdentityOperation<>(stack));
+        delegate.add(name, ()->stack);
     }
 
     public NamedStacks withoutUniformSizeConstraint() {

@@ -4,7 +4,7 @@ package org.anchoranalysis.core.functional.function;
  * #%L
  * anchor-core
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,20 +27,13 @@ package org.anchoranalysis.core.functional.function;
  */
 
 /**
- * Like {@java.util.Supplier} but can also throw an exception.
+ * Like a {@UnaryOperator} but allows an exception to be thrown
  *
  * @author Owen Feehan
- * @param <T> type of object to supply
- * @param <E> exception-type if supplying fails
+ * @param <T> input and output-type of operator
+ * @param <E> type of exception that may be thrown if something goes wrong
  */
 @FunctionalInterface
-public interface SupplierWithException<T, E extends Exception> {
-
-    /**
-     * Applies a supplier like with {@link java.util.Supplier#get).
-     *
-     * @return the supplied object.
-     * @throws E an exception that may be thrown
-     */
-    T get() throws E;
+public interface CheckedUnaryOperator<T, E extends Exception> {
+    T apply(T in) throws E;
 }

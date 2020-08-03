@@ -32,9 +32,9 @@ import java.util.stream.Stream;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
-import org.anchoranalysis.core.functional.function.FunctionWithException;
-import org.anchoranalysis.core.functional.function.IntFunctionWithException;
-import org.anchoranalysis.core.functional.function.ToIntFunctionWithException;
+import org.anchoranalysis.core.functional.function.CheckedFunction;
+import org.anchoranalysis.core.functional.function.CheckedIntFunction;
+import org.anchoranalysis.core.functional.function.CheckedToIntFunction;
 
 /** Map operations for streams that can throw checked-exceptions */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -76,10 +76,10 @@ public class CheckedStream {
      * @return the output of the flatMap
      * @throws E if the exception is thrown during mapping
      */
-    public static <S, T, E extends Exception> Stream<T> mapWithException(
+    public static <S, T, E extends Exception> Stream<T> map(
             Stream<S> stream,
             Class<? extends Exception> throwableClass,
-            FunctionWithException<S, T, E> mapFunction)
+            CheckedFunction<S, T, E> mapFunction)
             throws E {
         try {
             return stream.map(item -> suppressCheckedException(item, mapFunction));
@@ -107,10 +107,10 @@ public class CheckedStream {
      * @return the output of the flatMap
      * @throws E if the exception is thrown during mapping
      */
-    public static <S, E extends Exception> IntStream mapToIntWithException(
+    public static <S, E extends Exception> IntStream mapToInt(
             Stream<S> stream,
             Class<? extends Exception> throwableClass,
-            ToIntFunctionWithException<S, E> mapFunction)
+            CheckedToIntFunction<S, E> mapFunction)
             throws E {
         try {
             return stream.mapToInt(item -> suppressCheckedException(item, mapFunction));
@@ -134,10 +134,10 @@ public class CheckedStream {
      * @param mapFunc function for mapping
      * @return the stream after the mapping
      */
-    public static <T, E extends Exception> Stream<T> mapIntStreamWithException(
+    public static <T, E extends Exception> Stream<T> mapIntStream(
             IntStream stream,
             Class<? extends Exception> throwableClass,
-            IntFunctionWithException<T, E> mapFunc)
+            CheckedIntFunction<T, E> mapFunc)
             throws E {
         try {
             return stream.mapToObj(index -> suppressCheckedException(index, mapFunc));
@@ -164,10 +164,10 @@ public class CheckedStream {
      * @return the output of the flatMap
      * @throws E if the exception is thrown during mapping
      */
-    public static <T, E extends Exception> Stream<T> mapToObjWithException(
+    public static <T, E extends Exception> Stream<T> mapToObj(
             IntStream stream,
             Class<? extends Exception> throwableClass,
-            IntFunctionWithException<T, E> mapFunction)
+            CheckedIntFunction<T, E> mapFunction)
             throws E {
         try {
             return stream.mapToObj(item -> suppressCheckedException(item, mapFunction));
@@ -195,10 +195,10 @@ public class CheckedStream {
      * @return the output of the flatMap
      * @throws E if the exception
      */
-    public static <S, T, E extends Exception> Stream<T> flatMapWithException(
+    public static <S, T, E extends Exception> Stream<T> flatMap(
             Stream<S> stream,
             Class<? extends Exception> throwableClass,
-            FunctionWithException<S, Collection<? extends T>, E> flatMapFunction)
+            CheckedFunction<S, Collection<? extends T>, E> flatMapFunction)
             throws E {
         try {
             return stream.flatMap(item -> suppressCheckedException(item, flatMapFunction).stream());
@@ -245,7 +245,7 @@ public class CheckedStream {
      *     function}
      */
     private static <S, T, E extends Exception> T suppressCheckedException(
-            S param, FunctionWithException<S, T, E> function) {
+            S param, CheckedFunction<S, T, E> function) {
         try {
             return function.apply(param);
         } catch (Exception exc) {
@@ -254,11 +254,11 @@ public class CheckedStream {
     }
 
     /**
-     * Like @link(#suppressCheckedException) but instead accepts {@link ToIntFunctionWithException}
+     * Like @link(#suppressCheckedException) but instead accepts {@link CheckedToIntFunction}
      * functions
      */
     private static <S, E extends Exception> int suppressCheckedException(
-            S param, ToIntFunctionWithException<S, E> function) {
+            S param, CheckedToIntFunction<S, E> function) {
         try {
             return function.apply(param);
         } catch (Exception exc) {
@@ -267,11 +267,11 @@ public class CheckedStream {
     }
 
     /**
-     * Like @link(#suppressCheckedException) but instead accepts {@link IntFunctionWithException}
+     * Like @link(#suppressCheckedException) but instead accepts {@link CheckedIntFunction}
      * functions
      */
     private static <T, E extends Exception> T suppressCheckedException(
-            int param, IntFunctionWithException<T, E> function) {
+            int param, CheckedIntFunction<T, E> function) {
         try {
             return function.apply(param);
         } catch (Exception exc) {

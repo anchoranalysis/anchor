@@ -30,7 +30,7 @@ import java.util.Optional;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.functional.OptionalUtilities;
-import org.anchoranalysis.core.functional.function.FunctionWithException;
+import org.anchoranalysis.core.functional.function.CheckedFunction;
 
 /**
  * @author Owen Feehan
@@ -41,11 +41,11 @@ import org.anchoranalysis.core.functional.function.FunctionWithException;
 public class NamedProviderBridge<S, T> implements NamedProvider<T> {
 
     private final NamedProvider<S> srcProvider;
-    private final FunctionWithException<S, T, ? extends Exception> bridge;
+    private final CheckedFunction<S, T, ? extends Exception> bridge;
     private final boolean bridgeNulls;
 
     public NamedProviderBridge(
-            NamedProvider<S> srcProvider, FunctionWithException<S, T, ? extends Exception> bridge) {
+            NamedProvider<S> srcProvider, CheckedFunction<S, T, ? extends Exception> bridge) {
         this(srcProvider, bridge, true);
     }
 

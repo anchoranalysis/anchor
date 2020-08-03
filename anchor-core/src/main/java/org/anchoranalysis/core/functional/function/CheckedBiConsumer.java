@@ -27,21 +27,23 @@ package org.anchoranalysis.core.functional.function;
  */
 
 /**
- * Like {@java.util.ToIntFunction} but can also thrown an exception.
+ * Like {@java.util.BiConsumer} but can also throw a checked exception.
  *
  * @author Owen Feehan
- * @param <S> argument-type
+ * @param <S> first parameter-type
+ * @param <T> second parameter-type
  * @param <E> exception-type that can be thrown
  */
 @FunctionalInterface
-public interface ToIntFunctionWithException<S, E extends Exception> {
+public interface CheckedBiConsumer<S, T, E extends Exception> {
 
     /**
      * Calls the function
      *
-     * @param parameter parameter object
+     * @param first first parameter
+     * @param second second parameter
      * @return return-value
      * @throws E an exception that may be thrown
      */
-    int apply(S parameter) throws E;
+    void accept(S first, T second) throws E;
 }

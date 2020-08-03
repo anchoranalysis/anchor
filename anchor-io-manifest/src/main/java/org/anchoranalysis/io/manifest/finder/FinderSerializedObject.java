@@ -27,11 +27,13 @@
 package org.anchoranalysis.io.manifest.finder;
 
 import java.io.IOException;
+
 import java.util.List;
 import java.util.Optional;
-import org.anchoranalysis.core.cache.CacheCall;
+import org.anchoranalysis.core.cache.CachedSupplier;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
-import org.anchoranalysis.core.functional.CallableWithException;
+import org.anchoranalysis.core.functional.function.CheckedSupplier;
+import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.io.bean.deserializer.Deserializer;
 import org.anchoranalysis.io.bean.deserializer.KeyValueParamsDeserializer;
 import org.anchoranalysis.io.bean.deserializer.ObjectInputStreamDeserializer;
@@ -50,14 +52,8 @@ public class FinderSerializedObject<T> extends FinderSingleFile {
     private Optional<T> deserializedObject = Optional.empty();
     private String function;
 
-    private CallableWithException<Optional<T>, IOException> operation =
-            CacheCall.of(
-                    () -> {
-                        if (!exists()) {
-                            return Optional.empty();
-                        }
-                        return Optional.of(get());
-                    });
+    private CheckedSupplier<Optional<T>, IOException> operation =
+            CachedSupplier.cache( ()->OptionalUtilities.createFromFlagChecked(exists(), this::get) );
 
     public FinderSerializedObject(String function, ErrorReporter errorReporter) {
         super(errorReporter);
@@ -111,7 +107,7 @@ public class FinderSerializedObject<T> extends FinderSingleFile {
         return Optional.of(files.get(0));
     }
 
-    public CallableWithException<Optional<T>, IOException> operation() {
+    public CheckedSupplier<Optional<T>, IOException> operation() {
         return operation;
     }
 }

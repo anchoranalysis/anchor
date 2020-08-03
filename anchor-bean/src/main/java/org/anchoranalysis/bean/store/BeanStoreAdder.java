@@ -32,7 +32,7 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.functional.function.FunctionWithException;
+import org.anchoranalysis.core.functional.function.CheckedFunction;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -45,17 +45,17 @@ public class BeanStoreAdder {
      * @param <D> item-type in the container
      * @param name how the item will be named in the container
      * @param item item to be added
-     * @param cntr container the item is added to (destination)
+     * @param store container the item is added to (destination)
      * @param bridge bridge applied to item so it matches the type of cntr
      * @throws OperationFailedException if the operation cannot be completed
      */
     public static <S extends AnchorBean<?>, D> void add(
             String name,
             S item,
-            NamedProviderStore<D> cntr,
-            FunctionWithException<S, D, OperationFailedException> bridge)
+            NamedProviderStore<D> store,
+            CheckedFunction<S, D, OperationFailedException> bridge)
             throws OperationFailedException {
-        cntr.add(name, new CurriedObjectBridge<>(bridge, item));
+        store.add(name, ()->bridge.apply(item) );
     }
 
     /**
@@ -66,20 +66,19 @@ public class BeanStoreAdder {
      *
      * @param <S> item-type as input
      * @param <D> item-type in the container
-     * @param listItem list of named-items (source)
-     * @param cntr container the item is added to (destination)
+     * @param beans list of named-items (source)
+     * @param store container the item is added to (destination)
      * @param bridge bridge applied to item so it matches the type of cntr
      * @throws OperationFailedException if the operation cannot be completed
      */
     public static <S extends AnchorBean<?>, D> void addPreserveName(
-            List<NamedBean<S>> listItem,
-            NamedProviderStore<D> cntr,
-            FunctionWithException<S, D, OperationFailedException> bridge)
+            List<NamedBean<S>> beans,
+            NamedProviderStore<D> store,
+            CheckedFunction<S, D, OperationFailedException> bridge)
             throws OperationFailedException {
 
-        for (NamedBean<S> ni : listItem) {
-            NamedBean<S> niDup = ni.duplicateBean();
-            add(niDup.getName(), niDup.getValue(), cntr, bridge);
+        for (NamedBean<S> namedBean : beans) {
+            add(namedBean.getName(), namedBean.duplicateBean().getValue(), store, bridge);
         }
     }
 
@@ -92,20 +91,19 @@ public class BeanStoreAdder {
      *
      * @param <S> item-type as input
      * @param <D> item-type in the container
-     * @param listItem list of named-items (source)
-     * @param cntr container the item is added to (destination)
+     * @param beans list of named-items (source)
+     * @param store container the item is added to (destination)
      * @param bridge bridge applied to item so it matches the type of cntr
      * @throws OperationFailedException if the operation cannot be completed
      */
     public static <S extends AnchorBean<?>, D> void addPreserveNameEmbedded(
-            List<NamedBean<S>> listItem,
-            NamedProviderStore<D> cntr,
-            FunctionWithException<NamedBean<S>, D, OperationFailedException> bridge)
+            List<NamedBean<S>> beans,
+            NamedProviderStore<D> store,
+            CheckedFunction<NamedBean<S>, D, OperationFailedException> bridge)
             throws OperationFailedException {
 
-        for (NamedBean<S> ni : listItem) {
-            NamedBean<S> niDup = ni.duplicateBean();
-            add(niDup.getName(), niDup, cntr, bridge);
+        for (NamedBean<S> namedBean : beans) {
+            add(namedBean.getName(), namedBean.duplicateBean(), store, bridge);
         }
     }
 }

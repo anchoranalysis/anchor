@@ -32,9 +32,8 @@ import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
-import org.anchoranalysis.core.cache.CacheCall;
+import org.anchoranalysis.core.cache.CachedSupplier;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.functional.CallableWithException;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 
@@ -51,7 +50,7 @@ public class LazyEvaluationStore<T> implements NamedProviderStore<T> {
     private final String storeDisplayName;
     // END REQUIRED ARGUMENTS
 
-    private HashMap<String, CacheCall<T, OperationFailedException>> map = new HashMap<>();
+    private HashMap<String, CachedSupplier<T,OperationFailedException>> map = new HashMap<>();
 
     @Override
     public T getException(String key) throws NamedProviderGetException {
@@ -64,7 +63,7 @@ public class LazyEvaluationStore<T> implements NamedProviderStore<T> {
     public Optional<T> getOptional(String key) throws NamedProviderGetException {
         try {
             return OptionalUtilities.map(
-                    Optional.ofNullable(map.get(key)), CallableWithException::call);
+                    Optional.ofNullable(map.get(key)), CachedSupplier::get);
         } catch (Exception e) {
             throw NamedProviderGetException.wrap(key, e);
         }
@@ -73,7 +72,7 @@ public class LazyEvaluationStore<T> implements NamedProviderStore<T> {
     // We only refer to
     public Set<String> keysEvaluated() {
         HashSet<String> keysUsed = new HashSet<>();
-        for (Entry<String, CacheCall<T, OperationFailedException>> entry : map.entrySet()) {
+        for (Entry<String, CachedSupplier<T, OperationFailedException>> entry : map.entrySet()) {
             if (entry.getValue().isEvaluated()) {
                 keysUsed.add(entry.getKey());
             }
@@ -88,8 +87,7 @@ public class LazyEvaluationStore<T> implements NamedProviderStore<T> {
     }
 
     @Override
-    public void add(String name, CallableWithException<T, OperationFailedException> getter)
-            throws OperationFailedException {
-        map.put(name, CacheCall.of(getter));
+    public void add(String name, StoreSupplier<T> supplier) throws OperationFailedException {
+        map.put(name, StoreSupplier.cacheResettable(supplier));
     }
 }

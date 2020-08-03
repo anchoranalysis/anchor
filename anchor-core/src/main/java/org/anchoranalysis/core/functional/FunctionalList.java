@@ -38,7 +38,7 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.functional.function.FunctionWithException;
+import org.anchoranalysis.core.functional.function.CheckedFunction;
 
 /** Utilities functions for manipulating or creating {@link java.util.List} in a functional way */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -166,9 +166,9 @@ public class FunctionalList {
     public static <S, T, E extends Exception> List<T> mapToList(
             Collection<S> collection,
             Class<? extends Exception> throwableClass,
-            FunctionWithException<S, T, E> mapFunction)
+            CheckedFunction<S, T, E> mapFunction)
             throws E {
-        return CheckedStream.mapWithException(collection.stream(), throwableClass, mapFunction)
+        return CheckedStream.map(collection.stream(), throwableClass, mapFunction)
                 .collect(Collectors.toList());
     }
 }

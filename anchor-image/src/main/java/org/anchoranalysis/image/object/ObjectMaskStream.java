@@ -40,8 +40,8 @@ import java.util.function.ToIntFunction;
 import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 import org.anchoranalysis.core.functional.CheckedStream;
-import org.anchoranalysis.core.functional.function.FunctionWithException;
-import org.anchoranalysis.core.functional.function.PredicateWithException;
+import org.anchoranalysis.core.functional.function.CheckedFunction;
+import org.anchoranalysis.core.functional.function.CheckedPredicate;
 import org.anchoranalysis.image.extent.BoundingBox;
 
 /**
@@ -70,7 +70,7 @@ public final class ObjectMaskStream {
      * @throws E if an exception is thrown by the mapping function.
      */
     public <E extends Exception> ObjectCollection map(
-            FunctionWithException<ObjectMask, ObjectMask, E> mapFunc) throws E {
+            CheckedFunction<ObjectMask, ObjectMask, E> mapFunc) throws E {
         ObjectCollection out = new ObjectCollection();
         for (ObjectMask object : delegate) {
             out.add(mapFunc.apply(object));
@@ -102,7 +102,7 @@ public final class ObjectMaskStream {
      * @throws E if an exception occurs during mapping
      */
     public <T, E extends Exception> List<T> mapToList(
-            FunctionWithException<ObjectMask, T, E> mapFunc) throws E {
+            CheckedFunction<ObjectMask, T, E> mapFunc) throws E {
         List<T> out = new ArrayList<>();
         for (ObjectMask obj : delegate) {
             out.add(mapFunc.apply(obj));
@@ -124,7 +124,7 @@ public final class ObjectMaskStream {
      * @throws E if an exception occurs during mapping
      */
     public <T, E extends Exception> List<T> mapToListOptional(
-            FunctionWithException<ObjectMask, Optional<T>, E> mapFunc) throws E {
+            CheckedFunction<ObjectMask, Optional<T>, E> mapFunc) throws E {
         List<T> out = new ArrayList<>();
         for (ObjectMask obj : delegate) {
             Optional<T> result = mapFunc.apply(obj);
@@ -145,7 +145,7 @@ public final class ObjectMaskStream {
      * @throws E if an exception occurs during mapping
      */
     public <T, E extends Exception> SortedSet<T> mapToSortedSet(
-            FunctionWithException<ObjectMask, T, E> mapFunc) throws E {
+            CheckedFunction<ObjectMask, T, E> mapFunc) throws E {
         SortedSet<T> out = new TreeSet<>();
         for (ObjectMask obj : delegate) {
             out.add(mapFunc.apply(obj));
@@ -178,12 +178,12 @@ public final class ObjectMaskStream {
      * @return a newly created object-collection
      * @throws E if its thrown by <code>mapFunc</code>
      */
-    public <E extends Exception> ObjectCollection flatMapWithException(
+    public <E extends Exception> ObjectCollection flatMap(
             Class<? extends Exception> throwableClass,
-            FunctionWithException<ObjectMask, ObjectCollection, E> mapFunc)
+            CheckedFunction<ObjectMask, ObjectCollection, E> mapFunc)
             throws E {
         return new ObjectCollection(
-                CheckedStream.flatMapWithException(
+                CheckedStream.flatMap(
                         delegate.streamStandardJava(),
                         throwableClass,
                         element -> mapFunc.apply(element).asList()));
@@ -215,7 +215,7 @@ public final class ObjectMaskStream {
      * @throws E if thrown by the predicate
      */
     public <E extends Exception> ObjectCollection filter(
-            PredicateWithException<ObjectMask, E> predicate,
+            CheckedPredicate<ObjectMask, E> predicate,
             Optional<ObjectCollection> objectsRejected)
             throws E {
 

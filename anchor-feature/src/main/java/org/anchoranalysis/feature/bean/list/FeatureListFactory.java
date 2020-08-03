@@ -39,8 +39,8 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.functional.CheckedStream;
-import org.anchoranalysis.core.functional.function.FunctionWithException;
-import org.anchoranalysis.core.functional.function.IntFunctionWithException;
+import org.anchoranalysis.core.functional.function.CheckedFunction;
+import org.anchoranalysis.core.functional.function.CheckedIntFunction;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.provider.FeatureProvider;
 import org.anchoranalysis.feature.input.FeatureInput;
@@ -122,7 +122,7 @@ public class FeatureListFactory {
     public static <T extends FeatureInput> FeatureList<T> fromProviders(
             Collection<FeatureProvider<T>> providers) throws CreateException {
         return new FeatureList<>(
-                CheckedStream.mapWithException(
+                CheckedStream.map(
                         providers.stream(), CreateException.class, FeatureProvider::create));
     }
 
@@ -164,7 +164,7 @@ public class FeatureListFactory {
      * @throws E exception if it occurs during mapping
      */
     public static <S, T extends FeatureInput, E extends Exception> FeatureList<T> mapFrom(
-            Iterable<S> iterable, FunctionWithException<S, Feature<T>, E> mapFunc) throws E {
+            Iterable<S> iterable, CheckedFunction<S, Feature<T>, E> mapFunc) throws E {
         FeatureList<T> out = new FeatureList<>();
         for (S item : iterable) {
             out.add(mapFunc.apply(item));
@@ -188,7 +188,7 @@ public class FeatureListFactory {
     public static <S, T extends FeatureInput, E extends Exception> FeatureList<T> mapFromFiltered(
             Iterable<S> iterable,
             Predicate<S> predicate,
-            FunctionWithException<S, Feature<T>, E> mapFunc)
+            CheckedFunction<S, Feature<T>, E> mapFunc)
             throws E {
         FeatureList<T> out = new FeatureList<>();
         for (S item : iterable) {
@@ -216,7 +216,7 @@ public class FeatureListFactory {
     public static <S, T extends FeatureInput, E extends Exception>
             FeatureList<T> flatMapFromOptional(
                     Iterable<S> iterable,
-                    FunctionWithException<S, Optional<FeatureList<T>>, E> flatMapFunc)
+                    CheckedFunction<S, Optional<FeatureList<T>>, E> flatMapFunc)
                     throws E {
         FeatureList<T> out = new FeatureList<>();
         for (S item : iterable) {
@@ -255,10 +255,10 @@ public class FeatureListFactory {
             int startInclusive,
             int endExclusive,
             Class<? extends Exception> throwableClass,
-            IntFunctionWithException<Optional<Feature<T>>, E> mapFunc)
+            CheckedIntFunction<Optional<Feature<T>>, E> mapFunc)
             throws E {
         FeatureList<T> out = new FeatureList<>();
-        CheckedStream.mapIntStreamWithException(
+        CheckedStream.mapIntStream(
                         IntStream.range(startInclusive, endExclusive), throwableClass, mapFunc)
                 .forEach(opt -> opt.ifPresent(out::add));
         return out;

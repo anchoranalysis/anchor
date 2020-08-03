@@ -31,37 +31,26 @@ import java.util.List;
 import java.util.Optional;
 import org.anchoranalysis.core.text.TypedValue;
 import org.anchoranalysis.feature.io.csv.name.MultiName;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 /**
  * Labels associated with feature-results in an outputted CSV row
  *
  * @author Owen Feehan
  */
+@AllArgsConstructor
 public class StringLabelsForCsvRow {
 
+    /** identifier unique identifier for the row taking all elements together (together a primary key) */
     private final Optional<String[]> identifier;
-    private final Optional<MultiName> group;
-
-    /**
-     * Constructor
-     *
-     * @param identifier unique identifier for the row taking all elements together (together a
-     *     primary key)
-     * @param group an identifier for a higher-level group which the row belongs to (foreign key)
-     */
-    public StringLabelsForCsvRow(Optional<String[]> identifier, Optional<MultiName> group) {
-        super();
-        this.identifier = identifier;
-        this.group = group;
-    }
+    
+    /** an identifier for a higher-level group which the row belongs to (foreign key) */
+    @Getter private final Optional<MultiName> group;
 
     public void addToRow(List<TypedValue> csvRow) {
         identifier.ifPresent(stringArr -> addStringArrayToRow(stringArr, csvRow));
         group.ifPresent(stringArr -> addStringIterableToRow(stringArr, csvRow));
-    }
-
-    public Optional<MultiName> getGroup() {
-        return group;
     }
 
     private static void addStringArrayToRow(String[] arr, List<TypedValue> csvRow) {

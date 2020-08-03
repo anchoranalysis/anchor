@@ -31,20 +31,22 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 
 // Reads a CSV File
+@RequiredArgsConstructor
 public class CSVReader {
 
+    // START REQUIRED ARGUMENTS
+    private final String regExSeperator;
+    private final boolean firstLineHeaders;
+    private final boolean quotedStrings;
+    // END REQUIRED ARGUMENTS
+        
     private FileReader fileReader;
     private BufferedReader bufferedReader;
 
     private String[] headers;
-
-    private String regExSeperator;
-
-    private boolean firstLineHeaders;
-
-    private boolean quotedStrings;
 
     public class OpenedCSVFile implements AutoCloseable {
 
@@ -113,12 +115,6 @@ public class CSVReader {
 
     public CSVReader(String regExSeperator, boolean firstLineHeaders) {
         this(regExSeperator, firstLineHeaders, false);
-    }
-
-    public CSVReader(String regExSeperator, boolean firstLineHeaders, boolean quotedStrings) {
-        this.firstLineHeaders = firstLineHeaders;
-        this.regExSeperator = regExSeperator;
-        this.quotedStrings = quotedStrings;
     }
 
     /**

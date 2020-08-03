@@ -30,7 +30,7 @@ import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.name.provider.NamedProvider;
-import org.anchoranalysis.core.progress.CallableWithProgressReporter;
+import org.anchoranalysis.core.progress.CheckedProgressingSupplier;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.image.stack.NamedStacks;
@@ -39,7 +39,7 @@ import org.anchoranalysis.image.stack.wrap.WrapStackAsTimeSequenceStore;
 
 @AllArgsConstructor
 class OperationCreateStackCollection
-        implements CallableWithProgressReporter<NamedProvider<Stack>, CreateException> {
+        implements CheckedProgressingSupplier<NamedProvider<Stack>, CreateException> {
 
     private final ProvidesStackInput inputObject;
     private final int seriesNum;
@@ -50,19 +50,14 @@ class OperationCreateStackCollection
     }
 
     @Override
-    public NamedStacks call(ProgressReporter progressReporter) throws CreateException {
+    public NamedStacks get(ProgressReporter progressReporter) throws CreateException {
         try {
-            return doOperationWithException(progressReporter);
+            NamedStacks stackCollection = new NamedStacks();
+            inputObject.addToStoreInferNames(
+                    new WrapStackAsTimeSequenceStore(stackCollection, t), seriesNum, progressReporter);
+            return stackCollection;
         } catch (OperationFailedException e) {
             throw new CreateException(e);
         }
-    }
-
-    private NamedStacks doOperationWithException(ProgressReporter progressReporter)
-            throws OperationFailedException {
-        NamedStacks stackCollection = new NamedStacks();
-        inputObject.addToStoreInferNames(
-                new WrapStackAsTimeSequenceStore(stackCollection, t), seriesNum, progressReporter);
-        return stackCollection;
     }
 }

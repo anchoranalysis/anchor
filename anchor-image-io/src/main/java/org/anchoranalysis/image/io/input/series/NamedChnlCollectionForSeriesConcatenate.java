@@ -32,11 +32,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import org.anchoranalysis.core.cache.CacheCall;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.functional.CallableWithException;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
+import org.anchoranalysis.core.name.store.StoreSupplier;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporterMultiple;
 import org.anchoranalysis.core.progress.ProgressReporterOneOfMany;
@@ -153,15 +152,15 @@ public class NamedChnlCollectionForSeriesConcatenate implements NamedChannelsFor
     }
 
     @Override
-    public CallableWithException<Stack, OperationFailedException> allChannelsAsStack(int t) {
-        return CacheCall.of(() -> stackAllChnls(t));
+    public StoreSupplier<Stack> allChannelsAsStack(int t) {
+        return StoreSupplier.cache(() -> stackAllChannels(t));
     }
 
-    private Stack stackAllChnls(int t) throws OperationFailedException {
+    private Stack stackAllChannels(int timeIndex) throws OperationFailedException {
         Stack out = new Stack();
         for (NamedChannelsForSeries ncc : list) {
             try {
-                addAllChnlsFrom(ncc.allChannelsAsStack(t).call(), out);
+                addAllChannelsFrom(ncc.allChannelsAsStack(timeIndex).get(), out);
             } catch (IncorrectImageSizeException e) {
                 throw new OperationFailedException(e);
             }
@@ -169,9 +168,9 @@ public class NamedChnlCollectionForSeriesConcatenate implements NamedChannelsFor
         return out;
     }
 
-    private static void addAllChnlsFrom(Stack src, Stack dest) throws IncorrectImageSizeException {
-        for (Channel c : src) {
-            dest.addChannel(c);
+    private static void addAllChannelsFrom(Stack source, Stack destination) throws IncorrectImageSizeException {
+        for (Channel channel : source) {
+            destination.addChannel(channel);
         }
     }
 }

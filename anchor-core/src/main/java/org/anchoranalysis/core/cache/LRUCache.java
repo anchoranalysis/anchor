@@ -33,7 +33,7 @@ import com.google.common.util.concurrent.UncheckedExecutionException;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
-import org.anchoranalysis.core.functional.function.FunctionWithException;
+import org.anchoranalysis.core.functional.function.CheckedFunction;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 
 /**
@@ -57,7 +57,7 @@ public class LRUCache<K, V> {
      * @param calculator calculates the value for a given key if it's not already in the cache
      */
     public <E extends Exception> LRUCache(
-            int cacheSize, FunctionWithException<K, V, E> calculator) {
+            int cacheSize, CheckedFunction<K, V, E> calculator) {
 
         if (cacheSize <= 0) {
             throw new AnchorFriendlyRuntimeException("cacheSize must be a positive integer");

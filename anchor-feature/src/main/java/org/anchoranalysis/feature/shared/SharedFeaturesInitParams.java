@@ -95,21 +95,21 @@ public class SharedFeaturesInitParams implements BeanInitParams {
         }
     }
 
-    private void addFeatureList(NamedBean<FeatureListProvider<FeatureInput>> nb)
+    private void addFeatureList(NamedBean<FeatureListProvider<FeatureInput>> provider)
             throws OperationFailedException {
 
         try {
-            FeatureList<FeatureInput> fl = nb.getItem().create();
-            String name = nb.getName();
+            FeatureList<FeatureInput> featureList = provider.getItem().create();
+            String name = provider.getName();
 
             // If there's only one item in the feature list, then we set it as the custom
             //  name of teh feature
-            if (fl.size() == 1) {
-                fl.get(0).setCustomName(name);
+            if (featureList.size() == 1) {
+                featureList.get(0).setCustomName(name);
             }
 
-            storeFeatureList.add(name, () -> fl);
-            sharedFeatureSet.addNoDuplicate(fl);
+            storeFeatureList.add(name, () -> featureList);
+            sharedFeatureSet.addNoDuplicate(featureList);
 
         } catch (CreateException e) {
             throw new OperationFailedException(e);

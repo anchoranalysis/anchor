@@ -27,7 +27,7 @@
 package org.anchoranalysis.io.generator;
 
 import java.util.Optional;
-import org.anchoranalysis.core.functional.function.FunctionWithException;
+import org.anchoranalysis.core.functional.function.CheckedFunction;
 import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.io.manifest.file.FileType;
 import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
@@ -49,10 +49,10 @@ public class IterableGeneratorBridge<S, T> implements Generator, IterableGenerat
 
     private IterableGenerator<T> delegate;
 
-    private FunctionWithException<S, T, ?> bridge;
+    private CheckedFunction<S, T, ?> bridge;
 
     public IterableGeneratorBridge(
-            IterableGenerator<T> delegate, FunctionWithException<S, T, ?> bridge) {
+            IterableGenerator<T> delegate, CheckedFunction<S, T, ?> bridge) {
         super();
         this.delegate = delegate;
         this.bridge = bridge;

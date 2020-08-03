@@ -37,11 +37,8 @@ import org.anchoranalysis.io.output.bean.allowed.OutputAllowed;
 import org.anchoranalysis.io.output.bound.BindFailedException;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
 
-/*
+/**
  *  Responsible for making decisions on where output goes and what form it takes
- *
- *  Is always associated with a particular infilePath through init()
- *   which may be changed as the program is executed.
  */
 public abstract class OutputManager extends AnchorBean<OutputManager> {
 

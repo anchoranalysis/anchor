@@ -32,11 +32,11 @@ import org.anchoranalysis.anchor.mpp.overlay.OverlayCollectionMarkFactory;
 import org.anchoranalysis.anchor.overlay.OverlayedInstantState;
 import org.anchoranalysis.anchor.overlay.collection.OverlayCollection;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.functional.function.FunctionWithException;
+import org.anchoranalysis.core.functional.function.CheckedFunction;
 
 // Bridges CfgNRGInstantState to OverlayedInstantState
 public class CfgNRGInstantStateBridge
-        implements FunctionWithException<
+        implements CheckedFunction<
                 CfgNRGInstantState, OverlayedInstantState, OperationFailedException> {
 
     private RegionMembershipWithFlags regionMembership;

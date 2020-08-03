@@ -28,6 +28,8 @@ package org.anchoranalysis.io.csv.reader;
 
 import java.nio.file.Path;
 import org.anchoranalysis.core.error.OperationFailedException;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 /**
  * Reads a CSV file line-by-line
@@ -37,6 +39,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
  *
  * @author Owen Feehan
  */
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class CSVReaderByLine {
 
     @FunctionalInterface
@@ -72,8 +75,6 @@ public class CSVReaderByLine {
          */
         void close() throws CSVReaderException;
     }
-
-    private CSVReaderByLine() {}
 
     /** Default reader, using comma and first-line headers */
     public static ReadByLine open(Path filePath) {

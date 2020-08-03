@@ -31,7 +31,7 @@ import java.util.Iterator;
 import java.util.List;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
-import org.anchoranalysis.core.functional.function.UnaryOperatorWithException;
+import org.anchoranalysis.core.functional.function.CheckedUnaryOperator;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.channel.factory.ChannelFactorySingleType;
@@ -94,7 +94,7 @@ public class Stack implements Iterable<Channel> {
      * @return a new stack (after any modification by {@code mapFunc}) preserving the channel order
      * @throws OperationFailedException if the channels produced have non-uniform sizes
      */
-    public Stack mapChannel(UnaryOperatorWithException<Channel, OperationFailedException> mapping)
+    public Stack mapChannel(CheckedUnaryOperator<Channel, OperationFailedException> mapping)
             throws OperationFailedException {
         Stack out = new Stack();
         for (Channel channel : this) {

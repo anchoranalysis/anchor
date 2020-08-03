@@ -1,5 +1,7 @@
 package org.anchoranalysis.core.functional.function;
 
+import org.anchoranalysis.core.progress.CheckedProgressingSupplier;
+
 /*-
  * #%L
  * anchor-core
@@ -27,24 +29,25 @@ package org.anchoranalysis.core.functional.function;
  */
 
 /**
- * Like {@java.util.BiFunction} but can also throw a checked exception.
+ * Like {@java.util.Supplier} but can also throw an exception.
  *
  * @author Owen Feehan
- * @param <S> first parameter-type
- * @param <T> second parameter-type
- * @param <V> return-type
- * @param <E> exception-type that can be thrown
+ * @param <T> type of object to supply
+ * @param <E> exception-type if supplying fails
  */
 @FunctionalInterface
-public interface BiFunctionWithException<S, T, V, E extends Exception> {
+public interface CheckedSupplier<T, E extends Exception> {
 
     /**
-     * Calls the function
+     * Applies a supplier like with {@link java.util.Supplier#get).
      *
-     * @param first first parameter
-     * @param second second parameter
-     * @return return-value
+     * @return the supplied object.
      * @throws E an exception that may be thrown
      */
-    V apply(S first, T second) throws E;
+    T get() throws E;
+    
+    /** An interface to a similar supplier that uses a progress-reporter */
+    default CheckedProgressingSupplier<T, E> progressing() {
+        return progressReporter -> get();
+    }
 }

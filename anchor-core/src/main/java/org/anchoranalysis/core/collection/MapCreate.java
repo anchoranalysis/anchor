@@ -32,7 +32,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
 import org.anchoranalysis.core.error.AnchorNeverOccursException;
-import org.anchoranalysis.core.functional.CallableWithException;
+import org.anchoranalysis.core.functional.function.CheckedSupplier;
 
 /**
  * A tree map that creates a new item, if it doesn't already exist, after a GET operation
@@ -46,15 +46,15 @@ public class MapCreate<K, V> {
     // We use a tree-map to retain a deterministic order in the keys, as outputting in alphabetic
     // order is nice
     private Map<K, V> map;
-    private CallableWithException<V, AnchorNeverOccursException> opCreateNew;
+    private CheckedSupplier<V, AnchorNeverOccursException> opCreateNew;
 
-    public MapCreate(CallableWithException<V, AnchorNeverOccursException> opCreateNew) {
+    public MapCreate(CheckedSupplier<V, AnchorNeverOccursException> opCreateNew) {
         this.map = new TreeMap<>();
         this.opCreateNew = opCreateNew;
     }
 
     public MapCreate(
-            CallableWithException<V, AnchorNeverOccursException> opCreateNew,
+            CheckedSupplier<V, AnchorNeverOccursException> opCreateNew,
             Comparator<K> comparator) {
         super();
         this.map = new TreeMap<>(comparator);
@@ -62,7 +62,7 @@ public class MapCreate<K, V> {
     }
 
     public synchronized V getOrCreateNew(K key) {
-        return map.computeIfAbsent(key, k -> opCreateNew.call());
+        return map.computeIfAbsent(key, k -> opCreateNew.get());
     }
 
     public Set<Entry<K, V>> entrySet() {

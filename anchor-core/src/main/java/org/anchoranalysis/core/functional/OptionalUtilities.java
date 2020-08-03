@@ -28,6 +28,10 @@ package org.anchoranalysis.core.functional;
 
 import java.util.Optional;
 import java.util.function.Supplier;
+import org.anchoranalysis.core.functional.function.CheckedBiFunction;
+import org.anchoranalysis.core.functional.function.CheckedConsumer;
+import org.anchoranalysis.core.functional.function.CheckedFunction;
+import org.anchoranalysis.core.functional.function.CheckedSupplier;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -38,44 +42,6 @@ import lombok.NoArgsConstructor;
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class OptionalUtilities {
-
-    /**
-     * Function used to map from one optional to another
-     *
-     * @author Owen Feehan
-     * @param <S> source-type
-     * @param <T> target-type
-     * @param <E> exception that can be thrown during mapping
-     */
-    @FunctionalInterface
-    public interface MapFunction<S, T, E extends Exception> {
-        T apply(S in) throws E;
-    }
-
-    /**
-     * Function used to map from two optionals to another single optional
-     *
-     * @author Owen Feehan
-     * @param <S> source-type
-     * @param <T> target-type
-     * @param <E> exception that can be thrown during mapping
-     */
-    @FunctionalInterface
-    public interface MapFunctionTwo<T, U, V, E extends Exception> {
-        T apply(U in1, V in2) throws E;
-    }
-
-    /**
-     * Consumes a value and throws an exception
-     *
-     * @author Owen Feehan
-     * @param <S> source-type
-     * @param <E> exception that can be thrown during apply
-     */
-    @FunctionalInterface
-    public interface ConsumerWithException<S, E extends Exception> {
-        void accept(S in) throws E;
-    }
 
     /**
      * Like {@link Optional::map} but tolerates an exception in the mapping function, which is
@@ -90,7 +56,7 @@ public class OptionalUtilities {
      * @throws E an exception if the mapping function throws it
      */
     public static <S, E extends Exception> void ifPresent(
-            Optional<S> opt, ConsumerWithException<S, E> consumerFunc) throws E {
+            Optional<S> opt, CheckedConsumer<S, E> consumerFunc) throws E {
         if (opt.isPresent()) {
             consumerFunc.accept(opt.get());
         }
@@ -109,7 +75,7 @@ public class OptionalUtilities {
      * @throws E an exception if the mapping function throws it
      */
     public static <S, T, E extends Exception> Optional<T> map(
-            Optional<S> opt, MapFunction<S, T, E> mapFunc) throws E {
+            Optional<S> opt, CheckedFunction<S, T, E> mapFunc) throws E {
         if (opt.isPresent()) {
             T target = mapFunc.apply(opt.get());
             return Optional.of(target);
@@ -131,7 +97,7 @@ public class OptionalUtilities {
      * @throws E an exception if the mapping function throws it
      */
     public static <S, T, E extends Exception> Optional<T> flatMap(
-            Optional<S> opt, MapFunction<S, Optional<T>, E> mapFunc) throws E {
+            Optional<S> opt, CheckedFunction<S, Optional<T>, E> mapFunc) throws E {
         if (opt.isPresent()) {
             return mapFunc.apply(opt.get());
         } else {
@@ -152,7 +118,7 @@ public class OptionalUtilities {
      * @return the outgoing "mapped" optional (empty() if either incoming optional is empty)
      */
     public static <T, U, V, E extends Exception> Optional<T> mapBoth(
-            Optional<U> optional1, Optional<V> optional2, MapFunctionTwo<T, U, V, E> mapFunc)
+            Optional<U> optional1, Optional<V> optional2, CheckedBiFunction<U, V, T, E> mapFunc)
             throws E {
         if (optional1.isPresent() && optional2.isPresent()) {
             return Optional.of(mapFunc.apply(optional1.get(), optional2.get()));
@@ -200,6 +166,23 @@ public class OptionalUtilities {
      * @return a filled or empty optional depending on flag
      */
     public static <T> Optional<T> createFromFlag(boolean flag, Supplier<T> valueIfFlagTrue) {
+        if (flag) {
+            return Optional.of(valueIfFlagTrue.get());
+        } else {
+            return Optional.empty();
+        }
+    }
+    
+    /**
+     * Creates an {@link Optional} from a boolean flag - where the supplier can thrown an exception
+     *
+     * @param <T> type in Optional
+     * @param flag iff TRUE an populated optional is returned, otherwise empty().
+     * @param valueIfFlagTrue used to generate a positive value
+     * @return a filled or empty optional depending on flag
+     * @throws E if the supplioer throws an exception
+     */
+    public static <T,E extends Exception> Optional<T> createFromFlagChecked(boolean flag, CheckedSupplier<T,E> valueIfFlagTrue) throws E {
         if (flag) {
             return Optional.of(valueIfFlagTrue.get());
         } else {

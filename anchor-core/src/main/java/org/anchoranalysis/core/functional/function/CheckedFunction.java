@@ -1,12 +1,10 @@
-package org.anchoranalysis.core.functional;
+package org.anchoranalysis.core.functional.function;
 
-import lombok.AllArgsConstructor;
-
-/*
+/*-
  * #%L
  * anchor-core
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -28,13 +26,23 @@ import lombok.AllArgsConstructor;
  * #L%
  */
 
-@AllArgsConstructor
-public class IdentityOperation<T, E extends Exception> implements CallableWithException<T, E> {
+/**
+ * Like {@java.util.Function} but can also thrown an exception.
+ *
+ * @author Owen Feehan
+ * @param <S> parameter-type
+ * @param <V> return-type
+ * @param <E> exception-type that can be thrown
+ */
+@FunctionalInterface
+public interface CheckedFunction<S, V, E extends Exception> {
 
-    private final T obj;
-
-    @Override
-    public T call() throws E {
-        return obj;
-    }
+    /**
+     * Calls the function
+     *
+     * @param parameter parameter object
+     * @return return-value
+     * @throws E an exception that may be thrown
+     */
+    V apply(S parameter) throws E;
 }

@@ -44,10 +44,13 @@ import org.anchoranalysis.io.generator.ObjectGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.mpp.io.cfg.ColoredCfgWithDisplayStack;
+import lombok.Getter;
+import lombok.Setter;
 
 public abstract class CfgGeneratorBase extends RasterGenerator
         implements IterableObjectGenerator<ColoredCfgWithDisplayStack, Stack> {
 
+    @Getter @Setter
     private String manifestDescriptionFunction = "cfg";
 
     private DrawOverlay writer;
@@ -117,12 +120,4 @@ public abstract class CfgGeneratorBase extends RasterGenerator
 
     @Override
     public void end() throws OutputWriteFailedException {}
-
-    public String getManifestDescriptionFunction() {
-        return manifestDescriptionFunction;
-    }
-
-    public void setManifestDescriptionFunction(String manifestDescriptionFunction) {
-        this.manifestDescriptionFunction = manifestDescriptionFunction;
-    }
 }

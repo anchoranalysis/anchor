@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.io.generator;
 
-import org.anchoranalysis.core.functional.function.FunctionWithException;
+import org.anchoranalysis.core.functional.function.CheckedFunction;
 import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
@@ -45,11 +45,11 @@ public class IterableObjectGeneratorBridge<S, T, V> implements IterableObjectGen
 
     private IterableObjectGenerator<V, S> internalGenerator;
 
-    private FunctionWithException<T, V, ? extends Throwable> elementBridge;
+    private CheckedFunction<T, V, ? extends Throwable> elementBridge;
 
     public IterableObjectGeneratorBridge(
             IterableObjectGenerator<V, S> internalGenerator,
-            FunctionWithException<T, V, ? extends Throwable> elementBridge) {
+            CheckedFunction<T, V, ? extends Throwable> elementBridge) {
         super();
         this.internalGenerator = internalGenerator;
         this.elementBridge = elementBridge;

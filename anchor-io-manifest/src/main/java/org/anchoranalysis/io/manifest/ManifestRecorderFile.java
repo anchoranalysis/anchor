@@ -29,21 +29,21 @@ package org.anchoranalysis.io.manifest;
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import org.anchoranalysis.core.cache.CacheCall;
+import org.anchoranalysis.core.cache.CachedSupplier;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.functional.CallableWithException;
+import org.anchoranalysis.core.functional.function.CheckedSupplier;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
 import org.anchoranalysis.io.manifest.deserializer.ManifestDeserializer;
 
 public class ManifestRecorderFile {
 
     private final File file;
-    private final CallableWithException<ManifestRecorder, OperationFailedException> operation;
+    private final CheckedSupplier<ManifestRecorder, OperationFailedException> operation;
 
     public ManifestRecorderFile(File file, ManifestDeserializer manifestDeserializer) {
         this.file = file;
         this.operation =
-                CacheCall.of(
+                CachedSupplier.cache(
                         () -> {
                             try {
                                 if (!file.exists()) {
@@ -58,8 +58,8 @@ public class ManifestRecorderFile {
                         });
     }
 
-    public ManifestRecorder call() throws OperationFailedException {
-        return operation.call();
+    public ManifestRecorder get() throws OperationFailedException {
+        return operation.get();
     }
 
     public Path getRootPath() {

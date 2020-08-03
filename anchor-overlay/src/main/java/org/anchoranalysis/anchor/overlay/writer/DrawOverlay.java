@@ -136,7 +136,7 @@ public abstract class DrawOverlay {
 
         IDGetterIter<Overlay> colorIDGetter = new IDGetterIter<>();
 
-        return CheckedStream.mapToObjWithException(
+        return CheckedStream.mapToObj(
                         IntStream.range(0, coc.size()),
                         CreateException.class,
                         index -> {

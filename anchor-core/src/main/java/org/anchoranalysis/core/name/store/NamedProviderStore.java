@@ -27,7 +27,6 @@
 package org.anchoranalysis.core.name.store;
 
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.functional.CallableWithException;
 import org.anchoranalysis.core.name.provider.NamedProvider;
 
 /**
@@ -41,6 +40,5 @@ import org.anchoranalysis.core.name.provider.NamedProvider;
  */
 public interface NamedProviderStore<T> extends NamedProvider<T> {
 
-    void add(String name, CallableWithException<T, OperationFailedException> getter)
-            throws OperationFailedException;
+    void add(String name, StoreSupplier<T> getter) throws OperationFailedException;
 }

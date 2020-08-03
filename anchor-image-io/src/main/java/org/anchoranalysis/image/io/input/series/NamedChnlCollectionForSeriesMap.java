@@ -29,11 +29,10 @@ package org.anchoranalysis.image.io.input.series;
 import java.util.Optional;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
-import org.anchoranalysis.core.cache.CacheCall;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.functional.CallableWithException;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
+import org.anchoranalysis.core.name.store.StoreSupplier;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporterMultiple;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
@@ -167,13 +166,13 @@ public class NamedChnlCollectionForSeriesMap implements NamedChannelsForSeries {
         // Populate our stack from all the channels
         for (final String chnlName : chnlMap.keySet()) {
             stackCollection.add(
-                    chnlName, CacheCall.of(() -> extractChnlAsTimeSequence(chnlName, t)));
+                    chnlName, StoreSupplier.cache( () -> extractChnlAsTimeSequence(chnlName, t) ));
         }
     }
 
     @Override
-    public CallableWithException<Stack, OperationFailedException> allChannelsAsStack(int t) {
-        return CacheCall.of(() -> stackForAllChnls(t));
+    public StoreSupplier<Stack> allChannelsAsStack(int t) {
+        return StoreSupplier.cache( () -> stackForAllChnls(t) );
     }
 
     private TimeSequence createTimeSeries(ProgressReporter progressReporter)

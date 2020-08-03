@@ -1,7 +1,7 @@
 package org.anchoranalysis.core.cache;
 
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.functional.function.SupplierWithException;
+import org.anchoranalysis.core.functional.function.CheckedSupplier;
 
 /**
  * Base class for functions that memoize (cache) a call to an interface
@@ -10,12 +10,12 @@ import org.anchoranalysis.core.functional.function.SupplierWithException;
  * @param <T> result-type
  */
 @NoArgsConstructor
-public abstract class CacheCallBase<T> {
+public abstract class CachedSupplierBase<T> {
 
     private T result;
     private boolean evaluated = false;
 
-    public synchronized void assignFrom(CacheCallBase<T> source) {
+    public synchronized void assignFrom(CachedSupplierBase<T> source) {
         this.result = source.result;
         this.evaluated = source.evaluated;
     }
@@ -29,7 +29,7 @@ public abstract class CacheCallBase<T> {
         return evaluated;
     }
 
-    protected synchronized <E extends Exception> T call(SupplierWithException<T, E> supplier)
+    protected synchronized <E extends Exception> T call(CheckedSupplier<T, E> supplier)
             throws E {
 
         if (!evaluated) {
