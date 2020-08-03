@@ -79,17 +79,36 @@ public final class ObjectMaskStream {
     }
 
     /**
-     * Creates a new {@link ObjectCollection} after mapping the bounding-box on each object
+     * Creates a new {@link ObjectCollection} after mapping the bounding-box on each object (whose extent should remain unchanged)
+     * 
+     * <p>See {@link ObjectMask#mapBoundingBoxPreserveExtent(UnaryOperator)} for details on the mapping.
      *
      * <p>This is an <i>immutable</i> operation.
      *
      * @param mapFunc maps the bounding-box to a new bounding-box
      * @return a newly created object-collection
      */
-    public ObjectCollection mapBoundingBox(UnaryOperator<BoundingBox> mapFunc) {
+    public ObjectCollection mapBoundingBoxPreserveExtent(UnaryOperator<BoundingBox> mapFunc) {
         return map(object -> object.mapBoundingBoxPreserveExtent(mapFunc));
     }
-
+    
+    /**
+     * Creates a new {@link ObjectCollection} after mapping the bounding-box on each object (while maybe changing the extent).
+     *
+     * <p>See {@link ObjectMask#mapBoundingBoxChangeExtent} for details on the mapping.
+     *
+     * <p>This is an <i>immutable</i> operation.
+     * 
+     * <p>Precondition: the new bounding-box's extent must be greater than or equal to the existing
+     * extent in all dimensions.
+     * 
+     * @param mapFunc maps the bounding-box to a new bounding-box
+     * @return a newly created object-collection
+     */
+    public ObjectCollection mapBoundingBoxChangeExtent(BoundingBox boxToAssign) {
+        return map(object -> object.mapBoundingBoxChangeExtent(boxToAssign));
+    }
+    
     /**
      * Creates a new {@link List} after mapping each item to another type
      *

@@ -27,6 +27,8 @@
 package org.anchoranalysis.io.generator;
 
 import java.util.Optional;
+import java.util.stream.Stream;
+import org.anchoranalysis.core.functional.CheckedStream;
 import org.anchoranalysis.core.functional.function.CheckedFunction;
 import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.io.manifest.file.FileType;
@@ -35,6 +37,8 @@ import org.anchoranalysis.io.namestyle.OutputNameStyle;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
 
 /**
  * Allows us to call an IterableGenerator<S> as if it was an IterableGenerator<T>
@@ -43,20 +47,44 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
  * @param <S> source-type
  * @param <T> destination-type
  */
+@RequiredArgsConstructor(access=AccessLevel.PRIVATE)
 public class IterableGeneratorBridge<S, T> implements Generator, IterableGenerator<S> {
 
-    private S element;
-
-    private IterableGenerator<T> delegate;
-
-    private CheckedFunction<S, T, ?> bridge;
-
-    public IterableGeneratorBridge(
-            IterableGenerator<T> delegate, CheckedFunction<S, T, ?> bridge) {
-        super();
-        this.delegate = delegate;
-        this.bridge = bridge;
+    // START REQUIRED ARGUMENTS
+    /** The generator that accepts the destination type */
+    private final IterableGenerator<T> generator;
+    
+    /** Maps the source-type to one or more instances of the destination type */
+    private final CheckedFunction<S, Stream<T>, ?> bridge;
+    // END REQUIRED ARGUMENTS
+    
+    /**
+     * Creates a bridge that maps ONE-TO-ONE from source to destination (i.e. one call to the generator for each source item)
+     * 
+     * @param <S> source-type
+     * @param <T> destination-type
+     * @param generator the generator that accepts the destination type
+     * @param bridge maps a source-item to one destination-item
+     * @return a generator that accepts source-types as iterators, but actually calls a generator that uses destination types 
+     */
+    public static <S,T> IterableGeneratorBridge<S, T> createOneToOne(IterableGenerator<T> generator, CheckedFunction<S, T, ?> bridge) {
+        return new IterableGeneratorBridge<>(generator, item -> Stream.of( bridge.apply(item)) );
     }
+
+    /**
+     * Creates a bridge that maps ONE-TO-MANY from source to destination (i.e. one or more calls to the generator for each source item)
+     * 
+     * @param <S> source-type
+     * @param <T> destination-type
+     * @param generator the generator that accepts the destination type
+     * @param bridge maps a source-item to one or more destination-items
+     * @return a generator that accepts source-types as iterators, but actually calls a generator that uses destination types
+     */
+    public static <S,T> IterableGeneratorBridge<S, T> createOneToMany(IterableGenerator<T> generator, CheckedFunction<S, Stream<T>, ?> bridge) {
+        return new IterableGeneratorBridge<>(generator, bridge);
+    }
+    
+    private S element;
 
     @Override
     public S getIterableElement() {
@@ -67,7 +95,7 @@ public class IterableGeneratorBridge<S, T> implements Generator, IterableGenerat
     public void setIterableElement(S element) throws SetOperationFailedException {
         this.element = element;
         try {
-            delegate.setIterableElement(bridge.apply(element));
+            CheckedStream.forEach( bridge.apply(element), SetOperationFailedException.class, generator::setIterableElement);
         } catch (Exception e) {
             throw new SetOperationFailedException(e);
         }
@@ -75,23 +103,23 @@ public class IterableGeneratorBridge<S, T> implements Generator, IterableGenerat
 
     @Override
     public Generator getGenerator() {
-        return delegate.getGenerator();
+        return generator.getGenerator();
     }
 
     @Override
     public void start() throws OutputWriteFailedException {
-        delegate.start();
+        generator.start();
     }
 
     @Override
     public void end() throws OutputWriteFailedException {
-        delegate.end();
+        generator.end();
     }
 
     @Override
     public void write(OutputNameStyle outputNameStyle, BoundOutputManager outputManager)
             throws OutputWriteFailedException {
-        delegate.getGenerator().write(outputNameStyle, outputManager);
+        generator.getGenerator().write(outputNameStyle, outputManager);
     }
 
     @Override
@@ -100,11 +128,11 @@ public class IterableGeneratorBridge<S, T> implements Generator, IterableGenerat
             String index,
             BoundOutputManager outputManager)
             throws OutputWriteFailedException {
-        return delegate.getGenerator().write(outputNameStyle, index, outputManager);
+        return generator.getGenerator().write(outputNameStyle, index, outputManager);
     }
 
     @Override
     public Optional<FileType[]> getFileTypes(OutputWriteSettings outputWriteSettings) {
-        return delegate.getGenerator().getFileTypes(outputWriteSettings);
+        return generator.getGenerator().getFileTypes(outputWriteSettings);
     }
 }

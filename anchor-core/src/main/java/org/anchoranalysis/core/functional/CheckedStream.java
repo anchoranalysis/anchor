@@ -32,6 +32,7 @@ import java.util.stream.Stream;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
+import org.anchoranalysis.core.functional.function.CheckedConsumer;
 import org.anchoranalysis.core.functional.function.CheckedFunction;
 import org.anchoranalysis.core.functional.function.CheckedIntFunction;
 import org.anchoranalysis.core.functional.function.CheckedToIntFunction;
@@ -55,6 +56,36 @@ public class CheckedStream {
 
         public Throwable getException() {
             return exception;
+        }
+    }
+    
+    
+    /**
+     * Performs a forEach on a stream, but accepts a consumer that can throw a checked-exception
+     *
+     * <p>This uses some internal reflection trickery to suppress the checked exception, and then
+     * rethrow it.
+     *
+     * <p>As a side-effect, any runtime exceptions that are thrown during the function, will be
+     * rethrown wrapped inside a {@link ConvertedToRuntimeException}.
+     *
+     * @param  <T> type to consume
+     * @param  <E> exception that can be thrown by {code mapFunction}
+     * @param stream the stream to apply the map on
+     * @param throwableClass the class of {@code E}
+     * @param mapFunction the function to use for mapping
+     * @throws E if the exception is thrown during mapping
+     */
+    public static <T, E extends Exception> void forEach(
+            Stream<T> stream,
+            Class<? extends Exception> throwableClass,
+            CheckedConsumer<T, E> consumer)
+            throws E {
+        try {
+            stream.forEach(item -> suppressCheckedException(item, consumer));
+
+        } catch (ConvertedToRuntimeException e) {
+            throwException(e, throwableClass);
         }
     }
 
@@ -232,7 +263,7 @@ public class CheckedStream {
     }
 
     /**
-     * Catches any exceptions that occur around a function as it is executed and wraps them into a
+     * Catches any exceptions that occur around a {@link CheckedFunction} as it is executed and wraps them into a
      * run-time exception.
      *
      * @param <S> parameter-type for function
@@ -274,6 +305,19 @@ public class CheckedStream {
             int param, CheckedIntFunction<T, E> function) {
         try {
             return function.apply(param);
+        } catch (Exception exc) {
+            throw new ConvertedToRuntimeException(exc);
+        }
+    }
+    
+    /**
+     * Like @link(#suppressCheckedException) but instead accepts {@link CheckedConsumer}
+     * functions
+     */
+    private static <T, E extends Exception> void suppressCheckedException(
+            T param, CheckedConsumer<T, E> consumer) {
+        try {
+            consumer.accept(param);
         } catch (Exception exc) {
             throw new ConvertedToRuntimeException(exc);
         }

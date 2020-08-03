@@ -162,6 +162,22 @@ public class OptionalUtilities {
      *
      * @param <T> type in Optional
      * @param flag iff TRUE an populated optional is returned, otherwise empty().
+     * @param valueIfFlagTrue a positive value to use if fla gis true
+     * @return a filled or empty optional depending on flag
+     */
+    public static <T> Optional<T> createFromFlag(boolean flag, T valueIfFlagTrue) {
+        if (flag) {
+            return Optional.of(valueIfFlagTrue);
+        } else {
+            return Optional.empty();
+        }
+    }
+    
+    /**
+     * Creates an {@link Optional} from a boolean flag
+     *
+     * @param <T> type in Optional
+     * @param flag iff TRUE an populated optional is returned, otherwise empty().
      * @param valueIfFlagTrue used to generate a positive value
      * @return a filled or empty optional depending on flag
      */

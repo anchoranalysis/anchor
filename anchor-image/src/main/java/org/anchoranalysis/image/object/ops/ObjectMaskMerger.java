@@ -28,6 +28,7 @@ package org.anchoranalysis.image.object.ops;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import java.util.stream.Stream;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.core.geometry.Point3i;
@@ -76,18 +77,27 @@ public class ObjectMaskMerger {
     /**
      * Merges all the bounding boxes of a collection of objects.
      *
-     * @param objects objects whose bounding-boxes are merged
+     * @param objects a stream of objects whose bounding-boxes are to be merged
      * @return a bounding-box just large enough to include all the bounding-boxes of the objects
-     * @throws OperationFailedException if the {@code objects} parameter is empty
+     * @throws OperationFailedException if the object-collection is empty
      */
-    public static BoundingBox mergeBoundingBoxes(ObjectCollection objects)
-            throws OperationFailedException {
-
+    public static BoundingBox mergeBoundingBoxes(ObjectCollection objects) throws OperationFailedException {
+        
         if (objects.isEmpty()) {
-            throw new OperationFailedException("At least one object must exist in the collection");
+            throw new OperationFailedException("The object-collection is empty, at least one object is required for this operation");
         }
-
-        return objects.streamStandardJava() // NOSONAR
+        
+        return mergeBoundingBoxes(objects.streamStandardJava());
+    }
+    
+    /**
+     * Merges all the bounding boxes of a stream of objects.
+     *
+     * @param objects a stream of objects whose bounding-boxes are to be merged
+     * @return a bounding-box just large enough to include all the bounding-boxes of the objects
+     */
+    public static BoundingBox mergeBoundingBoxes(Stream<ObjectMask> objects) {
+        return objects // NOSONAR
                 .map(ObjectMask::getBoundingBox)
                 .reduce( // NOSONAR
                         (boundingBox, other) -> boundingBox.union().with(other))
@@ -112,7 +122,7 @@ public class ObjectMaskMerger {
             return objects.get(0).duplicate(); // So we are always guaranteed to have a new object
         }
 
-        BoundingBox bbox = mergeBoundingBoxes(objects);
+        BoundingBox bbox = mergeBoundingBoxes(objects.streamStandardJava());
 
         ObjectMask objectOut =
                 new ObjectMask(bbox, VoxelBoxFactory.getByte().create(bbox.extent()));

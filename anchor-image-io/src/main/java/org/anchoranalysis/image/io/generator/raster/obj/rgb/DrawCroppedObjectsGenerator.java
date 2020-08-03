@@ -34,7 +34,6 @@ import org.anchoranalysis.anchor.overlay.bean.DrawObject;
 import org.anchoranalysis.anchor.overlay.writer.ObjectDrawAttributes;
 import org.anchoranalysis.core.color.ColorIndex;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.size.Padding;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
@@ -68,28 +67,24 @@ public class DrawCroppedObjectsGenerator extends ObjectsOnRGBGenerator {
     @Override
     protected RGBStack generateBackground(Either<ImageDimensions, DisplayStack> background)
             throws CreateException {
-        try {
-            Extent extent =
-                    background.fold(Functions.identity(), DisplayStack::getDimensions).getExtent();
+        Extent extent =
+                background.fold(Functions.identity(), DisplayStack::getDimensions).getExtent();
 
-            ObjectCollection objects = getIterableElement().withoutProperties();
+        ObjectCollection objects = getIterableElement().withoutProperties();
 
-            if (objects.isEmpty()) {
-                throw new CreateException("This generator expects at least one mask to be present");
-            }
-
-            // Get a bounding box that contains all the objects
-            this.bbox = ObjectMaskMerger.mergeBoundingBoxes(objects);
-
-            bbox = growBBBox(bbox, extent);
-
-            // Extract the relevant piece of background
-            return background.fold(
-                    dimensions -> createEmptyStackFor(new ImageDimensions(bbox.extent())),
-                    stack -> ConvertDisplayStackToRGB.convertCropped(stack, bbox));
-        } catch (OperationFailedException e) {
-            throw new CreateException(e);
+        if (objects.isEmpty()) {
+            throw new CreateException("This generator expects at least one object to be present");
         }
+
+        // Get a bounding box that contains all the objects
+        this.bbox = ObjectMaskMerger.mergeBoundingBoxes(objects.streamStandardJava());
+
+        bbox = growBBBox(bbox, extent);
+
+        // Extract the relevant piece of background
+        return background.fold(
+                dimensions -> createEmptyStackFor(new ImageDimensions(bbox.extent())),
+                stack -> ConvertDisplayStackToRGB.convertCropped(stack, bbox));
     }
 
     @Override

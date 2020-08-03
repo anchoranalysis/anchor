@@ -375,7 +375,7 @@ public class ObjectMask {
                 new ObjectMask(bboxIntersect.get(), new BinaryVoxelBoxByte(vbMaskOut, bvOut));
 
         // If there no pixels left that haven't been set, then the intersection mask is zero
-        return OptionalUtilities.createFromFlag(object.hasPixelsGreaterThan(0), () -> object);
+        return OptionalUtilities.createFromFlag(object.hasPixelsGreaterThan(0), object);
     }
 
     /**
@@ -564,7 +564,7 @@ public class ObjectMask {
      * Applies a function to map the bounding-box to a new-value (whose extent should be unchanged
      * in value)
      *
-     * <p>This is an almost IMMUTABLE operation: the existing voxel-buffers are reused in the new
+     * <p>This is an almost <i>immutable</i> operation: the existing voxel-buffers are reused in the new
      * object.
      *
      * @param mapFunc map function to perform mapping of bounding-box
@@ -592,7 +592,7 @@ public class ObjectMask {
      * Applies a function to map the bounding-box to a new-value (whose extent is expected to change
      * in value)
      *
-     * <p>This is a almost IMMUTABLE operation, and NEW voxel-buffers are usually created for the
+     * <p>This is a almost <i>immutable</i> operation, and NEW voxel-buffers are usually created for the
      * new object, but not if the bounding-box or its extent need no change.
      *
      * <p>Precondition: the new bounding-box's extent must be greater than or equal to the existing
