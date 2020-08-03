@@ -28,7 +28,6 @@ package org.anchoranalysis.image.io.generator.raster;
 
 import java.util.Optional;
 import lombok.AllArgsConstructor;
-import org.anchoranalysis.core.functional.function.CheckedSupplier;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.generator.IterableObjectGenerator;
 import org.anchoranalysis.io.generator.ObjectGenerator;
@@ -37,10 +36,9 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 @AllArgsConstructor
 public class StackOperationGenerator extends RasterGenerator
-        implements IterableObjectGenerator<
-                CheckedSupplier<Stack, OutputWriteFailedException>, Stack> {
+        implements IterableObjectGenerator<StackToWriteSupplier, Stack> {
 
-    private CheckedSupplier<Stack, OutputWriteFailedException> stackIn;
+    private StackToWriteSupplier element;
     private boolean padIfNec;
     private String manifestFunction;
 
@@ -52,8 +50,7 @@ public class StackOperationGenerator extends RasterGenerator
 
     @Override
     public Stack generate() throws OutputWriteFailedException {
-        assert (stackIn != null);
-        return StackGenerator.generateStack(stackIn.get(), padIfNec);
+        return StackGenerator.generateStack(element.get(), padIfNec);
     }
 
     @Override
@@ -67,19 +64,19 @@ public class StackOperationGenerator extends RasterGenerator
     }
 
     @Override
-    public CheckedSupplier<Stack, OutputWriteFailedException> getIterableElement() {
-        return stackIn;
+    public StackToWriteSupplier getIterableElement() {
+        return element;
     }
 
     @Override
     public void setIterableElement(
-            CheckedSupplier<Stack, OutputWriteFailedException> element) {
-        this.stackIn = element;
+            StackToWriteSupplier element) {
+        this.element = element;
     }
 
     @Override
     public boolean isRGB() throws OutputWriteFailedException {
-        return stackIn.get().getNumberChannels() == 3
-                || (stackIn.get().getNumberChannels() == 2 && padIfNec);
+        return element.get().getNumberChannels() == 3
+                || (element.get().getNumberChannels() == 2 && padIfNec);
     }
 }

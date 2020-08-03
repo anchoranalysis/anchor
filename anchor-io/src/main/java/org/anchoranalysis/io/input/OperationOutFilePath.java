@@ -31,16 +31,14 @@ import java.util.Optional;
 import java.util.function.Supplier;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.cache.CachedSupplier;
-import org.anchoranalysis.core.functional.function.CheckedSupplier;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
 import org.anchoranalysis.io.error.AnchorIOException;
 
 @NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class OperationOutFilePath {
     
-    public static CheckedSupplier<Path, AnchorIOException> cachedOutPathFor(FilePathGenerator outputPathGenerator, Supplier<Optional<Path>> pathInput, boolean debugMode) {
-        return CachedSupplier.cache(
+    public static PathSupplier cachedOutPathFor(FilePathGenerator outputPathGenerator, Supplier<Optional<Path>> pathInput, boolean debugMode) {
+        return PathSupplier.cache(
             () -> outPathFor(outputPathGenerator, pathInput, debugMode)
         );
     }
