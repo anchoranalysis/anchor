@@ -31,32 +31,30 @@ import org.anchoranalysis.core.index.container.BoundedIndexContainer;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
 import org.anchoranalysis.io.manifest.folder.SequencedFolder;
 import org.anchoranalysis.io.manifest.sequencetype.SequenceType;
+import lombok.AllArgsConstructor;
 
+@AllArgsConstructor
 public abstract class DeserializeFromFolder<T> implements HistoryCreator<T> {
 
     private SequencedFolder folder;
-
-    public DeserializeFromFolder(SequencedFolder folder) {
-        this.folder = folder;
-    }
 
     @Override
     public LoadContainer<T> create() throws DeserializationFailedException {
 
         SequenceType sequenceType = folder.getAssociatedSequence();
-        GetterFromIndex<T> cntr = createCtnr(folder);
+        GetterFromIndex<T> container = createContainer(folder);
 
         assert (sequenceType != null);
 
         LoadContainer<T> history = new LoadContainer<>();
 
         BoundedIndexContainer<T> boundedContainer =
-                new BoundsFromSequenceType<>(cntr, sequenceType);
+                new BoundsFromSequenceType<>(container, sequenceType);
 
-        history.setCntr(boundedContainer);
+        history.setContainer(boundedContainer);
         history.setExpensiveLoad(false);
         return history;
     }
 
-    protected abstract GetterFromIndex<T> createCtnr(SequencedFolder folder);
+    protected abstract GetterFromIndex<T> createContainer(SequencedFolder folder);
 }

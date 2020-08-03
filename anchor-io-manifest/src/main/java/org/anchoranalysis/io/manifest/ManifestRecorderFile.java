@@ -38,32 +38,34 @@ import org.anchoranalysis.io.manifest.deserializer.ManifestDeserializer;
 public class ManifestRecorderFile {
 
     private final File file;
-    private final CheckedSupplier<ManifestRecorder, OperationFailedException> operation;
+    private final CheckedSupplier<ManifestRecorder, OperationFailedException> memoized;
 
     public ManifestRecorderFile(File file, ManifestDeserializer manifestDeserializer) {
         this.file = file;
-        this.operation =
+        this.memoized =
                 CachedSupplier.cache(
-                        () -> {
-                            try {
-                                if (!file.exists()) {
-                                    throw new OperationFailedException(
-                                            String.format(
-                                                    "File %s cannot be found", file.getPath()));
-                                }
-                                return manifestDeserializer.deserializeManifest(file);
-                            } catch (DeserializationFailedException e) {
-                                throw new OperationFailedException(e);
-                            }
-                        });
+                        () -> getInternal(manifestDeserializer));
     }
 
     public ManifestRecorder get() throws OperationFailedException {
-        return operation.get();
+        return memoized.get();
     }
 
     public Path getRootPath() {
         // Returns the path of the root of the manifest file (or what it will become)
         return Paths.get(file.getParent());
+    }
+    
+    private ManifestRecorder getInternal(ManifestDeserializer manifestDeserializer) throws OperationFailedException {
+        try {
+            if (!file.exists()) {
+                throw new OperationFailedException(
+                        String.format(
+                                "File %s cannot be found", file.getPath()));
+            }
+            return manifestDeserializer.deserializeManifest(file);
+        } catch (DeserializationFailedException e) {
+            throw new OperationFailedException(e);
+        }
     }
 }

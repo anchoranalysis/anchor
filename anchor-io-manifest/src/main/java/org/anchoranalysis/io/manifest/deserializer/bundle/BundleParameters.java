@@ -28,7 +28,9 @@ package org.anchoranalysis.io.manifest.deserializer.bundle;
 
 import java.io.Serializable;
 import org.anchoranalysis.io.manifest.sequencetype.SequenceType;
+import lombok.Data;
 
+@Data
 public class BundleParameters implements Serializable {
 
     /** */
@@ -36,20 +38,4 @@ public class BundleParameters implements Serializable {
 
     private int bundleSize;
     private SequenceType sequenceType;
-
-    public int getBundleSize() {
-        return bundleSize;
-    }
-
-    public void setBundleSize(int bundleSize) {
-        this.bundleSize = bundleSize;
-    }
-
-    public SequenceType getSequenceType() {
-        return sequenceType;
-    }
-
-    public void setSequenceType(SequenceType sequenceType) {
-        this.sequenceType = sequenceType;
-    }
 }

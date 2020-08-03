@@ -41,7 +41,7 @@ public class DeserializeFromFolderSimple<T> extends DeserializeFromFolder<T> {
     }
 
     @Override
-    protected GetterFromIndex<T> createCtnr(SequencedFolder folder) {
+    protected GetterFromIndex<T> createContainer(SequencedFolder folder) {
         return new SequencedFolderDeserializer<>(folder, deserializer);
     }
 }
