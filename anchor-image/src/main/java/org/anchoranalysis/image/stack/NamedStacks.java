@@ -31,7 +31,6 @@ import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.UnaryOperator;
-import lombok.AllArgsConstructor;
 import org.anchoranalysis.bean.StringSet;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.functional.OptionalUtilities;
@@ -40,7 +39,6 @@ import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
 import org.anchoranalysis.core.name.store.StoreSupplier;
 import org.anchoranalysis.core.progress.CheckedProgressingSupplier;
-import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
 import org.anchoranalysis.image.extent.ImageDimensions;
 
@@ -137,16 +135,13 @@ public class NamedStacks implements NamedProviderStore<Stack> {
     }
 
     public void addFrom(NamedProvider<Stack> src) {
-
-        for (String name : src.keys()) {
-            addImageStack(name, new OperationStack(src, name));
-        }
+        addFromWithPrefix(src,"");
     }
 
-    public void addFromWithPrefix(final NamedProvider<Stack> src, String prefix) {
+    public void addFromWithPrefix(NamedProvider<Stack> src, String prefix) {
 
-        for (final String name : src.keys()) {
-            addImageStack(prefix + name, new OperationStack(src, name));
+        for (String name : src.keys()) {
+            addImageStack(prefix + name, progressReporter -> stackFromProvider(src,name) );
         }
     }
 
@@ -166,21 +161,12 @@ public class NamedStacks implements NamedProviderStore<Stack> {
         }
         return out;
     }
-
-    @AllArgsConstructor
-    private static class OperationStack
-            implements CheckedProgressingSupplier<Stack, OperationFailedException> {
-
-        private NamedProvider<Stack> src;
-        private String name;
-
-        @Override
-        public Stack get(ProgressReporter progressReporter) throws OperationFailedException {
-            try {
-                return src.getException(name);
-            } catch (NamedProviderGetException e) {
-                throw new OperationFailedException(e.summarize());
-            }
+    
+    private Stack stackFromProvider(NamedProvider<Stack> src, String name) throws OperationFailedException {
+        try {
+            return src.getException(name);
+        } catch (NamedProviderGetException e) {
+            throw new OperationFailedException(e.summarize());
         }
     }
 }
