@@ -361,7 +361,7 @@ public class ObjectMask {
 
         // Then we set any pixels NOT on either mask to OFF..... leaving only the intersecting
         // pixels as ON in the output buffer
-        setPixelsTwoMasks(
+        setVoxelsTwoMasks(
                 vbMaskOut,
                 getVoxelBox(),
                 other.getVoxelBox(),
@@ -376,38 +376,6 @@ public class ObjectMask {
 
         // If there no pixels left that haven't been set, then the intersection mask is zero
         return OptionalUtilities.createFromFlag(object.hasPixelsGreaterThan(0), object);
-    }
-
-    /**
-     * Sets pixels in a voxel box that match either of two masks
-     *
-     * @param vbMaskOut voxel-box to write to
-     * @param voxelBox1 voxel-box for first mask
-     * @param voxelBox2 voxel-box for second mask
-     * @param bboxSrcMask bounding-box for first mask
-     * @param bboxOthrMask bounding-box for second mask
-     * @param value value to write
-     * @param maskMatchValue mask-value to match against for first mask
-     * @param maskMatchValue mask-value to match against for second mask
-     * @return the total number of pixels written
-     */
-    private static int setPixelsTwoMasks( // NOSONAR
-            VoxelBox<ByteBuffer> vbMaskOut,
-            VoxelBox<ByteBuffer> voxelBox1,
-            VoxelBox<ByteBuffer> voxelBox2,
-            BoundingBox bboxSrcMask,
-            BoundingBox bboxOthrMask,
-            int value,
-            byte maskMatchValue1,
-            byte maskMatchValue2) {
-        BoundingBox allOut = new BoundingBox(vbMaskOut.extent());
-        int cntSetFirst =
-                vbMaskOut.setPixelsCheckMask(
-                        allOut, voxelBox1, bboxSrcMask, value, maskMatchValue1);
-        int cntSetSecond =
-                vbMaskOut.setPixelsCheckMask(
-                        allOut, voxelBox2, bboxOthrMask, value, maskMatchValue2);
-        return cntSetFirst + cntSetSecond;
     }
 
     public boolean contains(Point3i point) {
@@ -653,16 +621,6 @@ public class ObjectMask {
         setVoxel(pointGlobal, bv.getOffInt());
     }
 
-    private void setVoxel(Point3i pointGlobal, int val) {
-        Point3i cornerMin = delegate.getBoundingBox().cornerMin();
-        delegate.getVoxelBox()
-                .setVoxel(
-                        pointGlobal.getX() - cornerMin.getX(),
-                        pointGlobal.getX() - cornerMin.getY(),
-                        pointGlobal.getX() - cornerMin.getZ(),
-                        val);
-    }
-
     /**
      * A string representation of the object-mask showing:
      *
@@ -676,5 +634,47 @@ public class ObjectMask {
         return String.format(
                 "Obj%s(cog=%s,numPixels=%d)",
                 super.hashCode(), centerOfGravity().toString(), numberVoxelsOn());
+    }
+    
+    private void setVoxel(Point3i pointGlobal, int val) {
+        Point3i cornerMin = delegate.getBoundingBox().cornerMin();
+        delegate.getVoxelBox()
+                .setVoxel(
+                        pointGlobal.getX() - cornerMin.getX(),
+                        pointGlobal.getX() - cornerMin.getY(),
+                        pointGlobal.getX() - cornerMin.getZ(),
+                        val);
+    }
+    
+    /**
+     * Sets voxels in a voxel box that match either of two masks
+     *
+     * @param vbMaskOut voxel-box to write to
+     * @param voxelBox1 voxel-box for first mask
+     * @param voxelBox2 voxel-box for second mask
+     * @param bboxSrcMask bounding-box for first mask
+     * @param bboxOthrMask bounding-box for second mask
+     * @param value value to write
+     * @param maskMatchValue mask-value to match against for first mask
+     * @param maskMatchValue mask-value to match against for second mask
+     * @return the total number of pixels written
+     */
+    private static int setVoxelsTwoMasks( // NOSONAR
+            VoxelBox<ByteBuffer> vbMaskOut,
+            VoxelBox<ByteBuffer> voxelBox1,
+            VoxelBox<ByteBuffer> voxelBox2,
+            BoundingBox bboxSrcMask,
+            BoundingBox bboxOthrMask,
+            int value,
+            byte maskMatchValue1,
+            byte maskMatchValue2) {
+        BoundingBox allOut = new BoundingBox(vbMaskOut.extent());
+        int cntSetFirst =
+                vbMaskOut.setPixelsCheckMask(
+                        allOut, voxelBox1, bboxSrcMask, value, maskMatchValue1);
+        int cntSetSecond =
+                vbMaskOut.setPixelsCheckMask(
+                        allOut, voxelBox2, bboxOthrMask, value, maskMatchValue2);
+        return cntSetFirst + cntSetSecond;
     }
 }
