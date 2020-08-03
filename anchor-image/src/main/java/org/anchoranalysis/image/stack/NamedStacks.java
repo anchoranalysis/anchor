@@ -42,8 +42,6 @@ import org.anchoranalysis.core.progress.CheckedProgressingSupplier;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
 import org.anchoranalysis.image.extent.ImageDimensions;
 
-//
-
 /**
  * A set of image-stacks each with a name
  *
@@ -51,11 +49,7 @@ import org.anchoranalysis.image.extent.ImageDimensions;
  */
 public class NamedStacks implements NamedProviderStore<Stack> {
 
-    private HashMap<String, CheckedProgressingSupplier<Stack, OperationFailedException>> map;
-
-    public NamedStacks() {
-        map = new HashMap<>();
-    }
+    private HashMap<String, CheckedProgressingSupplier<Stack, OperationFailedException>> map = new HashMap<>();
 
     public Optional<CheckedProgressingSupplier<Stack, OperationFailedException>> getAsOperation(
             String identifier) {
@@ -116,16 +110,16 @@ public class NamedStacks implements NamedProviderStore<Stack> {
 
         try {
             for (String key : keys()) {
-                Stack img = getException(key);
+                Stack stack = getException(key);
 
-                if (!img.getDimensions().equals(dimensions)) {
+                if (!stack.getDimensions().equals(dimensions)) {
                     throw new OperationFailedException(
                             String.format(
                                     "The image-dimensions of %s (%s) does not match what is expected (%s)",
-                                    key, img.getDimensions(), dimensions));
+                                    key, stack.getDimensions(), dimensions));
                 }
 
-                out.add(key, () -> stackOperation.apply(img) );
+                out.add(key, () -> stackOperation.apply(stack) );
             }
             return out;
 
@@ -134,14 +128,20 @@ public class NamedStacks implements NamedProviderStore<Stack> {
         }
     }
 
-    public void addFrom(NamedProvider<Stack> src) {
-        addFromWithPrefix(src,"");
+    public void addFrom(NamedProvider<Stack> source) {
+        addFromWithPrefix(source,"");
     }
 
-    public void addFromWithPrefix(NamedProvider<Stack> src, String prefix) {
+    public void addFromWithPrefix(NamedProvider<Stack> source, String prefix) {
 
-        for (String name : src.keys()) {
-            addImageStack(prefix + name, progressReporter -> stackFromProvider(src,name) );
+        for (String name : source.keys()) {
+            addImageStack(prefix + name, progressReporter -> {
+                try {
+                    return source.getException(name);
+                } catch (NamedProviderGetException e) {
+                    throw new OperationFailedException(e.summarize());
+                }
+            });
         }
     }
 
@@ -160,13 +160,5 @@ public class NamedStacks implements NamedProviderStore<Stack> {
             }
         }
         return out;
-    }
-    
-    private Stack stackFromProvider(NamedProvider<Stack> src, String name) throws OperationFailedException {
-        try {
-            return src.getException(name);
-        } catch (NamedProviderGetException e) {
-            throw new OperationFailedException(e.summarize());
-        }
     }
 }
