@@ -37,7 +37,7 @@ import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.chnl.ChannelGetter;
-import org.anchoranalysis.image.stack.NamedStacks;
+import org.anchoranalysis.image.stack.NamedStacksSet;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.TimeSequence;
 
@@ -63,7 +63,7 @@ public interface NamedChannelsForSeries extends ChannelGetter {
 
     ImageDimensions dimensions() throws RasterIOException;
 
-    void addAsSeparateChannels(NamedStacks stacks, int timeIndex, ProgressReporter progressReporter)
+    void addAsSeparateChannels(NamedStacksSet stacks, int timeIndex, ProgressReporter progressReporter)
             throws OperationFailedException;
 
     void addAsSeparateChannels(NamedProviderStore<TimeSequence> stacks, int timeIndex)

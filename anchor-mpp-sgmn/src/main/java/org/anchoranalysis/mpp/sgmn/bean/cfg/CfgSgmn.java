@@ -37,7 +37,7 @@ import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.experiment.identifiers.StackIdentifiers;
 import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.stack.NamedStacks;
+import org.anchoranalysis.image.stack.NamedStacksSet;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 
 public abstract class CfgSgmn extends AnchorBean<CfgSgmn> {
@@ -50,7 +50,7 @@ public abstract class CfgSgmn extends AnchorBean<CfgSgmn> {
     public abstract ExperimentState createExperimentState();
 
     public abstract Cfg sgmn(
-            NamedStacks stacks,
+            NamedStacksSet stacks,
             NamedProvider<ObjectCollection> objects,
             Optional<KeyValueParams> keyValueParams,
             BoundIOContext context)

@@ -32,14 +32,12 @@ import org.anchoranalysis.core.name.provider.NamedProvider;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.TimeSequence;
+import lombok.AllArgsConstructor;
 
+@AllArgsConstructor
 public class WrapStackAsTimeSequence implements NamedProvider<TimeSequence> {
 
     private NamedProvider<Stack> namedProvider;
-
-    public WrapStackAsTimeSequence(NamedProvider<Stack> namedProvider) {
-        this.namedProvider = namedProvider;
-    }
 
     @Override
     public Optional<TimeSequence> getOptional(String key) throws NamedProviderGetException {

@@ -32,13 +32,13 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import org.anchoranalysis.annotation.io.bean.strategy.AnnotatorStrategy;
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
-import org.anchoranalysis.core.name.provider.NamedProvider;
-import org.anchoranalysis.core.progress.CachedProgressingSupplier;
-import org.anchoranalysis.core.progress.CheckedProgressingSupplier;
+import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
-import org.anchoranalysis.image.stack.Stack;
+import org.anchoranalysis.image.stack.NamedStacksSupplier;
+import org.anchoranalysis.image.stack.NamedStacksSet;
+import org.anchoranalysis.image.stack.wrap.WrapStackAsTimeSequenceStore;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.InputFromManager;
 
@@ -100,7 +100,14 @@ public class AnnotationWithStrategy<T extends AnnotatorStrategy> implements Inpu
         input.close(errorReporter);
     }
 
-    public CheckedProgressingSupplier<NamedProvider<Stack>, CreateException> stacks() {
-        return CachedProgressingSupplier.cache(new OperationCreateStackCollection(input));
+    public NamedStacksSupplier stacks() {
+        return NamedStacksSupplier.cache(this::buildStacks);
+    }
+    
+    private NamedStacksSet buildStacks(ProgressReporter progressReporter) throws OperationFailedException {
+        NamedStacksSet stackCollection = new NamedStacksSet();
+        input.addToStoreInferNames(
+                new WrapStackAsTimeSequenceStore(stackCollection, 0), 0, progressReporter);
+        return stackCollection;
     }
 }

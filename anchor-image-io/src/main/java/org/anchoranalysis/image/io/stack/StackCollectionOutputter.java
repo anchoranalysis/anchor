@@ -32,10 +32,9 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.name.provider.NamedProvider;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
-import org.anchoranalysis.core.progress.CachedProgressingSupplier;
-import org.anchoranalysis.core.progress.CheckedProgressingSupplier;
+import org.anchoranalysis.core.name.store.StoreSupplier;
 import org.anchoranalysis.image.io.generator.raster.StackGenerator;
-import org.anchoranalysis.image.stack.NamedStacks;
+import org.anchoranalysis.image.stack.NamedStacksSet;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.generator.collection.IterableGeneratorOutputHelper;
 import org.anchoranalysis.io.output.bean.allowed.OutputAllowed;
@@ -96,7 +95,7 @@ public class StackCollectionOutputter {
     }
 
     public static void output(
-            NamedStacks namedCollection,
+            NamedStacksSet namedCollection,
             BoundOutputManager outputManager,
             String outputName,
             String prefix,
@@ -114,7 +113,7 @@ public class StackCollectionOutputter {
     }
 
     private static void outputWithException(
-            NamedStacks namedCollection,
+            NamedStacksSet namedCollection,
             BoundOutputManager outputManager,
             String outputName,
             String suffix,
@@ -130,9 +129,9 @@ public class StackCollectionOutputter {
                 suppressSubfoldersIn);
     }
 
-    public static NamedStacks subset(NamedProvider<Stack> stackCollection, OutputAllowed oa) {
+    public static NamedStacksSet subset(NamedProvider<Stack> stackCollection, OutputAllowed oa) {
 
-        NamedStacks out = new NamedStacks();
+        NamedStacksSet out = new NamedStacksSet();
 
         for (String name : stackCollection.keys()) {
 
@@ -144,10 +143,9 @@ public class StackCollectionOutputter {
         return out;
     }
 
-    private static CheckedProgressingSupplier<Stack, OperationFailedException> extractStackCached(
-            NamedProvider<Stack> stackCollection, String name) {
-        return CachedProgressingSupplier.cache(
-                pr -> {
+    private static StoreSupplier<Stack> extractStackCached(NamedProvider<Stack> stackCollection, String name) {
+        return StoreSupplier.cache(
+                () -> {
                     try {
                         return stackCollection.getException(name);
                     } catch (NamedProviderGetException e) {
@@ -161,7 +159,7 @@ public class StackCollectionOutputter {
         return new StackGenerator(true, manifestFunction);
     }
 
-    private static NamedStacks stackSubset(
+    private static NamedStacksSet stackSubset(
             NamedProvider<Stack> stacks,
             String secondLevelOutputKey,
             BoundOutputManagerRouteErrors outputManager) {

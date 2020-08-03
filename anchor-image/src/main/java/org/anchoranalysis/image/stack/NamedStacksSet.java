@@ -38,8 +38,6 @@ import org.anchoranalysis.core.name.provider.NamedProvider;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
 import org.anchoranalysis.core.name.store.StoreSupplier;
-import org.anchoranalysis.core.progress.CheckedProgressingSupplier;
-import org.anchoranalysis.core.progress.ProgressReporterNull;
 import org.anchoranalysis.image.extent.ImageDimensions;
 
 /**
@@ -47,21 +45,19 @@ import org.anchoranalysis.image.extent.ImageDimensions;
  *
  * @author Owen Feehan
  */
-public class NamedStacks implements NamedProviderStore<Stack> {
+public class NamedStacksSet implements NamedProviderStore<Stack> {
 
-    private HashMap<String, CheckedProgressingSupplier<Stack, OperationFailedException>> map = new HashMap<>();
+    private HashMap<String, StoreSupplier<Stack>> map = new HashMap<>();
 
-    public Optional<CheckedProgressingSupplier<Stack, OperationFailedException>> getAsOperation(
-            String identifier) {
+    public Optional<StoreSupplier<Stack>> getAsSupplier(String identifier) {
         return Optional.ofNullable(map.get(identifier));
     }
 
     @Override
     public Optional<Stack> getOptional(String identifier) throws NamedProviderGetException {
-        Optional<CheckedProgressingSupplier<Stack, OperationFailedException>> ret =
-                getAsOperation(identifier);
+        Optional<StoreSupplier<Stack>> ret = getAsSupplier(identifier);
         try {
-            return OptionalUtilities.map(ret, op -> op.get(ProgressReporterNull.get()));
+            return OptionalUtilities.map(ret, StoreSupplier::get);
         } catch (OperationFailedException e) {
             throw NamedProviderGetException.wrap(identifier, e);
         }
@@ -73,28 +69,29 @@ public class NamedStacks implements NamedProviderStore<Stack> {
     }
 
     public void addImageStack(String identifier, Stack inputImage) {
-        map.put(identifier, progresssReporter -> inputImage);
+        map.put(identifier, () -> inputImage);
     }
 
+    /** TODO remove in favour of add */
     public void addImageStack(
             String identifier,
-            CheckedProgressingSupplier<Stack, OperationFailedException> inputImage) {
+            StoreSupplier<Stack> inputImage) {
         map.put(identifier, inputImage);
     }
 
     @Override
-    public void add(String name, StoreSupplier<Stack> getter) throws OperationFailedException {
-        map.put(name, progressReporter -> getter.get());
+    public void add(String name, StoreSupplier<Stack> supplier) {
+        map.put(name, supplier);
     }
 
-    public NamedStacks maxIntensityProj() throws OperationFailedException {
+    public NamedStacksSet maxIntensityProj() throws OperationFailedException {
 
-        NamedStacks out = new NamedStacks();
+        NamedStacksSet out = new NamedStacksSet();
 
-        for (Entry<String, CheckedProgressingSupplier<Stack, OperationFailedException>> entry :
+        for (Entry<String, StoreSupplier<Stack>> entry :
                 map.entrySet()) {
             Stack projection =
-                    entry.getValue().get(ProgressReporterNull.get()).maximumIntensityProjection();
+                    entry.getValue().get().maximumIntensityProjection();
             out.addImageStack(entry.getKey(), projection);
         }
 
@@ -102,11 +99,11 @@ public class NamedStacks implements NamedProviderStore<Stack> {
     }
 
     /** Applies an operation on each stack in the collection and returns a new derived collection */
-    public NamedStacks applyOperation(
+    public NamedStacksSet applyOperation(
             ImageDimensions dimensions, UnaryOperator<Stack> stackOperation)
             throws OperationFailedException {
 
-        NamedStacks out = new NamedStacks();
+        NamedStacksSet out = new NamedStacksSet();
 
         try {
             for (String key : keys()) {
@@ -135,7 +132,7 @@ public class NamedStacks implements NamedProviderStore<Stack> {
     public void addFromWithPrefix(NamedProvider<Stack> source, String prefix) {
 
         for (String name : source.keys()) {
-            addImageStack(prefix + name, progressReporter -> {
+            addImageStack(prefix + name, () -> {
                 try {
                     return source.getException(name);
                 } catch (NamedProviderGetException e) {
@@ -150,10 +147,10 @@ public class NamedStacks implements NamedProviderStore<Stack> {
      *
      * @return the new collection
      */
-    public NamedStacks subset(StringSet keyMustBeIn) {
-        NamedStacks out = new NamedStacks();
+    public NamedStacksSet subset(StringSet keyMustBeIn) {
+        NamedStacksSet out = new NamedStacksSet();
 
-        for (Entry<String, CheckedProgressingSupplier<Stack, OperationFailedException>> entry :
+        for (Entry<String, StoreSupplier<Stack>> entry :
                 map.entrySet()) {
             if (keyMustBeIn.contains(entry.getKey())) {
                 out.map.put(entry.getKey(), entry.getValue());
