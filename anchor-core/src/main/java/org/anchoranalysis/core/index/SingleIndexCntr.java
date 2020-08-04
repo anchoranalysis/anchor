@@ -34,7 +34,7 @@ import lombok.EqualsAndHashCode;
  * @author Owen Feehan
  */
 @EqualsAndHashCode
-public abstract class SingleIndexCntr implements IIndexGetter, Comparable<IIndexGetter> {
+public abstract class SingleIndexCntr implements IndexGetter, Comparable<IndexGetter> {
 
     private final int index;
 
@@ -49,7 +49,7 @@ public abstract class SingleIndexCntr implements IIndexGetter, Comparable<IIndex
     }
 
     @Override
-    public int compareTo(IIndexGetter arg0) {
+    public int compareTo(IndexGetter arg0) {
         if (this.getIndex() < arg0.getIndex()) {
             return -1;
         } else if (this.getIndex() > arg0.getIndex()) {

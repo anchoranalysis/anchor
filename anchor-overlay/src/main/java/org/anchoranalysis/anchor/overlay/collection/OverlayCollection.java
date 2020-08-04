@@ -84,12 +84,12 @@ public class OverlayCollection implements Iterable<Overlay> {
         return set;
     }
 
-    public List<BoundingBox> bboxList(DrawOverlay maskWriter, ImageDimensions dimensions) {
+    public List<BoundingBox> bboxList(DrawOverlay drawOverlay, ImageDimensions dimensions) {
 
         List<BoundingBox> out = new ArrayList<>();
 
         for (Overlay ol : this) {
-            BoundingBox bbox = ol.bbox(maskWriter, dimensions);
+            BoundingBox bbox = ol.bbox(drawOverlay, dimensions);
             out.add(bbox);
         }
         return out;

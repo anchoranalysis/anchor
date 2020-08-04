@@ -26,6 +26,9 @@
 
 package org.anchoranalysis.core.progress;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /**
  * Placeholder that doesn't measure any progress
  *
@@ -34,11 +37,10 @@ package org.anchoranalysis.core.progress;
  *
  * @author Owen Feehan
  */
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class ProgressReporterNull implements ProgressReporter {
 
     private static ProgressReporterNull instance = null;
-
-    private ProgressReporterNull() {}
 
     public static ProgressReporterNull get() {
         if (instance == null) {

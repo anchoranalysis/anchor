@@ -38,9 +38,9 @@ import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.ObjectMask;
 
 /**
- * Writes an ObjectMask to a path within a HDF5 file
+ * Writes an object-mask to a path within a HDF5 file
  *
- * <p>The mask is written as a 3D array of 255 and 0 bytes
+ * <p>The object-mask is written as a 3D array of 255 and 0 bytes
  *
  * <p>The corner-position of the bounding box is added as attributes: x, y, z
  *
@@ -72,7 +72,7 @@ class ObjectMaskHDF5Writer {
     public void apply() {
 
         writer.uint8()
-                .writeMDArray(pathHDF5, byteArray(object.binaryVoxelBox()), compressionLevel());
+                .writeMDArray(pathHDF5, byteArray(object.binaryVoxels()), compressionLevel());
 
         addCorner();
     }

@@ -40,7 +40,7 @@ import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
 
-/** Merges one or more {@link ObjectMask}s into a single mask */
+/** Merges one or more {@link ObjectMask}s into a single object */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ObjectMaskMerger {
 
@@ -51,7 +51,7 @@ public class ObjectMaskMerger {
      *
      * <p>The merged box has a minimal bounding-box to fit both objects.
      *
-     * <p>Even if the two existing object-masks do not intersect or touch, a single merged mask is
+     * <p>Even if the two existing objects do not intersect or touch, a single merged object is
      * nevertheless created.
      *
      * <p>It assumes that the binary-values of the merges are always 255 and 0, or 0 and 255.
@@ -109,7 +109,7 @@ public class ObjectMaskMerger {
      *
      * @param objects objects to be merged
      * @return a newly created merged version of all the objects, with a bounding-box just big
-     *     enough to include all the existing mask bounding-boxes
+     *     enough to include all the existing objects' bounding-boxes
      * @throws OperationFailedException if any two objects with different binary-values are merged.
      */
     public static ObjectMask merge(ObjectCollection objects) throws OperationFailedException {
@@ -151,17 +151,17 @@ public class ObjectMaskMerger {
         Point3i pointDest = source.getBoundingBox().relPosTo(bbox);
         Extent e = source.getBoundingBox().extent();
 
-        source.getVoxelBox()
+        source.getVoxels()
                 .copyPixelsToCheckMask(
                         new BoundingBox(e),
-                        destination.getVoxelBox(),
+                        destination.getVoxels(),
                         new BoundingBox(pointDest, e),
-                        source.getVoxelBox(),
+                        source.getVoxels(),
                         source.getBinaryValuesByte());
     }
 
     /**
-     * Inverts the binary-values of the second mask if necessary to match the first
+     * Inverts the binary-values of the second object-mask if necessary to match the first
      *
      * @param first first-object to merge
      * @param second second-object to merge

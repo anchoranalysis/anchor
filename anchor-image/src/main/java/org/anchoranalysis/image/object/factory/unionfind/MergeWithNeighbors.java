@@ -97,7 +97,6 @@ final class MergeWithNeighbors {
     private final SlidingBuffer<IntBuffer> slidingIndex;
     private final UnionFind<Integer> unionIndex;
 
-    // Without mask
     public MergeWithNeighbors(
             VoxelBox<IntBuffer> indexBuffer,
             UnionFind<Integer> unionIndex,

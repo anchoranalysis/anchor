@@ -26,8 +26,10 @@
 
 package org.anchoranalysis.image.outline.traverser.visitedpixels.combine;
 
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
@@ -36,9 +38,8 @@ import org.anchoranalysis.image.outline.traverser.contiguouspath.ContiguousPixel
 import org.anchoranalysis.image.outline.traverser.contiguouspath.PointsListNeighborUtilities;
 
 /** Makes sure the head() and tail() of a ContiguousPath are neighbors */
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 class EnsureContiguousPathLoops {
-
-    private EnsureContiguousPathLoops() {}
 
     /** Ensures the head() and tail() of a path are neighbors, chopping off points if appropriate */
     public static boolean apply(ContiguousPixelPath path) {

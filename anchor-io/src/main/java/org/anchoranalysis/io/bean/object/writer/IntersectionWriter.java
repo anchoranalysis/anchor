@@ -39,37 +39,37 @@ import org.anchoranalysis.image.stack.rgb.RGBStack;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class IntersectionWriter {
 
-    // Writes only to the intersection of mask and stack (positioned at stackBBox)
+    // Writes only to the intersection of an object-mask and stack (positioned at stackBBox)
     public static void writeRGBMaskIntersection(
-            ObjectMask mask, RGBColor color, RGBStack stack, BoundingBox stackBBox)
+            ObjectMask object, RGBColor color, RGBStack stack, BoundingBox stackBBox)
             throws OperationFailedException {
 
-        if (!stackBBox.intersection().existsWith(mask.getBoundingBox())) {
+        if (!stackBBox.intersection().existsWith(object.getBoundingBox())) {
             throw new OperationFailedException(
                     String.format(
                             "The bounding-box of the object-mask (%s) does not intersect with the stack (%s)",
-                            mask.getBoundingBox().toString(), stackBBox.toString()));
+                            object.getBoundingBox().toString(), stackBBox.toString()));
         }
-        // Intersection of the mask and stackBBox
+        // Intersection of the object-mask and stackBBox
         BoundingBox intersection =
-                mask.getBoundingBox()
+                object.getBoundingBox()
                         .intersection()
                         .with(stackBBox)
                         .orElseThrow(
                                 () ->
                                         new OperationFailedException(
-                                                "Bounding boxes of mask and stack do not intersect"));
+                                                "Bounding boxes of object and stack do not intersect"));
 
         // Let's make the intersection relative to the stack
         writeOnEachSlice(
                 stack,
                 color,
                 intersection.shiftBackBy(stackBBox.cornerMin()),
-                mask.mapBoundingBoxPreserveExtent(bbox -> bbox.shiftBackBy(stackBBox.cornerMin())));
+                object.mapBoundingBoxPreserveExtent(bbox -> bbox.shiftBackBy(stackBBox.cornerMin())));
     }
 
     private static void writeOnEachSlice(
-            RGBStack stack, RGBColor color, BoundingBox intersection, ObjectMask mask) {
+            RGBStack stack, RGBColor color, BoundingBox intersection, ObjectMask object) {
 
         ReadableTuple3i maxGlobal = intersection.calcCornerMax();
         Point3i pointGlobal = new Point3i();
@@ -77,8 +77,8 @@ class IntersectionWriter {
         for (pointGlobal.setZ(intersection.cornerMin().getZ());
                 pointGlobal.getZ() <= maxGlobal.getZ();
                 pointGlobal.incrementZ()) {
-            int relZ = pointGlobal.getZ() - mask.getBoundingBox().cornerMin().getZ();
-            stack.writeRGBMaskToSlice(mask, intersection, color, pointGlobal, relZ, maxGlobal);
+            int relZ = pointGlobal.getZ() - object.getBoundingBox().cornerMin().getZ();
+            stack.writeRGBMaskToSlice(object, intersection, color, pointGlobal, relZ, maxGlobal);
         }
     }
 }

@@ -37,7 +37,7 @@ import org.anchoranalysis.image.object.ObjectMask;
  */
 public interface Seed {
 
-    ObjectMask createMask();
+    ObjectMask deriveObject();
 
     void scaleXY(double scale) throws OperationFailedException;
 

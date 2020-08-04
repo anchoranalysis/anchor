@@ -61,7 +61,7 @@ public class ChnlConverterDelegateToHistogram<T extends Buffer>
     }
 
     @Override
-    public VoxelBoxConverter<T> getVoxelBoxConverter() {
-        return delegate.getVoxelBoxConverter();
+    public VoxelBoxConverter<T> getVoxelsConverter() {
+        return delegate.getVoxelsConverter();
     }
 }

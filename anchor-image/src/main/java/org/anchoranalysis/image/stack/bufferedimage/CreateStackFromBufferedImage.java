@@ -37,12 +37,13 @@ import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferByte;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class CreateStackFromBufferedImage {
 
     private static final ChannelFactorySingleType FACTORY = new ChannelFactoryByte();
-
-    private CreateStackFromBufferedImage() {}
 
     public static Stack create(BufferedImage bufferedImage) throws OperationFailedException {
 
@@ -57,7 +58,7 @@ public class CreateStackFromBufferedImage {
             int numChnl = 3;
             for (int c = 0; c < numChnl; c++) {
                 Channel chnl = FACTORY.createEmptyUninitialised(sd);
-                chnl.getVoxelBox()
+                chnl.voxels()
                         .asByte()
                         .getPlaneAccess()
                         .setPixelsForPlane(0, VoxelBufferByte.wrap(arr[c]));

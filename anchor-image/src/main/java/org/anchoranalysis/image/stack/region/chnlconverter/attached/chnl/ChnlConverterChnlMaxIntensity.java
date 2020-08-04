@@ -36,22 +36,22 @@ import org.anchoranalysis.image.stack.region.chnlconverter.voxelbox.VoxelBoxConv
 
 public class ChnlConverterChnlMaxIntensity implements ChnlConverterAttached<Channel, ByteBuffer> {
 
-    private VoxelBoxConverterToByteScaleByMaxValue voxelBoxConverter;
+    private VoxelBoxConverterToByteScaleByMaxValue voxelsConverter;
 
     private ChannelConverterToUnsignedByte delegate;
 
     public ChnlConverterChnlMaxIntensity() {
         // Initialise with a dummy value
-        voxelBoxConverter = new VoxelBoxConverterToByteScaleByMaxValue(1);
+        voxelsConverter = new VoxelBoxConverterToByteScaleByMaxValue(1);
 
-        delegate = new ChannelConverterToUnsignedByte(voxelBoxConverter);
+        delegate = new ChannelConverterToUnsignedByte(voxelsConverter);
     }
 
     @Override
     public void attachObject(Channel obj) {
 
-        int maxValue = obj.getVoxelBox().any().ceilOfMaxPixel();
-        voxelBoxConverter.setMaxValue(maxValue);
+        int maxValue = obj.voxels().any().ceilOfMaxPixel();
+        voxelsConverter.setMaxValue(maxValue);
     }
 
     @Override
@@ -60,7 +60,7 @@ public class ChnlConverterChnlMaxIntensity implements ChnlConverterAttached<Chan
     }
 
     @Override
-    public VoxelBoxConverter<ByteBuffer> getVoxelBoxConverter() {
-        return voxelBoxConverter;
+    public VoxelBoxConverter<ByteBuffer> getVoxelsConverter() {
+        return voxelsConverter;
     }
 }

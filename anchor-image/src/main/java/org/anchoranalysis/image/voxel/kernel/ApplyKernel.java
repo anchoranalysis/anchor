@@ -38,17 +38,18 @@ import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
 import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactoryTypeBound;
 import org.anchoranalysis.image.voxel.kernel.count.CountKernel;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 /**
  * Applies a kernel to a Voxel Box
  *
  * @author Owen Feehan
  */
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class ApplyKernel {
 
     private static final VoxelBoxFactoryTypeBound<ByteBuffer> FACTORY = VoxelBoxFactory.getByte();
-
-    private ApplyKernel() {}
 
     public static VoxelBox<ByteBuffer> apply(BinaryKernel kernel, VoxelBox<ByteBuffer> in) {
         return apply(kernel, in, BinaryValuesByte.getDefault());
@@ -272,7 +273,7 @@ public class ApplyKernel {
             int ind = 0;
 
             ByteBuffer bufMask =
-                    object.getVoxelBox()
+                    object.getVoxels()
                             .getPixelsForPlane(point.getZ() - cornerMin.getZ())
                             .buffer();
 

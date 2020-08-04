@@ -50,14 +50,14 @@ public class BinarySegmentationThreshold extends BinarySegmentation {
     public BinaryVoxelBox<ByteBuffer> sgmn(
             VoxelBoxWrapper voxelBox,
             BinarySegmentationParameters params,
-            Optional<ObjectMask> mask)
+            Optional<ObjectMask> objectMask)
             throws SegmentationFailedException {
         try {
             return thresholder.threshold(
                     voxelBox,
                     BinaryValuesByte.getDefault(),
-                    mask.isPresent() ? Optional.empty() : params.getIntensityHistogram(),
-                    mask);
+                    objectMask.isPresent() ? Optional.empty() : params.getIntensityHistogram(),
+                    objectMask);
         } catch (OperationFailedException e) {
             throw new SegmentationFailedException(e);
         }

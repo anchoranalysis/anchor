@@ -98,12 +98,12 @@ public abstract class MarkAbstractPosition extends Mark implements Serializable 
     }
 
     @Override
-    public ObjectWithProperties calcMask(
+    public ObjectWithProperties deriveObject(
             ImageDimensions bndScene, RegionMembershipWithFlags rm, BinaryValuesByte bvOut) {
 
-        ObjectWithProperties mask = super.calcMask(bndScene, rm, bvOut);
-        mask.setProperty("midpointInt", calcRelativePoint(pos, mask.getBoundingBox().cornerMin()));
-        return mask;
+        ObjectWithProperties object = super.deriveObject(bndScene, rm, bvOut);
+        object.setProperty("midpointInt", calcRelativePoint(pos, object.getBoundingBox().cornerMin()));
+        return object;
     }
 
     @Override

@@ -36,6 +36,8 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.apache.commons.collections.MultiMap;
 import org.apache.commons.collections.map.MultiValueMap;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 /**
  * A collection of RootPath objects indexed by their name.
@@ -44,11 +46,10 @@ import org.apache.commons.collections.map.MultiValueMap;
  *
  * @author Owen Feehan
  */
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class RootPathMap {
 
     private static RootPathMap instance = null;
-
-    private RootPathMap() {}
 
     private MultiMap map = new MultiValueMap();
 

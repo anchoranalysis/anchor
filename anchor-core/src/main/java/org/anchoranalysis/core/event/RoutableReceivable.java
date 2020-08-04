@@ -1,4 +1,4 @@
-package org.anchoranalysis.core.index;
+package org.anchoranalysis.core.event;
 
 /*
  * #%L
@@ -26,7 +26,11 @@ package org.anchoranalysis.core.index;
  * #L%
  */
 
-@FunctionalInterface
-public interface IIndexSetter {
-    public void setIndex(int index);
+import java.util.EventObject;
+
+public interface RoutableReceivable<T extends EventObject> {
+
+    void addRoutableListener(RoutableListener<T> l);
+
+    void removeRoutableListener(RoutableListener<T> l);
 }

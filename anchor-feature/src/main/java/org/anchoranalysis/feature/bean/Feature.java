@@ -164,32 +164,16 @@ public abstract class Feature<T extends FeatureInput>
      * @return
      * @throws BeanMisconfiguredException
      */
-    public final FeatureList<FeatureInput> createListChildFeatures(boolean includeAdditionallyUsed)
+    public final FeatureList<FeatureInput> createListChildFeatures()
             throws BeanMisconfiguredException {
 
-        FeatureList<FeatureInput> out =
-                FeatureListFactory.wrapReuse(
+        return FeatureListFactory.wrapReuse(
                         findChildrenOfClass(getOrCreateBeanFields(), Feature.class));
-
-        if (includeAdditionallyUsed) {
-            addAdditionallyUsedFeatures(out);
-        }
-
-        return out;
     }
 
     public String getParamDscr() {
         return describeChildBeans();
     }
-
-    /**
-     * Adds other additionally-used features that aren't actually bean properties
-     *
-     * <p>NOTHING happens here. But it can be overriden by child classes appropriately
-     *
-     * @param out a list to add these features to
-     */
-    public void addAdditionallyUsedFeatures(FeatureList<FeatureInput> out) {}
 
     /**
      * Dummy method, that children can optionally override

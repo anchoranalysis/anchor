@@ -114,7 +114,7 @@ public class ObjectMask {
     }
 
     public ObjectMask(BinaryVoxelBox<ByteBuffer> voxelBox) {
-        this(new BoundedVoxelBox<>(voxelBox.getVoxelBox()), voxelBox.getBinaryValues());
+        this(new BoundedVoxelBox<>(voxelBox.getVoxels()), voxelBox.getBinaryValues());
     }
 
     public ObjectMask(BoundingBox bbox, VoxelBox<ByteBuffer> voxelBox) {
@@ -126,7 +126,7 @@ public class ObjectMask {
     }
 
     public ObjectMask(BoundingBox bbox, BinaryVoxelBox<ByteBuffer> voxelBox) {
-        this(new BoundedVoxelBox<>(bbox, voxelBox.getVoxelBox()), voxelBox.getBinaryValues());
+        this(new BoundedVoxelBox<>(bbox, voxelBox.getVoxels()), voxelBox.getBinaryValues());
     }
 
     public ObjectMask(BoundedVoxelBox<ByteBuffer> voxelBox, BinaryValues binaryValues) {
@@ -164,25 +164,21 @@ public class ObjectMask {
         return new ObjectMask(this);
     }
 
-    /** The number of "ON" voxels on the mask */
+    /** The number of "ON" voxels on the object-mask */
     public int numberVoxelsOn() {
-        return delegate.getVoxelBox().countEqual(bv.getOnInt());
+        return delegate.getVoxels().countEqual(bv.getOnInt());
     }
 
     /**
-     * Replaces the voxels in the mask.
+     * Replaces the voxels in the object-mask.
      *
-     * <p>This is an IMMUTABLE operation, and a new mask is created.
+     * <p>This is an IMMUTABLE operation, and a new object-mask is created.
      *
      * @param voxelBoxToAssign voxels to be assigned.
-     * @return a new mask the replacement voxels but identical other properties.
+     * @return a new object with the replacement voxels but identical in other respects.
      */
     public ObjectMask replaceVoxels(VoxelBox<ByteBuffer> voxelBoxToAssign) {
         return new ObjectMask(delegate.replaceVoxels(voxelBoxToAssign), bv);
-    }
-
-    public ObjectMask flattenZ() {
-        return new ObjectMask(delegate.flattenZ(), bv);
     }
 
     public ObjectMask growToZ(int sz) {
@@ -239,7 +235,7 @@ public class ObjectMask {
                 int thresholdVal = (bv.getOnInt() + bv.getOffInt()) / 2;
 
                 VoxelBoxThresholder.thresholdForLevel(
-                        scaled.getVoxelBox(), thresholdVal, bv.createByte());
+                        scaled.getVoxels(), thresholdVal, bv.createByte());
             }
             return new ObjectMask(scaled, bv);
 
@@ -277,7 +273,7 @@ public class ObjectMask {
         try {
             ObjectCollection objects =
                     CONNECTED_COMPONENT_CREATOR.createConnectedComponents(
-                            this.binaryVoxelBox().duplicate());
+                            this.binaryVoxels().duplicate());
             return objects.size() <= 1;
         } catch (CreateException e) {
             throw new OperationFailedException(e);
@@ -286,12 +282,12 @@ public class ObjectMask {
 
     public boolean numPixelsLessThan(int num) {
 
-        Extent e = delegate.getVoxelBox().extent();
+        Extent e = delegate.getVoxels().extent();
 
         int cnt = 0;
 
         for (int z = 0; z < e.getZ(); z++) {
-            ByteBuffer bb = delegate.getVoxelBox().getPixelsForPlane(z).buffer();
+            ByteBuffer bb = delegate.getVoxels().getPixelsForPlane(z).buffer();
 
             while (bb.hasRemaining()) {
                 byte b = bb.get();
@@ -310,12 +306,12 @@ public class ObjectMask {
 
     public boolean hasPixelsGreaterThan(int num) {
 
-        Extent e = delegate.getVoxelBox().extent();
+        Extent e = delegate.getVoxels().extent();
 
         int cnt = 0;
 
         for (int z = 0; z < e.getZ(); z++) {
-            ByteBuffer bb = delegate.getVoxelBox().getPixelsForPlane(z).buffer();
+            ByteBuffer bb = delegate.getVoxels().getPixelsForPlane(z).buffer();
 
             while (bb.hasRemaining()) {
                 byte b = bb.get();
@@ -337,11 +333,11 @@ public class ObjectMask {
      *
      * @param other the other object-mask to intersect with
      * @param dimensions dimensions to constrain any intersection
-     * @return a new mask of the intersection iff it exists
+     * @return a new object of the intersecting region iff it exists
      */
     public Optional<ObjectMask> intersect(ObjectMask other, ImageDimensions dimensions) {
 
-        // we combine the two masks
+        // we combine the two objects
         Optional<BoundingBox> bboxIntersect =
                 getBoundingBox()
                         .intersection()
@@ -359,12 +355,12 @@ public class ObjectMask {
         VoxelBox<ByteBuffer> vbMaskOut = FACTORY.create(bboxIntersect.get().extent());
         vbMaskOut.setAllPixelsTo(bvOut.getOnInt());
 
-        // Then we set any pixels NOT on either mask to OFF..... leaving only the intersecting
+        // Then we set any pixels NOT on either object to OFF..... leaving only the intersecting
         // pixels as ON in the output buffer
         setVoxelsTwoMasks(
                 vbMaskOut,
-                getVoxelBox(),
-                other.getVoxelBox(),
+                getVoxels(),
+                other.getVoxels(),
                 bboxIntersect.get().relPosToBox(getBoundingBox()),
                 bboxIntersect.get().relPosToBox(other.getBoundingBox()),
                 bvOut.getOffInt(),
@@ -374,7 +370,7 @@ public class ObjectMask {
         ObjectMask object =
                 new ObjectMask(bboxIntersect.get(), new BinaryVoxelBoxByte(vbMaskOut, bvOut));
 
-        // If there no pixels left that haven't been set, then the intersection mask is zero
+        // If there no pixels left that haven't been set, then the intersection object-mask is zero
         return OptionalUtilities.createFromFlag(object.hasPixelsGreaterThan(0), object);
     }
 
@@ -388,7 +384,7 @@ public class ObjectMask {
         int yRel = point.getY() - delegate.getBoundingBox().cornerMin().getY();
         int zRel = point.getZ() - delegate.getBoundingBox().cornerMin().getZ();
 
-        return delegate.getVoxelBox().getVoxel(xRel, yRel, zRel) == bv.getOnInt();
+        return delegate.getVoxels().getVoxel(xRel, yRel, zRel) == bv.getOnInt();
     }
 
     public boolean containsIgnoreZ(Point3i point) {
@@ -402,7 +398,7 @@ public class ObjectMask {
 
         Extent e = delegate.getBoundingBox().extent();
         for (int z = 0; z < e.getZ(); z++) {
-            if (delegate.getVoxelBox().getVoxel(xRel, yRel, z) == bv.getOnInt()) {
+            if (delegate.getVoxels().getVoxel(xRel, yRel, z) == bv.getOnInt()) {
                 return true;
             }
         }
@@ -416,7 +412,7 @@ public class ObjectMask {
      *
      * @return a new object-mask flattened in Z dimension.
      */
-    public ObjectMask maxIntensityProjection() {
+    public ObjectMask flattenZ() {
         return new ObjectMask(delegate.maxIntensityProjection());
     }
 
@@ -424,12 +420,12 @@ public class ObjectMask {
         return delegate.getBoundingBox();
     }
 
-    public BinaryVoxelBox<ByteBuffer> binaryVoxelBox() {
-        return new BinaryVoxelBoxByte(delegate.getVoxelBox(), bv);
+    public BinaryVoxelBox<ByteBuffer> binaryVoxels() {
+        return new BinaryVoxelBoxByte(delegate.getVoxels(), bv);
     }
 
-    public VoxelBox<ByteBuffer> getVoxelBox() {
-        return delegate.getVoxelBox();
+    public VoxelBox<ByteBuffer> getVoxels() {
+        return delegate.getVoxels();
     }
 
     public BinaryValues getBinaryValues() {
@@ -440,7 +436,7 @@ public class ObjectMask {
         return bvb;
     }
 
-    public BoundedVoxelBox<ByteBuffer> getVoxelBoxBounded() {
+    public BoundedVoxelBox<ByteBuffer> getBoundedVoxels() {
         return delegate;
     }
 
@@ -464,7 +460,7 @@ public class ObjectMask {
     }
 
     /**
-     * A (sub-)region of the mask.
+     * A (sub-)region of the object-mask.
      *
      * <p>The region may some smaller portion of the voxel-box, or the voxel-box as a whole.</p>
      *
@@ -473,8 +469,8 @@ public class ObjectMask {
      * <p>See {@link org.anchoranalysis.image.voxel.box.VoxelBox::region) for more details.</p>
      *
      * @param bbox bounding-box in absolute coordinates.
-     * @param reuseIfPossible if TRUE the existing mask will be reused if possible, otherwise a new mask is always created.
-     * @return a mask corresponding to the requested region, either newly-created or reused
+     * @param reuseIfPossible if TRUE the existing object will be reused if possible, otherwise a new object is always created.
+     * @return an object-mask corresponding to the requested region, either newly-created or reused
      * @throws CreateException
      */
     public ObjectMask region(BoundingBox bbox, boolean reuseIfPossible) throws CreateException {
@@ -482,20 +478,20 @@ public class ObjectMask {
     }
 
     /**
-     * Creates a mask covering the a bounding-box (that is required to intersect at least partially)
+     * Creates an object-mask covering the a bounding-box (that is required to intersect at least partially)
      *
      * <p>The region outputted will have the same size and coordinates as the bounding-box NOT the
-     * existing mask.
+     * existing object-mask.
      *
-     * <p>It will contain the correct mask-values for the intersecting region, and OFF values for
+     * <p>It will contain the correct object-mask values for the intersecting region, and OFF values for
      * the rest.
      *
      * <p>A new voxel-buffer is always created for this operation i.e. the existing box is never
      * reused like sometimes in {@link region}.</p.
      *
      * @param bbox bounding-box in absolute coordinates, that must at least partially intersect with
-     *     the current mask bounds.
-     * @return a newly created mask containing partially some parts of the existing mask as well as
+     *     the current object-mask bounds.
+     * @return a newly created object-mask containing partially some parts of the existing object-mask as well as
      *     OFF voxels for any other region.
      * @throws CreateException if the boxes do not intersect
      */
@@ -504,15 +500,15 @@ public class ObjectMask {
     }
 
     /**
-     * Finds any arbitrary "ON" voxel on the mask.
+     * Finds any arbitrary "ON" voxel on the object.
      *
      * <p>First it tries the center-of-gravity voxel, and if that's not on, it iterates through the
      * box until it finds an "ON" voxel.
      *
      * <p>This is a DETERMINISTIC operation, so one can rely on the same voxel being found for a
-     * given mask.
+     * given object.
      *
-     * @return the location (in absolute coordinates) of an arbitrary "ON" voxel on the mask, if it
+     * @return the location (in absolute coordinates) of an arbitrary "ON" voxel on the object, if it
      *     exists.
      */
     public Optional<Point3i> findArbitraryOnVoxel() {
@@ -525,7 +521,7 @@ public class ObjectMask {
         }
 
         // Second, if needed, we iterate until we find any "ON" value
-        return IterateVoxels.findFirstPointOnMask(this);
+        return IterateVoxels.findFirstPointOnObjectMask(this);
     }
 
     /**
@@ -591,7 +587,7 @@ public class ObjectMask {
         BoundingBox bbLocal = delegate.getBoundingBox().relPosToBox(boxToAssign);
 
         voxelBoxLarge.setPixelsCheckMask(
-                new ObjectMask(bbLocal, binaryVoxelBox()), bvb.getOnByte());
+                new ObjectMask(bbLocal, binaryVoxels()), bvb.getOnByte());
 
         return new ObjectMask(boxToAssign, voxelBoxLarge, bvb);
     }
@@ -608,7 +604,7 @@ public class ObjectMask {
     public ObjectMask relMaskTo(BoundingBox bbox) {
         Point3i point = delegate.getBoundingBox().relPosTo(bbox);
 
-        return new ObjectMask(new BoundingBox(point, delegate.extent()), delegate.getVoxelBox());
+        return new ObjectMask(new BoundingBox(point, delegate.extent()), delegate.getVoxels());
     }
 
     /** Sets a point (expressed in global coordinates) to be ON */
@@ -626,7 +622,7 @@ public class ObjectMask {
      *
      * <ol>
      *   <li>the center-of-gravity
-     *   <li>the number of "ON" voxels on the mask
+     *   <li>the number of "ON" voxels on the object
      * </ol>
      */
     @Override
@@ -638,7 +634,7 @@ public class ObjectMask {
     
     private void setVoxel(Point3i pointGlobal, int val) {
         Point3i cornerMin = delegate.getBoundingBox().cornerMin();
-        delegate.getVoxelBox()
+        delegate.getVoxels()
                 .setVoxel(
                         pointGlobal.getX() - cornerMin.getX(),
                         pointGlobal.getX() - cornerMin.getY(),
@@ -647,16 +643,16 @@ public class ObjectMask {
     }
     
     /**
-     * Sets voxels in a voxel box that match either of two masks
+     * Sets voxels in a voxel box that match either of two objects
      *
      * @param vbMaskOut voxel-box to write to
-     * @param voxelBox1 voxel-box for first mask
-     * @param voxelBox2 voxel-box for second mask
-     * @param bboxSrcMask bounding-box for first mask
-     * @param bboxOthrMask bounding-box for second mask
+     * @param voxelBox1 voxel-box for first object
+     * @param voxelBox2 voxel-box for second object
+     * @param bboxSrcMask bounding-box for first object
+     * @param bboxOthrMask bounding-box for second object
      * @param value value to write
-     * @param maskMatchValue mask-value to match against for first mask
-     * @param maskMatchValue mask-value to match against for second mask
+     * @param matchValue1 object-mask value to match against for first object
+     * @param matchValue2 object-mask value to match against for second object
      * @return the total number of pixels written
      */
     private static int setVoxelsTwoMasks( // NOSONAR
@@ -666,15 +662,15 @@ public class ObjectMask {
             BoundingBox bboxSrcMask,
             BoundingBox bboxOthrMask,
             int value,
-            byte maskMatchValue1,
-            byte maskMatchValue2) {
+            byte matchValue1,
+            byte matchValue2) {
         BoundingBox allOut = new BoundingBox(vbMaskOut.extent());
         int cntSetFirst =
                 vbMaskOut.setPixelsCheckMask(
-                        allOut, voxelBox1, bboxSrcMask, value, maskMatchValue1);
+                        allOut, voxelBox1, bboxSrcMask, value, matchValue1);
         int cntSetSecond =
                 vbMaskOut.setPixelsCheckMask(
-                        allOut, voxelBox2, bboxOthrMask, value, maskMatchValue2);
+                        allOut, voxelBox2, bboxOthrMask, value, matchValue2);
         return cntSetFirst + cntSetSecond;
     }
 }

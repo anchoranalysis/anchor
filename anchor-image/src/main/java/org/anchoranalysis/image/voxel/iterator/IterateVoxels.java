@@ -39,21 +39,22 @@ import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.buffer.SlidingBuffer;
 import org.anchoranalysis.image.voxel.iterator.changed.ProcessVoxelNeighbor;
 import org.anchoranalysis.image.voxel.neighborhood.Neighborhood;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 /**
  * Iterate over voxels in an extent/bounding-box/mask calling a processor on each selected voxel
  *
  * @author Owen Feehan
  */
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class IterateVoxels {
 
-    private IterateVoxels() {}
-
     /**
-     * Iterate over each voxel that is located on a mask AND optionally a second-mask
+     * Iterate over each voxel that is located on an object-mask AND optionally a second-mask
      *
-     * <p>If a second-mask is defined, it is a logical AND condition. A voxel is only processed if
-     * it exists in both masks.
+     * <p>If a second object-mask is defined, it is a logical AND condition. A voxel is only processed if
+     * it exists in both object-masks.
      *
      * @param firstMask the first-mask that is used as a condition on what voxels to iterate
      * @param secondMask an optional second-mask that can be a further condition
@@ -81,74 +82,74 @@ public class IterateVoxels {
 
     /**
      * Iterate over each voxel in a sliding-buffer, optionally restricting it to be only voxels in a
-     * certain mask
+     * certain object
      *
-     * @param buffer a sliding-buffer whose voxels are iterated over, parially (if a mask is
-     *     defined) as a whole (if no mask is defined)
-     * @param mask an optional mask that is used as a condition on what voxels to iterate
+     * @param buffer a sliding-buffer whose voxels are iterated over, partially (if an objectmask is
+     *     defined) or as a whole (if no onject-mask is defined)
+     * @param objectMask an optional object-mask that is used as a condition on what voxels to iterate
      * @param process process is called for each voxel (on the entire {@link SlidingBuffer} or on
      *     the object-mask depending) using GLOBAL coordinates.
      */
     public static void callEachPoint(
-            Optional<ObjectMask> mask, SlidingBuffer<?> buffer, ProcessVoxel process) {
+            Optional<ObjectMask> objectMask, SlidingBuffer<?> buffer, ProcessVoxel process) {
 
-        buffer.seek(mask.map(object -> object.getBoundingBox().cornerMin().getZ()).orElse(0));
+        buffer.seek(objectMask.map(object -> object.getBoundingBox().cornerMin().getZ()).orElse(0));
 
-        callEachPoint(mask, buffer.extent(), new ProcessVoxelSlide(buffer, process));
+        callEachPoint(objectMask, buffer.extent(), new ProcessVoxelSlide(buffer, process));
     }
 
     /**
-     * Iterate over each voxel that is located on a mask if it exists, otherwise iterate over the
+     * Iterate over each voxel that is located on a object-mask if it exists, otherwise iterate over the
      * entire extent
      *
-     * @param mask an optional mask that is used as a condition on what voxels to iterate
-     * @param extent if mask isn't defined, then all the voxels in this {@link Extent} are iterated
+     * @param objectMask an optional object-mask that is used as a condition on what voxels to iterate
+     * @param extent if object-mask isn't defined, then all the voxels in this {@link Extent} are iterated
      *     over instead
      * @param process process is called for each voxel (on the entire {@link Extent} or on the
      *     object-mask depending) using GLOBAL coordinates.
      */
     public static void callEachPoint(
-            Optional<ObjectMask> mask, Extent extent, ProcessVoxel process) {
-        if (mask.isPresent()) {
-            callEachPoint(mask.get(), process);
+            Optional<ObjectMask> objectMask, Extent extent, ProcessVoxel process) {
+        if (objectMask.isPresent()) {
+            callEachPoint(objectMask.get(), process);
         } else {
             callEachPoint(extent, process);
         }
     }
 
     /**
-     * Iterate over each voxel that is located on a mask
+     * Iterate over each voxel that is located on an object-mask
      *
-     * @param mask the mask that is used as a condition on what voxels to iterate
+     * @param object the object-mask that is used as a condition on what voxels to iterate
      * @param process process is called for each voxel with that satisfies the conditions using
      *     GLOBAL coordinates.
      */
-    public static void callEachPoint(ObjectMask mask, ProcessVoxel process) {
-        callEachPoint(mask.getBoundingBox(), new RequireIntersectionWithMask(process, mask));
+    public static void callEachPoint(ObjectMask object, ProcessVoxel process) {
+        callEachPoint(object.getBoundingBox(), new RequireIntersectionWithObject(process, object));
     }
 
     /**
-     * Iterate over each voxel that is located on a mask - with offsets
+     * Iterate over each voxel that is located on an object-mask - with offsets
      *
      * <p>This is identical to the other {@link callEachPoint} but adds offsets, and is optimized
      * for this circumstance.
      *
-     * @param mask the mask that is used as a condition on what voxels to iterate
+     * @param object the object-mask that is used as a condition on what voxels to iterate
      * @param extent the scene-size
      * @param process process is called for each voxel with that satisfies the conditions using
      *     GLOBAL coordinates.
      */
     private static <T extends Buffer> void callEachPoint(
-            ObjectMask mask, VoxelBox<T> voxels, ProcessVoxelSliceBuffer<T> process) {
+            ObjectMask object, VoxelBox<T> voxels, ProcessVoxelSliceBuffer<T> process) {
         // This is re-implemented in full, as reusing existing code with {@link AddOffsets} and
         //  {@link RequireIntersectionWithMask} was not inling using default JVM settings
         // Based on unit-tests, it seems to perform better emperically, even with the new Point3i()
         // adding to the heap.
 
         Extent extent = voxels.extent();
-        Extent extentMask = mask.getVoxelBox().extent();
-        ReadableTuple3i cornerMin = mask.getBoundingBox().cornerMin();
-        byte valueOn = mask.getBinaryValuesByte().getOnByte();
+        Extent extentMask = object.getVoxels().extent();
+        ReadableTuple3i cornerMin = object.getBoundingBox().cornerMin();
+        byte valueOn = object.getBinaryValuesByte().getOnByte();
 
         for (int z = 0; z < extentMask.getZ(); z++) {
 
@@ -156,7 +157,7 @@ public class IterateVoxels {
             int z1 = cornerMin.getZ() + z;
 
             T bb = voxels.getPixelsForPlane(z1).buffer();
-            ByteBuffer bbOM = mask.getVoxelBox().getPixelsForPlane(z).buffer();
+            ByteBuffer bbOM = object.getVoxels().getPixelsForPlane(z).buffer();
             process.notifyChangeZ(z1);
 
             for (int y = 0; y < extentMask.getY(); y++) {
@@ -177,23 +178,23 @@ public class IterateVoxels {
     }
 
     /**
-     * Calls each voxel in a mask until a point is found
+     * Calls each voxel in an object-mask until a point is found
      *
-     * @param mask mask
+     * @param object object-mask
      * @return the first point found
      */
-    public static Optional<Point3i> findFirstPointOnMask(ObjectMask mask) {
+    public static Optional<Point3i> findFirstPointOnObjectMask(ObjectMask object) {
 
-        Extent extentMask = mask.getVoxelBox().extent();
-        ReadableTuple3i cornerMin = mask.getBoundingBox().cornerMin();
-        byte valueOn = mask.getBinaryValuesByte().getOnByte();
+        Extent extentMask = object.getVoxels().extent();
+        ReadableTuple3i cornerMin = object.getBoundingBox().cornerMin();
+        byte valueOn = object.getBinaryValuesByte().getOnByte();
 
         for (int z = 0; z < extentMask.getZ(); z++) {
 
             // For 3d we need to translate the global index back to local
             int z1 = cornerMin.getZ() + z;
 
-            ByteBuffer bbOM = mask.getVoxelBox().getPixelsForPlane(z).buffer();
+            ByteBuffer bbOM = object.getVoxels().getPixelsForPlane(z).buffer();
 
             for (int y = 0; y < extentMask.getY(); y++) {
                 int y1 = cornerMin.getY() + y;
@@ -283,17 +284,17 @@ public class IterateVoxels {
     }
 
     /**
-     * Iterate over each voxel in a mask - with an associated buffer for each slice from a voxel-bo
+     * Iterate over each voxel in an object-mask - with an associated buffer for each slice from a voxel-bo
      *
      * @param voxels a voxel-box for which {@link} refers to a subregion.
-     * @param mask the mask is used as a condition on what voxels to iterate i.e. only voxels within
+     * @param object the object-mask is used as a condition on what voxels to iterate i.e. only voxels within
      *     these bounds
      * @param process is called for each voxel within the bounding-box using GLOBAL coordinates.
      * @param <T> buffer-type in voxel-box
      */
     public static <T extends Buffer> void callEachPoint(
-            VoxelBox<T> voxels, ObjectMask mask, ProcessVoxelSliceBuffer<T> process) {
-        callEachPoint(mask, voxels, process);
+            VoxelBox<T> voxels, ObjectMask object, ProcessVoxelSliceBuffer<T> process) {
+        callEachPoint(object, voxels, process);
     }
 
     /**
@@ -312,27 +313,27 @@ public class IterateVoxels {
         // but after some quick emperical checks, it doesn't seem to make a performance difference.
         // Probably the JVM is smart enough
         // to optimize away these redundant calcualations.
-        callEachPoint(new ObjectMask(mask.binaryVoxelBox()), voxels, process);
+        callEachPoint(new ObjectMask(mask.binaryVoxels()), voxels, process);
     }
 
     /**
-     * Iterate over each voxel that is located on a mask if it exists, otherwise iterate over the
+     * Iterate over each voxel that is located on an object-mask if it exists, otherwise iterate over the
      * entire voxel-box.
      *
      * <p>This is similar behaviour to {@link #callEachPoint} but adds a buffer for each slice.
      */
     public static <T extends Buffer> void callEachPoint(
-            Optional<ObjectMask> mask, VoxelBox<T> voxels, ProcessVoxelSliceBuffer<T> process) {
+            Optional<ObjectMask> objectMask, VoxelBox<T> voxels, ProcessVoxelSliceBuffer<T> process) {
         Extent extent = voxels.extent();
 
-        // Note the offsets must be added before any additional restriction like a mask, to make
-        // sure they are calculate for EVERY process.
+        // Note the offsets must be added before any additional restriction like an object-mask, to make
+        // sure they are calculated for EVERY process.
         // Therefore we {@link AddOffsets} must be interested as the top-most level in the
         // processing chain
         // (i.e. {@link AddOffsets} must delegate to {@link RequireIntersectionWithMask} but not the
         // other way round.
-        if (mask.isPresent()) {
-            callEachPoint(mask.get(), voxels, process);
+        if (objectMask.isPresent()) {
+            callEachPoint(objectMask.get(), voxels, process);
         } else {
             callEachPoint(extent, new RetrieveBufferForSlice<T>(voxels, process));
         }
@@ -361,8 +362,8 @@ public class IterateVoxels {
     }
 
     private static ProcessVoxel requireIntersectionTwice(
-            ProcessVoxel processor, ObjectMask mask1, ObjectMask mask2) {
-        ProcessVoxel inner = new RequireIntersectionWithMask(processor, mask2);
-        return new RequireIntersectionWithMask(inner, mask1);
+            ProcessVoxel processor, ObjectMask object1, ObjectMask object2) {
+        ProcessVoxel inner = new RequireIntersectionWithObject(processor, object2);
+        return new RequireIntersectionWithObject(inner, object1);
     }
 }

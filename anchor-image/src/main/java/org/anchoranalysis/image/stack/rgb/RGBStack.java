@@ -155,7 +155,7 @@ public class RGBStack {
 
     private static void writePoint(Point3i point, Channel chnl, byte toWrite) {
         int index = chnl.getDimensions().getExtent().offset(point.getX(), point.getY());
-        chnl.getVoxelBox().asByte().getPixelsForPlane(point.getZ()).buffer().put(index, toWrite);
+        chnl.voxels().asByte().getPixelsForPlane(point.getZ()).buffer().put(index, toWrite);
     }
 
     // Only supports 8-bit
@@ -168,7 +168,7 @@ public class RGBStack {
 
     // Only supports 8-bit
     public void writeRGBMaskToSlice(
-            ObjectMask mask,
+            ObjectMask object,
             BoundingBox bbox,
             RGBColor color,
             Point3i pointGlobal,
@@ -179,15 +179,15 @@ public class RGBStack {
         Preconditions.checkArgument(
                 channels.allChannelsHaveType(VoxelDataTypeUnsignedByte.INSTANCE));
 
-        byte maskOn = mask.getBinaryValuesByte().getOnByte();
+        byte objectMaskOn = object.getBinaryValuesByte().getOnByte();
 
-        ByteBuffer inArr = mask.getVoxelBox().getPixelsForPlane(zLocal).buffer();
+        ByteBuffer inArr = object.getVoxels().getPixelsForPlane(zLocal).buffer();
 
         ByteBuffer red = extractBuffer(0, pointGlobal.getZ());
         ByteBuffer green = extractBuffer(1, pointGlobal.getZ());
         ByteBuffer blue = extractBuffer(2, pointGlobal.getZ());
 
-        Extent eMask = mask.getBoundingBox().extent();
+        Extent eMask = object.getBoundingBox().extent();
 
         for (pointGlobal.setY(bbox.cornerMin().getY());
                 pointGlobal.getY() <= maxGlobal.getY();
@@ -197,12 +197,12 @@ public class RGBStack {
                     pointGlobal.getX() <= maxGlobal.getX();
                     pointGlobal.incrementX()) {
 
-                int maskOffset =
+                int objectMaskOffset =
                         eMask.offset(
-                                pointGlobal.getX() - mask.getBoundingBox().cornerMin().getX(),
-                                pointGlobal.getY() - mask.getBoundingBox().cornerMin().getY());
+                                pointGlobal.getX() - object.getBoundingBox().cornerMin().getX(),
+                                pointGlobal.getY() - object.getBoundingBox().cornerMin().getY());
 
-                if (inArr.get(maskOffset) != maskOn) {
+                if (inArr.get(objectMaskOffset) != objectMaskOn) {
                     continue;
                 }
 
@@ -219,7 +219,7 @@ public class RGBStack {
 
     private ByteBuffer extractBuffer(int chnlIndex, int zIndex) {
         return channels.getChannel(chnlIndex)
-                .getVoxelBox()
+                .voxels()
                 .asByte()
                 .getPlaneAccess()
                 .getPixelsForPlane(zIndex)

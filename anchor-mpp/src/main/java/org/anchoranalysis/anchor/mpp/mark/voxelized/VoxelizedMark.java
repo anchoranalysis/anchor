@@ -38,9 +38,9 @@ import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
  */
 public interface VoxelizedMark {
 
-    BoundedVoxelBox<ByteBuffer> getVoxelBox();
+    BoundedVoxelBox<ByteBuffer> getVoxels();
 
-    BoundedVoxelBox<ByteBuffer> getVoxelBoxMIP();
+    BoundedVoxelBox<ByteBuffer> getVoxelsMaximumIntensityProjection();
 
     BoundingBox getBoundingBox();
 

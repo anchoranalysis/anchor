@@ -43,7 +43,7 @@ class BufferArrList {
         for (int c = 0; c < stack.getNumberChannels(); c++) {
             ByteBuffer bb =
                     stack.getChannel(c)
-                            .getVoxelBox()
+                            .voxels()
                             .asByte()
                             .getPlaneAccess()
                             .getPixelsForPlane(z)

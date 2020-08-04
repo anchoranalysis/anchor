@@ -31,10 +31,11 @@ import org.anchoranalysis.core.axis.AxisType;
 import org.anchoranalysis.core.axis.AxisTypeConverter;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 final class CenterOfGravityCalculator {
-
-    private CenterOfGravityCalculator() {}
 
     /**
      * Calculates the center of gravity of an object-mask treating all pixels of equal weight.
@@ -46,7 +47,7 @@ final class CenterOfGravityCalculator {
      */
     public static Point3d calcCenterOfGravity(ObjectMask object) {
 
-        VoxelBox<ByteBuffer> vb = object.getVoxelBox();
+        VoxelBox<ByteBuffer> vb = object.getVoxels();
 
         int cnt = 0;
         Point3d sum = new Point3d();
@@ -87,7 +88,7 @@ final class CenterOfGravityCalculator {
      */
     public static double calcCenterOfGravityForAxis(ObjectMask object, AxisType axisType) {
 
-        VoxelBox<ByteBuffer> vb = object.getVoxelBox();
+        VoxelBox<ByteBuffer> vb = object.getVoxels();
 
         int cnt = 0;
         double sum = 0.0;

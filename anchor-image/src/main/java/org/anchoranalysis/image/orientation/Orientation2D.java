@@ -98,8 +98,8 @@ public class Orientation2D extends Orientation {
     }
 
     @Override
-    public void addPropertiesToMask(ObjectWithProperties mask) {
-        mask.setProperty("orientationRadians", getAngleRadians());
+    public void addPropertiesToMask(ObjectWithProperties object) {
+        object.setProperty("orientationRadians", getAngleRadians());
     }
 
     @Override

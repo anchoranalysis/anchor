@@ -87,7 +87,7 @@ public class HistogramFactory {
     public static Histogram create(Channel chnl) throws CreateException {
 
         try {
-            return create(chnl.getVoxelBox());
+            return create(chnl.voxels());
         } catch (IncorrectVoxelDataTypeException e) {
             throw new CreateException("Cannot create histogram from ImgChnl", e);
         }
@@ -101,9 +101,9 @@ public class HistogramFactory {
 
         Histogram total = new HistogramArray((int) chnl.getVoxelDataType().maxValue());
 
-        VoxelBox<?> vb = chnl.getVoxelBox().any();
+        VoxelBox<?> vb = chnl.voxels().any();
 
-        Histogram h = createWithMask(vb, new ObjectMask(mask.binaryVoxelBox()));
+        Histogram h = createWithMask(vb, new ObjectMask(mask.binaryVoxels()));
         try {
             total.addHistogram(h);
         } catch (OperationFailedException e) {
@@ -118,7 +118,7 @@ public class HistogramFactory {
     }
 
     public static Histogram create(Channel chnl, ObjectCollection objects) {
-        return createWithMasks(chnl.getVoxelBox(), objects);
+        return createWithMasks(chnl.voxels(), objects);
     }
 
     public static Histogram create(VoxelBuffer<?> inputBuffer) {
@@ -161,13 +161,13 @@ public class HistogramFactory {
         ReadableTuple3i cornerMin = object.getBoundingBox().cornerMin();
         ReadableTuple3i cornerMax = object.getBoundingBox().calcCornerMax();
 
-        byte maskOnVal = object.getBinaryValuesByte().getOnByte();
+        byte matchValue = object.getBinaryValuesByte().getOnByte();
 
         for (int z = cornerMin.getZ(); z <= cornerMax.getZ(); z++) {
 
             VoxelBuffer<?> bb = inputBuffer.getPixelsForPlane(z);
             ByteBuffer bbMask =
-                    object.getVoxelBox().getPixelsForPlane(z - cornerMin.getZ()).buffer();
+                    object.getVoxels().getPixelsForPlane(z - cornerMin.getZ()).buffer();
 
             for (int y = cornerMin.getY(); y <= cornerMax.getY(); y++) {
                 for (int x = cornerMin.getX(); x <= cornerMax.getX(); x++) {
@@ -175,9 +175,9 @@ public class HistogramFactory {
                     int offset = e.offset(x, y);
                     int offsetMask = eMask.offset(x - cornerMin.getX(), y - cornerMin.getY());
 
-                    byte maskVal = bbMask.get(offsetMask);
+                    byte valueOnMask = bbMask.get(offsetMask);
 
-                    if (maskVal == maskOnVal) {
+                    if (valueOnMask == matchValue) {
                         int val = bb.getInt(offset);
                         hist.incrVal(val);
                     }

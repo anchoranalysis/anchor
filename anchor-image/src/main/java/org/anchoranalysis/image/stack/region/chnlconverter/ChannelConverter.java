@@ -36,6 +36,8 @@ import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactoryTypeBound;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 /**
  * Converts a channel from one type to another
@@ -43,22 +45,12 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
  * @author Owen Feehan
  * @param <T> type to convert to (destination-type)
  */
+@AllArgsConstructor
 public abstract class ChannelConverter<T extends Buffer> {
 
-    private VoxelBoxFactoryTypeBound<T> voxelBoxFactory;
-
     private VoxelDataType dataTypeTarget;
-    private VoxelBoxConverter<T> voxelBoxConverter;
-
-    public ChannelConverter(
-            VoxelDataType dataTypeTarget,
-            VoxelBoxConverter<T> voxelBoxConverter,
-            VoxelBoxFactoryTypeBound<T> voxelBoxFactory) {
-        super();
-        this.dataTypeTarget = dataTypeTarget;
-        this.voxelBoxConverter = voxelBoxConverter;
-        this.voxelBoxFactory = voxelBoxFactory;
-    }
+    @Getter private VoxelBoxConverter<T> voxelsConverter;
+    private VoxelBoxFactoryTypeBound<T> voxelBoxFactory;
 
     public Stack convert(Stack stackIn, ConversionPolicy changeExisting) {
         Stack stackOut = new Stack();
@@ -86,30 +78,26 @@ public abstract class ChannelConverter<T extends Buffer> {
         }
 
         Channel chnlOut;
-        VoxelBox<T> voxelBoxOut;
+        VoxelBox<T> voxelsOut;
 
         if (changeExisting == ConversionPolicy.CHANGE_EXISTING_CHANNEL) {
             chnlOut = chnlIn;
             // We need to create a new voxel buffer
-            voxelBoxOut = voxelBoxFactory.create(chnlIn.getDimensions().getExtent());
+            voxelsOut = voxelBoxFactory.create(chnlIn.getDimensions().getExtent());
         } else {
             chnlOut =
                     ChannelFactory.instance()
                             .createEmptyUninitialised(chnlIn.getDimensions(), dataTypeTarget);
-            voxelBoxOut = (VoxelBox<T>) chnlOut.getVoxelBox().match(dataTypeTarget);
+            voxelsOut = (VoxelBox<T>) chnlOut.voxels().match(dataTypeTarget);
         }
 
-        voxelBoxConverter.convertFrom(chnlIn.getVoxelBox(), voxelBoxOut);
+        voxelsConverter.convertFrom(chnlIn.voxels(), voxelsOut);
 
         if (changeExisting == ConversionPolicy.CHANGE_EXISTING_CHANNEL) {
-            VoxelBoxWrapper wrapper = new VoxelBoxWrapper(voxelBoxOut);
+            VoxelBoxWrapper wrapper = new VoxelBoxWrapper(voxelsOut);
             chnlOut.replaceVoxelBox(wrapper);
         }
 
         return chnlOut;
-    }
-
-    public VoxelBoxConverter<T> getVoxelBoxConverter() {
-        return voxelBoxConverter;
     }
 }

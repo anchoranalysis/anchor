@@ -31,10 +31,11 @@ import java.nio.ByteBuffer;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class BufferedImageFactory {
-
-    private BufferedImageFactory() {}
 
     public static BufferedImage createGrayscale(VoxelBox<ByteBuffer> vb) throws CreateException {
 

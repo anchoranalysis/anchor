@@ -32,14 +32,18 @@ import org.anchoranalysis.image.voxel.box.VoxelBox;
 
 public class BinaryVoxelBoxInt extends BinaryVoxelBox<IntBuffer> {
 
-    public BinaryVoxelBoxInt(VoxelBox<IntBuffer> voxelBox, BinaryValues bv) {
-        super(voxelBox, bv);
+    public BinaryVoxelBoxInt(VoxelBox<IntBuffer> voxels) {
+        super(voxels);
+    }
+    
+    public BinaryVoxelBoxInt(VoxelBox<IntBuffer> voxels, BinaryValues bv) {
+        super(voxels, bv);
     }
 
     @Override
     public boolean isOn(int x, int y, int z) {
-        int offset = getVoxelBox().extent().offset(x, y);
-        return getVoxelBox().getPixelsForPlane(z).buffer().get(offset)
+        int offset = getVoxels().extent().offset(x, y);
+        return getVoxels().getPixelsForPlane(z).buffer().get(offset)
                 != getBinaryValues().getOffInt();
     }
 
@@ -50,22 +54,22 @@ public class BinaryVoxelBoxInt extends BinaryVoxelBox<IntBuffer> {
 
     @Override
     public void setOn(int x, int y, int z) {
-        int offset = getVoxelBox().extent().offset(x, y);
-        getVoxelBox().getPixelsForPlane(z).buffer().put(offset, getBinaryValues().getOnInt());
+        int offset = getVoxels().extent().offset(x, y);
+        getVoxels().getPixelsForPlane(z).buffer().put(offset, getBinaryValues().getOnInt());
     }
 
     @Override
     public void setOff(int x, int y, int z) {
-        int offset = getVoxelBox().extent().offset(x, y);
-        getVoxelBox().getPixelsForPlane(z).buffer().put(offset, getBinaryValues().getOffInt());
+        int offset = getVoxels().extent().offset(x, y);
+        getVoxels().getPixelsForPlane(z).buffer().put(offset, getBinaryValues().getOffInt());
     }
 
     @Override
     public BinaryVoxelBox<IntBuffer> duplicate() {
-        return new BinaryVoxelBoxInt(getVoxelBox().duplicate(), getBinaryValues());
+        return new BinaryVoxelBoxInt(getVoxels().duplicate(), getBinaryValues());
     }
 
     public BinaryVoxelBox<IntBuffer> extractSlice(int z) {
-        return new BinaryVoxelBoxInt(getVoxelBox().extractSlice(z), getBinaryValues());
+        return new BinaryVoxelBoxInt(getVoxels().extractSlice(z), getBinaryValues());
     }
 }

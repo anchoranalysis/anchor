@@ -28,10 +28,11 @@ package org.anchoranalysis.image.bean.nonbean.init;
 
 import org.anchoranalysis.core.name.provider.NamedProvider;
 import org.anchoranalysis.image.stack.Stack;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class CreateCombinedStack {
-
-    private CreateCombinedStack() {}
 
     public static NamedProvider<Stack> apply(ImageInitParams so) {
         return new CombineDiverseProvidersAsStacks(

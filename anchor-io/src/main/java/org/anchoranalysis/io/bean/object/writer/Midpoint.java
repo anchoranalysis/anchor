@@ -59,19 +59,19 @@ public class Midpoint extends DrawObject {
     @BeanField @Getter @Setter private int extraLength = 2;
     // END BEAN PROPERTIES
 
-    public static Point3i calcMidpoint(ObjectWithProperties mask, boolean suppressZ) {
+    public static Point3i calcMidpoint(ObjectWithProperties object, boolean suppressZ) {
 
-        return maybeSuppressZ(calcMidpoint3D(mask), suppressZ);
+        return maybeSuppressZ(calcMidpoint3D(object), suppressZ);
     }
 
     @Override
-    public PrecalcOverlay precalculate(ObjectWithProperties mask, ImageDimensions dim)
+    public PrecalcOverlay precalculate(ObjectWithProperties object, ImageDimensions dim)
             throws CreateException {
 
         // We ignore the z-dimension so it's projectable onto a 2D slice
-        Point3i midPoint = calcMidpoint(mask, true);
+        Point3i midPoint = calcMidpoint(object, true);
 
-        return new PrecalcOverlay(mask) {
+        return new PrecalcOverlay(object) {
 
             @Override
             public void writePrecalculatedMask(
@@ -83,7 +83,7 @@ public class Midpoint extends DrawObject {
 
                 writeCross(
                         midPoint,
-                        attributes.colorFor(mask, iteration),
+                        attributes.colorFor(object, iteration),
                         background,
                         extraLength,
                         restrictTo);
@@ -145,13 +145,13 @@ public class Midpoint extends DrawObject {
         return point;
     }
 
-    private static Point3i calcMidpoint3D(ObjectWithProperties mask) {
-        if (mask.hasProperty(PROPERTY_MIDPOINT)) {
+    private static Point3i calcMidpoint3D(ObjectWithProperties object) {
+        if (object.hasProperty(PROPERTY_MIDPOINT)) {
             return Point3i.immutableAdd(
-                    (Point3i) mask.getProperty(PROPERTY_MIDPOINT),
-                    mask.getBoundingBox().cornerMin());
+                    (Point3i) object.getProperty(PROPERTY_MIDPOINT),
+                    object.getBoundingBox().cornerMin());
         } else {
-            return PointConverter.intFromDouble(mask.getMask().centerOfGravity());
+            return PointConverter.intFromDouble(object.withoutProperties().centerOfGravity());
         }
     }
 }

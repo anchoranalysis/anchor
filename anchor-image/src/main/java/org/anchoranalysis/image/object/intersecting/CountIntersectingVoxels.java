@@ -38,10 +38,6 @@ public abstract class CountIntersectingVoxels {
      *
      * @param src
      * @param other
-     * @param onMaskThis a region membership mask or a binary-high value depending on
-     *     region-membership
-     * @param onMaskOther a region membership mask or a binary-high value depending on
-     *     region-membership
      * @return
      */
     public int countIntersectingVoxels(
@@ -73,10 +69,10 @@ public abstract class CountIntersectingVoxels {
         int cnt = 0;
         for (int z = bbox.z().min(); z < bbox.z().max(); z++) {
 
-            ByteBuffer buffer = src.getVoxelBox().getPixelsForPlane(z).buffer();
+            ByteBuffer buffer = src.getVoxels().getPixelsForPlane(z).buffer();
 
             int zOther = z + bbox.z().rel();
-            ByteBuffer bufferOther = other.getVoxelBox().getPixelsForPlane(zOther).buffer();
+            ByteBuffer bufferOther = other.getVoxels().getPixelsForPlane(zOther).buffer();
 
             cnt += countIntersectingVoxels(buffer, bufferOther, bbox);
         }

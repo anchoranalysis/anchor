@@ -41,7 +41,7 @@ public abstract class AnnotationWithCfg implements Annotation {
     protected abstract int getRegionID();
 
     public ObjectCollection convertToObjects(ImageDimensions dimensions) {
-        return getCfg().calcMask(
+        return getCfg().deriveObjects(
                         dimensions,
                         getRegionMap().membershipWithFlagsForIndex(getRegionID()),
                         BinaryValuesByte.getDefault())

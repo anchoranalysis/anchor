@@ -32,10 +32,11 @@ import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.nio.file.attribute.DosFileAttributes;
 import org.apache.commons.lang.SystemUtils;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 class HiddenPathChecker {
-
-    private HiddenPathChecker() {}
 
     public static boolean includePath(Path path) {
         try {

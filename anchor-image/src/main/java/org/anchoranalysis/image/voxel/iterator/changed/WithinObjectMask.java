@@ -33,12 +33,12 @@ import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.ObjectMask;
 
 /**
- * Processes only neighboring voxels that lie on a mask.
+ * Processes only neighboring voxels that lie on an object-mask.
  *
  * @author Owen Feehan
  * @param <T> result-type that can be collected after processing
  */
-final class WithinMask<T> implements ProcessVoxelNeighbor<T> {
+final class WithinObjectMask<T> implements ProcessVoxelNeighbor<T> {
 
     private final ProcessChangedPointAbsoluteMasked<T> delegate;
     private final ObjectMask object;
@@ -48,17 +48,17 @@ final class WithinMask<T> implements ProcessVoxelNeighbor<T> {
     private Point3i point;
     private Point3i relativeToCorner;
 
-    // Current ByteBuffer for the object mask
+    // Current ByteBuffer for the object-mask
     private ByteBuffer bbOM;
     private byte maskOffVal;
 
     private int maskOffsetXYAtPoint;
 
-    public WithinMask(ProcessChangedPointAbsoluteMasked<T> process, ObjectMask object) {
+    public WithinObjectMask(ProcessChangedPointAbsoluteMasked<T> process, ObjectMask object) {
         this.delegate = process;
         this.object = object;
         this.maskOffVal = object.getBinaryValuesByte().getOffByte();
-        this.extent = object.getVoxelBox().extent();
+        this.extent = object.getVoxels().extent();
         this.cornerMin = object.getBoundingBox().cornerMin();
     }
 
@@ -84,7 +84,7 @@ final class WithinMask<T> implements ProcessVoxelNeighbor<T> {
         }
 
         int zRel = z1 - cornerMin.getZ();
-        this.bbOM = object.getVoxelBox().getPixelsForPlane(zRel).buffer();
+        this.bbOM = object.getVoxels().getPixelsForPlane(zRel).buffer();
 
         delegate.notifyChangeZ(zChange, z1, bbOM);
         return true;

@@ -51,7 +51,7 @@ public class PointsFromObject {
     public static List<Point3i> fromAsInteger(ObjectMask object) {
         List<Point3i> points = new ArrayList<>();
         PointsFromBinaryVoxelBox.addPointsFromVoxelBox3D(
-                object.binaryVoxelBox(), object.getBoundingBox().cornerMin(), points);
+                object.binaryVoxels(), object.getBoundingBox().cornerMin(), points);
         return points;
     }
 
@@ -64,7 +64,7 @@ public class PointsFromObject {
     public static List<Point3d> fromAsDouble(ObjectMask object) {
         List<Point3d> points = new ArrayList<>();
         PointsFromBinaryVoxelBox.addPointsFromVoxelBox3DDouble(
-                object.binaryVoxelBox(), object.getBoundingBox().cornerMin(), points);
+                object.binaryVoxels(), object.getBoundingBox().cornerMin(), points);
         return points;
     }
 
@@ -79,7 +79,7 @@ public class PointsFromObject {
         List<Point3i> points = new ArrayList<>();
         ObjectMask outline = FindOutline.outline(objects, 1, false, true);
         PointsFromBinaryVoxelBox.addPointsFromVoxelBox3D(
-                outline.binaryVoxelBox(), outline.getBoundingBox().cornerMin(), points);
+                outline.binaryVoxels(), outline.getBoundingBox().cornerMin(), points);
         return points;
     }
 
@@ -89,7 +89,7 @@ public class PointsFromObject {
 
         ObjectMask outline = FindOutline.outline(objects, 1, false, false);
         PointsFromBinaryVoxelBox.addPointsFromVoxelBox3D(
-                outline.binaryVoxelBox(), outline.getBoundingBox().cornerMin(), points);
+                outline.binaryVoxels(), outline.getBoundingBox().cornerMin(), points);
         // Now get all the points on the outline
         return points;
     }

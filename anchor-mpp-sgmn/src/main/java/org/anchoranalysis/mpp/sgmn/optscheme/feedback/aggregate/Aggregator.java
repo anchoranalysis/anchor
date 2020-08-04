@@ -27,35 +27,38 @@
 package org.anchoranalysis.mpp.sgmn.optscheme.feedback.aggregate;
 
 import java.io.PrintWriter;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class Aggregator {
 
-    private double nrg;
-    private double size;
-    private double temperature;
-    private double accptAll;
+    @Getter @Setter private double nrg;
+    @Getter @Setter private double size;
+    @Getter private double temperature;
+    @Getter private double acceptAll;
 
-    private int lastDivider;
+    @Getter private int lastDivider;
 
-    private AggIDCounter kernelAccpt;
-    private AggIDCounter kernelProp;
-
-    private Aggregator() {}
+    @Getter private AggIDCounter kernelAccepted;
+    @Getter private AggIDCounter kernelProposed;
 
     public Aggregator(int maxID) {
-        kernelAccpt = new AggIDCounter(maxID);
-        kernelProp = new AggIDCounter(maxID);
+        kernelAccepted = new AggIDCounter(maxID);
+        kernelProposed = new AggIDCounter(maxID);
         reset();
     }
 
     public Aggregator deepCopy() {
         Aggregator agg = new Aggregator();
-        agg.kernelAccpt = kernelAccpt.deepCopy();
-        agg.kernelProp = kernelProp.deepCopy();
+        agg.kernelAccepted = kernelAccepted.deepCopy();
+        agg.kernelProposed = kernelProposed.deepCopy();
         agg.nrg = nrg;
         agg.size = size;
         agg.temperature = temperature;
-        agg.accptAll = accptAll;
+        agg.acceptAll = acceptAll;
         agg.lastDivider = lastDivider;
         return agg;
     }
@@ -64,9 +67,9 @@ public class Aggregator {
         nrg = 0;
         size = 0;
         temperature = 0;
-        accptAll = 0;
-        kernelAccpt.reset();
-        kernelProp.reset();
+        acceptAll = 0;
+        kernelAccepted.reset();
+        kernelProposed.reset();
         lastDivider = -1;
     }
 
@@ -74,10 +77,10 @@ public class Aggregator {
         nrg /= divider;
         size /= divider;
         temperature /= divider;
-        accptAll /= divider;
-        kernelAccpt.div(divider);
-        kernelProp.div(divider);
-        kernelAccpt.div(kernelProp);
+        acceptAll /= divider;
+        kernelAccepted.div(divider);
+        kernelProposed.div(divider);
+        kernelAccepted.div(kernelProposed);
         this.lastDivider = divider;
     }
 
@@ -85,21 +88,21 @@ public class Aggregator {
     public String toString() {
         return String.format(
                 "agg(nrg=%e  size=%3.3f  aa=%3.6f temp=%e  ka=%s)",
-                nrg, size, accptAll, temperature, kernelAccpt.toString());
+                nrg, size, acceptAll, temperature, kernelAccepted.toString());
     }
 
     public void outputToWriter(PrintWriter writer) {
-        writer.printf("%e,%f,%e,%e,", nrg, size, accptAll, temperature);
-        kernelProp.outputToWriter(writer);
+        writer.printf("%e,%f,%e,%e,", nrg, size, acceptAll, temperature);
+        kernelProposed.outputToWriter(writer);
         writer.print(",");
-        kernelAccpt.outputToWriter(writer);
+        kernelAccepted.outputToWriter(writer);
     }
 
     public void outputHeaderToWriter(PrintWriter writer) {
         writer.print("Nrg,Size,AccptAll,Temperature,");
-        kernelProp.outputHeaderToWriter(writer, "Prop");
+        kernelProposed.outputHeaderToWriter(writer, "Prop");
         writer.print(",");
-        kernelAccpt.outputHeaderToWriter(writer, "Accpt");
+        kernelAccepted.outputHeaderToWriter(writer, "Accpt");
     }
 
     public void incrNRG(double incr) {
@@ -115,51 +118,15 @@ public class Aggregator {
     }
 
     public void incrKernelProp(int kernelID) {
-        kernelProp.incr(kernelID);
+        kernelProposed.incr(kernelID);
     }
 
     public void incrKernelAccpt(int kernelID) {
-        kernelAccpt.incr(kernelID);
-        accptAll++;
-    }
-
-    public double getNrg() {
-        return nrg;
-    }
-
-    public void setNrg(double nrg) {
-        this.nrg = nrg;
-    }
-
-    public double getSize() {
-        return size;
-    }
-
-    public void setSize(double size) {
-        this.size = size;
+        kernelAccepted.incr(kernelID);
+        acceptAll++;
     }
 
     public boolean hasLastDivider() {
         return (lastDivider != -1);
-    }
-
-    public int getLastDivider() {
-        return lastDivider;
-    }
-
-    public double getTemp() {
-        return temperature;
-    }
-
-    public AggIDCounter getKernelAccpt() {
-        return kernelAccpt;
-    }
-
-    public AggIDCounter getKernelProp() {
-        return kernelProp;
-    }
-
-    public double getAccptAll() {
-        return accptAll;
     }
 }

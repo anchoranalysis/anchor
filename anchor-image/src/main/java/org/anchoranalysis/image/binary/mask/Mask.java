@@ -59,6 +59,8 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
  */
 public class Mask {
 
+    private static final ChannelFactorySingleType FACTORY = ChannelFactory.instance().get(VoxelDataTypeUnsignedByte.INSTANCE);
+    
     /**
      * The underlying channel which contains the binary-values. It is always has data-type of
      * unsigned 8-bit.
@@ -69,6 +71,29 @@ public class Mask {
 
     private final BinaryValuesByte binaryValuesByte;
 
+    /**
+     * Constructor - creates a mask from an existing channel using default values for OFF (0) and ON (255)
+     * <p>
+     * The channel should have maximally two distinct intensity values, represeting OFF and ON states
+     * <p>
+     * Precondition: no check occurs that only OFF and ON voxels exist in a channel, so please call only with valid input.
+     * 
+     * @param channel the channel to form the mask, whose voxel-buffer is reused internally in the mask
+     */
+    public Mask(Channel channel) {
+        this(channel, BinaryValues.getDefault());
+    }
+        
+    /**
+     * Constructor - creates a mask from an existing channel
+     * <p>
+     * The channel should have maximally two distinct intensity values, represeting OFF and ON states
+     * <p>
+     * Precondition: no check occurs that only OFF and ON voxels exist in a channel, so please call only with valid input.
+     * 
+     * @param channel the channel to form the mask, whose voxel-buffer is reused internally in the mask 
+     * @param binaryValues how to identify the OFF and ON states from intensity voxel-values
+     */
     public Mask(Channel channel, BinaryValues binaryValues) {
         this.channel = channel;
         this.binaryValues = binaryValues;
@@ -80,16 +105,21 @@ public class Mask {
         }
     }
 
-    public Mask(BinaryVoxelBox<ByteBuffer> voxelBox) {
+    /**
+     * Constructor - creates a mask from an existing binary voxel-box using default image resolution
+     * 
+     * @param voxels the voxel-box (reused as the internal buffer of the mask)
+     */
+    public Mask(BinaryVoxelBox<ByteBuffer> voxels) {
         this(
-                voxelBox,
-                new ImageResolution(),
-                ChannelFactory.instance().get(VoxelDataTypeUnsignedByte.INSTANCE));
+                voxels,
+                new ImageResolution()
+        );
     }
-
+    
     public Mask(
-            BinaryVoxelBox<ByteBuffer> vb, ImageResolution res, ChannelFactorySingleType factory) {
-        this.channel = factory.create(vb.getVoxelBox(), res);
+            BinaryVoxelBox<ByteBuffer> vb, ImageResolution res) {
+        this.channel = FACTORY.create(vb.getVoxels(), res);
         this.binaryValues = vb.getBinaryValues();
         this.binaryValuesByte = binaryValues.createByte();
     }
@@ -98,23 +128,23 @@ public class Mask {
         return channel.getDimensions();
     }
 
-    public VoxelBox<ByteBuffer> getVoxelBox() {
+    public VoxelBox<ByteBuffer> getVoxels() {
         try {
-            return channel.getVoxelBox().asByte();
+            return channel.voxels().asByte();
         } catch (IncorrectVoxelDataTypeException e) {
             throw new IncorrectVoxelDataTypeException(
                     "Associated imgChnl does contain have unsigned 8-bit data (byte)");
         }
     }
 
-    public BinaryVoxelBox<ByteBuffer> binaryVoxelBox() {
-        return new BinaryVoxelBoxByte(getVoxelBox(), binaryValues);
+    public BinaryVoxelBox<ByteBuffer> binaryVoxels() {
+        return new BinaryVoxelBoxByte(getVoxels(), binaryValues);
     }
 
     public boolean isPointOn(Point3i point) {
-        ByteBuffer bb = getVoxelBox().getPixelsForPlane(point.getZ()).buffer();
+        ByteBuffer bb = getVoxels().getPixelsForPlane(point.getZ()).buffer();
 
-        int offset = getVoxelBox().extent().offset(point.getX(), point.getY());
+        int offset = getVoxels().extent().offset(point.getX(), point.getY());
 
         return bb.get(offset) == binaryValuesByte.getOnByte();
     }
@@ -127,7 +157,7 @@ public class Mask {
     public ObjectMask region(BoundingBox bbox, boolean reuseIfPossible) {
         Preconditions.checkArgument(channel.getDimensions().contains(bbox));
         return new ObjectMask(
-                bbox, channel.getVoxelBox().asByte().region(bbox, reuseIfPossible), binaryValues);
+                bbox, channel.voxels().asByte().region(bbox, reuseIfPossible), binaryValues);
     }
 
     public Mask maxIntensityProj() {
@@ -151,12 +181,12 @@ public class Mask {
 
         Channel scaled = this.channel.scaleXY(scaleFactor, interpolator);
 
-        Mask binaryChnl = new Mask(scaled, binaryValues);
+        Mask mask = new Mask(scaled, binaryValues);
 
         // We threshold to make sure it's still binary
-        applyThreshold(binaryChnl);
+        applyThreshold(mask);
 
-        return binaryChnl;
+        return mask;
     }
 
     public Mask extractSlice(int z) {
@@ -164,13 +194,13 @@ public class Mask {
     }
 
     public void replaceBy(BinaryVoxelBox<ByteBuffer> bvb) throws IncorrectImageSizeException {
-        channel.getVoxelBox().asByte().replaceBy(bvb.getVoxelBox());
+        channel.voxels().asByte().replaceBy(bvb.getVoxels());
     }
 
-    private void applyThreshold(Mask binaryChnl) {
+    private void applyThreshold(Mask mask) {
         int thresholdVal = (binaryValues.getOnInt() + binaryValues.getOffInt()) / 2;
 
         VoxelBoxThresholder.thresholdForLevel(
-                binaryChnl.getVoxelBox(), thresholdVal, binaryChnl.getBinaryValues().createByte());
+                mask.getVoxels(), thresholdVal, mask.getBinaryValues().createByte());
     }
 }

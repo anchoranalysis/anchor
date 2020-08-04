@@ -46,7 +46,7 @@ import org.anchoranalysis.image.voxel.box.VoxelBox;
 @AllArgsConstructor
 public class ObjectWithProperties {
 
-    @Getter private final ObjectMask mask;
+    private final ObjectMask object;
 
     @Getter private final Map<String, Object> properties;
 
@@ -82,11 +82,11 @@ public class ObjectWithProperties {
      * @return the mapped object (with identical properties) to previously.
      */
     public ObjectWithProperties map(UnaryOperator<ObjectMask> funcMap) {
-        return new ObjectWithProperties(funcMap.apply(mask), properties);
+        return new ObjectWithProperties(funcMap.apply(object), properties);
     }
 
     public ObjectWithProperties duplicate() {
-        ObjectWithProperties out = new ObjectWithProperties(mask.duplicate());
+        ObjectWithProperties out = new ObjectWithProperties(object.duplicate());
         for (Entry<String, Object> entry : properties.entrySet()) {
             out.properties.put(entry.getKey(), entry.getValue());
         }
@@ -94,26 +94,30 @@ public class ObjectWithProperties {
     }
 
     public boolean equals(Object obj) {
-        return mask.equals(obj);
+        return object.equals(obj);
     }
 
     public BoundingBox getBoundingBox() {
-        return mask.getBoundingBox();
+        return object.getBoundingBox();
     }
 
-    public VoxelBox<ByteBuffer> getVoxelBox() {
-        return mask.getVoxelBox();
+    public VoxelBox<ByteBuffer> getVoxels() {
+        return object.getVoxels();
     }
 
     public int hashCode() {
-        return mask.hashCode();
+        return object.hashCode();
     }
 
     public String toString() {
-        return mask.toString();
+        return object.toString();
     }
 
     public BinaryValuesByte getBinaryValues() {
-        return mask.getBinaryValuesByte();
+        return object.getBinaryValuesByte();
+    }
+
+    public ObjectMask withoutProperties() {
+        return object;
     }
 }

@@ -29,10 +29,11 @@ package org.anchoranalysis.image.convert;
 import org.anchoranalysis.core.axis.AxisType;
 import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.orientation.DirectionVector;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class ImageUnitConverter {
-
-    private ImageUnitConverter() {}
 
     public static double convertToPhysicalVolume(double value, ImageResolution res) {
         return value * res.unitVolume();

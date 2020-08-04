@@ -30,10 +30,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.anchoranalysis.mpp.sgmn.kernel.proposer.WeightedKernel;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 class EnsureUniqueNames {
-
-    private EnsureUniqueNames() {}
 
     public static <T> void apply(List<WeightedKernel<T>> lstKernelFactories) {
         Map<String, Integer> hashName = cntUniqueNames(lstKernelFactories);

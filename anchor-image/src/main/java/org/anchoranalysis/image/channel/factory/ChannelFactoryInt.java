@@ -40,7 +40,7 @@ public class ChannelFactoryInt implements ChannelFactorySingleType {
     @Override
     public Channel createEmptyInitialised(ImageDimensions dim) {
         VoxelBoxInt vb = new VoxelBoxInt(PixelsFromIntBufferArr.createInitialised(dim.getExtent()));
-        return create(vb, dim.getRes());
+        return create(vb, dim.getResolution());
     }
 
     @Override
@@ -49,7 +49,7 @@ public class ChannelFactoryInt implements ChannelFactorySingleType {
         PixelsFromIntBufferArr pixels = PixelsFromIntBufferArr.createEmpty(dimensions.getExtent());
 
         VoxelBoxInt vb = new VoxelBoxInt(pixels);
-        return create(vb, dimensions.getRes());
+        return create(vb, dimensions.getResolution());
     }
 
     @Override

@@ -27,10 +27,11 @@
 package org.anchoranalysis.image.voxel.datatype;
 
 import org.anchoranalysis.core.error.CreateException;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class CombineTypes {
-
-    private CombineTypes() {}
 
     public static VoxelDataType combineTypes(VoxelDataType type1, VoxelDataType type2)
             throws CreateException {

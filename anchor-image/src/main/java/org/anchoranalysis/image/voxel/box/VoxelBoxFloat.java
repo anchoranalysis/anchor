@@ -136,7 +136,7 @@ public final class VoxelBoxFloat extends VoxelBox<FloatBuffer> {
     }
 
     @Override
-    public VoxelBox<FloatBuffer> maxIntensityProj() {
+    public VoxelBox<FloatBuffer> maxIntensityProjection() {
         MaxIntensityBufferFloat mi = new MaxIntensityBufferFloat(extent());
 
         for (int z = 0; z < extent().getZ(); z++) {
@@ -160,12 +160,12 @@ public final class VoxelBoxFloat extends VoxelBox<FloatBuffer> {
     }
 
     @Override
-    public void addPixelsCheckMask(ObjectMask mask, int value) {
+    public void addPixelsCheckMask(ObjectMask objectMask, int value) {
         throw new IllegalArgumentException("Currently unsupported method");
     }
 
     @Override
-    public void scalePixelsCheckMask(ObjectMask mask, double value) {
+    public void scalePixelsCheckMask(ObjectMask objectMask, double value) {
         throw new IllegalArgumentException("Currently unsupported method");
     }
 
@@ -194,7 +194,7 @@ public final class VoxelBoxFloat extends VoxelBox<FloatBuffer> {
     }
 
     @Override
-    public VoxelBox<FloatBuffer> meanIntensityProj() {
+    public VoxelBox<FloatBuffer> meanIntensityProjection() {
         throw new UnsupportedOperationException();
     }
 }

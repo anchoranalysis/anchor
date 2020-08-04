@@ -74,7 +74,7 @@ public final class VoxelBoxShort extends VoxelBox<ShortBuffer> {
 
             ShortBuffer pixelIn = getPlaneAccess().getPixelsForPlane(z).buffer();
             ByteBuffer pixelOut =
-                    object.getVoxelBox().getPixelsForPlane(z - bbox.cornerMin().getZ()).buffer();
+                    object.getVoxels().getPixelsForPlane(z - bbox.cornerMin().getZ()).buffer();
 
             int ind = 0;
             for (int y = bbox.cornerMin().getY(); y <= pointMax.getY(); y++) {
@@ -167,12 +167,12 @@ public final class VoxelBoxShort extends VoxelBox<ShortBuffer> {
 
     // TODO when values are too small or too large
     @Override
-    public void addPixelsCheckMask(ObjectMask mask, int value) {
+    public void addPixelsCheckMask(ObjectMask objectMask, int value) {
 
-        BoundingBox bbox = mask.getBoundingBox();
-        VoxelBox<ByteBuffer> objectBuffer = mask.getVoxelBox();
+        BoundingBox bbox = objectMask.getBoundingBox();
+        VoxelBox<ByteBuffer> objectBuffer = objectMask.getVoxels();
 
-        byte maskOnByte = mask.getBinaryValuesByte().getOnByte();
+        byte maskOnByte = objectMask.getBinaryValuesByte().getOnByte();
 
         ReadableTuple3i pointMax = bbox.calcCornerMax();
         for (int z = bbox.cornerMin().getZ(); z <= pointMax.getZ(); z++) {
@@ -197,7 +197,7 @@ public final class VoxelBoxShort extends VoxelBox<ShortBuffer> {
     }
 
     @Override
-    public void scalePixelsCheckMask(ObjectMask mask, double value) {
+    public void scalePixelsCheckMask(ObjectMask objectMask, double value) {
         throw new IllegalArgumentException("Currently unsupported method");
     }
 
@@ -226,7 +226,7 @@ public final class VoxelBoxShort extends VoxelBox<ShortBuffer> {
     }
 
     @Override
-    public VoxelBox<ShortBuffer> maxIntensityProj() {
+    public VoxelBox<ShortBuffer> maxIntensityProjection() {
 
         MaxIntensityBufferShort mi = new MaxIntensityBufferShort(extent());
 
@@ -238,7 +238,7 @@ public final class VoxelBoxShort extends VoxelBox<ShortBuffer> {
     }
 
     @Override
-    public VoxelBox<ShortBuffer> meanIntensityProj() {
+    public VoxelBox<ShortBuffer> meanIntensityProjection() {
         MeanIntensityShortBuffer mi = new MeanIntensityShortBuffer(extent());
 
         for (int z = 0; z < extent().getZ(); z++) {

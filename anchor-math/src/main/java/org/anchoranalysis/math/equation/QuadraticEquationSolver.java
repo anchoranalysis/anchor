@@ -27,11 +27,12 @@
 package org.anchoranalysis.math.equation;
 
 import org.anchoranalysis.core.error.OperationFailedException;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 /** Solves a Quadratic Equation by finding non-complex roots */
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class QuadraticEquationSolver {
-
-    private QuadraticEquationSolver() {}
 
     /** Roots (solution) of a quadratic equation */
     public static class QuadraticRoots {

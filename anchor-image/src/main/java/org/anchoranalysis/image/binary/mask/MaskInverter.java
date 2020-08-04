@@ -35,30 +35,49 @@ import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 
+/**
+ * Inverts masks and objects
+ * 
+ * @author Owen Feehan
+ *
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class MaskInverter {
 
+    /**
+     * Creates a new object-mask where OFF voxels become ON voxels and vice versa
+     * 
+     * @param object object to invert (unmodified)
+     * @return a newly created inverted object
+     */
     public static ObjectMask invertObjectDuplicate(ObjectMask object) {
-        BinaryVoxelBox<ByteBuffer> bvb = object.binaryVoxelBox().duplicate();
-        bvb.invert();
-        return new ObjectMask(bvb);
+        BinaryVoxelBox<ByteBuffer> voxels = object.binaryVoxels().duplicate();
+        voxels.invert();
+        return new ObjectMask(voxels);
     }
 
-    public static void invertChnl(Mask chnl) {
+    /**
+     * Modifies a mask so that OFF voxels become ON voxels and vice versa
+     * <p>
+     * The modification occur inplace, so no new masks are created.
+     * 
+     * @param mask mask to invert (modified)
+     */
+    public static void invert(Mask mask) {
 
-        BinaryValues bv = chnl.getBinaryValues();
+        BinaryValues bv = mask.getBinaryValues();
         BinaryValuesByte bvb = bv.createByte();
-        invertVoxelBox(chnl.getVoxelBox(), bvb);
+        invertVoxelBox(mask.getVoxels(), bvb);
     }
 
-    public static void invertVoxelBox(VoxelBox<ByteBuffer> vb, BinaryValuesByte bvb) {
-        for (int z = 0; z < vb.extent().getZ(); z++) {
+    private static void invertVoxelBox(VoxelBox<ByteBuffer> voxels, BinaryValuesByte bvb) {
+        for (int z = 0; z < voxels.extent().getZ(); z++) {
 
-            ByteBuffer bb = vb.getPixelsForPlane(z).buffer();
+            ByteBuffer bb = voxels.getPixelsForPlane(z).buffer();
 
             int offset = 0;
-            for (int y = 0; y < vb.extent().getY(); y++) {
-                for (int x = 0; x < vb.extent().getX(); x++) {
+            for (int y = 0; y < voxels.extent().getY(); y++) {
+                for (int x = 0; x < voxels.extent().getX(); x++) {
 
                     byte val = bb.get(offset);
 

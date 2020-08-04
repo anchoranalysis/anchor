@@ -62,8 +62,8 @@ public class BinarySegmentationReference extends BinarySegmentation {
     public BinaryVoxelBox<ByteBuffer> sgmn(
             VoxelBoxWrapper voxelBox,
             BinarySegmentationParameters params,
-            Optional<ObjectMask> mask)
+            Optional<ObjectMask> objectMask)
             throws SegmentationFailedException {
-        return proxy.sgmn(voxelBox, params, mask);
+        return proxy.sgmn(voxelBox, params, objectMask);
     }
 }

@@ -36,6 +36,9 @@ import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * A voxel-box that should only contain two voxel-values (representing ON and OFF states)
@@ -43,48 +46,52 @@ import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
  * @author Owen Feehan
  * @param <T> buffer-type
  */
+@AllArgsConstructor
 public abstract class BinaryVoxelBox<T extends Buffer> implements BinaryOnOffSetter {
 
-    private VoxelBox<T> voxelBox;
+    /** Voxels that should only have two intensity-values (representing ON and OFF states). This is not checked as a precondition. */
+    @Getter @Setter private VoxelBox<T> voxels;
+    
+    /** Which two intensity values represent OFF and ON states */
+    @Getter private BinaryValues binaryValues;
 
-    private BinaryValues binaryValues;
-
-    public BinaryVoxelBox(VoxelBox<T> voxelBox, BinaryValues bv) {
-        super();
-        this.voxelBox = voxelBox;
-        this.binaryValues = bv;
+    /**
+     * Constructor - creates a voxel box using default binary-values
+     * 
+     * @param voxels voxels that should only have two intensity-values (representing ON and OFF states). This is not checked as a precondition.
+     */
+    public BinaryVoxelBox(VoxelBox<T> voxels) {
+        this.voxels = voxels;
+        this.binaryValues = BinaryValues.getDefault();
     }
-
-    public Extent extent() {
-        return voxelBox.extent();
-    }
-
-    public VoxelBox<T> getVoxelBox() {
-        return voxelBox;
-    }
-
+    
+    /**
+     * Changes the OFF state to be the ON state and vice-versa.
+     * <p>
+     * Only the {@code binaryValues} (acting as an index to the intensity values) is changed; the voxels remain themselves unchanged.
+     */
     public void invert() {
         binaryValues = binaryValues.createInverted();
     }
-
-    public BinaryValues getBinaryValues() {
-        return binaryValues;
+    
+    public Extent extent() {
+        return voxels.extent();
     }
 
     public VoxelBuffer<T> getPixelsForPlane(int z) {
-        return voxelBox.getPixelsForPlane(z);
+        return voxels.getPixelsForPlane(z);
     }
 
     public boolean hasOnVoxel() {
-        return voxelBox.hasEqualTo(binaryValues.getOnInt());
+        return voxels.hasEqualTo(binaryValues.getOnInt());
     }
 
     public boolean hasOffVoxel() {
-        return voxelBox.hasEqualTo(binaryValues.getOffInt());
+        return voxels.hasEqualTo(binaryValues.getOffInt());
     }
 
     public void copyPixelsTo(BoundingBox sourceBox, VoxelBox<T> destVoxelBox, BoundingBox destBox) {
-        voxelBox.copyPixelsTo(sourceBox, destVoxelBox, destBox);
+        voxels.copyPixelsTo(sourceBox, destVoxelBox, destBox);
     }
 
     public void copyPixelsToCheckMask(
@@ -92,24 +99,24 @@ public abstract class BinaryVoxelBox<T extends Buffer> implements BinaryOnOffSet
             VoxelBox<T> destVoxelBox,
             BoundingBox destBox,
             VoxelBox<ByteBuffer> objectMaskBuffer,
-            BinaryValuesByte maskBV) {
-        voxelBox.copyPixelsToCheckMask(sourceBox, destVoxelBox, destBox, objectMaskBuffer, maskBV);
+            BinaryValuesByte bvb) {
+        voxels.copyPixelsToCheckMask(sourceBox, destVoxelBox, destBox, objectMaskBuffer, bvb);
     }
 
     public void setPixelsCheckMaskOn(ObjectMask object) {
-        voxelBox.setPixelsCheckMask(object, binaryValues.getOnInt());
+        voxels.setPixelsCheckMask(object, binaryValues.getOnInt());
     }
 
     public void setPixelsCheckMaskOff(ObjectMask object) {
-        voxelBox.setPixelsCheckMask(object, binaryValues.getOffInt());
+        voxels.setPixelsCheckMask(object, binaryValues.getOffInt());
     }
 
     public abstract BinaryVoxelBox<T> duplicate();
 
     public abstract BinaryVoxelBox<T> extractSlice(int z) throws CreateException;
 
-    public void setPixelsCheckMask(ObjectMask object, int value, byte maskMatchValue) {
-        voxelBox.setPixelsCheckMask(object, value, maskMatchValue);
+    public void setPixelsCheckMask(ObjectMask objectMask, int value, byte objectMaskMatchValue) {
+        voxels.setPixelsCheckMask(objectMask, value, objectMaskMatchValue);
     }
 
     public void setPixelsCheckMask(
@@ -117,44 +124,40 @@ public abstract class BinaryVoxelBox<T extends Buffer> implements BinaryOnOffSet
             VoxelBox<ByteBuffer> objectBuffer,
             BoundingBox bboxMask,
             int value,
-            byte maskMatchValue) {
-        voxelBox.setPixelsCheckMask(
-                bboxToBeAssigned, objectBuffer, bboxMask, value, maskMatchValue);
+            byte objectMaskMatchValue) {
+        voxels.setPixelsCheckMask(
+                bboxToBeAssigned, objectBuffer, bboxMask, value, objectMaskMatchValue);
     }
 
-    public void addPixelsCheckMask(ObjectMask mask, int value) {
-        voxelBox.addPixelsCheckMask(mask, value);
+    public void addPixelsCheckMask(ObjectMask objectMask, int value) {
+        voxels.addPixelsCheckMask(objectMask, value);
     }
 
     public void setPixelsForPlane(int z, VoxelBuffer<T> pixels) {
-        voxelBox.setPixelsForPlane(z, pixels);
+        voxels.setPixelsForPlane(z, pixels);
     }
 
     public void setAllPixelsToOn() {
-        voxelBox.setAllPixelsTo(binaryValues.getOnInt());
+        voxels.setAllPixelsTo(binaryValues.getOnInt());
     }
 
     public void setPixelsToOn(BoundingBox bbox) {
-        voxelBox.setPixelsTo(bbox, binaryValues.getOnInt());
+        voxels.setPixelsTo(bbox, binaryValues.getOnInt());
     }
 
     public void setAllPixelsToOff() {
-        voxelBox.setAllPixelsTo(binaryValues.getOffInt());
+        voxels.setAllPixelsTo(binaryValues.getOffInt());
     }
 
     public void setPixelsToOff(BoundingBox bbox) {
-        voxelBox.setPixelsTo(bbox, binaryValues.getOffInt());
-    }
-
-    public void setVoxelBox(VoxelBox<T> voxelBox) {
-        this.voxelBox = voxelBox;
+        voxels.setPixelsTo(bbox, binaryValues.getOffInt());
     }
 
     public int countOn() {
-        return voxelBox.countEqual(binaryValues.getOnInt());
+        return voxels.countEqual(binaryValues.getOnInt());
     }
 
     public int countOff() {
-        return voxelBox.countEqual(binaryValues.getOffInt());
+        return voxels.countEqual(binaryValues.getOffInt());
     }
 }

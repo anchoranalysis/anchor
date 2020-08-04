@@ -92,7 +92,7 @@ public class Orientation3DEulerAngles extends Orientation {
     }
 
     @Override
-    public void addPropertiesToMask(ObjectWithProperties mask) {
+    public void addPropertiesToMask(ObjectWithProperties object) {
         // NOTHING TO ADD
     }
 

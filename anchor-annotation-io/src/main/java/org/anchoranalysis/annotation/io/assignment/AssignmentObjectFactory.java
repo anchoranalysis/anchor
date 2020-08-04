@@ -93,7 +93,7 @@ public class AssignmentObjectFactory {
 
     private ObjectCollection maybeProject(ObjectCollection objects) {
         if (useMIP) {
-            return objects.stream().map(ObjectMask::maxIntensityProjection);
+            return objects.stream().map(ObjectMask::flattenZ);
         } else {
             return objects;
         }

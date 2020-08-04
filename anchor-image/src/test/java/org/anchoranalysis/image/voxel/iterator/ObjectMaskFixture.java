@@ -59,20 +59,20 @@ public class ObjectMaskFixture {
         return filledMask(cornerX, cornerY, WIDTH, HEIGHT);
     }
 
-    /** A rectangular mask with single-pixel corners removed */
+    /** A rectangular object-mask with single-pixel corners removed */
     public ObjectMask filledMask(int cornerX, int cornerY, int width, int height) {
         Point3i corner = new Point3i(cornerX, cornerY, 0);
         Extent extent = new Extent(width, height, do3D ? DEPTH : 1);
 
         ObjectMask object = new ObjectMask(new BoundingBox(corner, extent));
-        object.binaryVoxelBox().setAllPixelsToOn();
+        object.binaryVoxels().setAllPixelsToOn();
         removeEachCorner(object);
         return object;
     }
 
     private void removeEachCorner(ObjectMask object) {
 
-        BinaryVoxelBox<ByteBuffer> bvb = object.binaryVoxelBox();
+        BinaryVoxelBox<ByteBuffer> bvb = object.binaryVoxels();
 
         Extent e = object.getBoundingBox().extent();
         int widthMinusOne = e.getX() - 1;

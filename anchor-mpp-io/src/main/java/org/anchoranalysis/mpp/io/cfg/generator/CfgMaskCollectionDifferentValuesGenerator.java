@@ -68,10 +68,10 @@ public class CfgMaskCollectionDifferentValuesGenerator extends RasterGenerator
     @Override
     public Stack generate() throws OutputWriteFailedException {
 
-        ObjectCollectionWithProperties masks =
-                cfg.calcMask(delegate.getDimensions(), this.rm, BinaryValuesByte.getDefault());
+        ObjectCollectionWithProperties objects =
+                cfg.deriveObjects(delegate.getDimensions(), this.rm, BinaryValuesByte.getDefault());
         try {
-            delegate.setIterableElement(masks.withoutProperties());
+            delegate.setIterableElement(objects.withoutProperties());
         } catch (SetOperationFailedException e) {
             throw new OutputWriteFailedException(e);
         }

@@ -118,7 +118,7 @@ public class ConnectedComponentUnionFind {
 
     private static <T extends Buffer> int populateIndexFromBinary(
             BinaryVoxelBox<T> visited, PopulateIndexProcessor<T> process) {
-        IterateVoxels.callEachPoint(visited.getVoxelBox(), process);
+        IterateVoxels.callEachPoint(visited.getVoxels(), process);
         return process.getCount() - 1;
     }
 

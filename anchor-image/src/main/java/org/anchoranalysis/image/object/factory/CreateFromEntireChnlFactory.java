@@ -41,7 +41,7 @@ public class CreateFromEntireChnlFactory {
     public static ObjectMask createObject(Mask binaryImgChnl) {
         Channel chnl = binaryImgChnl.getChannel();
 
-        VoxelBox<ByteBuffer> vb = chnl.getVoxelBox().asByte();
+        VoxelBox<ByteBuffer> vb = chnl.voxels().asByte();
 
         return new ObjectMask(new BoundingBox(vb.extent()), vb, binaryImgChnl.getBinaryValues());
     }

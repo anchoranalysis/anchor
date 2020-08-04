@@ -245,11 +245,11 @@ public class DisplayStack {
         Channel out =
                 ChannelFactory.instance()
                         .createEmptyInitialised(
-                                new ImageDimensions(bbox.extent(), chnl.getDimensions().getRes()),
+                                new ImageDimensions(bbox.extent(), chnl.getDimensions().getResolution()),
                                 VoxelDataTypeUnsignedByte.INSTANCE);
 
         if (converter != null) {
-            copyPixelsTo(index, bbox, out.getVoxelBox().asByte(), new BoundingBox(bbox.extent()));
+            copyPixelsTo(index, bbox, out.voxels().asByte(), new BoundingBox(bbox.extent()));
         } else {
             if (!chnl.getVoxelDataType().equals(VoxelDataTypeUnsignedByte.INSTANCE)) {
                 // Datatype is not supported
@@ -257,8 +257,8 @@ public class DisplayStack {
             }
 
             delegate.getChannel(index)
-                    .getVoxelBox()
-                    .copyPixelsTo(bbox, out.getVoxelBox(), new BoundingBox(bbox.extent()));
+                    .voxels()
+                    .copyPixelsTo(bbox, out.voxels(), new BoundingBox(bbox.extent()));
         }
         return out;
     }
@@ -311,10 +311,10 @@ public class DisplayStack {
 
             VoxelBoxWrapper destBoxNonByte =
                     VoxelBoxFactory.instance().create(destBox.extent(), channel.getVoxelDataType());
-            channel.getVoxelBox().copyPixelsTo(sourceBox, destBoxNonByte, allLocalBox);
+            channel.voxels().copyPixelsTo(sourceBox, destBoxNonByte, allLocalBox);
 
             VoxelBox<ByteBuffer> destBoxByte = VoxelBoxFactory.getByte().create(destBox.extent());
-            converter.getVoxelBoxConverter().convertFrom(destBoxNonByte, destBoxByte);
+            converter.getVoxelsConverter().convertFrom(destBoxNonByte, destBoxByte);
 
             destBoxByte.copyPixelsTo(allLocalBox, destVoxelBox, destBox);
 
@@ -325,7 +325,7 @@ public class DisplayStack {
             }
 
             delegate.getChannel(chnlIndex)
-                    .getVoxelBox()
+                    .voxels()
                     .asByte()
                     .copyPixelsTo(sourceBox, destVoxelBox, destBox);
         }
@@ -342,7 +342,7 @@ public class DisplayStack {
 
     public int getUnconvertedVoxelAt(int c, int x, int y, int z) {
         Channel chnl = delegate.getChannel(c);
-        return chnl.getVoxelBox().any().getVoxel(x, y, z);
+        return chnl.voxels().any().getVoxel(x, y, z);
     }
 
     public RegionExtracter createRegionExtracter() {
@@ -396,14 +396,14 @@ public class DisplayStack {
 
         if (converter != null) {
             return converter
-                    .getVoxelBoxConverter()
-                    .convertFrom(chnl.getVoxelBox(), VoxelBoxFactory.getByte());
+                    .getVoxelsConverter()
+                    .convertFrom(chnl.voxels(), VoxelBoxFactory.getByte());
         } else {
             if (!chnl.getVoxelDataType().equals(VoxelDataTypeUnsignedByte.INSTANCE)) {
                 // Datatype is not supported
                 assert false;
             }
-            return chnl.getVoxelBox().asByte();
+            return chnl.voxels().asByte();
         }
     }
 
@@ -414,11 +414,11 @@ public class DisplayStack {
 
         ChnlConverterAttached<Channel, ByteBuffer> converter = listConverters.get(chnlNum);
 
-        VoxelBox<?> vbUnconverted = chnl.getVoxelBox().any().region(bbox, true);
+        VoxelBox<?> vbUnconverted = chnl.voxels().any().region(bbox, true);
 
         if (converter != null) {
             return converter
-                    .getVoxelBoxConverter()
+                    .getVoxelsConverter()
                     .convertFrom(new VoxelBoxWrapper(vbUnconverted), VoxelBoxFactory.getByte());
         } else {
             if (!chnl.getVoxelDataType().equals(VoxelDataTypeUnsignedByte.INSTANCE)) {

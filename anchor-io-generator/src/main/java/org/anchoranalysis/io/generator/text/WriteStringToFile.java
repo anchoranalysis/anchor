@@ -30,10 +30,11 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Path;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class WriteStringToFile {
-
-    private WriteStringToFile() {}
 
     public static void apply(String element, Path filePath) throws IOException {
         FileWriter outFile = new FileWriter(filePath.toFile());

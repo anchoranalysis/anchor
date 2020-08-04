@@ -152,7 +152,6 @@ public class ColoredCfg implements Iterable<Mark> {
         return mergedNew;
     }
 
-    // Calculates mask
     public ColoredCfg subsetWhereBBoxIntersects(
             ImageDimensions bndScene, int regionID, List<BoundingBox> intersectList) {
 

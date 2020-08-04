@@ -30,6 +30,7 @@ import java.nio.ByteBuffer;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.BoundingBox;
@@ -55,17 +56,10 @@ public class ObjectsAsBinaryChnlGenerator extends RasterGenerator
         implements IterableGenerator<ObjectMask> {
 
     // START REQUIRED ARGUMENTS
-    private final int maskVal;
-    private final ImageResolution res;
+    private final ImageResolution resolution;
     // END REQUIRED ARGUMENTS
 
-    private ObjectMask mask;
-
-    public ObjectsAsBinaryChnlGenerator(ObjectMask mask, int maskVal, ImageResolution dim) {
-        this.mask = mask;
-        this.maskVal = maskVal;
-        this.res = dim;
-    }
+    private ObjectMask element;
 
     @Override
     public Stack generate() throws OutputWriteFailedException {
@@ -74,19 +68,17 @@ public class ObjectsAsBinaryChnlGenerator extends RasterGenerator
             throw new OutputWriteFailedException("no mutable element set");
         }
 
-        Channel outChnl = createChnlFromMask(getIterableElement(), this.res, maskVal);
-
-        return new Stack(outChnl);
+        return new Stack( createChannelFromMask(getIterableElement(), resolution) );
     }
 
     @Override
     public ObjectMask getIterableElement() {
-        return this.mask;
+        return this.element;
     }
 
     @Override
     public void setIterableElement(ObjectMask element) {
-        this.mask = element;
+        this.element = element;
     }
 
     @Override
@@ -104,40 +96,51 @@ public class ObjectsAsBinaryChnlGenerator extends RasterGenerator
         return false;
     }
 
-    private static Channel createChnlFromMask(
-            ObjectMask mask, ImageResolution res, int chnlOutVal) {
+    /**
+     * Creates a channel for an object-mask 
+     * <p>
+     * An unsigned 8-bit buffer is created where values inside the mask are 255 are values outside are 0
+     * 
+     * @param objectMask the object-mask
+     * @param resolution resolution to use for the channel
+     * @return the newly created channel
+     */
+    private static Channel createChannelFromMask(
+            ObjectMask objectMask, ImageResolution resolution) {
 
-        BoundingBox bbox = mask.getBoundingBox();
+        int outOnValue = BinaryValuesByte.getDefault().getOnByte();
+        
+        BoundingBox bbox = objectMask.getBoundingBox();
 
-        ImageDimensions newSd = new ImageDimensions(bbox.extent(), res);
+        ImageDimensions dimensions = new ImageDimensions(bbox.extent(), resolution);
 
-        Channel chnlNew =
+        Channel channelNew =
                 ChannelFactory.instance()
-                        .createEmptyInitialised(newSd, VoxelDataTypeUnsignedByte.INSTANCE);
+                        .createEmptyInitialised(dimensions, VoxelDataTypeUnsignedByte.INSTANCE);
 
-        VoxelBox<ByteBuffer> vbNew = chnlNew.getVoxelBox().asByte();
+        VoxelBox<ByteBuffer> vbNew = channelNew.voxels().asByte();
 
-        byte maskVal = mask.getBinaryValuesByte().getOnByte();
-        byte chnlOutValByte = (byte) chnlOutVal;
+        byte matchValue = objectMask.getBinaryValuesByte().getOnByte();
+        byte outOnValueByte = (byte) outOnValue;
 
         Point3i pointLocal = new Point3i();
 
-        for (pointLocal.setZ(0); pointLocal.getZ() < newSd.getZ(); pointLocal.incrementZ()) {
+        for (pointLocal.setZ(0); pointLocal.getZ() < dimensions.getZ(); pointLocal.incrementZ()) {
 
-            ByteBuffer pixelsIn = mask.getVoxelBox().getPixelsForPlane(pointLocal.getZ()).buffer();
+            ByteBuffer pixelsIn = objectMask.getVoxels().getPixelsForPlane(pointLocal.getZ()).buffer();
             ByteBuffer pixelsOut =
                     vbNew.getPlaneAccess().getPixelsForPlane(pointLocal.getZ()).buffer();
 
             while (pixelsIn.hasRemaining()) {
 
-                if (pixelsIn.get() != maskVal) {
+                if (pixelsIn.get() != matchValue) {
                     continue;
                 }
 
-                pixelsOut.put(pixelsIn.position() - 1, chnlOutValByte);
+                pixelsOut.put(pixelsIn.position() - 1, outOnValueByte);
             }
         }
 
-        return chnlNew;
+        return channelNew;
     }
 }

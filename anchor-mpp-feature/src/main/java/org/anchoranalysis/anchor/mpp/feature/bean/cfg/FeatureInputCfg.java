@@ -45,7 +45,7 @@ public class FeatureInputCfg implements FeatureInputWithRes {
 
     @Override
     public Optional<ImageResolution> getResOptional() {
-        return dim.map(ImageDimensions::getRes);
+        return dim.map(ImageDimensions::getResolution);
     }
 
     public Cfg getCfg() {

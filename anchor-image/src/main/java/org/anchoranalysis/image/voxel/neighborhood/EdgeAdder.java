@@ -49,7 +49,7 @@ class EdgeAdder<V> {
     /** a list of vertices */
     private final List<V> verticesAsList;
 
-    /** how to convert a individual vertice to an object mask */
+    /** how to convert a individual vertice to an object-mask */
     private final Function<V, ObjectMask> vertexToObject;
 
     /** the rTree underpinning the vertices (or rather their derived object-masks) */

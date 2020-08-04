@@ -89,7 +89,7 @@ public class DrawCroppedObjectsGenerator extends ObjectsOnRGBGenerator {
 
     @Override
     protected ObjectCollectionWithProperties generateMasks() throws CreateException {
-        // Create a new set of object masks, relative to the bbox position
+        // Create a new set of object-masks, relative to the bbox position
         return relativeTo(getIterableElement().withoutProperties(), bbox);
     }
 
@@ -114,7 +114,7 @@ public class DrawCroppedObjectsGenerator extends ObjectsOnRGBGenerator {
             out.add(
                     new ObjectMask(
                             bboxNew,
-                            objectMask.binaryVoxelBox().getVoxelBox(),
+                            objectMask.binaryVoxels().getVoxels(),
                             objectMask.getBinaryValues()));
         }
 

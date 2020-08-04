@@ -78,13 +78,13 @@ class VoxelizedMarkHistogram implements VoxelizedMark {
     }
 
     @Override
-    public BoundedVoxelBox<ByteBuffer> getVoxelBox() {
-        return object.getVoxelBoxBounded();
+    public BoundedVoxelBox<ByteBuffer> getVoxels() {
+        return object.getBoundedVoxels();
     }
 
     @Override
-    public BoundedVoxelBox<ByteBuffer> getVoxelBoxMIP() {
-        return objectFlattened.getVoxelBoxBounded();
+    public BoundedVoxelBox<ByteBuffer> getVoxelsMaximumIntensityProjection() {
+        return objectFlattened.getBoundedVoxels();
     }
 
     @Override
@@ -152,7 +152,7 @@ class VoxelizedMarkHistogram implements VoxelizedMark {
         partitionList.init(
                 FACTORY, stack.getNumberChannels(), regionMap.numRegions(), localExtent.getZ());
 
-        ByteBuffer bufferMIP = getObjectFlattened().getVoxelBox().getPixelsForPlane(0).buffer();
+        ByteBuffer bufferMIP = getObjectFlattened().getVoxels().getPixelsForPlane(0).buffer();
 
         for (int z = bbox.cornerMin().getZ(); z <= cornerMax.getZ(); z++) {
 
@@ -182,7 +182,7 @@ class VoxelizedMarkHistogram implements VoxelizedMark {
         List<RegionMembershipWithFlags> listRegionMembership =
                 regionMap.createListMembershipWithFlags();
 
-        ByteBuffer buffer = getObject().getVoxelBox().getPixelsForPlane(zLocal).buffer();
+        ByteBuffer buffer = getObject().getVoxels().getPixelsForPlane(zLocal).buffer();
 
         for (int y = bbox.cornerMin().getY(); y <= cornerMax.getY(); y++) {
             ptRunning.setY(y + 0.5);
@@ -203,7 +203,7 @@ class VoxelizedMarkHistogram implements VoxelizedMark {
                 buffer.put(localOffset, membership);
                 bufferMIP.put(localOffset, membershipMIP(membership, bufferMIP, localOffset));
 
-                AddPxlsToHistogram.addPxls(
+                AddVoxelsToHistogram.addVoxels(
                         membership,
                         listRegionMembership,
                         partitionList,

@@ -35,6 +35,8 @@ import org.anchoranalysis.anchor.overlay.collection.ColoredOverlayCollection;
 import org.anchoranalysis.anchor.overlay.collection.OverlayCollection;
 import org.anchoranalysis.core.color.ColorIndex;
 import org.anchoranalysis.core.color.RGBColor;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 /**
  * Two-way factory.
@@ -43,9 +45,8 @@ import org.anchoranalysis.core.color.RGBColor;
  *
  * @author Owen Feehan
  */
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class OverlayCollectionMarkFactory {
-
-    private OverlayCollectionMarkFactory() {}
 
     public static OverlayCollection createWithoutColor(
             Cfg cfg, RegionMembershipWithFlags regionMembership) {

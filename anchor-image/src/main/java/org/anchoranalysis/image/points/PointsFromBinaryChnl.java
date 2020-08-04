@@ -33,23 +33,24 @@ import org.anchoranalysis.core.geometry.Point2i;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.extent.BoundingBox;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class PointsFromBinaryChnl {
-
-    private PointsFromBinaryChnl() {}
 
     public static List<Point3i> pointsFromChnl(Mask chnl) {
 
         List<Point3i> listOut = new ArrayList<>();
 
         PointsFromBinaryVoxelBox.addPointsFromVoxelBox3D(
-                chnl.binaryVoxelBox(), new Point3i(0, 0, 0), listOut);
+                chnl.binaryVoxels(), new Point3i(0, 0, 0), listOut);
 
         return listOut;
     }
 
     public static List<Point2i> pointsFromChnl2D(Mask chnl) throws CreateException {
-        return PointsFromBinaryVoxelBox.pointsFromVoxelBox2D(chnl.binaryVoxelBox());
+        return PointsFromBinaryVoxelBox.pointsFromVoxelBox2D(chnl.binaryVoxels());
     }
 
     public static List<Point3i> pointsFromChnlInsideBox(
@@ -62,7 +63,7 @@ public class PointsFromBinaryChnl {
                         skipAfterSuccessiveEmptySlices,
                         bbox.cornerMin(),
                         bbox.calcCornerMax(),
-                        chnl.getChannel().getVoxelBox().asByte(),
+                        chnl.getChannel().voxels().asByte(),
                         chnl.getBinaryValues().createByte(),
                         startZ,
                         listOut);

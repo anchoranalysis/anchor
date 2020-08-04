@@ -79,41 +79,41 @@ public class IterateVoxelsTest {
 
         ObjectMaskFixture objectsFixture = new ObjectMaskFixture(do3D);
 
-        ObjectMask mask1 = objectsFixture.filledMask(20, Y_MASK_1);
-        ObjectMask mask2 =
+        ObjectMask object1 = objectsFixture.filledMask(20, Y_MASK_1);
+        ObjectMask object2 =
                 objectsFixture.filledMask(20, Y_MASK_2); // Overlaps with mask1 but not entirely
 
-        testSingleMask("mask1", expectedSingleNumberVoxels, mask1);
-        testSingleMask("mask2", expectedSingleNumberVoxels, mask2);
-        testIntersectionMasks(
+        testSingleMask("object1", expectedSingleNumberVoxels, object1);
+        testSingleMask("object2", expectedSingleNumberVoxels, object2);
+        testIntersectionObjects(
                 "intersection",
                 expectedIntersectionNumVoxels,
                 expectedIntersectionCenter,
-                mask1,
-                mask2);
-        testBoundingBox("bbox1", mask1.getBoundingBox());
-        testBoundingBox("bbox2", mask2.getBoundingBox());
+                object1,
+                object2);
+        testBoundingBox("bbox1", object1.getBoundingBox());
+        testBoundingBox("bbox2", object2.getBoundingBox());
     }
 
-    private void testSingleMask(String message, int expectedNumVoxels, ObjectMask mask) {
+    private void testSingleMask(String message, int expectedNumVoxels, ObjectMask object) {
         testCounter(
                 message,
                 expectedNumVoxels,
-                mask.getBoundingBox().centerOfGravity(),
-                counter -> IterateVoxels.callEachPoint(mask, counter));
+                object.getBoundingBox().centerOfGravity(),
+                counter -> IterateVoxels.callEachPoint(object, counter));
     }
 
-    private void testIntersectionMasks(
+    private void testIntersectionObjects(
             String message,
             int expectedNumVoxels,
             Point3i expectedCenter,
-            ObjectMask mask1,
-            ObjectMask mask2) {
+            ObjectMask object1,
+            ObjectMask object2) {
         testCounter(
                 message,
                 expectedNumVoxels,
                 expectedCenter,
-                counter -> IterateVoxels.overMasks(mask1, Optional.of(mask2), counter));
+                counter -> IterateVoxels.overMasks(object1, Optional.of(object2), counter));
     }
 
     private void testBoundingBox(String message, BoundingBox box) {

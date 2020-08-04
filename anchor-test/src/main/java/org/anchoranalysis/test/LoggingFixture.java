@@ -30,15 +30,16 @@ import static org.mockito.Mockito.mock;
 
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.log.MessageLogger;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 /**
  * Fixtures to create loggers that don't output anything
  *
  * @author Owen Feehan
  */
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class LoggingFixture {
-
-    private LoggingFixture() {}
 
     /** A {@link MessageLogger} that doesn't output anything */
     public static MessageLogger suppressedLogReporter() {

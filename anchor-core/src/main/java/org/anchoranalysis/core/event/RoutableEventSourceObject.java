@@ -1,4 +1,4 @@
-package org.anchoranalysis.core.index;
+package org.anchoranalysis.core.event;
 
 /*
  * #%L
@@ -26,4 +26,4 @@ package org.anchoranalysis.core.index;
  * #L%
  */
 
-public interface IIndexGettableSettable extends IIndexGetter, IIndexSetter {}
+public interface RoutableEventSourceObject {}

@@ -104,7 +104,7 @@ class ConsiderNeighbors {
     public static boolean considerVisitMarkRaster(
             ConsiderVisit considerVisit, Point3i point, int distance, ObjectMask outline) {
 
-        VoxelBox<ByteBuffer> vb = outline.getVoxelBox();
+        VoxelBox<ByteBuffer> vb = outline.getVoxels();
         BinaryValuesByte bvb = outline.getBinaryValuesByte();
 
         if (!vb.extent().contains(point)) {

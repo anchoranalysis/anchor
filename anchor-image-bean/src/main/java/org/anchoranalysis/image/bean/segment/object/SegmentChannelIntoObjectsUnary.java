@@ -49,9 +49,9 @@ public abstract class SegmentChannelIntoObjectsUnary extends SegmentChannelIntoO
 
     @Override
     public ObjectCollection segment(
-            Channel channel, Optional<ObjectMask> mask, Optional<SeedCollection> seeds)
+            Channel channel, Optional<ObjectMask> objectMask, Optional<SeedCollection> seeds)
             throws SegmentationFailedException {
-        return segment(channel, mask, seeds, segment);
+        return segment(channel, objectMask, seeds, segment);
     }
 
     protected abstract ObjectCollection segment(

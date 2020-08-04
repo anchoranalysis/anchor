@@ -349,16 +349,16 @@ public class MarkEllipse extends MarkConic implements Serializable {
     }
 
     @Override
-    public ObjectWithProperties calcMask(
+    public ObjectWithProperties deriveObject(
             ImageDimensions bndScene, RegionMembershipWithFlags rm, BinaryValuesByte bvOut) {
 
-        ObjectWithProperties mask = super.calcMask(bndScene, rm, bvOut);
-        orientation.addPropertiesToMask(mask);
+        ObjectWithProperties object = super.deriveObject(bndScene, rm, bvOut);
+        orientation.addPropertiesToMask(object);
 
         // Axis orientation
-        addAxisOrientationProperties(mask, rm);
+        addAxisOrientationProperties(object, rm);
 
-        return mask;
+        return object;
     }
 
     @Override
@@ -399,7 +399,7 @@ public class MarkEllipse extends MarkConic implements Serializable {
     }
 
     private void addAxisOrientationProperties(
-            ObjectWithProperties mask, RegionMembershipWithFlags rm) {
+            ObjectWithProperties object, RegionMembershipWithFlags rm) {
 
         // NOTE can we do this more smartly?
         double radiiFactor = rm.getRegionID() == 0 ? 1.0 : 1.0 + shellRad;
@@ -413,8 +413,8 @@ public class MarkEllipse extends MarkConic implements Serializable {
         double[] xMinMax = minMaxEndPoint(endPoint1, endPoint2, 0, getPos().getX());
         double[] yMinMax = minMaxEndPoint(endPoint1, endPoint2, 1, getPos().getY());
 
-        addPoint2dProperty(mask, "xAxisMin", xMinMax[0], yMinMax[0]);
-        addPoint2dProperty(mask, "xAxisMax", xMinMax[1], yMinMax[1]);
+        addPoint2dProperty(object, "xAxisMin", xMinMax[0], yMinMax[0]);
+        addPoint2dProperty(object, "xAxisMax", xMinMax[1], yMinMax[1]);
     }
 
     private String strMarks() {

@@ -115,8 +115,8 @@ public class RasterArranger {
             }
 
             for (int c = 0; c < numC; c++) {
-                vbIn[c] = stackIn.getChannel(c).getVoxelBox().any().getPixelsForPlane(z);
-                vbOut[c] = stackOut.getChannel(c).getVoxelBox().any().getPixelsForPlane(outZ);
+                vbIn[c] = stackIn.getChannel(c).voxels().any().getPixelsForPlane(z);
+                vbOut[c] = stackOut.getChannel(c).voxels().any().getPixelsForPlane(outZ);
             }
 
             int src = 0;

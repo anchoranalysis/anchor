@@ -36,11 +36,12 @@ import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramArray;
 import org.anchoranalysis.io.csv.reader.CSVReaderByLine;
 import org.anchoranalysis.io.csv.reader.CSVReaderByLine.ReadByLine;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.io.csv.reader.CSVReaderException;
 
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class HistogramCSVReader {
-
-    private HistogramCSVReader() {}
 
     public static Histogram readHistogramFromFile(Path filePath) throws CSVReaderException {
 

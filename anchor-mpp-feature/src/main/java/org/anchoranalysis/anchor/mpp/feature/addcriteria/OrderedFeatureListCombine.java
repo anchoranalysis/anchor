@@ -32,10 +32,11 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListFactory;
 import org.anchoranalysis.feature.input.FeatureInput;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 class OrderedFeatureListCombine {
-
-    private OrderedFeatureListCombine() {}
 
     public static <T extends FeatureInput> Optional<FeatureList<T>> combine(
             List<? extends OrderedFeatureList<T>> list) throws CreateException {

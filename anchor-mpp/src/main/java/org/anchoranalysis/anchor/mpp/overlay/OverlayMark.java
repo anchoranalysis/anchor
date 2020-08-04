@@ -76,7 +76,7 @@ public class OverlayMark extends Overlay {
     }
 
     @Override
-    public ObjectWithProperties createScaledMask(
+    public ObjectWithProperties createScaleObject(
             DrawOverlay overlayWriter,
             double zoomFactorNew,
             ObjectWithProperties om,
@@ -94,7 +94,7 @@ public class OverlayMark extends Overlay {
     public ObjectWithProperties createObject(
             DrawOverlay overlayWriter, ImageDimensions dimEntireImage, BinaryValuesByte bvOut)
             throws CreateException {
-        return mark.calcMask(dimEntireImage, regionMembership, bvOut);
+        return mark.deriveObject(dimEntireImage, regionMembership, bvOut);
     }
 
     @Override

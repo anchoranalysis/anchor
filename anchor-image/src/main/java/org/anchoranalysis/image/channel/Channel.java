@@ -79,7 +79,7 @@ public class Channel {
         return delegate.equalMask(bbox, equalVal);
     }
 
-    public VoxelBoxWrapper getVoxelBox() {
+    public VoxelBoxWrapper voxels() {
         return new VoxelBoxWrapper(delegate);
     }
 
@@ -89,7 +89,7 @@ public class Channel {
 
     // Creates a new channel contain a duplication only of a particular slice
     public Channel extractSlice(int z) {
-        return ChannelFactory.instance().create(delegate.extractSlice(z), getDimensions().getRes());
+        return ChannelFactory.instance().create(delegate.extractSlice(z), getDimensions().getResolution());
     }
 
     public Channel scaleXY(ScaleFactor scaleFactor) {
@@ -116,20 +116,20 @@ public class Channel {
 
         VoxelBox<? extends Buffer> ba = delegate.resizeXY(x, y, interpolator);
         assert (ba.extent().getVolumeXY() == ba.getPixelsForPlane(0).buffer().capacity());
-        return FACTORY.create(ba, dimensionsScaled.getRes());
+        return FACTORY.create(ba, dimensionsScaled.getResolution());
     }
 
     public Channel maxIntensityProjection() {
-        return flattenZProjection(VoxelBox::maxIntensityProj);
+        return flattenZProjection(VoxelBox::maxIntensityProjection);
     }
 
     public Channel meanIntensityProjection() {
-        return flattenZProjection(VoxelBox::meanIntensityProj);
+        return flattenZProjection(VoxelBox::meanIntensityProjection);
     }
 
     // Duplicates the current channel
     public Channel duplicate() {
-        Channel dup = FACTORY.create(delegate.duplicate(), getDimensions().getRes());
+        Channel dup = FACTORY.create(delegate.duplicate(), getDimensions().getResolution());
         assert (dup.delegate.extent().equals(delegate.extent()));
         return dup;
     }
@@ -185,7 +185,7 @@ public class Channel {
         if (prevZSize > 1) {
             return FACTORY.create(
                     flattenFunc.apply(delegate),
-                    getDimensions().getRes().duplicateFlattenZ(prevZSize));
+                    getDimensions().getResolution().duplicateFlattenZ(prevZSize));
         } else {
             return this;
         }

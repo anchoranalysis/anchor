@@ -73,21 +73,21 @@ public class ThresholderGlobalTest {
     @Test
     public void testMask() throws OperationFailedException {
 
-        // A mask in the left half
-        ObjectMask mask = new ObjectMask(new BoundingBox(MASK_CORNER_MIN, MASK_EXTENT));
-        mask.binaryVoxelBox().setAllPixelsToOn();
+        // An object-mask in the left half
+        ObjectMask object = new ObjectMask(new BoundingBox(MASK_CORNER_MIN, MASK_EXTENT));
+        object.binaryVoxels().setAllPixelsToOn();
 
-        testThreshold(Optional.of(mask), 2400, 112000000);
+        testThreshold(Optional.of(object), 2400, 112000000);
     }
 
     private void testThreshold(
-            Optional<ObjectMask> mask, long expectedCountOn, long expectedCountOff)
+            Optional<ObjectMask> object, long expectedCountOn, long expectedCountOff)
             throws OperationFailedException {
         Thresholder thresholder = createThresholder();
 
         BinaryVoxelBox<ByteBuffer> out =
                 thresholder.threshold(
-                        voxelBox, BinaryValuesByte.getDefault(), Optional.empty(), mask);
+                        voxelBox, BinaryValuesByte.getDefault(), Optional.empty(), object);
 
         assertEquals("onCount", expectedCountOn, out.countOn());
         assertEquals("offCount", expectedCountOff, out.countOff());

@@ -53,7 +53,7 @@ public class FromMask implements ScaledMaskCreator {
 
         // Then we have to create the scaled-object fresh
         // We store it for next-time
-        ObjectMask scaled = unscaled.getMask().scale(new ScaleFactor(scaleFactor), INTERPOLATOR);
+        ObjectMask scaled = unscaled.withoutProperties().scale(new ScaleFactor(scaleFactor), INTERPOLATOR);
 
         assert (scaled.hasPixelsGreaterThan(0));
 

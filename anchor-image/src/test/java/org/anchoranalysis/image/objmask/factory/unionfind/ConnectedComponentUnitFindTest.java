@@ -143,10 +143,10 @@ public class ConnectedComponentUnitFindTest {
         return ObjectCollectionFactory.fromRepeated(
                 numberObjects,
                 () -> {
-                    ObjectMask mask = fixture.filledMask(running.getX(), running.getY());
+                    ObjectMask object = fixture.filledMask(running.getX(), running.getY());
                     running.incrementX(WIDTH + shift);
                     running.incrementY(HEIGHT + shift);
-                    return mask;
+                    return object;
                 });
     }
 

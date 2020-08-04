@@ -51,7 +51,7 @@ public class ProbMapObjectCollection implements ProbMap {
 
         probWeights = new ProbWeights();
         for (ObjectMask objectMask : objects) {
-            probWeights.add((double) objectMask.binaryVoxelBox().countOn());
+            probWeights.add((double) objectMask.binaryVoxels().countOn());
         }
     }
 
@@ -84,13 +84,13 @@ public class ProbMapObjectCollection implements ProbMap {
     private Point3d sampleFromObject(
             ObjectMask object, RandomNumberGenerator randomNumberGenerator) {
 
-        // Now we keep picking a pixel at random from the object mask until we find one that is
+        // Now we keep picking a pixel at random from the object-mask until we find one that is
         //  on.  Could be very inefficient for low-density bounding boxes? So we should make sure
         //  bounding boxes are tight
 
-        long vol = object.getVoxelBox().extent().getVolume();
-        int volXY = object.getVoxelBox().extent().getVolumeXY();
-        int exY = object.getVoxelBox().extent().getX();
+        long vol = object.getVoxels().extent().getVolume();
+        int volXY = object.getVoxels().extent().getVolumeXY();
+        int exY = object.getVoxels().extent().getX();
 
         while (true) {
 
@@ -99,7 +99,7 @@ public class ProbMapObjectCollection implements ProbMap {
             int slice = (int) (index3D / volXY);
             int index2D = (int) (index3D % volXY);
 
-            byte b = object.getVoxelBox().getPixelsForPlane(slice).buffer().get(index2D);
+            byte b = object.getVoxels().getPixelsForPlane(slice).buffer().get(index2D);
             if (b == object.getBinaryValuesByte().getOnByte()) {
 
                 int xRel = index2D % exY;

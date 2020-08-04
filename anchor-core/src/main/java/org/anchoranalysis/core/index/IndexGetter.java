@@ -27,6 +27,6 @@ package org.anchoranalysis.core.index;
  */
 
 @FunctionalInterface
-public interface IIndexGetter {
+public interface IndexGetter {
     int getIndex();
 }

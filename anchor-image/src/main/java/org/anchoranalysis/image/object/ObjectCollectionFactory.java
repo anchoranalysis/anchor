@@ -164,7 +164,7 @@ public class ObjectCollectionFactory {
     @SafeVarargs
     public static ObjectCollection of(Mask... masks) {
         ObjectCollection out = new ObjectCollection();
-        Arrays.stream(masks).forEach(mask -> out.add(new ObjectMask(mask.binaryVoxelBox())));
+        Arrays.stream(masks).forEach(mask -> out.add(new ObjectMask(mask.binaryVoxels())));
         return out;
     }
 
@@ -271,7 +271,7 @@ public class ObjectCollectionFactory {
     /**
      * Creates a new collection by filtering an iterable and then mapping it to {@link ObjectMask}
      *
-     * @param <T> type that will be mapped to {@link ObjectCollection}
+     * @param <T> type that will be mapped to {@link ObjectMask}
      * @param <E> exception-type that may be thrown during mapping
      * @param iterable incoming collection to be mapped
      * @param mapFunc function for mapping

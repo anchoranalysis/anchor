@@ -27,7 +27,6 @@
 package org.anchoranalysis.image.io.generator.raster.obj;
 
 import java.util.Optional;
-import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.io.generator.IterableGenerator;
@@ -44,7 +43,7 @@ import org.anchoranalysis.io.generator.serialized.ObjectOutputStreamGenerator;
 public class ObjectWithBoundingBoxGenerator extends IterableCombinedListGenerator<ObjectMask> {
 
     public ObjectWithBoundingBoxGenerator(ImageResolution res) {
-        this(new ObjectsAsBinaryChnlGenerator(BinaryValuesByte.getDefault().getOnByte(), res));
+        this(new ObjectsAsBinaryChnlGenerator(res));
     }
 
     private ObjectWithBoundingBoxGenerator(IterableGenerator<ObjectMask> generator) {

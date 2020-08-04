@@ -33,17 +33,17 @@ import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.ObjectMask;
 
 /**
- * Only processes a point if it lines on the region of an Object-Mask
+ * Only processes a point if it lines on the region of an object-mask
  *
  * <p>Any points lying outside the object-mask are never processed.
  *
  * @author Owen Feehan
  */
-final class RequireIntersectionWithMask implements ProcessVoxel {
+final class RequireIntersectionWithObject implements ProcessVoxel {
 
     private final ProcessVoxel process;
 
-    private final ObjectMask mask;
+    private final ObjectMask objectMask;
     private final Extent extent;
     private final byte byteOn;
     private final ReadableTuple3i cornerMin;
@@ -53,22 +53,22 @@ final class RequireIntersectionWithMask implements ProcessVoxel {
     /**
      * Constructor
      *
-     * @param process the processor to call on the region of the mask
-     * @param mask the mask that defines the "on" region which is processed only.
+     * @param process the processor to call on the region of the object-mask
+     * @param objectMask the object-mask that defines the "on" region which is processed only.
      */
-    public RequireIntersectionWithMask(ProcessVoxel process, ObjectMask mask) {
+    public RequireIntersectionWithObject(ProcessVoxel process, ObjectMask objectMask) {
         super();
         this.process = process;
-        this.mask = mask;
-        this.extent = mask.getVoxelBox().extent();
-        this.byteOn = mask.getBinaryValuesByte().getOnByte();
-        this.cornerMin = mask.getBoundingBox().cornerMin();
+        this.objectMask = objectMask;
+        this.extent = objectMask.getVoxels().extent();
+        this.byteOn = objectMask.getBinaryValuesByte().getOnByte();
+        this.cornerMin = objectMask.getBoundingBox().cornerMin();
     }
 
     @Override
     public void notifyChangeZ(int z) {
         process.notifyChangeZ(z);
-        bbMask = mask.getVoxelBox().getPixelsForPlane(z - cornerMin.getZ()).buffer();
+        bbMask = objectMask.getVoxels().getPixelsForPlane(z - cornerMin.getZ()).buffer();
     }
 
     @Override
@@ -78,17 +78,17 @@ final class RequireIntersectionWithMask implements ProcessVoxel {
 
     @Override
     public void process(Point3i point) {
-        // We skip if our containing mask doesn't include it
-        if (isPointOnMask(point)) {
+        // We skip if our containing object-mask doesn't include it
+        if (isPointOnObject(point)) {
             process.process(point);
         }
     }
 
-    private boolean isPointOnMask(Point3i point) {
+    private boolean isPointOnObject(Point3i point) {
         int offsetMask =
                 extent.offset(point.getX() - cornerMin.getX(), point.getY() - cornerMin.getY());
 
-        // We skip if our containing mask doesn't include it
+        // We skip if our containing object-mask doesn't include it
         return (bbMask.get(offsetMask) == byteOn);
     }
 }

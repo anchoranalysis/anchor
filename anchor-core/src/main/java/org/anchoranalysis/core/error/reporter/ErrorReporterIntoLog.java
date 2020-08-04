@@ -26,7 +26,7 @@ package org.anchoranalysis.core.error.reporter;
  * #L%
  */
 
-import org.anchoranalysis.core.error.friendly.IFriendlyException;
+import org.anchoranalysis.core.error.friendly.HasFriendlyErrorMessage;
 import org.anchoranalysis.core.log.MessageLogger;
 import org.apache.commons.lang.exception.ExceptionUtils;
 
@@ -54,8 +54,8 @@ public class ErrorReporterIntoLog implements ErrorReporter {
     public void recordError(Class<?> classOriginating, Throwable exc) {
 
         // Special behaviour if it's a friendly exception
-        if (exc instanceof IFriendlyException) {
-            IFriendlyException eCast = (IFriendlyException) exc;
+        if (exc instanceof HasFriendlyErrorMessage) {
+            HasFriendlyErrorMessage eCast = (HasFriendlyErrorMessage) exc;
             logWithBanner(eCast.friendlyMessageHierarchy());
         } else {
             try {

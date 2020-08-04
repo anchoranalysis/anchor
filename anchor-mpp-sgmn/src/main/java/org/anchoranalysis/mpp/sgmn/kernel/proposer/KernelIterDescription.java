@@ -29,9 +29,9 @@ package org.anchoranalysis.mpp.sgmn.kernel.proposer;
 import java.io.Serializable;
 import lombok.Getter;
 import org.anchoranalysis.anchor.mpp.proposer.error.ProposerFailureDescription;
-import org.anchoranalysis.core.index.IIndexGetter;
+import org.anchoranalysis.core.index.IndexGetter;
 
-public class KernelIterDescription implements Serializable, IIndexGetter {
+public class KernelIterDescription implements Serializable, IndexGetter {
 
     /** */
     private static final long serialVersionUID = -5135255409310941727L;

@@ -51,7 +51,7 @@ public class ChannelFactoryByte implements ChannelFactorySingleType {
 
         log.debug(String.format("Creating empty initialised: %s", dim.getExtent().toString()));
 
-        return create(vb, dim.getRes());
+        return create(vb, dim.getResolution());
     }
 
     @Override
@@ -60,7 +60,7 @@ public class ChannelFactoryByte implements ChannelFactorySingleType {
                 PixelsFromByteBufferArr.createEmpty(dimensions.getExtent());
 
         VoxelBox<ByteBuffer> vb = FACTORY.create(pixels);
-        return create(vb, dimensions.getRes());
+        return create(vb, dimensions.getResolution());
     }
 
     @Override

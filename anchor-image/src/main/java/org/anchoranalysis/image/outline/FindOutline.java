@@ -44,6 +44,8 @@ import org.anchoranalysis.image.voxel.kernel.ApplyKernel;
 import org.anchoranalysis.image.voxel.kernel.BinaryKernel;
 import org.anchoranalysis.image.voxel.kernel.dilateerode.ErosionKernel3;
 import org.anchoranalysis.image.voxel.kernel.outline.OutlineKernel3;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 /**
  * Finds outline voxels i.e. pixels on the contour/edge of the object
@@ -53,9 +55,8 @@ import org.anchoranalysis.image.voxel.kernel.outline.OutlineKernel3;
  *
  * <p>A new object/voxel-box is always created, so the existing buffers are not overwritten
  */
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class FindOutline {
-
-    private FindOutline() {}
 
     public static Mask outline(Mask chnl, boolean do3D, boolean erodeEdges) {
         // We create a new image for output
@@ -73,18 +74,18 @@ public class FindOutline {
 
     /** Outline using multiple erosions to create a deeper outline */
     public static ObjectMask outline(
-            ObjectMask mask, int numberErosions, boolean erodeEdges, boolean do3D) {
+            ObjectMask object, int numberErosions, boolean erodeEdges, boolean do3D) {
 
-        ObjectMask maskIn = mask.duplicate();
+        ObjectMask objectDuplicated = object.duplicate();
 
         if (numberErosions < 1) {
             assert false;
         }
 
         BinaryVoxelBox<ByteBuffer> bufferOut =
-                outlineMultiplex(maskIn.binaryVoxelBox(), numberErosions, erodeEdges, do3D);
+                outlineMultiplex(objectDuplicated.binaryVoxels(), numberErosions, erodeEdges, do3D);
         return new ObjectMask(
-                maskIn.getBoundingBox(), bufferOut.getVoxelBox(), bufferOut.getBinaryValues());
+                objectDuplicated.getBoundingBox(), bufferOut.getVoxels(), bufferOut.getBinaryValues());
     }
 
     private static BinaryVoxelBox<ByteBuffer> outlineMultiplex(
@@ -105,7 +106,7 @@ public class FindOutline {
             Mask imgChnl, Mask imgChnlOut, boolean do3D, boolean erodeEdges) {
 
         BinaryVoxelBox<ByteBuffer> box =
-                new BinaryVoxelBoxByte(imgChnl.getVoxelBox(), imgChnl.getBinaryValues());
+                new BinaryVoxelBoxByte(imgChnl.getVoxels(), imgChnl.getBinaryValues());
 
         BinaryVoxelBox<ByteBuffer> outline = outlineByKernel(box, erodeEdges, do3D);
 
@@ -130,7 +131,7 @@ public class FindOutline {
 
         BinaryKernel kernel = new OutlineKernel3(bvb, !erodeEdges, do3D);
 
-        VoxelBox<ByteBuffer> out = ApplyKernel.apply(kernel, voxelBox.getVoxelBox(), bvb);
+        VoxelBox<ByteBuffer> out = ApplyKernel.apply(kernel, voxelBox.getVoxels(), bvb);
         return new BinaryVoxelBoxByte(out, voxelBox.getBinaryValues());
     }
 
@@ -150,7 +151,7 @@ public class FindOutline {
         // Binary and between the original version and the eroded version
         assert (eroded != null);
         BinaryValuesByte bvb = voxelBox.getBinaryValues().createByte();
-        BinaryChnlXor.apply(voxelBox.getVoxelBox(), eroded, bvb, bvb);
+        BinaryChnlXor.apply(voxelBox.getVoxels(), eroded, bvb, bvb);
         return voxelBox;
     }
 
@@ -163,7 +164,7 @@ public class FindOutline {
         BinaryValuesByte bvb = voxelBox.getBinaryValues().createByte();
         BinaryKernel kernelErosion = new ErosionKernel3(bvb, erodeEdges, do3D);
 
-        VoxelBox<ByteBuffer> eroded = ApplyKernel.apply(kernelErosion, voxelBox.getVoxelBox(), bvb);
+        VoxelBox<ByteBuffer> eroded = ApplyKernel.apply(kernelErosion, voxelBox.getVoxels(), bvb);
         for (int i = 1; i < numberErosions; i++) {
             eroded = ApplyKernel.apply(kernelErosion, eroded, bvb);
         }

@@ -111,7 +111,7 @@ public class RegionExtracterFromDisplayStack implements RegionExtracter {
         MeanInterpolator interpolator = (zoomFactor < 1) ? new MeanInterpolator(zoomFactor) : null;
 
         if (extractedSlice.getVoxelDataType().equals(VoxelDataTypeUnsignedByte.INSTANCE)) {
-            VoxelBox<ByteBuffer> vb = extractedSlice.getVoxelBox().asByte();
+            VoxelBox<ByteBuffer> vb = extractedSlice.voxels().asByte();
             interpolateRegionFromByte(
                     vb,
                     bufferSc,
@@ -122,13 +122,13 @@ public class RegionExtracterFromDisplayStack implements RegionExtracter {
                     interpolator);
 
             if (chnlConverter != null) {
-                chnlConverter.getVoxelBoxConverter().convertFromByte(bufferSc, bufferSc);
+                chnlConverter.getVoxelsConverter().convertFromByte(bufferSc, bufferSc);
             }
 
         } else if (extractedSlice.getVoxelDataType().equals(VoxelDataTypeUnsignedShort.INSTANCE)
                 && chnlConverter != null) {
 
-            VoxelBox<ShortBuffer> vb = extractedSlice.getVoxelBox().asShort();
+            VoxelBox<ShortBuffer> vb = extractedSlice.voxels().asShort();
 
             VoxelBox<ShortBuffer> bufferIntermediate =
                     VoxelBoxFactory.getShort().create(extentTrgt);
@@ -142,7 +142,7 @@ public class RegionExtracterFromDisplayStack implements RegionExtracter {
                     interpolator);
 
             // We now convert the ShortBuffer into bytes
-            chnlConverter.getVoxelBoxConverter().convertFromShort(bufferIntermediate, bufferSc);
+            chnlConverter.getVoxelsConverter().convertFromShort(bufferIntermediate, bufferSc);
 
         } else {
             throw new IncorrectVoxelDataTypeException(
@@ -153,7 +153,7 @@ public class RegionExtracterFromDisplayStack implements RegionExtracter {
 
         return ChannelFactory.instance()
                 .get(VoxelDataTypeUnsignedByte.INSTANCE)
-                .create(bufferSc, sd.getRes());
+                .create(bufferSc, sd.getResolution());
     }
 
     // extentTrgt is the target-size (where we write this region)

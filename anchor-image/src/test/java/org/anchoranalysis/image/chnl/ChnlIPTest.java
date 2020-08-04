@@ -48,7 +48,7 @@ public class ChnlIPTest {
 
         Channel channel = imgChnlFloatFactory.createEmptyInitialised(dimensions);
 
-        VoxelBox<FloatBuffer> vb = channel.getVoxelBox().asFloat();
+        VoxelBox<FloatBuffer> vb = channel.voxels().asFloat();
         vb.getPlaneAccess().setPixelsForPlane(0, VoxelBufferFloat.wrap(new float[] {1, 2, 3, 4}));
 
         double delta = 1e-3;

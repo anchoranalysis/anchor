@@ -28,19 +28,18 @@ package org.anchoranalysis.anchor.mpp.mark.conic;
 
 import org.anchoranalysis.anchor.mpp.bean.bound.Bound;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
+import lombok.NoArgsConstructor;
 
 /**
  * A circle
  *
  * @author Owen Feehan
  */
+@NoArgsConstructor
 public class MarkCircle extends MarkSingleRadius {
 
     /** */
     private static final long serialVersionUID = 8551900716243748046L;
-
-    // Sphere with default properties
-    public MarkCircle() {}
 
     // Constructor
     public MarkCircle(Bound boundRadius) {

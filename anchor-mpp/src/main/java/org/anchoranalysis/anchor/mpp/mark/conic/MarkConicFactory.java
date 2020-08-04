@@ -27,6 +27,8 @@
 package org.anchoranalysis.anchor.mpp.mark.conic;
 
 import com.google.common.base.Preconditions;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.core.geometry.Point2d;
 import org.anchoranalysis.core.geometry.Point3d;
@@ -35,10 +37,9 @@ import org.anchoranalysis.core.geometry.PointConverter;
 import org.anchoranalysis.image.orientation.Orientation2D;
 import org.anchoranalysis.image.orientation.Orientation3DEulerAngles;
 
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class MarkConicFactory {
-
-    private MarkConicFactory() {}
-
+    
     public static Mark createMarkFromPoint(Point3i point, int size, boolean do3D) {
         return createMarkFromPoint(PointConverter.doubleFromInt(point), size, do3D);
     }

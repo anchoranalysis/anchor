@@ -26,13 +26,17 @@
 
 package org.anchoranalysis.image.interpolator;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class InterpolatorFactory {
 
     private static InterpolatorFactory instance = null;
 
-    private static Interpolator noInterpolator = new InterpolatorNone();
+    private static final Interpolator NO_INTERPOLATOR = new InterpolatorNone();
 
-    private static Interpolator resizingInterpolator = new InterpolatorImageJ();
+    private static final Interpolator RESIZING_INTERPOLATOR = new InterpolatorImageJ();
 
     public static InterpolatorFactory getInstance() {
         if (instance == null) {
@@ -41,17 +45,15 @@ public class InterpolatorFactory {
         return instance;
     }
 
-    private InterpolatorFactory() {}
-
     public Interpolator noInterpolation() {
-        return noInterpolator;
+        return NO_INTERPOLATOR;
     }
 
     public Interpolator rasterResizing() {
-        return resizingInterpolator;
+        return RESIZING_INTERPOLATOR;
     }
 
     public Interpolator binaryResizing() {
-        return resizingInterpolator;
+        return RESIZING_INTERPOLATOR;
     }
 }

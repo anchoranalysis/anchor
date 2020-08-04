@@ -57,14 +57,14 @@ public class OverlayObjectMask extends Overlay {
         this.id = id;
     }
 
-    // Assumes object mask is always inside the dim. TODO verify that is valid.
+    // Assumes object-mask is always inside the dim. TODO verify that is valid.
     @Override
     public BoundingBox bbox(DrawOverlay overlayWriter, ImageDimensions dim) {
         return object.getBoundingBox();
     }
 
     @Override
-    public ObjectWithProperties createScaledMask(
+    public ObjectWithProperties createScaleObject(
             DrawOverlay overlayWriter,
             double zoomFactorNew,
             ObjectWithProperties om,
@@ -93,15 +93,15 @@ public class OverlayObjectMask extends Overlay {
 
     @Override
     public boolean isPointInside(DrawOverlay overlayWriter, Point3i point) {
-        return object.getMask().contains(point);
+        return object.withoutProperties().contains(point);
     }
 
-    // We delegate uniqueness-check to the mask
+    // We delegate uniqueness-check to the object-mask
     @Override
     public boolean equals(Object arg0) {
         if (arg0 instanceof OverlayObjectMask) {
             OverlayObjectMask objCast = (OverlayObjectMask) arg0;
-            return this.object.getMask().equals(objCast.object.getMask());
+            return this.object.withoutProperties().equals(objCast.object.withoutProperties());
         } else {
             return false;
         }
@@ -109,12 +109,12 @@ public class OverlayObjectMask extends Overlay {
 
     @Override
     public int hashCode() {
-        return object.getMask().hashCode();
+        return object.withoutProperties().hashCode();
     }
 
     @Override
     public OverlayProperties generateProperties(ImageResolution sr) {
-        // TODO take the properties from the object mask
+        // TODO take the properties from the object-mask
         OverlayProperties out = new OverlayProperties();
         out.add("id", id);
         return out;

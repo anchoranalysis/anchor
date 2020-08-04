@@ -32,15 +32,16 @@ import org.anchoranalysis.feature.session.strategy.replace.ReplaceStrategy;
 import org.anchoranalysis.feature.session.strategy.replace.ReuseSingletonStrategy;
 import org.anchoranalysis.feature.session.strategy.replace.bind.BoundReplaceStrategy;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 /**
  * Strategies for caching used in {@link PairsTableCalculator}
  *
  * @author Owen Feehan
  */
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 class CachingStrategies {
-
-    private CachingStrategies() {}
 
     /** Cache and re-use inputs */
     public static <T extends FeatureInput>

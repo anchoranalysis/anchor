@@ -28,6 +28,8 @@ package org.anchoranalysis.math.moment;
 
 import cern.colt.matrix.DoubleMatrix2D;
 import cern.colt.matrix.doublealgo.Statistic;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,12 +41,11 @@ import java.util.List;
  *
  * @author Owen Feehan
  */
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class ImageMoments {
 
     private List<EigenvalueAndVector> list;
     private double[] mean = new double[3];
-
-    private ImageMoments() {}
 
     /**
      * Calculates the second-moments from the covariance of a matrix of points

@@ -88,7 +88,7 @@ public final class VoxelBoxInt extends VoxelBox<IntBuffer> {
 
             IntBuffer pixelIn = getPlaneAccess().getPixelsForPlane(z).buffer();
             ByteBuffer pixelOut =
-                    object.getVoxelBox().getPixelsForPlane(z - bbox.cornerMin().getZ()).buffer();
+                    object.getVoxels().getPixelsForPlane(z - bbox.cornerMin().getZ()).buffer();
 
             int ind = 0;
             for (int y = bbox.cornerMin().getY(); y <= pointMax.getY(); y++) {
@@ -148,7 +148,7 @@ public final class VoxelBoxInt extends VoxelBox<IntBuffer> {
     }
 
     @Override
-    public VoxelBox<IntBuffer> maxIntensityProj() {
+    public VoxelBox<IntBuffer> maxIntensityProjection() {
 
         MaxIntensityBufferInt mi = new MaxIntensityBufferInt(extent());
 
@@ -191,12 +191,12 @@ public final class VoxelBoxInt extends VoxelBox<IntBuffer> {
 
     // TODO when values are too small or too large
     @Override
-    public void addPixelsCheckMask(ObjectMask mask, int value) {
+    public void addPixelsCheckMask(ObjectMask objectMask, int value) {
 
-        BoundingBox bbox = mask.getBoundingBox();
-        VoxelBox<ByteBuffer> objectBuffer = mask.getVoxelBox();
+        BoundingBox bbox = objectMask.getBoundingBox();
+        VoxelBox<ByteBuffer> objectBuffer = objectMask.getVoxels();
 
-        byte maskOnByte = mask.getBinaryValuesByte().getOnByte();
+        byte maskOnByte = objectMask.getBinaryValuesByte().getOnByte();
 
         ReadableTuple3i pointMax = bbox.calcCornerMax();
         for (int z = bbox.cornerMin().getZ(); z <= pointMax.getZ(); z++) {
@@ -221,7 +221,7 @@ public final class VoxelBoxInt extends VoxelBox<IntBuffer> {
     }
 
     @Override
-    public void scalePixelsCheckMask(ObjectMask mask, double value) {
+    public void scalePixelsCheckMask(ObjectMask objectMask, double value) {
         throw new IllegalArgumentException("Currently unsupported method");
     }
 
@@ -250,7 +250,7 @@ public final class VoxelBoxInt extends VoxelBox<IntBuffer> {
     }
 
     @Override
-    public VoxelBox<IntBuffer> meanIntensityProj() {
+    public VoxelBox<IntBuffer> meanIntensityProjection() {
         throw new UnsupportedOperationException();
     }
 }

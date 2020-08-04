@@ -84,7 +84,7 @@ public class IJWrap {
 
         Channel chnlOut = factory.createEmptyUninitialised(sd);
 
-        VoxelBox<ByteBuffer> vbOut = chnlOut.getVoxelBox().asByte();
+        VoxelBox<ByteBuffer> vbOut = chnlOut.voxels().asByte();
         copyImageStackIntoVoxelBoxByte(imageStack, vbOut);
         return chnlOut;
     }
@@ -256,9 +256,9 @@ public class IJWrap {
         imp.getCalibration().setXUnit(IMAGEJ_UNIT_MICRON);
         imp.getCalibration().setYUnit(IMAGEJ_UNIT_MICRON);
         imp.getCalibration().setZUnit(IMAGEJ_UNIT_MICRON);
-        imp.getCalibration().pixelWidth = dimensions.getRes().getX() * MICRONS_TO_METERS;
-        imp.getCalibration().pixelHeight = dimensions.getRes().getY() * MICRONS_TO_METERS;
-        imp.getCalibration().pixelDepth = dimensions.getRes().getZ() * MICRONS_TO_METERS;
+        imp.getCalibration().pixelWidth = dimensions.getResolution().getX() * MICRONS_TO_METERS;
+        imp.getCalibration().pixelHeight = dimensions.getResolution().getY() * MICRONS_TO_METERS;
+        imp.getCalibration().pixelDepth = dimensions.getResolution().getZ() * MICRONS_TO_METERS;
 
         if (imp.getNSlices() != dimensions.getZ()) {
             throw new AnchorFriendlyRuntimeException(
@@ -281,9 +281,9 @@ public class IJWrap {
 
         int srcSliceNum = 0;
 
-        VoxelBox<ByteBuffer> vbRed = stack.getChnl(srcSliceNum++).getVoxelBox().asByte();
-        VoxelBox<ByteBuffer> vbGreen = stack.getChnl(srcSliceNum++).getVoxelBox().asByte();
-        VoxelBox<ByteBuffer> vbBlue = stack.getChnl(srcSliceNum).getVoxelBox().asByte();
+        VoxelBox<ByteBuffer> vbRed = stack.getChnl(srcSliceNum++).voxels().asByte();
+        VoxelBox<ByteBuffer> vbGreen = stack.getChnl(srcSliceNum++).voxels().asByte();
+        VoxelBox<ByteBuffer> vbBlue = stack.getChnl(srcSliceNum).voxels().asByte();
 
         for (int z = 0; z < dimensions.getZ(); z++) {
             ColorProcessor cp = new ColorProcessor(dimensions.getX(), dimensions.getY());
@@ -313,7 +313,7 @@ public class IJWrap {
             ImagePlus imagePlus, ImageDimensions sd, ChannelFactorySingleType factory) {
 
         Channel chnlOut = factory.createEmptyUninitialised(sd);
-        VoxelBox<ByteBuffer> vbOut = chnlOut.getVoxelBox().asByte();
+        VoxelBox<ByteBuffer> vbOut = chnlOut.voxels().asByte();
 
         for (int z = 0; z < chnlOut.getDimensions().getZ(); z++) {
 
@@ -337,7 +337,7 @@ public class IJWrap {
 
         Channel chnlOut = factory.createEmptyUninitialised(sd);
 
-        VoxelBox<ShortBuffer> vbOut = chnlOut.getVoxelBox().asShort();
+        VoxelBox<ShortBuffer> vbOut = chnlOut.voxels().asShort();
 
         for (int z = 0; z < sd.getZ(); z++) {
 
@@ -369,7 +369,7 @@ public class IJWrap {
 
             for (int c = 0; c < stack.getNumberChannels(); c++) {
                 Channel chnl = stack.getChannel(c);
-                VoxelBoxWrapper vb = chnl.getVoxelBox();
+                VoxelBoxWrapper vb = chnl.voxels();
 
                 ImageProcessor ip = IJWrap.imageProcessor(vb, z);
                 stackNew.addSlice(String.valueOf(z), ip);

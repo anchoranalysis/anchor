@@ -105,12 +105,12 @@ public class ExtractBoundingBoxAreaFromStackGenerator extends RasterGenerator
 
         for (Channel chnlIn : stackIn) {
 
-            VoxelBox<?> vbIn = chnlIn.getVoxelBox().any();
+            VoxelBox<?> vbIn = chnlIn.voxels().any();
 
             VoxelBox<?> vbExtracted = vbIn.region(bbox, false);
 
             Channel chnlExtracted =
-                    ChannelFactory.instance().create(vbExtracted, stackIn.getDimensions().getRes());
+                    ChannelFactory.instance().create(vbExtracted, stackIn.getDimensions().getResolution());
             try {
                 stackOut.addChannel(chnlExtracted);
             } catch (IncorrectImageSizeException e) {

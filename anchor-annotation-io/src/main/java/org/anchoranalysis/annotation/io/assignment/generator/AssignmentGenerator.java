@@ -175,8 +175,8 @@ public class AssignmentGenerator extends RasterGenerator {
 
     private DrawObject createConditionalWriter(List<ObjectMask> otherObjects, DrawObject writer) {
         return new IfElse(
-                (ObjectWithProperties mask, RGBStack stack, int id) ->
-                        otherObjects.contains(mask.getMask()),
+                (ObjectWithProperties object, RGBStack stack, int id) ->
+                        otherObjects.contains(object.withoutProperties()),
                 writer,
                 new Filled());
     }

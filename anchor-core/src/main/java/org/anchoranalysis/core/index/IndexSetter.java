@@ -1,4 +1,4 @@
-package org.anchoranalysis.core.event;
+package org.anchoranalysis.core.index;
 
 /*
  * #%L
@@ -26,4 +26,7 @@ package org.anchoranalysis.core.event;
  * #L%
  */
 
-public interface IRoutableEventSourceObject {}
+@FunctionalInterface
+public interface IndexSetter {
+    public void setIndex(int index);
+}

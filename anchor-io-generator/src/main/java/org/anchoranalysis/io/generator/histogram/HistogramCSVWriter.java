@@ -33,10 +33,11 @@ import org.anchoranalysis.core.text.TypedValue;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.output.csv.CSVWriter;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 class HistogramCSVWriter {
-
-    private HistogramCSVWriter() {}
 
     public static void writeHistogramToFile(Histogram histogram, Path filePath, boolean ignoreZeros)
             throws AnchorIOException {

@@ -32,11 +32,11 @@ import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInputWithRes;
 import org.anchoranalysis.image.extent.ImageResolution;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
 public abstract class FeatureSingleElemWithRes<T extends FeatureInputWithRes>
         extends FeatureGenericSingleElem<T> {
-
-    public FeatureSingleElemWithRes() {}
 
     public FeatureSingleElemWithRes(Feature<T> feature) {
         super(feature);

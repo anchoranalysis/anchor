@@ -31,10 +31,11 @@ import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class BackgroundCreator {
-
-    private BackgroundCreator() {}
 
     public static DisplayStack createBackground(
             NamedProviderStore<Stack> stackCollection, String backgroundStackName)

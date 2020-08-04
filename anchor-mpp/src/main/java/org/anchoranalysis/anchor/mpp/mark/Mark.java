@@ -117,17 +117,24 @@ public abstract class Mark implements Serializable, Identifiable {
         // ID check
         return equalsID(m);
     }
-
-    // Calculates the mask of an object
-    public ObjectWithProperties calcMask(
+    
+    /**
+     * Create an object-mask representation of the mark (i.e. in voxels in a bounding-box)
+     * 
+     * @param bndScene
+     * @param rm
+     * @param bv
+     * @return
+     */
+    public ObjectWithProperties deriveObject(
             ImageDimensions bndScene, RegionMembershipWithFlags rm, BinaryValuesByte bv) {
 
         BoundingBox bbox = this.bbox(bndScene, rm.getRegionID());
 
         // We make a new mask and populate it from out iterator
-        ObjectWithProperties mask = new ObjectWithProperties(bbox);
+        ObjectWithProperties object = new ObjectWithProperties(bbox);
 
-        assert (mask.getVoxelBox().extent().getZ() > 0);
+        assert (object.getVoxels().extent().getZ() > 0);
 
         byte maskOn = bv.getOnByte();
 
@@ -139,7 +146,7 @@ public abstract class Mark implements Serializable, Identifiable {
                 point.incrementZ()) {
 
             int zLocal = point.getZ() - bbox.cornerMin().getZ();
-            ByteBuffer maskSlice = mask.getVoxelBox().getPixelsForPlane(zLocal).buffer();
+            ByteBuffer maskSlice = object.getVoxels().getPixelsForPlane(zLocal).buffer();
 
             int cnt = 0;
             for (point.setY(bbox.cornerMin().getY());
@@ -159,9 +166,9 @@ public abstract class Mark implements Serializable, Identifiable {
             }
         }
 
-        assert (mask.getVoxelBox().extent().getZ() > 0);
+        assert (object.getVoxels().extent().getZ() > 0);
 
-        return mask;
+        return object;
     }
 
     // Calculates the mask of an object
@@ -174,9 +181,9 @@ public abstract class Mark implements Serializable, Identifiable {
         BoundingBox bbox = bbox(bndScene, rm.getRegionID()).scale(new ScaleFactor(scaleFactor));
 
         // We make a new mask and populate it from out iterator
-        ObjectWithProperties mask = new ObjectWithProperties(bbox);
+        ObjectWithProperties object = new ObjectWithProperties(bbox);
 
-        assert (mask.getVoxelBox().extent().getZ() > 0);
+        assert (object.getVoxels().extent().getZ() > 0);
 
         byte maskOn = bvOut.getOnByte();
 
@@ -189,7 +196,7 @@ public abstract class Mark implements Serializable, Identifiable {
                 point.incrementZ()) {
 
             int zLocal = point.getZ() - bbox.cornerMin().getZ();
-            ByteBuffer maskSlice = mask.getVoxelBox().getPixelsForPlane(zLocal).buffer();
+            ByteBuffer maskSlice = object.getVoxels().getPixelsForPlane(zLocal).buffer();
 
             // Z coordinates are the same as we only scale in XY
             pointScaled.setZ(point.getZ());
@@ -215,9 +222,9 @@ public abstract class Mark implements Serializable, Identifiable {
             }
         }
 
-        assert (mask.getVoxelBox().extent().getZ() > 0);
+        assert (object.getVoxels().extent().getZ() > 0);
 
-        return mask;
+        return object;
     }
 
     public String strId() {

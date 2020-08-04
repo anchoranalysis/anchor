@@ -67,7 +67,7 @@ public class MaskFromObjects {
 
     // We look for the values that are NOT on the masks
     private static Mask createChannelObjectCollectionHelper(
-            ObjectCollection masks,
+            ObjectCollection objects,
             ImageDimensions dimensions,
             BinaryValues outVal,
             int initialState,
@@ -76,24 +76,24 @@ public class MaskFromObjects {
         Channel chnlNew =
                 ChannelFactory.instance()
                         .createEmptyInitialised(dimensions, VoxelDataTypeUnsignedByte.INSTANCE);
-        VoxelBox<ByteBuffer> vbNew = chnlNew.getVoxelBox().asByte();
+        VoxelBox<ByteBuffer> vbNew = chnlNew.voxels().asByte();
 
         if (outVal.getOnInt() != 0) {
             vbNew.setAllPixelsTo(initialState);
         }
 
-        writeChannelObjectCollection(vbNew, masks, objectState);
+        writeChannelObjectCollection(vbNew, objects, objectState);
 
         return new Mask(chnlNew, outVal);
     }
 
     // nullVal is assumed to be 0
     private static void writeChannelObjectCollection(
-            VoxelBox<ByteBuffer> vb, ObjectCollection masks, byte outVal) {
+            VoxelBox<ByteBuffer> vb, ObjectCollection objects, byte outVal) {
 
-        for (ObjectMask object : masks) {
-            writeObjectToVoxelBox(object, vb, outVal);
-        }
+        objects.forEach(object->
+            writeObjectToVoxelBox(object, vb, outVal)
+        );
     }
 
     private static void writeObjectToVoxelBox(
@@ -105,14 +105,14 @@ public class MaskFromObjects {
         Point3i pointGlobal = new Point3i();
         Point3i pointLocal = new Point3i();
 
-        byte maskOn = object.getBinaryValuesByte().getOnByte();
+        byte matchValue = object.getBinaryValuesByte().getOnByte();
 
         pointLocal.setZ(0);
         for (pointGlobal.setZ(bbox.cornerMin().getZ());
                 pointGlobal.getZ() <= maxGlobal.getZ();
                 pointGlobal.incrementZ(), pointLocal.incrementZ()) {
 
-            ByteBuffer maskIn = object.getVoxelBox().getPixelsForPlane(pointLocal.getZ()).buffer();
+            ByteBuffer maskIn = object.getVoxels().getPixelsForPlane(pointLocal.getZ()).buffer();
 
             ByteBuffer pixelsOut =
                     voxelBoxOut.getPlaneAccess().getPixelsForPlane(pointGlobal.getZ()).buffer();
@@ -123,7 +123,7 @@ public class MaskFromObjects {
                     bbox.cornerMin(),
                     pointGlobal,
                     maxGlobal,
-                    maskOn,
+                    matchValue,
                     outValByte);
         }
     }
@@ -135,7 +135,7 @@ public class MaskFromObjects {
             ReadableTuple3i cornerMin,
             Point3i pointGlobal,
             ReadableTuple3i maxGlobal,
-            byte maskOn,
+            byte matchValue,
             byte outValByte) {
 
         for (pointGlobal.setY(cornerMin.getY());
@@ -146,7 +146,7 @@ public class MaskFromObjects {
                     pointGlobal.getX() <= maxGlobal.getX();
                     pointGlobal.incrementX()) {
 
-                if (maskIn.get() != maskOn) {
+                if (maskIn.get() != matchValue) {
                     continue;
                 }
 

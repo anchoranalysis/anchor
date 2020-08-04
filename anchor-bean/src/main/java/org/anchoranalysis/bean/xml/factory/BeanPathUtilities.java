@@ -29,10 +29,11 @@ package org.anchoranalysis.bean.xml.factory;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import org.anchoranalysis.bean.AnchorBean;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class BeanPathUtilities {
-
-    private BeanPathUtilities() {}
 
     public static Path pathRelativeToBean(AnchorBean<?> bean, String relativePath) {
         Path relative = Paths.get(relativePath);

@@ -34,7 +34,7 @@ import java.io.Writer;
  *
  * @author Owen Feehan
  */
-public interface IFriendlyException {
+public interface HasFriendlyErrorMessage {
 
     /**
      * A friendly message to describe to the user what went wrong. If no message has been defined in

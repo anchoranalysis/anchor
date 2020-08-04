@@ -260,7 +260,7 @@ public class SequentialSession<T extends FeatureInput> implements FeatureCalcula
         try {
             for (Feature<T> f : listFeatures) {
 
-                FeatureList<FeatureInput> allDependents = f.createListChildFeatures(false);
+                FeatureList<FeatureInput> allDependents = f.createListChildFeatures();
 
                 for (Feature<FeatureInput> dep : allDependents) {
 

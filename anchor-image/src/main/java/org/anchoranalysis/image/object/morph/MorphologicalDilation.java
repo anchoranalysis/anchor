@@ -76,8 +76,8 @@ public class MorphologicalDilation {
         try {
             ObjectMask objectGrown = object.growBuffer(grow, grow, extent);
             return objectGrown.replaceVoxels(
-                    dilate(objectGrown.binaryVoxelBox(), do3D, iterations, null, 0, bigNeighborhood)
-                            .getVoxelBox());
+                    dilate(objectGrown.binaryVoxels(), do3D, iterations, null, 0, bigNeighborhood)
+                            .getVoxels());
         } catch (OperationFailedException e) {
             throw new CreateException("Cannot grow object-mask", e);
         }
@@ -144,7 +144,7 @@ public class MorphologicalDilation {
                         outsideAtThreshold,
                         bigNeighborhood);
 
-        VoxelBox<ByteBuffer> buf = bvb.getVoxelBox();
+        VoxelBox<ByteBuffer> buf = bvb.getVoxels();
         for (int i = 0; i < iterations; i++) {
             VoxelBox<ByteBuffer> next =
                     ApplyKernel.apply(kernelDilation, buf, bvb.getBinaryValues().createByte());

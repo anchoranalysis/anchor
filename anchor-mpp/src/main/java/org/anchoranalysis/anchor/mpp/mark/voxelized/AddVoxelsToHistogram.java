@@ -32,12 +32,13 @@ import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipWithFlags;
 import org.anchoranalysis.anchor.mpp.pixelpart.IndexByChnl;
 import org.anchoranalysis.image.convert.ByteConverter;
 import org.anchoranalysis.image.histogram.Histogram;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
-class AddPxlsToHistogram {
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
+class AddVoxelsToHistogram {
 
-    private AddPxlsToHistogram() {}
-
-    public static void addPxls(
+    public static void addVoxels(
             byte membership,
             List<RegionMembershipWithFlags> listRegionMembership,
             IndexByChnl<Histogram> partitionList,

@@ -89,7 +89,7 @@ public class StackProviderGenerateString extends StackProvider {
     private static int maxValueFromStack(Stack stack) {
         int max = 0;
         for (Channel chnl : stack) {
-            int chnlVal = chnl.getVoxelBox().any().ceilOfMaxPixel();
+            int chnlVal = chnl.voxels().any().ceilOfMaxPixel();
             if (chnlVal > max) {
                 max = chnlVal;
             }
@@ -120,7 +120,7 @@ public class StackProviderGenerateString extends StackProvider {
                 double mult = maxValue / maxTypeValue;
 
                 for (Channel c : stack) {
-                    c.getVoxelBox().any().multiplyBy(mult);
+                    c.voxels().any().multiplyBy(mult);
                 }
             }
 
@@ -145,7 +145,7 @@ public class StackProviderGenerateString extends StackProvider {
             // Adjust dfestination box
             bboxDest = bboxDest.shiftToZ(z);
 
-            chnl.getVoxelBox().copyPixelsTo(bboxSrc, chnlNew.getVoxelBox(), bboxDest);
+            chnl.voxels().copyPixelsTo(bboxSrc, chnlNew.voxels(), bboxDest);
         }
         return chnlNew;
     }

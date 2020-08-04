@@ -37,17 +37,17 @@ import org.anchoranalysis.image.extent.Extent;
 public class BinaryChnlOr {
 
     /**
-     * A binary OR of chnlCrnt and chnlReceiver where chnlReceiver is overwritten with the output
+     * Performs a OR operation on each voxel in two masks, writing the result onto the second mask.
      *
-     * @param chnlCrnt first-channel for OR
-     * @param chnlReceiver second-channel for OR (and the channel where the result is overwritten)
+     * @param first the first channel for operation
+     * @param second the second channel for operation (and in which the result is written)
      */
-    public static void binaryOr(Mask chnlCrnt, Mask chnlReceiver) {
+    public static void binaryOr(Mask first, Mask second) {
 
-        BinaryValuesByte bvbCrnt = chnlCrnt.getBinaryValues().createByte();
-        BinaryValuesByte bvbReceiver = chnlReceiver.getBinaryValues().createByte();
+        BinaryValuesByte bvbCrnt = first.getBinaryValues().createByte();
+        BinaryValuesByte bvbReceiver = second.getBinaryValues().createByte();
 
-        Extent e = chnlCrnt.getDimensions().getExtent();
+        Extent e = first.getDimensions().getExtent();
 
         byte crntOn = bvbCrnt.getOnByte();
         byte receiveOn = bvbReceiver.getOnByte();
@@ -55,8 +55,8 @@ public class BinaryChnlOr {
         // All the on voxels in the receive, are put onto crnt
         for (int z = 0; z < e.getZ(); z++) {
 
-            ByteBuffer bufSrc = chnlCrnt.getVoxelBox().getPixelsForPlane(z).buffer();
-            ByteBuffer bufReceive = chnlReceiver.getVoxelBox().getPixelsForPlane(z).buffer();
+            ByteBuffer bufSrc = first.getVoxels().getPixelsForPlane(z).buffer();
+            ByteBuffer bufReceive = second.getVoxels().getPixelsForPlane(z).buffer();
 
             int offset = 0;
             for (int y = 0; y < e.getY(); y++) {

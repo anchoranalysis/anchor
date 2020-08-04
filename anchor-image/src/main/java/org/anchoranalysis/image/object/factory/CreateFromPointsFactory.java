@@ -48,8 +48,8 @@ public class CreateFromPointsFactory {
             throw new CreateException(e);
         }
 
-        ObjectMask mask = new ObjectMask(bbox);
-        points.forEach(mask::setOn);
-        return mask;
+        ObjectMask object = new ObjectMask(bbox);
+        points.forEach(object::setOn);
+        return object;
     }
 }

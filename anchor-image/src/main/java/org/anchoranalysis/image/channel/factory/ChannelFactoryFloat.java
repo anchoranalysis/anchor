@@ -41,7 +41,7 @@ public class ChannelFactoryFloat implements ChannelFactorySingleType {
     public Channel createEmptyInitialised(ImageDimensions dim) {
         VoxelBoxFloat vb =
                 new VoxelBoxFloat(PixelsFromFloatBufferArr.createInitialised(dim.getExtent()));
-        return create(vb, dim.getRes());
+        return create(vb, dim.getResolution());
     }
 
     @Override
@@ -51,7 +51,7 @@ public class ChannelFactoryFloat implements ChannelFactorySingleType {
                 PixelsFromFloatBufferArr.createEmpty(dimensions.getExtent());
 
         VoxelBoxFloat vb = new VoxelBoxFloat(pixels);
-        return create(vb, dimensions.getRes());
+        return create(vb, dimensions.getResolution());
     }
 
     @Override

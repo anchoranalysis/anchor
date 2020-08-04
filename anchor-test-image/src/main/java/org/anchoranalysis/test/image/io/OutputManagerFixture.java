@@ -44,10 +44,11 @@ import org.anchoranalysis.io.output.bound.BindFailedException;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.test.LoggingFixture;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class OutputManagerFixture {
-
-    private OutputManagerFixture() {}
 
     // These operations must occur before creating TempBoundOutputManager
     private static void globalSetup() {

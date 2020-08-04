@@ -78,7 +78,7 @@ public class OutlineKernel3NeighborMatchValue extends OutlineKernel3Base {
                 new LocalSlices(
                         z + object.getBoundingBox().cornerMin().getZ(),
                         3,
-                        vbRequireHigh.getVoxelBox());
+                        vbRequireHigh.getVoxels());
     }
 
     /**

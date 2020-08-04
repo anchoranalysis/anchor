@@ -29,6 +29,8 @@ package org.anchoranalysis.bean.xml.error;
 import java.nio.file.NoSuchFileException;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.ConfigurationRuntimeException;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 /**
  * Converts certain exceptions that occur from XML-Parsing into a friendly form to display to the
@@ -36,9 +38,8 @@ import org.apache.commons.configuration.ConfigurationRuntimeException;
  *
  * @author Owen Feehan
  */
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class HelperFriendlyExceptions {
-
-    private HelperFriendlyExceptions() {}
 
     /**
      * Possibly replaces an exception with a more user-friendly description

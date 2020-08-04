@@ -40,7 +40,7 @@ public class CalculateNumVoxels extends FeatureCalculation<Double, FeatureInputS
 
     public static double calc(ObjectMask object, boolean mip) {
         if (mip) {
-            object = object.maxIntensityProjection();
+            object = object.flattenZ();
         }
         return object.numberVoxelsOn();
     }

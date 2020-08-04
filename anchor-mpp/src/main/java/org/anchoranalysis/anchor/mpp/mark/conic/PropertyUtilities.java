@@ -35,7 +35,7 @@ import org.anchoranalysis.image.object.properties.ObjectWithProperties;
 class PropertyUtilities {
 
     public static void addPoint2dProperty(
-            ObjectWithProperties mask, String propertyName, double x, double y) {
-        mask.setProperty(propertyName, new Point3d(x, y, 0));
+            ObjectWithProperties object, String propertyName, double x, double y) {
+        object.setProperty(propertyName, new Point3d(x, y, 0));
     }
 }

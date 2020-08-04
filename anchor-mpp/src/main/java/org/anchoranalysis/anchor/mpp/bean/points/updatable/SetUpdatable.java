@@ -120,7 +120,7 @@ public class SetUpdatable extends UpdatablePointsContainer {
 
         Extent e = binaryImageChnl.getDimensions().getExtent();
 
-        VoxelBox<ByteBuffer> vbBinary = binaryImageChnl.getVoxelBox().asByte();
+        VoxelBox<ByteBuffer> vbBinary = binaryImageChnl.voxels().asByte();
 
         // Where we actually do the work
         Point3i pos = new Point3i();
@@ -184,7 +184,7 @@ public class SetUpdatable extends UpdatablePointsContainer {
         RegionMembership rm = newMark.getRegionMap().membershipForIndex(regionID);
         byte flags = rm.flags();
 
-        BoundedVoxelBox<ByteBuffer> voxelBox = pxlMark.getVoxelBox();
+        BoundedVoxelBox<ByteBuffer> voxelBox = pxlMark.getVoxels();
         Extent e = voxelBox.extent();
 
         Point3i crntExtentPoint = new Point3i();
@@ -236,12 +236,12 @@ public class SetUpdatable extends UpdatablePointsContainer {
 
         RegionMembership rm = markToAdd.getRegionMap().membershipForIndex(regionID);
 
-        BoundedVoxelBox<ByteBuffer> voxelBox = pxlMark.getVoxelBox();
+        BoundedVoxelBox<ByteBuffer> voxelBox = pxlMark.getVoxels();
         Extent e = voxelBox.extent();
 
         BinaryValuesByte bvb = binaryImage.getBinaryValues().createByte();
 
-        VoxelBox<ByteBuffer> vbBinary = binaryImageChnl.getVoxelBox().asByte();
+        VoxelBox<ByteBuffer> vbBinary = binaryImageChnl.voxels().asByte();
 
         Point3i crntExtentPoint = new Point3i();
         for (crntExtentPoint.setZ(0);

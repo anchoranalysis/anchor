@@ -61,7 +61,7 @@ public class SeedObjectMask implements Seed {
     }
 
     @Override
-    public ObjectMask createMask() {
+    public ObjectMask deriveObject() {
         return object;
     }
 

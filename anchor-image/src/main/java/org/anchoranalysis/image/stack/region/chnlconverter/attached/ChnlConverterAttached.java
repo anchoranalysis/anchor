@@ -46,5 +46,5 @@ public interface ChnlConverterAttached<S, T extends Buffer> {
 
     Channel convert(Channel chnl, ConversionPolicy changeExisting);
 
-    VoxelBoxConverter<T> getVoxelBoxConverter();
+    VoxelBoxConverter<T> getVoxelsConverter();
 }

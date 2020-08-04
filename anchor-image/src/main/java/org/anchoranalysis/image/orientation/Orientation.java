@@ -50,5 +50,5 @@ public abstract class Orientation implements Serializable {
 
     public void addProperties(NameValueSet<String> nvc) {}
 
-    public void addPropertiesToMask(ObjectWithProperties mask) {}
+    public void addPropertiesToMask(ObjectWithProperties object) {}
 }

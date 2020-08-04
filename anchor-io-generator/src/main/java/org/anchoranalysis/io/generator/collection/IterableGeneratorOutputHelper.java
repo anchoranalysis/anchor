@@ -30,7 +30,7 @@ import java.util.Set;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.error.combinable.AnchorCombinableException;
-import org.anchoranalysis.core.error.friendly.IFriendlyException;
+import org.anchoranalysis.core.error.friendly.HasFriendlyErrorMessage;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.name.provider.NameValueSet;
 import org.anchoranalysis.core.name.provider.NamedProvider;
@@ -134,8 +134,8 @@ public class IterableGeneratorOutputHelper {
 
         String errorMsg = String.format("An error occurred outputting %s", name);
 
-        if (e instanceof IFriendlyException) {
-            IFriendlyException eCast = (IFriendlyException) e;
+        if (e instanceof HasFriendlyErrorMessage) {
+            HasFriendlyErrorMessage eCast = (HasFriendlyErrorMessage) e;
             throw new OutputWriteFailedException(errorMsg, eCast);
         }
 

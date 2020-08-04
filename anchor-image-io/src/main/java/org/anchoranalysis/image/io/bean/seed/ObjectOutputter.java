@@ -48,7 +48,7 @@ public class ObjectOutputter extends SeedCollectionOutputter {
                 "seeds",
                 "seeds",
                 () -> new ObjectWithBoundingBoxGenerator(res),
-                seeds.createMasks().asList(),
+                seeds.deriveObjects().asList(),
                 true);
     }
 }

@@ -139,7 +139,7 @@ public class TestLoaderImageIO {
      * Opens an obj-mask-collection from a path to a file
      *
      * @param folderPath the path to a folder
-     * @return an object mask collection
+     * @return an object-mask collection
      * @throws TestDataLoadException if data cannot be loaded
      */
     public ObjectCollection openObjectsFromFilePath(Path folderPath) {

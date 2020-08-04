@@ -39,10 +39,11 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Document;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class XmlOutputter {
-
-    private XmlOutputter() {}
 
     public static void writeXmlToFile(Document doc, Path filePath)
             throws TransformerException, IOException {

@@ -36,11 +36,12 @@ import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 import org.anchoranalysis.image.voxel.iterator.IterateVoxels;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 /** Performs threshold operation on a VoxelBox */
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class VoxelBoxThresholder {
-
-    private VoxelBoxThresholder() {}
 
     public static void thresholdForLevel(
             VoxelBox<ByteBuffer> inputBuffer, int level, BinaryValuesByte bvOut) {
@@ -53,14 +54,14 @@ public class VoxelBoxThresholder {
             VoxelBoxWrapper inputBuffer,
             int level,
             BinaryValuesByte bvOut,
-            Optional<ObjectMask> mask,
+            Optional<ObjectMask> objectMask,
             boolean alwaysDuplicate) {
         VoxelBox<ByteBuffer> boxOut = inputBuffer.asByteOrCreateEmpty(alwaysDuplicate);
 
         if (inputBuffer.getVoxelDataType().equals(VoxelDataTypeUnsignedByte.INSTANCE)) {
 
             IterateVoxels.callEachPoint(
-                    mask, inputBuffer.asByte(), new PointProcessor(level, boxOut, bvOut));
+                    objectMask, inputBuffer.asByte(), new PointProcessor(level, boxOut, bvOut));
         }
 
         return new BinaryVoxelBoxByte(boxOut, bvOut.createInt());

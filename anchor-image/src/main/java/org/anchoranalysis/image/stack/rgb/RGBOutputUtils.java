@@ -30,10 +30,11 @@ import java.nio.ByteBuffer;
 import org.anchoranalysis.core.color.RGBColor;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.extent.ImageDimensions;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class RGBOutputUtils {
-
-    private RGBOutputUtils() {}
 
     public static void writeRGBColorToByteArr(
             RGBColor c,

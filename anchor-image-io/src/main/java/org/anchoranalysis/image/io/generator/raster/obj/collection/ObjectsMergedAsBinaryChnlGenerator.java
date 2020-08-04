@@ -46,8 +46,8 @@ public class ObjectsMergedAsBinaryChnlGenerator extends ObjectsGenerator {
         super(dimensions);
     }
 
-    public ObjectsMergedAsBinaryChnlGenerator(ImageDimensions dimensions, ObjectCollection masks) {
-        super(dimensions, masks);
+    public ObjectsMergedAsBinaryChnlGenerator(ImageDimensions dimensions, ObjectCollection objects) {
+        super(dimensions, objects);
     }
 
     @Override

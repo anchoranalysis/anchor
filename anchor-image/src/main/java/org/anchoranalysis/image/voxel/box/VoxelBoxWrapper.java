@@ -157,7 +157,7 @@ public class VoxelBoxWrapper {
             VoxelBoxWrapper destVoxelBox,
             BoundingBox destBox,
             VoxelBox<ByteBuffer> objectMaskBuffer,
-            BinaryValuesByte maskBV) {
+            BinaryValuesByte bvb) {
 
         // If the wrapper has the same type, we allow the operation
         if (destVoxelBox.getVoxelDataType().equals(getVoxelDataType())) {
@@ -166,7 +166,7 @@ public class VoxelBoxWrapper {
                     (VoxelBox) destVoxelBox.match(voxelDataType),
                     destBox,
                     objectMaskBuffer,
-                    maskBV);
+                    bvb);
         }
     }
 

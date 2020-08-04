@@ -44,6 +44,6 @@ public abstract class BinarySegmentation extends SegmentationBean<BinarySegmenta
     public abstract BinaryVoxelBox<ByteBuffer> sgmn(
             VoxelBoxWrapper voxelBox,
             BinarySegmentationParameters params,
-            Optional<ObjectMask> mask)
+            Optional<ObjectMask> objectMask)
             throws SegmentationFailedException;
 }

@@ -48,7 +48,7 @@ public abstract class Overlay implements Identifiable {
      */
     public abstract BoundingBox bbox(DrawOverlay overlayWriter, ImageDimensions dimensions);
 
-    public abstract ObjectWithProperties createScaledMask(
+    public abstract ObjectWithProperties createScaleObject(
             DrawOverlay overlayWriter,
             double zoomFactorNew,
             ObjectWithProperties om,

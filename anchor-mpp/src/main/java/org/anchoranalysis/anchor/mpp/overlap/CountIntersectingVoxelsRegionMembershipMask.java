@@ -97,12 +97,12 @@ class CountIntersectingVoxelsRegionMembershipMask {
 
         for (int z = bbox.z().min(); z < bbox.z().max(); z++) {
 
-            ByteBuffer buffer = src.getVoxelBox().getPixelsForPlane(z).buffer();
+            ByteBuffer buffer = src.getVoxels().getPixelsForPlane(z).buffer();
 
             int zOther = z + bbox.z().rel();
             int zGlobal = z + src.getBoundingBox().cornerMin().getZ();
 
-            ByteBuffer bufferOther = other.getVoxelBox().getPixelsForPlane(zOther).buffer();
+            ByteBuffer bufferOther = other.getVoxels().getPixelsForPlane(zOther).buffer();
             ByteBuffer bufferMaskGlobal = maskGlobal.getPixelsForPlane(zGlobal).buffer();
 
             buffer.clear();

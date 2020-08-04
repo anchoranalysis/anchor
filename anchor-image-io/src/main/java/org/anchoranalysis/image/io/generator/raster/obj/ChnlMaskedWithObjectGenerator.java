@@ -42,25 +42,22 @@ import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.io.generator.IterableGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import lombok.AllArgsConstructor;
 
 /**
- * Outputs a channel but with ONLY the pixels in a mask shown, and others set to 0.
+ * Outputs a channel but with ONLY the pixels in an object-mask shown, and others set to 0.
  *
  * @author Owen Feehan
  */
-public class ChnlMaskedWithObjGenerator extends RasterGenerator
+@AllArgsConstructor
+public class ChnlMaskedWithObjectGenerator extends RasterGenerator
         implements IterableGenerator<ObjectMask> {
 
+    private ObjectMask objectMask = null;
     private Channel srcChnl;
-    private ObjectMask mask = null;
 
-    public ChnlMaskedWithObjGenerator(Channel srcChnl) {
-        super();
-        this.srcChnl = srcChnl;
-    }
 
-    public ChnlMaskedWithObjGenerator(ObjectMask mask, Channel srcChnl) {
-        this.mask = mask;
+    public ChnlMaskedWithObjectGenerator(Channel srcChnl) {
         this.srcChnl = srcChnl;
     }
 
@@ -77,12 +74,12 @@ public class ChnlMaskedWithObjGenerator extends RasterGenerator
 
     @Override
     public ObjectMask getIterableElement() {
-        return mask;
+        return objectMask;
     }
 
     @Override
     public void setIterableElement(ObjectMask element) {
-        mask = element;
+        objectMask = element;
     }
 
     @Override
@@ -101,40 +98,40 @@ public class ChnlMaskedWithObjGenerator extends RasterGenerator
     }
 
     /**
-     * Creates a new channel, which copies voxels from srcChnl, but sets voxels outside the mask to
-     * 0
+     * Creates a new channel, which copies voxels from srcChnl, but sets voxels outside the object-mask to
+     * zero.
      *
      * <p>i.e. the new channel is a masked version of srcChnl
      *
-     * @param mask mask
+     * @param object object-mask that determines the region that is copied (voxels outside this region are set to zero)
      * @param srcChnl the channel to copy
      * @return the masked channel
      */
-    private static Channel createMaskedChnl(ObjectMask mask, Channel srcChnl) {
+    private static Channel createMaskedChnl(ObjectMask object, Channel srcChnl) {
 
-        BoundingBox bbox = mask.getBoundingBox();
+        BoundingBox bbox = object.getBoundingBox();
 
         ImageDimensions newSd =
-                new ImageDimensions(bbox.extent(), srcChnl.getDimensions().getRes());
+                new ImageDimensions(bbox.extent(), srcChnl.getDimensions().getResolution());
 
         Channel chnlNew =
                 ChannelFactory.instance().createEmptyInitialised(newSd, srcChnl.getVoxelDataType());
 
-        byte maskOn = mask.getBinaryValuesByte().getOnByte();
+        byte maskOn = object.getBinaryValuesByte().getOnByte();
 
         ReadableTuple3i maxGlobal = bbox.calcCornerMax();
         Point3i pointGlobal = new Point3i();
         Point3i pointLocal = new Point3i();
 
-        VoxelBox<?> vbSrc = srcChnl.getVoxelBox().any();
-        VoxelBox<?> vbNew = chnlNew.getVoxelBox().any();
+        VoxelBox<?> vbSrc = srcChnl.voxels().any();
+        VoxelBox<?> vbNew = chnlNew.voxels().any();
 
         pointLocal.setZ(0);
         for (pointGlobal.setZ(bbox.cornerMin().getZ());
                 pointGlobal.getZ() <= maxGlobal.getZ();
                 pointGlobal.incrementZ(), pointLocal.incrementZ()) {
 
-            ByteBuffer maskIn = mask.getVoxelBox().getPixelsForPlane(pointLocal.getZ()).buffer();
+            ByteBuffer maskIn = object.getVoxels().getPixelsForPlane(pointLocal.getZ()).buffer();
             VoxelBuffer<?> pixelsIn = vbSrc.getPixelsForPlane(pointGlobal.getZ());
             VoxelBuffer<?> pixelsOut = vbNew.getPixelsForPlane(pointLocal.getZ());
 

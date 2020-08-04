@@ -37,7 +37,7 @@ import org.anchoranalysis.core.error.AnchorRuntimeException;
  * @author Owen Feehan
  */
 public class AnchorFriendlyRuntimeException extends AnchorRuntimeException
-        implements IFriendlyException {
+        implements HasFriendlyErrorMessage {
 
     /** */
     private static final long serialVersionUID = 1L;

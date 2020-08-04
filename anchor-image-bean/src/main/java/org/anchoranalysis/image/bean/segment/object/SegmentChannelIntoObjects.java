@@ -37,7 +37,7 @@ import org.anchoranalysis.image.seed.SeedCollection;
 /**
  * A base class for routines to segment a channel into one or more objects.
  *
- * <p>Some algorithms can be restricted by a mask on the channel.
+ * <p>Some algorithms can be restricted by an object-mask on the channel.
  *
  * <p>Some algorithms can be influenced by passing a set of seeds.
  *
@@ -50,20 +50,20 @@ public abstract class SegmentChannelIntoObjects
      * Segments a channel to produce an object-collection.
      *
      * @param channel the channel to segment
-     * @param mask a mask that can restrict which areas of the channel are considered.
+     * @param objectMask an object-mask that can restrict which areas of the channel are considered.
      * @param seeds seeds that can be used to determine starting-points for segmentation regions.
      * @return a newly created collection of objects for each segment. The created objects will
      *     always exist inside the channel's extent.
      * @throws SegmentationFailedException if anything goes wrong during the segmentation.
      */
     public abstract ObjectCollection segment(
-            Channel channel, Optional<ObjectMask> mask, Optional<SeedCollection> seeds)
+            Channel channel, Optional<ObjectMask> objectMask, Optional<SeedCollection> seeds)
             throws SegmentationFailedException;
 
-    protected static void checkUnsupportedMask(Optional<ObjectMask> mask)
+    protected static void checkUnsupportedObjectMask(Optional<ObjectMask> objectMask)
             throws SegmentationFailedException {
-        if (mask.isPresent()) {
-            throw new SegmentationFailedException("A mask is not supported for this operation");
+        if (objectMask.isPresent()) {
+            throw new SegmentationFailedException("An object-mask is not supported for this operation");
         }
     }
 

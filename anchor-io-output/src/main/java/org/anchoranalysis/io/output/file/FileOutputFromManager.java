@@ -30,10 +30,11 @@ import java.nio.file.Path;
 import java.util.Optional;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class FileOutputFromManager {
-
-    private FileOutputFromManager() {}
 
     /**
      * Creates a FileOutput

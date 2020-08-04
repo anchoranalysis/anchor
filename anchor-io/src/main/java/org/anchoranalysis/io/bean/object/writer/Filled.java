@@ -44,9 +44,9 @@ import org.anchoranalysis.image.stack.rgb.RGBStack;
 public class Filled extends DrawObject {
 
     @Override
-    public PrecalcOverlay precalculate(ObjectWithProperties mask, ImageDimensions dim)
+    public PrecalcOverlay precalculate(ObjectWithProperties object, ImageDimensions dim)
             throws CreateException {
-        return new PrecalcOverlay(mask) {
+        return new PrecalcOverlay(object) {
 
             @Override
             public void writePrecalculatedMask(
@@ -57,8 +57,8 @@ public class Filled extends DrawObject {
                     throws OperationFailedException {
 
                 IntersectionWriter.writeRGBMaskIntersection(
-                        mask.getMask(),
-                        attributes.colorFor(mask, iteration),
+                        object.withoutProperties(),
+                        attributes.colorFor(object, iteration),
                         background,
                         restrictTo);
             }

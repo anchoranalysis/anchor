@@ -47,7 +47,7 @@ public abstract class FeatureInputNRG implements FeatureInputParams {
 
     @Override
     public Optional<ImageResolution> getResOptional() {
-        return nrgStack.map(NRGStackWithParams::getDimensions).map(ImageDimensions::getRes);
+        return nrgStack.map(NRGStackWithParams::getDimensions).map(ImageDimensions::getResolution);
     }
 
     @Override

@@ -50,12 +50,12 @@ public class ExtendObjectsInto3DMask {
 
     public static ObjectCollection extendObjects(
             ObjectCollection objects2D, BinaryVoxelBox<ByteBuffer> mask3D) {
-        return objects2D.stream().map(object -> extendObj(object, mask3D));
+        return objects2D.stream().map(object -> extendObject(object, mask3D));
     }
 
-    private static ObjectMask extendObj(
+    private static ObjectMask extendObject(
             ObjectMask object2D, BinaryVoxelBox<ByteBuffer> voxelBox3D) {
-        return new ObjectMask(extendObj(object2D.getVoxelBoxBounded(), voxelBox3D));
+        return new ObjectMask(extendObj(object2D.getBoundedVoxels(), voxelBox3D));
     }
 
     private static BoundedVoxelBox<ByteBuffer> extendObj(
@@ -72,13 +72,13 @@ public class ExtendObjectsInto3DMask {
 
         BinaryValuesByte bv = mask3D.getBinaryValues().createByte();
 
-        ByteBuffer bufferIn2D = obj2D.getVoxelBox().getPixelsForPlane(0).buffer();
+        ByteBuffer bufferIn2D = obj2D.getVoxels().getPixelsForPlane(0).buffer();
 
         for (point.setZ(0); point.getZ() <= max.getZ(); point.incrementZ()) {
 
             ByteBuffer bufferMask3D =
-                    mask3D.getVoxelBox().getPlaneAccess().getPixelsForPlane(point.getZ()).buffer();
-            ByteBuffer bufferOut3D = newMask.getVoxelBox().getPixelsForPlane(point.getZ()).buffer();
+                    mask3D.getVoxels().getPlaneAccess().getPixelsForPlane(point.getZ()).buffer();
+            ByteBuffer bufferOut3D = newMask.getVoxels().getPixelsForPlane(point.getZ()).buffer();
 
             int ind = 0;
 

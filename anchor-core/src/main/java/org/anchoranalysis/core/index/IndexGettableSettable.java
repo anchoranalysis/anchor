@@ -1,4 +1,4 @@
-package org.anchoranalysis.core.event;
+package org.anchoranalysis.core.index;
 
 /*
  * #%L
@@ -26,11 +26,4 @@ package org.anchoranalysis.core.event;
  * #L%
  */
 
-import java.util.EventObject;
-
-public interface IRoutableReceivable<T extends EventObject> {
-
-    void addRoutableListener(RoutableListener<T> l);
-
-    void removeRoutableListener(RoutableListener<T> l);
-}
+public interface IndexGettableSettable extends IndexGetter, IndexSetter {}

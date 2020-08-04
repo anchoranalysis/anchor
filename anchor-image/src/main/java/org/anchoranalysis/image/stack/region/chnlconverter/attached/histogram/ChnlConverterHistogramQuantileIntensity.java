@@ -64,7 +64,7 @@ public class ChnlConverterHistogramQuantileIntensity
     }
 
     @Override
-    public VoxelBoxConverter<ByteBuffer> getVoxelBoxConverter() {
+    public VoxelBoxConverter<ByteBuffer> getVoxelsConverter() {
         return voxelBoxConverter;
     }
 }

@@ -29,13 +29,14 @@ package org.anchoranalysis.anchor.mpp.mark.conic;
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipAnd;
 import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 // A Default RegionMap
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class RegionMapSingleton {
 
     private static RegionMap regionMap = null;
-
-    private RegionMapSingleton() {}
 
     public static synchronized RegionMap instance() {
         if (regionMap == null) {

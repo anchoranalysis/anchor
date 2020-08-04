@@ -36,10 +36,10 @@ import org.anchoranalysis.image.object.ObjectMask;
 public class ProcessVoxelNeighborFactory {
 
     /**
-     * Within either a mask or an extent (as a fallback)
+     * Within either an object-mask or an extent (as a fallback)
      *
      * @param containingMask if defined, the process is restricted to only process points within
-     *     this mask
+     *     this object-mask
      * @param extentFallback if {@code containingMask} is not defined, then as a fallback, the
      *     process is restricted to only process points in this extent
      * @param process a process which will be wrapped inside a restriction
@@ -61,12 +61,12 @@ public class ProcessVoxelNeighborFactory {
 
     public static <T> ProcessVoxelNeighbor<T> withinMask(
             ObjectMask object, ProcessChangedPointAbsoluteMasked<T> process) {
-        return new WithinMask<>(process, object);
+        return new WithinObjectMask<>(process, object);
     }
 
     public static <T> ProcessVoxelNeighbor<T> withinMask(
             ObjectMask object, ProcessVoxelNeighborAbsolute<T> process) {
-        return new WithinMask<>(new WrapAbsoluteAsMasked<>(process), object);
+        return new WithinObjectMask<>(new WrapAbsoluteAsMasked<>(process), object);
     }
 
     private static <T> ProcessVoxelNeighbor<T> withinExtent(

@@ -45,7 +45,7 @@ public final class ImageDimensions implements Serializable {
     /** */
     private static final long serialVersionUID = 1L;
 
-    private final ImageResolution res;
+    @Getter private final ImageResolution resolution;
 
     @Getter private final Extent extent;
 
@@ -60,27 +60,27 @@ public final class ImageDimensions implements Serializable {
     }
 
     /** Construct with an explicit extent and resolution */
-    public ImageDimensions(Extent extent, ImageResolution res) {
+    public ImageDimensions(Extent extent, ImageResolution resolution) {
         this.extent = extent;
-        this.res = res;
+        this.resolution = resolution;
     }
 
     public ImageDimensions scaleXYTo(int x, int y) {
         Extent extentScaled = new Extent(x, y, extent.getZ());
         ScaleFactor sf = ScaleFactorUtilities.calcRelativeScale(extent, extentScaled);
-        return new ImageDimensions(extentScaled, res.scaleXY(sf));
+        return new ImageDimensions(extentScaled, resolution.scaleXY(sf));
     }
 
-    public ImageDimensions scaleXYBy(ScaleFactor sf) {
-        return new ImageDimensions(extent.scaleXYBy(sf), res.scaleXY(sf));
+    public ImageDimensions scaleXYBy(ScaleFactor scaleFactor) {
+        return new ImageDimensions(extent.scaleXYBy(scaleFactor), resolution.scaleXY(scaleFactor));
     }
 
     public ImageDimensions duplicateChangeZ(int z) {
-        return new ImageDimensions(extent.duplicateChangeZ(z), res);
+        return new ImageDimensions(extent.duplicateChangeZ(z), resolution);
     }
 
-    public ImageDimensions duplicateChangeRes(ImageResolution resToAssign) {
-        return new ImageDimensions(extent, resToAssign);
+    public ImageDimensions duplicateChangeRes(ImageResolution resolutionToAssign) {
+        return new ImageDimensions(extent, resolutionToAssign);
     }
 
     public long getVolume() {
@@ -125,10 +125,6 @@ public final class ImageDimensions implements Serializable {
 
     public final int offsetSlice(Point3i point) {
         return extent.offsetSlice(point);
-    }
-
-    public ImageResolution getRes() {
-        return res;
     }
 
     public boolean contains(BoundingBox bbox) {

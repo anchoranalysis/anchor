@@ -33,17 +33,17 @@ public class RoutableEvent<T extends EventObject> extends EventObject {
     /** */
     private static final long serialVersionUID = 4810991820699526243L;
     /** */
-    private transient IRoutableEventSourceObject routableSource;
+    private transient RoutableEventSourceObject routableSource;
 
     private T event;
 
-    public RoutableEvent(IRoutableEventSourceObject routableSource, T event) {
+    public RoutableEvent(RoutableEventSourceObject routableSource, T event) {
         super(routableSource);
         this.routableSource = routableSource;
         this.event = event;
     }
 
-    public IRoutableEventSourceObject getRoutableSource() {
+    public RoutableEventSourceObject getRoutableSource() {
         return routableSource;
     }
 

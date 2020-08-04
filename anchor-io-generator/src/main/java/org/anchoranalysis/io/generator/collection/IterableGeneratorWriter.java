@@ -36,10 +36,11 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.writer.WritableItem;
 import org.anchoranalysis.io.output.writer.Writer;
 import org.anchoranalysis.io.output.writer.WriterRouterErrors;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class IterableGeneratorWriter {
-
-    private IterableGeneratorWriter() {}
 
     public static <T> void writeSubfolder(
             BoundOutputManager outputManager,

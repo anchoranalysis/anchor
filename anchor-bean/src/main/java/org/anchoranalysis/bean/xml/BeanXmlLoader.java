@@ -40,12 +40,13 @@ import org.apache.commons.configuration.HierarchicalConfiguration;
 import org.apache.commons.configuration.XMLConfiguration;
 import org.apache.commons.configuration.beanutils.BeanHelper;
 import org.apache.commons.configuration.beanutils.XMLBeanDeclaration;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class BeanXmlLoader {
 
     private static Logger logger = Logger.getLogger(BeanXmlLoader.class.getName());
-
-    private BeanXmlLoader() {}
 
     /**
      * Creates a bean by loading an XML description from the filesystem

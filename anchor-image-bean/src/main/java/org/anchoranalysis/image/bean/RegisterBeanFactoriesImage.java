@@ -31,15 +31,16 @@ import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureListFactory;
 import org.anchoranalysis.feature.input.FeatureInput;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 /**
  * Registers beans that needs particular factories
  *
  * @author Owen Feehan
  */
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class RegisterBeanFactoriesImage {
-
-    private RegisterBeanFactoriesImage() {}
 
     public static void registerBeanFactories() {
         RegisterBeanFactories.register(

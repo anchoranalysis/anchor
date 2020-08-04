@@ -37,10 +37,11 @@ import org.anchoranalysis.bean.xml.error.BeanXmlException;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.XMLConfiguration;
 import org.xml.sax.SAXParseException;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 class HelperReadXml {
-
-    private HelperReadXml() {}
 
     /**
      * Reads an XML file from the file-system, and wraps it as BeanXML

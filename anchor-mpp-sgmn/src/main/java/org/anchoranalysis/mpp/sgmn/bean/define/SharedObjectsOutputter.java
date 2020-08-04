@@ -35,10 +35,11 @@ import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.mpp.io.output.StackOutputKeys;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 class SharedObjectsOutputter {
-
-    private SharedObjectsOutputter() {}
 
     public static void output(
             ImageInitParams imageInit, boolean suppressSubfolders, BoundIOContext context) {

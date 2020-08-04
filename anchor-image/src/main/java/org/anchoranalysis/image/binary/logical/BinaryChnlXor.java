@@ -37,27 +37,41 @@ import org.anchoranalysis.image.voxel.box.VoxelBox;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class BinaryChnlXor {
 
-    public static void apply(Mask chnlCrnt, Mask chnlReceiver) {
+    /**
+     * Performs a XOR (exclusive OR) operation on each voxel in two masks, writing the result onto the second mask.
+     *
+     * @param first the first channel for operation
+     * @param second the second channel for operation (and in which the result is written)
+     */
+    public static void apply(Mask first, Mask second) {
         apply(
-                chnlCrnt.getVoxelBox(),
-                chnlReceiver.getVoxelBox(),
-                chnlCrnt.getBinaryValues().createByte(),
-                chnlReceiver.getBinaryValues().createByte());
+                first.getVoxels(),
+                second.getVoxels(),
+                first.getBinaryValues().createByte(),
+                second.getBinaryValues().createByte());
     }
 
+    /**
+     * Performs a XOR (exclusive OR) operation on each voxel in two voxel-boxes (considered to be masks), writing the result onto the second mask.
+     * 
+     * @param voxelsFirst the first voxel-box for operation
+     * @param voxelsSecond the second voxel-box for operation (and in which the result is written)
+     * @param bvbFirst binary-values to mask first voxel-box
+     * @param bvbSecond binary-values to mask second voxel-box
+     */
     public static void apply(
-            VoxelBox<ByteBuffer> voxelBoxCrnt,
-            VoxelBox<ByteBuffer> voxelBoxReceiver,
-            BinaryValuesByte bvbCrnt,
-            BinaryValuesByte bvbReceiver) {
+            VoxelBox<ByteBuffer> voxelsFirst,
+            VoxelBox<ByteBuffer> voxelsSecond,
+            BinaryValuesByte bvbFirst,
+            BinaryValuesByte bvbSecond) {
 
-        Extent e = voxelBoxCrnt.extent();
+        Extent e = voxelsFirst.extent();
 
         // All the on voxels in the receive, are put onto crnt
         for (int z = 0; z < e.getZ(); z++) {
 
-            ByteBuffer bufSrc = voxelBoxCrnt.getPixelsForPlane(z).buffer();
-            ByteBuffer bufReceive = voxelBoxReceiver.getPixelsForPlane(z).buffer();
+            ByteBuffer bufSrc = voxelsFirst.getPixelsForPlane(z).buffer();
+            ByteBuffer bufReceive = voxelsSecond.getPixelsForPlane(z).buffer();
 
             int offset = 0;
             for (int y = 0; y < e.getY(); y++) {
@@ -66,13 +80,13 @@ public class BinaryChnlXor {
                     byte byteSrc = bufSrc.get(offset);
                     byte byteRec = bufReceive.get(offset);
 
-                    boolean srcOn = byteSrc == bvbCrnt.getOnByte();
-                    boolean recOn = byteRec == bvbReceiver.getOnByte();
+                    boolean srcOn = byteSrc == bvbFirst.getOnByte();
+                    boolean recOn = byteRec == bvbSecond.getOnByte();
 
                     if (srcOn != recOn) {
-                        bufSrc.put(offset, bvbCrnt.getOnByte());
+                        bufSrc.put(offset, bvbFirst.getOnByte());
                     } else {
-                        bufSrc.put(offset, bvbCrnt.getOffByte());
+                        bufSrc.put(offset, bvbFirst.getOffByte());
                     }
 
                     offset++;

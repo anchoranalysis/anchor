@@ -89,13 +89,13 @@ public final class VoxelBoxByte extends VoxelBox<ByteBuffer> {
         ReadableTuple3i pointMax = bbox.calcCornerMax();
 
         byte equalValByte = (byte) equalVal;
-        byte maskOnVal = object.getBinaryValuesByte().getOnByte();
+        byte objectMaskOnVal = object.getBinaryValuesByte().getOnByte();
 
         for (int z = bbox.cornerMin().getZ(); z <= pointMax.getZ(); z++) {
 
             ByteBuffer pixelIn = getPlaneAccess().getPixelsForPlane(z).buffer();
             ByteBuffer pixelOut =
-                    object.getVoxelBox().getPixelsForPlane(z - bbox.cornerMin().getZ()).buffer();
+                    object.getVoxels().getPixelsForPlane(z - bbox.cornerMin().getZ()).buffer();
 
             int ind = 0;
             for (int y = bbox.cornerMin().getY(); y <= pointMax.getY(); y++) {
@@ -105,7 +105,7 @@ public final class VoxelBoxByte extends VoxelBox<ByteBuffer> {
                     byte chnlVal = pixelIn.get(index);
 
                     if (chnlVal == equalValByte) {
-                        pixelOut.put(ind, maskOnVal);
+                        pixelOut.put(ind, objectMaskOnVal);
                     }
 
                     ind++;
@@ -159,7 +159,7 @@ public final class VoxelBoxByte extends VoxelBox<ByteBuffer> {
     }
 
     @Override
-    public VoxelBox<ByteBuffer> maxIntensityProj() {
+    public VoxelBox<ByteBuffer> maxIntensityProjection() {
 
         MaxIntensityBufferByte mi = new MaxIntensityBufferByte(extent());
 
@@ -171,7 +171,7 @@ public final class VoxelBoxByte extends VoxelBox<ByteBuffer> {
     }
 
     @Override
-    public VoxelBox<ByteBuffer> meanIntensityProj() {
+    public VoxelBox<ByteBuffer> meanIntensityProjection() {
         MeanIntensityByteBuffer mi = new MeanIntensityByteBuffer(extent());
 
         for (int z = 0; z < extent().getZ(); z++) {
@@ -212,12 +212,12 @@ public final class VoxelBoxByte extends VoxelBox<ByteBuffer> {
     }
 
     @Override
-    public void scalePixelsCheckMask(ObjectMask mask, double value) {
+    public void scalePixelsCheckMask(ObjectMask objectMask, double value) {
 
-        BoundingBox bbox = mask.getBoundingBox();
-        VoxelBox<ByteBuffer> objectBuffer = mask.getVoxelBox();
+        BoundingBox bbox = objectMask.getBoundingBox();
+        VoxelBox<ByteBuffer> objectBuffer = objectMask.getVoxels();
 
-        byte maskOnByte = mask.getBinaryValuesByte().getOnByte();
+        byte maskOnByte = objectMask.getBinaryValuesByte().getOnByte();
 
         ReadableTuple3i pointMax = bbox.calcCornerMax();
         for (int z = bbox.cornerMin().getZ(); z <= pointMax.getZ(); z++) {
@@ -243,12 +243,12 @@ public final class VoxelBoxByte extends VoxelBox<ByteBuffer> {
     }
 
     @Override
-    public void addPixelsCheckMask(ObjectMask mask, int value) {
+    public void addPixelsCheckMask(ObjectMask objectMask, int value) {
 
-        BoundingBox bbox = mask.getBoundingBox();
-        VoxelBox<ByteBuffer> objectBuffer = mask.getVoxelBox();
+        BoundingBox bbox = objectMask.getBoundingBox();
+        VoxelBox<ByteBuffer> objectBuffer = objectMask.getVoxels();
 
-        byte maskOnByte = mask.getBinaryValuesByte().getOnByte();
+        byte maskOnByte = objectMask.getBinaryValuesByte().getOnByte();
 
         ReadableTuple3i pointMax = bbox.calcCornerMax();
         for (int z = bbox.cornerMin().getZ(); z <= pointMax.getZ(); z++) {

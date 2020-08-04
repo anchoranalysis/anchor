@@ -57,8 +57,8 @@ public class MaxIntensityProjectionPair {
     }
 
     public int minArea() {
-        int cnt1 = bufferMIP1.getVoxelBox().countEqual(BinaryValues.getDefault().getOnInt());
-        int cnt2 = bufferMIP2.getVoxelBox().countEqual(BinaryValues.getDefault().getOnInt());
+        int cnt1 = bufferMIP1.getVoxels().countEqual(BinaryValues.getDefault().getOnInt());
+        int cnt2 = bufferMIP2.getVoxels().countEqual(BinaryValues.getDefault().getOnInt());
         return Math.min(cnt1, cnt2);
     }
 
@@ -103,11 +103,11 @@ public class MaxIntensityProjectionPair {
 
     private static BoundedVoxelBox<ByteBuffer> intensityProjectionFor(
             BoundedVoxelBox<ByteBuffer> buffer, RegionMembershipWithFlags rmFlags) {
-        BinaryVoxelBox<ByteBuffer> bvb = createBinaryVoxelBoxForFlag(buffer.getVoxelBox(), rmFlags);
+        BinaryVoxelBox<ByteBuffer> bvb = createBinaryVoxelBoxForFlag(buffer.getVoxels(), rmFlags);
 
         BoundedVoxelBox<ByteBuffer> bvbBounded =
-                new BoundedVoxelBox<>(buffer.getBoundingBox(), bvb.getVoxelBox());
+                new BoundedVoxelBox<>(buffer.getBoundingBox(), bvb.getVoxels());
 
-        return bvbBounded.createMaxIntensityProjection();
+        return bvbBounded.maxIntensityProjection();
     }
 }

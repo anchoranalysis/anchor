@@ -52,8 +52,8 @@ public class ObjectsAsUniqueValueGenerator extends ObjectsGenerator {
         super(dimensions);
     }
 
-    public ObjectsAsUniqueValueGenerator(ImageDimensions dimensions, ObjectCollection masks) {
-        super(dimensions, masks);
+    public ObjectsAsUniqueValueGenerator(ImageDimensions dimensions, ObjectCollection objects) {
+        super(dimensions, objects);
     }
 
     @Override
@@ -61,7 +61,7 @@ public class ObjectsAsUniqueValueGenerator extends ObjectsGenerator {
 
         Channel outChnl = factory.createEmptyInitialised(getDimensions());
 
-        VoxelBox<?> vbOutput = outChnl.getVoxelBox().any();
+        VoxelBox<?> vbOutput = outChnl.voxels().any();
 
         if (getObjects().size() > 254) {
             throw new OutputWriteFailedException(

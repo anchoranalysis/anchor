@@ -44,9 +44,9 @@ public class CfgMIPGenerator extends CfgGeneratorBase {
     private DisplayStack cachedBackground;
     private DisplayStack cachedBackgroundMIP;
 
-    public CfgMIPGenerator(DrawObject maskWriter, IDGetter<Overlay> idGetter) {
+    public CfgMIPGenerator(DrawObject drawObject, IDGetter<Overlay> idGetter) {
         this(
-                maskWriter,
+                drawObject,
                 null,
                 idGetter,
                 RegionMapSingleton.instance()
@@ -54,11 +54,11 @@ public class CfgMIPGenerator extends CfgGeneratorBase {
     }
 
     public CfgMIPGenerator(
-            DrawObject maskWriter,
+            DrawObject drawObject,
             ColoredCfgWithDisplayStack cws,
             IDGetter<Overlay> idGetter,
             RegionMembershipWithFlags regionMembership) {
-        super(createWriter(maskWriter), cws, idGetter, regionMembership);
+        super(createWriter(drawObject), cws, idGetter, regionMembership);
     }
 
     @Override
@@ -72,7 +72,7 @@ public class CfgMIPGenerator extends CfgGeneratorBase {
         return cachedBackgroundMIP;
     }
 
-    private static DrawOverlay createWriter(DrawObject maskWriter) {
-        return new SimpleOverlayWriter(new Flatten(maskWriter));
+    private static DrawOverlay createWriter(DrawObject drawObject) {
+        return new SimpleOverlayWriter(new Flatten(drawObject));
     }
 }

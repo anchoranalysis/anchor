@@ -56,7 +56,7 @@ public class CreateFromConnectedComponentsFactory {
     }
 
     public ObjectCollection createConnectedComponents(Mask chnl) throws CreateException {
-        return createConnectedComponents(chnl.binaryVoxelBox());
+        return createConnectedComponents(chnl.binaryVoxels());
     }
 
     // This consumes the voxel buffer 'vb'

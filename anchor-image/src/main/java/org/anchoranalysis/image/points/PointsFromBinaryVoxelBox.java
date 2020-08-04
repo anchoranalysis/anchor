@@ -38,10 +38,11 @@ import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.extent.Extent;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class PointsFromBinaryVoxelBox {
-
-    private PointsFromBinaryVoxelBox() {}
 
     // Add: is added to each point before they are added to the list
     public static void addPointsFromVoxelBox(

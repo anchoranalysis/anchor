@@ -86,10 +86,10 @@ public class DetermineWhetherIntersectingVoxelsBinary {
         //  in both voxel boxes in the intersecting region
         for (int z = bbox.z().min(); z < bbox.z().max(); z++) {
 
-            ByteBuffer buffer = src.getVoxelBox().getPixelsForPlane(z).buffer();
+            ByteBuffer buffer = src.getVoxels().getPixelsForPlane(z).buffer();
 
             int zOther = z + bbox.z().rel();
-            ByteBuffer bufferOther = other.getVoxelBox().getPixelsForPlane(zOther).buffer();
+            ByteBuffer bufferOther = other.getVoxels().getPixelsForPlane(zOther).buffer();
 
             buffer.clear();
             bufferOther.clear();

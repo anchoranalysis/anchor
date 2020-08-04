@@ -36,15 +36,19 @@ public class BinaryVoxelBoxByte extends BinaryVoxelBox<ByteBuffer> {
 
     private BinaryValuesByte bvb;
 
-    public BinaryVoxelBoxByte(VoxelBox<ByteBuffer> voxelBox, BinaryValues bv) {
-        super(voxelBox, bv);
+    public BinaryVoxelBoxByte(VoxelBox<ByteBuffer> voxels) {
+        super(voxels);
+    }
+    
+    public BinaryVoxelBoxByte(VoxelBox<ByteBuffer> voxels, BinaryValues bv) {
+        super(voxels, bv);
         this.bvb = getBinaryValues().createByte();
     }
 
     @Override
     public boolean isOn(int x, int y, int z) {
-        int offset = getVoxelBox().extent().offset(x, y);
-        return getVoxelBox().getPixelsForPlane(z).buffer().get(offset) != bvb.getOffByte();
+        int offset = getVoxels().extent().offset(x, y);
+        return getVoxels().getPixelsForPlane(z).buffer().get(offset) != bvb.getOffByte();
     }
 
     @Override
@@ -54,14 +58,14 @@ public class BinaryVoxelBoxByte extends BinaryVoxelBox<ByteBuffer> {
 
     @Override
     public void setOn(int x, int y, int z) {
-        int offset = getVoxelBox().extent().offset(x, y);
-        getVoxelBox().getPixelsForPlane(z).buffer().put(offset, bvb.getOnByte());
+        int offset = getVoxels().extent().offset(x, y);
+        getVoxels().getPixelsForPlane(z).buffer().put(offset, bvb.getOnByte());
     }
 
     @Override
     public void setOff(int x, int y, int z) {
-        int offset = getVoxelBox().extent().offset(x, y);
-        getVoxelBox().getPixelsForPlane(z).buffer().put(offset, bvb.getOffByte());
+        int offset = getVoxels().extent().offset(x, y);
+        getVoxels().getPixelsForPlane(z).buffer().put(offset, bvb.getOffByte());
     }
 
     public BinaryValuesByte getBinaryValuesByte() {
@@ -70,10 +74,10 @@ public class BinaryVoxelBoxByte extends BinaryVoxelBox<ByteBuffer> {
 
     @Override
     public BinaryVoxelBoxByte duplicate() {
-        return new BinaryVoxelBoxByte(getVoxelBox().duplicate(), getBinaryValues());
+        return new BinaryVoxelBoxByte(getVoxels().duplicate(), getBinaryValues());
     }
 
     public BinaryVoxelBox<ByteBuffer> extractSlice(int z) throws CreateException {
-        return new BinaryVoxelBoxByte(getVoxelBox().extractSlice(z), getBinaryValues());
+        return new BinaryVoxelBoxByte(getVoxels().extractSlice(z), getBinaryValues());
     }
 }

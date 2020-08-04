@@ -30,10 +30,11 @@ import java.util.List;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.outline.traverser.contiguouspath.ContiguousPixelPath;
 import org.anchoranalysis.image.outline.traverser.contiguouspath.PointsListNeighborUtilities;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class CombineToOnePath {
-
-    private CombineToOnePath() {}
 
     /**
      * Combines all the contiguous paths to a single-path
