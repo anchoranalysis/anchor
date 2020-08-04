@@ -138,7 +138,7 @@ public class SeedCollection implements Iterable<Seed> {
 
             ObjectMask object = seed.deriveObject();
 
-            if (!e.contains(object.getBoundingBox())) {
+            if (!e.contains(object.boundingBox())) {
                 return false;
             }
         }

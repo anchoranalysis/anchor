@@ -29,6 +29,7 @@ package org.anchoranalysis.image.channel;
 import java.nio.Buffer;
 import java.util.function.UnaryOperator;
 import lombok.Getter;
+import lombok.experimental.Accessors;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.BoundingBox;
@@ -54,6 +55,7 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
  *
  * @author Owen Feehan
  */
+@Accessors(fluent=true)
 public class Channel {
 
     private static final Interpolator DEFAULT_INTERPOLATOR = new InterpolatorImgLib2Lanczos();
@@ -89,7 +91,7 @@ public class Channel {
 
     // Creates a new channel contain a duplication only of a particular slice
     public Channel extractSlice(int z) {
-        return ChannelFactory.instance().create(delegate.extractSlice(z), getDimensions().getResolution());
+        return ChannelFactory.instance().create(delegate.extractSlice(z), dimensions.resolution());
     }
 
     public Channel scaleXY(ScaleFactor scaleFactor) {
@@ -99,8 +101,8 @@ public class Channel {
     public Channel scaleXY(ScaleFactor scaleFactor, Interpolator interpolator) {
         // We round as sometimes we get values which, for example, are 7.999999, intended to be 8,
         // due to how we use our ScaleFactors
-        int newSizeX = (int) Math.round(scaleFactor.getX() * getDimensions().getX());
-        int newSizeY = (int) Math.round(scaleFactor.getY() * getDimensions().getY());
+        int newSizeX = (int) Math.round(scaleFactor.x() * dimensions().x());
+        int newSizeY = (int) Math.round(scaleFactor.y() * dimensions().y());
         return resizeXY(newSizeX, newSizeY, interpolator);
     }
 
@@ -112,11 +114,11 @@ public class Channel {
 
         assert (FACTORY != null);
 
-        ImageDimensions dimensionsScaled = getDimensions().scaleXYTo(x, y);
+        ImageDimensions dimensionsScaled = dimensions.scaleXYTo(x, y);
 
         Voxels<? extends Buffer> ba = delegate.resizeXY(x, y, interpolator);
-        assert (ba.extent().getVolumeXY() == ba.getPixelsForPlane(0).buffer().capacity());
-        return FACTORY.create(ba, dimensionsScaled.getResolution());
+        assert (ba.extent().volumeXY() == ba.slice(0).buffer().capacity());
+        return FACTORY.create(ba, dimensionsScaled.resolution());
     }
 
     public Channel maxIntensityProjection() {
@@ -129,7 +131,7 @@ public class Channel {
 
     // Duplicates the current channel
     public Channel duplicate() {
-        Channel dup = FACTORY.create(delegate.duplicate(), getDimensions().getResolution());
+        Channel dup = FACTORY.create(delegate.duplicate(), dimensions().resolution());
         assert (dup.delegate.extent().equals(delegate.extent()));
         return dup;
     }
@@ -181,11 +183,11 @@ public class Channel {
      * @return flattened box (i.e. 2D)
      */
     private Channel flattenZProjection(UnaryOperator<Voxels<? extends Buffer>> flattenFunc) {
-        int prevZSize = delegate.extent().getZ();
+        int prevZSize = delegate.extent().z();
         if (prevZSize > 1) {
             return FACTORY.create(
                     flattenFunc.apply(delegate),
-                    getDimensions().getResolution().duplicateFlattenZ(prevZSize));
+                    dimensions.resolution().duplicateFlattenZ(prevZSize));
         } else {
             return this;
         }

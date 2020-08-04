@@ -35,11 +35,11 @@ public class FloatFrom8Bit extends ConvertToFloat {
     protected float[] convertIntegerBytesToFloatArray(
             ImageDimensions sd, byte[] src, int srcOffset) {
 
-        float[] fArr = new float[sd.getX() * sd.getY()];
+        float[] fArr = new float[sd.x() * sd.y()];
 
         int cntLoc = 0;
-        for (int y = 0; y < sd.getY(); y++) {
-            for (int x = 0; x < sd.getX(); x++) {
+        for (int y = 0; y < sd.y(); y++) {
+            for (int x = 0; x < sd.x(); x++) {
                 float f = ByteConverter.unsignedByteToInt(src[srcOffset++]);
                 fArr[cntLoc++] = f;
             }

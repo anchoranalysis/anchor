@@ -47,7 +47,7 @@ public abstract class ConvertToFloat extends ConvertTo<FloatBuffer> {
 
     @Override
     protected void setupBefore(ImageDimensions sd, int numChnlsPerByteArray) {
-        sizeBytesChnl = sd.getX() * sd.getY() * bytesPerPixel();
+        sizeBytesChnl = sd.x() * sd.y() * bytesPerPixel();
         this.sd = sd;
     }
 

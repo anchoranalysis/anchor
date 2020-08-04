@@ -74,11 +74,11 @@ public class ObjectMaskFixture {
 
         BinaryVoxels<ByteBuffer> bvb = object.binaryVoxels();
 
-        Extent e = object.getBoundingBox().extent();
-        int widthMinusOne = e.getX() - 1;
-        int heightMinusOne = e.getY() - 1;
+        Extent e = object.boundingBox().extent();
+        int widthMinusOne = e.x() - 1;
+        int heightMinusOne = e.y() - 1;
 
-        for (int z = 0; z < e.getZ(); z++) {
+        for (int z = 0; z < e.z(); z++) {
             bvb.setOff(0, 0, z);
             bvb.setOff(widthMinusOne, 0, z);
             bvb.setOff(0, heightMinusOne, z);

@@ -67,11 +67,11 @@ public abstract class MeanIntensityBuffer<T extends Buffer> {
     }
 
     protected FloatBuffer sumBuffer() {
-        return voxelsSum.getPixelsForPlane(0).buffer();
+        return voxelsSum.slice(0).buffer();
     }
 
     protected T flatBuffer() {
-        return projectedVoxels.getPixelsForPlane(0).buffer();
+        return projectedVoxels.slice(0).buffer();
     }
 
     protected int numberSlicesProcessed() {
@@ -80,7 +80,7 @@ public abstract class MeanIntensityBuffer<T extends Buffer> {
 
     /** How many pixels in an XY slice */
     protected int volumeXY() {
-        return projectedVoxels.extent().getVolumeXY();
+        return projectedVoxels.extent().volumeXY();
     }
 
     public Voxels<T> getFlatBuffer() {

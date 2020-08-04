@@ -52,9 +52,9 @@ public class ImageUnitConverter {
     }
 
     private static double unitDistanceForDirection(ImageResolution res, DirectionVector dirVector) {
-        double x = (dirVector.getX()) * res.getX();
-        double y = (dirVector.getY()) * res.getY();
-        double z = (dirVector.getZ()) * res.getZ();
+        double x = (dirVector.x()) * res.x();
+        double y = (dirVector.y()) * res.y();
+        double z = (dirVector.z()) * res.z();
         return Math.sqrt(Math.pow(x, 2.0) + Math.pow(y, 2.0) + Math.pow(z, 2.0));
     }
 

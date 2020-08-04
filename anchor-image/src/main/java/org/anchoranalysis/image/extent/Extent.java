@@ -72,16 +72,16 @@ public final class Extent implements Serializable {
      */
     private Extent(ReadableTuple3i len) {
         this.len = len;
-        this.sxy = len.getX() * len.getY();
+        this.sxy = len.x() * len.y();
 
-        if (len.getX() < 1 || len.getY() < 1 || len.getZ() < 1) {
+        if (len.x() < 1 || len.y() < 1 || len.z() < 1) {
             throw new AnchorFriendlyRuntimeException(
                     "An extent must have at least one voxel in every dimension");
         }
     }
 
-    public int getVolumeAsInt() {
-        long volume = getVolume();
+    public int calculateVolumeAsInt() {
+        long volume = calculateVolume();
         if (volume > Integer.MAX_VALUE) {
             throw new AnchorFriendlyRuntimeException(
                     "The volume cannot be expressed as an int, as it is higher than the maximum bound");
@@ -89,15 +89,15 @@ public final class Extent implements Serializable {
         return (int) volume;
     }
 
-    public long getVolume() {
-        return ((long) sxy) * len.getZ();
+    public long calculateVolume() {
+        return ((long) sxy) * len.z();
     }
 
     public boolean isEmpty() {
-        return (sxy == 0) || (len.getZ() == 0);
+        return (sxy == 0) || (len.z() == 0);
     }
 
-    public int getVolumeXY() {
+    public int volumeXY() {
         return sxy;
     }
 
@@ -106,49 +106,37 @@ public final class Extent implements Serializable {
      * pixel array This is not the same as volume, both the start and end pixel are included
      */
     public int totalNumPixelPositions() {
-        return (len.getX() + 1) * (len.getY() + 1) * (len.getZ() + 1);
+        return (len.x() + 1) * (len.y() + 1) * (len.z() + 1);
     }
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + len.getX();
-        result = prime * result + len.getY();
-        result = prime * result + len.getZ();
+        result = prime * result + len.x();
+        result = prime * result + len.y();
+        result = prime * result + len.z();
         return result;
     }
 
-    public int getX() {
-        return len.getX();
+    public int x() {
+        return len.x();
     }
 
-    public int getY() {
-        return len.getY();
+    public int y() {
+        return len.y();
     }
 
-    public int getZ() {
-        return len.getZ();
+    public int z() {
+        return len.z();
     }
 
-    public int getXEx() {
-        return len.getX() + 1;
+    public int valueByDimension(int dimIndex) {
+        return len.byDimension(dimIndex);
     }
 
-    public int getYEx() {
-        return len.getY() + 1;
-    }
-
-    public int getZEx() {
-        return len.getZ() + 1;
-    }
-
-    public int getValueByDimension(int dimIndex) {
-        return len.getValueByDimension(dimIndex);
-    }
-
-    public int getValueByDimension(AxisType axis) {
-        return len.getValueByDimension(axis);
+    public int valueByDimension(AxisType axis) {
+        return len.byDimension(axis);
     }
 
     /**
@@ -175,45 +163,45 @@ public final class Extent implements Serializable {
 
     @Override
     public String toString() {
-        return String.format("[%d,%d,%d]", getX(), getY(), getZ());
+        return String.format("[%d,%d,%d]", x(), y(), z());
     }
 
     // Calculates an offset of an x and y point in terms of this extent
     public final int offset(int x, int y) {
-        return (y * len.getX()) + x;
+        return (y * len.x()) + x;
     }
 
     // Calculates an offset of an x and y point in terms of this extent
     //  we should cal
     public final int offset(int x, int y, int z) {
-        return (z * sxy) + (y * getX()) + x;
+        return (z * sxy) + (y * x()) + x;
     }
 
     // Calculates an offset of an x and y point in terms of this extent
     //  we should cal
     public final int offset(Point3i point) {
-        return offset(point.getX(), point.getY(), point.getZ());
+        return offset(point.x(), point.y(), point.z());
     }
 
     // Calculates an offset of an x and y point in terms of this extent
     public final int offset(Point2i point) {
-        return offset(point.getX(), point.getY(), 0);
+        return offset(point.x(), point.y(), 0);
     }
 
     // Calculates an offset of an x and y point in terms of this extent
     public final int offsetSlice(Point3i point) {
-        return offset(point.getX(), point.getY(), 0);
+        return offset(point.x(), point.y(), 0);
     }
 
     public Extent ex() {
-        return new Extent(getX() + 1, getY() + 1, getZ() + 1);
+        return new Extent(x() + 1, y() + 1, z() + 1);
     }
 
     public int[] createArray() {
         int[] arr = new int[3];
-        arr[0] = getX();
-        arr[1] = getY();
-        arr[2] = getZ();
+        arr[0] = x();
+        arr[1] = y();
+        arr[2] = z();
         return arr;
     }
 
@@ -224,39 +212,39 @@ public final class Extent implements Serializable {
     }
 
     public Extent duplicateChangeZ(int z) {
-        return new Extent(len.getX(), len.getY(), z);
+        return new Extent(len.x(), len.y(), z);
     }
 
     public boolean containsX(double x) {
-        return x >= 0 && x < getX();
+        return x >= 0 && x < x();
     }
 
     public boolean containsY(double y) {
-        return y >= 0 && y < getY();
+        return y >= 0 && y < y();
     }
 
     public boolean containsZ(double z) {
-        return z >= 0 && z < getZ();
+        return z >= 0 && z < z();
     }
 
     public boolean containsX(int x) {
-        return x >= 0 && x < getX();
+        return x >= 0 && x < x();
     }
 
     public boolean containsY(int y) {
-        return y >= 0 && y < getY();
+        return y >= 0 && y < y();
     }
 
     public boolean containsZ(int z) {
-        return z >= 0 && z < getZ();
+        return z >= 0 && z < z();
     }
 
     public boolean contains(Point3d point) {
-        return containsX(point.getX()) && containsY(point.getY()) && containsZ(point.getZ());
+        return containsX(point.x()) && containsY(point.y()) && containsZ(point.z());
     }
 
     public boolean contains(ReadableTuple3i point) {
-        return containsX(point.getX()) && containsY(point.getY()) && containsZ(point.getZ());
+        return containsX(point.x()) && containsY(point.y()) && containsZ(point.z());
     }
 
     public boolean contains(int x, int y, int z) {
@@ -273,15 +261,15 @@ public final class Extent implements Serializable {
             return false;
         }
 
-        if (x >= len.getX()) {
+        if (x >= len.x()) {
             return false;
         }
 
-        if (y >= len.getY()) {
+        if (y >= len.y()) {
             return false;
         }
 
-        return (z < len.getZ());
+        return (z < len.z());
     }
 
     public boolean contains(BoundingBox bbox) {
@@ -292,8 +280,8 @@ public final class Extent implements Serializable {
         return new Extent(
                 immutablePointOperation(
                         p -> {
-                            p.setX(ScaleFactorUtilities.scaleQuantity(sf.getX(), getX()));
-                            p.setY(ScaleFactorUtilities.scaleQuantity(sf.getY(), getY()));
+                            p.setX(ScaleFactorUtilities.scaleQuantity(sf.x(), x()));
+                            p.setY(ScaleFactorUtilities.scaleQuantity(sf.y(), y()));
                         }));
     }
 
@@ -327,7 +315,7 @@ public final class Extent implements Serializable {
      * of 1
      */
     public Extent flattenZ() {
-        return new Extent(new Point3i(len.getX(), len.getY(), 1));
+        return new Extent(new Point3i(len.x(), len.y(), 1));
     }
 
     /**
@@ -339,13 +327,13 @@ public final class Extent implements Serializable {
      *     dimension in {@code other})
      */
     public boolean anyDimensionIsLargerThan(Extent other) {
-        if (getX() > other.getX()) {
+        if (x() > other.x()) {
             return true;
         }
-        if (getY() > other.getY()) {
+        if (y() > other.y()) {
             return true;
         }
-        return getZ() > other.getZ();
+        return z() > other.z();
     }
 
     private Point3i immutablePointOperation(Consumer<Point3i> pointOperation) {

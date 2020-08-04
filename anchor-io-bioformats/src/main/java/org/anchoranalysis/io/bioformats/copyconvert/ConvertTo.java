@@ -106,7 +106,7 @@ public abstract class ConvertTo<T extends Buffer> {
             DestChnlForIndex dest,
             int z,
             int cRel) {
-        Voxels<S> vb = funcCastWrapper.apply(dest.get(cRel).voxels());
-        vb.getPlaneAccess().setPixelsForPlane(z, voxelBuffer);
+        Voxels<S> voxels = funcCastWrapper.apply(dest.get(cRel).voxels());
+        voxels.getPlaneAccess().setPixelsForPlane(z, voxelBuffer);
     }
 }

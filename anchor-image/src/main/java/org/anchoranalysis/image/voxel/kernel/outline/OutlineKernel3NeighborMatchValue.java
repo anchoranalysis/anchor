@@ -34,10 +34,10 @@ import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.kernel.LocalSlices;
 
 // Keeps any on pixel that touches an off pixel where the off pixel has a corresponding HIGH value
-// in vbRequireHigh
+// in voxelsRequireHigh
 public class OutlineKernel3NeighborMatchValue extends OutlineKernel3Base {
 
-    private BinaryVoxels<ByteBuffer> vbRequireHigh;
+    private BinaryVoxels<ByteBuffer> voxelsRequireHigh;
     private LocalSlices localSlicesRequireHigh;
     private BinaryValuesByte bvRequireHigh;
     private ObjectMask object;
@@ -46,14 +46,14 @@ public class OutlineKernel3NeighborMatchValue extends OutlineKernel3Base {
             boolean outsideAtThreshold,
             boolean useZ,
             ObjectMask object,
-            BinaryVoxels<ByteBuffer> vbRequireHigh,
+            BinaryVoxels<ByteBuffer> voxelsRequireHigh,
             boolean ignoreAtThreshold) {
         this(
-                object.getBinaryValuesByte(),
+                object.binaryValuesByte(),
                 outsideAtThreshold,
                 useZ,
                 object,
-                vbRequireHigh,
+                voxelsRequireHigh,
                 ignoreAtThreshold);
     }
 
@@ -63,12 +63,12 @@ public class OutlineKernel3NeighborMatchValue extends OutlineKernel3Base {
             boolean outsideAtThreshold,
             boolean useZ,
             ObjectMask object,
-            BinaryVoxels<ByteBuffer> vbRequireHigh,
+            BinaryVoxels<ByteBuffer> voxelsRequireHigh,
             boolean ignoreAtThreshold) {
         super(bv, outsideAtThreshold, useZ, ignoreAtThreshold);
-        this.vbRequireHigh = vbRequireHigh;
+        this.voxelsRequireHigh = voxelsRequireHigh;
         this.object = object;
-        this.bvRequireHigh = vbRequireHigh.getBinaryValues().createByte();
+        this.bvRequireHigh = voxelsRequireHigh.binaryValues().createByte();
     }
 
     @Override
@@ -76,9 +76,9 @@ public class OutlineKernel3NeighborMatchValue extends OutlineKernel3Base {
         super.notifyZChange(inSlices, z);
         localSlicesRequireHigh =
                 new LocalSlices(
-                        z + object.getBoundingBox().cornerMin().getZ(),
+                        z + object.boundingBox().cornerMin().z(),
                         3,
-                        vbRequireHigh.getVoxels());
+                        voxelsRequireHigh.voxels());
     }
 
     /**
@@ -99,10 +99,10 @@ public class OutlineKernel3NeighborMatchValue extends OutlineKernel3Base {
         ByteBuffer inArrRLess1 = localSlicesRequireHigh.getLocal(-1);
         ByteBuffer inArrRPlus1 = localSlicesRequireHigh.getLocal(+1);
 
-        int xLength = extent.getX();
+        int xLength = extent.x();
 
-        int x = point.getX();
-        int y = point.getY();
+        int x = point.x();
+        int y = point.y();
 
         if (bv.isOff(inArrZ.get(ind))) {
             return false;
@@ -123,7 +123,7 @@ public class OutlineKernel3NeighborMatchValue extends OutlineKernel3Base {
 
         x += 2;
         ind += 2;
-        if (x < extent.getX()) {
+        if (x < extent.x()) {
             if (bv.isOff(inArrZ.get(ind))) {
                 return checkIfRequireHighIsTrue(inArrR, point, +1, 0);
             }
@@ -149,7 +149,7 @@ public class OutlineKernel3NeighborMatchValue extends OutlineKernel3Base {
 
         y += 2;
         ind += (2 * xLength);
-        if (y < (extent.getY())) {
+        if (y < (extent.y())) {
             if (bv.isOff(inArrZ.get(ind))) {
                 return checkIfRequireHighIsTrue(inArrR, point, 0, +1);
             }
@@ -193,19 +193,19 @@ public class OutlineKernel3NeighborMatchValue extends OutlineKernel3Base {
             return outsideAtThreshold;
         }
 
-        int x1 = point.getX() + object.getBoundingBox().cornerMin().getX() + xShift;
+        int x1 = point.x() + object.boundingBox().cornerMin().x() + xShift;
 
-        if (!vbRequireHigh.extent().containsX(x1)) {
+        if (!voxelsRequireHigh.extent().containsX(x1)) {
             return outsideAtThreshold;
         }
 
-        int y1 = point.getY() + object.getBoundingBox().cornerMin().getY() + yShift;
+        int y1 = point.y() + object.boundingBox().cornerMin().y() + yShift;
 
-        if (!vbRequireHigh.extent().containsY(y1)) {
+        if (!voxelsRequireHigh.extent().containsY(y1)) {
             return outsideAtThreshold;
         }
 
-        int intGlobal = vbRequireHigh.extent().offset(x1, y1);
+        int intGlobal = voxelsRequireHigh.extent().offset(x1, y1);
         return bvRequireHigh.isOn(inArr.get(intGlobal));
     }
 }

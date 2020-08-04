@@ -37,16 +37,16 @@ public class PixelsFromShortBufferArr implements PixelsForPlane<ShortBuffer> {
     private final Extent extent;
 
     private PixelsFromShortBufferArr(Extent extent) {
-        assert (extent.getZ() > 0);
+        assert (extent.z() > 0);
 
         this.extent = extent;
 
-        buffer = new VoxelBufferShort[extent.getZ()];
+        buffer = new VoxelBufferShort[extent.z()];
     }
 
     private void init() {
-        int volumeXY = extent.getVolumeXY();
-        for (int z = 0; z < extent.getZ(); z++) {
+        int volumeXY = extent.volumeXY();
+        for (int z = 0; z < extent.z(); z++) {
             buffer[z] = VoxelBufferShort.allocate(volumeXY);
             assert (buffer[z].buffer().array().length == volumeXY);
         }
@@ -68,7 +68,7 @@ public class PixelsFromShortBufferArr implements PixelsForPlane<ShortBuffer> {
     public void setPixelsForPlane(int z, VoxelBuffer<ShortBuffer> pixels) {
         pixels.buffer().clear();
         buffer[z] = pixels;
-        assert (pixels.buffer().array().length == extent.getVolumeXY());
+        assert (pixels.buffer().array().length == extent.volumeXY());
     }
 
     @Override

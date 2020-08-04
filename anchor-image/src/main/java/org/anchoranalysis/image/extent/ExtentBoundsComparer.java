@@ -32,12 +32,12 @@ import java.util.function.ToIntFunction;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Value;
+import lombok.experimental.Accessors;
 import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 
 /** Helper classes for calculating the union/intersection along each axis */
-@Value
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@Value @Accessors(fluent=true) @AllArgsConstructor(access = AccessLevel.PRIVATE)
 class ExtentBoundsComparer {
 
     private final int min;

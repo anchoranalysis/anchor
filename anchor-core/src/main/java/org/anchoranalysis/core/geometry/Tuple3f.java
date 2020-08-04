@@ -27,26 +27,25 @@ package org.anchoranalysis.core.geometry;
  */
 
 import java.io.Serializable;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
+import lombok.experimental.Accessors;
 import org.anchoranalysis.core.axis.AxisType;
 import org.anchoranalysis.core.axis.AxisTypeConverter;
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
 
-@EqualsAndHashCode
+@Data @Accessors(fluent=true)
 public abstract class Tuple3f implements Serializable {
 
     /** */
     private static final long serialVersionUID = 1L;
 
-    @Getter @Setter protected float x = 0.0f;
+    protected float x = 0.0f;
 
-    @Getter @Setter protected float y = 0.0f;
+    protected float y = 0.0f;
 
-    @Getter @Setter protected float z = 0.0f;
+    protected float z = 0.0f;
 
-    public final float getValueByDimension(int dimIndex) {
+    public final float valueByDimension(int dimIndex) {
         if (dimIndex == 0) {
             return x;
         } else if (dimIndex == 1) {
@@ -58,7 +57,7 @@ public abstract class Tuple3f implements Serializable {
         }
     }
 
-    public final float getValueByDimension(AxisType axisType) {
+    public final float valueByDimension(AxisType axisType) {
         switch (axisType) {
             case X:
                 return x;

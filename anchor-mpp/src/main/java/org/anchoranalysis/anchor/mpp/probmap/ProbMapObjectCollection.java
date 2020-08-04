@@ -72,7 +72,7 @@ public class ProbMapObjectCollection implements ProbMap {
     }
 
     @Override
-    public ImageDimensions getDimensions() {
+    public ImageDimensions dimensions() {
         return dimensions;
     }
 
@@ -88,9 +88,9 @@ public class ProbMapObjectCollection implements ProbMap {
         //  on.  Could be very inefficient for low-density bounding boxes? So we should make sure
         //  bounding boxes are tight
 
-        long vol = object.getVoxels().extent().getVolume();
-        int volXY = object.getVoxels().extent().getVolumeXY();
-        int exY = object.getVoxels().extent().getX();
+        long vol = object.voxels().extent().calculateVolume();
+        int volXY = object.voxels().extent().volumeXY();
+        int exY = object.voxels().extent().x();
 
         while (true) {
 
@@ -99,16 +99,16 @@ public class ProbMapObjectCollection implements ProbMap {
             int slice = (int) (index3D / volXY);
             int index2D = (int) (index3D % volXY);
 
-            byte b = object.getVoxels().getPixelsForPlane(slice).buffer().get(index2D);
-            if (b == object.getBinaryValuesByte().getOnByte()) {
+            byte b = object.voxels().slice(slice).buffer().get(index2D);
+            if (b == object.binaryValuesByte().getOnByte()) {
 
                 int xRel = index2D % exY;
                 int yRel = index2D / exY;
                 int zRel = slice;
 
-                int x = xRel + object.getBoundingBox().cornerMin().getX();
-                int y = yRel + object.getBoundingBox().cornerMin().getY();
-                int z = zRel + object.getBoundingBox().cornerMin().getZ();
+                int x = xRel + object.boundingBox().cornerMin().x();
+                int y = yRel + object.boundingBox().cornerMin().y();
+                int z = zRel + object.boundingBox().cornerMin().z();
 
                 return new Point3d(x, y, z);
             }

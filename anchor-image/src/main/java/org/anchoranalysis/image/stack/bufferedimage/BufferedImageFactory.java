@@ -37,12 +37,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class BufferedImageFactory {
 
-    public static BufferedImage createGrayscale(Voxels<ByteBuffer> vb) throws CreateException {
+    public static BufferedImage createGrayscale(Voxels<ByteBuffer> voxels) throws CreateException {
 
-        Extent e = vb.extent();
+        Extent e = voxels.extent();
         checkExtentZ(e);
 
-        return createBufferedImageFromGrayscaleBuffer(vb.getPixelsForPlane(0).buffer(), e);
+        return createBufferedImageFromGrayscaleBuffer(voxels.slice(0).buffer(), e);
     }
 
     public static BufferedImage createRGB(
@@ -53,7 +53,7 @@ public class BufferedImageFactory {
             throws CreateException {
         checkExtentZ(e);
 
-        BufferedImage bi = new BufferedImage(e.getX(), e.getY(), BufferedImage.TYPE_3BYTE_BGR);
+        BufferedImage bi = new BufferedImage(e.x(), e.y(), BufferedImage.TYPE_3BYTE_BGR);
 
         byte[] arrComb =
                 createCombinedByteArray(
@@ -61,36 +61,36 @@ public class BufferedImageFactory {
                         firstBuffer(red, e, "red"),
                         firstBuffer(green, e, "green"),
                         firstBuffer(blue, e, "blue"));
-        bi.getWritableTile(0, 0).setDataElements(0, 0, e.getX(), e.getY(), arrComb);
+        bi.getWritableTile(0, 0).setDataElements(0, 0, e.x(), e.y(), arrComb);
 
         return bi;
     }
 
-    private static ByteBuffer firstBuffer(Voxels<ByteBuffer> vb, Extent e, String dscr)
+    private static ByteBuffer firstBuffer(Voxels<ByteBuffer> voxels, Extent e, String dscr)
             throws CreateException {
 
-        if (!vb.extent().equals(e)) {
+        if (!voxels.extent().equals(e)) {
             throw new CreateException(dscr + " channel extent does not match");
         }
 
-        return vb.getPixelsForPlane(0).buffer();
+        return voxels.slice(0).buffer();
     }
 
     private static BufferedImage createBufferedImageFromGrayscaleBuffer(
-            ByteBuffer bbGray, Extent e) {
+            ByteBuffer bbGray, Extent extent) {
 
-        BufferedImage bi = new BufferedImage(e.getX(), e.getY(), BufferedImage.TYPE_BYTE_GRAY);
+        BufferedImage image = new BufferedImage(extent.x(), extent.y(), BufferedImage.TYPE_BYTE_GRAY);
 
         byte[] arr = bbGray.array();
-        bi.getWritableTile(0, 0).setDataElements(0, 0, e.getX(), e.getY(), arr);
+        image.getWritableTile(0, 0).setDataElements(0, 0, extent.x(), extent.y(), arr);
 
-        return bi;
+        return image;
     }
 
     private static byte[] createCombinedByteArray(
             Extent e, ByteBuffer bbRed, ByteBuffer bbGreen, ByteBuffer bbBlue) {
 
-        int size = e.getVolumeAsInt();
+        int size = e.calculateVolumeAsInt();
         byte[] arrComb = new byte[size * 3];
         int cnt = 0;
         for (int i = 0; i < size; i++) {
@@ -103,7 +103,7 @@ public class BufferedImageFactory {
     }
 
     private static void checkExtentZ(Extent e) throws CreateException {
-        if (e.getZ() != 1) {
+        if (e.z() != 1) {
             throw new CreateException("z dimension must be 1");
         }
     }

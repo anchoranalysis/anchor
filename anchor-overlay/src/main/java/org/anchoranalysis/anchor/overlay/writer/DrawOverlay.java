@@ -68,10 +68,10 @@ public abstract class DrawOverlay {
             throws OperationFailedException {
         writeOverlays(
                 oc,
-                stack.getDimensions(),
+                stack.dimensions(),
                 stack,
                 idGetter,
-                new BoundingBox(stack.getDimensions().getExtent()));
+                new BoundingBox(stack.dimensions().extent()));
     }
 
     //

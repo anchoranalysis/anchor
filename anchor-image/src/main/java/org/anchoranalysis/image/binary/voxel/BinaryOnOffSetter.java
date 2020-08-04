@@ -39,18 +39,18 @@ public interface BinaryOnOffSetter {
     void setOff(int x, int y, int z);
 
     default void setOn(Point3i point) {
-        setOn(point.getX(), point.getY(), point.getZ());
+        setOn(point.x(), point.y(), point.z());
     }
 
     default void setOff(Point3i point) {
-        setOff(point.getX(), point.getY(), point.getZ());
+        setOff(point.x(), point.y(), point.z());
     }
 
     default boolean isOn(Point3i point) {
-        return isOn(point.getX(), point.getY(), point.getZ());
+        return isOn(point.x(), point.y(), point.z());
     }
 
     default boolean isOff(Point3i point) {
-        return isOff(point.getX(), point.getY(), point.getZ());
+        return isOff(point.x(), point.y(), point.z());
     }
 }

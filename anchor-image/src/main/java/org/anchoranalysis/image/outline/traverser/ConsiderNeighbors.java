@@ -80,7 +80,7 @@ class ConsiderNeighbors {
     private void considerAndQueue(int xShift, int yShift, int zShift) {
         considerVisitAndQueueNeighborPoint(
                 icv,
-                new Point3i(point.getX() + xShift, point.getY() + yShift, point.getZ() + zShift),
+                new Point3i(point.x() + xShift, point.y() + yShift, point.z() + zShift),
                 distance,
                 localQueue);
     }
@@ -104,15 +104,15 @@ class ConsiderNeighbors {
     public static boolean considerVisitMarkRaster(
             ConsiderVisit considerVisit, Point3i point, int distance, ObjectMask outline) {
 
-        Voxels<ByteBuffer> vb = outline.getVoxels();
-        BinaryValuesByte bvb = outline.getBinaryValuesByte();
+        Voxels<ByteBuffer> voxels = outline.voxels();
+        BinaryValuesByte bvb = outline.binaryValuesByte();
 
-        if (!vb.extent().contains(point)) {
+        if (!voxels.extent().contains(point)) {
             return false;
         }
 
-        ByteBuffer bb = vb.getPixelsForPlane(point.getZ()).buffer();
-        int offset = vb.extent().offset(point.getX(), point.getY());
+        ByteBuffer bb = voxels.slice(point.z()).buffer();
+        int offset = voxels.extent().offset(point.x(), point.y());
 
         // Check if the buffer allows us to read the pixel
         if (bb.get(offset) == bvb.getOffByte()) {

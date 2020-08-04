@@ -38,7 +38,7 @@ public class ByteFrom8BitUnsignedNoInterleaving extends ConvertToByte {
 
     @Override
     protected void setupBefore(ImageDimensions sd, int numChnlsPerByteArray) {
-        sizeXY = sd.getX() * sd.getY();
+        sizeXY = sd.x() * sd.y();
     }
 
     @Override

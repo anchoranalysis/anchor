@@ -47,7 +47,7 @@ public class IntFromUnsigned32BitInt extends ConvertToInt {
 
     @Override
     protected void setupBefore(ImageDimensions sd, int numChnlsPerByteArray) {
-        sizeXY = sd.getX() * sd.getY();
+        sizeXY = sd.x() * sd.y();
         sizeBytes = sizeXY * bytesPerPixel;
     }
 

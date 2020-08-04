@@ -70,7 +70,7 @@ public class Outline extends DrawObject {
 
         ObjectMask outline =
                 FindOutline.outline(
-                        object.withoutProperties(), outlineWidth, true, (dim.getZ() > 1) && !force2D);
+                        object.withoutProperties(), outlineWidth, true, (dim.z() > 1) && !force2D);
 
         ObjectWithProperties objectWithProperties =
                 new ObjectWithProperties(outline, object.getProperties());
@@ -85,9 +85,9 @@ public class Outline extends DrawObject {
                     BoundingBox restrictTo)
                     throws OperationFailedException {
 
-                assert (outline.getVoxels().extent().getZ() > 0);
+                assert (outline.voxels().extent().z() > 0);
                 // TODO this can get broken! Fix!
-                assert (outline.getBoundingBox().cornerMin().getZ() >= 0);
+                assert (outline.boundingBox().cornerMin().z() >= 0);
 
                 IntersectionWriter.writeRGBMaskIntersection(
                         outline,

@@ -72,9 +72,9 @@ public final class BoundingBox implements Serializable {
         this(
                 min,
                 new Extent(
-                        max.getX() - min.getX() + 1,
-                        max.getY() - min.getY() + 1,
-                        max.getZ() - min.getZ() + 1));
+                        max.x() - min.x() + 1,
+                        max.y() - min.y() + 1,
+                        max.z() - min.z() + 1));
         checkMaxMoreThanMin(min, max);
     }
 
@@ -132,27 +132,27 @@ public final class BoundingBox implements Serializable {
 
         ReadableTuple3i cornerMax = this.calcCornerMax();
 
-        if (cornerMin.getX() == 0) {
+        if (cornerMin.x() == 0) {
             return true;
         }
-        if (cornerMin.getY() == 0) {
+        if (cornerMin.y() == 0) {
             return true;
         }
 
-        if (cornerMax.getX() == (sd.getX() - 1)) {
+        if (cornerMax.x() == (sd.x() - 1)) {
             return true;
         }
-        return cornerMax.getY() == (sd.getY() - 1);
+        return cornerMax.y() == (sd.y() - 1);
     }
 
     public boolean atBorderZ(ImageDimensions sd) {
 
         ReadableTuple3i cornerMax = this.calcCornerMax();
 
-        if (cornerMin.getZ() == 0) {
+        if (cornerMin.z() == 0) {
             return true;
         }
-        return cornerMax.getZ() == (sd.getZ() - 1);
+        return cornerMax.z() == (sd.z() - 1);
     }
 
     public BoundingBox growBy(Tuple3i toAdd, Extent containingExtent) {
@@ -171,9 +171,9 @@ public final class BoundingBox implements Serializable {
     // So iterators should be <= CalcCornerMax
     public ReadableTuple3i calcCornerMax() {
         Point3i out = new Point3i();
-        out.setX(cornerMin.getX() + extent.getX() - 1);
-        out.setY(cornerMin.getY() + extent.getY() - 1);
-        out.setZ(cornerMin.getZ() + extent.getZ() - 1);
+        out.setX(cornerMin.x() + extent.x() - 1);
+        out.setY(cornerMin.y() + extent.y() - 1);
+        out.setZ(cornerMin.z() + extent.z() - 1);
         return out;
     }
 
@@ -182,24 +182,24 @@ public final class BoundingBox implements Serializable {
         Point3i min = new Point3i(cornerMin);
         Point3i max = new Point3i(calcCornerMax());
 
-        if (min.getX() < 0) {
+        if (min.x() < 0) {
             min.setX(0);
         }
-        if (min.getY() < 0) {
+        if (min.y() < 0) {
             min.setY(0);
         }
-        if (min.getZ() < 0) {
+        if (min.z() < 0) {
             min.setZ(0);
         }
 
-        if (max.getX() >= extent.getX()) {
-            max.setX(extent.getX() - 1);
+        if (max.x() >= extent.x()) {
+            max.setX(extent.x() - 1);
         }
-        if (max.getY() >= extent.getY()) {
-            max.setY(extent.getY() - 1);
+        if (max.y() >= extent.y()) {
+            max.setY(extent.y() - 1);
         }
-        if (max.getZ() >= extent.getZ()) {
-            max.setZ(extent.getZ() - 1);
+        if (max.z() >= extent.z()) {
+            max.setZ(extent.z() - 1);
         }
 
         return new BoundingBox(min, max);
@@ -210,9 +210,9 @@ public final class BoundingBox implements Serializable {
         ReadableTuple3i cornerMax = calcCornerMax();
 
         Point3i pointOut = new Point3i();
-        pointOut.setX(closestPointOnAxis(pointIn.getX(), cornerMin.getX(), cornerMax.getX()));
-        pointOut.setY(closestPointOnAxis(pointIn.getY(), cornerMin.getY(), cornerMax.getY()));
-        pointOut.setZ(closestPointOnAxis(pointIn.getZ(), cornerMin.getZ(), cornerMax.getZ()));
+        pointOut.setX(closestPointOnAxis(pointIn.x(), cornerMin.x(), cornerMax.x()));
+        pointOut.setY(closestPointOnAxis(pointIn.y(), cornerMin.y(), cornerMax.y()));
+        pointOut.setZ(closestPointOnAxis(pointIn.z(), cornerMin.z(), cornerMax.z()));
         return pointOut;
     }
 
@@ -325,7 +325,7 @@ public final class BoundingBox implements Serializable {
     }
 
     private void checkMaxMoreThanMin(ReadableTuple3i min, ReadableTuple3i max) {
-        if ((max.getX() < min.getX()) || (max.getY() < min.getY()) || (max.getZ() < min.getZ())) {
+        if ((max.x() < min.x()) || (max.y() < min.y()) || (max.z() < min.z())) {
             throw new AnchorFriendlyRuntimeException(
                     String.format(
                             "To create a bounding-box, the max-point %s must always be >= the min-point %s in all dimensions.",
@@ -335,9 +335,9 @@ public final class BoundingBox implements Serializable {
 
     private Point3d meanOfExtent(int subtractFromEachDimension) {
         return new Point3d(
-                calcMeanForDim(ReadableTuple3i::getX, subtractFromEachDimension),
-                calcMeanForDim(ReadableTuple3i::getY, subtractFromEachDimension),
-                calcMeanForDim(ReadableTuple3i::getZ, subtractFromEachDimension));
+                calcMeanForDim(ReadableTuple3i::x, subtractFromEachDimension),
+                calcMeanForDim(ReadableTuple3i::y, subtractFromEachDimension),
+                calcMeanForDim(ReadableTuple3i::z, subtractFromEachDimension));
     }
 
     private double calcMeanForDim(

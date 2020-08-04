@@ -78,7 +78,7 @@ public class OutlineTraverser {
      */
     public void applyGlobal(Point3i root, List<Point3i> listOut) throws OperationFailedException {
 
-        ReadableTuple3i cornerMin = outline.getBoundingBox().cornerMin();
+        ReadableTuple3i cornerMin = outline.boundingBox().cornerMin();
         Point3i rootRel = BoundingBox.relPosTo(root, cornerMin);
 
         listOut.addAll(applyLocal(rootRel).addShift(cornerMin));

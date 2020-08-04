@@ -91,13 +91,13 @@ public class MarkRotatableBoundingBox extends MarkAbstractPosition {
 
         Point3d pointRot = rotMatrixInv.calcRotatedPoint(point);
 
-        if (pointRot.getX() < distanceToLeftBottom.getX()
-                || pointRot.getX() >= distanceToRightTop.getX()) {
+        if (pointRot.x() < distanceToLeftBottom.x()
+                || pointRot.x() >= distanceToRightTop.x()) {
             return FLAG_SUBMARK_NONE;
         }
 
-        if (pointRot.getY() < distanceToLeftBottom.getY()
-                || pointRot.getY() >= distanceToRightTop.getY()) {
+        if (pointRot.y() < distanceToLeftBottom.y()
+                || pointRot.y() >= distanceToRightTop.y()) {
             return FLAG_SUBMARK_NONE;
         }
 
@@ -134,7 +134,7 @@ public class MarkRotatableBoundingBox extends MarkAbstractPosition {
 
         try {
             BoundingBox box = BoundingBoxFromPoints.forList(rotateAddPos(points));
-            return box.clipTo(bndScene.getExtent());
+            return box.clipTo(bndScene.extent());
         } catch (OperationFailedException e) {
             throw new AnchorImpossibleSituationException();
         }
@@ -148,8 +148,8 @@ public class MarkRotatableBoundingBox extends MarkAbstractPosition {
     @Override
     public double volume(int regionID) {
         // The volume is invariant to rotation
-        double width = distanceToRightTop.getX() - distanceToLeftBottom.getX();
-        double height = distanceToRightTop.getY() - distanceToLeftBottom.getY();
+        double width = distanceToRightTop.x() - distanceToLeftBottom.x();
+        double height = distanceToRightTop.y() - distanceToLeftBottom.y();
         return width * height;
     }
 
@@ -181,13 +181,13 @@ public class MarkRotatableBoundingBox extends MarkAbstractPosition {
     }
 
     private static Point3d convert3d(Point2d point) {
-        return new Point3d(point.getX(), point.getY(), 0);
+        return new Point3d(point.x(), point.y(), 0);
     }
 
     private Point3d cornerPoint(boolean x, boolean y) {
         return new Point3d(
-                x ? distanceToLeftBottom.getX() : distanceToRightTop.getX(),
-                y ? distanceToLeftBottom.getY() : distanceToRightTop.getY(),
+                x ? distanceToLeftBottom.x() : distanceToRightTop.x(),
+                y ? distanceToLeftBottom.y() : distanceToRightTop.y(),
                 0);
     }
 

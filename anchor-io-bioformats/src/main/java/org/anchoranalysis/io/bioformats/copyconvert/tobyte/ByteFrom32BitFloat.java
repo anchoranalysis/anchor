@@ -48,7 +48,7 @@ public class ByteFrom32BitFloat extends ConvertToByte {
 
     @Override
     protected void setupBefore(ImageDimensions sd, int numChnlsPerByteArray) {
-        sizeXY = sd.getX() * sd.getY();
+        sizeXY = sd.x() * sd.y();
         sizeBytes = sizeXY * BYTES_PER_PIXEL;
     }
 

@@ -73,12 +73,12 @@ public class ChnlFixture {
         Channel chnl = new ChannelFactoryByte().createEmptyInitialised(sd);
 
         // Populate the channel with values
-        for (int z = 0; z < e.getZ(); z++) {
+        for (int z = 0; z < e.z(); z++) {
 
-            VoxelBuffer<? extends Buffer> slice = chnl.voxels().any().getPixelsForPlane(z);
+            VoxelBuffer<? extends Buffer> slice = chnl.voxels().any().slice(z);
 
-            for (int x = 0; x < e.getX(); x++) {
-                for (int y = 0; y < e.getY(); y++) {
+            for (int x = 0; x < e.x(); x++) {
+                for (int y = 0; y < e.y(); y++) {
                     int intens = createIntensity.valueFor(x, y, z);
                     slice.putInt(e.offset(x, y), intens);
                 }

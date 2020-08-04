@@ -52,7 +52,7 @@ final class PointProcessor implements ProcessVoxelSliceBuffer<ByteBuffer> {
 
     @Override
     public void notifyChangeZ(int z) {
-        bbOut = voxelsOut.getPixelsForPlane(z).buffer();
+        bbOut = voxelsOut.slice(z).buffer();
     }
 
     @Override

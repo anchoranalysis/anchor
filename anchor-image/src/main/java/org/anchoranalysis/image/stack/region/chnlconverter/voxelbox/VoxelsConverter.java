@@ -47,55 +47,55 @@ import org.anchoranalysis.image.voxel.factory.VoxelsFactoryTypeBound;
  */
 public interface VoxelsConverter<T extends Buffer> {
 
-    default Voxels<T> convertFrom(VoxelsWrapper vbIn, VoxelsFactoryTypeBound<T> factory) {
-        Voxels<T> vbOut = factory.createInitialized(vbIn.any().extent());
-        convertFrom(vbIn, vbOut);
-        return vbOut;
+    default Voxels<T> convertFrom(VoxelsWrapper voxelsIn, VoxelsFactoryTypeBound<T> factory) {
+        Voxels<T> voxelsOut = factory.createInitialized(voxelsIn.any().extent());
+        convertFrom(voxelsIn, voxelsOut);
+        return voxelsOut;
     }
 
-    default void convertFrom(VoxelsWrapper vbIn, Voxels<T> vbOut) {
+    default void convertFrom(VoxelsWrapper voxelsIn, Voxels<T> voxelsOut) {
         // Otherwise, depending on the input type we spawn in different directions
-        VoxelDataType inType = vbIn.getVoxelDataType();
+        VoxelDataType inType = voxelsIn.getVoxelDataType();
         if (inType.equals(VoxelDataTypeUnsignedByte.INSTANCE)) {
-            convertFromByte(vbIn.asByte(), vbOut);
+            convertFromByte(voxelsIn.asByte(), voxelsOut);
         } else if (inType.equals(VoxelDataTypeFloat.INSTANCE)) {
-            convertFromFloat(vbIn.asFloat(), vbOut);
+            convertFromFloat(voxelsIn.asFloat(), voxelsOut);
         } else if (inType.equals(VoxelDataTypeUnsignedShort.INSTANCE)) {
-            convertFromShort(vbIn.asShort(), vbOut);
+            convertFromShort(voxelsIn.asShort(), voxelsOut);
         } else if (inType.equals(VoxelDataTypeUnsignedInt.INSTANCE)) {
-            convertFromInt(vbIn.asInt(), vbOut);
+            convertFromInt(voxelsIn.asInt(), voxelsOut);
         }
     }
 
-    default void convertFromByte(Voxels<ByteBuffer> vbIn, Voxels<T> vbOut) {
+    default void convertFromByte(Voxels<ByteBuffer> voxelsIn, Voxels<T> voxelsOut) {
 
-        for (int z = 0; z < vbIn.extent().getZ(); z++) {
-            VoxelBuffer<ByteBuffer> bufferIn = vbIn.getPixelsForPlane(z);
-            vbOut.setPixelsForPlane(z, convertFromByte(bufferIn));
+        for (int z = 0; z < voxelsIn.extent().z(); z++) {
+            VoxelBuffer<ByteBuffer> bufferIn = voxelsIn.slice(z);
+            voxelsOut.updateSlice(z, convertFromByte(bufferIn));
         }
     }
 
-    default void convertFromFloat(Voxels<FloatBuffer> vbIn, Voxels<T> vbOut) {
+    default void convertFromFloat(Voxels<FloatBuffer> voxelsIn, Voxels<T> voxelsOut) {
 
-        for (int z = 0; z < vbIn.extent().getZ(); z++) {
-            VoxelBuffer<FloatBuffer> bufferIn = vbIn.getPixelsForPlane(z);
-            vbOut.setPixelsForPlane(z, convertFromFloat(bufferIn));
+        for (int z = 0; z < voxelsIn.extent().z(); z++) {
+            VoxelBuffer<FloatBuffer> bufferIn = voxelsIn.slice(z);
+            voxelsOut.updateSlice(z, convertFromFloat(bufferIn));
         }
     }
 
-    default void convertFromInt(Voxels<IntBuffer> vbIn, Voxels<T> vbOut) {
+    default void convertFromInt(Voxels<IntBuffer> voxelsIn, Voxels<T> voxelsOut) {
 
-        for (int z = 0; z < vbIn.extent().getZ(); z++) {
-            VoxelBuffer<IntBuffer> bufferIn = vbIn.getPixelsForPlane(z);
-            vbOut.setPixelsForPlane(z, convertFromInt(bufferIn));
+        for (int z = 0; z < voxelsIn.extent().z(); z++) {
+            VoxelBuffer<IntBuffer> bufferIn = voxelsIn.slice(z);
+            voxelsOut.updateSlice(z, convertFromInt(bufferIn));
         }
     }
 
-    default void convertFromShort(Voxels<ShortBuffer> vbIn, Voxels<T> vbOut) {
+    default void convertFromShort(Voxels<ShortBuffer> voxelsIn, Voxels<T> voxelsOut) {
 
-        for (int z = 0; z < vbIn.extent().getZ(); z++) {
-            VoxelBuffer<ShortBuffer> bufferIn = vbIn.getPixelsForPlane(z);
-            vbOut.setPixelsForPlane(z, convertFromShort(bufferIn));
+        for (int z = 0; z < voxelsIn.extent().z(); z++) {
+            VoxelBuffer<ShortBuffer> bufferIn = voxelsIn.slice(z);
+            voxelsOut.updateSlice(z, convertFromShort(bufferIn));
         }
     }
 

@@ -202,7 +202,7 @@ public class AssignmentOverlapFromPairs implements Assignment {
     private static void removeTouchingBorderXYObjects(ImageDimensions sd, List<ObjectMask> list) {
         Iterator<ObjectMask> itr = list.iterator();
         while (itr.hasNext()) {
-            if (itr.next().getBoundingBox().atBorderXY(sd)) {
+            if (itr.next().boundingBox().atBorderXY(sd)) {
                 itr.remove();
             }
         }

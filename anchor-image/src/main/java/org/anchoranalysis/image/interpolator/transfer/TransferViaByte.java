@@ -50,8 +50,8 @@ public class TransferViaByte implements Transfer {
         this.src = src.asByte();
         this.trgt = trgt.asByte();
 
-        int trgtX = trgt.any().extent().getX();
-        int trgtY = trgt.any().extent().getY();
+        int trgtX = trgt.any().extent().x();
+        int trgtY = trgt.any().extent().y();
         assert (trgtX > 0);
         assert (trgtY > 0);
         resampleOp = new ResampleOp(trgtX, trgtY);
@@ -60,21 +60,21 @@ public class TransferViaByte implements Transfer {
 
     @Override
     public void assignSlice(int z) {
-        buffer = src.getPixelsForPlane(z);
+        buffer = src.slice(z);
     }
 
     @Override
     public void transferCopyTo(int z) {
-        trgt.setPixelsForPlane(z, buffer.duplicate());
+        trgt.updateSlice(z, buffer.duplicate());
     }
 
     @Override
     public void transferTo(int z, Interpolator interpolator) {
-        VoxelBuffer<ByteBuffer> bufIn = trgt.getPixelsForPlane(z);
+        VoxelBuffer<ByteBuffer> bufIn = trgt.slice(z);
         VoxelBuffer<ByteBuffer> bufOut =
                 interpolator.interpolateByte(buffer, bufIn, src.extent(), trgt.extent());
         if (!bufOut.equals(bufIn)) {
-            trgt.setPixelsForPlane(z, bufOut);
+            trgt.updateSlice(z, bufOut);
         }
     }
 }

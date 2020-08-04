@@ -38,13 +38,13 @@ class BinaryVoxelsByte extends BinaryVoxels<ByteBuffer> {
     
     public BinaryVoxelsByte(Voxels<ByteBuffer> voxels, BinaryValues binaryValuesByte) {
         super(voxels, binaryValuesByte);
-        this.binaryValuesByte = getBinaryValues().createByte();
+        this.binaryValuesByte = binaryValues().createByte();
     }
 
     @Override
     public boolean isOn(int x, int y, int z) {
-        int offset = getVoxels().extent().offset(x, y);
-        return getVoxels().getPixelsForPlane(z).buffer().get(offset) != binaryValuesByte.getOffByte();
+        int offset = voxels().extent().offset(x, y);
+        return voxels().slice(z).buffer().get(offset) != binaryValuesByte.getOffByte();
     }
 
     @Override
@@ -54,26 +54,26 @@ class BinaryVoxelsByte extends BinaryVoxels<ByteBuffer> {
 
     @Override
     public void setOn(int x, int y, int z) {
-        int offset = getVoxels().extent().offset(x, y);
-        getVoxels().getPixelsForPlane(z).buffer().put(offset, binaryValuesByte.getOnByte());
+        int offset = voxels().extent().offset(x, y);
+        voxels().slice(z).buffer().put(offset, binaryValuesByte.getOnByte());
     }
 
     @Override
     public void setOff(int x, int y, int z) {
-        int offset = getVoxels().extent().offset(x, y);
-        getVoxels().getPixelsForPlane(z).buffer().put(offset, binaryValuesByte.getOffByte());
+        int offset = voxels().extent().offset(x, y);
+        voxels().slice(z).buffer().put(offset, binaryValuesByte.getOffByte());
     }
 
-    public BinaryValuesByte getBinaryValuesByte() {
+    public BinaryValuesByte asByte() {
         return binaryValuesByte;
     }
 
     @Override
     public BinaryVoxelsByte duplicate() {
-        return new BinaryVoxelsByte(getVoxels().duplicate(), getBinaryValues());
+        return new BinaryVoxelsByte(voxels().duplicate(), binaryValues());
     }
 
     public BinaryVoxels<ByteBuffer> extractSlice(int z) throws CreateException {
-        return new BinaryVoxelsByte(getVoxels().extractSlice(z), getBinaryValues());
+        return new BinaryVoxelsByte(voxels().extractSlice(z), binaryValues());
     }
 }

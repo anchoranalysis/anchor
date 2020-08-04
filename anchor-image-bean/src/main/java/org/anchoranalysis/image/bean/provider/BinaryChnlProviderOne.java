@@ -43,5 +43,5 @@ public abstract class BinaryChnlProviderOne extends MaskProvider {
         return createFromMask(binaryChnl.create());
     }
 
-    protected abstract Mask createFromMask(Mask chnl) throws CreateException;
+    protected abstract Mask createFromMask(Mask mask) throws CreateException;
 }

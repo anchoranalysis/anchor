@@ -63,7 +63,7 @@ public abstract class MarkAbstractPosition extends Mark implements Serializable 
 
     public String strPos() {
         return String.format(
-                "[%6.1f,%6.1f,%6.1f]", this.pos.getX(), this.pos.getY(), this.pos.getZ());
+                "[%6.1f,%6.1f,%6.1f]", this.pos.x(), this.pos.y(), this.pos.z());
     }
 
     @Override
@@ -72,8 +72,8 @@ public abstract class MarkAbstractPosition extends Mark implements Serializable 
     }
 
     public static void scaleXYPoint(Point3d point, double multFactor) {
-        point.setX(point.getX() * multFactor);
-        point.setY(point.getY() * multFactor);
+        point.setX(point.x() * multFactor);
+        point.setY(point.y() * multFactor);
     }
 
     @Override
@@ -102,7 +102,7 @@ public abstract class MarkAbstractPosition extends Mark implements Serializable 
             ImageDimensions bndScene, RegionMembershipWithFlags rm, BinaryValuesByte bvOut) {
 
         ObjectWithProperties object = super.deriveObject(bndScene, rm, bvOut);
-        object.setProperty("midpointInt", calcRelativePoint(pos, object.getBoundingBox().cornerMin()));
+        object.setProperty("midpointInt", calcRelativePoint(pos, object.boundingBox().cornerMin()));
         return object;
     }
 
@@ -113,13 +113,13 @@ public abstract class MarkAbstractPosition extends Mark implements Serializable 
         int numDims = numDims();
 
         if (numDims >= 1) {
-            op.addDoubleAsString("Pos X", pos.getX());
+            op.addDoubleAsString("Pos X", pos.x());
         }
         if (numDims >= 2) {
-            op.addDoubleAsString("Pos Y", pos.getY());
+            op.addDoubleAsString("Pos Y", pos.y());
         }
         if (numDims >= 3) {
-            op.addDoubleAsString("Pos Z", pos.getZ());
+            op.addDoubleAsString("Pos Z", pos.z());
         }
         return op;
     }

@@ -44,23 +44,23 @@ public class BinaryChnlOr {
      */
     public static void binaryOr(Mask first, Mask second) {
 
-        BinaryValuesByte bvbCrnt = first.getBinaryValues().createByte();
-        BinaryValuesByte bvbReceiver = second.getBinaryValues().createByte();
+        BinaryValuesByte bvbCrnt = first.binaryValues().createByte();
+        BinaryValuesByte bvbReceiver = second.binaryValues().createByte();
 
-        Extent e = first.getDimensions().getExtent();
+        Extent e = first.dimensions().extent();
 
         byte crntOn = bvbCrnt.getOnByte();
         byte receiveOn = bvbReceiver.getOnByte();
 
         // All the on voxels in the receive, are put onto crnt
-        for (int z = 0; z < e.getZ(); z++) {
+        for (int z = 0; z < e.z(); z++) {
 
-            ByteBuffer bufSrc = first.getVoxels().getPixelsForPlane(z).buffer();
-            ByteBuffer bufReceive = second.getVoxels().getPixelsForPlane(z).buffer();
+            ByteBuffer bufSrc = first.voxels().slice(z).buffer();
+            ByteBuffer bufReceive = second.voxels().slice(z).buffer();
 
             int offset = 0;
-            for (int y = 0; y < e.getY(); y++) {
-                for (int x = 0; x < e.getX(); x++) {
+            for (int y = 0; y < e.y(); y++) {
+                for (int x = 0; x < e.x(); x++) {
 
                     byte byteRec = bufReceive.get(offset);
                     if (byteRec == receiveOn) {

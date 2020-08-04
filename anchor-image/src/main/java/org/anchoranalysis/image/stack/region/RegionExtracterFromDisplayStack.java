@@ -102,7 +102,7 @@ public class RegionExtracterFromDisplayStack implements RegionExtracter {
         ScaleFactor sf = new ScaleFactor(zoomFactor);
 
         // We calculate how big our outgoing voxels will be
-        ImageDimensions sd = extractedSlice.getDimensions().scaleXYBy(sf);
+        ImageDimensions sd = extractedSlice.dimensions().scaleXYBy(sf);
 
         Extent extentTrgt = bbox.extent().scaleXYBy(sf);
 
@@ -111,11 +111,10 @@ public class RegionExtracterFromDisplayStack implements RegionExtracter {
         MeanInterpolator interpolator = (zoomFactor < 1) ? new MeanInterpolator(zoomFactor) : null;
 
         if (extractedSlice.getVoxelDataType().equals(VoxelDataTypeUnsignedByte.INSTANCE)) {
-            Voxels<ByteBuffer> vb = extractedSlice.voxels().asByte();
             interpolateRegionFromByte(
-                    vb,
+                    extractedSlice.voxels().asByte(),
                     voxels,
-                    extractedSlice.getDimensions().getExtent(),
+                    extractedSlice.dimensions().extent(),
                     extentTrgt,
                     bbox,
                     zoomFactor,
@@ -128,14 +127,12 @@ public class RegionExtracterFromDisplayStack implements RegionExtracter {
         } else if (extractedSlice.getVoxelDataType().equals(VoxelDataTypeUnsignedShort.INSTANCE)
                 && chnlConverter != null) {
 
-            Voxels<ShortBuffer> vb = extractedSlice.voxels().asShort();
-
             Voxels<ShortBuffer> bufferIntermediate =
                     VoxelsFactory.getShort().createInitialized(extentTrgt);
             interpolateRegionFromShort(
-                    vb,
+                    extractedSlice.voxels().asShort(),
                     bufferIntermediate,
-                    extractedSlice.getDimensions().getExtent(),
+                    extractedSlice.dimensions().extent(),
                     extentTrgt,
                     bbox,
                     zoomFactor,
@@ -153,15 +150,15 @@ public class RegionExtracterFromDisplayStack implements RegionExtracter {
 
         return ChannelFactory.instance()
                 .get(VoxelDataTypeUnsignedByte.INSTANCE)
-                .create(voxels, sd.getResolution());
+                .create(voxels, sd.resolution());
     }
 
     // extentTrgt is the target-size (where we write this region)
     // extentSrcSlice is the source-size (the single slice we've extracted from the buffer to
     // interpolate from)
     private static void interpolateRegionFromByte(
-            Voxels<ByteBuffer> vbSrc,
-            Voxels<ByteBuffer> vbDest,
+            Voxels<ByteBuffer> voxelsSrc,
+            Voxels<ByteBuffer> voxelsDest,
             Extent extentSrc,
             Extent extentTrgt,
             BoundingBox bbox,
@@ -171,20 +168,20 @@ public class RegionExtracterFromDisplayStack implements RegionExtracter {
 
         ReadableTuple3i cornerMin = bbox.cornerMin();
         ReadableTuple3i cornerMax = bbox.calcCornerMax();
-        for (int z = cornerMin.getZ(); z <= cornerMax.getZ(); z++) {
+        for (int z = cornerMin.z(); z <= cornerMax.z(); z++) {
 
-            ByteBuffer bbIn = vbSrc.getPixelsForPlane(z).buffer();
-            ByteBuffer bbOut = vbDest.getPixelsForPlane(z - cornerMin.getZ()).buffer();
+            ByteBuffer bbIn = voxelsSrc.slice(z).buffer();
+            ByteBuffer bbOut = voxelsDest.slice(z - cornerMin.z()).buffer();
 
             // We go through every pixel in the new width, and height, and sample from the original
             // image
             int indOut = 0;
-            for (int y = 0; y < extentTrgt.getY(); y++) {
+            for (int y = 0; y < extentTrgt.y(); y++) {
 
-                int yOrig = ((int) (y / zoomFactor)) + cornerMin.getY();
-                for (int x = 0; x < extentTrgt.getX(); x++) {
+                int yOrig = ((int) (y / zoomFactor)) + cornerMin.y();
+                for (int x = 0; x < extentTrgt.x(); x++) {
 
-                    int xOrig = ((int) (x / zoomFactor)) + cornerMin.getX();
+                    int xOrig = ((int) (x / zoomFactor)) + cornerMin.x();
 
                     // We get the byte to write
                     byte b =
@@ -203,8 +200,8 @@ public class RegionExtracterFromDisplayStack implements RegionExtracter {
     // extentSrcSlice is the source-size (the single slice we've extracted from the buffer to
     // interpolate from)
     private static void interpolateRegionFromShort(
-            Voxels<ShortBuffer> vbSrc,
-            Voxels<ShortBuffer> vbDest,
+            Voxels<ShortBuffer> voxelsSrc,
+            Voxels<ShortBuffer> voxelsDest,
             Extent extentSrc,
             Extent extentTrgt,
             BoundingBox bbox,
@@ -214,23 +211,23 @@ public class RegionExtracterFromDisplayStack implements RegionExtracter {
 
         ReadableTuple3i cornerMin = bbox.cornerMin();
         ReadableTuple3i cornerMax = bbox.calcCornerMax();
-        for (int z = cornerMin.getZ(); z <= cornerMax.getZ(); z++) {
+        for (int z = cornerMin.z(); z <= cornerMax.z(); z++) {
 
-            assert (vbSrc.getPixelsForPlane(z) != null);
-            assert (vbDest.getPixelsForPlane(z - cornerMin.getZ()) != null);
+            assert (voxelsSrc.slice(z) != null);
+            assert (voxelsDest.slice(z - cornerMin.z()) != null);
 
-            ShortBuffer bbIn = vbSrc.getPixelsForPlane(z).buffer();
-            ShortBuffer bbOut = vbDest.getPixelsForPlane(z - cornerMin.getZ()).buffer();
+            ShortBuffer bbIn = voxelsSrc.slice(z).buffer();
+            ShortBuffer bbOut = voxelsDest.slice(z - cornerMin.z()).buffer();
 
             // We go through every pixel in the new width, and height, and sample from the original
             // image
             int indOut = 0;
-            for (int y = 0; y < extentTrgt.getY(); y++) {
+            for (int y = 0; y < extentTrgt.y(); y++) {
 
-                int yOrig = ((int) (y / zoomFactor)) + cornerMin.getY();
-                for (int x = 0; x < extentTrgt.getX(); x++) {
+                int yOrig = ((int) (y / zoomFactor)) + cornerMin.y();
+                for (int x = 0; x < extentTrgt.x(); x++) {
 
-                    int xOrig = ((int) (x / zoomFactor)) + cornerMin.getX();
+                    int xOrig = ((int) (x / zoomFactor)) + cornerMin.x();
 
                     // We get the byte to write
                     short s =

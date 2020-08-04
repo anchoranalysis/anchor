@@ -35,5 +35,5 @@ public interface PointSampler {
 
     Optional<Point3d> sample(RandomNumberGenerator randomNumberGenerator);
 
-    public abstract ImageDimensions getDimensions();
+    public abstract ImageDimensions dimensions();
 }

@@ -86,7 +86,7 @@ public class StackNotUniformSized implements Iterable<Channel> {
 
     public ImageDimensions getFirstDimensions() {
         assert (getNumberChannels() > 0);
-        return channels.get(0).getDimensions();
+        return channels.get(0).dimensions();
     }
 
     public boolean isUniformSized() {
@@ -95,11 +95,11 @@ public class StackNotUniformSized implements Iterable<Channel> {
             return true;
         }
 
-        ImageDimensions dimensions = channels.get(0).getDimensions();
+        ImageDimensions dimensions = channels.get(0).dimensions();
 
         for (int c = 1; c < channels.size(); c++) {
 
-            if (!dimensions.equals(channels.get(c).getDimensions())) {
+            if (!dimensions.equals(channels.get(c).dimensions())) {
                 return false;
             }
         }

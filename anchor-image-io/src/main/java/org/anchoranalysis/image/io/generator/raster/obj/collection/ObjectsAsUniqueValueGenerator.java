@@ -59,9 +59,9 @@ public class ObjectsAsUniqueValueGenerator extends ObjectsGenerator {
     @Override
     public Stack generate() throws OutputWriteFailedException {
 
-        Channel outChnl = factory.createEmptyInitialised(getDimensions());
+        Channel outChnl = factory.createEmptyInitialised(dimensions());
 
-        Voxels<?> vbOutput = outChnl.voxels().any();
+        Voxels<?> voxelsOutput = outChnl.voxels().any();
 
         if (getObjects().size() > 254) {
             throw new OutputWriteFailedException(
@@ -73,7 +73,7 @@ public class ObjectsAsUniqueValueGenerator extends ObjectsGenerator {
         int val = 1;
 
         for (ObjectMask object : getObjects()) {
-            vbOutput.setPixelsCheckMask(object, val++);
+            voxelsOutput.setPixelsCheckMask(object, val++);
         }
 
         return new ChnlGenerator(outChnl, "maskCollection").generate();

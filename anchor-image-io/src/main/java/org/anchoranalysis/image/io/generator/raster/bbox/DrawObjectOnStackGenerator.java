@@ -158,8 +158,8 @@ public class DrawObjectOnStackGenerator extends RasterGenerator
 
         ObjectsWithBoundingBox objects = this.getIterableElement();
 
-        ObjectCollection objectsForDrawing = objects.getObjects().stream().map(object->
-            prepareObjectForDrawing(object, objects.getBoundingBox()) );
+        ObjectCollection objectsForDrawing = objects.objects().stream().map(object->
+            prepareObjectForDrawing(object, objects.boundingBox()) );
         
         // An object-mask that is relative to the extracted section
         drawObjectsGenerator.setIterableElement(
@@ -173,11 +173,11 @@ public class DrawObjectOnStackGenerator extends RasterGenerator
 
         if (!backgroundGenerator.isPresent()) {
             // Exit early if there's no background to be extracted
-            return Either.left(new ImageDimensions(element.getBoundingBox().extent()));
+            return Either.left(new ImageDimensions(element.boundingBox().extent()));
         }
 
         try {
-            backgroundGenerator.get().setIterableElement(element.getBoundingBox());
+            backgroundGenerator.get().setIterableElement(element.boundingBox());
         } catch (SetOperationFailedException e) {
             throw new OutputWriteFailedException(e);
         }
@@ -230,7 +230,7 @@ public class DrawObjectOnStackGenerator extends RasterGenerator
     
     /** Changes the bounding-box to match the object rather than the global scene */
     private ObjectMask relativeBoundingBoxToScene(ObjectMask object, BoundingBox containingBox) {
-        Point3i relativePosition = object.getBoundingBox().relPosTo(containingBox);
+        Point3i relativePosition = object.boundingBox().relPosTo(containingBox);
         return object.mapBoundingBoxPreserveExtent( boundingBox->boundingBox.shiftTo(relativePosition) );
     }
 }

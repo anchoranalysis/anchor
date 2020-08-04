@@ -68,17 +68,17 @@ final class VoxelsAsShort extends Voxels<ShortBuffer> {
 
         ReadableTuple3i pointMax = bbox.calcCornerMax();
 
-        byte maskOnVal = object.getBinaryValuesByte().getOnByte();
+        byte maskOnVal = object.binaryValuesByte().getOnByte();
 
-        for (int z = bbox.cornerMin().getZ(); z <= pointMax.getZ(); z++) {
+        for (int z = bbox.cornerMin().z(); z <= pointMax.z(); z++) {
 
             ShortBuffer pixelIn = getPlaneAccess().getPixelsForPlane(z).buffer();
             ByteBuffer pixelOut =
-                    object.getVoxels().getPixelsForPlane(z - bbox.cornerMin().getZ()).buffer();
+                    object.voxels().slice(z - bbox.cornerMin().z()).buffer();
 
             int ind = 0;
-            for (int y = bbox.cornerMin().getY(); y <= pointMax.getY(); y++) {
-                for (int x = bbox.cornerMin().getX(); x <= pointMax.getX(); x++) {
+            for (int y = bbox.cornerMin().y(); y <= pointMax.y(); y++) {
+                for (int x = bbox.cornerMin().x(); x <= pointMax.x(); x++) {
 
                     int index = getPlaneAccess().extent().offset(x, y);
                     short chnlVal = pixelIn.get(index);
@@ -98,7 +98,7 @@ final class VoxelsAsShort extends Voxels<ShortBuffer> {
     @Override
     public void setAllPixelsTo(int val) {
 
-        for (int z = 0; z < extent().getZ(); z++) {
+        for (int z = 0; z < extent().z(); z++) {
 
             ShortBuffer buffer = getPlaneAccess().getPixelsForPlane(z).buffer();
 
@@ -117,12 +117,12 @@ final class VoxelsAsShort extends Voxels<ShortBuffer> {
         ReadableTuple3i cornerMax = bbox.calcCornerMax();
         Extent e = extent();
 
-        for (int z = cornerMin.getZ(); z <= cornerMax.getZ(); z++) {
+        for (int z = cornerMin.z(); z <= cornerMax.z(); z++) {
 
             ShortBuffer buffer = getPlaneAccess().getPixelsForPlane(z).buffer();
 
-            for (int y = cornerMin.getY(); y <= cornerMax.getY(); y++) {
-                for (int x = cornerMin.getX(); x <= cornerMax.getX(); x++) {
+            for (int y = cornerMin.y(); y <= cornerMax.y(); y++) {
+                for (int x = cornerMin.x(); x <= cornerMax.x(); x++) {
                     int offset = e.offset(x, y);
                     buffer.put(offset, valShort);
                 }
@@ -142,7 +142,7 @@ final class VoxelsAsShort extends Voxels<ShortBuffer> {
             return;
         }
 
-        for (int z = 0; z < extent().getZ(); z++) {
+        for (int z = 0; z < extent().z(); z++) {
 
             ShortBuffer buffer = getPlaneAccess().getPixelsForPlane(z).buffer();
 
@@ -169,20 +169,20 @@ final class VoxelsAsShort extends Voxels<ShortBuffer> {
     @Override
     public void addPixelsCheckMask(ObjectMask objectMask, int value) {
 
-        BoundingBox bbox = objectMask.getBoundingBox();
-        Voxels<ByteBuffer> voxels = objectMask.getVoxels();
+        BoundingBox bbox = objectMask.boundingBox();
+        Voxels<ByteBuffer> voxels = objectMask.voxels();
 
-        byte maskOnByte = objectMask.getBinaryValuesByte().getOnByte();
+        byte maskOnByte = objectMask.binaryValuesByte().getOnByte();
 
         ReadableTuple3i pointMax = bbox.calcCornerMax();
-        for (int z = bbox.cornerMin().getZ(); z <= pointMax.getZ(); z++) {
+        for (int z = bbox.cornerMin().z(); z <= pointMax.z(); z++) {
 
             ShortBuffer pixels = getPlaneAccess().getPixelsForPlane(z).buffer();
             ByteBuffer pixelsMask =
-                    voxels.getPixelsForPlane(z - bbox.cornerMin().getZ()).buffer();
+                    voxels.slice(z - bbox.cornerMin().z()).buffer();
 
-            for (int y = bbox.cornerMin().getY(); y <= pointMax.getY(); y++) {
-                for (int x = bbox.cornerMin().getX(); x <= pointMax.getX(); x++) {
+            for (int y = bbox.cornerMin().y(); y <= pointMax.y(); y++) {
+                for (int x = bbox.cornerMin().x(); x <= pointMax.x(); x++) {
 
                     int indexMask = getPlaneAccess().extent().offset(x, y);
                     if (pixelsMask.get(indexMask) == maskOnByte) {
@@ -209,7 +209,7 @@ final class VoxelsAsShort extends Voxels<ShortBuffer> {
     @Override
     public void subtractFrom(int val) {
 
-        for (int z = 0; z < extent().getZ(); z++) {
+        for (int z = 0; z < extent().z(); z++) {
 
             ShortBuffer buffer = getPlaneAccess().getPixelsForPlane(z).buffer();
 
@@ -230,7 +230,7 @@ final class VoxelsAsShort extends Voxels<ShortBuffer> {
 
         MaxIntensityBufferShort mi = new MaxIntensityBufferShort(extent());
 
-        for (int z = 0; z < extent().getZ(); z++) {
+        for (int z = 0; z < extent().z(); z++) {
             mi.projectSlice(getPlaneAccess().getPixelsForPlane(z).buffer());
         }
 
@@ -241,7 +241,7 @@ final class VoxelsAsShort extends Voxels<ShortBuffer> {
     public Voxels<ShortBuffer> meanIntensityProjection() {
         MeanIntensityShortBuffer mi = new MeanIntensityShortBuffer(extent());
 
-        for (int z = 0; z < extent().getZ(); z++) {
+        for (int z = 0; z < extent().z(); z++) {
             mi.projectSlice(getPlaneAccess().getPixelsForPlane(z).buffer());
         }
 

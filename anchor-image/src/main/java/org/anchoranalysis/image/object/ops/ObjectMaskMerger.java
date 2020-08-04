@@ -66,7 +66,7 @@ public class ObjectMaskMerger {
 
         second = invertSecondIfNecessary(first, second);
 
-        BoundingBox bbox = first.getBoundingBox().union().with(second.getBoundingBox());
+        BoundingBox bbox = first.boundingBox().union().with(second.boundingBox());
 
         ObjectMask out = new ObjectMask(bbox, VoxelsFactory.getByte().createInitialized(bbox.extent()));
         copyPixelsCheckMask(first, out, bbox);
@@ -98,7 +98,7 @@ public class ObjectMaskMerger {
      */
     public static BoundingBox mergeBoundingBoxes(Stream<ObjectMask> objects) {
         return objects // NOSONAR
-                .map(ObjectMask::getBoundingBox)
+                .map(ObjectMask::boundingBox)
                 .reduce( // NOSONAR
                         (boundingBox, other) -> boundingBox.union().with(other))
                 .get();
@@ -131,12 +131,12 @@ public class ObjectMaskMerger {
         for (ObjectMask objectMask : objects) {
 
             if (bv != null) {
-                if (!objectMask.getBinaryValues().equals(bv)) {
+                if (!objectMask.binaryValues().equals(bv)) {
                     throw new OperationFailedException(
                             "Cannot merge. Incompatible binary values among object-collection");
                 }
             } else {
-                bv = objectMask.getBinaryValues();
+                bv = objectMask.binaryValues();
             }
 
             copyPixelsCheckMask(objectMask, objectOut, bbox);
@@ -148,16 +148,16 @@ public class ObjectMaskMerger {
     private static void copyPixelsCheckMask(
             ObjectMask source, ObjectMask destination, BoundingBox bbox) {
 
-        Point3i pointDest = source.getBoundingBox().relPosTo(bbox);
-        Extent e = source.getBoundingBox().extent();
+        Point3i pointDest = source.boundingBox().relPosTo(bbox);
+        Extent e = source.boundingBox().extent();
 
-        source.getVoxels()
+        source.voxels()
                 .copyPixelsToCheckMask(
                         new BoundingBox(e),
-                        destination.getVoxels(),
+                        destination.voxels(),
                         new BoundingBox(pointDest, e),
-                        source.getVoxels(),
-                        source.getBinaryValuesByte());
+                        source.voxels(),
+                        source.binaryValuesByte());
     }
 
     /**
@@ -172,9 +172,9 @@ public class ObjectMaskMerger {
      */
     private static ObjectMask invertSecondIfNecessary(ObjectMask first, ObjectMask second) {
         // If we don't have identical binary values, we invert the second one
-        if (!second.getBinaryValues().equals(first.getBinaryValues())) {
+        if (!second.binaryValues().equals(first.binaryValues())) {
 
-            if (second.getBinaryValues().createInverted().equals(first.getBinaryValues())) {
+            if (second.binaryValues().createInverted().equals(first.binaryValues())) {
                 return MaskInverter.invertObjectDuplicate(second);
             } else {
                 throw new AnchorFriendlyRuntimeException(

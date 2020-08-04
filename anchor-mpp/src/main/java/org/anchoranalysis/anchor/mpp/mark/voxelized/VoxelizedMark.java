@@ -38,13 +38,15 @@ import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
  */
 public interface VoxelizedMark {
 
-    BoundedVoxels<ByteBuffer> getVoxels();
+    BoundedVoxels<ByteBuffer> voxels();
 
-    BoundedVoxels<ByteBuffer> getVoxelsMaximumIntensityProjection();
+    BoundedVoxels<ByteBuffer> voxelsMaximumIntensityProjection();
 
-    BoundingBox getBoundingBox();
+    /** A bounding-box enclosing the voxelized representation of the mark */
+    BoundingBox boundingBox();
 
-    BoundingBox getBoundingBoxMIP();
+    /** The bounding-box flattened in z dimension */
+    BoundingBox boundingBoxFlattened();
 
     VoxelizedMark duplicate();
 

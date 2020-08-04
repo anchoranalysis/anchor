@@ -78,8 +78,8 @@ public class NRGStack {
         return container.map(Stack::getNumberChannels).getOrElseGet(dimensions -> 0);
     }
 
-    public ImageDimensions getDimensions() {
-        return container.map(Stack::getDimensions).getOrElseGet(Functions.identity());
+    public ImageDimensions dimensions() {
+        return container.map(Stack::dimensions).getOrElseGet(Functions.identity());
     }
 
     public final Channel getChannel(int index) {

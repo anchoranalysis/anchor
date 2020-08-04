@@ -185,8 +185,8 @@ public class DisplayStack {
         listConverters.set(chnlNum, converter);
     }
 
-    public ImageDimensions getDimensions() {
-        return delegate.getDimensions();
+    public ImageDimensions dimensions() {
+        return delegate.dimensions();
     }
 
     public final int getNumberChannels() {
@@ -245,7 +245,7 @@ public class DisplayStack {
         Channel out =
                 ChannelFactory.instance()
                         .createEmptyInitialised(
-                                new ImageDimensions(bbox.extent(), chnl.getDimensions().getResolution()),
+                                new ImageDimensions(bbox.extent(), chnl.dimensions().resolution()),
                                 VoxelDataTypeUnsignedByte.INSTANCE);
 
         if (converter != null) {
@@ -367,14 +367,14 @@ public class DisplayStack {
                     voxelsForChannel(0),
                     voxelsForChannel(1),
                     voxelsForChannel(2),
-                    delegate.getDimensions().getExtent());
+                    delegate.dimensions().extent());
         }
         return BufferedImageFactory.createGrayscale(voxelsForChannel(0));
     }
 
     public BufferedImage createBufferedImageBBox(BoundingBox bbox) throws CreateException {
 
-        if (bbox.extent().getZ() != 1) {
+        if (bbox.extent().z() != 1) {
             throw new CreateException("BBox must have a single pixel z-height");
         }
 
@@ -414,18 +414,18 @@ public class DisplayStack {
 
         ChnlConverterAttached<Channel, ByteBuffer> converter = listConverters.get(chnlNum);
 
-        Voxels<?> vbUnconverted = chnl.voxels().any().region(bbox, true);
+        Voxels<?> voxelsUnconverted = chnl.voxels().any().region(bbox, true);
 
         if (converter != null) {
             return converter
                     .getVoxelsConverter()
-                    .convertFrom(new VoxelsWrapper(vbUnconverted), VoxelsFactory.getByte());
+                    .convertFrom(new VoxelsWrapper(voxelsUnconverted), VoxelsFactory.getByte());
         } else {
             if (!chnl.getVoxelDataType().equals(VoxelDataTypeUnsignedByte.INSTANCE)) {
                 // Datatype is not supported
                 assert false;
             }
-            return (Voxels<ByteBuffer>) vbUnconverted;
+            return (Voxels<ByteBuffer>) voxelsUnconverted;
         }
     }
 }

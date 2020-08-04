@@ -53,16 +53,16 @@ public class RotationMatrix implements Serializable {
 
         if (matrix.rows() == 3) {
             double[] dIn = new double[3];
-            dIn[0] = pointIn.getX();
-            dIn[1] = pointIn.getY();
-            dIn[2] = pointIn.getZ();
+            dIn[0] = pointIn.x();
+            dIn[1] = pointIn.y();
+            dIn[2] = pointIn.z();
 
             double[] rot = calcRotatedPoint(dIn);
             return new Point3d(rot[0], rot[1], rot[2]);
         } else if (matrix.rows() == 2) {
             double[] dIn = new double[2];
-            dIn[0] = pointIn.getX();
-            dIn[1] = pointIn.getY();
+            dIn[0] = pointIn.x();
+            dIn[1] = pointIn.y();
 
             double[] rot = calcRotatedPoint(dIn);
             return new Point3d(rot[0], rot[1], 0);

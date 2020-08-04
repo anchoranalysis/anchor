@@ -27,73 +27,28 @@ package org.anchoranalysis.core.geometry;
  */
 
 import java.io.Serializable;
-import org.anchoranalysis.core.arithmetic.FloatUtilities;
-import org.apache.commons.lang.builder.HashCodeBuilder;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 
+@EqualsAndHashCode @Accessors(fluent=true) @AllArgsConstructor @NoArgsConstructor
 public final class Point2f implements Serializable {
 
     /** */
     private static final long serialVersionUID = 1L;
 
-    private float x;
-    private float y;
-
-    /** Initialized with zeros */
-    public Point2f() {
-        this.x = 0;
-        this.y = 0;
-    }
-
-    public Point2f(float x, float y) {
-        this.x = x;
-        this.y = y;
-    }
+    @Getter private float x;
+    @Getter private float y;
 
     public void scale(double factor) {
         this.x *= factor;
         this.y *= factor;
     }
 
-    public float getX() {
-        return x;
-    }
-
-    public void setX(float x) {
-        this.x = x;
-    }
-
-    public float getY() {
-        return y;
-    }
-
-    public void setY(float y) {
-        this.y = y;
-    }
-
     @Override
     public String toString() {
         return String.format("[%f,%f]", x, y);
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (!(obj instanceof Point2f)) {
-            return false;
-        }
-        Point2f objCast = (Point2f) obj;
-
-        if (!FloatUtilities.areEqual(x, objCast.x)) {
-            return false;
-        }
-
-        return FloatUtilities.areEqual(y, objCast.y);
-    }
-
-    @Override
-    public int hashCode() {
-        return new HashCodeBuilder().append(x).append(y).toHashCode();
     }
 }

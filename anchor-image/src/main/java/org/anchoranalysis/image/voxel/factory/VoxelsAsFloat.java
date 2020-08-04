@@ -48,7 +48,7 @@ final class VoxelsAsFloat extends Voxels<FloatBuffer> {
         float max = 0;
         boolean first = true;
 
-        for (int z = 0; z < getPlaneAccess().extent().getZ(); z++) {
+        for (int z = 0; z < getPlaneAccess().extent().z(); z++) {
 
             FloatBuffer pixels = getPlaneAccess().getPixelsForPlane(z).buffer();
 
@@ -85,7 +85,7 @@ final class VoxelsAsFloat extends Voxels<FloatBuffer> {
 
         float valFloat = (float) val;
 
-        for (int z = 0; z < extent().getZ(); z++) {
+        for (int z = 0; z < extent().z(); z++) {
 
             FloatBuffer buffer = getPlaneAccess().getPixelsForPlane(z).buffer();
 
@@ -104,12 +104,12 @@ final class VoxelsAsFloat extends Voxels<FloatBuffer> {
         ReadableTuple3i cornerMax = bbox.calcCornerMax();
         Extent e = extent();
 
-        for (int z = cornerMin.getZ(); z <= cornerMax.getZ(); z++) {
+        for (int z = cornerMin.z(); z <= cornerMax.z(); z++) {
 
             FloatBuffer buffer = getPlaneAccess().getPixelsForPlane(z).buffer();
 
-            for (int y = cornerMin.getY(); y <= cornerMax.getY(); y++) {
-                for (int x = cornerMin.getX(); x <= cornerMax.getX(); x++) {
+            for (int y = cornerMin.y(); y <= cornerMax.y(); y++) {
+                for (int x = cornerMin.x(); x <= cornerMax.x(); x++) {
                     int offset = e.offset(x, y);
                     buffer.put(offset, valFloat);
                 }
@@ -124,7 +124,7 @@ final class VoxelsAsFloat extends Voxels<FloatBuffer> {
             return;
         }
 
-        for (int z = 0; z < extent().getZ(); z++) {
+        for (int z = 0; z < extent().z(); z++) {
 
             FloatBuffer buffer = getPlaneAccess().getPixelsForPlane(z).buffer();
 
@@ -139,7 +139,7 @@ final class VoxelsAsFloat extends Voxels<FloatBuffer> {
     public Voxels<FloatBuffer> maxIntensityProjection() {
         MaxIntensityBufferFloat mi = new MaxIntensityBufferFloat(extent());
 
-        for (int z = 0; z < extent().getZ(); z++) {
+        for (int z = 0; z < extent().z(); z++) {
             mi.projectSlice(getPlaneAccess().getPixelsForPlane(z).buffer());
         }
 
@@ -177,7 +177,7 @@ final class VoxelsAsFloat extends Voxels<FloatBuffer> {
     @Override
     public void subtractFrom(int val) {
 
-        for (int z = 0; z < extent().getZ(); z++) {
+        for (int z = 0; z < extent().z(); z++) {
 
             FloatBuffer buffer = getPlaneAccess().getPixelsForPlane(z).buffer();
 

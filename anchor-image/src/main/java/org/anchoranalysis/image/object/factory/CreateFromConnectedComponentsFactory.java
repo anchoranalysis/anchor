@@ -55,24 +55,24 @@ public class CreateFromConnectedComponentsFactory {
         unionFind = new ConnectedComponentUnionFind(minNumberVoxels, bigNeighborhood);
     }
 
-    public ObjectCollection createConnectedComponents(Mask chnl) throws CreateException {
-        return createConnectedComponents(chnl.binaryVoxels());
+    public ObjectCollection createConnectedComponents(Mask mask) throws CreateException {
+        return createConnectedComponents(mask.binaryVoxels());
     }
 
     // This consumes the voxel buffer 'vb'
-    public ObjectCollection createConnectedComponents(BinaryVoxels<ByteBuffer> vb)
+    public ObjectCollection createConnectedComponents(BinaryVoxels<ByteBuffer> voxels)
             throws CreateException {
         try {
-            return unionFind.deriveConnectedByte(vb);
+            return unionFind.deriveConnectedByte(voxels);
         } catch (OperationFailedException e) {
             throw new CreateException(e);
         }
     }
 
     // This consumes the voxel buffer 'vb'
-    public ObjectCollection create(BinaryVoxels<IntBuffer> vb) throws CreateException {
+    public ObjectCollection create(BinaryVoxels<IntBuffer> voxels) throws CreateException {
         try {
-            return unionFind.deriveConnectedInt(vb);
+            return unionFind.deriveConnectedInt(voxels);
         } catch (OperationFailedException e) {
             throw new CreateException(e);
         }

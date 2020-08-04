@@ -92,13 +92,13 @@ public final class BoundingBoxIntersection {
 
         Optional<ExtentBoundsComparer> meiX =
                 ExtentBoundsComparer.createMin(
-                        cornerMin, cornerMinOther, cornerMax, cornerMaxOthr, ReadableTuple3i::getX);
+                        cornerMin, cornerMinOther, cornerMax, cornerMaxOthr, ReadableTuple3i::x);
         Optional<ExtentBoundsComparer> meiY =
                 ExtentBoundsComparer.createMin(
-                        cornerMin, cornerMinOther, cornerMax, cornerMaxOthr, ReadableTuple3i::getY);
+                        cornerMin, cornerMinOther, cornerMax, cornerMaxOthr, ReadableTuple3i::y);
         Optional<ExtentBoundsComparer> meiZ =
                 ExtentBoundsComparer.createMin(
-                        cornerMin, cornerMinOther, cornerMax, cornerMaxOthr, ReadableTuple3i::getZ);
+                        cornerMin, cornerMinOther, cornerMax, cornerMaxOthr, ReadableTuple3i::z);
 
         if (!meiX.isPresent() || !meiY.isPresent() || !meiZ.isPresent()) {
             return Optional.empty();
@@ -108,11 +108,11 @@ public final class BoundingBoxIntersection {
             return Optional.of(
                     new BoundingBox(
                             new Point3i(
-                                    meiX.get().getMin(), meiY.get().getMin(), meiZ.get().getMin()),
+                                    meiX.get().min(), meiY.get().min(), meiZ.get().min()),
                             new Extent(
-                                    meiX.get().getExtent(),
-                                    meiY.get().getExtent(),
-                                    meiZ.get().getExtent())));
+                                    meiX.get().extent(),
+                                    meiY.get().extent(),
+                                    meiZ.get().extent())));
         } else {
             return Optional.of(bbox);
         }

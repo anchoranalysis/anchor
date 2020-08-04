@@ -72,17 +72,17 @@ class ConsumePointsFromMaskSliced {
         
         this.cornerMin = box.cornerMin();
         this.cornerMax = box.calcCornerMax();
-        this.voxels = mask.getChannel().voxels().asByte();
-        this.bvb = mask.getBinaryValues().createByte();
+        this.voxels = mask.channel().voxels().asByte();
+        this.bvb = mask.binaryValues().createByte();
         this.startZ = startZ;
         this.consumer = consumer;
         this.extent = voxels.extent();
     }    
     
     public void firstHalf() {
-        for (int z = startZ; z <= cornerMax.getZ(); z++) {
+        for (int z = startZ; z <= cornerMax.z(); z++) {
 
-            ByteBuffer bb = voxels.getPixelsForPlane(z).buffer();
+            ByteBuffer bb = voxels.slice(z).buffer();
 
             if (!addPointsFromSlice(bb, z)) {
                 successiveEmptySlices = 0;
@@ -98,9 +98,9 @@ class ConsumePointsFromMaskSliced {
     }
 
     public void secondHalf() {
-        for (int z = (startZ - 1); z >= cornerMin.getZ(); z--) {
+        for (int z = (startZ - 1); z >= cornerMin.z(); z--) {
 
-            ByteBuffer bb = voxels.getPixelsForPlane(z).buffer();
+            ByteBuffer bb = voxels.slice(z).buffer();
 
             if (!addPointsFromSlice(bb, z)) {
                 successiveEmptySlices = 0;
@@ -118,8 +118,8 @@ class ConsumePointsFromMaskSliced {
     private boolean addPointsFromSlice(ByteBuffer bb, int z) {
 
         boolean addedToSlice = false;
-        for (int y = cornerMin.getY(); y <= cornerMax.getY(); y++) {
-            for (int x = cornerMin.getX(); x <= cornerMax.getX(); x++) {
+        for (int y = cornerMin.y(); y <= cornerMax.y(); y++) {
+            for (int x = cornerMin.x(); x <= cornerMax.x(); x++) {
 
                 int offset = extent.offset(x, y);
                 if (bb.get(offset) == bvb.getOnByte()) {

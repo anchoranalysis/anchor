@@ -33,13 +33,10 @@ import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelsFactory;
-import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.Voxels;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 import org.anchoranalysis.image.voxel.kernel.ApplyKernel;
 import org.anchoranalysis.image.voxel.kernel.BinaryKernel;
 import org.anchoranalysis.image.voxel.kernel.dilateerode.ErosionKernel3;
@@ -54,22 +51,34 @@ import lombok.NoArgsConstructor;
  * only pixels on the contour are ON
  *
  * <p>A new object/mask is always created, so the existing buffers are not overwritten
+ * 
+ * <p>The outline is always guaranteed to be inside the existing mask (so always a subset of ON voxels).
  */
 @NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class FindOutline {
 
-    public static Mask outline(Mask chnl, boolean do3D, boolean erodeAtBoundary) {
-        // We create a new image for output
-        Channel chnlOut =
-                ChannelFactory.instance()
-                        .createEmptyInitialised(
-                                chnl.getDimensions(), VoxelDataTypeUnsignedByte.INSTANCE);
-        Mask chnlOutBinary = new Mask(chnlOut, chnl.getBinaryValues());
+    /**
+     * Finds the outline of a mask, guessing whether to do this in 2D or 3D depending on if the mask has 3-dimensions
+     * 
+     * @param mask the mask to find an outline for
+     * @param force2D if TRUE, 2D will ALWAYS be used irrespective of the guessing
+     * @param outlineAtBoundary if true, an edge is shown also for the boundary of the scene. if false, this is not shown.
+     * @return a newly-created mask showing only the outline
+     */
+    public static Mask outlineGuess3D(Mask mask, boolean force2D, boolean outlineAtBoundary) {
+        boolean do2D = mask.dimensions().z()==1 || force2D;
+        return outline(mask, !do2D, outlineAtBoundary);
+    }
+
+    
+    public static Mask outline(Mask mask, boolean do3D, boolean erodeAtBoundary) {
+        // We create a new mask for outputting
+        Mask maskOut = new Mask(mask.dimensions(), mask.binaryValues());
 
         // Gets outline
-        outlineChnlInto(chnl, chnlOutBinary, do3D, erodeAtBoundary);
+        outlineMaskInto(mask, maskOut, do3D, erodeAtBoundary);
 
-        return chnlOutBinary;
+        return maskOut;
     }
 
     /** 
@@ -94,7 +103,7 @@ public class FindOutline {
         BinaryVoxels<ByteBuffer> voxelsOut =
                 outlineMultiplex(objectDuplicated.binaryVoxels(), numberErosions, outlineAtBoundary, do3D);
         return new ObjectMask(
-                objectDuplicated.getBoundingBox(), voxelsOut.getVoxels(), voxelsOut.getBinaryValues());
+                objectDuplicated.boundingBox(), voxelsOut.voxels(), voxelsOut.binaryValues());
     }
 
     private static BinaryVoxels<ByteBuffer> outlineMultiplex(
@@ -111,16 +120,16 @@ public class FindOutline {
     }
 
     // Assumes imgChnlOut has the same ImgChnlRegions
-    private static void outlineChnlInto(
-            Mask imgChnl, Mask imgChnlOut, boolean do3D, boolean erodeAtBoundary) {
+    private static void outlineMaskInto(
+            Mask maskToFindOutlineFor, Mask maskToReplaceWithOutline, boolean do3D, boolean erodeAtBoundary) {
 
         BinaryVoxels<ByteBuffer> voxels =
-                BinaryVoxelsFactory.reuseByte(imgChnl.getVoxels(), imgChnl.getBinaryValues());
+                BinaryVoxelsFactory.reuseByte(maskToFindOutlineFor.voxels(), maskToFindOutlineFor.binaryValues());
 
         BinaryVoxels<ByteBuffer> outline = outlineByKernel(voxels, erodeAtBoundary, do3D);
 
         try {
-            imgChnlOut.replaceBy(outline);
+            maskToReplaceWithOutline.replaceBy(outline);
         } catch (IncorrectImageSizeException e) {
             throw new AnchorImpossibleSituationException();
         }
@@ -136,12 +145,12 @@ public class FindOutline {
             return voxels.duplicate();
         }
 
-        BinaryValuesByte bvb = voxels.getBinaryValues().createByte();
+        BinaryValuesByte bvb = voxels.binaryValues().createByte();
 
         BinaryKernel kernel = new OutlineKernel3(bvb, !erodeAtBoundary, do3D);
 
-        Voxels<ByteBuffer> out = ApplyKernel.apply(kernel, voxels.getVoxels(), bvb);
-        return BinaryVoxelsFactory.reuseByte(out, voxels.getBinaryValues());
+        Voxels<ByteBuffer> out = ApplyKernel.apply(kernel, voxels.voxels(), bvb);
+        return BinaryVoxelsFactory.reuseByte(out, voxels.binaryValues());
     }
 
     /**
@@ -159,8 +168,8 @@ public class FindOutline {
 
         // Binary and between the original version and the eroded version
         assert (eroded != null);
-        BinaryValuesByte bvb = voxels.getBinaryValues().createByte();
-        BinaryChnlXor.apply(voxels.getVoxels(), eroded, bvb, bvb);
+        BinaryValuesByte bvb = voxels.binaryValues().createByte();
+        BinaryChnlXor.apply(voxels.voxels(), eroded, bvb, bvb);
         return voxels;
     }
 
@@ -170,10 +179,10 @@ public class FindOutline {
             boolean erodeAtBoundary,
             boolean do3D) {
 
-        BinaryValuesByte bvb = voxels.getBinaryValues().createByte();
+        BinaryValuesByte bvb = voxels.binaryValues().createByte();
         BinaryKernel kernelErosion = new ErosionKernel3(bvb, erodeAtBoundary, do3D);
 
-        Voxels<ByteBuffer> eroded = ApplyKernel.apply(kernelErosion, voxels.getVoxels(), bvb);
+        Voxels<ByteBuffer> eroded = ApplyKernel.apply(kernelErosion, voxels.voxels(), bvb);
         for (int i = 1; i < numberErosions; i++) {
             eroded = ApplyKernel.apply(kernelErosion, eroded, bvb);
         }
@@ -182,9 +191,9 @@ public class FindOutline {
     }
 
     private static boolean isTooSmall(Extent e, boolean do3D) {
-        if (e.getX() < 3 || e.getY() < 3) {
+        if (e.x() < 3 || e.y() < 3) {
             return true;
         }
-        return (do3D && e.getZ() < 3);
+        return (do3D && e.z() < 3);
     }
 }

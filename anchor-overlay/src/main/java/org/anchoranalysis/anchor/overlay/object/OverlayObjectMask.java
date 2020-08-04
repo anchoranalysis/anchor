@@ -60,7 +60,7 @@ public class OverlayObjectMask extends Overlay {
     // Assumes object-mask is always inside the dim. TODO verify that is valid.
     @Override
     public BoundingBox bbox(DrawOverlay overlayWriter, ImageDimensions dim) {
-        return object.getBoundingBox();
+        return object.boundingBox();
     }
 
     @Override

@@ -55,14 +55,14 @@ public class ExtendObjectsInto3DMask {
 
     private static ObjectMask extendObject(
             ObjectMask object2D, BinaryVoxels<ByteBuffer> voxels3D) {
-        return new ObjectMask(extendObj(object2D.getBoundedVoxels(), voxels3D));
+        return new ObjectMask(extendObj(object2D.boundedVoxels(), voxels3D));
     }
 
     private static BoundedVoxels<ByteBuffer> extendObj(
             BoundedVoxels<ByteBuffer> obj2D, BinaryVoxels<ByteBuffer> mask3D) {
 
         BoundingBox newBBox =
-                createBoundingBoxForAllZ(obj2D.getBoundingBox(), mask3D.extent().getZ());
+                createBoundingBoxForAllZ(obj2D.boundingBox(), mask3D.extent().z());
 
         BoundedVoxels<ByteBuffer> newMask =
                 new BoundedVoxels<>(newBBox, VoxelsFactory.getByte());
@@ -70,31 +70,31 @@ public class ExtendObjectsInto3DMask {
         ReadableTuple3i max = newBBox.calcCornerMax();
         Point3i point = new Point3i();
 
-        BinaryValuesByte bv = mask3D.getBinaryValues().createByte();
+        BinaryValuesByte bv = mask3D.binaryValues().createByte();
 
-        ByteBuffer bufferIn2D = obj2D.getVoxels().getPixelsForPlane(0).buffer();
+        ByteBuffer bufferIn2D = obj2D.voxels().slice(0).buffer();
 
-        for (point.setZ(0); point.getZ() <= max.getZ(); point.incrementZ()) {
+        for (point.setZ(0); point.z() <= max.z(); point.incrementZ()) {
 
             ByteBuffer bufferMask3D =
-                    mask3D.getVoxels().getPlaneAccess().getPixelsForPlane(point.getZ()).buffer();
-            ByteBuffer bufferOut3D = newMask.getVoxels().getPixelsForPlane(point.getZ()).buffer();
+                    mask3D.voxels().getPlaneAccess().getPixelsForPlane(point.z()).buffer();
+            ByteBuffer bufferOut3D = newMask.voxels().slice(point.z()).buffer();
 
             int ind = 0;
 
-            for (point.setY(newBBox.cornerMin().getY());
-                    point.getY() <= max.getY();
+            for (point.setY(newBBox.cornerMin().y());
+                    point.y() <= max.y();
                     point.incrementY()) {
 
-                for (point.setX(newBBox.cornerMin().getX());
-                        point.getX() <= max.getX();
+                for (point.setX(newBBox.cornerMin().x());
+                        point.x() <= max.x();
                         point.incrementX(), ind++) {
 
                     if (bufferIn2D.get(ind) != bv.getOnByte()) {
                         continue;
                     }
 
-                    int indexGlobal = mask3D.extent().offset(point.getX(), point.getY());
+                    int indexGlobal = mask3D.extent().offset(point.x(), point.y());
                     bufferOut3D.put(
                             ind,
                             bufferMask3D.get(indexGlobal) == bv.getOnByte()
@@ -120,6 +120,6 @@ public class ExtendObjectsInto3DMask {
     }
 
     private static Extent copyExtentChangeZ(Extent in, int z) {
-        return new Extent(in.getX(), in.getY(), z);
+        return new Extent(in.x(), in.y(), z);
     }
 }

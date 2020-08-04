@@ -49,22 +49,22 @@ public class TransferViaShort implements Transfer {
 
     @Override
     public void assignSlice(int z) {
-        buffer = src.getPixelsForPlane(z);
+        buffer = src.slice(z);
     }
 
     @Override
     public void transferCopyTo(int z) {
-        trgt.setPixelsForPlane(z, buffer.duplicate());
+        trgt.updateSlice(z, buffer.duplicate());
     }
 
     @Override
     public void transferTo(int z, Interpolator interpolator) {
 
-        VoxelBuffer<ShortBuffer> bufIn = trgt.getPixelsForPlane(z);
+        VoxelBuffer<ShortBuffer> bufIn = trgt.slice(z);
         VoxelBuffer<ShortBuffer> bufOut =
                 interpolator.interpolateShort(buffer, bufIn, src.extent(), trgt.extent());
         if (!bufOut.equals(bufIn)) {
-            trgt.setPixelsForPlane(z, bufOut);
+            trgt.updateSlice(z, bufOut);
         }
     }
 }

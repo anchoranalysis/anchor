@@ -53,7 +53,7 @@ public class ByteFrom32BitUnsignedInt extends ConvertToByte {
 
         convertRatio = calculateConvertRatio();
 
-        sizeXY = sd.getX() * sd.getY();
+        sizeXY = sd.x() * sd.y();
         sizeBytes = sizeXY * bytesPerPixel;
     }
 

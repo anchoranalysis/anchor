@@ -28,7 +28,8 @@ package org.anchoranalysis.image.voxel;
 
 import com.google.common.base.Preconditions;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Value;
+import lombok.experimental.Accessors;
 import java.nio.Buffer;
 import java.util.Optional;
 import org.anchoranalysis.core.error.CreateException;
@@ -49,17 +50,17 @@ import org.anchoranalysis.image.voxel.factory.VoxelsFactoryTypeBound;
  * @author Owen Feehan
  * @param <T> buffer-type
  */
-@AllArgsConstructor
+@Value @Accessors(fluent=true) @AllArgsConstructor
 public class BoundedVoxels<T extends Buffer> {
 
     private static final Point3i ALL_ONES_2D = new Point3i(1, 1, 0);
     private static final Point3i ALL_ONES_3D = new Point3i(1, 1, 1);
 
     /** A bounding-box that associates voxels to a particular part of an image */
-    @Getter private BoundingBox boundingBox;
+    private BoundingBox boundingBox;
     
     /** Voxel-data that fits inside the bounding-box (its extent is invariant with the extent of the bounding-box). */
-    @Getter private Voxels<T> voxels;
+    private Voxels<T> voxels;
 
     /**
      * Constructor - initializes voxels for a particular bounding-vox with all values set to 0
@@ -88,7 +89,7 @@ public class BoundedVoxels<T extends Buffer> {
      * @param source where to copy from
      */
     public BoundedVoxels(BoundedVoxels<T> source) {
-        this.boundingBox = source.getBoundingBox();
+        this.boundingBox = source.boundingBox();
         this.voxels = source.voxels.duplicate();
     }
 
@@ -114,8 +115,8 @@ public class BoundedVoxels<T extends Buffer> {
     }
 
     public BoundedVoxels<T> growToZ(int sz, VoxelsFactoryTypeBound<T> factory) {
-        assert (this.boundingBox.extent().getZ() == 1);
-        assert (this.voxels.extent().getZ() == 1);
+        assert (this.boundingBox.extent().z() == 1);
+        assert (this.voxels.extent().z() == 1);
 
         BoundingBox bboxNew =
                 new BoundingBox(boundingBox.cornerMin(), boundingBox.extent().duplicateChangeZ(sz));
@@ -126,7 +127,7 @@ public class BoundedVoxels<T extends Buffer> {
         BoundingBox bboxSrc = new BoundingBox(e);
 
         // we copy in one by one
-        for (int z = 0; z < buffer.extent().getZ(); z++) {
+        for (int z = 0; z < buffer.extent().z(); z++) {
             this.voxels.copyPixelsTo(bboxSrc, buffer, new BoundingBox(new Point3i(0, 0, z), e));
         }
 
@@ -199,9 +200,9 @@ public class BoundedVoxels<T extends Buffer> {
 
         Point3i negClip =
                 new Point3i(
-                        clipNeg(boundingBox.cornerMin().getX(), neg.getX()),
-                        clipNeg(boundingBox.cornerMin().getY(), neg.getY()),
-                        clipNeg(boundingBox.cornerMin().getZ(), neg.getZ()));
+                        clipNeg(boundingBox.cornerMin().x(), neg.x()),
+                        clipNeg(boundingBox.cornerMin().y(), neg.y()),
+                        clipNeg(boundingBox.cornerMin().z(), neg.z()));
 
         ReadableTuple3i bboxMax = boundingBox.calcCornerMax();
 
@@ -214,9 +215,9 @@ public class BoundedVoxels<T extends Buffer> {
 
         Point3i growBy =
                 new Point3i(
-                        clipPos(bboxMax.getX(), pos.getX(), maxPossible.getX()) + negClip.getX(),
-                        clipPos(bboxMax.getY(), pos.getY(), maxPossible.getY()) + negClip.getY(),
-                        clipPos(bboxMax.getZ(), pos.getZ(), maxPossible.getZ()) + negClip.getZ());
+                        clipPos(bboxMax.x(), pos.x(), maxPossible.x()) + negClip.x(),
+                        clipPos(bboxMax.y(), pos.y(), maxPossible.y()) + negClip.y(),
+                        clipPos(bboxMax.z(), pos.z(), maxPossible.z()) + negClip.z());
         return new BoundingBox(negClip, this.voxels.extent().growBy(growBy));
     }
 
@@ -276,9 +277,9 @@ public class BoundedVoxels<T extends Buffer> {
         Voxels<T> voxelsOut =
                 voxels.resizeXY(
                         ScaleFactorUtilities.scaleQuantity(
-                                scaleFactor.getX(), boundingBox.extent().getX()),
+                                scaleFactor.x(), boundingBox.extent().x()),
                         ScaleFactorUtilities.scaleQuantity(
-                                scaleFactor.getY(), boundingBox.extent().getY()),
+                                scaleFactor.y(), boundingBox.extent().y()),
                         interpolator);
 
         return new BoundedVoxels<>(
@@ -301,7 +302,7 @@ public class BoundedVoxels<T extends Buffer> {
     }
 
     public T getPixelsForPlane(int z) {
-        return voxels.getPixelsForPlane(z).buffer();
+        return voxels.slice(z).buffer();
     }
 
     public Extent extent() {
@@ -329,7 +330,7 @@ public class BoundedVoxels<T extends Buffer> {
             throw new CreateException("zMax outside range");
         }
 
-        int relZ = zMin - boundingBox.cornerMin().getZ();
+        int relZ = zMin - boundingBox.cornerMin().z();
 
         BoundingBox target =
                 new BoundingBox(

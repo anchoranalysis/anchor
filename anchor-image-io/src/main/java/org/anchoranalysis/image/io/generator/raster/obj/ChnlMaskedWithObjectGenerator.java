@@ -109,38 +109,38 @@ public class ChnlMaskedWithObjectGenerator extends RasterGenerator
      */
     private static Channel createMaskedChnl(ObjectMask object, Channel srcChnl) {
 
-        BoundingBox bbox = object.getBoundingBox();
+        BoundingBox bbox = object.boundingBox();
 
         ImageDimensions newSd =
-                new ImageDimensions(bbox.extent(), srcChnl.getDimensions().getResolution());
+                new ImageDimensions(bbox.extent(), srcChnl.dimensions().resolution());
 
         Channel chnlNew =
                 ChannelFactory.instance().createEmptyInitialised(newSd, srcChnl.getVoxelDataType());
 
-        byte maskOn = object.getBinaryValuesByte().getOnByte();
+        byte maskOn = object.binaryValuesByte().getOnByte();
 
         ReadableTuple3i maxGlobal = bbox.calcCornerMax();
         Point3i pointGlobal = new Point3i();
         Point3i pointLocal = new Point3i();
 
-        Voxels<?> vbSrc = srcChnl.voxels().any();
-        Voxels<?> vbNew = chnlNew.voxels().any();
+        Voxels<?> voxelsSrc = srcChnl.voxels().any();
+        Voxels<?> voxelsNew = chnlNew.voxels().any();
 
         pointLocal.setZ(0);
-        for (pointGlobal.setZ(bbox.cornerMin().getZ());
-                pointGlobal.getZ() <= maxGlobal.getZ();
+        for (pointGlobal.setZ(bbox.cornerMin().z());
+                pointGlobal.z() <= maxGlobal.z();
                 pointGlobal.incrementZ(), pointLocal.incrementZ()) {
 
-            ByteBuffer maskIn = object.getVoxels().getPixelsForPlane(pointLocal.getZ()).buffer();
-            VoxelBuffer<?> pixelsIn = vbSrc.getPixelsForPlane(pointGlobal.getZ());
-            VoxelBuffer<?> pixelsOut = vbNew.getPixelsForPlane(pointLocal.getZ());
+            ByteBuffer maskIn = object.voxels().slice(pointLocal.z()).buffer();
+            VoxelBuffer<?> pixelsIn = voxelsSrc.slice(pointGlobal.z());
+            VoxelBuffer<?> pixelsOut = voxelsNew.slice(pointLocal.z());
 
-            for (pointGlobal.setY(bbox.cornerMin().getY());
-                    pointGlobal.getY() <= maxGlobal.getY();
+            for (pointGlobal.setY(bbox.cornerMin().y());
+                    pointGlobal.y() <= maxGlobal.y();
                     pointGlobal.incrementY()) {
 
-                for (pointGlobal.setX(bbox.cornerMin().getX());
-                        pointGlobal.getX() <= maxGlobal.getX();
+                for (pointGlobal.setX(bbox.cornerMin().x());
+                        pointGlobal.x() <= maxGlobal.x();
                         pointGlobal.incrementX()) {
 
                     if (maskIn.get() != maskOn) {
@@ -148,7 +148,7 @@ public class ChnlMaskedWithObjectGenerator extends RasterGenerator
                     }
 
                     int indexGlobal =
-                            srcChnl.getDimensions().offset(pointGlobal.getX(), pointGlobal.getY());
+                            srcChnl.dimensions().offset(pointGlobal.x(), pointGlobal.y());
                     pixelsOut.putInt(maskIn.position() - 1, pixelsIn.getInt(indexGlobal));
                 }
             }

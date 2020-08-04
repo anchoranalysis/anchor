@@ -45,9 +45,9 @@ public class NamedStacksUniformSize {
     public void add(String name, Stack stack) throws OperationFailedException {
 
         if (dimensions == null) {
-            dimensions = stack.getDimensions();
+            dimensions = stack.dimensions();
         } else {
-            if (!stack.getDimensions().equals(dimensions)) {
+            if (!stack.dimensions().equals(dimensions)) {
                 throw new OperationFailedException("Stack dimensions do not match");
             }
         }

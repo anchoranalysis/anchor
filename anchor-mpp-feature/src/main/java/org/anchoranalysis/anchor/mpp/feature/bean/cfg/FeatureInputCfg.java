@@ -31,32 +31,21 @@ import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 import org.anchoranalysis.feature.input.FeatureInputWithRes;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.extent.ImageResolution;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
+@AllArgsConstructor
 public class FeatureInputCfg implements FeatureInputWithRes {
 
-    private Cfg cfg;
-    private Optional<ImageDimensions> dim;
-
-    public FeatureInputCfg(Cfg cfg, Optional<ImageDimensions> dim) {
-        super();
-        this.cfg = cfg;
-        this.dim = dim;
-    }
+    @Getter private Cfg cfg;
+    private Optional<ImageDimensions> dimensions;
 
     @Override
-    public Optional<ImageResolution> getResOptional() {
-        return dim.map(ImageDimensions::getResolution);
+    public Optional<ImageResolution> getResolutionOptional() {
+        return dimensions.map(ImageDimensions::resolution);
     }
 
-    public Cfg getCfg() {
-        return cfg;
-    }
-
-    public void setCfg(Cfg cfg) {
-        this.cfg = cfg;
-    }
-
-    public Optional<ImageDimensions> getDimensions() {
-        return dim;
+    public Optional<ImageDimensions> dimensions() {
+        return dimensions;
     }
 }

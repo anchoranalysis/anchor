@@ -74,7 +74,7 @@ class EdgeAdder<V> {
                 MorphologicalDilation.createDilatedObject(
                         object,
                         Optional.of(sceneExtent),
-                        do3D && sceneExtent.getZ() > 1,
+                        do3D && sceneExtent.z() > 1,
                         1,
                         params.isBigNeighborhood());
 
@@ -83,7 +83,7 @@ class EdgeAdder<V> {
 
     private void addWithDilatedMask(
             int ignoreIndex, ObjectMask object, V vertexWith, ObjectMask dilated) {
-        List<Integer> indicesIntersects = rTree.intersectsWithAsIndices(dilated.getBoundingBox());
+        List<Integer> indicesIntersects = rTree.intersectsWithAsIndices(dilated.boundingBox());
         for (int j : indicesIntersects) {
 
             // We enforce an ordering, so as not to do the same pair twice (or the identity case)

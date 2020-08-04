@@ -147,9 +147,9 @@ public class MarkEllipsoid extends MarkConic implements Serializable {
     public final byte evalPointInside(Point3d pt) {
 
         // It is permissible to mutate the point during calculation
-        double x = pt.getX() - getPos().getX();
-        double y = pt.getY() - getPos().getY();
-        double z = pt.getZ() - getPos().getZ();
+        double x = pt.x() - getPos().x();
+        double y = pt.y() - getPos().y();
+        double z = pt.z() - getPos().z();
 
         if (l2norm(x, y, z) > radiiShellMaxSq) {
             return FLAG_SUBMARK_NONE;
@@ -217,9 +217,9 @@ public class MarkEllipsoid extends MarkConic implements Serializable {
     private double volumeForShell(double multiplier) {
         return (4
                         * Math.PI
-                        * this.radii.getX()
-                        * this.radii.getY()
-                        * this.radii.getZ()
+                        * this.radii.x()
+                        * this.radii.y()
+                        * this.radii.z()
                         * Math.pow(multiplier, 3))
                 / 3;
     }
@@ -229,7 +229,7 @@ public class MarkEllipsoid extends MarkConic implements Serializable {
         DoubleMatrix2D matRot = orientation.createRotationMatrix().getMatrix();
 
         double[] radiusArray =
-                threeElementArray(this.radii.getX(), this.radii.getY(), this.radii.getZ());
+                threeElementArray(this.radii.x(), this.radii.y(), this.radii.z());
         assert matRot.rows() == 3;
         this.ellipsoidCalculator.update(radiusArray, matRot);
 
@@ -273,9 +273,9 @@ public class MarkEllipsoid extends MarkConic implements Serializable {
     private String strMarks() {
         return String.format(
                 "rad=[%3.3f, %3.3f, %3.3f] rot=[%s] shellRad=[%f]",
-                this.radii.getX(),
-                this.radii.getY(),
-                this.radii.getZ(),
+                this.radii.x(),
+                this.radii.y(),
+                this.radii.z(),
                 this.orientation.toString(),
                 shellRad);
     }
@@ -292,9 +292,9 @@ public class MarkEllipsoid extends MarkConic implements Serializable {
 
                 DoubleMatrix1D relPos =
                         TensorUtilities.threeElementMatrix(
-                                trgtMark.getPos().getX() - getPos().getX(),
-                                trgtMark.getPos().getY() - getPos().getY(),
-                                trgtMark.getPos().getZ() - getPos().getZ());
+                                trgtMark.getPos().x() - getPos().x(),
+                                trgtMark.getPos().y() - getPos().y(),
+                                trgtMark.getPos().z() - getPos().z());
 
                 DoubleMatrix1D relPosSquared = relPos.copy();
                 relPosSquared.assign(Functions.functions.square); // NOSONAR
@@ -347,7 +347,7 @@ public class MarkEllipsoid extends MarkConic implements Serializable {
 
     @Override
     public double[] createRadiiArray() {
-        return threeElementArray(this.radii.getX(), this.radii.getY(), this.radii.getZ());
+        return threeElementArray(this.radii.x(), this.radii.y(), this.radii.z());
     }
 
     @Override
@@ -360,9 +360,9 @@ public class MarkEllipsoid extends MarkConic implements Serializable {
     public void scale(double multFactor) {
         super.scale(multFactor);
 
-        this.radii.setX(this.radii.getX() * multFactor);
-        this.radii.setY(this.radii.getY() * multFactor);
-        this.radii.setZ(this.radii.getZ() * multFactor);
+        this.radii.setX(this.radii.x() * multFactor);
+        this.radii.setY(this.radii.y() * multFactor);
+        this.radii.setZ(this.radii.z() * multFactor);
         updateAfterMarkChange();
     }
 
@@ -400,9 +400,9 @@ public class MarkEllipsoid extends MarkConic implements Serializable {
     public OverlayProperties generateProperties(ImageResolution sr) {
         OverlayProperties op = super.generateProperties(sr);
 
-        op.addDoubleAsString("Radius X (pixels)", radii.getX());
-        op.addDoubleAsString("Radius Y (pixels)", radii.getY());
-        op.addDoubleAsString("Radius Z (pixels)", radii.getZ());
+        op.addDoubleAsString("Radius X (pixels)", radii.x());
+        op.addDoubleAsString("Radius Y (pixels)", radii.y());
+        op.addDoubleAsString("Radius Z (pixels)", radii.z());
 
         if (sr != null) {
             double[] arr = EllipsoidUtilities.normalisedRadii(this, sr);

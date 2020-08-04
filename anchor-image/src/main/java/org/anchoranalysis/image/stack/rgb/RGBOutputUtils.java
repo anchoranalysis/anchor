@@ -43,7 +43,7 @@ public class RGBOutputUtils {
             ByteBuffer red,
             ByteBuffer blue,
             ByteBuffer green) {
-        int index = sd.offset(point.getX(), point.getY(), 0);
+        int index = sd.offset(point.x(), point.y(), 0);
         red.put(index, (byte) c.getRed());
         green.put(index, (byte) c.getGreen());
         blue.put(index, (byte) c.getBlue());

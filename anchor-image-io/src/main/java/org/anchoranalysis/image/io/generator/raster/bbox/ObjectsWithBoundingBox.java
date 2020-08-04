@@ -11,6 +11,7 @@ import com.google.common.base.Preconditions;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.experimental.Accessors;
 
 /**
  * One or more objects with the a bounding-box that contains them all fully
@@ -18,7 +19,7 @@ import lombok.Getter;
  * @author Owen Feehan
  *
  */
-@AllArgsConstructor(access=AccessLevel.PRIVATE)
+@AllArgsConstructor(access=AccessLevel.PRIVATE) @Accessors(fluent=true)
 public class ObjectsWithBoundingBox {
 
     /** The objects in the collection. This collection should not be altered after the constructor (treated immutably). */
@@ -36,7 +37,7 @@ public class ObjectsWithBoundingBox {
      */
     public ObjectsWithBoundingBox(ObjectMask object) {
         this.objects = ObjectCollectionFactory.of(object);
-        this.boundingBox = object.getBoundingBox();
+        this.boundingBox = object.boundingBox();
     }
     
     /**
@@ -88,7 +89,7 @@ public class ObjectsWithBoundingBox {
                     )
                );
         }
-        BoundingBox boxToAssign = new BoundingBox(dimensions.getExtent());
+        BoundingBox boxToAssign = new BoundingBox(dimensions.extent());
         return new ObjectsWithBoundingBox(objects.stream().mapBoundingBoxChangeExtent(boxToAssign), boxToAssign);
     }
         

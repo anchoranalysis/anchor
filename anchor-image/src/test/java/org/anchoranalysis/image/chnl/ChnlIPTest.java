@@ -48,13 +48,13 @@ public class ChnlIPTest {
 
         Channel channel = imgChnlFloatFactory.createEmptyInitialised(dimensions);
 
-        Voxels<FloatBuffer> vb = channel.voxels().asFloat();
-        vb.getPlaneAccess().setPixelsForPlane(0, VoxelBufferFloat.wrap(new float[] {1, 2, 3, 4}));
+        Voxels<FloatBuffer> voxels = channel.voxels().asFloat();
+        voxels.getPlaneAccess().setPixelsForPlane(0, VoxelBufferFloat.wrap(new float[] {1, 2, 3, 4}));
 
         double delta = 1e-3;
-        assertEquals(1.0f, vb.getVoxel(0, 0, 0), delta);
-        assertEquals(2.0f, vb.getVoxel(1, 0, 0), delta);
-        assertEquals(3.0f, vb.getVoxel(0, 1, 0), delta);
-        assertEquals(4.0f, vb.getVoxel(1, 1, 0), delta);
+        assertEquals(1.0f, voxels.getVoxel(0, 0, 0), delta);
+        assertEquals(2.0f, voxels.getVoxel(1, 0, 0), delta);
+        assertEquals(3.0f, voxels.getVoxel(0, 1, 0), delta);
+        assertEquals(4.0f, voxels.getVoxel(1, 1, 0), delta);
     }
 }

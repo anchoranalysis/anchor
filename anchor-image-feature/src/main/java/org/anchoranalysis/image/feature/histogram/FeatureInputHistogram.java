@@ -49,7 +49,7 @@ public class FeatureInputHistogram implements FeatureInputWithRes {
     }
 
     @Override
-    public Optional<ImageResolution> getResOptional() {
+    public Optional<ImageResolution> getResolutionOptional() {
         return res;
     }
 

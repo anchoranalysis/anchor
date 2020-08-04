@@ -82,9 +82,9 @@ class ObjectDualDeserializer implements Deserializer<ObjectMask> {
 
             Channel chnl = stack.getChannel(0);
 
-            if (!chnl.getDimensions().getExtent().equals(bbox.extent())) {
+            if (!chnl.dimensions().extent().equals(bbox.extent())) {
                 throw new DeserializationFailedException(
-                        errorMessageMismatchingDims(bbox, chnl.getDimensions(), filePath));
+                        errorMessageMismatchingDims(bbox, chnl.dimensions(), filePath));
             }
 
             return new ObjectMask(bbox, chnl.voxels().asByte());
@@ -98,7 +98,7 @@ class ObjectDualDeserializer implements Deserializer<ObjectMask> {
             BoundingBox bbox, ImageDimensions dimensions, Path filePath) {
         return String.format(
                 "Dimensions of bounding box (%s) and raster (%s) do not match for file %s",
-                bbox.extent(), dimensions.getExtent(), filePath);
+                bbox.extent(), dimensions.extent(), filePath);
     }
 
     private static Path changeExtension(Path path, String oldExtension, String newExtension)

@@ -36,15 +36,15 @@ import org.anchoranalysis.core.axis.AxisType;
  */
 public interface ReadableTuple3i extends Serializable {
 
-    int getX();
+    int x();
 
-    int getY();
+    int y();
 
-    int getZ();
+    int z();
 
-    int getValueByDimension(AxisType axisType);
+    int byDimension(AxisType axisType);
 
-    int getValueByDimension(int dimIndex);
+    int byDimension(int dimIndex);
 
     ReadableTuple3i duplicateChangeZ(int zNew);
 }

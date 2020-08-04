@@ -51,7 +51,7 @@ public abstract class ChnlProviderTwo extends ChannelProvider {
         Channel chnlFirst = chnl1.create();
         Channel chnlSecond = chnl2.create();
 
-        if (!chnlFirst.getDimensions().equals(chnlSecond.getDimensions())) {
+        if (!chnlFirst.dimensions().equals(chnlSecond.dimensions())) {
             throw new CreateException("Dimensions of channels do not match");
         }
 

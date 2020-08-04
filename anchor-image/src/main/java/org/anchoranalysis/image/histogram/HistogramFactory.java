@@ -95,15 +95,15 @@ public class HistogramFactory {
 
     public static Histogram create(Channel chnl, Mask mask) throws CreateException {
 
-        if (!chnl.getDimensions().getExtent().equals(mask.getDimensions().getExtent())) {
+        if (!chnl.dimensions().extent().equals(mask.dimensions().extent())) {
             throw new CreateException("Size of chnl and mask do not match");
         }
 
         Histogram total = new HistogramArray((int) chnl.getVoxelDataType().maxValue());
 
-        Voxels<?> vb = chnl.voxels().any();
+        Voxels<?> voxels = chnl.voxels().any();
 
-        Histogram h = createWithMask(vb, new ObjectMask(mask.binaryVoxels()));
+        Histogram h = createWithMask(voxels, new ObjectMask(mask.binaryVoxels()));
         try {
             total.addHistogram(h);
         } catch (OperationFailedException e) {
@@ -156,24 +156,24 @@ public class HistogramFactory {
         Histogram hist = new HistogramArray((int) inputBuffer.dataType().maxValue());
 
         Extent e = inputBuffer.extent();
-        Extent eMask = object.getBoundingBox().extent();
+        Extent eMask = object.boundingBox().extent();
 
-        ReadableTuple3i cornerMin = object.getBoundingBox().cornerMin();
-        ReadableTuple3i cornerMax = object.getBoundingBox().calcCornerMax();
+        ReadableTuple3i cornerMin = object.boundingBox().cornerMin();
+        ReadableTuple3i cornerMax = object.boundingBox().calcCornerMax();
 
-        byte matchValue = object.getBinaryValuesByte().getOnByte();
+        byte matchValue = object.binaryValuesByte().getOnByte();
 
-        for (int z = cornerMin.getZ(); z <= cornerMax.getZ(); z++) {
+        for (int z = cornerMin.z(); z <= cornerMax.z(); z++) {
 
-            VoxelBuffer<?> bb = inputBuffer.getPixelsForPlane(z);
+            VoxelBuffer<?> bb = inputBuffer.slice(z);
             ByteBuffer bbMask =
-                    object.getVoxels().getPixelsForPlane(z - cornerMin.getZ()).buffer();
+                    object.voxels().slice(z - cornerMin.z()).buffer();
 
-            for (int y = cornerMin.getY(); y <= cornerMax.getY(); y++) {
-                for (int x = cornerMin.getX(); x <= cornerMax.getX(); x++) {
+            for (int y = cornerMin.y(); y <= cornerMax.y(); y++) {
+                for (int x = cornerMin.x(); x <= cornerMax.x(); x++) {
 
                     int offset = e.offset(x, y);
-                    int offsetMask = eMask.offset(x - cornerMin.getX(), y - cornerMin.getY());
+                    int offsetMask = eMask.offset(x - cornerMin.x(), y - cornerMin.y());
 
                     byte valueOnMask = bbMask.get(offsetMask);
 
@@ -187,12 +187,12 @@ public class HistogramFactory {
         return hist;
     }
 
-    private static Histogram createWithMasks(VoxelsWrapper vb, ObjectCollection objects) {
+    private static Histogram createWithMasks(VoxelsWrapper voxels, ObjectCollection objects) {
 
-        Histogram total = new HistogramArray((int) vb.getVoxelDataType().maxValue());
+        Histogram total = new HistogramArray((int) voxels.getVoxelDataType().maxValue());
 
         for (ObjectMask objectMask : objects) {
-            Histogram histogram = createWithMask(vb.any(), objectMask);
+            Histogram histogram = createWithMask(voxels.any(), objectMask);
             try {
                 total.addHistogram(histogram);
             } catch (OperationFailedException e) {
@@ -207,9 +207,9 @@ public class HistogramFactory {
         Histogram hist = new HistogramArray((int) inputBox.dataType().maxValue());
 
         Extent e = inputBox.extent();
-        int volumeXY = e.getVolumeXY();
-        for (int z = 0; z < e.getZ(); z++) {
-            addBufferToHistogram(hist, inputBox.getPixelsForPlane(z), volumeXY);
+        int volumeXY = e.volumeXY();
+        for (int z = 0; z < e.z(); z++) {
+            addBufferToHistogram(hist, inputBox.slice(z), volumeXY);
         }
         return hist;
     }

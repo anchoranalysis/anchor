@@ -134,26 +134,26 @@ public abstract class Mark implements Serializable, Identifiable {
         // We make a new mask and populate it from out iterator
         ObjectWithProperties object = new ObjectWithProperties(bbox);
 
-        assert (object.getVoxels().extent().getZ() > 0);
+        assert (object.voxels().extent().z() > 0);
 
         byte maskOn = bv.getOnByte();
 
         ReadableTuple3i maxPos = bbox.calcCornerMax();
 
         Point3i point = new Point3i();
-        for (point.setZ(bbox.cornerMin().getZ());
-                point.getZ() <= maxPos.getZ();
+        for (point.setZ(bbox.cornerMin().z());
+                point.z() <= maxPos.z();
                 point.incrementZ()) {
 
-            int zLocal = point.getZ() - bbox.cornerMin().getZ();
-            ByteBuffer maskSlice = object.getVoxels().getPixelsForPlane(zLocal).buffer();
+            int zLocal = point.z() - bbox.cornerMin().z();
+            ByteBuffer maskSlice = object.voxels().slice(zLocal).buffer();
 
             int cnt = 0;
-            for (point.setY(bbox.cornerMin().getY());
-                    point.getY() <= maxPos.getY();
+            for (point.setY(bbox.cornerMin().y());
+                    point.y() <= maxPos.y();
                     point.incrementY()) {
-                for (point.setX(bbox.cornerMin().getX());
-                        point.getX() <= maxPos.getX();
+                for (point.setX(bbox.cornerMin().x());
+                        point.x() <= maxPos.x();
                         point.incrementX()) {
 
                     byte membership = evalPointInside(point);
@@ -166,7 +166,7 @@ public abstract class Mark implements Serializable, Identifiable {
             }
         }
 
-        assert (object.getVoxels().extent().getZ() > 0);
+        assert (object.voxels().extent().z() > 0);
 
         return object;
     }
@@ -183,7 +183,7 @@ public abstract class Mark implements Serializable, Identifiable {
         // We make a new mask and populate it from out iterator
         ObjectWithProperties object = new ObjectWithProperties(bbox);
 
-        assert (object.getVoxels().extent().getZ() > 0);
+        assert (object.voxels().extent().z() > 0);
 
         byte maskOn = bvOut.getOnByte();
 
@@ -191,26 +191,26 @@ public abstract class Mark implements Serializable, Identifiable {
 
         Point3i point = new Point3i();
         Point3d pointScaled = new Point3d();
-        for (point.setZ(bbox.cornerMin().getZ());
-                point.getZ() <= maxPos.getZ();
+        for (point.setZ(bbox.cornerMin().z());
+                point.z() <= maxPos.z();
                 point.incrementZ()) {
 
-            int zLocal = point.getZ() - bbox.cornerMin().getZ();
-            ByteBuffer maskSlice = object.getVoxels().getPixelsForPlane(zLocal).buffer();
+            int zLocal = point.z() - bbox.cornerMin().z();
+            ByteBuffer maskSlice = object.voxels().slice(zLocal).buffer();
 
             // Z coordinates are the same as we only scale in XY
-            pointScaled.setZ(point.getZ());
+            pointScaled.setZ(point.z());
 
             int cnt = 0;
-            for (point.setY(bbox.cornerMin().getY());
-                    point.getY() <= maxPos.getY();
+            for (point.setY(bbox.cornerMin().y());
+                    point.y() <= maxPos.y();
                     point.incrementY()) {
-                for (point.setX(bbox.cornerMin().getX());
-                        point.getX() <= maxPos.getX();
+                for (point.setX(bbox.cornerMin().x());
+                        point.x() <= maxPos.x();
                         point.incrementX()) {
 
-                    pointScaled.setX(((double) point.getX()) / scaleFactor);
-                    pointScaled.setY(((double) point.getY()) / scaleFactor);
+                    pointScaled.setX(((double) point.x()) / scaleFactor);
+                    pointScaled.setY(((double) point.y()) / scaleFactor);
 
                     byte membership = evalPointInside(pointScaled);
 
@@ -222,7 +222,7 @@ public abstract class Mark implements Serializable, Identifiable {
             }
         }
 
-        assert (object.getVoxels().extent().getZ() > 0);
+        assert (object.voxels().extent().z() > 0);
 
         return object;
     }

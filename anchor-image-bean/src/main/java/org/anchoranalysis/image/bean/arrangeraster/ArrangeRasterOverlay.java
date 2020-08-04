@@ -67,9 +67,9 @@ public class ArrangeRasterOverlay extends ArrangeRasterBean {
         if (horizontalAlign.equalsIgnoreCase("left")) {
             return 0;
         } else if (horizontalAlign.equalsIgnoreCase("right")) {
-            return bboxSet.getExtent().getX() - dimensions.getX();
+            return bboxSet.extent().x() - dimensions.x();
         } else {
-            return (bboxSet.getExtent().getX() - dimensions.getX()) / 2;
+            return (bboxSet.extent().x() - dimensions.x()) / 2;
         }
     }
 
@@ -78,9 +78,9 @@ public class ArrangeRasterOverlay extends ArrangeRasterBean {
         if (verticalAlign.equalsIgnoreCase("top")) {
             return 0;
         } else if (verticalAlign.equalsIgnoreCase("bottom")) {
-            return bboxSet.getExtent().getY() - dimensions.getY();
+            return bboxSet.extent().y() - dimensions.y();
         } else {
-            return (bboxSet.getExtent().getY() - dimensions.getY()) / 2;
+            return (bboxSet.extent().y() - dimensions.y()) / 2;
         }
     }
 
@@ -89,9 +89,9 @@ public class ArrangeRasterOverlay extends ArrangeRasterBean {
         if (zAlign.equalsIgnoreCase("bottom") || zAlign.equalsIgnoreCase("repeat")) {
             return 0;
         } else if (zAlign.equalsIgnoreCase("top")) {
-            return bboxSet.getExtent().getZ() - dimensions.getZ();
+            return bboxSet.extent().z() - dimensions.z();
         } else {
-            return (bboxSet.getExtent().getZ() - dimensions.getZ()) / 2;
+            return (bboxSet.extent().z() - dimensions.z()) / 2;
         }
     }
 
@@ -114,11 +114,11 @@ public class ArrangeRasterOverlay extends ArrangeRasterBean {
 
         Extent overlayE =
                 deriveExtent(
-                        overlayImg.getChnl(0).getDimensions().getExtent(), bboxSet.getExtent());
+                        overlayImg.channelAt(0).dimensions().extent(), bboxSet.extent());
 
-        int hPos = calcHorizontalPos(bboxSet, overlayImg.getDimensions());
-        int vPos = calcVerticalPos(bboxSet, overlayImg.getDimensions());
-        int zPos = calcZPos(bboxSet, overlayImg.getDimensions());
+        int hPos = calcHorizontalPos(bboxSet, overlayImg.dimensions());
+        int vPos = calcVerticalPos(bboxSet, overlayImg.dimensions());
+        int zPos = calcZPos(bboxSet, overlayImg.dimensions());
 
         bboxSet.add(new BoundingBox(new Point3i(hPos, vPos, zPos), overlayE));
         return bboxSet;
@@ -126,10 +126,10 @@ public class ArrangeRasterOverlay extends ArrangeRasterBean {
 
     private Extent deriveExtent(Extent overlay, Extent bbox) {
         return new Extent(
-                Math.min(overlay.getX(), bbox.getX()),
-                Math.min(overlay.getY(), bbox.getY()),
-                zAlign.equalsIgnoreCase("repeat") || (overlay.getZ() > bbox.getZ())
-                        ? bbox.getZ()
-                        : overlay.getZ());
+                Math.min(overlay.x(), bbox.x()),
+                Math.min(overlay.y(), bbox.y()),
+                zAlign.equalsIgnoreCase("repeat") || (overlay.z() > bbox.z())
+                        ? bbox.z()
+                        : overlay.z());
     }
 }

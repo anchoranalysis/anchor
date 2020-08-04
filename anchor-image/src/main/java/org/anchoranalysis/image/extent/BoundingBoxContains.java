@@ -47,27 +47,27 @@ public final class BoundingBoxContains {
 
     /** Is this value in the x-dimension within the bounding box range? */
     public boolean x(int x) {
-        return (x >= bbox.cornerMin().getX()) && (x <= cornerMax.getX());
+        return (x >= bbox.cornerMin().x()) && (x <= cornerMax.x());
     }
 
     /** Is this value in the y-dimension within the bounding box range? */
     public boolean y(int y) {
-        return (y >= bbox.cornerMin().getY()) && (y <= cornerMax.getY());
+        return (y >= bbox.cornerMin().y()) && (y <= cornerMax.y());
     }
 
     /** Is this value in the z-dimension within the bounding box range? */
     public boolean z(int z) {
-        return (z >= bbox.cornerMin().getZ()) && (z <= cornerMax.getZ());
+        return (z >= bbox.cornerMin().z()) && (z <= cornerMax.z());
     }
 
     /** Is this point within the bounding-box? */
     public boolean point(ReadableTuple3i point) {
-        return x(point.getX()) && y(point.getY()) && z(point.getZ());
+        return x(point.x()) && y(point.y()) && z(point.z());
     }
 
     /** Is this point within the bounding-box, but ignoring the z-dimension? */
     public boolean pointIgnoreZ(Point3i point) {
-        return x(point.getX()) && y(point.getY());
+        return x(point.x()) && y(point.y());
     }
 
     /** Is this other bounding-box FULLY contained within this bounding box? */

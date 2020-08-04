@@ -36,9 +36,9 @@ public final class Point3d extends Tuple3d {
     private static final long serialVersionUID = 1L;
 
     public Point3d(Point3f point) {
-        this.x = point.getX();
-        this.y = point.getY();
-        this.z = point.getZ();
+        this.x = point.x();
+        this.y = point.y();
+        this.z = point.z();
     }
 
     public Point3d(Vector3d point) {
@@ -124,7 +124,7 @@ public final class Point3d extends Tuple3d {
      */
     public Point3d min(ReadableTuple3i point) {
         return new Point3d(
-                Math.min(x, point.getX()), Math.min(y, point.getY()), Math.min(z, point.getZ()));
+                Math.min(x, point.x()), Math.min(y, point.y()), Math.min(z, point.z()));
     }
 
     /**

@@ -92,7 +92,7 @@ public class AddCriteriaNRGElemPair implements AddCriteria<NRGPair> {
         boolean calc = false;
         try {
             if (pairAddCriteria.includeMarks(
-                    mark1, mark2, nrgStack.getDimensions(), session, do3D)) {
+                    mark1, mark2, nrgStack.dimensions(), session, do3D)) {
                 calc = true;
             }
         } catch (IncludeMarksFailureException e) {

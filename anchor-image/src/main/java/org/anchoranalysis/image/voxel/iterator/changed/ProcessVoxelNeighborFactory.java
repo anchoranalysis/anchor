@@ -56,7 +56,7 @@ public class ProcessVoxelNeighborFactory {
 
     public static <T> ProcessVoxelNeighbor<T> withinExtent(
             ProcessVoxelNeighborAbsoluteWithSlidingBuffer<T> process) {
-        return withinExtent(process.getExtent(), process);
+        return withinExtent(process.extent(), process);
     }
 
     public static <T> ProcessVoxelNeighbor<T> withinMask(

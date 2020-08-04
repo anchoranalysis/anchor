@@ -43,9 +43,9 @@ public class CutOffCorners implements VoxelPattern {
 
         this.rightBorder =
                 new Extent(
-                        extent.getX() - edgeXY - 1,
-                        extent.getY() - edgeXY - 1,
-                        extent.getZ() - edgeZ - 1);
+                        extent.x() - edgeXY - 1,
+                        extent.y() - edgeXY - 1,
+                        extent.z() - edgeZ - 1);
     }
 
     // Predicate on whether a pixel is included or not - triangle pattern at the edges
@@ -54,18 +54,18 @@ public class CutOffCorners implements VoxelPattern {
         if (x < edgeXY) {
             return false;
         }
-        if (x > rightBorder.getX()) {
+        if (x > rightBorder.x()) {
             return false;
         }
         if (y < edgeXY) {
             return false;
         }
-        if (y > rightBorder.getY()) {
+        if (y > rightBorder.y()) {
             return false;
         }
         if (z < edgeZ) {
             return false;
         }
-        return z <= rightBorder.getZ();
+        return z <= rightBorder.z();
     }
 }

@@ -44,15 +44,15 @@ class IntersectionWriter {
             ObjectMask object, RGBColor color, RGBStack stack, BoundingBox stackBBox)
             throws OperationFailedException {
 
-        if (!stackBBox.intersection().existsWith(object.getBoundingBox())) {
+        if (!stackBBox.intersection().existsWith(object.boundingBox())) {
             throw new OperationFailedException(
                     String.format(
                             "The bounding-box of the object-mask (%s) does not intersect with the stack (%s)",
-                            object.getBoundingBox().toString(), stackBBox.toString()));
+                            object.boundingBox().toString(), stackBBox.toString()));
         }
         // Intersection of the object-mask and stackBBox
         BoundingBox intersection =
-                object.getBoundingBox()
+                object.boundingBox()
                         .intersection()
                         .with(stackBBox)
                         .orElseThrow(
@@ -74,10 +74,10 @@ class IntersectionWriter {
         ReadableTuple3i maxGlobal = intersection.calcCornerMax();
         Point3i pointGlobal = new Point3i();
 
-        for (pointGlobal.setZ(intersection.cornerMin().getZ());
-                pointGlobal.getZ() <= maxGlobal.getZ();
+        for (pointGlobal.setZ(intersection.cornerMin().z());
+                pointGlobal.z() <= maxGlobal.z();
                 pointGlobal.incrementZ()) {
-            int relZ = pointGlobal.getZ() - object.getBoundingBox().cornerMin().getZ();
+            int relZ = pointGlobal.z() - object.boundingBox().cornerMin().z();
             stack.writeRGBMaskToSlice(object, intersection, color, pointGlobal, relZ, maxGlobal);
         }
     }

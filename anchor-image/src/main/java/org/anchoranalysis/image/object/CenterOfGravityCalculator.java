@@ -47,19 +47,19 @@ final class CenterOfGravityCalculator {
      */
     public static Point3d calcCenterOfGravity(ObjectMask object) {
 
-        Voxels<ByteBuffer> vb = object.getVoxels();
+        Voxels<ByteBuffer> voxels = object.voxels();
 
         int cnt = 0;
         Point3d sum = new Point3d();
-        byte onByte = object.getBinaryValuesByte().getOnByte();
+        byte onByte = object.binaryValuesByte().getOnByte();
 
-        for (int z = 0; z < vb.extent().getZ(); z++) {
+        for (int z = 0; z < voxels.extent().z(); z++) {
 
-            ByteBuffer bb = vb.getPixelsForPlane(z).buffer();
+            ByteBuffer bb = voxels.slice(z).buffer();
 
             int offset = 0;
-            for (int y = 0; y < vb.extent().getY(); y++) {
-                for (int x = 0; x < vb.extent().getX(); x++) {
+            for (int y = 0; y < voxels.extent().y(); y++) {
+                for (int x = 0; x < voxels.extent().x(); x++) {
 
                     if (bb.get(offset) == onByte) {
                         sum.add(x, y, z);
@@ -75,7 +75,7 @@ final class CenterOfGravityCalculator {
         }
 
         sum.divideBy(cnt);
-        sum.add(object.getBoundingBox().cornerMin());
+        sum.add(object.boundingBox().cornerMin());
         return sum;
     }
 
@@ -88,19 +88,19 @@ final class CenterOfGravityCalculator {
      */
     public static double calcCenterOfGravityForAxis(ObjectMask object, AxisType axisType) {
 
-        Voxels<ByteBuffer> vb = object.getVoxels();
+        Voxels<ByteBuffer> voxels = object.voxels();
 
         int cnt = 0;
         double sum = 0.0;
-        byte onByte = object.getBinaryValuesByte().getOnByte();
+        byte onByte = object.binaryValuesByte().getOnByte();
 
-        for (int z = 0; z < vb.extent().getZ(); z++) {
+        for (int z = 0; z < voxels.extent().z(); z++) {
 
-            ByteBuffer bb = vb.getPixelsForPlane(z).buffer();
+            ByteBuffer bb = voxels.slice(z).buffer();
 
             int offset = 0;
-            for (int y = 0; y < vb.extent().getY(); y++) {
-                for (int x = 0; x < vb.extent().getX(); x++) {
+            for (int y = 0; y < voxels.extent().y(); y++) {
+                for (int x = 0; x < voxels.extent().x(); x++) {
 
                     if (bb.get(offset) == onByte) {
                         sum += AxisTypeConverter.valueFor(axisType, x, y, z);
@@ -115,7 +115,7 @@ final class CenterOfGravityCalculator {
             return Double.NaN;
         }
 
-        return (sum / cnt) + object.getBoundingBox().cornerMin().getValueByDimension(axisType);
+        return (sum / cnt) + object.boundingBox().cornerMin().byDimension(axisType);
     }
 
     private static Point3d emptyPoint() {

@@ -64,13 +64,13 @@ public class InterpolateUtilities {
 
         Transfer biWrapper = createTransfer(src, trgt);
 
-        for (int z = 0; z < eSrc.getZ(); z++) {
+        for (int z = 0; z < eSrc.z(); z++) {
 
             biWrapper.assignSlice(z);
-            if (eSrc.getX() == eTrgt.getX() && eSrc.getY() == eTrgt.getY()) {
+            if (eSrc.x() == eTrgt.x() && eSrc.y() == eTrgt.y()) {
                 biWrapper.transferCopyTo(z);
             } else {
-                if (eSrc.getX() != 1 && eSrc.getY() != 1) {
+                if (eSrc.x() != 1 && eSrc.y() != 1) {
                     // We only bother to interpolate when we have more than a single pixel in both
                     // directions
                     // And in this case, some of the interpolation algorithms would crash.
@@ -80,6 +80,6 @@ public class InterpolateUtilities {
                 }
             }
         }
-        assert (trgt.any().getPixelsForPlane(0).buffer().capacity() == eTrgt.getVolumeXY());
+        assert (trgt.any().slice(0).buffer().capacity() == eTrgt.volumeXY());
     }
 }

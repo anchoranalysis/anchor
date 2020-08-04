@@ -37,16 +37,16 @@ public class PixelsFromFloatBufferArr implements PixelsForPlane<FloatBuffer> {
     private final Extent extent;
 
     private PixelsFromFloatBufferArr(Extent extent) {
-        assert (extent.getZ() > 0);
+        assert (extent.z() > 0);
 
         this.extent = extent;
 
-        buffer = new VoxelBufferFloat[extent.getZ()];
+        buffer = new VoxelBufferFloat[extent.z()];
     }
 
     private void init() {
-        int volumeXY = extent.getVolumeXY();
-        for (int z = 0; z < extent.getZ(); z++) {
+        int volumeXY = extent.volumeXY();
+        for (int z = 0; z < extent.z(); z++) {
             buffer[z] = VoxelBufferFloat.allocate(volumeXY);
         }
     }

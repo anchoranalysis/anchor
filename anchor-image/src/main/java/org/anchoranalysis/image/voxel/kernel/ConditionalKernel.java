@@ -36,24 +36,24 @@ public class ConditionalKernel extends BinaryKernel {
 
     private BinaryKernel kernel;
     private int minValue;
-    private Voxels<ByteBuffer> vbIntensity;
+    private Voxels<ByteBuffer> voxelsIntensity;
 
     // Constructor
-    public ConditionalKernel(BinaryKernel kernel, int minValue, Voxels<ByteBuffer> vbIntensity) {
+    public ConditionalKernel(BinaryKernel kernel, int minValue, Voxels<ByteBuffer> voxelsIntensity) {
         super(kernel.getSize());
         this.kernel = kernel;
         this.minValue = minValue;
-        this.vbIntensity = vbIntensity;
+        this.voxelsIntensity = voxelsIntensity;
     }
 
     @Override
     public boolean accptPos(int ind, Point3i point) {
 
         byte valByte =
-                vbIntensity
-                        .getPixelsForPlane(point.getZ())
+                voxelsIntensity
+                        .slice(point.z())
                         .buffer()
-                        .get(vbIntensity.extent().offsetSlice(point));
+                        .get(voxelsIntensity.extent().offsetSlice(point));
         int val = ByteConverter.unsignedByteToInt(valByte);
 
         if (val < minValue) {

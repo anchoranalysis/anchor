@@ -56,19 +56,19 @@ public abstract class Kernel {
     }
 
     public int getYMin(Point3i point) {
-        return Math.max(point.getY() - getSizeHalf(), 0);
+        return Math.max(point.y() - getSizeHalf(), 0);
     }
 
     public int getYMax(Point3i point, Extent extent) {
-        return Math.min(point.getY() + getSizeHalf(), extent.getY() - 1);
+        return Math.min(point.y() + getSizeHalf(), extent.y() - 1);
     }
 
     public int getXMin(Point3i point) {
-        return Math.max(point.getX() - getSizeHalf(), 0);
+        return Math.max(point.x() - getSizeHalf(), 0);
     }
 
     public int getXMax(Point3i point, Extent extent) {
-        return Math.min(point.getX() + getSizeHalf(), extent.getX() - 1);
+        return Math.min(point.x() + getSizeHalf(), extent.x() - 1);
     }
 
     public abstract void init(Voxels<ByteBuffer> in);

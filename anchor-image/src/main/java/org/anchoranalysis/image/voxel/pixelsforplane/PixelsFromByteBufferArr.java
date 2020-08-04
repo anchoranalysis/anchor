@@ -38,16 +38,16 @@ public class PixelsFromByteBufferArr implements PixelsForPlane<ByteBuffer> {
     private final Extent extent;
 
     private PixelsFromByteBufferArr(Extent extent) {
-        assert (extent.getZ() > 0);
+        assert (extent.z() > 0);
 
         this.extent = extent;
 
-        buffer = new VoxelBufferByte[extent.getZ()];
+        buffer = new VoxelBufferByte[extent.z()];
     }
 
     private void init() {
-        int volumeXY = extent.getVolumeXY();
-        for (int z = 0; z < extent.getZ(); z++) {
+        int volumeXY = extent.volumeXY();
+        for (int z = 0; z < extent.z(); z++) {
             buffer[z] = VoxelBufferByte.allocate(volumeXY);
         }
     }

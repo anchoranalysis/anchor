@@ -38,11 +38,11 @@ import org.anchoranalysis.image.voxel.Voxels;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CreateFromEntireChnlFactory {
 
-    public static ObjectMask createObject(Mask binaryImgChnl) {
-        Channel chnl = binaryImgChnl.getChannel();
+    public static ObjectMask createObject(Mask mask) {
+        Channel chnl = mask.channel();
 
-        Voxels<ByteBuffer> vb = chnl.voxels().asByte();
+        Voxels<ByteBuffer> voxels = chnl.voxels().asByte();
 
-        return new ObjectMask(new BoundingBox(vb.extent()), vb, binaryImgChnl.getBinaryValues());
+        return new ObjectMask(new BoundingBox(voxels.extent()), voxels, mask.binaryValues());
     }
 }

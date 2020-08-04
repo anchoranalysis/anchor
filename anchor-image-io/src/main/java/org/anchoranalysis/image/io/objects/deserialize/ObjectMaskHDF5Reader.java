@@ -72,20 +72,20 @@ class ObjectMaskHDF5Reader {
      */
     private Voxels<ByteBuffer> createVoxels(MDByteArray mdb) {
         Extent e = extractExtent(mdb);
-        Voxels<ByteBuffer> vb = VoxelsFactory.getByte().createInitialized(e);
+        Voxels<ByteBuffer> voxels = VoxelsFactory.getByte().createInitialized(e);
 
-        for (int z = 0; z < e.getZ(); z++) {
+        for (int z = 0; z < e.z(); z++) {
 
-            ByteBuffer bb = vb.getPixelsForPlane(z).buffer();
+            ByteBuffer bb = voxels.slice(z).buffer();
 
-            for (int y = 0; y < e.getY(); y++) {
-                for (int x = 0; x < e.getX(); x++) {
+            for (int y = 0; y < e.y(); y++) {
+                for (int x = 0; x < e.x(); x++) {
                     bb.put(e.offset(x, y), mdb.get(x, y, z));
                 }
             }
         }
 
-        return vb;
+        return voxels;
     }
 
     private static Point3i cornerPoint(IHDF5IntReader reader, String path) {

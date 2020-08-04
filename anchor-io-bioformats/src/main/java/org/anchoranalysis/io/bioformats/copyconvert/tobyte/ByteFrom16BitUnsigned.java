@@ -50,7 +50,7 @@ public class ByteFrom16BitUnsigned extends ConvertToByte {
     @Override
     protected void setupBefore(ImageDimensions sd, int numChnlsPerByteArray) {
         bytesPerPixel = 2 * numChnlsPerByteArray;
-        sizeXY = sd.getX() * sd.getY();
+        sizeXY = sd.x() * sd.y();
         sizeBytes = sizeXY * bytesPerPixel;
     }
 

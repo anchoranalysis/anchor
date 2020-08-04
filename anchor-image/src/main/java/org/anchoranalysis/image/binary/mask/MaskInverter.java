@@ -65,19 +65,19 @@ public class MaskInverter {
      */
     public static void invert(Mask mask) {
 
-        BinaryValues bv = mask.getBinaryValues();
+        BinaryValues bv = mask.binaryValues();
         BinaryValuesByte bvb = bv.createByte();
-        invertVoxels(mask.getVoxels(), bvb);
+        invertVoxels(mask.voxels(), bvb);
     }
 
     private static void invertVoxels(Voxels<ByteBuffer> voxels, BinaryValuesByte bvb) {
-        for (int z = 0; z < voxels.extent().getZ(); z++) {
+        for (int z = 0; z < voxels.extent().z(); z++) {
 
-            ByteBuffer bb = voxels.getPixelsForPlane(z).buffer();
+            ByteBuffer bb = voxels.slice(z).buffer();
 
             int offset = 0;
-            for (int y = 0; y < voxels.extent().getY(); y++) {
-                for (int x = 0; x < voxels.extent().getX(); x++) {
+            for (int y = 0; y < voxels.extent().y(); y++) {
+                for (int x = 0; x < voxels.extent().x(); x++) {
 
                     byte val = bb.get(offset);
 

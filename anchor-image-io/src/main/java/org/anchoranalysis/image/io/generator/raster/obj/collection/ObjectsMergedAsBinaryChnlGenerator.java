@@ -52,9 +52,9 @@ public class ObjectsMergedAsBinaryChnlGenerator extends ObjectsGenerator {
 
     @Override
     public Stack generate() throws OutputWriteFailedException {
-        Mask chnl =
+        Mask mask =
                 MaskFromObjects.createFromObjects(
-                        getObjects(), getDimensions(), BinaryValues.getDefault());
-        return new ChnlGenerator(chnl.getChannel(), "maskCollection").generate();
+                        getObjects(), dimensions(), BinaryValues.getDefault());
+        return new ChnlGenerator(mask.channel(), "maskCollection").generate();
     }
 }

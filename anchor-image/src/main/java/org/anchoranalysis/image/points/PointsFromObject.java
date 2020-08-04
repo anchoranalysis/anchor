@@ -52,7 +52,7 @@ public class PointsFromObject {
      * @throws CreateException if the object is in three-dimensions
      */
     public static List<Point2i> listFrom2i(ObjectMask object) throws CreateException {
-        return PointsFromVoxels.listFrom2i(object.binaryVoxels(), object.getBoundingBox().cornerMin());
+        return PointsFromVoxels.listFrom2i(object.binaryVoxels(), object.boundingBox().cornerMin());
     }
     
     /**
@@ -62,7 +62,7 @@ public class PointsFromObject {
      * @return a newly-created list
      */
     public static List<Point3i> listFrom3i(ObjectMask object) {
-        return PointsFromVoxels.listFrom3i(object.binaryVoxels(), object.getBoundingBox().cornerMin());
+        return PointsFromVoxels.listFrom3i(object.binaryVoxels(), object.boundingBox().cornerMin());
     }
     
     /**
@@ -72,7 +72,7 @@ public class PointsFromObject {
      * @return a newly-created list
      */
     public static SortedSet<Point3i> setFrom3i(ObjectMask object) {
-        return PointsFromVoxels.setFrom3i(object.binaryVoxels(), object.getBoundingBox().cornerMin());
+        return PointsFromVoxels.setFrom3i(object.binaryVoxels(), object.boundingBox().cornerMin());
     }
 
     /**
@@ -82,7 +82,7 @@ public class PointsFromObject {
      * @return
      */
     public static List<Point3d> listFrom3d(ObjectMask object) {
-        return PointsFromVoxels.listFrom3d(object.binaryVoxels(), object.getBoundingBox().cornerMin());
+        return PointsFromVoxels.listFrom3d(object.binaryVoxels(), object.boundingBox().cornerMin());
     }
 
     /**
@@ -135,6 +135,6 @@ public class PointsFromObject {
     private static void consumeOutline2i(ObjectMask object, Consumer<Point2i> consumer) {
         ObjectMask outline = outlineFor(object, false);
         PointsFromVoxels.consumePoints2i(
-                outline.binaryVoxels(), outline.getBoundingBox().cornerMin(), consumer);
+                outline.binaryVoxels(), outline.boundingBox().cornerMin(), consumer);
     }
 }

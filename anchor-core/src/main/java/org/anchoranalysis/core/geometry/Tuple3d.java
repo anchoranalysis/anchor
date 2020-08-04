@@ -29,11 +29,12 @@ package org.anchoranalysis.core.geometry;
 import java.io.Serializable;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.experimental.Accessors;
 import org.anchoranalysis.core.axis.AxisType;
 import org.anchoranalysis.core.axis.AxisTypeConverter;
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
 
-@EqualsAndHashCode
+@EqualsAndHashCode @Accessors(fluent=true)
 public abstract class Tuple3d implements Serializable {
 
     /** */
@@ -58,9 +59,9 @@ public abstract class Tuple3d implements Serializable {
     }
 
     public final void add(ReadableTuple3i point) {
-        this.x += point.getX();
-        this.y += point.getY();
-        this.z += point.getZ();
+        this.x += point.x();
+        this.y += point.y();
+        this.z += point.z();
     }
 
     public final void subtract(Tuple3d point) {
@@ -116,7 +117,7 @@ public abstract class Tuple3d implements Serializable {
         this.z += val;
     }
 
-    public final double getValueByDimension(int dimIndex) {
+    public final double valueByDimension(int dimIndex) {
         if (dimIndex == 0) {
             return x;
         } else if (dimIndex == 1) {
@@ -128,7 +129,7 @@ public abstract class Tuple3d implements Serializable {
         }
     }
 
-    public final double getValueByDimension(AxisType axisType) {
+    public final double valueByDimension(AxisType axisType) {
         switch (axisType) {
             case X:
                 return x;

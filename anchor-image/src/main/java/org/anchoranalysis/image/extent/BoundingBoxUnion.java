@@ -59,16 +59,16 @@ public class BoundingBoxUnion {
 
         ExtentBoundsComparer meiX =
                 ExtentBoundsComparer.createMax(
-                        cornerMin, cornerMinOther, cornerMax, cornerMaxOthr, ReadableTuple3i::getX);
+                        cornerMin, cornerMinOther, cornerMax, cornerMaxOthr, ReadableTuple3i::x);
         ExtentBoundsComparer meiY =
                 ExtentBoundsComparer.createMax(
-                        cornerMin, cornerMinOther, cornerMax, cornerMaxOthr, ReadableTuple3i::getY);
+                        cornerMin, cornerMinOther, cornerMax, cornerMaxOthr, ReadableTuple3i::y);
         ExtentBoundsComparer meiZ =
                 ExtentBoundsComparer.createMax(
-                        cornerMin, cornerMinOther, cornerMax, cornerMaxOthr, ReadableTuple3i::getZ);
+                        cornerMin, cornerMinOther, cornerMax, cornerMaxOthr, ReadableTuple3i::z);
 
         return new BoundingBox(
-                new Point3i(meiX.getMin(), meiY.getMin(), meiZ.getMin()),
-                new Extent(meiX.getExtent(), meiY.getExtent(), meiZ.getExtent()));
+                new Point3i(meiX.min(), meiY.min(), meiZ.min()),
+                new Extent(meiX.extent(), meiY.extent(), meiZ.extent()));
     }
 }

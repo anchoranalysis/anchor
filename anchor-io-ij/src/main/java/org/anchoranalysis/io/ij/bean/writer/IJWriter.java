@@ -80,15 +80,15 @@ public abstract class IJWriter extends RasterWriter {
 
         log.debug(String.format("Writing image %s", filePath));
 
-        ImageDimensions sd = stack.getChannel(0).getDimensions();
+        ImageDimensions sd = stack.getChannel(0).dimensions();
 
         ImagePlus imp = IJWrap.createImagePlus(stack, makeRGB);
 
-        writeImagePlus(imp, filePath, (stack.getChannel(0).getDimensions().getZ() > 1));
+        writeImagePlus(imp, filePath, (stack.getChannel(0).dimensions().z() > 1));
 
         imp.close();
 
-        assert (imp.getNSlices() == sd.getZ());
+        assert (imp.getNSlices() == sd.z());
 
         log.debug(String.format("Finished writing image %s", filePath));
     }

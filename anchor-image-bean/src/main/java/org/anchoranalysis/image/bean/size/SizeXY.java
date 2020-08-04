@@ -54,7 +54,7 @@ public class SizeXY extends AnchorBean<SizeXY> {
      * @param extent extent
      */
     public SizeXY(Extent extent) {
-        this(extent.getX(), extent.getY());
+        this(extent.x(), extent.y());
     }
 
     public Extent asExtent() {

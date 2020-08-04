@@ -31,12 +31,14 @@ import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.stack.Stack;
+import lombok.Getter;
+import lombok.Setter;
 
 // An NRG stack with associated parameters
 public class NRGStackWithParams {
 
-    private NRGStack nrgStack;
-    private KeyValueParams params;
+    @Getter private final NRGStack nrgStack;
+    @Getter @Setter private KeyValueParams params;
 
     public NRGStackWithParams(Channel chnl) {
         super();
@@ -75,20 +77,8 @@ public class NRGStackWithParams {
         return new NRGStackWithParams(nrgStack.extractSlice(z), params);
     }
 
-    public NRGStack getNrgStack() {
-        return nrgStack;
-    }
-
-    public KeyValueParams getParams() {
-        return params;
-    }
-
-    public ImageDimensions getDimensions() {
-        return nrgStack.getDimensions();
-    }
-
-    public void setParams(KeyValueParams params) {
-        this.params = params;
+    public ImageDimensions dimensions() {
+        return nrgStack.dimensions();
     }
 
     public NRGStackWithParams copyChangeParams(KeyValueParams paramsToAssign) {

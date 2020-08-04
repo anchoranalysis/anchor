@@ -109,11 +109,11 @@ public class NamedStacksSet implements NamedProviderStore<Stack> {
             for (String key : keys()) {
                 Stack stack = getException(key);
 
-                if (!stack.getDimensions().equals(dimensions)) {
+                if (!stack.dimensions().equals(dimensions)) {
                     throw new OperationFailedException(
                             String.format(
                                     "The image-dimensions of %s (%s) does not match what is expected (%s)",
-                                    key, stack.getDimensions(), dimensions));
+                                    key, stack.dimensions(), dimensions));
                 }
 
                 out.add(key, () -> stackOperation.apply(stack) );

@@ -55,13 +55,13 @@ class PopulateIndexProcessor<T extends Buffer> implements ProcessVoxelSliceBuffe
         this.mergeWithNgbs = mergeWithNgbs;
         this.bufferReaderWriter = bufferReaderWriter;
 
-        bv = visited.getBinaryValues();
+        bv = visited.binaryValues();
         bvb = bv.createByte();
     }
 
     @Override
     public void notifyChangeZ(int z) {
-        bbIndex = indexBuffer.getPixelsForPlane(z).buffer();
+        bbIndex = indexBuffer.slice(z).buffer();
         if (z != 0) {
             mergeWithNgbs.shift();
         }

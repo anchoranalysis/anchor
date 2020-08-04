@@ -66,7 +66,7 @@ public class BoundingBoxOutline extends DrawObject {
                         createBoundingBoxObject(object.withoutProperties()),
                         outlineWidth,
                         true,
-                        dim.getZ() > 1);
+                        dim.z() > 1);
 
         return new PrecalcOverlay(object) {
 
@@ -85,8 +85,8 @@ public class BoundingBoxOutline extends DrawObject {
     }
 
     private ObjectMask createBoundingBoxObject(ObjectMask object) {
-        ObjectMask bbox = object.duplicate();
-        bbox.getVoxels().setAllPixelsTo(1);
-        return bbox;
+        ObjectMask mask = object.duplicate();
+        mask.voxels().setAllPixelsTo(1);
+        return mask;
     }
 }

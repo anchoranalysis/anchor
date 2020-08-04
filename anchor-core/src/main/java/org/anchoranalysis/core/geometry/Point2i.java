@@ -27,80 +27,46 @@ package org.anchoranalysis.core.geometry;
  */
 
 import java.io.Serializable;
-import org.apache.commons.lang.builder.HashCodeBuilder;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@AllArgsConstructor @NoArgsConstructor @EqualsAndHashCode
 public final class Point2i implements Serializable {
 
     /** */
     private static final long serialVersionUID = 1L;
 
-    private int x;
-    private int y;
+    @Setter private int x;
+    @Setter private int y;
 
-    public Point2i() {
-        x = 0;
-        y = 0;
-    }
-
-    public Point2i(int x, int y) {
-        this.x = x;
-        this.y = y;
-    }
-
-    public int getX() {
+    public int x() {
         return x;
     }
-
-    public void setX(int x) {
-        this.x = x;
-    }
-
-    public int getY() {
+    
+    public int y() {
         return y;
     }
-
-    public void setY(int y) {
-        this.y = y;
-    }
-
-    public void incrX() {
+    
+    public void incrementX() {
         this.x++;
     }
 
-    public void incrX(int val) {
+    public void incrementX(int val) {
         this.x += val;
     }
 
-    public void incrY() {
+    public void incrementY() {
         this.y++;
     }
 
-    public void incrY(int val) {
+    public void incrementY(int val) {
         this.y += val;
     }
 
     @Override
     public String toString() {
         return String.format("[%d,%d]", x, y);
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (!(obj instanceof Point2i)) {
-            return false;
-        }
-        Point2i objCast = (Point2i) obj;
-        if (x != objCast.x) {
-            return false;
-        }
-        return y == objCast.y;
-    }
-
-    @Override
-    public int hashCode() {
-        return new HashCodeBuilder().append(x).append(y).toHashCode();
     }
 }

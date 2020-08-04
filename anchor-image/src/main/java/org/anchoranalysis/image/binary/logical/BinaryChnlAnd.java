@@ -45,10 +45,10 @@ public class BinaryChnlAnd {
      */
     public static void apply(Mask first, Mask second) {
         apply(
-                first.getVoxels(),
-                second.getVoxels(),
-                first.getBinaryValues().createByte(),
-                second.getBinaryValues().createByte());
+                first.voxels(),
+                second.voxels(),
+                first.binaryValues().createByte(),
+                second.binaryValues().createByte());
     }
 
     /**
@@ -70,14 +70,14 @@ public class BinaryChnlAnd {
         byte receiveOn = bvbSecond.getOnByte();
 
         // All the on voxels in the receive, are put onto crnt
-        for (int z = 0; z < e.getZ(); z++) {
+        for (int z = 0; z < e.z(); z++) {
 
-            ByteBuffer bufSrc = voxelsFirst.getPixelsForPlane(z).buffer();
-            ByteBuffer bufReceive = voxelsSecond.getPixelsForPlane(z).buffer();
+            ByteBuffer bufSrc = voxelsFirst.slice(z).buffer();
+            ByteBuffer bufReceive = voxelsSecond.slice(z).buffer();
 
             int offset = 0;
-            for (int y = 0; y < e.getY(); y++) {
-                for (int x = 0; x < e.getX(); x++) {
+            for (int y = 0; y < e.y(); y++) {
+                for (int x = 0; x < e.x(); x++) {
 
                     byte byteSrc = bufSrc.get(offset);
                     byte byteRec = bufReceive.get(offset);

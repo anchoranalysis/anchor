@@ -58,27 +58,27 @@ public class MarkPolygonCurve extends MarkAbstractPointList {
     private double distanceToPolygonSegmentLocal(
             Point3d point, Point3d pointFirst, Point3d pointSecond) {
 
-        if (point.getX() < (pointFirst.getX() - distanceThreshold)) {
+        if (point.x() < (pointFirst.x() - distanceThreshold)) {
             return Double.POSITIVE_INFINITY;
         }
 
-        if (point.getY() < (pointFirst.getY() - distanceThreshold)) {
+        if (point.y() < (pointFirst.y() - distanceThreshold)) {
             return Double.POSITIVE_INFINITY;
         }
 
-        if (point.getZ() < (pointFirst.getZ() - distanceThreshold)) {
+        if (point.z() < (pointFirst.z() - distanceThreshold)) {
             return Double.POSITIVE_INFINITY;
         }
 
-        if (point.getX() > (pointSecond.getX() + distanceThreshold)) {
+        if (point.x() > (pointSecond.x() + distanceThreshold)) {
             return Double.POSITIVE_INFINITY;
         }
 
-        if (point.getY() > (pointSecond.getY() + distanceThreshold)) {
+        if (point.y() > (pointSecond.y() + distanceThreshold)) {
             return Double.POSITIVE_INFINITY;
         }
 
-        if (point.getZ() > (pointSecond.getZ() + distanceThreshold)) {
+        if (point.z() > (pointSecond.z() + distanceThreshold)) {
             return Double.POSITIVE_INFINITY;
         }
 

@@ -40,7 +40,7 @@ class ObjectMaskPair {
     private final double overlapRatio;
 
     public boolean atBorderXY(ImageDimensions sd) {
-        return left.getBoundingBox().atBorderXY(sd) || right.getBoundingBox().atBorderXY(sd);
+        return left.boundingBox().atBorderXY(sd) || right.boundingBox().atBorderXY(sd);
     }
 
     public ObjectMask getMultiplex(boolean leftFlag) {

@@ -66,14 +66,14 @@ public final class SlidingBuffer<T extends Buffer> {
 
         sliceNumber = sliceIndexToSeek;
         minusOne = null;
-        center = voxels.getPixelsForPlane(sliceNumber);
+        center = voxels.slice(sliceNumber);
 
         if ((sliceNumber - 1) >= 0) {
-            minusOne = voxels.getPixelsForPlane(sliceNumber - 1);
+            minusOne = voxels.slice(sliceNumber - 1);
         }
 
-        if ((sliceNumber + 1) < voxels.extent().getZ()) {
-            plusOne = voxels.getPixelsForPlane(sliceNumber + 1);
+        if ((sliceNumber + 1) < voxels.extent().z()) {
+            plusOne = voxels.slice(sliceNumber + 1);
         }
     }
 
@@ -84,8 +84,8 @@ public final class SlidingBuffer<T extends Buffer> {
 
         sliceNumber++;
 
-        if ((sliceNumber + 1) < voxels.extent().getZ()) {
-            plusOne = voxels.getPixelsForPlane(sliceNumber + 1);
+        if ((sliceNumber + 1) < voxels.extent().z()) {
+            plusOne = voxels.slice(sliceNumber + 1);
         } else {
             plusOne = null;
         }
@@ -100,7 +100,7 @@ public final class SlidingBuffer<T extends Buffer> {
             case -1:
                 return minusOne;
             default:
-                return voxels.getPixelsForPlane(sliceNumber + rel);
+                return voxels.slice(sliceNumber + rel);
         }
     }
 

@@ -43,7 +43,7 @@ public final class PointRange {
     private Point3i min;
 
     public void add(Point3i point) {
-        add(point.getX(), point.getY(), point.getZ());
+        add(point.x(), point.y(), point.z());
     }
 
     public void add(int x, int y, int z) {
@@ -54,21 +54,21 @@ public final class PointRange {
             return;
         }
 
-        if (x < min.getX()) {
+        if (x < min.x()) {
             min.setX(x);
-        } else if (x > max.getX()) {
+        } else if (x > max.x()) {
             max.setX(x);
         }
 
-        if (y < min.getY()) {
+        if (y < min.y()) {
             min.setY(y);
-        } else if (y > max.getY()) {
+        } else if (y > max.y()) {
             max.setY(y);
         }
 
-        if (z < min.getZ()) {
+        if (z < min.z()) {
             min.setZ(z);
-        } else if (z > max.getZ()) {
+        } else if (z > max.z()) {
             max.setZ(z);
         }
     }

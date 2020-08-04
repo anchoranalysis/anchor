@@ -110,7 +110,7 @@ public class ObjectsAsBinaryChnlGenerator extends RasterGenerator
 
         int outOnValue = BinaryValuesByte.getDefault().getOnByte();
         
-        BoundingBox bbox = objectMask.getBoundingBox();
+        BoundingBox bbox = objectMask.boundingBox();
 
         ImageDimensions dimensions = new ImageDimensions(bbox.extent(), resolution);
 
@@ -118,18 +118,18 @@ public class ObjectsAsBinaryChnlGenerator extends RasterGenerator
                 ChannelFactory.instance()
                         .createEmptyInitialised(dimensions, VoxelDataTypeUnsignedByte.INSTANCE);
 
-        Voxels<ByteBuffer> vbNew = channelNew.voxels().asByte();
+        Voxels<ByteBuffer> voxelsNew = channelNew.voxels().asByte();
 
-        byte matchValue = objectMask.getBinaryValuesByte().getOnByte();
+        byte matchValue = objectMask.binaryValuesByte().getOnByte();
         byte outOnValueByte = (byte) outOnValue;
 
         Point3i pointLocal = new Point3i();
 
-        for (pointLocal.setZ(0); pointLocal.getZ() < dimensions.getZ(); pointLocal.incrementZ()) {
+        for (pointLocal.setZ(0); pointLocal.z() < dimensions.z(); pointLocal.incrementZ()) {
 
-            ByteBuffer pixelsIn = objectMask.getVoxels().getPixelsForPlane(pointLocal.getZ()).buffer();
+            ByteBuffer pixelsIn = objectMask.voxels().slice(pointLocal.z()).buffer();
             ByteBuffer pixelsOut =
-                    vbNew.getPlaneAccess().getPixelsForPlane(pointLocal.getZ()).buffer();
+                    voxelsNew.getPlaneAccess().getPixelsForPlane(pointLocal.z()).buffer();
 
             while (pixelsIn.hasRemaining()) {
 

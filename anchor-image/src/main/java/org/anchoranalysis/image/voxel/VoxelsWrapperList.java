@@ -36,8 +36,8 @@ public class VoxelsWrapperList implements Iterable<VoxelsWrapper> {
 
     private List<VoxelsWrapper> list = new ArrayList<>();
 
-    public boolean add(VoxelsWrapper vb) {
-        return list.add(vb);
+    public boolean add(VoxelsWrapper voxels) {
+        return list.add(voxels);
     }
 
     @Override
@@ -52,7 +52,7 @@ public class VoxelsWrapperList implements Iterable<VoxelsWrapper> {
     public List<VoxelBuffer<?>> bufferListForSlice(int sliceNum) {
         List<VoxelBuffer<?>> listOut = new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {
-            listOut.add(list.get(i).any().getPixelsForPlane(sliceNum));
+            listOut.add(list.get(i).any().slice(sliceNum));
         }
         return listOut;
     }

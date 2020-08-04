@@ -35,7 +35,7 @@ import org.anchoranalysis.image.binary.mask.Mask;
 public abstract class UpdatablePointsContainer extends AnchorBean<UpdatablePointsContainer>
         implements UpdatableMarkSet, PointSampler {
 
-    public abstract void init(Mask binaryImage) throws InitException;
+    public abstract void init(Mask mask) throws InitException;
 
     public abstract int size();
 }

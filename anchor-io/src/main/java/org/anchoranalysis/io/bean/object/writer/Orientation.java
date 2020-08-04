@@ -126,8 +126,8 @@ public class Orientation extends DrawObject {
             BoundingBox bbox) {
 
         // We start at 0
-        double x = midpoint.getX();
-        double y = midpoint.getY();
+        double x = midpoint.x();
+        double y = midpoint.y();
 
         double xIncr = Math.cos(orientationRadians) * xDiv;
         double yIncr = Math.sin(orientationRadians) * xDiv;

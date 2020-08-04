@@ -53,7 +53,7 @@ class CountIntersectingVoxelsRegionMembershipMask {
             Voxels<ByteBuffer> maskGlobal,
             byte onMaskGlobal) {
         return countCheckIntersection(
-                src, other, src.getBoundingBox(), other.getBoundingBox(), maskGlobal, onMaskGlobal);
+                src, other, src.boundingBox(), other.boundingBox(), maskGlobal, onMaskGlobal);
     }
 
     private int countCheckIntersection(
@@ -89,7 +89,7 @@ class CountIntersectingVoxelsRegionMembershipMask {
 
         IntersectionBBox bbox =
                 IntersectionBBox.create(
-                        src.getBoundingBox(), other.getBoundingBox(), bboxIntersect);
+                        src.boundingBox(), other.boundingBox(), bboxIntersect);
 
         // Otherwise we count the number of pixels that are not empty
         //  in both bounded-voxels in the intersecting region
@@ -97,13 +97,13 @@ class CountIntersectingVoxelsRegionMembershipMask {
 
         for (int z = bbox.z().min(); z < bbox.z().max(); z++) {
 
-            ByteBuffer buffer = src.getVoxels().getPixelsForPlane(z).buffer();
+            ByteBuffer buffer = src.voxels().slice(z).buffer();
 
             int zOther = z + bbox.z().rel();
-            int zGlobal = z + src.getBoundingBox().cornerMin().getZ();
+            int zGlobal = z + src.boundingBox().cornerMin().z();
 
-            ByteBuffer bufferOther = other.getVoxels().getPixelsForPlane(zOther).buffer();
-            ByteBuffer bufferMaskGlobal = maskGlobal.getPixelsForPlane(zGlobal).buffer();
+            ByteBuffer bufferOther = other.voxels().slice(zOther).buffer();
+            ByteBuffer bufferMaskGlobal = maskGlobal.slice(zGlobal).buffer();
 
             buffer.clear();
             bufferOther.clear();
@@ -114,7 +114,7 @@ class CountIntersectingVoxelsRegionMembershipMask {
                             bufferOther,
                             bufferMaskGlobal,
                             bbox,
-                            src.getBoundingBox().cornerMin(),
+                            src.boundingBox().cornerMin(),
                             eGlobalMask,
                             onMaskGlobal);
         }
@@ -134,11 +134,11 @@ class CountIntersectingVoxelsRegionMembershipMask {
         int cnt = 0;
         for (int y = bbox.y().min(); y < bbox.y().max(); y++) {
             int yOther = y + bbox.y().rel();
-            int yGlobal = y + pointGlobalRel.getY();
+            int yGlobal = y + pointGlobalRel.y();
 
             for (int x = bbox.x().min(); x < bbox.x().max(); x++) {
                 int xOther = x + bbox.x().rel();
-                int xGlobal = x + pointGlobalRel.getX();
+                int xGlobal = x + pointGlobalRel.x();
 
                 byte globalMask = bufferMaskGlobal.get(extentGlobal.offset(xGlobal, yGlobal));
                 if (globalMask == onMaskGlobal) {

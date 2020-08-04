@@ -54,7 +54,7 @@ public class OverlapUtilities {
         byte flag = RegionMembershipUtilities.flagForRegion(regionID);
         return new CountIntersectingVoxelsRegionMembership(flag)
                 .countIntersectingVoxels(
-                        pmm1.voxelized().getVoxels(), pmm2.voxelized().getVoxels());
+                        pmm1.voxelized().voxels(), pmm2.voxelized().voxels());
     }
 
     /**
@@ -88,8 +88,8 @@ public class OverlapUtilities {
         byte flag = RegionMembershipUtilities.flagForRegion(regionID);
         return new CountIntersectingVoxelsRegionMembershipMask(flag)
                 .countIntersectingVoxelsMaskGlobal(
-                        pmm1.voxelized().getVoxels(),
-                        pmm2.voxelized().getVoxels(),
+                        pmm1.voxelized().voxels(),
+                        pmm2.voxelized().voxels(),
                         globalMask,
                         onGlobalMask);
     }

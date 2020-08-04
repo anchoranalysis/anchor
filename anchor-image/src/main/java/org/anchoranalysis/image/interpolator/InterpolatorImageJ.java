@@ -40,7 +40,7 @@ public class InterpolatorImageJ implements Interpolator {
             VoxelBuffer<ByteBuffer> src, VoxelBuffer<ByteBuffer> dest, Extent eSrc, Extent eDest) {
 
         ImageProcessor ipSrc = IJWrap.imageProcessorByte(src, eSrc);
-        ImageProcessor ipOut = ipSrc.resize(eDest.getX(), eDest.getY(), true);
+        ImageProcessor ipOut = ipSrc.resize(eDest.x(), eDest.y(), true);
         return IJWrap.voxelBufferFromImageProcessorByte(ipOut);
     }
 
@@ -52,7 +52,7 @@ public class InterpolatorImageJ implements Interpolator {
             Extent eDest) {
 
         ImageProcessor ipSrc = IJWrap.imageProcessorShort(src, eSrc);
-        ImageProcessor ipOut = ipSrc.resize(eDest.getX(), eDest.getY(), true);
+        ImageProcessor ipOut = ipSrc.resize(eDest.x(), eDest.y(), true);
         return IJWrap.voxelBufferFromImageProcessorShort(ipOut);
     }
 

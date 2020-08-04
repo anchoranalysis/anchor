@@ -32,10 +32,10 @@ import org.anchoranalysis.image.extent.ImageResolution;
 
 public interface FeatureInputWithRes extends FeatureInput {
 
-    Optional<ImageResolution> getResOptional();
+    Optional<ImageResolution> getResolutionOptional();
 
     default ImageResolution getResRequired() throws FeatureCalculationException {
-        return getResOptional()
+        return getResolutionOptional()
                 .orElseThrow(
                         () ->
                                 new FeatureCalculationException(

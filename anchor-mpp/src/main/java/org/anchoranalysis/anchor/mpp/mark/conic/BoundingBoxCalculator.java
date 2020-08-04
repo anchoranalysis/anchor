@@ -71,9 +71,9 @@ public class BoundingBoxCalculator {
         Point3i minPt = subTwoPointsClip(pos, radiiMatrix, do3D, bndScene);
         Point3i maxPt = addTwoPointsClip(pos, radiiMatrix, do3D, bndScene);
 
-        assert maxPt.getX() >= minPt.getX();
-        assert maxPt.getY() >= minPt.getY();
-        assert maxPt.getZ() >= minPt.getZ();
+        assert maxPt.x() >= minPt.x();
+        assert maxPt.y() >= minPt.y();
+        assert maxPt.z() >= minPt.z();
 
         return new BoundingBox(minPt, maxPt);
     }
@@ -96,9 +96,9 @@ public class BoundingBoxCalculator {
      */
     private static Point3i subTwoPoints(Point3d point1, DoubleMatrix1D point2, boolean do3D) {
         Point3i out = new Point3i();
-        out.setX(floorDiff(point1.getX(), point2.get(0)));
-        out.setY(floorDiff(point1.getY(), point2.get(1)));
-        out.setZ(do3D ? floorDiff(point1.getZ(), point2.get(2)) : 0);
+        out.setX(floorDiff(point1.x(), point2.get(0)));
+        out.setY(floorDiff(point1.y(), point2.get(1)));
+        out.setZ(do3D ? floorDiff(point1.z(), point2.get(2)) : 0);
         return out;
     }
 
@@ -108,9 +108,9 @@ public class BoundingBoxCalculator {
      */
     private static Point3i addTwoPoints(Point3d point1, DoubleMatrix1D point2, boolean do3D) {
         Point3i out = new Point3i();
-        out.setX(ceilSum(point1.getX(), point2.get(0)));
-        out.setY(ceilSum(point1.getY(), point2.get(1)));
-        out.setZ(do3D ? ceilSum(point1.getZ(), point2.get(2)) : 0);
+        out.setX(ceilSum(point1.x(), point2.get(0)));
+        out.setY(ceilSum(point1.y(), point2.get(1)));
+        out.setZ(do3D ? ceilSum(point1.z(), point2.get(2)) : 0);
         return out;
     }
 

@@ -48,27 +48,27 @@ public class BoundingBoxDistance {
 
         int xDistance =
                 minDistance(
-                        box1CornerMin.getX(),
-                        box1CornerMax.getX(),
-                        box2CornerMin.getX(),
-                        box2CornerMax.getX());
+                        box1CornerMin.x(),
+                        box1CornerMax.x(),
+                        box2CornerMin.x(),
+                        box2CornerMax.x());
 
         int yDistance =
                 minDistance(
-                        box1CornerMin.getY(),
-                        box1CornerMax.getY(),
-                        box2CornerMin.getY(),
-                        box2CornerMax.getY());
+                        box1CornerMin.y(),
+                        box1CornerMax.y(),
+                        box2CornerMin.y(),
+                        box2CornerMax.y());
 
         int zDistance = 0;
 
         if (includeZ) {
             zDistance =
                     minDistance(
-                            box1CornerMin.getZ(),
-                            box1CornerMax.getZ(),
-                            box2CornerMin.getZ(),
-                            box2CornerMax.getZ());
+                            box1CornerMin.z(),
+                            box1CornerMax.z(),
+                            box2CornerMin.z(),
+                            box2CornerMax.z());
         }
 
         return Math.sqrt(Math.pow(xDistance, 2) + Math.pow(yDistance, 2) + Math.pow(zDistance, 2));

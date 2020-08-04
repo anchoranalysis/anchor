@@ -38,9 +38,9 @@ class BinaryVoxelsInt extends BinaryVoxels<IntBuffer> {
 
     @Override
     public boolean isOn(int x, int y, int z) {
-        int offset = getVoxels().extent().offset(x, y);
-        return getVoxels().getPixelsForPlane(z).buffer().get(offset)
-                != getBinaryValues().getOffInt();
+        int offset = voxels().extent().offset(x, y);
+        return voxels().slice(z).buffer().get(offset)
+                != binaryValues().getOffInt();
     }
 
     @Override
@@ -50,22 +50,22 @@ class BinaryVoxelsInt extends BinaryVoxels<IntBuffer> {
 
     @Override
     public void setOn(int x, int y, int z) {
-        int offset = getVoxels().extent().offset(x, y);
-        getVoxels().getPixelsForPlane(z).buffer().put(offset, getBinaryValues().getOnInt());
+        int offset = voxels().extent().offset(x, y);
+        voxels().slice(z).buffer().put(offset, binaryValues().getOnInt());
     }
 
     @Override
     public void setOff(int x, int y, int z) {
-        int offset = getVoxels().extent().offset(x, y);
-        getVoxels().getPixelsForPlane(z).buffer().put(offset, getBinaryValues().getOffInt());
+        int offset = voxels().extent().offset(x, y);
+        voxels().slice(z).buffer().put(offset, binaryValues().getOffInt());
     }
 
     @Override
     public BinaryVoxels<IntBuffer> duplicate() {
-        return new BinaryVoxelsInt(getVoxels().duplicate(), getBinaryValues());
+        return new BinaryVoxelsInt(voxels().duplicate(), binaryValues());
     }
 
     public BinaryVoxels<IntBuffer> extractSlice(int z) {
-        return new BinaryVoxelsInt(getVoxels().extractSlice(z), getBinaryValues());
+        return new BinaryVoxelsInt(voxels().extractSlice(z), binaryValues());
     }
 }

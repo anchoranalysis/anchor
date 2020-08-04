@@ -45,7 +45,7 @@ import org.anchoranalysis.image.voxel.kernel.LocalSlices;
  */
 public class CountKernelNeighborhoodMask extends CountKernelNeighborhoodBase {
 
-    private BinaryVoxels<ByteBuffer> vbRequireHigh;
+    private BinaryVoxels<ByteBuffer> voxelsRequireHigh;
     private BinaryValuesByte bvRequireHigh;
     private ObjectMask objectRequireHigh;
 
@@ -58,8 +58,8 @@ public class CountKernelNeighborhoodMask extends CountKernelNeighborhoodBase {
             boolean multipleMatchesPerVoxel) {
         super(useZ, bv, multipleMatchesPerVoxel);
         this.objectRequireHigh = objectRequireHigh;
-        this.vbRequireHigh = objectRequireHigh.binaryVoxels();
-        this.bvRequireHigh = vbRequireHigh.getBinaryValues().createByte();
+        this.voxelsRequireHigh = objectRequireHigh.binaryVoxels();
+        this.bvRequireHigh = voxelsRequireHigh.binaryValues().createByte();
     }
 
     @Override
@@ -67,9 +67,9 @@ public class CountKernelNeighborhoodMask extends CountKernelNeighborhoodBase {
         super.notifyZChange(inSlices, z);
         localSlicesRequireHigh =
                 new LocalSlices(
-                        z + objectRequireHigh.getBoundingBox().cornerMin().getZ(),
+                        z + objectRequireHigh.boundingBox().cornerMin().z(),
                         3,
-                        vbRequireHigh.getVoxels());
+                        voxelsRequireHigh.voxels());
     }
 
     @Override
@@ -82,19 +82,19 @@ public class CountKernelNeighborhoodMask extends CountKernelNeighborhoodBase {
             return false;
         }
 
-        int x1 = point.getX() + objectRequireHigh.getBoundingBox().cornerMin().getX() + xShift;
+        int x1 = point.x() + objectRequireHigh.boundingBox().cornerMin().x() + xShift;
 
-        if (!vbRequireHigh.extent().containsX(x1)) {
+        if (!voxelsRequireHigh.extent().containsX(x1)) {
             return false;
         }
 
-        int y1 = point.getY() + objectRequireHigh.getBoundingBox().cornerMin().getY() + yShift;
+        int y1 = point.y() + objectRequireHigh.boundingBox().cornerMin().y() + yShift;
 
-        if (!vbRequireHigh.extent().containsY(y1)) {
+        if (!voxelsRequireHigh.extent().containsY(y1)) {
             return false;
         }
 
-        int indexGlobal = vbRequireHigh.extent().offset(x1, y1);
+        int indexGlobal = voxelsRequireHigh.extent().offset(x1, y1);
         return bvRequireHigh.isOn(inArr.get(indexGlobal));
     }
 }

@@ -105,7 +105,7 @@ public class Midpoint extends DrawObject {
             int extraLength,
             BoundingBox bboxContainer) {
 
-        if (!stack.getDimensions().contains(midpoint)) {
+        if (!stack.dimensions().contains(midpoint)) {
             return;
         }
 
@@ -149,7 +149,7 @@ public class Midpoint extends DrawObject {
         if (object.hasProperty(PROPERTY_MIDPOINT)) {
             return Point3i.immutableAdd(
                     (Point3i) object.getProperty(PROPERTY_MIDPOINT),
-                    object.getBoundingBox().cornerMin());
+                    object.boundingBox().cornerMin());
         } else {
             return PointConverter.intFromDouble(object.withoutProperties().centerOfGravity());
         }

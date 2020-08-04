@@ -112,11 +112,11 @@ public class OrientationAxisAngle extends Orientation {
     //
     private static Vector3d findPerpVector(Vector3d vec) {
         // We needto find any vector whose dot product is 0
-        if (vec.getX() > 0 || vec.getY() > 0) {
-            return new Vector3d(vec.getY() * -1, vec.getX(), 0);
+        if (vec.x() > 0 || vec.y() > 0) {
+            return new Vector3d(vec.y() * -1, vec.x(), 0);
         } else {
             // This handle's the case where both X and Y are 0
-            return new Vector3d(0, vec.getZ() * -1, vec.getY());
+            return new Vector3d(0, vec.z() * -1, vec.y());
         }
     }
 

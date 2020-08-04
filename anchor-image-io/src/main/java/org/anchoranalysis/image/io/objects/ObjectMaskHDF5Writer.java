@@ -78,14 +78,14 @@ class ObjectMaskHDF5Writer {
     }
 
     private void addCorner() {
-        addAttribute(HDF5PathHelper.EXTENT_X, ReadableTuple3i::getX);
-        addAttribute(HDF5PathHelper.EXTENT_Y, ReadableTuple3i::getY);
-        addAttribute(HDF5PathHelper.EXTENT_Z, ReadableTuple3i::getZ);
+        addAttribute(HDF5PathHelper.EXTENT_X, ReadableTuple3i::x);
+        addAttribute(HDF5PathHelper.EXTENT_Y, ReadableTuple3i::y);
+        addAttribute(HDF5PathHelper.EXTENT_Z, ReadableTuple3i::z);
     }
 
     private void addAttribute(String attrName, ToIntFunction<ReadableTuple3i> extrVal) {
 
-        Integer crnrVal = extrVal.applyAsInt(object.getBoundingBox().cornerMin());
+        Integer crnrVal = extrVal.applyAsInt(object.boundingBox().cornerMin());
         writer.uint32().setAttr(pathHDF5, attrName, crnrVal.intValue());
     }
 
@@ -95,12 +95,12 @@ class ObjectMaskHDF5Writer {
 
         MDByteArray md = new MDByteArray(dimensionsFromExtent(extent));
 
-        for (int z = 0; z < extent.getZ(); z++) {
+        for (int z = 0; z < extent.z(); z++) {
 
             ByteBuffer bb = bvb.getPixelsForPlane(z).buffer();
 
-            for (int y = 0; y < extent.getY(); y++) {
-                for (int x = 0; x < extent.getX(); x++) {
+            for (int y = 0; y < extent.y(); y++) {
+                for (int x = 0; x < extent.x(); x++) {
                     md.set(bb.get(extent.offset(x, y)), x, y, z);
                 }
             }
@@ -109,6 +109,6 @@ class ObjectMaskHDF5Writer {
     }
 
     private static int[] dimensionsFromExtent(Extent extent) {
-        return new int[] {extent.getX(), extent.getY(), extent.getZ()};
+        return new int[] {extent.x(), extent.y(), extent.z()};
     }
 }

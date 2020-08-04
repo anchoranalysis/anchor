@@ -28,7 +28,6 @@ package org.anchoranalysis.image.io.generator.raster.obj.collection;
 
 import java.util.Optional;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.image.extent.ImageDimensions;
@@ -49,7 +48,7 @@ public abstract class ObjectsGenerator extends RasterGenerator
         implements IterableGenerator<ObjectCollection> {
 
     // START REQUIRED ARGUMENTS
-    @Getter private final ImageDimensions dimensions;
+    private final ImageDimensions dimensions;
     // END REQUIRED ARGUMENTS
 
     private ObjectCollection objects;
@@ -81,5 +80,9 @@ public abstract class ObjectsGenerator extends RasterGenerator
 
     protected ObjectCollection getObjects() {
         return objects;
+    }
+
+    public ImageDimensions dimensions() {
+        return dimensions;
     }
 }

@@ -44,7 +44,7 @@ public abstract class CountIntersectingVoxels {
             BoundedVoxels<ByteBuffer> src, BoundedVoxels<ByteBuffer> other) {
         // Find the common bounding box
         Optional<BoundingBox> bboxIntersect =
-                src.getBoundingBox().intersection().with(other.getBoundingBox());
+                src.boundingBox().intersection().with(other.boundingBox());
 
         if (!bboxIntersect.isPresent()) {
             // If the bounding boxes don't intersect then we can
@@ -62,17 +62,17 @@ public abstract class CountIntersectingVoxels {
             BoundingBox bboxIntersect) {
         IntersectionBBox bbox =
                 IntersectionBBox.create(
-                        src.getBoundingBox(), other.getBoundingBox(), bboxIntersect);
+                        src.boundingBox(), other.boundingBox(), bboxIntersect);
 
         // Otherwise we count the number of pixels that are not empty
         //  in both bounded-voxels in the intersecting region
         int cnt = 0;
         for (int z = bbox.z().min(); z < bbox.z().max(); z++) {
 
-            ByteBuffer buffer = src.getVoxels().getPixelsForPlane(z).buffer();
+            ByteBuffer buffer = src.voxels().slice(z).buffer();
 
             int zOther = z + bbox.z().rel();
-            ByteBuffer bufferOther = other.getVoxels().getPixelsForPlane(zOther).buffer();
+            ByteBuffer bufferOther = other.voxels().slice(zOther).buffer();
 
             cnt += countIntersectingVoxels(buffer, bufferOther, bbox);
         }

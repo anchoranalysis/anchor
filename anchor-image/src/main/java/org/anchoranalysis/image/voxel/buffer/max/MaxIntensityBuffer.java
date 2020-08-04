@@ -43,12 +43,12 @@ public abstract class MaxIntensityBuffer<T extends Buffer> {
     private Voxels<T> target;
 
     public MaxIntensityBuffer(Extent srcExtent, VoxelsFactoryTypeBound<T> factory) {
-        target = factory.createInitialized(new Extent(srcExtent.getX(), srcExtent.getY()));
+        target = factory.createInitialized(new Extent(srcExtent.x(), srcExtent.y()));
     }
 
     public void projectSlice(T pixels) {
 
-        T flatBuffer = target.getPixelsForPlane(0).buffer();
+        T flatBuffer = target.slice(0).buffer();
 
         while (pixels.hasRemaining()) {
             addBuffer(pixels, flatBuffer);

@@ -113,12 +113,12 @@ public class ConnectedComponentUnionFind {
     private MergeWithNeighbors createMergeWithNeighbors(
             Voxels<IntBuffer> indexBuffer, UnionFind<Integer> unionIndex) {
         return new MergeWithNeighbors(
-                indexBuffer, unionIndex, indexBuffer.extent().getZ() > 1, bigNeighborhood);
+                indexBuffer, unionIndex, indexBuffer.extent().z() > 1, bigNeighborhood);
     }
 
     private static <T extends Buffer> int populateIndexFromBinary(
             BinaryVoxels<T> visited, PopulateIndexProcessor<T> process) {
-        IterateVoxels.callEachPoint(visited.getVoxels(), process);
+        IterateVoxels.callEachPoint(visited.voxels(), process);
         return process.getCount() - 1;
     }
 
@@ -159,14 +159,14 @@ public class ConnectedComponentUnionFind {
 
         Point3i point = new Point3i();
         Extent extent = indexBuffer.extent();
-        for (point.setZ(0); point.getZ() < extent.getZ(); point.incrementZ()) {
+        for (point.setZ(0); point.z() < extent.z(); point.incrementZ()) {
 
-            IntBuffer bbIndex = indexBuffer.getPixelsForPlane(point.getZ()).buffer();
+            IntBuffer bbIndex = indexBuffer.slice(point.z()).buffer();
 
             int offset = 0;
 
-            for (point.setY(0); point.getY() < extent.getY(); point.incrementY()) {
-                for (point.setX(0); point.getX() < extent.getX(); point.incrementX()) {
+            for (point.setY(0); point.y() < extent.y(); point.incrementY()) {
+                for (point.setX(0); point.x() < extent.x(); point.incrementX()) {
 
                     int idBig = bbIndex.get(offset);
                     if (idBig != 0) {

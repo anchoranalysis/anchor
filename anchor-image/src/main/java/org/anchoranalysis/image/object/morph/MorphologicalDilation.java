@@ -77,7 +77,7 @@ public class MorphologicalDilation {
             ObjectMask objectGrown = object.growBuffer(grow, grow, extent);
             return objectGrown.replaceVoxels(
                     dilate(objectGrown.binaryVoxels(), do3D, iterations, null, 0, bigNeighborhood)
-                            .getVoxels());
+                            .voxels());
         } catch (OperationFailedException e) {
             throw new CreateException("Cannot grow object-mask", e);
         }
@@ -136,7 +136,7 @@ public class MorphologicalDilation {
 
         BinaryKernel kernelDilation =
                 createDilationKernel(
-                        bvb.getBinaryValues().createByte(),
+                        bvb.binaryValues().createByte(),
                         do3D,
                         backgroundVb,
                         minIntensityValue,
@@ -144,14 +144,14 @@ public class MorphologicalDilation {
                         outsideAtThreshold,
                         bigNeighborhood);
 
-        Voxels<ByteBuffer> buf = bvb.getVoxels();
+        Voxels<ByteBuffer> buf = bvb.voxels();
         for (int i = 0; i < iterations; i++) {
             Voxels<ByteBuffer> next =
-                    ApplyKernel.apply(kernelDilation, buf, bvb.getBinaryValues().createByte());
+                    ApplyKernel.apply(kernelDilation, buf, bvb.binaryValues().createByte());
 
             try {
                 if (acceptConditions.isPresent()
-                        && !acceptConditions.get().acceptIteration(next, bvb.getBinaryValues())) {
+                        && !acceptConditions.get().acceptIteration(next, bvb.binaryValues())) {
                     break;
                 }
             } catch (OperationFailedException e) {
@@ -160,7 +160,7 @@ public class MorphologicalDilation {
 
             buf = next;
         }
-        return BinaryVoxelsFactory.reuseByte(buf, bvb.getBinaryValues());
+        return BinaryVoxelsFactory.reuseByte(buf, bvb.binaryValues());
     }
 
     private static BinaryKernel createDilationKernel(

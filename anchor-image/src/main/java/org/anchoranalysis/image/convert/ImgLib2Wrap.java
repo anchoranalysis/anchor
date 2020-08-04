@@ -88,16 +88,16 @@ public class ImgLib2Wrap {
     }
 
     @SuppressWarnings("unchecked")
-    public static Img<? extends RealType<?>> wrap(VoxelBuffer<?> vb, Extent e) {
+    public static Img<? extends RealType<?>> wrap(VoxelBuffer<?> voxels, Extent e) {
 
-        VoxelDataType dataType = vb.dataType();
+        VoxelDataType dataType = voxels.dataType();
 
         if (dataType.equals(VoxelDataTypeUnsignedByte.INSTANCE)) {
-            return wrapByte((VoxelBuffer<ByteBuffer>) vb, e);
+            return wrapByte((VoxelBuffer<ByteBuffer>) voxels, e);
         } else if (dataType.equals(VoxelDataTypeUnsignedShort.INSTANCE)) {
-            return wrapShort((VoxelBuffer<ShortBuffer>) vb, e);
+            return wrapShort((VoxelBuffer<ShortBuffer>) voxels, e);
         } else if (dataType.equals(VoxelDataTypeFloat.INSTANCE)) {
-            return wrapFloat((VoxelBuffer<FloatBuffer>) vb, e);
+            return wrapFloat((VoxelBuffer<FloatBuffer>) voxels, e);
         } else {
             throw new IncorrectVoxelDataTypeException(
                     "Only unsigned byte, short and float are supported");
@@ -149,7 +149,7 @@ public class ImgLib2Wrap {
                     Function<AbstractNativeImg<S, T>, S> createType) {
         Extent e = box.extent();
 
-        long[] dim = new long[] {e.getX(), e.getY(), e.getZ()};
+        long[] dim = new long[] {e.x(), e.y(), e.z()};
 
         PlanarImg<S, T> img = new PlanarImg<>(slicesFor(box, transform), dim, new Fraction());
         return updateLinkedTypeOnImage(img, createType);
@@ -157,8 +157,8 @@ public class ImgLib2Wrap {
 
     private static <T, U extends Buffer> List<T> slicesFor(
             Voxels<U> box, Function<U, T> transformSlice) {
-        return IntStream.range(0, box.extent().getZ())
-                .mapToObj(z -> transformSlice.apply(box.getPixelsForPlane(z).buffer()))
+        return IntStream.range(0, box.extent().z())
+                .mapToObj(z -> transformSlice.apply(box.slice(z).buffer()))
                 .collect(Collectors.toList());
     }
 
@@ -167,7 +167,7 @@ public class ImgLib2Wrap {
             Extent e,
             Function<U, T> transform,
             Function<AbstractNativeImg<S, T>, S> createType) {
-        long[] dim = new long[] {e.getX(), e.getY()};
+        long[] dim = new long[] {e.x(), e.y()};
         ArrayImg<S, T> img = new ArrayImg<>(transform.apply(buffer.buffer()), dim, new Fraction());
         return updateLinkedTypeOnImage(img, createType);
     }

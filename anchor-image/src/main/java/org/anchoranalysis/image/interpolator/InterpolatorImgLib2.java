@@ -104,8 +104,8 @@ public abstract class InterpolatorImgLib2 implements Interpolator {
 
             cursor.fwd();
 
-            tmp[0] = (cursor.getDoublePosition(0) / (destination.realMax(0)) * eSrc.getX());
-            tmp[1] = (cursor.getDoublePosition(1) / (destination.realMax(1)) * eSrc.getY());
+            tmp[0] = (cursor.getDoublePosition(0) / (destination.realMax(0)) * eSrc.x());
+            tmp[1] = (cursor.getDoublePosition(1) / (destination.realMax(1)) * eSrc.y());
 
             // set the position
             realRandomAccess.setPosition(tmp);

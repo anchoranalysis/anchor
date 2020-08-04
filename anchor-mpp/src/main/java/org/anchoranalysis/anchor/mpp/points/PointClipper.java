@@ -57,10 +57,10 @@ public class PointClipper {
     }
 
     private static Point3i clipHigh(Point3i point, ImageDimensions dimensions) {
-        return point.min(dimensions.getExtent().createMinusOne());
+        return point.min(dimensions.extent().createMinusOne());
     }
 
     private static Point3d clipHigh(Point3d point, ImageDimensions dimensions) {
-        return point.min(dimensions.getExtent().createMinusOne());
+        return point.min(dimensions.extent().createMinusOne());
     }
 }

@@ -45,11 +45,11 @@ public abstract class ChannelFactorySingleType {
     private final VoxelsFactoryTypeBound<? extends Buffer> factory;
     
     public Channel createEmptyInitialised(ImageDimensions dim) {
-        return create(factory.createInitialized(dim.getExtent()), dim.getResolution());
+        return create(factory.createInitialized(dim.extent()), dim.resolution());
     }
 
     public Channel createEmptyUninitialised(ImageDimensions dimensions) {
-        return create(factory.createUninitialized(dimensions.getExtent()), dimensions.getResolution());
+        return create(factory.createUninitialized(dimensions.extent()), dimensions.resolution());
     }
 
     public Channel create(Voxels<? extends Buffer> bufferAccess, ImageResolution resolution) {

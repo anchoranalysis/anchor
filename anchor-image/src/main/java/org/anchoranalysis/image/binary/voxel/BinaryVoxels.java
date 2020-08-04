@@ -38,7 +38,7 @@ import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.experimental.Accessors;
 
 /**
  * Like {@link Voxels} but should only contain two distinct intensity-values representing ON and OFF states.
@@ -46,11 +46,11 @@ import lombok.Setter;
  * @author Owen Feehan
  * @param <T> buffer-type
  */
-@AllArgsConstructor
+@AllArgsConstructor @Accessors(fluent=true)
 public abstract class BinaryVoxels<T extends Buffer> implements BinaryOnOffSetter {
 
     /** Voxels that should only have two intensity-values (representing ON and OFF states). This is not checked as a precondition. */
-    @Getter @Setter private Voxels<T> voxels;
+    @Getter private Voxels<T> voxels;
     
     /** Which two intensity values represent OFF and ON states */
     @Getter private BinaryValues binaryValues;
@@ -69,7 +69,7 @@ public abstract class BinaryVoxels<T extends Buffer> implements BinaryOnOffSette
     }
 
     public VoxelBuffer<T> getPixelsForPlane(int z) {
-        return voxels.getPixelsForPlane(z);
+        return voxels.slice(z);
     }
 
     public boolean hasOnVoxel() {
@@ -124,7 +124,7 @@ public abstract class BinaryVoxels<T extends Buffer> implements BinaryOnOffSette
     }
 
     public void setPixelsForPlane(int z, VoxelBuffer<T> pixels) {
-        voxels.setPixelsForPlane(z, pixels);
+        voxels.updateSlice(z, pixels);
     }
 
     public void setAllPixelsToOn() {

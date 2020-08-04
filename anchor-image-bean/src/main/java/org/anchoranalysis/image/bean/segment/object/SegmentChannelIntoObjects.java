@@ -75,7 +75,7 @@ public abstract class SegmentChannelIntoObjects
     }
 
     protected static void checkUnsupported3D(Channel channel) throws SegmentationFailedException {
-        if (channel.getDimensions().getZ() > 1) {
+        if (channel.dimensions().z() > 1) {
             throw new SegmentationFailedException(
                     "Z-stacks (3D) are not supported for this operation");
         }

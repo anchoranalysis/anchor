@@ -217,17 +217,17 @@ public class ObjectCollection implements Iterable<ObjectMask> {
         return stream()
                 .filter(
                         object ->
-                                object.getBoundingBox()
+                                object.boundingBox()
                                         .intersection()
-                                        .existsWith(objectToIntersectWith.getBoundingBox()));
+                                        .existsWith(objectToIntersectWith.boundingBox()));
     }
 
     public boolean objectsAreAllInside(Extent e) {
         for (ObjectMask object : this) {
-            if (!e.contains(object.getBoundingBox().cornerMin())) {
+            if (!e.contains(object.boundingBox().cornerMin())) {
                 return false;
             }
-            if (!e.contains(object.getBoundingBox().calcCornerMax())) {
+            if (!e.contains(object.boundingBox().calcCornerMax())) {
                 return false;
             }
         }
@@ -235,11 +235,11 @@ public class ObjectCollection implements Iterable<ObjectMask> {
     }
 
     public BinaryValuesByte getFirstBinaryValuesByte() {
-        return get(0).getBinaryValuesByte();
+        return get(0).binaryValuesByte();
     }
 
     public BinaryValues getFirstBinaryValues() {
-        return get(0).getBinaryValues();
+        return get(0).binaryValues();
     }
 
     /** Deep copy, including duplicating object-masks */

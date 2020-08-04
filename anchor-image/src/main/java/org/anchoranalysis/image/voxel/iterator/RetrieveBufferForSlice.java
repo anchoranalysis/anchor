@@ -59,7 +59,7 @@ public final class RetrieveBufferForSlice<T extends Buffer> implements ProcessVo
     public void notifyChangeZ(int z) {
         process.notifyChangeZ(z);
         offsetWithinSlice = 0;
-        this.bufferSlice = voxels.getPixelsForPlane(z).buffer();
+        this.bufferSlice = voxels.slice(z).buffer();
     }
 
     @Override

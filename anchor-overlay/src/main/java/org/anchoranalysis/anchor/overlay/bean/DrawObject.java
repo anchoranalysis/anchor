@@ -64,7 +64,7 @@ public abstract class DrawObject extends AnchorBean<DrawObject> {
             throws OperationFailedException {
 
         try {
-            PrecalcOverlay precalculatedObj = precalculate(object, stack.getDimensions());
+            PrecalcOverlay precalculatedObj = precalculate(object, stack.dimensions());
             precalculatedObj.writePrecalculatedMask(stack, attributes, iteration, restrictTo);
 
         } catch (CreateException e) {
@@ -86,7 +86,7 @@ public abstract class DrawObject extends AnchorBean<DrawObject> {
                 objects,
                 background,
                 attributes,
-                new BoundingBox(background.getDimensions().getExtent()));
+                new BoundingBox(background.dimensions().extent()));
     }
 
     /**

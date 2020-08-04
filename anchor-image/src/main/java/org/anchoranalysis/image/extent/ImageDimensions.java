@@ -27,8 +27,10 @@
 package org.anchoranalysis.image.extent;
 
 import java.io.Serializable;
+import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.experimental.Accessors;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.scale.ScaleFactor;
@@ -39,15 +41,17 @@ import org.anchoranalysis.image.scale.ScaleFactorUtilities;
  *
  * <p>This class is IMMUTABLE.
  */
-@EqualsAndHashCode
+@EqualsAndHashCode @Accessors(fluent=true) @AllArgsConstructor
 public final class ImageDimensions implements Serializable {
 
     /** */
     private static final long serialVersionUID = 1L;
 
-    @Getter private final ImageResolution resolution;
-
+    /** The width and height and depth of the image i.e. the size of each of the three possible dimensions*/
     @Getter private final Extent extent;
+    
+    /** Resolution of voxels to physical measurements e.g. physical size of each voxel in a particular dimension */
+    @Getter private final ImageResolution resolution;
 
     /** Construct with an explicit extent and default resolution (1.0 for each dimension) */
     public ImageDimensions(int x, int y, int z) {
@@ -59,16 +63,10 @@ public final class ImageDimensions implements Serializable {
         this(extent, new ImageResolution());
     }
 
-    /** Construct with an explicit extent and resolution */
-    public ImageDimensions(Extent extent, ImageResolution resolution) {
-        this.extent = extent;
-        this.resolution = resolution;
-    }
-
     public ImageDimensions scaleXYTo(int x, int y) {
-        Extent extentScaled = new Extent(x, y, extent.getZ());
-        ScaleFactor sf = ScaleFactorUtilities.calcRelativeScale(extent, extentScaled);
-        return new ImageDimensions(extentScaled, resolution.scaleXY(sf));
+        Extent extentScaled = new Extent(x, y, extent.z());
+        ScaleFactor scaleFactor = ScaleFactorUtilities.calcRelativeScale(extent, extentScaled);
+        return new ImageDimensions(extentScaled, resolution.scaleXY(scaleFactor));
     }
 
     public ImageDimensions scaleXYBy(ScaleFactor scaleFactor) {
@@ -83,24 +81,24 @@ public final class ImageDimensions implements Serializable {
         return new ImageDimensions(extent, resolutionToAssign);
     }
 
-    public long getVolume() {
-        return extent.getVolume();
+    public long calculateVolume() {
+        return extent.calculateVolume();
     }
 
-    public int getVolumeXY() {
-        return extent.getVolumeXY();
+    public int volumeXY() {
+        return extent.volumeXY();
     }
 
-    public int getX() {
-        return extent.getX();
+    public int x() {
+        return extent.x();
     }
 
-    public int getY() {
-        return extent.getY();
+    public int y() {
+        return extent.y();
     }
 
-    public int getZ() {
-        return extent.getZ();
+    public int z() {
+        return extent.z();
     }
 
     public int offset(int x, int y) {

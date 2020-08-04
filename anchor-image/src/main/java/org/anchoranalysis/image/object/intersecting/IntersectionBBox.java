@@ -90,9 +90,9 @@ public class IntersectionBBox {
 
     private IntersectionBBox(
             Point3i pointMin, Point3i pointMax, Point3i relPos, Extent eSrc, Extent eOther) {
-        x = new Dimension(pointMin.getX(), pointMax.getX(), relPos.getX());
-        y = new Dimension(pointMin.getY(), pointMax.getY(), relPos.getY());
-        z = new Dimension(pointMin.getZ(), pointMax.getZ(), relPos.getZ());
+        x = new Dimension(pointMin.x(), pointMax.x(), relPos.x());
+        y = new Dimension(pointMin.y(), pointMax.y(), relPos.y());
+        z = new Dimension(pointMin.z(), pointMax.z(), relPos.z());
         this.e1 = eSrc;
         this.e2 = eOther;
     }

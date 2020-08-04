@@ -63,9 +63,9 @@ public class BoundingBoxRTree {
     }
 
     public List<Integer> contains(Point3i point) {
-        singlePoint[0] = (float) point.getX();
-        singlePoint[1] = (float) point.getY();
-        singlePoint[2] = (float) point.getZ();
+        singlePoint[0] = (float) point.x();
+        singlePoint[1] = (float) point.y();
+        singlePoint[2] = (float) point.z();
 
         return rTree.search(singlePoint, singlePointExtent);
     }
@@ -87,11 +87,11 @@ public class BoundingBoxRTree {
 
     private static float[] minPoint(BoundingBox bbox) {
         return new float[] {
-            bbox.cornerMin().getX(), bbox.cornerMin().getY(), bbox.cornerMin().getZ()
+            bbox.cornerMin().x(), bbox.cornerMin().y(), bbox.cornerMin().z()
         };
     }
 
     private static float[] extent(BoundingBox bbox) {
-        return new float[] {bbox.extent().getX(), bbox.extent().getY(), bbox.extent().getZ()};
+        return new float[] {bbox.extent().x(), bbox.extent().y(), bbox.extent().z()};
     }
 }

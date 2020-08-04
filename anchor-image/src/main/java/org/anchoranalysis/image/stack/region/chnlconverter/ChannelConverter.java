@@ -83,11 +83,11 @@ public abstract class ChannelConverter<T extends Buffer> {
         if (changeExisting == ConversionPolicy.CHANGE_EXISTING_CHANNEL) {
             chnlOut = chnlIn;
             // We need to create a new voxel buffer
-            voxelsOut = voxelsFactory.createInitialized(chnlIn.getDimensions().getExtent());
+            voxelsOut = voxelsFactory.createInitialized(chnlIn.dimensions().extent());
         } else {
             chnlOut =
                     ChannelFactory.instance()
-                            .createEmptyUninitialised(chnlIn.getDimensions(), dataTypeTarget);
+                            .createEmptyUninitialised(chnlIn.dimensions(), dataTypeTarget);
             voxelsOut = (Voxels<T>) chnlOut.voxels().match(dataTypeTarget);
         }
 

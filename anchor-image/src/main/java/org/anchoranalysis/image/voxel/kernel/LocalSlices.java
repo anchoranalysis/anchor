@@ -48,8 +48,8 @@ public class LocalSlices {
 
             int rel = z + i - shift;
 
-            if (rel >= 0 && rel < voxels.extent().getZ()) {
-                arr[i] = voxels.getPixelsForPlane(rel).buffer().array();
+            if (rel >= 0 && rel < voxels.extent().z()) {
+                arr[i] = voxels.slice(rel).buffer().array();
             }
         }
     }

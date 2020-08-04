@@ -56,7 +56,7 @@ public class ThresholderGlobalTest {
     private static final Extent MASK_EXTENT = new Extent(30, 20, 4);
     private static final Point3i MASK_CORNER_MIN = new Point3i(10, 10, 2);
 
-    private static final long HALF_SCENE_EXTENT_VOLUME = SCENE_EXTENT.getVolume() / 2;
+    private static final long HALF_SCENE_EXTENT_VOLUME = SCENE_EXTENT.calculateVolume() / 2;
 
     private VoxelsWrapper voxels;
 
@@ -112,26 +112,26 @@ public class ThresholderGlobalTest {
 
         Extent extentHalf = new Extent(SCENE_WIDTH / 2, SCENE_HEIGHT, SCENE_DEPTH);
 
-        Voxels<ByteBuffer> vb = VoxelsFactory.getByte().createInitialized(SCENE_EXTENT);
+        Voxels<ByteBuffer> voxels = VoxelsFactory.getByte().createInitialized(SCENE_EXTENT);
 
         BoundingBox left = new BoundingBox(new Point3i(0, 0, 0), extentHalf);
         BoundingBox right = new BoundingBox(new Point3i(SCENE_WIDTH / 2, 0, 0), extentHalf);
 
-        writeModulo(vb, left, 0);
+        writeModulo(voxels, left, 0);
         writeModulo(
-                vb, right,
+                voxels, right,
                 100); // So the right half, should be 100 higher on average, and always >= 100
 
-        return new VoxelsWrapper(vb);
+        return new VoxelsWrapper(voxels);
     }
 
-    private static void writeModulo(Voxels<ByteBuffer> vb, BoundingBox bbox, int addToPixels) {
+    private static void writeModulo(Voxels<ByteBuffer> voxels, BoundingBox bbox, int addToPixels) {
         IterateVoxels.callEachPoint(
-                vb,
+                voxels,
                 bbox,
                 (Point3i point, ByteBuffer buffer, int offset) ->
                         buffer.put(
                                 offset,
-                                (byte) ((point.getY() % 50 + point.getX() % 50) + addToPixels)));
+                                (byte) ((point.y() % 50 + point.x() % 50) + addToPixels)));
     }
 }

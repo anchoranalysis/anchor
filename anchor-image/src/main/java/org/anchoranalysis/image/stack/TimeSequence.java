@@ -74,7 +74,7 @@ public class TimeSequence implements Iterable<Stack> {
     }
 
     // Assumes all dimensions are the same, but doesn't check
-    public ImageDimensions getDimensions() {
-        return list.get(0).getDimensions();
+    public ImageDimensions dimensions() {
+        return list.get(0).dimensions();
     }
 }

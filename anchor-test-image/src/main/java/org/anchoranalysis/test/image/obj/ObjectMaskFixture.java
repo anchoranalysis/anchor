@@ -70,17 +70,17 @@ public class ObjectMaskFixture {
 
         assertTrue(dimensions.contains(bbox));
 
-        Voxels<ByteBuffer> vb = VoxelsFactory.getByte().createInitialized(extent);
+        Voxels<ByteBuffer> voxels = VoxelsFactory.getByte().createInitialized(extent);
         BinaryValues bv = BinaryValues.getDefault();
         BinaryValuesByte bvb = bv.createByte();
 
         boolean atLeastOneHigh = false;
 
-        for (int z = 0; z < extent.getZ(); z++) {
-            VoxelBuffer<ByteBuffer> slice = vb.getPixelsForPlane(z);
+        for (int z = 0; z < extent.z(); z++) {
+            VoxelBuffer<ByteBuffer> slice = voxels.slice(z);
 
-            for (int y = 0; y < extent.getY(); y++) {
-                for (int x = 0; x < extent.getX(); x++) {
+            for (int y = 0; y < extent.y(); y++) {
+                for (int x = 0; x < extent.x(); x++) {
                     byte toPut;
                     if (pattern.isPixelOn(x, y, z)) {
                         toPut = bvb.getOnByte();
@@ -95,6 +95,6 @@ public class ObjectMaskFixture {
 
         assertTrue(atLeastOneHigh);
 
-        return new ObjectMask(bbox, BinaryVoxelsFactory.reuseByte(vb, bv));
+        return new ObjectMask(bbox, BinaryVoxelsFactory.reuseByte(voxels, bv));
     }
 }

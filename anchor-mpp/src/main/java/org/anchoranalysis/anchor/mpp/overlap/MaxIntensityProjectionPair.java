@@ -57,32 +57,32 @@ public class MaxIntensityProjectionPair {
     }
 
     public int minArea() {
-        int cnt1 = voxelsProjected1.getVoxels().countEqual(BinaryValues.getDefault().getOnInt());
-        int cnt2 = voxelsProjected2.getVoxels().countEqual(BinaryValues.getDefault().getOnInt());
+        int cnt1 = voxelsProjected1.voxels().countEqual(BinaryValues.getDefault().getOnInt());
+        int cnt2 = voxelsProjected2.voxels().countEqual(BinaryValues.getDefault().getOnInt());
         return Math.min(cnt1, cnt2);
     }
 
     private static BinaryVoxels<ByteBuffer> createBinaryVoxelsForFlag(
-            Voxels<ByteBuffer> vb, RegionMembershipWithFlags rmFlags) {
+            Voxels<ByteBuffer> voxels, RegionMembershipWithFlags rmFlags) {
 
-        Voxels<ByteBuffer> vbOut = VoxelsFactory.getByte().createInitialized(vb.extent());
+        Voxels<ByteBuffer> voxelsOut = VoxelsFactory.getByte().createInitialized(voxels.extent());
 
         BinaryValuesByte bvb = BinaryValuesByte.getDefault();
 
-        for (int z = 0; z < vb.extent().getZ(); z++) {
+        for (int z = 0; z < voxels.extent().z(); z++) {
 
-            ByteBuffer bb = vb.getPixelsForPlane(z).buffer();
-            ByteBuffer bbOut = vbOut.getPixelsForPlane(z).buffer();
+            ByteBuffer bb = voxels.slice(z).buffer();
+            ByteBuffer bbOut = voxelsOut.slice(z).buffer();
 
             int offset = 0;
-            for (int y = 0; y < vb.extent().getY(); y++) {
-                for (int x = 0; x < vb.extent().getX(); x++) {
+            for (int y = 0; y < voxels.extent().y(); y++) {
+                for (int x = 0; x < voxels.extent().x(); x++) {
                     maybeOutputByte(offset++, bb, bbOut, bvb, rmFlags);
                 }
             }
         }
 
-        return BinaryVoxelsFactory.reuseByte(vbOut, bvb.createInt());
+        return BinaryVoxelsFactory.reuseByte(voxelsOut, bvb.createInt());
     }
 
     private static void maybeOutputByte(
@@ -103,10 +103,10 @@ public class MaxIntensityProjectionPair {
 
     private static BoundedVoxels<ByteBuffer> intensityProjectionFor(
             BoundedVoxels<ByteBuffer> voxels, RegionMembershipWithFlags rmFlags) {
-        BinaryVoxels<ByteBuffer> bvb = createBinaryVoxelsForFlag(voxels.getVoxels(), rmFlags);
+        BinaryVoxels<ByteBuffer> bvb = createBinaryVoxelsForFlag(voxels.voxels(), rmFlags);
 
         BoundedVoxels<ByteBuffer> bvbBounded =
-                new BoundedVoxels<>(voxels.getBoundingBox(), bvb.getVoxels());
+                new BoundedVoxels<>(voxels.boundingBox(), bvb.voxels());
 
         return bvbBounded.maxIntensityProjection();
     }

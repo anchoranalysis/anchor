@@ -50,12 +50,12 @@ class SubrangeVoxelAccess<T extends Buffer> implements PixelsForPlane<T> {
 
     @Override
     public void setPixelsForPlane(int z, VoxelBuffer<T> pixels) {
-        src.getVoxels().setPixelsForPlane(z + zRel, pixels);
+        src.voxels().updateSlice(z + zRel, pixels);
     }
 
     @Override
     public VoxelBuffer<T> getPixelsForPlane(int z) {
-        return src.getVoxels().getPixelsForPlane(z + zRel);
+        return src.voxels().slice(z + zRel);
     }
 
     @Override

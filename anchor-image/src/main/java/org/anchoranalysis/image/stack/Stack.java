@@ -136,14 +136,14 @@ public class Stack implements Iterable<Channel> {
         Channel first = getChannel(0);
         delegate.addChannel(
                 ChannelFactory.instance()
-                        .createEmptyInitialised(first.getDimensions(), first.getVoxelDataType()));
+                        .createEmptyInitialised(first.dimensions(), first.getVoxelDataType()));
     }
 
     public final void addChannel(Channel channel) throws IncorrectImageSizeException {
 
         // We ensure that this channel has the same size as the first
         if (delegate.getNumberChannels() >= 1
-                && !channel.getDimensions().equals(delegate.getChannel(0).getDimensions())) {
+                && !channel.dimensions().equals(delegate.getChannel(0).dimensions())) {
             throw new IncorrectImageSizeException(
                     "Dimensions of channel do not match existing channel");
         }
@@ -165,8 +165,8 @@ public class Stack implements Iterable<Channel> {
         return delegate.getNumberChannels();
     }
 
-    public ImageDimensions getDimensions() {
-        return delegate.getChannel(0).getDimensions();
+    public ImageDimensions dimensions() {
+        return delegate.getChannel(0).dimensions();
     }
 
     public Stack duplicate() {

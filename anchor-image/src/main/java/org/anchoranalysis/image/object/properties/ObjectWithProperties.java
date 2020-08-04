@@ -33,7 +33,6 @@ import java.util.Map.Entry;
 import java.util.function.UnaryOperator;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.Voxels;
@@ -97,12 +96,12 @@ public class ObjectWithProperties {
         return object.equals(obj);
     }
 
-    public BoundingBox getBoundingBox() {
-        return object.getBoundingBox();
+    public BoundingBox boundingBox() {
+        return object.boundingBox();
     }
 
-    public Voxels<ByteBuffer> getVoxels() {
-        return object.getVoxels();
+    public Voxels<ByteBuffer> voxels() {
+        return object.voxels();
     }
 
     public int hashCode() {
@@ -111,10 +110,6 @@ public class ObjectWithProperties {
 
     public String toString() {
         return object.toString();
-    }
-
-    public BinaryValuesByte getBinaryValues() {
-        return object.getBinaryValuesByte();
     }
 
     public ObjectMask withoutProperties() {

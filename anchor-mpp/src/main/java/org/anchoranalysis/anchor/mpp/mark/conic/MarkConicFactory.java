@@ -46,7 +46,7 @@ public class MarkConicFactory {
 
     public static Mark createMarkFromPoint(Point3d point, int size, boolean do3D) {
         Preconditions.checkArgument(size > 0);
-        Preconditions.checkArgument(do3D || point.getZ() == 0);
+        Preconditions.checkArgument(do3D || point.z() == 0);
 
         if (do3D) {
             MarkEllipsoid me = new MarkEllipsoid();

@@ -141,8 +141,8 @@ public class ArrangeRasterTile extends ArrangeRasterBean {
                 int rowX = maxWidthHeight.sumWidthBeforeCol(colPos);
                 int rowY = maxWidthHeight.sumHeightBeforeRow(rowPos);
 
-                int x = rowX + ((colWidth - bboxSet.getExtent().getX()) / 2); // We center
-                int y = rowY + ((rowHeight - bboxSet.getExtent().getY()) / 2); // We center
+                int x = rowX + ((colWidth - bboxSet.extent().x()) / 2); // We center
+                int y = rowY + ((rowHeight - bboxSet.extent().y()) / 2); // We center
 
                 addShifted(bboxSet, set, x, y);
             }

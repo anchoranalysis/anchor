@@ -69,7 +69,7 @@ public class CfgMaskCollectionDifferentValuesGenerator extends RasterGenerator
     public Stack generate() throws OutputWriteFailedException {
 
         ObjectCollectionWithProperties objects =
-                cfg.deriveObjects(delegate.getDimensions(), this.rm, BinaryValuesByte.getDefault());
+                cfg.deriveObjects(delegate.dimensions(), this.rm, BinaryValuesByte.getDefault());
         try {
             delegate.setIterableElement(objects.withoutProperties());
         } catch (SetOperationFailedException e) {

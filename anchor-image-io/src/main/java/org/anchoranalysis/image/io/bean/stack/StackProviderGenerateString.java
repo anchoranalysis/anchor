@@ -69,7 +69,7 @@ public class StackProviderGenerateString extends StackProvider {
         if (repeatZProvider != null) {
 
             Stack repeatZ = repeatZProvider.create();
-            int zHeight = repeatZ.getDimensions().getZ();
+            int zHeight = repeatZ.dimensions().z();
 
             Stack out = new Stack();
             for (Channel chnl : label2D) {
@@ -131,11 +131,11 @@ public class StackProviderGenerateString extends StackProvider {
     }
 
     private Channel createExpandedChnl(Channel chnl, int zHeight) {
-        assert (chnl.getDimensions().getZ() == 1);
+        assert (chnl.dimensions().z() == 1);
 
-        ImageDimensions sdNew = chnl.getDimensions().duplicateChangeZ(zHeight);
+        ImageDimensions sdNew = chnl.dimensions().duplicateChangeZ(zHeight);
 
-        BoundingBox bboxSrc = new BoundingBox(chnl.getDimensions().getExtent());
+        BoundingBox bboxSrc = new BoundingBox(chnl.dimensions().extent());
         BoundingBox bboxDest = bboxSrc;
 
         Channel chnlNew =

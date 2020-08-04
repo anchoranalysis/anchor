@@ -33,6 +33,7 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.function.Consumer;
 import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.geometry.Comparator3i;
 import org.anchoranalysis.core.geometry.Point2i;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
@@ -88,7 +89,7 @@ public class PointsFromVoxels {
 
         List<Point2i> out = new ArrayList<>();
 
-        if (voxels.extent().getZ() > 1) {
+        if (voxels.extent().z() > 1) {
             throw new CreateException("Only works in 2D. No z-stack alllowed");
         }
 
@@ -120,7 +121,7 @@ public class PointsFromVoxels {
      * @throws CreateException if the voxels have three dimensions
      */
     public static SortedSet<Point3i> setFrom3i(BinaryVoxels<ByteBuffer> voxels, ReadableTuple3i shift) {
-        SortedSet<Point3i> points = new TreeSet<>();
+        SortedSet<Point3i> points = new TreeSet<>( new Comparator3i<>() );
         PointsFromVoxels.consumePoints3i(voxels, shift, points::add);
         return points;
     }
@@ -155,16 +156,16 @@ public class PointsFromVoxels {
             BinaryVoxels<ByteBuffer> voxels, ReadableTuple3i shift, Consumer<Point2i> consumer) {
         Extent e = voxels.extent();
 
-        BinaryValuesByte bvb = voxels.getBinaryValues().createByte();
+        BinaryValuesByte bvb = voxels.binaryValues().createByte();
         ByteBuffer bb = voxels.getPixelsForPlane(0).buffer();
 
-        for (int y = 0; y < e.getY(); y++) {
-            for (int x = 0; x < e.getX(); x++) {
+        for (int y = 0; y < e.y(); y++) {
+            for (int x = 0; x < e.x(); x++) {
 
                 if (bb.get() == bvb.getOnByte()) {
 
-                    int xAdj = shift.getX() + x;
-                    int yAdj = shift.getY() + y;
+                    int xAdj = shift.x() + x;
+                    int yAdj = shift.y() + y;
 
                     consumer.accept(new Point2i(xAdj, yAdj));
                 }
@@ -184,22 +185,22 @@ public class PointsFromVoxels {
 
         Extent e = voxels.extent();
 
-        BinaryValuesByte bvb = voxels.getBinaryValues().createByte();
+        BinaryValuesByte bvb = voxels.binaryValues().createByte();
 
-        for (int z = 0; z < e.getZ(); z++) {
+        for (int z = 0; z < e.z(); z++) {
             ByteBuffer bb = voxels.getPixelsForPlane(z).buffer();
 
-            int zAdj = shift.getZ() + z;
+            int zAdj = shift.z() + z;
 
-            for (int y = 0; y < e.getY(); y++) {
+            for (int y = 0; y < e.y(); y++) {
 
-                int yAdj = shift.getY() + y;
+                int yAdj = shift.y() + y;
 
-                for (int x = 0; x < e.getX(); x++) {
+                for (int x = 0; x < e.x(); x++) {
 
                     if (bb.get() == bvb.getOnByte()) {
 
-                        int xAdj = shift.getX() + x;
+                        int xAdj = shift.x() + x;
                         consumer.accept(new Point3i(xAdj, yAdj, zAdj));
                     }
                 }
@@ -219,22 +220,22 @@ public class PointsFromVoxels {
 
         Extent e = voxels.extent();
 
-        BinaryValuesByte bvb = voxels.getBinaryValues().createByte();
+        BinaryValuesByte bvb = voxels.binaryValues().createByte();
 
-        for (int z = 0; z < e.getZ(); z++) {
+        for (int z = 0; z < e.z(); z++) {
             ByteBuffer bb = voxels.getPixelsForPlane(z).buffer();
 
-            int zAdj = add.getZ() + z;
+            int zAdj = add.z() + z;
 
-            for (int y = 0; y < e.getY(); y++) {
+            for (int y = 0; y < e.y(); y++) {
 
-                int yAdj = add.getY() + y;
+                int yAdj = add.y() + y;
 
-                for (int x = 0; x < e.getX(); x++) {
+                for (int x = 0; x < e.x(); x++) {
 
                     if (bb.get() == bvb.getOnByte()) {
 
-                        int xAdj = add.getX() + x;
+                        int xAdj = add.x() + x;
 
                         consumer.accept(new Point3d(xAdj, yAdj, zAdj));
                     }

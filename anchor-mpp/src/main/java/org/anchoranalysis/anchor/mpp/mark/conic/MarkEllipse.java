@@ -142,8 +142,8 @@ public class MarkEllipse extends MarkConic implements Serializable {
         }
 
         // It is permissible to mutate the point during calculation
-        double x = pt.getX() - getPos().getX();
-        double y = pt.getY() - getPos().getY();
+        double x = pt.x() - getPos().x();
+        double y = pt.y() - getPos().y();
 
         // We exit early if it's inside the internal shell
         double sum = getEllipseSum(x, y, ellipsoidCalculator.getEllipsoidMatrix());
@@ -181,16 +181,16 @@ public class MarkEllipse extends MarkConic implements Serializable {
     }
 
     private double areaForShell(double multiplier) {
-        return (Math.PI * this.radii.getX() * this.radii.getY() * Math.pow(multiplier, 2));
+        return (Math.PI * this.radii.x() * this.radii.y() * Math.pow(multiplier, 2));
     }
 
     // Circumference
     public double circumference(int regionID) {
         if (regionID == GlobalRegionIdentifiers.SUBMARK_SHELL) {
             return calcCircumferenceUsingRamunjanApprox(
-                    this.radii.getX() * (1.0 + shellRad), this.radii.getY() * (1.0 + shellRad));
+                    this.radii.x() * (1.0 + shellRad), this.radii.y() * (1.0 + shellRad));
         } else {
-            return calcCircumferenceUsingRamunjanApprox(this.radii.getX(), this.radii.getY());
+            return calcCircumferenceUsingRamunjanApprox(this.radii.x(), this.radii.y());
         }
     }
 
@@ -226,7 +226,7 @@ public class MarkEllipse extends MarkConic implements Serializable {
 
         DoubleMatrix2D matRot = orientation.createRotationMatrix().getMatrix();
 
-        double[] radiusArray = twoElementArray(this.radii.getX(), this.radii.getY());
+        double[] radiusArray = twoElementArray(this.radii.x(), this.radii.y());
         this.ellipsoidCalculator.update(radiusArray, matRot);
 
         this.shellInt = 1.0 - this.shellRad;
@@ -242,7 +242,7 @@ public class MarkEllipse extends MarkConic implements Serializable {
     }
 
     public void setMarksExplicit(Point3d pos, Orientation orientation, Point2d radii) {
-        Preconditions.checkArgument(pos.getZ() == 0, "non-zero z-value");
+        Preconditions.checkArgument(pos.z() == 0, "non-zero z-value");
         super.setPos(pos);
         this.orientation = orientation;
         this.radii = radii;
@@ -260,7 +260,7 @@ public class MarkEllipse extends MarkConic implements Serializable {
     }
 
     public void setMarksExplicit(Point3d pos, Orientation orientation, Point3d radii) {
-        setMarksExplicit(pos, orientation, new Point2d(radii.getX(), radii.getY()));
+        setMarksExplicit(pos, orientation, new Point2d(radii.x(), radii.y()));
     }
 
     @Override
@@ -286,8 +286,8 @@ public class MarkEllipse extends MarkConic implements Serializable {
 
                 DoubleMatrix1D relPos =
                         twoElementMatrix(
-                                trgtMark.getPos().getX() - getPos().getX(),
-                                trgtMark.getPos().getY() - getPos().getY());
+                                trgtMark.getPos().x() - getPos().x(),
+                                trgtMark.getPos().y() - getPos().y());
 
                 DoubleMatrix1D relPosSquared = relPos.copy();
                 relPosSquared.assign(Functions.square); // NOSONAR
@@ -313,8 +313,7 @@ public class MarkEllipse extends MarkConic implements Serializable {
     }
 
     public void scaleRadii(double multFactor) {
-        this.radii.setX(this.radii.getX() * multFactor);
-        this.radii.setY(this.radii.getY() * multFactor);
+        this.radii.scale(multFactor);
         updateAfterMarkChange();
     }
 
@@ -322,9 +321,7 @@ public class MarkEllipse extends MarkConic implements Serializable {
     @Override
     public void scale(double multFactor) {
         super.scale(multFactor);
-
-        this.radii.setX(this.radii.getX() * multFactor);
-        this.radii.setY(this.radii.getY() * multFactor);
+        this.radii.scale(multFactor);
         updateAfterMarkChange();
     }
 
@@ -365,8 +362,8 @@ public class MarkEllipse extends MarkConic implements Serializable {
     public OverlayProperties generateProperties(ImageResolution sr) {
         OverlayProperties op = super.generateProperties(sr);
 
-        op.addDoubleAsString("Radius X (pixels)", radii.getX());
-        op.addDoubleAsString("Radius Y (pixels)", radii.getY());
+        op.addDoubleAsString("Radius X (pixels)", radii.x());
+        op.addDoubleAsString("Radius Y (pixels)", radii.y());
         orientation.addProperties(op.getNameValueSet());
         op.addDoubleAsString("Shell Radius (pixels)", shellRad);
 
@@ -380,12 +377,12 @@ public class MarkEllipse extends MarkConic implements Serializable {
 
     @Override
     public double[] createRadiiArray() {
-        return twoElementArray(this.radii.getX(), this.radii.getY());
+        return twoElementArray(this.radii.x(), this.radii.y());
     }
 
     @Override
     public double[] createRadiiArrayResolved(ImageResolution res) {
-        return twoElementArray(radii.getX(), radii.getY());
+        return twoElementArray(radii.x(), radii.y());
     }
 
     @Override
@@ -404,14 +401,14 @@ public class MarkEllipse extends MarkConic implements Serializable {
         // NOTE can we do this more smartly?
         double radiiFactor = rm.getRegionID() == 0 ? 1.0 : 1.0 + shellRad;
 
-        double radiusProjectedX = radii.getX() * radiiFactor;
+        double radiusProjectedX = radii.x() * radiiFactor;
 
         RotationMatrix rotMat = orientation.createRotationMatrix();
         double[] endPoint1 = rotMat.calcRotatedPoint(twoElementArray(-1 * radiusProjectedX));
         double[] endPoint2 = rotMat.calcRotatedPoint(twoElementArray(radiusProjectedX));
 
-        double[] xMinMax = minMaxEndPoint(endPoint1, endPoint2, 0, getPos().getX());
-        double[] yMinMax = minMaxEndPoint(endPoint1, endPoint2, 1, getPos().getY());
+        double[] xMinMax = minMaxEndPoint(endPoint1, endPoint2, 0, getPos().x());
+        double[] yMinMax = minMaxEndPoint(endPoint1, endPoint2, 1, getPos().y());
 
         addPoint2dProperty(object, "xAxisMin", xMinMax[0], yMinMax[0]);
         addPoint2dProperty(object, "xAxisMax", xMinMax[1], yMinMax[1]);
@@ -420,7 +417,7 @@ public class MarkEllipse extends MarkConic implements Serializable {
     private String strMarks() {
         return String.format(
                 "rad=[%3.3f, %3.3f] rot=%s",
-                this.radii.getX(), this.radii.getY(), this.orientation);
+                this.radii.x(), this.radii.y(), this.orientation);
     }
 
     private static double[] minMaxEndPoint(

@@ -37,23 +37,29 @@ import org.anchoranalysis.io.output.bound.BoundIOContext;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class NRGStackWriter {
 
+    private static final String FOLDER_CHANNEL = "nrgStack";
+    private static final String OUTPUT_PARAMS = "nrgStackParams";
+    
+    private static final String MANIFEST_FUNCTION_CHANNEL = "nrgStackChnl";
+    private static final String MANIFEST_FUNCTION_PARAMS = "nrgStackParams";
+    
     public static void writeNRGStack(NRGStackWithParams nrgStack, BoundIOContext context) {
-        // We write the nrg stack seperately as individual channels
+        // We write the nrg-stack separately as individual channels
         GeneratorSequenceUtilities.generateListAsSubfolder(
-                "nrgStack",
+                FOLDER_CHANNEL,
                 2,
                 nrgStack.getNrgStack().asStack().asListChannels(),
-                new ChnlGenerator("nrgStackChnl"),
+                new ChnlGenerator(MANIFEST_FUNCTION_CHANNEL),
                 context);
 
         if (nrgStack.getParams() != null) {
             context.getOutputManager()
                     .getWriterCheckIfAllowed()
                     .write(
-                            "nrgStackParams",
+                            OUTPUT_PARAMS,
                             () ->
                                     new KeyValueParamsGenerator(
-                                            nrgStack.getParams(), "nrgStackParams"));
+                                            nrgStack.getParams(), MANIFEST_FUNCTION_PARAMS));
         }
     }
 }

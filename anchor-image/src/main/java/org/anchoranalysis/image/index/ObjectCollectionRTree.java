@@ -48,7 +48,7 @@ public class ObjectCollectionRTree {
         delegate = new BoundingBoxRTree(objects.size());
 
         for (int i = 0; i < objects.size(); i++) {
-            delegate.add(i, objects.get(i).getBoundingBox());
+            delegate.add(i, objects.get(i).boundingBox());
         }
     }
 
@@ -65,7 +65,7 @@ public class ObjectCollectionRTree {
         return objects.stream()
                 .filterSubset(
                         omInd -> omInd.hasIntersectingVoxels(object),
-                        delegate.intersectsWith(object.getBoundingBox()));
+                        delegate.intersectsWith(object.boundingBox()));
     }
 
     public ObjectCollection intersectsWith(BoundingBox bbox) {
