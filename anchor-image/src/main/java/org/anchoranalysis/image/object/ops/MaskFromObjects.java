@@ -150,8 +150,7 @@ public class MaskFromObjects {
                     continue;
                 }
 
-                int indexGlobal = extentOut.offset(pointGlobal.x(), pointGlobal.y());
-                pixelsOut.put(indexGlobal, outValByte);
+                pixelsOut.put(extentOut.offset(pointGlobal), outValByte);
             }
         }
     }

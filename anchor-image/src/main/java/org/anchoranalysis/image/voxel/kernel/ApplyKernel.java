@@ -151,7 +151,7 @@ public class ApplyKernel {
                         point.x() <= pointMax.x();
                         point.incrementX()) {
 
-                    int ind = extent.offset(point.x(), point.y());
+                    int ind = extent.offset(point);
                     cnt += kernel.countAtPos(ind, point);
                 }
             }
@@ -284,7 +284,7 @@ public class ApplyKernel {
                         point.x() <= cornerMax.x();
                         point.incrementX()) {
 
-                    int indKernel = extent.offset(point.x(), point.y());
+                    int indKernel = extent.offset(point);
 
                     if (bufMask.get(ind) == bvb.getOnByte() && kernel.accptPos(indKernel, point)) {
                         cnt++;

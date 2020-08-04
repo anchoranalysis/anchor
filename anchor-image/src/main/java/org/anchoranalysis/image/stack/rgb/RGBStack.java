@@ -154,7 +154,7 @@ public class RGBStack {
     }
 
     private static void writePoint(Point3i point, Channel chnl, byte toWrite) {
-        int index = chnl.dimensions().extent().offset(point.x(), point.y());
+        int index = chnl.dimensions().extent().offset(point);
         chnl.voxels().asByte().slice(point.z()).buffer().put(index, toWrite);
     }
 
