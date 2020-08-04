@@ -166,29 +166,27 @@ public final class Extent implements Serializable {
         return String.format("[%d,%d,%d]", x(), y(), z());
     }
 
-    // Calculates an offset of an x and y point in terms of this extent
+    /** Calculates a XY-offset of a point in a buffer whose dimensions are this extent */
     public final int offset(int x, int y) {
         return (y * len.x()) + x;
     }
 
-    // Calculates an offset of an x and y point in terms of this extent
-    //  we should cal
+    /** Calculates a XYZ-offset of a point in a buffer whose dimensions are this extent */
     public final int offset(int x, int y, int z) {
         return (z * sxy) + (y * x()) + x;
     }
 
-    // Calculates an offset of an x and y point in terms of this extent
-    //  we should cal
+    /** Calculates a XYZ-offset of a point in a buffer whose dimensions are this extent */
     public final int offset(Point3i point) {
         return offset(point.x(), point.y(), point.z());
     }
 
-    // Calculates an offset of an x and y point in terms of this extent
+    /** Calculates a XY-offset of a point in a buffer whose dimensions are this extent */
     public final int offset(Point2i point) {
         return offset(point.x(), point.y(), 0);
     }
 
-    // Calculates an offset of an x and y point in terms of this extent
+    /** Calculates a XY-offset of a point in a buffer whose dimensions are this extent */
     public final int offsetSlice(Point3i point) {
         return offset(point.x(), point.y(), 0);
     }

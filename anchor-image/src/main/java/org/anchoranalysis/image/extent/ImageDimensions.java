@@ -105,10 +105,6 @@ public final class ImageDimensions implements Serializable {
         return extent.offset(x, y);
     }
 
-    public int offset(int x, int y, int z) {
-        return extent.offset(x, y, z);
-    }
-
     public boolean contains(Point3d point) {
         return extent.contains(point);
     }

@@ -37,15 +37,15 @@ import lombok.NoArgsConstructor;
 public class RGBOutputUtils {
 
     public static void writeRGBColorToByteArr(
-            RGBColor c,
+            RGBColor color,
             Point3i point,
-            ImageDimensions sd,
+            ImageDimensions dimensions,
             ByteBuffer red,
             ByteBuffer blue,
             ByteBuffer green) {
-        int index = sd.offset(point.x(), point.y(), 0);
-        red.put(index, (byte) c.getRed());
-        green.put(index, (byte) c.getGreen());
-        blue.put(index, (byte) c.getBlue());
+        int index = dimensions.offsetSlice(point);
+        red.put(index, (byte) color.getRed());
+        green.put(index, (byte) color.getGreen());
+        blue.put(index, (byte) color.getBlue());
     }
 }

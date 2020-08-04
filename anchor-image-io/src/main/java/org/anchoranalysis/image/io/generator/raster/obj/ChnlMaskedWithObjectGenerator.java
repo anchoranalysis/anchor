@@ -148,7 +148,7 @@ public class ChnlMaskedWithObjectGenerator extends RasterGenerator
                     }
 
                     int indexGlobal =
-                            srcChnl.dimensions().offset(pointGlobal.x(), pointGlobal.y());
+                            srcChnl.dimensions().offset(pointGlobal);
                     pixelsOut.putInt(maskIn.position() - 1, pixelsIn.getInt(indexGlobal));
                 }
             }

@@ -68,7 +68,7 @@ public abstract class BinaryVoxels<T extends Buffer> implements BinaryOnOffSette
         return voxels.extent();
     }
 
-    public VoxelBuffer<T> getPixelsForPlane(int z) {
+    public VoxelBuffer<T> slice(int z) {
         return voxels.slice(z);
     }
 
