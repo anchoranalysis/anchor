@@ -67,7 +67,7 @@ public class VoxelsWrapper {
         return voxels;
     }
 
-    public Voxels<? extends Buffer> match(VoxelDataType match) {
+    public Voxels<? extends Buffer> match(VoxelDataType match) {       // NOSONAR
         if (match.equals(dataType)) {
             return voxels;
         } else {

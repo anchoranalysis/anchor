@@ -80,7 +80,7 @@ public class BinaryVoxelsFactory {
      * @return newly created empty binary-voxels of specified size (all voxels initialized to 0)
      * @throws CreateException if an unsupported data-type is requested
      */
-    public static BinaryVoxels<?> createEmptyOff(
+    public static BinaryVoxels<?> createEmptyOff(   // NOSONAR
             Extent extent, VoxelDataType dataType)
             throws CreateException {
         if (dataType.equals(VoxelDataTypeUnsignedByte.INSTANCE)) {
