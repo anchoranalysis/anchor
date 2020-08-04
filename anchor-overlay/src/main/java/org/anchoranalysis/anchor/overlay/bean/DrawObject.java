@@ -93,19 +93,19 @@ public abstract class DrawObject extends AnchorBean<DrawObject> {
      * @param objects Masks to write
      * @param stack Stack to write masks on top of
      * @param attributes Extracts attributes from objects relevant to drawing
-     * @param bboxContainer A bounding box, which restricts where we write out to
+     * @param boxContainer A bounding box, which restricts where we write out to
      * @throws OperationFailedException
      */
     public void write(
             ObjectCollectionWithProperties objects,
             RGBStack stack,
             ObjectDrawAttributes attributes,
-            BoundingBox bboxContainer)
+            BoundingBox boxContainer)
             throws OperationFailedException {
         // We iterate through every mark
         int i = 0;
         for (ObjectWithProperties object : objects) {
-            writeSingle(object, stack, attributes, i++, bboxContainer);
+            writeSingle(object, stack, attributes, i++, boxContainer);
         }
     }
 }

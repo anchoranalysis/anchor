@@ -70,9 +70,9 @@ public class IterateVoxels {
                             .intersection()
                             .with(secondMask.get().boundingBox());
             intersection.ifPresent(
-                    bbox ->
+                    box ->
                             callEachPoint(
-                                    bbox,
+                                    box,
                                     requireIntersectionTwice(
                                             process, firstMask, secondMask.get())));
         } else {
@@ -225,14 +225,14 @@ public class IterateVoxels {
     /**
      * Iterate over each voxel in a bounding-box
      *
-     * @param bbox the box that is used as a condition on what voxels to iterate i.e. only voxels
+     * @param box the box that is used as a condition on what voxels to iterate i.e. only voxels
      *     within these bounds
      * @param process is called for each voxel within the bounding-box using GLOBAL coordinates.
      */
-    public static void callEachPoint(BoundingBox bbox, ProcessVoxel process) {
+    public static void callEachPoint(BoundingBox box, ProcessVoxel process) {
 
-        ReadableTuple3i cornerMin = bbox.cornerMin();
-        ReadableTuple3i cornerMax = bbox.calcCornerMax();
+        ReadableTuple3i cornerMin = box.cornerMin();
+        ReadableTuple3i cornerMax = box.calcCornerMax();
 
         Point3i point = new Point3i();
 
@@ -273,14 +273,14 @@ public class IterateVoxels {
      * voxel-buffer
      *
      * @param voxels voxels in which which {@link BoundingBox} refers to a subregion.
-     * @param bbox the box that is used as a condition on what voxels to iterate i.e. only voxels
+     * @param box the box that is used as a condition on what voxels to iterate i.e. only voxels
      *     within these bounds
      * @param process is called for each voxel within the bounding-box using GLOBAL coordinates.
      * @param <T> buffer-type for voxels
      */
     public static <T extends Buffer> void callEachPoint(
-            Voxels<T> voxels, BoundingBox bbox, ProcessVoxelSliceBuffer<T> process) {
-        callEachPoint(bbox, new RetrieveBufferForSlice<>(voxels, process));
+            Voxels<T> voxels, BoundingBox box, ProcessVoxelSliceBuffer<T> process) {
+        callEachPoint(box, new RetrieveBufferForSlice<>(voxels, process));
     }
 
     /**

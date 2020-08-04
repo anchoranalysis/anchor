@@ -36,11 +36,11 @@ import org.anchoranalysis.core.geometry.ReadableTuple3i;
  */
 public class BoundingBoxUnion {
 
-    private final BoundingBox bbox;
+    private final BoundingBox box;
 
-    public BoundingBoxUnion(BoundingBox bbox) {
+    public BoundingBoxUnion(BoundingBox box) {
         super();
-        this.bbox = bbox;
+        this.box = box;
     }
 
     /**
@@ -51,10 +51,10 @@ public class BoundingBoxUnion {
      */
     public BoundingBox with(BoundingBox other) {
 
-        ReadableTuple3i cornerMin = bbox.cornerMin();
+        ReadableTuple3i cornerMin = box.cornerMin();
         ReadableTuple3i cornerMinOther = other.cornerMin();
 
-        ReadableTuple3i cornerMax = bbox.calcCornerMax();
+        ReadableTuple3i cornerMax = box.calcCornerMax();
         ReadableTuple3i cornerMaxOthr = other.calcCornerMax();
 
         ExtentBoundsComparer meiX =

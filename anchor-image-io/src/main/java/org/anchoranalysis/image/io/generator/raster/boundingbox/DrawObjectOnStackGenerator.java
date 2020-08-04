@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.image.io.generator.raster.bbox;
+package org.anchoranalysis.image.io.generator.raster.boundingbox;
 
 import io.vavr.control.Either;
 import java.util.Optional;

@@ -64,7 +64,7 @@ public class RegionExtracterFromDisplayStack implements RegionExtracter {
     }
 
     @Override
-    public DisplayStack extractRegionFrom(BoundingBox bbox, double zoomFactor)
+    public DisplayStack extractRegionFrom(BoundingBox box, double zoomFactor)
             throws OperationFailedException {
 
         Stack out = null;
@@ -72,7 +72,7 @@ public class RegionExtracterFromDisplayStack implements RegionExtracter {
 
             Channel chnl =
                     extractRegionFrom(
-                            stack.getChannel(c), bbox, zoomFactor, listChnlConverter.get(c));
+                            stack.getChannel(c), box, zoomFactor, listChnlConverter.get(c));
 
             if (c == 0) {
                 out = new Stack(chnl);
@@ -94,7 +94,7 @@ public class RegionExtracterFromDisplayStack implements RegionExtracter {
     // TODO put in some form of interpolation when zoomFactor<1
     private Channel extractRegionFrom(
             Channel extractedSlice,
-            BoundingBox bbox,
+            BoundingBox box,
             double zoomFactor,
             ChnlConverterAttached<Channel, ByteBuffer> chnlConverter)
             throws OperationFailedException {
@@ -102,9 +102,9 @@ public class RegionExtracterFromDisplayStack implements RegionExtracter {
         ScaleFactor sf = new ScaleFactor(zoomFactor);
 
         // We calculate how big our outgoing voxels will be
-        ImageDimensions sd = extractedSlice.dimensions().scaleXYBy(sf);
+        ImageDimensions dimensions = extractedSlice.dimensions().scaleXYBy(sf);
 
-        Extent extentTrgt = bbox.extent().scaleXYBy(sf);
+        Extent extentTrgt = box.extent().scaleXYBy(sf);
 
         Voxels<ByteBuffer> voxels = VoxelsFactory.getByte().createInitialized(extentTrgt);
 
@@ -116,7 +116,7 @@ public class RegionExtracterFromDisplayStack implements RegionExtracter {
                     voxels,
                     extractedSlice.dimensions().extent(),
                     extentTrgt,
-                    bbox,
+                    box,
                     zoomFactor,
                     interpolator);
 
@@ -134,7 +134,7 @@ public class RegionExtracterFromDisplayStack implements RegionExtracter {
                     bufferIntermediate,
                     extractedSlice.dimensions().extent(),
                     extentTrgt,
-                    bbox,
+                    box,
                     zoomFactor,
                     interpolator);
 
@@ -150,7 +150,7 @@ public class RegionExtracterFromDisplayStack implements RegionExtracter {
 
         return ChannelFactory.instance()
                 .get(VoxelDataTypeUnsignedByte.INSTANCE)
-                .create(voxels, sd.resolution());
+                .create(voxels, dimensions.resolution());
     }
 
     // extentTrgt is the target-size (where we write this region)
@@ -161,13 +161,13 @@ public class RegionExtracterFromDisplayStack implements RegionExtracter {
             Voxels<ByteBuffer> voxelsDest,
             Extent extentSrc,
             Extent extentTrgt,
-            BoundingBox bbox,
+            BoundingBox box,
             double zoomFactor,
             MeanInterpolator interpolator)
             throws OperationFailedException {
 
-        ReadableTuple3i cornerMin = bbox.cornerMin();
-        ReadableTuple3i cornerMax = bbox.calcCornerMax();
+        ReadableTuple3i cornerMin = box.cornerMin();
+        ReadableTuple3i cornerMax = box.calcCornerMax();
         for (int z = cornerMin.z(); z <= cornerMax.z(); z++) {
 
             ByteBuffer bbIn = voxelsSrc.slice(z).buffer();
@@ -204,13 +204,13 @@ public class RegionExtracterFromDisplayStack implements RegionExtracter {
             Voxels<ShortBuffer> voxelsDest,
             Extent extentSrc,
             Extent extentTrgt,
-            BoundingBox bbox,
+            BoundingBox box,
             double zoomFactor,
             MeanInterpolator interpolator)
             throws OperationFailedException {
 
-        ReadableTuple3i cornerMin = bbox.cornerMin();
-        ReadableTuple3i cornerMax = bbox.calcCornerMax();
+        ReadableTuple3i cornerMin = box.cornerMin();
+        ReadableTuple3i cornerMax = box.calcCornerMax();
         for (int z = cornerMin.z(); z <= cornerMax.z(); z++) {
 
             assert (voxelsSrc.slice(z) != null);

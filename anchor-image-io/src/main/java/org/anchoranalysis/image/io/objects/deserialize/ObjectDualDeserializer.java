@@ -66,7 +66,7 @@ class ObjectDualDeserializer implements Deserializer<ObjectMask> {
 
         Path tiffFilename = changeExtension(filePath.toAbsolutePath(), "ser", "tif");
 
-        BoundingBox bbox = BOUNDING_BOX_DESERIALIZER.deserialize(filePath);
+        BoundingBox box = BOUNDING_BOX_DESERIALIZER.deserialize(filePath);
 
         try (OpenedRaster or = rasterReader.openFile(tiffFilename)) {
             Stack stack =
@@ -82,12 +82,12 @@ class ObjectDualDeserializer implements Deserializer<ObjectMask> {
 
             Channel chnl = stack.getChannel(0);
 
-            if (!chnl.dimensions().extent().equals(bbox.extent())) {
+            if (!chnl.dimensions().extent().equals(box.extent())) {
                 throw new DeserializationFailedException(
-                        errorMessageMismatchingDims(bbox, chnl.dimensions(), filePath));
+                        errorMessageMismatchingDims(box, chnl.dimensions(), filePath));
             }
 
-            return new ObjectMask(bbox, chnl.voxels().asByte());
+            return new ObjectMask(box, chnl.voxels().asByte());
 
         } catch (RasterIOException e) {
             throw new DeserializationFailedException(e);
@@ -95,10 +95,10 @@ class ObjectDualDeserializer implements Deserializer<ObjectMask> {
     }
 
     private static String errorMessageMismatchingDims(
-            BoundingBox bbox, ImageDimensions dimensions, Path filePath) {
+            BoundingBox box, ImageDimensions dimensions, Path filePath) {
         return String.format(
                 "Dimensions of bounding box (%s) and raster (%s) do not match for file %s",
-                bbox.extent(), dimensions.extent(), filePath);
+                box.extent(), dimensions.extent(), filePath);
     }
 
     private static Path changeExtension(Path path, String oldExtension, String newExtension)

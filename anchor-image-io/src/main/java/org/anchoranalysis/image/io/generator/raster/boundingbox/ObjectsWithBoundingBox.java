@@ -1,4 +1,4 @@
-package org.anchoranalysis.image.io.generator.raster.bbox;
+package org.anchoranalysis.image.io.generator.raster.boundingbox;
 
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.extent.BoundingBox;

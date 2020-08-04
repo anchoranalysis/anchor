@@ -49,9 +49,9 @@ public class BoundingBoxesOnPlane implements Iterable<BoundingBox> {
 
     private List<BoundingBox> list = new ArrayList<>();
 
-    public BoundingBoxesOnPlane(Extent extent, BoundingBox bbox) {
+    public BoundingBoxesOnPlane(Extent extent, BoundingBox box) {
         this(extent);
-        add(bbox);
+        add(box);
     }
 
     public void add(BoundingBox boundingBox) {
@@ -62,12 +62,12 @@ public class BoundingBoxesOnPlane implements Iterable<BoundingBox> {
         return list.get(index);
     }
 
-    public Iterator<BoundingBox> bboxIterator() {
+    public Iterator<BoundingBox> boxIterator() {
         return list.iterator();
     }
 
     @Override
     public Iterator<BoundingBox> iterator() {
-        return bboxIterator();
+        return boxIterator();
     }
 }

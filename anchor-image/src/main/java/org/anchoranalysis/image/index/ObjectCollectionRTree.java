@@ -68,11 +68,11 @@ public class ObjectCollectionRTree {
                         delegate.intersectsWith(object.boundingBox()));
     }
 
-    public ObjectCollection intersectsWith(BoundingBox bbox) {
-        return objects.createSubset(delegate.intersectsWith(bbox));
+    public ObjectCollection intersectsWith(BoundingBox box) {
+        return objects.createSubset(delegate.intersectsWith(box));
     }
 
-    public List<Integer> intersectsWithAsIndices(BoundingBox bbox) {
-        return delegate.intersectsWith(bbox);
+    public List<Integer> intersectsWithAsIndices(BoundingBox box) {
+        return delegate.intersectsWith(box);
     }
 }

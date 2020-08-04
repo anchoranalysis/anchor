@@ -118,20 +118,20 @@ public class BoundedVoxels<T extends Buffer> {
         assert (this.boundingBox.extent().z() == 1);
         assert (this.voxels.extent().z() == 1);
 
-        BoundingBox bboxNew =
+        BoundingBox boxNew =
                 new BoundingBox(boundingBox.cornerMin(), boundingBox.extent().duplicateChangeZ(sz));
 
-        Voxels<T> buffer = factory.createInitialized(bboxNew.extent());
+        Voxels<T> buffer = factory.createInitialized(boxNew.extent());
 
         Extent e = this.boundingBox.extent();
-        BoundingBox bboxSrc = new BoundingBox(e);
+        BoundingBox boxSrc = new BoundingBox(e);
 
         // we copy in one by one
         for (int z = 0; z < buffer.extent().z(); z++) {
-            this.voxels.copyPixelsTo(bboxSrc, buffer, new BoundingBox(new Point3i(0, 0, z), e));
+            this.voxels.copyPixelsTo(boxSrc, buffer, new BoundingBox(new Point3i(0, 0, z), e));
         }
 
-        return new BoundedVoxels<>(bboxNew, buffer);
+        return new BoundedVoxels<>(boxNew, buffer);
     }
 
     // Considers growing in the negative direction from crnr by neg increments
@@ -204,7 +204,7 @@ public class BoundedVoxels<T extends Buffer> {
                         clipNeg(boundingBox.cornerMin().y(), neg.y()),
                         clipNeg(boundingBox.cornerMin().z(), neg.z()));
 
-        ReadableTuple3i bboxMax = boundingBox.calcCornerMax();
+        ReadableTuple3i boxMax = boundingBox.calcCornerMax();
 
         ReadableTuple3i maxPossible;
         if (clipRegion.isPresent()) {
@@ -215,9 +215,9 @@ public class BoundedVoxels<T extends Buffer> {
 
         Point3i growBy =
                 new Point3i(
-                        clipPos(bboxMax.x(), pos.x(), maxPossible.x()) + negClip.x(),
-                        clipPos(bboxMax.y(), pos.y(), maxPossible.y()) + negClip.y(),
-                        clipPos(bboxMax.z(), pos.z(), maxPossible.z()) + negClip.z());
+                        clipPos(boxMax.x(), pos.x(), maxPossible.x()) + negClip.x(),
+                        clipPos(boxMax.y(), pos.y(), maxPossible.y()) + negClip.y(),
+                        clipPos(boxMax.z(), pos.z(), maxPossible.z()) + negClip.z());
         return new BoundingBox(negClip, this.voxels.extent().growBy(growBy));
     }
 
@@ -349,22 +349,22 @@ public class BoundedVoxels<T extends Buffer> {
      * <p>It should <b>never</b> be larger than the voxels.
      *
      * @see org.anchoranalysis.image.voxel.Voxels#region
-     * @param bbox bounding-box in absolute coordinates.
+     * @param box bounding-box in absolute coordinates.
      * @param reuseIfPossible if TRUE the existing box will be reused if possible, otherwise a new
      *     box is always created.
      * @return bounded0voxels corresponding to the requested region, either newly-created or
      *     reused
      * @throws CreateException
      */
-    public BoundedVoxels<T> region(BoundingBox bbox, boolean reuseIfPossible)
+    public BoundedVoxels<T> region(BoundingBox box, boolean reuseIfPossible)
             throws CreateException {
 
-        if (!boundingBox.contains().box(bbox)) {
+        if (!boundingBox.contains().box(box)) {
             throw new CreateException("Source box does not contain target box");
         }
 
-        BoundingBox target = bbox.relPosToBox(boundingBox);
-        return new BoundedVoxels<>(bbox, voxels.region(target, reuseIfPossible));
+        BoundingBox target = box.relPosToBox(boundingBox);
+        return new BoundedVoxels<>(box, voxels.region(target, reuseIfPossible));
     }
 
     /**
@@ -379,7 +379,7 @@ public class BoundedVoxels<T extends Buffer> {
      * <p>A new voxel-buffer is always created for this operation i.e. the existing box is never
      * reused like sometimes in {@link region}.</p.
      *
-     * @param bbox bounding-box in absolute coordinates, that must at least partially intersect with
+     * @param box bounding-box in absolute coordinates, that must at least partially intersect with
      *     the current bounds.
      * @param voxelValueForRest a voxel-value for the parts of the buffer not covered by the
      *     intersection.
@@ -387,16 +387,16 @@ public class BoundedVoxels<T extends Buffer> {
      *     other regions.
      * @throws CreateException if the boxes do not intersect
      */
-    public BoundedVoxels<T> regionIntersecting(BoundingBox bbox, int voxelValueForRest)
+    public BoundedVoxels<T> regionIntersecting(BoundingBox box, int voxelValueForRest)
             throws CreateException {
 
-        Optional<BoundingBox> bboxIntersect = boundingBox.intersection().with(bbox);
-        if (!bboxIntersect.isPresent()) {
+        Optional<BoundingBox> boxIntersect = boundingBox.intersection().with(box);
+        if (!boxIntersect.isPresent()) {
             throw new CreateException(
                     "Requested bounding-box does not intersect with current bounds");
         }
 
-        Voxels<T> bufNew = voxels.getFactory().createInitialized(bbox.extent());
+        Voxels<T> bufNew = voxels.getFactory().createInitialized(box.extent());
 
         // We can rely on the newly created voxels being 0 by default, otherwise we must update.
         if (voxelValueForRest != 0) {
@@ -404,11 +404,11 @@ public class BoundedVoxels<T extends Buffer> {
         }
 
         voxels.copyPixelsTo(
-                bboxIntersect.get().relPosToBox(this.boundingBox),
+                boxIntersect.get().relPosToBox(this.boundingBox),
                 bufNew,
-                bboxIntersect.get().relPosToBox(bbox));
+                boxIntersect.get().relPosToBox(box));
 
-        return new BoundedVoxels<>(bbox, bufNew);
+        return new BoundedVoxels<>(box, bufNew);
     }
 
     /**
@@ -441,9 +441,9 @@ public class BoundedVoxels<T extends Buffer> {
      */
     public BoundedVoxels<T> extractSlice(int z, boolean keepZ) {
 
-        BoundingBox bboxFlattened = boundingBox.flattenZ();
+        BoundingBox boxFlattened = boundingBox.flattenZ();
 
         return new BoundedVoxels<>(
-                keepZ ? bboxFlattened.shiftToZ(z) : bboxFlattened, voxels.extractSlice(z));
+                keepZ ? boxFlattened.shiftToZ(z) : boxFlattened, voxels.extractSlice(z));
     }
 }

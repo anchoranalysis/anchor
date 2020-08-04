@@ -68,9 +68,9 @@ public class ChnlFixture {
 
     public static Channel createChnl(Extent e, IntensityFunction createIntensity) {
 
-        ImageDimensions sd = new ImageDimensions(e, ImageResFixture.INSTANCE);
+        ImageDimensions dimensions = new ImageDimensions(e, ImageResFixture.INSTANCE);
 
-        Channel chnl = new ChannelFactoryByte().createEmptyInitialised(sd);
+        Channel chnl = new ChannelFactoryByte().createEmptyInitialised(dimensions);
 
         // Populate the channel with values
         for (int z = 0; z < e.z(); z++) {

@@ -66,9 +66,9 @@ public class ObjectMaskFixture {
     }
 
     private ObjectMask createAt(Point3i cornerMin, Extent extent, VoxelPattern pattern) {
-        BoundingBox bbox = new BoundingBox(cornerMin, extent);
+        BoundingBox box = new BoundingBox(cornerMin, extent);
 
-        assertTrue(dimensions.contains(bbox));
+        assertTrue(dimensions.contains(box));
 
         Voxels<ByteBuffer> voxels = VoxelsFactory.getByte().createInitialized(extent);
         BinaryValues bv = BinaryValues.getDefault();
@@ -95,6 +95,6 @@ public class ObjectMaskFixture {
 
         assertTrue(atLeastOneHigh);
 
-        return new ObjectMask(bbox, BinaryVoxelsFactory.reuseByte(voxels, bv));
+        return new ObjectMask(box, BinaryVoxelsFactory.reuseByte(voxels, bv));
     }
 }

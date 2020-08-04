@@ -264,15 +264,15 @@ public class MarkEllipse extends MarkConic implements Serializable {
     }
 
     @Override
-    public BoundingBox bbox(ImageDimensions bndScene, int regionID) {
+    public BoundingBox box(ImageDimensions bndScene, int regionID) {
 
-        DoubleMatrix1D bboxMatrix = ellipsoidCalculator.getBoundingBoxMatrix().copy();
+        DoubleMatrix1D boxMatrix = ellipsoidCalculator.getBoundingBoxMatrix().copy();
 
         if (regionID == GlobalRegionIdentifiers.SUBMARK_SHELL) {
-            bboxMatrix.assign(Functions.mult(shellExtOut));
+            boxMatrix.assign(Functions.mult(shellExtOut));
         }
 
-        return BoundingBoxCalculator.bboxFromBounds(getPos(), bboxMatrix, false, bndScene);
+        return BoundingBoxCalculator.boxFromBounds(getPos(), boxMatrix, false, bndScene);
     }
 
     private transient QuickOverlapCalculation quickOverlap =
@@ -391,8 +391,8 @@ public class MarkEllipse extends MarkConic implements Serializable {
     }
 
     @Override
-    public BoundingBox bboxAllRegions(ImageDimensions bndScene) {
-        return bbox(bndScene, GlobalRegionIdentifiers.SUBMARK_SHELL);
+    public BoundingBox boxAllRegions(ImageDimensions bndScene) {
+        return box(bndScene, GlobalRegionIdentifiers.SUBMARK_SHELL);
     }
 
     private void addAxisOrientationProperties(

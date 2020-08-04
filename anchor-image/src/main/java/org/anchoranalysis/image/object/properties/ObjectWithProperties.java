@@ -49,8 +49,8 @@ public class ObjectWithProperties {
 
     @Getter private final Map<String, Object> properties;
 
-    public ObjectWithProperties(BoundingBox bbox) {
-        this(new ObjectMask(bbox));
+    public ObjectWithProperties(BoundingBox box) {
+        this(new ObjectMask(box));
     }
 
     public ObjectWithProperties(ObjectMask object) {

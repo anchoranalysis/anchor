@@ -94,9 +94,9 @@ public abstract class Mark implements Serializable, Identifiable {
     // center point
     public abstract Point3d centerPoint();
 
-    public abstract BoundingBox bbox(ImageDimensions bndScene, int regionID);
+    public abstract BoundingBox box(ImageDimensions bndScene, int regionID);
 
-    public abstract BoundingBox bboxAllRegions(ImageDimensions bndScene);
+    public abstract BoundingBox boxAllRegions(ImageDimensions bndScene);
 
     protected byte evalPointInside(Point3i pt) {
         return this.evalPointInside(PointConverter.doubleFromInt(pt));
@@ -129,30 +129,30 @@ public abstract class Mark implements Serializable, Identifiable {
     public ObjectWithProperties deriveObject(
             ImageDimensions bndScene, RegionMembershipWithFlags rm, BinaryValuesByte bv) {
 
-        BoundingBox bbox = this.bbox(bndScene, rm.getRegionID());
+        BoundingBox box = this.box(bndScene, rm.getRegionID());
 
         // We make a new mask and populate it from out iterator
-        ObjectWithProperties object = new ObjectWithProperties(bbox);
+        ObjectWithProperties object = new ObjectWithProperties(box);
 
         assert (object.voxels().extent().z() > 0);
 
         byte maskOn = bv.getOnByte();
 
-        ReadableTuple3i maxPos = bbox.calcCornerMax();
+        ReadableTuple3i maxPos = box.calcCornerMax();
 
         Point3i point = new Point3i();
-        for (point.setZ(bbox.cornerMin().z());
+        for (point.setZ(box.cornerMin().z());
                 point.z() <= maxPos.z();
                 point.incrementZ()) {
 
-            int zLocal = point.z() - bbox.cornerMin().z();
+            int zLocal = point.z() - box.cornerMin().z();
             ByteBuffer maskSlice = object.voxels().slice(zLocal).buffer();
 
             int cnt = 0;
-            for (point.setY(bbox.cornerMin().y());
+            for (point.setY(box.cornerMin().y());
                     point.y() <= maxPos.y();
                     point.incrementY()) {
-                for (point.setX(bbox.cornerMin().x());
+                for (point.setX(box.cornerMin().x());
                         point.x() <= maxPos.x();
                         point.incrementX()) {
 
@@ -178,34 +178,34 @@ public abstract class Mark implements Serializable, Identifiable {
             BinaryValuesByte bvOut,
             double scaleFactor) {
 
-        BoundingBox bbox = bbox(bndScene, rm.getRegionID()).scale(new ScaleFactor(scaleFactor));
+        BoundingBox box = box(bndScene, rm.getRegionID()).scale(new ScaleFactor(scaleFactor));
 
         // We make a new mask and populate it from out iterator
-        ObjectWithProperties object = new ObjectWithProperties(bbox);
+        ObjectWithProperties object = new ObjectWithProperties(box);
 
         assert (object.voxels().extent().z() > 0);
 
         byte maskOn = bvOut.getOnByte();
 
-        ReadableTuple3i maxPos = bbox.calcCornerMax();
+        ReadableTuple3i maxPos = box.calcCornerMax();
 
         Point3i point = new Point3i();
         Point3d pointScaled = new Point3d();
-        for (point.setZ(bbox.cornerMin().z());
+        for (point.setZ(box.cornerMin().z());
                 point.z() <= maxPos.z();
                 point.incrementZ()) {
 
-            int zLocal = point.z() - bbox.cornerMin().z();
+            int zLocal = point.z() - box.cornerMin().z();
             ByteBuffer maskSlice = object.voxels().slice(zLocal).buffer();
 
             // Z coordinates are the same as we only scale in XY
             pointScaled.setZ(point.z());
 
             int cnt = 0;
-            for (point.setY(bbox.cornerMin().y());
+            for (point.setY(box.cornerMin().y());
                     point.y() <= maxPos.y();
                     point.incrementY()) {
-                for (point.setX(bbox.cornerMin().x());
+                for (point.setX(box.cornerMin().x());
                         point.x() <= maxPos.x();
                         point.incrementX()) {
 

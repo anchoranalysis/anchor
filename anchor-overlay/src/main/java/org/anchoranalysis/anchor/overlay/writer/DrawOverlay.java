@@ -86,7 +86,7 @@ public abstract class DrawOverlay {
             ImageDimensions dimensions,
             RGBStack background,
             IDGetter<Overlay> idGetter,
-            BoundingBox bboxContainer)
+            BoundingBox boxContainer)
             throws OperationFailedException {
 
         try {
@@ -101,13 +101,13 @@ public abstract class DrawOverlay {
                     background,
                     ObjectDrawAttributesFactory.createFromOverlays(
                             overlays, idGetter, new IDGetterObjectWithProperties("colorID")),
-                    bboxContainer);
+                    boxContainer);
         } catch (CreateException e) {
             throw new OperationFailedException(e);
         }
     }
 
-    // dim should be for the ENTIRE cfg, not just the bit in bboxContainer
+    // dim should be for the ENTIRE cfg, not just the bit in boxContainer
     public abstract void writePrecalculatedOverlays(
             List<PrecalcOverlay> precalculatedMasks,
             ImageDimensions dimensions,

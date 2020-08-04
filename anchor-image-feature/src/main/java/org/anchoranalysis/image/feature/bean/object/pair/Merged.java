@@ -31,17 +31,15 @@ import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
+import lombok.NoArgsConstructor;
 
 /**
  * Evaluates the first-object in a pair only
  *
  * @author Owen Feehan
  */
+@NoArgsConstructor
 public class Merged extends FeatureDeriveFromPair {
-
-    public Merged() {
-        // BEAN Constructor
-    }
 
     public Merged(Feature<FeatureInputSingleObject> item) {
         super(item);

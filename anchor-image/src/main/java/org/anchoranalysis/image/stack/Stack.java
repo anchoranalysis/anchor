@@ -29,8 +29,10 @@ package org.anchoranalysis.image.stack;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Stream;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
+import org.anchoranalysis.core.functional.function.CheckedBiFunction;
 import org.anchoranalysis.core.functional.function.CheckedUnaryOperator;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
@@ -60,19 +62,25 @@ public class Stack implements Iterable<Channel> {
         delegate = new StackNotUniformSized(channel);
     }
 
-    public Stack(ImageDimensions sd, ChannelFactorySingleType factory, int numberChannels) {
+    public Stack(ImageDimensions dimensions, ChannelFactorySingleType factory, int numberChannels) {
         this();
         for (int i = 0; i < numberChannels; i++) {
-            delegate.addChannel(factory.createEmptyInitialised(sd));
+            delegate.addChannel(factory.createEmptyInitialised(dimensions));
         }
     }
 
-    public Stack(Channel channel0, Channel channel1, Channel channel2)
-            throws IncorrectImageSizeException {
+    public Stack(Channel ...channels) throws IncorrectImageSizeException {
         this();
-        addChannel(channel0);
-        addChannel(channel1);
-        addChannel(channel2);
+        for(Channel channel : channels) {
+            addChannel(channel);    
+        }
+    }
+    
+    public Stack(Stream<Channel> channelStream) throws IncorrectImageSizeException {
+        delegate = new StackNotUniformSized(channelStream);
+        if (!delegate.isUniformlySized()) {
+            throw new IncorrectImageSizeException("Channels in streams are not uniformly sized");
+        }
     }
 
     private Stack(StackNotUniformSized stack) {
@@ -85,13 +93,13 @@ public class Stack implements Iterable<Channel> {
     }
 
     /**
-     * Produces a new stack with a particular operation applied to each channel.
+     * Produces a new stack with a particular mapping applied to each channel.
      *
      * <p>The function applied to the channel should ensure it produces uniform sizes.
      *
      * @param mapping performs an operation on a channel and produces a modified channel (or a
      *     different one entirely)
-     * @return a new stack (after any modification by {@code mapFunc}) preserving the channel order
+     * @return a new stack (after any modification by {@code mapping}) preserving the channel order
      * @throws OperationFailedException if the channels produced have non-uniform sizes
      */
     public Stack mapChannel(CheckedUnaryOperator<Channel, OperationFailedException> mapping)
@@ -100,6 +108,30 @@ public class Stack implements Iterable<Channel> {
         for (Channel channel : this) {
             try {
                 out.addChannel(mapping.apply(channel));
+            } catch (IncorrectImageSizeException e) {
+                throw new OperationFailedException(e);
+            }
+        }
+        return out;
+    }
+    
+    /**
+     * Produces a new stack with a particular mapping applied to each channel (with an index of the channel also available)
+     *
+     * <p>The function applied to the channel should ensure it produces uniform sizes.
+     *
+     * @param mapping performs an operation on a channel and produces a modified channel (or a
+     *     different one entirely)
+     * @return a new stack (after any modification by {@code mapping}) preserving the channel order
+     * @throws OperationFailedException if the channels produced have non-uniform sizes
+     */
+    public Stack mapChannelWithIndex(CheckedBiFunction<Channel,Integer,Channel,OperationFailedException> mapping)
+            throws OperationFailedException {
+        Stack out = new Stack();
+        for (int index = 0; index<getNumberChannels(); index++) {
+            Channel channel = getChannel(index);
+            try {
+                out.addChannel(mapping.apply(channel,index));
             } catch (IncorrectImageSizeException e) {
                 throw new OperationFailedException(e);
             }
@@ -124,7 +156,7 @@ public class Stack implements Iterable<Channel> {
                     "At least one channel must exist from which to guess dimensions");
         }
 
-        if (!delegate.isUniformSized()) {
+        if (!delegate.isUniformlySized()) {
             throw new OperationFailedException(
                     "Other channels do not have the same dimensions. Cannot make a good guess of dimensions.");
         }

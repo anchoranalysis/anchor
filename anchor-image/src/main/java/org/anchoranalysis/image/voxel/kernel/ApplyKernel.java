@@ -112,18 +112,18 @@ public class ApplyKernel {
      *
      * @param kernel the kernel to be applied
      * @param voxels the voxels to iterate over
-     * @param bbox a bounding-box (coordinates relative to voxels) that restricts where iteration
+     * @param box a bounding-box (coordinates relative to voxels) that restricts where iteration
      *     occurs. Must be containted within voxels.
      * @return the sum of the count value returned by the kernel over all iterated voxels
      * @throws OperationFailedException
      */
-    public static int applyForCount(CountKernel kernel, Voxels<ByteBuffer> voxels, BoundingBox bbox)
+    public static int applyForCount(CountKernel kernel, Voxels<ByteBuffer> voxels, BoundingBox box)
             throws OperationFailedException {
 
-        if (!voxels.extent().contains(bbox)) {
+        if (!voxels.extent().contains(box)) {
             throw new OperationFailedException(
                     String.format(
-                            "BBox (%s) must be contained within extent (%s)", bbox, voxels.extent()));
+                            "BBox (%s) must be contained within extent (%s)", box, voxels.extent()));
         }
 
         int localSlicesSize = 3;
@@ -134,24 +134,24 @@ public class ApplyKernel {
 
         kernel.init(voxels);
 
-        ReadableTuple3i pointMax = bbox.calcCornerMax();
+        ReadableTuple3i pointMax = box.calcCornerMax();
 
         Point3i point = new Point3i();
-        for (point.setZ(bbox.cornerMin().z());
+        for (point.setZ(box.cornerMin().z());
                 point.z() <= pointMax.z();
                 point.incrementZ()) {
 
             LocalSlices localSlices = new LocalSlices(point.z(), localSlicesSize, voxels);
             kernel.notifyZChange(localSlices, point.z());
 
-            for (point.setY(bbox.cornerMin().y());
+            for (point.setY(box.cornerMin().y());
                     point.y() <= pointMax.y();
                     point.incrementY()) {
-                for (point.setX(bbox.cornerMin().x());
+                for (point.setX(box.cornerMin().x());
                         point.x() <= pointMax.x();
                         point.incrementX()) {
 
-                    int ind = extent.offset(point);
+                    int ind = extent.offsetSlice(point);
                     cnt += kernel.countAtPos(ind, point);
                 }
             }
@@ -165,19 +165,19 @@ public class ApplyKernel {
      *
      * @param kernel the kernel to be applied
      * @param voxels the voxels to iterate over
-     * @param bbox a bounding-box (coordinates relative to voxels) that restricts where iteration
+     * @param box a bounding-box (coordinates relative to voxels) that restricts where iteration
      *     occurs. Must be contained within voxels.
      * @return TRUE if a positive-value is encountered, 0 if it never is encountered
      * @throws OperationFailedException
      */
     public static boolean applyUntilPositive(
-            CountKernel kernel, Voxels<ByteBuffer> voxels, BoundingBox bbox)
+            CountKernel kernel, Voxels<ByteBuffer> voxels, BoundingBox box)
             throws OperationFailedException {
 
-        if (!voxels.extent().contains(bbox)) {
+        if (!voxels.extent().contains(box)) {
             throw new OperationFailedException(
                     String.format(
-                            "Bounding-box (%s) must be contained within extent (%s)", bbox, voxels.extent()));
+                            "Bounding-box (%s) must be contained within extent (%s)", box, voxels.extent()));
         }
 
         int localSlicesSize = 3;
@@ -186,20 +186,20 @@ public class ApplyKernel {
 
         kernel.init(voxels);
 
-        ReadableTuple3i pointMax = bbox.calcCornerMax();
+        ReadableTuple3i pointMax = box.calcCornerMax();
 
         Point3i point = new Point3i();
-        for (point.setZ(bbox.cornerMin().z());
+        for (point.setZ(box.cornerMin().z());
                 point.z() <= pointMax.z();
                 point.incrementZ()) {
 
             LocalSlices localSlices = new LocalSlices(point.z(), localSlicesSize, voxels);
             kernel.notifyZChange(localSlices, point.z());
 
-            for (point.setY(bbox.cornerMin().y());
+            for (point.setY(box.cornerMin().y());
                     point.y() <= pointMax.y();
                     point.incrementY()) {
-                for (point.setX(bbox.cornerMin().x());
+                for (point.setX(box.cornerMin().x());
                         point.x() <= pointMax.x();
                         point.incrementX()) {
 
@@ -254,9 +254,9 @@ public class ApplyKernel {
 
         int cnt = 0;
 
-        BoundingBox bbox = object.boundingBox();
-        ReadableTuple3i cornerMin = bbox.cornerMin();
-        ReadableTuple3i cornerMax = bbox.calcCornerMax();
+        BoundingBox box = object.boundingBox();
+        ReadableTuple3i cornerMin = box.cornerMin();
+        ReadableTuple3i cornerMax = box.calcCornerMax();
 
         Extent extent = in.extent();
 
@@ -284,7 +284,7 @@ public class ApplyKernel {
                         point.x() <= cornerMax.x();
                         point.incrementX()) {
 
-                    int indKernel = extent.offset(point);
+                    int indKernel = extent.offsetSlice(point);
 
                     if (bufMask.get(ind) == bvb.getOnByte() && kernel.accptPos(indKernel, point)) {
                         cnt++;

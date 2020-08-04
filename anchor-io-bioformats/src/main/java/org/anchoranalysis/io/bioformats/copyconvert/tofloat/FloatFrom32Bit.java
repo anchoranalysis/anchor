@@ -42,10 +42,10 @@ public class FloatFrom32Bit extends ConvertToFloat {
     }
 
     @Override
-    protected float[] convertIntegerBytesToFloatArray(ImageDimensions sd, byte[] src, int srcOffset)
+    protected float[] convertIntegerBytesToFloatArray(ImageDimensions dimensions, byte[] src, int srcOffset)
             throws IOException {
 
-        float[] fArr = new float[sd.x() * sd.y()];
+        float[] fArr = new float[dimensions.volumeXY()];
         int cntLoc = 0;
 
         ByteArrayInputStream bis = new ByteArrayInputStream(src);
@@ -53,8 +53,8 @@ public class FloatFrom32Bit extends ConvertToFloat {
         if (littleEndian) {
 
             try (LittleEndianDataInputStream dis = new LittleEndianDataInputStream(bis)) {
-                for (int y = 0; y < sd.y(); y++) {
-                    for (int x = 0; x < sd.x(); x++) {
+                for (int y = 0; y < dimensions.y(); y++) {
+                    for (int x = 0; x < dimensions.x(); x++) {
                         fArr[cntLoc++] = dis.readFloat();
                     }
                 }
@@ -64,8 +64,8 @@ public class FloatFrom32Bit extends ConvertToFloat {
         } else {
 
             try (DataInputStream dis = new DataInputStream(bis)) {
-                for (int y = 0; y < sd.y(); y++) {
-                    for (int x = 0; x < sd.x(); x++) {
+                for (int y = 0; y < dimensions.y(); y++) {
+                    for (int x = 0; x < dimensions.x(); x++) {
 
                         float f = dis.readFloat();
                         fArr[cntLoc++] = f;

@@ -120,7 +120,7 @@ public class ColoredOverlayCollection implements Iterable<Overlay> {
 
             Overlay overlay = get(i);
 
-            if (overlay.bbox(drawOverlay, bndScene).intersection().existsWithAny(intersectList)) {
+            if (overlay.box(drawOverlay, bndScene).intersection().existsWithAny(intersectList)) {
                 out.add(overlay, getColor(i));
             }
         }
@@ -160,8 +160,8 @@ public class ColoredOverlayCollection implements Iterable<Overlay> {
         return overlays;
     }
 
-    public List<BoundingBox> bboxList(DrawOverlay drawOverlay, ImageDimensions dim) {
-        return overlays.bboxList(drawOverlay, dim);
+    public List<BoundingBox> boxList(DrawOverlay drawOverlay, ImageDimensions dim) {
+        return overlays.boxList(drawOverlay, dim);
     }
 
     public Set<Overlay> createSet() {

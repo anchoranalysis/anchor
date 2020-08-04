@@ -76,16 +76,16 @@ public abstract class Voxels<T extends Buffer> {
      * <p>If {@link reuseIfPossible} is FALSE, it is guaranteed that a new voxels will always be
      * created.
      *
-     * @param bbox a bounding-box indicating the regions desired (not be larger than the extent)
+     * @param box a bounding-box indicating the regions desired (not be larger than the extent)
      * @param reuseIfPossible if TRUE the existing box will be reused if possible,, otherwise a new
      *     box is always created.
      * @return voxels corresponding to the requested region, either newly-created or reused
      */
-    public Voxels<T> region(BoundingBox bbox, boolean reuseIfPossible) {
+    public Voxels<T> region(BoundingBox box, boolean reuseIfPossible) {
         if (reuseIfPossible) {
-            return regionAvoidNewIfPossible(bbox);
+            return regionAvoidNewIfPossible(box);
         } else {
-            return regionAlwaysNew(bbox);
+            return regionAlwaysNew(box);
         }
     }
 
@@ -219,22 +219,22 @@ public abstract class Voxels<T extends Buffer> {
      * <p>Bounding boxes can be used to restrict regions in both the source and destination, but
      * must be equal in volume.
      *
-     * @param bboxToBeAssigned which part of the buffer to write to
+     * @param boxToBeAssigned which part of the buffer to write to
      * @param voxelsMask the byte-buffer for the mask
-     * @param bboxForVoxels which part of scene the mask belongs to
+     * @param boxForVoxels which part of scene the mask belongs to
      * @param value value to be set in matched pixels
      * @param maskMatchValue what's an "On" value for {@code maskVoxels} to match against?
      * @return the number of pixels successfully "set"
      */
     public int setPixelsCheckMask(
-            BoundingBox bboxToBeAssigned,
+            BoundingBox boxToBeAssigned,
             Voxels<ByteBuffer> voxelsMask,
-            BoundingBox bboxForVoxels,
+            BoundingBox boxForVoxels,
             int value,
             byte maskMatchValue) {
-        checkExtentMatch(bboxForVoxels, bboxToBeAssigned);
+        checkExtentMatch(boxForVoxels, boxToBeAssigned);
 
-        Extent eIntersectingBox = bboxForVoxels.extent();
+        Extent eIntersectingBox = boxForVoxels.extent();
 
         Extent eAssignBuffer = this.extent();
         Extent eMaskBuffer = voxelsMask.extent();
@@ -244,23 +244,23 @@ public abstract class Voxels<T extends Buffer> {
         for (int z = 0; z < eIntersectingBox.z(); z++) {
 
             VoxelBuffer<?> pixels =
-                    getPlaneAccess().getPixelsForPlane(z + bboxToBeAssigned.cornerMin().z());
+                    getPlaneAccess().getPixelsForPlane(z + boxToBeAssigned.cornerMin().z());
             ByteBuffer pixelsMask =
-                    voxelsMask.slice(z + bboxForVoxels.cornerMin().z()).buffer();
+                    voxelsMask.slice(z + boxForVoxels.cornerMin().z()).buffer();
 
             for (int y = 0; y < eIntersectingBox.y(); y++) {
                 for (int x = 0; x < eIntersectingBox.x(); x++) {
 
                     int indexMask =
                             eMaskBuffer.offset(
-                                    x + bboxForVoxels.cornerMin().x(),
-                                    y + bboxForVoxels.cornerMin().y());
+                                    x + boxForVoxels.cornerMin().x(),
+                                    y + boxForVoxels.cornerMin().y());
 
                     if (pixelsMask.get(indexMask) == maskMatchValue) {
                         int indexAssgn =
                                 eAssignBuffer.offset(
-                                        x + bboxToBeAssigned.cornerMin().x(),
-                                        y + bboxToBeAssigned.cornerMin().y());
+                                        x + boxToBeAssigned.cornerMin().x(),
+                                        y + boxToBeAssigned.cornerMin().y());
                         pixels.putInt(indexAssgn, value);
                         cnt++;
                     }
@@ -277,23 +277,23 @@ public abstract class Voxels<T extends Buffer> {
 
     public abstract void subtractFrom(int val);
 
-    public ObjectMask equalMask(BoundingBox bbox, int equalVal) {
+    public ObjectMask equalMask(BoundingBox box, int equalVal) {
 
-        ObjectMask object = new ObjectMask(bbox);
+        ObjectMask object = new ObjectMask(box);
 
-        ReadableTuple3i pointMax = bbox.calcCornerMax();
+        ReadableTuple3i pointMax = box.calcCornerMax();
 
         byte maskOnValue = object.binaryValuesByte().getOnByte();
 
-        for (int z = bbox.cornerMin().z(); z <= pointMax.z(); z++) {
+        for (int z = box.cornerMin().z(); z <= pointMax.z(); z++) {
 
             T pixelIn = getPlaneAccess().getPixelsForPlane(z).buffer();
             ByteBuffer pixelOut =
-                    object.voxels().slice(z - bbox.cornerMin().z()).buffer();
+                    object.voxels().slice(z - box.cornerMin().z()).buffer();
 
             int ind = 0;
-            for (int y = bbox.cornerMin().y(); y <= pointMax.y(); y++) {
-                for (int x = bbox.cornerMin().x(); x <= pointMax.x(); x++) {
+            for (int y = box.cornerMin().y(); y <= pointMax.y(); y++) {
+                for (int x = box.cornerMin().x(); x <= pointMax.x(); x++) {
 
                     int index = getPlaneAccess().extent().offset(x, y);
 
@@ -311,23 +311,23 @@ public abstract class Voxels<T extends Buffer> {
         return object;
     }
 
-    public ObjectMask greaterThanMask(BoundingBox bbox, int equalVal) {
+    public ObjectMask greaterThanMask(BoundingBox box, int equalVal) {
 
-        ObjectMask object = new ObjectMask(bbox);
+        ObjectMask object = new ObjectMask(box);
 
-        ReadableTuple3i pointMax = bbox.calcCornerMax();
+        ReadableTuple3i pointMax = box.calcCornerMax();
 
         byte maskOut = object.binaryValuesByte().getOnByte();
 
-        for (int z = bbox.cornerMin().z(); z <= pointMax.z(); z++) {
+        for (int z = box.cornerMin().z(); z <= pointMax.z(); z++) {
 
             T pixelIn = getPlaneAccess().getPixelsForPlane(z).buffer();
             ByteBuffer pixelOut =
-                    object.voxels().slice(z - bbox.cornerMin().z()).buffer();
+                    object.voxels().slice(z - box.cornerMin().z()).buffer();
 
             int ind = 0;
-            for (int y = bbox.cornerMin().y(); y <= pointMax.y(); y++) {
-                for (int x = bbox.cornerMin().x(); x <= pointMax.x(); x++) {
+            for (int y = box.cornerMin().y(); y <= pointMax.y(); y++) {
+                for (int x = box.cornerMin().x(); x <= pointMax.x(); x++) {
 
                     int index = getPlaneAccess().extent().offset(x, y);
 
@@ -349,22 +349,22 @@ public abstract class Voxels<T extends Buffer> {
 
         ObjectMask out = new ObjectMask(objectMask.boundingBox());
 
-        BoundingBox bbox = objectMask.boundingBox();
-        ReadableTuple3i pointMax = bbox.calcCornerMax();
+        BoundingBox box = objectMask.boundingBox();
+        ReadableTuple3i pointMax = box.calcCornerMax();
 
         byte maskInVal = objectMask.binaryValuesByte().getOnByte();
         byte maskOutVal = out.binaryValuesByte().getOnByte();
 
-        for (int z = bbox.cornerMin().z(); z <= pointMax.z(); z++) {
+        for (int z = box.cornerMin().z(); z <= pointMax.z(); z++) {
 
             T pixelIn = getPlaneAccess().getPixelsForPlane(z).buffer();
             ByteBuffer pixelMaskIn = objectMask.voxels().slice(z).buffer();
             ByteBuffer pixelOut =
-                    out.voxels().slice(z - bbox.cornerMin().z()).buffer();
+                    out.voxels().slice(z - box.cornerMin().z()).buffer();
 
             int ind = 0;
-            for (int y = bbox.cornerMin().y(); y <= pointMax.y(); y++) {
-                for (int x = bbox.cornerMin().x(); x <= pointMax.x(); x++) {
+            for (int y = box.cornerMin().y(); y <= pointMax.y(); y++) {
+                for (int x = box.cornerMin().x(); x <= pointMax.x(); x++) {
 
                     int index = getPlaneAccess().extent().offset(x, y);
 
@@ -497,7 +497,7 @@ public abstract class Voxels<T extends Buffer> {
 
     public abstract void setAllPixelsTo(int val);
 
-    public abstract void setPixelsTo(BoundingBox bbox, int val);
+    public abstract void setPixelsTo(BoundingBox box, int val);
 
     public abstract void multiplyBy(double val);
 
@@ -647,28 +647,28 @@ public abstract class Voxels<T extends Buffer> {
         return factory;
     }
 
-    private Voxels<T> regionAvoidNewIfPossible(BoundingBox bbox) {
+    private Voxels<T> regionAvoidNewIfPossible(BoundingBox box) {
 
-        if (bbox.equals(new BoundingBox(extent()))
-                && bbox.cornerMin().x() == 0
-                && bbox.cornerMin().y() == 0
-                && bbox.cornerMin().z() == 0) {
+        if (box.equals(new BoundingBox(extent()))
+                && box.cornerMin().x() == 0
+                && box.cornerMin().y() == 0
+                && box.cornerMin().z() == 0) {
             return this;
         }
-        return regionAlwaysNew(bbox);
+        return regionAlwaysNew(box);
     }
 
-    private Voxels<T> regionAlwaysNew(BoundingBox bbox) {
+    private Voxels<T> regionAlwaysNew(BoundingBox box) {
 
         // Otherwise we create a new buffer
-        Voxels<T> voxelsOut = factory.createInitialized(bbox.extent());
-        copyPixelsTo(bbox, voxelsOut, new BoundingBox(bbox.extent()));
+        Voxels<T> voxelsOut = factory.createInitialized(box.extent());
+        copyPixelsTo(box, voxelsOut, new BoundingBox(box.extent()));
         return voxelsOut;
     }
 
-    private static void checkExtentMatch(BoundingBox bbox1, BoundingBox bbox2) {
-        Extent extent1 = bbox1.extent();
-        Extent extent2 = bbox2.extent();
+    private static void checkExtentMatch(BoundingBox box1, BoundingBox box2) {
+        Extent extent1 = box1.extent();
+        Extent extent2 = box2.extent();
         if (!extent1.equals(extent2)) {
             throw new IllegalArgumentException(
                     String.format(

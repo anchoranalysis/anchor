@@ -83,19 +83,19 @@ public class IterateVoxelsTest {
         ObjectMask object2 =
                 objectsFixture.filledMask(20, Y_MASK_2); // Overlaps with mask1 but not entirely
 
-        testSingleMask("object1", expectedSingleNumberVoxels, object1);
-        testSingleMask("object2", expectedSingleNumberVoxels, object2);
+        testSingleObject("object1", expectedSingleNumberVoxels, object1);
+        testSingleObject("object2", expectedSingleNumberVoxels, object2);
         testIntersectionObjects(
                 "intersection",
                 expectedIntersectionNumVoxels,
                 expectedIntersectionCenter,
                 object1,
                 object2);
-        testBoundingBox("bbox1", object1.boundingBox());
-        testBoundingBox("bbox2", object2.boundingBox());
+        testBoundingBox("box1", object1.boundingBox());
+        testBoundingBox("box2", object2.boundingBox());
     }
 
-    private void testSingleMask(String message, int expectedNumVoxels, ObjectMask object) {
+    private void testSingleObject(String message, int expectedNumVoxels, ObjectMask object) {
         testCounter(
                 message,
                 expectedNumVoxels,
@@ -126,12 +126,12 @@ public class IterateVoxelsTest {
 
     private void testCounter(
             String message,
-            long expectedNumVoxels,
+            long expectedNumberVoxels,
             Point3i expectedCenter,
             Consumer<AggregatePoints> func) {
         AggregatePoints counter = new AggregatePoints();
         func.accept(counter);
-        assertEquals(message + " count", expectedNumVoxels, counter.count());
+        assertEquals(message + " count", expectedNumberVoxels, counter.count());
         assertEquals(message + " center", expectedCenter, counter.center());
     }
 }

@@ -74,7 +74,7 @@ public class IJWrap {
     public static Channel chnlFromImageStackByte(
             ImageStack imageStack, ImageResolution res, ChannelFactorySingleType factory) {
 
-        ImageDimensions sd =
+        ImageDimensions dimensions =
                 new ImageDimensions(
                         new Extent(
                                 imageStack.getWidth(),
@@ -82,7 +82,7 @@ public class IJWrap {
                                 imageStack.getSize()),
                         res);
 
-        Channel chnlOut = factory.createEmptyUninitialised(sd);
+        Channel chnlOut = factory.createEmptyUninitialised(dimensions);
 
         Voxels<ByteBuffer> voxelsOut = chnlOut.voxels().asByte();
         copyImageStackIntoVoxelsByte(imageStack, voxelsOut);
@@ -93,7 +93,7 @@ public class IJWrap {
 
         ChannelFactory factory = ChannelFactory.instance();
 
-        ImageDimensions sd =
+        ImageDimensions dimensions =
                 new ImageDimensions(
                         new Extent(
                                 imagePlus.getWidth(),
@@ -103,10 +103,10 @@ public class IJWrap {
 
         if (imagePlus.getType() == ImagePlus.GRAY8) {
             return chnlFromImagePlusByte(
-                    imagePlus, sd, factory.get(VoxelDataTypeUnsignedByte.INSTANCE));
+                    imagePlus, dimensions, factory.get(VoxelDataTypeUnsignedByte.INSTANCE));
         } else if (imagePlus.getType() == ImagePlus.GRAY16) {
             return chnlFromImagePlusShort(
-                    imagePlus, sd, factory.get(VoxelDataTypeUnsignedShort.INSTANCE));
+                    imagePlus, dimensions, factory.get(VoxelDataTypeUnsignedShort.INSTANCE));
         } else {
             throw new IncorrectVoxelDataTypeException(
                     "Only unsigned-8 and unsigned 16bit supported");
@@ -211,7 +211,7 @@ public class IJWrap {
 
     public static ImagePlus createImagePlus(Stack stack, boolean makeRGB) {
 
-        ImageDimensions sd = stack.getChannel(0).dimensions();
+        ImageDimensions dimensions = stack.getChannel(0).dimensions();
 
         // If we're making an RGB then we need to convert our stack
 
@@ -219,14 +219,14 @@ public class IJWrap {
         if (makeRGB) {
             stackNew = createColorProcessorStack(new RGBStack((Stack) stack));
         } else {
-            stackNew = createInterleavedStack(sd.extent(), stack);
+            stackNew = createInterleavedStack(dimensions.extent(), stack);
         }
 
-        ImagePlus imp = createImagePlus(stackNew, sd, stack.getNumberChannels(), 1, !makeRGB);
+        ImagePlus imp = createImagePlus(stackNew, dimensions, stack.getNumberChannels(), 1, !makeRGB);
 
         maybeCorrectComposite(stack, imp);
 
-        assert (imp.getNSlices() == sd.z());
+        assert (imp.getNSlices() == dimensions.z());
         return imp;
     }
 
@@ -310,9 +310,9 @@ public class IJWrap {
     }
 
     private static Channel chnlFromImagePlusByte(
-            ImagePlus imagePlus, ImageDimensions sd, ChannelFactorySingleType factory) {
+            ImagePlus imagePlus, ImageDimensions dimensions, ChannelFactorySingleType factory) {
 
-        Channel chnlOut = factory.createEmptyUninitialised(sd);
+        Channel chnlOut = factory.createEmptyUninitialised(dimensions);
         Voxels<ByteBuffer> voxelsOut = chnlOut.voxels().asByte();
 
         for (int z = 0; z < chnlOut.dimensions().z(); z++) {
@@ -333,13 +333,13 @@ public class IJWrap {
     }
 
     private static Channel chnlFromImagePlusShort(
-            ImagePlus imagePlus, ImageDimensions sd, ChannelFactorySingleType factory) {
+            ImagePlus imagePlus, ImageDimensions dimensions, ChannelFactorySingleType factory) {
 
-        Channel chnlOut = factory.createEmptyUninitialised(sd);
+        Channel chnlOut = factory.createEmptyUninitialised(dimensions);
 
         Voxels<ShortBuffer> voxelsOut = chnlOut.voxels().asShort();
 
-        for (int z = 0; z < sd.z(); z++) {
+        for (int z = 0; z < dimensions.z(); z++) {
 
             ImageProcessor ip = imagePlus.getImageStack().getProcessor(z + 1);
             short[] arr = (short[]) ip.getPixels();

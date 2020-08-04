@@ -71,8 +71,8 @@ public class OverlayMark extends Overlay {
     }
 
     @Override
-    public BoundingBox bbox(DrawOverlay overlayWriter, ImageDimensions dim) {
-        return mark.bbox(dim, regionMembership.getRegionID());
+    public BoundingBox box(DrawOverlay overlayWriter, ImageDimensions dim) {
+        return mark.box(dim, regionMembership.getRegionID());
     }
 
     @Override
@@ -81,13 +81,13 @@ public class OverlayMark extends Overlay {
             double zoomFactorNew,
             ObjectWithProperties om,
             Overlay ol,
-            ImageDimensions sdUnscaled,
-            ImageDimensions sdScaled,
+            ImageDimensions dimensionsUnscaled,
+            ImageDimensions dimensionsScaled,
             BinaryValuesByte bvOut)
             throws CreateException {
 
         return scaledMaskCreator.createScaledMask(
-                overlayWriter, om, zoomFactorNew, mark, sdUnscaled, bvOut);
+                overlayWriter, om, zoomFactorNew, mark, dimensionsUnscaled, bvOut);
     }
 
     @Override

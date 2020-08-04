@@ -46,15 +46,15 @@ public abstract class Overlay implements Identifiable {
      * @param dimensions The dimensions of the containing-scene
      * @return the bounding-box
      */
-    public abstract BoundingBox bbox(DrawOverlay overlayWriter, ImageDimensions dimensions);
+    public abstract BoundingBox box(DrawOverlay overlayWriter, ImageDimensions dimensions);
 
     public abstract ObjectWithProperties createScaleObject(
             DrawOverlay overlayWriter,
             double zoomFactorNew,
             ObjectWithProperties om,
             Overlay ol,
-            ImageDimensions sdUnscaled,
-            ImageDimensions sdScaled,
+            ImageDimensions dimensionsUnscaled,
+            ImageDimensions dimensionsScaled,
             BinaryValuesByte bvOut)
             throws CreateException;
 

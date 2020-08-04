@@ -110,13 +110,13 @@ public abstract class BinaryVoxels<T extends Buffer> implements BinaryOnOffSette
     }
 
     public void setPixelsCheckMask(
-            BoundingBox bboxToBeAssigned,
+            BoundingBox boxToBeAssigned,
             Voxels<ByteBuffer> voxelsObject,
-            BoundingBox bboxMask,
+            BoundingBox boxMask,
             int value,
             byte objectMaskMatchValue) {
         voxels.setPixelsCheckMask(
-                bboxToBeAssigned, voxelsObject, bboxMask, value, objectMaskMatchValue);
+                boxToBeAssigned, voxelsObject, boxMask, value, objectMaskMatchValue);
     }
 
     public void addPixelsCheckMask(ObjectMask objectMask, int value) {
@@ -131,16 +131,16 @@ public abstract class BinaryVoxels<T extends Buffer> implements BinaryOnOffSette
         voxels.setAllPixelsTo(binaryValues.getOnInt());
     }
 
-    public void setPixelsToOn(BoundingBox bbox) {
-        voxels.setPixelsTo(bbox, binaryValues.getOnInt());
+    public void setPixelsToOn(BoundingBox box) {
+        voxels.setPixelsTo(box, binaryValues.getOnInt());
     }
 
     public void setAllPixelsToOff() {
         voxels.setAllPixelsTo(binaryValues.getOffInt());
     }
 
-    public void setPixelsToOff(BoundingBox bbox) {
-        voxels.setPixelsTo(bbox, binaryValues.getOffInt());
+    public void setPixelsToOff(BoundingBox box) {
+        voxels.setPixelsTo(box, binaryValues.getOffInt());
     }
 
     public int countOn() {

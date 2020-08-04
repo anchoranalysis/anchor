@@ -31,17 +31,15 @@ import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
+import lombok.NoArgsConstructor;
 
 /**
  * Evaluates the first-object in a pair only
  *
  * @author Owen Feehan
  */
+@NoArgsConstructor
 public class First extends FeatureDeriveFromPair {
-
-    public First() {
-        // BEAN Constructor
-    }
 
     public First(Feature<FeatureInputSingleObject> item) {
         super(item);

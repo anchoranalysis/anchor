@@ -130,23 +130,25 @@ public class StackProviderGenerateString extends StackProvider {
         }
     }
 
-    private Channel createExpandedChnl(Channel chnl, int zHeight) {
-        assert (chnl.dimensions().z() == 1);
+    private Channel createExpandedChnl(Channel channel, int zHeight) {
+        assert (channel.dimensions().z() == 1);
 
-        ImageDimensions sdNew = chnl.dimensions().duplicateChangeZ(zHeight);
+        BoundingBox boxSrc = new BoundingBox(channel.dimensions().extent());
+        BoundingBox boxDest = boxSrc;
 
-        BoundingBox bboxSrc = new BoundingBox(chnl.dimensions().extent());
-        BoundingBox bboxDest = bboxSrc;
-
-        Channel chnlNew =
-                ChannelFactory.instance().createEmptyInitialised(sdNew, chnl.getVoxelDataType());
+        Channel chnlNew = emptyChannelWithChangedZ(channel, zHeight);
         for (int z = 0; z < zHeight; z++) {
 
             // Adjust dfestination box
-            bboxDest = bboxDest.shiftToZ(z);
+            boxDest = boxDest.shiftToZ(z);
 
-            chnl.voxels().copyPixelsTo(bboxSrc, chnlNew.voxels(), bboxDest);
+            channel.voxels().copyPixelsTo(boxSrc, chnlNew.voxels(), boxDest);
         }
         return chnlNew;
+    }
+    
+    private Channel emptyChannelWithChangedZ(Channel channel, int zToAssign) {
+        ImageDimensions dimensionsChangedZ = channel.dimensions().duplicateChangeZ(zToAssign);
+        return ChannelFactory.instance().createEmptyInitialised(dimensionsChangedZ, channel.getVoxelDataType());
     }
 }

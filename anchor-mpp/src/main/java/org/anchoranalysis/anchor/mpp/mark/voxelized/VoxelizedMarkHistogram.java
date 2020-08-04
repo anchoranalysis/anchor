@@ -140,36 +140,36 @@ class VoxelizedMarkHistogram implements VoxelizedMark {
     // Calculates the pixels for a mark
     private void initForMark(Mark mark, NRGStack stack, RegionMap regionMap) {
 
-        ImageDimensions sd = stack.dimensions();
-        BoundingBox bbox = mark.bboxAllRegions(sd);
+        ImageDimensions dimensions = stack.dimensions();
+        BoundingBox box = mark.boxAllRegions(dimensions);
 
-        ReadableTuple3i cornerMax = bbox.calcCornerMax();
+        ReadableTuple3i cornerMax = box.calcCornerMax();
 
-        object = new ObjectMask(bbox);
-        objectFlattened = new ObjectMask(bbox.flattenZ());
+        object = new ObjectMask(box);
+        objectFlattened = new ObjectMask(box.flattenZ());
 
-        Extent localExtent = bbox.extent();
+        Extent localExtent = box.extent();
         partitionList.init(
                 FACTORY, stack.getNumberChannels(), regionMap.numRegions(), localExtent.z());
 
         ByteBuffer bufferMIP = getObjectFlattened().voxels().slice(0).buffer();
 
-        for (int z = bbox.cornerMin().z(); z <= cornerMax.z(); z++) {
+        for (int z = box.cornerMin().z(); z <= cornerMax.z(); z++) {
 
             BufferArrList bufferArrList = new BufferArrList();
             bufferArrList.init(stack, z);
             initForSlice(
-                    z, mark, bbox, cornerMax, localExtent, sd, bufferArrList, bufferMIP, regionMap);
+                    z, mark, box, cornerMax, localExtent, dimensions, bufferArrList, bufferMIP, regionMap);
         }
     }
 
     private void initForSlice( // NOSONAR
             int z,
             Mark mark,
-            BoundingBox bbox,
+            BoundingBox box,
             ReadableTuple3i cornerMax,
             Extent localExtent,
-            ImageDimensions sd,
+            ImageDimensions dimensions,
             BufferArrList bufferArrList,
             ByteBuffer bufferMIP,
             RegionMap regionMap) {
@@ -177,26 +177,26 @@ class VoxelizedMarkHistogram implements VoxelizedMark {
         Point3d ptRunning = new Point3d();
         ptRunning.setZ(z + 0.5);
 
-        int zLocal = z - bbox.cornerMin().z();
+        int zLocal = z - box.cornerMin().z();
 
         List<RegionMembershipWithFlags> listRegionMembership =
                 regionMap.createListMembershipWithFlags();
 
         ByteBuffer buffer = getObject().voxels().slice(zLocal).buffer();
 
-        for (int y = bbox.cornerMin().y(); y <= cornerMax.y(); y++) {
+        for (int y = box.cornerMin().y(); y <= cornerMax.y(); y++) {
             ptRunning.setY(y + 0.5);
 
-            int yLocal = y - bbox.cornerMin().y();
+            int yLocal = y - box.cornerMin().y();
 
-            for (int x = bbox.cornerMin().x(); x <= cornerMax.x(); x++) {
+            for (int x = box.cornerMin().x(); x <= cornerMax.x(); x++) {
 
                 ptRunning.setX(x + 0.5);
 
-                int xLocal = x - bbox.cornerMin().x();
+                int xLocal = x - box.cornerMin().x();
 
                 int localOffset = localExtent.offset(xLocal, yLocal);
-                int globalOffset = sd.offset(x, y);
+                int globalOffset = dimensions.offset(x, y);
 
                 byte membership = mark.evalPointInside(new Point3d(ptRunning));
 

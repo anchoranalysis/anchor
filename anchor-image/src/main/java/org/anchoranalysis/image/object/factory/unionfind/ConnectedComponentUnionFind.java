@@ -144,18 +144,18 @@ public class ConnectedComponentUnionFind {
     }
 
     private static PointRangeWithCount[] createBBoxArray(int size) {
-        PointRangeWithCount[] bboxArr = new PointRangeWithCount[size];
-        for (int i = 0; i < bboxArr.length; i++) {
-            bboxArr[i] = new PointRangeWithCount();
+        PointRangeWithCount[] boxArr = new PointRangeWithCount[size];
+        for (int i = 0; i < boxArr.length; i++) {
+            boxArr[i] = new PointRangeWithCount();
         }
-        return bboxArr;
+        return boxArr;
     }
 
     private static void addPointsAndAssignNewIDs(
             Voxels<IntBuffer> indexBuffer,
             UnionFind<Integer> unionIndex,
             Map<Integer, Integer> mapIDOrdered,
-            PointRangeWithCount[] bboxArr) {
+            PointRangeWithCount[] boxArr) {
 
         Point3i point = new Point3i();
         Extent extent = indexBuffer.extent();
@@ -173,8 +173,8 @@ public class ConnectedComponentUnionFind {
 
                         Integer idSmall = mapIDOrdered.get(unionIndex.find(idBig));
 
-                        PointRangeWithCount bbox = bboxArr[idSmall - 1];
-                        bbox.add(point);
+                        PointRangeWithCount box = boxArr[idSmall - 1];
+                        box.add(point);
 
                         bbIndex.put(offset, idSmall);
                     }
@@ -185,7 +185,7 @@ public class ConnectedComponentUnionFind {
     }
 
     private static ObjectCollection extractMasksInto(
-            PointRangeWithCount[] bboxArr,
+            PointRangeWithCount[] boxArr,
             Map<Integer, Integer> mapIDOrdered,
             Voxels<IntBuffer> indexBuffer,
             int minNumberVoxels,
@@ -194,10 +194,10 @@ public class ConnectedComponentUnionFind {
 
         for (int smallID : mapIDOrdered.values()) {
 
-            PointRangeWithCount bboxWithCnt = bboxArr[smallID - 1];
+            PointRangeWithCount boxWithCnt = boxArr[smallID - 1];
 
-            if (bboxWithCnt.getCount() >= minNumberVoxels) {
-                objects.add(indexBuffer.equalMask(bboxWithCnt.deriveBoundingBox(), smallID));
+            if (boxWithCnt.getCount() >= minNumberVoxels) {
+                objects.add(indexBuffer.equalMask(boxWithCnt.deriveBoundingBox(), smallID));
             }
         }
         return objects;
@@ -214,10 +214,10 @@ public class ConnectedComponentUnionFind {
 
         Map<Integer, Integer> mapIDOrdered = mapValuesToContiguousSet(primaryIDs);
 
-        PointRangeWithCount[] bboxArr = createBBoxArray(mapIDOrdered.size());
+        PointRangeWithCount[] boxArr = createBBoxArray(mapIDOrdered.size());
 
-        addPointsAndAssignNewIDs(indexBuffer, unionIndex, mapIDOrdered, bboxArr);
+        addPointsAndAssignNewIDs(indexBuffer, unionIndex, mapIDOrdered, boxArr);
 
-        extractMasksInto(bboxArr, mapIDOrdered, indexBuffer, minNumberVoxels, objects);
+        extractMasksInto(boxArr, mapIDOrdered, indexBuffer, minNumberVoxels, objects);
     }
 }

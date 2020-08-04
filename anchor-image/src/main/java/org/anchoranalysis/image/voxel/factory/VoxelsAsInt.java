@@ -76,23 +76,23 @@ final class VoxelsAsInt extends Voxels<IntBuffer> {
     }
 
     @Override
-    public ObjectMask equalMask(BoundingBox bbox, int equalVal) {
+    public ObjectMask equalMask(BoundingBox box, int equalVal) {
 
-        ObjectMask object = new ObjectMask(bbox);
+        ObjectMask object = new ObjectMask(box);
 
-        ReadableTuple3i pointMax = bbox.calcCornerMax();
+        ReadableTuple3i pointMax = box.calcCornerMax();
 
         byte maskOnVal = object.binaryValuesByte().getOnByte();
 
-        for (int z = bbox.cornerMin().z(); z <= pointMax.z(); z++) {
+        for (int z = box.cornerMin().z(); z <= pointMax.z(); z++) {
 
             IntBuffer pixelIn = getPlaneAccess().getPixelsForPlane(z).buffer();
             ByteBuffer pixelOut =
-                    object.voxels().slice(z - bbox.cornerMin().z()).buffer();
+                    object.voxels().slice(z - box.cornerMin().z()).buffer();
 
             int ind = 0;
-            for (int y = bbox.cornerMin().y(); y <= pointMax.y(); y++) {
-                for (int x = bbox.cornerMin().x(); x <= pointMax.x(); x++) {
+            for (int y = box.cornerMin().y(); y <= pointMax.y(); y++) {
+                for (int x = box.cornerMin().x(); x <= pointMax.x(); x++) {
 
                     int index = getPlaneAccess().extent().offset(x, y);
                     int chnlVal = pixelIn.get(index);
@@ -123,10 +123,10 @@ final class VoxelsAsInt extends Voxels<IntBuffer> {
     }
 
     @Override
-    public void setPixelsTo(BoundingBox bbox, int val) {
+    public void setPixelsTo(BoundingBox box, int val) {
 
-        ReadableTuple3i cornerMin = bbox.cornerMin();
-        ReadableTuple3i cornerMax = bbox.calcCornerMax();
+        ReadableTuple3i cornerMin = box.cornerMin();
+        ReadableTuple3i cornerMax = box.calcCornerMax();
         Extent e = extent();
 
         for (int z = cornerMin.z(); z <= cornerMax.z(); z++) {
@@ -193,20 +193,20 @@ final class VoxelsAsInt extends Voxels<IntBuffer> {
     @Override
     public void addPixelsCheckMask(ObjectMask objectMask, int value) {
 
-        BoundingBox bbox = objectMask.boundingBox();
+        BoundingBox box = objectMask.boundingBox();
         Voxels<ByteBuffer> voxels = objectMask.voxels();
 
         byte maskOnByte = objectMask.binaryValuesByte().getOnByte();
 
-        ReadableTuple3i pointMax = bbox.calcCornerMax();
-        for (int z = bbox.cornerMin().z(); z <= pointMax.z(); z++) {
+        ReadableTuple3i pointMax = box.calcCornerMax();
+        for (int z = box.cornerMin().z(); z <= pointMax.z(); z++) {
 
             IntBuffer pixels = getPlaneAccess().getPixelsForPlane(z).buffer();
             ByteBuffer pixelsMask =
-                    voxels.slice(z - bbox.cornerMin().z()).buffer();
+                    voxels.slice(z - box.cornerMin().z()).buffer();
 
-            for (int y = bbox.cornerMin().y(); y <= pointMax.y(); y++) {
-                for (int x = bbox.cornerMin().x(); x <= pointMax.x(); x++) {
+            for (int y = box.cornerMin().y(); y <= pointMax.y(); y++) {
+                for (int x = box.cornerMin().x(); x <= pointMax.x(); x++) {
 
                     int indexMask = getPlaneAccess().extent().offset(x, y);
                     if (pixelsMask.get(indexMask) == maskOnByte) {

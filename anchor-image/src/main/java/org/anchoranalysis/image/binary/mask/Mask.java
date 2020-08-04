@@ -172,10 +172,10 @@ public class Mask {
         return new Mask(channel.duplicate(), binaryValues);
     }
 
-    public ObjectMask region(BoundingBox bbox, boolean reuseIfPossible) {
-        Preconditions.checkArgument(channel.dimensions().contains(bbox));
+    public ObjectMask region(BoundingBox box, boolean reuseIfPossible) {
+        Preconditions.checkArgument(channel.dimensions().contains(box));
         return new ObjectMask(
-                bbox, channel.voxels().asByte().region(bbox, reuseIfPossible), binaryValues);
+                box, channel.voxels().asByte().region(box, reuseIfPossible), binaryValues);
     }
 
     public Mask flattenZ() {

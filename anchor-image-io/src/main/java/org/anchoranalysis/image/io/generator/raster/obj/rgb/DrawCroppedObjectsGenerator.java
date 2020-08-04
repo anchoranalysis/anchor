@@ -57,7 +57,7 @@ public class DrawCroppedObjectsGenerator extends ObjectsOnRGBGenerator {
 
     @Getter @Setter private Padding padding;
 
-    private BoundingBox bbox;
+    private BoundingBox box;
 
     public DrawCroppedObjectsGenerator(
             DrawObject drawObject, DisplayStack background, ColorIndex colorIndex) {
@@ -77,28 +77,28 @@ public class DrawCroppedObjectsGenerator extends ObjectsOnRGBGenerator {
         }
 
         // Get a bounding box that contains all the objects
-        this.bbox = ObjectMaskMerger.mergeBoundingBoxes(objects.streamStandardJava());
+        this.box = ObjectMaskMerger.mergeBoundingBoxes(objects.streamStandardJava());
 
-        bbox = growBBBox(bbox, extent);
+        box = growBBBox(box, extent);
 
         // Extract the relevant piece of background
         return background.fold(
-                dimensions -> createEmptyStackFor(new ImageDimensions(bbox.extent())),
-                stack -> ConvertDisplayStackToRGB.convertCropped(stack, bbox));
+                dimensions -> createEmptyStackFor(new ImageDimensions(box.extent())),
+                stack -> ConvertDisplayStackToRGB.convertCropped(stack, box));
     }
 
     @Override
     protected ObjectCollectionWithProperties generateMasks() throws CreateException {
-        // Create a new set of object-masks, relative to the bbox position
-        return relativeTo(getIterableElement().withoutProperties(), bbox);
+        // Create a new set of object-masks, relative to the box position
+        return relativeTo(getIterableElement().withoutProperties(), box);
     }
 
-    private BoundingBox growBBBox(BoundingBox bbox, Extent containingExtent) {
+    private BoundingBox growBBBox(BoundingBox box, Extent containingExtent) {
         if (padding.noPadding()) {
-            return bbox;
+            return box;
         }
 
-        return bbox.growBy(padding.asPoint(), containingExtent);
+        return box.growBy(padding.asPoint(), containingExtent);
     }
 
     private static ObjectCollectionWithProperties relativeTo(
@@ -107,13 +107,13 @@ public class DrawCroppedObjectsGenerator extends ObjectsOnRGBGenerator {
         ObjectCollectionWithProperties out = new ObjectCollectionWithProperties();
 
         for (ObjectMask objectMask : objects) {
-            BoundingBox bboxNew =
+            BoundingBox boxNew =
                     new BoundingBox(
                             objectMask.boundingBox().relPosTo(src),
                             objectMask.boundingBox().extent());
             out.add(
                     new ObjectMask(
-                            bboxNew,
+                            boxNew,
                             objectMask.binaryVoxels().voxels(),
                             objectMask.binaryValues()));
         }

@@ -74,7 +74,7 @@ public class ObjectCollection implements Iterable<ObjectMask> {
      * @return newly created object-collection with shifted corner position and identical extent
      */
     public ObjectCollection shiftBy(ReadableTuple3i shiftBy) {
-        return stream().mapBoundingBoxPreserveExtent(bbox -> bbox.shiftBy(shiftBy));
+        return stream().mapBoundingBoxPreserveExtent(box -> box.shiftBy(shiftBy));
     }
 
     public boolean add(ObjectMask object) {

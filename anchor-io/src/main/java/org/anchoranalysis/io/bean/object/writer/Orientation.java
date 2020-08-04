@@ -123,7 +123,7 @@ public class Orientation extends DrawObject {
             double orientationRadians,
             RGBColor color,
             RGBStack stack,
-            BoundingBox bbox) {
+            BoundingBox box) {
 
         // We start at 0
         double x = midpoint.x();
@@ -135,8 +135,8 @@ public class Orientation extends DrawObject {
         while (true) {
             Point3i point = new Point3i((int) x, (int) y, 0);
 
-            if (bbox.contains().pointIgnoreZ(point)) {
-                Midpoint.writeRelPoint(point, color, stack, bbox);
+            if (box.contains().pointIgnoreZ(point)) {
+                Midpoint.writeRelPoint(point, color, stack, box);
 
                 x += xIncr;
                 y += yIncr;

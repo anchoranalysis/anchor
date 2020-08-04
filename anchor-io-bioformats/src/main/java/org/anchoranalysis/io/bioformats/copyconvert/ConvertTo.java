@@ -57,7 +57,7 @@ public abstract class ConvertTo<T extends Buffer> {
     /**
      * Copies the channels in the source buffer into a particular Chnl
      *
-     * @param sd scene-dimension
+     * @param dimensions scene-dimension
      * @param src the buffer we copy all channels from
      * @param funcDestChnl finds an appropriate destination channel for a particular
      *     relative-channel-index
@@ -66,12 +66,12 @@ public abstract class ConvertTo<T extends Buffer> {
      * @throws IOException
      */
     public void copyAllChnls(
-            ImageDimensions sd, byte[] src, DestChnlForIndex dest, int z, int numChnlsPerByteArray)
+            ImageDimensions dimensions, byte[] src, DestChnlForIndex dest, int z, int numChnlsPerByteArray)
             throws IOException {
 
         log.debug(String.format("copy to byte %d start", z));
 
-        setupBefore(sd, numChnlsPerByteArray);
+        setupBefore(dimensions, numChnlsPerByteArray);
 
         for (int channelRelative = 0; channelRelative < numChnlsPerByteArray; channelRelative++) {
 
@@ -85,11 +85,11 @@ public abstract class ConvertTo<T extends Buffer> {
     /**
      * Always called before any batch of calls to convertSingleChnl
      *
-     * @param sd dimension
+     * @param dimensions dimension
      * @param numChnlsPerByteArray the number of channels that are found in the byte-array that will
      *     be passed to convertSingleChnl
      */
-    protected abstract void setupBefore(ImageDimensions sd, int numChnlsPerByteArray);
+    protected abstract void setupBefore(ImageDimensions dimensions, int numChnlsPerByteArray);
 
     /**
      * Converts a single-channel only

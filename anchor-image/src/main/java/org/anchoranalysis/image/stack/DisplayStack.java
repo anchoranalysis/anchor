@@ -236,7 +236,7 @@ public class DisplayStack {
     }
 
     // Always creates a new channel, but just capturing a portion of the channel
-    public Channel createChannelDuplicateForBoundingBox(int index, BoundingBox bbox) {
+    public Channel createChannelDuplicateForBoundingBox(int index, BoundingBox box) {
 
         Channel chnl = delegate.getChannel(index);
 
@@ -245,11 +245,11 @@ public class DisplayStack {
         Channel out =
                 ChannelFactory.instance()
                         .createEmptyInitialised(
-                                new ImageDimensions(bbox.extent(), chnl.dimensions().resolution()),
+                                new ImageDimensions(box.extent(), chnl.dimensions().resolution()),
                                 VoxelDataTypeUnsignedByte.INSTANCE);
 
         if (converter != null) {
-            copyPixelsTo(index, bbox, out.voxels().asByte(), new BoundingBox(bbox.extent()));
+            copyPixelsTo(index, box, out.voxels().asByte(), new BoundingBox(box.extent()));
         } else {
             if (!chnl.getVoxelDataType().equals(VoxelDataTypeUnsignedByte.INSTANCE)) {
                 // Datatype is not supported
@@ -258,7 +258,7 @@ public class DisplayStack {
 
             delegate.getChannel(index)
                     .voxels()
-                    .copyPixelsTo(bbox, out.voxels(), new BoundingBox(bbox.extent()));
+                    .copyPixelsTo(box, out.voxels(), new BoundingBox(box.extent()));
         }
         return out;
     }
@@ -372,20 +372,20 @@ public class DisplayStack {
         return BufferedImageFactory.createGrayscale(voxelsForChannel(0));
     }
 
-    public BufferedImage createBufferedImageBBox(BoundingBox bbox) throws CreateException {
+    public BufferedImage createBufferedImageBBox(BoundingBox box) throws CreateException {
 
-        if (bbox.extent().z() != 1) {
+        if (box.extent().z() != 1) {
             throw new CreateException("BBox must have a single pixel z-height");
         }
 
         if (delegate.getNumberChannels() == 3) {
             return BufferedImageFactory.createRGB(
-                    voxelsForChannelBoundingBox(0, bbox),
-                    voxelsForChannelBoundingBox(1, bbox),
-                    voxelsForChannelBoundingBox(2, bbox),
-                    bbox.extent());
+                    voxelsForChannelBoundingBox(0, box),
+                    voxelsForChannelBoundingBox(1, box),
+                    voxelsForChannelBoundingBox(2, box),
+                    box.extent());
         }
-        return BufferedImageFactory.createGrayscale(voxelsForChannelBoundingBox(0, bbox));
+        return BufferedImageFactory.createGrayscale(voxelsForChannelBoundingBox(0, box));
     }
 
     private Voxels<ByteBuffer> voxelsForChannel(int chnlNum) {
@@ -408,13 +408,13 @@ public class DisplayStack {
     }
 
     @SuppressWarnings("unchecked")
-    private Voxels<ByteBuffer> voxelsForChannelBoundingBox(int chnlNum, BoundingBox bbox) {
+    private Voxels<ByteBuffer> voxelsForChannelBoundingBox(int chnlNum, BoundingBox box) {
 
         Channel chnl = delegate.getChannel(chnlNum);
 
         ChnlConverterAttached<Channel, ByteBuffer> converter = listConverters.get(chnlNum);
 
-        Voxels<?> voxelsUnconverted = chnl.voxels().any().region(bbox, true);
+        Voxels<?> voxelsUnconverted = chnl.voxels().any().region(box, true);
 
         if (converter != null) {
             return converter

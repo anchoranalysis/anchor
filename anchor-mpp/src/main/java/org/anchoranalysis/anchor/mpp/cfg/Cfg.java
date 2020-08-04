@@ -282,11 +282,11 @@ public final class Cfg implements Iterable<Mark>, Serializable {
         return mergedNew;
     }
 
-    public List<BoundingBox> bboxList(ImageDimensions bndScene, int regionID) {
+    public List<BoundingBox> boxList(ImageDimensions bndScene, int regionID) {
 
         ArrayList<BoundingBox> list = new ArrayList<>();
         for (Mark m : this) {
-            list.add(m.bbox(bndScene, regionID));
+            list.add(m.box(bndScene, regionID));
         }
         return list;
     }

@@ -29,6 +29,8 @@ package org.anchoranalysis.image.stack;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
@@ -41,6 +43,11 @@ public class StackNotUniformSized implements Iterable<Channel> {
     // Image stack
     public StackNotUniformSized() {
         channels = new ArrayList<>();
+    }
+    
+    // Image stack
+    public StackNotUniformSized(Stream<Channel> channelStream) {
+        channels = channelStream.collect( Collectors.toList() );
     }
 
     // Create a stack from a channel
@@ -89,7 +96,7 @@ public class StackNotUniformSized implements Iterable<Channel> {
         return channels.get(0).dimensions();
     }
 
-    public boolean isUniformSized() {
+    public boolean isUniformlySized() {
 
         if (channels.size() <= 1) {
             return true;

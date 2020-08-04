@@ -38,11 +38,11 @@ import org.anchoranalysis.core.geometry.ReadableTuple3i;
  */
 public final class BoundingBoxIntersection {
 
-    private final BoundingBox bbox;
+    private final BoundingBox box;
 
-    public BoundingBoxIntersection(BoundingBox bbox) {
+    public BoundingBoxIntersection(BoundingBox box) {
         super();
-        this.bbox = bbox;
+        this.box = box;
     }
 
     /** Does this bounding box intersect with another? */
@@ -84,10 +84,10 @@ public final class BoundingBoxIntersection {
      */
     private Optional<BoundingBox> with(BoundingBox other, boolean createIntersectionBox) {
 
-        ReadableTuple3i cornerMin = bbox.cornerMin();
+        ReadableTuple3i cornerMin = box.cornerMin();
         ReadableTuple3i cornerMinOther = other.cornerMin();
 
-        ReadableTuple3i cornerMax = bbox.calcCornerMax();
+        ReadableTuple3i cornerMax = box.calcCornerMax();
         ReadableTuple3i cornerMaxOthr = other.calcCornerMax();
 
         Optional<ExtentBoundsComparer> meiX =
@@ -114,7 +114,7 @@ public final class BoundingBoxIntersection {
                                     meiY.get().extent(),
                                     meiZ.get().extent())));
         } else {
-            return Optional.of(bbox);
+            return Optional.of(box);
         }
     }
 }

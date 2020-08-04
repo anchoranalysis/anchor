@@ -48,9 +48,9 @@ public class ByteFrom16BitUnsigned extends ConvertToByte {
     }
 
     @Override
-    protected void setupBefore(ImageDimensions sd, int numChnlsPerByteArray) {
+    protected void setupBefore(ImageDimensions dimensions, int numChnlsPerByteArray) {
         bytesPerPixel = 2 * numChnlsPerByteArray;
-        sizeXY = sd.x() * sd.y();
+        sizeXY = dimensions.x() * dimensions.y();
         sizeBytes = sizeXY * bytesPerPixel;
     }
 

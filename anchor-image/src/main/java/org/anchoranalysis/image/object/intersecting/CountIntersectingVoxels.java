@@ -43,43 +43,43 @@ public abstract class CountIntersectingVoxels {
     public int countIntersectingVoxels(
             BoundedVoxels<ByteBuffer> src, BoundedVoxels<ByteBuffer> other) {
         // Find the common bounding box
-        Optional<BoundingBox> bboxIntersect =
+        Optional<BoundingBox> boxIntersect =
                 src.boundingBox().intersection().with(other.boundingBox());
 
-        if (!bboxIntersect.isPresent()) {
+        if (!boxIntersect.isPresent()) {
             // If the bounding boxes don't intersect then we can
             //   go home early
             return 0;
         }
 
-        return countIntersectingVoxelsFromBBox(src, other, bboxIntersect.get());
+        return countIntersectingVoxelsFromBBox(src, other, boxIntersect.get());
     }
 
     // count intersecting pixels
     private int countIntersectingVoxelsFromBBox(
             BoundedVoxels<ByteBuffer> src,
             BoundedVoxels<ByteBuffer> other,
-            BoundingBox bboxIntersect) {
-        IntersectionBBox bbox =
+            BoundingBox boxIntersect) {
+        IntersectionBBox box =
                 IntersectionBBox.create(
-                        src.boundingBox(), other.boundingBox(), bboxIntersect);
+                        src.boundingBox(), other.boundingBox(), boxIntersect);
 
         // Otherwise we count the number of pixels that are not empty
         //  in both bounded-voxels in the intersecting region
         int cnt = 0;
-        for (int z = bbox.z().min(); z < bbox.z().max(); z++) {
+        for (int z = box.z().min(); z < box.z().max(); z++) {
 
             ByteBuffer buffer = src.voxels().slice(z).buffer();
 
-            int zOther = z + bbox.z().rel();
+            int zOther = z + box.z().rel();
             ByteBuffer bufferOther = other.voxels().slice(zOther).buffer();
 
-            cnt += countIntersectingVoxels(buffer, bufferOther, bbox);
+            cnt += countIntersectingVoxels(buffer, bufferOther, box);
         }
 
         return cnt;
     }
 
     protected abstract int countIntersectingVoxels(
-            ByteBuffer buffer1, ByteBuffer buffer2, IntersectionBBox bbox);
+            ByteBuffer buffer1, ByteBuffer buffer2, IntersectionBBox box);
 }

@@ -249,7 +249,7 @@ public class MarkEllipsoid extends MarkConic implements Serializable {
     }
 
     @Override
-    public BoundingBox bbox(ImageDimensions bndScene, int regionID) {
+    public BoundingBox box(ImageDimensions bndScene, int regionID) {
 
         DoubleMatrix1D s = ellipsoidCalculator.getBoundingBoxMatrix().copy();
 
@@ -267,7 +267,7 @@ public class MarkEllipsoid extends MarkConic implements Serializable {
             s.assign(Functions.mult(shellInnerCore));
         }
 
-        return BoundingBoxCalculator.bboxFromBounds(getPos(), s, true, bndScene);
+        return BoundingBoxCalculator.boxFromBounds(getPos(), s, true, bndScene);
     }
 
     private String strMarks() {
@@ -422,8 +422,8 @@ public class MarkEllipsoid extends MarkConic implements Serializable {
     }
 
     @Override
-    public BoundingBox bboxAllRegions(ImageDimensions bndScene) {
-        return bbox(bndScene, GlobalRegionIdentifiers.SUBMARK_OUTSIDE);
+    public BoundingBox boxAllRegions(ImageDimensions bndScene) {
+        return box(bndScene, GlobalRegionIdentifiers.SUBMARK_OUTSIDE);
     }
 
     public EllipsoidMatrixCalculator getEllipsoidCalculator() {

@@ -125,10 +125,10 @@ public class ThresholderGlobalTest {
         return new VoxelsWrapper(voxels);
     }
 
-    private static void writeModulo(Voxels<ByteBuffer> voxels, BoundingBox bbox, int addToPixels) {
+    private static void writeModulo(Voxels<ByteBuffer> voxels, BoundingBox box, int addToPixels) {
         IterateVoxels.callEachPoint(
                 voxels,
-                bbox,
+                box,
                 (Point3i point, ByteBuffer buffer, int offset) ->
                         buffer.put(
                                 offset,

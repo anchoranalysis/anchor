@@ -54,11 +54,11 @@ public class BoundingBoxRTree {
         rTree = new RTree<>(maxEntries, minEntries, 3);
     }
 
-    public BoundingBoxRTree(List<BoundingBox> bboxList, int maxEntriesSuggested) {
+    public BoundingBoxRTree(List<BoundingBox> boxList, int maxEntriesSuggested) {
         this(maxEntriesSuggested);
 
-        for (int i = 0; i < bboxList.size(); i++) {
-            add(i, bboxList.get(i));
+        for (int i = 0; i < boxList.size(); i++) {
+            add(i, boxList.get(i));
         }
     }
 
@@ -70,28 +70,28 @@ public class BoundingBoxRTree {
         return rTree.search(singlePoint, singlePointExtent);
     }
 
-    public List<Integer> intersectsWith(BoundingBox bbox) {
+    public List<Integer> intersectsWith(BoundingBox box) {
 
-        float[] coords = minPoint(bbox);
-        float[] dimensions = extent(bbox);
+        float[] coords = minPoint(box);
+        float[] dimensions = extent(box);
 
         return rTree.search(coords, dimensions);
     }
 
-    public void add(int i, BoundingBox bbox) {
-        float[] coords = minPoint(bbox);
-        float[] dimensions = extent(bbox);
+    public void add(int i, BoundingBox box) {
+        float[] coords = minPoint(box);
+        float[] dimensions = extent(box);
 
         rTree.insert(coords, dimensions, i);
     }
 
-    private static float[] minPoint(BoundingBox bbox) {
+    private static float[] minPoint(BoundingBox box) {
         return new float[] {
-            bbox.cornerMin().x(), bbox.cornerMin().y(), bbox.cornerMin().z()
+            box.cornerMin().x(), box.cornerMin().y(), box.cornerMin().z()
         };
     }
 
-    private static float[] extent(BoundingBox bbox) {
-        return new float[] {bbox.extent().x(), bbox.extent().y(), bbox.extent().z()};
+    private static float[] extent(BoundingBox box) {
+        return new float[] {box.extent().x(), box.extent().y(), box.extent().z()};
     }
 }

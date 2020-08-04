@@ -70,37 +70,37 @@ public class RasterArranger {
         int index = 0;
         for (RGBStack image : generatedImages) {
 
-            BoundingBox bbox = this.boundingBoxes.get(index++);
+            BoundingBox box = this.boundingBoxes.get(index++);
 
             // NOTE
             // For a special case where our projection z-extent is different to our actual z-extent,
             // that means
             //   we should repeat
-            if (bbox.extent().z() != image.dimensions().z()) {
+            if (box.extent().z() != image.dimensions().z()) {
 
                 int zShift = 0;
                 do {
-                    projectImageOntoStackOut(bbox, image.asStack(), out, zShift);
+                    projectImageOntoStackOut(box, image.asStack(), out, zShift);
                     zShift += image.dimensions().z();
                 } while (zShift < out.dimensions().z());
 
             } else {
-                projectImageOntoStackOut(bbox, image.asStack(), out, 0);
+                projectImageOntoStackOut(box, image.asStack(), out, 0);
             }
         }
     }
 
     private void projectImageOntoStackOut(
-            BoundingBox bbox, Stack stackIn, Stack stackOut, int zShift) {
+            BoundingBox box, Stack stackIn, Stack stackOut, int zShift) {
 
         assert (stackIn.getNumberChannels() == stackOut.getNumberChannels());
 
         Extent extent = stackIn.dimensions().extent();
         Extent extentOut = stackIn.dimensions().extent();
 
-        ReadableTuple3i leftCrnr = bbox.cornerMin();
-        int xEnd = leftCrnr.x() + bbox.extent().x() - 1;
-        int yEnd = leftCrnr.y() + bbox.extent().y() - 1;
+        ReadableTuple3i leftCrnr = box.cornerMin();
+        int xEnd = leftCrnr.x() + box.extent().x() - 1;
+        int yEnd = leftCrnr.y() + box.extent().y() - 1;
 
         int numC = stackIn.getNumberChannels();
         VoxelBuffer<?>[] voxelsIn = new VoxelBuffer<?>[numC];

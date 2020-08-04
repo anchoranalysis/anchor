@@ -119,16 +119,16 @@ public final class BoundingBox implements Serializable {
         return new BoundingBox(cornerMin.duplicateChangeZ(crnrZ), extent.duplicateChangeZ(extentZ));
     }
 
-    public boolean atBorder(ImageDimensions sd) {
+    public boolean atBorder(ImageDimensions dimensions) {
 
-        if (atBorderXY(sd)) {
+        if (atBorderXY(dimensions)) {
             return true;
         }
 
-        return atBorderZ(sd);
+        return atBorderZ(dimensions);
     }
 
-    public boolean atBorderXY(ImageDimensions sd) {
+    public boolean atBorderXY(ImageDimensions dimensions) {
 
         ReadableTuple3i cornerMax = this.calcCornerMax();
 
@@ -139,20 +139,20 @@ public final class BoundingBox implements Serializable {
             return true;
         }
 
-        if (cornerMax.x() == (sd.x() - 1)) {
+        if (cornerMax.x() == (dimensions.x() - 1)) {
             return true;
         }
-        return cornerMax.y() == (sd.y() - 1);
+        return cornerMax.y() == (dimensions.y() - 1);
     }
 
-    public boolean atBorderZ(ImageDimensions sd) {
+    public boolean atBorderZ(ImageDimensions dimensions) {
 
         ReadableTuple3i cornerMax = this.calcCornerMax();
 
         if (cornerMin.z() == 0) {
             return true;
         }
-        return cornerMax.z() == (sd.z() - 1);
+        return cornerMax.z() == (dimensions.z() - 1);
     }
 
     public BoundingBox growBy(Tuple3i toAdd, Extent containingExtent) {

@@ -110,9 +110,9 @@ public class ObjectsAsBinaryChnlGenerator extends RasterGenerator
 
         int outOnValue = BinaryValuesByte.getDefault().getOnByte();
         
-        BoundingBox bbox = objectMask.boundingBox();
+        BoundingBox box = objectMask.boundingBox();
 
-        ImageDimensions dimensions = new ImageDimensions(bbox.extent(), resolution);
+        ImageDimensions dimensions = new ImageDimensions(box.extent(), resolution);
 
         Channel channelNew =
                 ChannelFactory.instance()

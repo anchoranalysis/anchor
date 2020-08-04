@@ -80,7 +80,7 @@ public abstract class IJWriter extends RasterWriter {
 
         log.debug(String.format("Writing image %s", filePath));
 
-        ImageDimensions sd = stack.getChannel(0).dimensions();
+        ImageDimensions dimensions = stack.getChannel(0).dimensions();
 
         ImagePlus imp = IJWrap.createImagePlus(stack, makeRGB);
 
@@ -88,7 +88,15 @@ public abstract class IJWriter extends RasterWriter {
 
         imp.close();
 
-        assert (imp.getNSlices() == sd.z());
+        if (imp.getNSlices() != dimensions.z()) {
+            throw new RasterIOException(
+                 String.format(
+                      "The number of slices in the ImagePlus (%d) is not the same as the image dimensions (%d)",
+                      imp.getNSlices(),
+                      dimensions.z()
+                      )
+            );
+        }
 
         log.debug(String.format("Finished writing image %s", filePath));
     }

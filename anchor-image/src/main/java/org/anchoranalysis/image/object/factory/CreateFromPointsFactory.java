@@ -41,14 +41,14 @@ public class CreateFromPointsFactory {
 
     public static ObjectMask create(List<Point3i> points) throws CreateException {
 
-        BoundingBox bbox;
+        BoundingBox box;
         try {
-            bbox = BoundingBoxFromPoints.forList(points);
+            box = BoundingBoxFromPoints.forList(points);
         } catch (OperationFailedException e) {
             throw new CreateException(e);
         }
 
-        ObjectMask object = new ObjectMask(bbox);
+        ObjectMask object = new ObjectMask(box);
         points.forEach(object::setOn);
         return object;
     }

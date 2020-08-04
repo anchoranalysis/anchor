@@ -45,13 +45,13 @@ public class IntersectionBBox {
     private Dimension x;
     private Dimension y;
     private Dimension z;
-    private Extent e1; // Extent of source bbox
-    private Extent e2; // Extent of other bbox
+    private Extent e1; // Extent of source box
+    private Extent e2; // Extent of other box
 
     public static class Dimension {
 
-        private int min; // Min point of intersection bbox
-        private int max; // Max point of intersection bbox
+        private int min; // Min point of intersection box
+        private int max; // Max point of intersection box
         private int rel; // Relative position other to src
 
         public Dimension(int min, int max, int rel) {
@@ -75,17 +75,17 @@ public class IntersectionBBox {
     }
 
     public static IntersectionBBox create(
-            BoundingBox bboxSrc, BoundingBox bboxOther, BoundingBox bboxIntersect) {
+            BoundingBox boxSrc, BoundingBox boxOther, BoundingBox boxIntersect) {
 
-        Point3i relPosSrc = bboxIntersect.relPosTo(bboxSrc);
+        Point3i relPosSrc = boxIntersect.relPosTo(boxSrc);
 
         Point3i relPosTrgtToSrc =
-                Point3i.immutableSubtract(bboxSrc.cornerMin(), bboxOther.cornerMin());
+                Point3i.immutableSubtract(boxSrc.cornerMin(), boxOther.cornerMin());
 
-        Point3i relPosSrcMax = Point3i.immutableAdd(relPosSrc, bboxIntersect.extent().asTuple());
+        Point3i relPosSrcMax = Point3i.immutableAdd(relPosSrc, boxIntersect.extent().asTuple());
 
         return new IntersectionBBox(
-                relPosSrc, relPosSrcMax, relPosTrgtToSrc, bboxSrc.extent(), bboxOther.extent());
+                relPosSrc, relPosSrcMax, relPosTrgtToSrc, boxSrc.extent(), boxOther.extent());
     }
 
     private IntersectionBBox(

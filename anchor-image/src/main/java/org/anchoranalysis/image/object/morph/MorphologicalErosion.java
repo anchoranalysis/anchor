@@ -61,8 +61,8 @@ public class MorphologicalErosion {
             // If we want to treat the outside of the image as if it's at a threshold, then
             //  we put an extra 1-pixel border around the object-mask, so that there's always
             //  whitespace around the object-mask, so long as it exists in the image scene
-            BoundingBox bbox = object.boundedVoxels().dilate(do3D, extent);
-            objectOut = object.regionIntersecting(bbox);
+            BoundingBox box = object.boundedVoxels().dilate(do3D, extent);
+            objectOut = object.regionIntersecting(box);
 
         } else {
             objectOut = object.duplicate();

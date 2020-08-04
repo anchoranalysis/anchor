@@ -92,9 +92,9 @@ public class Midpoint extends DrawObject {
     }
 
     public static void writeRelPoint(
-            Point3i point, RGBColor color, RGBStack stack, BoundingBox bboxContainer) {
-        if (bboxContainer.contains().point(point)) {
-            stack.writeRGBPoint(Point3i.immutableSubtract(point, bboxContainer.cornerMin()), color);
+            Point3i point, RGBColor color, RGBStack stack, BoundingBox boxContainer) {
+        if (boxContainer.contains().point(point)) {
+            stack.writeRGBPoint(Point3i.immutableSubtract(point, boxContainer.cornerMin()), color);
         }
     }
 
@@ -103,7 +103,7 @@ public class Midpoint extends DrawObject {
             RGBColor color,
             RGBStack stack,
             int extraLength,
-            BoundingBox bboxContainer) {
+            BoundingBox boxContainer) {
 
         if (!stack.dimensions().contains(midpoint)) {
             return;
@@ -114,26 +114,26 @@ public class Midpoint extends DrawObject {
         // X direction
         for (int i = 0; i < extraLength; i++) {
             midpoint.decrementX();
-            writeRelPoint(midpoint, color, stack, bboxContainer);
+            writeRelPoint(midpoint, color, stack, boxContainer);
         }
         midpoint.incrementX(extraLength);
 
         for (int i = 0; i < extraLength; i++) {
             midpoint.incrementX();
-            writeRelPoint(midpoint, color, stack, bboxContainer);
+            writeRelPoint(midpoint, color, stack, boxContainer);
         }
         midpoint.decrementX(extraLength);
 
         // Y direction
         for (int i = 0; i < extraLength; i++) {
             midpoint.decrementY();
-            writeRelPoint(midpoint, color, stack, bboxContainer);
+            writeRelPoint(midpoint, color, stack, boxContainer);
         }
         midpoint.incrementY(extraLength);
 
         for (int i = 0; i < extraLength; i++) {
             midpoint.decrementY();
-            writeRelPoint(midpoint, color, stack, bboxContainer);
+            writeRelPoint(midpoint, color, stack, boxContainer);
         }
         midpoint.decrementY(extraLength);
     }

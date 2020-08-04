@@ -77,8 +77,8 @@ public class Channel {
         delegate = voxels;
     }
 
-    public ObjectMask equalMask(BoundingBox bbox, int equalVal) {
-        return delegate.equalMask(bbox, equalVal);
+    public ObjectMask equalMask(BoundingBox box, int equalVal) {
+        return delegate.equalMask(box, equalVal);
     }
 
     public VoxelsWrapper voxels() {

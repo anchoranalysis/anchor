@@ -76,7 +76,7 @@ public class MarkLineSegment extends Mark {
     }
 
     @Override
-    public BoundingBox bbox(ImageDimensions bndScene, int regionID) {
+    public BoundingBox box(ImageDimensions bndScene, int regionID) {
         return BoundingBoxFromPoints.forTwoPoints(
                 distanceCalcToLine.getStartPoint(), distanceCalcToLine.getEndPoint());
     }
@@ -152,7 +152,7 @@ public class MarkLineSegment extends Mark {
     }
 
     @Override
-    public BoundingBox bboxAllRegions(ImageDimensions bndScene) {
-        return bbox(bndScene, GlobalRegionIdentifiers.SUBMARK_INSIDE);
+    public BoundingBox boxAllRegions(ImageDimensions bndScene) {
+        return box(bndScene, GlobalRegionIdentifiers.SUBMARK_INSIDE);
     }
 }

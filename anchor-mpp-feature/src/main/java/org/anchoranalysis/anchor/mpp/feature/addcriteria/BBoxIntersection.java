@@ -52,15 +52,15 @@ public class BBoxIntersection extends AddCriteriaPair {
             boolean do3D)
             throws IncludeMarksFailureException {
 
-        BoundingBox bbox1 = mark1.getMark().bboxAllRegions(dimensions);
-        BoundingBox bbox2 = mark2.getMark().bboxAllRegions(dimensions);
+        BoundingBox box1 = mark1.getMark().boxAllRegions(dimensions);
+        BoundingBox box2 = mark2.getMark().boxAllRegions(dimensions);
 
         if (suppressZ) {
-            bbox1 = bbox1.flattenZ();
-            bbox2 = bbox2.flattenZ();
+            box1 = box1.flattenZ();
+            box2 = box2.flattenZ();
         }
 
-        return bbox1.intersection().existsWith(bbox2);
+        return box1.intersection().existsWith(box2);
     }
 
     @Override

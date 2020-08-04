@@ -65,16 +65,16 @@ class CountIntersectingVoxelsRegionMembershipMask {
             byte onMaskGlobal) {
 
         // Find the common bounding box
-        Optional<BoundingBox> bboxIntersect = srcBox.intersection().with(otherBox);
+        Optional<BoundingBox> boxIntersect = srcBox.intersection().with(otherBox);
 
-        if (!bboxIntersect.isPresent()) {
+        if (!boxIntersect.isPresent()) {
             // If the bounding boxes don't intersect then we can
             //   go home early
             return 0;
         }
 
         return countIntersectingVoxelsFromBBoxMaskGlobal(
-                src, other, bboxIntersect.get(), maskGlobal, onMaskGlobal);
+                src, other, boxIntersect.get(), maskGlobal, onMaskGlobal);
     }
 
     // count intersecting pixels, but only includes a pixel ifs marked as onMaskGlobal in the mask
@@ -82,24 +82,24 @@ class CountIntersectingVoxelsRegionMembershipMask {
     private int countIntersectingVoxelsFromBBoxMaskGlobal(
             BoundedVoxels<ByteBuffer> src,
             BoundedVoxels<ByteBuffer> other,
-            BoundingBox bboxIntersect,
+            BoundingBox boxIntersect,
             Voxels<ByteBuffer> maskGlobal,
             byte onMaskGlobal) {
         Extent eGlobalMask = maskGlobal.extent();
 
-        IntersectionBBox bbox =
+        IntersectionBBox box =
                 IntersectionBBox.create(
-                        src.boundingBox(), other.boundingBox(), bboxIntersect);
+                        src.boundingBox(), other.boundingBox(), boxIntersect);
 
         // Otherwise we count the number of pixels that are not empty
         //  in both bounded-voxels in the intersecting region
         int cnt = 0;
 
-        for (int z = bbox.z().min(); z < bbox.z().max(); z++) {
+        for (int z = box.z().min(); z < box.z().max(); z++) {
 
             ByteBuffer buffer = src.voxels().slice(z).buffer();
 
-            int zOther = z + bbox.z().rel();
+            int zOther = z + box.z().rel();
             int zGlobal = z + src.boundingBox().cornerMin().z();
 
             ByteBuffer bufferOther = other.voxels().slice(zOther).buffer();
@@ -113,7 +113,7 @@ class CountIntersectingVoxelsRegionMembershipMask {
                             buffer,
                             bufferOther,
                             bufferMaskGlobal,
-                            bbox,
+                            box,
                             src.boundingBox().cornerMin(),
                             eGlobalMask,
                             onMaskGlobal);
@@ -126,25 +126,25 @@ class CountIntersectingVoxelsRegionMembershipMask {
             ByteBuffer buffer1,
             ByteBuffer buffer2,
             ByteBuffer bufferMaskGlobal,
-            IntersectionBBox bbox,
+            IntersectionBBox box,
             Point3i pointGlobalRel,
             Extent extentGlobal,
             byte onMaskGlobal) {
 
         int cnt = 0;
-        for (int y = bbox.y().min(); y < bbox.y().max(); y++) {
-            int yOther = y + bbox.y().rel();
+        for (int y = box.y().min(); y < box.y().max(); y++) {
+            int yOther = y + box.y().rel();
             int yGlobal = y + pointGlobalRel.y();
 
-            for (int x = bbox.x().min(); x < bbox.x().max(); x++) {
-                int xOther = x + bbox.x().rel();
+            for (int x = box.x().min(); x < box.x().max(); x++) {
+                int xOther = x + box.x().rel();
                 int xGlobal = x + pointGlobalRel.x();
 
                 byte globalMask = bufferMaskGlobal.get(extentGlobal.offset(xGlobal, yGlobal));
                 if (globalMask == onMaskGlobal) {
 
-                    byte posCheck = buffer1.get(bbox.e1().offset(x, y));
-                    byte posCheckOther = buffer2.get(bbox.e2().offset(xOther, yOther));
+                    byte posCheck = buffer1.get(box.e1().offset(x, y));
+                    byte posCheckOther = buffer2.get(box.e2().offset(xOther, yOther));
 
                     if (isPixelInRegion(posCheck) && isPixelInRegion(posCheckOther)) {
                         cnt++;

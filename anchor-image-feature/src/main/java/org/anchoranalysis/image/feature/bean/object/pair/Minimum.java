@@ -31,17 +31,15 @@ import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
+import lombok.NoArgsConstructor;
 
 /**
  * Ratio of first-object to second-object in a pair
  *
  * @author Owen Feehan
  */
+@NoArgsConstructor
 public class Minimum extends FeatureDeriveFromPair {
-
-    public Minimum() {
-        // BEAN Constructor
-    }
 
     public Minimum(Feature<FeatureInputSingleObject> item) {
         super(item);

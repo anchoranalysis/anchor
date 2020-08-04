@@ -71,7 +71,7 @@ public abstract class MarkAbstractPointList extends Mark {
     }
 
     @Override
-    public BoundingBox bbox(ImageDimensions bndScene, int regionID) {
+    public BoundingBox box(ImageDimensions bndScene, int regionID) {
         // TODO FOR NOW WE IGNORE THE SHELL RADIUS
         return new BoundingBox(min, max);
     }
@@ -120,7 +120,7 @@ public abstract class MarkAbstractPointList extends Mark {
         return max;
     }
 
-    protected BoundingBox bbox() {
+    protected BoundingBox box() {
         return new BoundingBox(getMin(), getMax());
     }
 

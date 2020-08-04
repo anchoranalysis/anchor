@@ -43,10 +43,10 @@ class ObjectMaskHDF5Reader {
 
         Voxels<ByteBuffer> voxels = createVoxels(reader.uint8().readMDArray(datasetPath));
 
-        BoundingBox bbox =
+        BoundingBox box =
                 new BoundingBox(cornerPoint(reader.uint32(), datasetPath), voxels.extent());
 
-        return new ObjectMask(bbox, voxels);
+        return new ObjectMask(box, voxels);
     }
 
     public static int extractIntAttr(IHDF5IntReader reader, String path, String attr) {

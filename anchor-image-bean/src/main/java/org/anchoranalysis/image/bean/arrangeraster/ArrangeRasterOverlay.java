@@ -62,36 +62,36 @@ public class ArrangeRasterOverlay extends ArrangeRasterBean {
         return getBeanName();
     }
 
-    private int calcHorizontalPos(BoundingBoxesOnPlane bboxSet, ImageDimensions dimensions) {
+    private int calcHorizontalPos(BoundingBoxesOnPlane boxSet, ImageDimensions dimensions) {
 
         if (horizontalAlign.equalsIgnoreCase("left")) {
             return 0;
         } else if (horizontalAlign.equalsIgnoreCase("right")) {
-            return bboxSet.extent().x() - dimensions.x();
+            return boxSet.extent().x() - dimensions.x();
         } else {
-            return (bboxSet.extent().x() - dimensions.x()) / 2;
+            return (boxSet.extent().x() - dimensions.x()) / 2;
         }
     }
 
-    private int calcVerticalPos(BoundingBoxesOnPlane bboxSet, ImageDimensions dimensions) {
+    private int calcVerticalPos(BoundingBoxesOnPlane boxSet, ImageDimensions dimensions) {
 
         if (verticalAlign.equalsIgnoreCase("top")) {
             return 0;
         } else if (verticalAlign.equalsIgnoreCase("bottom")) {
-            return bboxSet.extent().y() - dimensions.y();
+            return boxSet.extent().y() - dimensions.y();
         } else {
-            return (bboxSet.extent().y() - dimensions.y()) / 2;
+            return (boxSet.extent().y() - dimensions.y()) / 2;
         }
     }
 
-    private int calcZPos(BoundingBoxesOnPlane bboxSet, ImageDimensions dimensions) {
+    private int calcZPos(BoundingBoxesOnPlane boxSet, ImageDimensions dimensions) {
 
         if (zAlign.equalsIgnoreCase("bottom") || zAlign.equalsIgnoreCase("repeat")) {
             return 0;
         } else if (zAlign.equalsIgnoreCase("top")) {
-            return bboxSet.extent().z() - dimensions.z();
+            return boxSet.extent().z() - dimensions.z();
         } else {
-            return (bboxSet.extent().z() - dimensions.z()) / 2;
+            return (boxSet.extent().z() - dimensions.z()) / 2;
         }
     }
 
@@ -104,7 +104,7 @@ public class ArrangeRasterOverlay extends ArrangeRasterBean {
         }
 
         SingleRaster sr = new SingleRaster();
-        BoundingBoxesOnPlane bboxSet = sr.createBoundingBoxesOnPlane(rasterIterator);
+        BoundingBoxesOnPlane boxSet = sr.createBoundingBoxesOnPlane(rasterIterator);
 
         if (!rasterIterator.hasNext()) {
             throw new ArrangeRasterException("No image in iterator for overlay");
@@ -114,22 +114,22 @@ public class ArrangeRasterOverlay extends ArrangeRasterBean {
 
         Extent overlayE =
                 deriveExtent(
-                        overlayImg.channelAt(0).dimensions().extent(), bboxSet.extent());
+                        overlayImg.channelAt(0).dimensions().extent(), boxSet.extent());
 
-        int hPos = calcHorizontalPos(bboxSet, overlayImg.dimensions());
-        int vPos = calcVerticalPos(bboxSet, overlayImg.dimensions());
-        int zPos = calcZPos(bboxSet, overlayImg.dimensions());
+        int hPos = calcHorizontalPos(boxSet, overlayImg.dimensions());
+        int vPos = calcVerticalPos(boxSet, overlayImg.dimensions());
+        int zPos = calcZPos(boxSet, overlayImg.dimensions());
 
-        bboxSet.add(new BoundingBox(new Point3i(hPos, vPos, zPos), overlayE));
-        return bboxSet;
+        boxSet.add(new BoundingBox(new Point3i(hPos, vPos, zPos), overlayE));
+        return boxSet;
     }
 
-    private Extent deriveExtent(Extent overlay, Extent bbox) {
+    private Extent deriveExtent(Extent overlay, Extent box) {
         return new Extent(
-                Math.min(overlay.x(), bbox.x()),
-                Math.min(overlay.y(), bbox.y()),
-                zAlign.equalsIgnoreCase("repeat") || (overlay.z() > bbox.z())
-                        ? bbox.z()
+                Math.min(overlay.x(), box.x()),
+                Math.min(overlay.y(), box.y()),
+                zAlign.equalsIgnoreCase("repeat") || (overlay.z() > box.z())
+                        ? box.z()
                         : overlay.z());
     }
 }

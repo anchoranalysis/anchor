@@ -96,12 +96,12 @@ final class VoxelsAsFloat extends Voxels<FloatBuffer> {
     }
 
     @Override
-    public void setPixelsTo(BoundingBox bbox, int val) {
+    public void setPixelsTo(BoundingBox box, int val) {
 
         float valFloat = (float) val;
 
-        ReadableTuple3i cornerMin = bbox.cornerMin();
-        ReadableTuple3i cornerMax = bbox.calcCornerMax();
+        ReadableTuple3i cornerMin = box.cornerMin();
+        ReadableTuple3i cornerMax = box.calcCornerMax();
         Extent e = extent();
 
         for (int z = cornerMin.z(); z <= cornerMax.z(); z++) {

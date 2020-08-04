@@ -122,7 +122,7 @@ public class MarkRotatableBoundingBox extends MarkAbstractPosition {
     }
 
     @Override
-    public BoundingBox bboxAllRegions(ImageDimensions bndScene) {
+    public BoundingBox boxAllRegions(ImageDimensions bndScene) {
 
         Point3d[] points =
                 new Point3d[] {
@@ -141,8 +141,8 @@ public class MarkRotatableBoundingBox extends MarkAbstractPosition {
     }
 
     @Override
-    public BoundingBox bbox(ImageDimensions bndScene, int regionID) {
-        return bboxAllRegions(bndScene);
+    public BoundingBox box(ImageDimensions bndScene, int regionID) {
+        return boxAllRegions(bndScene);
     }
 
     @Override

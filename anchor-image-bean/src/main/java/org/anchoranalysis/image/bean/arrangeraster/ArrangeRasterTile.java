@@ -105,13 +105,13 @@ public class ArrangeRasterTile extends ArrangeRasterBean {
 
         // We now loop through each item in the cell, and add to our output set with
         //   the correct offset
-        for (BoundingBox bbox : src) {
+        for (BoundingBox box : src) {
 
-            Point3i cornerMin = new Point3i(bbox.cornerMin());
+            Point3i cornerMin = new Point3i(box.cornerMin());
             cornerMin.incrementX(shiftX);
             cornerMin.incrementY(shiftY);
 
-            dest.add(new BoundingBox(cornerMin, bbox.extent()));
+            dest.add(new BoundingBox(cornerMin, box.extent()));
         }
     }
 
@@ -133,7 +133,7 @@ public class ArrangeRasterTile extends ArrangeRasterBean {
                     break;
                 }
 
-                BoundingBoxesOnPlane bboxSet = table.get(rowPos, colPos);
+                BoundingBoxesOnPlane boxSet = table.get(rowPos, colPos);
 
                 int rowHeight = maxWidthHeight.getMaxHeightForRow(rowPos);
                 int colWidth = maxWidthHeight.getMaxWidthForCol(colPos);
@@ -141,10 +141,10 @@ public class ArrangeRasterTile extends ArrangeRasterBean {
                 int rowX = maxWidthHeight.sumWidthBeforeCol(colPos);
                 int rowY = maxWidthHeight.sumHeightBeforeRow(rowPos);
 
-                int x = rowX + ((colWidth - bboxSet.extent().x()) / 2); // We center
-                int y = rowY + ((rowHeight - bboxSet.extent().y()) / 2); // We center
+                int x = rowX + ((colWidth - boxSet.extent().x()) / 2); // We center
+                int y = rowY + ((rowHeight - boxSet.extent().y()) / 2); // We center
 
-                addShifted(bboxSet, set, x, y);
+                addShifted(boxSet, set, x, y);
             }
         }
         return set;

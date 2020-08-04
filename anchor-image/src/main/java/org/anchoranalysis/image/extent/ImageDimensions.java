@@ -121,8 +121,8 @@ public final class ImageDimensions implements Serializable {
         return extent.offsetSlice(point);
     }
 
-    public boolean contains(BoundingBox bbox) {
-        return extent.contains(bbox);
+    public boolean contains(BoundingBox box) {
+        return extent.contains(box);
     }
 
     @Override

@@ -59,7 +59,7 @@ public class OverlayObjectMask extends Overlay {
 
     // Assumes object-mask is always inside the dim. TODO verify that is valid.
     @Override
-    public BoundingBox bbox(DrawOverlay overlayWriter, ImageDimensions dim) {
+    public BoundingBox box(DrawOverlay overlayWriter, ImageDimensions dim) {
         return object.boundingBox();
     }
 
@@ -69,13 +69,13 @@ public class OverlayObjectMask extends Overlay {
             double zoomFactorNew,
             ObjectWithProperties om,
             Overlay ol,
-            ImageDimensions sdUnscaled,
-            ImageDimensions sdScaled,
+            ImageDimensions dimensionsUnscaled,
+            ImageDimensions dimensionsScaled,
             BinaryValuesByte bvOut)
             throws CreateException {
 
         return SCALED_MASK_CREATOR.createScaledMask(
-                overlayWriter, om, zoomFactorNew, om, sdScaled, bvOut);
+                overlayWriter, om, zoomFactorNew, om, dimensionsScaled, bvOut);
     }
 
     // TODO do we need to duplicate here?

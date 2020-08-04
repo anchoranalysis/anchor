@@ -66,11 +66,11 @@ public class ObjectMaskMerger {
 
         second = invertSecondIfNecessary(first, second);
 
-        BoundingBox bbox = first.boundingBox().union().with(second.boundingBox());
+        BoundingBox box = first.boundingBox().union().with(second.boundingBox());
 
-        ObjectMask out = new ObjectMask(bbox, VoxelsFactory.getByte().createInitialized(bbox.extent()));
-        copyPixelsCheckMask(first, out, bbox);
-        copyPixelsCheckMask(second, out, bbox);
+        ObjectMask out = new ObjectMask(box, VoxelsFactory.getByte().createInitialized(box.extent()));
+        copyPixelsCheckMask(first, out, box);
+        copyPixelsCheckMask(second, out, box);
         return out;
     }
 
@@ -122,10 +122,10 @@ public class ObjectMaskMerger {
             return objects.get(0).duplicate(); // So we are always guaranteed to have a new object
         }
 
-        BoundingBox bbox = mergeBoundingBoxes(objects.streamStandardJava());
+        BoundingBox box = mergeBoundingBoxes(objects.streamStandardJava());
 
         ObjectMask objectOut =
-                new ObjectMask(bbox, VoxelsFactory.getByte().createInitialized(bbox.extent()));
+                new ObjectMask(box, VoxelsFactory.getByte().createInitialized(box.extent()));
 
         BinaryValues bv = null;
         for (ObjectMask objectMask : objects) {
@@ -139,16 +139,16 @@ public class ObjectMaskMerger {
                 bv = objectMask.binaryValues();
             }
 
-            copyPixelsCheckMask(objectMask, objectOut, bbox);
+            copyPixelsCheckMask(objectMask, objectOut, box);
         }
 
         return objectOut;
     }
 
     private static void copyPixelsCheckMask(
-            ObjectMask source, ObjectMask destination, BoundingBox bbox) {
+            ObjectMask source, ObjectMask destination, BoundingBox box) {
 
-        Point3i pointDest = source.boundingBox().relPosTo(bbox);
+        Point3i pointDest = source.boundingBox().relPosTo(box);
         Extent e = source.boundingBox().extent();
 
         source.voxels()

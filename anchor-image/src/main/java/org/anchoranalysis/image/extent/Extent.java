@@ -191,20 +191,8 @@ public final class Extent implements Serializable {
         return offset(point.x(), point.y(), 0);
     }
 
-    public Extent ex() {
-        return new Extent(x() + 1, y() + 1, z() + 1);
-    }
-
-    public int[] createArray() {
-        int[] arr = new int[3];
-        arr[0] = x();
-        arr[1] = y();
-        arr[2] = z();
-        return arr;
-    }
-
-    public int[] createOrderedArray() {
-        int[] extents = createArray();
+    public int[] asOrderedArray() {
+        int[] extents = deriveArray();
         Arrays.sort(extents);
         return extents;
     }
@@ -270,8 +258,8 @@ public final class Extent implements Serializable {
         return (z < len.z());
     }
 
-    public boolean contains(BoundingBox bbox) {
-        return contains(bbox.cornerMin()) && contains(bbox.calcCornerMax());
+    public boolean contains(BoundingBox box) {
+        return contains(box.cornerMin()) && contains(box.calcCornerMax());
     }
 
     public Extent scaleXYBy(ScaleFactor sf) {
@@ -338,5 +326,13 @@ public final class Extent implements Serializable {
         Point3i lenDup = new Point3i(len);
         pointOperation.accept(lenDup);
         return lenDup;
+    }
+    
+    private int[] deriveArray() {
+        int[] arr = new int[3];
+        arr[0] = x();
+        arr[1] = y();
+        arr[2] = z();
+        return arr;
     }
 }

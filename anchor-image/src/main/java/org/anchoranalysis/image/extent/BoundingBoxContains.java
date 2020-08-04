@@ -36,28 +36,28 @@ import org.anchoranalysis.core.geometry.ReadableTuple3i;
  */
 public final class BoundingBoxContains {
 
-    private final BoundingBox bbox;
+    private final BoundingBox box;
     private final ReadableTuple3i cornerMax;
 
-    public BoundingBoxContains(BoundingBox bbox) {
+    public BoundingBoxContains(BoundingBox box) {
         super();
-        this.bbox = bbox;
-        this.cornerMax = bbox.calcCornerMax();
+        this.box = box;
+        this.cornerMax = box.calcCornerMax();
     }
 
     /** Is this value in the x-dimension within the bounding box range? */
     public boolean x(int x) {
-        return (x >= bbox.cornerMin().x()) && (x <= cornerMax.x());
+        return (x >= box.cornerMin().x()) && (x <= cornerMax.x());
     }
 
     /** Is this value in the y-dimension within the bounding box range? */
     public boolean y(int y) {
-        return (y >= bbox.cornerMin().y()) && (y <= cornerMax.y());
+        return (y >= box.cornerMin().y()) && (y <= cornerMax.y());
     }
 
     /** Is this value in the z-dimension within the bounding box range? */
     public boolean z(int z) {
-        return (z >= bbox.cornerMin().z()) && (z <= cornerMax.z());
+        return (z >= box.cornerMin().z()) && (z <= cornerMax.z());
     }
 
     /** Is this point within the bounding-box? */

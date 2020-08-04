@@ -38,10 +38,10 @@ public abstract class ReportFeatureForMPP<T extends FeatureInput>
         extends ReportFeatureEvaluator<T> {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private ImageDimProvider dim;
+    @BeanField @Getter @Setter private ImageDimProvider dimensions;
     // END BEAN PROPERTIES
 
     protected ImageDimensions createImageDim() throws CreateException {
-        return dim.create();
+        return dimensions.create();
     }
 }

@@ -154,7 +154,7 @@ public class RGBStack {
     }
 
     private static void writePoint(Point3i point, Channel chnl, byte toWrite) {
-        int index = chnl.dimensions().extent().offset(point);
+        int index = chnl.dimensions().extent().offsetSlice(point);
         chnl.voxels().asByte().slice(point.z()).buffer().put(index, toWrite);
     }
 
@@ -169,7 +169,7 @@ public class RGBStack {
     // Only supports 8-bit
     public void writeRGBMaskToSlice(
             ObjectMask object,
-            BoundingBox bbox,
+            BoundingBox box,
             RGBColor color,
             Point3i pointGlobal,
             int zLocal,
@@ -189,11 +189,11 @@ public class RGBStack {
 
         Extent eMask = object.boundingBox().extent();
 
-        for (pointGlobal.setY(bbox.cornerMin().y());
+        for (pointGlobal.setY(box.cornerMin().y());
                 pointGlobal.y() <= maxGlobal.y();
                 pointGlobal.incrementY()) {
 
-            for (pointGlobal.setX(bbox.cornerMin().x());
+            for (pointGlobal.setX(box.cornerMin().x());
                     pointGlobal.x() <= maxGlobal.x();
                     pointGlobal.incrementX()) {
 

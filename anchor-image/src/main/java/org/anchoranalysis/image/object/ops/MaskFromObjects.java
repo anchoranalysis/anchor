@@ -99,16 +99,16 @@ public class MaskFromObjects {
     private static void writeObjectOntoVoxels(
             ObjectMask object, Voxels<ByteBuffer> voxelsOut, byte outValByte) {
 
-        BoundingBox bbox = object.boundingBox();
+        BoundingBox box = object.boundingBox();
 
-        ReadableTuple3i maxGlobal = bbox.calcCornerMax();
+        ReadableTuple3i maxGlobal = box.calcCornerMax();
         Point3i pointGlobal = new Point3i();
         Point3i pointLocal = new Point3i();
 
         byte matchValue = object.binaryValuesByte().getOnByte();
 
         pointLocal.setZ(0);
-        for (pointGlobal.setZ(bbox.cornerMin().z());
+        for (pointGlobal.setZ(box.cornerMin().z());
                 pointGlobal.z() <= maxGlobal.z();
                 pointGlobal.incrementZ(), pointLocal.incrementZ()) {
 
@@ -120,7 +120,7 @@ public class MaskFromObjects {
                     maskIn,
                     pixelsOut,
                     voxelsOut.extent(),
-                    bbox.cornerMin(),
+                    box.cornerMin(),
                     pointGlobal,
                     maxGlobal,
                     matchValue,
@@ -150,7 +150,7 @@ public class MaskFromObjects {
                     continue;
                 }
 
-                pixelsOut.put(extentOut.offset(pointGlobal), outValByte);
+                pixelsOut.put(extentOut.offsetSlice(pointGlobal), outValByte);
             }
         }
     }

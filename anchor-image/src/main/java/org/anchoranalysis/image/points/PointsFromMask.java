@@ -49,14 +49,14 @@ public class PointsFromMask {
     }
 
     public static List<Point3i> listFromSlicesInsideBox3i(
-            Mask mask, BoundingBox bbox, int startZ, int skipAfterSuccessiveEmptySlices) {
+            Mask mask, BoundingBox box, int startZ, int skipAfterSuccessiveEmptySlices) {
 
         List<Point3i> out = new ArrayList<>();
 
         ConsumePointsFromMaskSliced helper =
                 new ConsumePointsFromMaskSliced(
                         skipAfterSuccessiveEmptySlices,
-                        bbox,
+                        box,
                         mask,
                         startZ,
                         out::add);

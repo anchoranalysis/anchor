@@ -24,14 +24,14 @@
  * #L%
  */
 
-package org.anchoranalysis.image.io.generator.raster.bbox;
+package org.anchoranalysis.image.io.generator.raster.boundingbox;
 
 import java.util.Optional;
 import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.io.generator.raster.RasterGenerator;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.voxel.Voxels;
@@ -39,12 +39,14 @@ import org.anchoranalysis.io.generator.IterableObjectGenerator;
 import org.anchoranalysis.io.generator.ObjectGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import lombok.RequiredArgsConstructor;
 
 /**
  * An iterable-generator that outputs the portion of a stack corresponding to a bounding-box
  *
  * @author Owen Feehan
  */
+@RequiredArgsConstructor
 public class ExtractBoundingBoxAreaFromStackGenerator extends RasterGenerator
         implements IterableObjectGenerator<BoundingBox, Stack> {
 
@@ -54,11 +56,7 @@ public class ExtractBoundingBoxAreaFromStackGenerator extends RasterGenerator
     private final Stack stack;
     // END REQUIRED ARGUMENTS
 
-    private BoundingBox bbox;
-
-    public ExtractBoundingBoxAreaFromStackGenerator(Stack stack) {
-        this.stack = stack;
-    }
+    private BoundingBox box;
 
     @Override
     public Stack generate() throws OutputWriteFailedException {
@@ -77,12 +75,12 @@ public class ExtractBoundingBoxAreaFromStackGenerator extends RasterGenerator
 
     @Override
     public BoundingBox getIterableElement() {
-        return bbox;
+        return box;
     }
 
     @Override
     public void setIterableElement(BoundingBox element) {
-        this.bbox = element;
+        this.box = element;
     }
 
     @Override
@@ -100,24 +98,16 @@ public class ExtractBoundingBoxAreaFromStackGenerator extends RasterGenerator
         return stack.getNumberChannels() == 3;
     }
 
-    private Stack createExtract(Stack stackIn) throws CreateException {
-        Stack stackOut = new Stack();
-
-        for (Channel chnlIn : stackIn) {
-
-            Voxels<?> voxelsIn = chnlIn.voxels().any();
-
-            Voxels<?> voxelsExtracted = voxelsIn.region(bbox, false);
-
-            Channel chnlExtracted =
-                    ChannelFactory.instance().create(voxelsExtracted, stackIn.dimensions().resolution());
-            try {
-                stackOut.addChannel(chnlExtracted);
-            } catch (IncorrectImageSizeException e) {
-                throw new CreateException(e);
-            }
+    private Stack createExtract(Stack stack) throws CreateException {
+        try {
+            return stack.mapChannel(this::extractArea);
+        } catch (OperationFailedException e) {
+            throw new CreateException(e);
         }
-
-        return stackOut;
+    }
+    
+    private Channel extractArea( Channel channel ) {
+        Voxels<?> voxelsExtracted = channel.voxels().any().region(box, false);
+        return ChannelFactory.instance().create(voxelsExtracted, stack.dimensions().resolution());  
     }
 }
