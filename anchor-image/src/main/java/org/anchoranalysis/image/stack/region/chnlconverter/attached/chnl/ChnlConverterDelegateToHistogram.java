@@ -35,7 +35,7 @@ import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramFactory;
 import org.anchoranalysis.image.stack.region.chnlconverter.ConversionPolicy;
 import org.anchoranalysis.image.stack.region.chnlconverter.attached.ChnlConverterAttached;
-import org.anchoranalysis.image.stack.region.chnlconverter.voxelbox.VoxelBoxConverter;
+import org.anchoranalysis.image.stack.region.chnlconverter.voxelbox.VoxelsConverter;
 
 @RequiredArgsConstructor
 public class ChnlConverterDelegateToHistogram<T extends Buffer>
@@ -61,7 +61,7 @@ public class ChnlConverterDelegateToHistogram<T extends Buffer>
     }
 
     @Override
-    public VoxelBoxConverter<T> getVoxelsConverter() {
+    public VoxelsConverter<T> getVoxelsConverter() {
         return delegate.getVoxelsConverter();
     }
 }

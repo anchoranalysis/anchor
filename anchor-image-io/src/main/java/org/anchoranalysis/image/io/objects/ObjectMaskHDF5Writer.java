@@ -33,7 +33,7 @@ import java.nio.ByteBuffer;
 import java.util.function.ToIntFunction;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
-import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
+import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.ObjectMask;
 
@@ -89,7 +89,7 @@ class ObjectMaskHDF5Writer {
         writer.uint32().setAttr(pathHDF5, attrName, crnrVal.intValue());
     }
 
-    private static MDByteArray byteArray(BinaryVoxelBox<ByteBuffer> bvb) {
+    private static MDByteArray byteArray(BinaryVoxels<ByteBuffer> bvb) {
 
         Extent extent = bvb.extent();
 

@@ -29,17 +29,17 @@ package org.anchoranalysis.image.voxel.kernel;
 import java.nio.ByteBuffer;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.convert.ByteConverter;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.Voxels;
 
 // Erosion with a 3x3 or 3x3x3 kernel
 public class ConditionalKernel extends BinaryKernel {
 
     private BinaryKernel kernel;
     private int minValue;
-    private VoxelBox<ByteBuffer> vbIntensity;
+    private Voxels<ByteBuffer> vbIntensity;
 
     // Constructor
-    public ConditionalKernel(BinaryKernel kernel, int minValue, VoxelBox<ByteBuffer> vbIntensity) {
+    public ConditionalKernel(BinaryKernel kernel, int minValue, Voxels<ByteBuffer> vbIntensity) {
         super(kernel.getSize());
         this.kernel = kernel;
         this.minValue = minValue;
@@ -64,7 +64,7 @@ public class ConditionalKernel extends BinaryKernel {
     }
 
     @Override
-    public void init(VoxelBox<ByteBuffer> in) {
+    public void init(Voxels<ByteBuffer> in) {
         kernel.init(in);
     }
 

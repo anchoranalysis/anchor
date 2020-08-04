@@ -30,7 +30,7 @@ import java.nio.Buffer;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.stack.region.chnlconverter.ConversionPolicy;
-import org.anchoranalysis.image.stack.region.chnlconverter.voxelbox.VoxelBoxConverter;
+import org.anchoranalysis.image.stack.region.chnlconverter.voxelbox.VoxelsConverter;
 
 /**
  * A ChnlConverter that has been permanently attached to a particular object (to give more
@@ -46,5 +46,5 @@ public interface ChnlConverterAttached<S, T extends Buffer> {
 
     Channel convert(Channel chnl, ConversionPolicy changeExisting);
 
-    VoxelBoxConverter<T> getVoxelsConverter();
+    VoxelsConverter<T> getVoxelsConverter();
 }

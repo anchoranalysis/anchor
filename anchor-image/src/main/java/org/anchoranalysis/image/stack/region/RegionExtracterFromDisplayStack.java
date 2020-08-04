@@ -42,11 +42,11 @@ import org.anchoranalysis.image.scale.ScaleFactor;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.region.chnlconverter.attached.ChnlConverterAttached;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
-import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
+import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelDataTypeException;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedShort;
+import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 
 public class RegionExtracterFromDisplayStack implements RegionExtracter {
 
@@ -101,20 +101,20 @@ public class RegionExtracterFromDisplayStack implements RegionExtracter {
 
         ScaleFactor sf = new ScaleFactor(zoomFactor);
 
-        // We calculate how big our outgoing voxelbox wil be
+        // We calculate how big our outgoing voxels will be
         ImageDimensions sd = extractedSlice.getDimensions().scaleXYBy(sf);
 
         Extent extentTrgt = bbox.extent().scaleXYBy(sf);
 
-        VoxelBox<ByteBuffer> bufferSc = VoxelBoxFactory.getByte().create(extentTrgt);
+        Voxels<ByteBuffer> voxels = VoxelsFactory.getByte().createInitialized(extentTrgt);
 
         MeanInterpolator interpolator = (zoomFactor < 1) ? new MeanInterpolator(zoomFactor) : null;
 
         if (extractedSlice.getVoxelDataType().equals(VoxelDataTypeUnsignedByte.INSTANCE)) {
-            VoxelBox<ByteBuffer> vb = extractedSlice.voxels().asByte();
+            Voxels<ByteBuffer> vb = extractedSlice.voxels().asByte();
             interpolateRegionFromByte(
                     vb,
-                    bufferSc,
+                    voxels,
                     extractedSlice.getDimensions().getExtent(),
                     extentTrgt,
                     bbox,
@@ -122,16 +122,16 @@ public class RegionExtracterFromDisplayStack implements RegionExtracter {
                     interpolator);
 
             if (chnlConverter != null) {
-                chnlConverter.getVoxelsConverter().convertFromByte(bufferSc, bufferSc);
+                chnlConverter.getVoxelsConverter().convertFromByte(voxels, voxels);
             }
 
         } else if (extractedSlice.getVoxelDataType().equals(VoxelDataTypeUnsignedShort.INSTANCE)
                 && chnlConverter != null) {
 
-            VoxelBox<ShortBuffer> vb = extractedSlice.voxels().asShort();
+            Voxels<ShortBuffer> vb = extractedSlice.voxels().asShort();
 
-            VoxelBox<ShortBuffer> bufferIntermediate =
-                    VoxelBoxFactory.getShort().create(extentTrgt);
+            Voxels<ShortBuffer> bufferIntermediate =
+                    VoxelsFactory.getShort().createInitialized(extentTrgt);
             interpolateRegionFromShort(
                     vb,
                     bufferIntermediate,
@@ -142,7 +142,7 @@ public class RegionExtracterFromDisplayStack implements RegionExtracter {
                     interpolator);
 
             // We now convert the ShortBuffer into bytes
-            chnlConverter.getVoxelsConverter().convertFromShort(bufferIntermediate, bufferSc);
+            chnlConverter.getVoxelsConverter().convertFromShort(bufferIntermediate, voxels);
 
         } else {
             throw new IncorrectVoxelDataTypeException(
@@ -153,15 +153,15 @@ public class RegionExtracterFromDisplayStack implements RegionExtracter {
 
         return ChannelFactory.instance()
                 .get(VoxelDataTypeUnsignedByte.INSTANCE)
-                .create(bufferSc, sd.getResolution());
+                .create(voxels, sd.getResolution());
     }
 
     // extentTrgt is the target-size (where we write this region)
     // extentSrcSlice is the source-size (the single slice we've extracted from the buffer to
     // interpolate from)
     private static void interpolateRegionFromByte(
-            VoxelBox<ByteBuffer> vbSrc,
-            VoxelBox<ByteBuffer> vbDest,
+            Voxels<ByteBuffer> vbSrc,
+            Voxels<ByteBuffer> vbDest,
             Extent extentSrc,
             Extent extentTrgt,
             BoundingBox bbox,
@@ -203,8 +203,8 @@ public class RegionExtracterFromDisplayStack implements RegionExtracter {
     // extentSrcSlice is the source-size (the single slice we've extracted from the buffer to
     // interpolate from)
     private static void interpolateRegionFromShort(
-            VoxelBox<ShortBuffer> vbSrc,
-            VoxelBox<ShortBuffer> vbDest,
+            Voxels<ShortBuffer> vbSrc,
+            Voxels<ShortBuffer> vbDest,
             Extent extentSrc,
             Extent extentTrgt,
             BoundingBox bbox,

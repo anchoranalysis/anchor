@@ -33,9 +33,8 @@ import java.nio.Buffer;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.binary.values.BinaryValues;
-import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
-import org.anchoranalysis.image.binary.voxel.BinaryVoxelBoxFactory;
+import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
+import org.anchoranalysis.image.binary.voxel.BinaryVoxelsFactory;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectCollectionFactory;
@@ -108,7 +107,7 @@ public class ConnectedComponentUnitFindTest {
                 allSizesEqualExceptOne(objects, expectedSingleObjectSize));
     }
 
-    private <T extends Buffer> BinaryVoxelBox<T> createBufferWithObjects(
+    private <T extends Buffer> BinaryVoxels<T> createBufferWithObjects(
             VoxelDataType bufferDataType, boolean do3D) throws CreateException {
 
         ObjectMaskFixture fixture = new ObjectMaskFixture(do3D);
@@ -120,10 +119,9 @@ public class ConnectedComponentUnitFindTest {
                         DEPTH);
 
         @SuppressWarnings("unchecked")
-        BinaryVoxelBox<T> bvb =
-                (BinaryVoxelBox<T>)
-                        BinaryVoxelBoxFactory.instance()
-                                .create(extent, bufferDataType, BinaryValues.getDefault());
+        BinaryVoxels<T> bvb =
+                (BinaryVoxels<T>)
+                        BinaryVoxelsFactory.createEmptyOff(extent, bufferDataType);
 
         createObjects(fixture).forEach(bvb::setPixelsCheckMaskOn);
         return bvb;

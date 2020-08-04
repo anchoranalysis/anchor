@@ -29,16 +29,17 @@ package org.anchoranalysis.image.object.morph.accept;
 import java.nio.ByteBuffer;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.binary.values.BinaryValues;
-import org.anchoranalysis.image.binary.voxel.BinaryVoxelBoxByte;
+import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
+import org.anchoranalysis.image.binary.voxel.BinaryVoxelsFactory;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.Voxels;
 
 public class RejectIterationIfLowDisconnected implements AcceptIterationConditon {
 
     @Override
-    public boolean acceptIteration(VoxelBox<ByteBuffer> buffer, BinaryValues bvb)
+    public boolean acceptIteration(Voxels<ByteBuffer> voxels, BinaryValues bvb)
             throws OperationFailedException {
-        BinaryVoxelBoxByte nextBinary = new BinaryVoxelBoxByte(buffer, bvb.createInverted());
+        BinaryVoxels<ByteBuffer> nextBinary = BinaryVoxelsFactory.reuseByte(voxels, bvb.createInverted());
         return new ObjectMask(nextBinary).checkIfConnected();
     }
 }

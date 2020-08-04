@@ -29,7 +29,7 @@ package org.anchoranalysis.image.object.morph.accept;
 import java.nio.ByteBuffer;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.binary.values.BinaryValues;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.Voxels;
 
 /**
  * A condition that must be fulfilled for a particular iteration of a morphological operation to be
@@ -40,10 +40,10 @@ import org.anchoranalysis.image.voxel.box.VoxelBox;
 @FunctionalInterface
 public interface AcceptIterationConditon {
     /**
-     * @param buffer
+     * @param voxels
      * @param bvb
      * @return TRUE if the particular iteration should be accepted, FALSE otherwise
      */
-    boolean acceptIteration(VoxelBox<ByteBuffer> buffer, BinaryValues bvb)
+    boolean acceptIteration(Voxels<ByteBuffer> voxels, BinaryValues bvb)
             throws OperationFailedException;
 }

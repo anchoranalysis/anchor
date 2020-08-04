@@ -49,16 +49,16 @@ import org.anchoranalysis.image.stack.region.chnlconverter.ConversionPolicy;
 import org.anchoranalysis.image.stack.region.chnlconverter.attached.ChnlConverterAttached;
 import org.anchoranalysis.image.stack.region.chnlconverter.attached.chnl.ChnlConverterChnlUpperLowerQuantileIntensity;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
-import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
-import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
+import org.anchoranalysis.image.voxel.Voxels;
+import org.anchoranalysis.image.voxel.VoxelsWrapper;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
+import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 
 /**
  * Byte Stack that contains 1 or 3 channels so that we cand display it as either or RGB 8-bit image
  *
- * <p>A voxelBoxConverter is optionally associated with each channel, used to convert the source
+ * <p>A voxelsConverter is optionally associated with each channel, used to convert the source
  * images into 8-bit.
  *
  * @author Owen Feehan
@@ -299,7 +299,7 @@ public class DisplayStack {
     public void copyPixelsTo(
             int chnlIndex,
             BoundingBox sourceBox,
-            VoxelBox<ByteBuffer> destVoxelBox,
+            Voxels<ByteBuffer> voxelsDestination,
             BoundingBox destBox) {
 
         Channel channel = delegate.getChannel(chnlIndex);
@@ -309,14 +309,14 @@ public class DisplayStack {
         if (converter != null) {
             BoundingBox allLocalBox = new BoundingBox(destBox.extent());
 
-            VoxelBoxWrapper destBoxNonByte =
-                    VoxelBoxFactory.instance().create(destBox.extent(), channel.getVoxelDataType());
+            VoxelsWrapper destBoxNonByte =
+                    VoxelsFactory.instance().create(destBox.extent(), channel.getVoxelDataType());
             channel.voxels().copyPixelsTo(sourceBox, destBoxNonByte, allLocalBox);
 
-            VoxelBox<ByteBuffer> destBoxByte = VoxelBoxFactory.getByte().create(destBox.extent());
+            Voxels<ByteBuffer> destBoxByte = VoxelsFactory.getByte().createInitialized(destBox.extent());
             converter.getVoxelsConverter().convertFrom(destBoxNonByte, destBoxByte);
 
-            destBoxByte.copyPixelsTo(allLocalBox, destVoxelBox, destBox);
+            destBoxByte.copyPixelsTo(allLocalBox, voxelsDestination, destBox);
 
         } else {
             if (!channel.getVoxelDataType().equals(VoxelDataTypeUnsignedByte.INSTANCE)) {
@@ -327,7 +327,7 @@ public class DisplayStack {
             delegate.getChannel(chnlIndex)
                     .voxels()
                     .asByte()
-                    .copyPixelsTo(sourceBox, destVoxelBox, destBox);
+                    .copyPixelsTo(sourceBox, voxelsDestination, destBox);
         }
     }
 
@@ -364,12 +364,12 @@ public class DisplayStack {
     public BufferedImage createBufferedImage() throws CreateException {
         if (delegate.getNumberChannels() == 3) {
             return BufferedImageFactory.createRGB(
-                    bufferForChnl(0),
-                    bufferForChnl(1),
-                    bufferForChnl(2),
+                    voxelsForChannel(0),
+                    voxelsForChannel(1),
+                    voxelsForChannel(2),
                     delegate.getDimensions().getExtent());
         }
-        return BufferedImageFactory.createGrayscale(bufferForChnl(0));
+        return BufferedImageFactory.createGrayscale(voxelsForChannel(0));
     }
 
     public BufferedImage createBufferedImageBBox(BoundingBox bbox) throws CreateException {
@@ -380,15 +380,15 @@ public class DisplayStack {
 
         if (delegate.getNumberChannels() == 3) {
             return BufferedImageFactory.createRGB(
-                    bufferForChnlBBox(0, bbox),
-                    bufferForChnlBBox(1, bbox),
-                    bufferForChnlBBox(2, bbox),
+                    voxelsForChannelBoundingBox(0, bbox),
+                    voxelsForChannelBoundingBox(1, bbox),
+                    voxelsForChannelBoundingBox(2, bbox),
                     bbox.extent());
         }
-        return BufferedImageFactory.createGrayscale(bufferForChnlBBox(0, bbox));
+        return BufferedImageFactory.createGrayscale(voxelsForChannelBoundingBox(0, bbox));
     }
 
-    private VoxelBox<ByteBuffer> bufferForChnl(int chnlNum) {
+    private Voxels<ByteBuffer> voxelsForChannel(int chnlNum) {
 
         Channel chnl = delegate.getChannel(chnlNum);
 
@@ -397,7 +397,7 @@ public class DisplayStack {
         if (converter != null) {
             return converter
                     .getVoxelsConverter()
-                    .convertFrom(chnl.voxels(), VoxelBoxFactory.getByte());
+                    .convertFrom(chnl.voxels(), VoxelsFactory.getByte());
         } else {
             if (!chnl.getVoxelDataType().equals(VoxelDataTypeUnsignedByte.INSTANCE)) {
                 // Datatype is not supported
@@ -408,24 +408,24 @@ public class DisplayStack {
     }
 
     @SuppressWarnings("unchecked")
-    private VoxelBox<ByteBuffer> bufferForChnlBBox(int chnlNum, BoundingBox bbox) {
+    private Voxels<ByteBuffer> voxelsForChannelBoundingBox(int chnlNum, BoundingBox bbox) {
 
         Channel chnl = delegate.getChannel(chnlNum);
 
         ChnlConverterAttached<Channel, ByteBuffer> converter = listConverters.get(chnlNum);
 
-        VoxelBox<?> vbUnconverted = chnl.voxels().any().region(bbox, true);
+        Voxels<?> vbUnconverted = chnl.voxels().any().region(bbox, true);
 
         if (converter != null) {
             return converter
                     .getVoxelsConverter()
-                    .convertFrom(new VoxelBoxWrapper(vbUnconverted), VoxelBoxFactory.getByte());
+                    .convertFrom(new VoxelsWrapper(vbUnconverted), VoxelsFactory.getByte());
         } else {
             if (!chnl.getVoxelDataType().equals(VoxelDataTypeUnsignedByte.INSTANCE)) {
                 // Datatype is not supported
                 assert false;
             }
-            return (VoxelBox<ByteBuffer>) vbUnconverted;
+            return (Voxels<ByteBuffer>) vbUnconverted;
         }
     }
 }

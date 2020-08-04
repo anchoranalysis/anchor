@@ -39,8 +39,8 @@ import org.anchoranalysis.image.interpolator.Interpolator;
 import org.anchoranalysis.image.interpolator.InterpolatorImgLib2Lanczos;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.scale.ScaleFactor;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
-import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
+import org.anchoranalysis.image.voxel.Voxels;
+import org.anchoranalysis.image.voxel.VoxelsWrapper;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 
 /**
@@ -62,29 +62,29 @@ public class Channel {
 
     @Getter private ImageDimensions dimensions;
 
-    private VoxelBox<? extends Buffer> delegate;
+    private Voxels<? extends Buffer> delegate;
 
     /**
      * Constructor
      *
-     * @param voxelBox
+     * @param voxels
      * @param res
      */
-    public Channel(VoxelBox<? extends Buffer> voxelBox, ImageResolution res) {
-        this.dimensions = new ImageDimensions(voxelBox.extent(), res);
-        delegate = voxelBox;
+    public Channel(Voxels<? extends Buffer> voxels, ImageResolution res) {
+        this.dimensions = new ImageDimensions(voxels.extent(), res);
+        delegate = voxels;
     }
 
     public ObjectMask equalMask(BoundingBox bbox, int equalVal) {
         return delegate.equalMask(bbox, equalVal);
     }
 
-    public VoxelBoxWrapper voxels() {
-        return new VoxelBoxWrapper(delegate);
+    public VoxelsWrapper voxels() {
+        return new VoxelsWrapper(delegate);
     }
 
-    public void replaceVoxelBox(VoxelBoxWrapper vbNew) {
-        this.delegate = vbNew.any();
+    public void replaceVoxels(VoxelsWrapper voxelsToAssign) {
+        this.delegate = voxelsToAssign.any();
     }
 
     // Creates a new channel contain a duplication only of a particular slice
@@ -114,17 +114,17 @@ public class Channel {
 
         ImageDimensions dimensionsScaled = getDimensions().scaleXYTo(x, y);
 
-        VoxelBox<? extends Buffer> ba = delegate.resizeXY(x, y, interpolator);
+        Voxels<? extends Buffer> ba = delegate.resizeXY(x, y, interpolator);
         assert (ba.extent().getVolumeXY() == ba.getPixelsForPlane(0).buffer().capacity());
         return FACTORY.create(ba, dimensionsScaled.getResolution());
     }
 
     public Channel maxIntensityProjection() {
-        return flattenZProjection(VoxelBox::maxIntensityProjection);
+        return flattenZProjection(Voxels::maxIntensityProjection);
     }
 
     public Channel meanIntensityProjection() {
-        return flattenZProjection(VoxelBox::meanIntensityProjection);
+        return flattenZProjection(Voxels::meanIntensityProjection);
     }
 
     // Duplicates the current channel
@@ -173,14 +173,14 @@ public class Channel {
     }
 
     /**
-     * Flattens the voxel-box in the z direction, only if necessary (i.e. there's more than 1 z
+     * Flattens the voxels in the z direction, only if necessary (i.e. there's more than 1 z
      * dimension).
      *
-     * @param voxelBox voxel-box to be flattened (i.e. 3D)
+     * @param voxels voxels to be flattened (i.e. 3D)
      * @param flattenFunc function to perform the flattening
      * @return flattened box (i.e. 2D)
      */
-    private Channel flattenZProjection(UnaryOperator<VoxelBox<? extends Buffer>> flattenFunc) {
+    private Channel flattenZProjection(UnaryOperator<Voxels<? extends Buffer>> flattenFunc) {
         int prevZSize = delegate.extent().getZ();
         if (prevZSize > 1) {
             return FACTORY.create(

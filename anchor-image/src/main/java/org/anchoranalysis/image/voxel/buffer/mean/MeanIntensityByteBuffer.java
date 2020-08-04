@@ -30,13 +30,13 @@ import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import org.anchoranalysis.image.convert.ByteConverter;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
+import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 
 public class MeanIntensityByteBuffer extends MeanIntensityBuffer<ByteBuffer> {
 
     /** Simple constructor since no preprocessing is necessary. */
     public MeanIntensityByteBuffer(Extent srcExtent) {
-        super(VoxelBoxFactory.getByte(), srcExtent);
+        super(VoxelsFactory.getByte(), srcExtent);
     }
 
     @Override
@@ -52,7 +52,7 @@ public class MeanIntensityByteBuffer extends MeanIntensityBuffer<ByteBuffer> {
         ByteBuffer bbFlat = flatBuffer();
         FloatBuffer bbSum = sumBuffer();
         for (int i = 0; i < maxIndex; i++) {
-            bbFlat.put(i, (byte) (bbSum.get(i) / count()));
+            bbFlat.put(i, (byte) (bbSum.get(i) / numberSlicesProcessed()));
         }
     }
 }

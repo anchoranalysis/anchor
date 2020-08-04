@@ -34,9 +34,9 @@ import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
-import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
-import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactoryTypeBound;
+import org.anchoranalysis.image.voxel.Voxels;
+import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
+import org.anchoranalysis.image.voxel.factory.VoxelsFactoryTypeBound;
 import org.anchoranalysis.image.voxel.kernel.count.CountKernel;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -49,17 +49,17 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class ApplyKernel {
 
-    private static final VoxelBoxFactoryTypeBound<ByteBuffer> FACTORY = VoxelBoxFactory.getByte();
+    private static final VoxelsFactoryTypeBound<ByteBuffer> FACTORY = VoxelsFactory.getByte();
 
-    public static VoxelBox<ByteBuffer> apply(BinaryKernel kernel, VoxelBox<ByteBuffer> in) {
+    public static Voxels<ByteBuffer> apply(BinaryKernel kernel, Voxels<ByteBuffer> in) {
         return apply(kernel, in, BinaryValuesByte.getDefault());
     }
 
     // 3 pixel diameter kernel
-    public static VoxelBox<ByteBuffer> apply(
-            BinaryKernel kernel, VoxelBox<ByteBuffer> in, BinaryValuesByte outBinary) {
+    public static Voxels<ByteBuffer> apply(
+            BinaryKernel kernel, Voxels<ByteBuffer> in, BinaryValuesByte outBinary) {
 
-        VoxelBox<ByteBuffer> out = FACTORY.create(in.extent());
+        Voxels<ByteBuffer> out = FACTORY.createInitialized(in.extent());
 
         int localSlicesSize = 3;
 
@@ -95,29 +95,29 @@ public class ApplyKernel {
     }
 
     /**
-     * Applies the kernel to a voxelbox and sums the returned value
+     * Applies the kernel to voxels and sums the returned value
      *
      * @param kernel the kernel to be applied
-     * @param vb the voxel-box to iterate over
+     * @param vb the voxels to iterate over
      * @return the sum of the count value returned by the kernel over all iterated voxels
      * @throws OperationFailedException
      */
-    public static int applyForCount(CountKernel kernel, VoxelBox<ByteBuffer> vb)
+    public static int applyForCount(CountKernel kernel, Voxels<ByteBuffer> vb)
             throws OperationFailedException {
         return applyForCount(kernel, vb, new BoundingBox(vb.extent()));
     }
 
     /**
-     * Applies the kernel to a voxelbox and sums the returned value
+     * Applies the kernel to voxels and sums the returned value
      *
      * @param kernel the kernel to be applied
-     * @param vb the voxel-box to iterate over
+     * @param vb the voxels to iterate over
      * @param bbox a bounding-box (coordinates relative to vb) that restricts where iteration
      *     occurs. Must be containted within vb.
      * @return the sum of the count value returned by the kernel over all iterated voxels
      * @throws OperationFailedException
      */
-    public static int applyForCount(CountKernel kernel, VoxelBox<ByteBuffer> vb, BoundingBox bbox)
+    public static int applyForCount(CountKernel kernel, Voxels<ByteBuffer> vb, BoundingBox bbox)
             throws OperationFailedException {
 
         if (!vb.extent().contains(bbox)) {
@@ -161,17 +161,17 @@ public class ApplyKernel {
     }
 
     /**
-     * Applies the kernel to a voxelbox until a positive value is returned, then exits with TRUE
+     * Applies the kernel to voxels until a positive value is returned, then exits with TRUE
      *
      * @param kernel the kernel to be applied
-     * @param vb the voxel-box to iterate over
+     * @param vb the voxels to iterate over
      * @param bbox a bounding-box (coordinates relative to vb) that restricts where iteration
-     *     occurs. Must be containted within vb.
+     *     occurs. Must be contained within vb.
      * @return TRUE if a positive-value is encountered, 0 if it never is encountered
      * @throws OperationFailedException
      */
     public static boolean applyUntilPositive(
-            CountKernel kernel, VoxelBox<ByteBuffer> vb, BoundingBox bbox)
+            CountKernel kernel, Voxels<ByteBuffer> vb, BoundingBox bbox)
             throws OperationFailedException {
 
         if (!vb.extent().contains(bbox)) {
@@ -214,7 +214,7 @@ public class ApplyKernel {
         return false;
     }
 
-    public static int applyForCount(BinaryKernel kernel, VoxelBox<ByteBuffer> in) {
+    public static int applyForCount(BinaryKernel kernel, Voxels<ByteBuffer> in) {
 
         int localSlicesSize = 3;
 
@@ -248,7 +248,7 @@ public class ApplyKernel {
     }
 
     public static int applyForCountOnMask(
-            BinaryKernel kernel, VoxelBox<ByteBuffer> in, ObjectMask object) {
+            BinaryKernel kernel, Voxels<ByteBuffer> in, ObjectMask object) {
 
         int localSlicesSize = 3;
 

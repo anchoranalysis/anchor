@@ -28,12 +28,12 @@ package org.anchoranalysis.image.voxel.buffer.max;
 
 import java.nio.FloatBuffer;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
+import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 
 public class MaxIntensityBufferFloat extends MaxIntensityBuffer<FloatBuffer> {
 
     public MaxIntensityBufferFloat(Extent srcExtent) {
-        super(srcExtent, VoxelBoxFactory.getFloat());
+        super(srcExtent, VoxelsFactory.getFloat());
     }
 
     @Override

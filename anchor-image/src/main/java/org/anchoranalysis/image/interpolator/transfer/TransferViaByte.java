@@ -30,8 +30,8 @@ import com.mortennobel.imagescaling.ResampleFilters;
 import com.mortennobel.imagescaling.ResampleOp;
 import java.nio.ByteBuffer;
 import org.anchoranalysis.image.interpolator.Interpolator;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
-import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
+import org.anchoranalysis.image.voxel.Voxels;
+import org.anchoranalysis.image.voxel.VoxelsWrapper;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 
 // Lots of copying bytes, which doesn't make it very efficient
@@ -40,13 +40,13 @@ import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 //   type which messes up our scaling
 public class TransferViaByte implements Transfer {
 
-    private VoxelBox<ByteBuffer> src;
-    private VoxelBox<ByteBuffer> trgt;
+    private Voxels<ByteBuffer> src;
+    private Voxels<ByteBuffer> trgt;
     private VoxelBuffer<ByteBuffer> buffer;
 
     private ResampleOp resampleOp;
 
-    public TransferViaByte(VoxelBoxWrapper src, VoxelBoxWrapper trgt) {
+    public TransferViaByte(VoxelsWrapper src, VoxelsWrapper trgt) {
         this.src = src.asByte();
         this.trgt = trgt.asByte();
 

@@ -33,7 +33,7 @@ import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactoryFloat;
 import org.anchoranalysis.image.channel.factory.ChannelFactorySingleType;
 import org.anchoranalysis.image.extent.ImageDimensions;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferFloat;
 import org.junit.Test;
 
@@ -48,7 +48,7 @@ public class ChnlIPTest {
 
         Channel channel = imgChnlFloatFactory.createEmptyInitialised(dimensions);
 
-        VoxelBox<FloatBuffer> vb = channel.voxels().asFloat();
+        Voxels<FloatBuffer> vb = channel.voxels().asFloat();
         vb.getPlaneAccess().setPixelsForPlane(0, VoxelBufferFloat.wrap(new float[] {1, 2, 3, 4}));
 
         double delta = 1e-3;

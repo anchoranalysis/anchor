@@ -31,7 +31,7 @@ import java.nio.IntBuffer;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.binary.mask.Mask;
-import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
+import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.factory.unionfind.ConnectedComponentUnionFind;
 
@@ -60,7 +60,7 @@ public class CreateFromConnectedComponentsFactory {
     }
 
     // This consumes the voxel buffer 'vb'
-    public ObjectCollection createConnectedComponents(BinaryVoxelBox<ByteBuffer> vb)
+    public ObjectCollection createConnectedComponents(BinaryVoxels<ByteBuffer> vb)
             throws CreateException {
         try {
             return unionFind.deriveConnectedByte(vb);
@@ -70,7 +70,7 @@ public class CreateFromConnectedComponentsFactory {
     }
 
     // This consumes the voxel buffer 'vb'
-    public ObjectCollection create(BinaryVoxelBox<IntBuffer> vb) throws CreateException {
+    public ObjectCollection create(BinaryVoxels<IntBuffer> vb) throws CreateException {
         try {
             return unionFind.deriveConnectedInt(vb);
         } catch (OperationFailedException e) {

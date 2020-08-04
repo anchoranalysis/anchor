@@ -32,17 +32,24 @@ import org.anchoranalysis.bean.annotation.GroupingRoot;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.bean.nonbean.parameters.BinarySegmentationParameters;
 import org.anchoranalysis.image.bean.segment.SegmentationBean;
-import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
+import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
+import org.anchoranalysis.image.voxel.VoxelsWrapper;
 
 @GroupingRoot
 public abstract class BinarySegmentation extends SegmentationBean<BinarySegmentation> {
-
-    // Returns a BinaryVoxelBox associated with the input buffer or perhaps an newly created buffer
-    // of identical size
-    public abstract BinaryVoxelBox<ByteBuffer> sgmn(
-            VoxelBoxWrapper voxelBox,
+    
+    /**
+     * Performs a segmentation on voxels so that each voxel has an ON or OFF state after the operation.
+     *  
+     * @param voxels voxels to segment
+     * @param params parameters to guide the algorithm
+     * @param objectMask if present, segmentation only occurs inside this object
+     * @return voxels for a mask on the input-buffer (reused or newly created as deemed appropriate)
+     * @throws SegmentationFailedException
+     */
+    public abstract BinaryVoxels<ByteBuffer> segment(
+            VoxelsWrapper voxels,
             BinarySegmentationParameters params,
             Optional<ObjectMask> objectMask)
             throws SegmentationFailedException;

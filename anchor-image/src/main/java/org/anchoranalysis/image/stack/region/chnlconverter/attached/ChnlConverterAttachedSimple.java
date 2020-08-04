@@ -30,7 +30,7 @@ import java.nio.Buffer;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.stack.region.chnlconverter.ChannelConverter;
 import org.anchoranalysis.image.stack.region.chnlconverter.ConversionPolicy;
-import org.anchoranalysis.image.stack.region.chnlconverter.voxelbox.VoxelBoxConverter;
+import org.anchoranalysis.image.stack.region.chnlconverter.voxelbox.VoxelsConverter;
 import lombok.AllArgsConstructor;
 
 /**
@@ -57,7 +57,7 @@ public class ChnlConverterAttachedSimple<S, T extends Buffer>
     }
 
     @Override
-    public VoxelBoxConverter<T> getVoxelsConverter() {
+    public VoxelsConverter<T> getVoxelsConverter() {
         return delegate.getVoxelsConverter();
     }
 }

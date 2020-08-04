@@ -37,7 +37,7 @@ import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.io.generator.raster.RasterGenerator;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.io.generator.IterableGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
@@ -123,8 +123,8 @@ public class ChnlMaskedWithObjectGenerator extends RasterGenerator
         Point3i pointGlobal = new Point3i();
         Point3i pointLocal = new Point3i();
 
-        VoxelBox<?> vbSrc = srcChnl.voxels().any();
-        VoxelBox<?> vbNew = chnlNew.voxels().any();
+        Voxels<?> vbSrc = srcChnl.voxels().any();
+        Voxels<?> vbNew = chnlNew.voxels().any();
 
         pointLocal.setZ(0);
         for (pointGlobal.setZ(bbox.cornerMin().getZ());

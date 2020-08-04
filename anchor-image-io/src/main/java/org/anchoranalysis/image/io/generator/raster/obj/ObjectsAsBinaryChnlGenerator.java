@@ -39,7 +39,7 @@ import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.io.generator.raster.RasterGenerator;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.generator.IterableGenerator;
@@ -118,7 +118,7 @@ public class ObjectsAsBinaryChnlGenerator extends RasterGenerator
                 ChannelFactory.instance()
                         .createEmptyInitialised(dimensions, VoxelDataTypeUnsignedByte.INSTANCE);
 
-        VoxelBox<ByteBuffer> vbNew = channelNew.voxels().asByte();
+        Voxels<ByteBuffer> vbNew = channelNew.voxels().asByte();
 
         byte matchValue = objectMask.getBinaryValuesByte().getOnByte();
         byte outOnValueByte = (byte) outOnValue;

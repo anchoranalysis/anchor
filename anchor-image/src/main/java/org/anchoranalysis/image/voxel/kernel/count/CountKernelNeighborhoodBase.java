@@ -30,7 +30,7 @@ import java.nio.ByteBuffer;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.kernel.LocalSlices;
 
 /**
@@ -70,7 +70,7 @@ public abstract class CountKernelNeighborhoodBase extends CountKernel {
     }
 
     @Override
-    public void init(VoxelBox<ByteBuffer> in) {
+    public void init(Voxels<ByteBuffer> in) {
         this.extent = in.extent();
     }
 

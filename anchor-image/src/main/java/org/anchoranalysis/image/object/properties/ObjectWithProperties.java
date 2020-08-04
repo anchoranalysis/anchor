@@ -36,7 +36,7 @@ import lombok.Getter;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.Voxels;
 
 /**
  * An {@link ObjectMask} with associated key-value properties.
@@ -101,7 +101,7 @@ public class ObjectWithProperties {
         return object.getBoundingBox();
     }
 
-    public VoxelBox<ByteBuffer> getVoxels() {
+    public Voxels<ByteBuffer> getVoxels() {
         return object.getVoxels();
     }
 

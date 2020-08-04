@@ -37,12 +37,12 @@ import java.util.TreeSet;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
+import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectCollectionFactory;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
-import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
+import org.anchoranalysis.image.voxel.Voxels;
+import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 import org.anchoranalysis.image.voxel.iterator.IterateVoxels;
 import org.jgrapht.alg.util.UnionFind;
 
@@ -59,14 +59,14 @@ public class ConnectedComponentUnionFind {
     private final boolean bigNeighborhood;
 
     /**
-     * Converts a binary-voxel-box (byte) into connected components.
+     * Converts binary-voxels (byte) into connected components.
      *
-     * @param voxels a binary voxel-box to be searched for connected components. It is consumed
+     * @param voxels binary-voxels to be searched for connected components. It is consumed
      *     (modified) during processing.
-     * @return the connected-components derived from the voxel-box
+     * @return the connected-components derived from the voxels
      * @throws OperationFailedException
      */
-    public ObjectCollection deriveConnectedByte(BinaryVoxelBox<ByteBuffer> voxels)
+    public ObjectCollection deriveConnectedByte(BinaryVoxels<ByteBuffer> voxels)
             throws OperationFailedException {
         ObjectCollection objects = new ObjectCollection();
         visitRegion(voxels, objects, minNumberVoxels, new ReadWriteByte());
@@ -74,14 +74,14 @@ public class ConnectedComponentUnionFind {
     }
 
     /**
-     * Converts a binary-voxel-box (int) into connected components.
+     * Converts binary-voxels (int) into connected components.
      *
-     * @param voxels a binary voxel-box to be searched for connected components. It is consumed
+     * @param voxels binary voxels to be searched for connected components. It is consumed
      *     (modified) during processing.
-     * @return the connected-components derived from the voxel-box
+     * @return the connected-components derived from the voxels
      * @throws OperationFailedException
      */
-    public ObjectCollection deriveConnectedInt(BinaryVoxelBox<IntBuffer> voxels)
+    public ObjectCollection deriveConnectedInt(BinaryVoxels<IntBuffer> voxels)
             throws OperationFailedException {
         ObjectCollection objects = ObjectCollectionFactory.empty();
         visitRegion(voxels, objects, minNumberVoxels, new ReadWriteInt());
@@ -89,14 +89,14 @@ public class ConnectedComponentUnionFind {
     }
 
     private <T extends Buffer> void visitRegion(
-            BinaryVoxelBox<T> visited,
+            BinaryVoxels<T> visited,
             ObjectCollection objects,
             int minNumberVoxels,
             BufferReadWrite<T> bufferReaderWriter)
             throws OperationFailedException {
 
         UnionFind<Integer> unionIndex = new UnionFind<>(new HashSet<Integer>());
-        VoxelBox<IntBuffer> indexBuffer = VoxelBoxFactory.getInt().create(visited.extent());
+        Voxels<IntBuffer> indexBuffer = VoxelsFactory.getInt().createInitialized(visited.extent());
 
         int maxBigIDAdded =
                 populateIndexFromBinary(
@@ -111,13 +111,13 @@ public class ConnectedComponentUnionFind {
     }
 
     private MergeWithNeighbors createMergeWithNeighbors(
-            VoxelBox<IntBuffer> indexBuffer, UnionFind<Integer> unionIndex) {
+            Voxels<IntBuffer> indexBuffer, UnionFind<Integer> unionIndex) {
         return new MergeWithNeighbors(
                 indexBuffer, unionIndex, indexBuffer.extent().getZ() > 1, bigNeighborhood);
     }
 
     private static <T extends Buffer> int populateIndexFromBinary(
-            BinaryVoxelBox<T> visited, PopulateIndexProcessor<T> process) {
+            BinaryVoxels<T> visited, PopulateIndexProcessor<T> process) {
         IterateVoxels.callEachPoint(visited.getVoxels(), process);
         return process.getCount() - 1;
     }
@@ -152,7 +152,7 @@ public class ConnectedComponentUnionFind {
     }
 
     private static void addPointsAndAssignNewIDs(
-            VoxelBox<IntBuffer> indexBuffer,
+            Voxels<IntBuffer> indexBuffer,
             UnionFind<Integer> unionIndex,
             Map<Integer, Integer> mapIDOrdered,
             PointRangeWithCount[] bboxArr) {
@@ -187,7 +187,7 @@ public class ConnectedComponentUnionFind {
     private static ObjectCollection extractMasksInto(
             PointRangeWithCount[] bboxArr,
             Map<Integer, Integer> mapIDOrdered,
-            VoxelBox<IntBuffer> indexBuffer,
+            Voxels<IntBuffer> indexBuffer,
             int minNumberVoxels,
             ObjectCollection objects)
             throws OperationFailedException {
@@ -206,7 +206,7 @@ public class ConnectedComponentUnionFind {
     private static void processIndexBuffer(
             int maxBigIDAdded,
             UnionFind<Integer> unionIndex,
-            VoxelBox<IntBuffer> indexBuffer,
+            Voxels<IntBuffer> indexBuffer,
             ObjectCollection objects,
             int minNumberVoxels)
             throws OperationFailedException {

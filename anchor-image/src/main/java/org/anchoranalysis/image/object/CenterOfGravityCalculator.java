@@ -30,7 +30,7 @@ import java.nio.ByteBuffer;
 import org.anchoranalysis.core.axis.AxisType;
 import org.anchoranalysis.core.axis.AxisTypeConverter;
 import org.anchoranalysis.core.geometry.Point3d;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.Voxels;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -47,7 +47,7 @@ final class CenterOfGravityCalculator {
      */
     public static Point3d calcCenterOfGravity(ObjectMask object) {
 
-        VoxelBox<ByteBuffer> vb = object.getVoxels();
+        Voxels<ByteBuffer> vb = object.getVoxels();
 
         int cnt = 0;
         Point3d sum = new Point3d();
@@ -88,7 +88,7 @@ final class CenterOfGravityCalculator {
      */
     public static double calcCenterOfGravityForAxis(ObjectMask object, AxisType axisType) {
 
-        VoxelBox<ByteBuffer> vb = object.getVoxels();
+        Voxels<ByteBuffer> vb = object.getVoxels();
 
         int cnt = 0;
         double sum = 0.0;

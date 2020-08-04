@@ -28,11 +28,11 @@ package org.anchoranalysis.image.voxel.iterator;
 
 import java.nio.Buffer;
 import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.Voxels;
 
 /**
  * Exposes a {@link ProcessVoxelOffset} as a {@link ProcessVoxelSliceBuffer} by retrieving a buffer
- * from a voxel-box for each z-slice.
+ * from voxels for each z-slice.
  *
  * <p>Note that {@link} notifyChangeZ need not be be called for all slices (perhaps only a subset),
  * but {@link process} must be called for ALL voxels on a given slice.
@@ -42,16 +42,16 @@ import org.anchoranalysis.image.voxel.box.VoxelBox;
  */
 public final class RetrieveBufferForSlice<T extends Buffer> implements ProcessVoxel {
 
-    private final VoxelBox<T> voxelBox;
+    private final Voxels<T> voxels;
     private final ProcessVoxelSliceBuffer<T> process;
 
     private T bufferSlice;
     /** A 2D offset within the current slice */
     private int offsetWithinSlice;
 
-    public RetrieveBufferForSlice(VoxelBox<T> voxelBox, ProcessVoxelSliceBuffer<T> process) {
+    public RetrieveBufferForSlice(Voxels<T> voxels, ProcessVoxelSliceBuffer<T> process) {
         super();
-        this.voxelBox = voxelBox;
+        this.voxels = voxels;
         this.process = process;
     }
 
@@ -59,7 +59,7 @@ public final class RetrieveBufferForSlice<T extends Buffer> implements ProcessVo
     public void notifyChangeZ(int z) {
         process.notifyChangeZ(z);
         offsetWithinSlice = 0;
-        this.bufferSlice = voxelBox.getPixelsForPlane(z).buffer();
+        this.bufferSlice = voxels.getPixelsForPlane(z).buffer();
     }
 
     @Override

@@ -32,13 +32,13 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
-import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
+import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.voxel.box.BoundedVoxelBox;
-import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
+import org.anchoranalysis.image.voxel.BoundedVoxels;
+import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 
 /**
  * Extends 2D objects as much as possible in z-dimension, while staying within a 3D binary mask.
@@ -49,23 +49,23 @@ import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
 public class ExtendObjectsInto3DMask {
 
     public static ObjectCollection extendObjects(
-            ObjectCollection objects2D, BinaryVoxelBox<ByteBuffer> mask3D) {
+            ObjectCollection objects2D, BinaryVoxels<ByteBuffer> mask3D) {
         return objects2D.stream().map(object -> extendObject(object, mask3D));
     }
 
     private static ObjectMask extendObject(
-            ObjectMask object2D, BinaryVoxelBox<ByteBuffer> voxelBox3D) {
-        return new ObjectMask(extendObj(object2D.getBoundedVoxels(), voxelBox3D));
+            ObjectMask object2D, BinaryVoxels<ByteBuffer> voxels3D) {
+        return new ObjectMask(extendObj(object2D.getBoundedVoxels(), voxels3D));
     }
 
-    private static BoundedVoxelBox<ByteBuffer> extendObj(
-            BoundedVoxelBox<ByteBuffer> obj2D, BinaryVoxelBox<ByteBuffer> mask3D) {
+    private static BoundedVoxels<ByteBuffer> extendObj(
+            BoundedVoxels<ByteBuffer> obj2D, BinaryVoxels<ByteBuffer> mask3D) {
 
         BoundingBox newBBox =
                 createBoundingBoxForAllZ(obj2D.getBoundingBox(), mask3D.extent().getZ());
 
-        BoundedVoxelBox<ByteBuffer> newMask =
-                new BoundedVoxelBox<>(newBBox, VoxelBoxFactory.getByte());
+        BoundedVoxels<ByteBuffer> newMask =
+                new BoundedVoxels<>(newBBox, VoxelsFactory.getByte());
 
         ReadableTuple3i max = newBBox.calcCornerMax();
         Point3i point = new Point3i();

@@ -33,7 +33,7 @@ import org.anchoranalysis.image.io.generator.raster.ChnlGenerator;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 /**
@@ -61,7 +61,7 @@ public class ObjectsAsUniqueValueGenerator extends ObjectsGenerator {
 
         Channel outChnl = factory.createEmptyInitialised(getDimensions());
 
-        VoxelBox<?> vbOutput = outChnl.voxels().any();
+        Voxels<?> vbOutput = outChnl.voxels().any();
 
         if (getObjects().size() > 254) {
             throw new OutputWriteFailedException(

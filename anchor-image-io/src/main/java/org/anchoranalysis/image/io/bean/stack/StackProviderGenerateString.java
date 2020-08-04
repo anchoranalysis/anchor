@@ -42,7 +42,7 @@ import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.region.chnlconverter.ChannelConverter;
 import org.anchoranalysis.image.stack.region.chnlconverter.ChannelConverterToUnsignedShort;
 import org.anchoranalysis.image.stack.region.chnlconverter.ConversionPolicy;
-import org.anchoranalysis.image.stack.region.chnlconverter.voxelbox.VoxelBoxConverterToShortScaleByType;
+import org.anchoranalysis.image.stack.region.chnlconverter.voxelbox.ToShortScaleByType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedShort;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
@@ -104,7 +104,7 @@ public class StackProviderGenerateString extends StackProvider {
             if (createShort) {
                 ChannelConverter<ShortBuffer> cc =
                         new ChannelConverterToUnsignedShort(
-                                new VoxelBoxConverterToShortScaleByType());
+                                new ToShortScaleByType());
 
                 stack = cc.convert(stack, ConversionPolicy.CHANGE_EXISTING_CHANNEL);
             }

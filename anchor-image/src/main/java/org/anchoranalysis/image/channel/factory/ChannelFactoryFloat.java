@@ -26,36 +26,12 @@
 
 package org.anchoranalysis.image.channel.factory;
 
-import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.extent.ImageDimensions;
-import org.anchoranalysis.image.voxel.box.VoxelBoxFloat;
-import org.anchoranalysis.image.voxel.box.pixelsforplane.PixelsFromFloatBufferArr;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeFloat;
+import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 
-public class ChannelFactoryFloat implements ChannelFactorySingleType {
-
-    private static final VoxelDataTypeFloat DATA_TYPE = VoxelDataTypeFloat.INSTANCE;
-
-    @Override
-    public Channel createEmptyInitialised(ImageDimensions dim) {
-        VoxelBoxFloat vb =
-                new VoxelBoxFloat(PixelsFromFloatBufferArr.createInitialised(dim.getExtent()));
-        return create(vb, dim.getResolution());
-    }
-
-    @Override
-    public Channel createEmptyUninitialised(ImageDimensions dimensions) {
-
-        PixelsFromFloatBufferArr pixels =
-                PixelsFromFloatBufferArr.createEmpty(dimensions.getExtent());
-
-        VoxelBoxFloat vb = new VoxelBoxFloat(pixels);
-        return create(vb, dimensions.getResolution());
-    }
-
-    @Override
-    public VoxelDataType dataType() {
-        return DATA_TYPE;
+public class ChannelFactoryFloat extends ChannelFactorySingleType {
+    
+    public ChannelFactoryFloat() {
+        super(VoxelDataTypeFloat.INSTANCE, VoxelsFactory.getFloat());
     }
 }

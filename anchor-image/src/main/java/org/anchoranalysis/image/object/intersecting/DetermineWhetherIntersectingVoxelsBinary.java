@@ -31,7 +31,7 @@ import java.util.Optional;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.voxel.box.BoundedVoxelBox;
+import org.anchoranalysis.image.voxel.BoundedVoxels;
 
 /**
  * Determines whether there are any intersecting voxels between binary-masks, exiting as soon as one
@@ -51,12 +51,12 @@ public class DetermineWhetherIntersectingVoxelsBinary {
     }
 
     public boolean hasIntersectingVoxels(
-            BoundedVoxelBox<ByteBuffer> src, BoundedVoxelBox<ByteBuffer> other) {
+            BoundedVoxels<ByteBuffer> src, BoundedVoxels<ByteBuffer> other) {
         return pointOfFirstIntersectingVoxel(src, other).isPresent();
     }
 
     private Optional<Point3i> pointOfFirstIntersectingVoxel(
-            BoundedVoxelBox<ByteBuffer> src, BoundedVoxelBox<ByteBuffer> other) {
+            BoundedVoxels<ByteBuffer> src, BoundedVoxels<ByteBuffer> other) {
 
         // Find the common bounding box
         Optional<BoundingBox> bboxIntersect =
@@ -74,8 +74,8 @@ public class DetermineWhetherIntersectingVoxelsBinary {
      *     (newly-created), or else empty if no intersection exists
      */
     private Optional<Point3i> hasIntersectingVoxelsInBoundingBox(
-            BoundedVoxelBox<ByteBuffer> src,
-            BoundedVoxelBox<ByteBuffer> other,
+            BoundedVoxels<ByteBuffer> src,
+            BoundedVoxels<ByteBuffer> other,
             BoundingBox bboxIntersect) {
 
         IntersectionBBox bbox =
@@ -83,7 +83,7 @@ public class DetermineWhetherIntersectingVoxelsBinary {
                         src.getBoundingBox(), other.getBoundingBox(), bboxIntersect);
 
         // Otherwise we count the number of pixels that are not empty
-        //  in both voxel boxes in the intersecting region
+        //  in both bounded-voxels in the intersecting region
         for (int z = bbox.z().min(); z < bbox.z().max(); z++) {
 
             ByteBuffer buffer = src.getVoxels().getPixelsForPlane(z).buffer();

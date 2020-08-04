@@ -27,19 +27,19 @@
 package org.anchoranalysis.image.stack.region.chnlconverter;
 
 import java.nio.ByteBuffer;
-import org.anchoranalysis.image.stack.region.chnlconverter.voxelbox.VoxelBoxConverter;
-import org.anchoranalysis.image.stack.region.chnlconverter.voxelbox.VoxelBoxConverterToByteNoScaling;
-import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
+import org.anchoranalysis.image.stack.region.chnlconverter.voxelbox.VoxelsConverter;
+import org.anchoranalysis.image.stack.region.chnlconverter.voxelbox.ToByteNoScaling;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
+import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 
 // Converts from other data types to Byte (unsigned 8-bit) without scaling any other data types
 public class ChannelConverterToUnsignedByte extends ChannelConverter<ByteBuffer> {
 
     public ChannelConverterToUnsignedByte() {
-        this(new VoxelBoxConverterToByteNoScaling());
+        this(new ToByteNoScaling());
     }
 
-    public ChannelConverterToUnsignedByte(VoxelBoxConverter<ByteBuffer> voxelBoxConverter) {
-        super(VoxelDataTypeUnsignedByte.INSTANCE, voxelBoxConverter, VoxelBoxFactory.getByte());
+    public ChannelConverterToUnsignedByte(VoxelsConverter<ByteBuffer> voxelsConverter) {
+        super(VoxelDataTypeUnsignedByte.INSTANCE, voxelsConverter, VoxelsFactory.getByte());
     }
 }

@@ -29,7 +29,7 @@ package org.anchoranalysis.image.voxel.kernel.outline;
 import java.nio.ByteBuffer;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
-import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
+import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.kernel.LocalSlices;
 
@@ -37,7 +37,7 @@ import org.anchoranalysis.image.voxel.kernel.LocalSlices;
 // in vbRequireHigh
 public class OutlineKernel3NeighborMatchValue extends OutlineKernel3Base {
 
-    private BinaryVoxelBox<ByteBuffer> vbRequireHigh;
+    private BinaryVoxels<ByteBuffer> vbRequireHigh;
     private LocalSlices localSlicesRequireHigh;
     private BinaryValuesByte bvRequireHigh;
     private ObjectMask object;
@@ -46,7 +46,7 @@ public class OutlineKernel3NeighborMatchValue extends OutlineKernel3Base {
             boolean outsideAtThreshold,
             boolean useZ,
             ObjectMask object,
-            BinaryVoxelBox<ByteBuffer> vbRequireHigh,
+            BinaryVoxels<ByteBuffer> vbRequireHigh,
             boolean ignoreAtThreshold) {
         this(
                 object.getBinaryValuesByte(),
@@ -63,7 +63,7 @@ public class OutlineKernel3NeighborMatchValue extends OutlineKernel3Base {
             boolean outsideAtThreshold,
             boolean useZ,
             ObjectMask object,
-            BinaryVoxelBox<ByteBuffer> vbRequireHigh,
+            BinaryVoxels<ByteBuffer> vbRequireHigh,
             boolean ignoreAtThreshold) {
         super(bv, outsideAtThreshold, useZ, ignoreAtThreshold);
         this.vbRequireHigh = vbRequireHigh;

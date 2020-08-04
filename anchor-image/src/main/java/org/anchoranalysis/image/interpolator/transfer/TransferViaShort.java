@@ -28,8 +28,8 @@ package org.anchoranalysis.image.interpolator.transfer;
 
 import java.nio.ShortBuffer;
 import org.anchoranalysis.image.interpolator.Interpolator;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
-import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
+import org.anchoranalysis.image.voxel.Voxels;
+import org.anchoranalysis.image.voxel.VoxelsWrapper;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 
 // Lots of copying bytes, which doesn't make it very efficient
@@ -38,11 +38,11 @@ import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 //   type which messes up our scaling
 public class TransferViaShort implements Transfer {
 
-    private VoxelBox<ShortBuffer> src;
-    private VoxelBox<ShortBuffer> trgt;
+    private Voxels<ShortBuffer> src;
+    private Voxels<ShortBuffer> trgt;
     private VoxelBuffer<ShortBuffer> buffer;
 
-    public TransferViaShort(VoxelBoxWrapper src, VoxelBoxWrapper trgt) {
+    public TransferViaShort(VoxelsWrapper src, VoxelsWrapper trgt) {
         this.src = src.asShort();
         this.trgt = trgt.asShort();
     }

@@ -35,7 +35,7 @@ import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.SlidingBuffer;
 import org.anchoranalysis.image.voxel.iterator.changed.ProcessVoxelNeighbor;
 import org.anchoranalysis.image.voxel.neighborhood.Neighborhood;
@@ -140,7 +140,7 @@ public class IterateVoxels {
      *     GLOBAL coordinates.
      */
     private static <T extends Buffer> void callEachPoint(
-            ObjectMask object, VoxelBox<T> voxels, ProcessVoxelSliceBuffer<T> process) {
+            ObjectMask object, Voxels<T> voxels, ProcessVoxelSliceBuffer<T> process) {
         // This is re-implemented in full, as reusing existing code with {@link AddOffsets} and
         //  {@link RequireIntersectionWithMask} was not inling using default JVM settings
         // Based on unit-tests, it seems to perform better emperically, even with the new Point3i()
@@ -256,58 +256,58 @@ public class IterateVoxels {
     }
 
     /**
-     * Iterate over each voxel - with an associated buffer for each slice from a voxel-bo
+     * Iterate over each voxel - with an associated buffer for each slice from a voxel-buffer
      *
-     * @param voxels a voxel-box, all of whose voxels will be iterated over
+     * @param voxels voxels to be iterated over (in their entirity)
      * @param process is called for each voxel within the bounding-box using GLOBAL coordinates.
-     * @param <T> buffer-type in voxel-box
+     * @param <T> buffer-type for voxels
      */
     public static <T extends Buffer> void callEachPoint(
-            VoxelBox<T> voxels, ProcessVoxelSliceBuffer<T> process) {
+            Voxels<T> voxels, ProcessVoxelSliceBuffer<T> process) {
         Extent extent = voxels.extent();
         callEachPoint(extent, new RetrieveBufferForSlice<>(voxels, process));
     }
 
     /**
      * Iterate over each voxel in a bounding-box - with an associated buffer for each slice from a
-     * voxel-bo
+     * voxel-buffer
      *
-     * @param voxels a voxel-box for which {@link} refers to a subregion.
+     * @param voxels voxels in which which {@link BoundingBox} refers to a subregion.
      * @param bbox the box that is used as a condition on what voxels to iterate i.e. only voxels
      *     within these bounds
      * @param process is called for each voxel within the bounding-box using GLOBAL coordinates.
-     * @param <T> buffer-type in voxel-box
+     * @param <T> buffer-type for voxels
      */
     public static <T extends Buffer> void callEachPoint(
-            VoxelBox<T> voxels, BoundingBox bbox, ProcessVoxelSliceBuffer<T> process) {
+            Voxels<T> voxels, BoundingBox bbox, ProcessVoxelSliceBuffer<T> process) {
         callEachPoint(bbox, new RetrieveBufferForSlice<>(voxels, process));
     }
 
     /**
      * Iterate over each voxel in an object-mask - with an associated buffer for each slice from a voxel-bo
      *
-     * @param voxels a voxel-box for which {@link} refers to a subregion.
+     * @param voxels voxels for which {@link} refers to a subregion.
      * @param object the object-mask is used as a condition on what voxels to iterate i.e. only voxels within
      *     these bounds
      * @param process is called for each voxel within the bounding-box using GLOBAL coordinates.
-     * @param <T> buffer-type in voxel-box
+     * @param <T> buffer-type for voxels
      */
     public static <T extends Buffer> void callEachPoint(
-            VoxelBox<T> voxels, ObjectMask object, ProcessVoxelSliceBuffer<T> process) {
+            Voxels<T> voxels, ObjectMask object, ProcessVoxelSliceBuffer<T> process) {
         callEachPoint(object, voxels, process);
     }
 
     /**
      * Iterate over each voxel in a mask - with an associated buffer for each slice from a voxel-bo
      *
-     * @param voxels a voxel-box for which {@link} refers to a subregion.
+     * @param voxels voxels for which {@link} refers to a subregion.
      * @param mask the mask is used as a condition on what voxels to iterate i.e. only voxels within
      *     these bounds
      * @param process is called for each voxel within the bounding-box using GLOBAL coordinates.
-     * @param <T> buffer-type in voxel-box
+     * @param <T> buffer-type for voxels
      */
     public static <T extends Buffer> void callEachPoint(
-            VoxelBox<T> voxels, Mask mask, ProcessVoxelSliceBuffer<T> process) {
+            Voxels<T> voxels, Mask mask, ProcessVoxelSliceBuffer<T> process) {
         // Treat it as one giant object box. This will involve some additions and subtractions of 0
         // during the processing of voxels
         // but after some quick emperical checks, it doesn't seem to make a performance difference.
@@ -318,12 +318,12 @@ public class IterateVoxels {
 
     /**
      * Iterate over each voxel that is located on an object-mask if it exists, otherwise iterate over the
-     * entire voxel-box.
+     * entire voxels.
      *
      * <p>This is similar behaviour to {@link #callEachPoint} but adds a buffer for each slice.
      */
     public static <T extends Buffer> void callEachPoint(
-            Optional<ObjectMask> objectMask, VoxelBox<T> voxels, ProcessVoxelSliceBuffer<T> process) {
+            Optional<ObjectMask> objectMask, Voxels<T> voxels, ProcessVoxelSliceBuffer<T> process) {
         Extent extent = voxels.extent();
 
         // Note the offsets must be added before any additional restriction like an object-mask, to make

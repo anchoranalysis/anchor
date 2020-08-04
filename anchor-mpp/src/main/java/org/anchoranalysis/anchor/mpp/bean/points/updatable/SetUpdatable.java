@@ -55,8 +55,8 @@ import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.ImageDimensions;
-import org.anchoranalysis.image.voxel.box.BoundedVoxelBox;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.BoundedVoxels;
+import org.anchoranalysis.image.voxel.Voxels;
 
 public class SetUpdatable extends UpdatablePointsContainer {
 
@@ -120,7 +120,7 @@ public class SetUpdatable extends UpdatablePointsContainer {
 
         Extent e = binaryImageChnl.getDimensions().getExtent();
 
-        VoxelBox<ByteBuffer> vbBinary = binaryImageChnl.voxels().asByte();
+        Voxels<ByteBuffer> vbBinary = binaryImageChnl.voxels().asByte();
 
         // Where we actually do the work
         Point3i pos = new Point3i();
@@ -184,15 +184,15 @@ public class SetUpdatable extends UpdatablePointsContainer {
         RegionMembership rm = newMark.getRegionMap().membershipForIndex(regionID);
         byte flags = rm.flags();
 
-        BoundedVoxelBox<ByteBuffer> voxelBox = pxlMark.getVoxels();
-        Extent e = voxelBox.extent();
+        BoundedVoxels<ByteBuffer> voxels = pxlMark.getVoxels();
+        Extent e = voxels.extent();
 
         Point3i crntExtentPoint = new Point3i();
         for (crntExtentPoint.setZ(0);
                 crntExtentPoint.getZ() < e.getZ();
                 crntExtentPoint.incrementZ()) {
 
-            ByteBuffer fb = voxelBox.getPixelsForPlane(crntExtentPoint.getZ());
+            ByteBuffer fb = voxels.getPixelsForPlane(crntExtentPoint.getZ());
 
             for (crntExtentPoint.setY(0);
                     crntExtentPoint.getY() < e.getY();
@@ -236,12 +236,12 @@ public class SetUpdatable extends UpdatablePointsContainer {
 
         RegionMembership rm = markToAdd.getRegionMap().membershipForIndex(regionID);
 
-        BoundedVoxelBox<ByteBuffer> voxelBox = pxlMark.getVoxels();
-        Extent e = voxelBox.extent();
+        BoundedVoxels<ByteBuffer> voxels = pxlMark.getVoxels();
+        Extent e = voxels.extent();
 
         BinaryValuesByte bvb = binaryImage.getBinaryValues().createByte();
 
-        VoxelBox<ByteBuffer> vbBinary = binaryImageChnl.voxels().asByte();
+        Voxels<ByteBuffer> vbBinary = binaryImageChnl.voxels().asByte();
 
         Point3i crntExtentPoint = new Point3i();
         for (crntExtentPoint.setZ(0);
@@ -254,7 +254,7 @@ public class SetUpdatable extends UpdatablePointsContainer {
                     crntExtentPoint,
                     crnrPoint,
                     e,
-                    voxelBox.getPixelsForPlane(crntExtentPoint.getZ()),
+                    voxels.getPixelsForPlane(crntExtentPoint.getZ()),
                     vbBinary.getPixelsForPlane(zGlobal).buffer(),
                     bvb,
                     zGlobal,

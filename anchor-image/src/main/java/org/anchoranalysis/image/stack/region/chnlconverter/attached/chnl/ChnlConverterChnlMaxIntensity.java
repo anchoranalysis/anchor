@@ -31,18 +31,18 @@ import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.stack.region.chnlconverter.ChannelConverterToUnsignedByte;
 import org.anchoranalysis.image.stack.region.chnlconverter.ConversionPolicy;
 import org.anchoranalysis.image.stack.region.chnlconverter.attached.ChnlConverterAttached;
-import org.anchoranalysis.image.stack.region.chnlconverter.voxelbox.VoxelBoxConverter;
-import org.anchoranalysis.image.stack.region.chnlconverter.voxelbox.VoxelBoxConverterToByteScaleByMaxValue;
+import org.anchoranalysis.image.stack.region.chnlconverter.voxelbox.VoxelsConverter;
+import org.anchoranalysis.image.stack.region.chnlconverter.voxelbox.ToByteScaleByMaxValue;
 
 public class ChnlConverterChnlMaxIntensity implements ChnlConverterAttached<Channel, ByteBuffer> {
 
-    private VoxelBoxConverterToByteScaleByMaxValue voxelsConverter;
+    private ToByteScaleByMaxValue voxelsConverter;
 
     private ChannelConverterToUnsignedByte delegate;
 
     public ChnlConverterChnlMaxIntensity() {
         // Initialise with a dummy value
-        voxelsConverter = new VoxelBoxConverterToByteScaleByMaxValue(1);
+        voxelsConverter = new ToByteScaleByMaxValue(1);
 
         delegate = new ChannelConverterToUnsignedByte(voxelsConverter);
     }
@@ -60,7 +60,7 @@ public class ChnlConverterChnlMaxIntensity implements ChnlConverterAttached<Chan
     }
 
     @Override
-    public VoxelBoxConverter<ByteBuffer> getVoxelsConverter() {
+    public VoxelsConverter<ByteBuffer> getVoxelsConverter() {
         return voxelsConverter;
     }
 }

@@ -28,7 +28,7 @@ package org.anchoranalysis.anchor.mpp.mark.voxelized;
 
 import java.nio.ByteBuffer;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.voxel.box.BoundedVoxelBox;
+import org.anchoranalysis.image.voxel.BoundedVoxels;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 
 /**
@@ -38,9 +38,9 @@ import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
  */
 public interface VoxelizedMark {
 
-    BoundedVoxelBox<ByteBuffer> getVoxels();
+    BoundedVoxels<ByteBuffer> getVoxels();
 
-    BoundedVoxelBox<ByteBuffer> getVoxelsMaximumIntensityProjection();
+    BoundedVoxels<ByteBuffer> getVoxelsMaximumIntensityProjection();
 
     BoundingBox getBoundingBox();
 

@@ -29,7 +29,7 @@ package org.anchoranalysis.image.voxel.kernel.dilateerode;
 import java.nio.ByteBuffer;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.Voxels;
 
 // Erosion with a 3x3 or 3x3x3 kernel
 public final class DilationKernel3ZOnly extends BinaryKernelMorph3 {
@@ -40,7 +40,7 @@ public final class DilationKernel3ZOnly extends BinaryKernelMorph3 {
     }
 
     @Override
-    public void init(VoxelBox<ByteBuffer> in) {
+    public void init(Voxels<ByteBuffer> in) {
         // NOTHING TO DO
     }
 

@@ -31,16 +31,16 @@ import java.util.ArrayList;
 import java.util.List;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.binary.values.BinaryValues;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.Voxels;
 
 public class AcceptIterationList implements AcceptIterationConditon {
     private List<AcceptIterationConditon> list = new ArrayList<>();
 
     @Override
-    public boolean acceptIteration(VoxelBox<ByteBuffer> buffer, BinaryValues bvb)
+    public boolean acceptIteration(Voxels<ByteBuffer> voxels, BinaryValues bvb)
             throws OperationFailedException {
         for (AcceptIterationConditon ai : list) {
-            if (!ai.acceptIteration(buffer, bvb)) {
+            if (!ai.acceptIteration(voxels, bvb)) {
                 return false;
             }
         }

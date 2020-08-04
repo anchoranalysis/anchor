@@ -33,29 +33,29 @@ import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.stack.region.chnlconverter.ChannelConverterToUnsignedByte;
 import org.anchoranalysis.image.stack.region.chnlconverter.ConversionPolicy;
 import org.anchoranalysis.image.stack.region.chnlconverter.attached.ChnlConverterAttached;
-import org.anchoranalysis.image.stack.region.chnlconverter.voxelbox.VoxelBoxConverter;
-import org.anchoranalysis.image.stack.region.chnlconverter.voxelbox.VoxelBoxConverterToByteScaleByMaxValue;
+import org.anchoranalysis.image.stack.region.chnlconverter.voxelbox.VoxelsConverter;
+import org.anchoranalysis.image.stack.region.chnlconverter.voxelbox.ToByteScaleByMaxValue;
 
 // Scales by a quantile of the intensity values of an image
 public class ChnlConverterHistogramQuantileIntensity
         implements ChnlConverterAttached<Histogram, ByteBuffer> {
 
-    private VoxelBoxConverterToByteScaleByMaxValue voxelBoxConverter;
+    private ToByteScaleByMaxValue voxelsConverter;
     private double quantile = 1.0;
     private ChannelConverterToUnsignedByte delegate;
 
     public ChnlConverterHistogramQuantileIntensity(double quantile) {
         // Initialise with a dummy value
-        voxelBoxConverter = new VoxelBoxConverterToByteScaleByMaxValue(1);
+        voxelsConverter = new ToByteScaleByMaxValue(1);
         this.quantile = quantile;
-        delegate = new ChannelConverterToUnsignedByte(voxelBoxConverter);
+        delegate = new ChannelConverterToUnsignedByte(voxelsConverter);
     }
 
     @Override
     public void attachObject(Histogram hist) throws OperationFailedException {
 
         int maxValue = hist.quantile(quantile);
-        voxelBoxConverter.setMaxValue(maxValue);
+        voxelsConverter.setMaxValue(maxValue);
     }
 
     @Override
@@ -64,7 +64,7 @@ public class ChnlConverterHistogramQuantileIntensity
     }
 
     @Override
-    public VoxelBoxConverter<ByteBuffer> getVoxelsConverter() {
-        return voxelBoxConverter;
+    public VoxelsConverter<ByteBuffer> getVoxelsConverter() {
+        return voxelsConverter;
     }
 }

@@ -40,8 +40,8 @@ import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectCollectionFactory;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
-import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
+import org.anchoranalysis.image.voxel.Voxels;
+import org.anchoranalysis.image.voxel.VoxelsWrapper;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelDataTypeException;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
@@ -101,7 +101,7 @@ public class HistogramFactory {
 
         Histogram total = new HistogramArray((int) chnl.getVoxelDataType().maxValue());
 
-        VoxelBox<?> vb = chnl.voxels().any();
+        Voxels<?> vb = chnl.voxels().any();
 
         Histogram h = createWithMask(vb, new ObjectMask(mask.binaryVoxels()));
         try {
@@ -128,11 +128,11 @@ public class HistogramFactory {
         return hist;
     }
 
-    public static Histogram create(VoxelBoxWrapper inputBuffer) {
+    public static Histogram create(VoxelsWrapper inputBuffer) {
         return create(inputBuffer, Optional.empty());
     }
 
-    public static Histogram create(VoxelBoxWrapper inputBuffer, Optional<ObjectMask> object) {
+    public static Histogram create(VoxelsWrapper inputBuffer, Optional<ObjectMask> object) {
 
         if (!isDataTypeSupported(inputBuffer.getVoxelDataType())) {
             throw new IncorrectVoxelDataTypeException(
@@ -151,7 +151,7 @@ public class HistogramFactory {
                 || dataType.equals(VoxelDataTypeUnsignedShort.INSTANCE);
     }
 
-    private static Histogram createWithMask(VoxelBox<?> inputBuffer, ObjectMask object) {
+    private static Histogram createWithMask(Voxels<?> inputBuffer, ObjectMask object) {
 
         Histogram hist = new HistogramArray((int) inputBuffer.dataType().maxValue());
 
@@ -187,7 +187,7 @@ public class HistogramFactory {
         return hist;
     }
 
-    private static Histogram createWithMasks(VoxelBoxWrapper vb, ObjectCollection objects) {
+    private static Histogram createWithMasks(VoxelsWrapper vb, ObjectCollection objects) {
 
         Histogram total = new HistogramArray((int) vb.getVoxelDataType().maxValue());
 
@@ -202,7 +202,7 @@ public class HistogramFactory {
         return total;
     }
 
-    private static Histogram create(VoxelBox<?> inputBox) {
+    private static Histogram create(Voxels<?> inputBox) {
 
         Histogram hist = new HistogramArray((int) inputBox.dataType().maxValue());
 

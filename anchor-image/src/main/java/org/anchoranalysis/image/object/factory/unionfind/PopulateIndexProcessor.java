@@ -31,13 +31,13 @@ import java.nio.IntBuffer;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
-import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
+import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.iterator.ProcessVoxelSliceBuffer;
 
 class PopulateIndexProcessor<T extends Buffer> implements ProcessVoxelSliceBuffer<T> {
 
-    private VoxelBox<IntBuffer> indexBuffer;
+    private Voxels<IntBuffer> indexBuffer;
     private MergeWithNeighbors mergeWithNgbs;
     private BinaryValues bv;
     private BinaryValuesByte bvb;
@@ -47,8 +47,8 @@ class PopulateIndexProcessor<T extends Buffer> implements ProcessVoxelSliceBuffe
     private int count = 1;
 
     public PopulateIndexProcessor(
-            BinaryVoxelBox<T> visited,
-            VoxelBox<IntBuffer> indexBuffer,
+            BinaryVoxels<T> visited,
+            Voxels<IntBuffer> indexBuffer,
             MergeWithNeighbors mergeWithNgbs,
             BufferReadWrite<T> bufferReaderWriter) {
         this.indexBuffer = indexBuffer;

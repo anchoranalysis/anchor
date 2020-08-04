@@ -29,19 +29,19 @@ package org.anchoranalysis.image.object.intersecting;
 import java.nio.ByteBuffer;
 import java.util.Optional;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.voxel.box.BoundedVoxelBox;
+import org.anchoranalysis.image.voxel.BoundedVoxels;
 
 public abstract class CountIntersectingVoxels {
 
     /**
-     * Calculates the number of intersecting pixels between two voxel boxes
+     * Calculates the number of intersecting pixels between two binary-voxels of identical size
      *
      * @param src
      * @param other
      * @return
      */
     public int countIntersectingVoxels(
-            BoundedVoxelBox<ByteBuffer> src, BoundedVoxelBox<ByteBuffer> other) {
+            BoundedVoxels<ByteBuffer> src, BoundedVoxels<ByteBuffer> other) {
         // Find the common bounding box
         Optional<BoundingBox> bboxIntersect =
                 src.getBoundingBox().intersection().with(other.getBoundingBox());
@@ -57,15 +57,15 @@ public abstract class CountIntersectingVoxels {
 
     // count intersecting pixels
     private int countIntersectingVoxelsFromBBox(
-            BoundedVoxelBox<ByteBuffer> src,
-            BoundedVoxelBox<ByteBuffer> other,
+            BoundedVoxels<ByteBuffer> src,
+            BoundedVoxels<ByteBuffer> other,
             BoundingBox bboxIntersect) {
         IntersectionBBox bbox =
                 IntersectionBBox.create(
                         src.getBoundingBox(), other.getBoundingBox(), bboxIntersect);
 
         // Otherwise we count the number of pixels that are not empty
-        //  in both voxel boxes in the intersecting region
+        //  in both bounded-voxels in the intersecting region
         int cnt = 0;
         for (int z = bbox.z().min(); z < bbox.z().max(); z++) {
 

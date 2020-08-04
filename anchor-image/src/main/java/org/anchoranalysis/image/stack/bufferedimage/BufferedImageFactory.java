@@ -30,14 +30,14 @@ import java.awt.image.BufferedImage;
 import java.nio.ByteBuffer;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.Voxels;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class BufferedImageFactory {
 
-    public static BufferedImage createGrayscale(VoxelBox<ByteBuffer> vb) throws CreateException {
+    public static BufferedImage createGrayscale(Voxels<ByteBuffer> vb) throws CreateException {
 
         Extent e = vb.extent();
         checkExtentZ(e);
@@ -46,9 +46,9 @@ public class BufferedImageFactory {
     }
 
     public static BufferedImage createRGB(
-            VoxelBox<ByteBuffer> red,
-            VoxelBox<ByteBuffer> green,
-            VoxelBox<ByteBuffer> blue,
+            Voxels<ByteBuffer> red,
+            Voxels<ByteBuffer> green,
+            Voxels<ByteBuffer> blue,
             Extent e)
             throws CreateException {
         checkExtentZ(e);
@@ -66,7 +66,7 @@ public class BufferedImageFactory {
         return bi;
     }
 
-    private static ByteBuffer firstBuffer(VoxelBox<ByteBuffer> vb, Extent e, String dscr)
+    private static ByteBuffer firstBuffer(Voxels<ByteBuffer> vb, Extent e, String dscr)
             throws CreateException {
 
         if (!vb.extent().equals(e)) {

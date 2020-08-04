@@ -32,7 +32,7 @@ import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.interpolator.transfer.Transfer;
 import org.anchoranalysis.image.interpolator.transfer.TransferViaByte;
 import org.anchoranalysis.image.interpolator.transfer.TransferViaShort;
-import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
+import org.anchoranalysis.image.voxel.VoxelsWrapper;
 import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelDataTypeException;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedShort;
@@ -40,7 +40,7 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedShort;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class InterpolateUtilities {
 
-    private static Transfer createTransfer(VoxelBoxWrapper src, VoxelBoxWrapper dest) {
+    private static Transfer createTransfer(VoxelsWrapper src, VoxelsWrapper dest) {
 
         if (!src.getVoxelDataType().equals(dest.getVoxelDataType())) {
             throw new IncorrectVoxelDataTypeException(
@@ -57,7 +57,7 @@ public class InterpolateUtilities {
     }
 
     public static void transferSlicesResizeXY(
-            VoxelBoxWrapper src, VoxelBoxWrapper trgt, Interpolator interpolator) {
+            VoxelsWrapper src, VoxelsWrapper trgt, Interpolator interpolator) {
 
         Extent eSrc = src.any().extent();
         Extent eTrgt = trgt.any().extent();

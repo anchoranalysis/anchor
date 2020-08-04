@@ -32,7 +32,7 @@ import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.Voxels;
 
 @AllArgsConstructor
 class ConsiderNeighbors {
@@ -104,7 +104,7 @@ class ConsiderNeighbors {
     public static boolean considerVisitMarkRaster(
             ConsiderVisit considerVisit, Point3i point, int distance, ObjectMask outline) {
 
-        VoxelBox<ByteBuffer> vb = outline.getVoxels();
+        Voxels<ByteBuffer> vb = outline.getVoxels();
         BinaryValuesByte bvb = outline.getBinaryValuesByte();
 
         if (!vb.extent().contains(point)) {

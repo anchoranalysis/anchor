@@ -33,8 +33,8 @@ import lombok.Setter;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
-import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
-import org.anchoranalysis.image.binary.voxel.BinaryVoxelBoxByte;
+import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
+import org.anchoranalysis.image.binary.voxel.BinaryVoxelsFactory;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.channel.factory.ChannelFactorySingleType;
@@ -45,10 +45,10 @@ import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.interpolator.Interpolator;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.scale.ScaleFactor;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
-import org.anchoranalysis.image.voxel.box.thresholder.VoxelBoxThresholder;
+import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelDataTypeException;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
+import org.anchoranalysis.image.voxel.thresholder.VoxelsThresholder;
 
 /**
  * A channel that is restricted to two values (ON and OFF) so as to act like a mask.
@@ -106,11 +106,11 @@ public class Mask {
     }
 
     /**
-     * Constructor - creates a mask from an existing binary voxel-box using default image resolution
+     * Constructor - creates a mask from an existing binary-voxels using default image resolution
      * 
-     * @param voxels the voxel-box (reused as the internal buffer of the mask)
+     * @param voxels the binary-voxels to be reused as the internal buffer of the mask
      */
-    public Mask(BinaryVoxelBox<ByteBuffer> voxels) {
+    public Mask(BinaryVoxels<ByteBuffer> voxels) {
         this(
                 voxels,
                 new ImageResolution()
@@ -118,9 +118,9 @@ public class Mask {
     }
     
     public Mask(
-            BinaryVoxelBox<ByteBuffer> vb, ImageResolution res) {
-        this.channel = FACTORY.create(vb.getVoxels(), res);
-        this.binaryValues = vb.getBinaryValues();
+            BinaryVoxels<ByteBuffer> voxels, ImageResolution res) {
+        this.channel = FACTORY.create(voxels.getVoxels(), res);
+        this.binaryValues = voxels.getBinaryValues();
         this.binaryValuesByte = binaryValues.createByte();
     }
 
@@ -128,7 +128,7 @@ public class Mask {
         return channel.getDimensions();
     }
 
-    public VoxelBox<ByteBuffer> getVoxels() {
+    public Voxels<ByteBuffer> getVoxels() {
         try {
             return channel.voxels().asByte();
         } catch (IncorrectVoxelDataTypeException e) {
@@ -137,8 +137,8 @@ public class Mask {
         }
     }
 
-    public BinaryVoxelBox<ByteBuffer> binaryVoxels() {
-        return new BinaryVoxelBoxByte(getVoxels(), binaryValues);
+    public BinaryVoxels<ByteBuffer> binaryVoxels() {
+        return BinaryVoxelsFactory.reuseByte(getVoxels(), binaryValues);
     }
 
     public boolean isPointOn(Point3i point) {
@@ -193,14 +193,14 @@ public class Mask {
         return new Mask(channel.extractSlice(z), binaryValues);
     }
 
-    public void replaceBy(BinaryVoxelBox<ByteBuffer> bvb) throws IncorrectImageSizeException {
-        channel.voxels().asByte().replaceBy(bvb.getVoxels());
+    public void replaceBy(BinaryVoxels<ByteBuffer> voxels) throws IncorrectImageSizeException {
+        channel.voxels().asByte().replaceBy(voxels.getVoxels());
     }
 
     private void applyThreshold(Mask mask) {
         int thresholdVal = (binaryValues.getOnInt() + binaryValues.getOffInt()) / 2;
 
-        VoxelBoxThresholder.thresholdForLevel(
+        VoxelsThresholder.thresholdForLevel(
                 mask.getVoxels(), thresholdVal, mask.getBinaryValues().createByte());
     }
 }

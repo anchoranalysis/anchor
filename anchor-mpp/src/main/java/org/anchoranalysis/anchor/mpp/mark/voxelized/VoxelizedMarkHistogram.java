@@ -46,7 +46,7 @@ import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramArray;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.voxel.box.BoundedVoxelBox;
+import org.anchoranalysis.image.voxel.BoundedVoxels;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatisticsFromHistogram;
 
@@ -78,12 +78,12 @@ class VoxelizedMarkHistogram implements VoxelizedMark {
     }
 
     @Override
-    public BoundedVoxelBox<ByteBuffer> getVoxels() {
+    public BoundedVoxels<ByteBuffer> getVoxels() {
         return object.getBoundedVoxels();
     }
 
     @Override
-    public BoundedVoxelBox<ByteBuffer> getVoxelsMaximumIntensityProjection() {
+    public BoundedVoxels<ByteBuffer> getVoxelsMaximumIntensityProjection() {
         return objectFlattened.getBoundedVoxels();
     }
 

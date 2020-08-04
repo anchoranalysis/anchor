@@ -34,7 +34,7 @@ import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.io.generator.raster.RasterGenerator;
 import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.io.generator.IterableObjectGenerator;
 import org.anchoranalysis.io.generator.ObjectGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
@@ -105,9 +105,9 @@ public class ExtractBoundingBoxAreaFromStackGenerator extends RasterGenerator
 
         for (Channel chnlIn : stackIn) {
 
-            VoxelBox<?> vbIn = chnlIn.voxels().any();
+            Voxels<?> vbIn = chnlIn.voxels().any();
 
-            VoxelBox<?> vbExtracted = vbIn.region(bbox, false);
+            Voxels<?> vbExtracted = vbIn.region(bbox, false);
 
             Channel chnlExtracted =
                     ChannelFactory.instance().create(vbExtracted, stackIn.getDimensions().getResolution());

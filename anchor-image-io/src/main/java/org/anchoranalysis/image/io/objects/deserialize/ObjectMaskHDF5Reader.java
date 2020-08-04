@@ -34,19 +34,19 @@ import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
-import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
+import org.anchoranalysis.image.voxel.Voxels;
+import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 
 class ObjectMaskHDF5Reader {
 
     public ObjectMask apply(IHDF5Reader reader, String datasetPath) {
 
-        VoxelBox<ByteBuffer> voxelBox = createVoxelBox(reader.uint8().readMDArray(datasetPath));
+        Voxels<ByteBuffer> voxels = createVoxels(reader.uint8().readMDArray(datasetPath));
 
         BoundingBox bbox =
-                new BoundingBox(cornerPoint(reader.uint32(), datasetPath), voxelBox.extent());
+                new BoundingBox(cornerPoint(reader.uint32(), datasetPath), voxels.extent());
 
-        return new ObjectMask(bbox, voxelBox);
+        return new ObjectMask(bbox, voxels);
     }
 
     public static int extractIntAttr(IHDF5IntReader reader, String path, String attr) {
@@ -60,7 +60,7 @@ class ObjectMaskHDF5Reader {
 
     /**
      * This approach is a bit efficient as we end up making two memory allocations ( the first in
-     * the JHDF5 library, the second for the VoxelBox)
+     * the JHDF5 library, the second for the {@link Voxels})
      *
      * <p>However our code, currently uses a memory model of a byte-array per slice. There doesn't
      * seem to be a convenient way to get the same structure back from the MDByteArray.
@@ -70,9 +70,9 @@ class ObjectMaskHDF5Reader {
      * @param mdb
      * @return
      */
-    private VoxelBox<ByteBuffer> createVoxelBox(MDByteArray mdb) {
+    private Voxels<ByteBuffer> createVoxels(MDByteArray mdb) {
         Extent e = extractExtent(mdb);
-        VoxelBox<ByteBuffer> vb = VoxelBoxFactory.getByte().create(e);
+        Voxels<ByteBuffer> vb = VoxelsFactory.getByte().createInitialized(e);
 
         for (int z = 0; z < e.getZ(); z++) {
 

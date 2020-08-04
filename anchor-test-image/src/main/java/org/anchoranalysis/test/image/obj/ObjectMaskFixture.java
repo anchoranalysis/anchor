@@ -33,14 +33,14 @@ import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
-import org.anchoranalysis.image.binary.voxel.BinaryVoxelBoxByte;
+import org.anchoranalysis.image.binary.voxel.BinaryVoxelsFactory;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
-import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
+import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
+import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 
 @AllArgsConstructor
 public class ObjectMaskFixture {
@@ -70,7 +70,7 @@ public class ObjectMaskFixture {
 
         assertTrue(dimensions.contains(bbox));
 
-        VoxelBox<ByteBuffer> vb = VoxelBoxFactory.getByte().create(extent);
+        Voxels<ByteBuffer> vb = VoxelsFactory.getByte().createInitialized(extent);
         BinaryValues bv = BinaryValues.getDefault();
         BinaryValuesByte bvb = bv.createByte();
 
@@ -95,6 +95,6 @@ public class ObjectMaskFixture {
 
         assertTrue(atLeastOneHigh);
 
-        return new ObjectMask(bbox, new BinaryVoxelBoxByte(vb, bv));
+        return new ObjectMask(bbox, BinaryVoxelsFactory.reuseByte(vb, bv));
     }
 }

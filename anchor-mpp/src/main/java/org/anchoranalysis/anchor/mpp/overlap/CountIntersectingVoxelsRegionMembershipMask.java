@@ -34,8 +34,8 @@ import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.intersecting.IntersectionBBox;
-import org.anchoranalysis.image.voxel.box.BoundedVoxelBox;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.BoundedVoxels;
+import org.anchoranalysis.image.voxel.Voxels;
 
 /**
  * Counts the number of intersecting-pixels where bytes are encoded as region memberships
@@ -48,20 +48,20 @@ class CountIntersectingVoxelsRegionMembershipMask {
     private final byte regionMembershipFlag;
 
     public int countIntersectingVoxelsMaskGlobal(
-            BoundedVoxelBox<ByteBuffer> src,
-            BoundedVoxelBox<ByteBuffer> other,
-            VoxelBox<ByteBuffer> maskGlobal,
+            BoundedVoxels<ByteBuffer> src,
+            BoundedVoxels<ByteBuffer> other,
+            Voxels<ByteBuffer> maskGlobal,
             byte onMaskGlobal) {
         return countCheckIntersection(
                 src, other, src.getBoundingBox(), other.getBoundingBox(), maskGlobal, onMaskGlobal);
     }
 
     private int countCheckIntersection(
-            BoundedVoxelBox<ByteBuffer> src,
-            BoundedVoxelBox<ByteBuffer> other,
+            BoundedVoxels<ByteBuffer> src,
+            BoundedVoxels<ByteBuffer> other,
             BoundingBox srcBox,
             BoundingBox otherBox,
-            VoxelBox<ByteBuffer> maskGlobal,
+            Voxels<ByteBuffer> maskGlobal,
             byte onMaskGlobal) {
 
         // Find the common bounding box
@@ -80,10 +80,10 @@ class CountIntersectingVoxelsRegionMembershipMask {
     // count intersecting pixels, but only includes a pixel ifs marked as onMaskGlobal in the mask
     //   voxel buffer
     private int countIntersectingVoxelsFromBBoxMaskGlobal(
-            BoundedVoxelBox<ByteBuffer> src,
-            BoundedVoxelBox<ByteBuffer> other,
+            BoundedVoxels<ByteBuffer> src,
+            BoundedVoxels<ByteBuffer> other,
             BoundingBox bboxIntersect,
-            VoxelBox<ByteBuffer> maskGlobal,
+            Voxels<ByteBuffer> maskGlobal,
             byte onMaskGlobal) {
         Extent eGlobalMask = maskGlobal.extent();
 
@@ -92,7 +92,7 @@ class CountIntersectingVoxelsRegionMembershipMask {
                         src.getBoundingBox(), other.getBoundingBox(), bboxIntersect);
 
         // Otherwise we count the number of pixels that are not empty
-        //  in both voxel boxes in the intersecting region
+        //  in both bounded-voxels in the intersecting region
         int cnt = 0;
 
         for (int z = bbox.z().min(); z < bbox.z().max(); z++) {

@@ -27,9 +27,9 @@
 package org.anchoranalysis.anchor.mpp.pixelpart.factory;
 
 import org.anchoranalysis.anchor.mpp.pixelpart.PixelPartPixelList;
-import org.anchoranalysis.image.voxel.VoxelIntensityList;
+import org.anchoranalysis.image.voxel.VoxelsIntensityList;
 
-public class PixelPartFactoryPixelList implements PixelPartFactory<VoxelIntensityList> {
+public class PixelPartFactoryPixelList implements PixelPartFactory<VoxelsIntensityList> {
 
     @Override
     public PixelPartPixelList create(int numSlices) {
@@ -37,7 +37,7 @@ public class PixelPartFactoryPixelList implements PixelPartFactory<VoxelIntensit
     }
 
     @Override
-    public void addUnused(VoxelIntensityList part) {
+    public void addUnused(VoxelsIntensityList part) {
         // NOTHING TO DO
     }
 }

@@ -28,7 +28,7 @@ package org.anchoranalysis.image.voxel.kernel;
 
 import java.nio.ByteBuffer;
 import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.Voxels;
 
 public class AndKernel extends BinaryKernel {
 
@@ -42,7 +42,7 @@ public class AndKernel extends BinaryKernel {
     }
 
     @Override
-    public void init(VoxelBox<ByteBuffer> in) {
+    public void init(Voxels<ByteBuffer> in) {
         kernel1.init(in);
         kernel2.init(in);
     }

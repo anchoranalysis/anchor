@@ -29,7 +29,7 @@ package org.anchoranalysis.image.voxel.kernel.count;
 import java.nio.ByteBuffer;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
-import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
+import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.kernel.LocalSlices;
@@ -45,7 +45,7 @@ import org.anchoranalysis.image.voxel.kernel.LocalSlices;
  */
 public class CountKernelNeighborhoodMask extends CountKernelNeighborhoodBase {
 
-    private BinaryVoxelBox<ByteBuffer> vbRequireHigh;
+    private BinaryVoxels<ByteBuffer> vbRequireHigh;
     private BinaryValuesByte bvRequireHigh;
     private ObjectMask objectRequireHigh;
 

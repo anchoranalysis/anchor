@@ -40,7 +40,7 @@ import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 
 /**
@@ -76,7 +76,7 @@ public class MaskFromObjects {
         Channel chnlNew =
                 ChannelFactory.instance()
                         .createEmptyInitialised(dimensions, VoxelDataTypeUnsignedByte.INSTANCE);
-        VoxelBox<ByteBuffer> vbNew = chnlNew.voxels().asByte();
+        Voxels<ByteBuffer> vbNew = chnlNew.voxels().asByte();
 
         if (outVal.getOnInt() != 0) {
             vbNew.setAllPixelsTo(initialState);
@@ -89,15 +89,15 @@ public class MaskFromObjects {
 
     // nullVal is assumed to be 0
     private static void writeChannelObjectCollection(
-            VoxelBox<ByteBuffer> vb, ObjectCollection objects, byte outVal) {
+            Voxels<ByteBuffer> vb, ObjectCollection objects, byte outVal) {
 
         objects.forEach(object->
-            writeObjectToVoxelBox(object, vb, outVal)
+            writeObjectOntoVoxels(object, vb, outVal)
         );
     }
 
-    private static void writeObjectToVoxelBox(
-            ObjectMask object, VoxelBox<ByteBuffer> voxelBoxOut, byte outValByte) {
+    private static void writeObjectOntoVoxels(
+            ObjectMask object, Voxels<ByteBuffer> voxelsOut, byte outValByte) {
 
         BoundingBox bbox = object.getBoundingBox();
 
@@ -115,11 +115,11 @@ public class MaskFromObjects {
             ByteBuffer maskIn = object.getVoxels().getPixelsForPlane(pointLocal.getZ()).buffer();
 
             ByteBuffer pixelsOut =
-                    voxelBoxOut.getPlaneAccess().getPixelsForPlane(pointGlobal.getZ()).buffer();
+                    voxelsOut.getPlaneAccess().getPixelsForPlane(pointGlobal.getZ()).buffer();
             writeToBufferMasked(
                     maskIn,
                     pixelsOut,
-                    voxelBoxOut.extent(),
+                    voxelsOut.extent(),
                     bbox.cornerMin(),
                     pointGlobal,
                     maxGlobal,

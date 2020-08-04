@@ -32,7 +32,7 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipUtilities;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.Voxels;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class OverlapUtilities {
@@ -71,7 +71,7 @@ public class OverlapUtilities {
             VoxelizedMarkMemo pmm1,
             VoxelizedMarkMemo pmm2,
             int regionID,
-            VoxelBox<ByteBuffer> globalMask,
+            Voxels<ByteBuffer> globalMask,
             byte onGlobalMask) {
         Mark mark1 = pmm1.getMark();
         Mark mark2 = pmm2.getMark();

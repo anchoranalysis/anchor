@@ -29,7 +29,7 @@ package org.anchoranalysis.image.voxel.buffer;
 import java.nio.Buffer;
 import lombok.Getter;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.Voxels;
 
 /**
  * Contains the {@link ByteBuffer} for the current slice, the current slice minus 1, and the current
@@ -41,7 +41,7 @@ import org.anchoranalysis.image.voxel.box.VoxelBox;
  */
 public final class SlidingBuffer<T extends Buffer> {
 
-    @Getter private final VoxelBox<T> voxelBox;
+    @Getter private final Voxels<T> voxels;
 
     @Getter private VoxelBuffer<T> center;
 
@@ -51,9 +51,9 @@ public final class SlidingBuffer<T extends Buffer> {
 
     private int sliceNumber = -1;
 
-    public SlidingBuffer(VoxelBox<T> voxelBox) {
+    public SlidingBuffer(Voxels<T> voxels) {
         super();
-        this.voxelBox = voxelBox;
+        this.voxels = voxels;
         seek(0); // We start off on slice 0 always
     }
 
@@ -66,14 +66,14 @@ public final class SlidingBuffer<T extends Buffer> {
 
         sliceNumber = sliceIndexToSeek;
         minusOne = null;
-        center = voxelBox.getPixelsForPlane(sliceNumber);
+        center = voxels.getPixelsForPlane(sliceNumber);
 
         if ((sliceNumber - 1) >= 0) {
-            minusOne = voxelBox.getPixelsForPlane(sliceNumber - 1);
+            minusOne = voxels.getPixelsForPlane(sliceNumber - 1);
         }
 
-        if ((sliceNumber + 1) < voxelBox.extent().getZ()) {
-            plusOne = voxelBox.getPixelsForPlane(sliceNumber + 1);
+        if ((sliceNumber + 1) < voxels.extent().getZ()) {
+            plusOne = voxels.getPixelsForPlane(sliceNumber + 1);
         }
     }
 
@@ -84,8 +84,8 @@ public final class SlidingBuffer<T extends Buffer> {
 
         sliceNumber++;
 
-        if ((sliceNumber + 1) < voxelBox.extent().getZ()) {
-            plusOne = voxelBox.getPixelsForPlane(sliceNumber + 1);
+        if ((sliceNumber + 1) < voxels.extent().getZ()) {
+            plusOne = voxels.getPixelsForPlane(sliceNumber + 1);
         } else {
             plusOne = null;
         }
@@ -100,11 +100,11 @@ public final class SlidingBuffer<T extends Buffer> {
             case -1:
                 return minusOne;
             default:
-                return voxelBox.getPixelsForPlane(sliceNumber + rel);
+                return voxels.getPixelsForPlane(sliceNumber + rel);
         }
     }
 
     public Extent extent() {
-        return voxelBox.extent();
+        return voxels.extent();
     }
 }

@@ -29,21 +29,21 @@ package org.anchoranalysis.image.voxel.buffer.mean;
 import java.nio.Buffer;
 import java.nio.FloatBuffer;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
-import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
-import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactoryTypeBound;
+import org.anchoranalysis.image.voxel.Voxels;
+import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
+import org.anchoranalysis.image.voxel.factory.VoxelsFactoryTypeBound;
 
 public abstract class MeanIntensityBuffer<T extends Buffer> {
 
-    private VoxelBox<T> flatVoxelBox;
-    private VoxelBox<FloatBuffer> sumVoxelBox;
-    private int cntVoxelBox = 0;
+    private Voxels<T> projectedVoxels;
+    private Voxels<FloatBuffer> voxelsSum;
+    private int countSlices = 0;
 
     /** Simple constructor since no preprocessing is necessary. */
-    public MeanIntensityBuffer(VoxelBoxFactoryTypeBound<T> flatType, Extent srcExtent) {
-        Extent flattened = srcExtent.flattenZ();
-        flatVoxelBox = flatType.create(flattened);
-        sumVoxelBox = VoxelBoxFactory.getFloat().create(flattened);
+    public MeanIntensityBuffer(VoxelsFactoryTypeBound<T> flatType, Extent extent) {
+        Extent extentForProjection = extent.flattenZ();
+        projectedVoxels = flatType.createInitialized(extentForProjection);
+        voxelsSum = VoxelsFactory.getFloat().createInitialized(extentForProjection);
     }
 
     public void projectSlice(T pixels) {
@@ -53,7 +53,7 @@ public abstract class MeanIntensityBuffer<T extends Buffer> {
             processPixel(pixels, i);
         }
         finalizeBuffer();
-        cntVoxelBox++;
+        countSlices++;
     }
 
     protected abstract void processPixel(T pixels, int index);
@@ -67,23 +67,23 @@ public abstract class MeanIntensityBuffer<T extends Buffer> {
     }
 
     protected FloatBuffer sumBuffer() {
-        return sumVoxelBox.getPixelsForPlane(0).buffer();
+        return voxelsSum.getPixelsForPlane(0).buffer();
     }
 
     protected T flatBuffer() {
-        return flatVoxelBox.getPixelsForPlane(0).buffer();
+        return projectedVoxels.getPixelsForPlane(0).buffer();
     }
 
-    protected int count() {
-        return cntVoxelBox;
+    protected int numberSlicesProcessed() {
+        return countSlices;
     }
 
     /** How many pixels in an XY slice */
     protected int volumeXY() {
-        return flatVoxelBox.extent().getVolumeXY();
+        return projectedVoxels.extent().getVolumeXY();
     }
 
-    public VoxelBox<T> getFlatBuffer() {
-        return flatVoxelBox;
+    public Voxels<T> getFlatBuffer() {
+        return projectedVoxels;
     }
 }

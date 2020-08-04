@@ -29,13 +29,13 @@ package org.anchoranalysis.image.voxel.statistics;
 import org.anchoranalysis.bean.shared.relation.threshold.RelationToThreshold;
 import org.anchoranalysis.core.relation.RelationToValue;
 import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.image.voxel.VoxelIntensityList;
+import org.anchoranalysis.image.voxel.VoxelsIntensityList;
 
 public class VoxelStatisticsFromList implements VoxelStatistics {
 
-    private VoxelIntensityList pixelList;
+    private VoxelsIntensityList pixelList;
 
-    public VoxelStatisticsFromList(VoxelIntensityList pixelList) {
+    public VoxelStatisticsFromList(VoxelsIntensityList pixelList) {
         super();
         this.pixelList = pixelList;
     }
@@ -57,14 +57,14 @@ public class VoxelStatisticsFromList implements VoxelStatistics {
 
     @Override
     public VoxelStatistics threshold(RelationToThreshold relationToThreshold) {
-        VoxelIntensityList pixelListThresholded = thresholdPxlList(pixelList, relationToThreshold);
+        VoxelsIntensityList pixelListThresholded = thresholdIntensityList(pixelList, relationToThreshold);
         return new VoxelStatisticsFromList(pixelListThresholded);
     }
 
-    private static VoxelIntensityList thresholdPxlList(
-            VoxelIntensityList list, RelationToThreshold relationToThreshold) {
+    private static VoxelsIntensityList thresholdIntensityList(
+            VoxelsIntensityList list, RelationToThreshold relationToThreshold) {
 
-        VoxelIntensityList pxlList = new VoxelIntensityList();
+        VoxelsIntensityList pxlList = new VoxelsIntensityList();
 
         RelationToValue relation = relationToThreshold.relation();
         double threshold = relationToThreshold.threshold();

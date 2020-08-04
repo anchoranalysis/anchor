@@ -33,12 +33,12 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
-import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
+import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramFactory;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
-import org.anchoranalysis.image.voxel.box.thresholder.VoxelBoxThresholder;
+import org.anchoranalysis.image.voxel.VoxelsWrapper;
+import org.anchoranalysis.image.voxel.thresholder.VoxelsThresholder;
 
 public class ThresholderGlobal extends Thresholder {
 
@@ -47,8 +47,8 @@ public class ThresholderGlobal extends Thresholder {
     // END BEAN PARAMETERS
 
     @Override
-    public BinaryVoxelBox<ByteBuffer> threshold(
-            VoxelBoxWrapper inputBuffer,
+    public BinaryVoxels<ByteBuffer> threshold(
+            VoxelsWrapper inputBuffer,
             BinaryValuesByte bvOut,
             Optional<Histogram> histogram,
             Optional<ObjectMask> objectMask)
@@ -57,20 +57,20 @@ public class ThresholderGlobal extends Thresholder {
                 histogramBuffer(inputBuffer, histogram, objectMask), inputBuffer, bvOut, objectMask);
     }
 
-    private BinaryVoxelBox<ByteBuffer> thresholdForHistogram(
+    private BinaryVoxels<ByteBuffer> thresholdForHistogram(
             Histogram hist,
-            VoxelBoxWrapper inputBuffer,
+            VoxelsWrapper inputBuffer,
             BinaryValuesByte bvOut,
             Optional<ObjectMask> objectMask)
             throws OperationFailedException {
 
         int thresholdVal = calculateLevel.calculateLevel(hist);
         assert (thresholdVal >= 0);
-        return VoxelBoxThresholder.thresholdForLevel(inputBuffer, thresholdVal, bvOut, objectMask, false);
+        return VoxelsThresholder.thresholdForLevel(inputBuffer, thresholdVal, bvOut, objectMask, false);
     }
 
     private Histogram histogramBuffer(
-            VoxelBoxWrapper inputBuffer, Optional<Histogram> histogram, Optional<ObjectMask> objectMask) {
+            VoxelsWrapper inputBuffer, Optional<Histogram> histogram, Optional<ObjectMask> objectMask) {
         return histogram.orElseGet(() -> HistogramFactory.create(inputBuffer, objectMask));
     }
 }

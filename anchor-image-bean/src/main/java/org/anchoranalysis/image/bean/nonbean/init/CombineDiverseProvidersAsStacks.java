@@ -35,7 +35,7 @@ import org.anchoranalysis.core.name.provider.NamedProviderBridge;
 import org.anchoranalysis.core.name.provider.NamedProviderCombine;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.image.binary.mask.Mask;
-import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
+import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactoryByte;
 import org.anchoranalysis.image.channel.factory.ChannelFactorySingleType;
@@ -96,7 +96,7 @@ class CombineDiverseProvidersAsStacks implements NamedProvider<Stack> {
 
         Channel chnlNew = FACTORY.createEmptyInitialised(sourceObject.getDimensions());
 
-        BinaryVoxelBox<ByteBuffer> bvb = sourceObject.binaryVoxels();
+        BinaryVoxels<ByteBuffer> bvb = sourceObject.binaryVoxels();
 
         // For each region we get a mask for what equals the binary mask
         ObjectMask object =

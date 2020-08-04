@@ -33,7 +33,7 @@ import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.Voxels;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CreateFromEntireChnlFactory {
@@ -41,7 +41,7 @@ public class CreateFromEntireChnlFactory {
     public static ObjectMask createObject(Mask binaryImgChnl) {
         Channel chnl = binaryImgChnl.getChannel();
 
-        VoxelBox<ByteBuffer> vb = chnl.voxels().asByte();
+        Voxels<ByteBuffer> vb = chnl.voxels().asByte();
 
         return new ObjectMask(new BoundingBox(vb.extent()), vb, binaryImgChnl.getBinaryValues());
     }

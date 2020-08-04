@@ -30,8 +30,8 @@ import java.io.IOException;
 import java.nio.Buffer;
 import java.util.function.Function;
 import org.anchoranalysis.image.extent.ImageDimensions;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
-import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
+import org.anchoranalysis.image.voxel.Voxels;
+import org.anchoranalysis.image.voxel.VoxelsWrapper;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.io.bioformats.DestChnlForIndex;
 import org.apache.commons.logging.Log;
@@ -42,14 +42,14 @@ public abstract class ConvertTo<T extends Buffer> {
 
     private static Log log = LogFactory.getLog(ConvertTo.class);
 
-    private Function<VoxelBoxWrapper, VoxelBox<T>> funcCastWrapper;
+    private Function<VoxelsWrapper, Voxels<T>> funcCastWrapper;
 
     /**
      * Default constructor
      *
-     * @param funcCastWrapper how to convert a VoxelBoxWrapper to the specific destination-type
+     * @param funcCastWrapper how to convert a {@link VoxelsWrapper} to the specific destination-type
      */
-    public ConvertTo(Function<VoxelBoxWrapper, VoxelBox<T>> funcCastWrapper) {
+    public ConvertTo(Function<VoxelsWrapper, Voxels<T>> funcCastWrapper) {
         super();
         this.funcCastWrapper = funcCastWrapper;
     }
@@ -102,11 +102,11 @@ public abstract class ConvertTo<T extends Buffer> {
 
     public static <S extends Buffer> void copyBytesIntoDestChnl(
             VoxelBuffer<S> voxelBuffer,
-            Function<VoxelBoxWrapper, VoxelBox<S>> funcCastWrapper,
+            Function<VoxelsWrapper, Voxels<S>> funcCastWrapper,
             DestChnlForIndex dest,
             int z,
             int cRel) {
-        VoxelBox<S> vb = funcCastWrapper.apply(dest.get(cRel).voxels());
+        Voxels<S> vb = funcCastWrapper.apply(dest.get(cRel).voxels());
         vb.getPlaneAccess().setPixelsForPlane(z, voxelBuffer);
     }
 }

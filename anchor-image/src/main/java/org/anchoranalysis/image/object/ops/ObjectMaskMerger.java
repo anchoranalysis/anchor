@@ -38,7 +38,7 @@ import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
+import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 
 /** Merges one or more {@link ObjectMask}s into a single object */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -68,7 +68,7 @@ public class ObjectMaskMerger {
 
         BoundingBox bbox = first.getBoundingBox().union().with(second.getBoundingBox());
 
-        ObjectMask out = new ObjectMask(bbox, VoxelBoxFactory.getByte().create(bbox.extent()));
+        ObjectMask out = new ObjectMask(bbox, VoxelsFactory.getByte().createInitialized(bbox.extent()));
         copyPixelsCheckMask(first, out, bbox);
         copyPixelsCheckMask(second, out, bbox);
         return out;
@@ -125,7 +125,7 @@ public class ObjectMaskMerger {
         BoundingBox bbox = mergeBoundingBoxes(objects.streamStandardJava());
 
         ObjectMask objectOut =
-                new ObjectMask(bbox, VoxelBoxFactory.getByte().create(bbox.extent()));
+                new ObjectMask(bbox, VoxelsFactory.getByte().createInitialized(bbox.extent()));
 
         BinaryValues bv = null;
         for (ObjectMask objectMask : objects) {

@@ -26,34 +26,12 @@
 
 package org.anchoranalysis.image.channel.factory;
 
-import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.extent.ImageDimensions;
-import org.anchoranalysis.image.voxel.box.VoxelBoxInt;
-import org.anchoranalysis.image.voxel.box.pixelsforplane.PixelsFromIntBufferArr;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedInt;
+import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 
-public class ChannelFactoryInt implements ChannelFactorySingleType {
+public class ChannelFactoryInt extends ChannelFactorySingleType {
 
-    private static final VoxelDataType DATA_TYPE = VoxelDataTypeUnsignedInt.INSTANCE;
-
-    @Override
-    public Channel createEmptyInitialised(ImageDimensions dim) {
-        VoxelBoxInt vb = new VoxelBoxInt(PixelsFromIntBufferArr.createInitialised(dim.getExtent()));
-        return create(vb, dim.getResolution());
-    }
-
-    @Override
-    public Channel createEmptyUninitialised(ImageDimensions dimensions) {
-
-        PixelsFromIntBufferArr pixels = PixelsFromIntBufferArr.createEmpty(dimensions.getExtent());
-
-        VoxelBoxInt vb = new VoxelBoxInt(pixels);
-        return create(vb, dimensions.getResolution());
-    }
-
-    @Override
-    public VoxelDataType dataType() {
-        return DATA_TYPE;
+    public ChannelFactoryInt() {
+        super(VoxelDataTypeUnsignedInt.INSTANCE, VoxelsFactory.getInt());
     }
 }

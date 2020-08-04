@@ -32,7 +32,7 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.Voxels;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class BinaryChnlAnd {
@@ -52,16 +52,16 @@ public class BinaryChnlAnd {
     }
 
     /**
-     * Performs a AND operation on each voxel in two voxel-boxes (considered to be masks), writing the result onto the second mask.
+     * Performs a AND operation on each voxel in two {@link Voxels} (considered to be masks), writing the result onto the second mask.
      * 
-     * @param voxelsFirst the first voxel-box for operation
-     * @param voxelsSecond the second voxel-box for operation (and in which the result is written)
-     * @param bvbFirst binary-values to mask first voxel-box
-     * @param bvbSecond binary-values to mask second voxel-box
+     * @param voxelsFirst the first voxels for the operation
+     * @param voxelsSecond the second voxels for the operation (and in which the result is written)
+     * @param bvbFirst binary-values to mask first voxels
+     * @param bvbSecond binary-values to mask second voxels
      */
     public static void apply(
-            VoxelBox<ByteBuffer> voxelsFirst,
-            VoxelBox<ByteBuffer> voxelsSecond,
+            Voxels<ByteBuffer> voxelsFirst,
+            Voxels<ByteBuffer> voxelsSecond,
             BinaryValuesByte bvbFirst,
             BinaryValuesByte bvbSecond) {
 

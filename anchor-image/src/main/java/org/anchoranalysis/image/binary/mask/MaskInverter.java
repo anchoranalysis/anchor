@@ -31,9 +31,9 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
-import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
+import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.Voxels;
 
 /**
  * Inverts masks and objects
@@ -51,7 +51,7 @@ public class MaskInverter {
      * @return a newly created inverted object
      */
     public static ObjectMask invertObjectDuplicate(ObjectMask object) {
-        BinaryVoxelBox<ByteBuffer> voxels = object.binaryVoxels().duplicate();
+        BinaryVoxels<ByteBuffer> voxels = object.binaryVoxels().duplicate();
         voxels.invert();
         return new ObjectMask(voxels);
     }
@@ -67,10 +67,10 @@ public class MaskInverter {
 
         BinaryValues bv = mask.getBinaryValues();
         BinaryValuesByte bvb = bv.createByte();
-        invertVoxelBox(mask.getVoxels(), bvb);
+        invertVoxels(mask.getVoxels(), bvb);
     }
 
-    private static void invertVoxelBox(VoxelBox<ByteBuffer> voxels, BinaryValuesByte bvb) {
+    private static void invertVoxels(Voxels<ByteBuffer> voxels, BinaryValuesByte bvb) {
         for (int z = 0; z < voxels.extent().getZ(); z++) {
 
             ByteBuffer bb = voxels.getPixelsForPlane(z).buffer();

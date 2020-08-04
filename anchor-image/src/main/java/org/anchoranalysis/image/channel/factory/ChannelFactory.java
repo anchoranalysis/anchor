@@ -31,7 +31,7 @@ import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.factory.VoxelDataTypeFactoryMultiplexer;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 
 /** Creates a channel for one of several data-types */
@@ -67,11 +67,11 @@ public class ChannelFactory extends VoxelDataTypeFactoryMultiplexer<ChannelFacto
         return factory.createEmptyUninitialised(dimensions);
     }
 
-    public Channel create(VoxelBox<? extends Buffer> voxelBox, ImageResolution res) {
+    public Channel create(Voxels<? extends Buffer> voxels, ImageResolution res) {
 
-        VoxelDataType chnlDataType = voxelBox.dataType();
+        VoxelDataType chnlDataType = voxels.dataType();
 
         ChannelFactorySingleType factory = get(chnlDataType);
-        return factory.create(voxelBox, res);
+        return factory.create(voxels, res);
     }
 }
