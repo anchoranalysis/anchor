@@ -28,41 +28,17 @@ package org.anchoranalysis.anchor.plot;
 
 import java.util.Optional;
 import org.jfree.chart.JFreeChart;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
-public class GraphInstance {
+@RequiredArgsConstructor
+public class PlotInstance {
 
-    private JFreeChart chart;
-    private boolean showVerticalAxisLines = true;
-
-    private Optional<AxisLimits> rangeAxisLimits;
-
-    public GraphInstance(JFreeChart chart, Optional<AxisLimits> rangeAxisLimits) {
-        super();
-        this.chart = chart;
-        this.rangeAxisLimits = rangeAxisLimits;
-    }
-
-    public JFreeChart getChart() {
-        return chart;
-    }
-
-    public void setChart(JFreeChart chart) {
-        this.chart = chart;
-    }
-
-    public boolean isShowVerticalAxisLines() {
-        return showVerticalAxisLines;
-    }
-
-    public void setShowVerticalAxisLines(boolean showVerticalAxisLines) {
-        this.showVerticalAxisLines = showVerticalAxisLines;
-    }
-
-    public Optional<AxisLimits> getRangeAxisLimits() {
-        return rangeAxisLimits;
-    }
-
-    public void setRangeAxisLimits(Optional<AxisLimits> rangeAxisLimits) {
-        this.rangeAxisLimits = rangeAxisLimits;
-    }
+    // START REQUIRED ARGUMENTS
+    @Getter private final JFreeChart chart;
+    @Getter private final Optional<AxisLimits> rangeAxisLimits;
+    // END REQUIRED ARGUMENTS
+    
+    @Getter @Setter private boolean showVerticalAxisLines = true;
 }

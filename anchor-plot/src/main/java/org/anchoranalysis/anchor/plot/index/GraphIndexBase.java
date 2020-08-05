@@ -29,7 +29,7 @@ package org.anchoranalysis.anchor.plot.index;
 import java.util.Iterator;
 import java.util.Optional;
 import org.anchoranalysis.anchor.plot.AxisLimits;
-import org.anchoranalysis.anchor.plot.GraphInstance;
+import org.anchoranalysis.anchor.plot.PlotInstance;
 import org.anchoranalysis.anchor.plot.bean.colorscheme.GraphColorScheme;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.index.GetOperationFailedException;
@@ -66,7 +66,7 @@ public abstract class GraphIndexBase<T, S extends Dataset> {
         numSeries = seriesNames.length;
     }
 
-    public GraphInstance createWithRangeLimits(
+    public PlotInstance createWithRangeLimits(
             Iterator<T> itr, Optional<AxisLimits> proposedRangeLimits) throws CreateException {
 
         try {
@@ -86,7 +86,7 @@ public abstract class GraphIndexBase<T, S extends Dataset> {
             final JFreeChart chart = createChart(dataset, this.graphName, proposedRangeLimits);
 
             // For now we don't set any limits for bar graphs
-            return new GraphInstance(chart, proposedRangeLimits);
+            return new PlotInstance(chart, proposedRangeLimits);
         } catch (GetOperationFailedException e) {
             throw new CreateException(e);
         }

@@ -31,7 +31,7 @@ import java.util.Optional;
 import java.util.function.Function;
 import org.anchoranalysis.anchor.mpp.plot.execution.ExecutionTimeItem;
 import org.anchoranalysis.anchor.plot.AxisLimits;
-import org.anchoranalysis.anchor.plot.GraphInstance;
+import org.anchoranalysis.anchor.plot.PlotInstance;
 import org.anchoranalysis.anchor.plot.bean.GraphDefinition;
 import org.anchoranalysis.anchor.plot.index.BarChart;
 import org.anchoranalysis.core.error.CreateException;
@@ -68,7 +68,7 @@ public class GraphDefinitionExecutionTime extends GraphDefinition<ExecutionTimeI
     }
 
     @Override
-    public GraphInstance create(
+    public PlotInstance create(
             Iterator<ExecutionTimeItem> items,
             Optional<AxisLimits> domainLimits,
             Optional<AxisLimits> rangeLimits)

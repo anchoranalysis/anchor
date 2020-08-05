@@ -27,14 +27,14 @@
 package org.anchoranalysis.anchor.plot.io;
 
 import java.awt.image.BufferedImage;
-import org.anchoranalysis.anchor.plot.GraphInstance;
+import org.anchoranalysis.anchor.plot.PlotInstance;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class GraphOutputter {
 
-    public static BufferedImage createBufferedImage(GraphInstance gi, int width, int height) {
+    public static BufferedImage createBufferedImage(PlotInstance gi, int width, int height) {
         return gi.getChart().createBufferedImage(width, height);
     }
 }

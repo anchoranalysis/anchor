@@ -31,7 +31,7 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.anchor.plot.AxisLimits;
-import org.anchoranalysis.anchor.plot.GraphInstance;
+import org.anchoranalysis.anchor.plot.PlotInstance;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.index.IndexGetter;
@@ -168,7 +168,7 @@ public class LinePlot<T extends IndexGetter> extends GraphIndexBase<T, XYDataset
         return chart;
     }
 
-    public GraphInstance create(
+    public PlotInstance create(
             Iterator<T> itr, Optional<AxisLimits> domainLimits, Optional<AxisLimits> rangeLimits)
             throws CreateException {
 
