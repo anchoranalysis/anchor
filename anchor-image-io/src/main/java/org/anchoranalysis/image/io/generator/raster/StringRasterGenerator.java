@@ -41,6 +41,7 @@ import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.color.RGBColor;
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.image.bean.size.SizeXY;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.bufferedimage.CreateStackFromBufferedImage;
 import org.anchoranalysis.io.bean.color.RGBColorBean;
@@ -52,18 +53,10 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 @NoArgsConstructor
 public class StringRasterGenerator extends AnchorBean<StringRasterGenerator> {
 
-    public StringRasterGenerator(String text) {
-        super();
-        this.text = text;
-    }
-
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private String text = "text";
 
-    @BeanField @Getter @Setter private int width = -1;
-
-    @BeanField @Getter @Setter private int height = -1;
-
+    @BeanField @Getter @Setter private SizeXY size = new SizeXY(-1,-1);
     @BeanField @Getter @Setter private int fontSize = 12;
 
     @BeanField @Getter @Setter private String fontName = "SansSerif";
@@ -95,19 +88,19 @@ public class StringRasterGenerator extends AnchorBean<StringRasterGenerator> {
 
             Rectangle2D defaultSize = calcDefaultSize();
 
-            if (width == -1) {
-                width = (int) Math.ceil(defaultSize.getWidth() + (padding * 2));
+            if (size.getWidth() == -1) {
+                size.setWidth( (int) Math.ceil(defaultSize.getWidth() + (padding * 2)) );
             }
 
-            if (height == -1) {
-                height = (int) Math.ceil(defaultSize.getHeight() + (padding * 2));
+            if (size.getHeight() == -1) {
+                size.setHeight( (int) Math.ceil(defaultSize.getHeight() + (padding * 2)) );
             }
 
             BufferedImage bufferedImage =
-                    new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+                    new BufferedImage(size.getWidth(), size.getHeight(), BufferedImage.TYPE_INT_RGB);
             Graphics2D graphics = createGraphicsFromBufferedImage(bufferedImage);
 
-            drawCenteredString(text, width, height, graphics);
+            drawCenteredString(text, size, graphics);
 
             try {
                 return CreateStackFromBufferedImage.create(bufferedImage);
@@ -150,14 +143,18 @@ public class StringRasterGenerator extends AnchorBean<StringRasterGenerator> {
             return graphics;
         }
 
-        private void drawCenteredString(String s, int w, int h, Graphics g) {
+        private void drawCenteredString(String stringToDraw, SizeXY size, Graphics g) {
             FontMetrics fm = g.getFontMetrics();
-            int x = (w - fm.stringWidth(s)) / 2;
-            int y = (fm.getAscent() + (h - (fm.getAscent() + fm.getDescent())) / 2);
-            g.drawString(s, x, y);
+            int x = (size.getWidth() - fm.stringWidth(stringToDraw)) / 2;
+            int y = (fm.getAscent() + (size.getHeight() - (fm.getAscent() + fm.getDescent())) / 2);
+            g.drawString(stringToDraw, x, y);
         }
     }
 
+    public StringRasterGenerator(String text) {
+        this.text = text;
+    }
+    
     // Create an iterable generator, which produces Stack for different Strings
     public IterableObjectGenerator<String, Stack> createGenerator() {
         return new Generator();
