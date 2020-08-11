@@ -103,6 +103,8 @@ public class StringRasterGenerator extends AnchorBean<StringRasterGenerator> {
 
             SizeXY resolvedSize = Optional.ofNullable(size).orElseGet(this::alternativeSizeFromDefault);
 
+            assert(resolvedSize.asExtent().volumeXY() > 0);
+            
             BufferedImage bufferedImage =
                     new BufferedImage(resolvedSize.getWidth(), resolvedSize.getHeight(), BufferedImage.TYPE_INT_RGB);
             Graphics2D graphics = createGraphicsFromBufferedImage(bufferedImage);

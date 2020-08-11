@@ -215,6 +215,7 @@ public class ObjectMask {
                 .hasIntersectingVoxels(voxels, other.voxels);
     }
 
+    
     /**
      * Produces a scaled-version of an object-mask.
      *
@@ -225,11 +226,25 @@ public class ObjectMask {
      * @return a scaled object-mask
      */
     public ObjectMask scale(ScaleFactor factor, Interpolator interpolator) {
+        return scale(factor, interpolator, Optional.empty());
+    }
+    
+    /**
+     * Produces a scaled-version of an object-mask.
+     *
+     * <p>This is an IMMUTABLE operation.
+     *
+     * @param factor scale-factor
+     * @param interpolator interpolator
+     * @param clipTo an extent which the object-masks should always fit inside after scaling (to catch any rounding errors that push the bounding box outside the scene-boundary)
+     * @return a scaled object-mask
+     */
+    public ObjectMask scale(ScaleFactor factor, Interpolator interpolator, Optional<Extent> clipTo) {
 
         if ((binaryValues.getOnInt() == 255 && binaryValues.getOffInt() == 0)
                 || (binaryValues.getOnInt() == 0 && binaryValues.getOffInt() == 255)) {
 
-            BoundedVoxels<ByteBuffer> scaled = voxels.scale(factor, interpolator);
+            BoundedVoxels<ByteBuffer> scaled = voxels.scale(factor, interpolator, clipTo);
 
             // We should do a thresholding afterwards to make sure our values correspond to the two
             // binry values
@@ -242,7 +257,6 @@ public class ObjectMask {
                         scaled.voxels(), thresholdVal, binaryValues.createByte());
             }
             return new ObjectMask(scaled, binaryValues);
-
         } else {
             throw new AnchorFriendlyRuntimeException(
                     "Operation not supported for these binary values");
@@ -633,8 +647,8 @@ public class ObjectMask {
         voxels.voxels()
                 .setVoxel(
                         pointGlobal.x() - cornerMin.x(),
-                        pointGlobal.x() - cornerMin.y(),
-                        pointGlobal.x() - cornerMin.z(),
+                        pointGlobal.y() - cornerMin.y(),
+                        pointGlobal.z() - cornerMin.z(),
                         val);
     }
     

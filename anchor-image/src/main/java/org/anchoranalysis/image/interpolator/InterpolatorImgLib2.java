@@ -41,33 +41,27 @@ import net.imglib2.view.Views;
 import org.anchoranalysis.image.convert.ImgLib2Wrap;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
+import lombok.AllArgsConstructor;
 
+@AllArgsConstructor
 public abstract class InterpolatorImgLib2 implements Interpolator {
 
     private InterpolatorFactory<UnsignedByteType, RandomAccessible<UnsignedByteType>> factoryByte;
     private InterpolatorFactory<UnsignedShortType, RandomAccessible<UnsignedShortType>>
             factoryShort;
 
-    public InterpolatorImgLib2(
-            InterpolatorFactory<UnsignedByteType, RandomAccessible<UnsignedByteType>> factoryByte,
-            InterpolatorFactory<UnsignedShortType, RandomAccessible<UnsignedShortType>>
-                    factoryShort) {
-        super();
-        this.factoryByte = factoryByte;
-        this.factoryShort = factoryShort;
-    }
-
     @Override
     public VoxelBuffer<ByteBuffer> interpolateByte(
             VoxelBuffer<ByteBuffer> src, VoxelBuffer<ByteBuffer> dest, Extent eSrc, Extent eDest) {
-
-        Img<UnsignedByteType> imIng = ImgLib2Wrap.wrapByte(src, eSrc);
+        
+        Img<UnsignedByteType> imgIn = ImgLib2Wrap.wrapByte(src, eSrc);
         Img<UnsignedByteType> imgOut = ImgLib2Wrap.wrapByte(dest, eDest);
 
         RealRandomAccessible<UnsignedByteType> interpolant =
-                Views.interpolate(Views.extendMirrorSingle(imIng), factoryByte);
+                Views.interpolate(Views.extendMirrorSingle(imgIn), factoryByte);
 
         interpolate2D(interpolant, imgOut, eSrc);
+       
         return dest;
     }
 
@@ -90,6 +84,7 @@ public abstract class InterpolatorImgLib2 implements Interpolator {
 
     private static <T extends Type<T>> Img<T> interpolate2D(
             RealRandomAccessible<T> source, Img<T> destination, Extent eSrc) {
+        
         // cursor to iterate over all pixels
         Cursor<T> cursor = destination.localizingCursor();
 
@@ -113,7 +108,7 @@ public abstract class InterpolatorImgLib2 implements Interpolator {
             // set the new value
             cursor.get().set(realRandomAccess.get());
         }
-
+        
         return destination;
     }
 

@@ -1,5 +1,6 @@
 package org.anchoranalysis.core.geometry;
 
+import java.util.function.IntBinaryOperator;
 import lombok.EqualsAndHashCode;
 
 /*
@@ -94,5 +95,14 @@ public final class Point3i extends Tuple3i {
         Point3i pointDup = new Point3i(point);
         pointDup.scale(factor);
         return pointDup;
+    }
+    
+    /** Applies an operation to each element across two points */
+    public static Point3i elementwiseOperation(ReadableTuple3i point1, ReadableTuple3i point2, IntBinaryOperator operator) {
+        return new Point3i(
+            operator.applyAsInt(point1.x(), point2.x()),
+            operator.applyAsInt(point1.y(), point2.y()),
+            operator.applyAsInt(point1.z(), point2.z())
+        );
     }
 }

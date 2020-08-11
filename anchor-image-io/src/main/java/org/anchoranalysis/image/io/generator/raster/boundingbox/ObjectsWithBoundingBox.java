@@ -53,22 +53,13 @@ public class ObjectsWithBoundingBox {
     }
     
     /**
-     * Maps the containing bounding-box to one (that must contain the existing box)
+     * Maps the containing bounding-box to a larger one (that must contain the existing box)
      * 
      * @param boundingBoxToAssign the new bounding-box to assign
      * @return newly-created with the same object-container but a different bounding-box
      * @throws OperationFailedException if the new bounding-box does not contain the existing one
      */
     public ObjectsWithBoundingBox mapBoundingBoxToBigger(BoundingBox boundingBoxToAssign) throws OperationFailedException {
-        if (!boundingBoxToAssign.contains().box(boundingBox)) {
-            throw new OperationFailedException(
-                 String.format(
-                     "The bounding-box to be assigned (%s) must contain the existing bounding-box (%s), but it does not",
-                     boundingBoxToAssign,
-                     boundingBox
-                 )
-            );
-        }
         return new ObjectsWithBoundingBox(objects, boundingBoxToAssign);
     }
     
@@ -92,7 +83,24 @@ public class ObjectsWithBoundingBox {
         BoundingBox boxToAssign = new BoundingBox(dimensions.extent());
         return new ObjectsWithBoundingBox(objects.stream().mapBoundingBoxChangeExtent(boxToAssign), boxToAssign);
     }
-        
+     
+    /**
+     * Adds objects without changing the bounding-box
+     * <p>
+     * The operation is <i>immutable</i>.
+     * 
+     * @param objectsToAdd objects to add (unchanged)
+     * @return a newly created {@link ObjectsWithBoundingBox} with the combined objects and the same bounding-box
+     */
+    public ObjectsWithBoundingBox addObjectsNoBoundingBoxChange(ObjectCollection objectsToAdd) {
+        ObjectCollection combined = ObjectCollectionFactory.of(objects, objectsToAdd);
+        for( ObjectMask toAdd : objectsToAdd) {
+            assert( boundingBox.intersection().existsWith(toAdd.boundingBox()) );
+        }
+        return new ObjectsWithBoundingBox(combined, boundingBox);
+    }
+    
+    
     /** The number of objects */
     public int numberObjects() {
         return objects.size();

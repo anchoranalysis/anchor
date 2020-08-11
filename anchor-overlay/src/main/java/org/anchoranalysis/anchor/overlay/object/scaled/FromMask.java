@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.anchor.overlay.object.scaled;
 
+import java.util.Optional;
 import org.anchoranalysis.anchor.overlay.writer.DrawOverlay;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
@@ -53,7 +54,8 @@ public class FromMask implements ScaledMaskCreator {
 
         // Then we have to create the scaled-object fresh
         // We store it for next-time
-        ObjectMask scaled = unscaled.withoutProperties().scale(new ScaleFactor(scaleFactor), INTERPOLATOR);
+        ObjectMask scaled = unscaled.withoutProperties().scale(
+                new ScaleFactor(scaleFactor), INTERPOLATOR, Optional.of( dimensionsScaled.extent() ));
 
         assert (scaled.hasPixelsGreaterThan(0));
 

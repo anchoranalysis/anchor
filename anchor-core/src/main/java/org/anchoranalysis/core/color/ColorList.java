@@ -135,8 +135,8 @@ public class ColorList implements ColorIndex, Iterable<RGBColor> {
     }
 
     @Override
-    public RGBColor get(int i) {
-        return list.get(i);
+    public RGBColor get(int index) {
+        return list.get(index);
     }
 
     public boolean addAll(ColorList other) {

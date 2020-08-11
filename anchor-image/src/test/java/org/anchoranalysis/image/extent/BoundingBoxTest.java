@@ -26,30 +26,42 @@
 
 package org.anchoranalysis.image.extent;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-
-import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.image.BoundingBoxFixture;
 import org.junit.Test;
 
 public class BoundingBoxTest {
 
     @Test
     public void testIntersect1() {
-        // fail("Not yet implemented");
 
-        BoundingBox obj1 = new BoundingBox(new Point3i(154, 58, 3), new Extent(12, 30, 16));
-        BoundingBox obj2 = new BoundingBox(new Point3i(46, 62, 5), new Extent(26, 24, 17));
+        BoundingBox obj1 = BoundingBoxFixture.of(154, 58, 3, 12, 30, 16);
+        BoundingBox obj2 = BoundingBoxFixture.of(46, 62, 5, 26, 24, 17);
 
         assertTrue(!obj1.intersection().existsWith(obj2));
     }
 
     @Test
     public void testIntersect2() {
-        // fail("Not yet implemented");
 
-        BoundingBox obj1 = new BoundingBox(new Point3i(0, 0, 0), new Extent(1024, 1024, 1));
-        BoundingBox obj2 = new BoundingBox(new Point3i(433, 95, 1), new Extent(1, 1, 1));
+        BoundingBox obj1 = BoundingBoxFixture.of(0, 0, 0, 1024, 1024, 1);
+        BoundingBox obj2 = BoundingBoxFixture.of(433, 95, 1, 1, 1, 1);
 
         assertTrue(!obj1.intersection().existsWith(obj2));
+    }
+    
+    @Test
+    public void testUnion() {
+        
+        BoundingBox box1 = BoundingBoxFixture.of(156, 56, 0, 139, 139, 1);
+        BoundingBox box2 = BoundingBoxFixture.of(94, 94, 0, 117, 117, 1);
+        
+        BoundingBox boxUnion = box1.union().with(box2);
+        
+        assertEquals(94, boxUnion.cornerMin().x());
+        assertEquals(56, boxUnion.cornerMin().y());
+        assertEquals(201, boxUnion.extent().x());
+        assertEquals(155, boxUnion.extent().y());
     }
 }

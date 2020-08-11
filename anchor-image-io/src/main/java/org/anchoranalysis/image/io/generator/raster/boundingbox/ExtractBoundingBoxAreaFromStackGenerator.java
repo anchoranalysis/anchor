@@ -28,13 +28,9 @@ package org.anchoranalysis.image.io.generator.raster.boundingbox;
 
 import java.util.Optional;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.io.generator.raster.RasterGenerator;
 import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.io.generator.IterableObjectGenerator;
 import org.anchoranalysis.io.generator.ObjectGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
@@ -53,10 +49,10 @@ public class ExtractBoundingBoxAreaFromStackGenerator extends RasterGenerator
     private static final String MANIFEST_FUNCTION = "boundingBoxExtract";
 
     // START REQUIRED ARGUMENTS
-    private final Stack stack;
+    private final ScaleableBackground background;
     // END REQUIRED ARGUMENTS
 
-    private BoundingBox box;
+    private BoundingBox element;
 
     @Override
     public Stack generate() throws OutputWriteFailedException {
@@ -66,7 +62,7 @@ public class ExtractBoundingBoxAreaFromStackGenerator extends RasterGenerator
         }
 
         try {
-            return createExtract(stack);
+            return background.extractRegionFromStack(element);
 
         } catch (CreateException e) {
             throw new OutputWriteFailedException(e);
@@ -75,12 +71,12 @@ public class ExtractBoundingBoxAreaFromStackGenerator extends RasterGenerator
 
     @Override
     public BoundingBox getIterableElement() {
-        return box;
+        return element;
     }
 
     @Override
     public void setIterableElement(BoundingBox element) {
-        this.box = element;
+        this.element = element;
     }
 
     @Override
@@ -95,19 +91,6 @@ public class ExtractBoundingBoxAreaFromStackGenerator extends RasterGenerator
 
     @Override
     public boolean isRGB() {
-        return stack.getNumberChannels() == 3;
-    }
-
-    private Stack createExtract(Stack stack) throws CreateException {
-        try {
-            return stack.mapChannel(this::extractArea);
-        } catch (OperationFailedException e) {
-            throw new CreateException(e);
-        }
-    }
-    
-    private Channel extractArea( Channel channel ) {
-        Voxels<?> voxelsExtracted = channel.voxels().any().region(box, false);
-        return ChannelFactory.instance().create(voxelsExtracted, stack.dimensions().resolution());  
+        return background.getNumberChannels() == 3;
     }
 }

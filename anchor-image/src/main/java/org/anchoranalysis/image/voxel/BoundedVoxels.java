@@ -41,7 +41,6 @@ import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.interpolator.Interpolator;
 import org.anchoranalysis.image.scale.ScaleFactor;
-import org.anchoranalysis.image.scale.ScaleFactorUtilities;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactoryTypeBound;
 
 /**
@@ -270,22 +269,21 @@ public class BoundedVoxels<T extends Buffer> {
      *
      * @param scaleFactor what to scale X and Y dimensions by?
      * @param interpolator means of interpolating between pixels
+     * @param clipTo an extent which the object-masks should always fit inside after scaling (to catch any rounding errors that push the bounding box outside the scene-boundary)
      * @return a new bounded-voxels box of specified size containing scaled contents of the existing
      */
-    public BoundedVoxels<T> scale(ScaleFactor scaleFactor, Interpolator interpolator) {
-
-        Voxels<T> voxelsOut =
-                voxels.resizeXY(
-                        ScaleFactorUtilities.scaleQuantity(
-                                scaleFactor.x(), boundingBox.extent().x()),
-                        ScaleFactorUtilities.scaleQuantity(
-                                scaleFactor.y(), boundingBox.extent().y()),
-                        interpolator);
-
-        return new BoundedVoxels<>(
-                boundingBox.scale(scaleFactor, voxelsOut.extent()), voxelsOut);
+    public BoundedVoxels<T> scale(ScaleFactor scaleFactor, Interpolator interpolator, Optional<Extent> clipTo) {
+        
+        // Construct a new bounding-box, clipping if necessary
+        BoundingBox boundingBoxScaled = clipTo.map( extent-> boundingBox.scaleClipTo(scaleFactor, extent) ).orElseGet( ()-> 
+            boundingBox.scale(scaleFactor)
+        );
+                
+        Voxels<T> voxelsOut = voxels.resizeXY(boundingBoxScaled.extent().x(), boundingBoxScaled.extent().y(), interpolator);
+        
+        return new BoundedVoxels<>(boundingBoxScaled, voxelsOut);
     }
-
+    
     /**
      * A maximum-intensity projection (flattens in z dimension)
      *

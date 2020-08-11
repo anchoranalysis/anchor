@@ -34,7 +34,6 @@ import org.anchoranalysis.image.bean.arrangeraster.ArrangeRasterOverlay;
 import org.anchoranalysis.image.bean.arrangeraster.ArrangeRasterTile;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.bean.provider.stack.StackProviderArrangeRaster;
-import org.anchoranalysis.image.bean.size.SizeXY;
 import org.anchoranalysis.image.io.bean.stack.StackProviderGenerateString;
 import org.anchoranalysis.image.io.bean.stack.arrange.StackProviderWithLabel;
 import org.anchoranalysis.image.io.generator.raster.StringRasterGenerator;
@@ -85,7 +84,6 @@ public class TileRasters {
 
         StringRasterGenerator srg = new StringRasterGenerator(spwl.getLabel());
         srg.setText(spwl.getLabel());
-        srg.setSize( new SizeXY(-1,-1) );
         srg.setPadding(3);
 
         spgs.setStringRasterGenerator(srg);

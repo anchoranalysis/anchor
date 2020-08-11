@@ -112,7 +112,7 @@ public class HistogramCSVReader {
         Histogram hist = new HistogramArray(maxHistVal);
 
         for (Entry<Integer, Integer> entry : map.entrySet()) {
-            hist.incrValBy(entry.getValue(), entry.getKey());
+            hist.incrValBy(entry.getKey(), entry.getValue());
         }
         return hist;
     }

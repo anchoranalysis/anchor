@@ -39,19 +39,20 @@ public class RotationMatrix implements Serializable {
     /** */
     private static final long serialVersionUID = 1L;
 
-    private DoubleMatrix2D matrix;
+    /** The underlying matrix implementing the rotation. This name is deliberately kept as 'delegate' to avoid breaking serialized objects. */
+    private DoubleMatrix2D delegate;
 
     public RotationMatrix(int numDim) {
-        matrix = DoubleFactory2D.dense.make(numDim, numDim);
+        delegate = DoubleFactory2D.dense.make(numDim, numDim);
     }
 
     public RotationMatrix(DoubleMatrix2D matrix) {
-        this.matrix = matrix;
+        this.delegate = matrix;
     }
 
     public Point3d calcRotatedPoint(Point3d pointIn) {
 
-        if (matrix.rows() == 3) {
+        if (delegate.rows() == 3) {
             double[] dIn = new double[3];
             dIn[0] = pointIn.x();
             dIn[1] = pointIn.y();
@@ -59,7 +60,7 @@ public class RotationMatrix implements Serializable {
 
             double[] rot = calcRotatedPoint(dIn);
             return new Point3d(rot[0], rot[1], rot[2]);
-        } else if (matrix.rows() == 2) {
+        } else if (delegate.rows() == 2) {
             double[] dIn = new double[2];
             dIn[0] = pointIn.x();
             dIn[1] = pointIn.y();
@@ -72,7 +73,7 @@ public class RotationMatrix implements Serializable {
     }
 
     public double[] calcRotatedPoint(double[] pointIn) {
-        Preconditions.checkArgument(pointIn.length == matrix.rows());
+        Preconditions.checkArgument(pointIn.length == delegate.rows());
 
         int numDim = pointIn.length;
 
@@ -83,7 +84,7 @@ public class RotationMatrix implements Serializable {
             matIn.set(i, 0, pointIn[i]);
         }
 
-        DoubleMatrix2D matOut = matrix.zMult(matIn, null);
+        DoubleMatrix2D matOut = delegate.zMult(matIn, null);
 
         double[] pointOut = new double[numDim];
         for (int i = 0; i < numDim; i++) {
@@ -114,36 +115,36 @@ public class RotationMatrix implements Serializable {
     }
 
     public RotationMatrix mult(RotationMatrix other) {
-        return new RotationMatrix(matrix.zMult(other.matrix, null));
+        return new RotationMatrix(delegate.zMult(other.delegate, null));
     }
 
     public Point3d column(int colNum) {
-        DoubleMatrix1D vector = matrix.viewColumn(colNum);
+        DoubleMatrix1D vector = delegate.viewColumn(colNum);
         return new Point3d(vector.get(0), vector.get(1), vector.get(2));
     }
 
     public int getNumDim() {
-        return matrix.columns();
+        return delegate.columns();
     }
 
     public DoubleMatrix2D getMatrix() {
-        return matrix;
+        return delegate;
     }
 
     public void multConstant(double value) {
-        matrix.assign(Functions.mult(value));
+        delegate.assign(Functions.mult(value));
     }
 
     public RotationMatrix transpose() {
-        return new RotationMatrix(matrix.viewDice().copy());
+        return new RotationMatrix(delegate.viewDice().copy());
     }
 
     public RotationMatrix duplicate() {
-        return new RotationMatrix(matrix.copy());
+        return new RotationMatrix(delegate.copy());
     }
 
     @Override
     public String toString() {
-        return matrix.toString();
+        return delegate.toString();
     }
 }

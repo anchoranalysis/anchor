@@ -164,7 +164,6 @@
 	    <artifactId>imglib2</artifactId>
 	    <version>${imglib2.version}</version>
 	</dependency>
-
 	
 	<!-- All Imagej dependencies that were excluded in correct versions, and not otherwise included elsewhere -->
 	<dependency>

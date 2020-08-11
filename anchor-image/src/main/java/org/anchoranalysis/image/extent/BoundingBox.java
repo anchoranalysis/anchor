@@ -64,22 +64,35 @@ public final class BoundingBox implements Serializable {
         this(new Point3i(0, 0, 0), extent);
     }
 
-    public BoundingBox(Point3d min, Point3d max) {
-        this(PointConverter.intFromDouble(min), PointConverter.intFromDoubleCeil(max));
+    /**
+     * Constructor - creates a new bounding-box from two points (a minimum corner and a maximum corner)
+     * 
+     * @param cornerMinInclusive minimum point in each dimension of the bounding-box (that exists inside the box)
+     * @param cornerMaxInclusive maximum point in each dimension of the bounding-box (that exists inside the box)
+     */
+    public BoundingBox(Point3d cornerMinInclusive, Point3d cornerMaxInclusive) {
+        this(PointConverter.intFromDouble(cornerMinInclusive), PointConverter.intFromDoubleCeil(cornerMaxInclusive));
     }
 
-    public BoundingBox(ReadableTuple3i min, ReadableTuple3i max) {
+    /**
+     * Constructor - creates a new bounding-box from two points (a minimum corner and a maximum corner)
+     * 
+     * @param cornerMinInclusive minimum point in each dimension of the bounding-box (that exists inside the box)
+     * @param cornerMaxInclusive maximum point in each dimension of the bounding-box (that exists inside the box)
+     */
+    public BoundingBox(ReadableTuple3i cornerMinInclusive, ReadableTuple3i cornerMaxInclusive) {
         this(
-                min,
+                cornerMinInclusive,
                 new Extent(
-                        max.x() - min.x() + 1,
-                        max.y() - min.y() + 1,
-                        max.z() - min.z() + 1));
-        checkMaxMoreThanMin(min, max);
+                        cornerMaxInclusive.x() - cornerMinInclusive.x() + 1,
+                        cornerMaxInclusive.y() - cornerMinInclusive.y() + 1,
+                        cornerMaxInclusive.z() - cornerMinInclusive.z() + 1));
+        checkMaxMoreThanMin(cornerMinInclusive, cornerMaxInclusive);
     }
 
     // Extent is the number of pixels need to represent this bounding box
     public BoundingBox(ReadableTuple3i cornerMin, Extent extent) {
+        // Note this always duplicates the corner, creating some needless object-creation
         this.cornerMin = new Point3i(cornerMin);
         this.extent = extent;
     }
@@ -111,12 +124,16 @@ public final class BoundingBox implements Serializable {
         return new BoundingBox(cornerMin.duplicateChangeZ(0), extent.duplicateChangeZ(1));
     }
 
-    public BoundingBox duplicateChangeExtentZ(int extentZ) {
-        return new BoundingBox(cornerMin, extent.duplicateChangeZ(extentZ));
+    public BoundingBox changeExtent(Extent extent) {
+        return new BoundingBox(cornerMin,extent);
     }
-
-    public BoundingBox duplicateChangeZ(int crnrZ, int extentZ) {
+    
+    public BoundingBox changeZ(int crnrZ, int extentZ) {
         return new BoundingBox(cornerMin.duplicateChangeZ(crnrZ), extent.duplicateChangeZ(extentZ));
+    }
+    
+    public BoundingBox changeExtentZ(int extentZ) {
+        return new BoundingBox(cornerMin, extent.duplicateChangeZ(extentZ));
     }
 
     public boolean atBorder(ImageDimensions dimensions) {
@@ -179,6 +196,12 @@ public final class BoundingBox implements Serializable {
 
     public BoundingBox clipTo(Extent extent) {
 
+        if (cornerMin.x() >= extent.x() || cornerMin.y() >= extent.y() || cornerMin.z() >= extent.z()) {
+            throw new AnchorFriendlyRuntimeException(
+               String.format("Corner-min (%s) is outside the clipping region (%s)", cornerMin, extent)
+            );
+        }
+        
         Point3i min = new Point3i(cornerMin);
         Point3i max = new Point3i(calcCornerMax());
 
@@ -311,17 +334,41 @@ public final class BoundingBox implements Serializable {
      * @return a new bounding-box with scaled corner-point and extent
      */
     public BoundingBox scale(ScaleFactor scaleFactor) {
-        return scale(scaleFactor, extent.scaleXYBy(scaleFactor));
+        return scale(scaleFactor, scaledExtent(scaleFactor));
     }
+
+    /**
+     * Scales the bounding-box, both the corner-point and the extent - ensuring it remains inside a containing-extent
+     *
+     * @param scaleFactor scaling-factor
+     * @param clipTo clips scaled-object's bounding-box to ensure it always fit inside (to catch any rounding errors that push the bounding box outside the scene-boundary)
+     * @return a new bounding-box with scaled corner-point and extent
+     */
+    public BoundingBox scaleClipTo(ScaleFactor scaleFactor, Extent clipTo) {
+        Point3i cornerScaled = scaledCorner(scaleFactor);
+        Extent extentScaled = scaledExtent(scaleFactor);
+        BoundingBox boxScaled = new BoundingBox(cornerScaled,extentScaled);
+        return boxScaled.clipTo(clipTo);
+    }
+
 
     /**
      * Scales the bounding-box corner-point, and assigns a new extent
      *
      * @param scaleFactor scaling-factor
+     * @param extent extent to assign
      * @return a new bounding-box with scaled corner-point and the specified extent
      */
     public BoundingBox scale(ScaleFactor scaleFactor, Extent extentToAssign) {
-        return new BoundingBox(ScaleFactorUtilities.scale(scaleFactor, cornerMin), extentToAssign);
+        return new BoundingBox(scaledCorner(scaleFactor), extentToAssign);
+    }
+    
+    private Extent scaledExtent(ScaleFactor scaleFactor) {
+        return extent.scaleXYBy(scaleFactor);
+    }
+    
+    private Point3i scaledCorner(ScaleFactor scaleFactor) {
+        return ScaleFactorUtilities.scale(scaleFactor, cornerMin);
     }
 
     private void checkMaxMoreThanMin(ReadableTuple3i min, ReadableTuple3i max) {

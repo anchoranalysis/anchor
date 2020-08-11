@@ -74,9 +74,14 @@ public final class Extent implements Serializable {
         this.len = len;
         this.sxy = len.x() * len.y();
 
-        if (len.x() < 1 || len.y() < 1 || len.z() < 1) {
+        if (len.x()==0 || len.y()==0 || len.z()==0) {
             throw new AnchorFriendlyRuntimeException(
                     "An extent must have at least one voxel in every dimension");
+        }
+        
+        if (len.x() < 0 || len.y() < 0 || len.z() < 0) {
+            throw new AnchorFriendlyRuntimeException(
+                    "An extent may not be negative in any dimension");
         }
     }
 
@@ -262,12 +267,12 @@ public final class Extent implements Serializable {
         return contains(box.cornerMin()) && contains(box.calcCornerMax());
     }
 
-    public Extent scaleXYBy(ScaleFactor sf) {
+    public Extent scaleXYBy(ScaleFactor scaleFactor) {
         return new Extent(
                 immutablePointOperation(
-                        p -> {
-                            p.setX(ScaleFactorUtilities.scaleQuantity(sf.x(), x()));
-                            p.setY(ScaleFactorUtilities.scaleQuantity(sf.y(), y()));
+                        point -> {
+                            point.setX(ScaleFactorUtilities.scaleQuantity(scaleFactor.x(), x()));
+                            point.setY(ScaleFactorUtilities.scaleQuantity(scaleFactor.y(), y()));
                         }));
     }
 
@@ -295,7 +300,19 @@ public final class Extent implements Serializable {
     public Extent growBy(ReadableTuple3i toAdd) {
         return new Extent(Point3i.immutableAdd(len, toAdd));
     }
-
+    
+    /**
+     * Intersects this extent with another (i.e. takes the smaller value in each dimension)
+     * 
+     * @param other the other
+     * @return a newly-created extent that is the intersection of this and another
+     */
+    public Extent intersectWith(Extent other) {
+        return new Extent(
+           Point3i.elementwiseOperation(len, other.len, Math::min)
+        );
+    }
+    
     /**
      * Collapses the Z dimension i.e. returns a new extent with the same X- and Y- size but Z-size
      * of 1

@@ -36,8 +36,8 @@ public class ColorIndexModulo implements ColorIndex {
     private ColorIndex delegate;
 
     @Override
-    public RGBColor get(int i) {
-        return delegate.get(i % numUniqueColors());
+    public RGBColor get(int index) {
+        return delegate.get(index % numUniqueColors());
     }
 
     @Override
@@ -46,7 +46,7 @@ public class ColorIndexModulo implements ColorIndex {
     }
 
     @Override
-    public boolean has(int i) {
-        return delegate.has(i % numUniqueColors());
+    public boolean has(int index) {
+        return delegate.has(index % numUniqueColors());
     }
 }

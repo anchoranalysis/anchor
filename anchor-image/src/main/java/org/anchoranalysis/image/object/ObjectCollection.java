@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
@@ -198,19 +199,30 @@ public class ObjectCollection implements Iterable<ObjectMask> {
      *
      * @param factor scaling-factor
      * @param interpolator interpolator
+     * @param clipTo an extent which the object-mask should always fit inside (to catch any rounding errors that push the bounding box outside the scene-boundary)
      * @return a new collection with scaled-masks
      */
-    public ObjectCollection scale(ScaleFactor factor, Interpolator interpolator) {
-        return stream().map(object -> object.scale(factor, interpolator));
+    public ObjectCollection scale(ScaleFactor factor, Interpolator interpolator, Optional<Extent> clipTo) {
+        return stream().map(object -> object.scale(factor, interpolator, clipTo));
     }
 
     public int countIntersectingVoxels(ObjectMask object) {
 
         int cnt = 0;
-        for (ObjectMask s : this) {
-            cnt += s.countIntersectingVoxels(object);
+        for (ObjectMask other : this) {
+            cnt += other.countIntersectingVoxels(object);
         }
         return cnt;
+    }
+    
+    public boolean hasIntersectingVoxels(ObjectMask object) {
+
+        for (ObjectMask other : this) {
+            if (other.hasIntersectingVoxels(object)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public ObjectCollection findObjectsWithIntersectingBBox(ObjectMask objectToIntersectWith) {

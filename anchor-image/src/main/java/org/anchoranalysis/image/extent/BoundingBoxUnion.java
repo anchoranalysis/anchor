@@ -69,6 +69,7 @@ public class BoundingBoxUnion {
 
         return new BoundingBox(
                 new Point3i(meiX.min(), meiY.min(), meiZ.min()),
-                new Extent(meiX.extent(), meiY.extent(), meiZ.extent()));
+                new Point3i(meiX.max(), meiY.max(), meiZ.max())
+        );
     }
 }

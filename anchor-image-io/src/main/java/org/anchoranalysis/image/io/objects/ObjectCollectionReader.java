@@ -97,7 +97,7 @@ public class ObjectCollectionReader {
             return TIFF_CORRECT_MISSING.deserialize(path);
         } else {
             throw new DeserializationFailedException(
-                    "Directory of object TIFFs not found at " + path);
+                    "Neither at HD5 file nor a directory of object TIFFs can be found for: " + path);
         }
     }
 

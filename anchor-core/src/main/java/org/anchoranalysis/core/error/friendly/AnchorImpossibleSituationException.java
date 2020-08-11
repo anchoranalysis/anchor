@@ -50,7 +50,7 @@ public class AnchorImpossibleSituationException extends AnchorFriendlyRuntimeExc
         super(
                 "This situation should never occur in properly functioning code, as it is should be logically impossible to reach.");
 
-        // As a further warnig, and assert is triggered.
+        // As a further warning, and assert is triggered.
         assert (false);
     }
 }

@@ -85,6 +85,7 @@ public class OutputManagerFixture {
         }
 
         OutputManagerWithPrefixer outputManager = new OutputManagerPermissive();
+        //OutputManagerWithPrefixer outputManager = new OutputManagerPermissiveExcept( new StringSet("thumbnails") );
         outputManager.setSilentlyDeleteExisting(true);
         outputManager.setOutputWriteSettings(ows);
         outputManager.setFilePathPrefixer(new FilePathPrefixerConstantPath(pathTempFolder));

@@ -76,7 +76,7 @@ public abstract class FileMatcher extends AnchorBean<FileMatcher> {
         }
 
         if (!dir.toFile().exists() || !dir.toFile().isDirectory()) {
-            throw new AnchorIOException(String.format("Directory '%s' does not exist", dir));
+            throw new AnchorIOException(String.format("Directory '%s' does not exist", dir.toAbsolutePath().normalize()));
         }
 
         // Many checks are possible on a file, including whether it is hidden or not

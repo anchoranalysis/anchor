@@ -29,7 +29,6 @@ package org.anchoranalysis.image.io.generator.raster.boundingbox;
 import io.vavr.control.Either;
 import java.util.Optional;
 import org.anchoranalysis.core.color.ColorIndex;
-import org.anchoranalysis.core.color.ColorList;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.index.SetOperationFailedException;
@@ -77,7 +76,7 @@ public class DrawObjectOnStackGenerator extends RasterGenerator
      * @param colors colors to use for outling of objects
      * @param outlineWidth width of the outline around an object
      */
-    public static DrawObjectOnStackGenerator createFromStack(Stack background, int outlineWidth, ColorList colors) {
+    public static DrawObjectOnStackGenerator createFromStack(ScaleableBackground background, int outlineWidth, ColorIndex colors) {
         return createFromGenerator(
                 new ExtractBoundingBoxAreaFromStackGenerator(background), outlineWidth, colors);
     }
@@ -90,7 +89,7 @@ public class DrawObjectOnStackGenerator extends RasterGenerator
      * @param colors colors to use for outling of objects
      * @return
      */
-    public static DrawObjectOnStackGenerator createWithEmptyBackground(int outlineWidth, ColorList colors) {
+    public static DrawObjectOnStackGenerator createWithEmptyBackground(int outlineWidth, ColorIndex colors) {
         return new DrawObjectOnStackGenerator(Optional.empty(), outlineWidth, colors, true);
     }
 
@@ -104,7 +103,7 @@ public class DrawObjectOnStackGenerator extends RasterGenerator
      * @param outlineWidth width of the outline around an object
      */
     public static DrawObjectOnStackGenerator createFromStack(
-            Optional<Stack> background, int outlineWidth, ColorList colors) {
+            Optional<ScaleableBackground> background, int outlineWidth, ColorIndex colors) {
         if (background.isPresent()) {
             return createFromStack(background.get(), outlineWidth, colors);
         } else {
@@ -121,7 +120,7 @@ public class DrawObjectOnStackGenerator extends RasterGenerator
      * @param colors colors to use for outling of objects
      */
     public static DrawObjectOnStackGenerator createFromGenerator(
-            IterableObjectGenerator<BoundingBox, Stack> backgroundGenerator, int outlineWidth, ColorList colors) {
+            IterableObjectGenerator<BoundingBox, Stack> backgroundGenerator, int outlineWidth, ColorIndex colors) {
         return new DrawObjectOnStackGenerator(
                 Optional.of(backgroundGenerator), outlineWidth, colors, true);
     }

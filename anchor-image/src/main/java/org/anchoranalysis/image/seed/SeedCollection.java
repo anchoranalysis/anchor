@@ -49,9 +49,9 @@ public class SeedCollection implements Iterable<Seed> {
         return out;
     }
 
-    public void scaleXY(double scale) throws OperationFailedException {
+    public void scaleXY(double scale, Extent extent) throws OperationFailedException {
         for (Seed seed : this) {
-            seed.scaleXY(scale);
+            seed.scaleXY(scale, extent);
         }
     }
 

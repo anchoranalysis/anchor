@@ -138,12 +138,7 @@ public abstract class Feature<T extends FeatureInput>
                     String.format("The feature (%s) has not been initialized", this.toString()));
         }
 
-        double ret = calc(input);
-
-        assert (!Double.isNaN(ret));
-        assert (Double.isFinite(ret));
-
-        return ret;
+        return calc(input);
     }
 
     // Calculates a value for some parameters
