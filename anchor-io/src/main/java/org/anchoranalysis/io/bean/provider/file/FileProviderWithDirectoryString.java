@@ -62,11 +62,6 @@ public abstract class FileProviderWithDirectoryString extends FileProviderWithDi
     @Override
     public Path getDirectoryAsPath(InputContextParams inputContext) {
 
-        // If no directory is explicitly specified, and the input-context provides an
-        // input-directory
-        //  then we use this
-        //
-        // This is a convenient way for the ExperimentLauncher to parameterize the input-directory
         if (!directory.isEmpty()) {
             Path directoryAsPath = Paths.get(directory);
             if (localized && !directoryAsPath.isAbsolute()) {
