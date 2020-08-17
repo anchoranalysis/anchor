@@ -24,12 +24,12 @@
  * #L%
  */
 
-package org.anchoranalysis.feature.cache.calculation;
+package org.anchoranalysis.feature.cache.calculate;
 
 import java.util.function.Function;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.ChildCacheName;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
@@ -38,7 +38,7 @@ import org.anchoranalysis.feature.input.FeatureInput;
  * @author Owen Feehan
  * @param <T>
  */
-public interface CalcForChild<T extends FeatureInput> {
+public interface CalculateForChild<T extends FeatureInput> {
 
     /**
      * Calculates a feature in a child-cache
@@ -50,7 +50,7 @@ public interface CalcForChild<T extends FeatureInput> {
      * @return the result of the feature calculation
      * @throws FeatureCalculationException
      */
-    <S extends FeatureInput> double calc(Feature<S> feature, S input, ChildCacheName childCacheName)
+    <S extends FeatureInput> double calculate(Feature<S> feature, S input, ChildCacheName childCacheName)
             throws FeatureCalculationException;
 
     /**
@@ -64,7 +64,7 @@ public interface CalcForChild<T extends FeatureInput> {
      * @return the result of the feature calculation
      * @throws FeatureCalculationException
      */
-    <S extends FeatureInput> double calc(
+    <S extends FeatureInput> double calculate(
             Feature<S> feature, FeatureCalculation<S, T> calculation, ChildCacheName childCacheName)
             throws FeatureCalculationException;
 
@@ -76,10 +76,10 @@ public interface CalcForChild<T extends FeatureInput> {
      * @param childCacheName name of child cache
      * @param input input to be used for calculation
      * @param funcResolve returns the resolved Feature-Calculation to be used (given a resolver)
-     * @return the restulf othe calculation
+     * @return the restult of the calculation
      * @throws FeatureCalculationException
      */
-    <S extends FeatureInput, U> U calc(
+    <S extends FeatureInput, U> U calculate(
             ChildCacheName childCacheName,
             S input,
             Function<CalculationResolver<S>, ResolvedCalculation<U, S>> funcResolve)

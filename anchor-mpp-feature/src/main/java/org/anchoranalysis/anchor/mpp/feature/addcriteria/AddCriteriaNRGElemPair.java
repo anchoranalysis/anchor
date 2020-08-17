@@ -35,8 +35,8 @@ import org.anchoranalysis.anchor.mpp.pair.IdentifiablePair;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.feature.bean.list.FeatureList;
-import org.anchoranalysis.feature.calc.NamedFeatureCalculationException;
-import org.anchoranalysis.feature.calc.results.ResultsVector;
+import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
+import org.anchoranalysis.feature.calculate.results.ResultsVector;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.nrg.NRGTotal;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
@@ -86,32 +86,32 @@ public class AddCriteriaNRGElemPair implements AddCriteria<NRGPair> {
         //       some features for the includeMarks
         //   and some features for nrgElemPairList
 
-        // If any of the add criteria indicate an edge, then we calc the features
+        // If any of the add criteria indicate an edge, then we calculate the features
         //  This will also ensure the params collection is fully populated with
         //  necessary calculations from the addCriteria calculations to be used later
-        boolean calc = false;
+        boolean calculate = false;
         try {
             if (pairAddCriteria.includeMarks(mark1, mark2, nrgStack.dimensions(), session, do3D)) {
-                calc = true;
+                calculate = true;
             }
         } catch (IncludeMarksFailureException e) {
             throw new CreateException(e);
         }
 
-        if (calc) {
+        if (calculate) {
             try {
                 FeatureInputPairMemo params = new FeatureInputPairMemo(mark1, mark2, nrgStack);
                 ResultsVector rv =
                         session.orElseThrow(
                                         () ->
-                                                new NamedFeatureCalculationException(
+                                                new NamedFeatureCalculateException(
                                                         "No feature-evaluator exists"))
                                 .calculate(params, nrgElemPairList);
 
                 IdentifiablePair<Mark> pair =
                         new IdentifiablePair<>(mark1.getMark(), mark2.getMark());
                 return Optional.of(new NRGPair(pair, new NRGTotal(rv.total())));
-            } catch (NamedFeatureCalculationException e) {
+            } catch (NamedFeatureCalculateException e) {
                 throw new CreateException(e);
             }
         } else {

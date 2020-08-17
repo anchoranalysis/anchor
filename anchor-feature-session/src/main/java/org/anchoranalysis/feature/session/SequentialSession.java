@@ -36,10 +36,10 @@ import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListFactory;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
-import org.anchoranalysis.feature.calc.FeatureInitParams;
-import org.anchoranalysis.feature.calc.NamedFeatureCalculationException;
-import org.anchoranalysis.feature.calc.results.ResultsVector;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureInitParams;
+import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
+import org.anchoranalysis.feature.calculate.results.ResultsVector;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.feature.session.strategy.replace.ReplaceStrategy;
@@ -140,20 +140,20 @@ public class SequentialSession<T extends FeatureInput> implements FeatureCalcula
      * @throws FeatureCalculationException
      */
     @Override
-    public ResultsVector calculate(T params) throws NamedFeatureCalculationException {
+    public ResultsVector calculate(T params) throws NamedFeatureCalculateException {
         checkIsStarted();
-        return calcCommonExceptionAsVector(params);
+        return calculateCommonExceptionAsVector(params);
     }
 
     @Override
     public ResultsVector calculate(T params, FeatureList<T> featuresSubset)
-            throws NamedFeatureCalculationException {
+            throws NamedFeatureCalculateException {
         checkIsStarted();
 
         try {
             return replaceSession.createOrReuse(params).calc(featuresSubset);
         } catch (CreateException e) {
-            throw new NamedFeatureCalculationException(e);
+            throw new NamedFeatureCalculateException(e);
         }
     }
 
@@ -172,7 +172,7 @@ public class SequentialSession<T extends FeatureInput> implements FeatureCalcula
             errorReporter.recordError(SequentialSession.class, ERROR_NOT_STARTED);
             res.setErrorAll(new OperationFailedException(ERROR_NOT_STARTED));
         } else {
-            calcCommonSuppressErrors(res, params, errorReporter);
+            calculateCommonSuppressErrors(res, params, errorReporter);
         }
 
         return res;
@@ -187,7 +187,7 @@ public class SequentialSession<T extends FeatureInput> implements FeatureCalcula
         return listFeatures.size();
     }
 
-    private void calcCommonSuppressErrors(
+    private void calculateCommonSuppressErrors(
             ResultsVector res, T params, ErrorReporter errorReporter) {
 
         // Create cacheable params, and record any errors for all features
@@ -221,14 +221,14 @@ public class SequentialSession<T extends FeatureInput> implements FeatureCalcula
         }
     }
 
-    private ResultsVector calcCommonExceptionAsVector(T input)
-            throws NamedFeatureCalculationException {
+    private ResultsVector calculateCommonExceptionAsVector(T input)
+            throws NamedFeatureCalculateException {
 
         SessionInput<T> sessionInput;
         try {
             sessionInput = replaceSession.createOrReuse(input);
         } catch (CreateException e) {
-            throw new NamedFeatureCalculationException(e);
+            throw new NamedFeatureCalculateException(e);
         }
 
         ResultsVector res = new ResultsVector(listFeatures.size());
@@ -239,7 +239,7 @@ public class SequentialSession<T extends FeatureInput> implements FeatureCalcula
                 double val = sessionInput.calc(feature);
                 res.set(i, val);
             } catch (FeatureCalculationException e) {
-                throw new NamedFeatureCalculationException(
+                throw new NamedFeatureCalculateException(
                         feature.getFriendlyName(), e.getMessage());
             }
         }
@@ -290,9 +290,9 @@ public class SequentialSession<T extends FeatureInput> implements FeatureCalcula
                         listFeatures, featureInitParamsDup, sharedFeatures, logger);
     }
 
-    private void checkIsStarted() throws NamedFeatureCalculationException {
+    private void checkIsStarted() throws NamedFeatureCalculateException {
         if (!isStarted) {
-            throw new NamedFeatureCalculationException(ERROR_NOT_STARTED);
+            throw new NamedFeatureCalculateException(ERROR_NOT_STARTED);
         }
     }
 }

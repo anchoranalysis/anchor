@@ -34,7 +34,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.operator.FeatureSingleElem;
 import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
@@ -55,10 +55,10 @@ public class AsSingle extends FeatureSingleElem<FeatureInputPairMemo, FeatureInp
             new ChildCacheName(AsSingle.class, "second");
 
     @Override
-    public double calc(SessionInput<FeatureInputPairMemo> input)
+    public double calculate(SessionInput<FeatureInputPairMemo> input)
             throws FeatureCalculationException {
         return input.forChild()
-                .calc(
+                .calculate(
                         getItem(),
                         new CalculateDeriveSingleMemoFromPair(first),
                         first ? CACHE_NAME_FIRST : CACHE_NAME_SECOND);
@@ -72,7 +72,7 @@ public class AsSingle extends FeatureSingleElem<FeatureInputPairMemo, FeatureInp
     }
 
     @Override
-    public String getParamDscr() {
-        return getItem().getParamDscr();
+    public String describeParams() {
+        return getItem().describeParams();
     }
 }

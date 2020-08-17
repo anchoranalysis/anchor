@@ -27,7 +27,7 @@
 package org.anchoranalysis.feature.input;
 
 import java.util.Optional;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.extent.ImageResolution;
 
 public interface FeatureInputWithRes extends FeatureInput {

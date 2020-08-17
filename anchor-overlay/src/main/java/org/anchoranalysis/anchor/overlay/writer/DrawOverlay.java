@@ -85,7 +85,7 @@ public abstract class DrawOverlay {
             throws OperationFailedException {
 
         try {
-            List<PrecalcOverlay> overlaysPreprocessed =
+            List<PrecalculationOverlay> overlaysPreprocessed =
                     precalculate(
                             overlays, this, dimensions, BinaryValues.getDefault().createByte());
 
@@ -104,7 +104,7 @@ public abstract class DrawOverlay {
 
     // dim should be for the ENTIRE cfg, not just the bit in boxContainer
     public abstract void writePrecalculatedOverlays(
-            List<PrecalcOverlay> precalculatedMasks,
+            List<PrecalculationOverlay> precalculatedMasks,
             ImageDimensions dimensions,
             RGBStack background,
             ObjectDrawAttributes attributes,
@@ -122,7 +122,7 @@ public abstract class DrawOverlay {
     // but
     // there should be exactly one object
     //  per Mark in the cfg, in the same order as the Cfg is inputted
-    public static List<PrecalcOverlay> precalculate(
+    public static List<PrecalculationOverlay> precalculate(
             ColoredOverlayCollection coc,
             DrawOverlay drawOverlay,
             ImageDimensions dimensions,
@@ -146,7 +146,7 @@ public abstract class DrawOverlay {
                 .collect(Collectors.toList());
     }
 
-    public static PrecalcOverlay createPrecalc(
+    public static PrecalculationOverlay createPrecalc(
             DrawOverlay drawOverlay, ObjectWithProperties object, ImageDimensions dimensions)
             throws CreateException {
         return drawOverlay.getDrawObject().precalculate(object, dimensions);

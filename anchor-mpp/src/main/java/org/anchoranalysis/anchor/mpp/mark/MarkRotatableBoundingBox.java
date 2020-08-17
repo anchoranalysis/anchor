@@ -83,13 +83,12 @@ public class MarkRotatableBoundingBox extends MarkAbstractPosition {
     }
 
     @Override
-    public byte evalPointInside(Point3d pt) {
+    public byte isPointInside(Point3d point) {
 
         // See if after rotating a point back, it lies with on our box
-        Point3d point = new Point3d(pt);
-        point.subtract(getPos());
+        Point3d pointRelative = Point3d.immutableSubtract(point, getPos());
 
-        Point3d pointRot = rotMatrixInv.calcRotatedPoint(point);
+        Point3d pointRot = rotMatrixInv.rotatedPoint(pointRelative);
 
         if (pointRot.x() < distanceToLeftBottom.x() || pointRot.x() >= distanceToRightTop.x()) {
             return FLAG_SUBMARK_NONE;
@@ -120,7 +119,7 @@ public class MarkRotatableBoundingBox extends MarkAbstractPosition {
     }
 
     @Override
-    public BoundingBox boxAllRegions(ImageDimensions bndScene) {
+    public BoundingBox boxAllRegions(ImageDimensions dimensions) {
 
         Point3d[] points =
                 new Point3d[] {
@@ -132,15 +131,15 @@ public class MarkRotatableBoundingBox extends MarkAbstractPosition {
 
         try {
             BoundingBox box = BoundingBoxFromPoints.forList(rotateAddPos(points));
-            return box.clipTo(bndScene.extent());
+            return box.clipTo(dimensions.extent());
         } catch (OperationFailedException e) {
             throw new AnchorImpossibleSituationException();
         }
     }
 
     @Override
-    public BoundingBox box(ImageDimensions bndScene, int regionID) {
-        return boxAllRegions(bndScene);
+    public BoundingBox box(ImageDimensions dimensions, int regionID) {
+        return boxAllRegions(dimensions);
     }
 
     @Override
@@ -159,7 +158,7 @@ public class MarkRotatableBoundingBox extends MarkAbstractPosition {
     }
 
     @Override
-    public int numRegions() {
+    public int numberRegions() {
         return 1;
     }
 
@@ -196,7 +195,7 @@ public class MarkRotatableBoundingBox extends MarkAbstractPosition {
 
     /** Rotates a position and adds the current position afterwards */
     private Point3d rotateAddPos(Point3d point) {
-        Point3d out = rotMatrix.calcRotatedPoint(point);
+        Point3d out = rotMatrix.rotatedPoint(point);
         out.add(getPos());
         return out;
     }

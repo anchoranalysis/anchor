@@ -30,7 +30,7 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.operator.FeatureGenericSingleElem;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInputWithRes;
 import org.anchoranalysis.image.extent.ImageResolution;
 
@@ -43,13 +43,13 @@ public abstract class FeatureSingleElemWithRes<T extends FeatureInputWithRes>
     }
 
     @Override
-    public final double calc(SessionInput<T> input) throws FeatureCalculationException {
+    public final double calculate(SessionInput<T> input) throws FeatureCalculationException {
 
         double value = input.calc(getItem());
 
-        return calcWithRes(value, input.get().getResRequired());
+        return calculateWithResolution(value, input.get().getResRequired());
     }
 
-    protected abstract double calcWithRes(double value, ImageResolution res)
+    protected abstract double calculateWithResolution(double value, ImageResolution resolution)
             throws FeatureCalculationException;
 }

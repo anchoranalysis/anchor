@@ -135,15 +135,15 @@ public class MarkEllipse extends MarkConic implements Serializable {
 
     // Where is a point in relation to the current object
     @Override
-    public final byte evalPointInside(Point3d pt) {
+    public final byte isPointInside(Point3d point) {
 
-        if (pt.distanceSquared(this.getPos()) > radiiShellMaxSq) {
+        if (point.distanceSquared(this.getPos()) > radiiShellMaxSq) {
             return FLAG_SUBMARK_NONE;
         }
 
         // It is permissible to mutate the point during calculation
-        double x = pt.x() - getPos().x();
-        double y = pt.y() - getPos().y();
+        double x = point.x() - getPos().x();
+        double y = point.y() - getPos().y();
 
         // We exit early if it's inside the internal shell
         double sum = getEllipseSum(x, y, ellipsoidCalculator.getEllipsoidMatrix());
@@ -187,14 +187,14 @@ public class MarkEllipse extends MarkConic implements Serializable {
     // Circumference
     public double circumference(int regionID) {
         if (regionID == GlobalRegionIdentifiers.SUBMARK_SHELL) {
-            return calcCircumferenceUsingRamunjanApprox(
+            return circumferenceUsingRamunjanApprox(
                     this.radii.x() * (1.0 + shellRad), this.radii.y() * (1.0 + shellRad));
         } else {
-            return calcCircumferenceUsingRamunjanApprox(this.radii.x(), this.radii.y());
+            return circumferenceUsingRamunjanApprox(this.radii.x(), this.radii.y());
         }
     }
 
-    private static double calcCircumferenceUsingRamunjanApprox(double a, double b) {
+    private static double circumferenceUsingRamunjanApprox(double a, double b) {
         // http://www.mathsisfun.com/geometry/ellipse-perimeter.html
 
         double first = 3 * (a + b);
@@ -264,7 +264,7 @@ public class MarkEllipse extends MarkConic implements Serializable {
     }
 
     @Override
-    public BoundingBox box(ImageDimensions bndScene, int regionID) {
+    public BoundingBox box(ImageDimensions dimensions, int regionID) {
 
         DoubleMatrix1D boxMatrix = ellipsoidCalculator.getBoundingBoxMatrix().copy();
 
@@ -272,7 +272,7 @@ public class MarkEllipse extends MarkConic implements Serializable {
             boxMatrix.assign(Functions.mult(shellExtOut));
         }
 
-        return BoundingBoxCalculator.boxFromBounds(getPos(), boxMatrix, false, bndScene);
+        return BoundingBoxCalculator.boxFromBounds(getPos(), boxMatrix, false, dimensions);
     }
 
     private transient QuickOverlapCalculation quickOverlap =
@@ -386,13 +386,13 @@ public class MarkEllipse extends MarkConic implements Serializable {
     }
 
     @Override
-    public int numRegions() {
+    public int numberRegions() {
         return 2;
     }
 
     @Override
-    public BoundingBox boxAllRegions(ImageDimensions bndScene) {
-        return box(bndScene, GlobalRegionIdentifiers.SUBMARK_SHELL);
+    public BoundingBox boxAllRegions(ImageDimensions dimensions) {
+        return box(dimensions, GlobalRegionIdentifiers.SUBMARK_SHELL);
     }
 
     private void addAxisOrientationProperties(
@@ -404,8 +404,8 @@ public class MarkEllipse extends MarkConic implements Serializable {
         double radiusProjectedX = radii.x() * radiiFactor;
 
         RotationMatrix rotMat = orientation.createRotationMatrix();
-        double[] endPoint1 = rotMat.calcRotatedPoint(twoElementArray(-1 * radiusProjectedX));
-        double[] endPoint2 = rotMat.calcRotatedPoint(twoElementArray(radiusProjectedX));
+        double[] endPoint1 = rotMat.rotatedPoint(twoElementArray(-1 * radiusProjectedX));
+        double[] endPoint2 = rotMat.rotatedPoint(twoElementArray(radiusProjectedX));
 
         double[] xMinMax = minMaxEndPoint(endPoint1, endPoint2, 0, getPos().x());
         double[] yMinMax = minMaxEndPoint(endPoint1, endPoint2, 1, getPos().y());

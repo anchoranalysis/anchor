@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.feature.calc;
+package org.anchoranalysis.feature.calculate;
 
 import java.util.Optional;
 import lombok.AllArgsConstructor;

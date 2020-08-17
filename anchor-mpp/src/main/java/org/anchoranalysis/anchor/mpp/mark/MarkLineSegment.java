@@ -61,14 +61,14 @@ public class MarkLineSegment extends Mark {
     // We assume this is only ever called for points within the bounding box, otherwise
     //  we need to do a check and reject all others
     @Override
-    public byte evalPointInside(Point3d pt) {
+    public byte isPointInside(Point3d point) {
 
         // TODO
         // This should be half the distance from one corner of a pixel/voxel to another
         // And it thus depends on the number of dimensions
         // In future we calculate this in a better way
 
-        if (distanceCalcToLine.distanceToLine(pt) < distanceToLineForInside) {
+        if (distanceCalcToLine.distanceToLine(point) < distanceToLineForInside) {
             return FLAG_SUBMARK_INSIDE;
         }
 
@@ -76,7 +76,7 @@ public class MarkLineSegment extends Mark {
     }
 
     @Override
-    public BoundingBox box(ImageDimensions bndScene, int regionID) {
+    public BoundingBox box(ImageDimensions dimensions, int regionID) {
         return BoundingBoxFromPoints.forTwoPoints(
                 distanceCalcToLine.getStartPoint(), distanceCalcToLine.getEndPoint());
     }
@@ -147,12 +147,12 @@ public class MarkLineSegment extends Mark {
     }
 
     @Override
-    public int numRegions() {
+    public int numberRegions() {
         return 1;
     }
 
     @Override
-    public BoundingBox boxAllRegions(ImageDimensions bndScene) {
-        return box(bndScene, GlobalRegionIdentifiers.SUBMARK_INSIDE);
+    public BoundingBox boxAllRegions(ImageDimensions dimensions) {
+        return box(dimensions, GlobalRegionIdentifiers.SUBMARK_INSIDE);
     }
 }

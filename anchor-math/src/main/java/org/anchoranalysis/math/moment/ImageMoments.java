@@ -61,9 +61,9 @@ public class ImageMoments {
      */
     public ImageMoments(DoubleMatrix2D matrixPoints, boolean suppressZ, boolean sortAscending) {
 
-        mean = calcFirstMoments(matrixPoints);
+        mean = calculateFirstMoments(matrixPoints);
 
-        list = EigenValueDecompose.apply(calcSecondMoments(matrixPoints, suppressZ), sortAscending);
+        list = EigenValueDecompose.apply(calculateSecondMoments(matrixPoints, suppressZ), sortAscending);
     }
 
     public EigenvalueAndVector get(int index) {
@@ -111,7 +111,7 @@ public class ImageMoments {
     }
 
     /** Calculates the first moment (the mean) */
-    private static double[] calcFirstMoments(DoubleMatrix2D matrixPoints) {
+    private static double[] calculateFirstMoments(DoubleMatrix2D matrixPoints) {
         double[] mean = new double[3];
         for (int i = 0; i < 3; i++) {
             mean[i] = matrixPoints.viewColumn(i).zSum() / matrixPoints.rows();
@@ -120,7 +120,7 @@ public class ImageMoments {
     }
 
     /** Calculates the second moment (the covariance) */
-    private static DoubleMatrix2D calcSecondMoments(
+    private static DoubleMatrix2D calculateSecondMoments(
             DoubleMatrix2D matrixPoints, boolean suppressZ) {
 
         DoubleMatrix2D secondMoments = Statistic.covariance(matrixPoints);

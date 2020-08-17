@@ -79,14 +79,14 @@ public abstract class AnchorBean<F> {
      *
      * @return either the short-name of the bean, or a longer description
      */
-    public String getBeanDscr() {
+    public String descriptionBean() {
         return getBeanName();
     }
 
-    /** By default, we use getBeanDscr() as the string representation of the bean */
+    /** By default, we use descriptionBean() as the string representation of the bean */
     @Override
     public String toString() {
-        return getBeanDscr();
+        return descriptionBean();
     }
 
     /**

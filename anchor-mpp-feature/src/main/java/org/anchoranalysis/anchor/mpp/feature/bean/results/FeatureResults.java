@@ -28,8 +28,8 @@ package org.anchoranalysis.anchor.mpp.feature.bean.results;
 
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
-import org.anchoranalysis.feature.calc.results.ResultsVectorCollection;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.results.ResultsVectorCollection;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.resultsvectorcollection.FeatureInputResults;
 
@@ -45,7 +45,7 @@ import org.anchoranalysis.feature.resultsvectorcollection.FeatureInputResults;
 public abstract class FeatureResults extends Feature<FeatureInputResults> {
 
     @Override
-    public double calc(SessionInput<FeatureInputResults> input) throws FeatureCalculationException {
+    public double calculate(SessionInput<FeatureInputResults> input) throws FeatureCalculationException {
         return calc(input.get());
     }
 

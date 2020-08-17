@@ -42,7 +42,7 @@ class AddVoxelsToHistogram {
             byte membership,
             List<RegionMembershipWithFlags> listRegionMembership,
             IndexByChnl<Histogram> partitionList,
-            BufferArrList bufferArrList,
+            BufferArrayList bufferArrList,
             int globalOffset,
             int zLocal) {
         iterateRegions(
@@ -53,7 +53,7 @@ class AddVoxelsToHistogram {
 
     private static void addRegionToPartition(
             IndexByChnl<Histogram> partitionList,
-            BufferArrList bufferArrList,
+            BufferArrayList bufferArrList,
             int globalOffset,
             int r,
             int zLocal) {

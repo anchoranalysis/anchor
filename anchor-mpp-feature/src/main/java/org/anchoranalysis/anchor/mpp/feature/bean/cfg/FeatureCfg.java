@@ -28,13 +28,13 @@ package org.anchoranalysis.anchor.mpp.feature.bean.cfg;
 
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 public abstract class FeatureCfg extends Feature<FeatureInputCfg> {
 
     @Override
-    public double calc(SessionInput<FeatureInputCfg> input) throws FeatureCalculationException {
+    public double calculate(SessionInput<FeatureInputCfg> input) throws FeatureCalculationException {
         return calc(input.get());
     }
 

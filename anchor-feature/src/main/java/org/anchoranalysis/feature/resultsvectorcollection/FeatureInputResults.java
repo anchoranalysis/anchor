@@ -28,7 +28,7 @@ package org.anchoranalysis.feature.resultsvectorcollection;
 
 import lombok.EqualsAndHashCode;
 import lombok.Value;
-import org.anchoranalysis.feature.calc.results.ResultsVectorCollection;
+import org.anchoranalysis.feature.calculate.results.ResultsVectorCollection;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.name.FeatureNameMapToIndex;
 

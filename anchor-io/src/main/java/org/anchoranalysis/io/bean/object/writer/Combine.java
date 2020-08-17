@@ -34,7 +34,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.anchor.overlay.bean.DrawObject;
 import org.anchoranalysis.anchor.overlay.writer.ObjectDrawAttributes;
-import org.anchoranalysis.anchor.overlay.writer.PrecalcOverlay;
+import org.anchoranalysis.anchor.overlay.writer.PrecalculationOverlay;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -52,16 +52,16 @@ public class Combine extends DrawObject {
     // END BEAN PROPERTIES
 
     @Override
-    public PrecalcOverlay precalculate(ObjectWithProperties object, ImageDimensions dim)
+    public PrecalculationOverlay precalculate(ObjectWithProperties object, ImageDimensions dim)
             throws CreateException {
 
-        List<PrecalcOverlay> listPrecalc = new ArrayList<>();
+        List<PrecalculationOverlay> listPrecalculation = new ArrayList<>();
 
         for (DrawObject writer : list) {
-            listPrecalc.add(writer.precalculate(object, dim));
+            listPrecalculation.add(writer.precalculate(object, dim));
         }
 
-        return new PrecalcOverlay(object) {
+        return new PrecalculationOverlay(object) {
 
             @Override
             public void writePrecalculatedMask(
@@ -71,7 +71,7 @@ public class Combine extends DrawObject {
                     BoundingBox restrictTo)
                     throws OperationFailedException {
 
-                for (PrecalcOverlay preCalc : listPrecalc) {
+                for (PrecalculationOverlay preCalc : listPrecalculation) {
                     preCalc.writePrecalculatedMask(background, attributes, iteration, restrictTo);
                 }
             }

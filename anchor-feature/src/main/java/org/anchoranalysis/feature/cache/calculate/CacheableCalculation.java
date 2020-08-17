@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.feature.cache.calculation;
+package org.anchoranalysis.feature.cache.calculate;
 
 import org.anchoranalysis.core.cache.CachedSupplier;
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;

@@ -112,9 +112,9 @@ final class MergeWithNeighbors {
                 ProcessVoxelNeighborFactory.withinExtent(new PointTester(slidingIndex, unionIndex));
     }
 
-    // Calculates the minimum label of the neighbors, making sure to merge any different values
-    //   -1 indicates that there is no indexed neighbor
-    public int calcMinNeighborLabel(Point3i point, int exstVal, int indxBuffer) {
+    /** Calculates the minimum label of the neighbors, making sure to merge any different values
+       -1 indicates that there is no indexed neighbor */
+    public int minNeighborLabel(Point3i point, int exstVal, int indxBuffer) {
         return IterateVoxels.callEachPointInNeighborhood(
                 point, neighborhood, do3D, process, exstVal, indxBuffer);
     }

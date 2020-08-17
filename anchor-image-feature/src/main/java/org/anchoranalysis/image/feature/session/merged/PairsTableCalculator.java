@@ -32,8 +32,8 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.bean.list.FeatureList;
-import org.anchoranalysis.feature.calc.NamedFeatureCalculationException;
-import org.anchoranalysis.feature.calc.results.ResultsVector;
+import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
+import org.anchoranalysis.feature.calculate.results.ResultsVector;
 import org.anchoranalysis.feature.name.FeatureNameList;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
@@ -93,8 +93,8 @@ public class PairsTableCalculator implements FeatureTableCalculator<FeatureInput
 
     @Override
     public ResultsVector calculate(FeatureInputPairObjects input)
-            throws NamedFeatureCalculationException {
-        return calculator.calcForInput(input, Optional.empty());
+            throws NamedFeatureCalculateException {
+        return calculator.calculateForInput(input, Optional.empty());
     }
 
     @Override
@@ -108,8 +108,8 @@ public class PairsTableCalculator implements FeatureTableCalculator<FeatureInput
             FeatureInputPairObjects input, ErrorReporter errorReporter) {
 
         try {
-            return calculator.calcForInput(input, Optional.of(errorReporter));
-        } catch (NamedFeatureCalculationException e) {
+            return calculator.calculateForInput(input, Optional.of(errorReporter));
+        } catch (NamedFeatureCalculateException e) {
             errorReporter.recordError(PairsTableCalculator.class, e);
 
             ResultsVector rv = new ResultsVector(sizeFeatures());
@@ -118,9 +118,9 @@ public class PairsTableCalculator implements FeatureTableCalculator<FeatureInput
         }
     }
 
-    public ResultsVector calcMaybeSuppressErrors(
+    public ResultsVector calculateMaybeSuppressErrors(
             FeatureInputPairObjects input, ErrorReporter errorReporter)
-            throws NamedFeatureCalculationException {
+            throws NamedFeatureCalculateException {
         if (suppressErrors) {
             return calculateSuppressErrors(input, errorReporter);
         } else {

@@ -72,7 +72,7 @@ public class FinderFileAsText extends FinderSingleFile {
     }
 
     private String readFileFromFileWrite(FileWrite fileWrite) throws IOException {
-        return readFile(fileWrite.calcPath());
+        return readFile(fileWrite.calculatePath());
     }
 
     public String get() throws OperationFailedException {

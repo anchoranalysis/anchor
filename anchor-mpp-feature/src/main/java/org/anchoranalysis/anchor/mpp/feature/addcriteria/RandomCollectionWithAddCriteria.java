@@ -50,7 +50,7 @@ import org.anchoranalysis.core.graph.GraphWithEdgeTypes;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.feature.bean.list.FeatureList;
-import org.anchoranalysis.feature.calc.FeatureInitParams;
+import org.anchoranalysis.feature.calculate.FeatureInitParams;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
@@ -160,7 +160,7 @@ public class RandomCollectionWithAddCriteria<T> extends RandomCollection<T> {
         checkInit();
         try {
             this.graph.addVertex(newMark.getMark());
-            calcPairsForMark(marksExisting, newMark, nrgStack);
+            calculatePairsForMark(marksExisting, newMark, nrgStack);
         } catch (CreateException e) {
             throw new UpdateMarkSetException(e);
         }
@@ -286,7 +286,7 @@ public class RandomCollectionWithAddCriteria<T> extends RandomCollection<T> {
         }
     }
 
-    private void calcPairsForMark(
+    private void calculatePairsForMark(
             MemoForIndex pxlMarkMemoList, VoxelizedMarkMemo newMark, NRGStackWithParams nrgStack)
             throws CreateException {
 

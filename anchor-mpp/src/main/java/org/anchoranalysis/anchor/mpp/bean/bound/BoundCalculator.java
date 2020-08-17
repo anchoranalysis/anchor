@@ -35,6 +35,6 @@ import org.anchoranalysis.math.rotation.RotationMatrix;
 public abstract class BoundCalculator extends MPPBean<BoundCalculator> {
 
     // angle is in radians
-    public abstract BidirectionalBound calcBound(Point3d point, RotationMatrix rotMatrix)
+    public abstract BidirectionalBound calculateBound(Point3d point, RotationMatrix rotMatrix)
             throws OperationFailedException;
 }

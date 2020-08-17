@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.mpp.sgmn.bean.kernel;
 
-import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcContext;
+import org.anchoranalysis.mpp.sgmn.kernel.KernelCalculationContext;
 
 /**
  * A kernel that makes proposals independently of the current state
@@ -39,7 +39,7 @@ public abstract class KernelIndependent<T> extends Kernel<T> {
 
     // Call ONCE before calculating anything
     @Override
-    public void initBeforeCalc(KernelCalcContext context) {
+    public void initBeforeCalc(KernelCalculationContext context) {
         // NOT NEEDED
     }
 

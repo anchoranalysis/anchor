@@ -49,7 +49,7 @@ public class BoundUnitless extends BoundMinMax {
     }
 
     @Override
-    public String getBeanDscr() {
+    public String descriptionBean() {
         return String.format("%s(min=%f,max=%f)", getBeanName(), getMin(), getMax());
     }
 

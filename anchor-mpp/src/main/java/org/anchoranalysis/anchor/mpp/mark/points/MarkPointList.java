@@ -58,7 +58,7 @@ public class MarkPointList extends MarkAbstractPointList {
     }
 
     @Override
-    public byte evalPointInside(Point3d pointIsInside) {
+    public byte isPointInside(Point3d pointIsInside) {
 
         // FOR NOW WE IGNORE THE SHELL RADIUS
         if (PointInSetQuery.anyCrnrInSet(pointIsInside, set)) {
@@ -120,12 +120,12 @@ public class MarkPointList extends MarkAbstractPointList {
     }
 
     @Override
-    public int numRegions() {
+    public int numberRegions() {
         return 1;
     }
 
     @Override
-    public BoundingBox boxAllRegions(ImageDimensions bndScene) {
-        return box(bndScene, GlobalRegionIdentifiers.SUBMARK_INSIDE);
+    public BoundingBox boxAllRegions(ImageDimensions dimensions) {
+        return box(dimensions, GlobalRegionIdentifiers.SUBMARK_INSIDE);
     }
 }

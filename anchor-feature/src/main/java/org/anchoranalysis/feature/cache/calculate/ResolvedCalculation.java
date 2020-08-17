@@ -24,52 +24,55 @@
  * #L%
  */
 
-package org.anchoranalysis.feature.cache.calculation;
+package org.anchoranalysis.feature.cache.calculate;
 
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInput;
+import lombok.AllArgsConstructor;
 
 /**
- * A {@link CacheableCalculationMap} that has been resolved against a cache.
+ * Like a {@link CacheableCalculation} but has been resolved against a cache to ensure its unique
+ * (singular).
+ *
+ * <p>This operation should always occur before a cached-calculation is used
  *
  * @author Owen Feehan
- * @param <S> result-type
+ * @param <S> result-type of the calculation
  * @param <T> feature input-type
- * @param <U> key-type
  */
-public class ResolvedCalculationMap<S, T extends FeatureInput, U> {
+@AllArgsConstructor
+public class ResolvedCalculation<S, T extends FeatureInput> {
 
-    private CacheableCalculationMap<S, T, U, FeatureCalculationException> map;
+    /** The cacheable-calculation that is now considered resolved */
+    private CacheableCalculation<S, T, FeatureCalculationException> calculation;
 
     /**
-     * Constructor
+     * Executes the operation and returns a result, either by doing the calculation, or retrieving a
+     * cached-result from previously.
      *
-     * @param map the cacheable-calculation map that is now considered resolved
+     * @param input If there is no existing cached-value, and the calculation occurs, these
+     *     parameters are used. Otherwise ignored.
+     * @return the result of the calculation
+     * @throws FeatureCalculationException if the calculation cannot finish, for whatever reason
      */
-    public ResolvedCalculationMap(
-            CacheableCalculationMap<S, T, U, FeatureCalculationException> map) {
-        super();
-        this.map = map;
+    public S getOrCalculate(T input) throws FeatureCalculationException {
+        return calculation.getOrCalculate(input);
     }
 
-    public S getOrCalculate(T params, U key) throws FeatureCalculationException {
-        return map.getOrCalculate(params, key);
-    }
-
-    // We delegate to the CachedCalculationMap to check equality. Needed for the search.
+    // We delegate to the CachedCalculation to check equality. Needed for the search.
     @SuppressWarnings("unchecked")
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof ResolvedCalculationMap) {
-            return ((ResolvedCalculationMap<S, T, U>) obj).map.equals(map);
+        if (obj instanceof ResolvedCalculation) {
+            return ((ResolvedCalculation<S, T>) obj).calculation.equals(calculation);
         } else {
             return false;
         }
     }
 
-    // We delegate to the CachedCalculationMap to check hashCode. Needed for the search.
+    // We delegate to the CachedCalculation to check hashCode. Needed for the search.
     @Override
     public int hashCode() {
-        return map.hashCode();
+        return calculation.hashCode();
     }
 }

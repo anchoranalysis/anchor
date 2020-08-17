@@ -190,7 +190,7 @@ public class HistogramArray implements Histogram {
     }
 
     public long sumNonZero() {
-        return calcSum() - getCount(0);
+        return calculateSum() - getCount(0);
     }
 
     public void scaleBy(double factor) {
@@ -223,7 +223,7 @@ public class HistogramArray implements Histogram {
                 return i;
             }
         }
-        return calcMaximum();
+        return calculateMaximum();
     }
 
     @Override
@@ -244,7 +244,7 @@ public class HistogramArray implements Histogram {
                 return i;
             }
         }
-        return calcMaximum();
+        return calculateMaximum();
     }
 
     public boolean hasAboveZero() {
@@ -272,12 +272,12 @@ public class HistogramArray implements Histogram {
     }
 
     @Override
-    public int calcMode() throws OperationFailedException {
+    public int calculateMode() throws OperationFailedException {
         checkAtLeastOneItemExists();
-        return calcMode(0);
+        return calculateMode(0);
     }
 
-    public int calcMode(int startVal) throws OperationFailedException {
+    public int calculateMode(int startVal) throws OperationFailedException {
         checkAtLeastOneItemExists();
 
         int maxIndex = -1;
@@ -294,7 +294,7 @@ public class HistogramArray implements Histogram {
         return maxIndex;
     }
 
-    public int calcMaximum() throws OperationFailedException {
+    public int calculateMaximum() throws OperationFailedException {
         checkAtLeastOneItemExists();
 
         for (int i = maxBin; i >= minBin; i--) {
@@ -306,7 +306,7 @@ public class HistogramArray implements Histogram {
         throw new AnchorImpossibleSituationException();
     }
 
-    public int calcMinimum() throws OperationFailedException {
+    public int calculateMinimum() throws OperationFailedException {
         checkAtLeastOneItemExists();
 
         for (int i = minBin; i <= maxBin; i++) {
@@ -319,21 +319,21 @@ public class HistogramArray implements Histogram {
     }
 
     @Override
-    public long calcSum() {
-        return calcSumHelper(i -> i);
+    public long calculateSum() {
+        return calculateSumHelper(i -> i);
     }
 
     @Override
-    public long calcSumSquares() {
-        return calcSumHelper(i -> i * i);
+    public long calculateSumSquares() {
+        return calculateSumHelper(i -> i * i);
     }
 
     @Override
-    public long calcSumCubes() {
-        return calcSumHelper(i -> i * i * i);
+    public long calculateSumCubes() {
+        return calculateSumHelper(i -> i * i * i);
     }
 
-    public int calcNumNonZero() {
+    public int calculateCountNonZero() {
 
         int num = 0;
 
@@ -418,11 +418,11 @@ public class HistogramArray implements Histogram {
         return countTotal;
     }
 
-    public Histogram extractPixelsFromRight(long numPixels) {
+    public Histogram extractValuesFromRight(long numberValues) {
 
         Histogram out = new HistogramArray(getMaxBin());
 
-        long remaining = numPixels;
+        long remaining = numberValues;
 
         // We keep taking pixels from the histogram until we have reached our quota
         for (int b = getMaxBin(); b >= getMinBin(); b--) {
@@ -442,11 +442,11 @@ public class HistogramArray implements Histogram {
         return out;
     }
 
-    public Histogram extractPixelsFromLeft(long numPixels) {
+    public Histogram extractValuesFromLeft(long numberValues) {
 
         Histogram out = new HistogramArray(getMaxBin());
 
-        long remaining = numPixels;
+        long remaining = numberValues;
 
         // We keep taking pixels from the histogram until we have reached our quota
         for (int b = getMinBin(); b <= getMaxBin(); b++) {
@@ -485,7 +485,7 @@ public class HistogramArray implements Histogram {
         return sum / countTotal;
     }
 
-    private long calcSumHelper(LongUnaryOperator func) {
+    private long calculateSumHelper(LongUnaryOperator func) {
 
         long sum = 0;
 

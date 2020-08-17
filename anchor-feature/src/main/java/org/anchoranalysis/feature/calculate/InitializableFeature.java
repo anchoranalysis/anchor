@@ -24,21 +24,30 @@
  * #L%
  */
 
-package org.anchoranalysis.feature.cache.calculation;
+package org.anchoranalysis.feature.calculate;
+
+import org.anchoranalysis.core.error.InitException;
+import org.anchoranalysis.core.log.Logger;
+import org.anchoranalysis.feature.bean.Feature;
+import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
- * A calculation that be invalidated (resetted), removing any existing cached value.
- *
- * <p>All resettable calculations must have a hashCode and equals implementation that checks that
- * relevant parameters are equal. They will be used in sets
+ * A feature that should be initialized with {@link FeatureInitParams} (or a sub-class) before any
+ * calculations occur.
  *
  * @author Owen Feehan
+ * @param <T> input-type for feature
  */
-public interface ResettableCalculation {
+public interface InitializableFeature<T extends FeatureInput> {
+
+    void init(FeatureInitParams params, Feature<T> parentFeature, Logger logger)
+            throws InitException;
 
     /**
-     * Resets the cached-calculation, so the next call to doOperationWithParams() is guaranteed to
-     * calculation the operation, and store the value in the cache.
+     * A friendly name that can be displayed to user describing the Feature. Should always
+     * prioritise the CustomName if one is associated with the feature
+     *
+     * @return
      */
-    abstract void invalidate();
+    String getFriendlyName();
 }

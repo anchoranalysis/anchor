@@ -31,8 +31,8 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
-import org.anchoranalysis.feature.calc.NamedFeatureCalculationException;
-import org.anchoranalysis.feature.calc.results.ResultsVector;
+import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
+import org.anchoranalysis.feature.calculate.results.ResultsVector;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 
@@ -41,7 +41,7 @@ class FeatureCalculatorMultiFixture {
     /**
      * Creates a feature-calculator than returns a constant result
      *
-     * @throws NamedFeatureCalculationException
+     * @throws NamedFeatureCalculateException
      */
     public static <T extends FeatureInput> FeatureCalculatorMulti<T> createFeatureCalculator(
             ResultsVector rv) {
@@ -52,7 +52,7 @@ class FeatureCalculatorMultiFixture {
             when(calculator.calculate(any())).thenReturn(rv);
             when(calculator.calculateSuppressErrors(any(), any())).thenReturn(rv);
             return calculator;
-        } catch (NamedFeatureCalculationException e) {
+        } catch (NamedFeatureCalculateException e) {
             throw new AnchorFriendlyRuntimeException(e);
         }
     }

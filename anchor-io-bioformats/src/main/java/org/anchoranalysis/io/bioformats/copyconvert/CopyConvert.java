@@ -69,10 +69,10 @@ public class CopyConvert {
             ConvertTo<?> convertTo,
             ReadOptions readOptions)
             throws FormatException, IOException {
-        int numChnlsPerByteArray = readOptions.chnlsPerByteArray(reader);
+        int numberChannelsPerByteArray = readOptions.chnlsPerByteArray(reader);
 
-        int numByteArraysPerIteration =
-                calcByteArraysPerIter(targetShape.getNumberChannels(), numChnlsPerByteArray);
+        int numberByteArraysPerIteration =
+                calculateByteArraysPerIteration(targetShape.getNumberChannels(), numberChannelsPerByteArray);
 
         try (ProgressReporterIncrement pri = new ProgressReporterIncrement(progressReporter)) {
 
@@ -82,7 +82,7 @@ public class CopyConvert {
             IterateOverSlices.iterateDimOrder(
                     reader.getDimensionOrder(),
                     targetShape,
-                    numByteArraysPerIteration,
+                    numberByteArraysPerIteration,
                     (t, z, c, readerIndex) -> {
 
                         /** Selects a destination channel for a particular relative channel */
@@ -101,14 +101,14 @@ public class CopyConvert {
                                 b,
                                 destC,
                                 z,
-                                numChnlsPerByteArray);
+                                numberChannelsPerByteArray);
 
                         pri.update();
                     });
         }
     }
 
-    private static int calcByteArraysPerIter(int numChnl, int numChnlsPerByteArray)
+    private static int calculateByteArraysPerIteration(int numChnl, int numChnlsPerByteArray)
             throws FormatException {
 
         if ((numChnl % numChnlsPerByteArray) != 0) {

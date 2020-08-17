@@ -31,8 +31,8 @@ import org.anchoranalysis.core.cache.LRUCache;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.feature.bean.list.FeatureList;
-import org.anchoranalysis.feature.calc.NamedFeatureCalculationException;
-import org.anchoranalysis.feature.calc.results.ResultsVector;
+import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
+import org.anchoranalysis.feature.calculate.results.ResultsVector;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 
@@ -50,7 +50,7 @@ public class FeatureCalculatorCachedMulti<T extends FeatureInput>
     private final FeatureCalculatorMulti<T> source;
     private final LRUCache<T, ResultsVector> cacheResults;
 
-    // We update this every time so it matches whatever is passed to calcSuppressErrors
+    /** We update this every time so it matches whatever is passed to {@code #calculateSuppressErrors(FeatureInput, ErrorReporter)} */
     private Optional<ErrorReporter> errorReporter = Optional.empty();
 
     /**
@@ -70,7 +70,7 @@ public class FeatureCalculatorCachedMulti<T extends FeatureInput>
      */
     public FeatureCalculatorCachedMulti(FeatureCalculatorMulti<T> source, int cacheSize) {
         this.source = source;
-        this.cacheResults = new LRUCache<>(cacheSize, this::calcInsideCache);
+        this.cacheResults = new LRUCache<>(cacheSize, this::calculateInsideCache);
     }
 
     @Override
@@ -85,19 +85,19 @@ public class FeatureCalculatorCachedMulti<T extends FeatureInput>
     }
 
     @Override
-    public ResultsVector calculate(T input) throws NamedFeatureCalculationException {
+    public ResultsVector calculate(T input) throws NamedFeatureCalculateException {
         this.errorReporter = Optional.empty(); // Do not suppress errors in cache
         try {
             return cacheResults.get(input);
         } catch (GetOperationFailedException e) {
-            throw new NamedFeatureCalculationException(e.getKey(), e.getMessage());
+            throw new NamedFeatureCalculateException(e.getKey(), e.getMessage());
         }
     }
 
     @Override
     public ResultsVector calculate(T input, FeatureList<T> featuresSubset)
-            throws NamedFeatureCalculationException {
-        throw new NamedFeatureCalculationException(
+            throws NamedFeatureCalculateException {
+        throw new NamedFeatureCalculateException(
                 "This operation is not supported for subsets of features");
     }
 
@@ -118,12 +118,12 @@ public class FeatureCalculatorCachedMulti<T extends FeatureInput>
 
     /** Return a vector with all NaNs */
     private ResultsVector createNaNVector(GetOperationFailedException e) {
-        ResultsVector rv = new ResultsVector(source.sizeFeatures());
-        rv.setErrorAll(e);
-        return rv;
+        ResultsVector results = new ResultsVector(source.sizeFeatures());
+        results.setErrorAll(e);
+        return results;
     }
 
-    private ResultsVector calcInsideCache(T index) throws NamedFeatureCalculationException {
+    private ResultsVector calculateInsideCache(T index) throws NamedFeatureCalculateException {
         if (errorReporter.isPresent()) {
             return source.calculateSuppressErrors(index, errorReporter.get());
         } else {

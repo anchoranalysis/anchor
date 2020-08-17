@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.feature.calc.results;
+package org.anchoranalysis.feature.calculate.results;
 
 import java.util.Collection;
 import java.util.Optional;

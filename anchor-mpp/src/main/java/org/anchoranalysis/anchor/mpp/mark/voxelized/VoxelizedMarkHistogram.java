@@ -156,7 +156,7 @@ class VoxelizedMarkHistogram implements VoxelizedMark {
 
         for (int z = box.cornerMin().z(); z <= cornerMax.z(); z++) {
 
-            BufferArrList bufferArrList = new BufferArrList();
+            BufferArrayList bufferArrList = new BufferArrayList();
             bufferArrList.init(stack, z);
             initForSlice(
                     z,
@@ -178,12 +178,12 @@ class VoxelizedMarkHistogram implements VoxelizedMark {
             ReadableTuple3i cornerMax,
             Extent localExtent,
             ImageDimensions dimensions,
-            BufferArrList bufferArrList,
+            BufferArrayList bufferArrList,
             ByteBuffer bufferMIP,
             RegionMap regionMap) {
 
-        Point3d ptRunning = new Point3d();
-        ptRunning.setZ(z + 0.5);
+        Point3d running = new Point3d();
+        running.setZ(z + 0.5);
 
         int zLocal = z - box.cornerMin().z();
 
@@ -193,20 +193,20 @@ class VoxelizedMarkHistogram implements VoxelizedMark {
         ByteBuffer buffer = object.sliceBufferLocal(zLocal);
 
         for (int y = box.cornerMin().y(); y <= cornerMax.y(); y++) {
-            ptRunning.setY(y + 0.5);
+            running.setY(y + 0.5);
 
             int yLocal = y - box.cornerMin().y();
 
             for (int x = box.cornerMin().x(); x <= cornerMax.x(); x++) {
 
-                ptRunning.setX(x + 0.5);
+                running.setX(x + 0.5);
 
                 int xLocal = x - box.cornerMin().x();
 
                 int localOffset = localExtent.offset(xLocal, yLocal);
                 int globalOffset = dimensions.offset(x, y);
 
-                byte membership = mark.evalPointInside(new Point3d(ptRunning));
+                byte membership = mark.isPointInside(new Point3d(running));
 
                 buffer.put(localOffset, membership);
                 bufferMIP.put(localOffset, membershipMIP(membership, bufferMIP, localOffset));

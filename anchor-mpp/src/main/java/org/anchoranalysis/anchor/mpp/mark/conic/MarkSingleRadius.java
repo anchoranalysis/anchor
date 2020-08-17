@@ -111,21 +111,21 @@ public abstract class MarkSingleRadius extends MarkAbstractPosition implements S
     }
 
     @Override
-    public BoundingBox box(ImageDimensions bndScene, int regionID) {
+    public BoundingBox box(ImageDimensions dimensions, int regionID) {
         return BoundingBoxCalculator.boxFromBounds(
-                getPos(), radiusForRegion(regionID) + ADDED_TO_RADIUS, numDims() == 3, bndScene);
+                getPos(), radiusForRegion(regionID) + ADDED_TO_RADIUS, numDims() == 3, dimensions);
     }
 
     @Override
-    public BoundingBox boxAllRegions(ImageDimensions bndScene) {
-        return box(bndScene, GlobalRegionIdentifiers.SUBMARK_SHELL);
+    public BoundingBox boxAllRegions(ImageDimensions dimensions) {
+        return box(dimensions, GlobalRegionIdentifiers.SUBMARK_SHELL);
     }
 
     // Where is a point in relation to the current object
     @Override
-    public final byte evalPointInside(Point3d pt) {
+    public final byte isPointInside(Point3d point) {
 
-        double distance = getPos().distanceSquared(pt);
+        double distance = getPos().distanceSquared(point);
 
         if (distance <= radiusSq) {
             return FLAG_SUBMARK_INSIDE;
@@ -155,7 +155,7 @@ public abstract class MarkSingleRadius extends MarkAbstractPosition implements S
     }
 
     @Override
-    public int numRegions() {
+    public int numberRegions() {
         return 2;
     }
 

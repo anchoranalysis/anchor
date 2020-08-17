@@ -68,11 +68,11 @@ public abstract class Mark implements Serializable, Identifiable {
     }
 
     // It is permissible to mutate the point during calculation
-    public abstract byte evalPointInside(Point3d pt);
+    public abstract byte isPointInside(Point3d point);
 
     public abstract Mark duplicate();
 
-    public abstract int numRegions();
+    public abstract int numberRegions();
 
     public abstract String getName();
 
@@ -94,12 +94,12 @@ public abstract class Mark implements Serializable, Identifiable {
     // center point
     public abstract Point3d centerPoint();
 
-    public abstract BoundingBox box(ImageDimensions bndScene, int regionID);
+    public abstract BoundingBox box(ImageDimensions dimensions, int regionID);
 
-    public abstract BoundingBox boxAllRegions(ImageDimensions bndScene);
+    public abstract BoundingBox boxAllRegions(ImageDimensions dimensions);
 
-    protected byte evalPointInside(Point3i pt) {
-        return this.evalPointInside(PointConverter.doubleFromInt(pt));
+    protected byte evalPointInside(Point3i point) {
+        return this.isPointInside(PointConverter.doubleFromInt(point));
     }
 
     public boolean equalsID(Object obj) {
@@ -121,15 +121,15 @@ public abstract class Mark implements Serializable, Identifiable {
     /**
      * Create an object-mask representation of the mark (i.e. in voxels in a bounding-box)
      *
-     * @param bndScene
+     * @param dimensions
      * @param rm
      * @param bv
      * @return
      */
     public ObjectWithProperties deriveObject(
-            ImageDimensions bndScene, RegionMembershipWithFlags rm, BinaryValuesByte bv) {
+            ImageDimensions dimensions, RegionMembershipWithFlags rm, BinaryValuesByte bv) {
 
-        BoundingBox box = this.box(bndScene, rm.getRegionID());
+        BoundingBox box = this.box(dimensions, rm.getRegionID());
 
         // We make a new mask and populate it from out iterator
         ObjectWithProperties object = new ObjectWithProperties(box);
@@ -161,7 +161,7 @@ public abstract class Mark implements Serializable, Identifiable {
     }
 
     // Calculates the mask of an object
-    public ObjectWithProperties calcMaskScaledXY(
+    public ObjectWithProperties maskScaledXY(
             ImageDimensions bndScene,
             RegionMembershipWithFlags rm,
             BinaryValuesByte bvOut,
@@ -193,7 +193,7 @@ public abstract class Mark implements Serializable, Identifiable {
                     pointScaled.setX(((double) point.x()) / scaleFactor);
                     pointScaled.setY(((double) point.y()) / scaleFactor);
 
-                    byte membership = evalPointInside(pointScaled);
+                    byte membership = isPointInside(pointScaled);
 
                     if (rm.isMemberFlag(membership)) {
                         maskSlice.put(cnt, maskOn);
@@ -232,7 +232,7 @@ public abstract class Mark implements Serializable, Identifiable {
     }
 
     private void addPropertiesForRegions(OverlayProperties nvc, ImageResolution res) {
-        for (int r = 0; r < numRegions(); r++) {
+        for (int r = 0; r < numberRegions(); r++) {
             double vol = volume(r);
 
             String name = numDims() == 3 ? "Volume" : "Area";

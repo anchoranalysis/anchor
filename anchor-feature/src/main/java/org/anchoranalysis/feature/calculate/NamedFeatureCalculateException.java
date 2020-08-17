@@ -23,7 +23,7 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.feature.calc;
+package org.anchoranalysis.feature.calculate;
 
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyCheckedException;
 
@@ -33,7 +33,7 @@ import org.anchoranalysis.core.error.friendly.AnchorFriendlyCheckedException;
  *
  * @author Owen Feehan
  */
-public class NamedFeatureCalculationException extends AnchorFriendlyCheckedException {
+public class NamedFeatureCalculateException extends AnchorFriendlyCheckedException {
 
     /** */
     private static final long serialVersionUID = 1L;
@@ -46,7 +46,7 @@ public class NamedFeatureCalculationException extends AnchorFriendlyCheckedExcep
      *
      * @param message
      */
-    public NamedFeatureCalculationException(String message) {
+    public NamedFeatureCalculateException(String message) {
         super(message);
         this.messageWithoutKey = message;
     }
@@ -56,7 +56,7 @@ public class NamedFeatureCalculationException extends AnchorFriendlyCheckedExcep
      *
      * @param message
      */
-    public NamedFeatureCalculationException(Exception exception) {
+    public NamedFeatureCalculateException(Exception exception) {
         this(exception.toString());
     }
 
@@ -66,7 +66,7 @@ public class NamedFeatureCalculationException extends AnchorFriendlyCheckedExcep
      * @param featureName a name to describe the feature whose calculation failed
      * @param message the reason for failure
      */
-    public NamedFeatureCalculationException(String featureName, String message) {
+    public NamedFeatureCalculateException(String featureName, String message) {
         super(
                 String.format(
                         "An error occurred when calculating feature '%s': %s",

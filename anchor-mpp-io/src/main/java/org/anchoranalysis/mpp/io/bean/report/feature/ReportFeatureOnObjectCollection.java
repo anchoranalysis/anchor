@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.mpp.io.bean.report.feature;
 
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.image.feature.object.input.FeatureInputObjectCollection;
 import org.anchoranalysis.image.object.ObjectCollection;
@@ -35,7 +35,7 @@ public class ReportFeatureOnObjectCollection
         extends ReportFeatureOnObjectsBase<FeatureInputObjectCollection> {
 
     @Override
-    protected double calcFeatureOn(
+    protected double calculateFeatureOn(
             ObjectCollection objects, FeatureCalculatorSingle<FeatureInputObjectCollection> session)
             throws FeatureCalculationException {
         return session.calculate(new FeatureInputObjectCollection(objects));

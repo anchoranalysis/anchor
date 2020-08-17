@@ -55,7 +55,7 @@ public class RotationBounds2D extends RotationBounds {
     }
 
     @Override
-    public String getBeanDscr() {
+    public String descriptionBean() {
         return String.format("%s, rotation=(%s)", getBeanName(), rotationAngle.toString());
     }
 }

@@ -32,8 +32,8 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.bean.list.FeatureList;
-import org.anchoranalysis.feature.calc.NamedFeatureCalculationException;
-import org.anchoranalysis.feature.calc.results.ResultsVector;
+import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
+import org.anchoranalysis.feature.calculate.results.ResultsVector;
 import org.anchoranalysis.feature.list.NamedFeatureStore;
 import org.anchoranalysis.feature.name.FeatureNameList;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
@@ -71,14 +71,14 @@ public class SingleTableCalculator implements FeatureTableCalculator<FeatureInpu
 
     @Override
     public ResultsVector calculate(FeatureInputSingleObject input)
-            throws NamedFeatureCalculationException {
+            throws NamedFeatureCalculateException {
         return session.calculate(input);
     }
 
     @Override
     public ResultsVector calculate(
             FeatureInputSingleObject input, FeatureList<FeatureInputSingleObject> featuresSubset)
-            throws NamedFeatureCalculationException {
+            throws NamedFeatureCalculateException {
         return session.calculate(input, featuresSubset);
     }
 

@@ -39,7 +39,7 @@ import org.anchoranalysis.anchor.mpp.mark.set.UpdateMarkSetException;
 import org.anchoranalysis.anchor.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.feature.calc.NamedFeatureCalculationException;
+import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
 import org.anchoranalysis.feature.nrg.NRGStack;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.shared.SharedFeatureMulti;
@@ -69,7 +69,7 @@ public final class CfgNRGPixelized {
             NRGStackWithParams nrgStack,
             SharedFeatureMulti sharedFeatures,
             Logger logger)
-            throws NamedFeatureCalculationException {
+            throws NamedFeatureCalculateException {
         this(cfgNRG, createMemoCollection(cfgNRG, nrgStack, sharedFeatures, logger), logger);
     }
 
@@ -96,34 +96,34 @@ public final class CfgNRGPixelized {
     }
 
     public void add(VoxelizedMarkMemo newPxlMark, NRGStack stack)
-            throws NamedFeatureCalculationException {
+            throws NamedFeatureCalculateException {
         cfgNRG.add(memoMarks, newPxlMark, stack);
     }
 
-    public void rmv(int index, NRGStack stack) throws NamedFeatureCalculationException {
+    public void rmv(int index, NRGStack stack) throws NamedFeatureCalculateException {
         VoxelizedMarkMemo memoRmv = getMemoForIndex(index);
         cfgNRG.rmv(memoMarks, index, memoRmv, stack);
     }
 
     public void rmv(VoxelizedMarkMemo memoRmv, NRGStack stack)
-            throws NamedFeatureCalculationException {
+            throws NamedFeatureCalculateException {
         cfgNRG.rmv(memoMarks, memoRmv, stack);
     }
 
     public void rmvTwo(int index1, int index2, NRGStack stack)
-            throws NamedFeatureCalculationException {
+            throws NamedFeatureCalculateException {
         cfgNRG.rmvTwo(memoMarks, index1, index2, stack);
     }
 
     // Does the pairs hash only contains items contained in a particular configuration
     public boolean isCfgSpan() {
-        return cfgNRG.getCalcMarkPair().isCfgSpan(cfgNRG.getCfg());
+        return cfgNRG.getPair().isCfgSpan(cfgNRG.getCfg());
     }
 
     // calculates a new energy and configuration based upon a mark at a particular index
     //   changing into new mark
     public void exchange(int index, VoxelizedMarkMemo newMark, NRGStackWithParams nrgStack)
-            throws NamedFeatureCalculationException {
+            throws NamedFeatureCalculateException {
         cfgNRG.exchange(memoMarks, index, newMark, nrgStack);
     }
 
@@ -188,11 +188,11 @@ public final class CfgNRGPixelized {
                         "size=%d, total=%e, ind=%e, pair=%e%n",
                         cfgNRG.getCfg().size(),
                         cfgNRG.getNrgTotal(),
-                        cfgNRG.getCalcMarkInd().getNrgTotal(),
-                        cfgNRG.getCalcMarkPair().getNRGTotal()));
+                        cfgNRG.getIndividual().getNrgTotal(),
+                        cfgNRG.getPair().getNRGTotal()));
 
-        s.append(cfgNRG.getCalcMarkInd().stringCfgNRG(cfgNRG.getCfg()));
-        s.append(cfgNRG.getCalcMarkPair().toString());
+        s.append(cfgNRG.getIndividual().stringCfgNRG(cfgNRG.getCfg()));
+        s.append(cfgNRG.getPair().toString());
 
         s.append("}");
         s.append(newLine);
@@ -206,18 +206,18 @@ public final class CfgNRGPixelized {
             NRGStackWithParams nrgStack,
             SharedFeatureMulti sharedFeatures,
             Logger logger)
-            throws NamedFeatureCalculationException {
+            throws NamedFeatureCalculateException {
         try {
             cfgNRG.init();
 
             MemoCollection memo =
                     new MemoCollection(
-                            cfgNRG.getCalcMarkInd(),
+                            cfgNRG.getIndividual(),
                             nrgStack.getNrgStack(),
                             cfgNRG.getCfg(),
                             cfgNRG.getNrgScheme());
 
-            cfgNRG.getCalcMarkPair().initUpdatableMarkSet(memo, nrgStack, logger, sharedFeatures);
+            cfgNRG.getPair().initUpdatableMarkSet(memo, nrgStack, logger, sharedFeatures);
 
             // Some nrg components need to be calculated in terms of interactions
             //  this we need to track in an intelligent way
@@ -225,7 +225,7 @@ public final class CfgNRGPixelized {
 
             return memo;
         } catch (InitException e) {
-            throw new NamedFeatureCalculationException(e);
+            throw new NamedFeatureCalculateException(e);
         }
     }
 }

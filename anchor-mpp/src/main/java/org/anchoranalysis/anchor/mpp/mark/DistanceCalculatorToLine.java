@@ -63,16 +63,16 @@ class DistanceCalculatorToLine implements Serializable {
         this.directionVector.subtract(startPoint);
     }
 
-    public double distanceToLine(Point3d pt) {
+    public double distanceToLine(Point3d point) {
         // http://mathworld.wolfram.com/Point-LineDistance3-Dimensional.html
 
         double distanceSquared2to1 = endPoint.distanceSquared(startPoint);
-        double distanceSquared1to0 = startPoint.distanceSquared(pt);
+        double distanceSquared1to0 = startPoint.distanceSquared(point);
 
         // Let's calculation the dot_product
-        double firstX = startPoint.x() - pt.x();
-        double firstY = startPoint.y() - pt.y();
-        double firstZ = startPoint.z() - pt.z();
+        double firstX = startPoint.x() - point.x();
+        double firstY = startPoint.y() - point.y();
+        double firstZ = startPoint.z() - point.z();
 
         double dotProduct =
                 (firstX * directionVector.x())

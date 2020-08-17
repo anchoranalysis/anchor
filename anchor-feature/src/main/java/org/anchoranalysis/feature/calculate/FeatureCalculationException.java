@@ -24,10 +24,24 @@
  * #L%
  */
 
-package org.anchoranalysis.feature.cache.calculation;
+package org.anchoranalysis.feature.calculate;
 
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
-import org.anchoranalysis.feature.input.FeatureInput;
+import org.anchoranalysis.core.error.AnchorCheckedException;
 
-public abstract class FeatureCalculation<S, T extends FeatureInput>
-        extends CacheableCalculation<S, T, FeatureCalculationException> {}
+public class FeatureCalculationException extends AnchorCheckedException {
+
+    /** */
+    private static final long serialVersionUID = -907417952940489366L;
+
+    public FeatureCalculationException(String string) {
+        super(string);
+    }
+
+    public FeatureCalculationException(Throwable exc) {
+        super(exc);
+    }
+
+    public FeatureCalculationException(String string, Throwable exc) {
+        super(string, exc);
+    }
+}

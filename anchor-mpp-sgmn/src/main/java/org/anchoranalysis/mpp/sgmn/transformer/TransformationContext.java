@@ -31,13 +31,13 @@ import lombok.Getter;
 import org.anchoranalysis.anchor.mpp.proposer.error.ErrorNode;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.image.extent.ImageDimensions;
-import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcContext;
+import org.anchoranalysis.mpp.sgmn.kernel.KernelCalculationContext;
 
 @AllArgsConstructor
 public class TransformationContext {
 
     private final ImageDimensions dimensions;
-    @Getter private final KernelCalcContext kernelCalcContext;
+    @Getter private final KernelCalculationContext kernelCalcContext;
     @Getter private final Logger logger;
 
     public TransformationContext replaceError(ErrorNode errorNode) {

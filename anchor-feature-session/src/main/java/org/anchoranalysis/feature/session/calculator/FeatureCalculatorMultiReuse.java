@@ -28,8 +28,8 @@ package org.anchoranalysis.feature.session.calculator;
 
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.feature.bean.list.FeatureList;
-import org.anchoranalysis.feature.calc.NamedFeatureCalculationException;
-import org.anchoranalysis.feature.calc.results.ResultsVector;
+import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
+import org.anchoranalysis.feature.calculate.results.ResultsVector;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
@@ -58,7 +58,7 @@ public class FeatureCalculatorMultiReuse<T extends FeatureInput>
     }
 
     @Override
-    public ResultsVector calculate(T params) throws NamedFeatureCalculationException {
+    public ResultsVector calculate(T params) throws NamedFeatureCalculateException {
         if (rv == null) {
             rv = delegate.calculate(params);
         }
@@ -67,8 +67,8 @@ public class FeatureCalculatorMultiReuse<T extends FeatureInput>
 
     @Override
     public ResultsVector calculate(T params, FeatureList<T> featuresSubset)
-            throws NamedFeatureCalculationException {
-        throw new NamedFeatureCalculationException("This operation is not supported");
+            throws NamedFeatureCalculateException {
+        throw new NamedFeatureCalculateException("This operation is not supported");
     }
 
     @Override

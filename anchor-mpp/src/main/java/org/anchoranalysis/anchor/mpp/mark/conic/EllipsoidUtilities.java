@@ -42,9 +42,9 @@ public class EllipsoidUtilities {
         // (0,1,0)*getRadii().z()
         RotationMatrix rotMatrix = mark.getOrientation().createRotationMatrix();
 
-        Point3d xRot = rotMatrix.calcRotatedPoint(new Point3d(mark.getRadii().x(), 0, 0));
-        Point3d yRot = rotMatrix.calcRotatedPoint(new Point3d(0, mark.getRadii().y(), 0));
-        Point3d zRot = rotMatrix.calcRotatedPoint(new Point3d(0, 0, mark.getRadii().z()));
+        Point3d xRot = rotMatrix.rotatedPoint(new Point3d(mark.getRadii().x(), 0, 0));
+        Point3d yRot = rotMatrix.rotatedPoint(new Point3d(0, mark.getRadii().y(), 0));
+        Point3d zRot = rotMatrix.rotatedPoint(new Point3d(0, 0, mark.getRadii().z()));
 
         double zRel = res.getZRelativeResolution();
         // We adjust each point for the z contribution

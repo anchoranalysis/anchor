@@ -46,12 +46,12 @@ public class VoxelStatisticsFromHistogram implements VoxelStatistics {
 
     @Override
     public long sum() {
-        return histogram.calcSum();
+        return histogram.calculateSum();
     }
 
     @Override
     public long sumOfSquares() {
-        return histogram.calcSumSquares();
+        return histogram.calculateSumSquares();
     }
 
     @Override

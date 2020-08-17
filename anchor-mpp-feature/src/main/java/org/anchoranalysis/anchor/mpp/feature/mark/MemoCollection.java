@@ -38,7 +38,7 @@ import org.anchoranalysis.anchor.mpp.mark.voxelized.memo.MemoForIndex;
 import org.anchoranalysis.anchor.mpp.mark.voxelized.memo.PxlMarkMemoFactory;
 import org.anchoranalysis.anchor.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
-import org.anchoranalysis.feature.calc.NamedFeatureCalculationException;
+import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
 import org.anchoranalysis.feature.nrg.NRGStack;
 import org.anchoranalysis.feature.nrg.NRGTotal;
 
@@ -69,9 +69,9 @@ public class MemoCollection implements Serializable, MemoForIndex {
             NRGStack nrgStack,
             Cfg cfg,
             NRGSchemeWithSharedFeatures nrgSchemeTotal)
-            throws NamedFeatureCalculationException {
+            throws NamedFeatureCalculateException {
         this.regionMap = nrgSchemeTotal.getRegionMap();
-        calcFreshInd(nrgSavedInd, nrgStack, cfg, nrgSchemeTotal);
+        calculateFreshInd(nrgSavedInd, nrgStack, cfg, nrgSchemeTotal);
     }
 
     public MemoCollection(MemoCollection src) {
@@ -120,13 +120,13 @@ public class MemoCollection implements Serializable, MemoForIndex {
         return -1;
     }
 
-    // calc fresh ind
-    private void calcFreshInd(
+    // calculate fresh ind
+    private void calculateFreshInd(
             NRGSavedInd nrgSavedInd,
             NRGStack nrgStack,
             Cfg cfg,
             NRGSchemeWithSharedFeatures nrgSchemeTotal)
-            throws NamedFeatureCalculationException {
+            throws NamedFeatureCalculateException {
 
         nrgSavedInd.setNrgTotal(0);
 
@@ -141,7 +141,7 @@ public class MemoCollection implements Serializable, MemoForIndex {
                     PxlMarkMemoFactory.create(mrk, nrgStack, nrgSchemeTotal.getRegionMap());
             this.pxlMarkMemo.add(pmm);
 
-            NRGTotal ind = nrgSchemeTotal.calcElemIndTotal(pmm, nrgStack);
+            NRGTotal ind = nrgSchemeTotal.totalIndividual(pmm, nrgStack);
             nrgSavedInd.add(ind);
         }
     }
@@ -154,9 +154,9 @@ public class MemoCollection implements Serializable, MemoForIndex {
             VoxelizedMarkMemo newMark,
             NRGStack stack,
             NRGSchemeWithSharedFeatures nrgSchemeTotal)
-            throws NamedFeatureCalculationException {
+            throws NamedFeatureCalculateException {
         // We calculate energy for individual components
-        NRGTotal ind = nrgSchemeTotal.calcElemIndTotal(newMark, stack);
+        NRGTotal ind = nrgSchemeTotal.totalIndividual(newMark, stack);
         nrgSavedInd.exchange(index, ind);
 
         this.pxlMarkMemo.set(index, newMark);
@@ -169,8 +169,8 @@ public class MemoCollection implements Serializable, MemoForIndex {
             VoxelizedMarkMemo pmm,
             NRGStack stack,
             NRGSchemeWithSharedFeatures nrgScheme)
-            throws NamedFeatureCalculationException {
-        NRGTotal nrg = nrgScheme.calcElemIndTotal(pmm, stack);
+            throws NamedFeatureCalculateException {
+        NRGTotal nrg = nrgScheme.totalIndividual(pmm, stack);
 
         // We calculate energy for individual components
         this.pxlMarkMemo.add(pmm);

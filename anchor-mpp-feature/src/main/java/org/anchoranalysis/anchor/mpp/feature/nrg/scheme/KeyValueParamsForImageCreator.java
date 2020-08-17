@@ -34,8 +34,8 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
-import org.anchoranalysis.feature.calc.FeatureInitParams;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureInitParams;
 import org.anchoranalysis.feature.nrg.NRGStack;
 import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
@@ -82,11 +82,11 @@ public class KeyValueParamsForImageCreator {
 
         for (NamedBean<Feature<FeatureInputStack>> ni : nrgScheme.getListImageFeatures()) {
 
-            kvp.putIfEmpty(ni.getName(), calcImageFeature(ni.getItem(), paramsInit, params));
+            kvp.putIfEmpty(ni.getName(), calculateImageFeature(ni.getItem(), paramsInit, params));
         }
     }
 
-    private double calcImageFeature(
+    private double calculateImageFeature(
             Feature<FeatureInputStack> feature,
             FeatureInitParams paramsInit,
             FeatureInputStack params)

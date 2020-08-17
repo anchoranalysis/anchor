@@ -28,8 +28,8 @@ package org.anchoranalysis.feature.session.calculator;
 
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
-import org.anchoranalysis.feature.calc.NamedFeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
@@ -63,7 +63,7 @@ public class FeatureCalculatorSingleFromMulti<T extends FeatureInput>
     public double calculate(T params) throws FeatureCalculationException {
         try {
             return delegate.calculate(params).get(0);
-        } catch (NamedFeatureCalculationException e) {
+        } catch (NamedFeatureCalculateException e) {
             throw e.dropKey();
         }
     }

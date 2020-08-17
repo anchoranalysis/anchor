@@ -24,12 +24,12 @@
  * #L%
  */
 
-package org.anchoranalysis.feature.cache.calculation;
+package org.anchoranalysis.feature.cache.calculate;
 
 import java.util.Set;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.cache.ChildCacheName;
-import org.anchoranalysis.feature.calc.FeatureInitParams;
+import org.anchoranalysis.feature.calculate.FeatureInitParams;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**

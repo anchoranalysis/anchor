@@ -38,8 +38,8 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListFactory;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
-import org.anchoranalysis.feature.calc.FeatureInitParams;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureInitParams;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
@@ -89,8 +89,8 @@ public abstract class Feature<T extends FeatureInput>
     public abstract Class<? extends FeatureInput> inputType();
 
     @Override
-    public final String getBeanDscr() {
-        String paramDscr = getParamDscr();
+    public final String descriptionBean() {
+        String paramDscr = describeParams();
         if (!paramDscr.isEmpty()) {
             return String.format("%s(%s)", getBeanName(), paramDscr);
         } else {
@@ -98,8 +98,8 @@ public abstract class Feature<T extends FeatureInput>
         }
     }
 
-    public String getDscrLong() {
-        return getBeanDscr();
+    public String descriptionLong() {
+        return descriptionBean();
     }
 
     /**
@@ -120,29 +120,29 @@ public abstract class Feature<T extends FeatureInput>
         if (!getCustomName().isEmpty()) {
             return getCustomName();
         } else {
-            return getDscrLong();
+            return descriptionLong();
         }
     }
 
-    public String getDscrWithCustomName() {
+    public String descriptionWithCustomName() {
         if (!getCustomName().isEmpty()) {
-            return String.format("%s: %s", getCustomName(), getBeanDscr());
+            return String.format("%s: %s", getCustomName(), descriptionBean());
         } else {
-            return getBeanDscr();
+            return descriptionBean();
         }
     }
 
-    public double calcCheckInit(SessionInput<T> input) throws FeatureCalculationException {
+    public double calculateCheckInitialized(SessionInput<T> input) throws FeatureCalculationException {
         if (!isInitialized()) {
             throw new FeatureCalculationException(
                     String.format("The feature (%s) has not been initialized", this.toString()));
         }
 
-        return calc(input);
+        return calculate(input);
     }
 
     // Calculates a value for some parameters
-    protected abstract double calc(SessionInput<T> input) throws FeatureCalculationException;
+    protected abstract double calculate(SessionInput<T> input) throws FeatureCalculationException;
 
     protected void duplicateHelper(Feature<FeatureInput> out) {
         out.customName = customName;
@@ -166,7 +166,7 @@ public abstract class Feature<T extends FeatureInput>
                 findChildrenOfClass(getOrCreateBeanFields(), Feature.class));
     }
 
-    public String getParamDscr() {
+    public String describeParams() {
         return describeChildBeans();
     }
 

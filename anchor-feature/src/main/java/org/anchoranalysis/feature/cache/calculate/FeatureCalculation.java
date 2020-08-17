@@ -24,39 +24,10 @@
  * #L%
  */
 
-package org.anchoranalysis.feature.calc.results;
+package org.anchoranalysis.feature.cache.calculate;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.feature.input.FeatureInput;
 
-public class ResultsVectorCollection implements Iterable<ResultsVector> {
-
-    private List<ResultsVector> list = new ArrayList<>();
-
-    public ResultsVectorCollection() {
-        super();
-    }
-
-    public ResultsVectorCollection(ResultsVector rv) {
-        super();
-        list.add(rv);
-    }
-
-    public boolean add(ResultsVector e) {
-        return list.add(e);
-    }
-
-    public int size() {
-        return list.size();
-    }
-
-    public ResultsVector get(int index) {
-        return list.get(index);
-    }
-
-    @Override
-    public Iterator<ResultsVector> iterator() {
-        return list.iterator();
-    }
-}
+public abstract class FeatureCalculation<S, T extends FeatureInput>
+        extends CacheableCalculation<S, T, FeatureCalculationException> {}

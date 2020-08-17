@@ -66,17 +66,17 @@ public abstract class MarkAbstractPointList extends Mark {
     public void updateAfterPointsChange() {
         assert (!points.isEmpty());
 
-        this.min = calcMin(getPoints());
-        this.max = calcMax(getPoints());
+        this.min = calculateMin(getPoints());
+        this.max = calculateMax(getPoints());
     }
 
     @Override
-    public BoundingBox box(ImageDimensions bndScene, int regionID) {
+    public BoundingBox box(ImageDimensions dimensions, int regionID) {
         // TODO FOR NOW WE IGNORE THE SHELL RADIUS
         return new BoundingBox(min, max);
     }
 
-    private static Point3d calcMin(List<Point3d> points) {
+    private static Point3d calculateMin(List<Point3d> points) {
         Point3d min =
                 new Point3d(
                         Double.POSITIVE_INFINITY,
@@ -98,7 +98,7 @@ public abstract class MarkAbstractPointList extends Mark {
         return min;
     }
 
-    private static Point3d calcMax(List<Point3d> points) {
+    private static Point3d calculateMax(List<Point3d> points) {
         Point3d max =
                 new Point3d(
                         Double.NEGATIVE_INFINITY,

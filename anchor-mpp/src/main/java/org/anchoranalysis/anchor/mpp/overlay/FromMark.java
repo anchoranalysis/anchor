@@ -57,7 +57,7 @@ class FromMark implements ScaledMaskCreator {
         Mark originalMark = (Mark) originalObject;
 
         ObjectWithProperties omScaled =
-                originalMark.calcMaskScaledXY(dimensionsScaled, regionMembership, bv, scaleFactor);
+                originalMark.maskScaledXY(dimensionsScaled, regionMembership, bv, scaleFactor);
 
         // We keep the properties the same
         return new ObjectWithProperties(omScaled.withoutProperties(), unscaled.getProperties());

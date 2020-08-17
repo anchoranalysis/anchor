@@ -37,7 +37,7 @@ import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.mpp.sgmn.bean.optscheme.termination.TriggerTerminationCondition;
 import org.anchoranalysis.mpp.sgmn.kernel.CfgGenContext;
-import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcContext;
+import org.anchoranalysis.mpp.sgmn.kernel.KernelCalculationContext;
 
 @AllArgsConstructor
 public class OptSchemeContext {
@@ -60,8 +60,8 @@ public class OptSchemeContext {
         return new CfgGenContext(cfgGen);
     }
 
-    public KernelCalcContext calcContext(CfgGenContext cfgGenContext) {
-        return new KernelCalcContext(
+    public KernelCalculationContext calculateContext(CfgGenContext cfgGenContext) {
+        return new KernelCalculationContext(
                 cfgGenContext,
                 dualStack.getNrgStack(),
                 nrgScheme,

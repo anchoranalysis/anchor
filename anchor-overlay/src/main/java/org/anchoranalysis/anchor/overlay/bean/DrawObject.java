@@ -27,7 +27,7 @@
 package org.anchoranalysis.anchor.overlay.bean;
 
 import org.anchoranalysis.anchor.overlay.writer.ObjectDrawAttributes;
-import org.anchoranalysis.anchor.overlay.writer.PrecalcOverlay;
+import org.anchoranalysis.anchor.overlay.writer.PrecalculationOverlay;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -64,7 +64,7 @@ public abstract class DrawObject extends AnchorBean<DrawObject> {
             throws OperationFailedException {
 
         try {
-            PrecalcOverlay precalculatedObj = precalculate(object, stack.dimensions());
+            PrecalculationOverlay precalculatedObj = precalculate(object, stack.dimensions());
             precalculatedObj.writePrecalculatedMask(stack, attributes, iteration, restrictTo);
 
         } catch (CreateException e) {
@@ -74,7 +74,7 @@ public abstract class DrawObject extends AnchorBean<DrawObject> {
 
     // Does computational preprocessing (so it can be cached). Outputs a collection of object-masks
     // that are later re used
-    public abstract PrecalcOverlay precalculate(
+    public abstract PrecalculationOverlay precalculate(
             ObjectWithProperties object, ImageDimensions dimensions) throws CreateException;
 
     public void write(

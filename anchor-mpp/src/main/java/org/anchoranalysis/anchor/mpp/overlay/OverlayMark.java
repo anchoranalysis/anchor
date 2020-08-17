@@ -107,7 +107,7 @@ public class OverlayMark extends Overlay {
 
         Point3d pointD = PointConverter.doubleFromInt(point);
 
-        byte membership = mark.evalPointInside(pointD);
+        byte membership = mark.isPointInside(pointD);
         return (regionMembership.isMemberFlag(membership));
     }
 

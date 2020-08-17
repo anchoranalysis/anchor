@@ -45,7 +45,7 @@ public abstract class MarkAbstractPosition extends Mark implements Serializable 
     /** */
     private static final long serialVersionUID = -6976277985708631268L;
 
-    // TODO rename pos to position
+    // TODO rename pos to position, but this will likely break annotations, so be careful
     // START mark state
     @Getter @Setter private Point3d pos;
     // END mark state
@@ -102,7 +102,7 @@ public abstract class MarkAbstractPosition extends Mark implements Serializable 
             ImageDimensions bndScene, RegionMembershipWithFlags rm, BinaryValuesByte bvOut) {
 
         ObjectWithProperties object = super.deriveObject(bndScene, rm, bvOut);
-        object.setProperty("midpointInt", calcRelativePoint(pos, object.boundingBox().cornerMin()));
+        object.setProperty("midpointInt", calculateRelativePoint(pos, object.boundingBox().cornerMin()));
         return object;
     }
 
@@ -125,7 +125,7 @@ public abstract class MarkAbstractPosition extends Mark implements Serializable 
     }
 
     /** Calculates a relative-point from pointGlobal to pointBase */
-    private static Point3i calcRelativePoint(Point3d pointGlobal, ReadableTuple3i pointBase) {
+    private static Point3i calculateRelativePoint(Point3d pointGlobal, ReadableTuple3i pointBase) {
         Point3i pointOut = PointConverter.intFromDoubleFloor(pointGlobal);
         pointOut.subtract(pointBase);
         return pointOut;

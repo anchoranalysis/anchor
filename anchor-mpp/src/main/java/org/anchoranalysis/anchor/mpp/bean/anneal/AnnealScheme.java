@@ -30,15 +30,15 @@ import org.anchoranalysis.bean.AnchorBean;
 
 public abstract class AnnealScheme extends AnchorBean<AnnealScheme> {
 
-    public abstract double calcTemp(int iter);
+    public abstract double calculateTemperature(int iter);
 
-    public abstract double crntTemp();
+    public abstract double currentTemperature();
 
-    public double calcDensityRatio(double num, double dem, int iter) {
+    public double calculateDensityRatio(double num, double dem, int iter) {
 
-        double d = (num - dem) / calcTemp(iter);
-        double r = Math.exp(d);
-        assert (!Double.isNaN(r));
-        return r;
+        double exponent = (num - dem) / calculateTemperature(iter);
+        double eToPowerOf = Math.exp(exponent);
+        assert (!Double.isNaN(eToPowerOf));
+        return eToPowerOf;
     }
 }

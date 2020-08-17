@@ -24,30 +24,33 @@
  * #L%
  */
 
-package org.anchoranalysis.feature.calc;
+package org.anchoranalysis.feature.calculate.results;
 
-import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.input.FeatureInput;
+class ArrayComparer {
 
-/**
- * A feature that should be initialized with {@link FeatureInitParams} (or a sub-class) before any
- * calculations occur.
- *
- * @author Owen Feehan
- * @param <T> input-type for feature
- */
-public interface InitializableFeature<T extends FeatureInput> {
+    public boolean compareArrays(Object[] objects1, Object[] objects2) {
+        if (objects1 == null) {
+            return (objects2.length == 0);
+        }
 
-    void init(FeatureInitParams params, Feature<T> parentFeature, Logger logger)
-            throws InitException;
+        if (objects2 == null) {
+            return (objects1.length == 0);
+        }
 
-    /**
-     * A friendly name that can be displayed to user describing the Feature. Should always
-     * prioritise the CustomName if one is associated with the feature
-     *
-     * @return
-     */
-    String getFriendlyName();
+        if (objects1.length != objects2.length) {
+            return false;
+        }
+
+        for (int i = 0; i < objects1.length; i++) {
+
+            if (!compareItem(objects1[i], objects2[i])) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    protected boolean compareItem(Object object1, Object object2) {
+        return object1.equals(object2);
+    }
 }

@@ -30,7 +30,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.feature.bean.FeatureHistogram;
 import org.anchoranalysis.image.histogram.Histogram;
 
@@ -48,7 +48,7 @@ public abstract class FeatureHistogramStatistic extends FeatureHistogram {
     // END BEAN PROPERTIES
 
     @Override
-    public double calc(SessionInput<FeatureInputHistogram> input)
+    public double calculate(SessionInput<FeatureInputHistogram> input)
             throws FeatureCalculationException {
         Histogram histogram = input.get().getHistogram();
 
@@ -62,9 +62,9 @@ public abstract class FeatureHistogramStatistic extends FeatureHistogram {
             }
         }
 
-        return calcStatisticFrom(histogram);
+        return calculateStatisticFrom(histogram);
     }
 
-    protected abstract double calcStatisticFrom(Histogram histogram)
+    protected abstract double calculateStatisticFrom(Histogram histogram)
             throws FeatureCalculationException;
 }

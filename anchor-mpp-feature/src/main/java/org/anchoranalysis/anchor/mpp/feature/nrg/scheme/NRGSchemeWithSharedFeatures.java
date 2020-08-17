@@ -40,9 +40,9 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.functional.function.CheckedFunction;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.params.KeyValueParams;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
-import org.anchoranalysis.feature.calc.FeatureInitParams;
-import org.anchoranalysis.feature.calc.NamedFeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureInitParams;
+import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
 import org.anchoranalysis.feature.nrg.NRGStack;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.nrg.NRGTotal;
@@ -55,12 +55,12 @@ public class NRGSchemeWithSharedFeatures {
     private NRGScheme nrgScheme;
     private SharedFeatureMulti sharedFeatures;
 
-    private CalcElemIndTotalOperation operationIndCalc;
+    private CalculateIndividualTotalOperation calculateTotalIndividual;
     private Logger logger;
 
     // Caches NRG value by index
-    private class CalcElemIndTotalOperation
-            implements CheckedFunction<Integer, NRGTotal, NamedFeatureCalculationException> {
+    private class CalculateIndividualTotalOperation
+            implements CheckedFunction<Integer, NRGTotal, NamedFeatureCalculateException> {
 
         private VoxelizedMarkMemo pmm;
         private NRGStack raster;
@@ -80,11 +80,11 @@ public class NRGSchemeWithSharedFeatures {
         }
 
         @Override
-        public NRGTotal apply(Integer index) throws NamedFeatureCalculationException {
+        public NRGTotal apply(Integer index) throws NamedFeatureCalculateException {
             return calc();
         }
 
-        public NRGTotal calc() throws NamedFeatureCalculationException {
+        public NRGTotal calc() throws NamedFeatureCalculateException {
             try {
                 FeatureCalculatorMulti<FeatureInputSingleMemo> session =
                         FeatureSession.with(
@@ -98,7 +98,7 @@ public class NRGSchemeWithSharedFeatures {
 
                 return new NRGTotal(session.calculate(params).total());
             } catch (InitException e) {
-                throw new NamedFeatureCalculationException(e);
+                throw new NamedFeatureCalculateException(e);
             }
         }
     }
@@ -110,11 +110,11 @@ public class NRGSchemeWithSharedFeatures {
         this.sharedFeatures = sharedFeatures;
         this.logger = logger;
 
-        operationIndCalc = new CalcElemIndTotalOperation();
+        calculateTotalIndividual = new CalculateIndividualTotalOperation();
     }
 
-    public NRGTotal calcElemAllTotal(MemoCollection pxlMarkMemoList, NRGStack raster)
-            throws NamedFeatureCalculationException {
+    public NRGTotal totalAll(MemoCollection pxlMarkMemoList, NRGStack raster)
+            throws NamedFeatureCalculateException {
 
         try {
             NRGStackWithParams nrgStack = createNRGStack(raster);
@@ -131,17 +131,17 @@ public class NRGSchemeWithSharedFeatures {
             return new NRGTotal(session.calculate(params).total());
 
         } catch (InitException | FeatureCalculationException e) {
-            throw new NamedFeatureCalculationException(e);
+            throw new NamedFeatureCalculateException(e);
         }
     }
 
-    public NRGTotal calcElemIndTotal(VoxelizedMarkMemo pmm, NRGStack raster)
-            throws NamedFeatureCalculationException {
+    public NRGTotal totalIndividual(VoxelizedMarkMemo pmm, NRGStack raster)
+            throws NamedFeatureCalculateException {
         try {
-            operationIndCalc.update(pmm, raster);
-            return operationIndCalc.calc();
+            calculateTotalIndividual.update(pmm, raster);
+            return calculateTotalIndividual.calc();
         } catch (OperationFailedException e) {
-            throw new NamedFeatureCalculationException(e);
+            throw new NamedFeatureCalculateException(e);
         }
     }
 

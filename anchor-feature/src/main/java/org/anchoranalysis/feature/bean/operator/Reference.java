@@ -31,7 +31,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 @NoArgsConstructor
@@ -47,14 +47,14 @@ public class Reference<T extends FeatureInput> extends FeatureOperator<T> {
     }
 
     @Override
-    public double calc(SessionInput<T> input) throws FeatureCalculationException {
-        // We resolve the ID before its passed to calcFeatureByID
-        String resolvedID = input.bySymbol().resolveFeatureID(id);
-        return input.bySymbol().calcFeatureByID(resolvedID, input);
+    public double calculate(SessionInput<T> input) throws FeatureCalculationException {
+        // We resolve the ID before its calculated
+        String resolvedID = input.bySymbol().resolveFeatureIdentifier(id);
+        return input.bySymbol().calculateFeatureByIdentifier(resolvedID, input);
     }
 
     @Override
-    public String getDscrLong() {
+    public String descriptionLong() {
         return "_" + id;
     }
 }

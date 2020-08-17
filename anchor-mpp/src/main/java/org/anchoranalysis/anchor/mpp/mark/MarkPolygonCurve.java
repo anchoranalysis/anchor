@@ -47,7 +47,7 @@ public class MarkPolygonCurve extends MarkAbstractPointList {
     private transient DistanceCalculatorToLine distanceCalculator = new DistanceCalculatorToLine();
 
     @Override
-    public byte evalPointInside(Point3d point) {
+    public byte isPointInside(Point3d point) {
 
         if (distanceToPolygonLocal(point) < distanceThreshold) {
             return FLAG_SUBMARK_INSIDE;
@@ -151,12 +151,12 @@ public class MarkPolygonCurve extends MarkAbstractPointList {
     }
 
     @Override
-    public int numRegions() {
+    public int numberRegions() {
         return 1;
     }
 
     @Override
-    public BoundingBox boxAllRegions(ImageDimensions bndScene) {
-        return box(bndScene, GlobalRegionIdentifiers.SUBMARK_INSIDE);
+    public BoundingBox boxAllRegions(ImageDimensions dimensions) {
+        return box(dimensions, GlobalRegionIdentifiers.SUBMARK_INSIDE);
     }
 }

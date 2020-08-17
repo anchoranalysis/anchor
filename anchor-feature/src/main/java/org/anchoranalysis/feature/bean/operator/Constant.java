@@ -61,17 +61,17 @@ public class Constant<T extends FeatureInput> extends FeatureOperator<T> {
     }
 
     @Override
-    public double calc(SessionInput<T> input) {
+    public double calculate(SessionInput<T> input) {
         return value;
     }
 
     @Override
-    public String getParamDscr() {
+    public String describeParams() {
         return String.format("%2.2f", value);
     }
 
     @Override
-    public String getDscrLong() {
-        return getParamDscr();
+    public String descriptionLong() {
+        return describeParams();
     }
 }

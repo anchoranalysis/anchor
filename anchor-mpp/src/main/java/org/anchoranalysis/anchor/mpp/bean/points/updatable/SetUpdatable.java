@@ -307,7 +307,7 @@ public class SetUpdatable extends UpdatablePointsContainer {
                     memo.getRegionMap().membershipForIndex(GlobalRegionIdentifiers.SUBMARK_INSIDE);
             byte flags = rm.flags();
 
-            byte membership = memo.getMark().evalPointInside(point);
+            byte membership = memo.getMark().isPointInside(point);
             if (rm.isMemberFlag(membership, flags)) {
                 return true;
             }

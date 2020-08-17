@@ -85,11 +85,11 @@ public class NRGSavedPairs implements UpdatableMarkSet {
             throws InitException {
 
         this.pairCollection.initUpdatableMarkSet(pxlMarkMemoList, stack, logger, sharedFeatures);
-        calcTotalFresh();
+        calculateTotalFresh();
     }
 
     // Calculates energy for all pairwise interactions freshly
-    private void calcTotalFresh() {
+    private void calculateTotalFresh() {
         nrgTotal = 0;
         for (NRGPair nrgPair : pairCollection.createPairsUnique()) {
             nrgTotal += nrgPair.getNRG().getTotal();

@@ -32,14 +32,14 @@ import org.anchoranalysis.anchor.mpp.proposer.error.ErrorNode;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 
-public class KernelCalcContext {
+public class KernelCalculationContext {
 
     private NRGSchemeWithSharedFeatures nrgScheme;
 
     private ProposerContext proposerContext;
     private CfgGenContext cfgGenContext;
 
-    public KernelCalcContext(
+    public KernelCalculationContext(
             CfgGenContext cfgGenContext,
             NRGStackWithParams nrgStack,
             NRGSchemeWithSharedFeatures nrgScheme,
@@ -61,8 +61,8 @@ public class KernelCalcContext {
         return nrgScheme;
     }
 
-    public KernelCalcContext replaceError(ErrorNode errorNode) {
-        return new KernelCalcContext(
+    public KernelCalculationContext replaceError(ErrorNode errorNode) {
+        return new KernelCalculationContext(
                 cfgGenContext,
                 proposerContext.getNrgStack(),
                 nrgScheme,

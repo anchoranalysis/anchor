@@ -31,7 +31,7 @@ import org.anchoranalysis.core.cache.LRUCache;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.cache.calculation.CacheCreator;
+import org.anchoranalysis.feature.cache.calculate.CacheCreator;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**

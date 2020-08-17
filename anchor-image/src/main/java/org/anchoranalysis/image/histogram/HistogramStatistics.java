@@ -73,7 +73,7 @@ public class HistogramStatistics {
         double sd = hist.standardDeviation();
 
         // Calculated using formula in https://en.wikipedia.org/wiki/Skewness
-        long firstTerm = hist.calcSumCubes() / count;
+        long firstTerm = hist.calculateSumCubes() / count;
         double secondTerm = -3.0 * mean * sd * sd;
         double thirdTerm = mean * mean * mean;
 

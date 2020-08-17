@@ -28,14 +28,14 @@ package org.anchoranalysis.image.feature.bean.object.collection;
 
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.image.feature.object.input.FeatureInputObjectCollection;
 
 public abstract class FeatureObjectCollection extends Feature<FeatureInputObjectCollection> {
 
     @Override
-    public double calc(SessionInput<FeatureInputObjectCollection> input)
+    public double calculate(SessionInput<FeatureInputObjectCollection> input)
             throws FeatureCalculationException {
         return calc(input.get());
     }

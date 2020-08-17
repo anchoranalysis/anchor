@@ -39,7 +39,7 @@ import org.anchoranalysis.image.stack.rgb.RGBStack;
  * @author Owen Feehan
  */
 @AllArgsConstructor
-public abstract class PrecalcOverlay {
+public abstract class PrecalculationOverlay {
 
     @Getter private final ObjectWithProperties first;
 

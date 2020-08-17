@@ -29,8 +29,8 @@ package org.anchoranalysis.image.feature.session.merged;
 import java.util.Optional;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
-import org.anchoranalysis.feature.calc.NamedFeatureCalculationException;
-import org.anchoranalysis.feature.calc.results.ResultsVector;
+import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
+import org.anchoranalysis.feature.calculate.results.ResultsVector;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.feature.session.strategy.replace.CacheAndReuseStrategy;
 import org.anchoranalysis.feature.session.strategy.replace.bind.BoundReplaceStrategy;
@@ -102,9 +102,9 @@ class CombinedCalculator {
         calculatorPair = createPair(soImage, cachingStrategyFirstSecond, cachingStrategyMerged);
     }
 
-    public ResultsVector calcForInput(
+    public ResultsVector calculateForInput(
             FeatureInputPairObjects input, Optional<ErrorReporter> errorReporter)
-            throws NamedFeatureCalculationException {
+            throws NamedFeatureCalculateException {
 
         ResultsVectorBuilder helper = new ResultsVectorBuilder(sizeFeatures(), errorReporter);
 
@@ -112,18 +112,18 @@ class CombinedCalculator {
         // calculator)
         // These are identical and are cached in the background, to avoid being repeatedly
         // calculated.
-        helper.calcAndInsert(new FeatureInputStack(), calculatorImage);
+        helper.calculateAndInsert(new FeatureInputStack(), calculatorImage);
 
         // First features
         if (include.includeFirst()) {
-            helper.calcAndInsert(
+            helper.calculateAndInsert(
                     input, FeatureInputPairObjects::getFirst, calculatorFirstSecond.get() // NOSONAR
                     );
         }
 
         // Second features
         if (include.includeSecond()) {
-            helper.calcAndInsert(
+            helper.calculateAndInsert(
                     input,
                     FeatureInputPairObjects::getSecond,
                     calculatorFirstSecond.get() // NOSONAR
@@ -132,13 +132,13 @@ class CombinedCalculator {
 
         // Merged.
         if (include.includeMerged()) {
-            helper.calcAndInsert(
+            helper.calculateAndInsert(
                     input, FeatureInputPairObjects::getMerged, calculatorMerged.get() // NOSONAR
                     );
         }
 
         // Pair features
-        helper.calcAndInsert(input, calculatorPair);
+        helper.calculateAndInsert(input, calculatorPair);
 
         return helper.getResultsVector();
     }

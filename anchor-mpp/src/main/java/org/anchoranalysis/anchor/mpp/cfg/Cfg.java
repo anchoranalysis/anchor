@@ -172,7 +172,7 @@ public final class Cfg implements Iterable<Mark>, Serializable {
 
         return ObjectCollectionWithPropertiesFactory.filterAndMapFrom(
                 marks,
-                mark -> mark.numRegions() > regionMembership.getRegionID(),
+                mark -> mark.numberRegions() > regionMembership.getRegionID(),
                 mark -> mark.deriveObject(dimensions, regionMembership, bvOut));
     }
 
@@ -193,7 +193,7 @@ public final class Cfg implements Iterable<Mark>, Serializable {
         // We cycle through each item in the configuration
         for (Mark m : this) {
 
-            byte membership = m.evalPointInside(point);
+            byte membership = m.isPointInside(point);
             if (rm.isMemberFlag(membership, flags)) {
                 cfgOut.add(m);
             }

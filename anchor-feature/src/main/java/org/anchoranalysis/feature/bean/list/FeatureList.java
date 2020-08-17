@@ -43,7 +43,7 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.functional.function.CheckedFunction;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.calc.FeatureInitParams;
+import org.anchoranalysis.feature.calculate.FeatureInitParams;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.name.FeatureNameList;
 
@@ -202,8 +202,8 @@ public class FeatureList<T extends FeatureInput> extends AnchorBean<FeatureList<
     }
 
     @Override
-    public String getBeanDscr() {
-        return String.format("%s with %d items", super.getBeanDscr(), list.size());
+    public String descriptionBean() {
+        return String.format("%s with %d items", super.descriptionBean(), list.size());
     }
 
     public Feature<T> get(int index) {

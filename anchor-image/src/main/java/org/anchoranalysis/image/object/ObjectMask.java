@@ -318,7 +318,7 @@ public class ObjectMask {
 
     /** Calculates center-of-gravity across all axes */
     public Point3d centerOfGravity() {
-        return CenterOfGravityCalculator.calcCenterOfGravity(this);
+        return CenterOfGravityCalculator.centerOfGravity(this);
     }
 
     /**
@@ -328,7 +328,7 @@ public class ObjectMask {
      * @return a point on the specific axis that is the center-of-gravity.
      */
     public double centerOfGravity(AxisType axis) {
-        return CenterOfGravityCalculator.calcCenterOfGravityForAxis(this, axis);
+        return CenterOfGravityCalculator.centerOfGravityForAxis(this, axis);
     }
 
     /**

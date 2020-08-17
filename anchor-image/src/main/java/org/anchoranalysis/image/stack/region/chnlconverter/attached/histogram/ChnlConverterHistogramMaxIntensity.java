@@ -53,7 +53,7 @@ public class ChnlConverterHistogramMaxIntensity
     @Override
     public void attachObject(Histogram hist) throws OperationFailedException {
 
-        int maxValue = hist.calcMaximum();
+        int maxValue = hist.calculateMaximum();
         voxelsConverter.setMaxValue(maxValue);
     }
 

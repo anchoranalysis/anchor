@@ -24,24 +24,34 @@
  * #L%
  */
 
-package org.anchoranalysis.feature.calc;
+package org.anchoranalysis.feature.calculate.results;
 
-import org.anchoranalysis.core.error.AnchorCheckedException;
+import org.apache.commons.math3.util.Precision;
 
-public class FeatureCalculationException extends AnchorCheckedException {
+class ArrayComparerPrecision extends ArrayComparer {
 
-    /** */
-    private static final long serialVersionUID = -907417952940489366L;
+    private double eps;
 
-    public FeatureCalculationException(String string) {
-        super(string);
+    public ArrayComparerPrecision(double eps) {
+        this.eps = eps;
     }
 
-    public FeatureCalculationException(Throwable exc) {
-        super(exc);
+    @Override
+    protected boolean compareItem(Object obj1, Object obj2) {
+
+        // Special case for doubles
+        if (obj1 instanceof Double) {
+            return compareDoubleWithOther((Double) obj1, obj2);
+        } else {
+            return super.compareItem(obj1, obj2);
+        }
     }
 
-    public FeatureCalculationException(String string, Throwable exc) {
-        super(string, exc);
+    private boolean compareDoubleWithOther(Double dbl, Object other) {
+        if (other instanceof Double) {
+            return Precision.equals(dbl, (Double) other, eps);
+        } else {
+            return false;
+        }
     }
 }

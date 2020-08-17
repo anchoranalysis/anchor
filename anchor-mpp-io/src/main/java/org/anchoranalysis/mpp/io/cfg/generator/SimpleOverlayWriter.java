@@ -33,7 +33,7 @@ import org.anchoranalysis.anchor.overlay.bean.DrawObject;
 import org.anchoranalysis.anchor.overlay.collection.ColoredOverlayCollection;
 import org.anchoranalysis.anchor.overlay.writer.DrawOverlay;
 import org.anchoranalysis.anchor.overlay.writer.ObjectDrawAttributes;
-import org.anchoranalysis.anchor.overlay.writer.PrecalcOverlay;
+import org.anchoranalysis.anchor.overlay.writer.PrecalculationOverlay;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.idgetter.IDGetter;
 import org.anchoranalysis.image.extent.BoundingBox;
@@ -53,7 +53,7 @@ public class SimpleOverlayWriter extends DrawOverlay {
 
     @Override
     public void writePrecalculatedOverlays(
-            List<PrecalcOverlay> precalculatedMasks,
+            List<PrecalculationOverlay> precalculatedMasks,
             ImageDimensions dimensions,
             RGBStack background,
             ObjectDrawAttributes attributes,

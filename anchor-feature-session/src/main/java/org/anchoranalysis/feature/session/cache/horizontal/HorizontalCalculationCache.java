@@ -32,10 +32,10 @@ import java.util.Map.Entry;
 import java.util.Set;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.cache.ChildCacheName;
-import org.anchoranalysis.feature.cache.calculation.CacheCreator;
-import org.anchoranalysis.feature.cache.calculation.FeatureSessionCache;
-import org.anchoranalysis.feature.cache.calculation.FeatureSessionCacheCalculator;
-import org.anchoranalysis.feature.calc.FeatureInitParams;
+import org.anchoranalysis.feature.cache.calculate.CacheCreator;
+import org.anchoranalysis.feature.cache.calculate.FeatureSessionCache;
+import org.anchoranalysis.feature.cache.calculate.FeatureSessionCacheCalculator;
+import org.anchoranalysis.feature.calculate.FeatureInitParams;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 

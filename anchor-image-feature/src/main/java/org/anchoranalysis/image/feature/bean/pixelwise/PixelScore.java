@@ -30,7 +30,7 @@ import java.util.List;
 import java.util.Optional;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.params.KeyValueParams;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.bean.ImageBean;
 import org.anchoranalysis.image.histogram.Histogram;
 
@@ -51,5 +51,5 @@ public abstract class PixelScore extends ImageBean<PixelScore> {
         // TO be overridden if needed
     }
 
-    public abstract double calc(int[] pixelVals) throws FeatureCalculationException;
+    public abstract double calculate(int[] pixelVals) throws FeatureCalculationException;
 }

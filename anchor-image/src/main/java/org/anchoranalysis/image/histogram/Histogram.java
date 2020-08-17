@@ -81,33 +81,33 @@ public interface Histogram {
 
     double percentGreaterEqualTo(int intensity);
 
-    default int calcMode() throws OperationFailedException {
-        return calcMode(0);
+    default int calculateMode() throws OperationFailedException {
+        return calculateMode(0);
     }
 
     // Should only be called on a histogram with at least one item
-    int calcMode(int startIndex) throws OperationFailedException;
+    int calculateMode(int startIndex) throws OperationFailedException;
 
     // Should only be called on a histogram with at least one item
-    int calcMaximum() throws OperationFailedException;
+    int calculateMaximum() throws OperationFailedException;
 
     // Should only be called on a histogram with at least one item
-    int calcMinimum() throws OperationFailedException;
+    int calculateMinimum() throws OperationFailedException;
 
-    long calcSum();
+    long calculateSum();
 
-    long calcSumSquares();
+    long calculateSumSquares();
 
-    long calcSumCubes();
+    long calculateSumCubes();
 
     void removeBelowThreshold(int threshold);
 
-    int calcNumNonZero();
+    int calculateCountNonZero();
 
     double standardDeviation() throws OperationFailedException;
 
     default double variance() {
-        return new VarianceCalculator(calcSum(), calcSumSquares(), getTotalCount()).variance();
+        return new VarianceCalculator(calculateSum(), calculateSumSquares(), getTotalCount()).variance();
     }
 
     long countThreshold(RelationToThreshold relationToThreshold);
@@ -131,7 +131,7 @@ public interface Histogram {
 
     long getTotalCount();
 
-    Histogram extractPixelsFromRight(long numPixels);
+    Histogram extractValuesFromRight(long numberValues);
 
-    Histogram extractPixelsFromLeft(long numPixels);
+    Histogram extractValuesFromLeft(long numberValues);
 }

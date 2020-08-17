@@ -71,7 +71,7 @@ public class PathDifferenceFromBase {
             String all = filePath.toFile().getCanonicalFile().toURI().getPath();
 
             // As we've converted to URIs the seperator is always a forward slash
-            return calcDiff(base, all);
+            return calculateDifference(base, all);
         } catch (IOException e) {
             throw new AnchorIOException("Cannot fully resolve paths");
         }
@@ -85,7 +85,7 @@ public class PathDifferenceFromBase {
      * @param base the base-folder as a string
      * @param all the entire path as a string
      */
-    private static PathDifferenceFromBase calcDiff(String baseFolderPath, String entirePath) {
+    private static PathDifferenceFromBase calculateDifference(String baseFolderPath, String entirePath) {
 
         // Convert the base, and all to forward slashes only
         String base = FilePathToUnixStyleConverter.toStringUnixStyle(baseFolderPath);

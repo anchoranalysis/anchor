@@ -40,7 +40,7 @@ public class KernelWithID<T> {
     }
 
     public String getDescription() {
-        return kernel.dscrLast();
+        return kernel.describeLast();
     }
 
     public Kernel<T> getKernel() {

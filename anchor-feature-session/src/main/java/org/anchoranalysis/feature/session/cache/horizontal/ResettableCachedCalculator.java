@@ -30,13 +30,13 @@ import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
-import org.anchoranalysis.feature.cache.calculation.CacheableCalculationMap;
-import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
-import org.anchoranalysis.feature.cache.calculation.FeatureSessionCacheCalculator;
-import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
-import org.anchoranalysis.feature.cache.calculation.ResolvedCalculationMap;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.cache.calculate.CacheableCalculation;
+import org.anchoranalysis.feature.cache.calculate.CacheableCalculationMap;
+import org.anchoranalysis.feature.cache.calculate.FeatureCalculation;
+import org.anchoranalysis.feature.cache.calculate.FeatureSessionCacheCalculator;
+import org.anchoranalysis.feature.cache.calculate.ResolvedCalculation;
+import org.anchoranalysis.feature.cache.calculate.ResolvedCalculationMap;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 
@@ -60,9 +60,9 @@ class ResettableCachedCalculator<T extends FeatureInput>
     }
 
     @Override
-    public double calc(Feature<T> feature, SessionInput<T> input)
+    public double calculate(Feature<T> feature, SessionInput<T> input)
             throws FeatureCalculationException {
-        double val = feature.calcCheckInit(input);
+        double val = feature.calculateCheckInitialized(input);
         if (Double.isNaN(val)) {
             logger.messageLogger()
                     .logFormatted(
@@ -89,11 +89,11 @@ class ResettableCachedCalculator<T extends FeatureInput>
     }
 
     @Override
-    public double calcFeatureByID(String id, SessionInput<T> input)
+    public double calculateFeatureByIdentifier(String id, SessionInput<T> input)
             throws FeatureCalculationException {
         try {
             Feature<T> feature = sharedFeatures.getException(id);
-            return calc(feature, input);
+            return calculate(feature, input);
         } catch (NamedProviderGetException e) {
             throw new FeatureCalculationException(
                     String.format("Cannot locate feature with resolved-ID: %s", id), e.summarize());
@@ -106,7 +106,7 @@ class ResettableCachedCalculator<T extends FeatureInput>
     }
 
     @Override
-    public String resolveFeatureID(String id) {
-        return id;
+    public String resolveFeatureIdentifier(String identifier) {
+        return identifier;
     }
 }

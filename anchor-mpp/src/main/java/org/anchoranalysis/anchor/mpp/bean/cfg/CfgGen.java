@@ -53,7 +53,7 @@ public class CfgGen extends NullParamsBean<CfgGen> {
     }
 
     @Override
-    public String getBeanDscr() {
+    public String descriptionBean() {
         return String.format(
                 "%s templateMark=%s, referencePoissonIntensity=%f",
                 getBeanName(), templateMark.toString(), referencePoissonIntensity);

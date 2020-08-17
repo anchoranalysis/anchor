@@ -220,7 +220,7 @@ public final class BoundingBox implements Serializable {
     /**
      * The maximum (right-most) point <i>inside</i> the box
      *
-     * <p>This means that iterators should be {@code <= #calcCornerMax()}
+     * <p>This means that iterators should be {@code <= #calculateCornerMax()}
      *
      * @return the maximum point inside the box in each dimension
      */
@@ -235,9 +235,9 @@ public final class BoundingBox implements Serializable {
     /**
      * The maximum (right-most) point just <i> outside the box
      *
-     * <p>It is equivalent to {@code < #calcCornerMax()} plus {@code 1} in each dimension.
+     * <p>It is equivalent to {@code < #calculateCornerMax()} plus {@code 1} in each dimension.
      *
-     * <p>This means that iterators should be {@code < #calcCornerMaxExclusive()}
+     * <p>This means that iterators should be {@code < #calculateCornerMaxExclusive()}
      *
      * @return the maximum point inside the box in each dimension
      */
@@ -467,12 +467,12 @@ public final class BoundingBox implements Serializable {
 
     private Point3d meanOfExtent(int subtractFromEachDimension) {
         return new Point3d(
-                calcMeanForDim(ReadableTuple3i::x, subtractFromEachDimension),
-                calcMeanForDim(ReadableTuple3i::y, subtractFromEachDimension),
-                calcMeanForDim(ReadableTuple3i::z, subtractFromEachDimension));
+                calculateMeanForDim(ReadableTuple3i::x, subtractFromEachDimension),
+                calculateMeanForDim(ReadableTuple3i::y, subtractFromEachDimension),
+                calculateMeanForDim(ReadableTuple3i::z, subtractFromEachDimension));
     }
 
-    private double calcMeanForDim(
+    private double calculateMeanForDim(
             ToDoubleFunction<ReadableTuple3i> extractDim, int subtractFromEachDimension) {
         double midPointInExtent =
                 (extractDim.applyAsDouble(extent.asTuple()) - subtractFromEachDimension) / 2;

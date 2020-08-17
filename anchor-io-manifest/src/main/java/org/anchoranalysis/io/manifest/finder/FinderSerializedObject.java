@@ -109,6 +109,6 @@ public class FinderSerializedObject<T> extends FinderSingleFile {
             deserializer = new ObjectInputStreamDeserializer<>();
         }
 
-        return deserializer.deserialize(fileWrite.calcPath());
+        return deserializer.deserialize(fileWrite.calculatePath());
     }
 }

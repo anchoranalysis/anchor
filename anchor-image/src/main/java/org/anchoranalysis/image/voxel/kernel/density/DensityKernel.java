@@ -60,7 +60,7 @@ public class DensityKernel extends BinaryKernel {
         this.minDensityRatio = minDensityRatio;
     }
 
-    private Density calcDensity(Voxels<ByteBuffer> in, LocalSlices inSlices, Point3i point) {
+    private Density calculateDensity(Voxels<ByteBuffer> in, LocalSlices inSlices, Point3i point) {
 
         // We count the number of on pixels inside a kernel
 
@@ -103,7 +103,7 @@ public class DensityKernel extends BinaryKernel {
 
         // We count the number of on pixels inside a kernel
 
-        Density density = calcDensity(in, inSlices, point);
+        Density density = calculateDensity(in, inSlices, point);
 
         double ratio = density.ratioSize2D(getSize());
 

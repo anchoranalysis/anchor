@@ -79,7 +79,7 @@ public final class ImageDimensions implements Serializable {
 
     public ImageDimensions scaleXYTo(int x, int y) {
         Extent extentScaled = new Extent(x, y, extent.z());
-        ScaleFactor scaleFactor = ScaleFactorUtilities.calcRelativeScale(extent, extentScaled);
+        ScaleFactor scaleFactor = ScaleFactorUtilities.relativeScale(extent, extentScaled);
         return new ImageDimensions(extentScaled, resolution.scaleXY(scaleFactor));
     }
 

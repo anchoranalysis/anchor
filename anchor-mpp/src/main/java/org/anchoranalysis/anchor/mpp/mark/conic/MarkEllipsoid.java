@@ -145,12 +145,12 @@ public class MarkEllipsoid extends MarkConic implements Serializable {
 
     // Where is a point in relation to the current object
     @Override
-    public final byte evalPointInside(Point3d pt) {
+    public final byte isPointInside(Point3d point) {
 
         // It is permissible to mutate the point during calculation
-        double x = pt.x() - getPos().x();
-        double y = pt.y() - getPos().y();
-        double z = pt.z() - getPos().z();
+        double x = point.x() - getPos().x();
+        double y = point.y() - getPos().y();
+        double z = point.z() - getPos().z();
 
         if (l2norm(x, y, z) > radiiShellMaxSq) {
             return FLAG_SUBMARK_NONE;
@@ -249,7 +249,7 @@ public class MarkEllipsoid extends MarkConic implements Serializable {
     }
 
     @Override
-    public BoundingBox box(ImageDimensions bndScene, int regionID) {
+    public BoundingBox box(ImageDimensions dimensions, int regionID) {
 
         DoubleMatrix1D s = ellipsoidCalculator.getBoundingBoxMatrix().copy();
 
@@ -267,7 +267,7 @@ public class MarkEllipsoid extends MarkConic implements Serializable {
             s.assign(Functions.mult(shellInnerCore));
         }
 
-        return BoundingBoxCalculator.boxFromBounds(getPos(), s, true, bndScene);
+        return BoundingBoxCalculator.boxFromBounds(getPos(), s, true, dimensions);
     }
 
     private String strMarks() {
@@ -398,13 +398,13 @@ public class MarkEllipsoid extends MarkConic implements Serializable {
     }
 
     @Override
-    public int numRegions() {
+    public int numberRegions() {
         return 5;
     }
 
     @Override
-    public BoundingBox boxAllRegions(ImageDimensions bndScene) {
-        return box(bndScene, GlobalRegionIdentifiers.SUBMARK_OUTSIDE);
+    public BoundingBox boxAllRegions(ImageDimensions dimensions) {
+        return box(dimensions, GlobalRegionIdentifiers.SUBMARK_OUTSIDE);
     }
 
     private double getMaximumRadius(int regionID) {

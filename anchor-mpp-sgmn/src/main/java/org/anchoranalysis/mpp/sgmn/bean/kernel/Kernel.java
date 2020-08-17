@@ -37,7 +37,7 @@ import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.image.extent.ImageDimensions;
-import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcContext;
+import org.anchoranalysis.mpp.sgmn.kernel.KernelCalculationContext;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcNRGException;
 
 /**
@@ -55,27 +55,27 @@ public abstract class Kernel<T> extends MPPBean<Kernel<T>> implements Compatible
     // END BEAN PROPERTIES
 
     // Call ONCE before calculating anything
-    public abstract void initBeforeCalc(KernelCalcContext context) throws InitException;
+    public abstract void initBeforeCalc(KernelCalculationContext context) throws InitException;
 
     /**
      * Calculates the NRG for a proposal
      *
-     * @param exst the existing NRG
+     * @param existing the existing NRG
      * @param context
      * @return a proposal, or empty() if there is no proposal to make
      * @throws KernelCalcNRGException
      */
-    public abstract Optional<T> makeProposal(Optional<T> exst, KernelCalcContext context)
+    public abstract Optional<T> makeProposal(Optional<T> existing, KernelCalculationContext context)
             throws KernelCalcNRGException;
 
-    public abstract double calcAccptProb(
-            int exstSize,
-            int propSize,
+    public abstract double calculateAcceptanceProbability(
+            int existingSize,
+            int proposalSize,
             double poissonIntens,
             ImageDimensions dimensions,
             double densityRatio);
 
-    public abstract String dscrLast();
+    public abstract String describeLast();
 
     /**
      * If the kernel is accepted, makes the necessary changes to a ListUpdatableMarkSetCollection
@@ -85,12 +85,12 @@ public abstract class Kernel<T> extends MPPBean<Kernel<T>> implements Compatible
      * @param nrgNew accepted energy
      * @throws UpdateMarkSetException
      */
-    public abstract void updateAfterAccpt(
+    public abstract void updateAfterAcceptance(
             ListUpdatableMarkSetCollection updatableMarkSetCollection, T nrgExst, T nrgNew)
             throws UpdateMarkSetException;
 
-    // Returns an array of Mark IDs that were changed in the last calcNRGForProp for the kernel
-    // Guaranteed only to be called, if calcNRGForProp did not return NULL
+    // Returns an array of Mark IDs that were changed in the last nrg-calculation for the kernel
+    // Guaranteed only to be called, if nrg-calculation did not return NULL
     public abstract int[] changedMarkIDArray();
 
     /**

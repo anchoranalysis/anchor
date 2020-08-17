@@ -30,7 +30,7 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import org.anchoranalysis.feature.nrg.NRGStack;
 
-class BufferArrList {
+class BufferArrayList {
 
     private ArrayList<ByteBuffer> delegate = new ArrayList<>();
 

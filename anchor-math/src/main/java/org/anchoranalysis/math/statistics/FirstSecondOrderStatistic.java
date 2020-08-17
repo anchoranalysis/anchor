@@ -26,6 +26,9 @@
 
 package org.anchoranalysis.math.statistics;
 
+import lombok.Data;
+
+@Data
 public class FirstSecondOrderStatistic {
 
     /** Mean */
@@ -34,27 +37,11 @@ public class FirstSecondOrderStatistic {
     /** Standard-Deviation */
     private double scale;
 
-    public double getMean() {
-        return mean;
+    public double zScore(double value) {
+        return calculateZScore(value, mean, scale);
     }
 
-    public void setMean(double mean) {
-        this.mean = mean;
-    }
-
-    public double getScale() {
-        return scale;
-    }
-
-    public void setScale(double scale) {
-        this.scale = scale;
-    }
-
-    public double zScore(double val) {
-        return calcZScore(val, mean, scale);
-    }
-
-    public static double calcZScore(double val, double mean, double scale) {
-        return (val - mean) / scale;
+    public static double calculateZScore(double value, double mean, double scale) {
+        return (value - mean) / scale;
     }
 }

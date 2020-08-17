@@ -31,7 +31,7 @@ import java.util.Map.Entry;
 import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.feature.calc.results.ResultsVectorCollection;
+import org.anchoranalysis.feature.calculate.results.ResultsVectorCollection;
 import org.anchoranalysis.feature.io.csv.writer.FeatureCSVWriter;
 import org.anchoranalysis.feature.name.FeatureNameList;
 import org.anchoranalysis.io.error.AnchorIOException;

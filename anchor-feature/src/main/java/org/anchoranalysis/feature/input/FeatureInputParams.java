@@ -28,7 +28,7 @@ package org.anchoranalysis.feature.input;
 
 import java.util.Optional;
 import org.anchoranalysis.core.params.KeyValueParams;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 
 /**
  * A feature-input that is associated with particular key-value parameters

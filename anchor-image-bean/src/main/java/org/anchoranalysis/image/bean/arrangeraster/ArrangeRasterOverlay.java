@@ -58,11 +58,11 @@ public class ArrangeRasterOverlay extends ArrangeRasterBean {
     // END BEAN PROPERTIES
 
     @Override
-    public String getBeanDscr() {
+    public String descriptionBean() {
         return getBeanName();
     }
 
-    private int calcHorizontalPos(BoundingBoxesOnPlane boxSet, ImageDimensions dimensions) {
+    private int positionHorizontal(BoundingBoxesOnPlane boxSet, ImageDimensions dimensions) {
 
         if (horizontalAlign.equalsIgnoreCase("left")) {
             return 0;
@@ -73,7 +73,7 @@ public class ArrangeRasterOverlay extends ArrangeRasterBean {
         }
     }
 
-    private int calcVerticalPos(BoundingBoxesOnPlane boxSet, ImageDimensions dimensions) {
+    private int positionVertical(BoundingBoxesOnPlane boxSet, ImageDimensions dimensions) {
 
         if (verticalAlign.equalsIgnoreCase("top")) {
             return 0;
@@ -84,7 +84,7 @@ public class ArrangeRasterOverlay extends ArrangeRasterBean {
         }
     }
 
-    private int calcZPos(BoundingBoxesOnPlane boxSet, ImageDimensions dimensions) {
+    private int positionZ(BoundingBoxesOnPlane boxSet, ImageDimensions dimensions) {
 
         if (zAlign.equalsIgnoreCase("bottom") || zAlign.equalsIgnoreCase("repeat")) {
             return 0;
@@ -115,9 +115,9 @@ public class ArrangeRasterOverlay extends ArrangeRasterBean {
         Extent overlayE =
                 deriveExtent(overlayImg.channelAt(0).dimensions().extent(), boxSet.extent());
 
-        int hPos = calcHorizontalPos(boxSet, overlayImg.dimensions());
-        int vPos = calcVerticalPos(boxSet, overlayImg.dimensions());
-        int zPos = calcZPos(boxSet, overlayImg.dimensions());
+        int hPos = positionHorizontal(boxSet, overlayImg.dimensions());
+        int vPos = positionVertical(boxSet, overlayImg.dimensions());
+        int zPos = positionZ(boxSet, overlayImg.dimensions());
 
         boxSet.add(new BoundingBox(new Point3i(hPos, vPos, zPos), overlayE));
         return boxSet;

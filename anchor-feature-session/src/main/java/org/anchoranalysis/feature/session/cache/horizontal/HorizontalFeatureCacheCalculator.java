@@ -29,12 +29,12 @@ package org.anchoranalysis.feature.session.cache.horizontal;
 import java.util.Collection;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.cache.calculation.CacheableCalculationMap;
-import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
-import org.anchoranalysis.feature.cache.calculation.FeatureSessionCacheCalculator;
-import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
-import org.anchoranalysis.feature.cache.calculation.ResolvedCalculationMap;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.cache.calculate.CacheableCalculationMap;
+import org.anchoranalysis.feature.cache.calculate.FeatureCalculation;
+import org.anchoranalysis.feature.cache.calculate.FeatureSessionCacheCalculator;
+import org.anchoranalysis.feature.cache.calculate.ResolvedCalculation;
+import org.anchoranalysis.feature.cache.calculate.ResolvedCalculationMap;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
@@ -57,9 +57,9 @@ class HorizontalFeatureCacheCalculator<T extends FeatureInput>
         this.ignorePrefixes = ignorePrefixes;
     }
 
-    private Double calcAndAdd(Feature<T> feature, SessionInput<T> input)
+    private Double calculateAndAdd(Feature<T> feature, SessionInput<T> input)
             throws FeatureCalculationException {
-        Double result = delegate.calc(feature, input);
+        Double result = delegate.calculate(feature, input);
         map.add(feature, resolveNameFeature(feature), result);
         return result;
     }
@@ -67,25 +67,25 @@ class HorizontalFeatureCacheCalculator<T extends FeatureInput>
     private String resolveNameFeature(Feature<T> feature) {
         String id = feature.getCustomName();
         if (id != null && !id.isEmpty()) {
-            return resolveFeatureID(id);
+            return resolveFeatureIdentifier(id);
         } else {
             return id;
         }
     }
 
     @Override
-    public double calc(Feature<T> feature, SessionInput<T> input)
+    public double calculate(Feature<T> feature, SessionInput<T> input)
             throws FeatureCalculationException {
 
         // if there's no custom name, then we don't consider caching
         if (feature.getCustomName() == null || feature.getCustomName().isEmpty()) {
-            return delegate.calc(feature, input);
+            return delegate.calculate(feature, input);
         }
 
         // Otherwise we save the result, and cache it for next time
         Double result = map.getResultFor(feature);
         if (result == null) {
-            result = calcAndAdd(feature, input);
+            result = calculateAndAdd(feature, input);
         }
         return result;
     }
@@ -102,37 +102,37 @@ class HorizontalFeatureCacheCalculator<T extends FeatureInput>
     }
 
     @Override
-    public String resolveFeatureID(String id) {
+    public String resolveFeatureIdentifier(String identifier) {
 
         // If any of the prefixes exist, they are removed
         for (String prefix : ignorePrefixes) {
-            if (id.startsWith(prefix)) {
-                String idPrefixRemoved = id.substring(prefix.length());
-                return delegate.resolveFeatureID(idPrefixRemoved);
+            if (identifier.startsWith(prefix)) {
+                String idPrefixRemoved = identifier.substring(prefix.length());
+                return delegate.resolveFeatureIdentifier(idPrefixRemoved);
             }
         }
-        return delegate.resolveFeatureID(id);
+        return delegate.resolveFeatureIdentifier(identifier);
     }
 
     @Override
-    public double calcFeatureByID(String id, SessionInput<T> input)
+    public double calculateFeatureByIdentifier(String id, SessionInput<T> input)
             throws FeatureCalculationException {
 
         // Let's first check if it's in our cache
-        Double res = map.getResultFor(id);
+        Double result = map.getResultFor(id);
 
-        if (res != null) {
-            return res;
+        if (result != null) {
+            return result;
         }
 
         // If it's not there, then let's find the feature we need to calculate from our list
-        Feature<T> feat = map.getFeatureFor(id);
+        Feature<T> feature = map.getFeatureFor(id);
 
-        if (feat != null) {
-            return calcAndAdd(feat, input);
+        if (feature != null) {
+            return calculateAndAdd(feature, input);
         } else {
             // We cannot find our feature throw an error, try the delegate
-            return delegate.calcFeatureByID(id, input);
+            return delegate.calculateFeatureByIdentifier(id, input);
         }
     }
 }

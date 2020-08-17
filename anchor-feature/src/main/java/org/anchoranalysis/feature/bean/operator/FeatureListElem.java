@@ -63,7 +63,7 @@ public abstract class FeatureListElem<T extends FeatureInput> extends Feature<T>
      * @return
      */
     protected String descriptionForList(String operatorDscr) {
-        return String.join(operatorDscr, FunctionalList.mapToList(list, Feature::getDscrLong));
+        return String.join(operatorDscr, FunctionalList.mapToList(list, Feature::descriptionLong));
     }
 
     public void setList(List<Feature<T>> list) {

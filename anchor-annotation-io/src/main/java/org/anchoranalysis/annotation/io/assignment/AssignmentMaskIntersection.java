@@ -94,7 +94,7 @@ public class AssignmentMaskIntersection implements Assignment {
     @Override
     public List<TypedValue> createStatistics() {
         WrappedTypeValueList out = new WrappedTypeValueList(4);
-        out.add(calcDice(), calcJaccard());
+        out.add(calculateDice(), calculateJaccard());
         out.add(numberIntersectingVoxels, numberUnionVoxels, sizeLeft, sizeRight);
         return out.asList();
     }
@@ -115,13 +115,13 @@ public class AssignmentMaskIntersection implements Assignment {
         return numberIntersectingVoxels > 0;
     }
 
-    private double calcDice() {
+    private double calculateDice() {
         int num = 2 * numberIntersectingVoxels;
         int dem = sizeLeft + sizeRight;
         return ((double) num) / dem;
     }
 
-    private double calcJaccard() {
+    private double calculateJaccard() {
         return ((double) numberIntersectingVoxels) / numberUnionVoxels;
     }
 }

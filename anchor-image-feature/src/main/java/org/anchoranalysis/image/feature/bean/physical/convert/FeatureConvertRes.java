@@ -33,7 +33,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.unit.SpatialConversionUtilities;
 import org.anchoranalysis.core.unit.SpatialConversionUtilities.UnitSuffix;
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInputWithRes;
 import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.feature.bean.physical.FeatureSingleElemWithRes;
@@ -52,9 +52,9 @@ public abstract class FeatureConvertRes<T extends FeatureInputWithRes>
     }
 
     @Override
-    protected double calcWithRes(double value, ImageResolution res)
+    protected double calculateWithResolution(double value, ImageResolution resolution)
             throws FeatureCalculationException {
-        double valuePhysical = convertToPhysical(value, res);
+        double valuePhysical = convertToPhysical(value, resolution);
         return convertToUnits(valuePhysical);
     }
 
