@@ -29,6 +29,8 @@ package org.anchoranalysis.image.extent;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.function.Consumer;
+import java.util.function.IntConsumer;
+import java.util.function.IntPredicate;
 import org.anchoranalysis.core.axis.AxisType;
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.core.geometry.Point2i;
@@ -62,13 +64,39 @@ public final class Extent implements Serializable {
     public Extent(int x, int y, int z) {
         this(new Point3i(x, y, z));
     }
+    
+    /**
+     * Constructor - creates an extent from a point (duplicating the point for internal use)
+     * <p>
+     * This constructor is exposed as a static method to deliberately duplicate the tuple
+     * as it will be used internally.
+     * 
+     * @param tuple a tuple with the extent size's for each dimension
+     * @return a newly created extent - that doesn't reuse {@code tuple} internally
+     */
+    public static Extent createFromTupleDuplicate(ReadableTuple3i tuple) {
+        return new Extent(new Point3i(tuple));
+    }
+    
+    /**
+     * Constructor - creates an extent from a point that is reused internally (without duplication)
+     * <p>
+     * This constructor is exposed as a static method to deliberately indicate that
+     * it's okay to consume the point internally, as it won't be otherwise use.
+     * 
+     * @param tuple a tuple with the extent size's for each dimension
+     * @return a newly created extent - that reuses {@code tuple} internally
+     */
+    public static Extent createFromTupleReuse(ReadableTuple3i tuple) {
+        return new Extent(new Point3i(tuple));
+    }
 
     /**
      * Constructor
      *
      * <p>The point will be taken ownership by the extent, and should not be modified thereafter.
      *
-     * @param len the length of each axis
+     * @param len a tuple with the extent size's for each dimension
      */
     private Extent(ReadableTuple3i len) {
         this.len = len;
@@ -182,7 +210,7 @@ public final class Extent implements Serializable {
     }
 
     /** Calculates a XYZ-offset of a point in a buffer whose dimensions are this extent */
-    public final int offset(Point3i point) {
+    public final int offset(ReadableTuple3i point) {
         return offset(point.x(), point.y(), point.z());
     }
 
@@ -192,7 +220,7 @@ public final class Extent implements Serializable {
     }
 
     /** Calculates a XY-offset of a point in a buffer whose dimensions are this extent */
-    public final int offsetSlice(Point3i point) {
+    public final int offsetSlice(ReadableTuple3i point) {
         return offset(point.x(), point.y(), 0);
     }
 
@@ -337,6 +365,38 @@ public final class Extent implements Serializable {
             return true;
         }
         return z() > other.z();
+    }
+    
+    /**
+     * Calls processor once for each z-value in the range
+     * 
+     * <p>This occurs sequentially from 0 (inclusive) to {@code z()} (exclusive)
+     *  
+     * @param indexConsumer called for each index (z-value)
+     */
+    public void iterateOverZ( IntConsumer indexConsumer ) {
+        for (int z = 0; z < len.z(); z++) {
+            indexConsumer.accept(z);
+        }
+    }
+    
+    /**
+     * Calls processor once for each z-value in the range unless {@code indexPredicate} returns false.
+     * 
+     * <p>This occurs sequentially from 0 (inclusive) to {@code z()} (exclusive)
+     * 
+     * <p>As soon as the {@code indexPredicate} returns false, the iteration stops.
+     *  
+     * @param indexPredicate called for each index (z-value)
+     * @return true if {@code indexPredicate} always returned true for every slice, false otherwise.
+     */
+    public boolean iterateOverZUntil( IntPredicate indexPredicate ) {
+        for (int z = 0; z < len.z(); z++) {
+            if (!indexPredicate.test(z)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private Point3i immutablePointOperation(Consumer<Point3i> pointOperation) {

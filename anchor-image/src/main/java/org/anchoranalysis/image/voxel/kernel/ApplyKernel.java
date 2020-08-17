@@ -71,7 +71,7 @@ public class ApplyKernel {
         for (point.setZ(0); point.z() < extent.z(); point.incrementZ()) {
 
             LocalSlices localSlices = new LocalSlices(point.z(), localSlicesSize, in);
-            ByteBuffer outArr = out.slice(point.z()).buffer();
+            ByteBuffer outArr = out.sliceBuffer(point.z());
 
             int ind = 0;
 
@@ -104,7 +104,7 @@ public class ApplyKernel {
      */
     public static int applyForCount(CountKernel kernel, Voxels<ByteBuffer> voxels)
             throws OperationFailedException {
-        return applyForCount(kernel, voxels, new BoundingBox(voxels.extent()));
+        return applyForCount(kernel, voxels, new BoundingBox(voxels));
     }
 
     /**
@@ -273,9 +273,7 @@ public class ApplyKernel {
             int ind = 0;
 
             ByteBuffer bufMask =
-                    object.voxels()
-                            .slice(point.z() - cornerMin.z())
-                            .buffer();
+                    object.sliceBufferGlobal(point.z());
 
             for (point.setY(cornerMin.y());
                     point.y() <= cornerMax.y();

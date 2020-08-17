@@ -42,7 +42,7 @@ public class BufferedImageFactory {
         Extent e = voxels.extent();
         checkExtentZ(e);
 
-        return createBufferedImageFromGrayscaleBuffer(voxels.slice(0).buffer(), e);
+        return createBufferedImageFromGrayscaleBuffer(voxels.sliceBuffer(0), e);
     }
 
     public static BufferedImage createRGB(
@@ -73,7 +73,7 @@ public class BufferedImageFactory {
             throw new CreateException(dscr + " channel extent does not match");
         }
 
-        return voxels.slice(0).buffer();
+        return voxels.sliceBuffer(0);
     }
 
     private static BufferedImage createBufferedImageFromGrayscaleBuffer(

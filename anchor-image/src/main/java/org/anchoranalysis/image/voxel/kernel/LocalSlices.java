@@ -49,7 +49,7 @@ public class LocalSlices {
             int rel = z + i - shift;
 
             if (rel >= 0 && rel < voxels.extent().z()) {
-                arr[i] = voxels.slice(rel).buffer().array();
+                arr[i] = voxels.sliceBuffer(rel).array();
             }
         }
     }

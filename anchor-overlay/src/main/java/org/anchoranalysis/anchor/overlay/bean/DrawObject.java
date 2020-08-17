@@ -86,7 +86,7 @@ public abstract class DrawObject extends AnchorBean<DrawObject> {
                 objects,
                 background,
                 attributes,
-                new BoundingBox(background.dimensions().extent()));
+                new BoundingBox(background.dimensions()));
     }
 
     /**

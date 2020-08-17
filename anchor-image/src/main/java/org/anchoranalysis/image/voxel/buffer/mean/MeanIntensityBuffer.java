@@ -67,11 +67,11 @@ public abstract class MeanIntensityBuffer<T extends Buffer> {
     }
 
     protected FloatBuffer sumBuffer() {
-        return voxelsSum.slice(0).buffer();
+        return voxelsSum.sliceBuffer(0);
     }
 
     protected T flatBuffer() {
-        return projectedVoxels.slice(0).buffer();
+        return projectedVoxels.sliceBuffer(0);
     }
 
     protected int numberSlicesProcessed() {

@@ -36,6 +36,7 @@ import cern.jet.math.Functions;
 import java.io.Serializable;
 import java.util.Optional;
 import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.mark.MarkConic;
@@ -71,15 +72,15 @@ public class MarkEllipsoid extends MarkConic implements Serializable {
     private static final byte FLAG_SUBMARK_REGION4 = flagForRegion(SUBMARK_OUTSIDE);
 
     // START Mark State
-    private double shellRad = 0.1;
-    private double innerCoreDistance = 0.4;
+    @Getter @Setter private double shellRad = 0.1;
+    @Getter @Setter private double innerCoreDistance = 0.4;
 
     @Getter private Point3d radii;
-    private Orientation orientation = new Orientation3DEulerAngles();
+    @Getter private Orientation orientation = new Orientation3DEulerAngles();
     // END mark state
 
     // START internal objects
-    private EllipsoidMatrixCalculator ellipsoidCalculator;
+    @Getter private EllipsoidMatrixCalculator ellipsoidCalculator;
 
     // Relative distances to various shells squared (expressed as a ratio of the radii)
     private double shellInnerCore;
@@ -288,47 +289,28 @@ public class MarkEllipsoid extends MarkConic implements Serializable {
                     return false;
                 }
 
-                MarkEllipsoid trgtMark = (MarkEllipsoid) mark;
+                MarkEllipsoid target = (MarkEllipsoid) mark;
 
-                DoubleMatrix1D relPos =
+                DoubleMatrix1D relativePosition =
                         TensorUtilities.threeElementMatrix(
-                                trgtMark.getPos().x() - getPos().x(),
-                                trgtMark.getPos().y() - getPos().y(),
-                                trgtMark.getPos().z() - getPos().z());
+                                target.getPos().x() - getPos().x(),
+                                target.getPos().y() - getPos().y(),
+                                target.getPos().z() - getPos().z());
 
-                DoubleMatrix1D relPosSquared = relPos.copy();
-                relPosSquared.assign(Functions.functions.square); // NOSONAR
-                double distance = relPosSquared.zSum();
+                DoubleMatrix1D relativePositionSquared = relativePosition.copy();
+                relativePositionSquared.assign(Functions.functions.square); // NOSONAR
+                double distance = relativePositionSquared.zSum();
 
                 // Definitely outside
                 return distance
                         > Math.pow(
-                                getMaximumRadius(regionID) + trgtMark.getMaximumRadius(regionID),
+                                getMaximumRadius(regionID) + target.getMaximumRadius(regionID),
                                 2.0);
             };
 
     @Override
     public Optional<QuickOverlapCalculation> quickOverlap() {
         return Optional.of(quickOverlap);
-    }
-
-    private double getMaximumRadius(int regionID) {
-
-        double maxRadius = ellipsoidCalculator.getMaximumRadius();
-
-        if (regionID == GlobalRegionIdentifiers.SUBMARK_SHELL) {
-            maxRadius *= (1 + shellRad);
-        }
-
-        return maxRadius;
-    }
-
-    public double getShellRad() {
-        return shellRad;
-    }
-
-    public void setShellRad(double shellRad) {
-        this.shellRad = shellRad;
     }
 
     @Override
@@ -425,12 +407,15 @@ public class MarkEllipsoid extends MarkConic implements Serializable {
     public BoundingBox boxAllRegions(ImageDimensions bndScene) {
         return box(bndScene, GlobalRegionIdentifiers.SUBMARK_OUTSIDE);
     }
+    
+    private double getMaximumRadius(int regionID) {
 
-    public EllipsoidMatrixCalculator getEllipsoidCalculator() {
-        return ellipsoidCalculator;
-    }
+        double maxRadius = ellipsoidCalculator.getMaximumRadius();
 
-    public Orientation getOrientation() {
-        return orientation;
+        if (regionID == GlobalRegionIdentifiers.SUBMARK_SHELL) {
+            maxRadius *= (1 + shellRad);
+        }
+
+        return maxRadius;
     }
 }

@@ -85,7 +85,7 @@ public class Outline extends DrawObject {
                     BoundingBox restrictTo)
                     throws OperationFailedException {
 
-                assert (outline.voxels().extent().z() > 0);
+                assert (outline.extent().z() > 0);
                 // TODO this can get broken! Fix!
                 assert (outline.boundingBox().cornerMin().z() >= 0);
 

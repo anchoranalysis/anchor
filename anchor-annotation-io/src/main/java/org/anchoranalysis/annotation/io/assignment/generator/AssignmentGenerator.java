@@ -41,7 +41,7 @@ import org.anchoranalysis.image.bean.provider.stack.StackProviderArrangeRaster;
 import org.anchoranalysis.image.io.bean.stack.arrange.StackProviderWithLabel;
 import org.anchoranalysis.image.io.generator.raster.RasterGenerator;
 import org.anchoranalysis.image.io.generator.raster.StackGenerator;
-import org.anchoranalysis.image.io.generator.raster.obj.rgb.DrawObjectsGenerator;
+import org.anchoranalysis.image.io.generator.raster.object.rgb.DrawObjectsGenerator;
 import org.anchoranalysis.image.io.stack.TileRasters;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectCollectionFactory;

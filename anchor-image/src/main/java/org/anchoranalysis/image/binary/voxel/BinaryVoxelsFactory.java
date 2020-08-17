@@ -51,7 +51,7 @@ public class BinaryVoxelsFactory {
      */
     public static BinaryVoxels<ByteBuffer> createEmptyOn(Extent extent) {
         BinaryVoxels<ByteBuffer> voxels = createEmptyOff(extent);
-        voxels.setAllPixelsToOn();
+        voxels.assignOn().toAll();
         return voxels;
     }
         

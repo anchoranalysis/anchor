@@ -30,7 +30,7 @@ import java.nio.ByteBuffer;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipUtilities;
-import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.intersecting.IntersectionBBox;
@@ -97,13 +97,13 @@ class CountIntersectingVoxelsRegionMembershipMask {
 
         for (int z = box.z().min(); z < box.z().max(); z++) {
 
-            ByteBuffer buffer = src.voxels().slice(z).buffer();
+            ByteBuffer buffer = src.voxels().sliceBuffer(z);
 
             int zOther = z + box.z().rel();
             int zGlobal = z + src.boundingBox().cornerMin().z();
 
-            ByteBuffer bufferOther = other.voxels().slice(zOther).buffer();
-            ByteBuffer bufferMaskGlobal = maskGlobal.slice(zGlobal).buffer();
+            ByteBuffer bufferOther = other.voxels().sliceBuffer(zOther);
+            ByteBuffer bufferMaskGlobal = maskGlobal.sliceBuffer(zGlobal);
 
             buffer.clear();
             bufferOther.clear();
@@ -127,7 +127,7 @@ class CountIntersectingVoxelsRegionMembershipMask {
             ByteBuffer buffer2,
             ByteBuffer bufferMaskGlobal,
             IntersectionBBox box,
-            Point3i pointGlobalRel,
+            ReadableTuple3i pointGlobalRel,
             Extent extentGlobal,
             byte onMaskGlobal) {
 

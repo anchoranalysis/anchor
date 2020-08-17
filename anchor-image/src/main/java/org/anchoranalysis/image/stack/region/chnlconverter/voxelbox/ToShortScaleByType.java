@@ -42,7 +42,7 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedShort;
 //
 // Note that the Type.MAX_VALUE in Java assumes siged types.  So we multiply by two to get unsigned
 // sizes
-public final class ToShortScaleByType implements VoxelsConverter<ShortBuffer> {
+public final class ToShortScaleByType extends VoxelsConverter<ShortBuffer> {
 
     // This doesn't really make sense for a float, as the maximum value is so much higher, so we
     // take

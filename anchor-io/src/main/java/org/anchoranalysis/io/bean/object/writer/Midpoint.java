@@ -151,7 +151,7 @@ public class Midpoint extends DrawObject {
                     (Point3i) object.getProperty(PROPERTY_MIDPOINT),
                     object.boundingBox().cornerMin());
         } else {
-            return PointConverter.intFromDouble(object.withoutProperties().centerOfGravity());
+            return PointConverter.intFromDoubleFloor(object.withoutProperties().centerOfGravity());
         }
     }
 }

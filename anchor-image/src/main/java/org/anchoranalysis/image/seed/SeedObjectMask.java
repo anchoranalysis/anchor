@@ -30,7 +30,6 @@ import lombok.AllArgsConstructor;
 import java.util.Optional;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.interpolator.InterpolatorFactory;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.scale.ScaleFactor;
 
@@ -44,7 +43,6 @@ public class SeedObjectMask implements Seed {
         object =
                 object.scale(
                         new ScaleFactor(scale),
-                        InterpolatorFactory.getInstance().noInterpolation(),
                         Optional.of(extent));
     }
 

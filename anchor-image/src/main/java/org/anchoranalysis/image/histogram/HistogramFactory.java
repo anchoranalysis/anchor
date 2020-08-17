@@ -153,10 +153,9 @@ public class HistogramFactory {
 
     private static Histogram createWithMask(Voxels<?> inputBuffer, ObjectMask object) {
 
-        Histogram hist = new HistogramArray((int) inputBuffer.dataType().maxValue());
+        Histogram histogram = new HistogramArray((int) inputBuffer.dataType().maxValue());
 
-        Extent e = inputBuffer.extent();
-        Extent eMask = object.boundingBox().extent();
+        Extent extent = inputBuffer.extent();
 
         ReadableTuple3i cornerMin = object.boundingBox().cornerMin();
         ReadableTuple3i cornerMax = object.boundingBox().calcCornerMax();
@@ -166,58 +165,60 @@ public class HistogramFactory {
         for (int z = cornerMin.z(); z <= cornerMax.z(); z++) {
 
             VoxelBuffer<?> bb = inputBuffer.slice(z);
-            ByteBuffer bbMask =
-                    object.voxels().slice(z - cornerMin.z()).buffer();
+            ByteBuffer bbMask = object.sliceBufferGlobal(z);
 
             for (int y = cornerMin.y(); y <= cornerMax.y(); y++) {
                 for (int x = cornerMin.x(); x <= cornerMax.x(); x++) {
 
-                    int offset = e.offset(x, y);
-                    int offsetMask = eMask.offset(x - cornerMin.x(), y - cornerMin.y());
+                    int offset = extent.offset(x, y);
+                    int offsetMask = object.offsetGlobal(x,y);
 
                     byte valueOnMask = bbMask.get(offsetMask);
 
                     if (valueOnMask == matchValue) {
                         int val = bb.getInt(offset);
-                        hist.incrVal(val);
+                        histogram.incrementValue(val);
                     }
                 }
             }
         }
-        return hist;
+        return histogram;
     }
 
     private static Histogram createWithMasks(VoxelsWrapper voxels, ObjectCollection objects) {
 
         Histogram total = new HistogramArray((int) voxels.getVoxelDataType().maxValue());
 
-        for (ObjectMask objectMask : objects) {
-            Histogram histogram = createWithMask(voxels.any(), objectMask);
-            try {
+        try {
+            for (ObjectMask objectMask : objects) {
+                Histogram histogram = createWithMask(voxels.any(), objectMask);
                 total.addHistogram(histogram);
-            } catch (OperationFailedException e) {
-                assert false;
             }
+        
+        } catch (OperationFailedException e) {
+            assert false;
         }
+
         return total;
     }
-
+  
     private static Histogram create(Voxels<?> inputBox) {
 
         Histogram hist = new HistogramArray((int) inputBox.dataType().maxValue());
 
-        Extent e = inputBox.extent();
-        int volumeXY = e.volumeXY();
-        for (int z = 0; z < e.z(); z++) {
-            addBufferToHistogram(hist, inputBox.slice(z), volumeXY);
-        }
+        int volumeXY = inputBox.extent().volumeXY();
+        
+        inputBox.extent().iterateOverZ( z->
+            addBufferToHistogram(hist, inputBox.slice(z), volumeXY)
+        );
+
         return hist;
     }
 
     private static void addBufferToHistogram(Histogram hist, VoxelBuffer<?> bb, int maxOffset) {
         for (int offset = 0; offset < maxOffset; offset++) {
             int val = bb.getInt(offset);
-            hist.incrVal(val);
+            hist.incrementValue(val);
         }
     }
 
@@ -225,7 +226,7 @@ public class HistogramFactory {
             Channel chnl, ObjectMask object, boolean ignoreZero) {
         Histogram hist = create(chnl, object);
         if (ignoreZero) {
-            hist.zeroVal(0);
+            hist.zeroValue(0);
         }
         return hist;
     }

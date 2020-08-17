@@ -29,17 +29,18 @@ package org.anchoranalysis.image.voxel.factory;
 import java.nio.IntBuffer;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.Voxels;
+import org.anchoranalysis.image.voxel.VoxelsAsInt;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedInt;
-import org.anchoranalysis.image.voxel.pixelsforplane.PixelsForPlane;
-import org.anchoranalysis.image.voxel.pixelsforplane.PixelsFromIntBufferArr;
+import org.anchoranalysis.image.voxel.pixelsforslice.PixelsForSlice;
+import org.anchoranalysis.image.voxel.pixelsforslice.PixelsFromIntBufferArr;
 
 final class FactoryInt implements VoxelsFactoryTypeBound<IntBuffer> {
 
     private static final VoxelDataType DATA_TYPE = VoxelDataTypeUnsignedInt.INSTANCE;
 
     @Override
-    public Voxels<IntBuffer> create(PixelsForPlane<IntBuffer> pixelsForPlane) {
+    public Voxels<IntBuffer> create(PixelsForSlice<IntBuffer> pixelsForPlane) {
         return new VoxelsAsInt(pixelsForPlane);
     }
 

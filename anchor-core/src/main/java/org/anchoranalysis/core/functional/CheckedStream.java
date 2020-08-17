@@ -291,7 +291,7 @@ public class CheckedStream {
     private static <S, E extends Exception> int suppressCheckedException(
             S param, CheckedToIntFunction<S, E> function) {
         try {
-            return function.apply(param);
+            return function.applyAsInt(param);
         } catch (Exception exc) {
             throw new ConvertedToRuntimeException(exc);
         }

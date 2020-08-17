@@ -148,16 +148,14 @@ public class ObjectMaskMerger {
     private static void copyPixelsCheckMask(
             ObjectMask source, ObjectMask destination, BoundingBox box) {
 
-        Point3i pointDest = source.boundingBox().relPosTo(box);
-        Extent e = source.boundingBox().extent();
-
-        source.voxels()
-                .copyPixelsToCheckMask(
-                        new BoundingBox(e),
+        Point3i pointDest = source.boundingBox().relativePositionTo(box);
+        Extent extent = source.boundingBox().extent();
+        
+        source.extracter()
+                .objectCopyTo(
+                        source,
                         destination.voxels(),
-                        new BoundingBox(pointDest, e),
-                        source.voxels(),
-                        source.binaryValuesByte());
+                        new BoundingBox(pointDest, extent));
     }
 
     /**

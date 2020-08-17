@@ -45,8 +45,8 @@ class BufferArrList {
                     stack.getChannel(c)
                             .voxels()
                             .asByte()
-                            .getPlaneAccess()
-                            .getPixelsForPlane(z)
+                            .slices()
+                            .slice(z)
                             .buffer();
             delegate.add(bb);
         }

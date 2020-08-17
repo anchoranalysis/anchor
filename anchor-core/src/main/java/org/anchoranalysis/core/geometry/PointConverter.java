@@ -32,16 +32,22 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.functional.FunctionalList;
 
+/**
+ * Conversion utilities between different types and dimensionalities of points 
+ * 
+ * @author Owen Feehan
+ *
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class PointConverter {
 
     // START singular points
 
-    public static Point2i intFromDouble(Point2d point) {
+    public static Point2i intFromDoubleFloor(Point2d point) {
         return new Point2i((int) point.x(), (int) point.y());
     }
 
-    public static Point3i intFromDouble(Point3d point) {
+    public static Point3i intFromDoubleFloor(Point3d point) {
         return new Point3i((int) point.x(), (int) point.y(), (int) point.z());
     }
 
@@ -52,8 +58,16 @@ public class PointConverter {
                 (int) Math.ceil(point.z()));
     }
 
-    public static Point3i convertTo3d(Point2i point) {
+    public static Point3i convertTo3i(Point2i point) {
         return new Point3i(point.x(), point.y(), 0);
+    }
+    
+    public static Point3i convertTo3i(Point2i point, int slice) {
+        return new Point3i(point.x(), point.y(), slice);
+    }
+    
+    public static Point3d convertTo3d(Point2d point) {
+        return new Point3d(point.x(), point.y(), 0);
     }
 
     public static Point2d doubleFromFloat(Point2f point) {
@@ -129,7 +143,7 @@ public class PointConverter {
     }
 
     public static List<Point3i> convert3i(List<Point3d> points) {
-        return convert(points, PointConverter::intFromDouble);
+        return convert(points, PointConverter::intFromDoubleFloor);
     }
 
     // END lists of points

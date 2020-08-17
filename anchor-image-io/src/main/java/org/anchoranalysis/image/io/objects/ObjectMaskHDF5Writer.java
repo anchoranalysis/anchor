@@ -97,7 +97,7 @@ class ObjectMaskHDF5Writer {
 
         for (int z = 0; z < extent.z(); z++) {
 
-            ByteBuffer bb = bvb.slice(z).buffer();
+            ByteBuffer bb = bvb.sliceBuffer(z);
 
             for (int y = 0; y < extent.y(); y++) {
                 for (int x = 0; x < extent.x(); x++) {

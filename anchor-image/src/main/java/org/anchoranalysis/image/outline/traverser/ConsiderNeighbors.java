@@ -32,7 +32,6 @@ import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.voxel.Voxels;
 
 @AllArgsConstructor
 class ConsiderNeighbors {
@@ -104,15 +103,14 @@ class ConsiderNeighbors {
     public static boolean considerVisitMarkRaster(
             ConsiderVisit considerVisit, Point3i point, int distance, ObjectMask outline) {
 
-        Voxels<ByteBuffer> voxels = outline.voxels();
         BinaryValuesByte bvb = outline.binaryValuesByte();
 
-        if (!voxels.extent().contains(point)) {
+        if (!outline.extent().contains(point)) {
             return false;
         }
 
-        ByteBuffer bb = voxels.slice(point.z()).buffer();
-        int offset = voxels.extent().offset(point.x(), point.y());
+        ByteBuffer bb = outline.sliceBufferLocal(point.z());
+        int offset = outline.extent().offsetSlice(point);
 
         // Check if the buffer allows us to read the pixel
         if (bb.get(offset) == bvb.getOffByte()) {

@@ -72,13 +72,12 @@ public class ExtendObjectsInto3DMask {
 
         BinaryValuesByte bv = mask3D.binaryValues().createByte();
 
-        ByteBuffer bufferIn2D = obj2D.voxels().slice(0).buffer();
+        ByteBuffer bufferIn2D = obj2D.voxels().sliceBuffer(0);
 
         for (point.setZ(0); point.z() <= max.z(); point.incrementZ()) {
 
-            ByteBuffer bufferMask3D =
-                    mask3D.voxels().getPlaneAccess().getPixelsForPlane(point.z()).buffer();
-            ByteBuffer bufferOut3D = newMask.voxels().slice(point.z()).buffer();
+            ByteBuffer bufferMask3D = mask3D.voxels().sliceBuffer(point.z());
+            ByteBuffer bufferOut3D = newMask.voxels().sliceBuffer(point.z());
 
             int ind = 0;
 

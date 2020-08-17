@@ -61,7 +61,7 @@ public class VoxelsThresholder {
         if (inputBuffer.getVoxelDataType().equals(VoxelDataTypeUnsignedByte.INSTANCE)) {
 
             IterateVoxels.callEachPoint(
-                    objectMask, inputBuffer.asByte(), new PointProcessor(level, boxOut, bvOut));
+                    inputBuffer.asByte(), objectMask, new PointProcessor(level, boxOut, bvOut));
         }
 
         return BinaryVoxelsFactory.reuseByte(boxOut, bvOut.createInt());

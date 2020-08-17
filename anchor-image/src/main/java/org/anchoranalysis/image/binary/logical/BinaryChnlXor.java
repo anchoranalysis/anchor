@@ -70,8 +70,8 @@ public class BinaryChnlXor {
         // All the on voxels in the receive, are put onto crnt
         for (int z = 0; z < e.z(); z++) {
 
-            ByteBuffer bufSrc = voxelsFirst.slice(z).buffer();
-            ByteBuffer bufReceive = voxelsSecond.slice(z).buffer();
+            ByteBuffer bufSrc = voxelsFirst.sliceBuffer(z);
+            ByteBuffer bufReceive = voxelsSecond.sliceBuffer(z);
 
             int offset = 0;
             for (int y = 0; y < e.y(); y++) {

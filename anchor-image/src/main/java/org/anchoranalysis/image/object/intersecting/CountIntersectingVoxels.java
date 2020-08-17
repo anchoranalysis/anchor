@@ -69,10 +69,10 @@ public abstract class CountIntersectingVoxels {
         int cnt = 0;
         for (int z = box.z().min(); z < box.z().max(); z++) {
 
-            ByteBuffer buffer = src.voxels().slice(z).buffer();
+            ByteBuffer buffer = src.voxels().sliceBuffer(z);
 
             int zOther = z + box.z().rel();
-            ByteBuffer bufferOther = other.voxels().slice(zOther).buffer();
+            ByteBuffer bufferOther = other.voxels().sliceBuffer(zOther);
 
             cnt += countIntersectingVoxels(buffer, bufferOther, box);
         }

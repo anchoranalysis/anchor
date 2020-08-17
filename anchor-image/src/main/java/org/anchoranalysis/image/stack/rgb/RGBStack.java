@@ -155,7 +155,7 @@ public class RGBStack {
 
     private static void writePoint(Point3i point, Channel chnl, byte toWrite) {
         int index = chnl.dimensions().extent().offsetSlice(point);
-        chnl.voxels().asByte().slice(point.z()).buffer().put(index, toWrite);
+        chnl.voxels().asByte().sliceBuffer(point.z()).put(index, toWrite);
     }
 
     // Only supports 8-bit
@@ -181,7 +181,7 @@ public class RGBStack {
 
         byte objectMaskOn = object.binaryValuesByte().getOnByte();
 
-        ByteBuffer inArr = object.voxels().slice(zLocal).buffer();
+        ByteBuffer inArr = object.sliceBufferLocal(zLocal);
 
         ByteBuffer red = extractBuffer(0, pointGlobal.z());
         ByteBuffer green = extractBuffer(1, pointGlobal.z());
@@ -221,8 +221,7 @@ public class RGBStack {
         return channels.getChannel(chnlIndex)
                 .voxels()
                 .asByte()
-                .getPlaneAccess()
-                .getPixelsForPlane(zIndex)
+                .slice(zIndex)
                 .buffer();
     }
 

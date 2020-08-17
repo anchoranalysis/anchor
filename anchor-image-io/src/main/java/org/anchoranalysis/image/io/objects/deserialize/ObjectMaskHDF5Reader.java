@@ -76,7 +76,7 @@ class ObjectMaskHDF5Reader {
 
         for (int z = 0; z < e.z(); z++) {
 
-            ByteBuffer bb = voxels.slice(z).buffer();
+            ByteBuffer bb = voxels.sliceBuffer(z);
 
             for (int y = 0; y < e.y(); y++) {
                 for (int x = 0; x < e.x(); x++) {

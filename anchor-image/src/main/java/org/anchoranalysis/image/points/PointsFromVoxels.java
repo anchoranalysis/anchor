@@ -157,7 +157,7 @@ public class PointsFromVoxels {
         Extent e = voxels.extent();
 
         BinaryValuesByte bvb = voxels.binaryValues().createByte();
-        ByteBuffer bb = voxels.slice(0).buffer();
+        ByteBuffer bb = voxels.sliceBuffer(0);
 
         for (int y = 0; y < e.y(); y++) {
             for (int x = 0; x < e.x(); x++) {
@@ -188,7 +188,7 @@ public class PointsFromVoxels {
         BinaryValuesByte bvb = voxels.binaryValues().createByte();
 
         for (int z = 0; z < e.z(); z++) {
-            ByteBuffer bb = voxels.slice(z).buffer();
+            ByteBuffer bb = voxels.sliceBuffer(z);
 
             int zAdj = shift.z() + z;
 
@@ -223,7 +223,7 @@ public class PointsFromVoxels {
         BinaryValuesByte bvb = voxels.binaryValues().createByte();
 
         for (int z = 0; z < e.z(); z++) {
-            ByteBuffer bb = voxels.slice(z).buffer();
+            ByteBuffer bb = voxels.sliceBuffer(z);
 
             int zAdj = add.z() + z;
 

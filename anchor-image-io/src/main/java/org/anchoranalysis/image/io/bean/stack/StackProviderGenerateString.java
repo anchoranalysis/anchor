@@ -88,8 +88,8 @@ public class StackProviderGenerateString extends StackProvider {
 
     private static int maxValueFromStack(Stack stack) {
         int max = 0;
-        for (Channel chnl : stack) {
-            int chnlVal = chnl.voxels().any().ceilOfMaxPixel();
+        for (Channel channel : stack) {
+            int chnlVal = channel.extracter().voxelWithMaxIntensity();
             if (chnlVal > max) {
                 max = chnlVal;
             }
@@ -119,8 +119,8 @@ public class StackProviderGenerateString extends StackProvider {
                 double maxValue = maxValueFromStack(stackIntensity);
                 double mult = maxValue / maxTypeValue;
 
-                for (Channel c : stack) {
-                    c.voxels().any().multiplyBy(mult);
+                for (Channel channel : stack) {
+                    channel.arithmetic().multiplyBy(mult);
                 }
             }
 
@@ -133,7 +133,7 @@ public class StackProviderGenerateString extends StackProvider {
     private Channel createExpandedChnl(Channel channel, int zHeight) {
         assert (channel.dimensions().z() == 1);
 
-        BoundingBox boxSrc = new BoundingBox(channel.dimensions().extent());
+        BoundingBox boxSrc = new BoundingBox(channel.dimensions());
         BoundingBox boxDest = boxSrc;
 
         Channel chnlNew = emptyChannelWithChangedZ(channel, zHeight);
@@ -142,7 +142,7 @@ public class StackProviderGenerateString extends StackProvider {
             // Adjust dfestination box
             boxDest = boxDest.shiftToZ(z);
 
-            channel.voxels().copyPixelsTo(boxSrc, chnlNew.voxels(), boxDest);
+            channel.voxels().copyVoxelsTo(boxSrc, chnlNew.voxels(), boxDest);
         }
         return chnlNew;
     }

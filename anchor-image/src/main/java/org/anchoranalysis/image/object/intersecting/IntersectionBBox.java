@@ -75,26 +75,26 @@ public class IntersectionBBox {
     }
 
     public static IntersectionBBox create(
-            BoundingBox boxSrc, BoundingBox boxOther, BoundingBox boxIntersect) {
+            BoundingBox boxSource, BoundingBox boxOther, BoundingBox boxIntersect) {
 
-        Point3i relPosSrc = boxIntersect.relPosTo(boxSrc);
+        Point3i relativePositionSource = boxIntersect.relativePositionTo(boxSource);
 
-        Point3i relPosTrgtToSrc =
-                Point3i.immutableSubtract(boxSrc.cornerMin(), boxOther.cornerMin());
+        Point3i relativePositionDestinationToSource =
+                Point3i.immutableSubtract(boxSource.cornerMin(), boxOther.cornerMin());
 
-        Point3i relPosSrcMax = Point3i.immutableAdd(relPosSrc, boxIntersect.extent().asTuple());
+        Point3i relativePositionSourceMax = Point3i.immutableAdd(relativePositionSource, boxIntersect.extent().asTuple());
 
         return new IntersectionBBox(
-                relPosSrc, relPosSrcMax, relPosTrgtToSrc, boxSrc.extent(), boxOther.extent());
+                relativePositionSource, relativePositionSourceMax, relativePositionDestinationToSource, boxSource.extent(), boxOther.extent());
     }
 
     private IntersectionBBox(
-            Point3i pointMin, Point3i pointMax, Point3i relPos, Extent eSrc, Extent eOther) {
-        x = new Dimension(pointMin.x(), pointMax.x(), relPos.x());
-        y = new Dimension(pointMin.y(), pointMax.y(), relPos.y());
-        z = new Dimension(pointMin.z(), pointMax.z(), relPos.z());
-        this.e1 = eSrc;
-        this.e2 = eOther;
+            Point3i pointMin, Point3i pointMax, Point3i relativePosition, Extent extentSource, Extent extentOther) {
+        x = new Dimension(pointMin.x(), pointMax.x(), relativePosition.x());
+        y = new Dimension(pointMin.y(), pointMax.y(), relativePosition.y());
+        z = new Dimension(pointMin.z(), pointMax.z(), relativePosition.z());
+        this.e1 = extentSource;
+        this.e2 = extentOther;
     }
 
     public Dimension x() {

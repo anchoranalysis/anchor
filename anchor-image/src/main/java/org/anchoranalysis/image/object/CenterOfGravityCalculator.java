@@ -30,7 +30,7 @@ import java.nio.ByteBuffer;
 import org.anchoranalysis.core.axis.AxisType;
 import org.anchoranalysis.core.axis.AxisTypeConverter;
 import org.anchoranalysis.core.geometry.Point3d;
-import org.anchoranalysis.image.voxel.Voxels;
+import org.anchoranalysis.image.extent.Extent;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -47,19 +47,18 @@ final class CenterOfGravityCalculator {
      */
     public static Point3d calcCenterOfGravity(ObjectMask object) {
 
-        Voxels<ByteBuffer> voxels = object.voxels();
-
         int cnt = 0;
         Point3d sum = new Point3d();
         byte onByte = object.binaryValuesByte().getOnByte();
+        Extent extent = object.extent();
 
-        for (int z = 0; z < voxels.extent().z(); z++) {
+        for (int z = 0; z < extent.z(); z++) {
 
-            ByteBuffer bb = voxels.slice(z).buffer();
+            ByteBuffer bb = object.sliceBufferLocal(z);
 
             int offset = 0;
-            for (int y = 0; y < voxels.extent().y(); y++) {
-                for (int x = 0; x < voxels.extent().x(); x++) {
+            for (int y = 0; y < extent.y(); y++) {
+                for (int x = 0; x < extent.x(); x++) {
 
                     if (bb.get(offset) == onByte) {
                         sum.add(x, y, z);
@@ -88,19 +87,18 @@ final class CenterOfGravityCalculator {
      */
     public static double calcCenterOfGravityForAxis(ObjectMask object, AxisType axisType) {
 
-        Voxels<ByteBuffer> voxels = object.voxels();
-
         int cnt = 0;
         double sum = 0.0;
         byte onByte = object.binaryValuesByte().getOnByte();
+        Extent extent = object.extent();
+        
+        for (int z = 0; z < extent.z(); z++) {
 
-        for (int z = 0; z < voxels.extent().z(); z++) {
-
-            ByteBuffer bb = voxels.slice(z).buffer();
+            ByteBuffer bb = object.sliceBufferLocal(z);
 
             int offset = 0;
-            for (int y = 0; y < voxels.extent().y(); y++) {
-                for (int x = 0; x < voxels.extent().x(); x++) {
+            for (int y = 0; y < extent.y(); y++) {
+                for (int x = 0; x < extent.x(); x++) {
 
                     if (bb.get(offset) == onByte) {
                         sum += AxisTypeConverter.valueFor(axisType, x, y, z);

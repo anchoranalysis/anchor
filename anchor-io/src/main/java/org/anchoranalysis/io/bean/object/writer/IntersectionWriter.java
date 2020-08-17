@@ -39,22 +39,22 @@ import org.anchoranalysis.image.stack.rgb.RGBStack;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class IntersectionWriter {
 
-    // Writes only to the intersection of an object-mask and stack (positioned at stackBBox)
+    /** Writes only to the intersection of an object-mask and stack (positioned at {@code stackBox}) */
     public static void writeRGBMaskIntersection(
-            ObjectMask object, RGBColor color, RGBStack stack, BoundingBox stackBBox)
+            ObjectMask object, RGBColor color, RGBStack stack, BoundingBox stackBox)
             throws OperationFailedException {
 
-        if (!stackBBox.intersection().existsWith(object.boundingBox())) {
+        if (!stackBox.intersection().existsWith(object.boundingBox())) {
             throw new OperationFailedException(
                     String.format(
                             "The bounding-box of the object-mask (%s) does not intersect with the stack (%s)",
-                            object.boundingBox().toString(), stackBBox.toString()));
+                            object.boundingBox().toString(), stackBox.toString()));
         }
         // Intersection of the object-mask and stackBBox
         BoundingBox intersection =
                 object.boundingBox()
                         .intersection()
-                        .with(stackBBox)
+                        .with(stackBox)
                         .orElseThrow(
                                 () ->
                                         new OperationFailedException(
@@ -64,8 +64,8 @@ class IntersectionWriter {
         writeOnEachSlice(
                 stack,
                 color,
-                intersection.shiftBackBy(stackBBox.cornerMin()),
-                object.mapBoundingBoxPreserveExtent(box -> box.shiftBackBy(stackBBox.cornerMin())));
+                intersection.shiftBackBy(stackBox.cornerMin()),
+                object.shiftBackBy(stackBox.cornerMin()));
     }
 
     private static void writeOnEachSlice(

@@ -36,15 +36,15 @@ public interface Histogram {
 
     void reset();
 
-    void zeroVal(int val);
+    void zeroValue(int val);
 
-    void transferVal(int srcVal, int destVal);
+    void transferValue(int srcVal, int destVal);
 
-    void incrVal(int val);
+    void incrementValue(int val);
 
-    void incrValBy(int val, int increase);
+    void incrValueBy(int val, int increase);
 
-    void incrValBy(int val, long increase);
+    void incrValueBy(int val, long increase);
 
     boolean isEmpty();
 
@@ -89,10 +89,10 @@ public interface Histogram {
     int calcMode(int startIndex) throws OperationFailedException;
 
     // Should only be called on a histogram with at least one item
-    int calcMax() throws OperationFailedException;
+    int calcMaximum() throws OperationFailedException;
 
     // Should only be called on a histogram with at least one item
-    int calcMin() throws OperationFailedException;
+    int calcMinimum() throws OperationFailedException;
 
     long calcSum();
 
@@ -104,7 +104,7 @@ public interface Histogram {
 
     int calcNumNonZero();
 
-    double stdDev() throws OperationFailedException;
+    double standardDeviation() throws OperationFailedException;
 
     default double variance() {
         return new VarianceCalculator(calcSum(), calcSumSquares(), getTotalCount()).variance();

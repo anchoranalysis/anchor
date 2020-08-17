@@ -29,6 +29,7 @@ package org.anchoranalysis.test.image;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.nio.file.Path;
 import lombok.Getter;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.io.csv.comparer.CSVComparer;
@@ -49,7 +50,7 @@ public class DualComparer {
 
     private final TestLoaderImageIO loaderImg1;
     private final TestLoaderImageIO loaderImg2;
-
+    
     public DualComparer(TestLoader loader1, TestLoader loader2) {
         super();
         this.loader1 = loader1;
@@ -106,7 +107,7 @@ public class DualComparer {
     }
 
     /**
-     * Compare two obj-mask-collections
+     * Compare two object-mask-collections
      *
      * @param path path to compare
      * @throws IOException if something goes wrong with I/O
@@ -115,5 +116,12 @@ public class DualComparer {
         ObjectCollection objects1 = loaderImg1.openObjectsFromTestPath(path);
         ObjectCollection objects2 = loaderImg2.openObjectsFromTestPath(path);
         return objects1.equalsDeep(objects2);
+    }
+    
+    
+    public boolean compareTwoSubdirectories(String path) {
+        Path dir1 = loaderImg1.getTestLoader().resolveTestPath(path);
+        Path dir2 = loaderImg2.getTestLoader().resolveTestPath(path);
+        return DirectoriesComparer.areDirectoriesEqual(dir1, dir2);
     }
 }

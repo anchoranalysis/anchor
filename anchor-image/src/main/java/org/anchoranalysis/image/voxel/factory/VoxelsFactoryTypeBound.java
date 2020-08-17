@@ -30,7 +30,7 @@ import java.nio.Buffer;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
-import org.anchoranalysis.image.voxel.pixelsforplane.PixelsForPlane;
+import org.anchoranalysis.image.voxel.pixelsforslice.PixelsForSlice;
 
 /**
  * A factory for creating voxels with a particular buffer-type
@@ -42,7 +42,7 @@ import org.anchoranalysis.image.voxel.pixelsforplane.PixelsForPlane;
  */
 public interface VoxelsFactoryTypeBound<T extends Buffer> {
 
-    Voxels<T> create(PixelsForPlane<T> pixelsForPlane);
+    Voxels<T> create(PixelsForSlice<T> pixelsForPlane);
 
     Voxels<T> createInitialized(Extent extent);
     

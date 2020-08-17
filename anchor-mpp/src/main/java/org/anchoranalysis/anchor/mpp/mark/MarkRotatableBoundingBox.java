@@ -193,7 +193,7 @@ public class MarkRotatableBoundingBox extends MarkAbstractPosition {
 
     private List<Point3i> rotateAddPos(Point3d[] points) {
         return FunctionalList.mapToList(
-                points, point -> PointConverter.intFromDouble(rotateAddPos(point)));
+                points, point -> PointConverter.intFromDoubleFloor(rotateAddPos(point)));
     }
 
     /** Rotates a position and adds the current position afterwards */

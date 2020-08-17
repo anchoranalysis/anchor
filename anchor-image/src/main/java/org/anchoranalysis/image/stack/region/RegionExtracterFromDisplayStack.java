@@ -170,8 +170,8 @@ public class RegionExtracterFromDisplayStack implements RegionExtracter {
         ReadableTuple3i cornerMax = box.calcCornerMax();
         for (int z = cornerMin.z(); z <= cornerMax.z(); z++) {
 
-            ByteBuffer bbIn = voxelsSrc.slice(z).buffer();
-            ByteBuffer bbOut = voxelsDest.slice(z - cornerMin.z()).buffer();
+            ByteBuffer bbIn = voxelsSrc.sliceBuffer(z);
+            ByteBuffer bbOut = voxelsDest.sliceBuffer(z - cornerMin.z());
 
             // We go through every pixel in the new width, and height, and sample from the original
             // image
@@ -216,7 +216,7 @@ public class RegionExtracterFromDisplayStack implements RegionExtracter {
             assert (voxelsSrc.slice(z) != null);
             assert (voxelsDest.slice(z - cornerMin.z()) != null);
 
-            ShortBuffer bbIn = voxelsSrc.slice(z).buffer();
+            ShortBuffer bbIn = voxelsSrc.sliceBuffer(z);
             ShortBuffer bbOut = voxelsDest.slice(z - cornerMin.z()).buffer();
 
             // We go through every pixel in the new width, and height, and sample from the original

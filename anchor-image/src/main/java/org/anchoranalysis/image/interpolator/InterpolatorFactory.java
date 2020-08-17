@@ -53,7 +53,9 @@ public class InterpolatorFactory {
         return RESIZING_INTERPOLATOR;
     }
 
-    public Interpolator binaryResizing() {
-        return RESIZING_INTERPOLATOR;
+    public Interpolator binaryResizing(int offValue) {
+        InterpolatorImgLib2 interpolator = new InterpolatorImgLib2NearestNeighbor();
+        interpolator.extendWith(offValue);
+        return interpolator;
     }
 }

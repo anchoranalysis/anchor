@@ -57,7 +57,7 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedShort;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
-import org.anchoranalysis.image.voxel.pixelsforplane.PixelsForPlane;
+import org.anchoranalysis.image.voxel.pixelsforslice.PixelsForSlice;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class IJWrap {
@@ -151,37 +151,37 @@ public class IJWrap {
 
     public static ImageProcessor imageProcessor(VoxelsWrapper voxels, int z) {
 
-        if (voxels.any().extent().volumeXY() != voxels.any().slice(z).buffer().capacity()) {
+        if (voxels.any().extent().volumeXY() != voxels.any().sliceBuffer(z).capacity()) {
             throw new AnchorFriendlyRuntimeException(
                     String.format(
                             "Extent volume (%d) and buffer-capacity (%d) are not equal",
                             voxels.any().extent().volumeXY(),
-                            voxels.any().slice(z).buffer().capacity()));
+                            voxels.any().sliceBuffer(z).capacity()));
         }
 
         if (voxels.getVoxelDataType().equals(DATA_TYPE_BYTE)) {
-            return imageProcessorByte(voxels.asByte().getPlaneAccess(), z);
+            return imageProcessorByte(voxels.asByte().slices(), z);
         } else if (voxels.getVoxelDataType().equals(DATA_TYPE_SHORT)) {
-            return imageProcessorShort(voxels.asShort().getPlaneAccess(), z);
+            return imageProcessorShort(voxels.asShort().slices(), z);
         } else {
             throw new IncorrectVoxelDataTypeException(
                     "Only byte or short data types are supported");
         }
     }
 
-    public static ImageProcessor imageProcessorByte(PixelsForPlane<ByteBuffer> planeAccess, int z) {
+    public static ImageProcessor imageProcessorByte(PixelsForSlice<ByteBuffer> planeAccess, int z) {
         Extent e = planeAccess.extent();
         return new ByteProcessor(
-                e.x(), e.y(), planeAccess.getPixelsForPlane(z).buffer().array(), null);
+                e.x(), e.y(), planeAccess.slice(z).buffer().array(), null);
     }
 
     public static ImageProcessor imageProcessorShort(
-            PixelsForPlane<ShortBuffer> planeAccess, int z) {
+            PixelsForSlice<ShortBuffer> planeAccess, int z) {
         Extent extent = planeAccess.extent();
         return new ShortProcessor(
                 extent.x(),
                 extent.y(),
-                planeAccess.getPixelsForPlane(z).buffer().array(),
+                planeAccess.slice(z).buffer().array(),
                 null);
     }
 
@@ -319,7 +319,7 @@ public class IJWrap {
 
             ImageProcessor ip = imagePlus.getImageStack().getProcessor(z + 1);
             byte[] arr = (byte[]) ip.getPixels();
-            voxelsOut.updateSlice(z, VoxelBufferByte.wrap(arr));
+            voxelsOut.replaceSlice(z, VoxelBufferByte.wrap(arr));
         }
         return chnlOut;
     }
@@ -343,7 +343,7 @@ public class IJWrap {
 
             ImageProcessor ip = imagePlus.getImageStack().getProcessor(z + 1);
             short[] arr = (short[]) ip.getPixels();
-            voxelsOut.updateSlice(z, VoxelBufferShort.wrap(arr));
+            voxelsOut.replaceSlice(z, VoxelBufferShort.wrap(arr));
         }
         return chnlOut;
     }
@@ -383,15 +383,15 @@ public class IJWrap {
             ImageStack stack, Voxels<ByteBuffer> voxelsOut) {
         for (int z = 0; z < voxelsOut.extent().z(); z++) {
             ImageProcessor ip = stack.getProcessor(z + 1);
-            voxelsOut.updateSlice(z, voxelBufferFromImageProcessorByte(ip));
+            voxelsOut.replaceSlice(z, voxelBufferFromImageProcessorByte(ip));
         }
     }
 
     private static void copyImageStackIntoVoxelsShort(
             ImageStack stack, Voxels<ShortBuffer> voxelsOut) {
         for (int z = 0; z < voxelsOut.extent().z(); z++) {
-            ImageProcessor ip = stack.getProcessor(z + 1);
-            voxelsOut.updateSlice(z, voxelBufferFromImageProcessorShort(ip));
+            ImageProcessor processor = stack.getProcessor(z + 1);
+            voxelsOut.replaceSlice(z, voxelBufferFromImageProcessorShort(processor));
         }
     }
 
@@ -421,6 +421,6 @@ public class IJWrap {
     }
     
     private static byte[] extractSliceAsArray(Voxels<ByteBuffer> voxels, int z) {
-        return voxels.getPlaneAccess().getPixelsForPlane(z).buffer().array();
+        return voxels.sliceBuffer(z).array();
     }
 }

@@ -32,6 +32,7 @@ import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.values.BinaryValues;
+import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
@@ -88,9 +89,10 @@ public class ProbMapObjectCollection implements ProbMap {
         //  on.  Could be very inefficient for low-density bounding boxes? So we should make sure
         //  bounding boxes are tight
 
-        long vol = object.voxels().extent().calculateVolume();
-        int volXY = object.voxels().extent().volumeXY();
-        int exY = object.voxels().extent().x();
+        Extent extent = object.extent();
+        long vol = extent.calculateVolume();
+        int volXY = extent.volumeXY();
+        int exY = extent.x();
 
         while (true) {
 
@@ -99,7 +101,7 @@ public class ProbMapObjectCollection implements ProbMap {
             int slice = (int) (index3D / volXY);
             int index2D = (int) (index3D % volXY);
 
-            byte b = object.voxels().slice(slice).buffer().get(index2D);
+            byte b = object.sliceBufferLocal(slice).get(index2D);
             if (b == object.binaryValuesByte().getOnByte()) {
 
                 int xRel = index2D % exY;

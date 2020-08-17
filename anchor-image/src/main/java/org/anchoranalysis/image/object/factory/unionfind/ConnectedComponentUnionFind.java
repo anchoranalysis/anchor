@@ -36,12 +36,14 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectCollectionFactory;
 import org.anchoranalysis.image.voxel.Voxels;
+import org.anchoranalysis.image.voxel.extracter.VoxelsExtracter;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 import org.anchoranalysis.image.voxel.iterator.IterateVoxels;
 import org.jgrapht.alg.util.UnionFind;
@@ -66,8 +68,7 @@ public class ConnectedComponentUnionFind {
      * @return the connected-components derived from the voxels
      * @throws OperationFailedException
      */
-    public ObjectCollection deriveConnectedByte(BinaryVoxels<ByteBuffer> voxels)
-            throws OperationFailedException {
+    public ObjectCollection deriveConnectedByte(BinaryVoxels<ByteBuffer> voxels) {
         ObjectCollection objects = new ObjectCollection();
         visitRegion(voxels, objects, minNumberVoxels, new ReadWriteByte());
         return objects;
@@ -93,7 +94,7 @@ public class ConnectedComponentUnionFind {
             ObjectCollection objects,
             int minNumberVoxels,
             BufferReadWrite<T> bufferReaderWriter)
-            throws OperationFailedException {
+            {
 
         UnionFind<Integer> unionIndex = new UnionFind<>(new HashSet<Integer>());
         Voxels<IntBuffer> indexBuffer = VoxelsFactory.getInt().createInitialized(visited.extent());
@@ -161,7 +162,7 @@ public class ConnectedComponentUnionFind {
         Extent extent = indexBuffer.extent();
         for (point.setZ(0); point.z() < extent.z(); point.incrementZ()) {
 
-            IntBuffer bbIndex = indexBuffer.slice(point.z()).buffer();
+            IntBuffer bbIndex = indexBuffer.sliceBuffer(point.z());
 
             int offset = 0;
 
@@ -189,15 +190,20 @@ public class ConnectedComponentUnionFind {
             Map<Integer, Integer> mapIDOrdered,
             Voxels<IntBuffer> indexBuffer,
             int minNumberVoxels,
-            ObjectCollection objects)
-            throws OperationFailedException {
+            ObjectCollection objects) {
 
+        VoxelsExtracter<IntBuffer> extracter = indexBuffer.extracter();
+        
         for (int smallID : mapIDOrdered.values()) {
 
             PointRangeWithCount boxWithCnt = boxArr[smallID - 1];
 
             if (boxWithCnt.getCount() >= minNumberVoxels) {
-                objects.add(indexBuffer.equalMask(boxWithCnt.deriveBoundingBox(), smallID));
+                try {
+                    objects.add(extracter.voxelsEqualTo(smallID).deriveObject(boxWithCnt.deriveBoundingBox()));
+                } catch (OperationFailedException e) {
+                    throw new AnchorImpossibleSituationException();
+                }
             }
         }
         return objects;
@@ -208,8 +214,7 @@ public class ConnectedComponentUnionFind {
             UnionFind<Integer> unionIndex,
             Voxels<IntBuffer> indexBuffer,
             ObjectCollection objects,
-            int minNumberVoxels)
-            throws OperationFailedException {
+            int minNumberVoxels) {
         Set<Integer> primaryIDs = setFromUnionFind(maxBigIDAdded, unionIndex);
 
         Map<Integer, Integer> mapIDOrdered = mapValuesToContiguousSet(primaryIDs);

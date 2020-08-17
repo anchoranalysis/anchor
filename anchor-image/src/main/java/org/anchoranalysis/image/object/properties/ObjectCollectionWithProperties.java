@@ -90,4 +90,8 @@ public class ObjectCollectionWithProperties implements Iterable<ObjectWithProper
     public ObjectCollection withoutProperties() {
         return ObjectCollectionFactory.mapFrom(delegate, ObjectWithProperties::withoutProperties);
     }
+
+    public int size() {
+        return delegate.size();
+    }
 }

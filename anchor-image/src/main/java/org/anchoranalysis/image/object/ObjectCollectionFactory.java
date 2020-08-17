@@ -28,6 +28,7 @@ package org.anchoranalysis.image.object;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -92,7 +93,7 @@ public class ObjectCollectionFactory {
      * @param objects existing collections to copy from
      */
     @SafeVarargs
-    public static ObjectCollection from(Optional<ObjectCollection>... objects) {
+    public static ObjectCollection of(Optional<ObjectCollection>... objects) {
         ObjectCollection out = new ObjectCollection();
         for (Optional<ObjectCollection> collection : objects) {
             collection.ifPresent(out::addAll);
@@ -103,12 +104,12 @@ public class ObjectCollectionFactory {
     /**
      * Creates a new collection with elements copied from existing collections
      *
-     * @param collection one or more collections to add items from
+     * @param collections one or more collections to add items from
      */
     @SafeVarargs
-    public static ObjectCollection of(Collection<ObjectMask>... collection) {
+    public static ObjectCollection of(Collection<ObjectMask>... collections) {
         ObjectCollection out = new ObjectCollection();
-        Arrays.stream(collection).forEach(out::addAll);
+        Arrays.stream(collections).forEach(out::addAll);
         return out;
     }
 
@@ -136,11 +137,9 @@ public class ObjectCollectionFactory {
      *
      * <p>The object is only included in the outgoing collection if Optional.isPresent()
      *
-     * <p>
-     *
      * @param <T> type that will be mapped to {@link ObjectCollection}
      * @param <E> exception-type that can be thrown during mapping
-     * @param collection incoming collection to be mapped
+     * @param iterable iterable to be mapped
      * @param mapFunc function for mapping
      * @return a newly created ObjectCollection
      * @throws E exception if it occurs during mapping
@@ -148,9 +147,27 @@ public class ObjectCollectionFactory {
     public static <T, E extends Exception> ObjectCollection mapFromOptional(
             Iterable<T> iterable, CheckedFunction<T, Optional<ObjectMask>, E> mapFunc)
             throws E {
+        return mapFromOptional(iterable.iterator(), mapFunc);
+    }
+    
+    /**
+     * Creates a new collection by mapping an {@link Iterator} to {@link Optional<ObjectMask>}
+     *
+     * <p>The object is only included in the outgoing collection if Optional.isPresent()
+     *
+     * @param <T> type that will be mapped to {@link ObjectCollection}
+     * @param <E> exception-type that can be thrown during mapping
+     * @param iterator to be mapped
+     * @param mapFunc function for mapping
+     * @return a newly created ObjectCollection
+     * @throws E exception if it occurs during mapping
+     */
+    public static <T, E extends Exception> ObjectCollection mapFromOptional(
+            Iterator<T> iterator, CheckedFunction<T, Optional<ObjectMask>, E> mapFunc)
+            throws E {
         ObjectCollection out = new ObjectCollection();
-        for (T item : iterable) {
-            mapFunc.apply(item).ifPresent(out::add);
+        while (iterator.hasNext()) {
+            mapFunc.apply(iterator.next()).ifPresent(out::add);
         }
         return out;
     }

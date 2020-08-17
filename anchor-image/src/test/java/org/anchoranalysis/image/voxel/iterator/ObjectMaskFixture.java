@@ -65,7 +65,7 @@ public class ObjectMaskFixture {
         Extent extent = new Extent(width, height, do3D ? DEPTH : 1);
 
         ObjectMask object = new ObjectMask(new BoundingBox(corner, extent));
-        object.binaryVoxels().setAllPixelsToOn();
+        object.assignOn().toAll();
         removeEachCorner(object);
         return object;
     }

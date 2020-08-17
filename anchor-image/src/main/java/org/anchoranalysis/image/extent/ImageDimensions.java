@@ -33,6 +33,7 @@ import lombok.Getter;
 import lombok.experimental.Accessors;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.scale.ScaleFactor;
 import org.anchoranalysis.image.scale.ScaleFactorUtilities;
 
@@ -56,6 +57,11 @@ public final class ImageDimensions implements Serializable {
     /** Construct with an explicit extent and default resolution (1.0 for each dimension) */
     public ImageDimensions(int x, int y, int z) {
         this(new Extent(x, y, z));
+    }
+    
+    /** Construct with an explicit extent and default resolution (1.0 for each dimension) */
+    public ImageDimensions(ReadableTuple3i extent) {
+        this(new Extent(extent.x(), extent.y(), extent.z()));
     }
 
     /** Construct with an explicit extent and default resolution (1.0 for each dimension) */

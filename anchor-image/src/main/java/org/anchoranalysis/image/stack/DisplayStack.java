@@ -36,6 +36,7 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
+import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
@@ -249,7 +250,7 @@ public class DisplayStack {
                                 VoxelDataTypeUnsignedByte.INSTANCE);
 
         if (converter != null) {
-            copyPixelsTo(index, box, out.voxels().asByte(), new BoundingBox(box.extent()));
+            copyPixelsTo(index, box, out.voxels().asByte(), box.shiftToOrigin());
         } else {
             if (!chnl.getVoxelDataType().equals(VoxelDataTypeUnsignedByte.INSTANCE)) {
                 // Datatype is not supported
@@ -258,7 +259,7 @@ public class DisplayStack {
 
             delegate.getChannel(index)
                     .voxels()
-                    .copyPixelsTo(box, out.voxels(), new BoundingBox(box.extent()));
+                    .copyVoxelsTo(box, out.voxels(), box.shiftToOrigin());
         }
         return out;
     }
@@ -295,28 +296,28 @@ public class DisplayStack {
         return stackOut;
     }
 
-    // Copies pixels on a particular channel to an output buffer
+    /** Copies pixels on a particular channel to an output buffer */
     public void copyPixelsTo(
             int chnlIndex,
             BoundingBox sourceBox,
             Voxels<ByteBuffer> voxelsDestination,
-            BoundingBox destBox) {
+            BoundingBox destinationBox) {
 
         Channel channel = delegate.getChannel(chnlIndex);
 
         ChnlConverterAttached<Channel, ByteBuffer> converter = listConverters.get(chnlIndex);
 
         if (converter != null) {
-            BoundingBox allLocalBox = new BoundingBox(destBox.extent());
+            BoundingBox allLocalBox = destinationBox.shiftToOrigin();
 
             VoxelsWrapper destBoxNonByte =
-                    VoxelsFactory.instance().create(destBox.extent(), channel.getVoxelDataType());
-            channel.voxels().copyPixelsTo(sourceBox, destBoxNonByte, allLocalBox);
+                    VoxelsFactory.instance().create(destinationBox.extent(), channel.getVoxelDataType());
+            channel.voxels().copyVoxelsTo(sourceBox, destBoxNonByte, allLocalBox);
 
-            Voxels<ByteBuffer> destBoxByte = VoxelsFactory.getByte().createInitialized(destBox.extent());
+            Voxels<ByteBuffer> destBoxByte = VoxelsFactory.getByte().createInitialized(destinationBox.extent());
             converter.getVoxelsConverter().convertFrom(destBoxNonByte, destBoxByte);
 
-            destBoxByte.copyPixelsTo(allLocalBox, voxelsDestination, destBox);
+            destBoxByte.extracter().boxCopyTo(allLocalBox, voxelsDestination, destinationBox);
 
         } else {
             if (!channel.getVoxelDataType().equals(VoxelDataTypeUnsignedByte.INSTANCE)) {
@@ -327,7 +328,8 @@ public class DisplayStack {
             delegate.getChannel(chnlIndex)
                     .voxels()
                     .asByte()
-                    .copyPixelsTo(sourceBox, voxelsDestination, destBox);
+                    .extracter()
+                    .boxCopyTo(sourceBox, voxelsDestination, destinationBox);
         }
     }
 
@@ -340,9 +342,8 @@ public class DisplayStack {
         return Optional.of(dataType);
     }
 
-    public int getUnconvertedVoxelAt(int c, int x, int y, int z) {
-        Channel chnl = delegate.getChannel(c);
-        return chnl.voxels().any().getVoxel(x, y, z);
+    public int getUnconvertedVoxelAt(int channelIndex, Point3i point) {
+        return delegate.getChannel(channelIndex).extracter().voxel(point);
     }
 
     public RegionExtracter createRegionExtracter() {
@@ -410,18 +411,18 @@ public class DisplayStack {
     @SuppressWarnings("unchecked")
     private Voxels<ByteBuffer> voxelsForChannelBoundingBox(int chnlNum, BoundingBox box) {
 
-        Channel chnl = delegate.getChannel(chnlNum);
+        Channel channel = delegate.getChannel(chnlNum);
 
         ChnlConverterAttached<Channel, ByteBuffer> converter = listConverters.get(chnlNum);
 
-        Voxels<?> voxelsUnconverted = chnl.voxels().any().region(box, true);
+        Voxels<?> voxelsUnconverted = channel.extracter().region(box, true);
 
         if (converter != null) {
             return converter
                     .getVoxelsConverter()
                     .convertFrom(new VoxelsWrapper(voxelsUnconverted), VoxelsFactory.getByte());
         } else {
-            if (!chnl.getVoxelDataType().equals(VoxelDataTypeUnsignedByte.INSTANCE)) {
+            if (!channel.getVoxelDataType().equals(VoxelDataTypeUnsignedByte.INSTANCE)) {
                 // Datatype is not supported
                 assert false;
             }

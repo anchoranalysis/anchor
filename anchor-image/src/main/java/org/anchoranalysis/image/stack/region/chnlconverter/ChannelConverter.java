@@ -27,13 +27,13 @@
 package org.anchoranalysis.image.stack.region.chnlconverter;
 
 import java.nio.Buffer;
+import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.region.chnlconverter.voxelbox.VoxelsConverter;
 import org.anchoranalysis.image.voxel.Voxels;
-import org.anchoranalysis.image.voxel.VoxelsWrapper;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactoryTypeBound;
 import lombok.AllArgsConstructor;
@@ -94,8 +94,11 @@ public abstract class ChannelConverter<T extends Buffer> {
         voxelsConverter.convertFrom(chnlIn.voxels(), voxelsOut);
 
         if (changeExisting == ConversionPolicy.CHANGE_EXISTING_CHANNEL) {
-            VoxelsWrapper wrapper = new VoxelsWrapper(voxelsOut);
-            chnlOut.replaceVoxels(wrapper);
+            try {
+                chnlOut.replaceVoxels(voxelsOut);
+            } catch (IncorrectImageSizeException e) {
+                throw new AnchorImpossibleSituationException();
+            }
         }
 
         return chnlOut;

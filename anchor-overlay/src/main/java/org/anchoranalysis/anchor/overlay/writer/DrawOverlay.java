@@ -71,7 +71,7 @@ public abstract class DrawOverlay {
                 stack.dimensions(),
                 stack,
                 idGetter,
-                new BoundingBox(stack.dimensions().extent()));
+                new BoundingBox(stack.dimensions()));
     }
 
     //

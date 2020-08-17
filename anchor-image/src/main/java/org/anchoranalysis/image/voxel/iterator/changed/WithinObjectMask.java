@@ -58,7 +58,7 @@ final class WithinObjectMask<T> implements ProcessVoxelNeighbor<T> {
         this.delegate = process;
         this.object = object;
         this.maskOffVal = object.binaryValuesByte().getOffByte();
-        this.extent = object.voxels().extent();
+        this.extent = object.extent();
         this.cornerMin = object.boundingBox().cornerMin();
     }
 
@@ -84,7 +84,7 @@ final class WithinObjectMask<T> implements ProcessVoxelNeighbor<T> {
         }
 
         int zRel = z1 - cornerMin.z();
-        this.bbOM = object.voxels().slice(zRel).buffer();
+        this.bbOM = object.sliceBufferLocal(zRel);
 
         delegate.notifyChangeZ(zChange, z1, bbOM);
         return true;

@@ -51,8 +51,8 @@ final class PointProcessor implements ProcessVoxelSliceBuffer<ByteBuffer> {
     }
 
     @Override
-    public void notifyChangeZ(int z) {
-        bbOut = voxelsOut.slice(z).buffer();
+    public void notifyChangeSlice(int z) {
+        bbOut = voxelsOut.sliceBuffer(z);
     }
 
     @Override

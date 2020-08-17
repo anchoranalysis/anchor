@@ -40,7 +40,7 @@ public interface ProcessVoxel {
     default void notifyChangeY(int y) {}
 
     /** Notifies the processor that there has been a change in z-coordinate */
-    default void notifyChangeZ(int z) {}
+    default void notifyChangeSlice(int z) {}
 
     void process(Point3i point);
 }

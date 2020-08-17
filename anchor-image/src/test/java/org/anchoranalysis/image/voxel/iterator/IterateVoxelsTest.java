@@ -52,6 +52,7 @@ public class IterateVoxelsTest {
     private static final int EXPECTED_INTERSECTION_CENTER_X = 39;
     private static final int EXPECTED_INTERSECTION_CENTER_Y = 57;
     /** END: Constants for expected results */
+    
     @Test
     public void test2D() {
         testTwoMasks(

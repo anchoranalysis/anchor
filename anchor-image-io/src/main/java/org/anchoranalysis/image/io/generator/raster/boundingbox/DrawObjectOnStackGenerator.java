@@ -35,9 +35,10 @@ import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.io.generator.raster.RasterGenerator;
-import org.anchoranalysis.image.io.generator.raster.obj.rgb.DrawObjectsGenerator;
+import org.anchoranalysis.image.io.generator.raster.object.rgb.DrawObjectsGenerator;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.object.ObjectsWithBoundingBox;
 import org.anchoranalysis.image.object.properties.ObjectCollectionWithProperties;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
@@ -229,7 +230,7 @@ public class DrawObjectOnStackGenerator extends RasterGenerator
     
     /** Changes the bounding-box to match the object rather than the global scene */
     private ObjectMask relativeBoundingBoxToScene(ObjectMask object, BoundingBox containingBox) {
-        Point3i relativePosition = object.boundingBox().relPosTo(containingBox);
+        Point3i relativePosition = object.boundingBox().relativePositionTo(containingBox);
         return object.mapBoundingBoxPreserveExtent( boundingBox->boundingBox.shiftTo(relativePosition) );
     }
 }

@@ -37,7 +37,7 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 
 // Converts voxel buffers to a unsigned 8-bit buffer without scaling any values.
 // So values larger than 255 are clipped
-public final class ToByteNoScaling implements VoxelsConverter<ByteBuffer> {
+public final class ToByteNoScaling extends VoxelsConverter<ByteBuffer> {
 
     @Override
     public VoxelBuffer<ByteBuffer> convertFromFloat(VoxelBuffer<FloatBuffer> bufferIn) {

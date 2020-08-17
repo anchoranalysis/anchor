@@ -51,8 +51,7 @@ public class ConditionalKernel extends BinaryKernel {
 
         byte valByte =
                 voxelsIntensity
-                        .slice(point.z())
-                        .buffer()
+                        .sliceBuffer(point.z())
                         .get(voxelsIntensity.extent().offsetSlice(point));
         int val = ByteConverter.unsignedByteToInt(valByte);
 

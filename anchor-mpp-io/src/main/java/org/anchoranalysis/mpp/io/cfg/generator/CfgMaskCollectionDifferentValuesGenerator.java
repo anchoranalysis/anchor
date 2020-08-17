@@ -33,7 +33,7 @@ import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.io.generator.raster.RasterGenerator;
-import org.anchoranalysis.image.io.generator.raster.obj.collection.ObjectsAsUniqueValueGenerator;
+import org.anchoranalysis.image.io.generator.raster.object.collection.ObjectsAsUniqueValueGenerator;
 import org.anchoranalysis.image.object.properties.ObjectCollectionWithProperties;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.generator.Generator;

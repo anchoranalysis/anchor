@@ -28,8 +28,6 @@ package org.anchoranalysis.image.voxel.iterator;
 
 import java.nio.ByteBuffer;
 import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.core.geometry.ReadableTuple3i;
-import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.ObjectMask;
 
 /**
@@ -44,9 +42,7 @@ final class RequireIntersectionWithObject implements ProcessVoxel {
     private final ProcessVoxel process;
 
     private final ObjectMask objectMask;
-    private final Extent extent;
     private final byte byteOn;
-    private final ReadableTuple3i cornerMin;
 
     private ByteBuffer bbMask;
 
@@ -60,15 +56,13 @@ final class RequireIntersectionWithObject implements ProcessVoxel {
         super();
         this.process = process;
         this.objectMask = objectMask;
-        this.extent = objectMask.voxels().extent();
         this.byteOn = objectMask.binaryValuesByte().getOnByte();
-        this.cornerMin = objectMask.boundingBox().cornerMin();
     }
 
     @Override
-    public void notifyChangeZ(int z) {
-        process.notifyChangeZ(z);
-        bbMask = objectMask.voxels().slice(z - cornerMin.z()).buffer();
+    public void notifyChangeSlice(int z) {
+        process.notifyChangeSlice(z);
+        bbMask = objectMask.sliceBufferGlobal(z);
     }
 
     @Override
@@ -85,8 +79,7 @@ final class RequireIntersectionWithObject implements ProcessVoxel {
     }
 
     private boolean isPointOnObject(Point3i point) {
-        int offsetMask =
-                extent.offset(point.x() - cornerMin.x(), point.y() - cornerMin.y());
+        int offsetMask = objectMask.offsetGlobal(point.x(), point.y());
 
         // We skip if our containing object-mask doesn't include it
         return (bbMask.get(offsetMask) == byteOn);

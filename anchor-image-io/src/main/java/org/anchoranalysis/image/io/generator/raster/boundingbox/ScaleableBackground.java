@@ -140,13 +140,13 @@ public class ScaleableBackground {
         Voxels<?> voxelsUnscaled = extractVoxels(channel, boxUnscaled);
         
         // Scale it up to to the extent we want
-        Voxels<?> voxelsScaled = voxelsUnscaled.resizeXY(boxScaled.extent().x(), boxScaled.extent().y(), interpolator);
+        Voxels<?> voxelsScaled = voxelsUnscaled.extracter().resizedXY(boxScaled.extent().x(), boxScaled.extent().y(), interpolator);
         
         return channelFor(voxelsScaled);
     }
     
     private static Voxels<?> extractVoxels(Channel channel, BoundingBox box) {
-        return channel.voxels().any().region(box, false);
+        return channel.extracter().region(box, false);
     }
     
     private Channel channelFor(Voxels<?> voxels) {

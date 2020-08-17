@@ -27,7 +27,6 @@
 package org.anchoranalysis.image.index;
 
 import java.util.List;
-import java.util.function.Function;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.object.ObjectCollection;
@@ -51,23 +50,19 @@ public class ObjectCollectionRTree {
     
     /** All objects stored in the r-tree (whose order corresponds to indices in {@code delegate} */
     @Getter private ObjectCollection objects;
-
-    public ObjectCollectionRTree(ObjectCollection objects) {
-        this(objects, ObjectMask::boundingBox);        
-    }
-    
+ 
     /**
      * Constructor - create
      * 
      * @param objects
      * @param extractBoundingBox
      */
-    public ObjectCollectionRTree(ObjectCollection objects, Function<ObjectMask,BoundingBox> extractBoundingBox) {
+    public ObjectCollectionRTree(ObjectCollection objects) {
         this.objects = objects;
         tree = new BoundingBoxRTree(objects.size());
 
         for (int i = 0; i < objects.size(); i++) {
-            tree.add(i, extractBoundingBox.apply(objects.get(i)));
+            tree.add(i, objects.get(i).boundingBox());
         }
     }
 

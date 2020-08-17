@@ -209,7 +209,7 @@ public final class ObjectMaskStream {
     }
 
     /**
-     * Filters a {@link ObjectCollection} to include certain items based on a predicate
+     * Filters a {@link ObjectCollection} to <b>include</b> certain items based on a predicate
      *
      * <p>This is an <i>immutable</i> operation.
      *
@@ -218,6 +218,18 @@ public final class ObjectMaskStream {
      */
     public ObjectCollection filter(Predicate<ObjectMask> predicate) {
         return new ObjectCollection(delegate.streamStandardJava().filter(predicate));
+    }
+    
+    /**
+     * Filters a {@link ObjectCollection} to <b>exclude</b> certain items based on a predicate
+     *
+     * <p>This is an <i>immutable</i> operation.
+     *
+     * @param predicate iff true object is excluded, otherwise included
+     * @return a newly created object-collection, a filtered version of all objects
+     */
+    public ObjectCollection filterExclude(Predicate<ObjectMask> predicate) {
+        return filter( object -> !predicate.test(object) );
     }
 
     /**

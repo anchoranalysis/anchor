@@ -35,7 +35,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.voxel.Voxels;
 
 /**
  * An {@link ObjectMask} with associated key-value properties.
@@ -100,10 +99,6 @@ public class ObjectWithProperties {
         return object.boundingBox();
     }
 
-    public Voxels<ByteBuffer> voxels() {
-        return object.voxels();
-    }
-
     public int hashCode() {
         return object.hashCode();
     }
@@ -114,5 +109,9 @@ public class ObjectWithProperties {
 
     public ObjectMask withoutProperties() {
         return object;
+    }
+
+    public ByteBuffer sliceBufferLocal(int sliceIndexRelative) {
+        return object.sliceBufferLocal(sliceIndexRelative);
     }
 }

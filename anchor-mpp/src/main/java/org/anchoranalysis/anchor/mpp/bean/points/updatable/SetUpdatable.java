@@ -123,25 +123,17 @@ public class SetUpdatable extends UpdatablePointsContainer {
         Voxels<ByteBuffer> voxelsBinary = maskChannel.voxels().asByte();
 
         // Where we actually do the work
-        Point3i pos = new Point3i();
+        Point3i position = new Point3i();
 
-        for (pos.setZ(0); pos.z() < dimensions.z(); pos.incrementZ()) {
+        for (position.setZ(0); position.z() < dimensions.z(); position.incrementZ()) {
 
-            ByteBuffer bbBinaryImage = voxelsBinary.slice(pos.z()).buffer();
+            ByteBuffer bbBinaryImage = voxelsBinary.sliceBuffer(position.z());
 
-            for (pos.setY(0); pos.y() < dimensions.y(); pos.incrementY()) {
-                for (pos.setX(0); pos.x() < dimensions.x(); pos.incrementX()) {
+            for (position.setY(0); position.y() < dimensions.y(); position.incrementY()) {
+                for (position.setX(0); position.x() < dimensions.x(); position.incrementX()) {
 
-                    if (bbBinaryImage.get(e.offsetSlice(pos)) == bvb.getOnByte()) {
-
-                        assert (pos.x() >= 0);
-                        assert (pos.y() >= 0);
-                        assert (pos.z() >= 0);
-
-                        assert (pos.x() < dimensions.x());
-                        assert (pos.y() < dimensions.y());
-                        assert (pos.z() < dimensions.z());
-                        setPoints.add(PointConverter.doubleFromInt(pos));
+                    if (bbBinaryImage.get(e.offsetSlice(position)) == bvb.getOnByte()) {
+                        setPoints.add(PointConverter.doubleFromInt(position));
                     }
                 }
             }
@@ -186,25 +178,25 @@ public class SetUpdatable extends UpdatablePointsContainer {
         BoundedVoxels<ByteBuffer> voxels = pxlMark.voxels();
         Extent e = voxels.extent();
 
-        Point3i crntExtentPoint = new Point3i();
-        for (crntExtentPoint.setZ(0);
-                crntExtentPoint.z() < e.z();
-                crntExtentPoint.incrementZ()) {
+        Point3i position = new Point3i();
+        for (position.setZ(0);
+                position.z() < e.z();
+                position.incrementZ()) {
 
-            ByteBuffer fb = voxels.getPixelsForPlane(crntExtentPoint.z());
+            ByteBuffer buffer = voxels.sliceBuffer(position.z());
 
-            for (crntExtentPoint.setY(0);
-                    crntExtentPoint.y() < e.y();
-                    crntExtentPoint.incrementY()) {
-                for (crntExtentPoint.setX(0);
-                        crntExtentPoint.x() < e.x();
-                        crntExtentPoint.incrementX()) {
+            for (position.setY(0);
+                    position.y() < e.y();
+                    position.incrementY()) {
+                for (position.setX(0);
+                        position.x() < e.x();
+                        position.incrementX()) {
 
                     byte membership =
-                            fb.get(e.offset(crntExtentPoint.x(), crntExtentPoint.y()));
+                            buffer.get(e.offset(position.x(), position.y()));
 
                     if (!rm.isMemberFlag(membership, flags)) {
-                        rmvPoint(crntExtentPoint, crnrPoint);
+                        rmvPoint(position, crnrPoint);
                     }
                 }
             }
@@ -253,8 +245,8 @@ public class SetUpdatable extends UpdatablePointsContainer {
                     crntExtentPoint,
                     crnrPoint,
                     e,
-                    voxels.getPixelsForPlane(crntExtentPoint.z()),
-                    voxelsBinary.slice(zGlobal).buffer(),
+                    voxels.sliceBuffer(crntExtentPoint.z()),
+                    voxelsBinary.sliceBuffer(zGlobal),
                     bvb,
                     zGlobal,
                     rm,

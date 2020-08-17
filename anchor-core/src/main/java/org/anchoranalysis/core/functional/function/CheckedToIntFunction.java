@@ -43,5 +43,5 @@ public interface CheckedToIntFunction<S, E extends Exception> {
      * @return return-value
      * @throws E an exception that may be thrown
      */
-    int apply(S parameter) throws E;
+    int applyAsInt(S parameter) throws E;
 }

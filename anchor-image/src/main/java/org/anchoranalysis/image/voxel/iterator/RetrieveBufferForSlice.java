@@ -56,10 +56,10 @@ public final class RetrieveBufferForSlice<T extends Buffer> implements ProcessVo
     }
 
     @Override
-    public void notifyChangeZ(int z) {
-        process.notifyChangeZ(z);
+    public void notifyChangeSlice(int z) {
+        process.notifyChangeSlice(z);
         offsetWithinSlice = 0;
-        this.bufferSlice = voxels.slice(z).buffer();
+        this.bufferSlice = voxels.sliceBuffer(z);
     }
 
     @Override

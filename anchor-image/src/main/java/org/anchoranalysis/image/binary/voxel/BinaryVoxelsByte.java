@@ -27,7 +27,6 @@
 package org.anchoranalysis.image.binary.voxel;
 
 import java.nio.ByteBuffer;
-import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.voxel.Voxels;
@@ -44,7 +43,7 @@ class BinaryVoxelsByte extends BinaryVoxels<ByteBuffer> {
     @Override
     public boolean isOn(int x, int y, int z) {
         int offset = voxels().extent().offset(x, y);
-        return voxels().slice(z).buffer().get(offset) != binaryValuesByte.getOffByte();
+        return voxels().sliceBuffer(z).get(offset) != binaryValuesByte.getOffByte();
     }
 
     @Override
@@ -55,13 +54,13 @@ class BinaryVoxelsByte extends BinaryVoxels<ByteBuffer> {
     @Override
     public void setOn(int x, int y, int z) {
         int offset = voxels().extent().offset(x, y);
-        voxels().slice(z).buffer().put(offset, binaryValuesByte.getOnByte());
+        voxels().sliceBuffer(z).put(offset, binaryValuesByte.getOnByte());
     }
 
     @Override
     public void setOff(int x, int y, int z) {
         int offset = voxels().extent().offset(x, y);
-        voxels().slice(z).buffer().put(offset, binaryValuesByte.getOffByte());
+        voxels().sliceBuffer(z).put(offset, binaryValuesByte.getOffByte());
     }
 
     public BinaryValuesByte asByte() {
@@ -72,8 +71,10 @@ class BinaryVoxelsByte extends BinaryVoxels<ByteBuffer> {
     public BinaryVoxelsByte duplicate() {
         return new BinaryVoxelsByte(voxels().duplicate(), binaryValues());
     }
-
-    public BinaryVoxels<ByteBuffer> extractSlice(int z) throws CreateException {
-        return new BinaryVoxelsByte(voxels().extractSlice(z), binaryValues());
+    
+    @Override
+    protected BinaryVoxels<ByteBuffer> binaryVoxelsFor(Voxels<ByteBuffer> slice,
+            BinaryValues binaryValues) {
+        return new BinaryVoxelsByte(slice, binaryValues);
     }
 }

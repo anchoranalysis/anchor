@@ -34,18 +34,33 @@ import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 public interface Interpolator {
 
     /**
-     * Interpolates from src to dest. Both boxes must be 2-dimensional. Returns the destination
-     * buffer (either as passed, or a new one that was created)
+     * Interpolates from {@code voxelsSource} to {@code voxelsDestination} for unsigned 8-bit buffers.
+     * <p>
+     * Both buffers must be 2-dimensional, not 3-dimensional.
      *
-     * @param src
-     * @param dest
+     * @param voxelsSource voxels to interpolate from
+     * @param voxelsDestination voxels to write the interpolated values into
+     * @param extentSource extent corresponding to {@code voxelsSource}
+     * @param extentDestination extent corresponding to {@code extentDestination}
+     * @return the destination buffer (either as passed, or a new one that was created)
      */
     VoxelBuffer<ByteBuffer> interpolateByte(
-            VoxelBuffer<ByteBuffer> src, VoxelBuffer<ByteBuffer> dest, Extent eSrc, Extent eDest);
+            VoxelBuffer<ByteBuffer> voxelsSource, VoxelBuffer<ByteBuffer> voxelsDestination, Extent extentSource, Extent extentDestination);
 
+    /**
+     * Interpolates from {@code voxelsSource} to {@code voxelsDestination} for unsigned 16-bit buffers.
+     * <p>
+     * Both buffers must be 2-dimensional, not 3-dimensional.
+     *
+     * @param voxelsSource voxels to interpolate from
+     * @param voxelsDestination voxels to write the interpolated values into
+     * @param extentSource extent corresponding to {@code voxelsSource}
+     * @param extentDestination extent corresponding to {@code extentDestination}
+     * @return the destination buffer (either as passed, or a new one that was created)
+     */
     VoxelBuffer<ShortBuffer> interpolateShort(
-            VoxelBuffer<ShortBuffer> src, VoxelBuffer<ShortBuffer> dest, Extent eSrc, Extent eDest);
-
+            VoxelBuffer<ShortBuffer> voxelsSource, VoxelBuffer<ShortBuffer> voxelsDestination, Extent extentSource, Extent extentDestination);
+    
     /**
      * Returns TRUE if it's possible for values to be created after interpolation that aren't found
      * in the input-image. Returns the destination buffer (either as passed, or a new one that was

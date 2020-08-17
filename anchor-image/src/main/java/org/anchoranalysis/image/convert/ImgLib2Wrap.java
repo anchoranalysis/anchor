@@ -158,7 +158,7 @@ public class ImgLib2Wrap {
     private static <T, U extends Buffer> List<T> slicesFor(
             Voxels<U> box, Function<U, T> transformSlice) {
         return IntStream.range(0, box.extent().z())
-                .mapToObj(z -> transformSlice.apply(box.slice(z).buffer()))
+                .mapToObj(z -> transformSlice.apply(box.sliceBuffer(z)))
                 .collect(Collectors.toList());
     }
 

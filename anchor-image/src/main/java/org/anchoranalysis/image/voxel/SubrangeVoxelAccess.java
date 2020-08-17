@@ -29,33 +29,28 @@ package org.anchoranalysis.image.voxel;
 import java.nio.Buffer;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
-import org.anchoranalysis.image.voxel.pixelsforplane.PixelsForPlane;
+import org.anchoranalysis.image.voxel.pixelsforslice.PixelsForSlice;
+import lombok.AllArgsConstructor;
 
 /**
  * @author Owen Feehan
  * @param <T> buffer-type
  */
-class SubrangeVoxelAccess<T extends Buffer> implements PixelsForPlane<T> {
+@AllArgsConstructor
+class SubrangeVoxelAccess<T extends Buffer> implements PixelsForSlice<T> {
 
-    private int zRel;
+    private int zRelative;
     private Extent extent;
-    private BoundedVoxels<T> src;
+    private BoundedVoxels<T> voxels;
 
-    public SubrangeVoxelAccess(int zRel, Extent extent, BoundedVoxels<T> src) {
-        super();
-        this.zRel = zRel;
-        this.extent = extent;
-        this.src = src;
+    @Override
+    public void replaceSlice(int sliceIndex, VoxelBuffer<T> pixels) {
+        voxels.replaceSlice(sliceIndex + zRelative, pixels);
     }
 
     @Override
-    public void setPixelsForPlane(int z, VoxelBuffer<T> pixels) {
-        src.voxels().updateSlice(z + zRel, pixels);
-    }
-
-    @Override
-    public VoxelBuffer<T> getPixelsForPlane(int z) {
-        return src.voxels().slice(z + zRel);
+    public VoxelBuffer<T> slice(int sliceIndex) {
+        return voxels.voxels().slice(sliceIndex + zRelative);
     }
 
     @Override

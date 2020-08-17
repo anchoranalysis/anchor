@@ -29,17 +29,18 @@ package org.anchoranalysis.image.voxel.factory;
 import java.nio.FloatBuffer;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.Voxels;
+import org.anchoranalysis.image.voxel.VoxelsAsFloat;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeFloat;
-import org.anchoranalysis.image.voxel.pixelsforplane.PixelsForPlane;
-import org.anchoranalysis.image.voxel.pixelsforplane.PixelsFromFloatBufferArr;
+import org.anchoranalysis.image.voxel.pixelsforslice.PixelsForSlice;
+import org.anchoranalysis.image.voxel.pixelsforslice.PixelsFromFloatBufferArr;
 
 final class FactoryFloat implements VoxelsFactoryTypeBound<FloatBuffer> {
 
     private static final VoxelDataType DATA_TYPE = VoxelDataTypeFloat.INSTANCE;
 
     @Override
-    public Voxels<FloatBuffer> create(PixelsForPlane<FloatBuffer> pixelsForPlane) {
+    public Voxels<FloatBuffer> create(PixelsForSlice<FloatBuffer> pixelsForPlane) {
         return new VoxelsAsFloat(pixelsForPlane);
     }
 

@@ -29,6 +29,7 @@ package org.anchoranalysis.image.voxel.iterator;
 import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.util.Optional;
+import java.util.function.Predicate;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.binary.mask.Mask;
@@ -95,7 +96,7 @@ public class IterateVoxels {
 
         buffer.seek(objectMask.map(object -> object.boundingBox().cornerMin().z()).orElse(0));
 
-        callEachPoint(objectMask, buffer.extent(), new ProcessVoxelSlide(buffer, process));
+        callEachPoint(objectMask, buffer.extent(), new SlidingBufferProcessor(buffer, process));
     }
 
     /**
@@ -129,55 +130,6 @@ public class IterateVoxels {
     }
 
     /**
-     * Iterate over each voxel that is located on an object-mask - with offsets
-     *
-     * <p>This is identical to the other {@link callEachPoint} but adds offsets, and is optimized
-     * for this circumstance.
-     *
-     * @param object the object-mask that is used as a condition on what voxels to iterate
-     * @param extent the scene-size
-     * @param process process is called for each voxel with that satisfies the conditions using
-     *     GLOBAL coordinates.
-     */
-    private static <T extends Buffer> void callEachPoint(
-            ObjectMask object, Voxels<T> voxels, ProcessVoxelSliceBuffer<T> process) {
-        // This is re-implemented in full, as reusing existing code with {@link AddOffsets} and
-        //  {@link RequireIntersectionWithMask} was not inling using default JVM settings
-        // Based on unit-tests, it seems to perform better emperically, even with the new Point3i()
-        // adding to the heap.
-
-        Extent extent = voxels.extent();
-        Extent extentMask = object.voxels().extent();
-        ReadableTuple3i cornerMin = object.boundingBox().cornerMin();
-        byte valueOn = object.binaryValuesByte().getOnByte();
-
-        for (int z = 0; z < extentMask.z(); z++) {
-
-            // For 3d we need to translate the global index back to local
-            int z1 = cornerMin.z() + z;
-
-            T bb = voxels.slice(z1).buffer();
-            ByteBuffer bbOM = object.voxels().slice(z).buffer();
-            process.notifyChangeZ(z1);
-
-            for (int y = 0; y < extentMask.y(); y++) {
-                int y1 = cornerMin.y() + y;
-                int offset = extent.offset(cornerMin.x(), y1);
-
-                for (int x = 0; x < extentMask.x(); x++) {
-
-                    if (bbOM.get() == valueOn) {
-                        int x1 = cornerMin.x() + x;
-
-                        process.process(new Point3i(x1, y1, z1), bb, offset);
-                    }
-                    offset++;
-                }
-            }
-        }
-    }
-
-    /**
      * Calls each voxel in an object-mask until a point is found
      *
      * @param object object-mask
@@ -185,7 +137,7 @@ public class IterateVoxels {
      */
     public static Optional<Point3i> findFirstPointOnObjectMask(ObjectMask object) {
 
-        Extent extentMask = object.voxels().extent();
+        Extent extentMask = object.extent();
         ReadableTuple3i cornerMin = object.boundingBox().cornerMin();
         byte valueOn = object.binaryValuesByte().getOnByte();
 
@@ -194,7 +146,7 @@ public class IterateVoxels {
             // For 3d we need to translate the global index back to local
             int z1 = cornerMin.z() + z;
 
-            ByteBuffer bbOM = object.voxels().slice(z).buffer();
+            ByteBuffer bbOM = object.sliceBufferLocal(z);
 
             for (int y = 0; y < extentMask.y(); y++) {
                 int y1 = cornerMin.y() + y;
@@ -238,7 +190,7 @@ public class IterateVoxels {
 
         for (point.setZ(cornerMin.z()); point.z() <= cornerMax.z(); point.incrementZ()) {
 
-            process.notifyChangeZ(point.z());
+            process.notifyChangeSlice(point.z());
 
             for (point.setY(cornerMin.y());
                     point.y() <= cornerMax.y();
@@ -254,6 +206,52 @@ public class IterateVoxels {
             }
         }
     }
+    
+
+    /**
+     * Iterate over each voxel in an extent that matches a predicate
+     *
+     * @param box the extent through which every point is tested to see if it matches the predicate
+     * @param process is called for each voxel within the bounding-box using GLOBAL coordinates.
+     */
+    public static void callEachPoint(Extent extent, Predicate<Point3i> predicate, ProcessVoxel process) {
+        callEachPoint( new BoundingBox(extent), predicate, process);
+    }
+    
+    /**
+     * Iterate over each voxel in a bounding-box that matches a predicate
+     *
+     * @param box the box that is used as a condition on what voxels to iterate i.e. only voxels
+     *     within these bounds
+     * @param process is called for each voxel within the bounding-box using GLOBAL coordinates.
+     */
+    public static void callEachPoint(BoundingBox box, Predicate<Point3i> predicate, ProcessVoxel process) {
+
+        ReadableTuple3i cornerMin = box.cornerMin();
+        ReadableTuple3i cornerMax = box.calcCornerMax();
+
+        Point3i point = new Point3i();
+
+        for (point.setZ(cornerMin.z()); point.z() <= cornerMax.z(); point.incrementZ()) {
+
+            process.notifyChangeSlice(point.z());
+
+            for (point.setY(cornerMin.y());
+                    point.y() <= cornerMax.y();
+                    point.incrementY()) {
+
+                process.notifyChangeY(point.y());
+
+                for (point.setX(cornerMin.x());
+                        point.x() <= cornerMax.x();
+                        point.incrementX()) {
+                    if (predicate.test(point)) {
+                        process.process(point);
+                    }
+                }
+            }
+        }
+    }
 
     /**
      * Iterate over each voxel - with an associated buffer for each slice from a voxel-buffer
@@ -264,8 +262,7 @@ public class IterateVoxels {
      */
     public static <T extends Buffer> void callEachPoint(
             Voxels<T> voxels, ProcessVoxelSliceBuffer<T> process) {
-        Extent extent = voxels.extent();
-        callEachPoint(extent, new RetrieveBufferForSlice<>(voxels, process));
+        callEachPoint(voxels.extent(), new RetrieveBufferForSlice<>(voxels, process));
     }
 
     /**
@@ -284,9 +281,9 @@ public class IterateVoxels {
     }
 
     /**
-     * Iterate over each voxel in an object-mask - with an associated buffer for each slice from a voxel-bo
+     * Iterate over each voxel in an object-mask - with an associated buffer for each slice from {@link Voxels}
      *
-     * @param voxels voxels for which {@link} refers to a subregion.
+     * @param voxels voxels where buffers extracted from be processed, and which define the global coordinate space
      * @param object the object-mask is used as a condition on what voxels to iterate i.e. only voxels within
      *     these bounds
      * @param process is called for each voxel within the bounding-box using GLOBAL coordinates.
@@ -294,7 +291,39 @@ public class IterateVoxels {
      */
     public static <T extends Buffer> void callEachPoint(
             Voxels<T> voxels, ObjectMask object, ProcessVoxelSliceBuffer<T> process) {
-        callEachPoint(object, voxels, process);
+        /** This is re-implemented in full, as reusing existing code with {@link AddOffsets} and
+        /  {@link RequireIntersectionWithMask} was not inlining using default JVM settings
+        / Based on unit-tests, it seems to perform better empirically, even with the new Point3i()
+        / adding to the heap. */
+
+        Extent extent = voxels.extent();
+        
+        ReadableTuple3i cornerMin = object.boundingBox().cornerMin();
+        byte valueOn = object.binaryValuesByte().getOnByte();
+
+        Point3i cornerMax = object.boundingBox().calcCornerMaxExclusive();
+        
+        Point3i point = new Point3i();
+        
+        for (point.setZ(cornerMin.z()); point.z() < cornerMax.z(); point.incrementZ()) {
+            
+            T buffer = voxels.sliceBuffer( point.z() );
+            ByteBuffer bufferObject = object.sliceBufferGlobal(point.z());
+            process.notifyChangeSlice( point.z() );
+            
+            for (point.setY(cornerMin.y()); point.y() < cornerMax.y(); point.incrementY()) {
+
+                int offset = extent.offset(cornerMin.x(), point.y());
+                
+                for (point.setX(cornerMin.x()); point.x() < cornerMax.x(); point.incrementX()) {
+
+                    if (bufferObject.get() == valueOn) {
+                        process.process(point, buffer, offset);
+                    }
+                    offset++;
+                }
+            }
+        }
     }
 
     /**
@@ -313,7 +342,7 @@ public class IterateVoxels {
         // but after some quick emperical checks, it doesn't seem to make a performance difference.
         // Probably the JVM is smart enough
         // to optimize away these redundant calcualations.
-        callEachPoint(new ObjectMask(mask.binaryVoxels()), voxels, process);
+        callEachPoint(voxels, new ObjectMask(mask.binaryVoxels()), process);
     }
 
     /**
@@ -323,7 +352,7 @@ public class IterateVoxels {
      * <p>This is similar behaviour to {@link #callEachPoint} but adds a buffer for each slice.
      */
     public static <T extends Buffer> void callEachPoint(
-            Optional<ObjectMask> objectMask, Voxels<T> voxels, ProcessVoxelSliceBuffer<T> process) {
+            Voxels<T> voxels, Optional<ObjectMask> objectMask, ProcessVoxelSliceBuffer<T> process) {
         Extent extent = voxels.extent();
 
         // Note the offsets must be added before any additional restriction like an object-mask, to make
@@ -333,7 +362,7 @@ public class IterateVoxels {
         // (i.e. {@link AddOffsets} must delegate to {@link RequireIntersectionWithMask} but not the
         // other way round.
         if (objectMask.isPresent()) {
-            callEachPoint(objectMask.get(), voxels, process);
+            callEachPoint(voxels, objectMask.get(), process);
         } else {
             callEachPoint(extent, new RetrieveBufferForSlice<T>(voxels, process));
         }
@@ -360,7 +389,7 @@ public class IterateVoxels {
         neighborhood.processAllPointsInNeighborhood(do3D, process);
         return process.collectResult();
     }
-
+    
     private static ProcessVoxel requireIntersectionTwice(
             ProcessVoxel processor, ObjectMask object1, ObjectMask object2) {
         ProcessVoxel inner = new RequireIntersectionWithObject(processor, object2);

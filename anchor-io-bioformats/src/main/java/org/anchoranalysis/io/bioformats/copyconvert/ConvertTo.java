@@ -107,6 +107,6 @@ public abstract class ConvertTo<T extends Buffer> {
             int z,
             int cRel) {
         Voxels<S> voxels = funcCastWrapper.apply(dest.get(cRel).voxels());
-        voxels.getPlaneAccess().setPixelsForPlane(z, voxelBuffer);
+        voxels.slices().replaceSlice(z, voxelBuffer);
     }
 }

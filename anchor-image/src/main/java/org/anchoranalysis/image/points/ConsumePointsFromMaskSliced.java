@@ -82,7 +82,7 @@ class ConsumePointsFromMaskSliced {
     public void firstHalf() {
         for (int z = startZ; z <= cornerMax.z(); z++) {
 
-            ByteBuffer bb = voxels.slice(z).buffer();
+            ByteBuffer bb = voxels.sliceBuffer(z);
 
             if (!addPointsFromSlice(bb, z)) {
                 successiveEmptySlices = 0;
@@ -100,7 +100,7 @@ class ConsumePointsFromMaskSliced {
     public void secondHalf() {
         for (int z = (startZ - 1); z >= cornerMin.z(); z--) {
 
-            ByteBuffer bb = voxels.slice(z).buffer();
+            ByteBuffer bb = voxels.sliceBuffer(z);
 
             if (!addPointsFromSlice(bb, z)) {
                 successiveEmptySlices = 0;

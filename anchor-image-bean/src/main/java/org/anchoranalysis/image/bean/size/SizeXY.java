@@ -58,7 +58,22 @@ public class SizeXY extends AnchorBean<SizeXY> {
         this(extent.x(), extent.y());
     }
 
+    /**
+     * Creates an extent with identical width and height and depth (z-extent) of 1
+     * 
+     * @return the newly created extent
+     */
     public Extent asExtent() {
-        return new Extent(width, height);
+        return asExtent(1);
+    }
+
+    /**
+     * Creates an extent with identical width and height and a specific depth (z-extent)
+     * 
+     * @param the depth for the extent
+     * @return the newly created extent
+     */
+    public Extent asExtent(int depth) {
+        return new Extent(width, height, depth);
     }
 }

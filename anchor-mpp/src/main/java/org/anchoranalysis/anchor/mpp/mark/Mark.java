@@ -134,8 +134,6 @@ public abstract class Mark implements Serializable, Identifiable {
         // We make a new mask and populate it from out iterator
         ObjectWithProperties object = new ObjectWithProperties(box);
 
-        assert (object.voxels().extent().z() > 0);
-
         byte maskOn = bv.getOnByte();
 
         ReadableTuple3i maxPos = box.calcCornerMax();
@@ -146,7 +144,7 @@ public abstract class Mark implements Serializable, Identifiable {
                 point.incrementZ()) {
 
             int zLocal = point.z() - box.cornerMin().z();
-            ByteBuffer maskSlice = object.voxels().slice(zLocal).buffer();
+            ByteBuffer maskSlice = object.sliceBufferLocal(zLocal);
 
             int cnt = 0;
             for (point.setY(box.cornerMin().y());
@@ -165,9 +163,6 @@ public abstract class Mark implements Serializable, Identifiable {
                 }
             }
         }
-
-        assert (object.voxels().extent().z() > 0);
-
         return object;
     }
 
@@ -183,8 +178,6 @@ public abstract class Mark implements Serializable, Identifiable {
         // We make a new mask and populate it from out iterator
         ObjectWithProperties object = new ObjectWithProperties(box);
 
-        assert (object.voxels().extent().z() > 0);
-
         byte maskOn = bvOut.getOnByte();
 
         ReadableTuple3i maxPos = box.calcCornerMax();
@@ -196,7 +189,7 @@ public abstract class Mark implements Serializable, Identifiable {
                 point.incrementZ()) {
 
             int zLocal = point.z() - box.cornerMin().z();
-            ByteBuffer maskSlice = object.voxels().slice(zLocal).buffer();
+            ByteBuffer maskSlice = object.sliceBufferLocal(zLocal);
 
             // Z coordinates are the same as we only scale in XY
             pointScaled.setZ(point.z());
@@ -221,9 +214,6 @@ public abstract class Mark implements Serializable, Identifiable {
                 }
             }
         }
-
-        assert (object.voxels().extent().z() > 0);
-
         return object;
     }
 

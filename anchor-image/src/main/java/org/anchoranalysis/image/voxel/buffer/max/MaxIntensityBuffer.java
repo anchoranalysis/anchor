@@ -48,7 +48,7 @@ public abstract class MaxIntensityBuffer<T extends Buffer> {
 
     public void projectSlice(T pixels) {
 
-        T flatBuffer = target.slice(0).buffer();
+        T flatBuffer = target.sliceBuffer(0);
 
         while (pixels.hasRemaining()) {
             addBuffer(pixels, flatBuffer);
@@ -60,7 +60,7 @@ public abstract class MaxIntensityBuffer<T extends Buffer> {
      *
      * @return the result of the maximum-intensity projection
      */
-    public Voxels<T> getProjection() {
+    public Voxels<T> asVoxels() {
         return target;
     }
 

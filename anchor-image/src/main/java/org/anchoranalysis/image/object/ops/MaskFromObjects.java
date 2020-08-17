@@ -79,7 +79,7 @@ public class MaskFromObjects {
         Voxels<ByteBuffer> voxelsNew = chnlNew.voxels().asByte();
 
         if (outVal.getOnInt() != 0) {
-            voxelsNew.setAllPixelsTo(initialState);
+            voxelsNew.assignValue(initialState).toAll();
         }
 
         writeChannelObjectCollection(voxelsNew, objects, objectState);
@@ -112,10 +112,9 @@ public class MaskFromObjects {
                 pointGlobal.z() <= maxGlobal.z();
                 pointGlobal.incrementZ(), pointLocal.incrementZ()) {
 
-            ByteBuffer maskIn = object.voxels().slice(pointLocal.z()).buffer();
+            ByteBuffer maskIn = object.sliceBufferLocal(pointLocal.z());
 
-            ByteBuffer pixelsOut =
-                    voxelsOut.getPlaneAccess().getPixelsForPlane(pointGlobal.z()).buffer();
+            ByteBuffer pixelsOut = voxelsOut.sliceBuffer(pointGlobal.z());
             writeToBufferMasked(
                     maskIn,
                     pixelsOut,

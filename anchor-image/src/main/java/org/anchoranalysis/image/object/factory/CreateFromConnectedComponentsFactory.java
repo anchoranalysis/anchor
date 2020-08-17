@@ -60,13 +60,8 @@ public class CreateFromConnectedComponentsFactory {
     }
 
     // This consumes the voxel buffer 'vb'
-    public ObjectCollection createConnectedComponents(BinaryVoxels<ByteBuffer> voxels)
-            throws CreateException {
-        try {
-            return unionFind.deriveConnectedByte(voxels);
-        } catch (OperationFailedException e) {
-            throw new CreateException(e);
-        }
+    public ObjectCollection createConnectedComponents(BinaryVoxels<ByteBuffer> voxels) {
+        return unionFind.deriveConnectedByte(voxels);
     }
 
     // This consumes the voxel buffer 'vb'

@@ -40,8 +40,7 @@ import org.anchoranalysis.image.voxel.buffer.VoxelBufferByte;
 //
 // Note that the Type.MAX_VALUE in Java assumes siged types.  So we multiply by two to get unsigned
 // sizes
-public final class ToByteScaleByMinMaxValue
-        implements VoxelsConverter<ByteBuffer> {
+public final class ToByteScaleByMinMaxValue extends VoxelsConverter<ByteBuffer> {
 
     private double scale = 0;
     private int subtract = 0;

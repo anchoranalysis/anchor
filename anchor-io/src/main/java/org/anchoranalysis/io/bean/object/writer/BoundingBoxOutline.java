@@ -86,7 +86,7 @@ public class BoundingBoxOutline extends DrawObject {
 
     private ObjectMask createBoundingBoxObject(ObjectMask object) {
         ObjectMask mask = object.duplicate();
-        mask.voxels().setAllPixelsTo(1);
+        mask.assignOn().toAll();
         return mask;
     }
 }

@@ -40,8 +40,8 @@ public abstract class ChnlProviderOne extends ChannelProvider {
 
     @Override
     public Channel create() throws CreateException {
-        return createFromChnl(chnl.create());
+        return createFromChannel(chnl.create());
     }
 
-    protected abstract Channel createFromChnl(Channel chnl) throws CreateException;
+    protected abstract Channel createFromChannel(Channel channel) throws CreateException;
 }

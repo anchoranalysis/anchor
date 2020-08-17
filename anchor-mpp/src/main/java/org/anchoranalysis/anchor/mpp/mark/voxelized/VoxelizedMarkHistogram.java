@@ -152,7 +152,7 @@ class VoxelizedMarkHistogram implements VoxelizedMark {
         partitionList.init(
                 FACTORY, stack.getNumberChannels(), regionMap.numRegions(), localExtent.z());
 
-        ByteBuffer bufferMIP = getObjectFlattened().voxels().slice(0).buffer();
+        ByteBuffer bufferMIP = getObjectFlattened().sliceBufferLocal(0);
 
         for (int z = box.cornerMin().z(); z <= cornerMax.z(); z++) {
 
@@ -182,7 +182,7 @@ class VoxelizedMarkHistogram implements VoxelizedMark {
         List<RegionMembershipWithFlags> listRegionMembership =
                 regionMap.createListMembershipWithFlags();
 
-        ByteBuffer buffer = getObject().voxels().slice(zLocal).buffer();
+        ByteBuffer buffer = object.sliceBufferLocal(zLocal);
 
         for (int y = box.cornerMin().y(); y <= cornerMax.y(); y++) {
             ptRunning.setY(y + 0.5);
@@ -195,7 +195,7 @@ class VoxelizedMarkHistogram implements VoxelizedMark {
 
                 int xLocal = x - box.cornerMin().x();
 
-                int localOffset = localExtent.offset(xLocal, yLocal);
+                int localOffset =  localExtent.offset(xLocal, yLocal);
                 int globalOffset = dimensions.offset(x, y);
 
                 byte membership = mark.evalPointInside(new Point3d(ptRunning));

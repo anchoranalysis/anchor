@@ -29,6 +29,7 @@ package org.anchoranalysis.image.voxel;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 
@@ -50,11 +51,7 @@ public class VoxelsWrapperList implements Iterable<VoxelsWrapper> {
     }
 
     public List<VoxelBuffer<?>> bufferListForSlice(int sliceNum) {
-        List<VoxelBuffer<?>> listOut = new ArrayList<>();
-        for (int i = 0; i < list.size(); i++) {
-            listOut.add(list.get(i).any().slice(sliceNum));
-        }
-        return listOut;
+        return FunctionalList.mapToList(list, item->item.slice(sliceNum) );
     }
 
     public VoxelsWrapper get(int index) {

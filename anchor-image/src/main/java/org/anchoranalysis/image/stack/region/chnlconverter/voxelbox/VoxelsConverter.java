@@ -31,6 +31,7 @@ import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
+import java.util.function.Function;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
@@ -45,15 +46,15 @@ import org.anchoranalysis.image.voxel.factory.VoxelsFactoryTypeBound;
  * @author Owen Feehan
  * @param <T> desgination-type
  */
-public interface VoxelsConverter<T extends Buffer> {
+public abstract class VoxelsConverter<T extends Buffer> {
 
-    default Voxels<T> convertFrom(VoxelsWrapper voxelsIn, VoxelsFactoryTypeBound<T> factory) {
+    public Voxels<T> convertFrom(VoxelsWrapper voxelsIn, VoxelsFactoryTypeBound<T> factory) {
         Voxels<T> voxelsOut = factory.createInitialized(voxelsIn.any().extent());
         convertFrom(voxelsIn, voxelsOut);
         return voxelsOut;
     }
-
-    default void convertFrom(VoxelsWrapper voxelsIn, Voxels<T> voxelsOut) {
+    
+    public void convertFrom(VoxelsWrapper voxelsIn, Voxels<T> voxelsOut) {
         // Otherwise, depending on the input type we spawn in different directions
         VoxelDataType inType = voxelsIn.getVoxelDataType();
         if (inType.equals(VoxelDataTypeUnsignedByte.INSTANCE)) {
@@ -67,43 +68,33 @@ public interface VoxelsConverter<T extends Buffer> {
         }
     }
 
-    default void convertFromByte(Voxels<ByteBuffer> voxelsIn, Voxels<T> voxelsOut) {
-
-        for (int z = 0; z < voxelsIn.extent().z(); z++) {
-            VoxelBuffer<ByteBuffer> bufferIn = voxelsIn.slice(z);
-            voxelsOut.updateSlice(z, convertFromByte(bufferIn));
-        }
+    public void convertFromByte(Voxels<ByteBuffer> in, Voxels<T> out) {
+        convertFrom(in, out, this::convertFromByte);
+    }
+    
+    public void convertFromShort(Voxels<ShortBuffer> in, Voxels<T> out) {
+        convertFrom(in, out, this::convertFromShort);
+    }
+    
+    public void convertFromInt(Voxels<IntBuffer> in, Voxels<T> out) {
+        convertFrom(in, out, this::convertFromInt);
+    }
+    
+    public void convertFromFloat(Voxels<FloatBuffer> in, Voxels<T> out) {
+        convertFrom(in, out, this::convertFromFloat);
     }
 
-    default void convertFromFloat(Voxels<FloatBuffer> voxelsIn, Voxels<T> voxelsOut) {
+    public abstract VoxelBuffer<T> convertFromByte(VoxelBuffer<ByteBuffer> in);
 
-        for (int z = 0; z < voxelsIn.extent().z(); z++) {
-            VoxelBuffer<FloatBuffer> bufferIn = voxelsIn.slice(z);
-            voxelsOut.updateSlice(z, convertFromFloat(bufferIn));
-        }
+    public abstract VoxelBuffer<T> convertFromFloat(VoxelBuffer<FloatBuffer> in);
+
+    public abstract VoxelBuffer<T> convertFromInt(VoxelBuffer<IntBuffer> in);
+
+    public abstract VoxelBuffer<T> convertFromShort(VoxelBuffer<ShortBuffer> in);
+    
+    private <S extends Buffer> void convertFrom(Voxels<S> in, Voxels<T> out, Function<VoxelBuffer<S>,VoxelBuffer<T>> converter ) {
+        in.extent().iterateOverZ( z->
+            out.replaceSlice(z, converter.apply(in.slice(z)))
+        );
     }
-
-    default void convertFromInt(Voxels<IntBuffer> voxelsIn, Voxels<T> voxelsOut) {
-
-        for (int z = 0; z < voxelsIn.extent().z(); z++) {
-            VoxelBuffer<IntBuffer> bufferIn = voxelsIn.slice(z);
-            voxelsOut.updateSlice(z, convertFromInt(bufferIn));
-        }
-    }
-
-    default void convertFromShort(Voxels<ShortBuffer> voxelsIn, Voxels<T> voxelsOut) {
-
-        for (int z = 0; z < voxelsIn.extent().z(); z++) {
-            VoxelBuffer<ShortBuffer> bufferIn = voxelsIn.slice(z);
-            voxelsOut.updateSlice(z, convertFromShort(bufferIn));
-        }
-    }
-
-    VoxelBuffer<T> convertFromByte(VoxelBuffer<ByteBuffer> in);
-
-    VoxelBuffer<T> convertFromFloat(VoxelBuffer<FloatBuffer> in);
-
-    VoxelBuffer<T> convertFromInt(VoxelBuffer<IntBuffer> in);
-
-    VoxelBuffer<T> convertFromShort(VoxelBuffer<ShortBuffer> in);
 }

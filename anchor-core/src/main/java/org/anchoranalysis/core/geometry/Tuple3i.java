@@ -80,9 +80,17 @@ public abstract class Tuple3i implements ReadableTuple3i {
         this.z = this.z / factor;
     }
 
-    public final void scaleXY(double factor) {
+    public final void scaleX(double factor) {
         this.x = (int) (factor * this.x);
+    }
+    
+    public final void scaleY(double factor) {
         this.y = (int) (factor * this.y);
+    }
+    
+    public final void scaleXY(double factor) {
+        scaleX(factor);
+        scaleY(factor);
     }
 
     /**

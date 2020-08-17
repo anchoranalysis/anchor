@@ -57,8 +57,8 @@ public class MaxIntensityProjectionPair {
     }
 
     public int minArea() {
-        int cnt1 = voxelsProjected1.voxels().countEqual(BinaryValues.getDefault().getOnInt());
-        int cnt2 = voxelsProjected2.voxels().countEqual(BinaryValues.getDefault().getOnInt());
+        int cnt1 = voxelsProjected1.extracter().voxelsEqualTo(BinaryValues.getDefault().getOnInt()).count();
+        int cnt2 = voxelsProjected2.extracter().voxelsEqualTo(BinaryValues.getDefault().getOnInt()).count();
         return Math.min(cnt1, cnt2);
     }
 
@@ -71,8 +71,8 @@ public class MaxIntensityProjectionPair {
 
         for (int z = 0; z < voxels.extent().z(); z++) {
 
-            ByteBuffer bb = voxels.slice(z).buffer();
-            ByteBuffer bbOut = voxelsOut.slice(z).buffer();
+            ByteBuffer bb = voxels.sliceBuffer(z);
+            ByteBuffer bbOut = voxelsOut.sliceBuffer(z);
 
             int offset = 0;
             for (int y = 0; y < voxels.extent().y(); y++) {

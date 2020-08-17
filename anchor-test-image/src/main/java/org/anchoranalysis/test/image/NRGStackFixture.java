@@ -34,7 +34,7 @@ import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.test.image.ChnlFixture.IntensityFunction;
+import org.anchoranalysis.test.image.ChannelFixture.IntensityFunction;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class NRGStackFixture {
@@ -45,9 +45,9 @@ public class NRGStackFixture {
 
         try {
             Stack stack = new Stack();
-            addChnl(stack, size, ChnlFixture::sumMod);
-            addChnl(stack, size, ChnlFixture::diffMod);
-            addChnl(stack, size, ChnlFixture::multMod);
+            addChnl(stack, size, ChannelFixture::sumMod);
+            addChnl(stack, size, ChannelFixture::diffMod);
+            addChnl(stack, size, ChannelFixture::multMod);
 
             NRGStack nrgStack = new NRGStack(stack);
             return new NRGStackWithParams(nrgStack);
@@ -59,14 +59,14 @@ public class NRGStackFixture {
 
     private static Extent muxExtent(boolean big, boolean do3D) {
         if (do3D) {
-            return big ? ChnlFixture.LARGE_3D : ChnlFixture.MEDIUM_3D;
+            return big ? ChannelFixture.LARGE_3D : ChannelFixture.MEDIUM_3D;
         } else {
-            return big ? ChnlFixture.LARGE_2D : ChnlFixture.MEDIUM_2D;
+            return big ? ChannelFixture.LARGE_2D : ChannelFixture.MEDIUM_2D;
         }
     }
 
     private static void addChnl(Stack stack, Extent size, IntensityFunction intensityFunction)
             throws IncorrectImageSizeException {
-        stack.addChannel(ChnlFixture.createChnl(size, intensityFunction));
+        stack.addChannel(ChannelFixture.createChannel(size, intensityFunction));
     }
 }

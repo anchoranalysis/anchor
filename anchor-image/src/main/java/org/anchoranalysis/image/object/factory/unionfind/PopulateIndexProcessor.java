@@ -38,7 +38,7 @@ import org.anchoranalysis.image.voxel.iterator.ProcessVoxelSliceBuffer;
 class PopulateIndexProcessor<T extends Buffer> implements ProcessVoxelSliceBuffer<T> {
 
     private Voxels<IntBuffer> indexBuffer;
-    private MergeWithNeighbors mergeWithNgbs;
+    private MergeWithNeighbors mergeWithNeighbors;
     private BinaryValues bv;
     private BinaryValuesByte bvb;
     private final BufferReadWrite<T> bufferReaderWriter;
@@ -49,10 +49,10 @@ class PopulateIndexProcessor<T extends Buffer> implements ProcessVoxelSliceBuffe
     public PopulateIndexProcessor(
             BinaryVoxels<T> visited,
             Voxels<IntBuffer> indexBuffer,
-            MergeWithNeighbors mergeWithNgbs,
+            MergeWithNeighbors mergeWithNeighbors,
             BufferReadWrite<T> bufferReaderWriter) {
         this.indexBuffer = indexBuffer;
-        this.mergeWithNgbs = mergeWithNgbs;
+        this.mergeWithNeighbors = mergeWithNeighbors;
         this.bufferReaderWriter = bufferReaderWriter;
 
         bv = visited.binaryValues();
@@ -60,10 +60,10 @@ class PopulateIndexProcessor<T extends Buffer> implements ProcessVoxelSliceBuffe
     }
 
     @Override
-    public void notifyChangeZ(int z) {
-        bbIndex = indexBuffer.slice(z).buffer();
+    public void notifyChangeSlice(int z) {
+        bbIndex = indexBuffer.sliceBuffer(z);
         if (z != 0) {
-            mergeWithNgbs.shift();
+            mergeWithNeighbors.shift();
         }
     }
 
@@ -72,11 +72,11 @@ class PopulateIndexProcessor<T extends Buffer> implements ProcessVoxelSliceBuffe
         if (bufferReaderWriter.isBufferOn(buffer, offsetSlice, bv, bvb)
                 && bbIndex.get(offsetSlice) == 0) {
 
-            int neighborLabel = mergeWithNgbs.calcMinNeighborLabel(point, 0, offsetSlice);
+            int neighborLabel = mergeWithNeighbors.calcMinNeighborLabel(point, 0, offsetSlice);
             if (neighborLabel == -1) {
                 bufferReaderWriter.putBufferCnt(buffer, offsetSlice, count);
                 bbIndex.put(offsetSlice, count);
-                mergeWithNgbs.addElement(count);
+                mergeWithNeighbors.addElement(count);
                 count++;
             } else {
                 bbIndex.put(offsetSlice, neighborLabel);

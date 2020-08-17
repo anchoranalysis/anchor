@@ -43,9 +43,12 @@ import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.interpolator.Interpolator;
+import org.anchoranalysis.image.interpolator.InterpolatorFactory;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.scale.ScaleFactor;
 import org.anchoranalysis.image.voxel.Voxels;
+import org.anchoranalysis.image.voxel.VoxelsPredicate;
+import org.anchoranalysis.image.voxel.assigner.VoxelsAssigner;
 import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelDataTypeException;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 import org.anchoranalysis.image.voxel.thresholder.VoxelsThresholder;
@@ -72,6 +75,9 @@ public class Mask {
 
     private final BinaryValuesByte binaryValuesByte;
 
+    /** Interpolator used for resizing the mask (making sure to use an out-of-bounds strategy of OFF voxels) */
+    private final Interpolator interpolator;
+    
     /**
      * Constructor - creates a mask from an existing channel using default values for OFF (0) and ON (255)
      * <p>
@@ -104,6 +110,8 @@ public class Mask {
             throw new IncorrectVoxelDataTypeException(
                     "Only unsigned 8-bit data type is supported for BinaryChnl");
         }
+        
+        this.interpolator = createInterpolator( binaryValues );
     }
 
     /**
@@ -129,6 +137,8 @@ public class Mask {
         this.channel = FACTORY.create(voxels.voxels(), resolution);
         this.binaryValues = voxels.binaryValues();
         this.binaryValuesByte = binaryValues.createByte();
+        
+        this.interpolator = createInterpolator( binaryValues );
     }
         
     /**
@@ -161,9 +171,9 @@ public class Mask {
     }
 
     public boolean isPointOn(Point3i point) {
-        ByteBuffer bb = voxels().slice(point.z()).buffer();
+        ByteBuffer bb = voxels().sliceBuffer(point.z());
 
-        int offset = voxels().extent().offset(point.x(), point.y());
+        int offset = voxels().extent().offsetSlice(point);
 
         return bb.get(offset) == binaryValuesByte.getOnByte();
     }
@@ -175,26 +185,22 @@ public class Mask {
     public ObjectMask region(BoundingBox box, boolean reuseIfPossible) {
         Preconditions.checkArgument(channel.dimensions().contains(box));
         return new ObjectMask(
-                box, channel.voxels().asByte().region(box, reuseIfPossible), binaryValues);
+                box, channel.voxels().asByte().extracter().region(box, reuseIfPossible), binaryValues);
     }
 
     public Mask flattenZ() {
         return new Mask(channel.maxIntensityProjection(), binaryValues);
     }
 
-    public boolean hasOn() {
-        return channel.hasEqualTo(binaryValues.getOnInt());
-    }
-
-    public int countOn() {
-        return channel.countEqualTo(binaryValues.getOnInt());
+    public VoxelsPredicate voxelsOn() {
+        return channel.voxelsEqualTo(binaryValues.getOnInt());
     }
     
-    public int countOff() {
-        return channel.countEqualTo(binaryValues.getOffInt());
+    public VoxelsPredicate voxelsOff() {
+        return channel.voxelsEqualTo(binaryValues.getOffInt());
     }
 
-    public Mask scaleXY(ScaleFactor scaleFactor, Interpolator interpolator) {
+    public Mask scaleXY(ScaleFactor scaleFactor) {
 
         if (scaleFactor.isNoScale()) {
             // Nothing to do
@@ -216,7 +222,15 @@ public class Mask {
     }
 
     public void replaceBy(BinaryVoxels<ByteBuffer> voxels) throws IncorrectImageSizeException {
-        channel.voxels().asByte().replaceBy(voxels.voxels());
+        channel.replaceVoxels(voxels.voxels());
+    }
+    
+    public VoxelsAssigner assignOn() {
+        return channel.assignValue(binaryValues.getOnInt());
+    }
+    
+    public VoxelsAssigner assignOff() {
+        return channel.assignValue(binaryValues.getOffInt());
     }
 
     private void applyThreshold(Mask mask) {
@@ -224,5 +238,9 @@ public class Mask {
 
         VoxelsThresholder.thresholdForLevel(
                 mask.voxels(), thresholdVal, mask.binaryValues().createByte());
+    }
+    
+    private Interpolator createInterpolator(BinaryValues binaryValues) {
+        return InterpolatorFactory.getInstance().binaryResizing( binaryValues.getOffInt() );
     }
 }

@@ -80,6 +80,6 @@ public class InterpolateUtilities {
                 }
             }
         }
-        assert (trgt.any().slice(0).buffer().capacity() == eTrgt.volumeXY());
+        assert (trgt.any().sliceBuffer(0).capacity() == eTrgt.volumeXY());
     }
 }

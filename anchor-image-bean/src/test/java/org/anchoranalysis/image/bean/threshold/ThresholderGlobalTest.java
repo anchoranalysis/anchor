@@ -75,7 +75,7 @@ public class ThresholderGlobalTest {
 
         // An object-mask in the left half
         ObjectMask object = new ObjectMask(new BoundingBox(MASK_CORNER_MIN, MASK_EXTENT));
-        object.binaryVoxels().setAllPixelsToOn();
+        object.assignOn().toAll();
 
         testThreshold(Optional.of(object), 2400, 112000000);
     }

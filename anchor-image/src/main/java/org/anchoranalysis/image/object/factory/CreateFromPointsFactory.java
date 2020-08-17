@@ -35,6 +35,7 @@ import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.points.BoundingBoxFromPoints;
+import org.anchoranalysis.image.voxel.assigner.VoxelsAssigner;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CreateFromPointsFactory {
@@ -49,7 +50,8 @@ public class CreateFromPointsFactory {
         }
 
         ObjectMask object = new ObjectMask(box);
-        points.forEach(object::setOn);
+        VoxelsAssigner assigner = object.assignOn();
+        points.forEach(assigner::toVoxel);
         return object;
     }
 }
