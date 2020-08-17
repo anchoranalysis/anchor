@@ -29,7 +29,7 @@ package org.anchoranalysis.image.voxel.kernel.dilateerode;
 import java.nio.ByteBuffer;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.Voxels;
 
 public abstract class BinaryKernelMorph3Extent extends BinaryKernelMorph3 {
 
@@ -42,7 +42,7 @@ public abstract class BinaryKernelMorph3Extent extends BinaryKernelMorph3 {
     }
 
     @Override
-    public void init(VoxelBox<ByteBuffer> in) {
+    public void init(Voxels<ByteBuffer> in) {
         this.extent = in.extent();
     }
 }

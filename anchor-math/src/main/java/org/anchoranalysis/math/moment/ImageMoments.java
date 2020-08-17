@@ -30,6 +30,8 @@ import cern.colt.matrix.DoubleMatrix2D;
 import cern.colt.matrix.doublealgo.Statistic;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 /**
  * The first moment (mean) and eigenvalues of the second moments (covariance) from a matrix of
@@ -39,12 +41,11 @@ import java.util.List;
  *
  * @author Owen Feehan
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ImageMoments {
 
     private List<EigenvalueAndVector> list;
     private double[] mean = new double[3];
-
-    private ImageMoments() {}
 
     /**
      * Calculates the second-moments from the covariance of a matrix of points

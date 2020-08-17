@@ -41,7 +41,7 @@ import org.anchoranalysis.image.bean.provider.stack.StackProviderArrangeRaster;
 import org.anchoranalysis.image.io.bean.stack.arrange.StackProviderWithLabel;
 import org.anchoranalysis.image.io.generator.raster.RasterGenerator;
 import org.anchoranalysis.image.io.generator.raster.StackGenerator;
-import org.anchoranalysis.image.io.generator.raster.obj.rgb.DrawObjectsGenerator;
+import org.anchoranalysis.image.io.generator.raster.object.rgb.DrawObjectsGenerator;
 import org.anchoranalysis.image.io.stack.TileRasters;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectCollectionFactory;
@@ -175,8 +175,8 @@ public class AssignmentGenerator extends RasterGenerator {
 
     private DrawObject createConditionalWriter(List<ObjectMask> otherObjects, DrawObject writer) {
         return new IfElse(
-                (ObjectWithProperties mask, RGBStack stack, int id) ->
-                        otherObjects.contains(mask.getMask()),
+                (ObjectWithProperties object, RGBStack stack, int id) ->
+                        otherObjects.contains(object.withoutProperties()),
                 writer,
                 new Filled());
     }

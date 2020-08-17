@@ -71,30 +71,30 @@ public class OverlayMark extends Overlay {
     }
 
     @Override
-    public BoundingBox bbox(DrawOverlay overlayWriter, ImageDimensions dim) {
-        return mark.bbox(dim, regionMembership.getRegionID());
+    public BoundingBox box(DrawOverlay overlayWriter, ImageDimensions dim) {
+        return mark.box(dim, regionMembership.getRegionID());
     }
 
     @Override
-    public ObjectWithProperties createScaledMask(
+    public ObjectWithProperties createScaleObject(
             DrawOverlay overlayWriter,
             double zoomFactorNew,
             ObjectWithProperties om,
             Overlay ol,
-            ImageDimensions sdUnscaled,
-            ImageDimensions sdScaled,
+            ImageDimensions dimensionsUnscaled,
+            ImageDimensions dimensionsScaled,
             BinaryValuesByte bvOut)
             throws CreateException {
 
         return scaledMaskCreator.createScaledMask(
-                overlayWriter, om, zoomFactorNew, mark, sdUnscaled, bvOut);
+                overlayWriter, om, zoomFactorNew, mark, dimensionsUnscaled, bvOut);
     }
 
     @Override
     public ObjectWithProperties createObject(
             DrawOverlay overlayWriter, ImageDimensions dimEntireImage, BinaryValuesByte bvOut)
             throws CreateException {
-        return mark.calcMask(dimEntireImage, regionMembership, bvOut);
+        return mark.deriveObject(dimEntireImage, regionMembership, bvOut);
     }
 
     @Override

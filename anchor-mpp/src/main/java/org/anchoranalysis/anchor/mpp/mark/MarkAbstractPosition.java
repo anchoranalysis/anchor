@@ -45,6 +45,7 @@ public abstract class MarkAbstractPosition extends Mark implements Serializable 
     /** */
     private static final long serialVersionUID = -6976277985708631268L;
 
+    // TODO rename pos to position
     // START mark state
     @Getter @Setter private Point3d pos;
     // END mark state
@@ -62,8 +63,7 @@ public abstract class MarkAbstractPosition extends Mark implements Serializable 
     }
 
     public String strPos() {
-        return String.format(
-                "[%6.1f,%6.1f,%6.1f]", this.pos.getX(), this.pos.getY(), this.pos.getZ());
+        return String.format("[%6.1f,%6.1f,%6.1f]", this.pos.x(), this.pos.y(), this.pos.z());
     }
 
     @Override
@@ -72,8 +72,8 @@ public abstract class MarkAbstractPosition extends Mark implements Serializable 
     }
 
     public static void scaleXYPoint(Point3d point, double multFactor) {
-        point.setX(point.getX() * multFactor);
-        point.setY(point.getY() * multFactor);
+        point.setX(point.x() * multFactor);
+        point.setY(point.y() * multFactor);
     }
 
     @Override
@@ -98,12 +98,12 @@ public abstract class MarkAbstractPosition extends Mark implements Serializable 
     }
 
     @Override
-    public ObjectWithProperties calcMask(
+    public ObjectWithProperties deriveObject(
             ImageDimensions bndScene, RegionMembershipWithFlags rm, BinaryValuesByte bvOut) {
 
-        ObjectWithProperties mask = super.calcMask(bndScene, rm, bvOut);
-        mask.setProperty("midpointInt", calcRelativePoint(pos, mask.getBoundingBox().cornerMin()));
-        return mask;
+        ObjectWithProperties object = super.deriveObject(bndScene, rm, bvOut);
+        object.setProperty("midpointInt", calcRelativePoint(pos, object.boundingBox().cornerMin()));
+        return object;
     }
 
     @Override
@@ -113,20 +113,20 @@ public abstract class MarkAbstractPosition extends Mark implements Serializable 
         int numDims = numDims();
 
         if (numDims >= 1) {
-            op.addDoubleAsString("Pos X", pos.getX());
+            op.addDoubleAsString("Pos X", pos.x());
         }
         if (numDims >= 2) {
-            op.addDoubleAsString("Pos Y", pos.getY());
+            op.addDoubleAsString("Pos Y", pos.y());
         }
         if (numDims >= 3) {
-            op.addDoubleAsString("Pos Z", pos.getZ());
+            op.addDoubleAsString("Pos Z", pos.z());
         }
         return op;
     }
 
     /** Calculates a relative-point from pointGlobal to pointBase */
     private static Point3i calcRelativePoint(Point3d pointGlobal, ReadableTuple3i pointBase) {
-        Point3i pointOut = PointConverter.intFromDouble(pointGlobal);
+        Point3i pointOut = PointConverter.intFromDoubleFloor(pointGlobal);
         pointOut.subtract(pointBase);
         return pointOut;
     }

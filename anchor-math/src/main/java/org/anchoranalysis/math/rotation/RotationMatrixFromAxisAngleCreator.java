@@ -51,17 +51,17 @@ public class RotationMatrixFromAxisAngleCreator extends RotationMatrixCreator {
         double cos = Math.cos(angle);
         double sin = Math.sin(angle);
 
-        mat.set(0, 0, cos + point.getX() * point.getX() * oneMinusCos);
-        mat.set(1, 0, point.getY() * point.getX() * oneMinusCos + point.getZ() * sin);
-        mat.set(2, 0, point.getZ() * point.getX() * oneMinusCos - point.getY() * sin);
+        mat.set(0, 0, cos + point.x() * point.x() * oneMinusCos);
+        mat.set(1, 0, point.y() * point.x() * oneMinusCos + point.z() * sin);
+        mat.set(2, 0, point.z() * point.x() * oneMinusCos - point.y() * sin);
 
-        mat.set(0, 1, point.getX() * point.getY() * oneMinusCos - point.getZ() * sin);
-        mat.set(1, 1, cos + point.getY() * point.getY() * oneMinusCos);
-        mat.set(2, 1, point.getZ() * point.getY() * oneMinusCos + point.getX() * sin);
+        mat.set(0, 1, point.x() * point.y() * oneMinusCos - point.z() * sin);
+        mat.set(1, 1, cos + point.y() * point.y() * oneMinusCos);
+        mat.set(2, 1, point.z() * point.y() * oneMinusCos + point.x() * sin);
 
-        mat.set(0, 2, point.getX() * point.getZ() * oneMinusCos + point.getY() * sin);
-        mat.set(1, 2, point.getY() * point.getZ() * oneMinusCos - point.getX() * sin);
-        mat.set(2, 2, cos + point.getZ() * point.getZ() * oneMinusCos);
+        mat.set(0, 2, point.x() * point.z() * oneMinusCos + point.y() * sin);
+        mat.set(1, 2, point.y() * point.z() * oneMinusCos - point.x() * sin);
+        mat.set(2, 2, cos + point.z() * point.z() * oneMinusCos);
     }
 
     @Override

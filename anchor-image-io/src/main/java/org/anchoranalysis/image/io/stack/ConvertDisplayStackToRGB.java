@@ -43,11 +43,11 @@ public class ConvertDisplayStackToRGB {
         try {
             if (background.getNumberChannels() == 1) {
                 return new RGBStack(
-                        background.createChnlDuplicate(0),
-                        background.createChnlDuplicate(0),
-                        background.createChnlDuplicate(0));
+                        background.createChannelDuplicate(0),
+                        background.createChannelDuplicate(0),
+                        background.createChannelDuplicate(0));
             } else if (background.getNumberChannels() == 3) {
-                return new RGBStack(background.createStackDuplicate());
+                return new RGBStack(background.deriveStackDuplicate());
             } else {
                 throw new AnchorImpossibleSituationException();
             }
@@ -56,17 +56,17 @@ public class ConvertDisplayStackToRGB {
         }
     }
 
-    public static RGBStack convertCropped(DisplayStack background, BoundingBox bbox) {
+    public static RGBStack convertCropped(DisplayStack background, BoundingBox box) {
 
         try {
             if (background.getNumberChannels() == 1) {
-                Channel chnl = background.createChannelDuplicateForBoundingBox(0, bbox);
+                Channel chnl = background.createChannelDuplicateForBoundingBox(0, box);
                 return new RGBStack(chnl, chnl.duplicate(), chnl.duplicate());
             } else if (background.getNumberChannels() == 3) {
                 return new RGBStack(
-                        background.createChannelDuplicateForBoundingBox(0, bbox),
-                        background.createChannelDuplicateForBoundingBox(1, bbox),
-                        background.createChannelDuplicateForBoundingBox(2, bbox));
+                        background.createChannelDuplicateForBoundingBox(0, box),
+                        background.createChannelDuplicateForBoundingBox(1, box),
+                        background.createChannelDuplicateForBoundingBox(2, box));
             } else {
                 throw new AnchorImpossibleSituationException();
             }

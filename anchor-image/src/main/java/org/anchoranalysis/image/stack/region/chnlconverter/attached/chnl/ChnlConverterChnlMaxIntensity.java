@@ -31,27 +31,26 @@ import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.stack.region.chnlconverter.ChannelConverterToUnsignedByte;
 import org.anchoranalysis.image.stack.region.chnlconverter.ConversionPolicy;
 import org.anchoranalysis.image.stack.region.chnlconverter.attached.ChnlConverterAttached;
-import org.anchoranalysis.image.stack.region.chnlconverter.voxelbox.VoxelBoxConverter;
-import org.anchoranalysis.image.stack.region.chnlconverter.voxelbox.VoxelBoxConverterToByteScaleByMaxValue;
+import org.anchoranalysis.image.stack.region.chnlconverter.voxelbox.ToByteScaleByMaxValue;
+import org.anchoranalysis.image.stack.region.chnlconverter.voxelbox.VoxelsConverter;
 
 public class ChnlConverterChnlMaxIntensity implements ChnlConverterAttached<Channel, ByteBuffer> {
 
-    private VoxelBoxConverterToByteScaleByMaxValue voxelBoxConverter;
+    private ToByteScaleByMaxValue voxelsConverter;
 
     private ChannelConverterToUnsignedByte delegate;
 
     public ChnlConverterChnlMaxIntensity() {
         // Initialise with a dummy value
-        voxelBoxConverter = new VoxelBoxConverterToByteScaleByMaxValue(1);
+        voxelsConverter = new ToByteScaleByMaxValue(1);
 
-        delegate = new ChannelConverterToUnsignedByte(voxelBoxConverter);
+        delegate = new ChannelConverterToUnsignedByte(voxelsConverter);
     }
 
     @Override
-    public void attachObject(Channel obj) {
-
-        int maxValue = obj.getVoxelBox().any().ceilOfMaxPixel();
-        voxelBoxConverter.setMaxValue(maxValue);
+    public void attachObject(Channel channel) {
+        int maxValue = channel.extracter().voxelWithMaxIntensity();
+        voxelsConverter.setMaxValue(maxValue);
     }
 
     @Override
@@ -60,7 +59,7 @@ public class ChnlConverterChnlMaxIntensity implements ChnlConverterAttached<Chan
     }
 
     @Override
-    public VoxelBoxConverter<ByteBuffer> getVoxelBoxConverter() {
-        return voxelBoxConverter;
+    public VoxelsConverter<ByteBuffer> getVoxelsConverter() {
+        return voxelsConverter;
     }
 }

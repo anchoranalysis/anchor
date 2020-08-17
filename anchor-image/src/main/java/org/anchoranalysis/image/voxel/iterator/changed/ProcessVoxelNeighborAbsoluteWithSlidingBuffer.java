@@ -82,7 +82,7 @@ public abstract class ProcessVoxelNeighborAbsoluteWithSlidingBuffer<T>
         return bb.getInt(changedOffset(xChange, yChange));
     }
 
-    public Extent getExtent() {
+    public Extent extent() {
         return extent;
     }
 }

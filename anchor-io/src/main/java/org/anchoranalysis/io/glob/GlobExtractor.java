@@ -27,6 +27,10 @@
 package org.anchoranalysis.io.glob;
 
 import java.util.Optional;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.Value;
 import org.anchoranalysis.io.bean.provider.file.SingleFile;
 
 /**
@@ -34,30 +38,18 @@ import org.anchoranalysis.io.bean.provider.file.SingleFile;
  *
  * @author Owen Feehan
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class GlobExtractor {
 
+    @Value
+    @AllArgsConstructor
     public static class GlobWithDirectory {
 
-        private Optional<String> directory;
-        private String glob;
-
-        public GlobWithDirectory(Optional<String> directory, String glob) {
-            super();
-            this.directory = directory;
-            this.glob = glob;
-        }
-
-        public String getGlob() {
-            return glob;
-        }
-
         /** The directory part of the string, or null if it doesn't exist */
-        public Optional<String> getDirectory() {
-            return directory;
-        }
-    }
+        private Optional<String> directory;
 
-    private GlobExtractor() {}
+        private String glob;
+    }
 
     /**
      * Extracts a glob, and a directory portion if it exists from a string with a wildcard
@@ -80,9 +72,9 @@ public class GlobExtractor {
         }
     }
 
-    private static int positionFinalSlashBeforeWildcard(String str) {
-        int firstWildcardPos = str.indexOf('*');
-        String strWithoutWildcard = str.substring(0, firstWildcardPos);
-        return strWithoutWildcard.lastIndexOf('/');
+    private static int positionFinalSlashBeforeWildcard(String withWildcard) {
+        int firstWildcardPos = withWildcard.indexOf('*');
+        String without = withWildcard.substring(0, firstWildcardPos);
+        return without.lastIndexOf('/');
     }
 }

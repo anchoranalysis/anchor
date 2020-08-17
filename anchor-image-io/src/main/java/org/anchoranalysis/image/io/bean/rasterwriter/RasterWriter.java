@@ -28,25 +28,25 @@ package org.anchoranalysis.image.io.bean.rasterwriter;
 
 import java.nio.file.Path;
 import org.anchoranalysis.bean.AnchorBean;
-import org.anchoranalysis.image.channel.factory.ChannelFactoryByte;
-import org.anchoranalysis.image.channel.factory.ChannelFactoryShort;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.generator.raster.series.StackSeries;
 import org.anchoranalysis.image.stack.Stack;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedShort;
 
 public abstract class RasterWriter extends AnchorBean<RasterWriter> {
 
     // Get the default extension for a writer
-    public abstract String dfltExt();
+    public abstract String defaultExtension();
 
     public abstract void writeTimeSeriesStackByte(
             StackSeries stackSeries, Path filePath, boolean makeRGB) throws RasterIOException;
 
     public void writeStack(Stack stack, Path filePath, boolean makeRGB) throws RasterIOException {
 
-        if (stack.allChannelsHaveType(ChannelFactoryByte.staticDataType())) {
+        if (stack.allChannelsHaveType(VoxelDataTypeUnsignedByte.INSTANCE)) {
             writeStackByte((Stack) stack, filePath, makeRGB);
-        } else if (stack.allChannelsHaveType(ChannelFactoryShort.staticDataType())) {
+        } else if (stack.allChannelsHaveType(VoxelDataTypeUnsignedShort.INSTANCE)) {
             writeStackShort((Stack) stack, filePath, makeRGB);
         } else {
             throw new RasterIOException(

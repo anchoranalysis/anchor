@@ -28,10 +28,11 @@ package org.anchoranalysis.image.stack.bufferedimage;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class BufferedImageOverlay {
-
-    private BufferedImageOverlay() {}
 
     public static void overlayBufferedImage(
             BufferedImage imageSrc, BufferedImage imageInsert, int x, int y) {

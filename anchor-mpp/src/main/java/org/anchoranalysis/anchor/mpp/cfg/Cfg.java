@@ -48,6 +48,7 @@ import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.object.properties.ObjectCollectionWithProperties;
+import org.anchoranalysis.image.object.properties.ObjectCollectionWithPropertiesFactory;
 
 /// A particular configuration of marks
 public final class Cfg implements Iterable<Mark>, Serializable {
@@ -164,24 +165,15 @@ public final class Cfg implements Iterable<Mark>, Serializable {
         return marks.indexOf(m);
     }
 
-    public ObjectCollectionWithProperties calcMask(
-            ImageDimensions bndScene,
+    public ObjectCollectionWithProperties deriveObjects(
+            ImageDimensions dimensions,
             RegionMembershipWithFlags regionMembership,
             BinaryValuesByte bvOut) {
 
-        ObjectCollectionWithProperties maskCollection = new ObjectCollectionWithProperties();
-
-        for (int i = 0; i < marks.size(); i++) {
-            Mark mark = marks.get(i);
-
-            if (regionMembership.getRegionID() >= mark.numRegions()) {
-                continue;
-            }
-
-            maskCollection.add(mark.calcMask(bndScene, regionMembership, bvOut));
-        }
-
-        return maskCollection;
+        return ObjectCollectionWithPropertiesFactory.filterAndMapFrom(
+                marks,
+                mark -> mark.numRegions() > regionMembership.getRegionID(),
+                mark -> mark.deriveObject(dimensions, regionMembership, bvOut));
     }
 
     public void scaleXY(double scaleFactor) throws OptionalOperationUnsupportedException {
@@ -289,11 +281,11 @@ public final class Cfg implements Iterable<Mark>, Serializable {
         return mergedNew;
     }
 
-    public List<BoundingBox> bboxList(ImageDimensions bndScene, int regionID) {
+    public List<BoundingBox> boxList(ImageDimensions bndScene, int regionID) {
 
         ArrayList<BoundingBox> list = new ArrayList<>();
         for (Mark m : this) {
-            list.add(m.bbox(bndScene, regionID));
+            list.add(m.box(bndScene, regionID));
         }
         return list;
     }

@@ -32,7 +32,7 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipUtilities;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.Voxels;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class OverlapUtilities {
@@ -53,8 +53,7 @@ public class OverlapUtilities {
         // between the two bounding box
         byte flag = RegionMembershipUtilities.flagForRegion(regionID);
         return new CountIntersectingVoxelsRegionMembership(flag)
-                .countIntersectingVoxels(
-                        pmm1.voxelized().getVoxelBox(), pmm2.voxelized().getVoxelBox());
+                .countIntersectingVoxels(pmm1.voxelized().voxels(), pmm2.voxelized().voxels());
     }
 
     /**
@@ -71,7 +70,7 @@ public class OverlapUtilities {
             VoxelizedMarkMemo pmm1,
             VoxelizedMarkMemo pmm2,
             int regionID,
-            VoxelBox<ByteBuffer> globalMask,
+            Voxels<ByteBuffer> globalMask,
             byte onGlobalMask) {
         Mark mark1 = pmm1.getMark();
         Mark mark2 = pmm2.getMark();
@@ -88,8 +87,8 @@ public class OverlapUtilities {
         byte flag = RegionMembershipUtilities.flagForRegion(regionID);
         return new CountIntersectingVoxelsRegionMembershipMask(flag)
                 .countIntersectingVoxelsMaskGlobal(
-                        pmm1.voxelized().getVoxelBox(),
-                        pmm2.voxelized().getVoxelBox(),
+                        pmm1.voxelized().voxels(),
+                        pmm2.voxelized().voxels(),
                         globalMask,
                         onGlobalMask);
     }

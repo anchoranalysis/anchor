@@ -91,8 +91,7 @@ public class AddCriteriaNRGElemPair implements AddCriteria<NRGPair> {
         //  necessary calculations from the addCriteria calculations to be used later
         boolean calc = false;
         try {
-            if (pairAddCriteria.includeMarks(
-                    mark1, mark2, nrgStack.getDimensions(), session, do3D)) {
+            if (pairAddCriteria.includeMarks(mark1, mark2, nrgStack.dimensions(), session, do3D)) {
                 calc = true;
             }
         } catch (IncludeMarksFailureException e) {
@@ -107,7 +106,7 @@ public class AddCriteriaNRGElemPair implements AddCriteria<NRGPair> {
                                         () ->
                                                 new NamedFeatureCalculationException(
                                                         "No feature-evaluator exists"))
-                                .calc(params, nrgElemPairList);
+                                .calculate(params, nrgElemPairList);
 
                 IdentifiablePair<Mark> pair =
                         new IdentifiablePair<>(mark1.getMark(), mark2.getMark());

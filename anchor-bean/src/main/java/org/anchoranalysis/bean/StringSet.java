@@ -26,9 +26,11 @@
 
 package org.anchoranalysis.bean;
 
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
+import lombok.NoArgsConstructor;
 
 /**
  * A set of strings.
@@ -47,9 +49,14 @@ import java.util.TreeSet;
  *
  * @author Owen Feehan
  */
+@NoArgsConstructor
 public class StringSet extends AnchorBean<StringSet> implements StringBeanCollection {
 
     private Set<String> set = new TreeSet<>();
+
+    public StringSet(String... strings) {
+        Arrays.stream(strings).forEach(set::add);
+    }
 
     @Override
     public void add(String s) {

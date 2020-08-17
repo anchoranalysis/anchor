@@ -36,9 +36,9 @@ import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.bean.nonbean.parameters.BinarySegmentationParameters;
 import org.anchoranalysis.image.bean.threshold.Thresholder;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
-import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
+import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
+import org.anchoranalysis.image.voxel.VoxelsWrapper;
 
 public class BinarySegmentationThreshold extends BinarySegmentation {
 
@@ -47,17 +47,17 @@ public class BinarySegmentationThreshold extends BinarySegmentation {
     // END PARAMETERS
 
     @Override
-    public BinaryVoxelBox<ByteBuffer> sgmn(
-            VoxelBoxWrapper voxelBox,
+    public BinaryVoxels<ByteBuffer> segment(
+            VoxelsWrapper voxels,
             BinarySegmentationParameters params,
-            Optional<ObjectMask> mask)
+            Optional<ObjectMask> objectMask)
             throws SegmentationFailedException {
         try {
             return thresholder.threshold(
-                    voxelBox,
+                    voxels,
                     BinaryValuesByte.getDefault(),
-                    mask.isPresent() ? Optional.empty() : params.getIntensityHistogram(),
-                    mask);
+                    objectMask.isPresent() ? Optional.empty() : params.getIntensityHistogram(),
+                    objectMask);
         } catch (OperationFailedException e) {
             throw new SegmentationFailedException(e);
         }

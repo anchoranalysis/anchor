@@ -34,12 +34,12 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
-import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
-import org.anchoranalysis.image.binary.voxel.BinaryVoxelBoxByte;
+import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
+import org.anchoranalysis.image.binary.voxel.BinaryVoxelsFactory;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.morph.accept.AcceptIterationConditon;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.kernel.ApplyKernel;
 import org.anchoranalysis.image.voxel.kernel.BinaryKernel;
 import org.anchoranalysis.image.voxel.kernel.ConditionalKernel;
@@ -76,18 +76,18 @@ public class MorphologicalDilation {
         try {
             ObjectMask objectGrown = object.growBuffer(grow, grow, extent);
             return objectGrown.replaceVoxels(
-                    dilate(objectGrown.binaryVoxelBox(), do3D, iterations, null, 0, bigNeighborhood)
-                            .getVoxelBox());
+                    dilate(objectGrown.binaryVoxels(), do3D, iterations, null, 0, bigNeighborhood)
+                            .voxels());
         } catch (OperationFailedException e) {
             throw new CreateException("Cannot grow object-mask", e);
         }
     }
 
-    public static BinaryVoxelBox<ByteBuffer> dilate(
-            BinaryVoxelBox<ByteBuffer> bvb,
+    public static BinaryVoxels<ByteBuffer> dilate(
+            BinaryVoxels<ByteBuffer> bvb,
             boolean do3D,
             int iterations,
-            Optional<VoxelBox<ByteBuffer>> backgroundVb,
+            Optional<Voxels<ByteBuffer>> backgroundVb,
             int minIntensityValue,
             boolean bigNeighborhood)
             throws CreateException {
@@ -122,11 +122,11 @@ public class MorphologicalDilation {
      * @return a new buffer containing the results of the dilation-operations
      * @throws CreateException
      */
-    public static BinaryVoxelBox<ByteBuffer> dilate(
-            BinaryVoxelBox<ByteBuffer> bvb,
+    public static BinaryVoxels<ByteBuffer> dilate(
+            BinaryVoxels<ByteBuffer> bvb,
             boolean do3D,
             int iterations,
-            Optional<VoxelBox<ByteBuffer>> backgroundVb,
+            Optional<Voxels<ByteBuffer>> backgroundVb,
             int minIntensityValue,
             boolean zOnly,
             boolean outsideAtThreshold,
@@ -136,7 +136,7 @@ public class MorphologicalDilation {
 
         BinaryKernel kernelDilation =
                 createDilationKernel(
-                        bvb.getBinaryValues().createByte(),
+                        bvb.binaryValues().createByte(),
                         do3D,
                         backgroundVb,
                         minIntensityValue,
@@ -144,14 +144,14 @@ public class MorphologicalDilation {
                         outsideAtThreshold,
                         bigNeighborhood);
 
-        VoxelBox<ByteBuffer> buf = bvb.getVoxelBox();
+        Voxels<ByteBuffer> buf = bvb.voxels();
         for (int i = 0; i < iterations; i++) {
-            VoxelBox<ByteBuffer> next =
-                    ApplyKernel.apply(kernelDilation, buf, bvb.getBinaryValues().createByte());
+            Voxels<ByteBuffer> next =
+                    ApplyKernel.apply(kernelDilation, buf, bvb.binaryValues().createByte());
 
             try {
                 if (acceptConditions.isPresent()
-                        && !acceptConditions.get().acceptIteration(next, bvb.getBinaryValues())) {
+                        && !acceptConditions.get().acceptIteration(next, bvb.binaryValues())) {
                     break;
                 }
             } catch (OperationFailedException e) {
@@ -160,13 +160,13 @@ public class MorphologicalDilation {
 
             buf = next;
         }
-        return new BinaryVoxelBoxByte(buf, bvb.getBinaryValues());
+        return BinaryVoxelsFactory.reuseByte(buf, bvb.binaryValues());
     }
 
     private static BinaryKernel createDilationKernel(
             BinaryValuesByte bv,
             boolean do3D,
-            Optional<VoxelBox<ByteBuffer>> backgroundVb,
+            Optional<Voxels<ByteBuffer>> backgroundVb,
             int minIntensityValue,
             boolean zOnly,
             boolean outsideAtThreshold,

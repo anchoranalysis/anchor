@@ -26,12 +26,10 @@
 
 package org.anchoranalysis.image.interpolator.transfer;
 
-import com.mortennobel.imagescaling.ResampleFilters;
-import com.mortennobel.imagescaling.ResampleOp;
 import java.nio.ByteBuffer;
 import org.anchoranalysis.image.interpolator.Interpolator;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
-import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
+import org.anchoranalysis.image.voxel.Voxels;
+import org.anchoranalysis.image.voxel.VoxelsWrapper;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 
 // Lots of copying bytes, which doesn't make it very efficient
@@ -40,41 +38,32 @@ import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 //   type which messes up our scaling
 public class TransferViaByte implements Transfer {
 
-    private VoxelBox<ByteBuffer> src;
-    private VoxelBox<ByteBuffer> trgt;
-    private VoxelBuffer<ByteBuffer> buffer;
+    private final Voxels<ByteBuffer> source;
+    private final Voxels<ByteBuffer> destination;
+    private VoxelBuffer<ByteBuffer> slice;
 
-    private ResampleOp resampleOp;
-
-    public TransferViaByte(VoxelBoxWrapper src, VoxelBoxWrapper trgt) {
-        this.src = src.asByte();
-        this.trgt = trgt.asByte();
-
-        int trgtX = trgt.any().extent().getX();
-        int trgtY = trgt.any().extent().getY();
-        assert (trgtX > 0);
-        assert (trgtY > 0);
-        resampleOp = new ResampleOp(trgtX, trgtY);
-        resampleOp.setFilter(ResampleFilters.getBiCubicFilter());
+    public TransferViaByte(VoxelsWrapper source, VoxelsWrapper destination) {
+        this.source = source.asByte();
+        this.destination = destination.asByte();
     }
 
     @Override
     public void assignSlice(int z) {
-        buffer = src.getPixelsForPlane(z);
+        slice = source.slice(z);
     }
 
     @Override
     public void transferCopyTo(int z) {
-        trgt.setPixelsForPlane(z, buffer.duplicate());
+        destination.replaceSlice(z, slice.duplicate());
     }
 
     @Override
     public void transferTo(int z, Interpolator interpolator) {
-        VoxelBuffer<ByteBuffer> bufIn = trgt.getPixelsForPlane(z);
+        VoxelBuffer<ByteBuffer> bufIn = destination.slice(z);
         VoxelBuffer<ByteBuffer> bufOut =
-                interpolator.interpolateByte(buffer, bufIn, src.extent(), trgt.extent());
+                interpolator.interpolateByte(slice, bufIn, source.extent(), destination.extent());
         if (!bufOut.equals(bufIn)) {
-            trgt.setPixelsForPlane(z, bufOut);
+            destination.replaceSlice(z, bufOut);
         }
     }
 }

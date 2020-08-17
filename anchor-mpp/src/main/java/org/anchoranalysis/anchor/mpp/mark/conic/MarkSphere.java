@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.anchor.mpp.mark.conic;
 
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.anchor.mpp.bean.bound.Bound;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 
@@ -34,13 +35,11 @@ import org.anchoranalysis.anchor.mpp.mark.Mark;
  *
  * @author Owen Feehan
  */
+@NoArgsConstructor
 public class MarkSphere extends MarkSingleRadius {
 
     /** */
     private static final long serialVersionUID = -3526056946146656810L;
-
-    // Sphere with default properties
-    public MarkSphere() {}
 
     // Constructor
     public MarkSphere(Bound boundRadius) {

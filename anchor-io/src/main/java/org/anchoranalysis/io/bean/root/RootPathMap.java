@@ -30,6 +30,8 @@ import java.nio.file.Path;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.bean.xml.BeanXmlLoader;
 import org.anchoranalysis.bean.xml.error.BeanXmlException;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -44,11 +46,10 @@ import org.apache.commons.collections.map.MultiValueMap;
  *
  * @author Owen Feehan
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class RootPathMap {
 
     private static RootPathMap instance = null;
-
-    private RootPathMap() {}
 
     private MultiMap map = new MultiValueMap();
 

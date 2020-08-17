@@ -79,59 +79,59 @@ public class IterateVoxelsTest {
 
         ObjectMaskFixture objectsFixture = new ObjectMaskFixture(do3D);
 
-        ObjectMask mask1 = objectsFixture.filledMask(20, Y_MASK_1);
-        ObjectMask mask2 =
+        ObjectMask object1 = objectsFixture.filledMask(20, Y_MASK_1);
+        ObjectMask object2 =
                 objectsFixture.filledMask(20, Y_MASK_2); // Overlaps with mask1 but not entirely
 
-        testSingleMask("mask1", expectedSingleNumberVoxels, mask1);
-        testSingleMask("mask2", expectedSingleNumberVoxels, mask2);
-        testIntersectionMasks(
+        testSingleObject("object1", expectedSingleNumberVoxels, object1);
+        testSingleObject("object2", expectedSingleNumberVoxels, object2);
+        testIntersectionObjects(
                 "intersection",
                 expectedIntersectionNumVoxels,
                 expectedIntersectionCenter,
-                mask1,
-                mask2);
-        testBoundingBox("bbox1", mask1.getBoundingBox());
-        testBoundingBox("bbox2", mask2.getBoundingBox());
+                object1,
+                object2);
+        testBoundingBox("box1", object1.boundingBox());
+        testBoundingBox("box2", object2.boundingBox());
     }
 
-    private void testSingleMask(String message, int expectedNumVoxels, ObjectMask mask) {
+    private void testSingleObject(String message, int expectedNumVoxels, ObjectMask object) {
         testCounter(
                 message,
                 expectedNumVoxels,
-                mask.getBoundingBox().centerOfGravity(),
-                counter -> IterateVoxels.callEachPoint(mask, counter));
+                object.boundingBox().centerOfGravity(),
+                counter -> IterateVoxels.callEachPoint(object, counter));
     }
 
-    private void testIntersectionMasks(
+    private void testIntersectionObjects(
             String message,
             int expectedNumVoxels,
             Point3i expectedCenter,
-            ObjectMask mask1,
-            ObjectMask mask2) {
+            ObjectMask object1,
+            ObjectMask object2) {
         testCounter(
                 message,
                 expectedNumVoxels,
                 expectedCenter,
-                counter -> IterateVoxels.overMasks(mask1, Optional.of(mask2), counter));
+                counter -> IterateVoxels.overMasks(object1, Optional.of(object2), counter));
     }
 
     private void testBoundingBox(String message, BoundingBox box) {
         testCounter(
                 message,
-                box.extent().getVolume(),
+                box.extent().calculateVolume(),
                 box.centerOfGravity(),
                 counter -> IterateVoxels.callEachPoint(box, counter));
     }
 
     private void testCounter(
             String message,
-            long expectedNumVoxels,
+            long expectedNumberVoxels,
             Point3i expectedCenter,
             Consumer<AggregatePoints> func) {
         AggregatePoints counter = new AggregatePoints();
         func.accept(counter);
-        assertEquals(message + " count", expectedNumVoxels, counter.count());
+        assertEquals(message + " count", expectedNumberVoxels, counter.count());
         assertEquals(message + " center", expectedCenter, counter.center());
     }
 }

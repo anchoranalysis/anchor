@@ -29,26 +29,26 @@ package org.anchoranalysis.anchor.mpp.pixelpart;
 import java.util.ArrayList;
 import java.util.List;
 import org.anchoranalysis.anchor.mpp.pixelpart.factory.PixelPartFactory;
-import org.anchoranalysis.image.voxel.VoxelIntensityList;
+import org.anchoranalysis.image.voxel.VoxelsIntensityList;
 
-public class PixelPartPixelList implements PixelPart<VoxelIntensityList> {
+public class PixelPartPixelList implements PixelPart<VoxelsIntensityList> {
 
-    private VoxelIntensityList combined;
-    private List<VoxelIntensityList> list;
+    private VoxelsIntensityList combined;
+    private List<VoxelsIntensityList> list;
 
     public PixelPartPixelList(int numSlices) {
 
-        combined = new VoxelIntensityList();
+        combined = new VoxelsIntensityList();
 
         list = new ArrayList<>();
         for (int i = 0; i < numSlices; i++) {
-            list.add(new VoxelIntensityList());
+            list.add(new VoxelsIntensityList());
         }
     }
 
     // Should only be used RO, if we want to maintain integrity with the combined list
     @Override
-    public VoxelIntensityList getSlice(int sliceID) {
+    public VoxelsIntensityList getSlice(int sliceID) {
         return list.get(sliceID);
     }
 
@@ -60,12 +60,12 @@ public class PixelPartPixelList implements PixelPart<VoxelIntensityList> {
     }
 
     @Override
-    public VoxelIntensityList getCombined() {
+    public VoxelsIntensityList getCombined() {
         return combined;
     }
 
     @Override
-    public void cleanUp(PixelPartFactory<VoxelIntensityList> factory) {
+    public void cleanUp(PixelPartFactory<VoxelsIntensityList> factory) {
         // NOTHING TO DO
     }
 

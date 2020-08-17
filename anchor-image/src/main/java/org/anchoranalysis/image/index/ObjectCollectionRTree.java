@@ -27,28 +27,41 @@
 package org.anchoranalysis.image.index;
 
 import java.util.List;
+import lombok.Getter;
+import lombok.experimental.Accessors;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 
 /**
- * An R-Tree of bounding boxes. The index of the item in a list, determines an integer ID,
- * associated with the item in the R-Tree.
+ * An R-Tree of object-masks (indexed via a derived bounding-box).
  *
+ * @see <a href="https://en.wikipedia.org/wiki/R-tree">Wikipedia's R-tree</a>
+ * @see {@link BoundingBoxRTree} for a related structure only on bounding-boxes
  * @author Owen Feehan
  */
+@Accessors(fluent = true)
 public class ObjectCollectionRTree {
 
-    private BoundingBoxRTree delegate;
-    private ObjectCollection objects;
+    /** An r-tree that stores indices of the objects for each bounding-box */
+    private BoundingBoxRTree tree;
 
+    /** All objects stored in the r-tree (whose order corresponds to indices in {@code delegate} */
+    @Getter private ObjectCollection objects;
+
+    /**
+     * Constructor - create
+     *
+     * @param objects
+     * @param extractBoundingBox
+     */
     public ObjectCollectionRTree(ObjectCollection objects) {
         this.objects = objects;
-        delegate = new BoundingBoxRTree(objects.size());
+        tree = new BoundingBoxRTree(objects.size());
 
         for (int i = 0; i < objects.size(); i++) {
-            delegate.add(i, objects.get(i).getBoundingBox());
+            tree.add(i, objects.get(i).boundingBox());
         }
     }
 
@@ -56,7 +69,7 @@ public class ObjectCollectionRTree {
         // We do an additional check to make sure the point is inside the object,
         //  as points can be inside the Bounding Box but not inside the object
         return objects.stream()
-                .filterSubset(object -> object.contains(point), delegate.contains(point));
+                .filterSubset(object -> object.contains(point), tree.contains(point));
     }
 
     public ObjectCollection intersectsWith(ObjectMask object) {
@@ -65,14 +78,14 @@ public class ObjectCollectionRTree {
         return objects.stream()
                 .filterSubset(
                         omInd -> omInd.hasIntersectingVoxels(object),
-                        delegate.intersectsWith(object.getBoundingBox()));
+                        tree.intersectsWith(object.boundingBox()));
     }
 
-    public ObjectCollection intersectsWith(BoundingBox bbox) {
-        return objects.createSubset(delegate.intersectsWith(bbox));
+    public ObjectCollection intersectsWith(BoundingBox box) {
+        return objects.createSubset(tree.intersectsWith(box));
     }
 
-    public List<Integer> intersectsWithAsIndices(BoundingBox bbox) {
-        return delegate.intersectsWith(bbox);
+    public List<Integer> intersectsWithAsIndices(BoundingBox box) {
+        return tree.intersectsWith(box);
     }
 }

@@ -29,15 +29,15 @@ package org.anchoranalysis.image.io.input.series;
 import java.util.Optional;
 import java.util.Set;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.functional.CallableWithException;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
+import org.anchoranalysis.core.name.store.StoreSupplier;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.chnl.ChannelGetter;
-import org.anchoranalysis.image.stack.NamedStacks;
+import org.anchoranalysis.image.stack.NamedStacksSet;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.TimeSequence;
 
@@ -63,11 +63,12 @@ public interface NamedChannelsForSeries extends ChannelGetter {
 
     ImageDimensions dimensions() throws RasterIOException;
 
-    void addAsSeparateChannels(NamedStacks stacks, int timeIndex, ProgressReporter progressReporter)
+    void addAsSeparateChannels(
+            NamedStacksSet stacks, int timeIndex, ProgressReporter progressReporter)
             throws OperationFailedException;
 
     void addAsSeparateChannels(NamedProviderStore<TimeSequence> stacks, int timeIndex)
             throws OperationFailedException;
 
-    CallableWithException<Stack, OperationFailedException> allChannelsAsStack(int timeIndex);
+    StoreSupplier<Stack> allChannelsAsStack(int timeIndex);
 }

@@ -29,6 +29,9 @@ package org.anchoranalysis.image.bean.nonbean.arrangeraster;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
+import lombok.Value;
+import lombok.experimental.Accessors;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 
@@ -37,40 +40,36 @@ import org.anchoranalysis.image.extent.Extent;
  *
  * @author Owen Feehan
  */
+@RequiredArgsConstructor
+@Value
+@Accessors(fluent = true)
 public class BoundingBoxesOnPlane implements Iterable<BoundingBox> {
 
-    private Extent extent;
+    // START REQUIRED ARGUMENTS
+    private final Extent extent;
+    // END REQUIRED ARGUMENTS
 
     private List<BoundingBox> list = new ArrayList<>();
 
-    public BoundingBoxesOnPlane(Extent extent) {
-        super();
-        this.extent = extent;
-    }
-
-    public BoundingBoxesOnPlane(Extent extent, BoundingBox bbox) {
+    public BoundingBoxesOnPlane(Extent extent, BoundingBox box) {
         this(extent);
-        add(bbox);
+        add(box);
     }
 
-    public void add(BoundingBox obj) {
-        list.add(obj);
+    public void add(BoundingBox boundingBox) {
+        list.add(boundingBox);
     }
 
     public BoundingBox get(int index) {
         return list.get(index);
     }
 
-    public Iterator<BoundingBox> bboxIterator() {
+    public Iterator<BoundingBox> boxIterator() {
         return list.iterator();
     }
 
     @Override
     public Iterator<BoundingBox> iterator() {
-        return bboxIterator();
-    }
-
-    public Extent getExtent() {
-        return extent;
+        return boxIterator();
     }
 }

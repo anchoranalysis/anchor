@@ -171,7 +171,7 @@ class WriteGroupResults {
         FeatureInputResults params =
                 new FeatureInputResults(featuresCollection, featureNamesSource.createMapToIndex());
 
-        return session.calcSuppressErrors(params, logger.errorReporter());
+        return session.calculateSuppressErrors(params, logger.errorReporter());
     }
 
     private static <T extends FeatureInput> void writeAggregatedAsParams(

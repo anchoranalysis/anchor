@@ -26,10 +26,9 @@ package org.anchoranalysis.core.index;
  * #L%
  */
 
-import org.anchoranalysis.core.functional.function.FunctionWithException;
+import org.anchoranalysis.core.functional.function.CheckedFunction;
 
-public class IndexBridge<T>
-        implements FunctionWithException<Integer, T, GetOperationFailedException> {
+public class IndexBridge<T> implements CheckedFunction<Integer, T, GetOperationFailedException> {
 
     private GetterFromIndex<T> cntr;
 

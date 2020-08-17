@@ -29,9 +29,9 @@ package org.anchoranalysis.io.manifest.finder;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
-import org.anchoranalysis.core.cache.CacheCall;
+import lombok.Getter;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
-import org.anchoranalysis.core.functional.CallableWithException;
+import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.io.bean.deserializer.Deserializer;
 import org.anchoranalysis.io.bean.deserializer.KeyValueParamsDeserializer;
 import org.anchoranalysis.io.bean.deserializer.ObjectInputStreamDeserializer;
@@ -50,35 +50,22 @@ public class FinderSerializedObject<T> extends FinderSingleFile {
     private Optional<T> deserializedObject = Optional.empty();
     private String function;
 
-    private CallableWithException<Optional<T>, IOException> operation =
-            CacheCall.of(
-                    () -> {
-                        if (!exists()) {
-                            return Optional.empty();
-                        }
-                        return Optional.of(get());
-                    });
+    /** Provides a memoized (cached) means of access the results of the finder */
+    @Getter
+    private SerializedObjectSupplier<T> memoized =
+            SerializedObjectSupplier.cache(
+                    () -> OptionalUtilities.createFromFlagChecked(exists(), this::getInternal));
 
     public FinderSerializedObject(String function, ErrorReporter errorReporter) {
         super(errorReporter);
         this.function = function;
     }
 
-    private T deserialize(FileWrite fileWrite) throws DeserializationFailedException {
-
-        Deserializer<T> deserializer;
-        if (fileWrite.getFileName().toLowerCase().endsWith(".properties.xml")) {
-            deserializer = new KeyValueParamsDeserializer<>();
-        } else if (fileWrite.getFileName().toLowerCase().endsWith(".xml")) {
-            deserializer = new XStreamDeserializer<>();
-        } else {
-            deserializer = new ObjectInputStreamDeserializer<>();
-        }
-
-        return deserializer.deserialize(fileWrite.calcPath());
+    public T get() throws IOException {
+        return memoized.get().get(); // NOSONAR
     }
 
-    public T get() throws IOException {
+    private T getInternal() throws IOException {
         assert (exists());
         if (!deserializedObject.isPresent()) {
             try {
@@ -111,7 +98,17 @@ public class FinderSerializedObject<T> extends FinderSingleFile {
         return Optional.of(files.get(0));
     }
 
-    public CallableWithException<Optional<T>, IOException> operation() {
-        return operation;
+    private T deserialize(FileWrite fileWrite) throws DeserializationFailedException {
+
+        Deserializer<T> deserializer;
+        if (fileWrite.getFileName().toLowerCase().endsWith(".properties.xml")) {
+            deserializer = new KeyValueParamsDeserializer<>();
+        } else if (fileWrite.getFileName().toLowerCase().endsWith(".xml")) {
+            deserializer = new XStreamDeserializer<>();
+        } else {
+            deserializer = new ObjectInputStreamDeserializer<>();
+        }
+
+        return deserializer.deserialize(fileWrite.calcPath());
     }
 }

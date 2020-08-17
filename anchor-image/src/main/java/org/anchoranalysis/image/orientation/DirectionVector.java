@@ -34,12 +34,12 @@ import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.Tuple3d;
 import org.anchoranalysis.core.geometry.Vector3d;
 
-public class DirectionVector {
+public final class DirectionVector {
 
-    private Tuple3d vector;
+    private final Tuple3d vector;
 
     public DirectionVector() {
-        vector = new Vector3d();
+        this.vector = new Vector3d();
     }
 
     public DirectionVector(Tuple3d vector) {
@@ -47,10 +47,7 @@ public class DirectionVector {
     }
 
     public DirectionVector(double x, double y, double z) {
-        this();
-        vector.setX(x);
-        vector.setY(y);
-        vector.setZ(z);
+        this.vector = new Vector3d(x, y, z);
     }
 
     /**
@@ -74,28 +71,16 @@ public class DirectionVector {
         }
     }
 
-    public final double getX() {
-        return vector.getX();
+    public double x() {
+        return vector.x();
     }
 
-    public final double getY() {
-        return vector.getY();
+    public double y() {
+        return vector.y();
     }
 
-    public final double getZ() {
-        return vector.getZ();
-    }
-
-    public final void setX(double arg0) {
-        vector.setX(arg0);
-    }
-
-    public final void setY(double arg0) {
-        vector.setY(arg0);
-    }
-
-    public final void setZ(double arg0) {
-        vector.setZ(arg0);
+    public double z() {
+        return vector.z();
     }
 
     /**
@@ -116,35 +101,26 @@ public class DirectionVector {
 
     public static DirectionVector createBetweenTwoPoints(Point3d point1, Point3d point2) {
 
-        double sx = point2.getX() - point1.getX();
-        double sy = point2.getY() - point1.getY();
-        double sz = point2.getZ() - point1.getZ();
-
-        double norm = Math.sqrt(Math.pow(sx, 2.0) + Math.pow(sy, 2.0) + Math.pow(sz, 2.0));
-
-        DirectionVector out = new DirectionVector();
-        out.setX(sx / norm);
-        out.setY(sy / norm);
-        out.setZ(sz / norm);
-        return out;
+        double sx = point2.x() - point1.x();
+        double sy = point2.y() - point1.y();
+        double sz = point2.z() - point1.z();
+        return createNormed(sx, sy, sz);
     }
 
     public static DirectionVector createBetweenTwoPoints(Point3i point1, Point3i point2) {
 
-        double sx = (double) point2.getX() - point1.getX();
-        double sy = (double) point2.getY() - point1.getY();
-        double sz = (double) point2.getZ() - point1.getZ();
-
-        double norm = Math.sqrt(Math.pow(sx, 2.0) + Math.pow(sy, 2.0) + Math.pow(sz, 2.0));
-
-        DirectionVector out = new DirectionVector();
-        out.setX(sx / norm);
-        out.setY(sy / norm);
-        out.setZ(sz / norm);
-        return out;
+        double sx = (double) point2.x() - point1.x();
+        double sy = (double) point2.y() - point1.y();
+        double sz = (double) point2.z() - point1.z();
+        return createNormed(sx, sy, sz);
     }
 
     public Vector3d createVector3d() {
         return new Vector3d(vector);
+    }
+
+    private static DirectionVector createNormed(double sx, double sy, double sz) {
+        double norm = Math.sqrt(Math.pow(sx, 2.0) + Math.pow(sy, 2.0) + Math.pow(sz, 2.0));
+        return new DirectionVector(sx / norm, sy / norm, sz / norm);
     }
 }

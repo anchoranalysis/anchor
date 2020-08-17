@@ -36,7 +36,7 @@ import org.anchoranalysis.bean.init.params.BeanInitParams;
 import org.anchoranalysis.bean.init.property.PropertyInitializer;
 import org.anchoranalysis.bean.store.BeanStoreAdder;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.functional.function.FunctionWithException;
+import org.anchoranalysis.core.functional.function.CheckedFunction;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
 
@@ -121,7 +121,7 @@ public class PopulateStoreFromDefine<V extends BeanInitParams> {
      * @throws OperationFailedException
      */
     public <S extends InitializableBean<?, V> & Provider<T>, T>
-            FunctionWithException<S, T, OperationFailedException> copyProvider(
+            CheckedFunction<S, T, OperationFailedException> copyProvider(
                     Class<?> defineClss, NamedProviderStore<T> destination)
                     throws OperationFailedException {
 

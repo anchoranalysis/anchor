@@ -74,7 +74,7 @@ public class SimpleOverlayWriter extends DrawOverlay {
             throws OperationFailedException {
 
         writeOverlays(
-                overlays.subsetWhereBBoxIntersects(stack.getDimensions(), this, intersectList),
+                overlays.subsetWhereBBoxIntersects(stack.dimensions(), this, intersectList),
                 stack,
                 idGetter);
     }

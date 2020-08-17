@@ -58,6 +58,6 @@ public class RasterWriterUtilities {
         if (defaultWriter == null) {
             return ".unknown";
         }
-        return defaultWriter.dfltExt();
+        return defaultWriter.defaultExtension();
     }
 }

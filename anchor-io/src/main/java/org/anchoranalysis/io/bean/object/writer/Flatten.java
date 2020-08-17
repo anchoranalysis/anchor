@@ -59,12 +59,12 @@ public class Flatten extends DrawObject {
     // END BEAN PROPERTIES
 
     @Override
-    public PrecalcOverlay precalculate(ObjectWithProperties mask, ImageDimensions dim)
+    public PrecalcOverlay precalculate(ObjectWithProperties object, ImageDimensions dim)
             throws CreateException {
 
-        ObjectWithProperties maskMIP = mask.map(ObjectMask::maxIntensityProjection);
+        ObjectWithProperties objectFlattened = object.map(ObjectMask::flattenZ);
 
-        return new PrecalcOverlay(mask) {
+        return new PrecalcOverlay(object) {
 
             @Override
             public void writePrecalculatedMask(
@@ -74,7 +74,7 @@ public class Flatten extends DrawObject {
                     BoundingBox restrictTo)
                     throws OperationFailedException {
                 writer.writeSingle(
-                        (ObjectWithProperties) maskMIP,
+                        (ObjectWithProperties) objectFlattened,
                         background,
                         attributes,
                         iteration,

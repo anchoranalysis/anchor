@@ -33,14 +33,14 @@ import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.stack.region.chnlconverter.ChannelConverterToUnsignedByte;
 import org.anchoranalysis.image.stack.region.chnlconverter.ConversionPolicy;
 import org.anchoranalysis.image.stack.region.chnlconverter.attached.ChnlConverterAttached;
-import org.anchoranalysis.image.stack.region.chnlconverter.voxelbox.VoxelBoxConverter;
-import org.anchoranalysis.image.stack.region.chnlconverter.voxelbox.VoxelBoxConverterToByteScaleByMinMaxValue;
+import org.anchoranalysis.image.stack.region.chnlconverter.voxelbox.ToByteScaleByMinMaxValue;
+import org.anchoranalysis.image.stack.region.chnlconverter.voxelbox.VoxelsConverter;
 
 // Scales by a quantile of the intensity values of an image
 public class ChnlConverterHistogramUpperLowerQuantileIntensity
         implements ChnlConverterAttached<Histogram, ByteBuffer> {
 
-    private VoxelBoxConverterToByteScaleByMinMaxValue voxelBoxConverter;
+    private ToByteScaleByMinMaxValue voxelsConverter;
     private double quantileLower = 0.0;
     private double quantileUpper = 1.0;
     private double scaleLower = 0.0;
@@ -55,13 +55,13 @@ public class ChnlConverterHistogramUpperLowerQuantileIntensity
     public ChnlConverterHistogramUpperLowerQuantileIntensity(
             double quantileLower, double quantileUpper, double scaleLower, double scaleUpper) {
         // Initialise with a dummy value
-        voxelBoxConverter = new VoxelBoxConverterToByteScaleByMinMaxValue(0, 1);
+        voxelsConverter = new ToByteScaleByMinMaxValue(0, 1);
         this.quantileLower = quantileLower;
         this.quantileUpper = quantileUpper;
         this.scaleUpper = scaleUpper;
         this.scaleLower = scaleLower;
 
-        delegate = new ChannelConverterToUnsignedByte(voxelBoxConverter);
+        delegate = new ChannelConverterToUnsignedByte(voxelsConverter);
     }
 
     @Override
@@ -69,7 +69,7 @@ public class ChnlConverterHistogramUpperLowerQuantileIntensity
 
         int minValue = scaleQuantile(hist, quantileLower, scaleLower);
         int maxValue = scaleQuantile(hist, quantileUpper, scaleUpper);
-        voxelBoxConverter.setMinMaxValues(minValue, maxValue);
+        voxelsConverter.setMinMaxValues(minValue, maxValue);
     }
 
     private int scaleQuantile(Histogram hist, double quantile, double scaleFactor)
@@ -83,7 +83,7 @@ public class ChnlConverterHistogramUpperLowerQuantileIntensity
     }
 
     @Override
-    public VoxelBoxConverter<ByteBuffer> getVoxelBoxConverter() {
-        return voxelBoxConverter;
+    public VoxelsConverter<ByteBuffer> getVoxelsConverter() {
+        return voxelsConverter;
     }
 }

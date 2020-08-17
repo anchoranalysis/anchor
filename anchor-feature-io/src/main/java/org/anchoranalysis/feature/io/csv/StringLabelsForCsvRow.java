@@ -29,6 +29,8 @@ package org.anchoranalysis.feature.io.csv;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.anchoranalysis.core.text.TypedValue;
 import org.anchoranalysis.feature.io.csv.name.MultiName;
 
@@ -37,31 +39,21 @@ import org.anchoranalysis.feature.io.csv.name.MultiName;
  *
  * @author Owen Feehan
  */
+@AllArgsConstructor
 public class StringLabelsForCsvRow {
 
-    private final Optional<String[]> identifier;
-    private final Optional<MultiName> group;
-
     /**
-     * Constructor
-     *
-     * @param identifier unique identifier for the row taking all elements together (together a
-     *     primary key)
-     * @param group an identifier for a higher-level group which the row belongs to (foreign key)
+     * identifier unique identifier for the row taking all elements together (together a primary
+     * key)
      */
-    public StringLabelsForCsvRow(Optional<String[]> identifier, Optional<MultiName> group) {
-        super();
-        this.identifier = identifier;
-        this.group = group;
-    }
+    private final Optional<String[]> identifier;
+
+    /** an identifier for a higher-level group which the row belongs to (foreign key) */
+    @Getter private final Optional<MultiName> group;
 
     public void addToRow(List<TypedValue> csvRow) {
         identifier.ifPresent(stringArr -> addStringArrayToRow(stringArr, csvRow));
         group.ifPresent(stringArr -> addStringIterableToRow(stringArr, csvRow));
-    }
-
-    public Optional<MultiName> getGroup() {
-        return group;
     }
 
     private static void addStringArrayToRow(String[] arr, List<TypedValue> csvRow) {

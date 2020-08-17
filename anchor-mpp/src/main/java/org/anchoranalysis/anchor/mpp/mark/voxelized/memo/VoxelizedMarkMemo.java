@@ -31,7 +31,7 @@ import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.mark.voxelized.VoxelizedMark;
 import org.anchoranalysis.anchor.mpp.mark.voxelized.VoxelizedMarkFactory;
-import org.anchoranalysis.core.cache.CacheCall;
+import org.anchoranalysis.core.cache.CachedSupplier;
 import org.anchoranalysis.core.error.AnchorNeverOccursException;
 import org.anchoranalysis.feature.nrg.NRGStack;
 
@@ -47,13 +47,14 @@ public class VoxelizedMarkMemo {
     @Getter private final RegionMap regionMap;
     // END REQUIRED ARGUMENTS
 
-    private CacheCall<VoxelizedMark, AnchorNeverOccursException> cachedMark;
+    private CachedSupplier<VoxelizedMark, AnchorNeverOccursException> cachedMark;
 
     public VoxelizedMarkMemo(Mark mark, NRGStack stack, RegionMap regionMap) {
         this.mark = mark;
         this.stack = stack;
         this.regionMap = regionMap;
-        this.cachedMark = CacheCall.of(() -> VoxelizedMarkFactory.create(mark, stack, regionMap));
+        this.cachedMark =
+                CachedSupplier.cache(() -> VoxelizedMarkFactory.create(mark, stack, regionMap));
     }
 
     /**
@@ -62,7 +63,7 @@ public class VoxelizedMarkMemo {
      * @return
      */
     public VoxelizedMark voxelized() {
-        return cachedMark.call();
+        return cachedMark.get();
     }
 
     public void reset() {

@@ -41,13 +41,7 @@ class BufferArrList {
     public void init(NRGStack stack, int z) {
 
         for (int c = 0; c < stack.getNumberChannels(); c++) {
-            ByteBuffer bb =
-                    stack.getChannel(c)
-                            .getVoxelBox()
-                            .asByte()
-                            .getPlaneAccess()
-                            .getPixelsForPlane(z)
-                            .buffer();
+            ByteBuffer bb = stack.getChannel(c).voxels().asByte().slices().slice(z).buffer();
             delegate.add(bb);
         }
     }

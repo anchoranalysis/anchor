@@ -27,6 +27,7 @@
 package org.anchoranalysis.image.io.generator.raster;
 
 import java.util.Optional;
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.generator.IterableObjectGenerator;
@@ -34,10 +35,11 @@ import org.anchoranalysis.io.generator.ObjectGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
+@AllArgsConstructor
 public class ChnlGenerator extends RasterGenerator
         implements IterableObjectGenerator<Channel, Stack> {
 
-    private Channel chnl = null;
+    private Channel chnl;
     private String manifestFunction;
 
     public ChnlGenerator(String manifestFunction) {
@@ -46,12 +48,6 @@ public class ChnlGenerator extends RasterGenerator
 
     public ChnlGenerator(Channel chnl) {
         this(chnl, "chnl");
-    }
-
-    public ChnlGenerator(Channel chnl, String manifestFunction) {
-        super();
-        this.chnl = chnl;
-        this.manifestFunction = manifestFunction;
     }
 
     @Override

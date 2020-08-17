@@ -26,11 +26,12 @@ package org.anchoranalysis.core.memory;
  * #L%
  */
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.log.MessageLogger;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class MemoryUtilities {
-
-    private MemoryUtilities() {}
 
     public static long calcMemoryUsage() {
         Runtime runtime = java.lang.Runtime.getRuntime();

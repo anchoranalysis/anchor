@@ -27,6 +27,7 @@
 package org.anchoranalysis.image.seed;
 
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.ObjectMask;
 
 /**
@@ -37,9 +38,9 @@ import org.anchoranalysis.image.object.ObjectMask;
  */
 public interface Seed {
 
-    ObjectMask createMask();
+    ObjectMask deriveObject();
 
-    void scaleXY(double scale) throws OperationFailedException;
+    void scaleXY(double scale, Extent extent) throws OperationFailedException;
 
     void flattenZ();
 

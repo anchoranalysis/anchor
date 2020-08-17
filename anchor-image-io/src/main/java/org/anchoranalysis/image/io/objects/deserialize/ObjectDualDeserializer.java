@@ -49,7 +49,7 @@ import org.anchoranalysis.io.deserializer.DeserializationFailedException;
  * Specifically, it expects:
  * <ol>
  * <li>A serialized {@link BoundingBox} <pre.somename.ser</pre>  (this filename is expected) in Java serialization form.
- * <li>An unsigned-8 bit raster mask <pre>somename.tif</pre> corresponding to this bounding-box, using 255 as ON and 0 as on.
+ * <li>An unsigned-8 bit raster-mask <pre>somename.tif</pre> corresponding to this bounding-box, using 255 as ON and 0 as on.
  * </ol>
  * @author Owen Feehan
  */
@@ -66,7 +66,7 @@ class ObjectDualDeserializer implements Deserializer<ObjectMask> {
 
         Path tiffFilename = changeExtension(filePath.toAbsolutePath(), "ser", "tif");
 
-        BoundingBox bbox = BOUNDING_BOX_DESERIALIZER.deserialize(filePath);
+        BoundingBox box = BOUNDING_BOX_DESERIALIZER.deserialize(filePath);
 
         try (OpenedRaster or = rasterReader.openFile(tiffFilename)) {
             Stack stack =
@@ -82,12 +82,12 @@ class ObjectDualDeserializer implements Deserializer<ObjectMask> {
 
             Channel chnl = stack.getChannel(0);
 
-            if (!chnl.getDimensions().getExtent().equals(bbox.extent())) {
+            if (!chnl.dimensions().extent().equals(box.extent())) {
                 throw new DeserializationFailedException(
-                        errorMessageMismatchingDims(bbox, chnl.getDimensions(), filePath));
+                        errorMessageMismatchingDims(box, chnl.dimensions(), filePath));
             }
 
-            return new ObjectMask(bbox, chnl.getVoxelBox().asByte());
+            return new ObjectMask(box, chnl.voxels().asByte());
 
         } catch (RasterIOException e) {
             throw new DeserializationFailedException(e);
@@ -95,10 +95,10 @@ class ObjectDualDeserializer implements Deserializer<ObjectMask> {
     }
 
     private static String errorMessageMismatchingDims(
-            BoundingBox bbox, ImageDimensions dimensions, Path filePath) {
+            BoundingBox box, ImageDimensions dimensions, Path filePath) {
         return String.format(
                 "Dimensions of bounding box (%s) and raster (%s) do not match for file %s",
-                bbox.extent(), dimensions.getExtent(), filePath);
+                box.extent(), dimensions.extent(), filePath);
     }
 
     private static Path changeExtension(Path path, String oldExtension, String newExtension)

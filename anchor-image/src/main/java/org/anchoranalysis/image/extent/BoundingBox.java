@@ -39,13 +39,15 @@ import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.core.geometry.Tuple3i;
 import org.anchoranalysis.image.scale.ScaleFactor;
 import org.anchoranalysis.image.scale.ScaleFactorUtilities;
+import org.anchoranalysis.image.voxel.Voxels;
 
 /**
  * A bounding-box in 2 or 3 dimensions
  *
  * <p>A 2D bounding-box should always have a z-extent of 1 pixel.
  *
- * <p>This is an <i>immutable</i> class.
+ * <p>This is an <i>immutable</i> class. All operations are immutable (i.e. do not modify the state
+ * of the existing object).
  */
 @EqualsAndHashCode
 @Accessors(fluent = true)
@@ -55,31 +57,75 @@ public final class BoundingBox implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /** The bottom-left corner of the bounding box. */
-    @Getter private final Point3i cornerMin;
+    private final Point3i cornerMin;
 
     /** Dimensions in pixels needed to represent the bounding box */
     @Getter private final Extent extent;
 
+    /**
+     * Constructs a bounding-box to cover the entirety of certain dimensions
+     *
+     * @param dimensions the dimensions
+     */
+    public BoundingBox(ImageDimensions dimensions) {
+        this(dimensions.extent());
+    }
+
+    /**
+     * Constructs a bounding-box to cover the entirety of certain voxels
+     *
+     * @param voxels the voxels
+     */
+    public BoundingBox(Voxels<?> voxels) {
+        this(voxels.extent());
+    }
+
+    /**
+     * Constructs a bounding-box to cover the entirety of a certain extent
+     *
+     * @param extent the extent
+     */
     public BoundingBox(Extent extent) {
-        this(new Point3i(0, 0, 0), extent);
+        this(new Point3i(), extent);
     }
 
-    public BoundingBox(Point3d min, Point3d max) {
-        this(PointConverter.intFromDouble(min), PointConverter.intFromDoubleCeil(max));
-    }
-
-    public BoundingBox(ReadableTuple3i min, ReadableTuple3i max) {
+    /**
+     * Constructor - creates a new bounding-box from two points (a minimum corner and a maximum
+     * corner)
+     *
+     * @param cornerMinInclusive minimum point in each dimension of the bounding-box (that exists
+     *     inside the box)
+     * @param cornerMaxInclusive maximum point in each dimension of the bounding-box (that exists
+     *     inside the box)
+     */
+    public BoundingBox(Point3d cornerMinInclusive, Point3d cornerMaxInclusive) {
         this(
-                min,
+                PointConverter.intFromDoubleFloor(cornerMinInclusive),
+                PointConverter.intFromDoubleCeil(cornerMaxInclusive));
+    }
+
+    /**
+     * Constructor - creates a new bounding-box from two points (a minimum corner and a maximum
+     * corner)
+     *
+     * @param cornerMinInclusive minimum point in each dimension of the bounding-box (that exists
+     *     inside the box)
+     * @param cornerMaxInclusive maximum point in each dimension of the bounding-box (that exists
+     *     inside the box)
+     */
+    public BoundingBox(ReadableTuple3i cornerMinInclusive, ReadableTuple3i cornerMaxInclusive) {
+        this(
+                cornerMinInclusive,
                 new Extent(
-                        max.getX() - min.getX() + 1,
-                        max.getY() - min.getY() + 1,
-                        max.getZ() - min.getZ() + 1));
-        checkMaxMoreThanMin(min, max);
+                        cornerMaxInclusive.x() - cornerMinInclusive.x() + 1,
+                        cornerMaxInclusive.y() - cornerMinInclusive.y() + 1,
+                        cornerMaxInclusive.z() - cornerMinInclusive.z() + 1));
+        checkMaxMoreThanMin(cornerMinInclusive, cornerMaxInclusive);
     }
 
     // Extent is the number of pixels need to represent this bounding box
     public BoundingBox(ReadableTuple3i cornerMin, Extent extent) {
+        // Note this always duplicates the corner, creating some needless object-creation
         this.cornerMin = new Point3i(cornerMin);
         this.extent = extent;
     }
@@ -104,55 +150,59 @@ public final class BoundingBox implements Serializable {
      * @return the center-of-gravity
      */
     public Point3i centerOfGravity() {
-        return PointConverter.intFromDouble(meanOfExtent(1));
+        return PointConverter.intFromDoubleFloor(meanOfExtent(1));
     }
 
     public BoundingBox flattenZ() {
         return new BoundingBox(cornerMin.duplicateChangeZ(0), extent.duplicateChangeZ(1));
     }
 
-    public BoundingBox duplicateChangeExtentZ(int extentZ) {
-        return new BoundingBox(cornerMin, extent.duplicateChangeZ(extentZ));
+    public BoundingBox changeExtent(Extent extent) {
+        return new BoundingBox(cornerMin, extent);
     }
 
-    public BoundingBox duplicateChangeZ(int crnrZ, int extentZ) {
+    public BoundingBox changeZ(int crnrZ, int extentZ) {
         return new BoundingBox(cornerMin.duplicateChangeZ(crnrZ), extent.duplicateChangeZ(extentZ));
     }
 
-    public boolean atBorder(ImageDimensions sd) {
-
-        if (atBorderXY(sd)) {
-            return true;
-        }
-
-        return atBorderZ(sd);
+    public BoundingBox changeExtentZ(int extentZ) {
+        return new BoundingBox(cornerMin, extent.duplicateChangeZ(extentZ));
     }
 
-    public boolean atBorderXY(ImageDimensions sd) {
+    public boolean atBorder(ImageDimensions dimensions) {
 
-        ReadableTuple3i cornerMax = this.calcCornerMax();
-
-        if (cornerMin.getX() == 0) {
-            return true;
-        }
-        if (cornerMin.getY() == 0) {
+        if (atBorderXY(dimensions)) {
             return true;
         }
 
-        if (cornerMax.getX() == (sd.getX() - 1)) {
-            return true;
-        }
-        return cornerMax.getY() == (sd.getY() - 1);
+        return atBorderZ(dimensions);
     }
 
-    public boolean atBorderZ(ImageDimensions sd) {
+    public boolean atBorderXY(ImageDimensions dimensions) {
 
-        ReadableTuple3i cornerMax = this.calcCornerMax();
+        ReadableTuple3i cornerMax = this.calculateCornerMaxExclusive();
 
-        if (cornerMin.getZ() == 0) {
+        if (cornerMin.x() == 0) {
             return true;
         }
-        return cornerMax.getZ() == (sd.getZ() - 1);
+        if (cornerMin.y() == 0) {
+            return true;
+        }
+
+        if (cornerMax.x() == dimensions.x()) {
+            return true;
+        }
+        return cornerMax.y() == dimensions.y();
+    }
+
+    public boolean atBorderZ(ImageDimensions dimensions) {
+
+        ReadableTuple3i cornerMax = this.calculateCornerMaxExclusive();
+
+        if (cornerMin.z() == 0) {
+            return true;
+        }
+        return cornerMax.z() == dimensions.z();
     }
 
     public BoundingBox growBy(Tuple3i toAdd, Extent containingExtent) {
@@ -167,39 +217,70 @@ public final class BoundingBox implements Serializable {
         return new BoundingBox(cornerMinShifted, extentGrown).clipTo(containingExtent);
     }
 
-    // This is the last point INSIDE the box
-    // So iterators should be <= CalcCornerMax
-    public ReadableTuple3i calcCornerMax() {
+    /**
+     * The maximum (right-most) point <i>inside</i> the box
+     *
+     * <p>This means that iterators should be {@code <= #calcCornerMax()}
+     *
+     * @return the maximum point inside the box in each dimension
+     */
+    public ReadableTuple3i calculateCornerMax() {
         Point3i out = new Point3i();
-        out.setX(cornerMin.getX() + extent.getX() - 1);
-        out.setY(cornerMin.getY() + extent.getY() - 1);
-        out.setZ(cornerMin.getZ() + extent.getZ() - 1);
+        out.setX(cornerMin.x() + extent.x() - 1);
+        out.setY(cornerMin.y() + extent.y() - 1);
+        out.setZ(cornerMin.z() + extent.z() - 1);
+        return out;
+    }
+
+    /**
+     * The maximum (right-most) point just <i> outside the box
+     *
+     * <p>It is equivalent to {@code < #calcCornerMax()} plus {@code 1} in each dimension.
+     *
+     * <p>This means that iterators should be {@code < #calcCornerMaxExclusive()}
+     *
+     * @return the maximum point inside the box in each dimension
+     */
+    public Point3i calculateCornerMaxExclusive() {
+        Point3i out = new Point3i();
+        out.setX(cornerMin.x() + extent.x());
+        out.setY(cornerMin.y() + extent.y());
+        out.setZ(cornerMin.z() + extent.z());
         return out;
     }
 
     public BoundingBox clipTo(Extent extent) {
 
-        Point3i min = new Point3i(cornerMin);
-        Point3i max = new Point3i(calcCornerMax());
+        if (cornerMin.x() >= extent.x()
+                || cornerMin.y() >= extent.y()
+                || cornerMin.z() >= extent.z()) {
+            throw new AnchorFriendlyRuntimeException(
+                    String.format(
+                            "Corner-min (%s) is outside the clipping region (%s)",
+                            cornerMin, extent));
+        }
 
-        if (min.getX() < 0) {
+        Point3i min = new Point3i(cornerMin);
+        Point3i max = new Point3i(calculateCornerMax());
+
+        if (min.x() < 0) {
             min.setX(0);
         }
-        if (min.getY() < 0) {
+        if (min.y() < 0) {
             min.setY(0);
         }
-        if (min.getZ() < 0) {
+        if (min.z() < 0) {
             min.setZ(0);
         }
 
-        if (max.getX() >= extent.getX()) {
-            max.setX(extent.getX() - 1);
+        if (max.x() >= extent.x()) {
+            max.setX(extent.x() - 1);
         }
-        if (max.getY() >= extent.getY()) {
-            max.setY(extent.getY() - 1);
+        if (max.y() >= extent.y()) {
+            max.setY(extent.y() - 1);
         }
-        if (max.getZ() >= extent.getZ()) {
-            max.setZ(extent.getZ() - 1);
+        if (max.z() >= extent.z()) {
+            max.setZ(extent.z() - 1);
         }
 
         return new BoundingBox(min, max);
@@ -207,22 +288,28 @@ public final class BoundingBox implements Serializable {
 
     public Point3i closestPointOnBorder(Point3d pointIn) {
 
-        ReadableTuple3i cornerMax = calcCornerMax();
+        ReadableTuple3i cornerMax = calculateCornerMax();
 
         Point3i pointOut = new Point3i();
-        pointOut.setX(closestPointOnAxis(pointIn.getX(), cornerMin.getX(), cornerMax.getX()));
-        pointOut.setY(closestPointOnAxis(pointIn.getY(), cornerMin.getY(), cornerMax.getY()));
-        pointOut.setZ(closestPointOnAxis(pointIn.getZ(), cornerMin.getZ(), cornerMax.getZ()));
+        pointOut.setX(closestPointOnAxis(pointIn.x(), cornerMin.x(), cornerMax.x()));
+        pointOut.setY(closestPointOnAxis(pointIn.y(), cornerMin.y(), cornerMax.y()));
+        pointOut.setZ(closestPointOnAxis(pointIn.z(), cornerMin.z(), cornerMax.z()));
         return pointOut;
     }
 
-    public static Point3i relPosTo(Point3i relPoint, ReadableTuple3i srcPoint) {
+    public static Point3i relativePositionTo(Point3i relPoint, ReadableTuple3i srcPoint) {
         return Point3i.immutableSubtract(relPoint, srcPoint);
     }
 
-    // returns the relative position of the corner to another bounding box
-    public Point3i relPosTo(BoundingBox src) {
-        return relPosTo(cornerMin, src.cornerMin);
+    /**
+     * The relative position of the corner to another bounding box
+     *
+     * @param other the other box, against whom we consider our coordinates relatively
+     * @return the difference between corners i.e. other bounding-box's corner - this bounding-box's
+     *     corner
+     */
+    public Point3i relativePositionTo(BoundingBox other) {
+        return relativePositionTo(cornerMin, other.cornerMin);
     }
 
     /**
@@ -231,8 +318,8 @@ public final class BoundingBox implements Serializable {
      * @param other the other box, against whom we consider our coordinates relatively
      * @return a newly created bounding box with relative coordinates
      */
-    public BoundingBox relPosToBox(BoundingBox other) {
-        return new BoundingBox(relPosTo(other), extent);
+    public BoundingBox relativePositionToBox(BoundingBox other) {
+        return new BoundingBox(relativePositionTo(other), extent);
     }
 
     /** For evaluating whether this bounding-box contains other points, boxes etc.? */
@@ -252,27 +339,41 @@ public final class BoundingBox implements Serializable {
 
     @Override
     public String toString() {
-        return cornerMin.toString() + "+" + extent.toString() + "=" + calcCornerMax().toString();
+        return cornerMin.toString()
+                + "+"
+                + extent.toString()
+                + "="
+                + calculateCornerMaxExclusive().toString();
+    }
+
+    /**
+     * Moves the bounding-box to the origin (0,0,0) but preserves the extent
+     *
+     * @return newly-created bounding box with shifted corner position (to the origin) and identical
+     *     extent
+     */
+    public BoundingBox shiftToOrigin() {
+        return new BoundingBox(extent);
     }
 
     /**
      * Shifts the bounding-box by adding to it i.e. adds a vector to the corner position
      *
-     * @param shiftBy what to add to the corner position
+     * @param shift what to add to the corner position
      * @return newly created bounding-box with shifted corner position and identical extent
      */
-    public BoundingBox shiftBy(ReadableTuple3i shiftBy) {
-        return new BoundingBox(Point3i.immutableAdd(cornerMin, shiftBy), extent);
+    public BoundingBox shiftBy(ReadableTuple3i shift) {
+        return new BoundingBox(Point3i.immutableAdd(cornerMin, shift), extent);
     }
 
     /**
      * Shifts the bounding-box by subtracting from i.e. subtracts a vector from the corner position
      *
-     * @param shiftBy what to add to the corner position
+     * @param shift what to sutract from the corner position
      * @return newly created bounding-box with shifted corner position and identical extent
      */
-    public BoundingBox shiftBackBy(ReadableTuple3i shiftBackwardsBy) {
-        return new BoundingBox(Point3i.immutableSubtract(cornerMin, shiftBackwardsBy), extent);
+    public BoundingBox shiftBackBy(ReadableTuple3i shift) {
+        return new BoundingBox(Point3i.immutableSubtract(cornerMin, shift), extent);
     }
 
     /**
@@ -311,21 +412,52 @@ public final class BoundingBox implements Serializable {
      * @return a new bounding-box with scaled corner-point and extent
      */
     public BoundingBox scale(ScaleFactor scaleFactor) {
-        return scale(scaleFactor, extent.scaleXYBy(scaleFactor));
+        return scale(scaleFactor, scaledExtent(scaleFactor));
+    }
+
+    /**
+     * Scales the bounding-box, both the corner-point and the extent - ensuring it remains inside a
+     * containing-extent
+     *
+     * @param scaleFactor scaling-factor
+     * @param clipTo clips scaled-object's bounding-box to ensure it always fit inside (to catch any
+     *     rounding errors that push the bounding box outside the scene-boundary)
+     * @return a new bounding-box with scaled corner-point and extent
+     */
+    public BoundingBox scaleClipTo(ScaleFactor scaleFactor, Extent clipTo) {
+        Point3i cornerScaled = scaledCorner(scaleFactor);
+        Extent extentScaled = scaledExtent(scaleFactor);
+        BoundingBox boxScaled = new BoundingBox(cornerScaled, extentScaled);
+        return boxScaled.clipTo(clipTo);
     }
 
     /**
      * Scales the bounding-box corner-point, and assigns a new extent
      *
      * @param scaleFactor scaling-factor
+     * @param extent extent to assign
      * @return a new bounding-box with scaled corner-point and the specified extent
      */
     public BoundingBox scale(ScaleFactor scaleFactor, Extent extentToAssign) {
-        return new BoundingBox(ScaleFactorUtilities.scale(scaleFactor, cornerMin), extentToAssign);
+        return new BoundingBox(scaledCorner(scaleFactor), extentToAssign);
+    }
+
+    /** The bottom-left corner of the bounding box. */
+    public ReadableTuple3i cornerMin() {
+        /** Exposed via {@link ReadableTuple3i} to keep it read-only */
+        return cornerMin;
+    }
+
+    private Extent scaledExtent(ScaleFactor scaleFactor) {
+        return extent.scaleXYBy(scaleFactor);
+    }
+
+    private Point3i scaledCorner(ScaleFactor scaleFactor) {
+        return ScaleFactorUtilities.scale(scaleFactor, cornerMin);
     }
 
     private void checkMaxMoreThanMin(ReadableTuple3i min, ReadableTuple3i max) {
-        if ((max.getX() < min.getX()) || (max.getY() < min.getY()) || (max.getZ() < min.getZ())) {
+        if ((max.x() < min.x()) || (max.y() < min.y()) || (max.z() < min.z())) {
             throw new AnchorFriendlyRuntimeException(
                     String.format(
                             "To create a bounding-box, the max-point %s must always be >= the min-point %s in all dimensions.",
@@ -335,9 +467,9 @@ public final class BoundingBox implements Serializable {
 
     private Point3d meanOfExtent(int subtractFromEachDimension) {
         return new Point3d(
-                calcMeanForDim(ReadableTuple3i::getX, subtractFromEachDimension),
-                calcMeanForDim(ReadableTuple3i::getY, subtractFromEachDimension),
-                calcMeanForDim(ReadableTuple3i::getZ, subtractFromEachDimension));
+                calcMeanForDim(ReadableTuple3i::x, subtractFromEachDimension),
+                calcMeanForDim(ReadableTuple3i::y, subtractFromEachDimension),
+                calcMeanForDim(ReadableTuple3i::z, subtractFromEachDimension));
     }
 
     private double calcMeanForDim(

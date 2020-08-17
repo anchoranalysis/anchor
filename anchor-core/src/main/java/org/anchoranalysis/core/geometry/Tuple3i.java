@@ -27,7 +27,6 @@ package org.anchoranalysis.core.geometry;
  */
 
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.core.axis.AxisType;
 import org.anchoranalysis.core.axis.AxisTypeConverter;
@@ -39,16 +38,16 @@ public abstract class Tuple3i implements ReadableTuple3i {
     /** */
     private static final long serialVersionUID = 1L;
 
-    @Getter @Setter protected int x = 0;
+    @Setter protected int x = 0;
 
-    @Getter @Setter protected int y = 0;
+    @Setter protected int y = 0;
 
-    @Getter @Setter protected int z = 0;
+    @Setter protected int z = 0;
 
     public final void add(ReadableTuple3i point) {
-        this.x = this.x + point.getX();
-        this.y = this.y + point.getY();
-        this.z = this.z + point.getZ();
+        this.x = this.x + point.x();
+        this.y = this.y + point.y();
+        this.z = this.z + point.z();
     }
 
     public final void subtract(int val) {
@@ -58,9 +57,9 @@ public abstract class Tuple3i implements ReadableTuple3i {
     }
 
     public final void subtract(ReadableTuple3i point) {
-        this.x = this.x - point.getX();
-        this.y = this.y - point.getY();
-        this.z = this.z - point.getZ();
+        this.x = this.x - point.x();
+        this.y = this.y - point.y();
+        this.z = this.z - point.z();
     }
 
     public final void scale(int factor) {
@@ -81,9 +80,17 @@ public abstract class Tuple3i implements ReadableTuple3i {
         this.z = this.z / factor;
     }
 
-    public final void scaleXY(double factor) {
+    public final void scaleX(double factor) {
         this.x = (int) (factor * this.x);
+    }
+
+    public final void scaleY(double factor) {
         this.y = (int) (factor * this.y);
+    }
+
+    public final void scaleXY(double factor) {
+        scaleX(factor);
+        scaleY(factor);
     }
 
     /**
@@ -93,8 +100,7 @@ public abstract class Tuple3i implements ReadableTuple3i {
      * @return a new point containing the minimum of the x, y, z components
      */
     public Point3i min(ReadableTuple3i point) {
-        return new Point3i(
-                Math.min(x, point.getX()), Math.min(y, point.getY()), Math.min(z, point.getZ()));
+        return new Point3i(Math.min(x, point.x()), Math.min(y, point.y()), Math.min(z, point.z()));
     }
 
     /**
@@ -104,8 +110,7 @@ public abstract class Tuple3i implements ReadableTuple3i {
      * @return a new point containing the minimum of the x, y, z components
      */
     public Point3i max(ReadableTuple3i point) {
-        return new Point3i(
-                Math.max(x, point.getX()), Math.max(y, point.getY()), Math.max(z, point.getZ()));
+        return new Point3i(Math.max(x, point.x()), Math.max(y, point.y()), Math.max(z, point.z()));
     }
 
     /**
@@ -118,7 +123,7 @@ public abstract class Tuple3i implements ReadableTuple3i {
         return new Point3i(Math.max(x, val), Math.max(y, val), Math.max(z, val));
     }
 
-    public final int getValueByDimension(int dimIndex) {
+    public final int byDimension(int dimIndex) {
         if (dimIndex == 0) {
             return x;
         } else if (dimIndex == 1) {
@@ -131,7 +136,7 @@ public abstract class Tuple3i implements ReadableTuple3i {
     }
 
     @Override
-    public final int getValueByDimension(AxisType axisType) {
+    public final int byDimension(AxisType axisType) {
         switch (axisType) {
             case X:
                 return x;
@@ -195,5 +200,20 @@ public abstract class Tuple3i implements ReadableTuple3i {
     @Override
     public String toString() {
         return String.format("[%d,%d,%d]", x, y, z);
+    }
+
+    @Override
+    public int x() {
+        return x;
+    }
+
+    @Override
+    public int y() {
+        return y;
+    }
+
+    @Override
+    public int z() {
+        return z;
     }
 }

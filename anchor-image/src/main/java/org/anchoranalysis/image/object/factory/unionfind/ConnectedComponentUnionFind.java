@@ -36,13 +36,15 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
+import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectCollectionFactory;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
-import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
+import org.anchoranalysis.image.voxel.Voxels;
+import org.anchoranalysis.image.voxel.extracter.VoxelsExtracter;
+import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 import org.anchoranalysis.image.voxel.iterator.IterateVoxels;
 import org.jgrapht.alg.util.UnionFind;
 
@@ -59,44 +61,41 @@ public class ConnectedComponentUnionFind {
     private final boolean bigNeighborhood;
 
     /**
-     * Converts a binary-voxel-box (byte) into connected components.
+     * Converts binary-voxels (byte) into connected components.
      *
-     * @param voxels a binary voxel-box to be searched for connected components. It is consumed
+     * @param voxels binary-voxels to be searched for connected components. It is consumed
      *     (modified) during processing.
-     * @return the connected-components derived from the voxel-box
+     * @return the connected-components derived from the voxels
      * @throws OperationFailedException
      */
-    public ObjectCollection deriveConnectedByte(BinaryVoxelBox<ByteBuffer> voxels)
-            throws OperationFailedException {
+    public ObjectCollection deriveConnectedByte(BinaryVoxels<ByteBuffer> voxels) {
         ObjectCollection objects = new ObjectCollection();
         visitRegion(voxels, objects, minNumberVoxels, new ReadWriteByte());
         return objects;
     }
 
     /**
-     * Converts a binary-voxel-box (int) into connected components.
+     * Converts binary-voxels (int) into connected components.
      *
-     * @param voxels a binary voxel-box to be searched for connected components. It is consumed
+     * @param voxels binary voxels to be searched for connected components. It is consumed
      *     (modified) during processing.
-     * @return the connected-components derived from the voxel-box
+     * @return the connected-components derived from the voxels
      * @throws OperationFailedException
      */
-    public ObjectCollection deriveConnectedInt(BinaryVoxelBox<IntBuffer> voxels)
-            throws OperationFailedException {
+    public ObjectCollection deriveConnectedInt(BinaryVoxels<IntBuffer> voxels) {
         ObjectCollection objects = ObjectCollectionFactory.empty();
         visitRegion(voxels, objects, minNumberVoxels, new ReadWriteInt());
         return objects;
     }
 
     private <T extends Buffer> void visitRegion(
-            BinaryVoxelBox<T> visited,
+            BinaryVoxels<T> visited,
             ObjectCollection objects,
             int minNumberVoxels,
-            BufferReadWrite<T> bufferReaderWriter)
-            throws OperationFailedException {
+            BufferReadWrite<T> bufferReaderWriter) {
 
         UnionFind<Integer> unionIndex = new UnionFind<>(new HashSet<Integer>());
-        VoxelBox<IntBuffer> indexBuffer = VoxelBoxFactory.getInt().create(visited.extent());
+        Voxels<IntBuffer> indexBuffer = VoxelsFactory.getInt().createInitialized(visited.extent());
 
         int maxBigIDAdded =
                 populateIndexFromBinary(
@@ -111,14 +110,14 @@ public class ConnectedComponentUnionFind {
     }
 
     private MergeWithNeighbors createMergeWithNeighbors(
-            VoxelBox<IntBuffer> indexBuffer, UnionFind<Integer> unionIndex) {
+            Voxels<IntBuffer> indexBuffer, UnionFind<Integer> unionIndex) {
         return new MergeWithNeighbors(
-                indexBuffer, unionIndex, indexBuffer.extent().getZ() > 1, bigNeighborhood);
+                indexBuffer, unionIndex, indexBuffer.extent().z() > 1, bigNeighborhood);
     }
 
     private static <T extends Buffer> int populateIndexFromBinary(
-            BinaryVoxelBox<T> visited, PopulateIndexProcessor<T> process) {
-        IterateVoxels.callEachPoint(visited.getVoxelBox(), process);
+            BinaryVoxels<T> visited, PopulateIndexProcessor<T> process) {
+        IterateVoxels.callEachPoint(visited.voxels(), process);
         return process.getCount() - 1;
     }
 
@@ -144,37 +143,37 @@ public class ConnectedComponentUnionFind {
     }
 
     private static PointRangeWithCount[] createBBoxArray(int size) {
-        PointRangeWithCount[] bboxArr = new PointRangeWithCount[size];
-        for (int i = 0; i < bboxArr.length; i++) {
-            bboxArr[i] = new PointRangeWithCount();
+        PointRangeWithCount[] boxArr = new PointRangeWithCount[size];
+        for (int i = 0; i < boxArr.length; i++) {
+            boxArr[i] = new PointRangeWithCount();
         }
-        return bboxArr;
+        return boxArr;
     }
 
     private static void addPointsAndAssignNewIDs(
-            VoxelBox<IntBuffer> indexBuffer,
+            Voxels<IntBuffer> indexBuffer,
             UnionFind<Integer> unionIndex,
             Map<Integer, Integer> mapIDOrdered,
-            PointRangeWithCount[] bboxArr) {
+            PointRangeWithCount[] boxArr) {
 
         Point3i point = new Point3i();
         Extent extent = indexBuffer.extent();
-        for (point.setZ(0); point.getZ() < extent.getZ(); point.incrementZ()) {
+        for (point.setZ(0); point.z() < extent.z(); point.incrementZ()) {
 
-            IntBuffer bbIndex = indexBuffer.getPixelsForPlane(point.getZ()).buffer();
+            IntBuffer bbIndex = indexBuffer.sliceBuffer(point.z());
 
             int offset = 0;
 
-            for (point.setY(0); point.getY() < extent.getY(); point.incrementY()) {
-                for (point.setX(0); point.getX() < extent.getX(); point.incrementX()) {
+            for (point.setY(0); point.y() < extent.y(); point.incrementY()) {
+                for (point.setX(0); point.x() < extent.x(); point.incrementX()) {
 
                     int idBig = bbIndex.get(offset);
                     if (idBig != 0) {
 
                         Integer idSmall = mapIDOrdered.get(unionIndex.find(idBig));
 
-                        PointRangeWithCount bbox = bboxArr[idSmall - 1];
-                        bbox.add(point);
+                        PointRangeWithCount box = boxArr[idSmall - 1];
+                        box.add(point);
 
                         bbIndex.put(offset, idSmall);
                     }
@@ -185,19 +184,27 @@ public class ConnectedComponentUnionFind {
     }
 
     private static ObjectCollection extractMasksInto(
-            PointRangeWithCount[] bboxArr,
+            PointRangeWithCount[] boxArr,
             Map<Integer, Integer> mapIDOrdered,
-            VoxelBox<IntBuffer> indexBuffer,
+            Voxels<IntBuffer> indexBuffer,
             int minNumberVoxels,
-            ObjectCollection objects)
-            throws OperationFailedException {
+            ObjectCollection objects) {
+
+        VoxelsExtracter<IntBuffer> extracter = indexBuffer.extracter();
 
         for (int smallID : mapIDOrdered.values()) {
 
-            PointRangeWithCount bboxWithCnt = bboxArr[smallID - 1];
+            PointRangeWithCount boxWithCnt = boxArr[smallID - 1];
 
-            if (bboxWithCnt.getCount() >= minNumberVoxels) {
-                objects.add(indexBuffer.equalMask(bboxWithCnt.deriveBoundingBox(), smallID));
+            if (boxWithCnt.getCount() >= minNumberVoxels) {
+                try {
+                    objects.add(
+                            extracter
+                                    .voxelsEqualTo(smallID)
+                                    .deriveObject(boxWithCnt.deriveBoundingBox()));
+                } catch (OperationFailedException e) {
+                    throw new AnchorImpossibleSituationException();
+                }
             }
         }
         return objects;
@@ -206,18 +213,17 @@ public class ConnectedComponentUnionFind {
     private static void processIndexBuffer(
             int maxBigIDAdded,
             UnionFind<Integer> unionIndex,
-            VoxelBox<IntBuffer> indexBuffer,
+            Voxels<IntBuffer> indexBuffer,
             ObjectCollection objects,
-            int minNumberVoxels)
-            throws OperationFailedException {
+            int minNumberVoxels) {
         Set<Integer> primaryIDs = setFromUnionFind(maxBigIDAdded, unionIndex);
 
         Map<Integer, Integer> mapIDOrdered = mapValuesToContiguousSet(primaryIDs);
 
-        PointRangeWithCount[] bboxArr = createBBoxArray(mapIDOrdered.size());
+        PointRangeWithCount[] boxArr = createBBoxArray(mapIDOrdered.size());
 
-        addPointsAndAssignNewIDs(indexBuffer, unionIndex, mapIDOrdered, bboxArr);
+        addPointsAndAssignNewIDs(indexBuffer, unionIndex, mapIDOrdered, boxArr);
 
-        extractMasksInto(bboxArr, mapIDOrdered, indexBuffer, minNumberVoxels, objects);
+        extractMasksInto(boxArr, mapIDOrdered, indexBuffer, minNumberVoxels, objects);
     }
 }

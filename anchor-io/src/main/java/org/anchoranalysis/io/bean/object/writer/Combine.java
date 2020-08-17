@@ -52,16 +52,16 @@ public class Combine extends DrawObject {
     // END BEAN PROPERTIES
 
     @Override
-    public PrecalcOverlay precalculate(ObjectWithProperties mask, ImageDimensions dim)
+    public PrecalcOverlay precalculate(ObjectWithProperties object, ImageDimensions dim)
             throws CreateException {
 
         List<PrecalcOverlay> listPrecalc = new ArrayList<>();
 
         for (DrawObject writer : list) {
-            listPrecalc.add(writer.precalculate(mask, dim));
+            listPrecalc.add(writer.precalculate(object, dim));
         }
 
-        return new PrecalcOverlay(mask) {
+        return new PrecalcOverlay(object) {
 
             @Override
             public void writePrecalculatedMask(

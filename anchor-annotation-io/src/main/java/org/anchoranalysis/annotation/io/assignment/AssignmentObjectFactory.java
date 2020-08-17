@@ -93,7 +93,7 @@ public class AssignmentObjectFactory {
 
     private ObjectCollection maybeProject(ObjectCollection objects) {
         if (useMIP) {
-            return objects.stream().map(ObjectMask::maxIntensityProjection);
+            return objects.stream().map(ObjectMask::flattenZ);
         } else {
             return objects;
         }
@@ -121,7 +121,7 @@ public class AssignmentObjectFactory {
                 ObjectMask objR = result.get(j);
 
                 double costObjects =
-                        session.calc(new FeatureInputPairObjects(objA, objR, nrgStack));
+                        session.calculate(new FeatureInputPairObjects(objA, objR, nrgStack));
                 outArr[i][j] = costObjects;
 
                 if (Double.isNaN(costObjects)) {

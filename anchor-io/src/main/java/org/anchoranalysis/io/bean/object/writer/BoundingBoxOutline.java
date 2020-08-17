@@ -59,16 +59,16 @@ public class BoundingBoxOutline extends DrawObject {
     }
 
     @Override
-    public PrecalcOverlay precalculate(ObjectWithProperties mask, ImageDimensions dim)
+    public PrecalcOverlay precalculate(ObjectWithProperties object, ImageDimensions dim)
             throws CreateException {
         ObjectMask outline =
                 FindOutline.outline(
-                        createBoundingBoxObject(mask.getMask()),
+                        createBoundingBoxObject(object.withoutProperties()),
                         outlineWidth,
                         true,
-                        dim.getZ() > 1);
+                        dim.z() > 1);
 
-        return new PrecalcOverlay(mask) {
+        return new PrecalcOverlay(object) {
 
             @Override
             public void writePrecalculatedMask(
@@ -79,14 +79,14 @@ public class BoundingBoxOutline extends DrawObject {
                     throws OperationFailedException {
 
                 IntersectionWriter.writeRGBMaskIntersection(
-                        outline, attributes.colorFor(mask, iteration), background, restrictTo);
+                        outline, attributes.colorFor(object, iteration), background, restrictTo);
             }
         };
     }
 
-    private ObjectMask createBoundingBoxObject(ObjectMask mask) {
-        ObjectMask bbox = mask.duplicate();
-        bbox.getVoxelBox().setAllPixelsTo(1);
-        return bbox;
+    private ObjectMask createBoundingBoxObject(ObjectMask object) {
+        ObjectMask mask = object.duplicate();
+        mask.assignOn().toAll();
+        return mask;
     }
 }

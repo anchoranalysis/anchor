@@ -30,7 +30,7 @@ import java.nio.ByteBuffer;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.kernel.BinaryKernel;
 import org.anchoranalysis.image.voxel.kernel.LocalSlices;
 
@@ -65,7 +65,7 @@ public class MaxDensityKernel3 extends BinaryKernel {
     }
 
     @Override
-    public void init(VoxelBox<ByteBuffer> in) {
+    public void init(Voxels<ByteBuffer> in) {
         this.extent = in.extent();
     }
 
@@ -90,10 +90,10 @@ public class MaxDensityKernel3 extends BinaryKernel {
         ByteBuffer inArrZLess1 = inSlices.getLocal(-1);
         ByteBuffer inArrZPlus1 = inSlices.getLocal(+1);
 
-        int xLength = extent.getX();
+        int xLength = extent.x();
 
-        int x = point.getX();
-        int y = point.getY();
+        int x = point.x();
+        int y = point.y();
 
         if (bv.isOn(inArrZ.get(ind))) {
             cnt++;
@@ -114,7 +114,7 @@ public class MaxDensityKernel3 extends BinaryKernel {
 
         x += 2;
         ind += 2;
-        if (x < extent.getX()) {
+        if (x < extent.x()) {
             if (bv.isOn(inArrZ.get(ind))) {
                 cnt++;
             }
@@ -140,7 +140,7 @@ public class MaxDensityKernel3 extends BinaryKernel {
 
         y += 2;
         ind += (2 * xLength);
-        if (y < (extent.getY())) {
+        if (y < (extent.y())) {
             if (bv.isOn(inArrZ.get(ind))) {
                 cnt++;
             }

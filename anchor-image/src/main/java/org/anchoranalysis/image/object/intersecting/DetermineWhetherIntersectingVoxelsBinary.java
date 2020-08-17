@@ -31,7 +31,7 @@ import java.util.Optional;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.voxel.box.BoundedVoxelBox;
+import org.anchoranalysis.image.voxel.BoundedVoxels;
 
 /**
  * Determines whether there are any intersecting voxels between binary-masks, exiting as soon as one
@@ -51,50 +51,49 @@ public class DetermineWhetherIntersectingVoxelsBinary {
     }
 
     public boolean hasIntersectingVoxels(
-            BoundedVoxelBox<ByteBuffer> src, BoundedVoxelBox<ByteBuffer> other) {
+            BoundedVoxels<ByteBuffer> src, BoundedVoxels<ByteBuffer> other) {
         return pointOfFirstIntersectingVoxel(src, other).isPresent();
     }
 
     private Optional<Point3i> pointOfFirstIntersectingVoxel(
-            BoundedVoxelBox<ByteBuffer> src, BoundedVoxelBox<ByteBuffer> other) {
+            BoundedVoxels<ByteBuffer> src, BoundedVoxels<ByteBuffer> other) {
 
         // Find the common bounding box
-        Optional<BoundingBox> bboxIntersect =
-                src.getBoundingBox().intersection().with(other.getBoundingBox());
-        return bboxIntersect.flatMap(bbox -> hasIntersectingVoxelsInBoundingBox(src, other, bbox));
+        Optional<BoundingBox> boxIntersect =
+                src.boundingBox().intersection().with(other.boundingBox());
+        return boxIntersect.flatMap(box -> hasIntersectingVoxelsInBoundingBox(src, other, box));
     }
 
     /**
      * @param src
      * @param other
-     * @param bboxIntersect
+     * @param boxIntersect
      * @param onMask1
      * @param onMask2
      * @return Point3i if intersection exists, then the first point of intersection found
      *     (newly-created), or else empty if no intersection exists
      */
     private Optional<Point3i> hasIntersectingVoxelsInBoundingBox(
-            BoundedVoxelBox<ByteBuffer> src,
-            BoundedVoxelBox<ByteBuffer> other,
-            BoundingBox bboxIntersect) {
+            BoundedVoxels<ByteBuffer> src,
+            BoundedVoxels<ByteBuffer> other,
+            BoundingBox boxIntersect) {
 
-        IntersectionBBox bbox =
-                IntersectionBBox.create(
-                        src.getBoundingBox(), other.getBoundingBox(), bboxIntersect);
+        IntersectionBBox box =
+                IntersectionBBox.create(src.boundingBox(), other.boundingBox(), boxIntersect);
 
         // Otherwise we count the number of pixels that are not empty
-        //  in both voxel boxes in the intersecting region
-        for (int z = bbox.z().min(); z < bbox.z().max(); z++) {
+        //  in both bounded-voxels in the intersecting region
+        for (int z = box.z().min(); z < box.z().max(); z++) {
 
-            ByteBuffer buffer = src.getVoxelBox().getPixelsForPlane(z).buffer();
+            ByteBuffer buffer = src.voxels().sliceBuffer(z);
 
-            int zOther = z + bbox.z().rel();
-            ByteBuffer bufferOther = other.getVoxelBox().getPixelsForPlane(zOther).buffer();
+            int zOther = z + box.z().rel();
+            ByteBuffer bufferOther = other.voxels().sliceBuffer(zOther);
 
             buffer.clear();
             bufferOther.clear();
 
-            Optional<Point3i> intersectingPoint = hasIntersectingVoxels(buffer, bufferOther, bbox);
+            Optional<Point3i> intersectingPoint = hasIntersectingVoxels(buffer, bufferOther, box);
             if (intersectingPoint.isPresent()) {
                 intersectingPoint.get().setZ(z);
                 return intersectingPoint;
@@ -109,16 +108,16 @@ public class DetermineWhetherIntersectingVoxelsBinary {
      *     (newly-created)
      */
     private Optional<Point3i> hasIntersectingVoxels(
-            ByteBuffer buffer1, ByteBuffer buffer2, IntersectionBBox bbox) {
+            ByteBuffer buffer1, ByteBuffer buffer2, IntersectionBBox box) {
 
-        for (int y = bbox.y().min(); y < bbox.y().max(); y++) {
-            int yOther = y + bbox.y().rel();
+        for (int y = box.y().min(); y < box.y().max(); y++) {
+            int yOther = y + box.y().rel();
 
-            for (int x = bbox.x().min(); x < bbox.x().max(); x++) {
-                int xOther = x + bbox.x().rel();
+            for (int x = box.x().min(); x < box.x().max(); x++) {
+                int xOther = x + box.x().rel();
 
-                byte posCheck = buffer1.get(bbox.e1().offset(x, y));
-                byte posCheckOther = buffer2.get(bbox.e2().offset(xOther, yOther));
+                byte posCheck = buffer1.get(box.e1().offset(x, y));
+                byte posCheckOther = buffer2.get(box.e2().offset(xOther, yOther));
 
                 if (posCheck == byteOn1 && posCheckOther == byteOn2) {
                     return Optional.of(new Point3i(x, y, 0));

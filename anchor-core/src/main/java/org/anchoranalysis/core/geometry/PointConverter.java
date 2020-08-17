@@ -32,71 +32,81 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.functional.FunctionalList;
 
+/**
+ * Conversion utilities between different types and dimensionalities of points
+ *
+ * @author Owen Feehan
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class PointConverter {
 
     // START singular points
 
-    public static Point2i intFromDouble(Point2d point) {
-        return new Point2i((int) point.getX(), (int) point.getY());
+    public static Point2i intFromDoubleFloor(Point2d point) {
+        return new Point2i((int) point.x(), (int) point.y());
     }
 
-    public static Point3i intFromDouble(Point3d point) {
-        return new Point3i((int) point.getX(), (int) point.getY(), (int) point.getZ());
+    public static Point3i intFromDoubleFloor(Point3d point) {
+        return new Point3i((int) point.x(), (int) point.y(), (int) point.z());
     }
 
     public static Point3i intFromDoubleCeil(Point3d point) {
         return new Point3i(
-                (int) Math.ceil(point.getX()),
-                (int) Math.ceil(point.getY()),
-                (int) Math.ceil(point.getZ()));
+                (int) Math.ceil(point.x()), (int) Math.ceil(point.y()), (int) Math.ceil(point.z()));
     }
 
-    public static Point3i convertTo3d(Point2i point) {
-        return new Point3i(point.getX(), point.getY(), 0);
+    public static Point3i convertTo3i(Point2i point) {
+        return new Point3i(point.x(), point.y(), 0);
+    }
+
+    public static Point3i convertTo3i(Point2i point, int slice) {
+        return new Point3i(point.x(), point.y(), slice);
+    }
+
+    public static Point3d convertTo3d(Point2d point) {
+        return new Point3d(point.x(), point.y(), 0);
     }
 
     public static Point2d doubleFromFloat(Point2f point) {
-        return new Point2d(point.getX(), point.getY());
+        return new Point2d(point.x(), point.y());
     }
 
     public static Point3d doubleFromFloat(Point3f point) {
-        return new Point3d(point.getX(), point.getY(), point.getZ());
+        return new Point3d(point.x(), point.y(), point.z());
     }
 
     public static Point3d doubleFromInt(Point2i point) {
-        return new Point3d((double) point.getX(), (double) point.getY(), 0);
+        return new Point3d((double) point.x(), (double) point.y(), 0);
     }
 
     public static Point3d doubleFromInt(ReadableTuple3i point) {
-        return new Point3d((double) point.getX(), (double) point.getY(), (double) point.getZ());
+        return new Point3d((double) point.x(), (double) point.y(), (double) point.z());
     }
 
     public static Point3f floatFromInt(Point2i point) {
-        return new Point3f((float) point.getX(), (float) point.getY(), 0);
+        return new Point3f((float) point.x(), (float) point.y(), 0);
     }
 
     public static Point3f floatFromDouble(Point3d point) {
-        return new Point3f((float) point.getX(), (float) point.getY(), (float) point.getZ());
+        return new Point3f((float) point.x(), (float) point.y(), (float) point.z());
     }
 
     public static Point3f floatFromInt(ReadableTuple3i point) {
-        return new Point3f((float) point.getX(), (float) point.getY(), (float) point.getZ());
+        return new Point3f((float) point.x(), (float) point.y(), (float) point.z());
     }
 
     /**
      * Creates a new {@code Point3f} with X, Y values from the {@code Point3i} but setting Z to be 0
      */
     public static Point3f floatFromIntDropZ(ReadableTuple3i point) {
-        return new Point3f((float) point.getX(), (float) point.getY(), 0);
+        return new Point3f((float) point.x(), (float) point.y(), 0);
     }
 
     public static Point3i intFromFloat(Point3f point, boolean round) {
         if (round) {
-            return new Point3i(
-                    roundInt(point.getX()), roundInt(point.getY()), roundInt(point.getZ()));
+            return new Point3i(roundInt(point.x()), roundInt(point.y()), roundInt(point.z()));
         } else {
-            return new Point3i(ceilInt(point.getX()), ceilInt(point.getY()), ceilInt(point.getZ()));
+            return new Point3i(ceilInt(point.x()), ceilInt(point.y()), ceilInt(point.z()));
         }
     }
 
@@ -129,7 +139,7 @@ public class PointConverter {
     }
 
     public static List<Point3i> convert3i(List<Point3d> points) {
-        return convert(points, PointConverter::intFromDouble);
+        return convert(points, PointConverter::intFromDoubleFloor);
     }
 
     // END lists of points

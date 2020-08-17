@@ -63,16 +63,16 @@ public class FeatureCalculatorCachedMultiTest {
         assertCurrentLoad(0);
 
         assertInputMissing(INPUT_1);
-        cached.calc(INPUT_1);
+        cached.calculate(INPUT_1);
         assertInputExists(INPUT_1);
         assertCurrentLoad(1);
 
-        cached.calc(INPUT_2);
+        cached.calculate(INPUT_2);
         assertInputExists(INPUT_1);
         assertInputExists(INPUT_2);
 
         // Check that INPUT_1 remains in the cache
-        cached.calc(INPUT_1_REPEATED);
+        cached.calculate(INPUT_1_REPEATED);
         assertInputExists(INPUT_1);
 
         // There should be 2 items in the cache at the end

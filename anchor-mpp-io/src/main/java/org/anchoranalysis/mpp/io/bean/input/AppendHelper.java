@@ -31,7 +31,6 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.function.Function;
 import org.anchoranalysis.bean.NamedBean;
-import org.anchoranalysis.core.cache.CacheCall;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
@@ -42,7 +41,6 @@ import org.anchoranalysis.image.io.objects.ObjectCollectionReader;
 import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
 import org.anchoranalysis.image.stack.TimeSequence;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
-import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.OperationOutFilePath;
 import org.anchoranalysis.mpp.io.input.MultiInput;
 import org.anchoranalysis.mpp.io.input.MultiInputSubMap;
@@ -182,13 +180,10 @@ class AppendHelper {
             NamedBean<FilePathGenerator> ni,
             boolean debugMode)
             throws OperationFailedException {
-        // Delayed-calculation of the appending path as it can be a bit expensive when multiplied by
-        // so many items
-        CacheCall<Path, AnchorIOException> outPath =
-                CacheCall.of(new OperationOutFilePath(ni, inputObject::pathForBinding, debugMode));
-
         try {
-            return reader.apply(outPath.call());
+            return reader.apply(
+                    OperationOutFilePath.outPathFor(
+                            ni.getValue(), inputObject::pathForBinding, debugMode));
         } catch (Exception e) {
             throw new OperationFailedException("An error occured appending to the multi-input", e);
         }

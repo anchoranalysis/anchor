@@ -28,6 +28,8 @@ package org.anchoranalysis.test;
 
 import static org.mockito.Mockito.mock;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.log.MessageLogger;
 
@@ -36,9 +38,8 @@ import org.anchoranalysis.core.log.MessageLogger;
  *
  * @author Owen Feehan
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class LoggingFixture {
-
-    private LoggingFixture() {}
 
     /** A {@link MessageLogger} that doesn't output anything */
     public static MessageLogger suppressedLogReporter() {

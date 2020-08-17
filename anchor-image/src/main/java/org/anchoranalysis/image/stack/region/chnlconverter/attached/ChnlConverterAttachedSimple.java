@@ -27,10 +27,11 @@
 package org.anchoranalysis.image.stack.region.chnlconverter.attached;
 
 import java.nio.Buffer;
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.stack.region.chnlconverter.ChannelConverter;
 import org.anchoranalysis.image.stack.region.chnlconverter.ConversionPolicy;
-import org.anchoranalysis.image.stack.region.chnlconverter.voxelbox.VoxelBoxConverter;
+import org.anchoranalysis.image.stack.region.chnlconverter.voxelbox.VoxelsConverter;
 
 /**
  * Simply passes everything onto a ChnlConverter
@@ -39,15 +40,11 @@ import org.anchoranalysis.image.stack.region.chnlconverter.voxelbox.VoxelBoxConv
  * @param <S> attachment-type
  * @param <T> destination-type
  */
+@AllArgsConstructor
 public class ChnlConverterAttachedSimple<S, T extends Buffer>
         implements ChnlConverterAttached<S, T> {
 
     private ChannelConverter<T> delegate;
-
-    public ChnlConverterAttachedSimple(ChannelConverter<T> delegate) {
-        super();
-        this.delegate = delegate;
-    }
 
     @Override
     public Channel convert(Channel chnl, ConversionPolicy changeExisting) {
@@ -60,7 +57,7 @@ public class ChnlConverterAttachedSimple<S, T extends Buffer>
     }
 
     @Override
-    public VoxelBoxConverter<T> getVoxelBoxConverter() {
-        return delegate.getVoxelBoxConverter();
+    public VoxelsConverter<T> getVoxelsConverter() {
+        return delegate.getVoxelsConverter();
     }
 }

@@ -40,7 +40,7 @@ public class IJTiffWriter extends IJWriterSupportsStack {
     }
 
     @Override
-    public String dfltExt() {
+    public String defaultExtension() {
         return "tif";
     }
 }

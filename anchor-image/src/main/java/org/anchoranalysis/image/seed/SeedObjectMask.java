@@ -26,9 +26,10 @@
 
 package org.anchoranalysis.image.seed;
 
+import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.interpolator.InterpolatorFactory;
+import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.scale.ScaleFactor;
 
@@ -38,11 +39,8 @@ public class SeedObjectMask implements Seed {
     private ObjectMask object;
 
     @Override
-    public void scaleXY(double scale) throws OperationFailedException {
-        object =
-                object.scale(
-                        new ScaleFactor(scale),
-                        InterpolatorFactory.getInstance().noInterpolation());
+    public void scaleXY(double scale, Extent extent) throws OperationFailedException {
+        object = object.scale(new ScaleFactor(scale), Optional.of(extent));
     }
 
     @Override
@@ -61,7 +59,7 @@ public class SeedObjectMask implements Seed {
     }
 
     @Override
-    public ObjectMask createMask() {
+    public ObjectMask deriveObject() {
         return object;
     }
 

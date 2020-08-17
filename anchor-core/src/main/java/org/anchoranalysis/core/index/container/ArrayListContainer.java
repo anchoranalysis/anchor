@@ -30,11 +30,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import javax.swing.event.EventListenerList;
 import org.anchoranalysis.core.index.GetOperationFailedException;
-import org.anchoranalysis.core.index.IIndexGetter;
+import org.anchoranalysis.core.index.IndexGetter;
 import org.anchoranalysis.core.index.SimpleIndex;
 import org.anchoranalysis.core.index.container.BoundChangeEvent.BoundType;
 
-public class ArrayListContainer<T extends IIndexGetter & Comparable<IIndexGetter>>
+public class ArrayListContainer<T extends IndexGetter & Comparable<IndexGetter>>
         implements BoundedIndexContainer<T> {
 
     // The sorted elements

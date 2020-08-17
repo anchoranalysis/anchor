@@ -33,14 +33,14 @@ import java.nio.ByteBuffer;
 import java.util.function.ToIntFunction;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
-import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
+import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.ObjectMask;
 
 /**
- * Writes an ObjectMask to a path within a HDF5 file
+ * Writes an object-mask to a path within a HDF5 file
  *
- * <p>The mask is written as a 3D array of 255 and 0 bytes
+ * <p>The object-mask is written as a 3D array of 255 and 0 bytes
  *
  * <p>The corner-position of the bounding box is added as attributes: x, y, z
  *
@@ -71,36 +71,35 @@ class ObjectMaskHDF5Writer {
 
     public void apply() {
 
-        writer.uint8()
-                .writeMDArray(pathHDF5, byteArray(object.binaryVoxelBox()), compressionLevel());
+        writer.uint8().writeMDArray(pathHDF5, byteArray(object.binaryVoxels()), compressionLevel());
 
         addCorner();
     }
 
     private void addCorner() {
-        addAttribute(HDF5PathHelper.EXTENT_X, ReadableTuple3i::getX);
-        addAttribute(HDF5PathHelper.EXTENT_Y, ReadableTuple3i::getY);
-        addAttribute(HDF5PathHelper.EXTENT_Z, ReadableTuple3i::getZ);
+        addAttribute(HDF5PathHelper.EXTENT_X, ReadableTuple3i::x);
+        addAttribute(HDF5PathHelper.EXTENT_Y, ReadableTuple3i::y);
+        addAttribute(HDF5PathHelper.EXTENT_Z, ReadableTuple3i::z);
     }
 
     private void addAttribute(String attrName, ToIntFunction<ReadableTuple3i> extrVal) {
 
-        Integer crnrVal = extrVal.applyAsInt(object.getBoundingBox().cornerMin());
+        Integer crnrVal = extrVal.applyAsInt(object.boundingBox().cornerMin());
         writer.uint32().setAttr(pathHDF5, attrName, crnrVal.intValue());
     }
 
-    private static MDByteArray byteArray(BinaryVoxelBox<ByteBuffer> bvb) {
+    private static MDByteArray byteArray(BinaryVoxels<ByteBuffer> bvb) {
 
         Extent extent = bvb.extent();
 
         MDByteArray md = new MDByteArray(dimensionsFromExtent(extent));
 
-        for (int z = 0; z < extent.getZ(); z++) {
+        for (int z = 0; z < extent.z(); z++) {
 
-            ByteBuffer bb = bvb.getPixelsForPlane(z).buffer();
+            ByteBuffer bb = bvb.sliceBuffer(z);
 
-            for (int y = 0; y < extent.getY(); y++) {
-                for (int x = 0; x < extent.getX(); x++) {
+            for (int y = 0; y < extent.y(); y++) {
+                for (int x = 0; x < extent.x(); x++) {
                     md.set(bb.get(extent.offset(x, y)), x, y, z);
                 }
             }
@@ -109,6 +108,6 @@ class ObjectMaskHDF5Writer {
     }
 
     private static int[] dimensionsFromExtent(Extent extent) {
-        return new int[] {extent.getX(), extent.getY(), extent.getZ()};
+        return new int[] {extent.x(), extent.y(), extent.z()};
     }
 }

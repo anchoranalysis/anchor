@@ -80,8 +80,8 @@ class ResultsVectorBuilder {
             throws NamedFeatureCalculationException {
         ResultsVector rvImage =
                 errorReporter.isPresent()
-                        ? calc.calcSuppressErrors(input, errorReporter.get())
-                        : calc.calc(input);
+                        ? calc.calculateSuppressErrors(input, errorReporter.get())
+                        : calc.calculate(input);
         out.set(cnt, rvImage);
         cnt += rvImage.length();
     }

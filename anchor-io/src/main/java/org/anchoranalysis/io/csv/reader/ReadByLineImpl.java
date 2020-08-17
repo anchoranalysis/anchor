@@ -29,22 +29,20 @@ package org.anchoranalysis.io.csv.reader;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.io.csv.reader.CSVReaderByLine.ProcessCSVLine;
 import org.anchoranalysis.io.csv.reader.CSVReaderByLine.ReadByLine;
 
+@RequiredArgsConstructor
 class ReadByLineImpl implements ReadByLine {
 
-    private CSVReader csvReader;
-    private Path filePath;
+    // START REQUIRED ARGUMENTS
+    private final Path filePath;
+    private final CSVReader csvReader;
+    // END REQUIRED ARGUMENTS
 
     private CSVReader.OpenedCSVFile openedFile = null;
-
-    public ReadByLineImpl(Path filePath, CSVReader csvReader) {
-        super();
-        this.filePath = filePath;
-        this.csvReader = csvReader;
-    }
 
     @Override
     public String[] headers() throws CSVReaderException {

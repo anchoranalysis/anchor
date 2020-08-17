@@ -1,5 +1,6 @@
 package org.anchoranalysis.core.geometry;
 
+import java.util.function.IntBinaryOperator;
 import lombok.EqualsAndHashCode;
 
 /*
@@ -36,7 +37,7 @@ public final class Point3i extends Tuple3i {
 
     /** Constructor - creates the points with a 0 in each dimension */
     public Point3i() {
-        // Initializes wit zeroes
+        // Initializes with zeroes
     }
 
     public Point3i(int x, int y, int z) {
@@ -46,9 +47,9 @@ public final class Point3i extends Tuple3i {
     }
 
     public Point3i(ReadableTuple3i point) {
-        this.x = point.getX();
-        this.y = point.getY();
-        this.z = point.getZ();
+        this.x = point.x();
+        this.y = point.y();
+        this.z = point.z();
     }
 
     public int distanceSquared(Point3i point) {
@@ -94,5 +95,14 @@ public final class Point3i extends Tuple3i {
         Point3i pointDup = new Point3i(point);
         pointDup.scale(factor);
         return pointDup;
+    }
+
+    /** Applies an operation to each element across two points */
+    public static Point3i elementwiseOperation(
+            ReadableTuple3i point1, ReadableTuple3i point2, IntBinaryOperator operator) {
+        return new Point3i(
+                operator.applyAsInt(point1.x(), point2.x()),
+                operator.applyAsInt(point1.y(), point2.y()),
+                operator.applyAsInt(point1.z(), point2.z()));
     }
 }

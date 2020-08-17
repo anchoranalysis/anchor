@@ -26,9 +26,11 @@
 
 package org.anchoranalysis.anchor.mpp.mark;
 
-public class GlobalRegionIdentifiers {
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
-    private GlobalRegionIdentifiers() {}
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public class GlobalRegionIdentifiers {
 
     public static final int SUBMARK_INSIDE = 0;
     public static final int SUBMARK_SHELL = 1;

@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.image.object.ops;
 
+import java.util.stream.Stream;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -37,9 +38,9 @@ import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
+import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 
-/** Merges one or more {@link ObjectMask}s into a single mask */
+/** Merges one or more {@link ObjectMask}s into a single object */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ObjectMaskMerger {
 
@@ -50,7 +51,7 @@ public class ObjectMaskMerger {
      *
      * <p>The merged box has a minimal bounding-box to fit both objects.
      *
-     * <p>Even if the two existing object-masks do not intersect or touch, a single merged mask is
+     * <p>Even if the two existing objects do not intersect or touch, a single merged object is
      * nevertheless created.
      *
      * <p>It assumes that the binary-values of the merges are always 255 and 0, or 0 and 255.
@@ -65,30 +66,42 @@ public class ObjectMaskMerger {
 
         second = invertSecondIfNecessary(first, second);
 
-        BoundingBox bbox = first.getBoundingBox().union().with(second.getBoundingBox());
+        BoundingBox box = first.boundingBox().union().with(second.boundingBox());
 
-        ObjectMask out = new ObjectMask(bbox, VoxelBoxFactory.getByte().create(bbox.extent()));
-        copyPixelsCheckMask(first, out, bbox);
-        copyPixelsCheckMask(second, out, bbox);
+        ObjectMask out =
+                new ObjectMask(box, VoxelsFactory.getByte().createInitialized(box.extent()));
+        copyPixelsCheckMask(first, out, box);
+        copyPixelsCheckMask(second, out, box);
         return out;
     }
 
     /**
      * Merges all the bounding boxes of a collection of objects.
      *
-     * @param objects objects whose bounding-boxes are merged
+     * @param objects a stream of objects whose bounding-boxes are to be merged
      * @return a bounding-box just large enough to include all the bounding-boxes of the objects
-     * @throws OperationFailedException if the {@code objects} parameter is empty
+     * @throws OperationFailedException if the object-collection is empty
      */
     public static BoundingBox mergeBoundingBoxes(ObjectCollection objects)
             throws OperationFailedException {
 
         if (objects.isEmpty()) {
-            throw new OperationFailedException("At least one object must exist in the collection");
+            throw new OperationFailedException(
+                    "The object-collection is empty, at least one object is required for this operation");
         }
 
-        return objects.streamStandardJava() // NOSONAR
-                .map(ObjectMask::getBoundingBox)
+        return mergeBoundingBoxes(objects.streamStandardJava());
+    }
+
+    /**
+     * Merges all the bounding boxes of a stream of objects.
+     *
+     * @param objects a stream of objects whose bounding-boxes are to be merged
+     * @return a bounding-box just large enough to include all the bounding-boxes of the objects
+     */
+    public static BoundingBox mergeBoundingBoxes(Stream<ObjectMask> objects) {
+        return objects // NOSONAR
+                .map(ObjectMask::boundingBox)
                 .reduce( // NOSONAR
                         (boundingBox, other) -> boundingBox.union().with(other))
                 .get();
@@ -99,7 +112,7 @@ public class ObjectMaskMerger {
      *
      * @param objects objects to be merged
      * @return a newly created merged version of all the objects, with a bounding-box just big
-     *     enough to include all the existing mask bounding-boxes
+     *     enough to include all the existing objects' bounding-boxes
      * @throws OperationFailedException if any two objects with different binary-values are merged.
      */
     public static ObjectMask merge(ObjectCollection objects) throws OperationFailedException {
@@ -112,46 +125,41 @@ public class ObjectMaskMerger {
             return objects.get(0).duplicate(); // So we are always guaranteed to have a new object
         }
 
-        BoundingBox bbox = mergeBoundingBoxes(objects);
+        BoundingBox box = mergeBoundingBoxes(objects.streamStandardJava());
 
         ObjectMask objectOut =
-                new ObjectMask(bbox, VoxelBoxFactory.getByte().create(bbox.extent()));
+                new ObjectMask(box, VoxelsFactory.getByte().createInitialized(box.extent()));
 
         BinaryValues bv = null;
         for (ObjectMask objectMask : objects) {
 
             if (bv != null) {
-                if (!objectMask.getBinaryValues().equals(bv)) {
+                if (!objectMask.binaryValues().equals(bv)) {
                     throw new OperationFailedException(
                             "Cannot merge. Incompatible binary values among object-collection");
                 }
             } else {
-                bv = objectMask.getBinaryValues();
+                bv = objectMask.binaryValues();
             }
 
-            copyPixelsCheckMask(objectMask, objectOut, bbox);
+            copyPixelsCheckMask(objectMask, objectOut, box);
         }
 
         return objectOut;
     }
 
     private static void copyPixelsCheckMask(
-            ObjectMask source, ObjectMask destination, BoundingBox bbox) {
+            ObjectMask source, ObjectMask destination, BoundingBox box) {
 
-        Point3i pointDest = source.getBoundingBox().relPosTo(bbox);
-        Extent e = source.getBoundingBox().extent();
+        Point3i pointDest = source.boundingBox().relativePositionTo(box);
+        Extent extent = source.boundingBox().extent();
 
-        source.getVoxelBox()
-                .copyPixelsToCheckMask(
-                        new BoundingBox(e),
-                        destination.getVoxelBox(),
-                        new BoundingBox(pointDest, e),
-                        source.getVoxelBox(),
-                        source.getBinaryValuesByte());
+        source.extracter()
+                .objectCopyTo(source, destination.voxels(), new BoundingBox(pointDest, extent));
     }
 
     /**
-     * Inverts the binary-values of the second mask if necessary to match the first
+     * Inverts the binary-values of the second object-mask if necessary to match the first
      *
      * @param first first-object to merge
      * @param second second-object to merge
@@ -162,9 +170,9 @@ public class ObjectMaskMerger {
      */
     private static ObjectMask invertSecondIfNecessary(ObjectMask first, ObjectMask second) {
         // If we don't have identical binary values, we invert the second one
-        if (!second.getBinaryValues().equals(first.getBinaryValues())) {
+        if (!second.binaryValues().equals(first.binaryValues())) {
 
-            if (second.getBinaryValues().createInverted().equals(first.getBinaryValues())) {
+            if (second.binaryValues().createInverted().equals(first.binaryValues())) {
                 return MaskInverter.invertObjectDuplicate(second);
             } else {
                 throw new AnchorFriendlyRuntimeException(

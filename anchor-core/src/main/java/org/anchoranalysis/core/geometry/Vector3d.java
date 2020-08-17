@@ -63,9 +63,9 @@ public final class Vector3d extends Tuple3d {
     // Cross product
     public static Vector3d cross(Vector3d u, Vector3d v) {
         Vector3d out = new Vector3d();
-        out.x = u.getY() * v.getZ() - u.getZ() * v.getY();
-        out.y = u.getZ() * v.getX() - u.getX() * v.getZ();
-        out.z = u.getX() * v.getY() - u.getY() * v.getX();
+        out.x = u.y() * v.z() - u.z() * v.y();
+        out.y = u.z() * v.x() - u.x() * v.z();
+        out.z = u.x() * v.y() - u.y() * v.x();
         return out;
     }
 }

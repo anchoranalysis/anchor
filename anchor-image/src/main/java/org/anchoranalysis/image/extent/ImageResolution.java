@@ -27,6 +27,7 @@
 package org.anchoranalysis.image.extent;
 
 import java.io.Serializable;
+import lombok.EqualsAndHashCode;
 import org.anchoranalysis.core.axis.AxisType;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
@@ -41,6 +42,7 @@ import org.anchoranalysis.image.scale.ScaleFactor;
  *
  * @author Owen Feehan
  */
+@EqualsAndHashCode
 public final class ImageResolution implements Serializable {
 
     /** */
@@ -63,45 +65,45 @@ public final class ImageResolution implements Serializable {
     }
 
     public ImageResolution duplicateFlattenZ(int prevZSize) {
-        return new ImageResolution(res.getX(), res.getY(), res.getZ() * prevZSize);
+        return new ImageResolution(res.x(), res.y(), res.z() * prevZSize);
     }
 
-    public double getX() {
-        return res.getX();
+    public double x() {
+        return res.x();
     }
 
-    public double getY() {
-        return res.getY();
+    public double y() {
+        return res.y();
     }
 
-    public double getZ() {
-        return res.getZ();
+    public double z() {
+        return res.z();
     }
 
     public double unitVolume() {
-        return getX() * getY() * getZ();
+        return x() * y() * z();
     }
 
     public double unitArea() {
-        return getX() * getY();
+        return x() * y();
     }
 
     public ImageResolution scaleXY(ScaleFactor sf) {
-        return new ImageResolution(res.getX() * sf.getX(), res.getY() * sf.getY(), res.getZ());
+        return new ImageResolution(res.x() * sf.x(), res.y() * sf.y(), res.z());
     }
 
     private double max2D() {
-        return Math.max(res.getX(), res.getY());
+        return Math.max(res.x(), res.y());
     }
 
     private double min2D() {
-        return Math.min(res.getX(), res.getY());
+        return Math.min(res.x(), res.y());
     }
 
     public double max(boolean do3D) {
 
         if (do3D) {
-            return Math.max(max2D(), res.getZ());
+            return Math.max(max2D(), res.z());
         } else {
             return max2D();
         }
@@ -109,7 +111,7 @@ public final class ImageResolution implements Serializable {
 
     public double min(boolean do3D) {
         if (do3D) {
-            return Math.min(min2D(), res.getZ());
+            return Math.min(min2D(), res.z());
         } else {
             return min2D();
         }
@@ -117,26 +119,26 @@ public final class ImageResolution implements Serializable {
 
     public double distanceSq(Point3i point1, Point3i point2) {
 
-        double sx = (double) point1.getX() - point2.getX();
-        double sy = (double) point1.getY() - point2.getY();
-        double sz = (double) point1.getZ() - point2.getZ();
+        double sx = (double) point1.x() - point2.x();
+        double sy = (double) point1.y() - point2.y();
+        double sz = (double) point1.z() - point2.z();
 
-        sx *= getX();
-        sy *= getY();
-        sz *= getZ();
+        sx *= x();
+        sy *= y();
+        sz *= z();
 
         return Math.pow(sx, 2) + Math.pow(sy, 2) + Math.pow(sz, 2);
     }
 
     public double distanceSq(Point3d point1, Point3d point2) {
 
-        double sx = point1.getX() - point2.getX();
-        double sy = point1.getY() - point2.getY();
-        double sz = point1.getZ() - point2.getZ();
+        double sx = point1.x() - point2.x();
+        double sy = point1.y() - point2.y();
+        double sz = point1.z() - point2.z();
 
-        sx *= getX();
-        sy *= getY();
-        sz *= getZ();
+        sx *= x();
+        sy *= y();
+        sz *= z();
 
         return Math.pow(sx, 2) + Math.pow(sy, 2) + Math.pow(sz, 2);
     }
@@ -151,9 +153,9 @@ public final class ImageResolution implements Serializable {
 
     public double distanceSquaredZRelative(Point3i point1, Point3i point2) {
 
-        int sx = point1.getX() - point2.getX();
-        int sy = point1.getY() - point2.getY();
-        int sz = point1.getZ() - point2.getZ();
+        int sx = point1.x() - point2.x();
+        int sy = point1.y() - point2.y();
+        int sz = point1.z() - point2.z();
 
         double szAdj = getZRelativeResolution() * sz;
 
@@ -166,9 +168,9 @@ public final class ImageResolution implements Serializable {
 
     public double distanceSquaredZRelative(Point3d point1, Point3d point2) {
 
-        double sx = point1.getX() - point2.getX();
-        double sy = point1.getY() - point2.getY();
-        double sz = point1.getZ() - point2.getZ();
+        double sx = point1.x() - point2.x();
+        double sy = point1.y() - point2.y();
+        double sz = point1.z() - point2.z();
 
         sz = sz * getZRelativeResolution();
 
@@ -176,50 +178,30 @@ public final class ImageResolution implements Serializable {
     }
 
     public double convertVolume(double val) {
-        double div = res.getX() * res.getY() * res.getZ();
+        double div = res.x() * res.y() * res.z();
         return val * div;
     }
 
     public double convertArea(double val) {
-        double div = res.getX() * res.getY();
+        double div = res.x() * res.y();
         return val * div;
     }
 
     // Assumes X and Y has constant res, and gives the relative resolution of Z
     public double getZRelativeResolution() {
-        return getZ() / getX();
+        return z() / x();
     }
 
     @Override
     public String toString() {
-        return String.format("[%6.3e,%6.3e,%6.3e]", res.getX(), res.getY(), res.getZ());
+        return String.format("[%6.3e,%6.3e,%6.3e]", res.x(), res.y(), res.z());
     }
 
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((res == null) ? 0 : res.hashCode());
-        return result;
+    public final double valueByDimension(int dimIndex) {
+        return res.valueByDimension(dimIndex);
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (obj == null) return false;
-        if (getClass() != obj.getClass()) return false;
-        ImageResolution other = (ImageResolution) obj;
-        if (res == null) {
-            if (other.res != null) return false;
-        } else if (!res.equals(other.res)) return false;
-        return true;
-    }
-
-    public final double getValueByDimension(int dimIndex) {
-        return res.getValueByDimension(dimIndex);
-    }
-
-    public final double getValueByDimension(AxisType axisType) {
-        return res.getValueByDimension(axisType);
+    public final double valueByDimension(AxisType axisType) {
+        return res.valueByDimension(axisType);
     }
 }

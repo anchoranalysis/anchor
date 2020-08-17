@@ -33,6 +33,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.bean.annotation.Positive;
 import org.anchoranalysis.image.extent.Extent;
 
 @NoArgsConstructor
@@ -41,9 +42,9 @@ import org.anchoranalysis.image.extent.Extent;
 public class SizeXY extends AnchorBean<SizeXY> {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private int width;
+    @BeanField @Positive @Getter @Setter private int width;
 
-    @BeanField @Getter @Setter private int height;
+    @BeanField @Positive @Getter @Setter private int height;
     // END BEAN PROPERTIES
 
     /**
@@ -54,10 +55,25 @@ public class SizeXY extends AnchorBean<SizeXY> {
      * @param extent extent
      */
     public SizeXY(Extent extent) {
-        this(extent.getX(), extent.getY());
+        this(extent.x(), extent.y());
     }
 
+    /**
+     * Creates an extent with identical width and height and depth (z-extent) of 1
+     *
+     * @return the newly created extent
+     */
     public Extent asExtent() {
-        return new Extent(width, height);
+        return asExtent(1);
+    }
+
+    /**
+     * Creates an extent with identical width and height and a specific depth (z-extent)
+     *
+     * @param the depth for the extent
+     * @return the newly created extent
+     */
+    public Extent asExtent(int depth) {
+        return new Extent(width, height, depth);
     }
 }

@@ -48,7 +48,7 @@ public abstract class ReportFeatureOnObjectsBase<T extends FeatureInput>
     // END BEAN PROPERTIES
 
     @Override
-    public String genFeatureStringFor(MPPInitParams so, Logger logger)
+    public String featureDescription(MPPInitParams so, Logger logger)
             throws OperationFailedException {
         try {
             objects.initRecursive(so.getImage(), logger);

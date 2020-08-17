@@ -29,9 +29,9 @@ package org.anchoranalysis.core.color;
 // Indexable colors
 public interface ColorIndex {
 
-    public RGBColor get(int i);
+    public RGBColor get(int index);
 
     public int numUniqueColors();
 
-    public boolean has(int i);
+    public boolean has(int index);
 }

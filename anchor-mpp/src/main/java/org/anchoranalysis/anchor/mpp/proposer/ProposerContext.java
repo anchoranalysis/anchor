@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.anchor.mpp.proposer;
 
+import lombok.Value;
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.mark.voxelized.memo.PxlMarkMemoFactory;
@@ -36,24 +37,13 @@ import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.extent.ImageDimensions;
 
+@Value
 public class ProposerContext {
 
     private RandomNumberGenerator randomNumberGenerator;
     private NRGStackWithParams nrgStack;
     private RegionMap regionMap;
     private ErrorNode errorNode;
-
-    public ProposerContext(
-            RandomNumberGenerator randomNumberGenerator,
-            NRGStackWithParams nrgStack,
-            RegionMap regionMap,
-            ErrorNode errorNode) {
-        super();
-        this.randomNumberGenerator = randomNumberGenerator;
-        this.nrgStack = nrgStack;
-        this.regionMap = regionMap;
-        this.errorNode = errorNode;
-    }
 
     public ProposerContext replaceError(ErrorNode errorNode) {
         return new ProposerContext(randomNumberGenerator, nrgStack, regionMap, errorNode);
@@ -74,27 +64,11 @@ public class ProposerContext {
         return (int) (randomNumberGenerator.sampleDoubleZeroAndOne() * maxValExclusive);
     }
 
-    public RandomNumberGenerator getRandomNumberGenerator() {
-        return randomNumberGenerator;
-    }
-
-    public ImageDimensions getDimensions() {
-        return nrgStack.getNrgStack().getDimensions();
+    public ImageDimensions dimensions() {
+        return nrgStack.getNrgStack().dimensions();
     }
 
     public VoxelizedMarkMemo create(Mark mark) {
         return PxlMarkMemoFactory.create(mark, nrgStack.getNrgStack(), regionMap);
-    }
-
-    public RegionMap getRegionMap() {
-        return regionMap;
-    }
-
-    public ErrorNode getErrorNode() {
-        return errorNode;
-    }
-
-    public NRGStackWithParams getNrgStack() {
-        return nrgStack;
     }
 }

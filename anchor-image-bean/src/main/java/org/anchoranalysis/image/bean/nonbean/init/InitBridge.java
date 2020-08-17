@@ -32,7 +32,7 @@ import org.anchoranalysis.bean.init.property.PropertyInitializer;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.functional.function.FunctionWithException;
+import org.anchoranalysis.core.functional.function.CheckedFunction;
 import org.anchoranalysis.core.log.Logger;
 
 /**
@@ -44,11 +44,11 @@ import org.anchoranalysis.core.log.Logger;
  * @param <V> initialization-parameters type
  */
 class InitBridge<S extends InitializableBean<?, V>, T, V extends BeanInitParams>
-        implements FunctionWithException<S, T, OperationFailedException> {
+        implements CheckedFunction<S, T, OperationFailedException> {
 
     private PropertyInitializer<?> pi;
     private Logger logger;
-    private FunctionWithException<S, T, CreateException> beanBridge;
+    private CheckedFunction<S, T, CreateException> beanBridge;
 
     /**
      * Constructor
@@ -60,7 +60,7 @@ class InitBridge<S extends InitializableBean<?, V>, T, V extends BeanInitParams>
     public InitBridge(
             PropertyInitializer<?> pi,
             Logger logger,
-            FunctionWithException<S, T, CreateException> beanBridge) {
+            CheckedFunction<S, T, CreateException> beanBridge) {
         super();
         this.pi = pi;
         this.logger = logger;

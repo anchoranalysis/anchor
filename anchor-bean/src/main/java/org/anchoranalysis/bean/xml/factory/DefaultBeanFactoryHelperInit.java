@@ -32,6 +32,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.configuration.ConfigurationRuntimeException;
@@ -40,6 +42,7 @@ import org.apache.commons.configuration.beanutils.BeanHelper;
 
 // We change the behaviour of BeanHelper so that it will keep passing the current 'param' onto new
 // beans which are created
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 class DefaultBeanFactoryHelperInit {
 
     /// Initializing a collection
@@ -152,8 +155,6 @@ class DefaultBeanFactoryHelperInit {
             }
         }
     }
-
-    private DefaultBeanFactoryHelperInit() {}
 
     public static void initBean(Object bean, BeanDeclaration data, Object parameter) {
         BeanHelper.initBeanProperties(bean, data);

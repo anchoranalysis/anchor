@@ -28,30 +28,29 @@ package org.anchoranalysis.mpp.io.input;
 
 import java.nio.file.Path;
 import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
-import org.anchoranalysis.core.functional.CallableWithException;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
+import org.anchoranalysis.core.name.store.StoreSupplier;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.image.stack.TimeSequence;
 
 /** Combines a Stack with a map of other stacks */
+@RequiredArgsConstructor
 public class StackWithMap implements MultiInputSubMap<TimeSequence> {
 
-    // Needed for getting main-stack
-    private String mainObjectName;
-    private ProvidesStackInput mainInputObject;
+    // START REQUIRED ARGUMENTS
+    /** Needed for getting main-stack */
+    private final String mainObjectName;
+
+    private final ProvidesStackInput mainInputObject;
+    // END REQUIRED ARGUMENTS
 
     // Where the other stacks are stored
     private OperationMap<TimeSequence> map = new OperationMap<>();
-
-    public StackWithMap(String mainObjectName, ProvidesStackInput mainInputObject) {
-        super();
-        this.mainObjectName = mainObjectName;
-        this.mainInputObject = mainInputObject;
-    }
 
     @Override
     public void addToStore(NamedProviderStore<TimeSequence> stackCollection)
@@ -74,7 +73,7 @@ public class StackWithMap implements MultiInputSubMap<TimeSequence> {
     }
 
     @Override
-    public void add(String name, CallableWithException<TimeSequence, OperationFailedException> op) {
+    public void add(String name, StoreSupplier<TimeSequence> op) {
         map.add(name, op);
     }
 
@@ -100,8 +99,7 @@ public class StackWithMap implements MultiInputSubMap<TimeSequence> {
     }
 
     @Override
-    public CallableWithException<TimeSequence, OperationFailedException> get(String name)
-            throws OperationFailedException {
+    public StoreSupplier<TimeSequence> get(String name) throws OperationFailedException {
 
         if (name.equals(mainObjectName)) {
             throw new OperationFailedException("Retrieving the main-object name is not allowed");

@@ -38,6 +38,6 @@ public abstract class MaskProvider extends BeanProviderAsStackBase<MaskProvider,
     public abstract Mask create() throws CreateException;
 
     public Stack createAsStack() throws CreateException {
-        return new Stack(create().getChannel());
+        return new Stack(create().channel());
     }
 }

@@ -84,8 +84,6 @@ public class TileRasters {
 
         StringRasterGenerator srg = new StringRasterGenerator(spwl.getLabel());
         srg.setText(spwl.getLabel());
-        srg.setWidth(-1);
-        srg.setHeight(-1);
         srg.setPadding(3);
 
         spgs.setStringRasterGenerator(srg);

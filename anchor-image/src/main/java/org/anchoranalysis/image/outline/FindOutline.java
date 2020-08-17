@@ -27,19 +27,18 @@
 package org.anchoranalysis.image.outline;
 
 import java.nio.ByteBuffer;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.image.binary.logical.BinaryChnlXor;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
-import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
-import org.anchoranalysis.image.binary.voxel.BinaryVoxelBoxByte;
-import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.channel.factory.ChannelFactory;
+import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
+import org.anchoranalysis.image.binary.voxel.BinaryVoxelsFactory;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
+import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.kernel.ApplyKernel;
 import org.anchoranalysis.image.voxel.kernel.BinaryKernel;
 import org.anchoranalysis.image.voxel.kernel.dilateerode.ErosionKernel3;
@@ -51,119 +50,150 @@ import org.anchoranalysis.image.voxel.kernel.outline.OutlineKernel3;
  * <p>Specifically, it converts a solid-object (where all voxels inside an object are ON) into where
  * only pixels on the contour are ON
  *
- * <p>A new object/voxel-box is always created, so the existing buffers are not overwritten
+ * <p>A new object/mask is always created, so the existing buffers are not overwritten
+ *
+ * <p>The outline is always guaranteed to be inside the existing mask (so always a subset of ON
+ * voxels).
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class FindOutline {
 
-    private FindOutline() {}
-
-    public static Mask outline(Mask chnl, boolean do3D, boolean erodeEdges) {
-        // We create a new image for output
-        Channel chnlOut =
-                ChannelFactory.instance()
-                        .createEmptyInitialised(
-                                chnl.getDimensions(), VoxelDataTypeUnsignedByte.INSTANCE);
-        Mask chnlOutBinary = new Mask(chnlOut, chnl.getBinaryValues());
-
-        // Gets outline
-        outlineChnlInto(chnl, chnlOutBinary, do3D, erodeEdges);
-
-        return chnlOutBinary;
+    /**
+     * Finds the outline of a mask, guessing whether to do this in 2D or 3D depending on if the mask
+     * has 3-dimensions
+     *
+     * @param mask the mask to find an outline for
+     * @param force2D if TRUE, 2D will ALWAYS be used irrespective of the guessing
+     * @param outlineAtBoundary if true, an edge is shown also for the boundary of the scene. if
+     *     false, this is not shown.
+     * @return a newly-created mask showing only the outline
+     */
+    public static Mask outlineGuess3D(Mask mask, boolean force2D, boolean outlineAtBoundary) {
+        boolean do2D = mask.dimensions().z() == 1 || force2D;
+        return outline(mask, !do2D, outlineAtBoundary);
     }
 
-    /** Outline using multiple erosions to create a deeper outline */
-    public static ObjectMask outline(
-            ObjectMask mask, int numberErosions, boolean erodeEdges, boolean do3D) {
+    public static Mask outline(Mask mask, boolean do3D, boolean erodeAtBoundary) {
+        // We create a new mask for outputting
+        Mask maskOut = new Mask(mask.dimensions(), mask.binaryValues());
 
-        ObjectMask maskIn = mask.duplicate();
+        // Gets outline
+        outlineMaskInto(mask, maskOut, do3D, erodeAtBoundary);
+
+        return maskOut;
+    }
+
+    /**
+     * Creates outline from an object
+     *
+     * <p>It potentially uses multiple erosions to create a deeper outline.
+     *
+     * @param object object to find outline for
+     * @param numberErosions the number of erosions, effectively determining how thick the outline
+     *     is
+     * @param outlineAtBoundary if true, an edge is shown also for the boundary of the scene. if
+     *     false, this is not shown.
+     * @param do3D whether to also perform the outline in the third dimension. This is a bad idea
+     *     for 2 dimensional images, as every voxel inside the object is treated as on the boundary
+     *     and a filled in object is produced.
+     */
+    public static ObjectMask outline(
+            ObjectMask object, int numberErosions, boolean outlineAtBoundary, boolean do3D) {
+
+        ObjectMask objectDuplicated = object.duplicate();
 
         if (numberErosions < 1) {
             assert false;
         }
 
-        BinaryVoxelBox<ByteBuffer> bufferOut =
-                outlineMultiplex(maskIn.binaryVoxelBox(), numberErosions, erodeEdges, do3D);
+        BinaryVoxels<ByteBuffer> voxelsOut =
+                outlineMultiplex(
+                        objectDuplicated.binaryVoxels(), numberErosions, outlineAtBoundary, do3D);
         return new ObjectMask(
-                maskIn.getBoundingBox(), bufferOut.getVoxelBox(), bufferOut.getBinaryValues());
+                objectDuplicated.boundingBox(), voxelsOut.voxels(), voxelsOut.binaryValues());
     }
 
-    private static BinaryVoxelBox<ByteBuffer> outlineMultiplex(
-            BinaryVoxelBox<ByteBuffer> voxelBox,
+    private static BinaryVoxels<ByteBuffer> outlineMultiplex(
+            BinaryVoxels<ByteBuffer> voxels,
             int numberErosions,
-            boolean erodeEdges,
+            boolean erodeAtBoundary,
             boolean do3D) {
         // If we just want an edge of size 1, we can do things more optimally
         if (numberErosions == 1) {
-            return outlineByKernel(voxelBox, erodeEdges, do3D);
+            return outlineByKernel(voxels, erodeAtBoundary, do3D);
         } else {
-            return outlineByErosion(voxelBox, numberErosions, erodeEdges, do3D);
+            return outlineByErosion(voxels, numberErosions, erodeAtBoundary, do3D);
         }
     }
 
     // Assumes imgChnlOut has the same ImgChnlRegions
-    private static void outlineChnlInto(
-            Mask imgChnl, Mask imgChnlOut, boolean do3D, boolean erodeEdges) {
+    private static void outlineMaskInto(
+            Mask maskToFindOutlineFor,
+            Mask maskToReplaceWithOutline,
+            boolean do3D,
+            boolean erodeAtBoundary) {
 
-        BinaryVoxelBox<ByteBuffer> box =
-                new BinaryVoxelBoxByte(imgChnl.getVoxelBox(), imgChnl.getBinaryValues());
+        BinaryVoxels<ByteBuffer> voxels =
+                BinaryVoxelsFactory.reuseByte(
+                        maskToFindOutlineFor.voxels(), maskToFindOutlineFor.binaryValues());
 
-        BinaryVoxelBox<ByteBuffer> outline = outlineByKernel(box, erodeEdges, do3D);
+        BinaryVoxels<ByteBuffer> outline = outlineByKernel(voxels, erodeAtBoundary, do3D);
 
         try {
-            imgChnlOut.replaceBy(outline);
+            maskToReplaceWithOutline.replaceBy(outline);
         } catch (IncorrectImageSizeException e) {
             throw new AnchorImpossibleSituationException();
         }
     }
 
     /** Find an outline only 1 pixel deep by using a kernel directly */
-    private static BinaryVoxelBox<ByteBuffer> outlineByKernel(
-            BinaryVoxelBox<ByteBuffer> voxelBox, boolean erodeEdges, boolean do3D) {
+    private static BinaryVoxels<ByteBuffer> outlineByKernel(
+            BinaryVoxels<ByteBuffer> voxels, boolean erodeAtBoundary, boolean do3D) {
 
         // if our solid is too small, we don't apply the kernel, as it fails on anything less than
         // 3x3, and instead we simply return the solid as it is
-        if (isTooSmall(voxelBox.extent(), do3D)) {
-            return voxelBox.duplicate();
+        if (isTooSmall(voxels.extent(), do3D)) {
+            return voxels.duplicate();
         }
 
-        BinaryValuesByte bvb = voxelBox.getBinaryValues().createByte();
+        BinaryValuesByte bvb = voxels.binaryValues().createByte();
 
-        BinaryKernel kernel = new OutlineKernel3(bvb, !erodeEdges, do3D);
+        BinaryKernel kernel = new OutlineKernel3(bvb, !erodeAtBoundary, do3D);
 
-        VoxelBox<ByteBuffer> out = ApplyKernel.apply(kernel, voxelBox.getVoxelBox(), bvb);
-        return new BinaryVoxelBoxByte(out, voxelBox.getBinaryValues());
+        Voxels<ByteBuffer> out = ApplyKernel.apply(kernel, voxels.voxels(), bvb);
+        return BinaryVoxelsFactory.reuseByte(out, voxels.binaryValues());
     }
 
     /**
      * Find an outline by doing (maybe more than 1) morphological erosions, and subtracting from
      * original object
      */
-    private static BinaryVoxelBox<ByteBuffer> outlineByErosion(
-            BinaryVoxelBox<ByteBuffer> voxelBox,
+    private static BinaryVoxels<ByteBuffer> outlineByErosion(
+            BinaryVoxels<ByteBuffer> voxels,
             int numberErosions,
-            boolean erodeEdges,
+            boolean outlineAtBoundary,
             boolean do3D) {
 
         // Otherwise if > 1
-        VoxelBox<ByteBuffer> eroded = multipleErode(voxelBox, numberErosions, erodeEdges, do3D);
+        Voxels<ByteBuffer> eroded = multipleErode(voxels, numberErosions, outlineAtBoundary, do3D);
 
         // Binary and between the original version and the eroded version
         assert (eroded != null);
-        BinaryValuesByte bvb = voxelBox.getBinaryValues().createByte();
-        BinaryChnlXor.apply(voxelBox.getVoxelBox(), eroded, bvb, bvb);
-        return voxelBox;
+        BinaryValuesByte bvb = voxels.binaryValues().createByte();
+        BinaryChnlXor.apply(voxels.voxels(), eroded, bvb, bvb);
+        return voxels;
     }
 
-    private static VoxelBox<ByteBuffer> multipleErode(
-            BinaryVoxelBox<ByteBuffer> voxelBox,
+    private static Voxels<ByteBuffer> multipleErode(
+            BinaryVoxels<ByteBuffer> voxels,
             int numberErosions,
-            boolean erodeEdges,
+            boolean erodeAtBoundary,
             boolean do3D) {
 
-        BinaryValuesByte bvb = voxelBox.getBinaryValues().createByte();
-        BinaryKernel kernelErosion = new ErosionKernel3(bvb, erodeEdges, do3D);
+        BinaryValuesByte bvb = voxels.binaryValues().createByte();
+        BinaryKernel kernelErosion = new ErosionKernel3(bvb, erodeAtBoundary, do3D);
 
-        VoxelBox<ByteBuffer> eroded = ApplyKernel.apply(kernelErosion, voxelBox.getVoxelBox(), bvb);
+        Voxels<ByteBuffer> eroded = ApplyKernel.apply(kernelErosion, voxels.voxels(), bvb);
         for (int i = 1; i < numberErosions; i++) {
             eroded = ApplyKernel.apply(kernelErosion, eroded, bvb);
         }
@@ -172,9 +202,9 @@ public class FindOutline {
     }
 
     private static boolean isTooSmall(Extent e, boolean do3D) {
-        if (e.getX() < 3 || e.getY() < 3) {
+        if (e.x() < 3 || e.y() < 3) {
             return true;
         }
-        return (do3D && e.getZ() < 3);
+        return (do3D && e.z() < 3);
     }
 }

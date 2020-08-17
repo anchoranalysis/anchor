@@ -1,5 +1,8 @@
 package org.anchoranalysis.core.error.friendly;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /*-
  * #%L
  * anchor-core
@@ -31,9 +34,8 @@ package org.anchoranalysis.core.error.friendly;
  *
  * @author Owen Feehan
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 class ExceptionTypes {
-
-    private ExceptionTypes() {}
 
     /** Is it the last exception in the chain? */
     public static boolean isFinal(Throwable exc) {
@@ -42,7 +44,7 @@ class ExceptionTypes {
 
     /** Is it the last exception in the chain? */
     public static boolean isFriendly(Throwable exc) {
-        return exc instanceof IFriendlyException;
+        return exc instanceof HasFriendlyErrorMessage;
     }
 
     /** Does the exception lack a message? */

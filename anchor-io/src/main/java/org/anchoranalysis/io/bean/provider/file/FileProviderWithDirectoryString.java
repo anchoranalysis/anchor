@@ -35,7 +35,20 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.params.InputContextParams;
 
 /**
- * A FileProviderWithDirectory where the directory is specified a String BeanField
+ * A {@link FileProviderWithDirectory} where the directory is optionally specified as a string
+ * constant
+ *
+ * <p>If an explicit absolute {@code directory} is set then it is used. Otherwise a directory is
+ * inferred by trying in order of priority:
+ *
+ * <ul>
+ *   <li>The directory in which the bean-XML file is located (iff {@code localized}==true)
+ *   <li>The input-directory set in the input context
+ *   <li>The current working-directory
+ * </ul>
+ *
+ * <p>If an explicit relative {@code directory} it is not normalized (unless {@code
+ * localized}==true, in which case it is resolved against the location of the BeanXML).
  *
  * @author Owen Feehan
  */
@@ -43,27 +56,39 @@ public abstract class FileProviderWithDirectoryString extends FileProviderWithDi
 
     // START BEAN FIELDS
     /**
-     * A directory in which to look for files.
-     *
-     * <p>If empty, first the bean will try to use any input-dir set in the input context if it
-     * exists, or otherwise use the current working-directory
+     * A directory in which to look for files. If set, takes precedence over any other inference of
+     * a directory.
      */
     @BeanField @AllowEmpty @Getter @Setter private String directory = "";
+
+    @BeanField @Getter @Setter private boolean localized = false;
     // END BEAN FIELDS
 
     @Override
     public Path getDirectoryAsPath(InputContextParams inputContext) {
 
-        // If no directory is explicitly specified, and the input-context provides an
-        // input-directory
-        //  then we use this
-        //
-        // This is a convenient way for the ExperimentLauncher to parameterize the input-directory
         if (!directory.isEmpty()) {
-            return Paths.get(directory);
+            Path directoryAsPath = Paths.get(directory);
+            if (localized && !directoryAsPath.isAbsolute()) {
+                return localRoot().resolve(directoryAsPath);
+            } else {
+                return directoryAsPath;
+            }
         } else {
             // The current working directory
+            return inferDirectory(inputContext);
+        }
+    }
+
+    private Path inferDirectory(InputContextParams inputContext) {
+        if (localized) {
+            return localRoot();
+        } else {
             return inputContext.getInputDir().orElseGet(() -> Paths.get("."));
         }
+    }
+
+    private Path localRoot() {
+        return getLocalPath().getParent();
     }
 }

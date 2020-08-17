@@ -32,7 +32,7 @@ import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.interpolator.transfer.Transfer;
 import org.anchoranalysis.image.interpolator.transfer.TransferViaByte;
 import org.anchoranalysis.image.interpolator.transfer.TransferViaShort;
-import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
+import org.anchoranalysis.image.voxel.VoxelsWrapper;
 import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelDataTypeException;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedShort;
@@ -40,7 +40,7 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedShort;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class InterpolateUtilities {
 
-    private static Transfer createTransfer(VoxelBoxWrapper src, VoxelBoxWrapper dest) {
+    private static Transfer createTransfer(VoxelsWrapper src, VoxelsWrapper dest) {
 
         if (!src.getVoxelDataType().equals(dest.getVoxelDataType())) {
             throw new IncorrectVoxelDataTypeException(
@@ -57,20 +57,20 @@ public class InterpolateUtilities {
     }
 
     public static void transferSlicesResizeXY(
-            VoxelBoxWrapper src, VoxelBoxWrapper trgt, Interpolator interpolator) {
+            VoxelsWrapper src, VoxelsWrapper trgt, Interpolator interpolator) {
 
         Extent eSrc = src.any().extent();
         Extent eTrgt = trgt.any().extent();
 
         Transfer biWrapper = createTransfer(src, trgt);
 
-        for (int z = 0; z < eSrc.getZ(); z++) {
+        for (int z = 0; z < eSrc.z(); z++) {
 
             biWrapper.assignSlice(z);
-            if (eSrc.getX() == eTrgt.getX() && eSrc.getY() == eTrgt.getY()) {
+            if (eSrc.x() == eTrgt.x() && eSrc.y() == eTrgt.y()) {
                 biWrapper.transferCopyTo(z);
             } else {
-                if (eSrc.getX() != 1 && eSrc.getY() != 1) {
+                if (eSrc.x() != 1 && eSrc.y() != 1) {
                     // We only bother to interpolate when we have more than a single pixel in both
                     // directions
                     // And in this case, some of the interpolation algorithms would crash.
@@ -80,6 +80,6 @@ public class InterpolateUtilities {
                 }
             }
         }
-        assert (trgt.any().getPixelsForPlane(0).buffer().capacity() == eTrgt.getVolumeXY());
+        assert (trgt.any().sliceBuffer(0).capacity() == eTrgt.volumeXY());
     }
 }

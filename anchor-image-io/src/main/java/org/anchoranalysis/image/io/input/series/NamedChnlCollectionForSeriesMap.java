@@ -29,11 +29,10 @@ package org.anchoranalysis.image.io.input.series;
 import java.util.Optional;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
-import org.anchoranalysis.core.cache.CacheCall;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.functional.CallableWithException;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
+import org.anchoranalysis.core.name.store.StoreSupplier;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporterMultiple;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
@@ -45,7 +44,7 @@ import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.bean.channel.map.ImgChnlMapEntry;
 import org.anchoranalysis.image.io.chnl.map.ImgChnlMap;
 import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
-import org.anchoranalysis.image.stack.NamedStacks;
+import org.anchoranalysis.image.stack.NamedStacksSet;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.TimeSequence;
 
@@ -139,7 +138,7 @@ public class NamedChnlCollectionForSeriesMap implements NamedChannelsForSeries {
 
     @Override
     public void addAsSeparateChannels(
-            NamedStacks stackCollection, int t, ProgressReporter progressReporter)
+            NamedStacksSet stackCollection, int t, ProgressReporter progressReporter)
             throws OperationFailedException {
 
         try {
@@ -167,13 +166,13 @@ public class NamedChnlCollectionForSeriesMap implements NamedChannelsForSeries {
         // Populate our stack from all the channels
         for (final String chnlName : chnlMap.keySet()) {
             stackCollection.add(
-                    chnlName, CacheCall.of(() -> extractChnlAsTimeSequence(chnlName, t)));
+                    chnlName, StoreSupplier.cache(() -> extractChnlAsTimeSequence(chnlName, t)));
         }
     }
 
     @Override
-    public CallableWithException<Stack, OperationFailedException> allChannelsAsStack(int t) {
-        return CacheCall.of(() -> stackForAllChnls(t));
+    public StoreSupplier<Stack> allChannelsAsStack(int t) {
+        return StoreSupplier.cache(() -> stackForAllChnls(t));
     }
 
     private TimeSequence createTimeSeries(ProgressReporter progressReporter)

@@ -31,14 +31,14 @@ import java.nio.IntBuffer;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
-import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
+import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.iterator.ProcessVoxelSliceBuffer;
 
 class PopulateIndexProcessor<T extends Buffer> implements ProcessVoxelSliceBuffer<T> {
 
-    private VoxelBox<IntBuffer> indexBuffer;
-    private MergeWithNeighbors mergeWithNgbs;
+    private Voxels<IntBuffer> indexBuffer;
+    private MergeWithNeighbors mergeWithNeighbors;
     private BinaryValues bv;
     private BinaryValuesByte bvb;
     private final BufferReadWrite<T> bufferReaderWriter;
@@ -47,23 +47,23 @@ class PopulateIndexProcessor<T extends Buffer> implements ProcessVoxelSliceBuffe
     private int count = 1;
 
     public PopulateIndexProcessor(
-            BinaryVoxelBox<T> visited,
-            VoxelBox<IntBuffer> indexBuffer,
-            MergeWithNeighbors mergeWithNgbs,
+            BinaryVoxels<T> visited,
+            Voxels<IntBuffer> indexBuffer,
+            MergeWithNeighbors mergeWithNeighbors,
             BufferReadWrite<T> bufferReaderWriter) {
         this.indexBuffer = indexBuffer;
-        this.mergeWithNgbs = mergeWithNgbs;
+        this.mergeWithNeighbors = mergeWithNeighbors;
         this.bufferReaderWriter = bufferReaderWriter;
 
-        bv = visited.getBinaryValues();
+        bv = visited.binaryValues();
         bvb = bv.createByte();
     }
 
     @Override
-    public void notifyChangeZ(int z) {
-        bbIndex = indexBuffer.getPixelsForPlane(z).buffer();
+    public void notifyChangeSlice(int z) {
+        bbIndex = indexBuffer.sliceBuffer(z);
         if (z != 0) {
-            mergeWithNgbs.shift();
+            mergeWithNeighbors.shift();
         }
     }
 
@@ -72,11 +72,11 @@ class PopulateIndexProcessor<T extends Buffer> implements ProcessVoxelSliceBuffe
         if (bufferReaderWriter.isBufferOn(buffer, offsetSlice, bv, bvb)
                 && bbIndex.get(offsetSlice) == 0) {
 
-            int neighborLabel = mergeWithNgbs.calcMinNeighborLabel(point, 0, offsetSlice);
+            int neighborLabel = mergeWithNeighbors.calcMinNeighborLabel(point, 0, offsetSlice);
             if (neighborLabel == -1) {
                 bufferReaderWriter.putBufferCnt(buffer, offsetSlice, count);
                 bbIndex.put(offsetSlice, count);
-                mergeWithNgbs.addElement(count);
+                mergeWithNeighbors.addElement(count);
                 count++;
             } else {
                 bbIndex.put(offsetSlice, neighborLabel);

@@ -27,13 +27,14 @@
 package org.anchoranalysis.image.outline.traverser.visitedpixels.combine;
 
 import java.util.List;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.outline.traverser.contiguouspath.ContiguousPixelPath;
 import org.anchoranalysis.image.outline.traverser.contiguouspath.PointsListNeighborUtilities;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CombineToOnePath {
-
-    private CombineToOnePath() {}
 
     /**
      * Combines all the contiguous paths to a single-path

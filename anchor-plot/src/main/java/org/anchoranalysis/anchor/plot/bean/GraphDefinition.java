@@ -29,7 +29,7 @@ package org.anchoranalysis.anchor.plot.bean;
 import java.util.Iterator;
 import java.util.Optional;
 import org.anchoranalysis.anchor.plot.AxisLimits;
-import org.anchoranalysis.anchor.plot.GraphInstance;
+import org.anchoranalysis.anchor.plot.PlotInstance;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.core.error.CreateException;
 
@@ -48,7 +48,7 @@ public abstract class GraphDefinition<T> extends AnchorBean<GraphDefinition<T>> 
      * @return
      * @throws CreateException
      */
-    public abstract GraphInstance create(
+    public abstract PlotInstance create(
             Iterator<T> items, Optional<AxisLimits> domainLimits, Optional<AxisLimits> rangeLimits)
             throws CreateException;
 

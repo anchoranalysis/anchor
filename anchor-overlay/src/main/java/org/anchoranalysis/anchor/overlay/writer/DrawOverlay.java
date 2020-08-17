@@ -66,12 +66,7 @@ public abstract class DrawOverlay {
     public void writeOverlays(
             ColoredOverlayCollection oc, RGBStack stack, IDGetter<Overlay> idGetter)
             throws OperationFailedException {
-        writeOverlays(
-                oc,
-                stack.getDimensions(),
-                stack,
-                idGetter,
-                new BoundingBox(stack.getDimensions().getExtent()));
+        writeOverlays(oc, stack.dimensions(), stack, idGetter, new BoundingBox(stack.dimensions()));
     }
 
     //
@@ -86,28 +81,28 @@ public abstract class DrawOverlay {
             ImageDimensions dimensions,
             RGBStack background,
             IDGetter<Overlay> idGetter,
-            BoundingBox bboxContainer)
+            BoundingBox boxContainer)
             throws OperationFailedException {
 
         try {
-            List<PrecalcOverlay> masksPreprocessed =
+            List<PrecalcOverlay> overlaysPreprocessed =
                     precalculate(
                             overlays, this, dimensions, BinaryValues.getDefault().createByte());
 
             // TODO, can't we read the color directly from the cfg in some way?
             writePrecalculatedOverlays(
-                    masksPreprocessed,
+                    overlaysPreprocessed,
                     dimensions,
                     background,
                     ObjectDrawAttributesFactory.createFromOverlays(
                             overlays, idGetter, new IDGetterObjectWithProperties("colorID")),
-                    bboxContainer);
+                    boxContainer);
         } catch (CreateException e) {
             throw new OperationFailedException(e);
         }
     }
 
-    // dim should be for the ENTIRE cfg, not just the bit in bboxContainer
+    // dim should be for the ENTIRE cfg, not just the bit in boxContainer
     public abstract void writePrecalculatedOverlays(
             List<PrecalcOverlay> precalculatedMasks,
             ImageDimensions dimensions,
@@ -129,31 +124,31 @@ public abstract class DrawOverlay {
     //  per Mark in the cfg, in the same order as the Cfg is inputted
     public static List<PrecalcOverlay> precalculate(
             ColoredOverlayCollection coc,
-            DrawOverlay maskWriter,
+            DrawOverlay drawOverlay,
             ImageDimensions dimensions,
             BinaryValuesByte bvOut)
             throws CreateException {
 
         IDGetterIter<Overlay> colorIDGetter = new IDGetterIter<>();
 
-        return CheckedStream.mapToObjWithException(
+        return CheckedStream.mapToObj(
                         IntStream.range(0, coc.size()),
                         CreateException.class,
                         index -> {
                             Overlay overlay = coc.get(index);
 
                             ObjectWithProperties object =
-                                    overlay.createObject(maskWriter, dimensions, bvOut);
+                                    overlay.createObject(drawOverlay, dimensions, bvOut);
                             object.setProperty("colorID", colorIDGetter.getID(overlay, index));
 
-                            return createPrecalc(maskWriter, object, dimensions);
+                            return createPrecalc(drawOverlay, object, dimensions);
                         })
                 .collect(Collectors.toList());
     }
 
     public static PrecalcOverlay createPrecalc(
-            DrawOverlay maskWriter, ObjectWithProperties om, ImageDimensions dimensions)
+            DrawOverlay drawOverlay, ObjectWithProperties object, ImageDimensions dimensions)
             throws CreateException {
-        return maskWriter.getDrawObject().precalculate(om, dimensions);
+        return drawOverlay.getDrawObject().precalculate(object, dimensions);
     }
 }

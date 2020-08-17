@@ -37,14 +37,14 @@ import org.anchoranalysis.mpp.io.cfg.ColoredCfgWithDisplayStack;
 
 public class CfgGenerator extends CfgGeneratorBase {
 
-    public CfgGenerator(DrawObject maskWriter, IDGetter<Overlay> idGetter) {
-        this(maskWriter, null, idGetter);
+    public CfgGenerator(DrawObject drawObject, IDGetter<Overlay> idGetter) {
+        this(drawObject, null, idGetter);
     }
 
     public CfgGenerator(
-            DrawObject maskWriter, ColoredCfgWithDisplayStack cws, IDGetter<Overlay> idGetter) {
+            DrawObject drawObject, ColoredCfgWithDisplayStack cws, IDGetter<Overlay> idGetter) {
         this(
-                maskWriter,
+                drawObject,
                 cws,
                 idGetter,
                 RegionMapSingleton.instance()
@@ -52,11 +52,11 @@ public class CfgGenerator extends CfgGeneratorBase {
     }
 
     public CfgGenerator(
-            DrawObject maskWriter,
+            DrawObject drawObject,
             ColoredCfgWithDisplayStack cws,
             IDGetter<Overlay> idGetter,
             RegionMembershipWithFlags regionMembership) {
-        super(new SimpleOverlayWriter(maskWriter), cws, idGetter, regionMembership);
+        super(new SimpleOverlayWriter(drawObject), cws, idGetter, regionMembership);
     }
 
     @Override

@@ -56,7 +56,7 @@ public abstract class DrawObject extends AnchorBean<DrawObject> {
      *     of the possibly-zoomed pixel cooridinates)
      */
     public final void writeSingle(
-            ObjectWithProperties mask,
+            ObjectWithProperties object,
             RGBStack stack,
             ObjectDrawAttributes attributes,
             int iteration,
@@ -64,7 +64,7 @@ public abstract class DrawObject extends AnchorBean<DrawObject> {
             throws OperationFailedException {
 
         try {
-            PrecalcOverlay precalculatedObj = precalculate(mask, stack.getDimensions());
+            PrecalcOverlay precalculatedObj = precalculate(object, stack.dimensions());
             precalculatedObj.writePrecalculatedMask(stack, attributes, iteration, restrictTo);
 
         } catch (CreateException e) {
@@ -78,34 +78,30 @@ public abstract class DrawObject extends AnchorBean<DrawObject> {
             ObjectWithProperties object, ImageDimensions dimensions) throws CreateException;
 
     public void write(
-            ObjectCollectionWithProperties masks,
+            ObjectCollectionWithProperties objects,
             RGBStack background,
             ObjectDrawAttributes attributes)
             throws OperationFailedException {
-        write(
-                masks,
-                background,
-                attributes,
-                new BoundingBox(background.getDimensions().getExtent()));
+        write(objects, background, attributes, new BoundingBox(background.dimensions()));
     }
 
     /**
-     * @param masks Masks to write
+     * @param objects Masks to write
      * @param stack Stack to write masks on top of
      * @param attributes Extracts attributes from objects relevant to drawing
-     * @param bboxContainer A bounding box, which restricts where we write out to
+     * @param boxContainer A bounding box, which restricts where we write out to
      * @throws OperationFailedException
      */
     public void write(
-            ObjectCollectionWithProperties masks,
+            ObjectCollectionWithProperties objects,
             RGBStack stack,
             ObjectDrawAttributes attributes,
-            BoundingBox bboxContainer)
+            BoundingBox boxContainer)
             throws OperationFailedException {
         // We iterate through every mark
         int i = 0;
-        for (ObjectWithProperties mask : masks) {
-            writeSingle(mask, stack, attributes, i++, bboxContainer);
+        for (ObjectWithProperties object : objects) {
+            writeSingle(object, stack, attributes, i++, boxContainer);
         }
     }
 }

@@ -26,13 +26,14 @@
 
 package org.anchoranalysis.image.io.objects.deserialize;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.io.bean.deserializer.Deserializer;
 
 /** Entry point to deserializers */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ObjectCollectionDeserializers {
-
-    private ObjectCollectionDeserializers() {}
 
     public static final Deserializer<ObjectCollection> TIFF_CORRECT_MISSING =
             new ReadObjectsFromTIFFDirectoryCorrectMissing();

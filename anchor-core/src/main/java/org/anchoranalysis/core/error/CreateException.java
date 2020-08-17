@@ -2,7 +2,7 @@ package org.anchoranalysis.core.error;
 
 import org.anchoranalysis.core.error.combinable.AnchorCombinableException;
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyCheckedException;
-import org.anchoranalysis.core.error.friendly.IFriendlyException;
+import org.anchoranalysis.core.error.friendly.HasFriendlyErrorMessage;
 
 /*-
  * #%L
@@ -43,7 +43,7 @@ public class CreateException extends AnchorFriendlyCheckedException {
         super(exc);
     }
 
-    public CreateException(String message, IFriendlyException cause) {
+    public CreateException(String message, HasFriendlyErrorMessage cause) {
         super(friendly(message, cause));
     }
 
@@ -51,7 +51,7 @@ public class CreateException extends AnchorFriendlyCheckedException {
         super(combine(message, cause));
     }
 
-    private static String friendly(String message, IFriendlyException cause) {
+    private static String friendly(String message, HasFriendlyErrorMessage cause) {
         return String.format("%s: %s", message, cause.friendlyMessageHierarchy());
     }
 

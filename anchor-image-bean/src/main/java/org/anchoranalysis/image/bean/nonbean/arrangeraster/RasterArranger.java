@@ -56,7 +56,7 @@ public class RasterArranger {
             throw new InitException("rasterIterator has more items than can be accomodated");
         }
 
-        dimensions = new ImageDimensions(boundingBoxes.getExtent());
+        dimensions = new ImageDimensions(boundingBoxes.extent());
     }
 
     public RGBStack createStack(List<RGBStack> list, ChannelFactorySingleType factory) {
@@ -70,63 +70,63 @@ public class RasterArranger {
         int index = 0;
         for (RGBStack image : generatedImages) {
 
-            BoundingBox bbox = this.boundingBoxes.get(index++);
+            BoundingBox box = this.boundingBoxes.get(index++);
 
             // NOTE
             // For a special case where our projection z-extent is different to our actual z-extent,
             // that means
             //   we should repeat
-            if (bbox.extent().getZ() != image.getDimensions().getZ()) {
+            if (box.extent().z() != image.dimensions().z()) {
 
                 int zShift = 0;
                 do {
-                    projectImageOntoStackOut(bbox, image.asStack(), out, zShift);
-                    zShift += image.getDimensions().getZ();
-                } while (zShift < out.getDimensions().getZ());
+                    projectImageOntoStackOut(box, image.asStack(), out, zShift);
+                    zShift += image.dimensions().z();
+                } while (zShift < out.dimensions().z());
 
             } else {
-                projectImageOntoStackOut(bbox, image.asStack(), out, 0);
+                projectImageOntoStackOut(box, image.asStack(), out, 0);
             }
         }
     }
 
     private void projectImageOntoStackOut(
-            BoundingBox bbox, Stack stackIn, Stack stackOut, int zShift) {
+            BoundingBox box, Stack stackIn, Stack stackOut, int zShift) {
 
         assert (stackIn.getNumberChannels() == stackOut.getNumberChannels());
 
-        Extent extent = stackIn.getDimensions().getExtent();
-        Extent extentOut = stackIn.getDimensions().getExtent();
+        Extent extent = stackIn.dimensions().extent();
+        Extent extentOut = stackIn.dimensions().extent();
 
-        ReadableTuple3i leftCrnr = bbox.cornerMin();
-        int xEnd = leftCrnr.getX() + bbox.extent().getX() - 1;
-        int yEnd = leftCrnr.getY() + bbox.extent().getY() - 1;
+        ReadableTuple3i leftCrnr = box.cornerMin();
+        int xEnd = leftCrnr.x() + box.extent().x() - 1;
+        int yEnd = leftCrnr.y() + box.extent().y() - 1;
 
         int numC = stackIn.getNumberChannels();
-        VoxelBuffer<?>[] vbIn = new VoxelBuffer<?>[numC];
-        VoxelBuffer<?>[] vbOut = new VoxelBuffer<?>[numC];
+        VoxelBuffer<?>[] voxelsIn = new VoxelBuffer<?>[numC];
+        VoxelBuffer<?>[] voxelsOut = new VoxelBuffer<?>[numC];
 
-        for (int z = 0; z < extent.getZ(); z++) {
+        for (int z = 0; z < extent.z(); z++) {
 
-            int outZ = leftCrnr.getZ() + z + zShift;
+            int outZ = leftCrnr.z() + z + zShift;
 
-            if (outZ >= extentOut.getZ()) {
+            if (outZ >= extentOut.z()) {
                 return;
             }
 
             for (int c = 0; c < numC; c++) {
-                vbIn[c] = stackIn.getChannel(c).getVoxelBox().any().getPixelsForPlane(z);
-                vbOut[c] = stackOut.getChannel(c).getVoxelBox().any().getPixelsForPlane(outZ);
+                voxelsIn[c] = stackIn.getChannel(c).voxels().slice(z);
+                voxelsOut[c] = stackOut.getChannel(c).voxels().slice(outZ);
             }
 
             int src = 0;
-            for (int y = leftCrnr.getY(); y <= yEnd; y++) {
-                for (int x = leftCrnr.getX(); x <= xEnd; x++) {
+            for (int y = leftCrnr.y(); y <= yEnd; y++) {
+                for (int x = leftCrnr.x(); x <= xEnd; x++) {
 
-                    int outPos = stackOut.getDimensions().offset(x, y);
+                    int outPos = stackOut.dimensions().offset(x, y);
 
                     for (int c = 0; c < numC; c++) {
-                        vbOut[c].transferFromConvert(outPos, vbIn[c], src);
+                        voxelsOut[c].transferFromConvert(outPos, voxelsIn[c], src);
                     }
                     src++;
                 }

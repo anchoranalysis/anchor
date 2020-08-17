@@ -32,16 +32,22 @@ import java.util.function.ToIntFunction;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Value;
+import lombok.experimental.Accessors;
 import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 
 /** Helper classes for calculating the union/intersection along each axis */
 @Value
+@Accessors(fluent = true)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 class ExtentBoundsComparer {
 
     private final int min;
-    private final int extent;
+    private final int max;
+
+    public int extent() {
+        return max - min + 1;
+    }
 
     public static ExtentBoundsComparer createMax(
             ReadableTuple3i min1,
@@ -49,7 +55,7 @@ class ExtentBoundsComparer {
             ReadableTuple3i max1,
             ReadableTuple3i max2,
             ToIntFunction<ReadableTuple3i> extract) {
-        return calc(
+        return calculate(
                         extract.applyAsInt(min1),
                         extract.applyAsInt(min2),
                         extract.applyAsInt(max1),
@@ -65,7 +71,7 @@ class ExtentBoundsComparer {
             ReadableTuple3i max1,
             ReadableTuple3i max2,
             ToIntFunction<ReadableTuple3i> extract) {
-        return calc(
+        return calculate(
                 extract.applyAsInt(min1),
                 extract.applyAsInt(min2),
                 extract.applyAsInt(max1),
@@ -74,7 +80,7 @@ class ExtentBoundsComparer {
                 Math::min);
     }
 
-    private static Optional<ExtentBoundsComparer> calc(
+    private static Optional<ExtentBoundsComparer> calculate(
             int min1,
             int min2,
             int max1,
@@ -84,7 +90,7 @@ class ExtentBoundsComparer {
         int minNew = minOp.applyAsInt(min1, min2);
         int maxNew = maxOp.applyAsInt(max1, max2);
         if (minNew <= maxNew) {
-            return Optional.of(new ExtentBoundsComparer(minNew, maxNew - minNew + 1));
+            return Optional.of(new ExtentBoundsComparer(minNew, maxNew));
         } else {
             return Optional.empty();
         }

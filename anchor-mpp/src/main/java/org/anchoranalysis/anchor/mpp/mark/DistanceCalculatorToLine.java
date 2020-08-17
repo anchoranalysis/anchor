@@ -70,14 +70,14 @@ class DistanceCalculatorToLine implements Serializable {
         double distanceSquared1to0 = startPoint.distanceSquared(pt);
 
         // Let's calculation the dot_product
-        double firstX = startPoint.getX() - pt.getX();
-        double firstY = startPoint.getY() - pt.getY();
-        double firstZ = startPoint.getZ() - pt.getZ();
+        double firstX = startPoint.x() - pt.x();
+        double firstY = startPoint.y() - pt.y();
+        double firstZ = startPoint.z() - pt.z();
 
         double dotProduct =
-                (firstX * directionVector.getX())
-                        + (firstY * directionVector.getY())
-                        + (firstZ * directionVector.getZ());
+                (firstX * directionVector.x())
+                        + (firstY * directionVector.y())
+                        + (firstZ * directionVector.z());
 
         double num = (distanceSquared2to1 * distanceSquared1to0) - Math.pow(dotProduct, 2);
         return num / distanceSquared2to1;

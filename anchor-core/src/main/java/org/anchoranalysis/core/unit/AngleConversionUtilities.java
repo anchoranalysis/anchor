@@ -26,14 +26,16 @@
 
 package org.anchoranalysis.core.unit;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /**
  * Converting angles between degrees and radians
  *
  * @author Owen Feehan
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class AngleConversionUtilities {
-
-    private AngleConversionUtilities() {}
 
     public static double convertDegreesToRadians(double degrees) {
         return (Math.PI / 180) * degrees;

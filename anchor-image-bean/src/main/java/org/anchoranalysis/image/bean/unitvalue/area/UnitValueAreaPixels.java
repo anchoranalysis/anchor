@@ -27,6 +27,7 @@
 package org.anchoranalysis.image.bean.unitvalue.area;
 
 import java.util.Optional;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.image.extent.ImageResolution;
 
 /**
@@ -34,11 +35,8 @@ import org.anchoranalysis.image.extent.ImageResolution;
  *
  * @author Owen Feehan
  */
+@NoArgsConstructor
 public class UnitValueAreaPixels extends UnitValueArea {
-
-    public UnitValueAreaPixels() {
-        // Standard bean constructor
-    }
 
     public UnitValueAreaPixels(double value) {
         super(value);

@@ -29,6 +29,8 @@ package org.anchoranalysis.image.extent;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.function.Consumer;
+import java.util.function.IntConsumer;
+import java.util.function.IntPredicate;
 import org.anchoranalysis.core.axis.AxisType;
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.core.geometry.Point2i;
@@ -64,24 +66,55 @@ public final class Extent implements Serializable {
     }
 
     /**
+     * Constructor - creates an extent from a point (duplicating the point for internal use)
+     *
+     * <p>This constructor is exposed as a static method to deliberately duplicate the tuple as it
+     * will be used internally.
+     *
+     * @param tuple a tuple with the extent size's for each dimension
+     * @return a newly created extent - that doesn't reuse {@code tuple} internally
+     */
+    public static Extent createFromTupleDuplicate(ReadableTuple3i tuple) {
+        return new Extent(new Point3i(tuple));
+    }
+
+    /**
+     * Constructor - creates an extent from a point that is reused internally (without duplication)
+     *
+     * <p>This constructor is exposed as a static method to deliberately indicate that it's okay to
+     * consume the point internally, as it won't be otherwise use.
+     *
+     * @param tuple a tuple with the extent size's for each dimension
+     * @return a newly created extent - that reuses {@code tuple} internally
+     */
+    public static Extent createFromTupleReuse(ReadableTuple3i tuple) {
+        return new Extent(new Point3i(tuple));
+    }
+
+    /**
      * Constructor
      *
      * <p>The point will be taken ownership by the extent, and should not be modified thereafter.
      *
-     * @param len the length of each axis
+     * @param len a tuple with the extent size's for each dimension
      */
     private Extent(ReadableTuple3i len) {
         this.len = len;
-        this.sxy = len.getX() * len.getY();
+        this.sxy = len.x() * len.y();
 
-        if (len.getX() < 1 || len.getY() < 1 || len.getZ() < 1) {
+        if (len.x() == 0 || len.y() == 0 || len.z() == 0) {
             throw new AnchorFriendlyRuntimeException(
                     "An extent must have at least one voxel in every dimension");
         }
+
+        if (len.x() < 0 || len.y() < 0 || len.z() < 0) {
+            throw new AnchorFriendlyRuntimeException(
+                    "An extent may not be negative in any dimension");
+        }
     }
 
-    public int getVolumeAsInt() {
-        long volume = getVolume();
+    public int calculateVolumeAsInt() {
+        long volume = calculateVolume();
         if (volume > Integer.MAX_VALUE) {
             throw new AnchorFriendlyRuntimeException(
                     "The volume cannot be expressed as an int, as it is higher than the maximum bound");
@@ -89,15 +122,15 @@ public final class Extent implements Serializable {
         return (int) volume;
     }
 
-    public long getVolume() {
-        return ((long) sxy) * len.getZ();
+    public long calculateVolume() {
+        return ((long) sxy) * len.z();
     }
 
     public boolean isEmpty() {
-        return (sxy == 0) || (len.getZ() == 0);
+        return (sxy == 0) || (len.z() == 0);
     }
 
-    public int getVolumeXY() {
+    public int volumeXY() {
         return sxy;
     }
 
@@ -106,49 +139,37 @@ public final class Extent implements Serializable {
      * pixel array This is not the same as volume, both the start and end pixel are included
      */
     public int totalNumPixelPositions() {
-        return (len.getX() + 1) * (len.getY() + 1) * (len.getZ() + 1);
+        return (len.x() + 1) * (len.y() + 1) * (len.z() + 1);
     }
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + len.getX();
-        result = prime * result + len.getY();
-        result = prime * result + len.getZ();
+        result = prime * result + len.x();
+        result = prime * result + len.y();
+        result = prime * result + len.z();
         return result;
     }
 
-    public int getX() {
-        return len.getX();
+    public int x() {
+        return len.x();
     }
 
-    public int getY() {
-        return len.getY();
+    public int y() {
+        return len.y();
     }
 
-    public int getZ() {
-        return len.getZ();
+    public int z() {
+        return len.z();
     }
 
-    public int getXEx() {
-        return len.getX() + 1;
+    public int valueByDimension(int dimIndex) {
+        return len.byDimension(dimIndex);
     }
 
-    public int getYEx() {
-        return len.getY() + 1;
-    }
-
-    public int getZEx() {
-        return len.getZ() + 1;
-    }
-
-    public int getValueByDimension(int dimIndex) {
-        return len.getValueByDimension(dimIndex);
-    }
-
-    public int getValueByDimension(AxisType axis) {
-        return len.getValueByDimension(axis);
+    public int valueByDimension(AxisType axis) {
+        return len.byDimension(axis);
     }
 
     /**
@@ -175,88 +196,74 @@ public final class Extent implements Serializable {
 
     @Override
     public String toString() {
-        return String.format("[%d,%d,%d]", getX(), getY(), getZ());
+        return String.format("[%d,%d,%d]", x(), y(), z());
     }
 
-    // Calculates an offset of an x and y point in terms of this extent
+    /** Calculates a XY-offset of a point in a buffer whose dimensions are this extent */
     public final int offset(int x, int y) {
-        return (y * len.getX()) + x;
+        return (y * len.x()) + x;
     }
 
-    // Calculates an offset of an x and y point in terms of this extent
-    //  we should cal
+    /** Calculates a XYZ-offset of a point in a buffer whose dimensions are this extent */
     public final int offset(int x, int y, int z) {
-        return (z * sxy) + (y * getX()) + x;
+        return (z * sxy) + (y * x()) + x;
     }
 
-    // Calculates an offset of an x and y point in terms of this extent
-    //  we should cal
-    public final int offset(Point3i point) {
-        return offset(point.getX(), point.getY(), point.getZ());
+    /** Calculates a XYZ-offset of a point in a buffer whose dimensions are this extent */
+    public final int offset(ReadableTuple3i point) {
+        return offset(point.x(), point.y(), point.z());
     }
 
-    // Calculates an offset of an x and y point in terms of this extent
+    /** Calculates a XY-offset of a point in a buffer whose dimensions are this extent */
     public final int offset(Point2i point) {
-        return offset(point.getX(), point.getY(), 0);
+        return offset(point.x(), point.y(), 0);
     }
 
-    // Calculates an offset of an x and y point in terms of this extent
-    public final int offsetSlice(Point3i point) {
-        return offset(point.getX(), point.getY(), 0);
+    /** Calculates a XY-offset of a point in a buffer whose dimensions are this extent */
+    public final int offsetSlice(ReadableTuple3i point) {
+        return offset(point.x(), point.y(), 0);
     }
 
-    public Extent ex() {
-        return new Extent(getX() + 1, getY() + 1, getZ() + 1);
-    }
-
-    public int[] createArray() {
-        int[] arr = new int[3];
-        arr[0] = getX();
-        arr[1] = getY();
-        arr[2] = getZ();
-        return arr;
-    }
-
-    public int[] createOrderedArray() {
-        int[] extents = createArray();
+    public int[] asOrderedArray() {
+        int[] extents = deriveArray();
         Arrays.sort(extents);
         return extents;
     }
 
     public Extent duplicateChangeZ(int z) {
-        return new Extent(len.getX(), len.getY(), z);
+        return new Extent(len.x(), len.y(), z);
     }
 
     public boolean containsX(double x) {
-        return x >= 0 && x < getX();
+        return x >= 0 && x < x();
     }
 
     public boolean containsY(double y) {
-        return y >= 0 && y < getY();
+        return y >= 0 && y < y();
     }
 
     public boolean containsZ(double z) {
-        return z >= 0 && z < getZ();
+        return z >= 0 && z < z();
     }
 
     public boolean containsX(int x) {
-        return x >= 0 && x < getX();
+        return x >= 0 && x < x();
     }
 
     public boolean containsY(int y) {
-        return y >= 0 && y < getY();
+        return y >= 0 && y < y();
     }
 
     public boolean containsZ(int z) {
-        return z >= 0 && z < getZ();
+        return z >= 0 && z < z();
     }
 
     public boolean contains(Point3d point) {
-        return containsX(point.getX()) && containsY(point.getY()) && containsZ(point.getZ());
+        return containsX(point.x()) && containsY(point.y()) && containsZ(point.z());
     }
 
     public boolean contains(ReadableTuple3i point) {
-        return containsX(point.getX()) && containsY(point.getY()) && containsZ(point.getZ());
+        return containsX(point.x()) && containsY(point.y()) && containsZ(point.z());
     }
 
     public boolean contains(int x, int y, int z) {
@@ -273,27 +280,27 @@ public final class Extent implements Serializable {
             return false;
         }
 
-        if (x >= len.getX()) {
+        if (x >= len.x()) {
             return false;
         }
 
-        if (y >= len.getY()) {
+        if (y >= len.y()) {
             return false;
         }
 
-        return (z < len.getZ());
+        return (z < len.z());
     }
 
-    public boolean contains(BoundingBox bbox) {
-        return contains(bbox.cornerMin()) && contains(bbox.calcCornerMax());
+    public boolean contains(BoundingBox box) {
+        return contains(box.cornerMin()) && contains(box.calculateCornerMax());
     }
 
-    public Extent scaleXYBy(ScaleFactor sf) {
+    public Extent scaleXYBy(ScaleFactor scaleFactor) {
         return new Extent(
                 immutablePointOperation(
-                        p -> {
-                            p.setX(ScaleFactorUtilities.scaleQuantity(sf.getX(), getX()));
-                            p.setY(ScaleFactorUtilities.scaleQuantity(sf.getY(), getY()));
+                        point -> {
+                            point.setX(ScaleFactorUtilities.scaleQuantity(scaleFactor.x(), x()));
+                            point.setY(ScaleFactorUtilities.scaleQuantity(scaleFactor.y(), y()));
                         }));
     }
 
@@ -323,11 +330,21 @@ public final class Extent implements Serializable {
     }
 
     /**
+     * Intersects this extent with another (i.e. takes the smaller value in each dimension)
+     *
+     * @param other the other
+     * @return a newly-created extent that is the intersection of this and another
+     */
+    public Extent intersectWith(Extent other) {
+        return new Extent(Point3i.elementwiseOperation(len, other.len, Math::min));
+    }
+
+    /**
      * Collapses the Z dimension i.e. returns a new extent with the same X- and Y- size but Z-size
      * of 1
      */
     public Extent flattenZ() {
-        return new Extent(new Point3i(len.getX(), len.getY(), 1));
+        return new Extent(new Point3i(len.x(), len.y(), 1));
     }
 
     /**
@@ -339,18 +356,59 @@ public final class Extent implements Serializable {
      *     dimension in {@code other})
      */
     public boolean anyDimensionIsLargerThan(Extent other) {
-        if (getX() > other.getX()) {
+        if (x() > other.x()) {
             return true;
         }
-        if (getY() > other.getY()) {
+        if (y() > other.y()) {
             return true;
         }
-        return getZ() > other.getZ();
+        return z() > other.z();
+    }
+
+    /**
+     * Calls processor once for each z-value in the range
+     *
+     * <p>This occurs sequentially from 0 (inclusive) to {@code z()} (exclusive)
+     *
+     * @param indexConsumer called for each index (z-value)
+     */
+    public void iterateOverZ(IntConsumer indexConsumer) {
+        for (int z = 0; z < len.z(); z++) {
+            indexConsumer.accept(z);
+        }
+    }
+
+    /**
+     * Calls processor once for each z-value in the range unless {@code indexPredicate} returns
+     * false.
+     *
+     * <p>This occurs sequentially from 0 (inclusive) to {@code z()} (exclusive)
+     *
+     * <p>As soon as the {@code indexPredicate} returns false, the iteration stops.
+     *
+     * @param indexPredicate called for each index (z-value)
+     * @return true if {@code indexPredicate} always returned true for every slice, false otherwise.
+     */
+    public boolean iterateOverZUntil(IntPredicate indexPredicate) {
+        for (int z = 0; z < len.z(); z++) {
+            if (!indexPredicate.test(z)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private Point3i immutablePointOperation(Consumer<Point3i> pointOperation) {
         Point3i lenDup = new Point3i(len);
         pointOperation.accept(lenDup);
         return lenDup;
+    }
+
+    private int[] deriveArray() {
+        int[] arr = new int[3];
+        arr[0] = x();
+        arr[1] = y();
+        arr[2] = z();
+        return arr;
     }
 }

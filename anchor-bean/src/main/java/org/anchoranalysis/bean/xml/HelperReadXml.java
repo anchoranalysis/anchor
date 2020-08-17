@@ -33,14 +33,15 @@ import java.io.InputStream;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import javax.xml.parsers.ParserConfigurationException;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.bean.xml.error.BeanXmlException;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.XMLConfiguration;
 import org.xml.sax.SAXParseException;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 class HelperReadXml {
-
-    private HelperReadXml() {}
 
     /**
      * Reads an XML file from the file-system, and wraps it as BeanXML

@@ -116,11 +116,11 @@ public class CreateNeighborGraph<V> {
     private static void checkObjectsInScene(ObjectCollection objects, Extent sceneExtent)
             throws CreateException {
         for (ObjectMask objectMask : objects) {
-            if (!sceneExtent.contains(objectMask.getBoundingBox())) {
+            if (!sceneExtent.contains(objectMask.boundingBox())) {
                 throw new CreateException(
                         String.format(
                                 "Object is not contained (fully or partially) inside scene extent: %s is not in %s",
-                                objectMask.getBoundingBox(), sceneExtent));
+                                objectMask.boundingBox(), sceneExtent));
             }
         }
     }

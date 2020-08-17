@@ -38,11 +38,12 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.w3c.dom.Document;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class XmlOutputter {
-
-    private XmlOutputter() {}
 
     public static void writeXmlToFile(Document doc, Path filePath)
             throws TransformerException, IOException {

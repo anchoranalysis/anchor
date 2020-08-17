@@ -33,28 +33,28 @@ import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.stack.region.chnlconverter.ChannelConverterToUnsignedByte;
 import org.anchoranalysis.image.stack.region.chnlconverter.ConversionPolicy;
 import org.anchoranalysis.image.stack.region.chnlconverter.attached.ChnlConverterAttached;
-import org.anchoranalysis.image.stack.region.chnlconverter.voxelbox.VoxelBoxConverter;
-import org.anchoranalysis.image.stack.region.chnlconverter.voxelbox.VoxelBoxConverterToByteScaleByMaxValue;
+import org.anchoranalysis.image.stack.region.chnlconverter.voxelbox.ToByteScaleByMaxValue;
+import org.anchoranalysis.image.stack.region.chnlconverter.voxelbox.VoxelsConverter;
 
 public class ChnlConverterHistogramMaxIntensity
         implements ChnlConverterAttached<Histogram, ByteBuffer> {
 
-    private VoxelBoxConverterToByteScaleByMaxValue voxelBoxConverter;
+    private ToByteScaleByMaxValue voxelsConverter;
 
     private ChannelConverterToUnsignedByte delegate;
 
     public ChnlConverterHistogramMaxIntensity() {
         // Initialise with a dummy value
-        voxelBoxConverter = new VoxelBoxConverterToByteScaleByMaxValue(1);
+        voxelsConverter = new ToByteScaleByMaxValue(1);
 
-        delegate = new ChannelConverterToUnsignedByte(voxelBoxConverter);
+        delegate = new ChannelConverterToUnsignedByte(voxelsConverter);
     }
 
     @Override
     public void attachObject(Histogram hist) throws OperationFailedException {
 
-        int maxValue = hist.calcMax();
-        voxelBoxConverter.setMaxValue(maxValue);
+        int maxValue = hist.calcMaximum();
+        voxelsConverter.setMaxValue(maxValue);
     }
 
     @Override
@@ -63,7 +63,7 @@ public class ChnlConverterHistogramMaxIntensity
     }
 
     @Override
-    public VoxelBoxConverter<ByteBuffer> getVoxelBoxConverter() {
-        return voxelBoxConverter;
+    public VoxelsConverter<ByteBuffer> getVoxelsConverter() {
+        return voxelsConverter;
     }
 }

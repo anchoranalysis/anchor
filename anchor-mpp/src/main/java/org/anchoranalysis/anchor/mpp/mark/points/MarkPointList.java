@@ -116,7 +116,7 @@ public class MarkPointList extends MarkAbstractPointList {
     public Point3d centerPoint() {
         // We take the mean of the BBOX as it's not really well defined. We probably should take the
         // COG.
-        return bbox().midpoint();
+        return box().midpoint();
     }
 
     @Override
@@ -125,7 +125,7 @@ public class MarkPointList extends MarkAbstractPointList {
     }
 
     @Override
-    public BoundingBox bboxAllRegions(ImageDimensions bndScene) {
-        return bbox(bndScene, GlobalRegionIdentifiers.SUBMARK_INSIDE);
+    public BoundingBox boxAllRegions(ImageDimensions bndScene) {
+        return box(bndScene, GlobalRegionIdentifiers.SUBMARK_INSIDE);
     }
 }

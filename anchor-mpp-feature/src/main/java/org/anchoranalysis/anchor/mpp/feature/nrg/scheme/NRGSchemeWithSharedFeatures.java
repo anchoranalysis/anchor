@@ -37,7 +37,7 @@ import org.anchoranalysis.bean.error.BeanDuplicateException;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.functional.function.FunctionWithException;
+import org.anchoranalysis.core.functional.function.CheckedFunction;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.calc.FeatureCalculationException;
@@ -60,7 +60,7 @@ public class NRGSchemeWithSharedFeatures {
 
     // Caches NRG value by index
     private class CalcElemIndTotalOperation
-            implements FunctionWithException<Integer, NRGTotal, NamedFeatureCalculationException> {
+            implements CheckedFunction<Integer, NRGTotal, NamedFeatureCalculationException> {
 
         private VoxelizedMarkMemo pmm;
         private NRGStack raster;
@@ -96,7 +96,7 @@ public class NRGSchemeWithSharedFeatures {
                 FeatureInputSingleMemo params =
                         new FeatureInputSingleMemo(pmm, new NRGStackWithParams(raster, kvp));
 
-                return new NRGTotal(session.calc(params).total());
+                return new NRGTotal(session.calculate(params).total());
             } catch (InitException e) {
                 throw new NamedFeatureCalculationException(e);
             }
@@ -128,7 +128,7 @@ public class NRGSchemeWithSharedFeatures {
 
             FeatureInputAllMemo params = new FeatureInputAllMemo(pxlMarkMemoList, nrgStack);
 
-            return new NRGTotal(session.calc(params).total());
+            return new NRGTotal(session.calculate(params).total());
 
         } catch (InitException | FeatureCalculationException e) {
             throw new NamedFeatureCalculationException(e);

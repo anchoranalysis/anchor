@@ -28,7 +28,7 @@ package org.anchoranalysis.image.object.factory.unionfind;
 
 import java.nio.IntBuffer;
 import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.SlidingBuffer;
 import org.anchoranalysis.image.voxel.iterator.IterateVoxels;
 import org.anchoranalysis.image.voxel.iterator.changed.ProcessVoxelNeighbor;
@@ -97,9 +97,8 @@ final class MergeWithNeighbors {
     private final SlidingBuffer<IntBuffer> slidingIndex;
     private final UnionFind<Integer> unionIndex;
 
-    // Without mask
     public MergeWithNeighbors(
-            VoxelBox<IntBuffer> indexBuffer,
+            Voxels<IntBuffer> indexBuffer,
             UnionFind<Integer> unionIndex,
             boolean do3D,
             boolean bigNeighborhood) {

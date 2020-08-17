@@ -28,6 +28,7 @@ package org.anchoranalysis.image.object;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -40,9 +41,9 @@ import java.util.stream.Stream;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.functional.CheckedStream;
-import org.anchoranalysis.core.functional.function.BiFunctionWithException;
-import org.anchoranalysis.core.functional.function.FunctionWithException;
-import org.anchoranalysis.core.functional.function.IntFunctionWithException;
+import org.anchoranalysis.core.functional.function.CheckedBiFunction;
+import org.anchoranalysis.core.functional.function.CheckedFunction;
+import org.anchoranalysis.core.functional.function.CheckedIntFunction;
 import org.anchoranalysis.image.binary.mask.Mask;
 
 /**
@@ -92,7 +93,7 @@ public class ObjectCollectionFactory {
      * @param objects existing collections to copy from
      */
     @SafeVarargs
-    public static ObjectCollection from(Optional<ObjectCollection>... objects) {
+    public static ObjectCollection of(Optional<ObjectCollection>... objects) {
         ObjectCollection out = new ObjectCollection();
         for (Optional<ObjectCollection> collection : objects) {
             collection.ifPresent(out::addAll);
@@ -103,12 +104,12 @@ public class ObjectCollectionFactory {
     /**
      * Creates a new collection with elements copied from existing collections
      *
-     * @param collection one or more collections to add items from
+     * @param collections one or more collections to add items from
      */
     @SafeVarargs
-    public static ObjectCollection of(Collection<ObjectMask>... collection) {
+    public static ObjectCollection of(Collection<ObjectMask>... collections) {
         ObjectCollection out = new ObjectCollection();
-        Arrays.stream(collection).forEach(out::addAll);
+        Arrays.stream(collections).forEach(out::addAll);
         return out;
     }
 
@@ -123,7 +124,7 @@ public class ObjectCollectionFactory {
      * @throws E exception if it occurs during mapping
      */
     public static <T, E extends Exception> ObjectCollection mapFrom(
-            Iterable<T> iterable, FunctionWithException<T, ObjectMask, E> mapFunc) throws E {
+            Iterable<T> iterable, CheckedFunction<T, ObjectMask, E> mapFunc) throws E {
         ObjectCollection out = new ObjectCollection();
         for (T item : iterable) {
             out.add(mapFunc.apply(item));
@@ -136,21 +137,35 @@ public class ObjectCollectionFactory {
      *
      * <p>The object is only included in the outgoing collection if Optional.isPresent()
      *
-     * <p>
-     *
      * @param <T> type that will be mapped to {@link ObjectCollection}
      * @param <E> exception-type that can be thrown during mapping
-     * @param collection incoming collection to be mapped
+     * @param iterable iterable to be mapped
      * @param mapFunc function for mapping
      * @return a newly created ObjectCollection
      * @throws E exception if it occurs during mapping
      */
     public static <T, E extends Exception> ObjectCollection mapFromOptional(
-            Iterable<T> iterable, FunctionWithException<T, Optional<ObjectMask>, E> mapFunc)
-            throws E {
+            Iterable<T> iterable, CheckedFunction<T, Optional<ObjectMask>, E> mapFunc) throws E {
+        return mapFromOptional(iterable.iterator(), mapFunc);
+    }
+
+    /**
+     * Creates a new collection by mapping an {@link Iterator} to {@link Optional<ObjectMask>}
+     *
+     * <p>The object is only included in the outgoing collection if Optional.isPresent()
+     *
+     * @param <T> type that will be mapped to {@link ObjectCollection}
+     * @param <E> exception-type that can be thrown during mapping
+     * @param iterator to be mapped
+     * @param mapFunc function for mapping
+     * @return a newly created ObjectCollection
+     * @throws E exception if it occurs during mapping
+     */
+    public static <T, E extends Exception> ObjectCollection mapFromOptional(
+            Iterator<T> iterator, CheckedFunction<T, Optional<ObjectMask>, E> mapFunc) throws E {
         ObjectCollection out = new ObjectCollection();
-        for (T item : iterable) {
-            mapFunc.apply(item).ifPresent(out::add);
+        while (iterator.hasNext()) {
+            mapFunc.apply(iterator.next()).ifPresent(out::add);
         }
         return out;
     }
@@ -164,7 +179,7 @@ public class ObjectCollectionFactory {
     @SafeVarargs
     public static ObjectCollection of(Mask... masks) {
         ObjectCollection out = new ObjectCollection();
-        Arrays.stream(masks).forEach(mask -> out.add(new ObjectMask(mask.binaryVoxelBox())));
+        Arrays.stream(masks).forEach(mask -> out.add(new ObjectMask(mask.binaryVoxels())));
         return out;
     }
 
@@ -219,10 +234,10 @@ public class ObjectCollectionFactory {
             int startInclusive,
             int endExclusive,
             Class<? extends Exception> throwableClass,
-            IntFunctionWithException<ObjectMask, E> mapFunc)
+            CheckedIntFunction<ObjectMask, E> mapFunc)
             throws E {
         return new ObjectCollection(
-                CheckedStream.mapIntStreamWithException(
+                CheckedStream.mapIntStream(
                         IntStream.range(startInclusive, endExclusive), throwableClass, mapFunc));
     }
 
@@ -258,10 +273,10 @@ public class ObjectCollectionFactory {
             int startInclusive,
             int endExclusive,
             Class<? extends Exception> throwableClass,
-            IntFunctionWithException<ObjectCollection, E> mapFunc)
+            CheckedIntFunction<ObjectCollection, E> mapFunc)
             throws E {
         return new ObjectCollection(
-                CheckedStream.mapIntStreamWithException(
+                CheckedStream.mapIntStream(
                                 IntStream.range(startInclusive, endExclusive),
                                 throwableClass,
                                 mapFunc)
@@ -271,7 +286,7 @@ public class ObjectCollectionFactory {
     /**
      * Creates a new collection by filtering an iterable and then mapping it to {@link ObjectMask}
      *
-     * @param <T> type that will be mapped to {@link ObjectCollection}
+     * @param <T> type that will be mapped to {@link ObjectMask}
      * @param <E> exception-type that may be thrown during mapping
      * @param iterable incoming collection to be mapped
      * @param mapFunc function for mapping
@@ -279,9 +294,7 @@ public class ObjectCollectionFactory {
      * @throws E if thrown by <code>mapFunc</code>
      */
     public static <T, E extends Exception> ObjectCollection filterAndMapFrom(
-            Iterable<T> iterable,
-            Predicate<T> predicate,
-            FunctionWithException<T, ObjectMask, E> mapFunc)
+            Iterable<T> iterable, Predicate<T> predicate, CheckedFunction<T, ObjectMask, E> mapFunc)
             throws E {
         ObjectCollection out = new ObjectCollection();
         for (T item : iterable) {
@@ -310,7 +323,7 @@ public class ObjectCollectionFactory {
     public static <T, E extends Exception> ObjectCollection filterAndMapWithIndexFrom(
             List<T> list,
             Predicate<T> predicate,
-            BiFunctionWithException<T, Integer, ObjectMask, E> mapFuncWithIndex)
+            CheckedBiFunction<T, Integer, ObjectMask, E> mapFuncWithIndex)
             throws E {
         ObjectCollection out = new ObjectCollection();
         for (int i = 0; i < list.size(); i++) {
@@ -354,7 +367,7 @@ public class ObjectCollectionFactory {
     public static <T, E extends Exception> ObjectCollection flatMapFrom(
             Stream<T> stream,
             Class<? extends Exception> throwableClass,
-            FunctionWithException<T, ObjectCollection, E> mapFunc)
+            CheckedFunction<T, ObjectCollection, E> mapFunc)
             throws E {
         return flatMapFromCollection(
                 stream, throwableClass, source -> mapFunc.apply(source).asList());
@@ -374,9 +387,8 @@ public class ObjectCollectionFactory {
     public static <T, E extends Exception> ObjectCollection flatMapFromCollection(
             Stream<T> stream,
             Class<? extends Exception> throwableClass,
-            FunctionWithException<T, Collection<? extends ObjectMask>, E> mapFunc)
+            CheckedFunction<T, Collection<? extends ObjectMask>, E> mapFunc)
             throws E {
-        return new ObjectCollection(
-                CheckedStream.flatMapWithException(stream, throwableClass, mapFunc));
+        return new ObjectCollection(CheckedStream.flatMap(stream, throwableClass, mapFunc));
     }
 }

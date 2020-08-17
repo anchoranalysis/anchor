@@ -26,6 +26,8 @@
 
 package org.anchoranalysis.anchor.mpp.mark.conic;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.anchor.mpp.bean.bound.Bound;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
@@ -36,9 +38,8 @@ import org.anchoranalysis.image.extent.ImageResolution;
  *
  * @author Owen Feehan
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class RadiiRandomizer {
-
-    private RadiiRandomizer() {}
 
     public static Point3d randomizeRadii(
             Bound bound,

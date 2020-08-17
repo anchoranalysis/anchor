@@ -33,10 +33,8 @@ import java.util.Map.Entry;
 import java.util.function.UnaryOperator;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
 
 /**
  * An {@link ObjectMask} with associated key-value properties.
@@ -46,12 +44,12 @@ import org.anchoranalysis.image.voxel.box.VoxelBox;
 @AllArgsConstructor
 public class ObjectWithProperties {
 
-    @Getter private final ObjectMask mask;
+    private final ObjectMask object;
 
     @Getter private final Map<String, Object> properties;
 
-    public ObjectWithProperties(BoundingBox bbox) {
-        this(new ObjectMask(bbox));
+    public ObjectWithProperties(BoundingBox box) {
+        this(new ObjectMask(box));
     }
 
     public ObjectWithProperties(ObjectMask object) {
@@ -82,11 +80,11 @@ public class ObjectWithProperties {
      * @return the mapped object (with identical properties) to previously.
      */
     public ObjectWithProperties map(UnaryOperator<ObjectMask> funcMap) {
-        return new ObjectWithProperties(funcMap.apply(mask), properties);
+        return new ObjectWithProperties(funcMap.apply(object), properties);
     }
 
     public ObjectWithProperties duplicate() {
-        ObjectWithProperties out = new ObjectWithProperties(mask.duplicate());
+        ObjectWithProperties out = new ObjectWithProperties(object.duplicate());
         for (Entry<String, Object> entry : properties.entrySet()) {
             out.properties.put(entry.getKey(), entry.getValue());
         }
@@ -94,26 +92,26 @@ public class ObjectWithProperties {
     }
 
     public boolean equals(Object obj) {
-        return mask.equals(obj);
+        return object.equals(obj);
     }
 
-    public BoundingBox getBoundingBox() {
-        return mask.getBoundingBox();
-    }
-
-    public VoxelBox<ByteBuffer> getVoxelBox() {
-        return mask.getVoxelBox();
+    public BoundingBox boundingBox() {
+        return object.boundingBox();
     }
 
     public int hashCode() {
-        return mask.hashCode();
+        return object.hashCode();
     }
 
     public String toString() {
-        return mask.toString();
+        return object.toString();
     }
 
-    public BinaryValuesByte getBinaryValues() {
-        return mask.getBinaryValuesByte();
+    public ObjectMask withoutProperties() {
+        return object;
+    }
+
+    public ByteBuffer sliceBufferLocal(int sliceIndexRelative) {
+        return object.sliceBufferLocal(sliceIndexRelative);
     }
 }

@@ -49,7 +49,7 @@ class EdgeAdder<V> {
     /** a list of vertices */
     private final List<V> verticesAsList;
 
-    /** how to convert a individual vertice to an object mask */
+    /** how to convert a individual vertice to an object-mask */
     private final Function<V, ObjectMask> vertexToObject;
 
     /** the rTree underpinning the vertices (or rather their derived object-masks) */
@@ -74,7 +74,7 @@ class EdgeAdder<V> {
                 MorphologicalDilation.createDilatedObject(
                         object,
                         Optional.of(sceneExtent),
-                        do3D && sceneExtent.getZ() > 1,
+                        do3D && sceneExtent.z() > 1,
                         1,
                         params.isBigNeighborhood());
 
@@ -83,7 +83,7 @@ class EdgeAdder<V> {
 
     private void addWithDilatedMask(
             int ignoreIndex, ObjectMask object, V vertexWith, ObjectMask dilated) {
-        List<Integer> indicesIntersects = rTree.intersectsWithAsIndices(dilated.getBoundingBox());
+        List<Integer> indicesIntersects = rTree.intersectsWithAsIndices(dilated.boundingBox());
         for (int j : indicesIntersects) {
 
             // We enforce an ordering, so as not to do the same pair twice (or the identity case)

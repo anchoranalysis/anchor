@@ -27,22 +27,33 @@
 package org.anchoranalysis.image.channel.factory;
 
 import java.nio.Buffer;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.experimental.Accessors;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.extent.ImageResolution;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
+import org.anchoranalysis.image.voxel.factory.VoxelsFactoryTypeBound;
 
-/** Creates a Chnl for a specific data-type */
-public interface ChannelFactorySingleType {
+/** Creates a channel for a specific data-type */
+@AllArgsConstructor
+@Accessors(fluent = true)
+public abstract class ChannelFactorySingleType {
 
-    Channel createEmptyInitialised(ImageDimensions dimensions);
+    @Getter private final VoxelDataType dataType;
+    private final VoxelsFactoryTypeBound<? extends Buffer> factory;
 
-    Channel createEmptyUninitialised(ImageDimensions dimensions);
-
-    default Channel create(VoxelBox<? extends Buffer> bufferAccess, ImageResolution res) {
-        return new Channel(bufferAccess, res);
+    public Channel createEmptyInitialised(ImageDimensions dim) {
+        return create(factory.createInitialized(dim.extent()), dim.resolution());
     }
 
-    VoxelDataType dataType();
+    public Channel createEmptyUninitialised(ImageDimensions dimensions) {
+        return create(factory.createUninitialized(dimensions.extent()), dimensions.resolution());
+    }
+
+    public Channel create(Voxels<? extends Buffer> bufferAccess, ImageResolution resolution) {
+        return new Channel(bufferAccess, resolution);
+    }
 }

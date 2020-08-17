@@ -75,25 +75,25 @@ public class HistogramArray implements Histogram {
         }
     }
 
-    public void zeroVal(int val) {
+    public void zeroValue(int val) {
         int indx = index(val);
         countTotal -= arr[indx];
         arr[indx] = 0;
     }
 
-    public void transferVal(int srcVal, int destVal) {
+    public void transferValue(int srcVal, int destVal) {
         int srcIndx = index(srcVal);
 
         arrIncr(destVal, arr[srcIndx]);
         arr[srcIndx] = 0;
     }
 
-    public void incrVal(int val) {
+    public void incrementValue(int val) {
         arrIncr(val, 1);
         countTotal++;
     }
 
-    public void incrValBy(int val, int increase) {
+    public void incrValueBy(int val, int increase) {
         arrIncr(val, increase);
         countTotal += increase;
     }
@@ -103,14 +103,14 @@ public class HistogramArray implements Histogram {
      *
      * @throws ArithmeticException if incresae cannot be converted to an int safely
      */
-    public void incrValBy(int val, long increase) {
-        incrValBy(val, toIntExact(increase));
+    public void incrValueBy(int val, long increase) {
+        incrValueBy(val, toIntExact(increase));
     }
 
     @Override
     public void removeBelowThreshold(int threshold) {
         for (int i = getMinBin(); i < threshold; i++) {
-            zeroVal(i);
+            zeroValue(i);
         }
         // Now chop off the unneeded values and set a new minimum
         chopArrBefore(index(threshold));
@@ -223,7 +223,7 @@ public class HistogramArray implements Histogram {
                 return i;
             }
         }
-        return calcMax();
+        return calcMaximum();
     }
 
     @Override
@@ -244,7 +244,7 @@ public class HistogramArray implements Histogram {
                 return i;
             }
         }
-        return calcMax();
+        return calcMaximum();
     }
 
     public boolean hasAboveZero() {
@@ -294,7 +294,7 @@ public class HistogramArray implements Histogram {
         return maxIndex;
     }
 
-    public int calcMax() throws OperationFailedException {
+    public int calcMaximum() throws OperationFailedException {
         checkAtLeastOneItemExists();
 
         for (int i = maxBin; i >= minBin; i--) {
@@ -306,7 +306,7 @@ public class HistogramArray implements Histogram {
         throw new AnchorImpossibleSituationException();
     }
 
-    public int calcMin() throws OperationFailedException {
+    public int calcMinimum() throws OperationFailedException {
         checkAtLeastOneItemExists();
 
         for (int i = minBin; i <= maxBin; i++) {
@@ -347,7 +347,7 @@ public class HistogramArray implements Histogram {
     }
 
     @Override
-    public double stdDev() throws OperationFailedException {
+    public double standardDeviation() throws OperationFailedException {
         checkAtLeastOneItemExists();
         return Math.sqrt(variance());
     }
@@ -546,11 +546,11 @@ public class HistogramArray implements Histogram {
             Histogram destination, int bin, int countForBin, long remaining) {
         // If there's more or just enough remaining than we have, we transfer the entire bin
         if (remaining >= countForBin) {
-            destination.incrValBy(bin, countForBin);
+            destination.incrValueBy(bin, countForBin);
             return remaining - countForBin;
         } else {
             // Otherwise partially transfer the bin
-            destination.incrValBy(bin, remaining);
+            destination.incrValueBy(bin, remaining);
             return 0;
         }
     }

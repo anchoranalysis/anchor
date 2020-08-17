@@ -56,28 +56,28 @@ public class Orientation extends DrawObject {
     @BeanField @Getter @Setter private boolean drawReverseLine = false;
     // END BEAN PROPERTIES
 
-    public static Optional<Point3d> calcPoint(ObjectWithProperties mask, String propertyName) {
+    public static Optional<Point3d> calcPoint(ObjectWithProperties object, String propertyName) {
 
-        if (!mask.hasProperty(propertyName)) {
+        if (!object.hasProperty(propertyName)) {
             return Optional.empty();
         }
 
-        return Optional.of(new Point3d((Point3d) mask.getProperty(propertyName)));
+        return Optional.of(new Point3d((Point3d) object.getProperty(propertyName)));
     }
 
-    public static Optional<Double> calcOrientation(ObjectWithProperties mask) {
+    public static Optional<Double> calcOrientation(ObjectWithProperties object) {
 
-        if (!mask.hasProperty("orientationRadians")) {
+        if (!object.hasProperty("orientationRadians")) {
             return Optional.empty();
         }
 
-        return Optional.of((Double) mask.getProperty("orientationRadians"));
+        return Optional.of((Double) object.getProperty("orientationRadians"));
     }
 
     @Override
-    public PrecalcOverlay precalculate(ObjectWithProperties mask, ImageDimensions dim)
+    public PrecalcOverlay precalculate(ObjectWithProperties object, ImageDimensions dim)
             throws CreateException {
-        return new PrecalcOverlay(mask) {
+        return new PrecalcOverlay(object) {
 
             @Override
             public void writePrecalculatedMask(
@@ -87,24 +87,24 @@ public class Orientation extends DrawObject {
                     BoundingBox restrictTo)
                     throws OperationFailedException {
 
-                Point3i midpoint = Midpoint.calcMidpoint(mask, false);
+                Point3i midpoint = Midpoint.calcMidpoint(object, false);
 
-                Optional<Double> orientationRadians = calcOrientation(mask);
+                Optional<Double> orientationRadians = calcOrientation(object);
                 if (!orientationRadians.isPresent()) {
                     return;
                 }
 
-                Optional<Point3d> xAxisMin = calcPoint(mask, "xAxisMin");
+                Optional<Point3d> xAxisMin = calcPoint(object, "xAxisMin");
                 if (!xAxisMin.isPresent()) {
                     return;
                 }
 
-                Optional<Point3d> xAxisMax = calcPoint(mask, "xAxisMax");
+                Optional<Point3d> xAxisMax = calcPoint(object, "xAxisMax");
                 if (!xAxisMax.isPresent()) {
                     return;
                 }
 
-                RGBColor color = attributes.colorFor(mask, iteration);
+                RGBColor color = attributes.colorFor(object, iteration);
 
                 writeOrientationLine(
                         midpoint, orientationRadians.get(), color, background, restrictTo);
@@ -123,11 +123,11 @@ public class Orientation extends DrawObject {
             double orientationRadians,
             RGBColor color,
             RGBStack stack,
-            BoundingBox bbox) {
+            BoundingBox box) {
 
         // We start at 0
-        double x = midpoint.getX();
-        double y = midpoint.getY();
+        double x = midpoint.x();
+        double y = midpoint.y();
 
         double xIncr = Math.cos(orientationRadians) * xDiv;
         double yIncr = Math.sin(orientationRadians) * xDiv;
@@ -135,8 +135,8 @@ public class Orientation extends DrawObject {
         while (true) {
             Point3i point = new Point3i((int) x, (int) y, 0);
 
-            if (bbox.contains().pointIgnoreZ(point)) {
-                Midpoint.writeRelPoint(point, color, stack, bbox);
+            if (box.contains().pointIgnoreZ(point)) {
+                Midpoint.writeRelPoint(point, color, stack, box);
 
                 x += xIncr;
                 y += yIncr;

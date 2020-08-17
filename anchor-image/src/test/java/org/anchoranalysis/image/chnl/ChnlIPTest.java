@@ -29,15 +29,19 @@ package org.anchoranalysis.image.chnl;
 import static org.junit.Assert.*;
 
 import java.nio.FloatBuffer;
+import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactoryFloat;
 import org.anchoranalysis.image.channel.factory.ChannelFactorySingleType;
 import org.anchoranalysis.image.extent.ImageDimensions;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferFloat;
+import org.anchoranalysis.image.voxel.extracter.VoxelsExtracter;
 import org.junit.Test;
 
 public class ChnlIPTest {
+
+    double delta = 1e-3;
 
     @Test
     public void testSetPixelsForPlane() {
@@ -48,13 +52,18 @@ public class ChnlIPTest {
 
         Channel channel = imgChnlFloatFactory.createEmptyInitialised(dimensions);
 
-        VoxelBox<FloatBuffer> vb = channel.getVoxelBox().asFloat();
-        vb.getPlaneAccess().setPixelsForPlane(0, VoxelBufferFloat.wrap(new float[] {1, 2, 3, 4}));
+        Voxels<FloatBuffer> voxels = channel.voxels().asFloat();
+        voxels.slices().replaceSlice(0, VoxelBufferFloat.wrap(new float[] {1, 2, 3, 4}));
 
-        double delta = 1e-3;
-        assertEquals(1.0f, vb.getVoxel(0, 0, 0), delta);
-        assertEquals(2.0f, vb.getVoxel(1, 0, 0), delta);
-        assertEquals(3.0f, vb.getVoxel(0, 1, 0), delta);
-        assertEquals(4.0f, vb.getVoxel(1, 1, 0), delta);
+        VoxelsExtracter<FloatBuffer> extracter = voxels.extracter();
+        assertVoxelEquals(1.0f, 0, 0, extracter);
+        assertVoxelEquals(2.0f, 1, 0, extracter);
+        assertVoxelEquals(3.0f, 0, 1, extracter);
+        assertVoxelEquals(4.0f, 1, 1, extracter);
+    }
+
+    private void assertVoxelEquals(
+            double value, int x, int y, VoxelsExtracter<FloatBuffer> extracter) {
+        assertEquals(value, extracter.voxel(new Point3i(x, y, 0)), delta);
     }
 }

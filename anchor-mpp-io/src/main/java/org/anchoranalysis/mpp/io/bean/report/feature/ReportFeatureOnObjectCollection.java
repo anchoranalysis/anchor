@@ -38,6 +38,6 @@ public class ReportFeatureOnObjectCollection
     protected double calcFeatureOn(
             ObjectCollection objects, FeatureCalculatorSingle<FeatureInputObjectCollection> session)
             throws FeatureCalculationException {
-        return session.calc(new FeatureInputObjectCollection(objects));
+        return session.calculate(new FeatureInputObjectCollection(objects));
     }
 }

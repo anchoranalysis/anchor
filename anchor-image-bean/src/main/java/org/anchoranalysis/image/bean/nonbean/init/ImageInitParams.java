@@ -34,14 +34,13 @@ import org.anchoranalysis.bean.init.property.PropertyInitializer;
 import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsInitParams;
 import org.anchoranalysis.bean.store.BeanStoreAdder;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.functional.CallableWithException;
-import org.anchoranalysis.core.functional.IdentityOperation;
-import org.anchoranalysis.core.functional.function.FunctionWithException;
+import org.anchoranalysis.core.functional.function.CheckedFunction;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.name.provider.NamedProvider;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
 import org.anchoranalysis.core.name.store.SharedObjects;
+import org.anchoranalysis.core.name.store.StoreSupplier;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
@@ -76,8 +75,7 @@ public class ImageInitParams implements BeanInitParams {
     private final NamedProviderStore<BinarySegmentation> storeBinarySgmn;
     // END: Stores
 
-    private FunctionWithException<StackProvider, Stack, OperationFailedException>
-            stackProviderBridge;
+    private CheckedFunction<StackProvider, Stack, OperationFailedException> stackProviderBridge;
 
     public ImageInitParams(SharedObjects sharedObjects) {
         super();
@@ -144,7 +142,7 @@ public class ImageInitParams implements BeanInitParams {
 
     public void addToStackCollection(String identifier, Stack inputImage)
             throws OperationFailedException {
-        getStackCollection().add(identifier, new IdentityOperation<>(inputImage));
+        getStackCollection().add(identifier, () -> inputImage);
     }
 
     public void addToStackCollection(String identifier, StackProvider stackProvider)
@@ -168,27 +166,27 @@ public class ImageInitParams implements BeanInitParams {
     public void copyObjectsFrom(NamedProvider<ObjectCollection> collectionSource)
             throws OperationFailedException {
 
-        try {
-            for (String id : collectionSource.keys()) {
-                addToObjects(id, new IdentityOperation<>(collectionSource.getException(id)));
-            }
-        } catch (NamedProviderGetException e) {
-            throw new OperationFailedException(e.summarize());
+        for (String id : collectionSource.keys()) {
+            addToObjects(
+                    id,
+                    () -> {
+                        try {
+                            return collectionSource.getException(id);
+                        } catch (NamedProviderGetException e) {
+                            throw new OperationFailedException(e.summarize());
+                        }
+                    });
         }
     }
 
-    public void addToObjects(
-            String identifier,
-            CallableWithException<ObjectCollection, OperationFailedException> opObjects)
+    public void addToObjects(String identifier, StoreSupplier<ObjectCollection> objects)
             throws OperationFailedException {
-        getObjectCollection().add(identifier, opObjects);
+        getObjectCollection().add(identifier, objects);
     }
 
     public void addToKeyValueParamsCollection(String identifier, KeyValueParams params)
             throws OperationFailedException {
-        getParams()
-                .getNamedKeyValueParamsCollection()
-                .add(identifier, new IdentityOperation<>(params));
+        getParams().getNamedKeyValueParamsCollection().add(identifier, () -> params);
     }
 
     public Path getModelDirectory() {

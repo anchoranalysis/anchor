@@ -29,14 +29,15 @@ package org.anchoranalysis.io.generator.histogram;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.text.TypedValue;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.output.csv.CSVWriter;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 class HistogramCSVWriter {
-
-    private HistogramCSVWriter() {}
 
     public static void writeHistogramToFile(Histogram histogram, Path filePath, boolean ignoreZeros)
             throws AnchorIOException {

@@ -52,11 +52,11 @@ public class ArbitraryPointCommon extends AddCriteriaPair {
             boolean do3D)
             throws IncludeMarksFailureException {
 
-        BoundingBox bbox1 = mark1.getMark().bboxAllRegions(dimensions);
-        BoundingBox bbox2 = mark2.getMark().bboxAllRegions(dimensions);
+        BoundingBox box1 = mark1.getMark().boxAllRegions(dimensions);
+        BoundingBox box2 = mark2.getMark().boxAllRegions(dimensions);
 
         // If their bounding boxes don't intersect, they cannot possibly have an overlapping point
-        if (!bbox1.intersection().existsWith(bbox2)) {
+        if (!box1.intersection().existsWith(box2)) {
             return false;
         }
 

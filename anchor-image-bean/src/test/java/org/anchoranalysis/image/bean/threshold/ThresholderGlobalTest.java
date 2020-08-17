@@ -34,13 +34,13 @@ import java.util.Optional;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
-import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
+import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
-import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
-import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
+import org.anchoranalysis.image.voxel.Voxels;
+import org.anchoranalysis.image.voxel.VoxelsWrapper;
+import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 import org.anchoranalysis.image.voxel.iterator.IterateVoxels;
 import org.junit.Before;
 import org.junit.Test;
@@ -56,13 +56,13 @@ public class ThresholderGlobalTest {
     private static final Extent MASK_EXTENT = new Extent(30, 20, 4);
     private static final Point3i MASK_CORNER_MIN = new Point3i(10, 10, 2);
 
-    private static final long HALF_SCENE_EXTENT_VOLUME = SCENE_EXTENT.getVolume() / 2;
+    private static final long HALF_SCENE_EXTENT_VOLUME = SCENE_EXTENT.calculateVolume() / 2;
 
-    private VoxelBoxWrapper voxelBox;
+    private VoxelsWrapper voxels;
 
     @Before
     public void setup() {
-        voxelBox = createVoxels();
+        voxels = createVoxels();
     }
 
     @Test
@@ -73,21 +73,21 @@ public class ThresholderGlobalTest {
     @Test
     public void testMask() throws OperationFailedException {
 
-        // A mask in the left half
-        ObjectMask mask = new ObjectMask(new BoundingBox(MASK_CORNER_MIN, MASK_EXTENT));
-        mask.binaryVoxelBox().setAllPixelsToOn();
+        // An object-mask in the left half
+        ObjectMask object = new ObjectMask(new BoundingBox(MASK_CORNER_MIN, MASK_EXTENT));
+        object.assignOn().toAll();
 
-        testThreshold(Optional.of(mask), 2400, 112000000);
+        testThreshold(Optional.of(object), 2400, 112000000);
     }
 
     private void testThreshold(
-            Optional<ObjectMask> mask, long expectedCountOn, long expectedCountOff)
+            Optional<ObjectMask> object, long expectedCountOn, long expectedCountOff)
             throws OperationFailedException {
         Thresholder thresholder = createThresholder();
 
-        BinaryVoxelBox<ByteBuffer> out =
+        BinaryVoxels<ByteBuffer> out =
                 thresholder.threshold(
-                        voxelBox, BinaryValuesByte.getDefault(), Optional.empty(), mask);
+                        voxels, BinaryValuesByte.getDefault(), Optional.empty(), object);
 
         assertEquals("onCount", expectedCountOn, out.countOn());
         assertEquals("offCount", expectedCountOff, out.countOff());
@@ -108,30 +108,29 @@ public class ThresholderGlobalTest {
         return calculateLevel;
     }
 
-    private static VoxelBoxWrapper createVoxels() {
+    private static VoxelsWrapper createVoxels() {
 
         Extent extentHalf = new Extent(SCENE_WIDTH / 2, SCENE_HEIGHT, SCENE_DEPTH);
 
-        VoxelBox<ByteBuffer> vb = VoxelBoxFactory.getByte().create(SCENE_EXTENT);
+        Voxels<ByteBuffer> voxels = VoxelsFactory.getByte().createInitialized(SCENE_EXTENT);
 
         BoundingBox left = new BoundingBox(new Point3i(0, 0, 0), extentHalf);
         BoundingBox right = new BoundingBox(new Point3i(SCENE_WIDTH / 2, 0, 0), extentHalf);
 
-        writeModulo(vb, left, 0);
+        writeModulo(voxels, left, 0);
         writeModulo(
-                vb, right,
+                voxels, right,
                 100); // So the right half, should be 100 higher on average, and always >= 100
 
-        return new VoxelBoxWrapper(vb);
+        return new VoxelsWrapper(voxels);
     }
 
-    private static void writeModulo(VoxelBox<ByteBuffer> vb, BoundingBox bbox, int addToPixels) {
+    private static void writeModulo(Voxels<ByteBuffer> voxels, BoundingBox box, int addToPixels) {
         IterateVoxels.callEachPoint(
-                vb,
-                bbox,
+                voxels,
+                box,
                 (Point3i point, ByteBuffer buffer, int offset) ->
                         buffer.put(
-                                offset,
-                                (byte) ((point.getY() % 50 + point.getX() % 50) + addToPixels)));
+                                offset, (byte) ((point.y() % 50 + point.x() % 50) + addToPixels)));
     }
 }

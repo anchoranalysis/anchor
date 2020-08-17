@@ -35,7 +35,7 @@ import org.anchoranalysis.core.name.provider.NamedProviderBridge;
 import org.anchoranalysis.core.name.provider.NamedProviderCombine;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.image.binary.mask.Mask;
-import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
+import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactoryByte;
 import org.anchoranalysis.image.channel.factory.ChannelFactorySingleType;
@@ -94,18 +94,18 @@ class CombineDiverseProvidersAsStacks implements NamedProvider<Stack> {
 
     private static Stack stackFromBinary(Mask sourceObject) {
 
-        Channel chnlNew = FACTORY.createEmptyInitialised(sourceObject.getDimensions());
+        Channel chnlNew = FACTORY.createEmptyInitialised(sourceObject.dimensions());
 
-        BinaryVoxelBox<ByteBuffer> bvb = sourceObject.binaryVoxelBox();
+        BinaryVoxels<ByteBuffer> bvb = sourceObject.binaryVoxels();
 
         // For each region we get a mask for what equals the binary mask
         ObjectMask object =
-                bvb.getVoxelBox()
-                        .equalMask(
-                                new BoundingBox(bvb.getVoxelBox().extent()),
-                                bvb.getBinaryValues().getOnInt());
+                bvb.voxels()
+                        .extracter()
+                        .voxelsEqualTo(bvb.binaryValues().getOnInt())
+                        .deriveObject(new BoundingBox(bvb.voxels()));
         try {
-            chnlNew.getVoxelBox().asByte().replaceBy(object.getVoxelBox());
+            chnlNew.replaceVoxels(object.voxels());
         } catch (IncorrectImageSizeException e) {
             assert false;
         }

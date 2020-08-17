@@ -32,10 +32,11 @@ import cern.colt.matrix.linalg.EigenvalueDecomposition;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 class EigenValueDecompose {
-
-    private EigenValueDecompose() {}
 
     public static List<EigenvalueAndVector> apply(
             DoubleMatrix2D covarianceMatrix, boolean sortAscending) {

@@ -26,16 +26,15 @@
 
 package org.anchoranalysis.io.namestyle;
 
+import lombok.AllArgsConstructor;
+
+@AllArgsConstructor
 public class SimpleOutputNameStyle extends OutputNameStyle {
 
     /** */
     private static final long serialVersionUID = 7800246042849181557L;
 
     private String outputName;
-
-    public SimpleOutputNameStyle(String outputName) {
-        this.outputName = outputName;
-    }
 
     @Override
     public String getPhysicalName() {

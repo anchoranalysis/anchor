@@ -27,6 +27,8 @@
 package org.anchoranalysis.image.bean;
 
 import java.util.List;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureListFactory;
@@ -37,9 +39,8 @@ import org.anchoranalysis.feature.input.FeatureInput;
  *
  * @author Owen Feehan
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class RegisterBeanFactoriesImage {
-
-    private RegisterBeanFactoriesImage() {}
 
     public static void registerBeanFactories() {
         RegisterBeanFactories.register(

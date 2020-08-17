@@ -98,7 +98,7 @@ public class OrientationIdentity extends Orientation {
     }
 
     @Override
-    public void addPropertiesToMask(ObjectWithProperties mask) {
-        delegate.addPropertiesToMask(mask);
+    public void addPropertiesToMask(ObjectWithProperties object) {
+        delegate.addPropertiesToMask(object);
     }
 }

@@ -30,8 +30,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.functional.CallableWithException;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
+import org.anchoranalysis.core.name.store.StoreSupplier;
 
 /**
  * Stores objects as operations
@@ -40,32 +40,30 @@ import org.anchoranalysis.core.name.store.NamedProviderStore;
  */
 public class OperationMap<T> implements MultiInputSubMap<T> {
 
-    private Map<String, CallableWithException<T, OperationFailedException>> map = new HashMap<>();
+    private Map<String, StoreSupplier<T>> map = new HashMap<>();
 
     @Override
-    public void add(String name, CallableWithException<T, OperationFailedException> op) {
+    public void add(String name, StoreSupplier<T> op) {
         map.put(name, op);
     }
 
     @Override
     public void addToStore(NamedProviderStore<T> namedStore) throws OperationFailedException {
-        for (Entry<String, CallableWithException<T, OperationFailedException>> entry :
-                map.entrySet()) {
+        for (Entry<String, StoreSupplier<T>> entry : map.entrySet()) {
             namedStore.add(entry.getKey(), entry.getValue());
         }
     }
 
     @Override
-    public CallableWithException<T, OperationFailedException> get(String name)
-            throws OperationFailedException {
-        CallableWithException<T, OperationFailedException> ret = map.get(name);
+    public StoreSupplier<T> get(String name) throws OperationFailedException {
+        StoreSupplier<T> ret = map.get(name);
         if (ret == null) {
             throw new OperationFailedException(String.format("Cannot find key '%s'", name));
         }
         return ret;
     }
 
-    public Map<String, CallableWithException<T, OperationFailedException>> getMap() {
+    public Map<String, StoreSupplier<T>> getMap() {
         return map;
     }
 }

@@ -29,12 +29,12 @@ package org.anchoranalysis.image.voxel.buffer.max;
 import java.nio.ByteBuffer;
 import org.anchoranalysis.image.convert.ByteConverter;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
+import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 
 public class MaxIntensityBufferByte extends MaxIntensityBuffer<ByteBuffer> {
 
     public MaxIntensityBufferByte(Extent srcExtent) {
-        super(srcExtent, VoxelBoxFactory.getByte());
+        super(srcExtent, VoxelsFactory.getByte());
     }
 
     @Override

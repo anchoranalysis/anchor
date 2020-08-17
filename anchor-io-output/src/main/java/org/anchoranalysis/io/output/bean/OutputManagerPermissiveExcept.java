@@ -31,6 +31,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.StringSet;
@@ -44,6 +45,7 @@ import org.anchoranalysis.io.output.bean.allowed.SpecificOutputDisallowed;
  *
  * @author Owen Feehan
  */
+@NoArgsConstructor
 public class OutputManagerPermissiveExcept extends OutputManagerWithPrefixer {
 
     // START BEAN PROPERTIES
@@ -53,6 +55,10 @@ public class OutputManagerPermissiveExcept extends OutputManagerWithPrefixer {
     @BeanField @Getter @Setter
     private List<NamedBean<StringSet>> exceptSecondLevel = new ArrayList<>();
     // END BEAN PROPERTIES
+
+    public OutputManagerPermissiveExcept(StringSet except) {
+        this.except = except;
+    }
 
     // We cache the second-level map here
     private Map<String, OutputAllowed> mapSecondLevel = null;

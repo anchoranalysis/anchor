@@ -34,7 +34,7 @@ import org.anchoranalysis.image.stack.Stack;
 public class NullWriter extends RasterWriter {
 
     @Override
-    public String dfltExt() {
+    public String defaultExtension() {
         return "tif";
     }
 

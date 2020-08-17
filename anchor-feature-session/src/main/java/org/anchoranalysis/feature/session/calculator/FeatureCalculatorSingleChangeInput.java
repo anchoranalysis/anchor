@@ -27,6 +27,7 @@
 package org.anchoranalysis.feature.session.calculator;
 
 import java.util.function.Consumer;
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInput;
@@ -37,32 +38,25 @@ import org.anchoranalysis.feature.input.FeatureInput;
  * @author Owen Feehan
  * @param <T> feature-input
  */
+@AllArgsConstructor
 public class FeatureCalculatorSingleChangeInput<T extends FeatureInput>
         implements FeatureCalculatorSingle<T> {
 
+    /** Delegate which is called after an input is changed */
     private FeatureCalculatorSingle<T> calculator;
+
+    /** A function that is applied to change the input before being passed to {@code calculator} */
     private Consumer<T> funcToApplyChange;
 
-    /**
-     * Constructor
-     *
-     * @param calculator delegate which is called after an input is changed
-     * @param funcToApplyChange a function that is applied to change the input before being passed
-     *     to the delegate
-     */
-    public FeatureCalculatorSingleChangeInput(
-            FeatureCalculatorSingle<T> calculator, Consumer<T> funcToApplyChange) {
-        this.calculator = calculator;
-        this.funcToApplyChange = funcToApplyChange;
+    @Override
+    public double calculate(T input) throws FeatureCalculationException {
+        funcToApplyChange.accept(input);
+        return calculator.calculate(input);
     }
 
-    public double calc(T input) throws FeatureCalculationException {
+    @Override
+    public double calculateSuppressErrors(T input, ErrorReporter errorReporter) {
         funcToApplyChange.accept(input);
-        return calculator.calc(input);
-    }
-
-    public double calcSuppressErrors(T input, ErrorReporter errorReporter) {
-        funcToApplyChange.accept(input);
-        return calculator.calcSuppressErrors(input, errorReporter);
+        return calculator.calculateSuppressErrors(input, errorReporter);
     }
 }

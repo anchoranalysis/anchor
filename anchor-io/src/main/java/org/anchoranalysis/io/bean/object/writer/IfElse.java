@@ -59,7 +59,7 @@ public class IfElse extends DrawObject {
 
     @FunctionalInterface
     public interface Condition {
-        boolean isTrue(ObjectWithProperties mask, RGBStack stack, int id);
+        boolean isTrue(ObjectWithProperties object, RGBStack stack, int id);
     }
 
     public IfElse(Condition condition, DrawObject trueWriter, DrawObject falseWriter) {
@@ -70,14 +70,14 @@ public class IfElse extends DrawObject {
     }
 
     @Override
-    public PrecalcOverlay precalculate(ObjectWithProperties mask, ImageDimensions dim)
+    public PrecalcOverlay precalculate(ObjectWithProperties object, ImageDimensions dim)
             throws CreateException {
 
         // We calculate both the TRUE and FALSE precalculations
-        PrecalcOverlay precalcTrue = whenTrue.precalculate(mask, dim);
-        PrecalcOverlay precalcFalse = whenFalse.precalculate(mask, dim);
+        PrecalcOverlay precalcTrue = whenTrue.precalculate(object, dim);
+        PrecalcOverlay precalcFalse = whenFalse.precalculate(object, dim);
 
-        return new PrecalcOverlay(mask) {
+        return new PrecalcOverlay(object) {
 
             @Override
             public void writePrecalculatedMask(
@@ -90,7 +90,7 @@ public class IfElse extends DrawObject {
                 if (condition.isPresent()
                         && condition
                                 .get()
-                                .isTrue(mask, background, attributes.idFor(mask, iteration))) {
+                                .isTrue(object, background, attributes.idFor(object, iteration))) {
                     precalcTrue.writePrecalculatedMask(
                             background, attributes, iteration, restrictTo);
                 } else {

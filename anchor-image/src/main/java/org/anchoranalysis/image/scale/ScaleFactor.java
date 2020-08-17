@@ -28,6 +28,7 @@ package org.anchoranalysis.image.scale;
 
 import lombok.AllArgsConstructor;
 import lombok.Value;
+import lombok.experimental.Accessors;
 
 /**
  * What to scale x and y dimensions by
@@ -38,6 +39,7 @@ import lombok.Value;
  */
 @Value
 @AllArgsConstructor
+@Accessors(fluent = true)
 public final class ScaleFactor {
 
     private final double x;

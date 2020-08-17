@@ -27,13 +27,13 @@
 package org.anchoranalysis.io.manifest.match;
 
 import java.util.ArrayList;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 
+@NoArgsConstructor
 public class ManifestDescriptionMatchAnd implements Match<ManifestDescription> {
 
     private ArrayList<Match<ManifestDescription>> list = new ArrayList<>();
-
-    public ManifestDescriptionMatchAnd() {}
 
     public ManifestDescriptionMatchAnd(
             Match<ManifestDescription> condition1, Match<ManifestDescription> condition2) {

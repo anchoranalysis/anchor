@@ -29,6 +29,9 @@ package org.anchoranalysis.image.stack.bufferedimage;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
 import java.awt.image.WritableRaster;
+import java.util.stream.IntStream;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactoryByte;
@@ -38,36 +41,34 @@ import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferByte;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CreateStackFromBufferedImage {
 
     private static final ChannelFactorySingleType FACTORY = new ChannelFactoryByte();
 
-    private CreateStackFromBufferedImage() {}
-
     public static Stack create(BufferedImage bufferedImage) throws OperationFailedException {
 
-        Stack stackOut = new Stack();
-
-        ImageDimensions sd =
+        ImageDimensions dimensions =
                 new ImageDimensions(bufferedImage.getWidth(), bufferedImage.getHeight(), 1);
 
         byte[][] arr = bytesFromBufferedImage(bufferedImage);
 
         try {
-            int numChnl = 3;
-            for (int c = 0; c < numChnl; c++) {
-                Channel chnl = FACTORY.createEmptyUninitialised(sd);
-                chnl.getVoxelBox()
-                        .asByte()
-                        .getPlaneAccess()
-                        .setPixelsForPlane(0, VoxelBufferByte.wrap(arr[c]));
-                stackOut.addChannel(chnl);
-            }
+            return new Stack(
+                    IntStream.range(0, arr.length)
+                            .mapToObj(
+                                    channelIndex ->
+                                            createChannelFor(dimensions, arr[channelIndex])));
 
-            return stackOut;
         } catch (IncorrectImageSizeException e) {
             throw new OperationFailedException(e);
         }
+    }
+
+    private static Channel createChannelFor(ImageDimensions dimensions, byte[] arr) {
+        Channel channel = FACTORY.createEmptyUninitialised(dimensions);
+        channel.voxels().asByte().slices().replaceSlice(0, VoxelBufferByte.wrap(arr));
+        return channel;
     }
 
     private static byte[][] bytesFromBufferedImage(BufferedImage image) {

@@ -77,7 +77,7 @@ public class RootPath extends AnchorBean<RootPath> {
         // We get the difference of what is left, or else an exception is thrown if it cannot match
         PathDifferenceFromBase diff = PathDifferenceFromBase.differenceFrom(rootPath, path);
         out.setRoot(rootPath);
-        out.setPath(diff.combined());
+        out.setRemainder(diff.combined());
         return out;
     }
 

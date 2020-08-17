@@ -45,7 +45,7 @@ public class HistogramStatistics {
                     "The mean is 0 so the coefficient-of-variation is undefined");
         }
 
-        return hist.stdDev() / mean;
+        return hist.standardDeviation() / mean;
     }
 
     public static double kurtosis(Histogram hist) throws OperationFailedException {
@@ -70,7 +70,7 @@ public class HistogramStatistics {
 
         long count = hist.getTotalCount();
         double mean = hist.mean();
-        double sd = hist.stdDev();
+        double sd = hist.standardDeviation();
 
         // Calculated using formula in https://en.wikipedia.org/wiki/Skewness
         long firstTerm = hist.calcSumCubes() / count;

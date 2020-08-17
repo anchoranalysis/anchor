@@ -30,8 +30,8 @@ import java.io.IOException;
 import java.nio.Buffer;
 import java.util.function.Function;
 import org.anchoranalysis.image.extent.ImageDimensions;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
-import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
+import org.anchoranalysis.image.voxel.Voxels;
+import org.anchoranalysis.image.voxel.VoxelsWrapper;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.io.bioformats.DestChnlForIndex;
 import org.apache.commons.logging.Log;
@@ -42,14 +42,15 @@ public abstract class ConvertTo<T extends Buffer> {
 
     private static Log log = LogFactory.getLog(ConvertTo.class);
 
-    private Function<VoxelBoxWrapper, VoxelBox<T>> funcCastWrapper;
+    private Function<VoxelsWrapper, Voxels<T>> funcCastWrapper;
 
     /**
      * Default constructor
      *
-     * @param funcCastWrapper how to convert a VoxelBoxWrapper to the specific destination-type
+     * @param funcCastWrapper how to convert a {@link VoxelsWrapper} to the specific
+     *     destination-type
      */
-    public ConvertTo(Function<VoxelBoxWrapper, VoxelBox<T>> funcCastWrapper) {
+    public ConvertTo(Function<VoxelsWrapper, Voxels<T>> funcCastWrapper) {
         super();
         this.funcCastWrapper = funcCastWrapper;
     }
@@ -57,7 +58,7 @@ public abstract class ConvertTo<T extends Buffer> {
     /**
      * Copies the channels in the source buffer into a particular Chnl
      *
-     * @param sd scene-dimension
+     * @param dimensions scene-dimension
      * @param src the buffer we copy all channels from
      * @param funcDestChnl finds an appropriate destination channel for a particular
      *     relative-channel-index
@@ -66,12 +67,16 @@ public abstract class ConvertTo<T extends Buffer> {
      * @throws IOException
      */
     public void copyAllChnls(
-            ImageDimensions sd, byte[] src, DestChnlForIndex dest, int z, int numChnlsPerByteArray)
+            ImageDimensions dimensions,
+            byte[] src,
+            DestChnlForIndex dest,
+            int z,
+            int numChnlsPerByteArray)
             throws IOException {
 
         log.debug(String.format("copy to byte %d start", z));
 
-        setupBefore(sd, numChnlsPerByteArray);
+        setupBefore(dimensions, numChnlsPerByteArray);
 
         for (int channelRelative = 0; channelRelative < numChnlsPerByteArray; channelRelative++) {
 
@@ -85,11 +90,11 @@ public abstract class ConvertTo<T extends Buffer> {
     /**
      * Always called before any batch of calls to convertSingleChnl
      *
-     * @param sd dimension
+     * @param dimensions dimension
      * @param numChnlsPerByteArray the number of channels that are found in the byte-array that will
      *     be passed to convertSingleChnl
      */
-    protected abstract void setupBefore(ImageDimensions sd, int numChnlsPerByteArray);
+    protected abstract void setupBefore(ImageDimensions dimensions, int numChnlsPerByteArray);
 
     /**
      * Converts a single-channel only
@@ -102,11 +107,11 @@ public abstract class ConvertTo<T extends Buffer> {
 
     public static <S extends Buffer> void copyBytesIntoDestChnl(
             VoxelBuffer<S> voxelBuffer,
-            Function<VoxelBoxWrapper, VoxelBox<S>> funcCastWrapper,
+            Function<VoxelsWrapper, Voxels<S>> funcCastWrapper,
             DestChnlForIndex dest,
             int z,
             int cRel) {
-        VoxelBox<S> vb = funcCastWrapper.apply(dest.get(cRel).getVoxelBox());
-        vb.getPlaneAccess().setPixelsForPlane(z, voxelBuffer);
+        Voxels<S> voxels = funcCastWrapper.apply(dest.get(cRel).voxels());
+        voxels.slices().replaceSlice(z, voxelBuffer);
     }
 }

@@ -33,9 +33,6 @@ public abstract class OutputNameStyle implements Serializable {
     /** */
     private static final long serialVersionUID = 7757474603700575166L;
 
-    // Only for deserialization
-    public OutputNameStyle() {}
-
     public abstract String getPhysicalName();
 
     // The output name which refers to a particular category of output

@@ -112,7 +112,7 @@ public class ColoredOverlayCollection implements Iterable<Overlay> {
 
     // TODO - make more efficient using RTrees
     public ColoredOverlayCollection subsetWhereBBoxIntersects(
-            ImageDimensions bndScene, DrawOverlay maskWriter, List<BoundingBox> intersectList) {
+            ImageDimensions bndScene, DrawOverlay drawOverlay, List<BoundingBox> intersectList) {
 
         ColoredOverlayCollection out = new ColoredOverlayCollection();
 
@@ -120,7 +120,7 @@ public class ColoredOverlayCollection implements Iterable<Overlay> {
 
             Overlay overlay = get(i);
 
-            if (overlay.bbox(maskWriter, bndScene).intersection().existsWithAny(intersectList)) {
+            if (overlay.box(drawOverlay, bndScene).intersection().existsWithAny(intersectList)) {
                 out.add(overlay, getColor(i));
             }
         }
@@ -160,8 +160,8 @@ public class ColoredOverlayCollection implements Iterable<Overlay> {
         return overlays;
     }
 
-    public List<BoundingBox> bboxList(DrawOverlay maskWriter, ImageDimensions dim) {
-        return overlays.bboxList(maskWriter, dim);
+    public List<BoundingBox> boxList(DrawOverlay drawOverlay, ImageDimensions dim) {
+        return overlays.boxList(drawOverlay, dim);
     }
 
     public Set<Overlay> createSet() {

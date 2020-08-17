@@ -31,11 +31,12 @@ import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ByteConverter {
-
-    private ByteConverter() {}
 
     public static int unsignedByteToInt(byte b) {
         return b & 0xff;

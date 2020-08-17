@@ -41,24 +41,24 @@ public class FeatureCalculatorMultiFromSingle<T extends FeatureInput>
     private final FeatureCalculatorSingle<T> delegate;
 
     @Override
-    public ResultsVector calc(T input) throws NamedFeatureCalculationException {
+    public ResultsVector calculate(T input) throws NamedFeatureCalculationException {
         try {
-            return vectorFor(delegate.calc(input));
+            return vectorFor(delegate.calculate(input));
         } catch (FeatureCalculationException e) {
             throw new NamedFeatureCalculationException(e);
         }
     }
 
     @Override
-    public ResultsVector calc(T input, FeatureList<T> featuresSubset)
+    public ResultsVector calculate(T input, FeatureList<T> featuresSubset)
             throws NamedFeatureCalculationException {
         throw new NamedFeatureCalculationException(
                 "The calculation on feature-subsets operation is not supported");
     }
 
     @Override
-    public ResultsVector calcSuppressErrors(T input, ErrorReporter errorReporter) {
-        return vectorFor(delegate.calcSuppressErrors(input, errorReporter));
+    public ResultsVector calculateSuppressErrors(T input, ErrorReporter errorReporter) {
+        return vectorFor(delegate.calculateSuppressErrors(input, errorReporter));
     }
 
     @Override

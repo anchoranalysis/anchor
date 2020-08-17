@@ -39,8 +39,9 @@ public class ColorList implements ColorIndex, Iterable<RGBColor> {
 
     private List<RGBColor> list = new ArrayList<>();
 
-    public ColorList(Color color) {
-        this(new RGBColor(color));
+    public ColorList(Color... colors) {
+        this();
+        Arrays.stream(colors).forEach(this::add);
     }
 
     public ColorList(RGBColor... colors) {
@@ -112,6 +113,10 @@ public class ColorList implements ColorIndex, Iterable<RGBColor> {
         return i < size();
     }
 
+    public void add(Color color) {
+        add(new RGBColor(color));
+    }
+
     public void add(RGBColor color) {
         list.add(color);
     }
@@ -130,8 +135,8 @@ public class ColorList implements ColorIndex, Iterable<RGBColor> {
     }
 
     @Override
-    public RGBColor get(int i) {
-        return list.get(i);
+    public RGBColor get(int index) {
+        return list.get(index);
     }
 
     public boolean addAll(ColorList other) {

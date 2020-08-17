@@ -27,6 +27,8 @@
 package org.anchoranalysis.image.points;
 
 import java.util.List;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
@@ -37,9 +39,8 @@ import org.anchoranalysis.image.extent.BoundingBox;
  *
  * @author Owen Feehan
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class BoundingBoxFromPoints {
-
-    private BoundingBoxFromPoints() {}
 
     /**
      * Create from a list of points
@@ -76,17 +77,17 @@ public class BoundingBoxFromPoints {
 
     private static Point3d calcMin(Point3d point1, Point3d point2) {
         Point3d point = new Point3d();
-        point.setX(Math.min(point1.getX(), point2.getX()));
-        point.setY(Math.min(point1.getY(), point2.getY()));
-        point.setZ(Math.min(point1.getZ(), point2.getZ()));
+        point.setX(Math.min(point1.x(), point2.x()));
+        point.setY(Math.min(point1.y(), point2.y()));
+        point.setZ(Math.min(point1.z(), point2.z()));
         return point;
     }
 
     private static Point3d calcMax(Point3d point1, Point3d point2) {
         Point3d point = new Point3d();
-        point.setX(Math.max(point1.getX(), point2.getX()));
-        point.setY(Math.max(point1.getY(), point2.getY()));
-        point.setZ(Math.max(point1.getZ(), point2.getZ()));
+        point.setX(Math.max(point1.x(), point2.x()));
+        point.setY(Math.max(point1.y(), point2.y()));
+        point.setZ(Math.max(point1.z(), point2.z()));
         return point;
     }
 }

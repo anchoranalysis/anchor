@@ -36,33 +36,38 @@ public class InterpolatorNone implements Interpolator {
 
     @Override
     public VoxelBuffer<ByteBuffer> interpolateByte(
-            VoxelBuffer<ByteBuffer> src, VoxelBuffer<ByteBuffer> dest, Extent eSrc, Extent eDest) {
+            VoxelBuffer<ByteBuffer> voxelsSource,
+            VoxelBuffer<ByteBuffer> voxelsDestination,
+            Extent extentSource,
+            Extent extentDestination) {
 
-        copyByte(src.buffer(), dest.buffer(), eSrc, eDest);
-        return dest;
+        copyByte(
+                voxelsSource.buffer(), voxelsDestination.buffer(), extentSource, extentDestination);
+        return voxelsDestination;
     }
 
     @Override
     public VoxelBuffer<ShortBuffer> interpolateShort(
-            VoxelBuffer<ShortBuffer> src,
-            VoxelBuffer<ShortBuffer> dest,
-            Extent eSrc,
-            Extent eDest) {
-        copyShort(src.buffer(), dest.buffer(), eSrc, eDest);
-        return dest;
+            VoxelBuffer<ShortBuffer> voxelsSource,
+            VoxelBuffer<ShortBuffer> voxelsDestination,
+            Extent extentSource,
+            Extent extentDestination) {
+        copyShort(
+                voxelsSource.buffer(), voxelsDestination.buffer(), extentSource, extentDestination);
+        return voxelsDestination;
     }
 
     private static void copyByte(ByteBuffer bbIn, ByteBuffer bbOut, Extent eIn, Extent eOut) {
 
-        double xScale = intDiv(eIn.getX(), eOut.getX());
-        double yScale = intDiv(eIn.getY(), eOut.getY());
+        double xScale = intDiv(eIn.x(), eOut.x());
+        double yScale = intDiv(eIn.y(), eOut.y());
 
         // We loop through every pixel in the output buffer
-        for (int y = 0; y < eOut.getY(); y++) {
-            for (int x = 0; x < eOut.getX(); x++) {
+        for (int y = 0; y < eOut.y(); y++) {
+            for (int x = 0; x < eOut.x(); x++) {
 
-                int xOrig = intMin(xScale * x, eIn.getX() - 1);
-                int yOrig = intMin(yScale * y, eIn.getY() - 1);
+                int xOrig = intMin(xScale * x, eIn.x() - 1);
+                int yOrig = intMin(yScale * y, eIn.y() - 1);
 
                 byte orig = bbIn.get(eIn.offset(xOrig, yOrig));
                 bbOut.put(orig);
@@ -72,15 +77,15 @@ public class InterpolatorNone implements Interpolator {
 
     private static void copyShort(ShortBuffer bbIn, ShortBuffer bbOut, Extent eIn, Extent eOut) {
 
-        double xScale = intDiv(eIn.getX(), eOut.getX());
-        double yScale = intDiv(eIn.getY(), eOut.getY());
+        double xScale = intDiv(eIn.x(), eOut.x());
+        double yScale = intDiv(eIn.y(), eOut.y());
 
         // We loop through every pixel in the output buffer
-        for (int y = 0; y < eOut.getY(); y++) {
-            for (int x = 0; x < eOut.getX(); x++) {
+        for (int y = 0; y < eOut.y(); y++) {
+            for (int x = 0; x < eOut.x(); x++) {
 
-                int xOrig = intMin(xScale * x, eIn.getX() - 1);
-                int yOrig = intMin(yScale * y, eIn.getY() - 1);
+                int xOrig = intMin(xScale * x, eIn.x() - 1);
+                int yOrig = intMin(yScale * y, eIn.y() - 1);
 
                 short orig = bbIn.get(eIn.offset(xOrig, yOrig));
                 bbOut.put(orig);

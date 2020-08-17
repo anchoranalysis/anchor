@@ -46,8 +46,8 @@ public abstract class FeatureInputNRG implements FeatureInputParams {
     }
 
     @Override
-    public Optional<ImageResolution> getResOptional() {
-        return nrgStack.map(NRGStackWithParams::getDimensions).map(ImageDimensions::getRes);
+    public Optional<ImageResolution> getResolutionOptional() {
+        return nrgStack.map(NRGStackWithParams::dimensions).map(ImageDimensions::resolution);
     }
 
     @Override
@@ -55,16 +55,16 @@ public abstract class FeatureInputNRG implements FeatureInputParams {
         return nrgStack.map(NRGStackWithParams::getParams);
     }
 
-    public ImageDimensions getDimensionsRequired() throws FeatureCalculationException {
-        return getDimensionsOptional()
+    public ImageDimensions dimensionsRequired() throws FeatureCalculationException {
+        return dimensionsOptional()
                 .orElseThrow(
                         () ->
                                 new FeatureCalculationException(
                                         "Dimensions are required in the input for this operation"));
     }
 
-    public Optional<ImageDimensions> getDimensionsOptional() {
-        return nrgStack.map(NRGStackWithParams::getDimensions);
+    public Optional<ImageDimensions> dimensionsOptional() {
+        return nrgStack.map(NRGStackWithParams::dimensions);
     }
 
     /**

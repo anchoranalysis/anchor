@@ -30,17 +30,16 @@ import java.io.Serializable;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.io.bean.deserializer.Deserializer;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
 import org.anchoranalysis.io.manifest.file.FileWrite;
 import org.anchoranalysis.io.manifest.folder.FolderWrite;
 import org.anchoranalysis.io.manifest.match.FileWriteIndex;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class BundleUtilities {
-
-    private BundleUtilities() {
-        // static access only
-    }
 
     public static <T extends Serializable> Bundle<T> generateBundle(
             Deserializer<Bundle<T>> deserializer, FolderWrite rootFolder, int index)

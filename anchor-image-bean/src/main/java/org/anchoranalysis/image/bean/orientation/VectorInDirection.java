@@ -46,9 +46,9 @@ public class VectorInDirection extends DirectionVectorBean {
     // END BEAN PROPERTIES
 
     public VectorInDirection(DirectionVector vector) {
-        this.x = vector.getX();
-        this.y = vector.getY();
-        this.z = vector.getZ();
+        this.x = vector.x();
+        this.y = vector.y();
+        this.z = vector.z();
     }
 
     @Override

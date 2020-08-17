@@ -28,7 +28,6 @@ package org.anchoranalysis.image.io.generator.raster;
 
 import java.util.Optional;
 import lombok.AllArgsConstructor;
-import org.anchoranalysis.core.functional.CallableWithException;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.generator.IterableObjectGenerator;
 import org.anchoranalysis.io.generator.ObjectGenerator;
@@ -37,10 +36,9 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 @AllArgsConstructor
 public class StackOperationGenerator extends RasterGenerator
-        implements IterableObjectGenerator<
-                CallableWithException<Stack, OutputWriteFailedException>, Stack> {
+        implements IterableObjectGenerator<StackToWriteSupplier, Stack> {
 
-    private CallableWithException<Stack, OutputWriteFailedException> stackIn;
+    private StackToWriteSupplier element;
     private boolean padIfNec;
     private String manifestFunction;
 
@@ -52,8 +50,7 @@ public class StackOperationGenerator extends RasterGenerator
 
     @Override
     public Stack generate() throws OutputWriteFailedException {
-        assert (stackIn != null);
-        return StackGenerator.generateStack(stackIn.call(), padIfNec);
+        return StackGenerator.generateStack(element.get(), padIfNec);
     }
 
     @Override
@@ -67,19 +64,18 @@ public class StackOperationGenerator extends RasterGenerator
     }
 
     @Override
-    public CallableWithException<Stack, OutputWriteFailedException> getIterableElement() {
-        return stackIn;
+    public StackToWriteSupplier getIterableElement() {
+        return element;
     }
 
     @Override
-    public void setIterableElement(
-            CallableWithException<Stack, OutputWriteFailedException> element) {
-        this.stackIn = element;
+    public void setIterableElement(StackToWriteSupplier element) {
+        this.element = element;
     }
 
     @Override
     public boolean isRGB() throws OutputWriteFailedException {
-        return stackIn.call().getNumberChannels() == 3
-                || (stackIn.call().getNumberChannels() == 2 && padIfNec);
+        return element.get().getNumberChannels() == 3
+                || (element.get().getNumberChannels() == 2 && padIfNec);
     }
 }

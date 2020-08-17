@@ -27,10 +27,13 @@
 package org.anchoranalysis.image.extent;
 
 import java.io.Serializable;
+import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.experimental.Accessors;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.scale.ScaleFactor;
 import org.anchoranalysis.image.scale.ScaleFactorUtilities;
 
@@ -40,14 +43,24 @@ import org.anchoranalysis.image.scale.ScaleFactorUtilities;
  * <p>This class is IMMUTABLE.
  */
 @EqualsAndHashCode
+@Accessors(fluent = true)
+@AllArgsConstructor
 public final class ImageDimensions implements Serializable {
 
     /** */
     private static final long serialVersionUID = 1L;
 
-    private final ImageResolution res;
-
+    /**
+     * The width and height and depth of the image i.e. the size of each of the three possible
+     * dimensions
+     */
     @Getter private final Extent extent;
+
+    /**
+     * Resolution of voxels to physical measurements e.g. physical size of each voxel in a
+     * particular dimension
+     */
+    @Getter private final ImageResolution resolution;
 
     /** Construct with an explicit extent and default resolution (1.0 for each dimension) */
     public ImageDimensions(int x, int y, int z) {
@@ -55,60 +68,59 @@ public final class ImageDimensions implements Serializable {
     }
 
     /** Construct with an explicit extent and default resolution (1.0 for each dimension) */
+    public ImageDimensions(ReadableTuple3i extent) {
+        this(new Extent(extent.x(), extent.y(), extent.z()));
+    }
+
+    /** Construct with an explicit extent and default resolution (1.0 for each dimension) */
     public ImageDimensions(Extent extent) {
         this(extent, new ImageResolution());
     }
 
-    /** Construct with an explicit extent and resolution */
-    public ImageDimensions(Extent extent, ImageResolution res) {
-        this.extent = extent;
-        this.res = res;
-    }
-
     public ImageDimensions scaleXYTo(int x, int y) {
-        Extent extentScaled = new Extent(x, y, extent.getZ());
-        ScaleFactor sf = ScaleFactorUtilities.calcRelativeScale(extent, extentScaled);
-        return new ImageDimensions(extentScaled, res.scaleXY(sf));
+        Extent extentScaled = new Extent(x, y, extent.z());
+        ScaleFactor scaleFactor = ScaleFactorUtilities.calcRelativeScale(extent, extentScaled);
+        return new ImageDimensions(extentScaled, resolution.scaleXY(scaleFactor));
     }
 
-    public ImageDimensions scaleXYBy(ScaleFactor sf) {
-        return new ImageDimensions(extent.scaleXYBy(sf), res.scaleXY(sf));
+    public ImageDimensions scaleXYBy(ScaleFactor scaleFactor) {
+        return new ImageDimensions(extent.scaleXYBy(scaleFactor), resolution.scaleXY(scaleFactor));
+    }
+
+    public ImageDimensions duplicateChangeExtent(Extent extentToAssign) {
+        return new ImageDimensions(extentToAssign, resolution);
     }
 
     public ImageDimensions duplicateChangeZ(int z) {
-        return new ImageDimensions(extent.duplicateChangeZ(z), res);
+        return new ImageDimensions(extent.duplicateChangeZ(z), resolution);
     }
 
-    public ImageDimensions duplicateChangeRes(ImageResolution resToAssign) {
-        return new ImageDimensions(extent, resToAssign);
+    public ImageDimensions duplicateChangeRes(ImageResolution resolutionToAssign) {
+        return new ImageDimensions(extent, resolutionToAssign);
     }
 
-    public long getVolume() {
-        return extent.getVolume();
+    public long calculateVolume() {
+        return extent.calculateVolume();
     }
 
-    public int getVolumeXY() {
-        return extent.getVolumeXY();
+    public int volumeXY() {
+        return extent.volumeXY();
     }
 
-    public int getX() {
-        return extent.getX();
+    public int x() {
+        return extent.x();
     }
 
-    public int getY() {
-        return extent.getY();
+    public int y() {
+        return extent.y();
     }
 
-    public int getZ() {
-        return extent.getZ();
+    public int z() {
+        return extent.z();
     }
 
     public int offset(int x, int y) {
         return extent.offset(x, y);
-    }
-
-    public int offset(int x, int y, int z) {
-        return extent.offset(x, y, z);
     }
 
     public boolean contains(Point3d point) {
@@ -127,12 +139,8 @@ public final class ImageDimensions implements Serializable {
         return extent.offsetSlice(point);
     }
 
-    public ImageResolution getRes() {
-        return res;
-    }
-
-    public boolean contains(BoundingBox bbox) {
-        return extent.contains(bbox);
+    public boolean contains(BoundingBox box) {
+        return extent.contains(box);
     }
 
     @Override

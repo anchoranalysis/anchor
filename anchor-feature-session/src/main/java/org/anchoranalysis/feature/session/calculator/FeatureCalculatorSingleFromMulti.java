@@ -55,14 +55,14 @@ public class FeatureCalculatorSingleFromMulti<T extends FeatureInput>
     }
 
     @Override
-    public double calcSuppressErrors(T input, ErrorReporter errorReporter) {
-        return delegate.calcSuppressErrors(input, errorReporter).get(0);
+    public double calculateSuppressErrors(T input, ErrorReporter errorReporter) {
+        return delegate.calculateSuppressErrors(input, errorReporter).get(0);
     }
 
     @Override
-    public double calc(T params) throws FeatureCalculationException {
+    public double calculate(T params) throws FeatureCalculationException {
         try {
-            return delegate.calc(params).get(0);
+            return delegate.calculate(params).get(0);
         } catch (NamedFeatureCalculationException e) {
             throw e.dropKey();
         }

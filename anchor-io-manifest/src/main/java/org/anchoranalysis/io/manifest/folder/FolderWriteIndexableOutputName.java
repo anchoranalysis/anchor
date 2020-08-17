@@ -78,7 +78,7 @@ public class FolderWriteIndexableOutputName extends FolderWriteWithPath {
         do {
             // We loop through each file type
             for (FileType fileType : template) {
-                FileWrite virtualFile = genFile(sequenceType.indexStr(i), fileType);
+                FileWrite virtualFile = createFileWrite(sequenceType.indexStr(i), fileType);
                 if (match.matches(virtualFile)) {
                     foundList.add(virtualFile);
                 }
@@ -89,7 +89,7 @@ public class FolderWriteIndexableOutputName extends FolderWriteWithPath {
         } while (i != -1);
     }
 
-    private FileWrite genFile(String index, FileType fileType) {
+    private FileWrite createFileWrite(String index, FileType fileType) {
 
         FileWrite fw = new FileWrite();
         fw.setFileName(outputName.getPhysicalName(index) + "." + fileType.getFileExtension());

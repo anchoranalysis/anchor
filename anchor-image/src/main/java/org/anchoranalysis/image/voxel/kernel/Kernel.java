@@ -29,7 +29,7 @@ package org.anchoranalysis.image.voxel.kernel;
 import java.nio.ByteBuffer;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.Voxels;
 
 public abstract class Kernel {
 
@@ -56,22 +56,22 @@ public abstract class Kernel {
     }
 
     public int getYMin(Point3i point) {
-        return Math.max(point.getY() - getSizeHalf(), 0);
+        return Math.max(point.y() - getSizeHalf(), 0);
     }
 
     public int getYMax(Point3i point, Extent extent) {
-        return Math.min(point.getY() + getSizeHalf(), extent.getY() - 1);
+        return Math.min(point.y() + getSizeHalf(), extent.y() - 1);
     }
 
     public int getXMin(Point3i point) {
-        return Math.max(point.getX() - getSizeHalf(), 0);
+        return Math.max(point.x() - getSizeHalf(), 0);
     }
 
     public int getXMax(Point3i point, Extent extent) {
-        return Math.min(point.getX() + getSizeHalf(), extent.getX() - 1);
+        return Math.min(point.x() + getSizeHalf(), extent.x() - 1);
     }
 
-    public abstract void init(VoxelBox<ByteBuffer> in);
+    public abstract void init(Voxels<ByteBuffer> in);
 
     public abstract void notifyZChange(LocalSlices inSlices, int z);
 }

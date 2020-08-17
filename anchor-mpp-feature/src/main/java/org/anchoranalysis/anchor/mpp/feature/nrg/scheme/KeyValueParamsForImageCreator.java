@@ -96,7 +96,7 @@ public class KeyValueParamsForImageCreator {
             FeatureCalculatorSingle<FeatureInputStack> session =
                     FeatureSession.with(feature, paramsInit, sharedFeatures, logger);
 
-            return session.calc(params);
+            return session.calculate(params);
 
         } catch (FeatureCalculationException | InitException e) {
             throw new OperationFailedException(e);

@@ -37,22 +37,25 @@ public class InterpolatorImageJ implements Interpolator {
 
     @Override
     public VoxelBuffer<ByteBuffer> interpolateByte(
-            VoxelBuffer<ByteBuffer> src, VoxelBuffer<ByteBuffer> dest, Extent eSrc, Extent eDest) {
+            VoxelBuffer<ByteBuffer> voxelsSource,
+            VoxelBuffer<ByteBuffer> voxelsDestination,
+            Extent extentSource,
+            Extent extentDestination) {
 
-        ImageProcessor ipSrc = IJWrap.imageProcessorByte(src, eSrc);
-        ImageProcessor ipOut = ipSrc.resize(eDest.getX(), eDest.getY(), true);
+        ImageProcessor ipSrc = IJWrap.imageProcessorByte(voxelsSource, extentSource);
+        ImageProcessor ipOut = ipSrc.resize(extentDestination.x(), extentDestination.y(), true);
         return IJWrap.voxelBufferFromImageProcessorByte(ipOut);
     }
 
     @Override
     public VoxelBuffer<ShortBuffer> interpolateShort(
-            VoxelBuffer<ShortBuffer> src,
-            VoxelBuffer<ShortBuffer> dest,
-            Extent eSrc,
-            Extent eDest) {
+            VoxelBuffer<ShortBuffer> voxelsSource,
+            VoxelBuffer<ShortBuffer> voxelsDestination,
+            Extent extentSource,
+            Extent extentDestination) {
 
-        ImageProcessor ipSrc = IJWrap.imageProcessorShort(src, eSrc);
-        ImageProcessor ipOut = ipSrc.resize(eDest.getX(), eDest.getY(), true);
+        ImageProcessor ipSrc = IJWrap.imageProcessorShort(voxelsSource, extentSource);
+        ImageProcessor ipOut = ipSrc.resize(extentDestination.x(), extentDestination.y(), true);
         return IJWrap.voxelBufferFromImageProcessorShort(ipOut);
     }
 

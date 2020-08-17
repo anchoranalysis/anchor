@@ -26,6 +26,8 @@
 
 package org.anchoranalysis.anchor.mpp.proposer.error;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 
 /**
@@ -33,14 +35,13 @@ import org.anchoranalysis.anchor.mpp.mark.Mark;
  *
  * @author Owen Feehan
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ErrorNodeNull extends ErrorNode {
 
     /** */
     private static final long serialVersionUID = 5512508477564211253L;
 
     private static ErrorNodeNull instance = new ErrorNodeNull();
-
-    private ErrorNodeNull() {}
 
     public static ErrorNodeNull instance() {
         return instance;

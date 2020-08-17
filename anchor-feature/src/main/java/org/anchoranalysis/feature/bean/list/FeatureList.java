@@ -40,7 +40,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.functional.function.FunctionWithException;
+import org.anchoranalysis.core.functional.function.CheckedFunction;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calc.FeatureInitParams;
@@ -95,7 +95,7 @@ public class FeatureList<T extends FeatureInput> extends AnchorBean<FeatureList<
      * @throws E if the mapping-function throws this exception
      */
     public <S extends FeatureInput, E extends Exception> FeatureList<S> map(
-            FunctionWithException<Feature<T>, Feature<S>, E> mapFunc) throws E {
+            CheckedFunction<Feature<T>, Feature<S>, E> mapFunc) throws E {
         FeatureList<S> out = new FeatureList<>();
         for (Feature<T> feature : list) {
             out.add(mapFunc.apply(feature));
@@ -116,8 +116,7 @@ public class FeatureList<T extends FeatureInput> extends AnchorBean<FeatureList<
      * @throws E if the mapping-function throws this exception
      */
     public <S extends FeatureInput, E extends Exception> FeatureList<S> filterAndMap(
-            Predicate<Feature<T>> predicate,
-            FunctionWithException<Feature<T>, Feature<S>, E> mapFunc)
+            Predicate<Feature<T>> predicate, CheckedFunction<Feature<T>, Feature<S>, E> mapFunc)
             throws E {
         FeatureList<S> out = new FeatureList<>();
         for (Feature<T> feature : list) {

@@ -28,8 +28,8 @@ package org.anchoranalysis.image.interpolator.transfer;
 
 import java.nio.ShortBuffer;
 import org.anchoranalysis.image.interpolator.Interpolator;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
-import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
+import org.anchoranalysis.image.voxel.Voxels;
+import org.anchoranalysis.image.voxel.VoxelsWrapper;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 
 // Lots of copying bytes, which doesn't make it very efficient
@@ -38,33 +38,33 @@ import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 //   type which messes up our scaling
 public class TransferViaShort implements Transfer {
 
-    private VoxelBox<ShortBuffer> src;
-    private VoxelBox<ShortBuffer> trgt;
-    private VoxelBuffer<ShortBuffer> buffer;
+    private final Voxels<ShortBuffer> source;
+    private final Voxels<ShortBuffer> destination;
+    private VoxelBuffer<ShortBuffer> slice;
 
-    public TransferViaShort(VoxelBoxWrapper src, VoxelBoxWrapper trgt) {
-        this.src = src.asShort();
-        this.trgt = trgt.asShort();
+    public TransferViaShort(VoxelsWrapper source, VoxelsWrapper destination) {
+        this.source = source.asShort();
+        this.destination = destination.asShort();
     }
 
     @Override
     public void assignSlice(int z) {
-        buffer = src.getPixelsForPlane(z);
+        slice = source.slice(z);
     }
 
     @Override
     public void transferCopyTo(int z) {
-        trgt.setPixelsForPlane(z, buffer.duplicate());
+        destination.replaceSlice(z, slice.duplicate());
     }
 
     @Override
     public void transferTo(int z, Interpolator interpolator) {
 
-        VoxelBuffer<ShortBuffer> bufIn = trgt.getPixelsForPlane(z);
+        VoxelBuffer<ShortBuffer> bufIn = destination.slice(z);
         VoxelBuffer<ShortBuffer> bufOut =
-                interpolator.interpolateShort(buffer, bufIn, src.extent(), trgt.extent());
+                interpolator.interpolateShort(slice, bufIn, source.extent(), destination.extent());
         if (!bufOut.equals(bufIn)) {
-            trgt.setPixelsForPlane(z, bufOut);
+            destination.replaceSlice(z, bufOut);
         }
     }
 }

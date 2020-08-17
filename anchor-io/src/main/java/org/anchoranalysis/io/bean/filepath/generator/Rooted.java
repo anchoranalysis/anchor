@@ -72,7 +72,7 @@ public class Rooted extends FilePathGenerator {
     private Path determinePathOut(SplitPath pathInWithoutRoot, boolean debugMode)
             throws AnchorIOException {
 
-        Path pathOut = item.outFilePath(pathInWithoutRoot.getPath(), debugMode);
+        Path pathOut = item.outFilePath(pathInWithoutRoot.getRemainder(), debugMode);
 
         if (suppressRootOut) {
             pathOut = BeanPathUtilities.combine(getLocalPath(), pathOut);

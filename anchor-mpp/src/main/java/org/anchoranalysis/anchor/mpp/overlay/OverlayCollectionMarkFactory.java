@@ -26,6 +26,8 @@
 
 package org.anchoranalysis.anchor.mpp.overlay;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipWithFlags;
 import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 import org.anchoranalysis.anchor.mpp.cfg.ColoredCfg;
@@ -43,9 +45,8 @@ import org.anchoranalysis.core.color.RGBColor;
  *
  * @author Owen Feehan
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class OverlayCollectionMarkFactory {
-
-    private OverlayCollectionMarkFactory() {}
 
     public static OverlayCollection createWithoutColor(
             Cfg cfg, RegionMembershipWithFlags regionMembership) {

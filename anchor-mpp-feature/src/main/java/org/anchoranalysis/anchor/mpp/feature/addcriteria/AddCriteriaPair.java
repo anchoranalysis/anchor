@@ -50,7 +50,7 @@ public abstract class AddCriteriaPair extends AnchorBean<AddCriteriaPair>
             throws CreateException {
 
         try {
-            if (includeMarks(mark1, mark2, nrgStack.getDimensions(), session, do3D)) {
+            if (includeMarks(mark1, mark2, nrgStack.dimensions(), session, do3D)) {
                 return Optional.of(new IdentifiablePair<Mark>(mark1.getMark(), mark2.getMark()));
             }
         } catch (IncludeMarksFailureException e) {

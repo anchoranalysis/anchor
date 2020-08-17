@@ -69,16 +69,16 @@ public class FeatureCalculatorCachedSingle<T extends FeatureInput>
     }
 
     @Override
-    public double calc(T input) throws FeatureCalculationException {
+    public double calculate(T input) throws FeatureCalculationException {
         try {
-            return delegate.calc(input).get(0);
+            return delegate.calculate(input).get(0);
         } catch (NamedFeatureCalculationException e) {
             throw e.dropKey();
         }
     }
 
     @Override
-    public double calcSuppressErrors(T input, ErrorReporter errorReporter) {
-        return delegate.calcSuppressErrors(input, errorReporter).get(0);
+    public double calculateSuppressErrors(T input, ErrorReporter errorReporter) {
+        return delegate.calculateSuppressErrors(input, errorReporter).get(0);
     }
 }

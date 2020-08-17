@@ -65,17 +65,17 @@ public class Outline extends DrawObject {
     }
 
     @Override
-    public PrecalcOverlay precalculate(ObjectWithProperties mask, ImageDimensions dim)
+    public PrecalcOverlay precalculate(ObjectWithProperties object, ImageDimensions dim)
             throws CreateException {
 
-        ObjectMask object =
+        ObjectMask outline =
                 FindOutline.outline(
-                        mask.getMask(), outlineWidth, true, (dim.getZ() > 1) && !force2D);
+                        object.withoutProperties(), outlineWidth, true, (dim.z() > 1) && !force2D);
 
         ObjectWithProperties objectWithProperties =
-                new ObjectWithProperties(object, mask.getProperties());
+                new ObjectWithProperties(outline, object.getProperties());
 
-        return new PrecalcOverlay(mask) {
+        return new PrecalcOverlay(object) {
 
             @Override
             public void writePrecalculatedMask(
@@ -85,12 +85,12 @@ public class Outline extends DrawObject {
                     BoundingBox restrictTo)
                     throws OperationFailedException {
 
-                assert (object.getVoxelBox().extent().getZ() > 0);
+                assert (outline.extent().z() > 0);
                 // TODO this can get broken! Fix!
-                assert (object.getBoundingBox().cornerMin().getZ() >= 0);
+                assert (outline.boundingBox().cornerMin().z() >= 0);
 
                 IntersectionWriter.writeRGBMaskIntersection(
-                        object,
+                        outline,
                         attributes.colorFor(objectWithProperties, iteration),
                         background,
                         restrictTo);

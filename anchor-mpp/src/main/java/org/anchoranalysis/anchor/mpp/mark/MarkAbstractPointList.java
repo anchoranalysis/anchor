@@ -71,7 +71,7 @@ public abstract class MarkAbstractPointList extends Mark {
     }
 
     @Override
-    public BoundingBox bbox(ImageDimensions bndScene, int regionID) {
+    public BoundingBox box(ImageDimensions bndScene, int regionID) {
         // TODO FOR NOW WE IGNORE THE SHELL RADIUS
         return new BoundingBox(min, max);
     }
@@ -83,16 +83,16 @@ public abstract class MarkAbstractPointList extends Mark {
                         Double.POSITIVE_INFINITY,
                         Double.POSITIVE_INFINITY);
         for (Point3d point : points) {
-            if (point.getX() < min.getX()) {
-                min.setX(point.getX());
+            if (point.x() < min.x()) {
+                min.setX(point.x());
             }
 
-            if (point.getY() < min.getY()) {
-                min.setY(point.getY());
+            if (point.y() < min.y()) {
+                min.setY(point.y());
             }
 
-            if (point.getZ() < min.getZ()) {
-                min.setZ(point.getZ());
+            if (point.z() < min.z()) {
+                min.setZ(point.z());
             }
         }
         return min;
@@ -105,22 +105,22 @@ public abstract class MarkAbstractPointList extends Mark {
                         Double.NEGATIVE_INFINITY,
                         Double.NEGATIVE_INFINITY);
         for (Point3d point : points) {
-            if (point.getX() > max.getX()) {
-                max.setX(point.getX());
+            if (point.x() > max.x()) {
+                max.setX(point.x());
             }
 
-            if (point.getY() > max.getY()) {
-                max.setY(point.getY());
+            if (point.y() > max.y()) {
+                max.setY(point.y());
             }
 
-            if (point.getZ() > max.getZ()) {
-                max.setZ(point.getZ());
+            if (point.z() > max.z()) {
+                max.setZ(point.z());
             }
         }
         return max;
     }
 
-    protected BoundingBox bbox() {
+    protected BoundingBox box() {
         return new BoundingBox(getMin(), getMax());
     }
 

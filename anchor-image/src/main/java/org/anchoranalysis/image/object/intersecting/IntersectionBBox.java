@@ -45,13 +45,13 @@ public class IntersectionBBox {
     private Dimension x;
     private Dimension y;
     private Dimension z;
-    private Extent e1; // Extent of source bbox
-    private Extent e2; // Extent of other bbox
+    private Extent e1; // Extent of source box
+    private Extent e2; // Extent of other box
 
     public static class Dimension {
 
-        private int min; // Min point of intersection bbox
-        private int max; // Max point of intersection bbox
+        private int min; // Min point of intersection box
+        private int max; // Max point of intersection box
         private int rel; // Relative position other to src
 
         public Dimension(int min, int max, int rel) {
@@ -75,26 +75,35 @@ public class IntersectionBBox {
     }
 
     public static IntersectionBBox create(
-            BoundingBox bboxSrc, BoundingBox bboxOther, BoundingBox bboxIntersect) {
+            BoundingBox boxSource, BoundingBox boxOther, BoundingBox boxIntersect) {
 
-        Point3i relPosSrc = bboxIntersect.relPosTo(bboxSrc);
+        Point3i relativePositionSource = boxIntersect.relativePositionTo(boxSource);
 
-        Point3i relPosTrgtToSrc =
-                Point3i.immutableSubtract(bboxSrc.cornerMin(), bboxOther.cornerMin());
+        Point3i relativePositionDestinationToSource =
+                Point3i.immutableSubtract(boxSource.cornerMin(), boxOther.cornerMin());
 
-        Point3i relPosSrcMax = Point3i.immutableAdd(relPosSrc, bboxIntersect.extent().asTuple());
+        Point3i relativePositionSourceMax =
+                Point3i.immutableAdd(relativePositionSource, boxIntersect.extent().asTuple());
 
         return new IntersectionBBox(
-                relPosSrc, relPosSrcMax, relPosTrgtToSrc, bboxSrc.extent(), bboxOther.extent());
+                relativePositionSource,
+                relativePositionSourceMax,
+                relativePositionDestinationToSource,
+                boxSource.extent(),
+                boxOther.extent());
     }
 
     private IntersectionBBox(
-            Point3i pointMin, Point3i pointMax, Point3i relPos, Extent eSrc, Extent eOther) {
-        x = new Dimension(pointMin.getX(), pointMax.getX(), relPos.getX());
-        y = new Dimension(pointMin.getY(), pointMax.getY(), relPos.getY());
-        z = new Dimension(pointMin.getZ(), pointMax.getZ(), relPos.getZ());
-        this.e1 = eSrc;
-        this.e2 = eOther;
+            Point3i pointMin,
+            Point3i pointMax,
+            Point3i relativePosition,
+            Extent extentSource,
+            Extent extentOther) {
+        x = new Dimension(pointMin.x(), pointMax.x(), relativePosition.x());
+        y = new Dimension(pointMin.y(), pointMax.y(), relativePosition.y());
+        z = new Dimension(pointMin.z(), pointMax.z(), relativePosition.z());
+        this.e1 = extentSource;
+        this.e2 = extentOther;
     }
 
     public Dimension x() {

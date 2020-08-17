@@ -28,6 +28,8 @@ package org.anchoranalysis.test.feature;
 
 import static org.junit.Assert.assertTrue;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListFactory;
@@ -35,33 +37,32 @@ import org.anchoranalysis.feature.bean.operator.Constant;
 import org.anchoranalysis.feature.calc.results.ResultsVector;
 import org.anchoranalysis.feature.input.FeatureInput;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ConstantsInListFixture {
 
-    private static double f1Value = 1.0;
-    private static double f2Value = 2.0;
-    private static double f3Value = 3.0;
+    private static final double F1_VALUE = 1.0;
+    private static final double F2_VALUE = 2.0;
+    private static final double F3_VALUE = 3.0;
 
-    private static double eps = 1e-16;
-
-    private ConstantsInListFixture() {}
+    private static final double EPS = 1e-16;
 
     /** creates a feature-list associated with the fixture */
     public static <T extends FeatureInput> FeatureList<T> create() {
         return FeatureListFactory.from(
-                constantFeatureFor(f1Value),
-                constantFeatureFor(f2Value),
-                constantFeatureFor(f3Value));
+                constantFeatureFor(F1_VALUE),
+                constantFeatureFor(F2_VALUE),
+                constantFeatureFor(F3_VALUE));
     }
 
     /**
      * checks that a result-vector has the results we expect from the feature-list associated with
      * this fixture
      */
-    public static void checkResultVector(ResultsVector rv) {
-        assertTrue(rv.equalsPrecision(eps, f1Value, f2Value, f3Value));
+    public static void checkResultVector(ResultsVector resultsVector) {
+        assertTrue(resultsVector.equalsPrecision(EPS, F1_VALUE, F2_VALUE, F3_VALUE));
     }
 
-    private static <T extends FeatureInput> Feature<T> constantFeatureFor(double val) {
-        return new Constant<>(val);
+    private static <T extends FeatureInput> Feature<T> constantFeatureFor(double value) {
+        return new Constant<>(value);
     }
 }

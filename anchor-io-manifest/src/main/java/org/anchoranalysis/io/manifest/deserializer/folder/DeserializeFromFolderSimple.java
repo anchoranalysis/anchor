@@ -33,7 +33,7 @@ import org.anchoranalysis.io.manifest.folder.SequencedFolder;
 
 public class DeserializeFromFolderSimple<T> extends DeserializeFromFolder<T> {
 
-    private Deserializer<T> deserializer;
+    private final Deserializer<T> deserializer;
 
     public DeserializeFromFolderSimple(Deserializer<T> deserializer, SequencedFolder folder) {
         super(folder);
@@ -41,7 +41,7 @@ public class DeserializeFromFolderSimple<T> extends DeserializeFromFolder<T> {
     }
 
     @Override
-    protected GetterFromIndex<T> createCtnr(SequencedFolder folder) {
+    protected GetterFromIndex<T> createContainer(SequencedFolder folder) {
         return new SequencedFolderDeserializer<>(folder, deserializer);
     }
 }

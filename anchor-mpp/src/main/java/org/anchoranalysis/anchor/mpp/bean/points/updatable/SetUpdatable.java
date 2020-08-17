@@ -55,8 +55,8 @@ import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.ImageDimensions;
-import org.anchoranalysis.image.voxel.box.BoundedVoxelBox;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.BoundedVoxels;
+import org.anchoranalysis.image.voxel.Voxels;
 
 public class SetUpdatable extends UpdatablePointsContainer {
 
@@ -67,19 +67,19 @@ public class SetUpdatable extends UpdatablePointsContainer {
     private RandomSet<Point3d> setPoints;
 
     private ImageDimensions dimensions;
-    private Mask binaryImage;
-    private Channel binaryImageChnl;
+    private Mask mask;
+    private Channel maskChannel;
 
     @Override
-    public void init(Mask binaryImage) throws InitException {
-        this.binaryImage = binaryImage;
-        this.binaryImageChnl = binaryImage.getChannel();
+    public void init(Mask mask) throws InitException {
+        this.mask = mask;
+        this.maskChannel = mask.channel();
 
-        dimensions = binaryImage.getDimensions();
+        dimensions = mask.dimensions();
 
         setPoints = new RandomSet<>();
 
-        BinaryValuesByte bvb = binaryImage.getBinaryValues().createByte();
+        BinaryValuesByte bvb = mask.binaryValues().createByte();
         addEntireScene(bvb);
     }
 
@@ -93,13 +93,13 @@ public class SetUpdatable extends UpdatablePointsContainer {
 
         Point3d point = sampleFromSet(setPoints, randomNumberGenerator);
 
-        assert (point.getX() >= 0);
-        assert (point.getY() >= 0);
-        assert (point.getZ() >= 0);
+        assert (point.x() >= 0);
+        assert (point.y() >= 0);
+        assert (point.z() >= 0);
 
-        assert (point.getX() < getDimensions().getX());
-        assert (point.getY() < getDimensions().getY());
-        assert (point.getZ() < getDimensions().getZ());
+        assert (point.x() < dimensions.x());
+        assert (point.y() < dimensions.y());
+        assert (point.z() < dimensions.z());
 
         // To hide our internal data from manipulation, even though this (presumably) adds
         //  a bit of overhead
@@ -118,31 +118,22 @@ public class SetUpdatable extends UpdatablePointsContainer {
 
     private void addEntireScene(BinaryValuesByte bvb) {
 
-        Extent e = binaryImageChnl.getDimensions().getExtent();
+        Extent e = maskChannel.dimensions().extent();
 
-        VoxelBox<ByteBuffer> vbBinary = binaryImageChnl.getVoxelBox().asByte();
+        Voxels<ByteBuffer> voxelsBinary = maskChannel.voxels().asByte();
 
         // Where we actually do the work
-        Point3i pos = new Point3i();
+        Point3i position = new Point3i();
 
-        ImageDimensions sd = getDimensions();
-        for (pos.setZ(0); pos.getZ() < sd.getZ(); pos.incrementZ()) {
+        for (position.setZ(0); position.z() < dimensions.z(); position.incrementZ()) {
 
-            ByteBuffer bbBinaryImage = vbBinary.getPixelsForPlane(pos.getZ()).buffer();
+            ByteBuffer bbBinaryImage = voxelsBinary.sliceBuffer(position.z());
 
-            for (pos.setY(0); pos.getY() < sd.getY(); pos.incrementY()) {
-                for (pos.setX(0); pos.getX() < sd.getX(); pos.incrementX()) {
+            for (position.setY(0); position.y() < dimensions.y(); position.incrementY()) {
+                for (position.setX(0); position.x() < dimensions.x(); position.incrementX()) {
 
-                    if (bbBinaryImage.get(e.offsetSlice(pos)) == bvb.getOnByte()) {
-
-                        assert (pos.getX() >= 0);
-                        assert (pos.getY() >= 0);
-                        assert (pos.getZ() >= 0);
-
-                        assert (pos.getX() < getDimensions().getX());
-                        assert (pos.getY() < getDimensions().getY());
-                        assert (pos.getZ() < getDimensions().getZ());
-                        setPoints.add(PointConverter.doubleFromInt(pos));
+                    if (bbBinaryImage.get(e.offsetSlice(position)) == bvb.getOnByte()) {
+                        setPoints.add(PointConverter.doubleFromInt(position));
                     }
                 }
             }
@@ -154,7 +145,7 @@ public class SetUpdatable extends UpdatablePointsContainer {
     }
 
     @Override
-    public ImageDimensions getDimensions() {
+    public ImageDimensions dimensions() {
         return dimensions;
     }
 
@@ -165,9 +156,9 @@ public class SetUpdatable extends UpdatablePointsContainer {
     }
 
     private void rmvPoint(ReadableTuple3i crntExtentPoint, ReadableTuple3i crnrPoint) {
-        int xGlobal = crnrPoint.getX() + crntExtentPoint.getX();
-        int yGlobal = crnrPoint.getY() + crntExtentPoint.getY();
-        int zGlobal = crnrPoint.getZ() + crntExtentPoint.getZ();
+        int xGlobal = crnrPoint.x() + crntExtentPoint.x();
+        int yGlobal = crnrPoint.y() + crntExtentPoint.y();
+        int zGlobal = crnrPoint.z() + crntExtentPoint.z();
 
         Point3d pointGlobal = new Point3d(xGlobal, yGlobal, zGlobal);
 
@@ -179,33 +170,26 @@ public class SetUpdatable extends UpdatablePointsContainer {
         // We add any points in our new mark to the set
         VoxelizedMark pxlMark = newMark.voxelized();
 
-        ReadableTuple3i crnrPoint = pxlMark.getBoundingBox().cornerMin();
+        ReadableTuple3i crnrPoint = pxlMark.boundingBox().cornerMin();
 
         RegionMembership rm = newMark.getRegionMap().membershipForIndex(regionID);
         byte flags = rm.flags();
 
-        BoundedVoxelBox<ByteBuffer> voxelBox = pxlMark.getVoxelBox();
-        Extent e = voxelBox.extent();
+        BoundedVoxels<ByteBuffer> voxels = pxlMark.voxels();
+        Extent e = voxels.extent();
 
-        Point3i crntExtentPoint = new Point3i();
-        for (crntExtentPoint.setZ(0);
-                crntExtentPoint.getZ() < e.getZ();
-                crntExtentPoint.incrementZ()) {
+        Point3i position = new Point3i();
+        for (position.setZ(0); position.z() < e.z(); position.incrementZ()) {
 
-            ByteBuffer fb = voxelBox.getPixelsForPlane(crntExtentPoint.getZ());
+            ByteBuffer buffer = voxels.sliceBuffer(position.z());
 
-            for (crntExtentPoint.setY(0);
-                    crntExtentPoint.getY() < e.getY();
-                    crntExtentPoint.incrementY()) {
-                for (crntExtentPoint.setX(0);
-                        crntExtentPoint.getX() < e.getX();
-                        crntExtentPoint.incrementX()) {
+            for (position.setY(0); position.y() < e.y(); position.incrementY()) {
+                for (position.setX(0); position.x() < e.x(); position.incrementX()) {
 
-                    byte membership =
-                            fb.get(e.offset(crntExtentPoint.getX(), crntExtentPoint.getY()));
+                    byte membership = buffer.get(e.offset(position.x(), position.y()));
 
                     if (!rm.isMemberFlag(membership, flags)) {
-                        rmvPoint(crntExtentPoint, crnrPoint);
+                        rmvPoint(position, crnrPoint);
                     }
                 }
             }
@@ -232,30 +216,28 @@ public class SetUpdatable extends UpdatablePointsContainer {
 
         VoxelizedMark pxlMark = markToAdd.voxelized();
 
-        ReadableTuple3i crnrPoint = pxlMark.getBoundingBox().cornerMin();
+        ReadableTuple3i crnrPoint = pxlMark.boundingBox().cornerMin();
 
         RegionMembership rm = markToAdd.getRegionMap().membershipForIndex(regionID);
 
-        BoundedVoxelBox<ByteBuffer> voxelBox = pxlMark.getVoxelBox();
-        Extent e = voxelBox.extent();
+        BoundedVoxels<ByteBuffer> voxels = pxlMark.voxels();
+        Extent e = voxels.extent();
 
-        BinaryValuesByte bvb = binaryImage.getBinaryValues().createByte();
+        BinaryValuesByte bvb = mask.binaryValues().createByte();
 
-        VoxelBox<ByteBuffer> vbBinary = binaryImageChnl.getVoxelBox().asByte();
+        Voxels<ByteBuffer> voxelsBinary = maskChannel.voxels().asByte();
 
         Point3i crntExtentPoint = new Point3i();
-        for (crntExtentPoint.setZ(0);
-                crntExtentPoint.getZ() < e.getZ();
-                crntExtentPoint.incrementZ()) {
+        for (crntExtentPoint.setZ(0); crntExtentPoint.z() < e.z(); crntExtentPoint.incrementZ()) {
 
-            int zGlobal = crnrPoint.getZ() + crntExtentPoint.getZ();
+            int zGlobal = crnrPoint.z() + crntExtentPoint.z();
 
             addPointsForSlice(
                     crntExtentPoint,
                     crnrPoint,
                     e,
-                    voxelBox.getPixelsForPlane(crntExtentPoint.getZ()),
-                    vbBinary.getPixelsForPlane(zGlobal).buffer(),
+                    voxels.sliceBuffer(crntExtentPoint.z()),
+                    voxelsBinary.sliceBuffer(zGlobal),
                     bvb,
                     zGlobal,
                     rm,
@@ -276,19 +258,18 @@ public class SetUpdatable extends UpdatablePointsContainer {
         byte flags = rm.flags();
 
         for (crntExtentPoint.setY(0);
-                crntExtentPoint.getY() < extent.getY();
+                crntExtentPoint.y() < extent.y();
                 crntExtentPoint.incrementY()) {
-            int yGlobal = crnrPoint.getY() + crntExtentPoint.getY();
+            int yGlobal = crnrPoint.y() + crntExtentPoint.y();
 
             for (crntExtentPoint.setX(0);
-                    crntExtentPoint.getX() < extent.getX();
+                    crntExtentPoint.x() < extent.x();
                     crntExtentPoint.incrementX()) {
 
-                int xGlobal = crnrPoint.getX() + crntExtentPoint.getX();
+                int xGlobal = crnrPoint.x() + crntExtentPoint.x();
 
                 int globOffset = extent.offset(xGlobal, yGlobal);
-                byte posCheck =
-                        buffer.get(extent.offset(crntExtentPoint.getX(), crntExtentPoint.getY()));
+                byte posCheck = buffer.get(extent.offset(crntExtentPoint.x(), crntExtentPoint.y()));
                 if (rm.isMemberFlag(posCheck, flags)
                         && bbBinaryImage.get(globOffset) == bvb.getOnByte()) {
 

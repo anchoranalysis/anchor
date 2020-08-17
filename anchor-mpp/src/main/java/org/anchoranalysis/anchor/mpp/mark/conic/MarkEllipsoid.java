@@ -36,6 +36,7 @@ import cern.jet.math.Functions;
 import java.io.Serializable;
 import java.util.Optional;
 import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.mark.MarkConic;
@@ -71,15 +72,15 @@ public class MarkEllipsoid extends MarkConic implements Serializable {
     private static final byte FLAG_SUBMARK_REGION4 = flagForRegion(SUBMARK_OUTSIDE);
 
     // START Mark State
-    private double shellRad = 0.1;
-    private double innerCoreDistance = 0.4;
+    @Getter @Setter private double shellRad = 0.1;
+    @Getter @Setter private double innerCoreDistance = 0.4;
 
     @Getter private Point3d radii;
-    private Orientation orientation = new Orientation3DEulerAngles();
+    @Getter private Orientation orientation = new Orientation3DEulerAngles();
     // END mark state
 
     // START internal objects
-    private EllipsoidMatrixCalculator ellipsoidCalculator;
+    @Getter private EllipsoidMatrixCalculator ellipsoidCalculator;
 
     // Relative distances to various shells squared (expressed as a ratio of the radii)
     private double shellInnerCore;
@@ -147,9 +148,9 @@ public class MarkEllipsoid extends MarkConic implements Serializable {
     public final byte evalPointInside(Point3d pt) {
 
         // It is permissible to mutate the point during calculation
-        double x = pt.getX() - getPos().getX();
-        double y = pt.getY() - getPos().getY();
-        double z = pt.getZ() - getPos().getZ();
+        double x = pt.x() - getPos().x();
+        double y = pt.y() - getPos().y();
+        double z = pt.z() - getPos().z();
 
         if (l2norm(x, y, z) > radiiShellMaxSq) {
             return FLAG_SUBMARK_NONE;
@@ -217,9 +218,9 @@ public class MarkEllipsoid extends MarkConic implements Serializable {
     private double volumeForShell(double multiplier) {
         return (4
                         * Math.PI
-                        * this.radii.getX()
-                        * this.radii.getY()
-                        * this.radii.getZ()
+                        * this.radii.x()
+                        * this.radii.y()
+                        * this.radii.z()
                         * Math.pow(multiplier, 3))
                 / 3;
     }
@@ -228,8 +229,7 @@ public class MarkEllipsoid extends MarkConic implements Serializable {
 
         DoubleMatrix2D matRot = orientation.createRotationMatrix().getMatrix();
 
-        double[] radiusArray =
-                threeElementArray(this.radii.getX(), this.radii.getY(), this.radii.getZ());
+        double[] radiusArray = threeElementArray(this.radii.x(), this.radii.y(), this.radii.z());
         assert matRot.rows() == 3;
         this.ellipsoidCalculator.update(radiusArray, matRot);
 
@@ -249,7 +249,7 @@ public class MarkEllipsoid extends MarkConic implements Serializable {
     }
 
     @Override
-    public BoundingBox bbox(ImageDimensions bndScene, int regionID) {
+    public BoundingBox box(ImageDimensions bndScene, int regionID) {
 
         DoubleMatrix1D s = ellipsoidCalculator.getBoundingBoxMatrix().copy();
 
@@ -267,15 +267,15 @@ public class MarkEllipsoid extends MarkConic implements Serializable {
             s.assign(Functions.mult(shellInnerCore));
         }
 
-        return BoundingBoxCalculator.bboxFromBounds(getPos(), s, true, bndScene);
+        return BoundingBoxCalculator.boxFromBounds(getPos(), s, true, bndScene);
     }
 
     private String strMarks() {
         return String.format(
                 "rad=[%3.3f, %3.3f, %3.3f] rot=[%s] shellRad=[%f]",
-                this.radii.getX(),
-                this.radii.getY(),
-                this.radii.getZ(),
+                this.radii.x(),
+                this.radii.y(),
+                this.radii.z(),
                 this.orientation.toString(),
                 shellRad);
     }
@@ -288,47 +288,28 @@ public class MarkEllipsoid extends MarkConic implements Serializable {
                     return false;
                 }
 
-                MarkEllipsoid trgtMark = (MarkEllipsoid) mark;
+                MarkEllipsoid target = (MarkEllipsoid) mark;
 
-                DoubleMatrix1D relPos =
+                DoubleMatrix1D relativePosition =
                         TensorUtilities.threeElementMatrix(
-                                trgtMark.getPos().getX() - getPos().getX(),
-                                trgtMark.getPos().getY() - getPos().getY(),
-                                trgtMark.getPos().getZ() - getPos().getZ());
+                                target.getPos().x() - getPos().x(),
+                                target.getPos().y() - getPos().y(),
+                                target.getPos().z() - getPos().z());
 
-                DoubleMatrix1D relPosSquared = relPos.copy();
-                relPosSquared.assign(Functions.functions.square); // NOSONAR
-                double distance = relPosSquared.zSum();
+                DoubleMatrix1D relativePositionSquared = relativePosition.copy();
+                relativePositionSquared.assign(Functions.functions.square); // NOSONAR
+                double distance = relativePositionSquared.zSum();
 
                 // Definitely outside
                 return distance
                         > Math.pow(
-                                getMaximumRadius(regionID) + trgtMark.getMaximumRadius(regionID),
+                                getMaximumRadius(regionID) + target.getMaximumRadius(regionID),
                                 2.0);
             };
 
     @Override
     public Optional<QuickOverlapCalculation> quickOverlap() {
         return Optional.of(quickOverlap);
-    }
-
-    private double getMaximumRadius(int regionID) {
-
-        double maxRadius = ellipsoidCalculator.getMaximumRadius();
-
-        if (regionID == GlobalRegionIdentifiers.SUBMARK_SHELL) {
-            maxRadius *= (1 + shellRad);
-        }
-
-        return maxRadius;
-    }
-
-    public double getShellRad() {
-        return shellRad;
-    }
-
-    public void setShellRad(double shellRad) {
-        this.shellRad = shellRad;
     }
 
     @Override
@@ -347,7 +328,7 @@ public class MarkEllipsoid extends MarkConic implements Serializable {
 
     @Override
     public double[] createRadiiArray() {
-        return threeElementArray(this.radii.getX(), this.radii.getY(), this.radii.getZ());
+        return threeElementArray(this.radii.x(), this.radii.y(), this.radii.z());
     }
 
     @Override
@@ -360,9 +341,9 @@ public class MarkEllipsoid extends MarkConic implements Serializable {
     public void scale(double multFactor) {
         super.scale(multFactor);
 
-        this.radii.setX(this.radii.getX() * multFactor);
-        this.radii.setY(this.radii.getY() * multFactor);
-        this.radii.setZ(this.radii.getZ() * multFactor);
+        this.radii.setX(this.radii.x() * multFactor);
+        this.radii.setY(this.radii.y() * multFactor);
+        this.radii.setZ(this.radii.z() * multFactor);
         updateAfterMarkChange();
     }
 
@@ -400,9 +381,9 @@ public class MarkEllipsoid extends MarkConic implements Serializable {
     public OverlayProperties generateProperties(ImageResolution sr) {
         OverlayProperties op = super.generateProperties(sr);
 
-        op.addDoubleAsString("Radius X (pixels)", radii.getX());
-        op.addDoubleAsString("Radius Y (pixels)", radii.getY());
-        op.addDoubleAsString("Radius Z (pixels)", radii.getZ());
+        op.addDoubleAsString("Radius X (pixels)", radii.x());
+        op.addDoubleAsString("Radius Y (pixels)", radii.y());
+        op.addDoubleAsString("Radius Z (pixels)", radii.z());
 
         if (sr != null) {
             double[] arr = EllipsoidUtilities.normalisedRadii(this, sr);
@@ -422,15 +403,18 @@ public class MarkEllipsoid extends MarkConic implements Serializable {
     }
 
     @Override
-    public BoundingBox bboxAllRegions(ImageDimensions bndScene) {
-        return bbox(bndScene, GlobalRegionIdentifiers.SUBMARK_OUTSIDE);
+    public BoundingBox boxAllRegions(ImageDimensions bndScene) {
+        return box(bndScene, GlobalRegionIdentifiers.SUBMARK_OUTSIDE);
     }
 
-    public EllipsoidMatrixCalculator getEllipsoidCalculator() {
-        return ellipsoidCalculator;
-    }
+    private double getMaximumRadius(int regionID) {
 
-    public Orientation getOrientation() {
-        return orientation;
+        double maxRadius = ellipsoidCalculator.getMaximumRadius();
+
+        if (regionID == GlobalRegionIdentifiers.SUBMARK_SHELL) {
+            maxRadius *= (1 + shellRad);
+        }
+
+        return maxRadius;
     }
 }

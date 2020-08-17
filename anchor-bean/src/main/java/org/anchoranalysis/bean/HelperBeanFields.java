@@ -29,15 +29,16 @@ package org.anchoranalysis.bean;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.bean.error.BeanStrangeException;
 import org.anchoranalysis.core.error.OperationFailedException;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 class HelperBeanFields {
-
-    private HelperBeanFields() {}
 
     public static String describeChildBeans(AnchorBean<?> bean) {
 

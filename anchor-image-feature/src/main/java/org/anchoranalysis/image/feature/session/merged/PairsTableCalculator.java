@@ -92,19 +92,19 @@ public class PairsTableCalculator implements FeatureTableCalculator<FeatureInput
     }
 
     @Override
-    public ResultsVector calc(FeatureInputPairObjects input)
+    public ResultsVector calculate(FeatureInputPairObjects input)
             throws NamedFeatureCalculationException {
         return calculator.calcForInput(input, Optional.empty());
     }
 
     @Override
-    public ResultsVector calc(
+    public ResultsVector calculate(
             FeatureInputPairObjects input, FeatureList<FeatureInputPairObjects> featuresSubset) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public ResultsVector calcSuppressErrors(
+    public ResultsVector calculateSuppressErrors(
             FeatureInputPairObjects input, ErrorReporter errorReporter) {
 
         try {
@@ -122,9 +122,9 @@ public class PairsTableCalculator implements FeatureTableCalculator<FeatureInput
             FeatureInputPairObjects input, ErrorReporter errorReporter)
             throws NamedFeatureCalculationException {
         if (suppressErrors) {
-            return calcSuppressErrors(input, errorReporter);
+            return calculateSuppressErrors(input, errorReporter);
         } else {
-            return calc(input);
+            return calculate(input);
         }
     }
 

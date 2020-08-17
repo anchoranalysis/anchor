@@ -35,21 +35,23 @@ import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.points.BoundingBoxFromPoints;
+import org.anchoranalysis.image.voxel.assigner.VoxelsAssigner;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CreateFromPointsFactory {
 
     public static ObjectMask create(List<Point3i> points) throws CreateException {
 
-        BoundingBox bbox;
+        BoundingBox box;
         try {
-            bbox = BoundingBoxFromPoints.forList(points);
+            box = BoundingBoxFromPoints.forList(points);
         } catch (OperationFailedException e) {
             throw new CreateException(e);
         }
 
-        ObjectMask mask = new ObjectMask(bbox);
-        points.forEach(mask::setOn);
-        return mask;
+        ObjectMask object = new ObjectMask(box);
+        VoxelsAssigner assigner = object.assignOn();
+        points.forEach(assigner::toVoxel);
+        return object;
     }
 }

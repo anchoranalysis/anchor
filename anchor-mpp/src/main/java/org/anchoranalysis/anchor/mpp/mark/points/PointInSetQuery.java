@@ -55,9 +55,9 @@ class PointInSetQuery {
             DoubleUnaryOperator funcZ) {
         Point3d pointNew =
                 new Point3d(
-                        applyFuncIfNonNull(point.getX(), funcX),
-                        applyFuncIfNonNull(point.getY(), funcY),
-                        applyFuncIfNonNull(point.getZ(), funcZ));
+                        applyFuncIfNonNull(point.x(), funcX),
+                        applyFuncIfNonNull(point.y(), funcY),
+                        applyFuncIfNonNull(point.z(), funcZ));
         return pointInSet(pointNew, set);
     }
 

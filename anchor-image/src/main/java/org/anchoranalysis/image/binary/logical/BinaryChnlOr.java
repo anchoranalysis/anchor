@@ -37,30 +37,30 @@ import org.anchoranalysis.image.extent.Extent;
 public class BinaryChnlOr {
 
     /**
-     * A binary OR of chnlCrnt and chnlReceiver where chnlReceiver is overwritten with the output
+     * Performs a OR operation on each voxel in two masks, writing the result onto the second mask.
      *
-     * @param chnlCrnt first-channel for OR
-     * @param chnlReceiver second-channel for OR (and the channel where the result is overwritten)
+     * @param first the first channel for operation
+     * @param second the second channel for operation (and in which the result is written)
      */
-    public static void binaryOr(Mask chnlCrnt, Mask chnlReceiver) {
+    public static void binaryOr(Mask first, Mask second) {
 
-        BinaryValuesByte bvbCrnt = chnlCrnt.getBinaryValues().createByte();
-        BinaryValuesByte bvbReceiver = chnlReceiver.getBinaryValues().createByte();
+        BinaryValuesByte bvbCrnt = first.binaryValues().createByte();
+        BinaryValuesByte bvbReceiver = second.binaryValues().createByte();
 
-        Extent e = chnlCrnt.getDimensions().getExtent();
+        Extent e = first.dimensions().extent();
 
         byte crntOn = bvbCrnt.getOnByte();
         byte receiveOn = bvbReceiver.getOnByte();
 
         // All the on voxels in the receive, are put onto crnt
-        for (int z = 0; z < e.getZ(); z++) {
+        for (int z = 0; z < e.z(); z++) {
 
-            ByteBuffer bufSrc = chnlCrnt.getVoxelBox().getPixelsForPlane(z).buffer();
-            ByteBuffer bufReceive = chnlReceiver.getVoxelBox().getPixelsForPlane(z).buffer();
+            ByteBuffer bufSrc = first.voxels().sliceBuffer(z);
+            ByteBuffer bufReceive = second.voxels().sliceBuffer(z);
 
             int offset = 0;
-            for (int y = 0; y < e.getY(); y++) {
-                for (int x = 0; x < e.getX(); x++) {
+            for (int y = 0; y < e.y(); y++) {
+                for (int x = 0; x < e.x(); x++) {
 
                     byte byteRec = bufReceive.get(offset);
                     if (byteRec == receiveOn) {

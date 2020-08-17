@@ -26,21 +26,19 @@
 
 package org.anchoranalysis.image.orientation;
 
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.math.rotation.RotationMatrix;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
+@NoArgsConstructor
+@AllArgsConstructor
 public class OrientationRotationMatrix extends Orientation {
 
     /** */
     private static final long serialVersionUID = -496736778234811706L;
 
     private RotationMatrix rotationMatrix;
-
-    public OrientationRotationMatrix() {}
-
-    public OrientationRotationMatrix(RotationMatrix rotationMatrix) {
-        this.rotationMatrix = rotationMatrix;
-    }
 
     @Override
     public Orientation duplicate() {

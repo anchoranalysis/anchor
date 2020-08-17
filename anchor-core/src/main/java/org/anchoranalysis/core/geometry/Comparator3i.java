@@ -34,19 +34,19 @@ public final class Comparator3i<T extends Tuple3i> implements Comparator<T> {
     public int compare(T arg0, T arg1) {
 
         // First order by X
-        int cmpX = Integer.compare(arg0.getX(), arg1.getX());
+        int cmpX = Integer.compare(arg0.x(), arg1.x());
         if (cmpX != 0) {
             return cmpX;
         }
 
         // Then ordered by Y
-        int cmpY = Integer.compare(arg0.getY(), arg1.getY());
+        int cmpY = Integer.compare(arg0.y(), arg1.y());
         if (cmpY != 0) {
             return cmpY;
         }
 
         // Then ordered by Z
-        int cmpZ = Integer.compare(arg0.getZ(), arg1.getZ());
+        int cmpZ = Integer.compare(arg0.z(), arg1.z());
         if (cmpZ != 0) {
             return cmpZ;
         }

@@ -102,11 +102,10 @@ public class MultipleComparer extends AnchorBean<MultipleComparer> {
         for (NamedBean<Comparer> ni : listComparers) {
 
             ObjectCollection annotationObjects =
-                    annotation.convertToObjects(background.getDimensions());
+                    annotation.convertToObjects(background.dimensions());
 
             Findable<ObjectCollection> compareObjects =
-                    ni.getValue()
-                            .createObjects(annotationPath, background.getDimensions(), debugMode);
+                    ni.getValue().createObjects(annotationPath, background.dimensions(), debugMode);
 
             Optional<ObjectCollection> foundObjects =
                     compareObjects.getFoundOrLog(ni.getName(), logger);
@@ -146,7 +145,7 @@ public class MultipleComparer extends AnchorBean<MultipleComparer> {
                                     annotationObjects,
                                     compareObjects,
                                     maxCost,
-                                    background.getDimensions());
+                                    background.dimensions());
 
             ColorPool colorPool =
                     new ColorPool(

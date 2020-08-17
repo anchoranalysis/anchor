@@ -31,7 +31,7 @@ import java.util.List;
 import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.functional.function.FunctionWithException;
+import org.anchoranalysis.core.functional.function.CheckedFunction;
 import org.anchoranalysis.core.progress.ProgressReporter;
 
 /** Utilities for updating a {@link ProgressReporter} in a functional way */
@@ -51,9 +51,7 @@ public class FunctionalProgress {
      * @throws E if the exception is thrown during mapping
      */
     public static <S, T, E extends Exception> List<T> mapList(
-            List<S> list,
-            ProgressReporter progressReporter,
-            FunctionWithException<S, T, E> mapFunction)
+            List<S> list, ProgressReporter progressReporter, CheckedFunction<S, T, E> mapFunction)
             throws E {
         List<T> listOut = new ArrayList<>();
 
@@ -96,7 +94,7 @@ public class FunctionalProgress {
     public static <S, T, E extends Exception> List<T> mapListOptional(
             List<S> list,
             ProgressReporter progressReporter,
-            FunctionWithException<S, Optional<T>, E> mapFunction)
+            CheckedFunction<S, Optional<T>, E> mapFunction)
             throws E {
         List<T> listOut = new ArrayList<>();
 

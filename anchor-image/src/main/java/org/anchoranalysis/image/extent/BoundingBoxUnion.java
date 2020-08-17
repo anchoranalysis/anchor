@@ -36,11 +36,11 @@ import org.anchoranalysis.core.geometry.ReadableTuple3i;
  */
 public class BoundingBoxUnion {
 
-    private final BoundingBox bbox;
+    private final BoundingBox box;
 
-    public BoundingBoxUnion(BoundingBox bbox) {
+    public BoundingBoxUnion(BoundingBox box) {
         super();
-        this.bbox = bbox;
+        this.box = box;
     }
 
     /**
@@ -51,24 +51,24 @@ public class BoundingBoxUnion {
      */
     public BoundingBox with(BoundingBox other) {
 
-        ReadableTuple3i cornerMin = bbox.cornerMin();
+        ReadableTuple3i cornerMin = box.cornerMin();
         ReadableTuple3i cornerMinOther = other.cornerMin();
 
-        ReadableTuple3i cornerMax = bbox.calcCornerMax();
-        ReadableTuple3i cornerMaxOthr = other.calcCornerMax();
+        ReadableTuple3i cornerMax = box.calculateCornerMax();
+        ReadableTuple3i cornerMaxOthr = other.calculateCornerMax();
 
         ExtentBoundsComparer meiX =
                 ExtentBoundsComparer.createMax(
-                        cornerMin, cornerMinOther, cornerMax, cornerMaxOthr, ReadableTuple3i::getX);
+                        cornerMin, cornerMinOther, cornerMax, cornerMaxOthr, ReadableTuple3i::x);
         ExtentBoundsComparer meiY =
                 ExtentBoundsComparer.createMax(
-                        cornerMin, cornerMinOther, cornerMax, cornerMaxOthr, ReadableTuple3i::getY);
+                        cornerMin, cornerMinOther, cornerMax, cornerMaxOthr, ReadableTuple3i::y);
         ExtentBoundsComparer meiZ =
                 ExtentBoundsComparer.createMax(
-                        cornerMin, cornerMinOther, cornerMax, cornerMaxOthr, ReadableTuple3i::getZ);
+                        cornerMin, cornerMinOther, cornerMax, cornerMaxOthr, ReadableTuple3i::z);
 
         return new BoundingBox(
-                new Point3i(meiX.getMin(), meiY.getMin(), meiZ.getMin()),
-                new Extent(meiX.getExtent(), meiY.getExtent(), meiZ.getExtent()));
+                new Point3i(meiX.min(), meiY.min(), meiZ.min()),
+                new Point3i(meiX.max(), meiY.max(), meiZ.max()));
     }
 }

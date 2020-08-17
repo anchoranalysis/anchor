@@ -105,6 +105,16 @@ public class TestLoader {
      * @param rootDirectory the path where the root folder is
      * @return a testLoader associated with the explicit root
      */
+    public static TestLoader createFromExplicitDirectory(String rootDirectory) {
+        return createFromExplicitDirectory(Paths.get(rootDirectory));
+    }
+
+    /**
+     * Creates a new test-data loader using an explicit File path as root
+     *
+     * @param rootDirectory the path where the root folder is
+     * @return a testLoader associated with the explicit root
+     */
     public static TestLoader createFromExplicitDirectory(Path rootDirectory) {
         return new TestLoader(rootDirectory);
     }

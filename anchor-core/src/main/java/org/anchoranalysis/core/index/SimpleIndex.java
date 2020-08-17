@@ -26,7 +26,7 @@ package org.anchoranalysis.core.index;
  * #L%
  */
 
-public class SimpleIndex implements IIndexGetter {
+public class SimpleIndex implements IndexGetter {
 
     private int index;
 

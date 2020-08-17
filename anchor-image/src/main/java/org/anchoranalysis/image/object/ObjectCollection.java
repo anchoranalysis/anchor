@@ -30,13 +30,16 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
+import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.interpolator.Interpolator;
 import org.anchoranalysis.image.scale.ScaleFactor;
 
 /**
@@ -74,7 +77,7 @@ public class ObjectCollection implements Iterable<ObjectMask> {
      * @return newly created object-collection with shifted corner position and identical extent
      */
     public ObjectCollection shiftBy(ReadableTuple3i shiftBy) {
-        return stream().mapBoundingBox(bbox -> bbox.shiftBy(shiftBy));
+        return stream().mapBoundingBoxPreserveExtent(box -> box.shiftBy(shiftBy));
     }
 
     public boolean add(ObjectMask object) {
@@ -192,42 +195,100 @@ public class ObjectCollection implements Iterable<ObjectMask> {
     }
 
     /**
-     * Scales every object-mask
+     * Scales every object-mask in a collection
+     *
+     * <p>It is desirable scale objects together, as interpolation can be done so that adjacent
+     * boundaries pre-scaling remain adjacent after scaling (only if there's no overlap among them).
      *
      * <p>This is an IMMUTABLE operation.
      *
      * @param factor scaling-factor
-     * @param interpolator interpolator
-     * @return a new collection with scaled-masks
+     * @return a new collection with scaled object-masks (existing object-masks are unaltered)
+     * @throws OperationFailedException
      */
-    public ObjectCollection scale(ScaleFactor factor, Interpolator interpolator) {
-        return stream().map(object -> object.scale(factor, interpolator));
+    public ScaledObjectCollection scale(ScaleFactor factor) throws OperationFailedException {
+        return scale(factor, Optional.empty(), Optional.empty());
+    }
+
+    /**
+     * Scales every object-mask in a collection
+     *
+     * <p>Like {@link scale(ScaleFactor)} but ensured the scaled-results will always be inside a
+     * particular extent (clipping if necessary)
+     *
+     * @param factor scaling-factor
+     * @param clipTo clips any objects after scaling to make sure they fit inside this extent
+     * @return a new collection with scaled object-masks (existing object-masks are unaltered)
+     * @throws OperationFailedException
+     */
+    public ScaledObjectCollection scale(ScaleFactor factor, Extent clipTo)
+            throws OperationFailedException {
+        try {
+            return new ScaledObjectCollection(
+                    this, factor, Optional.empty(), Optional.of(object -> object.clipTo(clipTo)));
+        } catch (CreateException e) {
+            throw new OperationFailedException(e);
+        }
+    }
+
+    /**
+     * Scales every object-mask in a collection
+     *
+     * <p>Like {@link scale(ScaleFactor)} but allows for additional manipulating of objects
+     * (pre-scaling and post-scaling)
+     *
+     * @param factor scaling-factor
+     * @param preOperation applied to each-object before it is scaled (e.g. flattening)
+     * @param postOperation applied to each-object after it is scaled (e.g. clipping to an extent)
+     * @return a new collection with scaled object-masks (existing object-masks are unalterted)
+     * @throws OperationFailedException
+     */
+    public ScaledObjectCollection scale(
+            ScaleFactor factor,
+            Optional<UnaryOperator<ObjectMask>> preOperation,
+            Optional<UnaryOperator<ObjectMask>> postOperation)
+            throws OperationFailedException {
+        try {
+            return new ScaledObjectCollection(this, factor, preOperation, postOperation);
+        } catch (CreateException e) {
+            throw new OperationFailedException(e);
+        }
     }
 
     public int countIntersectingVoxels(ObjectMask object) {
 
-        int cnt = 0;
-        for (ObjectMask s : this) {
-            cnt += s.countIntersectingVoxels(object);
+        int count = 0;
+        for (ObjectMask other : this) {
+            count += other.countIntersectingVoxels(object);
         }
-        return cnt;
+        return count;
+    }
+
+    public boolean hasIntersectingVoxels(ObjectMask object) {
+
+        for (ObjectMask other : this) {
+            if (other.hasIntersectingVoxels(object)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public ObjectCollection findObjectsWithIntersectingBBox(ObjectMask objectToIntersectWith) {
         return stream()
                 .filter(
                         object ->
-                                object.getBoundingBox()
+                                object.boundingBox()
                                         .intersection()
-                                        .existsWith(objectToIntersectWith.getBoundingBox()));
+                                        .existsWith(objectToIntersectWith.boundingBox()));
     }
 
     public boolean objectsAreAllInside(Extent e) {
         for (ObjectMask object : this) {
-            if (!e.contains(object.getBoundingBox().cornerMin())) {
+            if (!e.contains(object.boundingBox().cornerMin())) {
                 return false;
             }
-            if (!e.contains(object.getBoundingBox().calcCornerMax())) {
+            if (!e.contains(object.boundingBox().calculateCornerMax())) {
                 return false;
             }
         }
@@ -235,11 +296,11 @@ public class ObjectCollection implements Iterable<ObjectMask> {
     }
 
     public BinaryValuesByte getFirstBinaryValuesByte() {
-        return get(0).getBinaryValuesByte();
+        return get(0).binaryValuesByte();
     }
 
     public BinaryValues getFirstBinaryValues() {
-        return get(0).getBinaryValues();
+        return get(0).binaryValues();
     }
 
     /** Deep copy, including duplicating object-masks */

@@ -28,6 +28,7 @@ package org.anchoranalysis.io.generator.collection;
 
 import java.util.Collection;
 import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.generator.IterableGenerator;
@@ -44,19 +45,16 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
  * @param <T>
  * @param <S> collection-type
  */
+@RequiredArgsConstructor
 public class SubfolderGenerator<T, S extends Collection<T>>
         implements Generator, IterableGenerator<S> {
 
+    // START REQUIRED ARGUMENTS
+    private final IterableGenerator<T> generator;
+    private final String collectionOutputName;
+    // END REQUIRED ARGUMENTS
+
     private S element;
-
-    private IterableGenerator<T> generator;
-    private String collectionOutputName;
-
-    public SubfolderGenerator(IterableGenerator<T> generator, String collectionOutputName) {
-        super();
-        this.generator = generator;
-        this.collectionOutputName = collectionOutputName;
-    }
 
     @Override
     public void write(OutputNameStyle outputNameStyle, BoundOutputManager outputManager)

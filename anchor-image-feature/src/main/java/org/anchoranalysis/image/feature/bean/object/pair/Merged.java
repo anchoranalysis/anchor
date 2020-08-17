@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.image.feature.bean.object.pair;
 
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalculationException;
@@ -37,11 +38,8 @@ import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
  *
  * @author Owen Feehan
  */
+@NoArgsConstructor
 public class Merged extends FeatureDeriveFromPair {
-
-    public Merged() {
-        // BEAN Constructor
-    }
 
     public Merged(Feature<FeatureInputSingleObject> item) {
         super(item);

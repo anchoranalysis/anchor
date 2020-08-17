@@ -45,16 +45,16 @@ public class ScaleFactorUtilities {
      */
     public static ScaleFactor calcRelativeScale(Extent source, Extent target) {
         return new ScaleFactor(
-                deriveScalingFactor(target.getX(), source.getX()),
-                deriveScalingFactor(target.getY(), source.getY()));
+                deriveScalingFactor(target.x(), source.x()),
+                deriveScalingFactor(target.y(), source.y()));
     }
 
     /** Scales a point in XY (immutably) */
     public static Point3i scale(ScaleFactor scalingFactor, Point3i point) {
         return new Point3i(
-                ScaleFactorUtilities.scaleQuantity(scalingFactor.getX(), point.getX()),
-                ScaleFactorUtilities.scaleQuantity(scalingFactor.getY(), point.getY()),
-                point.getZ());
+                ScaleFactorUtilities.scaleQuantity(scalingFactor.x(), point.x()),
+                ScaleFactorUtilities.scaleQuantity(scalingFactor.y(), point.y()),
+                point.z());
     }
 
     /**

@@ -35,10 +35,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.EnumSet;
 import java.util.List;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 class WalkSingleDir {
-
-    private WalkSingleDir() {}
 
     public static void apply(Path dir, PathMatchConstraints constraints, List<File> listOut)
             throws FindFilesException {

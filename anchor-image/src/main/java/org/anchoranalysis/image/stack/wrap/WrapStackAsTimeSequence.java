@@ -28,18 +28,16 @@ package org.anchoranalysis.image.stack.wrap;
 
 import java.util.Optional;
 import java.util.Set;
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.name.provider.NamedProvider;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.TimeSequence;
 
+@AllArgsConstructor
 public class WrapStackAsTimeSequence implements NamedProvider<TimeSequence> {
 
     private NamedProvider<Stack> namedProvider;
-
-    public WrapStackAsTimeSequence(NamedProvider<Stack> namedProvider) {
-        this.namedProvider = namedProvider;
-    }
 
     @Override
     public Optional<TimeSequence> getOptional(String key) throws NamedProviderGetException {

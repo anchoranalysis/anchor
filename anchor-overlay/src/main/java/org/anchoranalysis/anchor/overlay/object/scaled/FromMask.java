@@ -26,20 +26,16 @@
 
 package org.anchoranalysis.anchor.overlay.object.scaled;
 
+import java.util.Optional;
 import org.anchoranalysis.anchor.overlay.writer.DrawOverlay;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.ImageDimensions;
-import org.anchoranalysis.image.interpolator.Interpolator;
-import org.anchoranalysis.image.interpolator.InterpolatorFactory;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.properties.ObjectWithProperties;
 import org.anchoranalysis.image.scale.ScaleFactor;
 
 public class FromMask implements ScaledMaskCreator {
-
-    private static final Interpolator INTERPOLATOR =
-            InterpolatorFactory.getInstance().binaryResizing();
 
     @Override
     public ObjectWithProperties createScaledMask(
@@ -53,9 +49,13 @@ public class FromMask implements ScaledMaskCreator {
 
         // Then we have to create the scaled-object fresh
         // We store it for next-time
-        ObjectMask scaled = unscaled.getMask().scale(new ScaleFactor(scaleFactor), INTERPOLATOR);
+        ObjectMask scaled =
+                unscaled.withoutProperties()
+                        .scale(
+                                new ScaleFactor(scaleFactor),
+                                Optional.of(dimensionsScaled.extent()));
 
-        assert (scaled.hasPixelsGreaterThan(0));
+        assert (scaled.voxelsOn().anyExists());
 
         // We keep the properties the same
         return new ObjectWithProperties(scaled, unscaled.getProperties());

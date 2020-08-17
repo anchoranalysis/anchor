@@ -32,46 +32,61 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.Voxels;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class BinaryChnlAnd {
 
-    public static void apply(Mask chnlCrnt, Mask chnlReceiver) {
+    /**
+     * Performs a AND operation on each voxel in two masks, writing the result onto the second mask.
+     *
+     * @param first the first channel for operation
+     * @param second the second channel for operation (and in which the result is written)
+     */
+    public static void apply(Mask first, Mask second) {
         apply(
-                chnlCrnt.getVoxelBox(),
-                chnlReceiver.getVoxelBox(),
-                chnlCrnt.getBinaryValues().createByte(),
-                chnlReceiver.getBinaryValues().createByte());
+                first.voxels(),
+                second.voxels(),
+                first.binaryValues().createByte(),
+                second.binaryValues().createByte());
     }
 
+    /**
+     * Performs a AND operation on each voxel in two {@link Voxels} (considered to be masks),
+     * writing the result onto the second mask.
+     *
+     * @param voxelsFirst the first voxels for the operation
+     * @param voxelsSecond the second voxels for the operation (and in which the result is written)
+     * @param bvbFirst binary-values to mask first voxels
+     * @param bvbSecond binary-values to mask second voxels
+     */
     public static void apply(
-            VoxelBox<ByteBuffer> voxelBoxCrnt,
-            VoxelBox<ByteBuffer> voxelBoxReceiver,
-            BinaryValuesByte bvbCrnt,
-            BinaryValuesByte bvbReceiver) {
+            Voxels<ByteBuffer> voxelsFirst,
+            Voxels<ByteBuffer> voxelsSecond,
+            BinaryValuesByte bvbFirst,
+            BinaryValuesByte bvbSecond) {
 
-        Extent e = voxelBoxCrnt.extent();
+        Extent e = voxelsFirst.extent();
 
-        byte receiveOn = bvbReceiver.getOnByte();
+        byte receiveOn = bvbSecond.getOnByte();
 
         // All the on voxels in the receive, are put onto crnt
-        for (int z = 0; z < e.getZ(); z++) {
+        for (int z = 0; z < e.z(); z++) {
 
-            ByteBuffer bufSrc = voxelBoxCrnt.getPixelsForPlane(z).buffer();
-            ByteBuffer bufReceive = voxelBoxReceiver.getPixelsForPlane(z).buffer();
+            ByteBuffer bufSrc = voxelsFirst.sliceBuffer(z);
+            ByteBuffer bufReceive = voxelsSecond.sliceBuffer(z);
 
             int offset = 0;
-            for (int y = 0; y < e.getY(); y++) {
-                for (int x = 0; x < e.getX(); x++) {
+            for (int y = 0; y < e.y(); y++) {
+                for (int x = 0; x < e.x(); x++) {
 
                     byte byteSrc = bufSrc.get(offset);
                     byte byteRec = bufReceive.get(offset);
 
-                    if (byteSrc == bvbCrnt.getOnByte() && byteRec == receiveOn) {
-                        bufSrc.put(offset, bvbCrnt.getOnByte());
+                    if (byteSrc == bvbFirst.getOnByte() && byteRec == receiveOn) {
+                        bufSrc.put(offset, bvbFirst.getOnByte());
                     } else {
-                        bufSrc.put(offset, bvbCrnt.getOffByte());
+                        bufSrc.put(offset, bvbFirst.getOffByte());
                     }
 
                     offset++;

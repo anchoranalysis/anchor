@@ -111,24 +111,24 @@ public class RGBStack {
         channels.addChannel(blue);
     }
 
-    public Channel getRed() {
+    public Channel red() {
         return channels.getChannel(0);
     }
 
-    public Channel getGreen() {
+    public Channel green() {
         return channels.getChannel(1);
     }
 
-    public Channel getBlue() {
+    public Channel blue() {
         return channels.getChannel(2);
     }
 
-    public Channel getChnl(int index) {
+    public Channel channelAt(int index) {
         return channels.getChannel(index);
     }
 
-    public ImageDimensions getDimensions() {
-        return channels.getDimensions();
+    public ImageDimensions dimensions() {
+        return channels.dimensions();
     }
 
     public RGBStack extractSlice(int z) {
@@ -154,8 +154,8 @@ public class RGBStack {
     }
 
     private static void writePoint(Point3i point, Channel chnl, byte toWrite) {
-        int index = chnl.getDimensions().getExtent().offset(point.getX(), point.getY());
-        chnl.getVoxelBox().asByte().getPixelsForPlane(point.getZ()).buffer().put(index, toWrite);
+        int index = chnl.dimensions().extent().offsetSlice(point);
+        chnl.voxels().asByte().sliceBuffer(point.z()).put(index, toWrite);
     }
 
     // Only supports 8-bit
@@ -168,62 +168,52 @@ public class RGBStack {
 
     // Only supports 8-bit
     public void writeRGBMaskToSlice(
-            ObjectMask mask,
-            BoundingBox bbox,
+            ObjectMask object,
+            BoundingBox box,
             RGBColor color,
             Point3i pointGlobal,
             int zLocal,
             ReadableTuple3i maxGlobal) {
-        Preconditions.checkArgument(pointGlobal.getZ() >= 0);
+        Preconditions.checkArgument(pointGlobal.z() >= 0);
         Preconditions.checkArgument(channels.getNumberChannels() == 3);
         Preconditions.checkArgument(
                 channels.allChannelsHaveType(VoxelDataTypeUnsignedByte.INSTANCE));
 
-        byte maskOn = mask.getBinaryValuesByte().getOnByte();
+        byte objectMaskOn = object.binaryValuesByte().getOnByte();
 
-        ByteBuffer inArr = mask.getVoxelBox().getPixelsForPlane(zLocal).buffer();
+        ByteBuffer inArr = object.sliceBufferLocal(zLocal);
 
-        ByteBuffer red = extractBuffer(0, pointGlobal.getZ());
-        ByteBuffer green = extractBuffer(1, pointGlobal.getZ());
-        ByteBuffer blue = extractBuffer(2, pointGlobal.getZ());
+        ByteBuffer red = extractBuffer(0, pointGlobal.z());
+        ByteBuffer green = extractBuffer(1, pointGlobal.z());
+        ByteBuffer blue = extractBuffer(2, pointGlobal.z());
 
-        Extent eMask = mask.getBoundingBox().extent();
+        Extent eMask = object.boundingBox().extent();
 
-        for (pointGlobal.setY(bbox.cornerMin().getY());
-                pointGlobal.getY() <= maxGlobal.getY();
+        for (pointGlobal.setY(box.cornerMin().y());
+                pointGlobal.y() <= maxGlobal.y();
                 pointGlobal.incrementY()) {
 
-            for (pointGlobal.setX(bbox.cornerMin().getX());
-                    pointGlobal.getX() <= maxGlobal.getX();
+            for (pointGlobal.setX(box.cornerMin().x());
+                    pointGlobal.x() <= maxGlobal.x();
                     pointGlobal.incrementX()) {
 
-                int maskOffset =
+                int objectMaskOffset =
                         eMask.offset(
-                                pointGlobal.getX() - mask.getBoundingBox().cornerMin().getX(),
-                                pointGlobal.getY() - mask.getBoundingBox().cornerMin().getY());
+                                pointGlobal.x() - object.boundingBox().cornerMin().x(),
+                                pointGlobal.y() - object.boundingBox().cornerMin().y());
 
-                if (inArr.get(maskOffset) != maskOn) {
+                if (inArr.get(objectMaskOffset) != objectMaskOn) {
                     continue;
                 }
 
                 RGBOutputUtils.writeRGBColorToByteArr(
-                        color,
-                        pointGlobal,
-                        channels.getChannel(0).getDimensions(),
-                        red,
-                        blue,
-                        green);
+                        color, pointGlobal, channels.getChannel(0).dimensions(), red, blue, green);
             }
         }
     }
 
     private ByteBuffer extractBuffer(int chnlIndex, int zIndex) {
-        return channels.getChannel(chnlIndex)
-                .getVoxelBox()
-                .asByte()
-                .getPlaneAccess()
-                .getPixelsForPlane(zIndex)
-                .buffer();
+        return channels.getChannel(chnlIndex).voxels().asByte().slice(zIndex).buffer();
     }
 
     private static Stack convertGrayscaleIntoColor(Stack stack) {

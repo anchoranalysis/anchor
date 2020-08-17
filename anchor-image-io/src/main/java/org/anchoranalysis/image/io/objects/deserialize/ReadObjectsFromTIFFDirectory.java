@@ -70,10 +70,10 @@ class ReadObjectsFromTIFFDirectory implements Deserializer<ObjectCollection> {
             throws CreateException {
         try {
             return ObjectCollectionFactory.mapFromRange(
-                    lc.getCntr().getMinimumIndex(),
-                    lc.getCntr().getMaximumIndex() + 1,
+                    lc.getContainer().getMinimumIndex(),
+                    lc.getContainer().getMaximumIndex() + 1,
                     GetOperationFailedException.class,
-                    index -> lc.getCntr().get(index));
+                    index -> lc.getContainer().get(index));
 
         } catch (GetOperationFailedException e) {
             throw new CreateException(e);

@@ -43,7 +43,7 @@ public class IJPngWriter extends IJWriterNoStack {
     }
 
     @Override
-    public String dfltExt() {
+    public String defaultExtension() {
         return "png";
     }
 }

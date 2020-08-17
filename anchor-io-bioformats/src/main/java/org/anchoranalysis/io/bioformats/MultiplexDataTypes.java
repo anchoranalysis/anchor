@@ -27,6 +27,8 @@
 package org.anchoranalysis.io.bioformats;
 
 import loci.formats.FormatTools;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.image.channel.factory.ChannelFactoryByte;
 import org.anchoranalysis.image.channel.factory.ChannelFactoryFloat;
 import org.anchoranalysis.image.channel.factory.ChannelFactoryInt;
@@ -40,9 +42,8 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedInt;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedShort;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 class MultiplexDataTypes {
-
-    private MultiplexDataTypes() {}
 
     public static VoxelDataType multiplexFormat(int pixelType) throws RasterIOException {
         switch (pixelType) {

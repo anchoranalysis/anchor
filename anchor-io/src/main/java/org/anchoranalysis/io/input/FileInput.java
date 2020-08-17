@@ -26,21 +26,22 @@
 
 package org.anchoranalysis.io.input;
 
+import com.google.common.base.Preconditions;
 import java.io.File;
 import java.nio.file.Path;
 import java.util.Optional;
+import lombok.Getter;
 import org.anchoranalysis.io.input.descriptivename.DescriptiveFile;
 
 public class FileInput implements InputFromManager {
 
-    private File file;
+    @Getter private File file;
     private String descriptiveName;
 
     public FileInput(DescriptiveFile file) {
-        super();
+        Preconditions.checkArgument(!file.getDescriptiveName().isEmpty());
         this.file = file.getFile();
         this.descriptiveName = file.getDescriptiveName();
-        assert (!descriptiveName.isEmpty());
     }
 
     @Override
@@ -56,9 +57,5 @@ public class FileInput implements InputFromManager {
     @Override
     public String toString() {
         return descriptiveName();
-    }
-
-    public File getFile() {
-        return file;
     }
 }

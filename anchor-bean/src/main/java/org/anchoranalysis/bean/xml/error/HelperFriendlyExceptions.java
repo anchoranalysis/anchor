@@ -27,6 +27,8 @@
 package org.anchoranalysis.bean.xml.error;
 
 import java.nio.file.NoSuchFileException;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.ConfigurationRuntimeException;
 
@@ -36,9 +38,8 @@ import org.apache.commons.configuration.ConfigurationRuntimeException;
  *
  * @author Owen Feehan
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class HelperFriendlyExceptions {
-
-    private HelperFriendlyExceptions() {}
 
     /**
      * Possibly replaces an exception with a more user-friendly description

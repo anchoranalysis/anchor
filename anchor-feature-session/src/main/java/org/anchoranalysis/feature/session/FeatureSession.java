@@ -141,6 +141,27 @@ public class FeatureSession {
         return session;
     }
 
+    /**
+     * Starts a feature-session for a single feature - and performs a calculation
+     *
+     * @param <T> type of input
+     * @param feature the feature
+     * @param input for features
+     * @param logger a logger
+     * @return the calculated result
+     * @throws FeatureCalculationException if the feature cannot be initialized or cannot be
+     *     calculated
+     */
+    public static <T extends FeatureInput> double calculateWith(
+            Feature<T> feature, T input, Logger logger) throws FeatureCalculationException {
+        try {
+            FeatureCalculatorSingle<T> calculator = with(feature, logger);
+            return calculator.calculate(input);
+        } catch (InitException e) {
+            throw new FeatureCalculationException(e);
+        }
+    }
+
     private static <T extends FeatureInput> void startSession(
             SequentialSession<T> session,
             FeatureInitParams initParams,

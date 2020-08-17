@@ -28,7 +28,6 @@ package org.anchoranalysis.image.io.generator.raster;
 
 import java.nio.file.Path;
 import java.util.Optional;
-import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.io.generator.IterableObjectGenerator;
 import org.anchoranalysis.io.generator.ObjectGenerator;
@@ -62,7 +61,7 @@ public class DisplayStackGenerator extends ObjectGenerator<DisplayStack>
     }
 
     @Override
-    public void setIterableElement(DisplayStack element) throws SetOperationFailedException {
+    public void setIterableElement(DisplayStack element) {
         this.item = element;
 
         delegate.setIterableElement(element.deriveStack(false));

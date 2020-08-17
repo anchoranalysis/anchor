@@ -27,15 +27,17 @@
 package org.anchoranalysis.image.stack.region.chnlconverter;
 
 import java.nio.Buffer;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.image.stack.region.chnlconverter.voxelbox.VoxelBoxConverter;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
-import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
-import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactoryTypeBound;
+import org.anchoranalysis.image.stack.region.chnlconverter.voxelbox.VoxelsConverter;
+import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
+import org.anchoranalysis.image.voxel.factory.VoxelsFactoryTypeBound;
 
 /**
  * Converts a channel from one type to another
@@ -43,22 +45,12 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
  * @author Owen Feehan
  * @param <T> type to convert to (destination-type)
  */
+@AllArgsConstructor
 public abstract class ChannelConverter<T extends Buffer> {
 
-    private VoxelBoxFactoryTypeBound<T> voxelBoxFactory;
-
     private VoxelDataType dataTypeTarget;
-    private VoxelBoxConverter<T> voxelBoxConverter;
-
-    public ChannelConverter(
-            VoxelDataType dataTypeTarget,
-            VoxelBoxConverter<T> voxelBoxConverter,
-            VoxelBoxFactoryTypeBound<T> voxelBoxFactory) {
-        super();
-        this.dataTypeTarget = dataTypeTarget;
-        this.voxelBoxConverter = voxelBoxConverter;
-        this.voxelBoxFactory = voxelBoxFactory;
-    }
+    @Getter private VoxelsConverter<T> voxelsConverter;
+    private VoxelsFactoryTypeBound<T> voxelsFactory;
 
     public Stack convert(Stack stackIn, ConversionPolicy changeExisting) {
         Stack stackOut = new Stack();
@@ -86,30 +78,29 @@ public abstract class ChannelConverter<T extends Buffer> {
         }
 
         Channel chnlOut;
-        VoxelBox<T> voxelBoxOut;
+        Voxels<T> voxelsOut;
 
         if (changeExisting == ConversionPolicy.CHANGE_EXISTING_CHANNEL) {
             chnlOut = chnlIn;
             // We need to create a new voxel buffer
-            voxelBoxOut = voxelBoxFactory.create(chnlIn.getDimensions().getExtent());
+            voxelsOut = voxelsFactory.createInitialized(chnlIn.dimensions().extent());
         } else {
             chnlOut =
                     ChannelFactory.instance()
-                            .createEmptyUninitialised(chnlIn.getDimensions(), dataTypeTarget);
-            voxelBoxOut = (VoxelBox<T>) chnlOut.getVoxelBox().match(dataTypeTarget);
+                            .createUninitialised(chnlIn.dimensions(), dataTypeTarget);
+            voxelsOut = (Voxels<T>) chnlOut.voxels().match(dataTypeTarget);
         }
 
-        voxelBoxConverter.convertFrom(chnlIn.getVoxelBox(), voxelBoxOut);
+        voxelsConverter.convertFrom(chnlIn.voxels(), voxelsOut);
 
         if (changeExisting == ConversionPolicy.CHANGE_EXISTING_CHANNEL) {
-            VoxelBoxWrapper wrapper = new VoxelBoxWrapper(voxelBoxOut);
-            chnlOut.replaceVoxelBox(wrapper);
+            try {
+                chnlOut.replaceVoxels(voxelsOut);
+            } catch (IncorrectImageSizeException e) {
+                throw new AnchorImpossibleSituationException();
+            }
         }
 
         return chnlOut;
-    }
-
-    public VoxelBoxConverter<T> getVoxelBoxConverter() {
-        return voxelBoxConverter;
     }
 }

@@ -29,41 +29,41 @@ package org.anchoranalysis.io.manifest;
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import org.anchoranalysis.core.cache.CacheCall;
+import org.anchoranalysis.core.cache.CachedSupplier;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.functional.CallableWithException;
+import org.anchoranalysis.core.functional.function.CheckedSupplier;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
 import org.anchoranalysis.io.manifest.deserializer.ManifestDeserializer;
 
 public class ManifestRecorderFile {
 
     private final File file;
-    private final CallableWithException<ManifestRecorder, OperationFailedException> operation;
+    private final CheckedSupplier<ManifestRecorder, OperationFailedException> memoized;
 
     public ManifestRecorderFile(File file, ManifestDeserializer manifestDeserializer) {
         this.file = file;
-        this.operation =
-                CacheCall.of(
-                        () -> {
-                            try {
-                                if (!file.exists()) {
-                                    throw new OperationFailedException(
-                                            String.format(
-                                                    "File %s cannot be found", file.getPath()));
-                                }
-                                return manifestDeserializer.deserializeManifest(file);
-                            } catch (DeserializationFailedException e) {
-                                throw new OperationFailedException(e);
-                            }
-                        });
+        this.memoized = CachedSupplier.cache(() -> getInternal(manifestDeserializer));
     }
 
-    public ManifestRecorder call() throws OperationFailedException {
-        return operation.call();
+    public ManifestRecorder get() throws OperationFailedException {
+        return memoized.get();
     }
 
     public Path getRootPath() {
         // Returns the path of the root of the manifest file (or what it will become)
         return Paths.get(file.getParent());
+    }
+
+    private ManifestRecorder getInternal(ManifestDeserializer manifestDeserializer)
+            throws OperationFailedException {
+        try {
+            if (!file.exists()) {
+                throw new OperationFailedException(
+                        String.format("File %s cannot be found", file.getPath()));
+            }
+            return manifestDeserializer.deserializeManifest(file);
+        } catch (DeserializationFailedException e) {
+            throw new OperationFailedException(e);
+        }
     }
 }

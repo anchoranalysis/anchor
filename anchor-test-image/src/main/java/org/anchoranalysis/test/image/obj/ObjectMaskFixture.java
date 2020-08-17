@@ -33,14 +33,14 @@ import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
-import org.anchoranalysis.image.binary.voxel.BinaryVoxelBoxByte;
+import org.anchoranalysis.image.binary.voxel.BinaryVoxelsFactory;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
-import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
+import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
+import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 
 @AllArgsConstructor
 public class ObjectMaskFixture {
@@ -66,21 +66,21 @@ public class ObjectMaskFixture {
     }
 
     private ObjectMask createAt(Point3i cornerMin, Extent extent, VoxelPattern pattern) {
-        BoundingBox bbox = new BoundingBox(cornerMin, extent);
+        BoundingBox box = new BoundingBox(cornerMin, extent);
 
-        assertTrue(dimensions.contains(bbox));
+        assertTrue(dimensions.contains(box));
 
-        VoxelBox<ByteBuffer> vb = VoxelBoxFactory.getByte().create(extent);
+        Voxels<ByteBuffer> voxels = VoxelsFactory.getByte().createInitialized(extent);
         BinaryValues bv = BinaryValues.getDefault();
         BinaryValuesByte bvb = bv.createByte();
 
         boolean atLeastOneHigh = false;
 
-        for (int z = 0; z < extent.getZ(); z++) {
-            VoxelBuffer<ByteBuffer> slice = vb.getPixelsForPlane(z);
+        for (int z = 0; z < extent.z(); z++) {
+            VoxelBuffer<ByteBuffer> slice = voxels.slice(z);
 
-            for (int y = 0; y < extent.getY(); y++) {
-                for (int x = 0; x < extent.getX(); x++) {
+            for (int y = 0; y < extent.y(); y++) {
+                for (int x = 0; x < extent.x(); x++) {
                     byte toPut;
                     if (pattern.isPixelOn(x, y, z)) {
                         toPut = bvb.getOnByte();
@@ -95,6 +95,6 @@ public class ObjectMaskFixture {
 
         assertTrue(atLeastOneHigh);
 
-        return new ObjectMask(bbox, new BinaryVoxelBoxByte(vb, bv));
+        return new ObjectMask(box, BinaryVoxelsFactory.reuseByte(voxels, bv));
     }
 }

@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.image.feature.bean.physical;
 
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.operator.FeatureGenericSingleElem;
 import org.anchoranalysis.feature.cache.SessionInput;
@@ -33,10 +34,9 @@ import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInputWithRes;
 import org.anchoranalysis.image.extent.ImageResolution;
 
+@NoArgsConstructor
 public abstract class FeatureSingleElemWithRes<T extends FeatureInputWithRes>
         extends FeatureGenericSingleElem<T> {
-
-    public FeatureSingleElemWithRes() {}
 
     public FeatureSingleElemWithRes(Feature<T> feature) {
         super(feature);

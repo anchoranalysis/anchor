@@ -27,12 +27,12 @@
 package org.anchoranalysis.io.manifest.match;
 
 import java.util.ArrayList;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
 public class MatchAnd<T> implements Match<T> {
 
     private ArrayList<Match<T>> conditions = new ArrayList<>();
-
-    public MatchAnd() {}
 
     public MatchAnd(Match<T> condition1, Match<T> condition2) {
         conditions.add(condition1);

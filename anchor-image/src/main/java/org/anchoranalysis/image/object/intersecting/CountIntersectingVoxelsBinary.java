@@ -47,17 +47,17 @@ public class CountIntersectingVoxelsBinary extends CountIntersectingVoxels {
 
     @Override
     protected int countIntersectingVoxels(
-            ByteBuffer buffer1, ByteBuffer buffer2, IntersectionBBox bbox) {
+            ByteBuffer buffer1, ByteBuffer buffer2, IntersectionBBox box) {
 
         int cnt = 0;
-        for (int y = bbox.y().min(); y < bbox.y().max(); y++) {
-            int yOther = y + bbox.y().rel();
+        for (int y = box.y().min(); y < box.y().max(); y++) {
+            int yOther = y + box.y().rel();
 
-            for (int x = bbox.x().min(); x < bbox.x().max(); x++) {
-                int xOther = x + bbox.x().rel();
+            for (int x = box.x().min(); x < box.x().max(); x++) {
+                int xOther = x + box.x().rel();
 
-                byte posCheck = buffer1.get(bbox.e1().offset(x, y));
-                byte posCheckOther = buffer2.get(bbox.e2().offset(xOther, yOther));
+                byte posCheck = buffer1.get(box.e1().offset(x, y));
+                byte posCheckOther = buffer2.get(box.e2().offset(xOther, yOther));
 
                 if (posCheck == byteOn1 && posCheckOther == byteOn2) {
                     cnt++;

@@ -26,7 +26,7 @@ package org.anchoranalysis.core.index.container.bridge;
  * #L%
  */
 
-import org.anchoranalysis.core.functional.function.FunctionWithException;
+import org.anchoranalysis.core.functional.function.CheckedFunction;
 import org.anchoranalysis.core.index.container.BoundedIndexContainer;
 
 /**
@@ -43,10 +43,10 @@ import org.anchoranalysis.core.index.container.BoundedIndexContainer;
 public class BoundedIndexContainerBridgeWithoutIndex<H, S, E extends Exception>
         extends BoundedIndexContainerBridge<H, S, E> {
 
-    private FunctionWithException<H, S, E> bridge;
+    private CheckedFunction<H, S, E> bridge;
 
     public BoundedIndexContainerBridgeWithoutIndex(
-            BoundedIndexContainer<H> source, FunctionWithException<H, S, E> bridge) {
+            BoundedIndexContainer<H> source, CheckedFunction<H, S, E> bridge) {
         super(source);
         this.bridge = bridge;
     }

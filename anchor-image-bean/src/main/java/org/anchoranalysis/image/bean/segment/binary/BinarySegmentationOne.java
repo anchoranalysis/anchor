@@ -33,9 +33,9 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.bean.nonbean.parameters.BinarySegmentationParameters;
-import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
+import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
+import org.anchoranalysis.image.voxel.VoxelsWrapper;
 
 public abstract class BinarySegmentationOne extends BinarySegmentation {
 
@@ -44,16 +44,16 @@ public abstract class BinarySegmentationOne extends BinarySegmentation {
     // END BEAN PROPERTIES
 
     @Override
-    public BinaryVoxelBox<ByteBuffer> sgmn(
-            VoxelBoxWrapper voxelBox,
+    public BinaryVoxels<ByteBuffer> segment(
+            VoxelsWrapper voxels,
             BinarySegmentationParameters params,
-            Optional<ObjectMask> mask)
+            Optional<ObjectMask> objectMask)
             throws SegmentationFailedException {
-        return sgmnFromSgmn(voxelBox, params, mask, sgmn);
+        return sgmnFromSgmn(voxels, params, objectMask, sgmn);
     }
 
-    protected abstract BinaryVoxelBox<ByteBuffer> sgmnFromSgmn(
-            VoxelBoxWrapper voxelBox,
+    protected abstract BinaryVoxels<ByteBuffer> sgmnFromSgmn(
+            VoxelsWrapper voxels,
             BinarySegmentationParameters params,
             Optional<ObjectMask> object,
             BinarySegmentation sgmn)

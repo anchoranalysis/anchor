@@ -62,8 +62,8 @@ public class CountKernelNeighborhoodIgnoreOutsideScene extends CountKernelNeighb
     protected boolean isNeighborVoxelAccepted(
             Point3i point, int xShift, int yShift, int zShift, Extent extent) {
         return extentScene.contains(
-                point.getX() + xShift + addPoint.getX(),
-                point.getY() + yShift + addPoint.getY(),
-                point.getZ() + zShift + addPoint.getZ());
+                point.x() + xShift + addPoint.x(),
+                point.y() + yShift + addPoint.y(),
+                point.z() + zShift + addPoint.z());
     }
 }

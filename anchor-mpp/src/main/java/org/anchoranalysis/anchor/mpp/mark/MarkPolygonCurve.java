@@ -58,27 +58,27 @@ public class MarkPolygonCurve extends MarkAbstractPointList {
     private double distanceToPolygonSegmentLocal(
             Point3d point, Point3d pointFirst, Point3d pointSecond) {
 
-        if (point.getX() < (pointFirst.getX() - distanceThreshold)) {
+        if (point.x() < (pointFirst.x() - distanceThreshold)) {
             return Double.POSITIVE_INFINITY;
         }
 
-        if (point.getY() < (pointFirst.getY() - distanceThreshold)) {
+        if (point.y() < (pointFirst.y() - distanceThreshold)) {
             return Double.POSITIVE_INFINITY;
         }
 
-        if (point.getZ() < (pointFirst.getZ() - distanceThreshold)) {
+        if (point.z() < (pointFirst.z() - distanceThreshold)) {
             return Double.POSITIVE_INFINITY;
         }
 
-        if (point.getX() > (pointSecond.getX() + distanceThreshold)) {
+        if (point.x() > (pointSecond.x() + distanceThreshold)) {
             return Double.POSITIVE_INFINITY;
         }
 
-        if (point.getY() > (pointSecond.getY() + distanceThreshold)) {
+        if (point.y() > (pointSecond.y() + distanceThreshold)) {
             return Double.POSITIVE_INFINITY;
         }
 
-        if (point.getZ() > (pointSecond.getZ() + distanceThreshold)) {
+        if (point.z() > (pointSecond.z() + distanceThreshold)) {
             return Double.POSITIVE_INFINITY;
         }
 
@@ -142,7 +142,7 @@ public class MarkPolygonCurve extends MarkAbstractPointList {
     public Point3d centerPoint() {
         // We take the mean of the BBOX as it's not really well defined. We probably should take the
         // COG.
-        return bbox().midpoint();
+        return box().midpoint();
     }
 
     @Override
@@ -156,7 +156,7 @@ public class MarkPolygonCurve extends MarkAbstractPointList {
     }
 
     @Override
-    public BoundingBox bboxAllRegions(ImageDimensions bndScene) {
-        return bbox(bndScene, GlobalRegionIdentifiers.SUBMARK_INSIDE);
+    public BoundingBox boxAllRegions(ImageDimensions bndScene) {
+        return box(bndScene, GlobalRegionIdentifiers.SUBMARK_INSIDE);
     }
 }

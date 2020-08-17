@@ -28,8 +28,8 @@ package org.anchoranalysis.image.voxel.buffer.max;
 
 import java.nio.Buffer;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
-import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactoryTypeBound;
+import org.anchoranalysis.image.voxel.Voxels;
+import org.anchoranalysis.image.voxel.factory.VoxelsFactoryTypeBound;
 
 /**
  * The buffer used when making a maximum-intensity projection
@@ -40,15 +40,15 @@ import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactoryTypeBound;
 public abstract class MaxIntensityBuffer<T extends Buffer> {
 
     /** Target buffer, where the maximum-intensity pixels are stored */
-    private VoxelBox<T> target;
+    private Voxels<T> target;
 
-    public MaxIntensityBuffer(Extent srcExtent, VoxelBoxFactoryTypeBound<T> factory) {
-        target = factory.create(new Extent(srcExtent.getX(), srcExtent.getY()));
+    public MaxIntensityBuffer(Extent srcExtent, VoxelsFactoryTypeBound<T> factory) {
+        target = factory.createInitialized(new Extent(srcExtent.x(), srcExtent.y()));
     }
 
     public void projectSlice(T pixels) {
 
-        T flatBuffer = target.getPixelsForPlane(0).buffer();
+        T flatBuffer = target.sliceBuffer(0);
 
         while (pixels.hasRemaining()) {
             addBuffer(pixels, flatBuffer);
@@ -60,7 +60,7 @@ public abstract class MaxIntensityBuffer<T extends Buffer> {
      *
      * @return the result of the maximum-intensity projection
      */
-    public VoxelBox<T> getProjection() {
+    public Voxels<T> asVoxels() {
         return target;
     }
 

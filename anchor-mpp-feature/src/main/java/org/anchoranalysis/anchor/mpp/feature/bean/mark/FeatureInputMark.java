@@ -65,8 +65,8 @@ public class FeatureInputMark implements FeatureInputParams {
     }
 
     @Override
-    public Optional<ImageResolution> getResOptional() {
-        return dimensions.map(ImageDimensions::getRes);
+    public Optional<ImageResolution> getResolutionOptional() {
+        return dimensions.map(ImageDimensions::resolution);
     }
 
     @Override

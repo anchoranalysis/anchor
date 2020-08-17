@@ -29,14 +29,14 @@ package org.anchoranalysis.image.voxel.kernel.count;
 import java.nio.ByteBuffer;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
-import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
+import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.kernel.LocalSlices;
 
 /**
- * The number of touching-faces of a voxel with a neighbor, so long as the neighbor is part of a
- * mask
+ * The number of touching-faces of a voxel with a neighbor, so long as the neighbor is part of an
+ * object-mask
  *
  * <p>i.e. the sum of all faces of a voxel that touch the face of a voxel belonging to a neighboring
  * pixel
@@ -45,7 +45,7 @@ import org.anchoranalysis.image.voxel.kernel.LocalSlices;
  */
 public class CountKernelNeighborhoodMask extends CountKernelNeighborhoodBase {
 
-    private BinaryVoxelBox<ByteBuffer> vbRequireHigh;
+    private BinaryVoxels<ByteBuffer> voxelsRequireHigh;
     private BinaryValuesByte bvRequireHigh;
     private ObjectMask objectRequireHigh;
 
@@ -58,8 +58,8 @@ public class CountKernelNeighborhoodMask extends CountKernelNeighborhoodBase {
             boolean multipleMatchesPerVoxel) {
         super(useZ, bv, multipleMatchesPerVoxel);
         this.objectRequireHigh = objectRequireHigh;
-        this.vbRequireHigh = objectRequireHigh.binaryVoxelBox();
-        this.bvRequireHigh = vbRequireHigh.getBinaryValues().createByte();
+        this.voxelsRequireHigh = objectRequireHigh.binaryVoxels();
+        this.bvRequireHigh = voxelsRequireHigh.binaryValues().createByte();
     }
 
     @Override
@@ -67,9 +67,9 @@ public class CountKernelNeighborhoodMask extends CountKernelNeighborhoodBase {
         super.notifyZChange(inSlices, z);
         localSlicesRequireHigh =
                 new LocalSlices(
-                        z + objectRequireHigh.getBoundingBox().cornerMin().getZ(),
+                        z + objectRequireHigh.boundingBox().cornerMin().z(),
                         3,
-                        vbRequireHigh.getVoxelBox());
+                        voxelsRequireHigh.voxels());
     }
 
     @Override
@@ -82,19 +82,19 @@ public class CountKernelNeighborhoodMask extends CountKernelNeighborhoodBase {
             return false;
         }
 
-        int x1 = point.getX() + objectRequireHigh.getBoundingBox().cornerMin().getX() + xShift;
+        int x1 = point.x() + objectRequireHigh.boundingBox().cornerMin().x() + xShift;
 
-        if (!vbRequireHigh.extent().containsX(x1)) {
+        if (!voxelsRequireHigh.extent().containsX(x1)) {
             return false;
         }
 
-        int y1 = point.getY() + objectRequireHigh.getBoundingBox().cornerMin().getY() + yShift;
+        int y1 = point.y() + objectRequireHigh.boundingBox().cornerMin().y() + yShift;
 
-        if (!vbRequireHigh.extent().containsY(y1)) {
+        if (!voxelsRequireHigh.extent().containsY(y1)) {
             return false;
         }
 
-        int indexGlobal = vbRequireHigh.extent().offset(x1, y1);
+        int indexGlobal = voxelsRequireHigh.extent().offset(x1, y1);
         return bvRequireHigh.isOn(inArr.get(indexGlobal));
     }
 }

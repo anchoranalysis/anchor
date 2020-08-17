@@ -26,6 +26,8 @@
 
 package org.anchoranalysis.image.feature.session.merged;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.session.strategy.replace.CacheAndReuseStrategy;
 import org.anchoranalysis.feature.session.strategy.replace.ReplaceStrategy;
@@ -38,9 +40,8 @@ import org.anchoranalysis.image.feature.stack.FeatureInputStack;
  *
  * @author Owen Feehan
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 class CachingStrategies {
-
-    private CachingStrategies() {}
 
     /** Cache and re-use inputs */
     public static <T extends FeatureInput>

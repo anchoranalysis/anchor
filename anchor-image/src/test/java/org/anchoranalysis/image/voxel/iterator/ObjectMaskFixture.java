@@ -29,7 +29,7 @@ package org.anchoranalysis.image.voxel.iterator;
 import java.nio.ByteBuffer;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
+import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.ObjectMask;
@@ -59,26 +59,26 @@ public class ObjectMaskFixture {
         return filledMask(cornerX, cornerY, WIDTH, HEIGHT);
     }
 
-    /** A rectangular mask with single-pixel corners removed */
+    /** A rectangular object-mask with single-pixel corners removed */
     public ObjectMask filledMask(int cornerX, int cornerY, int width, int height) {
         Point3i corner = new Point3i(cornerX, cornerY, 0);
         Extent extent = new Extent(width, height, do3D ? DEPTH : 1);
 
         ObjectMask object = new ObjectMask(new BoundingBox(corner, extent));
-        object.binaryVoxelBox().setAllPixelsToOn();
+        object.assignOn().toAll();
         removeEachCorner(object);
         return object;
     }
 
     private void removeEachCorner(ObjectMask object) {
 
-        BinaryVoxelBox<ByteBuffer> bvb = object.binaryVoxelBox();
+        BinaryVoxels<ByteBuffer> bvb = object.binaryVoxels();
 
-        Extent e = object.getBoundingBox().extent();
-        int widthMinusOne = e.getX() - 1;
-        int heightMinusOne = e.getY() - 1;
+        Extent e = object.boundingBox().extent();
+        int widthMinusOne = e.x() - 1;
+        int heightMinusOne = e.y() - 1;
 
-        for (int z = 0; z < e.getZ(); z++) {
+        for (int z = 0; z < e.z(); z++) {
             bvb.setOff(0, 0, z);
             bvb.setOff(widthMinusOne, 0, z);
             bvb.setOff(0, heightMinusOne, z);

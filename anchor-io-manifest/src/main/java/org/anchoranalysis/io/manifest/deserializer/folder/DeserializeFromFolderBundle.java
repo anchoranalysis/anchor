@@ -27,6 +27,7 @@
 package org.anchoranalysis.io.manifest.deserializer.folder;
 
 import java.io.Serializable;
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.index.GetterFromIndex;
 import org.anchoranalysis.core.index.container.BoundedIndexContainer;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
@@ -37,19 +38,14 @@ import org.anchoranalysis.io.manifest.folder.FolderWrite;
  * @param <T> history-type
  * @param <S> cache-type
  */
+@AllArgsConstructor
 public abstract class DeserializeFromFolderBundle<T, S extends Serializable>
         implements HistoryCreator<T> {
 
-    private final BundleDeserializers<S> deserializers;
-    private FolderWrite folder;
-
     private static final int CACHE_SIZE = 5;
 
-    public DeserializeFromFolderBundle(
-            final BundleDeserializers<S> deserializers, FolderWrite folder) {
-        this.deserializers = deserializers;
-        this.folder = folder;
-    }
+    private final BundleDeserializers<S> deserializers;
+    private FolderWrite folder;
 
     @Override
     public LoadContainer<T> create() throws DeserializationFailedException {
@@ -62,7 +58,7 @@ public abstract class DeserializeFromFolderBundle<T, S extends Serializable>
                         deserializeFromBundle.getBundleParameters().getSequenceType());
 
         LoadContainer<T> history = new LoadContainer<>();
-        history.setCntr(boundedContainer);
+        history.setContainer(boundedContainer);
         history.setExpensiveLoad(expensiveLoad());
 
         return history;

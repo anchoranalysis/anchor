@@ -26,13 +26,14 @@
 
 package org.anchoranalysis.image.convert;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.axis.AxisType;
 import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.orientation.DirectionVector;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ImageUnitConverter {
-
-    private ImageUnitConverter() {}
 
     public static double convertToPhysicalVolume(double value, ImageResolution res) {
         return value * res.unitVolume();
@@ -51,9 +52,9 @@ public class ImageUnitConverter {
     }
 
     private static double unitDistanceForDirection(ImageResolution res, DirectionVector dirVector) {
-        double x = (dirVector.getX()) * res.getX();
-        double y = (dirVector.getY()) * res.getY();
-        double z = (dirVector.getZ()) * res.getZ();
+        double x = (dirVector.x()) * res.x();
+        double y = (dirVector.y()) * res.y();
+        double z = (dirVector.z()) * res.z();
         return Math.sqrt(Math.pow(x, 2.0) + Math.pow(y, 2.0) + Math.pow(z, 2.0));
     }
 

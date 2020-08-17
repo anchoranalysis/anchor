@@ -27,56 +27,42 @@ package org.anchoranalysis.core.geometry;
  */
 
 import java.io.Serializable;
-import org.anchoranalysis.core.arithmetic.DoubleUtilities;
-import org.apache.commons.lang.builder.HashCodeBuilder;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 
+@AllArgsConstructor
+@EqualsAndHashCode
+@NoArgsConstructor
+@Accessors(fluent = true)
 public final class Point2d implements Serializable {
 
     /** */
     private static final long serialVersionUID = 1L;
 
-    private double x;
-    private double y;
-
-    public Point2d() {
-        x = 0;
-        y = 0;
-    }
+    @Getter private double x;
+    @Getter private double y;
 
     public Point2d(Point2d point) {
         this.x = point.x;
         this.y = point.y;
     }
 
-    public Point2d(double x, double y) {
-        this.x = x;
-        this.y = y;
+    public void add(Point2i point) {
+        this.x = this.x + point.x();
+        this.y = this.y + point.y();
     }
 
-    public void add(Point2i point) {
-        this.x = this.x + point.getX();
-        this.y = this.y + point.getY();
+    public void add(Point2d point) {
+        this.x = this.x + point.x();
+        this.y = this.y + point.y();
     }
 
     public void scale(double factor) {
         this.x *= factor;
         this.y *= factor;
-    }
-
-    public double getX() {
-        return x;
-    }
-
-    public void setX(double x) {
-        this.x = x;
-    }
-
-    public double getY() {
-        return y;
-    }
-
-    public void setY(double y) {
-        this.y = y;
     }
 
     public double distanceSquared(Point2d point) {
@@ -94,29 +80,7 @@ public final class Point2d implements Serializable {
         return String.format("[%f,%f]", x, y);
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (!(obj instanceof Point2d)) {
-            return false;
-        }
-        Point2d objCast = (Point2d) obj;
-
-        if (!DoubleUtilities.areEqual(x, objCast.x)) {
-            return false;
-        }
-
-        return (DoubleUtilities.areEqual(y, objCast.y));
-    }
-
     public Point2f toFloat() {
         return new Point2f((float) this.x, (float) this.y);
-    }
-
-    @Override
-    public int hashCode() {
-        return new HashCodeBuilder().append(x).append(y).toHashCode();
     }
 }

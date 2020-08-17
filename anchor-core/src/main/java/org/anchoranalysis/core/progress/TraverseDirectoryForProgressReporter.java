@@ -34,10 +34,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class TraverseDirectoryForProgressReporter {
-
-    private TraverseDirectoryForProgressReporter() {}
 
     public static class TraversalResult {
 

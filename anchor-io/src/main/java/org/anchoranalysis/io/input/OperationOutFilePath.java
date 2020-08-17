@@ -29,30 +29,38 @@ package org.anchoranalysis.io.input;
 import java.nio.file.Path;
 import java.util.Optional;
 import java.util.function.Supplier;
-import lombok.AllArgsConstructor;
-import org.anchoranalysis.bean.NamedBean;
-import org.anchoranalysis.core.functional.CallableWithException;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
 import org.anchoranalysis.io.error.AnchorIOException;
 
-@AllArgsConstructor
-public class OperationOutFilePath implements CallableWithException<Path, AnchorIOException> {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public class OperationOutFilePath {
 
-    private NamedBean<FilePathGenerator> ni;
-    private Supplier<Optional<Path>> path;
-    private boolean debugMode;
+    public static PathSupplier cachedOutPathFor(
+            FilePathGenerator outputPathGenerator,
+            Supplier<Optional<Path>> pathInput,
+            boolean debugMode) {
+        return PathSupplier.cache(() -> outPathFor(outputPathGenerator, pathInput, debugMode));
+    }
 
-    @Override
-    public Path call() throws AnchorIOException {
-        return ni.getValue()
+    public static Path outPathFor(
+            FilePathGenerator outputPathGenerator,
+            Supplier<Optional<Path>> pathInput,
+            boolean debugMode)
+            throws AnchorIOException {
+        return outputPathGenerator
                 .outFilePath(
-                        path.get()
-                                .orElseThrow(
-                                        () ->
-                                                new AnchorIOException(
-                                                        "A binding-path must be associated with the input for this operation")),
+                        pathInput
+                                .get()
+                                .orElseThrow(OperationOutFilePath::bindingPathMissingException),
                         debugMode)
                 .toAbsolutePath()
                 .normalize();
+    }
+
+    private static AnchorIOException bindingPathMissingException() {
+        return new AnchorIOException(
+                "A binding-path must be associated with the input for this operation");
     }
 }

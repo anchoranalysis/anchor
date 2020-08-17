@@ -70,22 +70,22 @@ public class SingleTableCalculator implements FeatureTableCalculator<FeatureInpu
     }
 
     @Override
-    public ResultsVector calc(FeatureInputSingleObject input)
+    public ResultsVector calculate(FeatureInputSingleObject input)
             throws NamedFeatureCalculationException {
-        return session.calc(input);
+        return session.calculate(input);
     }
 
     @Override
-    public ResultsVector calc(
+    public ResultsVector calculate(
             FeatureInputSingleObject input, FeatureList<FeatureInputSingleObject> featuresSubset)
             throws NamedFeatureCalculationException {
-        return session.calc(input, featuresSubset);
+        return session.calculate(input, featuresSubset);
     }
 
     @Override
-    public ResultsVector calcSuppressErrors(
+    public ResultsVector calculateSuppressErrors(
             FeatureInputSingleObject input, ErrorReporter errorReporter) {
-        return session.calcSuppressErrors(input, errorReporter);
+        return session.calculateSuppressErrors(input, errorReporter);
     }
 
     @Override

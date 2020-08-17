@@ -49,8 +49,8 @@ class FeatureCalculatorMultiFixture {
         try {
             @SuppressWarnings("unchecked")
             FeatureCalculatorMulti<T> calculator = mock(FeatureCalculatorMulti.class);
-            when(calculator.calc(any())).thenReturn(rv);
-            when(calculator.calcSuppressErrors(any(), any())).thenReturn(rv);
+            when(calculator.calculate(any())).thenReturn(rv);
+            when(calculator.calculateSuppressErrors(any(), any())).thenReturn(rv);
             return calculator;
         } catch (NamedFeatureCalculationException e) {
             throw new AnchorFriendlyRuntimeException(e);

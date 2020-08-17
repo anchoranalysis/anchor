@@ -50,10 +50,10 @@ public class FeatureSessionTest {
                 new SharedFeatureMulti(),
                 LoggingFixture.suppressedLogErrorReporter());
 
-        ResultsVector rv1 = session.calc(FeatureInputNull.instance());
+        ResultsVector rv1 = session.calculate(FeatureInputNull.instance());
         ConstantsInListFixture.checkResultVector(rv1);
 
-        ResultsVector rv2 = session.calc(FeatureInputNull.instance());
+        ResultsVector rv2 = session.calculate(FeatureInputNull.instance());
         ConstantsInListFixture.checkResultVector(rv2);
     }
 }

@@ -26,22 +26,23 @@
 
 package org.anchoranalysis.feature.bean.operator;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInput;
 
+@NoArgsConstructor
 public class Sum<T extends FeatureInput> extends FeatureListElem<T> {
 
     // START BEAN PROPERTIES
     /** If TRUE, we ignore any NaN values. Otherwise the sum becomes NaN */
-    private boolean ignoreNaN;
+    @BeanField @Getter @Setter private boolean ignoreNaN;
     // END BEAN PROPERTIES
-
-    public Sum() {
-        // Standard bean constructor
-    }
 
     public Sum(FeatureList<T> list) {
         super(list);
@@ -68,13 +69,5 @@ public class Sum<T extends FeatureInput> extends FeatureListElem<T> {
     @Override
     public String getDscrLong() {
         return descriptionForList("+");
-    }
-
-    public boolean isIgnoreNaN() {
-        return ignoreNaN;
-    }
-
-    public void setIgnoreNaN(boolean ignoreNaN) {
-        this.ignoreNaN = ignoreNaN;
     }
 }

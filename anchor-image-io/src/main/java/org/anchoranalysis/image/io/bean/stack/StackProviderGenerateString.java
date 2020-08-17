@@ -42,7 +42,7 @@ import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.region.chnlconverter.ChannelConverter;
 import org.anchoranalysis.image.stack.region.chnlconverter.ChannelConverterToUnsignedShort;
 import org.anchoranalysis.image.stack.region.chnlconverter.ConversionPolicy;
-import org.anchoranalysis.image.stack.region.chnlconverter.voxelbox.VoxelBoxConverterToShortScaleByType;
+import org.anchoranalysis.image.stack.region.chnlconverter.voxelbox.ToShortScaleByType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedShort;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
@@ -69,7 +69,7 @@ public class StackProviderGenerateString extends StackProvider {
         if (repeatZProvider != null) {
 
             Stack repeatZ = repeatZProvider.create();
-            int zHeight = repeatZ.getDimensions().getZ();
+            int zHeight = repeatZ.dimensions().z();
 
             Stack out = new Stack();
             for (Channel chnl : label2D) {
@@ -88,8 +88,8 @@ public class StackProviderGenerateString extends StackProvider {
 
     private static int maxValueFromStack(Stack stack) {
         int max = 0;
-        for (Channel chnl : stack) {
-            int chnlVal = chnl.getVoxelBox().any().ceilOfMaxPixel();
+        for (Channel channel : stack) {
+            int chnlVal = channel.extracter().voxelWithMaxIntensity();
             if (chnlVal > max) {
                 max = chnlVal;
             }
@@ -103,8 +103,7 @@ public class StackProviderGenerateString extends StackProvider {
 
             if (createShort) {
                 ChannelConverter<ShortBuffer> cc =
-                        new ChannelConverterToUnsignedShort(
-                                new VoxelBoxConverterToShortScaleByType());
+                        new ChannelConverterToUnsignedShort(new ToShortScaleByType());
 
                 stack = cc.convert(stack, ConversionPolicy.CHANGE_EXISTING_CHANNEL);
             }
@@ -119,8 +118,8 @@ public class StackProviderGenerateString extends StackProvider {
                 double maxValue = maxValueFromStack(stackIntensity);
                 double mult = maxValue / maxTypeValue;
 
-                for (Channel c : stack) {
-                    c.getVoxelBox().any().multiplyBy(mult);
+                for (Channel channel : stack) {
+                    channel.arithmetic().multiplyBy(mult);
                 }
             }
 
@@ -130,23 +129,25 @@ public class StackProviderGenerateString extends StackProvider {
         }
     }
 
-    private Channel createExpandedChnl(Channel chnl, int zHeight) {
-        assert (chnl.getDimensions().getZ() == 1);
+    private Channel createExpandedChnl(Channel channel, int zHeight) {
+        assert (channel.dimensions().z() == 1);
 
-        ImageDimensions sdNew = chnl.getDimensions().duplicateChangeZ(zHeight);
+        BoundingBox boxSrc = new BoundingBox(channel.dimensions());
+        BoundingBox boxDest = boxSrc;
 
-        BoundingBox bboxSrc = new BoundingBox(chnl.getDimensions().getExtent());
-        BoundingBox bboxDest = bboxSrc;
-
-        Channel chnlNew =
-                ChannelFactory.instance().createEmptyInitialised(sdNew, chnl.getVoxelDataType());
+        Channel chnlNew = emptyChannelWithChangedZ(channel, zHeight);
         for (int z = 0; z < zHeight; z++) {
 
             // Adjust dfestination box
-            bboxDest = bboxDest.shiftToZ(z);
+            boxDest = boxDest.shiftToZ(z);
 
-            chnl.getVoxelBox().copyPixelsTo(bboxSrc, chnlNew.getVoxelBox(), bboxDest);
+            channel.voxels().copyVoxelsTo(boxSrc, chnlNew.voxels(), boxDest);
         }
         return chnlNew;
+    }
+
+    private Channel emptyChannelWithChangedZ(Channel channel, int zToAssign) {
+        ImageDimensions dimensionsChangedZ = channel.dimensions().duplicateChangeZ(zToAssign);
+        return ChannelFactory.instance().create(dimensionsChangedZ, channel.getVoxelDataType());
     }
 }

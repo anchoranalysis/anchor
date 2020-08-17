@@ -39,7 +39,7 @@ import org.anchoranalysis.core.error.AnchorCheckedException;
  * @author Owen Feehan
  */
 public abstract class AnchorFriendlyCheckedException extends AnchorCheckedException
-        implements IFriendlyException {
+        implements HasFriendlyErrorMessage {
 
     /** */
     private static final long serialVersionUID = 1L;

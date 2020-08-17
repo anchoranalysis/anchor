@@ -54,8 +54,8 @@ public class PixelPartHistogram implements PixelPart<Histogram> {
 
     @Override
     public void addForSlice(int sliceID, int val) {
-        list.get(sliceID).incrVal(val);
-        combined.incrVal(val);
+        list.get(sliceID).incrementValue(val);
+        combined.incrementValue(val);
     }
 
     @Override

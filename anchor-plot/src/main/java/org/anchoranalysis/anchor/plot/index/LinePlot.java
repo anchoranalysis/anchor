@@ -31,10 +31,10 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.anchor.plot.AxisLimits;
-import org.anchoranalysis.anchor.plot.GraphInstance;
+import org.anchoranalysis.anchor.plot.PlotInstance;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.index.GetOperationFailedException;
-import org.anchoranalysis.core.index.IIndexGetter;
+import org.anchoranalysis.core.index.IndexGetter;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.NumberAxis;
@@ -51,7 +51,7 @@ import org.jfree.data.xy.XYSeriesCollection;
  *
  * @param <T> container item type
  */
-public class LinePlot<T extends IIndexGetter> extends GraphIndexBase<T, XYDataset> {
+public class LinePlot<T extends IndexGetter> extends GraphIndexBase<T, XYDataset> {
 
     @Getter @Setter private int numPoints = 1000;
 
@@ -168,7 +168,7 @@ public class LinePlot<T extends IIndexGetter> extends GraphIndexBase<T, XYDatase
         return chart;
     }
 
-    public GraphInstance create(
+    public PlotInstance create(
             Iterator<T> itr, Optional<AxisLimits> domainLimits, Optional<AxisLimits> rangeLimits)
             throws CreateException {
 

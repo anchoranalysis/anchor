@@ -39,8 +39,10 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.color.RGBColor;
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.image.bean.size.SizeXY;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.bufferedimage.CreateStackFromBufferedImage;
 import org.anchoranalysis.io.bean.color.RGBColorBean;
@@ -49,30 +51,38 @@ import org.anchoranalysis.io.generator.ObjectGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
+/**
+ * Generates an image with a text (string) drawn on it.
+ *
+ * @author Owen Feehan
+ */
 @NoArgsConstructor
 public class StringRasterGenerator extends AnchorBean<StringRasterGenerator> {
 
-    public StringRasterGenerator(String text) {
-        super();
-        this.text = text;
-    }
-
     // START BEAN PROPERTIES
+    /** Text to draw on an image */
     @BeanField @Getter @Setter private String text = "text";
 
-    @BeanField @Getter @Setter private int width = -1;
+    /** Explicit size of the image the string is draw on */
+    @BeanField @OptionalBean @Getter @Setter private SizeXY size;
 
-    @BeanField @Getter @Setter private int height = -1;
-
+    /** Font-size of drawn text */
     @BeanField @Getter @Setter private int fontSize = 12;
 
+    /** Font-name of drawn text */
     @BeanField @Getter @Setter private String fontName = "SansSerif";
 
+    /** Font-color of drawn text */
     @BeanField @Getter @Setter
     private RGBColorBean fontColor = new RGBColorBean(new RGBColor(Color.WHITE));
 
+    /** Whether to bold the drawn text */
     @BeanField @Getter @Setter private boolean bold = false;
 
+    /**
+     * Padding added around the text in both dimensions if a default size is inferred (ignored if an
+     * explicit size is specified )
+     */
     @BeanField @Getter @Setter private double padding = 0;
     // END BEAN PROPERTIES
 
@@ -93,21 +103,19 @@ public class StringRasterGenerator extends AnchorBean<StringRasterGenerator> {
         @Override
         public Stack generate() throws OutputWriteFailedException {
 
-            Rectangle2D defaultSize = calcDefaultSize();
+            SizeXY resolvedSize =
+                    Optional.ofNullable(size).orElseGet(this::alternativeSizeFromDefault);
 
-            if (width == -1) {
-                width = (int) Math.ceil(defaultSize.getWidth() + (padding * 2));
-            }
-
-            if (height == -1) {
-                height = (int) Math.ceil(defaultSize.getHeight() + (padding * 2));
-            }
+            assert (resolvedSize.asExtent().volumeXY() > 0);
 
             BufferedImage bufferedImage =
-                    new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+                    new BufferedImage(
+                            resolvedSize.getWidth(),
+                            resolvedSize.getHeight(),
+                            BufferedImage.TYPE_INT_RGB);
             Graphics2D graphics = createGraphicsFromBufferedImage(bufferedImage);
 
-            drawCenteredString(text, width, height, graphics);
+            drawCenteredString(text, resolvedSize, graphics);
 
             try {
                 return CreateStackFromBufferedImage.create(bufferedImage);
@@ -131,14 +139,6 @@ public class StringRasterGenerator extends AnchorBean<StringRasterGenerator> {
             return this;
         }
 
-        private Rectangle2D calcDefaultSize() {
-
-            BufferedImage bufferedImage = new BufferedImage(1000, 1000, BufferedImage.TYPE_INT_RGB);
-            Graphics2D graphics = createGraphicsFromBufferedImage(bufferedImage);
-            FontMetrics fm = graphics.getFontMetrics();
-            return fm.getStringBounds(text, graphics);
-        }
-
         private Graphics2D createGraphicsFromBufferedImage(BufferedImage bufferedImage) {
 
             Graphics2D graphics = bufferedImage.createGraphics();
@@ -150,20 +150,39 @@ public class StringRasterGenerator extends AnchorBean<StringRasterGenerator> {
             return graphics;
         }
 
-        private void drawCenteredString(String s, int w, int h, Graphics g) {
+        private void drawCenteredString(String stringToDraw, SizeXY size, Graphics g) {
             FontMetrics fm = g.getFontMetrics();
-            int x = (w - fm.stringWidth(s)) / 2;
-            int y = (fm.getAscent() + (h - (fm.getAscent() + fm.getDescent())) / 2);
-            g.drawString(s, x, y);
+            int x = (size.getWidth() - fm.stringWidth(stringToDraw)) / 2;
+            int y = (fm.getAscent() + (size.getHeight() - (fm.getAscent() + fm.getDescent())) / 2);
+            g.drawString(stringToDraw, x, y);
+        }
+
+        private SizeXY alternativeSizeFromDefault() {
+
+            Graphics2D graphics =
+                    createGraphicsFromBufferedImage(
+                            new BufferedImage(1000, 1000, BufferedImage.TYPE_INT_RGB));
+            FontMetrics fm = graphics.getFontMetrics();
+            Rectangle2D defaultSize = fm.getStringBounds(text, graphics);
+            return new SizeXY(
+                    addPadding(defaultSize.getWidth()), addPadding(defaultSize.getHeight()));
+        }
+
+        private int addPadding(double value) {
+            return (int) Math.ceil(value + (padding * 2));
         }
     }
 
-    // Create an iterable generator, which produces Stack for different Strings
+    public StringRasterGenerator(String text) {
+        this.text = text;
+    }
+
+    /** Creates an iterable-generator, which produces a drawn string on an image when generated */
     public IterableObjectGenerator<String, Stack> createGenerator() {
         return new Generator();
     }
 
-    // Creates a stack with this string
+    /** Creates a stack with the drawn string on an image */
     public Stack generateStack() throws OutputWriteFailedException {
         return new Generator().generate();
     }

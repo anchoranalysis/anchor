@@ -46,7 +46,7 @@ import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramArray;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.voxel.box.BoundedVoxelBox;
+import org.anchoranalysis.image.voxel.BoundedVoxels;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatisticsFromHistogram;
 
@@ -78,23 +78,23 @@ class VoxelizedMarkHistogram implements VoxelizedMark {
     }
 
     @Override
-    public BoundedVoxelBox<ByteBuffer> getVoxelBox() {
-        return object.getVoxelBoxBounded();
+    public BoundedVoxels<ByteBuffer> voxels() {
+        return object.boundedVoxels();
     }
 
     @Override
-    public BoundedVoxelBox<ByteBuffer> getVoxelBoxMIP() {
-        return objectFlattened.getVoxelBoxBounded();
+    public BoundedVoxels<ByteBuffer> voxelsMaximumIntensityProjection() {
+        return objectFlattened.boundedVoxels();
     }
 
     @Override
-    public BoundingBox getBoundingBox() {
-        return object.getBoundingBox();
+    public BoundingBox boundingBox() {
+        return object.boundingBox();
     }
 
     @Override
-    public BoundingBox getBoundingBoxMIP() {
-        return objectFlattened.getBoundingBox();
+    public BoundingBox boundingBoxFlattened() {
+        return objectFlattened.boundingBox();
     }
 
     @Override
@@ -140,36 +140,44 @@ class VoxelizedMarkHistogram implements VoxelizedMark {
     // Calculates the pixels for a mark
     private void initForMark(Mark mark, NRGStack stack, RegionMap regionMap) {
 
-        ImageDimensions sd = stack.getDimensions();
-        BoundingBox bbox = mark.bboxAllRegions(sd);
+        ImageDimensions dimensions = stack.dimensions();
+        BoundingBox box = mark.boxAllRegions(dimensions);
 
-        ReadableTuple3i cornerMax = bbox.calcCornerMax();
+        ReadableTuple3i cornerMax = box.calculateCornerMax();
 
-        object = new ObjectMask(bbox);
-        objectFlattened = new ObjectMask(bbox.flattenZ());
+        object = new ObjectMask(box);
+        objectFlattened = new ObjectMask(box.flattenZ());
 
-        Extent localExtent = bbox.extent();
+        Extent localExtent = box.extent();
         partitionList.init(
-                FACTORY, stack.getNumberChannels(), regionMap.numRegions(), localExtent.getZ());
+                FACTORY, stack.getNumberChannels(), regionMap.numRegions(), localExtent.z());
 
-        ByteBuffer bufferMIP = getObjectFlattened().getVoxelBox().getPixelsForPlane(0).buffer();
+        ByteBuffer bufferMIP = getObjectFlattened().sliceBufferLocal(0);
 
-        for (int z = bbox.cornerMin().getZ(); z <= cornerMax.getZ(); z++) {
+        for (int z = box.cornerMin().z(); z <= cornerMax.z(); z++) {
 
             BufferArrList bufferArrList = new BufferArrList();
             bufferArrList.init(stack, z);
             initForSlice(
-                    z, mark, bbox, cornerMax, localExtent, sd, bufferArrList, bufferMIP, regionMap);
+                    z,
+                    mark,
+                    box,
+                    cornerMax,
+                    localExtent,
+                    dimensions,
+                    bufferArrList,
+                    bufferMIP,
+                    regionMap);
         }
     }
 
     private void initForSlice( // NOSONAR
             int z,
             Mark mark,
-            BoundingBox bbox,
+            BoundingBox box,
             ReadableTuple3i cornerMax,
             Extent localExtent,
-            ImageDimensions sd,
+            ImageDimensions dimensions,
             BufferArrList bufferArrList,
             ByteBuffer bufferMIP,
             RegionMap regionMap) {
@@ -177,33 +185,33 @@ class VoxelizedMarkHistogram implements VoxelizedMark {
         Point3d ptRunning = new Point3d();
         ptRunning.setZ(z + 0.5);
 
-        int zLocal = z - bbox.cornerMin().getZ();
+        int zLocal = z - box.cornerMin().z();
 
         List<RegionMembershipWithFlags> listRegionMembership =
                 regionMap.createListMembershipWithFlags();
 
-        ByteBuffer buffer = getObject().getVoxelBox().getPixelsForPlane(zLocal).buffer();
+        ByteBuffer buffer = object.sliceBufferLocal(zLocal);
 
-        for (int y = bbox.cornerMin().getY(); y <= cornerMax.getY(); y++) {
+        for (int y = box.cornerMin().y(); y <= cornerMax.y(); y++) {
             ptRunning.setY(y + 0.5);
 
-            int yLocal = y - bbox.cornerMin().getY();
+            int yLocal = y - box.cornerMin().y();
 
-            for (int x = bbox.cornerMin().getX(); x <= cornerMax.getX(); x++) {
+            for (int x = box.cornerMin().x(); x <= cornerMax.x(); x++) {
 
                 ptRunning.setX(x + 0.5);
 
-                int xLocal = x - bbox.cornerMin().getX();
+                int xLocal = x - box.cornerMin().x();
 
                 int localOffset = localExtent.offset(xLocal, yLocal);
-                int globalOffset = sd.offset(x, y);
+                int globalOffset = dimensions.offset(x, y);
 
                 byte membership = mark.evalPointInside(new Point3d(ptRunning));
 
                 buffer.put(localOffset, membership);
                 bufferMIP.put(localOffset, membershipMIP(membership, bufferMIP, localOffset));
 
-                AddPxlsToHistogram.addPxls(
+                AddVoxelsToHistogram.addVoxels(
                         membership,
                         listRegionMembership,
                         partitionList,

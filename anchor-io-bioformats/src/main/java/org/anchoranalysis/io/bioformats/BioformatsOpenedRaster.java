@@ -158,13 +158,13 @@ public class BioformatsOpenedRaster implements OpenedRaster {
 
             TimeSequence ts = new TimeSequence();
 
-            ImageDimensions sd = dimensionsForSeries(seriesIndex);
+            ImageDimensions dimensions = dimensionsForSeries(seriesIndex);
 
             // Assumes order of time first, and then channels
             List<Channel> listAllChnls =
-                    createUninitialisedChnls(sd, ts, multiplexVoxelDataType(dataType));
+                    createUninitialisedChnls(dimensions, ts, multiplexVoxelDataType(dataType));
 
-            copyBytesIntoChnls(listAllChnls, sd, progressReporter, dataType, readOptions);
+            copyBytesIntoChnls(listAllChnls, dimensions, progressReporter, dataType, readOptions);
 
             LOG.debug(
                     String.format(

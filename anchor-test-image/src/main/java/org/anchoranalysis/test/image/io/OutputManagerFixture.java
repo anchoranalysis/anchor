@@ -28,6 +28,8 @@ package org.anchoranalysis.test.image.io;
 
 import java.nio.file.Path;
 import java.util.Optional;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
@@ -45,9 +47,8 @@ import org.anchoranalysis.io.output.bound.BoundOutputManager;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.test.LoggingFixture;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class OutputManagerFixture {
-
-    private OutputManagerFixture() {}
 
     // These operations must occur before creating TempBoundOutputManager
     private static void globalSetup() {
@@ -74,19 +75,16 @@ public class OutputManagerFixture {
 
         globalSetup();
 
-        OutputWriteSettings ows = new OutputWriteSettings();
+        OutputWriteSettings settings = new OutputWriteSettings();
 
         // We populate any defaults in OutputWriteSettings from our default bean factory
         try {
-            ows.checkMisconfigured(RegisterBeanFactories.getDefaultInstances());
+            settings.checkMisconfigured(RegisterBeanFactories.getDefaultInstances());
         } catch (BeanMisconfiguredException e1) {
             errorReporter.recordError(OutputManagerFixture.class, e1);
         }
 
-        OutputManagerWithPrefixer outputManager = new OutputManagerPermissive();
-        outputManager.setSilentlyDeleteExisting(true);
-        outputManager.setOutputWriteSettings(ows);
-        outputManager.setFilePathPrefixer(new FilePathPrefixerConstantPath(pathTempFolder));
+        OutputManagerWithPrefixer outputManager = createOutputManager(pathTempFolder, settings);
 
         try {
             return outputManager.bindRootFolder(
@@ -96,6 +94,15 @@ public class OutputManagerFixture {
         } catch (FilePathPrefixerException e) {
             throw new BindFailedException(e);
         }
+    }
+
+    private static OutputManagerWithPrefixer createOutputManager(
+            Path pathTempFolder, OutputWriteSettings settings) {
+        OutputManagerWithPrefixer outputManager = new OutputManagerPermissive();
+        outputManager.setSilentlyDeleteExisting(true);
+        outputManager.setOutputWriteSettings(settings);
+        outputManager.setFilePathPrefixer(new FilePathPrefixerConstantPath(pathTempFolder));
+        return outputManager;
     }
 
     private static class FilePathPrefixerConstantPath extends FilePathPrefixer {

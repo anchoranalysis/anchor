@@ -31,7 +31,7 @@ import javax.swing.event.EventListenerList;
 
 // Framework class for converting EventListener events into RoutableEvents
 public abstract class RoutableListenerAdapter<T extends EventObject>
-        implements IRoutableReceivable<T> {
+        implements RoutableReceivable<T> {
 
     private EventListenerList list = new EventListenerList();
 

@@ -51,8 +51,8 @@ public class HashedColorSet implements ColorIndex {
     }
 
     @Override
-    public RGBColor get(int i) {
-        Integer z = Integer.valueOf(i);
+    public RGBColor get(int index) {
+        Integer z = Integer.valueOf(index);
         RGBColor col = map.get(z);
 
         if (col == null) {
@@ -76,7 +76,7 @@ public class HashedColorSet implements ColorIndex {
     }
 
     @Override
-    public boolean has(int i) {
-        return map.containsKey(i);
+    public boolean has(int index) {
+        return map.containsKey(index);
     }
 }

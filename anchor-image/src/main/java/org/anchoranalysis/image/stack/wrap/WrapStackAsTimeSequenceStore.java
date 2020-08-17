@@ -29,9 +29,9 @@ package org.anchoranalysis.image.stack.wrap;
 import java.util.Optional;
 import java.util.Set;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.functional.CallableWithException;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
+import org.anchoranalysis.core.name.store.StoreSupplier;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.TimeSequence;
 
@@ -60,9 +60,8 @@ public class WrapStackAsTimeSequenceStore implements NamedProviderStore<TimeSequ
     }
 
     @Override
-    public void add(
-            String name, CallableWithException<TimeSequence, OperationFailedException> getter)
+    public void add(String name, StoreSupplier<TimeSequence> supplier)
             throws OperationFailedException {
-        namedProvider.add(name, () -> getter.call().get(t));
+        namedProvider.add(name, () -> supplier.get().get(t));
     }
 }

@@ -1,5 +1,9 @@
 package org.anchoranalysis.core.idgetter;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 /*
  * #%L
  * anchor-image
@@ -25,38 +29,16 @@ package org.anchoranalysis.core.idgetter;
  * THE SOFTWARE.
  * #L%
  */
-
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class IDGetterMod<T> implements IDGetter<T> {
 
     private IDGetter<T> idGetter;
     private int mod;
 
-    public IDGetterMod() {}
-
-    public IDGetterMod(IDGetter<T> idGetter, int mod) {
-        super();
-        this.idGetter = idGetter;
-        this.mod = mod;
-    }
-
     @Override
     public int getID(T m, int iter) {
         return idGetter.getID(m, iter) % mod;
-    }
-
-    public IDGetter<T> getIdGetter() {
-        return idGetter;
-    }
-
-    public void setIdGetter(IDGetter<T> idGetter) {
-        this.idGetter = idGetter;
-    }
-
-    public int getMod() {
-        return mod;
-    }
-
-    public void setMod(int mod) {
-        this.mod = mod;
     }
 }

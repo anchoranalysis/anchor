@@ -32,7 +32,6 @@ import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
 
 @AllArgsConstructor
 class ConsiderNeighbors {
@@ -80,7 +79,7 @@ class ConsiderNeighbors {
     private void considerAndQueue(int xShift, int yShift, int zShift) {
         considerVisitAndQueueNeighborPoint(
                 icv,
-                new Point3i(point.getX() + xShift, point.getY() + yShift, point.getZ() + zShift),
+                new Point3i(point.x() + xShift, point.y() + yShift, point.z() + zShift),
                 distance,
                 localQueue);
     }
@@ -104,15 +103,14 @@ class ConsiderNeighbors {
     public static boolean considerVisitMarkRaster(
             ConsiderVisit considerVisit, Point3i point, int distance, ObjectMask outline) {
 
-        VoxelBox<ByteBuffer> vb = outline.getVoxelBox();
-        BinaryValuesByte bvb = outline.getBinaryValuesByte();
+        BinaryValuesByte bvb = outline.binaryValuesByte();
 
-        if (!vb.extent().contains(point)) {
+        if (!outline.extent().contains(point)) {
             return false;
         }
 
-        ByteBuffer bb = vb.getPixelsForPlane(point.getZ()).buffer();
-        int offset = vb.extent().offset(point.getX(), point.getY());
+        ByteBuffer bb = outline.sliceBufferLocal(point.z());
+        int offset = outline.extent().offsetSlice(point);
 
         // Check if the buffer allows us to read the pixel
         if (bb.get(offset) == bvb.getOffByte()) {

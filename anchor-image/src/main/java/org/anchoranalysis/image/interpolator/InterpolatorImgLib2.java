@@ -28,6 +28,7 @@ package org.anchoranalysis.image.interpolator;
 
 import java.nio.ByteBuffer;
 import java.nio.ShortBuffer;
+import lombok.RequiredArgsConstructor;
 import net.imglib2.Cursor;
 import net.imglib2.RandomAccessible;
 import net.imglib2.RealRandomAccess;
@@ -35,90 +36,138 @@ import net.imglib2.RealRandomAccessible;
 import net.imglib2.img.Img;
 import net.imglib2.interpolation.InterpolatorFactory;
 import net.imglib2.type.Type;
+import net.imglib2.type.numeric.IntegerType;
 import net.imglib2.type.numeric.integer.UnsignedByteType;
 import net.imglib2.type.numeric.integer.UnsignedShortType;
+import net.imglib2.view.ExtendedRandomAccessibleInterval;
 import net.imglib2.view.Views;
 import org.anchoranalysis.image.convert.ImgLib2Wrap;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 
+/**
+ * Performs interpolation using ImgLib2
+ *
+ * <p>By default, voxels at the boundaries are mirrored (i.e. voxels just after the boundary are
+ * treated like the closest voxel inside the boundary), but this can be changed to an extent
+ * strategy instead.
+ *
+ * @author Owen Feehan
+ */
+@RequiredArgsConstructor
 public abstract class InterpolatorImgLib2 implements Interpolator {
 
-    private InterpolatorFactory<UnsignedByteType, RandomAccessible<UnsignedByteType>> factoryByte;
-    private InterpolatorFactory<UnsignedShortType, RandomAccessible<UnsignedShortType>>
-            factoryShort;
+    /**
+     * Added to the interpolated position as it is using the top-left interpolation scheme rather
+     * than the center-scheme, where coordinates correspond to the 'center' point of a sample
+     *
+     * @see <a
+     *     href="https://javadoc.scijava.org/ImgLib2/net/imglib2/interpolation/randomaccess/NearestNeighborInterpolator.html">ImgLib2
+     *     interpolation Javadocs</a>
+     */
+    private static final double SHIFT_IN_INTERPOLATED_POSITION = -0.5;
 
-    public InterpolatorImgLib2(
-            InterpolatorFactory<UnsignedByteType, RandomAccessible<UnsignedByteType>> factoryByte,
-            InterpolatorFactory<UnsignedShortType, RandomAccessible<UnsignedShortType>>
-                    factoryShort) {
-        super();
-        this.factoryByte = factoryByte;
-        this.factoryShort = factoryShort;
-    }
+    // START REQUIRED ARGUMENTS
+    private final InterpolatorFactory<UnsignedByteType, RandomAccessible<UnsignedByteType>>
+            factoryByte;
+
+    private final InterpolatorFactory<UnsignedShortType, RandomAccessible<UnsignedShortType>>
+            factoryShort;
+    // END REQUIRED ARGUMENTS
+
+    /** If set, rather than using the default mirroring strategy, an extend strategy is used */
+    private boolean extend = false;
+
+    /** If {@code extend==true} this value is used for all voxels outside the boundary */
+    private int extendValue = 0;
 
     @Override
     public VoxelBuffer<ByteBuffer> interpolateByte(
-            VoxelBuffer<ByteBuffer> src, VoxelBuffer<ByteBuffer> dest, Extent eSrc, Extent eDest) {
+            VoxelBuffer<ByteBuffer> voxelsSource,
+            VoxelBuffer<ByteBuffer> voxelsDestination,
+            Extent extentSource,
+            Extent extentDestination) {
 
-        Img<UnsignedByteType> imIng = ImgLib2Wrap.wrapByte(src, eSrc);
-        Img<UnsignedByteType> imgOut = ImgLib2Wrap.wrapByte(dest, eDest);
+        Img<UnsignedByteType> imgIn = ImgLib2Wrap.wrapByte(voxelsSource, extentSource);
+        Img<UnsignedByteType> imgOut = ImgLib2Wrap.wrapByte(voxelsDestination, extentDestination);
 
         RealRandomAccessible<UnsignedByteType> interpolant =
-                Views.interpolate(Views.extendMirrorSingle(imIng), factoryByte);
+                Views.interpolate(outOfBoundsView(imgIn), factoryByte);
 
-        interpolate2D(interpolant, imgOut, eSrc);
-        return dest;
+        interpolate2D(interpolant, imgOut, extentSource);
+
+        return voxelsDestination;
     }
 
     @Override
     public VoxelBuffer<ShortBuffer> interpolateShort(
-            VoxelBuffer<ShortBuffer> src,
-            VoxelBuffer<ShortBuffer> dest,
-            Extent eSrc,
-            Extent eDest) {
+            VoxelBuffer<ShortBuffer> voxelsSource,
+            VoxelBuffer<ShortBuffer> voxelsDestination,
+            Extent extentSource,
+            Extent extentDestination) {
 
-        Img<UnsignedShortType> imIng = ImgLib2Wrap.wrapShort(src, eSrc);
-        Img<UnsignedShortType> imgOut = ImgLib2Wrap.wrapShort(dest, eDest);
+        Img<UnsignedShortType> imIng = ImgLib2Wrap.wrapShort(voxelsSource, extentSource);
+        Img<UnsignedShortType> imgOut = ImgLib2Wrap.wrapShort(voxelsDestination, extentDestination);
 
         RealRandomAccessible<UnsignedShortType> interpolant =
-                Views.interpolate(Views.extendMirrorSingle(imIng), factoryShort);
+                Views.interpolate(outOfBoundsView(imIng), factoryShort);
 
-        interpolate2D(interpolant, imgOut, eSrc);
-        return dest;
+        interpolate2D(interpolant, imgOut, extentSource);
+        return voxelsDestination;
+    }
+
+    /**
+     * Switches to extend constant-value out-of-bounds strategy
+     *
+     * @param extendValue constant-value to use for all values outside the boundary
+     */
+    public void extendWith(int extendValue) {
+        this.extend = true;
+        this.extendValue = extendValue;
+    }
+
+    /** Multiplexes between two different strategies for handling out-of-bounds boundary values */
+    private <T extends IntegerType<T>> ExtendedRandomAccessibleInterval<T, Img<T>> outOfBoundsView(
+            Img<T> imgIn) {
+        if (extend) {
+            return Views.extendValue(imgIn, extendValue);
+        } else {
+            return Views.extendMirrorSingle(imgIn);
+        }
     }
 
     private static <T extends Type<T>> Img<T> interpolate2D(
-            RealRandomAccessible<T> source, Img<T> destination, Extent eSrc) {
+            RealRandomAccessible<T> source, Img<T> destination, Extent extentSrc) {
+
         // cursor to iterate over all pixels
         Cursor<T> cursor = destination.localizingCursor();
 
         // create a RealRandomAccess on the source (interpolator)
-        RealRandomAccess<T> realRandomAccess = source.realRandomAccess();
+        RealRandomAccess<T> interpolatedAccess = source.realRandomAccess();
 
-        // the temporary array to compute the position
-        double[] tmp = new double[2];
+        double[] positionInterpolated = new double[2];
+
+        double[] magnification = {
+            destination.realMax(0) / extentSrc.x(), destination.realMax(1) / extentSrc.y()
+        };
 
         // for all pixels of the output image
         while (cursor.hasNext()) {
 
             cursor.fwd();
 
-            tmp[0] = (cursor.getDoublePosition(0) / (destination.realMax(0)) * eSrc.getX());
-            tmp[1] = (cursor.getDoublePosition(1) / (destination.realMax(1)) * eSrc.getY());
+            positionInterpolated[0] =
+                    (cursor.getDoublePosition(0) / magnification[0])
+                            + SHIFT_IN_INTERPOLATED_POSITION;
+            positionInterpolated[1] =
+                    (cursor.getDoublePosition(1) / magnification[1])
+                            + SHIFT_IN_INTERPOLATED_POSITION;
 
-            // set the position
-            realRandomAccess.setPosition(tmp);
-
-            // set the new value
-            cursor.get().set(realRandomAccess.get());
+            // set the position and extract the interpolated value
+            interpolatedAccess.setPosition(positionInterpolated);
+            cursor.get().set(interpolatedAccess.get());
         }
 
         return destination;
-    }
-
-    @Override
-    public boolean isNewValuesPossible() {
-        return true;
     }
 }

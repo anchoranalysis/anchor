@@ -27,14 +27,15 @@
 package org.anchoranalysis.image.object;
 
 import java.nio.ByteBuffer;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.axis.AxisType;
 import org.anchoranalysis.core.axis.AxisTypeConverter;
 import org.anchoranalysis.core.geometry.Point3d;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.extent.Extent;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 final class CenterOfGravityCalculator {
-
-    private CenterOfGravityCalculator() {}
 
     /**
      * Calculates the center of gravity of an object-mask treating all pixels of equal weight.
@@ -46,19 +47,18 @@ final class CenterOfGravityCalculator {
      */
     public static Point3d calcCenterOfGravity(ObjectMask object) {
 
-        VoxelBox<ByteBuffer> vb = object.getVoxelBox();
-
         int cnt = 0;
         Point3d sum = new Point3d();
-        byte onByte = object.getBinaryValuesByte().getOnByte();
+        byte onByte = object.binaryValuesByte().getOnByte();
+        Extent extent = object.extent();
 
-        for (int z = 0; z < vb.extent().getZ(); z++) {
+        for (int z = 0; z < extent.z(); z++) {
 
-            ByteBuffer bb = vb.getPixelsForPlane(z).buffer();
+            ByteBuffer bb = object.sliceBufferLocal(z);
 
             int offset = 0;
-            for (int y = 0; y < vb.extent().getY(); y++) {
-                for (int x = 0; x < vb.extent().getX(); x++) {
+            for (int y = 0; y < extent.y(); y++) {
+                for (int x = 0; x < extent.x(); x++) {
 
                     if (bb.get(offset) == onByte) {
                         sum.add(x, y, z);
@@ -74,7 +74,7 @@ final class CenterOfGravityCalculator {
         }
 
         sum.divideBy(cnt);
-        sum.add(object.getBoundingBox().cornerMin());
+        sum.add(object.boundingBox().cornerMin());
         return sum;
     }
 
@@ -87,19 +87,18 @@ final class CenterOfGravityCalculator {
      */
     public static double calcCenterOfGravityForAxis(ObjectMask object, AxisType axisType) {
 
-        VoxelBox<ByteBuffer> vb = object.getVoxelBox();
-
         int cnt = 0;
         double sum = 0.0;
-        byte onByte = object.getBinaryValuesByte().getOnByte();
+        byte onByte = object.binaryValuesByte().getOnByte();
+        Extent extent = object.extent();
 
-        for (int z = 0; z < vb.extent().getZ(); z++) {
+        for (int z = 0; z < extent.z(); z++) {
 
-            ByteBuffer bb = vb.getPixelsForPlane(z).buffer();
+            ByteBuffer bb = object.sliceBufferLocal(z);
 
             int offset = 0;
-            for (int y = 0; y < vb.extent().getY(); y++) {
-                for (int x = 0; x < vb.extent().getX(); x++) {
+            for (int y = 0; y < extent.y(); y++) {
+                for (int x = 0; x < extent.x(); x++) {
 
                     if (bb.get(offset) == onByte) {
                         sum += AxisTypeConverter.valueFor(axisType, x, y, z);
@@ -114,7 +113,7 @@ final class CenterOfGravityCalculator {
             return Double.NaN;
         }
 
-        return (sum / cnt) + object.getBoundingBox().cornerMin().getValueByDimension(axisType);
+        return (sum / cnt) + object.boundingBox().cornerMin().byDimension(axisType);
     }
 
     private static Point3d emptyPoint() {

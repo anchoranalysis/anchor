@@ -50,6 +50,6 @@ class AggregatePoints implements ProcessVoxel {
 
     /** The center-of-gravity of all points-processed (discretized) */
     public Point3i center() {
-        return PointConverter.intFromDouble(runningSum.mean());
+        return PointConverter.intFromDoubleFloor(runningSum.mean());
     }
 }

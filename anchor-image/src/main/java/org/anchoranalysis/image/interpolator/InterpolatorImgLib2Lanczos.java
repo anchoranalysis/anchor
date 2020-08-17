@@ -37,4 +37,9 @@ public class InterpolatorImgLib2Lanczos extends InterpolatorImgLib2 {
                 new LanczosInterpolatorFactory<UnsignedByteType>(),
                 new LanczosInterpolatorFactory<UnsignedShortType>());
     }
+
+    @Override
+    public boolean isNewValuesPossible() {
+        return true;
+    }
 }

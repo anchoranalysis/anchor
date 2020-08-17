@@ -26,8 +26,11 @@
 
 package org.anchoranalysis.image.index;
 
+import com.google.common.collect.Streams;
 import com.newbrightidea.util.RTree;
 import java.util.List;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.extent.BoundingBox;
 
@@ -35,63 +38,93 @@ import org.anchoranalysis.image.extent.BoundingBox;
  * An R-Tree of bounding boxes. The index of the item in a list, determines an integer ID,
  * associated with the item in the R-Tree.
  *
+ * @see <a href="https://en.wikipedia.org/wiki/R-tree">Wikipedia's R-tree</a>
  * @author Owen Feehan
  */
 public class BoundingBoxRTree {
 
-    private RTree<Integer> rTree;
+    private static final float[] SINGLE_POINT_EXTENT = new float[] {1, 1, 1};
+
+    private static final int MIN_NUMBER_ENTRIES = 1;
+
+    private static final int NUMBER_DIMENSIONS = 3;
 
     // We re-use this singlePoint to avoid memory allocation for a single point
     private float[] singlePoint = new float[] {0, 0, 0};
 
-    private float[] singlePointExtent = new float[] {1, 1, 1};
+    private final RTree<Integer> rTree;
 
-    public BoundingBoxRTree(int maxEntriesSuggested) {
-        // We insist that maxEntries is at least twice the minimum num items
-        int minEntries = 1;
-        int maxEntries = Math.max(maxEntriesSuggested, minEntries * 2);
+    /**
+     * Constructor
+     *
+     * @param maxNumberEntriesSuggested suggested a maximum number of entries in the r-tree
+     */
+    public BoundingBoxRTree(int maxNumberEntriesSuggested) {
+        // Insist that maxEntries is at least twice the minimum num items
+        int maxNumberEntries = Math.max(maxNumberEntriesSuggested, MIN_NUMBER_ENTRIES * 2);
 
-        rTree = new RTree<>(maxEntries, minEntries, 3);
+        rTree = new RTree<>(maxNumberEntries, MIN_NUMBER_ENTRIES, NUMBER_DIMENSIONS);
     }
 
-    public BoundingBoxRTree(List<BoundingBox> bboxList, int maxEntriesSuggested) {
-        this(maxEntriesSuggested);
+    /**
+     * Constructor - with an initial list of boxes
+     *
+     * @param boxes added to the r-tree
+     * @param maxNumberEntriesSuggested suggested a maximum number of entries in the r-tree
+     */
+    public BoundingBoxRTree(List<BoundingBox> boxes, int maxNumberEntriesSuggested) {
+        this(maxNumberEntriesSuggested);
 
-        for (int i = 0; i < bboxList.size(); i++) {
-            add(i, bboxList.get(i));
-        }
+        // Adds each box to the r-tree with its corresponding index
+        IntStream.range(0, boxes.size()).forEach(index -> add(index, boxes.get(index)));
+    }
+
+    /**
+     * Constructor - with an initial list of boxes
+     *
+     * @param boxes added to the r-tree
+     * @param maxNumberEntriesSuggested suggested a maximum number of entries in the r-tree
+     */
+    public BoundingBoxRTree(Stream<BoundingBox> boxes, int maxNumberEntriesSuggested) {
+        this(maxNumberEntriesSuggested);
+
+        // Adds each box to the r-tree with its corresponding index
+        Streams.mapWithIndex(
+                boxes,
+                (box, index) -> {
+                    this.add((int) index, box);
+                    return 0;
+                });
     }
 
     public List<Integer> contains(Point3i point) {
-        singlePoint[0] = (float) point.getX();
-        singlePoint[1] = (float) point.getY();
-        singlePoint[2] = (float) point.getZ();
+        singlePoint[0] = (float) point.x();
+        singlePoint[1] = (float) point.y();
+        singlePoint[2] = (float) point.z();
 
-        return rTree.search(singlePoint, singlePointExtent);
+        return rTree.search(singlePoint, SINGLE_POINT_EXTENT);
     }
 
-    public List<Integer> intersectsWith(BoundingBox bbox) {
+    public List<Integer> intersectsWith(BoundingBox box) {
 
-        float[] coords = minPoint(bbox);
-        float[] dimensions = extent(bbox);
+        float[] coords = minPoint(box);
+        float[] dimensions = extent(box);
 
         return rTree.search(coords, dimensions);
     }
 
-    public void add(int i, BoundingBox bbox) {
-        float[] coords = minPoint(bbox);
-        float[] dimensions = extent(bbox);
+    public void add(int i, BoundingBox box) {
+        float[] coords = minPoint(box);
+        float[] dimensions = extent(box);
 
         rTree.insert(coords, dimensions, i);
     }
 
-    private static float[] minPoint(BoundingBox bbox) {
-        return new float[] {
-            bbox.cornerMin().getX(), bbox.cornerMin().getY(), bbox.cornerMin().getZ()
-        };
+    private static float[] minPoint(BoundingBox box) {
+        return new float[] {box.cornerMin().x(), box.cornerMin().y(), box.cornerMin().z()};
     }
 
-    private static float[] extent(BoundingBox bbox) {
-        return new float[] {bbox.extent().getX(), bbox.extent().getY(), bbox.extent().getZ()};
+    private static float[] extent(BoundingBox box) {
+        return new float[] {box.extent().x() - 1, box.extent().y() - 1, box.extent().z() - 1};
     }
 }

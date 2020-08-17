@@ -26,9 +26,9 @@
 
 package org.anchoranalysis.image.io.input;
 
-import org.anchoranalysis.core.cache.CacheCall;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
+import org.anchoranalysis.core.name.store.StoreSupplier;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.io.RasterIOException;
@@ -87,7 +87,7 @@ public abstract class NamedChnlsInput implements ProvidesStackInput {
         // Adds this stack (cached) under the given name
         stackCollection.add(
                 name,
-                CacheCall.of(() -> chnlCollectionAsTimeSequence(seriesNum, progressReporter)));
+                StoreSupplier.cache(() -> channelsAsTimeSequence(seriesNum, progressReporter)));
     }
 
     @Override
@@ -95,12 +95,12 @@ public abstract class NamedChnlsInput implements ProvidesStackInput {
         return 1;
     }
 
-    private TimeSequence chnlCollectionAsTimeSequence(
-            int seriesNum, ProgressReporter progressReporter) throws OperationFailedException {
+    private TimeSequence channelsAsTimeSequence(int seriesNum, ProgressReporter progressReporter)
+            throws OperationFailedException {
         // Apply it only to first time-series frame
         try {
             NamedChannelsForSeries ncc = createChannelsForSeries(seriesNum, progressReporter);
-            return new TimeSequence(ncc.allChannelsAsStack(0).call());
+            return new TimeSequence(ncc.allChannelsAsStack(0).get());
 
         } catch (RasterIOException e) {
             throw new OperationFailedException(e);
