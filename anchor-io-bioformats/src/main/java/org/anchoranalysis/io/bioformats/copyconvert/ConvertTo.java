@@ -47,7 +47,8 @@ public abstract class ConvertTo<T extends Buffer> {
     /**
      * Default constructor
      *
-     * @param funcCastWrapper how to convert a {@link VoxelsWrapper} to the specific destination-type
+     * @param funcCastWrapper how to convert a {@link VoxelsWrapper} to the specific
+     *     destination-type
      */
     public ConvertTo(Function<VoxelsWrapper, Voxels<T>> funcCastWrapper) {
         super();
@@ -66,7 +67,11 @@ public abstract class ConvertTo<T extends Buffer> {
      * @throws IOException
      */
     public void copyAllChnls(
-            ImageDimensions dimensions, byte[] src, DestChnlForIndex dest, int z, int numChnlsPerByteArray)
+            ImageDimensions dimensions,
+            byte[] src,
+            DestChnlForIndex dest,
+            int z,
+            int numChnlsPerByteArray)
             throws IOException {
 
         log.debug(String.format("copy to byte %d start", z));

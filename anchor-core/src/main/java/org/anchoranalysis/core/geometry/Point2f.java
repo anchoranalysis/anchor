@@ -33,7 +33,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
-@EqualsAndHashCode @Accessors(fluent=true) @AllArgsConstructor @NoArgsConstructor
+@EqualsAndHashCode
+@Accessors(fluent = true)
+@AllArgsConstructor
+@NoArgsConstructor
 public final class Point2f implements Serializable {
 
     /** */

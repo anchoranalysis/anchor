@@ -38,18 +38,18 @@ import org.anchoranalysis.image.voxel.Voxels;
 
 /**
  * Consumes each certain voxels on certain slices as points
- * <p>
- * Slices are iterated in a certain order.
- * <p>
- * The voxels must be:
- * <ul>
- * <li>Be ON on a mask
- * <li>Lie inside a bounding-box
- * <li>Exist on certain slices
- * </ul>
- * 
- * @author Owen Feehan
  *
+ * <p>Slices are iterated in a certain order.
+ *
+ * <p>The voxels must be:
+ *
+ * <ul>
+ *   <li>Be ON on a mask
+ *   <li>Lie inside a bounding-box
+ *   <li>Exist on certain slices
+ * </ul>
+ *
+ * @author Owen Feehan
  */
 class ConsumePointsFromMaskSliced {
 
@@ -65,11 +65,15 @@ class ConsumePointsFromMaskSliced {
     // Stays as -1 until we reach a non-empty slice
     private int successiveEmptySlices = -1;
 
-    public ConsumePointsFromMaskSliced(int skipAfterSuccessiveEmptySlices,
-            BoundingBox box, Mask mask, int startZ, Consumer<Point3i> consumer) {
+    public ConsumePointsFromMaskSliced(
+            int skipAfterSuccessiveEmptySlices,
+            BoundingBox box,
+            Mask mask,
+            int startZ,
+            Consumer<Point3i> consumer) {
         super();
         this.skipAfterSuccessiveEmptySlices = skipAfterSuccessiveEmptySlices;
-        
+
         this.cornerMin = box.cornerMin();
         this.cornerMax = box.calculateCornerMax();
         this.voxels = mask.channel().voxels().asByte();
@@ -77,8 +81,8 @@ class ConsumePointsFromMaskSliced {
         this.startZ = startZ;
         this.consumer = consumer;
         this.extent = voxels.extent();
-    }    
-    
+    }
+
     public void firstHalf() {
         for (int z = startZ; z <= cornerMax.z(); z++) {
 

@@ -28,6 +28,7 @@ package org.anchoranalysis.image.io.generator.raster.object;
 
 import java.nio.ByteBuffer;
 import java.util.Optional;
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.channel.Channel;
@@ -42,7 +43,6 @@ import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.io.generator.IterableGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
-import lombok.AllArgsConstructor;
 
 /**
  * Outputs a channel but with ONLY the pixels in an object-mask shown, and others set to 0.
@@ -55,7 +55,6 @@ public class ChnlMaskedWithObjectGenerator extends RasterGenerator
 
     private ObjectMask objectMask = null;
     private Channel srcChnl;
-
 
     public ChnlMaskedWithObjectGenerator(Channel srcChnl) {
         this.srcChnl = srcChnl;
@@ -98,12 +97,13 @@ public class ChnlMaskedWithObjectGenerator extends RasterGenerator
     }
 
     /**
-     * Creates a new channel, which copies voxels from srcChnl, but sets voxels outside the object-mask to
-     * zero.
+     * Creates a new channel, which copies voxels from srcChnl, but sets voxels outside the
+     * object-mask to zero.
      *
      * <p>i.e. the new channel is a masked version of srcChnl
      *
-     * @param object object-mask that determines the region that is copied (voxels outside this region are set to zero)
+     * @param object object-mask that determines the region that is copied (voxels outside this
+     *     region are set to zero)
      * @param srcChnl the channel to copy
      * @return the masked channel
      */
@@ -114,8 +114,7 @@ public class ChnlMaskedWithObjectGenerator extends RasterGenerator
         ImageDimensions newSd =
                 new ImageDimensions(box.extent(), srcChnl.dimensions().resolution());
 
-        Channel chnlNew =
-                ChannelFactory.instance().create(newSd, srcChnl.getVoxelDataType());
+        Channel chnlNew = ChannelFactory.instance().create(newSd, srcChnl.getVoxelDataType());
 
         byte maskOn = object.binaryValuesByte().getOnByte();
 
@@ -147,8 +146,7 @@ public class ChnlMaskedWithObjectGenerator extends RasterGenerator
                         continue;
                     }
 
-                    int indexGlobal =
-                            srcChnl.dimensions().offset(pointGlobal);
+                    int indexGlobal = srcChnl.dimensions().offset(pointGlobal);
                     pixelsOut.putInt(maskIn.position() - 1, pixelsIn.getInt(indexGlobal));
                 }
             }

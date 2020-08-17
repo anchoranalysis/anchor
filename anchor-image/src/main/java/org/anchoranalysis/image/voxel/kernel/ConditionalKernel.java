@@ -39,7 +39,8 @@ public class ConditionalKernel extends BinaryKernel {
     private Voxels<ByteBuffer> voxelsIntensity;
 
     // Constructor
-    public ConditionalKernel(BinaryKernel kernel, int minValue, Voxels<ByteBuffer> voxelsIntensity) {
+    public ConditionalKernel(
+            BinaryKernel kernel, int minValue, Voxels<ByteBuffer> voxelsIntensity) {
         super(kernel.getSize());
         this.kernel = kernel;
         this.minValue = minValue;

@@ -41,7 +41,7 @@ public abstract class FileProviderWithDirectory extends FileProvider {
     }
 
     public abstract Path getDirectoryAsPath(InputContextParams inputContext);
-    
+
     public abstract Collection<File> matchingFilesForDirectory(
             Path directory, InputManagerParams params) throws FileProviderException;
 

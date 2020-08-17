@@ -29,7 +29,7 @@ package org.anchoranalysis.image.interpolator;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class InterpolatorFactory {
 
     private static InterpolatorFactory instance = null;

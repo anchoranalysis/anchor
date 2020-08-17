@@ -26,13 +26,13 @@
 
 package org.anchoranalysis.feature.nrg;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.stack.Stack;
-import lombok.Getter;
-import lombok.Setter;
 
 // An NRG stack with associated parameters
 public class NRGStackWithParams {

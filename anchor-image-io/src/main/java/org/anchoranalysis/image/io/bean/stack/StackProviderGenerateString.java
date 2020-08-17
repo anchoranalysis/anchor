@@ -103,8 +103,7 @@ public class StackProviderGenerateString extends StackProvider {
 
             if (createShort) {
                 ChannelConverter<ShortBuffer> cc =
-                        new ChannelConverterToUnsignedShort(
-                                new ToShortScaleByType());
+                        new ChannelConverterToUnsignedShort(new ToShortScaleByType());
 
                 stack = cc.convert(stack, ConversionPolicy.CHANGE_EXISTING_CHANNEL);
             }
@@ -146,7 +145,7 @@ public class StackProviderGenerateString extends StackProvider {
         }
         return chnlNew;
     }
-    
+
     private Channel emptyChannelWithChangedZ(Channel channel, int zToAssign) {
         ImageDimensions dimensionsChangedZ = channel.dimensions().duplicateChangeZ(zToAssign);
         return ChannelFactory.instance().create(dimensionsChangedZ, channel.getVoxelDataType());

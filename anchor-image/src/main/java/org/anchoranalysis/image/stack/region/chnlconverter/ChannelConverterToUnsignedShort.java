@@ -27,8 +27,8 @@
 package org.anchoranalysis.image.stack.region.chnlconverter;
 
 import java.nio.ShortBuffer;
-import org.anchoranalysis.image.stack.region.chnlconverter.voxelbox.VoxelsConverter;
 import org.anchoranalysis.image.stack.region.chnlconverter.voxelbox.ToShortNoScaling;
+import org.anchoranalysis.image.stack.region.chnlconverter.voxelbox.VoxelsConverter;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedShort;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 

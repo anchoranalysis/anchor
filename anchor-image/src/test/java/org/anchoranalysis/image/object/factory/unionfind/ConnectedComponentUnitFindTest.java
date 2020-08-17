@@ -120,8 +120,7 @@ public class ConnectedComponentUnitFindTest {
 
         @SuppressWarnings("unchecked")
         BinaryVoxels<T> voxels =
-                (BinaryVoxels<T>)
-                        BinaryVoxelsFactory.createEmptyOff(extent, bufferDataType);
+                (BinaryVoxels<T>) BinaryVoxelsFactory.createEmptyOff(extent, bufferDataType);
 
         VoxelsAssigner assigner = voxels.assignOn();
         createObjects(fixture).forEach(assigner::toObject);

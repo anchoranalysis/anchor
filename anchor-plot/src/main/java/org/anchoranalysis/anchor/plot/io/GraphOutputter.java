@@ -27,11 +27,11 @@
 package org.anchoranalysis.anchor.plot.io;
 
 import java.awt.image.BufferedImage;
-import org.anchoranalysis.anchor.plot.PlotInstance;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.anchor.plot.PlotInstance;
 
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class GraphOutputter {
 
     public static BufferedImage createBufferedImage(PlotInstance gi, int width, int height) {

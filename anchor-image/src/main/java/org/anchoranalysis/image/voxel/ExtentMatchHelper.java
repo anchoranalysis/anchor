@@ -1,11 +1,11 @@
 package org.anchoranalysis.image.voxel;
 
-import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.Extent;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.image.extent.BoundingBox;
+import org.anchoranalysis.image.extent.Extent;
 
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ExtentMatchHelper {
 
     public static void checkExtentMatch(BoundingBox box1, BoundingBox box2) {

@@ -27,8 +27,8 @@
 package org.anchoranalysis.io.manifest.deserializer.bundle;
 
 import java.io.Serializable;
-import org.anchoranalysis.io.manifest.sequencetype.SequenceType;
 import lombok.Data;
+import org.anchoranalysis.io.manifest.sequencetype.SequenceType;
 
 @Data
 public class BundleParameters implements Serializable {

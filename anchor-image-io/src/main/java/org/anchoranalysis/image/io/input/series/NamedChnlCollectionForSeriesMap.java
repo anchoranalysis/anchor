@@ -166,13 +166,13 @@ public class NamedChnlCollectionForSeriesMap implements NamedChannelsForSeries {
         // Populate our stack from all the channels
         for (final String chnlName : chnlMap.keySet()) {
             stackCollection.add(
-                    chnlName, StoreSupplier.cache( () -> extractChnlAsTimeSequence(chnlName, t) ));
+                    chnlName, StoreSupplier.cache(() -> extractChnlAsTimeSequence(chnlName, t)));
         }
     }
 
     @Override
     public StoreSupplier<Stack> allChannelsAsStack(int t) {
-        return StoreSupplier.cache( () -> stackForAllChnls(t) );
+        return StoreSupplier.cache(() -> stackForAllChnls(t));
     }
 
     private TimeSequence createTimeSeries(ProgressReporter progressReporter)

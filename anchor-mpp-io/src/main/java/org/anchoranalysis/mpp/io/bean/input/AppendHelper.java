@@ -181,7 +181,9 @@ class AppendHelper {
             boolean debugMode)
             throws OperationFailedException {
         try {
-            return reader.apply( OperationOutFilePath.outPathFor(ni.getValue(), inputObject::pathForBinding, debugMode) );
+            return reader.apply(
+                    OperationOutFilePath.outPathFor(
+                            ni.getValue(), inputObject::pathForBinding, debugMode));
         } catch (Exception e) {
             throw new OperationFailedException("An error occured appending to the multi-input", e);
         }

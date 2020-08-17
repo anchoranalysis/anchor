@@ -37,9 +37,7 @@ import org.anchoranalysis.io.output.bean.allowed.OutputAllowed;
 import org.anchoranalysis.io.output.bound.BindFailedException;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
 
-/**
- *  Responsible for making decisions on where output goes and what form it takes
- */
+/** Responsible for making decisions on where output goes and what form it takes */
 public abstract class OutputManager extends AnchorBean<OutputManager> {
 
     public abstract boolean isOutputAllowed(String outputName);

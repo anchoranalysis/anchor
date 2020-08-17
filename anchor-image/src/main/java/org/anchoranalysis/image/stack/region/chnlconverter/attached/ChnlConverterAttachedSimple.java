@@ -27,11 +27,11 @@
 package org.anchoranalysis.image.stack.region.chnlconverter.attached;
 
 import java.nio.Buffer;
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.stack.region.chnlconverter.ChannelConverter;
 import org.anchoranalysis.image.stack.region.chnlconverter.ConversionPolicy;
 import org.anchoranalysis.image.stack.region.chnlconverter.voxelbox.VoxelsConverter;
-import lombok.AllArgsConstructor;
 
 /**
  * Simply passes everything onto a ChnlConverter

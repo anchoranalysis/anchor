@@ -30,6 +30,7 @@ import java.nio.ByteBuffer;
 import java.nio.ShortBuffer;
 import java.util.List;
 import java.util.Optional;
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
@@ -49,7 +50,6 @@ import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelDataTypeException;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedShort;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
-import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public class RegionExtracterFromDisplayStack implements RegionExtracter {
@@ -69,7 +69,12 @@ public class RegionExtracterFromDisplayStack implements RegionExtracter {
 
             Channel chnl =
                     extractRegionFrom(
-                            stack.getChannel(c), box, zoomFactor, listChnlConverter.get(c).map(ChnlConverterAttached::getVoxelsConverter));
+                            stack.getChannel(c),
+                            box,
+                            zoomFactor,
+                            listChnlConverter
+                                    .get(c)
+                                    .map(ChnlConverterAttached::getVoxelsConverter));
 
             if (c == 0) {
                 out = new Stack(chnl);

@@ -28,6 +28,7 @@ package org.anchoranalysis.test.image.io;
 
 import java.io.FileNotFoundException;
 import java.nio.file.Path;
+import lombok.Getter;
 import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
 import org.anchoranalysis.image.channel.Channel;
@@ -41,13 +42,12 @@ import org.anchoranalysis.io.bioformats.ConfigureBioformatsLogging;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
 import org.anchoranalysis.test.TestDataLoadException;
 import org.anchoranalysis.test.TestLoader;
-import lombok.Getter;
 
 public class TestLoaderImageIO {
 
     /** Delegate loader (for non image-related loading) */
     @Getter private TestLoader testLoader;
-    
+
     /** Reads rasters from filesystme */
     private RasterReader rasterReader;
 
@@ -177,7 +177,7 @@ public class TestLoaderImageIO {
 
         return objectsWritten.equalsDeep(objectsSaved);
     }
-    
+
     public Path resolveTestPath(String testPath) {
         return testLoader.resolveTestPath(testPath);
     }

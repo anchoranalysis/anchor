@@ -37,12 +37,14 @@ import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 
 /** Helper classes for calculating the union/intersection along each axis */
-@Value @Accessors(fluent=true) @AllArgsConstructor(access = AccessLevel.PRIVATE)
+@Value
+@Accessors(fluent = true)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 class ExtentBoundsComparer {
 
     private final int min;
     private final int max;
-    
+
     public int extent() {
         return max - min + 1;
     }

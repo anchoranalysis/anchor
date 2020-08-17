@@ -91,8 +91,7 @@ public class AddCriteriaNRGElemPair implements AddCriteria<NRGPair> {
         //  necessary calculations from the addCriteria calculations to be used later
         boolean calc = false;
         try {
-            if (pairAddCriteria.includeMarks(
-                    mark1, mark2, nrgStack.dimensions(), session, do3D)) {
+            if (pairAddCriteria.includeMarks(mark1, mark2, nrgStack.dimensions(), session, do3D)) {
                 calc = true;
             }
         } catch (IncludeMarksFailureException e) {

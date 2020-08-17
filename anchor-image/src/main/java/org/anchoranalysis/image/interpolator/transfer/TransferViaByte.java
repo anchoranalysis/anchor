@@ -46,7 +46,7 @@ public class TransferViaByte implements Transfer {
         this.source = source.asByte();
         this.destination = destination.asByte();
     }
-    
+
     @Override
     public void assignSlice(int z) {
         slice = source.slice(z);

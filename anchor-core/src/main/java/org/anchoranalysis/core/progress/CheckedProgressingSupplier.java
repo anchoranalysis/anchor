@@ -29,8 +29,7 @@ package org.anchoranalysis.core.progress;
 import org.anchoranalysis.core.functional.function.CheckedSupplier;
 
 /**
- * Like {@link CheckedSupplier} but can update a progress-reporter as the operation
- * progresses.
+ * Like {@link CheckedSupplier} but can update a progress-reporter as the operation progresses.
  *
  * @author Owen Feehan
  * @param <R> result-type

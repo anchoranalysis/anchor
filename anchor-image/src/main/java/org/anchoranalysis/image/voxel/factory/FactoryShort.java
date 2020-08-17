@@ -48,7 +48,7 @@ final class FactoryShort implements VoxelsFactoryTypeBound<ShortBuffer> {
     public Voxels<ShortBuffer> createInitialized(Extent extent) {
         return new VoxelsAsShort(PixelsFromShortBufferArr.createInitialized(extent));
     }
-    
+
     @Override
     public Voxels<ShortBuffer> createUninitialized(Extent extent) {
         return new VoxelsAsShort(PixelsFromShortBufferArr.createUninitialized(extent));

@@ -66,12 +66,7 @@ public abstract class DrawOverlay {
     public void writeOverlays(
             ColoredOverlayCollection oc, RGBStack stack, IDGetter<Overlay> idGetter)
             throws OperationFailedException {
-        writeOverlays(
-                oc,
-                stack.dimensions(),
-                stack,
-                idGetter,
-                new BoundingBox(stack.dimensions()));
+        writeOverlays(oc, stack.dimensions(), stack, idGetter, new BoundingBox(stack.dimensions()));
     }
 
     //

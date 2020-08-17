@@ -74,8 +74,7 @@ public class MaskFromObjects {
             byte objectState) {
 
         Channel chnlNew =
-                ChannelFactory.instance()
-                        .create(dimensions, VoxelDataTypeUnsignedByte.INSTANCE);
+                ChannelFactory.instance().create(dimensions, VoxelDataTypeUnsignedByte.INSTANCE);
         Voxels<ByteBuffer> voxelsNew = chnlNew.voxels().asByte();
 
         if (outVal.getOnInt() != 0) {
@@ -91,9 +90,7 @@ public class MaskFromObjects {
     private static void writeChannelObjectCollection(
             Voxels<ByteBuffer> voxels, ObjectCollection objects, byte outVal) {
 
-        objects.forEach(object->
-            writeObjectOntoVoxels(object, voxels, outVal)
-        );
+        objects.forEach(object -> writeObjectOntoVoxels(object, voxels, outVal));
     }
 
     private static void writeObjectOntoVoxels(

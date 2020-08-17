@@ -38,10 +38,11 @@ import org.anchoranalysis.image.voxel.VoxelsWrapper;
 
 @GroupingRoot
 public abstract class BinarySegmentation extends SegmentationBean<BinarySegmentation> {
-    
+
     /**
-     * Performs a segmentation on voxels so that each voxel has an ON or OFF state after the operation.
-     *  
+     * Performs a segmentation on voxels so that each voxel has an ON or OFF state after the
+     * operation.
+     *
      * @param voxels voxels to segment
      * @param params parameters to guide the algorithm
      * @param objectMask if present, segmentation only occurs inside this object

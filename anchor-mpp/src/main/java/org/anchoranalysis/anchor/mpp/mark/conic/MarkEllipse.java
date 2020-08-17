@@ -416,8 +416,7 @@ public class MarkEllipse extends MarkConic implements Serializable {
 
     private String strMarks() {
         return String.format(
-                "rad=[%3.3f, %3.3f] rot=%s",
-                this.radii.x(), this.radii.y(), this.orientation);
+                "rad=[%3.3f, %3.3f] rot=%s", this.radii.x(), this.radii.y(), this.orientation);
     }
 
     private static double[] minMaxEndPoint(

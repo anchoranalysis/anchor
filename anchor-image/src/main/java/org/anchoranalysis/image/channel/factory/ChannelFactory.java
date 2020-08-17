@@ -62,8 +62,8 @@ public class ChannelFactory extends VoxelDataTypeFactoryMultiplexer<ChannelFacto
 
     /**
      * Creates an empty initialized channel for a particular data-type
-     * 
-     * @param dimensions channel dimensions 
+     *
+     * @param dimensions channel dimensions
      * @param channelDataType data-type
      * @return a newly created channel with newly created buffers
      */
@@ -71,30 +71,33 @@ public class ChannelFactory extends VoxelDataTypeFactoryMultiplexer<ChannelFacto
         return get(channelDataType).createEmptyInitialised(dimensions);
     }
 
-    public Channel createUninitialised(
-            ImageDimensions dimensions, VoxelDataType channelDataType) {
+    public Channel createUninitialised(ImageDimensions dimensions, VoxelDataType channelDataType) {
         return get(channelDataType).createEmptyUninitialised(dimensions);
     }
 
     public Channel create(Voxels<? extends Buffer> voxels, ImageResolution resolution) {
         return get(voxels.dataType()).create(voxels, resolution);
     }
-    
+
     /**
-     * Creates an empty initialized channel with discrete type with as minimal as needed data-type to support a maximum value
-     * <p>
-     * byte, short and int are tried in that order.
-     *  
+     * Creates an empty initialized channel with discrete type with as minimal as needed data-type
+     * to support a maximum value
+     *
+     * <p>byte, short and int are tried in that order.
+     *
      * @param dimensions dimensions
-     * @param maxIntensityValueNeeded the maximum value that the channel's data-type needs to support
+     * @param maxIntensityValueNeeded the maximum value that the channel's data-type needs to
+     *     support
      * @return a newly created channel of selected data-type with newly created buffers
-     * @throws CreateException if the max value exceeds all supported data types 
+     * @throws CreateException if the max value exceeds all supported data types
      */
-    public Channel createEmptyInitialisedToSupportMaxValue(ImageDimensions dimensions, long maxIntensityValueNeeded) throws CreateException {
-        return create(dimensions, selectDataTypeToSupport(maxIntensityValueNeeded) );
+    public Channel createEmptyInitialisedToSupportMaxValue(
+            ImageDimensions dimensions, long maxIntensityValueNeeded) throws CreateException {
+        return create(dimensions, selectDataTypeToSupport(maxIntensityValueNeeded));
     }
-    
-    private static VoxelDataType selectDataTypeToSupport(long maxIntensityValueNeeded) throws CreateException {
+
+    private static VoxelDataType selectDataTypeToSupport(long maxIntensityValueNeeded)
+            throws CreateException {
         if (maxIntensityValueNeeded < VoxelDataTypeUnsignedByte.INSTANCE.maxValue()) {
             return VoxelDataTypeUnsignedByte.INSTANCE;
         } else if (maxIntensityValueNeeded < VoxelDataTypeUnsignedShort.INSTANCE.maxValue()) {
@@ -102,7 +105,8 @@ public class ChannelFactory extends VoxelDataTypeFactoryMultiplexer<ChannelFacto
         } else if (maxIntensityValueNeeded < VoxelDataTypeUnsignedInt.INSTANCE.maxValue()) {
             return VoxelDataTypeUnsignedInt.INSTANCE;
         } else {
-            throw new CreateException("No data-type can support a max intensity-value of " + maxIntensityValueNeeded);
+            throw new CreateException(
+                    "No data-type can support a max intensity-value of " + maxIntensityValueNeeded);
         }
     }
 }

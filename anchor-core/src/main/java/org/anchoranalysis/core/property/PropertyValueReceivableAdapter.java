@@ -26,8 +26,8 @@
 
 package org.anchoranalysis.core.property;
 
-import org.anchoranalysis.core.event.RoutableEventSourceObject;
 import org.anchoranalysis.core.event.RoutableEvent;
+import org.anchoranalysis.core.event.RoutableEventSourceObject;
 import org.anchoranalysis.core.event.RoutableListener;
 import org.anchoranalysis.core.event.RoutableListenerAdapter;
 import org.anchoranalysis.core.property.change.PropertyValueChangeEvent;

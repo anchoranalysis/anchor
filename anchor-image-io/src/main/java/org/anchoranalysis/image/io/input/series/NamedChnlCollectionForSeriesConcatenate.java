@@ -168,7 +168,8 @@ public class NamedChnlCollectionForSeriesConcatenate implements NamedChannelsFor
         return out;
     }
 
-    private static void addAllChannelsFrom(Stack source, Stack destination) throws IncorrectImageSizeException {
+    private static void addAllChannelsFrom(Stack source, Stack destination)
+            throws IncorrectImageSizeException {
         for (Channel channel : source) {
             destination.addChannel(channel);
         }

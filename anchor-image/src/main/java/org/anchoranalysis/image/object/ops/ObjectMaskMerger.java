@@ -26,9 +26,9 @@
 
 package org.anchoranalysis.image.object.ops;
 
+import java.util.stream.Stream;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import java.util.stream.Stream;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.core.geometry.Point3i;
@@ -68,7 +68,8 @@ public class ObjectMaskMerger {
 
         BoundingBox box = first.boundingBox().union().with(second.boundingBox());
 
-        ObjectMask out = new ObjectMask(box, VoxelsFactory.getByte().createInitialized(box.extent()));
+        ObjectMask out =
+                new ObjectMask(box, VoxelsFactory.getByte().createInitialized(box.extent()));
         copyPixelsCheckMask(first, out, box);
         copyPixelsCheckMask(second, out, box);
         return out;
@@ -81,15 +82,17 @@ public class ObjectMaskMerger {
      * @return a bounding-box just large enough to include all the bounding-boxes of the objects
      * @throws OperationFailedException if the object-collection is empty
      */
-    public static BoundingBox mergeBoundingBoxes(ObjectCollection objects) throws OperationFailedException {
-        
+    public static BoundingBox mergeBoundingBoxes(ObjectCollection objects)
+            throws OperationFailedException {
+
         if (objects.isEmpty()) {
-            throw new OperationFailedException("The object-collection is empty, at least one object is required for this operation");
+            throw new OperationFailedException(
+                    "The object-collection is empty, at least one object is required for this operation");
         }
-        
+
         return mergeBoundingBoxes(objects.streamStandardJava());
     }
-    
+
     /**
      * Merges all the bounding boxes of a stream of objects.
      *
@@ -150,12 +153,9 @@ public class ObjectMaskMerger {
 
         Point3i pointDest = source.boundingBox().relativePositionTo(box);
         Extent extent = source.boundingBox().extent();
-        
+
         source.extracter()
-                .objectCopyTo(
-                        source,
-                        destination.voxels(),
-                        new BoundingBox(pointDest, extent));
+                .objectCopyTo(source, destination.voxels(), new BoundingBox(pointDest, extent));
     }
 
     /**

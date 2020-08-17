@@ -73,9 +73,7 @@ public class NamedStacksSet implements NamedProviderStore<Stack> {
     }
 
     /** TODO remove in favour of add */
-    public void addImageStack(
-            String identifier,
-            StoreSupplier<Stack> inputImage) {
+    public void addImageStack(String identifier, StoreSupplier<Stack> inputImage) {
         map.put(identifier, inputImage);
     }
 
@@ -88,10 +86,8 @@ public class NamedStacksSet implements NamedProviderStore<Stack> {
 
         NamedStacksSet out = new NamedStacksSet();
 
-        for (Entry<String, StoreSupplier<Stack>> entry :
-                map.entrySet()) {
-            Stack projection =
-                    entry.getValue().get().maximumIntensityProjection();
+        for (Entry<String, StoreSupplier<Stack>> entry : map.entrySet()) {
+            Stack projection = entry.getValue().get().maximumIntensityProjection();
             out.addImageStack(entry.getKey(), projection);
         }
 
@@ -116,7 +112,7 @@ public class NamedStacksSet implements NamedProviderStore<Stack> {
                                     key, stack.dimensions(), dimensions));
                 }
 
-                out.add(key, () -> stackOperation.apply(stack) );
+                out.add(key, () -> stackOperation.apply(stack));
             }
             return out;
 
@@ -126,19 +122,21 @@ public class NamedStacksSet implements NamedProviderStore<Stack> {
     }
 
     public void addFrom(NamedProvider<Stack> source) {
-        addFromWithPrefix(source,"");
+        addFromWithPrefix(source, "");
     }
 
     public void addFromWithPrefix(NamedProvider<Stack> source, String prefix) {
 
         for (String name : source.keys()) {
-            addImageStack(prefix + name, () -> {
-                try {
-                    return source.getException(name);
-                } catch (NamedProviderGetException e) {
-                    throw new OperationFailedException(e.summarize());
-                }
-            });
+            addImageStack(
+                    prefix + name,
+                    () -> {
+                        try {
+                            return source.getException(name);
+                        } catch (NamedProviderGetException e) {
+                            throw new OperationFailedException(e.summarize());
+                        }
+                    });
         }
     }
 
@@ -150,8 +148,7 @@ public class NamedStacksSet implements NamedProviderStore<Stack> {
     public NamedStacksSet subset(StringSet keyMustBeIn) {
         NamedStacksSet out = new NamedStacksSet();
 
-        for (Entry<String, StoreSupplier<Stack>> entry :
-                map.entrySet()) {
+        for (Entry<String, StoreSupplier<Stack>> entry : map.entrySet()) {
             if (keyMustBeIn.contains(entry.getKey())) {
                 out.map.put(entry.getKey(), entry.getValue());
             }

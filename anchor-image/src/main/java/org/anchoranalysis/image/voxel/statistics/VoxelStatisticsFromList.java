@@ -57,7 +57,8 @@ public class VoxelStatisticsFromList implements VoxelStatistics {
 
     @Override
     public VoxelStatistics threshold(RelationToThreshold relationToThreshold) {
-        VoxelsIntensityList pixelListThresholded = thresholdIntensityList(pixelList, relationToThreshold);
+        VoxelsIntensityList pixelListThresholded =
+                thresholdIntensityList(pixelList, relationToThreshold);
         return new VoxelStatisticsFromList(pixelListThresholded);
     }
 

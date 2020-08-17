@@ -33,8 +33,8 @@ import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.stack.region.chnlconverter.ChannelConverterToUnsignedByte;
 import org.anchoranalysis.image.stack.region.chnlconverter.ConversionPolicy;
 import org.anchoranalysis.image.stack.region.chnlconverter.attached.ChnlConverterAttached;
-import org.anchoranalysis.image.stack.region.chnlconverter.voxelbox.VoxelsConverter;
 import org.anchoranalysis.image.stack.region.chnlconverter.voxelbox.ToByteScaleByMinMaxValue;
+import org.anchoranalysis.image.stack.region.chnlconverter.voxelbox.VoxelsConverter;
 
 // Scales by a quantile of the intensity values of an image
 public class ChnlConverterHistogramUpperLowerQuantileIntensity

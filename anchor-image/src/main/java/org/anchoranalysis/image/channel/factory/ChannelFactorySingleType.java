@@ -27,23 +27,24 @@
 package org.anchoranalysis.image.channel.factory;
 
 import java.nio.Buffer;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.experimental.Accessors;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactoryTypeBound;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.experimental.Accessors;
 
 /** Creates a channel for a specific data-type */
-@AllArgsConstructor @Accessors(fluent=true)
+@AllArgsConstructor
+@Accessors(fluent = true)
 public abstract class ChannelFactorySingleType {
 
     @Getter private final VoxelDataType dataType;
     private final VoxelsFactoryTypeBound<? extends Buffer> factory;
-    
+
     public Channel createEmptyInitialised(ImageDimensions dim) {
         return create(factory.createInitialized(dim.extent()), dim.resolution());
     }

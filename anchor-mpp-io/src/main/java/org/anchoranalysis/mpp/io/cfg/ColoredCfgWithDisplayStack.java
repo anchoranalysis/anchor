@@ -26,15 +26,16 @@
 
 package org.anchoranalysis.mpp.io.cfg;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import org.anchoranalysis.anchor.mpp.cfg.ColoredCfg;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.core.color.ColorIndex;
 import org.anchoranalysis.core.idgetter.IDGetter;
 import org.anchoranalysis.image.stack.DisplayStack;
-import lombok.AllArgsConstructor;
-import lombok.Data;
 
-@Data @AllArgsConstructor
+@Data
+@AllArgsConstructor
 public class ColoredCfgWithDisplayStack {
 
     private ColoredCfg cfg;

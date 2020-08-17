@@ -29,10 +29,10 @@ package org.anchoranalysis.feature.io.csv;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import org.anchoranalysis.core.text.TypedValue;
-import org.anchoranalysis.feature.io.csv.name.MultiName;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.anchoranalysis.core.text.TypedValue;
+import org.anchoranalysis.feature.io.csv.name.MultiName;
 
 /**
  * Labels associated with feature-results in an outputted CSV row
@@ -42,9 +42,12 @@ import lombok.Getter;
 @AllArgsConstructor
 public class StringLabelsForCsvRow {
 
-    /** identifier unique identifier for the row taking all elements together (together a primary key) */
+    /**
+     * identifier unique identifier for the row taking all elements together (together a primary
+     * key)
+     */
     private final Optional<String[]> identifier;
-    
+
     /** an identifier for a higher-level group which the row belongs to (foreign key) */
     @Getter private final Optional<MultiName> group;
 

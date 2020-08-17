@@ -30,6 +30,8 @@ import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
 import java.awt.image.WritableRaster;
 import java.util.stream.IntStream;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactoryByte;
@@ -38,10 +40,8 @@ import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferByte;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CreateStackFromBufferedImage {
 
     private static final ChannelFactorySingleType FACTORY = new ChannelFactoryByte();
@@ -55,22 +55,19 @@ public class CreateStackFromBufferedImage {
 
         try {
             return new Stack(
-                IntStream.range(0, arr.length).mapToObj( channelIndex->
-                    createChannelFor(dimensions, arr[channelIndex])
-                )
-            );
-            
+                    IntStream.range(0, arr.length)
+                            .mapToObj(
+                                    channelIndex ->
+                                            createChannelFor(dimensions, arr[channelIndex])));
+
         } catch (IncorrectImageSizeException e) {
             throw new OperationFailedException(e);
         }
     }
-    
+
     private static Channel createChannelFor(ImageDimensions dimensions, byte[] arr) {
         Channel channel = FACTORY.createEmptyUninitialised(dimensions);
-        channel.voxels()
-                .asByte()
-                .slices()
-                .replaceSlice(0, VoxelBufferByte.wrap(arr));
+        channel.voxels().asByte().slices().replaceSlice(0, VoxelBufferByte.wrap(arr));
         return channel;
     }
 

@@ -28,12 +28,12 @@ package org.anchoranalysis.core.functional;
 
 import java.util.Optional;
 import java.util.function.Supplier;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.functional.function.CheckedBiFunction;
 import org.anchoranalysis.core.functional.function.CheckedConsumer;
 import org.anchoranalysis.core.functional.function.CheckedFunction;
 import org.anchoranalysis.core.functional.function.CheckedSupplier;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 
 /**
  * Additional utility functions for {@link Optional} and exceptions.
@@ -172,7 +172,7 @@ public class OptionalUtilities {
             return Optional.empty();
         }
     }
-    
+
     /**
      * Creates an {@link Optional} from a boolean flag
      *
@@ -188,7 +188,7 @@ public class OptionalUtilities {
             return Optional.empty();
         }
     }
-    
+
     /**
      * Creates an {@link Optional} from a boolean flag - where the supplier can thrown an exception
      *
@@ -198,7 +198,8 @@ public class OptionalUtilities {
      * @return a filled or empty optional depending on flag
      * @throws E if the supplioer throws an exception
      */
-    public static <T,E extends Exception> Optional<T> createFromFlagChecked(boolean flag, CheckedSupplier<T,E> valueIfFlagTrue) throws E {
+    public static <T, E extends Exception> Optional<T> createFromFlagChecked(
+            boolean flag, CheckedSupplier<T, E> valueIfFlagTrue) throws E {
         if (flag) {
             return Optional.of(valueIfFlagTrue.get());
         } else {

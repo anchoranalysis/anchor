@@ -194,15 +194,14 @@ public class ObjectCollection implements Iterable<ObjectMask> {
         return toString(false, false);
     }
 
-    
     /**
      * Scales every object-mask in a collection
-     * 
-     * <p>It is desirable scale objects together, as interpolation can be done so that adjacent boundaries pre-scaling remain
-     * adjacent after scaling (only if there's no overlap among them).
-     * 
+     *
+     * <p>It is desirable scale objects together, as interpolation can be done so that adjacent
+     * boundaries pre-scaling remain adjacent after scaling (only if there's no overlap among them).
+     *
      * <p>This is an IMMUTABLE operation.
-     * 
+     *
      * @param factor scaling-factor
      * @return a new collection with scaled object-masks (existing object-masks are unaltered)
      * @throws OperationFailedException
@@ -210,37 +209,45 @@ public class ObjectCollection implements Iterable<ObjectMask> {
     public ScaledObjectCollection scale(ScaleFactor factor) throws OperationFailedException {
         return scale(factor, Optional.empty(), Optional.empty());
     }
-    
+
     /**
      * Scales every object-mask in a collection
      *
-     * <p>Like {@link scale(ScaleFactor)} but ensured the scaled-results will always be inside a particular extent (clipping if necessary)
+     * <p>Like {@link scale(ScaleFactor)} but ensured the scaled-results will always be inside a
+     * particular extent (clipping if necessary)
      *
      * @param factor scaling-factor
      * @param clipTo clips any objects after scaling to make sure they fit inside this extent
      * @return a new collection with scaled object-masks (existing object-masks are unaltered)
-     * @throws OperationFailedException 
+     * @throws OperationFailedException
      */
-    public ScaledObjectCollection scale(ScaleFactor factor, Extent clipTo) throws OperationFailedException {
+    public ScaledObjectCollection scale(ScaleFactor factor, Extent clipTo)
+            throws OperationFailedException {
         try {
-            return new ScaledObjectCollection(this, factor, Optional.empty(), Optional.of(object->object.clipTo(clipTo)) );
+            return new ScaledObjectCollection(
+                    this, factor, Optional.empty(), Optional.of(object -> object.clipTo(clipTo)));
         } catch (CreateException e) {
             throw new OperationFailedException(e);
         }
     }
-    
+
     /**
      * Scales every object-mask in a collection
      *
-     * <p>Like {@link scale(ScaleFactor)} but allows for additional manipulating of objects (pre-scaling and post-scaling)
+     * <p>Like {@link scale(ScaleFactor)} but allows for additional manipulating of objects
+     * (pre-scaling and post-scaling)
      *
      * @param factor scaling-factor
      * @param preOperation applied to each-object before it is scaled (e.g. flattening)
      * @param postOperation applied to each-object after it is scaled (e.g. clipping to an extent)
      * @return a new collection with scaled object-masks (existing object-masks are unalterted)
-     * @throws OperationFailedException 
+     * @throws OperationFailedException
      */
-    public ScaledObjectCollection scale(ScaleFactor factor, Optional<UnaryOperator<ObjectMask>> preOperation, Optional<UnaryOperator<ObjectMask>> postOperation) throws OperationFailedException {
+    public ScaledObjectCollection scale(
+            ScaleFactor factor,
+            Optional<UnaryOperator<ObjectMask>> preOperation,
+            Optional<UnaryOperator<ObjectMask>> postOperation)
+            throws OperationFailedException {
         try {
             return new ScaledObjectCollection(this, factor, preOperation, postOperation);
         } catch (CreateException e) {
@@ -256,7 +263,7 @@ public class ObjectCollection implements Iterable<ObjectMask> {
         }
         return count;
     }
-    
+
     public boolean hasIntersectingVoxels(ObjectMask object) {
 
         for (ObjectMask other : this) {

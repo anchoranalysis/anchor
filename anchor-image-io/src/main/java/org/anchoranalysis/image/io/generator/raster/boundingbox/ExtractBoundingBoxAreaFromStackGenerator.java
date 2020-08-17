@@ -27,6 +27,7 @@
 package org.anchoranalysis.image.io.generator.raster.boundingbox;
 
 import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.io.generator.raster.RasterGenerator;
@@ -35,7 +36,6 @@ import org.anchoranalysis.io.generator.IterableObjectGenerator;
 import org.anchoranalysis.io.generator.ObjectGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
-import lombok.RequiredArgsConstructor;
 
 /**
  * An iterable-generator that outputs the portion of a stack corresponding to a bounding-box

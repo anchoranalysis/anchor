@@ -26,8 +26,8 @@
 
 package org.anchoranalysis.image.seed;
 
-import lombok.AllArgsConstructor;
 import java.util.Optional;
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.ObjectMask;
@@ -40,10 +40,7 @@ public class SeedObjectMask implements Seed {
 
     @Override
     public void scaleXY(double scale, Extent extent) throws OperationFailedException {
-        object =
-                object.scale(
-                        new ScaleFactor(scale),
-                        Optional.of(extent));
+        object = object.scale(new ScaleFactor(scale), Optional.of(extent));
     }
 
     @Override

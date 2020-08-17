@@ -87,7 +87,7 @@ public abstract class NamedChnlsInput implements ProvidesStackInput {
         // Adds this stack (cached) under the given name
         stackCollection.add(
                 name,
-                StoreSupplier.cache(() -> channelsAsTimeSequence(seriesNum, progressReporter)) );
+                StoreSupplier.cache(() -> channelsAsTimeSequence(seriesNum, progressReporter)));
     }
 
     @Override
@@ -95,8 +95,8 @@ public abstract class NamedChnlsInput implements ProvidesStackInput {
         return 1;
     }
 
-    private TimeSequence channelsAsTimeSequence(
-            int seriesNum, ProgressReporter progressReporter) throws OperationFailedException {
+    private TimeSequence channelsAsTimeSequence(int seriesNum, ProgressReporter progressReporter)
+            throws OperationFailedException {
         // Apply it only to first time-series frame
         try {
             NamedChannelsForSeries ncc = createChannelsForSeries(seriesNum, progressReporter);

@@ -34,10 +34,10 @@ public class InterpolatorImgLib2NearestNeighbor extends InterpolatorImgLib2 {
 
     public InterpolatorImgLib2NearestNeighbor() {
         super(
-            new NearestNeighborInterpolatorFactory<UnsignedByteType>(),
-            new NearestNeighborInterpolatorFactory<UnsignedShortType>());
+                new NearestNeighborInterpolatorFactory<UnsignedByteType>(),
+                new NearestNeighborInterpolatorFactory<UnsignedShortType>());
     }
-    
+
     @Override
     public boolean isNewValuesPossible() {
         return false;

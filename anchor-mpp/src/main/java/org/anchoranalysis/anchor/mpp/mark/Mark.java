@@ -117,10 +117,10 @@ public abstract class Mark implements Serializable, Identifiable {
         // ID check
         return equalsID(m);
     }
-    
+
     /**
      * Create an object-mask representation of the mark (i.e. in voxels in a bounding-box)
-     * 
+     *
      * @param bndScene
      * @param rm
      * @param bv
@@ -139,20 +139,14 @@ public abstract class Mark implements Serializable, Identifiable {
         ReadableTuple3i maxPos = box.calculateCornerMax();
 
         Point3i point = new Point3i();
-        for (point.setZ(box.cornerMin().z());
-                point.z() <= maxPos.z();
-                point.incrementZ()) {
+        for (point.setZ(box.cornerMin().z()); point.z() <= maxPos.z(); point.incrementZ()) {
 
             int zLocal = point.z() - box.cornerMin().z();
             ByteBuffer maskSlice = object.sliceBufferLocal(zLocal);
 
             int cnt = 0;
-            for (point.setY(box.cornerMin().y());
-                    point.y() <= maxPos.y();
-                    point.incrementY()) {
-                for (point.setX(box.cornerMin().x());
-                        point.x() <= maxPos.x();
-                        point.incrementX()) {
+            for (point.setY(box.cornerMin().y()); point.y() <= maxPos.y(); point.incrementY()) {
+                for (point.setX(box.cornerMin().x()); point.x() <= maxPos.x(); point.incrementX()) {
 
                     byte membership = evalPointInside(point);
 
@@ -184,9 +178,7 @@ public abstract class Mark implements Serializable, Identifiable {
 
         Point3i point = new Point3i();
         Point3d pointScaled = new Point3d();
-        for (point.setZ(box.cornerMin().z());
-                point.z() <= maxPos.z();
-                point.incrementZ()) {
+        for (point.setZ(box.cornerMin().z()); point.z() <= maxPos.z(); point.incrementZ()) {
 
             int zLocal = point.z() - box.cornerMin().z();
             ByteBuffer maskSlice = object.sliceBufferLocal(zLocal);
@@ -195,12 +187,8 @@ public abstract class Mark implements Serializable, Identifiable {
             pointScaled.setZ(point.z());
 
             int cnt = 0;
-            for (point.setY(box.cornerMin().y());
-                    point.y() <= maxPos.y();
-                    point.incrementY()) {
-                for (point.setX(box.cornerMin().x());
-                        point.x() <= maxPos.x();
-                        point.incrementX()) {
+            for (point.setY(box.cornerMin().y()); point.y() <= maxPos.y(); point.incrementY()) {
+                for (point.setX(box.cornerMin().x()); point.x() <= maxPos.x(); point.incrementX()) {
 
                     pointScaled.setX(((double) point.x()) / scaleFactor);
                     pointScaled.setY(((double) point.y()) / scaleFactor);

@@ -48,7 +48,7 @@ final class FactoryInt implements VoxelsFactoryTypeBound<IntBuffer> {
     public Voxels<IntBuffer> createInitialized(Extent extent) {
         return new VoxelsAsInt(PixelsFromIntBufferArr.createInitialized(extent));
     }
-    
+
     @Override
     public Voxels<IntBuffer> createUninitialized(Extent extent) {
         return new VoxelsAsInt(PixelsFromIntBufferArr.createUninitialized(extent));

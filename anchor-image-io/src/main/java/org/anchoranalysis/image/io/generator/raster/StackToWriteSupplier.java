@@ -5,9 +5,8 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 /**
  * Supplies an image-stack to be written in a generator
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 @FunctionalInterface
 public interface StackToWriteSupplier {

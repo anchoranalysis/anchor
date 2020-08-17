@@ -27,6 +27,9 @@
 package org.anchoranalysis.image.voxel;
 
 import java.nio.Buffer;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.experimental.Accessors;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.arithmetic.VoxelsArithmetic;
 import org.anchoranalysis.image.voxel.assigner.VoxelsAssigner;
@@ -35,42 +38,41 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.image.voxel.extracter.VoxelsExtracter;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactoryTypeBound;
 import org.anchoranalysis.image.voxel.pixelsforslice.PixelsForSlice;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.experimental.Accessors;
 
 /**
  * A box (3-dimensions) with voxel-data.
  *
- * <p>This class is almost <i>immutable</i> the exception being the buffers containing intensity values which can be modified.
+ * <p>This class is almost <i>immutable</i> the exception being the buffers containing intensity
+ * values which can be modified.
  *
- * <p>All operations that can modify the state (i.e. <i>mutable</i> operations) are provided via the {@link #assigner()} or {@link #arithmetic()} or {@link #updateSlice} or {@link #slice} or {@link #sliceBuffer} methods. Other operations are all <i>immutable</i>.
- * 
+ * <p>All operations that can modify the state (i.e. <i>mutable</i> operations) are provided via the
+ * {@link #assigner()} or {@link #arithmetic()} or {@link #updateSlice} or {@link #slice} or {@link
+ * #sliceBuffer} methods. Other operations are all <i>immutable</i>.
+ *
  * @author Owen Feehan
  * @param <T> buffer-type
  */
-@Accessors(fluent=true) @AllArgsConstructor
+@Accessors(fluent = true)
+@AllArgsConstructor
 public abstract class Voxels<T extends Buffer> {
 
     @Getter private final PixelsForSlice<T> slices;
     @Getter private final VoxelsFactoryTypeBound<T> factory;
-    
+
     /** Methods to manipulate the voxel-values via arithmetic */
     @Getter private final VoxelsArithmetic arithmetic;
-    
-    /** 
-     * Methods to read/copy/duplicate the voxel-values
-     **/
+
+    /** Methods to read/copy/duplicate the voxel-values */
     public abstract VoxelsExtracter<T> extracter();
 
     /**
      * Provides a means to assign a constant-value to some or all of the voxels
-     * 
+     *
      * @param valueToAssign
      * @return a newly instantiated object to perform assignments to this voxels object
      */
-    public abstract VoxelsAssigner assignValue( int valueToAssign );
-    
+    public abstract VoxelsAssigner assignValue(int valueToAssign);
+
     public VoxelDataType dataType() {
         return factory.dataType();
     }
@@ -78,7 +80,7 @@ public abstract class Voxels<T extends Buffer> {
     public VoxelBuffer<T> slice(int z) {
         return slices.slice(z);
     }
-    
+
     public T sliceBuffer(int z) {
         return slice(z).buffer();
     }
@@ -99,7 +101,7 @@ public abstract class Voxels<T extends Buffer> {
 
     /**
      * Are the voxels identical to another voxels (deep equals)?
-     * 
+     *
      * @param other the other voxels to compare with
      * @return true if the size, data-type and each voxel-value of both are identical
      */
@@ -114,31 +116,30 @@ public abstract class Voxels<T extends Buffer> {
             return false;
         }
 
-        extent().iterateOverZUntil( z-> {
-            
-            T buffer1 = sliceBuffer(z);
-            T buffer2 = (T) other.sliceBuffer(z);
+        extent().iterateOverZUntil(
+                        z -> {
+                            T buffer1 = sliceBuffer(z);
+                            T buffer2 = (T) other.sliceBuffer(z);
 
-            while (buffer1.hasRemaining()) {
+                            while (buffer1.hasRemaining()) {
 
-                if (!areBufferValuesEqual(buffer1, buffer2)) {
-                    return false;
-                }
-            }
+                                if (!areBufferValuesEqual(buffer1, buffer2)) {
+                                    return false;
+                                }
+                            }
 
-            assert (!buffer2.hasRemaining());
-            return true;
-            
-        });
+                            assert (!buffer2.hasRemaining());
+                            return true;
+                        });
 
         return true;
     }
-    
+
     /**
      * Assigns a new buffer for a slice
-     * <p>
-     * This is a <b>mutable</b> operation.
-     * 
+     *
+     * <p>This is a <b>mutable</b> operation.
+     *
      * @param sliceIndexToUpdate slice-index to update
      * @param bufferToAssign buffer to assign
      */
@@ -148,9 +149,9 @@ public abstract class Voxels<T extends Buffer> {
 
     /**
      * Checks if the current values from <i>two buffers are equal</i>
-     * 
+     *
      * <p>(i.e. by calling {@code get()} on the buffer)
-     * 
+     *
      * @param buffer1 provides first-value to compare
      * @param buffer2 provides second-value to compare
      * @return true iff the current values from both buffers are equal to each other

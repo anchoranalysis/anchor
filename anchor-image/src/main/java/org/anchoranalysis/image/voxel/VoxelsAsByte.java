@@ -27,21 +27,21 @@
 package org.anchoranalysis.image.voxel;
 
 import java.nio.ByteBuffer;
+import org.anchoranalysis.image.voxel.arithmetic.VoxelsArithmetic;
 import org.anchoranalysis.image.voxel.arithmetic.VoxelsArithmeticFactory;
 import org.anchoranalysis.image.voxel.assigner.VoxelsAssigner;
 import org.anchoranalysis.image.voxel.assigner.VoxelsAssignerFactory;
-import org.anchoranalysis.image.voxel.arithmetic.VoxelsArithmetic;
 import org.anchoranalysis.image.voxel.extracter.VoxelsExtracter;
 import org.anchoranalysis.image.voxel.extracter.VoxelsExtracterFactory;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 import org.anchoranalysis.image.voxel.pixelsforslice.PixelsForSlice;
 
 public final class VoxelsAsByte extends Voxels<ByteBuffer> {
-    
+
     public VoxelsAsByte(PixelsForSlice<ByteBuffer> slices) {
         super(slices, VoxelsFactory.getByte(), createArithmetic(slices));
     }
-   
+
     @Override
     protected boolean areBufferValuesEqual(ByteBuffer buffer1, ByteBuffer buffer2) {
         return buffer1.get() == buffer2.get();
@@ -49,15 +49,15 @@ public final class VoxelsAsByte extends Voxels<ByteBuffer> {
 
     @Override
     public VoxelsAssigner assignValue(int valueToAssign) {
-        return VoxelsAssignerFactory.createByte(this, valueToAssign );
+        return VoxelsAssignerFactory.createByte(this, valueToAssign);
     }
-    
+
     @Override
     public VoxelsExtracter<ByteBuffer> extracter() {
         return VoxelsExtracterFactory.createByte(this);
     }
-        
+
     private static VoxelsArithmetic createArithmetic(PixelsForSlice<ByteBuffer> slices) {
-        return VoxelsArithmeticFactory.createByte( slices.extent(), slices::sliceBuffer );
+        return VoxelsArithmeticFactory.createByte(slices.extent(), slices::sliceBuffer);
     }
 }

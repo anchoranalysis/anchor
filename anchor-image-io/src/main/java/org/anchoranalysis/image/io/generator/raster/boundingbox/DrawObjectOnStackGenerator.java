@@ -49,9 +49,11 @@ import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 /**
- * Creates images of object(s) drawn on a background only in a local region around their bounding box.
+ * Creates images of object(s) drawn on a background only in a local region around their bounding
+ * box.
  *
- * <p>This provides a visualization of an object(s) and a small around of immediate background context.
+ * <p>This provides a visualization of an object(s) and a small around of immediate background
+ * context.
  *
  * @author Owen Feehan
  */
@@ -77,7 +79,8 @@ public class DrawObjectOnStackGenerator extends RasterGenerator
      * @param colors colors to use for outling of objects
      * @param outlineWidth width of the outline around an object
      */
-    public static DrawObjectOnStackGenerator createFromStack(ScaleableBackground background, int outlineWidth, ColorIndex colors) {
+    public static DrawObjectOnStackGenerator createFromStack(
+            ScaleableBackground background, int outlineWidth, ColorIndex colors) {
         return createFromGenerator(
                 new ExtractBoundingBoxAreaFromStackGenerator(background), outlineWidth, colors);
     }
@@ -90,7 +93,8 @@ public class DrawObjectOnStackGenerator extends RasterGenerator
      * @param colors colors to use for outling of objects
      * @return
      */
-    public static DrawObjectOnStackGenerator createWithEmptyBackground(int outlineWidth, ColorIndex colors) {
+    public static DrawObjectOnStackGenerator createWithEmptyBackground(
+            int outlineWidth, ColorIndex colors) {
         return new DrawObjectOnStackGenerator(Optional.empty(), outlineWidth, colors, true);
     }
 
@@ -121,7 +125,9 @@ public class DrawObjectOnStackGenerator extends RasterGenerator
      * @param colors colors to use for outling of objects
      */
     public static DrawObjectOnStackGenerator createFromGenerator(
-            IterableObjectGenerator<BoundingBox, Stack> backgroundGenerator, int outlineWidth, ColorIndex colors) {
+            IterableObjectGenerator<BoundingBox, Stack> backgroundGenerator,
+            int outlineWidth,
+            ColorIndex colors) {
         return new DrawObjectOnStackGenerator(
                 Optional.of(backgroundGenerator), outlineWidth, colors, true);
     }
@@ -158,12 +164,13 @@ public class DrawObjectOnStackGenerator extends RasterGenerator
 
         ObjectsWithBoundingBox objects = this.getIterableElement();
 
-        ObjectCollection objectsForDrawing = objects.objects().stream().map(object->
-            prepareObjectForDrawing(object, objects.boundingBox()) );
-        
+        ObjectCollection objectsForDrawing =
+                objects.objects().stream()
+                        .map(object -> prepareObjectForDrawing(object, objects.boundingBox()));
+
         // An object-mask that is relative to the extracted section
         drawObjectsGenerator.setIterableElement(
-                new ObjectCollectionWithProperties(objectsForDrawing) );
+                new ObjectCollectionWithProperties(objectsForDrawing));
 
         return drawObjectsGenerator.generate();
     }
@@ -227,10 +234,11 @@ public class DrawObjectOnStackGenerator extends RasterGenerator
             return relativeBoundingBoxToScene(object, containingBox);
         }
     }
-    
+
     /** Changes the bounding-box to match the object rather than the global scene */
     private ObjectMask relativeBoundingBoxToScene(ObjectMask object, BoundingBox containingBox) {
         Point3i relativePosition = object.boundingBox().relativePositionTo(containingBox);
-        return object.mapBoundingBoxPreserveExtent( boundingBox->boundingBox.shiftTo(relativePosition) );
+        return object.mapBoundingBoxPreserveExtent(
+                boundingBox -> boundingBox.shiftTo(relativePosition));
     }
 }

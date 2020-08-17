@@ -42,7 +42,7 @@ public class CSVReader {
     private final boolean firstLineHeaders;
     private final boolean quotedStrings;
     // END REQUIRED ARGUMENTS
-        
+
     private FileReader fileReader;
     private BufferedReader bufferedReader;
 

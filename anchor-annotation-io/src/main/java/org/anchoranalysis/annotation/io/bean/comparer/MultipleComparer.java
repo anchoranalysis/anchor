@@ -105,8 +105,7 @@ public class MultipleComparer extends AnchorBean<MultipleComparer> {
                     annotation.convertToObjects(background.dimensions());
 
             Findable<ObjectCollection> compareObjects =
-                    ni.getValue()
-                            .createObjects(annotationPath, background.dimensions(), debugMode);
+                    ni.getValue().createObjects(annotationPath, background.dimensions(), debugMode);
 
             Optional<ObjectCollection> foundObjects =
                     compareObjects.getFoundOrLog(ni.getName(), logger);

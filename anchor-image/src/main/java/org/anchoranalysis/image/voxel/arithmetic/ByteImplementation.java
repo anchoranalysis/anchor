@@ -6,11 +6,11 @@ import org.anchoranalysis.image.convert.ByteConverter;
 import org.anchoranalysis.image.extent.Extent;
 
 class ByteImplementation extends Base<ByteBuffer> {
-    
+
     public ByteImplementation(Extent extent, IntFunction<ByteBuffer> bufferForSlice) {
         super(extent, bufferForSlice);
     }
-    
+
     @Override
     protected void multiplyBuffer(ByteBuffer buffer, double factor) {
         while (buffer.hasRemaining()) {
@@ -18,7 +18,7 @@ class ByteImplementation extends Base<ByteBuffer> {
             buffer.put(buffer.position() - 1, mult);
         }
     }
-    
+
     @Override
     protected void subtractFromBuffer(ByteBuffer buffer, int valueToSubtractFrom) {
         while (buffer.hasRemaining()) {
@@ -32,27 +32,25 @@ class ByteImplementation extends Base<ByteBuffer> {
         byte mult = scaleClippedByte(factor, buffer.get(index));
         buffer.put(index, mult);
     }
-    
+
     @Override
     protected void addToBufferIndex(ByteBuffer buffer, int index, int valueToBeAdded) {
         byte added = addClippedByte(valueToBeAdded, buffer.get(index));
-        buffer.put(index, added);        
+        buffer.put(index, added);
     }
 
     private static byte addClippedByte(int value, byte pixelValue) {
-        return (byte) addClipped(
-                value, ByteConverter.unsignedByteToInt(pixelValue) );
+        return (byte) addClipped(value, ByteConverter.unsignedByteToInt(pixelValue));
     }
-    
+
     private static byte subtractFromClippedByte(int valueToSubtractFrom, byte pixelValue) {
-        return (byte) (valueToSubtractFrom - ByteConverter.unsignedByteToInt(pixelValue) );
+        return (byte) (valueToSubtractFrom - ByteConverter.unsignedByteToInt(pixelValue));
     }
-    
+
     private static byte scaleClippedByte(double factor, byte pixelValue) {
-        return (byte) scaleClipped(
-                factor, ByteConverter.unsignedByteToInt(pixelValue) );
+        return (byte) scaleClipped(factor, ByteConverter.unsignedByteToInt(pixelValue));
     }
-    
+
     private static int scaleClipped(double factor, int pixelValue) {
         int intVal = (int) Math.round(factor * pixelValue);
         if (intVal < 0) {

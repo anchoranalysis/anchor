@@ -123,8 +123,7 @@ public final class Point3d extends Tuple3d {
      * @return a new point containing the minimum of the x, y, z components
      */
     public Point3d min(ReadableTuple3i point) {
-        return new Point3d(
-                Math.min(x, point.x()), Math.min(y, point.y()), Math.min(z, point.z()));
+        return new Point3d(Math.min(x, point.x()), Math.min(y, point.y()), Math.min(z, point.z()));
     }
 
     /**

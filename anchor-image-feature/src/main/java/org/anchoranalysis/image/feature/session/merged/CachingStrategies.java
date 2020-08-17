@@ -26,21 +26,21 @@
 
 package org.anchoranalysis.image.feature.session.merged;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.session.strategy.replace.CacheAndReuseStrategy;
 import org.anchoranalysis.feature.session.strategy.replace.ReplaceStrategy;
 import org.anchoranalysis.feature.session.strategy.replace.ReuseSingletonStrategy;
 import org.anchoranalysis.feature.session.strategy.replace.bind.BoundReplaceStrategy;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 
 /**
  * Strategies for caching used in {@link PairsTableCalculator}
  *
  * @author Owen Feehan
  */
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 class CachingStrategies {
 
     /** Cache and re-use inputs */

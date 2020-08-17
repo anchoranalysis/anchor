@@ -92,8 +92,7 @@ public class ConnectedComponentUnionFind {
             BinaryVoxels<T> visited,
             ObjectCollection objects,
             int minNumberVoxels,
-            BufferReadWrite<T> bufferReaderWriter)
-            {
+            BufferReadWrite<T> bufferReaderWriter) {
 
         UnionFind<Integer> unionIndex = new UnionFind<>(new HashSet<Integer>());
         Voxels<IntBuffer> indexBuffer = VoxelsFactory.getInt().createInitialized(visited.extent());
@@ -192,14 +191,17 @@ public class ConnectedComponentUnionFind {
             ObjectCollection objects) {
 
         VoxelsExtracter<IntBuffer> extracter = indexBuffer.extracter();
-        
+
         for (int smallID : mapIDOrdered.values()) {
 
             PointRangeWithCount boxWithCnt = boxArr[smallID - 1];
 
             if (boxWithCnt.getCount() >= minNumberVoxels) {
                 try {
-                    objects.add(extracter.voxelsEqualTo(smallID).deriveObject(boxWithCnt.deriveBoundingBox()));
+                    objects.add(
+                            extracter
+                                    .voxelsEqualTo(smallID)
+                                    .deriveObject(boxWithCnt.deriveBoundingBox()));
                 } catch (OperationFailedException e) {
                     throw new AnchorImpossibleSituationException();
                 }

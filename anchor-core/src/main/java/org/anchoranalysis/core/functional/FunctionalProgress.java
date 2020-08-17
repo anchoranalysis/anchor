@@ -51,9 +51,7 @@ public class FunctionalProgress {
      * @throws E if the exception is thrown during mapping
      */
     public static <S, T, E extends Exception> List<T> mapList(
-            List<S> list,
-            ProgressReporter progressReporter,
-            CheckedFunction<S, T, E> mapFunction)
+            List<S> list, ProgressReporter progressReporter, CheckedFunction<S, T, E> mapFunction)
             throws E {
         List<T> listOut = new ArrayList<>();
 

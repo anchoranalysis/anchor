@@ -48,17 +48,11 @@ public class BoundingBoxDistance {
 
         int xDistance =
                 minDistance(
-                        box1CornerMin.x(),
-                        box1CornerMax.x(),
-                        box2CornerMin.x(),
-                        box2CornerMax.x());
+                        box1CornerMin.x(), box1CornerMax.x(), box2CornerMin.x(), box2CornerMax.x());
 
         int yDistance =
                 minDistance(
-                        box1CornerMin.y(),
-                        box1CornerMax.y(),
-                        box2CornerMin.y(),
-                        box2CornerMax.y());
+                        box1CornerMin.y(), box1CornerMax.y(), box2CornerMin.y(), box2CornerMax.y());
 
         int zDistance = 0;
 

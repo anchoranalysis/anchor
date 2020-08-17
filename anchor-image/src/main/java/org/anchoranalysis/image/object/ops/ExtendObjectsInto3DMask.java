@@ -53,19 +53,16 @@ public class ExtendObjectsInto3DMask {
         return objects2D.stream().map(object -> extendObject(object, mask3D));
     }
 
-    private static ObjectMask extendObject(
-            ObjectMask object2D, BinaryVoxels<ByteBuffer> voxels3D) {
+    private static ObjectMask extendObject(ObjectMask object2D, BinaryVoxels<ByteBuffer> voxels3D) {
         return new ObjectMask(extendObj(object2D.boundedVoxels(), voxels3D));
     }
 
     private static BoundedVoxels<ByteBuffer> extendObj(
             BoundedVoxels<ByteBuffer> obj2D, BinaryVoxels<ByteBuffer> mask3D) {
 
-        BoundingBox newBBox =
-                createBoundingBoxForAllZ(obj2D.boundingBox(), mask3D.extent().z());
+        BoundingBox newBBox = createBoundingBoxForAllZ(obj2D.boundingBox(), mask3D.extent().z());
 
-        BoundedVoxels<ByteBuffer> newMask =
-                new BoundedVoxels<>(newBBox, VoxelsFactory.getByte());
+        BoundedVoxels<ByteBuffer> newMask = new BoundedVoxels<>(newBBox, VoxelsFactory.getByte());
 
         ReadableTuple3i max = newBBox.calculateCornerMax();
         Point3i point = new Point3i();
@@ -81,9 +78,7 @@ public class ExtendObjectsInto3DMask {
 
             int ind = 0;
 
-            for (point.setY(newBBox.cornerMin().y());
-                    point.y() <= max.y();
-                    point.incrementY()) {
+            for (point.setY(newBBox.cornerMin().y()); point.y() <= max.y(); point.incrementY()) {
 
                 for (point.setX(newBBox.cornerMin().x());
                         point.x() <= max.x();

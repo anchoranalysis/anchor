@@ -60,7 +60,7 @@ import org.anchoranalysis.image.voxel.extracter.VoxelsExtracter;
  *
  * @author Owen Feehan
  */
-@Accessors(fluent=true)
+@Accessors(fluent = true)
 public class Channel {
 
     private static final Interpolator DEFAULT_INTERPOLATOR = new InterpolatorImgLib2Lanczos();
@@ -92,24 +92,26 @@ public class Channel {
 
     /**
      * Assigns new voxels to replace the existing voxels
-     * 
+     *
      * @param voxelsToAssign voxels-to-assign
-     * @throws IncorrectImageSizeException 
+     * @throws IncorrectImageSizeException
      */
     public void replaceVoxels(Voxels<?> voxelsToAssign) throws IncorrectImageSizeException {
-        
+
         if (!voxelsToAssign.extent().equals(dimensions.extent())) {
             throw new IncorrectImageSizeException(
-               String.format("voxels to be assigned (%s) are not the same size as the existing voxels (%s)", voxelsToAssign.extent(), dimensions.extent())
-            );
+                    String.format(
+                            "voxels to be assigned (%s) are not the same size as the existing voxels (%s)",
+                            voxelsToAssign.extent(), dimensions.extent()));
         }
-        
+
         this.voxels = voxelsToAssign;
     }
 
     /** Creates a new channel contain only of a particular slice (reusing the voxel buffers) */
     public Channel extractSlice(int z) {
-        return ChannelFactory.instance().create(voxels.extracter().slice(z), dimensions.resolution());
+        return ChannelFactory.instance()
+                .create(voxels.extracter().slice(z), dimensions.resolution());
     }
 
     public Channel scaleXY(ScaleFactor scaleFactor) {
@@ -153,22 +155,24 @@ public class Channel {
         assert (dup.voxels.extent().equals(voxels.extent()));
         return dup;
     }
-    
+
     /**
      * Operations on whether particular voxels are equal to a particular value
-     * 
+     *
      * @param equalToValue
-     * @return a newly instantiated object to perform queries to this voxels object as described above
+     * @return a newly instantiated object to perform queries to this voxels object as described
+     *     above
      */
     public VoxelsPredicate voxelsEqualTo(int equalToValue) {
         return voxels.extracter().voxelsEqualTo(equalToValue);
     }
-    
+
     /**
      * Operations on whether particular voxels are greater than a treshold (but not equal to)
-     * 
+     *
      * @param threshold voxel-values greater than this threshold are included
-     * @return a newly instantiated object to perform queries to this voxels object as described above
+     * @return a newly instantiated object to perform queries to this voxels object as described
+     *     above
      */
     public VoxelsPredicate voxelsGreaterThan(int threshold) {
         return voxels.extracter().voxelsGreaterThan(threshold);
@@ -204,7 +208,7 @@ public class Channel {
      * @param flattener function to perform the flattening
      * @return flattened box (i.e. 2D)
      */
-    private Channel flattenZProjection(Function<VoxelsExtracter<?>,Voxels<?>> flattener) {
+    private Channel flattenZProjection(Function<VoxelsExtracter<?>, Voxels<?>> flattener) {
         int prevZSize = voxels.extent().z();
         if (prevZSize > 1) {
             return FACTORY.create(
@@ -223,7 +227,7 @@ public class Channel {
         return voxels.assignValue(valueToAssign);
     }
 
-    public VoxelsExtracter<? extends Buffer> extracter() {  // NOSONAR
+    public VoxelsExtracter<? extends Buffer> extracter() { // NOSONAR
         return voxels.extracter();
     }
 }

@@ -82,14 +82,23 @@ public class IntersectionBBox {
         Point3i relativePositionDestinationToSource =
                 Point3i.immutableSubtract(boxSource.cornerMin(), boxOther.cornerMin());
 
-        Point3i relativePositionSourceMax = Point3i.immutableAdd(relativePositionSource, boxIntersect.extent().asTuple());
+        Point3i relativePositionSourceMax =
+                Point3i.immutableAdd(relativePositionSource, boxIntersect.extent().asTuple());
 
         return new IntersectionBBox(
-                relativePositionSource, relativePositionSourceMax, relativePositionDestinationToSource, boxSource.extent(), boxOther.extent());
+                relativePositionSource,
+                relativePositionSourceMax,
+                relativePositionDestinationToSource,
+                boxSource.extent(),
+                boxOther.extent());
     }
 
     private IntersectionBBox(
-            Point3i pointMin, Point3i pointMax, Point3i relativePosition, Extent extentSource, Extent extentOther) {
+            Point3i pointMin,
+            Point3i pointMax,
+            Point3i relativePosition,
+            Extent extentSource,
+            Extent extentOther) {
         x = new Dimension(pointMin.x(), pointMax.x(), relativePosition.x());
         y = new Dimension(pointMin.y(), pointMax.y(), relativePosition.y());
         z = new Dimension(pointMin.z(), pointMax.z(), relativePosition.z());

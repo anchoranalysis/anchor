@@ -54,8 +54,8 @@ import org.anchoranalysis.feature.shared.SharedFeatureMulti;
  * <p>All feature use the same InitParams, but successively different {#FeatureCalcParams}
  * sequentially.
  *
- * <p>Caching is applied only within each call to {{@link #calculate(FeatureInput)} but among successive
- * calls.
+ * <p>Caching is applied only within each call to {{@link #calculate(FeatureInput)} but among
+ * successive calls.
  *
  * @author Owen Feehan
  * @param T input-type for feature

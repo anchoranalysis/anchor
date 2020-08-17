@@ -27,6 +27,8 @@
 package org.anchoranalysis.io.generator.collection;
 
 import java.util.Collection;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.functional.function.CheckedSupplier;
 import org.anchoranalysis.io.generator.IterableGenerator;
 import org.anchoranalysis.io.generator.sequence.CollectionGenerator;
@@ -36,10 +38,8 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.writer.WritableItem;
 import org.anchoranalysis.io.output.writer.Writer;
 import org.anchoranalysis.io.output.writer.WriterRouterErrors;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class IterableGeneratorWriter {
 
     public static <T> void writeSubfolder(
@@ -66,8 +66,7 @@ public class IterableGeneratorWriter {
             BoundOutputManagerRouteErrors outputManager,
             String outputNameFolder,
             String outputNameSubfolder,
-            CheckedSupplier<IterableGenerator<T>, OutputWriteFailedException>
-                    generatorIterable,
+            CheckedSupplier<IterableGenerator<T>, OutputWriteFailedException> generatorIterable,
             Collection<T> collection,
             boolean checkIfAllowed) {
         extractWriter(outputManager, checkIfAllowed)

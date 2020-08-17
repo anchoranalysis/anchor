@@ -33,7 +33,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
-@AllArgsConstructor @EqualsAndHashCode @NoArgsConstructor @Accessors(fluent=true)
+@AllArgsConstructor
+@EqualsAndHashCode
+@NoArgsConstructor
+@Accessors(fluent = true)
 public final class Point2d implements Serializable {
 
     /** */
@@ -51,7 +54,7 @@ public final class Point2d implements Serializable {
         this.x = this.x + point.x();
         this.y = this.y + point.y();
     }
-    
+
     public void add(Point2d point) {
         this.x = this.x + point.x();
         this.y = this.y + point.y();

@@ -26,8 +26,8 @@
 
 package org.anchoranalysis.io.manifest.deserializer.folder;
 
-import org.anchoranalysis.core.index.container.BoundedIndexContainer;
 import lombok.Data;
+import org.anchoranalysis.core.index.container.BoundedIndexContainer;
 
 @Data
 public class LoadContainer<T> {
@@ -36,9 +36,11 @@ public class LoadContainer<T> {
     private BoundedIndexContainer<T> container;
 
     /**
-     *  If true, then it takes a long time to load a state when requested (use of Bundles, expensive deserialization etc.)
-     *  <p>
-     *  If false, then it assumes it does not take a long time to load a state when requested (quick deserialization, in memory, etc.)
+     * If true, then it takes a long time to load a state when requested (use of Bundles, expensive
+     * deserialization etc.)
+     *
+     * <p>If false, then it assumes it does not take a long time to load a state when requested
+     * (quick deserialization, in memory, etc.)
      */
     private boolean expensiveLoad;
 }

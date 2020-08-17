@@ -52,9 +52,7 @@ public class MapCreate<K, V> {
         this.createNewElement = createNewElement;
     }
 
-    public MapCreate(
-            Supplier<V> opCreateNew,
-            Comparator<K> comparator) {
+    public MapCreate(Supplier<V> opCreateNew, Comparator<K> comparator) {
         super();
         this.map = new TreeMap<>(comparator);
         this.createNewElement = opCreateNew;

@@ -1,8 +1,11 @@
 package org.anchoranalysis.test.image;
 
+import io.vavr.control.Either;
 import java.nio.ByteBuffer;
 import java.nio.file.Path;
 import java.util.List;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
@@ -31,26 +34,25 @@ import org.junit.rules.TemporaryFolder;
 import org.junit.rules.TestRule;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
-import io.vavr.control.Either;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 /**
  * JUnit rule for writing one or more stacks/objects/channels into a temporary-folder during testing
- * 
- * <p>Any checked-exceptions thrown during writing stacks are converted into run-time exceptions,
- * to make it easy to temporarily use this class in a test for debugging with minimal
- * alteration of functions.
- * 
- * @author Owen Feehan
  *
+ * <p>Any checked-exceptions thrown during writing stacks are converted into run-time exceptions, to
+ * make it easy to temporarily use this class in a test for debugging with minimal alteration of
+ * functions.
+ *
+ * @author Owen Feehan
  */
 @RequiredArgsConstructor
 public class WriteIntoFolder implements TestRule {
-    
-    /** If there are no objects or specified dimensions, this size is used for an output image as a fallback*/
-    private static final ImageDimensions FALLBACK_SIZE = new ImageDimensions(100,100,1);
-    
+
+    /**
+     * If there are no objects or specified dimensions, this size is used for an output image as a
+     * fallback
+     */
+    private static final ImageDimensions FALLBACK_SIZE = new ImageDimensions(100, 100, 1);
+
     // START REQUIRED ARGUMENTS
     /** If true, the path of {@code folder} is printed to the console */
     private final boolean printDirectoryToConsole;
@@ -58,95 +60,88 @@ public class WriteIntoFolder implements TestRule {
 
     /** The folder in which stacks are written */
     @Getter private TemporaryFolder folder = new TemporaryFolder();
-    
-    /**
-     * Constructor - print directory to the console
-     * 
-     */
+
+    /** Constructor - print directory to the console */
     public WriteIntoFolder() {
         this.printDirectoryToConsole = true;
     }
-        
+
     private BoundOutputManagerRouteErrors outputManager;
 
     private DisplayStackGenerator generatorStack = new DisplayStackGenerator("irrelevant");
-    
+
     private ObjectAsMaskGenerator generatorSingleObject = new ObjectAsMaskGenerator();
-    
+
     @Override
     public Statement apply(Statement base, Description description) {
         return folder.apply(base, description);
     }
-    
+
     public void writeStack(String outputName, DisplayStack stack) {
-        
+
         setupOutputManagerIfNecessary();
-        
+
         generatorStack.setIterableElement(stack);
-        
+
         outputManager.getWriterAlwaysAllowed().write(outputName, () -> generatorStack);
     }
-    
+
     public void writeObject(String outputName, ObjectMask object) {
-        
+
         setupOutputManagerIfNecessary();
-        
+
         generatorSingleObject.setIterableElement(object);
-        
+
         outputManager.getWriterAlwaysAllowed().write(outputName, () -> generatorSingleObject);
     }
-    
+
     /**
-     * Writes the outline of objects on a blank RGB image, inferring dimensions of the image to center the object
-     * 
+     * Writes the outline of objects on a blank RGB image, inferring dimensions of the image to
+     * center the object
+     *
      * @param outputName output-name
      * @param objects the objects to draw an outline for
      */
     public void writeObjects(String outputName, ObjectCollection objects) {
-        
+
         ImageDimensions dimensionsResolved = dimensionsToForObjects(objects);
-        
+
         writeObjects(outputName, objects, Either.left(dimensionsResolved));
     }
-    
+
     /**
      * Writes the outline of objects on a background.
-     * 
+     *
      * @param outputName output-name
      * @param objects the objects to draw an outline for
      * @param background the background
      */
     public void writeObjects(String outputName, ObjectCollection objects, Stack background) {
-        writeObjects(outputName, objects, Either.right( displayStackFor(background)) );
+        writeObjects(outputName, objects, Either.right(displayStackFor(background)));
     }
-    
+
     public void writeVoxels(String outputName, Voxels<ByteBuffer> voxels) {
-        
-        Channel channel = ChannelFactory.instance().create(voxels, new ImageResolution() );
-        
+
+        Channel channel = ChannelFactory.instance().create(voxels, new ImageResolution());
+
         writeChannel(outputName, channel);
     }
-    
+
     public void writeChannel(String outputName, Channel channel) {
-        
+
         setupOutputManagerIfNecessary();
 
-        writeStack(outputName, displayStackFor(channel) );
+        writeStack(outputName, displayStackFor(channel));
     }
-    
+
     public void writeList(String outputName, List<DisplayStack> stacks) {
-        
+
         setupOutputManagerIfNecessary();
-        
+
         IterableGeneratorWriter.writeSubfolder(
-                outputManager,
-                outputName,
-                outputName,
-                () -> generatorStack,
-                stacks,
-                true);
+                outputManager, outputName, outputName, () -> generatorStack, stacks, true);
     }
-    
+
     private static DisplayStack displayStackFor(Channel channel) {
         try {
             return DisplayStack.create(channel);
@@ -162,49 +157,56 @@ public class WriteIntoFolder implements TestRule {
             throw new AnchorFriendlyRuntimeException(e);
         }
     }
-    
+
     private void setupOutputManagerIfNecessary() {
         try {
-            if (outputManager==null) {
-                
+            if (outputManager == null) {
+
                 Path path = folder.getRoot().toPath();
-                
+
                 outputManager = OutputManagerFixture.outputManagerForRouterErrors(path);
-                
+
                 if (printDirectoryToConsole) {
-                    System.out.println("Outputs written in test to: " + path);  // NOSONAR
+                    System.out.println("Outputs written in test to: " + path); // NOSONAR
                 }
             }
         } catch (BindFailedException e) {
             throw new AnchorFriendlyRuntimeException(e);
-        }        
+        }
     }
 
     /** Writes objects with either dimensions (for a blank background) or a particular background */
-    private void writeObjects(String outputName, ObjectCollection objects, Either<ImageDimensions, DisplayStack> background) {
-        
+    private void writeObjects(
+            String outputName,
+            ObjectCollection objects,
+            Either<ImageDimensions, DisplayStack> background) {
+
         setupOutputManagerIfNecessary();
-        
-        DrawObjectsGenerator generatorObjects = new DrawObjectsGenerator(new Outline(), new ObjectCollectionWithProperties(objects), background);
-        
+
+        DrawObjectsGenerator generatorObjects =
+                new DrawObjectsGenerator(
+                        new Outline(), new ObjectCollectionWithProperties(objects), background);
+
         outputManager.getWriterAlwaysAllowed().write(outputName, () -> generatorObjects);
     }
 
-    /** 
+    /**
      * Finds dimensions that place the objects in the center
-     *  
-     * @throws OperationFailedException */
+     *
+     * @throws OperationFailedException
+     */
     private static ImageDimensions dimensionsToForObjects(ObjectCollection objects) {
-        
-        if (objects.size()==0) {
+
+        if (objects.size() == 0) {
             return FALLBACK_SIZE;
         }
-        
+
         try {
             BoundingBox boxSpans = new ObjectsWithBoundingBox(objects).boundingBox();
-            
-            BoundingBox boxCentered = boxSpans.changeExtent( boxSpans.extent().growBy(boxSpans.cornerMin()) );
-            
+
+            BoundingBox boxCentered =
+                    boxSpans.changeExtent(boxSpans.extent().growBy(boxSpans.cornerMin()));
+
             return new ImageDimensions(boxCentered.calculateCornerMaxExclusive());
         } catch (OperationFailedException e) {
             throw new AnchorImpossibleSituationException();

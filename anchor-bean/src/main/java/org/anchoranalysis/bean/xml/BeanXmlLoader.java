@@ -30,6 +30,8 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.bean.error.BeanStrangeException;
 import org.anchoranalysis.bean.xml.error.BeanXmlException;
 import org.anchoranalysis.bean.xml.error.HelperFriendlyExceptions;
@@ -40,10 +42,8 @@ import org.apache.commons.configuration.HierarchicalConfiguration;
 import org.apache.commons.configuration.XMLConfiguration;
 import org.apache.commons.configuration.beanutils.BeanHelper;
 import org.apache.commons.configuration.beanutils.XMLBeanDeclaration;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class BeanXmlLoader {
 
     private static Logger logger = Logger.getLogger(BeanXmlLoader.class.getName());

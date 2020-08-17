@@ -34,11 +34,9 @@ import lombok.Setter;
 @AllArgsConstructor
 public class FilePathPrefix implements FilePathCreator {
 
-    @Getter
-    private Path folderPath;
-    
-    @Getter @Setter
-    private String filenamePrefix = "";
+    @Getter private Path folderPath;
+
+    @Getter @Setter private String filenamePrefix = "";
 
     public FilePathPrefix(Path folderPath) {
         setFolderPath(folderPath.normalize());

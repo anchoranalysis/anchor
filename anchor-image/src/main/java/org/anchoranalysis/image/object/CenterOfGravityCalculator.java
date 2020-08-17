@@ -27,14 +27,14 @@
 package org.anchoranalysis.image.object;
 
 import java.nio.ByteBuffer;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.axis.AxisType;
 import org.anchoranalysis.core.axis.AxisTypeConverter;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.image.extent.Extent;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 final class CenterOfGravityCalculator {
 
     /**
@@ -91,7 +91,7 @@ final class CenterOfGravityCalculator {
         double sum = 0.0;
         byte onByte = object.binaryValuesByte().getOnByte();
         Extent extent = object.extent();
-        
+
         for (int z = 0; z < extent.z(); z++) {
 
             ByteBuffer bb = object.sliceBufferLocal(z);

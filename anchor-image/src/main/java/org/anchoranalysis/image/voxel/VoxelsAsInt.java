@@ -46,16 +46,16 @@ public final class VoxelsAsInt extends Voxels<IntBuffer> {
     protected boolean areBufferValuesEqual(IntBuffer buffer1, IntBuffer buffer2) {
         return buffer1.get() == buffer2.get();
     }
-    
+
     @Override
     public VoxelsAssigner assignValue(int valueToAssign) {
         return VoxelsAssignerFactory.createInt(this, valueToAssign);
     }
-    
+
     private static VoxelsArithmetic createArithmetic(PixelsForSlice<IntBuffer> slices) {
-        return VoxelsArithmeticFactory.createInt( slices.extent(), slices::sliceBuffer );
+        return VoxelsArithmeticFactory.createInt(slices.extent(), slices::sliceBuffer);
     }
-        
+
     @Override
     public VoxelsExtracter<IntBuffer> extracter() {
         return VoxelsExtracterFactory.createInt(this);

@@ -34,7 +34,8 @@ import org.anchoranalysis.core.axis.AxisType;
 import org.anchoranalysis.core.axis.AxisTypeConverter;
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
 
-@EqualsAndHashCode @Accessors(fluent=true)
+@EqualsAndHashCode
+@Accessors(fluent = true)
 public abstract class Tuple3d implements Serializable {
 
     /** */

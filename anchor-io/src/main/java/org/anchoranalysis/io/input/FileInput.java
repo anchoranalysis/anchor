@@ -26,12 +26,12 @@
 
 package org.anchoranalysis.io.input;
 
+import com.google.common.base.Preconditions;
 import java.io.File;
 import java.nio.file.Path;
 import java.util.Optional;
-import org.anchoranalysis.io.input.descriptivename.DescriptiveFile;
-import com.google.common.base.Preconditions;
 import lombok.Getter;
+import org.anchoranalysis.io.input.descriptivename.DescriptiveFile;
 
 public class FileInput implements InputFromManager {
 

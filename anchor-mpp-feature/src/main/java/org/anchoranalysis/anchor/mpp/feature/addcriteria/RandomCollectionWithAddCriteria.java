@@ -279,8 +279,7 @@ public class RandomCollectionWithAddCriteria<T> extends RandomCollection<T> {
                 VoxelizedMarkMemo destMark = marks.getMemoForIndex(j);
 
                 addCriteria
-                        .generateEdge(
-                                srcMark, destMark, stack, session, stack.dimensions().z() > 1)
+                        .generateEdge(srcMark, destMark, stack, session, stack.dimensions().z() > 1)
                         .ifPresent(
                                 pair -> graph.addEdge(srcMark.getMark(), destMark.getMark(), pair));
             }

@@ -171,7 +171,7 @@ public class HistogramFactory {
                 for (int x = cornerMin.x(); x <= cornerMax.x(); x++) {
 
                     int offset = extent.offset(x, y);
-                    int offsetMask = object.offsetGlobal(x,y);
+                    int offsetMask = object.offsetGlobal(x, y);
 
                     byte valueOnMask = bbMask.get(offsetMask);
 
@@ -194,23 +194,22 @@ public class HistogramFactory {
                 Histogram histogram = createWithMask(voxels.any(), objectMask);
                 total.addHistogram(histogram);
             }
-        
+
         } catch (OperationFailedException e) {
             assert false;
         }
 
         return total;
     }
-  
+
     private static Histogram create(Voxels<?> inputBox) {
 
         Histogram hist = new HistogramArray((int) inputBox.dataType().maxValue());
 
         int volumeXY = inputBox.extent().volumeXY();
-        
-        inputBox.extent().iterateOverZ( z->
-            addBufferToHistogram(hist, inputBox.slice(z), volumeXY)
-        );
+
+        inputBox.extent()
+                .iterateOverZ(z -> addBufferToHistogram(hist, inputBox.slice(z), volumeXY));
 
         return hist;
     }

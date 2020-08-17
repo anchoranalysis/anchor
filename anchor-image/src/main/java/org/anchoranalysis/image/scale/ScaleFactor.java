@@ -39,7 +39,7 @@ import lombok.experimental.Accessors;
  */
 @Value
 @AllArgsConstructor
-@Accessors(fluent=true)
+@Accessors(fluent = true)
 public final class ScaleFactor {
 
     private final double x;

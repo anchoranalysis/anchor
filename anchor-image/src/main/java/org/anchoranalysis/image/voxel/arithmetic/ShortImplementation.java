@@ -6,14 +6,12 @@ import org.anchoranalysis.image.convert.ByteConverter;
 import org.anchoranalysis.image.extent.Extent;
 
 /**
- * 
  * TODO what to do when values are too small or too large?
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 class ShortImplementation extends Base<ShortBuffer> {
-    
+
     public ShortImplementation(Extent extent, IntFunction<ShortBuffer> bufferForSlice) {
         super(extent, bufferForSlice);
     }
@@ -25,13 +23,13 @@ class ShortImplementation extends Base<ShortBuffer> {
             buffer.put(buffer.position() - 1, mult);
         }
     }
-    
+
     @Override
     protected void multiplyByBufferIndex(ShortBuffer buffer, int index, double factor) {
         short mult = multiplyBy(buffer.get(index), factor);
         buffer.put(index, mult);
     }
-    
+
     @Override
     protected void subtractFromBuffer(ShortBuffer buffer, int valueToSubtractFrom) {
 
@@ -48,7 +46,7 @@ class ShortImplementation extends Base<ShortBuffer> {
         short shortVal = (short) (buffer.get(index) + valueToBeAdded);
         buffer.put(index, shortVal);
     }
-    
+
     private static short multiplyBy(short value, double factor) {
         // TODO do we need to cast to an int first, or can it not just be done directly to a short?
         int mult = (int) (ByteConverter.unsignedShortToInt(value) * factor);

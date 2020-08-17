@@ -36,8 +36,8 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
-import org.anchoranalysis.image.stack.NamedStacksSupplier;
 import org.anchoranalysis.image.stack.NamedStacksSet;
+import org.anchoranalysis.image.stack.NamedStacksSupplier;
 import org.anchoranalysis.image.stack.wrap.WrapStackAsTimeSequenceStore;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.InputFromManager;
@@ -103,8 +103,9 @@ public class AnnotationWithStrategy<T extends AnnotatorStrategy> implements Inpu
     public NamedStacksSupplier stacks() {
         return NamedStacksSupplier.cache(this::buildStacks);
     }
-    
-    private NamedStacksSet buildStacks(ProgressReporter progressReporter) throws OperationFailedException {
+
+    private NamedStacksSet buildStacks(ProgressReporter progressReporter)
+            throws OperationFailedException {
         NamedStacksSet stackCollection = new NamedStacksSet();
         input.addToStoreInferNames(
                 new WrapStackAsTimeSequenceStore(stackCollection, 0), 0, progressReporter);

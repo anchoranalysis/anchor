@@ -69,13 +69,13 @@ public class Stack implements Iterable<Channel> {
         }
     }
 
-    public Stack(Channel ...channels) throws IncorrectImageSizeException {
+    public Stack(Channel... channels) throws IncorrectImageSizeException {
         this();
-        for(Channel channel : channels) {
-            addChannel(channel);    
+        for (Channel channel : channels) {
+            addChannel(channel);
         }
     }
-    
+
     public Stack(Stream<Channel> channelStream) throws IncorrectImageSizeException {
         delegate = new StackNotUniformSized(channelStream);
         if (!delegate.isUniformlySized()) {
@@ -114,9 +114,10 @@ public class Stack implements Iterable<Channel> {
         }
         return out;
     }
-    
+
     /**
-     * Produces a new stack with a particular mapping applied to each channel (with an index of the channel also available)
+     * Produces a new stack with a particular mapping applied to each channel (with an index of the
+     * channel also available)
      *
      * <p>The function applied to the channel should ensure it produces uniform sizes.
      *
@@ -125,13 +126,14 @@ public class Stack implements Iterable<Channel> {
      * @return a new stack (after any modification by {@code mapping}) preserving the channel order
      * @throws OperationFailedException if the channels produced have non-uniform sizes
      */
-    public Stack mapChannelWithIndex(CheckedBiFunction<Channel,Integer,Channel,OperationFailedException> mapping)
+    public Stack mapChannelWithIndex(
+            CheckedBiFunction<Channel, Integer, Channel, OperationFailedException> mapping)
             throws OperationFailedException {
         Stack out = new Stack();
-        for (int index = 0; index<getNumberChannels(); index++) {
+        for (int index = 0; index < getNumberChannels(); index++) {
             Channel channel = getChannel(index);
             try {
-                out.addChannel(mapping.apply(channel,index));
+                out.addChannel(mapping.apply(channel, index));
             } catch (IncorrectImageSizeException e) {
                 throw new OperationFailedException(e);
             }
@@ -167,8 +169,7 @@ public class Stack implements Iterable<Channel> {
 
         Channel first = getChannel(0);
         delegate.addChannel(
-                ChannelFactory.instance()
-                        .create(first.dimensions(), first.getVoxelDataType()));
+                ChannelFactory.instance().create(first.dimensions(), first.getVoxelDataType()));
     }
 
     public final void addChannel(Channel channel) throws IncorrectImageSizeException {

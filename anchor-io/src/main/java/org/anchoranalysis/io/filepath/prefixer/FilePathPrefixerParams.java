@@ -28,17 +28,15 @@ package org.anchoranalysis.io.filepath.prefixer;
 
 import java.nio.file.Path;
 import java.util.Optional;
-import org.anchoranalysis.io.error.FilePathPrefixerException;
 import lombok.Getter;
+import org.anchoranalysis.io.error.FilePathPrefixerException;
 
 public class FilePathPrefixerParams {
 
-    @Getter
-    private boolean debugMode;
+    @Getter private boolean debugMode;
 
     /** A directory indicating where inputs can be located */
-    @Getter
-    private final Optional<Path> outputDirectory;
+    @Getter private final Optional<Path> outputDirectory;
 
     public FilePathPrefixerParams(boolean debugMode, Optional<Path> outputDirectory)
             throws FilePathPrefixerException {

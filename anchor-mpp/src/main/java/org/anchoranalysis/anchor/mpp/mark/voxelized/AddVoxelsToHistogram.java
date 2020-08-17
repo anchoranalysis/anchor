@@ -28,14 +28,14 @@ package org.anchoranalysis.anchor.mpp.mark.voxelized;
 
 import java.util.List;
 import java.util.function.IntConsumer;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipWithFlags;
 import org.anchoranalysis.anchor.mpp.pixelpart.IndexByChnl;
 import org.anchoranalysis.image.convert.ByteConverter;
 import org.anchoranalysis.image.histogram.Histogram;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 class AddVoxelsToHistogram {
 
     public static void addVoxels(

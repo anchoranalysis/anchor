@@ -45,7 +45,7 @@ public interface VoxelsFactoryTypeBound<T extends Buffer> {
     Voxels<T> create(PixelsForSlice<T> pixelsForPlane);
 
     Voxels<T> createInitialized(Extent extent);
-    
+
     Voxels<T> createUninitialized(Extent extent);
 
     VoxelDataType dataType();

@@ -27,13 +27,13 @@
 package org.anchoranalysis.image.stack.rgb;
 
 import java.nio.ByteBuffer;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.color.RGBColor;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.extent.ImageDimensions;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class RGBOutputUtils {
 
     public static void writeRGBColorToByteArr(

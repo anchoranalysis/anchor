@@ -28,6 +28,8 @@ package org.anchoranalysis.image.voxel.thresholder;
 
 import java.nio.ByteBuffer;
 import java.util.Optional;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelsFactory;
@@ -36,11 +38,9 @@ import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 import org.anchoranalysis.image.voxel.iterator.IterateVoxels;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 
 /** Performs threshold operation on voxels */
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class VoxelsThresholder {
 
     public static void thresholdForLevel(

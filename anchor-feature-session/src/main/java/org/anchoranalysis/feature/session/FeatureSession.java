@@ -149,7 +149,8 @@ public class FeatureSession {
      * @param input for features
      * @param logger a logger
      * @return the calculated result
-     * @throws FeatureCalculationException if the feature cannot be initialized or cannot be calculated
+     * @throws FeatureCalculationException if the feature cannot be initialized or cannot be
+     *     calculated
      */
     public static <T extends FeatureInput> double calculateWith(
             Feature<T> feature, T input, Logger logger) throws FeatureCalculationException {
@@ -160,7 +161,7 @@ public class FeatureSession {
             throw new FeatureCalculationException(e);
         }
     }
-    
+
     private static <T extends FeatureInput> void startSession(
             SequentialSession<T> session,
             FeatureInitParams initParams,

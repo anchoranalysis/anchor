@@ -27,8 +27,8 @@
 package org.anchoranalysis.io.manifest.match;
 
 import java.util.ArrayList;
-import org.anchoranalysis.io.manifest.ManifestDescription;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.io.manifest.ManifestDescription;
 
 @NoArgsConstructor
 public class ManifestDescriptionMatchAnd implements Match<ManifestDescription> {

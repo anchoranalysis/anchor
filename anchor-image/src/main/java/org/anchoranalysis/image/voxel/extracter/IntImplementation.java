@@ -6,7 +6,7 @@ import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.max.MaxIntensityBufferInt;
 
 class IntImplementation extends Base<IntBuffer> {
-    
+
     public IntImplementation(Voxels<IntBuffer> voxels) {
         super(voxels);
     }
@@ -15,7 +15,7 @@ class IntImplementation extends Base<IntBuffer> {
     public Voxels<IntBuffer> projectionMax() {
 
         Extent extent = voxels.extent();
-        
+
         MaxIntensityBufferInt mi = new MaxIntensityBufferInt(extent);
 
         for (int z = 0; z < extent.z(); z++) {
@@ -24,18 +24,18 @@ class IntImplementation extends Base<IntBuffer> {
 
         return mi.asVoxels();
     }
-    
+
     @Override
     public Voxels<IntBuffer> projectionMean() {
         throw new UnsupportedOperationException();
     }
-    
+
     @Override
     public int voxelWithMaxIntensity() {
 
         int max = 0;
         boolean first = true;
-        
+
         Extent extent = voxels.extent();
 
         for (int z = 0; z < extent.z(); z++) {
@@ -53,9 +53,13 @@ class IntImplementation extends Base<IntBuffer> {
         }
         return max;
     }
-    
+
     @Override
-    protected void copyBufferIndexTo(IntBuffer sourceBuffer, int sourceIndex, IntBuffer destinationBuffer, int destinationIndex) {
+    protected void copyBufferIndexTo(
+            IntBuffer sourceBuffer,
+            int sourceIndex,
+            IntBuffer destinationBuffer,
+            int destinationIndex) {
         destinationBuffer.put(destinationIndex, sourceBuffer.get(sourceIndex));
     }
 
@@ -63,7 +67,7 @@ class IntImplementation extends Base<IntBuffer> {
     protected int voxelAtBufferIndex(IntBuffer buffer, int index) {
         return buffer.get(index);
     }
-    
+
     @Override
     protected boolean bufferValueGreaterThan(IntBuffer buffer, int threshold) {
         return buffer.get() > threshold;

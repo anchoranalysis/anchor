@@ -47,7 +47,7 @@ import org.anchoranalysis.io.output.bound.BoundIOContext;
 public class MPPInitParamsFactory {
 
     private static final String KEY_VALUE_PARAMS_IDENTIFIER = "input_params";
-    
+
     public static MPPInitParams create(
             BoundIOContext context,
             Optional<Define> define,
@@ -104,7 +104,8 @@ public class MPPInitParamsFactory {
             }
 
             if (keyValueParams.isPresent()) {
-                soImage.addToKeyValueParamsCollection(KEY_VALUE_PARAMS_IDENTIFIER, keyValueParams.get());
+                soImage.addToKeyValueParamsCollection(
+                        KEY_VALUE_PARAMS_IDENTIFIER, keyValueParams.get());
             }
 
             return soMPP;

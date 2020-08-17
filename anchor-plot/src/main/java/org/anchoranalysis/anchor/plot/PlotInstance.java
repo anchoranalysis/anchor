@@ -27,10 +27,10 @@
 package org.anchoranalysis.anchor.plot;
 
 import java.util.Optional;
-import org.jfree.chart.JFreeChart;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.jfree.chart.JFreeChart;
 
 @RequiredArgsConstructor
 public class PlotInstance {
@@ -39,6 +39,6 @@ public class PlotInstance {
     @Getter private final JFreeChart chart;
     @Getter private final Optional<AxisLimits> rangeAxisLimits;
     // END REQUIRED ARGUMENTS
-    
+
     @Getter @Setter private boolean showVerticalAxisLines = true;
 }

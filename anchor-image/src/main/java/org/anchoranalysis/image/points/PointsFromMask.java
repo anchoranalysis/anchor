@@ -28,20 +28,19 @@ package org.anchoranalysis.image.points;
 
 import java.util.ArrayList;
 import java.util.List;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point2i;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.extent.BoundingBox;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class PointsFromMask {
 
     public static List<Point3i> listFrom3i(Mask mask) {
-        return PointsFromVoxels.listFrom3i(
-                mask.binaryVoxels());
+        return PointsFromVoxels.listFrom3i(mask.binaryVoxels());
     }
 
     public static List<Point2i> listFrom2i(Mask mask) throws CreateException {
@@ -55,11 +54,7 @@ public class PointsFromMask {
 
         ConsumePointsFromMaskSliced helper =
                 new ConsumePointsFromMaskSliced(
-                        skipAfterSuccessiveEmptySlices,
-                        box,
-                        mask,
-                        startZ,
-                        out::add);
+                        skipAfterSuccessiveEmptySlices, box, mask, startZ, out::add);
 
         helper.firstHalf();
 

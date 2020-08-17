@@ -27,10 +27,10 @@
 package org.anchoranalysis.image.voxel;
 
 import java.nio.Buffer;
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.pixelsforslice.PixelsForSlice;
-import lombok.AllArgsConstructor;
 
 /**
  * @author Owen Feehan

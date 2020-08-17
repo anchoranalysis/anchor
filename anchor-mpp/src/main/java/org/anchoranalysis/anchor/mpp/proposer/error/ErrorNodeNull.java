@@ -26,16 +26,16 @@
 
 package org.anchoranalysis.anchor.mpp.proposer.error;
 
-import org.anchoranalysis.anchor.mpp.mark.Mark;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.anchor.mpp.mark.Mark;
 
 /**
  * Singleton that does nothing with errors
  *
  * @author Owen Feehan
  */
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ErrorNodeNull extends ErrorNode {
 
     /** */

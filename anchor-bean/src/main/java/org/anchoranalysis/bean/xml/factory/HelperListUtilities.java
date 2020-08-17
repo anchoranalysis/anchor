@@ -30,16 +30,16 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
-import org.apache.commons.configuration.HierarchicalConfiguration;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.apache.commons.configuration.HierarchicalConfiguration;
 
 /**
  * Utilities for manipulating list of beans
  *
  * @author Owen Feehan
  */
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class HelperListUtilities {
 
     /**

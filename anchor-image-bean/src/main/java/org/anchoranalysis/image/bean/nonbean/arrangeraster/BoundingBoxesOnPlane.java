@@ -29,18 +29,20 @@ package org.anchoranalysis.image.bean.nonbean.arrangeraster;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.Extent;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
 import lombok.experimental.Accessors;
+import org.anchoranalysis.image.extent.BoundingBox;
+import org.anchoranalysis.image.extent.Extent;
 
 /**
  * Describes a set of bounding boxes on top of a plane
  *
  * @author Owen Feehan
  */
-@RequiredArgsConstructor @Value @Accessors(fluent=true)
+@RequiredArgsConstructor
+@Value
+@Accessors(fluent = true)
 public class BoundingBoxesOnPlane implements Iterable<BoundingBox> {
 
     // START REQUIRED ARGUMENTS

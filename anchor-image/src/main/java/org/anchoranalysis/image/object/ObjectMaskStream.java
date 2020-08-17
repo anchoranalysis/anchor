@@ -79,9 +79,11 @@ public final class ObjectMaskStream {
     }
 
     /**
-     * Creates a new {@link ObjectCollection} after mapping the bounding-box on each object (whose extent should remain unchanged)
-     * 
-     * <p>See {@link ObjectMask#mapBoundingBoxPreserveExtent(UnaryOperator)} for details on the mapping.
+     * Creates a new {@link ObjectCollection} after mapping the bounding-box on each object (whose
+     * extent should remain unchanged)
+     *
+     * <p>See {@link ObjectMask#mapBoundingBoxPreserveExtent(UnaryOperator)} for details on the
+     * mapping.
      *
      * <p>This is an <i>immutable</i> operation.
      *
@@ -91,24 +93,25 @@ public final class ObjectMaskStream {
     public ObjectCollection mapBoundingBoxPreserveExtent(UnaryOperator<BoundingBox> mapFunc) {
         return map(object -> object.mapBoundingBoxPreserveExtent(mapFunc));
     }
-    
+
     /**
-     * Creates a new {@link ObjectCollection} after mapping the bounding-box on each object (while maybe changing the extent).
+     * Creates a new {@link ObjectCollection} after mapping the bounding-box on each object (while
+     * maybe changing the extent).
      *
      * <p>See {@link ObjectMask#mapBoundingBoxChangeExtent} for details on the mapping.
      *
      * <p>This is an <i>immutable</i> operation.
-     * 
+     *
      * <p>Precondition: the new bounding-box's extent must be greater than or equal to the existing
      * extent in all dimensions.
-     * 
+     *
      * @param mapFunc maps the bounding-box to a new bounding-box
      * @return a newly created object-collection
      */
     public ObjectCollection mapBoundingBoxChangeExtent(BoundingBox boxToAssign) {
         return map(object -> object.mapBoundingBoxChangeExtent(boxToAssign));
     }
-    
+
     /**
      * Creates a new {@link List} after mapping each item to another type
      *
@@ -120,8 +123,8 @@ public final class ObjectMaskStream {
      * @return a newly created list contained the mapped objects
      * @throws E if an exception occurs during mapping
      */
-    public <T, E extends Exception> List<T> mapToList(
-            CheckedFunction<ObjectMask, T, E> mapFunc) throws E {
+    public <T, E extends Exception> List<T> mapToList(CheckedFunction<ObjectMask, T, E> mapFunc)
+            throws E {
         List<T> out = new ArrayList<>();
         for (ObjectMask obj : delegate) {
             out.add(mapFunc.apply(obj));
@@ -219,7 +222,7 @@ public final class ObjectMaskStream {
     public ObjectCollection filter(Predicate<ObjectMask> predicate) {
         return new ObjectCollection(delegate.streamStandardJava().filter(predicate));
     }
-    
+
     /**
      * Filters a {@link ObjectCollection} to <b>exclude</b> certain items based on a predicate
      *
@@ -229,7 +232,7 @@ public final class ObjectMaskStream {
      * @return a newly created object-collection, a filtered version of all objects
      */
     public ObjectCollection filterExclude(Predicate<ObjectMask> predicate) {
-        return filter( object -> !predicate.test(object) );
+        return filter(object -> !predicate.test(object));
     }
 
     /**
@@ -246,8 +249,7 @@ public final class ObjectMaskStream {
      * @throws E if thrown by the predicate
      */
     public <E extends Exception> ObjectCollection filter(
-            CheckedPredicate<ObjectMask, E> predicate,
-            Optional<ObjectCollection> objectsRejected)
+            CheckedPredicate<ObjectMask, E> predicate, Optional<ObjectCollection> objectsRejected)
             throws E {
 
         ObjectCollection out = new ObjectCollection();

@@ -76,9 +76,7 @@ public class OutlineKernel3NeighborMatchValue extends OutlineKernel3Base {
         super.notifyZChange(inSlices, z);
         localSlicesRequireHigh =
                 new LocalSlices(
-                        z + object.boundingBox().cornerMin().z(),
-                        3,
-                        voxelsRequireHigh.voxels());
+                        z + object.boundingBox().cornerMin().z(), 3, voxelsRequireHigh.voxels());
     }
 
     /**

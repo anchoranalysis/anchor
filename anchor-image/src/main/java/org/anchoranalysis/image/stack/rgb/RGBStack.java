@@ -207,22 +207,13 @@ public class RGBStack {
                 }
 
                 RGBOutputUtils.writeRGBColorToByteArr(
-                        color,
-                        pointGlobal,
-                        channels.getChannel(0).dimensions(),
-                        red,
-                        blue,
-                        green);
+                        color, pointGlobal, channels.getChannel(0).dimensions(), red, blue, green);
             }
         }
     }
 
     private ByteBuffer extractBuffer(int chnlIndex, int zIndex) {
-        return channels.getChannel(chnlIndex)
-                .voxels()
-                .asByte()
-                .slice(zIndex)
-                .buffer();
+        return channels.getChannel(chnlIndex).voxels().asByte().slice(zIndex).buffer();
     }
 
     private static Stack convertGrayscaleIntoColor(Stack stack) {

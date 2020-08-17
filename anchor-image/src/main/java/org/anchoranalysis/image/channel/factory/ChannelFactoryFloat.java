@@ -30,7 +30,7 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeFloat;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 
 public class ChannelFactoryFloat extends ChannelFactorySingleType {
-    
+
     public ChannelFactoryFloat() {
         super(VoxelDataTypeFloat.INSTANCE, VoxelsFactory.getFloat());
     }

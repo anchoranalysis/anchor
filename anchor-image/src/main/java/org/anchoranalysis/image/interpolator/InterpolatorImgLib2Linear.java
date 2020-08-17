@@ -37,7 +37,7 @@ public class InterpolatorImgLib2Linear extends InterpolatorImgLib2 {
                 new NLinearInterpolatorFactory<UnsignedByteType>(),
                 new NLinearInterpolatorFactory<UnsignedShortType>());
     }
-    
+
     @Override
     public boolean isNewValuesPossible() {
         return true;

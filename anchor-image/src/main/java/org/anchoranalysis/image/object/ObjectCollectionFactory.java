@@ -145,11 +145,10 @@ public class ObjectCollectionFactory {
      * @throws E exception if it occurs during mapping
      */
     public static <T, E extends Exception> ObjectCollection mapFromOptional(
-            Iterable<T> iterable, CheckedFunction<T, Optional<ObjectMask>, E> mapFunc)
-            throws E {
+            Iterable<T> iterable, CheckedFunction<T, Optional<ObjectMask>, E> mapFunc) throws E {
         return mapFromOptional(iterable.iterator(), mapFunc);
     }
-    
+
     /**
      * Creates a new collection by mapping an {@link Iterator} to {@link Optional<ObjectMask>}
      *
@@ -163,8 +162,7 @@ public class ObjectCollectionFactory {
      * @throws E exception if it occurs during mapping
      */
     public static <T, E extends Exception> ObjectCollection mapFromOptional(
-            Iterator<T> iterator, CheckedFunction<T, Optional<ObjectMask>, E> mapFunc)
-            throws E {
+            Iterator<T> iterator, CheckedFunction<T, Optional<ObjectMask>, E> mapFunc) throws E {
         ObjectCollection out = new ObjectCollection();
         while (iterator.hasNext()) {
             mapFunc.apply(iterator.next()).ifPresent(out::add);
@@ -296,9 +294,7 @@ public class ObjectCollectionFactory {
      * @throws E if thrown by <code>mapFunc</code>
      */
     public static <T, E extends Exception> ObjectCollection filterAndMapFrom(
-            Iterable<T> iterable,
-            Predicate<T> predicate,
-            CheckedFunction<T, ObjectMask, E> mapFunc)
+            Iterable<T> iterable, Predicate<T> predicate, CheckedFunction<T, ObjectMask, E> mapFunc)
             throws E {
         ObjectCollection out = new ObjectCollection();
         for (T item : iterable) {
@@ -393,7 +389,6 @@ public class ObjectCollectionFactory {
             Class<? extends Exception> throwableClass,
             CheckedFunction<T, Collection<? extends ObjectMask>, E> mapFunc)
             throws E {
-        return new ObjectCollection(
-                CheckedStream.flatMap(stream, throwableClass, mapFunc));
+        return new ObjectCollection(CheckedStream.flatMap(stream, throwableClass, mapFunc));
     }
 }

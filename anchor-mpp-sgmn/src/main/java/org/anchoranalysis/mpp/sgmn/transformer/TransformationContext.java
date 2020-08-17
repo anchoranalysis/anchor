@@ -44,7 +44,7 @@ public class TransformationContext {
         return new TransformationContext(
                 dimensions, kernelCalcContext.replaceError(errorNode), logger);
     }
-    
+
     public ImageDimensions dimensions() {
         return dimensions;
     }

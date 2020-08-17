@@ -26,12 +26,13 @@
 
 package org.anchoranalysis.mpp.io.cfg;
 
-import org.anchoranalysis.anchor.mpp.cfg.Cfg;
-import org.anchoranalysis.image.stack.DisplayStack;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import org.anchoranalysis.anchor.mpp.cfg.Cfg;
+import org.anchoranalysis.image.stack.DisplayStack;
 
-@Data @AllArgsConstructor
+@Data
+@AllArgsConstructor
 public class CfgWithDisplayStack {
 
     private Cfg cfg;

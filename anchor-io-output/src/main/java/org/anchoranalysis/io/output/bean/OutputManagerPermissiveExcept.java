@@ -55,7 +55,7 @@ public class OutputManagerPermissiveExcept extends OutputManagerWithPrefixer {
     @BeanField @Getter @Setter
     private List<NamedBean<StringSet>> exceptSecondLevel = new ArrayList<>();
     // END BEAN PROPERTIES
-    
+
     public OutputManagerPermissiveExcept(StringSet except) {
         this.except = except;
     }

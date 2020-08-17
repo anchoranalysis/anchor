@@ -71,8 +71,7 @@ class ObjectMaskHDF5Writer {
 
     public void apply() {
 
-        writer.uint8()
-                .writeMDArray(pathHDF5, byteArray(object.binaryVoxels()), compressionLevel());
+        writer.uint8().writeMDArray(pathHDF5, byteArray(object.binaryVoxels()), compressionLevel());
 
         addCorner();
     }

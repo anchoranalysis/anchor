@@ -163,7 +163,7 @@ public abstract class Feature<T extends FeatureInput>
             throws BeanMisconfiguredException {
 
         return FeatureListFactory.wrapReuse(
-                        findChildrenOfClass(getOrCreateBeanFields(), Feature.class));
+                findChildrenOfClass(getOrCreateBeanFields(), Feature.class));
     }
 
     public String getParamDscr() {

@@ -42,8 +42,8 @@ public class FloatFrom32Bit extends ConvertToFloat {
     }
 
     @Override
-    protected float[] convertIntegerBytesToFloatArray(ImageDimensions dimensions, byte[] src, int srcOffset)
-            throws IOException {
+    protected float[] convertIntegerBytesToFloatArray(
+            ImageDimensions dimensions, byte[] src, int srcOffset) throws IOException {
 
         float[] fArr = new float[dimensions.volumeXY()];
         int cntLoc = 0;

@@ -58,8 +58,7 @@ public class CheckedStream {
             return exception;
         }
     }
-    
-    
+
     /**
      * Performs a forEach on a stream, but accepts a consumer that can throw a checked-exception
      *
@@ -263,8 +262,8 @@ public class CheckedStream {
     }
 
     /**
-     * Catches any exceptions that occur around a {@link CheckedFunction} as it is executed and wraps them into a
-     * run-time exception.
+     * Catches any exceptions that occur around a {@link CheckedFunction} as it is executed and
+     * wraps them into a run-time exception.
      *
      * @param <S> parameter-type for function
      * @param <T> return-type for function
@@ -309,10 +308,9 @@ public class CheckedStream {
             throw new ConvertedToRuntimeException(exc);
         }
     }
-    
+
     /**
-     * Like @link(#suppressCheckedException) but instead accepts {@link CheckedConsumer}
-     * functions
+     * Like @link(#suppressCheckedException) but instead accepts {@link CheckedConsumer} functions
      */
     private static <T, E extends Exception> void suppressCheckedException(
             T param, CheckedConsumer<T, E> consumer) {

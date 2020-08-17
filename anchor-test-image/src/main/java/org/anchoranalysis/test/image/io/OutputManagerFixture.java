@@ -28,6 +28,8 @@ package org.anchoranalysis.test.image.io;
 
 import java.nio.file.Path;
 import java.util.Optional;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
@@ -44,10 +46,8 @@ import org.anchoranalysis.io.output.bound.BindFailedException;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.test.LoggingFixture;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class OutputManagerFixture {
 
     // These operations must occur before creating TempBoundOutputManager
@@ -95,8 +95,9 @@ public class OutputManagerFixture {
             throw new BindFailedException(e);
         }
     }
-    
-    private static OutputManagerWithPrefixer createOutputManager(Path pathTempFolder, OutputWriteSettings settings) {
+
+    private static OutputManagerWithPrefixer createOutputManager(
+            Path pathTempFolder, OutputWriteSettings settings) {
         OutputManagerWithPrefixer outputManager = new OutputManagerPermissive();
         outputManager.setSilentlyDeleteExisting(true);
         outputManager.setOutputWriteSettings(settings);

@@ -34,7 +34,7 @@ import lombok.NoArgsConstructor;
  *
  * @author Owen Feehan
  */
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 class ExceptionTypes {
 
     /** Is it the last exception in the chain? */

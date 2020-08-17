@@ -6,16 +6,15 @@ import org.anchoranalysis.core.cache.CachedSupplier;
 
 /**
  * Supplies a serialized-object (if it exists)
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  * @param <T> type of serialized object
  */
 @FunctionalInterface
 public interface SerializedObjectSupplier<T> {
 
     Optional<T> get() throws IOException;
-    
+
     public static <T> SerializedObjectSupplier<T> cache(SerializedObjectSupplier<T> supplier) {
         return CachedSupplier.cache(supplier::get)::get;
     }

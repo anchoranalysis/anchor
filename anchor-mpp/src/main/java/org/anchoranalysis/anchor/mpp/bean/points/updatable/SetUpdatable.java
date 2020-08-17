@@ -179,21 +179,14 @@ public class SetUpdatable extends UpdatablePointsContainer {
         Extent e = voxels.extent();
 
         Point3i position = new Point3i();
-        for (position.setZ(0);
-                position.z() < e.z();
-                position.incrementZ()) {
+        for (position.setZ(0); position.z() < e.z(); position.incrementZ()) {
 
             ByteBuffer buffer = voxels.sliceBuffer(position.z());
 
-            for (position.setY(0);
-                    position.y() < e.y();
-                    position.incrementY()) {
-                for (position.setX(0);
-                        position.x() < e.x();
-                        position.incrementX()) {
+            for (position.setY(0); position.y() < e.y(); position.incrementY()) {
+                for (position.setX(0); position.x() < e.x(); position.incrementX()) {
 
-                    byte membership =
-                            buffer.get(e.offset(position.x(), position.y()));
+                    byte membership = buffer.get(e.offset(position.x(), position.y()));
 
                     if (!rm.isMemberFlag(membership, flags)) {
                         rmvPoint(position, crnrPoint);
@@ -235,9 +228,7 @@ public class SetUpdatable extends UpdatablePointsContainer {
         Voxels<ByteBuffer> voxelsBinary = maskChannel.voxels().asByte();
 
         Point3i crntExtentPoint = new Point3i();
-        for (crntExtentPoint.setZ(0);
-                crntExtentPoint.z() < e.z();
-                crntExtentPoint.incrementZ()) {
+        for (crntExtentPoint.setZ(0); crntExtentPoint.z() < e.z(); crntExtentPoint.incrementZ()) {
 
             int zGlobal = crnrPoint.z() + crntExtentPoint.z();
 
@@ -278,8 +269,7 @@ public class SetUpdatable extends UpdatablePointsContainer {
                 int xGlobal = crnrPoint.x() + crntExtentPoint.x();
 
                 int globOffset = extent.offset(xGlobal, yGlobal);
-                byte posCheck =
-                        buffer.get(extent.offset(crntExtentPoint.x(), crntExtentPoint.y()));
+                byte posCheck = buffer.get(extent.offset(crntExtentPoint.x(), crntExtentPoint.y()));
                 if (rm.isMemberFlag(posCheck, flags)
                         && bbBinaryImage.get(globOffset) == bvb.getOnByte()) {
 

@@ -37,7 +37,10 @@ public class InterpolatorImageJ implements Interpolator {
 
     @Override
     public VoxelBuffer<ByteBuffer> interpolateByte(
-            VoxelBuffer<ByteBuffer> voxelsSource, VoxelBuffer<ByteBuffer> voxelsDestination, Extent extentSource, Extent extentDestination) {
+            VoxelBuffer<ByteBuffer> voxelsSource,
+            VoxelBuffer<ByteBuffer> voxelsDestination,
+            Extent extentSource,
+            Extent extentDestination) {
 
         ImageProcessor ipSrc = IJWrap.imageProcessorByte(voxelsSource, extentSource);
         ImageProcessor ipOut = ipSrc.resize(extentDestination.x(), extentDestination.y(), true);

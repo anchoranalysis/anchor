@@ -27,19 +27,19 @@
 package org.anchoranalysis.image.points;
 
 import java.util.List;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.extent.BoundingBox;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 
 /**
  * Creates a bounding-box from one or more points
  *
  * @author Owen Feehan
  */
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class BoundingBoxFromPoints {
 
     /**

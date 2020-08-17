@@ -48,7 +48,7 @@ final class FactoryByte implements VoxelsFactoryTypeBound<ByteBuffer> {
     public Voxels<ByteBuffer> createInitialized(Extent extent) {
         return new VoxelsAsByte(PixelsFromByteBufferArr.createInitialized(extent));
     }
-    
+
     @Override
     public Voxels<ByteBuffer> createUninitialized(Extent extent) {
         return new VoxelsAsByte(PixelsFromByteBufferArr.createUninitialized(extent));

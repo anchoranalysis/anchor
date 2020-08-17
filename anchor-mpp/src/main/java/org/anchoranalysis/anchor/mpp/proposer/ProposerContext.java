@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.anchor.mpp.proposer;
 
+import lombok.Value;
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.mark.voxelized.memo.PxlMarkMemoFactory;
@@ -35,7 +36,6 @@ import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.extent.ImageDimensions;
-import lombok.Value;
 
 @Value
 public class ProposerContext {
@@ -71,5 +71,4 @@ public class ProposerContext {
     public VoxelizedMarkMemo create(Mark mark) {
         return PxlMarkMemoFactory.create(mark, nrgStack.getNrgStack(), regionMap);
     }
-
 }

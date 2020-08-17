@@ -26,9 +26,9 @@
 
 package org.anchoranalysis.anchor.mpp.mark.conic;
 
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.anchor.mpp.bean.bound.Bound;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
-import lombok.NoArgsConstructor;
 
 /**
  * A circle

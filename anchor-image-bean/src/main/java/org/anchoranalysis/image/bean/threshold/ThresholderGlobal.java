@@ -54,7 +54,10 @@ public class ThresholderGlobal extends Thresholder {
             Optional<ObjectMask> objectMask)
             throws OperationFailedException {
         return thresholdForHistogram(
-                histogramBuffer(inputBuffer, histogram, objectMask), inputBuffer, bvOut, objectMask);
+                histogramBuffer(inputBuffer, histogram, objectMask),
+                inputBuffer,
+                bvOut,
+                objectMask);
     }
 
     private BinaryVoxels<ByteBuffer> thresholdForHistogram(
@@ -66,11 +69,14 @@ public class ThresholderGlobal extends Thresholder {
 
         int thresholdVal = calculateLevel.calculateLevel(hist);
         assert (thresholdVal >= 0);
-        return VoxelsThresholder.thresholdForLevel(inputBuffer, thresholdVal, bvOut, objectMask, false);
+        return VoxelsThresholder.thresholdForLevel(
+                inputBuffer, thresholdVal, bvOut, objectMask, false);
     }
 
     private Histogram histogramBuffer(
-            VoxelsWrapper inputBuffer, Optional<Histogram> histogram, Optional<ObjectMask> objectMask) {
+            VoxelsWrapper inputBuffer,
+            Optional<Histogram> histogram,
+            Optional<ObjectMask> objectMask) {
         return histogram.orElseGet(() -> HistogramFactory.create(inputBuffer, objectMask));
     }
 }

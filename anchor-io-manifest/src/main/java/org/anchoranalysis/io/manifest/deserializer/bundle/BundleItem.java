@@ -30,7 +30,8 @@ import java.io.Serializable;
 import lombok.AllArgsConstructor;
 import lombok.Value;
 
-@Value @AllArgsConstructor
+@Value
+@AllArgsConstructor
 public class BundleItem<T extends Serializable> implements Serializable {
     /** */
     private static final long serialVersionUID = 2630085442934070697L;

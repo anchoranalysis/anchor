@@ -116,8 +116,7 @@ public class FeatureList<T extends FeatureInput> extends AnchorBean<FeatureList<
      * @throws E if the mapping-function throws this exception
      */
     public <S extends FeatureInput, E extends Exception> FeatureList<S> filterAndMap(
-            Predicate<Feature<T>> predicate,
-            CheckedFunction<Feature<T>, Feature<S>, E> mapFunc)
+            Predicate<Feature<T>> predicate, CheckedFunction<Feature<T>, Feature<S>, E> mapFunc)
             throws E {
         FeatureList<S> out = new FeatureList<>();
         for (Feature<T> feature : list) {

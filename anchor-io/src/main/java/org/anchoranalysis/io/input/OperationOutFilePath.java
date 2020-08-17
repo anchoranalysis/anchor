@@ -34,23 +34,31 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
 import org.anchoranalysis.io.error.AnchorIOException;
 
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class OperationOutFilePath {
-    
-    public static PathSupplier cachedOutPathFor(FilePathGenerator outputPathGenerator, Supplier<Optional<Path>> pathInput, boolean debugMode) {
-        return PathSupplier.cache(
-            () -> outPathFor(outputPathGenerator, pathInput, debugMode)
-        );
+
+    public static PathSupplier cachedOutPathFor(
+            FilePathGenerator outputPathGenerator,
+            Supplier<Optional<Path>> pathInput,
+            boolean debugMode) {
+        return PathSupplier.cache(() -> outPathFor(outputPathGenerator, pathInput, debugMode));
     }
-    
-    public static Path outPathFor(FilePathGenerator outputPathGenerator, Supplier<Optional<Path>> pathInput, boolean debugMode) throws AnchorIOException {
-        return outputPathGenerator.outFilePath(
-                pathInput.get().orElseThrow(OperationOutFilePath::bindingPathMissingException),
-                debugMode)
-        .toAbsolutePath()
-        .normalize();
+
+    public static Path outPathFor(
+            FilePathGenerator outputPathGenerator,
+            Supplier<Optional<Path>> pathInput,
+            boolean debugMode)
+            throws AnchorIOException {
+        return outputPathGenerator
+                .outFilePath(
+                        pathInput
+                                .get()
+                                .orElseThrow(OperationOutFilePath::bindingPathMissingException),
+                        debugMode)
+                .toAbsolutePath()
+                .normalize();
     }
-    
+
     private static AnchorIOException bindingPathMissingException() {
         return new AnchorIOException(
                 "A binding-path must be associated with the input for this operation");

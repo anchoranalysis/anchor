@@ -26,16 +26,16 @@
 
 package org.anchoranalysis.image.io.bean;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.bean.xml.factory.IndirectlyFromListBeanFactory;
 import org.anchoranalysis.bean.xml.factory.ListBeanFactory;
 import org.anchoranalysis.image.bean.arrangeraster.ArrangeRasterCell;
 import org.anchoranalysis.image.io.chnl.map.CreateImgChnlMapFromEntries;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 
 // An externally loadable component of the system
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class RegisterBeanFactoriesIO {
 
     public static void registerBeanFactories() {

@@ -44,13 +44,10 @@ public class VoxelsFactory
     // Singleton
     private static VoxelsFactory instance;
 
-    private static final VoxelsFactoryTypeBound<ByteBuffer> FACTORY_BYTE =
-            new FactoryByte();
-    private static final VoxelsFactoryTypeBound<ShortBuffer> FACTORY_SHORT =
-            new FactoryShort();
+    private static final VoxelsFactoryTypeBound<ByteBuffer> FACTORY_BYTE = new FactoryByte();
+    private static final VoxelsFactoryTypeBound<ShortBuffer> FACTORY_SHORT = new FactoryShort();
     private static final VoxelsFactoryTypeBound<IntBuffer> FACTORY_INT = new FactoryInt();
-    private static final VoxelsFactoryTypeBound<FloatBuffer> FACTORY_FLOAT =
-            new FactoryFloat();
+    private static final VoxelsFactoryTypeBound<FloatBuffer> FACTORY_FLOAT = new FactoryFloat();
 
     private VoxelsFactory() {
         super(FACTORY_BYTE, FACTORY_SHORT, FACTORY_INT, FACTORY_FLOAT);

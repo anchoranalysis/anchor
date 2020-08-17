@@ -29,7 +29,8 @@ package org.anchoranalysis.io.bioformats.copyconvert.tobyte;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
-@AllArgsConstructor @NoArgsConstructor
+@AllArgsConstructor
+@NoArgsConstructor
 class ApplyScaling {
 
     private float convertRatio = 1;

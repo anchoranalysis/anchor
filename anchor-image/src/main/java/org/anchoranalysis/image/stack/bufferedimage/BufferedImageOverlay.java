@@ -31,7 +31,7 @@ import java.awt.image.BufferedImage;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class BufferedImageOverlay {
 
     public static void overlayBufferedImage(

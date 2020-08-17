@@ -38,8 +38,7 @@ public class IndirectlyFromListBeanFactory<T extends AnchorBean<T>, S> extends A
 
     private CheckedFunction<List<T>, S, ? extends Exception> bridge;
 
-    public IndirectlyFromListBeanFactory(
-            CheckedFunction<List<T>, S, ? extends Exception> bridge) {
+    public IndirectlyFromListBeanFactory(CheckedFunction<List<T>, S, ? extends Exception> bridge) {
         this.bridge = bridge;
     }
 

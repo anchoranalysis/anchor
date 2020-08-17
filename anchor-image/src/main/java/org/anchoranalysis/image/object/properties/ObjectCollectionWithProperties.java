@@ -51,7 +51,7 @@ public class ObjectCollectionWithProperties implements Iterable<ObjectWithProper
     public ObjectCollectionWithProperties(ObjectMask object) {
         this(ObjectCollectionFactory.of(object));
     }
-    
+
     public ObjectCollectionWithProperties(Stream<ObjectWithProperties> objects) {
         delegate = objects.collect(Collectors.toList());
     }

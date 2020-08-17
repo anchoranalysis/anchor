@@ -51,7 +51,7 @@ public class VoxelsWrapperList implements Iterable<VoxelsWrapper> {
     }
 
     public List<VoxelBuffer<?>> bufferListForSlice(int sliceNum) {
-        return FunctionalList.mapToList(list, item->item.slice(sliceNum) );
+        return FunctionalList.mapToList(list, item -> item.slice(sliceNum));
     }
 
     public VoxelsWrapper get(int index) {

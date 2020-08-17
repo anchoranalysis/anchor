@@ -37,7 +37,7 @@ import lombok.NoArgsConstructor;
  *
  * @author Owen Feehan
  */
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ProgressReporterNull implements ProgressReporter {
 
     private static ProgressReporterNull instance = null;

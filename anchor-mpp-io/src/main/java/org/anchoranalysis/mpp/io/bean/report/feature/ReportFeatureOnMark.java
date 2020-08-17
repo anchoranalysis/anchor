@@ -81,7 +81,8 @@ public class ReportFeatureOnMark extends ReportFeatureForMPP<FeatureInputMark> {
 
             ImageDimensions dimensions = createImageDim();
 
-            double val = session.calculate(new FeatureInputMark(mark.get(), Optional.of(dimensions)));
+            double val =
+                    session.calculate(new FeatureInputMark(mark.get(), Optional.of(dimensions)));
             return Double.toString(val);
         } catch (FeatureCalculationException | CreateException e) {
             throw new OperationFailedException(e);

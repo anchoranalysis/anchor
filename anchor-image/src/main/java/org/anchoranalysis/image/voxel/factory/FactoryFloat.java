@@ -48,7 +48,7 @@ final class FactoryFloat implements VoxelsFactoryTypeBound<FloatBuffer> {
     public Voxels<FloatBuffer> createInitialized(Extent extent) {
         return new VoxelsAsFloat(PixelsFromFloatBufferArr.createInitialized(extent));
     }
-    
+
     @Override
     public Voxels<FloatBuffer> createUninitialized(Extent extent) {
         return new VoxelsAsFloat(PixelsFromFloatBufferArr.createUninitialized(extent));

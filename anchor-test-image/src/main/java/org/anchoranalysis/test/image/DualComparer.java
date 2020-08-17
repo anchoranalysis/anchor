@@ -50,7 +50,7 @@ public class DualComparer {
 
     private final TestLoaderImageIO loaderImage1;
     private final TestLoaderImageIO loaderImage2;
-    
+
     public DualComparer(TestLoader loader1, TestLoader loader2) {
         super();
         this.loader1 = loader1;
@@ -117,8 +117,7 @@ public class DualComparer {
         ObjectCollection objects2 = loaderImage2.openObjectsFromTestPath(path);
         return objects1.equalsDeep(objects2);
     }
-    
-    
+
     public boolean compareTwoSubdirectories(String path) {
         Path dir1 = loaderImage1.resolveTestPath(path);
         Path dir2 = loaderImage2.resolveTestPath(path);

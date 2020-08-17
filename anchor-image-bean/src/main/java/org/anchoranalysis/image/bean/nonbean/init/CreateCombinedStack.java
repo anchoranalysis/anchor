@@ -26,12 +26,12 @@
 
 package org.anchoranalysis.image.bean.nonbean.init;
 
-import org.anchoranalysis.core.name.provider.NamedProvider;
-import org.anchoranalysis.image.stack.Stack;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.core.name.provider.NamedProvider;
+import org.anchoranalysis.image.stack.Stack;
 
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CreateCombinedStack {
 
     public static NamedProvider<Stack> apply(ImageInitParams so) {

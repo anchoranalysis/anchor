@@ -26,11 +26,11 @@ package org.anchoranalysis.core.memory;
  * #L%
  */
 
-import org.anchoranalysis.core.log.MessageLogger;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.core.log.MessageLogger;
 
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class MemoryUtilities {
 
     public static long calcMemoryUsage() {

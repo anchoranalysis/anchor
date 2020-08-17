@@ -27,12 +27,12 @@
 package org.anchoranalysis.anchor.mpp.feature.bean.cfg;
 
 import java.util.Optional;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 import org.anchoranalysis.feature.input.FeatureInputWithRes;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.extent.ImageResolution;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 
 @AllArgsConstructor
 public class FeatureInputCfg implements FeatureInputWithRes {

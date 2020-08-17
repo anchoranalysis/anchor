@@ -26,12 +26,12 @@
 
 package org.anchoranalysis.image.feature.bean.object.pair;
 
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
-import lombok.NoArgsConstructor;
 
 /**
  * Evaluates the first-object in a pair only

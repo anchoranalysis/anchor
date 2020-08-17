@@ -28,6 +28,7 @@ package org.anchoranalysis.image.extent;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+
 import org.anchoranalysis.image.BoundingBoxFixture;
 import org.junit.Test;
 
@@ -50,15 +51,15 @@ public class BoundingBoxTest {
 
         assertTrue(!obj1.intersection().existsWith(obj2));
     }
-    
+
     @Test
     public void testUnion() {
-        
+
         BoundingBox box1 = BoundingBoxFixture.of(156, 56, 0, 139, 139, 1);
         BoundingBox box2 = BoundingBoxFixture.of(94, 94, 0, 117, 117, 1);
-        
+
         BoundingBox boxUnion = box1.union().with(box2);
-        
+
         assertEquals(94, boxUnion.cornerMin().x());
         assertEquals(56, boxUnion.cornerMin().y());
         assertEquals(201, boxUnion.extent().x());

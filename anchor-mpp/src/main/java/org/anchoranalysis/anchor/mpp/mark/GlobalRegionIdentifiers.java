@@ -29,7 +29,7 @@ package org.anchoranalysis.anchor.mpp.mark;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class GlobalRegionIdentifiers {
 
     public static final int SUBMARK_INSIDE = 0;

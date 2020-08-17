@@ -114,9 +114,9 @@ public class ColorList implements ColorIndex, Iterable<RGBColor> {
     }
 
     public void add(Color color) {
-        add( new RGBColor(color) );
+        add(new RGBColor(color));
     }
-    
+
     public void add(RGBColor color) {
         list.add(color);
     }

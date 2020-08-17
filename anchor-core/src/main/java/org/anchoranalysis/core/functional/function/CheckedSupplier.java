@@ -45,7 +45,7 @@ public interface CheckedSupplier<T, E extends Exception> {
      * @throws E an exception that may be thrown
      */
     T get() throws E;
-    
+
     /** An interface to a similar supplier that uses a progress-reporter */
     default CheckedProgressingSupplier<T, E> progressing() {
         return progressReporter -> get();

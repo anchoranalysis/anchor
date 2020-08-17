@@ -28,13 +28,13 @@ package org.anchoranalysis.image.stack.bufferedimage;
 
 import java.awt.image.BufferedImage;
 import java.nio.ByteBuffer;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.Voxels;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class BufferedImageFactory {
 
     public static BufferedImage createGrayscale(Voxels<ByteBuffer> voxels) throws CreateException {
@@ -46,10 +46,7 @@ public class BufferedImageFactory {
     }
 
     public static BufferedImage createRGB(
-            Voxels<ByteBuffer> red,
-            Voxels<ByteBuffer> green,
-            Voxels<ByteBuffer> blue,
-            Extent e)
+            Voxels<ByteBuffer> red, Voxels<ByteBuffer> green, Voxels<ByteBuffer> blue, Extent e)
             throws CreateException {
         checkExtentZ(e);
 
@@ -79,7 +76,8 @@ public class BufferedImageFactory {
     private static BufferedImage createBufferedImageFromGrayscaleBuffer(
             ByteBuffer bbGray, Extent extent) {
 
-        BufferedImage image = new BufferedImage(extent.x(), extent.y(), BufferedImage.TYPE_BYTE_GRAY);
+        BufferedImage image =
+                new BufferedImage(extent.x(), extent.y(), BufferedImage.TYPE_BYTE_GRAY);
 
         byte[] arr = bbGray.array();
         image.getWritableTile(0, 0).setDataElements(0, 0, extent.x(), extent.y(), arr);

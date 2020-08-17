@@ -27,10 +27,10 @@
 package org.anchoranalysis.feature.session.calculator;
 
 import java.util.function.Consumer;
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInput;
-import lombok.AllArgsConstructor;
 
 /**
  * Likes a SequentialSession but automatically changes parameters before calculation
@@ -44,7 +44,7 @@ public class FeatureCalculatorSingleChangeInput<T extends FeatureInput>
 
     /** Delegate which is called after an input is changed */
     private FeatureCalculatorSingle<T> calculator;
-    
+
     /** A function that is applied to change the input before being passed to {@code calculator} */
     private Consumer<T> funcToApplyChange;
 

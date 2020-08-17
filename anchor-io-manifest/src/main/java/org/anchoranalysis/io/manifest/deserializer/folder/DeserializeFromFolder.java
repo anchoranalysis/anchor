@@ -26,12 +26,12 @@
 
 package org.anchoranalysis.io.manifest.deserializer.folder;
 
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.index.GetterFromIndex;
 import org.anchoranalysis.core.index.container.BoundedIndexContainer;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
 import org.anchoranalysis.io.manifest.folder.SequencedFolder;
 import org.anchoranalysis.io.manifest.sequencetype.SequenceType;
-import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public abstract class DeserializeFromFolder<T> implements HistoryCreator<T> {

@@ -31,7 +31,7 @@ import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.voxel.Voxels;
 
 class BinaryVoxelsInt extends BinaryVoxels<IntBuffer> {
-    
+
     public BinaryVoxelsInt(Voxels<IntBuffer> voxels, BinaryValues bv) {
         super(voxels, bv);
     }
@@ -39,8 +39,7 @@ class BinaryVoxelsInt extends BinaryVoxels<IntBuffer> {
     @Override
     public boolean isOn(int x, int y, int z) {
         int offset = voxels().extent().offset(x, y);
-        return voxels().sliceBuffer(z).get(offset)
-                != binaryValues().getOffInt();
+        return voxels().sliceBuffer(z).get(offset) != binaryValues().getOffInt();
     }
 
     @Override
@@ -66,8 +65,8 @@ class BinaryVoxelsInt extends BinaryVoxels<IntBuffer> {
     }
 
     @Override
-    protected BinaryVoxels<IntBuffer> binaryVoxelsFor(Voxels<IntBuffer> slice,
-            BinaryValues binaryValues) {
+    protected BinaryVoxels<IntBuffer> binaryVoxelsFor(
+            Voxels<IntBuffer> slice, BinaryValues binaryValues) {
         return new BinaryVoxelsInt(slice, binaryValues);
     }
 }

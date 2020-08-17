@@ -29,7 +29,9 @@ import lombok.NoArgsConstructor;
  * THE SOFTWARE.
  * #L%
  */
-@Data @NoArgsConstructor @AllArgsConstructor
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class IDGetterMod<T> implements IDGetter<T> {
 
     private IDGetter<T> idGetter;

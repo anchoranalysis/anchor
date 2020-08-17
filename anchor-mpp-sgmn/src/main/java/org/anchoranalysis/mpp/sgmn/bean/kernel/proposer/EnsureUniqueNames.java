@@ -29,11 +29,11 @@ package org.anchoranalysis.mpp.sgmn.bean.kernel.proposer;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.anchoranalysis.mpp.sgmn.kernel.proposer.WeightedKernel;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.mpp.sgmn.kernel.proposer.WeightedKernel;
 
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 class EnsureUniqueNames {
 
     public static <T> void apply(List<WeightedKernel<T>> lstKernelFactories) {

@@ -33,7 +33,8 @@ import org.anchoranalysis.core.axis.AxisType;
 import org.anchoranalysis.core.axis.AxisTypeConverter;
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
 
-@Data @Accessors(fluent=true)
+@Data
+@Accessors(fluent = true)
 public abstract class Tuple3f implements Serializable {
 
     /** */

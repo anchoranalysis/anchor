@@ -32,7 +32,9 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@AllArgsConstructor @NoArgsConstructor @EqualsAndHashCode
+@AllArgsConstructor
+@NoArgsConstructor
+@EqualsAndHashCode
 public final class Point2i implements Serializable {
 
     /** */
@@ -44,11 +46,11 @@ public final class Point2i implements Serializable {
     public int x() {
         return x;
     }
-    
+
     public int y() {
         return y;
     }
-    
+
     public void incrementX() {
         this.x++;
     }

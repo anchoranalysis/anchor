@@ -52,7 +52,7 @@ public class NamedStacksUniformSize {
             }
         }
 
-        delegate.add(name, ()->stack);
+        delegate.add(name, () -> stack);
     }
 
     public NamedStacksSet withoutUniformSizeConstraint() {

@@ -32,7 +32,7 @@ import java.nio.file.Path;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class WriterUtilities {
 
     public static void createNecessaryDirectories(Path annotationPath) throws IOException {

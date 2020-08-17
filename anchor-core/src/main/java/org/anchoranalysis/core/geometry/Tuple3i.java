@@ -83,11 +83,11 @@ public abstract class Tuple3i implements ReadableTuple3i {
     public final void scaleX(double factor) {
         this.x = (int) (factor * this.x);
     }
-    
+
     public final void scaleY(double factor) {
         this.y = (int) (factor * this.y);
     }
-    
+
     public final void scaleXY(double factor) {
         scaleX(factor);
         scaleY(factor);
@@ -100,8 +100,7 @@ public abstract class Tuple3i implements ReadableTuple3i {
      * @return a new point containing the minimum of the x, y, z components
      */
     public Point3i min(ReadableTuple3i point) {
-        return new Point3i(
-                Math.min(x, point.x()), Math.min(y, point.y()), Math.min(z, point.z()));
+        return new Point3i(Math.min(x, point.x()), Math.min(y, point.y()), Math.min(z, point.z()));
     }
 
     /**
@@ -111,8 +110,7 @@ public abstract class Tuple3i implements ReadableTuple3i {
      * @return a new point containing the minimum of the x, y, z components
      */
     public Point3i max(ReadableTuple3i point) {
-        return new Point3i(
-                Math.max(x, point.x()), Math.max(y, point.y()), Math.max(z, point.z()));
+        return new Point3i(Math.max(x, point.x()), Math.max(y, point.y()), Math.max(z, point.z()));
     }
 
     /**

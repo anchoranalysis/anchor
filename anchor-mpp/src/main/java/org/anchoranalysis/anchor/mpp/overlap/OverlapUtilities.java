@@ -53,8 +53,7 @@ public class OverlapUtilities {
         // between the two bounding box
         byte flag = RegionMembershipUtilities.flagForRegion(regionID);
         return new CountIntersectingVoxelsRegionMembership(flag)
-                .countIntersectingVoxels(
-                        pmm1.voxelized().voxels(), pmm2.voxelized().voxels());
+                .countIntersectingVoxels(pmm1.voxelized().voxels(), pmm2.voxelized().voxels());
     }
 
     /**

@@ -38,7 +38,7 @@ import java.util.List;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 class WalkSingleDir {
 
     public static void apply(Path dir, PathMatchConstraints constraints, List<File> listOut)

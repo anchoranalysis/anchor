@@ -79,8 +79,7 @@ public class DetermineWhetherIntersectingVoxelsBinary {
             BoundingBox boxIntersect) {
 
         IntersectionBBox box =
-                IntersectionBBox.create(
-                        src.boundingBox(), other.boundingBox(), boxIntersect);
+                IntersectionBBox.create(src.boundingBox(), other.boundingBox(), boxIntersect);
 
         // Otherwise we count the number of pixels that are not empty
         //  in both bounded-voxels in the intersecting region

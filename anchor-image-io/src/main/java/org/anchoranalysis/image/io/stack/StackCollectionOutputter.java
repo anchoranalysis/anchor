@@ -50,7 +50,8 @@ public class StackCollectionOutputter {
     private static final String PREFIX = "";
 
     /**
-     * Only outputs stacks whose names are allowed by the output-manager - and logs if anything goes wrong
+     * Only outputs stacks whose names are allowed by the output-manager - and logs if anything goes
+     * wrong
      */
     public static void outputSubset(
             NamedProvider<Stack> stacks,
@@ -70,7 +71,8 @@ public class StackCollectionOutputter {
     }
 
     /**
-     * Only outputs stacks whose names are allowed by the output-manager - and throws an exception if anything goes wrong
+     * Only outputs stacks whose names are allowed by the output-manager - and throws an exception
+     * if anything goes wrong
      *
      * @throws OutputWriteFailedException if anything goes wrong
      */
@@ -143,7 +145,8 @@ public class StackCollectionOutputter {
         return out;
     }
 
-    private static StoreSupplier<Stack> extractStackCached(NamedProvider<Stack> stackCollection, String name) {
+    private static StoreSupplier<Stack> extractStackCached(
+            NamedProvider<Stack> stackCollection, String name) {
         return StoreSupplier.cache(
                 () -> {
                     try {

@@ -28,6 +28,8 @@ package org.anchoranalysis.io.generator;
 
 import java.util.Optional;
 import java.util.stream.Stream;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.functional.CheckedStream;
 import org.anchoranalysis.core.functional.function.CheckedFunction;
 import org.anchoranalysis.core.index.SetOperationFailedException;
@@ -37,8 +39,6 @@ import org.anchoranalysis.io.namestyle.OutputNameStyle;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
 
 /**
  * Allows us to call an IterableGenerator<S> as if it was an IterableGenerator<T>
@@ -47,43 +47,49 @@ import lombok.RequiredArgsConstructor;
  * @param <S> source-type
  * @param <T> destination-type
  */
-@RequiredArgsConstructor(access=AccessLevel.PRIVATE)
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class IterableGeneratorBridge<S, T> implements Generator, IterableGenerator<S> {
 
     // START REQUIRED ARGUMENTS
     /** The generator that accepts the destination type */
     private final IterableGenerator<T> generator;
-    
+
     /** Maps the source-type to one or more instances of the destination type */
     private final CheckedFunction<S, Stream<T>, ?> bridge;
     // END REQUIRED ARGUMENTS
-    
+
     /**
-     * Creates a bridge that maps ONE-TO-ONE from source to destination (i.e. one call to the generator for each source item)
-     * 
+     * Creates a bridge that maps ONE-TO-ONE from source to destination (i.e. one call to the
+     * generator for each source item)
+     *
      * @param <S> source-type
      * @param <T> destination-type
      * @param generator the generator that accepts the destination type
      * @param bridge maps a source-item to one destination-item
-     * @return a generator that accepts source-types as iterators, but actually calls a generator that uses destination types 
+     * @return a generator that accepts source-types as iterators, but actually calls a generator
+     *     that uses destination types
      */
-    public static <S,T> IterableGeneratorBridge<S, T> createOneToOne(IterableGenerator<T> generator, CheckedFunction<S, T, ?> bridge) {
-        return new IterableGeneratorBridge<>(generator, item -> Stream.of( bridge.apply(item)) );
+    public static <S, T> IterableGeneratorBridge<S, T> createOneToOne(
+            IterableGenerator<T> generator, CheckedFunction<S, T, ?> bridge) {
+        return new IterableGeneratorBridge<>(generator, item -> Stream.of(bridge.apply(item)));
     }
 
     /**
-     * Creates a bridge that maps ONE-TO-MANY from source to destination (i.e. one or more calls to the generator for each source item)
-     * 
+     * Creates a bridge that maps ONE-TO-MANY from source to destination (i.e. one or more calls to
+     * the generator for each source item)
+     *
      * @param <S> source-type
      * @param <T> destination-type
      * @param generator the generator that accepts the destination type
      * @param bridge maps a source-item to one or more destination-items
-     * @return a generator that accepts source-types as iterators, but actually calls a generator that uses destination types
+     * @return a generator that accepts source-types as iterators, but actually calls a generator
+     *     that uses destination types
      */
-    public static <S,T> IterableGeneratorBridge<S, T> createOneToMany(IterableGenerator<T> generator, CheckedFunction<S, Stream<T>, ?> bridge) {
+    public static <S, T> IterableGeneratorBridge<S, T> createOneToMany(
+            IterableGenerator<T> generator, CheckedFunction<S, Stream<T>, ?> bridge) {
         return new IterableGeneratorBridge<>(generator, bridge);
     }
-    
+
     private S element;
 
     @Override
@@ -95,7 +101,10 @@ public class IterableGeneratorBridge<S, T> implements Generator, IterableGenerat
     public void setIterableElement(S element) throws SetOperationFailedException {
         this.element = element;
         try {
-            CheckedStream.forEach( bridge.apply(element), SetOperationFailedException.class, generator::setIterableElement);
+            CheckedStream.forEach(
+                    bridge.apply(element),
+                    SetOperationFailedException.class,
+                    generator::setIterableElement);
         } catch (Exception e) {
             throw new SetOperationFailedException(e);
         }

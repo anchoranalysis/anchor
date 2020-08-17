@@ -58,16 +58,14 @@ public class ObjectAsMaskGenerator extends RasterGenerator
     // START REQUIRED ARGUMENTS
     private final ImageResolution resolution;
     // END REQUIRED ARGUMENTS
-    
+
     private ObjectMask element;
 
-    /**
-     * Constructor - creates using a default image-resolution
-     */
+    /** Constructor - creates using a default image-resolution */
     public ObjectAsMaskGenerator() {
-        this( new ImageResolution() );
+        this(new ImageResolution());
     }
-    
+
     @Override
     public Stack generate() throws OutputWriteFailedException {
 
@@ -75,7 +73,7 @@ public class ObjectAsMaskGenerator extends RasterGenerator
             throw new OutputWriteFailedException("no mutable element set");
         }
 
-        return new Stack( createChannelFromMask(getIterableElement(), resolution) );
+        return new Stack(createChannelFromMask(getIterableElement(), resolution));
     }
 
     @Override
@@ -104,10 +102,11 @@ public class ObjectAsMaskGenerator extends RasterGenerator
     }
 
     /**
-     * Creates a channel for an object-mask 
-     * <p>
-     * An unsigned 8-bit buffer is created where values inside the mask are 255 are values outside are 0
-     * 
+     * Creates a channel for an object-mask
+     *
+     * <p>An unsigned 8-bit buffer is created where values inside the mask are 255 are values
+     * outside are 0
+     *
      * @param objectMask the object-mask
      * @param resolution resolution to use for the channel
      * @return the newly created channel
@@ -116,14 +115,13 @@ public class ObjectAsMaskGenerator extends RasterGenerator
             ObjectMask objectMask, ImageResolution resolution) {
 
         int outOnValue = BinaryValuesByte.getDefault().getOnByte();
-        
+
         BoundingBox box = objectMask.boundingBox();
 
         ImageDimensions dimensions = new ImageDimensions(box.extent(), resolution);
 
         Channel channelNew =
-                ChannelFactory.instance()
-                        .create(dimensions, VoxelDataTypeUnsignedByte.INSTANCE);
+                ChannelFactory.instance().create(dimensions, VoxelDataTypeUnsignedByte.INSTANCE);
 
         Voxels<ByteBuffer> voxelsNew = channelNew.voxels().asByte();
 
@@ -135,8 +133,7 @@ public class ObjectAsMaskGenerator extends RasterGenerator
         for (pointLocal.setZ(0); pointLocal.z() < dimensions.z(); pointLocal.incrementZ()) {
 
             ByteBuffer pixelsIn = objectMask.sliceBufferLocal(pointLocal.z());
-            ByteBuffer pixelsOut =
-                    voxelsNew.sliceBuffer(pointLocal.z());
+            ByteBuffer pixelsOut = voxelsNew.sliceBuffer(pointLocal.z());
 
             while (pixelsIn.hasRemaining()) {
 

@@ -42,7 +42,7 @@ import org.junit.Test;
 public class ChnlIPTest {
 
     double delta = 1e-3;
-    
+
     @Test
     public void testSetPixelsForPlane() {
 
@@ -61,8 +61,9 @@ public class ChnlIPTest {
         assertVoxelEquals(3.0f, 0, 1, extracter);
         assertVoxelEquals(4.0f, 1, 1, extracter);
     }
-    
-    private void assertVoxelEquals(double value, int x, int y, VoxelsExtracter<FloatBuffer> extracter) {
-        assertEquals(value, extracter.voxel( new Point3i(x, y, 0)), delta);
+
+    private void assertVoxelEquals(
+            double value, int x, int y, VoxelsExtracter<FloatBuffer> extracter) {
+        assertEquals(value, extracter.voxel(new Point3i(x, y, 0)), delta);
     }
 }

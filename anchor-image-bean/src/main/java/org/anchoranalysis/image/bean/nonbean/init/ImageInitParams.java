@@ -75,8 +75,7 @@ public class ImageInitParams implements BeanInitParams {
     private final NamedProviderStore<BinarySegmentation> storeBinarySgmn;
     // END: Stores
 
-    private CheckedFunction<StackProvider, Stack, OperationFailedException>
-            stackProviderBridge;
+    private CheckedFunction<StackProvider, Stack, OperationFailedException> stackProviderBridge;
 
     public ImageInitParams(SharedObjects sharedObjects) {
         super();
@@ -143,7 +142,7 @@ public class ImageInitParams implements BeanInitParams {
 
     public void addToStackCollection(String identifier, Stack inputImage)
             throws OperationFailedException {
-        getStackCollection().add(identifier, ()->inputImage);
+        getStackCollection().add(identifier, () -> inputImage);
     }
 
     public void addToStackCollection(String identifier, StackProvider stackProvider)
@@ -168,28 +167,26 @@ public class ImageInitParams implements BeanInitParams {
             throws OperationFailedException {
 
         for (String id : collectionSource.keys()) {
-            addToObjects(id, () -> {
-                try {
-                    return collectionSource.getException(id);
-                } catch (NamedProviderGetException e) {
-                    throw new OperationFailedException(e.summarize());            
-                }
-            });
+            addToObjects(
+                    id,
+                    () -> {
+                        try {
+                            return collectionSource.getException(id);
+                        } catch (NamedProviderGetException e) {
+                            throw new OperationFailedException(e.summarize());
+                        }
+                    });
         }
     }
 
-    public void addToObjects(
-            String identifier,
-            StoreSupplier<ObjectCollection> objects)
+    public void addToObjects(String identifier, StoreSupplier<ObjectCollection> objects)
             throws OperationFailedException {
         getObjectCollection().add(identifier, objects);
     }
 
     public void addToKeyValueParamsCollection(String identifier, KeyValueParams params)
             throws OperationFailedException {
-        getParams()
-                .getNamedKeyValueParamsCollection()
-                .add(identifier, ()->params);
+        getParams().getNamedKeyValueParamsCollection().add(identifier, () -> params);
     }
 
     public Path getModelDirectory() {

@@ -36,9 +36,13 @@ public class InterpolatorNone implements Interpolator {
 
     @Override
     public VoxelBuffer<ByteBuffer> interpolateByte(
-            VoxelBuffer<ByteBuffer> voxelsSource, VoxelBuffer<ByteBuffer> voxelsDestination, Extent extentSource, Extent extentDestination) {
+            VoxelBuffer<ByteBuffer> voxelsSource,
+            VoxelBuffer<ByteBuffer> voxelsDestination,
+            Extent extentSource,
+            Extent extentDestination) {
 
-        copyByte(voxelsSource.buffer(), voxelsDestination.buffer(), extentSource, extentDestination);
+        copyByte(
+                voxelsSource.buffer(), voxelsDestination.buffer(), extentSource, extentDestination);
         return voxelsDestination;
     }
 
@@ -48,7 +52,8 @@ public class InterpolatorNone implements Interpolator {
             VoxelBuffer<ShortBuffer> voxelsDestination,
             Extent extentSource,
             Extent extentDestination) {
-        copyShort(voxelsSource.buffer(), voxelsDestination.buffer(), extentSource, extentDestination);
+        copyShort(
+                voxelsSource.buffer(), voxelsDestination.buffer(), extentSource, extentDestination);
         return voxelsDestination;
     }
 

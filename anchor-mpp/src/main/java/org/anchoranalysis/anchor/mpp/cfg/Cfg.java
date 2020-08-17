@@ -169,12 +169,11 @@ public final class Cfg implements Iterable<Mark>, Serializable {
             ImageDimensions dimensions,
             RegionMembershipWithFlags regionMembership,
             BinaryValuesByte bvOut) {
-        
+
         return ObjectCollectionWithPropertiesFactory.filterAndMapFrom(
                 marks,
                 mark -> mark.numRegions() > regionMembership.getRegionID(),
-                mark -> mark.deriveObject(dimensions, regionMembership, bvOut)    
-        );
+                mark -> mark.deriveObject(dimensions, regionMembership, bvOut));
     }
 
     public void scaleXY(double scaleFactor) throws OptionalOperationUnsupportedException {

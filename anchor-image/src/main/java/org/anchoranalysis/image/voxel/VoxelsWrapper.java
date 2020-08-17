@@ -48,9 +48,8 @@ import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 
 /**
  * Wraps a voxels associated with a channel so it can be easily casted to an appropriate data type
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class VoxelsWrapper {
 
@@ -72,13 +71,12 @@ public class VoxelsWrapper {
         return voxels;
     }
 
-    public Voxels<? extends Buffer> match(VoxelDataType match) {       // NOSONAR
+    public Voxels<? extends Buffer> match(VoxelDataType match) { // NOSONAR
         if (match.equals(dataType)) {
             return voxels;
         } else {
             throw new IncorrectVoxelDataTypeException(
-                    String.format(
-                            "User has requested %s from %s voxels", match, dataType));
+                    String.format("User has requested %s from %s voxels", match, dataType));
         }
     }
 
@@ -156,23 +154,19 @@ public class VoxelsWrapper {
 
         // If the wrapper has the same type, we allow the operation
         if (voxelsDestination.getVoxelDataType().equals(getVoxelDataType())) {
-            voxels.extracter().boxCopyTo(from, (Voxels) voxelsDestination.match(dataType), destinationBox);
+            voxels.extracter()
+                    .boxCopyTo(from, (Voxels) voxelsDestination.match(dataType), destinationBox);
         }
     }
 
     @SuppressWarnings({"rawtypes", "unchecked"})
     public void copyVoxelsTo(
-            ObjectMask from,
-            VoxelsWrapper voxelsDestination,
-            BoundingBox destinationBox
-    ) {
+            ObjectMask from, VoxelsWrapper voxelsDestination, BoundingBox destinationBox) {
 
         // If the wrapper has the same type, we allow the operation
         if (voxelsDestination.getVoxelDataType().equals(getVoxelDataType())) {
-            voxels.extracter().objectCopyTo(
-                    from,
-                    (Voxels) voxelsDestination.match(dataType),
-                    destinationBox);
+            voxels.extracter()
+                    .objectCopyTo(from, (Voxels) voxelsDestination.match(dataType), destinationBox);
         }
     }
 
@@ -181,15 +175,22 @@ public class VoxelsWrapper {
     }
 
     @SuppressWarnings({"rawtypes", "unchecked"})
-    public void transferSlice(int sliceIndexToUpdate, VoxelsWrapper sourceVoxels, int sliceIndexSource, boolean duplicate) {
+    public void transferSlice(
+            int sliceIndexToUpdate,
+            VoxelsWrapper sourceVoxels,
+            int sliceIndexSource,
+            boolean duplicate) {
         if (getVoxelDataType().equals(sourceVoxels.getVoxelDataType())) {
-            voxels.replaceSlice(sliceIndexToUpdate, sourceSlice((Voxels) sourceVoxels.any(), sliceIndexSource, duplicate) );
+            voxels.replaceSlice(
+                    sliceIndexToUpdate,
+                    sourceSlice((Voxels) sourceVoxels.any(), sliceIndexSource, duplicate));
         } else {
             throw new IncorrectVoxelDataTypeException("Voxel types are different");
         }
     }
-        
-    private static <T extends Buffer> VoxelBuffer<T> sourceSlice(Voxels<T> sourceVoxels, int sliceIndexSource, boolean duplicate) {
+
+    private static <T extends Buffer> VoxelBuffer<T> sourceSlice(
+            Voxels<T> sourceVoxels, int sliceIndexSource, boolean duplicate) {
         if (duplicate) {
             return sourceVoxels.slice(sliceIndexSource);
         } else {
@@ -213,7 +214,7 @@ public class VoxelsWrapper {
         return voxels.assignValue(valueToAssign);
     }
 
-    public VoxelsExtracter<? extends Buffer> extracter() {  // NOSONAR
+    public VoxelsExtracter<? extends Buffer> extracter() { // NOSONAR
         return voxels.extracter();
     }
 }

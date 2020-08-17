@@ -32,17 +32,17 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.configuration.ConfigurationRuntimeException;
 import org.apache.commons.configuration.beanutils.BeanDeclaration;
 import org.apache.commons.configuration.beanutils.BeanHelper;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 
 // We change the behaviour of BeanHelper so that it will keep passing the current 'param' onto new
 // beans which are created
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 class DefaultBeanFactoryHelperInit {
 
     /// Initializing a collection

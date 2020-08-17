@@ -7,20 +7,21 @@ import lombok.AllArgsConstructor;
 import lombok.experimental.Accessors;
 
 /**
- * As a stream can only be used once, this data-structure allows for repeatedly getting streams from a collection
- * 
- * @author Owen Feehan
+ * As a stream can only be used once, this data-structure allows for repeatedly getting streams from
+ * a collection
  *
+ * @author Owen Feehan
  * @param<T> stream-type
  */
-@AllArgsConstructor @Accessors(fluent=true)
+@AllArgsConstructor
+@Accessors(fluent = true)
 public class StreamableCollection<T> {
 
     private final Supplier<Stream<T>> supplier;
-    
+
     /**
      * Constructor - create for a particular collection
-     * 
+     *
      * @param collection the collection
      */
     public StreamableCollection(Collection<T> collection) {

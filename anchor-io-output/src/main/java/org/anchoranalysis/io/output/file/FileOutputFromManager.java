@@ -28,12 +28,12 @@ package org.anchoranalysis.io.output.file;
 
 import java.nio.file.Path;
 import java.util.Optional;
-import org.anchoranalysis.io.manifest.ManifestDescription;
-import org.anchoranalysis.io.output.bound.BoundOutputManager;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.io.manifest.ManifestDescription;
+import org.anchoranalysis.io.output.bound.BoundOutputManager;
 
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class FileOutputFromManager {
 
     /**

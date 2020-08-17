@@ -63,7 +63,8 @@ public abstract class SegmentChannelIntoObjects
     protected static void checkUnsupportedObjectMask(Optional<ObjectMask> objectMask)
             throws SegmentationFailedException {
         if (objectMask.isPresent()) {
-            throw new SegmentationFailedException("An object-mask is not supported for this operation");
+            throw new SegmentationFailedException(
+                    "An object-mask is not supported for this operation");
         }
     }
 

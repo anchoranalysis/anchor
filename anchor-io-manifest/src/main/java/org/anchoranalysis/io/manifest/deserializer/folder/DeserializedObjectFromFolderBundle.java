@@ -28,6 +28,7 @@ package org.anchoranalysis.io.manifest.deserializer.folder;
 
 import java.io.Serializable;
 import java.util.Map;
+import lombok.Getter;
 import org.anchoranalysis.core.cache.LRUCache;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.index.GetOperationFailedException;
@@ -37,7 +38,6 @@ import org.anchoranalysis.io.deserializer.DeserializationFailedException;
 import org.anchoranalysis.io.manifest.deserializer.bundle.BundleParameters;
 import org.anchoranalysis.io.manifest.deserializer.bundle.BundleUtilities;
 import org.anchoranalysis.io.manifest.folder.FolderWrite;
-import lombok.Getter;
 
 public class DeserializedObjectFromFolderBundle<T extends Serializable>
         implements GetterFromIndex<T> {
@@ -53,8 +53,7 @@ public class DeserializedObjectFromFolderBundle<T extends Serializable>
         // We create our cache
         this.cache =
                 new LRUCache<>(
-                        cacheSize,
-                        index -> bundleForIndex(index, deserializers, folderWrite) );
+                        cacheSize, index -> bundleForIndex(index, deserializers, folderWrite));
 
         bundleParameters =
                 BundleUtilities.generateBundleParameters(
@@ -84,15 +83,16 @@ public class DeserializedObjectFromFolderBundle<T extends Serializable>
 
         return map.get(index);
     }
-    
-    private Map<Integer,T> bundleForIndex(Integer index, BundleDeserializers<T> deserializers, FolderWrite bundleFolder) throws OperationFailedException {
+
+    private Map<Integer, T> bundleForIndex(
+            Integer index, BundleDeserializers<T> deserializers, FolderWrite bundleFolder)
+            throws OperationFailedException {
         try {
             return BundleUtilities.generateBundle(
-                deserializers.getDeserializerBundle(),
-                bundleFolder,
-                index).createHashMap();
+                            deserializers.getDeserializerBundle(), bundleFolder, index)
+                    .createHashMap();
         } catch (IllegalArgumentException | DeserializationFailedException e) {
             throw new OperationFailedException(e);
-        }  
+        }
     }
 }

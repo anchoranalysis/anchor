@@ -4,15 +4,14 @@ import java.nio.FloatBuffer;
 import org.anchoranalysis.image.voxel.Voxels;
 
 class FloatImplementation extends Base<FloatBuffer> {
-    
+
     private final float valueCast;
-    
-    public FloatImplementation(Voxels<FloatBuffer> voxels,
-            int valueToAssign) {
+
+    public FloatImplementation(Voxels<FloatBuffer> voxels, int valueToAssign) {
         super(voxels, valueToAssign);
         valueCast = (float) valueToAssign;
     }
-    
+
     @Override
     protected void assignToEntireBuffer(FloatBuffer buffer) {
         while (buffer.hasRemaining()) {

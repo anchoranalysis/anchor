@@ -36,28 +36,28 @@ import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
  * @param <T> buffer-type
  */
 public interface PixelsForSlice<T extends Buffer> {
-    
+
     VoxelBuffer<T> slice(int z);
 
     void replaceSlice(int z, VoxelBuffer<T> pixels);
 
     Extent extent();
-    
+
     default T sliceBuffer(int z) {
         return slice(z).buffer();
     }
-    
+
     /**
      * Calls processor once for a buffer for each slice
-     * 
+     *
      * <p>This occurs sequentially from 0 (inclusive) to {@code z()} (exclusive)
-     *  
+     *
      * @param sliceConsumer called for each index (z-value)
      */
-    default void iterateOverSlices( Consumer<VoxelBuffer<T>> sliceConsumer ) {
+    default void iterateOverSlices(Consumer<VoxelBuffer<T>> sliceConsumer) {
         int zMax = extent().z();
         for (int z = 0; z < zMax; z++) {
-            sliceConsumer.accept( slice(z) );
+            sliceConsumer.accept(slice(z));
         }
     }
 }

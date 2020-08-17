@@ -26,12 +26,13 @@
 
 package org.anchoranalysis.image.orientation;
 
-import org.anchoranalysis.math.rotation.RotationMatrix;
-import org.apache.commons.lang.builder.HashCodeBuilder;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.math.rotation.RotationMatrix;
+import org.apache.commons.lang.builder.HashCodeBuilder;
 
-@NoArgsConstructor @AllArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 public class OrientationRotationMatrix extends Orientation {
 
     /** */

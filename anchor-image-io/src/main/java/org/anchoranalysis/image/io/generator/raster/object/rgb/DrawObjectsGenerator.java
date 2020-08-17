@@ -45,8 +45,8 @@ import org.anchoranalysis.io.bean.color.generator.HSBColorSetGenerator;
  */
 public class DrawObjectsGenerator extends ObjectsOnRGBGenerator {
 
-    //HSBColorSetGenerator
-    
+    // HSBColorSetGenerator
+
     public DrawObjectsGenerator(DrawObject drawObject, ColorIndex colorIndex) {
         this(
                 drawObject,
@@ -54,12 +54,11 @@ public class DrawObjectsGenerator extends ObjectsOnRGBGenerator {
                 null, // No background set yet
                 new ObjectDrawAttributes(colorIndex));
     }
-    
+
     public DrawObjectsGenerator(
             DrawObject drawObject,
             ObjectCollectionWithProperties objects,
-            Either<ImageDimensions, DisplayStack> background
-    ) {
+            Either<ImageDimensions, DisplayStack> background) {
         this(drawObject, objects, background, defaultColorsFor(objects));
     }
 
@@ -90,7 +89,7 @@ public class DrawObjectsGenerator extends ObjectsOnRGBGenerator {
     protected ObjectCollectionWithProperties generateMasks() {
         return getIterableElement();
     }
-        
+
     private static ColorIndex defaultColorsFor(ObjectCollectionWithProperties objects) {
         return new HSBColorSetGenerator().generateColors(objects.size());
     }

@@ -33,10 +33,9 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.functional.FunctionalList;
 
 /**
- * Conversion utilities between different types and dimensionalities of points 
- * 
- * @author Owen Feehan
+ * Conversion utilities between different types and dimensionalities of points
  *
+ * @author Owen Feehan
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class PointConverter {
@@ -53,19 +52,17 @@ public class PointConverter {
 
     public static Point3i intFromDoubleCeil(Point3d point) {
         return new Point3i(
-                (int) Math.ceil(point.x()),
-                (int) Math.ceil(point.y()),
-                (int) Math.ceil(point.z()));
+                (int) Math.ceil(point.x()), (int) Math.ceil(point.y()), (int) Math.ceil(point.z()));
     }
 
     public static Point3i convertTo3i(Point2i point) {
         return new Point3i(point.x(), point.y(), 0);
     }
-    
+
     public static Point3i convertTo3i(Point2i point, int slice) {
         return new Point3i(point.x(), point.y(), slice);
     }
-    
+
     public static Point3d convertTo3d(Point2d point) {
         return new Point3d(point.x(), point.y(), 0);
     }
@@ -107,8 +104,7 @@ public class PointConverter {
 
     public static Point3i intFromFloat(Point3f point, boolean round) {
         if (round) {
-            return new Point3i(
-                    roundInt(point.x()), roundInt(point.y()), roundInt(point.z()));
+            return new Point3i(roundInt(point.x()), roundInt(point.y()), roundInt(point.z()));
         } else {
             return new Point3i(ceilInt(point.x()), ceilInt(point.y()), ceilInt(point.z()));
         }

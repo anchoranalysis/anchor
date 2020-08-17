@@ -32,8 +32,7 @@ import org.anchoranalysis.core.functional.function.CheckedFunction;
 import org.anchoranalysis.image.io.bean.channel.map.ImgChnlMapEntry;
 
 public class CreateImgChnlMapFromEntries
-        implements CheckedFunction<
-                List<ImgChnlMapEntry>, ImgChnlMap, AnchorNeverOccursException> {
+        implements CheckedFunction<List<ImgChnlMapEntry>, ImgChnlMap, AnchorNeverOccursException> {
 
     @Override
     public ImgChnlMap apply(List<ImgChnlMapEntry> list) {

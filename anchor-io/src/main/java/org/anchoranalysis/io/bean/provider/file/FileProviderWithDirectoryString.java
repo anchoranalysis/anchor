@@ -35,16 +35,20 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.params.InputContextParams;
 
 /**
- * A {@link FileProviderWithDirectory} where the directory is optionally specified as a string constant
- * <p>
- * If an explicit absolute {@code directory} is set then it is used. Otherwise a directory is inferred by trying in order of priority:
+ * A {@link FileProviderWithDirectory} where the directory is optionally specified as a string
+ * constant
+ *
+ * <p>If an explicit absolute {@code directory} is set then it is used. Otherwise a directory is
+ * inferred by trying in order of priority:
+ *
  * <ul>
- * <li>The directory in which the bean-XML file is located (iff {@code localized}==true)
- * <li>The input-directory set in the input context
- * <li>The current working-directory
+ *   <li>The directory in which the bean-XML file is located (iff {@code localized}==true)
+ *   <li>The input-directory set in the input context
+ *   <li>The current working-directory
  * </ul>
- * 
- * <p>If an explicit relative {@code directory} it is not normalized (unless {@code localized}==true, in which case it is resolved against the location of the BeanXML).   
+ *
+ * <p>If an explicit relative {@code directory} it is not normalized (unless {@code
+ * localized}==true, in which case it is resolved against the location of the BeanXML).
  *
  * @author Owen Feehan
  */
@@ -52,10 +56,11 @@ public abstract class FileProviderWithDirectoryString extends FileProviderWithDi
 
     // START BEAN FIELDS
     /**
-     * A directory in which to look for files. If set, takes precedence over any other inference of a directory.
+     * A directory in which to look for files. If set, takes precedence over any other inference of
+     * a directory.
      */
     @BeanField @AllowEmpty @Getter @Setter private String directory = "";
-    
+
     @BeanField @Getter @Setter private boolean localized = false;
     // END BEAN FIELDS
 
@@ -74,15 +79,15 @@ public abstract class FileProviderWithDirectoryString extends FileProviderWithDi
             return inferDirectory(inputContext);
         }
     }
-    
+
     private Path inferDirectory(InputContextParams inputContext) {
         if (localized) {
             return localRoot();
         } else {
-            return inputContext.getInputDir().orElseGet( ()->Paths.get(".") );
+            return inputContext.getInputDir().orElseGet(() -> Paths.get("."));
         }
     }
-    
+
     private Path localRoot() {
         return getLocalPath().getParent();
     }

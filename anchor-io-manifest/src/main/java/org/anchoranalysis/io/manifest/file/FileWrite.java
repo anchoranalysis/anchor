@@ -28,11 +28,11 @@ package org.anchoranalysis.io.manifest.file;
 
 import java.io.Serializable;
 import java.nio.file.Path;
-import org.anchoranalysis.io.manifest.ManifestDescription;
-import org.anchoranalysis.io.manifest.folder.FolderWrite;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.anchoranalysis.io.manifest.ManifestDescription;
+import org.anchoranalysis.io.manifest.folder.FolderWrite;
 
 @NoArgsConstructor
 public class FileWrite implements Serializable {

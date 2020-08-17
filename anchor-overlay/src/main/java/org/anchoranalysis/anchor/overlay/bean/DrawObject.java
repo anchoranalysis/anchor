@@ -82,11 +82,7 @@ public abstract class DrawObject extends AnchorBean<DrawObject> {
             RGBStack background,
             ObjectDrawAttributes attributes)
             throws OperationFailedException {
-        write(
-                objects,
-                background,
-                attributes,
-                new BoundingBox(background.dimensions()));
+        write(objects, background, attributes, new BoundingBox(background.dimensions()));
     }
 
     /**

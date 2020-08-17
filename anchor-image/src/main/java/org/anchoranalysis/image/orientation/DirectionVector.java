@@ -47,7 +47,7 @@ public final class DirectionVector {
     }
 
     public DirectionVector(double x, double y, double z) {
-        this.vector = new Vector3d(x,y,z);
+        this.vector = new Vector3d(x, y, z);
     }
 
     /**
@@ -118,9 +118,9 @@ public final class DirectionVector {
     public Vector3d createVector3d() {
         return new Vector3d(vector);
     }
-    
+
     private static DirectionVector createNormed(double sx, double sy, double sz) {
         double norm = Math.sqrt(Math.pow(sx, 2.0) + Math.pow(sy, 2.0) + Math.pow(sz, 2.0));
-        return new DirectionVector(sx/norm, sy/norm, sz/norm);
+        return new DirectionVector(sx / norm, sy / norm, sz / norm);
     }
 }

@@ -34,7 +34,7 @@ import org.anchoranalysis.image.voxel.Voxels;
 class BinaryVoxelsByte extends BinaryVoxels<ByteBuffer> {
 
     private BinaryValuesByte binaryValuesByte;
-    
+
     public BinaryVoxelsByte(Voxels<ByteBuffer> voxels, BinaryValues binaryValuesByte) {
         super(voxels, binaryValuesByte);
         this.binaryValuesByte = binaryValues().createByte();
@@ -71,10 +71,10 @@ class BinaryVoxelsByte extends BinaryVoxels<ByteBuffer> {
     public BinaryVoxelsByte duplicate() {
         return new BinaryVoxelsByte(voxels().duplicate(), binaryValues());
     }
-    
+
     @Override
-    protected BinaryVoxels<ByteBuffer> binaryVoxelsFor(Voxels<ByteBuffer> slice,
-            BinaryValues binaryValues) {
+    protected BinaryVoxels<ByteBuffer> binaryVoxelsFor(
+            Voxels<ByteBuffer> slice, BinaryValues binaryValues) {
         return new BinaryVoxelsByte(slice, binaryValues);
     }
 }

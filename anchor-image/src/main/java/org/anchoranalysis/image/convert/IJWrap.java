@@ -171,25 +171,22 @@ public class IJWrap {
 
     public static ImageProcessor imageProcessorByte(PixelsForSlice<ByteBuffer> planeAccess, int z) {
         Extent e = planeAccess.extent();
-        return new ByteProcessor(
-                e.x(), e.y(), planeAccess.slice(z).buffer().array(), null);
+        return new ByteProcessor(e.x(), e.y(), planeAccess.slice(z).buffer().array(), null);
     }
 
     public static ImageProcessor imageProcessorShort(
             PixelsForSlice<ShortBuffer> planeAccess, int z) {
         Extent extent = planeAccess.extent();
         return new ShortProcessor(
-                extent.x(),
-                extent.y(),
-                planeAccess.slice(z).buffer().array(),
-                null);
+                extent.x(), extent.y(), planeAccess.slice(z).buffer().array(), null);
     }
 
     public static ImageProcessor imageProcessorByte(VoxelBuffer<ByteBuffer> voxels, Extent extent) {
         return new ByteProcessor(extent.x(), extent.y(), voxels.buffer().array(), null);
     }
 
-    public static ImageProcessor imageProcessorShort(VoxelBuffer<ShortBuffer> voxels, Extent extent) {
+    public static ImageProcessor imageProcessorShort(
+            VoxelBuffer<ShortBuffer> voxels, Extent extent) {
         return new ShortProcessor(extent.x(), extent.y(), voxels.buffer().array(), null);
     }
 
@@ -222,7 +219,8 @@ public class IJWrap {
             stackNew = createInterleavedStack(dimensions.extent(), stack);
         }
 
-        ImagePlus imp = createImagePlus(stackNew, dimensions, stack.getNumberChannels(), 1, !makeRGB);
+        ImagePlus imp =
+                createImagePlus(stackNew, dimensions, stack.getNumberChannels(), 1, !makeRGB);
 
         maybeCorrectComposite(stack, imp);
 
@@ -242,11 +240,7 @@ public class IJWrap {
         if (makeComposite) {
             imp =
                     createCompositeImagePlus(
-                            stack,
-                            numberChannels,
-                            dimensions.z(),
-                            numberFrames,
-                            IMAGEJ_IMAGE_NAME);
+                            stack, numberChannels, dimensions.z(), numberFrames, IMAGEJ_IMAGE_NAME);
         } else {
             imp =
                     createNonCompositeImagePlus(
@@ -298,7 +292,7 @@ public class IJWrap {
 
         return stackNew;
     }
-    
+
     public static VoxelBuffer<ByteBuffer> voxelBufferFromImageProcessorByte(ImageProcessor ip) {
         byte[] arr = (byte[]) ip.getPixels();
         return VoxelBufferByte.wrap(arr);
@@ -415,11 +409,11 @@ public class IJWrap {
         imp.setTitle(imageName);
         return imp;
     }
-    
+
     private static Voxels<ByteBuffer> extractSliceAsByte(RGBStack stack, int channelIndex) {
         return stack.channelAt(channelIndex).voxels().asByte();
     }
-    
+
     private static byte[] extractSliceAsArray(Voxels<ByteBuffer> voxels, int z) {
         return voxels.sliceBuffer(z).array();
     }

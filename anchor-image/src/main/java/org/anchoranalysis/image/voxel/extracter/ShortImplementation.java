@@ -9,14 +9,17 @@ import org.anchoranalysis.image.voxel.buffer.mean.MeanIntensityShortBuffer;
 import org.anchoranalysis.image.voxel.iterator.IterateVoxelsAsInt;
 
 class ShortImplementation extends Base<ShortBuffer> {
-    
+
     public ShortImplementation(Voxels<ShortBuffer> voxels) {
         super(voxels);
     }
 
     @Override
     public void copyBufferIndexTo(
-            ShortBuffer sourceBuffer, int sourceIndex, ShortBuffer destinationBuffer, int destinationIndex) {
+            ShortBuffer sourceBuffer,
+            int sourceIndex,
+            ShortBuffer destinationBuffer,
+            int destinationIndex) {
         destinationBuffer.put(destinationIndex, sourceBuffer.get(sourceIndex));
     }
 
@@ -24,7 +27,7 @@ class ShortImplementation extends Base<ShortBuffer> {
     public Voxels<ShortBuffer> projectionMax() {
 
         Extent extent = voxels.extent();
-        
+
         MaxIntensityBufferShort projection = new MaxIntensityBufferShort(extent);
 
         for (int z = 0; z < extent.z(); z++) {
@@ -36,9 +39,9 @@ class ShortImplementation extends Base<ShortBuffer> {
 
     @Override
     public Voxels<ShortBuffer> projectionMean() {
-        
+
         Extent extent = voxels.extent();
-        
+
         MeanIntensityShortBuffer projection = new MeanIntensityShortBuffer(extent);
 
         for (int z = 0; z < extent.z(); z++) {
@@ -47,7 +50,7 @@ class ShortImplementation extends Base<ShortBuffer> {
 
         return projection.getFlatBuffer();
     }
-    
+
     @Override
     public int voxelWithMaxIntensity() {
         return IterateVoxelsAsInt.findMaxValue(voxels);
@@ -57,7 +60,6 @@ class ShortImplementation extends Base<ShortBuffer> {
     protected int voxelAtBufferIndex(ShortBuffer buffer, int index) {
         return ByteConverter.unsignedShortToInt(buffer.get(index));
     }
-    
 
     @Override
     protected boolean bufferValueGreaterThan(ShortBuffer buffer, int threshold) {

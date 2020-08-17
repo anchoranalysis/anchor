@@ -60,8 +60,7 @@ public class WrapStackAsTimeSequenceStore implements NamedProviderStore<TimeSequ
     }
 
     @Override
-    public void add(
-            String name, StoreSupplier<TimeSequence> supplier)
+    public void add(String name, StoreSupplier<TimeSequence> supplier)
             throws OperationFailedException {
         namedProvider.add(name, () -> supplier.get().get(t));
     }

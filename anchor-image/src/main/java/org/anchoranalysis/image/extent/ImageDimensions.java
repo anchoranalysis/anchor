@@ -42,23 +42,31 @@ import org.anchoranalysis.image.scale.ScaleFactorUtilities;
  *
  * <p>This class is IMMUTABLE.
  */
-@EqualsAndHashCode @Accessors(fluent=true) @AllArgsConstructor
+@EqualsAndHashCode
+@Accessors(fluent = true)
+@AllArgsConstructor
 public final class ImageDimensions implements Serializable {
 
     /** */
     private static final long serialVersionUID = 1L;
 
-    /** The width and height and depth of the image i.e. the size of each of the three possible dimensions*/
+    /**
+     * The width and height and depth of the image i.e. the size of each of the three possible
+     * dimensions
+     */
     @Getter private final Extent extent;
-    
-    /** Resolution of voxels to physical measurements e.g. physical size of each voxel in a particular dimension */
+
+    /**
+     * Resolution of voxels to physical measurements e.g. physical size of each voxel in a
+     * particular dimension
+     */
     @Getter private final ImageResolution resolution;
 
     /** Construct with an explicit extent and default resolution (1.0 for each dimension) */
     public ImageDimensions(int x, int y, int z) {
         this(new Extent(x, y, z));
     }
-    
+
     /** Construct with an explicit extent and default resolution (1.0 for each dimension) */
     public ImageDimensions(ReadableTuple3i extent) {
         this(new Extent(extent.x(), extent.y(), extent.z()));
@@ -82,7 +90,7 @@ public final class ImageDimensions implements Serializable {
     public ImageDimensions duplicateChangeExtent(Extent extentToAssign) {
         return new ImageDimensions(extentToAssign, resolution);
     }
-    
+
     public ImageDimensions duplicateChangeZ(int z) {
         return new ImageDimensions(extent.duplicateChangeZ(z), resolution);
     }

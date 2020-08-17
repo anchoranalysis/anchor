@@ -26,11 +26,11 @@
 
 package org.anchoranalysis.image.outline.traverser.contiguouspath;
 
-import org.anchoranalysis.core.geometry.Point3i;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.core.geometry.Point3i;
 
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class DistanceToContiguousPath {
 
     /** The maximum-distance of a point to the closest point on the path */

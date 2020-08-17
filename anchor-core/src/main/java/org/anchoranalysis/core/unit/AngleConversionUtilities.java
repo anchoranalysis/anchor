@@ -34,7 +34,7 @@ import lombok.NoArgsConstructor;
  *
  * @author Owen Feehan
  */
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class AngleConversionUtilities {
 
     public static double convertDegreesToRadians(double degrees) {

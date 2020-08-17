@@ -35,9 +35,6 @@ import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 public class ChannelConverterToFloat extends ChannelConverter<FloatBuffer> {
 
     public ChannelConverterToFloat() {
-        super(
-                VoxelDataTypeFloat.INSTANCE,
-                new ToFloatNoScaling(),
-                VoxelsFactory.getFloat());
+        super(VoxelDataTypeFloat.INSTANCE, new ToFloatNoScaling(), VoxelsFactory.getFloat());
     }
 }

@@ -39,7 +39,10 @@ public class RotationMatrix implements Serializable {
     /** */
     private static final long serialVersionUID = 1L;
 
-    /** The underlying matrix implementing the rotation. This name is deliberately kept as 'delegate' to avoid breaking serialized objects. */
+    /**
+     * The underlying matrix implementing the rotation. This name is deliberately kept as 'delegate'
+     * to avoid breaking serialized objects.
+     */
     private DoubleMatrix2D delegate;
 
     public RotationMatrix(int numDim) {

@@ -28,10 +28,10 @@ package org.anchoranalysis.math.moment;
 
 import cern.colt.matrix.DoubleMatrix2D;
 import cern.colt.matrix.doublealgo.Statistic;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 /**
  * The first moment (mean) and eigenvalues of the second moments (covariance) from a matrix of
@@ -41,7 +41,7 @@ import java.util.List;
  *
  * @author Owen Feehan
  */
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ImageMoments {
 
     private List<EigenvalueAndVector> list;

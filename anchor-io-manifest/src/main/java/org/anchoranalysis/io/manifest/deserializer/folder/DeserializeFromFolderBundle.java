@@ -27,11 +27,11 @@
 package org.anchoranalysis.io.manifest.deserializer.folder;
 
 import java.io.Serializable;
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.index.GetterFromIndex;
 import org.anchoranalysis.core.index.container.BoundedIndexContainer;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
 import org.anchoranalysis.io.manifest.folder.FolderWrite;
-import lombok.AllArgsConstructor;
 
 /**
  * @author Owen Feehan
@@ -39,10 +39,11 @@ import lombok.AllArgsConstructor;
  * @param <S> cache-type
  */
 @AllArgsConstructor
-public abstract class DeserializeFromFolderBundle<T, S extends Serializable> implements HistoryCreator<T> {
+public abstract class DeserializeFromFolderBundle<T, S extends Serializable>
+        implements HistoryCreator<T> {
 
     private static final int CACHE_SIZE = 5;
-    
+
     private final BundleDeserializers<S> deserializers;
     private FolderWrite folder;
 

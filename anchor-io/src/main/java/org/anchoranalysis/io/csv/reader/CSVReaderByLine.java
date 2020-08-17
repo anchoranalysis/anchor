@@ -27,9 +27,9 @@
 package org.anchoranalysis.io.csv.reader;
 
 import java.nio.file.Path;
-import org.anchoranalysis.core.error.OperationFailedException;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.core.error.OperationFailedException;
 
 /**
  * Reads a CSV file line-by-line
@@ -39,7 +39,7 @@ import lombok.NoArgsConstructor;
  *
  * @author Owen Feehan
  */
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CSVReaderByLine {
 
     @FunctionalInterface

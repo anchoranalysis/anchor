@@ -63,8 +63,7 @@ public abstract class MarkAbstractPosition extends Mark implements Serializable 
     }
 
     public String strPos() {
-        return String.format(
-                "[%6.1f,%6.1f,%6.1f]", this.pos.x(), this.pos.y(), this.pos.z());
+        return String.format("[%6.1f,%6.1f,%6.1f]", this.pos.x(), this.pos.y(), this.pos.z());
     }
 
     @Override

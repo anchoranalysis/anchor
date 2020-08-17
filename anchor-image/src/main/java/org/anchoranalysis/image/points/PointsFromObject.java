@@ -54,7 +54,7 @@ public class PointsFromObject {
     public static List<Point2i> listFrom2i(ObjectMask object) throws CreateException {
         return PointsFromVoxels.listFrom2i(object.binaryVoxels(), object.boundingBox().cornerMin());
     }
-    
+
     /**
      * A list of three-dimensional integer points from the entire object-mask
      *
@@ -64,7 +64,7 @@ public class PointsFromObject {
     public static List<Point3i> listFrom3i(ObjectMask object) {
         return PointsFromVoxels.listFrom3i(object.binaryVoxels(), object.boundingBox().cornerMin());
     }
-    
+
     /**
      * A sorted-set of three-dimensional integer points from the entire object-mask
      *
@@ -93,9 +93,9 @@ public class PointsFromObject {
      * @throws CreateException
      */
     public static List<Point3i> listFromOutline3i(ObjectMask object) {
-        return listFrom3i( outlineFor(object,true) );
+        return listFrom3i(outlineFor(object, true));
     }
-    
+
     /**
      * A list of points as three-dimensional integers from the outline of an object-mask
      *
@@ -104,11 +104,12 @@ public class PointsFromObject {
      * @throws CreateException if the object is in three-dimensions
      */
     public static List<Point2i> listFromOutline2i(ObjectMask object) throws CreateException {
-        return listFrom2i( outlineFor(object,false) );
+        return listFrom2i(outlineFor(object, false));
     }
-    
+
     /**
-     * A list of points as three-dimensional integers from the outline of all objects in a collection
+     * A list of points as three-dimensional integers from the outline of all objects in a
+     * collection
      *
      * @param objects objects to find outlines for
      * @return a newly created list
@@ -125,13 +126,13 @@ public class PointsFromObject {
     }
 
     public static Set<Point3i> setFromOutline(ObjectMask object) {
-        return setFrom3i( outlineFor(object,false) );
+        return setFrom3i(outlineFor(object, false));
     }
-    
+
     private static ObjectMask outlineFor(ObjectMask object, boolean do3D) {
         return FindOutline.outline(object, 1, false, do3D);
     }
-    
+
     private static void consumeOutline2i(ObjectMask object, Consumer<Point2i> consumer) {
         ObjectMask outline = outlineFor(object, false);
         PointsFromVoxels.consumePoints2i(

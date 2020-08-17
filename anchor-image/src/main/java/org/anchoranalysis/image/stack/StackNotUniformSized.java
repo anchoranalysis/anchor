@@ -44,10 +44,10 @@ public class StackNotUniformSized implements Iterable<Channel> {
     public StackNotUniformSized() {
         channels = new ArrayList<>();
     }
-    
+
     // Image stack
     public StackNotUniformSized(Stream<Channel> channelStream) {
-        channels = channelStream.collect( Collectors.toList() );
+        channels = channelStream.collect(Collectors.toList());
     }
 
     // Create a stack from a channel

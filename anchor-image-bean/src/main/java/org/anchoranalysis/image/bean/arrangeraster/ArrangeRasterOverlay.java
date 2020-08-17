@@ -113,8 +113,7 @@ public class ArrangeRasterOverlay extends ArrangeRasterBean {
         RGBStack overlayImg = rasterIterator.next();
 
         Extent overlayE =
-                deriveExtent(
-                        overlayImg.channelAt(0).dimensions().extent(), boxSet.extent());
+                deriveExtent(overlayImg.channelAt(0).dimensions().extent(), boxSet.extent());
 
         int hPos = calcHorizontalPos(boxSet, overlayImg.dimensions());
         int vPos = calcVerticalPos(boxSet, overlayImg.dimensions());

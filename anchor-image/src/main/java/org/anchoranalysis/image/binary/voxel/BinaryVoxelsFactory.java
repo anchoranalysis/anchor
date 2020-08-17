@@ -28,6 +28,8 @@ package org.anchoranalysis.image.binary.voxel;
 
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.image.binary.values.BinaryValues;
@@ -37,10 +39,8 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedInt;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class BinaryVoxelsFactory {
 
     /**
@@ -54,7 +54,7 @@ public class BinaryVoxelsFactory {
         voxels.assignOn().toAll();
         return voxels;
     }
-        
+
     /**
      * Creates binary-voxels using unsigned 8-bit byte type and with all voxels set to OFF (0)
      *
@@ -72,7 +72,8 @@ public class BinaryVoxelsFactory {
     }
 
     /**
-     * Creates an empty binary-voxels of a particular data-type with all voxels initialized to OFF (0)
+     * Creates an empty binary-voxels of a particular data-type with all voxels initialized to OFF
+     * (0)
      *
      * @param extent the size of the voxels
      * @param dataType the data-type of the underlying voxel-buffer, either unsigned-byte or
@@ -80,52 +81,57 @@ public class BinaryVoxelsFactory {
      * @return newly created empty binary-voxels of specified size (all voxels initialized to 0)
      * @throws CreateException if an unsupported data-type is requested
      */
-    public static BinaryVoxels<?> createEmptyOff(   // NOSONAR
-            Extent extent, VoxelDataType dataType)
-            throws CreateException {
+    public static BinaryVoxels<?> createEmptyOff( // NOSONAR
+            Extent extent, VoxelDataType dataType) throws CreateException {
         if (dataType.equals(VoxelDataTypeUnsignedByte.INSTANCE)) {
-            return new BinaryVoxelsByte(VoxelsFactory.getByte().createInitialized(extent), BinaryValues.getDefault());
+            return new BinaryVoxelsByte(
+                    VoxelsFactory.getByte().createInitialized(extent), BinaryValues.getDefault());
         } else if (dataType.equals(VoxelDataTypeUnsignedInt.INSTANCE)) {
-            return new BinaryVoxelsInt(VoxelsFactory.getInt().createInitialized(extent), BinaryValues.getDefault());
+            return new BinaryVoxelsInt(
+                    VoxelsFactory.getInt().createInitialized(extent), BinaryValues.getDefault());
         } else {
             throw new CreateException(
                     "Unsupported voxel-data-type, only unsigned byte and int are supported");
         }
     }
-    
+
     /**
      * Like {@link #reuseByte} but uses default binary-values for OFF (0) and ON (255).
-     * 
+     *
      * @param voxels voxel-buffer to treat as binary (and internally reused)
      * @return newly created binary-voxels reusing existing voxels internally
      */
     public static BinaryVoxels<ByteBuffer> reuseByte(Voxels<ByteBuffer> voxels) {
         return reuseByte(voxels, BinaryValues.getDefault());
     }
-    
+
     /**
-     * Reuses an existing voxel-buffer (of type unsigned byte) as a binary-version which should have only two intensity-values representing OFF and ON
-     * <p>
-     * No check occurs that only these intensity values exist.
-     * 
+     * Reuses an existing voxel-buffer (of type unsigned byte) as a binary-version which should have
+     * only two intensity-values representing OFF and ON
+     *
+     * <p>No check occurs that only these intensity values exist.
+     *
      * @param voxels voxel-buffer to treat as binary (and internally reused)
      * @param binaryValues how to interpret OFF and ON states
      * @return newly created binary-voxels reusing existing voxels internally
      */
-    public static BinaryVoxels<ByteBuffer> reuseByte(Voxels<ByteBuffer> voxels, BinaryValues binaryValues) {
+    public static BinaryVoxels<ByteBuffer> reuseByte(
+            Voxels<ByteBuffer> voxels, BinaryValues binaryValues) {
         return new BinaryVoxelsByte(voxels, binaryValues);
     }
-    
+
     /**
-     * Reuses an existing voxel-buffer (of type unsigned int) as a binary-version which should have only two intensity-values representing OFF and ON
-     * <p>
-     * No check occurs that only these intensity values exist.
-     * 
+     * Reuses an existing voxel-buffer (of type unsigned int) as a binary-version which should have
+     * only two intensity-values representing OFF and ON
+     *
+     * <p>No check occurs that only these intensity values exist.
+     *
      * @param voxels voxel-buffer to treat as binary (and internally reused)
      * @param binaryValues how to interpret OFF and ON states
      * @return newly created binary-voxels reusing existing voxels internally
      */
-    public static BinaryVoxels<IntBuffer> reuseInt(Voxels<IntBuffer> voxels, BinaryValues binaryValues) {
+    public static BinaryVoxels<IntBuffer> reuseInt(
+            Voxels<IntBuffer> voxels, BinaryValues binaryValues) {
         return new BinaryVoxelsInt(voxels, binaryValues);
     }
 }

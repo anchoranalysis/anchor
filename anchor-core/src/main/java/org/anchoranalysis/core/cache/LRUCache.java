@@ -56,8 +56,7 @@ public class LRUCache<K, V> {
      * @param cacheSize maximum-size of cache
      * @param calculator calculates the value for a given key if it's not already in the cache
      */
-    public <E extends Exception> LRUCache(
-            int cacheSize, CheckedFunction<K, V, E> calculator) {
+    public <E extends Exception> LRUCache(int cacheSize, CheckedFunction<K, V, E> calculator) {
 
         if (cacheSize <= 0) {
             throw new AnchorFriendlyRuntimeException("cacheSize must be a positive integer");

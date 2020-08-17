@@ -67,8 +67,7 @@ public class DrawCroppedObjectsGenerator extends ObjectsOnRGBGenerator {
     @Override
     protected RGBStack generateBackground(Either<ImageDimensions, DisplayStack> background)
             throws CreateException {
-        Extent extent =
-                background.fold(Functions.identity(), DisplayStack::dimensions).extent();
+        Extent extent = background.fold(Functions.identity(), DisplayStack::dimensions).extent();
 
         ObjectCollection objects = getIterableElement().withoutProperties();
 
@@ -113,9 +112,7 @@ public class DrawCroppedObjectsGenerator extends ObjectsOnRGBGenerator {
                             objectMask.boundingBox().extent());
             out.add(
                     new ObjectMask(
-                            boxNew,
-                            objectMask.binaryVoxels().voxels(),
-                            objectMask.binaryValues()));
+                            boxNew, objectMask.binaryVoxels().voxels(), objectMask.binaryValues()));
         }
 
         return out;

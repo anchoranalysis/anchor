@@ -53,7 +53,7 @@ public abstract class VoxelsConverter<T extends Buffer> {
         convertFrom(voxelsIn, voxelsOut);
         return voxelsOut;
     }
-    
+
     public void convertFrom(VoxelsWrapper voxelsIn, Voxels<T> voxelsOut) {
         // Otherwise, depending on the input type we spawn in different directions
         VoxelDataType inType = voxelsIn.getVoxelDataType();
@@ -71,15 +71,15 @@ public abstract class VoxelsConverter<T extends Buffer> {
     public void convertFromByte(Voxels<ByteBuffer> in, Voxels<T> out) {
         convertFrom(in, out, this::convertFromByte);
     }
-    
+
     public void convertFromShort(Voxels<ShortBuffer> in, Voxels<T> out) {
         convertFrom(in, out, this::convertFromShort);
     }
-    
+
     public void convertFromInt(Voxels<IntBuffer> in, Voxels<T> out) {
         convertFrom(in, out, this::convertFromInt);
     }
-    
+
     public void convertFromFloat(Voxels<FloatBuffer> in, Voxels<T> out) {
         convertFrom(in, out, this::convertFromFloat);
     }
@@ -91,10 +91,9 @@ public abstract class VoxelsConverter<T extends Buffer> {
     public abstract VoxelBuffer<T> convertFromInt(VoxelBuffer<IntBuffer> in);
 
     public abstract VoxelBuffer<T> convertFromShort(VoxelBuffer<ShortBuffer> in);
-    
-    private <S extends Buffer> void convertFrom(Voxels<S> in, Voxels<T> out, Function<VoxelBuffer<S>,VoxelBuffer<T>> converter ) {
-        in.extent().iterateOverZ( z->
-            out.replaceSlice(z, converter.apply(in.slice(z)))
-        );
+
+    private <S extends Buffer> void convertFrom(
+            Voxels<S> in, Voxels<T> out, Function<VoxelBuffer<S>, VoxelBuffer<T>> converter) {
+        in.extent().iterateOverZ(z -> out.replaceSlice(z, converter.apply(in.slice(z))));
     }
 }

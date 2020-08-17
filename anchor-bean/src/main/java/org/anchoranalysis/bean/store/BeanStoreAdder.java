@@ -55,7 +55,7 @@ public class BeanStoreAdder {
             NamedProviderStore<D> store,
             CheckedFunction<S, D, OperationFailedException> bridge)
             throws OperationFailedException {
-        store.add(name, ()->bridge.apply(item) );
+        store.add(name, () -> bridge.apply(item));
     }
 
     /**

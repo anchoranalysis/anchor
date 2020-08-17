@@ -34,13 +34,11 @@ import java.util.stream.Stream;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.extent.BoundingBox;
 
-
 /**
  * An R-Tree of bounding boxes. The index of the item in a list, determines an integer ID,
  * associated with the item in the R-Tree.
  *
  * @see <a href="https://en.wikipedia.org/wiki/R-tree">Wikipedia's R-tree</a>
- * 
  * @author Owen Feehan
  */
 public class BoundingBoxRTree {
@@ -48,17 +46,17 @@ public class BoundingBoxRTree {
     private static final float[] SINGLE_POINT_EXTENT = new float[] {1, 1, 1};
 
     private static final int MIN_NUMBER_ENTRIES = 1;
-    
+
     private static final int NUMBER_DIMENSIONS = 3;
-    
+
     // We re-use this singlePoint to avoid memory allocation for a single point
     private float[] singlePoint = new float[] {0, 0, 0};
 
     private final RTree<Integer> rTree;
-    
+
     /**
      * Constructor
-     * 
+     *
      * @param maxNumberEntriesSuggested suggested a maximum number of entries in the r-tree
      */
     public BoundingBoxRTree(int maxNumberEntriesSuggested) {
@@ -70,7 +68,7 @@ public class BoundingBoxRTree {
 
     /**
      * Constructor - with an initial list of boxes
-     * 
+     *
      * @param boxes added to the r-tree
      * @param maxNumberEntriesSuggested suggested a maximum number of entries in the r-tree
      */
@@ -78,14 +76,12 @@ public class BoundingBoxRTree {
         this(maxNumberEntriesSuggested);
 
         // Adds each box to the r-tree with its corresponding index
-        IntStream.range(0, boxes.size()).forEach( index->
-            add(index, boxes.get(index) )
-        );
+        IntStream.range(0, boxes.size()).forEach(index -> add(index, boxes.get(index)));
     }
-    
+
     /**
      * Constructor - with an initial list of boxes
-     * 
+     *
      * @param boxes added to the r-tree
      * @param maxNumberEntriesSuggested suggested a maximum number of entries in the r-tree
      */
@@ -93,10 +89,12 @@ public class BoundingBoxRTree {
         this(maxNumberEntriesSuggested);
 
         // Adds each box to the r-tree with its corresponding index
-        Streams.mapWithIndex(boxes, (box,index) -> {
-            this.add( (int) index, box);
-            return 0;
-        });
+        Streams.mapWithIndex(
+                boxes,
+                (box, index) -> {
+                    this.add((int) index, box);
+                    return 0;
+                });
     }
 
     public List<Integer> contains(Point3i point) {
@@ -123,12 +121,10 @@ public class BoundingBoxRTree {
     }
 
     private static float[] minPoint(BoundingBox box) {
-        return new float[] {
-            box.cornerMin().x(), box.cornerMin().y(), box.cornerMin().z()
-        };
+        return new float[] {box.cornerMin().x(), box.cornerMin().y(), box.cornerMin().z()};
     }
 
     private static float[] extent(BoundingBox box) {
-        return new float[] {box.extent().x()-1, box.extent().y()-1, box.extent().z()-1};
+        return new float[] {box.extent().x() - 1, box.extent().y() - 1, box.extent().z() - 1};
     }
 }

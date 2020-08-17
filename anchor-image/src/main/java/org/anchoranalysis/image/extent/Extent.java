@@ -64,26 +64,26 @@ public final class Extent implements Serializable {
     public Extent(int x, int y, int z) {
         this(new Point3i(x, y, z));
     }
-    
+
     /**
      * Constructor - creates an extent from a point (duplicating the point for internal use)
-     * <p>
-     * This constructor is exposed as a static method to deliberately duplicate the tuple
-     * as it will be used internally.
-     * 
+     *
+     * <p>This constructor is exposed as a static method to deliberately duplicate the tuple as it
+     * will be used internally.
+     *
      * @param tuple a tuple with the extent size's for each dimension
      * @return a newly created extent - that doesn't reuse {@code tuple} internally
      */
     public static Extent createFromTupleDuplicate(ReadableTuple3i tuple) {
         return new Extent(new Point3i(tuple));
     }
-    
+
     /**
      * Constructor - creates an extent from a point that is reused internally (without duplication)
-     * <p>
-     * This constructor is exposed as a static method to deliberately indicate that
-     * it's okay to consume the point internally, as it won't be otherwise use.
-     * 
+     *
+     * <p>This constructor is exposed as a static method to deliberately indicate that it's okay to
+     * consume the point internally, as it won't be otherwise use.
+     *
      * @param tuple a tuple with the extent size's for each dimension
      * @return a newly created extent - that reuses {@code tuple} internally
      */
@@ -102,11 +102,11 @@ public final class Extent implements Serializable {
         this.len = len;
         this.sxy = len.x() * len.y();
 
-        if (len.x()==0 || len.y()==0 || len.z()==0) {
+        if (len.x() == 0 || len.y() == 0 || len.z() == 0) {
             throw new AnchorFriendlyRuntimeException(
                     "An extent must have at least one voxel in every dimension");
         }
-        
+
         if (len.x() < 0 || len.y() < 0 || len.z() < 0) {
             throw new AnchorFriendlyRuntimeException(
                     "An extent may not be negative in any dimension");
@@ -328,19 +328,17 @@ public final class Extent implements Serializable {
     public Extent growBy(ReadableTuple3i toAdd) {
         return new Extent(Point3i.immutableAdd(len, toAdd));
     }
-    
+
     /**
      * Intersects this extent with another (i.e. takes the smaller value in each dimension)
-     * 
+     *
      * @param other the other
      * @return a newly-created extent that is the intersection of this and another
      */
     public Extent intersectWith(Extent other) {
-        return new Extent(
-           Point3i.elementwiseOperation(len, other.len, Math::min)
-        );
+        return new Extent(Point3i.elementwiseOperation(len, other.len, Math::min));
     }
-    
+
     /**
      * Collapses the Z dimension i.e. returns a new extent with the same X- and Y- size but Z-size
      * of 1
@@ -366,31 +364,32 @@ public final class Extent implements Serializable {
         }
         return z() > other.z();
     }
-    
+
     /**
      * Calls processor once for each z-value in the range
-     * 
+     *
      * <p>This occurs sequentially from 0 (inclusive) to {@code z()} (exclusive)
-     *  
+     *
      * @param indexConsumer called for each index (z-value)
      */
-    public void iterateOverZ( IntConsumer indexConsumer ) {
+    public void iterateOverZ(IntConsumer indexConsumer) {
         for (int z = 0; z < len.z(); z++) {
             indexConsumer.accept(z);
         }
     }
-    
+
     /**
-     * Calls processor once for each z-value in the range unless {@code indexPredicate} returns false.
-     * 
+     * Calls processor once for each z-value in the range unless {@code indexPredicate} returns
+     * false.
+     *
      * <p>This occurs sequentially from 0 (inclusive) to {@code z()} (exclusive)
-     * 
+     *
      * <p>As soon as the {@code indexPredicate} returns false, the iteration stops.
-     *  
+     *
      * @param indexPredicate called for each index (z-value)
      * @return true if {@code indexPredicate} always returned true for every slice, false otherwise.
      */
-    public boolean iterateOverZUntil( IntPredicate indexPredicate ) {
+    public boolean iterateOverZUntil(IntPredicate indexPredicate) {
         for (int z = 0; z < len.z(); z++) {
             if (!indexPredicate.test(z)) {
                 return false;
@@ -404,7 +403,7 @@ public final class Extent implements Serializable {
         pointOperation.accept(lenDup);
         return lenDup;
     }
-    
+
     private int[] deriveArray() {
         int[] arr = new int[3];
         arr[0] = x();

@@ -37,25 +37,25 @@ import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 import org.anchoranalysis.image.voxel.pixelsforslice.PixelsForSlice;
 
 public final class VoxelsAsShort extends Voxels<ShortBuffer> {
-    
+
     public VoxelsAsShort(PixelsForSlice<ShortBuffer> slices) {
-        super(slices, VoxelsFactory.getShort(), createArithmetic(slices) );
+        super(slices, VoxelsFactory.getShort(), createArithmetic(slices));
     }
 
     @Override
     protected boolean areBufferValuesEqual(ShortBuffer buffer1, ShortBuffer buffer2) {
         return buffer1.get() == buffer2.get();
     }
-    
+
     @Override
     public VoxelsAssigner assignValue(int valueToAssign) {
         return VoxelsAssignerFactory.createShort(this, valueToAssign);
     }
-    
+
     private static VoxelsArithmetic createArithmetic(PixelsForSlice<ShortBuffer> slices) {
-        return VoxelsArithmeticFactory.createShort( slices.extent(), slices::sliceBuffer );
+        return VoxelsArithmeticFactory.createShort(slices.extent(), slices::sliceBuffer);
     }
-    
+
     @Override
     public VoxelsExtracter<ShortBuffer> extracter() {
         return VoxelsExtracterFactory.createShort(this);

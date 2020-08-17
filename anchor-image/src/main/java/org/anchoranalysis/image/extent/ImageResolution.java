@@ -27,12 +27,12 @@
 package org.anchoranalysis.image.extent;
 
 import java.io.Serializable;
+import lombok.EqualsAndHashCode;
 import org.anchoranalysis.core.axis.AxisType;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.Tuple3d;
 import org.anchoranalysis.image.scale.ScaleFactor;
-import lombok.EqualsAndHashCode;
 
 /**
  * The resolution of an image i.e. what a single voxel represents in physical units (meters) in x,

@@ -199,7 +199,8 @@ public class AssignmentOverlapFromPairs implements Assignment {
         return listPairs.size() + listUnassignedRight.size();
     }
 
-    private static void removeTouchingBorderXYObjects(ImageDimensions dimensions, List<ObjectMask> list) {
+    private static void removeTouchingBorderXYObjects(
+            ImageDimensions dimensions, List<ObjectMask> list) {
         Iterator<ObjectMask> itr = list.iterator();
         while (itr.hasNext()) {
             if (itr.next().boundingBox().atBorderXY(dimensions)) {

@@ -27,6 +27,8 @@
 package org.anchoranalysis.image.stack.region.chnlconverter;
 
 import java.nio.Buffer;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
@@ -36,8 +38,6 @@ import org.anchoranalysis.image.stack.region.chnlconverter.voxelbox.VoxelsConver
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactoryTypeBound;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 
 /**
  * Converts a channel from one type to another

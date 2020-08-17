@@ -49,8 +49,11 @@ public class FromMask implements ScaledMaskCreator {
 
         // Then we have to create the scaled-object fresh
         // We store it for next-time
-        ObjectMask scaled = unscaled.withoutProperties().scale(
-                new ScaleFactor(scaleFactor), Optional.of( dimensionsScaled.extent() ));
+        ObjectMask scaled =
+                unscaled.withoutProperties()
+                        .scale(
+                                new ScaleFactor(scaleFactor),
+                                Optional.of(dimensionsScaled.extent()));
 
         assert (scaled.voxelsOn().anyExists());
 

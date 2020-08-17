@@ -27,26 +27,27 @@
 package org.anchoranalysis.io.glob;
 
 import java.util.Optional;
-import org.anchoranalysis.io.bean.provider.file.SingleFile;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.Value;
+import org.anchoranalysis.io.bean.provider.file.SingleFile;
 
 /**
  * Extracts a glob
  *
  * @author Owen Feehan
  */
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class GlobExtractor {
 
-    @Value @AllArgsConstructor
+    @Value
+    @AllArgsConstructor
     public static class GlobWithDirectory {
 
         /** The directory part of the string, or null if it doesn't exist */
         private Optional<String> directory;
-        
+
         private String glob;
     }
 

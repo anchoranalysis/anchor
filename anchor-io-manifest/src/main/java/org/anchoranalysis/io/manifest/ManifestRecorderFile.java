@@ -42,9 +42,7 @@ public class ManifestRecorderFile {
 
     public ManifestRecorderFile(File file, ManifestDeserializer manifestDeserializer) {
         this.file = file;
-        this.memoized =
-                CachedSupplier.cache(
-                        () -> getInternal(manifestDeserializer));
+        this.memoized = CachedSupplier.cache(() -> getInternal(manifestDeserializer));
     }
 
     public ManifestRecorder get() throws OperationFailedException {
@@ -55,13 +53,13 @@ public class ManifestRecorderFile {
         // Returns the path of the root of the manifest file (or what it will become)
         return Paths.get(file.getParent());
     }
-    
-    private ManifestRecorder getInternal(ManifestDeserializer manifestDeserializer) throws OperationFailedException {
+
+    private ManifestRecorder getInternal(ManifestDeserializer manifestDeserializer)
+            throws OperationFailedException {
         try {
             if (!file.exists()) {
                 throw new OperationFailedException(
-                        String.format(
-                                "File %s cannot be found", file.getPath()));
+                        String.format("File %s cannot be found", file.getPath()));
             }
             return manifestDeserializer.deserializeManifest(file);
         } catch (DeserializationFailedException e) {

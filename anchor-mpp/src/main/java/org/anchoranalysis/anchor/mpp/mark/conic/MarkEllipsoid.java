@@ -229,8 +229,7 @@ public class MarkEllipsoid extends MarkConic implements Serializable {
 
         DoubleMatrix2D matRot = orientation.createRotationMatrix().getMatrix();
 
-        double[] radiusArray =
-                threeElementArray(this.radii.x(), this.radii.y(), this.radii.z());
+        double[] radiusArray = threeElementArray(this.radii.x(), this.radii.y(), this.radii.z());
         assert matRot.rows() == 3;
         this.ellipsoidCalculator.update(radiusArray, matRot);
 
@@ -407,7 +406,7 @@ public class MarkEllipsoid extends MarkConic implements Serializable {
     public BoundingBox boxAllRegions(ImageDimensions bndScene) {
         return box(bndScene, GlobalRegionIdentifiers.SUBMARK_OUTSIDE);
     }
-    
+
     private double getMaximumRadius(int regionID) {
 
         double maxRadius = ellipsoidCalculator.getMaximumRadius();

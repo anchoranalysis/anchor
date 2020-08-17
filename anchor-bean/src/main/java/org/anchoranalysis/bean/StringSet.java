@@ -54,9 +54,10 @@ public class StringSet extends AnchorBean<StringSet> implements StringBeanCollec
 
     private Set<String> set = new TreeSet<>();
 
-    public StringSet(String ...strings) {
+    public StringSet(String... strings) {
         Arrays.stream(strings).forEach(set::add);
     }
+
     @Override
     public void add(String s) {
         set.add(s);

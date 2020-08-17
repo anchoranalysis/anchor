@@ -27,33 +27,32 @@
 package org.anchoranalysis.image.index;
 
 import java.util.List;
+import lombok.Getter;
+import lombok.experimental.Accessors;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
-import lombok.Getter;
-import lombok.experimental.Accessors;
 
 /**
  * An R-Tree of object-masks (indexed via a derived bounding-box).
- * 
+ *
  * @see <a href="https://en.wikipedia.org/wiki/R-tree">Wikipedia's R-tree</a>
  * @see {@link BoundingBoxRTree} for a related structure only on bounding-boxes
- *
  * @author Owen Feehan
  */
-@Accessors(fluent=true)
+@Accessors(fluent = true)
 public class ObjectCollectionRTree {
 
     /** An r-tree that stores indices of the objects for each bounding-box */
     private BoundingBoxRTree tree;
-    
+
     /** All objects stored in the r-tree (whose order corresponds to indices in {@code delegate} */
     @Getter private ObjectCollection objects;
- 
+
     /**
      * Constructor - create
-     * 
+     *
      * @param objects
      * @param extractBoundingBox
      */

@@ -27,9 +27,9 @@
 package org.anchoranalysis.io.manifest.finder;
 
 import java.io.IOException;
-
 import java.util.List;
 import java.util.Optional;
+import lombok.Getter;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.io.bean.deserializer.Deserializer;
@@ -40,7 +40,6 @@ import org.anchoranalysis.io.deserializer.DeserializationFailedException;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
 import org.anchoranalysis.io.manifest.file.FileWrite;
 import org.anchoranalysis.io.manifest.match.helper.filewrite.FileWriteFileFunctionType;
-import lombok.Getter;
 
 /**
  * @author Owen Feehan
@@ -54,7 +53,8 @@ public class FinderSerializedObject<T> extends FinderSingleFile {
     /** Provides a memoized (cached) means of access the results of the finder */
     @Getter
     private SerializedObjectSupplier<T> memoized =
-            SerializedObjectSupplier.cache( ()->OptionalUtilities.createFromFlagChecked(exists(), this::getInternal) );
+            SerializedObjectSupplier.cache(
+                    () -> OptionalUtilities.createFromFlagChecked(exists(), this::getInternal));
 
     public FinderSerializedObject(String function, ErrorReporter errorReporter) {
         super(errorReporter);
@@ -62,9 +62,9 @@ public class FinderSerializedObject<T> extends FinderSingleFile {
     }
 
     public T get() throws IOException {
-        return memoized.get().get();    // NOSONAR
+        return memoized.get().get(); // NOSONAR
     }
-    
+
     private T getInternal() throws IOException {
         assert (exists());
         if (!deserializedObject.isPresent()) {
@@ -97,7 +97,7 @@ public class FinderSerializedObject<T> extends FinderSingleFile {
 
         return Optional.of(files.get(0));
     }
-    
+
     private T deserialize(FileWrite fileWrite) throws DeserializationFailedException {
 
         Deserializer<T> deserializer;

@@ -186,9 +186,7 @@ public class FeatureListFactory {
      * @throws E exception if it occurs during mapping
      */
     public static <S, T extends FeatureInput, E extends Exception> FeatureList<T> mapFromFiltered(
-            Iterable<S> iterable,
-            Predicate<S> predicate,
-            CheckedFunction<S, Feature<T>, E> mapFunc)
+            Iterable<S> iterable, Predicate<S> predicate, CheckedFunction<S, Feature<T>, E> mapFunc)
             throws E {
         FeatureList<T> out = new FeatureList<>();
         for (S item : iterable) {

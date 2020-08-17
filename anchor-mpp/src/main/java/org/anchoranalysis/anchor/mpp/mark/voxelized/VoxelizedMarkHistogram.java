@@ -159,7 +159,15 @@ class VoxelizedMarkHistogram implements VoxelizedMark {
             BufferArrList bufferArrList = new BufferArrList();
             bufferArrList.init(stack, z);
             initForSlice(
-                    z, mark, box, cornerMax, localExtent, dimensions, bufferArrList, bufferMIP, regionMap);
+                    z,
+                    mark,
+                    box,
+                    cornerMax,
+                    localExtent,
+                    dimensions,
+                    bufferArrList,
+                    bufferMIP,
+                    regionMap);
         }
     }
 
@@ -195,7 +203,7 @@ class VoxelizedMarkHistogram implements VoxelizedMark {
 
                 int xLocal = x - box.cornerMin().x();
 
-                int localOffset =  localExtent.offset(xLocal, yLocal);
+                int localOffset = localExtent.offset(xLocal, yLocal);
                 int globalOffset = dimensions.offset(x, y);
 
                 byte membership = mark.evalPointInside(new Point3d(ptRunning));

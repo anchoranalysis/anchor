@@ -5,7 +5,7 @@ import java.util.function.IntFunction;
 import org.anchoranalysis.image.extent.Extent;
 
 class IntImplementation extends Base<IntBuffer> {
-    
+
     public IntImplementation(Extent extent, IntFunction<IntBuffer> bufferForSlice) {
         super(extent, bufferForSlice);
     }

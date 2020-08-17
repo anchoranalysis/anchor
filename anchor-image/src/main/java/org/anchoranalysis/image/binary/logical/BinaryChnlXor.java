@@ -38,7 +38,8 @@ import org.anchoranalysis.image.voxel.Voxels;
 public class BinaryChnlXor {
 
     /**
-     * Performs a XOR (exclusive OR) operation on each voxel in two masks, writing the result onto the second mask.
+     * Performs a XOR (exclusive OR) operation on each voxel in two masks, writing the result onto
+     * the second mask.
      *
      * @param first the first channel for operation
      * @param second the second channel for operation (and in which the result is written)
@@ -52,8 +53,9 @@ public class BinaryChnlXor {
     }
 
     /**
-     * Performs a XOR (exclusive OR) operation on each voxel in two {@link Voxels} (considered to be masks), writing the result onto the second mask.
-     * 
+     * Performs a XOR (exclusive OR) operation on each voxel in two {@link Voxels} (considered to be
+     * masks), writing the result onto the second mask.
+     *
      * @param voxelsFirst the first voxels for operation
      * @param voxelsSecond the second voxels for operation (and in which the result is written)
      * @param bvbFirst binary-values to mask the first voxels

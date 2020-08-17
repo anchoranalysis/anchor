@@ -28,17 +28,17 @@ package org.anchoranalysis.test;
 
 import static org.mockito.Mockito.mock;
 
-import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.core.log.MessageLogger;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.core.log.Logger;
+import org.anchoranalysis.core.log.MessageLogger;
 
 /**
  * Fixtures to create loggers that don't output anything
  *
  * @author Owen Feehan
  */
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class LoggingFixture {
 
     /** A {@link MessageLogger} that doesn't output anything */

@@ -100,10 +100,10 @@ class CombineDiverseProvidersAsStacks implements NamedProvider<Stack> {
 
         // For each region we get a mask for what equals the binary mask
         ObjectMask object =
-                bvb.voxels().extracter().voxelsEqualTo(bvb.binaryValues().getOnInt())
-                        .deriveObject(
-                                new BoundingBox(bvb.voxels())
-                                );
+                bvb.voxels()
+                        .extracter()
+                        .voxelsEqualTo(bvb.binaryValues().getOnInt())
+                        .deriveObject(new BoundingBox(bvb.voxels()));
         try {
             chnlNew.replaceVoxels(object.voxels());
         } catch (IncorrectImageSizeException e) {

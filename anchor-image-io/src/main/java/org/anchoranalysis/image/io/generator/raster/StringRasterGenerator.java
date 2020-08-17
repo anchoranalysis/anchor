@@ -53,9 +53,8 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 /**
  * Generates an image with a text (string) drawn on it.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 @NoArgsConstructor
 public class StringRasterGenerator extends AnchorBean<StringRasterGenerator> {
@@ -66,7 +65,7 @@ public class StringRasterGenerator extends AnchorBean<StringRasterGenerator> {
 
     /** Explicit size of the image the string is draw on */
     @BeanField @OptionalBean @Getter @Setter private SizeXY size;
-    
+
     /** Font-size of drawn text */
     @BeanField @Getter @Setter private int fontSize = 12;
 
@@ -80,7 +79,10 @@ public class StringRasterGenerator extends AnchorBean<StringRasterGenerator> {
     /** Whether to bold the drawn text */
     @BeanField @Getter @Setter private boolean bold = false;
 
-    /** Padding added around the text in both dimensions if a default size is inferred (ignored if an explicit size is specified ) */
+    /**
+     * Padding added around the text in both dimensions if a default size is inferred (ignored if an
+     * explicit size is specified )
+     */
     @BeanField @Getter @Setter private double padding = 0;
     // END BEAN PROPERTIES
 
@@ -101,12 +103,16 @@ public class StringRasterGenerator extends AnchorBean<StringRasterGenerator> {
         @Override
         public Stack generate() throws OutputWriteFailedException {
 
-            SizeXY resolvedSize = Optional.ofNullable(size).orElseGet(this::alternativeSizeFromDefault);
+            SizeXY resolvedSize =
+                    Optional.ofNullable(size).orElseGet(this::alternativeSizeFromDefault);
 
-            assert(resolvedSize.asExtent().volumeXY() > 0);
-            
+            assert (resolvedSize.asExtent().volumeXY() > 0);
+
             BufferedImage bufferedImage =
-                    new BufferedImage(resolvedSize.getWidth(), resolvedSize.getHeight(), BufferedImage.TYPE_INT_RGB);
+                    new BufferedImage(
+                            resolvedSize.getWidth(),
+                            resolvedSize.getHeight(),
+                            BufferedImage.TYPE_INT_RGB);
             Graphics2D graphics = createGraphicsFromBufferedImage(bufferedImage);
 
             drawCenteredString(text, resolvedSize, graphics);
@@ -150,15 +156,18 @@ public class StringRasterGenerator extends AnchorBean<StringRasterGenerator> {
             int y = (fm.getAscent() + (size.getHeight() - (fm.getAscent() + fm.getDescent())) / 2);
             g.drawString(stringToDraw, x, y);
         }
-        
+
         private SizeXY alternativeSizeFromDefault() {
 
-            Graphics2D graphics = createGraphicsFromBufferedImage( new BufferedImage(1000, 1000, BufferedImage.TYPE_INT_RGB) );
+            Graphics2D graphics =
+                    createGraphicsFromBufferedImage(
+                            new BufferedImage(1000, 1000, BufferedImage.TYPE_INT_RGB));
             FontMetrics fm = graphics.getFontMetrics();
             Rectangle2D defaultSize = fm.getStringBounds(text, graphics);
-            return new SizeXY(addPadding(defaultSize.getWidth()), addPadding(defaultSize.getHeight()));
+            return new SizeXY(
+                    addPadding(defaultSize.getWidth()), addPadding(defaultSize.getHeight()));
         }
-        
+
         private int addPadding(double value) {
             return (int) Math.ceil(value + (padding * 2));
         }
@@ -167,7 +176,7 @@ public class StringRasterGenerator extends AnchorBean<StringRasterGenerator> {
     public StringRasterGenerator(String text) {
         this.text = text;
     }
-    
+
     /** Creates an iterable-generator, which produces a drawn string on an image when generated */
     public IterableObjectGenerator<String, Stack> createGenerator() {
         return new Generator();

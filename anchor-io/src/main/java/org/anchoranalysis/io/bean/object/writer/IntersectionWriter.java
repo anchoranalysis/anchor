@@ -39,7 +39,9 @@ import org.anchoranalysis.image.stack.rgb.RGBStack;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class IntersectionWriter {
 
-    /** Writes only to the intersection of an object-mask and stack (positioned at {@code stackBox}) */
+    /**
+     * Writes only to the intersection of an object-mask and stack (positioned at {@code stackBox})
+     */
     public static void writeRGBMaskIntersection(
             ObjectMask object, RGBColor color, RGBStack stack, BoundingBox stackBox)
             throws OperationFailedException {

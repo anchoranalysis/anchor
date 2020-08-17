@@ -37,16 +37,15 @@ import org.anchoranalysis.image.voxel.Voxels;
 
 /**
  * Inverts masks and objects
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class MaskInverter {
 
     /**
      * Creates a new object-mask where OFF voxels become ON voxels and vice versa
-     * 
+     *
      * @param object object to invert (unmodified)
      * @return a newly created inverted object
      */
@@ -58,9 +57,9 @@ public class MaskInverter {
 
     /**
      * Modifies a mask so that OFF voxels become ON voxels and vice versa
-     * <p>
-     * The modification occur inplace, so no new masks are created.
-     * 
+     *
+     * <p>The modification occur inplace, so no new masks are created.
+     *
      * @param mask mask to invert (modified)
      */
     public static void invert(Mask mask) {

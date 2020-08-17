@@ -27,8 +27,8 @@
 package org.anchoranalysis.image.stack.region.chnlconverter;
 
 import java.nio.ByteBuffer;
-import org.anchoranalysis.image.stack.region.chnlconverter.voxelbox.VoxelsConverter;
 import org.anchoranalysis.image.stack.region.chnlconverter.voxelbox.ToByteNoScaling;
+import org.anchoranalysis.image.stack.region.chnlconverter.voxelbox.VoxelsConverter;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 

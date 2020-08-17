@@ -36,8 +36,8 @@ import org.anchoranalysis.io.generator.combined.IterableCombinedListGenerator;
 import org.anchoranalysis.io.generator.serialized.ObjectOutputStreamGenerator;
 
 /**
- * Like {@link org.anchoranalysis.image.io.generator.raster.object.collection.ObjectAsMaskGenerator} but
- * also outputs a serialized bounding box.
+ * Like {@link org.anchoranalysis.image.io.generator.raster.object.collection.ObjectAsMaskGenerator}
+ * but also outputs a serialized bounding box.
  *
  * @author Owen Feehan
  */

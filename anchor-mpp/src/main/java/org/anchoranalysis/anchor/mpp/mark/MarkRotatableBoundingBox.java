@@ -91,13 +91,11 @@ public class MarkRotatableBoundingBox extends MarkAbstractPosition {
 
         Point3d pointRot = rotMatrixInv.calcRotatedPoint(point);
 
-        if (pointRot.x() < distanceToLeftBottom.x()
-                || pointRot.x() >= distanceToRightTop.x()) {
+        if (pointRot.x() < distanceToLeftBottom.x() || pointRot.x() >= distanceToRightTop.x()) {
             return FLAG_SUBMARK_NONE;
         }
 
-        if (pointRot.y() < distanceToLeftBottom.y()
-                || pointRot.y() >= distanceToRightTop.y()) {
+        if (pointRot.y() < distanceToLeftBottom.y() || pointRot.y() >= distanceToRightTop.y()) {
             return FLAG_SUBMARK_NONE;
         }
 

@@ -69,8 +69,7 @@ public class StackOperationGenerator extends RasterGenerator
     }
 
     @Override
-    public void setIterableElement(
-            StackToWriteSupplier element) {
+    public void setIterableElement(StackToWriteSupplier element) {
         this.element = element;
     }
 

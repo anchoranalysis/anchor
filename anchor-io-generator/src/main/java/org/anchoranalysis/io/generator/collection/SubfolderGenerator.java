@@ -28,6 +28,7 @@ package org.anchoranalysis.io.generator.collection;
 
 import java.util.Collection;
 import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.generator.IterableGenerator;
@@ -38,7 +39,6 @@ import org.anchoranalysis.io.namestyle.OutputNameStyle;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
-import lombok.RequiredArgsConstructor;
 
 /**
  * @author Owen Feehan
@@ -53,7 +53,7 @@ public class SubfolderGenerator<T, S extends Collection<T>>
     private final IterableGenerator<T> generator;
     private final String collectionOutputName;
     // END REQUIRED ARGUMENTS
-    
+
     private S element;
 
     @Override

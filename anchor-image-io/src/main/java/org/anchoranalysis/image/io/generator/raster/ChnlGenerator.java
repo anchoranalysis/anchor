@@ -27,13 +27,13 @@
 package org.anchoranalysis.image.io.generator.raster;
 
 import java.util.Optional;
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.generator.IterableObjectGenerator;
 import org.anchoranalysis.io.generator.ObjectGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
-import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public class ChnlGenerator extends RasterGenerator

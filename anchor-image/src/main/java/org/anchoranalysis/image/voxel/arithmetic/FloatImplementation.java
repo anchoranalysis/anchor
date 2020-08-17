@@ -9,7 +9,7 @@ class FloatImplementation extends Base<FloatBuffer> {
     public FloatImplementation(Extent extent, IntFunction<FloatBuffer> bufferForSlice) {
         super(extent, bufferForSlice);
     }
-    
+
     @Override
     protected void multiplyBuffer(FloatBuffer buffer, double factor) {
         while (buffer.hasRemaining()) {
@@ -24,7 +24,6 @@ class FloatImplementation extends Base<FloatBuffer> {
             float newVal = valueToSubtractFrom - buffer.get();
             buffer.put(buffer.position() - 1, newVal);
         }
-        
     }
 
     @Override

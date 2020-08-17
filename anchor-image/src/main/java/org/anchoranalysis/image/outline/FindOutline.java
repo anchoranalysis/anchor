@@ -27,6 +27,8 @@
 package org.anchoranalysis.image.outline;
 
 import java.nio.ByteBuffer;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.image.binary.logical.BinaryChnlXor;
 import org.anchoranalysis.image.binary.mask.Mask;
@@ -41,8 +43,6 @@ import org.anchoranalysis.image.voxel.kernel.ApplyKernel;
 import org.anchoranalysis.image.voxel.kernel.BinaryKernel;
 import org.anchoranalysis.image.voxel.kernel.dilateerode.ErosionKernel3;
 import org.anchoranalysis.image.voxel.kernel.outline.OutlineKernel3;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 
 /**
  * Finds outline voxels i.e. pixels on the contour/edge of the object
@@ -51,26 +51,28 @@ import lombok.NoArgsConstructor;
  * only pixels on the contour are ON
  *
  * <p>A new object/mask is always created, so the existing buffers are not overwritten
- * 
- * <p>The outline is always guaranteed to be inside the existing mask (so always a subset of ON voxels).
+ *
+ * <p>The outline is always guaranteed to be inside the existing mask (so always a subset of ON
+ * voxels).
  */
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class FindOutline {
 
     /**
-     * Finds the outline of a mask, guessing whether to do this in 2D or 3D depending on if the mask has 3-dimensions
-     * 
+     * Finds the outline of a mask, guessing whether to do this in 2D or 3D depending on if the mask
+     * has 3-dimensions
+     *
      * @param mask the mask to find an outline for
      * @param force2D if TRUE, 2D will ALWAYS be used irrespective of the guessing
-     * @param outlineAtBoundary if true, an edge is shown also for the boundary of the scene. if false, this is not shown.
+     * @param outlineAtBoundary if true, an edge is shown also for the boundary of the scene. if
+     *     false, this is not shown.
      * @return a newly-created mask showing only the outline
      */
     public static Mask outlineGuess3D(Mask mask, boolean force2D, boolean outlineAtBoundary) {
-        boolean do2D = mask.dimensions().z()==1 || force2D;
+        boolean do2D = mask.dimensions().z() == 1 || force2D;
         return outline(mask, !do2D, outlineAtBoundary);
     }
 
-    
     public static Mask outline(Mask mask, boolean do3D, boolean erodeAtBoundary) {
         // We create a new mask for outputting
         Mask maskOut = new Mask(mask.dimensions(), mask.binaryValues());
@@ -81,16 +83,20 @@ public class FindOutline {
         return maskOut;
     }
 
-    /** 
+    /**
      * Creates outline from an object
-     * <p>
-     * It potentially uses multiple erosions to create a deeper outline.
-     * 
+     *
+     * <p>It potentially uses multiple erosions to create a deeper outline.
+     *
      * @param object object to find outline for
-     * @param numberErosions the number of erosions, effectively determining how thick the outline is
-     * @param outlineAtBoundary if true, an edge is shown also for the boundary of the scene. if false, this is not shown.
-     * @param do3D whether to also perform the outline in the third dimension. This is a bad idea for 2 dimensional images, as every voxel inside the object is treated as on the boundary and a filled in object is produced.
-     * */
+     * @param numberErosions the number of erosions, effectively determining how thick the outline
+     *     is
+     * @param outlineAtBoundary if true, an edge is shown also for the boundary of the scene. if
+     *     false, this is not shown.
+     * @param do3D whether to also perform the outline in the third dimension. This is a bad idea
+     *     for 2 dimensional images, as every voxel inside the object is treated as on the boundary
+     *     and a filled in object is produced.
+     */
     public static ObjectMask outline(
             ObjectMask object, int numberErosions, boolean outlineAtBoundary, boolean do3D) {
 
@@ -101,7 +107,8 @@ public class FindOutline {
         }
 
         BinaryVoxels<ByteBuffer> voxelsOut =
-                outlineMultiplex(objectDuplicated.binaryVoxels(), numberErosions, outlineAtBoundary, do3D);
+                outlineMultiplex(
+                        objectDuplicated.binaryVoxels(), numberErosions, outlineAtBoundary, do3D);
         return new ObjectMask(
                 objectDuplicated.boundingBox(), voxelsOut.voxels(), voxelsOut.binaryValues());
     }
@@ -121,10 +128,14 @@ public class FindOutline {
 
     // Assumes imgChnlOut has the same ImgChnlRegions
     private static void outlineMaskInto(
-            Mask maskToFindOutlineFor, Mask maskToReplaceWithOutline, boolean do3D, boolean erodeAtBoundary) {
+            Mask maskToFindOutlineFor,
+            Mask maskToReplaceWithOutline,
+            boolean do3D,
+            boolean erodeAtBoundary) {
 
         BinaryVoxels<ByteBuffer> voxels =
-                BinaryVoxelsFactory.reuseByte(maskToFindOutlineFor.voxels(), maskToFindOutlineFor.binaryValues());
+                BinaryVoxelsFactory.reuseByte(
+                        maskToFindOutlineFor.voxels(), maskToFindOutlineFor.binaryValues());
 
         BinaryVoxels<ByteBuffer> outline = outlineByKernel(voxels, erodeAtBoundary, do3D);
 

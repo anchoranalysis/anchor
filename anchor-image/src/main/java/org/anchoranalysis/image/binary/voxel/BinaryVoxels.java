@@ -27,6 +27,9 @@
 package org.anchoranalysis.image.binary.voxel;
 
 import java.nio.Buffer;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.experimental.Accessors;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.extent.Extent;
@@ -34,34 +37,37 @@ import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.assigner.VoxelsAssigner;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.extracter.VoxelsExtracter;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.experimental.Accessors;
 
 /**
- * Like {@link Voxels} but should only contain two distinct intensity-values representing ON and OFF states.
+ * Like {@link Voxels} but should only contain two distinct intensity-values representing ON and OFF
+ * states.
  *
  * @author Owen Feehan
  * @param <T> buffer-type
  */
-@AllArgsConstructor @Accessors(fluent=true)
+@AllArgsConstructor
+@Accessors(fluent = true)
 public abstract class BinaryVoxels<T extends Buffer> implements BinaryOnOffSetter {
 
-    /** Voxels that should only have two intensity-values (representing ON and OFF states). This is not checked as a precondition. */
+    /**
+     * Voxels that should only have two intensity-values (representing ON and OFF states). This is
+     * not checked as a precondition.
+     */
     @Getter private final Voxels<T> voxels;
-    
+
     /** Which two intensity values represent OFF and ON states */
     @Getter private BinaryValues binaryValues;
-    
+
     /**
      * Changes the OFF state to be the ON state and vice-versa.
-     * <p>
-     * Only the {@code binaryValues} (acting as an index to the intensity values) is changed; the voxels remain themselves unchanged.
+     *
+     * <p>Only the {@code binaryValues} (acting as an index to the intensity values) is changed; the
+     * voxels remain themselves unchanged.
      */
     public void invert() {
         binaryValues = binaryValues.createInverted();
     }
-    
+
     public Extent extent() {
         return voxels.extent();
     }
@@ -79,7 +85,7 @@ public abstract class BinaryVoxels<T extends Buffer> implements BinaryOnOffSette
     public BinaryVoxels<T> extractSlice(int z) throws CreateException {
         return binaryVoxelsFor(extracter().slice(z), binaryValues());
     }
-    
+
     protected abstract BinaryVoxels<T> binaryVoxelsFor(Voxels<T> slice, BinaryValues binaryValues);
 
     public void updateSlice(int z, VoxelBuffer<T> buffer) {
@@ -89,7 +95,7 @@ public abstract class BinaryVoxels<T extends Buffer> implements BinaryOnOffSette
     public VoxelsAssigner assignOn() {
         return voxels.assignValue(binaryValues.getOnInt());
     }
-    
+
     public VoxelsAssigner assignOff() {
         return voxels.assignValue(binaryValues.getOffInt());
     }

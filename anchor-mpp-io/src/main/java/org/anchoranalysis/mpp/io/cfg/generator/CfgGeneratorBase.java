@@ -27,6 +27,8 @@
 package org.anchoranalysis.mpp.io.cfg.generator;
 
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipWithFlags;
 import org.anchoranalysis.anchor.mpp.overlay.OverlayCollectionMarkFactory;
 import org.anchoranalysis.anchor.overlay.Overlay;
@@ -44,14 +46,11 @@ import org.anchoranalysis.io.generator.ObjectGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.mpp.io.cfg.ColoredCfgWithDisplayStack;
-import lombok.Getter;
-import lombok.Setter;
 
 public abstract class CfgGeneratorBase extends RasterGenerator
         implements IterableObjectGenerator<ColoredCfgWithDisplayStack, Stack> {
 
-    @Getter @Setter
-    private String manifestDescriptionFunction = "cfg";
+    @Getter @Setter private String manifestDescriptionFunction = "cfg";
 
     private DrawOverlay writer;
     private ColoredCfgWithDisplayStack cws;
