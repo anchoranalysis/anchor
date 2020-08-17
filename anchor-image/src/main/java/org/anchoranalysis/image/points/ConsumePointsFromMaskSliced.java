@@ -71,7 +71,7 @@ class ConsumePointsFromMaskSliced {
         this.skipAfterSuccessiveEmptySlices = skipAfterSuccessiveEmptySlices;
         
         this.cornerMin = box.cornerMin();
-        this.cornerMax = box.calcCornerMax();
+        this.cornerMax = box.calculateCornerMax();
         this.voxels = mask.channel().voxels().asByte();
         this.bvb = mask.binaryValues().createByte();
         this.startZ = startZ;

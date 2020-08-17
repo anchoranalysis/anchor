@@ -53,7 +53,7 @@ abstract class Base<T extends Buffer> implements VoxelsExtracter<T> {
         ExtentMatchHelper.checkExtentMatch(sourceBox, destinationBox);
 
         ReadableTuple3i sourceStart = sourceBox.cornerMin();
-        ReadableTuple3i sourceEnd = sourceBox.calcCornerMax();
+        ReadableTuple3i sourceEnd = sourceBox.calculateCornerMax();
 
         Point3i relativePosition = destinationBox.relativePositionTo(sourceBox);
 
@@ -87,7 +87,7 @@ abstract class Base<T extends Buffer> implements VoxelsExtracter<T> {
         ExtentMatchHelper.checkExtentMatch(object.boundingBox(), destinationBox);
 
         ReadableTuple3i sourceStart = object.boundingBox().cornerMin();
-        ReadableTuple3i sourceEnd = object.boundingBox().calcCornerMax();
+        ReadableTuple3i sourceEnd = object.boundingBox().calculateCornerMax();
 
         Point3i relativePosition = destinationBox.relativePositionTo(object.boundingBox());
 

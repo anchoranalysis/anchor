@@ -54,14 +54,14 @@ abstract class Base<T extends Buffer> implements VoxelsArithmetic {
 
         byte maskOnByte = object.binaryValuesByte().getOnByte();
 
-        ReadableTuple3i pointMax = box.calcCornerMax();
-        for (int z = box.cornerMin().z(); z <= pointMax.z(); z++) {
+        ReadableTuple3i pointMax = box.calculateCornerMaxExclusive();
+        for (int z = box.cornerMin().z(); z < pointMax.z(); z++) {
 
             T pixels = bufferForSlice.apply(z);
             ByteBuffer pixelsMask = object.sliceBufferGlobal(z);
 
-            for (int y = box.cornerMin().y(); y <= pointMax.y(); y++) {
-                for (int x = box.cornerMin().x(); x <= pointMax.x(); x++) {
+            for (int y = box.cornerMin().y(); y < pointMax.y(); y++) {
+                for (int x = box.cornerMin().x(); x < pointMax.x(); x++) {
 
                     if (pixelsMask.get() == maskOnByte) {
                         addToBufferIndex(pixels, extent.offset(x, y), valueToBeAdded);
@@ -78,7 +78,7 @@ abstract class Base<T extends Buffer> implements VoxelsArithmetic {
 
         byte maskOnByte = object.binaryValuesByte().getOnByte();
 
-        ReadableTuple3i pointMax = box.calcCornerMax();
+        ReadableTuple3i pointMax = box.calculateCornerMax();
         for (int z = box.cornerMin().z(); z <= pointMax.z(); z++) {
 
             T pixels = bufferForSlice.apply(z);

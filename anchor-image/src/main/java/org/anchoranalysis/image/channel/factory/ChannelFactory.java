@@ -67,11 +67,11 @@ public class ChannelFactory extends VoxelDataTypeFactoryMultiplexer<ChannelFacto
      * @param channelDataType data-type
      * @return a newly created channel with newly created buffers
      */
-    public Channel createEmptyInitialised(ImageDimensions dimensions, VoxelDataType channelDataType) {
+    public Channel create(ImageDimensions dimensions, VoxelDataType channelDataType) {
         return get(channelDataType).createEmptyInitialised(dimensions);
     }
 
-    public Channel createEmptyUninitialised(
+    public Channel createUninitialised(
             ImageDimensions dimensions, VoxelDataType channelDataType) {
         return get(channelDataType).createEmptyUninitialised(dimensions);
     }
@@ -91,7 +91,7 @@ public class ChannelFactory extends VoxelDataTypeFactoryMultiplexer<ChannelFacto
      * @throws CreateException if the max value exceeds all supported data types 
      */
     public Channel createEmptyInitialisedToSupportMaxValue(ImageDimensions dimensions, long maxIntensityValueNeeded) throws CreateException {
-        return createEmptyInitialised(dimensions, selectDataTypeToSupport(maxIntensityValueNeeded) );
+        return create(dimensions, selectDataTypeToSupport(maxIntensityValueNeeded) );
     }
     
     private static VoxelDataType selectDataTypeToSupport(long maxIntensityValueNeeded) throws CreateException {

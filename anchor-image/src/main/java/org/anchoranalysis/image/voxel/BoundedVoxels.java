@@ -456,7 +456,7 @@ public class BoundedVoxels<T extends Buffer> {
                         clipNeg(boundingBox.cornerMin().y(), neg.y()),
                         clipNeg(boundingBox.cornerMin().z(), neg.z()));
 
-        ReadableTuple3i boxMax = boundingBox.calcCornerMax();
+        ReadableTuple3i boxMax = boundingBox.calculateCornerMax();
 
         ReadableTuple3i maxPossible;
         if (clipRegion.isPresent()) {
@@ -495,5 +495,9 @@ public class BoundedVoxels<T extends Buffer> {
         } else {
             return pos - (sum - max + 1);
         }
+    }
+
+    public String toString() {
+        return boundingBox.toString();
     }
 }

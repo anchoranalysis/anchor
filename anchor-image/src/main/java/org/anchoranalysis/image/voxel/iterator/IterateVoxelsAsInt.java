@@ -118,7 +118,7 @@ public class IterateVoxelsAsInt {
     public static <T extends Buffer> boolean allPointsMatchPredicate(Voxels<T> voxels, ObjectMask object, IntPredicate predicate) {    
         
         ReadableTuple3i cornerMin = object.boundingBox().cornerMin();
-        ReadableTuple3i cornerMax = object.boundingBox().calcCornerMaxExclusive();
+        ReadableTuple3i cornerMax = object.boundingBox().calculateCornerMaxExclusive();
         
         byte maskMatchValue = object.binaryValuesByte().getOnByte();
         
@@ -202,7 +202,7 @@ public class IterateVoxelsAsInt {
         ExtentMatchHelper.checkExtentMatch(boxVoxels, boxRelativeToObject);
         
         ReadableTuple3i cornerMin = boxVoxels.cornerMin();
-        ReadableTuple3i cornerMax = boxVoxels.calcCornerMaxExclusive();
+        ReadableTuple3i cornerMax = boxVoxels.calculateCornerMaxExclusive();
         
         // Adding this to the voxels (global) coordinate gives a local coordinate for the object-mask
         ReadableTuple3i maskShift = Point3i.immutableSubtract(boxRelativeToObject.cornerMin(), cornerMin);

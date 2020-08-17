@@ -149,6 +149,6 @@ public class StackProviderGenerateString extends StackProvider {
     
     private Channel emptyChannelWithChangedZ(Channel channel, int zToAssign) {
         ImageDimensions dimensionsChangedZ = channel.dimensions().duplicateChangeZ(zToAssign);
-        return ChannelFactory.instance().createEmptyInitialised(dimensionsChangedZ, channel.getVoxelDataType());
+        return ChannelFactory.instance().create(dimensionsChangedZ, channel.getVoxelDataType());
     }
 }

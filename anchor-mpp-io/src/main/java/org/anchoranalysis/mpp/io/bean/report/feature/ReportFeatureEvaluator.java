@@ -56,7 +56,7 @@ public abstract class ReportFeatureEvaluator<T extends FeatureInput>
     }
 
     @Override
-    public String genTitleStr() throws OperationFailedException {
+    public String title() throws OperationFailedException {
         return title;
     }
 }

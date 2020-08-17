@@ -87,7 +87,7 @@ public abstract class ChannelConverter<T extends Buffer> {
         } else {
             chnlOut =
                     ChannelFactory.instance()
-                            .createEmptyUninitialised(chnlIn.dimensions(), dataTypeTarget);
+                            .createUninitialised(chnlIn.dimensions(), dataTypeTarget);
             voxelsOut = (Voxels<T>) chnlOut.voxels().match(dataTypeTarget);
         }
 

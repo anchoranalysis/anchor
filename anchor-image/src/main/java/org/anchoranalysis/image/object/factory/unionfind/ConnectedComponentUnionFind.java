@@ -82,8 +82,7 @@ public class ConnectedComponentUnionFind {
      * @return the connected-components derived from the voxels
      * @throws OperationFailedException
      */
-    public ObjectCollection deriveConnectedInt(BinaryVoxels<IntBuffer> voxels)
-            throws OperationFailedException {
+    public ObjectCollection deriveConnectedInt(BinaryVoxels<IntBuffer> voxels) {
         ObjectCollection objects = ObjectCollectionFactory.empty();
         visitRegion(voxels, objects, minNumberVoxels, new ReadWriteInt());
         return objects;

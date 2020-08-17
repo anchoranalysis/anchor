@@ -42,7 +42,7 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class CreateObjectsFromLabels {
 
-    private final static int BACKGROUND_COLOR = 0;
+    private static final int BACKGROUND_COLOR = 0;
     
     /** Voxels each labelled with an integer (sequentially increasing from 1) to represent an object */
     private Voxels<?> voxels;

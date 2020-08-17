@@ -75,7 +75,7 @@ public class MaskFromObjects {
 
         Channel chnlNew =
                 ChannelFactory.instance()
-                        .createEmptyInitialised(dimensions, VoxelDataTypeUnsignedByte.INSTANCE);
+                        .create(dimensions, VoxelDataTypeUnsignedByte.INSTANCE);
         Voxels<ByteBuffer> voxelsNew = chnlNew.voxels().asByte();
 
         if (outVal.getOnInt() != 0) {
@@ -101,7 +101,7 @@ public class MaskFromObjects {
 
         BoundingBox box = object.boundingBox();
 
-        ReadableTuple3i maxGlobal = box.calcCornerMax();
+        ReadableTuple3i maxGlobal = box.calculateCornerMax();
         Point3i pointGlobal = new Point3i();
         Point3i pointLocal = new Point3i();
 

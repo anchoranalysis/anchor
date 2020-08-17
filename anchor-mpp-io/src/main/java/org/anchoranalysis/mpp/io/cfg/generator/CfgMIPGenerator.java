@@ -66,7 +66,7 @@ public class CfgMIPGenerator extends CfgGeneratorBase {
         // We avoid repeating the same calculation using a cache
         if (stack != cachedBackground) {
             cachedBackground = stack;
-            cachedBackgroundMIP = stack.maxIntensityProj();
+            cachedBackgroundMIP = stack.maxIntensityProjection();
         }
 
         return cachedBackgroundMIP;

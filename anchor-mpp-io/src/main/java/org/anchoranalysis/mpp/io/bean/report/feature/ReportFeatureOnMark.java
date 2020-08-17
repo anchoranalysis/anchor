@@ -54,7 +54,7 @@ public class ReportFeatureOnMark extends ReportFeatureForMPP<FeatureInputMark> {
     }
 
     @Override
-    public String genFeatureStringFor(MPPInitParams so, Logger logger)
+    public String featureDescription(MPPInitParams so, Logger logger)
             throws OperationFailedException {
 
         // Maybe we should duplicate the providers?
@@ -81,7 +81,7 @@ public class ReportFeatureOnMark extends ReportFeatureForMPP<FeatureInputMark> {
 
             ImageDimensions dimensions = createImageDim();
 
-            double val = session.calc(new FeatureInputMark(mark.get(), Optional.of(dimensions)));
+            double val = session.calculate(new FeatureInputMark(mark.get(), Optional.of(dimensions)));
             return Double.toString(val);
         } catch (FeatureCalculationException | CreateException e) {
             throw new OperationFailedException(e);

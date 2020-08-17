@@ -31,8 +31,7 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import java.util.function.IntFunction;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
@@ -55,212 +54,127 @@ import org.anchoranalysis.image.voxel.VoxelsWrapper;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
+import com.google.common.base.Functions;
 
 /**
- * Byte Stack that contains 1 or 3 channels so that we cand display it as either or RGB 8-bit image
+ * Stack that contains 1 or 3 channels so that we and display it as either or RGB unsigned 8-bit image
  *
- * <p>A voxelsConverter is optionally associated with each channel, used to convert the source
- * images into 8-bit.
+ * <p>A converter is optionally associated with each channel, used to convert the source
+ * images into unsigned 8-bit.
  *
  * @author Owen Feehan
  */
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class DisplayStack {
 
-    private Stack delegate;
-    private List<ChnlConverterAttached<Channel, ByteBuffer>> listConverters = new ArrayList<>();
-
-    // START: factory methods
-
-    // We don't allow
-
-    public static DisplayStack create(Channel chnl) throws CreateException {
-        DisplayStack ds = new DisplayStack();
-        ds.delegate = new Stack(chnl);
-        try {
-            ds.addConvertersAsNeeded();
-        } catch (SetOperationFailedException e) {
-            throw new CreateException(e);
-        }
-        return ds;
-    }
-
-    public static DisplayStack create(Stack stack) throws CreateException {
-        DisplayStack ds = new DisplayStack();
-        ds.delegate = stack;
-        ds.checkChnlNum(stack.getNumberChannels());
-        try {
-            ds.addConvertersAsNeeded();
-        } catch (SetOperationFailedException e) {
-            throw new CreateException(e);
-        }
-        return ds;
-    }
-
-    public static DisplayStack create(RGBStack rgbStack) throws CreateException {
-        DisplayStack ds = new DisplayStack();
-        ds.delegate = rgbStack.asStack();
-        try {
-            ds.addConvertersAsNeeded();
-        } catch (SetOperationFailedException e) {
-            throw new CreateException(e);
-        }
-        return ds;
-    }
-
-    // END: factory methods
-
-    private void addConvertersAsNeeded() throws SetOperationFailedException {
-        addEmptyConverters(getNumberChannels());
-        for (int c = 0; c < getNumberChannels(); c++) {
-            if (!delegate.getChannel(c)
-                    .getVoxelDataType()
-                    .equals(VoxelDataTypeUnsignedByte.INSTANCE)) {
-                setConverterFor(
-                        c, new ChnlConverterChnlUpperLowerQuantileIntensity(0.0001, 0.9999));
-            }
-        }
-    }
-
-    public int numNonNullConverters() {
-        int a = 0;
-        for (ChnlConverterAttached<Channel, ByteBuffer> c : listConverters) {
-            if (c != null) {
-                a++;
-            }
-        }
-        return a;
+    private static final double QUANTILE_LOWER = 0.0001;
+    private static final double QUANTILE_UPPER = 0.9999;
+    
+    private final Stack stack;
+    private final List<Optional<ChnlConverterAttached<Channel, ByteBuffer>>> listConverters;
+    private final ChannelMapper mapper;
+    
+    // START: constructors    
+    private DisplayStack(Stack stack) {
+        this.stack = stack;
+        this.listConverters = new ArrayList<>();
+        this.mapper = createChannelMapper();
     }
 
     // We don't need to worry about channel numbers
-    // TODO let's switch this back to private
-    private DisplayStack(
-            Stack stack, List<ChnlConverterAttached<Channel, ByteBuffer>> listConverters)
-            throws CreateException {
-        delegate = stack;
+    private DisplayStack(Stack stack, List<Optional<ChnlConverterAttached<Channel, ByteBuffer>>> listConverters) throws CreateException {
+        this.stack = stack;
         this.listConverters = listConverters;
-
-        for (int c = 0; c < stack.getNumberChannels(); c++) {
-            ChnlConverterAttached<Channel, ByteBuffer> cca = listConverters.get(c);
-            if (cca != null) {
+        this.mapper = createChannelMapper();
+        
+        for (int index = 0; index < stack.getNumberChannels(); index++) {
+            Optional<ChnlConverterAttached<Channel, ByteBuffer>> converter = listConverters.get(index);
+            if (converter.isPresent()) {
                 try {
-                    cca.attachObject(stack.getChannel(c));
+                    converter.get().attachObject(stack.getChannel(index));
                 } catch (OperationFailedException e) {
-                    throw new CreateException("Cannot attach the chnl to the converter");
+                    throw new CreateException("Cannot attach the channel to the converter");
                 }
             }
         }
     }
-
-    private void checkChnlNum(int numChnl) throws CreateException {
-
-        if (numChnl > 3) {
-            throw new CreateException(
-                    String.format(
-                            "Cannot convert to DisplayStack as there are %d channels. There must be 3 or less.",
-                            numChnl));
-        }
-
-        if (numChnl == 2) {
-            try {
-                delegate.addBlankChannel();
-            } catch (OperationFailedException e) {
-                throw new CreateException(e);
-            }
-        }
-    }
-
-    private void addEmptyConverters(int num) {
-        for (int c = 0; c < num; c++) {
-            listConverters.add(null);
-        }
-    }
-
-    private void setConverterFor(int chnlNum, ChnlConverterAttached<Channel, ByteBuffer> converter)
-            throws SetOperationFailedException {
+    // END: constructors
+    
+    // START: factory methods
+    public static DisplayStack create(Channel channel) throws CreateException {
+        DisplayStack display = new DisplayStack( new Stack(channel) );
         try {
-            converter.attachObject(delegate.getChannel(chnlNum));
-        } catch (OperationFailedException e) {
-            throw new SetOperationFailedException(e);
+            display.addConvertersAsNeeded();
+        } catch (SetOperationFailedException e) {
+            throw new CreateException(e);
         }
-        listConverters.set(chnlNum, converter);
+        return display;
+    }
+
+    public static DisplayStack create(Stack stack) throws CreateException {
+        DisplayStack display = new DisplayStack(stack);
+        display.checkNumberChannels(stack.getNumberChannels());
+        try {
+            display.addConvertersAsNeeded();
+        } catch (SetOperationFailedException e) {
+            throw new CreateException(e);
+        }
+        return display;
+    }
+
+    public static DisplayStack create(RGBStack rgbStack) throws CreateException {
+        DisplayStack display = new DisplayStack(rgbStack.asStack());
+        try {
+            display.addConvertersAsNeeded();
+        } catch (SetOperationFailedException e) {
+            throw new CreateException(e);
+        }
+        return display;
+    }
+
+    // END: factory methods
+
+    public long numberNonNullConverters() {
+        return listConverters.stream().filter(Optional::isPresent).count();
     }
 
     public ImageDimensions dimensions() {
-        return delegate.dimensions();
+        return stack.dimensions();
     }
 
     public final int getNumberChannels() {
-        return delegate.getNumberChannels();
+        return stack.getNumberChannels();
     }
 
     // Only creates a new channel if needs be, otherwise reuses existing channel
     public Channel createChannel(int index, boolean alwaysNew) {
-
-        Channel channel = delegate.getChannel(index);
-
-        ChnlConverterAttached<Channel, ByteBuffer> converter = listConverters.get(index);
-
-        if (converter != null) {
-            ConversionPolicy policy =
-                    alwaysNew
-                            ? ConversionPolicy.ALWAYS_NEW
-                            : ConversionPolicy.DO_NOT_CHANGE_EXISTING;
-            return converter.convert(channel, policy);
-        } else {
-            if (!channel.getVoxelDataType().equals(VoxelDataTypeUnsignedByte.INSTANCE)) {
-                // Datatype is not supported
-                assert false;
-            }
-
-            return delegate.getChannel(index);
-        }
+        
+        return mapper.mapChannelIfSupported(index,
+                (channel, converter) -> converter.convert(channel, conversionPolicy(alwaysNew)),
+                Functions.identity() );
     }
 
     // Always creates a new channel
-    public Channel createChnlDuplicate(int index) {
-
-        Channel chnl = delegate.getChannel(index);
-
-        ChnlConverterAttached<Channel, ByteBuffer> converter = listConverters.get(index);
-
-        if (converter != null) {
-            return converter.convert(chnl, ConversionPolicy.ALWAYS_NEW);
-        } else {
-            if (!chnl.getVoxelDataType().equals(VoxelDataTypeUnsignedByte.INSTANCE)) {
-                // Datatype is not supported
-                assert false;
-            }
-
-            return delegate.getChannel(index).duplicate();
-        }
+    public Channel createChannelDuplicate(int index) {
+        return mapper.mapChannelIfSupported(index,
+                (channel, converter) -> converter.convert(channel, ConversionPolicy.ALWAYS_NEW),
+                Channel::duplicate );
     }
 
     // Always creates a new channel, but just capturing a portion of the channel
     public Channel createChannelDuplicateForBoundingBox(int index, BoundingBox box) {
 
-        Channel chnl = delegate.getChannel(index);
-
-        ChnlConverterAttached<Channel, ByteBuffer> converter = listConverters.get(index);
-
         Channel out =
                 ChannelFactory.instance()
-                        .createEmptyInitialised(
-                                new ImageDimensions(box.extent(), chnl.dimensions().resolution()),
+                        .create(
+                                stack.getChannel(index).dimensions().duplicateChangeExtent(box.extent()),
                                 VoxelDataTypeUnsignedByte.INSTANCE);
-
-        if (converter != null) {
-            copyPixelsTo(index, box, out.voxels().asByte(), box.shiftToOrigin());
-        } else {
-            if (!chnl.getVoxelDataType().equals(VoxelDataTypeUnsignedByte.INSTANCE)) {
-                // Datatype is not supported
-                assert false;
-            }
-
-            delegate.getChannel(index)
-                    .voxels()
-                    .copyVoxelsTo(box, out.voxels(), box.shiftToOrigin());
-        }
+        
+        mapper.callChannelIfSupported(
+            index,
+            (channel,convert)->copyPixelsTo(index, box, out.voxels().asByte(), box.shiftToOrigin()),
+            channel -> stack.getChannel(index).voxels().copyVoxelsTo(box, out.voxels(), box.shiftToOrigin())
+        );
+        
         return out;
     }
 
@@ -273,102 +187,76 @@ public class DisplayStack {
      *     all of which are unsigned 8-bit.
      */
     public Stack deriveStack(boolean alwaysNew) {
-        Stack stackOut = new Stack();
-        for (int c = 0; c < delegate.getNumberChannels(); c++) {
-            try {
-                stackOut.addChannel(createChannel(c, alwaysNew));
-            } catch (IncorrectImageSizeException e) {
-                throw new AnchorImpossibleSituationException();
-            }
-        }
-        return stackOut;
+        return deriveStack( index->createChannel(index, alwaysNew) );
     }
 
-    public Stack createStackDuplicate() {
-        Stack stackOut = new Stack();
-        for (int c = 0; c < delegate.getNumberChannels(); c++) {
-            try {
-                stackOut.addChannel(createChnlDuplicate(c));
-            } catch (IncorrectImageSizeException e) {
-                assert false;
-            }
-        }
-        return stackOut;
+    public Stack deriveStackDuplicate() {
+        return deriveStack(this::createChannelDuplicate);
     }
 
     /** Copies pixels on a particular channel to an output buffer */
     public void copyPixelsTo(
-            int chnlIndex,
+            int channelIndex,
             BoundingBox sourceBox,
             Voxels<ByteBuffer> voxelsDestination,
             BoundingBox destinationBox) {
+        
+        mapper.callChannelIfSupported(channelIndex,
+            (channel,converter) -> {
+                BoundingBox allLocalBox = destinationBox.shiftToOrigin();
 
-        Channel channel = delegate.getChannel(chnlIndex);
+                VoxelsWrapper destBoxNonByte =
+                        VoxelsFactory.instance().create(destinationBox.extent(), channel.getVoxelDataType());
+                channel.voxels().copyVoxelsTo(sourceBox, destBoxNonByte, allLocalBox);
 
-        ChnlConverterAttached<Channel, ByteBuffer> converter = listConverters.get(chnlIndex);
+                Voxels<ByteBuffer> destBoxByte = VoxelsFactory.getByte().createInitialized(destinationBox.extent());
+                converter.getVoxelsConverter().convertFrom(destBoxNonByte, destBoxByte);
 
-        if (converter != null) {
-            BoundingBox allLocalBox = destinationBox.shiftToOrigin();
-
-            VoxelsWrapper destBoxNonByte =
-                    VoxelsFactory.instance().create(destinationBox.extent(), channel.getVoxelDataType());
-            channel.voxels().copyVoxelsTo(sourceBox, destBoxNonByte, allLocalBox);
-
-            Voxels<ByteBuffer> destBoxByte = VoxelsFactory.getByte().createInitialized(destinationBox.extent());
-            converter.getVoxelsConverter().convertFrom(destBoxNonByte, destBoxByte);
-
-            destBoxByte.extracter().boxCopyTo(allLocalBox, voxelsDestination, destinationBox);
-
-        } else {
-            if (!channel.getVoxelDataType().equals(VoxelDataTypeUnsignedByte.INSTANCE)) {
-                // Datatype is not supported
-                assert false;
-            }
-
-            delegate.getChannel(chnlIndex)
-                    .voxels()
-                    .asByte()
-                    .extracter()
-                    .boxCopyTo(sourceBox, voxelsDestination, destinationBox);
-        }
+                destBoxByte.extracter().boxCopyTo(allLocalBox, voxelsDestination, destinationBox);                
+            },
+            channel -> channel.voxels()
+                .asByte()
+                .extracter()
+                .boxCopyTo(sourceBox, voxelsDestination, destinationBox)
+        );
     }
 
     public Optional<VoxelDataType> unconvertedDataType() {
-        VoxelDataType dataType = delegate.getChannel(0).getVoxelDataType();
+        VoxelDataType dataType = stack.getChannel(0).getVoxelDataType();
         // If they don't all have the same dataType we return null
-        if (!delegate.allChannelsHaveType(dataType)) {
+        if (!stack.allChannelsHaveType(dataType)) {
             return Optional.empty();
         }
         return Optional.of(dataType);
     }
 
     public int getUnconvertedVoxelAt(int channelIndex, Point3i point) {
-        return delegate.getChannel(channelIndex).extracter().voxel(point);
+        return stack.getChannel(channelIndex).extracter().voxel(point);
     }
 
     public RegionExtracter createRegionExtracter() {
-        return new RegionExtracterFromDisplayStack(delegate, listConverters);
+        return new RegionExtracterFromDisplayStack(listConverters, stack);
     }
 
-    public DisplayStack maxIntensityProj() throws OperationFailedException {
+    public DisplayStack maxIntensityProjection() throws OperationFailedException {
         try {
-            return new DisplayStack(delegate.maximumIntensityProjection(), listConverters);
+            return new DisplayStack(stack.maximumIntensityProjection(), listConverters);
         } catch (CreateException e) {
             throw new OperationFailedException(e);
         }
     }
 
     public DisplayStack extractSlice(int z) throws CreateException {
-        return new DisplayStack(delegate.extractSlice(z), listConverters);
+        return new DisplayStack(stack.extractSlice(z), listConverters);
     }
 
     public BufferedImage createBufferedImage() throws CreateException {
-        if (delegate.getNumberChannels() == 3) {
+        if (stack.getNumberChannels() == 3) {
             return BufferedImageFactory.createRGB(
                     voxelsForChannel(0),
                     voxelsForChannel(1),
                     voxelsForChannel(2),
-                    delegate.dimensions().extent());
+                    stack.dimensions().extent());
         }
         return BufferedImageFactory.createGrayscale(voxelsForChannel(0));
     }
@@ -379,7 +267,7 @@ public class DisplayStack {
             throw new CreateException("BBox must have a single pixel z-height");
         }
 
-        if (delegate.getNumberChannels() == 3) {
+        if (stack.getNumberChannels() == 3) {
             return BufferedImageFactory.createRGB(
                     voxelsForChannelBoundingBox(0, box),
                     voxelsForChannelBoundingBox(1, box),
@@ -389,44 +277,82 @@ public class DisplayStack {
         return BufferedImageFactory.createGrayscale(voxelsForChannelBoundingBox(0, box));
     }
 
-    private Voxels<ByteBuffer> voxelsForChannel(int chnlNum) {
-
-        Channel chnl = delegate.getChannel(chnlNum);
-
-        ChnlConverterAttached<Channel, ByteBuffer> converter = listConverters.get(chnlNum);
-
-        if (converter != null) {
-            return converter
-                    .getVoxelsConverter()
-                    .convertFrom(chnl.voxels(), VoxelsFactory.getByte());
-        } else {
-            if (!chnl.getVoxelDataType().equals(VoxelDataTypeUnsignedByte.INSTANCE)) {
-                // Datatype is not supported
-                assert false;
-            }
-            return chnl.voxels().asByte();
-        }
+    private Voxels<ByteBuffer> voxelsForChannel(int channelIndex) {
+        return mapper.mapChannelIfSupported( channelIndex, (channel, converter) -> converter.getVoxelsConverter().convertFrom(channel.voxels(), VoxelsFactory.getByte()), channel -> channel.voxels().asByte() );
     }
 
     @SuppressWarnings("unchecked")
-    private Voxels<ByteBuffer> voxelsForChannelBoundingBox(int chnlNum, BoundingBox box) {
+    private Voxels<ByteBuffer> voxelsForChannelBoundingBox(int channelIndex, BoundingBox box) {
 
-        Channel channel = delegate.getChannel(chnlNum);
-
-        ChnlConverterAttached<Channel, ByteBuffer> converter = listConverters.get(chnlNum);
-
-        Voxels<?> voxelsUnconverted = channel.extracter().region(box, true);
-
-        if (converter != null) {
-            return converter
-                    .getVoxelsConverter()
-                    .convertFrom(new VoxelsWrapper(voxelsUnconverted), VoxelsFactory.getByte());
-        } else {
-            if (!channel.getVoxelDataType().equals(VoxelDataTypeUnsignedByte.INSTANCE)) {
-                // Datatype is not supported
-                assert false;
+        Voxels<?> voxelsUnconverted = stack.getChannel(channelIndex).extracter().region(box, true);
+        return mapper.mapChannelIfSupported(channelIndex, (channel, converter) -> converter.getVoxelsConverter().convertFrom(new VoxelsWrapper(voxelsUnconverted), VoxelsFactory.getByte()), channel -> (Voxels<ByteBuffer>) voxelsUnconverted );
+    }
+    
+    private Stack deriveStack(IntFunction<Channel> indexToChannel) {
+        Stack out = new Stack();
+        for (int index = 0; index < stack.getNumberChannels(); index++) {
+            try {
+                out.addChannel( indexToChannel.apply(index) );
+            } catch (IncorrectImageSizeException e) {
+                throw new AnchorImpossibleSituationException();
             }
-            return (Voxels<ByteBuffer>) voxelsUnconverted;
         }
+        return out;
+    }
+    
+    private static ConversionPolicy conversionPolicy(boolean alwaysNew) {
+        return alwaysNew
+                ? ConversionPolicy.ALWAYS_NEW
+                : ConversionPolicy.DO_NOT_CHANGE_EXISTING;
+    }
+    
+    private void addEmptyConverters(int number) {
+        for (int c = 0; c < number; c++) {
+            listConverters.add( Optional.empty() );
+        }
+    }
+
+    private void setConverterFor(int channelIndex, ChnlConverterAttached<Channel, ByteBuffer> converter)
+            throws SetOperationFailedException {
+        try {
+            converter.attachObject(stack.getChannel(channelIndex));
+        } catch (OperationFailedException e) {
+            throw new SetOperationFailedException(e);
+        }
+        listConverters.set(channelIndex, Optional.of(converter));
+    }
+
+    private void addConvertersAsNeeded() throws SetOperationFailedException {
+        addEmptyConverters(getNumberChannels());
+        for (int index = 0; index < getNumberChannels(); index++) {
+            if (!stack.getChannel(index)
+                    .getVoxelDataType()
+                    .equals(VoxelDataTypeUnsignedByte.INSTANCE)) {
+                setConverterFor(
+                        index, new ChnlConverterChnlUpperLowerQuantileIntensity(QUANTILE_LOWER, QUANTILE_UPPER));
+            }
+        }
+    }
+    
+    private void checkNumberChannels(int numberChannels) throws CreateException {
+
+        if (numberChannels > 3) {
+            throw new CreateException(
+                    String.format(
+                            "Cannot convert to DisplayStack as there are %d channels. There must be 3 or less.",
+                            numberChannels));
+        }
+
+        if (numberChannels == 2) {
+            try {
+                stack.addBlankChannel();
+            } catch (OperationFailedException e) {
+                throw new CreateException(e);
+            }
+        }
+    }
+    
+    private ChannelMapper createChannelMapper() {
+        return new ChannelMapper(stack::getChannel, listConverters::get);
     }
 }

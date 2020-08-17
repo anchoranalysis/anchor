@@ -36,11 +36,9 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.core.color.ColorIndex;
-import org.anchoranalysis.core.color.RGBColor;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.io.bean.color.generator.ColorSetGenerator;
 import org.anchoranalysis.io.bean.color.generator.HSBColorSetGenerator;
-import org.anchoranalysis.io.bean.color.generator.PrependColorSetGenerator;
 import org.anchoranalysis.io.bean.color.generator.ShuffleColorSetGenerator;
 import org.anchoranalysis.io.color.ColorIndexModulo;
 
@@ -121,15 +119,8 @@ public class OutputWriteSettings extends AnchorBean<OutputWriteSettings> {
         return writerInstances.get(c);
     }
 
-    public ColorIndex genDefaultColorIndex(int cols) throws OperationFailedException {
-        return new ColorIndexModulo(getDefaultColorSetGenerator().generateColors(cols));
-    }
-
-    public ColorIndex genPrependedDefaultColorIndex(int cols, RGBColor color)
-            throws OperationFailedException {
-        PrependColorSetGenerator prependedColIndex =
-                new PrependColorSetGenerator(getDefaultColorSetGenerator(), color);
-        return prependedColIndex.generateColors(cols);
+    public ColorIndex defaultColorIndexFor(int numberColors) throws OperationFailedException {
+        return new ColorIndexModulo(getDefaultColorSetGenerator().generateColors(numberColors));
     }
 
     public String getExtensionHTML() {

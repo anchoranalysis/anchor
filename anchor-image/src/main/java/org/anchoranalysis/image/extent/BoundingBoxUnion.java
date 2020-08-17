@@ -54,8 +54,8 @@ public class BoundingBoxUnion {
         ReadableTuple3i cornerMin = box.cornerMin();
         ReadableTuple3i cornerMinOther = other.cornerMin();
 
-        ReadableTuple3i cornerMax = box.calcCornerMax();
-        ReadableTuple3i cornerMaxOthr = other.calcCornerMax();
+        ReadableTuple3i cornerMax = box.calculateCornerMax();
+        ReadableTuple3i cornerMaxOthr = other.calculateCornerMax();
 
         ExtentBoundsComparer meiX =
                 ExtentBoundsComparer.createMax(

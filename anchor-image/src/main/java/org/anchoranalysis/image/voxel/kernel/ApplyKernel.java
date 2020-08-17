@@ -134,7 +134,7 @@ public class ApplyKernel {
 
         kernel.init(voxels);
 
-        ReadableTuple3i pointMax = box.calcCornerMax();
+        ReadableTuple3i pointMax = box.calculateCornerMax();
 
         Point3i point = new Point3i();
         for (point.setZ(box.cornerMin().z());
@@ -186,7 +186,7 @@ public class ApplyKernel {
 
         kernel.init(voxels);
 
-        ReadableTuple3i pointMax = box.calcCornerMax();
+        ReadableTuple3i pointMax = box.calculateCornerMax();
 
         Point3i point = new Point3i();
         for (point.setZ(box.cornerMin().z());
@@ -256,7 +256,7 @@ public class ApplyKernel {
 
         BoundingBox box = object.boundingBox();
         ReadableTuple3i cornerMin = box.cornerMin();
-        ReadableTuple3i cornerMax = box.calcCornerMax();
+        ReadableTuple3i cornerMax = box.calculateCornerMax();
 
         Extent extent = in.extent();
 

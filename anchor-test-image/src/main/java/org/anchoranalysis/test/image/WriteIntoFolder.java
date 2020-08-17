@@ -3,9 +3,9 @@ package org.anchoranalysis.test.image;
 import java.nio.ByteBuffer;
 import java.nio.file.Path;
 import java.util.List;
-import java.util.Optional;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
@@ -20,6 +20,7 @@ import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.ObjectsWithBoundingBox;
 import org.anchoranalysis.image.object.properties.ObjectCollectionWithProperties;
 import org.anchoranalysis.image.stack.DisplayStack;
+import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.io.bean.object.writer.Outline;
 import org.anchoranalysis.io.generator.collection.IterableGeneratorWriter;
@@ -27,36 +28,42 @@ import org.anchoranalysis.io.output.bound.BindFailedException;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.test.image.io.OutputManagerFixture;
 import org.junit.rules.TemporaryFolder;
+import org.junit.rules.TestRule;
+import org.junit.runner.Description;
+import org.junit.runners.model.Statement;
 import io.vavr.control.Either;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 /**
- * Utilities for writing one or more stacks into a folder during testing
+ * JUnit rule for writing one or more stacks/objects/channels into a temporary-folder during testing
+ * 
+ * <p>Any checked-exceptions thrown during writing stacks are converted into run-time exceptions,
+ * to make it easy to temporarily use this class in a test for debugging with minimal
+ * alteration of functions.
  * 
  * @author Owen Feehan
  *
  */
 @RequiredArgsConstructor
-public class WriteIntoFolder {
+public class WriteIntoFolder implements TestRule {
     
     /** If there are no objects or specified dimensions, this size is used for an output image as a fallback*/
     private static final ImageDimensions FALLBACK_SIZE = new ImageDimensions(100,100,1);
     
     // START REQUIRED ARGUMENTS
-    /** The folder in which stacks are written */
-    private final TemporaryFolder folder;
-    
     /** If true, the path of {@code folder} is printed to the console */
     private final boolean printDirectoryToConsole;
     // END REQUIRED ARGUMENTS
+
+    /** The folder in which stacks are written */
+    @Getter private TemporaryFolder folder = new TemporaryFolder();
     
     /**
-     * Constructor
+     * Constructor - print directory to the console
      * 
-     * @param folder the folder in which stacks are written
      */
-    public WriteIntoFolder(TemporaryFolder folder) {
-        this.folder = folder;
+    public WriteIntoFolder() {
         this.printDirectoryToConsole = true;
     }
         
@@ -66,7 +73,12 @@ public class WriteIntoFolder {
     
     private ObjectAsMaskGenerator generatorSingleObject = new ObjectAsMaskGenerator();
     
-    public void writeStack(String outputName, DisplayStack stack) throws OperationFailedException {
+    @Override
+    public Statement apply(Statement base, Description description) {
+        return folder.apply(base, description);
+    }
+    
+    public void writeStack(String outputName, DisplayStack stack) {
         
         setupOutputManagerIfNecessary();
         
@@ -75,7 +87,7 @@ public class WriteIntoFolder {
         outputManager.getWriterAlwaysAllowed().write(outputName, () -> generatorStack);
     }
     
-    public void writeObject(String outputName, ObjectMask object) throws OperationFailedException {
+    public void writeObject(String outputName, ObjectMask object) {
         
         setupOutputManagerIfNecessary();
         
@@ -89,33 +101,95 @@ public class WriteIntoFolder {
      * 
      * @param outputName output-name
      * @param objects the objects to draw an outline for
-     * @throws OperationFailedException
      */
-    public void writeObjects(String outputName, ObjectCollection objects) throws OperationFailedException {
-        writeObjects(outputName, objects, Optional.empty());
+    public void writeObjects(String outputName, ObjectCollection objects) {
+        
+        ImageDimensions dimensionsResolved = dimensionsToForObjects(objects);
+        
+        writeObjects(outputName, objects, Either.left(dimensionsResolved));
     }
     
     /**
-     * Writes the outline of objects on a blank RGB image, inferring dimensions if they are not provided.
-     * <p>
-     * The dimensions are inferred so as to center the objects in a scene.
+     * Writes the outline of objects on a background.
      * 
      * @param outputName output-name
      * @param objects the objects to draw an outline for
-     * @param dimensions the explicit dimensions, if specified
-     * @throws OperationFailedException
+     * @param background the background
      */
-    public void writeObjects(String outputName, ObjectCollection objects, Optional<ImageDimensions> dimensions) throws OperationFailedException {
+    public void writeObjects(String outputName, ObjectCollection objects, Stack background) {
+        writeObjects(outputName, objects, Either.right( displayStackFor(background)) );
+    }
+    
+    public void writeVoxels(String outputName, Voxels<ByteBuffer> voxels) {
+        
+        Channel channel = ChannelFactory.instance().create(voxels, new ImageResolution() );
+        
+        writeChannel(outputName, channel);
+    }
+    
+    public void writeChannel(String outputName, Channel channel) {
+        
+        setupOutputManagerIfNecessary();
+
+        writeStack(outputName, displayStackFor(channel) );
+    }
+    
+    public void writeList(String outputName, List<DisplayStack> stacks) {
         
         setupOutputManagerIfNecessary();
         
-        ImageDimensions dimensionsResolved = dimensions.orElseGet( ()->dimensionsToForObjects(objects) );
+        IterableGeneratorWriter.writeSubfolder(
+                outputManager,
+                outputName,
+                outputName,
+                () -> generatorStack,
+                stacks,
+                true);
+    }
+    
+    private static DisplayStack displayStackFor(Channel channel) {
+        try {
+            return DisplayStack.create(channel);
+        } catch (CreateException e) {
+            throw new AnchorFriendlyRuntimeException(e);
+        }
+    }
+
+    private static DisplayStack displayStackFor(Stack stack) {
+        try {
+            return DisplayStack.create(stack);
+        } catch (CreateException e) {
+            throw new AnchorFriendlyRuntimeException(e);
+        }
+    }
+    
+    private void setupOutputManagerIfNecessary() {
+        try {
+            if (outputManager==null) {
+                
+                Path path = folder.getRoot().toPath();
+                
+                outputManager = OutputManagerFixture.outputManagerForRouterErrors(path);
+                
+                if (printDirectoryToConsole) {
+                    System.out.println("Outputs written in test to: " + path);  // NOSONAR
+                }
+            }
+        } catch (BindFailedException e) {
+            throw new AnchorFriendlyRuntimeException(e);
+        }        
+    }
+
+    /** Writes objects with either dimensions (for a blank background) or a particular background */
+    private void writeObjects(String outputName, ObjectCollection objects, Either<ImageDimensions, DisplayStack> background) {
         
-        DrawObjectsGenerator generatorObjects = new DrawObjectsGenerator(new Outline(), new ObjectCollectionWithProperties(objects), Either.left(dimensionsResolved));
+        setupOutputManagerIfNecessary();
+        
+        DrawObjectsGenerator generatorObjects = new DrawObjectsGenerator(new Outline(), new ObjectCollectionWithProperties(objects), background);
         
         outputManager.getWriterAlwaysAllowed().write(outputName, () -> generatorObjects);
     }
-    
+
     /** 
      * Finds dimensions that place the objects in the center
      *  
@@ -131,57 +205,9 @@ public class WriteIntoFolder {
             
             BoundingBox boxCentered = boxSpans.changeExtent( boxSpans.extent().growBy(boxSpans.cornerMin()) );
             
-            return new ImageDimensions(boxCentered.calcCornerMaxExclusive());
+            return new ImageDimensions(boxCentered.calculateCornerMaxExclusive());
         } catch (OperationFailedException e) {
             throw new AnchorImpossibleSituationException();
         }
-    }
-    
-    public void writeVoxels(String outputName, Voxels<ByteBuffer> voxels) throws OperationFailedException {
-        
-        Channel channel = ChannelFactory.instance().create(voxels, new ImageResolution() );
-        
-        writeChannel(outputName, channel);
-    }
-    
-    public void writeChannel(String outputName, Channel channel) throws OperationFailedException {
-        
-        setupOutputManagerIfNecessary();
-        
-        try {
-            writeStack(outputName, DisplayStack.create(channel) );
-        } catch (CreateException e) {
-            throw new OperationFailedException(e);
-        }
-    }
-    
-    public void writeList(String outputName, List<DisplayStack> stacks) throws OperationFailedException {
-        
-        setupOutputManagerIfNecessary();
-        
-        IterableGeneratorWriter.writeSubfolder(
-                outputManager,
-                outputName,
-                outputName,
-                () -> generatorStack,
-                stacks,
-                true);
-    }
-    
-    private void setupOutputManagerIfNecessary() throws OperationFailedException {
-        try {
-            if (outputManager==null) {
-                
-                Path path = folder.getRoot().toPath();
-                
-                outputManager = OutputManagerFixture.outputManagerForRouterErrors(path);
-                
-                if (printDirectoryToConsole) {
-                    System.out.println("Outputs written in test to: " + path);  // NOSONAR
-                }
-            }
-        } catch (BindFailedException e) {
-            throw new OperationFailedException(e);
-        }        
     }
 }

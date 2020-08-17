@@ -34,8 +34,8 @@ public abstract class ReportFeature<T> extends AnchorBean<ReportFeature<T>> {
 
     public abstract boolean isNumeric();
 
-    public abstract String genTitleStr() throws OperationFailedException;
+    public abstract String title() throws OperationFailedException;
 
-    public abstract String genFeatureStringFor(T obj, Logger logger)
+    public abstract String featureDescription(T object, Logger logger)
             throws OperationFailedException;
 }

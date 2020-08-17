@@ -281,7 +281,7 @@ public class ObjectCollection implements Iterable<ObjectMask> {
             if (!e.contains(object.boundingBox().cornerMin())) {
                 return false;
             }
-            if (!e.contains(object.boundingBox().calcCornerMax())) {
+            if (!e.contains(object.boundingBox().calculateCornerMax())) {
                 return false;
             }
         }

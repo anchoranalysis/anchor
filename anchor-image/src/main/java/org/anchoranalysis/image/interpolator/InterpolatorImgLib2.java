@@ -129,7 +129,7 @@ public abstract class InterpolatorImgLib2 implements Interpolator {
     }
     
     private static <T extends Type<T>> Img<T> interpolate2D(
-            RealRandomAccessible<T> source, Img<T> destination, Extent eSrc) {
+            RealRandomAccessible<T> source, Img<T> destination, Extent extentSrc) {
         
         // cursor to iterate over all pixels
         Cursor<T> cursor = destination.localizingCursor();
@@ -140,8 +140,8 @@ public abstract class InterpolatorImgLib2 implements Interpolator {
         double[] positionInterpolated = new double[2];
 
         double[] magnification = {
-                destination.realMax(0) / eSrc.x(),
-                destination.realMax(1) / eSrc.y()
+                destination.realMax(0) / extentSrc.x(),
+                destination.realMax(1) / extentSrc.y()
         };
         
         // for all pixels of the output image

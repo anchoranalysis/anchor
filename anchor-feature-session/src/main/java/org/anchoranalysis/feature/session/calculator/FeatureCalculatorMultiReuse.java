@@ -50,23 +50,23 @@ public class FeatureCalculatorMultiReuse<T extends FeatureInput>
     }
 
     @Override
-    public ResultsVector calcSuppressErrors(T params, ErrorReporter errorReporter) {
+    public ResultsVector calculateSuppressErrors(T params, ErrorReporter errorReporter) {
         if (rv == null) {
-            rv = delegate.calcSuppressErrors(params, errorReporter);
+            rv = delegate.calculateSuppressErrors(params, errorReporter);
         }
         return rv;
     }
 
     @Override
-    public ResultsVector calc(T params) throws NamedFeatureCalculationException {
+    public ResultsVector calculate(T params) throws NamedFeatureCalculationException {
         if (rv == null) {
-            rv = delegate.calc(params);
+            rv = delegate.calculate(params);
         }
         return rv;
     }
 
     @Override
-    public ResultsVector calc(T params, FeatureList<T> featuresSubset)
+    public ResultsVector calculate(T params, FeatureList<T> featuresSubset)
             throws NamedFeatureCalculationException {
         throw new NamedFeatureCalculationException("This operation is not supported");
     }

@@ -62,7 +62,7 @@ public class FinderSerializedObject<T> extends FinderSingleFile {
     }
 
     public T get() throws IOException {
-        return memoized.get().get();
+        return memoized.get().get();    // NOSONAR
     }
     
     private T getInternal() throws IOException {

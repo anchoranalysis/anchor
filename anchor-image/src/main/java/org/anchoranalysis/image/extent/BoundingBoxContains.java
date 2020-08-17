@@ -42,7 +42,7 @@ public final class BoundingBoxContains {
     public BoundingBoxContains(BoundingBox box) {
         super();
         this.box = box;
-        this.cornerMax = box.calcCornerMax();
+        this.cornerMax = box.calculateCornerMax();
     }
 
     /** Is this value in the x-dimension within the bounding box range? */
@@ -73,6 +73,6 @@ public final class BoundingBoxContains {
     /** Is this other bounding-box FULLY contained within this bounding box? */
     public boolean box(BoundingBox maybeContainedInside) {
         return point(maybeContainedInside.cornerMin())
-                && point(maybeContainedInside.calcCornerMax());
+                && point(maybeContainedInside.calculateCornerMax());
     }
 }

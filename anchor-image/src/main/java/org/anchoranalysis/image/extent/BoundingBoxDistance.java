@@ -41,10 +41,10 @@ public class BoundingBoxDistance {
         }
 
         ReadableTuple3i box1CornerMin = box1.cornerMin();
-        ReadableTuple3i box1CornerMax = box1.calcCornerMax();
+        ReadableTuple3i box1CornerMax = box1.calculateCornerMax();
 
         ReadableTuple3i box2CornerMin = box2.cornerMin();
-        ReadableTuple3i box2CornerMax = box2.calcCornerMax();
+        ReadableTuple3i box2CornerMax = box2.calculateCornerMax();
 
         int xDistance =
                 minDistance(

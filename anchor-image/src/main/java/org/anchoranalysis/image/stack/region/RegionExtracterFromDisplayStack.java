@@ -29,6 +29,7 @@ package org.anchoranalysis.image.stack.region;
 import java.nio.ByteBuffer;
 import java.nio.ShortBuffer;
 import java.util.List;
+import java.util.Optional;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
@@ -42,26 +43,22 @@ import org.anchoranalysis.image.scale.ScaleFactor;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.region.chnlconverter.attached.ChnlConverterAttached;
+import org.anchoranalysis.image.stack.region.chnlconverter.voxelbox.VoxelsConverter;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelDataTypeException;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedShort;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
+import lombok.AllArgsConstructor;
 
+@AllArgsConstructor
 public class RegionExtracterFromDisplayStack implements RegionExtracter {
 
-    // Used to convert our source buffer to bytes, not called if it's already bytes
-    private List<ChnlConverterAttached<Channel, ByteBuffer>> listChnlConverter;
+    /** Used to convert our source buffer to bytes, not called if it's already bytes */
+    private List<Optional<ChnlConverterAttached<Channel, ByteBuffer>>> listChnlConverter;
 
-    // Current displayStacl
+    /** Current displayStack */
     private Stack stack;
-
-    public RegionExtracterFromDisplayStack(
-            Stack stack, List<ChnlConverterAttached<Channel, ByteBuffer>> listChnlConverter) {
-        super();
-        this.stack = stack;
-        this.listChnlConverter = listChnlConverter;
-    }
 
     @Override
     public DisplayStack extractRegionFrom(BoundingBox box, double zoomFactor)
@@ -72,7 +69,7 @@ public class RegionExtracterFromDisplayStack implements RegionExtracter {
 
             Channel chnl =
                     extractRegionFrom(
-                            stack.getChannel(c), box, zoomFactor, listChnlConverter.get(c));
+                            stack.getChannel(c), box, zoomFactor, listChnlConverter.get(c).map(ChnlConverterAttached::getVoxelsConverter));
 
             if (c == 0) {
                 out = new Stack(chnl);
@@ -96,7 +93,7 @@ public class RegionExtracterFromDisplayStack implements RegionExtracter {
             Channel extractedSlice,
             BoundingBox box,
             double zoomFactor,
-            ChnlConverterAttached<Channel, ByteBuffer> chnlConverter)
+            Optional<VoxelsConverter<ByteBuffer>> chnlConverter)
             throws OperationFailedException {
 
         ScaleFactor sf = new ScaleFactor(zoomFactor);
@@ -120,12 +117,12 @@ public class RegionExtracterFromDisplayStack implements RegionExtracter {
                     zoomFactor,
                     interpolator);
 
-            if (chnlConverter != null) {
-                chnlConverter.getVoxelsConverter().convertFromByte(voxels, voxels);
+            if (chnlConverter.isPresent()) {
+                chnlConverter.get().convertFromByte(voxels, voxels);
             }
 
         } else if (extractedSlice.getVoxelDataType().equals(VoxelDataTypeUnsignedShort.INSTANCE)
-                && chnlConverter != null) {
+                && chnlConverter.isPresent()) {
 
             Voxels<ShortBuffer> bufferIntermediate =
                     VoxelsFactory.getShort().createInitialized(extentTrgt);
@@ -139,7 +136,7 @@ public class RegionExtracterFromDisplayStack implements RegionExtracter {
                     interpolator);
 
             // We now convert the ShortBuffer into bytes
-            chnlConverter.getVoxelsConverter().convertFromShort(bufferIntermediate, voxels);
+            chnlConverter.get().convertFromShort(bufferIntermediate, voxels);
 
         } else {
             throw new IncorrectVoxelDataTypeException(
@@ -167,7 +164,7 @@ public class RegionExtracterFromDisplayStack implements RegionExtracter {
             throws OperationFailedException {
 
         ReadableTuple3i cornerMin = box.cornerMin();
-        ReadableTuple3i cornerMax = box.calcCornerMax();
+        ReadableTuple3i cornerMax = box.calculateCornerMax();
         for (int z = cornerMin.z(); z <= cornerMax.z(); z++) {
 
             ByteBuffer bbIn = voxelsSrc.sliceBuffer(z);
@@ -210,7 +207,7 @@ public class RegionExtracterFromDisplayStack implements RegionExtracter {
             throws OperationFailedException {
 
         ReadableTuple3i cornerMin = box.cornerMin();
-        ReadableTuple3i cornerMax = box.calcCornerMax();
+        ReadableTuple3i cornerMax = box.calculateCornerMax();
         for (int z = cornerMin.z(); z <= cornerMax.z(); z++) {
 
             assert (voxelsSrc.slice(z) != null);

@@ -48,15 +48,15 @@ public class DualComparer {
 
     @Getter private final TestLoader loader2;
 
-    private final TestLoaderImageIO loaderImg1;
-    private final TestLoaderImageIO loaderImg2;
+    private final TestLoaderImageIO loaderImage1;
+    private final TestLoaderImageIO loaderImage2;
     
     public DualComparer(TestLoader loader1, TestLoader loader2) {
         super();
         this.loader1 = loader1;
         this.loader2 = loader2;
-        this.loaderImg1 = new TestLoaderImageIO(loader1);
-        this.loaderImg2 = new TestLoaderImageIO(loader2);
+        this.loaderImage1 = new TestLoaderImageIO(loader1);
+        this.loaderImage2 = new TestLoaderImageIO(loader2);
     }
 
     /**
@@ -67,7 +67,7 @@ public class DualComparer {
      * @throws FileNotFoundException if one or both of the files cannot be found
      */
     public boolean compareTwoImages(String path) throws FileNotFoundException {
-        return TestLoaderImageIO.compareTwoImages(loaderImg1, path, loaderImg2, path);
+        return TestLoaderImageIO.compareTwoImages(loaderImage1, path, loaderImage2, path);
     }
 
     /**
@@ -101,8 +101,8 @@ public class DualComparer {
     public boolean compareTwoCsvFiles(String path, CSVComparer comparer, PrintStream messageStream)
             throws CSVReaderException {
         return comparer.areCsvFilesEqual(
-                loaderImg1.getTestLoader().resolveTestPath(path),
-                loaderImg2.getTestLoader().resolveTestPath(path),
+                loaderImage1.resolveTestPath(path),
+                loaderImage2.resolveTestPath(path),
                 messageStream);
     }
 
@@ -113,15 +113,15 @@ public class DualComparer {
      * @throws IOException if something goes wrong with I/O
      */
     public boolean compareTwoObjectCollections(String path) throws IOException {
-        ObjectCollection objects1 = loaderImg1.openObjectsFromTestPath(path);
-        ObjectCollection objects2 = loaderImg2.openObjectsFromTestPath(path);
+        ObjectCollection objects1 = loaderImage1.openObjectsFromTestPath(path);
+        ObjectCollection objects2 = loaderImage2.openObjectsFromTestPath(path);
         return objects1.equalsDeep(objects2);
     }
     
     
     public boolean compareTwoSubdirectories(String path) {
-        Path dir1 = loaderImg1.getTestLoader().resolveTestPath(path);
-        Path dir2 = loaderImg2.getTestLoader().resolveTestPath(path);
+        Path dir1 = loaderImage1.resolveTestPath(path);
+        Path dir2 = loaderImage2.resolveTestPath(path);
         return DirectoriesComparer.areDirectoriesEqual(dir1, dir2);
     }
 }

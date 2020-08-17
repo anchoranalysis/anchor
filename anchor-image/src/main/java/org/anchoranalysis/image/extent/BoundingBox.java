@@ -171,7 +171,7 @@ public final class BoundingBox implements Serializable {
 
     public boolean atBorderXY(ImageDimensions dimensions) {
 
-        ReadableTuple3i cornerMax = this.calcCornerMax();
+        ReadableTuple3i cornerMax = this.calculateCornerMaxExclusive();
 
         if (cornerMin.x() == 0) {
             return true;
@@ -180,20 +180,20 @@ public final class BoundingBox implements Serializable {
             return true;
         }
 
-        if (cornerMax.x() == (dimensions.x() - 1)) {
+        if (cornerMax.x() == dimensions.x()) {
             return true;
         }
-        return cornerMax.y() == (dimensions.y() - 1);
+        return cornerMax.y() == dimensions.y();
     }
 
     public boolean atBorderZ(ImageDimensions dimensions) {
 
-        ReadableTuple3i cornerMax = this.calcCornerMax();
+        ReadableTuple3i cornerMax = this.calculateCornerMaxExclusive();
 
         if (cornerMin.z() == 0) {
             return true;
         }
-        return cornerMax.z() == (dimensions.z() - 1);
+        return cornerMax.z() == dimensions.z();
     }
 
     public BoundingBox growBy(Tuple3i toAdd, Extent containingExtent) {
@@ -215,7 +215,7 @@ public final class BoundingBox implements Serializable {
      * 
      * @return the maximum point inside the box in each dimension
      */
-    public ReadableTuple3i calcCornerMax() {
+    public ReadableTuple3i calculateCornerMax() {
         Point3i out = new Point3i();
         out.setX(cornerMin.x() + extent.x() - 1);
         out.setY(cornerMin.y() + extent.y() - 1);
@@ -232,7 +232,7 @@ public final class BoundingBox implements Serializable {
      * 
      * @return the maximum point inside the box in each dimension
      */
-    public Point3i calcCornerMaxExclusive() {
+    public Point3i calculateCornerMaxExclusive() {
         Point3i out = new Point3i();
         out.setX(cornerMin.x() + extent.x());
         out.setY(cornerMin.y() + extent.y());
@@ -249,7 +249,7 @@ public final class BoundingBox implements Serializable {
         }
         
         Point3i min = new Point3i(cornerMin);
-        Point3i max = new Point3i(calcCornerMax());
+        Point3i max = new Point3i(calculateCornerMax());
 
         if (min.x() < 0) {
             min.setX(0);
@@ -276,7 +276,7 @@ public final class BoundingBox implements Serializable {
 
     public Point3i closestPointOnBorder(Point3d pointIn) {
 
-        ReadableTuple3i cornerMax = calcCornerMax();
+        ReadableTuple3i cornerMax = calculateCornerMax();
 
         Point3i pointOut = new Point3i();
         pointOut.setX(closestPointOnAxis(pointIn.x(), cornerMin.x(), cornerMax.x()));
@@ -326,7 +326,7 @@ public final class BoundingBox implements Serializable {
 
     @Override
     public String toString() {
-        return cornerMin.toString() + "+" + extent.toString() + "=" + calcCornerMax().toString();
+        return cornerMin.toString() + "+" + extent.toString() + "=" + calculateCornerMaxExclusive().toString();
     }
 
     /**

@@ -184,7 +184,7 @@ public class IterateVoxels {
     public static void callEachPoint(BoundingBox box, ProcessVoxel process) {
 
         ReadableTuple3i cornerMin = box.cornerMin();
-        ReadableTuple3i cornerMax = box.calcCornerMax();
+        ReadableTuple3i cornerMax = box.calculateCornerMax();
 
         Point3i point = new Point3i();
 
@@ -228,7 +228,7 @@ public class IterateVoxels {
     public static void callEachPoint(BoundingBox box, Predicate<Point3i> predicate, ProcessVoxel process) {
 
         ReadableTuple3i cornerMin = box.cornerMin();
-        ReadableTuple3i cornerMax = box.calcCornerMax();
+        ReadableTuple3i cornerMax = box.calculateCornerMax();
 
         Point3i point = new Point3i();
 
@@ -301,7 +301,7 @@ public class IterateVoxels {
         ReadableTuple3i cornerMin = object.boundingBox().cornerMin();
         byte valueOn = object.binaryValuesByte().getOnByte();
 
-        Point3i cornerMax = object.boundingBox().calcCornerMaxExclusive();
+        Point3i cornerMax = object.boundingBox().calculateCornerMaxExclusive();
         
         Point3i point = new Point3i();
         

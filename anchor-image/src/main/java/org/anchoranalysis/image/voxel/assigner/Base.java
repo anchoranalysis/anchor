@@ -35,7 +35,7 @@ abstract class Base<T extends Buffer> implements VoxelsAssigner {
     public void toBox(BoundingBox box) {
 
         ReadableTuple3i cornerMin = box.cornerMin();
-        ReadableTuple3i cornerMax = box.calcCornerMax();
+        ReadableTuple3i cornerMax = box.calculateCornerMax();
         Extent extent = voxels.extent();
 
         for (int z = cornerMin.z(); z <= cornerMax.z(); z++) {

@@ -54,7 +54,7 @@ import org.anchoranalysis.feature.shared.SharedFeatureMulti;
  * <p>All feature use the same InitParams, but successively different {#FeatureCalcParams}
  * sequentially.
  *
- * <p>Caching is applied only within each call to {{@link #calc(FeatureInput)} but among successive
+ * <p>Caching is applied only within each call to {{@link #calculate(FeatureInput)} but among successive
  * calls.
  *
  * @author Owen Feehan
@@ -140,13 +140,13 @@ public class SequentialSession<T extends FeatureInput> implements FeatureCalcula
      * @throws FeatureCalculationException
      */
     @Override
-    public ResultsVector calc(T params) throws NamedFeatureCalculationException {
+    public ResultsVector calculate(T params) throws NamedFeatureCalculationException {
         checkIsStarted();
         return calcCommonExceptionAsVector(params);
     }
 
     @Override
-    public ResultsVector calc(T params, FeatureList<T> featuresSubset)
+    public ResultsVector calculate(T params, FeatureList<T> featuresSubset)
             throws NamedFeatureCalculationException {
         checkIsStarted();
 
@@ -164,7 +164,7 @@ public class SequentialSession<T extends FeatureInput> implements FeatureCalcula
      * @param params
      * @return
      */
-    public ResultsVector calcSuppressErrors(T params, ErrorReporter errorReporter) {
+    public ResultsVector calculateSuppressErrors(T params, ErrorReporter errorReporter) {
 
         ResultsVector res = new ResultsVector(listFeatures.size());
 

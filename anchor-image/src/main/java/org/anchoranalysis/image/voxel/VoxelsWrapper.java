@@ -213,7 +213,7 @@ public class VoxelsWrapper {
         return voxels.assignValue(valueToAssign);
     }
 
-    public VoxelsExtracter<? extends Buffer> extracter() {
+    public VoxelsExtracter<? extends Buffer> extracter() {  // NOSONAR
         return voxels.extracter();
     }
 }

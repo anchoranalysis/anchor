@@ -53,7 +53,7 @@ class ExtentBoundsComparer {
             ReadableTuple3i max1,
             ReadableTuple3i max2,
             ToIntFunction<ReadableTuple3i> extract) {
-        return calc(
+        return calculate(
                         extract.applyAsInt(min1),
                         extract.applyAsInt(min2),
                         extract.applyAsInt(max1),
@@ -69,7 +69,7 @@ class ExtentBoundsComparer {
             ReadableTuple3i max1,
             ReadableTuple3i max2,
             ToIntFunction<ReadableTuple3i> extract) {
-        return calc(
+        return calculate(
                 extract.applyAsInt(min1),
                 extract.applyAsInt(min2),
                 extract.applyAsInt(max1),
@@ -78,7 +78,7 @@ class ExtentBoundsComparer {
                 Math::min);
     }
 
-    private static Optional<ExtentBoundsComparer> calc(
+    private static Optional<ExtentBoundsComparer> calculate(
             int min1,
             int min2,
             int max1,

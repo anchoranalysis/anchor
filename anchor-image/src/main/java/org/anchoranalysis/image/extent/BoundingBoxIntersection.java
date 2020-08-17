@@ -28,22 +28,20 @@ package org.anchoranalysis.image.extent;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.ToIntFunction;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
+import lombok.AllArgsConstructor;
 
 /**
  * Methods for checking intersection between a particular bounding-box and others
  *
  * @author Owen Feehan
  */
+@AllArgsConstructor
 public final class BoundingBoxIntersection {
 
     private final BoundingBox box;
-
-    public BoundingBoxIntersection(BoundingBox box) {
-        super();
-        this.box = box;
-    }
 
     /** Does this bounding box intersect with another? */
     public boolean existsWith(BoundingBox other) {
@@ -84,37 +82,54 @@ public final class BoundingBoxIntersection {
      */
     private Optional<BoundingBox> with(BoundingBox other, boolean createIntersectionBox) {
 
-        ReadableTuple3i cornerMin = box.cornerMin();
-        ReadableTuple3i cornerMinOther = other.cornerMin();
+        CreateComparer createComparer = new CreateComparer(box, other);
 
-        ReadableTuple3i cornerMax = box.calcCornerMax();
-        ReadableTuple3i cornerMaxOthr = other.calcCornerMax();
+        Optional<ExtentBoundsComparer> compareX = createComparer.createMin(ReadableTuple3i::x);
+        Optional<ExtentBoundsComparer> compareY = createComparer.createMin(ReadableTuple3i::y);
+        Optional<ExtentBoundsComparer> compareZ = createComparer.createMin(ReadableTuple3i::z);
 
-        Optional<ExtentBoundsComparer> meiX =
-                ExtentBoundsComparer.createMin(
-                        cornerMin, cornerMinOther, cornerMax, cornerMaxOthr, ReadableTuple3i::x);
-        Optional<ExtentBoundsComparer> meiY =
-                ExtentBoundsComparer.createMin(
-                        cornerMin, cornerMinOther, cornerMax, cornerMaxOthr, ReadableTuple3i::y);
-        Optional<ExtentBoundsComparer> meiZ =
-                ExtentBoundsComparer.createMin(
-                        cornerMin, cornerMinOther, cornerMax, cornerMaxOthr, ReadableTuple3i::z);
-
-        if (!meiX.isPresent() || !meiY.isPresent() || !meiZ.isPresent()) {
+        if (!compareX.isPresent() || !compareY.isPresent() || !compareZ.isPresent()) {
             return Optional.empty();
         }
 
         if (createIntersectionBox) {
             return Optional.of(
-                    new BoundingBox(
-                            new Point3i(
-                                    meiX.get().min(), meiY.get().min(), meiZ.get().min()),
-                            new Extent(
-                                    meiX.get().extent(),
-                                    meiY.get().extent(),
-                                    meiZ.get().extent())));
+                    createIntersection(compareX.get(), compareY.get(), compareZ.get()));
         } else {
             return Optional.of(box);
+        }
+    }
+    
+    private BoundingBox createIntersection(ExtentBoundsComparer compareX, ExtentBoundsComparer compareY, ExtentBoundsComparer compareZ) {
+        return new BoundingBox(
+                new Point3i(
+                        compareX.min(), compareY.min(), compareZ.min()),
+                new Extent(
+                        compareX.extent(),
+                        compareY.extent(),
+                        compareZ.extent()));        
+    }
+    
+    /** Helps creates a comparer for each dimension of the box */
+    private static class CreateComparer {
+        
+        private final ReadableTuple3i cornerMin1;
+        private final ReadableTuple3i cornerMin2;
+
+        private final ReadableTuple3i cornerMax1;
+        private final ReadableTuple3i cornerMax2;
+        
+        public CreateComparer(BoundingBox box1, BoundingBox box2) {
+            cornerMin1 = box1.cornerMin();
+            cornerMin2 = box2.cornerMin();
+
+            cornerMax1 = box1.calculateCornerMax();
+            cornerMax2 = box2.calculateCornerMax();   
+        }
+        
+        public Optional<ExtentBoundsComparer> createMin(ToIntFunction<ReadableTuple3i> extract) {
+            return ExtentBoundsComparer.createMin(
+                    cornerMin1, cornerMin2, cornerMax1, cornerMax2, extract);
         }
     }
 }

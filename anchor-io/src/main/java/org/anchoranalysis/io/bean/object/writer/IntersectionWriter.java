@@ -71,7 +71,7 @@ class IntersectionWriter {
     private static void writeOnEachSlice(
             RGBStack stack, RGBColor color, BoundingBox intersection, ObjectMask object) {
 
-        ReadableTuple3i maxGlobal = intersection.calcCornerMax();
+        ReadableTuple3i maxGlobal = intersection.calculateCornerMax();
         Point3i pointGlobal = new Point3i();
 
         for (pointGlobal.setZ(intersection.cornerMin().z());

@@ -115,11 +115,11 @@ public class ChnlMaskedWithObjectGenerator extends RasterGenerator
                 new ImageDimensions(box.extent(), srcChnl.dimensions().resolution());
 
         Channel chnlNew =
-                ChannelFactory.instance().createEmptyInitialised(newSd, srcChnl.getVoxelDataType());
+                ChannelFactory.instance().create(newSd, srcChnl.getVoxelDataType());
 
         byte maskOn = object.binaryValuesByte().getOnByte();
 
-        ReadableTuple3i maxGlobal = box.calcCornerMax();
+        ReadableTuple3i maxGlobal = box.calculateCornerMax();
         Point3i pointGlobal = new Point3i();
         Point3i pointLocal = new Point3i();
 

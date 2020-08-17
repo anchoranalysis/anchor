@@ -52,11 +52,11 @@ public class PrependColorSetGenerator extends ColorSetGenerator {
 
     @Override
     public ColorList generateColors(int numberColors) throws OperationFailedException {
-        ColorList lst = source.generateColors(numberColors);
-        lst.shuffle();
+        ColorList list = source.generateColors(numberColors);
+        list.shuffle();
 
-        lst.add(0, prependColor.rgbColor());
+        list.add(0, prependColor.rgbColor());
 
-        return lst;
+        return list;
     }
 }

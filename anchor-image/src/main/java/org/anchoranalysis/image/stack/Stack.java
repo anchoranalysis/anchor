@@ -168,7 +168,7 @@ public class Stack implements Iterable<Channel> {
         Channel first = getChannel(0);
         delegate.addChannel(
                 ChannelFactory.instance()
-                        .createEmptyInitialised(first.dimensions(), first.getVoxelDataType()));
+                        .create(first.dimensions(), first.getVoxelDataType()));
     }
 
     public final void addChannel(Channel channel) throws IncorrectImageSizeException {

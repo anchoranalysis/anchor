@@ -42,23 +42,23 @@ import org.anchoranalysis.feature.input.FeatureInput;
 public interface FeatureCalculatorMulti<T extends FeatureInput> {
 
     /** Performs one calculation throwing an exception if something goes wrong */
-    ResultsVector calc(T input) throws NamedFeatureCalculationException;
+    ResultsVector calculate(T input) throws NamedFeatureCalculationException;
 
     /**
      * Performs one calculation on a sub-set of the feature list throwing an exception if something
      * goes wrong
      */
-    ResultsVector calc(T input, FeatureList<T> featuresSubset)
+    ResultsVector calculate(T input, FeatureList<T> featuresSubset)
             throws NamedFeatureCalculationException;
 
     /**
      * Performs one calculation recording the error to an ErrorReporter if anything goes wrong, but
      * throwing no exception
      */
-    ResultsVector calcSuppressErrors(T input, ErrorReporter errorReporter);
+    ResultsVector calculateSuppressErrors(T input, ErrorReporter errorReporter);
 
     /**
-     * Performs one calculation, either calling {@link #calc(T)} or {@link #calcSuppressErrors}
+     * Performs one calculation, either calling {@link #calculate(T)} or {@link #calcSuppressErrors}
      * depending on a flag
      *
      * @throws FeatureCalculationException if suppress errors is FALSE and an error occurs during
@@ -67,9 +67,9 @@ public interface FeatureCalculatorMulti<T extends FeatureInput> {
     default ResultsVector calc(T input, ErrorReporter errorReporter, boolean suppressErrors)
             throws NamedFeatureCalculationException {
         if (suppressErrors) {
-            return calcSuppressErrors(input, errorReporter);
+            return calculateSuppressErrors(input, errorReporter);
         } else {
-            return calc(input);
+            return calculate(input);
         }
     }
 

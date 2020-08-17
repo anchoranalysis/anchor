@@ -38,7 +38,7 @@ public class LabelObjects {
     public Channel createLabelledChannelForObjects(ObjectsWithBoundingBox objects, Optional<Map<Integer,ObjectMask>> mapLabels) throws CreateException {
         
         // A channel that is exactly the size of the bounding box for the objects
-        Channel channel = ChannelFactory.instance().createEmptyInitialisedToSupportMaxValue( new ImageDimensions(objects.boundingBox().extent()), objects.size() + 1);
+        Channel channel = ChannelFactory.instance().createEmptyInitialisedToSupportMaxValue( new ImageDimensions(objects.boundingBox().extent()), (long) (objects.size() + 1));
         
         ReadableTuple3i shiftBack = objects.boundingBox().cornerMin();
         performLabelling(channel, objects.objects(), mapLabels, object->shiftObjectBack( maybeApplyBefore(object), shiftBack) );

@@ -38,7 +38,7 @@ public class ReportFeatureOnObject extends ReportFeatureOnObjectsBase<FeatureInp
     protected double calcFeatureOn(
             ObjectCollection objects, FeatureCalculatorSingle<FeatureInputSingleObject> session)
             throws FeatureCalculationException {
-        return session.calc(new FeatureInputSingleObject(extractObjFromCollection(objects)));
+        return session.calculate(new FeatureInputSingleObject(extractObjFromCollection(objects)));
     }
 
     private ObjectMask extractObjFromCollection(ObjectCollection objects)

@@ -79,6 +79,10 @@ public final class ImageDimensions implements Serializable {
         return new ImageDimensions(extent.scaleXYBy(scaleFactor), resolution.scaleXY(scaleFactor));
     }
 
+    public ImageDimensions duplicateChangeExtent(Extent extentToAssign) {
+        return new ImageDimensions(extentToAssign, resolution);
+    }
+    
     public ImageDimensions duplicateChangeZ(int z) {
         return new ImageDimensions(extent.duplicateChangeZ(z), resolution);
     }

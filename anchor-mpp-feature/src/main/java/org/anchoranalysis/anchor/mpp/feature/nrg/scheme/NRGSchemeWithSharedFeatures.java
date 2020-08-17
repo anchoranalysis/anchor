@@ -96,7 +96,7 @@ public class NRGSchemeWithSharedFeatures {
                 FeatureInputSingleMemo params =
                         new FeatureInputSingleMemo(pmm, new NRGStackWithParams(raster, kvp));
 
-                return new NRGTotal(session.calc(params).total());
+                return new NRGTotal(session.calculate(params).total());
             } catch (InitException e) {
                 throw new NamedFeatureCalculationException(e);
             }
@@ -128,7 +128,7 @@ public class NRGSchemeWithSharedFeatures {
 
             FeatureInputAllMemo params = new FeatureInputAllMemo(pxlMarkMemoList, nrgStack);
 
-            return new NRGTotal(session.calc(params).total());
+            return new NRGTotal(session.calculate(params).total());
 
         } catch (InitException | FeatureCalculationException e) {
             throw new NamedFeatureCalculationException(e);

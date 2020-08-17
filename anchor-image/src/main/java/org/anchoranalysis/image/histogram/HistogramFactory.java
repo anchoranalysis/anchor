@@ -158,7 +158,7 @@ public class HistogramFactory {
         Extent extent = inputBuffer.extent();
 
         ReadableTuple3i cornerMin = object.boundingBox().cornerMin();
-        ReadableTuple3i cornerMax = object.boundingBox().calcCornerMax();
+        ReadableTuple3i cornerMax = object.boundingBox().calculateCornerMax();
 
         byte matchValue = object.binaryValuesByte().getOnByte();
 

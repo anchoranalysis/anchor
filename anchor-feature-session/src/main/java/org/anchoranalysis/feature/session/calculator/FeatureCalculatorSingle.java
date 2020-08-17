@@ -39,11 +39,11 @@ import org.anchoranalysis.feature.input.FeatureInput;
 public interface FeatureCalculatorSingle<T extends FeatureInput> {
 
     /** Performs one calculation throwing an exception if something goes wrong */
-    double calc(T input) throws FeatureCalculationException;
+    double calculate(T input) throws FeatureCalculationException;
 
     /**
      * Performs one calculation recording the error to an ErrorReporter if anything goes wrong, but
      * throwing no exception
      */
-    double calcSuppressErrors(T input, ErrorReporter errorReporter);
+    double calculateSuppressErrors(T input, ErrorReporter errorReporter);
 }

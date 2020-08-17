@@ -71,7 +71,7 @@ class PredicateImplementation<T extends Buffer> implements VoxelsPredicate {
     public int countForObject(ObjectMask object) {
 
         ReadableTuple3i srcStart = object.boundingBox().cornerMin();
-        ReadableTuple3i srcEnd = object.boundingBox().calcCornerMax();
+        ReadableTuple3i srcEnd = object.boundingBox().calculateCornerMax();
 
         int count = 0;
 
@@ -150,7 +150,7 @@ class PredicateImplementation<T extends Buffer> implements VoxelsPredicate {
 
         ObjectMask object = new ObjectMask(box);
 
-        ReadableTuple3i pointMax = box.calcCornerMax();
+        ReadableTuple3i pointMax = box.calculateCornerMax();
 
         byte outOn = object.binaryValuesByte().getOnByte();
         

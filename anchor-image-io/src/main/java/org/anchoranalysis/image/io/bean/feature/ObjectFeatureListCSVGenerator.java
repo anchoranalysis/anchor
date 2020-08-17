@@ -112,7 +112,7 @@ class ObjectFeatureListCSVGenerator extends CSVGenerator
             rvc = new ResultsVectorCollection();
             for (ObjectMask objectMask : element) {
                 rvc.add(
-                        session.calcSuppressErrors(
+                        session.calculateSuppressErrors(
                                 createParams(objectMask, nrgStack), logger.errorReporter()));
             }
         } catch (InitException e) {

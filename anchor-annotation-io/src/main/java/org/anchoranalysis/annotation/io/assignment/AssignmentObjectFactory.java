@@ -121,7 +121,7 @@ public class AssignmentObjectFactory {
                 ObjectMask objR = result.get(j);
 
                 double costObjects =
-                        session.calc(new FeatureInputPairObjects(objA, objR, nrgStack));
+                        session.calculate(new FeatureInputPairObjects(objA, objR, nrgStack));
                 outArr[i][j] = costObjects;
 
                 if (Double.isNaN(costObjects)) {

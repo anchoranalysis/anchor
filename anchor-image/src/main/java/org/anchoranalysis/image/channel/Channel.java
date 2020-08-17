@@ -201,14 +201,14 @@ public class Channel {
      * dimension).
      *
      * @param voxels voxels to be flattened (i.e. 3D)
-     * @param flattenFunc function to perform the flattening
+     * @param flattener function to perform the flattening
      * @return flattened box (i.e. 2D)
      */
-    private Channel flattenZProjection(Function<VoxelsExtracter<?>,Voxels<?>> flattenFunc) {
+    private Channel flattenZProjection(Function<VoxelsExtracter<?>,Voxels<?>> flattener) {
         int prevZSize = voxels.extent().z();
         if (prevZSize > 1) {
             return FACTORY.create(
-                    flattenFunc.apply(voxels.extracter()),
+                    flattener.apply(voxels.extracter()),
                     dimensions.resolution().duplicateFlattenZ(prevZSize));
         } else {
             return this;

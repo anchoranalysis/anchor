@@ -58,21 +58,21 @@ public class FeatureCalculatorMultiChangeInput<T extends FeatureInput>
         this.funcToApplyChange = funcToApplyChange;
     }
 
-    public ResultsVector calc(T input) throws NamedFeatureCalculationException {
+    public ResultsVector calculate(T input) throws NamedFeatureCalculationException {
         funcToApplyChange.accept(input);
-        return calculator.calc(input);
+        return calculator.calculate(input);
     }
 
     @Override
-    public ResultsVector calc(T input, FeatureList<T> featuresSubset)
+    public ResultsVector calculate(T input, FeatureList<T> featuresSubset)
             throws NamedFeatureCalculationException {
         funcToApplyChange.accept(input);
-        return calculator.calc(input, featuresSubset);
+        return calculator.calculate(input, featuresSubset);
     }
 
-    public ResultsVector calcSuppressErrors(T input, ErrorReporter errorReporter) {
+    public ResultsVector calculateSuppressErrors(T input, ErrorReporter errorReporter) {
         funcToApplyChange.accept(input);
-        return calculator.calcSuppressErrors(input, errorReporter);
+        return calculator.calculateSuppressErrors(input, errorReporter);
     }
 
     @Override

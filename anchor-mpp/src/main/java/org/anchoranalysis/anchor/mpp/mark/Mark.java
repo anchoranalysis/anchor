@@ -136,7 +136,7 @@ public abstract class Mark implements Serializable, Identifiable {
 
         byte maskOn = bv.getOnByte();
 
-        ReadableTuple3i maxPos = box.calcCornerMax();
+        ReadableTuple3i maxPos = box.calculateCornerMax();
 
         Point3i point = new Point3i();
         for (point.setZ(box.cornerMin().z());
@@ -180,7 +180,7 @@ public abstract class Mark implements Serializable, Identifiable {
 
         byte maskOn = bvOut.getOnByte();
 
-        ReadableTuple3i maxPos = box.calcCornerMax();
+        ReadableTuple3i maxPos = box.calculateCornerMax();
 
         Point3i point = new Point3i();
         Point3d pointScaled = new Point3d();

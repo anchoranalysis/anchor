@@ -41,31 +41,35 @@ import org.anchoranalysis.io.bioformats.ConfigureBioformatsLogging;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
 import org.anchoranalysis.test.TestDataLoadException;
 import org.anchoranalysis.test.TestLoader;
+import lombok.Getter;
 
 public class TestLoaderImageIO {
 
-    private TestLoader delegate;
+    /** Delegate loader (for non image-related loading) */
+    @Getter private TestLoader testLoader;
+    
+    /** Reads rasters from filesystme */
     private RasterReader rasterReader;
 
     public TestLoaderImageIO(TestLoader testLoader) {
-        this.delegate = testLoader;
+        this.testLoader = testLoader;
 
         TestReaderWriterUtilities.ensureRasterReader();
         rasterReader = RegisterBeanFactories.getDefaultInstances().get(RasterReader.class);
     }
 
-    public Channel openChnlFromTestPath(String testPath) {
-        return extractChnl(openStackFromTestPath(testPath));
+    public Channel openChannelFromTestPath(String testPath) {
+        return extractChannel(openStackFromTestPath(testPath));
     }
 
-    public Channel openChnlFromFilePath(Path filePath) {
-        return extractChnl(openStackFromFilePath(filePath));
+    public Channel openChannelFromFilePath(Path filePath) {
+        return extractChannel(openStackFromFilePath(filePath));
     }
 
     public Stack openStackFromTestPath(String testPath) {
         ConfigureBioformatsLogging.instance().makeSureConfigured();
 
-        Path filePath = delegate.resolveTestPath(testPath);
+        Path filePath = testLoader.resolveTestPath(testPath);
         return openStackFromFilePath(filePath);
     }
 
@@ -73,20 +77,11 @@ public class TestLoaderImageIO {
 
         ConfigureBioformatsLogging.instance().makeSureConfigured();
 
-        try {
-            OpenedRaster or = rasterReader.openFile(filePath);
-            try {
-                return or.open(0, ProgressReporterNull.get()).get(0);
-            } finally {
-                or.close();
-            }
+        try (OpenedRaster openedRaster = rasterReader.openFile(filePath)) {
+            return openedRaster.open(0, ProgressReporterNull.get()).get(0);
         } catch (RasterIOException e) {
             throw new TestDataLoadException(e);
         }
-    }
-
-    public TestLoader getTestLoader() {
-        return delegate;
     }
 
     /**
@@ -131,7 +126,7 @@ public class TestLoaderImageIO {
     }
 
     public ObjectCollection openObjectsFromTestPath(String testFolderPath) {
-        Path filePath = delegate.resolveTestPath(testFolderPath);
+        Path filePath = testLoader.resolveTestPath(testFolderPath);
         return openObjectsFromFilePath(filePath);
     }
 
@@ -182,8 +177,12 @@ public class TestLoaderImageIO {
 
         return objectsWritten.equalsDeep(objectsSaved);
     }
+    
+    public Path resolveTestPath(String testPath) {
+        return testLoader.resolveTestPath(testPath);
+    }
 
-    private static Channel extractChnl(Stack stack) {
+    private static Channel extractChannel(Stack stack) {
         if (stack.getNumberChannels() != 1) {
             throw new TestDataLoadException(
                     "Loading a stack which contains more than one channel, when only one channel is intended");

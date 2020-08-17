@@ -74,7 +74,7 @@ public class FeatureCalculatorCachedMulti<T extends FeatureInput>
     }
 
     @Override
-    public ResultsVector calcSuppressErrors(T input, ErrorReporter errorReporter) {
+    public ResultsVector calculateSuppressErrors(T input, ErrorReporter errorReporter) {
         this.errorReporter = Optional.of(errorReporter); // Suppress errors in cache
         try {
             return cacheResults.get(input);
@@ -85,7 +85,7 @@ public class FeatureCalculatorCachedMulti<T extends FeatureInput>
     }
 
     @Override
-    public ResultsVector calc(T input) throws NamedFeatureCalculationException {
+    public ResultsVector calculate(T input) throws NamedFeatureCalculationException {
         this.errorReporter = Optional.empty(); // Do not suppress errors in cache
         try {
             return cacheResults.get(input);
@@ -95,7 +95,7 @@ public class FeatureCalculatorCachedMulti<T extends FeatureInput>
     }
 
     @Override
-    public ResultsVector calc(T input, FeatureList<T> featuresSubset)
+    public ResultsVector calculate(T input, FeatureList<T> featuresSubset)
             throws NamedFeatureCalculationException {
         throw new NamedFeatureCalculationException(
                 "This operation is not supported for subsets of features");
@@ -125,9 +125,9 @@ public class FeatureCalculatorCachedMulti<T extends FeatureInput>
 
     private ResultsVector calcInsideCache(T index) throws NamedFeatureCalculationException {
         if (errorReporter.isPresent()) {
-            return source.calcSuppressErrors(index, errorReporter.get());
+            return source.calculateSuppressErrors(index, errorReporter.get());
         } else {
-            return source.calc(index);
+            return source.calculate(index);
         }
     }
 }

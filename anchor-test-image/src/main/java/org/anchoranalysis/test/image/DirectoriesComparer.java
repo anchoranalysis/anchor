@@ -54,7 +54,7 @@ class DirectoriesComparer {
         
         for (int i = 0; i < list2.length; i++) {
             if (list1[i].isFile() && list2[i].isFile()) {
-                if (!compareFiles(list1[i], list2[i])) {
+                if (!compareFiles(list1[i], list2[i])) {    // NOSONAR
                     return false;
                 }
             } else if (list1[i].isDirectory() && list2[i].isDirectory()) {

@@ -67,7 +67,7 @@ public class ExtendObjectsInto3DMask {
         BoundedVoxels<ByteBuffer> newMask =
                 new BoundedVoxels<>(newBBox, VoxelsFactory.getByte());
 
-        ReadableTuple3i max = newBBox.calcCornerMax();
+        ReadableTuple3i max = newBBox.calculateCornerMax();
         Point3i point = new Point3i();
 
         BinaryValuesByte bv = mask3D.binaryValues().createByte();

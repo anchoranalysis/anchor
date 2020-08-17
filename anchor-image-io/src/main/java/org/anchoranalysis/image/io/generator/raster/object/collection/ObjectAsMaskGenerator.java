@@ -123,7 +123,7 @@ public class ObjectAsMaskGenerator extends RasterGenerator
 
         Channel channelNew =
                 ChannelFactory.instance()
-                        .createEmptyInitialised(dimensions, VoxelDataTypeUnsignedByte.INSTANCE);
+                        .create(dimensions, VoxelDataTypeUnsignedByte.INSTANCE);
 
         Voxels<ByteBuffer> voxelsNew = channelNew.voxels().asByte();
 
