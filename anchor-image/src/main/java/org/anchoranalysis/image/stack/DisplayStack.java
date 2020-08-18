@@ -41,6 +41,7 @@ import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.BoundingBox;
+import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.stack.bufferedimage.BufferedImageFactory;
@@ -143,6 +144,10 @@ public class DisplayStack {
 
     public ImageDimensions dimensions() {
         return stack.dimensions();
+    }
+    
+    public Extent extent() {
+        return dimensions().extent();
     }
 
     public final int getNumberChannels() {
@@ -272,7 +277,7 @@ public class DisplayStack {
                     voxelsForChannel(0),
                     voxelsForChannel(1),
                     voxelsForChannel(2),
-                    stack.dimensions().extent());
+                    stack.extent());
         }
         return BufferedImageFactory.createGrayscale(voxelsForChannel(0));
     }

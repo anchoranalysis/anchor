@@ -95,8 +95,8 @@ public class RasterArranger {
 
         assert (stackIn.getNumberChannels() == stackOut.getNumberChannels());
 
-        Extent extent = stackIn.dimensions().extent();
-        Extent extentOut = stackIn.dimensions().extent();
+        Extent extent = stackIn.extent();
+        Extent extentOut = stackIn.extent();
 
         ReadableTuple3i leftCrnr = box.cornerMin();
         int xEnd = leftCrnr.x() + box.extent().x() - 1;

@@ -45,7 +45,7 @@ class ShiftBackwardsBy implements VoxelsAssigner {
     }
 
     @Override
-    public int toObject(ObjectMask object, IntPredicate voxelPredicate) {
+    public boolean toObject(ObjectMask object, IntPredicate voxelPredicate) {
         return voxelsAssigner.toObject(shift(object), voxelPredicate);
     }
 

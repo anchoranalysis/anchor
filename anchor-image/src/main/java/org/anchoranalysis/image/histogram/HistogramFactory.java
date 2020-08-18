@@ -84,28 +84,26 @@ public class HistogramFactory {
         return out;
     }
 
-    public static Histogram create(Channel chnl) throws CreateException {
+    public static Histogram create(Channel channel) throws CreateException {
 
         try {
-            return create(chnl.voxels());
+            return create(channel.voxels());
         } catch (IncorrectVoxelDataTypeException e) {
-            throw new CreateException("Cannot create histogram from ImgChnl", e);
+            throw new CreateException("Cannot create histogram from channel", e);
         }
     }
 
-    public static Histogram create(Channel chnl, Mask mask) throws CreateException {
+    public static Histogram create(Channel channel, Mask mask) throws CreateException {
 
-        if (!chnl.dimensions().extent().equals(mask.dimensions().extent())) {
-            throw new CreateException("Size of chnl and mask do not match");
+        if (!channel.extent().equals(mask.extent())) {
+            throw new CreateException("Size of channel and mask do not match");
         }
 
-        Histogram total = new Histogram((int) chnl.getVoxelDataType().maxValue());
+        Histogram total = new Histogram((int) channel.getVoxelDataType().maxValue());
 
-        Voxels<?> voxels = chnl.voxels().any();
-
-        Histogram h = createWithMask(voxels, new ObjectMask(mask.binaryVoxels()));
+        Histogram histogramForObject = createWithMask(channel.voxels().any(), new ObjectMask(mask.binaryVoxels()));
         try {
-            total.addHistogram(h);
+            total.addHistogram(histogramForObject);
         } catch (OperationFailedException e) {
             assert false;
         }

@@ -31,6 +31,7 @@ import lombok.Setter;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.stack.Stack;
 
@@ -91,5 +92,9 @@ public class NRGStackWithParams {
 
     public Stack asStack() {
         return nrgStack.asStack();
+    }
+
+    public Extent extent() {
+        return nrgStack.extent();
     }
 }

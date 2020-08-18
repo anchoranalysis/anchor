@@ -82,7 +82,7 @@ class ObjectDualDeserializer implements Deserializer<ObjectMask> {
 
             Channel chnl = stack.getChannel(0);
 
-            if (!chnl.dimensions().extent().equals(box.extent())) {
+            if (!chnl.extent().equals(box.extent())) {
                 throw new DeserializationFailedException(
                         errorMessageMismatchingDims(box, chnl.dimensions(), filePath));
             }

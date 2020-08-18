@@ -116,7 +116,7 @@ public class RegionExtracterFromDisplayStack implements RegionExtracter {
             interpolateRegionFromByte(
                     extractedSlice.voxels().asByte(),
                     voxels,
-                    extractedSlice.dimensions().extent(),
+                    extractedSlice.extent(),
                     extentTrgt,
                     box,
                     zoomFactor,

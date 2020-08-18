@@ -76,7 +76,7 @@ class ScaledLabelledObjects {
                         overlappingObject ->
                                 scaleObjectIndependently(
                                         overlappingObject,
-                                        labelsScaled.dimensions().extent(),
+                                        labelsScaled.extent(),
                                         scaleFactor,
                                         map,
                                         postOperationWithShift));

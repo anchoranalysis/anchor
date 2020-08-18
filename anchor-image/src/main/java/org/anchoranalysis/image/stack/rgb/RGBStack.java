@@ -59,7 +59,7 @@ import org.anchoranalysis.image.voxel.datatype.UnsignedByte;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class RGBStack {
 
-    private Stack channels;
+    private Stack stack;
 
     /**
      * Constructor - creates a particularly-sized stack with all channels initialized to 0.
@@ -68,7 +68,7 @@ public class RGBStack {
      * @param factory factory to create the channel
      */
     public RGBStack(ImageDimensions dimensions, ChannelFactorySingleType factory) {
-        channels = new Stack(dimensions, factory, 3);
+        stack = new Stack(dimensions, factory, 3);
     }
 
     /**
@@ -84,9 +84,9 @@ public class RGBStack {
     public RGBStack(Stack stack) {
         int numberChannels = stack.getNumberChannels();
         if (numberChannels == 3) {
-            channels = stack;
+            this.stack = stack;
         } else if (numberChannels == 1) {
-            channels = convertGrayscaleIntoColor(stack);
+            this.stack = convertGrayscaleIntoColor(stack);
         } else {
             throw new AnchorFriendlyRuntimeException(
                     String.format(
@@ -101,44 +101,44 @@ public class RGBStack {
      * @param source where to copy from
      */
     private RGBStack(RGBStack source) {
-        channels = source.channels.duplicate();
+        stack = source.stack.duplicate();
     }
 
     public RGBStack(Channel red, Channel green, Channel blue) throws IncorrectImageSizeException {
-        channels = new Stack();
-        channels.addChannel(red);
-        channels.addChannel(green);
-        channels.addChannel(blue);
+        stack = new Stack();
+        stack.addChannel(red);
+        stack.addChannel(green);
+        stack.addChannel(blue);
     }
 
     public Channel red() {
-        return channels.getChannel(0);
+        return stack.getChannel(0);
     }
 
     public Channel green() {
-        return channels.getChannel(1);
+        return stack.getChannel(1);
     }
 
     public Channel blue() {
-        return channels.getChannel(2);
+        return stack.getChannel(2);
     }
 
     public Channel channelAt(int index) {
-        return channels.getChannel(index);
+        return stack.getChannel(index);
     }
 
     public ImageDimensions dimensions() {
-        return channels.dimensions();
+        return stack.dimensions();
     }
 
     public RGBStack extractSlice(int z) {
         RGBStack out = new RGBStack();
-        out.channels = channels.extractSlice(z);
+        out.stack = stack.extractSlice(z);
         return out;
     }
 
     public Stack asStack() {
-        return channels;
+        return stack;
     }
 
     public DisplayStack backgroundStack() throws CreateException {
@@ -150,20 +150,19 @@ public class RGBStack {
     }
 
     public boolean allChnlsHaveType(VoxelDataType chnlDataType) {
-        return channels.allChannelsHaveType(chnlDataType);
+        return stack.allChannelsHaveType(chnlDataType);
     }
 
-    private static void writePoint(Point3i point, Channel chnl, byte toWrite) {
-        int index = chnl.dimensions().extent().offsetSlice(point);
-        chnl.voxels().asByte().sliceBuffer(point.z()).put(index, toWrite);
+    private static void writePoint(Point3i point, Channel channel, int toWrite) {
+        channel.assignValue(toWrite).toVoxel(point);
     }
 
     // Only supports 8-bit
     public void writeRGBPoint(Point3i point, RGBColor color) {
-        assert (channels.allChannelsHaveType(UnsignedByte.INSTANCE));
-        writePoint(point, channels.getChannel(0), (byte) color.getRed());
-        writePoint(point, channels.getChannel(1), (byte) color.getGreen());
-        writePoint(point, channels.getChannel(2), (byte) color.getBlue());
+        assert (stack.allChannelsHaveType(UnsignedByte.INSTANCE));
+        writePoint(point, stack.getChannel(0), color.getRed());
+        writePoint(point, stack.getChannel(1), color.getGreen());
+        writePoint(point, stack.getChannel(2), color.getBlue());
     }
 
     // Only supports 8-bit
@@ -175,9 +174,9 @@ public class RGBStack {
             int zLocal,
             ReadableTuple3i maxGlobal) {
         Preconditions.checkArgument(pointGlobal.z() >= 0);
-        Preconditions.checkArgument(channels.getNumberChannels() == 3);
+        Preconditions.checkArgument(stack.getNumberChannels() == 3);
         Preconditions.checkArgument(
-                channels.allChannelsHaveType(UnsignedByte.INSTANCE));
+                stack.allChannelsHaveType(UnsignedByte.INSTANCE));
 
         byte objectMaskOn = object.binaryValuesByte().getOnByte();
 
@@ -207,13 +206,13 @@ public class RGBStack {
                 }
 
                 RGBOutputUtils.writeRGBColorToByteArr(
-                        color, pointGlobal, channels.getChannel(0).dimensions(), red, blue, green);
+                        color, pointGlobal, stack.getChannel(0).dimensions(), red, blue, green);
             }
         }
     }
 
     private ByteBuffer extractBuffer(int chnlIndex, int zIndex) {
-        return channels.getChannel(chnlIndex).voxels().asByte().slice(zIndex).buffer();
+        return stack.getChannel(chnlIndex).voxels().asByte().slice(zIndex).buffer();
     }
 
     private static Stack convertGrayscaleIntoColor(Stack stack) {
@@ -226,5 +225,9 @@ public class RGBStack {
             throw new AnchorImpossibleSituationException();
         }
         return out;
+    }
+
+    public Extent extent() {
+        return stack.extent();
     }
 }

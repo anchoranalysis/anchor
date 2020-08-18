@@ -158,7 +158,24 @@ public class IterateVoxelsVoxelBoxAsInt {
 
         return true;
     }
-
+    
+    /**
+     * Calls each point on a bounding-box (optionally subregion thereof) of an object-mask
+     *
+     * <p>{@code boxVoxels} and {@code boxRelativeToObject} must both have the same extent.
+     *
+     * @param <T> buffer-type
+     * @param voxels voxels which provide a buffer passed to {@code process}
+     * @param object the object-mask (global coordinates)
+     * @param process processes each point that fulfills the conditions
+     */
+    public static <T extends Buffer> void callEachPoint(
+            Voxels<T> voxels,
+            ObjectMask object,
+            ProcessVoxelSlice<T> process) {
+        callEachPoint(voxels,  object, Optional.empty(), process);
+    }
+    
     /**
      * Calls each point on a bounding-box (optionally subregion thereof) of an object-mask
      *

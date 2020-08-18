@@ -67,10 +67,9 @@ public interface VoxelsAssigner {
      * @param object the object-mask to restrict which values in the buffer are assigned
      * @param voxelPredicate the existing value of every voxel to be written must match this
      *     predicate, otherwise no voxels are set at all
-     * @return the number of voxels successfully "set" or -1 if at least one voxel didn't match the
-     *     predicate wasn't matched
+     * @return if at least one voxel was set
      */
-    int toObject(ObjectMask object, IntPredicate voxelPredicate);
+    boolean toObject(ObjectMask object, IntPredicate voxelPredicate);
 
     /**
      * Sets voxels in a box to a particular value if they match a object-mask (but only a part of

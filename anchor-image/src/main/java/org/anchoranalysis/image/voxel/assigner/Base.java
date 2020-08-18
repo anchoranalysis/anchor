@@ -4,7 +4,6 @@ import java.nio.Buffer;
 import java.util.Optional;
 import java.util.function.IntPredicate;
 import lombok.RequiredArgsConstructor;
-import org.anchoranalysis.core.arithmetic.Counter;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.extent.BoundingBox;
@@ -77,13 +76,14 @@ abstract class Base<T extends Buffer> implements VoxelsAssigner {
     }
 
     @Override
-    public int toObject(ObjectMask object, IntPredicate voxelPredicate) {
+    public boolean toObject(ObjectMask object, IntPredicate voxelPredicate) {
 
         // First check if all voxels on the object match the predicate
         if (IterateVoxelsVoxelBoxAsInt.allPointsMatchPredicate(voxels, object, voxelPredicate)) {
-            return toObject(object, Optional.empty());
+            toObject(object, Optional.empty());
+            return true;
         } else {
-            return -1; // Failure code that at least one voxel didn't match
+            return false;
         }
     }
 
@@ -113,20 +113,14 @@ abstract class Base<T extends Buffer> implements VoxelsAssigner {
      * @param restrictTo optionally, a restriction on where in the object-mask to process (expressed
      *     in the same coordinates as {@code object}). Its extent must be equal to {@code
      *     boxToBeAssigned}.
-     * @return the number of voxels successfully "set"
      */
-    private int toObject(ObjectMask object, Optional<BoundingBox> restrictTo) {
-        Counter counter = new Counter();
+    private void toObject(ObjectMask object, Optional<BoundingBox> restrictTo) {
         IterateVoxelsVoxelBoxAsInt.callEachPoint(
                 voxels,
                 object,
                 restrictTo,
-                (Point3i point, VoxelBuffer<T> buffer, int offset) -> {
-                    assignToBuffer(buffer, offset);
-                    counter.increment();
-                }
+                (Point3i point, VoxelBuffer<T> buffer, int offset) -> assignToBuffer(buffer, offset)
         );
-        return counter.getCount();
     }
     
     private void assignToBuffer(VoxelBuffer<T> buffer, int offset) {

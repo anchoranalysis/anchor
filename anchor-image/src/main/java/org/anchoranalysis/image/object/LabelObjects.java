@@ -126,13 +126,10 @@ public class LabelObjects {
 
             ObjectMask objectAfterOp = operationAfterMap.apply(object);
 
-            int voxelsAssigned =
+            boolean voxelsAssigned =
                     channel.assignValue(index)
                             .toObject(objectAfterOp, voxelValue -> voxelValue == 0);
-            if (voxelsAssigned == -1) {
-                processOverlappingObject(new OverlappingObject(object, objectAfterOp));
-            } else {
-
+            if (voxelsAssigned) {
                 // Add mapping from label to input-object
                 if (mapLabelsToBefore.isPresent()) {
                     mapLabelsToBefore.get().put(index, object);
@@ -146,6 +143,8 @@ public class LabelObjects {
                                     "A maximum of %d (non-overlapping) objects are allowed, and this threshold has been reached. There are %d objects in total (overlapping or not).",
                                     channel.getVoxelDataType().maxValue(), objects.size()));
                 }
+            } else {
+                processOverlappingObject(new OverlappingObject(object, objectAfterOp));
             }
         }
     }

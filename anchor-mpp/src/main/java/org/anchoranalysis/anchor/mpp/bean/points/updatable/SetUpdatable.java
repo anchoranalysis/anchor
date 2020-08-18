@@ -118,7 +118,7 @@ public class SetUpdatable extends UpdatablePointsContainer {
 
     private void addEntireScene(BinaryValuesByte bvb) {
 
-        Extent e = maskChannel.dimensions().extent();
+        Extent extent = maskChannel.extent();
 
         Voxels<ByteBuffer> voxelsBinary = maskChannel.voxels().asByte();
 
@@ -132,7 +132,7 @@ public class SetUpdatable extends UpdatablePointsContainer {
             for (position.setY(0); position.y() < dimensions.y(); position.incrementY()) {
                 for (position.setX(0); position.x() < dimensions.x(); position.incrementX()) {
 
-                    if (bbBinaryImage.get(e.offsetSlice(position)) == bvb.getOnByte()) {
+                    if (bbBinaryImage.get(extent.offsetSlice(position)) == bvb.getOnByte()) {
                         setPoints.add(PointConverter.doubleFromInt(position));
                     }
                 }

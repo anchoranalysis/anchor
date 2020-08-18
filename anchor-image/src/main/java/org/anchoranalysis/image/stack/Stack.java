@@ -37,6 +37,7 @@ import org.anchoranalysis.core.functional.function.CheckedUnaryOperator;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.channel.factory.ChannelFactorySingleType;
+import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
@@ -200,6 +201,10 @@ public class Stack implements Iterable<Channel> {
 
     public ImageDimensions dimensions() {
         return delegate.getChannel(0).dimensions();
+    }
+    
+    public Extent extent() {
+        return dimensions().extent();
     }
 
     public Stack duplicate() {

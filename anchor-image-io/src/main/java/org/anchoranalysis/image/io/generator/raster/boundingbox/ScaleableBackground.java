@@ -115,7 +115,7 @@ public class ScaleableBackground {
     }
 
     public Extent extentAfterAnyScaling() {
-        Extent extent = stack.dimensions().extent();
+        Extent extent = stack.extent();
         if (scaleFactor.isPresent()) {
             return extent.scaleXYBy(scaleFactor.get());
         } else {
@@ -131,7 +131,7 @@ public class ScaleableBackground {
             throws OperationFailedException {
         // What would the bounding box look like in the unscaled window?
         BoundingBox boxUnscaled =
-                box.scaleClipTo(scaleFactor.invert(), stack.dimensions().extent());
+                box.scaleClipTo(scaleFactor.invert(), stack.extent());
 
         return stack.mapChannel(channel -> extractChannelScaled(channel, boxUnscaled, box));
     }
@@ -142,7 +142,6 @@ public class ScaleableBackground {
 
     private Channel extractChannelScaled(
             Channel channel, BoundingBox boxUnscaled, BoundingBox boxScaled) {
-        assert (channel.dimensions().extent().contains(boxUnscaled));
 
         // Extract this region from the channels
         Voxels<?> voxelsUnscaled = extractVoxels(channel, boxUnscaled);
