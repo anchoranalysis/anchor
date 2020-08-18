@@ -169,9 +169,8 @@ public class IterateVoxelsVoxelBoxAsInt {
      * @param object the object-mask (global coordinates)
      * @param restrictTo optional sub-region of object-mask (global coordinates)
      * @param process processes each point that fulfills the conditions
-     * @return the total number of points processed (0 if none are)
      */
-    public static <T extends Buffer> int callEachPoint(
+    public static <T extends Buffer> void callEachPoint(
             Voxels<T> voxels,
             ObjectMask object,
             Optional<BoundingBox> restrictTo,
@@ -185,7 +184,7 @@ public class IterateVoxelsVoxelBoxAsInt {
         if (restrictTo.isPresent() && !restrictToIntersection.isPresent()) {
             // There's no intersection between the object-mask and restrictTo, so there's nothing to
             // be done. Exit early
-            return 0;
+            return;
         }
 
         // What part of the object-mask is iterated over. If not restricted, all of the mask is
@@ -195,7 +194,7 @@ public class IterateVoxelsVoxelBoxAsInt {
                         .map(box -> box.relativePositionToBox(object.boundingBox()))
                         .orElseGet(boxVoxels::shiftToOrigin);
 
-        return callEachPoint(voxels, boxVoxels, object, iterateBox, process);
+        callEachPoint(voxels, boxVoxels, object, iterateBox, process);
     }
 
     /**
@@ -210,9 +209,8 @@ public class IterateVoxelsVoxelBoxAsInt {
      * @param boxRelativeToObject bounding-box expressed <i>relative</i> to the object-mask's
      *     bounding-box
      * @param process processes each point that fulfills the conditions
-     * @return the total number of points processed (0 if none are)
      */
-    private static <T extends Buffer> int callEachPoint(
+    private static <T extends Buffer> void callEachPoint(
             Voxels<T> voxels,
             BoundingBox boxVoxels,
             ObjectMask object,
@@ -234,8 +232,6 @@ public class IterateVoxelsVoxelBoxAsInt {
         Extent extentVoxels = voxels.extent();
         Extent extentObject = object.extent();
 
-        int count = 0;
-
         Point3i point = new Point3i();
         for (point.setZ(cornerMin.z()); point.z() < cornerMax.z(); point.incrementZ()) {
 
@@ -254,15 +250,10 @@ public class IterateVoxelsVoxelBoxAsInt {
                     if (sliceMask.get(indexMask) == maskMatchValue) {
 
                         int offset = extentVoxels.offsetSlice(point);
-
                         process.process(point, buffer, offset);
-
-                        count++;
                     }
                 }
             }
         }
-
-        return count;
     }
 }

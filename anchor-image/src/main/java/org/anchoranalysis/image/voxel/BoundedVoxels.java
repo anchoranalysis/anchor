@@ -76,30 +76,6 @@ public class BoundedVoxels<T extends Buffer> {
     private final VoxelsExtracter<T> extracterGlobal;
 
     /**
-     * Constructor - voxels with a corresponding bounding box
-     *
-     * @param boundingBox bounding-box
-     * @param voxels voxels which must have the same extent as {@code boundingBox}
-     */
-    public BoundedVoxels(BoundingBox boundingBox, Voxels<T> voxels) {
-        Preconditions.checkArgument(boundingBox.extent().equals(voxels.extent()));
-        this.boundingBox = boundingBox;
-        this.voxels = voxels;
-        this.extracterLocal = voxels.extracter();
-        this.extracterGlobal = VoxelsExtracterFactory.atCorner(cornerMin(), voxels.extracter());
-    }
-
-    /**
-     * Constructor - initializes voxels for a particular bounding-vox with all values set to 0
-     *
-     * @param boundingBox bounding-box
-     * @param factory factory for voxels
-     */
-    public BoundedVoxels(BoundingBox boundingBox, VoxelsFactoryTypeBound<T> factory) {
-        this(boundingBox, factory.createInitialized(boundingBox.extent()));
-    }
-
-    /**
      * Constructor - creates voxels bounded to match the entire voxel-data at the origin
      *
      * @param voxels voxel-data
@@ -117,6 +93,20 @@ public class BoundedVoxels<T extends Buffer> {
         this(source.boundingBox(), source.voxels.duplicate());
     }
 
+    /**
+     * Constructor - voxels with a corresponding bounding box
+     *
+     * @param boundingBox bounding-box
+     * @param voxels voxels which must have the same extent as {@code boundingBox}
+     */
+    public BoundedVoxels(BoundingBox boundingBox, Voxels<T> voxels) {
+        Preconditions.checkArgument(boundingBox.extent().equals(voxels.extent()));
+        this.boundingBox = boundingBox;
+        this.voxels = voxels;
+        this.extracterLocal = voxels.extracter();
+        this.extracterGlobal = VoxelsExtracterFactory.atCorner(cornerMin(), voxels.extracter());
+    }
+    
     public boolean equalsDeep(BoundedVoxels<?> other) {
 
         if (!boundingBox.equals(other.boundingBox)) {
@@ -204,13 +194,13 @@ public class BoundedVoxels<T extends Buffer> {
                 new BoundingBox(extent), bufferNew, new BoundingBox(grownBox.cornerMin(), extent));
 
         // We create a new bounding box
-        BoundingBox bbo =
+        BoundingBox box =
                 new BoundingBox(
                         Point3i.immutableSubtract(
                                 this.boundingBox.cornerMin(), grownBox.cornerMin()),
                         grownBox.extent());
 
-        return new BoundedVoxels<>(bbo, bufferNew);
+        return new BoundedVoxels<>(box, bufferNew);
     }
 
     /**
@@ -472,9 +462,9 @@ public class BoundedVoxels<T extends Buffer> {
 
         Point3i negClip =
                 new Point3i(
-                        clipNeg(boundingBox.cornerMin().x(), neg.x()),
-                        clipNeg(boundingBox.cornerMin().y(), neg.y()),
-                        clipNeg(boundingBox.cornerMin().z(), neg.z()));
+                        clipNegative(boundingBox.cornerMin().x(), neg.x()),
+                        clipNegative(boundingBox.cornerMin().y(), neg.y()),
+                        clipNegative(boundingBox.cornerMin().z(), neg.z()));
 
         ReadableTuple3i boxMax = boundingBox.calculateCornerMax();
 
@@ -487,33 +477,33 @@ public class BoundedVoxels<T extends Buffer> {
 
         Point3i growBy =
                 new Point3i(
-                        clipPosition(boxMax.x(), pos.x(), maxPossible.x()) + negClip.x(),
-                        clipPosition(boxMax.y(), pos.y(), maxPossible.y()) + negClip.y(),
-                        clipPosition(boxMax.z(), pos.z(), maxPossible.z()) + negClip.z());
+                        clipPositive(boxMax.x(), pos.x(), maxPossible.x()) + negClip.x(),
+                        clipPositive(boxMax.y(), pos.y(), maxPossible.y()) + negClip.y(),
+                        clipPositive(boxMax.z(), pos.z(), maxPossible.z()) + negClip.z());
         return new BoundingBox(negClip, this.voxels.extent().growBy(growBy));
     }
 
     // Considers growing in the negative direction from crnr by neg increments
     //  returns the maximum number of increments that are allowed without leading
     //  to a bounding box that is <0
-    private static int clipNeg(int corner, int neg) {
-        int diff = corner - neg;
+    private static int clipNegative(int corner, int negative) {
+        int diff = corner - negative;
         if (diff > 0) {
-            return neg;
+            return negative;
         } else {
-            return neg + diff;
+            return negative + diff;
         }
     }
 
     // Considers growing in the positive direction from crnr by neg increments
     //  returns the maximum number of increments that are allowed without leading
     //  to a bounding box that is >= max
-    private static int clipPosition(int crnr, int pos, int max) {
-        int sum = crnr + pos;
+    private static int clipPositive(int corner, int positive, int max) {
+        int sum = corner + positive;
         if (sum < max) {
-            return pos;
+            return positive;
         } else {
-            return pos - (sum - max + 1);
+            return positive - (sum - max + 1);
         }
     }
 

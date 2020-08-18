@@ -54,13 +54,12 @@ public interface VoxelsAssigner {
      * <p>See {@link #toObject(BoundingBox, ObjectMask, Optional) for a more flexible version.
      *
      * @param object the object-mask to restrict which values in the buffer are written to
-     * @return the number of voxels successfully "set"
      */
-    int toObject(ObjectMask object);
+    void toObject(ObjectMask object);
 
     /**
-     * Sets voxels in a box to a particular value if they match an object-mask <b>and</b> every
-     * voxel to be set matches a predicate
+     * Sets voxels in a box to a particular value if they match an object-mask <b>and</b> each voxel 
+     * matches a predicate
      *
      * <p>If any one of the voxels in the object doesn't match the predicate, the operation is
      * aborted, and nothing is written at all.
@@ -85,9 +84,8 @@ public interface VoxelsAssigner {
      * @param object the object-mask to restrict where voxels are set
      * @param restrictTo a restriction on where to process in the object-mask (expressed in the same
      *     coordinates as {@code object}).
-     * @return the number of voxels successfully "set"
      */
-    int toObject(ObjectMask object, BoundingBox restrictTo);
+    void toObject(ObjectMask object, BoundingBox restrictTo);
 
     /**
      * Sets voxels to a value if the position is ON in either of two masks
@@ -96,8 +94,7 @@ public interface VoxelsAssigner {
      * @param voxels2 second-object
      * @param restrictTo only process this region (which is sensibly part or all of the intersection
      *     of the two objects bounding-boxes)
-     * @return the total number of pixels written
      * @throws OperationFailedException if {@code restrictTo} does not intersect
      */
-    int toEitherTwoObjects(ObjectMask object1, ObjectMask object2, BoundingBox restrictTo);
+    void toEitherTwoObjects(ObjectMask object1, ObjectMask object2, BoundingBox restrictTo);
 }

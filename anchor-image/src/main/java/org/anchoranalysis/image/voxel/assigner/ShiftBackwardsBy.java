@@ -40,8 +40,8 @@ class ShiftBackwardsBy implements VoxelsAssigner {
     }
 
     @Override
-    public int toObject(ObjectMask object) {
-        return voxelsAssigner.toObject(shift(object));
+    public void toObject(ObjectMask object) {
+        voxelsAssigner.toObject(shift(object));
     }
 
     @Override
@@ -50,13 +50,13 @@ class ShiftBackwardsBy implements VoxelsAssigner {
     }
 
     @Override
-    public int toObject(ObjectMask object, BoundingBox restrictTo) {
-        return voxelsAssigner.toObject(shift(object), shift(restrictTo));
+    public void toObject(ObjectMask object, BoundingBox restrictTo) {
+        voxelsAssigner.toObject(shift(object), shift(restrictTo));
     }
 
     @Override
-    public int toEitherTwoObjects(ObjectMask object1, ObjectMask object2, BoundingBox restrictTo) {
-        return voxelsAssigner.toEitherTwoObjects(shift(object1), shift(object2), shift(restrictTo));
+    public void toEitherTwoObjects(ObjectMask object1, ObjectMask object2, BoundingBox restrictTo) {
+        voxelsAssigner.toEitherTwoObjects(shift(object1), shift(object2), shift(restrictTo));
     }
 
     private BoundingBox shift(BoundingBox box) {

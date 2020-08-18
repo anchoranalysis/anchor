@@ -38,7 +38,7 @@ import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.BoundedVoxels;
-import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
+import org.anchoranalysis.image.voxel.BoundedVoxelsFactory;
 
 /**
  * Extends 2D objects as much as possible in z-dimension, while staying within a 3D binary mask.
@@ -54,15 +54,15 @@ public class ExtendObjectsInto3DMask {
     }
 
     private static ObjectMask extendObject(ObjectMask object2D, BinaryVoxels<ByteBuffer> voxels3D) {
-        return new ObjectMask(extendObj(object2D.boundedVoxels(), voxels3D));
+        return new ObjectMask(extendObject(object2D.boundedVoxels(), voxels3D));
     }
 
-    private static BoundedVoxels<ByteBuffer> extendObj(
+    private static BoundedVoxels<ByteBuffer> extendObject(
             BoundedVoxels<ByteBuffer> obj2D, BinaryVoxels<ByteBuffer> mask3D) {
 
         BoundingBox newBBox = createBoundingBoxForAllZ(obj2D.boundingBox(), mask3D.extent().z());
 
-        BoundedVoxels<ByteBuffer> newMask = new BoundedVoxels<>(newBBox, VoxelsFactory.getByte());
+        BoundedVoxels<ByteBuffer> newMask = BoundedVoxelsFactory.createByte(newBBox);
 
         ReadableTuple3i max = newBBox.calculateCornerMax();
         Point3i point = new Point3i();

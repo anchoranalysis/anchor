@@ -4,6 +4,7 @@ import java.nio.Buffer;
 import java.util.Optional;
 import java.util.function.IntPredicate;
 import lombok.RequiredArgsConstructor;
+import org.anchoranalysis.core.arithmetic.Counter;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.extent.BoundingBox;
@@ -71,8 +72,8 @@ abstract class Base<T extends Buffer> implements VoxelsAssigner {
     protected abstract void assignAtBufferPosition(T buffer, int index);
 
     @Override
-    public int toObject(ObjectMask object) {
-        return toObject(object, Optional.empty());
+    public void toObject(ObjectMask object) {
+        toObject(object, Optional.empty());
     }
 
     @Override
@@ -80,17 +81,24 @@ abstract class Base<T extends Buffer> implements VoxelsAssigner {
 
         // First check if all voxels on the object match the predicate
         if (IterateVoxelsVoxelBoxAsInt.allPointsMatchPredicate(voxels, object, voxelPredicate)) {
-            return toObject(object);
+            return toObject(object, Optional.empty());
         } else {
             return -1; // Failure code that at least one voxel didn't match
         }
     }
 
     @Override
-    public int toObject(ObjectMask object, BoundingBox restrictTo) {
-        return toObject(object, Optional.of(restrictTo));
+    public void toObject(ObjectMask object, BoundingBox restrictTo) {
+        toObject(object, Optional.of(restrictTo));
     }
 
+    @Override
+    public void toEitherTwoObjects( // NOSONAR
+            ObjectMask object1, ObjectMask object2, BoundingBox restrictTo) {
+        toObject(object1, restrictTo);
+        toObject(object2, restrictTo);
+    }
+    
     /**
      * Sets voxels in a box to a particular value if they match a object-mask (but only a part of
      * the object-mask)
@@ -108,19 +116,20 @@ abstract class Base<T extends Buffer> implements VoxelsAssigner {
      * @return the number of voxels successfully "set"
      */
     private int toObject(ObjectMask object, Optional<BoundingBox> restrictTo) {
-        return IterateVoxelsVoxelBoxAsInt.callEachPoint(
+        Counter counter = new Counter();
+        IterateVoxelsVoxelBoxAsInt.callEachPoint(
                 voxels,
                 object,
                 restrictTo,
-                (Point3i point, VoxelBuffer<T> buffer, int offset) ->
-                        buffer.putInt(offset, valueToAssign));
+                (Point3i point, VoxelBuffer<T> buffer, int offset) -> {
+                    assignToBuffer(buffer, offset);
+                    counter.increment();
+                }
+        );
+        return counter.getCount();
     }
-
-    @Override
-    public int toEitherTwoObjects( // NOSONAR
-            ObjectMask object1, ObjectMask object2, BoundingBox restrictTo) {
-        int countFirst = toObject(object1, restrictTo);
-        int countSecond = toObject(object2, restrictTo);
-        return countFirst + countSecond;
+    
+    private void assignToBuffer(VoxelBuffer<T> buffer, int offset) {
+        buffer.putInt(offset, valueToAssign);
     }
 }

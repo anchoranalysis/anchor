@@ -3,11 +3,14 @@ package org.anchoranalysis.image.voxel.iterator;
 import java.nio.ByteBuffer;
 import java.util.Optional;
 import java.util.function.Consumer;
+import org.anchoranalysis.core.arithmetic.RunningSum;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.core.geometry.consumer.PointThreeDimensionalConsumer;
+import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.convert.ByteConverter;
 import org.anchoranalysis.image.extent.Extent;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.BoundedVoxels;
 import org.anchoranalysis.image.voxel.Voxels;
 import com.google.common.base.Preconditions;
@@ -28,23 +31,11 @@ public class IterateVoxelsByte {
      * @param consumer called for every matching voxel
      */
     public static void iterateEqualValuesReusePoint( Voxels<ByteBuffer> voxels, byte equalToValue, Consumer<Point3i> consumer) {
-        Extent extent = voxels.extent();
-        
-        Point3i point = new Point3i(0, 0, 0);
-        for (point.setZ(0); point.z() < extent.z(); point.incrementZ()) {
-
-            ByteBuffer buf = voxels.sliceBuffer(point.z());
-
-            for (point.setY(0); point.y() < extent.y(); point.incrementY()) {
-                for (point.setX(0); point.x() < extent.x(); point.incrementX()) {
-
-                    int offset = extent.offsetSlice(point);
-                    if (buf.get(offset) == equalToValue) {
-                        consumer.accept(point);
-                    }
-                }
+        IterateVoxels.callEachPoint(voxels, (point, buffer, offset) -> {
+            if (buffer.get(offset) == equalToValue) {
+                consumer.accept(point);
             }
-        }
+        });
     }
     
     /**
@@ -68,17 +59,13 @@ public class IterateVoxelsByte {
      * @param consumer called for every matching voxel
      */
     public static void iterateEqualValuesSlice( Voxels<ByteBuffer> voxels, int sliceIndex, byte equalToValue, PointThreeDimensionalConsumer consumer) {
-        Extent extent = voxels.extent();
         ByteBuffer buffer = voxels.sliceBuffer(sliceIndex);
 
-        for (int y = 0; y < extent.y(); y++) {
-            for (int x = 0; x < extent.x(); x++) {
-
-                if (buffer.get() == equalToValue) {
-                    consumer.accept(x, y, sliceIndex);
-                }
+        voxels.extent().iterateOverXY( (x,y,offset) -> {
+            if (buffer.get() == equalToValue) {
+                consumer.accept(x, y, sliceIndex);
             }
-        }
+        });
     }
     
     /**
@@ -111,48 +98,46 @@ public class IterateVoxelsByte {
     }
     
     /**
-     * Calculates the mean-value across voxels that correspond to ON voxels on an object-mask
+     * Calculates the sum and count across voxels that correspond to ON voxels on a <i>mask</i>
      * <p>
      * The {@code mask} must have equal extent to {@code voxelsIntensity} 
      * 
      * @param voxelsIntensity the voxels whose intensity we wish to find the mean of (subject to {@code mask}
      * @param mask only voxels who correspond to an ON voxels in the mask are included
-     * @param maskOnValue what constitutes ON voxel in the mask
-     * @param meanIfZeroCount what to return if no voxels are included i.e. the mask is empty
-     * @return the mean voxel-intensity or {@code meanIfZeroCount) if count is zero.
+     * @return the running-sum
      */
-    public static double calculateMean( Voxels<ByteBuffer> voxelsIntensity, Voxels<ByteBuffer> mask, byte maskOnValue, double meanIfZeroCount ) {
+    public static RunningSum calculateSumAndCount( Voxels<ByteBuffer> voxelsIntensity, Mask mask) {
         Preconditions.checkArgument( voxelsIntensity.extent().equals(mask.extent()));
         
-        Extent extent = voxelsIntensity.extent();
+        RunningSum running = new RunningSum();
         
-        double sum = 0.0;
-        double count = 0;
+        IterateVoxels.callEachPoint(voxelsIntensity, mask, (point,buffer,offset) ->
+            addFromBufferToRunning(buffer, offset, running)
+        );
 
-        for (int z = 0; z < extent.z(); z++) {
+        return running;
+    }
+    
+    /**
+     * Calculates the sum and count across voxels that correspond to ON voxels on an <i>object-mask</i>
+     * 
+     * @param voxelsIntensity the voxels whose intensity we wish to find the mean of (subject to {@code mask}
+     * @param mask only voxels who correspond to an ON voxels in the object-mask are included
+     * @return the running-sum
+     */
+    public static RunningSum calculateSumAndCount( Voxels<ByteBuffer> voxelsIntensity, ObjectMask object) {
+        
+        RunningSum running = new RunningSum();
+        
+        IterateVoxels.callEachPoint(voxelsIntensity, object, (point,buffer,offset) ->
+            addFromBufferToRunning(buffer, offset, running)
+        );
 
-            ByteBuffer bufferMask = mask.sliceBuffer(z);
-            ByteBuffer bufferIntensity = voxelsIntensity.sliceBuffer(z);
-
-            int offset = 0;
-            for (int y = 0; y < extent.y(); y++) {
-                for (int x = 0; x < extent.x(); x++) {
-
-                    if (bufferMask.get(offset) == maskOnValue) {
-                        int intensity = ByteConverter.unsignedByteToInt(bufferIntensity.get(offset));
-                        sum += intensity;
-                        count++;
-                    }
-
-                    offset++;
-                }
-            }
-        }
-
-        if (count == 0) {
-            return meanIfZeroCount;
-        }
-
-        return sum / count;
+        return running;
+    }
+    
+    private static void addFromBufferToRunning(ByteBuffer buffer, int offset, RunningSum running) {
+        int intensity = ByteConverter.unsignedByteToInt(buffer.get(offset));
+        running.increment(intensity, 1);
     }
 }

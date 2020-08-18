@@ -57,6 +57,7 @@ import org.anchoranalysis.image.object.intersecting.CountIntersectingVoxelsBinar
 import org.anchoranalysis.image.object.intersecting.DetermineWhetherIntersectingVoxelsBinary;
 import org.anchoranalysis.image.scale.ScaleFactor;
 import org.anchoranalysis.image.voxel.BoundedVoxels;
+import org.anchoranalysis.image.voxel.BoundedVoxelsFactory;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.VoxelsPredicate;
 import org.anchoranalysis.image.voxel.assigner.VoxelsAssigner;
@@ -114,7 +115,7 @@ public class ObjectMask {
      * @param box bounding-box
      */
     public ObjectMask(BoundingBox box) {
-        this(new BoundedVoxels<>(box, FACTORY));
+        this( BoundedVoxelsFactory.createByte(box) );
     }
 
     /**
@@ -383,9 +384,7 @@ public class ObjectMask {
         BinaryValues bvOut = BinaryValues.getDefault();
 
         // We initially set all pixels to ON
-        BoundedVoxels<ByteBuffer> voxelsMaskOut =
-                new BoundedVoxels<>(
-                        boxIntersect.get(), FACTORY.createInitialized(boxIntersect.get().extent()));
+        BoundedVoxels<ByteBuffer> voxelsMaskOut = BoundedVoxelsFactory.createByte(boxIntersect.get());
         voxelsMaskOut.assignValue(bvOut.getOnInt()).toAll();
 
         // Then we set any pixels NOT on either object to OFF..... leaving only the intersecting
