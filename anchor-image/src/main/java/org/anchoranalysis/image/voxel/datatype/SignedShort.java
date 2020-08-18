@@ -26,20 +26,14 @@
 
 package org.anchoranalysis.image.voxel.datatype;
 
-public abstract class VoxelDataTypeSigned extends VoxelDataType {
+public class SignedShort extends Signed {
 
-    protected VoxelDataTypeSigned(
-            int numBits, String typeIdentifier, long maxValue, long minValue) {
-        super(numBits, typeIdentifier, maxValue, minValue);
-    }
+    public static final long MIN_VALUE = -32768;
+    public static final long MAX_VALUE = 32767;
 
-    @Override
-    public final boolean isInteger() {
-        return true;
-    }
+    public static final SignedShort instance = new SignedShort();
 
-    @Override
-    public final boolean isUnsigned() {
-        return false;
+    private SignedShort() {
+        super(16, "signed16", MAX_VALUE, MIN_VALUE);
     }
 }

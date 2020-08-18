@@ -29,14 +29,15 @@ package org.anchoranalysis.image.extent;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.function.Consumer;
-import java.util.function.IntConsumer;
 import java.util.function.IntPredicate;
 import org.anchoranalysis.core.axis.AxisType;
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
+import org.anchoranalysis.core.functional.function.CheckedIntConsumer;
 import org.anchoranalysis.core.geometry.Point2i;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
+import org.anchoranalysis.core.geometry.consumer.OffsettedPointTwoDimensionalConsumer;
 import org.anchoranalysis.image.scale.ScaleFactor;
 import org.anchoranalysis.image.scale.ScaleFactorUtilities;
 
@@ -138,7 +139,7 @@ public final class Extent implements Serializable {
      * Calculates the total number of pixel positions needed to represent this bounding box as a
      * pixel array This is not the same as volume, both the start and end pixel are included
      */
-    public int totalNumPixelPositions() {
+    public int totalNumberVoxelPositions() {
         return (len.x() + 1) * (len.y() + 1) * (len.z() + 1);
     }
 
@@ -192,6 +193,16 @@ public final class Extent implements Serializable {
         Extent other = (Extent) obj;
 
         return len.equals(other.len);
+    }
+    
+    /** Checks for equality with another extent ignoring any differences in the Z dimension */
+    public boolean equalsIgnoreZ(Object obj) {
+        if (this == obj) return true;
+        if (obj == null) return false;
+        if (getClass() != obj.getClass()) return false;
+        Extent other = (Extent) obj;
+
+        return (len.x()==other.x()) && (len.y() ==other.y());
     }
 
     @Override
@@ -364,15 +375,51 @@ public final class Extent implements Serializable {
         }
         return z() > other.z();
     }
+    
+    /**
+     * Calls processor once for each x and y-values in the range
+     *
+     * <p>This occurs in ascending order (x-dimension increments first, y-dimension increments second)
+     *
+     * @param <E> a checked-exception that {@code indexConsumer} may throw
+     * @param indexConsumer called for each point
+     * @throws E if {@code indexConsumer} throws this exception
+     */
+    public <E extends Exception> void iterateOverXY(OffsettedPointTwoDimensionalConsumer<E> pointConsumer) throws E {
+        int offset = 0;
+        for (int y = 0; y < len.y(); y++) {
+            for (int x = 0; x < len.x(); x++) {
+                pointConsumer.accept(x, y, offset++);
+            }
+        }
+    }
+
+    /**
+     * Calls processor once for each x and y-values but <i>only</b> passing an offset
+     *
+     * <p>This occurs in ascending order (x-dimension increments first, y-dimension increments second)
+     *
+     * @param <E> a checked-exception that {@code indexConsumer} may throw
+     * @param indexConsumer called for each point with the offset
+     * @throws E if {@code indexConsumer} throws this exception
+     */
+    public <E extends Exception> void iterateOverXYOffset( CheckedIntConsumer<E> pointConsumer ) throws E {
+        int area = len.x() * len.y();
+        for (int offset = 0; offset < area; offset++) {
+            pointConsumer.accept(offset);
+        }
+    }
 
     /**
      * Calls processor once for each z-value in the range
      *
      * <p>This occurs sequentially from 0 (inclusive) to {@code z()} (exclusive)
      *
+     * @param <E> a checked-exception that {@code indexConsumer} may throw
      * @param indexConsumer called for each index (z-value)
+     * @throws E if {@code indexConsumer} throws this exception
      */
-    public void iterateOverZ(IntConsumer indexConsumer) {
+    public <E extends Exception> void iterateOverZ(CheckedIntConsumer<E> indexConsumer) throws E {
         for (int z = 0; z < len.z(); z++) {
             indexConsumer.accept(z);
         }

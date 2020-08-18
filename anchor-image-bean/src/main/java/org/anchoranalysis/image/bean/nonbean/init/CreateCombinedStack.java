@@ -36,6 +36,6 @@ public class CreateCombinedStack {
 
     public static NamedProvider<Stack> apply(ImageInitParams so) {
         return new CombineDiverseProvidersAsStacks(
-                so.getStackCollection(), so.getChnlCollection(), so.getBinaryImageCollection());
+                so.stacks(), so.channels(), so.masks());
     }
 }

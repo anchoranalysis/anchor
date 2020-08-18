@@ -28,20 +28,17 @@ package org.anchoranalysis.image.extent;
 
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
+import lombok.AllArgsConstructor;
 
 /**
  * Performs union of a bounding-box with other entities
  *
  * @author Owen Feehan
  */
+@AllArgsConstructor
 public class BoundingBoxUnion {
 
     private final BoundingBox box;
-
-    public BoundingBoxUnion(BoundingBox box) {
-        super();
-        this.box = box;
-    }
 
     /**
      * Performs a union with another box (immutably)

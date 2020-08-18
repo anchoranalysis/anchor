@@ -122,7 +122,7 @@ public class OutputFeatureTable extends ImageBean<OutputFeatureTable> {
                 new ObjectFeatureListCSVGenerator(features, nrgStack, logger);
         generator.setParamsInit(paramsInit);
         generator.setSharedFeatures(
-                getInitializationParameters().getFeature().getSharedFeatureSet());
+                getInitializationParameters().features().getSharedFeatureSet());
         generator.setIterableElement(objects);
         return generator;
     }

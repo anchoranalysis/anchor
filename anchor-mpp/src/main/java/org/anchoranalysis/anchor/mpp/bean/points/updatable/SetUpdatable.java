@@ -152,7 +152,7 @@ public class SetUpdatable extends UpdatablePointsContainer {
     @Override
     public void add(MemoForIndex marksExisting, VoxelizedMarkMemo newMark)
             throws UpdateMarkSetException {
-        rmvPointsInMark(newMark);
+        removePointsInMark(newMark);
     }
 
     private void rmvPoint(ReadableTuple3i crntExtentPoint, ReadableTuple3i crnrPoint) {
@@ -165,7 +165,7 @@ public class SetUpdatable extends UpdatablePointsContainer {
         setPoints.remove(pointGlobal);
     }
 
-    public void rmvPointsInMark(VoxelizedMarkMemo newMark) {
+    public void removePointsInMark(VoxelizedMarkMemo newMark) {
 
         // We add any points in our new mark to the set
         VoxelizedMark pxlMark = newMark.voxelized();
@@ -176,17 +176,17 @@ public class SetUpdatable extends UpdatablePointsContainer {
         byte flags = rm.flags();
 
         BoundedVoxels<ByteBuffer> voxels = pxlMark.voxels();
-        Extent e = voxels.extent();
+        Extent extent = voxels.extent();
 
         Point3i position = new Point3i();
-        for (position.setZ(0); position.z() < e.z(); position.incrementZ()) {
+        for (position.setZ(0); position.z() < extent.z(); position.incrementZ()) {
 
-            ByteBuffer buffer = voxels.sliceBuffer(position.z());
+            ByteBuffer buffer = voxels.sliceBufferLocal(position.z());
 
-            for (position.setY(0); position.y() < e.y(); position.incrementY()) {
-                for (position.setX(0); position.x() < e.x(); position.incrementX()) {
+            for (position.setY(0); position.y() < extent.y(); position.incrementY()) {
+                for (position.setX(0); position.x() < extent.x(); position.incrementX()) {
 
-                    byte membership = buffer.get(e.offset(position.x(), position.y()));
+                    byte membership = buffer.get(extent.offset(position.x(), position.y()));
 
                     if (!rm.isMemberFlag(membership, flags)) {
                         rmvPoint(position, crnrPoint);
@@ -204,7 +204,7 @@ public class SetUpdatable extends UpdatablePointsContainer {
             VoxelizedMarkMemo newMark) {
 
         addPointsInMark(pxlMarkMemoList, oldMark);
-        rmvPointsInMark(newMark);
+        removePointsInMark(newMark);
     }
 
     public void addPointsInMark(MemoForIndex marksExisting, VoxelizedMarkMemo markToAdd) {
@@ -227,16 +227,16 @@ public class SetUpdatable extends UpdatablePointsContainer {
 
         Voxels<ByteBuffer> voxelsBinary = maskChannel.voxels().asByte();
 
-        Point3i crntExtentPoint = new Point3i();
-        for (crntExtentPoint.setZ(0); crntExtentPoint.z() < e.z(); crntExtentPoint.incrementZ()) {
+        Point3i point = new Point3i();
+        for (point.setZ(0); point.z() < e.z(); point.incrementZ()) {
 
-            int zGlobal = crnrPoint.z() + crntExtentPoint.z();
+            int zGlobal = crnrPoint.z() + point.z();
 
             addPointsForSlice(
-                    crntExtentPoint,
+                    point,
                     crnrPoint,
                     e,
-                    voxels.sliceBuffer(crntExtentPoint.z()),
+                    voxels.sliceBufferLocal(point.z()),
                     voxelsBinary.sliceBuffer(zGlobal),
                     bvb,
                     zGlobal,

@@ -30,18 +30,18 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.binary.mask.Mask;
+import org.anchoranalysis.image.histogram.Histogram;
 
-public abstract class BinaryChnlProviderOne extends MaskProvider {
+public abstract class HistogramProviderUnary extends HistogramProvider {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private MaskProvider binaryChnl;
+    @BeanField @Getter @Setter private HistogramProvider histogram;
     // END BEAN PROPERTIES
 
     @Override
-    public Mask create() throws CreateException {
-        return createFromMask(binaryChnl.create());
+    public Histogram create() throws CreateException {
+        return createFromHistogram(histogram.create());
     }
 
-    protected abstract Mask createFromMask(Mask mask) throws CreateException;
+    protected abstract Histogram createFromHistogram(Histogram hist) throws CreateException;
 }

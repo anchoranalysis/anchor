@@ -53,7 +53,7 @@ import org.anchoranalysis.image.stack.rgb.RGBStack;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
+import org.anchoranalysis.image.voxel.datatype.UnsignedByte;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 
 /**
@@ -175,7 +175,7 @@ public class DisplayStack {
                                 stack.getChannel(index)
                                         .dimensions()
                                         .duplicateChangeExtent(box.extent()),
-                                VoxelDataTypeUnsignedByte.INSTANCE);
+                                UnsignedByte.INSTANCE);
 
         mapper.callChannelIfSupported(
                 index,
@@ -356,7 +356,7 @@ public class DisplayStack {
         for (int index = 0; index < getNumberChannels(); index++) {
             if (!stack.getChannel(index)
                     .getVoxelDataType()
-                    .equals(VoxelDataTypeUnsignedByte.INSTANCE)) {
+                    .equals(UnsignedByte.INSTANCE)) {
                 setConverterFor(
                         index,
                         new ChnlConverterChnlUpperLowerQuantileIntensity(

@@ -31,7 +31,7 @@ import loci.common.DataTools;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferShort;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedShort;
+import org.anchoranalysis.image.voxel.datatype.UnsignedShort;
 
 public class ShortFromUnsignedShort extends ConvertToShort {
 
@@ -63,11 +63,11 @@ public class ShortFromUnsignedShort extends ConvertToShort {
 
             // Make positive
             if (s < 0) {
-                s += (VoxelDataTypeUnsignedShort.MAX_VALUE_INT + 1);
+                s += (UnsignedShort.MAX_VALUE_INT + 1);
             }
 
-            if (s > VoxelDataTypeUnsignedShort.MAX_VALUE_INT) {
-                s = VoxelDataTypeUnsignedShort.MAX_VALUE_INT;
+            if (s > UnsignedShort.MAX_VALUE_INT) {
+                s = UnsignedShort.MAX_VALUE_INT;
             }
             if (s < 0) {
                 s = 0;

@@ -63,7 +63,7 @@ import org.anchoranalysis.image.voxel.assigner.VoxelsAssigner;
 import org.anchoranalysis.image.voxel.extracter.VoxelsExtracter;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactoryTypeBound;
-import org.anchoranalysis.image.voxel.iterator.IterateVoxels;
+import org.anchoranalysis.image.voxel.iterator.IterateVoxelsByte;
 import org.anchoranalysis.image.voxel.thresholder.VoxelsThresholder;
 
 /**
@@ -543,7 +543,7 @@ public class ObjectMask {
         }
 
         // Second, if needed, we iterate until we find any "ON" value
-        return IterateVoxels.findFirstPointOnObjectMask(this);
+        return IterateVoxelsByte.iterateUntilFirstEqual(boundedVoxels(), binaryValuesByte().getOnByte());
     }
 
     /**
@@ -553,7 +553,7 @@ public class ObjectMask {
      * @return the buffer
      */
     public ByteBuffer sliceBufferLocal(int sliceIndexRelative) {
-        return voxels.sliceBuffer(sliceIndexRelative);
+        return voxels.sliceBufferLocal(sliceIndexRelative);
     }
 
     /**
@@ -563,7 +563,7 @@ public class ObjectMask {
      * @return the buffer
      */
     public ByteBuffer sliceBufferGlobal(int sliceIndexGlobal) {
-        return voxels.sliceBuffer(sliceIndexGlobal - boundingBox().cornerMin().z());
+        return voxels.sliceBufferGlobal(sliceIndexGlobal);
     }
 
     /**
@@ -703,27 +703,8 @@ public class ObjectMask {
      * @return a newly created list with newly created points
      */
     public List<Point3i> derivePointsLocal() {
-
         List<Point3i> points = new ArrayList<>();
-
-        Extent extent = extent();
-
-        byte onValue = binaryValuesByte().getOnByte();
-
-        for (int z = 0; z < extent.z(); z++) {
-            ByteBuffer bb = sliceBufferLocal(z);
-
-            int offset = 0;
-            for (int y = 0; y < extent.y(); y++) {
-                for (int x = 0; x < extent.x(); x++) {
-
-                    if (bb.get(offset++) == onValue) {
-                        points.add(new Point3i(x, y, z));
-                    }
-                }
-            }
-        }
-
+        IterateVoxelsByte.iterateEqualValues(voxels.voxels(), binaryValuesByte().getOnByte(), (x,y,z) -> points.add(new Point3i(x,y,z)) );
         return points;
     }
 

@@ -26,13 +26,24 @@
 
 package org.anchoranalysis.image.voxel.datatype;
 
-public class VoxelDataTypeUnsignedInt extends VoxelDataTypeUnsigned {
+public class Float extends VoxelDataType {
 
-    public static final long MAX_VALUE = 4294967295L;
+    public static final long MAX_VALUE = (long) java.lang.Float.MAX_VALUE;
+    public static final long MIN_VALUE = (long) java.lang.Float.MIN_VALUE;
 
-    public static final VoxelDataTypeUnsignedInt INSTANCE = new VoxelDataTypeUnsignedInt();
+    public static final Float INSTANCE = new Float();
 
-    private VoxelDataTypeUnsignedInt() {
-        super(32, "unsigned32", MAX_VALUE);
+    private Float() {
+        super(32, "float", MAX_VALUE, MIN_VALUE);
+    }
+
+    @Override
+    public boolean isInteger() {
+        return false;
+    }
+
+    @Override
+    public boolean isUnsigned() {
+        return false;
     }
 }

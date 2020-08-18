@@ -78,7 +78,6 @@ public class GeneratorHDF5 extends SingleFileTypeGenerator
         IHDF5Writer writer = HDF5Factory.open(filePath.toString());
 
         addObjectsSizeAttribute(writer, objects);
-
         try {
             for (int i = 0; i < objects.size(); i++) {
 

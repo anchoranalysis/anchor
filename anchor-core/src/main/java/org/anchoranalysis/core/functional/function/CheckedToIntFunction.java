@@ -31,7 +31,7 @@ package org.anchoranalysis.core.functional.function;
  *
  * @author Owen Feehan
  * @param <S> argument-type
- * @param <E> exception-type that can be thrown
+ * @param <E> exception-type that can be thrown during {@code applyAsInt}
  */
 @FunctionalInterface
 public interface CheckedToIntFunction<S, E extends Exception> {

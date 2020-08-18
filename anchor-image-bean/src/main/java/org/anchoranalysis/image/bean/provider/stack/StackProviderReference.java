@@ -51,7 +51,7 @@ public class StackProviderReference extends StackProvider {
     public Stack create() throws CreateException {
         if (stack == null) {
             try {
-                this.stack = getInitializationParameters().getStackCollection().getException(id);
+                this.stack = getInitializationParameters().stacks().getException(id);
             } catch (NamedProviderGetException e) {
                 throw new CreateException(e);
             }

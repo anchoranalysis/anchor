@@ -34,23 +34,24 @@ import org.anchoranalysis.image.interpolator.transfer.TransferViaByte;
 import org.anchoranalysis.image.interpolator.transfer.TransferViaShort;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
 import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelDataTypeException;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedShort;
+import org.anchoranalysis.image.voxel.datatype.UnsignedByte;
+import org.anchoranalysis.image.voxel.datatype.UnsignedShort;
+import com.google.common.base.Preconditions;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class InterpolateUtilities {
 
-    private static Transfer createTransfer(VoxelsWrapper src, VoxelsWrapper dest) {
+    private static Transfer createTransfer(VoxelsWrapper source, VoxelsWrapper destination) {
 
-        if (!src.getVoxelDataType().equals(dest.getVoxelDataType())) {
+        if (!source.getVoxelDataType().equals(destination.getVoxelDataType())) {
             throw new IncorrectVoxelDataTypeException(
-                    "Data types don't match between src and dest");
+                    "Data types don't match between source and destination");
         }
 
-        if (src.getVoxelDataType().equals(VoxelDataTypeUnsignedByte.INSTANCE)) {
-            return new TransferViaByte(src, dest);
-        } else if (src.getVoxelDataType().equals(VoxelDataTypeUnsignedShort.INSTANCE)) {
-            return new TransferViaShort(src, dest);
+        if (source.getVoxelDataType().equals(UnsignedByte.INSTANCE)) {
+            return new TransferViaByte(source, destination);
+        } else if (source.getVoxelDataType().equals(UnsignedShort.INSTANCE)) {
+            return new TransferViaShort(source, destination);
         } else {
             throw new IncorrectVoxelDataTypeException("Only unsigned byte and short are supported");
         }
@@ -59,27 +60,27 @@ public class InterpolateUtilities {
     public static void transferSlicesResizeXY(
             VoxelsWrapper src, VoxelsWrapper trgt, Interpolator interpolator) {
 
-        Extent eSrc = src.any().extent();
-        Extent eTrgt = trgt.any().extent();
+        Extent extentSource = src.any().extent();
+        Extent extentTarget = trgt.any().extent();
 
-        Transfer biWrapper = createTransfer(src, trgt);
+        Transfer transfer = createTransfer(src, trgt);
 
-        for (int z = 0; z < eSrc.z(); z++) {
+        for (int z = 0; z < extentSource.z(); z++) {
 
-            biWrapper.assignSlice(z);
-            if (eSrc.x() == eTrgt.x() && eSrc.y() == eTrgt.y()) {
-                biWrapper.transferCopyTo(z);
+            transfer.assignSlice(z);
+            if (extentSource.x() == extentTarget.x() && extentSource.y() == extentTarget.y()) {
+                transfer.transferCopyTo(z);
             } else {
-                if (eSrc.x() != 1 && eSrc.y() != 1) {
+                if (extentSource.x() != 1 && extentSource.y() != 1) {
                     // We only bother to interpolate when we have more than a single pixel in both
                     // directions
                     // And in this case, some of the interpolation algorithms would crash.
-                    biWrapper.transferTo(z, interpolator);
+                    transfer.transferTo(z, interpolator);
                 } else {
-                    biWrapper.transferTo(z, InterpolatorFactory.getInstance().noInterpolation());
+                    transfer.transferTo(z, InterpolatorFactory.getInstance().noInterpolation());
                 }
             }
         }
-        assert (trgt.any().sliceBuffer(0).capacity() == eTrgt.volumeXY());
+        Preconditions.checkArgument(trgt.any().sliceBuffer(0).capacity() == extentTarget.volumeXY());
     }
 }

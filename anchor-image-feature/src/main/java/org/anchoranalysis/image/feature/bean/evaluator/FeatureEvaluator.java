@@ -43,21 +43,21 @@ public abstract class FeatureEvaluator<T extends FeatureInput>
         extends FeatureRelatedBean<FeatureEvaluator<T>> {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private FeatureProvider<T> featureProvider;
+    @BeanField @Getter @Setter private FeatureProvider<T> feature;
     // END BEAN PROPERTIES
 
     public FeatureCalculatorSingle<T> createAndStartSession() throws OperationFailedException {
 
         try {
-            Feature<T> feature = featureProvider.create();
+            Feature<T> featureCreated = feature.create();
 
-            if (feature == null) {
+            if (featureCreated == null) {
                 throw new OperationFailedException(
                         "FeatureProvider returns null. A feature is required.");
             }
 
             return FeatureSession.with(
-                    feature, getInitializationParameters().getSharedFeatureSet(), getLogger());
+                    featureCreated, getInitializationParameters().getSharedFeatureSet(), getLogger());
 
         } catch (CreateException | InitException e) {
             throw new OperationFailedException(e);

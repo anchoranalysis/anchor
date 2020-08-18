@@ -44,7 +44,6 @@ import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.image.histogram.HistogramArray;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.BoundedVoxels;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
@@ -118,7 +117,7 @@ class VoxelizedMarkHistogram implements VoxelizedMark {
     public VoxelStatistics statisticsForAllSlicesMaskSlice(
             int chnlID, int regionID, int maskChnlID) {
 
-        Histogram h = new HistogramArray(255);
+        Histogram h = new Histogram(255);
 
         // We loop through each slice
         for (int z = 0; z < partitionList.get(0).numSlices(); z++) {

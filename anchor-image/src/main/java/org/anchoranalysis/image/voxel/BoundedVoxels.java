@@ -256,8 +256,24 @@ public class BoundedVoxels<T extends Buffer> {
         return new BoundedVoxels<>(this);
     }
 
-    public T sliceBuffer(int z) {
-        return voxels.sliceBuffer(z);
+    /**
+     * A slice buffer with <i>local</i> coordinates i.e. relative to the bounding-box corner
+     *
+     * @param sliceIndexRelative sliceIndex (z) relative to the bounding-box of the object-mask
+     * @return the buffer
+     */
+    public T sliceBufferLocal(int sliceIndexRelative) {
+        return voxels.sliceBuffer(sliceIndexRelative);
+    }
+
+    /**
+     * A slice buffer with <i>global</i> coordinates
+     *
+     * @param sliceIndexGlobal sliceIndex (z) in global coordinates
+     * @return the buffer
+     */
+    public T sliceBufferGlobal(int sliceIndexGlobal) {
+        return voxels.sliceBuffer(sliceIndexGlobal - boundingBox().cornerMin().z());
     }
 
     public Extent extent() {

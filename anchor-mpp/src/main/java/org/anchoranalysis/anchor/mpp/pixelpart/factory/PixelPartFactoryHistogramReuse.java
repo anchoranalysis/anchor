@@ -31,7 +31,6 @@ import java.util.List;
 import org.anchoranalysis.anchor.mpp.pixelpart.PixelPart;
 import org.anchoranalysis.anchor.mpp.pixelpart.PixelPartHistogram;
 import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.image.histogram.HistogramArray;
 
 public class PixelPartFactoryHistogramReuse implements PixelPartFactory<Histogram> {
 
@@ -54,12 +53,12 @@ public class PixelPartFactoryHistogramReuse implements PixelPartFactory<Histogra
         if (!listUnused.isEmpty()) {
             // we retrieve one from the unused list and reset it
 
-            Histogram h = listUnused.remove(0);
-            h.reset();
-            return h;
+            Histogram histogram = listUnused.remove(0);
+            histogram.reset();
+            return histogram;
 
         } else {
-            return new HistogramArray(255);
+            return new Histogram(255);
         }
     }
 }

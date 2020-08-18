@@ -363,10 +363,11 @@ public class ObjectCollection implements Iterable<ObjectMask> {
     /** Descriptive string representation of an object-mask */
     private static String objectToString(ObjectMask object, int index, boolean includeIndex) {
         String cog = object.centerOfGravity().toString();
+        int numberVoxels = object.numberVoxelsOn();
         if (includeIndex) {
-            return index + " " + cog;
+            return String.format("%d %s(%s)", index, cog, numberVoxels);
         } else {
-            return cog;
+            return String.format("%s(%s)", cog, numberVoxels);
         }
     }
 }

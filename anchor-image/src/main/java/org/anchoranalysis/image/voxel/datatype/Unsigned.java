@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-image-bean
+ * anchor-image
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -24,24 +24,21 @@
  * #L%
  */
 
-package org.anchoranalysis.image.bean.provider;
+package org.anchoranalysis.image.voxel.datatype;
 
-import lombok.Getter;
-import lombok.Setter;
-import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.histogram.Histogram;
+public abstract class Unsigned extends VoxelDataType {
 
-public abstract class HistogramProviderOne extends HistogramProvider {
-
-    // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private HistogramProvider histogramProvider;
-    // END BEAN PROPERTIES
-
-    @Override
-    public Histogram create() throws CreateException {
-        return createFromHistogram(histogramProvider.create());
+    protected Unsigned(int numBits, String typeIdentifier, long maxValue) {
+        super(numBits, typeIdentifier, maxValue, 0);
     }
 
-    protected abstract Histogram createFromHistogram(Histogram hist) throws CreateException;
+    @Override
+    public final boolean isInteger() {
+        return true;
+    }
+
+    @Override
+    public final boolean isUnsigned() {
+        return true;
+    }
 }

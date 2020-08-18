@@ -46,7 +46,7 @@ import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
+import org.anchoranalysis.image.voxel.datatype.UnsignedByte;
 
 /**
  * A stack with exactly three channels, respectively for Red, Green and Blue colors.
@@ -160,7 +160,7 @@ public class RGBStack {
 
     // Only supports 8-bit
     public void writeRGBPoint(Point3i point, RGBColor color) {
-        assert (channels.allChannelsHaveType(VoxelDataTypeUnsignedByte.INSTANCE));
+        assert (channels.allChannelsHaveType(UnsignedByte.INSTANCE));
         writePoint(point, channels.getChannel(0), (byte) color.getRed());
         writePoint(point, channels.getChannel(1), (byte) color.getGreen());
         writePoint(point, channels.getChannel(2), (byte) color.getBlue());
@@ -177,7 +177,7 @@ public class RGBStack {
         Preconditions.checkArgument(pointGlobal.z() >= 0);
         Preconditions.checkArgument(channels.getNumberChannels() == 3);
         Preconditions.checkArgument(
-                channels.allChannelsHaveType(VoxelDataTypeUnsignedByte.INSTANCE));
+                channels.allChannelsHaveType(UnsignedByte.INSTANCE));
 
         byte objectMaskOn = object.binaryValuesByte().getOnByte();
 

@@ -29,6 +29,7 @@ package org.anchoranalysis.image.voxel.iterator;
 import java.nio.Buffer;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.voxel.Voxels;
+import lombok.RequiredArgsConstructor;
 
 /**
  * Exposes a {@link ProcessVoxelOffset} as a {@link ProcessVoxelSliceBuffer} by retrieving a buffer
@@ -40,20 +41,17 @@ import org.anchoranalysis.image.voxel.Voxels;
  * @author Owen Feehan
  * @param <T> buffer-type for slice
  */
+@RequiredArgsConstructor
 public final class RetrieveBufferForSlice<T extends Buffer> implements ProcessVoxel {
 
+    // START REQUIRED ARGUMENTS
     private final Voxels<T> voxels;
     private final ProcessVoxelSliceBuffer<T> process;
+    // END REQUIRED ARGUMENTS
 
     private T bufferSlice;
     /** A 2D offset within the current slice */
     private int offsetWithinSlice;
-
-    public RetrieveBufferForSlice(Voxels<T> voxels, ProcessVoxelSliceBuffer<T> process) {
-        super();
-        this.voxels = voxels;
-        this.process = process;
-    }
 
     @Override
     public void notifyChangeSlice(int z) {

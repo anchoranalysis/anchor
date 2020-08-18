@@ -67,7 +67,7 @@ class SubsetOutputterFactory {
 
     public SubsetOutputter<Histogram> histogram() {
         return create(
-                soMPP.getImage().getHistogramCollection(),
+                soMPP.getImage().histograms(),
                 new HistogramCSVGenerator(),
                 (BoundOutputManagerRouteErrors bom) ->
                         bom.outputAllowedSecondLevel(StackOutputKeys.HISTOGRAM),
@@ -76,7 +76,7 @@ class SubsetOutputterFactory {
 
     public SubsetOutputter<ObjectCollection> objects() {
         return create(
-                soMPP.getImage().getObjectCollection(),
+                soMPP.getImage().objects(),
                 ObjectCollectionWriter.generator(),
                 (BoundOutputManagerRouteErrors bom) ->
                         bom.outputAllowedSecondLevel(StackOutputKeys.OBJECTS),

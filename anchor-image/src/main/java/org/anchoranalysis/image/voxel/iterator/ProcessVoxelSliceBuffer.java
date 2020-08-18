@@ -34,7 +34,7 @@ import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
  * Processes a 3D point like {@link ProcessVoxelOffset} but also retrieves a {@link Buffer} for the
  * current z-slice.
  *
- * <p>It is very similar to {@link ProcessVoxelSliceBuffer} but uses {@link Buffer} instead of a
+ * <p>It is very similar to {@link ProcessVoxelSlice} but uses {@link Buffer} instead of a
  * {@link VoxelBuffer}.
  *
  * @author Owen Feehan

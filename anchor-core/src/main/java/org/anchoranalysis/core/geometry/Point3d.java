@@ -156,6 +156,15 @@ public final class Point3d extends Tuple3d {
         pointDup.add(toAdd);
         return pointDup;
     }
+    
+    /** Performs an addition without changing any values in an existing point */
+    public static Point3d immutableAdd(Point3d point, int x, int y, int z) {
+        Point3d pointCopy = new Point3d(point);
+        pointCopy.incrementX(x);
+        pointCopy.incrementY(y);
+        pointCopy.incrementZ(z);
+        return pointCopy;
+    }
 
     /** Performs a subtraction without changing any values in an existing point */
     public static Point3d immutableSubtract(Tuple3d point, Tuple3d toSubtract) {

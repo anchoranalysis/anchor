@@ -30,8 +30,8 @@ import java.nio.ByteBuffer;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
-import org.anchoranalysis.image.binary.logical.BinaryChnlXor;
 import org.anchoranalysis.image.binary.mask.Mask;
+import org.anchoranalysis.image.binary.mask.combine.MaskXor;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelsFactory;
@@ -180,7 +180,7 @@ public class FindOutline {
         // Binary and between the original version and the eroded version
         assert (eroded != null);
         BinaryValuesByte bvb = voxels.binaryValues().createByte();
-        BinaryChnlXor.apply(voxels.voxels(), eroded, bvb, bvb);
+        MaskXor.apply(voxels.voxels(), eroded, bvb, bvb);
         return voxels;
     }
 
@@ -197,7 +197,6 @@ public class FindOutline {
         for (int i = 1; i < numberErosions; i++) {
             eroded = ApplyKernel.apply(kernelErosion, eroded, bvb);
         }
-
         return eroded;
     }
 

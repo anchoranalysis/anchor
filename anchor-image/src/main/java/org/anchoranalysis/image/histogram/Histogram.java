@@ -26,112 +26,578 @@
 
 package org.anchoranalysis.image.histogram;
 
+import static java.lang.Math.toIntExact;
+
+import java.util.Arrays;
+import java.util.function.IntFunction;
+import java.util.function.LongUnaryOperator;
+import lombok.Getter;
 import org.anchoranalysis.bean.shared.relation.threshold.RelationToThreshold;
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
+import org.anchoranalysis.core.relation.RelationToValue;
 import org.anchoranalysis.math.statistics.VarianceCalculator;
+import org.apache.commons.lang.ArrayUtils;
 
-public interface Histogram {
+public final class Histogram {
 
-    Histogram duplicate();
+    /** Minimum bin-value (by default 0) inclusive */
+    @Getter private int minBin;
 
-    void reset();
+    /** Maximum bin-value inclusive */
+    @Getter private int maxBin;
 
-    void zeroValue(int val);
+    private int[] counts;
+    
+    private long sumCount = 0;
 
-    void transferValue(int srcVal, int destVal);
+    public Histogram(int maxValue) {
+        this(0, maxValue);
+    }
 
-    void incrementValue(int val);
+    public Histogram(int minValue, int maxValue) {
+        counts = new int[maxValue - minValue + 1];
+        sumCount = 0;
+        this.maxBin = maxValue;
+        this.minBin = minValue;
+    }
 
-    void incrValueBy(int val, int increase);
+    
+    public Histogram duplicate() {
+        Histogram out = new Histogram(minBin, maxBin);
+        out.counts = ArrayUtils.clone(counts);
+        out.sumCount = sumCount;
+        return out;
+    }
 
-    void incrValueBy(int val, long increase);
+    
+    public void reset() {
+        sumCount = 0;
+        for (int i = minBin; i <= maxBin; i++) {
+            set(i, 0);
+        }
+    }
 
-    boolean isEmpty();
+    
+    public void zeroValue(int value) {
+        int index = index(value);
+        sumCount -= counts[index];
+        counts[index] = 0;
+    }
 
-    int getCount(int val);
+    
+    public void transferValue(int sourceValue, int destinationValue) {
+        int srcIndex = index(sourceValue);
 
-    int size();
+        incrementCount(destinationValue, counts[srcIndex]);
+        counts[srcIndex] = 0;
+    }
 
-    void addHistogram(Histogram other) throws OperationFailedException;
+    
+    public void incrementValue(int value) {
+        incrementCount(value, 1);
+        sumCount++;
+    }
 
-    double mean() throws OperationFailedException;
+    
+    public void incrementValueBy(int value, int increase) {
+        incrementCount(value, increase);
+        sumCount += increase;
+    }
 
     /**
-     * calculates the mean after raising each histogram value to a power i.e. mean of
-     * histogramVal^power
+     * long version of incrValBy
+     *
+     * @throws ArithmeticException if incresae cannot be converted to an int safely
      */
-    double mean(double power) throws OperationFailedException;
+    
+    public void incrementValueBy(int value, long increase) {
+        incrementValueBy(value, toIntExact(increase));
+    }
 
-    /** calculates the mean of (histogramVal - subtractVal)^power */
-    double mean(double power, double subtractVal) throws OperationFailedException;
+    
+    public void removeBelowThreshold(int threshold) {
+        for (int bin = getMinBin(); bin < threshold; bin++) {
+            zeroValue(bin);
+        }
+        // Now chop off the unneeded values and set a new minimum
+        chopBefore(index(threshold));
+        this.minBin = threshold;
+    }
 
-    double meanGreaterEqualTo(int val) throws OperationFailedException;
+    
+    public boolean isEmpty() {
+        return sumCount == 0;
+    }
 
-    double meanNonZero() throws OperationFailedException;
+    
+    public int getCount(int value) {
+        return counts[index(value)];
+    }
 
-    long sumNonZero();
+    /** The number of items in the histogram {@code (maxBin - minBin + 1)} */
+    
+    public int size() {
+        return counts.length;
+    }
 
-    void scaleBy(double factor);
+    
+    public void addHistogram(Histogram other) throws OperationFailedException {
+        if (this.getMaxBin() != other.getMaxBin()) {
+            throw new OperationFailedException(
+                    "Cannot add histograms with different max-bin-values");
+        }
+        if (this.getMinBin() != other.getMinBin()) {
+            throw new OperationFailedException(
+                    "Cannot add histograms with different min-bin-values");
+        }
 
-    int quantile(double quantile) throws OperationFailedException;
+        for (int bin = getMinBin(); bin <= getMaxBin(); bin++) {
+            int otherCount = other.getCount(bin);
+            incrementCount(bin, otherCount);
+            sumCount += otherCount;
+        }
+    }
 
-    int quantileAboveZero(double quantile) throws OperationFailedException;
+    
+    public double mean() throws OperationFailedException {
 
-    boolean hasAboveZero();
+        checkAtLeastOneItemExists();
 
-    double percentGreaterEqualTo(int intensity);
+        long sum = 0;
 
-    default int calculateMode() throws OperationFailedException {
+        for (int bin = minBin; bin <= maxBin; bin++) {
+            sum += getAsLong(bin) * bin;
+        }
+
+        return ((double) sum) / sumCount;
+    }
+
+    
+    public double meanGreaterEqualTo(int value) throws OperationFailedException {
+        checkAtLeastOneItemExists();
+
+        long sum = 0;
+        long count = 0;
+
+        int startMin = Math.max(value, minBin);
+
+        for (int bin = startMin; bin <= maxBin; bin++) {
+            long num = getAsLong(bin);
+            sum += bin * num;
+            count += num;
+        }
+
+        return ((double) sum) / count; // NOSONAR
+    }
+
+    
+    public double meanNonZero() throws OperationFailedException {
+        checkAtLeastOneItemExists();
+
+        long sum = 0;
+
+        for (int bin = minBin; bin <= maxBin; bin++) {
+            sum += bin * getAsLong(bin);
+        }
+
+        return ((double) sum) / (sumCount - getCount(0));
+    }
+
+    
+    public long sumNonZero() {
+        return calculateSum() - getCount(0);
+    }
+
+    
+    public void scaleBy(double factor) {
+
+        int sum = 0;
+
+        for (int bin = minBin; bin <= maxBin; bin++) {
+
+            int index = index(bin);
+
+            int valNew = (int) Math.round(factor * counts[index]);
+            sum += valNew;
+            counts[index] = valNew;
+        }
+
+        sumCount = sum;
+    }
+
+    
+    public int quantile(double quantile) throws OperationFailedException {
+        checkAtLeastOneItemExists();
+
+        double pos = quantile * sumCount;
+
+        long sum = 0;
+        for (int bin = minBin; bin <= maxBin; bin++) {
+            sum += getCount(bin);
+
+            if (sum > pos) {
+                return bin;
+            }
+        }
+        return calculateMaximum();
+    }
+
+    
+    public int quantileAboveZero(double quantile) throws OperationFailedException {
+        checkAtLeastOneItemExists();
+
+        long countMinusZero = sumCount - getCount(0);
+
+        double pos = quantile * countMinusZero;
+
+        int startMin = Math.max(1, minBin);
+
+        long sum = 0;
+        for (int bin = startMin; bin <= maxBin; bin++) {
+            sum += getCount(bin);
+
+            if (sum > pos) {
+                return bin;
+            }
+        }
+        return calculateMaximum();
+    }
+
+    
+    public boolean hasAboveZero() {
+
+        int startMin = Math.max(1, minBin);
+
+        for (int bin = startMin; bin <= maxBin; bin++) {
+            if (getCount(bin) > 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    
+    public double percentGreaterEqualTo(int binThreshold) {
+
+        int startMin = Math.max(binThreshold, minBin);
+
+        long sum = 0;
+        for (int bin = startMin; bin <= maxBin; bin++) {
+            sum += getCount(bin);
+        }
+
+        return ((double) sum) / sumCount;
+    }
+
+    
+    public int calculateMode() throws OperationFailedException {
+        checkAtLeastOneItemExists();
         return calculateMode(0);
     }
 
-    // Should only be called on a histogram with at least one item
-    int calculateMode(int startIndex) throws OperationFailedException;
+    /**
+     * Calculates the mode of the histogram values i.e. the most frequently occurring item
+     * 
+     * <p>Should only be called on a histogram with at least one item
+     */
+    
+    public int calculateMode(int startValue) throws OperationFailedException {
+        checkAtLeastOneItemExists();
 
-    // Should only be called on a histogram with at least one item
-    int calculateMaximum() throws OperationFailedException;
+        int maxIndex = -1;
+        int maxValue = -1;
 
-    // Should only be called on a histogram with at least one item
-    int calculateMinimum() throws OperationFailedException;
+        for (int bin = startValue; bin <= maxBin; bin++) {
+            int val = getCount(bin);
+            if (val > maxValue) {
+                maxValue = val;
+                maxIndex = bin;
+            }
+        }
 
-    long calculateSum();
+        return maxIndex;
+    }
 
-    long calculateSumSquares();
+    /**
+     * Calculates the <i>maximum</i> of the histogram values i.e. the highest bin with a non-zero count
+     * 
+     * <p>Should only be called on a histogram with at least one item
+     */
+    public int calculateMaximum() throws OperationFailedException {
+        checkAtLeastOneItemExists();
 
-    long calculateSumCubes();
+        for (int bin = maxBin; bin >= minBin; bin--) {
+            if (getCount(bin) > 0) {
+                return bin;
+            }
+        }
 
-    void removeBelowThreshold(int threshold);
+        throw new AnchorImpossibleSituationException();
+    }
 
-    int calculateCountNonZero();
+    /**
+     * Calculates the <i>minimum</i> of the histogram values i.e. the lowest bin with a non-zero count
+     * 
+     * <p>Should only be called on a histogram with at least one item
+     */
+    
+    public int calculateMinimum() throws OperationFailedException {
+        checkAtLeastOneItemExists();
 
-    double standardDeviation() throws OperationFailedException;
+        for (int bin = minBin; bin <= maxBin; bin++) {
+            if (getCount(bin) > 0) {
+                return bin;
+            }
+        }
 
-    default double variance() {
+        throw new AnchorImpossibleSituationException();
+    }
+
+    
+    public long calculateSum() {
+        return calculateSumHelper(i -> i);
+    }
+
+    
+    public long calculateSumSquares() {
+        return calculateSumHelper(i -> i * i);
+    }
+
+    
+    public long calculateSumCubes() {
+        return calculateSumHelper(i -> i * i * i);
+    }
+
+    
+    public int calculateCountNonZero() {
+
+        int num = 0;
+
+        for (int bin = minBin; bin <= maxBin; bin++) {
+            if (getCount(bin) > 0) {
+                num++;
+            }
+        }
+
+        return num;
+    }
+
+    
+    public double standardDeviation() throws OperationFailedException {
+        checkAtLeastOneItemExists();
+        return Math.sqrt(variance());
+    }
+    
+    public double variance() {
         return new VarianceCalculator(calculateSum(), calculateSumSquares(), getTotalCount()).variance();
     }
+    
+    public long countThreshold(RelationToThreshold relationToThreshold) {
 
-    long countThreshold(RelationToThreshold relationToThreshold);
+        RelationToValue relation = relationToThreshold.relation();
+        double threshold = relationToThreshold.threshold();
 
-    // Thresholds (generates a new histogram, existing object is unchanged)
-    Histogram threshold(RelationToThreshold relationToThreshold);
+        long sum = 0;
 
-    String toString();
+        for (int bin = minBin; bin <= maxBin; bin++) {
 
-    default String csvString() {
-        StringBuilder sb = new StringBuilder();
-        for (int t = 0; t <= getMaxBin(); t++) {
-            sb.append(String.format("%d, %d%n", t, getCount(t)));
+            if (relation.isRelationToValueTrue(bin, threshold)) {
+                sum += getAsLong(bin);
+            }
         }
-        return sb.toString();
+
+        return sum;
     }
 
-    int getMaxBin();
+    // Thresholds (generates a new histogram, existing object is unchanged)
+    
+    public Histogram threshold(RelationToThreshold relationToThreshold) {
 
-    int getMinBin();
+        RelationToValue relation = relationToThreshold.relation();
+        double threshold = relationToThreshold.threshold();
 
-    long getTotalCount();
+        Histogram out = new Histogram(maxBin);
+        out.sumCount = 0;
+        for (int bin = minBin; bin <= maxBin; bin++) {
 
-    Histogram extractValuesFromRight(long numberValues);
+            if (relation.isRelationToValueTrue(bin, threshold)) {
+                int s = getCount(bin);
+                out.set(bin, s);
+                out.sumCount += s;
+            }
+        }
 
-    Histogram extractValuesFromLeft(long numberValues);
+        return out;
+    }
+
+    // Doesn't show zero values
+    public String toString() {
+        return concatenateForEachBin( bin -> {
+            int count = getCount(bin);
+            if (count!=0) {
+                return String.format("%d: %d%n", bin, count);
+            } else {
+                return "";
+            }
+        });
+    }
+
+    // Includes zero values
+    
+    public String csvString() {
+        return concatenateForEachBin( bin -> String.format("%d, %d%n", bin, getCount(bin)) );
+    }
+
+    
+    public long getTotalCount() {
+        return sumCount;
+    }
+
+    
+    public Histogram extractValuesFromRight(long numberValues) {
+
+        Histogram out = new Histogram(getMaxBin());
+
+        long remaining = numberValues;
+
+        // We keep taking pixels from the histogram until we have reached our quota
+        for (int bin = getMaxBin(); bin >= getMinBin(); bin--) {
+
+            int count = getCount(bin);
+
+            // Skip if there's nothing there
+            if (count != 0) {
+
+                remaining = extractBin(out, bin, count, remaining);
+
+                if (remaining == 0) {
+                    break;
+                }
+            }
+        }
+        return out;
+    }
+
+    
+    public Histogram extractValuesFromLeft(long numberValues) {
+
+        Histogram out = new Histogram(getMaxBin());
+
+        long remaining = numberValues;
+
+        // We keep taking pixels from the histogram until we have reached our quota
+        for (int bin = getMinBin(); bin <= getMaxBin(); bin++) {
+
+            int count = getCount(bin);
+
+            // Skip if there's nothing there
+            if (count != 0) {
+                remaining = extractBin(out, bin, count, remaining);
+
+                if (remaining == 0) {
+                    break;
+                }
+            }
+        }
+        return out;
+    }
+
+    /**
+     * calculates the mean after raising each histogram value to a power i.e. mean of
+     * {@code histogramVal^power}
+     */
+    public double mean(double power) throws OperationFailedException {
+        checkAtLeastOneItemExists();
+        return mean(power, 0.0);
+    }
+
+    /** calculates the mean of {@code (histogramVal - subtractVal)^power} */
+    public double mean(double power, double subtractVal) throws OperationFailedException {
+        checkAtLeastOneItemExists();
+
+        double sum = 0;
+
+        for (int bin = minBin; bin <= maxBin; bin++) {
+            double binSubtracted = (bin - subtractVal);
+            sum += getAsLong(bin) * Math.pow(binSubtracted, power);
+        }
+
+        return sum / sumCount;
+    }
+
+    private long calculateSumHelper(LongUnaryOperator func) {
+
+        long sum = 0;
+
+        for (int bin = minBin; bin <= maxBin; bin++) {
+            long add = getAsLong(bin) * func.applyAsLong((long) bin);
+            sum += add;
+        }
+
+        return sum;
+    }
+
+    // The index in the array the value is stored at
+    private int index(int value) {
+        return value - minBin;
+    }
+
+    // Sets a count for a value
+    private void set(int value, int cntToSet) {
+        counts[index(value)] = cntToSet;
+    }
+
+    // Sets a count for a value
+    private void incrementCount(int value, int incrementBy) {
+        counts[index(value)] += incrementBy;
+    }
+
+    private long getAsLong(int value) {
+        return (long) getCount(value);
+    }
+
+    private void chopBefore(int index) {
+        counts = Arrays.copyOfRange(counts, index, counts.length);
+    }
+
+    private void checkAtLeastOneItemExists() throws OperationFailedException {
+        if (isEmpty()) {
+            throw new OperationFailedException(
+                    "There are no items in the histogram so this operation cannot occur");
+        }
+    }
+
+    /**
+     * Places a particular bin in a destination histogram.
+     * <p>
+     * Either the whole bin is transferred or only some of the bin so that {@code remaining >= 0).
+     *
+     * @param destination the destination histogram
+     * @param bin the bin-value
+     * @param countForBin the count
+     * @param remaining the count remaining that can still be transferred
+     * @return an updated value for remaining after subtracting the transferred count
+     */
+    private static long extractBin(
+            Histogram destination, int bin, int countForBin, long remaining) {
+        // If there's more or just enough remaining than we have, we transfer the entire bin
+        if (remaining >= countForBin) {
+            destination.incrementValueBy(bin, countForBin);
+            return remaining - countForBin;
+        } else {
+            // Otherwise partially transfer the bin
+            destination.incrementValueBy(bin, remaining);
+            return 0;
+        }
+    }
+    
+    /** Builds a string that is a concatenation of strings generated for each bin in the histogram */
+    private String concatenateForEachBin(IntFunction<String> stringForBin) {
+        StringBuilder builder = new StringBuilder();
+        for (int bin = minBin; bin <= maxBin; bin++) {
+            builder.append( stringForBin.apply(bin) );
+        }
+        return builder.toString();
+    }
 }

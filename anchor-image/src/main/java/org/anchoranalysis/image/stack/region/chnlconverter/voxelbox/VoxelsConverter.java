@@ -36,10 +36,10 @@ import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeFloat;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedInt;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedShort;
+import org.anchoranalysis.image.voxel.datatype.Float;
+import org.anchoranalysis.image.voxel.datatype.UnsignedByte;
+import org.anchoranalysis.image.voxel.datatype.UnsignedInt;
+import org.anchoranalysis.image.voxel.datatype.UnsignedShort;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactoryTypeBound;
 
 /**
@@ -57,13 +57,13 @@ public abstract class VoxelsConverter<T extends Buffer> {
     public void convertFrom(VoxelsWrapper voxelsIn, Voxels<T> voxelsOut) {
         // Otherwise, depending on the input type we spawn in different directions
         VoxelDataType inType = voxelsIn.getVoxelDataType();
-        if (inType.equals(VoxelDataTypeUnsignedByte.INSTANCE)) {
+        if (inType.equals(UnsignedByte.INSTANCE)) {
             convertFromByte(voxelsIn.asByte(), voxelsOut);
-        } else if (inType.equals(VoxelDataTypeFloat.INSTANCE)) {
+        } else if (inType.equals(Float.INSTANCE)) {
             convertFromFloat(voxelsIn.asFloat(), voxelsOut);
-        } else if (inType.equals(VoxelDataTypeUnsignedShort.INSTANCE)) {
+        } else if (inType.equals(UnsignedShort.INSTANCE)) {
             convertFromShort(voxelsIn.asShort(), voxelsOut);
-        } else if (inType.equals(VoxelDataTypeUnsignedInt.INSTANCE)) {
+        } else if (inType.equals(UnsignedInt.INSTANCE)) {
             convertFromInt(voxelsIn.asInt(), voxelsOut);
         }
     }

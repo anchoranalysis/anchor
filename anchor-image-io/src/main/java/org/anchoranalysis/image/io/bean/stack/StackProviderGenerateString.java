@@ -43,8 +43,8 @@ import org.anchoranalysis.image.stack.region.chnlconverter.ChannelConverter;
 import org.anchoranalysis.image.stack.region.chnlconverter.ChannelConverterToUnsignedShort;
 import org.anchoranalysis.image.stack.region.chnlconverter.ConversionPolicy;
 import org.anchoranalysis.image.stack.region.chnlconverter.voxelbox.ToShortScaleByType;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedShort;
+import org.anchoranalysis.image.voxel.datatype.UnsignedByte;
+import org.anchoranalysis.image.voxel.datatype.UnsignedShort;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 public class StackProviderGenerateString extends StackProvider {
@@ -111,8 +111,8 @@ public class StackProviderGenerateString extends StackProvider {
             if (intensityProvider != null) {
                 int maxTypeValue =
                         createShort
-                                ? VoxelDataTypeUnsignedShort.MAX_VALUE_INT
-                                : VoxelDataTypeUnsignedByte.MAX_VALUE_INT;
+                                ? UnsignedShort.MAX_VALUE_INT
+                                : UnsignedByte.MAX_VALUE_INT;
 
                 Stack stackIntensity = intensityProvider.create();
                 double maxValue = maxValueFromStack(stackIntensity);

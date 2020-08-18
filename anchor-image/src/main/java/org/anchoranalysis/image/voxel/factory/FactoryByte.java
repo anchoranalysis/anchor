@@ -31,13 +31,13 @@ import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.VoxelsAsByte;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
+import org.anchoranalysis.image.voxel.datatype.UnsignedByte;
 import org.anchoranalysis.image.voxel.pixelsforslice.PixelsForSlice;
 import org.anchoranalysis.image.voxel.pixelsforslice.PixelsFromByteBufferArr;
 
 final class FactoryByte implements VoxelsFactoryTypeBound<ByteBuffer> {
 
-    private static final VoxelDataType DATA_TYPE = VoxelDataTypeUnsignedByte.INSTANCE;
+    private static final VoxelDataType DATA_TYPE = UnsignedByte.INSTANCE;
 
     @Override
     public Voxels<ByteBuffer> create(PixelsForSlice<ByteBuffer> pixelsForPlane) {

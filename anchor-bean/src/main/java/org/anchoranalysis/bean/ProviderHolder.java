@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-image
+ * anchor-plugin-image
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -24,21 +24,25 @@
  * #L%
  */
 
-package org.anchoranalysis.image.voxel.datatype;
+package org.anchoranalysis.bean;
 
-public abstract class VoxelDataTypeUnsigned extends VoxelDataType {
+import lombok.AllArgsConstructor;
+import org.anchoranalysis.core.error.CreateException;
 
-    protected VoxelDataTypeUnsigned(int numBits, String typeIdentifier, long maxValue) {
-        super(numBits, typeIdentifier, maxValue, 0);
-    }
+/**
+ * A convenient way of inserting an object into providers in bean
+ *
+ * <p>Note, this is not a java-bean, as there's no parameterless constructor.
+ *
+ * @author Owen Feehan
+ */
+@AllArgsConstructor
+public class ProviderHolder<T> implements Provider<T> {
+
+    private T object;
 
     @Override
-    public final boolean isInteger() {
-        return true;
-    }
-
-    @Override
-    public final boolean isUnsigned() {
-        return true;
+    public T create() throws CreateException {
+        return object;
     }
 }

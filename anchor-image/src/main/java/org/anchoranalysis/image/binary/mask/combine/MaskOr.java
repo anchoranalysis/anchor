@@ -24,16 +24,31 @@
  * #L%
  */
 
-package org.anchoranalysis.image.voxel.datatype;
+package org.anchoranalysis.image.binary.mask.combine;
 
-public class VoxelDataTypeUnsignedShort extends VoxelDataTypeUnsigned {
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+import org.anchoranalysis.image.binary.mask.Mask;
+import org.anchoranalysis.image.voxel.iterator.IterateVoxels;
 
-    public static final long MAX_VALUE = 65535;
-    public static final int MAX_VALUE_INT = 65535;
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public class MaskOr {
 
-    public static final VoxelDataTypeUnsignedShort INSTANCE = new VoxelDataTypeUnsignedShort();
+    /**
+     * Performs a OR operation on each voxel in two masks, writing the result onto the first mask.
+     *
+     * @param first the first channel for operation (and in which the result is written)
+     * @param second the second channel for operation 
+     */
+    public static void apply(Mask first, Mask second) {
 
-    private VoxelDataTypeUnsignedShort() {
-        super(16, "unsigned16", MAX_VALUE);
+        byte sourceOn = first.getOnByte();
+        byte receiveOn = second.getOnByte();
+
+        IterateVoxels.callEachPointTwo(first.voxels(), second.voxels(), (point, bufferSource, bufferReceive, offset) -> {
+            if (bufferReceive.get(offset) == receiveOn) {
+                bufferSource.put(offset, sourceOn);
+            }
+        });
     }
 }

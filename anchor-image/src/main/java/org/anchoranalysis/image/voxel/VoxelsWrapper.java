@@ -39,10 +39,10 @@ import org.anchoranalysis.image.voxel.assigner.VoxelsAssigner;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelDataTypeException;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeFloat;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedInt;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedShort;
+import org.anchoranalysis.image.voxel.datatype.Float;
+import org.anchoranalysis.image.voxel.datatype.UnsignedByte;
+import org.anchoranalysis.image.voxel.datatype.UnsignedInt;
+import org.anchoranalysis.image.voxel.datatype.UnsignedShort;
 import org.anchoranalysis.image.voxel.extracter.VoxelsExtracter;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 
@@ -83,7 +83,7 @@ public class VoxelsWrapper {
     @SuppressWarnings("unchecked")
     public Voxels<ByteBuffer> asByte() {
 
-        if (!dataType.equals(VoxelDataTypeUnsignedByte.INSTANCE)) {
+        if (!dataType.equals(UnsignedByte.INSTANCE)) {
             throw new IncorrectVoxelDataTypeException(
                     "Voxels do not contain unsigned 8-bit data (byte)");
         }
@@ -94,7 +94,7 @@ public class VoxelsWrapper {
     @SuppressWarnings("unchecked")
     public Voxels<FloatBuffer> asFloat() {
 
-        if (!dataType.equals(VoxelDataTypeFloat.INSTANCE)) {
+        if (!dataType.equals(Float.INSTANCE)) {
             throw new IncorrectVoxelDataTypeException("Voxels do not contain float data");
         }
 
@@ -104,7 +104,7 @@ public class VoxelsWrapper {
     @SuppressWarnings("unchecked")
     public Voxels<ShortBuffer> asShort() {
 
-        if (!dataType.equals(VoxelDataTypeUnsignedShort.INSTANCE)) {
+        if (!dataType.equals(UnsignedShort.INSTANCE)) {
             throw new IncorrectVoxelDataTypeException(
                     "Voxels do not contain unsigned 16-bit data (int)");
         }
@@ -115,7 +115,7 @@ public class VoxelsWrapper {
     @SuppressWarnings("unchecked")
     public Voxels<IntBuffer> asInt() {
 
-        if (!dataType.equals(VoxelDataTypeUnsignedInt.INSTANCE)) {
+        if (!dataType.equals(UnsignedInt.INSTANCE)) {
             throw new IncorrectVoxelDataTypeException(
                     "Voxels do not contain unsigned 32-bit data (int)");
         }
@@ -135,7 +135,7 @@ public class VoxelsWrapper {
 
         // If the input-channel is Byte then we do it in-place
         // Otherwise we create new voxels
-        if (!alwaysDuplicate && getVoxelDataType().equals(VoxelDataTypeUnsignedByte.INSTANCE)) {
+        if (!alwaysDuplicate && getVoxelDataType().equals(UnsignedByte.INSTANCE)) {
             boxOut = asByte();
         } else {
             boxOut = VoxelsFactory.getByte().createInitialized(any().extent());

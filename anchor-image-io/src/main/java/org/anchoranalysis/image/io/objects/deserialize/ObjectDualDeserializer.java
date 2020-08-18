@@ -38,7 +38,7 @@ import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
 import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
+import org.anchoranalysis.image.voxel.datatype.UnsignedByte;
 import org.anchoranalysis.io.bean.deserializer.Deserializer;
 import org.anchoranalysis.io.bean.deserializer.ObjectInputStreamDeserializer;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
@@ -73,7 +73,7 @@ class ObjectDualDeserializer implements Deserializer<ObjectMask> {
                     or.openCheckType(
                                     0,
                                     ProgressReporterNull.get(),
-                                    VoxelDataTypeUnsignedByte.INSTANCE)
+                                    UnsignedByte.INSTANCE)
                             .get(0);
 
             if (stack.getNumberChannels() != 1) {

@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-mpp
+ * anchor-image
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -24,20 +24,16 @@
  * #L%
  */
 
-package org.anchoranalysis.anchor.mpp.pixelpart.factory;
+package org.anchoranalysis.image.voxel.datatype;
 
-import org.anchoranalysis.anchor.mpp.pixelpart.PixelPartPixelList;
-import org.anchoranalysis.image.voxel.VoxelsIntensityList;
+public class UnsignedShort extends Unsigned {
 
-public class PixelPartFactoryPixelList implements PixelPartFactory<VoxelsIntensityList> {
+    public static final long MAX_VALUE = 65535;
+    public static final int MAX_VALUE_INT = 65535;
 
-    @Override
-    public PixelPartPixelList create(int numSlices) {
-        return new PixelPartPixelList(numSlices);
-    }
+    public static final UnsignedShort INSTANCE = new UnsignedShort();
 
-    @Override
-    public void addUnused(VoxelsIntensityList part) {
-        // NOTHING TO DO
+    private UnsignedShort() {
+        super(16, "unsigned16", MAX_VALUE);
     }
 }

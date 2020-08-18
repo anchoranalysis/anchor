@@ -11,7 +11,7 @@ import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
-import org.anchoranalysis.image.voxel.iterator.IterateVoxelsAsInt;
+import org.anchoranalysis.image.voxel.iterator.IterateVoxelsVoxelBoxAsInt;
 
 @RequiredArgsConstructor
 abstract class Base<T extends Buffer> implements VoxelsAssigner {
@@ -79,7 +79,7 @@ abstract class Base<T extends Buffer> implements VoxelsAssigner {
     public int toObject(ObjectMask object, IntPredicate voxelPredicate) {
 
         // First check if all voxels on the object match the predicate
-        if (IterateVoxelsAsInt.allPointsMatchPredicate(voxels, object, voxelPredicate)) {
+        if (IterateVoxelsVoxelBoxAsInt.allPointsMatchPredicate(voxels, object, voxelPredicate)) {
             return toObject(object);
         } else {
             return -1; // Failure code that at least one voxel didn't match
@@ -108,7 +108,7 @@ abstract class Base<T extends Buffer> implements VoxelsAssigner {
      * @return the number of voxels successfully "set"
      */
     private int toObject(ObjectMask object, Optional<BoundingBox> restrictTo) {
-        return IterateVoxelsAsInt.callEachPoint(
+        return IterateVoxelsVoxelBoxAsInt.callEachPoint(
                 voxels,
                 object,
                 restrictTo,

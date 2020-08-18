@@ -32,9 +32,9 @@ import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferShort;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedInt;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedShort;
+import org.anchoranalysis.image.voxel.datatype.UnsignedByte;
+import org.anchoranalysis.image.voxel.datatype.UnsignedInt;
+import org.anchoranalysis.image.voxel.datatype.UnsignedShort;
 
 // Converts voxel buffers to a unsigned 8-bit buffer scaling against the maximum value in each
 // buffer.
@@ -51,8 +51,8 @@ public final class ToShortScaleByType extends VoxelsConverter<ShortBuffer> {
     public VoxelBuffer<ShortBuffer> convertFromFloat(VoxelBuffer<FloatBuffer> bufferIn) {
 
         double div =
-                (double) VoxelDataTypeUnsignedInt.MAX_VALUE
-                        / VoxelDataTypeUnsignedShort.MAX_VALUE_INT;
+                (double) UnsignedInt.MAX_VALUE
+                        / UnsignedShort.MAX_VALUE_INT;
 
         ShortBuffer bufferOut = ShortBuffer.allocate(bufferIn.buffer().capacity());
 
@@ -71,8 +71,8 @@ public final class ToShortScaleByType extends VoxelsConverter<ShortBuffer> {
     public VoxelBuffer<ShortBuffer> convertFromInt(VoxelBuffer<IntBuffer> bufferIn) {
 
         double div =
-                (double) VoxelDataTypeUnsignedInt.MAX_VALUE
-                        / VoxelDataTypeUnsignedShort.MAX_VALUE_INT;
+                (double) UnsignedInt.MAX_VALUE
+                        / UnsignedShort.MAX_VALUE_INT;
 
         ShortBuffer bufferOut = ShortBuffer.allocate(bufferIn.buffer().capacity());
 
@@ -91,8 +91,8 @@ public final class ToShortScaleByType extends VoxelsConverter<ShortBuffer> {
     @Override
     public VoxelBuffer<ShortBuffer> convertFromByte(VoxelBuffer<ByteBuffer> bufferIn) {
         double mult =
-                (double) VoxelDataTypeUnsignedShort.MAX_VALUE_INT
-                        / VoxelDataTypeUnsignedByte.MAX_VALUE_INT;
+                (double) UnsignedShort.MAX_VALUE_INT
+                        / UnsignedByte.MAX_VALUE_INT;
 
         ShortBuffer bufferOut = ShortBuffer.allocate(bufferIn.buffer().capacity());
 

@@ -26,6 +26,9 @@
 
 package org.anchoranalysis.math.statistics;
 
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+
 /**
  * Helper class for calculating variance from running variables
  *
@@ -33,18 +36,12 @@ package org.anchoranalysis.math.statistics;
  *
  * @author Owen Feehan
  */
+@AllArgsConstructor @NoArgsConstructor
 public class VarianceCalculator {
 
     private long sum = 0;
     private long sumSquares = 0;
     private long count = 0;
-
-    public VarianceCalculator(long sum, long sumSquares, long count) {
-        super();
-        this.sum = sum;
-        this.sumSquares = sumSquares;
-        this.count = count;
-    }
 
     public void add(int histCount, long k) {
         // Longs to avoid hitting maximum value

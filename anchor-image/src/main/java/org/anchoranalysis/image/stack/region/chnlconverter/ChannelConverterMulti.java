@@ -28,10 +28,10 @@ package org.anchoranalysis.image.stack.region.chnlconverter;
 
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeFloat;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedInt;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedShort;
+import org.anchoranalysis.image.voxel.datatype.Float;
+import org.anchoranalysis.image.voxel.datatype.UnsignedByte;
+import org.anchoranalysis.image.voxel.datatype.UnsignedInt;
+import org.anchoranalysis.image.voxel.datatype.UnsignedShort;
 
 public class ChannelConverterMulti {
 
@@ -45,13 +45,13 @@ public class ChannelConverterMulti {
 
         if (chnlIn.getVoxelDataType().equals(outputType)) {
             return chnlIn;
-        } else if (outputType.equals(VoxelDataTypeUnsignedByte.INSTANCE)) {
+        } else if (outputType.equals(UnsignedByte.INSTANCE)) {
             return new ChannelConverterToUnsignedByte().convert(chnlIn, conversionPolicy);
-        } else if (outputType.equals(VoxelDataTypeUnsignedShort.INSTANCE)) {
+        } else if (outputType.equals(UnsignedShort.INSTANCE)) {
             return new ChannelConverterToUnsignedShort().convert(chnlIn, conversionPolicy);
-        } else if (outputType.equals(VoxelDataTypeFloat.INSTANCE)) {
+        } else if (outputType.equals(Float.INSTANCE)) {
             return new ChannelConverterToFloat().convert(chnlIn, conversionPolicy);
-        } else if (outputType.equals(VoxelDataTypeUnsignedInt.INSTANCE)) {
+        } else if (outputType.equals(UnsignedInt.INSTANCE)) {
             throw new UnsupportedOperationException(
                     "UnsignedInt is not yet supported for this operation");
         } else {

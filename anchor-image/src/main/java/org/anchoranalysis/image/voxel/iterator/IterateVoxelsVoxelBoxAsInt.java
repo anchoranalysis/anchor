@@ -24,7 +24,7 @@ import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
  * @author Owen Feehan
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class IterateVoxelsAsInt {
+public class IterateVoxelsVoxelBoxAsInt {
 
     /**
      * Changes each voxel reading and writing the buffer as an {@code int}.

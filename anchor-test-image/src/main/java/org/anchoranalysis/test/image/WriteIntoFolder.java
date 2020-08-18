@@ -104,7 +104,7 @@ public class WriteIntoFolder implements TestRule {
      */
     public void writeObjects(String outputName, ObjectCollection objects) {
 
-        ImageDimensions dimensionsResolved = dimensionsToForObjects(objects);
+        ImageDimensions dimensionsResolved = dimensionsToCenterObjects(objects);
 
         writeObjects(outputName, objects, Either.left(dimensionsResolved));
     }
@@ -195,7 +195,7 @@ public class WriteIntoFolder implements TestRule {
      *
      * @throws OperationFailedException
      */
-    private static ImageDimensions dimensionsToForObjects(ObjectCollection objects) {
+    private static ImageDimensions dimensionsToCenterObjects(ObjectCollection objects) {
 
         if (objects.size() == 0) {
             return FALLBACK_SIZE;

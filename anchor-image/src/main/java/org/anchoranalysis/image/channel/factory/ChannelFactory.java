@@ -34,9 +34,9 @@ import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.factory.VoxelDataTypeFactoryMultiplexer;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedInt;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedShort;
+import org.anchoranalysis.image.voxel.datatype.UnsignedByte;
+import org.anchoranalysis.image.voxel.datatype.UnsignedInt;
+import org.anchoranalysis.image.voxel.datatype.UnsignedShort;
 
 /** Creates a channel for one of several data-types */
 public class ChannelFactory extends VoxelDataTypeFactoryMultiplexer<ChannelFactorySingleType> {
@@ -98,12 +98,12 @@ public class ChannelFactory extends VoxelDataTypeFactoryMultiplexer<ChannelFacto
 
     private static VoxelDataType selectDataTypeToSupport(long maxIntensityValueNeeded)
             throws CreateException {
-        if (maxIntensityValueNeeded < VoxelDataTypeUnsignedByte.INSTANCE.maxValue()) {
-            return VoxelDataTypeUnsignedByte.INSTANCE;
-        } else if (maxIntensityValueNeeded < VoxelDataTypeUnsignedShort.INSTANCE.maxValue()) {
-            return VoxelDataTypeUnsignedShort.INSTANCE;
-        } else if (maxIntensityValueNeeded < VoxelDataTypeUnsignedInt.INSTANCE.maxValue()) {
-            return VoxelDataTypeUnsignedInt.INSTANCE;
+        if (maxIntensityValueNeeded < UnsignedByte.INSTANCE.maxValue()) {
+            return UnsignedByte.INSTANCE;
+        } else if (maxIntensityValueNeeded < UnsignedShort.INSTANCE.maxValue()) {
+            return UnsignedShort.INSTANCE;
+        } else if (maxIntensityValueNeeded < UnsignedInt.INSTANCE.maxValue()) {
+            return UnsignedInt.INSTANCE;
         } else {
             throw new CreateException(
                     "No data-type can support a max intensity-value of " + maxIntensityValueNeeded);

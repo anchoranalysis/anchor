@@ -28,10 +28,10 @@ package org.anchoranalysis.image.factory;
 
 import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelDataTypeException;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeFloat;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedInt;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedShort;
+import org.anchoranalysis.image.voxel.datatype.Float;
+import org.anchoranalysis.image.voxel.datatype.UnsignedByte;
+import org.anchoranalysis.image.voxel.datatype.UnsignedInt;
+import org.anchoranalysis.image.voxel.datatype.UnsignedShort;
 
 /**
  * Multiplexes betwen four different types of factories each representing a particular primitive
@@ -64,13 +64,13 @@ public abstract class VoxelDataTypeFactoryMultiplexer<T> {
      */
     public T get(VoxelDataType dataType) {
 
-        if (dataType.equals(VoxelDataTypeUnsignedByte.INSTANCE)) {
+        if (dataType.equals(UnsignedByte.INSTANCE)) {
             return factoryByte;
-        } else if (dataType.equals(VoxelDataTypeUnsignedShort.INSTANCE)) {
+        } else if (dataType.equals(UnsignedShort.INSTANCE)) {
             return factoryShort;
-        } else if (dataType.equals(VoxelDataTypeUnsignedInt.INSTANCE)) {
+        } else if (dataType.equals(UnsignedInt.INSTANCE)) {
             return factoryInt;
-        } else if (dataType.equals(VoxelDataTypeFloat.INSTANCE)) {
+        } else if (dataType.equals(Float.INSTANCE)) {
             return factoryFloat;
         } else {
             throw new IncorrectVoxelDataTypeException("Non-existent type");

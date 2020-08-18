@@ -58,7 +58,7 @@ public abstract class DefineOutputterWithNrg extends DefineOutputter {
         NRGStackWithParams stack = new NRGStackWithParams(nrgStackProviderLoc.create());
 
         if (nrgParamsProvider != null) {
-            nrgParamsProvider.initRecursive(so.getParams(), logger);
+            nrgParamsProvider.initRecursive(so.params(), logger);
             stack.setParams(nrgParamsProvider.create());
         }
         return stack;

@@ -47,8 +47,8 @@ import org.anchoranalysis.image.stack.region.chnlconverter.attached.ChnlConverte
 import org.anchoranalysis.image.stack.region.chnlconverter.voxelbox.VoxelsConverter;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelDataTypeException;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedShort;
+import org.anchoranalysis.image.voxel.datatype.UnsignedByte;
+import org.anchoranalysis.image.voxel.datatype.UnsignedShort;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 
 @AllArgsConstructor
@@ -112,7 +112,7 @@ public class RegionExtracterFromDisplayStack implements RegionExtracter {
 
         MeanInterpolator interpolator = (zoomFactor < 1) ? new MeanInterpolator(zoomFactor) : null;
 
-        if (extractedSlice.getVoxelDataType().equals(VoxelDataTypeUnsignedByte.INSTANCE)) {
+        if (extractedSlice.getVoxelDataType().equals(UnsignedByte.INSTANCE)) {
             interpolateRegionFromByte(
                     extractedSlice.voxels().asByte(),
                     voxels,
@@ -126,7 +126,7 @@ public class RegionExtracterFromDisplayStack implements RegionExtracter {
                 chnlConverter.get().convertFromByte(voxels, voxels);
             }
 
-        } else if (extractedSlice.getVoxelDataType().equals(VoxelDataTypeUnsignedShort.INSTANCE)
+        } else if (extractedSlice.getVoxelDataType().equals(UnsignedShort.INSTANCE)
                 && chnlConverter.isPresent()) {
 
             Voxels<ShortBuffer> bufferIntermediate =
@@ -151,7 +151,7 @@ public class RegionExtracterFromDisplayStack implements RegionExtracter {
         }
 
         return ChannelFactory.instance()
-                .get(VoxelDataTypeUnsignedByte.INSTANCE)
+                .get(UnsignedByte.INSTANCE)
                 .create(voxels, dimensions.resolution());
     }
 

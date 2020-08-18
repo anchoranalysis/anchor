@@ -55,7 +55,7 @@ public class DefineOutputterMPP extends DefineOutputter {
         try {
             MPPInitParams initParams = super.createInitParams(context);
             ncc.addAsSeparateChannels(
-                    new WrapStackAsTimeSequenceStore(initParams.getImage().getStackCollection()),
+                    new WrapStackAsTimeSequenceStore(initParams.getImage().stacks()),
                     0);
 
             super.outputSharedObjects(initParams, context);

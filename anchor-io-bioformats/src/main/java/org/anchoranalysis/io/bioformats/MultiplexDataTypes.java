@@ -36,11 +36,11 @@ import org.anchoranalysis.image.channel.factory.ChannelFactoryShort;
 import org.anchoranalysis.image.channel.factory.ChannelFactorySingleType;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeFloat;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeSignedShort;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedInt;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedShort;
+import org.anchoranalysis.image.voxel.datatype.Float;
+import org.anchoranalysis.image.voxel.datatype.SignedShort;
+import org.anchoranalysis.image.voxel.datatype.UnsignedByte;
+import org.anchoranalysis.image.voxel.datatype.UnsignedInt;
+import org.anchoranalysis.image.voxel.datatype.UnsignedShort;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class MultiplexDataTypes {
@@ -48,13 +48,13 @@ class MultiplexDataTypes {
     public static VoxelDataType multiplexFormat(int pixelType) throws RasterIOException {
         switch (pixelType) {
             case FormatTools.UINT8:
-                return VoxelDataTypeUnsignedByte.INSTANCE;
+                return UnsignedByte.INSTANCE;
             case FormatTools.UINT16:
-                return VoxelDataTypeUnsignedShort.INSTANCE;
+                return UnsignedShort.INSTANCE;
             case FormatTools.INT16:
-                return VoxelDataTypeSignedShort.instance;
+                return SignedShort.instance;
             case FormatTools.FLOAT:
-                return VoxelDataTypeFloat.INSTANCE;
+                return Float.INSTANCE;
             default:
                 throw new RasterIOException(
                         String.format(
@@ -64,15 +64,15 @@ class MultiplexDataTypes {
     }
 
     public static ChannelFactorySingleType multiplexVoxelDataType(VoxelDataType voxelDataType) {
-        if (voxelDataType.equals(VoxelDataTypeUnsignedByte.INSTANCE)) {
+        if (voxelDataType.equals(UnsignedByte.INSTANCE)) {
             return new ChannelFactoryByte();
-        } else if (voxelDataType.equals(VoxelDataTypeUnsignedShort.INSTANCE)) {
+        } else if (voxelDataType.equals(UnsignedShort.INSTANCE)) {
             return new ChannelFactoryShort();
-        } else if (voxelDataType.equals(VoxelDataTypeSignedShort.instance)) {
+        } else if (voxelDataType.equals(SignedShort.instance)) {
             return new ChannelFactoryShort();
-        } else if (voxelDataType.equals(VoxelDataTypeFloat.INSTANCE)) {
+        } else if (voxelDataType.equals(Float.INSTANCE)) {
             return new ChannelFactoryFloat();
-        } else if (voxelDataType.equals(VoxelDataTypeUnsignedInt.INSTANCE)) {
+        } else if (voxelDataType.equals(UnsignedInt.INSTANCE)) {
             return new ChannelFactoryInt();
         } else {
             throw new UnsupportedOperationException();

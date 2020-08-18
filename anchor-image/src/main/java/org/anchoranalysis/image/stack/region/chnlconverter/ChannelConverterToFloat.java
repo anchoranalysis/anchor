@@ -28,13 +28,13 @@ package org.anchoranalysis.image.stack.region.chnlconverter;
 
 import java.nio.FloatBuffer;
 import org.anchoranalysis.image.stack.region.chnlconverter.voxelbox.ToFloatNoScaling;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeFloat;
+import org.anchoranalysis.image.voxel.datatype.Float;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 
 // Converts an existing channel to a float
 public class ChannelConverterToFloat extends ChannelConverter<FloatBuffer> {
 
     public ChannelConverterToFloat() {
-        super(VoxelDataTypeFloat.INSTANCE, new ToFloatNoScaling(), VoxelsFactory.getFloat());
+        super(Float.INSTANCE, new ToFloatNoScaling(), VoxelsFactory.getFloat());
     }
 }

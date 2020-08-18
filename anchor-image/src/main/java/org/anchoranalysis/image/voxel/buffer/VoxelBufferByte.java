@@ -29,7 +29,7 @@ package org.anchoranalysis.image.voxel.buffer;
 import java.nio.ByteBuffer;
 import org.anchoranalysis.image.convert.ByteConverter;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
+import org.anchoranalysis.image.voxel.datatype.UnsignedByte;
 
 public final class VoxelBufferByte extends VoxelBuffer<ByteBuffer> {
 
@@ -80,7 +80,7 @@ public final class VoxelBufferByte extends VoxelBuffer<ByteBuffer> {
 
     @Override
     public VoxelDataType dataType() {
-        return VoxelDataTypeUnsignedByte.INSTANCE;
+        return UnsignedByte.INSTANCE;
     }
 
     @Override

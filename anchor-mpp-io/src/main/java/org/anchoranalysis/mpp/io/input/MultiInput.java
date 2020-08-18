@@ -41,12 +41,14 @@ import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.stack.TimeSequence;
 import org.anchoranalysis.image.stack.wrap.WrapStackAsTimeSequenceStore;
+import lombok.experimental.Accessors;
 
+@Accessors(fluent=true)
 public class MultiInput implements ProvidesStackInput, InputForMPPBean {
 
     public static final String DEFAULT_IMAGE_INPUT_NAME = "input_image";
 
-    private StackWithMap stackWithMap;
+    private StackWithMap stack;
 
     private OperationMap<Cfg> mapCfg = new OperationMap<>();
     private OperationMap<ObjectCollection> mapObjects = new OperationMap<>();
@@ -59,7 +61,7 @@ public class MultiInput implements ProvidesStackInput, InputForMPPBean {
     }
 
     public MultiInput(String mainObjectName, ProvidesStackInput mainInputObject) {
-        this.stackWithMap = new StackWithMap(mainObjectName, mainInputObject);
+        this.stack = new StackWithMap(mainObjectName, mainInputObject);
     }
 
     @Override
@@ -68,7 +70,7 @@ public class MultiInput implements ProvidesStackInput, InputForMPPBean {
             int seriesNum,
             ProgressReporter progressReporter)
             throws OperationFailedException {
-        stackWithMap.addToStore(stackCollection, seriesNum, progressReporter);
+        stack.addToStore(stackCollection, seriesNum, progressReporter);
     }
 
     @Override
@@ -86,26 +88,26 @@ public class MultiInput implements ProvidesStackInput, InputForMPPBean {
             throws OperationFailedException {
 
         cfg().addToStore(soMPP.getCfgCollection());
-        stack().addToStore(new WrapStackAsTimeSequenceStore(soImage.getStackCollection()));
-        objects().addToStore(soImage.getObjectCollection());
-        keyValueParams().addToStore(soImage.getParams().getNamedKeyValueParamsCollection());
-        filePath().addToStore(soImage.getParams().getNamedFilePathCollection());
-        histogram().addToStore(soImage.getHistogramCollection());
+        stack().addToStore(new WrapStackAsTimeSequenceStore(soImage.stacks()));
+        objects().addToStore(soImage.objects());
+        keyValueParams().addToStore(soImage.params().getNamedKeyValueParamsCollection());
+        filePath().addToStore(soImage.params().getNamedFilePathCollection());
+        histogram().addToStore(soImage.histograms());
     }
 
     @Override
     public String descriptiveName() {
-        return stackWithMap.descriptiveName();
+        return stack.descriptiveName();
     }
 
     @Override
     public Optional<Path> pathForBinding() {
-        return stackWithMap.pathForBinding();
+        return stack.pathForBinding();
     }
 
     @Override
     public void close(ErrorReporter errorReporter) {
-        stackWithMap.close(errorReporter);
+        stack.close(errorReporter);
 
         // We set all these objects to NULL so the garbage collector can free up memory
         // This probably isn't necessary, as the MultiInput object should get garbage-collected ASAP
@@ -138,15 +140,15 @@ public class MultiInput implements ProvidesStackInput, InputForMPPBean {
     }
 
     public MultiInputSubMap<TimeSequence> stack() {
-        return stackWithMap;
+        return stack;
     }
 
     public String getMainObjectName() {
-        return stackWithMap.getMainObjectName();
+        return stack.getMainObjectName();
     }
 
     @Override
     public int numberFrames() throws OperationFailedException {
-        return stackWithMap.numFrames();
+        return stack.numFrames();
     }
 }

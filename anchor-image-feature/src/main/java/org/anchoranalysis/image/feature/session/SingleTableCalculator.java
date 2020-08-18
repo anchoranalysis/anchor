@@ -60,7 +60,7 @@ public class SingleTableCalculator implements FeatureTableCalculator<FeatureInpu
                         namedFeatureStore.listFeatures(),
                         InitParamsHelper.createInitParams(
                                 Optional.of(soImage.getSharedObjects()), nrgStack),
-                        soImage.getFeature().getSharedFeatureSet(),
+                        soImage.features().getSharedFeatureSet(),
                         logger);
     }
 

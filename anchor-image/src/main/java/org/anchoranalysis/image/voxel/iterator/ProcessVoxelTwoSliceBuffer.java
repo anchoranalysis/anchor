@@ -24,16 +24,36 @@
  * #L%
  */
 
-package org.anchoranalysis.image.voxel.datatype;
+package org.anchoranalysis.image.voxel.iterator;
 
-public class VoxelDataTypeSignedShort extends VoxelDataTypeSigned {
+import java.nio.Buffer;
+import org.anchoranalysis.core.geometry.Point3i;
 
-    public static final long MIN_VALUE = -32768;
-    public static final long MAX_VALUE = 32767;
+/**
+ * Processes a 3D point like {@link ProcessVoxelOffset} but also retrieves two {@link Buffer} for the
+ * current z-slice.
+ *
+ * <p>It is very similar to {@link ProcessVoxelSliceBuffer} but uses two {@link Buffer} of the same type
+ * instead of a single one.
+ *
+ * @param <T> type of both buffers
+ * @author Owen Feehan
+ */
+@FunctionalInterface
+public interface ProcessVoxelTwoSliceBuffer<T extends Buffer> {
 
-    public static final VoxelDataTypeSignedShort instance = new VoxelDataTypeSignedShort();
+    /** Notifies the processor that there has been a change in slice (z global coordinate) */
+    default void notifyChangeSlice(int z) {}
 
-    private VoxelDataTypeSignedShort() {
-        super(16, "signed16", MAX_VALUE, MIN_VALUE);
-    }
+    /**
+     * Processes a voxel location in a buffer
+     *
+     * @param point a point with global coordinates
+     * @param buffer1 first buffer for the current slice for which {@link offsetSlice} refers to a
+     *     particular location
+     * @param buffer2 second buffer for the current slice for which {@link offsetSlice} refers to a
+     *     particular location
+     * @param offset an offset value for the current slice (i.e. indexing XY only, but not Z)
+     */
+    void process(Point3i point, T buffer1, T buffer2, int offset);
 }

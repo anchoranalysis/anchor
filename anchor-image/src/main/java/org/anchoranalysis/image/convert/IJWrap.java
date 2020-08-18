@@ -54,8 +54,8 @@ import org.anchoranalysis.image.voxel.buffer.VoxelBufferByte;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferShort;
 import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelDataTypeException;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedShort;
+import org.anchoranalysis.image.voxel.datatype.UnsignedByte;
+import org.anchoranalysis.image.voxel.datatype.UnsignedShort;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 import org.anchoranalysis.image.voxel.pixelsforslice.PixelsForSlice;
 
@@ -68,8 +68,8 @@ public class IJWrap {
     /** A multiplication-factor to convert microns to meters */
     private static final int MICRONS_TO_METERS = 1000000;
 
-    private static final VoxelDataType DATA_TYPE_BYTE = VoxelDataTypeUnsignedByte.INSTANCE;
-    private static final VoxelDataType DATA_TYPE_SHORT = VoxelDataTypeUnsignedShort.INSTANCE;
+    private static final VoxelDataType DATA_TYPE_BYTE = UnsignedByte.INSTANCE;
+    private static final VoxelDataType DATA_TYPE_SHORT = UnsignedShort.INSTANCE;
 
     public static Channel chnlFromImageStackByte(
             ImageStack imageStack, ImageResolution res, ChannelFactorySingleType factory) {
@@ -103,10 +103,10 @@ public class IJWrap {
 
         if (imagePlus.getType() == ImagePlus.GRAY8) {
             return chnlFromImagePlusByte(
-                    imagePlus, dimensions, factory.get(VoxelDataTypeUnsignedByte.INSTANCE));
+                    imagePlus, dimensions, factory.get(UnsignedByte.INSTANCE));
         } else if (imagePlus.getType() == ImagePlus.GRAY16) {
             return chnlFromImagePlusShort(
-                    imagePlus, dimensions, factory.get(VoxelDataTypeUnsignedShort.INSTANCE));
+                    imagePlus, dimensions, factory.get(UnsignedShort.INSTANCE));
         } else {
             throw new IncorrectVoxelDataTypeException(
                     "Only unsigned-8 and unsigned 16bit supported");

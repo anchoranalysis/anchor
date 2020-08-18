@@ -26,14 +26,13 @@
 
 package org.anchoranalysis.image.voxel.datatype;
 
-public class VoxelDataTypeUnsignedByte extends VoxelDataTypeUnsigned {
+public class UnsignedInt extends Unsigned {
 
-    public static final long MAX_VALUE = 255;
-    public static final int MAX_VALUE_INT = 255;
+    public static final long MAX_VALUE = 4294967295L;
 
-    public static final VoxelDataTypeUnsignedByte INSTANCE = new VoxelDataTypeUnsignedByte();
+    public static final UnsignedInt INSTANCE = new UnsignedInt();
 
-    private VoxelDataTypeUnsignedByte() {
-        super(8, "unsigned8", MAX_VALUE);
+    private UnsignedInt() {
+        super(32, "unsigned32", MAX_VALUE);
     }
 }

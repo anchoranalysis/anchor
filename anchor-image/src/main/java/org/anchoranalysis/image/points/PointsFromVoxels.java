@@ -39,10 +39,11 @@ import org.anchoranalysis.core.geometry.Comparator3i;
 import org.anchoranalysis.core.geometry.Point2i;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.core.geometry.PointConverter;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
-import org.anchoranalysis.image.extent.Extent;
+import org.anchoranalysis.image.voxel.iterator.IterateVoxelsByte;
 
 /**
  * Converts binary-voxels into points
@@ -137,7 +138,7 @@ public class PointsFromVoxels {
      */
     public static List<Point3d> listFrom3d(BinaryVoxels<ByteBuffer> voxels, ReadableTuple3i shift) {
         List<Point3d> points = new ArrayList<>();
-        PointsFromVoxels.consumePoints3d(voxels, shift, points::add);
+        PointsFromVoxels.consumePoints3d(voxels, PointConverter.doubleFromInt(shift), points::add);
         return points;
     }
 
@@ -155,23 +156,11 @@ public class PointsFromVoxels {
      */
     static void consumePoints2i(
             BinaryVoxels<ByteBuffer> voxels, ReadableTuple3i shift, Consumer<Point2i> consumer) {
-        Extent e = voxels.extent();
-
+        
         BinaryValuesByte bvb = voxels.binaryValues().createByte();
-        ByteBuffer bb = voxels.sliceBuffer(0);
-
-        for (int y = 0; y < e.y(); y++) {
-            for (int x = 0; x < e.x(); x++) {
-
-                if (bb.get() == bvb.getOnByte()) {
-
-                    int xAdj = shift.x() + x;
-                    int yAdj = shift.y() + y;
-
-                    consumer.accept(new Point2i(xAdj, yAdj));
-                }
-            }
-        }
+        IterateVoxelsByte.iterateEqualValuesSlice(voxels.voxels(), 0, bvb.getOnByte(), (x,y,z) -> consumer.accept(
+                new Point2i(shift.x() + x, shift.y() + y)
+        ));
     }
 
     /**
@@ -183,30 +172,10 @@ public class PointsFromVoxels {
      */
     private static void consumePoints3i(
             BinaryVoxels<ByteBuffer> voxels, ReadableTuple3i shift, Consumer<Point3i> consumer) {
-
-        Extent e = voxels.extent();
-
         BinaryValuesByte bvb = voxels.binaryValues().createByte();
-
-        for (int z = 0; z < e.z(); z++) {
-            ByteBuffer bb = voxels.sliceBuffer(z);
-
-            int zAdj = shift.z() + z;
-
-            for (int y = 0; y < e.y(); y++) {
-
-                int yAdj = shift.y() + y;
-
-                for (int x = 0; x < e.x(); x++) {
-
-                    if (bb.get() == bvb.getOnByte()) {
-
-                        int xAdj = shift.x() + x;
-                        consumer.accept(new Point3i(xAdj, yAdj, zAdj));
-                    }
-                }
-            }
-        }
+        IterateVoxelsByte.iterateEqualValues(voxels.voxels(), bvb.getOnByte(), (x,y,z) -> consumer.accept(
+           Point3i.immutableAdd(shift, x, y, z)
+        ));
     }
 
     /**
@@ -217,31 +186,10 @@ public class PointsFromVoxels {
      * @param consumer called for each point
      */
     private static void consumePoints3d(
-            BinaryVoxels<ByteBuffer> voxels, ReadableTuple3i add, Consumer<Point3d> consumer) {
-
-        Extent e = voxels.extent();
-
+            BinaryVoxels<ByteBuffer> voxels, Point3d add, Consumer<Point3d> consumer) {
         BinaryValuesByte bvb = voxels.binaryValues().createByte();
-
-        for (int z = 0; z < e.z(); z++) {
-            ByteBuffer bb = voxels.sliceBuffer(z);
-
-            int zAdj = add.z() + z;
-
-            for (int y = 0; y < e.y(); y++) {
-
-                int yAdj = add.y() + y;
-
-                for (int x = 0; x < e.x(); x++) {
-
-                    if (bb.get() == bvb.getOnByte()) {
-
-                        int xAdj = add.x() + x;
-
-                        consumer.accept(new Point3d(xAdj, yAdj, zAdj));
-                    }
-                }
-            }
-        }
+        IterateVoxelsByte.iterateEqualValues(voxels.voxels(), bvb.getOnByte(), (x,y,z) -> consumer.accept(
+           Point3d.immutableAdd(add, x, y, z)
+        ));
     }
 }

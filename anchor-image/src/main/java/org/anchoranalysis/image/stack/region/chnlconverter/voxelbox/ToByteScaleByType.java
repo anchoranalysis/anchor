@@ -32,9 +32,9 @@ import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferByte;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedInt;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedShort;
+import org.anchoranalysis.image.voxel.datatype.UnsignedByte;
+import org.anchoranalysis.image.voxel.datatype.UnsignedInt;
+import org.anchoranalysis.image.voxel.datatype.UnsignedShort;
 
 // Converts voxel buffers to a unsigned 8-bit buffer scaling against the maximum value in each
 // buffer.
@@ -51,8 +51,8 @@ public final class ToByteScaleByType extends VoxelsConverter<ByteBuffer> {
     public VoxelBuffer<ByteBuffer> convertFromFloat(VoxelBuffer<FloatBuffer> bufferIn) {
 
         double div =
-                (double) VoxelDataTypeUnsignedInt.MAX_VALUE
-                        / VoxelDataTypeUnsignedByte.MAX_VALUE_INT;
+                (double) UnsignedInt.MAX_VALUE
+                        / UnsignedByte.MAX_VALUE_INT;
 
         ByteBuffer bufferOut = ByteBuffer.allocate(bufferIn.buffer().capacity());
 
@@ -71,7 +71,7 @@ public final class ToByteScaleByType extends VoxelsConverter<ByteBuffer> {
     public VoxelBuffer<ByteBuffer> convertFromInt(VoxelBuffer<IntBuffer> bufferIn) {
 
         double div =
-                (double) VoxelDataTypeUnsignedInt.MAX_VALUE / VoxelDataTypeUnsignedByte.MAX_VALUE;
+                (double) UnsignedInt.MAX_VALUE / UnsignedByte.MAX_VALUE;
 
         ByteBuffer bufferOut = ByteBuffer.allocate(bufferIn.buffer().capacity());
 
@@ -86,7 +86,7 @@ public final class ToByteScaleByType extends VoxelsConverter<ByteBuffer> {
     public VoxelBuffer<ByteBuffer> convertFromShort(VoxelBuffer<ShortBuffer> bufferIn) {
 
         double div =
-                (double) VoxelDataTypeUnsignedShort.MAX_VALUE / VoxelDataTypeUnsignedByte.MAX_VALUE;
+                (double) UnsignedShort.MAX_VALUE / UnsignedByte.MAX_VALUE;
 
         ByteBuffer bufferOut = ByteBuffer.allocate(bufferIn.buffer().capacity());
 

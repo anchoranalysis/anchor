@@ -45,8 +45,8 @@ import org.anchoranalysis.image.voxel.VoxelsWrapper;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelDataTypeException;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedShort;
+import org.anchoranalysis.image.voxel.datatype.UnsignedByte;
+import org.anchoranalysis.image.voxel.datatype.UnsignedShort;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class HistogramFactory {
@@ -70,10 +70,10 @@ public class HistogramFactory {
             throws CreateException {
 
         if (histograms.isEmpty()) {
-            return new HistogramArray(maxBinVal);
+            return new Histogram(maxBinVal);
         }
 
-        Histogram out = new HistogramArray(maxBinVal);
+        Histogram out = new Histogram(maxBinVal);
         for (Histogram h : histograms) {
             try {
                 out.addHistogram(h);
@@ -99,7 +99,7 @@ public class HistogramFactory {
             throw new CreateException("Size of chnl and mask do not match");
         }
 
-        Histogram total = new HistogramArray((int) chnl.getVoxelDataType().maxValue());
+        Histogram total = new Histogram((int) chnl.getVoxelDataType().maxValue());
 
         Voxels<?> voxels = chnl.voxels().any();
 
@@ -123,7 +123,7 @@ public class HistogramFactory {
 
     public static Histogram create(VoxelBuffer<?> inputBuffer) {
 
-        Histogram hist = new HistogramArray((int) inputBuffer.dataType().maxValue());
+        Histogram hist = new Histogram((int) inputBuffer.dataType().maxValue());
         addBufferToHistogram(hist, inputBuffer, inputBuffer.size());
         return hist;
     }
@@ -147,13 +147,13 @@ public class HistogramFactory {
     }
 
     private static boolean isDataTypeSupported(VoxelDataType dataType) {
-        return dataType.equals(VoxelDataTypeUnsignedByte.INSTANCE)
-                || dataType.equals(VoxelDataTypeUnsignedShort.INSTANCE);
+        return dataType.equals(UnsignedByte.INSTANCE)
+                || dataType.equals(UnsignedShort.INSTANCE);
     }
 
     private static Histogram createWithMask(Voxels<?> inputBuffer, ObjectMask object) {
 
-        Histogram histogram = new HistogramArray((int) inputBuffer.dataType().maxValue());
+        Histogram histogram = new Histogram((int) inputBuffer.dataType().maxValue());
 
         Extent extent = inputBuffer.extent();
 
@@ -187,7 +187,7 @@ public class HistogramFactory {
 
     private static Histogram createWithMasks(VoxelsWrapper voxels, ObjectCollection objects) {
 
-        Histogram total = new HistogramArray((int) voxels.getVoxelDataType().maxValue());
+        Histogram total = new Histogram((int) voxels.getVoxelDataType().maxValue());
 
         try {
             for (ObjectMask objectMask : objects) {
@@ -204,7 +204,7 @@ public class HistogramFactory {
 
     private static Histogram create(Voxels<?> inputBox) {
 
-        Histogram hist = new HistogramArray((int) inputBox.dataType().maxValue());
+        Histogram hist = new Histogram((int) inputBox.dataType().maxValue());
 
         int volumeXY = inputBox.extent().volumeXY();
 

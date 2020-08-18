@@ -70,9 +70,9 @@ public class ImageInitParams implements BeanInitParams {
     private final NamedProviderStore<Stack> storeStack;
     private final NamedProviderStore<Histogram> storeHistogram;
     private final NamedProviderStore<ObjectCollection> storeObjects;
-    private final NamedProviderStore<Channel> storeChnl;
-    private final NamedProviderStore<Mask> storeBinaryChnl;
-    private final NamedProviderStore<BinarySegmentation> storeBinarySgmn;
+    private final NamedProviderStore<Channel> storeChannel;
+    private final NamedProviderStore<Mask> storeMask;
+    private final NamedProviderStore<BinarySegmentation> storeBinarySegmentation;
     // END: Stores
 
     private CheckedFunction<StackProvider, Stack, OperationFailedException> stackProviderBridge;
@@ -86,77 +86,76 @@ public class ImageInitParams implements BeanInitParams {
         storeStack = sharedObjects.getOrCreate(Stack.class);
         storeHistogram = sharedObjects.getOrCreate(Histogram.class);
         storeObjects = sharedObjects.getOrCreate(ObjectCollection.class);
-        storeChnl = sharedObjects.getOrCreate(Channel.class);
-        storeBinaryChnl = sharedObjects.getOrCreate(Mask.class);
-        storeBinarySgmn = sharedObjects.getOrCreate(BinarySegmentation.class);
+        storeChannel = sharedObjects.getOrCreate(Channel.class);
+        storeMask = sharedObjects.getOrCreate(Mask.class);
+        storeBinarySegmentation = sharedObjects.getOrCreate(BinarySegmentation.class);
     }
 
-    public NamedProviderStore<Stack> getStackCollection() {
+    public NamedProviderStore<Stack> stacks() {
         return storeStack;
     }
 
-    public NamedProviderStore<Histogram> getHistogramCollection() {
+    public NamedProviderStore<Histogram> histograms() {
         return storeHistogram;
     }
 
-    public NamedProviderStore<ObjectCollection> getObjectCollection() {
+    public NamedProviderStore<ObjectCollection> objects() {
         return storeObjects;
     }
 
-    public NamedProviderStore<Channel> getChnlCollection() {
-        return storeChnl;
+    public NamedProviderStore<Channel> channels() {
+        return storeChannel;
     }
 
-    public NamedProviderStore<Mask> getBinaryImageCollection() {
-        return storeBinaryChnl;
+    public NamedProviderStore<Mask> masks() {
+        return storeMask;
     }
 
-    public NamedProviderStore<BinarySegmentation> getBinarySgmnSet() {
-        return storeBinarySgmn;
+    public NamedProviderStore<BinarySegmentation> binarySegmentations() {
+        return storeBinarySegmentation;
     }
 
-    public KeyValueParamsInitParams getParams() {
+    public KeyValueParamsInitParams params() {
         return soParams;
     }
 
-    public SharedFeaturesInitParams getFeature() {
+    public SharedFeaturesInitParams features() {
         return soFeature;
     }
 
-    public void populate(PropertyInitializer<?> pi, Define define, Logger logger)
+    public void populate(PropertyInitializer<?> propertyInitializer, Define define, Logger logger)
             throws OperationFailedException {
 
         soFeature.populate(define.getList(FeatureListProvider.class), logger);
 
         PopulateStoreFromDefine<ImageInitParams> populate =
-                new PopulateStoreFromDefine<>(define, pi, logger);
+                new PopulateStoreFromDefine<>(define, propertyInitializer, logger);
 
-        populate.copyInit(BinarySegmentation.class, getBinarySgmnSet());
-        populate.copyProvider(MaskProvider.class, getBinaryImageCollection());
-        populate.copyProvider(ChannelProvider.class, getChnlCollection());
-        populate.copyProvider(ObjectCollectionProvider.class, getObjectCollection());
-        populate.copyProvider(HistogramProvider.class, getHistogramCollection());
+        populate.copyInit(BinarySegmentation.class, storeBinarySegmentation);
+        populate.copyProvider(MaskProvider.class, storeMask);
+        populate.copyProvider(ChannelProvider.class, storeChannel);
+        populate.copyProvider(ObjectCollectionProvider.class, storeObjects);
+        populate.copyProvider(HistogramProvider.class, storeHistogram);
 
-        stackProviderBridge = populate.copyProvider(StackProvider.class, getStackCollection());
+        stackProviderBridge = populate.copyProvider(StackProvider.class, stacks());
     }
 
     public void addToStackCollection(String identifier, Stack inputImage)
             throws OperationFailedException {
-        getStackCollection().add(identifier, () -> inputImage);
+        stacks().add(identifier, () -> inputImage);
     }
 
-    public void addToStackCollection(String identifier, StackProvider stackProvider)
+    public void addToStackCollection(String identifier, StackProvider stack)
             throws OperationFailedException {
-        BeanStoreAdder.add(identifier, stackProvider, getStackCollection(), stackProviderBridge);
+        BeanStoreAdder.add(identifier, stack, storeStack, stackProviderBridge);
     }
 
-    public void copyStackCollectionFrom(NamedProvider<Stack> stackCollectionSource)
+    public void copyStackCollectionFrom(NamedProvider<Stack> source)
             throws OperationFailedException {
 
         try {
-            for (String id : stackCollectionSource.keys()) {
-                Stack stack = stackCollectionSource.getException(id);
-                addToStackCollection(id, stack);
+            for (String id : source.keys()) {
+                addToStackCollection(id, source.getException(id));
             }
         } catch (NamedProviderGetException e) {
             throw new OperationFailedException(e.summarize());
@@ -179,17 +178,17 @@ public class ImageInitParams implements BeanInitParams {
         }
     }
 
-    public void addToObjects(String identifier, StoreSupplier<ObjectCollection> objects)
-            throws OperationFailedException {
-        getObjectCollection().add(identifier, objects);
-    }
-
     public void addToKeyValueParamsCollection(String identifier, KeyValueParams params)
             throws OperationFailedException {
-        getParams().getNamedKeyValueParamsCollection().add(identifier, () -> params);
+        params().getNamedKeyValueParamsCollection().add(identifier, () -> params);
     }
 
     public Path getModelDirectory() {
         return sharedObjects.getContext().getModelDirectory();
+    }
+    
+    private void addToObjects(String identifier, StoreSupplier<ObjectCollection> objects)
+            throws OperationFailedException {
+        objects().add(identifier, objects);
     }
 }

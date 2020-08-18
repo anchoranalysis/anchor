@@ -45,6 +45,25 @@ import org.anchoranalysis.image.voxel.thresholder.VoxelsThresholder;
 public abstract class Thresholder extends NullParamsBean<VoxelsThresholder> {
 
     /**
+     * Like {@link #threshold(VoxelsWrapper, BinaryValuesByte, Optional, Optional)} applying
+     * the thresholding to the entire set of voxels.
+     * <p>
+     * The thresholder does not accept a histogram as input.
+     * 
+     * @param voxels the voxels to be thresholded
+     * @param binaryValues what binary values to be used in the output
+     * @return a binary-channel as described above, which may possibly reuse the input voxel-buffers.
+     * @throws OperationFailedException
+     * @throws OperationFailedException
+     */
+    public BinaryVoxels<ByteBuffer> threshold(
+            VoxelsWrapper voxels,
+            BinaryValuesByte binaryValues)
+            throws OperationFailedException {
+        return threshold(voxels, binaryValues, Optional.empty(), Optional.empty());
+    }
+    
+    /**
      * Thresholds voxels (across a range of values) so that they have only binary range (i.e. two
      * voxel values representing ON and OFF)
      *
@@ -58,8 +77,7 @@ public abstract class Thresholder extends NullParamsBean<VoxelsThresholder> {
      *     efficiency.
      * @param objectMask an object-mask to restrict thresholding to only some region(s) of the
      *     voxels
-     * @return a binary-channel as described above, which may possibly reuse the input voxel-buffers
-     *     which should be reused.
+     * @return a binary-channel as described above, which may possibly reuse the input voxel-buffers.
      * @throws OperationFailedException
      */
     public abstract BinaryVoxels<ByteBuffer> threshold(

@@ -33,6 +33,7 @@ import lombok.experimental.Accessors;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.BoundingBox;
+import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
@@ -229,5 +230,9 @@ public class Channel {
 
     public VoxelsExtracter<? extends Buffer> extracter() { // NOSONAR
         return voxels.extracter();
+    }
+    
+    public Extent extent() {
+        return voxels.extent();
     }
 }

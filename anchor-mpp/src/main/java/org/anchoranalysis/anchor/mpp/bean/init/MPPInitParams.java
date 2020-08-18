@@ -89,7 +89,7 @@ public class MPPInitParams implements BeanInitParams {
     }
 
     public SharedFeaturesInitParams getFeature() {
-        return soImage.getFeature();
+        return soImage.features();
     }
 
     public PointsInitParams getPoints() {
@@ -97,7 +97,7 @@ public class MPPInitParams implements BeanInitParams {
     }
 
     public KeyValueParamsInitParams getParams() {
-        return soImage.getParams();
+        return soImage.params();
     }
 
     public NamedProviderStore<Cfg> getCfgCollection() {

@@ -32,7 +32,7 @@ import org.anchoranalysis.image.channel.factory.ChannelFactoryByte;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
+import org.anchoranalysis.image.voxel.datatype.UnsignedByte;
 
 public class ChannelFixture {
 
@@ -90,6 +90,6 @@ public class ChannelFixture {
 
     // Finds modulus of a number with the maximum byte value (+1)
     private static int mod(int num) {
-        return Math.floorMod(num, VoxelDataTypeUnsignedByte.MAX_VALUE_INT + 1);
+        return Math.floorMod(num, UnsignedByte.MAX_VALUE_INT + 1);
     }
 }

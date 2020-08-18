@@ -45,7 +45,7 @@ public abstract class ImageBean<T> extends InitializableBean<T, ImageInitParams>
 
     private static List<ExtractFromParam<ImageInitParams, ?>> paramExtracters() {
         return Arrays.asList(
-                new ExtractFromParam<>(KeyValueParamsInitParams.class, ImageInitParams::getFeature),
-                new ExtractFromParam<>(KeyValueParamsInitParams.class, ImageInitParams::getParams));
+                new ExtractFromParam<>(KeyValueParamsInitParams.class, ImageInitParams::features),
+                new ExtractFromParam<>(KeyValueParamsInitParams.class, ImageInitParams::params));
     }
 }

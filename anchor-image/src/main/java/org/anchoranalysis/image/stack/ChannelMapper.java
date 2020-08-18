@@ -11,7 +11,7 @@ import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.stack.region.chnlconverter.attached.ChnlConverterAttached;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
+import org.anchoranalysis.image.voxel.datatype.UnsignedByte;
 
 /**
  * Helps a retrieve channel and an associated converter and apply operation on them jointly
@@ -36,7 +36,7 @@ public class ChannelMapper {
         if (optional.isPresent()) {
             return mapper.apply(channel, optional.get());
         } else {
-            if (!channel.getVoxelDataType().equals(VoxelDataTypeUnsignedByte.INSTANCE)) {
+            if (!channel.getVoxelDataType().equals(UnsignedByte.INSTANCE)) {
                 // Datatype is not supported
                 throw new AnchorFriendlyRuntimeException("Unsupported data-type");
             }

@@ -32,16 +32,14 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.binary.mask.Mask;
+import org.anchoranalysis.image.binary.mask.MaskFactory;
 import org.anchoranalysis.image.binary.values.BinaryValues;
-import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.Voxels;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 
 /**
  * Creates a mask from one or more objects
@@ -54,43 +52,48 @@ public class MaskFromObjects {
     /** We look for space IN objects, and create channel to display it */
     public static Mask createFromObjects(
             ObjectCollection objects, ImageDimensions dimensions, BinaryValues outVal) {
-        return createChannelObjectCollectionHelper(
+        return createFromObjectsWithValues(
                 objects, dimensions, outVal, outVal.getOffInt(), outVal.createByte().getOnByte());
     }
 
     /** We look for space NOT in the objects, and create channel to display it */
     public static Mask createFromNotObjects(
             ObjectCollection objects, ImageDimensions dimensions, BinaryValues outVal) {
-        return createChannelObjectCollectionHelper(
+        return createFromObjectsWithValues(
                 objects, dimensions, outVal, outVal.getOnInt(), outVal.createByte().getOffByte());
     }
 
-    // We look for the values that are NOT on the masks
-    private static Mask createChannelObjectCollectionHelper(
+
+    /**
+     * Creates a mask where the voxels corresponding to any objects in a collection are assigned {@code valueObjects} and other voxels are assigned {@code valueNotObjects}
+     * 
+     * @param objects objects which determine ON and OFF values for the mask
+     * @param dimensions the mask's dimensions
+     * @param binaryValuesToOutput what defines ON and OFF in the output channel
+     * @param valueNotObjects value to assign to voxels that <b>do not</b> correspond to an ON voxel in any of {@code objects}
+     * @param valueObjects value to assign to voxels that <b>do</b> correspond to an ON voxel in any of {@code objects}
+     * @return a newly created mask with newly created buffers
+     */
+    private static Mask createFromObjectsWithValues(
             ObjectCollection objects,
             ImageDimensions dimensions,
-            BinaryValues outVal,
-            int initialState,
-            byte objectState) {
-
-        Channel chnlNew =
-                ChannelFactory.instance().create(dimensions, VoxelDataTypeUnsignedByte.INSTANCE);
-        Voxels<ByteBuffer> voxelsNew = chnlNew.voxels().asByte();
-
-        if (outVal.getOnInt() != 0) {
-            voxelsNew.assignValue(initialState).toAll();
+            BinaryValues binaryValuesToOutput,
+            int valueNotObjects,
+            byte valueObjects) {
+        
+        Mask out = MaskFactory.createMaskOff(dimensions, binaryValuesToOutput);
+        if (valueNotObjects != 0) {
+            out.voxels().assignValue(valueNotObjects).toAll();
         }
 
-        writeChannelObjectCollection(voxelsNew, objects, objectState);
+        assignValueToObjects(out.voxels(), objects, valueObjects);
 
-        return new Mask(chnlNew, outVal);
+        return out;
     }
 
-    // nullVal is assumed to be 0
-    private static void writeChannelObjectCollection(
-            Voxels<ByteBuffer> voxels, ObjectCollection objects, byte outVal) {
-
-        objects.forEach(object -> writeObjectOntoVoxels(object, voxels, outVal));
+    private static void assignValueToObjects(
+            Voxels<ByteBuffer> voxels, ObjectCollection objects, byte valueToAssign) {
+        objects.forEach(object -> writeObjectOntoVoxels(object, voxels, valueToAssign));
     }
 
     private static void writeObjectOntoVoxels(
@@ -142,11 +145,9 @@ public class MaskFromObjects {
                     pointGlobal.x() <= maxGlobal.x();
                     pointGlobal.incrementX()) {
 
-                if (maskIn.get() != matchValue) {
-                    continue;
+                if (maskIn.get() == matchValue) {
+                    pixelsOut.put(extentOut.offsetSlice(pointGlobal), outValByte);
                 }
-
-                pixelsOut.put(extentOut.offsetSlice(pointGlobal), outValByte);
             }
         }
     }

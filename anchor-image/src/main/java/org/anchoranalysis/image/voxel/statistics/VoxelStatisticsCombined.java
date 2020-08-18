@@ -31,7 +31,6 @@ import java.util.List;
 import org.anchoranalysis.bean.shared.relation.threshold.RelationToThreshold;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.image.histogram.HistogramArray;
 
 public class VoxelStatisticsCombined implements VoxelStatistics {
 
@@ -95,7 +94,7 @@ public class VoxelStatisticsCombined implements VoxelStatistics {
     @Override
     public Histogram histogram() throws OperationFailedException {
 
-        Histogram out = new HistogramArray(255);
+        Histogram out = new Histogram(255);
         for (VoxelStatistics ps : list) {
             out.addHistogram(ps.histogram());
         }

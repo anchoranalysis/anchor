@@ -40,7 +40,7 @@ import org.anchoranalysis.image.io.generator.raster.RasterGenerator;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.voxel.Voxels;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
+import org.anchoranalysis.image.voxel.datatype.UnsignedByte;
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.generator.IterableGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
@@ -121,7 +121,7 @@ public class ObjectAsMaskGenerator extends RasterGenerator
         ImageDimensions dimensions = new ImageDimensions(box.extent(), resolution);
 
         Channel channelNew =
-                ChannelFactory.instance().create(dimensions, VoxelDataTypeUnsignedByte.INSTANCE);
+                ChannelFactory.instance().create(dimensions, UnsignedByte.INSTANCE);
 
         Voxels<ByteBuffer> voxelsNew = channelNew.voxels().asByte();
 
