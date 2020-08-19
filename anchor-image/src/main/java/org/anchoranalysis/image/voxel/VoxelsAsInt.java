@@ -57,7 +57,7 @@ public final class VoxelsAsInt extends Voxels<IntBuffer> {
     }
 
     @Override
-    public VoxelsExtracter<IntBuffer> extracter() {
+    public VoxelsExtracter<IntBuffer> extract() {
         return VoxelsExtracterFactory.createInt(this);
     }
 }

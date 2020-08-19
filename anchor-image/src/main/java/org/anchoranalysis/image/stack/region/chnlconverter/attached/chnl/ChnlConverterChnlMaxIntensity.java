@@ -49,7 +49,7 @@ public class ChnlConverterChnlMaxIntensity implements ChnlConverterAttached<Chan
 
     @Override
     public void attachObject(Channel channel) {
-        int maxValue = channel.extracter().voxelWithMaxIntensity();
+        int maxValue = channel.extract().voxelWithMaxIntensity();
         voxelsConverter.setMaxValue(maxValue);
     }
 

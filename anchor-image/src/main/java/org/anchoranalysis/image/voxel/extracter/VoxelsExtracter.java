@@ -102,7 +102,7 @@ public interface VoxelsExtracter<T extends Buffer> {
      * @return voxels with newly-created buffers containing projection (identical in XY dimensions
      *     but with a single slice)
      */
-    Voxels<T> projectionMax();
+    Voxels<T> projectMax();
 
     /**
      * A <i>mean</i> intensity projection of all slices
@@ -110,7 +110,7 @@ public interface VoxelsExtracter<T extends Buffer> {
      * @return voxels with newly-created buffers containing projection (identical in XY dimensions
      *     but with a single slice)
      */
-    Voxels<T> projectionMean();
+    Voxels<T> projectMean();
 
     /**
      * Operations on whether particular voxels are equal to a particular value

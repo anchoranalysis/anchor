@@ -70,7 +70,7 @@ public class StackNotUniformSized implements Iterable<Channel> {
         StackNotUniformSized stackOut = new StackNotUniformSized();
         for (int c = 0; c < channels.size(); c++) {
             // TODO make more efficient than duplicate()
-            stackOut.addChannel(channels.get(c).duplicate().maxIntensityProjection());
+            stackOut.addChannel(channels.get(c).duplicate().projectMax());
         }
         return stackOut;
     }

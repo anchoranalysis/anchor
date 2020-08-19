@@ -63,7 +63,7 @@ public class ScaleableBackground {
     private ScaleableBackground(
             Stack stack, Optional<ScaleFactor> scaleFactor, Interpolator interpolator) {
         try {
-            this.stack = stack.mapChannel(Channel::maxIntensityProjection);
+            this.stack = stack.mapChannel(Channel::projectMax);
         } catch (OperationFailedException e) {
             // Channels will always be the same size
             throw new AnchorImpossibleSituationException();
@@ -149,14 +149,14 @@ public class ScaleableBackground {
         // Scale it up to to the extent we want
         Voxels<?> voxelsScaled =
                 voxelsUnscaled
-                        .extracter()
+                        .extract()
                         .resizedXY(boxScaled.extent().x(), boxScaled.extent().y(), interpolator);
 
         return channelFor(voxelsScaled);
     }
 
     private static Voxels<?> extractVoxels(Channel channel, BoundingBox box) {
-        return channel.extracter().region(box, false);
+        return channel.extract().region(box, false);
     }
 
     private Channel channelFor(Voxels<?> voxels) {

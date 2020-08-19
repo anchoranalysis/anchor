@@ -93,7 +93,7 @@ public class ObjectMask {
     @Getter private final BinaryValuesByte binaryValuesByte;
     private final Interpolator interpolator;
 
-    @Getter private final VoxelsExtracter<ByteBuffer> extracter;
+    @Getter private final VoxelsExtracter<ByteBuffer> extract;
 
     /**
      * Constructor - creates an object-mask assuming coordinates at the origin (i.e. corner is
@@ -152,7 +152,7 @@ public class ObjectMask {
         this.binaryValues = binaryValues;
         this.binaryValuesByte = binaryValues.createByte();
         this.interpolator = createInterpolator(binaryValues);
-        this.extracter = voxels.extracter();
+        this.extract = voxels.extract();
     }
 
     public ObjectMask(
@@ -161,7 +161,7 @@ public class ObjectMask {
         this.binaryValues = binaryValuesByte.createInt();
         this.binaryValuesByte = binaryValuesByte;
         this.interpolator = createInterpolator(binaryValues);
-        this.extracter = voxels.extracter();
+        this.extract = voxels.extract();
     }
 
     /**
@@ -190,7 +190,7 @@ public class ObjectMask {
         this.binaryValues = binaryValues;
         this.binaryValuesByte = binaryValuesByte;
         this.interpolator = createInterpolator(binaryValues);
-        this.extracter = voxels.extracter();
+        this.extract = voxels.extract();
     }
 
     public ObjectMask duplicate() {
@@ -348,11 +348,11 @@ public class ObjectMask {
     }
 
     public VoxelsPredicate voxelsOn() {
-        return extracter.voxelsEqualTo(binaryValues.getOnInt());
+        return extract.voxelsEqualTo(binaryValues.getOnInt());
     }
 
     public VoxelsPredicate voxelsOff() {
-        return extracter.voxelsEqualTo(binaryValues.getOffInt());
+        return extract.voxelsEqualTo(binaryValues.getOffInt());
     }
 
     /** The number of "ON" voxels on the object-mask */
@@ -405,7 +405,7 @@ public class ObjectMask {
             return false;
         }
 
-        return extracter.voxel(point) == binaryValues.getOnInt();
+        return extract.voxel(point) == binaryValues.getOnInt();
     }
 
     /**
@@ -416,7 +416,7 @@ public class ObjectMask {
      * @return a new object-mask flattened in Z dimension.
      */
     public ObjectMask flattenZ() {
-        return new ObjectMask(voxels.maxIntensityProjection());
+        return new ObjectMask(voxels.projectMax());
     }
 
     public BoundingBox boundingBox() {

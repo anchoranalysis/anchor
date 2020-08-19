@@ -27,29 +27,18 @@
 package org.anchoranalysis.image.io.bean.feature;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.bean.Provider;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.OptionalBean;
-import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsProvider;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.core.params.KeyValueParams;
-import org.anchoranalysis.feature.bean.list.FeatureList;
-import org.anchoranalysis.feature.bean.list.FeatureListFactory;
-import org.anchoranalysis.feature.bean.provider.FeatureProvider;
-import org.anchoranalysis.feature.calculate.FeatureInitParams;
-import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.bean.ImageBean;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
+import org.anchoranalysis.image.feature.bean.evaluator.FeatureListEvaluator;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 // Doesn't change the objects, just uses a generator to output a feature list as a CSV
 public class OutputFeatureTable extends ImageBean<OutputFeatureTable> {
@@ -58,12 +47,7 @@ public class OutputFeatureTable extends ImageBean<OutputFeatureTable> {
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private ObjectCollectionProvider objects;
 
-    @BeanField @Getter @Setter
-    private List<FeatureProvider<FeatureInputSingleObject>> listFeatureProvider = new ArrayList<>();
-
-    @BeanField @OptionalBean @Getter @Setter private Provider<Stack> stackNRG;
-
-    @BeanField @OptionalBean @Getter @Setter private KeyValueParamsProvider keyValueParamsProvider;
+    @BeanField @Getter @Setter private FeatureListEvaluator<FeatureInputSingleObject> feature;
     // END BEAN PROPERTIES
 
     public void output(BoundIOContext context) throws IOException {
@@ -76,63 +60,24 @@ public class OutputFeatureTable extends ImageBean<OutputFeatureTable> {
         try {
             ObjectCollection objectCollection = objects.create();
 
-            FeatureList<FeatureInputSingleObject> features =
-                    FeatureListFactory.fromProviders(listFeatureProvider);
-
-            if (features.size() == 0) {
-                throw new IOException("No features are set");
-            }
-
-            // Init
-            FeatureInitParams paramsInit =
-                    new FeatureInitParams(
-                            Optional.of(createKeyValueParams()),
-                            Optional.empty(),
-                            Optional.of(getInitializationParameters().getSharedObjects()));
-
-            // Create NRG stack
-            final NRGStackWithParams nrgStack =
-                    stackNRG != null
-                            ? new NRGStackWithParams(stackNRG.create())
-                            : null;
-
             context.getOutputManager()
                     .getWriterCheckIfAllowed()
                     .write(
                             OUTPUT_NAME_OBJECTS_FEATURE_LIST,
-                            () ->
-                                    createGenerator(
-                                            paramsInit,
-                                            nrgStack,
-                                            objectCollection,
-                                            features,
-                                            context.getLogger()));
+                            () -> createGenerator(objectCollection, context.getLogger()) );
 
         } catch (CreateException e) {
             throw new IOException(e);
         }
     }
 
-    private ObjectFeatureListCSVGenerator createGenerator(
-            FeatureInitParams paramsInit,
-            NRGStackWithParams nrgStack,
-            ObjectCollection objects,
-            FeatureList<FeatureInputSingleObject> features,
-            Logger logger) {
-        ObjectFeatureListCSVGenerator generator =
-                new ObjectFeatureListCSVGenerator(features, nrgStack, logger);
-        generator.setParamsInit(paramsInit);
-        generator.setSharedFeatures(
-                getInitializationParameters().features().getSharedFeatureSet());
-        generator.setIterableElement(objects);
-        return generator;
-    }
-
-    private KeyValueParams createKeyValueParams() throws CreateException {
-        if (keyValueParamsProvider != null) {
-            return keyValueParamsProvider.create();
-        } else {
-            return new KeyValueParams();
+    private ObjectFeatureListCSVGenerator createGenerator(ObjectCollection objects, Logger logger) throws OutputWriteFailedException {
+        try {
+            ObjectFeatureListCSVGenerator generator = new ObjectFeatureListCSVGenerator(feature, getInitializationParameters().getSharedObjects(), logger);
+            generator.setIterableElement(objects);
+            return generator;
+        } catch (CreateException e) {
+            throw new OutputWriteFailedException(e);
         }
     }
 }

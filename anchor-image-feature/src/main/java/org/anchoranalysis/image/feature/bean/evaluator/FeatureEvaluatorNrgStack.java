@@ -33,9 +33,7 @@ import org.anchoranalysis.bean.Provider;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsProvider;
-import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.input.FeatureInputNRG;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
@@ -71,31 +69,8 @@ public class FeatureEvaluatorNrgStack<T extends FeatureInput> extends FeatureEva
                     }
                 });
     }
-
+    
     public Optional<NRGStackWithParams> nrgStack() throws OperationFailedException {
-        try {
-            if (stackNRG != null) {
-
-                NRGStackWithParams nrgStack = new NRGStackWithParams(stackNRG.create());
-                nrgStack.setParams(createKeyValueParams());
-                return Optional.of(nrgStack);
-            } else {
-                return Optional.empty();
-            }
-        } catch (CreateException e) {
-            throw new OperationFailedException(e);
-        }
-    }
-
-    private KeyValueParams createKeyValueParams() throws OperationFailedException {
-        if (keyValueParamsProvider != null) {
-            try {
-                return keyValueParamsProvider.create();
-            } catch (CreateException e) {
-                throw new OperationFailedException(e);
-            }
-        } else {
-            return new KeyValueParams();
-        }
+        return NrgStackHelper.nrgStack(stackNRG,keyValueParamsProvider);
     }
 }

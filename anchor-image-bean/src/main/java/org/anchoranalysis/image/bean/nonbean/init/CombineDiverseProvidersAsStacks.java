@@ -101,7 +101,7 @@ class CombineDiverseProvidersAsStacks implements NamedProvider<Stack> {
         // For each region we get a mask for what equals the binary mask
         ObjectMask object =
                 bvb.voxels()
-                        .extracter()
+                        .extract()
                         .voxelsEqualTo(bvb.binaryValues().getOnInt())
                         .deriveObject(new BoundingBox(bvb.voxels()));
         try {

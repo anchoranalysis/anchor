@@ -21,7 +21,7 @@ class FloatImplementation extends Base<FloatBuffer> {
     }
 
     @Override
-    public Voxels<FloatBuffer> projectionMax() {
+    public Voxels<FloatBuffer> projectMax() {
 
         Extent extent = voxels.extent();
 
@@ -35,7 +35,7 @@ class FloatImplementation extends Base<FloatBuffer> {
     }
 
     @Override
-    public Voxels<FloatBuffer> projectionMean() {
+    public Voxels<FloatBuffer> projectMean() {
         throw new UnsupportedOperationException();
     }
 

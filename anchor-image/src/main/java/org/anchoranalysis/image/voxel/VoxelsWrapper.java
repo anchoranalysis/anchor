@@ -154,7 +154,7 @@ public class VoxelsWrapper {
 
         // If the wrapper has the same type, we allow the operation
         if (voxelsDestination.getVoxelDataType().equals(getVoxelDataType())) {
-            voxels.extracter()
+            voxels.extract()
                     .boxCopyTo(from, (Voxels) voxelsDestination.match(dataType), destinationBox);
         }
     }
@@ -165,7 +165,7 @@ public class VoxelsWrapper {
 
         // If the wrapper has the same type, we allow the operation
         if (voxelsDestination.getVoxelDataType().equals(getVoxelDataType())) {
-            voxels.extracter()
+            voxels.extract()
                     .objectCopyTo(from, (Voxels) voxelsDestination.match(dataType), destinationBox);
         }
     }
@@ -214,7 +214,7 @@ public class VoxelsWrapper {
         return voxels.assignValue(valueToAssign);
     }
 
-    public VoxelsExtracter<? extends Buffer> extracter() { // NOSONAR
-        return voxels.extracter();
+    public VoxelsExtracter<? extends Buffer> extract() { // NOSONAR
+        return voxels.extract();
     }
 }

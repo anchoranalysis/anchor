@@ -57,7 +57,7 @@ public final class VoxelsAsShort extends Voxels<ShortBuffer> {
     }
 
     @Override
-    public VoxelsExtracter<ShortBuffer> extracter() {
+    public VoxelsExtracter<ShortBuffer> extract() {
         return VoxelsExtracterFactory.createShort(this);
     }
 }

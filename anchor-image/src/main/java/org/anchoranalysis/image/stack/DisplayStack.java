@@ -232,13 +232,13 @@ public class DisplayStack {
                     converter.getVoxelsConverter().convertFrom(destBoxNonByte, destBoxByte);
 
                     destBoxByte
-                            .extracter()
+                            .extract()
                             .boxCopyTo(allLocalBox, voxelsDestination, destinationBox);
                 },
                 channel ->
                         channel.voxels()
                                 .asByte()
-                                .extracter()
+                                .extract()
                                 .boxCopyTo(sourceBox, voxelsDestination, destinationBox));
     }
 
@@ -252,7 +252,7 @@ public class DisplayStack {
     }
 
     public int getUnconvertedVoxelAt(int channelIndex, Point3i point) {
-        return stack.getChannel(channelIndex).extracter().voxel(point);
+        return stack.getChannel(channelIndex).extract().voxel(point);
     }
 
     public RegionExtracter createRegionExtracter() {
@@ -311,7 +311,7 @@ public class DisplayStack {
     @SuppressWarnings("unchecked")
     private Voxels<ByteBuffer> voxelsForChannelBoundingBox(int channelIndex, BoundingBox box) {
 
-        Voxels<?> voxelsUnconverted = stack.getChannel(channelIndex).extracter().region(box, true);
+        Voxels<?> voxelsUnconverted = stack.getChannel(channelIndex).extract().region(box, true);
         return mapper.mapChannelIfSupported(
                 channelIndex,
                 (channel, converter) ->

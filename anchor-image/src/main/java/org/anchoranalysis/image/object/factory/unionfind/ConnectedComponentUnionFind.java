@@ -190,7 +190,7 @@ public class ConnectedComponentUnionFind {
             int minNumberVoxels,
             ObjectCollection objects) {
 
-        VoxelsExtracter<IntBuffer> extracter = indexBuffer.extracter();
+        VoxelsExtracter<IntBuffer> extracter = indexBuffer.extract();
 
         for (int smallID : mapIDOrdered.values()) {
 

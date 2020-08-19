@@ -57,7 +57,7 @@ public final class VoxelsAsFloat extends Voxels<FloatBuffer> {
     }
 
     @Override
-    public VoxelsExtracter<FloatBuffer> extracter() {
+    public VoxelsExtracter<FloatBuffer> extract() {
         return VoxelsExtracterFactory.createFloat(this);
     }
 }

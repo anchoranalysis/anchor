@@ -29,7 +29,7 @@ class ByteImplementation extends Base<ByteBuffer> {
     }
 
     @Override
-    public Voxels<ByteBuffer> projectionMax() {
+    public Voxels<ByteBuffer> projectMax() {
 
         Extent extent = voxels.extent();
 
@@ -43,7 +43,7 @@ class ByteImplementation extends Base<ByteBuffer> {
     }
 
     @Override
-    public Voxels<ByteBuffer> projectionMean() {
+    public Voxels<ByteBuffer> projectMean() {
 
         Extent extent = voxels.extent();
 

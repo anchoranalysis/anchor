@@ -12,7 +12,7 @@ class IntImplementation extends Base<IntBuffer> {
     }
 
     @Override
-    public Voxels<IntBuffer> projectionMax() {
+    public Voxels<IntBuffer> projectMax() {
 
         Extent extent = voxels.extent();
 
@@ -26,7 +26,7 @@ class IntImplementation extends Base<IntBuffer> {
     }
 
     @Override
-    public Voxels<IntBuffer> projectionMean() {
+    public Voxels<IntBuffer> projectMean() {
         throw new UnsupportedOperationException();
     }
 

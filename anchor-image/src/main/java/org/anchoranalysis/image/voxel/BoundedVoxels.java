@@ -103,8 +103,8 @@ public class BoundedVoxels<T extends Buffer> {
         Preconditions.checkArgument(boundingBox.extent().equals(voxels.extent()));
         this.boundingBox = boundingBox;
         this.voxels = voxels;
-        this.extracterLocal = voxels.extracter();
-        this.extracterGlobal = VoxelsExtracterFactory.atCorner(cornerMin(), voxels.extracter());
+        this.extracterLocal = voxels.extract();
+        this.extracterGlobal = VoxelsExtracterFactory.atCorner(cornerMin(), voxels.extract());
     }
     
     public boolean equalsDeep(BoundedVoxels<?> other) {
@@ -238,8 +238,8 @@ public class BoundedVoxels<T extends Buffer> {
      *
      * @return newly-created bounded-voxels flattened in Z dimension.
      */
-    public BoundedVoxels<T> maxIntensityProjection() {
-        return new BoundedVoxels<>(boundingBox.flattenZ(), extracterLocal.projectionMax());
+    public BoundedVoxels<T> projectMax() {
+        return new BoundedVoxels<>(boundingBox.flattenZ(), extracterLocal.projectMax());
     }
 
     public BoundedVoxels<T> duplicate() {
@@ -429,7 +429,7 @@ public class BoundedVoxels<T extends Buffer> {
     }
 
     /** Extracts value from voxels using <i>global</u> coordinates */
-    public final VoxelsExtracter<T> extracter() {
+    public final VoxelsExtracter<T> extract() {
         return extracterGlobal;
     }
 

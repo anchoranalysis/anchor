@@ -195,12 +195,12 @@ public class Mask {
         Preconditions.checkArgument(channel.dimensions().contains(box));
         return new ObjectMask(
                 box,
-                channel.voxels().asByte().extracter().region(box, reuseIfPossible),
+                channel.voxels().asByte().extract().region(box, reuseIfPossible),
                 binaryValues);
     }
 
     public Mask flattenZ() {
-        return new Mask(channel.maxIntensityProjection(), binaryValues);
+        return new Mask(channel.projectMax(), binaryValues);
     }
 
     public VoxelsPredicate voxelsOn() {

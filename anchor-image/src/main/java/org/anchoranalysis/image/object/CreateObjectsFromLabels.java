@@ -91,7 +91,7 @@ public class CreateObjectsFromLabels {
                     deriveBoundingBoxes(),
                     box -> box.extent().volumeXY() >= smallVolumeThreshold,
                     (box, index) ->
-                            voxels.extracter()
+                            voxels.extract()
                                     .voxelsEqualTo(index + 1)
                                     .deriveObject(box) // The labels begin at 1
                     );

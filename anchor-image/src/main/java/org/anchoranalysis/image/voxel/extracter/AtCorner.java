@@ -61,13 +61,13 @@ class AtCorner<T extends Buffer> implements VoxelsExtracter<T> {
     }
 
     @Override
-    public Voxels<T> projectionMax() {
-        return delegate.projectionMax();
+    public Voxels<T> projectMax() {
+        return delegate.projectMax();
     }
 
     @Override
-    public Voxels<T> projectionMean() {
-        return delegate.projectionMean();
+    public Voxels<T> projectMean() {
+        return delegate.projectMean();
     }
 
     @Override

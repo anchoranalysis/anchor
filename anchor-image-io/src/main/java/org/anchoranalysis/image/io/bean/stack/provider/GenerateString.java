@@ -90,7 +90,7 @@ public class GenerateString extends StackProvider {
     private static int maxValueFromStack(Stack stack) {
         int max = 0;
         for (Channel channel : stack) {
-            int chnlVal = channel.extracter().voxelWithMaxIntensity();
+            int chnlVal = channel.extract().voxelWithMaxIntensity();
             if (chnlVal > max) {
                 max = chnlVal;
             }

@@ -63,7 +63,7 @@ public abstract class Voxels<T extends Buffer> {
     @Getter private final VoxelsArithmetic arithmetic;
 
     /** Methods to read/copy/duplicate the voxel-values */
-    public abstract VoxelsExtracter<T> extracter();
+    public abstract VoxelsExtracter<T> extract();
 
     /**
      * Provides a means to assign a constant-value to some or all of the voxels

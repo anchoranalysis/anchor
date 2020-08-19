@@ -55,7 +55,7 @@ public class ChnlIPTest {
         Voxels<FloatBuffer> voxels = channel.voxels().asFloat();
         voxels.slices().replaceSlice(0, VoxelBufferFloat.wrap(new float[] {1, 2, 3, 4}));
 
-        VoxelsExtracter<FloatBuffer> extracter = voxels.extracter();
+        VoxelsExtracter<FloatBuffer> extracter = voxels.extract();
         assertVoxelEquals(1.0f, 0, 0, extracter);
         assertVoxelEquals(2.0f, 1, 0, extracter);
         assertVoxelEquals(3.0f, 0, 1, extracter);

@@ -84,7 +84,7 @@ public class Channel {
     }
 
     public ObjectMask equalMask(BoundingBox box, int equalVal) {
-        return voxels.extracter().voxelsEqualTo(equalVal).deriveObject(box);
+        return voxels.extract().voxelsEqualTo(equalVal).deriveObject(box);
     }
 
     public VoxelsWrapper voxels() {
@@ -112,7 +112,7 @@ public class Channel {
     /** Creates a new channel contain only of a particular slice (reusing the voxel buffers) */
     public Channel extractSlice(int z) {
         return ChannelFactory.instance()
-                .create(voxels.extracter().slice(z), dimensions.resolution());
+                .create(voxels.extract().slice(z), dimensions.resolution());
     }
 
     public Channel scaleXY(ScaleFactor scaleFactor) {
@@ -137,17 +137,17 @@ public class Channel {
 
         ImageDimensions dimensionsScaled = dimensions.scaleXYTo(x, y);
 
-        Voxels<? extends Buffer> ba = voxels.extracter().resizedXY(x, y, interpolator);
+        Voxels<? extends Buffer> ba = voxels.extract().resizedXY(x, y, interpolator);
         assert (ba.extent().volumeXY() == ba.sliceBuffer(0).capacity());
         return FACTORY.create(ba, dimensionsScaled.resolution());
     }
 
-    public Channel maxIntensityProjection() {
-        return flattenZProjection(VoxelsExtracter::projectionMax);
+    public Channel projectMax() {
+        return flattenZProjection(VoxelsExtracter::projectMax);
     }
 
-    public Channel meanIntensityProjection() {
-        return flattenZProjection(VoxelsExtracter::projectionMean);
+    public Channel projectMean() {
+        return flattenZProjection(VoxelsExtracter::projectMean);
     }
 
     // Duplicates the current channel
@@ -165,7 +165,7 @@ public class Channel {
      *     above
      */
     public VoxelsPredicate voxelsEqualTo(int equalToValue) {
-        return voxels.extracter().voxelsEqualTo(equalToValue);
+        return voxels.extract().voxelsEqualTo(equalToValue);
     }
 
     /**
@@ -176,7 +176,7 @@ public class Channel {
      *     above
      */
     public VoxelsPredicate voxelsGreaterThan(int threshold) {
-        return voxels.extracter().voxelsGreaterThan(threshold);
+        return voxels.extract().voxelsGreaterThan(threshold);
     }
 
     public void updateResolution(ImageResolution res) {
@@ -213,7 +213,7 @@ public class Channel {
         int prevZSize = voxels.extent().z();
         if (prevZSize > 1) {
             return FACTORY.create(
-                    flattener.apply(voxels.extracter()),
+                    flattener.apply(voxels.extract()),
                     dimensions.resolution().duplicateFlattenZ(prevZSize));
         } else {
             return this;
@@ -228,8 +228,8 @@ public class Channel {
         return voxels.assignValue(valueToAssign);
     }
 
-    public VoxelsExtracter<? extends Buffer> extracter() { // NOSONAR
-        return voxels.extracter();
+    public VoxelsExtracter<? extends Buffer> extract() { // NOSONAR
+        return voxels.extract();
     }
     
     public Extent extent() {

@@ -24,7 +24,7 @@ class ShortImplementation extends Base<ShortBuffer> {
     }
 
     @Override
-    public Voxels<ShortBuffer> projectionMax() {
+    public Voxels<ShortBuffer> projectMax() {
 
         Extent extent = voxels.extent();
 
@@ -38,7 +38,7 @@ class ShortImplementation extends Base<ShortBuffer> {
     }
 
     @Override
-    public Voxels<ShortBuffer> projectionMean() {
+    public Voxels<ShortBuffer> projectMean() {
 
         Extent extent = voxels.extent();
 
