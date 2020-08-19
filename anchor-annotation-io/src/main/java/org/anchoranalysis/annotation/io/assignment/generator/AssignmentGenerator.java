@@ -37,8 +37,8 @@ import org.anchoranalysis.annotation.io.assignment.Assignment;
 import org.anchoranalysis.core.color.ColorList;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.bean.provider.stack.StackProviderArrangeRaster;
-import org.anchoranalysis.image.io.bean.stack.arrange.StackProviderWithLabel;
+import org.anchoranalysis.image.bean.provider.stack.ArrangeRaster;
+import org.anchoranalysis.image.io.bean.stack.StackProviderWithLabel;
 import org.anchoranalysis.image.io.generator.raster.RasterGenerator;
 import org.anchoranalysis.image.io.generator.raster.StackGenerator;
 import org.anchoranalysis.image.io.generator.raster.object.rgb.DrawObjectsGenerator;
@@ -104,7 +104,7 @@ public class AssignmentGenerator extends RasterGenerator {
     @Override
     public Stack generate() throws OutputWriteFailedException {
 
-        StackProviderArrangeRaster stackProvider =
+        ArrangeRaster stackProvider =
                 createTiledStackProvider(
                         createRGBOutlineStack(true),
                         createRGBOutlineStack(false),
@@ -121,7 +121,7 @@ public class AssignmentGenerator extends RasterGenerator {
         }
     }
 
-    private static StackProviderArrangeRaster createTiledStackProvider(
+    private static ArrangeRaster createTiledStackProvider(
             Stack stackLeft, Stack stackRight, String nameLeft, String nameRight) {
         List<StackProviderWithLabel> listProvider = new ArrayList<>();
         listProvider.add(new StackProviderWithLabel(stackLeft, nameLeft));
@@ -182,7 +182,7 @@ public class AssignmentGenerator extends RasterGenerator {
     }
 
     private DrawObject createOutlineWriter() {
-        return new Outline(outlineWidth, mipOutline);
+        return new Outline(outlineWidth, !mipOutline);
     }
 
     @Override

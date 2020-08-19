@@ -259,11 +259,11 @@ public class DisplayStack {
         return new RegionExtracterFromDisplayStack(listConverters, stack);
     }
 
-    public DisplayStack maxIntensityProjection() throws OperationFailedException {
+    public DisplayStack maximumIntensityProjection() {
         try {
             return new DisplayStack(stack.maximumIntensityProjection(), listConverters);
         } catch (CreateException e) {
-            throw new OperationFailedException(e);
+            throw new AnchorImpossibleSituationException();
         }
     }
 

@@ -4,7 +4,6 @@ import java.nio.Buffer;
 import java.util.Optional;
 import java.util.function.IntPredicate;
 import lombok.RequiredArgsConstructor;
-import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
@@ -119,7 +118,7 @@ abstract class Base<T extends Buffer> implements VoxelsAssigner {
                 voxels,
                 object,
                 restrictTo,
-                (Point3i point, VoxelBuffer<T> buffer, int offset) -> assignToBuffer(buffer, offset)
+                this::assignToBuffer
         );
     }
     

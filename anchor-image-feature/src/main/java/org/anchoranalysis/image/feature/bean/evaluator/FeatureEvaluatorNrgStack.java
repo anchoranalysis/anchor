@@ -29,6 +29,7 @@ package org.anchoranalysis.image.feature.bean.evaluator;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
+import org.anchoranalysis.bean.Provider;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsProvider;
@@ -40,7 +41,7 @@ import org.anchoranalysis.feature.input.FeatureInputNRG;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingleChangeInput;
-import org.anchoranalysis.image.bean.provider.stack.StackProvider;
+import org.anchoranalysis.image.stack.Stack;
 
 /**
  * @author Owen Feehan
@@ -49,7 +50,7 @@ import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 public class FeatureEvaluatorNrgStack<T extends FeatureInput> extends FeatureEvaluator<T> {
 
     // START BEAN PROPERTIES
-    @BeanField @OptionalBean @Getter @Setter private StackProvider stackProviderNRG;
+    @BeanField @OptionalBean @Getter @Setter private Provider<Stack> stackNRG;
 
     @BeanField @OptionalBean @Getter @Setter private KeyValueParamsProvider keyValueParamsProvider;
     // END BEAN PROPERTIES
@@ -73,9 +74,9 @@ public class FeatureEvaluatorNrgStack<T extends FeatureInput> extends FeatureEva
 
     public Optional<NRGStackWithParams> nrgStack() throws OperationFailedException {
         try {
-            if (stackProviderNRG != null) {
+            if (stackNRG != null) {
 
-                NRGStackWithParams nrgStack = new NRGStackWithParams(stackProviderNRG.create());
+                NRGStackWithParams nrgStack = new NRGStackWithParams(stackNRG.create());
                 nrgStack.setParams(createKeyValueParams());
                 return Optional.of(nrgStack);
             } else {

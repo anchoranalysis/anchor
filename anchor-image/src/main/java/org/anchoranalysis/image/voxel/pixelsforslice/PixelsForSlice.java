@@ -30,6 +30,7 @@ import java.nio.Buffer;
 import java.util.function.Consumer;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
+import org.anchoranalysis.image.voxel.iterator.ProcessVoxelSlice;
 
 /**
  * @author Owen Feehan
@@ -48,7 +49,7 @@ public interface PixelsForSlice<T extends Buffer> {
     }
 
     /**
-     * Calls processor once for a buffer for each slice
+     * Calls {@code sliceConsumer} once for each slice with the respective buffer
      *
      * <p>This occurs sequentially from 0 (inclusive) to {@code z()} (exclusive)
      *
@@ -59,5 +60,21 @@ public interface PixelsForSlice<T extends Buffer> {
         for (int z = 0; z < zMax; z++) {
             sliceConsumer.accept(slice(z));
         }
+    }
+    
+    /**
+     * Calls {@code process} for each offset in each slice
+     *
+     * <p>This occurs sequentially from 0 (inclusive) to {@code extent.z()} (exclusive) and from 0 (inclusive)
+     *   to {@code extent.x() * extent.y()} (exclusive) for the offsets
+     *
+     * @param process called for each offset on each slice
+     */
+    default void iterateOverSlicesAndOffsets(ProcessVoxelSlice<T> process) {
+        iterateOverSlices( buffer -> 
+            extent().iterateOverXYOffset( offset-> 
+                process.process(buffer, offset)
+            )
+        );
     }
 }

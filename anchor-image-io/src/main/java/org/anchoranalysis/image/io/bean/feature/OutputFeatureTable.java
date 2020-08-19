@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
+import org.anchoranalysis.bean.Provider;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsProvider;
@@ -45,9 +46,9 @@ import org.anchoranalysis.feature.calculate.FeatureInitParams;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.bean.ImageBean;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
-import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 
 // Doesn't change the objects, just uses a generator to output a feature list as a CSV
@@ -60,7 +61,7 @@ public class OutputFeatureTable extends ImageBean<OutputFeatureTable> {
     @BeanField @Getter @Setter
     private List<FeatureProvider<FeatureInputSingleObject>> listFeatureProvider = new ArrayList<>();
 
-    @BeanField @OptionalBean @Getter @Setter private StackProvider stackProviderNRG;
+    @BeanField @OptionalBean @Getter @Setter private Provider<Stack> stackNRG;
 
     @BeanField @OptionalBean @Getter @Setter private KeyValueParamsProvider keyValueParamsProvider;
     // END BEAN PROPERTIES
@@ -91,8 +92,8 @@ public class OutputFeatureTable extends ImageBean<OutputFeatureTable> {
 
             // Create NRG stack
             final NRGStackWithParams nrgStack =
-                    stackProviderNRG != null
-                            ? new NRGStackWithParams(stackProviderNRG.create())
+                    stackNRG != null
+                            ? new NRGStackWithParams(stackNRG.create())
                             : null;
 
             context.getOutputManager()

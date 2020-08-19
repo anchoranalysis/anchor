@@ -24,39 +24,38 @@
  * #L%
  */
 
-package org.anchoranalysis.image.bean.provider;
+package org.anchoranalysis.image.bean.provider.stack;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.core.name.provider.NamedProviderGetException;
+import org.anchoranalysis.image.stack.Stack;
 
-/**
- * A chnl-provider based-on two input chnl-providers that must be of the same dimensionality
- *
- * @author Owen Feehan
- */
-public abstract class ChnlProviderTwo extends ChannelProvider {
+@NoArgsConstructor
+public class Reference extends StackProvider {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private ChannelProvider chnl1;
-
-    @BeanField @Getter @Setter private ChannelProvider chnl2;
+    @BeanField @Getter @Setter private String id = "";
     // END BEAN PROPERTIES
 
-    @Override
-    public Channel create() throws CreateException {
+    private Stack stack;
 
-        Channel chnlFirst = chnl1.create();
-        Channel chnlSecond = chnl2.create();
-
-        if (!chnlFirst.dimensions().equals(chnlSecond.dimensions())) {
-            throw new CreateException("Dimensions of channels do not match");
-        }
-
-        return process(chnlFirst, chnlSecond);
+    public Reference(String id) {
+        this.id = id;
     }
 
-    protected abstract Channel process(Channel chnl1, Channel chnl2) throws CreateException;
+    @Override
+    public Stack create() throws CreateException {
+        if (stack == null) {
+            try {
+                this.stack = getInitializationParameters().stacks().getException(id);
+            } catch (NamedProviderGetException e) {
+                throw new CreateException(e);
+            }
+        }
+        return stack;
+    }
 }

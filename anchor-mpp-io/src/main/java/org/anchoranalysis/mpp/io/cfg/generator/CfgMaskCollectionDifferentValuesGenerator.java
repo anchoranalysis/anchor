@@ -30,7 +30,6 @@ import java.util.Optional;
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipWithFlags;
 import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 import org.anchoranalysis.core.index.SetOperationFailedException;
-import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.io.generator.raster.RasterGenerator;
 import org.anchoranalysis.image.io.generator.raster.object.collection.ObjectsAsUniqueValueGenerator;
@@ -69,7 +68,7 @@ public class CfgMaskCollectionDifferentValuesGenerator extends RasterGenerator
     public Stack generate() throws OutputWriteFailedException {
 
         ObjectCollectionWithProperties objects =
-                cfg.deriveObjects(delegate.dimensions(), this.rm, BinaryValuesByte.getDefault());
+                cfg.deriveObjects(delegate.dimensions(), this.rm);
         try {
             delegate.setIterableElement(objects.withoutProperties());
         } catch (SetOperationFailedException e) {

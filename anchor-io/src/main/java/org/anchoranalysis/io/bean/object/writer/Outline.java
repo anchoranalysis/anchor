@@ -53,7 +53,8 @@ public class Outline extends DrawObject {
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private int outlineWidth;
 
-    @BeanField @Getter @Setter private boolean force2D = false;
+    /** If true the outline is also applied in the z-dimension, otherwise this is ignored as possible boundary */
+    @BeanField @Getter @Setter private boolean includeZ;
     // END BEAN PROPERTIES
 
     public Outline() {
@@ -61,7 +62,7 @@ public class Outline extends DrawObject {
     }
 
     public Outline(int outlineWidth) {
-        this(outlineWidth, false);
+        this(outlineWidth, true);
     }
 
     @Override
@@ -70,7 +71,7 @@ public class Outline extends DrawObject {
 
         ObjectMask outline =
                 FindOutline.outline(
-                        object.withoutProperties(), outlineWidth, true, (dim.z() > 1) && !force2D);
+                        object.withoutProperties(), outlineWidth, (dim.z() > 1) && includeZ, true);
 
         ObjectWithProperties objectWithProperties =
                 new ObjectWithProperties(outline, object.getProperties());
@@ -84,10 +85,6 @@ public class Outline extends DrawObject {
                     int iteration,
                     BoundingBox restrictTo)
                     throws OperationFailedException {
-
-                assert (outline.extent().z() > 0);
-                // TODO this can get broken! Fix!
-                assert (outline.boundingBox().cornerMin().z() >= 0);
 
                 IntersectionWriter.writeRGBMaskIntersection(
                         outline,

@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
+import org.anchoranalysis.bean.Provider;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
@@ -42,16 +43,22 @@ import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
 
-// Creates new stacks that tile each provider
-public class StackProviderArrangeRaster extends StackProvider {
+/**
+ * Creates a stack that tiles (or otherwise combines) other providers
+ * 
+ * @author Owen Feehan
+ *
+ */
+public class ArrangeRaster extends StackProvider {
 
     // START BEAN
-    @BeanField @Getter @Setter private ArrangeRasterBean arrangeRaster;
+    @BeanField @Getter @Setter private ArrangeRasterBean arrange;
 
+    /** If set, ensures every stack is converted into 3 channels */
     @BeanField @Getter @Setter
-    private boolean forceRGB = false; // Makes sure every stack is converted into 3 channels
+    private boolean forceRGB = false;
 
-    @BeanField @Getter @Setter private List<StackProvider> list = new ArrayList<>();
+    @BeanField @Getter @Setter private List<Provider<Stack>> list = new ArrayList<>();
 
     @BeanField @Getter @Setter private boolean createShort = false;
     // END BEAN
@@ -64,7 +71,7 @@ public class StackProviderArrangeRaster extends StackProvider {
         }
 
         List<RGBStack> rasterList = new ArrayList<>();
-        for (StackProvider provider : list) {
+        for (Provider<Stack> provider : list) {
 
             Stack stack = provider.create();
 
@@ -76,7 +83,7 @@ public class StackProviderArrangeRaster extends StackProvider {
 
         RasterArranger rasterArranger = new RasterArranger();
         try {
-            rasterArranger.init(arrangeRaster, rasterList);
+            rasterArranger.init(arrange, rasterList);
         } catch (InitException e) {
             throw new CreateException(e);
         }

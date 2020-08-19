@@ -47,7 +47,7 @@ import org.anchoranalysis.io.generator.IterableObjectGenerator;
 public class CombineRasterGenerator<T> extends AnchorBean<CombineRasterGenerator<T>> {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private ArrangeRasterBean arrangeRaster;
+    @BeanField @Getter @Setter private ArrangeRasterBean arrange;
 
     // A list of all generators to be tiled (left to right, then top to bottom)
     @BeanField @Getter @Setter
@@ -59,7 +59,7 @@ public class CombineRasterGenerator<T> extends AnchorBean<CombineRasterGenerator
     }
 
     public IterableObjectGenerator<T, Stack> createGenerator() {
-        return new CombineGenerator<>(arrangeRaster, generatorList);
+        return new CombineGenerator<>(arrange, generatorList);
     }
 
     @Override

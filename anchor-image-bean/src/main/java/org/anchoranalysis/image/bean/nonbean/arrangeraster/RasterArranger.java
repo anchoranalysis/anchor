@@ -43,11 +43,11 @@ public class RasterArranger {
     private BoundingBoxesOnPlane boundingBoxes;
     private ImageDimensions dimensions;
 
-    public void init(ArrangeRaster arrangeRaster, List<RGBStack> list) throws InitException {
+    public void init(ArrangeRaster arrange, List<RGBStack> list) throws InitException {
 
         Iterator<RGBStack> rasterIterator = list.iterator();
         try {
-            this.boundingBoxes = arrangeRaster.createBoundingBoxesOnPlane(rasterIterator);
+            this.boundingBoxes = arrange.createBoundingBoxesOnPlane(rasterIterator);
         } catch (ArrangeRasterException e) {
             throw new InitException(e);
         }

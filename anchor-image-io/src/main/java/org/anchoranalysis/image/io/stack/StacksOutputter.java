@@ -44,7 +44,7 @@ import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class StackCollectionOutputter {
+public class StacksOutputter {
 
     private static final String OUTPUT_NAME = "stackCollection";
     private static final String PREFIX = "";
@@ -61,7 +61,7 @@ public class StackCollectionOutputter {
         BoundOutputManagerRouteErrors outputManager = context.getOutputManager();
 
         assert (outputManager.getOutputWriteSettings().hasBeenInit());
-        StackCollectionOutputter.output(
+        StacksOutputter.output(
                 stackSubset(stacks, secondLevelOutputKey, outputManager),
                 outputManager.getDelegate(),
                 OUTPUT_NAME,
@@ -88,7 +88,7 @@ public class StackCollectionOutputter {
                     "OutputManager's settings have not yet been initialized");
         }
 
-        StackCollectionOutputter.outputWithException(
+        StacksOutputter.outputWithException(
                 stackSubset(stacks, secondLevelOutputKey, outputManager),
                 outputManager.getDelegate(),
                 OUTPUT_NAME,
@@ -166,7 +166,7 @@ public class StackCollectionOutputter {
             NamedProvider<Stack> stacks,
             String secondLevelOutputKey,
             BoundOutputManagerRouteErrors outputManager) {
-        return StackCollectionOutputter.subset(
+        return StacksOutputter.subset(
                 stacks, outputManager.outputAllowedSecondLevel(secondLevelOutputKey));
     }
 }

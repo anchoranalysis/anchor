@@ -24,11 +24,12 @@
  * #L%
  */
 
-package org.anchoranalysis.image.io.bean.stack;
+package org.anchoranalysis.image.io.bean.stack.provider;
 
 import java.nio.ShortBuffer;
 import lombok.Getter;
 import lombok.Setter;
+import org.anchoranalysis.bean.Provider;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
@@ -47,7 +48,7 @@ import org.anchoranalysis.image.voxel.datatype.UnsignedByte;
 import org.anchoranalysis.image.voxel.datatype.UnsignedShort;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
-public class StackProviderGenerateString extends StackProvider {
+public class GenerateString extends StackProvider {
 
     // START BEANS
     @BeanField @Getter @Setter private StringRasterGenerator stringRasterGenerator;
@@ -55,10 +56,10 @@ public class StackProviderGenerateString extends StackProvider {
     @BeanField @Getter @Setter private boolean createShort;
 
     /* The string is the maximum-value of the image */
-    @BeanField @Getter @Setter private StackProvider intensityProvider;
+    @BeanField @Getter @Setter private Provider<Stack> intensityProvider;
 
     /** Repeats the generated (2D) string in z, so it's the same z-extent as repeatZProvider */
-    @BeanField @Getter @Setter private StackProvider repeatZProvider;
+    @BeanField @Getter @Setter private Provider<Stack> repeatZProvider;
     // END BEANS
 
     @Override

@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-image-bean
+ * anchor-image-io
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -24,29 +24,47 @@
  * #L%
  */
 
-package org.anchoranalysis.image.bean.provider.stack;
+package org.anchoranalysis.image.io.bean.stack.provider;
 
-import lombok.AllArgsConstructor;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.error.InitException;
+import org.anchoranalysis.image.bean.provider.stack.StackProvider;
+import org.anchoranalysis.image.bean.provider.stack.ArrangeRaster;
+import org.anchoranalysis.image.io.bean.stack.StackProviderWithLabel;
+import org.anchoranalysis.image.io.stack.TileRasters;
 import org.anchoranalysis.image.stack.Stack;
 
-// We don't really use this as a bean, convenient way of inserting stack into providers in bean
-// parameters
-// This is hack. When inserted into the usual framework, lots of standard bean behaviour wont work.
-@NoArgsConstructor
-@AllArgsConstructor
-public class StackProviderHolder extends StackProvider {
+// A short-cut provider for tiling a number of stack providers with labels
+public class TileWithLabels extends StackProvider {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private Stack stack;
+    @BeanField @Getter @Setter private List<StackProviderWithLabel> list = new ArrayList<>();
+
+    @BeanField @Getter @Setter private int numCols = 3;
+
+    @BeanField @Getter @Setter boolean createShort;
+
+    @BeanField @Getter @Setter boolean scaleLabel = true;
+
+    @BeanField @Getter @Setter
+    boolean expandLabelZ = false; // Repeats the label in the z-dimension to match the stackProvider
     // END BEAN PROPERTIES
 
     @Override
     public Stack create() throws CreateException {
-        return stack;
+        ArrangeRaster arrangeRaster =
+                TileRasters.createStackProvider(
+                        list, numCols, createShort, scaleLabel, expandLabelZ);
+        try {
+            arrangeRaster.initRecursive(getInitializationParameters(), getLogger());
+        } catch (InitException e) {
+            throw new CreateException(e);
+        }
+        return arrangeRaster.create();
     }
 }

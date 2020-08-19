@@ -65,8 +65,8 @@ public class BoundingBoxOutline extends DrawObject {
                 FindOutline.outline(
                         createBoundingBoxObject(object.withoutProperties()),
                         outlineWidth,
-                        true,
-                        dim.z() > 1);
+                        dim.z() > 1,
+                        true);
 
         return new PrecalculationOverlay(object) {
 

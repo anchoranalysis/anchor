@@ -32,16 +32,22 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.channel.Channel;
 
-public abstract class ChnlProviderOne extends ChannelProvider {
+public abstract class ChnlProviderTernary extends ChannelProvider {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private ChannelProvider chnl;
+    @BeanField @Getter @Setter private ChannelProvider chnl1;
+
+    @BeanField @Getter @Setter private ChannelProvider chnl2;
+
+    @BeanField @Getter @Setter private ChannelProvider chnl3;
     // END BEAN PROPERTIES
 
     @Override
     public Channel create() throws CreateException {
-        return createFromChannel(chnl.create());
+
+        return process(chnl1.create(), chnl2.create(), chnl3.create());
     }
 
-    protected abstract Channel createFromChannel(Channel channel) throws CreateException;
+    protected abstract Channel process(Channel chnl1, Channel chnl2, Channel chnl3)
+            throws CreateException;
 }

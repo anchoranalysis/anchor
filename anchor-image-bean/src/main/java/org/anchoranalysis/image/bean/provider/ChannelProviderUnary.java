@@ -24,24 +24,24 @@
  * #L%
  */
 
-package org.anchoranalysis.image.bean.provider.stack;
+package org.anchoranalysis.image.bean.provider;
 
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.stack.Stack;
+import org.anchoranalysis.image.channel.Channel;
 
-public abstract class StackProviderOne extends StackProvider {
+public abstract class ChannelProviderUnary extends ChannelProvider {
 
-    // START BEAN FIELDS
-    @BeanField @Getter @Setter private StackProvider stack;
-    // END BEAN FIELDS
+    // START BEAN PROPERTIES
+    @BeanField @Getter @Setter private ChannelProvider chnl;
+    // END BEAN PROPERTIES
 
     @Override
-    public Stack create() throws CreateException {
-        return createFromStack(stack.create());
+    public Channel create() throws CreateException {
+        return createFromChannel(chnl.create());
     }
 
-    protected abstract Stack createFromStack(Stack stack) throws CreateException;
+    protected abstract Channel createFromChannel(Channel channel) throws CreateException;
 }

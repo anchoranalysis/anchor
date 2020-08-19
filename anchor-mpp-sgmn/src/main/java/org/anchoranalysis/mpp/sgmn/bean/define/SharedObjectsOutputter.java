@@ -32,7 +32,7 @@ import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.image.bean.nonbean.init.CreateCombinedStack;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
-import org.anchoranalysis.image.io.stack.StackCollectionOutputter;
+import org.anchoranalysis.image.io.stack.StacksOutputter;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
@@ -43,7 +43,7 @@ class SharedObjectsOutputter {
 
     public static void output(
             ImageInitParams imageInit, boolean suppressSubfolders, BoundIOContext context) {
-        StackCollectionOutputter.outputSubset(
+        StacksOutputter.outputSubset(
                 CreateCombinedStack.apply(imageInit),
                 StackOutputKeys.STACK,
                 suppressSubfolders,
@@ -53,7 +53,7 @@ class SharedObjectsOutputter {
     public static void outputWithException(
             ImageInitParams imageInit, boolean suppressSubfolders, BoundIOContext context)
             throws OutputWriteFailedException {
-        StackCollectionOutputter.outputSubsetWithException(
+        StacksOutputter.outputSubsetWithException(
                 CreateCombinedStack.apply(imageInit),
                 context.getOutputManager(),
                 StackOutputKeys.STACK,

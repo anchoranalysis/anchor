@@ -176,6 +176,11 @@ public class StringRasterGenerator extends AnchorBean<StringRasterGenerator> {
     public StringRasterGenerator(String text) {
         this.text = text;
     }
+    
+    public StringRasterGenerator(String text, double padding) {
+        this.text = text;
+        this.padding = padding;
+    }
 
     /** Creates an iterable-generator, which produces a drawn string on an image when generated */
     public IterableObjectGenerator<String, Stack> createGenerator() {

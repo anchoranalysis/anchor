@@ -24,30 +24,25 @@
  * #L%
  */
 
-package org.anchoranalysis.image.bean.provider;
+package org.anchoranalysis.image.bean.provider.stack;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.anchoranalysis.bean.Provider;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.stack.Stack;
 
-public abstract class ChnlProviderThree extends ChannelProvider {
+public abstract class StackProviderUnary extends StackProvider {
 
-    // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private ChannelProvider chnl1;
-
-    @BeanField @Getter @Setter private ChannelProvider chnl2;
-
-    @BeanField @Getter @Setter private ChannelProvider chnl3;
-    // END BEAN PROPERTIES
+    // START BEAN FIELDS
+    @BeanField @Getter @Setter private Provider<Stack> stack;
+    // END BEAN FIELDS
 
     @Override
-    public Channel create() throws CreateException {
-
-        return process(chnl1.create(), chnl2.create(), chnl3.create());
+    public Stack create() throws CreateException {
+        return createFromStack(stack.create());
     }
 
-    protected abstract Channel process(Channel chnl1, Channel chnl2, Channel chnl3)
-            throws CreateException;
+    protected abstract Stack createFromStack(Stack source) throws CreateException;
 }

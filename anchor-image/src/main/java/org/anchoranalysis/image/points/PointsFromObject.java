@@ -130,7 +130,7 @@ public class PointsFromObject {
     }
 
     private static ObjectMask outlineFor(ObjectMask object, boolean do3D) {
-        return FindOutline.outline(object, 1, false, do3D);
+        return FindOutline.outline(object, 1, do3D, false);
     }
 
     private static void consumeOutline2i(ObjectMask object, Consumer<Point2i> consumer) {

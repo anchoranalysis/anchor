@@ -27,7 +27,6 @@
 package org.anchoranalysis.image.voxel.iterator;
 
 import java.nio.Buffer;
-import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 
 /**
@@ -42,9 +41,6 @@ import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 @FunctionalInterface
 public interface ProcessVoxelSlice<T extends Buffer> {
 
-    /** Notifies the processor that there has been a change in slice (z global coordinate) */
-    default void notifyChangeSlice(int z) {}
-
     /**
      * Processes a voxel location in a buffer
      *
@@ -53,5 +49,5 @@ public interface ProcessVoxelSlice<T extends Buffer> {
      *     particular location
      * @param offset an offset value for the current slice (i.e. indexing XY only, but not Z)
      */
-    void process(Point3i point, VoxelBuffer<T> buffer, int offset);
+    void process(VoxelBuffer<T> buffer, int offset);
 }

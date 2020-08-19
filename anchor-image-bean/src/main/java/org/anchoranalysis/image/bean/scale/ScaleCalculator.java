@@ -34,6 +34,6 @@ import org.anchoranalysis.image.scale.ScaleFactor;
 
 public abstract class ScaleCalculator extends NullParamsBean<ScaleCalculator> {
 
-    public abstract ScaleFactor calc(Optional<ImageDimensions> sourceDimensions)
+    public abstract ScaleFactor calculate(Optional<ImageDimensions> sourceDimensions)
             throws OperationFailedException;
 }

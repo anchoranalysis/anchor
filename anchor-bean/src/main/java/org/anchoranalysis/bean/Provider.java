@@ -34,7 +34,6 @@ import org.anchoranalysis.core.error.CreateException;
  * @author Owen Feehan
  * @param <T> the item the bean creates
  */
-@FunctionalInterface
 public interface Provider<T> {
 
     T create() throws CreateException;

@@ -35,19 +35,11 @@ public class IterateVoxelsVoxelBoxAsInt {
      * @param operator determines a corresponding <i>output</i> value for each <i>input</i> voxel
      */
     public static void changeEachPoint(Voxels<?> voxels, IntUnaryOperator operator) {
-
-        int volumeXY = voxels.extent().volumeXY();
-
-        voxels.slices()
-                .iterateOverSlices(
-                        buffer -> {
-                            for (int offset = 0; offset < volumeXY; offset++) {
-
-                                int value = buffer.getInt(offset);
-
-                                buffer.putInt(offset, operator.applyAsInt(value));
-                            }
-                        });
+        voxels.slices().iterateOverSlicesAndOffsets(
+            (buffer, offset) -> {
+                int value = buffer.getInt(offset);
+                buffer.putInt(offset, operator.applyAsInt(value));
+            });
     }
 
     /**
@@ -64,20 +56,12 @@ public class IterateVoxelsVoxelBoxAsInt {
     public static void assignEachMatchingPoint(
             Voxels<?> voxels, IntPredicate predicate, int valueToAssign) {
 
-        int volumeXY = voxels.extent().volumeXY();
-
-        voxels.slices()
-                .iterateOverSlices(
-                        buffer -> {
-                            for (int offset = 0; offset < volumeXY; offset++) {
-
-                                int value = buffer.getInt(offset);
-
-                                if (predicate.test(value)) {
-                                    buffer.putInt(offset, valueToAssign);
-                                }
-                            }
-                        });
+        voxels.slices().iterateOverSlicesAndOffsets(
+            (buffer, offset) -> {
+                if (predicate.test(buffer.getInt(offset))) {
+                    buffer.putInt(offset, valueToAssign);
+                }
+            });
     }
 
     /**
@@ -255,8 +239,6 @@ public class IterateVoxelsVoxelBoxAsInt {
             VoxelBuffer<T> buffer = voxels.slice(point.z());
             ByteBuffer sliceMask = object.sliceBufferLocal(point.z() + maskShift.z());
 
-            process.notifyChangeSlice(point.z());
-
             for (point.setY(cornerMin.y()); point.y() < cornerMax.y(); point.incrementY()) {
                 for (point.setX(cornerMin.x()); point.x() < cornerMax.x(); point.incrementX()) {
 
@@ -267,7 +249,7 @@ public class IterateVoxelsVoxelBoxAsInt {
                     if (sliceMask.get(indexMask) == maskMatchValue) {
 
                         int offset = extentVoxels.offsetSlice(point);
-                        process.process(point, buffer, offset);
+                        process.process(buffer, offset);
                     }
                 }
             }
