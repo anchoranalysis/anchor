@@ -68,8 +68,8 @@ public class DefineMPPTest {
     }
 
     private void checkDefine(Define define) {
-        // We assume an order of chnl1 before chnl2
-        assertTwoElements(define, ChannelProvider.class, "chnl");
+        // We assume an order of channel1 before channel2
+        assertTwoElements(define, ChannelProvider.class, "channel");
 
         // We assume an order of stack1 before stack2
         assertTwoElements(define, StackProvider.class, "stack");

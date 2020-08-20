@@ -2,7 +2,7 @@
 <config>
 <bean config-class="org.anchoranalysis.bean.define.Define" config-factory="define">
 
-	<namedChnlProviderList config-class="java.util.List" config-factory="include" filePath="chnlProviderList.xml"/>
+	<namedChannelProviderList config-class="java.util.List" config-factory="include" filePath="chnlProviderList.xml"/>
 
 	<namedStackProviderList config-class="java.util.List" config-factory="include" filePath="stackProviderList.xml"/>
 	

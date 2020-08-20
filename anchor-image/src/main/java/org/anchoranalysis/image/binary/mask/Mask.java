@@ -171,7 +171,7 @@ public class Mask {
             return channel.voxels().asByte();
         } catch (IncorrectVoxelTypeException e) {
             throw new IncorrectVoxelTypeException(
-                    "Associated imgChnl does contain have unsigned 8-bit data (byte)");
+                    "Associated imgChannel does contain have unsigned 8-bit data (byte)");
         }
     }
 

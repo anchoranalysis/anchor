@@ -71,7 +71,7 @@ public class IJWrap {
     private static final VoxelDataType DATA_TYPE_BYTE = UnsignedByteVoxelType.INSTANCE;
     private static final VoxelDataType DATA_TYPE_SHORT = UnsignedShortVoxelType.INSTANCE;
 
-    public static Channel chnlFromImageStackByte(
+    public static Channel channelFromImageStackByte(
             ImageStack imageStack, Resolution res, ChannelFactorySingleType factory) {
 
         Dimensions dimensions =
@@ -82,14 +82,14 @@ public class IJWrap {
                                 imageStack.getSize()),
                         res);
 
-        Channel chnlOut = factory.createEmptyUninitialised(dimensions);
+        Channel channelOut = factory.createEmptyUninitialised(dimensions);
 
-        Voxels<ByteBuffer> voxelsOut = chnlOut.voxels().asByte();
+        Voxels<ByteBuffer> voxelsOut = channelOut.voxels().asByte();
         copyImageStackIntoVoxelsByte(imageStack, voxelsOut);
-        return chnlOut;
+        return channelOut;
     }
 
-    public static Channel chnlFromImagePlus(ImagePlus imagePlus, Resolution res) {
+    public static Channel channelFromImagePlus(ImagePlus imagePlus, Resolution res) {
 
         ChannelFactory factory = ChannelFactory.instance();
 
@@ -102,10 +102,10 @@ public class IJWrap {
                         res);
 
         if (imagePlus.getType() == ImagePlus.GRAY8) {
-            return chnlFromImagePlusByte(
+            return channelFromImagePlusByte(
                     imagePlus, dimensions, factory.get(UnsignedByteVoxelType.INSTANCE));
         } else if (imagePlus.getType() == ImagePlus.GRAY16) {
-            return chnlFromImagePlusShort(
+            return channelFromImagePlusShort(
                     imagePlus, dimensions, factory.get(UnsignedShortVoxelType.INSTANCE));
         } else {
             throw new IncorrectVoxelTypeException(
@@ -201,8 +201,8 @@ public class IJWrap {
                 false);
     }
 
-    public static ImagePlus createImagePlus(Channel chnl) {
-        Stack stack = new Stack(chnl);
+    public static ImagePlus createImagePlus(Channel channel) {
+        Stack stack = new Stack(channel);
         return createImagePlus(stack, false);
     }
 
@@ -303,19 +303,19 @@ public class IJWrap {
         return VoxelBufferShort.wrap(arr);
     }
 
-    private static Channel chnlFromImagePlusByte(
+    private static Channel channelFromImagePlusByte(
             ImagePlus imagePlus, Dimensions dimensions, ChannelFactorySingleType factory) {
 
-        Channel chnlOut = factory.createEmptyUninitialised(dimensions);
-        Voxels<ByteBuffer> voxelsOut = chnlOut.voxels().asByte();
+        Channel channelOut = factory.createEmptyUninitialised(dimensions);
+        Voxels<ByteBuffer> voxelsOut = channelOut.voxels().asByte();
 
-        for (int z = 0; z < chnlOut.dimensions().z(); z++) {
+        for (int z = 0; z < channelOut.dimensions().z(); z++) {
 
             ImageProcessor ip = imagePlus.getImageStack().getProcessor(z + 1);
             byte[] arr = (byte[]) ip.getPixels();
             voxelsOut.replaceSlice(z, VoxelBufferByte.wrap(arr));
         }
-        return chnlOut;
+        return channelOut;
     }
 
     private static void maybeCorrectComposite(Stack stack, ImagePlus imp) {
@@ -326,12 +326,12 @@ public class IJWrap {
         }
     }
 
-    private static Channel chnlFromImagePlusShort(
+    private static Channel channelFromImagePlusShort(
             ImagePlus imagePlus, Dimensions dimensions, ChannelFactorySingleType factory) {
 
-        Channel chnlOut = factory.createEmptyUninitialised(dimensions);
+        Channel channelOut = factory.createEmptyUninitialised(dimensions);
 
-        Voxels<ShortBuffer> voxelsOut = chnlOut.voxels().asShort();
+        Voxels<ShortBuffer> voxelsOut = channelOut.voxels().asShort();
 
         for (int z = 0; z < dimensions.z(); z++) {
 
@@ -339,18 +339,18 @@ public class IJWrap {
             short[] arr = (short[]) ip.getPixels();
             voxelsOut.replaceSlice(z, VoxelBufferShort.wrap(arr));
         }
-        return chnlOut;
+        return channelOut;
     }
 
     private static ImagePlus createCompositeImagePlus(
-            ImageStack stackNew, int numChnl, int numSlices, int numFrames, String imageName) {
+            ImageStack stackNew, int numChannel, int numSlices, int numFrames, String imageName) {
         ImagePlus impNC =
-                createNonCompositeImagePlus(stackNew, numChnl, numSlices, numFrames, imageName);
+                createNonCompositeImagePlus(stackNew, numChannel, numSlices, numFrames, imageName);
         assert (impNC.getNSlices() == numSlices);
         ImagePlus impOut = new CompositeImage(impNC, CompositeImage.COLOR);
 
         // The Composite image sometimes sets these wrong, so we force the correct dimensionality
-        impOut.setDimensions(numChnl, numSlices, numFrames);
+        impOut.setDimensions(numChannel, numSlices, numFrames);
         return impOut;
     }
 
@@ -362,8 +362,8 @@ public class IJWrap {
         for (int z = 0; z < e.z(); z++) {
 
             for (int c = 0; c < stack.getNumberChannels(); c++) {
-                Channel chnl = stack.getChannel(c);
-                VoxelsWrapper voxels = chnl.voxels();
+                Channel channel = stack.getChannel(c);
+                VoxelsWrapper voxels = channel.voxels();
 
                 ImageProcessor ip = IJWrap.imageProcessor(voxels, z);
                 stackNew.addSlice(String.valueOf(z), ip);
@@ -403,9 +403,9 @@ public class IJWrap {
     }
 
     private static ImagePlus createNonCompositeImagePlus(
-            ImageStack stackNew, int numChnl, int numSlices, int numFrames, String imageName) {
+            ImageStack stackNew, int numChannel, int numSlices, int numFrames, String imageName) {
         ImagePlus imp = new ImagePlus();
-        imp.setStack(stackNew, numChnl, numSlices, numFrames);
+        imp.setStack(stackNew, numChannel, numSlices, numFrames);
         imp.setTitle(imageName);
         return imp;
     }

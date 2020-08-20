@@ -36,7 +36,7 @@ import org.anchoranalysis.io.bioformats.copyconvert.ConvertTo;
 
 public abstract class ConvertToFloat extends ConvertTo<FloatBuffer> {
 
-    private int sizeBytesChnl;
+    private int sizeBytesChannel;
     private Dimensions dimensions;
 
     public ConvertToFloat() {
@@ -47,14 +47,14 @@ public abstract class ConvertToFloat extends ConvertTo<FloatBuffer> {
 
     @Override
     protected void setupBefore(Dimensions dimensions, int numChannelsPerByteArray) {
-        sizeBytesChnl = dimensions.x() * dimensions.y() * bytesPerPixel();
+        sizeBytesChannel = dimensions.x() * dimensions.y() * bytesPerPixel();
         this.dimensions = dimensions;
     }
 
     @Override
     protected VoxelBuffer<FloatBuffer> convertSingleChannel(byte[] src, int channelRelative)
             throws IOException {
-        int index = (sizeBytesChnl * channelRelative);
+        int index = (sizeBytesChannel * channelRelative);
         float[] fArr = convertIntegerBytesToFloatArray(dimensions, src, index);
         return VoxelBufferFloat.wrap(fArr);
     }

@@ -80,14 +80,14 @@ class ObjectDualDeserializer implements Deserializer<ObjectMask> {
                 throw new DeserializationFailedException("Raster file must have 1 channel exactly");
             }
 
-            Channel chnl = stack.getChannel(0);
+            Channel channel = stack.getChannel(0);
 
-            if (!chnl.extent().equals(box.extent())) {
+            if (!channel.extent().equals(box.extent())) {
                 throw new DeserializationFailedException(
-                        errorMessageMismatchingDims(box, chnl.dimensions(), filePath));
+                        errorMessageMismatchingDims(box, channel.dimensions(), filePath));
             }
 
-            return new ObjectMask(box, chnl.voxels().asByte());
+            return new ObjectMask(box, channel.voxels().asByte());
 
         } catch (RasterIOException e) {
             throw new DeserializationFailedException(e);

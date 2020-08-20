@@ -55,9 +55,9 @@ public abstract class ChannelConverter<T extends Buffer> {
     public Stack convert(Stack stackIn, ConversionPolicy changeExisting) {
         Stack stackOut = new Stack();
 
-        for (Channel chnl : stackIn) {
+        for (Channel channel : stackIn) {
             try {
-                stackOut.addChannel(convert(chnl, changeExisting));
+                stackOut.addChannel(convert(channel, changeExisting));
             } catch (IncorrectImageSizeException e) {
                 // Should never happen as sizes are correct in the incoming stack
                 assert false;
@@ -69,38 +69,38 @@ public abstract class ChannelConverter<T extends Buffer> {
     // If changeExisting is true, the contents of the existing channel will be changed
     // If changeExisting is false, a new channel will be created
     @SuppressWarnings("unchecked")
-    public Channel convert(Channel chnlIn, ConversionPolicy changeExisting) {
+    public Channel convert(Channel channelIn, ConversionPolicy changeExisting) {
 
         // Nothing to do
-        if (chnlIn.getVoxelDataType().equals(dataTypeTarget)
+        if (channelIn.getVoxelDataType().equals(dataTypeTarget)
                 && changeExisting != ConversionPolicy.ALWAYS_NEW) {
-            return chnlIn;
+            return channelIn;
         }
 
-        Channel chnlOut;
+        Channel channelOut;
         Voxels<T> voxelsOut;
 
         if (changeExisting == ConversionPolicy.CHANGE_EXISTING_CHANNEL) {
-            chnlOut = chnlIn;
+            channelOut = channelIn;
             // We need to create a new voxel buffer
-            voxelsOut = voxelsFactory.createInitialized(chnlIn.dimensions().extent());
+            voxelsOut = voxelsFactory.createInitialized(channelIn.dimensions().extent());
         } else {
-            chnlOut =
+            channelOut =
                     ChannelFactory.instance()
-                            .createUninitialised(chnlIn.dimensions(), dataTypeTarget);
-            voxelsOut = (Voxels<T>) chnlOut.voxels().match(dataTypeTarget);
+                            .createUninitialised(channelIn.dimensions(), dataTypeTarget);
+            voxelsOut = (Voxels<T>) channelOut.voxels().match(dataTypeTarget);
         }
 
-        voxelsConverter.convertFrom(chnlIn.voxels(), voxelsOut);
+        voxelsConverter.convertFrom(channelIn.voxels(), voxelsOut);
 
         if (changeExisting == ConversionPolicy.CHANGE_EXISTING_CHANNEL) {
             try {
-                chnlOut.replaceVoxels(voxelsOut);
+                channelOut.replaceVoxels(voxelsOut);
             } catch (IncorrectImageSizeException e) {
                 throw new AnchorImpossibleSituationException();
             }
         }
 
-        return chnlOut;
+        return channelOut;
     }
 }

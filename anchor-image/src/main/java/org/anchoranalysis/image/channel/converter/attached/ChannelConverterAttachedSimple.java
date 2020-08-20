@@ -34,7 +34,7 @@ import org.anchoranalysis.image.channel.converter.ConversionPolicy;
 import org.anchoranalysis.image.channel.converter.voxels.VoxelsConverter;
 
 /**
- * Simply passes everything onto a ChnlConverter
+ * Simply passes everything onto a ChannelConverter
  *
  * @author Owen Feehan
  * @param <S> attachment-type
@@ -47,8 +47,8 @@ public class ChannelConverterAttachedSimple<S, T extends Buffer>
     private ChannelConverter<T> delegate;
 
     @Override
-    public Channel convert(Channel chnl, ConversionPolicy changeExisting) {
-        return delegate.convert(chnl, changeExisting);
+    public Channel convert(Channel channel, ConversionPolicy changeExisting) {
+        return delegate.convert(channel, changeExisting);
     }
 
     @Override

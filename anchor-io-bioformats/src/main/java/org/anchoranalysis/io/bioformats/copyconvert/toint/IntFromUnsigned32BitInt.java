@@ -54,14 +54,14 @@ public class IntFromUnsigned32BitInt extends ConvertToInt {
     @Override
     protected VoxelBuffer<IntBuffer> convertSingleChannel(byte[] src, int channelRelative) {
 
-        int[] crntChnlBytes = new int[sizeXY];
+        int[] crntChannelBytes = new int[sizeXY];
 
         int indOut = 0;
         for (int indIn = 0; indIn < sizeBytes; indIn += bytesPerPixel) {
             int s = DataTools.bytesToInt(src, indIn, bytesPerPixel, littleEndian);
-            crntChnlBytes[indOut++] = s;
+            crntChannelBytes[indOut++] = s;
         }
 
-        return VoxelBufferInt.wrap(crntChnlBytes);
+        return VoxelBufferInt.wrap(crntChannelBytes);
     }
 }

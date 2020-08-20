@@ -47,7 +47,7 @@ import org.anchoranalysis.io.output.bound.BoundIOContext;
 /**
  * Applies a filter to a particular channel
  * 
- * <p>Forms input from a stack called <i>input_chnl</i>
+ * <p>Forms input from a stack called <i>input_channel</i>
  * 
  * @author Owen Feehan
  *
@@ -93,14 +93,14 @@ public class ChannelFilter extends AnchorBean<ChannelFilter> implements ChannelG
     }
 
     @Override
-    public boolean hasChannel(String chnlName) {
-        return channels.hasChannel(chnlName);
+    public boolean hasChannel(String channelName) {
+        return channels.hasChannel(channelName);
     }
     
     private void initProvider(ChannelProvider provider, Channel channel) throws InitException {
         ImageInitParams soImage = ImageInitParamsFactory.create(context);
         try {
-            soImage.addToStackCollection("input_chnl", new Stack(channel));
+            soImage.addToStackCollection("input_channel", new Stack(channel));
         } catch (OperationFailedException e) {
             throw new InitException(e);
         }

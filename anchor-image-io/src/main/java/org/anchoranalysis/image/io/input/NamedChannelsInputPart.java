@@ -33,13 +33,13 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.io.RasterIOException;
 
 /**
- * One part of a NamedChnlsInput that can be combined with others
+ * One part of a NamedChannelsInput that can be combined with others
  *
  * @author Owen Feehan
  */
 public abstract class NamedChannelsInputPart extends NamedChannelsInput {
 
-    public abstract boolean hasChnl(String chnlName) throws RasterIOException;
+    public abstract boolean hasChannel(String channelName) throws RasterIOException;
 
     public abstract List<Path> pathForBindingForAllChannels() throws OperationFailedException;
 

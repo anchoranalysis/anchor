@@ -54,7 +54,7 @@ public class NamedChannelsForSeriesMap implements NamedChannelsForSeries {
     // END REQUIRED ARGUMENTS
     // Null until the first time we request a channel
     private final OpenedRaster openedRaster;
-    private final NamedEntries chnlMap;
+    private final NamedEntries channelMap;
     private final int seriesNum;
     // END REQUIRED ARGUMENTS
 
@@ -67,13 +67,13 @@ public class NamedChannelsForSeriesMap implements NamedChannelsForSeries {
 
     // The outputManager is in case we want to do any debugging
     @Override
-    public Channel getChannel(String chnlName, int timeIndex, ProgressReporter progressReporter)
+    public Channel getChannel(String channelName, int timeIndex, ProgressReporter progressReporter)
             throws GetOperationFailedException {
 
-        int index = chnlMap.get(chnlName);
+        int index = channelMap.get(channelName);
         if (index == -1) {
             throw new GetOperationFailedException(
-                    chnlName, String.format("'%s' cannot be found", chnlName));
+                    channelName, String.format("'%s' cannot be found", channelName));
         }
 
         try {
@@ -81,25 +81,25 @@ public class NamedChannelsForSeriesMap implements NamedChannelsForSeries {
 
             if (index >= stack.getNumberChannels()) {
                 throw new GetOperationFailedException(
-                        chnlName,
+                        channelName,
                         String.format(
-                                "Stack does not have a channel corresponding to '%s'", chnlName));
+                                "Stack does not have a channel corresponding to '%s'", channelName));
             }
 
-            return stack.getChannel(chnlMap.getException(chnlName));
+            return stack.getChannel(channelMap.getException(channelName));
 
         } catch (OperationFailedException e) {
-            throw new GetOperationFailedException(chnlName, e);
+            throw new GetOperationFailedException(channelName, e);
         }
     }
 
     // The outputManager is in case we want to do any debugging
     @Override
     public Optional<Channel> getChannelOptional(
-            String chnlName, int t, ProgressReporter progressReporter)
+            String channelName, int t, ProgressReporter progressReporter)
             throws GetOperationFailedException {
 
-        int index = chnlMap.get(chnlName);
+        int index = channelMap.get(channelName);
         if (index == -1) {
             return Optional.empty();
         }
@@ -113,7 +113,7 @@ public class NamedChannelsForSeriesMap implements NamedChannelsForSeries {
 
             return Optional.of(stack.getChannel(index));
         } catch (OperationFailedException e) {
-            throw new GetOperationFailedException(chnlName, e);
+            throw new GetOperationFailedException(channelName, e);
         }
     }
 
@@ -128,12 +128,12 @@ public class NamedChannelsForSeriesMap implements NamedChannelsForSeries {
 
     @Override
     public Set<String> channelNames() {
-        return chnlMap.keySet();
+        return channelMap.keySet();
     }
 
     @Override
-    public boolean hasChannel(String chnlName) {
-        return chnlMap.keySet().contains(chnlName);
+    public boolean hasChannel(String channelName) {
+        return channelMap.keySet().contains(channelName);
     }
 
     @Override
@@ -143,12 +143,12 @@ public class NamedChannelsForSeriesMap implements NamedChannelsForSeries {
 
         try {
             try (ProgressReporterMultiple prm =
-                    new ProgressReporterMultiple(progressReporter, chnlMap.keySet().size())) {
+                    new ProgressReporterMultiple(progressReporter, channelMap.keySet().size())) {
 
                 // Populate our stack from all the channels
-                for (String chnlName : chnlMap.keySet()) {
-                    Channel image = getChannel(chnlName, t, new ProgressReporterOneOfMany(prm));
-                    stackCollection.addImageStack(chnlName, new Stack(image));
+                for (String channelName : channelMap.keySet()) {
+                    Channel image = getChannel(channelName, t, new ProgressReporterOneOfMany(prm));
+                    stackCollection.addImageStack(channelName, new Stack(image));
                     prm.incrWorker();
                 }
             } catch (GetOperationFailedException e) {
@@ -164,15 +164,15 @@ public class NamedChannelsForSeriesMap implements NamedChannelsForSeries {
     public void addAsSeparateChannels(NamedProviderStore<TimeSequence> stackCollection, final int t)
             throws OperationFailedException {
         // Populate our stack from all the channels
-        for (final String chnlName : chnlMap.keySet()) {
+        for (final String channelName : channelMap.keySet()) {
             stackCollection.add(
-                    chnlName, StoreSupplier.cache(() -> extractChnlAsTimeSequence(chnlName, t)));
+                    channelName, StoreSupplier.cache(() -> extractChannelAsTimeSequence(channelName, t)));
         }
     }
 
     @Override
     public StoreSupplier<Stack> allChannelsAsStack(int t) {
-        return StoreSupplier.cache(() -> stackForAllChnls(t));
+        return StoreSupplier.cache(() -> stackForAllChannels(t));
     }
 
     private TimeSequence createTimeSeries(ProgressReporter progressReporter)
@@ -187,10 +187,10 @@ public class NamedChannelsForSeriesMap implements NamedChannelsForSeries {
         return ts;
     }
 
-    private Stack stackForAllChnls(int t) throws OperationFailedException {
+    private Stack stackForAllChannels(int t) throws OperationFailedException {
         Stack out = new Stack();
 
-        for (ChannelEntry entry : chnlMap.entryCollection()) {
+        for (ChannelEntry entry : channelMap.entryCollection()) {
             try {
                 out.addChannel(getChannel(entry.getName(), t, ProgressReporterNull.get()));
             } catch (IncorrectImageSizeException | GetOperationFailedException e) {
@@ -201,10 +201,10 @@ public class NamedChannelsForSeriesMap implements NamedChannelsForSeries {
         return out;
     }
 
-    private TimeSequence extractChnlAsTimeSequence(String chnlName, int t)
+    private TimeSequence extractChannelAsTimeSequence(String channelName, int t)
             throws OperationFailedException {
         try {
-            Channel image = getChannel(chnlName, t, ProgressReporterNull.get());
+            Channel image = getChannel(channelName, t, ProgressReporterNull.get());
             return new TimeSequence(new Stack(image));
         } catch (GetOperationFailedException e) {
             throw new OperationFailedException(e);

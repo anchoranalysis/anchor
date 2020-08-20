@@ -46,8 +46,8 @@ public class ChannelGenerator extends RasterGenerator
         this.manifestFunction = manifestFunction;
     }
 
-    public ChannelGenerator(Channel chnl) {
-        this(chnl, "chnl");
+    public ChannelGenerator(Channel channel) {
+        this(channel, "channel");
     }
 
     @Override

@@ -54,7 +54,7 @@ public class ByteFrom32BitFloat extends ConvertToByte {
 
     @Override
     protected VoxelBuffer<ByteBuffer> convertSingleChannel(byte[] src, int channelRelative) {
-        byte[] crntChnlBytes = new byte[sizeXY];
+        byte[] crntChannelBytes = new byte[sizeXY];
 
         int indOut = 0;
         for (int indIn = 0; indIn < sizeBytes; indIn += BYTES_PER_PIXEL) {
@@ -66,8 +66,8 @@ public class ByteFrom32BitFloat extends ConvertToByte {
             if (f < 0) {
                 f = 0;
             }
-            crntChnlBytes[indOut++] = (byte) (f);
+            crntChannelBytes[indOut++] = (byte) (f);
         }
-        return VoxelBufferByte.wrap(crntChnlBytes);
+        return VoxelBufferByte.wrap(crntChannelBytes);
     }
 }

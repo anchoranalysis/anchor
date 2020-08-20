@@ -126,7 +126,7 @@ public class FindOutline {
         return new ObjectMask(objectDuplicated.boundingBox(), voxelsOut);
     }
 
-    // Assumes imgChnlOut has the same ImgChnlRegions
+    // Assumes imgChannelOut has the same ImgChannelRegions
     private static void outlineMaskInto(
             Mask maskToFindOutlineFor,
             Mask maskToReplaceWithOutline,

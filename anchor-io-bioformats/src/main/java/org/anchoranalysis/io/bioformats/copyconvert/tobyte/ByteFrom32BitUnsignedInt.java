@@ -59,14 +59,14 @@ public class ByteFrom32BitUnsignedInt extends ConvertToByte {
 
     @Override
     protected VoxelBuffer<ByteBuffer> convertSingleChannel(byte[] src, int channelRelative) {
-        byte[] crntChnlBytes = new byte[sizeXY];
+        byte[] crntChannelBytes = new byte[sizeXY];
 
         int indOut = 0;
         for (int indIn = 0; indIn < sizeBytes; indIn += bytesPerPixel) {
             int i = DataTools.bytesToInt(src, indIn, littleEndian);
-            crntChnlBytes[indOut++] = (byte) (i * convertRatio);
+            crntChannelBytes[indOut++] = (byte) (i * convertRatio);
         }
-        return VoxelBufferByte.wrap(crntChnlBytes);
+        return VoxelBufferByte.wrap(crntChannelBytes);
     }
 
     private double calculateConvertRatio() {

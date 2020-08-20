@@ -55,7 +55,7 @@ public abstract class SegmentChannelIntoObjectsUnary extends SegmentChannelIntoO
     }
 
     protected abstract ObjectCollection segment(
-            Channel chnl,
+            Channel channel,
             Optional<ObjectMask> object,
             Optional<SeedCollection> seeds,
             SegmentChannelIntoObjects upstreamSegmentation)

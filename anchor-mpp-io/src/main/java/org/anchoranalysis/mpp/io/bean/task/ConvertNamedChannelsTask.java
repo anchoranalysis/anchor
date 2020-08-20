@@ -49,9 +49,9 @@ import org.anchoranalysis.mpp.io.input.MultiInput;
  * <p>Note that the presence of {@link IReplaceTask} gives special behavior to this task in the {@link JobProcessor}
  *
  * @author Owen Feehan
- * @param <T> the named-chnls-input we expect to receive
+ * @param <T> the named-channels-input we expect to receive
  * @param <S> shared-state of the task
- * @param <U> the named-chnls-input the delegate task contains
+ * @param <U> the named-channels-input the delegate task contains
  */
 public class ConvertNamedChannelsTask<T extends NamedChannelsInput, S, U extends NamedChannelsInput>
         extends Task<T, S> implements IReplaceTask<U, S> {
@@ -75,7 +75,7 @@ public class ConvertNamedChannelsTask<T extends NamedChannelsInput, S, U extends
         InputTypesExpected expectedFromDelegate = task.inputTypesExpected();
         if (expectedFromDelegate.doesClassInheritFromAny(inputObjClass)) {
             // All good, the delegate happily accepts our type without change
-            doJobWithNamedChnlInput(params);
+            doJobWithNamedChannelInput(params);
         } else if (expectedFromDelegate.doesClassInheritFromAny(MultiInput.class)) {
             doJobWithMultiInput(params);
         } else {
@@ -87,7 +87,7 @@ public class ConvertNamedChannelsTask<T extends NamedChannelsInput, S, U extends
     }
 
     @SuppressWarnings("unchecked")
-    private void doJobWithNamedChnlInput(InputBound<T, S> params) throws JobExecutionException {
+    private void doJobWithNamedChannelInput(InputBound<T, S> params) throws JobExecutionException {
         task.doJobOnInputObject((InputBound<U, S>) params);
     }
 

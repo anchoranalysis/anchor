@@ -50,7 +50,7 @@ public abstract class ConvertTo<T extends Buffer> {
     // END REQUIRED ARGUMENTS
 
     /**
-     * Copies the channels in the source buffer into a particular Chnl
+     * Copies the channels in the source buffer into a particular Channel
      *
      * @param dimensions scene-dimension
      * @param src the buffer we copy all channels from
@@ -82,11 +82,11 @@ public abstract class ConvertTo<T extends Buffer> {
     }
 
     /**
-     * Always called before any batch of calls to convertSingleChnl
+     * Always called before any batch of calls to convertSingleChannel
      *
      * @param dimensions dimension
      * @param numChannelsPerByteArray the number of channels that are found in the byte-array that will
-     *     be passed to convertSingleChnl
+     *     be passed to convertSingleChannel
      */
     protected abstract void setupBefore(Dimensions dimensions, int numChannelsPerByteArray);
 

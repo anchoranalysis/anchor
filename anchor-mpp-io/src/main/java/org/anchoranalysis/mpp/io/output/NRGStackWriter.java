@@ -40,7 +40,7 @@ public class NRGStackWriter {
     private static final String FOLDER_CHANNEL = "nrgStack";
     private static final String OUTPUT_PARAMS = "nrgStackParams";
 
-    private static final String MANIFEST_FUNCTION_CHANNEL = "nrgStackChnl";
+    private static final String MANIFEST_FUNCTION_CHANNEL = "nrgStackChannel";
     private static final String MANIFEST_FUNCTION_PARAMS = "nrgStackParams";
 
     public static void writeNRGStack(NRGStackWithParams nrgStack, BoundIOContext context) {

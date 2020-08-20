@@ -73,9 +73,9 @@ public class GenerateString extends StackProvider {
             int zHeight = repeatZ.dimensions().z();
 
             Stack out = new Stack();
-            for (Channel chnl : label2D) {
+            for (Channel channel : label2D) {
                 try {
-                    out.addChannel(createExpandedChnl(chnl, zHeight));
+                    out.addChannel(createExpandedChannel(channel, zHeight));
                 } catch (IncorrectImageSizeException e) {
                     throw new CreateException(e);
                 }
@@ -90,9 +90,9 @@ public class GenerateString extends StackProvider {
     private static int maxValueFromStack(Stack stack) {
         int max = 0;
         for (Channel channel : stack) {
-            int chnlVal = channel.extract().voxelWithMaxIntensity();
-            if (chnlVal > max) {
-                max = chnlVal;
+            int channelVal = channel.extract().voxelWithMaxIntensity();
+            if (channelVal > max) {
+                max = channelVal;
             }
         }
         return max;
@@ -130,21 +130,21 @@ public class GenerateString extends StackProvider {
         }
     }
 
-    private Channel createExpandedChnl(Channel channel, int zHeight) {
+    private Channel createExpandedChannel(Channel channel, int zHeight) {
         assert (channel.dimensions().z() == 1);
 
         BoundingBox boxSrc = new BoundingBox(channel.dimensions());
         BoundingBox boxDest = boxSrc;
 
-        Channel chnlNew = emptyChannelWithChangedZ(channel, zHeight);
+        Channel channelNew = emptyChannelWithChangedZ(channel, zHeight);
         for (int z = 0; z < zHeight; z++) {
 
             // Adjust dfestination box
             boxDest = boxDest.shiftToZ(z);
 
-            channel.voxels().copyVoxelsTo(boxSrc, chnlNew.voxels(), boxDest);
+            channel.voxels().copyVoxelsTo(boxSrc, channelNew.voxels(), boxDest);
         }
-        return chnlNew;
+        return channelNew;
     }
 
     private Channel emptyChannelWithChangedZ(Channel channel, int zToAssign) {

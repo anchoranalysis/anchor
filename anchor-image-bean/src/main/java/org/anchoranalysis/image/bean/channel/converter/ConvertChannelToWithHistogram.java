@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.image.bean.chnl.converter;
+package org.anchoranalysis.image.bean.channel.converter;
 
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.image.channel.converter.attached.ChannelConverterAttached;

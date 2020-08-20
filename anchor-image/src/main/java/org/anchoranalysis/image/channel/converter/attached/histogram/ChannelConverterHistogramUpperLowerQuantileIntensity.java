@@ -78,8 +78,8 @@ public class ChannelConverterHistogramUpperLowerQuantileIntensity
     }
 
     @Override
-    public Channel convert(Channel chnl, ConversionPolicy changeExisting) {
-        return delegate.convert(chnl, changeExisting);
+    public Channel convert(Channel channel, ConversionPolicy changeExisting) {
+        return delegate.convert(channel, changeExisting);
     }
 
     @Override

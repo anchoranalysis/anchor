@@ -45,7 +45,7 @@ class IterateOverSlices {
      *
      * @param dimensionsOrder
      * @param shape the shape of the dimensions of the data
-     * @param numChnlsPerByteArray
+     * @param numChannelsPerByteArray
      * @param channelIteration called for each unique z-slice from each channel and each frame
      * @throws IOException
      * @throws FormatException
@@ -79,11 +79,11 @@ class IterateOverSlices {
     private static void applyXYCZT(
             ImageFileShape shape, int numberByteArrays, ApplyIterationToChannel channelIteration)
             throws IOException, FormatException {
-        int chnlIndex = 0;
+        int channelIndex = 0;
         for (int t = 0; t < shape.getNumberFrames(); t++) {
             for (int z = 0; z < shape.getNumberSlices(); z++) {
                 for (int c = 0; c < numberByteArrays; c++) {
-                    channelIteration.apply(t, z, c, chnlIndex++);
+                    channelIteration.apply(t, z, c, channelIndex++);
                 }
             }
         }
@@ -92,11 +92,11 @@ class IterateOverSlices {
     private static void applyXYZCT(
             ImageFileShape shape, int numberByteArrays, ApplyIterationToChannel channelIteration)
             throws IOException, FormatException {
-        int chnlIndex = 0;
+        int channelIndex = 0;
         for (int t = 0; t < shape.getNumberFrames(); t++) {
             for (int c = 0; c < numberByteArrays; c++) {
                 for (int z = 0; z < shape.getNumberSlices(); z++) {
-                    channelIteration.apply(t, z, c, chnlIndex++);
+                    channelIteration.apply(t, z, c, channelIndex++);
                 }
             }
         }
@@ -105,11 +105,11 @@ class IterateOverSlices {
     private static void applyXYZTC(
             ImageFileShape targetShape, int numberByteArrays, ApplyIterationToChannel channelIteration)
             throws IOException, FormatException {
-        int chnlIndex = 0;
+        int channelIndex = 0;
         for (int c = 0; c < numberByteArrays; c++) {
             for (int t = 0; t < targetShape.getNumberFrames(); t++) {
                 for (int z = 0; z < targetShape.getNumberSlices(); z++) {
-                    channelIteration.apply(t, z, c, chnlIndex++);
+                    channelIteration.apply(t, z, c, channelIndex++);
                 }
             }
         }
@@ -118,11 +118,11 @@ class IterateOverSlices {
     private static void applyXYCTZ(
             ImageFileShape shape, int numberByteArrays, ApplyIterationToChannel channelIteration)
             throws IOException, FormatException {
-        int chnlIndex = 0;
+        int channelIndex = 0;
         for (int z = 0; z < shape.getNumberSlices(); z++) {
             for (int t = 0; t < shape.getNumberFrames(); t++) {
                 for (int c = 0; c < numberByteArrays; c++) {
-                    channelIteration.apply(t, z, c, chnlIndex++);
+                    channelIteration.apply(t, z, c, channelIndex++);
                 }
             }
         }
@@ -131,11 +131,11 @@ class IterateOverSlices {
     private static void applyXYTCZ(
             ImageFileShape shape, int numberByteArrays, ApplyIterationToChannel channelIteration)
             throws IOException, FormatException {
-        int chnlIndex = 0;
+        int channelIndex = 0;
         for (int z = 0; z < shape.getNumberSlices(); z++) {
             for (int c = 0; c < numberByteArrays; c++) {
                 for (int t = 0; t < shape.getNumberFrames(); t++) {
-                    channelIteration.apply(t, z, c, chnlIndex++);
+                    channelIteration.apply(t, z, c, channelIndex++);
                 }
             }
         }

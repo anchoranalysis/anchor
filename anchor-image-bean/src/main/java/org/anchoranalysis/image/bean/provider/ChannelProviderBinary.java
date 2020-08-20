@@ -33,23 +33,23 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.channel.Channel;
 
 /**
- * A chnl-provider based-on two input chnl-providers that must be of the same dimensionality
+ * A channel-provider based-on two input channel-providers that must be of the same dimensionality
  *
  * @author Owen Feehan
  */
 public abstract class ChannelProviderBinary extends ChannelProvider {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private ChannelProvider chnl1;
+    @BeanField @Getter @Setter private ChannelProvider channel1;
 
-    @BeanField @Getter @Setter private ChannelProvider chnl2;
+    @BeanField @Getter @Setter private ChannelProvider channel2;
     // END BEAN PROPERTIES
 
     @Override
     public Channel create() throws CreateException {
 
-        Channel channel1Created = chnl1.create();
-        Channel channel2Created = chnl2.create();
+        Channel channel1Created = channel1.create();
+        Channel channel2Created = channel2.create();
 
         if (!channel1Created.dimensions().equals(channel2Created.dimensions())) {
             throw new CreateException("Dimensions of channels do not match");

@@ -55,7 +55,7 @@ import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 public class RegionExtracterFromDisplayStack implements RegionExtracter {
 
     /** Used to convert our source buffer to bytes, not called if it's already bytes */
-    private List<Optional<ChannelConverterAttached<Channel, ByteBuffer>>> listChnlConverter;
+    private List<Optional<ChannelConverterAttached<Channel, ByteBuffer>>> listChannelConverter;
 
     /** Current displayStack */
     private Stack stack;
@@ -67,20 +67,20 @@ public class RegionExtracterFromDisplayStack implements RegionExtracter {
         Stack out = null;
         for (int c = 0; c < stack.getNumberChannels(); c++) {
 
-            Channel chnl =
+            Channel channel =
                     extractRegionFrom(
                             stack.getChannel(c),
                             box,
                             zoomFactor,
-                            listChnlConverter
+                            listChannelConverter
                                     .get(c)
                                     .map(ChannelConverterAttached::getVoxelsConverter));
 
             if (c == 0) {
-                out = new Stack(chnl);
+                out = new Stack(channel);
             } else {
                 try {
-                    out.addChannel(chnl);
+                    out.addChannel(channel);
                 } catch (IncorrectImageSizeException e) {
                     assert false;
                 }
@@ -98,7 +98,7 @@ public class RegionExtracterFromDisplayStack implements RegionExtracter {
             Channel extractedSlice,
             BoundingBox box,
             double zoomFactor,
-            Optional<VoxelsConverter<ByteBuffer>> chnlConverter)
+            Optional<VoxelsConverter<ByteBuffer>> channelConverter)
             throws OperationFailedException {
 
         ScaleFactor sf = new ScaleFactor(zoomFactor);
@@ -122,12 +122,12 @@ public class RegionExtracterFromDisplayStack implements RegionExtracter {
                     zoomFactor,
                     interpolator);
 
-            if (chnlConverter.isPresent()) {
-                chnlConverter.get().convertFromByte(voxels, voxels);
+            if (channelConverter.isPresent()) {
+                channelConverter.get().convertFromByte(voxels, voxels);
             }
 
         } else if (extractedSlice.getVoxelDataType().equals(UnsignedShortVoxelType.INSTANCE)
-                && chnlConverter.isPresent()) {
+                && channelConverter.isPresent()) {
 
             Voxels<ShortBuffer> bufferIntermediate =
                     VoxelsFactory.getShort().createInitialized(extentTrgt);
@@ -141,12 +141,12 @@ public class RegionExtracterFromDisplayStack implements RegionExtracter {
                     interpolator);
 
             // We now convert the ShortBuffer into bytes
-            chnlConverter.get().convertFromShort(bufferIntermediate, voxels);
+            channelConverter.get().convertFromShort(bufferIntermediate, voxels);
 
         } else {
             throw new IncorrectVoxelTypeException(
                     String.format(
-                            "dataType %s is unsupported without chnlConverter",
+                            "dataType %s is unsupported without channelConverter",
                             extractedSlice.getVoxelDataType()));
         }
 

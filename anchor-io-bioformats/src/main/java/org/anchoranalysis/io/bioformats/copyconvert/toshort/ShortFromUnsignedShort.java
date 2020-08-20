@@ -55,7 +55,7 @@ public class ShortFromUnsignedShort extends ConvertToShort {
     @Override
     protected VoxelBuffer<ShortBuffer> convertSingleChannel(byte[] src, int channelRelative) {
 
-        short[] crntChnlBytes = new short[sizeXY];
+        short[] crntChannelBytes = new short[sizeXY];
 
         int indOut = 0;
         for (int indIn = 0; indIn < sizeBytes; indIn += bytesPerPixel) {
@@ -73,9 +73,9 @@ public class ShortFromUnsignedShort extends ConvertToShort {
                 s = 0;
             }
 
-            crntChnlBytes[indOut++] = (short) s;
+            crntChannelBytes[indOut++] = (short) s;
         }
 
-        return VoxelBufferShort.wrap(crntChnlBytes);
+        return VoxelBufferShort.wrap(crntChannelBytes);
     }
 }

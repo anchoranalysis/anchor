@@ -35,12 +35,12 @@ import org.anchoranalysis.image.channel.Channel;
 public abstract class ChannelProviderUnary extends ChannelProvider {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private ChannelProvider chnl;
+    @BeanField @Getter @Setter private ChannelProvider channel;
     // END BEAN PROPERTIES
 
     @Override
     public Channel create() throws CreateException {
-        return createFromChannel(chnl.create());
+        return createFromChannel(channel.create());
     }
 
     protected abstract Channel createFromChannel(Channel channel) throws CreateException;

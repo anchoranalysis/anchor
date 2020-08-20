@@ -52,29 +52,29 @@ public class NamedChannelsForSeriesConcatenate implements NamedChannelsForSeries
     private List<NamedChannelsForSeries> list = new ArrayList<>();
 
     @Override
-    public Channel getChannel(String chnlName, int timeIndex, ProgressReporter progressReporter)
+    public Channel getChannel(String channelName, int timeIndex, ProgressReporter progressReporter)
             throws GetOperationFailedException {
 
         for (NamedChannelsForSeries item : list) {
 
-            Optional<Channel> c = item.getChannelOptional(chnlName, timeIndex, progressReporter);
+            Optional<Channel> c = item.getChannelOptional(channelName, timeIndex, progressReporter);
             if (c.isPresent()) {
                 return c.get();
             }
         }
 
         throw new GetOperationFailedException(
-                chnlName, String.format("chnlName '%s' is not found", chnlName));
+                channelName, String.format("channelName '%s' is not found", channelName));
     }
 
     @Override
     public Optional<Channel> getChannelOptional(
-            String chnlName, int t, ProgressReporter progressReporter)
+            String channelName, int t, ProgressReporter progressReporter)
             throws GetOperationFailedException {
 
         for (NamedChannelsForSeries item : list) {
 
-            Optional<Channel> c = item.getChannelOptional(chnlName, t, progressReporter);
+            Optional<Channel> c = item.getChannelOptional(channelName, t, progressReporter);
             if (c.isPresent()) {
                 return c;
             }
@@ -133,9 +133,9 @@ public class NamedChannelsForSeriesConcatenate implements NamedChannelsForSeries
     }
 
     @Override
-    public boolean hasChannel(String chnlName) {
+    public boolean hasChannel(String channelName) {
         for (NamedChannelsForSeries item : list) {
-            if (item.channelNames().contains(chnlName)) {
+            if (item.channelNames().contains(channelName)) {
                 return true;
             }
         }

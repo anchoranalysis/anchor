@@ -46,10 +46,10 @@ public class ByteFrom8BitUnsignedNoInterleaving extends ConvertToByte {
         ByteBuffer buffer = ByteBuffer.wrap(src);
 
         int sizeTotalBytes = sizeXY * bytesPerPixel;
-        byte[] crntChnlBytes = new byte[sizeTotalBytes];
+        byte[] crntChannelBytes = new byte[sizeTotalBytes];
 
         buffer.position(sizeTotalBytes * channelRelative);
-        buffer.get(crntChnlBytes, 0, sizeTotalBytes);
-        return VoxelBufferByte.wrap(crntChnlBytes);
+        buffer.get(crntChannelBytes, 0, sizeTotalBytes);
+        return VoxelBufferByte.wrap(crntChannelBytes);
     }
 }

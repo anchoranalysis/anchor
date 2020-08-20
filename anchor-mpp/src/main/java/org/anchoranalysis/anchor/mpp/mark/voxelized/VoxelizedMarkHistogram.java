@@ -97,15 +97,15 @@ class VoxelizedMarkHistogram implements VoxelizedMark {
     }
 
     @Override
-    public VoxelStatistics statisticsForAllSlices(int chnlID, int regionID) {
+    public VoxelStatistics statisticsForAllSlices(int channelID, int regionID) {
         return new VoxelStatisticsFromHistogram(
-                partitionList.get(chnlID).getForAllSlices(regionID));
+                partitionList.get(channelID).getForAllSlices(regionID));
     }
 
     @Override
-    public VoxelStatistics statisticsFor(int chnlID, int regionID, int sliceID) {
+    public VoxelStatistics statisticsFor(int channelID, int regionID, int sliceID) {
         return new VoxelStatisticsFromHistogram(
-                partitionList.get(chnlID).getForSlice(regionID, sliceID));
+                partitionList.get(channelID).getForSlice(regionID, sliceID));
     }
 
     @Override
@@ -115,19 +115,19 @@ class VoxelizedMarkHistogram implements VoxelizedMark {
 
     @Override
     public VoxelStatistics statisticsForAllSlicesMaskSlice(
-            int chnlID, int regionID, int maskChnlID) {
+            int channelID, int regionID, int maskChannelID) {
 
         Histogram h = new Histogram(255);
 
         // We loop through each slice
         for (int z = 0; z < partitionList.get(0).numSlices(); z++) {
 
-            Histogram hChnl = partitionList.get(chnlID).getForSlice(regionID, z);
-            Histogram hMaskChnl = partitionList.get(maskChnlID).getForSlice(regionID, z);
+            Histogram hChannel = partitionList.get(channelID).getForSlice(regionID, z);
+            Histogram hMaskChannel = partitionList.get(maskChannelID).getForSlice(regionID, z);
 
-            if (hMaskChnl.hasAboveZero()) {
+            if (hMaskChannel.hasAboveZero()) {
                 try {
-                    h.addHistogram(hChnl);
+                    h.addHistogram(hChannel);
                 } catch (OperationFailedException e) {
                     throw new AnchorImpossibleSituationException();
                 }

@@ -70,7 +70,7 @@ public class NamedEntries {
             return ind;
         } else {
             throw new IndexOutOfBoundsException(
-                    String.format("No channel index for '%s' in imgChnlMap", name));
+                    String.format("No channel index for '%s' in imgChannelMap", name));
         }
     }
 }

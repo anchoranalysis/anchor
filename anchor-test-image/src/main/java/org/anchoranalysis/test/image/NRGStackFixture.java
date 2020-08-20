@@ -45,9 +45,9 @@ public class NRGStackFixture {
 
         try {
             Stack stack = new Stack();
-            addChnl(stack, size, ChannelFixture::sumMod);
-            addChnl(stack, size, ChannelFixture::diffMod);
-            addChnl(stack, size, ChannelFixture::multMod);
+            addChannel(stack, size, ChannelFixture::sumMod);
+            addChannel(stack, size, ChannelFixture::diffMod);
+            addChannel(stack, size, ChannelFixture::multMod);
 
             NRGStack nrgStack = new NRGStack(stack);
             return new NRGStackWithParams(nrgStack);
@@ -65,7 +65,7 @@ public class NRGStackFixture {
         }
     }
 
-    private static void addChnl(Stack stack, Extent size, IntensityFunction intensityFunction)
+    private static void addChannel(Stack stack, Extent size, IntensityFunction intensityFunction)
             throws IncorrectImageSizeException {
         stack.addChannel(ChannelFixture.createChannel(size, intensityFunction));
     }

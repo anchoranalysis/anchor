@@ -57,7 +57,7 @@ public class CopyConvert {
      * @param numberChannels
      * @param numberFrames
      * @param bitsPerPixel
-     * @param numChnlsPerByteArray
+     * @param numChannelsPerByteArray
      * @throws FormatException
      * @throws IOException
      */
@@ -69,7 +69,7 @@ public class CopyConvert {
             ConvertTo<?> convertTo,
             ReadOptions readOptions)
             throws FormatException, IOException {
-        int numberChannelsPerByteArray = readOptions.chnlsPerByteArray(reader);
+        int numberChannelsPerByteArray = readOptions.channelsPerByteArray(reader);
 
         int numberByteArraysPerIteration =
                 calculateByteArraysPerIteration(targetShape.getNumberChannels(), numberChannelsPerByteArray);
@@ -108,20 +108,20 @@ public class CopyConvert {
         }
     }
 
-    private static int calculateByteArraysPerIteration(int numChnl, int numChnlsPerByteArray)
+    private static int calculateByteArraysPerIteration(int numChannel, int numChannelsPerByteArray)
             throws FormatException {
 
-        if ((numChnl % numChnlsPerByteArray) != 0) {
+        if ((numChannel % numChannelsPerByteArray) != 0) {
             throw new FormatException(
                     String.format(
-                            "numChnls(%d) mod numChnlsPerByteArray(%d) != 0",
-                            numChnl, numChnlsPerByteArray));
+                            "numChannels(%d) mod numChannelsPerByteArray(%d) != 0",
+                            numChannel, numChannelsPerByteArray));
         }
 
-        return numChnl / numChnlsPerByteArray;
+        return numChannel / numChannelsPerByteArray;
     }
 
-    private static int destIndex(int c, int t, int numChnlsPerFrame) {
-        return (t * numChnlsPerFrame) + c;
+    private static int destIndex(int c, int t, int numChannelsPerFrame) {
+        return (t * numChannelsPerFrame) + c;
     }
 }

@@ -33,7 +33,7 @@ import org.anchoranalysis.image.channel.converter.ConversionPolicy;
 import org.anchoranalysis.image.channel.converter.voxels.VoxelsConverter;
 
 /**
- * A ChnlConverter that has been permanently attached to a particular object (to give more
+ * A ChannelConverter that has been permanently attached to a particular object (to give more
  * information for the conversion)
  *
  * @author Owen Feehan
@@ -44,7 +44,7 @@ public interface ChannelConverterAttached<S, T extends Buffer> {
 
     void attachObject(S obj) throws OperationFailedException;
 
-    Channel convert(Channel chnl, ConversionPolicy changeExisting);
+    Channel convert(Channel channel, ConversionPolicy changeExisting);
 
     VoxelsConverter<T> getVoxelsConverter();
 }

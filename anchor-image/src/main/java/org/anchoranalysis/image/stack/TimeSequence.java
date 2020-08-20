@@ -63,10 +63,10 @@ public class TimeSequence implements Iterable<Stack> {
     }
 
     // Returns true if the data type of all channels is equal to
-    public boolean allChnlsHaveType(VoxelDataType chnlDataType) {
+    public boolean allChannelsHaveType(VoxelDataType channelDataType) {
 
         for (Stack stack : this) {
-            if (!stack.allChannelsHaveType(chnlDataType)) {
+            if (!stack.allChannelsHaveType(channelDataType)) {
                 return false;
             }
         }

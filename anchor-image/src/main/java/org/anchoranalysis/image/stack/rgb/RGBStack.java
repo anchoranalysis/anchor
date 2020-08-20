@@ -149,8 +149,8 @@ public class RGBStack {
         return new RGBStack(this);
     }
 
-    public boolean allChnlsHaveType(VoxelDataType chnlDataType) {
-        return stack.allChannelsHaveType(chnlDataType);
+    public boolean allChannelsHaveType(VoxelDataType channelDataType) {
+        return stack.allChannelsHaveType(channelDataType);
     }
 
     private static void writePoint(Point3i point, Channel channel, int toWrite) {
@@ -211,8 +211,8 @@ public class RGBStack {
         }
     }
 
-    private ByteBuffer extractBuffer(int chnlIndex, int zIndex) {
-        return stack.getChannel(chnlIndex).voxels().asByte().slice(zIndex).buffer();
+    private ByteBuffer extractBuffer(int channelIndex, int zIndex) {
+        return stack.getChannel(channelIndex).voxels().asByte().slice(zIndex).buffer();
     }
 
     private static Stack convertGrayscaleIntoColor(Stack stack) {

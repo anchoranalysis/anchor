@@ -78,8 +78,8 @@ public abstract class ReadOptionsDelegate extends ReadOptions {
     }
 
     @Override
-    public int chnlsPerByteArray(IFormatReader reader) {
-        return options.chnlsPerByteArray(reader);
+    public int channelsPerByteArray(IFormatReader reader) {
+        return options.channelsPerByteArray(reader);
     }
 
     protected ReadOptions delegate() {

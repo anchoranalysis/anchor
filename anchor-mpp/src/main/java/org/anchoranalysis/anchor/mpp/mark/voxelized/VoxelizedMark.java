@@ -50,11 +50,11 @@ public interface VoxelizedMark {
 
     VoxelizedMark duplicate();
 
-    VoxelStatistics statisticsForAllSlices(int chnlID, int regionID);
+    VoxelStatistics statisticsForAllSlices(int channelID, int regionID);
 
-    VoxelStatistics statisticsForAllSlicesMaskSlice(int chnlID, int regionID, int maskChnlID);
+    VoxelStatistics statisticsForAllSlicesMaskSlice(int channelID, int regionID, int maskChannelID);
 
-    VoxelStatistics statisticsFor(int chnlID, int regionID, int sliceID);
+    VoxelStatistics statisticsFor(int channelID, int regionID, int sliceID);
 
     void cleanUp();
 }

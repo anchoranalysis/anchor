@@ -41,9 +41,9 @@ public class IndexByChannel<T> {
         return delegate.add(e);
     }
 
-    public void init(PixelPartFactory<T> factory, int numChnl, int numRegions, int numSlices) {
+    public void init(PixelPartFactory<T> factory, int numChannel, int numRegions, int numSlices) {
 
-        for (int i = 0; i < numChnl; i++) {
+        for (int i = 0; i < numChannel; i++) {
             delegate.add(new IndexByRegion<>(factory, numRegions, numSlices));
         }
     }

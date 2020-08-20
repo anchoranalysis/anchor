@@ -76,7 +76,7 @@ public class ArrangeRaster extends StackProvider {
             Stack stack = provider.create();
 
             if (forceRGB) {
-                copyFirstChnlUntil3(stack);
+                copyFirstChannelUntil3(stack);
             }
             rasterList.add(new RGBStack(stack));
         }
@@ -94,7 +94,7 @@ public class ArrangeRaster extends StackProvider {
         return rasterArranger.createStack(rasterList, factory).asStack();
     }
 
-    private void copyFirstChnlUntil3(Stack stack) {
+    private void copyFirstChannelUntil3(Stack stack) {
         while (stack.getNumberChannels() < 3) {
             try {
                 stack.addChannel(stack.getChannel(0).duplicate());

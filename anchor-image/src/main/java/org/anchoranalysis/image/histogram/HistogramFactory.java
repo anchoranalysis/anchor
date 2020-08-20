@@ -111,12 +111,12 @@ public class HistogramFactory {
         return total;
     }
 
-    public static Histogram create(Channel chnl, ObjectMask object) {
-        return create(chnl, ObjectCollectionFactory.of(object));
+    public static Histogram create(Channel channel, ObjectMask object) {
+        return create(channel, ObjectCollectionFactory.of(object));
     }
 
-    public static Histogram create(Channel chnl, ObjectCollection objects) {
-        return createWithMasks(chnl.voxels(), objects);
+    public static Histogram create(Channel channel, ObjectCollection objects) {
+        return createWithMasks(channel.voxels(), objects);
     }
 
     public static Histogram create(VoxelBuffer<?> inputBuffer) {
@@ -220,8 +220,8 @@ public class HistogramFactory {
     }
 
     public static Histogram createHistogramIgnoreZero(
-            Channel chnl, ObjectMask object, boolean ignoreZero) {
-        Histogram hist = create(chnl, object);
+            Channel channel, ObjectMask object, boolean ignoreZero) {
+        Histogram hist = create(channel, object);
         if (ignoreZero) {
             hist.zeroValue(0);
         }

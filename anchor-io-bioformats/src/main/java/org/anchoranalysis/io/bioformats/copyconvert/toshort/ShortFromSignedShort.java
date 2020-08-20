@@ -54,14 +54,14 @@ public class ShortFromSignedShort extends ConvertToShort {
     @Override
     protected VoxelBuffer<ShortBuffer> convertSingleChannel(byte[] src, int channelRelative) {
 
-        short[] crntChnlShorts = new short[sizeXY];
+        short[] crntChannelShorts = new short[sizeXY];
 
         int indOut = 0;
         for (int indIn = 0; indIn < sizeBytes; indIn += bytesPerPixel) {
             short s = DataTools.bytesToShort(src, indIn, bytesPerPixel, littleEndian);
-            crntChnlShorts[indOut++] = s;
+            crntChannelShorts[indOut++] = s;
         }
 
-        return VoxelBufferShort.wrap(crntChnlShorts);
+        return VoxelBufferShort.wrap(crntChannelShorts);
     }
 }

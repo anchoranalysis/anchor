@@ -38,14 +38,14 @@ public interface OpenedRaster extends AutoCloseable {
 
     // Opens a time-series as a particular type. If it's not the correct type, an error is thrown
     default TimeSequence openCheckType(
-            int seriesIndex, ProgressReporter progressReporter, VoxelDataType chnlDataType)
+            int seriesIndex, ProgressReporter progressReporter, VoxelDataType channelDataType)
             throws RasterIOException {
 
         TimeSequence ts = open(seriesIndex, progressReporter);
 
-        if (!ts.allChnlsHaveType(chnlDataType)) {
+        if (!ts.allChannelsHaveType(channelDataType)) {
             throw new RasterIOException(
-                    String.format("File does not have dataType %s", chnlDataType));
+                    String.format("File does not have dataType %s", channelDataType));
         }
 
         return ts;

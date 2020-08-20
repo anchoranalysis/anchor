@@ -35,19 +35,19 @@ import org.anchoranalysis.image.channel.Channel;
 public abstract class ChannelProviderTernary extends ChannelProvider {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private ChannelProvider chnl1;
+    @BeanField @Getter @Setter private ChannelProvider channel1;
 
-    @BeanField @Getter @Setter private ChannelProvider chnl2;
+    @BeanField @Getter @Setter private ChannelProvider channel2;
 
-    @BeanField @Getter @Setter private ChannelProvider chnl3;
+    @BeanField @Getter @Setter private ChannelProvider channel3;
     // END BEAN PROPERTIES
 
     @Override
     public Channel create() throws CreateException {
 
-        return process(chnl1.create(), chnl2.create(), chnl3.create());
+        return process(channel1.create(), channel2.create(), channel3.create());
     }
 
-    protected abstract Channel process(Channel chnl1, Channel chnl2, Channel chnl3)
+    protected abstract Channel process(Channel channel1, Channel channel2, Channel channel3)
             throws CreateException;
 }

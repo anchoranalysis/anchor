@@ -79,8 +79,8 @@ public class StackNotUniformSized implements Iterable<Channel> {
         channels.clear();
     }
 
-    public final void addChannel(Channel chnl) {
-        channels.add(chnl);
+    public final void addChannel(Channel channel) {
+        channels.add(channel);
     }
 
     public final Channel getChannel(int index) {

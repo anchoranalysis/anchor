@@ -40,7 +40,7 @@ public class ForceChannelsPerByteArray extends ReadOptionsDelegate {
 
     // Overrides with constant
     @Override
-    public int chnlsPerByteArray(IFormatReader reader) {
+    public int channelsPerByteArray(IFormatReader reader) {
         return channelsPerByteArray;
     }
 }
