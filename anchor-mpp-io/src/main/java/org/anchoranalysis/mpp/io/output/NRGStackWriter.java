@@ -29,7 +29,7 @@ package org.anchoranalysis.mpp.io.output;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
-import org.anchoranalysis.image.io.generator.raster.ChnlGenerator;
+import org.anchoranalysis.image.io.generator.raster.ChannelGenerator;
 import org.anchoranalysis.io.generator.sequence.GeneratorSequenceUtilities;
 import org.anchoranalysis.io.generator.serialized.KeyValueParamsGenerator;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
@@ -49,7 +49,7 @@ public class NRGStackWriter {
                 FOLDER_CHANNEL,
                 2,
                 nrgStack.getNrgStack().asStack().asListChannels(),
-                new ChnlGenerator(MANIFEST_FUNCTION_CHANNEL),
+                new ChannelGenerator(MANIFEST_FUNCTION_CHANNEL),
                 context);
 
         if (nrgStack.getParams() != null) {

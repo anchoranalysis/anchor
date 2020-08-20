@@ -52,7 +52,7 @@ public final class RetrieveBuffersForTwoSlices<T extends Buffer> implements Proc
     private final Voxels<T> voxels2;
     
     /** Processor */
-    private final ProcessVoxelTwoSliceBuffer<T> process;
+    private final ProcessVoxelTwoSliceBuffers<T> process;
     // END REQUIRED ARGUMENTS
 
     private T bufferSlice1;

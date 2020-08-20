@@ -28,13 +28,13 @@ package org.anchoranalysis.feature.input;
 
 import java.util.Optional;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.image.extent.ImageResolution;
+import org.anchoranalysis.image.extent.Resolution;
 
 public interface FeatureInputWithRes extends FeatureInput {
 
-    Optional<ImageResolution> getResolutionOptional();
+    Optional<Resolution> getResolutionOptional();
 
-    default ImageResolution getResRequired() throws FeatureCalculationException {
+    default Resolution getResRequired() throws FeatureCalculationException {
         return getResolutionOptional()
                 .orElseThrow(
                         () ->

@@ -16,6 +16,7 @@ import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.ExtentMatchHelper;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
+import com.google.common.base.Preconditions;
 
 /**
  * Iterates over {@link Voxels} using the (slower) {@code getInt} and {@code putInt} methods of
@@ -254,5 +255,33 @@ public class IterateVoxelsVoxelBoxAsInt {
                 }
             }
         }
+    }
+    
+    /**
+     * Iterate over each voxel in a bounding-box - with <b>two</b> associated buffers for each slice
+     * <p>
+     * The extent's of both {@code voxels1} and {@code voxels2} must be equal.
+     * 
+     * @param voxels1 voxels in which which {@link BoundingBox} refers to a subregion, and which provides the <b>first</b> buffer
+     * @param voxels2 voxels in which which {@link BoundingBox} refers to a subregion, and which provides the <b>second</b> buffer
+     * @param process is called for each voxel within the bounding-box using GLOBAL coordinates.
+     * @param <T> buffer-type for voxels
+     */
+    public static <S extends Buffer, T extends Buffer> void callEachPointTwo(
+            Voxels<S> voxels1, Voxels<T> voxels2, ProcessVoxelSliceTwo<S,T> process) {
+        Preconditions.checkArgument( voxels1.extent().equals(voxels2.extent()) );
+
+        int volumeXY = voxels1.extent().volumeXY();
+
+        voxels1.extent().iterateOverZ( z-> {
+
+            VoxelBuffer<S> buffer1 = voxels1.slice(z);
+            VoxelBuffer<T> buffer2 = voxels2.slice(z);
+
+            for (int offset = 0; offset < volumeXY; offset++) {
+                process.process(buffer1, buffer2, offset);
+            }
+            
+        });
     }
 }

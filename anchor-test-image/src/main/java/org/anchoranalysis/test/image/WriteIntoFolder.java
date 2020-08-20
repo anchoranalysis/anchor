@@ -13,8 +13,8 @@ import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.ImageDimensions;
-import org.anchoranalysis.image.extent.ImageResolution;
+import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.io.generator.raster.DisplayStackGenerator;
 import org.anchoranalysis.image.io.generator.raster.object.collection.ObjectAsMaskGenerator;
 import org.anchoranalysis.image.io.generator.raster.object.rgb.DrawObjectsGenerator;
@@ -51,7 +51,7 @@ public class WriteIntoFolder implements TestRule {
      * If there are no objects or specified dimensions, this size is used for an output image as a
      * fallback
      */
-    private static final ImageDimensions FALLBACK_SIZE = new ImageDimensions(100, 100, 1);
+    private static final Dimensions FALLBACK_SIZE = new Dimensions(100, 100, 1);
 
     // START REQUIRED ARGUMENTS
     /** If true, the path of {@code folder} is printed to the console */
@@ -104,7 +104,7 @@ public class WriteIntoFolder implements TestRule {
      */
     public void writeObjects(String outputName, ObjectCollection objects) {
 
-        ImageDimensions dimensionsResolved = dimensionsToCenterObjects(objects);
+        Dimensions dimensionsResolved = dimensionsToCenterObjects(objects);
 
         writeObjects(outputName, objects, Either.left(dimensionsResolved));
     }
@@ -122,7 +122,7 @@ public class WriteIntoFolder implements TestRule {
 
     public void writeVoxels(String outputName, Voxels<ByteBuffer> voxels) {
 
-        Channel channel = ChannelFactory.instance().create(voxels, new ImageResolution());
+        Channel channel = ChannelFactory.instance().create(voxels, new Resolution());
 
         writeChannel(outputName, channel);
     }
@@ -179,7 +179,7 @@ public class WriteIntoFolder implements TestRule {
     private void writeObjects(
             String outputName,
             ObjectCollection objects,
-            Either<ImageDimensions, DisplayStack> background) {
+            Either<Dimensions, DisplayStack> background) {
 
         setupOutputManagerIfNecessary();
 
@@ -195,7 +195,7 @@ public class WriteIntoFolder implements TestRule {
      *
      * @throws OperationFailedException
      */
-    private static ImageDimensions dimensionsToCenterObjects(ObjectCollection objects) {
+    private static Dimensions dimensionsToCenterObjects(ObjectCollection objects) {
 
         if (objects.size() == 0) {
             return FALLBACK_SIZE;
@@ -207,7 +207,7 @@ public class WriteIntoFolder implements TestRule {
             BoundingBox boxCentered =
                     boxSpans.changeExtent(boxSpans.extent().growBy(boxSpans.cornerMin()));
 
-            return new ImageDimensions(boxCentered.calculateCornerMaxExclusive());
+            return new Dimensions(boxCentered.calculateCornerMaxExclusive());
         } catch (OperationFailedException e) {
             throw new AnchorImpossibleSituationException();
         }

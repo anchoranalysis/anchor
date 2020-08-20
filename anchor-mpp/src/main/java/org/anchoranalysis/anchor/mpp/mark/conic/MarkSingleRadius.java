@@ -41,7 +41,7 @@ import org.anchoranalysis.anchor.mpp.mark.MarkAbstractPosition;
 import org.anchoranalysis.anchor.mpp.mark.QuickOverlapCalculation;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 
 /** Base-class for a conic that has a single radius (circle, sphere etc.) */
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -111,13 +111,13 @@ public abstract class MarkSingleRadius extends MarkAbstractPosition implements S
     }
 
     @Override
-    public BoundingBox box(ImageDimensions dimensions, int regionID) {
+    public BoundingBox box(Dimensions dimensions, int regionID) {
         return BoundingBoxCalculator.boxFromBounds(
                 getPos(), radiusForRegion(regionID) + ADDED_TO_RADIUS, numDims() == 3, dimensions);
     }
 
     @Override
-    public BoundingBox boxAllRegions(ImageDimensions dimensions) {
+    public BoundingBox boxAllRegions(Dimensions dimensions) {
         return box(dimensions, GlobalRegionIdentifiers.SUBMARK_SHELL);
     }
 

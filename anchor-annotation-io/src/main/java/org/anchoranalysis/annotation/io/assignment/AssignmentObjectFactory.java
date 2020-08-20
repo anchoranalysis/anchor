@@ -33,7 +33,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
 import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.object.ObjectCollection;
@@ -55,7 +55,7 @@ public class AssignmentObjectFactory {
             ObjectCollection left,
             ObjectCollection right,
             double maxAcceptedCost,
-            ImageDimensions dim)
+            Dimensions dim)
             throws FeatureCalculationException {
 
         // Empty annotations
@@ -100,7 +100,7 @@ public class AssignmentObjectFactory {
     }
 
     private ObjectCollectionDistanceMatrix createCostMatrix(
-            ObjectCollection annotation, ObjectCollection result, ImageDimensions dim)
+            ObjectCollection annotation, ObjectCollection result, Dimensions dim)
             throws FeatureCalculationException {
 
         FeatureCalculatorSingle<FeatureInputPairObjects> session;

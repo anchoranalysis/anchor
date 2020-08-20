@@ -2,8 +2,8 @@ package org.anchoranalysis.image.binary.mask;
 
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
-import org.anchoranalysis.image.extent.ImageDimensions;
-import org.anchoranalysis.image.voxel.datatype.UnsignedByte;
+import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -25,7 +25,7 @@ public class MaskFactory {
      * 
      * @return a newly created binary-mask with newly-created buffers
      */
-    public static Mask createMaskOff(ImageDimensions dimensions) {
+    public static Mask createMaskOff(Dimensions dimensions) {
         return createMaskOff(dimensions, BinaryValues.getDefault());
     }
     
@@ -37,10 +37,10 @@ public class MaskFactory {
      * 
      * @return a newly created binary-mask with newly-created buffers
      */
-    public static Mask createMaskOff(ImageDimensions dimensions, BinaryValues binaryValues) {
+    public static Mask createMaskOff(Dimensions dimensions, BinaryValues binaryValues) {
         Mask mask = new Mask(
                 ChannelFactory.instance()
-                .create(dimensions, UnsignedByte.INSTANCE), binaryValues     
+                .create(dimensions, UnsignedByteVoxelType.INSTANCE), binaryValues     
         );
         // By default the voxels are 0. If OFF value is not 0, it needs to be explicitly assigned.
         if (binaryValues.getOffInt()!=0) {
@@ -58,7 +58,7 @@ public class MaskFactory {
      * 
      * @return a newly created binary-mask with newly-created buffers
      */
-    public static Mask createMaskOn(ImageDimensions dimensions) {
+    public static Mask createMaskOn(Dimensions dimensions) {
         return createMaskOn(dimensions, BinaryValues.getDefault());
     }
     
@@ -70,7 +70,7 @@ public class MaskFactory {
      * 
      * @return a newly created binary-mask with newly-created buffers
      */
-    public static Mask createMaskOn(ImageDimensions dimensions, BinaryValues binaryValues) {
+    public static Mask createMaskOn(Dimensions dimensions, BinaryValues binaryValues) {
         Mask mask = createMaskOff(dimensions, binaryValues);
         mask.assignOn().toAll();
         return mask;

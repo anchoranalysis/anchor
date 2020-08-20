@@ -28,7 +28,7 @@ package org.anchoranalysis.annotation;
 
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
 import org.anchoranalysis.anchor.mpp.cfg.Cfg;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.object.ObjectCollection;
 
 public abstract class AnnotationWithCfg implements Annotation {
@@ -39,7 +39,7 @@ public abstract class AnnotationWithCfg implements Annotation {
 
     protected abstract int getRegionID();
 
-    public ObjectCollection convertToObjects(ImageDimensions dimensions) {
+    public ObjectCollection convertToObjects(Dimensions dimensions) {
         return getCfg().deriveObjects(
                         dimensions,
                         getRegionMap().membershipWithFlagsForIndex(getRegionID())

@@ -29,14 +29,14 @@ package org.anchoranalysis.image.channel.factory;
 import java.nio.Buffer;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.extent.ImageDimensions;
-import org.anchoranalysis.image.extent.ImageResolution;
+import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.factory.VoxelDataTypeFactoryMultiplexer;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
-import org.anchoranalysis.image.voxel.datatype.UnsignedByte;
-import org.anchoranalysis.image.voxel.datatype.UnsignedInt;
-import org.anchoranalysis.image.voxel.datatype.UnsignedShort;
+import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
+import org.anchoranalysis.image.voxel.datatype.UnsignedIntVoxelType;
+import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
 
 /** Creates a channel for one of several data-types */
 public class ChannelFactory extends VoxelDataTypeFactoryMultiplexer<ChannelFactorySingleType> {
@@ -67,15 +67,15 @@ public class ChannelFactory extends VoxelDataTypeFactoryMultiplexer<ChannelFacto
      * @param channelDataType data-type
      * @return a newly created channel with newly created buffers
      */
-    public Channel create(ImageDimensions dimensions, VoxelDataType channelDataType) {
+    public Channel create(Dimensions dimensions, VoxelDataType channelDataType) {
         return get(channelDataType).createEmptyInitialised(dimensions);
     }
 
-    public Channel createUninitialised(ImageDimensions dimensions, VoxelDataType channelDataType) {
+    public Channel createUninitialised(Dimensions dimensions, VoxelDataType channelDataType) {
         return get(channelDataType).createEmptyUninitialised(dimensions);
     }
 
-    public Channel create(Voxels<? extends Buffer> voxels, ImageResolution resolution) {
+    public Channel create(Voxels<? extends Buffer> voxels, Resolution resolution) {
         return get(voxels.dataType()).create(voxels, resolution);
     }
 
@@ -92,18 +92,18 @@ public class ChannelFactory extends VoxelDataTypeFactoryMultiplexer<ChannelFacto
      * @throws CreateException if the max value exceeds all supported data types
      */
     public Channel createEmptyInitialisedToSupportMaxValue(
-            ImageDimensions dimensions, long maxIntensityValueNeeded) throws CreateException {
+            Dimensions dimensions, long maxIntensityValueNeeded) throws CreateException {
         return create(dimensions, selectDataTypeToSupport(maxIntensityValueNeeded));
     }
 
     private static VoxelDataType selectDataTypeToSupport(long maxIntensityValueNeeded)
             throws CreateException {
-        if (maxIntensityValueNeeded < UnsignedByte.INSTANCE.maxValue()) {
-            return UnsignedByte.INSTANCE;
-        } else if (maxIntensityValueNeeded < UnsignedShort.INSTANCE.maxValue()) {
-            return UnsignedShort.INSTANCE;
-        } else if (maxIntensityValueNeeded < UnsignedInt.INSTANCE.maxValue()) {
-            return UnsignedInt.INSTANCE;
+        if (maxIntensityValueNeeded < UnsignedByteVoxelType.INSTANCE.maxValue()) {
+            return UnsignedByteVoxelType.INSTANCE;
+        } else if (maxIntensityValueNeeded < UnsignedShortVoxelType.INSTANCE.maxValue()) {
+            return UnsignedShortVoxelType.INSTANCE;
+        } else if (maxIntensityValueNeeded < UnsignedIntVoxelType.INSTANCE.maxValue()) {
+            return UnsignedIntVoxelType.INSTANCE;
         } else {
             throw new CreateException(
                     "No data-type can support a max intensity-value of " + maxIntensityValueNeeded);

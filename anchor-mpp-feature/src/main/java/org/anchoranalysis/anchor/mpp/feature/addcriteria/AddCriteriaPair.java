@@ -35,7 +35,7 @@ import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 
 public abstract class AddCriteriaPair extends AnchorBean<AddCriteriaPair>
         implements AddCriteria<IdentifiablePair<Mark>> {
@@ -63,7 +63,7 @@ public abstract class AddCriteriaPair extends AnchorBean<AddCriteriaPair>
     public abstract boolean includeMarks(
             VoxelizedMarkMemo mark1,
             VoxelizedMarkMemo mark2,
-            ImageDimensions dimensions,
+            Dimensions dimensions,
             Optional<FeatureCalculatorMulti<FeatureInputPairMemo>> session,
             boolean do3D)
             throws IncludeMarksFailureException;

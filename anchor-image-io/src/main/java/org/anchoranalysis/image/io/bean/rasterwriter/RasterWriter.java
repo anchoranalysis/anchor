@@ -31,8 +31,8 @@ import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.generator.raster.series.StackSeries;
 import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.image.voxel.datatype.UnsignedByte;
-import org.anchoranalysis.image.voxel.datatype.UnsignedShort;
+import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
+import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
 
 public abstract class RasterWriter extends AnchorBean<RasterWriter> {
 
@@ -44,9 +44,9 @@ public abstract class RasterWriter extends AnchorBean<RasterWriter> {
 
     public void writeStack(Stack stack, Path filePath, boolean makeRGB) throws RasterIOException {
 
-        if (stack.allChannelsHaveType(UnsignedByte.INSTANCE)) {
+        if (stack.allChannelsHaveType(UnsignedByteVoxelType.INSTANCE)) {
             writeStackByte((Stack) stack, filePath, makeRGB);
-        } else if (stack.allChannelsHaveType(UnsignedShort.INSTANCE)) {
+        } else if (stack.allChannelsHaveType(UnsignedShortVoxelType.INSTANCE)) {
             writeStackShort((Stack) stack, filePath, makeRGB);
         } else {
             throw new RasterIOException(

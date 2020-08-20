@@ -42,8 +42,8 @@ import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.core.unit.SpatialConversionUtilities.UnitSuffix;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.ImageDimensions;
-import org.anchoranalysis.image.extent.ImageResolution;
+import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.object.properties.ObjectWithProperties;
 import org.anchoranalysis.image.scale.ScaleFactor;
 
@@ -94,9 +94,9 @@ public abstract class Mark implements Serializable, Identifiable {
     // center point
     public abstract Point3d centerPoint();
 
-    public abstract BoundingBox box(ImageDimensions dimensions, int regionID);
+    public abstract BoundingBox box(Dimensions dimensions, int regionID);
 
-    public abstract BoundingBox boxAllRegions(ImageDimensions dimensions);
+    public abstract BoundingBox boxAllRegions(Dimensions dimensions);
 
     protected byte evalPointInside(Point3i point) {
         return this.isPointInside(PointConverter.doubleFromInt(point));
@@ -127,7 +127,7 @@ public abstract class Mark implements Serializable, Identifiable {
      * @return
      */
     public ObjectWithProperties deriveObject(
-            ImageDimensions dimensions, RegionMembershipWithFlags rm, BinaryValuesByte bv) {
+            Dimensions dimensions, RegionMembershipWithFlags rm, BinaryValuesByte bv) {
 
         BoundingBox box = this.box(dimensions, rm.getRegionID());
 
@@ -162,7 +162,7 @@ public abstract class Mark implements Serializable, Identifiable {
 
     // Calculates the mask of an object
     public ObjectWithProperties maskScaledXY(
-            ImageDimensions bndScene,
+            Dimensions bndScene,
             RegionMembershipWithFlags rm,
             BinaryValuesByte bvOut,
             double scaleFactor) {
@@ -218,7 +218,7 @@ public abstract class Mark implements Serializable, Identifiable {
         this.id = id;
     }
 
-    public OverlayProperties generateProperties(ImageResolution res) {
+    public OverlayProperties generateProperties(Resolution res) {
 
         OverlayProperties nvc = new OverlayProperties();
         nvc.add("Type", getName());
@@ -231,7 +231,7 @@ public abstract class Mark implements Serializable, Identifiable {
         return nvc;
     }
 
-    private void addPropertiesForRegions(OverlayProperties nvc, ImageResolution res) {
+    private void addPropertiesForRegions(OverlayProperties nvc, Resolution res) {
         for (int r = 0; r < numberRegions(); r++) {
             double vol = volume(r);
 

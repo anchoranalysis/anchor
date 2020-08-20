@@ -37,7 +37,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 
 public class AddCriteriaOr extends AddCriteriaPair {
 
@@ -49,7 +49,7 @@ public class AddCriteriaOr extends AddCriteriaPair {
     public boolean includeMarks(
             VoxelizedMarkMemo mark1,
             VoxelizedMarkMemo mark2,
-            ImageDimensions dimensions,
+            Dimensions dimensions,
             Optional<FeatureCalculatorMulti<FeatureInputPairMemo>> session,
             boolean do3D)
             throws IncludeMarksFailureException {

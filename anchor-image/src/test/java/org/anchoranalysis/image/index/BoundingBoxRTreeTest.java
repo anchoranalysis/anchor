@@ -4,8 +4,8 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.Arrays;
 import java.util.List;
-import org.anchoranalysis.image.BoundingBoxFixture;
 import org.anchoranalysis.image.extent.BoundingBox;
+import org.anchoranalysis.image.extent.BoundingBoxFixture;
 import org.junit.Before;
 import org.junit.Test;
 

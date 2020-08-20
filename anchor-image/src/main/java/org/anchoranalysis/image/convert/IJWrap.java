@@ -43,8 +43,8 @@ import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.channel.factory.ChannelFactorySingleType;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.extent.ImageDimensions;
-import org.anchoranalysis.image.extent.ImageResolution;
+import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
 import org.anchoranalysis.image.voxel.Voxels;
@@ -52,10 +52,10 @@ import org.anchoranalysis.image.voxel.VoxelsWrapper;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferByte;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferShort;
-import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelDataTypeException;
+import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelTypeException;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
-import org.anchoranalysis.image.voxel.datatype.UnsignedByte;
-import org.anchoranalysis.image.voxel.datatype.UnsignedShort;
+import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
+import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 import org.anchoranalysis.image.voxel.pixelsforslice.PixelsForSlice;
 
@@ -68,14 +68,14 @@ public class IJWrap {
     /** A multiplication-factor to convert microns to meters */
     private static final int MICRONS_TO_METERS = 1000000;
 
-    private static final VoxelDataType DATA_TYPE_BYTE = UnsignedByte.INSTANCE;
-    private static final VoxelDataType DATA_TYPE_SHORT = UnsignedShort.INSTANCE;
+    private static final VoxelDataType DATA_TYPE_BYTE = UnsignedByteVoxelType.INSTANCE;
+    private static final VoxelDataType DATA_TYPE_SHORT = UnsignedShortVoxelType.INSTANCE;
 
     public static Channel chnlFromImageStackByte(
-            ImageStack imageStack, ImageResolution res, ChannelFactorySingleType factory) {
+            ImageStack imageStack, Resolution res, ChannelFactorySingleType factory) {
 
-        ImageDimensions dimensions =
-                new ImageDimensions(
+        Dimensions dimensions =
+                new Dimensions(
                         new Extent(
                                 imageStack.getWidth(),
                                 imageStack.getHeight(),
@@ -89,12 +89,12 @@ public class IJWrap {
         return chnlOut;
     }
 
-    public static Channel chnlFromImagePlus(ImagePlus imagePlus, ImageResolution res) {
+    public static Channel chnlFromImagePlus(ImagePlus imagePlus, Resolution res) {
 
         ChannelFactory factory = ChannelFactory.instance();
 
-        ImageDimensions dimensions =
-                new ImageDimensions(
+        Dimensions dimensions =
+                new Dimensions(
                         new Extent(
                                 imagePlus.getWidth(),
                                 imagePlus.getHeight(),
@@ -103,12 +103,12 @@ public class IJWrap {
 
         if (imagePlus.getType() == ImagePlus.GRAY8) {
             return chnlFromImagePlusByte(
-                    imagePlus, dimensions, factory.get(UnsignedByte.INSTANCE));
+                    imagePlus, dimensions, factory.get(UnsignedByteVoxelType.INSTANCE));
         } else if (imagePlus.getType() == ImagePlus.GRAY16) {
             return chnlFromImagePlusShort(
-                    imagePlus, dimensions, factory.get(UnsignedShort.INSTANCE));
+                    imagePlus, dimensions, factory.get(UnsignedShortVoxelType.INSTANCE));
         } else {
-            throw new IncorrectVoxelDataTypeException(
+            throw new IncorrectVoxelTypeException(
                     "Only unsigned-8 and unsigned 16bit supported");
         }
     }
@@ -120,7 +120,7 @@ public class IJWrap {
         } else if (imagePlus.getType() == ImagePlus.GRAY16) {
             return new VoxelsWrapper(voxelsFromImagePlusShort(imagePlus));
         } else {
-            throw new IncorrectVoxelDataTypeException(
+            throw new IncorrectVoxelTypeException(
                     "Only unsigned-8 and unsigned 16bit supported");
         }
     }
@@ -164,7 +164,7 @@ public class IJWrap {
         } else if (voxels.getVoxelDataType().equals(DATA_TYPE_SHORT)) {
             return imageProcessorShort(voxels.asShort().slices(), z);
         } else {
-            throw new IncorrectVoxelDataTypeException(
+            throw new IncorrectVoxelTypeException(
                     "Only byte or short data types are supported");
         }
     }
@@ -195,7 +195,7 @@ public class IJWrap {
         ImageStack stackNew = createStackForVoxels(voxels);
         return createImagePlus(
                 stackNew,
-                new ImageDimensions(voxels.any().extent(), new ImageResolution()),
+                new Dimensions(voxels.any().extent(), new Resolution()),
                 1,
                 1,
                 false);
@@ -208,7 +208,7 @@ public class IJWrap {
 
     public static ImagePlus createImagePlus(Stack stack, boolean makeRGB) {
 
-        ImageDimensions dimensions = stack.getChannel(0).dimensions();
+        Dimensions dimensions = stack.getChannel(0).dimensions();
 
         // If we're making an RGB then we need to convert our stack
 
@@ -230,7 +230,7 @@ public class IJWrap {
 
     public static ImagePlus createImagePlus(
             ImageStack stack,
-            ImageDimensions dimensions,
+            Dimensions dimensions,
             int numberChannels,
             int numberFrames,
             boolean makeComposite) {
@@ -269,7 +269,7 @@ public class IJWrap {
     // separate RGB channels
     public static ImageStack createColorProcessorStack(RGBStack stack) {
 
-        ImageDimensions dimensions = stack.channelAt(0).dimensions();
+        Dimensions dimensions = stack.channelAt(0).dimensions();
 
         ImageStack stackNew = new ImageStack(dimensions.x(), dimensions.y());
 
@@ -304,7 +304,7 @@ public class IJWrap {
     }
 
     private static Channel chnlFromImagePlusByte(
-            ImagePlus imagePlus, ImageDimensions dimensions, ChannelFactorySingleType factory) {
+            ImagePlus imagePlus, Dimensions dimensions, ChannelFactorySingleType factory) {
 
         Channel chnlOut = factory.createEmptyUninitialised(dimensions);
         Voxels<ByteBuffer> voxelsOut = chnlOut.voxels().asByte();
@@ -327,7 +327,7 @@ public class IJWrap {
     }
 
     private static Channel chnlFromImagePlusShort(
-            ImagePlus imagePlus, ImageDimensions dimensions, ChannelFactorySingleType factory) {
+            ImagePlus imagePlus, Dimensions dimensions, ChannelFactorySingleType factory) {
 
         Channel chnlOut = factory.createEmptyUninitialised(dimensions);
 

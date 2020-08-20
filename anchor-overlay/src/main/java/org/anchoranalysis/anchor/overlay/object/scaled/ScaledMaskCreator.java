@@ -29,7 +29,7 @@ package org.anchoranalysis.anchor.overlay.object.scaled;
 import org.anchoranalysis.anchor.overlay.writer.DrawOverlay;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.object.properties.ObjectWithProperties;
 
 /**
@@ -56,7 +56,7 @@ public interface ScaledMaskCreator {
             ObjectWithProperties unscaled,
             double scaleFactor,
             Object originalObject,
-            ImageDimensions dimensionsScaled,
+            Dimensions dimensionsScaled,
             BinaryValuesByte bv)
             throws CreateException;
 }

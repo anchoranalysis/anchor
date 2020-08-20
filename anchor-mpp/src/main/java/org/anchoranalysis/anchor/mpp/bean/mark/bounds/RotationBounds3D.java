@@ -32,7 +32,7 @@ import org.anchoranalysis.anchor.mpp.bean.bound.Bound;
 import org.anchoranalysis.anchor.mpp.bean.bound.BoundUnitless;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
-import org.anchoranalysis.image.extent.ImageResolution;
+import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.orientation.Orientation;
 import org.anchoranalysis.image.orientation.Orientation3DEulerAngles;
 
@@ -55,7 +55,7 @@ public class RotationBounds3D extends RotationBounds {
 
     @Override
     public Orientation randomOrientation(
-            RandomNumberGenerator randomNumberGenerator, ImageResolution res) {
+            RandomNumberGenerator randomNumberGenerator, Resolution res) {
         return new Orientation3DEulerAngles(
                 randomizeRot(rotationX, randomNumberGenerator, res),
                 randomizeRot(rotationY, randomNumberGenerator, res),
@@ -70,7 +70,7 @@ public class RotationBounds3D extends RotationBounds {
     }
 
     private static double randomizeRot(
-            Bound bound, RandomNumberGenerator randomNumberGenerator, ImageResolution res) {
+            Bound bound, RandomNumberGenerator randomNumberGenerator, Resolution res) {
         return bound.resolve(res, true).randOpen(randomNumberGenerator);
     }
 }

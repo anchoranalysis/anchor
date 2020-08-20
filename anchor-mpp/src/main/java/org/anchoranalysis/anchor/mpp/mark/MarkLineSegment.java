@@ -32,7 +32,7 @@ import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.PointConverter;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.points.BoundingBoxFromPoints;
 
 @NoArgsConstructor
@@ -76,7 +76,7 @@ public class MarkLineSegment extends Mark {
     }
 
     @Override
-    public BoundingBox box(ImageDimensions dimensions, int regionID) {
+    public BoundingBox box(Dimensions dimensions, int regionID) {
         return BoundingBoxFromPoints.forTwoPoints(
                 distanceCalcToLine.getStartPoint(), distanceCalcToLine.getEndPoint());
     }
@@ -152,7 +152,7 @@ public class MarkLineSegment extends Mark {
     }
 
     @Override
-    public BoundingBox boxAllRegions(ImageDimensions dimensions) {
+    public BoundingBox boxAllRegions(Dimensions dimensions) {
         return box(dimensions, GlobalRegionIdentifiers.SUBMARK_INSIDE);
     }
 }

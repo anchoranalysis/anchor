@@ -40,7 +40,7 @@ import org.anchoranalysis.core.idgetter.IDGetterIter;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.object.properties.IDGetterObjectWithProperties;
 import org.anchoranalysis.image.object.properties.ObjectWithProperties;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
@@ -78,7 +78,7 @@ public abstract class DrawOverlay {
     //
     private void writeOverlays(
             ColoredOverlayCollection overlays,
-            ImageDimensions dimensions,
+            Dimensions dimensions,
             RGBStack background,
             IDGetter<Overlay> idGetter,
             BoundingBox boxContainer)
@@ -105,7 +105,7 @@ public abstract class DrawOverlay {
     // dim should be for the ENTIRE cfg, not just the bit in boxContainer
     public abstract void writePrecalculatedOverlays(
             List<PrecalculationOverlay> precalculatedMasks,
-            ImageDimensions dimensions,
+            Dimensions dimensions,
             RGBStack background,
             ObjectDrawAttributes attributes,
             BoundingBox restrictTo)
@@ -125,7 +125,7 @@ public abstract class DrawOverlay {
     public static List<PrecalculationOverlay> precalculate(
             ColoredOverlayCollection coc,
             DrawOverlay drawOverlay,
-            ImageDimensions dimensions,
+            Dimensions dimensions,
             BinaryValuesByte bvOut)
             throws CreateException {
 
@@ -147,7 +147,7 @@ public abstract class DrawOverlay {
     }
 
     public static PrecalculationOverlay createPrecalc(
-            DrawOverlay drawOverlay, ObjectWithProperties object, ImageDimensions dimensions)
+            DrawOverlay drawOverlay, ObjectWithProperties object, Dimensions dimensions)
             throws CreateException {
         return drawOverlay.getDrawObject().precalculate(object, dimensions);
     }

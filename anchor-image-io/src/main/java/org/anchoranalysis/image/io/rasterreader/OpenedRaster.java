@@ -29,7 +29,7 @@ package org.anchoranalysis.image.io.rasterreader;
 import java.util.List;
 import java.util.Optional;
 import org.anchoranalysis.core.progress.ProgressReporter;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.stack.TimeSequence;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
@@ -69,5 +69,5 @@ public interface OpenedRaster extends AutoCloseable {
 
     void close() throws RasterIOException;
 
-    ImageDimensions dimensionsForSeries(int seriesIndex) throws RasterIOException;
+    Dimensions dimensionsForSeries(int seriesIndex) throws RasterIOException;
 }

@@ -27,13 +27,13 @@
 package org.anchoranalysis.io.bioformats.copyconvert.tofloat;
 
 import org.anchoranalysis.image.convert.ByteConverter;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 
 public class FloatFrom8Bit extends ConvertToFloat {
 
     @Override
     protected float[] convertIntegerBytesToFloatArray(
-            ImageDimensions dimensions, byte[] src, int srcOffset) {
+            Dimensions dimensions, byte[] src, int srcOffset) {
 
         float[] fArr = new float[dimensions.x() * dimensions.y()];
 

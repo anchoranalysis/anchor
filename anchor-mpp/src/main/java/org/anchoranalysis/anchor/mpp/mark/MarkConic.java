@@ -28,7 +28,7 @@ package org.anchoranalysis.anchor.mpp.mark;
 
 import java.util.Arrays;
 import org.anchoranalysis.core.geometry.Point3d;
-import org.anchoranalysis.image.extent.ImageResolution;
+import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.orientation.Orientation;
 
 public abstract class MarkConic extends MarkAbstractPosition {
@@ -44,7 +44,7 @@ public abstract class MarkConic extends MarkAbstractPosition {
         super(src);
     }
 
-    public abstract double[] createRadiiArrayResolved(ImageResolution sr);
+    public abstract double[] createRadiiArrayResolved(Resolution sr);
 
     public abstract double[] createRadiiArray();
 
@@ -54,7 +54,7 @@ public abstract class MarkConic extends MarkAbstractPosition {
 
     public abstract void setMarksExplicit(Point3d pos);
 
-    public double[] radiiOrderedResolved(ImageResolution sr) {
+    public double[] radiiOrderedResolved(Resolution sr) {
         double[] radii = createRadiiArrayResolved(sr);
         Arrays.sort(radii);
         return radii;

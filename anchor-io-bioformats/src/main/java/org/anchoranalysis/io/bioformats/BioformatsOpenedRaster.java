@@ -39,7 +39,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactorySingleType;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
@@ -140,7 +140,7 @@ public class BioformatsOpenedRaster implements OpenedRaster {
     }
 
     @Override
-    public ImageDimensions dimensionsForSeries(int seriesIndex) {
+    public Dimensions dimensionsForSeries(int seriesIndex) {
         return new DimensionsCreator(lociMetadata).apply(reader, readOptions, seriesIndex);
     }
 
@@ -158,7 +158,7 @@ public class BioformatsOpenedRaster implements OpenedRaster {
 
             TimeSequence ts = new TimeSequence();
 
-            ImageDimensions dimensions = dimensionsForSeries(seriesIndex);
+            Dimensions dimensions = dimensionsForSeries(seriesIndex);
 
             // Assumes order of time first, and then channels
             List<Channel> listAllChnls =
@@ -179,7 +179,7 @@ public class BioformatsOpenedRaster implements OpenedRaster {
     }
 
     private List<Channel> createUninitialisedChnls(
-            ImageDimensions dimensions, TimeSequence ts, ChannelFactorySingleType factory)
+            Dimensions dimensions, TimeSequence ts, ChannelFactorySingleType factory)
             throws IncorrectImageSizeException {
 
         /** A list of all channels i.e. aggregating the channels associated with each stack */
@@ -202,7 +202,7 @@ public class BioformatsOpenedRaster implements OpenedRaster {
 
     private void copyBytesIntoChnls(
             List<Channel> listChnls,
-            ImageDimensions dimensions,
+            Dimensions dimensions,
             ProgressReporter progressReporter,
             VoxelDataType dataType,
             ReadOptions readOptions)

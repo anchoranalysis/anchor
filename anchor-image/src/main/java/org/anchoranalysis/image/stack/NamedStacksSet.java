@@ -38,7 +38,7 @@ import org.anchoranalysis.core.name.provider.NamedProvider;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
 import org.anchoranalysis.core.name.store.StoreSupplier;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 
 /**
  * A set of image-stacks each with a name
@@ -96,7 +96,7 @@ public class NamedStacksSet implements NamedProviderStore<Stack> {
 
     /** Applies an operation on each stack in the collection and returns a new derived collection */
     public NamedStacksSet applyOperation(
-            ImageDimensions dimensions, UnaryOperator<Stack> stackOperation)
+            Dimensions dimensions, UnaryOperator<Stack> stackOperation)
             throws OperationFailedException {
 
         NamedStacksSet out = new NamedStacksSet();

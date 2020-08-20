@@ -68,7 +68,6 @@ public class PixelsFromShortBufferArr implements PixelsForSlice<ShortBuffer> {
     public void replaceSlice(int z, VoxelBuffer<ShortBuffer> pixels) {
         pixels.buffer().clear();
         buffer[z] = pixels;
-        assert (pixels.buffer().array().length == extent.volumeXY());
     }
 
     @Override

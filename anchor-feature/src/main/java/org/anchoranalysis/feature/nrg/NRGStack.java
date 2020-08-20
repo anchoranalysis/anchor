@@ -32,7 +32,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.OperationFailedRuntimeException;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.stack.Stack;
 
 /**
@@ -46,7 +46,7 @@ import org.anchoranalysis.image.stack.Stack;
 public class NRGStack {
 
     /** Either stack to delegate or dimensions (as they cannot be inferred from a stack) */
-    private final Either<ImageDimensions, Stack> container;
+    private final Either<Dimensions, Stack> container;
 
     /**
      * Create a nrg-stack comprised of a single channel
@@ -71,7 +71,7 @@ public class NRGStack {
      *
      * @param dimensions
      */
-    public NRGStack(ImageDimensions dimensions) {
+    public NRGStack(Dimensions dimensions) {
         this.container = Either.left(dimensions);
     }
 
@@ -79,7 +79,7 @@ public class NRGStack {
         return container.map(Stack::getNumberChannels).getOrElseGet(dimensions -> 0);
     }
 
-    public ImageDimensions dimensions() {
+    public Dimensions dimensions() {
         return container.map(Stack::dimensions).getOrElseGet(Functions.identity());
     }
     

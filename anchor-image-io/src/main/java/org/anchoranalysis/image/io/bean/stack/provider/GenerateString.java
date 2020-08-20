@@ -34,18 +34,18 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.channel.converter.ChannelConverter;
+import org.anchoranalysis.image.channel.converter.ChannelConverterToUnsignedShort;
+import org.anchoranalysis.image.channel.converter.ConversionPolicy;
+import org.anchoranalysis.image.channel.converter.voxels.ConvertToShortScaleByType;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.io.generator.raster.StringRasterGenerator;
 import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.image.stack.region.chnlconverter.ChannelConverter;
-import org.anchoranalysis.image.stack.region.chnlconverter.ChannelConverterToUnsignedShort;
-import org.anchoranalysis.image.stack.region.chnlconverter.ConversionPolicy;
-import org.anchoranalysis.image.stack.region.chnlconverter.voxelbox.ToShortScaleByType;
-import org.anchoranalysis.image.voxel.datatype.UnsignedByte;
-import org.anchoranalysis.image.voxel.datatype.UnsignedShort;
+import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
+import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 public class GenerateString extends StackProvider {
@@ -104,7 +104,7 @@ public class GenerateString extends StackProvider {
 
             if (createShort) {
                 ChannelConverter<ShortBuffer> cc =
-                        new ChannelConverterToUnsignedShort(new ToShortScaleByType());
+                        new ChannelConverterToUnsignedShort(new ConvertToShortScaleByType());
 
                 stack = cc.convert(stack, ConversionPolicy.CHANGE_EXISTING_CHANNEL);
             }
@@ -112,8 +112,8 @@ public class GenerateString extends StackProvider {
             if (intensityProvider != null) {
                 int maxTypeValue =
                         createShort
-                                ? UnsignedShort.MAX_VALUE_INT
-                                : UnsignedByte.MAX_VALUE_INT;
+                                ? UnsignedShortVoxelType.MAX_VALUE_INT
+                                : UnsignedByteVoxelType.MAX_VALUE_INT;
 
                 Stack stackIntensity = intensityProvider.create();
                 double maxValue = maxValueFromStack(stackIntensity);
@@ -148,7 +148,7 @@ public class GenerateString extends StackProvider {
     }
 
     private Channel emptyChannelWithChangedZ(Channel channel, int zToAssign) {
-        ImageDimensions dimensionsChangedZ = channel.dimensions().duplicateChangeZ(zToAssign);
+        Dimensions dimensionsChangedZ = channel.dimensions().duplicateChangeZ(zToAssign);
         return ChannelFactory.instance().create(dimensionsChangedZ, channel.getVoxelDataType());
     }
 }

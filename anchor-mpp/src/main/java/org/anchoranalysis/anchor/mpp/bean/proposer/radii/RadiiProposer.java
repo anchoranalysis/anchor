@@ -32,7 +32,7 @@ import org.anchoranalysis.anchor.mpp.mark.CompatibleWithMark;
 import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.orientation.Orientation;
 
 public abstract class RadiiProposer extends MPPBean<RadiiProposer> implements CompatibleWithMark {
@@ -41,7 +41,7 @@ public abstract class RadiiProposer extends MPPBean<RadiiProposer> implements Co
     public abstract Optional<Point3d> propose(
             Point3d pos,
             RandomNumberGenerator randomNumberGenerator,
-            ImageDimensions dimensions,
+            Dimensions dimensions,
             Orientation orientation)
             throws ProposalAbnormalFailureException;
 }

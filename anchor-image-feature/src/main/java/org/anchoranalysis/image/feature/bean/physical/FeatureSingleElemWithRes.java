@@ -32,7 +32,7 @@ import org.anchoranalysis.feature.bean.operator.FeatureGenericSingleElem;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInputWithRes;
-import org.anchoranalysis.image.extent.ImageResolution;
+import org.anchoranalysis.image.extent.Resolution;
 
 @NoArgsConstructor
 public abstract class FeatureSingleElemWithRes<T extends FeatureInputWithRes>
@@ -50,6 +50,6 @@ public abstract class FeatureSingleElemWithRes<T extends FeatureInputWithRes>
         return calculateWithResolution(value, input.get().getResRequired());
     }
 
-    protected abstract double calculateWithResolution(double value, ImageResolution resolution)
+    protected abstract double calculateWithResolution(double value, Resolution resolution)
             throws FeatureCalculationException;
 }

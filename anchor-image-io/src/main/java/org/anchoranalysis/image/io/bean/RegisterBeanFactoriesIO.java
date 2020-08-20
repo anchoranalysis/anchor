@@ -32,7 +32,7 @@ import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.bean.xml.factory.IndirectlyFromListBeanFactory;
 import org.anchoranalysis.bean.xml.factory.ListBeanFactory;
 import org.anchoranalysis.image.bean.arrangeraster.ArrangeRasterCell;
-import org.anchoranalysis.image.io.chnl.map.CreateImgChnlMapFromEntries;
+import org.anchoranalysis.image.io.channel.NamedEntriesCreator;
 
 // An externally loadable component of the system
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -41,7 +41,7 @@ public final class RegisterBeanFactoriesIO {
     public static void registerBeanFactories() {
         RegisterBeanFactories.register(
                 "imgChnlMap",
-                new IndirectlyFromListBeanFactory<>(new CreateImgChnlMapFromEntries()));
+                new IndirectlyFromListBeanFactory<>(new NamedEntriesCreator()));
         RegisterBeanFactories.register(
                 "arrangeRasterCellList", new ListBeanFactory<ArrangeRasterCell>());
     }

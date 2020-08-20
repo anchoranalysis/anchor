@@ -30,7 +30,7 @@ import ij.ImagePlus;
 import ij.io.FileSaver;
 import java.nio.file.Path;
 import org.anchoranalysis.image.convert.IJWrap;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.bean.rasterwriter.RasterWriter;
 import org.anchoranalysis.image.stack.Stack;
@@ -80,7 +80,7 @@ public abstract class IJWriter extends RasterWriter {
 
         log.debug(String.format("Writing image %s", filePath));
 
-        ImageDimensions dimensions = stack.getChannel(0).dimensions();
+        Dimensions dimensions = stack.getChannel(0).dimensions();
 
         ImagePlus imp = IJWrap.createImagePlus(stack, makeRGB);
 

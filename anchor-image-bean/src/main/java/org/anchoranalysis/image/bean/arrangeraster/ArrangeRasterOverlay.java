@@ -35,7 +35,7 @@ import org.anchoranalysis.image.bean.nonbean.arrangeraster.ArrangeRasterExceptio
 import org.anchoranalysis.image.bean.nonbean.arrangeraster.BoundingBoxesOnPlane;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
 
 // Overlays one image on the other
@@ -62,7 +62,7 @@ public class ArrangeRasterOverlay extends ArrangeRasterBean {
         return getBeanName();
     }
 
-    private int positionHorizontal(BoundingBoxesOnPlane boxSet, ImageDimensions dimensions) {
+    private int positionHorizontal(BoundingBoxesOnPlane boxSet, Dimensions dimensions) {
 
         if (horizontalAlign.equalsIgnoreCase("left")) {
             return 0;
@@ -73,7 +73,7 @@ public class ArrangeRasterOverlay extends ArrangeRasterBean {
         }
     }
 
-    private int positionVertical(BoundingBoxesOnPlane boxSet, ImageDimensions dimensions) {
+    private int positionVertical(BoundingBoxesOnPlane boxSet, Dimensions dimensions) {
 
         if (verticalAlign.equalsIgnoreCase("top")) {
             return 0;
@@ -84,7 +84,7 @@ public class ArrangeRasterOverlay extends ArrangeRasterBean {
         }
     }
 
-    private int positionZ(BoundingBoxesOnPlane boxSet, ImageDimensions dimensions) {
+    private int positionZ(BoundingBoxesOnPlane boxSet, Dimensions dimensions) {
 
         if (zAlign.equalsIgnoreCase("bottom") || zAlign.equalsIgnoreCase("repeat")) {
             return 0;

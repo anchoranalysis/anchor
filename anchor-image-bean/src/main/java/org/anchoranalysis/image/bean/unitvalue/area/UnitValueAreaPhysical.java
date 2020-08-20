@@ -34,7 +34,7 @@ import org.anchoranalysis.core.unit.SpatialConversionUtilities;
 import org.anchoranalysis.core.unit.SpatialConversionUtilities.UnitSuffix;
 import org.anchoranalysis.image.bean.nonbean.error.UnitValueException;
 import org.anchoranalysis.image.convert.ImageUnitConverter;
-import org.anchoranalysis.image.extent.ImageResolution;
+import org.anchoranalysis.image.extent.Resolution;
 
 /**
  * Area expressed in physical coordinates
@@ -48,7 +48,7 @@ public class UnitValueAreaPhysical extends UnitValueArea {
     // END BEAN PROPERTIES
 
     @Override
-    public double resolveToVoxels(Optional<ImageResolution> resolution) throws UnitValueException {
+    public double resolveToVoxels(Optional<Resolution> resolution) throws UnitValueException {
 
         if (!resolution.isPresent()) {
             throw new UnitValueException(

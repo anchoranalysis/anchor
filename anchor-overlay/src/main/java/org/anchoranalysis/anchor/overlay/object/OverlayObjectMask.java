@@ -36,8 +36,8 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.ImageDimensions;
-import org.anchoranalysis.image.extent.ImageResolution;
+import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.properties.ObjectWithProperties;
 
@@ -59,7 +59,7 @@ public class OverlayObjectMask extends Overlay {
 
     // Assumes object-mask is always inside the dim. TODO verify that is valid.
     @Override
-    public BoundingBox box(DrawOverlay overlayWriter, ImageDimensions dim) {
+    public BoundingBox box(DrawOverlay overlayWriter, Dimensions dim) {
         return object.boundingBox();
     }
 
@@ -69,8 +69,8 @@ public class OverlayObjectMask extends Overlay {
             double zoomFactorNew,
             ObjectWithProperties om,
             Overlay ol,
-            ImageDimensions dimensionsUnscaled,
-            ImageDimensions dimensionsScaled,
+            Dimensions dimensionsUnscaled,
+            Dimensions dimensionsScaled,
             BinaryValuesByte bvOut)
             throws CreateException {
 
@@ -81,7 +81,7 @@ public class OverlayObjectMask extends Overlay {
     // TODO do we need to duplicate here?
     @Override
     public ObjectWithProperties createObject(
-            DrawOverlay overlayWriter, ImageDimensions dimEntireImage, BinaryValuesByte bvOut)
+            DrawOverlay overlayWriter, Dimensions dimEntireImage, BinaryValuesByte bvOut)
             throws CreateException {
         return object;
     }
@@ -113,7 +113,7 @@ public class OverlayObjectMask extends Overlay {
     }
 
     @Override
-    public OverlayProperties generateProperties(ImageResolution sr) {
+    public OverlayProperties generateProperties(Resolution sr) {
         // TODO take the properties from the object-mask
         OverlayProperties out = new OverlayProperties();
         out.add("id", id);

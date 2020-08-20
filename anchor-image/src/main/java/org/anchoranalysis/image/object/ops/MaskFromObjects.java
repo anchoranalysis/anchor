@@ -36,7 +36,7 @@ import org.anchoranalysis.image.binary.mask.MaskFactory;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.Voxels;
@@ -51,14 +51,14 @@ public class MaskFromObjects {
 
     /** We look for space IN objects, and create channel to display it */
     public static Mask createFromObjects(
-            ObjectCollection objects, ImageDimensions dimensions, BinaryValues outVal) {
+            ObjectCollection objects, Dimensions dimensions, BinaryValues outVal) {
         return createFromObjectsWithValues(
                 objects, dimensions, outVal, outVal.getOffInt(), outVal.createByte().getOnByte());
     }
 
     /** We look for space NOT in the objects, and create channel to display it */
     public static Mask createFromNotObjects(
-            ObjectCollection objects, ImageDimensions dimensions, BinaryValues outVal) {
+            ObjectCollection objects, Dimensions dimensions, BinaryValues outVal) {
         return createFromObjectsWithValues(
                 objects, dimensions, outVal, outVal.getOnInt(), outVal.createByte().getOffByte());
     }
@@ -76,7 +76,7 @@ public class MaskFromObjects {
      */
     private static Mask createFromObjectsWithValues(
             ObjectCollection objects,
-            ImageDimensions dimensions,
+            Dimensions dimensions,
             BinaryValues binaryValuesToOutput,
             int valueNotObjects,
             byte valueObjects) {

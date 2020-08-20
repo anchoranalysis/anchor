@@ -39,7 +39,7 @@ import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.PointConverter;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.orientation.Orientation2D;
 import org.anchoranalysis.image.points.BoundingBoxFromPoints;
 import org.anchoranalysis.math.rotation.RotationMatrix;
@@ -119,7 +119,7 @@ public class MarkRotatableBoundingBox extends MarkAbstractPosition {
     }
 
     @Override
-    public BoundingBox boxAllRegions(ImageDimensions dimensions) {
+    public BoundingBox boxAllRegions(Dimensions dimensions) {
 
         Point3d[] points =
                 new Point3d[] {
@@ -138,7 +138,7 @@ public class MarkRotatableBoundingBox extends MarkAbstractPosition {
     }
 
     @Override
-    public BoundingBox box(ImageDimensions dimensions, int regionID) {
+    public BoundingBox box(Dimensions dimensions, int regionID) {
         return boxAllRegions(dimensions);
     }
 

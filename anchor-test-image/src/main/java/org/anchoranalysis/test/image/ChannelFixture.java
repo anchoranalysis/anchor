@@ -30,9 +30,9 @@ import java.nio.Buffer;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactoryByte;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
-import org.anchoranalysis.image.voxel.datatype.UnsignedByte;
+import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 
 public class ChannelFixture {
 
@@ -68,7 +68,7 @@ public class ChannelFixture {
 
     public static Channel createChannel(Extent e, IntensityFunction createIntensity) {
 
-        ImageDimensions dimensions = new ImageDimensions(e, ImageResFixture.INSTANCE);
+        Dimensions dimensions = new Dimensions(e, ImageResFixture.INSTANCE);
 
         Channel channel = new ChannelFactoryByte().createEmptyInitialised(dimensions);
 
@@ -90,6 +90,6 @@ public class ChannelFixture {
 
     // Finds modulus of a number with the maximum byte value (+1)
     private static int mod(int num) {
-        return Math.floorMod(num, UnsignedByte.MAX_VALUE_INT + 1);
+        return Math.floorMod(num, UnsignedByteVoxelType.MAX_VALUE_INT + 1);
     }
 }

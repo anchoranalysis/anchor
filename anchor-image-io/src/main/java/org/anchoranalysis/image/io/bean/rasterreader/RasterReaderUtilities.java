@@ -55,7 +55,7 @@ public class RasterReaderUtilities {
         }
     }
 
-    public static Mask openBinaryChnl(RasterReader rasterReader, Path path, BinaryValues bv)
+    public static Mask openMask(RasterReader rasterReader, Path path, BinaryValues bv)
             throws RasterIOException {
 
         Stack stack = openStackFromPath(rasterReader, path);

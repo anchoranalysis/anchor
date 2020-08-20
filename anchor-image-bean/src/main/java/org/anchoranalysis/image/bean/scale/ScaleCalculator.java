@@ -29,11 +29,11 @@ package org.anchoranalysis.image.bean.scale;
 import java.util.Optional;
 import org.anchoranalysis.bean.NullParamsBean;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.scale.ScaleFactor;
 
 public abstract class ScaleCalculator extends NullParamsBean<ScaleCalculator> {
 
-    public abstract ScaleFactor calculate(Optional<ImageDimensions> sourceDimensions)
+    public abstract ScaleFactor calculate(Optional<Dimensions> sourceDimensions)
             throws OperationFailedException;
 }

@@ -37,12 +37,12 @@ public class CombineTypes {
             throws CreateException {
         if (type1.equals(type2)) {
             return type1;
-        } else if (type1.equals(UnsignedByte.INSTANCE)
-                && type2.equals(UnsignedShort.INSTANCE)) {
-            return UnsignedShort.INSTANCE;
-        } else if (type2.equals(UnsignedByte.INSTANCE)
-                && type1.equals(UnsignedShort.INSTANCE)) {
-            return UnsignedShort.INSTANCE;
+        } else if (type1.equals(UnsignedByteVoxelType.INSTANCE)
+                && type2.equals(UnsignedShortVoxelType.INSTANCE)) {
+            return UnsignedShortVoxelType.INSTANCE;
+        } else if (type2.equals(UnsignedByteVoxelType.INSTANCE)
+                && type1.equals(UnsignedShortVoxelType.INSTANCE)) {
+            return UnsignedShortVoxelType.INSTANCE;
         } else {
             throw new CreateException("Only combinations of byte and short are supported");
         }

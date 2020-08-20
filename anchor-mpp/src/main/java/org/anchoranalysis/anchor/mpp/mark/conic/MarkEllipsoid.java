@@ -44,8 +44,8 @@ import org.anchoranalysis.anchor.mpp.mark.QuickOverlapCalculation;
 import org.anchoranalysis.anchor.overlay.OverlayProperties;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.ImageDimensions;
-import org.anchoranalysis.image.extent.ImageResolution;
+import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.orientation.Orientation;
 import org.anchoranalysis.image.orientation.Orientation3DEulerAngles;
 
@@ -249,7 +249,7 @@ public class MarkEllipsoid extends MarkConic implements Serializable {
     }
 
     @Override
-    public BoundingBox box(ImageDimensions dimensions, int regionID) {
+    public BoundingBox box(Dimensions dimensions, int regionID) {
 
         DoubleMatrix1D s = ellipsoidCalculator.getBoundingBoxMatrix().copy();
 
@@ -332,7 +332,7 @@ public class MarkEllipsoid extends MarkConic implements Serializable {
     }
 
     @Override
-    public double[] createRadiiArrayResolved(ImageResolution sr) {
+    public double[] createRadiiArrayResolved(Resolution sr) {
         return EllipsoidUtilities.normalisedRadii(this, sr);
     }
 
@@ -378,7 +378,7 @@ public class MarkEllipsoid extends MarkConic implements Serializable {
     }
 
     @Override
-    public OverlayProperties generateProperties(ImageResolution sr) {
+    public OverlayProperties generateProperties(Resolution sr) {
         OverlayProperties op = super.generateProperties(sr);
 
         op.addDoubleAsString("Radius X (pixels)", radii.x());
@@ -403,7 +403,7 @@ public class MarkEllipsoid extends MarkConic implements Serializable {
     }
 
     @Override
-    public BoundingBox boxAllRegions(ImageDimensions dimensions) {
+    public BoundingBox boxAllRegions(Dimensions dimensions) {
         return box(dimensions, GlobalRegionIdentifiers.SUBMARK_OUTSIDE);
     }
 

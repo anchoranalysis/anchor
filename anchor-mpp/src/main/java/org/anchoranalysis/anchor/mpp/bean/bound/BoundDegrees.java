@@ -27,7 +27,7 @@
 package org.anchoranalysis.anchor.mpp.bean.bound;
 
 import org.anchoranalysis.core.unit.AngleConversionUtilities;
-import org.anchoranalysis.image.extent.ImageResolution;
+import org.anchoranalysis.image.extent.Resolution;
 
 //
 //  An upper and lower bound in degrees which is converted
@@ -47,12 +47,12 @@ public class BoundDegrees extends BoundMinMax {
     }
 
     @Override
-    public double getMinResolved(ImageResolution sr, boolean do3D) {
+    public double getMinResolved(Resolution sr, boolean do3D) {
         return AngleConversionUtilities.convertDegreesToRadians(getMin());
     }
 
     @Override
-    public double getMaxResolved(ImageResolution sr, boolean do3D) {
+    public double getMaxResolved(Resolution sr, boolean do3D) {
         return AngleConversionUtilities.convertDegreesToRadians(getMax());
     }
 

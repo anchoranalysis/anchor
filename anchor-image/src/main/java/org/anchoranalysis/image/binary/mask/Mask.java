@@ -40,8 +40,8 @@ import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.channel.factory.ChannelFactorySingleType;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.extent.ImageDimensions;
-import org.anchoranalysis.image.extent.ImageResolution;
+import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.interpolator.Interpolator;
 import org.anchoranalysis.image.interpolator.InterpolatorFactory;
@@ -50,8 +50,8 @@ import org.anchoranalysis.image.scale.ScaleFactor;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.VoxelsPredicate;
 import org.anchoranalysis.image.voxel.assigner.VoxelsAssigner;
-import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelDataTypeException;
-import org.anchoranalysis.image.voxel.datatype.UnsignedByte;
+import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelTypeException;
+import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.image.voxel.thresholder.VoxelsThresholder;
 
 /**
@@ -65,7 +65,7 @@ import org.anchoranalysis.image.voxel.thresholder.VoxelsThresholder;
 public class Mask {
 
     private static final ChannelFactorySingleType FACTORY =
-            ChannelFactory.instance().get(UnsignedByte.INSTANCE);
+            ChannelFactory.instance().get(UnsignedByteVoxelType.INSTANCE);
 
     /**
      * The underlying channel which contains the binary-values. It is always has data-type of
@@ -118,9 +118,9 @@ public class Mask {
         this.binaryValues = binaryValues;
         this.binaryValuesByte = binaryValues.createByte();
 
-        if (!channel.getVoxelDataType().equals(UnsignedByte.INSTANCE)) {
-            throw new IncorrectVoxelDataTypeException(
-                    "Only unsigned 8-bit data type is supported for BinaryChnl");
+        if (!channel.getVoxelDataType().equals(UnsignedByteVoxelType.INSTANCE)) {
+            throw new IncorrectVoxelTypeException(
+                    "Only unsigned 8-bit data type is supported for mask");
         }
 
         this.interpolator = createInterpolator(binaryValues);
@@ -132,7 +132,7 @@ public class Mask {
      * @param voxels the binary-voxels to be reused as the internal buffer of the mask
      */
     public Mask(BinaryVoxels<ByteBuffer> voxels) {
-        this(voxels, new ImageResolution());
+        this(voxels, new Resolution());
     }
 
     /**
@@ -141,7 +141,7 @@ public class Mask {
      * @param voxels the binary-voxels to be reused as the internal buffer of the mask
      * @param resolution the image-resolution to assign
      */
-    public Mask(BinaryVoxels<ByteBuffer> voxels, ImageResolution resolution) {
+    public Mask(BinaryVoxels<ByteBuffer> voxels, Resolution resolution) {
         this.channel = FACTORY.create(voxels.voxels(), resolution);
         this.binaryValues = voxels.binaryValues();
         this.binaryValuesByte = binaryValues.createByte();
@@ -158,19 +158,19 @@ public class Mask {
      * @param dimensions the dimensions for the newly-created mask
      * @param binaryValues the binary-values to use for the newly created mask
      */
-    public Mask(ImageDimensions dimensions, BinaryValues binaryValues) {
+    public Mask(Dimensions dimensions, BinaryValues binaryValues) {
         this(FACTORY.createEmptyInitialised(dimensions), binaryValues);
     }
 
-    public ImageDimensions dimensions() {
+    public Dimensions dimensions() {
         return channel.dimensions();
     }
 
     public Voxels<ByteBuffer> voxels() {
         try {
             return channel.voxels().asByte();
-        } catch (IncorrectVoxelDataTypeException e) {
-            throw new IncorrectVoxelDataTypeException(
+        } catch (IncorrectVoxelTypeException e) {
+            throw new IncorrectVoxelTypeException(
                     "Associated imgChnl does contain have unsigned 8-bit data (byte)");
         }
     }

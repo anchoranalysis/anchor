@@ -33,9 +33,9 @@ import org.anchoranalysis.image.interpolator.transfer.Transfer;
 import org.anchoranalysis.image.interpolator.transfer.TransferViaByte;
 import org.anchoranalysis.image.interpolator.transfer.TransferViaShort;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
-import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelDataTypeException;
-import org.anchoranalysis.image.voxel.datatype.UnsignedByte;
-import org.anchoranalysis.image.voxel.datatype.UnsignedShort;
+import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelTypeException;
+import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
+import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
 import com.google.common.base.Preconditions;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -44,16 +44,16 @@ public class InterpolateUtilities {
     private static Transfer createTransfer(VoxelsWrapper source, VoxelsWrapper destination) {
 
         if (!source.getVoxelDataType().equals(destination.getVoxelDataType())) {
-            throw new IncorrectVoxelDataTypeException(
+            throw new IncorrectVoxelTypeException(
                     "Data types don't match between source and destination");
         }
 
-        if (source.getVoxelDataType().equals(UnsignedByte.INSTANCE)) {
+        if (source.getVoxelDataType().equals(UnsignedByteVoxelType.INSTANCE)) {
             return new TransferViaByte(source, destination);
-        } else if (source.getVoxelDataType().equals(UnsignedShort.INSTANCE)) {
+        } else if (source.getVoxelDataType().equals(UnsignedShortVoxelType.INSTANCE)) {
             return new TransferViaShort(source, destination);
         } else {
-            throw new IncorrectVoxelDataTypeException("Only unsigned byte and short are supported");
+            throw new IncorrectVoxelTypeException("Only unsigned byte and short are supported");
         }
     }
 

@@ -37,7 +37,7 @@ import org.anchoranalysis.core.color.ColorList;
 import org.anchoranalysis.core.color.RGBColor;
 import org.anchoranalysis.core.index.IndicesSelection;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 
 @AllArgsConstructor
 public class ColoredOverlayCollection implements Iterable<Overlay> {
@@ -112,7 +112,7 @@ public class ColoredOverlayCollection implements Iterable<Overlay> {
 
     // TODO - make more efficient using RTrees
     public ColoredOverlayCollection subsetWhereBBoxIntersects(
-            ImageDimensions bndScene, DrawOverlay drawOverlay, List<BoundingBox> intersectList) {
+            Dimensions bndScene, DrawOverlay drawOverlay, List<BoundingBox> intersectList) {
 
         ColoredOverlayCollection out = new ColoredOverlayCollection();
 
@@ -160,7 +160,7 @@ public class ColoredOverlayCollection implements Iterable<Overlay> {
         return overlays;
     }
 
-    public List<BoundingBox> boxList(DrawOverlay drawOverlay, ImageDimensions dim) {
+    public List<BoundingBox> boxList(DrawOverlay drawOverlay, Dimensions dim) {
         return overlays.boxList(drawOverlay, dim);
     }
 

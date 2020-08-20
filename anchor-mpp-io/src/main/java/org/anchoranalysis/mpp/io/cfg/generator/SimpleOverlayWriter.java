@@ -37,7 +37,7 @@ import org.anchoranalysis.anchor.overlay.writer.PrecalculationOverlay;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.idgetter.IDGetter;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
 
 /**
@@ -54,7 +54,7 @@ public class SimpleOverlayWriter extends DrawOverlay {
     @Override
     public void writePrecalculatedOverlays(
             List<PrecalculationOverlay> precalculatedMasks,
-            ImageDimensions dimensions,
+            Dimensions dimensions,
             RGBStack background,
             ObjectDrawAttributes attributes,
             BoundingBox restrictTo)

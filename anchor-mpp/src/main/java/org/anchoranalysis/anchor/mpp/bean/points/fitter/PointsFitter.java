@@ -32,12 +32,12 @@ import org.anchoranalysis.anchor.mpp.mark.CompatibleWithMark;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.bean.annotation.GroupingRoot;
 import org.anchoranalysis.core.geometry.Point3f;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 
 // Fits an ellipsoid to a set of points
 @GroupingRoot
 public abstract class PointsFitter extends PointsBean<PointsFitter> implements CompatibleWithMark {
 
-    public abstract void fit(List<Point3f> points, Mark mark, ImageDimensions dimensions)
+    public abstract void fit(List<Point3f> points, Mark mark, Dimensions dimensions)
             throws PointsFitterException, InsufficientPointsException;
 }

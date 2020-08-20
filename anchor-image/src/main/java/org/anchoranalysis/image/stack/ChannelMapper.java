@@ -10,8 +10,8 @@ import java.util.function.IntFunction;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.stack.region.chnlconverter.attached.ChnlConverterAttached;
-import org.anchoranalysis.image.voxel.datatype.UnsignedByte;
+import org.anchoranalysis.image.channel.converter.attached.ChannelConverterAttached;
+import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 
 /**
  * Helps a retrieve channel and an associated converter and apply operation on them jointly
@@ -22,21 +22,21 @@ import org.anchoranalysis.image.voxel.datatype.UnsignedByte;
 public class ChannelMapper {
 
     private IntFunction<Channel> channelGetter;
-    private IntFunction<Optional<ChnlConverterAttached<Channel, ByteBuffer>>> converterGetter;
+    private IntFunction<Optional<ChannelConverterAttached<Channel, ByteBuffer>>> converterGetter;
 
     public <T> T mapChannelIfSupported(
             int channelIndex,
-            BiFunction<Channel, ChnlConverterAttached<Channel, ByteBuffer>, T> mapper,
+            BiFunction<Channel, ChannelConverterAttached<Channel, ByteBuffer>, T> mapper,
             Function<Channel, T> fallback) {
 
         Channel channel = channelGetter.apply(channelIndex);
-        Optional<ChnlConverterAttached<Channel, ByteBuffer>> optional =
+        Optional<ChannelConverterAttached<Channel, ByteBuffer>> optional =
                 converterGetter.apply(channelIndex);
 
         if (optional.isPresent()) {
             return mapper.apply(channel, optional.get());
         } else {
-            if (!channel.getVoxelDataType().equals(UnsignedByte.INSTANCE)) {
+            if (!channel.getVoxelDataType().equals(UnsignedByteVoxelType.INSTANCE)) {
                 // Datatype is not supported
                 throw new AnchorFriendlyRuntimeException("Unsupported data-type");
             }
@@ -46,7 +46,7 @@ public class ChannelMapper {
 
     public void callChannelIfSupported(
             int channelIndex,
-            BiConsumer<Channel, ChnlConverterAttached<Channel, ByteBuffer>> consumer,
+            BiConsumer<Channel, ChannelConverterAttached<Channel, ByteBuffer>> consumer,
             Consumer<Channel> fallback) {
         // We perform the call via a mapping that returns null
         mapChannelIfSupported(channelIndex, convertConsumer(consumer), convertConsumer(fallback));

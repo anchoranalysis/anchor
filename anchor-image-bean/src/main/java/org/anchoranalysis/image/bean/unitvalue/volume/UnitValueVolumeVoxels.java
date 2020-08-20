@@ -32,7 +32,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.image.extent.ImageResolution;
+import org.anchoranalysis.image.extent.Resolution;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -43,7 +43,7 @@ public class UnitValueVolumeVoxels extends UnitValueVolume {
     // END BEAN PROPERTIES
 
     @Override
-    public double resolveToVoxels(Optional<ImageResolution> resolution) {
+    public double resolveToVoxels(Optional<Resolution> resolution) {
         return value;
     }
 

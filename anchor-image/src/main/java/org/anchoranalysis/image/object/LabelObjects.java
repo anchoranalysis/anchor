@@ -10,7 +10,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 
 /**
  * Writes a unique ID (successive integer IDs) for each object's voxels into a channel, and 0 for
@@ -54,7 +54,7 @@ public class LabelObjects {
         Channel channel =
                 ChannelFactory.instance()
                         .createEmptyInitialisedToSupportMaxValue(
-                                new ImageDimensions(objects.boundingBox().extent()),
+                                new Dimensions(objects.boundingBox().extent()),
                                 (long) (objects.size() + 1));
 
         ReadableTuple3i shiftBack = objects.boundingBox().cornerMin();

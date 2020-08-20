@@ -36,7 +36,7 @@ import org.anchoranalysis.anchor.mpp.mark.set.UpdateMarkSetException;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalculationContext;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcNRGException;
 
@@ -72,7 +72,7 @@ public abstract class Kernel<T> extends MPPBean<Kernel<T>> implements Compatible
             int existingSize,
             int proposalSize,
             double poissonIntens,
-            ImageDimensions dimensions,
+            Dimensions dimensions,
             double densityRatio);
 
     public abstract String describeLast();

@@ -29,7 +29,7 @@ package org.anchoranalysis.image.binary.values;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelDataTypeException;
+import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelTypeException;
 
 /**
  * Two values representing {@link int} binary states in an unsigned-byte buffer e.g. 0 for OFF and 1
@@ -57,10 +57,10 @@ public final class BinaryValues {
 
     public BinaryValuesByte createByte() {
         if (offInt > 255) {
-            throw new IncorrectVoxelDataTypeException("offInt must be <= 255");
+            throw new IncorrectVoxelTypeException("offInt must be <= 255");
         }
         if (onInt > 255) {
-            throw new IncorrectVoxelDataTypeException("onInt must be <= 255");
+            throw new IncorrectVoxelTypeException("onInt must be <= 255");
         }
         return new BinaryValuesByte(offInt, onInt);
     }

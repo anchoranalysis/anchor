@@ -39,22 +39,22 @@ import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.channel.converter.ConversionPolicy;
+import org.anchoranalysis.image.channel.converter.attached.ChannelConverterAttached;
+import org.anchoranalysis.image.channel.converter.attached.channel.ChannelConverterUpperLowerQuantileIntensity;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.stack.bufferedimage.BufferedImageFactory;
 import org.anchoranalysis.image.stack.region.RegionExtracter;
 import org.anchoranalysis.image.stack.region.RegionExtracterFromDisplayStack;
-import org.anchoranalysis.image.stack.region.chnlconverter.ConversionPolicy;
-import org.anchoranalysis.image.stack.region.chnlconverter.attached.ChnlConverterAttached;
-import org.anchoranalysis.image.stack.region.chnlconverter.attached.chnl.ChnlConverterChnlUpperLowerQuantileIntensity;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
-import org.anchoranalysis.image.voxel.datatype.UnsignedByte;
+import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 
 /**
@@ -72,7 +72,7 @@ public class DisplayStack {
     private static final double QUANTILE_UPPER = 0.9999;
 
     private final Stack stack;
-    private final List<Optional<ChnlConverterAttached<Channel, ByteBuffer>>> listConverters;
+    private final List<Optional<ChannelConverterAttached<Channel, ByteBuffer>>> listConverters;
     private final ChannelMapper mapper;
 
     // START: constructors
@@ -84,14 +84,14 @@ public class DisplayStack {
 
     // We don't need to worry about channel numbers
     private DisplayStack(
-            Stack stack, List<Optional<ChnlConverterAttached<Channel, ByteBuffer>>> listConverters)
+            Stack stack, List<Optional<ChannelConverterAttached<Channel, ByteBuffer>>> listConverters)
             throws CreateException {
         this.stack = stack;
         this.listConverters = listConverters;
         this.mapper = createChannelMapper();
 
         for (int index = 0; index < stack.getNumberChannels(); index++) {
-            Optional<ChnlConverterAttached<Channel, ByteBuffer>> converter =
+            Optional<ChannelConverterAttached<Channel, ByteBuffer>> converter =
                     listConverters.get(index);
             if (converter.isPresent()) {
                 try {
@@ -142,7 +142,7 @@ public class DisplayStack {
         return listConverters.stream().filter(Optional::isPresent).count();
     }
 
-    public ImageDimensions dimensions() {
+    public Dimensions dimensions() {
         return stack.dimensions();
     }
     
@@ -180,7 +180,7 @@ public class DisplayStack {
                                 stack.getChannel(index)
                                         .dimensions()
                                         .duplicateChangeExtent(box.extent()),
-                                UnsignedByte.INSTANCE);
+                                UnsignedByteVoxelType.INSTANCE);
 
         mapper.callChannelIfSupported(
                 index,
@@ -346,7 +346,7 @@ public class DisplayStack {
     }
 
     private void setConverterFor(
-            int channelIndex, ChnlConverterAttached<Channel, ByteBuffer> converter)
+            int channelIndex, ChannelConverterAttached<Channel, ByteBuffer> converter)
             throws SetOperationFailedException {
         try {
             converter.attachObject(stack.getChannel(channelIndex));
@@ -361,10 +361,10 @@ public class DisplayStack {
         for (int index = 0; index < getNumberChannels(); index++) {
             if (!stack.getChannel(index)
                     .getVoxelDataType()
-                    .equals(UnsignedByte.INSTANCE)) {
+                    .equals(UnsignedByteVoxelType.INSTANCE)) {
                 setConverterFor(
                         index,
-                        new ChnlConverterChnlUpperLowerQuantileIntensity(
+                        new ChannelConverterUpperLowerQuantileIntensity(
                                 QUANTILE_LOWER, QUANTILE_UPPER));
             }
         }

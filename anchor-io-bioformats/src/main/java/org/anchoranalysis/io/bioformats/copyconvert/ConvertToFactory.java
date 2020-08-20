@@ -32,11 +32,11 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
-import org.anchoranalysis.image.voxel.datatype.Float;
-import org.anchoranalysis.image.voxel.datatype.SignedShort;
-import org.anchoranalysis.image.voxel.datatype.UnsignedByte;
-import org.anchoranalysis.image.voxel.datatype.UnsignedInt;
-import org.anchoranalysis.image.voxel.datatype.UnsignedShort;
+import org.anchoranalysis.image.voxel.datatype.FloatVoxelType;
+import org.anchoranalysis.image.voxel.datatype.SignedShortVoxelType;
+import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
+import org.anchoranalysis.image.voxel.datatype.UnsignedIntVoxelType;
+import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
 import org.anchoranalysis.io.bioformats.copyconvert.tobyte.ByteFrom16BitUnsigned;
 import org.anchoranalysis.io.bioformats.copyconvert.tobyte.ByteFrom32BitFloat;
 import org.anchoranalysis.io.bioformats.copyconvert.tobyte.ByteFrom32BitUnsignedInt;
@@ -73,7 +73,7 @@ public class ConvertToFactory {
 
     private static ConvertTo<?> createFromInterleaved(
             VoxelDataType targetDataType, int bitsPerPixel) throws CreateException {
-        if (targetDataType.equals(UnsignedByte.INSTANCE) && bitsPerPixel == 8) {
+        if (targetDataType.equals(UnsignedByteVoxelType.INSTANCE) && bitsPerPixel == 8) {
             return new ByteFrom8BitUnsignedInterleaving();
         } else {
             throw new CreateException("For interleaved formats only 8-bits are supported");
@@ -91,14 +91,14 @@ public class ConvertToFactory {
         boolean littleEndian = reader.isLittleEndian();
         boolean floatingPoint = FormatTools.isFloatingPoint(reader.getPixelType());
 
-        if (targetDataType.equals(UnsignedByte.INSTANCE)) {
+        if (targetDataType.equals(UnsignedByteVoxelType.INSTANCE)) {
             return toByte(bitsPerPixel, effectiveBitsPerPixel, littleEndian, floatingPoint, signed);
-        } else if (targetDataType.equals(UnsignedShort.INSTANCE)
-                || targetDataType.equals(SignedShort.instance)) {
+        } else if (targetDataType.equals(UnsignedShortVoxelType.INSTANCE)
+                || targetDataType.equals(SignedShortVoxelType.instance)) {
             return toShort(bitsPerPixel, littleEndian, signed);
-        } else if (targetDataType.equals(Float.INSTANCE)) {
+        } else if (targetDataType.equals(FloatVoxelType.INSTANCE)) {
             return toFloat(bitsPerPixel, littleEndian, signed);
-        } else if (targetDataType.equals(UnsignedInt.INSTANCE)) {
+        } else if (targetDataType.equals(UnsignedIntVoxelType.INSTANCE)) {
             return toInt(bitsPerPixel, littleEndian, floatingPoint, signed);
         } else {
             throw new CreateException("Unsupported voxel data-type");

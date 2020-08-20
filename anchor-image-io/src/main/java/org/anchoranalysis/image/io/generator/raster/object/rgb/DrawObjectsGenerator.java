@@ -30,7 +30,7 @@ import io.vavr.control.Either;
 import org.anchoranalysis.anchor.overlay.bean.DrawObject;
 import org.anchoranalysis.anchor.overlay.writer.ObjectDrawAttributes;
 import org.anchoranalysis.core.color.ColorIndex;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.io.stack.ConvertDisplayStackToRGB;
 import org.anchoranalysis.image.object.properties.ObjectCollectionWithProperties;
 import org.anchoranalysis.image.stack.DisplayStack;
@@ -58,14 +58,14 @@ public class DrawObjectsGenerator extends ObjectsOnRGBGenerator {
     public DrawObjectsGenerator(
             DrawObject drawObject,
             ObjectCollectionWithProperties objects,
-            Either<ImageDimensions, DisplayStack> background) {
+            Either<Dimensions, DisplayStack> background) {
         this(drawObject, objects, background, defaultColorsFor(objects));
     }
 
     public DrawObjectsGenerator(
             DrawObject drawObject,
             ObjectCollectionWithProperties objects,
-            Either<ImageDimensions, DisplayStack> background,
+            Either<Dimensions, DisplayStack> background,
             ColorIndex colorIndex) {
         this(drawObject, objects, background, new ObjectDrawAttributes(colorIndex));
     }
@@ -73,14 +73,14 @@ public class DrawObjectsGenerator extends ObjectsOnRGBGenerator {
     public DrawObjectsGenerator(
             DrawObject drawObject,
             ObjectCollectionWithProperties objects,
-            Either<ImageDimensions, DisplayStack> background,
+            Either<Dimensions, DisplayStack> background,
             ObjectDrawAttributes attributes) {
         super(drawObject, attributes, background);
         this.setIterableElement(objects);
     }
 
     @Override
-    protected RGBStack generateBackground(Either<ImageDimensions, DisplayStack> background) {
+    protected RGBStack generateBackground(Either<Dimensions, DisplayStack> background) {
         return background.fold(
                 DrawObjectsGenerator::createEmptyStackFor, ConvertDisplayStackToRGB::convert);
     }

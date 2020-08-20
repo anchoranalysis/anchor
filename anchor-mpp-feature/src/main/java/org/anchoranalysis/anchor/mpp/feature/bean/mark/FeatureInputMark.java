@@ -32,28 +32,28 @@ import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInputParams;
-import org.anchoranalysis.image.extent.ImageDimensions;
-import org.anchoranalysis.image.extent.ImageResolution;
+import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.extent.Resolution;
 
 @EqualsAndHashCode
 public class FeatureInputMark implements FeatureInputParams {
 
     private final Mark mark;
-    private final Optional<ImageDimensions> dimensions;
+    private final Optional<Dimensions> dimensions;
     private final Optional<KeyValueParams> params;
 
-    public FeatureInputMark(Mark mark, Optional<ImageDimensions> dimensions) {
+    public FeatureInputMark(Mark mark, Optional<Dimensions> dimensions) {
         this.mark = mark;
         this.dimensions = dimensions;
         this.params = Optional.empty();
     }
 
-    public FeatureInputMark(Mark mark, ImageDimensions dimensions, KeyValueParams params) {
+    public FeatureInputMark(Mark mark, Dimensions dimensions, KeyValueParams params) {
         this(mark, Optional.of(dimensions), Optional.of(params));
     }
 
     public FeatureInputMark(
-            Mark mark, Optional<ImageDimensions> dim, Optional<KeyValueParams> params) {
+            Mark mark, Optional<Dimensions> dim, Optional<KeyValueParams> params) {
         super();
         this.mark = mark;
         this.dimensions = dim;
@@ -65,8 +65,8 @@ public class FeatureInputMark implements FeatureInputParams {
     }
 
     @Override
-    public Optional<ImageResolution> getResolutionOptional() {
-        return dimensions.map(ImageDimensions::resolution);
+    public Optional<Resolution> getResolutionOptional() {
+        return dimensions.map(Dimensions::resolution);
     }
 
     @Override
@@ -74,11 +74,11 @@ public class FeatureInputMark implements FeatureInputParams {
         return params;
     }
 
-    public Optional<ImageDimensions> getDimensionsOptional() {
+    public Optional<Dimensions> getDimensionsOptional() {
         return dimensions;
     }
 
-    public ImageDimensions getDimensionsRequired() throws FeatureCalculationException {
+    public Dimensions getDimensionsRequired() throws FeatureCalculationException {
         return dimensions.orElseThrow(
                 () ->
                         new FeatureCalculationException(

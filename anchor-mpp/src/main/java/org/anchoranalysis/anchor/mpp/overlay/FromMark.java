@@ -32,7 +32,7 @@ import org.anchoranalysis.anchor.overlay.object.scaled.ScaledMaskCreator;
 import org.anchoranalysis.anchor.overlay.writer.DrawOverlay;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.object.properties.ObjectWithProperties;
 
 class FromMark implements ScaledMaskCreator {
@@ -50,7 +50,7 @@ class FromMark implements ScaledMaskCreator {
             ObjectWithProperties unscaled,
             double scaleFactor,
             Object originalObject,
-            ImageDimensions dimensionsScaled,
+            Dimensions dimensionsScaled,
             BinaryValuesByte bv)
             throws CreateException {
 

@@ -37,12 +37,12 @@ import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.arithmetic.VoxelsArithmetic;
 import org.anchoranalysis.image.voxel.assigner.VoxelsAssigner;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
-import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelDataTypeException;
+import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelTypeException;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
-import org.anchoranalysis.image.voxel.datatype.Float;
-import org.anchoranalysis.image.voxel.datatype.UnsignedByte;
-import org.anchoranalysis.image.voxel.datatype.UnsignedInt;
-import org.anchoranalysis.image.voxel.datatype.UnsignedShort;
+import org.anchoranalysis.image.voxel.datatype.FloatVoxelType;
+import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
+import org.anchoranalysis.image.voxel.datatype.UnsignedIntVoxelType;
+import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
 import org.anchoranalysis.image.voxel.extracter.VoxelsExtracter;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 
@@ -75,7 +75,7 @@ public class VoxelsWrapper {
         if (match.equals(dataType)) {
             return voxels;
         } else {
-            throw new IncorrectVoxelDataTypeException(
+            throw new IncorrectVoxelTypeException(
                     String.format("User has requested %s from %s voxels", match, dataType));
         }
     }
@@ -83,8 +83,8 @@ public class VoxelsWrapper {
     @SuppressWarnings("unchecked")
     public Voxels<ByteBuffer> asByte() {
 
-        if (!dataType.equals(UnsignedByte.INSTANCE)) {
-            throw new IncorrectVoxelDataTypeException(
+        if (!dataType.equals(UnsignedByteVoxelType.INSTANCE)) {
+            throw new IncorrectVoxelTypeException(
                     "Voxels do not contain unsigned 8-bit data (byte)");
         }
 
@@ -94,8 +94,8 @@ public class VoxelsWrapper {
     @SuppressWarnings("unchecked")
     public Voxels<FloatBuffer> asFloat() {
 
-        if (!dataType.equals(Float.INSTANCE)) {
-            throw new IncorrectVoxelDataTypeException("Voxels do not contain float data");
+        if (!dataType.equals(FloatVoxelType.INSTANCE)) {
+            throw new IncorrectVoxelTypeException("Voxels do not contain float data");
         }
 
         return (Voxels<FloatBuffer>) voxels;
@@ -104,8 +104,8 @@ public class VoxelsWrapper {
     @SuppressWarnings("unchecked")
     public Voxels<ShortBuffer> asShort() {
 
-        if (!dataType.equals(UnsignedShort.INSTANCE)) {
-            throw new IncorrectVoxelDataTypeException(
+        if (!dataType.equals(UnsignedShortVoxelType.INSTANCE)) {
+            throw new IncorrectVoxelTypeException(
                     "Voxels do not contain unsigned 16-bit data (int)");
         }
 
@@ -115,8 +115,8 @@ public class VoxelsWrapper {
     @SuppressWarnings("unchecked")
     public Voxels<IntBuffer> asInt() {
 
-        if (!dataType.equals(UnsignedInt.INSTANCE)) {
-            throw new IncorrectVoxelDataTypeException(
+        if (!dataType.equals(UnsignedIntVoxelType.INSTANCE)) {
+            throw new IncorrectVoxelTypeException(
                     "Voxels do not contain unsigned 32-bit data (int)");
         }
 
@@ -135,7 +135,7 @@ public class VoxelsWrapper {
 
         // If the input-channel is Byte then we do it in-place
         // Otherwise we create new voxels
-        if (!alwaysDuplicate && getVoxelDataType().equals(UnsignedByte.INSTANCE)) {
+        if (!alwaysDuplicate && getVoxelDataType().equals(UnsignedByteVoxelType.INSTANCE)) {
             boxOut = asByte();
         } else {
             boxOut = VoxelsFactory.getByte().createInitialized(any().extent());
@@ -185,7 +185,7 @@ public class VoxelsWrapper {
                     sliceIndexToUpdate,
                     sourceSlice((Voxels) sourceVoxels.any(), sliceIndexSource, duplicate));
         } else {
-            throw new IncorrectVoxelDataTypeException("Voxel types are different");
+            throw new IncorrectVoxelTypeException("Voxel types are different");
         }
     }
 

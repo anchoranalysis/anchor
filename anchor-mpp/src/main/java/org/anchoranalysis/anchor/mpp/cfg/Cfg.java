@@ -46,7 +46,7 @@ import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.object.properties.ObjectCollectionWithProperties;
 import org.anchoranalysis.image.object.properties.ObjectCollectionWithPropertiesFactory;
 
@@ -166,7 +166,7 @@ public final class Cfg implements Iterable<Mark>, Serializable {
     }
 
     public ObjectCollectionWithProperties deriveObjects(
-            ImageDimensions dimensions,
+            Dimensions dimensions,
             RegionMembershipWithFlags regionMembership
             ) {
 
@@ -281,7 +281,7 @@ public final class Cfg implements Iterable<Mark>, Serializable {
         return mergedNew;
     }
 
-    public List<BoundingBox> boxList(ImageDimensions bndScene, int regionID) {
+    public List<BoundingBox> boxList(Dimensions bndScene, int regionID) {
 
         ArrayList<BoundingBox> list = new ArrayList<>();
         for (Mark m : this) {

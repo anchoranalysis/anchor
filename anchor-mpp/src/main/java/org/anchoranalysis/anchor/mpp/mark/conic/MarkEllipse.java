@@ -50,8 +50,8 @@ import org.anchoranalysis.core.geometry.Point2d;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.ImageDimensions;
-import org.anchoranalysis.image.extent.ImageResolution;
+import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.object.properties.ObjectWithProperties;
 import org.anchoranalysis.image.orientation.Orientation;
 import org.anchoranalysis.image.orientation.Orientation2D;
@@ -264,7 +264,7 @@ public class MarkEllipse extends MarkConic implements Serializable {
     }
 
     @Override
-    public BoundingBox box(ImageDimensions dimensions, int regionID) {
+    public BoundingBox box(Dimensions dimensions, int regionID) {
 
         DoubleMatrix1D boxMatrix = ellipsoidCalculator.getBoundingBoxMatrix().copy();
 
@@ -347,7 +347,7 @@ public class MarkEllipse extends MarkConic implements Serializable {
 
     @Override
     public ObjectWithProperties deriveObject(
-            ImageDimensions bndScene, RegionMembershipWithFlags rm, BinaryValuesByte bvOut) {
+            Dimensions bndScene, RegionMembershipWithFlags rm, BinaryValuesByte bvOut) {
 
         ObjectWithProperties object = super.deriveObject(bndScene, rm, bvOut);
         orientation.addPropertiesToMask(object);
@@ -359,7 +359,7 @@ public class MarkEllipse extends MarkConic implements Serializable {
     }
 
     @Override
-    public OverlayProperties generateProperties(ImageResolution sr) {
+    public OverlayProperties generateProperties(Resolution sr) {
         OverlayProperties op = super.generateProperties(sr);
 
         op.addDoubleAsString("Radius X (pixels)", radii.x());
@@ -381,7 +381,7 @@ public class MarkEllipse extends MarkConic implements Serializable {
     }
 
     @Override
-    public double[] createRadiiArrayResolved(ImageResolution res) {
+    public double[] createRadiiArrayResolved(Resolution res) {
         return twoElementArray(radii.x(), radii.y());
     }
 
@@ -391,7 +391,7 @@ public class MarkEllipse extends MarkConic implements Serializable {
     }
 
     @Override
-    public BoundingBox boxAllRegions(ImageDimensions dimensions) {
+    public BoundingBox boxAllRegions(Dimensions dimensions) {
         return box(dimensions, GlobalRegionIdentifiers.SUBMARK_SHELL);
     }
 

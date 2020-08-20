@@ -9,6 +9,7 @@ import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.core.geometry.consumer.PointThreeDimensionalConsumer;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.convert.ByteConverter;
+import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.BoundedVoxels;
@@ -116,6 +117,43 @@ public class IterateVoxelsByte {
         );
 
         return running;
+    }
+    
+    /**
+     * Iterate over each voxel in a bounding-box - applying a binary operation with values from <b>two</b> input associated buffers for each slice and writing it into an output buffer
+     * <p>
+     * The extent's of both {@code voxelsIn1} and {@code voxelsIn2} and {@code voxelsOut} must be equal.
+     * 
+     * @param voxelsIn1 voxels in which which {@link BoundingBox} refers to a subregion, and which provides the <b>first inwards</b> buffer
+     * @param voxelsIn2 voxels in which which {@link BoundingBox} refers to a subregion, and which provides the <b>second inwards</b> buffer
+     * @param voxelsOut voxels in which which {@link BoundingBox} refers to a subregion, and which provides the <b>outwards</b> buffer
+     * @param process is called for each voxel within the bounding-box using GLOBAL coordinates.
+     * @param <T> buffer-type for voxels
+     */
+    public static void callEachPointWithBinaryOperation(
+            Voxels<ByteBuffer> voxelsIn1, Voxels<ByteBuffer> voxelsIn2, Voxels<ByteBuffer> voxelsOut, IntBinaryOperation operation) {
+        Preconditions.checkArgument( voxelsIn1.extent().equals(voxelsIn2.extent()) );
+        Preconditions.checkArgument( voxelsIn2.extent().equals(voxelsOut.extent()) );
+        
+        for (int z = 0; z < voxelsOut.extent().z(); z++) {
+
+            ByteBuffer in1 = voxelsIn1.sliceBuffer(z);
+            ByteBuffer in2 = voxelsIn2.sliceBuffer(z);
+            ByteBuffer out = voxelsOut.sliceBuffer(z);
+
+            while (in1.hasRemaining()) {
+
+                byte b1 = in1.get();
+                byte b2 = in2.get();
+
+                int result = operation.apply(
+                        ByteConverter.unsignedByteToInt(b1), ByteConverter.unsignedByteToInt(b2));
+                out.put((byte) result);
+            }
+
+            assert (!in2.hasRemaining());
+            assert (!out.hasRemaining());
+        }
     }
     
     /**

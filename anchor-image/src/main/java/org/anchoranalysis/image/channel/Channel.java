@@ -34,8 +34,8 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.extent.ImageDimensions;
-import org.anchoranalysis.image.extent.ImageResolution;
+import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.histogram.HistogramFactory;
 import org.anchoranalysis.image.interpolator.Interpolator;
@@ -68,7 +68,7 @@ public class Channel {
 
     private static final ChannelFactory FACTORY = ChannelFactory.instance();
 
-    @Getter private ImageDimensions dimensions;
+    @Getter private Dimensions dimensions;
 
     private Voxels<? extends Buffer> voxels;
 
@@ -78,8 +78,8 @@ public class Channel {
      * @param voxels
      * @param resolution
      */
-    public Channel(Voxels<? extends Buffer> voxels, ImageResolution resolution) {
-        this.dimensions = new ImageDimensions(voxels.extent(), resolution);
+    public Channel(Voxels<? extends Buffer> voxels, Resolution resolution) {
+        this.dimensions = new Dimensions(voxels.extent(), resolution);
         this.voxels = voxels;
     }
 
@@ -135,7 +135,7 @@ public class Channel {
 
         assert (FACTORY != null);
 
-        ImageDimensions dimensionsScaled = dimensions.scaleXYTo(x, y);
+        Dimensions dimensionsScaled = dimensions.scaleXYTo(x, y);
 
         Voxels<? extends Buffer> ba = voxels.extract().resizedXY(x, y, interpolator);
         assert (ba.extent().volumeXY() == ba.sliceBuffer(0).capacity());
@@ -179,7 +179,7 @@ public class Channel {
         return voxels.extract().voxelsGreaterThan(threshold);
     }
 
-    public void updateResolution(ImageResolution res) {
+    public void updateResolution(Resolution res) {
         dimensions = dimensions.duplicateChangeRes(res);
     }
 

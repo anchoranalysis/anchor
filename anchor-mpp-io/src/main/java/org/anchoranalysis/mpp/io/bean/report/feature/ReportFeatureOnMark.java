@@ -40,7 +40,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 
 public class ReportFeatureOnMark extends ReportFeatureForMPP<FeatureInputMark> {
 
@@ -79,7 +79,7 @@ public class ReportFeatureOnMark extends ReportFeatureForMPP<FeatureInputMark> {
         try {
             FeatureCalculatorSingle<FeatureInputMark> session = createAndStartSession();
 
-            ImageDimensions dimensions = createImageDim();
+            Dimensions dimensions = createImageDim();
 
             double val =
                     session.calculate(new FeatureInputMark(mark.get(), Optional.of(dimensions)));

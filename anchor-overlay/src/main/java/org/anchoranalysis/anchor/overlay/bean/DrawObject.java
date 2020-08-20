@@ -32,7 +32,7 @@ import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.object.properties.ObjectCollectionWithProperties;
 import org.anchoranalysis.image.object.properties.ObjectWithProperties;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
@@ -75,7 +75,7 @@ public abstract class DrawObject extends AnchorBean<DrawObject> {
     // Does computational preprocessing (so it can be cached). Outputs a collection of object-masks
     // that are later re used
     public abstract PrecalculationOverlay precalculate(
-            ObjectWithProperties object, ImageDimensions dimensions) throws CreateException;
+            ObjectWithProperties object, Dimensions dimensions) throws CreateException;
 
     public void write(
             ObjectCollectionWithProperties objects,

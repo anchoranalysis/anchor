@@ -33,7 +33,7 @@ import org.anchoranalysis.anchor.mpp.bean.bound.Bound;
 import org.anchoranalysis.anchor.mpp.bean.bound.BoundUnitless;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
-import org.anchoranalysis.image.extent.ImageResolution;
+import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.orientation.Orientation;
 import org.anchoranalysis.image.orientation.Orientation2D;
 
@@ -68,7 +68,7 @@ public class EllipseBounds extends EllipseBoundsWithoutRotation {
 
     @Override
     public Orientation randomOrientation(
-            RandomNumberGenerator randomNumberGenerator, ImageResolution res) {
+            RandomNumberGenerator randomNumberGenerator, Resolution res) {
         return new Orientation2D(
                 getRotationAngle().resolve(res, false).randOpen(randomNumberGenerator));
     }

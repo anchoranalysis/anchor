@@ -249,9 +249,27 @@ public class IterateVoxels {
      * @param <T> buffer-type for voxels
      */
     public static <T extends Buffer> void callEachPointTwo(
-            Voxels<T> voxels1, Voxels<T> voxels2, ProcessVoxelTwoSliceBuffer<T> process) {
+            Voxels<T> voxels1, Voxels<T> voxels2, ProcessVoxelTwoSliceBuffers<T> process) {
         Preconditions.checkArgument( voxels1.extent().equals(voxels2.extent()) );
         callEachPoint(voxels1.extent(), new RetrieveBuffersForTwoSlices<>(voxels1, voxels2, process));
+    }
+    
+    /**
+     * Iterate over each voxel in a bounding-box - with <b>three</b> associated buffers for each slice
+     * <p>
+     * The extent's of both {@code voxels1} and {@code voxels2} and {@code voxels3} must be equal.
+     * 
+     * @param voxels1 voxels in which which {@link BoundingBox} refers to a subregion, and which provides the <b>first</b> buffer
+     * @param voxels2 voxels in which which {@link BoundingBox} refers to a subregion, and which provides the <b>second</b> buffer
+     * @param voxels3 voxels in which which {@link BoundingBox} refers to a subregion, and which provides the <b>third</b> buffer
+     * @param process is called for each voxel within the bounding-box using GLOBAL coordinates.
+     * @param <T> buffer-type for voxels
+     */
+    public static <T extends Buffer> void callEachPointThree(
+            Voxels<T> voxels1, Voxels<T> voxels2, Voxels<T> voxels3, ProcessVoxelThreeSliceBuffers<T> process) {
+        Preconditions.checkArgument( voxels1.extent().equals(voxels2.extent()) );
+        Preconditions.checkArgument( voxels2.extent().equals(voxels3.extent()) );
+        callEachPoint(voxels1.extent(), new RetrieveBuffersForThreeSlices<>(voxels1, voxels2, voxels3, process));
     }
     
     /**
@@ -266,7 +284,7 @@ public class IterateVoxels {
      * @param <T> buffer-type for voxels
      */
     public static <T extends Buffer> void callEachPointTwo(
-            Voxels<T> voxels1, Voxels<T> voxels2, ObjectMask object, ProcessVoxelTwoSliceBuffer<T> process) {
+            Voxels<T> voxels1, Voxels<T> voxels2, ObjectMask object, ProcessVoxelTwoSliceBuffers<T> process) {
         Preconditions.checkArgument( voxels1.extent().equals(voxels2.extent()) );
         callEachPoint(object, new RetrieveBuffersForTwoSlices<>(voxels1, voxels2, process));
     }

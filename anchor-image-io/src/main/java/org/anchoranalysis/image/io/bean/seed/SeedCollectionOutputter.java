@@ -27,7 +27,7 @@
 package org.anchoranalysis.image.io.bean.seed;
 
 import org.anchoranalysis.bean.AnchorBean;
-import org.anchoranalysis.image.extent.ImageResolution;
+import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.seed.SeedCollection;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 
@@ -35,5 +35,5 @@ import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 public abstract class SeedCollectionOutputter extends AnchorBean<SeedCollectionOutputter> {
 
     public abstract void output(
-            SeedCollection seeds, ImageResolution res, BoundOutputManagerRouteErrors outputManager);
+            SeedCollection seeds, Resolution res, BoundOutputManagerRouteErrors outputManager);
 }

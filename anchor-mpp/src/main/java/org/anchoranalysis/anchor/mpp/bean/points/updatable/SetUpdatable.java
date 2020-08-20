@@ -54,7 +54,7 @@ import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.voxel.BoundedVoxels;
 import org.anchoranalysis.image.voxel.Voxels;
 
@@ -66,7 +66,7 @@ public class SetUpdatable extends UpdatablePointsContainer {
 
     private RandomSet<Point3d> setPoints;
 
-    private ImageDimensions dimensions;
+    private Dimensions dimensions;
     private Mask mask;
     private Channel maskChannel;
 
@@ -145,7 +145,7 @@ public class SetUpdatable extends UpdatablePointsContainer {
     }
 
     @Override
-    public ImageDimensions dimensions() {
+    public Dimensions dimensions() {
         return dimensions;
     }
 

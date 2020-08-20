@@ -32,8 +32,8 @@ import lombok.EqualsAndHashCode;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
-import org.anchoranalysis.image.extent.ImageDimensions;
-import org.anchoranalysis.image.extent.ImageResolution;
+import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.extent.Resolution;
 
 @AllArgsConstructor
 @EqualsAndHashCode
@@ -46,8 +46,8 @@ public abstract class FeatureInputNRG implements FeatureInputParams {
     }
 
     @Override
-    public Optional<ImageResolution> getResolutionOptional() {
-        return nrgStack.map(NRGStackWithParams::dimensions).map(ImageDimensions::resolution);
+    public Optional<Resolution> getResolutionOptional() {
+        return nrgStack.map(NRGStackWithParams::dimensions).map(Dimensions::resolution);
     }
 
     @Override
@@ -55,7 +55,7 @@ public abstract class FeatureInputNRG implements FeatureInputParams {
         return nrgStack.map(NRGStackWithParams::getParams);
     }
 
-    public ImageDimensions dimensionsRequired() throws FeatureCalculationException {
+    public Dimensions dimensionsRequired() throws FeatureCalculationException {
         return dimensionsOptional()
                 .orElseThrow(
                         () ->
@@ -63,7 +63,7 @@ public abstract class FeatureInputNRG implements FeatureInputParams {
                                         "Dimensions are required in the input for this operation"));
     }
 
-    public Optional<ImageDimensions> dimensionsOptional() {
+    public Optional<Dimensions> dimensionsOptional() {
         return nrgStack.map(NRGStackWithParams::dimensions);
     }
 

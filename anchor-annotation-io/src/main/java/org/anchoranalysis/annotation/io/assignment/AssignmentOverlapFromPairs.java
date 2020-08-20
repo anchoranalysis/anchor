@@ -33,7 +33,7 @@ import java.util.List;
 import java.util.stream.DoubleStream;
 import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.core.text.TypedValue;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 
@@ -81,7 +81,7 @@ public class AssignmentOverlapFromPairs implements Assignment {
         return elements.asList();
     }
 
-    public void removeTouchingBorderXY(ImageDimensions dimensions) {
+    public void removeTouchingBorderXY(Dimensions dimensions) {
         removeTouchingBorderXYObjects(dimensions, listUnassignedLeft);
         removeTouchingBorderXYObjects(dimensions, listUnassignedRight);
         removeTouchingBorderXYPairObjects(dimensions, listPairs);
@@ -200,7 +200,7 @@ public class AssignmentOverlapFromPairs implements Assignment {
     }
 
     private static void removeTouchingBorderXYObjects(
-            ImageDimensions dimensions, List<ObjectMask> list) {
+            Dimensions dimensions, List<ObjectMask> list) {
         Iterator<ObjectMask> itr = list.iterator();
         while (itr.hasNext()) {
             if (itr.next().boundingBox().atBorderXY(dimensions)) {
@@ -210,7 +210,7 @@ public class AssignmentOverlapFromPairs implements Assignment {
     }
 
     private static void removeTouchingBorderXYPairObjects(
-            ImageDimensions dimensions, List<ObjectMaskPair> list) {
+            Dimensions dimensions, List<ObjectMaskPair> list) {
         Iterator<ObjectMaskPair> itr = list.iterator();
         while (itr.hasNext()) {
             if (itr.next().atBorderXY(dimensions)) {

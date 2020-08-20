@@ -32,7 +32,7 @@ import lombok.Getter;
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipWithFlags;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
-import org.anchoranalysis.anchor.mpp.pixelpart.IndexByChnl;
+import org.anchoranalysis.anchor.mpp.pixelpart.IndexByChannel;
 import org.anchoranalysis.anchor.mpp.pixelpart.factory.PixelPartFactory;
 import org.anchoranalysis.anchor.mpp.pixelpart.factory.PixelPartFactoryHistogram;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -42,7 +42,7 @@ import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.feature.nrg.NRGStack;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.BoundedVoxels;
@@ -54,14 +54,14 @@ class VoxelizedMarkHistogram implements VoxelizedMark {
     private static final PixelPartFactory<Histogram> FACTORY = new PixelPartFactoryHistogram();
 
     // Quick access to what is inside and what is outside
-    private final IndexByChnl<Histogram> partitionList;
+    private final IndexByChannel<Histogram> partitionList;
 
     @Getter private ObjectMask object;
 
     @Getter private ObjectMask objectFlattened; // null until we need it
 
     public VoxelizedMarkHistogram(Mark mark, NRGStack stack, RegionMap regionMap) {
-        partitionList = new IndexByChnl<>();
+        partitionList = new IndexByChannel<>();
         initForMark(mark, stack, regionMap);
     }
 
@@ -139,7 +139,7 @@ class VoxelizedMarkHistogram implements VoxelizedMark {
     // Calculates the pixels for a mark
     private void initForMark(Mark mark, NRGStack stack, RegionMap regionMap) {
 
-        ImageDimensions dimensions = stack.dimensions();
+        Dimensions dimensions = stack.dimensions();
         BoundingBox box = mark.boxAllRegions(dimensions);
 
         ReadableTuple3i cornerMax = box.calculateCornerMax();
@@ -176,7 +176,7 @@ class VoxelizedMarkHistogram implements VoxelizedMark {
             BoundingBox box,
             ReadableTuple3i cornerMax,
             Extent localExtent,
-            ImageDimensions dimensions,
+            Dimensions dimensions,
             BufferArrayList bufferArrList,
             ByteBuffer bufferMIP,
             RegionMap regionMap) {

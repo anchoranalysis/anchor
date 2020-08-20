@@ -33,7 +33,7 @@ import org.anchoranalysis.core.axis.AxisType;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.extent.ImageResolution;
+import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.orientation.DirectionVector;
 
 public abstract class UnitValueDistance extends AnchorBean<UnitValueDistance>
@@ -45,7 +45,7 @@ public abstract class UnitValueDistance extends AnchorBean<UnitValueDistance>
     // Uses the direction between two points to resolve the distance.
     // NB the magnitude of the distance between these two points is not considered, only the
     // direction
-    public double resolve(Optional<ImageResolution> res, Point3d point1, Point3d point2)
+    public double resolve(Optional<Resolution> res, Point3d point1, Point3d point2)
             throws OperationFailedException {
         return resolve(res, DirectionVector.createBetweenTwoPoints(point1, point2));
     }
@@ -53,13 +53,13 @@ public abstract class UnitValueDistance extends AnchorBean<UnitValueDistance>
     // Uses the direction between two points to resolve the distance.
     // NB the magnitude of the distance between these two points is not considered, only the
     // direction
-    public double resolve(Optional<ImageResolution> res, Point3i point1, Point3i point2)
+    public double resolve(Optional<Resolution> res, Point3i point1, Point3i point2)
             throws OperationFailedException {
         return resolve(res, DirectionVector.createBetweenTwoPoints(point1, point2));
     }
 
     // Returns value in voxels
-    public abstract double resolve(Optional<ImageResolution> res, DirectionVector dirVector)
+    public abstract double resolve(Optional<Resolution> res, DirectionVector dirVector)
             throws OperationFailedException;
 
     /**
@@ -70,7 +70,7 @@ public abstract class UnitValueDistance extends AnchorBean<UnitValueDistance>
      * @return the distance in the direction of the axis
      * @throws OperationFailedException
      */
-    public double resolveForAxis(Optional<ImageResolution> res, AxisType axis)
+    public double resolveForAxis(Optional<Resolution> res, AxisType axis)
             throws OperationFailedException {
         return resolve(res, new DirectionVector(axis));
     }

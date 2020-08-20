@@ -28,7 +28,7 @@ package org.anchoranalysis.io.bioformats.copyconvert.toint;
 
 import java.nio.IntBuffer;
 import loci.common.DataTools;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferInt;
 
@@ -46,13 +46,13 @@ public class IntFromUnsigned32BitInt extends ConvertToInt {
     }
 
     @Override
-    protected void setupBefore(ImageDimensions dimensions, int numChnlsPerByteArray) {
+    protected void setupBefore(Dimensions dimensions, int numChannelsPerByteArray) {
         sizeXY = dimensions.x() * dimensions.y();
         sizeBytes = sizeXY * bytesPerPixel;
     }
 
     @Override
-    protected VoxelBuffer<IntBuffer> convertSingleChnl(byte[] src, int channelRelative) {
+    protected VoxelBuffer<IntBuffer> convertSingleChannel(byte[] src, int channelRelative) {
 
         int[] crntChnlBytes = new int[sizeXY];
 

@@ -31,7 +31,7 @@ import java.util.function.IntConsumer;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipWithFlags;
-import org.anchoranalysis.anchor.mpp.pixelpart.IndexByChnl;
+import org.anchoranalysis.anchor.mpp.pixelpart.IndexByChannel;
 import org.anchoranalysis.image.convert.ByteConverter;
 import org.anchoranalysis.image.histogram.Histogram;
 
@@ -41,7 +41,7 @@ class AddVoxelsToHistogram {
     public static void addVoxels(
             byte membership,
             List<RegionMembershipWithFlags> listRegionMembership,
-            IndexByChnl<Histogram> partitionList,
+            IndexByChannel<Histogram> partitionList,
             BufferArrayList bufferArrList,
             int globalOffset,
             int zLocal) {
@@ -52,7 +52,7 @@ class AddVoxelsToHistogram {
     }
 
     private static void addRegionToPartition(
-            IndexByChnl<Histogram> partitionList,
+            IndexByChannel<Histogram> partitionList,
             BufferArrayList bufferArrList,
             int globalOffset,
             int r,

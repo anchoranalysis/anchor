@@ -32,13 +32,13 @@ import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
 import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.image.voxel.datatype.UnsignedByte;
+import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.io.bean.deserializer.Deserializer;
 import org.anchoranalysis.io.bean.deserializer.ObjectInputStreamDeserializer;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
@@ -73,7 +73,7 @@ class ObjectDualDeserializer implements Deserializer<ObjectMask> {
                     or.openCheckType(
                                     0,
                                     ProgressReporterNull.get(),
-                                    UnsignedByte.INSTANCE)
+                                    UnsignedByteVoxelType.INSTANCE)
                             .get(0);
 
             if (stack.getNumberChannels() != 1) {
@@ -95,7 +95,7 @@ class ObjectDualDeserializer implements Deserializer<ObjectMask> {
     }
 
     private static String errorMessageMismatchingDims(
-            BoundingBox box, ImageDimensions dimensions, Path filePath) {
+            BoundingBox box, Dimensions dimensions, Path filePath) {
         return String.format(
                 "Dimensions of bounding box (%s) and raster (%s) do not match for file %s",
                 box.extent(), dimensions.extent(), filePath);

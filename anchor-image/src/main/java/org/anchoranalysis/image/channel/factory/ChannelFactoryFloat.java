@@ -26,12 +26,12 @@
 
 package org.anchoranalysis.image.channel.factory;
 
-import org.anchoranalysis.image.voxel.datatype.Float;
+import org.anchoranalysis.image.voxel.datatype.FloatVoxelType;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 
 public class ChannelFactoryFloat extends ChannelFactorySingleType {
 
     public ChannelFactoryFloat() {
-        super(Float.INSTANCE, VoxelsFactory.getFloat());
+        super(FloatVoxelType.INSTANCE, VoxelsFactory.getFloat());
     }
 }

@@ -27,12 +27,12 @@
 package org.anchoranalysis.io.bioformats.copyconvert;
 
 import lombok.Value;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 
 /** How to shape the image (across various dimensions) after the copying */
 @Value
 public class ImageFileShape {
-    private final ImageDimensions imageDimensions;
+    private final Dimensions imageDimensions;
     private final int numberChannels;
     private final int numberFrames;
 

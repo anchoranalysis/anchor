@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.anchor.mpp.bean.bound;
 
-import org.anchoranalysis.image.extent.ImageResolution;
+import org.anchoranalysis.image.extent.Resolution;
 
 //
 //  An upper and lower bound
@@ -38,7 +38,7 @@ public abstract class Bound extends MarkBounds {
 
     public abstract Bound duplicate();
 
-    public ResolvedBound resolve(ImageResolution sr, boolean do3D) {
+    public ResolvedBound resolve(Resolution sr, boolean do3D) {
         return new ResolvedBound(getMinResolved(sr, do3D), getMaxResolved(sr, do3D));
     }
 

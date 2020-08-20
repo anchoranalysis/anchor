@@ -28,7 +28,7 @@ package org.anchoranalysis.io.bioformats.copyconvert.toshort;
 
 import java.nio.ShortBuffer;
 import loci.common.DataTools;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferShort;
 
@@ -46,13 +46,13 @@ public class ShortFromSignedShort extends ConvertToShort {
     }
 
     @Override
-    protected void setupBefore(ImageDimensions dimensions, int numChnlsPerByteArray) {
+    protected void setupBefore(Dimensions dimensions, int numChannelsPerByteArray) {
         sizeXY = dimensions.x() * dimensions.y();
         sizeBytes = sizeXY * bytesPerPixel;
     }
 
     @Override
-    protected VoxelBuffer<ShortBuffer> convertSingleChnl(byte[] src, int channelRelative) {
+    protected VoxelBuffer<ShortBuffer> convertSingleChannel(byte[] src, int channelRelative) {
 
         short[] crntChnlShorts = new short[sizeXY];
 

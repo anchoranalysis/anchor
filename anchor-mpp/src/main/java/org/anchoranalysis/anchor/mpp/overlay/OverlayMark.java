@@ -41,8 +41,8 @@ import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.PointConverter;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.ImageDimensions;
-import org.anchoranalysis.image.extent.ImageResolution;
+import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.object.properties.ObjectWithProperties;
 
 @EqualsAndHashCode(callSuper = false)
@@ -71,7 +71,7 @@ public class OverlayMark extends Overlay {
     }
 
     @Override
-    public BoundingBox box(DrawOverlay overlayWriter, ImageDimensions dim) {
+    public BoundingBox box(DrawOverlay overlayWriter, Dimensions dim) {
         return mark.box(dim, regionMembership.getRegionID());
     }
 
@@ -81,8 +81,8 @@ public class OverlayMark extends Overlay {
             double zoomFactorNew,
             ObjectWithProperties om,
             Overlay ol,
-            ImageDimensions dimensionsUnscaled,
-            ImageDimensions dimensionsScaled,
+            Dimensions dimensionsUnscaled,
+            Dimensions dimensionsScaled,
             BinaryValuesByte bvOut)
             throws CreateException {
 
@@ -92,7 +92,7 @@ public class OverlayMark extends Overlay {
 
     @Override
     public ObjectWithProperties createObject(
-            DrawOverlay overlayWriter, ImageDimensions dimEntireImage, BinaryValuesByte bvOut)
+            DrawOverlay overlayWriter, Dimensions dimEntireImage, BinaryValuesByte bvOut)
             throws CreateException {
         return mark.deriveObject(dimEntireImage, regionMembership, bvOut);
     }
@@ -112,7 +112,7 @@ public class OverlayMark extends Overlay {
     }
 
     @Override
-    public OverlayProperties generateProperties(ImageResolution sr) {
+    public OverlayProperties generateProperties(Resolution sr) {
         return mark.generateProperties(sr);
     }
 }

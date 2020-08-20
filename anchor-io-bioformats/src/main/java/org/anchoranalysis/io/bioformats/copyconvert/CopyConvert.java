@@ -35,7 +35,7 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporterIncrement;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.io.bioformats.DestChnlForIndex;
+import org.anchoranalysis.io.bioformats.DestinationChannelForIndex;
 import org.anchoranalysis.io.bioformats.bean.options.ReadOptions;
 
 /**
@@ -79,14 +79,14 @@ public class CopyConvert {
             pri.setMax(targetShape.totalNumberSlices());
             pri.open();
 
-            IterateOverSlices.iterateDimOrder(
+            IterateOverSlices.iterateDimensionsOrder(
                     reader.getDimensionOrder(),
                     targetShape,
                     numberByteArraysPerIteration,
                     (t, z, c, readerIndex) -> {
 
                         /** Selects a destination channel for a particular relative channel */
-                        DestChnlForIndex destC =
+                        DestinationChannelForIndex destC =
                                 channelRelative ->
                                         dest.get(
                                                 destIndex(
@@ -96,7 +96,7 @@ public class CopyConvert {
 
                         byte[] b = reader.openBytes(readerIndex);
 
-                        convertTo.copyAllChnls(
+                        convertTo.copyAllChannels(
                                 targetShape.getImageDimensions(),
                                 b,
                                 destC,

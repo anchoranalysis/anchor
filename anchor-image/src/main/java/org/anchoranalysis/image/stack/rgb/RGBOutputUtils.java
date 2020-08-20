@@ -31,7 +31,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.color.RGBColor;
 import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class RGBOutputUtils {
@@ -39,7 +39,7 @@ public class RGBOutputUtils {
     public static void writeRGBColorToByteArr(
             RGBColor color,
             Point3i point,
-            ImageDimensions dimensions,
+            Dimensions dimensions,
             ByteBuffer red,
             ByteBuffer blue,
             ByteBuffer green) {

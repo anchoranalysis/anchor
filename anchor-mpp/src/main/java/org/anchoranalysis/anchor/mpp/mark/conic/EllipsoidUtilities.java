@@ -29,13 +29,13 @@ package org.anchoranalysis.anchor.mpp.mark.conic;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.geometry.Point3d;
-import org.anchoranalysis.image.extent.ImageResolution;
+import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.math.rotation.RotationMatrix;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class EllipsoidUtilities {
 
-    public static double[] normalisedRadii(MarkEllipsoid mark, ImageResolution res) {
+    public static double[] normalisedRadii(MarkEllipsoid mark, Resolution res) {
         // We re-calculate all the bounds to take account of the different z-resolution
 
         // We get the rotated points of (1,0,0)*getRadii().x() and (0,1,0)*getRadii().y() and

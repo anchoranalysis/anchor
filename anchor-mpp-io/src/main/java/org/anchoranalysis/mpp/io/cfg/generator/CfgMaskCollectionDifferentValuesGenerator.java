@@ -30,7 +30,7 @@ import java.util.Optional;
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipWithFlags;
 import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 import org.anchoranalysis.core.index.SetOperationFailedException;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.io.generator.raster.RasterGenerator;
 import org.anchoranalysis.image.io.generator.raster.object.collection.ObjectsAsUniqueValueGenerator;
 import org.anchoranalysis.image.object.properties.ObjectCollectionWithProperties;
@@ -48,13 +48,13 @@ public class CfgMaskCollectionDifferentValuesGenerator extends RasterGenerator
     private RegionMembershipWithFlags rm;
 
     public CfgMaskCollectionDifferentValuesGenerator(
-            ImageDimensions dimensions, RegionMembershipWithFlags rm) {
+            Dimensions dimensions, RegionMembershipWithFlags rm) {
         delegate = new ObjectsAsUniqueValueGenerator(dimensions);
         this.rm = rm;
     }
 
     public CfgMaskCollectionDifferentValuesGenerator(
-            ImageDimensions dimensions, RegionMembershipWithFlags rm, Cfg cfg) {
+            Dimensions dimensions, RegionMembershipWithFlags rm, Cfg cfg) {
         this(dimensions, rm);
         this.cfg = cfg;
     }

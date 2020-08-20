@@ -33,7 +33,7 @@ import java.util.stream.Stream;
 import lombok.Getter;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.apache.commons.collections.ListUtils;
 
 public abstract class MarkAbstractPointList extends Mark {
@@ -71,7 +71,7 @@ public abstract class MarkAbstractPointList extends Mark {
     }
 
     @Override
-    public BoundingBox box(ImageDimensions dimensions, int regionID) {
+    public BoundingBox box(Dimensions dimensions, int regionID) {
         // TODO FOR NOW WE IGNORE THE SHELL RADIUS
         return new BoundingBox(min, max);
     }

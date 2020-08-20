@@ -43,10 +43,10 @@ import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
-import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelDataTypeException;
+import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelTypeException;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
-import org.anchoranalysis.image.voxel.datatype.UnsignedByte;
-import org.anchoranalysis.image.voxel.datatype.UnsignedShort;
+import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
+import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class HistogramFactory {
@@ -88,7 +88,7 @@ public class HistogramFactory {
 
         try {
             return create(channel.voxels());
-        } catch (IncorrectVoxelDataTypeException e) {
+        } catch (IncorrectVoxelTypeException e) {
             throw new CreateException("Cannot create histogram from channel", e);
         }
     }
@@ -133,7 +133,7 @@ public class HistogramFactory {
     public static Histogram create(VoxelsWrapper inputBuffer, Optional<ObjectMask> object) {
 
         if (!isDataTypeSupported(inputBuffer.getVoxelDataType())) {
-            throw new IncorrectVoxelDataTypeException(
+            throw new IncorrectVoxelTypeException(
                     String.format("Data type %s is not supported", inputBuffer.getVoxelDataType()));
         }
 
@@ -145,8 +145,8 @@ public class HistogramFactory {
     }
 
     private static boolean isDataTypeSupported(VoxelDataType dataType) {
-        return dataType.equals(UnsignedByte.INSTANCE)
-                || dataType.equals(UnsignedShort.INSTANCE);
+        return dataType.equals(UnsignedByteVoxelType.INSTANCE)
+                || dataType.equals(UnsignedShortVoxelType.INSTANCE);
     }
 
     private static Histogram createWithMask(Voxels<?> inputBuffer, ObjectMask object) {

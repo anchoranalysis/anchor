@@ -40,7 +40,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 
 public class ReportFeatureOnCfg extends ReportFeatureForMPP<FeatureInputCfg> {
 
@@ -68,7 +68,7 @@ public class ReportFeatureOnCfg extends ReportFeatureForMPP<FeatureInputCfg> {
         try {
             Cfg cfg = cfgProvider.create();
 
-            ImageDimensions dimensions = createImageDim();
+            Dimensions dimensions = createImageDim();
 
             FeatureCalculatorSingle<FeatureInputCfg> session = createAndStartSession();
 

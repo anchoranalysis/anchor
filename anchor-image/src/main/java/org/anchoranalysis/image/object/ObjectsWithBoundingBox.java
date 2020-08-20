@@ -7,7 +7,7 @@ import lombok.Getter;
 import lombok.experimental.Accessors;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.object.ops.ObjectMaskMerger;
 
 /**
@@ -72,7 +72,7 @@ public class ObjectsWithBoundingBox {
      * @throws OperationFailedException if the image-dimensions don't contain the existing
      *     bounding-boc
      */
-    public ObjectsWithBoundingBox mapObjectsToUseEntireImage(ImageDimensions dimensions)
+    public ObjectsWithBoundingBox mapObjectsToUseEntireImage(Dimensions dimensions)
             throws OperationFailedException {
         if (!dimensions.contains(boundingBox)) {
             throw new OperationFailedException(

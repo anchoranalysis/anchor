@@ -37,7 +37,7 @@ import org.anchoranalysis.bean.NullParamsBean;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 
 public abstract class PointsProposer extends NullParamsBean<PointsProposer>
         implements CompatibleWithMark {
@@ -45,7 +45,7 @@ public abstract class PointsProposer extends NullParamsBean<PointsProposer>
     public abstract Optional<List<Point3i>> propose(
             Point3d point,
             Mark mark,
-            ImageDimensions dimensions,
+            Dimensions dimensions,
             RandomNumberGenerator randomNumberGenerator,
             ErrorNode errorNode)
             throws ProposalAbnormalFailureException;

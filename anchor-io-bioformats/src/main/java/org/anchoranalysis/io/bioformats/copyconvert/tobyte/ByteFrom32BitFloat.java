@@ -28,7 +28,7 @@ package org.anchoranalysis.io.bioformats.copyconvert.tobyte;
 
 import java.nio.ByteBuffer;
 import loci.common.DataTools;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferByte;
 
@@ -47,13 +47,13 @@ public class ByteFrom32BitFloat extends ConvertToByte {
     }
 
     @Override
-    protected void setupBefore(ImageDimensions dimensions, int numChnlsPerByteArray) {
+    protected void setupBefore(Dimensions dimensions, int numChannelsPerByteArray) {
         sizeXY = dimensions.x() * dimensions.y();
         sizeBytes = sizeXY * BYTES_PER_PIXEL;
     }
 
     @Override
-    protected VoxelBuffer<ByteBuffer> convertSingleChnl(byte[] src, int channelRelative) {
+    protected VoxelBuffer<ByteBuffer> convertSingleChannel(byte[] src, int channelRelative) {
         byte[] crntChnlBytes = new byte[sizeXY];
 
         int indOut = 0;

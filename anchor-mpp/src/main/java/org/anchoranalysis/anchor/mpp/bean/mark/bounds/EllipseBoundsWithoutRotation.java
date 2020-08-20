@@ -33,7 +33,7 @@ import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.bean.bound.Bound;
 import org.anchoranalysis.anchor.mpp.bean.bound.OrientableBounds;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.image.extent.ImageResolution;
+import org.anchoranalysis.image.extent.Resolution;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -58,12 +58,12 @@ public abstract class EllipseBoundsWithoutRotation extends OrientableBounds {
     }
 
     @Override
-    public double getMinResolved(ImageResolution sr, boolean do3D) {
+    public double getMinResolved(Resolution sr, boolean do3D) {
         return radius.getMinResolved(sr, do3D);
     }
 
     @Override
-    public double getMaxResolved(ImageResolution sr, boolean do3D) {
+    public double getMaxResolved(Resolution sr, boolean do3D) {
         return radius.getMaxResolved(sr, do3D);
     }
 }

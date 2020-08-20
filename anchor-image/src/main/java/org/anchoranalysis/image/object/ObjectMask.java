@@ -49,7 +49,7 @@ import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelsFactory;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.interpolator.Interpolator;
 import org.anchoranalysis.image.interpolator.InterpolatorFactory;
 import org.anchoranalysis.image.object.factory.CreateFromConnectedComponentsFactory;
@@ -369,7 +369,7 @@ public class ObjectMask {
      * @param dimensions dimensions to constrain any intersection
      * @return a new object of the intersecting region iff it exists
      */
-    public Optional<ObjectMask> intersect(ObjectMask other, ImageDimensions dimensions) {
+    public Optional<ObjectMask> intersect(ObjectMask other, Dimensions dimensions) {
 
         // we combine the two objects
         Optional<BoundingBox> boxIntersect =

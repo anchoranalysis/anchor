@@ -27,7 +27,7 @@
 package org.anchoranalysis.image.stack;
 
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 
 /**
  * Like a @{link {@link NamedStacksSet} but enforces a condition that all stacks must have the same
@@ -38,7 +38,7 @@ import org.anchoranalysis.image.extent.ImageDimensions;
 public class NamedStacksUniformSize {
 
     /** Lazy initialization after first stack is added */
-    private ImageDimensions dimensions;
+    private Dimensions dimensions;
 
     private NamedStacksSet delegate = new NamedStacksSet();
 

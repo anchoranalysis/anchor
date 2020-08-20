@@ -40,13 +40,13 @@ import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactorySingleType;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
-import org.anchoranalysis.image.voxel.datatype.UnsignedByte;
+import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 
 /**
  * A stack with exactly three channels, respectively for Red, Green and Blue colors.
@@ -67,7 +67,7 @@ public class RGBStack {
      * @param dimensions dimensions of each channel
      * @param factory factory to create the channel
      */
-    public RGBStack(ImageDimensions dimensions, ChannelFactorySingleType factory) {
+    public RGBStack(Dimensions dimensions, ChannelFactorySingleType factory) {
         stack = new Stack(dimensions, factory, 3);
     }
 
@@ -127,7 +127,7 @@ public class RGBStack {
         return stack.getChannel(index);
     }
 
-    public ImageDimensions dimensions() {
+    public Dimensions dimensions() {
         return stack.dimensions();
     }
 
@@ -159,7 +159,7 @@ public class RGBStack {
 
     // Only supports 8-bit
     public void writeRGBPoint(Point3i point, RGBColor color) {
-        assert (stack.allChannelsHaveType(UnsignedByte.INSTANCE));
+        assert (stack.allChannelsHaveType(UnsignedByteVoxelType.INSTANCE));
         writePoint(point, stack.getChannel(0), color.getRed());
         writePoint(point, stack.getChannel(1), color.getGreen());
         writePoint(point, stack.getChannel(2), color.getBlue());
@@ -176,7 +176,7 @@ public class RGBStack {
         Preconditions.checkArgument(pointGlobal.z() >= 0);
         Preconditions.checkArgument(stack.getNumberChannels() == 3);
         Preconditions.checkArgument(
-                stack.allChannelsHaveType(UnsignedByte.INSTANCE));
+                stack.allChannelsHaveType(UnsignedByteVoxelType.INSTANCE));
 
         byte objectMaskOn = object.binaryValuesByte().getOnByte();
 

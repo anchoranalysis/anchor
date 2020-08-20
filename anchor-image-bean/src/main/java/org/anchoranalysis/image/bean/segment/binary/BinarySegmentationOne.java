@@ -49,10 +49,10 @@ public abstract class BinarySegmentationOne extends BinarySegmentation {
             BinarySegmentationParameters params,
             Optional<ObjectMask> objectMask)
             throws SegmentationFailedException {
-        return sgmnFromSgmn(voxels, params, objectMask, sgmn);
+        return segmentFromExistingSegmentation(voxels, params, objectMask, sgmn);
     }
 
-    protected abstract BinaryVoxels<ByteBuffer> sgmnFromSgmn(
+    protected abstract BinaryVoxels<ByteBuffer> segmentFromExistingSegmentation(
             VoxelsWrapper voxels,
             BinarySegmentationParameters params,
             Optional<ObjectMask> object,

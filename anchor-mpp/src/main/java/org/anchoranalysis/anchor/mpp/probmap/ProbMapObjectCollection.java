@@ -33,7 +33,7 @@ import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.ops.MaskFromObjects;
@@ -41,11 +41,11 @@ import org.anchoranalysis.image.object.ops.MaskFromObjects;
 public class ProbMapObjectCollection implements ProbMap {
 
     private final ObjectCollection objects;
-    private final ImageDimensions dimensions;
+    private final Dimensions dimensions;
 
     private final ProbWeights probWeights;
 
-    public ProbMapObjectCollection(ObjectCollection objects, ImageDimensions dim) {
+    public ProbMapObjectCollection(ObjectCollection objects, Dimensions dim) {
         super();
         this.objects = objects;
         this.dimensions = dim;
@@ -73,7 +73,7 @@ public class ProbMapObjectCollection implements ProbMap {
     }
 
     @Override
-    public ImageDimensions dimensions() {
+    public Dimensions dimensions() {
         return dimensions;
     }
 

@@ -38,8 +38,8 @@ import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.channel.factory.ChannelFactorySingleType;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.extent.ImageDimensions;
-import org.anchoranalysis.image.extent.ImageResolution;
+import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.apache.commons.lang.builder.HashCodeBuilder;
@@ -63,7 +63,7 @@ public class Stack implements Iterable<Channel> {
         delegate = new StackNotUniformSized(channel);
     }
 
-    public Stack(ImageDimensions dimensions, ChannelFactorySingleType factory, int numberChannels) {
+    public Stack(Dimensions dimensions, ChannelFactorySingleType factory, int numberChannels) {
         this();
         for (int i = 0; i < numberChannels; i++) {
             delegate.addChannel(factory.createEmptyInitialised(dimensions));
@@ -199,7 +199,7 @@ public class Stack implements Iterable<Channel> {
         return delegate.getNumberChannels();
     }
 
-    public ImageDimensions dimensions() {
+    public Dimensions dimensions() {
         return delegate.getChannel(0).dimensions();
     }
     
@@ -288,7 +288,7 @@ public class Stack implements Iterable<Channel> {
         return builder.toHashCode();
     }
 
-    public void updateResolution(ImageResolution res) {
+    public void updateResolution(Resolution res) {
         for (int i = 0; i < getNumberChannels(); i++) {
             getChannel(i).updateResolution(res);
         }

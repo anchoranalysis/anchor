@@ -36,8 +36,8 @@ import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
-import org.anchoranalysis.image.voxel.datatype.UnsignedByte;
-import org.anchoranalysis.image.voxel.datatype.UnsignedInt;
+import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
+import org.anchoranalysis.image.voxel.datatype.UnsignedIntVoxelType;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -65,7 +65,7 @@ public class BinaryVoxelsFactory {
     public static BinaryVoxels<ByteBuffer> createEmptyOff(Extent extent) {
         try {
             return (BinaryVoxels<ByteBuffer>)
-                    createEmptyOff(extent, UnsignedByte.INSTANCE);
+                    createEmptyOff(extent, UnsignedByteVoxelType.INSTANCE);
         } catch (CreateException e) {
             throw new AnchorImpossibleSituationException();
         }
@@ -83,10 +83,10 @@ public class BinaryVoxelsFactory {
      */
     public static BinaryVoxels<?> createEmptyOff( // NOSONAR
             Extent extent, VoxelDataType dataType) throws CreateException {
-        if (dataType.equals(UnsignedByte.INSTANCE)) {
+        if (dataType.equals(UnsignedByteVoxelType.INSTANCE)) {
             return new BinaryVoxelsByte(
                     VoxelsFactory.getByte().createInitialized(extent), BinaryValues.getDefault());
-        } else if (dataType.equals(UnsignedInt.INSTANCE)) {
+        } else if (dataType.equals(UnsignedIntVoxelType.INSTANCE)) {
             return new BinaryVoxelsInt(
                     VoxelsFactory.getInt().createInitialized(extent), BinaryValues.getDefault());
         } else {

@@ -30,12 +30,12 @@ import org.anchoranalysis.anchor.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.GenerateUniqueParameterization;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 
 public abstract class MarkRegion extends AnchorBean<MarkRegion>
         implements GenerateUniqueParameterization {
 
     public abstract VoxelStatistics createStatisticsFor(
-            VoxelizedMarkMemo memo, ImageDimensions dimensions) throws CreateException;
+            VoxelizedMarkMemo memo, Dimensions dimensions) throws CreateException;
 }

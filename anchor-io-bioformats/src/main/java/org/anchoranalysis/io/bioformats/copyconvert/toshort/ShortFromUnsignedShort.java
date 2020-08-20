@@ -28,10 +28,10 @@ package org.anchoranalysis.io.bioformats.copyconvert.toshort;
 
 import java.nio.ShortBuffer;
 import loci.common.DataTools;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferShort;
-import org.anchoranalysis.image.voxel.datatype.UnsignedShort;
+import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
 
 public class ShortFromUnsignedShort extends ConvertToShort {
 
@@ -47,13 +47,13 @@ public class ShortFromUnsignedShort extends ConvertToShort {
     }
 
     @Override
-    protected void setupBefore(ImageDimensions dimensions, int numChnlsPerByteArray) {
+    protected void setupBefore(Dimensions dimensions, int numChannelsPerByteArray) {
         sizeXY = dimensions.x() * dimensions.y();
         sizeBytes = sizeXY * bytesPerPixel;
     }
 
     @Override
-    protected VoxelBuffer<ShortBuffer> convertSingleChnl(byte[] src, int channelRelative) {
+    protected VoxelBuffer<ShortBuffer> convertSingleChannel(byte[] src, int channelRelative) {
 
         short[] crntChnlBytes = new short[sizeXY];
 
@@ -63,11 +63,11 @@ public class ShortFromUnsignedShort extends ConvertToShort {
 
             // Make positive
             if (s < 0) {
-                s += (UnsignedShort.MAX_VALUE_INT + 1);
+                s += (UnsignedShortVoxelType.MAX_VALUE_INT + 1);
             }
 
-            if (s > UnsignedShort.MAX_VALUE_INT) {
-                s = UnsignedShort.MAX_VALUE_INT;
+            if (s > UnsignedShortVoxelType.MAX_VALUE_INT) {
+                s = UnsignedShortVoxelType.MAX_VALUE_INT;
             }
             if (s < 0) {
                 s = 0;

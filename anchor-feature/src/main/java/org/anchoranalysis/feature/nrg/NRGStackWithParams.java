@@ -32,7 +32,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.stack.Stack;
 
 // An NRG stack with associated parameters
@@ -41,9 +41,9 @@ public class NRGStackWithParams {
     @Getter private final NRGStack nrgStack;
     @Getter @Setter private KeyValueParams params;
 
-    public NRGStackWithParams(Channel chnl) {
+    public NRGStackWithParams(Channel channel) {
         super();
-        this.nrgStack = new NRGStack(chnl);
+        this.nrgStack = new NRGStack(channel);
         this.params = new KeyValueParams();
     }
 
@@ -69,7 +69,7 @@ public class NRGStackWithParams {
         this.params = new KeyValueParams();
     }
 
-    public NRGStackWithParams(ImageDimensions dimensions) {
+    public NRGStackWithParams(Dimensions dimensions) {
         this.nrgStack = new NRGStack(dimensions);
         this.params = new KeyValueParams();
     }
@@ -78,7 +78,7 @@ public class NRGStackWithParams {
         return new NRGStackWithParams(nrgStack.extractSlice(z), params);
     }
 
-    public ImageDimensions dimensions() {
+    public Dimensions dimensions() {
         return nrgStack.dimensions();
     }
 

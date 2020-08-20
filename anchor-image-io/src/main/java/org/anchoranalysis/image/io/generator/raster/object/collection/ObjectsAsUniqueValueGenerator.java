@@ -28,8 +28,8 @@ package org.anchoranalysis.image.io.generator.raster.object.collection;
 
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactoryByte;
-import org.anchoranalysis.image.extent.ImageDimensions;
-import org.anchoranalysis.image.io.generator.raster.ChnlGenerator;
+import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.io.generator.raster.ChannelGenerator;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.stack.Stack;
@@ -47,11 +47,11 @@ public class ObjectsAsUniqueValueGenerator extends ObjectsGenerator {
 
     private static ChannelFactoryByte factory = new ChannelFactoryByte();
 
-    public ObjectsAsUniqueValueGenerator(ImageDimensions dimensions) {
+    public ObjectsAsUniqueValueGenerator(Dimensions dimensions) {
         super(dimensions);
     }
 
-    public ObjectsAsUniqueValueGenerator(ImageDimensions dimensions, ObjectCollection objects) {
+    public ObjectsAsUniqueValueGenerator(Dimensions dimensions, ObjectCollection objects) {
         super(dimensions, objects);
     }
 
@@ -73,6 +73,6 @@ public class ObjectsAsUniqueValueGenerator extends ObjectsGenerator {
             out.assignValue(val++).toObject(object);
         }
 
-        return new ChnlGenerator(out, "maskCollection").generate();
+        return new ChannelGenerator(out, "maskCollection").generate();
     }
 }

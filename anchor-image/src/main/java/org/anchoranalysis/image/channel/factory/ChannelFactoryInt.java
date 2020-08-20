@@ -26,12 +26,12 @@
 
 package org.anchoranalysis.image.channel.factory;
 
-import org.anchoranalysis.image.voxel.datatype.UnsignedInt;
+import org.anchoranalysis.image.voxel.datatype.UnsignedIntVoxelType;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 
 public class ChannelFactoryInt extends ChannelFactorySingleType {
 
     public ChannelFactoryInt() {
-        super(UnsignedInt.INSTANCE, VoxelsFactory.getInt());
+        super(UnsignedIntVoxelType.INSTANCE, VoxelsFactory.getInt());
     }
 }
