@@ -37,6 +37,7 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.bean.Provider;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.functional.CheckedStream;
 import org.anchoranalysis.core.functional.function.CheckedFunction;
@@ -84,7 +85,7 @@ public class FeatureListFactory {
      * @throws CreateException
      */
     public static <T extends FeatureInput> FeatureList<T> fromProvider(
-            FeatureProvider<T> featureProvider) throws CreateException {
+            Provider<Feature<T>> featureProvider) throws CreateException {
         return from(featureProvider.create());
     }
 
