@@ -112,7 +112,7 @@ public class OptimizationStep<S, T> {
 
     private void assgnCrntFromProposal(ToDoubleFunction<T> funcScore) {
         // We can rely that a proposal exists, as it has been accepted
-        state.assignCurrent(proposalOptional.get());       // NOSONAR
+        state.assignCurrent(proposalOptional.get());    
         maybeAssignAsBest(funcScore);
     }
 
