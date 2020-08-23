@@ -28,7 +28,7 @@ package org.anchoranalysis.anchor.mpp.mark.voxelized.memo;
 
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
-import org.anchoranalysis.feature.nrg.NRGStack;
+import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
 
 // We more explicitly manage the creation and deletiion of PxlMarkMemo as they can take up a large
 // amount of memory
@@ -38,7 +38,7 @@ public class PxlMarkMemoFactory {
         // ONLY ALLOWED AS STATIC
     }
 
-    public static VoxelizedMarkMemo create(Mark mark, NRGStack stack, RegionMap regionMap) {
+    public static VoxelizedMarkMemo create(Mark mark, EnergyStackWithoutParams stack, RegionMap regionMap) {
         return new VoxelizedMarkMemo(mark, stack, regionMap);
     }
 }

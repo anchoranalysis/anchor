@@ -35,5 +35,5 @@ public class StackIdentifiers {
     public static final String INPUT_IMAGE = "input_image";
     public static final String INPUT_IMAGE_MASK = "input_image_mask";
     public static final String INPUT_IMAGE_VISUAL = "input_image_visual";
-    public static final String NRG_STACK = "nrg_stack";
+    public static final String ENERGY_STACK = "energy_stack";
 }

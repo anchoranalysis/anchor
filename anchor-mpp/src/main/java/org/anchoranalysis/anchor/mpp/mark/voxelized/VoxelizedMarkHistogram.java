@@ -39,7 +39,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
-import org.anchoranalysis.feature.nrg.NRGStack;
+import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.Dimensions;
@@ -60,7 +60,7 @@ class VoxelizedMarkHistogram implements VoxelizedMark {
 
     @Getter private ObjectMask objectFlattened; // null until we need it
 
-    public VoxelizedMarkHistogram(Mark mark, NRGStack stack, RegionMap regionMap) {
+    public VoxelizedMarkHistogram(Mark mark, EnergyStackWithoutParams stack, RegionMap regionMap) {
         partitionList = new IndexByChannel<>();
         initForMark(mark, stack, regionMap);
     }
@@ -137,7 +137,7 @@ class VoxelizedMarkHistogram implements VoxelizedMark {
     }
 
     // Calculates the pixels for a mark
-    private void initForMark(Mark mark, NRGStack stack, RegionMap regionMap) {
+    private void initForMark(Mark mark, EnergyStackWithoutParams stack, RegionMap regionMap) {
 
         Dimensions dimensions = stack.dimensions();
         BoundingBox box = mark.boxAllRegions(dimensions);

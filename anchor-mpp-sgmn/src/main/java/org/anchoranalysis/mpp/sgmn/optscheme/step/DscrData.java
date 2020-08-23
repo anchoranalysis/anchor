@@ -27,7 +27,7 @@
 package org.anchoranalysis.mpp.sgmn.optscheme.step;
 
 import org.anchoranalysis.anchor.mpp.proposer.error.ProposerFailureDescription;
-import org.anchoranalysis.mpp.sgmn.kernel.proposer.KernelWithID;
+import org.anchoranalysis.mpp.sgmn.kernel.proposer.KernelWithIdentifier;
 
 /**
  * @author Owen Feehan
@@ -38,7 +38,7 @@ class DscrData<T> {
     private double temperature;
     private int[] changedMarkIDs;
     private long executionTime;
-    private KernelWithID<T> kernel;
+    private KernelWithIdentifier<T> kernel;
     private ProposerFailureDescription kernelNoProposalDescription;
 
     public double getTemperature() {
@@ -65,11 +65,11 @@ class DscrData<T> {
         this.executionTime = executionTime;
     }
 
-    public KernelWithID<T> getKernel() {
+    public KernelWithIdentifier<T> getKernel() {
         return kernel;
     }
 
-    public void setKernel(KernelWithID<T> kernel) {
+    public void setKernel(KernelWithIdentifier<T> kernel) {
         this.kernel = kernel;
     }
 

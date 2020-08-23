@@ -89,13 +89,13 @@ class AggregateTrigger<S, T extends AggregateReceiver<S>> {
     public void record(Reporting<S> reporting) throws ReporterException {
 
         // If accepted we increase the total for this kernel
-        if (reporting.isAccptd()) {
-            agg.incrKernelAccpt(reporting.getKernel().getID());
+        if (reporting.isAccepted()) {
+            agg.incrKernelAccpt(reporting.getKernel().getIdentifier());
         }
 
-        agg.incrKernelProp(reporting.getKernel().getID());
-        agg.incrNRG(extractScoreSize.extractScore(reporting.getCfgNRGAfter()));
-        agg.incrSize(extractScoreSize.extractSize(reporting.getCfgNRGAfter()));
+        agg.incrKernelProp(reporting.getKernel().getIdentifier());
+        agg.incrEnergy(extractScoreSize.extractScore(reporting.getMarksAfter()));
+        agg.incrSize(extractScoreSize.extractSize(reporting.getMarksAfter()));
         agg.incrTemperature(reporting.getTemperature());
     }
 

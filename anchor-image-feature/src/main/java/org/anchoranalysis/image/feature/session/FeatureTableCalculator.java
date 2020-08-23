@@ -29,9 +29,9 @@ package org.anchoranalysis.image.feature.session;
 import java.util.Optional;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.log.Logger;
+import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.name.FeatureNameList;
-import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 
@@ -49,11 +49,11 @@ public interface FeatureTableCalculator<T extends FeatureInput> extends FeatureC
      * createFeatures() from the same object
      *
      * @param initParams
-     * @param nrgStack
+     * @param energyStack
      * @param logger
      * @param features
      */
-    void start(ImageInitParams initParams, Optional<NRGStackWithParams> nrgStack, Logger logger)
+    void start(ImageInitParams initParams, Optional<EnergyStack> energyStack, Logger logger)
             throws InitException;
 
     /**

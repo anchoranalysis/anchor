@@ -29,12 +29,12 @@ package org.anchoranalysis.image.feature.object.input;
 import java.util.Optional;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import org.anchoranalysis.feature.input.FeatureInputNRG;
-import org.anchoranalysis.feature.nrg.NRGStackWithParams;
+import org.anchoranalysis.feature.energy.EnergyStack;
+import org.anchoranalysis.feature.input.FeatureInputEnergy;
 import org.anchoranalysis.image.object.ObjectCollection;
 
 @EqualsAndHashCode(callSuper = true)
-public class FeatureInputObjectCollection extends FeatureInputNRG {
+public class FeatureInputObjectCollection extends FeatureInputEnergy {
 
     @Getter private final ObjectCollection objects;
 
@@ -43,8 +43,8 @@ public class FeatureInputObjectCollection extends FeatureInputNRG {
     }
 
     public FeatureInputObjectCollection(
-            ObjectCollection objects, Optional<NRGStackWithParams> nrgStack) {
-        super(nrgStack);
+            ObjectCollection objects, Optional<EnergyStack> energyStack) {
+        super(energyStack);
         this.objects = objects;
     }
 }

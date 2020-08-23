@@ -27,13 +27,13 @@
 package org.anchoranalysis.anchor.mpp.bean.init;
 
 import org.anchoranalysis.anchor.mpp.bean.bound.MarkBounds;
-import org.anchoranalysis.anchor.mpp.bean.cfg.CfgProvider;
-import org.anchoranalysis.anchor.mpp.bean.proposer.CfgProposer;
+import org.anchoranalysis.anchor.mpp.bean.proposer.MarkCollectionProposer;
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkMergeProposer;
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkProposer;
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkSplitProposer;
-import org.anchoranalysis.anchor.mpp.cfg.Cfg;
+import org.anchoranalysis.anchor.mpp.bean.provider.MarkCollectionProvider;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
+import org.anchoranalysis.anchor.mpp.mark.MarkCollection;
 import org.anchoranalysis.anchor.mpp.pair.IdentifiablePair;
 import org.anchoranalysis.anchor.mpp.pair.RandomCollection;
 import org.anchoranalysis.anchor.mpp.probmap.ProbMap;
@@ -59,8 +59,8 @@ public class MPPInitParams implements BeanInitParams {
     // END: InitParams
 
     // START: Stores
-    private NamedProviderStore<Cfg> storeCfg;
-    private NamedProviderStore<CfgProposer> storeCfgProposer;
+    private NamedProviderStore<MarkCollection> storeCfg;
+    private NamedProviderStore<MarkCollectionProposer> storeCfgProposer;
     private NamedProviderStore<MarkBounds> storeMarkBounds;
     private NamedProviderStore<MarkProposer> storeMarkProposer;
     private NamedProviderStore<MarkMergeProposer> storeMarkMergeProposer;
@@ -74,8 +74,8 @@ public class MPPInitParams implements BeanInitParams {
         this.soImage = soImage;
         this.soPoints = PointsInitParams.create(soImage, so);
 
-        storeCfg = so.getOrCreate(Cfg.class);
-        storeCfgProposer = so.getOrCreate(CfgProposer.class);
+        storeCfg = so.getOrCreate(MarkCollection.class);
+        storeCfgProposer = so.getOrCreate(MarkCollectionProposer.class);
         storeMarkBounds = so.getOrCreate(MarkBounds.class);
         storeMarkProposer = so.getOrCreate(MarkProposer.class);
         storeMarkMergeProposer = so.getOrCreate(MarkMergeProposer.class);
@@ -100,11 +100,11 @@ public class MPPInitParams implements BeanInitParams {
         return soImage.params();
     }
 
-    public NamedProviderStore<Cfg> getCfgCollection() {
+    public NamedProviderStore<MarkCollection> getCfgCollection() {
         return storeCfg;
     }
 
-    public NamedProviderStore<CfgProposer> getCfgProposerSet() {
+    public NamedProviderStore<MarkCollectionProposer> getCfgProposerSet() {
         return storeCfgProposer;
     }
 
@@ -151,12 +151,12 @@ public class MPPInitParams implements BeanInitParams {
                 new PopulateStoreFromDefine<>(define, pi, logger);
         populater.copyWithoutInit(MarkBounds.class, getMarkBoundsSet());
         populater.copyInit(MarkProposer.class, getMarkProposerSet());
-        populater.copyInit(CfgProposer.class, getCfgProposerSet());
+        populater.copyInit(MarkCollectionProposer.class, getCfgProposerSet());
         populater.copyInit(MarkSplitProposer.class, getMarkSplitProposerSet());
         populater.copyInit(MarkMergeProposer.class, getMarkMergeProposerSet());
         populater.copyWithoutInit(RandomCollection.class, getSimplePairCollection());
 
-        populater.copyProvider(CfgProvider.class, getCfgCollection());
+        populater.copyProvider(MarkCollectionProvider.class, getCfgCollection());
 
         soImage.populate(pi, define, logger);
         soPoints.populate(pi, define, logger);

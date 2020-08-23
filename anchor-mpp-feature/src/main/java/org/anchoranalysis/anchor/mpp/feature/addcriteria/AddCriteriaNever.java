@@ -31,7 +31,7 @@ import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
 import org.anchoranalysis.anchor.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.bean.list.FeatureList;
-import org.anchoranalysis.feature.nrg.NRGStackWithParams;
+import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 
 /**
@@ -44,7 +44,7 @@ public class AddCriteriaNever<T> implements AddCriteria<T> {
     public Optional<T> generateEdge(
             VoxelizedMarkMemo mark1,
             VoxelizedMarkMemo mark2,
-            NRGStackWithParams nrgStack,
+            EnergyStack energyStack,
             Optional<FeatureCalculatorMulti<FeatureInputPairMemo>> session,
             boolean do3D)
             throws CreateException {

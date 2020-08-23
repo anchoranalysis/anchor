@@ -34,9 +34,9 @@ import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
 import org.anchoranalysis.feature.calculate.results.ResultsVector;
+import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.feature.list.NamedFeatureStore;
 import org.anchoranalysis.feature.name.FeatureNameList;
-import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
@@ -52,14 +52,14 @@ public class SingleTableCalculator implements FeatureTableCalculator<FeatureInpu
     private FeatureCalculatorMulti<FeatureInputSingleObject> session;
 
     @Override
-    public void start(ImageInitParams soImage, Optional<NRGStackWithParams> nrgStack, Logger logger)
+    public void start(ImageInitParams soImage, Optional<EnergyStack> energyStack, Logger logger)
             throws InitException {
 
         session =
                 FeatureSession.with(
                         namedFeatureStore.listFeatures(),
                         InitParamsHelper.createInitParams(
-                                Optional.of(soImage.getSharedObjects()), nrgStack),
+                                Optional.of(soImage.getSharedObjects()), energyStack),
                         soImage.features().getSharedFeatureSet(),
                         logger);
     }

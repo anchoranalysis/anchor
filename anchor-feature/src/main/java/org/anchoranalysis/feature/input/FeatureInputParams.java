@@ -35,7 +35,7 @@ import org.anchoranalysis.feature.calculate.FeatureCalculationException;
  *
  * @author Owen Feehan
  */
-public interface FeatureInputParams extends FeatureInputWithRes {
+public interface FeatureInputParams extends FeatureInputWithResolution {
 
     Optional<KeyValueParams> getParamsOptional();
 

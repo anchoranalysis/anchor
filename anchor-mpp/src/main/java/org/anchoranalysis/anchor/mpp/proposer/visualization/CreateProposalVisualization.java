@@ -26,10 +26,10 @@
 
 package org.anchoranalysis.anchor.mpp.proposer.visualization;
 
-import org.anchoranalysis.anchor.mpp.cfg.ColoredCfg;
+import org.anchoranalysis.anchor.mpp.mark.ColoredMarks;
 
 @FunctionalInterface
 public interface CreateProposalVisualization {
 
-    void addToCfg(ColoredCfg cfg);
+    void addToCfg(ColoredMarks cfg);
 }

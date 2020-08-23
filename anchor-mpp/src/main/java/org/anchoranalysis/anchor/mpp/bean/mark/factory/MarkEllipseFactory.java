@@ -29,7 +29,7 @@ package org.anchoranalysis.anchor.mpp.bean.mark.factory;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
-import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipse;
+import org.anchoranalysis.anchor.mpp.mark.conic.Ellipse;
 import org.anchoranalysis.bean.annotation.BeanField;
 
 public class MarkEllipseFactory extends MarkFactory {
@@ -40,7 +40,7 @@ public class MarkEllipseFactory extends MarkFactory {
 
     @Override
     public Mark create() {
-        MarkEllipse mark = new MarkEllipse();
+        Ellipse mark = new Ellipse();
         mark.setShellRad(shellRad);
         return mark;
     }

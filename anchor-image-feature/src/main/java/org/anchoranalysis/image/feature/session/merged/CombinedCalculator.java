@@ -108,7 +108,7 @@ class CombinedCalculator {
 
         ResultsVectorBuilder helper = new ResultsVectorBuilder(sizeFeatures(), errorReporter);
 
-        // First we calculate the Image features (we rely on the NRG stack being added by the
+        // First we calculate the Image features (we rely on the energy stack being added by the
         // calculator)
         // These are identical and are cached in the background, to avoid being repeatedly
         // calculated.

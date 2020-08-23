@@ -129,25 +129,25 @@ public class ColoredOverlayCollection implements Iterable<Overlay> {
 
     // Everything from the two Cfgs which isn't in the intersection
     public static OverlayCollection createIntersectionComplement(
-            ColoredOverlayCollection cfg1, ColoredOverlayCollection cfg2) {
+            ColoredOverlayCollection marks1, ColoredOverlayCollection marks2) {
 
         OverlayCollection out = new OverlayCollection();
 
-        if (cfg2 == null) {
-            out.addAll(cfg1.withoutColor());
+        if (marks2 == null) {
+            out.addAll(marks1.withoutColor());
             return out;
         }
 
-        Set<Overlay> set1 = cfg1.createSet();
-        Set<Overlay> set2 = cfg2.createSet();
+        Set<Overlay> set1 = marks1.createSet();
+        Set<Overlay> set2 = marks2.createSet();
 
-        for (Overlay m : cfg1) {
+        for (Overlay m : marks1) {
             if (!set2.contains(m)) {
                 out.add(m);
             }
         }
 
-        for (Overlay m : cfg2) {
+        for (Overlay m : marks2) {
             if (!set1.contains(m)) {
                 out.add(m);
             }

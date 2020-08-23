@@ -27,11 +27,11 @@
 package org.anchoranalysis.image.feature.histogram;
 
 import java.util.Optional;
-import org.anchoranalysis.feature.input.FeatureInputWithRes;
+import org.anchoranalysis.feature.input.FeatureInputWithResolution;
 import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.histogram.Histogram;
 
-public class FeatureInputHistogram implements FeatureInputWithRes {
+public class FeatureInputHistogram implements FeatureInputWithResolution {
 
     private Histogram histogram;
     private Optional<Resolution> res;

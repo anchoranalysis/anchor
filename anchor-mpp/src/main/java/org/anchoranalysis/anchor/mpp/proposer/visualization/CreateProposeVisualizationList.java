@@ -28,7 +28,7 @@ package org.anchoranalysis.anchor.mpp.proposer.visualization;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.anchoranalysis.anchor.mpp.cfg.ColoredCfg;
+import org.anchoranalysis.anchor.mpp.mark.ColoredMarks;
 
 public class CreateProposeVisualizationList implements CreateProposalVisualization {
 
@@ -39,7 +39,7 @@ public class CreateProposeVisualizationList implements CreateProposalVisualizati
     }
 
     @Override
-    public void addToCfg(ColoredCfg cfg) {
+    public void addToCfg(ColoredMarks cfg) {
         for (CreateProposalVisualization item : list) {
             item.addToCfg(cfg);
         }

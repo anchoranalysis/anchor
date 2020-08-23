@@ -31,7 +31,7 @@ import java.util.function.ToDoubleFunction;
 import org.anchoranalysis.anchor.mpp.proposer.error.ProposerFailureDescription;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.functional.OptionalUtilities;
-import org.anchoranalysis.mpp.sgmn.kernel.proposer.KernelWithID;
+import org.anchoranalysis.mpp.sgmn.kernel.proposer.KernelWithIdentifier;
 import org.anchoranalysis.mpp.sgmn.optscheme.DualState;
 import org.anchoranalysis.mpp.sgmn.optscheme.StateReporter;
 import org.anchoranalysis.mpp.sgmn.transformer.TransformationContext;
@@ -62,7 +62,7 @@ public class OptimizationStep<S, T> {
         dscrData.setTemperature(temperature);
     }
 
-    public void assignProposal(Optional<T> proposalNew, KernelWithID<S> kid) {
+    public void assignProposal(Optional<T> proposalNew, KernelWithIdentifier<S> kid) {
 
         dscrData.setKernel(kid);
 
@@ -112,7 +112,7 @@ public class OptimizationStep<S, T> {
 
     private void assgnCrntFromProposal(ToDoubleFunction<T> funcScore) {
         // We can rely that a proposal exists, as it has been accepted
-        state.assignCrnt(proposal.get());
+        state.assignCurrent(proposal.get());
         maybeAssignAsBest(funcScore);
     }
 
@@ -124,20 +124,20 @@ public class OptimizationStep<S, T> {
     private void maybeAssignAsBest(ToDoubleFunction<T> funcScore) {
         // Is the score from crnt, greater than the score from best?
         if (!state.getBest().isPresent() || scoreCurrentBetterThanBest(funcScore)) {
-            state.assignBestFromCrnt();
+            state.assignBestFromCurrent();
             best = true;
         }
     }
 
     private boolean scoreCurrentBetterThanBest(ToDoubleFunction<T> funcScore) {
-        if (!state.getCrnt().isPresent()) {
+        if (!state.getCurrent().isPresent()) {
             return false;
         }
-        return funcScore.applyAsDouble(state.getCrnt().get())
+        return funcScore.applyAsDouble(state.getCurrent().get())
                 > funcScore.applyAsDouble(state.getBest().get()); // NOSONAR
     }
 
-    private void markChanged(KernelWithID<S> kid) {
+    private void markChanged(KernelWithIdentifier<S> kid) {
         setChangedMarkIDs(kid.getKernel().changedMarkIDArray());
     }
 
@@ -150,12 +150,12 @@ public class OptimizationStep<S, T> {
         best = false;
     }
 
-    public KernelWithID<S> getKernel() {
+    public KernelWithIdentifier<S> getKernel() {
         return dscrData.getKernel();
     }
 
     public Optional<T> getCrnt() {
-        return state.getCrnt();
+        return state.getCurrent();
     }
 
     public Optional<T> getBest() {
@@ -168,7 +168,7 @@ public class OptimizationStep<S, T> {
 
     /**
      * @param iter
-     * @param func Main function for extracting a CfgNRGPixelized from type T
+     * @param func Main function for extracting the primary proposal
      * @param funcProposalSecondary Function for extracting a secondary proposal
      * @return
      * @throws OperationFailedException

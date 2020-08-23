@@ -41,7 +41,7 @@ public class MarkSphereTest {
     @Test
     public void testSerialization() throws IOException, ClassNotFoundException {
 
-        MarkSphere ms_in = new MarkSphere();
+        Sphere ms_in = new Sphere();
         ms_in.setId(3);
         ms_in.setPos(new Point3d(4, 5, 6));
         ms_in.setRadius(7);
@@ -55,7 +55,7 @@ public class MarkSphereTest {
                 new ByteArrayInputStream(memoryOutputStream.toByteArray());
         ObjectInputStream deserializer = new ObjectInputStream(memoryInputStream);
 
-        MarkSphere ms_out = (MarkSphere) deserializer.readObject();
+        Sphere ms_out = (Sphere) deserializer.readObject();
 
         assertTrue(ms_in.equalsDeep(ms_out));
     }

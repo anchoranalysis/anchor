@@ -35,7 +35,7 @@ import lombok.Setter;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Aggregator {
 
-    @Getter @Setter private double nrg;
+    @Getter private double energy;
     @Getter @Setter private double size;
     @Getter private double temperature;
     @Getter private double acceptAll;
@@ -55,7 +55,7 @@ public class Aggregator {
         Aggregator agg = new Aggregator();
         agg.kernelAccepted = kernelAccepted.deepCopy();
         agg.kernelProposed = kernelProposed.deepCopy();
-        agg.nrg = nrg;
+        agg.energy = energy;
         agg.size = size;
         agg.temperature = temperature;
         agg.acceptAll = acceptAll;
@@ -64,7 +64,7 @@ public class Aggregator {
     }
 
     public void reset() {
-        nrg = 0;
+        energy = 0;
         size = 0;
         temperature = 0;
         acceptAll = 0;
@@ -74,7 +74,7 @@ public class Aggregator {
     }
 
     public void div(int divider) {
-        nrg /= divider;
+        energy /= divider;
         size /= divider;
         temperature /= divider;
         acceptAll /= divider;
@@ -87,26 +87,26 @@ public class Aggregator {
     @Override
     public String toString() {
         return String.format(
-                "agg(nrg=%e  size=%3.3f  aa=%3.6f temp=%e  ka=%s)",
-                nrg, size, acceptAll, temperature, kernelAccepted.toString());
+                "agg(energy=%e  size=%3.3f  aa=%3.6f temp=%e  ka=%s)",
+                energy, size, acceptAll, temperature, kernelAccepted.toString());
     }
 
     public void outputToWriter(PrintWriter writer) {
-        writer.printf("%e,%f,%e,%e,", nrg, size, acceptAll, temperature);
+        writer.printf("%e,%f,%e,%e,", energy, size, acceptAll, temperature);
         kernelProposed.outputToWriter(writer);
         writer.print(",");
         kernelAccepted.outputToWriter(writer);
     }
 
     public void outputHeaderToWriter(PrintWriter writer) {
-        writer.print("Nrg,Size,AccptAll,Temperature,");
+        writer.print("Energy,Size,AccptAll,Temperature,");
         kernelProposed.outputHeaderToWriter(writer, "Prop");
         writer.print(",");
         kernelAccepted.outputHeaderToWriter(writer, "Accpt");
     }
 
-    public void incrNRG(double incr) {
-        nrg += incr;
+    public void incrEnergy(double incr) {
+        energy += incr;
     }
 
     public void incrSize(double incr) {

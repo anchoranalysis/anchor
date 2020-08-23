@@ -34,12 +34,12 @@ import org.anchoranalysis.core.unit.SpatialConversionUtilities;
 import org.anchoranalysis.core.unit.SpatialConversionUtilities.UnitSuffix;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.input.FeatureInputWithRes;
+import org.anchoranalysis.feature.input.FeatureInputWithResolution;
 import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.feature.bean.physical.FeatureSingleElemWithRes;
 
 @NoArgsConstructor
-public abstract class FeatureConvertRes<T extends FeatureInputWithRes>
+public abstract class FeatureConvertRes<T extends FeatureInputWithResolution>
         extends FeatureSingleElemWithRes<T> {
 
     // START BEAN PROPERTIES

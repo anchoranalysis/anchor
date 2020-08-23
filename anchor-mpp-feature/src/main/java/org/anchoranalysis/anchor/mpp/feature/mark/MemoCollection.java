@@ -30,17 +30,17 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
-import org.anchoranalysis.anchor.mpp.cfg.Cfg;
-import org.anchoranalysis.anchor.mpp.feature.nrg.saved.NRGSavedInd;
-import org.anchoranalysis.anchor.mpp.feature.nrg.scheme.NRGSchemeWithSharedFeatures;
+import org.anchoranalysis.anchor.mpp.feature.energy.saved.EnergySavedInd;
+import org.anchoranalysis.anchor.mpp.feature.energy.scheme.EnergySchemeWithSharedFeatures;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
+import org.anchoranalysis.anchor.mpp.mark.MarkCollection;
 import org.anchoranalysis.anchor.mpp.mark.voxelized.memo.MemoForIndex;
 import org.anchoranalysis.anchor.mpp.mark.voxelized.memo.PxlMarkMemoFactory;
 import org.anchoranalysis.anchor.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
-import org.anchoranalysis.feature.nrg.NRGStack;
-import org.anchoranalysis.feature.nrg.NRGTotal;
+import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
+import org.anchoranalysis.feature.energy.EnergyTotal;
 
 /**
  * A collection of memoized marks on which energies can be derived.
@@ -65,13 +65,13 @@ public class MemoCollection implements Serializable, MemoForIndex {
     }
 
     public MemoCollection(
-            NRGSavedInd nrgSavedInd,
-            NRGStack nrgStack,
-            Cfg cfg,
-            NRGSchemeWithSharedFeatures nrgSchemeTotal)
+            EnergySavedInd savedInd,
+            EnergyStackWithoutParams energyStack,
+            MarkCollection cfg,
+            EnergySchemeWithSharedFeatures energySchemeTotal)
             throws NamedFeatureCalculateException {
-        this.regionMap = nrgSchemeTotal.getRegionMap();
-        calculateFreshInd(nrgSavedInd, nrgStack, cfg, nrgSchemeTotal);
+        this.regionMap = energySchemeTotal.getRegionMap();
+        calculateFreshInd(savedInd, energyStack, cfg, energySchemeTotal);
     }
 
     public MemoCollection(MemoCollection src) {
@@ -96,7 +96,7 @@ public class MemoCollection implements Serializable, MemoForIndex {
         return regionMap;
     }
 
-    public VoxelizedMarkMemo getMemoForMark(Cfg cfg, Mark mark) {
+    public VoxelizedMarkMemo getMemoForMark(MarkCollection cfg, Mark mark) {
         int index = cfg.indexOf(mark);
         if (index == -1) {
             throw new AnchorFriendlyRuntimeException("Mark doesn't exist in cfg");
@@ -122,42 +122,42 @@ public class MemoCollection implements Serializable, MemoForIndex {
 
     // calculate fresh ind
     private void calculateFreshInd(
-            NRGSavedInd nrgSavedInd,
-            NRGStack nrgStack,
-            Cfg cfg,
-            NRGSchemeWithSharedFeatures nrgSchemeTotal)
+            EnergySavedInd energySavedInd,
+            EnergyStackWithoutParams energyStack,
+            MarkCollection marks,
+            EnergySchemeWithSharedFeatures energySchemeTotal)
             throws NamedFeatureCalculateException {
 
-        nrgSavedInd.setNrgTotal(0);
+        energySavedInd.setEnergyTotal(0);
 
         this.pxlMarkMemo = new ArrayList<>();
 
-        nrgSavedInd.resetInd();
+        energySavedInd.resetInd();
 
-        // Some nrg components need to be calculated individually
-        for (Mark mrk : cfg) {
+        // Some energy components need to be calculated individually
+        for (Mark mrk : marks) {
 
             VoxelizedMarkMemo pmm =
-                    PxlMarkMemoFactory.create(mrk, nrgStack, nrgSchemeTotal.getRegionMap());
+                    PxlMarkMemoFactory.create(mrk, energyStack, energySchemeTotal.getRegionMap());
             this.pxlMarkMemo.add(pmm);
 
-            NRGTotal ind = nrgSchemeTotal.totalIndividual(pmm, nrgStack);
-            nrgSavedInd.add(ind);
+            EnergyTotal ind = energySchemeTotal.totalIndividual(pmm, energyStack);
+            energySavedInd.add(ind);
         }
     }
 
     // calculates a new energy and configuration based upon a mark at a particular index
     //   changing into new mark
     public VoxelizedMarkMemo exchange(
-            NRGSavedInd nrgSavedInd,
+            EnergySavedInd energySavedInd,
             int index,
             VoxelizedMarkMemo newMark,
-            NRGStack stack,
-            NRGSchemeWithSharedFeatures nrgSchemeTotal)
+            EnergyStackWithoutParams stack,
+            EnergySchemeWithSharedFeatures energySchemeTotal)
             throws NamedFeatureCalculateException {
         // We calculate energy for individual components
-        NRGTotal ind = nrgSchemeTotal.totalIndividual(newMark, stack);
-        nrgSavedInd.exchange(index, ind);
+        EnergyTotal ind = energySchemeTotal.totalIndividual(newMark, stack);
+        energySavedInd.exchange(index, ind);
 
         this.pxlMarkMemo.set(index, newMark);
 
@@ -165,34 +165,34 @@ public class MemoCollection implements Serializable, MemoForIndex {
     }
 
     public VoxelizedMarkMemo add(
-            NRGSavedInd nrgSavedInd,
-            VoxelizedMarkMemo pmm,
-            NRGStack stack,
-            NRGSchemeWithSharedFeatures nrgScheme)
+            EnergySavedInd energySavedInd,
+            VoxelizedMarkMemo memo,
+            EnergyStackWithoutParams stack,
+            EnergySchemeWithSharedFeatures energyScheme)
             throws NamedFeatureCalculateException {
-        NRGTotal nrg = nrgScheme.totalIndividual(pmm, stack);
+        EnergyTotal energy = energyScheme.totalIndividual(memo, stack);
 
         // We calculate energy for individual components
-        this.pxlMarkMemo.add(pmm);
+        this.pxlMarkMemo.add(memo);
 
-        nrgSavedInd.add(nrg);
+        energySavedInd.add(energy);
 
-        return pmm;
+        return memo;
     }
 
-    public void rmv(NRGSavedInd nrgSavedInd, int index) {
+    public void remove(EnergySavedInd energySavedInd, int index) {
 
-        nrgSavedInd.rmv(index);
+        energySavedInd.rmv(index);
 
         this.pxlMarkMemo.remove(index);
     }
 
-    public void rmvTwo(NRGSavedInd nrgSavedInd, int index1, int index2) {
+    public void removeTwo(EnergySavedInd energySavedInd, int index1, int index2) {
         int indexMax = Math.max(index1, index2);
         int indexMin = Math.min(index1, index2);
 
-        rmv(nrgSavedInd, indexMax);
-        rmv(nrgSavedInd, indexMin);
+        remove(energySavedInd, indexMax);
+        remove(energySavedInd, indexMin);
     }
 
     public void assertValid() {
@@ -203,12 +203,12 @@ public class MemoCollection implements Serializable, MemoForIndex {
         }
     }
 
-    public Cfg asCfg() {
-        Cfg cfg = new Cfg();
+    public MarkCollection asMarks() {
+        MarkCollection marks = new MarkCollection();
         for (int i = 0; i < this.size(); i++) {
             VoxelizedMarkMemo pmm = this.getMemoForIndex(i);
-            cfg.add(pmm.getMark());
+            marks.add(pmm.getMark());
         }
-        return cfg;
+        return marks;
     }
 }

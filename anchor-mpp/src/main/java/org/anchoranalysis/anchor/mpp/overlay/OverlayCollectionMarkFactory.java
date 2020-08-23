@@ -29,9 +29,9 @@ package org.anchoranalysis.anchor.mpp.overlay;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipWithFlags;
-import org.anchoranalysis.anchor.mpp.cfg.Cfg;
-import org.anchoranalysis.anchor.mpp.cfg.ColoredCfg;
+import org.anchoranalysis.anchor.mpp.mark.ColoredMarks;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
+import org.anchoranalysis.anchor.mpp.mark.MarkCollection;
 import org.anchoranalysis.anchor.overlay.Overlay;
 import org.anchoranalysis.anchor.overlay.collection.ColoredOverlayCollection;
 import org.anchoranalysis.anchor.overlay.collection.OverlayCollection;
@@ -49,24 +49,24 @@ import org.anchoranalysis.core.color.RGBColor;
 public class OverlayCollectionMarkFactory {
 
     public static OverlayCollection createWithoutColor(
-            Cfg cfg, RegionMembershipWithFlags regionMembership) {
+            MarkCollection marks, RegionMembershipWithFlags regionMembership) {
         OverlayCollection out = new OverlayCollection();
 
-        for (int i = 0; i < cfg.size(); i++) {
-            Mark m = cfg.get(i);
-            out.add(new OverlayMark(m, regionMembership));
+        for (int index = 0; index < marks.size(); index++) {
+            Mark mark = marks.get(index);
+            out.add(new OverlayMark(mark, regionMembership));
         }
 
         return out;
     }
 
     public static ColoredOverlayCollection createColor(
-            ColoredCfg cfg, RegionMembershipWithFlags regionMembership) {
-        return createColor(cfg.getCfg(), cfg.getColorList(), regionMembership);
+            ColoredMarks cfg, RegionMembershipWithFlags regionMembership) {
+        return createColor(cfg.getMarks(), cfg.getColorList(), regionMembership);
     }
 
     private static ColoredOverlayCollection createColor(
-            Cfg cfg, ColorIndex colorIndex, RegionMembershipWithFlags regionMembership) {
+            MarkCollection cfg, ColorIndex colorIndex, RegionMembershipWithFlags regionMembership) {
 
         ColoredOverlayCollection out = new ColoredOverlayCollection();
 
@@ -77,8 +77,8 @@ public class OverlayCollectionMarkFactory {
     }
 
     // Creates a cfg from whatever Overlays are found in the collection
-    public static Cfg cfgFromOverlays(OverlayCollection overlays) {
-        Cfg out = new Cfg();
+    public static MarkCollection cfgFromOverlays(OverlayCollection overlays) {
+        MarkCollection out = new MarkCollection();
 
         for (int i = 0; i < overlays.size(); i++) {
             Overlay overlay = overlays.get(i);
@@ -93,8 +93,8 @@ public class OverlayCollectionMarkFactory {
     }
 
     // Creates a cfg from whatever Overlays are found in the collection
-    public static ColoredCfg cfgFromOverlays(ColoredOverlayCollection overlays) {
-        ColoredCfg out = new ColoredCfg();
+    public static ColoredMarks cfgFromOverlays(ColoredOverlayCollection overlays) {
+        ColoredMarks out = new ColoredMarks();
 
         for (int i = 0; i < overlays.size(); i++) {
             Overlay overlay = overlays.get(i);

@@ -79,7 +79,7 @@ class CombineGenerator<T> extends RasterGenerator implements IterableObjectGener
 
     @Override
     public Optional<ManifestDescription> createManifestDescription() {
-        return Optional.of(new ManifestDescription("raster", "combinedNRG"));
+        return Optional.of(new ManifestDescription("raster", "combinedEnergy"));
     }
 
     @Override

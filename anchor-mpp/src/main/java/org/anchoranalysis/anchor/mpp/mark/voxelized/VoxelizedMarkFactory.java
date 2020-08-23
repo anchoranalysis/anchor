@@ -30,12 +30,12 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
-import org.anchoranalysis.feature.nrg.NRGStack;
+import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class VoxelizedMarkFactory {
 
-    public static VoxelizedMarkHistogram create(Mark mark, NRGStack stack, RegionMap regionMap) {
+    public static VoxelizedMarkHistogram create(Mark mark, EnergyStackWithoutParams stack, RegionMap regionMap) {
         return new VoxelizedMarkHistogram(mark, stack, regionMap);
     }
 }

@@ -32,8 +32,8 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.calculate.FeatureInitParams;
-import org.anchoranalysis.feature.input.FeatureInputNRG;
-import org.anchoranalysis.feature.nrg.NRGStackWithParams;
+import org.anchoranalysis.feature.energy.EnergyStack;
+import org.anchoranalysis.feature.input.FeatureInputEnergy;
 import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMultiChangeInput;
@@ -51,25 +51,25 @@ import org.anchoranalysis.image.feature.session.InitParamsHelper;
 class CreateCalculatorHelper {
 
     // Prefixes that are ignored
-    private final Optional<NRGStackWithParams> nrgStack;
+    private final Optional<EnergyStack> energyStack;
     private final Logger logger;
 
-    public <T extends FeatureInputNRG> FeatureCalculatorMulti<T> create(
+    public <T extends FeatureInputEnergy> FeatureCalculatorMulti<T> create(
             FeatureList<T> features,
             ImageInitParams soImage,
             BoundReplaceStrategy<T, ? extends ReplaceStrategy<T>> replacePolicyFactory)
             throws InitException {
-        return wrapWithNrg(createWithoutNrg(features, soImage, replacePolicyFactory));
+        return wrapWithEnergy(createWithoutEnergy(features, soImage, replacePolicyFactory));
     }
 
-    public <T extends FeatureInputNRG> FeatureCalculatorMulti<T> createCached(
+    public <T extends FeatureInputEnergy> FeatureCalculatorMulti<T> createCached(
             FeatureList<T> features,
             ImageInitParams soImage,
             BoundReplaceStrategy<T, ? extends ReplaceStrategy<T>> replacePolicyFactory)
             throws InitException {
-        return wrapWithNrg(
+        return wrapWithEnergy(
                 new FeatureCalculatorCachedMulti<>(
-                        createWithoutNrg(features, soImage, replacePolicyFactory)));
+                        createWithoutEnergy(features, soImage, replacePolicyFactory)));
     }
 
     /**
@@ -85,7 +85,7 @@ class CreateCalculatorHelper {
      * @return
      * @throws InitException
      */
-    public <T extends FeatureInputNRG> FeatureCalculatorMulti<T> createPair(
+    public <T extends FeatureInputEnergy> FeatureCalculatorMulti<T> createPair(
             FeatureList<T> features,
             ImageInitParams soImage,
             CacheTransferSourceCollection cacheTransferSource)
@@ -100,10 +100,10 @@ class CreateCalculatorHelper {
                                                 FeatureInputSingleObject.class,
                                                 cacheTransferSource)));
 
-        return wrapWithNrg(createWithoutNrg(features, soImage, replaceStrategy));
+        return wrapWithEnergy(createWithoutEnergy(features, soImage, replaceStrategy));
     }
 
-    private <T extends FeatureInputNRG> FeatureCalculatorMulti<T> createWithoutNrg(
+    private <T extends FeatureInputEnergy> FeatureCalculatorMulti<T> createWithoutEnergy(
             FeatureList<T> features,
             ImageInitParams soImage,
             BoundReplaceStrategy<T, ? extends ReplaceStrategy<T>> replacePolicyFactory)
@@ -116,14 +116,14 @@ class CreateCalculatorHelper {
                 replacePolicyFactory);
     }
 
-    /** Ensures any input-parameters have the NRG-stack attached */
-    private <T extends FeatureInputNRG> FeatureCalculatorMulti<T> wrapWithNrg(
+    /** Ensures any input-parameters have the energy-stack attached */
+    private <T extends FeatureInputEnergy> FeatureCalculatorMulti<T> wrapWithEnergy(
             FeatureCalculatorMulti<T> calculator) {
         return new FeatureCalculatorMultiChangeInput<>(
-                calculator, input -> input.setNrgStack(nrgStack));
+                calculator, input -> input.setEnergyStack(energyStack));
     }
 
     private FeatureInitParams createInitParams(ImageInitParams soImage) {
-        return InitParamsHelper.createInitParams(Optional.of(soImage.getSharedObjects()), nrgStack);
+        return InitParamsHelper.createInitParams(Optional.of(soImage.getSharedObjects()), energyStack);
     }
 }

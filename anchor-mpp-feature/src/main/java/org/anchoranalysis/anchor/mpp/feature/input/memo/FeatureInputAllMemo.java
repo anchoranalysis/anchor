@@ -29,15 +29,15 @@ package org.anchoranalysis.anchor.mpp.feature.input.memo;
 import java.util.Optional;
 import lombok.EqualsAndHashCode;
 import org.anchoranalysis.anchor.mpp.feature.mark.MemoCollection;
-import org.anchoranalysis.feature.input.FeatureInputNRG;
-import org.anchoranalysis.feature.nrg.NRGStackWithParams;
+import org.anchoranalysis.feature.energy.EnergyStack;
+import org.anchoranalysis.feature.input.FeatureInputEnergy;
 
 @EqualsAndHashCode(callSuper = true)
-public class FeatureInputAllMemo extends FeatureInputNRG {
+public class FeatureInputAllMemo extends FeatureInputEnergy {
 
     private MemoCollection pxlMarkMemoList;
 
-    public FeatureInputAllMemo(MemoCollection pxlMarkMemoList, NRGStackWithParams raster) {
+    public FeatureInputAllMemo(MemoCollection pxlMarkMemoList, EnergyStack raster) {
         super(Optional.of(raster));
         this.pxlMarkMemoList = pxlMarkMemoList;
     }

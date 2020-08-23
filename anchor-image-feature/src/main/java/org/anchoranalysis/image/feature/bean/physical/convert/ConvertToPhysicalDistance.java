@@ -36,7 +36,7 @@ import org.anchoranalysis.core.unit.SpatialConversionUtilities.UnitSuffix;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.FeatureInitParams;
-import org.anchoranalysis.feature.input.FeatureInputWithRes;
+import org.anchoranalysis.feature.input.FeatureInputWithResolution;
 import org.anchoranalysis.image.bean.orientation.DirectionVectorBean;
 import org.anchoranalysis.image.bean.orientation.VectorInDirection;
 import org.anchoranalysis.image.convert.ImageUnitConverter;
@@ -45,7 +45,7 @@ import org.anchoranalysis.image.orientation.DirectionVector;
 
 //
 @NoArgsConstructor
-public class ConvertToPhysicalDistance<T extends FeatureInputWithRes> extends FeatureConvertRes<T> {
+public class ConvertToPhysicalDistance<T extends FeatureInputWithResolution> extends FeatureConvertRes<T> {
 
     // START BEAN PROPERTIES
 

@@ -48,7 +48,7 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class IterableGeneratorOutputHelper {
 
-    // TODO remove padding for nrgStack and switch to single channel outputs
+    // TODO remove padding for energyStack and switch to single channel outputs
     public static <T> void output(
             NamedProvider<T> providers,
             IterableGenerator<T> generator,

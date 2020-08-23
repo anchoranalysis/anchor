@@ -1,0 +1,177 @@
+/*-
+ * #%L
+ * anchor-mpp-feature
+ * %%
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
+ * %%
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ * #L%
+ */
+
+package org.anchoranalysis.anchor.mpp.feature.energy.saved;
+
+import java.util.Set;
+import org.anchoranalysis.anchor.mpp.feature.addcriteria.AddCriteria;
+import org.anchoranalysis.anchor.mpp.feature.addcriteria.RandomCollectionWithAddCriteria;
+import org.anchoranalysis.anchor.mpp.feature.energy.EnergyPair;
+import org.anchoranalysis.anchor.mpp.mark.Mark;
+import org.anchoranalysis.anchor.mpp.mark.MarkCollection;
+import org.anchoranalysis.anchor.mpp.mark.set.UpdatableMarkSet;
+import org.anchoranalysis.anchor.mpp.mark.set.UpdateMarkSetException;
+import org.anchoranalysis.anchor.mpp.mark.voxelized.memo.MemoForIndex;
+import org.anchoranalysis.anchor.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
+import org.anchoranalysis.core.error.InitException;
+import org.anchoranalysis.core.graph.EdgeTypeWithVertices;
+import org.anchoranalysis.core.log.Logger;
+import org.anchoranalysis.feature.energy.EnergyStack;
+import org.anchoranalysis.feature.shared.SharedFeatureMulti;
+import lombok.Getter;
+
+public class EnergySavedPairs implements UpdatableMarkSet {
+
+    /** Pairwise energy total */
+    @Getter private double energyTotal;
+
+    private RandomCollectionWithAddCriteria<EnergyPair> pairCollection;
+
+    public EnergySavedPairs(AddCriteria<EnergyPair> addCriteria) {
+        this.pairCollection = new RandomCollectionWithAddCriteria<>(EnergyPair.class);
+        this.pairCollection.setAddCriteria(addCriteria);
+    }
+
+    public EnergySavedPairs shallowCopy() {
+        EnergySavedPairs out = new EnergySavedPairs(this.pairCollection.getAddCriteria());
+        out.pairCollection = this.pairCollection.shallowCopy();
+        out.energyTotal = this.energyTotal;
+        return out;
+    }
+
+    public EnergySavedPairs deepCopy() {
+        EnergySavedPairs out = new EnergySavedPairs(this.pairCollection.getAddCriteria());
+        out.pairCollection = this.pairCollection.deepCopy();
+        out.energyTotal = this.energyTotal;
+        return out;
+    }
+
+    @Override
+    public void initUpdatableMarkSet(
+            MemoForIndex pxlMarkMemoList,
+            EnergyStack stack,
+            Logger logger,
+            SharedFeatureMulti sharedFeatures)
+            throws InitException {
+
+        this.pairCollection.initUpdatableMarkSet(pxlMarkMemoList, stack, logger, sharedFeatures);
+        calculateTotalFresh();
+    }
+
+    // Calculates energy for all pairwise interactions freshly
+    private void calculateTotalFresh() {
+        energyTotal = 0;
+        for (EnergyPair pair : pairCollection.createPairsUnique()) {
+            energyTotal += pair.getEnergyTotal().getTotal();
+        }
+        assert !Double.isNaN(energyTotal);
+    }
+
+    private double totalEnergyForMark(Mark mark) {
+
+        double total = 0;
+        for (EdgeTypeWithVertices<Mark, EnergyPair> pair : this.pairCollection.getPairsFor(mark)) {
+            total += pair.getEdge().getEnergyTotal().getTotal();
+        }
+        assert !Double.isNaN(total);
+
+        return total;
+    }
+
+    @Override
+    public void add(MemoForIndex pxlMarkMemoList, VoxelizedMarkMemo newMark)
+            throws UpdateMarkSetException {
+
+        this.pairCollection.add(pxlMarkMemoList, newMark);
+        this.energyTotal += totalEnergyForMark(newMark.getMark());
+        assert !Double.isNaN(energyTotal);
+    }
+
+    @Override
+    public void remove(MemoForIndex marksExisting, VoxelizedMarkMemo mark)
+            throws UpdateMarkSetException {
+
+        // We calculate it's individual contribution
+        this.energyTotal -= totalEnergyForMark(mark.getMark());
+        this.pairCollection.remove(marksExisting, mark);
+        assert !Double.isNaN(energyTotal);
+    }
+
+    // exchanges one mark with another
+    @Override
+    public void exchange(
+            MemoForIndex pxlMarkMemoList,
+            VoxelizedMarkMemo oldMark,
+            int indexOldMark,
+            VoxelizedMarkMemo newMark)
+            throws UpdateMarkSetException {
+
+        // We get a total for how the old mark interacts with the other marks
+        double oldPairTotal = totalEnergyForMark(oldMark.getMark());
+
+        this.pairCollection.exchange(pxlMarkMemoList, oldMark, indexOldMark, newMark);
+
+        double newPairTotal = totalEnergyForMark(newMark.getMark());
+        this.energyTotal = this.energyTotal - oldPairTotal + newPairTotal;
+    }
+
+    // Does the pairs hash only contains items contained in a particular configuration
+    public boolean isCfgSpan(MarkCollection cfg) {
+        return pairCollection.isCfgSpan(cfg);
+    }
+
+    @Override
+    public String toString() {
+
+        String newLine = System.getProperty("line.separator");
+
+        StringBuilder s = new StringBuilder("{");
+
+        s.append(newLine);
+
+        // We list all the non-null energy components
+        for (EnergyPair di : createPairsUnique()) {
+            s.append(
+                    String.format(
+                            "%2d--%2d\tenergy=%e%n",
+                            di.getPair().getSource().getId(),
+                            di.getPair().getDestination().getId(),
+                            di.getEnergyTotal().getTotal()));
+        }
+
+        s.append("}" + newLine);
+
+        return s.toString();
+    }
+
+    public void assertValid() {
+        assert !Double.isNaN(energyTotal);
+    }
+
+    public Set<EnergyPair> createPairsUnique() {
+        return pairCollection.createPairsUnique();
+    }
+}

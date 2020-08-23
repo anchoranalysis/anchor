@@ -31,11 +31,11 @@ import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.operator.FeatureGenericSingleElem;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.input.FeatureInputWithRes;
+import org.anchoranalysis.feature.input.FeatureInputWithResolution;
 import org.anchoranalysis.image.extent.Resolution;
 
 @NoArgsConstructor
-public abstract class FeatureSingleElemWithRes<T extends FeatureInputWithRes>
+public abstract class FeatureSingleElemWithRes<T extends FeatureInputWithResolution>
         extends FeatureGenericSingleElem<T> {
 
     public FeatureSingleElemWithRes(Feature<T> feature) {
@@ -47,7 +47,7 @@ public abstract class FeatureSingleElemWithRes<T extends FeatureInputWithRes>
 
         double value = input.calc(getItem());
 
-        return calculateWithResolution(value, input.get().getResRequired());
+        return calculateWithResolution(value, input.get().getResolutionRequired());
     }
 
     protected abstract double calculateWithResolution(double value, Resolution resolution)

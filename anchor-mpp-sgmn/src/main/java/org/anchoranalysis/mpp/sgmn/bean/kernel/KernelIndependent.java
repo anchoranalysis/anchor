@@ -44,7 +44,7 @@ public abstract class KernelIndependent<T> extends Kernel<T> {
     }
 
     @Override
-    public void informLatestState(T cfgNRG) {
+    public void informLatestState(T state) {
         // Deliberately DOES NOTHING as all sub-classes should be independent of
         //   current state
     }

@@ -29,7 +29,7 @@ package org.anchoranalysis.mpp.io.input;
 import java.nio.file.Path;
 import java.util.Optional;
 import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
-import org.anchoranalysis.anchor.mpp.cfg.Cfg;
+import org.anchoranalysis.anchor.mpp.mark.MarkCollection;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
@@ -50,7 +50,7 @@ public class MultiInput implements ProvidesStackInput, InputForMPPBean {
 
     private StackWithMap stack;
 
-    private OperationMap<Cfg> mapCfg = new OperationMap<>();
+    private OperationMap<MarkCollection> mapCfg = new OperationMap<>();
     private OperationMap<ObjectCollection> mapObjects = new OperationMap<>();
     private OperationMap<KeyValueParams> mapKeyValueParams = new OperationMap<>();
     private OperationMap<Histogram> mapHistogram = new OperationMap<>();
@@ -119,7 +119,7 @@ public class MultiInput implements ProvidesStackInput, InputForMPPBean {
         mapFilePath = null;
     }
 
-    public MultiInputSubMap<Cfg> cfg() {
+    public MultiInputSubMap<MarkCollection> cfg() {
         return mapCfg;
     }
 

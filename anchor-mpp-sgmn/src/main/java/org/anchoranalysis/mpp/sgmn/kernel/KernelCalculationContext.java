@@ -26,51 +26,52 @@
 
 package org.anchoranalysis.mpp.sgmn.kernel;
 
-import org.anchoranalysis.anchor.mpp.feature.nrg.scheme.NRGSchemeWithSharedFeatures;
+import org.anchoranalysis.anchor.mpp.bean.cfg.MarkWithIdentifierFactory;
+import org.anchoranalysis.anchor.mpp.feature.energy.scheme.EnergySchemeWithSharedFeatures;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 import org.anchoranalysis.anchor.mpp.proposer.error.ErrorNode;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
-import org.anchoranalysis.feature.nrg.NRGStackWithParams;
+import org.anchoranalysis.feature.energy.EnergyStack;
 
 public class KernelCalculationContext {
 
-    private NRGSchemeWithSharedFeatures nrgScheme;
+    private EnergySchemeWithSharedFeatures energyScheme;
 
     private ProposerContext proposerContext;
-    private CfgGenContext cfgGenContext;
+    private MarkFactoryContext markFactoryContext;
 
     public KernelCalculationContext(
-            CfgGenContext cfgGenContext,
-            NRGStackWithParams nrgStack,
-            NRGSchemeWithSharedFeatures nrgScheme,
+            MarkFactoryContext markFactoryContext,
+            EnergyStack energyStack,
+            EnergySchemeWithSharedFeatures energyScheme,
             RandomNumberGenerator randomNumberGenerator,
             ErrorNode errorNode) {
-        this.nrgScheme = nrgScheme;
-        this.cfgGenContext = cfgGenContext;
+        this.energyScheme = energyScheme;
+        this.markFactoryContext = markFactoryContext;
 
         this.proposerContext =
                 new ProposerContext(
-                        randomNumberGenerator, nrgStack, nrgScheme.getRegionMap(), errorNode);
+                        randomNumberGenerator, energyStack, energyScheme.getRegionMap(), errorNode);
     }
 
     public ProposerContext proposer() {
         return proposerContext;
     }
 
-    public NRGSchemeWithSharedFeatures getNrgScheme() {
-        return nrgScheme;
+    public EnergySchemeWithSharedFeatures getEnergyScheme() {
+        return energyScheme;
     }
 
     public KernelCalculationContext replaceError(ErrorNode errorNode) {
         return new KernelCalculationContext(
-                cfgGenContext,
-                proposerContext.getNrgStack(),
-                nrgScheme,
+                markFactoryContext,
+                proposerContext.getEnergyStack(),
+                energyScheme,
                 proposerContext.getRandomNumberGenerator(),
                 errorNode);
     }
 
-    public CfgGenContext cfgGen() {
-        return cfgGenContext;
+    public MarkWithIdentifierFactory getMarkFactory() {
+        return markFactoryContext.getMarkFactory();
     }
 }

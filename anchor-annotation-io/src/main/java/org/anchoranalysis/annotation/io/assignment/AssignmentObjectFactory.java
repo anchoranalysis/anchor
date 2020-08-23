@@ -31,7 +31,7 @@ import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.nrg.NRGStackWithParams;
+import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
@@ -110,7 +110,7 @@ public class AssignmentObjectFactory {
             throw new FeatureCalculationException(e);
         }
 
-        NRGStackWithParams nrgStack = new NRGStackWithParams(dim);
+        EnergyStack energyStack = new EnergyStack(dim);
 
         double[][] outArr = new double[annotation.size()][result.size()];
 
@@ -121,7 +121,7 @@ public class AssignmentObjectFactory {
                 ObjectMask objR = result.get(j);
 
                 double costObjects =
-                        session.calculate(new FeatureInputPairObjects(objA, objR, nrgStack));
+                        session.calculate(new FeatureInputPairObjects(objA, objR, energyStack));
                 outArr[i][j] = costObjects;
 
                 if (Double.isNaN(costObjects)) {

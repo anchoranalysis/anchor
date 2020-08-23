@@ -29,18 +29,18 @@ package org.anchoranalysis.anchor.mpp.feature.input.memo;
 import java.util.Optional;
 import lombok.EqualsAndHashCode;
 import org.anchoranalysis.anchor.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
-import org.anchoranalysis.feature.input.FeatureInputNRG;
-import org.anchoranalysis.feature.nrg.NRGStackWithParams;
+import org.anchoranalysis.feature.energy.EnergyStack;
+import org.anchoranalysis.feature.input.FeatureInputEnergy;
 
 @EqualsAndHashCode(callSuper = true)
-public class FeatureInputPairMemo extends FeatureInputNRG {
+public class FeatureInputPairMemo extends FeatureInputEnergy {
 
     private VoxelizedMarkMemo obj1;
     private VoxelizedMarkMemo obj2;
 
     public FeatureInputPairMemo(
-            VoxelizedMarkMemo obj1, VoxelizedMarkMemo obj2, NRGStackWithParams nrgStack) {
-        super(Optional.of(nrgStack));
+            VoxelizedMarkMemo obj1, VoxelizedMarkMemo obj2, EnergyStack energyStack) {
+        super(Optional.of(energyStack));
         this.obj1 = obj1;
         this.obj2 = obj2;
     }

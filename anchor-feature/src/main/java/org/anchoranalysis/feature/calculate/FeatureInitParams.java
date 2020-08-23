@@ -33,8 +33,8 @@ import org.anchoranalysis.bean.init.params.BeanInitParams;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.name.store.SharedObjects;
 import org.anchoranalysis.core.params.KeyValueParams;
-import org.anchoranalysis.feature.nrg.NRGStack;
-import org.anchoranalysis.feature.nrg.NRGStackWithParams;
+import org.anchoranalysis.feature.energy.EnergyStack;
+import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
 
 /**
  * Parameters used to initialize a feature before any calculations
@@ -47,37 +47,37 @@ public class FeatureInitParams implements BeanInitParams {
 
     private final Optional<KeyValueParams> keyValueParams;
 
-    private final Optional<NRGStack> nrgStack;
+    private final Optional<EnergyStackWithoutParams> energyStack;
 
     private final Optional<SharedObjects> sharedObjects;
 
     public FeatureInitParams() {
         this.keyValueParams = Optional.empty();
-        this.nrgStack = Optional.empty();
+        this.energyStack = Optional.empty();
         this.sharedObjects = Optional.empty();
     }
 
     public FeatureInitParams(SharedObjects sharedObjects) {
         this.keyValueParams = Optional.empty();
-        this.nrgStack = Optional.empty();
+        this.energyStack = Optional.empty();
         this.sharedObjects = Optional.of(sharedObjects);
     }
 
     public FeatureInitParams(KeyValueParams keyValueParams) {
         this.keyValueParams = Optional.of(keyValueParams);
-        this.nrgStack = Optional.empty();
+        this.energyStack = Optional.empty();
         this.sharedObjects = Optional.empty();
     }
 
-    public FeatureInitParams(NRGStackWithParams nrgStack) {
-        this.nrgStack = Optional.of(nrgStack.getNrgStack());
-        this.keyValueParams = Optional.of(nrgStack.getParams());
+    public FeatureInitParams(EnergyStack energyStack) {
+        this.energyStack = Optional.of(energyStack.getEnergyStack());
+        this.keyValueParams = Optional.of(energyStack.getParams());
         this.sharedObjects = Optional.empty();
     }
 
     // Shallow-copy
     public FeatureInitParams duplicate() {
-        return new FeatureInitParams(keyValueParams, nrgStack, sharedObjects);
+        return new FeatureInitParams(keyValueParams, energyStack, sharedObjects);
     }
 
     public SharedObjects sharedObjectsRequired() throws InitException {

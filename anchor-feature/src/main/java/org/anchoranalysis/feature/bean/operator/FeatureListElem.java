@@ -36,7 +36,7 @@ import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.input.FeatureInput;
-import org.anchoranalysis.feature.input.descriptor.FeatureInputType;
+import org.anchoranalysis.feature.input.FeatureInputType;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class FeatureListElem<T extends FeatureInput> extends Feature<T> {

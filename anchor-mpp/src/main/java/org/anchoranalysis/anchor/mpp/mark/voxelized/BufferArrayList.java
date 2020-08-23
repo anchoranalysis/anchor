@@ -28,7 +28,7 @@ package org.anchoranalysis.anchor.mpp.mark.voxelized;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
-import org.anchoranalysis.feature.nrg.NRGStack;
+import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
 
 class BufferArrayList {
 
@@ -38,7 +38,7 @@ class BufferArrayList {
         return delegate.add(e);
     }
 
-    public void init(NRGStack stack, int z) {
+    public void init(EnergyStackWithoutParams stack, int z) {
 
         for (int c = 0; c < stack.getNumberChannels(); c++) {
             ByteBuffer bb = stack.getChannel(c).voxels().asByte().slices().slice(z).buffer();

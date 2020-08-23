@@ -38,7 +38,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalculationContext;
-import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcNRGException;
+import org.anchoranalysis.mpp.sgmn.kernel.KernelCalculateEnergyException;
 
 /**
  * Modifies an Object by applying a kernel
@@ -58,15 +58,15 @@ public abstract class Kernel<T> extends MPPBean<Kernel<T>> implements Compatible
     public abstract void initBeforeCalc(KernelCalculationContext context) throws InitException;
 
     /**
-     * Calculates the NRG for a proposal
+     * Calculates the Energy for a proposal
      *
-     * @param existing the existing NRG
+     * @param existing the existing Energy
      * @param context
      * @return a proposal, or empty() if there is no proposal to make
-     * @throws KernelCalcNRGException
+     * @throws KernelCalculateEnergyException
      */
     public abstract Optional<T> makeProposal(Optional<T> existing, KernelCalculationContext context)
-            throws KernelCalcNRGException;
+            throws KernelCalculateEnergyException;
 
     public abstract double calculateAcceptanceProbability(
             int existingSize,
@@ -81,23 +81,28 @@ public abstract class Kernel<T> extends MPPBean<Kernel<T>> implements Compatible
      * If the kernel is accepted, makes the necessary changes to a ListUpdatableMarkSetCollection
      *
      * @param updatableMarkSetCollection where to make the changes
-     * @param nrgExst existing energy
-     * @param nrgNew accepted energy
+     * @param energyExisting existing energy
+     * @param energyNew accepted energy
      * @throws UpdateMarkSetException
      */
     public abstract void updateAfterAcceptance(
-            ListUpdatableMarkSetCollection updatableMarkSetCollection, T nrgExst, T nrgNew)
+            ListUpdatableMarkSetCollection updatableMarkSetCollection, T energyExisting, T energyNew)
             throws UpdateMarkSetException;
 
-    // Returns an array of Mark IDs that were changed in the last nrg-calculation for the kernel
-    // Guaranteed only to be called, if nrg-calculation did not return NULL
+    /**
+     * The mark ids that were changed in the last energy calculation for the kernel
+     * 
+     * <p>Guaranteed only to be called, if energy calculation did not return NULL
+     * 
+     * @return an array of mark IDs
+     */
     public abstract int[] changedMarkIDArray();
 
     /**
      * Called every time a proposal is accepted, so a kernel can potentially keep track of the state
      * of the current image
      *
-     * @param cfgNRG
+     * @param state current-state (after being accepted)
      */
-    public abstract void informLatestState(T cfgNRG);
+    public abstract void informLatestState(T state);
 }

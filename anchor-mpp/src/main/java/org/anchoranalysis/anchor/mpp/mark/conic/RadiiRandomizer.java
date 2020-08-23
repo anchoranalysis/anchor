@@ -34,7 +34,7 @@ import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.extent.Resolution;
 
 /**
- * Utility functions for generating random radii for {@link MarkConic}
+ * Utility functions for generating random radii for {@link ConicBase}
  *
  * @author Owen Feehan
  */

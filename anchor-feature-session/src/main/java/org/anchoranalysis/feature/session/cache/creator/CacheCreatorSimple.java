@@ -34,7 +34,7 @@ import org.anchoranalysis.feature.cache.calculate.CacheCreator;
 import org.anchoranalysis.feature.cache.calculate.FeatureSessionCache;
 import org.anchoranalysis.feature.calculate.FeatureInitParams;
 import org.anchoranalysis.feature.input.FeatureInput;
-import org.anchoranalysis.feature.input.descriptor.FeatureInputType;
+import org.anchoranalysis.feature.input.FeatureInputType;
 import org.anchoranalysis.feature.session.cache.FeatureSessionCacheFactory;
 import org.anchoranalysis.feature.session.cache.horizontal.HorizontalFeatureCacheFactory;
 import org.anchoranalysis.feature.shared.SharedFeatureMulti;

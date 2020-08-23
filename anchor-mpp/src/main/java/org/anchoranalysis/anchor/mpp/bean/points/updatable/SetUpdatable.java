@@ -48,7 +48,7 @@ import org.anchoranalysis.core.geometry.PointConverter;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
-import org.anchoranalysis.feature.nrg.NRGStackWithParams;
+import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.feature.shared.SharedFeatureMulti;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
@@ -109,7 +109,7 @@ public class SetUpdatable extends UpdatablePointsContainer {
     @Override
     public void initUpdatableMarkSet(
             MemoForIndex marks,
-            NRGStackWithParams nrgStack,
+            EnergyStack energyStack,
             Logger logger,
             SharedFeatureMulti sharedFeatures)
             throws InitException {
@@ -317,7 +317,7 @@ public class SetUpdatable extends UpdatablePointsContainer {
     }
 
     @Override
-    public void rmv(MemoForIndex marksExisting, VoxelizedMarkMemo mark)
+    public void remove(MemoForIndex marksExisting, VoxelizedMarkMemo mark)
             throws UpdateMarkSetException {
         addPointsInMark(marksExisting, mark);
     }

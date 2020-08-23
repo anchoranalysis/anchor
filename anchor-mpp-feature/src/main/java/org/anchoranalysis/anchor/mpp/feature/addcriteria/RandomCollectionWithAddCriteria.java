@@ -32,10 +32,10 @@ import java.util.Optional;
 import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
 import org.anchoranalysis.anchor.mpp.feature.mark.MemoList;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
+import org.anchoranalysis.anchor.mpp.mark.MarkCollection;
 import org.anchoranalysis.anchor.mpp.mark.set.UpdateMarkSetException;
 import org.anchoranalysis.anchor.mpp.mark.voxelized.memo.MemoForIndex;
 import org.anchoranalysis.anchor.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
@@ -51,7 +51,7 @@ import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.calculate.FeatureInitParams;
-import org.anchoranalysis.feature.nrg.NRGStackWithParams;
+import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.feature.shared.SharedFeatureMulti;
@@ -80,7 +80,7 @@ public class RandomCollectionWithAddCriteria<T> extends RandomCollection<T> {
     // END BEAN PROPERTIES
 
     private boolean hasInit = false;
-    private NRGStackWithParams nrgStack;
+    private EnergyStack energyStack;
     private Logger logger;
     private SharedFeatureMulti sharedFeatures;
 
@@ -94,7 +94,7 @@ public class RandomCollectionWithAddCriteria<T> extends RandomCollection<T> {
                 new RandomCollectionWithAddCriteria<>(this.pairTypeClass);
         out.graph = this.graph.shallowCopy();
         out.addCriteria = this.addCriteria;
-        out.nrgStack = this.nrgStack;
+        out.energyStack = this.energyStack;
         out.hasInit = this.hasInit;
         out.logger = this.logger;
         out.sharedFeatures = this.sharedFeatures;
@@ -106,7 +106,7 @@ public class RandomCollectionWithAddCriteria<T> extends RandomCollection<T> {
                 new RandomCollectionWithAddCriteria<>(this.pairTypeClass);
         out.graph = this.graph.shallowCopy();
         out.addCriteria = this.addCriteria;
-        out.nrgStack = nrgStack;
+        out.energyStack = energyStack;
         out.hasInit = this.hasInit;
         out.logger = this.logger;
         out.sharedFeatures = this.sharedFeatures;
@@ -116,7 +116,7 @@ public class RandomCollectionWithAddCriteria<T> extends RandomCollection<T> {
     @Override
     public void initUpdatableMarkSet(
             MemoForIndex marks,
-            NRGStackWithParams stack,
+            EnergyStack stack,
             Logger logger,
             SharedFeatureMulti sharedFeatures)
             throws InitException {
@@ -147,7 +147,7 @@ public class RandomCollectionWithAddCriteria<T> extends RandomCollection<T> {
             initGraph(marks, stack, session);
 
             this.hasInit = true;
-            this.nrgStack = stack;
+            this.energyStack = stack;
 
         } catch (CreateException e) {
             throw new InitException(e);
@@ -160,7 +160,7 @@ public class RandomCollectionWithAddCriteria<T> extends RandomCollection<T> {
         checkInit();
         try {
             this.graph.addVertex(newMark.getMark());
-            calculatePairsForMark(marksExisting, newMark, nrgStack);
+            calculatePairsForMark(marksExisting, newMark, energyStack);
         } catch (CreateException e) {
             throw new UpdateMarkSetException(e);
         }
@@ -179,7 +179,7 @@ public class RandomCollectionWithAddCriteria<T> extends RandomCollection<T> {
         MemoList memoList = new MemoList();
         memoList.addAll(pxlMarkMemoList);
 
-        rmv(pxlMarkMemoList, oldMark);
+        remove(pxlMarkMemoList, oldMark);
 
         memoList.remove(indexOldMark);
 
@@ -187,7 +187,7 @@ public class RandomCollectionWithAddCriteria<T> extends RandomCollection<T> {
     }
 
     @Override
-    public void rmv(MemoForIndex marksExisting, VoxelizedMarkMemo mark)
+    public void remove(MemoForIndex marksExisting, VoxelizedMarkMemo mark)
             throws UpdateMarkSetException {
         checkInit();
         this.graph.removeVertex(mark.getMark());
@@ -220,7 +220,7 @@ public class RandomCollectionWithAddCriteria<T> extends RandomCollection<T> {
         return graph.vertexSet();
     }
 
-    public boolean isCfgSpan(Cfg cfg) {
+    public boolean isCfgSpan(MarkCollection cfg) {
 
         for (int i = 0; i < cfg.size(); i++) {
             if (!containsMark(cfg.get(i))) {
@@ -266,10 +266,10 @@ public class RandomCollectionWithAddCriteria<T> extends RandomCollection<T> {
 
     private void initGraph(
             MemoForIndex marks,
-            NRGStackWithParams stack,
+            EnergyStack stack,
             Optional<FeatureCalculatorMulti<FeatureInputPairMemo>> session)
             throws CreateException {
-        // Some nrg components need to be calculated individually
+        // Some energy components need to be calculated individually
         for (int i = 0; i < marks.size(); i++) {
 
             VoxelizedMarkMemo srcMark = marks.getMemoForIndex(i);
@@ -287,7 +287,7 @@ public class RandomCollectionWithAddCriteria<T> extends RandomCollection<T> {
     }
 
     private void calculatePairsForMark(
-            MemoForIndex pxlMarkMemoList, VoxelizedMarkMemo newMark, NRGStackWithParams nrgStack)
+            MemoForIndex pxlMarkMemoList, VoxelizedMarkMemo newMark, EnergyStack energyStack)
             throws CreateException {
 
         Optional<FeatureCalculatorMulti<FeatureInputPairMemo>> session;
@@ -299,7 +299,7 @@ public class RandomCollectionWithAddCriteria<T> extends RandomCollection<T> {
                             f ->
                                     FeatureSession.with(
                                             f,
-                                            new FeatureInitParams(nrgStack.getParams()),
+                                            new FeatureInitParams(energyStack.getParams()),
                                             sharedFeatures,
                                             logger));
         } catch (InitException e) {
@@ -315,9 +315,9 @@ public class RandomCollectionWithAddCriteria<T> extends RandomCollection<T> {
                         .generateEdge(
                                 otherMark,
                                 newMark,
-                                nrgStack,
+                                energyStack,
                                 session,
-                                nrgStack.dimensions().z() > 1)
+                                energyStack.dimensions().z() > 1)
                         .ifPresent(
                                 pair ->
                                         this.graph.addEdge(

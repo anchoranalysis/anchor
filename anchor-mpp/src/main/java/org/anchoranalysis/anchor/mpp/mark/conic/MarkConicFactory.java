@@ -49,12 +49,12 @@ public class MarkConicFactory {
         Preconditions.checkArgument(do3D || point.z() == 0);
 
         if (do3D) {
-            MarkEllipsoid me = new MarkEllipsoid();
+            Ellipsoid me = new Ellipsoid();
             me.setMarksExplicit(
                     point, new Orientation3DEulerAngles(), new Point3d(size, size, size));
             return me;
         } else {
-            MarkEllipse me = new MarkEllipse();
+            Ellipse me = new Ellipse();
             me.setMarksExplicit(point, new Orientation2D(), new Point2d(size, size));
             return me;
         }

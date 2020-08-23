@@ -29,10 +29,10 @@ package org.anchoranalysis.mpp.io.bean.report.feature;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.anchor.mpp.bean.cfg.CfgProvider;
 import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
-import org.anchoranalysis.anchor.mpp.cfg.Cfg;
-import org.anchoranalysis.anchor.mpp.feature.bean.cfg.FeatureInputCfg;
+import org.anchoranalysis.anchor.mpp.bean.provider.MarkCollectionProvider;
+import org.anchoranalysis.anchor.mpp.feature.bean.mark.collection.FeatureInputMarkCollection;
+import org.anchoranalysis.anchor.mpp.mark.MarkCollection;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
@@ -42,10 +42,10 @@ import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.image.extent.Dimensions;
 
-public class ReportFeatureOnCfg extends ReportFeatureForMPP<FeatureInputCfg> {
+public class ReportFeatureOnCfg extends ReportFeatureForMPP<FeatureInputMarkCollection> {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private CfgProvider cfgProvider;
+    @BeanField @Getter @Setter private MarkCollectionProvider cfgProvider;
     // END BEAN PROPERTIES
 
     @Override
@@ -66,13 +66,13 @@ public class ReportFeatureOnCfg extends ReportFeatureForMPP<FeatureInputCfg> {
         }
 
         try {
-            Cfg cfg = cfgProvider.create();
+            MarkCollection cfg = cfgProvider.create();
 
             Dimensions dimensions = createImageDim();
 
-            FeatureCalculatorSingle<FeatureInputCfg> session = createAndStartSession();
+            FeatureCalculatorSingle<FeatureInputMarkCollection> session = createAndStartSession();
 
-            double val = session.calculate(new FeatureInputCfg(cfg, Optional.of(dimensions)));
+            double val = session.calculate(new FeatureInputMarkCollection(cfg, Optional.of(dimensions)));
             return Double.toString(val);
 
         } catch (FeatureCalculationException | CreateException e) {

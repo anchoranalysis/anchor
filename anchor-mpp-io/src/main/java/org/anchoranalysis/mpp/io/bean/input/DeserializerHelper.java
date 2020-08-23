@@ -29,7 +29,7 @@ package org.anchoranalysis.mpp.io.bean.input;
 import java.nio.file.Path;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.anchor.mpp.cfg.Cfg;
+import org.anchoranalysis.anchor.mpp.mark.MarkCollection;
 import org.anchoranalysis.annotation.mark.MarkAnnotation;
 import org.anchoranalysis.io.bean.deserializer.XStreamDeserializer;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
@@ -37,15 +37,15 @@ import org.anchoranalysis.io.deserializer.DeserializationFailedException;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class DeserializerHelper {
 
-    private static XStreamDeserializer<Cfg> deserializerCfg = new XStreamDeserializer<>();
+    private static XStreamDeserializer<MarkCollection> deserializerCfg = new XStreamDeserializer<>();
     private static XStreamDeserializer<MarkAnnotation> deserializerAnnotation =
             new XStreamDeserializer<>();
 
-    public static Cfg deserializeCfg(Path path) throws DeserializationFailedException {
+    public static MarkCollection deserializeCfg(Path path) throws DeserializationFailedException {
         return deserializerCfg.deserialize(path);
     }
 
-    public static Cfg deserializeCfgFromAnnotation(
+    public static MarkCollection deserializeCfgFromAnnotation(
             Path outPath, boolean includeAccepted, boolean includeRejected)
             throws DeserializationFailedException {
         MarkAnnotation ann = deserializerAnnotation.deserialize(outPath);
@@ -56,10 +56,10 @@ class DeserializerHelper {
             throw new DeserializationFailedException("Annotation was never accepted");
         }
 
-        Cfg cfgOut = new Cfg();
+        MarkCollection cfgOut = new MarkCollection();
 
         if (includeAccepted) {
-            cfgOut.addAll(ann.getCfg());
+            cfgOut.addAll(ann.getMarks());
         }
 
         if (includeRejected && ann.getCfgReject() != null) {

@@ -30,7 +30,7 @@ import java.util.Optional;
 import java.util.function.Function;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
-import org.anchoranalysis.anchor.mpp.cfg.Cfg;
+import org.anchoranalysis.anchor.mpp.mark.MarkCollection;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.io.objects.ObjectCollectionWriter;
@@ -56,10 +56,10 @@ class SubsetOutputterFactory {
     private BoundOutputManagerRouteErrors outputManager;
     private boolean suppressSubfolders;
 
-    public SubsetOutputter<Cfg> cfg() {
+    public SubsetOutputter<MarkCollection> cfg() {
         return create(
                 soMPP.getCfgCollection(),
-                new XStreamGenerator<Cfg>(Optional.of("cfg")),
+                new XStreamGenerator<MarkCollection>(Optional.of("cfg")),
                 (BoundOutputManagerRouteErrors bom) ->
                         bom.outputAllowedSecondLevel(StackOutputKeys.CFG),
                 OutputterDirectories.CFG);

@@ -33,7 +33,7 @@ import cern.colt.matrix.DoubleMatrix2D;
 import cern.colt.matrix.linalg.Algebra;
 import java.io.Serializable;
 
-public class EllipsoidMatrixCalculator implements Serializable {
+class EllipsoidMatrixCalculator implements Serializable {
 
     /** */
     private static final long serialVersionUID = -6844865854045587235L;

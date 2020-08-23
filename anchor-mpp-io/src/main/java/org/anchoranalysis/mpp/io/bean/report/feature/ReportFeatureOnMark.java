@@ -30,7 +30,7 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
-import org.anchoranalysis.anchor.mpp.bean.provider.MarkProvider;
+import org.anchoranalysis.anchor.mpp.bean.provider.SingleMarkProvider;
 import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureInputMark;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -45,7 +45,7 @@ import org.anchoranalysis.image.extent.Dimensions;
 public class ReportFeatureOnMark extends ReportFeatureForMPP<FeatureInputMark> {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private MarkProvider markProvider;
+    @BeanField @Getter @Setter private SingleMarkProvider markProvider;
     // END BEAN PROPERTIES
 
     @Override

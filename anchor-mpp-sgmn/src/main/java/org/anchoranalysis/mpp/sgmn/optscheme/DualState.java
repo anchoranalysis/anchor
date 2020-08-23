@@ -31,6 +31,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.mpp.sgmn.transformer.StateTransformer;
 import org.anchoranalysis.mpp.sgmn.transformer.TransformationContext;
+import lombok.Getter;
 
 /**
  * Remembers the current state of type T and some best state (which was once set from the current
@@ -41,41 +42,33 @@ import org.anchoranalysis.mpp.sgmn.transformer.TransformationContext;
  */
 public class DualState<T> {
 
-    private Optional<T> crnt;
-    private Optional<T> best;
+    @Getter private Optional<T> current;
+    @Getter private Optional<T> best;
 
     public DualState() {
-        this.crnt = Optional.empty();
+        this.current = Optional.empty();
         this.best = Optional.empty();
     }
 
-    private DualState(Optional<T> crnt, Optional<T> best) {
+    private DualState(Optional<T> current, Optional<T> best) {
         super();
-        this.crnt = crnt;
+        this.current = current;
         this.best = best;
     }
 
     public T releaseKeepBest() throws OperationFailedException {
-        T cfgNRG = this.best.orElseThrow(DualState::noBestDefined);
-        this.crnt = Optional.empty();
+        T kept = this.best.orElseThrow(DualState::noBestDefined);
+        this.current = Optional.empty();
         clearBest();
-        return cfgNRG;
+        return kept;
+    }
+    
+    public void assignCurrent(T stateToAssign) {
+        this.current = Optional.of(stateToAssign);
     }
 
-    public Optional<T> getCrnt() {
-        return crnt;
-    }
-
-    public void assignCrnt(T cfgNRG) {
-        this.crnt = Optional.of(cfgNRG);
-    }
-
-    public Optional<T> getBest() {
-        return best;
-    }
-
-    public void assignBestFromCrnt() {
-        this.best = this.crnt;
+    public void assignBestFromCurrent() {
+        this.best = this.current;
     }
 
     public void clearBest() {
@@ -85,7 +78,7 @@ public class DualState<T> {
     public <S> DualState<S> transform(StateTransformer<T, S> func, TransformationContext context)
             throws OperationFailedException {
         return new DualState<>(
-                transformOptional(crnt, func, context), transformOptional(best, func, context));
+                transformOptional(current, func, context), transformOptional(best, func, context));
     }
 
     private static <T, S> Optional<S> transformOptional(

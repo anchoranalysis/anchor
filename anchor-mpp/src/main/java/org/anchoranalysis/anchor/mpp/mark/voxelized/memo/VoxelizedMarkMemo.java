@@ -33,7 +33,7 @@ import org.anchoranalysis.anchor.mpp.mark.voxelized.VoxelizedMark;
 import org.anchoranalysis.anchor.mpp.mark.voxelized.VoxelizedMarkFactory;
 import org.anchoranalysis.core.cache.CachedSupplier;
 import org.anchoranalysis.core.error.AnchorNeverOccursException;
-import org.anchoranalysis.feature.nrg.NRGStack;
+import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
 
 /** Memoization of retrieving a {@VoxelizedMark} from a mark */
 public class VoxelizedMarkMemo {
@@ -42,14 +42,14 @@ public class VoxelizedMarkMemo {
     /** The associated mark */
     @Getter private Mark mark;
 
-    private NRGStack stack;
+    private EnergyStackWithoutParams stack;
 
     @Getter private final RegionMap regionMap;
     // END REQUIRED ARGUMENTS
 
     private CachedSupplier<VoxelizedMark, AnchorNeverOccursException> cachedMark;
 
-    public VoxelizedMarkMemo(Mark mark, NRGStack stack, RegionMap regionMap) {
+    public VoxelizedMarkMemo(Mark mark, EnergyStackWithoutParams stack, RegionMap regionMap) {
         this.mark = mark;
         this.stack = stack;
         this.regionMap = regionMap;

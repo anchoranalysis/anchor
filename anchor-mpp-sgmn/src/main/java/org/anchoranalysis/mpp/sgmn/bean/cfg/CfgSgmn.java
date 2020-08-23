@@ -29,7 +29,7 @@ package org.anchoranalysis.mpp.sgmn.bean.cfg;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.anchor.mpp.cfg.Cfg;
+import org.anchoranalysis.anchor.mpp.mark.MarkCollection;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.name.provider.NamedProvider;
@@ -49,7 +49,7 @@ public abstract class CfgSgmn extends AnchorBean<CfgSgmn> {
     // Creates state for the experiment in general, that is not tied to any particular image
     public abstract ExperimentState createExperimentState();
 
-    public abstract Cfg sgmn(
+    public abstract MarkCollection sgmn(
             NamedStacksSet stacks,
             NamedProvider<ObjectCollection> objects,
             Optional<KeyValueParams> keyValueParams,

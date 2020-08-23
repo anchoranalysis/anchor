@@ -34,8 +34,8 @@ import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
 import org.anchoranalysis.feature.calculate.results.ResultsVector;
+import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.feature.name.FeatureNameList;
-import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.feature.session.FeatureTableCalculator;
@@ -47,7 +47,7 @@ import org.anchoranalysis.image.feature.session.FeatureTableCalculator;
  * <p><div>
  *
  * <ul>
- *   <li>the image in which the object exists (on {code listImage}) i.e. the nrg-stack.
+ *   <li>the image in which the object exists (on {code listImage}) i.e. the energy-stack.
  *   <li>the left-object in the pair (on {@code listSingle})
  *   <li>the right-object in the pair (on {@code listSingle})
  *   <li>the pair (on {code listPair})
@@ -83,12 +83,12 @@ public class PairsTableCalculator implements FeatureTableCalculator<FeatureInput
     }
 
     @Override
-    public void start(ImageInitParams soImage, Optional<NRGStackWithParams> nrgStack, Logger logger)
+    public void start(ImageInitParams soImage, Optional<EnergyStack> energyStack, Logger logger)
             throws InitException {
 
         calculator =
                 new CombinedCalculator(
-                        features, new CreateCalculatorHelper(nrgStack, logger), include, soImage);
+                        features, new CreateCalculatorHelper(energyStack, logger), include, soImage);
     }
 
     @Override

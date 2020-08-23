@@ -28,71 +28,43 @@ package org.anchoranalysis.mpp.sgmn.optscheme.step;
 
 import java.util.Optional;
 import org.anchoranalysis.anchor.mpp.proposer.error.ProposerFailureDescription;
-import org.anchoranalysis.mpp.sgmn.kernel.proposer.KernelWithID;
+import org.anchoranalysis.mpp.sgmn.kernel.proposer.KernelWithIdentifier;
 import org.anchoranalysis.mpp.sgmn.optscheme.DualState;
 import org.anchoranalysis.mpp.sgmn.optscheme.feedback.ReporterException;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 /** Exposes data which is only needed by reporting tools */
+@AllArgsConstructor(access=AccessLevel.PACKAGE)
 public class Reporting<S> {
 
-    private int iter;
+    @Getter private int iter;
     private final DualState<S> state;
-    private Optional<S> proposed;
+    @Getter private Optional<S> proposal;
 
-    /** An optional additional cfg-NRG that provides an additional explanation of proposed */
-    private Optional<S> proposedSecondary;
+    /** An optional additional cfg-Energy that provides an additional explanation of proposed */
+    @Getter private Optional<S> proposalSecondary;
 
     private DscrData<?> dscrData;
-    private boolean accptd;
+    
+    @Getter private boolean accepted;
     private boolean best;
-
-    Reporting(
-            int iter,
-            DualState<S> state,
-            Optional<S> proposed,
-            Optional<S> proposedSecondary,
-            DscrData<?> dscrData,
-            boolean accptd,
-            boolean best) {
-        this.iter = iter;
-        this.state = state;
-        this.proposed = proposed;
-        this.proposedSecondary = proposedSecondary;
-        this.dscrData = dscrData;
-        this.accptd = accptd;
-        this.best = best;
-    }
 
     public double getTemperature() {
         return dscrData.getTemperature();
-    }
-
-    public boolean isAccptd() {
-        return accptd;
     }
 
     public boolean isBest() {
         return best;
     }
 
-    public Optional<S> getProposal() {
-        return proposed;
+    public Optional<S> getMarksAfterOptional() {
+        return state.getCurrent();
     }
 
-    public Optional<S> getProposalSecondary() {
-        return proposedSecondary;
-    }
-
-    public Optional<S> getCfgNRGAfterOptional() {
-        return state.getCrnt();
-    }
-
-    public S getCfgNRGAfter() throws ReporterException {
-        return state.getCrnt().orElseThrow(() -> new ReporterException("No 'after' defined yet"));
-    }
-
-    public int getIter() {
-        return iter;
+    public S getMarksAfter() throws ReporterException {
+        return state.getCurrent().orElseThrow(() -> new ReporterException("No 'after' defined yet"));
     }
 
     public ProposerFailureDescription getKernelNoProposalDescription() {
@@ -111,7 +83,7 @@ public class Reporting<S> {
         return dscrData.getChangedMarkIDs();
     }
 
-    public KernelWithID<?> getKernel() {
+    public KernelWithIdentifier<?> getKernel() {
         return dscrData.getKernel();
     }
 }

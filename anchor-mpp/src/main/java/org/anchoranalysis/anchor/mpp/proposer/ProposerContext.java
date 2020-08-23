@@ -34,29 +34,29 @@ import org.anchoranalysis.anchor.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.anchor.mpp.proposer.error.ErrorNode;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
-import org.anchoranalysis.feature.nrg.NRGStackWithParams;
+import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.image.extent.Dimensions;
 
 @Value
 public class ProposerContext {
 
     private RandomNumberGenerator randomNumberGenerator;
-    private NRGStackWithParams nrgStack;
+    private EnergyStack energyStack;
     private RegionMap regionMap;
     private ErrorNode errorNode;
 
     public ProposerContext replaceError(ErrorNode errorNode) {
-        return new ProposerContext(randomNumberGenerator, nrgStack, regionMap, errorNode);
+        return new ProposerContext(randomNumberGenerator, energyStack, regionMap, errorNode);
     }
 
     public ProposerContext addErrorLevel(String errorMessage) {
         return new ProposerContext(
-                randomNumberGenerator, nrgStack, regionMap, errorNode.add(errorMessage));
+                randomNumberGenerator, energyStack, regionMap, errorNode.add(errorMessage));
     }
 
     public ProposerContext addErrorLevel(String errorMessage, AnchorBean<?> bean) {
         return new ProposerContext(
-                randomNumberGenerator, nrgStack, regionMap, errorNode.addBean(errorMessage, bean));
+                randomNumberGenerator, energyStack, regionMap, errorNode.addBean(errorMessage, bean));
     }
 
     /** Samples an integer uniformally between [0..maxVal) */
@@ -65,10 +65,10 @@ public class ProposerContext {
     }
 
     public Dimensions dimensions() {
-        return nrgStack.getNrgStack().dimensions();
+        return energyStack.dimensions();
     }
 
     public VoxelizedMarkMemo create(Mark mark) {
-        return PxlMarkMemoFactory.create(mark, nrgStack.getNrgStack(), regionMap);
+        return PxlMarkMemoFactory.create(mark, energyStack.getEnergyStack(), regionMap);
     }
 }

@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.mpp.sgmn.kernel;
 
-import org.anchoranalysis.mpp.sgmn.kernel.proposer.KernelWithID;
+import org.anchoranalysis.mpp.sgmn.kernel.proposer.KernelWithIdentifier;
 import org.anchoranalysis.mpp.sgmn.optscheme.step.OptimizationStep;
 import org.anchoranalysis.mpp.sgmn.transformer.TransformationContext;
 
@@ -38,6 +38,6 @@ import org.anchoranalysis.mpp.sgmn.transformer.TransformationContext;
 public interface KernelAssigner<S, T> {
 
     void assignProposal(
-            OptimizationStep<S, T> optStep, TransformationContext context, KernelWithID<S> kid)
-            throws KernelCalcNRGException;
+            OptimizationStep<S, T> optStep, TransformationContext context, KernelWithIdentifier<S> kernel)
+            throws KernelCalculateEnergyException;
 }

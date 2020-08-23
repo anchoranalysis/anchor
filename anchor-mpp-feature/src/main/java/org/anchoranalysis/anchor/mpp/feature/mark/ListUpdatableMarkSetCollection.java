@@ -38,7 +38,7 @@ import org.anchoranalysis.anchor.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.anchor.mpp.probmap.ProbMap;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.feature.nrg.NRGStackWithParams;
+import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.feature.shared.SharedFeatureMulti;
 
 // The pxlMarkMemoList must always match the current state of the underlzing updatable items
@@ -54,7 +54,7 @@ public class ListUpdatableMarkSetCollection implements UpdatableMarkSet, List<Up
     @Override
     public void initUpdatableMarkSet(
             MemoForIndex marks,
-            NRGStackWithParams stack,
+            EnergyStack stack,
             Logger logger,
             SharedFeatureMulti sharedFeatures)
             throws InitException {
@@ -124,10 +124,10 @@ public class ListUpdatableMarkSetCollection implements UpdatableMarkSet, List<Up
     }
 
     @Override
-    public void rmv(MemoForIndex marksExisting, VoxelizedMarkMemo mark)
+    public void remove(MemoForIndex marksExisting, VoxelizedMarkMemo mark)
             throws UpdateMarkSetException {
         for (UpdatableMarkSet item : delegate) {
-            item.rmv(marksExisting, mark);
+            item.remove(marksExisting, mark);
         }
     }
 

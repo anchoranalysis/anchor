@@ -40,7 +40,7 @@ import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.mpp.sgmn.bean.kernel.Kernel;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalculationContext;
-import org.anchoranalysis.mpp.sgmn.kernel.proposer.KernelWithID;
+import org.anchoranalysis.mpp.sgmn.kernel.proposer.KernelWithIdentifier;
 import org.anchoranalysis.mpp.sgmn.kernel.proposer.WeightedKernel;
 import org.anchoranalysis.mpp.sgmn.kernel.proposer.WeightedKernelList;
 
@@ -76,12 +76,12 @@ public class KernelProposer<T> extends AnchorBean<KernelProposer<T>> {
         }
     }
 
-    public KernelWithID<T> initialKernel() {
-        return new KernelWithID<>(kernels.get(0).getKernel(), 0);
+    public KernelWithIdentifier<T> initialKernel() {
+        return new KernelWithIdentifier<>(kernels.get(0).getKernel(), 0);
     }
 
     // Proposes a kernel
-    public KernelWithID<T> proposeKernel(RandomNumberGenerator randomNumberGenerator) {
+    public KernelWithIdentifier<T> proposeKernel(RandomNumberGenerator randomNumberGenerator) {
         return proposeKernel(randomNumberGenerator.sampleDoubleZeroAndOne());
     }
 
@@ -178,14 +178,14 @@ public class KernelProposer<T> extends AnchorBean<KernelProposer<T>> {
     }
 
     // Proposes a kernel
-    private KernelWithID<T> proposeKernel(double randomValueBetweenZeroAndOne) {
+    private KernelWithIdentifier<T> proposeKernel(double randomValueBetweenZeroAndOne) {
 
         for (int i = 0; i < getNumberKernels(); i++) {
 
             WeightedKernel<T> wkf = getWeightedKernelFactory(i);
 
             if (randomValueBetweenZeroAndOne < cumalativeProbability[i]) {
-                return new KernelWithID<>(wkf.getKernel(), i);
+                return new KernelWithIdentifier<>(wkf.getKernel(), i);
             }
         }
 

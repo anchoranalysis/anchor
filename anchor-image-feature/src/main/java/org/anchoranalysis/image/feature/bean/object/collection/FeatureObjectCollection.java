@@ -40,7 +40,7 @@ public abstract class FeatureObjectCollection extends Feature<FeatureInputObject
         return calc(input.get());
     }
 
-    // Calculates an NRG element for a set of pixels
+    // Calculates an Energy element for a set of pixels
     public abstract double calc(FeatureInputObjectCollection params)
             throws FeatureCalculationException;
 

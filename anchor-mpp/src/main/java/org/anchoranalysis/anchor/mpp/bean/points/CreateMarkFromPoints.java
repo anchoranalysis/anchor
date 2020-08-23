@@ -34,10 +34,10 @@ import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.bean.points.fitter.InsufficientPointsException;
 import org.anchoranalysis.anchor.mpp.bean.points.fitter.PointsFitter;
 import org.anchoranalysis.anchor.mpp.bean.points.fitter.PointsFitterException;
-import org.anchoranalysis.anchor.mpp.bean.provider.MarkProvider;
-import org.anchoranalysis.anchor.mpp.cfg.Cfg;
+import org.anchoranalysis.anchor.mpp.bean.provider.SingleMarkProvider;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
-import org.anchoranalysis.anchor.mpp.mark.points.MarkPointList;
+import org.anchoranalysis.anchor.mpp.mark.MarkCollection;
+import org.anchoranalysis.anchor.mpp.mark.points.PointList;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.SkipInit;
@@ -51,7 +51,7 @@ import org.anchoranalysis.image.extent.Dimensions;
 public class CreateMarkFromPoints extends AnchorBean<CreateMarkFromPoints> {
 
     // START BEAN PROPERTIES
-    @BeanField @SkipInit @Getter @Setter private MarkProvider markProvider;
+    @BeanField @SkipInit @Getter @Setter private SingleMarkProvider markProvider;
 
     // NOTE no init occurs of pointsFitter
     @BeanField @SkipInit @Getter @Setter private PointsFitter pointsFitter;
@@ -71,7 +71,7 @@ public class CreateMarkFromPoints extends AnchorBean<CreateMarkFromPoints> {
      * @return
      * @throws OperationFailedException
      */
-    public Optional<Mark> fitMarkToPointsFromCfg(Cfg cfg, Dimensions dimensions)
+    public Optional<Mark> fitMarkToPointsFromCfg(MarkCollection cfg, Dimensions dimensions)
             throws OperationFailedException {
 
         try {
@@ -128,14 +128,14 @@ public class CreateMarkFromPoints extends AnchorBean<CreateMarkFromPoints> {
      * @return
      * @throws FeatureCalculationException
      */
-    private static List<Point3f> extractPointsFromCfg(Cfg cfg) throws OperationFailedException {
+    private static List<Point3f> extractPointsFromCfg(MarkCollection cfg) throws OperationFailedException {
 
         List<Point3f> out = new ArrayList<>();
 
         for (Mark m : cfg) {
 
-            if (m instanceof MarkPointList) {
-                addPointsFrom((MarkPointList) m, out);
+            if (m instanceof PointList) {
+                addPointsFrom((PointList) m, out);
             } else {
                 throw new OperationFailedException(
                         String.format(
@@ -147,7 +147,7 @@ public class CreateMarkFromPoints extends AnchorBean<CreateMarkFromPoints> {
         return out;
     }
 
-    private static void addPointsFrom(MarkPointList mark, List<Point3f> points) {
+    private static void addPointsFrom(PointList mark, List<Point3f> points) {
         points.addAll(PointConverter.convert3dTo3f(mark.getPoints()));
     }
 }

@@ -28,38 +28,38 @@ package org.anchoranalysis.image.feature.stack;
 
 import java.util.Optional;
 import lombok.EqualsAndHashCode;
-import org.anchoranalysis.feature.input.FeatureInputNRG;
-import org.anchoranalysis.feature.nrg.NRGStack;
-import org.anchoranalysis.feature.nrg.NRGStackWithParams;
+import org.anchoranalysis.feature.energy.EnergyStack;
+import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
+import org.anchoranalysis.feature.input.FeatureInputEnergy;
 
 @EqualsAndHashCode(callSuper = true)
-public class FeatureInputStack extends FeatureInputNRG {
+public class FeatureInputStack extends FeatureInputEnergy {
 
     /**
-     * Should only be used if it's guaranteed the NRG stack will be added later, as this this
+     * Should only be used if it's guaranteed the energy stack will be added later, as this this
      * required.
      */
     public FeatureInputStack() {
-        this.setNrgStack(Optional.empty());
+        this.setEnergyStack(Optional.empty());
     }
 
     /**
      * Params without any ImageInitParams
      *
-     * @param nrgStack
+     * @param energyStack
      */
-    public FeatureInputStack(NRGStack nrgStack) {
-        this.setNrgStack(new NRGStackWithParams(nrgStack));
+    public FeatureInputStack(EnergyStackWithoutParams energyStack) {
+        this.setEnergyStack(new EnergyStack(energyStack));
     }
 
     /**
      * Params without any ImageInitParams
      *
-     * @param nrgStack
+     * @param energyStack
      */
-    public FeatureInputStack(Optional<NRGStack> nrgStack) {
-        if (nrgStack.isPresent()) {
-            this.setNrgStack(new NRGStackWithParams(nrgStack.get()));
+    public FeatureInputStack(Optional<EnergyStackWithoutParams> energyStack) {
+        if (energyStack.isPresent()) {
+            this.setEnergyStack(new EnergyStack(energyStack.get()));
         }
     }
 }

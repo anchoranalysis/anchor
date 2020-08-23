@@ -27,8 +27,7 @@
 package org.anchoranalysis.image.feature.objmask;
 
 import static org.junit.Assert.*;
-
-import org.anchoranalysis.feature.nrg.NRGStackWithParams;
+import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.junit.Before;
@@ -46,35 +45,35 @@ public class FeatureInputSingleObjTest {
     }
 
     @Test
-    public void testEquals_SameNRGStack() {
+    public void testEquals_SameEnergyStack() {
 
-        NRGStackWithParams nrgStack = Mockito.mock(NRGStackWithParams.class);
+        EnergyStack energyStack = Mockito.mock(EnergyStack.class);
 
-        assertTrue(createInput(nrgStack).equals(createInput(nrgStack)));
+        assertTrue(createInput(energyStack).equals(createInput(energyStack)));
     }
 
     @Test
-    public void testEquals_DifferentNRGStack() {
+    public void testEquals_DifferentEnergyStack() {
 
-        NRGStackWithParams nrgStack1 = Mockito.mock(NRGStackWithParams.class);
-        NRGStackWithParams nrgStack2 = Mockito.mock(NRGStackWithParams.class);
+        EnergyStack energyStack1 = Mockito.mock(EnergyStack.class);
+        EnergyStack energyStack2 = Mockito.mock(EnergyStack.class);
 
-        assertFalse(createInput(nrgStack1).equals(createInput(nrgStack2)));
+        assertFalse(createInput(energyStack1).equals(createInput(energyStack2)));
     }
 
     @Test
     public void testEquals_DifferentObjects() {
 
-        NRGStackWithParams nrgStack = Mockito.mock(NRGStackWithParams.class);
+        EnergyStack energyStack = Mockito.mock(EnergyStack.class);
 
-        assertFalse(createInputWithNewObj(nrgStack).equals(createInputWithNewObj(nrgStack)));
+        assertFalse(createInputWithNewObj(energyStack).equals(createInputWithNewObj(energyStack)));
     }
 
-    private FeatureInputSingleObject createInput(NRGStackWithParams nrgStack) {
-        return new FeatureInputSingleObject(obj, nrgStack);
+    private FeatureInputSingleObject createInput(EnergyStack energyStack) {
+        return new FeatureInputSingleObject(obj, energyStack);
     }
 
-    private FeatureInputSingleObject createInputWithNewObj(NRGStackWithParams nrgStack) {
-        return new FeatureInputSingleObject(Mockito.mock(ObjectMask.class), nrgStack);
+    private FeatureInputSingleObject createInputWithNewObj(EnergyStack energyStack) {
+        return new FeatureInputSingleObject(Mockito.mock(ObjectMask.class), energyStack);
     }
 }

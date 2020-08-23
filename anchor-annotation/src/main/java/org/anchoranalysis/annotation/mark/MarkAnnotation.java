@@ -29,11 +29,12 @@ package org.anchoranalysis.annotation.mark;
 import java.util.Calendar;
 import java.util.Date;
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
-import org.anchoranalysis.anchor.mpp.cfg.Cfg;
+import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMapSingleton;
 import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
-import org.anchoranalysis.anchor.mpp.mark.conic.RegionMapSingleton;
-import org.anchoranalysis.annotation.AnnotationWithCfg;
+import org.anchoranalysis.anchor.mpp.mark.MarkCollection;
+import org.anchoranalysis.annotation.AnnotationWithMarks;
 import org.anchoranalysis.core.error.OptionalOperationUnsupportedException;
+import lombok.Getter;
 
 /**
  * An annotation that consists of two sets of marks (accepted marks, and rejected marks) as well as
@@ -41,43 +42,47 @@ import org.anchoranalysis.core.error.OptionalOperationUnsupportedException;
  *
  * @author Owen Feehan
  */
-public class MarkAnnotation extends AnnotationWithCfg {
+public class MarkAnnotation extends AnnotationWithMarks {
 
-    private boolean accepted = false;
-    private RejectionReason rejectionReason;
+    @Getter private boolean accepted = false;
+    @Getter private RejectionReason rejectionReason;
 
-    private Cfg cfg; // Marks in annotation
-    private Cfg cfgReject; // Marks covering area that should be rejected, can be NULL
+    /** Marks in annotation */
+    private MarkCollection marks;
+    
+    /** Marks covering area that should be rejected, can be NULL */
+    private MarkCollection marksReject;
 
-    private Date timeAnnotationLastUpdated; // Number of seconds since the UNIX epoch
-    private boolean finished = false;
+    /** Number of seconds since the UNIX epoch */
+    private Date timeAnnotationLastUpdated;
+    @Getter private boolean finished = false;
 
     // Hard-coded regionID
     private int regionID = GlobalRegionIdentifiers.SUBMARK_INSIDE;
 
-    public void markAccepted(Cfg cfg, Cfg cfgReject) {
+    public void markAccepted(MarkCollection marks, MarkCollection marksReject) {
         finished = true;
         accepted = true;
-        this.cfg = cfg;
-        this.cfgReject = cfgReject;
+        this.marks = marks;
+        this.marksReject = marksReject;
         recordCurrentTime();
     }
 
-    public void markPaused(Cfg cfg, Cfg cfgReject) {
+    public void markPaused(MarkCollection marks, MarkCollection marksReject) {
         finished = false;
         accepted = true;
-        this.cfg = cfg;
-        this.cfgReject = cfgReject;
+        this.marks = marks;
+        this.marksReject = marksReject;
         recordCurrentTime();
     }
 
     // Marks the image as a whole as being rejected
     // We record the so far accepted/rejected configurations in case we change our mind lafter
-    public void markRejected(Cfg cfg, Cfg cfgReject, RejectionReason reason) {
+    public void markRejected(MarkCollection cfg, MarkCollection cfgReject, RejectionReason reason) {
         accepted = false;
         finished = true;
-        this.cfg = cfg;
-        this.cfgReject = cfgReject;
+        this.marks = cfg;
+        this.marksReject = cfgReject;
         recordCurrentTime();
         this.rejectionReason = reason;
     }
@@ -86,29 +91,13 @@ public class MarkAnnotation extends AnnotationWithCfg {
         timeAnnotationLastUpdated = Calendar.getInstance().getTime();
     }
 
-    public boolean isAccepted() {
-        return accepted;
-    }
-
-    public RejectionReason getRejectionReason() {
-        return rejectionReason;
-    }
-
     @Override
-    public Cfg getCfg() {
-        return cfg;
+    public MarkCollection getMarks() {
+        return marks;
     }
 
     public Date getTimeAnnotationLastUpdated() {
         return timeAnnotationLastUpdated;
-    }
-
-    public boolean isFinished() {
-        return finished;
-    }
-
-    public void setFinished(boolean finished) {
-        this.finished = finished;
     }
 
     @Override
@@ -121,12 +110,12 @@ public class MarkAnnotation extends AnnotationWithCfg {
         return regionID;
     }
 
-    public Cfg getCfgReject() {
-        return cfgReject;
+    public MarkCollection getCfgReject() {
+        return marksReject;
     }
 
     public void scaleXY(double scaleFactor) throws OptionalOperationUnsupportedException {
-        cfg.scaleXY(scaleFactor);
-        cfgReject.scaleXY(scaleFactor);
+        marks.scaleXY(scaleFactor);
+        marksReject.scaleXY(scaleFactor);
     }
 }

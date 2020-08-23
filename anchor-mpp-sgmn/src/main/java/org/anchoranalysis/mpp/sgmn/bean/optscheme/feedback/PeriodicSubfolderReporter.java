@@ -29,7 +29,7 @@ package org.anchoranalysis.mpp.sgmn.bean.optscheme.feedback;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgNRGPixelized;
+import org.anchoranalysis.anchor.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.generator.IterableGenerator;
 import org.anchoranalysis.io.generator.sequence.GeneratorSequenceNonIncrementalWriter;
@@ -45,7 +45,7 @@ import org.anchoranalysis.mpp.sgmn.optscheme.feedback.period.PeriodReceiver;
 import org.anchoranalysis.mpp.sgmn.optscheme.feedback.period.PeriodReceiverException;
 import org.anchoranalysis.mpp.sgmn.optscheme.step.Reporting;
 
-public abstract class PeriodicSubfolderReporter<T> extends ReporterInterval<CfgNRGPixelized> {
+public abstract class PeriodicSubfolderReporter<T> extends ReporterInterval<VoxelizedMarksWithEnergy> {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private String outputName;
@@ -56,12 +56,12 @@ public abstract class PeriodicSubfolderReporter<T> extends ReporterInterval<CfgN
     private BoundOutputManagerRouteErrors parentOutputManager;
 
     /** Handles period-receiver updates */
-    private class AddToWriter implements PeriodReceiver<CfgNRGPixelized> {
+    private class AddToWriter implements PeriodReceiver<VoxelizedMarksWithEnergy> {
 
         private Optional<T> runningElement;
 
         @Override
-        public void periodStart(Reporting<CfgNRGPixelized> reporting)
+        public void periodStart(Reporting<VoxelizedMarksWithEnergy> reporting)
                 throws PeriodReceiverException {
 
             try {
@@ -84,7 +84,7 @@ public abstract class PeriodicSubfolderReporter<T> extends ReporterInterval<CfgN
         }
 
         @Override
-        public void periodEnd(Reporting<CfgNRGPixelized> reporting) {
+        public void periodEnd(Reporting<VoxelizedMarksWithEnergy> reporting) {
             // NOTHING TO DO
         }
     }
@@ -117,7 +117,7 @@ public abstract class PeriodicSubfolderReporter<T> extends ReporterInterval<CfgN
     }
 
     @Override
-    public void reportBegin(OptimizationFeedbackInitParams<CfgNRGPixelized> optInit)
+    public void reportBegin(OptimizationFeedbackInitParams<VoxelizedMarksWithEnergy> optInit)
             throws ReporterException {
 
         this.parentOutputManager = optInit.getInitContext().getOutputManager();
@@ -130,7 +130,7 @@ public abstract class PeriodicSubfolderReporter<T> extends ReporterInterval<CfgN
         optInit.getPeriodTriggerBank().obtain(getAggInterval(), new AddToWriter());
     }
 
-    protected abstract Optional<T> generateIterableElement(Reporting<CfgNRGPixelized> reporting)
+    protected abstract Optional<T> generateIterableElement(Reporting<VoxelizedMarksWithEnergy> reporting)
             throws ReporterException;
 
     protected BoundOutputManagerRouteErrors getParentOutputManager() {
@@ -138,7 +138,7 @@ public abstract class PeriodicSubfolderReporter<T> extends ReporterInterval<CfgN
     }
 
     @Override
-    public void reportEnd(OptimizationFeedbackEndParams<CfgNRGPixelized> optStep)
+    public void reportEnd(OptimizationFeedbackEndParams<VoxelizedMarksWithEnergy> optStep)
             throws ReporterException {
 
         try {

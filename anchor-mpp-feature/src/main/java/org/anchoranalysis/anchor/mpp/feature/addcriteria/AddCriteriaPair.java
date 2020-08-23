@@ -33,7 +33,7 @@ import org.anchoranalysis.anchor.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.anchor.mpp.pair.IdentifiablePair;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.feature.nrg.NRGStackWithParams;
+import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.image.extent.Dimensions;
 
@@ -44,13 +44,13 @@ public abstract class AddCriteriaPair extends AnchorBean<AddCriteriaPair>
     public Optional<IdentifiablePair<Mark>> generateEdge(
             VoxelizedMarkMemo mark1,
             VoxelizedMarkMemo mark2,
-            NRGStackWithParams nrgStack,
+            EnergyStack energyStack,
             Optional<FeatureCalculatorMulti<FeatureInputPairMemo>> session,
             boolean do3D)
             throws CreateException {
 
         try {
-            if (includeMarks(mark1, mark2, nrgStack.dimensions(), session, do3D)) {
+            if (includeMarks(mark1, mark2, energyStack.dimensions(), session, do3D)) {
                 return Optional.of(new IdentifiablePair<Mark>(mark1.getMark(), mark2.getMark()));
             }
         } catch (IncludeMarksFailureException e) {

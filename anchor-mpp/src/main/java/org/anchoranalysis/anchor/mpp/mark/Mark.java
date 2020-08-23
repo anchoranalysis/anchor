@@ -205,7 +205,7 @@ public abstract class Mark implements Serializable, Identifiable {
         return object;
     }
 
-    public String strId() {
+    public String identifier() {
         return String.format("id=%10d", id);
     }
 

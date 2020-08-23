@@ -30,14 +30,14 @@ import org.anchoranalysis.anchor.mpp.mark.voxelized.memo.MemoForIndex;
 import org.anchoranalysis.anchor.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.feature.nrg.NRGStackWithParams;
+import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.feature.shared.SharedFeatureMulti;
 
 public interface UpdatableMarkSet {
 
     void initUpdatableMarkSet(
             MemoForIndex marks,
-            NRGStackWithParams nrgStack,
+            EnergyStack energyStack,
             Logger logger,
             SharedFeatureMulti sharedFeatures)
             throws InitException;
@@ -51,5 +51,5 @@ public interface UpdatableMarkSet {
             VoxelizedMarkMemo newMark)
             throws UpdateMarkSetException;
 
-    void rmv(MemoForIndex marksExisting, VoxelizedMarkMemo mark) throws UpdateMarkSetException;
+    void remove(MemoForIndex marksExisting, VoxelizedMarkMemo mark) throws UpdateMarkSetException;
 }

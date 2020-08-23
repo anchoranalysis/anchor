@@ -28,7 +28,7 @@ package org.anchoranalysis.anchor.mpp.feature.addcriteria;
 
 import java.util.Optional;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
-import org.anchoranalysis.anchor.mpp.mark.points.MarkPointList;
+import org.anchoranalysis.anchor.mpp.mark.points.PointList;
 import org.anchoranalysis.anchor.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
@@ -60,8 +60,8 @@ public class ArbitraryPointCommon extends AddCriteriaPair {
             return false;
         }
 
-        MarkPointList mark1Cast = (MarkPointList) mark1.getMark();
-        MarkPointList mark2Cast = (MarkPointList) mark2.getMark();
+        PointList mark1Cast = (PointList) mark1.getMark();
+        PointList mark2Cast = (PointList) mark2.getMark();
 
         // Check for intersection of an arbitrary point
         return mark2Cast.getPoints().contains(mark1Cast.getPoints().get(0));

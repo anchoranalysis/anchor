@@ -32,27 +32,27 @@ import org.anchoranalysis.anchor.mpp.feature.error.CheckException;
 import org.anchoranalysis.anchor.mpp.mark.CompatibleWithMark;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.feature.nrg.NRGStackWithParams;
+import org.anchoranalysis.feature.energy.EnergyStack;
 
 public abstract class CheckMark extends MPPBean<CheckMark> implements CompatibleWithMark {
 
     /**
      * Called before any calls to check()
      *
-     * @param nrgStack
+     * @param energyStack
      */
-    public void start(NRGStackWithParams nrgStack) throws OperationFailedException {}
+    public void start(EnergyStack energyStack) throws OperationFailedException {}
 
     /**
      * Checks a mark
      *
      * @param mark
      * @param regionMap
-     * @param nrgStack
-     * @param featureSession session (nb nrgStack can be added to featureSession)
+     * @param energyStack
+     * @param featureSession session (nb energyStack can be added to featureSession)
      * @return
      */
-    public abstract boolean check(Mark mark, RegionMap regionMap, NRGStackWithParams nrgStack)
+    public abstract boolean check(Mark mark, RegionMap regionMap, EnergyStack energyStack)
             throws CheckException;
 
     /** Called after any calls to check() */

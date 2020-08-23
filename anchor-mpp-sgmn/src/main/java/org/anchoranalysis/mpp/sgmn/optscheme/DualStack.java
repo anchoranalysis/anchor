@@ -27,26 +27,26 @@
 package org.anchoranalysis.mpp.sgmn.optscheme;
 
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.feature.nrg.NRGStackWithParams;
+import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.image.stack.DisplayStack;
 
-/** Stores an NRGStack together with a background stack */
+/** Stores an EnergyStack together with a background stack */
 public class DualStack {
-    private NRGStackWithParams nrgStack;
+    private EnergyStack energyStack;
     private DisplayStack bgStack;
 
-    public DualStack(NRGStackWithParams stackBoth) throws CreateException {
-        this(stackBoth, DisplayStack.create(stackBoth.getNrgStack().asStack()));
+    public DualStack(EnergyStack stackBoth) throws CreateException {
+        this(stackBoth, DisplayStack.create(stackBoth.getEnergyStack().asStack()));
     }
 
-    public DualStack(NRGStackWithParams nrgStack, DisplayStack bgStack) {
+    public DualStack(EnergyStack energyStack, DisplayStack bgStack) {
         super();
-        this.nrgStack = nrgStack;
+        this.energyStack = energyStack;
         this.bgStack = bgStack;
     }
 
-    public NRGStackWithParams getNrgStack() {
-        return nrgStack;
+    public EnergyStack getEnergyStack() {
+        return energyStack;
     }
 
     public DisplayStack getBgStack() {

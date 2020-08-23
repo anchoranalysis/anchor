@@ -61,7 +61,7 @@ public class CalculateInputFromPair
     @Override
     protected FeatureInputSingleObject execute(FeatureInputPairObjects input) {
         FeatureInputSingleObject paramsNew = new FeatureInputSingleObject(extractObj(input));
-        paramsNew.setNrgStack(input.getNrgStackOptional());
+        paramsNew.setEnergyStack(input.getEnergyStackOptional());
         return paramsNew;
     }
 

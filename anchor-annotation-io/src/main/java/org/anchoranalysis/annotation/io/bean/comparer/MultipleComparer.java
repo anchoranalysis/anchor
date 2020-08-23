@@ -34,7 +34,7 @@ import java.util.List;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.annotation.AnnotationWithCfg;
+import org.anchoranalysis.annotation.AnnotationWithMarks;
 import org.anchoranalysis.annotation.io.assignment.AssignmentObjectFactory;
 import org.anchoranalysis.annotation.io.assignment.AssignmentOverlapFromPairs;
 import org.anchoranalysis.annotation.io.assignment.generator.AssignmentGenerator;
@@ -81,7 +81,7 @@ public class MultipleComparer extends AnchorBean<MultipleComparer> {
     // END BEAN PROPERTIES
 
     public List<NameValue<Stack>> createRasters(
-            AnnotationWithCfg annotation,
+            AnnotationWithMarks annotation,
             DisplayStack background,
             Path annotationPath,
             ColorSetGenerator colorSetGenerator,
