@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.mpp.sgmn.bean.cfg;
+package org.anchoranalysis.mpp.sgmn.bean;
 
 import java.util.Optional;
 import lombok.Getter;
@@ -40,7 +40,7 @@ import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.stack.NamedStacksSet;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 
-public abstract class CfgSgmn extends AnchorBean<CfgSgmn> {
+public abstract class SegmentIntoMarks extends AnchorBean<SegmentIntoMarks> {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private String backgroundStackName = StackIdentifiers.INPUT_IMAGE;
@@ -49,7 +49,7 @@ public abstract class CfgSgmn extends AnchorBean<CfgSgmn> {
     // Creates state for the experiment in general, that is not tied to any particular image
     public abstract ExperimentState createExperimentState();
 
-    public abstract MarkCollection sgmn(
+    public abstract MarkCollection segment(
             NamedStacksSet stacks,
             NamedProvider<ObjectCollection> objects,
             Optional<KeyValueParams> keyValueParams,

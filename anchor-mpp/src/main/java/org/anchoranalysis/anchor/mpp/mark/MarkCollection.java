@@ -89,8 +89,8 @@ public final class MarkCollection implements Iterable<Mark>, Serializable {
         return marks.add(arg0);
     }
 
-    public void addAll(MarkCollection cfg) {
-        for (Mark m : cfg) {
+    public void addAll(MarkCollection marks) {
+        for (Mark m : marks) {
             add(m);
         }
     }
@@ -187,7 +187,7 @@ public final class MarkCollection implements Iterable<Mark>, Serializable {
 
     public MarkCollection marksAt(Point3d point, RegionMap regionMap, int regionID) {
 
-        MarkCollection cfgOut = new MarkCollection();
+        MarkCollection marksOut = new MarkCollection();
 
         RegionMembership rm = regionMap.membershipForIndex(regionID);
         byte flags = rm.flags();
@@ -197,10 +197,10 @@ public final class MarkCollection implements Iterable<Mark>, Serializable {
 
             byte membership = m.isPointInside(point);
             if (rm.isMemberFlag(membership, flags)) {
-                cfgOut.add(m);
+                marksOut.add(m);
             }
         }
-        return cfgOut;
+        return marksOut;
     }
 
     public boolean equalsDeep(MarkCollection other) {

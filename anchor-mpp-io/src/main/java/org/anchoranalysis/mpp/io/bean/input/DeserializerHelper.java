@@ -37,15 +37,15 @@ import org.anchoranalysis.io.deserializer.DeserializationFailedException;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class DeserializerHelper {
 
-    private static XStreamDeserializer<MarkCollection> deserializerCfg = new XStreamDeserializer<>();
+    private static XStreamDeserializer<MarkCollection> deserializerMarks = new XStreamDeserializer<>();
     private static XStreamDeserializer<MarkAnnotation> deserializerAnnotation =
             new XStreamDeserializer<>();
 
-    public static MarkCollection deserializeCfg(Path path) throws DeserializationFailedException {
-        return deserializerCfg.deserialize(path);
+    public static MarkCollection deserializeMarks(Path path) throws DeserializationFailedException {
+        return deserializerMarks.deserialize(path);
     }
 
-    public static MarkCollection deserializeCfgFromAnnotation(
+    public static MarkCollection deserializeMarksFromAnnotation(
             Path outPath, boolean includeAccepted, boolean includeRejected)
             throws DeserializationFailedException {
         MarkAnnotation ann = deserializerAnnotation.deserialize(outPath);
@@ -56,16 +56,16 @@ class DeserializerHelper {
             throw new DeserializationFailedException("Annotation was never accepted");
         }
 
-        MarkCollection cfgOut = new MarkCollection();
+        MarkCollection marksOut = new MarkCollection();
 
         if (includeAccepted) {
-            cfgOut.addAll(ann.getMarks());
+            marksOut.addAll(ann.getMarks());
         }
 
-        if (includeRejected && ann.getCfgReject() != null) {
-            cfgOut.addAll(ann.getCfgReject());
+        if (includeRejected && ann.getMarksReject() != null) {
+            marksOut.addAll(ann.getMarksReject());
         }
 
-        return cfgOut;
+        return marksOut;
     }
 }

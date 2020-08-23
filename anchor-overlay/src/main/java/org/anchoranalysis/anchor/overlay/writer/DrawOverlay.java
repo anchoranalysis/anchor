@@ -89,7 +89,7 @@ public abstract class DrawOverlay {
                     precalculate(
                             overlays, this, dimensions, BinaryValues.getDefault().createByte());
 
-            // TODO, can't we read the color directly from the cfg in some way?
+            // TODO, can't we read the color directly from the marks in some way?
             writePrecalculatedOverlays(
                     overlaysPreprocessed,
                     dimensions,
@@ -102,7 +102,7 @@ public abstract class DrawOverlay {
         }
     }
 
-    // dim should be for the ENTIRE cfg, not just the bit in boxContainer
+    // dim should be for the ENTIRE marks, not just the bit in boxContainer
     public abstract void writePrecalculatedOverlays(
             List<PrecalculationOverlay> precalculatedMasks,
             Dimensions dimensions,
@@ -121,7 +121,7 @@ public abstract class DrawOverlay {
     // Does computationally-intensive preprocessing (so it can be cached). Any object can be used,
     // but
     // there should be exactly one object
-    //  per Mark in the cfg, in the same order as the Cfg is inputted
+    //  per Mark in the marks, in the same order as the Marks is inputted
     public static List<PrecalculationOverlay> precalculate(
             ColoredOverlayCollection coc,
             DrawOverlay drawOverlay,

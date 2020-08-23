@@ -67,11 +67,11 @@ public class MemoCollection implements Serializable, MemoForIndex {
     public MemoCollection(
             EnergySavedInd savedInd,
             EnergyStackWithoutParams energyStack,
-            MarkCollection cfg,
+            MarkCollection marks,
             EnergySchemeWithSharedFeatures energySchemeTotal)
             throws NamedFeatureCalculateException {
         this.regionMap = energySchemeTotal.getRegionMap();
-        calculateFreshInd(savedInd, energyStack, cfg, energySchemeTotal);
+        calculateFreshInd(savedInd, energyStack, marks, energySchemeTotal);
     }
 
     public MemoCollection(MemoCollection src) {
@@ -96,10 +96,10 @@ public class MemoCollection implements Serializable, MemoForIndex {
         return regionMap;
     }
 
-    public VoxelizedMarkMemo getMemoForMark(MarkCollection cfg, Mark mark) {
-        int index = cfg.indexOf(mark);
+    public VoxelizedMarkMemo getMemoForMark(MarkCollection marks, Mark mark) {
+        int index = marks.indexOf(mark);
         if (index == -1) {
-            throw new AnchorFriendlyRuntimeException("Mark doesn't exist in cfg");
+            throw new AnchorFriendlyRuntimeException("Mark doesn't exist in marks");
         }
         return pxlMarkMemo.get(index);
     }

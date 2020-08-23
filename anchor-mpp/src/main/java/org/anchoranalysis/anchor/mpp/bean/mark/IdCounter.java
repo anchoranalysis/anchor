@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.anchor.mpp.bean.cfg;
+package org.anchoranalysis.anchor.mpp.bean.mark;
 
 class IdCounter {
 

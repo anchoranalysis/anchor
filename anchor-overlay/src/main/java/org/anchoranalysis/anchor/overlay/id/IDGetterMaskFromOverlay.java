@@ -38,7 +38,7 @@ public class IDGetterMaskFromOverlay implements IDGetter<ObjectWithProperties> {
     private ColoredOverlayCollection oc;
 
     // If switched on, we always do a modulus of the iteration
-    //   with the cfg size to determine the mark to reference
+    //   with the marks size to determine the mark to reference
     //
     // This is, for example, useful when object-masks are doubled
     //   to include both inside and shell areas, as we can

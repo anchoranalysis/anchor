@@ -42,10 +42,10 @@ import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.image.extent.Dimensions;
 
-public class ReportFeatureOnCfg extends ReportFeatureForMPP<FeatureInputMarkCollection> {
+public class ReportFeatureOnMarks extends ReportFeatureForMPP<FeatureInputMarkCollection> {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private MarkCollectionProvider cfgProvider;
+    @BeanField @Getter @Setter private MarkCollectionProvider marks;
     // END BEAN PROPERTIES
 
     @Override
@@ -60,19 +60,19 @@ public class ReportFeatureOnCfg extends ReportFeatureForMPP<FeatureInputMarkColl
         // Maybe we should duplicate the providers?
         try {
             init(so, logger);
-            cfgProvider.initRecursive(so, logger);
+            marks.initRecursive(so, logger);
         } catch (InitException e) {
             throw new OperationFailedException(e);
         }
 
         try {
-            MarkCollection cfg = cfgProvider.create();
+            MarkCollection marksCreated = marks.create();
 
             Dimensions dimensions = createImageDim();
 
             FeatureCalculatorSingle<FeatureInputMarkCollection> session = createAndStartSession();
 
-            double val = session.calculate(new FeatureInputMarkCollection(cfg, Optional.of(dimensions)));
+            double val = session.calculate(new FeatureInputMarkCollection(marksCreated, Optional.of(dimensions)));
             return Double.toString(val);
 
         } catch (FeatureCalculationException | CreateException e) {

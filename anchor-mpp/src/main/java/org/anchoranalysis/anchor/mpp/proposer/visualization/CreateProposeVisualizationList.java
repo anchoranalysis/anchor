@@ -39,9 +39,9 @@ public class CreateProposeVisualizationList implements CreateProposalVisualizati
     }
 
     @Override
-    public void addToCfg(ColoredMarks cfg) {
+    public void addToMarks(ColoredMarks marks) {
         for (CreateProposalVisualization item : list) {
-            item.addToCfg(cfg);
+            item.addToMarks(marks);
         }
     }
 }

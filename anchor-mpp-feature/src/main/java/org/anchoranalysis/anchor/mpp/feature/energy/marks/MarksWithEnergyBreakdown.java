@@ -192,7 +192,7 @@ public class MarksWithEnergyBreakdown implements Serializable {
 
         wrapperInd.removeTwo(getIndividual(), index1, index2);
 
-        MarkCollection newCfg = marks.getMarks().shallowCopy();
+        MarkCollection newMarks = marks.getMarks().shallowCopy();
 
         MemoList memoList = new MemoList();
         memoList.addAll(wrapperInd);
@@ -206,9 +206,9 @@ public class MarksWithEnergyBreakdown implements Serializable {
             throw new NamedFeatureCalculateException(e);
         }
 
-        newCfg.removeTwo(index1, index2);
+        newMarks.removeTwo(index1, index2);
 
-        marks.setMarks(newCfg);
+        marks.setMarks(newMarks);
 
         updateTotal(wrapperInd, energyStack);
     }
@@ -241,7 +241,7 @@ public class MarksWithEnergyBreakdown implements Serializable {
             throw new NamedFeatureCalculateException(e);
         }
 
-        assert (getPair().isCfgSpan(marks.getMarks()));
+        assert (getPair().isMarksSpan(marks.getMarks()));
 
         // we can also calculate both afresh, but slower
         updateTotal(wrapperInd, energyStack.getEnergyStack());

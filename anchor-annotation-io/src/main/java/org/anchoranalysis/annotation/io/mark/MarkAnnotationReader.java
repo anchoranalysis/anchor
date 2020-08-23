@@ -65,7 +65,7 @@ public class MarkAnnotationReader implements AnnotationReader<MarkAnnotation> {
     }
 
     // Reads an annotation if it can, returns NULL otherwise
-    public MarkCollection readDefaultCfg(Path path) throws DeserializationFailedException {
+    public MarkCollection readDefaultMarks(Path path) throws DeserializationFailedException {
         return DESERIALIZER.deserialize(path);
     }
 

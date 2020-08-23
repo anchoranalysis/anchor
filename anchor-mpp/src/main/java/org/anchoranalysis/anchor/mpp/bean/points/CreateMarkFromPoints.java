@@ -63,15 +63,15 @@ public class CreateMarkFromPoints extends AnchorBean<CreateMarkFromPoints> {
     // END BEAN PROPERTIES
 
     /**
-     * Extract points from a cfg, creates a new mark from markProvider and then fits this mark the
+     * Extract points from a marks, creates a new mark from markProvider and then fits this mark the
      * extracted points
      *
-     * @param cfg a cfg containing MarkPointLists as points
+     * @param marks a marks containing MarkPointLists as points
      * @param dimensions
      * @return
      * @throws OperationFailedException
      */
-    public Optional<Mark> fitMarkToPointsFromCfg(MarkCollection cfg, Dimensions dimensions)
+    public Optional<Mark> fitMarkToPointsFromMarks(MarkCollection marks, Dimensions dimensions)
             throws OperationFailedException {
 
         try {
@@ -83,7 +83,7 @@ public class CreateMarkFromPoints extends AnchorBean<CreateMarkFromPoints> {
                                             new OperationFailedException(
                                                     "A mark is required for this operation"));
 
-            List<Point3f> points = extractPointsFromCfg(cfg);
+            List<Point3f> points = extractPointsFromMarks(marks);
 
             if (points.size() >= minNumPoints) {
                 return fitPoints(mark, points, dimensions);
@@ -122,24 +122,24 @@ public class CreateMarkFromPoints extends AnchorBean<CreateMarkFromPoints> {
     }
 
     /**
-     * Given a Cfg whose marks are all MarkPointList, extract the points from all marks
+     * Given a Marks whose marks are all MarkPointList, extract the points from all marks
      *
-     * @param cfg
+     * @param marks
      * @return
      * @throws FeatureCalculationException
      */
-    private static List<Point3f> extractPointsFromCfg(MarkCollection cfg) throws OperationFailedException {
+    private static List<Point3f> extractPointsFromMarks(MarkCollection marks) throws OperationFailedException {
 
         List<Point3f> out = new ArrayList<>();
 
-        for (Mark m : cfg) {
+        for (Mark m : marks) {
 
             if (m instanceof PointList) {
                 addPointsFrom((PointList) m, out);
             } else {
                 throw new OperationFailedException(
                         String.format(
-                                "At least one Mark in the cfg is not a MarkPointList, rather a %s",
+                                "At least one Mark in the marks is not a MarkPointList, rather a %s",
                                 m.getClass()));
             }
         }

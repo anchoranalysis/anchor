@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.mpp.sgmn.bean.cfg;
+package org.anchoranalysis.mpp.sgmn.bean;
 
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 

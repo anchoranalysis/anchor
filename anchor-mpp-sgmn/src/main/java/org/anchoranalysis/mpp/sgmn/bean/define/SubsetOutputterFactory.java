@@ -44,7 +44,7 @@ import org.anchoranalysis.mpp.io.output.StackOutputKeys;
 import org.anchoranalysis.mpp.sgmn.define.OutputterDirectories;
 
 /**
- * This class will expect for the following second-level output keys: {@link StackOutputKeys.CFG}
+ * This class will expect for the following second-level output keys: {@link StackOutputKeys.MARKS}
  * {@link StackOutputKeys.HISTOGRAM} {@link StackOutputKeys.OBJECTS}
  *
  * @author Owen Feehan
@@ -56,13 +56,13 @@ class SubsetOutputterFactory {
     private BoundOutputManagerRouteErrors outputManager;
     private boolean suppressSubfolders;
 
-    public SubsetOutputter<MarkCollection> cfg() {
+    public SubsetOutputter<MarkCollection> marks() {
         return create(
-                soMPP.getCfgCollection(),
-                new XStreamGenerator<MarkCollection>(Optional.of("cfg")),
+                soMPP.getMarksCollection(),
+                new XStreamGenerator<MarkCollection>(Optional.of("marks")),
                 (BoundOutputManagerRouteErrors bom) ->
-                        bom.outputAllowedSecondLevel(StackOutputKeys.CFG),
-                OutputterDirectories.CFG);
+                        bom.outputAllowedSecondLevel(StackOutputKeys.MARKS),
+                OutputterDirectories.MARKS);
     }
 
     public SubsetOutputter<Histogram> histogram() {

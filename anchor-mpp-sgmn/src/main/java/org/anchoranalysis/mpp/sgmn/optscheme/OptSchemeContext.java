@@ -28,7 +28,7 @@ package org.anchoranalysis.mpp.sgmn.optscheme;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.anchoranalysis.anchor.mpp.bean.cfg.MarkWithIdentifierFactory;
+import org.anchoranalysis.anchor.mpp.bean.mark.MarkWithIdentifierFactory;
 import org.anchoranalysis.anchor.mpp.feature.energy.scheme.EnergySchemeWithSharedFeatures;
 import org.anchoranalysis.anchor.mpp.proposer.error.ErrorNodeNull;
 import org.anchoranalysis.core.log.Logger;

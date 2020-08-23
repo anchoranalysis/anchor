@@ -50,7 +50,7 @@ public class MultiInput implements ProvidesStackInput, InputForMPPBean {
 
     private StackWithMap stack;
 
-    private OperationMap<MarkCollection> mapCfg = new OperationMap<>();
+    private OperationMap<MarkCollection> mapMarks = new OperationMap<>();
     private OperationMap<ObjectCollection> mapObjects = new OperationMap<>();
     private OperationMap<KeyValueParams> mapKeyValueParams = new OperationMap<>();
     private OperationMap<Histogram> mapHistogram = new OperationMap<>();
@@ -87,7 +87,7 @@ public class MultiInput implements ProvidesStackInput, InputForMPPBean {
     public void addToSharedObjects(MPPInitParams soMPP, ImageInitParams soImage)
             throws OperationFailedException {
 
-        cfg().addToStore(soMPP.getCfgCollection());
+        marks().addToStore(soMPP.getMarksCollection());
         stack().addToStore(new WrapStackAsTimeSequenceStore(soImage.stacks()));
         objects().addToStore(soImage.objects());
         keyValueParams().addToStore(soImage.params().getNamedKeyValueParamsCollection());
@@ -112,15 +112,15 @@ public class MultiInput implements ProvidesStackInput, InputForMPPBean {
         // We set all these objects to NULL so the garbage collector can free up memory
         // This probably isn't necessary, as the MultiInput object should get garbage-collected ASAP
         //   but just in case
-        mapCfg = null;
+        mapMarks = null;
         mapObjects = null;
         mapKeyValueParams = null;
         mapHistogram = null;
         mapFilePath = null;
     }
 
-    public MultiInputSubMap<MarkCollection> cfg() {
-        return mapCfg;
+    public MultiInputSubMap<MarkCollection> marks() {
+        return mapMarks;
     }
 
     public MultiInputSubMap<ObjectCollection> objects() {

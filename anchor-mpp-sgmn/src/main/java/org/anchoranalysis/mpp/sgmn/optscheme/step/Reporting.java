@@ -43,7 +43,7 @@ public class Reporting<S> {
     private final DualState<S> state;
     @Getter private Optional<S> proposal;
 
-    /** An optional additional cfg-Energy that provides an additional explanation of proposed */
+    /** An optional additional marks-Energy that provides an additional explanation of proposed */
     @Getter private Optional<S> proposalSecondary;
 
     private DscrData<?> dscrData;

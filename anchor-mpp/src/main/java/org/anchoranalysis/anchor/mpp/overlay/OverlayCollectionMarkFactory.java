@@ -61,23 +61,23 @@ public class OverlayCollectionMarkFactory {
     }
 
     public static ColoredOverlayCollection createColor(
-            ColoredMarks cfg, RegionMembershipWithFlags regionMembership) {
-        return createColor(cfg.getMarks(), cfg.getColorList(), regionMembership);
+            ColoredMarks marks, RegionMembershipWithFlags regionMembership) {
+        return createColor(marks.getMarks(), marks.getColorList(), regionMembership);
     }
 
     private static ColoredOverlayCollection createColor(
-            MarkCollection cfg, ColorIndex colorIndex, RegionMembershipWithFlags regionMembership) {
+            MarkCollection marks, ColorIndex colorIndex, RegionMembershipWithFlags regionMembership) {
 
         ColoredOverlayCollection out = new ColoredOverlayCollection();
 
-        for (int i = 0; i < cfg.size(); i++) {
-            out.add(new OverlayMark(cfg.get(i), regionMembership), colorIndex.get(i));
+        for (int i = 0; i < marks.size(); i++) {
+            out.add(new OverlayMark(marks.get(i), regionMembership), colorIndex.get(i));
         }
         return out;
     }
 
-    // Creates a cfg from whatever Overlays are found in the collection
-    public static MarkCollection cfgFromOverlays(OverlayCollection overlays) {
+    // Creates a marks from whatever Overlays are found in the collection
+    public static MarkCollection marksFromOverlays(OverlayCollection overlays) {
         MarkCollection out = new MarkCollection();
 
         for (int i = 0; i < overlays.size(); i++) {
@@ -92,8 +92,8 @@ public class OverlayCollectionMarkFactory {
         return out;
     }
 
-    // Creates a cfg from whatever Overlays are found in the collection
-    public static ColoredMarks cfgFromOverlays(ColoredOverlayCollection overlays) {
+    // Creates a marks from whatever Overlays are found in the collection
+    public static ColoredMarks marksFromOverlays(ColoredOverlayCollection overlays) {
         ColoredMarks out = new ColoredMarks();
 
         for (int i = 0; i < overlays.size(); i++) {

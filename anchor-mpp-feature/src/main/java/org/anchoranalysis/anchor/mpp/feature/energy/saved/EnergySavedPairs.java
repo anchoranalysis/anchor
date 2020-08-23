@@ -139,8 +139,8 @@ public class EnergySavedPairs implements UpdatableMarkSet {
     }
 
     // Does the pairs hash only contains items contained in a particular configuration
-    public boolean isCfgSpan(MarkCollection cfg) {
-        return pairCollection.isCfgSpan(cfg);
+    public boolean isMarksSpan(MarkCollection marks) {
+        return pairCollection.isMarksSpan(marks);
     }
 
     @Override

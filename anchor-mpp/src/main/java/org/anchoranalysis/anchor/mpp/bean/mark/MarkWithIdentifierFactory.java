@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.anchor.mpp.bean.cfg;
+package org.anchoranalysis.anchor.mpp.bean.mark;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

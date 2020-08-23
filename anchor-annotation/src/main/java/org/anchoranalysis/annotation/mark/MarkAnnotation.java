@@ -78,11 +78,11 @@ public class MarkAnnotation extends AnnotationWithMarks {
 
     // Marks the image as a whole as being rejected
     // We record the so far accepted/rejected configurations in case we change our mind lafter
-    public void markRejected(MarkCollection cfg, MarkCollection cfgReject, RejectionReason reason) {
+    public void markRejected(MarkCollection marks, MarkCollection marksReject, RejectionReason reason) {
         accepted = false;
         finished = true;
-        this.marks = cfg;
-        this.marksReject = cfgReject;
+        this.marks = marks;
+        this.marksReject = marksReject;
         recordCurrentTime();
         this.rejectionReason = reason;
     }
@@ -110,7 +110,7 @@ public class MarkAnnotation extends AnnotationWithMarks {
         return regionID;
     }
 
-    public MarkCollection getCfgReject() {
+    public MarkCollection getMarksReject() {
         return marksReject;
     }
 

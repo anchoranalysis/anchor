@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.mpp.sgmn.kernel;
 
-import org.anchoranalysis.anchor.mpp.bean.cfg.MarkWithIdentifierFactory;
+import org.anchoranalysis.anchor.mpp.bean.mark.MarkWithIdentifierFactory;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

@@ -46,7 +46,7 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class StacksOutputter {
 
-    private static final String OUTPUT_NAME = "stackCollection";
+    public static final String OUTPUT_NAME = "stacks";
     private static final String PREFIX = "";
 
     /**

@@ -50,7 +50,7 @@ import org.anchoranalysis.mpp.io.marks.ColoredMarksWithDisplayStack;
 public abstract class MarksGeneratorBase extends RasterGenerator
         implements IterableObjectGenerator<ColoredMarksWithDisplayStack, Stack> {
 
-    @Getter @Setter private String manifestDescriptionFunction = "cfg";
+    @Getter @Setter private String manifestDescriptionFunction = "marks";
 
     private DrawOverlay writer;
     private ColoredMarksWithDisplayStack marks;

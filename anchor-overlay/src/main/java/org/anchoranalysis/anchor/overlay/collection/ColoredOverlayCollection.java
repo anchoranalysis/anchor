@@ -127,7 +127,7 @@ public class ColoredOverlayCollection implements Iterable<Overlay> {
         return out;
     }
 
-    // Everything from the two Cfgs which isn't in the intersection
+    // Everything from the two Markss which isn't in the intersection
     public static OverlayCollection createIntersectionComplement(
             ColoredOverlayCollection marks1, ColoredOverlayCollection marks2) {
 

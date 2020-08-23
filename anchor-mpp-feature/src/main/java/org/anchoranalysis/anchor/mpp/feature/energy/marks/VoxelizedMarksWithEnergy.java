@@ -115,8 +115,8 @@ public final class VoxelizedMarksWithEnergy {
     }
 
     // Does the pairs hash only contains items contained in a particular configuration
-    public boolean isCfgSpan() {
-        return marks.getPair().isCfgSpan(marks.getMarks());
+    public boolean isMarksSpan() {
+        return marks.getPair().isMarksSpan(marks.getMarks());
     }
 
     // calculates a new energy and configuration based upon a mark at a particular index

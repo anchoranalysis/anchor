@@ -107,19 +107,19 @@ class AppendHelper {
                 debugMode);
     }
 
-    public static void appendCfg(
+    public static void appendMarks(
             List<NamedBean<FilePathGenerator>> listPaths,
             final MultiInput inputObject,
             boolean debugMode) {
         append(
                 inputObject,
                 listPaths,
-                MultiInput::cfg,
-                DeserializerHelper::deserializeCfg,
+                MultiInput::marks,
+                DeserializerHelper::deserializeMarks,
                 debugMode);
     }
 
-    public static void appendCfgFromAnnotation(
+    public static void appendMarksFromAnnotation(
             List<NamedBean<FilePathGenerator>> listPaths,
             MultiInput inputObject,
             boolean includeAccepted,
@@ -129,9 +129,9 @@ class AppendHelper {
         append(
                 inputObject,
                 listPaths,
-                MultiInput::cfg,
+                MultiInput::marks,
                 outPath ->
-                        DeserializerHelper.deserializeCfgFromAnnotation(
+                        DeserializerHelper.deserializeMarksFromAnnotation(
                                 outPath, includeAccepted, includeRejected),
                 debugMode);
     }

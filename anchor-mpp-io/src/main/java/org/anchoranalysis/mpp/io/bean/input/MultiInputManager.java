@@ -62,18 +62,18 @@ public class MultiInputManager extends MultiInputManagerBase {
     private List<NamedBean<FilePathGenerator>> appendStack = new ArrayList<>();
 
     @BeanField @OptionalBean @Getter @Setter
-    private List<NamedBean<FilePathGenerator>> listAppendCfg = new ArrayList<>();
+    private List<NamedBean<FilePathGenerator>> listAppendMarks = new ArrayList<>();
 
     @BeanField @OptionalBean @Getter @Setter
-    private List<NamedBean<FilePathGenerator>> listAppendCfgFromAnnotation =
+    private List<NamedBean<FilePathGenerator>> listAppendMarksFromAnnotation =
             new ArrayList<>(); // Uses both accepted and rejected
 
     @BeanField @OptionalBean @Getter @Setter
-    private List<NamedBean<FilePathGenerator>> listAppendCfgFromAnnotationAcceptedOnly =
+    private List<NamedBean<FilePathGenerator>> listAppendMarksFromAnnotationAcceptedOnly =
             new ArrayList<>(); // Uses both accepted only
 
     @BeanField @OptionalBean @Getter @Setter
-    private List<NamedBean<FilePathGenerator>> listAppendCfgFromAnnotationRejectedOnly =
+    private List<NamedBean<FilePathGenerator>> listAppendMarksFromAnnotationRejectedOnly =
             new ArrayList<>(); // Uses both accepted rejectedonly
 
     /** Appends object-collections to the multi-input */
@@ -116,19 +116,19 @@ public class MultiInputManager extends MultiInputManagerBase {
 
     private void appendFromLists(MultiInput inputObject, boolean doDebug) {
         appendStack(appendStack, inputObject, doDebug, rasterReader);
-        appendFromVariousCfgSources(inputObject, doDebug);
+        appendFromVariousMarksSources(inputObject, doDebug);
         appendObjects(appendObjects, inputObject, doDebug);
         appendKeyValueParams(listAppendKeyValueParams, inputObject, doDebug);
         appendHistogram(appendHistogram, inputObject, doDebug);
         appendFilePath(listAppendFilePath, inputObject, doDebug);
     }
 
-    private void appendFromVariousCfgSources(MultiInput inputObject, boolean doDebug) {
-        appendCfg(listAppendCfg, inputObject, doDebug);
-        appendCfgFromAnnotation(listAppendCfgFromAnnotation, inputObject, true, true, doDebug);
-        appendCfgFromAnnotation(
-                listAppendCfgFromAnnotationAcceptedOnly, inputObject, true, false, doDebug);
-        appendCfgFromAnnotation(
-                listAppendCfgFromAnnotationRejectedOnly, inputObject, false, true, doDebug);
+    private void appendFromVariousMarksSources(MultiInput inputObject, boolean doDebug) {
+        appendMarks(listAppendMarks, inputObject, doDebug);
+        appendMarksFromAnnotation(listAppendMarksFromAnnotation, inputObject, true, true, doDebug);
+        appendMarksFromAnnotation(
+                listAppendMarksFromAnnotationAcceptedOnly, inputObject, true, false, doDebug);
+        appendMarksFromAnnotation(
+                listAppendMarksFromAnnotationRejectedOnly, inputObject, false, true, doDebug);
     }
 }

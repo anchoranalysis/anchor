@@ -42,8 +42,8 @@ public class OutputterDirectories {
     public static final String OBJECT = "objects";
 
     /** Where collections of histograms are typically placed in a define-experiment output */
-    public static final String HISTOGRAM = "histogramCollection";
+    public static final String HISTOGRAM = "histogram";
 
     /** Where collections of marks are typically placed in a define-experiment output */
-    public static final String CFG = "cfgCollection";
+    public static final String MARKS = "marks";
 }

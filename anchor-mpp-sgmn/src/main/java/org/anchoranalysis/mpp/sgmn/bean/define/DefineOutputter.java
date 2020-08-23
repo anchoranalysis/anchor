@@ -48,7 +48,7 @@ import org.anchoranalysis.mpp.io.input.MPPInitParamsFactory;
 public abstract class DefineOutputter extends AnchorBean<DefineOutputter> {
 
     // START BEAN PROPERTIES
-    @BeanField @OptionalBean @Getter @Setter private Define define;
+    @BeanField @OptionalBean @Getter @Setter private Define define = new Define();
 
     @BeanField @Getter @Setter private boolean suppressSubfolders = false;
 

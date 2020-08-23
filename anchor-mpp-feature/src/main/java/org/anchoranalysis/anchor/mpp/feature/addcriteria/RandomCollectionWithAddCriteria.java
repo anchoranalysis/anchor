@@ -220,16 +220,16 @@ public class RandomCollectionWithAddCriteria<T> extends RandomCollection<T> {
         return graph.vertexSet();
     }
 
-    public boolean isCfgSpan(MarkCollection cfg) {
+    public boolean isMarksSpan(MarkCollection marks) {
 
-        for (int i = 0; i < cfg.size(); i++) {
-            if (!containsMark(cfg.get(i))) {
+        for (int i = 0; i < marks.size(); i++) {
+            if (!containsMark(marks.get(i))) {
                 return false;
             }
         }
 
         for (Mark m : getMarks()) {
-            if (cfg.indexOf(m) == -1) {
+            if (marks.indexOf(m) == -1) {
                 return false;
             }
         }

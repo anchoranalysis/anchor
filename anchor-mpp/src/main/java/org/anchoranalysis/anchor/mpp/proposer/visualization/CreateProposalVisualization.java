@@ -31,5 +31,5 @@ import org.anchoranalysis.anchor.mpp.mark.ColoredMarks;
 @FunctionalInterface
 public interface CreateProposalVisualization {
 
-    void addToCfg(ColoredMarks cfg);
+    void addToMarks(ColoredMarks marks);
 }

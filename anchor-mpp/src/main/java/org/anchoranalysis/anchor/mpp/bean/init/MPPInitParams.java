@@ -59,8 +59,8 @@ public class MPPInitParams implements BeanInitParams {
     // END: InitParams
 
     // START: Stores
-    private NamedProviderStore<MarkCollection> storeCfg;
-    private NamedProviderStore<MarkCollectionProposer> storeCfgProposer;
+    private NamedProviderStore<MarkCollection> storeMarks;
+    private NamedProviderStore<MarkCollectionProposer> storeMarksProposer;
     private NamedProviderStore<MarkBounds> storeMarkBounds;
     private NamedProviderStore<MarkProposer> storeMarkProposer;
     private NamedProviderStore<MarkMergeProposer> storeMarkMergeProposer;
@@ -74,8 +74,8 @@ public class MPPInitParams implements BeanInitParams {
         this.soImage = soImage;
         this.soPoints = PointsInitParams.create(soImage, so);
 
-        storeCfg = so.getOrCreate(MarkCollection.class);
-        storeCfgProposer = so.getOrCreate(MarkCollectionProposer.class);
+        storeMarks = so.getOrCreate(MarkCollection.class);
+        storeMarksProposer = so.getOrCreate(MarkCollectionProposer.class);
         storeMarkBounds = so.getOrCreate(MarkBounds.class);
         storeMarkProposer = so.getOrCreate(MarkProposer.class);
         storeMarkMergeProposer = so.getOrCreate(MarkMergeProposer.class);
@@ -100,12 +100,12 @@ public class MPPInitParams implements BeanInitParams {
         return soImage.params();
     }
 
-    public NamedProviderStore<MarkCollection> getCfgCollection() {
-        return storeCfg;
+    public NamedProviderStore<MarkCollection> getMarksCollection() {
+        return storeMarks;
     }
 
-    public NamedProviderStore<MarkCollectionProposer> getCfgProposerSet() {
-        return storeCfgProposer;
+    public NamedProviderStore<MarkCollectionProposer> getMarksProposerSet() {
+        return storeMarksProposer;
     }
 
     public NamedProviderStore<MarkBounds> getMarkBoundsSet() {
@@ -151,12 +151,12 @@ public class MPPInitParams implements BeanInitParams {
                 new PopulateStoreFromDefine<>(define, pi, logger);
         populater.copyWithoutInit(MarkBounds.class, getMarkBoundsSet());
         populater.copyInit(MarkProposer.class, getMarkProposerSet());
-        populater.copyInit(MarkCollectionProposer.class, getCfgProposerSet());
+        populater.copyInit(MarkCollectionProposer.class, getMarksProposerSet());
         populater.copyInit(MarkSplitProposer.class, getMarkSplitProposerSet());
         populater.copyInit(MarkMergeProposer.class, getMarkMergeProposerSet());
         populater.copyWithoutInit(RandomCollection.class, getSimplePairCollection());
 
-        populater.copyProvider(MarkCollectionProvider.class, getCfgCollection());
+        populater.copyProvider(MarkCollectionProvider.class, getMarksCollection());
 
         soImage.populate(pi, define, logger);
         soPoints.populate(pi, define, logger);
