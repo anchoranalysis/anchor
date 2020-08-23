@@ -45,7 +45,7 @@ public interface ProcessVoxelSlice<T extends Buffer> {
      * Processes a voxel location in a buffer
      *
      * @param point a point with global coordinates
-     * @param buffer a buffer for the current slice for which {@link offset} refers to a
+     * @param buffer a buffer for the current slice for which {@code offset} refers to a
      *     particular location
      * @param offset an offset value for the current slice (i.e. indexing XY only, but not Z)
      */

@@ -218,7 +218,7 @@ public class CheckedStream {
      *
      * @param <S> input-type to flatMap
      * @param <T> output-type of flatMap
-     * @param <E> exception that can be thrown by {@link flatMapFunction}
+     * @param <E> exception that can be thrown by {@code flatMapFunction}
      * @param stream the stream to apply the flatMap on
      * @param throwableClass the class of {@code E}
      * @param flatMapFunction the function to use for flatMapping

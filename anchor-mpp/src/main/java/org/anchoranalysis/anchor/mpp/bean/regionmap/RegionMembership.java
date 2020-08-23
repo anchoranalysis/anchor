@@ -35,8 +35,6 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
 
 /**
- * @see org.anchoranalysis.plugin.image.feature.bean.stack.object.AsObjectMask} for an example of
- *     where equals is needed on this class
  * @author Owen Feehan
  */
 @NoArgsConstructor

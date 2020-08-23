@@ -53,10 +53,9 @@ public class BoundOutputManagerRouteErrors {
      * BoundOutputManagerRouteErrors}
      *
      * @see BoundOutputManager#deriveSubdirectory
-     * @param subdirectoryName
-     * @param manifestDescription
-     * @param manifestFolder
-     * @return
+     * @param subdirectoryName the subdirectory-name
+     * @param manifestDescription manifest-description
+     * @return the new output manager
      */
     public BoundOutputManagerRouteErrors deriveSubdirectory(
             String subdirectoryName, ManifestFolderDescription manifestDescription) {

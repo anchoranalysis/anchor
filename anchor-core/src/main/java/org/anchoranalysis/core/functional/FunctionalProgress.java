@@ -79,12 +79,12 @@ public class FunctionalProgress {
      * Maps a list to a new list, including only certain items, updating a progress-reporter for
      * every element
      *
-     * <p>Items where the mapping returns {@link Optional.empty()} are not included in the outputted
+     * <p>Items where the mapping returns {@link Optional#empty} are not included in the outputted
      * list.
      *
      * @param <S> input-type to map
      * @param <T> output-type of map
-     * @param <E> exception that can be thrown by {@link mapFunction}
+     * @param <E> exception that can be thrown by {@code mapFunction}
      * @param list the list to map
      * @param progressReporter the progress-reporter to update
      * @param mapFunction the function to use for mapping

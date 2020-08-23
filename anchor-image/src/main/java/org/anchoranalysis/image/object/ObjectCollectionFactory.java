@@ -133,7 +133,7 @@ public class ObjectCollectionFactory {
     }
 
     /**
-     * Creates a new collection by mapping an {@link Iterable} to {@link Optional<ObjectMask>}
+     * Creates a new collection by mapping an {@link Iterable} to {@link Optional}
      *
      * <p>The object is only included in the outgoing collection if Optional.isPresent()
      *
@@ -150,7 +150,7 @@ public class ObjectCollectionFactory {
     }
 
     /**
-     * Creates a new collection by mapping an {@link Iterator} to {@link Optional<ObjectMask>}
+     * Creates a new collection by mapping an {@link Iterator} to {@link Optional}
      *
      * <p>The object is only included in the outgoing collection if Optional.isPresent()
      *
@@ -243,11 +243,10 @@ public class ObjectCollectionFactory {
 
     /**
      * Creates a new collection by flat-mapping integers (from a range) each to a {@link
-     * ObjectMaskCollection}
+     * ObjectCollection}
      *
      * @param startInclusive start index for the integer range (inclusive)
      * @param endExclusive end index for the integer range (exclusive)
-     * @param throwableClass the class of the exception that might be thrown during mapping
      * @param mapFunc function for flat-mmapping
      * @return a newly created ObjectCollection
      */
@@ -261,7 +260,7 @@ public class ObjectCollectionFactory {
 
     /**
      * Creates a new collection by flat-mapping integers (from a range) each to a {@link
-     * ObjectMaskCollection}
+     * ObjectCollection}
      *
      * @param startInclusive start index for the integer range (inclusive)
      * @param endExclusive end index for the integer range (exclusive)

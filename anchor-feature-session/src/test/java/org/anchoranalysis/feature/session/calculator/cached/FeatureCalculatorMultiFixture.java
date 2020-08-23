@@ -40,8 +40,6 @@ class FeatureCalculatorMultiFixture {
 
     /**
      * Creates a feature-calculator than returns a constant result
-     *
-     * @throws NamedFeatureCalculateException
      */
     public static <T extends FeatureInput> FeatureCalculatorMulti<T> createFeatureCalculator(
             ResultsVector rv) {

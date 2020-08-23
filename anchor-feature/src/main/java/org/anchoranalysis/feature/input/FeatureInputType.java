@@ -81,7 +81,7 @@ public class FeatureInputType {
     }
 
     /**
-     * Like {@link FeatureInputType#prefer(Class, Class)) but accepts features directly as input.
+     * Like {@link FeatureInputType#prefer(Class, Class)} but accepts features directly as input.
      * <p>
      * The order of the two {@code inputType} parameters is irrelevant.
      *

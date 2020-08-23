@@ -66,7 +66,6 @@ public class ConnectedComponentUnionFind {
      * @param voxels binary-voxels to be searched for connected components. It is consumed
      *     (modified) during processing.
      * @return the connected-components derived from the voxels
-     * @throws OperationFailedException
      */
     public ObjectCollection deriveConnectedByte(BinaryVoxels<ByteBuffer> voxels) {
         ObjectCollection objects = new ObjectCollection();
@@ -80,7 +79,6 @@ public class ConnectedComponentUnionFind {
      * @param voxels binary voxels to be searched for connected components. It is consumed
      *     (modified) during processing.
      * @return the connected-components derived from the voxels
-     * @throws OperationFailedException
      */
     public ObjectCollection deriveConnectedInt(BinaryVoxels<IntBuffer> voxels) {
         ObjectCollection objects = ObjectCollectionFactory.empty();

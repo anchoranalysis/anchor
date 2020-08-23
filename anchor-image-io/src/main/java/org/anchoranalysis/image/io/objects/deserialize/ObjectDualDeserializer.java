@@ -44,7 +44,7 @@ import org.anchoranalysis.io.bean.deserializer.ObjectInputStreamDeserializer;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
 
 /**
- * Deserializes an {@link ObjectMask] stored in two parts (a raster-mask and a serialized bounding-box)
+ * Deserializes an {@link ObjectMask} stored in two parts (a raster-mask and a serialized bounding-box)
  * <p>
  * Specifically, it expects:
  * <ol>

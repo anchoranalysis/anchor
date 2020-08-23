@@ -341,10 +341,10 @@ public class IterateVoxels {
     /**
      * Iterate over each voxel in a mask - with an associated buffer for each slice from a voxel-bo
      *
-     * @param voxels voxels for which {@link} refers to a subregion.
+     * @param voxels voxels to iterate over (if the corresponding mask voxel is <i>on</i>)
      * @param mask the mask is used as a condition on what voxels to iterate i.e. only voxels within
      *     these bounds
-     * @param process is called for each voxel within the bounding-box using GLOBAL coordinates.
+     * @param process is called for each voxel within the bounding-box using <i>global</i> coordinates.
      * @param <T> buffer-type for voxels
      */
     public static <T extends Buffer> void callEachPoint(

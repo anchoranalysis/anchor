@@ -68,7 +68,6 @@ class HelperUtilities {
      * @param collectionToPopulate the collection to populate
      * @param declaration the top-most XML bean declaration
      * @return {@code collectionToPopulate}
-     * @throws BeanXmlException
      */
     public static StringBeanCollection populateStringCollection(
             StringBeanCollection collectionToPopulate, BeanDeclaration declaration) {

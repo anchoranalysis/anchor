@@ -178,11 +178,10 @@ public class BoundOutputManager {
      * Derives a bound-output-manager for a (possibly newly created) subdirectory of the existing
      * manager
      *
-     * @param subdirectoryName what determines the subdirectory-name
+     * @param subdirectoryName the subdirectory-name
      * @param manifestDescription manifest-description
      * @param manifestFolder manifest-folder
      * @return a bound-output-manager for the subdirectory
-     * @throws OutputWriteFailedException
      */
     public BoundOutputManager deriveSubdirectory(
             String subdirectoryName,

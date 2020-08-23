@@ -1,5 +1,6 @@
 package org.anchoranalysis.core.functional.function;
 
+import java.util.function.Supplier;
 import org.anchoranalysis.core.progress.CheckedProgressingSupplier;
 
 /*-
@@ -29,7 +30,7 @@ import org.anchoranalysis.core.progress.CheckedProgressingSupplier;
  */
 
 /**
- * Like {@java.util.Supplier} but can also throw an exception.
+ * Like {@link Supplier} but can also throw an exception.
  *
  * @author Owen Feehan
  * @param <T> type of object to supply
@@ -39,7 +40,7 @@ import org.anchoranalysis.core.progress.CheckedProgressingSupplier;
 public interface CheckedSupplier<T, E extends Exception> {
 
     /**
-     * Applies a supplier like with {@link java.util.Supplier#get).
+     * Applies a supplier like with {@link Supplier#get}.
      *
      * @return the supplied object.
      * @throws E an exception that may be thrown

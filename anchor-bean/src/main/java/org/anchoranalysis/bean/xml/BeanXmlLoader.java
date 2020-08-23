@@ -96,7 +96,6 @@ public class BeanXmlLoader {
      * @return an initialized bean
      * @throws BeanXmlException problem with reading the beanXML from the filesystem
      * @throws LocalisedBeanException problem occurs somewhere processing a configuration
-     * @throws IOException some kind of io error
      */
     public static <T> T loadBeanLocalized(Path path, String xmlPath)
             throws BeanXmlException, LocalisedBeanException {

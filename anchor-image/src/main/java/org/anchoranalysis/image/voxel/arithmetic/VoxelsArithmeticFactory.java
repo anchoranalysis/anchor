@@ -18,7 +18,7 @@ public class VoxelsArithmeticFactory {
      * @param extent the extent of the voxels on which arithmetic is to be performed
      * @param bufferForSlice a buffer for a particular slice index (set at the initial position in
      *     the buffer)
-     * @return
+     * @return a newly-created voxels-arithmetic
      */
     public static VoxelsArithmetic createByte(
             Extent extent, IntFunction<ByteBuffer> bufferForSlice) {
@@ -31,7 +31,7 @@ public class VoxelsArithmeticFactory {
      * @param extent the extent of the voxels on which arithmetic is to be performed
      * @param bufferForSlice a buffer for a particular slice index (set at the initial position in
      *     the buffer)
-     * @return
+     * @return a newly-created voxels-arithmetic
      */
     public static VoxelsArithmetic createShort(
             Extent extent, IntFunction<ShortBuffer> bufferForSlice) {

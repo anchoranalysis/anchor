@@ -338,7 +338,6 @@ public class ObjectMask {
      * <p>TODO this is not particular efficient. We can avoid making the object-collection.
      *
      * @return
-     * @throws OperationFailedException
      */
     public boolean checkIfConnected() {
         ObjectCollection objects =
@@ -485,7 +484,7 @@ public class ObjectMask {
      *
      * <p>It should <b>never</b> be larger than the voxels.
      *
-     * <p>See {@link org.anchoranalysis.image.voxel.Voxels#region) for more details.
+     * <p>See {@link org.anchoranalysis.image.voxel.Voxels#region} for more details.
      *
      * @param box bounding-box in absolute coordinates.
      * @param reuseIfPossible if TRUE the existing object will be reused if possible, otherwise a new object is always created.

@@ -115,7 +115,7 @@ public class ObjectCollection implements Iterable<ObjectMask> {
      * Checks if two collections are equal in a deeper way
      *
      * <p>Specifically, objects are tested to be equal using a deep byte-by-byte comparison using
-     * {@link ObjectMask.equalsDeep}. Their objects do not need to be equal.
+     * {@link ObjectMask#equalsDeep}. Their objects do not need to be equal.
      *
      * <p>This is more expensive equality check than with {@link #equalsDeep}, but is useful for
      * comparing objects that were instantiated in different places.

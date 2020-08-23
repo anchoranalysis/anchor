@@ -32,7 +32,7 @@ import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 /**
  * Routines for checking that particular patterns exist with bean-properties
  * <p>
- * They are intended to be used inside an overridden {@link org.anchoranalysis.bean.AnchorBean#checkMisconfigured) method.
+ * They are intended to be used inside an overridden {@link org.anchoranalysis.bean.AnchorBean#checkMisconfigured} method.
  *
  * @author Owen Feehan
  *

@@ -43,8 +43,8 @@ import org.jfree.data.category.CategoryDataset;
 public abstract class GraphIndexBaseCategorical<T, S extends CategoryDataset>
         extends GraphIndexBase<T, S> {
 
-    private GetForSeries<T, String> labelGetter;
-    private GetForSeries<T, Paint> colorGetter;
+    private final GetForSeries<T, String> labelGetter;
+    private final GetForSeries<T, Paint> colorGetter;
 
     private ArrayList<Paint> seriesColors = new ArrayList<>();
 
@@ -53,7 +53,6 @@ public abstract class GraphIndexBaseCategorical<T, S extends CategoryDataset>
      * @param seriesNames
      * @param labelGetter
      * @param colorGetter color-getter or NULL to use default colors
-     * @throws InitException
      */
     public GraphIndexBaseCategorical(
             String graphName,

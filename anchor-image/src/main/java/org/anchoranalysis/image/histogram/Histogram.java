@@ -571,7 +571,7 @@ public final class Histogram {
     /**
      * Places a particular bin in a destination histogram.
      * <p>
-     * Either the whole bin is transferred or only some of the bin so that {@code remaining >= 0).
+     * Either the whole bin is transferred or only some of the bin so that {@code remaining >= 0}.
      *
      * @param destination the destination histogram
      * @param bin the bin-value

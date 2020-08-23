@@ -90,7 +90,6 @@ public class PointsFromObject {
      *
      * @param object
      * @return
-     * @throws CreateException
      */
     public static List<Point3i> listFromOutline3i(ObjectMask object) {
         return listFrom3i(outlineFor(object, true));
@@ -113,7 +112,6 @@ public class PointsFromObject {
      *
      * @param objects objects to find outlines for
      * @return a newly created list
-     * @throws CreateException if the object is in three-dimensions
      */
     public static List<Point2i> listFromAllOutlines2i(ObjectCollection objects) {
         List<Point2i> points = new ArrayList<>();

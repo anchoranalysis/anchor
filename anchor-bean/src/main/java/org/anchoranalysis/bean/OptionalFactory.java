@@ -45,8 +45,7 @@ public class OptionalFactory {
      *
      * @param <T> type of optional as created by the provider
      * @param provider a provider or null (if it doesn't exist)
-     * @return the result of the create() option if provider is non-NULL, otherwise {@link
-     *     Optional.empty()}
+     * @return the result of the create() option if provider is non-NULL, otherwise {@link Optional}
      * @throws CreateException
      */
     public static <T> Optional<T> create(Provider<T> provider) throws CreateException {

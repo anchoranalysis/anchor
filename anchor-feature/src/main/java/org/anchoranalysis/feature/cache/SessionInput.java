@@ -62,7 +62,6 @@ public interface SessionInput<T extends FeatureInput> {
      *
      * @param features features to calculate with
      * @return the results of each feature's calculation respectively
-     * @throws FeatureCalculationException
      */
     ResultsVector calc(FeatureList<T> features) throws NamedFeatureCalculateException;
 

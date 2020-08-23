@@ -78,7 +78,6 @@ public class MonitoredSequentialExecutor<T> {
      *
      * @param logPrefix prefixed to the output of each log-message
      * @param inputs a collection of strings that uniquely determine each input
-     * @throws ExperimentExecutionException
      */
     public TaskStatistics executeEachWithMonitor(String logPrefix, List<T> inputs) {
 

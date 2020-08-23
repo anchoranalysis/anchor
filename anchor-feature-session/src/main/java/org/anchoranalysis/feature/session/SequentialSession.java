@@ -137,7 +137,6 @@ public class SequentialSession<T extends FeatureInput> implements FeatureCalcula
      *
      * @param params
      * @return
-     * @throws FeatureCalculationException
      */
     @Override
     public ResultsVector calculate(T params) throws NamedFeatureCalculateException {

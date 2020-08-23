@@ -71,7 +71,6 @@ public class PointsFromVoxels {
      *
      * @param voxels binary-voxels, in each ON voxel represents a point
      * @return a newly created list
-     * @throws CreateException if the voxels have three dimensions
      */
     public static List<Point3i> listFrom3i(BinaryVoxels<ByteBuffer> voxels) {
         return listFrom3i(voxels, ZERO_SHIFT);
@@ -105,7 +104,6 @@ public class PointsFromVoxels {
      * @param voxels binary-voxels, in each ON voxel represents a point
      * @param shift adds this shift to each point
      * @return a newly created list
-     * @throws CreateException if the voxels have three dimensions
      */
     public static List<Point3i> listFrom3i(BinaryVoxels<ByteBuffer> voxels, ReadableTuple3i shift) {
         List<Point3i> points = new ArrayList<>();
@@ -119,7 +117,6 @@ public class PointsFromVoxels {
      * @param voxels binary-voxels, in each ON voxel represents a point
      * @param shift adds this shift to each point
      * @return a newly created list
-     * @throws CreateException if the voxels have three dimensions
      */
     public static SortedSet<Point3i> setFrom3i(
             BinaryVoxels<ByteBuffer> voxels, ReadableTuple3i shift) {
@@ -134,7 +131,6 @@ public class PointsFromVoxels {
      * @param voxels binary-voxels, in each ON voxel represents a point
      * @param shift adds this shift to each point
      * @return a newly created list
-     * @throws CreateException if the voxels have three dimensions
      */
     public static List<Point3d> listFrom3d(BinaryVoxels<ByteBuffer> voxels, ReadableTuple3i shift) {
         List<Point3d> points = new ArrayList<>();

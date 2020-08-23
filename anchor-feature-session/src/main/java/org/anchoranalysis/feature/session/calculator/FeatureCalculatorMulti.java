@@ -61,7 +61,7 @@ public interface FeatureCalculatorMulti<T extends FeatureInput> {
      * Performs one calculation, either calling {@link #calculate(T)} or {@link #calculateSuppressErrors}
      * depending on a flag
      *
-     * @throws FeatureCalculationException if suppress errors is FALSE and an error occurs during
+     * @throws NamedFeatureCalculateException if suppress errors is FALSE and an error occurs during
      *     calculation
      */
     default ResultsVector calculate(T input, ErrorReporter errorReporter, boolean suppressErrors)

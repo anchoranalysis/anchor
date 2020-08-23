@@ -61,7 +61,6 @@ public interface FeatureSessionCacheCalculator<T extends FeatureInput>
      * @param input params
      * @return the results of each feature, with Double.NaN (and the stored exception) if an error
      *     occurs
-     * @throws FeatureCalculationException
      */
     default ResultsVector calc(FeatureList<T> features, SessionInput<T> input)
             throws NamedFeatureCalculateException {

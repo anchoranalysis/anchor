@@ -142,10 +142,10 @@ public final class BoundingBox implements Serializable {
     }
 
     /**
-     * Similar to {@link midpoint} but not always identical. It is the mean of all the points in the
+     * Similar to {@link #midpoint} but not always identical. It is the mean of all the points in the
      * box, and guaranteed to be integral.
      *
-     * <p>It should be the same in each dimension as (crnr+extent-1)/2
+     * <p>It should always be identical in each dimension to {@code (corner()+extent()-1)/2}
      *
      * @return the center-of-gravity
      */

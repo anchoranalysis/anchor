@@ -1,5 +1,7 @@
 package org.anchoranalysis.core.functional.function;
 
+import java.util.function.Predicate;
+
 /*-
  * #%L
  * anchor-core
@@ -37,7 +39,7 @@ package org.anchoranalysis.core.functional.function;
 public interface CheckedPredicate<T, E extends Exception> {
 
     /**
-     * Applies a predicate like with {@link Predicate#apply).
+     * Applies a predicate like with {@link Predicate#test}.
      *
      * @param source object to be tested
      * @return true if predicate is satisfied, false otherwise

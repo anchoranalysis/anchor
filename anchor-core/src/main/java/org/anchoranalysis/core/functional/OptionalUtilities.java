@@ -44,7 +44,7 @@ import org.anchoranalysis.core.functional.function.CheckedSupplier;
 public class OptionalUtilities {
 
     /**
-     * Like {@link Optional::map} but tolerates an exception in the mapping function, which is
+     * Like {@link Optional#map} but tolerates an exception in the mapping function, which is
      * immediately thrown.
      *
      * @param <S> incoming optional-type for map
@@ -63,7 +63,7 @@ public class OptionalUtilities {
     }
 
     /**
-     * Like {@link Optional::map} but tolerates an exception in the mapping function, which is
+     * Like {@link Optional#map} but tolerates an exception in the mapping function, which is
      * immediately thrown.
      *
      * @param <S> incoming optional-type for map
@@ -86,7 +86,7 @@ public class OptionalUtilities {
     
     
     /**
-     * Like {@link Optional::orElseGet} but tolerates an exception in the supplier function, which is
+     * Like {@link Optional#orElseGet} but tolerates an exception in the supplier function, which is
      * immediately thrown.
      *
      * @param <T> optional-type
@@ -106,7 +106,7 @@ public class OptionalUtilities {
     }
 
     /**
-     * Like {@link Optional::flatMap} but tolerates an exception in the mapping function, which is
+     * Like {@link Optional#flatMap} but tolerates an exception in the mapping function, which is
      * immediately thrown.
      *
      * @param <S> incoming optional-type for map

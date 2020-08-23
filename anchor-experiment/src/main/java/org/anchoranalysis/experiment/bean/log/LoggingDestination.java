@@ -47,7 +47,7 @@ public abstract class LoggingDestination extends AnchorBean<LoggingDestination> 
      * the console.
      *
      * <p>Identical to {@link LoggingDestination#createWithLogFallback} but uses a {@link
-     * ConsoleReporter} as the {@code fallbackErrorReporter}.
+     * ConsoleMessageLogger} as the {@code fallbackErrorReporter}.
      *
      * @param outputManager the output-manager
      * @param arguments experiment-arguments

@@ -74,7 +74,6 @@ class ResultsVectorBuilder {
      *
      * @param input
      * @param calculator
-     * @throws FeatureCalculationException
      */
     public <T extends FeatureInput> void calculateAndInsert(T input, FeatureCalculatorMulti<T> calculator)
             throws NamedFeatureCalculateException {

@@ -51,7 +51,7 @@ public interface VoxelsAssigner {
     /**
      * Sets voxels in a box to a particular value if they match an object-mask
      *
-     * <p>See {@link #toObject(BoundingBox, ObjectMask, Optional) for a more flexible version.
+     * <p>See {@link #toObject(BoundingBox, ObjectMask, Optional)} for a more flexible version.
      *
      * @param object the object-mask to restrict which values in the buffer are written to
      */
@@ -93,7 +93,6 @@ public interface VoxelsAssigner {
      * @param voxels2 second-object
      * @param restrictTo only process this region (which is sensibly part or all of the intersection
      *     of the two objects bounding-boxes)
-     * @throws OperationFailedException if {@code restrictTo} does not intersect
      */
     void toEitherTwoObjects(ObjectMask object1, ObjectMask object2, BoundingBox restrictTo);
 }
