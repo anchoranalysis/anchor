@@ -245,7 +245,6 @@ public class ObjectMask {
      * <p>This is an IMMUTABLE operation.
      *
      * @param factor scale-factor
-     * @param interpolator interpolator
      * @return a scaled object-mask
      */
     public ObjectMask scale(ScaleFactor factor) {
@@ -267,7 +266,6 @@ public class ObjectMask {
      * <p>This is an <i>immutable</i> operation.
      *
      * @param factor scale-factor
-     * @param interpolator interpolator
      * @param clipTo an extent which the object-masks should always fit inside after scaling (to
      *     catch any rounding errors that push the bounding box outside the scene-boundary)
      * @return a scaled object-mask
@@ -484,7 +482,7 @@ public class ObjectMask {
      *
      * <p>It should <b>never</b> be larger than the voxels.
      *
-     * <p>See {@link org.anchoranalysis.image.voxel.Voxels#region} for more details.
+     * <p>See {@link VoxelsExtracter#region} for more details.
      *
      * @param box bounding-box in absolute coordinates.
      * @param reuseIfPossible if TRUE the existing object will be reused if possible, otherwise a new object is always created.
@@ -506,7 +504,7 @@ public class ObjectMask {
      * for the rest.
      *
      * <p>A new voxel-buffer is always created for this operation i.e. the existing box is never
-     * reused like sometimes in {@link region}.</p.
+     * reused like sometimes in {@link #region}.</p.
      *
      * @param box bounding-box in absolute coordinates, that must at least partially intersect with
      *     the current object-mask bounds.
@@ -630,7 +628,6 @@ public class ObjectMask {
      * extent in all dimensions.
      *
      * @param boxToAssign bounding-box to assign
-     * @param function to perform mapping of bounding-box
      * @return a new object-mask with the updated bounding box (and changed voxels)
      */
     public ObjectMask mapBoundingBoxChangeExtent(BoundingBox boxToAssign) {

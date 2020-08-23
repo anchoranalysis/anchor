@@ -309,7 +309,7 @@ public class BoundedVoxels<T extends Buffer> {
      *
      * <p>It should <b>never</b> be larger than the voxels.
      *
-     * @see org.anchoranalysis.image.voxel.Voxels#region
+     * @see VoxelsExtracter#region
      * @param box bounding-box in absolute coordinates.
      * @param reuseIfPossible if TRUE the existing box will be reused if possible, otherwise a new
      *     box is always created.
@@ -327,16 +327,16 @@ public class BoundedVoxels<T extends Buffer> {
     }
 
     /**
-     * Like {@link region} but only expects a bounding-box that intersects at least partially.
+     * Like {@link #region} but only expects a bounding-box that intersects at least partially.
      *
-     * <p>This is a weakened condition compared to {@link region}.
+     * <p>This is a weakened condition compared to {@link #region}.
      *
      * <p>The region outputted will have the same size and coordinates as the bounding-box, but with
      * the correct voxel-values for the part within the voxels. Any other voxels are set to {@code
      * voxelValueForRest}.
      *
      * <p>A new voxel-buffer is always created for this operation i.e. the existing box is never
-     * reused like sometimes in {@link region}.</p.
+     * reused like sometimes in {@link #region}.</p.
      *
      * @param box bounding-box in absolute coordinates, that must at least partially intersect with
      *     the current bounds.

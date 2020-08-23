@@ -120,17 +120,16 @@ public class ResultsVector {
      *
      * @param index start-index to start copying into
      * @param length number of items to copy
-     * @param src vector to copy from
-     * @param srcIndex index in the source away to start from
-     * @return
+     * @param source vector to copy from
+     * @param sourceIndex index in the source away to start from
      */
-    public void copyFrom(int index, int length, ResultsVector src, int srcIndex) {
+    public void copyFrom(int index, int length, ResultsVector source, int sourceIndex) {
 
         for (int i = 0; i < length; i++) {
-            int indexIn = srcIndex + i;
+            int indexIn = sourceIndex + i;
             int indexOut = index + i;
 
-            arr[indexOut] = src.arr[indexIn];
+            arr[indexOut] = source.arr[indexIn];
         }
     }
 

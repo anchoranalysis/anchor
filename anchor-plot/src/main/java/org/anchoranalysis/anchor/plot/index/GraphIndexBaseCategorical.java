@@ -30,7 +30,6 @@ import java.awt.Paint;
 import java.util.ArrayList;
 import java.util.Iterator;
 import org.anchoranalysis.anchor.plot.GetForSeries;
-import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.jfree.data.category.CategoryDataset;
 

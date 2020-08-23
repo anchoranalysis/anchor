@@ -1,8 +1,6 @@
 package org.anchoranalysis.image.voxel.assigner;
 
-import java.util.Optional;
 import java.util.function.IntPredicate;
-import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.object.ObjectMask;
@@ -51,8 +49,6 @@ public interface VoxelsAssigner {
     /**
      * Sets voxels in a box to a particular value if they match an object-mask
      *
-     * <p>See {@link #toObject(BoundingBox, ObjectMask, Optional)} for a more flexible version.
-     *
      * @param object the object-mask to restrict which values in the buffer are written to
      */
     void toObject(ObjectMask object);
@@ -78,8 +74,6 @@ public interface VoxelsAssigner {
      * <p>Pixels are unchanged if they do not match the mask, or outside the part of the mask that
      * is considered.
      *
-     * @see {#link {@link #toObject(BoundingBox, ObjectMask, Optional)} for a more customizable
-     *     version
      * @param object the object-mask to restrict where voxels are set
      * @param restrictTo a restriction on where to process in the object-mask (expressed in the same
      *     coordinates as {@code object}).

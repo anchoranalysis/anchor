@@ -46,17 +46,17 @@ public class Reporting<S> {
     /** An optional additional marks-Energy that provides an additional explanation of proposed */
     @Getter private Optional<S> proposalSecondary;
 
-    private DscrData<?> dscrData;
+    private DescribeData<?> describeData;
     
     @Getter private boolean accepted;
     private boolean best;
-
-    public double getTemperature() {
-        return dscrData.getTemperature();
-    }
-
+    
     public boolean isBest() {
         return best;
+    }
+
+    public double getTemperature() {
+        return describeData.getTemperature();
     }
 
     public Optional<S> getMarksAfterOptional() {
@@ -68,7 +68,7 @@ public class Reporting<S> {
     }
 
     public ProposerFailureDescription getKernelNoProposalDescription() {
-        return dscrData.getKernelNoProposalDescription();
+        return describeData.getKernelNoProposalDescription();
     }
 
     public Optional<S> getBest() {
@@ -76,14 +76,14 @@ public class Reporting<S> {
     }
 
     public long getExecutionTime() {
-        return dscrData.getExecutionTime();
+        return describeData.getExecutionTime();
     }
 
     public int[] getChangedMarkIDs() {
-        return dscrData.getChangedMarkIDs();
+        return describeData.getChangedMarkIDs();
     }
 
     public KernelWithIdentifier<?> getKernel() {
-        return dscrData.getKernel();
+        return describeData.getKernel();
     }
 }

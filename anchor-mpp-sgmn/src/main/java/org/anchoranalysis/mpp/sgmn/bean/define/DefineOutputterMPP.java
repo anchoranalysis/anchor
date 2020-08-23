@@ -41,7 +41,6 @@ import org.anchoranalysis.mpp.io.input.MultiInput;
  * Helper for tasks that uses a {@link Define} in association with an input to execute some tasks,
  * and then outputs results *
  *
- * @param <T> input-object type
  */
 public class DefineOutputterMPP extends DefineOutputter {
 

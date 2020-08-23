@@ -126,7 +126,6 @@ public class VoxelsWrapper {
     /**
      * If already byte -> no change If not already byte -> create new empty byte buffer
      *
-     * @param inputBuffer
      * @param alwaysDuplicate
      * @return
      */

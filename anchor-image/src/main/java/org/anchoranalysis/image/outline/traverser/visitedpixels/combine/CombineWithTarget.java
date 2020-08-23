@@ -38,10 +38,6 @@ class CombineWithTarget {
 
     /**
      * @param paths
-     * @param p1
-     * @param p2
-     * @param mergePoint
-     * @param indexHighest
      * @return the number of pixels deleted through the combination
      */
     public static int combineAndRemove(

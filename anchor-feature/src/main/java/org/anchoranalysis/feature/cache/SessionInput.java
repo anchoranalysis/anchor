@@ -41,7 +41,7 @@ import org.anchoranalysis.feature.input.FeatureInput;
 /**
  * Encapsulates a feature-input in the context of a particular session.
  *
- * @param T underlying feature-input type
+ * @param <T> underlying feature-input type
  * @author Owen Feehan
  */
 public interface SessionInput<T extends FeatureInput> {

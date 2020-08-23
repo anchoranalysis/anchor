@@ -174,7 +174,7 @@ public class ObjectCollectionFactory {
      * Creates a new collection with elements from the parameter-list of {@link Mask} converting
      * each channel to an object-mask
      *
-     * @param obj object-mask to add to collection
+     * @param masks object-mask to add to collection
      */
     @SafeVarargs
     public static ObjectCollection of(Mask... masks) {
@@ -373,7 +373,7 @@ public class ObjectCollectionFactory {
     }
 
     /**
-     * Creates a new {@link ObjectCollection} by flatMapping an incoming stream to {@link
+     * Creates a new {@link ObjectCollection} by flatMapping an incoming stream to {@code
      * Collection<ObjectMask>} AND rethrowing any exception during mapping
      *
      * @param <T> type that will be flatMapped to {@link ObjectCollection}

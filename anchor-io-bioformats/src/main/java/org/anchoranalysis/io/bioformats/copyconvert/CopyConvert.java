@@ -53,11 +53,6 @@ public class CopyConvert {
      * @param reader the source of the copy
      * @param dest the destination of the copy
      * @param progressReporter
-     * @param imageDimensions
-     * @param numberChannels
-     * @param numberFrames
-     * @param bitsPerPixel
-     * @param numChannelsPerByteArray
      * @throws FormatException
      * @throws IOException
      */

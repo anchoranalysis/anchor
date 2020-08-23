@@ -41,14 +41,13 @@ import org.anchoranalysis.image.stack.rgb.RGBStack;
  * Draws an object-mask on a RGB-stack
  *
  * @author Owen Feehan
- * @param <T> pre-calculate object type
  */
 public abstract class DrawObject extends AnchorBean<DrawObject> {
 
     /**
      * Draws a single-object on top of a RGB-stack
      *
-     * @param mask the object to draw
+     * @param object the object to draw
      * @param stack the RGB-stack to draw upon
      * @param attributes attributes for each object when drawing
      * @param iteration the current iteration

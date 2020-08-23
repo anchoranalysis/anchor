@@ -68,7 +68,7 @@ public class ApplyPermutations<T extends AnchorBean<T>> {
      * @param listIn FeatureList in
      * @param pp Which property to permute, and all the values for the permutation
      * @param setter for setting the permutation onto the property
-     * @param <T> bean-type
+     * @param <S> permutation-type
      * @return a list containing the permuted beans
      * @throws CreateException if something goes wrong
      */

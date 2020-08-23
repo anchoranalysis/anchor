@@ -60,7 +60,7 @@ public class RunningSum implements Serializable {
     /**
      * Calculates the mean
      *
-     * @value valueIfCountZero value to use if the count is Zero
+     * @param valueIfCountZero value to use if the count is zero
      * @return the mean or {@code valueIfCountZero} if the count is zero.
      */
     public double mean(double valueIfCountZero) {

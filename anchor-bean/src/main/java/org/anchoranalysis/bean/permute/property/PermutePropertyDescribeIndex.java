@@ -43,8 +43,6 @@ import org.anchoranalysis.core.error.OperationFailedException;
  *
  * <p>TODO replace permuteProperty with an automatically generated sequence as it can be inferred
  * from the StringList
- *
- * @param <T> property type
  */
 public class PermutePropertyDescribeIndex extends PermuteProperty<Integer> {
 

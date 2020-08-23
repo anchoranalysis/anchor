@@ -44,12 +44,11 @@ class HelperInit {
      * Initializes the bean
      *
      * @param bean bean to initialise
-     * @param pi the property-initializer to use
+     * @param initializer the property-initializer to use
      * @param logger logger
-     * @param parent an optional-bean parent to use, otherwise NULL
      * @throws InitException
      */
-    public static void initRecursive(AnchorBean<?> bean, PropertyInitializer<?> pi, Logger logger)
+    public static void initRecursive(AnchorBean<?> bean, PropertyInitializer<?> initializer, Logger logger)
             throws InitException {
 
         List<BeanAndParent> everything = new ArrayList<>();
@@ -65,7 +64,7 @@ class HelperInit {
                 continue;
             }
 
-            maybeInitChildren(removedObj, everything, bean.getBeanName(), pi, logger);
+            maybeInitChildren(removedObj, everything, bean.getBeanName(), initializer, logger);
 
             done.add(removedObj.getBean());
         }

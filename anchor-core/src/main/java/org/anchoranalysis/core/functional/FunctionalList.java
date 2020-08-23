@@ -50,8 +50,7 @@ public class FunctionalList {
      * <p>This function's purpose is mostly an convenience utility to make source-code easier to
      * read, as the paradigm below (although idiomatic) occurs in multiple places.
      *
-     * @param  <S> parameter-type for function
-     * @param  <T> return-type for function
+     * @param <T> list item-type
      * @param predicate predicate to first filter the input collection before mapping
      * @param collection the collection to be filtered
      * @return a list with only the elements that pass the filter
@@ -84,7 +83,7 @@ public class FunctionalList {
      *
      * @param <S> parameter-type for function
      * @param <T> return-type for function
-     * @param collection the collection to be mapped
+     * @param list the list to be mapped
      * @param mapFunction function to do the mapping
      * @return a list with the same size and same order, but using derived elements that are a
      *     result of the mapping

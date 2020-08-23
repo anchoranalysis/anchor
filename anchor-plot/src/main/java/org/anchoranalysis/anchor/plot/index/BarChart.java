@@ -32,7 +32,6 @@ import java.util.Optional;
 import org.anchoranalysis.anchor.plot.AxisLimits;
 import org.anchoranalysis.anchor.plot.GetForSeries;
 import org.anchoranalysis.anchor.plot.bean.colorscheme.GraphColorScheme;
-import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;

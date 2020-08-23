@@ -213,7 +213,7 @@ public class ObjectCollection implements Iterable<ObjectMask> {
     /**
      * Scales every object-mask in a collection
      *
-     * <p>Like {@link scale(ScaleFactor)} but ensured the scaled-results will always be inside a
+     * <p>Like {@link #scale(ScaleFactor)} but ensured the scaled-results will always be inside a
      * particular extent (clipping if necessary)
      *
      * @param factor scaling-factor
@@ -234,7 +234,7 @@ public class ObjectCollection implements Iterable<ObjectMask> {
     /**
      * Scales every object-mask in a collection
      *
-     * <p>Like {@link scale(ScaleFactor)} but allows for additional manipulating of objects
+     * <p>Like {@link #scale(ScaleFactor)} but allows for additional manipulating of objects
      * (pre-scaling and post-scaling)
      *
      * @param factor scaling-factor

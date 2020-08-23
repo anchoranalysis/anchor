@@ -49,7 +49,6 @@ public abstract class CheckMark extends MPPBean<CheckMark> implements Compatible
      * @param mark
      * @param regionMap
      * @param energyStack
-     * @param featureSession session (nb energyStack can be added to featureSession)
      * @return
      */
     public abstract boolean check(Mark mark, RegionMap regionMap, EnergyStack energyStack)

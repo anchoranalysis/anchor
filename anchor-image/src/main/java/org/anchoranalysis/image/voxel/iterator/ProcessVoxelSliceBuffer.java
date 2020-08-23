@@ -31,7 +31,7 @@ import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 
 /**
- * Processes a 3D point like {@link ProcessVoxelOffset} but also retrieves a {@link Buffer} for the
+ * Processes a 3D point like {@link ProcessVoxel} but also retrieves a {@link Buffer} for the
  * current z-slice.
  *
  * <p>It is very similar to {@link ProcessVoxelSlice} but uses {@link Buffer} instead of a
@@ -49,7 +49,7 @@ public interface ProcessVoxelSliceBuffer<T extends Buffer> {
      * Processes a voxel location in a buffer
      *
      * @param point a point with global coordinates
-     * @param buffer a buffer for the current slice for which {@link offsetSlice} refers to a
+     * @param buffer a buffer for the current slice for which {code offset} refers to a
      *     particular location
      * @param offset an offset value for the current slice (i.e. indexing XY only, but not Z)
      */

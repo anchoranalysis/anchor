@@ -81,7 +81,7 @@ public class CreateObjectsFromLabels {
      * Creates an object-collection from voxels that are labelled with unique integers (sequentially
      * increasing)
      *
-     * @param minBoundingBoxVolume minimum volume of bounding-box otherwise a label is ignored
+     * @param smallVolumeThreshold minimum volume of bounding-box otherwise a label is ignored
      * @return a list of respective object-masks, one for each label
      * @throws CreateException if bounding-boxes cannot be derived
      */

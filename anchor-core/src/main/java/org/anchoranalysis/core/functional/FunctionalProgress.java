@@ -43,7 +43,7 @@ public class FunctionalProgress {
      *
      * @param <S> input-type to map
      * @param <T> output-type of map
-     * @param <E> exception that can be thrown by {@link mapFunction}
+     * @param <E> exception that can be thrown by {@code mapFunction}
      * @param list the list to map
      * @param progressReporter the progress-reporter to update
      * @param mapFunction the function to use for mapping

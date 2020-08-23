@@ -28,7 +28,6 @@ package org.anchoranalysis.feature.session.calculator;
 
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.feature.bean.list.FeatureList;
-import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
 import org.anchoranalysis.feature.calculate.results.ResultsVector;
 import org.anchoranalysis.feature.input.FeatureInput;
@@ -58,7 +57,7 @@ public interface FeatureCalculatorMulti<T extends FeatureInput> {
     ResultsVector calculateSuppressErrors(T input, ErrorReporter errorReporter);
 
     /**
-     * Performs one calculation, either calling {@link #calculate(T)} or {@link #calculateSuppressErrors}
+     * Performs one calculation, either calling {@link #calculate} or {@link #calculateSuppressErrors}
      * depending on a flag
      *
      * @throws NamedFeatureCalculateException if suppress errors is FALSE and an error occurs during

@@ -41,7 +41,7 @@ public interface ProcessVoxelNeighbor<T> {
     /**
      * Specify the source-point (of which all the processed points are neighbors)
      *
-     * <p>This must be called before any calls to {@link processPoint}.
+     * <p>This must be called before any calls to {@link #processPoint}.
      *
      * @param pointSource the source point in global coordinates
      * @param sourceVal the value of the source pixel (in the associated sliding buffer)

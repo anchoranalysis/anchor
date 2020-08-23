@@ -33,7 +33,7 @@ import org.anchoranalysis.feature.input.FeatureInput;
  * A single-element feature that accepts the most generic of parameters {#link {@link FeatureInput}}
  *
  * @author Owen Feehan
- * @param T input-type
+ * @param <T> input-type
  */
 public abstract class FeatureGenericSingleElem<T extends FeatureInput>
         extends FeatureSingleElem<T, T> {

@@ -30,7 +30,7 @@ import java.nio.Buffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 
 /**
- * Processes a 3D point like {@link ProcessVoxelOffset} but also retrieves a {@link VoxelBuffer} for
+ * Processes a 3D point like {@link ProcessVoxel} but also retrieves <b>two</b> {@link VoxelBuffer}s for
  * the current z-slice.
  *
  * <p>It is very similar to {@link ProcessVoxelSliceBuffer} but uses {@link VoxelBuffer} instead of
@@ -47,9 +47,9 @@ public interface ProcessVoxelSliceTwo<S extends Buffer, T extends Buffer> {
      * Processes a voxel location in a buffer
      *
      * @param point a point with global coordinates
-     * @param buffer first buffer for the current slice for which {@link offset} refers to a
+     * @param buffer first buffer for the current slice for which {@code offset} refers to a
      *     particular location
-     * @param buffer second buffer for the current slice for which {@link offset} refers to a
+     * @param buffer second buffer for the current slice for which {@code offset} refers to a
      *     particular location
      * @param offset an offset value for the current slice (i.e. indexing XY only, but not Z)
      */

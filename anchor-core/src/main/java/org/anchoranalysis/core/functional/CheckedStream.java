@@ -72,7 +72,7 @@ public class CheckedStream {
      * @param  <E> exception that can be thrown by {code mapFunction}
      * @param stream the stream to apply the map on
      * @param throwableClass the class of {@code E}
-     * @param mapFunction the function to use for mapping
+     * @param consumer the function to call for each object in the stream
      * @throws E if the exception is thrown during mapping
      */
     public static <T, E extends Exception> void forEach(

@@ -58,7 +58,7 @@ import org.anchoranalysis.feature.shared.SharedFeatureMulti;
  * successive calls.
  *
  * @author Owen Feehan
- * @param T input-type for feature
+ * @param <T> input-type for feature
  */
 public class SequentialSession<T extends FeatureInput> implements FeatureCalculatorMulti<T> {
 

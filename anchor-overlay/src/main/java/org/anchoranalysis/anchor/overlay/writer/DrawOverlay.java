@@ -57,16 +57,15 @@ public abstract class DrawOverlay {
     /**
      * Writes a collection of colored-overlays to the background
      *
-     * @param oc overlays
+     * @param overlays overlays
      * @param stack overlays are written onto this stack
      * @param idGetter
-     * @param factory
      * @throws OperationFailedException
      */
     public void writeOverlays(
-            ColoredOverlayCollection oc, RGBStack stack, IDGetter<Overlay> idGetter)
+            ColoredOverlayCollection overlays, RGBStack stack, IDGetter<Overlay> idGetter)
             throws OperationFailedException {
-        writeOverlays(oc, stack.dimensions(), stack, idGetter, new BoundingBox(stack.dimensions()));
+        writeOverlays(overlays, stack.dimensions(), stack, idGetter, new BoundingBox(stack.dimensions()));
     }
 
     //

@@ -48,7 +48,6 @@ public class FeatureCalculatorCachedSingle<T extends FeatureInput>
      * Creates a feature-calculator with a new cache
      *
      * @param source the underlying feature-calculator to use for calculating unknown results
-     * @param cacheSize size of cache
      */
     public FeatureCalculatorCachedSingle(FeatureCalculatorSingle<T> source) {
         delegate =
@@ -59,7 +58,6 @@ public class FeatureCalculatorCachedSingle<T extends FeatureInput>
      * Creates a feature-calculator with a new cache
      *
      * @param source the underlying feature-calculator to use for calculating unknown results
-     * @param suppressErrors
      * @param cacheSize size of cache
      */
     public FeatureCalculatorCachedSingle(FeatureCalculatorSingle<T> source, int cacheSize) {

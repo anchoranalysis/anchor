@@ -32,11 +32,11 @@ import org.anchoranalysis.image.voxel.Voxels;
 import lombok.RequiredArgsConstructor;
 
 /**
- * Exposes a {@link ProcessVoxelOffset} as a {@link ProcessVoxelSliceBuffer} by retrieving a buffer
- * from voxels for each z-slice.
+ * Exposes a {@link ProcessVoxel} as a {@link ProcessVoxelSliceBuffer} by retrieving <b>three</b> buffers
+ * for each z-slice.
  *
- * <p>Note that {@link} notifyChangeZ need not be be called for all slices (perhaps only a subset),
- * but {@link process} must be called for ALL voxels on a given slice.
+ * <p>Note that {@link #notifyChangeSlice} <b>need not</b> be be called for all slices (perhaps only a subset),
+ * but {@link #process} <b>must</b> be called for ALL voxels on a given slice.
  *
  * @author Owen Feehan
  * @param <T> buffer-type for slice
@@ -55,7 +55,7 @@ public final class RetrieveBuffersForThreeSlices<T extends Buffer> implements Pr
     private final Voxels<T> voxels3;
     
     /** Processor */
-    private final ProcessVoxelThreeSliceBuffers<T> process;
+    private final ProcessVoxelThreeSliceBuffers<T> processor;
     // END REQUIRED ARGUMENTS
 
     private T bufferSlice1;
@@ -67,7 +67,7 @@ public final class RetrieveBuffersForThreeSlices<T extends Buffer> implements Pr
 
     @Override
     public void notifyChangeSlice(int z) {
-        process.notifyChangeSlice(z);
+        processor.notifyChangeSlice(z);
         offsetWithinSlice = 0;
         this.bufferSlice1 = voxels1.sliceBuffer(z);
         this.bufferSlice2 = voxels2.sliceBuffer(z);
@@ -76,6 +76,6 @@ public final class RetrieveBuffersForThreeSlices<T extends Buffer> implements Pr
 
     @Override
     public void process(Point3i point) {
-        process.process(point, bufferSlice1, bufferSlice2, bufferSlice3, offsetWithinSlice++);
+        processor.process(point, bufferSlice1, bufferSlice2, bufferSlice3, offsetWithinSlice++);
     }
 }

@@ -38,7 +38,8 @@ import org.anchoranalysis.image.extent.BoundingBox;
  * An R-Tree of bounding boxes. The index of the item in a list, determines an integer ID,
  * associated with the item in the R-Tree.
  *
- * @see <a href="https://en.wikipedia.org/wiki/R-tree">Wikipedia's R-tree</a>
+ * @see <a href="https://en.wikipedia.org/wiki/R-tree">R-tree on Wikipedia</a>
+ * @see ObjectCollectionRTree for a related structure operating only on object-masks
  * @author Owen Feehan
  */
 public class BoundingBoxRTree {

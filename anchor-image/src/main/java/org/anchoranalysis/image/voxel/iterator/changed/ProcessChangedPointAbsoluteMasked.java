@@ -39,7 +39,7 @@ public interface ProcessChangedPointAbsoluteMasked<T> {
     /**
      * The value and offset for the source point (around which we process neighbors)
      *
-     * <p>This function should always be called before {@link processPoint}
+     * <p>This function should always be called before {@link #processPoint}
      *
      * <p>It can be called repeatedly for different points (resetting state each time).
      *

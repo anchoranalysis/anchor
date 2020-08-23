@@ -45,7 +45,7 @@ import org.anchoranalysis.feature.energy.EnergyTotal;
 /**
  * A collection of memoized marks on which energies can be derived.
  *
- * <p>TODO, can it be united with {@link #MemoList}?
+ * <p>TODO, can it be united with {@link MemoList}?
  *
  * @author Owen Feehan
  */

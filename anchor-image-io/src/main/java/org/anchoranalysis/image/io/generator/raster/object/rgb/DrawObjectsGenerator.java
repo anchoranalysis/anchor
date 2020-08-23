@@ -40,7 +40,6 @@ import org.anchoranalysis.io.bean.color.generator.HSBColorSetGenerator;
 /**
  * Generates stacks of RGB images using a {@link DrawObject} to draw objects on a background.
  *
- * @param T pre-calculation type for the {@link DrawObject}
  * @author Owen Feehan
  */
 public class DrawObjectsGenerator extends ObjectsOnRGBGenerator {

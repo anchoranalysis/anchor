@@ -51,7 +51,7 @@ import org.anchoranalysis.feature.input.FeatureInput;
  * guarantees the next calculation will be fresh/
  *
  * @author Owen Feehan
- * @param T feature-input
+ * @param <T> feature-input
  */
 public interface FeatureSessionCache<T extends FeatureInput> {
 

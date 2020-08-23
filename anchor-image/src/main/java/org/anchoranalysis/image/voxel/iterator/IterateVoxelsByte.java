@@ -127,8 +127,7 @@ public class IterateVoxelsByte {
      * @param voxelsIn1 voxels in which which {@link BoundingBox} refers to a subregion, and which provides the <b>first inwards</b> buffer
      * @param voxelsIn2 voxels in which which {@link BoundingBox} refers to a subregion, and which provides the <b>second inwards</b> buffer
      * @param voxelsOut voxels in which which {@link BoundingBox} refers to a subregion, and which provides the <b>outwards</b> buffer
-     * @param process is called for each voxel within the bounding-box using GLOBAL coordinates.
-     * @param <T> buffer-type for voxels
+     * @param operation is called for each voxel within the bounding-box using GLOBAL coordinates.
      */
     public static void callEachPointWithBinaryOperation(
             Voxels<ByteBuffer> voxelsIn1, Voxels<ByteBuffer> voxelsIn2, Voxels<ByteBuffer> voxelsOut, IntBinaryOperation operation) {
@@ -160,7 +159,7 @@ public class IterateVoxelsByte {
      * Calculates the sum and count across voxels that correspond to ON voxels on an <i>object-mask</i>
      * 
      * @param voxelsIntensity the voxels whose intensity we wish to find the mean of (subject to {@code mask}
-     * @param mask only voxels who correspond to an ON voxels in the object-mask are included
+     * @param object only voxels who correspond to an ON voxels in this object-mask are included
      * @return the running-sum
      */
     public static RunningSum calculateSumAndCount( Voxels<ByteBuffer> voxelsIntensity, ObjectMask object) {

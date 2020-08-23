@@ -60,7 +60,6 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 /**
  * @author Owen Feehan
- * @param <T> feature calculation params
  */
 class ObjectFeatureListCSVGenerator extends CSVGenerator
         implements IterableGenerator<ObjectCollection> {

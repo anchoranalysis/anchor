@@ -47,7 +47,7 @@ public class ReuseSingletonStrategy<T extends FeatureInput> implements ReplaceSt
     /**
      * Constructor with default means of creating a session-input
      *
-     * @param createSessionInput
+     * @param cacheCreator
      */
     public ReuseSingletonStrategy(CacheCreator cacheCreator) {
         this(cacheCreator, DefaultFindChildStrategy.instance());
@@ -56,7 +56,7 @@ public class ReuseSingletonStrategy<T extends FeatureInput> implements ReplaceSt
     /**
      * Constructor with custom means of creating a session-input
      *
-     * @param createSessionInput
+     * @param cacheCreator
      */
     public ReuseSingletonStrategy(CacheCreator cacheCreator, FindChildStrategy findChildStrategy) {
         super();

@@ -74,17 +74,17 @@ public interface BoundIOContext {
     }
 
     /**
-     * Optionally creates a new context like with {@link subdirectory} but only if a directory-name
+     * Optionally creates a new context like with {@link #subdirectory} but only if a directory-name
      * is defined
      *
-     * @param subDirectoryName if defined, a new context is created that writes into a sub-directory
+     * @param subdirectoryName if defined, a new context is created that writes into a sub-directory
      *     of this name
      * @return either a newly created context, or the existing context
      */
     default BoundIOContext maybeSubdirectory(
-            Optional<String> subDirectoryName,
+            Optional<String> subdirectoryName,
             ManifestFolderDescription manifestFolderDescription) {
-        return subDirectoryName
+        return subdirectoryName
                 .map(name -> subdirectory(name, manifestFolderDescription))
                 .orElse(this);
     }

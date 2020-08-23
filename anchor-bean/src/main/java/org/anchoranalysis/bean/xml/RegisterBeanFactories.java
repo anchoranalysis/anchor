@@ -74,7 +74,7 @@ public final class RegisterBeanFactories {
      *
      * <p>If it's already been called, we simply do nothing
      *
-     * @param returns the default factory for creating objects
+     * @returns the default factory for creating objects
      */
     public static AnchorDefaultBeanFactory registerAllPackageBeanFactories() {
 

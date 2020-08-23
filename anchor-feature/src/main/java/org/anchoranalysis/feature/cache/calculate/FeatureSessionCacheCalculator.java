@@ -39,7 +39,7 @@ import org.anchoranalysis.feature.input.FeatureInput;
  * Calculates features in the context of a particular {#FeatureSessionCache}.
  *
  * @author Owen Feehan
- * @param T feature-input type that the cache supports
+ * @param <T> feature-input type that the cache supports
  */
 public interface FeatureSessionCacheCalculator<T extends FeatureInput>
         extends CalculationResolver<T>, FeatureSymbolCalculator<T> {

@@ -64,7 +64,7 @@ public class OutlineTraverser {
      * Root point is arbitrarily chosen from object
      *
      * @param listOut
-     * @throws TraverseOutlineException
+     * @throws OperationFailedException
      */
     public void applyGlobal(List<Point3i> listOut) throws OperationFailedException {
         OptionalUtilities.ifPresent(
@@ -74,7 +74,7 @@ public class OutlineTraverser {
     /**
      * @param root this root point should exist on the omOutline (in absolute scene coordinates)
      * @param listOut
-     * @throws TraverseOutlineException
+     * @throws OperationFailedException
      */
     public void applyGlobal(Point3i root, List<Point3i> listOut) throws OperationFailedException {
 

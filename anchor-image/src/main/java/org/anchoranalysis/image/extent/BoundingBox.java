@@ -435,7 +435,7 @@ public final class BoundingBox implements Serializable {
      * Scales the bounding-box corner-point, and assigns a new extent
      *
      * @param scaleFactor scaling-factor
-     * @param extent extent to assign
+     * @param extentToAssign extent to assign
      * @return a new bounding-box with scaled corner-point and the specified extent
      */
     public BoundingBox scale(ScaleFactor scaleFactor, Extent extentToAssign) {

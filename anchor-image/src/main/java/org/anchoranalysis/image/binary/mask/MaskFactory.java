@@ -33,7 +33,7 @@ public class MaskFactory {
      * Creates a binary-mask for specific dimensions with all voxels set to OFF
      * 
      * @param dimensions the dimensions to create the mask for
-     * @param binaryValue binary-values
+     * @param binaryValues binary-values
      * 
      * @return a newly created binary-mask with newly-created buffers
      */
@@ -66,7 +66,7 @@ public class MaskFactory {
      * Creates a binary-mask for specific dimensions with all voxels set to ON
      * 
      * @param dimensions the dimensions to create the mask for
-     * @param binaryValue binary-values
+     * @param binaryValues binary-values
      * 
      * @return a newly created binary-mask with newly-created buffers
      */

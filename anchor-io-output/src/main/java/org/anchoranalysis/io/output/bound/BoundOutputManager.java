@@ -44,7 +44,6 @@ import org.anchoranalysis.io.output.bean.OutputManager;
 import org.anchoranalysis.io.output.bean.OutputManagerPermissive;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.bean.allowed.OutputAllowed;
-import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.writer.AlwaysAllowed;
 import org.anchoranalysis.io.output.writer.CheckIfAllowed;
 import org.anchoranalysis.io.output.writer.Writer;
@@ -93,8 +92,6 @@ public class BoundOutputManager {
      * @param outputWriteSettings
      * @param deleteExistingFolder if true this directory if it already exists is deleted before
      *     executing the experiment, otherwise an exception is thrown if it exists.
-     * @param parentInit iff defined, parent initializer to call, before our own initializer is
-     *     called.
      */
     public BoundOutputManager(
             OutputManager outputManager,

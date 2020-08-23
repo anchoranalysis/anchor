@@ -31,7 +31,6 @@ import org.anchoranalysis.core.log.Logger;
 
 /**
  * @author Owen Feehan
- * @param <P> init-param type
  */
 public interface PropertyDefiner {
 

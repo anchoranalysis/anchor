@@ -47,13 +47,11 @@ public class OptionalUtilities {
      * Like {@link Optional#map} but tolerates an exception in the mapping function, which is
      * immediately thrown.
      *
-     * @param <S> incoming optional-type for map
-     * @param <T> outgoing optional-type for map
+     * @param <S> optional-type
      * @param <E> exception that may be thrown during mapping
      * @param optional incoming optional
-     * @param mapFunc the function that does the mapping from incoming to outgoing
-     * @return the outgoing "mapped" optional
-     * @throws E an exception if the mapping function throws it
+     * @param consumerFunction the function that is called if an optional contains a vlaue
+     * @throws E an exception if {@code consumerFunction} throws it
      */
     public static <S, E extends Exception> void ifPresent(
             Optional<S> optional, CheckedConsumer<S, E> consumerFunction) throws E {

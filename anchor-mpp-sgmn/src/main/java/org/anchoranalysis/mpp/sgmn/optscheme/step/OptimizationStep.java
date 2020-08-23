@@ -46,12 +46,12 @@ public class OptimizationStep<S, T> {
     // The important state needed for the current algorithm step
     private DualState<T> state;
 
-    private boolean accptd;
+    private boolean accpted;
     private boolean best;
 
-    private Optional<T> proposal = Optional.empty();
+    private Optional<T> proposalOptional = Optional.empty();
 
-    private DscrData<S> dscrData = new DscrData<>();
+    private DescribeData<S> describeData = new DescribeData<>();
 
     public OptimizationStep() {
         state = new DualState<>();
@@ -59,36 +59,36 @@ public class OptimizationStep<S, T> {
     }
 
     public void setTemperature(double temperature) {
-        dscrData.setTemperature(temperature);
+        describeData.setTemperature(temperature);
     }
 
-    public void assignProposal(Optional<T> proposalNew, KernelWithIdentifier<S> kid) {
+    public void assignProposal(Optional<T> proposalToAssign, KernelWithIdentifier<S> kid) {
 
-        dscrData.setKernel(kid);
+        describeData.setKernel(kid);
 
-        if (this.proposal.equals(proposalNew)) {
+        if (this.proposalOptional.equals(proposalToAssign)) {
             return;
         }
 
-        this.proposal = proposalNew;
+        this.proposalOptional = proposalToAssign;
     }
 
     public void acceptProposal(ToDoubleFunction<T> funcScore) {
-        accptd = true;
+        accpted = true;
         assgnCrntFromProposal(funcScore);
 
         setKernelNoProposalDescription(null);
-        markChanged(dscrData.getKernel());
+        markChanged(describeData.getKernel());
     }
 
     public void rejectProposal() {
         markRejected();
         setKernelNoProposalDescription(null);
-        markChanged(dscrData.getKernel());
+        markChanged(describeData.getKernel());
     }
 
     public void markNoProposal(ProposerFailureDescription proposerFailureDescription) {
-        proposal = Optional.empty();
+        proposalOptional = Optional.empty();
 
         setKernelNoProposalDescription(proposerFailureDescription);
         setChangedMarkIDs(new int[] {});
@@ -97,7 +97,7 @@ public class OptimizationStep<S, T> {
     }
 
     public void setExecutionTime(long executionTime) {
-        dscrData.setExecutionTime(executionTime);
+        describeData.setExecutionTime(executionTime);
     }
 
     public T releaseKeepBest() throws OperationFailedException {
@@ -107,18 +107,18 @@ public class OptimizationStep<S, T> {
     }
 
     private void releaseProposal() {
-        proposal = Optional.empty();
+        proposalOptional = Optional.empty();
     }
 
     private void assgnCrntFromProposal(ToDoubleFunction<T> funcScore) {
         // We can rely that a proposal exists, as it has been accepted
-        state.assignCurrent(proposal.get());
+        state.assignCurrent(proposalOptional.get());       // NOSONAR
         maybeAssignAsBest(funcScore);
     }
 
     private void setKernelNoProposalDescription(
             ProposerFailureDescription kernelRejectionDescription) {
-        dscrData.setKernelNoProposalDescription(kernelRejectionDescription);
+        describeData.setKernelNoProposalDescription(kernelRejectionDescription);
     }
 
     private void maybeAssignAsBest(ToDoubleFunction<T> funcScore) {
@@ -142,16 +142,16 @@ public class OptimizationStep<S, T> {
     }
 
     private void setChangedMarkIDs(int[] changedMarkIDs) {
-        dscrData.setChangedMarkIDs(changedMarkIDs);
+        describeData.setChangedMarkIDs(changedMarkIDs);
     }
 
     private void markRejected() {
-        accptd = false;
+        accpted = false;
         best = false;
     }
 
     public KernelWithIdentifier<S> getKernel() {
-        return dscrData.getKernel();
+        return describeData.getKernel();
     }
 
     public Optional<T> getCrnt() {
@@ -163,13 +163,11 @@ public class OptimizationStep<S, T> {
     }
 
     public Optional<T> getProposal() {
-        return proposal;
+        return proposalOptional;
     }
 
     /**
      * @param iter
-     * @param func Main function for extracting the primary proposal
-     * @param funcProposalSecondary Function for extracting a secondary proposal
      * @return
      * @throws OperationFailedException
      */
@@ -181,13 +179,13 @@ public class OptimizationStep<S, T> {
                 iter,
                 state.transform(stateReporter.primaryReport(), context),
                 OptionalUtilities.map(
-                        proposal, p -> stateReporter.primaryReport().transform(p, context)),
+                        proposalOptional, proposal -> stateReporter.primaryReport().transform(proposal, context)),
                 OptionalUtilities.mapBoth(
                         stateReporter.secondaryReport(),
-                        proposal,
-                        (secondaryReport, prop) -> secondaryReport.transform(prop, context)),
-                dscrData,
-                accptd,
+                        proposalOptional,
+                        (secondaryReport, proposal) -> secondaryReport.transform(proposal, context)),
+                describeData,
+                accpted,
                 best);
     }
 }

@@ -71,15 +71,14 @@ class HelperDescribeXmlNode {
     /**
      * Appends a description of an attribute-collection to a stringbuilder
      *
+     * <p>The string takes the form: [ATTRIBUTE1_DESCRIPTION, ATTRIBUTE2_DESCRIPTION, ATTRIBUTE3_DESCRIPTION]
      * @param nodes collection of attribute nodes
-     * @param sb string-builder
-     * @return a string in the format [ATTRIBUTE1_DESCRIPTION, ATTRIBUTE2_DESCRIPTION,
-     *     ATTRIBUTE3_DESCRIPTION]
+     * @param stringBuilder string-builder
      */
     private static void describeAttributes(
             Collection<ConfigurationNode> nodes,
             Predicate<ConfigurationNode> predicate,
-            StringBuilder sb) {
+            StringBuilder stringBuilder) {
 
         List<ConfigurationNode> nodesFiltered = FunctionalList.filterToList(nodes, predicate);
 
@@ -87,12 +86,12 @@ class HelperDescribeXmlNode {
         if (nodesFiltered.isEmpty()) {
             return;
         }
-        sb.append(" ");
+        stringBuilder.append(" ");
         String attributeDesc =
                 nodesFiltered.stream()
                         .map(HelperDescribeXmlNode::describeAttributeKeyValue)
                         .collect(Collectors.joining(", ", "[", "]"));
-        sb.append(attributeDesc);
+        stringBuilder.append(attributeDesc);
     }
 
     /**

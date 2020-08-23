@@ -172,7 +172,7 @@ public class IterateVoxels {
     /**
      * Iterate over each voxel in an extent that matches a predicate
      *
-     * @param box the extent through which every point is tested to see if it matches the predicate
+     * @param extent the extent through which every point is tested to see if it matches the predicate
      * @param process is called for each voxel within the bounding-box using GLOBAL coordinates.
      */
     public static void callEachPoint(

@@ -75,7 +75,7 @@ public class PropertyInitializer<P> {
      * initialized.
      *
      * @param initParamType type of parameters to be propagated
-     * @param extracters extracters to used for other property-types that can be derived from
+     * @param extractersToAdd extracters to used for other property-types that can be derived from
      *     current property-type
      */
     public PropertyInitializer(

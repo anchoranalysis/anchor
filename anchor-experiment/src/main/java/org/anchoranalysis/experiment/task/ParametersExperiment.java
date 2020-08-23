@@ -42,7 +42,6 @@ import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
  * Parameters for executing a task, when the manifest, log etc. are still bound to the experiment
  *
  * @author Owen Feehan
- * @param <T> input-object type
  */
 public class ParametersExperiment {
 

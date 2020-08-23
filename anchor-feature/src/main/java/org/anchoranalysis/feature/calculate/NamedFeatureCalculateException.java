@@ -54,7 +54,7 @@ public class NamedFeatureCalculateException extends AnchorFriendlyCheckedExcepti
     /**
      * Constructor - when a calculation error occurs associated with the only pertinent feature.
      *
-     * @param message
+     * @param exception reason for failure
      */
     public NamedFeatureCalculateException(Exception exception) {
         this(exception.toString());

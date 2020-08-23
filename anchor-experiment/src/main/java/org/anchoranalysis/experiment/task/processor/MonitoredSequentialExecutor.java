@@ -34,43 +34,31 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import org.anchoranalysis.core.log.MessageLogger;
-import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.task.TaskStatistics;
+import lombok.AllArgsConstructor;
 
 /**
  * Runs executes sequence of jobs/tasks/whatever monitoring various pieces of information - how many
  * have run? - how many successful/failed? - how long did execution take? - etc.
  *
  * @author Owen Feehan
- * @param T inputType
+ * @param <T> inputType
  */
+@AllArgsConstructor
 public class MonitoredSequentialExecutor<T> {
 
+    /** executes a particular input (String) */
     private Predicate<T> execFunc;
+    
+    /** extracts a string-description from an input */
     private Function<T, String> dscrFunc;
+    
+    /** reports before and after an input on the current status (disabled if empty()) */
     private Optional<MessageLogger> logger;
+    
+    /** indicates if lines of hashes should be placed before and after each
+     *     log message (adds emphasis) */
     private boolean showHashSeperators;
-
-    /**
-     * Constructor
-     *
-     * @param execFunc executes a particular input (String)
-     * @param dscrFunc extracts a string-description from an input
-     * @param logger reports before and after an input on the current status (disabled if empty())
-     * @param showHashSeperators indicates if lines of hashes should be placed before and after each
-     *     log message (adds emphasis)
-     */
-    public MonitoredSequentialExecutor(
-            Predicate<T> execFunc,
-            Function<T, String> dscrFunc,
-            Optional<MessageLogger> logger,
-            boolean showHashSeperators) {
-        super();
-        this.execFunc = execFunc;
-        this.dscrFunc = dscrFunc;
-        this.logger = logger;
-        this.showHashSeperators = showHashSeperators;
-    }
 
     /**
      * Executes code for each element of inputs in serial, providing log-reports as to how many are

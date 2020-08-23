@@ -30,7 +30,7 @@ import java.nio.Buffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 
 /**
- * Processes a 3D point like {@link ProcessVoxelOffset} but also retrieves a {@link VoxelBuffer} for
+ * Processes a 3D point like {@link ProcessVoxel} but also retrieves a {@link VoxelBuffer} for
  * the current z-slice.
  *
  * <p>It is very similar to {@link ProcessVoxelSliceBuffer} but uses {@link VoxelBuffer} instead of

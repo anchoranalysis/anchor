@@ -35,7 +35,7 @@ import org.anchoranalysis.math.rotation.RotationMatrixFromAxisAngleCreator;
 /**
  * An orientation in axis-angle representation.
  *
- * @see <a href="https://en.wikipedia.org/wiki/Axis%E2%80%93angle_representation>Wikipedia</a>
+ * @see <a href="https://en.wikipedia.org/wiki/Axis%E2%80%93angle_representation">Wikipedia</a>
  * @author Owen Feehan
  */
 @Value

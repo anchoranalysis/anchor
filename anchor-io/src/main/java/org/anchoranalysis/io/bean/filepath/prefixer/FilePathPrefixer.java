@@ -43,7 +43,7 @@ public abstract class FilePathPrefixer extends AnchorBean<FilePathPrefixer> {
      *
      * @param input an input to derive a prefix from
      * @param experimentIdentifier an identifier for the experiment
-     * @param outputContext output-context
+     * @param context
      * @return a prefixer
      * @throws FilePathPrefixerException
      */
@@ -55,7 +55,7 @@ public abstract class FilePathPrefixer extends AnchorBean<FilePathPrefixer> {
      * Provides a prefix that becomes the root-folder. The prefix should be an absolute path.
      *
      * @param experimentIdentifier an identifier for the experiment
-     * @param outputContext output-context
+     * @param context
      * @return a prefixer
      * @throws FilePathPrefixerException
      */

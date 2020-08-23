@@ -34,7 +34,7 @@ import org.anchoranalysis.core.name.store.StoreSupplier;
  * a sub-item of multi-input which: 1. involves a map of objects of type T 2. can have its contents
  * copied into a NamedProviderStore
  *
- * @param T object-type
+ * @param <T> object-type
  */
 public interface MultiInputSubMap<T> {
 

@@ -73,7 +73,7 @@ public abstract class Thresholder extends NullParamsBean<VoxelsThresholder> {
      * @param voxels the voxels to be thresholded
      * @param binaryValues what binary values to be used in the output
      * @param histogram a histogram if it's available, which must exactly match the intensity-values
-     *     of {@link voxels} after any object-mask is applied. This exists for calculation
+     *     of {@code voxels} after any object-mask is applied. This exists for calculation
      *     efficiency.
      * @param objectMask an object-mask to restrict thresholding to only some region(s) of the
      *     voxels

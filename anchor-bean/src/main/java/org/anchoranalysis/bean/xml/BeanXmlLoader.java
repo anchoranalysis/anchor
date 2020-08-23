@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.bean.xml;
 
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.logging.Level;
 import java.util.logging.Logger;

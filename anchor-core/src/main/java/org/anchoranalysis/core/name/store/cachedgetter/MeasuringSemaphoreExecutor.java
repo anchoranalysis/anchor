@@ -36,7 +36,7 @@ import org.apache.commons.lang.time.StopWatch;
  * first starts until the last completes.
  *
  * @author Owen Feehan
- * @param E exception throw if operation fails
+ * @param <E> exception throw if operation fails
  */
 class MeasuringSemaphoreExecutor<E extends Exception> {
     private int cnt = 0;

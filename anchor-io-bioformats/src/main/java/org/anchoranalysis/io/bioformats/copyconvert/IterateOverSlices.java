@@ -45,7 +45,6 @@ class IterateOverSlices {
      *
      * @param dimensionsOrder
      * @param shape the shape of the dimensions of the data
-     * @param numChannelsPerByteArray
      * @param channelIteration called for each unique z-slice from each channel and each frame
      * @throws IOException
      * @throws FormatException

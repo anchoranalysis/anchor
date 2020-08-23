@@ -77,7 +77,7 @@ public final class Point3d extends Tuple3d {
     /**
      * Square of Euclidean distance from this point to another
      *
-     * @param other the other point
+     * @param point the other point
      * @return the distance-squared
      */
     public double distanceSquared(Point3i point) {

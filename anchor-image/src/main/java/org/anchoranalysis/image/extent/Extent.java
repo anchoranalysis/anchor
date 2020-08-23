@@ -383,7 +383,7 @@ public final class Extent implements Serializable {
      * <p>This occurs in ascending order (x-dimension increments first, y-dimension increments second)
      *
      * @param <E> a checked-exception that {@code indexConsumer} may throw
-     * @param indexConsumer called for each point
+     * @param pointConsumer called for each point
      * @throws E if {@code indexConsumer} throws this exception
      */
     public <E extends Exception> void iterateOverXY(OffsettedPointTwoDimensionalConsumer<E> pointConsumer) throws E {
@@ -401,7 +401,7 @@ public final class Extent implements Serializable {
      * <p>This occurs in ascending order (x-dimension increments first, y-dimension increments second)
      *
      * @param <E> a checked-exception that {@code indexConsumer} may throw
-     * @param indexConsumer called for each point with the offset
+     * @param offsetConsumer called for each point with the offset
      * @throws E if {@code indexConsumer} throws this exception
      */
     public <E extends Exception> void iterateOverXYOffset( CheckedIntConsumer<E> offsetConsumer ) throws E {

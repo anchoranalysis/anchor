@@ -49,7 +49,7 @@ public class AlwaysNew<T extends FeatureInput> implements ReplaceStrategy<T> {
     /**
      * Constructor with default means of creating a session-input
      *
-     * @param createSessionInput
+     * @param cacheCreator
      */
     public AlwaysNew(CacheCreator cacheCreator) {
         this(cacheCreator, DefaultFindChildStrategy.instance());

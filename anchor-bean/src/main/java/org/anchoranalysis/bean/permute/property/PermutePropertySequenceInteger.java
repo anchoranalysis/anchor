@@ -32,7 +32,6 @@ import java.util.Iterator;
  * An arithmetic sequence of doubles, obtained by dividing an integer sequence by a divider
  *
  * @author Owen Feehan
- * @param T permutation type
  */
 public class PermutePropertySequenceInteger extends PermutePropertySequence<Integer> {
 

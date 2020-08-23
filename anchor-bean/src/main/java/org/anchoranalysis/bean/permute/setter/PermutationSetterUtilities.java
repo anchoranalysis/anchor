@@ -59,7 +59,7 @@ public class PermutationSetterUtilities {
      * Finds a bean corresponding to a field (exceptionally handling a List by taking the first item
      * in it)
      *
-     * @param field a field corresponding to an AnchorBean or a {@param java.util.List}
+     * @param field a field corresponding to an AnchorBean or a {@link java.util.List}
      * @param currentBean the bean object to which the field refers to
      * @return an AnchorBean corresponding to this particular field on this particular object
      *     (exceptionally handling lists)
