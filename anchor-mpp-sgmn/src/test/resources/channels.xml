@@ -2,11 +2,11 @@
 <config>
 <bean config-class="java.util.List" config-factory="list">
 	
-	<item config-class="org.anchoranalysis.bean.NamedBean" name="chnl1">
+	<item config-class="org.anchoranalysis.bean.NamedBean" name="channel1">
 		<item config-class="org.anchoranalysis.mpp.sgmn.dummyProvider.DummyChannelProvider"/>
 	</item>
 
-	<item config-class="org.anchoranalysis.bean.NamedBean" name="chnl2">
+	<item config-class="org.anchoranalysis.bean.NamedBean" name="channel2">
 		<item config-class="org.anchoranalysis.mpp.sgmn.dummyProvider.DummyChannelProvider"/>
 	</item>
 
