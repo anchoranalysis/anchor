@@ -29,10 +29,15 @@ package org.anchoranalysis.io.xml;
 import static org.junit.Assert.*;
 
 import java.io.IOException;
+import java.io.StringWriter;
 import java.net.URISyntaxException;
 import java.nio.file.Path;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 import org.anchoranalysis.test.TestLoader;
 import org.junit.Rule;
 import org.junit.Test;
@@ -56,9 +61,9 @@ public class XmlOutputterTest {
         Document docIn = loader.openXmlFromTestPath(testPathIn);
 
         XmlOutputter.writeXmlToFile(docIn, pathOut);
-
+        
         Document docOut = TestLoader.openXmlAbsoluteFilePath(pathOut);
-
+        
         assertTrue(TestLoader.areXmlEqual(docIn, docOut));
     }
 }

@@ -73,7 +73,7 @@ public abstract class MarkWithPositionAndSingleRadius extends MarkWithPosition i
     /**
      * Constructor with a bound on the radius
      *
-     * @param bonudRadius
+     * @param boundRadius
      */
     protected MarkWithPositionAndSingleRadius(Bound boundRadius) {
         this.boundRadius = boundRadius;

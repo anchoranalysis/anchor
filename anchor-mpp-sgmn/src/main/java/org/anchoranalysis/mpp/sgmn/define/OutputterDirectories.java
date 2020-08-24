@@ -31,7 +31,7 @@ import lombok.NoArgsConstructor;
 
 /**
  * Directories into which collections of different types of objects are written to in a
- * <emph>define</emph> experiment
+ * <i>define</i> experiment
  *
  * @author Owen Feehan
  */

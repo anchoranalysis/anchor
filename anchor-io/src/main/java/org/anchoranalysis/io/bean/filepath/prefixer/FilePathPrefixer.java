@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.io.bean.filepath.prefixer;
 
-import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import org.anchoranalysis.bean.AnchorBean;
@@ -74,7 +73,6 @@ public abstract class FilePathPrefixer extends AnchorBean<FilePathPrefixer> {
      *
      * @param pathToResolve input-path that is relative
      * @return the converted path (relative to the localizedPath of the current file)
-     * @throws IOException if it cannot be converted to a real-path
      */
     protected Path resolvePath(Path pathToResolve) {
 

@@ -35,7 +35,7 @@ import org.anchoranalysis.core.cache.CachedSupplier;
 import org.anchoranalysis.core.error.AnchorNeverOccursException;
 import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
 
-/** Memoization of retrieving a {@VoxelizedMark} from a mark */
+/** Memoization of retrieving a {@link VoxelizedMark} from a mark */
 public class VoxelizedMarkMemo {
 
     // START REQUIRED ARGUMENTS

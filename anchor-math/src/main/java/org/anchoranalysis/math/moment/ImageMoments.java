@@ -37,7 +37,7 @@ import lombok.NoArgsConstructor;
  * The first moment (mean) and eigenvalues of the second moments (covariance) from a matrix of
  * points
  *
- * <p>See <a href="Image moment">Image Moment on Wikipedia</a>
+ * <p>See <a href="https://en.wikipedia.org/wiki/Image_moment">Image Moment on Wikipedia</a>
  *
  * @author Owen Feehan
  */

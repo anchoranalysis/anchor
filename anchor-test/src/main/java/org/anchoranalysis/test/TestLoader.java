@@ -39,6 +39,9 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.apache.commons.io.FileUtils;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
+import org.xmlunit.builder.DiffBuilder;
+import org.xmlunit.builder.Input;
+import org.xmlunit.diff.Diff;
 
 /**
  * Loads test data, which is found at some location on the file-system
@@ -226,6 +229,7 @@ public class TestLoader {
     public static Document openXmlAbsoluteFilePath(Path filePath) {
         try {
             DocumentBuilderFactory dbf = createDocumentBuilderFactory();
+            
             DocumentBuilder db = dbf.newDocumentBuilder();
             return db.parse(filePath.toFile());
         } catch (ParserConfigurationException | SAXException | IOException e) {
@@ -244,9 +248,7 @@ public class TestLoader {
      * @return TRUE if their contents match, FALSE otherwise
      */
     public static boolean areXmlEqual(Document doc1, Document doc2) {
-        doc1.normalizeDocument();
-        doc2.normalizeDocument();
-        return doc1.isEqualNode(doc2);
+        return areXmlEqual( Input.fromDocument(doc1), Input.fromDocument(doc2) );
     }
 
     /**
@@ -294,5 +296,10 @@ public class TestLoader {
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         dbf.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
         return dbf;
+    }
+        
+    private static boolean areXmlEqual(Input.Builder expectedXML, Input.Builder actualXML) {
+        Diff difference = DiffBuilder.compare(expectedXML).ignoreWhitespace().ignoreComments().withTest(actualXML).build();
+        return !difference.hasDifferences();
     }
 }
