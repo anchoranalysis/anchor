@@ -48,7 +48,7 @@ public class PermutationSetterUtilities {
 
         if (tokens.length == 1) {
             // Simple case when there is a direct property
-            Field finalField = findMatchingField(parentBean.getOrCreateBeanFields(), propertyPath);
+            Field finalField = findMatchingField(parentBean.fields(), propertyPath);
             return new PermutationSetterSingle(finalField);
         } else {
             return createWithIntermediateProperties(parentBean, tokens);
@@ -103,7 +103,7 @@ public class PermutationSetterUtilities {
         PermutationSetterSingle setter = new PermutationSetterSingle();
 
         AnchorBean<?> currentBean = parentBean;
-        List<Field> currentList = currentBean.getOrCreateBeanFields();
+        List<Field> currentList = currentBean.fields();
 
         int intermediateFields = tokens.length - 1;
 
@@ -118,7 +118,7 @@ public class PermutationSetterUtilities {
             setter.addField(matchedField);
 
             currentBean = PermutationSetterUtilities.beanFor(matchedField, currentBean);
-            currentList = currentBean.getOrCreateBeanFields();
+            currentList = currentBean.fields();
         }
 
         // Find a matching property for the final setter

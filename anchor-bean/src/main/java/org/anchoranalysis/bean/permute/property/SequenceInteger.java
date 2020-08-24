@@ -28,19 +28,32 @@ package org.anchoranalysis.bean.permute.property;
 
 import lombok.Getter;
 import lombok.Setter;
+import java.util.Iterator;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 
+/**
+ * A sequence of integers.
+ * 
+ * <p>The sequence will step from {@code start} to {@code end} with step-sizes of {@code increment}.
+ * 
+ * <p>There is no guarantee that {@code end} will be included, if it doesn't align with the step-size.
+ * 
+ * @author Owen Feehan
+ *
+ */
 public class SequenceInteger extends AnchorBean<SequenceInteger> {
 
     // START BEAN PROPERTIES
+    /** The index to begin iteration from */
     @BeanField @Getter @Setter private int start = 0;
 
-    // Last item, inclusive
+    /** An index beyond which we cannot iterate (inclusive) */
     @BeanField @Getter @Setter private int end = 0;
 
+    /** Size of step to use when incrementing */
     @BeanField @Getter @Setter private int increment = 1;
     // END BEAN PROPERTIES
 
@@ -54,7 +67,12 @@ public class SequenceInteger extends AnchorBean<SequenceInteger> {
         }
     }
 
-    public SequenceIntegerIterator iterator() {
+    /**
+     * An iterator for each element in the sequence
+     * 
+     * @return the iterator
+     */
+    public Iterator<Integer> iterator() {
         return new SequenceIntegerIterator(start, end, increment);
     }
 }

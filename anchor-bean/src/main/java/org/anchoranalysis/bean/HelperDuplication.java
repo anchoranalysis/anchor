@@ -48,7 +48,7 @@ class HelperDuplication {
         try {
             AnchorBean<T> beanOut = bean.getClass().getConstructor().newInstance();
 
-            for (Field field : bean.getOrCreateBeanFields()) {
+            for (Field field : bean.fields()) {
 
                 Optional<Object> propertyNew =
                         duplicatePropertyValue(

@@ -201,8 +201,8 @@ public class FeatureList<T extends FeatureInput> extends AnchorBean<FeatureList<
     }
 
     @Override
-    public String descriptionBean() {
-        return String.format("%s with %d items", super.descriptionBean(), list.size());
+    public String describeBean() {
+        return String.format("%s with %d items", super.describeBean(), list.size());
     }
 
     public Feature<T> get(int index) {

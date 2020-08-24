@@ -69,7 +69,7 @@ public abstract class BoundMinMax extends Bound {
     }
 
     @Override
-    public String descriptionBean() {
+    public String describeBean() {
         return delegate.getDscr();
     }
 

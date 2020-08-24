@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-plugin-image
+ * anchor-bean
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -24,25 +24,18 @@
  * #L%
  */
 
-package org.anchoranalysis.bean;
+package org.anchoranalysis.bean.provider;
 
-import lombok.AllArgsConstructor;
+import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.core.error.CreateException;
 
 /**
- * A convenient way of inserting an object into providers in bean
- *
- * <p>Note, this is not a java-bean, as there's no parameterless constructor.
+ * A class (usually an {@link AnchorBean}} that creates or provides another obhect
  *
  * @author Owen Feehan
+ * @param <T> the item the bean creates
  */
-@AllArgsConstructor
-public class ProviderHolder<T> implements Provider<T> {
+public interface Provider<T> {
 
-    private T object;
-
-    @Override
-    public T create() throws CreateException {
-        return object;
-    }
+    T create() throws CreateException;
 }

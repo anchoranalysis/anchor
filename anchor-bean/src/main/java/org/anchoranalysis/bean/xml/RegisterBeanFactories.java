@@ -64,7 +64,7 @@ public final class RegisterBeanFactories {
     private static final String FACTORY_REPLACE_PROPERTY = "replaceProperty";
     // END keys for factories
 
-    // A check that registerAllPackageBeanFactories() has been called
+    /** A check that {@link #registerAllPackageBeanFactories} has been called */
     private static boolean calledRegisterAllPackage = false;
 
     /**
@@ -74,7 +74,7 @@ public final class RegisterBeanFactories {
      *
      * <p>If it's already been called, we simply do nothing
      *
-     * @returns the default factory for creating objects
+     * @return the default factory for creating objects
      */
     public static AnchorDefaultBeanFactory registerAllPackageBeanFactories() {
 

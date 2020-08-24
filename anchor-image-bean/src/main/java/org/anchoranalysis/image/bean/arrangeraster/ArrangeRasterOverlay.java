@@ -58,7 +58,7 @@ public class ArrangeRasterOverlay extends ArrangeRasterBean {
     // END BEAN PROPERTIES
 
     @Override
-    public String descriptionBean() {
+    public String describeBean() {
         return getBeanName();
     }
 

@@ -44,7 +44,7 @@ class HelperBeanFields {
 
         try {
 
-            List<Field> listFields = bean.getOrCreateBeanFields();
+            List<Field> listFields = bean.fields();
 
             StringBuilder sb = new StringBuilder();
 

@@ -42,7 +42,7 @@ public class MarkPairCollection extends RandomCollectionWithAddCriteria<Identifi
     }
 
     @Override
-    public String descriptionBean() {
+    public String describeBean() {
         return getBeanName();
     }
 }

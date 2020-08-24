@@ -45,7 +45,7 @@ public class FeedbackReceiverList<T> extends FeedbackReceiverBean<T> {
     // END BEAN PROPERTIES
 
     @Override
-    public String descriptionBean() {
+    public String describeBean() {
 
         String newLine = System.getProperty("line.separator");
 

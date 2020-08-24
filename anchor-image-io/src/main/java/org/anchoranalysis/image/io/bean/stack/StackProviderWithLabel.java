@@ -30,9 +30,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.NullParamsBean;
-import org.anchoranalysis.bean.Provider;
-import org.anchoranalysis.bean.ProviderHolder;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.bean.provider.Provider;
+import org.anchoranalysis.bean.provider.ProviderHolder;
 import org.anchoranalysis.image.stack.Stack;
 
 @NoArgsConstructor

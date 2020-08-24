@@ -49,7 +49,7 @@ class FindChildrenForInit {
     public static void addChildrenFromBean(BeanAndParent bean, List<BeanAndParent> listOut)
             throws InitException {
 
-        List<Field> beanFields = bean.getBean().getOrCreateBeanFields();
+        List<Field> beanFields = bean.getBean().fields();
 
         for (Field field : beanFields) {
 

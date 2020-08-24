@@ -29,41 +29,41 @@ package org.anchoranalysis.bean;
 import java.lang.reflect.Field;
 import java.nio.file.Path;
 import java.util.List;
+import javax.annotation.Nullable;
+import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.bean.error.BeanDuplicateException;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
+import lombok.Getter;
 
 /**
- * The base class of all beans used in Anchor.
+ * The base class of all beans used in <a href="http://www.anchoranalysis.org">Anchor</a>.
  *
- * <p>The family-type exists as a Template to allow us to return a sensible-typed object when
- * duplicate is called. It is usually set as the same type of the class itself, or an abstract base
- * type of it (a family of similar classes).
- *
- * <p>Thus, a bean must always be assignable from (e.g. equal or inherit from) the family it is
- * associated with
+ * <p>The family-type exists as a templated parameter {@code <F>} to return a sensibly-typed object when
+ * {@link #duplicateBean} is called. Typically, this is either the type of the class itself, or an abstract base
+ * class representing a family of similar classes. A bean must always be assignable from (i.e. be equal to or inherit from) the family-type it is
+ * associated with.
  *
  * @author Owen Feehan
- * @param <F> family-type when the duplicate method is called, what type is returned
+ * @param <F> family-type, the type returned the {@link #duplicateBean} method is called
  */
 public abstract class AnchorBean<F> {
 
     /**
-     * Lazy-loading of a list of Fields associated with properties of the bean.
+     * Lazy-loading of a list of the fields associated with properties of the bean.
      *
      * <p>We cache this in the class, to avoid having to regenerate it every time an object is
-     * duplicated, init-ed, or checkInitParams() is called etc.
+     * duplicated, initialized, or {@link #checkInitParams} is called etc.
      */
     private List<Field> listBeanFields;
 
     /**
-     * If non-null, a local path on the file-system associate with this bean (from serialization).
-     * If null, no such local-path has been assigned.
+     * A local path on the file-system associated with this bean (from serialization) if defined. Otherwise null.
      */
-    private Path localPath;
+    @Getter @Nullable private Path localPath;
 
     /**
-     * A short-name identifying a bean (by default the name of the class associated with the bean)
+     * A short-name identifying a bean (by default the name of the class associated with the bean).
      *
      * @return the short-name of the bean
      */
@@ -72,27 +72,26 @@ public abstract class AnchorBean<F> {
     }
 
     /**
-     * A potentially longer description of the bean, identifying the bean and also giving some
-     * information about its parameterization.
+     * A (maybe longer) description identifying the bean and perhaps its key parameters.
      *
-     * <p>By default, it returns the same as getBeanName() but beans can optionally override it
+     * <p>By default, it returns the same as {@link #getBeanName} but beans can optionally override it
      *
      * @return either the short-name of the bean, or a longer description
      */
-    public String descriptionBean() {
+    public String describeBean() {
         return getBeanName();
     }
 
-    /** By default, we use descriptionBean() as the string representation of the bean */
+    /** By default, we use {@link #describeBean} as the string representation of the bean. */
     @Override
     public String toString() {
-        return descriptionBean();
+        return describeBean();
     }
 
     /**
-     * Called once after the bean is created, localising the bean to a path on the filesystem
+     * Called once after the bean is created, localising the bean to a path on the filesystem.
      *
-     * <p>It is sometimes useful to override this method so as to include other files
+     * <p>It is sometimes useful to override this method so as to include other files.
      *
      * @param path a path on the file-system which is associated with the bean (can be null,
      *     indicating no localization)
@@ -109,22 +108,22 @@ public abstract class AnchorBean<F> {
     }
 
     /**
-     * Checks that a mark's initial parameters are correct
+     * Checks that a bean's properties conform to expectations.
      *
-     * @param defaultInstances all available default instances if the {{@link DefaultInstance}
+     * @param defaultInstances all available default instances if the {@link DefaultInstance}
      *     annotation is used
      * @throws BeanMisconfiguredException if the bean has not been configured properly as XML
      */
     public void checkMisconfigured(BeanInstanceMap defaultInstances)
             throws BeanMisconfiguredException {
         HelperCheckMisconfigured helper = new HelperCheckMisconfigured(defaultInstances);
-        helper.checkMisconfiguredWithFields(this, getOrCreateBeanFields());
+        helper.checkMisconfiguredWithFields(this, fields());
     }
 
     /**
-     * Creates a new bean, that deep-copies every property value
+     * Creates a new bean that deep-copies every property value.
      *
-     * <p>Any state that is not a @code{BeanField} is ignored.
+     * <p>Any state that is not a {@link BeanField} is ignored.
      *
      * @return the newly created bean
      */
@@ -139,43 +138,39 @@ public abstract class AnchorBean<F> {
     }
 
     /**
-     * Retrieves a list of the bean-fields (this is cached to make it quicker necess time as the
-     * reflection calls are costly)
+     * Generates a string describing the children of the current bean.
      *
-     * @return a list of bean-fields associated with the current bean
+     * @return a string describing the children.
      */
-    public List<Field> getOrCreateBeanFields() {
-        if (listBeanFields == null) {
-            listBeanFields = HelperBeanFields.createListBeanPropertyFields(this.getClass());
-        }
-        return listBeanFields;
-    }
-
-    /**
-     * Generates a string describing the child-beans of the current bean
-     *
-     * @return a string describing the child-beans
-     */
-    protected String describeChildBeans() {
+    protected String describeChildren() {
         return HelperBeanFields.describeChildBeans(this);
     }
 
     /**
-     * Finds all bean-fields that are instance of a certain class. All immediate children are
-     * checked, and any items in immediate lists.
+     * Finds all bean-fields that are instances of a certain class.
+     * 
+     * <p>All immediate children are checked, and any items in immediate lists.
      *
-     * @param listFields the list of fields associated with the bean
      * @param match the class that a field must be assignable from (equal to or inherit from)
      * @param <T> the type of bean returned in the list
      * @return a list of all bean-fields that match the criteria
      * @throws BeanMisconfiguredException if we discover the bean has been misconfigured
      */
-    public <T extends AnchorBean<?>> List<T> findChildrenOfClass(
-            List<Field> listFields, Class<?> match) throws BeanMisconfiguredException {
-        return HelperFindChildren.findChildrenOfClass(this, listFields, match);
+    public <T extends AnchorBean<?>> List<T> findFieldsOfClass(Class<?> match) throws BeanMisconfiguredException {
+        return HelperFindChildren.findChildrenOfClass(this, fields(), match);
     }
 
-    public Path getLocalPath() {
-        return localPath;
+    /**
+     * A list of <i>all</i> bean-fields that are associated with this bean directly (fields of children are not checked).
+     * 
+     * <p>This operation is cached as the necessary reflection calls are costly.
+     *
+     * @return a list of bean-fields associated with the current bean
+     */
+    public List<Field> fields() {
+        if (listBeanFields == null) {
+            listBeanFields = HelperBeanFields.createListBeanPropertyFields(this.getClass());
+        }
+        return listBeanFields;
     }
 }

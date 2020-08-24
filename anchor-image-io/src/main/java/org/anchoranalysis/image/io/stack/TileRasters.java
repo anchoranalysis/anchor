@@ -30,7 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.bean.Provider;
+import org.anchoranalysis.bean.provider.Provider;
 import org.anchoranalysis.image.bean.arrangeraster.ArrangeRasterOverlay;
 import org.anchoranalysis.image.bean.arrangeraster.ArrangeRasterTile;
 import org.anchoranalysis.image.bean.provider.stack.ArrangeRaster;

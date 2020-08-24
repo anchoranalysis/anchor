@@ -89,7 +89,7 @@ public abstract class Feature<T extends FeatureInput>
     public abstract Class<? extends FeatureInput> inputType();
 
     @Override
-    public final String descriptionBean() {
+    public final String describeBean() {
         String paramDscr = describeParams();
         if (!paramDscr.isEmpty()) {
             return String.format("%s(%s)", getBeanName(), paramDscr);
@@ -99,7 +99,7 @@ public abstract class Feature<T extends FeatureInput>
     }
 
     public String descriptionLong() {
-        return descriptionBean();
+        return describeBean();
     }
 
     /**
@@ -126,9 +126,9 @@ public abstract class Feature<T extends FeatureInput>
 
     public String descriptionWithCustomName() {
         if (!getCustomName().isEmpty()) {
-            return String.format("%s: %s", getCustomName(), descriptionBean());
+            return String.format("%s: %s", getCustomName(), describeBean());
         } else {
-            return descriptionBean();
+            return describeBean();
         }
     }
 
@@ -163,11 +163,11 @@ public abstract class Feature<T extends FeatureInput>
             throws BeanMisconfiguredException {
 
         return FeatureListFactory.wrapReuse(
-                findChildrenOfClass(getOrCreateBeanFields(), Feature.class));
+                findFieldsOfClass(Feature.class));
     }
 
     public String describeParams() {
-        return describeChildBeans();
+        return describeChildren();
     }
 
     /**

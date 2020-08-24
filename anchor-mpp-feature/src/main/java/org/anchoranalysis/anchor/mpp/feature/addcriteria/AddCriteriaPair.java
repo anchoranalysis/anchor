@@ -69,7 +69,7 @@ public abstract class AddCriteriaPair extends AnchorBean<AddCriteriaPair>
             throws IncludeMarksFailureException;
 
     @Override
-    public String descriptionBean() {
+    public String describeBean() {
         return getBeanName();
     }
 }

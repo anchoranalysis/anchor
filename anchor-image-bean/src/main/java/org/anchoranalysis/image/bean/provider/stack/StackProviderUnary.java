@@ -28,8 +28,8 @@ package org.anchoranalysis.image.bean.provider.stack;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.bean.Provider;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.bean.provider.Provider;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.stack.Stack;
 

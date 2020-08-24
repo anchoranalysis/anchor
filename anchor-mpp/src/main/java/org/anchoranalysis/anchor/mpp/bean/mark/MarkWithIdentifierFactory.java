@@ -53,7 +53,7 @@ public class MarkWithIdentifierFactory extends NullParamsBean<MarkWithIdentifier
     }
 
     @Override
-    public String descriptionBean() {
+    public String describeBean() {
         return String.format(
                 "%s templateMark=%s, referencePoissonIntensity=%f",
                 getBeanName(), templateMark.toString(), referencePoissonIntensity);

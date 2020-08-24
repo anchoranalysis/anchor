@@ -60,7 +60,7 @@ public class EllipseBounds extends EllipseBoundsWithoutRotation {
     }
 
     @Override
-    public String descriptionBean() {
+    public String describeBean() {
         return String.format(
                 "%s, radius=(%s), rotation=(%s)",
                 getBeanName(), getRadius().toString(), rotationAngle.toString());

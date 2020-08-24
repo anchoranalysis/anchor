@@ -28,6 +28,7 @@ package org.anchoranalysis.bean.permute.property;
 
 import lombok.Getter;
 import lombok.Setter;
+import java.util.Iterator;
 import org.anchoranalysis.bean.annotation.BeanField;
 
 /**
@@ -43,7 +44,7 @@ public abstract class PermutePropertySequence<T> extends PermutePropertyWithPath
     @BeanField @Getter @Setter private SequenceInteger sequence;
     // END BEAN PROPERTIES
 
-    protected SequenceIntegerIterator range() {
+    protected Iterator<Integer> range() {
         return sequence.iterator();
     }
 }

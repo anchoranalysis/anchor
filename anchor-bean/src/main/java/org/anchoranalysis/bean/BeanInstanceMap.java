@@ -32,10 +32,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 
-//
-
 /**
- * Maps a Java AnchorBean class to an object implementing it (including implementing a subclass).
+ * Maps a {@link AnchorBean} family-type to some beans belong to the family.
  *
  * @author Owen Feehan
  */
@@ -74,19 +72,19 @@ public class BeanInstanceMap {
     }
 
     /**
-     * Populates from a list of NamedBeans.
+     * Populates from a list of {@link NamedBean}.
      *
      * <p>Any existing map-entries are retained.
      *
-     * @param listNamedInstances list of NamedBeans. The name of each bean maps to the class in the
+     * @param listNamedInstances list of {@link NamedBean}. The name of each bean maps to the class in the
      *     map.
-     * @throws BeanMisconfiguredException if the list of NamedBeans contains an invalid class
+     * @throws BeanMisconfiguredException if the list of {@link NamedBean} contains an invalid class.
      */
     public void addFrom(List<NamedBean<?>> listNamedInstances) throws BeanMisconfiguredException {
 
         try {
-            for (NamedBean<?> nb : listNamedInstances) {
-                map.put(Class.forName(nb.getName()), nb.getValue());
+            for (NamedBean<?> namedBean : listNamedInstances) {
+                map.put(Class.forName(namedBean.getName()), namedBean.getValue());
             }
         } catch (ClassNotFoundException e) {
             throw new BeanMisconfiguredException(

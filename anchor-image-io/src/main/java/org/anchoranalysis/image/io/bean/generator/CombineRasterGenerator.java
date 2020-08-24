@@ -63,7 +63,7 @@ public class CombineRasterGenerator<T> extends AnchorBean<CombineRasterGenerator
     }
 
     @Override
-    public String descriptionBean() {
+    public String describeBean() {
         return getBeanName();
     }
 }

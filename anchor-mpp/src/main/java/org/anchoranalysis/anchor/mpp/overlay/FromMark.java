@@ -34,15 +34,12 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.object.properties.ObjectWithProperties;
+import lombok.AllArgsConstructor;
 
+@AllArgsConstructor
 class FromMark implements ScaledMaskCreator {
 
     private RegionMembershipWithFlags regionMembership;
-
-    public FromMark(RegionMembershipWithFlags regionMembership) {
-        super();
-        this.regionMembership = regionMembership;
-    }
 
     @Override
     public ObjectWithProperties createScaledMask(

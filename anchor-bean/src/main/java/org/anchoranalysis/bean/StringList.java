@@ -53,13 +53,13 @@ public class StringList extends AnchorBean<StringList> implements StringBeanColl
     @Getter private List<String> list = new ArrayList<>();
 
     @Override
-    public void add(String s) {
-        list.add(s);
+    public void add(String text) {
+        list.add(text);
     }
 
     @Override
-    public boolean contains(String s) {
-        return list.contains(s);
+    public boolean contains(String text) {
+        return list.contains(text);
     }
 
     @Override

@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.feature.bean.provider;
 
-import org.anchoranalysis.bean.Provider;
+import org.anchoranalysis.bean.provider.Provider;
 import org.anchoranalysis.feature.bean.FeatureRelatedBean;
 
 /**

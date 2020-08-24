@@ -27,7 +27,7 @@ package org.anchoranalysis.image.feature.bean.evaluator;
 
 import java.util.Optional;
 import org.anchoranalysis.bean.OptionalFactory;
-import org.anchoranalysis.bean.Provider;
+import org.anchoranalysis.bean.provider.Provider;
 import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsProvider;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;

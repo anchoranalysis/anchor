@@ -63,7 +63,7 @@ public class RotationBounds3D extends RotationBounds {
     }
 
     @Override
-    public String descriptionBean() {
+    public String describeBean() {
         return String.format(
                 "%s, rotation=(%f,%f,%f)",
                 getBeanName(), getRotationX(), getRotationY(), rotationZ);

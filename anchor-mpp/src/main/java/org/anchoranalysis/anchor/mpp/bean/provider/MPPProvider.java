@@ -27,7 +27,7 @@
 package org.anchoranalysis.anchor.mpp.bean.provider;
 
 import org.anchoranalysis.anchor.mpp.bean.MPPBean;
-import org.anchoranalysis.bean.Provider;
+import org.anchoranalysis.bean.provider.Provider;
 
 /**
  * @author Owen Feehan

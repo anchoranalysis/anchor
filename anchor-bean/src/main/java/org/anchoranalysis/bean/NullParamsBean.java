@@ -34,8 +34,10 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.log.Logger;
 
 /**
+ * A base class for beans that require initialization but the initializations needs no parameters.
+ * 
  * @author Owen Feehan
- * @param <T> bean-type
+ * @param <T> bean family-type
  */
 public abstract class NullParamsBean<T> extends InitializableBean<T, NullInitParams> {
 
