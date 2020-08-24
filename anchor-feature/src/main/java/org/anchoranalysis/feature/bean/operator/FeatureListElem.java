@@ -58,7 +58,6 @@ public abstract class FeatureListElem<T extends FeatureInput> extends Feature<T>
      * A string description of all the items of the list concatenated together with a character in
      * between
      *
-     * @param list
      * @param operatorDscr
      * @return
      */

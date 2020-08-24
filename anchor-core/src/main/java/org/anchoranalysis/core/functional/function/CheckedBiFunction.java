@@ -1,5 +1,7 @@
 package org.anchoranalysis.core.functional.function;
 
+import java.util.function.BiFunction;
+
 /*-
  * #%L
  * anchor-core
@@ -27,7 +29,7 @@ package org.anchoranalysis.core.functional.function;
  */
 
 /**
- * Like {@java.util.BiFunction} but can also throw a checked exception.
+ * Like {@link BiFunction} but can also throw a checked exception.
  *
  * @author Owen Feehan
  * @param <S> first parameter-type

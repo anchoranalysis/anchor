@@ -37,7 +37,6 @@ import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectCollectionFactory;
 import org.anchoranalysis.io.bean.deserializer.Deserializer;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
-import org.anchoranalysis.io.error.AnchorIOException;
 
 class ReadObjectsFromHDF5 implements Deserializer<ObjectCollection> {
 
@@ -69,7 +68,6 @@ class ReadObjectsFromHDF5 implements Deserializer<ObjectCollection> {
      * @param rootPath a path in the HDF5, NOTE it should always end in a forward-slash
      * @return
      * @throws DeserializationFailedException
-     * @throws AnchorIOException
      */
     private ObjectCollection readObjects(IHDF5Reader reader, String rootPath)
             throws DeserializationFailedException {

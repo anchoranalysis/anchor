@@ -88,25 +88,22 @@ public class SequentialSession<T extends FeatureInput> implements FeatureCalcula
     /**
      * Constructor of a session
      *
-     * @param listFeatures the features that will be calculated in this session
+     * @param features the features that will be calculated in this session
      */
-    SequentialSession(Iterable<Feature<T>> iterFeatures) {
-        this(iterFeatures, new BoundReplaceStrategy<>(ReuseSingletonStrategy::new));
+    SequentialSession(Iterable<Feature<T>> features) {
+        this(features, new BoundReplaceStrategy<>(ReuseSingletonStrategy::new));
     }
 
     /**
      * Constructor of a session
      *
-     * @param listFeatures the features that will be calculated in this session
-     * @param prependFeatureName a string that can be prepended to feature-ID references e.g. when
-     *     looking for featureX, concat(prependFeatureName,featureX) is also considered. This helps
-     *     with scoping.
+     * @param features the features that will be calculated in this session
      */
     SequentialSession(
-            Iterable<Feature<T>> iterFeatures,
+            Iterable<Feature<T>> features,
             BoundReplaceStrategy<T, ? extends ReplaceStrategy<T>> replacePolicyFactory) {
         this.replacePolicyFactory = replacePolicyFactory;
-        this.listFeatures = FeatureListFactory.fromIterable(iterFeatures);
+        this.listFeatures = FeatureListFactory.fromIterable(features);
     }
 
     /**

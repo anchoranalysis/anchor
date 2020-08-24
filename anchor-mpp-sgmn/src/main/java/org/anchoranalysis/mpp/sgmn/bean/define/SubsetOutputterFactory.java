@@ -44,8 +44,8 @@ import org.anchoranalysis.mpp.io.output.StackOutputKeys;
 import org.anchoranalysis.mpp.sgmn.define.OutputterDirectories;
 
 /**
- * This class will expect for the following second-level output keys: {@link StackOutputKeys.MARKS}
- * {@link StackOutputKeys.HISTOGRAM} {@link StackOutputKeys.OBJECTS}
+ * This class will expect for the following second-level output keys: {@link StackOutputKeys#MARKS}
+ * {@link StackOutputKeys#HISTOGRAM} {@link StackOutputKeys#OBJECTS}
  *
  * @author Owen Feehan
  */

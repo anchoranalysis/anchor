@@ -178,7 +178,7 @@ public class PointsFromVoxels {
      * Consumes a three dimensional double point for each ON voxel (with a possible shift)
      *
      * @param voxels binary-voxels where each ON voxel produces a point
-     * @param shift adds this shift to each point
+     * @param add adds this shift to each point
      * @param consumer called for each point
      */
     private static void consumePoints3d(

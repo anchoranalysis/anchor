@@ -53,7 +53,7 @@ public abstract class AnchorBean<F> {
      * Lazy-loading of a list of the fields associated with properties of the bean.
      *
      * <p>We cache this in the class, to avoid having to regenerate it every time an object is
-     * duplicated, initialized, or {@link #checkInitParams} is called etc.
+     * duplicated, initialized, or {@link #checkMisconfigured} is called etc.
      */
     private List<Field> listBeanFields;
 

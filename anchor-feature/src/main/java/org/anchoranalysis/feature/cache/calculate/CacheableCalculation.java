@@ -61,7 +61,7 @@ public abstract class CacheableCalculation<S, T extends FeatureInput, E extends 
      * @param input If there is no cached-value, and the calculation occurs, this input is used.
      *     Otherwise ignored.
      * @return the result of the calculation
-     * @throws ExecuteException if the calculation cannot finish, for whatever reason
+     * @throws E if the calculation cannot finish for whatever reason
      */
     synchronized S getOrCalculate(T input) throws E {
 

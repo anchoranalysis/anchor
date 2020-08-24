@@ -464,7 +464,7 @@ public class ObjectMask {
     /**
      * Creates an object-mask with a subrange of the slices.
      *
-     * <p>This will always reuse the existing voxel-buffers.</p.
+     * <p>This will always reuse the existing voxel-buffers.</p>.
      *
      * @param zMin minimum z-slice index, inclusive.
      * @param zMax maximum z-slice index, inclusive.
@@ -504,7 +504,7 @@ public class ObjectMask {
      * for the rest.
      *
      * <p>A new voxel-buffer is always created for this operation i.e. the existing box is never
-     * reused like sometimes in {@link #region}.</p.
+     * reused like sometimes in {@link #region}.</p>.
      *
      * @param box bounding-box in absolute coordinates, that must at least partially intersect with
      *     the current object-mask bounds.

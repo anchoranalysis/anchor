@@ -271,7 +271,7 @@ public class CheckedStream {
      * @param param the parameter to apply to the function
      * @param function the function
      * @return the return-value of the function
-     * @throws ConvertedToRuntimeException a run-time exception if an exception is thrown by {@link
+     * @throws ConvertedToRuntimeException a run-time exception if an exception is thrown by {@code
      *     function}
      */
     private static <S, T, E extends Exception> T suppressCheckedException(

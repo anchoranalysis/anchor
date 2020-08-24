@@ -68,7 +68,7 @@ public abstract class Thresholder extends NullParamsBean<VoxelsThresholder> {
      * voxel values representing ON and OFF)
      *
      * <p>If a mask is used, the voxels outside the object-mask are left unchanged. They will be
-     * either identical to the input-volume or 0 if a new buffer needs to be created.</p.
+     * either identical to the input-volume or 0 if a new buffer needs to be created.</p>.
      *
      * @param voxels the voxels to be thresholded
      * @param binaryValues what binary values to be used in the output

@@ -46,10 +46,9 @@ public interface ProcessVoxelSliceTwo<S extends Buffer, T extends Buffer> {
     /**
      * Processes a voxel location in a buffer
      *
-     * @param point a point with global coordinates
-     * @param buffer first buffer for the current slice for which {@code offset} refers to a
+     * @param buffer1 first buffer for the current slice for which {@code offset} refers to a
      *     particular location
-     * @param buffer second buffer for the current slice for which {@code offset} refers to a
+     * @param buffer2 second buffer for the current slice for which {@code offset} refers to a
      *     particular location
      * @param offset an offset value for the current slice (i.e. indexing XY only, but not Z)
      */

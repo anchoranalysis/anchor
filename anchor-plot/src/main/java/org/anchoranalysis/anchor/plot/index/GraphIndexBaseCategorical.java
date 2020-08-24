@@ -66,7 +66,6 @@ public abstract class GraphIndexBaseCategorical<T, S extends CategoryDataset>
     /**
      * Creates a sample dataset
      *
-     * @throws GeneralException
      * @throws GetOperationFailedException
      */
     @Override

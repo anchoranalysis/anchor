@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.mpp.io.bean.input;
 
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.function.Function;
@@ -157,7 +156,6 @@ class AppendHelper {
      * @param extractMap extracts an OperationMap from inputObject
      * @param reader converts from a path to the object of interest
      * @param debugMode
-     * @throws IOException
      */
     private static <T> void append(
             MultiInput inputObject,

@@ -43,7 +43,7 @@ public abstract class FeatureHistogramStatistic extends FeatureHistogram {
      */
     @BeanField @Getter @Setter private boolean exceptionIfEmpty = true;
 
-    /** The value to return iff {@link #exceptionifEmpty} is false */
+    /** The value to return iff {@code exceptionifEmpty} is false */
     @BeanField @Getter @Setter private double valueIfEmpty = 0;
     // END BEAN PROPERTIES
 

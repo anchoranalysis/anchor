@@ -65,30 +65,28 @@ public class DetermineWhetherIntersectingVoxelsBinary {
     }
 
     /**
-     * @param src
-     * @param other
+     * @param voxels1
+     * @param voxels2
      * @param boxIntersect
-     * @param onMask1
-     * @param onMask2
      * @return Point3i if intersection exists, then the first point of intersection found
      *     (newly-created), or else empty if no intersection exists
      */
     private Optional<Point3i> hasIntersectingVoxelsInBoundingBox(
-            BoundedVoxels<ByteBuffer> src,
-            BoundedVoxels<ByteBuffer> other,
+            BoundedVoxels<ByteBuffer> voxels1,
+            BoundedVoxels<ByteBuffer> voxels2,
             BoundingBox boxIntersect) {
 
         IntersectionBBox box =
-                IntersectionBBox.create(src.boundingBox(), other.boundingBox(), boxIntersect);
+                IntersectionBBox.create(voxels1.boundingBox(), voxels2.boundingBox(), boxIntersect);
 
         // Otherwise we count the number of pixels that are not empty
         //  in both bounded-voxels in the intersecting region
         for (int z = box.z().min(); z < box.z().max(); z++) {
 
-            ByteBuffer buffer = src.voxels().sliceBuffer(z);
+            ByteBuffer buffer = voxels1.voxels().sliceBuffer(z);
 
             int zOther = z + box.z().rel();
-            ByteBuffer bufferOther = other.voxels().sliceBuffer(zOther);
+            ByteBuffer bufferOther = voxels2.voxels().sliceBuffer(zOther);
 
             buffer.clear();
             bufferOther.clear();

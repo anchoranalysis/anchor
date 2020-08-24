@@ -1,5 +1,7 @@
 package org.anchoranalysis.core.functional.function;
 
+import java.util.function.IntFunction;
+
 /*-
  * #%L
  * anchor-core
@@ -27,7 +29,7 @@ package org.anchoranalysis.core.functional.function;
  */
 
 /**
- * Like {@java.util.IntFunction} but can also thrown an exception.
+ * Like {@link IntFunction} but can also thrown an exception.
  *
  * @author Owen Feehan
  * @param <T> return-type

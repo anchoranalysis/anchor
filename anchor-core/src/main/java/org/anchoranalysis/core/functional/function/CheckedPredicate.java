@@ -29,7 +29,7 @@ import java.util.function.Predicate;
  */
 
 /**
- * Like {@java.util.Predicate} but can also throw an exception.
+ * Like {@link Predicate} but can also throw an exception.
  *
  * @author Owen Feehan
  * @param <T> type of object to test

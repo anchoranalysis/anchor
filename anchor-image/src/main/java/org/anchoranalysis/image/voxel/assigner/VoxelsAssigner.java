@@ -108,8 +108,8 @@ public interface VoxelsAssigner {
     /**
      * Sets voxels to a value if the position is ON in either of two masks
      *
-     * @param voxels1 first-object
-     * @param voxels2 second-object
+     * @param object1 first-object
+     * @param object2 second-object
      * @param restrictTo only process this region (which is sensibly part or all of the intersection
      *     of the two objects bounding-boxes)
      */

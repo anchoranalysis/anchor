@@ -206,7 +206,6 @@ public class Channel {
      * Flattens the voxels in the z direction, only if necessary (i.e. there's more than 1 z
      * dimension).
      *
-     * @param voxels voxels to be flattened (i.e. 3D)
      * @param flattener function to perform the flattening
      * @return flattened box (i.e. 2D)
      */

@@ -83,10 +83,6 @@ class ApplyMergeStrategy extends MergeStrategy {
      * @param toKeep the path which will be kept
      * @param toCombine the path which will be combined with toKeep
      * @param insertLeft if TRUE toCombine is added at the start toKeep, if FALSE rather at the end
-     * @param loopInsert1 first set of additional points that are inserted between the appending,
-     *     but looped to make sure it starts and ends in the same place
-     * @param loopInsert2 second set of additional points that are inserted between the appending,
-     *     but looped to make sure it starts and ends in the same place
      */
     private static void appendListToPath(
             ContiguousPixelPath toKeep, List<Point3i> toCombine, boolean insertLeft) {

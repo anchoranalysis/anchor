@@ -55,8 +55,6 @@ public class TestLoader {
 
     /**
      * Makes a new test-data loader
-     *
-     * @param pathTestDataRoot path to where the test-data is stored
      */
     private TestLoader(String root) {
         this(Paths.get(root));
@@ -65,7 +63,7 @@ public class TestLoader {
     /**
      * Makes a new test-data loader
      *
-     * @param pathTestDataRoot path to where the test-data is stored
+     * @param root path to where the test-data is stored
      */
     private TestLoader(Path root) {
         super();

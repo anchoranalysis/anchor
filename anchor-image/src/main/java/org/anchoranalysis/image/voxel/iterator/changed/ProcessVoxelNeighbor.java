@@ -64,9 +64,9 @@ public interface ProcessVoxelNeighbor<T> {
     /**
      * Processes a particular point
      *
-     * @param zChange the change in X-dimension to reach this neighbor relative to the source
+     * @param xChange the change in x-dimension to reach this neighbor relative to the source
      *     coordinate
-     * @param yChange the change in Y-dimension to reach this neighbor relative to the source
+     * @param yChange the change in y-dimension to reach this neighbor relative to the source
      *     coordinate
      */
     void processPoint(int xChange, int yChange);

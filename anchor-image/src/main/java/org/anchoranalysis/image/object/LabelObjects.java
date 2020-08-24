@@ -131,9 +131,6 @@ public class LabelObjects {
      *     object-mask (before scaling any any other operation)
      * @param operationAfterMap an operation applied to each-object mask after they are maybe added
      *     to {@code mapLabelsToBefore} but before their labels are written to voxels
-     * @param overlappingObjectConsumer if set, this is called once with any overlapping object
-     *     (after {@code operationAfterMap is applied}). Otherwise, an exception is thrown if an
-     *     overlapping object is encountered.
      * @throws CreateException if there are more than 255 objects, or if two objects overlap (and
      *     {@code overlappingObjectConsumer} is not set)
      */

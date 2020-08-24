@@ -317,7 +317,7 @@ public class ObjectCollectionFactory {
      *     in the bounding-box)
      * @return a newly created ObjectCollection
      * @throws E
-     * @throw E if an exception is thrown during mapping
+     * @throws E if an exception is thrown during mapping
      */
     public static <T, E extends Exception> ObjectCollection filterAndMapWithIndexFrom(
             List<T> list,

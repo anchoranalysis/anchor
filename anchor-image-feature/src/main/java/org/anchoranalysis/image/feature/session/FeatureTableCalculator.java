@@ -51,7 +51,6 @@ public interface FeatureTableCalculator<T extends FeatureInput> extends FeatureC
      * @param initParams
      * @param energyStack
      * @param logger
-     * @param features
      */
     void start(ImageInitParams initParams, Optional<EnergyStack> energyStack, Logger logger)
             throws InitException;

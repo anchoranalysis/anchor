@@ -217,8 +217,6 @@ public class WriteIntoFolder implements TestRule {
 
     /**
      * Finds dimensions that place the objects in the center
-     *
-     * @throws OperationFailedException
      */
     private static Dimensions dimensionsToCenterObjects(ObjectCollection objects) {
 

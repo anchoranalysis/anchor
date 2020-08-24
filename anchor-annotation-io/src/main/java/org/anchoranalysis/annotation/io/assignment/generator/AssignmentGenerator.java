@@ -75,12 +75,7 @@ public class AssignmentGenerator extends RasterGenerator {
     /**
      * @param background
      * @param assignment
-     * @param colorSetGeneratorPaired
-     * @param colorSetGeneratorUnpaired
      * @param mipOutline
-     * @param factory
-     * @param replaceMatchesWithSolids if TRUE, then any matching objects are displayed as solids,
-     *     rather than outlines. if FALSE, all objects are displayed as outlines.
      */
     AssignmentGenerator(
             DisplayStack background,

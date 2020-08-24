@@ -273,7 +273,7 @@ public class BoundedVoxels<T extends Buffer> {
     /**
      * Creates an box with a subrange of the slices.
      *
-     * <p>This will always reuse the existing voxel-buffers.</p.
+     * <p>This will always reuse the existing voxel-buffers.</p>.
      *
      * @param zMin minimum z-slice index, inclusive.
      * @param zMax maximum z-slice index, inclusive.
@@ -336,7 +336,7 @@ public class BoundedVoxels<T extends Buffer> {
      * voxelValueForRest}.
      *
      * <p>A new voxel-buffer is always created for this operation i.e. the existing box is never
-     * reused like sometimes in {@link #region}.</p.
+     * reused like sometimes in {@link #region}.</p>.
      *
      * @param box bounding-box in absolute coordinates, that must at least partially intersect with
      *     the current bounds.
@@ -428,7 +428,7 @@ public class BoundedVoxels<T extends Buffer> {
                 voxels.assignValue(valueToAssign), boundingBox.cornerMin());
     }
 
-    /** Extracts value from voxels using <i>global</u> coordinates */
+    /** Extracts value from voxels using <i>global</i> coordinates */
     public final VoxelsExtracter<T> extract() {
         return extracterGlobal;
     }
@@ -453,8 +453,8 @@ public class BoundedVoxels<T extends Buffer> {
      *
      * @param neg how much to grow in the negative direction
      * @param pos how much to grow in the negative direction
-     * @param a region to clip to, which we can't grow beyond
-     * @return a bounding box: the crnr is the relative-position to the current bounding box
+     * @param clipRegion a region to clip to, which we can't grow beyond
+     * @return a bounding box: the corner is the relative-position to the current bounding box
      *     (multipled by -1), the extent is absolute
      */
     private BoundingBox createGrownBoxRelative(
