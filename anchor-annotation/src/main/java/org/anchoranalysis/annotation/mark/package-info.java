@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-mpp-sgmn
+ * anchor-annotation
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- *
+ * 
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- *
+ * 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -23,35 +23,11 @@
  * THE SOFTWARE.
  * #L%
  */
-
-package org.anchoranalysis.mpp.sgmn.transformer;
-
-import lombok.Getter;
-import lombok.Setter;
-import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.OperationFailedException;
-
 /**
- * Combines a transformation from {@code S} to {@code U} with one from {@code U} to {@code T}
- *
+ * Annotations that use one or more marks to describe entities in an image.
+ * 
  * @author Owen Feehan
- * @param <S> source type
- * @param <T> destination type
- * @param <U> intermediate type
+ *
  */
-public class Compose<S, T, U> extends StateTransformerBean<S, T> {
+package org.anchoranalysis.annotation.mark;
 
-    // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private StateTransformerBean<S, U> first;
-
-    @BeanField @Getter @Setter private StateTransformerBean<U, T> second;
-    // END BEAN PROPERTIES
-
-    @Override
-    public T transform(S in, TransformationContext context) throws OperationFailedException {
-
-        U inter = first.transform(in, context);
-
-        return second.transform(inter, context);
-    }
-}

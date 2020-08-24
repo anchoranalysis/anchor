@@ -36,7 +36,7 @@ import org.anchoranalysis.image.object.ObjectCollectionFactory;
 import org.anchoranalysis.image.object.ObjectMask;
 
 /**
- * Like an {@ObjectCollection} but each object has associated properties.
+ * Like an {@link ObjectCollection} but each object has associated properties.
  *
  * @author Owen Feehan
  */

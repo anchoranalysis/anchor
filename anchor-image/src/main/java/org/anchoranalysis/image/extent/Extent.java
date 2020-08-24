@@ -396,7 +396,7 @@ public final class Extent implements Serializable {
     }
 
     /**
-     * Calls processor once for each x and y-values but <i>only</b> passing an offset
+     * Calls processor once for each x and y-values but <i>only</i> passing an offset
      *
      * <p>This occurs in ascending order (x-dimension increments first, y-dimension increments second)
      *

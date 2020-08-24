@@ -48,7 +48,7 @@ public class BoundingBoxCalculator {
      * @param radius size of scalar radius
      * @param do3D 3 dimensions (XYZ) iff TRUE, otherwise 2 dimensions (XZ)
      * @param bndScene bounds on the scene, used to clip the bounding-box
-     * @return
+     * @return a newly created bounding-box
      */
     public static BoundingBox boxFromBounds(
             Point3d pos, double radius, boolean do3D, Dimensions bndScene) {
@@ -60,16 +60,16 @@ public class BoundingBoxCalculator {
      * Calculates a bounding box for a point with varying radii in each dimension (that have already
      * been resolved into a matrix)
      *
-     * @param pos center-point
+     * @param center center-point
      * @param radiiMatrix a matrix with resolved-radii for each dimension
      * @param do3D 3 dimensions (XYZ) iff TRUE, otherwise 2 dimensions (XZ)
-     * @param bndScene bounds on the scene, used to clip the bounding-box
-     * @return
+     * @param dimensions image-bounds, used to clip the bounding-box
+     * @return a newly created bounding-box
      */
     public static BoundingBox boxFromBounds(
-            Point3d pos, DoubleMatrix1D radiiMatrix, boolean do3D, Dimensions bndScene) {
-        Point3i minPt = subTwoPointsClip(pos, radiiMatrix, do3D, bndScene);
-        Point3i maxPt = addTwoPointsClip(pos, radiiMatrix, do3D, bndScene);
+            Point3d center, DoubleMatrix1D radiiMatrix, boolean do3D, Dimensions dimensions) {
+        Point3i minPt = subTwoPointsClip(center, radiiMatrix, do3D, dimensions);
+        Point3i maxPt = addTwoPointsClip(center, radiiMatrix, do3D, dimensions);
 
         assert maxPt.x() >= minPt.x();
         assert maxPt.y() >= minPt.y();

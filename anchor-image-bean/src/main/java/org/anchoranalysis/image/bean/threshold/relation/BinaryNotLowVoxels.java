@@ -37,7 +37,7 @@ import org.anchoranalysis.image.binary.values.BinaryValues;
  * <p>Uses the default "low" value of 255
  *
  * <p>Note this is not the same as selecting "high" pixels which would only select pixels of value
- * 255. There's fuzzy undefined space > 1 and < 255.
+ * 255. There's undefined space {@code > 1} and {@code < 255}.
  *
  * @author Owen Feehan
  */

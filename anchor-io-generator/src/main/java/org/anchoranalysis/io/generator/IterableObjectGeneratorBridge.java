@@ -29,31 +29,26 @@ package org.anchoranalysis.io.generator;
 import org.anchoranalysis.core.functional.function.CheckedFunction;
 import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import lombok.RequiredArgsConstructor;
 
 /**
- * Allows us to call an IterableGenerator<ExternalType> as if it was an
- * IterableGenerator<InternalType> using an interface function to connect the two
+ * Allows us to call an {@code IterableGenerator<V,S>} as if it was an
+ * {@code IterableGenerator<T,S>} using an function to connect the two
  *
  * @author Owen Feehan
  * @param <S> generator-type
  * @param <T> exposed-iterator type
  * @param <V> hidden-iterator-type
  */
+@RequiredArgsConstructor
 public class IterableObjectGeneratorBridge<S, T, V> implements IterableObjectGenerator<T, S> {
 
+    // START REQUIRED ARGUMENTS
+    private final IterableObjectGenerator<V, S> internalGenerator;
+    private final CheckedFunction<T, V, ? extends Throwable> elementBridge;
+    // END REQUIRED ARGUMENTS
+    
     private T element;
-
-    private IterableObjectGenerator<V, S> internalGenerator;
-
-    private CheckedFunction<T, V, ? extends Throwable> elementBridge;
-
-    public IterableObjectGeneratorBridge(
-            IterableObjectGenerator<V, S> internalGenerator,
-            CheckedFunction<T, V, ? extends Throwable> elementBridge) {
-        super();
-        this.internalGenerator = internalGenerator;
-        this.elementBridge = elementBridge;
-    }
 
     @Override
     public T getIterableElement() {

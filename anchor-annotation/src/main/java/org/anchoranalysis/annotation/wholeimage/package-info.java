@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-bean
+ * anchor-annotation
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- *
+ * 
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- *
+ * 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -23,25 +23,10 @@
  * THE SOFTWARE.
  * #L%
  */
-
-package org.anchoranalysis.bean.xml;
-
-import org.apache.commons.configuration.XMLConfiguration;
-
 /**
- * For classes that wish to have a XmlConfiguration associated with them
- *
- * <p>The associateXml method is called after the class has been loaded with the BeanXMLLoader
- *
+ * An annotation that is a label applied to an image.
+ *  
  * @author Owen Feehan
+ *
  */
-@FunctionalInterface
-public interface IAssociateXmlUponLoad {
-
-    /**
-     * Associated
-     *
-     * @param xmlConfiguration the xml-configuration to associate with an object
-     */
-    void associateXml(XMLConfiguration xmlConfiguration);
-}
+package org.anchoranalysis.annotation.wholeimage;

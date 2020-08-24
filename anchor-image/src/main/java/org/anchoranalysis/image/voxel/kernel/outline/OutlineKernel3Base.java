@@ -36,10 +36,8 @@ public abstract class OutlineKernel3Base extends BinaryKernelMorph3Extent {
 
     public OutlineKernel3Base(
             BinaryValuesByte bv,
-            boolean outsideAtThreshold,
-            boolean useZ,
-            boolean ignoreAtThreshold) {
-        super(bv, outsideAtThreshold, useZ);
-        this.ignoreAtThreshold = ignoreAtThreshold;
+            OutlineKernelParameters params) {
+        super(bv, params.isOutsideAtThreshold(), params.isUseZ());
+        this.ignoreAtThreshold = params.isIgnoreAtThreshold();
     }
 }

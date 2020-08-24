@@ -44,6 +44,7 @@ public class MaskIfHighLow {
      * <tr><td>0</td><td>1</td><td>0</td></tr>
      * <tr><td>1</td><td>0</td><td>1</td></tr>
      * <tr><td>1</td><td>1</td><td>0</td></tr>
+     * <caption>truth table</caption>
      * </table>
      * 
      * @param first the first channel for operation  (and in which the result is written)

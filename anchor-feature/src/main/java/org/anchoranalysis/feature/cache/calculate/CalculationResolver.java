@@ -30,8 +30,7 @@ import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
- * Given a CacheableCalculation, a resolver searches among a cache to see if an existing calculation
- * already exists, and if so reuses.
+ * Searches a cache to reuses a {@link FeatureCalculation} if it already exists.
  *
  * <p>The purpose is to avoid repeating calculations that may be shared by more than one feature, or
  * more than one parameterization of a feature
@@ -42,21 +41,19 @@ import org.anchoranalysis.feature.input.FeatureInput;
 public interface CalculationResolver<T extends FeatureInput> {
 
     /**
-     * Returns an equivalent CachedCalculation to what is passed. Different caches implement
-     * different strategies.
+     * Searches for an equivalent calculation to {@code calculation}
      *
-     * @param cc the cached-calculation to find an equivalent for
-     * @return
+     * @param calculation the feature-calculation to find an equivalent for
+     * @return the corresponding resolved-calculation
      */
-    <S> ResolvedCalculation<S, T> search(FeatureCalculation<S, T> cc);
+    <S> ResolvedCalculation<S, T> search(FeatureCalculation<S, T> calculation);
 
     /**
-     * Returns an equivalent CachedCalculationMap to what is passed. Different caches implement
-     * different strategies.
+     * Searches for an equivalent calculation to {@code calculation}
      *
-     * @param cc the cached-calculation map to find an equivalent for
-     * @return
+     * @param calculation the {@link CacheableCalculationMap} to find an equivalent for
+     * @return the corresponding resolved-calculation
      */
     <S, U> ResolvedCalculationMap<S, T, U> search(
-            CacheableCalculationMap<S, T, U, FeatureCalculationException> cc);
+            CacheableCalculationMap<S, T, U, FeatureCalculationException> calculation);
 }

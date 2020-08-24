@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-feature
+ * anchor-bean
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -24,57 +24,24 @@
  * #L%
  */
 
-package org.anchoranalysis.feature.cache;
+package org.anchoranalysis.bean.xml;
 
-import lombok.EqualsAndHashCode;
+import org.apache.commons.configuration.XMLConfiguration;
 
 /**
- * A unique identifier for a child-cache name, that uses a class and optionally additionally a
- * part-name
+ * For classes that wish to have a XmlConfiguration associated with them
  *
- * <ul>
- * <li>a class: guaranteed to be unique for the class
- * <li>an optional part-name (string): a further division of the class into different caches
- * </ul>
+ * <p>The associateXml method is called after the class has been loaded with the BeanXMLLoader
+ *
+ * @author Owen Feehan
  */
-@EqualsAndHashCode
-public class ChildCacheName {
-
-    private Class<?> cls;
-    private String part;
+@FunctionalInterface
+public interface AssociateXmlUponLoad {
 
     /**
-     * Uses only the class as an identifier - and a blank part-name
+     * Associated
      *
-     * @param cls class
+     * @param xmlConfiguration the xml-configuration to associate with an object
      */
-    public ChildCacheName(Class<?> cls) {
-        this(cls, "");
-    }
-
-    /**
-     * Uses only the class as an identifier - and a integer part-name
-     *
-     * @param cls class
-     */
-    public ChildCacheName(Class<?> cls, int id) {
-        this(cls, String.valueOf(id));
-    }
-
-    /**
-     * Uses both the class and a part-name as an identifier
-     *
-     * @param cls class
-     * @param part part-name
-     */
-    public ChildCacheName(Class<?> cls, String part) {
-        super();
-        this.cls = cls;
-        this.part = part;
-    }
-
-    @Override
-    public String toString() {
-        return String.format("%s:%s", cls.getCanonicalName(), part);
-    }
+    void associateXml(XMLConfiguration xmlConfiguration);
 }

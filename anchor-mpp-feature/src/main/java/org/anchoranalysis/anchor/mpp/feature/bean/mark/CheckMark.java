@@ -34,10 +34,16 @@ import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.energy.EnergyStack;
 
+/**
+ * A predicate on a mark to check if a condition has been satisfied.
+ * 
+ * @author Owen Feehan
+ *
+ */
 public abstract class CheckMark extends MPPBean<CheckMark> implements CompatibleWithMark {
 
     /**
-     * Called before any calls to check()
+     * Called before any calls to {@link #check}
      *
      * @param energyStack
      */
@@ -46,14 +52,14 @@ public abstract class CheckMark extends MPPBean<CheckMark> implements Compatible
     /**
      * Checks a mark
      *
-     * @param mark
-     * @param regionMap
-     * @param energyStack
-     * @return
+     * @param mark the mark to check
+     * @param regionMap the region-map
+     * @param energyStack the corresponding energy-stack for the mark
+     * @return true if the mark satisfies the <i>check</i>, false otherwise
      */
     public abstract boolean check(Mark mark, RegionMap regionMap, EnergyStack energyStack)
             throws CheckException;
 
-    /** Called after any calls to check() */
+    /** Called after any calls to {@link #check} */
     public void end() {}
 }

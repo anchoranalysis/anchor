@@ -36,23 +36,23 @@ import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.session.cache.creator.CacheCreatorSimple;
 import org.anchoranalysis.feature.session.strategy.replace.ReplaceStrategy;
 import org.anchoranalysis.feature.shared.SharedFeatureMulti;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 /**
  * Attaches a replacement-strategy to a session lazily (i.e. when it is needed)
  *
  * <p>This is because as the relevant parameters are not available when we need to call the
- * constructor</op>.
+ * constructor.
  */
+@RequiredArgsConstructor
 public class BoundReplaceStrategy<T extends FeatureInput, S extends ReplaceStrategy<T>> {
 
-    private Optional<S> strategy = Optional.empty();
-
-    private Function<CacheCreator, S> funcCreateStrategy;
-
-    public BoundReplaceStrategy(Function<CacheCreator, S> funcCreateStrategy) {
-        super();
-        this.funcCreateStrategy = funcCreateStrategy;
-    }
+    // START REQUIRED ARGUMENTS
+    private final Function<CacheCreator, S> funcCreateStrategy;
+    // END REQUIRED ARGUMENTS
+    
+    @Getter private Optional<S> strategy = Optional.empty();
 
     public ReplaceStrategy<T> bind(
             FeatureList<T> featureList,
@@ -65,9 +65,5 @@ public class BoundReplaceStrategy<T extends FeatureInput, S extends ReplaceStrat
             strategy = Optional.of(funcCreateStrategy.apply(cacheCreator));
         }
         return strategy.get();
-    }
-
-    public Optional<S> getStrategy() {
-        return strategy;
     }
 }

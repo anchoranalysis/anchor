@@ -218,9 +218,9 @@ public final class BoundingBox implements Serializable {
     }
 
     /**
-     * The maximum (right-most) point <i>inside</i> the box
+     * The maximum (right-most) point <i>inside</i> the box.
      *
-     * <p>This means that iterators should be {@code <= #calculateCornerMax()}
+     * <p>This means that iterators should be {@code <= calculateCornerMax()}.
      *
      * @return the maximum point inside the box in each dimension
      */
@@ -233,11 +233,11 @@ public final class BoundingBox implements Serializable {
     }
 
     /**
-     * The maximum (right-most) point just <i> outside the box
+     * The maximum (right-most) point just outside the box.
      *
-     * <p>It is equivalent to {@code < #calculateCornerMax()} plus {@code 1} in each dimension.
+     * <p>It is equivalent to {@code < calculateCornerMax()} plus {@code 1} in each dimension.
      *
-     * <p>This means that iterators should be {@code < #calculateCornerMaxExclusive()}
+     * <p>This means that iterators should be {@code < calculateCornerMaxExclusive()}.
      *
      * @return the maximum point inside the box in each dimension
      */
@@ -397,7 +397,7 @@ public final class BoundingBox implements Serializable {
     }
 
     /**
-     * Reflects the bounding box through the origin (i.e. x,y,z -> -x, -y, -z)
+     * Reflects the bounding box through the origin (i.e. {@code x, y, z} becomes {@code -x, -y, -z})
      *
      * @return a bounding-box reflected through the origin
      */

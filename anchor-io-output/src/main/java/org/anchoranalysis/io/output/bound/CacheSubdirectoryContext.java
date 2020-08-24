@@ -50,11 +50,11 @@ public class CacheSubdirectoryContext {
     private Map<Optional<String>, BoundIOContext> mapOutputManagers = new HashMap<>();
 
     /**
-     * Gets (from the cache if it's already there) subdirectory for a given-name
+     * Gets (from the cache if it's already there) a context for a subdirectory of given-name
      *
      * @param subdirectoryName the sub-directory name. if not set, then the parentContext is
      *     returned instead.
-     * @return
+     * @return either an existing context for the sub-directory or a newly created one
      */
     public BoundIOContext get(Optional<String> subdirectoryName) {
         return mapOutputManagers.computeIfAbsent(

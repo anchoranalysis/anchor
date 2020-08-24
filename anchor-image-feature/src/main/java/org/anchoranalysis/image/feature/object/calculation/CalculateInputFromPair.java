@@ -36,12 +36,13 @@ import org.anchoranalysis.image.object.ObjectMask;
 /**
  * Calculates a single-input from a pair
  *
- * <p><div> Three states are possible:
+ * <p>Three states are possible:
  *
  * <ul>
  *   <li>First
  *   <li>Second
- *   <li>Merged </div>
+ *   <li>Merged
+ * </ul>
  *
  * @author Owen Feehan
  */
