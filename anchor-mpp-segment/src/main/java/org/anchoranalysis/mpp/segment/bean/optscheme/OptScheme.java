@@ -26,8 +26,8 @@
 
 package org.anchoranalysis.mpp.segment.bean.optscheme;
 
-import org.anchoranalysis.anchor.mpp.feature.mark.ListUpdatableMarkSetCollection;
 import org.anchoranalysis.bean.AnchorBean;
+import org.anchoranalysis.mpp.feature.mark.ListUpdatableMarkSetCollection;
 import org.anchoranalysis.mpp.segment.bean.kernel.proposer.KernelProposer;
 import org.anchoranalysis.mpp.segment.optscheme.OptSchemeContext;
 import org.anchoranalysis.mpp.segment.optscheme.OptTerminatedEarlyException;

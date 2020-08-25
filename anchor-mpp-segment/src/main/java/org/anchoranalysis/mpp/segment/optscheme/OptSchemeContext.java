@@ -28,12 +28,12 @@ package org.anchoranalysis.mpp.segment.optscheme;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.anchoranalysis.anchor.mpp.feature.energy.scheme.EnergySchemeWithSharedFeatures;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.mpp.bean.mark.MarkWithIdentifierFactory;
+import org.anchoranalysis.mpp.feature.energy.scheme.EnergySchemeWithSharedFeatures;
 import org.anchoranalysis.mpp.proposer.error.ErrorNodeNull;
 import org.anchoranalysis.mpp.segment.bean.optscheme.termination.TriggerTerminationCondition;
 import org.anchoranalysis.mpp.segment.kernel.KernelCalculationContext;

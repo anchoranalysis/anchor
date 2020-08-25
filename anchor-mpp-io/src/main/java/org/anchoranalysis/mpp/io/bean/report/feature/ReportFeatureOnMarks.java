@@ -29,7 +29,6 @@ package org.anchoranalysis.mpp.io.bean.report.feature;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.anchor.mpp.feature.bean.mark.collection.FeatureInputMarkCollection;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
@@ -40,6 +39,7 @@ import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.mpp.bean.provider.MarkCollectionProvider;
+import org.anchoranalysis.mpp.feature.bean.mark.collection.FeatureInputMarkCollection;
 import org.anchoranalysis.mpp.mark.MarkCollection;
 
 public class ReportFeatureOnMarks extends ReportFeatureForMPP<FeatureInputMarkCollection> {
