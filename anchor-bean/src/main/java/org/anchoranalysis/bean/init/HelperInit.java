@@ -48,7 +48,8 @@ class HelperInit {
      * @param logger logger
      * @throws InitException
      */
-    public static void initRecursive(AnchorBean<?> bean, PropertyInitializer<?> initializer, Logger logger)
+    public static void initRecursive(
+            AnchorBean<?> bean, PropertyInitializer<?> initializer, Logger logger)
             throws InitException {
 
         List<BeanAndParent> everything = new ArrayList<>();

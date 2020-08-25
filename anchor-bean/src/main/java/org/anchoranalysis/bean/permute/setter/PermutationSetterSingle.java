@@ -34,8 +34,9 @@ import org.anchoranalysis.bean.AnchorBean;
 /**
  * Sets a permutation from a list of fields
  *
- * <p>All fields must refer to either an {@link AnchorBean} or (as a corner case) a {@link java.util.List} of containing at least one item of type {@link
- *   AnchorBean}. The first item of the list will be taken as the corresponding Anchor-Bean.
+ * <p>All fields must refer to either an {@link AnchorBean} or (as a corner case) a {@link
+ * java.util.List} of containing at least one item of type {@link AnchorBean}. The first item of the
+ * list will be taken as the corresponding Anchor-Bean.
  *
  * @author Owen Feehan
  */

@@ -46,8 +46,7 @@ public class ObjectsMergedAsMaskGenerator extends ObjectsGenerator {
         super(dimensions);
     }
 
-    public ObjectsMergedAsMaskGenerator(
-            Dimensions dimensions, ObjectCollection objects) {
+    public ObjectsMergedAsMaskGenerator(Dimensions dimensions, ObjectCollection objects) {
         super(dimensions, objects);
     }
 

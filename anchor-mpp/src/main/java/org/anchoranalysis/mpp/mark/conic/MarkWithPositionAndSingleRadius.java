@@ -27,6 +27,7 @@
 package org.anchoranalysis.mpp.mark.conic;
 
 import static org.anchoranalysis.mpp.mark.conic.TensorUtilities.squared;
+
 import java.io.Serializable;
 import java.util.Optional;
 import lombok.AccessLevel;
@@ -44,7 +45,8 @@ import org.anchoranalysis.mpp.mark.QuickOverlapCalculation;
 
 /** Base-class for a conic that has a single radius (circle, sphere etc.) */
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public abstract class MarkWithPositionAndSingleRadius extends MarkWithPosition implements Serializable {
+public abstract class MarkWithPositionAndSingleRadius extends MarkWithPosition
+        implements Serializable {
 
     /** */
     private static final long serialVersionUID = 1L;
@@ -138,10 +140,14 @@ public abstract class MarkWithPositionAndSingleRadius extends MarkWithPosition i
     private transient QuickOverlapCalculation quickOverlap =
             (Mark mark, int regionID) -> {
                 if (getClass().equals(mark.getClass())) {
-                    MarkWithPositionAndSingleRadius markCast = ((MarkWithPositionAndSingleRadius) mark);
-                    double radiusSum = MarkWithPositionAndSingleRadius.this.radius + markCast.radius;
+                    MarkWithPositionAndSingleRadius markCast =
+                            ((MarkWithPositionAndSingleRadius) mark);
+                    double radiusSum =
+                            MarkWithPositionAndSingleRadius.this.radius + markCast.radius;
                     double distanceBetweenCenters =
-                            MarkWithPositionAndSingleRadius.this.getPos().distance(markCast.getPos());
+                            MarkWithPositionAndSingleRadius.this
+                                    .getPos()
+                                    .distance(markCast.getPos());
                     return radiusSum > distanceBetweenCenters;
                 } else {
                     throw new UnsupportedOperationException();

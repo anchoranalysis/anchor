@@ -30,11 +30,11 @@ import java.nio.ByteBuffer;
 import org.anchoranalysis.image.channel.converter.attached.histogram.ChannelConverterHistogramUpperLowerQuantileIntensity;
 
 // Scales by a quantile of the intensity values of an image
-public class ChannelConverterUpperLowerQuantileIntensity
-        extends DelegateToHistogram<ByteBuffer> {
+public class ChannelConverterUpperLowerQuantileIntensity extends DelegateToHistogram<ByteBuffer> {
 
-    public ChannelConverterUpperLowerQuantileIntensity(
-            double quantileLower, double quantileUpper) {
-        super(new ChannelConverterHistogramUpperLowerQuantileIntensity(quantileLower, quantileUpper));
+    public ChannelConverterUpperLowerQuantileIntensity(double quantileLower, double quantileUpper) {
+        super(
+                new ChannelConverterHistogramUpperLowerQuantileIntensity(
+                        quantileLower, quantileUpper));
     }
 }

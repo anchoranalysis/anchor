@@ -28,13 +28,13 @@ package org.anchoranalysis.annotation.mark;
 
 import java.util.Calendar;
 import java.util.Date;
+import lombok.Getter;
 import org.anchoranalysis.annotation.AnnotationWithMarks;
 import org.anchoranalysis.core.error.OptionalOperationUnsupportedException;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMap;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMapSingleton;
 import org.anchoranalysis.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.mpp.mark.MarkCollection;
-import lombok.Getter;
 
 /**
  * An annotation that consists of two sets of marks (accepted marks, and rejected marks) as well as
@@ -49,12 +49,13 @@ public class MarkAnnotation extends AnnotationWithMarks {
 
     /** Marks in annotation */
     private MarkCollection marks;
-    
+
     /** Marks covering area that should be rejected, can be NULL */
     @Getter private MarkCollection marksReject;
 
     /** Number of seconds since the UNIX epoch */
     @Getter private Date timeAnnotationLastUpdated;
+
     @Getter private boolean finished = false;
 
     // Hard-coded regionID
@@ -78,7 +79,8 @@ public class MarkAnnotation extends AnnotationWithMarks {
 
     // Marks the image as a whole as being rejected
     // We record the so far accepted/rejected configurations in case we change our mind lafter
-    public void markRejected(MarkCollection marks, MarkCollection marksReject, RejectionReason reason) {
+    public void markRejected(
+            MarkCollection marks, MarkCollection marksReject, RejectionReason reason) {
         accepted = false;
         finished = true;
         this.marks = marks;

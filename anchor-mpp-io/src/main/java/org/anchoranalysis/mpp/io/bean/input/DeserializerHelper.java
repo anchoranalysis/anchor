@@ -37,7 +37,8 @@ import org.anchoranalysis.mpp.mark.MarkCollection;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class DeserializerHelper {
 
-    private static XStreamDeserializer<MarkCollection> deserializerMarks = new XStreamDeserializer<>();
+    private static XStreamDeserializer<MarkCollection> deserializerMarks =
+            new XStreamDeserializer<>();
     private static XStreamDeserializer<MarkAnnotation> deserializerAnnotation =
             new XStreamDeserializer<>();
 

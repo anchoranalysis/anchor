@@ -26,11 +26,12 @@
 
 package org.anchoranalysis.mpp.segment.kernel.proposer;
 
-import org.anchoranalysis.mpp.segment.bean.kernel.Kernel;
 import lombok.AllArgsConstructor;
 import lombok.Value;
+import org.anchoranalysis.mpp.segment.bean.kernel.Kernel;
 
-@AllArgsConstructor @Value 
+@AllArgsConstructor
+@Value
 public class KernelWithIdentifier<T> {
 
     private Kernel<T> kernel;
@@ -39,5 +40,4 @@ public class KernelWithIdentifier<T> {
     public String getDescription() {
         return kernel.describeLast();
     }
-
 }

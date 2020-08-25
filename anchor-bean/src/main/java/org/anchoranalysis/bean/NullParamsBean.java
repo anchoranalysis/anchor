@@ -35,7 +35,7 @@ import org.anchoranalysis.core.log.Logger;
 
 /**
  * A base class for beans that require initialization but the initializations needs no parameters.
- * 
+ *
  * @author Owen Feehan
  * @param <T> bean family-type
  */

@@ -42,8 +42,8 @@ import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.channel.factory.ChannelFactorySingleType;
-import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
@@ -53,9 +53,9 @@ import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferByte;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferShort;
 import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelTypeException;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 import org.anchoranalysis.image.voxel.pixelsforslice.PixelsForSlice;
 
@@ -108,8 +108,7 @@ public class IJWrap {
             return channelFromImagePlusShort(
                     imagePlus, dimensions, factory.get(UnsignedShortVoxelType.INSTANCE));
         } else {
-            throw new IncorrectVoxelTypeException(
-                    "Only unsigned-8 and unsigned 16bit supported");
+            throw new IncorrectVoxelTypeException("Only unsigned-8 and unsigned 16bit supported");
         }
     }
 
@@ -120,8 +119,7 @@ public class IJWrap {
         } else if (imagePlus.getType() == ImagePlus.GRAY16) {
             return new VoxelsWrapper(voxelsFromImagePlusShort(imagePlus));
         } else {
-            throw new IncorrectVoxelTypeException(
-                    "Only unsigned-8 and unsigned 16bit supported");
+            throw new IncorrectVoxelTypeException("Only unsigned-8 and unsigned 16bit supported");
         }
     }
 
@@ -164,8 +162,7 @@ public class IJWrap {
         } else if (voxels.getVoxelDataType().equals(DATA_TYPE_SHORT)) {
             return imageProcessorShort(voxels.asShort().slices(), z);
         } else {
-            throw new IncorrectVoxelTypeException(
-                    "Only byte or short data types are supported");
+            throw new IncorrectVoxelTypeException("Only byte or short data types are supported");
         }
     }
 
@@ -194,11 +191,7 @@ public class IJWrap {
 
         ImageStack stackNew = createStackForVoxels(voxels);
         return createImagePlus(
-                stackNew,
-                new Dimensions(voxels.any().extent(), new Resolution()),
-                1,
-                1,
-                false);
+                stackNew, new Dimensions(voxels.any().extent(), new Resolution()), 1, 1, false);
     }
 
     public static ImagePlus createImagePlus(Channel channel) {

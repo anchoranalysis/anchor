@@ -26,9 +26,9 @@
 
 package org.anchoranalysis.mpp.proposer.error;
 
-import org.anchoranalysis.mpp.mark.Mark;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.mpp.mark.Mark;
 
 /**
  * Singleton that does nothing with errors

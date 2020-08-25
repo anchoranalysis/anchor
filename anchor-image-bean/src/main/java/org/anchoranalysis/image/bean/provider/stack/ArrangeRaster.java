@@ -45,9 +45,8 @@ import org.anchoranalysis.image.stack.rgb.RGBStack;
 
 /**
  * Creates a stack that tiles (or otherwise combines) other providers
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class ArrangeRaster extends StackProvider {
 
@@ -55,8 +54,7 @@ public class ArrangeRaster extends StackProvider {
     @BeanField @Getter @Setter private ArrangeRasterBean arrange;
 
     /** If set, ensures every stack is converted into 3 channels */
-    @BeanField @Getter @Setter
-    private boolean forceRGB = false;
+    @BeanField @Getter @Setter private boolean forceRGB = false;
 
     @BeanField @Getter @Setter private List<Provider<Stack>> list = new ArrayList<>();
 

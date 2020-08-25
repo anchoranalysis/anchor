@@ -46,11 +46,7 @@ public class OutlineKernel3NeighborMatchValue extends OutlineKernel3Base {
             ObjectMask object,
             BinaryVoxels<ByteBuffer> voxelsRequireHigh,
             OutlineKernelParameters params) {
-        this(
-                object.binaryValuesByte(),
-                object,
-                voxelsRequireHigh,
-                params);
+        this(object.binaryValuesByte(), object, voxelsRequireHigh, params);
     }
 
     // Constructor

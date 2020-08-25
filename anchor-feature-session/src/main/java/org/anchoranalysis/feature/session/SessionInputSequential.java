@@ -71,7 +71,8 @@ public class SessionInputSequential<T extends FeatureInput> implements SessionIn
                 FeatureCalculation<S, T> calculation,
                 ChildCacheName childCacheName)
                 throws FeatureCalculationException {
-            return calculate(feature, SessionInputSequential.this.calc(calculation), childCacheName);
+            return calculate(
+                    feature, SessionInputSequential.this.calc(calculation), childCacheName);
         }
 
         @Override

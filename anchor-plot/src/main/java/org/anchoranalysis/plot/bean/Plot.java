@@ -35,9 +35,9 @@ import org.anchoranalysis.plot.PlotInstance;
 
 /**
  * Defines a plot that can then, given axis-limits, created a plot-instance
- * 
+ *
  * <p>Every plot describes items (via iterator) that are somehow illustrated on the plot.
- * 
+ *
  * @author Owen Feehan
  * @param <T> item-type
  */

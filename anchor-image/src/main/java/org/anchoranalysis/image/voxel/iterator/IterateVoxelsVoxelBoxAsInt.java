@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -25,6 +25,7 @@
  */
 package org.anchoranalysis.image.voxel.iterator;
 
+import com.google.common.base.Preconditions;
 import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.util.Optional;
@@ -41,7 +42,6 @@ import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.ExtentMatchHelper;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
-import com.google.common.base.Preconditions;
 
 /**
  * Iterates over {@link Voxels} using the (slower) {@code getInt} and {@code putInt} methods of
@@ -61,11 +61,12 @@ public class IterateVoxelsVoxelBoxAsInt {
      * @param operator determines a corresponding <i>output</i> value for each <i>input</i> voxel
      */
     public static void changeEachPoint(Voxels<?> voxels, IntUnaryOperator operator) {
-        voxels.slices().iterateOverSlicesAndOffsets(
-            (buffer, offset) -> {
-                int value = buffer.getInt(offset);
-                buffer.putInt(offset, operator.applyAsInt(value));
-            });
+        voxels.slices()
+                .iterateOverSlicesAndOffsets(
+                        (buffer, offset) -> {
+                            int value = buffer.getInt(offset);
+                            buffer.putInt(offset, operator.applyAsInt(value));
+                        });
     }
 
     /**
@@ -82,12 +83,13 @@ public class IterateVoxelsVoxelBoxAsInt {
     public static void assignEachMatchingPoint(
             Voxels<?> voxels, IntPredicate predicate, int valueToAssign) {
 
-        voxels.slices().iterateOverSlicesAndOffsets(
-            (buffer, offset) -> {
-                if (predicate.test(buffer.getInt(offset))) {
-                    buffer.putInt(offset, valueToAssign);
-                }
-            });
+        voxels.slices()
+                .iterateOverSlicesAndOffsets(
+                        (buffer, offset) -> {
+                            if (predicate.test(buffer.getInt(offset))) {
+                                buffer.putInt(offset, valueToAssign);
+                            }
+                        });
     }
 
     /**
@@ -168,7 +170,7 @@ public class IterateVoxelsVoxelBoxAsInt {
 
         return true;
     }
-    
+
     /**
      * Calls each point on a bounding-box (optionally subregion thereof) of an object-mask
      *
@@ -180,12 +182,10 @@ public class IterateVoxelsVoxelBoxAsInt {
      * @param process processes each point that fulfills the conditions
      */
     public static <T extends Buffer> void callEachPoint(
-            Voxels<T> voxels,
-            ObjectMask object,
-            ProcessVoxelSlice<T> process) {
-        callEachPoint(voxels,  object, Optional.empty(), process);
+            Voxels<T> voxels, ObjectMask object, ProcessVoxelSlice<T> process) {
+        callEachPoint(voxels, object, Optional.empty(), process);
     }
-    
+
     /**
      * Calls each point on a bounding-box (optionally subregion thereof) of an object-mask
      *
@@ -281,32 +281,34 @@ public class IterateVoxelsVoxelBoxAsInt {
             }
         }
     }
-    
+
     /**
      * Iterate over each voxel in a bounding-box - with <b>two</b> associated buffers for each slice
-     * <p>
-     * The extent's of both {@code voxels1} and {@code voxels2} must be equal.
-     * 
-     * @param voxels1 voxels in which which {@link BoundingBox} refers to a subregion, and which provides the <b>first</b> buffer
-     * @param voxels2 voxels in which which {@link BoundingBox} refers to a subregion, and which provides the <b>second</b> buffer
+     *
+     * <p>The extent's of both {@code voxels1} and {@code voxels2} must be equal.
+     *
+     * @param voxels1 voxels in which which {@link BoundingBox} refers to a subregion, and which
+     *     provides the <b>first</b> buffer
+     * @param voxels2 voxels in which which {@link BoundingBox} refers to a subregion, and which
+     *     provides the <b>second</b> buffer
      * @param process is called for each voxel within the bounding-box using GLOBAL coordinates.
      * @param <T> buffer-type for voxels
      */
     public static <S extends Buffer, T extends Buffer> void callEachPointTwo(
-            Voxels<S> voxels1, Voxels<T> voxels2, ProcessVoxelSliceTwo<S,T> process) {
-        Preconditions.checkArgument( voxels1.extent().equals(voxels2.extent()) );
+            Voxels<S> voxels1, Voxels<T> voxels2, ProcessVoxelSliceTwo<S, T> process) {
+        Preconditions.checkArgument(voxels1.extent().equals(voxels2.extent()));
 
         int volumeXY = voxels1.extent().volumeXY();
 
-        voxels1.extent().iterateOverZ( z-> {
+        voxels1.extent()
+                .iterateOverZ(
+                        z -> {
+                            VoxelBuffer<S> buffer1 = voxels1.slice(z);
+                            VoxelBuffer<T> buffer2 = voxels2.slice(z);
 
-            VoxelBuffer<S> buffer1 = voxels1.slice(z);
-            VoxelBuffer<T> buffer2 = voxels2.slice(z);
-
-            for (int offset = 0; offset < volumeXY; offset++) {
-                process.process(buffer1, buffer2, offset);
-            }
-            
-        });
+                            for (int offset = 0; offset < volumeXY; offset++) {
+                                process.process(buffer1, buffer2, offset);
+                            }
+                        });
     }
 }

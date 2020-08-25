@@ -63,7 +63,9 @@ public class ImageMoments {
 
         mean = calculateFirstMoments(matrixPoints);
 
-        list = EigenValueDecompose.apply(calculateSecondMoments(matrixPoints, suppressZ), sortAscending);
+        list =
+                EigenValueDecompose.apply(
+                        calculateSecondMoments(matrixPoints, suppressZ), sortAscending);
     }
 
     public EigenvalueAndVector get(int index) {

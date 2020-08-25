@@ -50,7 +50,10 @@ public class FeatureCalculatorCachedMulti<T extends FeatureInput>
     private final FeatureCalculatorMulti<T> source;
     private final LRUCache<T, ResultsVector> cacheResults;
 
-    /** We update this every time so it matches whatever is passed to {@code #calculateSuppressErrors(FeatureInput, ErrorReporter)} */
+    /**
+     * We update this every time so it matches whatever is passed to {@code
+     * #calculateSuppressErrors(FeatureInput, ErrorReporter)}
+     */
     private Optional<ErrorReporter> errorReporter = Optional.empty();
 
     /**

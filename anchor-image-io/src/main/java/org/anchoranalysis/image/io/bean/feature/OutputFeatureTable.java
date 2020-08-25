@@ -64,16 +64,19 @@ public class OutputFeatureTable extends ImageBean<OutputFeatureTable> {
                     .getWriterCheckIfAllowed()
                     .write(
                             OUTPUT_NAME_OBJECTS_FEATURE_LIST,
-                            () -> createGenerator(objectCollection, context.getLogger()) );
+                            () -> createGenerator(objectCollection, context.getLogger()));
 
         } catch (CreateException e) {
             throw new IOException(e);
         }
     }
 
-    private ObjectFeatureListCSVGenerator createGenerator(ObjectCollection objects, Logger logger) throws OutputWriteFailedException {
+    private ObjectFeatureListCSVGenerator createGenerator(ObjectCollection objects, Logger logger)
+            throws OutputWriteFailedException {
         try {
-            ObjectFeatureListCSVGenerator generator = new ObjectFeatureListCSVGenerator(feature, getInitializationParameters().getSharedObjects(), logger);
+            ObjectFeatureListCSVGenerator generator =
+                    new ObjectFeatureListCSVGenerator(
+                            feature, getInitializationParameters().getSharedObjects(), logger);
             generator.setIterableElement(objects);
             return generator;
         } catch (CreateException e) {

@@ -40,8 +40,7 @@ public final class RegisterBeanFactoriesIO {
 
     public static void registerBeanFactories() {
         RegisterBeanFactories.register(
-                "imgChannelMap",
-                new IndirectlyFromListBeanFactory<>(new NamedEntriesCreator()));
+                "imgChannelMap", new IndirectlyFromListBeanFactory<>(new NamedEntriesCreator()));
         RegisterBeanFactories.register(
                 "arrangeRasterCellList", new ListBeanFactory<ArrangeRasterCell>());
     }

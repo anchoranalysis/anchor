@@ -124,6 +124,7 @@ class CreateCalculatorHelper {
     }
 
     private FeatureInitParams createInitParams(ImageInitParams soImage) {
-        return InitParamsHelper.createInitParams(Optional.of(soImage.getSharedObjects()), energyStack);
+        return InitParamsHelper.createInitParams(
+                Optional.of(soImage.getSharedObjects()), energyStack);
     }
 }

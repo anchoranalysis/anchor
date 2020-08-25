@@ -61,7 +61,8 @@ public class KeyValueParamsForImageCreator {
         this.logger = logger;
     }
 
-    public KeyValueParams createParamsForImage(EnergyStackWithoutParams energyStack) throws CreateException {
+    public KeyValueParams createParamsForImage(EnergyStackWithoutParams energyStack)
+            throws CreateException {
         try {
             KeyValueParams params = energyScheme.createKeyValueParams();
             addParamsForImage(energyStack, params);

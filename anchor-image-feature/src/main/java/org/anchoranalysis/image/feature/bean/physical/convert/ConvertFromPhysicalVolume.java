@@ -32,7 +32,8 @@ import org.anchoranalysis.image.convert.ImageUnitConverter;
 import org.anchoranalysis.image.extent.Resolution;
 
 /** converts a feature to a physical distance in a XY place that is isometric */
-public class ConvertFromPhysicalVolume<T extends FeatureInputWithResolution> extends FeatureConvertRes<T> {
+public class ConvertFromPhysicalVolume<T extends FeatureInputWithResolution>
+        extends FeatureConvertRes<T> {
 
     @Override
     protected double convertToPhysical(double value, Resolution res)

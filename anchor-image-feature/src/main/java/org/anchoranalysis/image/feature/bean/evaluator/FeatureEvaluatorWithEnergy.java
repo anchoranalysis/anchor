@@ -69,8 +69,8 @@ public class FeatureEvaluatorWithEnergy<T extends FeatureInput> extends FeatureE
                     }
                 });
     }
-    
+
     public Optional<EnergyStack> energyStack() throws OperationFailedException {
-        return EnergyStackHelper.energyStack(stackEnergy,params);
+        return EnergyStackHelper.energyStack(stackEnergy, params);
     }
 }

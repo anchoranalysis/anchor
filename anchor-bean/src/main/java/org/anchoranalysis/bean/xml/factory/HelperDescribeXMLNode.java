@@ -71,7 +71,9 @@ class HelperDescribeXmlNode {
     /**
      * Appends a description of an attribute-collection to a stringbuilder
      *
-     * <p>The string takes the form: [ATTRIBUTE1_DESCRIPTION, ATTRIBUTE2_DESCRIPTION, ATTRIBUTE3_DESCRIPTION]
+     * <p>The string takes the form: [ATTRIBUTE1_DESCRIPTION, ATTRIBUTE2_DESCRIPTION,
+     * ATTRIBUTE3_DESCRIPTION]
+     *
      * @param nodes collection of attribute nodes
      * @param stringBuilder string-builder
      */

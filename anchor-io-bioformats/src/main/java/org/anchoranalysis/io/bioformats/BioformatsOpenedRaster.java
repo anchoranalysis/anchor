@@ -164,7 +164,8 @@ public class BioformatsOpenedRaster implements OpenedRaster {
             List<Channel> listAllChannels =
                     createUninitialisedChannels(dimensions, ts, multiplexVoxelDataType(dataType));
 
-            copyBytesIntoChannels(listAllChannels, dimensions, progressReporter, dataType, readOptions);
+            copyBytesIntoChannels(
+                    listAllChannels, dimensions, progressReporter, dataType, readOptions);
 
             LOG.debug(
                     String.format(

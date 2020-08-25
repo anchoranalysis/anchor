@@ -45,7 +45,8 @@ import org.anchoranalysis.image.orientation.DirectionVector;
 
 //
 @NoArgsConstructor
-public class ConvertToPhysicalDistance<T extends FeatureInputWithResolution> extends FeatureConvertRes<T> {
+public class ConvertToPhysicalDistance<T extends FeatureInputWithResolution>
+        extends FeatureConvertRes<T> {
 
     // START BEAN PROPERTIES
 

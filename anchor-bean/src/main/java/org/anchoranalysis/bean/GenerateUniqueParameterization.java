@@ -27,8 +27,8 @@
 package org.anchoranalysis.bean;
 
 /**
- * Objects that must implement well-defined {@code equals()} and {@code hashCode()} methods and also generate a name
- * uniquely identifying the class and all parameterization
+ * Objects that must implement well-defined {@code equals()} and {@code hashCode()} methods and also
+ * generate a name uniquely identifying the class and all parameterization
  *
  * @author Owen Feehan
  */

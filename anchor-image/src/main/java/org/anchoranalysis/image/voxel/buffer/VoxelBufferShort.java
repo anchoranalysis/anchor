@@ -28,8 +28,8 @@ package org.anchoranalysis.image.voxel.buffer;
 
 import java.nio.ShortBuffer;
 import org.anchoranalysis.image.convert.ByteConverter;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 
 public final class VoxelBufferShort extends VoxelBuffer<ShortBuffer> {
 

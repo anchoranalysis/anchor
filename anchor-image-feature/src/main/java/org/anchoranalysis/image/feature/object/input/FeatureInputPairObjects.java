@@ -55,8 +55,7 @@ public class FeatureInputPairObjects extends FeatureInputEnergy {
         this(first, second, Optional.empty());
     }
 
-    public FeatureInputPairObjects(
-            ObjectMask first, ObjectMask second, EnergyStack energyStack) {
+    public FeatureInputPairObjects(ObjectMask first, ObjectMask second, EnergyStack energyStack) {
         this(first, second, Optional.of(energyStack));
     }
 

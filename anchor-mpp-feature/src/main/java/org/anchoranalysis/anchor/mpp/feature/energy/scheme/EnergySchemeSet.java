@@ -28,10 +28,10 @@ package org.anchoranalysis.anchor.mpp.feature.energy.scheme;
 
 import java.util.HashMap;
 import java.util.Iterator;
-import org.anchoranalysis.core.name.value.SimpleNameValue;
-import org.anchoranalysis.feature.shared.SharedFeatureMulti;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.anchoranalysis.core.name.value.SimpleNameValue;
+import org.anchoranalysis.feature.shared.SharedFeatureMulti;
 
 /**
  * A set of EnergySchemes each with a name.
@@ -46,7 +46,7 @@ public class EnergySchemeSet implements Iterable<SimpleNameValue<EnergyScheme>> 
     // START REQUIRED ARGUMENTS
     @Getter private final SharedFeatureMulti sharedFeatures;
     // END REQUIRED ARGUMENTS
-    
+
     private HashMap<String, SimpleNameValue<EnergyScheme>> delegate = new HashMap<>();
 
     public boolean add(String name, EnergyScheme energyScheme) {

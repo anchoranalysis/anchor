@@ -40,10 +40,9 @@ public abstract class AnnotationWithMarks implements Annotation {
     protected abstract int getRegionID();
 
     public ObjectCollection convertToObjects(Dimensions dimensions) {
-        return getMarks().deriveObjects(
-                        dimensions,
-                        getRegionMap().membershipWithFlagsForIndex(getRegionID())
-                        )
+        return getMarks()
+                .deriveObjects(
+                        dimensions, getRegionMap().membershipWithFlagsForIndex(getRegionID()))
                 .withoutProperties();
     }
 }

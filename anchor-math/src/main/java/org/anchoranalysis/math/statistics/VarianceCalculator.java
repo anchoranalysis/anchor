@@ -36,7 +36,8 @@ import lombok.NoArgsConstructor;
  *
  * @author Owen Feehan
  */
-@AllArgsConstructor @NoArgsConstructor
+@AllArgsConstructor
+@NoArgsConstructor
 public class VarianceCalculator {
 
     private long sum = 0;

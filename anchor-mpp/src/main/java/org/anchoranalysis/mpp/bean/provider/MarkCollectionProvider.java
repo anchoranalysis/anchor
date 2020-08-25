@@ -32,12 +32,12 @@ import org.anchoranalysis.mpp.mark.MarkCollection;
 
 /**
  * Provides a collection of marks
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 @GroupingRoot
-public abstract class MarkCollectionProvider extends MPPProvider<MarkCollectionProvider, MarkCollection> {
+public abstract class MarkCollectionProvider
+        extends MPPProvider<MarkCollectionProvider, MarkCollection> {
 
     @Override
     public abstract MarkCollection create() throws CreateException;

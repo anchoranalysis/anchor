@@ -76,7 +76,8 @@ public abstract class MarksGeneratorBase extends RasterGenerator
             RGBStack stack = ConvertDisplayStackToRGB.convert(background(marks.getStack()));
 
             ColoredOverlayCollection oc =
-                    OverlayCollectionMarkFactory.createColor(marks.getMarksColored(), regionMembership);
+                    OverlayCollectionMarkFactory.createColor(
+                            marks.getMarksColored(), regionMembership);
 
             writer.writeOverlays(oc, stack, idGetter);
 

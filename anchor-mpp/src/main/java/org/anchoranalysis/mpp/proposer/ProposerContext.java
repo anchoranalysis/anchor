@@ -56,7 +56,10 @@ public class ProposerContext {
 
     public ProposerContext addErrorLevel(String errorMessage, AnchorBean<?> bean) {
         return new ProposerContext(
-                randomNumberGenerator, energyStack, regionMap, errorNode.addBean(errorMessage, bean));
+                randomNumberGenerator,
+                energyStack,
+                regionMap,
+                errorNode.addBean(errorMessage, bean));
     }
 
     /** Samples an integer uniformally between [0..maxVal) */

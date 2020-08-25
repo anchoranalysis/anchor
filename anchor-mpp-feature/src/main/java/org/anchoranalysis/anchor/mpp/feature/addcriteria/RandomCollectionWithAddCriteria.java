@@ -115,10 +115,7 @@ public class RandomCollectionWithAddCriteria<T> extends RandomCollection<T> {
 
     @Override
     public void initUpdatableMarkSet(
-            MemoForIndex marks,
-            EnergyStack stack,
-            Logger logger,
-            SharedFeatureMulti sharedFeatures)
+            MemoForIndex marks, EnergyStack stack, Logger logger, SharedFeatureMulti sharedFeatures)
             throws InitException {
         this.logger = logger;
         this.sharedFeatures = sharedFeatures;

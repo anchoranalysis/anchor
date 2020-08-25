@@ -40,9 +40,9 @@ import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectCollectionFactory;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.assigner.VoxelsAssigner;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedIntVoxelType;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.image.voxel.iterator.ObjectMaskFixture;
 import org.junit.Before;
 import org.junit.Test;
@@ -89,8 +89,7 @@ public class ConnectedComponentUnitFindTest {
 
     private ObjectCollection deriveInt(boolean do3D)
             throws OperationFailedException, CreateException {
-        return cc.deriveConnectedInt(
-                createBufferWithObjects(UnsignedIntVoxelType.INSTANCE, do3D));
+        return cc.deriveConnectedInt(createBufferWithObjects(UnsignedIntVoxelType.INSTANCE, do3D));
     }
 
     private ObjectCollection deriveByte(boolean do3D)

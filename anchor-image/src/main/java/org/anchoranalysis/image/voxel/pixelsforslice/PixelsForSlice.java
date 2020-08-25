@@ -61,20 +61,17 @@ public interface PixelsForSlice<T extends Buffer> {
             sliceConsumer.accept(slice(z));
         }
     }
-    
+
     /**
      * Calls {@code process} for each offset in each slice
      *
-     * <p>This occurs sequentially from 0 (inclusive) to {@code extent.z()} (exclusive) and from 0 (inclusive)
-     *   to {@code extent.x() * extent.y()} (exclusive) for the offsets
+     * <p>This occurs sequentially from 0 (inclusive) to {@code extent.z()} (exclusive) and from 0
+     * (inclusive) to {@code extent.x() * extent.y()} (exclusive) for the offsets
      *
      * @param process called for each offset on each slice
      */
     default void iterateOverSlicesAndOffsets(ProcessVoxelSlice<T> process) {
-        iterateOverSlices( buffer -> 
-            extent().iterateOverXYOffset( offset-> 
-                process.process(buffer, offset)
-            )
-        );
+        iterateOverSlices(
+                buffer -> extent().iterateOverXYOffset(offset -> process.process(buffer, offset)));
     }
 }

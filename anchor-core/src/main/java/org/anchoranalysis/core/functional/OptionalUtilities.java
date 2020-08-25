@@ -81,8 +81,7 @@ public class OptionalUtilities {
             return Optional.empty();
         }
     }
-    
-    
+
     /**
      * Like {@link Optional#orElseGet} but tolerates an exception in the supplier function, which is
      * immediately thrown.
@@ -95,7 +94,7 @@ public class OptionalUtilities {
      * @throws E an exception if the supplier throws it
      */
     public static <T, E extends Exception> T orElseGet(
-            Optional<T> optional, CheckedSupplier<T,E> supplier) throws E {
+            Optional<T> optional, CheckedSupplier<T, E> supplier) throws E {
         if (optional.isPresent()) {
             return optional.get();
         } else {

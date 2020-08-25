@@ -26,27 +26,26 @@
 
 package org.anchoranalysis.mpp.segment.optscheme;
 
+import lombok.AllArgsConstructor;
+import lombok.Value;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.image.stack.DisplayStack;
-import lombok.AllArgsConstructor;
-import lombok.Value;
 
-/** 
- * Stores an {@link EnergyStack} together with a background stack.
- **/
-@Value @AllArgsConstructor
+/** Stores an {@link EnergyStack} together with a background stack. */
+@Value
+@AllArgsConstructor
 public class DualStack {
 
     /** The energy-stack */
     private EnergyStack energyStack;
-    
+
     /** The background */
     private DisplayStack background;
 
     /**
      * Constructor - derives a background from the the energy-stack
-     * 
+     *
      * @param energyStack the energy-stack
      * @throws CreateException if a display-stack cannot be derived
      */

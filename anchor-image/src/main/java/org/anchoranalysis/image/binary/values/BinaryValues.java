@@ -37,8 +37,7 @@ import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelTypeException;
  *
  * <p>This class is <i>immutable</i>.
  *
- * <p>See {@link BinaryValuesByte} for an equivalent class
- * that stores these states as {@code byte}
+ * <p>See {@link BinaryValuesByte} for an equivalent class that stores these states as {@code byte}
  *
  * @author Owen Feehan
  */

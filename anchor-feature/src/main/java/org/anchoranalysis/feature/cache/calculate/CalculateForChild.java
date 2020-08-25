@@ -50,7 +50,8 @@ public interface CalculateForChild<T extends FeatureInput> {
      * @return the result of the feature calculation
      * @throws FeatureCalculationException
      */
-    <S extends FeatureInput> double calculate(Feature<S> feature, S input, ChildCacheName childCacheName)
+    <S extends FeatureInput> double calculate(
+            Feature<S> feature, S input, ChildCacheName childCacheName)
             throws FeatureCalculationException;
 
     /**

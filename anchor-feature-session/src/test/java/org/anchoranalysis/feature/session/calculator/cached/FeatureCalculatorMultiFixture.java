@@ -38,9 +38,7 @@ import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 
 class FeatureCalculatorMultiFixture {
 
-    /**
-     * Creates a feature-calculator than returns a constant result
-     */
+    /** Creates a feature-calculator than returns a constant result */
     public static <T extends FeatureInput> FeatureCalculatorMulti<T> createFeatureCalculator(
             ResultsVector rv) {
 

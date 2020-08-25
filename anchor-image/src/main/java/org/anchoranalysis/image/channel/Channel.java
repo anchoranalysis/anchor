@@ -33,10 +33,10 @@ import lombok.experimental.Accessors;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.Dimensions;
-import org.anchoranalysis.image.extent.Resolution;
+import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
+import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.histogram.HistogramFactory;
 import org.anchoranalysis.image.interpolator.Interpolator;
 import org.anchoranalysis.image.interpolator.InterpolatorImgLib2Lanczos;
@@ -112,8 +112,7 @@ public class Channel {
 
     /** Creates a new channel contain only of a particular slice (reusing the voxel buffers) */
     public Channel extractSlice(int z) {
-        return ChannelFactory.instance()
-                .create(voxels.extract().slice(z), dimensions.resolution());
+        return ChannelFactory.instance().create(voxels.extract().slice(z), dimensions.resolution());
     }
 
     public Channel scaleXY(ScaleFactor scaleFactor) {
@@ -231,7 +230,7 @@ public class Channel {
     public VoxelsExtracter<? extends Buffer> extract() { // NOSONAR
         return voxels.extract();
     }
-    
+
     public Extent extent() {
         return voxels.extent();
     }

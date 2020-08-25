@@ -30,14 +30,14 @@ import java.awt.Color;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.anchoranalysis.core.color.ColorIndex;
 import org.anchoranalysis.core.color.ColorList;
 import org.anchoranalysis.core.color.RGBColor;
 import org.anchoranalysis.core.idgetter.IDGetter;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Dimensions;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 
 @AllArgsConstructor
 public class ColoredMarks implements Iterable<Mark> {
@@ -67,7 +67,7 @@ public class ColoredMarks implements Iterable<Mark> {
         this.marks = new MarkCollection(mark);
         this.colorList = new ColorList(color);
     }
-    
+
     public void add(Mark mark, Color color) {
         add(mark, new RGBColor(color));
     }

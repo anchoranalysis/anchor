@@ -66,20 +66,25 @@ public class MaskXor {
             Voxels<ByteBuffer> voxelsSecond,
             BinaryValuesByte bvbFirst,
             BinaryValuesByte bvbSecond) {
-        
+
         byte sourceOn = bvbFirst.getOnByte();
         byte sourceOff = bvbFirst.getOffByte();
-        
+
         byte receiveOn = bvbSecond.getOnByte();
 
-        IterateVoxels.callEachPointTwo(voxelsFirst, voxelsSecond, (point, bufferSource, bufferReceive, offset) -> {
-            boolean identicalStates = (bufferSource.get(offset)==sourceOn)==(bufferReceive.get(offset)==receiveOn);
-            
-            if (identicalStates) {
-                bufferSource.put(offset, sourceOff);
-            } else {
-                bufferSource.put(offset, sourceOn);
-            }
-        });
+        IterateVoxels.callEachPointTwo(
+                voxelsFirst,
+                voxelsSecond,
+                (point, bufferSource, bufferReceive, offset) -> {
+                    boolean identicalStates =
+                            (bufferSource.get(offset) == sourceOn)
+                                    == (bufferReceive.get(offset) == receiveOn);
+
+                    if (identicalStates) {
+                        bufferSource.put(offset, sourceOff);
+                    } else {
+                        bufferSource.put(offset, sourceOn);
+                    }
+                });
     }
 }

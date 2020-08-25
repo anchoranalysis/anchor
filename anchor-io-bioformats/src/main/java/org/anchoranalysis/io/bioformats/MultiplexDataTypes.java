@@ -35,12 +35,12 @@ import org.anchoranalysis.image.channel.factory.ChannelFactoryInt;
 import org.anchoranalysis.image.channel.factory.ChannelFactoryShort;
 import org.anchoranalysis.image.channel.factory.ChannelFactorySingleType;
 import org.anchoranalysis.image.io.RasterIOException;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.image.voxel.datatype.FloatVoxelType;
 import org.anchoranalysis.image.voxel.datatype.SignedShortVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedIntVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class MultiplexDataTypes {

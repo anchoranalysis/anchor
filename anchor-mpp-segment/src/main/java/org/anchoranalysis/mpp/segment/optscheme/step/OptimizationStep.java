@@ -112,7 +112,7 @@ public class OptimizationStep<S, T> {
 
     private void assgnCrntFromProposal(ToDoubleFunction<T> funcScore) {
         // We can rely that a proposal exists, as it has been accepted
-        state.assignCurrent(proposalOptional.get());    
+        state.assignCurrent(proposalOptional.get());
         maybeAssignAsBest(funcScore);
     }
 
@@ -179,11 +179,13 @@ public class OptimizationStep<S, T> {
                 iter,
                 state.transform(stateReporter.primaryReport(), context),
                 OptionalUtilities.map(
-                        proposalOptional, proposal -> stateReporter.primaryReport().transform(proposal, context)),
+                        proposalOptional,
+                        proposal -> stateReporter.primaryReport().transform(proposal, context)),
                 OptionalUtilities.mapBoth(
                         stateReporter.secondaryReport(),
                         proposalOptional,
-                        (secondaryReport, proposal) -> secondaryReport.transform(proposal, context)),
+                        (secondaryReport, proposal) ->
+                                secondaryReport.transform(proposal, context)),
                 describeData,
                 accpted,
                 best);

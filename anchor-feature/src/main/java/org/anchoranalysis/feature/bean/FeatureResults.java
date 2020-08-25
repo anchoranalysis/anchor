@@ -44,7 +44,8 @@ import org.anchoranalysis.feature.input.FeatureInputResults;
 public abstract class FeatureResults extends Feature<FeatureInputResults> {
 
     @Override
-    public double calculate(SessionInput<FeatureInputResults> input) throws FeatureCalculationException {
+    public double calculate(SessionInput<FeatureInputResults> input)
+            throws FeatureCalculationException {
         return calculate(input.get());
     }
 

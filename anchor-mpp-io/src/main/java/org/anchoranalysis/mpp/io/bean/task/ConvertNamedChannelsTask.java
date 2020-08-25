@@ -47,7 +47,8 @@ import org.anchoranalysis.mpp.io.input.MultiInput;
 /**
  * Converts {@link NamedChannelsInput} to a variety of others to match a delegate task
  *
- * <p>Note that the presence of {@link IReplaceTask} gives special behavior to this task in the {@link JobProcessor}
+ * <p>Note that the presence of {@link IReplaceTask} gives special behavior to this task in the
+ * {@link JobProcessor}
  *
  * @author Owen Feehan
  * @param <T> the named-channels-input we expect to receive

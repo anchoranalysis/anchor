@@ -82,7 +82,7 @@ public final class Point3i extends Tuple3i {
         pointCopy.add(toAdd);
         return pointCopy;
     }
-    
+
     /** Performs an addition without changing any values in an existing point */
     public static Point3i immutableAdd(ReadableTuple3i point, int x, int y, int z) {
         Point3i pointCopy = new Point3i(point);

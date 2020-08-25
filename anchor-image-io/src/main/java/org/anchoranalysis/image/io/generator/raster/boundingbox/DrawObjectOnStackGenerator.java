@@ -175,8 +175,7 @@ public class DrawObjectOnStackGenerator extends RasterGenerator
         return drawObjectsGenerator.generate();
     }
 
-    private Either<Dimensions, DisplayStack> createBackground()
-            throws OutputWriteFailedException {
+    private Either<Dimensions, DisplayStack> createBackground() throws OutputWriteFailedException {
 
         if (!backgroundGenerator.isPresent()) {
             // Exit early if there's no background to be extracted

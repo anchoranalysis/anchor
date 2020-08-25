@@ -52,8 +52,7 @@ public class FeatureInputMark implements FeatureInputParams {
         this(mark, Optional.of(dimensions), Optional.of(params));
     }
 
-    public FeatureInputMark(
-            Mark mark, Optional<Dimensions> dim, Optional<KeyValueParams> params) {
+    public FeatureInputMark(Mark mark, Optional<Dimensions> dim, Optional<KeyValueParams> params) {
         super();
         this.mark = mark;
         this.dimensions = dim;

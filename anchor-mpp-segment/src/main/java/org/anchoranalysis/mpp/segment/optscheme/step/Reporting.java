@@ -27,16 +27,16 @@
 package org.anchoranalysis.mpp.segment.optscheme.step;
 
 import java.util.Optional;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.anchoranalysis.mpp.proposer.error.ProposerFailureDescription;
 import org.anchoranalysis.mpp.segment.kernel.proposer.KernelWithIdentifier;
 import org.anchoranalysis.mpp.segment.optscheme.DualState;
 import org.anchoranalysis.mpp.segment.optscheme.feedback.ReporterException;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 
 /** Exposes data which is only needed by reporting tools */
-@AllArgsConstructor(access=AccessLevel.PACKAGE)
+@AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class Reporting<S> {
 
     @Getter private int iter;
@@ -47,10 +47,10 @@ public class Reporting<S> {
     @Getter private Optional<S> proposalSecondary;
 
     private DescribeData<?> describeData;
-    
+
     @Getter private boolean accepted;
     private boolean best;
-    
+
     public boolean isBest() {
         return best;
     }
@@ -64,7 +64,8 @@ public class Reporting<S> {
     }
 
     public S getMarksAfter() throws ReporterException {
-        return state.getCurrent().orElseThrow(() -> new ReporterException("No 'after' defined yet"));
+        return state.getCurrent()
+                .orElseThrow(() -> new ReporterException("No 'after' defined yet"));
     }
 
     public ProposerFailureDescription getKernelNoProposalDescription() {

@@ -58,33 +58,34 @@ import org.anchoranalysis.io.generator.csv.CSVGenerator;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
-/**
- * @author Owen Feehan
- */
+/** @author Owen Feehan */
 class ObjectFeatureListCSVGenerator extends CSVGenerator
         implements IterableGenerator<ObjectCollection> {
 
     private static final String MANIFEST_FUNCTION = "objectFeatures";
 
     private FeatureCalculatorMulti<FeatureInputSingleObject> featureCalculator;
-    
+
     private TableCSVGenerator<ResultsVectorCollection> delegate;
-    
+
     private final Logger logger;
-    
+
     private ObjectCollection element; // Iteration element
 
     public ObjectFeatureListCSVGenerator(
             FeatureListEvaluator<FeatureInputSingleObject> featureEvaluator,
             SharedObjects sharedObjects,
-            Logger logger) throws CreateException {
+            Logger logger)
+            throws CreateException {
         super(MANIFEST_FUNCTION);
         this.logger = logger;
-        
+
         try {
-            NamedFeatureCalculatorMulti<FeatureInputSingleObject> tuple = featureEvaluator.createAndStartSession(this::createFullFeatureList, sharedObjects);
+            NamedFeatureCalculatorMulti<FeatureInputSingleObject> tuple =
+                    featureEvaluator.createAndStartSession(
+                            this::createFullFeatureList, sharedObjects);
             this.featureCalculator = tuple.getCalculator();
-    
+
             delegate = new FeatureListCSVGeneratorVertical(MANIFEST_FUNCTION, tuple.getNames());
         } catch (OperationFailedException e) {
             throw new CreateException(e);
@@ -99,7 +100,7 @@ class ObjectFeatureListCSVGenerator extends CSVGenerator
     @Override
     public void writeToFile(OutputWriteSettings outputWriteSettings, Path filePath)
             throws OutputWriteFailedException {
-        
+
         // We calculate a results vector for each object, across all features in memory. This is
         // more efficient
         ResultsVectorCollection rvc = new ResultsVectorCollection();

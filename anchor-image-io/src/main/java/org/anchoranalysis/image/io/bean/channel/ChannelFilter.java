@@ -46,11 +46,10 @@ import org.anchoranalysis.io.output.bound.BoundIOContext;
 
 /**
  * Applies a filter to a particular channel
- * 
- * <p>Forms input from a stack called <i>input_channel</i>
- * 
- * @author Owen Feehan
  *
+ * <p>Forms input from a stack called <i>input_channel</i>
+ *
+ * @author Owen Feehan
  */
 public class ChannelFilter extends AnchorBean<ChannelFilter> implements ChannelGetter {
 
@@ -85,9 +84,7 @@ public class ChannelFilter extends AnchorBean<ChannelFilter> implements ChannelG
 
             return providerDuplicated.create();
 
-        } catch (InitException
-                | CreateException
-                | BeanDuplicateException e) {
+        } catch (InitException | CreateException | BeanDuplicateException e) {
             throw new GetOperationFailedException(name, e);
         }
     }
@@ -96,7 +93,7 @@ public class ChannelFilter extends AnchorBean<ChannelFilter> implements ChannelG
     public boolean hasChannel(String channelName) {
         return channels.hasChannel(channelName);
     }
-    
+
     private void initProvider(ChannelProvider provider, Channel channel) throws InitException {
         ImageInitParams soImage = ImageInitParamsFactory.create(context);
         try {
@@ -104,6 +101,6 @@ public class ChannelFilter extends AnchorBean<ChannelFilter> implements ChannelG
         } catch (OperationFailedException e) {
             throw new InitException(e);
         }
-        provider.initRecursive(soImage, context.getLogger()); 
+        provider.initRecursive(soImage, context.getLogger());
     }
 }

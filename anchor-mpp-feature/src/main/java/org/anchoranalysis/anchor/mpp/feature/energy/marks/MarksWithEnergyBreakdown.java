@@ -45,9 +45,7 @@ import org.anchoranalysis.mpp.mark.MarkCollection;
 import org.anchoranalysis.mpp.mark.set.UpdateMarkSetException;
 import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 
-/** 
- * Marks with both the total energy and a breakdown by clique
- **/
+/** Marks with both the total energy and a breakdown by clique */
 @AllArgsConstructor
 public class MarksWithEnergyBreakdown implements Serializable {
 
@@ -62,7 +60,10 @@ public class MarksWithEnergyBreakdown implements Serializable {
     /** Every combination of interactions between marks and the associated energy */
     @Getter private transient EnergySavedPairs pair;
 
-    /** Certain features are stored for every object, so that we can reference them in our calculations for the 'all' component */
+    /**
+     * Certain features are stored for every object, so that we can reference them in our
+     * calculations for the 'all' component
+     */
     @Getter @Setter private transient EnergySavedAll all;
     // END REQUIRED ARGUMENTS
 
@@ -126,10 +127,7 @@ public class MarksWithEnergyBreakdown implements Serializable {
 
     public MarksWithEnergyBreakdown deepCopy() {
         return new MarksWithEnergyBreakdown(
-                marks.deepCopy(),
-                individual.deepCopy(),
-                pair.deepCopy(),
-                all.deepCopy());
+                marks.deepCopy(), individual.deepCopy(), pair.deepCopy(), all.deepCopy());
     }
 
     public double getEnergyTotal() {
@@ -144,7 +142,10 @@ public class MarksWithEnergyBreakdown implements Serializable {
         return marks.getEnergyScheme();
     }
 
-    public void add(MemoCollection wrapperInd, VoxelizedMarkMemo newPxlMarkMemo, EnergyStackWithoutParams stack)
+    public void add(
+            MemoCollection wrapperInd,
+            VoxelizedMarkMemo newPxlMarkMemo,
+            EnergyStackWithoutParams stack)
             throws NamedFeatureCalculateException {
 
         marks.add(newPxlMarkMemo);
@@ -162,7 +163,10 @@ public class MarksWithEnergyBreakdown implements Serializable {
         updateTotal(wrapperInd, stack);
     }
 
-    public void remove(MemoCollection wrapperInd, VoxelizedMarkMemo markToRemove, EnergyStackWithoutParams stack)
+    public void remove(
+            MemoCollection wrapperInd,
+            VoxelizedMarkMemo markToRemove,
+            EnergyStackWithoutParams stack)
             throws NamedFeatureCalculateException {
 
         int index = wrapperInd.getIndexForMemo(markToRemove);
@@ -170,7 +174,11 @@ public class MarksWithEnergyBreakdown implements Serializable {
         remove(wrapperInd, index, markToRemove, stack);
     }
 
-    public void remove(MemoCollection wrapperInd, int index, VoxelizedMarkMemo markToRemove, EnergyStackWithoutParams stack)
+    public void remove(
+            MemoCollection wrapperInd,
+            int index,
+            VoxelizedMarkMemo markToRemove,
+            EnergyStackWithoutParams stack)
             throws NamedFeatureCalculateException {
         try {
             getPair().remove(wrapperInd, markToRemove);
@@ -184,7 +192,8 @@ public class MarksWithEnergyBreakdown implements Serializable {
         }
     }
 
-    public void removeTwo(MemoCollection wrapperInd, int index1, int index2, EnergyStackWithoutParams energyStack)
+    public void removeTwo(
+            MemoCollection wrapperInd, int index1, int index2, EnergyStackWithoutParams energyStack)
             throws NamedFeatureCalculateException {
 
         VoxelizedMarkMemo memoRmv1 = wrapperInd.getMemoForIndex(index1);

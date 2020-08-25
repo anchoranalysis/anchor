@@ -53,10 +53,7 @@ public class ListUpdatableMarkSetCollection implements UpdatableMarkSet, List<Up
 
     @Override
     public void initUpdatableMarkSet(
-            MemoForIndex marks,
-            EnergyStack stack,
-            Logger logger,
-            SharedFeatureMulti sharedFeatures)
+            MemoForIndex marks, EnergyStack stack, Logger logger, SharedFeatureMulti sharedFeatures)
             throws InitException {
         for (UpdatableMarkSet item : delegate) {
             item.initUpdatableMarkSet(marks, stack, logger, sharedFeatures);

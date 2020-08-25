@@ -81,9 +81,9 @@ public class TileRasters {
             boolean createShort,
             boolean scaleLabel,
             boolean expandLabelZ) {
-        
+
         GenerateString out = new GenerateString();
-        out.setStringRasterGenerator( new StringRasterGenerator(providerWithLabel.getLabel(), 3) );
+        out.setStringRasterGenerator(new StringRasterGenerator(providerWithLabel.getLabel(), 3));
         out.setCreateShort(createShort);
         if (scaleLabel) {
             out.setIntensityProvider(providerWithLabel.getStack());

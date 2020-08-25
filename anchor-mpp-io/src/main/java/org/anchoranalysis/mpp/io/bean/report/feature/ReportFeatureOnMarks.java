@@ -72,7 +72,9 @@ public class ReportFeatureOnMarks extends ReportFeatureForMPP<FeatureInputMarkCo
 
             FeatureCalculatorSingle<FeatureInputMarkCollection> session = createAndStartSession();
 
-            double val = session.calculate(new FeatureInputMarkCollection(marksCreated, Optional.of(dimensions)));
+            double val =
+                    session.calculate(
+                            new FeatureInputMarkCollection(marksCreated, Optional.of(dimensions)));
             return Double.toString(val);
 
         } catch (FeatureCalculationException | CreateException e) {

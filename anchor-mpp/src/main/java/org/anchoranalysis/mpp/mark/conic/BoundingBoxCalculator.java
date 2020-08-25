@@ -26,10 +26,11 @@
 
 package org.anchoranalysis.mpp.mark.conic;
 
+import static org.anchoranalysis.mpp.mark.conic.TensorUtilities.*;
+
 import cern.colt.matrix.DoubleMatrix1D;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import static org.anchoranalysis.mpp.mark.conic.TensorUtilities.*;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.extent.BoundingBox;

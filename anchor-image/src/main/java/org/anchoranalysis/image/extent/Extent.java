@@ -53,7 +53,7 @@ public final class Extent implements Serializable {
 
     /** Sizes in each dimension */
     private final ReadableTuple3i size;
-    
+
     /** Size in X multiplied by size in Y. Convenient for calculating offsets and for iterations. */
     private final int areaXY;
 
@@ -195,7 +195,7 @@ public final class Extent implements Serializable {
 
         return size.equals(other.size);
     }
-    
+
     /** Checks for equality with another extent ignoring any differences in the Z dimension */
     public boolean equalsIgnoreZ(Object obj) {
         if (this == obj) return true;
@@ -203,7 +203,7 @@ public final class Extent implements Serializable {
         if (getClass() != obj.getClass()) return false;
         Extent other = (Extent) obj;
 
-        return (size.x()==other.x()) && (size.y() ==other.y());
+        return (size.x() == other.x()) && (size.y() == other.y());
     }
 
     @Override
@@ -376,17 +376,19 @@ public final class Extent implements Serializable {
         }
         return z() > other.z();
     }
-    
+
     /**
      * Calls processor once for each x and y-values in the range
      *
-     * <p>This occurs in ascending order (x-dimension increments first, y-dimension increments second)
+     * <p>This occurs in ascending order (x-dimension increments first, y-dimension increments
+     * second)
      *
      * @param <E> a checked-exception that {@code indexConsumer} may throw
      * @param pointConsumer called for each point
      * @throws E if {@code indexConsumer} throws this exception
      */
-    public <E extends Exception> void iterateOverXY(OffsettedPointTwoDimensionalConsumer<E> pointConsumer) throws E {
+    public <E extends Exception> void iterateOverXY(
+            OffsettedPointTwoDimensionalConsumer<E> pointConsumer) throws E {
         int offset = 0;
         for (int y = 0; y < size.y(); y++) {
             for (int x = 0; x < size.x(); x++) {
@@ -398,13 +400,15 @@ public final class Extent implements Serializable {
     /**
      * Calls processor once for each x and y-values but <i>only</i> passing an offset
      *
-     * <p>This occurs in ascending order (x-dimension increments first, y-dimension increments second)
+     * <p>This occurs in ascending order (x-dimension increments first, y-dimension increments
+     * second)
      *
      * @param <E> a checked-exception that {@code indexConsumer} may throw
      * @param offsetConsumer called for each point with the offset
      * @throws E if {@code indexConsumer} throws this exception
      */
-    public <E extends Exception> void iterateOverXYOffset( CheckedIntConsumer<E> offsetConsumer ) throws E {
+    public <E extends Exception> void iterateOverXYOffset(CheckedIntConsumer<E> offsetConsumer)
+            throws E {
         for (int offset = 0; offset < areaXY; offset++) {
             offsetConsumer.accept(offset);
         }

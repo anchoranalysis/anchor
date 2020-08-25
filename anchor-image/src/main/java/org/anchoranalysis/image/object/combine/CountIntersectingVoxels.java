@@ -61,7 +61,8 @@ public abstract class CountIntersectingVoxels {
             BoundedVoxels<ByteBuffer> other,
             BoundingBox boxIntersect) {
         IntersectionBoundingBox box =
-                IntersectionBoundingBox.create(src.boundingBox(), other.boundingBox(), boxIntersect);
+                IntersectionBoundingBox.create(
+                        src.boundingBox(), other.boundingBox(), boxIntersect);
 
         // Otherwise we count the number of pixels that are not empty
         //  in both bounded-voxels in the intersecting region

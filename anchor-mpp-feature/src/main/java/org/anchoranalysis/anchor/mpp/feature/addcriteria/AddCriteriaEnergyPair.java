@@ -91,7 +91,8 @@ public class AddCriteriaEnergyPair implements AddCriteria<EnergyPair> {
         //  necessary calculations from the addCriteria calculations to be used later
         boolean calculate = false;
         try {
-            if (pairAddCriteria.includeMarks(mark1, mark2, energyStack.dimensions(), session, do3D)) {
+            if (pairAddCriteria.includeMarks(
+                    mark1, mark2, energyStack.dimensions(), session, do3D)) {
                 calculate = true;
             }
         } catch (IncludeMarksFailureException e) {

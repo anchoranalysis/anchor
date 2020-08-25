@@ -34,9 +34,7 @@ import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
 
-/**
- * @author Owen Feehan
- */
+/** @author Owen Feehan */
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 public abstract class RegionMembership extends AnchorBean<RegionMembership> {

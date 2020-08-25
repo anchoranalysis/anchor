@@ -38,17 +38,20 @@ public class MaskOr {
      * Performs a OR operation on each voxel in two masks, writing the result onto the first mask.
      *
      * @param first the first channel for operation (and in which the result is written)
-     * @param second the second channel for operation 
+     * @param second the second channel for operation
      */
     public static void apply(Mask first, Mask second) {
 
         byte sourceOn = first.getOnByte();
         byte receiveOn = second.getOnByte();
 
-        IterateVoxels.callEachPointTwo(first.voxels(), second.voxels(), (point, bufferSource, bufferReceive, offset) -> {
-            if (bufferReceive.get(offset) == receiveOn) {
-                bufferSource.put(offset, sourceOn);
-            }
-        });
+        IterateVoxels.callEachPointTwo(
+                first.voxels(),
+                second.voxels(),
+                (point, bufferSource, bufferReceive, offset) -> {
+                    if (bufferReceive.get(offset) == receiveOn) {
+                        bufferSource.put(offset, sourceOn);
+                    }
+                });
     }
 }

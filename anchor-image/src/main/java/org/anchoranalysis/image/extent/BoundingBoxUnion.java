@@ -26,9 +26,9 @@
 
 package org.anchoranalysis.image.extent;
 
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
-import lombok.AllArgsConstructor;
 
 /**
  * Performs union of a bounding-box with other entities

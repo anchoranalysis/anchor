@@ -33,7 +33,8 @@ import org.anchoranalysis.image.histogram.Histogram;
 public class Mean extends FeatureHistogramStatistic {
 
     @Override
-    protected double calculateStatisticFrom(Histogram histogram) throws FeatureCalculationException {
+    protected double calculateStatisticFrom(Histogram histogram)
+            throws FeatureCalculationException {
         try {
             return histogram.mean();
         } catch (OperationFailedException e) {

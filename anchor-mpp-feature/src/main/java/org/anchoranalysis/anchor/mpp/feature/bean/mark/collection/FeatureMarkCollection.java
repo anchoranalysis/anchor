@@ -34,12 +34,14 @@ import org.anchoranalysis.feature.input.FeatureInput;
 public abstract class FeatureMarkCollection extends Feature<FeatureInputMarkCollection> {
 
     @Override
-    public double calculate(SessionInput<FeatureInputMarkCollection> input) throws FeatureCalculationException {
+    public double calculate(SessionInput<FeatureInputMarkCollection> input)
+            throws FeatureCalculationException {
         return calc(input.get());
     }
 
     // Calculates an Energy element for a set of pixels
-    public abstract double calc(FeatureInputMarkCollection params) throws FeatureCalculationException;
+    public abstract double calc(FeatureInputMarkCollection params)
+            throws FeatureCalculationException;
 
     @Override
     public Class<? extends FeatureInput> inputType() {

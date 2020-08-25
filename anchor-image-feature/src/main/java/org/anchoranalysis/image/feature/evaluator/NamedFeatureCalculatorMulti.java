@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,26 +26,27 @@
 package org.anchoranalysis.image.feature.evaluator;
 
 import java.util.function.UnaryOperator;
+import lombok.AllArgsConstructor;
+import lombok.Value;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.name.FeatureNameList;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
-import lombok.AllArgsConstructor;
-import lombok.Value;
 
 /**
  * A {@link FeatureCalculatorMulti} with associated feature-names
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  * @param <T> feature input type
  */
-@Value @AllArgsConstructor
+@Value
+@AllArgsConstructor
 public class NamedFeatureCalculatorMulti<T extends FeatureInput> {
 
     private FeatureCalculatorMulti<T> calculator;
     private FeatureNameList names;
-    
-    public NamedFeatureCalculatorMulti<T> mapCalculator( UnaryOperator<FeatureCalculatorMulti<T>> mapOperator ) {
-        return new NamedFeatureCalculatorMulti<>( mapOperator.apply(calculator), names );
+
+    public NamedFeatureCalculatorMulti<T> mapCalculator(
+            UnaryOperator<FeatureCalculatorMulti<T>> mapOperator) {
+        return new NamedFeatureCalculatorMulti<>(mapOperator.apply(calculator), names);
     }
 }

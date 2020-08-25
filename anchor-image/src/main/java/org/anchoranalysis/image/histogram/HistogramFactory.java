@@ -44,9 +44,9 @@ import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelTypeException;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class HistogramFactory {
@@ -101,7 +101,8 @@ public class HistogramFactory {
 
         Histogram total = new Histogram((int) channel.getVoxelDataType().maxValue());
 
-        Histogram histogramForObject = createWithMask(channel.voxels().any(), new ObjectMask(mask.binaryVoxels()));
+        Histogram histogramForObject =
+                createWithMask(channel.voxels().any(), new ObjectMask(mask.binaryVoxels()));
         try {
             total.addHistogram(histogramForObject);
         } catch (OperationFailedException e) {

@@ -32,8 +32,8 @@ import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.Voxels;
 
 /**
- * Contains the buffer for the current slice, the current slice minus 1, and the current
- * slice plus 1
+ * Contains the buffer for the current slice, the current slice minus 1, and the current slice plus
+ * 1
  *
  * <p>Can then be shifted (incremented) across all z-slices
  *

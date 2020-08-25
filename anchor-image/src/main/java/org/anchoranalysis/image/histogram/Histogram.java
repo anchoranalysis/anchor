@@ -48,7 +48,7 @@ public final class Histogram {
     @Getter private int maxBin;
 
     private int[] counts;
-    
+
     private long sumCount = 0;
 
     public Histogram(int maxValue) {
@@ -62,7 +62,6 @@ public final class Histogram {
         this.minBin = minValue;
     }
 
-    
     public Histogram duplicate() {
         Histogram out = new Histogram(minBin, maxBin);
         out.counts = ArrayUtils.clone(counts);
@@ -70,7 +69,6 @@ public final class Histogram {
         return out;
     }
 
-    
     public void reset() {
         sumCount = 0;
         for (int i = minBin; i <= maxBin; i++) {
@@ -78,14 +76,12 @@ public final class Histogram {
         }
     }
 
-    
     public void zeroValue(int value) {
         int index = index(value);
         sumCount -= counts[index];
         counts[index] = 0;
     }
 
-    
     public void transferValue(int sourceValue, int destinationValue) {
         int srcIndex = index(sourceValue);
 
@@ -93,13 +89,11 @@ public final class Histogram {
         counts[srcIndex] = 0;
     }
 
-    
     public void incrementValue(int value) {
         incrementCount(value, 1);
         sumCount++;
     }
 
-    
     public void incrementValueBy(int value, int increase) {
         incrementCount(value, increase);
         sumCount += increase;
@@ -110,12 +104,10 @@ public final class Histogram {
      *
      * @throws ArithmeticException if incresae cannot be converted to an int safely
      */
-    
     public void incrementValueBy(int value, long increase) {
         incrementValueBy(value, toIntExact(increase));
     }
 
-    
     public void removeBelowThreshold(int threshold) {
         for (int bin = getMinBin(); bin < threshold; bin++) {
             zeroValue(bin);
@@ -125,23 +117,19 @@ public final class Histogram {
         this.minBin = threshold;
     }
 
-    
     public boolean isEmpty() {
         return sumCount == 0;
     }
 
-    
     public int getCount(int value) {
         return counts[index(value)];
     }
 
     /** The number of items in the histogram {@code (maxBin - minBin + 1)} */
-    
     public int size() {
         return counts.length;
     }
 
-    
     public void addHistogram(Histogram other) throws OperationFailedException {
         if (this.getMaxBin() != other.getMaxBin()) {
             throw new OperationFailedException(
@@ -159,7 +147,6 @@ public final class Histogram {
         }
     }
 
-    
     public double mean() throws OperationFailedException {
 
         checkAtLeastOneItemExists();
@@ -173,7 +160,6 @@ public final class Histogram {
         return ((double) sum) / sumCount;
     }
 
-    
     public double meanGreaterEqualTo(int value) throws OperationFailedException {
         checkAtLeastOneItemExists();
 
@@ -191,7 +177,6 @@ public final class Histogram {
         return ((double) sum) / count; // NOSONAR
     }
 
-    
     public double meanNonZero() throws OperationFailedException {
         checkAtLeastOneItemExists();
 
@@ -204,12 +189,10 @@ public final class Histogram {
         return ((double) sum) / (sumCount - getCount(0));
     }
 
-    
     public long sumNonZero() {
         return calculateSum() - getCount(0);
     }
 
-    
     public void scaleBy(double factor) {
 
         int sum = 0;
@@ -226,7 +209,6 @@ public final class Histogram {
         sumCount = sum;
     }
 
-    
     public int quantile(double quantile) throws OperationFailedException {
         checkAtLeastOneItemExists();
 
@@ -243,7 +225,6 @@ public final class Histogram {
         return calculateMaximum();
     }
 
-    
     public int quantileAboveZero(double quantile) throws OperationFailedException {
         checkAtLeastOneItemExists();
 
@@ -264,7 +245,6 @@ public final class Histogram {
         return calculateMaximum();
     }
 
-    
     public boolean hasAboveZero() {
 
         int startMin = Math.max(1, minBin);
@@ -277,7 +257,6 @@ public final class Histogram {
         return false;
     }
 
-    
     public double percentGreaterEqualTo(int binThreshold) {
 
         int startMin = Math.max(binThreshold, minBin);
@@ -290,7 +269,6 @@ public final class Histogram {
         return ((double) sum) / sumCount;
     }
 
-    
     public int calculateMode() throws OperationFailedException {
         checkAtLeastOneItemExists();
         return calculateMode(0);
@@ -298,10 +276,9 @@ public final class Histogram {
 
     /**
      * Calculates the mode of the histogram values i.e. the most frequently occurring item
-     * 
+     *
      * <p>Should only be called on a histogram with at least one item
      */
-    
     public int calculateMode(int startValue) throws OperationFailedException {
         checkAtLeastOneItemExists();
 
@@ -320,8 +297,9 @@ public final class Histogram {
     }
 
     /**
-     * Calculates the <i>maximum</i> of the histogram values i.e. the highest bin with a non-zero count
-     * 
+     * Calculates the <i>maximum</i> of the histogram values i.e. the highest bin with a non-zero
+     * count
+     *
      * <p>Should only be called on a histogram with at least one item
      */
     public int calculateMaximum() throws OperationFailedException {
@@ -337,11 +315,11 @@ public final class Histogram {
     }
 
     /**
-     * Calculates the <i>minimum</i> of the histogram values i.e. the lowest bin with a non-zero count
-     * 
+     * Calculates the <i>minimum</i> of the histogram values i.e. the lowest bin with a non-zero
+     * count
+     *
      * <p>Should only be called on a histogram with at least one item
      */
-    
     public int calculateMinimum() throws OperationFailedException {
         checkAtLeastOneItemExists();
 
@@ -354,22 +332,18 @@ public final class Histogram {
         throw new AnchorImpossibleSituationException();
     }
 
-    
     public long calculateSum() {
         return calculateSumHelper(i -> i);
     }
 
-    
     public long calculateSumSquares() {
         return calculateSumHelper(i -> i * i);
     }
 
-    
     public long calculateSumCubes() {
         return calculateSumHelper(i -> i * i * i);
     }
 
-    
     public int calculateCountNonZero() {
 
         int num = 0;
@@ -383,16 +357,16 @@ public final class Histogram {
         return num;
     }
 
-    
     public double standardDeviation() throws OperationFailedException {
         checkAtLeastOneItemExists();
         return Math.sqrt(variance());
     }
-    
+
     public double variance() {
-        return new VarianceCalculator(calculateSum(), calculateSumSquares(), getTotalCount()).variance();
+        return new VarianceCalculator(calculateSum(), calculateSumSquares(), getTotalCount())
+                .variance();
     }
-    
+
     public long countThreshold(RelationToThreshold relationToThreshold) {
 
         RelationToValue relation = relationToThreshold.relation();
@@ -411,7 +385,7 @@ public final class Histogram {
     }
 
     // Thresholds (generates a new histogram, existing object is unchanged)
-    
+
     public Histogram threshold(RelationToThreshold relationToThreshold) {
 
         RelationToValue relation = relationToThreshold.relation();
@@ -433,28 +407,27 @@ public final class Histogram {
 
     // Doesn't show zero values
     public String toString() {
-        return concatenateForEachBin( bin -> {
-            int count = getCount(bin);
-            if (count!=0) {
-                return String.format("%d: %d%n", bin, count);
-            } else {
-                return "";
-            }
-        });
+        return concatenateForEachBin(
+                bin -> {
+                    int count = getCount(bin);
+                    if (count != 0) {
+                        return String.format("%d: %d%n", bin, count);
+                    } else {
+                        return "";
+                    }
+                });
     }
 
     // Includes zero values
-    
+
     public String csvString() {
-        return concatenateForEachBin( bin -> String.format("%d, %d%n", bin, getCount(bin)) );
+        return concatenateForEachBin(bin -> String.format("%d, %d%n", bin, getCount(bin)));
     }
 
-    
     public long getTotalCount() {
         return sumCount;
     }
 
-    
     public Histogram extractValuesFromRight(long numberValues) {
 
         Histogram out = new Histogram(getMaxBin());
@@ -479,7 +452,6 @@ public final class Histogram {
         return out;
     }
 
-    
     public Histogram extractValuesFromLeft(long numberValues) {
 
         Histogram out = new Histogram(getMaxBin());
@@ -504,8 +476,8 @@ public final class Histogram {
     }
 
     /**
-     * calculates the mean after raising each histogram value to a power i.e. mean of
-     * {@code histogramVal^power}
+     * calculates the mean after raising each histogram value to a power i.e. mean of {@code
+     * histogramVal^power}
      */
     public double mean(double power) throws OperationFailedException {
         checkAtLeastOneItemExists();
@@ -570,8 +542,9 @@ public final class Histogram {
 
     /**
      * Places a particular bin in a destination histogram.
-     * <p>
-     * Either the whole bin is transferred or only some of the bin so that {@code remaining >= 0}.
+     *
+     * <p>Either the whole bin is transferred or only some of the bin so that {@code remaining >=
+     * 0}.
      *
      * @param destination the destination histogram
      * @param bin the bin-value
@@ -591,12 +564,14 @@ public final class Histogram {
             return 0;
         }
     }
-    
-    /** Builds a string that is a concatenation of strings generated for each bin in the histogram */
+
+    /**
+     * Builds a string that is a concatenation of strings generated for each bin in the histogram
+     */
     private String concatenateForEachBin(IntFunction<String> stringForBin) {
         StringBuilder builder = new StringBuilder();
         for (int bin = minBin; bin <= maxBin; bin++) {
-            builder.append( stringForBin.apply(bin) );
+            builder.append(stringForBin.apply(bin));
         }
         return builder.toString();
     }

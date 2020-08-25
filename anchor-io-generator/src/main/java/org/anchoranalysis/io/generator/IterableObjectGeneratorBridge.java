@@ -26,14 +26,14 @@
 
 package org.anchoranalysis.io.generator;
 
+import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.functional.function.CheckedFunction;
 import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
-import lombok.RequiredArgsConstructor;
 
 /**
- * Allows us to call an {@code IterableGenerator<V,S>} as if it was an
- * {@code IterableGenerator<T,S>} using an function to connect the two
+ * Allows us to call an {@code IterableGenerator<V,S>} as if it was an {@code
+ * IterableGenerator<T,S>} using an function to connect the two
  *
  * @author Owen Feehan
  * @param <S> generator-type
@@ -47,7 +47,7 @@ public class IterableObjectGeneratorBridge<S, T, V> implements IterableObjectGen
     private final IterableObjectGenerator<V, S> internalGenerator;
     private final CheckedFunction<T, V, ? extends Throwable> elementBridge;
     // END REQUIRED ARGUMENTS
-    
+
     private T element;
 
     @Override

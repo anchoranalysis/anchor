@@ -26,19 +26,19 @@
 
 package org.anchoranalysis.annotation.image;
 
-import org.anchoranalysis.annotation.Annotation;
 import lombok.AllArgsConstructor;
 import lombok.Value;
+import org.anchoranalysis.annotation.Annotation;
 
 /**
  * A single label that pertains to an image
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
-@Value @AllArgsConstructor
+@Value
+@AllArgsConstructor
 public class ImageLabelAnnotation implements Annotation {
 
-    /** The label that applies to the image*/
+    /** The label that applies to the image */
     private String label;
 }

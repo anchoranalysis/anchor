@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.mpp.overlay;
 
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.Dimensions;
@@ -34,7 +35,6 @@ import org.anchoranalysis.mpp.bean.regionmap.RegionMembershipWithFlags;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.overlay.object.scaled.ScaledMaskCreator;
 import org.anchoranalysis.overlay.writer.DrawOverlay;
-import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 class FromMark implements ScaledMaskCreator {

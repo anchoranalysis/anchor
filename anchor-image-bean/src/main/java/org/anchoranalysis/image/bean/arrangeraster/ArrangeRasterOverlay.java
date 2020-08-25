@@ -34,8 +34,8 @@ import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.bean.nonbean.arrangeraster.ArrangeRasterException;
 import org.anchoranalysis.image.bean.nonbean.arrangeraster.BoundingBoxesOnPlane;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
 
 // Overlays one image on the other
@@ -112,8 +112,7 @@ public class ArrangeRasterOverlay extends ArrangeRasterBean {
 
         RGBStack overlayImg = rasterIterator.next();
 
-        Extent overlayE =
-                deriveExtent(overlayImg.channelAt(0).extent(), boxSet.extent());
+        Extent overlayE = deriveExtent(overlayImg.channelAt(0).extent(), boxSet.extent());
 
         int hPos = positionHorizontal(boxSet, overlayImg.dimensions());
         int vPos = positionVertical(boxSet, overlayImg.dimensions());

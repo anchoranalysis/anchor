@@ -138,12 +138,14 @@ public class KernelProposer<T> extends AnchorBean<KernelProposer<T>> {
             if (!weightedKernel.getKernel().isCompatibleWith(testMark)) {
                 throw new UnsupportedOperationException(
                         String.format(
-                                "Kernel %s is not compatible with templateMark", weightedKernel.getName()));
+                                "Kernel %s is not compatible with templateMark",
+                                weightedKernel.getName()));
             }
         }
     }
 
-    private void calculateCumulativeProbability(List<KernelProposerOption<T>> options) throws InitException {
+    private void calculateCumulativeProbability(List<KernelProposerOption<T>> options)
+            throws InitException {
 
         if (options.isEmpty()) {
             throw new InitException("At least one option must be specified");

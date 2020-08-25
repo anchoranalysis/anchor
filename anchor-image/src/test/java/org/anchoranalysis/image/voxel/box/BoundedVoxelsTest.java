@@ -50,19 +50,18 @@ public class BoundedVoxelsTest {
         // A bounding box that overlaps with the extent
         Extent extent = extent(20);
 
-        BoundedVoxels<ByteBuffer> box = BoundedVoxelsFactory.createByte(
-             new BoundingBox(point(10), extent(15))
-        );
+        BoundedVoxels<ByteBuffer> box =
+                BoundedVoxelsFactory.createByte(new BoundingBox(point(10), extent(15)));
 
         Point3i grow = point(1);
         box.growBuffer(grow, grow, Optional.of(extent), VoxelsFactory.getByte());
     }
-    
+
     private static Point3i point(int value) {
         return new Point3i(value, value, value);
     }
-    
+
     private static Extent extent(int value) {
-        return new Extent(value,value,value);
+        return new Extent(value, value, value);
     }
 }

@@ -85,7 +85,8 @@ public class PathDifferenceFromBase {
      * @param baseFolderPath the base-folder as a string
      * @param entirePath the entire path as a string
      */
-    private static PathDifferenceFromBase calculateDifference(String baseFolderPath, String entirePath) {
+    private static PathDifferenceFromBase calculateDifference(
+            String baseFolderPath, String entirePath) {
 
         // Convert the base, and all to forward slashes only
         String base = FilePathToUnixStyleConverter.toStringUnixStyle(baseFolderPath);
@@ -119,12 +120,12 @@ public class PathDifferenceFromBase {
             return Paths.get(getFilename());
         }
     }
-        
+
     private static PathDifferenceFromBase differenceFromRemainder(String remainder) {
         File remainderFile = new File(remainder);
 
         return new PathDifferenceFromBase(
                 remainderFile.getName(),
-                Optional.ofNullable(remainderFile.getParentFile()).map(File::toPath));        
+                Optional.ofNullable(remainderFile.getParentFile()).map(File::toPath));
     }
 }

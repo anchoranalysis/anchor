@@ -30,7 +30,8 @@ import java.io.Serializable;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
-@AllArgsConstructor @RequiredArgsConstructor
+@AllArgsConstructor
+@RequiredArgsConstructor
 public class EnergyTotal implements Serializable {
 
     /** */

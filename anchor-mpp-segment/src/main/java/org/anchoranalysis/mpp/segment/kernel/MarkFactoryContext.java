@@ -26,9 +26,9 @@
 
 package org.anchoranalysis.mpp.segment.kernel;
 
-import org.anchoranalysis.mpp.bean.mark.MarkWithIdentifierFactory;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.anchoranalysis.mpp.bean.mark.MarkWithIdentifierFactory;
 
 @AllArgsConstructor
 public class MarkFactoryContext {

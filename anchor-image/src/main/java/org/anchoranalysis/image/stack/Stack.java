@@ -37,10 +37,10 @@ import org.anchoranalysis.core.functional.function.CheckedUnaryOperator;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.channel.factory.ChannelFactorySingleType;
-import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.Dimensions;
-import org.anchoranalysis.image.extent.Resolution;
+import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
+import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
@@ -202,7 +202,7 @@ public class Stack implements Iterable<Channel> {
     public Dimensions dimensions() {
         return delegate.getChannel(0).dimensions();
     }
-    
+
     public Extent extent() {
         return dimensions().extent();
     }

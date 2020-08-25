@@ -53,7 +53,10 @@ public class Outline extends DrawObject {
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private int outlineWidth;
 
-    /** If true the outline is also applied in the z-dimension, otherwise this is ignored as possible boundary */
+    /**
+     * If true the outline is also applied in the z-dimension, otherwise this is ignored as possible
+     * boundary
+     */
     @BeanField @Getter @Setter private boolean includeZ;
     // END BEAN PROPERTIES
 

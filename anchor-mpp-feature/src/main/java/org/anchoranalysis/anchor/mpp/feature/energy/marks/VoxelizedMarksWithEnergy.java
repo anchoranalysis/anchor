@@ -75,14 +75,16 @@ public final class VoxelizedMarksWithEnergy {
 
     // Copy constructor - we do shallow copying of configuration
     public VoxelizedMarksWithEnergy shallowCopy() {
-        return new VoxelizedMarksWithEnergy(marks.shallowCopy(), new MemoCollection(memoMarks), logger);
+        return new VoxelizedMarksWithEnergy(
+                marks.shallowCopy(), new MemoCollection(memoMarks), logger);
     }
 
     // Copy constructor - we do shallow copying of configuration
     public VoxelizedMarksWithEnergy deepCopy() {
-        return new VoxelizedMarksWithEnergy(marks.deepCopy(), new MemoCollection(memoMarks), logger);
+        return new VoxelizedMarksWithEnergy(
+                marks.deepCopy(), new MemoCollection(memoMarks), logger);
     }
-    
+
     public int indexOf(Mark mark) {
         return marks.getMarks().indexOf(mark);
     }
@@ -100,7 +102,8 @@ public final class VoxelizedMarksWithEnergy {
         marks.add(memoMarks, newPxlMark, stack);
     }
 
-    public void remove(int index, EnergyStackWithoutParams stack) throws NamedFeatureCalculateException {
+    public void remove(int index, EnergyStackWithoutParams stack)
+            throws NamedFeatureCalculateException {
         VoxelizedMarkMemo memoRmv = getMemoForIndex(index);
         marks.remove(memoMarks, index, memoRmv, stack);
     }

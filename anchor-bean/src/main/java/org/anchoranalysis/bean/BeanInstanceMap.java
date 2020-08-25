@@ -76,9 +76,10 @@ public class BeanInstanceMap {
      *
      * <p>Any existing map-entries are retained.
      *
-     * @param listNamedInstances list of {@link NamedBean}. The name of each bean maps to the class in the
-     *     map.
-     * @throws BeanMisconfiguredException if the list of {@link NamedBean} contains an invalid class.
+     * @param listNamedInstances list of {@link NamedBean}. The name of each bean maps to the class
+     *     in the map.
+     * @throws BeanMisconfiguredException if the list of {@link NamedBean} contains an invalid
+     *     class.
      */
     public void addFrom(List<NamedBean<?>> listNamedInstances) throws BeanMisconfiguredException {
 

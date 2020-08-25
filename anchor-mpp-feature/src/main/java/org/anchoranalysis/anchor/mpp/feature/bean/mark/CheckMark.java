@@ -36,9 +36,8 @@ import org.anchoranalysis.mpp.mark.Mark;
 
 /**
  * A predicate on a mark to check if a condition has been satisfied.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public abstract class CheckMark extends MPPBean<CheckMark> implements CompatibleWithMark {
 

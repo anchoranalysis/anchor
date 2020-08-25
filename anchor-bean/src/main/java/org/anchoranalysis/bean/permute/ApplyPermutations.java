@@ -39,7 +39,8 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 
 /**
- * Applies a {@link PermuteProperty} to a bean to create new duplicated beans each with a permutation
+ * Applies a {@link PermuteProperty} to a bean to create new duplicated beans each with a
+ * permutation
  *
  * @author Owen Feehan
  */
@@ -62,8 +63,15 @@ public class ApplyPermutations<T extends AnchorBean<T>> {
     /**
      * Takes a list of beans, and creates a permuted version, updating the custom names
      *
-     * <p>If both {@code nameGetter} and {@code nameSetter} are non-null, then a <pre>.XXX</pre> is appended to the name of the
-     * duplicated bean where <pre>XXX</pre> identifies the permutation.
+     * <p>If both {@code nameGetter} and {@code nameSetter} are non-null, then a
+     *
+     * <pre>.XXX</pre>
+     *
+     * is appended to the name of the duplicated bean where
+     *
+     * <pre>XXX</pre>
+     *
+     * identifies the permutation.
      *
      * @param beans list of beans on which a permutation is applied
      * @param propertyToPermute the property to permute, and all the values for the permutation

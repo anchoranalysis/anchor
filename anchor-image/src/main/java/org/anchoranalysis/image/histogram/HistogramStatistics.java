@@ -37,7 +37,8 @@ import org.anchoranalysis.core.error.OperationFailedException;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class HistogramStatistics {
 
-    public static double coefficientOfVariation(Histogram histogram) throws OperationFailedException {
+    public static double coefficientOfVariation(Histogram histogram)
+            throws OperationFailedException {
         double mean = histogram.mean();
 
         if (mean == 0) {

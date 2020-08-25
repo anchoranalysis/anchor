@@ -57,18 +57,26 @@ public class FeatureListEvaluatorEnergy<T extends FeatureInput> extends FeatureL
     // END BEAN PROPERTIES
 
     @Override
-    public NamedFeatureCalculatorMulti<T> createAndStartSession( UnaryOperator<FeatureList<T>> addFeatures, SharedObjects sharedObjects ) throws OperationFailedException {
+    public NamedFeatureCalculatorMulti<T> createAndStartSession(
+            UnaryOperator<FeatureList<T>> addFeatures, SharedObjects sharedObjects)
+            throws OperationFailedException {
 
-        NamedFeatureCalculatorMulti<T> namedCalculator = super.createAndStartSession(addFeatures, sharedObjects);
+        NamedFeatureCalculatorMulti<T> namedCalculator =
+                super.createAndStartSession(addFeatures, sharedObjects);
 
-        Optional<EnergyStack> energyStack = EnergyStackHelper.energyStack(stackEnergy,params);
-        return namedCalculator.mapCalculator( calculator -> new FeatureCalculatorMultiChangeInput<>(
-                calculator,
-                params -> {
-                    // Use reflection, to only set the energyStack on params that supports them
-                    if (params instanceof FeatureInputEnergy && energyStack.isPresent()) {
-                        ((FeatureInputEnergy) params).setEnergyStack(energyStack.get());
-                    }
-                }));
+        Optional<EnergyStack> energyStack = EnergyStackHelper.energyStack(stackEnergy, params);
+        return namedCalculator.mapCalculator(
+                calculator ->
+                        new FeatureCalculatorMultiChangeInput<>(
+                                calculator,
+                                params -> {
+                                    // Use reflection, to only set the energyStack on params that
+                                    // supports them
+                                    if (params instanceof FeatureInputEnergy
+                                            && energyStack.isPresent()) {
+                                        ((FeatureInputEnergy) params)
+                                                .setEnergyStack(energyStack.get());
+                                    }
+                                }));
     }
 }

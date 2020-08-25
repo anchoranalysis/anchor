@@ -29,6 +29,7 @@ package org.anchoranalysis.mpp.mark.points;
 import static org.anchoranalysis.mpp.bean.regionmap.RegionMembershipUtilities.flagForNoRegion;
 import static org.anchoranalysis.mpp.bean.regionmap.RegionMembershipUtilities.flagForRegion;
 import static org.anchoranalysis.mpp.mark.GlobalRegionIdentifiers.SUBMARK_INSIDE;
+
 import java.util.List;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;

@@ -179,9 +179,9 @@ public class FeatureListFactory {
      * @param  <S> type that will be filtered and then mapped to a feature
      * @param  <T> feature input-type for the result of the mapping
      * @param  <E> exception-type that can be thrown during mapping
-     * @param  iterable source of entities to be mapped
-     * @param  predicate only items in {@code iterable} that fulfill this condition will be mapped
-     * @param  mapFunc function for mapping
+     * @param iterable source of entities to be mapped
+     * @param predicate only items in {@code iterable} that fulfill this condition will be mapped
+     * @param mapFunc function for mapping
      * @return a newly created feature-list, with the result (in order) of the mapping of each item
      *     in {@code iterable}
      * @throws E exception if it occurs during mapping

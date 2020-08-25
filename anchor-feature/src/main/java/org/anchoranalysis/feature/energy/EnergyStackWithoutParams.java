@@ -31,8 +31,8 @@ import io.vavr.control.Either;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.OperationFailedRuntimeException;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.stack.Stack;
 
 /**
@@ -82,7 +82,7 @@ public class EnergyStackWithoutParams {
     public Dimensions dimensions() {
         return container.map(Stack::dimensions).getOrElseGet(Functions.identity());
     }
-    
+
     public Extent extent() {
         return dimensions().extent();
     }

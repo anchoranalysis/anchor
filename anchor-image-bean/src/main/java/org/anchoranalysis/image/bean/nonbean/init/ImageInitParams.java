@@ -186,7 +186,7 @@ public class ImageInitParams implements BeanInitParams {
     public Path getModelDirectory() {
         return sharedObjects.getContext().getModelDirectory();
     }
-    
+
     private void addToObjects(String identifier, StoreSupplier<ObjectCollection> objects)
             throws OperationFailedException {
         objects().add(identifier, objects);

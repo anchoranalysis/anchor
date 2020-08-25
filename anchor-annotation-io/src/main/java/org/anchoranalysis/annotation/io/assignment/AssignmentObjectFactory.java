@@ -52,10 +52,7 @@ public class AssignmentObjectFactory {
     @Getter private ObjectCollectionDistanceMatrix cost;
 
     public AssignmentOverlapFromPairs createAssignment(
-            ObjectCollection left,
-            ObjectCollection right,
-            double maxAcceptedCost,
-            Dimensions dim)
+            ObjectCollection left, ObjectCollection right, double maxAcceptedCost, Dimensions dim)
             throws FeatureCalculationException {
 
         // Empty annotations

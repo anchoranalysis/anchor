@@ -26,9 +26,9 @@
 
 package org.anchoranalysis.bean.permute.property;
 
+import java.util.Iterator;
 import lombok.Getter;
 import lombok.Setter;
-import java.util.Iterator;
 import org.anchoranalysis.bean.annotation.BeanField;
 
 /**

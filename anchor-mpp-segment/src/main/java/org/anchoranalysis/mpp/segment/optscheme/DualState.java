@@ -27,11 +27,11 @@
 package org.anchoranalysis.mpp.segment.optscheme;
 
 import java.util.Optional;
+import lombok.Getter;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.mpp.segment.transformer.StateTransformer;
 import org.anchoranalysis.mpp.segment.transformer.TransformationContext;
-import lombok.Getter;
 
 /**
  * Remembers the current state of type T and some best state (which was once set from the current
@@ -62,7 +62,7 @@ public class DualState<T> {
         clearBest();
         return kept;
     }
-    
+
     public void assignCurrent(T stateToAssign) {
         this.current = Optional.of(stateToAssign);
     }

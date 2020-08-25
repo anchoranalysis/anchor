@@ -30,19 +30,19 @@ import java.lang.reflect.Field;
 import java.nio.file.Path;
 import java.util.List;
 import javax.annotation.Nullable;
+import lombok.Getter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.bean.error.BeanDuplicateException;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
-import lombok.Getter;
 
 /**
  * The base class of all beans used in <a href="http://www.anchoranalysis.org">Anchor</a>.
  *
- * <p>The family-type exists as a templated parameter {@code <F>} to return a sensibly-typed object when
- * {@link #duplicateBean} is called. Typically, this is either the type of the class itself, or an abstract base
- * class representing a family of similar classes. A bean must always be assignable from (i.e. be equal to or inherit from) the family-type it is
- * associated with.
+ * <p>The family-type exists as a templated parameter {@code <F>} to return a sensibly-typed object
+ * when {@link #duplicateBean} is called. Typically, this is either the type of the class itself, or
+ * an abstract base class representing a family of similar classes. A bean must always be assignable
+ * from (i.e. be equal to or inherit from) the family-type it is associated with.
  *
  * @author Owen Feehan
  * @param <F> family-type, the type returned the {@link #duplicateBean} method is called
@@ -58,7 +58,8 @@ public abstract class AnchorBean<F> {
     private List<Field> listBeanFields;
 
     /**
-     * A local path on the file-system associated with this bean (from serialization) if defined. Otherwise null.
+     * A local path on the file-system associated with this bean (from serialization) if defined.
+     * Otherwise null.
      */
     @Getter @Nullable private Path localPath;
 
@@ -74,7 +75,8 @@ public abstract class AnchorBean<F> {
     /**
      * A (maybe longer) description identifying the bean and perhaps its key parameters.
      *
-     * <p>By default, it returns the same as {@link #getBeanName} but beans can optionally override it
+     * <p>By default, it returns the same as {@link #getBeanName} but beans can optionally override
+     * it
      *
      * @return either the short-name of the bean, or a longer description
      */
@@ -148,7 +150,7 @@ public abstract class AnchorBean<F> {
 
     /**
      * Finds all bean-fields that are instances of a certain class.
-     * 
+     *
      * <p>All immediate children are checked, and any items in immediate lists.
      *
      * @param match the class that a field must be assignable from (equal to or inherit from)
@@ -156,13 +158,15 @@ public abstract class AnchorBean<F> {
      * @return a list of all bean-fields that match the criteria
      * @throws BeanMisconfiguredException if we discover the bean has been misconfigured
      */
-    public <T extends AnchorBean<?>> List<T> findFieldsOfClass(Class<?> match) throws BeanMisconfiguredException {
+    public <T extends AnchorBean<?>> List<T> findFieldsOfClass(Class<?> match)
+            throws BeanMisconfiguredException {
         return HelperFindChildren.findChildrenOfClass(this, fields(), match);
     }
 
     /**
-     * A list of <i>all</i> bean-fields that are associated with this bean directly (fields of children are not checked).
-     * 
+     * A list of <i>all</i> bean-fields that are associated with this bean directly (fields of
+     * children are not checked).
+     *
      * <p>This operation is cached as the necessary reflection calls are costly.
      *
      * @return a list of bean-fields associated with the current bean

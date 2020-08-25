@@ -42,9 +42,9 @@ import org.anchoranalysis.image.feature.session.FeatureTableCalculator;
 
 /**
  * A feature-session to evaluate pairs of objects.
- * 
+ *
  * <p>Successive pairs are evaluated in five different ways:
-
+ *
  * <ul>
  *   <li>the image in which the object exists (on {code listImage}) i.e. the energy-stack.
  *   <li>the left-object in the pair (on {@code listSingle})
@@ -57,11 +57,13 @@ import org.anchoranalysis.image.feature.session.FeatureTableCalculator;
  * appropriately to avoid redundancies.
  *
  * <p>Two types of caching are applied to avoid redundancy:
+ *
  * <ul>
- * <li>The internal calculation caches of first/second/merged are reused as the internal calculation
- *     sub-caches in pair.
- * <li>The entire results are cached (as a function of the input) for first/second, as the same
- *     inputs reappear multiple times. </ul>
+ *   <li>The internal calculation caches of first/second/merged are reused as the internal
+ *       calculation sub-caches in pair.
+ *   <li>The entire results are cached (as a function of the input) for first/second, as the same
+ *       inputs reappear multiple times.
+ * </ul>
  *
  * @author Owen Feehan
  */
@@ -86,7 +88,10 @@ public class PairsTableCalculator implements FeatureTableCalculator<FeatureInput
 
         calculator =
                 new CombinedCalculator(
-                        features, new CreateCalculatorHelper(energyStack, logger), include, soImage);
+                        features,
+                        new CreateCalculatorHelper(energyStack, logger),
+                        include,
+                        soImage);
     }
 
     @Override

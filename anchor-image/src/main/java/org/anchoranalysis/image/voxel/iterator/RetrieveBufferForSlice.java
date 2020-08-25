@@ -27,16 +27,16 @@
 package org.anchoranalysis.image.voxel.iterator;
 
 import java.nio.Buffer;
+import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.voxel.Voxels;
-import lombok.RequiredArgsConstructor;
 
 /**
- * Exposes a {@link ProcessVoxel} as a {@link ProcessVoxelSliceBuffer} by retrieving a buffer
- * from voxels for each z-slice.
+ * Exposes a {@link ProcessVoxel} as a {@link ProcessVoxelSliceBuffer} by retrieving a buffer from
+ * voxels for each z-slice.
  *
- * <p>Note that {@link #notifyChangeSlice} <b>need not</b> be be called for all slices (perhaps only a subset),
- * but {@link #process} <b>must</b> be called for ALL voxels on a given slice.
+ * <p>Note that {@link #notifyChangeSlice} <b>need not</b> be be called for all slices (perhaps only
+ * a subset), but {@link #process} <b>must</b> be called for ALL voxels on a given slice.
  *
  * @author Owen Feehan
  * @param <T> buffer-type for slice

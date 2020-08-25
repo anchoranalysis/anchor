@@ -39,14 +39,14 @@ import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactorySingleType;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 
 /**
  * A stack with exactly three channels, respectively for Red, Green and Blue colors.
@@ -175,8 +175,7 @@ public class RGBStack {
             ReadableTuple3i maxGlobal) {
         Preconditions.checkArgument(pointGlobal.z() >= 0);
         Preconditions.checkArgument(stack.getNumberChannels() == 3);
-        Preconditions.checkArgument(
-                stack.allChannelsHaveType(UnsignedByteVoxelType.INSTANCE));
+        Preconditions.checkArgument(stack.allChannelsHaveType(UnsignedByteVoxelType.INSTANCE));
 
         byte objectMaskOn = object.binaryValuesByte().getOnByte();
 

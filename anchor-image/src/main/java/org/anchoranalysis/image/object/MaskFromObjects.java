@@ -35,8 +35,8 @@ import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.mask.MaskFactory;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.Voxels;
 
 /**
@@ -51,25 +51,35 @@ public class MaskFromObjects {
     public static Mask createFromObjects(
             ObjectCollection objects, Dimensions dimensions, BinaryValues outValues) {
         return createFromObjectsWithValues(
-                objects, dimensions, outValues, outValues.getOffInt(), outValues.createByte().getOnByte());
+                objects,
+                dimensions,
+                outValues,
+                outValues.getOffInt(),
+                outValues.createByte().getOnByte());
     }
 
     /** We look for space NOT in the objects, and create channel to display it */
     public static Mask createFromNotObjects(
             ObjectCollection objects, Dimensions dimensions, BinaryValues outValues) {
         return createFromObjectsWithValues(
-                objects, dimensions, outValues, outValues.getOnInt(), outValues.createByte().getOffByte());
+                objects,
+                dimensions,
+                outValues,
+                outValues.getOnInt(),
+                outValues.createByte().getOffByte());
     }
 
-
     /**
-     * Creates a mask where the voxels corresponding to any objects in a collection are assigned {@code valueObjects} and other voxels are assigned {@code valueNotObjects}
-     * 
+     * Creates a mask where the voxels corresponding to any objects in a collection are assigned
+     * {@code valueObjects} and other voxels are assigned {@code valueNotObjects}
+     *
      * @param objects objects which determine ON and OFF values for the mask
      * @param dimensions the mask's dimensions
      * @param binaryValuesToOutput what defines ON and OFF in the output channel
-     * @param valueNotObjects value to assign to voxels that <b>do not</b> correspond to an ON voxel in any of {@code objects}
-     * @param valueObjects value to assign to voxels that <b>do</b> correspond to an ON voxel in any of {@code objects}
+     * @param valueNotObjects value to assign to voxels that <b>do not</b> correspond to an ON voxel
+     *     in any of {@code objects}
+     * @param valueObjects value to assign to voxels that <b>do</b> correspond to an ON voxel in any
+     *     of {@code objects}
      * @return a newly created mask with newly created buffers
      */
     private static Mask createFromObjectsWithValues(
@@ -78,7 +88,7 @@ public class MaskFromObjects {
             BinaryValues binaryValuesToOutput,
             int valueNotObjects,
             byte valueObjects) {
-        
+
         Mask out = MaskFactory.createMaskOff(dimensions, binaryValuesToOutput);
         if (valueNotObjects != 0) {
             out.voxels().assignValue(valueNotObjects).toAll();

@@ -53,9 +53,7 @@ public class TestLoader {
     /** Path to where the test-data is stored */
     private Path pathTestDataRoot;
 
-    /**
-     * Makes a new test-data loader
-     */
+    /** Makes a new test-data loader */
     private TestLoader(String root) {
         this(Paths.get(root));
     }
@@ -227,7 +225,7 @@ public class TestLoader {
     public static Document openXmlAbsoluteFilePath(Path filePath) {
         try {
             DocumentBuilderFactory dbf = createDocumentBuilderFactory();
-            
+
             DocumentBuilder db = dbf.newDocumentBuilder();
             return db.parse(filePath.toFile());
         } catch (ParserConfigurationException | SAXException | IOException e) {
@@ -246,7 +244,7 @@ public class TestLoader {
      * @return TRUE if their contents match, FALSE otherwise
      */
     public static boolean areXmlEqual(Document doc1, Document doc2) {
-        return areXmlEqual( Input.fromDocument(doc1), Input.fromDocument(doc2) );
+        return areXmlEqual(Input.fromDocument(doc1), Input.fromDocument(doc2));
     }
 
     /**
@@ -295,9 +293,14 @@ public class TestLoader {
         dbf.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
         return dbf;
     }
-        
+
     private static boolean areXmlEqual(Input.Builder expectedXML, Input.Builder actualXML) {
-        Diff difference = DiffBuilder.compare(expectedXML).ignoreWhitespace().ignoreComments().withTest(actualXML).build();
+        Diff difference =
+                DiffBuilder.compare(expectedXML)
+                        .ignoreWhitespace()
+                        .ignoreComments()
+                        .withTest(actualXML)
+                        .build();
         return !difference.hasDifferences();
     }
 }

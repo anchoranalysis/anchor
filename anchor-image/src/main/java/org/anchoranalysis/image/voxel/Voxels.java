@@ -46,8 +46,8 @@ import org.anchoranalysis.image.voxel.pixelsforslice.PixelsForSlice;
  * values which can be modified.
  *
  * <p>All operations that can modify the state (i.e. <i>mutable</i> operations) are provided via the
- * {@link #assignValue} or {@link #arithmetic()} or {@link #replaceSlice} or {@link #slice} or {@link
- * #sliceBuffer} methods. Other operations are all <i>immutable</i>.
+ * {@link #assignValue} or {@link #arithmetic()} or {@link #replaceSlice} or {@link #slice} or
+ * {@link #sliceBuffer} methods. Other operations are all <i>immutable</i>.
  *
  * @author Owen Feehan
  * @param <T> buffer-type

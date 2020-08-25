@@ -56,7 +56,8 @@ public class Orientation extends DrawObject {
     @BeanField @Getter @Setter private boolean drawReverseLine = false;
     // END BEAN PROPERTIES
 
-    public static Optional<Point3d> calculatePoint(ObjectWithProperties object, String propertyName) {
+    public static Optional<Point3d> calculatePoint(
+            ObjectWithProperties object, String propertyName) {
 
         if (!object.hasProperty(propertyName)) {
             return Optional.empty();

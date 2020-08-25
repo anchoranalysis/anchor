@@ -44,7 +44,7 @@ public class RunningSum implements Serializable {
 
     /** The running sum */
     @Getter private double sum = 0;
-    
+
     /** The running count */
     @Getter private int count = 0;
 
@@ -56,7 +56,7 @@ public class RunningSum implements Serializable {
     public double mean() {
         return mean(Double.NaN);
     }
-    
+
     /**
      * Calculates the mean
      *

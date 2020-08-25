@@ -56,9 +56,9 @@ public class XmlOutputterTest {
         Document docIn = loader.openXmlFromTestPath(testPathIn);
 
         XmlOutputter.writeXmlToFile(docIn, pathOut);
-        
+
         Document docOut = TestLoader.openXmlAbsoluteFilePath(pathOut);
-        
+
         assertTrue(TestLoader.areXmlEqual(docIn, docOut));
     }
 }

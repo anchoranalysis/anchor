@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -122,7 +122,7 @@ abstract class Base<T extends Buffer> implements VoxelsAssigner {
         toObject(object1, restrictTo);
         toObject(object2, restrictTo);
     }
-    
+
     /**
      * Sets voxels in a box to a particular value if they match a object-mask (but only a part of
      * the object-mask)
@@ -139,14 +139,9 @@ abstract class Base<T extends Buffer> implements VoxelsAssigner {
      *     boxToBeAssigned}.
      */
     private void toObject(ObjectMask object, Optional<BoundingBox> restrictTo) {
-        IterateVoxelsVoxelBoxAsInt.callEachPoint(
-                voxels,
-                object,
-                restrictTo,
-                this::assignToBuffer
-        );
+        IterateVoxelsVoxelBoxAsInt.callEachPoint(voxels, object, restrictTo, this::assignToBuffer);
     }
-    
+
     private void assignToBuffer(VoxelBuffer<T> buffer, int offset) {
         buffer.putInt(offset, valueToAssign);
     }

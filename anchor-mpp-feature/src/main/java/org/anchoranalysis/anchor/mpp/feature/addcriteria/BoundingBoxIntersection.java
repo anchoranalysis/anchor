@@ -52,14 +52,16 @@ public class BoundingBoxIntersection extends AddCriteriaPair {
             Optional<FeatureCalculatorMulti<FeatureInputPairMemo>> session,
             boolean do3D)
             throws IncludeMarksFailureException {
-        return boxFor(mark1.getMark(),dimensions).intersection().existsWith( boxFor(mark2.getMark(),dimensions) );
+        return boxFor(mark1.getMark(), dimensions)
+                .intersection()
+                .existsWith(boxFor(mark2.getMark(), dimensions));
     }
 
     @Override
     public Optional<FeatureList<FeatureInputPairMemo>> orderedListOfFeatures() {
         return Optional.empty();
     }
-    
+
     private BoundingBox boxFor(Mark mark, Dimensions dimensions) {
         BoundingBox box = mark.boxAllRegions(dimensions);
         if (suppressZ) {

@@ -83,7 +83,8 @@ public class NamedChannelsForSeriesMap implements NamedChannelsForSeries {
                 throw new GetOperationFailedException(
                         channelName,
                         String.format(
-                                "Stack does not have a channel corresponding to '%s'", channelName));
+                                "Stack does not have a channel corresponding to '%s'",
+                                channelName));
             }
 
             return stack.getChannel(channelMap.getException(channelName));
@@ -166,7 +167,8 @@ public class NamedChannelsForSeriesMap implements NamedChannelsForSeries {
         // Populate our stack from all the channels
         for (final String channelName : channelMap.keySet()) {
             stackCollection.add(
-                    channelName, StoreSupplier.cache(() -> extractChannelAsTimeSequence(channelName, t)));
+                    channelName,
+                    StoreSupplier.cache(() -> extractChannelAsTimeSequence(channelName, t)));
         }
     }
 

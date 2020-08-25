@@ -32,10 +32,10 @@ import org.anchoranalysis.core.index.IndexGetter;
 import org.anchoranalysis.mpp.proposer.error.ProposerFailureDescription;
 
 /**
- * A description of the decision made to accept/reject a kernel at a particular time instance (index)
- *  
- * @author Owen Feehan
+ * A description of the decision made to accept/reject a kernel at a particular time instance
+ * (index)
  *
+ * @author Owen Feehan
  */
 public class KernelDescision implements Serializable, IndexGetter {
 

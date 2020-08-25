@@ -28,22 +28,21 @@ package org.anchoranalysis.anchor.mpp.feature.energy.marks;
 
 import java.io.Serializable;
 import java.util.function.Consumer;
-import org.anchoranalysis.anchor.mpp.feature.energy.scheme.EnergySchemeWithSharedFeatures;
-import org.anchoranalysis.mpp.mark.Mark;
-import org.anchoranalysis.mpp.mark.MarkCollection;
-import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import org.anchoranalysis.anchor.mpp.feature.energy.scheme.EnergySchemeWithSharedFeatures;
+import org.anchoranalysis.mpp.mark.Mark;
+import org.anchoranalysis.mpp.mark.MarkCollection;
+import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 
 /**
  * A collection of marks with an associated (total) energy.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
-@AllArgsConstructor(access=AccessLevel.PRIVATE)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class MarksWithTotalEnergy implements Serializable {
 
     /** */
@@ -57,7 +56,7 @@ public class MarksWithTotalEnergy implements Serializable {
 
     /** The pre-annealed total energy */
     @Getter @Setter private double energyTotal = 0;
-    
+
     public MarksWithTotalEnergy(MarkCollection marks, EnergySchemeWithSharedFeatures energyScheme) {
         this.marks = marks;
         this.energyScheme = energyScheme;
@@ -66,7 +65,7 @@ public class MarksWithTotalEnergy implements Serializable {
 
     /**
      * Make a shallow copy
-     * 
+     *
      * @return a newly created object with identical contents (all member fields reused)
      */
     public MarksWithTotalEnergy shallowCopy() {
@@ -75,27 +74,28 @@ public class MarksWithTotalEnergy implements Serializable {
 
     /**
      * Make a deep copy (except the {@code energyScheme} which is reused).
-     * 
-     * @return a newly created object with identical contents (some member fields duplicated, some reused)
+     *
+     * @return a newly created object with identical contents (some member fields duplicated, some
+     *     reused)
      */
     public MarksWithTotalEnergy deepCopy() {
         return new MarksWithTotalEnergy(this.marks.deepCopy(), this.energyScheme, this.energyTotal);
     }
 
     public void add(VoxelizedMarkMemo voxelizedMark) {
-        replaceWithShallowCopy( marksCopy -> marksCopy.add(voxelizedMark.getMark()) );
+        replaceWithShallowCopy(marksCopy -> marksCopy.add(voxelizedMark.getMark()));
     }
 
     public void remove(int index) {
         // As none of our updates involve the memo list, we can do
         //  this operate after the other remove operations
-        replaceWithShallowCopy( marksCopy -> marksCopy.remove(index) );
+        replaceWithShallowCopy(marksCopy -> marksCopy.remove(index));
     }
 
     // calculates a new energy and configuration based upon a mark at a particular index
     //   changing into new mark
     public void exchange(int index, VoxelizedMarkMemo newMark) {
-        replaceWithShallowCopy( marksCopy -> marksCopy.exchange(index, newMark.getMark()) );
+        replaceWithShallowCopy(marksCopy -> marksCopy.exchange(index, newMark.getMark()));
     }
 
     public final int size() {
@@ -105,7 +105,7 @@ public class MarksWithTotalEnergy implements Serializable {
     public Mark get(int index) {
         return marks.get(index);
     }
-    
+
     private void replaceWithShallowCopy(Consumer<MarkCollection> operationAfterCopy) {
 
         // We shallow copy the existing configuration

@@ -54,7 +54,9 @@ public class ByteFrom8BitUnsignedInterleaving extends ConvertToByte {
         int totalBytesBuffer = sizeXY * numChannelsPerByteArray;
 
         int indOut = 0;
-        for (int indIn = channelRelative; indIn < totalBytesBuffer; indIn += numChannelsPerByteArray) {
+        for (int indIn = channelRelative;
+                indIn < totalBytesBuffer;
+                indIn += numChannelsPerByteArray) {
             crntChannelBytes[indOut++] = buffer.get(indIn);
         }
         return VoxelBufferByte.wrap(crntChannelBytes);

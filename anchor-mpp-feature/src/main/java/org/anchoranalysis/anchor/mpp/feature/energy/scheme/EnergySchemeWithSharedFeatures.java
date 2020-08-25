@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.anchor.mpp.feature.energy.scheme;
 
+import lombok.Getter;
 import org.anchoranalysis.anchor.mpp.feature.addcriteria.AddCriteriaEnergyPair;
 import org.anchoranalysis.anchor.mpp.feature.addcriteria.AddCriteriaPair;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputAllMemo;
@@ -49,7 +50,6 @@ import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.feature.shared.SharedFeatureMulti;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMap;
 import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
-import lombok.Getter;
 
 public class EnergySchemeWithSharedFeatures {
 
@@ -67,7 +67,8 @@ public class EnergySchemeWithSharedFeatures {
         private EnergyStackWithoutParams raster;
         private KeyValueParams kvp;
 
-        public void update(VoxelizedMarkMemo mark, EnergyStackWithoutParams raster) throws OperationFailedException {
+        public void update(VoxelizedMarkMemo mark, EnergyStackWithoutParams raster)
+                throws OperationFailedException {
             this.mark = mark;
             this.raster = raster;
 
@@ -146,15 +147,14 @@ public class EnergySchemeWithSharedFeatures {
         }
     }
 
-    private EnergyStack createEnergyStack(EnergyStackWithoutParams raster) throws FeatureCalculationException {
+    private EnergyStack createEnergyStack(EnergyStackWithoutParams raster)
+            throws FeatureCalculationException {
 
         try {
             return new EnergyStack(raster, energyScheme.createKeyValueParams());
         } catch (CreateException e) {
             throw new FeatureCalculationException(e);
         }
-
-        
     }
 
     public AddCriteriaEnergyPair createAddCriteria() throws CreateException {

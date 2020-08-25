@@ -99,7 +99,8 @@ public abstract class NamedChannelsInput implements ProvidesStackInput {
             throws OperationFailedException {
         // Apply it only to first time-series frame
         try {
-            NamedChannelsForSeries namedChannels = createChannelsForSeries(seriesNum, progressReporter);
+            NamedChannelsForSeries namedChannels =
+                    createChannelsForSeries(seriesNum, progressReporter);
             return new TimeSequence(namedChannels.allChannelsAsStack(0).get());
 
         } catch (RasterIOException e) {

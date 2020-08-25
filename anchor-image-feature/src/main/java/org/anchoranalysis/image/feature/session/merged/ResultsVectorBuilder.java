@@ -74,8 +74,8 @@ class ResultsVectorBuilder {
      * @param input
      * @param calculator
      */
-    public <T extends FeatureInput> void calculateAndInsert(T input, FeatureCalculatorMulti<T> calculator)
-            throws NamedFeatureCalculateException {
+    public <T extends FeatureInput> void calculateAndInsert(
+            T input, FeatureCalculatorMulti<T> calculator) throws NamedFeatureCalculateException {
         ResultsVector rvImage =
                 errorReporter.isPresent()
                         ? calculator.calculateSuppressErrors(input, errorReporter.get())

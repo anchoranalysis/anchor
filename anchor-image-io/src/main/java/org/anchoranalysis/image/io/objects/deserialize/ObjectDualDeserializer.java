@@ -70,10 +70,7 @@ class ObjectDualDeserializer implements Deserializer<ObjectMask> {
 
         try (OpenedRaster or = rasterReader.openFile(tiffFilename)) {
             Stack stack =
-                    or.openCheckType(
-                                    0,
-                                    ProgressReporterNull.get(),
-                                    UnsignedByteVoxelType.INSTANCE)
+                    or.openCheckType(0, ProgressReporterNull.get(), UnsignedByteVoxelType.INSTANCE)
                             .get(0);
 
             if (stack.getNumberChannels() != 1) {

@@ -35,8 +35,7 @@ import org.anchoranalysis.annotation.image.ImageLabelAnnotation;
 import org.anchoranalysis.annotation.io.AnnotationReader;
 import org.anchoranalysis.io.error.AnchorIOException;
 
-public class WholeImageLabelAnnotationReader
-        implements AnnotationReader<ImageLabelAnnotation> {
+public class WholeImageLabelAnnotationReader implements AnnotationReader<ImageLabelAnnotation> {
 
     @Override
     public Optional<ImageLabelAnnotation> read(Path path) throws AnchorIOException {

@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -29,16 +29,16 @@ import java.util.function.IntConsumer;
 
 /**
  * Like a {@link IntConsumer} but accepts two coordinates of a point and an offset value
- * 
+ *
  * @author Owen Feehan
  * @param <E> a checked-exception that can be thrown during consumption
  */
 @FunctionalInterface
 public interface OffsettedPointTwoDimensionalConsumer<E extends Exception> {
-    
+
     /**
      * Accepts a point
-     * 
+     *
      * @param x local x coordinate during iteration
      * @param y local y coordinate during iteration
      * @param offset offset based on current x and y values

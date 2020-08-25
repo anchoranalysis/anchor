@@ -35,7 +35,8 @@ import org.anchoranalysis.mpp.mark.Mark;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class VoxelizedMarkFactory {
 
-    public static VoxelizedMarkHistogram create(Mark mark, EnergyStackWithoutParams stack, RegionMap regionMap) {
+    public static VoxelizedMarkHistogram create(
+            Mark mark, EnergyStackWithoutParams stack, RegionMap regionMap) {
         return new VoxelizedMarkHistogram(mark, stack, regionMap);
     }
 }

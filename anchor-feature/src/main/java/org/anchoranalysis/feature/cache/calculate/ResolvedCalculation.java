@@ -26,9 +26,9 @@
 
 package org.anchoranalysis.feature.cache.calculate;
 
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInput;
-import lombok.AllArgsConstructor;
 
 /**
  * Like a {@link CacheableCalculation} but has been resolved against a cache to ensure its unique

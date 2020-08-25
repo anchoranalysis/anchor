@@ -102,7 +102,8 @@ public abstract class MarkWithPosition extends Mark implements Serializable {
             Dimensions bndScene, RegionMembershipWithFlags rm, BinaryValuesByte bvOut) {
 
         ObjectWithProperties object = super.deriveObject(bndScene, rm, bvOut);
-        object.setProperty("midpointInt", calculateRelativePoint(pos, object.boundingBox().cornerMin()));
+        object.setProperty(
+                "midpointInt", calculateRelativePoint(pos, object.boundingBox().cornerMin()));
         return object;
     }
 

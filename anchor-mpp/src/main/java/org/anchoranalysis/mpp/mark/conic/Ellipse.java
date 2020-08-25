@@ -30,6 +30,7 @@ import static org.anchoranalysis.mpp.bean.regionmap.RegionMembershipUtilities.*;
 import static org.anchoranalysis.mpp.mark.GlobalRegionIdentifiers.*;
 import static org.anchoranalysis.mpp.mark.conic.PropertyUtilities.*;
 import static org.anchoranalysis.mpp.mark.conic.TensorUtilities.*;
+
 import cern.colt.matrix.DoubleMatrix1D;
 import cern.colt.matrix.DoubleMatrix2D;
 import cern.jet.math.Functions;

@@ -48,8 +48,8 @@ import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelsFactory;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.interpolator.Interpolator;
 import org.anchoranalysis.image.interpolator.InterpolatorFactory;
 import org.anchoranalysis.image.object.combine.CountIntersectingVoxelsBinary;
@@ -115,7 +115,7 @@ public class ObjectMask {
      * @param box bounding-box
      */
     public ObjectMask(BoundingBox box) {
-        this( BoundedVoxelsFactory.createByte(box) );
+        this(BoundedVoxelsFactory.createByte(box));
     }
 
     /**
@@ -381,7 +381,8 @@ public class ObjectMask {
         BinaryValues bvOut = BinaryValues.getDefault();
 
         // We initially set all pixels to ON
-        BoundedVoxels<ByteBuffer> voxelsMaskOut = BoundedVoxelsFactory.createByte(boxIntersect.get());
+        BoundedVoxels<ByteBuffer> voxelsMaskOut =
+                BoundedVoxelsFactory.createByte(boxIntersect.get());
         voxelsMaskOut.assignValue(bvOut.getOnInt()).toAll();
 
         // Then we set any pixels NOT on either object to OFF..... leaving only the intersecting
@@ -464,7 +465,7 @@ public class ObjectMask {
     /**
      * Creates an object-mask with a subrange of the slices.
      *
-     * <p>This will always reuse the existing voxel-buffers.</p>.
+     * <p>This will always reuse the existing voxel-buffers..
      *
      * @param zMin minimum z-slice index, inclusive.
      * @param zMax maximum z-slice index, inclusive.
@@ -485,7 +486,8 @@ public class ObjectMask {
      * <p>See {@link VoxelsExtracter#region} for more details.
      *
      * @param box bounding-box in absolute coordinates.
-     * @param reuseIfPossible if TRUE the existing object will be reused if possible, otherwise a new object is always created.
+     * @param reuseIfPossible if TRUE the existing object will be reused if possible, otherwise a
+     *     new object is always created.
      * @return an object-mask corresponding to the requested region, either newly-created or reused
      * @throws CreateException
      */
@@ -504,7 +506,7 @@ public class ObjectMask {
      * for the rest.
      *
      * <p>A new voxel-buffer is always created for this operation i.e. the existing box is never
-     * reused like sometimes in {@link #region}.</p>.
+     * reused like sometimes in {@link #region}..
      *
      * @param box bounding-box in absolute coordinates, that must at least partially intersect with
      *     the current object-mask bounds.
@@ -539,7 +541,8 @@ public class ObjectMask {
         }
 
         // Second, if needed, we iterate until we find any "ON" value
-        return IterateVoxelsByte.iterateUntilFirstEqual(boundedVoxels(), binaryValuesByte().getOnByte());
+        return IterateVoxelsByte.iterateUntilFirstEqual(
+                boundedVoxels(), binaryValuesByte().getOnByte());
     }
 
     /**
@@ -699,7 +702,10 @@ public class ObjectMask {
      */
     public List<Point3i> derivePointsLocal() {
         List<Point3i> points = new ArrayList<>();
-        IterateVoxelsByte.iterateEqualValues(voxels.voxels(), binaryValuesByte().getOnByte(), (x,y,z) -> points.add(new Point3i(x,y,z)) );
+        IterateVoxelsByte.iterateEqualValues(
+                voxels.voxels(),
+                binaryValuesByte().getOnByte(),
+                (x, y, z) -> points.add(new Point3i(x, y, z)));
         return points;
     }
 

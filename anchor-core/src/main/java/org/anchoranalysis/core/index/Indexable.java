@@ -1,7 +1,5 @@
 package org.anchoranalysis.core.index;
 
-import lombok.AllArgsConstructor;
-
 /*
  * #%L
  * anchor-core
@@ -28,6 +26,7 @@ import lombok.AllArgsConstructor;
  * #L%
  */
 
+import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 
 /**
@@ -35,7 +34,8 @@ import lombok.EqualsAndHashCode;
  *
  * @author Owen Feehan
  */
-@AllArgsConstructor @EqualsAndHashCode
+@AllArgsConstructor
+@EqualsAndHashCode
 public abstract class Indexable implements IndexGetter, Comparable<IndexGetter> {
 
     private final int index;

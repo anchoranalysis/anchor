@@ -38,8 +38,7 @@ import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramFactory;
 
 @RequiredArgsConstructor
-class DelegateToHistogram<T extends Buffer>
-        implements ChannelConverterAttached<Channel, T> {
+class DelegateToHistogram<T extends Buffer> implements ChannelConverterAttached<Channel, T> {
 
     private final ChannelConverterAttached<Histogram, T> delegate;
 

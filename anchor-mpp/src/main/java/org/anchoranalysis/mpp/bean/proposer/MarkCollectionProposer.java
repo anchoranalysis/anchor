@@ -36,13 +36,14 @@ import org.anchoranalysis.mpp.proposer.ProposerContext;
 
 /**
  * Proposes an entire collection (confguration) of marks
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 @GroupingRoot
-public abstract class MarkCollectionProposer extends ProposerBean<MarkCollectionProposer> implements CompatibleWithMark {
+public abstract class MarkCollectionProposer extends ProposerBean<MarkCollectionProposer>
+        implements CompatibleWithMark {
 
-    public abstract Optional<MarkCollection> propose(MarkWithIdentifierFactory markFactory, ProposerContext context)
+    public abstract Optional<MarkCollection> propose(
+            MarkWithIdentifierFactory markFactory, ProposerContext context)
             throws ProposalAbnormalFailureException;
 }

@@ -26,9 +26,9 @@
 
 package org.anchoranalysis.feature.bean.results;
 
-import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import cern.colt.list.DoubleArrayList;
 import cern.jet.stat.Descriptive;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 
 public class Mean extends FeatureResultsFromIndex {
 

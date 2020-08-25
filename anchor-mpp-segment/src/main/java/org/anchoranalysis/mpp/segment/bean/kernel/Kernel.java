@@ -86,14 +86,16 @@ public abstract class Kernel<T> extends MPPBean<Kernel<T>> implements Compatible
      * @throws UpdateMarkSetException
      */
     public abstract void updateAfterAcceptance(
-            ListUpdatableMarkSetCollection updatableMarkSetCollection, T energyExisting, T energyNew)
+            ListUpdatableMarkSetCollection updatableMarkSetCollection,
+            T energyExisting,
+            T energyNew)
             throws UpdateMarkSetException;
 
     /**
      * The mark ids that were changed in the last energy calculation for the kernel
-     * 
+     *
      * <p>Guaranteed only to be called, if energy calculation did not return NULL
-     * 
+     *
      * @return an array of mark IDs
      */
     public abstract int[] changedMarkIDArray();

@@ -26,16 +26,16 @@
 
 package org.anchoranalysis.anchor.mpp.feature.energy;
 
-import org.anchoranalysis.anchor.mpp.feature.energy.marks.MarksWithEnergyBreakdown;
-import org.anchoranalysis.core.index.Indexable;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import org.anchoranalysis.anchor.mpp.feature.energy.marks.MarksWithEnergyBreakdown;
+import org.anchoranalysis.core.index.Indexable;
 
 @EqualsAndHashCode(callSuper = true)
 public class IndexableMarksWithEnergy extends Indexable {
 
     @Getter private MarksWithEnergyBreakdown marks;
-    
+
     public IndexableMarksWithEnergy(int iter, MarksWithEnergyBreakdown marks) {
         super(iter);
         this.marks = marks;

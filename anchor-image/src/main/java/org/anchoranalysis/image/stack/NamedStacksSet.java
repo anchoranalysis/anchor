@@ -95,8 +95,7 @@ public class NamedStacksSet implements NamedProviderStore<Stack> {
     }
 
     /** Applies an operation on each stack in the collection and returns a new derived collection */
-    public NamedStacksSet applyOperation(
-            Dimensions dimensions, UnaryOperator<Stack> stackOperation)
+    public NamedStacksSet applyOperation(Dimensions dimensions, UnaryOperator<Stack> stackOperation)
             throws OperationFailedException {
 
         NamedStacksSet out = new NamedStacksSet();

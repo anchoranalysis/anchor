@@ -36,6 +36,5 @@ import org.anchoranalysis.image.object.ObjectCollection;
 public abstract class Comparer extends AnchorBean<Comparer> {
 
     public abstract Findable<ObjectCollection> createObjects(
-            Path filePathSource, Dimensions dimensions, boolean debugMode)
-            throws CreateException;
+            Path filePathSource, Dimensions dimensions, boolean debugMode) throws CreateException;
 }

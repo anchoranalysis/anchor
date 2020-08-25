@@ -50,9 +50,7 @@ public final class ConvertToShortScaleByType extends VoxelsConverter<ShortBuffer
     @Override
     public VoxelBuffer<ShortBuffer> convertFromFloat(VoxelBuffer<FloatBuffer> bufferIn) {
 
-        double div =
-                (double) UnsignedIntVoxelType.MAX_VALUE
-                        / UnsignedShortVoxelType.MAX_VALUE_INT;
+        double div = (double) UnsignedIntVoxelType.MAX_VALUE / UnsignedShortVoxelType.MAX_VALUE_INT;
 
         ShortBuffer bufferOut = ShortBuffer.allocate(bufferIn.buffer().capacity());
 
@@ -70,9 +68,7 @@ public final class ConvertToShortScaleByType extends VoxelsConverter<ShortBuffer
     @Override
     public VoxelBuffer<ShortBuffer> convertFromInt(VoxelBuffer<IntBuffer> bufferIn) {
 
-        double div =
-                (double) UnsignedIntVoxelType.MAX_VALUE
-                        / UnsignedShortVoxelType.MAX_VALUE_INT;
+        double div = (double) UnsignedIntVoxelType.MAX_VALUE / UnsignedShortVoxelType.MAX_VALUE_INT;
 
         ShortBuffer bufferOut = ShortBuffer.allocate(bufferIn.buffer().capacity());
 
@@ -91,8 +87,7 @@ public final class ConvertToShortScaleByType extends VoxelsConverter<ShortBuffer
     @Override
     public VoxelBuffer<ShortBuffer> convertFromByte(VoxelBuffer<ByteBuffer> bufferIn) {
         double mult =
-                (double) UnsignedShortVoxelType.MAX_VALUE_INT
-                        / UnsignedByteVoxelType.MAX_VALUE_INT;
+                (double) UnsignedShortVoxelType.MAX_VALUE_INT / UnsignedByteVoxelType.MAX_VALUE_INT;
 
         ShortBuffer bufferOut = ShortBuffer.allocate(bufferIn.buffer().capacity());
 

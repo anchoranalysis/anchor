@@ -44,11 +44,11 @@ import org.apache.commons.configuration.beanutils.XMLBeanDeclaration;
 
 /**
  * Creates beans based on XML specifying their properties (including nested children).
- * 
- * <p>This is the principle means of loading beans, allowing XML files to provide inversion of control.
- * 
- * @author Owen Feehan
  *
+ * <p>This is the principle means of loading beans, allowing XML files to provide inversion of
+ * control.
+ *
+ * @author Owen Feehan
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class BeanXmlLoader {
@@ -194,7 +194,8 @@ public class BeanXmlLoader {
      * @param currentFilePath the path to the XML-file on the filesystem, this should be an absolute
      *     path
      * @return a newly created bean populated from the XML
-     * @throws LocalisedBeanException if invalid XML exists or anything else goes wrong during loading 
+     * @throws LocalisedBeanException if invalid XML exists or anything else goes wrong during
+     *     loading
      */
     private static <T> T createFromXMLConfigurationLocalised(
             HierarchicalConfiguration config, String xmlPath, Path currentFilePath)
@@ -231,15 +232,14 @@ public class BeanXmlLoader {
         }
     }
 
-    
     /**
      * Creates a bean from a {@link HierarchicalConfiguration} describing it
-     *  
+     *
      * @param <T> type of bean
      * @param config the configuration
      * @param xmlPath xpath describing where in the XML the bean is specified
-     * @param currentFilePath the file where the xml was retrieved from, allowing us to process relative
-     paths to other files
+     * @param currentFilePath the file where the xml was retrieved from, allowing us to process
+     *     relative paths to other files
      * @return newly created bean
      */
     @SuppressWarnings("unchecked")

@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.image.outline;
 
+import com.google.common.base.Preconditions;
 import java.nio.ByteBuffer;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -43,7 +44,6 @@ import org.anchoranalysis.image.voxel.kernel.ApplyKernel;
 import org.anchoranalysis.image.voxel.kernel.BinaryKernel;
 import org.anchoranalysis.image.voxel.kernel.dilateerode.ErosionKernel3;
 import org.anchoranalysis.image.voxel.kernel.outline.OutlineKernel3;
-import com.google.common.base.Preconditions;
 
 /**
  * Finds outline voxels i.e. pixels on the contour/edge of the object
@@ -71,25 +71,27 @@ public class FindOutline {
      *     false, this is not shown.
      * @return a newly-created mask showing only the outline
      */
-    public static Mask outlineGuess3D(Mask mask, int numberErosions, boolean force2D, boolean outlineAtBoundary) {
+    public static Mask outlineGuess3D(
+            Mask mask, int numberErosions, boolean force2D, boolean outlineAtBoundary) {
         boolean do2D = mask.dimensions().z() == 1 || force2D;
         return outline(mask, numberErosions, !do2D, outlineAtBoundary);
     }
 
     /**
      * Creates an outline of depth 1 from a mask
-     * 
+     *
      * @param mask the mask
      * @param numberErosions the number of erosions, effectively determining how thick the outline
      *     is
-     * @param do3D whether to also perform the outline in the third dimension. This is typically unwanted
-     *     for 2 dimensional images, as every voxel inside the object is treated as on the boundary
-     *     and a filled in object is produced.
+     * @param do3D whether to also perform the outline in the third dimension. This is typically
+     *     unwanted for 2 dimensional images, as every voxel inside the object is treated as on the
+     *     boundary and a filled in object is produced.
      * @param outlineAtBoundary if true, an edge is shown also for the boundary of the scene. if
      *     false, this is not shown.
      * @return
      */
-    public static Mask outline(Mask mask, int numberErosions, boolean do3D, boolean outlineAtBoundary) {
+    public static Mask outline(
+            Mask mask, int numberErosions, boolean do3D, boolean outlineAtBoundary) {
         // We create a new mask for outputting
         Mask maskOut = new Mask(mask.dimensions(), mask.binaryValues());
 
@@ -109,15 +111,15 @@ public class FindOutline {
      *     is
      * @param outlineAtBoundary if true, an edge is shown also for the boundary of the scene. if
      *     false, this is not shown.
-     * @param do3D whether to also perform the outline in the third dimension. This is typically unwanted
-     *     for 2 dimensional images, as every voxel inside the object is treated as on the boundary
-     *     and a filled in object is produced.
+     * @param do3D whether to also perform the outline in the third dimension. This is typically
+     *     unwanted for 2 dimensional images, as every voxel inside the object is treated as on the
+     *     boundary and a filled in object is produced.
      */
     public static ObjectMask outline(
             ObjectMask object, int numberErosions, boolean do3D, boolean outlineAtBoundary) {
 
         Preconditions.checkArgument(numberErosions >= 1);
-        
+
         ObjectMask objectDuplicated = object.duplicate();
 
         BinaryVoxels<ByteBuffer> voxelsOut =
@@ -138,7 +140,8 @@ public class FindOutline {
                 BinaryVoxelsFactory.reuseByte(
                         maskToFindOutlineFor.voxels(), maskToFindOutlineFor.binaryValues());
 
-        BinaryVoxels<ByteBuffer> outline = outlineMultiplex(voxels, numberErosions, do3D, outlineAtBoundary);
+        BinaryVoxels<ByteBuffer> outline =
+                outlineMultiplex(voxels, numberErosions, do3D, outlineAtBoundary);
 
         try {
             maskToReplaceWithOutline.replaceBy(outline);
@@ -146,11 +149,12 @@ public class FindOutline {
             throw new AnchorImpossibleSituationException();
         }
     }
-    
+
     private static BinaryVoxels<ByteBuffer> outlineMultiplex(
             BinaryVoxels<ByteBuffer> voxels,
             int numberErosions,
-            boolean do3D, boolean outlineAtBoundary) {
+            boolean do3D,
+            boolean outlineAtBoundary) {
         // If we just want an edge of size 1, we can do things more optimally
         if (numberErosions == 1) {
             return outlineByKernel(voxels, outlineAtBoundary, do3D);

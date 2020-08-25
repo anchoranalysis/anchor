@@ -128,7 +128,7 @@ public class AnchorDefaultBeanFactory implements BeanFactory {
         return null;
     }
 
-    protected Object createBeanInstance(Class<?> beanClass, BeanDeclaration data)   // NOSONAR
+    protected Object createBeanInstance(Class<?> beanClass, BeanDeclaration data) // NOSONAR
             throws Exception // NOSONAR
             {
         return beanClass.getConstructor().newInstance();

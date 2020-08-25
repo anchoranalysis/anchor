@@ -44,8 +44,8 @@ import org.anchoranalysis.image.channel.converter.attached.ChannelConverterAttac
 import org.anchoranalysis.image.channel.converter.attached.channel.ChannelConverterUpperLowerQuantileIntensity;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.stack.bufferedimage.BufferedImageFactory;
 import org.anchoranalysis.image.stack.region.RegionExtracter;
@@ -53,8 +53,8 @@ import org.anchoranalysis.image.stack.region.RegionExtracterFromDisplayStack;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 
 /**
@@ -84,7 +84,8 @@ public class DisplayStack {
 
     // We don't need to worry about channel numbers
     private DisplayStack(
-            Stack stack, List<Optional<ChannelConverterAttached<Channel, ByteBuffer>>> listConverters)
+            Stack stack,
+            List<Optional<ChannelConverterAttached<Channel, ByteBuffer>>> listConverters)
             throws CreateException {
         this.stack = stack;
         this.listConverters = listConverters;
@@ -145,7 +146,7 @@ public class DisplayStack {
     public Dimensions dimensions() {
         return stack.dimensions();
     }
-    
+
     public Extent extent() {
         return dimensions().extent();
     }
@@ -231,9 +232,7 @@ public class DisplayStack {
                             VoxelsFactory.getByte().createInitialized(destinationBox.extent());
                     converter.getVoxelsConverter().convertFrom(destBoxNonByte, destBoxByte);
 
-                    destBoxByte
-                            .extract()
-                            .boxCopyTo(allLocalBox, voxelsDestination, destinationBox);
+                    destBoxByte.extract().boxCopyTo(allLocalBox, voxelsDestination, destinationBox);
                 },
                 channel ->
                         channel.voxels()
@@ -274,10 +273,7 @@ public class DisplayStack {
     public BufferedImage createBufferedImage() throws CreateException {
         if (stack.getNumberChannels() == 3) {
             return BufferedImageFactory.createRGB(
-                    voxelsForChannel(0),
-                    voxelsForChannel(1),
-                    voxelsForChannel(2),
-                    stack.extent());
+                    voxelsForChannel(0), voxelsForChannel(1), voxelsForChannel(2), stack.extent());
         }
         return BufferedImageFactory.createGrayscale(voxelsForChannel(0));
     }

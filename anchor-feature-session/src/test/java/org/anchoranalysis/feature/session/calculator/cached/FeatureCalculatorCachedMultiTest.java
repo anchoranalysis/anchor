@@ -27,6 +27,7 @@
 package org.anchoranalysis.feature.session.calculator.cached;
 
 import static org.junit.Assert.*;
+
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
 import org.anchoranalysis.feature.calculate.results.ResultsVector;

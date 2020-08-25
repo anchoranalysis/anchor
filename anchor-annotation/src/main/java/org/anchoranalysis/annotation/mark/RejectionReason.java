@@ -28,9 +28,8 @@ package org.anchoranalysis.annotation.mark;
 
 /**
  * A specific set of reasons for rejecting an image for annotation.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public enum RejectionReason {
     INCORRECT_BOUNDARY,

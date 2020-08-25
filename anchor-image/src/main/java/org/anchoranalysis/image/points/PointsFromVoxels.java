@@ -152,11 +152,13 @@ public class PointsFromVoxels {
      */
     static void consumePoints2i(
             BinaryVoxels<ByteBuffer> voxels, ReadableTuple3i shift, Consumer<Point2i> consumer) {
-        
+
         BinaryValuesByte bvb = voxels.binaryValues().createByte();
-        IterateVoxelsByte.iterateEqualValuesSlice(voxels.voxels(), 0, bvb.getOnByte(), (x,y,z) -> consumer.accept(
-                new Point2i(shift.x() + x, shift.y() + y)
-        ));
+        IterateVoxelsByte.iterateEqualValuesSlice(
+                voxels.voxels(),
+                0,
+                bvb.getOnByte(),
+                (x, y, z) -> consumer.accept(new Point2i(shift.x() + x, shift.y() + y)));
     }
 
     /**
@@ -169,9 +171,10 @@ public class PointsFromVoxels {
     private static void consumePoints3i(
             BinaryVoxels<ByteBuffer> voxels, ReadableTuple3i shift, Consumer<Point3i> consumer) {
         BinaryValuesByte bvb = voxels.binaryValues().createByte();
-        IterateVoxelsByte.iterateEqualValues(voxels.voxels(), bvb.getOnByte(), (x,y,z) -> consumer.accept(
-           Point3i.immutableAdd(shift, x, y, z)
-        ));
+        IterateVoxelsByte.iterateEqualValues(
+                voxels.voxels(),
+                bvb.getOnByte(),
+                (x, y, z) -> consumer.accept(Point3i.immutableAdd(shift, x, y, z)));
     }
 
     /**
@@ -184,8 +187,9 @@ public class PointsFromVoxels {
     private static void consumePoints3d(
             BinaryVoxels<ByteBuffer> voxels, Point3d add, Consumer<Point3d> consumer) {
         BinaryValuesByte bvb = voxels.binaryValues().createByte();
-        IterateVoxelsByte.iterateEqualValues(voxels.voxels(), bvb.getOnByte(), (x,y,z) -> consumer.accept(
-           Point3d.immutableAdd(add, x, y, z)
-        ));
+        IterateVoxelsByte.iterateEqualValues(
+                voxels.voxels(),
+                bvb.getOnByte(),
+                (x, y, z) -> consumer.accept(Point3d.immutableAdd(add, x, y, z)));
     }
 }

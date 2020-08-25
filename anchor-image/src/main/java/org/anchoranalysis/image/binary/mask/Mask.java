@@ -39,10 +39,10 @@ import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.channel.factory.ChannelFactorySingleType;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.Dimensions;
-import org.anchoranalysis.image.extent.Resolution;
+import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
+import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.interpolator.Interpolator;
 import org.anchoranalysis.image.interpolator.InterpolatorFactory;
 import org.anchoranalysis.image.object.ObjectMask;
@@ -243,8 +243,8 @@ public class Mask {
     public VoxelsAssigner assignOff() {
         return channel.assignValue(binaryValues.getOffInt());
     }
-    
-    public ByteBuffer sliceBuffer(int z){
+
+    public ByteBuffer sliceBuffer(int z) {
         return channel.voxels().asByte().sliceBuffer(z);
     }
 
@@ -294,7 +294,7 @@ public class Mask {
     public byte getOnByte() {
         return binaryValuesByte.getOnByte();
     }
-    
+
     public Extent extent() {
         return channel.extent();
     }

@@ -26,9 +26,9 @@
 
 package org.anchoranalysis.bean.permute.property;
 
+import java.util.Iterator;
 import lombok.Getter;
 import lombok.Setter;
-import java.util.Iterator;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -36,13 +36,13 @@ import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 
 /**
  * A sequence of integers.
- * 
- * <p>The sequence will step from {@code start} to {@code end} with step-sizes of {@code increment}.
- * 
- * <p>There is no guarantee that {@code end} will be included, if it doesn't align with the step-size.
- * 
- * @author Owen Feehan
  *
+ * <p>The sequence will step from {@code start} to {@code end} with step-sizes of {@code increment}.
+ *
+ * <p>There is no guarantee that {@code end} will be included, if it doesn't align with the
+ * step-size.
+ *
+ * @author Owen Feehan
  */
 public class SequenceInteger extends AnchorBean<SequenceInteger> {
 
@@ -69,7 +69,7 @@ public class SequenceInteger extends AnchorBean<SequenceInteger> {
 
     /**
      * An iterator for each element in the sequence
-     * 
+     *
      * @return the iterator
      */
     public Iterator<Integer> iterator() {

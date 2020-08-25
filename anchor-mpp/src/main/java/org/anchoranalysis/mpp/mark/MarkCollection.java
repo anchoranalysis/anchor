@@ -52,9 +52,8 @@ import org.anchoranalysis.mpp.bean.regionmap.RegionMembershipWithFlags;
 
 /**
  * A collection of marks, termed a <i>configuration</i> in marked-point-processes literature
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 @AllArgsConstructor
 public final class MarkCollection implements Iterable<Mark>, Serializable {
@@ -168,14 +167,14 @@ public final class MarkCollection implements Iterable<Mark>, Serializable {
     }
 
     public ObjectCollectionWithProperties deriveObjects(
-            Dimensions dimensions,
-            RegionMembershipWithFlags regionMembership
-            ) {
+            Dimensions dimensions, RegionMembershipWithFlags regionMembership) {
 
         return ObjectCollectionWithPropertiesFactory.filterAndMapFrom(
                 marks,
                 mark -> mark.numberRegions() > regionMembership.getRegionID(),
-                mark -> mark.deriveObject(dimensions, regionMembership, BinaryValuesByte.getDefault()));
+                mark ->
+                        mark.deriveObject(
+                                dimensions, regionMembership, BinaryValuesByte.getDefault()));
     }
 
     public void scaleXY(double scaleFactor) throws OptionalOperationUnsupportedException {

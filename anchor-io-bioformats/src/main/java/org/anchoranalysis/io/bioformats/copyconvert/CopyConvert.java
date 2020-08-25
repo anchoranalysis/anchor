@@ -67,7 +67,8 @@ public class CopyConvert {
         int numberChannelsPerByteArray = readOptions.channelsPerByteArray(reader);
 
         int numberByteArraysPerIteration =
-                calculateByteArraysPerIteration(targetShape.getNumberChannels(), numberChannelsPerByteArray);
+                calculateByteArraysPerIteration(
+                        targetShape.getNumberChannels(), numberChannelsPerByteArray);
 
         try (ProgressReporterIncrement pri = new ProgressReporterIncrement(progressReporter)) {
 

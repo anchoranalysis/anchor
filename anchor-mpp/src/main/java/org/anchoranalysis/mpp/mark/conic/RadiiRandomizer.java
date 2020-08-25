@@ -42,10 +42,7 @@ import org.anchoranalysis.mpp.bean.bound.Bound;
 public class RadiiRandomizer {
 
     public static Point3d randomizeRadii(
-            Bound bound,
-            RandomNumberGenerator randomNumberGenerator,
-            Resolution sr,
-            boolean do3D) {
+            Bound bound, RandomNumberGenerator randomNumberGenerator, Resolution sr, boolean do3D) {
         return new Point3d(
                 randomizeRadius(bound, randomNumberGenerator, sr),
                 randomizeRadius(bound, randomNumberGenerator, sr),

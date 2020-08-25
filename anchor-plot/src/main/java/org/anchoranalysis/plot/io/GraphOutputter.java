@@ -27,9 +27,9 @@
 package org.anchoranalysis.plot.io;
 
 import java.awt.image.BufferedImage;
-import org.anchoranalysis.plot.PlotInstance;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.plot.PlotInstance;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class GraphOutputter {

@@ -30,7 +30,8 @@ import lombok.AllArgsConstructor;
 import lombok.Value;
 
 /** A distance, and the index the point came from */
-@Value @AllArgsConstructor
+@Value
+@AllArgsConstructor
 public class DistanceIndex {
     private int distance;
     private int index;

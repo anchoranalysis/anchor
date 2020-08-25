@@ -106,7 +106,7 @@ public class BoundedVoxels<T extends Buffer> {
         this.extracterLocal = voxels.extract();
         this.extracterGlobal = VoxelsExtracterFactory.atCorner(cornerMin(), voxels.extract());
     }
-    
+
     public boolean equalsDeep(BoundedVoxels<?> other) {
 
         if (!boundingBox.equals(other.boundingBox)) {
@@ -273,7 +273,7 @@ public class BoundedVoxels<T extends Buffer> {
     /**
      * Creates an box with a subrange of the slices.
      *
-     * <p>This will always reuse the existing voxel-buffers.</p>.
+     * <p>This will always reuse the existing voxel-buffers..
      *
      * @param zMin minimum z-slice index, inclusive.
      * @param zMax maximum z-slice index, inclusive.
@@ -336,7 +336,7 @@ public class BoundedVoxels<T extends Buffer> {
      * voxelValueForRest}.
      *
      * <p>A new voxel-buffer is always created for this operation i.e. the existing box is never
-     * reused like sometimes in {@link #region}.</p>.
+     * reused like sometimes in {@link #region}..
      *
      * @param box bounding-box in absolute coordinates, that must at least partially intersect with
      *     the current bounds.

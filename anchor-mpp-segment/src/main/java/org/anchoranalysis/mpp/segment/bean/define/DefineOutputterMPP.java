@@ -40,7 +40,6 @@ import org.anchoranalysis.mpp.io.input.MultiInput;
 /**
  * Helper for tasks that uses a {@link Define} in association with an input to execute some tasks,
  * and then outputs results *
- *
  */
 public class DefineOutputterMPP extends DefineOutputter {
 
@@ -54,8 +53,7 @@ public class DefineOutputterMPP extends DefineOutputter {
         try {
             MPPInitParams initParams = super.createInitParams(context);
             ncc.addAsSeparateChannels(
-                    new WrapStackAsTimeSequenceStore(initParams.getImage().stacks()),
-                    0);
+                    new WrapStackAsTimeSequenceStore(initParams.getImage().stacks()), 0);
 
             super.outputSharedObjects(initParams, context);
 

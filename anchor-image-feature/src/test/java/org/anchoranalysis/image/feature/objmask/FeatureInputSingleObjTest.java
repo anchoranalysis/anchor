@@ -27,6 +27,7 @@
 package org.anchoranalysis.image.feature.objmask;
 
 import static org.junit.Assert.*;
+
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectMask;

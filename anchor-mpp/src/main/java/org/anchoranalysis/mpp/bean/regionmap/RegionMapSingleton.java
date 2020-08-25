@@ -26,9 +26,9 @@
 
 package org.anchoranalysis.mpp.bean.regionmap;
 
-import org.anchoranalysis.mpp.mark.GlobalRegionIdentifiers;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.mpp.mark.GlobalRegionIdentifiers;
 
 // A Default RegionMap
 @NoArgsConstructor(access = AccessLevel.PRIVATE)

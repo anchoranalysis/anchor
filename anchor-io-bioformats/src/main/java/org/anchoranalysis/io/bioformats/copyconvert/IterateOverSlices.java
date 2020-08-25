@@ -71,7 +71,8 @@ class IterateOverSlices {
         } else if (dimensionsOrder.equalsIgnoreCase("XYTCZ")) {
             applyXYTCZ(shape, numberByteArrays, channelIteration);
         } else {
-            throw new IOException(String.format("dimensionsOrder '%s' not supported", dimensionsOrder));
+            throw new IOException(
+                    String.format("dimensionsOrder '%s' not supported", dimensionsOrder));
         }
     }
 
@@ -102,7 +103,9 @@ class IterateOverSlices {
     }
 
     private static void applyXYZTC(
-            ImageFileShape targetShape, int numberByteArrays, ApplyIterationToChannel channelIteration)
+            ImageFileShape targetShape,
+            int numberByteArrays,
+            ApplyIterationToChannel channelIteration)
             throws IOException, FormatException {
         int channelIndex = 0;
         for (int c = 0; c < numberByteArrays; c++) {

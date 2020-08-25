@@ -176,7 +176,7 @@ public class StringRasterGenerator extends AnchorBean<StringRasterGenerator> {
     public StringRasterGenerator(String text) {
         this.text = text;
     }
-    
+
     public StringRasterGenerator(String text, double padding) {
         this.text = text;
         this.padding = padding;

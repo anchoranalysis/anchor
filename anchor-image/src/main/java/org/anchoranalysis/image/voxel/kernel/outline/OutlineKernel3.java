@@ -37,9 +37,7 @@ public class OutlineKernel3 extends OutlineKernel3Base {
         this(bv, new OutlineKernelParameters(outsideAtThreshold, useZ, false));
     }
 
-    public OutlineKernel3(
-            BinaryValuesByte bv,
-            OutlineKernelParameters params) {
+    public OutlineKernel3(BinaryValuesByte bv, OutlineKernelParameters params) {
         super(bv, params);
     }
 

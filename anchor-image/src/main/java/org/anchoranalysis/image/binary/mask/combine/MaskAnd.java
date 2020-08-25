@@ -41,7 +41,7 @@ public class MaskAnd {
      * Performs a AND operation on each voxel in two masks, writing the result onto the second mask.
      *
      * @param first the first channel for operation (and in which the result is written)
-     * @param second the second channel for operation 
+     * @param second the second channel for operation
      */
     public static void apply(Mask first, Mask second) {
         apply(
@@ -55,7 +55,7 @@ public class MaskAnd {
      * Performs a AND operation on each voxel in two {@link Voxels} (considered to be masks),
      * writing the result onto the second mask.
      *
-     * @param voxelsFirst the first voxels for the operation  (and in which the result is written)
+     * @param voxelsFirst the first voxels for the operation (and in which the result is written)
      * @param voxelsSecond the second voxels for the operation
      * @param bvbFirst binary-values to mask first voxels
      * @param bvbSecond binary-values to mask second voxels
@@ -65,16 +65,20 @@ public class MaskAnd {
             Voxels<ByteBuffer> voxelsSecond,
             BinaryValuesByte bvbFirst,
             BinaryValuesByte bvbSecond) {
-        
+
         byte sourceOn = bvbFirst.getOnByte();
         byte sourceOff = bvbFirst.getOffByte();
         byte receiveOff = bvbSecond.getOffByte();
 
-        IterateVoxels.callEachPointTwo(voxelsFirst, voxelsSecond, (point, bufferSource, bufferReceive, offset) -> {
-            if (bufferSource.get(offset) == sourceOn && bufferReceive.get(offset) == receiveOff) {
-                // source is ON but receive is OFF, so we change the buffer
-                bufferSource.put(offset, sourceOff);
-            }
-        });
+        IterateVoxels.callEachPointTwo(
+                voxelsFirst,
+                voxelsSecond,
+                (point, bufferSource, bufferReceive, offset) -> {
+                    if (bufferSource.get(offset) == sourceOn
+                            && bufferReceive.get(offset) == receiveOff) {
+                        // source is ON but receive is OFF, so we change the buffer
+                        bufferSource.put(offset, sourceOff);
+                    }
+                });
     }
 }

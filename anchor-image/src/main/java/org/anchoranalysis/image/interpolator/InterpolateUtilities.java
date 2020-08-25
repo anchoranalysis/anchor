@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.image.interpolator;
 
+import com.google.common.base.Preconditions;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.image.extent.Extent;
@@ -36,7 +37,6 @@ import org.anchoranalysis.image.voxel.VoxelsWrapper;
 import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelTypeException;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
-import com.google.common.base.Preconditions;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class InterpolateUtilities {
@@ -81,6 +81,7 @@ public class InterpolateUtilities {
                 }
             }
         }
-        Preconditions.checkArgument(trgt.any().sliceBuffer(0).capacity() == extentTarget.volumeXY());
+        Preconditions.checkArgument(
+                trgt.any().sliceBuffer(0).capacity() == extentTarget.volumeXY());
     }
 }

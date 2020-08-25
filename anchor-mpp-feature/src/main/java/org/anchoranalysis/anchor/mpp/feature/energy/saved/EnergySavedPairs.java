@@ -27,6 +27,7 @@
 package org.anchoranalysis.anchor.mpp.feature.energy.saved;
 
 import java.util.Set;
+import lombok.Getter;
 import org.anchoranalysis.anchor.mpp.feature.addcriteria.AddCriteria;
 import org.anchoranalysis.anchor.mpp.feature.addcriteria.RandomCollectionWithAddCriteria;
 import org.anchoranalysis.anchor.mpp.feature.energy.EnergyPair;
@@ -41,7 +42,6 @@ import org.anchoranalysis.mpp.mark.set.UpdatableMarkSet;
 import org.anchoranalysis.mpp.mark.set.UpdateMarkSetException;
 import org.anchoranalysis.mpp.mark.voxelized.memo.MemoForIndex;
 import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
-import lombok.Getter;
 
 public class EnergySavedPairs implements UpdatableMarkSet {
 

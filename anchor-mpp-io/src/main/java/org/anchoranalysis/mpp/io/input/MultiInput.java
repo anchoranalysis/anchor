@@ -28,6 +28,7 @@ package org.anchoranalysis.mpp.io.input;
 
 import java.nio.file.Path;
 import java.util.Optional;
+import lombok.experimental.Accessors;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
@@ -41,9 +42,8 @@ import org.anchoranalysis.image.stack.TimeSequence;
 import org.anchoranalysis.image.stack.wrap.WrapStackAsTimeSequenceStore;
 import org.anchoranalysis.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.mpp.mark.MarkCollection;
-import lombok.experimental.Accessors;
 
-@Accessors(fluent=true)
+@Accessors(fluent = true)
 public class MultiInput implements ProvidesStackInput, InputForMPPBean {
 
     public static final String DEFAULT_IMAGE_INPUT_NAME = "input_image";

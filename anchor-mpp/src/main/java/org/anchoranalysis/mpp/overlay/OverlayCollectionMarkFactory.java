@@ -66,7 +66,9 @@ public class OverlayCollectionMarkFactory {
     }
 
     private static ColoredOverlayCollection createColor(
-            MarkCollection marks, ColorIndex colorIndex, RegionMembershipWithFlags regionMembership) {
+            MarkCollection marks,
+            ColorIndex colorIndex,
+            RegionMembershipWithFlags regionMembership) {
 
         ColoredOverlayCollection out = new ColoredOverlayCollection();
 

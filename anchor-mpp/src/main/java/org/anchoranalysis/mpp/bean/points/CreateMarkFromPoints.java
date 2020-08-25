@@ -126,7 +126,8 @@ public class CreateMarkFromPoints extends AnchorBean<CreateMarkFromPoints> {
      * @param marks
      * @return
      */
-    private static List<Point3f> extractPointsFromMarks(MarkCollection marks) throws OperationFailedException {
+    private static List<Point3f> extractPointsFromMarks(MarkCollection marks)
+            throws OperationFailedException {
 
         List<Point3f> out = new ArrayList<>();
 

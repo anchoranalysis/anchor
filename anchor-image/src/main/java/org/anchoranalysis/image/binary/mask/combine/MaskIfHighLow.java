@@ -35,9 +35,11 @@ import org.anchoranalysis.image.voxel.iterator.IterateVoxels;
 public class MaskIfHighLow {
 
     /**
-     * Performs a {@code iff first==HIGH and second==LOW then LOW} operation on each voxel in two masks, writing the result onto the second mask.
-     * <p>
-     * Specifically the truth table is:
+     * Performs a {@code iff first==HIGH and second==LOW then LOW} operation on each voxel in two
+     * masks, writing the result onto the second mask.
+     *
+     * <p>Specifically the truth table is:
+     *
      * <table>
      * <tr><th>First</th><th>Second</th><th>Output</th></tr>
      * <tr><td>0</td><td>0</td><td>0</td></tr>
@@ -46,8 +48,8 @@ public class MaskIfHighLow {
      * <tr><td>1</td><td>1</td><td>0</td></tr>
      * <caption>truth table</caption>
      * </table>
-     * 
-     * @param first the first channel for operation  (and in which the result is written)
+     *
+     * @param first the first channel for operation (and in which the result is written)
      * @param second the second channel for operation
      */
     public static void apply(Mask first, Mask second) {
@@ -56,10 +58,14 @@ public class MaskIfHighLow {
         byte sourceOff = first.getOffByte();
         byte receiveOn = second.getOnByte();
 
-        IterateVoxels.callEachPointTwo(first.voxels(), second.voxels(), (point, bufferSource, bufferReceive, offset) -> {
-            if (bufferSource.get(offset) == sourceOn && bufferReceive.get(offset) == receiveOn) {
-                bufferSource.put(offset, sourceOff);
-            }
-        });
+        IterateVoxels.callEachPointTwo(
+                first.voxels(),
+                second.voxels(),
+                (point, bufferSource, bufferReceive, offset) -> {
+                    if (bufferSource.get(offset) == sourceOn
+                            && bufferReceive.get(offset) == receiveOn) {
+                        bufferSource.put(offset, sourceOff);
+                    }
+                });
     }
 }

@@ -28,6 +28,8 @@ package org.anchoranalysis.feature.session.strategy.replace.bind;
 
 import java.util.Optional;
 import java.util.function.Function;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.cache.calculate.CacheCreator;
@@ -36,8 +38,6 @@ import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.session.cache.creator.CacheCreatorSimple;
 import org.anchoranalysis.feature.session.strategy.replace.ReplaceStrategy;
 import org.anchoranalysis.feature.shared.SharedFeatureMulti;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 /**
  * Attaches a replacement-strategy to a session lazily (i.e. when it is needed)
@@ -51,7 +51,7 @@ public class BoundReplaceStrategy<T extends FeatureInput, S extends ReplaceStrat
     // START REQUIRED ARGUMENTS
     private final Function<CacheCreator, S> funcCreateStrategy;
     // END REQUIRED ARGUMENTS
-    
+
     @Getter private Optional<S> strategy = Optional.empty();
 
     public ReplaceStrategy<T> bind(

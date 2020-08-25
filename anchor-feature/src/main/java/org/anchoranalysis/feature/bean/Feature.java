@@ -132,7 +132,8 @@ public abstract class Feature<T extends FeatureInput>
         }
     }
 
-    public double calculateCheckInitialized(SessionInput<T> input) throws FeatureCalculationException {
+    public double calculateCheckInitialized(SessionInput<T> input)
+            throws FeatureCalculationException {
         if (!isInitialized()) {
             throw new FeatureCalculationException(
                     String.format("The feature (%s) has not been initialized", this.toString()));
@@ -162,8 +163,7 @@ public abstract class Feature<T extends FeatureInput>
     public final FeatureList<FeatureInput> createListChildFeatures()
             throws BeanMisconfiguredException {
 
-        return FeatureListFactory.wrapReuse(
-                findFieldsOfClass(Feature.class));
+        return FeatureListFactory.wrapReuse(findFieldsOfClass(Feature.class));
     }
 
     public String describeParams() {

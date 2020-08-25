@@ -33,9 +33,8 @@ import org.anchoranalysis.core.error.CreateException;
 
 /**
  * Provides a list of one or more colors
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public abstract class ColorProvider extends NullParamsBean<ColorProvider>
         implements Provider<ColorList> {

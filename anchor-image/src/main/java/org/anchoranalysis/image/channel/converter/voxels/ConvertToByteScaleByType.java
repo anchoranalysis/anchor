@@ -50,9 +50,7 @@ public final class ConvertToByteScaleByType extends VoxelsConverter<ByteBuffer> 
     @Override
     public VoxelBuffer<ByteBuffer> convertFromFloat(VoxelBuffer<FloatBuffer> bufferIn) {
 
-        double div =
-                (double) UnsignedIntVoxelType.MAX_VALUE
-                        / UnsignedByteVoxelType.MAX_VALUE_INT;
+        double div = (double) UnsignedIntVoxelType.MAX_VALUE / UnsignedByteVoxelType.MAX_VALUE_INT;
 
         ByteBuffer bufferOut = ByteBuffer.allocate(bufferIn.buffer().capacity());
 
@@ -70,8 +68,7 @@ public final class ConvertToByteScaleByType extends VoxelsConverter<ByteBuffer> 
     @Override
     public VoxelBuffer<ByteBuffer> convertFromInt(VoxelBuffer<IntBuffer> bufferIn) {
 
-        double div =
-                (double) UnsignedIntVoxelType.MAX_VALUE / UnsignedByteVoxelType.MAX_VALUE;
+        double div = (double) UnsignedIntVoxelType.MAX_VALUE / UnsignedByteVoxelType.MAX_VALUE;
 
         ByteBuffer bufferOut = ByteBuffer.allocate(bufferIn.buffer().capacity());
 
@@ -85,8 +82,7 @@ public final class ConvertToByteScaleByType extends VoxelsConverter<ByteBuffer> 
     @Override
     public VoxelBuffer<ByteBuffer> convertFromShort(VoxelBuffer<ShortBuffer> bufferIn) {
 
-        double div =
-                (double) UnsignedShortVoxelType.MAX_VALUE / UnsignedByteVoxelType.MAX_VALUE;
+        double div = (double) UnsignedShortVoxelType.MAX_VALUE / UnsignedByteVoxelType.MAX_VALUE;
 
         ByteBuffer bufferOut = ByteBuffer.allocate(bufferIn.buffer().capacity());
 

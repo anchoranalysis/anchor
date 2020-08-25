@@ -28,9 +28,8 @@ package org.anchoranalysis.bean;
 
 /**
  * A bean that provides a collection of Strings.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public interface StringBeanCollection extends Iterable<String> {
 

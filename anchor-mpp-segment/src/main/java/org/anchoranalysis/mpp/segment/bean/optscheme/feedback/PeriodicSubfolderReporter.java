@@ -45,7 +45,8 @@ import org.anchoranalysis.mpp.segment.optscheme.feedback.period.PeriodReceiver;
 import org.anchoranalysis.mpp.segment.optscheme.feedback.period.PeriodReceiverException;
 import org.anchoranalysis.mpp.segment.optscheme.step.Reporting;
 
-public abstract class PeriodicSubfolderReporter<T> extends ReporterInterval<VoxelizedMarksWithEnergy> {
+public abstract class PeriodicSubfolderReporter<T>
+        extends ReporterInterval<VoxelizedMarksWithEnergy> {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private String outputName;
@@ -130,8 +131,8 @@ public abstract class PeriodicSubfolderReporter<T> extends ReporterInterval<Voxe
         optInit.getPeriodTriggerBank().obtain(getAggInterval(), new AddToWriter());
     }
 
-    protected abstract Optional<T> generateIterableElement(Reporting<VoxelizedMarksWithEnergy> reporting)
-            throws ReporterException;
+    protected abstract Optional<T> generateIterableElement(
+            Reporting<VoxelizedMarksWithEnergy> reporting) throws ReporterException;
 
     protected BoundOutputManagerRouteErrors getParentOutputManager() {
         return parentOutputManager;

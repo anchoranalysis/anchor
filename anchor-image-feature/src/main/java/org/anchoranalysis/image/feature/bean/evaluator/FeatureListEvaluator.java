@@ -26,11 +26,11 @@
 
 package org.anchoranalysis.image.feature.bean.evaluator;
 
-import lombok.Getter;
-import lombok.Setter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.UnaryOperator;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
@@ -54,21 +54,27 @@ public abstract class FeatureListEvaluator<T extends FeatureInput>
     private List<FeatureProvider<T>> listFeatureProvider = new ArrayList<>();
     // END BEAN PROPERTIES
 
-    public NamedFeatureCalculatorMulti<T> createAndStartSession( UnaryOperator<FeatureList<T>> addFeatures, SharedObjects sharedObjects ) throws OperationFailedException {
+    public NamedFeatureCalculatorMulti<T> createAndStartSession(
+            UnaryOperator<FeatureList<T>> addFeatures, SharedObjects sharedObjects)
+            throws OperationFailedException {
 
         try {
             FeatureList<T> features =
-                    addFeatures.apply( FeatureListFactory.fromProviders(listFeatureProvider) );
-            
+                    addFeatures.apply(FeatureListFactory.fromProviders(listFeatureProvider));
+
             if (features.size() == 0) {
                 throw new OperationFailedException("No features are set");
             }
-            
+
             FeatureInitParams paramsInit = new FeatureInitParams(sharedObjects);
 
-            FeatureCalculatorMulti<T> calculator = FeatureSession.with(
-                    features, paramsInit, getInitializationParameters().getSharedFeatureSet(), getLogger());
-            
+            FeatureCalculatorMulti<T> calculator =
+                    FeatureSession.with(
+                            features,
+                            paramsInit,
+                            getInitializationParameters().getSharedFeatureSet(),
+                            getLogger());
+
             return new NamedFeatureCalculatorMulti<>(calculator, features.createNames());
 
         } catch (CreateException | InitException e) {
