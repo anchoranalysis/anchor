@@ -83,7 +83,15 @@ public class Reporting<S> {
     public int[] getChangedMarkIDs() {
         return describeData.getChangedMarkIDs();
     }
-
+    
+    public String kernelDescription() {
+        return describeData.getKernel().getDescription();
+    }
+    
+    public int kernelIdentifier() {
+        return describeData.getKernel().getIdentifier();
+    }
+    
     public KernelWithIdentifier<?> getKernel() {
         return describeData.getKernel();
     }

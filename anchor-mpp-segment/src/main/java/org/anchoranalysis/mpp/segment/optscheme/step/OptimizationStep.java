@@ -75,7 +75,7 @@ public class OptimizationStep<S, T> {
 
     public void acceptProposal(ToDoubleFunction<T> funcScore) {
         accpted = true;
-        assgnCrntFromProposal(funcScore);
+        assignProposalToCurrent(funcScore);
 
         setKernelNoProposalDescription(null);
         markChanged(describeData.getKernel());
@@ -110,9 +110,9 @@ public class OptimizationStep<S, T> {
         proposalOptional = Optional.empty();
     }
 
-    private void assgnCrntFromProposal(ToDoubleFunction<T> funcScore) {
+    private void assignProposalToCurrent(ToDoubleFunction<T> funcScore) {
         // We can rely that a proposal exists, as it has been accepted
-        state.assignCurrent(proposalOptional.get());
+        state.assignCurrent(proposalOptional);
         maybeAssignAsBest(funcScore);
     }
 
@@ -154,7 +154,7 @@ public class OptimizationStep<S, T> {
         return describeData.getKernel();
     }
 
-    public Optional<T> getCrnt() {
+    public Optional<T> getCurrent() {
         return state.getCurrent();
     }
 

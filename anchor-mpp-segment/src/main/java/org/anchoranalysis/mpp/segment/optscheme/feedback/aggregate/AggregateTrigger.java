@@ -90,10 +90,10 @@ class AggregateTrigger<S, T extends AggregateReceiver<S>> {
 
         // If accepted we increase the total for this kernel
         if (reporting.isAccepted()) {
-            agg.incrKernelAccpt(reporting.getKernel().getIdentifier());
+            agg.incrKernelAccpt(reporting.kernelIdentifier());
         }
 
-        agg.incrKernelProp(reporting.getKernel().getIdentifier());
+        agg.incrKernelProp(reporting.kernelIdentifier());
         agg.incrEnergy(extractScoreSize.extractScore(reporting.getMarksAfter()));
         agg.incrSize(extractScoreSize.extractSize(reporting.getMarksAfter()));
         agg.incrTemperature(reporting.getTemperature());

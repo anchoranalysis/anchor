@@ -63,8 +63,8 @@ public class DualState<T> {
         return kept;
     }
 
-    public void assignCurrent(T stateToAssign) {
-        this.current = Optional.of(stateToAssign);
+    public void assignCurrent(Optional<T> stateToAssign) {
+        this.current = stateToAssign;
     }
 
     public void assignBestFromCurrent() {
