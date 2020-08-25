@@ -26,32 +26,15 @@
 
 package org.anchoranalysis.image.object.factory;
 
-import java.util.List;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.extent.BoundingBox;
+import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.points.BoundingBoxFromPoints;
-import org.anchoranalysis.image.voxel.assigner.VoxelsAssigner;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class CreateFromPointsFactory {
+public class SingleObjectFromChannelFactory {
 
-    public static ObjectMask create(List<Point3i> points) throws CreateException {
-
-        BoundingBox box;
-        try {
-            box = BoundingBoxFromPoints.forList(points);
-        } catch (OperationFailedException e) {
-            throw new CreateException(e);
-        }
-
-        ObjectMask object = new ObjectMask(box);
-        VoxelsAssigner assigner = object.assignOn();
-        points.forEach(assigner::toVoxel);
-        return object;
+    public static ObjectMask createObject(Mask mask) {
+        return new ObjectMask(mask.binaryVoxels());
     }
 }

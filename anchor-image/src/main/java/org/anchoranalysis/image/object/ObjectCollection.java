@@ -61,7 +61,7 @@ public class ObjectCollection implements Iterable<ObjectMask> {
      *
      * @param stream objects
      */
-    ObjectCollection(Stream<ObjectMask> stream) {
+    public ObjectCollection(Stream<ObjectMask> stream) {
         delegate = stream.collect(Collectors.toList());
     }
 

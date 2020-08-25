@@ -33,23 +33,29 @@ import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.factory.unionfind.ConnectedComponentUnionFind;
 
-public class CreateFromConnectedComponentsFactory {
+/**
+ * Creates a {@link ObjectCollection} from the connected-components of a mask or binary-voxels.
+ * 
+ * @author Owen Feehan
+ *
+ */
+public class ObjectsFromConnectedComponentsFactory {
 
     private final ConnectedComponentUnionFind unionFind;
 
-    public CreateFromConnectedComponentsFactory() {
+    public ObjectsFromConnectedComponentsFactory() {
         this(false);
     }
 
-    public CreateFromConnectedComponentsFactory(boolean bigNeighborhood) {
+    public ObjectsFromConnectedComponentsFactory(boolean bigNeighborhood) {
         this(bigNeighborhood, 1);
     }
 
-    public CreateFromConnectedComponentsFactory(int minNumberVoxels) {
+    public ObjectsFromConnectedComponentsFactory(int minNumberVoxels) {
         this(false, minNumberVoxels);
     }
 
-    public CreateFromConnectedComponentsFactory(boolean bigNeighborhood, int minNumberVoxels) {
+    public ObjectsFromConnectedComponentsFactory(boolean bigNeighborhood, int minNumberVoxels) {
         unionFind = new ConnectedComponentUnionFind(minNumberVoxels, bigNeighborhood);
     }
 

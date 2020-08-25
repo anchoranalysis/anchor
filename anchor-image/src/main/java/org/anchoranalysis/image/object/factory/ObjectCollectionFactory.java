@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.image.object;
+package org.anchoranalysis.image.object.factory;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -45,6 +45,8 @@ import org.anchoranalysis.core.functional.function.CheckedBiFunction;
 import org.anchoranalysis.core.functional.function.CheckedFunction;
 import org.anchoranalysis.core.functional.function.CheckedIntFunction;
 import org.anchoranalysis.image.binary.mask.Mask;
+import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectMask;
 
 /**
  * Creates {@link ObjectCollection} using various utility and helper methods

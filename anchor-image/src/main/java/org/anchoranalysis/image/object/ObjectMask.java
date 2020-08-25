@@ -54,7 +54,7 @@ import org.anchoranalysis.image.interpolator.Interpolator;
 import org.anchoranalysis.image.interpolator.InterpolatorFactory;
 import org.anchoranalysis.image.object.combine.CountIntersectingVoxelsBinary;
 import org.anchoranalysis.image.object.combine.DetermineWhetherIntersectingVoxelsBinary;
-import org.anchoranalysis.image.object.factory.CreateFromConnectedComponentsFactory;
+import org.anchoranalysis.image.object.factory.ObjectsFromConnectedComponentsFactory;
 import org.anchoranalysis.image.scale.ScaleFactor;
 import org.anchoranalysis.image.voxel.BoundedVoxels;
 import org.anchoranalysis.image.voxel.BoundedVoxelsFactory;
@@ -82,8 +82,8 @@ import org.anchoranalysis.image.voxel.thresholder.VoxelsThresholder;
 @Accessors(fluent = true)
 public class ObjectMask {
 
-    private static final CreateFromConnectedComponentsFactory CONNECTED_COMPONENT_CREATOR =
-            new CreateFromConnectedComponentsFactory(true);
+    private static final ObjectsFromConnectedComponentsFactory CONNECTED_COMPONENT_CREATOR =
+            new ObjectsFromConnectedComponentsFactory(true);
 
     private static final VoxelsFactoryTypeBound<ByteBuffer> FACTORY = VoxelsFactory.getByte();
 
