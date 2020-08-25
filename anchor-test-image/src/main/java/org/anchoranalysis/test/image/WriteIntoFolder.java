@@ -131,7 +131,7 @@ public class WriteIntoFolder implements TestRule {
 
         Dimensions dimensionsResolved = dimensionsToCenterObjects(objects);
 
-        writeObjects(outputName, objects, Either.left(dimensionsResolved));
+        writeObjectsEither(outputName, objects, Either.left(dimensionsResolved));
     }
 
     /**
@@ -142,7 +142,7 @@ public class WriteIntoFolder implements TestRule {
      * @param background the background
      */
     public void writeObjects(String outputName, ObjectCollection objects, Stack background) {
-        writeObjects(outputName, objects, Either.right(displayStackFor(background)));
+        writeObjectsEither(outputName, objects, Either.right(displayStackFor(background)));
     }
 
     public void writeVoxels(String outputName, Voxels<ByteBuffer> voxels) {
@@ -201,7 +201,7 @@ public class WriteIntoFolder implements TestRule {
     }
 
     /** Writes objects with either dimensions (for a blank background) or a particular background */
-    private void writeObjects(
+    private void writeObjectsEither(
             String outputName,
             ObjectCollection objects,
             Either<Dimensions, DisplayStack> background) {

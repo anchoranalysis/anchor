@@ -92,7 +92,7 @@ public class Reporting<S> {
         return describeData.getKernel().getIdentifier();
     }
     
-    public KernelWithIdentifier<?> getKernel() {
+    public KernelWithIdentifier<?> getKernel() {    // NOSONAR
         return describeData.getKernel();
     }
 }

@@ -133,7 +133,7 @@ public class OptimizationStep<S, T> {
         if (!state.getCurrent().isPresent()) {
             return false;
         }
-        return funcScore.applyAsDouble(state.getCurrent().get())
+        return funcScore.applyAsDouble(state.getCurrent().get())    // NOSONAR
                 > funcScore.applyAsDouble(state.getBest().get()); // NOSONAR
     }
 
