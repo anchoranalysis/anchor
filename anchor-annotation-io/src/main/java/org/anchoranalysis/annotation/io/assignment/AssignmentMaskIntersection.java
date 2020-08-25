@@ -61,12 +61,12 @@ public class AssignmentMaskIntersection implements Assignment {
     }
 
     @Override
-    public int numPaired() {
+    public int numberPaired() {
         return isIntersectionPresent() ? 1 : 0;
     }
 
     @Override
-    public int numUnassigned(boolean left) {
+    public int numberUnassigned(boolean left) {
         return isIntersectionPresent() ? 0 : 1;
     }
 

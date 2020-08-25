@@ -74,7 +74,7 @@ public class AssignmentOverlapFromPairs implements Assignment {
         elements.add(percentLeftMatched(), percentRightMatched());
 
         elements.add(
-                numPaired(), numUnassignedLeft(), leftSize(), numUnassignedRight(), rightSize());
+                numberPaired(), numUnassignedLeft(), leftSize(), numUnassignedRight(), rightSize());
 
         elements.add(meanOverlapFromPaired(), minOverlapFromPaired(), maxOverlapFromPaired());
 
@@ -158,7 +158,7 @@ public class AssignmentOverlapFromPairs implements Assignment {
         if (size == 0) {
             return Double.NaN;
         }
-        return ((double) numPaired()) * 100 / size;
+        return ((double) numberPaired()) * 100 / size;
     }
 
     public double percentRightMatched() {
@@ -166,16 +166,16 @@ public class AssignmentOverlapFromPairs implements Assignment {
         if (size == 0) {
             return Double.NaN;
         }
-        return ((double) numPaired()) * 100 / size;
+        return ((double) numberPaired()) * 100 / size;
     }
 
     @Override
-    public int numPaired() {
+    public int numberPaired() {
         return listPairs.size();
     }
 
     @Override
-    public int numUnassigned(boolean left) {
+    public int numberUnassigned(boolean left) {
         if (left) {
             return numUnassignedLeft();
         } else {

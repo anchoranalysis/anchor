@@ -67,7 +67,7 @@ public class AssignmentGeneratorFactory {
     private static String maybeAppendNumber(
             boolean doAppend, String mainString, Assignment assignment, boolean left) {
         if (doAppend) {
-            return String.format("%s (%d)", mainString, assignment.numUnassigned(left));
+            return String.format("%s (%d)", mainString, assignment.numberUnassigned(left));
         } else {
             return mainString;
         }
