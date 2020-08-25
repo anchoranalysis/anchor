@@ -24,26 +24,32 @@
  * #L%
  */
 
-package org.anchoranalysis.annotation.io.wholeimage.findable;
+package org.anchoranalysis.annotation.io.image.findable;
 
+import java.nio.file.Path;
 import java.util.Optional;
+import lombok.Value;
 import org.anchoranalysis.core.log.Logger;
 
 /**
- * An object that can be Found or Not-Found
+ * A negative-result when an object is NOT found at a particular location
  *
  * @author Owen Feehan
- * @param <T> object-type
+ * @param <T>
  */
-public interface Findable<T> {
+@Value
+public class NotFound<T> implements Findable<T> {
 
-    /**
-     * Returns the found object (or empty() if it's not found..... and in this case logs a message
-     * describing what went wrong)
-     *
-     * @param name
-     * @param logger
-     * @return true if successful, false if not-found
-     */
-    Optional<T> getFoundOrLog(String name, Logger logger);
+    /** the path an object was not found at. */
+    private final Path path;
+
+    private final String reason;
+
+    @Override
+    public Optional<T> getFoundOrLog(String name, Logger logger) {
+
+        logger.messageLogger().logFormatted("Cannot find %s: %s at %s", name, reason, path);
+
+        return Optional.empty();
+    }
 }

@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.annotation.io.bean.background;
+package org.anchoranalysis.annotation.io.bean;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -34,7 +34,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.shared.StringMap;
 
-public class AnnotationBackgroundDefinition extends AnchorBean<AnnotationBackgroundDefinition> {
+public class AnnotationBackground extends AnchorBean<AnnotationBackground> {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private String stackNameVisualOriginal;

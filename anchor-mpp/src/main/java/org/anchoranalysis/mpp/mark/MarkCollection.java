@@ -51,7 +51,7 @@ import org.anchoranalysis.mpp.bean.regionmap.RegionMembership;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMembershipWithFlags;
 
 /**
- * A collection of marks, termed a <i>configuration</i> in marked-point-processes literature
+ * A collection of marks, termed a <i>configuration</i> in marked-point-processes academic literature.
  *
  * @author Owen Feehan
  */

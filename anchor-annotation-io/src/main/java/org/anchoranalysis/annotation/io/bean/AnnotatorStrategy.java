@@ -24,13 +24,12 @@
  * #L%
  */
 
-package org.anchoranalysis.annotation.io.bean.strategy;
+package org.anchoranalysis.annotation.io.bean;
 
 import java.nio.file.Path;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.annotation.io.bean.background.AnnotationBackgroundDefinition;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
@@ -41,7 +40,7 @@ import org.anchoranalysis.io.error.AnchorIOException;
 public abstract class AnnotatorStrategy extends AnchorBean<AnnotatorStrategy> {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private AnnotationBackgroundDefinition background;
+    @BeanField @Getter @Setter private AnnotationBackground background;
 
     @BeanField @DefaultInstance @Getter @Setter private RasterReader rasterReader;
     // END BEAN PROPERTIES

@@ -24,32 +24,22 @@
  * #L%
  */
 
-package org.anchoranalysis.annotation.io.wholeimage.findable;
+package org.anchoranalysis.annotation.io.image;
 
+import java.io.IOException;
 import java.nio.file.Path;
-import java.util.Optional;
-import lombok.Value;
-import org.anchoranalysis.core.log.Logger;
+import org.anchoranalysis.annotation.image.ImageLabelAnnotation;
+import org.anchoranalysis.annotation.io.AnnotationWriter;
+import org.anchoranalysis.annotation.io.WriterUtilities;
+import org.anchoranalysis.io.generator.text.WriteStringToFile;
 
-/**
- * A negative-result when an object is NOT found at a particular location
- *
- * @author Owen Feehan
- * @param <T>
- */
-@Value
-public class NotFound<T> implements Findable<T> {
-
-    /** the path an object was not found at. */
-    private final Path path;
-
-    private final String reason;
+public class WholeImageLabelAnnotationWriter implements AnnotationWriter<ImageLabelAnnotation> {
 
     @Override
-    public Optional<T> getFoundOrLog(String name, Logger logger) {
+    public void write(ImageLabelAnnotation annotation, Path path) throws IOException {
 
-        logger.messageLogger().logFormatted("Cannot find %s: %s at %s", name, reason, path);
+        WriterUtilities.createNecessaryDirectories(path);
 
-        return Optional.empty();
+        WriteStringToFile.apply(annotation.getLabel(), path);
     }
 }

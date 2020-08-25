@@ -24,22 +24,26 @@
  * #L%
  */
 
-package org.anchoranalysis.annotation.io.wholeimage;
+package org.anchoranalysis.annotation.io.image.findable;
 
-import java.io.IOException;
-import java.nio.file.Path;
-import org.anchoranalysis.annotation.image.ImageLabelAnnotation;
-import org.anchoranalysis.annotation.io.AnnotationWriter;
-import org.anchoranalysis.annotation.io.WriterUtilities;
-import org.anchoranalysis.io.generator.text.WriteStringToFile;
+import java.util.Optional;
+import org.anchoranalysis.core.log.Logger;
 
-public class WholeImageLabelAnnotationWriter implements AnnotationWriter<ImageLabelAnnotation> {
+/**
+ * An object that can be Found or Not-Found
+ *
+ * @author Owen Feehan
+ * @param <T> object-type
+ */
+public interface Findable<T> {
 
-    @Override
-    public void write(ImageLabelAnnotation annotation, Path path) throws IOException {
-
-        WriterUtilities.createNecessaryDirectories(path);
-
-        WriteStringToFile.apply(annotation.getLabel(), path);
-    }
+    /**
+     * Returns the found object (or empty() if it's not found..... and in this case logs a message
+     * describing what went wrong)
+     *
+     * @param name
+     * @param logger
+     * @return true if successful, false if not-found
+     */
+    Optional<T> getFoundOrLog(String name, Logger logger);
 }

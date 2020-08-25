@@ -34,10 +34,12 @@ import org.anchoranalysis.annotation.io.AnnotationWriter;
 import org.anchoranalysis.annotation.io.WriterUtilities;
 import org.anchoranalysis.annotation.mark.MarkAnnotation;
 import org.anchoranalysis.io.generator.serialized.XStreamGenerator;
+import lombok.Getter;
+import lombok.Setter;
 
 public class MarkAnnotationWriter implements AnnotationWriter<MarkAnnotation> {
 
-    private boolean disablePathModification = false;
+    @Getter @Setter private boolean disablePathModification = false;
 
     @Override
     public void write(MarkAnnotation annotation, Path path) throws IOException {
@@ -79,13 +81,5 @@ public class MarkAnnotationWriter implements AnnotationWriter<MarkAnnotation> {
                 && !annotationPathForDeletion.equals(annotationPath)) {
             Files.deleteIfExists(annotationPathForDeletion);
         }
-    }
-
-    public boolean isDisablePathModification() {
-        return disablePathModification;
-    }
-
-    public void setDisablePathModification(boolean disablePathModification) {
-        this.disablePathModification = disablePathModification;
     }
 }

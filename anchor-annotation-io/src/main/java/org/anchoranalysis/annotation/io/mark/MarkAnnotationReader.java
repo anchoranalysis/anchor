@@ -36,17 +36,14 @@ import org.anchoranalysis.io.deserializer.DeserializationFailedException;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.mpp.io.marks.MarkCollectionDeserializer;
 import org.anchoranalysis.mpp.mark.MarkCollection;
+import lombok.AllArgsConstructor;
 
+@AllArgsConstructor
 public class MarkAnnotationReader implements AnnotationReader<MarkAnnotation> {
 
-    private boolean acceptUnfinished;
-
     private static final MarkCollectionDeserializer DESERIALIZER = new MarkCollectionDeserializer();
-
-    public MarkAnnotationReader(boolean acceptUnfinished) {
-        super();
-        this.acceptUnfinished = acceptUnfinished;
-    }
+    
+    private final boolean acceptUnfinished;
 
     public boolean annotationExistsCorrespondTo(Path annotationPath) {
         return fileNameToRead(annotationPath).isPresent();

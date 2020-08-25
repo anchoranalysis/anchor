@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.annotation.io.wholeimage;
+package org.anchoranalysis.annotation.io.image;
 
 import java.io.BufferedReader;
 import java.io.FileReader;

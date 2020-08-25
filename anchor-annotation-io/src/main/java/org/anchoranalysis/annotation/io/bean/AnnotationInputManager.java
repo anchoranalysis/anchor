@@ -24,12 +24,11 @@
  * #L%
  */
 
-package org.anchoranalysis.annotation.io.bean.input;
+package org.anchoranalysis.annotation.io.bean;
 
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.annotation.io.bean.strategy.AnnotatorStrategy;
 import org.anchoranalysis.annotation.io.input.AnnotationWithStrategy;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.functional.FunctionalProgress;
