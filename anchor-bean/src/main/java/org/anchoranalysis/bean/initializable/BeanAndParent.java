@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.bean.init;
+package org.anchoranalysis.bean.initializable;
 
 import java.util.ArrayList;
 import java.util.List;

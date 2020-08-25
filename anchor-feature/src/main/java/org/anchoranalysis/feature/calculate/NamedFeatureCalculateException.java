@@ -42,7 +42,7 @@ public class NamedFeatureCalculateException extends AnchorFriendlyCheckedExcepti
     private final String messageWithoutKey;
 
     /**
-     * Constructor - when a general failure message that doesn't pertain to any particular feature.
+     * Creates with a general failure message that doesn't pertain to any particular feature.
      *
      * @param message
      */
@@ -52,7 +52,7 @@ public class NamedFeatureCalculateException extends AnchorFriendlyCheckedExcepti
     }
 
     /**
-     * Constructor - when a calculation error occurs associated with the only pertinent feature.
+     * Creates with a calculation error that doesn't pertain to any particular feature.
      *
      * @param exception reason for failure
      */
@@ -61,7 +61,7 @@ public class NamedFeatureCalculateException extends AnchorFriendlyCheckedExcepti
     }
 
     /**
-     * Constructor - when a particular named feature failed in some way
+     * Creates with a failure message associated with a particular feature.
      *
      * @param featureName a name to describe the feature whose calculation failed
      * @param message the reason for failure

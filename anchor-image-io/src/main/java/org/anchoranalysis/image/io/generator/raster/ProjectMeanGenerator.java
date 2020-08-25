@@ -33,15 +33,21 @@ import org.anchoranalysis.io.generator.ObjectGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
-public class MIPGenerator extends RasterGenerator implements IterableObjectGenerator<Stack, Stack> {
+/**
+ * Like a {@link StackGenerator} but first applies a maximum-intensity-projection.
+ *  
+ * @author Owen Feehan
+ *
+ */
+public class ProjectMeanGenerator extends RasterGenerator implements IterableObjectGenerator<Stack, Stack> {
 
     private StackGenerator delegate;
 
-    public MIPGenerator(boolean padIfNec, String manifestFunction) {
+    public ProjectMeanGenerator(boolean padIfNec, String manifestFunction) {
         delegate = new StackGenerator(padIfNec, manifestFunction);
     }
 
-    public MIPGenerator(Stack element, boolean padIfNec, String manifestFunction) {
+    public ProjectMeanGenerator(Stack element, boolean padIfNec, String manifestFunction) {
         delegate = new StackGenerator(element, padIfNec, manifestFunction);
     }
 

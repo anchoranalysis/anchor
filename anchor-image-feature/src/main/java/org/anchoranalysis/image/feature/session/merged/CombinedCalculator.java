@@ -85,7 +85,7 @@ class CombinedCalculator {
         this.include = include;
 
         calculatorImage =
-                features.createImageSession(cc, soImage, CachingStrategies.cacheAndReuse());
+                features.createCalculator(cc, soImage, CachingStrategies.cacheAndReuse());
 
         BoundReplaceStrategy<
                         FeatureInputSingleObject, CacheAndReuseStrategy<FeatureInputSingleObject>>
@@ -151,9 +151,9 @@ class CombinedCalculator {
                         + integerFromBoolean(include.includeFirst())
                         + integerFromBoolean(include.includeSecond()));
 
-        return (features.numImageFeatures()
-                + features.numPairFeatures()
-                + (numSingle * features.numSingleFeatures()));
+        return (features.numberImageFeatures()
+                + features.numberPairFeatures()
+                + (numSingle * features.numberSingleFeatures()));
     }
 
     private Optional<FeatureCalculatorMulti<FeatureInputSingleObject>> createFirstAndSecond(

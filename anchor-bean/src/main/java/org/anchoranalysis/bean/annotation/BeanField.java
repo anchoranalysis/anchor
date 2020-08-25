@@ -29,6 +29,13 @@ package org.anchoranalysis.bean.annotation;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
-// Indicates that a property is a field that is part of the bean
+/**
+ * Indicates that a field in an <a href="https://www.anchoranalysis.org/developer_guide_anchor_beans.html">Anchor Bean</a> class is to be treated as a bean-field.
+ * 
+ * <p>This is <b>necessary</b> to include the field in any checks, initialization, duplication etc. that occurs.
+ * 
+ * @author Owen Feehan
+ *
+ */
 @Retention(RetentionPolicy.RUNTIME)
 public @interface BeanField {}

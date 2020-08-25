@@ -24,13 +24,13 @@
  * #L%
  */
 
-package org.anchoranalysis.bean.init.property;
+package org.anchoranalysis.bean.initializable.property;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import org.anchoranalysis.bean.init.InitializableBean;
-import org.anchoranalysis.bean.init.params.NullInitParams;
+import org.anchoranalysis.bean.initializable.InitializableBean;
+import org.anchoranalysis.bean.initializable.params.NullInitParams;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.log.Logger;
 

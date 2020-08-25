@@ -38,6 +38,7 @@ import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
+import lombok.Getter;
 
 /**
  * The list of features that can be used in a {@link PairsTableCalculator}
@@ -46,68 +47,57 @@ import org.anchoranalysis.image.feature.stack.FeatureInputStack;
  */
 public class MergedPairsFeatures {
 
-    private FeatureList<FeatureInputStack> listImage;
+    @Getter private FeatureList<FeatureInputStack> image;
 
-    private FeatureList<FeatureInputSingleObject> listSingle;
-    private FeatureList<FeatureInputPairObjects> listPair;
+    @Getter private FeatureList<FeatureInputSingleObject> single;
+    
+    @Getter private FeatureList<FeatureInputPairObjects> pair;
 
     /**
-     * Constructor - only calculate pair features
+     * Creates to only calculate pair features.
      *
-     * @param listPair features for a pair of objects
+     * @param pair features for a pair of objects
      */
-    public MergedPairsFeatures(FeatureList<FeatureInputPairObjects> listPair) {
-        this(FeatureListFactory.empty(), FeatureListFactory.empty(), listPair);
+    public MergedPairsFeatures(FeatureList<FeatureInputPairObjects> pair) {
+        this(FeatureListFactory.empty(), FeatureListFactory.empty(), pair);
     }
 
     /**
-     * Constructor
+     * Creates with features for single, pair and image as a whole.
      *
-     * @param listImage features for image as a whole
-     * @param listSingle features for single-objects
-     * @param listPair features for a pair of objects
+     * @param image features for image as a whole
+     * @param single features for single-objects
+     * @param pair features for a pair of objects
      */
     public MergedPairsFeatures(
-            FeatureList<FeatureInputStack> listImage,
-            FeatureList<FeatureInputSingleObject> listSingle,
-            FeatureList<FeatureInputPairObjects> listPair) {
+            FeatureList<FeatureInputStack> image,
+            FeatureList<FeatureInputSingleObject> single,
+            FeatureList<FeatureInputPairObjects> pair) {
         super();
-        this.listImage = listImage;
-        this.listSingle = listSingle;
-        this.listPair = listPair;
-    }
-
-    public FeatureList<FeatureInputStack> getImage() {
-        return listImage;
-    }
-
-    public FeatureList<FeatureInputSingleObject> getSingle() {
-        return listSingle;
-    }
-
-    public FeatureList<FeatureInputPairObjects> getPair() {
-        return listPair;
+        this.image = image;
+        this.single = single;
+        this.pair = pair;
     }
 
     /** Immutably creates entirely new duplicated features */
     public MergedPairsFeatures duplicate() {
         return new MergedPairsFeatures(
-                listImage.duplicateBean(), listSingle.duplicateBean(), listPair.duplicateBean());
+                image.duplicateBean(), single.duplicateBean(), pair.duplicateBean());
     }
 
-    public int numImageFeatures() {
-        return listImage.size();
+    public int numberImageFeatures() {
+        return image.size();
     }
 
-    public int numSingleFeatures() {
-        return listSingle.size();
+    public int numberSingleFeatures() {
+        return single.size();
     }
 
-    public int numPairFeatures() {
-        return listPair.size();
+    public int numberPairFeatures() {
+        return pair.size();
     }
 
-    public FeatureCalculatorMulti<FeatureInputStack> createImageSession(
+    public FeatureCalculatorMulti<FeatureInputStack> createCalculator(
             CreateCalculatorHelper cc,
             ImageInitParams soImage,
             BoundReplaceStrategy<FeatureInputStack, ? extends ReplaceStrategy<FeatureInputStack>>
@@ -132,7 +122,6 @@ public class MergedPairsFeatures {
             ImageInitParams soImage,
             CacheTransferSourceCollection cacheTransferSource)
             throws InitException {
-        // TODO fix no shared features anymore, prev sharedFeatures.duplicate()
         return cc.createPair(getPair(), soImage, cacheTransferSource);
     }
 }

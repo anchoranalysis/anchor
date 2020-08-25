@@ -24,7 +24,7 @@
  * #L%
  */
 /**
- * Beans for segmentation algorithms related to marked-point-processes
+ * Beans for segmentation algorithms related to marked-point-processes.
  *
  * @author Owen Feehan
  */

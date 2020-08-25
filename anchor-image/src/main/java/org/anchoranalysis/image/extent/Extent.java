@@ -57,18 +57,18 @@ public final class Extent implements Serializable {
     /** Size in X multiplied by size in Y. Convenient for calculating offsets and for iterations. */
     private final int areaXY;
 
-    /** Constructor - create with only x and y dimensions (z dimension is assumed to be 1) */
+    /** Creates with with only x and y dimensions (z dimension is assumed to be 1) */
     public Extent(int x, int y) {
         this(x, y, 1);
     }
 
-    /** Constructor - create with x and y and z dimensions */
+    /** Creates with x and y and z dimensions */
     public Extent(int x, int y, int z) {
         this(new Point3i(x, y, z));
     }
 
     /**
-     * Constructor - creates an extent from a point (duplicating the point for internal use)
+     * Createss an extent from a point (duplicating the point for internal use)
      *
      * <p>This constructor is exposed as a static method to deliberately duplicate the tuple as it
      * will be used internally.
@@ -81,7 +81,7 @@ public final class Extent implements Serializable {
     }
 
     /**
-     * Constructor - creates an extent from a point that is reused internally (without duplication)
+     * Creates from a point that is reused internally (without duplication)
      *
      * <p>This constructor is exposed as a static method to deliberately indicate that it's okay to
      * consume the point internally, as it won't be otherwise use.
@@ -94,9 +94,7 @@ public final class Extent implements Serializable {
     }
 
     /**
-     * Constructor
-     *
-     * <p>The point will be taken ownership by the extent, and should not be modified thereafter.
+     * Creates from a tuple that is reused internally (without duplication).
      *
      * @param len a tuple with the extent size's for each dimension
      */

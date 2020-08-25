@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.bean.init;
+package org.anchoranalysis.bean.initializable;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -33,7 +33,7 @@ import java.util.Set;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.bean.AnchorBean;
-import org.anchoranalysis.bean.init.property.PropertyInitializer;
+import org.anchoranalysis.bean.initializable.property.PropertyInitializer;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.log.Logger;
 

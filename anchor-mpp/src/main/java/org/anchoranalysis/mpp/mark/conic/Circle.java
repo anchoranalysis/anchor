@@ -41,14 +41,22 @@ public class Circle extends MarkWithPositionAndSingleRadius {
     /** */
     private static final long serialVersionUID = 8551900716243748046L;
 
-    // Constructor
+    /**
+     * Creates with a radius within particular bounds.
+     * 
+     * @param boundRadius
+     */
     public Circle(Bound boundRadius) {
         super(boundRadius);
     }
-
-    // Copy Constructor - we do not copy scene
-    public Circle(Circle src) {
-        super(src);
+    
+    /**
+     * Copy constructor
+     * 
+     * @param source
+     */
+    public Circle(Circle source) {
+        super(source);
     }
 
     @Override

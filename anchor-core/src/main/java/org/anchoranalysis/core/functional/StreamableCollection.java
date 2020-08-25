@@ -45,7 +45,7 @@ public class StreamableCollection<T> {
     private final Supplier<Stream<T>> supplier;
 
     /**
-     * Constructor - create for a particular collection
+     * Create for a particular collection
      *
      * @param collection the collection
      */

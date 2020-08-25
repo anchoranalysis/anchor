@@ -29,7 +29,7 @@ package org.anchoranalysis.feature.shared;
 import java.nio.file.Path;
 import java.util.List;
 import org.anchoranalysis.bean.NamedBean;
-import org.anchoranalysis.bean.init.params.BeanInitParams;
+import org.anchoranalysis.bean.initializable.params.BeanInitParams;
 import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsInitParams;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;

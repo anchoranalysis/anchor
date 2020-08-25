@@ -24,18 +24,17 @@
  * #L%
  */
 
-package org.anchoranalysis.bean.init.property;
+package org.anchoranalysis.bean.initializable.params;
 
-import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.log.Logger;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
-/** @author Owen Feehan */
-public interface PropertyDefiner {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public class NullInitParams implements BeanInitParams {
 
-    boolean accepts(Class<?> paramType);
+    private static final NullInitParams INSTANCE = new NullInitParams();
 
-    void doInitFor(Object propertyValue, Object param, Object parent, Logger logger)
-            throws InitException;
-
-    String describeAcceptedClasses();
+    public static NullInitParams instance() {
+        return INSTANCE;
+    }
 }

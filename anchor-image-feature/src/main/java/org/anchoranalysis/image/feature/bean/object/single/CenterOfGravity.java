@@ -47,7 +47,7 @@ public class CenterOfGravity extends FeatureSingleObject {
     // END BEAN PROPERTIES
 
     /**
-     * Constructor - create for a specific axis
+     * Creates for a specific axis.
      *
      * @param axis axis
      */

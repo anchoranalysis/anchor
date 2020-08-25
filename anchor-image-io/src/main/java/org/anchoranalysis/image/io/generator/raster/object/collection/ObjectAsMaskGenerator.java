@@ -61,7 +61,7 @@ public class ObjectAsMaskGenerator extends RasterGenerator
 
     private ObjectMask element;
 
-    /** Constructor - creates using a default image-resolution */
+    /** Creates using a default image-resolution. */
     public ObjectAsMaskGenerator() {
         this(new Resolution());
     }

@@ -44,7 +44,7 @@ public class DualStack {
     private DisplayStack background;
 
     /**
-     * Constructor - derives a background from the the energy-stack
+     * Creates to infer a background from the energy-stack.
      *
      * @param energyStack the energy-stack
      * @throws CreateException if a display-stack cannot be derived

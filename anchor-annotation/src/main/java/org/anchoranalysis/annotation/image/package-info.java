@@ -24,7 +24,7 @@
  * #L%
  */
 /**
- * Annotations that apply to an image as a whole
+ * Annotations that apply to an image as a whole.
  *
  * @author Owen Feehan
  */

@@ -84,7 +84,7 @@ public class Mask {
     private final Interpolator interpolator;
 
     /**
-     * Constructor - creates a mask from an existing channel using default values for OFF (0) and ON
+     * Creates a mask from an existing channel using default values for OFF (0) and ON
      * (255)
      *
      * <p>The channel should have maximally two distinct intensity values, represeting OFF and ON
@@ -101,7 +101,7 @@ public class Mask {
     }
 
     /**
-     * Constructor - creates a mask from an existing channel
+     * Creates a mask from an existing channel
      *
      * <p>The channel should have maximally two distinct intensity values, represeting OFF and ON
      * states
@@ -127,7 +127,7 @@ public class Mask {
     }
 
     /**
-     * Constructor - creates a mask from an existing binary-voxels using default image resolution
+     * Creates a mask from an existing binary-voxels using default image resolution
      *
      * @param voxels the binary-voxels to be reused as the internal buffer of the mask
      */
@@ -136,7 +136,7 @@ public class Mask {
     }
 
     /**
-     * Constructor - creates a mask from an existing binary-voxels using default image resolution
+     * Creates a mask from an existing binary-voxels using default image resolution
      *
      * @param voxels the binary-voxels to be reused as the internal buffer of the mask
      * @param resolution the image-resolution to assign
@@ -150,7 +150,7 @@ public class Mask {
     }
 
     /**
-     * Constructor - creates a new empty mask of particular dimensions and with particular
+     * Creates a new empty mask of particular dimensions and with particular
      * binaryvalues
      *
      * <p>Default mask values for OFF (0) and ON (255) are employed.

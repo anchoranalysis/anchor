@@ -23,7 +23,7 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.bean.init;
+package org.anchoranalysis.bean.initializable;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

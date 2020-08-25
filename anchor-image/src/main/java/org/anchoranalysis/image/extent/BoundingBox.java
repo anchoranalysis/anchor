@@ -90,8 +90,7 @@ public final class BoundingBox implements Serializable {
     }
 
     /**
-     * Constructor - creates a new bounding-box from two points (a minimum corner and a maximum
-     * corner)
+     * Creates from two {@code double} points (a minimum corner and a maximum corner)
      *
      * @param cornerMinInclusive minimum point in each dimension of the bounding-box (that exists
      *     inside the box)
@@ -105,8 +104,7 @@ public final class BoundingBox implements Serializable {
     }
 
     /**
-     * Constructor - creates a new bounding-box from two points (a minimum corner and a maximum
-     * corner)
+     * Creates from two {@code int} points (a minimum corner and a maximum corner)
      *
      * @param cornerMinInclusive minimum point in each dimension of the bounding-box (that exists
      *     inside the box)

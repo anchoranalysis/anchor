@@ -1,3 +1,6 @@
+/**
+ * Exceptions that can occur executing generic operations on <a href="https://www.anchoranalysis.org/developer_guide_anchor_beans.html">Anchor Beans</a>. 
+ */
 package org.anchoranalysis.bean.error;
 /*-
  * #%L

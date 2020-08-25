@@ -29,7 +29,7 @@ import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 /**
- * Supplies an image-stack to be written in a generator
+ * Supplies an image-stack to be written in a generator.
  *
  * @author Owen Feehan
  */

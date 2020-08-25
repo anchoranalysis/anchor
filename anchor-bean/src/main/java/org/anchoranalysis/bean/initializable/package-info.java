@@ -1,4 +1,4 @@
-package org.anchoranalysis.bean.init.property;
+package org.anchoranalysis.bean.initializable;
 /*-
  * #%L
  * anchor-bean

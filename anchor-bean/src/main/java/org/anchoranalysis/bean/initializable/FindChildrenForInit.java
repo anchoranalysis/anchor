@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.bean.init;
+package org.anchoranalysis.bean.initializable;
 
 import java.lang.reflect.Field;
 import java.util.Collection;

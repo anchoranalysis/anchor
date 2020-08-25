@@ -26,9 +26,9 @@
 
 package org.anchoranalysis.image.bean.nonbean.init;
 
-import org.anchoranalysis.bean.init.InitializableBean;
-import org.anchoranalysis.bean.init.params.BeanInitParams;
-import org.anchoranalysis.bean.init.property.PropertyInitializer;
+import org.anchoranalysis.bean.initializable.InitializableBean;
+import org.anchoranalysis.bean.initializable.params.BeanInitParams;
+import org.anchoranalysis.bean.initializable.property.PropertyInitializer;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;

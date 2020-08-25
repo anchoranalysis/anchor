@@ -41,14 +41,18 @@ public class Sphere extends MarkWithPositionAndSingleRadius {
     /** */
     private static final long serialVersionUID = -3526056946146656810L;
 
-    // Constructor
+    /**
+     * Creates with a radius within particular bounds.
+     * 
+     * @param boundRadius
+     */
     public Sphere(Bound boundRadius) {
         super(boundRadius);
     }
 
-    // Copy Constructor - we do not copy scene
-    public Sphere(Sphere src) {
-        super(src);
+    /** Copy Constructor */
+    public Sphere(Sphere source) {
+        super(source);
     }
 
     @Override

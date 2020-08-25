@@ -68,7 +68,7 @@ public class BoundingBoxRTree {
     }
 
     /**
-     * Constructor - with an initial list of boxes
+     * Creates from an initial list of boxes
      *
      * @param boxes added to the r-tree
      * @param maxNumberEntriesSuggested suggested a maximum number of entries in the r-tree
@@ -81,7 +81,7 @@ public class BoundingBoxRTree {
     }
 
     /**
-     * Constructor - with an initial list of boxes
+     * Creates from an initial stream of boxes
      *
      * @param boxes added to the r-tree
      * @param maxNumberEntriesSuggested suggested a maximum number of entries in the r-tree

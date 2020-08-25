@@ -29,7 +29,7 @@ package org.anchoranalysis.feature.calculate;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.Value;
-import org.anchoranalysis.bean.init.params.BeanInitParams;
+import org.anchoranalysis.bean.initializable.params.BeanInitParams;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.name.store.SharedObjects;
 import org.anchoranalysis.core.params.KeyValueParams;

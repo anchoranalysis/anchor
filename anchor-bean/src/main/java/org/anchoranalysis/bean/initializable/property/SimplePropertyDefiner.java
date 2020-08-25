@@ -24,10 +24,10 @@
  * #L%
  */
 
-package org.anchoranalysis.bean.init.property;
+package org.anchoranalysis.bean.initializable.property;
 
 import lombok.RequiredArgsConstructor;
-import org.anchoranalysis.bean.init.params.ParamsInitializer;
+import org.anchoranalysis.bean.initializable.params.ParamsInitializer;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.log.Logger;
 

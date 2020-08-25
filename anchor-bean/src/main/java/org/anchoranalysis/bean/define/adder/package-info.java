@@ -1,3 +1,6 @@
+/**
+ * {@link org.anchoranalysis.bean.define.adder.DefineAdder} and related-classes.
+ */
 package org.anchoranalysis.bean.define.adder;
 /*-
  * #%L

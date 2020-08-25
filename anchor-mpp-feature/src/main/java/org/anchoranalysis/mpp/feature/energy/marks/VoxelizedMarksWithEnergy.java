@@ -73,13 +73,13 @@ public final class VoxelizedMarksWithEnergy {
         this(marks, createMemoCollection(marks, energyStack, sharedFeatures, logger), logger);
     }
 
-    // Copy constructor - we do shallow copying of configuration
+    /** Creates a shallow-copy of the marks */
     public VoxelizedMarksWithEnergy shallowCopy() {
         return new VoxelizedMarksWithEnergy(
                 marks.shallowCopy(), new MemoCollection(memoMarks), logger);
     }
 
-    // Copy constructor - we do shallow copying of configuration
+    /** Creates a deep-copy of the marks */
     public VoxelizedMarksWithEnergy deepCopy() {
         return new VoxelizedMarksWithEnergy(
                 marks.deepCopy(), new MemoCollection(memoMarks), logger);

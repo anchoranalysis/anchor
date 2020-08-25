@@ -76,7 +76,7 @@ public class BoundedVoxels<T extends Buffer> {
     private final VoxelsExtracter<T> extracterGlobal;
 
     /**
-     * Constructor - creates voxels bounded to match the entire voxel-data at the origin
+     * Creates voxels bounded to match the entire voxel-data at the origin.
      *
      * @param voxels voxel-data
      */
@@ -94,7 +94,7 @@ public class BoundedVoxels<T extends Buffer> {
     }
 
     /**
-     * Constructor - voxels with a corresponding bounding box
+     * Creates voxels with a corresponding bounding box.
      *
      * @param boundingBox bounding-box
      * @param voxels voxels which must have the same extent as {@code boundingBox}

@@ -68,8 +68,8 @@ public class BoundOutputManager {
     private WriterExecuteBeforeEveryOperation initIfNeeded;
 
     /**
-     * Constructor - defaulting to a permissive output-manager in a directory and otherwise default
-     * settings
+     * Creates defaulting to a permissive output-manager in a directory and otherwise default
+     * settings.
      *
      * @param destination directory to associate with output-amanger
      * @param deleteExistingFolder if true this directory if it already exists is deleted before

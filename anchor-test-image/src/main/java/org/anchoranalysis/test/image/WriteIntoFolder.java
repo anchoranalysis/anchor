@@ -86,7 +86,7 @@ public class WriteIntoFolder implements TestRule {
     /** The folder in which stacks are written */
     @Getter private TemporaryFolder folder = new TemporaryFolder();
 
-    /** Constructor - print directory to the console */
+    /** Creates to print directory to the console. */
     public WriteIntoFolder() {
         this.printDirectoryToConsole = true;
     }

@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.feature.bean;
 
-import org.anchoranalysis.bean.init.property.PropertyDefiner;
+import org.anchoranalysis.bean.initializable.property.PropertyDefiner;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.calculate.FeatureInitParams;

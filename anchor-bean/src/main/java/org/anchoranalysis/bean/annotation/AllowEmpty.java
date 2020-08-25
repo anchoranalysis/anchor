@@ -29,6 +29,6 @@ package org.anchoranalysis.bean.annotation;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
-// Indicates that a String is allowed be empty. By default, it must be popopulated.
+/** Indicates that a String is allowed be empty, otherwise by default it must be non-empty. */
 @Retention(RetentionPolicy.RUNTIME)
 public @interface AllowEmpty {}

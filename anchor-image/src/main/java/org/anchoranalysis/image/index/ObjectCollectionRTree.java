@@ -51,7 +51,7 @@ public class ObjectCollectionRTree {
     @Getter private ObjectCollection objects;
 
     /**
-     * Constructor - creates an r-tree for particular objects
+     * Creates an r-tree for particular objects.
      *
      * @param objects the objects
      */

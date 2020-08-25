@@ -96,8 +96,7 @@ public class ObjectMask {
     @Getter private final VoxelsExtracter<ByteBuffer> extract;
 
     /**
-     * Constructor - creates an object-mask assuming coordinates at the origin (i.e. corner is
-     * 0,0,0)
+     * Creates an object-mask with a corner at the origin (i.e. corner is 0,0,0)
      *
      * <p>Default binary-values of (OFF=0, ON=255) are used.
      *
@@ -108,7 +107,7 @@ public class ObjectMask {
     }
 
     /**
-     * Constructor - creates an object-mask to matching a bounding-box but all pixels are OFF (0)
+     * Creates an object-mask to corresponding to a bounding-box with all pixels OFF (0)
      *
      * <p>Default binary-values of (OFF=0, ON=255) are used.
      *
@@ -119,7 +118,7 @@ public class ObjectMask {
     }
 
     /**
-     * Constructor - creates an object-mask to matching bounded-voxels
+     * Creates an object-mask to correspond to bounded-voxels.
      *
      * <p>The voxels are reused without duplication.
      *
@@ -165,7 +164,7 @@ public class ObjectMask {
     }
 
     /**
-     * Constructor - creates a simple object-mask from a mask and centered at the origin
+     * Creates a simple object-mask from a mask and centered at the origin
      *
      * @param mask the mask
      */

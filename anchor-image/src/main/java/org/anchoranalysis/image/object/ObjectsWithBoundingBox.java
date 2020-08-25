@@ -54,7 +54,7 @@ public class ObjectsWithBoundingBox {
     @Getter private final BoundingBox boundingBox;
 
     /**
-     * Constructor - create for a single object, using its current bounding-box
+     * Creates for a single object, using its current bounding-box.
      *
      * @param object the object
      */
@@ -64,7 +64,7 @@ public class ObjectsWithBoundingBox {
     }
 
     /**
-     * Constructor - create for a collection of objects, minimally fitting a bounding-box around all
+     * Creates for a collection of objects, minimally fitting a bounding-box around all
      * objects
      *
      * @param objects objects

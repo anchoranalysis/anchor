@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.bean.init.property;
+package org.anchoranalysis.bean.initializable.property;
 
 import java.util.Optional;
 import java.util.function.Function;

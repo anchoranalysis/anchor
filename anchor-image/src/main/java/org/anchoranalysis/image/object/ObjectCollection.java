@@ -51,13 +51,13 @@ public class ObjectCollection implements Iterable<ObjectMask> {
 
     private final List<ObjectMask> delegate;
 
-    /** Constructor - create with no objects */
+    /** Creates with no objects */
     public ObjectCollection() {
         delegate = new ArrayList<>();
     }
 
     /**
-     * Constructor - creates a new collection with elements from a stream
+     * Creates with elements from a stream
      *
      * @param stream objects
      */

@@ -27,8 +27,8 @@
 package org.anchoranalysis.mpp.bean.init;
 
 import org.anchoranalysis.bean.define.Define;
-import org.anchoranalysis.bean.init.params.BeanInitParams;
-import org.anchoranalysis.bean.init.property.PropertyInitializer;
+import org.anchoranalysis.bean.initializable.params.BeanInitParams;
+import org.anchoranalysis.bean.initializable.property.PropertyInitializer;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.name.store.NamedProviderStore;

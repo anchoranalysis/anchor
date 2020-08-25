@@ -62,7 +62,7 @@ public class RGBStack {
     private Stack stack;
 
     /**
-     * Constructor - creates a particularly-sized stack with all channels initialized to 0.
+     * Creates a particularly-sized stack with all channels initialized to 0.
      *
      * @param dimensions dimensions of each channel
      * @param factory factory to create the channel
@@ -72,7 +72,7 @@ public class RGBStack {
     }
 
     /**
-     * Constructor - creates a RGB stack from an existing stack (which must have 1 or 3 channels)
+     * Creates from an existing stack (which must have 1 or 3 channels).
      *
      * <p>The channel order is: red, green, blue.
      *
