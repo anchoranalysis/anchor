@@ -31,15 +31,15 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Optional;
+import org.anchoranalysis.annotation.image.ImageLabelAnnotation;
 import org.anchoranalysis.annotation.io.AnnotationReader;
-import org.anchoranalysis.annotation.wholeimage.WholeImageLabelAnnotation;
 import org.anchoranalysis.io.error.AnchorIOException;
 
 public class WholeImageLabelAnnotationReader
-        implements AnnotationReader<WholeImageLabelAnnotation> {
+        implements AnnotationReader<ImageLabelAnnotation> {
 
     @Override
-    public Optional<WholeImageLabelAnnotation> read(Path path) throws AnchorIOException {
+    public Optional<ImageLabelAnnotation> read(Path path) throws AnchorIOException {
 
         try (FileReader fileReader = new FileReader(path.toFile())) {
             return Optional.of(readFromFile(fileReader));
@@ -48,7 +48,7 @@ public class WholeImageLabelAnnotationReader
         }
     }
 
-    private static WholeImageLabelAnnotation readFromFile(FileReader fileReader)
+    private static ImageLabelAnnotation readFromFile(FileReader fileReader)
             throws AnchorIOException {
         try (BufferedReader bufferedReader = new BufferedReader(fileReader)) {
             String label = bufferedReader.readLine();
@@ -59,7 +59,7 @@ public class WholeImageLabelAnnotationReader
                         "We expect the a whole-image label to be in a text file with a single line only");
             }
 
-            return new WholeImageLabelAnnotation(label);
+            return new ImageLabelAnnotation(label);
         } catch (IOException e) {
             throw new AnchorIOException(
                     "A failure occurred reading a line from the annotation file");

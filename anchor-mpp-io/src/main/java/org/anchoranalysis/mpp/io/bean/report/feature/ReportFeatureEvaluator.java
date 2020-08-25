@@ -28,7 +28,6 @@ package org.anchoranalysis.mpp.io.bean.report.feature;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -36,6 +35,7 @@ import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
+import org.anchoranalysis.mpp.bean.init.MPPInitParams;
 
 public abstract class ReportFeatureEvaluator<T extends FeatureInput>
         extends ReportFeatureForSharedObjects {

@@ -26,10 +26,10 @@
 
 package org.anchoranalysis.anchor.mpp.feature.bean.mark;
 
-import org.anchoranalysis.anchor.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 
 public abstract class PxlListOperationFromMark extends AnchorBean<PxlListOperationFromMark> {
 

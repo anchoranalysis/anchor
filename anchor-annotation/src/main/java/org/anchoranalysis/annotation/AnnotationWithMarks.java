@@ -26,10 +26,10 @@
 
 package org.anchoranalysis.annotation;
 
-import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
-import org.anchoranalysis.anchor.mpp.mark.MarkCollection;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.mpp.bean.regionmap.RegionMap;
+import org.anchoranalysis.mpp.mark.MarkCollection;
 
 public abstract class AnnotationWithMarks implements Annotation {
 

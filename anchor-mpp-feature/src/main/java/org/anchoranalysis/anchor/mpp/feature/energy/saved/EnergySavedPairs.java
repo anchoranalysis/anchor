@@ -30,17 +30,17 @@ import java.util.Set;
 import org.anchoranalysis.anchor.mpp.feature.addcriteria.AddCriteria;
 import org.anchoranalysis.anchor.mpp.feature.addcriteria.RandomCollectionWithAddCriteria;
 import org.anchoranalysis.anchor.mpp.feature.energy.EnergyPair;
-import org.anchoranalysis.anchor.mpp.mark.Mark;
-import org.anchoranalysis.anchor.mpp.mark.MarkCollection;
-import org.anchoranalysis.anchor.mpp.mark.set.UpdatableMarkSet;
-import org.anchoranalysis.anchor.mpp.mark.set.UpdateMarkSetException;
-import org.anchoranalysis.anchor.mpp.mark.voxelized.memo.MemoForIndex;
-import org.anchoranalysis.anchor.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.graph.EdgeTypeWithVertices;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.feature.shared.SharedFeatureMulti;
+import org.anchoranalysis.mpp.mark.Mark;
+import org.anchoranalysis.mpp.mark.MarkCollection;
+import org.anchoranalysis.mpp.mark.set.UpdatableMarkSet;
+import org.anchoranalysis.mpp.mark.set.UpdateMarkSetException;
+import org.anchoranalysis.mpp.mark.voxelized.memo.MemoForIndex;
+import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 import lombok.Getter;
 
 public class EnergySavedPairs implements UpdatableMarkSet {

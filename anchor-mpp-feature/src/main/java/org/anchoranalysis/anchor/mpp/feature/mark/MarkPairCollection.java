@@ -27,8 +27,8 @@
 package org.anchoranalysis.anchor.mpp.feature.mark;
 
 import org.anchoranalysis.anchor.mpp.feature.addcriteria.RandomCollectionWithAddCriteria;
-import org.anchoranalysis.anchor.mpp.mark.Mark;
-import org.anchoranalysis.anchor.mpp.pair.IdentifiablePair;
+import org.anchoranalysis.mpp.mark.Mark;
+import org.anchoranalysis.mpp.pair.IdentifiablePair;
 
 /**
  * A pair collection where the underlying type is a simple {@link IdentifiablePair}

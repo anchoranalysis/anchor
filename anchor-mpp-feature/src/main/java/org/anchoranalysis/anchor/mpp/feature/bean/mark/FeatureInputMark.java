@@ -28,12 +28,12 @@ package org.anchoranalysis.anchor.mpp.feature.bean.mark;
 
 import java.util.Optional;
 import lombok.EqualsAndHashCode;
-import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInputParams;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.extent.Resolution;
+import org.anchoranalysis.mpp.mark.Mark;
 
 @EqualsAndHashCode
 public class FeatureInputMark implements FeatureInputParams {

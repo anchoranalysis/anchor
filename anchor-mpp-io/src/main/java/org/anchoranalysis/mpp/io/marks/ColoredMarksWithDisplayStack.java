@@ -28,11 +28,11 @@ package org.anchoranalysis.mpp.io.marks;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.anchoranalysis.anchor.mpp.mark.ColoredMarks;
-import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.core.color.ColorIndex;
 import org.anchoranalysis.core.idgetter.IDGetter;
 import org.anchoranalysis.image.stack.DisplayStack;
+import org.anchoranalysis.mpp.mark.ColoredMarks;
+import org.anchoranalysis.mpp.mark.Mark;
 
 @Data
 @AllArgsConstructor

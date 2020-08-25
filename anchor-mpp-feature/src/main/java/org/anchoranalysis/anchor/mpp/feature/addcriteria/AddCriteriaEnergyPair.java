@@ -29,9 +29,6 @@ package org.anchoranalysis.anchor.mpp.feature.addcriteria;
 import java.util.Optional;
 import org.anchoranalysis.anchor.mpp.feature.energy.EnergyPair;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
-import org.anchoranalysis.anchor.mpp.mark.Mark;
-import org.anchoranalysis.anchor.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
-import org.anchoranalysis.anchor.mpp.pair.IdentifiablePair;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.feature.bean.list.FeatureList;
@@ -40,6 +37,9 @@ import org.anchoranalysis.feature.calculate.results.ResultsVector;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.feature.energy.EnergyTotal;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
+import org.anchoranalysis.mpp.mark.Mark;
+import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
+import org.anchoranalysis.mpp.pair.IdentifiablePair;
 
 public class AddCriteriaEnergyPair implements AddCriteria<EnergyPair> {
 

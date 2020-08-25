@@ -29,7 +29,6 @@ package org.anchoranalysis.anchor.mpp.feature.energy.scheme;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
 import org.anchoranalysis.anchor.mpp.feature.addcriteria.AddCriteriaPair;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputAllMemo;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
@@ -43,6 +42,7 @@ import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
+import org.anchoranalysis.mpp.bean.regionmap.RegionMap;
 
 /**
  * The energy for a feature-list as factorized into different cliques.

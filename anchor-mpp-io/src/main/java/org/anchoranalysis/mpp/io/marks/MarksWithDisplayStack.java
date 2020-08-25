@@ -28,8 +28,8 @@ package org.anchoranalysis.mpp.io.marks;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.anchoranalysis.anchor.mpp.mark.MarkCollection;
 import org.anchoranalysis.image.stack.DisplayStack;
+import org.anchoranalysis.mpp.mark.MarkCollection;
 
 @Data
 @AllArgsConstructor

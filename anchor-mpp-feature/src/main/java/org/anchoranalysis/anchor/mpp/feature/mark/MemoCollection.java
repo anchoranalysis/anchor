@@ -29,18 +29,18 @@ package org.anchoranalysis.anchor.mpp.feature.mark;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
 import org.anchoranalysis.anchor.mpp.feature.energy.saved.EnergySavedInd;
 import org.anchoranalysis.anchor.mpp.feature.energy.scheme.EnergySchemeWithSharedFeatures;
-import org.anchoranalysis.anchor.mpp.mark.Mark;
-import org.anchoranalysis.anchor.mpp.mark.MarkCollection;
-import org.anchoranalysis.anchor.mpp.mark.voxelized.memo.MemoForIndex;
-import org.anchoranalysis.anchor.mpp.mark.voxelized.memo.PxlMarkMemoFactory;
-import org.anchoranalysis.anchor.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
 import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
 import org.anchoranalysis.feature.energy.EnergyTotal;
+import org.anchoranalysis.mpp.bean.regionmap.RegionMap;
+import org.anchoranalysis.mpp.mark.Mark;
+import org.anchoranalysis.mpp.mark.MarkCollection;
+import org.anchoranalysis.mpp.mark.voxelized.memo.MemoForIndex;
+import org.anchoranalysis.mpp.mark.voxelized.memo.PxlMarkMemoFactory;
+import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 
 /**
  * A collection of memoized marks on which energies can be derived.

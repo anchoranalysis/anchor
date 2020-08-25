@@ -28,12 +28,12 @@ package org.anchoranalysis.annotation.mark;
 
 import java.util.Calendar;
 import java.util.Date;
-import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
-import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMapSingleton;
-import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
-import org.anchoranalysis.anchor.mpp.mark.MarkCollection;
 import org.anchoranalysis.annotation.AnnotationWithMarks;
 import org.anchoranalysis.core.error.OptionalOperationUnsupportedException;
+import org.anchoranalysis.mpp.bean.regionmap.RegionMap;
+import org.anchoranalysis.mpp.bean.regionmap.RegionMapSingleton;
+import org.anchoranalysis.mpp.mark.GlobalRegionIdentifiers;
+import org.anchoranalysis.mpp.mark.MarkCollection;
 import lombok.Getter;
 
 /**
@@ -51,10 +51,10 @@ public class MarkAnnotation extends AnnotationWithMarks {
     private MarkCollection marks;
     
     /** Marks covering area that should be rejected, can be NULL */
-    private MarkCollection marksReject;
+    @Getter private MarkCollection marksReject;
 
     /** Number of seconds since the UNIX epoch */
-    private Date timeAnnotationLastUpdated;
+    @Getter private Date timeAnnotationLastUpdated;
     @Getter private boolean finished = false;
 
     // Hard-coded regionID
@@ -96,10 +96,6 @@ public class MarkAnnotation extends AnnotationWithMarks {
         return marks;
     }
 
-    public Date getTimeAnnotationLastUpdated() {
-        return timeAnnotationLastUpdated;
-    }
-
     @Override
     public RegionMap getRegionMap() {
         return RegionMapSingleton.instance();
@@ -108,10 +104,6 @@ public class MarkAnnotation extends AnnotationWithMarks {
     @Override
     public int getRegionID() {
         return regionID;
-    }
-
-    public MarkCollection getMarksReject() {
-        return marksReject;
     }
 
     public void scaleXY(double scaleFactor) throws OptionalOperationUnsupportedException {

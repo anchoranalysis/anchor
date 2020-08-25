@@ -31,7 +31,7 @@ import java.util.Collections;
 import java.util.List;
 import org.anchoranalysis.core.text.TypedValue;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.object.ops.ObjectMaskMerger;
+import org.anchoranalysis.image.object.combine.ObjectMaskMerger;
 
 /**
  * Calculates statistics (DICE, Jaccard etc.) based upon corresponding two object-masks

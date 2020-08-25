@@ -28,9 +28,9 @@ package org.anchoranalysis.anchor.mpp.feature.input.memo;
 
 import java.util.Optional;
 import lombok.EqualsAndHashCode;
-import org.anchoranalysis.anchor.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.feature.input.FeatureInputEnergy;
+import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 
 @EqualsAndHashCode(callSuper = true)
 public class FeatureInputPairMemo extends FeatureInputEnergy {

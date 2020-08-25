@@ -28,11 +28,11 @@ package org.anchoranalysis.anchor.mpp.feature.bean.mark;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.anchor.mpp.bean.mark.MarkWithIdentifierFactory;
 import org.anchoranalysis.anchor.mpp.feature.bean.energy.scheme.EnergySchemeCreator;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.define.Define;
 import org.anchoranalysis.feature.bean.FeatureRelatedBean;
+import org.anchoranalysis.mpp.bean.mark.MarkWithIdentifierFactory;
 
 public class MarkEvaluator extends FeatureRelatedBean<MarkEvaluator> {
 

@@ -31,15 +31,15 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
-import org.anchoranalysis.anchor.mpp.mark.set.UpdatableMarkSet;
-import org.anchoranalysis.anchor.mpp.mark.set.UpdateMarkSetException;
-import org.anchoranalysis.anchor.mpp.mark.voxelized.memo.MemoForIndex;
-import org.anchoranalysis.anchor.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
-import org.anchoranalysis.anchor.mpp.probmap.ProbMap;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.feature.shared.SharedFeatureMulti;
+import org.anchoranalysis.mpp.mark.set.UpdatableMarkSet;
+import org.anchoranalysis.mpp.mark.set.UpdateMarkSetException;
+import org.anchoranalysis.mpp.mark.voxelized.memo.MemoForIndex;
+import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
+import org.anchoranalysis.mpp.probmap.ProbMap;
 
 // The pxlMarkMemoList must always match the current state of the underlzing updatable items
 public class ListUpdatableMarkSetCollection implements UpdatableMarkSet, List<UpdatableMarkSet> {

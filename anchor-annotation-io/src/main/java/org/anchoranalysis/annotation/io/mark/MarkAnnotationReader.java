@@ -28,7 +28,6 @@ package org.anchoranalysis.annotation.io.mark;
 
 import java.nio.file.Path;
 import java.util.Optional;
-import org.anchoranalysis.anchor.mpp.mark.MarkCollection;
 import org.anchoranalysis.annotation.io.AnnotationReader;
 import org.anchoranalysis.annotation.mark.MarkAnnotation;
 import org.anchoranalysis.core.functional.OptionalUtilities;
@@ -36,6 +35,7 @@ import org.anchoranalysis.io.bean.deserializer.XStreamDeserializer;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.mpp.io.marks.MarkCollectionDeserializer;
+import org.anchoranalysis.mpp.mark.MarkCollection;
 
 public class MarkAnnotationReader implements AnnotationReader<MarkAnnotation> {
 

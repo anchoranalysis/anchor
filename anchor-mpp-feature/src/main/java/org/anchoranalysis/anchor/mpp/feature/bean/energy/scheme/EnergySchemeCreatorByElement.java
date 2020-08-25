@@ -31,7 +31,6 @@ import java.util.List;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
 import org.anchoranalysis.anchor.mpp.feature.addcriteria.AddCriteriaPair;
 import org.anchoranalysis.anchor.mpp.feature.energy.scheme.EnergyScheme;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputAllMemo;
@@ -49,6 +48,7 @@ import org.anchoranalysis.feature.bean.list.FeatureListFactory;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.bean.operator.Sum;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
+import org.anchoranalysis.mpp.bean.regionmap.RegionMap;
 
 public class EnergySchemeCreatorByElement extends EnergySchemeCreator {
 

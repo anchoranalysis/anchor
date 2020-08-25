@@ -26,13 +26,13 @@
 
 package org.anchoranalysis.anchor.mpp.feature.bean.mark;
 
-import org.anchoranalysis.anchor.mpp.bean.MPPBean;
-import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
 import org.anchoranalysis.anchor.mpp.feature.error.CheckException;
-import org.anchoranalysis.anchor.mpp.mark.CompatibleWithMark;
-import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.energy.EnergyStack;
+import org.anchoranalysis.mpp.bean.MPPBean;
+import org.anchoranalysis.mpp.bean.regionmap.RegionMap;
+import org.anchoranalysis.mpp.mark.CompatibleWithMark;
+import org.anchoranalysis.mpp.mark.Mark;
 
 /**
  * A predicate on a mark to check if a condition has been satisfied.

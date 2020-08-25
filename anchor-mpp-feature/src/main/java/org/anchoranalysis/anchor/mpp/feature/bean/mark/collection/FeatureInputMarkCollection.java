@@ -29,10 +29,10 @@ package org.anchoranalysis.anchor.mpp.feature.bean.mark.collection;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.anchoranalysis.anchor.mpp.mark.MarkCollection;
 import org.anchoranalysis.feature.input.FeatureInputWithResolution;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.extent.Resolution;
+import org.anchoranalysis.mpp.mark.MarkCollection;
 
 @AllArgsConstructor
 public class FeatureInputMarkCollection implements FeatureInputWithResolution {

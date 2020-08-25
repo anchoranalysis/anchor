@@ -29,9 +29,9 @@ package org.anchoranalysis.anchor.mpp.feature.energy.saved;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
-import org.anchoranalysis.anchor.mpp.mark.Mark;
-import org.anchoranalysis.anchor.mpp.mark.MarkCollection;
 import org.anchoranalysis.feature.energy.EnergyTotal;
+import org.anchoranalysis.mpp.mark.Mark;
+import org.anchoranalysis.mpp.mark.MarkCollection;
 import lombok.Getter;
 import lombok.Setter;
 
