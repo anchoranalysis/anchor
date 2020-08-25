@@ -31,9 +31,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipWithFlags;
 import org.anchoranalysis.anchor.mpp.overlay.OverlayCollectionMarkFactory;
-import org.anchoranalysis.anchor.overlay.Overlay;
-import org.anchoranalysis.anchor.overlay.collection.ColoredOverlayCollection;
-import org.anchoranalysis.anchor.overlay.writer.DrawOverlay;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.idgetter.IDGetter;
 import org.anchoranalysis.image.io.generator.raster.RasterGenerator;
@@ -46,6 +43,9 @@ import org.anchoranalysis.io.generator.ObjectGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.mpp.io.marks.ColoredMarksWithDisplayStack;
+import org.anchoranalysis.overlay.Overlay;
+import org.anchoranalysis.overlay.collection.ColoredOverlayCollection;
+import org.anchoranalysis.overlay.writer.DrawOverlay;
 
 public abstract class MarksGeneratorBase extends RasterGenerator
         implements IterableObjectGenerator<ColoredMarksWithDisplayStack, Stack> {

@@ -28,12 +28,12 @@ package org.anchoranalysis.anchor.mpp.overlay;
 
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
-import org.anchoranalysis.anchor.overlay.object.scaled.ScaledMaskCreator;
-import org.anchoranalysis.anchor.overlay.writer.DrawOverlay;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.object.properties.ObjectWithProperties;
+import org.anchoranalysis.overlay.object.scaled.ScaledMaskCreator;
+import org.anchoranalysis.overlay.writer.DrawOverlay;
 
 @AllArgsConstructor
 class VolumeThreshold implements ScaledMaskCreator {

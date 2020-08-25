@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.anchor.mpp.pair;
 
-import org.anchoranalysis.anchor.overlay.id.Identifiable;
+import org.anchoranalysis.overlay.id.Identifiable;
 
 /**
  * Pair of marks

@@ -24,20 +24,20 @@
  * #L%
  */
 
-package org.anchoranalysis.anchor.overlay.collection;
+package org.anchoranalysis.overlay.collection;
 
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.anchoranalysis.anchor.overlay.Overlay;
-import org.anchoranalysis.anchor.overlay.writer.DrawOverlay;
 import org.anchoranalysis.core.color.ColorList;
 import org.anchoranalysis.core.color.RGBColor;
 import org.anchoranalysis.core.index.IndicesSelection;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.overlay.Overlay;
+import org.anchoranalysis.overlay.writer.DrawOverlay;
 
 @AllArgsConstructor
 public class ColoredOverlayCollection implements Iterable<Overlay> {

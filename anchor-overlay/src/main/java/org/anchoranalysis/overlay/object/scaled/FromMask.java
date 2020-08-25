@@ -24,39 +24,40 @@
  * #L%
  */
 
-package org.anchoranalysis.anchor.overlay.object.scaled;
+package org.anchoranalysis.overlay.object.scaled;
 
-import org.anchoranalysis.anchor.overlay.writer.DrawOverlay;
+import java.util.Optional;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.properties.ObjectWithProperties;
+import org.anchoranalysis.image.scale.ScaleFactor;
+import org.anchoranalysis.overlay.writer.DrawOverlay;
 
-/**
- * Creates a scaled version of a mask from a mark/object that is not scaled
- *
- * @author Owen Feehan
- */
-public interface ScaledMaskCreator {
+public class FromMask implements ScaledMaskCreator {
 
-    /**
-     * Creates a scaled-version of the mask
-     *
-     * @param overlayWriter what writes an overlay onto a raster
-     * @param unscaled unscaled object-mask
-     * @param scaleFactor how much to scale by (e.g. 0.5 scales the X dimension to 50%)
-     * @param originalObject the object from which omUnscaled was derived
-     * @param dimensionsScaled the scene-dimensions when scaled to match scaleFactor
-     * @param bv binary-values for creating the mask
-     * @return the scaled object-mask
-     * @throws CreateException
-     */
-    ObjectWithProperties createScaledMask(
+    @Override
+    public ObjectWithProperties createScaledMask(
             DrawOverlay overlayWriter,
             ObjectWithProperties unscaled,
             double scaleFactor,
             Object originalObject,
             Dimensions dimensionsScaled,
-            BinaryValuesByte bv)
-            throws CreateException;
+            BinaryValuesByte bvOut)
+            throws CreateException {
+
+        // Then we have to create the scaled-object fresh
+        // We store it for next-time
+        ObjectMask scaled =
+                unscaled.withoutProperties()
+                        .scale(
+                                new ScaleFactor(scaleFactor),
+                                Optional.of(dimensionsScaled.extent()));
+
+        assert (scaled.voxelsOn().anyExists());
+
+        // We keep the properties the same
+        return new ObjectWithProperties(scaled, unscaled.getProperties());
+    }
 }

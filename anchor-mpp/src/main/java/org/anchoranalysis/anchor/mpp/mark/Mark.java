@@ -32,8 +32,6 @@ import java.util.Optional;
 import java.util.function.DoubleUnaryOperator;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipWithFlags;
-import org.anchoranalysis.anchor.overlay.OverlayProperties;
-import org.anchoranalysis.anchor.overlay.id.Identifiable;
 import org.anchoranalysis.core.error.OptionalOperationUnsupportedException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
@@ -46,6 +44,8 @@ import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.object.properties.ObjectWithProperties;
 import org.anchoranalysis.image.scale.ScaleFactor;
+import org.anchoranalysis.overlay.OverlayProperties;
+import org.anchoranalysis.overlay.id.Identifiable;
 
 @NoArgsConstructor
 public abstract class Mark implements Serializable, Identifiable {

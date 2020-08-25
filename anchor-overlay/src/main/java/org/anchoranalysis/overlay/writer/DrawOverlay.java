@@ -24,14 +24,11 @@
  * #L%
  */
 
-package org.anchoranalysis.anchor.overlay.writer;
+package org.anchoranalysis.overlay.writer;
 
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import org.anchoranalysis.anchor.overlay.Overlay;
-import org.anchoranalysis.anchor.overlay.bean.DrawObject;
-import org.anchoranalysis.anchor.overlay.collection.ColoredOverlayCollection;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.functional.CheckedStream;
@@ -44,6 +41,9 @@ import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.object.properties.IDGetterObjectWithProperties;
 import org.anchoranalysis.image.object.properties.ObjectWithProperties;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
+import org.anchoranalysis.overlay.Overlay;
+import org.anchoranalysis.overlay.bean.DrawObject;
+import org.anchoranalysis.overlay.collection.ColoredOverlayCollection;
 
 /**
  * Draws an overlay onto a RGB-stack, including precalculated overlays.

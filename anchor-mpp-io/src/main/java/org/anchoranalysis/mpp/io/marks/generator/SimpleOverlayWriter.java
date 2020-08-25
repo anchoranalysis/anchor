@@ -28,17 +28,17 @@ package org.anchoranalysis.mpp.io.marks.generator;
 
 import java.util.List;
 import lombok.AllArgsConstructor;
-import org.anchoranalysis.anchor.overlay.Overlay;
-import org.anchoranalysis.anchor.overlay.bean.DrawObject;
-import org.anchoranalysis.anchor.overlay.collection.ColoredOverlayCollection;
-import org.anchoranalysis.anchor.overlay.writer.DrawOverlay;
-import org.anchoranalysis.anchor.overlay.writer.ObjectDrawAttributes;
-import org.anchoranalysis.anchor.overlay.writer.PrecalculationOverlay;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.idgetter.IDGetter;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
+import org.anchoranalysis.overlay.Overlay;
+import org.anchoranalysis.overlay.bean.DrawObject;
+import org.anchoranalysis.overlay.collection.ColoredOverlayCollection;
+import org.anchoranalysis.overlay.writer.DrawOverlay;
+import org.anchoranalysis.overlay.writer.ObjectDrawAttributes;
+import org.anchoranalysis.overlay.writer.PrecalculationOverlay;
 
 /**
  * Converts a configuration to a set of object-masks, using a simple {@link DrawObject} for all

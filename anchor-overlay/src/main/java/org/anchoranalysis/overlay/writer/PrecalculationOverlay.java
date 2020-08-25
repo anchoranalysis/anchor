@@ -24,9 +24,29 @@
  * #L%
  */
 
-package org.anchoranalysis.anchor.overlay.id;
+package org.anchoranalysis.overlay.writer;
 
-@FunctionalInterface
-public interface Identifiable {
-    int getId();
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.image.extent.BoundingBox;
+import org.anchoranalysis.image.object.properties.ObjectWithProperties;
+import org.anchoranalysis.image.stack.rgb.RGBStack;
+
+/**
+ * Overlays with additional pre-calculations that make them quicker to draw onto a RGBStack
+ *
+ * @author Owen Feehan
+ */
+@AllArgsConstructor
+public abstract class PrecalculationOverlay {
+
+    @Getter private final ObjectWithProperties first;
+
+    public abstract void writePrecalculatedMask(
+            RGBStack background,
+            ObjectDrawAttributes attributes,
+            int iteration,
+            BoundingBox restrictTo)
+            throws OperationFailedException;
 }

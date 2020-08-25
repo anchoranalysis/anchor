@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.anchor.overlay;
+package org.anchoranalysis.overlay;
 
 import java.util.Iterator;
 import java.util.function.DoubleUnaryOperator;

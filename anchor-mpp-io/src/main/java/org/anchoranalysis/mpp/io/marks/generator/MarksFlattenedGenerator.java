@@ -29,14 +29,14 @@ package org.anchoranalysis.mpp.io.marks.generator;
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMapSingleton;
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipWithFlags;
 import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
-import org.anchoranalysis.anchor.overlay.Overlay;
-import org.anchoranalysis.anchor.overlay.bean.DrawObject;
-import org.anchoranalysis.anchor.overlay.writer.DrawOverlay;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.idgetter.IDGetter;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.io.bean.object.writer.Flatten;
 import org.anchoranalysis.mpp.io.marks.ColoredMarksWithDisplayStack;
+import org.anchoranalysis.overlay.Overlay;
+import org.anchoranalysis.overlay.bean.DrawObject;
+import org.anchoranalysis.overlay.writer.DrawOverlay;
 
 public class MarksFlattenedGenerator extends MarksGeneratorBase {
 

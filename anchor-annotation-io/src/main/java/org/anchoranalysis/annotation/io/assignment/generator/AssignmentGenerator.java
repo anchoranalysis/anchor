@@ -32,7 +32,6 @@ import java.util.List;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.anchor.overlay.bean.DrawObject;
 import org.anchoranalysis.annotation.io.assignment.Assignment;
 import org.anchoranalysis.core.color.ColorList;
 import org.anchoranalysis.core.error.CreateException;
@@ -56,6 +55,7 @@ import org.anchoranalysis.io.bean.object.writer.IfElse;
 import org.anchoranalysis.io.bean.object.writer.Outline;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import org.anchoranalysis.overlay.bean.DrawObject;
 
 public class AssignmentGenerator extends RasterGenerator {
 

@@ -24,10 +24,8 @@
  * #L%
  */
 
-package org.anchoranalysis.anchor.overlay;
+package org.anchoranalysis.overlay;
 
-import org.anchoranalysis.anchor.overlay.id.Identifiable;
-import org.anchoranalysis.anchor.overlay.writer.DrawOverlay;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
@@ -35,6 +33,8 @@ import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.object.properties.ObjectWithProperties;
+import org.anchoranalysis.overlay.id.Identifiable;
+import org.anchoranalysis.overlay.writer.DrawOverlay;
 
 // What can be projected on top of a raster through the GUI
 public abstract class Overlay implements Identifiable {

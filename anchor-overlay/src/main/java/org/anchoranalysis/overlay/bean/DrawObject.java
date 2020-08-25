@@ -24,10 +24,8 @@
  * #L%
  */
 
-package org.anchoranalysis.anchor.overlay.bean;
+package org.anchoranalysis.overlay.bean;
 
-import org.anchoranalysis.anchor.overlay.writer.ObjectDrawAttributes;
-import org.anchoranalysis.anchor.overlay.writer.PrecalculationOverlay;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -36,6 +34,8 @@ import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.object.properties.ObjectCollectionWithProperties;
 import org.anchoranalysis.image.object.properties.ObjectWithProperties;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
+import org.anchoranalysis.overlay.writer.ObjectDrawAttributes;
+import org.anchoranalysis.overlay.writer.PrecalculationOverlay;
 
 /**
  * Draws an object-mask on a RGB-stack

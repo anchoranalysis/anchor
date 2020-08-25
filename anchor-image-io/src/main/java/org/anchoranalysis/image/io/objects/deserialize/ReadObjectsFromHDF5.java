@@ -28,9 +28,9 @@ package org.anchoranalysis.image.io.objects.deserialize;
 
 import ch.systemsx.cisd.hdf5.HDF5Factory;
 import ch.systemsx.cisd.hdf5.IHDF5Reader;
+import ch.systemsx.cisd.hdf5.exceptions.HDF5FileNotFoundException;
 import java.nio.file.Path;
 import java.util.List;
-import ncsa.hdf.hdf5lib.exceptions.HDF5FileNotFoundException;
 import org.anchoranalysis.image.io.objects.GeneratorHDF5;
 import org.anchoranalysis.image.io.objects.HDF5PathHelper;
 import org.anchoranalysis.image.object.ObjectCollection;

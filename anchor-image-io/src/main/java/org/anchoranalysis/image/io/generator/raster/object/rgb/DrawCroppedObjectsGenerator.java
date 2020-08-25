@@ -30,8 +30,6 @@ import com.google.common.base.Functions;
 import io.vavr.control.Either;
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.anchor.overlay.bean.DrawObject;
-import org.anchoranalysis.anchor.overlay.writer.ObjectDrawAttributes;
 import org.anchoranalysis.core.color.ColorIndex;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.size.Padding;
@@ -45,6 +43,8 @@ import org.anchoranalysis.image.object.ops.ObjectMaskMerger;
 import org.anchoranalysis.image.object.properties.ObjectCollectionWithProperties;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
+import org.anchoranalysis.overlay.bean.DrawObject;
+import org.anchoranalysis.overlay.writer.ObjectDrawAttributes;
 
 /**
  * Similar to {@link DrawObjectsGenerator}

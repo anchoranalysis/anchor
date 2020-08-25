@@ -27,8 +27,6 @@
 package org.anchoranalysis.image.io.generator.raster.object.rgb;
 
 import io.vavr.control.Either;
-import org.anchoranalysis.anchor.overlay.bean.DrawObject;
-import org.anchoranalysis.anchor.overlay.writer.ObjectDrawAttributes;
 import org.anchoranalysis.core.color.ColorIndex;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.io.stack.ConvertDisplayStackToRGB;
@@ -36,6 +34,8 @@ import org.anchoranalysis.image.object.properties.ObjectCollectionWithProperties
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
 import org.anchoranalysis.io.bean.color.generator.HSBColorSetGenerator;
+import org.anchoranalysis.overlay.bean.DrawObject;
+import org.anchoranalysis.overlay.writer.ObjectDrawAttributes;
 
 /**
  * Generates stacks of RGB images using a {@link DrawObject} to draw objects on a background.

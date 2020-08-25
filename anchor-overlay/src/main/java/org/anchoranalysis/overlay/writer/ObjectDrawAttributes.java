@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.anchor.overlay.writer;
+package org.anchoranalysis.overlay.writer;
 
 import lombok.AllArgsConstructor;
 import lombok.Value;

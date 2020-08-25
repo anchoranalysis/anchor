@@ -30,7 +30,6 @@ import java.io.Serializable;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipWithFlags;
-import org.anchoranalysis.anchor.overlay.OverlayProperties;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.PointConverter;
@@ -39,6 +38,7 @@ import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.object.properties.ObjectWithProperties;
+import org.anchoranalysis.overlay.OverlayProperties;
 
 public abstract class MarkWithPosition extends Mark implements Serializable {
 

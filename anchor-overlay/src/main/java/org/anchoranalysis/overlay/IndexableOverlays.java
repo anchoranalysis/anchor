@@ -24,15 +24,20 @@
  * #L%
  */
 
-package org.anchoranalysis.anchor.overlay.id;
+package org.anchoranalysis.overlay;
 
-import org.anchoranalysis.anchor.overlay.Overlay;
-import org.anchoranalysis.core.idgetter.IDGetter;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import org.anchoranalysis.core.index.Indexable;
+import org.anchoranalysis.overlay.collection.OverlayCollection;
 
-public class IDGetterOverlayID implements IDGetter<Overlay> {
+@EqualsAndHashCode(callSuper = true)
+public class IndexableOverlays extends Indexable {
 
-    @Override
-    public int getID(Overlay ol, int iter) {
-        return ol.getId();
+    @Getter private final OverlayCollection overlays;
+
+    public IndexableOverlays(int iter, OverlayCollection overlays) {
+        super(iter);
+        this.overlays = overlays;
     }
 }

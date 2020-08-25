@@ -24,12 +24,12 @@
  * #L%
  */
 
-package org.anchoranalysis.anchor.overlay.id;
+package org.anchoranalysis.overlay.id;
 
-import org.anchoranalysis.anchor.overlay.Overlay;
-import org.anchoranalysis.anchor.overlay.collection.ColoredOverlayCollection;
 import org.anchoranalysis.core.idgetter.IDGetter;
 import org.anchoranalysis.image.object.properties.ObjectWithProperties;
+import org.anchoranalysis.overlay.Overlay;
+import org.anchoranalysis.overlay.collection.ColoredOverlayCollection;
 
 public class IDGetterMaskFromOverlay implements IDGetter<ObjectWithProperties> {
 

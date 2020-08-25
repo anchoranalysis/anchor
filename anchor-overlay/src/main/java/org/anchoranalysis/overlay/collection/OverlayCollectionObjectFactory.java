@@ -24,16 +24,16 @@
  * #L%
  */
 
-package org.anchoranalysis.anchor.overlay.collection;
+package org.anchoranalysis.overlay.collection;
 
 import java.util.stream.IntStream;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.anchor.overlay.object.OverlayObjectMask;
 import org.anchoranalysis.core.idgetter.IDGetter;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectCollectionFactory;
 import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.overlay.object.OverlayObjectMask;
 
 /**
  * Two-way factory.

@@ -24,14 +24,9 @@
  * #L%
  */
 
-package org.anchoranalysis.anchor.overlay.object;
+package org.anchoranalysis.overlay.object;
 
 import lombok.Getter;
-import org.anchoranalysis.anchor.overlay.Overlay;
-import org.anchoranalysis.anchor.overlay.OverlayProperties;
-import org.anchoranalysis.anchor.overlay.object.scaled.FromMask;
-import org.anchoranalysis.anchor.overlay.object.scaled.ScaledMaskCreator;
-import org.anchoranalysis.anchor.overlay.writer.DrawOverlay;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
@@ -40,6 +35,11 @@ import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.properties.ObjectWithProperties;
+import org.anchoranalysis.overlay.Overlay;
+import org.anchoranalysis.overlay.OverlayProperties;
+import org.anchoranalysis.overlay.object.scaled.FromMask;
+import org.anchoranalysis.overlay.object.scaled.ScaledMaskCreator;
+import org.anchoranalysis.overlay.writer.DrawOverlay;
 
 public class OverlayObjectMask extends Overlay {
 

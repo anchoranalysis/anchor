@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.anchor.overlay.collection;
+package org.anchoranalysis.overlay.collection;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -33,11 +33,11 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import org.anchoranalysis.anchor.overlay.Overlay;
-import org.anchoranalysis.anchor.overlay.writer.DrawOverlay;
 import org.anchoranalysis.core.index.IndicesSelection;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.overlay.Overlay;
+import org.anchoranalysis.overlay.writer.DrawOverlay;
 
 public class OverlayCollection implements Iterable<Overlay> {
 

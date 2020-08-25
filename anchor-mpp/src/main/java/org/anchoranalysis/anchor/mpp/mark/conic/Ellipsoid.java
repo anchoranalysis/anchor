@@ -40,13 +40,13 @@ import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.mark.QuickOverlapCalculation;
-import org.anchoranalysis.anchor.overlay.OverlayProperties;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.orientation.Orientation;
 import org.anchoranalysis.image.orientation.Orientation3DEulerAngles;
+import org.anchoranalysis.overlay.OverlayProperties;
 
 //
 //  3 sub-marks

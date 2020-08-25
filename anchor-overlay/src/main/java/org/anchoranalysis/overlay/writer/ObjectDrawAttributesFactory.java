@@ -24,15 +24,15 @@
  * #L%
  */
 
-package org.anchoranalysis.anchor.overlay.writer;
+package org.anchoranalysis.overlay.writer;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.anchor.overlay.Overlay;
-import org.anchoranalysis.anchor.overlay.collection.ColoredOverlayCollection;
-import org.anchoranalysis.anchor.overlay.id.IDGetterMaskFromOverlay;
 import org.anchoranalysis.core.idgetter.IDGetter;
 import org.anchoranalysis.image.object.properties.ObjectWithProperties;
+import org.anchoranalysis.overlay.Overlay;
+import org.anchoranalysis.overlay.collection.ColoredOverlayCollection;
+import org.anchoranalysis.overlay.id.IDGetterMaskFromOverlay;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ObjectDrawAttributesFactory {

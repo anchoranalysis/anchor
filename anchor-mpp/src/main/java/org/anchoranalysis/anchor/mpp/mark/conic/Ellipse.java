@@ -44,7 +44,6 @@ import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipWithFlags;
 import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.mark.QuickOverlapCalculation;
-import org.anchoranalysis.anchor.overlay.OverlayProperties;
 import org.anchoranalysis.core.geometry.Point2d;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
@@ -55,6 +54,7 @@ import org.anchoranalysis.image.object.properties.ObjectWithProperties;
 import org.anchoranalysis.image.orientation.Orientation;
 import org.anchoranalysis.image.orientation.Orientation2D;
 import org.anchoranalysis.math.rotation.RotationMatrix;
+import org.anchoranalysis.overlay.OverlayProperties;
 
 public class Ellipse extends ConicBase implements Serializable {
 
