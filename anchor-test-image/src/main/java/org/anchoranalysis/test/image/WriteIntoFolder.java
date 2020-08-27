@@ -46,11 +46,9 @@ import org.anchoranalysis.image.io.generator.raster.object.rgb.DrawObjectsGenera
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.ObjectsWithBoundingBox;
-import org.anchoranalysis.image.object.properties.ObjectCollectionWithProperties;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.voxel.Voxels;
-import org.anchoranalysis.io.bean.object.writer.Outline;
 import org.anchoranalysis.io.generator.collection.IterableGeneratorWriter;
 import org.anchoranalysis.io.output.bound.BindFailedException;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
@@ -208,9 +206,7 @@ public class WriteIntoFolder implements TestRule {
 
         setupOutputManagerIfNecessary();
 
-        DrawObjectsGenerator generatorObjects =
-                new DrawObjectsGenerator(
-                        new Outline(), new ObjectCollectionWithProperties(objects), background);
+        DrawObjectsGenerator generatorObjects = DrawObjectsGenerator.outlineVariedColors(objects, 1, background);
 
         outputManager.getWriterAlwaysAllowed().write(outputName, () -> generatorObjects);
     }

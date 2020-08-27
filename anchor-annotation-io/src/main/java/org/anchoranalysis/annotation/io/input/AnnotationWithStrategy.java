@@ -32,15 +32,12 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import org.anchoranalysis.annotation.io.bean.AnnotatorStrategy;
-import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
-import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
-import org.anchoranalysis.image.stack.NamedStacksSet;
 import org.anchoranalysis.image.stack.NamedStacksSupplier;
-import org.anchoranalysis.image.stack.wrap.WrapStackAsTimeSequenceStore;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.InputFromManager;
+import lombok.Getter;
 
 /**
  * An annotation that has been combined with it's strategy
@@ -50,25 +47,19 @@ import org.anchoranalysis.io.input.InputFromManager;
 public class AnnotationWithStrategy<T extends AnnotatorStrategy> implements InputFromManager {
 
     private ProvidesStackInput input;
-    private T annotationStrategy;
-    private Path annotationPath;
+    @Getter private T strategy;
+    
+    /** Path to annotation */
+    @Getter private Path path;
 
     public AnnotationWithStrategy(ProvidesStackInput input, T strategy) throws AnchorIOException {
         this.input = input;
-        this.annotationStrategy = strategy;
-        this.annotationPath = annotationStrategy.annotationPathFor(input);
+        this.strategy = strategy;
+        this.path = strategy.annotationPathFor(input);
     }
 
     public Optional<File> associatedFile() {
         return input.pathForBinding().map(Path::toFile);
-    }
-
-    public T getStrategy() {
-        return annotationStrategy;
-    }
-
-    public Path getAnnotationPath() {
-        return annotationPath;
     }
 
     /**
@@ -78,7 +69,7 @@ public class AnnotationWithStrategy<T extends AnnotatorStrategy> implements Inpu
      * @throws AnchorIOException
      */
     public Optional<String> labelForAggregation() throws AnchorIOException {
-        return annotationStrategy.annotationLabelFor(input);
+        return strategy.annotationLabelFor(input);
     }
 
     @Override
@@ -92,7 +83,7 @@ public class AnnotationWithStrategy<T extends AnnotatorStrategy> implements Inpu
     }
 
     public List<File> deriveAssociatedFiles() {
-        return Arrays.asList(getAnnotationPath().toFile());
+        return Arrays.asList(path.toFile());
     }
 
     @Override
@@ -101,14 +92,6 @@ public class AnnotationWithStrategy<T extends AnnotatorStrategy> implements Inpu
     }
 
     public NamedStacksSupplier stacks() {
-        return NamedStacksSupplier.cache(this::buildStacks);
-    }
-
-    private NamedStacksSet buildStacks(ProgressReporter progressReporter)
-            throws OperationFailedException {
-        NamedStacksSet stackCollection = new NamedStacksSet();
-        input.addToStoreInferNames(
-                new WrapStackAsTimeSequenceStore(stackCollection, 0), 0, progressReporter);
-        return stackCollection;
+        return NamedStacksSupplier.cache(input::asSet);
     }
 }

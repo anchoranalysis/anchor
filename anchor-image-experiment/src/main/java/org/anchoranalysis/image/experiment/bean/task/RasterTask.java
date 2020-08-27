@@ -47,11 +47,6 @@ import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 public abstract class RasterTask extends TaskWithoutSharedState<NamedChannelsInput> {
 
     @Override
-    public InputTypesExpected inputTypesExpected() {
-        return new InputTypesExpected(NamedChannelsInput.class);
-    }
-
-    @Override
     public void doJobOnInputObject(InputBound<NamedChannelsInput, NoSharedState> params)
             throws JobExecutionException {
 
@@ -93,4 +88,10 @@ public abstract class RasterTask extends TaskWithoutSharedState<NamedChannelsInp
 
     public abstract void endSeries(BoundOutputManagerRouteErrors outputManager)
             throws JobExecutionException;
+    
+
+    @Override
+    public InputTypesExpected inputTypesExpected() {
+        return new InputTypesExpected(NamedChannelsInput.class);
+    }
 }

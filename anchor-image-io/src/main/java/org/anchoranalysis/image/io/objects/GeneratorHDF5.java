@@ -54,8 +54,18 @@ public class GeneratorHDF5 extends SingleFileTypeGenerator
     private final boolean compressed;
     // END REQUIRED ARGUMENTS
 
-    private ObjectCollection item;
-
+    private ObjectCollection element;
+    
+    /**
+     * Creates with an element (and compressed set to true)
+     * 
+     * @param objects the initial element for the generator
+     */
+    public GeneratorHDF5(ObjectCollection objects) {
+        this(true);
+        this.element = objects;
+    }
+    
     public static void writeObjectsToFile(ObjectCollection objects, Path filePath) {
         GeneratorHDF5 generator = new GeneratorHDF5(true);
         generator.setIterableElement(objects);
@@ -110,11 +120,11 @@ public class GeneratorHDF5 extends SingleFileTypeGenerator
 
     @Override
     public ObjectCollection getIterableElement() {
-        return item;
+        return element;
     }
 
     @Override
     public void setIterableElement(ObjectCollection element) {
-        this.item = element;
+        this.element = element;
     }
 }

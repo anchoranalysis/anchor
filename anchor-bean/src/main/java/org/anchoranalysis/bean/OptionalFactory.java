@@ -73,4 +73,18 @@ public class OptionalFactory {
             return Optional.empty();
         }
     }
+    
+    /**
+     * Creates {@code Optional.empty()} for an empty string, or otherwise Optional.of 
+     * 
+     * @param string the string (possibly empty)
+     * @return the optional
+     */
+    public static Optional<String> create(String string) {
+        if (!string.isEmpty()) {
+            return Optional.of(string); 
+        } else {
+            return Optional.empty();
+        }
+    }
 }

@@ -34,7 +34,7 @@ import org.anchoranalysis.core.name.provider.NamedProvider;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.name.store.StoreSupplier;
 import org.anchoranalysis.image.io.generator.raster.StackGenerator;
-import org.anchoranalysis.image.stack.NamedStacksSet;
+import org.anchoranalysis.image.stack.NamedStacks;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.generator.collection.IterableGeneratorOutputHelper;
 import org.anchoranalysis.io.output.bean.allowed.OutputAllowed;
@@ -97,7 +97,7 @@ public class StacksOutputter {
     }
 
     public static void output(
-            NamedStacksSet namedCollection,
+            NamedStacks namedCollection,
             BoundOutputManager outputManager,
             String outputName,
             String prefix,
@@ -115,7 +115,7 @@ public class StacksOutputter {
     }
 
     private static void outputWithException(
-            NamedStacksSet namedCollection,
+            NamedStacks namedCollection,
             BoundOutputManager outputManager,
             String outputName,
             String suffix,
@@ -131,14 +131,14 @@ public class StacksOutputter {
                 suppressSubfoldersIn);
     }
 
-    public static NamedStacksSet subset(NamedProvider<Stack> stackCollection, OutputAllowed oa) {
+    public static NamedStacks subset(NamedProvider<Stack> stackCollection, OutputAllowed oa) {
 
-        NamedStacksSet out = new NamedStacksSet();
+        NamedStacks out = new NamedStacks();
 
         for (String name : stackCollection.keys()) {
 
             if (oa.isOutputAllowed(name)) {
-                out.addImageStack(name, extractStackCached(stackCollection, name));
+                out.add(name, extractStackCached(stackCollection, name));
             }
         }
 
@@ -162,7 +162,7 @@ public class StacksOutputter {
         return new StackGenerator(true, manifestFunction);
     }
 
-    private static NamedStacksSet stackSubset(
+    private static NamedStacks stackSubset(
             NamedProvider<Stack> stacks,
             String secondLevelOutputKey,
             BoundOutputManagerRouteErrors outputManager) {

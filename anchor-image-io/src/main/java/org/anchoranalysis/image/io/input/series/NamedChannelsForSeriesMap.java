@@ -44,7 +44,7 @@ import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.bean.channel.map.ChannelEntry;
 import org.anchoranalysis.image.io.channel.NamedEntries;
 import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
-import org.anchoranalysis.image.stack.NamedStacksSet;
+import org.anchoranalysis.image.stack.NamedStacks;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.TimeSequence;
 
@@ -139,7 +139,7 @@ public class NamedChannelsForSeriesMap implements NamedChannelsForSeries {
 
     @Override
     public void addAsSeparateChannels(
-            NamedStacksSet stackCollection, int t, ProgressReporter progressReporter)
+            NamedStacks stackCollection, int t, ProgressReporter progressReporter)
             throws OperationFailedException {
 
         try {
@@ -149,7 +149,7 @@ public class NamedChannelsForSeriesMap implements NamedChannelsForSeries {
                 // Populate our stack from all the channels
                 for (String channelName : channelMap.keySet()) {
                     Channel image = getChannel(channelName, t, new ProgressReporterOneOfMany(prm));
-                    stackCollection.addImageStack(channelName, new Stack(image));
+                    stackCollection.add(channelName, new Stack(image));
                     prm.incrWorker();
                 }
             } catch (GetOperationFailedException e) {

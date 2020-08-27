@@ -28,6 +28,7 @@ package org.anchoranalysis.mpp.io.bean.task;
 
 import lombok.Getter;
 import lombok.Setter;
+import java.util.function.Function;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
@@ -43,6 +44,7 @@ import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.mpp.io.input.MultiInput;
+import org.anchoranalysis.plugin.io.bean.input.stack.StackSequenceInput;
 
 /**
  * Converts {@link NamedChannelsInput} to a variety of others to match a delegate task
@@ -70,34 +72,24 @@ public class ConvertNamedChannelsTask<T extends NamedChannelsInput, S, U extends
     }
 
     @Override
-    public void doJobOnInputObject(InputBound<T, S> params) throws JobExecutionException {
+    public void doJobOnInputObject(InputBound<T, S> input) throws JobExecutionException {
 
-        Class<? extends InputFromManager> inputObjClass = params.getInputObject().getClass();
+        Class<? extends InputFromManager> inputObjClass = input.getInputObject().getClass();
 
         InputTypesExpected expectedFromDelegate = task.inputTypesExpected();
         if (expectedFromDelegate.doesClassInheritFromAny(inputObjClass)) {
             // All good, the delegate happily accepts our type without change
-            doJobWithNamedChannelInput(params);
+            doJobWithNamedChannelInput(input);
         } else if (expectedFromDelegate.doesClassInheritFromAny(MultiInput.class)) {
-            doJobWithMultiInput(params);
+            doJobWithMultiInput(input);
+        } else if (expectedFromDelegate.doesClassInheritFromAny(StackSequenceInput.class)) {
+            doJobWithStackSequenceInput(input);            
         } else {
             throw new JobExecutionException(
                     String.format(
                             "Cannot pass or convert the input-type (%s) to match the delegate's expected input-type:%n%s",
                             inputObjClass, expectedFromDelegate));
         }
-    }
-
-    @SuppressWarnings("unchecked")
-    private void doJobWithNamedChannelInput(InputBound<T, S> params) throws JobExecutionException {
-        task.doJobOnInputObject((InputBound<U, S>) params);
-    }
-
-    @SuppressWarnings("unchecked")
-    private void doJobWithMultiInput(InputBound<T, S> params) throws JobExecutionException {
-        InputBound<? extends InputFromManager, S> paramsChanged =
-                params.changeInputObject(new MultiInput(params.getInputObject()));
-        task.doJobOnInputObject((InputBound<U, S>) paramsChanged);
     }
 
     @Override
@@ -122,5 +114,26 @@ public class ConvertNamedChannelsTask<T extends NamedChannelsInput, S, U extends
     @Override
     public void replaceTask(Task<U, S> taskToReplace) throws OperationFailedException {
         this.task = taskToReplace;
+    }
+
+    private void doJobWithNamedChannelInput(InputBound<T, S> input) throws JobExecutionException {
+        doJobWithInputCast(input);
+    }
+
+    private void doJobWithMultiInput(InputBound<T, S> input) throws JobExecutionException {
+        doJobWithConvertedInput(input, MultiInput::new);
+    }
+    
+    private void doJobWithStackSequenceInput(InputBound<T, S> input) throws JobExecutionException {
+        doJobWithConvertedInput(input, ConvertChannelsInputToStack::new);
+    }
+    
+    private void doJobWithConvertedInput(InputBound<T, S> input, Function<T,InputFromManager> deriveChangedInput ) throws JobExecutionException {
+        doJobWithInputCast( input.changeInputObject( deriveChangedInput.apply(input.getInputObject())) );        
+    }
+    
+    @SuppressWarnings("unchecked")
+    private void doJobWithInputCast(InputBound<? extends InputFromManager, S> input) throws JobExecutionException {
+        task.doJobOnInputObject((InputBound<U, S>) input);
     }
 }

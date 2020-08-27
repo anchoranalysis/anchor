@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-image
+ * anchor-plugin-io
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -24,38 +24,18 @@
  * #L%
  */
 
-package org.anchoranalysis.image.stack;
+package org.anchoranalysis.plugin.io.bean.input.stack;
 
-import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.io.RasterIOException;
+import org.anchoranalysis.image.io.input.ProvidesStackInput;
 
 /**
- * Like a @{link {@link NamedStacks} but enforces a condition that all stacks must have the same
- * dimensions
+ * Provides a single stack (or a time series of such stacks) as an input
  *
  * @author Owen Feehan
  */
-public class NamedStacksUniformSize {
+public interface StackSequenceInput extends ProvidesStackInput {
 
-    /** Lazy initialization after first stack is added */
-    private Dimensions dimensions;
-
-    private NamedStacks delegate = new NamedStacks();
-
-    public void add(String name, Stack stack) throws OperationFailedException {
-
-        if (dimensions == null) {
-            dimensions = stack.dimensions();
-        } else {
-            if (!stack.dimensions().equals(dimensions)) {
-                throw new OperationFailedException("Stack dimensions do not match");
-            }
-        }
-
-        delegate.add(name, () -> stack);
-    }
-
-    public NamedStacks withoutUniformSizeConstraint() {
-        return delegate;
-    }
+    /** Creates a TimeSequence of stacks for a particular series number */
+    TimeSequenceSupplier createStackSequenceForSeries(int seriesNum) throws RasterIOException;
 }

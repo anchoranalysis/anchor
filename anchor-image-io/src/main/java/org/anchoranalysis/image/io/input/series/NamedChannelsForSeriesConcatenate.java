@@ -43,7 +43,7 @@ import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.io.RasterIOException;
-import org.anchoranalysis.image.stack.NamedStacksSet;
+import org.anchoranalysis.image.stack.NamedStacks;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.TimeSequence;
 
@@ -84,7 +84,7 @@ public class NamedChannelsForSeriesConcatenate implements NamedChannelsForSeries
     }
 
     public void addAsSeparateChannels(
-            NamedStacksSet stackCollection, int t, ProgressReporter progressReporter)
+            NamedStacks stackCollection, int t, ProgressReporter progressReporter)
             throws OperationFailedException {
 
         try (ProgressReporterMultiple prm =

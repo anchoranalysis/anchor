@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-image
+ * anchor-plugin-io
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -23,39 +23,14 @@
  * THE SOFTWARE.
  * #L%
  */
-
-package org.anchoranalysis.image.stack;
+package org.anchoranalysis.plugin.io.bean.input.stack;
 
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.core.progress.ProgressReporter;
+import org.anchoranalysis.image.stack.TimeSequence;
 
-/**
- * Like a @{link {@link NamedStacks} but enforces a condition that all stacks must have the same
- * dimensions
- *
- * @author Owen Feehan
- */
-public class NamedStacksUniformSize {
+@FunctionalInterface
+public interface TimeSequenceSupplier {
 
-    /** Lazy initialization after first stack is added */
-    private Dimensions dimensions;
-
-    private NamedStacks delegate = new NamedStacks();
-
-    public void add(String name, Stack stack) throws OperationFailedException {
-
-        if (dimensions == null) {
-            dimensions = stack.dimensions();
-        } else {
-            if (!stack.dimensions().equals(dimensions)) {
-                throw new OperationFailedException("Stack dimensions do not match");
-            }
-        }
-
-        delegate.add(name, () -> stack);
-    }
-
-    public NamedStacks withoutUniformSizeConstraint() {
-        return delegate;
-    }
+    TimeSequence get(ProgressReporter progressReporter) throws OperationFailedException;
 }

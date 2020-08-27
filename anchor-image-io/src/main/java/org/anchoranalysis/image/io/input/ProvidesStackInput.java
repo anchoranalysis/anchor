@@ -30,6 +30,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
+import org.anchoranalysis.image.stack.NamedStacks;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.TimeSequence;
 import org.anchoranalysis.image.stack.wrap.WrapStackAsTimeSequenceStore;
@@ -41,7 +42,22 @@ import org.anchoranalysis.io.input.InputFromManager;
  * @author Owen Feehan
  */
 public interface ProvidesStackInput extends InputFromManager {
-
+    
+    /**
+     * Exposes the input as a set of named stacks (infering the names)
+     * 
+     * @param progressReporter a progress-reporter
+     * @return a set of named-stacks
+     * @throws OperationFailedException
+     */
+    default NamedStacks asSet(ProgressReporter progressReporter)
+            throws OperationFailedException {
+        NamedStacks set = new NamedStacks();
+        addToStoreInferNames(
+                new WrapStackAsTimeSequenceStore(set, 0), 0, progressReporter);
+        return set;
+    }
+    
     /**
      * Adds the current object to a named-store of stacks (using the default series)
      *

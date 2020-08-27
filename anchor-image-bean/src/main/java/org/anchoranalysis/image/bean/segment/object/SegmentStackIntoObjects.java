@@ -24,38 +24,28 @@
  * #L%
  */
 
-package org.anchoranalysis.image.bean.segment.binary;
+package org.anchoranalysis.image.bean.segment.object;
 
-import java.nio.ByteBuffer;
-import java.util.Optional;
-import lombok.Getter;
-import lombok.Setter;
-import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
-import org.anchoranalysis.image.bean.nonbean.parameters.BinarySegmentationParameters;
-import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
-import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.voxel.VoxelsWrapper;
+import org.anchoranalysis.image.bean.segment.SegmentationBean;
+import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.stack.Stack;
 
-public abstract class BinarySegmentationOne extends BinarySegmentation {
+/**
+ * A base class for algorithms to segment a stack into one or more objects.
+ *
+ * @author Owen Feehan
+ */
+public abstract class SegmentStackIntoObjects
+        extends SegmentationBean<SegmentStackIntoObjects> {
 
-    // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private BinarySegmentation segment;
-    // END BEAN PROPERTIES
-
-    @Override
-    public BinaryVoxels<ByteBuffer> segment(
-            VoxelsWrapper voxels,
-            BinarySegmentationParameters params,
-            Optional<ObjectMask> objectMask)
-            throws SegmentationFailedException {
-        return segmentFromExistingSegmentation(voxels, params, objectMask, segment);
-    }
-
-    protected abstract BinaryVoxels<ByteBuffer> segmentFromExistingSegmentation(
-            VoxelsWrapper voxels,
-            BinarySegmentationParameters params,
-            Optional<ObjectMask> object,
-            BinarySegmentation sgmn)
-            throws SegmentationFailedException;
+    /**
+     * Segments a stack to produce an object-collection.
+     *
+     * @param stack the stack to segment
+     * @return a newly created collection of objects for each segment. The created objects will
+     *     always exist inside the stack's extent.
+     * @throws SegmentationFailedException if anything goes wrong during the segmentation.
+     */
+    public abstract ObjectCollection segment(Stack stack) throws SegmentationFailedException;
 }

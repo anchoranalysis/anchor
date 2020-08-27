@@ -36,7 +36,7 @@ import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.experiment.identifiers.StackIdentifiers;
 import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.stack.NamedStacksSet;
+import org.anchoranalysis.image.stack.NamedStacks;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.mpp.mark.MarkCollection;
 
@@ -50,7 +50,7 @@ public abstract class SegmentIntoMarks extends AnchorBean<SegmentIntoMarks> {
     public abstract ExperimentState createExperimentState();
 
     public abstract MarkCollection segment(
-            NamedStacksSet stacks,
+            NamedStacks stacks,
             NamedProvider<ObjectCollection> objects,
             Optional<KeyValueParams> keyValueParams,
             BoundIOContext context)

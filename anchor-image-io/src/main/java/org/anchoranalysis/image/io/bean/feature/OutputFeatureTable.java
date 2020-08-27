@@ -43,7 +43,8 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 // Doesn't change the objects, just uses a generator to output a feature list as a CSV
 public class OutputFeatureTable extends ImageBean<OutputFeatureTable> {
 
-    private static final String OUTPUT_NAME_OBJECTS_FEATURE_LIST = "objectsFeatureList";
+    private static final String OUTPUT_NAME_OBJECTS_FEATURE_LIST = "features";
+    
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private ObjectCollectionProvider objects;
 

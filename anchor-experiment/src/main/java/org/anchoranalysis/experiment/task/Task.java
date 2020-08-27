@@ -106,7 +106,7 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
      */
     public abstract InputTypesExpected inputTypesExpected();
 
-    public abstract void doJobOnInputObject(InputBound<T, S> params) throws JobExecutionException;
+    public abstract void doJobOnInputObject(InputBound<T, S> input) throws JobExecutionException;
 
     /**
      * Creates other objects needed to have a fully bound set of parameters for the task

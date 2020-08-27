@@ -45,10 +45,19 @@ import org.anchoranalysis.image.extent.Dimensions;
  *
  * @author Owen Feehan
  */
-public class NamedStacksSet implements NamedProviderStore<Stack> {
+public class NamedStacks implements NamedProviderStore<Stack> {
 
     private HashMap<String, StoreSupplier<Stack>> map = new HashMap<>();
 
+    public void add(String identifier, Stack inputImage) {
+        map.put(identifier, () -> inputImage);
+    }
+
+    @Override
+    public void add(String identifier, StoreSupplier<Stack> supplier) {
+        map.put(identifier, supplier);
+    }
+    
     public Optional<StoreSupplier<Stack>> getAsSupplier(String identifier) {
         return Optional.ofNullable(map.get(identifier));
     }
@@ -68,37 +77,11 @@ public class NamedStacksSet implements NamedProviderStore<Stack> {
         return map.keySet();
     }
 
-    public void addImageStack(String identifier, Stack inputImage) {
-        map.put(identifier, () -> inputImage);
-    }
-
-    /** TODO remove in favour of add */
-    public void addImageStack(String identifier, StoreSupplier<Stack> inputImage) {
-        map.put(identifier, inputImage);
-    }
-
-    @Override
-    public void add(String name, StoreSupplier<Stack> supplier) {
-        map.put(name, supplier);
-    }
-
-    public NamedStacksSet maxIntensityProj() throws OperationFailedException {
-
-        NamedStacksSet out = new NamedStacksSet();
-
-        for (Entry<String, StoreSupplier<Stack>> entry : map.entrySet()) {
-            Stack projection = entry.getValue().get().maximumIntensityProjection();
-            out.addImageStack(entry.getKey(), projection);
-        }
-
-        return out;
-    }
-
     /** Applies an operation on each stack in the collection and returns a new derived collection */
-    public NamedStacksSet applyOperation(Dimensions dimensions, UnaryOperator<Stack> stackOperation)
+    public NamedStacks applyOperation(Dimensions dimensions, UnaryOperator<Stack> stackOperation)
             throws OperationFailedException {
 
-        NamedStacksSet out = new NamedStacksSet();
+        NamedStacks out = new NamedStacks();
 
         try {
             for (String key : keys()) {
@@ -127,7 +110,7 @@ public class NamedStacksSet implements NamedProviderStore<Stack> {
     public void addFromWithPrefix(NamedProvider<Stack> source, String prefix) {
 
         for (String name : source.keys()) {
-            addImageStack(
+            add(
                     prefix + name,
                     () -> {
                         try {
@@ -144,8 +127,8 @@ public class NamedStacksSet implements NamedProviderStore<Stack> {
      *
      * @return the new collection
      */
-    public NamedStacksSet subset(StringSet keyMustBeIn) {
-        NamedStacksSet out = new NamedStacksSet();
+    public NamedStacks subset(StringSet keyMustBeIn) {
+        NamedStacks out = new NamedStacks();
 
         for (Entry<String, StoreSupplier<Stack>> entry : map.entrySet()) {
             if (keyMustBeIn.contains(entry.getKey())) {
@@ -153,5 +136,14 @@ public class NamedStacksSet implements NamedProviderStore<Stack> {
             }
         }
         return out;
+    }
+    
+    /**
+     * Number of stacks
+     * 
+     * @return the number of stacks
+     */
+    public int size() {
+        return map.size();
     }
 }
