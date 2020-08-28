@@ -60,14 +60,8 @@ public class DrawObjectsGenerator extends ObjectsOnRGBGenerator {
                 drawObject,
                 null, // No element yet to iterate
                 null, // No background set yet
-                new ObjectDrawAttributes(colorIndex));
-    }
-
-    private DrawObjectsGenerator(
-            DrawObject drawObject,
-            ObjectCollectionWithProperties objects,
-            Either<Dimensions, DisplayStack> background) {
-        this(drawObject, objects, background, defaultColorsFor(objects));
+                colorIndex
+        );
     }
 
     public DrawObjectsGenerator(
@@ -75,15 +69,7 @@ public class DrawObjectsGenerator extends ObjectsOnRGBGenerator {
             ObjectCollectionWithProperties objects,
             Either<Dimensions, DisplayStack> background,
             ColorIndex colorIndex) {
-        this(drawObject, objects, background, new ObjectDrawAttributes(colorIndex));
-    }
-
-    public DrawObjectsGenerator(
-            DrawObject drawObject,
-            ObjectCollectionWithProperties objects,
-            Either<Dimensions, DisplayStack> background,
-            ObjectDrawAttributes attributes) {
-        super(drawObject, attributes, background);
+        super(drawObject, new ObjectDrawAttributes(colorIndex), background);
         this.setIterableElement(objects);
     }
     
@@ -111,7 +97,8 @@ public class DrawObjectsGenerator extends ObjectsOnRGBGenerator {
         return new DrawObjectsGenerator(
             new Outline(outlineWidth),
             new ObjectCollectionWithProperties(objects),
-            background
+            background,
+            defaultColorsFor(objects.size())
         );
     }
     
@@ -144,8 +131,8 @@ public class DrawObjectsGenerator extends ObjectsOnRGBGenerator {
         return getIterableElement();
     }
 
-    private static ColorIndex defaultColorsFor(ObjectCollectionWithProperties objects) {
-        return new HSBColorSetGenerator().generateColors(objects.size());
+    private static ColorIndex defaultColorsFor(int size) {
+        return new HSBColorSetGenerator().generateColors(size);
     }
     
 

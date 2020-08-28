@@ -142,13 +142,6 @@ public abstract class Feature<T extends FeatureInput>
         return calculate(input);
     }
 
-    // Calculates a value for some parameters
-    protected abstract double calculate(SessionInput<T> input) throws FeatureCalculationException;
-
-    protected void duplicateHelper(Feature<FeatureInput> out) {
-        out.customName = customName;
-    }
-
     /**
      * Returns a list of Features that exist as bean-properties of this feature, either directly or
      * in lists.
@@ -162,21 +155,11 @@ public abstract class Feature<T extends FeatureInput>
      */
     public final FeatureList<FeatureInput> createListChildFeatures()
             throws BeanMisconfiguredException {
-
         return FeatureListFactory.wrapReuse(findFieldsOfClass(Feature.class));
     }
 
     public String describeParams() {
         return describeChildren();
-    }
-
-    /**
-     * Dummy method, that children can optionally override
-     *
-     * @param paramsInit initialization parameters
-     */
-    protected void beforeCalc(FeatureInitParams paramsInit) throws InitException {
-        // Does nothing. To be overridden in children if needed.
     }
 
     @Override
@@ -188,5 +171,21 @@ public abstract class Feature<T extends FeatureInput>
     @SuppressWarnings("unchecked")
     public <S extends T> Feature<S> downcast() {
         return (Feature<S>) this;
+    }
+
+    /**
+     * Dummy method, that children can optionally override
+     *
+     * @param paramsInit initialization parameters
+     */
+    protected void beforeCalc(FeatureInitParams paramsInit) throws InitException {
+        // Does nothing. To be overridden in children if needed.
+    }
+
+    // Calculates a value for some parameters
+    protected abstract double calculate(SessionInput<T> input) throws FeatureCalculationException;
+
+    protected void duplicateHelper(Feature<FeatureInput> out) {
+        out.customName = customName;
     }
 }

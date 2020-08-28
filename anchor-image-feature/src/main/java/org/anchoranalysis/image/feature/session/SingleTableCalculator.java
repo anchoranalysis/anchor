@@ -49,13 +49,13 @@ public class SingleTableCalculator implements FeatureTableCalculator<FeatureInpu
     private final NamedFeatureStore<FeatureInputSingleObject> namedFeatureStore;
     // END REQUIRED ARGUMENTS
 
-    private FeatureCalculatorMulti<FeatureInputSingleObject> session;
+    private FeatureCalculatorMulti<FeatureInputSingleObject> calculator;
 
     @Override
     public void start(ImageInitParams soImage, Optional<EnergyStack> energyStack, Logger logger)
             throws InitException {
 
-        session =
+        calculator =
                 FeatureSession.with(
                         namedFeatureStore.listFeatures(),
                         InitParamsHelper.createInitParams(
@@ -72,20 +72,20 @@ public class SingleTableCalculator implements FeatureTableCalculator<FeatureInpu
     @Override
     public ResultsVector calculate(FeatureInputSingleObject input)
             throws NamedFeatureCalculateException {
-        return session.calculate(input);
+        return calculator.calculate(input);
     }
 
     @Override
     public ResultsVector calculate(
             FeatureInputSingleObject input, FeatureList<FeatureInputSingleObject> featuresSubset)
             throws NamedFeatureCalculateException {
-        return session.calculate(input, featuresSubset);
+        return calculator.calculate(input, featuresSubset);
     }
 
     @Override
     public ResultsVector calculateSuppressErrors(
             FeatureInputSingleObject input, ErrorReporter errorReporter) {
-        return session.calculateSuppressErrors(input, errorReporter);
+        return calculator.calculateSuppressErrors(input, errorReporter);
     }
 
     @Override
