@@ -75,8 +75,7 @@ public class LazyDirectoryCreatorCache {
             Path directory, Optional<WriterExecuteBeforeEveryOperation> opBefore) throws GetOperationFailedException {
 
         if (directory.equals(rootDirectory)) {
-            // If we look for the same directory as the root, somethings gone wronge
-            return getOrCreate( Paths.get(""), rootDirectory, opBefore);
+            return getRootCreator(opBefore);
         }
         
         return processEachDirectoryComponent(differenceFromRoot(directory), opBefore);
@@ -91,6 +90,11 @@ public class LazyDirectoryCreatorCache {
      */
     public synchronized Optional<LazyDirectoryCreator> get(Path directory) throws GetOperationFailedException {
         return Optional.ofNullable(map.get(differenceFromRoot(directory)));
+    }
+
+    /** A directory-creator for the root directory */
+    private LazyDirectoryCreator getRootCreator(Optional<WriterExecuteBeforeEveryOperation> opBefore) {
+        return getOrCreate( Paths.get(""), rootDirectory, opBefore);
     }
     
     /**
@@ -137,6 +141,7 @@ public class LazyDirectoryCreatorCache {
     private synchronized LazyDirectoryCreator getOrCreate(Path key, Path directoryFull, Optional<WriterExecuteBeforeEveryOperation> opBefore) {
         return map.computeIfAbsent(
                 key,
+                // The creator is bound to the full path not the partial path in the key
                 path -> new LazyDirectoryCreator(directoryFull, deleteExisting, opBefore));
     }
     

@@ -67,8 +67,8 @@ public class BoundOutputManager {
 
     @Getter private final Writer writerCheckIfAllowed;
 
-    /** Parent initializer to be executed before any derived sub-directories */
-    private WriterExecuteBeforeEveryOperation parentInit;
+    /** Parent directory creator to be executed before any derived sub-directories */
+    private WriterExecuteBeforeEveryOperation parentDirectoryCreator;
 
     /**
      * Creates defaulting to a permissive output-manager in a directory and otherwise default
@@ -138,12 +138,12 @@ public class BoundOutputManager {
         this.directoryCreator = directoryCreator;
 
         try {
-            this.parentInit = directoryCreator.getOrCreate(prefix.getFolderPath(), parent);
+            this.parentDirectoryCreator = directoryCreator.getOrCreate(prefix.getFolderPath(), parent);
         } catch (GetOperationFailedException e) {
             throw new BindFailedException(e);
         }
-        writerAlwaysAllowed = new AlwaysAllowed(this, this.parentInit);
-        writerCheckIfAllowed = new CheckIfAllowed(this, this.parentInit, writerAlwaysAllowed);
+        writerAlwaysAllowed = new AlwaysAllowed(this, this.parentDirectoryCreator);
+        writerCheckIfAllowed = new CheckIfAllowed(this, this.parentDirectoryCreator, writerAlwaysAllowed);
     }
 
     /** Adds an additional operation recorder alongside any existing recorders */
@@ -175,7 +175,7 @@ public class BoundOutputManager {
                     outputWriteSettings,
                     writeRecorder(manifestRecorder),
                     directoryCreator,
-                    Optional.of(parentInit));
+                    Optional.of(parentDirectoryCreator));
         } catch (FilePathPrefixerException e) {
             throw new BindFailedException(e);
         }
@@ -209,7 +209,7 @@ public class BoundOutputManager {
                     outputWriteSettings,
                     recorderNew,
                     directoryCreator,
-                    Optional.of(parentInit));
+                    Optional.of(parentDirectoryCreator));
         } catch (BindFailedException e) {
             // This exception can only be thrown if the prefix-path doesn't reside within the rootDirectory
             // of the directoryCreator, which should never occur in this class.
