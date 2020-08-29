@@ -28,13 +28,14 @@ package org.anchoranalysis.io.output.bound;
 
 import java.nio.file.Path;
 import java.util.Optional;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.io.output.error.OutputManagerAlreadyExistsException;
 import org.anchoranalysis.io.output.writer.WriterExecuteBeforeEveryOperation;
 import org.apache.commons.io.FileUtils;
 
 /**
- * Creates the output-directory lazily on the first occasion exec() is called
+ * Creates the output-directory lazily on the first occasion {@link #execute} is called
  *
  * <p>Depending on settings, the initialization routine involves:
  *
@@ -46,29 +47,30 @@ import org.apache.commons.io.FileUtils;
  * </ul>
  */
 @RequiredArgsConstructor
-class LazyDirectoryInit implements WriterExecuteBeforeEveryOperation {
+class LazyDirectoryCreator implements WriterExecuteBeforeEveryOperation {
 
     // START REQUIRED ARGUMENTS
     /** The output-directory to be init */
     private final Path outputDirectory;
 
-    /** Whether to delete the existing folder if it exists */
-    private final boolean delExistingFolder;
+    /** Whether to delete the existing directory if it exists */
+    private final boolean deleteExisting;
 
-    /** A parent whose exec() is called before our exec() is called (if empty(), ignored) */
+    /** A parent whose {@link #execute} is called before our {@link #execute} is called (if empty(), ignored) */
     private final Optional<WriterExecuteBeforeEveryOperation> parent;
     // END REQUIRED ARGUMENTS
 
-    private boolean needsInit = true;
+    /** Has this directory already been initialized/ */
+    @Getter private boolean initialized = false;
 
     @Override
-    public synchronized void exec() {
-        if (needsInit) {
+    public synchronized void execute() {
+        if (!initialized) {
 
-            parent.ifPresent(WriterExecuteBeforeEveryOperation::exec);
+            parent.ifPresent(WriterExecuteBeforeEveryOperation::execute);
 
             if (outputDirectory.toFile().exists()) {
-                if (delExistingFolder) {
+                if (deleteExisting) {
                     FileUtils.deleteQuietly(outputDirectory.toFile());
                 } else {
                     String line1 = "Output directory already exists.";
@@ -83,7 +85,7 @@ class LazyDirectoryInit implements WriterExecuteBeforeEveryOperation {
 
             // We create any subdirectories as needed
             outputDirectory.toFile().mkdirs();
-            needsInit = false;
+            initialized = true;
         }
     }
 }

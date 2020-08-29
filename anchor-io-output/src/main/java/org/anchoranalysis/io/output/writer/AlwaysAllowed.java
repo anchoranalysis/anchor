@@ -57,8 +57,7 @@ public class AlwaysAllowed implements Writer {
             Optional<FolderWriteWithPath> folder)
             throws OutputWriteFailedException {
 
-        preop.exec();
-
+        preop.execute();
         return Optional.of(bom.deriveSubdirectory(outputName, manifestDescription, folder));
     }
 
@@ -66,7 +65,7 @@ public class AlwaysAllowed implements Writer {
     public void writeSubfolder(String outputName, GenerateWritableItem<?> collectionGenerator)
             throws OutputWriteFailedException {
 
-        preop.exec();
+        preop.execute();
 
         collectionGenerator.generate().write(new IntegerSuffixOutputNameStyle(outputName, 3), bom);
     }
@@ -78,7 +77,7 @@ public class AlwaysAllowed implements Writer {
             String index)
             throws OutputWriteFailedException {
 
-        preop.exec();
+        preop.execute();
         return generator.generate().write(outputNameStyle, index, bom);
     }
 
@@ -87,7 +86,7 @@ public class AlwaysAllowed implements Writer {
     public void write(OutputNameStyle outputNameStyle, GenerateWritableItem<?> generator)
             throws OutputWriteFailedException {
 
-        preop.exec();
+        preop.execute();
         generator.generate().write(outputNameStyle, bom);
     }
 
@@ -102,7 +101,7 @@ public class AlwaysAllowed implements Writer {
             String outputNameSuffix,
             String index) {
 
-        preop.exec();
+        preop.execute();
 
         Path outPath =
                 bom.outFilePath(outputNamePrefix + outputName + outputNameSuffix + "." + extension);
