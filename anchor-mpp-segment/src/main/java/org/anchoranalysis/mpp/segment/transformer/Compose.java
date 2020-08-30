@@ -26,7 +26,9 @@
 
 package org.anchoranalysis.mpp.segment.transformer;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -39,14 +41,17 @@ import org.anchoranalysis.core.error.OperationFailedException;
  * @param <T> destination type
  * @param <U> intermediate type
  */
+@NoArgsConstructor @AllArgsConstructor
 public class Compose<S, T, U> extends StateTransformerBean<S, T> {
 
     // START BEAN PROPERTIES
+    /** First transformation from {@code S} to {@code U} */
     @BeanField @Getter @Setter private StateTransformerBean<S, U> first;
 
+    /** Second transformation from {@code U} to {@code T} */
     @BeanField @Getter @Setter private StateTransformerBean<U, T> second;
     // END BEAN PROPERTIES
-
+    
     @Override
     public T transform(S in, TransformationContext context) throws OperationFailedException {
 
