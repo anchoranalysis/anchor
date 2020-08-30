@@ -50,7 +50,7 @@ public class JobState {
     }
 
     public boolean isCompleted() {
-        return state == State.COMPLETED_SUCCESS || state == State.COMPLETED_FAILURE;
+        return isCompletedSuccessfully() || isCompletedFailure();
     }
 
     public boolean isCompletedSuccessfully() {

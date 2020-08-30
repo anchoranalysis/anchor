@@ -80,7 +80,7 @@ public class DebugDependentProcessor<T extends InputFromManager, S> extends JobP
             return sp;
         } else {
             ParallelProcessor<T, S> pp = new ParallelProcessor<>();
-            pp.setMaxNumProcessors(maxNumProcessors);
+            pp.setMaxNumberProcessors(maxNumProcessors);
             pp.setTask(getTask());
             pp.setSuppressExceptions(isSuppressExceptions());
             pp.setKeepProcessorsFree(keepProcessorsFree);

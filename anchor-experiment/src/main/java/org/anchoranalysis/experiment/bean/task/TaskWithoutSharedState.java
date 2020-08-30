@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.experiment.bean.task;
 
+import org.anchoranalysis.core.concurrency.ConcurrencyPlan;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.task.NoSharedState;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
@@ -54,7 +55,7 @@ public abstract class TaskWithoutSharedState<T extends InputFromManager>
 
     @Override
     public final NoSharedState beforeAnyJobIsExecuted(
-            BoundOutputManagerRouteErrors outputManager, ParametersExperiment params)
+            BoundOutputManagerRouteErrors outputManager, ConcurrencyPlan concurrencyPlan, ParametersExperiment params)
             throws ExperimentExecutionException {
         // No shared-state by default, so we use a placeholder shared-state type
         return NoSharedState.INSTANCE;

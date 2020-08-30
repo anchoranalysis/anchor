@@ -33,6 +33,7 @@ import java.util.concurrent.Executors;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.concurrency.ConcurrencyPlan;
 import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.core.text.LanguageUtilities;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
@@ -57,7 +58,12 @@ import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 public class ParallelProcessor<T extends InputFromManager, S> extends JobProcessor<T, S> {
 
     // START BEAN
-    @BeanField @Getter @Setter private int maxNumProcessors = 64;
+    /**
+     * Theoretical maximum number of (CPU) processors to use in parallel.
+     * 
+     * <p>In effect, the effective maximum is {@code min(maxNumberProcessors,numberAvailableProcessors)}, usually lower.
+     */
+    @BeanField @Getter @Setter private int maxNumberProcessors = 64;
 
     /**
      * When the number of ongoing jobs is less than this threshold, they are shown in event logs. 0
@@ -73,6 +79,11 @@ public class ParallelProcessor<T extends InputFromManager, S> extends JobProcess
      * on a desktop PC where other tasks (e.g web browsing) may be ongoing during processing.
      */
     @BeanField @Getter @Setter private int keepProcessorsFree = 1;
+
+    /**
+     * How many GPU processors to use when this is possible as a substitute for a CPU processor
+     */
+    @BeanField @Getter @Setter private int numberGPUProcessors = 1;
     // END BEAN
 
     @Override
@@ -82,26 +93,29 @@ public class ParallelProcessor<T extends InputFromManager, S> extends JobProcess
             ParametersExperiment paramsExperiment)
             throws ExperimentExecutionException {
 
-        S sharedState = getTask().beforeAnyJobIsExecuted(rootOutputManager, paramsExperiment);
-
-        int nrOfProcessors =
+        int numberProcessors =
                 selectNumProcessors(
                         paramsExperiment.getLoggerExperiment(),
                         paramsExperiment.isDetailedLogging());
-        ExecutorService eservice = Executors.newFixedThreadPool(nrOfProcessors);
 
-        int cnt = 1;
+        ConcurrencyPlan concurrencyPlan = ConcurrencyPlan.multipleProcessors(numberProcessors,numberGPUProcessors);
+        
+        S sharedState = getTask().beforeAnyJobIsExecuted(rootOutputManager, concurrencyPlan, paramsExperiment);
+
+        ExecutorService eservice = Executors.newFixedThreadPool(numberProcessors);
+
+        int count = 1;
 
         ConcurrentJobMonitor monitor = new ConcurrentJobMonitor(inputObjects.size());
 
-        ListIterator<T> itr = inputObjects.listIterator();
-        while (itr.hasNext()) {
-            T inputObj = itr.next();
+        ListIterator<T> iterator = inputObjects.listIterator();
+        while (iterator.hasNext()) {
+            T input = iterator.next();
             try {
-                submitJob(eservice, inputObj, cnt, sharedState, paramsExperiment, monitor);
-                cnt++;
+                submitJob(eservice, input, count, sharedState, paramsExperiment, monitor);
+                count++;
             } finally {
-                itr.remove();
+                iterator.remove();
             }
         }
 
@@ -123,8 +137,8 @@ public class ParallelProcessor<T extends InputFromManager, S> extends JobProcess
 
         int nrOfProcessors = availableProcessors - keepProcessorsFree;
 
-        if (maxNumProcessors > 0) {
-            nrOfProcessors = Math.min(nrOfProcessors, maxNumProcessors);
+        if (maxNumberProcessors > 0) {
+            nrOfProcessors = Math.min(nrOfProcessors, maxNumberProcessors);
         }
 
         if (detailedLogging) {

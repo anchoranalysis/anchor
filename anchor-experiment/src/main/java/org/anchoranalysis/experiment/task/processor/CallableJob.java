@@ -57,7 +57,7 @@ public class CallableJob<T extends InputFromManager, S>
      * @param task
      * @param paramsUnbound
      * @param taskState
-     * @param taskDescription
+     * @param jobDescription
      * @param monitor
      * @param loggerMonitor the logger used for the monitor
      */
@@ -65,7 +65,7 @@ public class CallableJob<T extends InputFromManager, S>
             Task<T, S> task,
             ParametersUnbound<T, S> paramsUnbound,
             JobState taskState,
-            JobDescription taskDescription,
+            JobDescription jobDescription,
             ConcurrentJobMonitor monitor,
             Optional<MessageLogger> loggerMonitor,
             int showOngoingJobsLessThan) {
@@ -73,7 +73,7 @@ public class CallableJob<T extends InputFromManager, S>
         this.task = task;
         this.paramsUnbound = paramsUnbound;
         this.jobState = taskState;
-        this.jobDescription = taskDescription;
+        this.jobDescription = jobDescription;
         this.logger =
                 new JobStartStopLogger(
                         "Job", loggerMonitor, monitor, false, showOngoingJobsLessThan);
