@@ -46,28 +46,10 @@
 		  <artifactId>commons-logging</artifactId>
 		  <version>${commons-logging.version}</version>
 		</dependency>
-		<dependency>
-		  <groupId>net.imagej</groupId>
-		  <artifactId>ij</artifactId>
-		  <version>${imagej1.version}</version>
-		</dependency>		
-		<dependency>
-		  <groupId>net.imagej</groupId>
-		  <artifactId>imagej</artifactId>
-		  <version>${imagej.version}</version>
-	    <exclusions>
-	    	<!--  A more recent version of the JAR is needed by the georegression library, and there is a version clash, so we ignore this one -->
-	        <exclusion>
-	          <groupId>com.googlecode.efficient-java-matrix-library</groupId>
-	          <artifactId>ejml</artifactId>
-	        </exclusion>
-	      </exclusions> 		  
-		</dependency>
-		<dependency>
-		  <groupId>net.imagej</groupId>
-		  <artifactId>imagej-common</artifactId>
-		  <version>${imagej-common.version}</version>
-		</dependency>	
+				
+		<!-- Note, we don't explicitly declare ImageJ dependencies and instead
+		rely on them coming transivitely through anchor-image -->
+		
 		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>

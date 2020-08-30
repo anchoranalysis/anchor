@@ -128,6 +128,12 @@
                 <groupId>xml-apis</groupId>
                 <artifactId>xml-apis</artifactId>
             </exclusion>
+            
+            <!--  Excluded to reduce the number of JARs -->
+		       <exclusion>
+		         <groupId>net.imagej</groupId>
+		         <artifactId>imagej-scripting</artifactId>
+		       </exclusion>
 		
 	      </exclusions> 
 		
@@ -157,6 +163,7 @@
 	  <groupId>net.imagej</groupId>
 	  <artifactId>imagej-common</artifactId>
 	  <version>${imagej-common.version}</version>
+ 
 	</dependency>	
 	
 	<dependency>
