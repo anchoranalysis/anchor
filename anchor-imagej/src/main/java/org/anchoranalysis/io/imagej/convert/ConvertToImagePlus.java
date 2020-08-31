@@ -25,11 +25,13 @@
  */
 package org.anchoranalysis.io.imagej.convert;
 
+import java.nio.ByteBuffer;
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.stack.Stack;
+import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
 import com.google.common.base.Preconditions;
 import ij.CompositeImage;
@@ -37,6 +39,7 @@ import ij.IJ;
 import ij.ImagePlus;
 import ij.ImageStack;
 import ij.measure.Calibration;
+import ij.process.ImageProcessor;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -98,6 +101,18 @@ public class ConvertToImagePlus {
 
         Preconditions.checkArgument(imagePlus.getNSlices() == stack.extent().z());
         return imagePlus;
+    }
+    
+    /**
+     * Creates an {@link ImagePlus} from <i>one slice<</i> of a {@code Voxels<ByteBuffer> voxels}.
+     * @param voxels 
+     * @param sliceIndex slice-index (z coordinate) to extract
+     * @param name the name to use in the image-plus
+     * @return a newly created image-plus, reusing the input channels's buffer without copying.
+     */
+    public static ImagePlus fromSlice( Voxels<ByteBuffer> voxels, int sliceIndex, String name ) {
+        ImageProcessor processor = ConvertToImageProcessor.fromByte(voxels.slices(), sliceIndex);
+        return new ImagePlus(name, processor);
     }
     
     private static ImagePlus createImagePlus(
