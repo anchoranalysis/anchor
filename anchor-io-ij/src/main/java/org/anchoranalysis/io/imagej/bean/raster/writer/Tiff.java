@@ -24,26 +24,31 @@
  * #L%
  */
 
-package org.anchoranalysis.io.ij.bean.writer;
+package org.anchoranalysis.io.imagej.bean.raster.writer;
 
 import ij.io.FileSaver;
-import org.anchoranalysis.image.io.RasterIOException;
 
-public class IJPngWriter extends IJWriterNoStack {
+/**
+ * Writes a TIFF image using ImageJ.
+ * 
+ * <p>The extension .tif is employed by default.
+ * 
+ * @author Owen Feehan
+ *
+ */
+public class Tiff extends SupportsTimeSeries {
 
     @Override
-    protected boolean writeRaster(FileSaver fs, String outPath, boolean asStack)
-            throws RasterIOException {
-
+    protected boolean writeRaster(FileSaver fs, String outPath, boolean asStack) {
         if (asStack) {
-            throw new RasterIOException("Writing as stack unsupported for this format");
+            return fs.saveAsTiffStack(outPath);
         } else {
-            return fs.saveAsPng(outPath);
+            return fs.saveAsTiff(outPath);
         }
     }
 
     @Override
     public String defaultExtension() {
-        return "png";
+        return "tif";
     }
 }

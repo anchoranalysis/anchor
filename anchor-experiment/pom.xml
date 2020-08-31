@@ -8,13 +8,7 @@
   <artifactId>anchor-experiment</artifactId>
   <version>0.0.8-SNAPSHOT</version>
   <dependencies>
-  
-	<dependency>
-	  <groupId>org.apache.logging.log4j</groupId>
-	  <artifactId>log4j-core</artifactId>
-	  <version>2.13.2</version>
-	</dependency>
-       
+	   
     <dependency>
     	<groupId>commons-lang</groupId>
     	<artifactId>commons-lang</artifactId>
@@ -37,6 +31,11 @@
   		<artifactId>anchor-bean</artifactId>
   		<version>0.0.8-SNAPSHOT</version>
   	</dependency>
+	 <dependency>
+      <groupId>${project.groupId}</groupId>  	
+  	  <artifactId>anchor-io</artifactId>
+  	  <version>0.0.8-SNAPSHOT</version>
+  	 </dependency>
 	 <dependency>
 		 <groupId>${project.groupId}</groupId>
 		 <artifactId>anchor-io-generator</artifactId>

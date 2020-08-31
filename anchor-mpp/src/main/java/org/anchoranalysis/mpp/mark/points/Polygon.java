@@ -47,7 +47,8 @@ public class Polygon extends PointListBase {
     private static final byte FLAG_SUBMARK_INSIDE =
             RegionMembershipUtilities.flagForRegion(GlobalRegionIdentifiers.SUBMARK_INSIDE);
 
-    private PolygonRoi polygon;
+    /** A region of interest in ImageJ representing a polygon */
+    private PolygonRoi region;
 
     private double area;
     private Point3d centroid;
@@ -70,7 +71,7 @@ public class Polygon extends PointListBase {
     }
 
     private boolean contains(int x, int y) {
-        return polygon.contains(x, y);
+        return region.contains(x, y);
     }
 
     @Override
@@ -118,7 +119,7 @@ public class Polygon extends PointListBase {
         this.area = area(getPoints());
         this.centroid = centroid(getPoints(), area);
 
-        polygon = createRoi(getPoints());
+        region = createRoi(getPoints());
     }
 
     private static PolygonRoi createRoi(List<Point3d> points) {

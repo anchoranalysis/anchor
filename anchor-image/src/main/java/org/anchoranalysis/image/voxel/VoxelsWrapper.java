@@ -66,9 +66,15 @@ public class VoxelsWrapper {
         return new VoxelsWrapper(voxels);
     }
 
-    // Returns voxels that are not cast to any specific buffer type
+    /** Returns voxels that are not cast to any specific buffer type */
     public Voxels<? extends Buffer> any() { // NOSONAR
         return voxels;
+    }
+    
+    /** Casts voxels to a particular type */
+    @SuppressWarnings("unchecked")
+    public <T extends Buffer> Voxels<T> castTo() { // NOSONAR
+        return (Voxels<T>) voxels;
     }
 
     public Voxels<? extends Buffer> match(VoxelDataType match) { // NOSONAR

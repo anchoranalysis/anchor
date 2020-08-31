@@ -24,23 +24,26 @@
  * #L%
  */
 
-package org.anchoranalysis.io.ij.bean.writer;
+package org.anchoranalysis.io.imagej.bean.raster.writer;
 
 import java.nio.file.Path;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.generator.raster.series.StackSeries;
-import org.anchoranalysis.image.stack.Stack;
 
-public abstract class IJWriterSupportsStack extends IJWriter {
+/**
+ * Base class for {@link ImageJRasterWriter} that <b>does</b> support writing time-series as a stack.
+ * 
+ * @author Owen Feehan
+ */
+public abstract class SupportsTimeSeries extends ImageJRasterWriter {
 
     @Override
     public void writeTimeSeriesStackByte(StackSeries stackSeries, Path filePath, boolean makeRGB)
             throws RasterIOException {
 
         try {
-            Stack stack = stackSeries.createSingleStack();
-            writeStackTime(stack, filePath, makeRGB);
+            writeStackTime(stackSeries.createSingleStack(), filePath, makeRGB);
         } catch (IncorrectImageSizeException e) {
             throw new RasterIOException(e);
         }

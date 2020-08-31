@@ -24,26 +24,28 @@
  * #L%
  */
 
-package org.anchoranalysis.io.ij.bean.writer;
+package org.anchoranalysis.io.imagej.bean.raster.writer;
 
 import ij.ImagePlus;
 import ij.io.FileSaver;
 import java.nio.file.Path;
-import org.anchoranalysis.image.convert.IJWrap;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.bean.rasterwriter.RasterWriter;
 import org.anchoranalysis.image.stack.Stack;
+import org.anchoranalysis.io.imagej.convert.ConvertToImagePlus;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-//
-//  Note the difference between ImageStack (and ImageJ class)
-//   and {@link Stack} (one of our classes)
-//
-public abstract class IJWriter extends RasterWriter {
+/**
+ * Base class for writing a raster using ImageJ
+ * 
+ * @author Owen Feehan
+ *
+ */
+public abstract class ImageJRasterWriter extends RasterWriter {
 
-    private static Log log = LogFactory.getLog(IJWriter.class);
+    private static Log log = LogFactory.getLog(ImageJRasterWriter.class);
 
     @Override
     public void writeStackByte(Stack stack, Path filePath, boolean makeRGB)
@@ -82,7 +84,7 @@ public abstract class IJWriter extends RasterWriter {
 
         Dimensions dimensions = stack.getChannel(0).dimensions();
 
-        ImagePlus imp = IJWrap.createImagePlus(stack, makeRGB);
+        ImagePlus imp = ConvertToImagePlus.from(stack, makeRGB);
 
         writeImagePlus(imp, filePath, (stack.getChannel(0).dimensions().z() > 1));
 

@@ -36,7 +36,7 @@ public class InterpolatorFactory {
 
     private static final Interpolator NO_INTERPOLATOR = new InterpolatorNone();
 
-    private static final Interpolator RESIZING_INTERPOLATOR = new InterpolatorImageJ();
+    private static final Interpolator RESIZING_INTERPOLATOR = new InterpolatorImgLib2Linear();
 
     public static InterpolatorFactory getInstance() {
         if (instance == null) {

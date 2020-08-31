@@ -24,13 +24,18 @@
  * #L%
  */
 
-package org.anchoranalysis.io.ij.bean.writer;
+package org.anchoranalysis.io.imagej.bean.raster.writer;
 
 import java.nio.file.Path;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.generator.raster.series.StackSeries;
 
-public abstract class IJWriterNoStack extends IJWriter {
+/**
+ * Base class for {@link ImageJRasterWriter} that <b>doesn't</b> support writing time-series as a stack.
+ * 
+ * @author Owen Feehan
+ */
+public abstract class NoTimeSeries extends ImageJRasterWriter {
 
     @Override
     public void writeTimeSeriesStackByte(StackSeries stackSeries, Path filePath, boolean makeRGB)
