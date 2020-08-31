@@ -5,7 +5,7 @@
    	    <artifactId>anchor-parent</artifactId>
 		<version>0.0.11-SNAPSHOT</version>
     </parent>
-  <artifactId>anchor-io-ij</artifactId>
+  <artifactId>anchor-imagej</artifactId>
   <version>0.0.1-SNAPSHOT</version>
    <licenses>
     <license>

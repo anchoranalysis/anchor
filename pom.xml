@@ -48,7 +48,7 @@
 
 	   <!-- IO modules that the test routines dependent on -->
 	   <module>anchor-io-bioformats</module>
-	   <module>anchor-io-ij</module>
+	   <module>anchor-imagej</module>
 	   
 	   <!-- Test modules -->
 		<module>anchor-test</module>
