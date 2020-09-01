@@ -29,14 +29,15 @@ package org.anchoranalysis.image.extent;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.function.Consumer;
-import java.util.function.IntConsumer;
 import java.util.function.IntPredicate;
 import org.anchoranalysis.core.axis.AxisType;
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
+import org.anchoranalysis.core.functional.function.CheckedIntConsumer;
 import org.anchoranalysis.core.geometry.Point2i;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
+import org.anchoranalysis.core.geometry.consumer.OffsettedPointTwoDimensionalConsumer;
 import org.anchoranalysis.image.scale.ScaleFactor;
 import org.anchoranalysis.image.scale.ScaleFactorUtilities;
 
@@ -50,23 +51,24 @@ public final class Extent implements Serializable {
     /** */
     private static final long serialVersionUID = 1L;
 
-    private final int sxy;
+    /** Sizes in each dimension */
+    private final ReadableTuple3i size;
 
-    // Lengths in each dimension
-    private final ReadableTuple3i len;
+    /** Size in X multiplied by size in Y. Convenient for calculating offsets and for iterations. */
+    private final int areaXY;
 
-    /** Constructor - create with only x and y dimensions (z dimension is assumed to be 1) */
+    /** Creates with with only x and y dimensions (z dimension is assumed to be 1) */
     public Extent(int x, int y) {
         this(x, y, 1);
     }
 
-    /** Constructor - create with x and y and z dimensions */
+    /** Creates with x and y and z dimensions */
     public Extent(int x, int y, int z) {
         this(new Point3i(x, y, z));
     }
 
     /**
-     * Constructor - creates an extent from a point (duplicating the point for internal use)
+     * Createss an extent from a point (duplicating the point for internal use)
      *
      * <p>This constructor is exposed as a static method to deliberately duplicate the tuple as it
      * will be used internally.
@@ -79,7 +81,7 @@ public final class Extent implements Serializable {
     }
 
     /**
-     * Constructor - creates an extent from a point that is reused internally (without duplication)
+     * Creates from a point that is reused internally (without duplication)
      *
      * <p>This constructor is exposed as a static method to deliberately indicate that it's okay to
      * consume the point internally, as it won't be otherwise use.
@@ -92,15 +94,13 @@ public final class Extent implements Serializable {
     }
 
     /**
-     * Constructor
-     *
-     * <p>The point will be taken ownership by the extent, and should not be modified thereafter.
+     * Creates from a tuple that is reused internally (without duplication).
      *
      * @param len a tuple with the extent size's for each dimension
      */
     private Extent(ReadableTuple3i len) {
-        this.len = len;
-        this.sxy = len.x() * len.y();
+        this.size = len;
+        this.areaXY = len.x() * len.y();
 
         if (len.x() == 0 || len.y() == 0 || len.z() == 0) {
             throw new AnchorFriendlyRuntimeException(
@@ -123,53 +123,53 @@ public final class Extent implements Serializable {
     }
 
     public long calculateVolume() {
-        return ((long) sxy) * len.z();
+        return ((long) areaXY) * size.z();
     }
 
     public boolean isEmpty() {
-        return (sxy == 0) || (len.z() == 0);
+        return (areaXY == 0) || (size.z() == 0);
     }
 
     public int volumeXY() {
-        return sxy;
+        return areaXY;
     }
 
     /**
      * Calculates the total number of pixel positions needed to represent this bounding box as a
      * pixel array This is not the same as volume, both the start and end pixel are included
      */
-    public int totalNumPixelPositions() {
-        return (len.x() + 1) * (len.y() + 1) * (len.z() + 1);
+    public int totalNumberVoxelPositions() {
+        return (size.x() + 1) * (size.y() + 1) * (size.z() + 1);
     }
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + len.x();
-        result = prime * result + len.y();
-        result = prime * result + len.z();
+        result = prime * result + size.x();
+        result = prime * result + size.y();
+        result = prime * result + size.z();
         return result;
     }
 
     public int x() {
-        return len.x();
+        return size.x();
     }
 
     public int y() {
-        return len.y();
+        return size.y();
     }
 
     public int z() {
-        return len.z();
+        return size.z();
     }
 
     public int valueByDimension(int dimIndex) {
-        return len.byDimension(dimIndex);
+        return size.byDimension(dimIndex);
     }
 
     public int valueByDimension(AxisType axis) {
-        return len.byDimension(axis);
+        return size.byDimension(axis);
     }
 
     /**
@@ -181,7 +181,7 @@ public final class Extent implements Serializable {
      * @return the extent's width, height, depth as a tuple
      */
     public ReadableTuple3i asTuple() {
-        return len;
+        return size;
     }
 
     @Override
@@ -191,7 +191,17 @@ public final class Extent implements Serializable {
         if (getClass() != obj.getClass()) return false;
         Extent other = (Extent) obj;
 
-        return len.equals(other.len);
+        return size.equals(other.size);
+    }
+
+    /** Checks for equality with another extent ignoring any differences in the Z dimension */
+    public boolean equalsIgnoreZ(Object obj) {
+        if (this == obj) return true;
+        if (obj == null) return false;
+        if (getClass() != obj.getClass()) return false;
+        Extent other = (Extent) obj;
+
+        return (size.x() == other.x()) && (size.y() == other.y());
     }
 
     @Override
@@ -201,12 +211,12 @@ public final class Extent implements Serializable {
 
     /** Calculates a XY-offset of a point in a buffer whose dimensions are this extent */
     public final int offset(int x, int y) {
-        return (y * len.x()) + x;
+        return (y * size.x()) + x;
     }
 
     /** Calculates a XYZ-offset of a point in a buffer whose dimensions are this extent */
     public final int offset(int x, int y, int z) {
-        return (z * sxy) + (y * x()) + x;
+        return (z * areaXY) + (y * x()) + x;
     }
 
     /** Calculates a XYZ-offset of a point in a buffer whose dimensions are this extent */
@@ -231,7 +241,7 @@ public final class Extent implements Serializable {
     }
 
     public Extent duplicateChangeZ(int z) {
-        return new Extent(len.x(), len.y(), z);
+        return new Extent(size.x(), size.y(), z);
     }
 
     public boolean containsX(double x) {
@@ -280,15 +290,15 @@ public final class Extent implements Serializable {
             return false;
         }
 
-        if (x >= len.x()) {
+        if (x >= size.x()) {
             return false;
         }
 
-        if (y >= len.y()) {
+        if (y >= size.y()) {
             return false;
         }
 
-        return (z < len.z());
+        return (z < size.z());
     }
 
     public boolean contains(BoundingBox box) {
@@ -305,7 +315,7 @@ public final class Extent implements Serializable {
     }
 
     public Extent subtract(ReadableTuple3i toSubtract) {
-        return new Extent(Point3i.immutableSubtract(len, toSubtract));
+        return new Extent(Point3i.immutableSubtract(size, toSubtract));
     }
 
     public Extent divide(int factor) {
@@ -326,7 +336,7 @@ public final class Extent implements Serializable {
     }
 
     public Extent growBy(ReadableTuple3i toAdd) {
-        return new Extent(Point3i.immutableAdd(len, toAdd));
+        return new Extent(Point3i.immutableAdd(size, toAdd));
     }
 
     /**
@@ -336,7 +346,7 @@ public final class Extent implements Serializable {
      * @return a newly-created extent that is the intersection of this and another
      */
     public Extent intersectWith(Extent other) {
-        return new Extent(Point3i.elementwiseOperation(len, other.len, Math::min));
+        return new Extent(Point3i.elementwiseOperation(size, other.size, Math::min));
     }
 
     /**
@@ -344,7 +354,7 @@ public final class Extent implements Serializable {
      * of 1
      */
     public Extent flattenZ() {
-        return new Extent(new Point3i(len.x(), len.y(), 1));
+        return new Extent(new Point3i(size.x(), size.y(), 1));
     }
 
     /**
@@ -366,14 +376,53 @@ public final class Extent implements Serializable {
     }
 
     /**
+     * Calls processor once for each x and y-values in the range
+     *
+     * <p>This occurs in ascending order (x-dimension increments first, y-dimension increments
+     * second)
+     *
+     * @param <E> a checked-exception that {@code indexConsumer} may throw
+     * @param pointConsumer called for each point
+     * @throws E if {@code indexConsumer} throws this exception
+     */
+    public <E extends Exception> void iterateOverXY(
+            OffsettedPointTwoDimensionalConsumer<E> pointConsumer) throws E {
+        int offset = 0;
+        for (int y = 0; y < size.y(); y++) {
+            for (int x = 0; x < size.x(); x++) {
+                pointConsumer.accept(x, y, offset++);
+            }
+        }
+    }
+
+    /**
+     * Calls processor once for each x and y-values but <i>only</i> passing an offset
+     *
+     * <p>This occurs in ascending order (x-dimension increments first, y-dimension increments
+     * second)
+     *
+     * @param <E> a checked-exception that {@code indexConsumer} may throw
+     * @param offsetConsumer called for each point with the offset
+     * @throws E if {@code indexConsumer} throws this exception
+     */
+    public <E extends Exception> void iterateOverXYOffset(CheckedIntConsumer<E> offsetConsumer)
+            throws E {
+        for (int offset = 0; offset < areaXY; offset++) {
+            offsetConsumer.accept(offset);
+        }
+    }
+
+    /**
      * Calls processor once for each z-value in the range
      *
      * <p>This occurs sequentially from 0 (inclusive) to {@code z()} (exclusive)
      *
+     * @param <E> a checked-exception that {@code indexConsumer} may throw
      * @param indexConsumer called for each index (z-value)
+     * @throws E if {@code indexConsumer} throws this exception
      */
-    public void iterateOverZ(IntConsumer indexConsumer) {
-        for (int z = 0; z < len.z(); z++) {
+    public <E extends Exception> void iterateOverZ(CheckedIntConsumer<E> indexConsumer) throws E {
+        for (int z = 0; z < size.z(); z++) {
             indexConsumer.accept(z);
         }
     }
@@ -390,7 +439,7 @@ public final class Extent implements Serializable {
      * @return true if {@code indexPredicate} always returned true for every slice, false otherwise.
      */
     public boolean iterateOverZUntil(IntPredicate indexPredicate) {
-        for (int z = 0; z < len.z(); z++) {
+        for (int z = 0; z < size.z(); z++) {
             if (!indexPredicate.test(z)) {
                 return false;
             }
@@ -399,7 +448,7 @@ public final class Extent implements Serializable {
     }
 
     private Point3i immutablePointOperation(Consumer<Point3i> pointOperation) {
-        Point3i lenDup = new Point3i(len);
+        Point3i lenDup = new Point3i(size);
         pointOperation.accept(lenDup);
         return lenDup;
     }

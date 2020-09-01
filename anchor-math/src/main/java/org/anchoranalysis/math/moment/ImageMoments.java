@@ -37,7 +37,7 @@ import lombok.NoArgsConstructor;
  * The first moment (mean) and eigenvalues of the second moments (covariance) from a matrix of
  * points
  *
- * <p>See <a href="Image moment">Image Moment on Wikipedia</a>
+ * <p>See <a href="https://en.wikipedia.org/wiki/Image_moment">Image Moment on Wikipedia</a>
  *
  * @author Owen Feehan
  */
@@ -61,9 +61,11 @@ public class ImageMoments {
      */
     public ImageMoments(DoubleMatrix2D matrixPoints, boolean suppressZ, boolean sortAscending) {
 
-        mean = calcFirstMoments(matrixPoints);
+        mean = calculateFirstMoments(matrixPoints);
 
-        list = EigenValueDecompose.apply(calcSecondMoments(matrixPoints, suppressZ), sortAscending);
+        list =
+                EigenValueDecompose.apply(
+                        calculateSecondMoments(matrixPoints, suppressZ), sortAscending);
     }
 
     public EigenvalueAndVector get(int index) {
@@ -111,7 +113,7 @@ public class ImageMoments {
     }
 
     /** Calculates the first moment (the mean) */
-    private static double[] calcFirstMoments(DoubleMatrix2D matrixPoints) {
+    private static double[] calculateFirstMoments(DoubleMatrix2D matrixPoints) {
         double[] mean = new double[3];
         for (int i = 0; i < 3; i++) {
             mean[i] = matrixPoints.viewColumn(i).zSum() / matrixPoints.rows();
@@ -120,7 +122,7 @@ public class ImageMoments {
     }
 
     /** Calculates the second moment (the covariance) */
-    private static DoubleMatrix2D calcSecondMoments(
+    private static DoubleMatrix2D calculateSecondMoments(
             DoubleMatrix2D matrixPoints, boolean suppressZ) {
 
         DoubleMatrix2D secondMoments = Statistic.covariance(matrixPoints);

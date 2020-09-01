@@ -73,9 +73,9 @@ public abstract class FolderWrite implements SequencedFolder, WriteOperationReco
 
     public abstract Path getRelativePath();
 
-    public Path calcPath() {
+    public Path calculatePath() {
         if (parentFolder != null) {
-            return parentFolder.calcPath().resolve(getRelativePath());
+            return parentFolder.calculatePath().resolve(getRelativePath());
         } else {
             return getRelativePath();
         }

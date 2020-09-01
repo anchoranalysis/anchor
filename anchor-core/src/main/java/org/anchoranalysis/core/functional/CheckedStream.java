@@ -72,7 +72,7 @@ public class CheckedStream {
      * @param  <E> exception that can be thrown by {code mapFunction}
      * @param stream the stream to apply the map on
      * @param throwableClass the class of {@code E}
-     * @param mapFunction the function to use for mapping
+     * @param consumer the function to call for each object in the stream
      * @throws E if the exception is thrown during mapping
      */
     public static <T, E extends Exception> void forEach(
@@ -218,7 +218,7 @@ public class CheckedStream {
      *
      * @param <S> input-type to flatMap
      * @param <T> output-type of flatMap
-     * @param <E> exception that can be thrown by {@link flatMapFunction}
+     * @param <E> exception that can be thrown by {@code flatMapFunction}
      * @param stream the stream to apply the flatMap on
      * @param throwableClass the class of {@code E}
      * @param flatMapFunction the function to use for flatMapping
@@ -271,7 +271,7 @@ public class CheckedStream {
      * @param param the parameter to apply to the function
      * @param function the function
      * @return the return-value of the function
-     * @throws ConvertedToRuntimeException a run-time exception if an exception is thrown by {@link
+     * @throws ConvertedToRuntimeException a run-time exception if an exception is thrown by {@code
      *     function}
      */
     private static <S, T, E extends Exception> T suppressCheckedException(

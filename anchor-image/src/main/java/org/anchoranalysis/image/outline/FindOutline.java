@@ -26,12 +26,13 @@
 
 package org.anchoranalysis.image.outline;
 
+import com.google.common.base.Preconditions;
 import java.nio.ByteBuffer;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
-import org.anchoranalysis.image.binary.logical.BinaryChnlXor;
 import org.anchoranalysis.image.binary.mask.Mask;
+import org.anchoranalysis.image.binary.mask.combine.MaskXor;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelsFactory;
@@ -63,22 +64,39 @@ public class FindOutline {
      * has 3-dimensions
      *
      * @param mask the mask to find an outline for
+     * @param numberErosions the number of erosions, effectively determining how thick the outline
+     *     is
      * @param force2D if TRUE, 2D will ALWAYS be used irrespective of the guessing
      * @param outlineAtBoundary if true, an edge is shown also for the boundary of the scene. if
      *     false, this is not shown.
      * @return a newly-created mask showing only the outline
      */
-    public static Mask outlineGuess3D(Mask mask, boolean force2D, boolean outlineAtBoundary) {
+    public static Mask outlineGuess3D(
+            Mask mask, int numberErosions, boolean force2D, boolean outlineAtBoundary) {
         boolean do2D = mask.dimensions().z() == 1 || force2D;
-        return outline(mask, !do2D, outlineAtBoundary);
+        return outline(mask, numberErosions, !do2D, outlineAtBoundary);
     }
 
-    public static Mask outline(Mask mask, boolean do3D, boolean erodeAtBoundary) {
+    /**
+     * Creates an outline of depth 1 from a mask
+     *
+     * @param mask the mask
+     * @param numberErosions the number of erosions, effectively determining how thick the outline
+     *     is
+     * @param do3D whether to also perform the outline in the third dimension. This is typically
+     *     unwanted for 2 dimensional images, as every voxel inside the object is treated as on the
+     *     boundary and a filled in object is produced.
+     * @param outlineAtBoundary if true, an edge is shown also for the boundary of the scene. if
+     *     false, this is not shown.
+     * @return
+     */
+    public static Mask outline(
+            Mask mask, int numberErosions, boolean do3D, boolean outlineAtBoundary) {
         // We create a new mask for outputting
         Mask maskOut = new Mask(mask.dimensions(), mask.binaryValues());
 
         // Gets outline
-        outlineMaskInto(mask, maskOut, do3D, erodeAtBoundary);
+        outlineMaskInto(mask, maskOut, numberErosions, do3D, outlineAtBoundary);
 
         return maskOut;
     }
@@ -93,51 +111,37 @@ public class FindOutline {
      *     is
      * @param outlineAtBoundary if true, an edge is shown also for the boundary of the scene. if
      *     false, this is not shown.
-     * @param do3D whether to also perform the outline in the third dimension. This is a bad idea
-     *     for 2 dimensional images, as every voxel inside the object is treated as on the boundary
-     *     and a filled in object is produced.
+     * @param do3D whether to also perform the outline in the third dimension. This is typically
+     *     unwanted for 2 dimensional images, as every voxel inside the object is treated as on the
+     *     boundary and a filled in object is produced.
      */
     public static ObjectMask outline(
-            ObjectMask object, int numberErosions, boolean outlineAtBoundary, boolean do3D) {
+            ObjectMask object, int numberErosions, boolean do3D, boolean outlineAtBoundary) {
+
+        Preconditions.checkArgument(numberErosions >= 1);
 
         ObjectMask objectDuplicated = object.duplicate();
 
-        if (numberErosions < 1) {
-            assert false;
-        }
-
         BinaryVoxels<ByteBuffer> voxelsOut =
                 outlineMultiplex(
-                        objectDuplicated.binaryVoxels(), numberErosions, outlineAtBoundary, do3D);
-        return new ObjectMask(
-                objectDuplicated.boundingBox(), voxelsOut.voxels(), voxelsOut.binaryValues());
+                        objectDuplicated.binaryVoxels(), numberErosions, do3D, outlineAtBoundary);
+        return new ObjectMask(objectDuplicated.boundingBox(), voxelsOut);
     }
 
-    private static BinaryVoxels<ByteBuffer> outlineMultiplex(
-            BinaryVoxels<ByteBuffer> voxels,
-            int numberErosions,
-            boolean erodeAtBoundary,
-            boolean do3D) {
-        // If we just want an edge of size 1, we can do things more optimally
-        if (numberErosions == 1) {
-            return outlineByKernel(voxels, erodeAtBoundary, do3D);
-        } else {
-            return outlineByErosion(voxels, numberErosions, erodeAtBoundary, do3D);
-        }
-    }
-
-    // Assumes imgChnlOut has the same ImgChnlRegions
+    // Assumes imgChannelOut has the same ImgChannelRegions
     private static void outlineMaskInto(
             Mask maskToFindOutlineFor,
             Mask maskToReplaceWithOutline,
+            int numberErosions,
             boolean do3D,
-            boolean erodeAtBoundary) {
+            boolean outlineAtBoundary) {
 
         BinaryVoxels<ByteBuffer> voxels =
                 BinaryVoxelsFactory.reuseByte(
                         maskToFindOutlineFor.voxels(), maskToFindOutlineFor.binaryValues());
 
-        BinaryVoxels<ByteBuffer> outline = outlineByKernel(voxels, erodeAtBoundary, do3D);
+        BinaryVoxels<ByteBuffer> outline =
+                outlineMultiplex(voxels, numberErosions, do3D, outlineAtBoundary);
 
         try {
             maskToReplaceWithOutline.replaceBy(outline);
@@ -146,9 +150,22 @@ public class FindOutline {
         }
     }
 
+    private static BinaryVoxels<ByteBuffer> outlineMultiplex(
+            BinaryVoxels<ByteBuffer> voxels,
+            int numberErosions,
+            boolean do3D,
+            boolean outlineAtBoundary) {
+        // If we just want an edge of size 1, we can do things more optimally
+        if (numberErosions == 1) {
+            return outlineByKernel(voxels, outlineAtBoundary, do3D);
+        } else {
+            return outlineByErosion(voxels, numberErosions, outlineAtBoundary, do3D);
+        }
+    }
+
     /** Find an outline only 1 pixel deep by using a kernel directly */
     private static BinaryVoxels<ByteBuffer> outlineByKernel(
-            BinaryVoxels<ByteBuffer> voxels, boolean erodeAtBoundary, boolean do3D) {
+            BinaryVoxels<ByteBuffer> voxels, boolean outlineAtBoundary, boolean do3D) {
 
         // if our solid is too small, we don't apply the kernel, as it fails on anything less than
         // 3x3, and instead we simply return the solid as it is
@@ -158,7 +175,7 @@ public class FindOutline {
 
         BinaryValuesByte bvb = voxels.binaryValues().createByte();
 
-        BinaryKernel kernel = new OutlineKernel3(bvb, !erodeAtBoundary, do3D);
+        BinaryKernel kernel = new OutlineKernel3(bvb, !outlineAtBoundary, do3D);
 
         Voxels<ByteBuffer> out = ApplyKernel.apply(kernel, voxels.voxels(), bvb);
         return BinaryVoxelsFactory.reuseByte(out, voxels.binaryValues());
@@ -180,7 +197,7 @@ public class FindOutline {
         // Binary and between the original version and the eroded version
         assert (eroded != null);
         BinaryValuesByte bvb = voxels.binaryValues().createByte();
-        BinaryChnlXor.apply(voxels.voxels(), eroded, bvb, bvb);
+        MaskXor.apply(voxels.voxels(), eroded, bvb, bvb);
         return voxels;
     }
 
@@ -197,14 +214,13 @@ public class FindOutline {
         for (int i = 1; i < numberErosions; i++) {
             eroded = ApplyKernel.apply(kernelErosion, eroded, bvb);
         }
-
         return eroded;
     }
 
-    private static boolean isTooSmall(Extent e, boolean do3D) {
-        if (e.x() < 3 || e.y() < 3) {
+    private static boolean isTooSmall(Extent extent, boolean do3D) {
+        if (extent.x() < 3 || extent.y() < 3) {
             return true;
         }
-        return (do3D && e.z() < 3);
+        return (do3D && extent.z() < 3);
     }
 }

@@ -70,12 +70,12 @@ public class BoundingBoxFromPoints {
      * @return a bounding-box minally spanning the two points
      */
     public static BoundingBox forTwoPoints(Point3d point1, Point3d point2) {
-        Point3d min = calcMin(point1, point2);
-        Point3d max = calcMax(point1, point2);
+        Point3d min = calculateMin(point1, point2);
+        Point3d max = calculateMax(point1, point2);
         return new BoundingBox(min, max);
     }
 
-    private static Point3d calcMin(Point3d point1, Point3d point2) {
+    private static Point3d calculateMin(Point3d point1, Point3d point2) {
         Point3d point = new Point3d();
         point.setX(Math.min(point1.x(), point2.x()));
         point.setY(Math.min(point1.y(), point2.y()));
@@ -83,7 +83,7 @@ public class BoundingBoxFromPoints {
         return point;
     }
 
-    private static Point3d calcMax(Point3d point1, Point3d point2) {
+    private static Point3d calculateMax(Point3d point1, Point3d point2) {
         Point3d point = new Point3d();
         point.setX(Math.max(point1.x(), point2.x()));
         point.setY(Math.max(point1.y(), point2.y()));

@@ -30,33 +30,34 @@ import java.util.ArrayList;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.bean.provider.Provider;
 import org.anchoranalysis.image.bean.arrangeraster.ArrangeRasterOverlay;
 import org.anchoranalysis.image.bean.arrangeraster.ArrangeRasterTile;
-import org.anchoranalysis.image.bean.provider.stack.StackProvider;
-import org.anchoranalysis.image.bean.provider.stack.StackProviderArrangeRaster;
-import org.anchoranalysis.image.io.bean.stack.StackProviderGenerateString;
-import org.anchoranalysis.image.io.bean.stack.arrange.StackProviderWithLabel;
+import org.anchoranalysis.image.bean.provider.stack.ArrangeRaster;
+import org.anchoranalysis.image.io.bean.stack.StackProviderWithLabel;
+import org.anchoranalysis.image.io.bean.stack.provider.GenerateString;
 import org.anchoranalysis.image.io.generator.raster.StringRasterGenerator;
+import org.anchoranalysis.image.stack.Stack;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class TileRasters {
 
-    public static StackProviderArrangeRaster createStackProvider(
+    public static ArrangeRaster createStackProvider(
             List<StackProviderWithLabel> list,
             int numCols,
             boolean createShort,
             boolean scaleLabel,
             boolean expandLabelZ) {
 
-        StackProviderArrangeRaster spar = new StackProviderArrangeRaster();
+        ArrangeRaster spar = new ArrangeRaster();
         spar.setCreateShort(createShort);
         spar.setForceRGB(true); // Makes everything an RGB output
-        spar.setList(new ArrayList<StackProvider>());
+        spar.setList(new ArrayList<Provider<Stack>>());
 
         // Add stack providers
-        for (StackProviderWithLabel spwl : list) {
-            spar.getList().add(spwl.getStackProvider());
-            spar.getList().add(addGenerateString(spwl, createShort, scaleLabel, expandLabelZ));
+        for (StackProviderWithLabel provider : list) {
+            spar.getList().add(provider.getStack());
+            spar.getList().add(addGenerateString(provider, createShort, scaleLabel, expandLabelZ));
         }
 
         ArrangeRasterTile art = new ArrangeRasterTile();
@@ -70,30 +71,26 @@ public class TileRasters {
 
         art.setCellDefault(arOverlay);
 
-        spar.setArrangeRaster(art);
+        spar.setArrange(art);
 
         return spar;
     }
 
-    private static StackProviderGenerateString addGenerateString(
-            StackProviderWithLabel spwl,
+    private static GenerateString addGenerateString(
+            StackProviderWithLabel providerWithLabel,
             boolean createShort,
             boolean scaleLabel,
             boolean expandLabelZ) {
-        StackProviderGenerateString spgs = new StackProviderGenerateString();
 
-        StringRasterGenerator srg = new StringRasterGenerator(spwl.getLabel());
-        srg.setText(spwl.getLabel());
-        srg.setPadding(3);
-
-        spgs.setStringRasterGenerator(srg);
-        spgs.setCreateShort(createShort);
+        GenerateString out = new GenerateString();
+        out.setStringRasterGenerator(new StringRasterGenerator(providerWithLabel.getLabel(), 3));
+        out.setCreateShort(createShort);
         if (scaleLabel) {
-            spgs.setIntensityProvider(spwl.getStackProvider());
+            out.setIntensityProvider(providerWithLabel.getStack());
         }
         if (expandLabelZ) {
-            spgs.setRepeatZProvider(spwl.getStackProvider());
+            out.setRepeatZProvider(providerWithLabel.getStack());
         }
-        return spgs;
+        return out;
     }
 }

@@ -29,9 +29,6 @@ package org.anchoranalysis.io.bean.object.writer;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.anchor.overlay.bean.DrawObject;
-import org.anchoranalysis.anchor.overlay.writer.ObjectDrawAttributes;
-import org.anchoranalysis.anchor.overlay.writer.PrecalcOverlay;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.color.RGBColor;
 import org.anchoranalysis.core.error.CreateException;
@@ -39,9 +36,12 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.object.properties.ObjectWithProperties;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
+import org.anchoranalysis.overlay.bean.DrawObject;
+import org.anchoranalysis.overlay.writer.ObjectDrawAttributes;
+import org.anchoranalysis.overlay.writer.PrecalculationOverlay;
 
 /**
  * Writes a line through the midpoint illustrating the orientation of the object
@@ -56,7 +56,8 @@ public class Orientation extends DrawObject {
     @BeanField @Getter @Setter private boolean drawReverseLine = false;
     // END BEAN PROPERTIES
 
-    public static Optional<Point3d> calcPoint(ObjectWithProperties object, String propertyName) {
+    public static Optional<Point3d> calculatePoint(
+            ObjectWithProperties object, String propertyName) {
 
         if (!object.hasProperty(propertyName)) {
             return Optional.empty();
@@ -65,7 +66,7 @@ public class Orientation extends DrawObject {
         return Optional.of(new Point3d((Point3d) object.getProperty(propertyName)));
     }
 
-    public static Optional<Double> calcOrientation(ObjectWithProperties object) {
+    public static Optional<Double> calculateOrientation(ObjectWithProperties object) {
 
         if (!object.hasProperty("orientationRadians")) {
             return Optional.empty();
@@ -75,9 +76,9 @@ public class Orientation extends DrawObject {
     }
 
     @Override
-    public PrecalcOverlay precalculate(ObjectWithProperties object, ImageDimensions dim)
+    public PrecalculationOverlay precalculate(ObjectWithProperties object, Dimensions dim)
             throws CreateException {
-        return new PrecalcOverlay(object) {
+        return new PrecalculationOverlay(object) {
 
             @Override
             public void writePrecalculatedMask(
@@ -87,19 +88,19 @@ public class Orientation extends DrawObject {
                     BoundingBox restrictTo)
                     throws OperationFailedException {
 
-                Point3i midpoint = Midpoint.calcMidpoint(object, false);
+                Point3i midpoint = Midpoint.calculateMidpoint(object, false);
 
-                Optional<Double> orientationRadians = calcOrientation(object);
+                Optional<Double> orientationRadians = calculateOrientation(object);
                 if (!orientationRadians.isPresent()) {
                     return;
                 }
 
-                Optional<Point3d> xAxisMin = calcPoint(object, "xAxisMin");
+                Optional<Point3d> xAxisMin = calculatePoint(object, "xAxisMin");
                 if (!xAxisMin.isPresent()) {
                     return;
                 }
 
-                Optional<Point3d> xAxisMax = calcPoint(object, "xAxisMax");
+                Optional<Point3d> xAxisMax = calculatePoint(object, "xAxisMax");
                 if (!xAxisMax.isPresent()) {
                     return;
                 }

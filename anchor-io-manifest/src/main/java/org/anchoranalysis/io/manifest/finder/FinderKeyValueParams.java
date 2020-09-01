@@ -50,7 +50,7 @@ public class FinderKeyValueParams extends FinderSingleFile {
         assert (exists());
 
         try {
-            return KeyValueParams.readFromFile(getFoundFile().calcPath());
+            return KeyValueParams.readFromFile(getFoundFile().calculatePath());
         } catch (IOException e) {
             throw new OperationFailedException(e);
         }

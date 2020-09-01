@@ -38,8 +38,7 @@ import org.anchoranalysis.image.convert.ByteConverter;
  *
  * <p>This class is <i>immutable</i>.
  *
- * <p>See {@link org.anchoranalysis.image.binary.values.BinaryValueBytes} for an equivalent class
- * that stores these states as {@code int}
+ * <p>See {@link BinaryValues} for an equivalent class that stores these states as {@code int}
  *
  * @author Owen Feehan
  */

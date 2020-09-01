@@ -28,16 +28,15 @@ package org.anchoranalysis.image.io.objects.deserialize;
 
 import ch.systemsx.cisd.hdf5.HDF5Factory;
 import ch.systemsx.cisd.hdf5.IHDF5Reader;
+import ch.systemsx.cisd.hdf5.exceptions.HDF5FileNotFoundException;
 import java.nio.file.Path;
 import java.util.List;
-import ncsa.hdf.hdf5lib.exceptions.HDF5FileNotFoundException;
 import org.anchoranalysis.image.io.objects.GeneratorHDF5;
 import org.anchoranalysis.image.io.objects.HDF5PathHelper;
 import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.object.ObjectCollectionFactory;
+import org.anchoranalysis.image.object.factory.ObjectCollectionFactory;
 import org.anchoranalysis.io.bean.deserializer.Deserializer;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
-import org.anchoranalysis.io.error.AnchorIOException;
 
 class ReadObjectsFromHDF5 implements Deserializer<ObjectCollection> {
 
@@ -69,7 +68,6 @@ class ReadObjectsFromHDF5 implements Deserializer<ObjectCollection> {
      * @param rootPath a path in the HDF5, NOTE it should always end in a forward-slash
      * @return
      * @throws DeserializationFailedException
-     * @throws AnchorIOException
      */
     private ObjectCollection readObjects(IHDF5Reader reader, String rootPath)
             throws DeserializationFailedException {

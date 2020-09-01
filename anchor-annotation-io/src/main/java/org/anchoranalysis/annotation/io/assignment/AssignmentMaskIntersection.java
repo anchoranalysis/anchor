@@ -31,7 +31,7 @@ import java.util.Collections;
 import java.util.List;
 import org.anchoranalysis.core.text.TypedValue;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.object.ops.ObjectMaskMerger;
+import org.anchoranalysis.image.object.combine.ObjectMaskMerger;
 
 /**
  * Calculates statistics (DICE, Jaccard etc.) based upon corresponding two object-masks
@@ -61,12 +61,12 @@ public class AssignmentMaskIntersection implements Assignment {
     }
 
     @Override
-    public int numPaired() {
+    public int numberPaired() {
         return isIntersectionPresent() ? 1 : 0;
     }
 
     @Override
-    public int numUnassigned(boolean left) {
+    public int numberUnassigned(boolean left) {
         return isIntersectionPresent() ? 0 : 1;
     }
 
@@ -94,7 +94,7 @@ public class AssignmentMaskIntersection implements Assignment {
     @Override
     public List<TypedValue> createStatistics() {
         WrappedTypeValueList out = new WrappedTypeValueList(4);
-        out.add(calcDice(), calcJaccard());
+        out.add(calculateDice(), calculateJaccard());
         out.add(numberIntersectingVoxels, numberUnionVoxels, sizeLeft, sizeRight);
         return out.asList();
     }
@@ -115,13 +115,13 @@ public class AssignmentMaskIntersection implements Assignment {
         return numberIntersectingVoxels > 0;
     }
 
-    private double calcDice() {
+    private double calculateDice() {
         int num = 2 * numberIntersectingVoxels;
         int dem = sizeLeft + sizeRight;
         return ((double) num) / dem;
     }
 
-    private double calcJaccard() {
+    private double calculateJaccard() {
         return ((double) numberIntersectingVoxels) / numberUnionVoxels;
     }
 }

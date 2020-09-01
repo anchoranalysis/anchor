@@ -1,3 +1,28 @@
+/*-
+ * #%L
+ * anchor-image-io
+ * %%
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
+ * %%
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ * #L%
+ */
 package org.anchoranalysis.image.io.generator.raster.boundingbox;
 
 import java.util.Optional;
@@ -63,7 +88,7 @@ public class ScaleableBackground {
     private ScaleableBackground(
             Stack stack, Optional<ScaleFactor> scaleFactor, Interpolator interpolator) {
         try {
-            this.stack = stack.mapChannel(Channel::maxIntensityProjection);
+            this.stack = stack.mapChannel(Channel::projectMax);
         } catch (OperationFailedException e) {
             // Channels will always be the same size
             throw new AnchorImpossibleSituationException();
@@ -115,7 +140,7 @@ public class ScaleableBackground {
     }
 
     public Extent extentAfterAnyScaling() {
-        Extent extent = stack.dimensions().extent();
+        Extent extent = stack.extent();
         if (scaleFactor.isPresent()) {
             return extent.scaleXYBy(scaleFactor.get());
         } else {
@@ -130,8 +155,7 @@ public class ScaleableBackground {
     private Stack extractStackScaled(BoundingBox box, ScaleFactor scaleFactor)
             throws OperationFailedException {
         // What would the bounding box look like in the unscaled window?
-        BoundingBox boxUnscaled =
-                box.scaleClipTo(scaleFactor.invert(), stack.dimensions().extent());
+        BoundingBox boxUnscaled = box.scaleClipTo(scaleFactor.invert(), stack.extent());
 
         return stack.mapChannel(channel -> extractChannelScaled(channel, boxUnscaled, box));
     }
@@ -142,7 +166,6 @@ public class ScaleableBackground {
 
     private Channel extractChannelScaled(
             Channel channel, BoundingBox boxUnscaled, BoundingBox boxScaled) {
-        assert (channel.dimensions().extent().contains(boxUnscaled));
 
         // Extract this region from the channels
         Voxels<?> voxelsUnscaled = extractVoxels(channel, boxUnscaled);
@@ -150,14 +173,14 @@ public class ScaleableBackground {
         // Scale it up to to the extent we want
         Voxels<?> voxelsScaled =
                 voxelsUnscaled
-                        .extracter()
+                        .extract()
                         .resizedXY(boxScaled.extent().x(), boxScaled.extent().y(), interpolator);
 
         return channelFor(voxelsScaled);
     }
 
     private static Voxels<?> extractVoxels(Channel channel, BoundingBox box) {
-        return channel.extracter().region(box, false);
+        return channel.extract().region(box, false);
     }
 
     private Channel channelFor(Voxels<?> voxels) {

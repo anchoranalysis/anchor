@@ -1,3 +1,28 @@
+/*-
+ * #%L
+ * anchor-image
+ * %%
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
+ * %%
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ * #L%
+ */
 package org.anchoranalysis.image.object;
 
 import java.util.Map;
@@ -10,7 +35,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 
 /**
  * Writes a unique ID (successive integer IDs) for each object's voxels into a channel, and 0 for
@@ -54,7 +79,7 @@ public class LabelObjects {
         Channel channel =
                 ChannelFactory.instance()
                         .createEmptyInitialisedToSupportMaxValue(
-                                new ImageDimensions(objects.boundingBox().extent()),
+                                new Dimensions(objects.boundingBox().extent()),
                                 (long) (objects.size() + 1));
 
         ReadableTuple3i shiftBack = objects.boundingBox().cornerMin();
@@ -106,9 +131,6 @@ public class LabelObjects {
      *     object-mask (before scaling any any other operation)
      * @param operationAfterMap an operation applied to each-object mask after they are maybe added
      *     to {@code mapLabelsToBefore} but before their labels are written to voxels
-     * @param overlappingObjectConsumer if set, this is called once with any overlapping object
-     *     (after {@code operationAfterMap is applied}). Otherwise, an exception is thrown if an
-     *     overlapping object is encountered.
      * @throws CreateException if there are more than 255 objects, or if two objects overlap (and
      *     {@code overlappingObjectConsumer} is not set)
      */
@@ -126,13 +148,10 @@ public class LabelObjects {
 
             ObjectMask objectAfterOp = operationAfterMap.apply(object);
 
-            int voxelsAssigned =
+            boolean voxelsAssigned =
                     channel.assignValue(index)
                             .toObject(objectAfterOp, voxelValue -> voxelValue == 0);
-            if (voxelsAssigned == -1) {
-                processOverlappingObject(new OverlappingObject(object, objectAfterOp));
-            } else {
-
+            if (voxelsAssigned) {
                 // Add mapping from label to input-object
                 if (mapLabelsToBefore.isPresent()) {
                     mapLabelsToBefore.get().put(index, object);
@@ -146,6 +165,8 @@ public class LabelObjects {
                                     "A maximum of %d (non-overlapping) objects are allowed, and this threshold has been reached. There are %d objects in total (overlapping or not).",
                                     channel.getVoxelDataType().maxValue(), objects.size()));
                 }
+            } else {
+                processOverlappingObject(new OverlappingObject(object, objectAfterOp));
             }
         }
     }

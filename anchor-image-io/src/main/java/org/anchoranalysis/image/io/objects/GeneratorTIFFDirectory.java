@@ -29,7 +29,7 @@ package org.anchoranalysis.image.io.objects;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.image.extent.ImageResolution;
+import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.io.generator.raster.object.ObjectWithBoundingBoxGenerator;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
@@ -51,7 +51,7 @@ public class GeneratorTIFFDirectory {
 
         // Creates a TIFF for each object inside a a directory
         IterableGenerator<ObjectMask> objectGenerator =
-                new ObjectWithBoundingBoxGenerator(new ImageResolution());
+                new ObjectWithBoundingBoxGenerator(new Resolution());
 
         // Creates a subfolder for each List of objects passed to the generator
         // We must use a list as it is required to be of type Collection<T> where T is the type

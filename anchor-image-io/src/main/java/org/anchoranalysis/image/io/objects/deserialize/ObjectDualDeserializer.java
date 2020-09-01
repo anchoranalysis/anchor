@@ -32,19 +32,19 @@ import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
 import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
+import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.io.bean.deserializer.Deserializer;
 import org.anchoranalysis.io.bean.deserializer.ObjectInputStreamDeserializer;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
 
 /**
- * Deserializes an {@link ObjectMask] stored in two parts (a raster-mask and a serialized bounding-box)
+ * Deserializes an {@link ObjectMask} stored in two parts (a raster-mask and a serialized bounding-box)
  * <p>
  * Specifically, it expects:
  * <ol>
@@ -70,24 +70,21 @@ class ObjectDualDeserializer implements Deserializer<ObjectMask> {
 
         try (OpenedRaster or = rasterReader.openFile(tiffFilename)) {
             Stack stack =
-                    or.openCheckType(
-                                    0,
-                                    ProgressReporterNull.get(),
-                                    VoxelDataTypeUnsignedByte.INSTANCE)
+                    or.openCheckType(0, ProgressReporterNull.get(), UnsignedByteVoxelType.INSTANCE)
                             .get(0);
 
             if (stack.getNumberChannels() != 1) {
                 throw new DeserializationFailedException("Raster file must have 1 channel exactly");
             }
 
-            Channel chnl = stack.getChannel(0);
+            Channel channel = stack.getChannel(0);
 
-            if (!chnl.dimensions().extent().equals(box.extent())) {
+            if (!channel.extent().equals(box.extent())) {
                 throw new DeserializationFailedException(
-                        errorMessageMismatchingDims(box, chnl.dimensions(), filePath));
+                        errorMessageMismatchingDims(box, channel.dimensions(), filePath));
             }
 
-            return new ObjectMask(box, chnl.voxels().asByte());
+            return new ObjectMask(box, channel.voxels().asByte());
 
         } catch (RasterIOException e) {
             throw new DeserializationFailedException(e);
@@ -95,7 +92,7 @@ class ObjectDualDeserializer implements Deserializer<ObjectMask> {
     }
 
     private static String errorMessageMismatchingDims(
-            BoundingBox box, ImageDimensions dimensions, Path filePath) {
+            BoundingBox box, Dimensions dimensions, Path filePath) {
         return String.format(
                 "Dimensions of bounding box (%s) and raster (%s) do not match for file %s",
                 box.extent(), dimensions.extent(), filePath);

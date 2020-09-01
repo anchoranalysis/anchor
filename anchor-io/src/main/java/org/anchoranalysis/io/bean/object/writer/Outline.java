@@ -29,18 +29,18 @@ package org.anchoranalysis.io.bean.object.writer;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.anchor.overlay.bean.DrawObject;
-import org.anchoranalysis.anchor.overlay.writer.ObjectDrawAttributes;
-import org.anchoranalysis.anchor.overlay.writer.PrecalcOverlay;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.properties.ObjectWithProperties;
 import org.anchoranalysis.image.outline.FindOutline;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
+import org.anchoranalysis.overlay.bean.DrawObject;
+import org.anchoranalysis.overlay.writer.ObjectDrawAttributes;
+import org.anchoranalysis.overlay.writer.PrecalculationOverlay;
 
 /**
  * Draws the outline of each object-mask.
@@ -53,7 +53,11 @@ public class Outline extends DrawObject {
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private int outlineWidth;
 
-    @BeanField @Getter @Setter private boolean force2D = false;
+    /**
+     * If true the outline is also applied in the z-dimension, otherwise this is ignored as possible
+     * boundary
+     */
+    @BeanField @Getter @Setter private boolean includeZ;
     // END BEAN PROPERTIES
 
     public Outline() {
@@ -61,21 +65,21 @@ public class Outline extends DrawObject {
     }
 
     public Outline(int outlineWidth) {
-        this(outlineWidth, false);
+        this(outlineWidth, true);
     }
 
     @Override
-    public PrecalcOverlay precalculate(ObjectWithProperties object, ImageDimensions dim)
+    public PrecalculationOverlay precalculate(ObjectWithProperties object, Dimensions dim)
             throws CreateException {
 
         ObjectMask outline =
                 FindOutline.outline(
-                        object.withoutProperties(), outlineWidth, true, (dim.z() > 1) && !force2D);
+                        object.withoutProperties(), outlineWidth, (dim.z() > 1) && includeZ, true);
 
         ObjectWithProperties objectWithProperties =
                 new ObjectWithProperties(outline, object.getProperties());
 
-        return new PrecalcOverlay(object) {
+        return new PrecalculationOverlay(object) {
 
             @Override
             public void writePrecalculatedMask(
@@ -84,10 +88,6 @@ public class Outline extends DrawObject {
                     int iteration,
                     BoundingBox restrictTo)
                     throws OperationFailedException {
-
-                assert (outline.extent().z() > 0);
-                // TODO this can get broken! Fix!
-                assert (outline.boundingBox().cornerMin().z() >= 0);
 
                 IntersectionWriter.writeRGBMaskIntersection(
                         outline,

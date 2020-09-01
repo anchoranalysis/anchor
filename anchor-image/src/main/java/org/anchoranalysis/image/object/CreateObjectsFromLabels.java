@@ -35,6 +35,7 @@ import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.extent.BoundingBox;
+import org.anchoranalysis.image.object.factory.ObjectCollectionFactory;
 import org.anchoranalysis.image.points.PointRange;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
@@ -81,7 +82,7 @@ public class CreateObjectsFromLabels {
      * Creates an object-collection from voxels that are labelled with unique integers (sequentially
      * increasing)
      *
-     * @param minBoundingBoxVolume minimum volume of bounding-box otherwise a label is ignored
+     * @param smallVolumeThreshold minimum volume of bounding-box otherwise a label is ignored
      * @return a list of respective object-masks, one for each label
      * @throws CreateException if bounding-boxes cannot be derived
      */
@@ -91,7 +92,7 @@ public class CreateObjectsFromLabels {
                     deriveBoundingBoxes(),
                     box -> box.extent().volumeXY() >= smallVolumeThreshold,
                     (box, index) ->
-                            voxels.extracter()
+                            voxels.extract()
                                     .voxelsEqualTo(index + 1)
                                     .deriveObject(box) // The labels begin at 1
                     );

@@ -41,7 +41,7 @@ import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.object.ObjectCollectionFactory;
+import org.anchoranalysis.image.object.factory.ObjectCollectionFactory;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.extracter.VoxelsExtracter;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
@@ -66,7 +66,6 @@ public class ConnectedComponentUnionFind {
      * @param voxels binary-voxels to be searched for connected components. It is consumed
      *     (modified) during processing.
      * @return the connected-components derived from the voxels
-     * @throws OperationFailedException
      */
     public ObjectCollection deriveConnectedByte(BinaryVoxels<ByteBuffer> voxels) {
         ObjectCollection objects = new ObjectCollection();
@@ -80,7 +79,6 @@ public class ConnectedComponentUnionFind {
      * @param voxels binary voxels to be searched for connected components. It is consumed
      *     (modified) during processing.
      * @return the connected-components derived from the voxels
-     * @throws OperationFailedException
      */
     public ObjectCollection deriveConnectedInt(BinaryVoxels<IntBuffer> voxels) {
         ObjectCollection objects = ObjectCollectionFactory.empty();
@@ -190,7 +188,7 @@ public class ConnectedComponentUnionFind {
             int minNumberVoxels,
             ObjectCollection objects) {
 
-        VoxelsExtracter<IntBuffer> extracter = indexBuffer.extracter();
+        VoxelsExtracter<IntBuffer> extracter = indexBuffer.extract();
 
         for (int smallID : mapIDOrdered.values()) {
 

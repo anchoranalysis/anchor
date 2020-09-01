@@ -48,22 +48,23 @@ import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelsFactory;
 import org.anchoranalysis.image.extent.BoundingBox;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.interpolator.Interpolator;
 import org.anchoranalysis.image.interpolator.InterpolatorFactory;
-import org.anchoranalysis.image.object.factory.CreateFromConnectedComponentsFactory;
-import org.anchoranalysis.image.object.intersecting.CountIntersectingVoxelsBinary;
-import org.anchoranalysis.image.object.intersecting.DetermineWhetherIntersectingVoxelsBinary;
+import org.anchoranalysis.image.object.combine.CountIntersectingVoxelsBinary;
+import org.anchoranalysis.image.object.combine.DetermineWhetherIntersectingVoxelsBinary;
+import org.anchoranalysis.image.object.factory.ObjectsFromConnectedComponentsFactory;
 import org.anchoranalysis.image.scale.ScaleFactor;
 import org.anchoranalysis.image.voxel.BoundedVoxels;
+import org.anchoranalysis.image.voxel.BoundedVoxelsFactory;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.VoxelsPredicate;
 import org.anchoranalysis.image.voxel.assigner.VoxelsAssigner;
 import org.anchoranalysis.image.voxel.extracter.VoxelsExtracter;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactoryTypeBound;
-import org.anchoranalysis.image.voxel.iterator.IterateVoxels;
+import org.anchoranalysis.image.voxel.iterator.IterateVoxelsByte;
 import org.anchoranalysis.image.voxel.thresholder.VoxelsThresholder;
 
 /**
@@ -81,8 +82,8 @@ import org.anchoranalysis.image.voxel.thresholder.VoxelsThresholder;
 @Accessors(fluent = true)
 public class ObjectMask {
 
-    private static final CreateFromConnectedComponentsFactory CONNECTED_COMPONENT_CREATOR =
-            new CreateFromConnectedComponentsFactory(true);
+    private static final ObjectsFromConnectedComponentsFactory CONNECTED_COMPONENT_CREATOR =
+            new ObjectsFromConnectedComponentsFactory(true);
 
     private static final VoxelsFactoryTypeBound<ByteBuffer> FACTORY = VoxelsFactory.getByte();
 
@@ -92,11 +93,10 @@ public class ObjectMask {
     @Getter private final BinaryValuesByte binaryValuesByte;
     private final Interpolator interpolator;
 
-    @Getter private final VoxelsExtracter<ByteBuffer> extracter;
+    @Getter private final VoxelsExtracter<ByteBuffer> extract;
 
     /**
-     * Constructor - creates an object-mask assuming coordinates at the origin (i.e. corner is
-     * 0,0,0)
+     * Creates an object-mask with a corner at the origin (i.e. corner is 0,0,0)
      *
      * <p>Default binary-values of (OFF=0, ON=255) are used.
      *
@@ -107,18 +107,18 @@ public class ObjectMask {
     }
 
     /**
-     * Constructor - creates an object-mask to matching a bounding-box but all pixels are OFF (0)
+     * Creates an object-mask to corresponding to a bounding-box with all pixels OFF (0)
      *
      * <p>Default binary-values of (OFF=0, ON=255) are used.
      *
      * @param box bounding-box
      */
     public ObjectMask(BoundingBox box) {
-        this(new BoundedVoxels<>(box, FACTORY));
+        this(BoundedVoxelsFactory.createByte(box));
     }
 
     /**
-     * Constructor - creates an object-mask to matching bounded-voxels
+     * Creates an object-mask to correspond to bounded-voxels.
      *
      * <p>The voxels are reused without duplication.
      *
@@ -151,7 +151,7 @@ public class ObjectMask {
         this.binaryValues = binaryValues;
         this.binaryValuesByte = binaryValues.createByte();
         this.interpolator = createInterpolator(binaryValues);
-        this.extracter = voxels.extracter();
+        this.extract = voxels.extract();
     }
 
     public ObjectMask(
@@ -160,11 +160,11 @@ public class ObjectMask {
         this.binaryValues = binaryValuesByte.createInt();
         this.binaryValuesByte = binaryValuesByte;
         this.interpolator = createInterpolator(binaryValues);
-        this.extracter = voxels.extracter();
+        this.extract = voxels.extract();
     }
 
     /**
-     * Constructor - creates a simple object-mask from a mask and centered at the origin
+     * Creates a simple object-mask from a mask and centered at the origin
      *
      * @param mask the mask
      */
@@ -189,7 +189,7 @@ public class ObjectMask {
         this.binaryValues = binaryValues;
         this.binaryValuesByte = binaryValuesByte;
         this.interpolator = createInterpolator(binaryValues);
-        this.extracter = voxels.extracter();
+        this.extract = voxels.extract();
     }
 
     public ObjectMask duplicate() {
@@ -244,7 +244,6 @@ public class ObjectMask {
      * <p>This is an IMMUTABLE operation.
      *
      * @param factor scale-factor
-     * @param interpolator interpolator
      * @return a scaled object-mask
      */
     public ObjectMask scale(ScaleFactor factor) {
@@ -266,7 +265,6 @@ public class ObjectMask {
      * <p>This is an <i>immutable</i> operation.
      *
      * @param factor scale-factor
-     * @param interpolator interpolator
      * @param clipTo an extent which the object-masks should always fit inside after scaling (to
      *     catch any rounding errors that push the bounding box outside the scene-boundary)
      * @return a scaled object-mask
@@ -318,7 +316,7 @@ public class ObjectMask {
 
     /** Calculates center-of-gravity across all axes */
     public Point3d centerOfGravity() {
-        return CenterOfGravityCalculator.calcCenterOfGravity(this);
+        return CenterOfGravityCalculator.centerOfGravity(this);
     }
 
     /**
@@ -328,7 +326,7 @@ public class ObjectMask {
      * @return a point on the specific axis that is the center-of-gravity.
      */
     public double centerOfGravity(AxisType axis) {
-        return CenterOfGravityCalculator.calcCenterOfGravityForAxis(this, axis);
+        return CenterOfGravityCalculator.centerOfGravityForAxis(this, axis);
     }
 
     /**
@@ -337,7 +335,6 @@ public class ObjectMask {
      * <p>TODO this is not particular efficient. We can avoid making the object-collection.
      *
      * @return
-     * @throws OperationFailedException
      */
     public boolean checkIfConnected() {
         ObjectCollection objects =
@@ -347,11 +344,11 @@ public class ObjectMask {
     }
 
     public VoxelsPredicate voxelsOn() {
-        return extracter.voxelsEqualTo(binaryValues.getOnInt());
+        return extract.voxelsEqualTo(binaryValues.getOnInt());
     }
 
     public VoxelsPredicate voxelsOff() {
-        return extracter.voxelsEqualTo(binaryValues.getOffInt());
+        return extract.voxelsEqualTo(binaryValues.getOffInt());
     }
 
     /** The number of "ON" voxels on the object-mask */
@@ -368,7 +365,7 @@ public class ObjectMask {
      * @param dimensions dimensions to constrain any intersection
      * @return a new object of the intersecting region iff it exists
      */
-    public Optional<ObjectMask> intersect(ObjectMask other, ImageDimensions dimensions) {
+    public Optional<ObjectMask> intersect(ObjectMask other, Dimensions dimensions) {
 
         // we combine the two objects
         Optional<BoundingBox> boxIntersect =
@@ -384,8 +381,7 @@ public class ObjectMask {
 
         // We initially set all pixels to ON
         BoundedVoxels<ByteBuffer> voxelsMaskOut =
-                new BoundedVoxels<>(
-                        boxIntersect.get(), FACTORY.createInitialized(boxIntersect.get().extent()));
+                BoundedVoxelsFactory.createByte(boxIntersect.get());
         voxelsMaskOut.assignValue(bvOut.getOnInt()).toAll();
 
         // Then we set any pixels NOT on either object to OFF..... leaving only the intersecting
@@ -406,7 +402,7 @@ public class ObjectMask {
             return false;
         }
 
-        return extracter.voxel(point) == binaryValues.getOnInt();
+        return extract.voxel(point) == binaryValues.getOnInt();
     }
 
     /**
@@ -417,7 +413,7 @@ public class ObjectMask {
      * @return a new object-mask flattened in Z dimension.
      */
     public ObjectMask flattenZ() {
-        return new ObjectMask(voxels.maxIntensityProjection());
+        return new ObjectMask(voxels.projectMax());
     }
 
     public BoundingBox boundingBox() {
@@ -468,7 +464,7 @@ public class ObjectMask {
     /**
      * Creates an object-mask with a subrange of the slices.
      *
-     * <p>This will always reuse the existing voxel-buffers.</p.
+     * <p>This will always reuse the existing voxel-buffers..
      *
      * @param zMin minimum z-slice index, inclusive.
      * @param zMax maximum z-slice index, inclusive.
@@ -486,10 +482,11 @@ public class ObjectMask {
      *
      * <p>It should <b>never</b> be larger than the voxels.
      *
-     * <p>See {@link org.anchoranalysis.image.voxel.Voxels#region) for more details.
+     * <p>See {@link VoxelsExtracter#region} for more details.
      *
      * @param box bounding-box in absolute coordinates.
-     * @param reuseIfPossible if TRUE the existing object will be reused if possible, otherwise a new object is always created.
+     * @param reuseIfPossible if TRUE the existing object will be reused if possible, otherwise a
+     *     new object is always created.
      * @return an object-mask corresponding to the requested region, either newly-created or reused
      * @throws CreateException
      */
@@ -508,7 +505,7 @@ public class ObjectMask {
      * for the rest.
      *
      * <p>A new voxel-buffer is always created for this operation i.e. the existing box is never
-     * reused like sometimes in {@link region}.</p.
+     * reused like sometimes in {@link #region}..
      *
      * @param box bounding-box in absolute coordinates, that must at least partially intersect with
      *     the current object-mask bounds.
@@ -543,7 +540,8 @@ public class ObjectMask {
         }
 
         // Second, if needed, we iterate until we find any "ON" value
-        return IterateVoxels.findFirstPointOnObjectMask(this);
+        return IterateVoxelsByte.iterateUntilFirstEqual(
+                boundedVoxels(), binaryValuesByte().getOnByte());
     }
 
     /**
@@ -553,7 +551,7 @@ public class ObjectMask {
      * @return the buffer
      */
     public ByteBuffer sliceBufferLocal(int sliceIndexRelative) {
-        return voxels.sliceBuffer(sliceIndexRelative);
+        return voxels.sliceBufferLocal(sliceIndexRelative);
     }
 
     /**
@@ -563,7 +561,7 @@ public class ObjectMask {
      * @return the buffer
      */
     public ByteBuffer sliceBufferGlobal(int sliceIndexGlobal) {
-        return voxels.sliceBuffer(sliceIndexGlobal - boundingBox().cornerMin().z());
+        return voxels.sliceBufferGlobal(sliceIndexGlobal);
     }
 
     /**
@@ -632,7 +630,6 @@ public class ObjectMask {
      * extent in all dimensions.
      *
      * @param boxToAssign bounding-box to assign
-     * @param function to perform mapping of bounding-box
      * @return a new object-mask with the updated bounding box (and changed voxels)
      */
     public ObjectMask mapBoundingBoxChangeExtent(BoundingBox boxToAssign) {
@@ -703,27 +700,11 @@ public class ObjectMask {
      * @return a newly created list with newly created points
      */
     public List<Point3i> derivePointsLocal() {
-
         List<Point3i> points = new ArrayList<>();
-
-        Extent extent = extent();
-
-        byte onValue = binaryValuesByte().getOnByte();
-
-        for (int z = 0; z < extent.z(); z++) {
-            ByteBuffer bb = sliceBufferLocal(z);
-
-            int offset = 0;
-            for (int y = 0; y < extent.y(); y++) {
-                for (int x = 0; x < extent.x(); x++) {
-
-                    if (bb.get(offset++) == onValue) {
-                        points.add(new Point3i(x, y, z));
-                    }
-                }
-            }
-        }
-
+        IterateVoxelsByte.iterateEqualValues(
+                voxels.voxels(),
+                binaryValuesByte().getOnByte(),
+                (x, y, z) -> points.add(new Point3i(x, y, z)));
         return points;
     }
 

@@ -29,18 +29,18 @@ package org.anchoranalysis.io.bean.object.writer;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.anchor.overlay.bean.DrawObject;
-import org.anchoranalysis.anchor.overlay.writer.ObjectDrawAttributes;
-import org.anchoranalysis.anchor.overlay.writer.PrecalcOverlay;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.properties.ObjectWithProperties;
 import org.anchoranalysis.image.outline.FindOutline;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
+import org.anchoranalysis.overlay.bean.DrawObject;
+import org.anchoranalysis.overlay.writer.ObjectDrawAttributes;
+import org.anchoranalysis.overlay.writer.PrecalculationOverlay;
 
 /**
  * Draws the outline of the bounding-box for each object.
@@ -59,16 +59,16 @@ public class BoundingBoxOutline extends DrawObject {
     }
 
     @Override
-    public PrecalcOverlay precalculate(ObjectWithProperties object, ImageDimensions dim)
+    public PrecalculationOverlay precalculate(ObjectWithProperties object, Dimensions dim)
             throws CreateException {
         ObjectMask outline =
                 FindOutline.outline(
                         createBoundingBoxObject(object.withoutProperties()),
                         outlineWidth,
-                        true,
-                        dim.z() > 1);
+                        dim.z() > 1,
+                        true);
 
-        return new PrecalcOverlay(object) {
+        return new PrecalculationOverlay(object) {
 
             @Override
             public void writePrecalculatedMask(

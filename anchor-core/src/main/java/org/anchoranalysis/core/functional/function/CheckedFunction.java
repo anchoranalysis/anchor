@@ -1,5 +1,7 @@
 package org.anchoranalysis.core.functional.function;
 
+import java.util.function.Function;
+
 /*-
  * #%L
  * anchor-core
@@ -27,7 +29,7 @@ package org.anchoranalysis.core.functional.function;
  */
 
 /**
- * Like {@java.util.Function} but can also thrown an exception.
+ * Like {@link Function} but can also thrown an exception.
  *
  * @author Owen Feehan
  * @param <S> parameter-type

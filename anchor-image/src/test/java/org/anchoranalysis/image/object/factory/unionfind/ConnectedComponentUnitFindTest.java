@@ -37,12 +37,12 @@ import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelsFactory;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.object.ObjectCollectionFactory;
 import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.object.factory.ObjectCollectionFactory;
 import org.anchoranalysis.image.voxel.assigner.VoxelsAssigner;
+import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
+import org.anchoranalysis.image.voxel.datatype.UnsignedIntVoxelType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedInt;
 import org.anchoranalysis.image.voxel.iterator.ObjectMaskFixture;
 import org.junit.Before;
 import org.junit.Test;
@@ -89,14 +89,13 @@ public class ConnectedComponentUnitFindTest {
 
     private ObjectCollection deriveInt(boolean do3D)
             throws OperationFailedException, CreateException {
-        return cc.deriveConnectedInt(
-                createBufferWithObjects(VoxelDataTypeUnsignedInt.INSTANCE, do3D));
+        return cc.deriveConnectedInt(createBufferWithObjects(UnsignedIntVoxelType.INSTANCE, do3D));
     }
 
     private ObjectCollection deriveByte(boolean do3D)
             throws OperationFailedException, CreateException {
         return cc.deriveConnectedByte(
-                createBufferWithObjects(VoxelDataTypeUnsignedByte.INSTANCE, do3D));
+                createBufferWithObjects(UnsignedByteVoxelType.INSTANCE, do3D));
     }
 
     private void testObjects(ObjectCollection objects, int expectedSingleObjectSize)

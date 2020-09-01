@@ -30,7 +30,7 @@ import java.util.Optional;
 import java.util.function.Function;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.cache.calculation.CacheCreator;
+import org.anchoranalysis.feature.cache.calculate.CacheCreator;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.session.SessionInputSequential;
 import org.anchoranalysis.feature.session.strategy.child.DefaultFindChildStrategy;
@@ -47,7 +47,7 @@ public class ReuseSingletonStrategy<T extends FeatureInput> implements ReplaceSt
     /**
      * Constructor with default means of creating a session-input
      *
-     * @param createSessionInput
+     * @param cacheCreator
      */
     public ReuseSingletonStrategy(CacheCreator cacheCreator) {
         this(cacheCreator, DefaultFindChildStrategy.instance());
@@ -56,7 +56,7 @@ public class ReuseSingletonStrategy<T extends FeatureInput> implements ReplaceSt
     /**
      * Constructor with custom means of creating a session-input
      *
-     * @param createSessionInput
+     * @param cacheCreator
      */
     public ReuseSingletonStrategy(CacheCreator cacheCreator, FindChildStrategy findChildStrategy) {
         super();

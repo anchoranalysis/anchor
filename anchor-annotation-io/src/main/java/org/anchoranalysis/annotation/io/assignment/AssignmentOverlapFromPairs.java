@@ -33,7 +33,7 @@ import java.util.List;
 import java.util.stream.DoubleStream;
 import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.core.text.TypedValue;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 
@@ -74,14 +74,14 @@ public class AssignmentOverlapFromPairs implements Assignment {
         elements.add(percentLeftMatched(), percentRightMatched());
 
         elements.add(
-                numPaired(), numUnassignedLeft(), leftSize(), numUnassignedRight(), rightSize());
+                numberPaired(), numUnassignedLeft(), leftSize(), numUnassignedRight(), rightSize());
 
         elements.add(meanOverlapFromPaired(), minOverlapFromPaired(), maxOverlapFromPaired());
 
         return elements.asList();
     }
 
-    public void removeTouchingBorderXY(ImageDimensions dimensions) {
+    public void removeTouchingBorderXY(Dimensions dimensions) {
         removeTouchingBorderXYObjects(dimensions, listUnassignedLeft);
         removeTouchingBorderXYObjects(dimensions, listUnassignedRight);
         removeTouchingBorderXYPairObjects(dimensions, listPairs);
@@ -158,7 +158,7 @@ public class AssignmentOverlapFromPairs implements Assignment {
         if (size == 0) {
             return Double.NaN;
         }
-        return ((double) numPaired()) * 100 / size;
+        return ((double) numberPaired()) * 100 / size;
     }
 
     public double percentRightMatched() {
@@ -166,16 +166,16 @@ public class AssignmentOverlapFromPairs implements Assignment {
         if (size == 0) {
             return Double.NaN;
         }
-        return ((double) numPaired()) * 100 / size;
+        return ((double) numberPaired()) * 100 / size;
     }
 
     @Override
-    public int numPaired() {
+    public int numberPaired() {
         return listPairs.size();
     }
 
     @Override
-    public int numUnassigned(boolean left) {
+    public int numberUnassigned(boolean left) {
         if (left) {
             return numUnassignedLeft();
         } else {
@@ -200,7 +200,7 @@ public class AssignmentOverlapFromPairs implements Assignment {
     }
 
     private static void removeTouchingBorderXYObjects(
-            ImageDimensions dimensions, List<ObjectMask> list) {
+            Dimensions dimensions, List<ObjectMask> list) {
         Iterator<ObjectMask> itr = list.iterator();
         while (itr.hasNext()) {
             if (itr.next().boundingBox().atBorderXY(dimensions)) {
@@ -210,7 +210,7 @@ public class AssignmentOverlapFromPairs implements Assignment {
     }
 
     private static void removeTouchingBorderXYPairObjects(
-            ImageDimensions dimensions, List<ObjectMaskPair> list) {
+            Dimensions dimensions, List<ObjectMaskPair> list) {
         Iterator<ObjectMaskPair> itr = list.iterator();
         while (itr.hasNext()) {
             if (itr.next().atBorderXY(dimensions)) {

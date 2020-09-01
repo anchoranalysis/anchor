@@ -27,7 +27,7 @@
 package org.anchoranalysis.io.bean.filepath.provider;
 
 import java.nio.file.Path;
-import org.anchoranalysis.bean.Provider;
+import org.anchoranalysis.bean.provider.Provider;
 import org.anchoranalysis.bean.shared.params.ParamsBean;
 import org.anchoranalysis.core.error.CreateException;
 

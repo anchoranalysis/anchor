@@ -43,14 +43,14 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.functional.function.CheckedFunction;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.calc.FeatureInitParams;
+import org.anchoranalysis.feature.calculate.FeatureInitParams;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.name.FeatureNameList;
 
 /**
  * A list of features with the same input-type.
  *
- * @see {@FeatureListFactory} for the preferred means of creating instances.
+ * @see FeatureListFactory for the preferred means of creating instances.
  * @author Owen Feehan
  * @param <T> input type of features contained in the list
  */
@@ -78,8 +78,8 @@ public class FeatureList<T extends FeatureInput> extends AnchorBean<FeatureList<
 
     public void initRecursive(FeatureInitParams featureInitParams, Logger logger)
             throws InitException {
-        for (Feature<T> f : list) {
-            f.initRecursive(featureInitParams, logger);
+        for (Feature<T> feature : list) {
+            feature.initRecursive(featureInitParams, logger);
         }
     }
 
@@ -132,8 +132,7 @@ public class FeatureList<T extends FeatureInput> extends AnchorBean<FeatureList<
      *
      * <p>This is an IMMUTABLE operation and the existing list is not altered.
      *
-     * @param <T> input-type of feature(s) in list
-     * @param feature the optional feature-lists to append
+     * @param featureList the optional feature-lists to append
      * @return a newly-created list with all the existing features, as well as any optional
      *     additional features
      */
@@ -202,8 +201,8 @@ public class FeatureList<T extends FeatureInput> extends AnchorBean<FeatureList<
     }
 
     @Override
-    public String getBeanDscr() {
-        return String.format("%s with %d items", super.getBeanDscr(), list.size());
+    public String describeBean() {
+        return String.format("%s with %d items", super.describeBean(), list.size());
     }
 
     public Feature<T> get(int index) {

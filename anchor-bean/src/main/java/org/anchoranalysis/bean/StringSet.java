@@ -59,13 +59,13 @@ public class StringSet extends AnchorBean<StringSet> implements StringBeanCollec
     }
 
     @Override
-    public void add(String s) {
-        set.add(s);
+    public void add(String text) {
+        set.add(text);
     }
 
     @Override
-    public boolean contains(String s) {
-        return set.contains(s);
+    public boolean contains(String text) {
+        return set.contains(text);
     }
 
     public Set<String> set() {

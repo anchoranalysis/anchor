@@ -27,10 +27,10 @@
 package org.anchoranalysis.image.stack;
 
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 
 /**
- * Like a @{link {@link NamedStacksSet} but enforces a condition that all stacks must have the same
+ * Like a @{link {@link NamedStacks} but enforces a condition that all stacks must have the same
  * dimensions
  *
  * @author Owen Feehan
@@ -38,9 +38,9 @@ import org.anchoranalysis.image.extent.ImageDimensions;
 public class NamedStacksUniformSize {
 
     /** Lazy initialization after first stack is added */
-    private ImageDimensions dimensions;
+    private Dimensions dimensions;
 
-    private NamedStacksSet delegate = new NamedStacksSet();
+    private NamedStacks delegate = new NamedStacks();
 
     public void add(String name, Stack stack) throws OperationFailedException {
 
@@ -55,7 +55,7 @@ public class NamedStacksUniformSize {
         delegate.add(name, () -> stack);
     }
 
-    public NamedStacksSet withoutUniformSizeConstraint() {
+    public NamedStacks withoutUniformSizeConstraint() {
         return delegate;
     }
 }

@@ -35,7 +35,6 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.image.histogram.HistogramArray;
 import org.anchoranalysis.io.csv.reader.CSVReaderByLine;
 import org.anchoranalysis.io.csv.reader.CSVReaderByLine.ReadByLine;
 import org.anchoranalysis.io.csv.reader.CSVReaderException;
@@ -82,7 +81,7 @@ public class HistogramCSVReader {
     }
 
     // Maximum-value
-    private static int maxVal(Set<Integer> set) {
+    private static int maxValue(Set<Integer> set) {
 
         Integer max = null;
         for (Integer i : set) {
@@ -104,16 +103,16 @@ public class HistogramCSVReader {
     private static Histogram histogramFromMap(Map<Integer, Integer> map) {
 
         // We get the highest-intensity value from the map
-        int maxCSVVal = maxVal(map.keySet());
+        int maxCsvValue = maxValue(map.keySet());
 
         // We guess the upper limit of the histogram to match an unsigned 8-bit or 16-bit image
-        int maxHistVal = guessMaxHistVal(maxCSVVal);
+        int maxHistogramValue = guessMaxHistVal(maxCsvValue);
 
-        Histogram hist = new HistogramArray(maxHistVal);
+        Histogram histogram = new Histogram(maxHistogramValue);
 
         for (Entry<Integer, Integer> entry : map.entrySet()) {
-            hist.incrValueBy(entry.getKey(), entry.getValue());
+            histogram.incrementValueBy(entry.getKey(), entry.getValue());
         }
-        return hist;
+        return histogram;
     }
 }

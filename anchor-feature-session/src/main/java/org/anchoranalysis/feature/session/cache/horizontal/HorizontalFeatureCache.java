@@ -33,10 +33,10 @@ import org.anchoranalysis.core.name.value.NameValue;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.cache.ChildCacheName;
-import org.anchoranalysis.feature.cache.calculation.CacheCreator;
-import org.anchoranalysis.feature.cache.calculation.FeatureSessionCache;
-import org.anchoranalysis.feature.cache.calculation.FeatureSessionCacheCalculator;
-import org.anchoranalysis.feature.calc.FeatureInitParams;
+import org.anchoranalysis.feature.cache.calculate.CacheCreator;
+import org.anchoranalysis.feature.cache.calculate.FeatureSessionCache;
+import org.anchoranalysis.feature.cache.calculate.FeatureSessionCacheCalculator;
+import org.anchoranalysis.feature.calculate.FeatureInitParams;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 

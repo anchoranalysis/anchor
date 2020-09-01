@@ -53,11 +53,11 @@ import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
-import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelDataTypeException;
+import org.anchoranalysis.image.voxel.datatype.FloatVoxelType;
+import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelTypeException;
+import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
+import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeFloat;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedShort;
 
 /**
  * Converts the {@link Voxels} and {@link VoxelBuffer} data-types used in Anchor to the {@link
@@ -75,14 +75,14 @@ public class ImgLib2Wrap {
 
         VoxelDataType dataType = box.getVoxelDataType();
 
-        if (dataType.equals(VoxelDataTypeUnsignedByte.INSTANCE)) {
+        if (dataType.equals(UnsignedByteVoxelType.INSTANCE)) {
             return wrapByte(box.asByte());
-        } else if (dataType.equals(VoxelDataTypeUnsignedShort.INSTANCE)) {
+        } else if (dataType.equals(UnsignedShortVoxelType.INSTANCE)) {
             return wrapShort(box.asShort());
-        } else if (dataType.equals(VoxelDataTypeFloat.INSTANCE)) {
+        } else if (dataType.equals(FloatVoxelType.INSTANCE)) {
             return wrapFloat(box.asFloat());
         } else {
-            throw new IncorrectVoxelDataTypeException(
+            throw new IncorrectVoxelTypeException(
                     "Only unsigned byte, short and float are supported");
         }
     }
@@ -92,14 +92,14 @@ public class ImgLib2Wrap {
 
         VoxelDataType dataType = voxels.dataType();
 
-        if (dataType.equals(VoxelDataTypeUnsignedByte.INSTANCE)) {
+        if (dataType.equals(UnsignedByteVoxelType.INSTANCE)) {
             return wrapByte((VoxelBuffer<ByteBuffer>) voxels, e);
-        } else if (dataType.equals(VoxelDataTypeUnsignedShort.INSTANCE)) {
+        } else if (dataType.equals(UnsignedShortVoxelType.INSTANCE)) {
             return wrapShort((VoxelBuffer<ShortBuffer>) voxels, e);
-        } else if (dataType.equals(VoxelDataTypeFloat.INSTANCE)) {
+        } else if (dataType.equals(FloatVoxelType.INSTANCE)) {
             return wrapFloat((VoxelBuffer<FloatBuffer>) voxels, e);
         } else {
-            throw new IncorrectVoxelDataTypeException(
+            throw new IncorrectVoxelTypeException(
                     "Only unsigned byte, short and float are supported");
         }
     }

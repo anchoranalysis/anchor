@@ -28,8 +28,8 @@ package org.anchoranalysis.image.voxel.buffer;
 
 import java.nio.ShortBuffer;
 import org.anchoranalysis.image.convert.ByteConverter;
+import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedShort;
 
 public final class VoxelBufferShort extends VoxelBuffer<ShortBuffer> {
 
@@ -64,7 +64,7 @@ public final class VoxelBufferShort extends VoxelBuffer<ShortBuffer> {
 
     @Override
     public VoxelDataType dataType() {
-        return VoxelDataTypeUnsignedShort.INSTANCE;
+        return UnsignedShortVoxelType.INSTANCE;
     }
 
     @Override

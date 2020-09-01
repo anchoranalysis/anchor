@@ -36,7 +36,7 @@ import org.anchoranalysis.core.name.store.StoreSupplier;
 /**
  * Stores objects as operations
  *
- * @param T object-type
+ * @param <T> object-type
  */
 public class OperationMap<T> implements MultiInputSubMap<T> {
 

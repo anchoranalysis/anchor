@@ -29,7 +29,7 @@ package org.anchoranalysis.image.bean.unitvalue.areavolume;
 import java.util.Optional;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.image.bean.nonbean.error.UnitValueException;
-import org.anchoranalysis.image.extent.ImageResolution;
+import org.anchoranalysis.image.extent.Resolution;
 
 public abstract class UnitValueAreaOrVolume extends AnchorBean<UnitValueAreaOrVolume> {
 
@@ -41,6 +41,6 @@ public abstract class UnitValueAreaOrVolume extends AnchorBean<UnitValueAreaOrVo
      * @return the resolved-value (pixels for area, voxels for volume).
      * @throws UnitValueException
      */
-    public abstract double resolveToVoxels(Optional<ImageResolution> resolution)
+    public abstract double resolveToVoxels(Optional<Resolution> resolution)
             throws UnitValueException;
 }

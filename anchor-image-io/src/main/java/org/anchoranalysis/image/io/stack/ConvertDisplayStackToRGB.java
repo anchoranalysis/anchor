@@ -60,8 +60,8 @@ public class ConvertDisplayStackToRGB {
 
         try {
             if (background.getNumberChannels() == 1) {
-                Channel chnl = background.createChannelDuplicateForBoundingBox(0, box);
-                return new RGBStack(chnl, chnl.duplicate(), chnl.duplicate());
+                Channel channel = background.createChannelDuplicateForBoundingBox(0, box);
+                return new RGBStack(channel, channel.duplicate(), channel.duplicate());
             } else if (background.getNumberChannels() == 3) {
                 return new RGBStack(
                         background.createChannelDuplicateForBoundingBox(0, box),

@@ -33,7 +33,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 @NoArgsConstructor
@@ -49,7 +49,7 @@ public class Sum<T extends FeatureInput> extends FeatureListElem<T> {
     }
 
     @Override
-    public double calc(SessionInput<T> input) throws FeatureCalculationException {
+    public double calculate(SessionInput<T> input) throws FeatureCalculationException {
 
         double result = 0;
 
@@ -67,7 +67,7 @@ public class Sum<T extends FeatureInput> extends FeatureListElem<T> {
     }
 
     @Override
-    public String getDscrLong() {
+    public String descriptionLong() {
         return descriptionForList("+");
     }
 }

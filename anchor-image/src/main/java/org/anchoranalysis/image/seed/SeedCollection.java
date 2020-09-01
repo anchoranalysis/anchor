@@ -32,8 +32,8 @@ import java.util.List;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.object.ObjectCollectionFactory;
 import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.object.factory.ObjectCollectionFactory;
 
 public class SeedCollection implements Iterable<Seed> {
 

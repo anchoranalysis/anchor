@@ -39,7 +39,7 @@ public class StackInputInitParamsCreator {
             ProvidesStackInput inputObject, BoundIOContext context)
             throws OperationFailedException {
         ImageInitParams soImage = ImageInitParamsFactory.create(context);
-        inputObject.addToStoreInferNames(soImage.getStackCollection());
+        inputObject.addToStoreInferNames(soImage.stacks());
         return soImage;
     }
 }

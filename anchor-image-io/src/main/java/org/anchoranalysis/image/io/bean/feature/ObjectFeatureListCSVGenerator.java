@@ -28,28 +28,26 @@ package org.anchoranalysis.image.io.bean.feature;
 
 import java.nio.file.Path;
 import java.util.stream.Stream;
-import lombok.Getter;
-import lombok.Setter;
 import one.util.streamex.StreamEx;
 import org.anchoranalysis.core.axis.AxisType;
-import org.anchoranalysis.core.error.InitException;
+import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.Logger;
+import org.anchoranalysis.core.name.store.SharedObjects;
 import org.anchoranalysis.core.unit.SpatialConversionUtilities.UnitSuffix;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListFactory;
-import org.anchoranalysis.feature.calc.FeatureInitParams;
-import org.anchoranalysis.feature.calc.results.ResultsVectorCollection;
+import org.anchoranalysis.feature.calculate.results.ResultsVectorCollection;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.io.csv.writer.FeatureListCSVGeneratorVertical;
 import org.anchoranalysis.feature.io.csv.writer.TableCSVGenerator;
-import org.anchoranalysis.feature.nrg.NRGStackWithParams;
-import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
-import org.anchoranalysis.feature.shared.SharedFeatureMulti;
+import org.anchoranalysis.image.feature.bean.evaluator.FeatureListEvaluator;
 import org.anchoranalysis.image.feature.bean.object.single.CenterOfGravity;
 import org.anchoranalysis.image.feature.bean.object.single.NumberVoxels;
 import org.anchoranalysis.image.feature.bean.physical.convert.ConvertToPhysicalDistance;
+import org.anchoranalysis.image.feature.evaluator.NamedFeatureCalculatorMulti;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
@@ -60,37 +58,38 @@ import org.anchoranalysis.io.generator.csv.CSVGenerator;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
-/**
- * @author Owen Feehan
- * @param <T> feature calculation params
- */
+/** @author Owen Feehan */
 class ObjectFeatureListCSVGenerator extends CSVGenerator
         implements IterableGenerator<ObjectCollection> {
 
     private static final String MANIFEST_FUNCTION = "objectFeatures";
 
-    private final NRGStackWithParams nrgStack;
-    private final Logger logger;
-    private final FeatureList<FeatureInputSingleObject> features;
+    private FeatureCalculatorMulti<FeatureInputSingleObject> featureCalculator;
 
     private TableCSVGenerator<ResultsVectorCollection> delegate;
 
-    @Getter @Setter private FeatureInitParams paramsInit; // Optional initialization parameters
-
-    @Getter @Setter private SharedFeatureMulti sharedFeatures = new SharedFeatureMulti();
+    private final Logger logger;
 
     private ObjectCollection element; // Iteration element
 
     public ObjectFeatureListCSVGenerator(
-            FeatureList<FeatureInputSingleObject> features,
-            NRGStackWithParams nrgStack,
-            Logger logger) {
+            FeatureListEvaluator<FeatureInputSingleObject> featureEvaluator,
+            SharedObjects sharedObjects,
+            Logger logger)
+            throws CreateException {
         super(MANIFEST_FUNCTION);
-        this.nrgStack = nrgStack;
         this.logger = logger;
-        this.features = createFullFeatureList(features);
 
-        delegate = new FeatureListCSVGeneratorVertical(MANIFEST_FUNCTION, features.createNames());
+        try {
+            NamedFeatureCalculatorMulti<FeatureInputSingleObject> tuple =
+                    featureEvaluator.createAndStartSession(
+                            this::createFullFeatureList, sharedObjects);
+            this.featureCalculator = tuple.getCalculator();
+
+            delegate = new FeatureListCSVGeneratorVertical(MANIFEST_FUNCTION, tuple.getNames());
+        } catch (OperationFailedException e) {
+            throw new CreateException(e);
+        }
     }
 
     @Override
@@ -102,21 +101,13 @@ class ObjectFeatureListCSVGenerator extends CSVGenerator
     public void writeToFile(OutputWriteSettings outputWriteSettings, Path filePath)
             throws OutputWriteFailedException {
 
-        ResultsVectorCollection rvc;
-        try {
-            FeatureCalculatorMulti<FeatureInputSingleObject> session =
-                    FeatureSession.with(features, paramsInit, sharedFeatures, logger);
-
-            // We calculate a results vector for each object, across all features in memory. This is
-            // more efficient
-            rvc = new ResultsVectorCollection();
-            for (ObjectMask objectMask : element) {
-                rvc.add(
-                        session.calculateSuppressErrors(
-                                createParams(objectMask, nrgStack), logger.errorReporter()));
-            }
-        } catch (InitException e) {
-            throw new OutputWriteFailedException(e);
+        // We calculate a results vector for each object, across all features in memory. This is
+        // more efficient
+        ResultsVectorCollection rvc = new ResultsVectorCollection();
+        for (ObjectMask objectMask : element) {
+            rvc.add(
+                    featureCalculator.calculateSuppressErrors(
+                            new FeatureInputSingleObject(objectMask), logger.errorReporter()));
         }
 
         delegate.setIterableElement(rvc);
@@ -181,10 +172,5 @@ class ObjectFeatureListCSVGenerator extends CSVGenerator
     private static Feature<FeatureInputSingleObject> convertToPhysical(
             Feature<FeatureInputSingleObject> feature, DirectionVector dir) {
         return new ConvertToPhysicalDistance<>(feature, UnitSuffix.MICRO, dir);
-    }
-
-    private static FeatureInputSingleObject createParams(
-            ObjectMask object, NRGStackWithParams nrgStack) {
-        return new FeatureInputSingleObject(object, nrgStack);
     }
 }

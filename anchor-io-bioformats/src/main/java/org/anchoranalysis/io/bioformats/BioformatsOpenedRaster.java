@@ -39,7 +39,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactorySingleType;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
@@ -61,7 +61,7 @@ public class BioformatsOpenedRaster implements OpenedRaster {
 
     private final IMetadata lociMetadata;
 
-    private final int numChnl;
+    private final int numChannel;
     private final int sizeT;
     private final boolean rgb;
     private final int bitsPerPixel;
@@ -85,7 +85,7 @@ public class BioformatsOpenedRaster implements OpenedRaster {
         sizeT = readOptions.sizeT(reader);
         rgb = readOptions.isRGB(reader);
         bitsPerPixel = readOptions.effectiveBitsPerPixel(reader);
-        numChnl = readOptions.sizeC(reader);
+        numChannel = readOptions.sizeC(reader);
 
         channelNames = readOptions.determineChannelNames(reader);
     }
@@ -117,7 +117,7 @@ public class BioformatsOpenedRaster implements OpenedRaster {
     }
 
     public int numberChannels() {
-        return numChnl;
+        return numChannel;
     }
 
     @Override
@@ -140,7 +140,7 @@ public class BioformatsOpenedRaster implements OpenedRaster {
     }
 
     @Override
-    public ImageDimensions dimensionsForSeries(int seriesIndex) {
+    public Dimensions dimensionsForSeries(int seriesIndex) {
         return new DimensionsCreator(lociMetadata).apply(reader, readOptions, seriesIndex);
     }
 
@@ -152,19 +152,20 @@ public class BioformatsOpenedRaster implements OpenedRaster {
         try {
             LOG.debug(String.format("Opening series %d as %s", seriesIndex, dataType));
 
-            LOG.debug(String.format("Size T = %d; Size C = %d", sizeT, numChnl));
+            LOG.debug(String.format("Size T = %d; Size C = %d", sizeT, numChannel));
 
             reader.setSeries(seriesIndex);
 
             TimeSequence ts = new TimeSequence();
 
-            ImageDimensions dimensions = dimensionsForSeries(seriesIndex);
+            Dimensions dimensions = dimensionsForSeries(seriesIndex);
 
             // Assumes order of time first, and then channels
-            List<Channel> listAllChnls =
-                    createUninitialisedChnls(dimensions, ts, multiplexVoxelDataType(dataType));
+            List<Channel> listAllChannels =
+                    createUninitialisedChannels(dimensions, ts, multiplexVoxelDataType(dataType));
 
-            copyBytesIntoChnls(listAllChnls, dimensions, progressReporter, dataType, readOptions);
+            copyBytesIntoChannels(
+                    listAllChannels, dimensions, progressReporter, dataType, readOptions);
 
             LOG.debug(
                     String.format(
@@ -178,31 +179,31 @@ public class BioformatsOpenedRaster implements OpenedRaster {
         }
     }
 
-    private List<Channel> createUninitialisedChnls(
-            ImageDimensions dimensions, TimeSequence ts, ChannelFactorySingleType factory)
+    private List<Channel> createUninitialisedChannels(
+            Dimensions dimensions, TimeSequence ts, ChannelFactorySingleType factory)
             throws IncorrectImageSizeException {
 
         /** A list of all channels i.e. aggregating the channels associated with each stack */
-        List<Channel> listAllChnls = new ArrayList<>();
+        List<Channel> listAllChannels = new ArrayList<>();
 
         for (int t = 0; t < sizeT; t++) {
             Stack stack = new Stack();
-            for (int c = 0; c < numChnl; c++) {
+            for (int c = 0; c < numChannel; c++) {
 
-                Channel chnl = factory.createEmptyUninitialised(dimensions);
+                Channel channel = factory.createEmptyUninitialised(dimensions);
 
-                stack.addChannel(chnl);
-                listAllChnls.add(chnl);
+                stack.addChannel(channel);
+                listAllChannels.add(channel);
             }
             ts.add(stack);
         }
 
-        return listAllChnls;
+        return listAllChannels;
     }
 
-    private void copyBytesIntoChnls(
-            List<Channel> listChnls,
-            ImageDimensions dimensions,
+    private void copyBytesIntoChannels(
+            List<Channel> listChannels,
+            Dimensions dimensions,
             ProgressReporter progressReporter,
             VoxelDataType dataType,
             ReadOptions readOptions)
@@ -215,9 +216,9 @@ public class BioformatsOpenedRaster implements OpenedRaster {
 
         CopyConvert.copyAllFrames(
                 reader,
-                listChnls,
+                listChannels,
                 progressReporter,
-                new ImageFileShape(dimensions, numChnl, sizeT),
+                new ImageFileShape(dimensions, numChannel, sizeT),
                 convertTo,
                 readOptions);
     }

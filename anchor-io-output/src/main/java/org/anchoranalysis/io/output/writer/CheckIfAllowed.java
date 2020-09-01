@@ -62,7 +62,7 @@ public class CheckIfAllowed implements Writer {
             return Optional.empty();
         }
 
-        preop.exec();
+        preop.execute();
 
         return writer.bindAsSubdirectory(outputName, manifestDescription, folder);
     }
@@ -75,7 +75,7 @@ public class CheckIfAllowed implements Writer {
             return;
         }
 
-        preop.exec();
+        preop.execute();
 
         writer.writeSubfolder(outputName, collectionGenerator);
     }
@@ -91,7 +91,7 @@ public class CheckIfAllowed implements Writer {
             return -1;
         }
 
-        preop.exec();
+        preop.execute();
 
         return writer.write(outputNameStyle, generator, index);
     }
@@ -102,7 +102,7 @@ public class CheckIfAllowed implements Writer {
 
         if (!outputManager.isOutputAllowed(outputNameStyle.getOutputName())) return;
 
-        preop.exec();
+        preop.execute();
 
         writer.write(outputNameStyle, generator);
     }
@@ -120,7 +120,7 @@ public class CheckIfAllowed implements Writer {
             return Optional.empty();
         }
 
-        preop.exec();
+        preop.execute();
 
         return writer.writeGenerateFilename(
                 outputName,

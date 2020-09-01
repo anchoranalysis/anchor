@@ -56,7 +56,7 @@ public class BundleUtilities {
             throw new IllegalArgumentException(String.format("Cannot find index %s", indexStr));
         }
 
-        Bundle<T> bundle = deserializer.deserialize(foundList.get(0).calcPath());
+        Bundle<T> bundle = deserializer.deserialize(foundList.get(0).calculatePath());
 
         assert bundle != null;
 
@@ -69,7 +69,7 @@ public class BundleUtilities {
             throws DeserializationFailedException {
 
         // We construct a path
-        Path path = rootFolder.calcPath().resolve("bundleParameters.ser");
+        Path path = rootFolder.calculatePath().resolve("bundleParameters.ser");
 
         BundleParameters bundleParameters = deserializer.deserialize(path);
 

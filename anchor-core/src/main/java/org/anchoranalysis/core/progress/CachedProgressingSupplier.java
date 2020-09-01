@@ -55,8 +55,8 @@ public class CachedProgressingSupplier<T, E extends Exception> extends CachedSup
      *     progress, reset etc.
      */
     public static <T, E extends Exception> CachedProgressingSupplier<T, E> cache(
-            CheckedProgressingSupplier<T, E> op) {
-        return new CachedProgressingSupplier<>(op);
+            CheckedProgressingSupplier<T, E> supplier) {
+        return new CachedProgressingSupplier<>(supplier);
     }
 
     @Override

@@ -37,6 +37,7 @@ import org.apache.commons.configuration.beanutils.BeanDeclaration;
  * <ul>
  *   <li>all "item" sub-elements, and
  *   <li>the "items" attribute, split by commas, if it exists
+ * </ul>
  *
  * @author Owen Feehan
  */

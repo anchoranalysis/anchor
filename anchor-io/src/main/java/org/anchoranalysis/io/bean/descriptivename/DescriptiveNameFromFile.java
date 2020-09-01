@@ -67,7 +67,6 @@ public abstract class DescriptiveNameFromFile extends AnchorBean<DescriptiveName
      * @param file the file to extract a descriptive-name for
      * @param elseName a fallback name to use if something goes wrong
      * @return
-     * @throws AnchorIOException
      */
     public DescriptiveFile descriptiveNameFor(File file, String elseName, Logger logger) {
         return descriptiveNamesFor(Arrays.asList(file), elseName, logger).get(0);

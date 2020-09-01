@@ -34,7 +34,7 @@ import org.anchoranalysis.core.axis.AxisType;
 import org.anchoranalysis.core.axis.AxisTypeConverter;
 import org.anchoranalysis.core.axis.AxisTypeException;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 
 @NoArgsConstructor
@@ -47,7 +47,7 @@ public class CenterOfGravity extends FeatureSingleObject {
     // END BEAN PROPERTIES
 
     /**
-     * Constructor - create for a specific axis
+     * Creates for a specific axis.
      *
      * @param axis axis
      */
@@ -56,7 +56,7 @@ public class CenterOfGravity extends FeatureSingleObject {
     }
 
     @Override
-    public double calc(SessionInput<FeatureInputSingleObject> input)
+    public double calculate(SessionInput<FeatureInputSingleObject> input)
             throws FeatureCalculationException {
 
         FeatureInputSingleObject params = input.get();

@@ -1,8 +1,31 @@
+/*-
+ * #%L
+ * anchor-image
+ * %%
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
+ * %%
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ * #L%
+ */
 package org.anchoranalysis.image.voxel.assigner;
 
-import java.util.Optional;
 import java.util.function.IntPredicate;
-import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.object.ObjectMask;
@@ -51,16 +74,13 @@ public interface VoxelsAssigner {
     /**
      * Sets voxels in a box to a particular value if they match an object-mask
      *
-     * <p>See {@link #toObject(BoundingBox, ObjectMask, Optional) for a more flexible version.
-     *
      * @param object the object-mask to restrict which values in the buffer are written to
-     * @return the number of voxels successfully "set"
      */
-    int toObject(ObjectMask object);
+    void toObject(ObjectMask object);
 
     /**
-     * Sets voxels in a box to a particular value if they match an object-mask <b>and</b> every
-     * voxel to be set matches a predicate
+     * Sets voxels in a box to a particular value if they match an object-mask <b>and</b> each voxel
+     * matches a predicate
      *
      * <p>If any one of the voxels in the object doesn't match the predicate, the operation is
      * aborted, and nothing is written at all.
@@ -68,10 +88,9 @@ public interface VoxelsAssigner {
      * @param object the object-mask to restrict which values in the buffer are assigned
      * @param voxelPredicate the existing value of every voxel to be written must match this
      *     predicate, otherwise no voxels are set at all
-     * @return the number of voxels successfully "set" or -1 if at least one voxel didn't match the
-     *     predicate wasn't matched
+     * @return if at least one voxel was set
      */
-    int toObject(ObjectMask object, IntPredicate voxelPredicate);
+    boolean toObject(ObjectMask object, IntPredicate voxelPredicate);
 
     /**
      * Sets voxels in a box to a particular value if they match a object-mask (but only a part of
@@ -80,24 +99,19 @@ public interface VoxelsAssigner {
      * <p>Pixels are unchanged if they do not match the mask, or outside the part of the mask that
      * is considered.
      *
-     * @see {#link {@link #toObject(BoundingBox, ObjectMask, Optional)} for a more customizable
-     *     version
      * @param object the object-mask to restrict where voxels are set
      * @param restrictTo a restriction on where to process in the object-mask (expressed in the same
      *     coordinates as {@code object}).
-     * @return the number of voxels successfully "set"
      */
-    int toObject(ObjectMask object, BoundingBox restrictTo);
+    void toObject(ObjectMask object, BoundingBox restrictTo);
 
     /**
      * Sets voxels to a value if the position is ON in either of two masks
      *
-     * @param voxels1 first-object
-     * @param voxels2 second-object
+     * @param object1 first-object
+     * @param object2 second-object
      * @param restrictTo only process this region (which is sensibly part or all of the intersection
      *     of the two objects bounding-boxes)
-     * @return the total number of pixels written
-     * @throws OperationFailedException if {@code restrictTo} does not intersect
      */
-    int toEitherTwoObjects(ObjectMask object1, ObjectMask object2, BoundingBox restrictTo);
+    void toEitherTwoObjects(ObjectMask object1, ObjectMask object2, BoundingBox restrictTo);
 }

@@ -28,7 +28,7 @@ package org.anchoranalysis.feature.session.strategy.replace;
 
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.cache.calculation.CacheCreator;
+import org.anchoranalysis.feature.cache.calculate.CacheCreator;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.session.SessionInputSequential;
 import org.anchoranalysis.feature.session.strategy.child.DefaultFindChildStrategy;
@@ -49,7 +49,7 @@ public class AlwaysNew<T extends FeatureInput> implements ReplaceStrategy<T> {
     /**
      * Constructor with default means of creating a session-input
      *
-     * @param createSessionInput
+     * @param cacheCreator
      */
     public AlwaysNew(CacheCreator cacheCreator) {
         this(cacheCreator, DefaultFindChildStrategy.instance());

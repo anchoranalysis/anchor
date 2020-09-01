@@ -36,7 +36,7 @@ import org.anchoranalysis.image.io.bean.rasterwriter.RasterWriter;
 import org.anchoranalysis.io.bioformats.ConfigureBioformatsLogging;
 import org.anchoranalysis.io.bioformats.bean.BioformatsReader;
 import org.anchoranalysis.io.bioformats.bean.options.ForceTimeSeriesToStack;
-import org.anchoranalysis.io.ij.bean.writer.IJTiffWriter;
+import org.anchoranalysis.io.imagej.bean.raster.writer.Tiff;
 import org.apache.commons.configuration.beanutils.BeanHelper;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -48,7 +48,7 @@ public class TestReaderWriterUtilities {
     }
 
     public static void ensureRasterWriter() {
-        addIfMissing(RasterWriter.class, new IJTiffWriter());
+        addIfMissing(RasterWriter.class, new Tiff());
     }
 
     private static RasterReader createReader() {

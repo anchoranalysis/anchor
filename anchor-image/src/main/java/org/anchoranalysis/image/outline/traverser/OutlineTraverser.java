@@ -35,8 +35,8 @@ import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.outline.traverser.contiguouspath.ContiguousPixelPath;
-import org.anchoranalysis.image.outline.traverser.visitedpixels.VisitedPixels;
+import org.anchoranalysis.image.outline.traverser.path.ContiguousVoxelPath;
+import org.anchoranalysis.image.outline.traverser.visited.VisitedVoxels;
 
 /** @author Owen Feehan */
 @AllArgsConstructor
@@ -64,7 +64,7 @@ public class OutlineTraverser {
      * Root point is arbitrarily chosen from object
      *
      * @param listOut
-     * @throws TraverseOutlineException
+     * @throws OperationFailedException
      */
     public void applyGlobal(List<Point3i> listOut) throws OperationFailedException {
         OptionalUtilities.ifPresent(
@@ -74,7 +74,7 @@ public class OutlineTraverser {
     /**
      * @param root this root point should exist on the omOutline (in absolute scene coordinates)
      * @param listOut
-     * @throws TraverseOutlineException
+     * @throws OperationFailedException
      */
     public void applyGlobal(Point3i root, List<Point3i> listOut) throws OperationFailedException {
 
@@ -84,9 +84,9 @@ public class OutlineTraverser {
         listOut.addAll(applyLocal(rootRel).addShift(cornerMin));
     }
 
-    private ContiguousPixelPath applyLocal(Point3i rootRel) throws OperationFailedException {
+    private ContiguousVoxelPath applyLocal(Point3i rootRel) throws OperationFailedException {
 
-        VisitedPixels visitedPixels = new VisitedPixels();
+        VisitedVoxels visitedPixels = new VisitedVoxels();
         PriorityQueueVisit queue = new PriorityQueueVisit();
 
         if (ConsiderNeighbors.considerVisitMarkRaster(visitCondition, rootRel, 0, outline)) {
@@ -99,7 +99,7 @@ public class OutlineTraverser {
     }
 
     // process FIFO
-    private void processQueue(PriorityQueueVisit queue, VisitedPixels visitedPixels) {
+    private void processQueue(PriorityQueueVisit queue, VisitedVoxels visitedPixels) {
 
         while (true) {
 
@@ -117,7 +117,7 @@ public class OutlineTraverser {
     private void visit(
             Point3iWithDistance pointWithDistance,
             PriorityQueueVisit queue,
-            VisitedPixels visitedPixels) {
+            VisitedVoxels visitedPixels) {
 
         Point3i point = pointWithDistance.getPoint();
 

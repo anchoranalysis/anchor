@@ -35,7 +35,7 @@ import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.seed.SeedCollection;
 
 /**
- * A base class for routines to segment a channel into one or more objects.
+ * A base class for algorithms to segment a channel into one or more objects.
  *
  * <p>Some algorithms can be restricted by an object-mask on the channel.
  *

@@ -28,20 +28,20 @@ package org.anchoranalysis.feature.cache;
 
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
-import org.anchoranalysis.feature.cache.calculation.CalcForChild;
-import org.anchoranalysis.feature.cache.calculation.CalculationResolver;
-import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
-import org.anchoranalysis.feature.cache.calculation.FeatureSessionCache;
-import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
-import org.anchoranalysis.feature.calc.NamedFeatureCalculationException;
-import org.anchoranalysis.feature.calc.results.ResultsVector;
+import org.anchoranalysis.feature.cache.calculate.CalculateForChild;
+import org.anchoranalysis.feature.cache.calculate.CalculationResolver;
+import org.anchoranalysis.feature.cache.calculate.FeatureCalculation;
+import org.anchoranalysis.feature.cache.calculate.FeatureSessionCache;
+import org.anchoranalysis.feature.cache.calculate.ResolvedCalculation;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
+import org.anchoranalysis.feature.calculate.results.ResultsVector;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
  * Encapsulates a feature-input in the context of a particular session.
  *
- * @param T underlying feature-input type
+ * @param <T> underlying feature-input type
  * @author Owen Feehan
  */
 public interface SessionInput<T extends FeatureInput> {
@@ -62,9 +62,8 @@ public interface SessionInput<T extends FeatureInput> {
      *
      * @param features features to calculate with
      * @return the results of each feature's calculation respectively
-     * @throws FeatureCalculationException
      */
-    ResultsVector calc(FeatureList<T> features) throws NamedFeatureCalculationException;
+    ResultsVector calc(FeatureList<T> features) throws NamedFeatureCalculateException;
 
     /**
      * Calculates a feature-calculation after resolving it against the main cache
@@ -98,7 +97,7 @@ public interface SessionInput<T extends FeatureInput> {
      *
      * @return
      */
-    CalcForChild<T> forChild();
+    CalculateForChild<T> forChild();
 
     /**
      * Calculates a feature if only an symbol (ID/name) is known, which refers to another feature.

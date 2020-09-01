@@ -37,12 +37,12 @@ import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.arithmetic.VoxelsArithmetic;
 import org.anchoranalysis.image.voxel.assigner.VoxelsAssigner;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
-import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelDataTypeException;
+import org.anchoranalysis.image.voxel.datatype.FloatVoxelType;
+import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelTypeException;
+import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
+import org.anchoranalysis.image.voxel.datatype.UnsignedIntVoxelType;
+import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeFloat;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedInt;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedShort;
 import org.anchoranalysis.image.voxel.extracter.VoxelsExtracter;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 
@@ -66,16 +66,22 @@ public class VoxelsWrapper {
         return new VoxelsWrapper(voxels);
     }
 
-    // Returns voxels that are not cast to any specific buffer type
+    /** Returns voxels that are not cast to any specific buffer type */
     public Voxels<? extends Buffer> any() { // NOSONAR
         return voxels;
+    }
+    
+    /** Casts voxels to a particular type */
+    @SuppressWarnings("unchecked")
+    public <T extends Buffer> Voxels<T> castTo() { // NOSONAR
+        return (Voxels<T>) voxels;
     }
 
     public Voxels<? extends Buffer> match(VoxelDataType match) { // NOSONAR
         if (match.equals(dataType)) {
             return voxels;
         } else {
-            throw new IncorrectVoxelDataTypeException(
+            throw new IncorrectVoxelTypeException(
                     String.format("User has requested %s from %s voxels", match, dataType));
         }
     }
@@ -83,8 +89,8 @@ public class VoxelsWrapper {
     @SuppressWarnings("unchecked")
     public Voxels<ByteBuffer> asByte() {
 
-        if (!dataType.equals(VoxelDataTypeUnsignedByte.INSTANCE)) {
-            throw new IncorrectVoxelDataTypeException(
+        if (!dataType.equals(UnsignedByteVoxelType.INSTANCE)) {
+            throw new IncorrectVoxelTypeException(
                     "Voxels do not contain unsigned 8-bit data (byte)");
         }
 
@@ -94,8 +100,8 @@ public class VoxelsWrapper {
     @SuppressWarnings("unchecked")
     public Voxels<FloatBuffer> asFloat() {
 
-        if (!dataType.equals(VoxelDataTypeFloat.INSTANCE)) {
-            throw new IncorrectVoxelDataTypeException("Voxels do not contain float data");
+        if (!dataType.equals(FloatVoxelType.INSTANCE)) {
+            throw new IncorrectVoxelTypeException("Voxels do not contain float data");
         }
 
         return (Voxels<FloatBuffer>) voxels;
@@ -104,8 +110,8 @@ public class VoxelsWrapper {
     @SuppressWarnings("unchecked")
     public Voxels<ShortBuffer> asShort() {
 
-        if (!dataType.equals(VoxelDataTypeUnsignedShort.INSTANCE)) {
-            throw new IncorrectVoxelDataTypeException(
+        if (!dataType.equals(UnsignedShortVoxelType.INSTANCE)) {
+            throw new IncorrectVoxelTypeException(
                     "Voxels do not contain unsigned 16-bit data (int)");
         }
 
@@ -115,8 +121,8 @@ public class VoxelsWrapper {
     @SuppressWarnings("unchecked")
     public Voxels<IntBuffer> asInt() {
 
-        if (!dataType.equals(VoxelDataTypeUnsignedInt.INSTANCE)) {
-            throw new IncorrectVoxelDataTypeException(
+        if (!dataType.equals(UnsignedIntVoxelType.INSTANCE)) {
+            throw new IncorrectVoxelTypeException(
                     "Voxels do not contain unsigned 32-bit data (int)");
         }
 
@@ -124,9 +130,8 @@ public class VoxelsWrapper {
     }
 
     /**
-     * If already byte -> no change If not already byte -> create new empty byte buffer
+     * Reuses the existing buffer if byte, otherwise creates a new empty byte buffer
      *
-     * @param inputBuffer
      * @param alwaysDuplicate
      * @return
      */
@@ -135,7 +140,7 @@ public class VoxelsWrapper {
 
         // If the input-channel is Byte then we do it in-place
         // Otherwise we create new voxels
-        if (!alwaysDuplicate && getVoxelDataType().equals(VoxelDataTypeUnsignedByte.INSTANCE)) {
+        if (!alwaysDuplicate && getVoxelDataType().equals(UnsignedByteVoxelType.INSTANCE)) {
             boxOut = asByte();
         } else {
             boxOut = VoxelsFactory.getByte().createInitialized(any().extent());
@@ -154,7 +159,7 @@ public class VoxelsWrapper {
 
         // If the wrapper has the same type, we allow the operation
         if (voxelsDestination.getVoxelDataType().equals(getVoxelDataType())) {
-            voxels.extracter()
+            voxels.extract()
                     .boxCopyTo(from, (Voxels) voxelsDestination.match(dataType), destinationBox);
         }
     }
@@ -165,7 +170,7 @@ public class VoxelsWrapper {
 
         // If the wrapper has the same type, we allow the operation
         if (voxelsDestination.getVoxelDataType().equals(getVoxelDataType())) {
-            voxels.extracter()
+            voxels.extract()
                     .objectCopyTo(from, (Voxels) voxelsDestination.match(dataType), destinationBox);
         }
     }
@@ -185,7 +190,7 @@ public class VoxelsWrapper {
                     sliceIndexToUpdate,
                     sourceSlice((Voxels) sourceVoxels.any(), sliceIndexSource, duplicate));
         } else {
-            throw new IncorrectVoxelDataTypeException("Voxel types are different");
+            throw new IncorrectVoxelTypeException("Voxel types are different");
         }
     }
 
@@ -214,7 +219,7 @@ public class VoxelsWrapper {
         return voxels.assignValue(valueToAssign);
     }
 
-    public VoxelsExtracter<? extends Buffer> extracter() { // NOSONAR
-        return voxels.extracter();
+    public VoxelsExtracter<? extends Buffer> extract() { // NOSONAR
+        return voxels.extract();
     }
 }

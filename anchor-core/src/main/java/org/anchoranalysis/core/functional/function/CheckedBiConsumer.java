@@ -1,5 +1,7 @@
 package org.anchoranalysis.core.functional.function;
 
+import java.util.function.BiConsumer;
+
 /*-
  * #%L
  * anchor-core
@@ -27,7 +29,7 @@ package org.anchoranalysis.core.functional.function;
  */
 
 /**
- * Like {@java.util.BiConsumer} but can also throw a checked exception.
+ * Like {@link BiConsumer} but can also throw a checked exception.
  *
  * @author Owen Feehan
  * @param <S> first parameter-type
@@ -42,7 +44,6 @@ public interface CheckedBiConsumer<S, T, E extends Exception> {
      *
      * @param first first parameter
      * @param second second parameter
-     * @return return-value
      * @throws E an exception that may be thrown
      */
     void accept(S first, T second) throws E;

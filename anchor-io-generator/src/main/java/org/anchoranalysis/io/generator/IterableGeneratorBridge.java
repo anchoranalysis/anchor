@@ -41,7 +41,7 @@ import org.anchoranalysis.io.output.bound.BoundOutputManager;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 /**
- * Allows us to call an IterableGenerator<S> as if it was an IterableGenerator<T>
+ * Allows us to call an {@code IterableGenerator<S>} as if it was an {@code IterableGenerator<T>}
  *
  * @author Owen Feehan
  * @param <S> source-type

@@ -30,10 +30,10 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
-import org.anchoranalysis.feature.nrg.NRGStackWithParams;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
 import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.object.ObjectCollection;
@@ -52,10 +52,7 @@ public class AssignmentObjectFactory {
     @Getter private ObjectCollectionDistanceMatrix cost;
 
     public AssignmentOverlapFromPairs createAssignment(
-            ObjectCollection left,
-            ObjectCollection right,
-            double maxAcceptedCost,
-            ImageDimensions dim)
+            ObjectCollection left, ObjectCollection right, double maxAcceptedCost, Dimensions dim)
             throws FeatureCalculationException {
 
         // Empty annotations
@@ -100,7 +97,7 @@ public class AssignmentObjectFactory {
     }
 
     private ObjectCollectionDistanceMatrix createCostMatrix(
-            ObjectCollection annotation, ObjectCollection result, ImageDimensions dim)
+            ObjectCollection annotation, ObjectCollection result, Dimensions dim)
             throws FeatureCalculationException {
 
         FeatureCalculatorSingle<FeatureInputPairObjects> session;
@@ -110,7 +107,7 @@ public class AssignmentObjectFactory {
             throw new FeatureCalculationException(e);
         }
 
-        NRGStackWithParams nrgStack = new NRGStackWithParams(dim);
+        EnergyStack energyStack = new EnergyStack(dim);
 
         double[][] outArr = new double[annotation.size()][result.size()];
 
@@ -121,7 +118,7 @@ public class AssignmentObjectFactory {
                 ObjectMask objR = result.get(j);
 
                 double costObjects =
-                        session.calculate(new FeatureInputPairObjects(objA, objR, nrgStack));
+                        session.calculate(new FeatureInputPairObjects(objA, objR, energyStack));
                 outArr[i][j] = costObjects;
 
                 if (Double.isNaN(costObjects)) {

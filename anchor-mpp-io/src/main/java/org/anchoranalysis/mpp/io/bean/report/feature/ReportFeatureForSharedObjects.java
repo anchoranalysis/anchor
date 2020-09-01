@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.mpp.io.bean.report.feature;
 
-import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.io.bean.report.feature.ReportFeature;
+import org.anchoranalysis.mpp.bean.init.MPPInitParams;
 
 public abstract class ReportFeatureForSharedObjects extends ReportFeature<MPPInitParams> {}

@@ -31,7 +31,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.image.extent.ImageResolution;
+import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.orientation.DirectionVector;
 
 @NoArgsConstructor
@@ -49,7 +49,7 @@ public class UnitValueDistanceVoxels extends UnitValueDistance {
     }
 
     @Override
-    public double resolve(Optional<ImageResolution> res, DirectionVector dirVector) {
+    public double resolve(Optional<Resolution> res, DirectionVector dirVector) {
         return value;
     }
 }

@@ -34,13 +34,13 @@ import java.util.List;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.annotation.AnnotationWithCfg;
+import org.anchoranalysis.annotation.AnnotationWithMarks;
 import org.anchoranalysis.annotation.io.assignment.AssignmentObjectFactory;
 import org.anchoranalysis.annotation.io.assignment.AssignmentOverlapFromPairs;
 import org.anchoranalysis.annotation.io.assignment.generator.AssignmentGenerator;
 import org.anchoranalysis.annotation.io.assignment.generator.AssignmentGeneratorFactory;
 import org.anchoranalysis.annotation.io.assignment.generator.ColorPool;
-import org.anchoranalysis.annotation.io.wholeimage.findable.Findable;
+import org.anchoranalysis.annotation.io.image.findable.Findable;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -50,7 +50,7 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.name.value.NameValue;
 import org.anchoranalysis.core.name.value.SimpleNameValue;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
 import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
@@ -81,7 +81,7 @@ public class MultipleComparer extends AnchorBean<MultipleComparer> {
     // END BEAN PROPERTIES
 
     public List<NameValue<Stack>> createRasters(
-            AnnotationWithCfg annotation,
+            AnnotationWithMarks annotation,
             DisplayStack background,
             Path annotationPath,
             ColorSetGenerator colorSetGenerator,
@@ -149,7 +149,7 @@ public class MultipleComparer extends AnchorBean<MultipleComparer> {
 
             ColorPool colorPool =
                     new ColorPool(
-                            assignment.numPaired(),
+                            assignment.numberPaired(),
                             colorSetGenerator,
                             new VeryBrightColorSetGenerator(),
                             true);

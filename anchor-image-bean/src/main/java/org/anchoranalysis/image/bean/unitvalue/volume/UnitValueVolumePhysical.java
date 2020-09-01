@@ -34,7 +34,7 @@ import org.anchoranalysis.core.unit.SpatialConversionUtilities;
 import org.anchoranalysis.core.unit.SpatialConversionUtilities.UnitSuffix;
 import org.anchoranalysis.image.bean.nonbean.error.UnitValueException;
 import org.anchoranalysis.image.convert.ImageUnitConverter;
-import org.anchoranalysis.image.extent.ImageResolution;
+import org.anchoranalysis.image.extent.Resolution;
 
 // Measures either area or volume (depending if the do3D flag is employed)
 public class UnitValueVolumePhysical extends UnitValueVolume {
@@ -46,7 +46,7 @@ public class UnitValueVolumePhysical extends UnitValueVolume {
     // END VALUE
 
     @Override
-    public double resolveToVoxels(Optional<ImageResolution> resolution) throws UnitValueException {
+    public double resolveToVoxels(Optional<Resolution> resolution) throws UnitValueException {
         if (!resolution.isPresent()) {
             throw new UnitValueException(
                     "An image resolution is required to calculate physical-volume but it is missing");

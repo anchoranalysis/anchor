@@ -30,7 +30,7 @@ import com.google.common.io.LittleEndianDataInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 
 public class FloatFrom32Bit extends ConvertToFloat {
 
@@ -43,7 +43,7 @@ public class FloatFrom32Bit extends ConvertToFloat {
 
     @Override
     protected float[] convertIntegerBytesToFloatArray(
-            ImageDimensions dimensions, byte[] src, int srcOffset) throws IOException {
+            Dimensions dimensions, byte[] src, int srcOffset) throws IOException {
 
         float[] fArr = new float[dimensions.volumeXY()];
         int cntLoc = 0;

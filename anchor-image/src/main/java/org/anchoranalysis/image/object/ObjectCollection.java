@@ -51,17 +51,17 @@ public class ObjectCollection implements Iterable<ObjectMask> {
 
     private final List<ObjectMask> delegate;
 
-    /** Constructor - create with no objects */
+    /** Creates with no objects */
     public ObjectCollection() {
         delegate = new ArrayList<>();
     }
 
     /**
-     * Constructor - creates a new collection with elements from a stream
+     * Creates with elements from a stream
      *
      * @param stream objects
      */
-    ObjectCollection(Stream<ObjectMask> stream) {
+    public ObjectCollection(Stream<ObjectMask> stream) {
         delegate = stream.collect(Collectors.toList());
     }
 
@@ -115,7 +115,7 @@ public class ObjectCollection implements Iterable<ObjectMask> {
      * Checks if two collections are equal in a deeper way
      *
      * <p>Specifically, objects are tested to be equal using a deep byte-by-byte comparison using
-     * {@link ObjectMask.equalsDeep}. Their objects do not need to be equal.
+     * {@link ObjectMask#equalsDeep}. Their objects do not need to be equal.
      *
      * <p>This is more expensive equality check than with {@link #equalsDeep}, but is useful for
      * comparing objects that were instantiated in different places.
@@ -213,7 +213,7 @@ public class ObjectCollection implements Iterable<ObjectMask> {
     /**
      * Scales every object-mask in a collection
      *
-     * <p>Like {@link scale(ScaleFactor)} but ensured the scaled-results will always be inside a
+     * <p>Like {@link #scale(ScaleFactor)} but ensured the scaled-results will always be inside a
      * particular extent (clipping if necessary)
      *
      * @param factor scaling-factor
@@ -234,7 +234,7 @@ public class ObjectCollection implements Iterable<ObjectMask> {
     /**
      * Scales every object-mask in a collection
      *
-     * <p>Like {@link scale(ScaleFactor)} but allows for additional manipulating of objects
+     * <p>Like {@link #scale(ScaleFactor)} but allows for additional manipulating of objects
      * (pre-scaling and post-scaling)
      *
      * @param factor scaling-factor
@@ -363,10 +363,11 @@ public class ObjectCollection implements Iterable<ObjectMask> {
     /** Descriptive string representation of an object-mask */
     private static String objectToString(ObjectMask object, int index, boolean includeIndex) {
         String cog = object.centerOfGravity().toString();
+        int numberVoxels = object.numberVoxelsOn();
         if (includeIndex) {
-            return index + " " + cog;
+            return String.format("%d %s(%s)", index, cog, numberVoxels);
         } else {
-            return cog;
+            return String.format("%s(%s)", cog, numberVoxels);
         }
     }
 }

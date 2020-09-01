@@ -29,23 +29,23 @@ package org.anchoranalysis.mpp.io.bean.report.feature;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
-import org.anchoranalysis.anchor.mpp.bean.provider.MarkProvider;
-import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureInputMark;
-import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.mpp.bean.init.MPPInitParams;
+import org.anchoranalysis.mpp.bean.provider.SingleMarkProvider;
+import org.anchoranalysis.mpp.feature.bean.mark.FeatureInputMark;
+import org.anchoranalysis.mpp.mark.Mark;
 
 public class ReportFeatureOnMark extends ReportFeatureForMPP<FeatureInputMark> {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private MarkProvider markProvider;
+    @BeanField @Getter @Setter private SingleMarkProvider markProvider;
     // END BEAN PROPERTIES
 
     @Override
@@ -79,7 +79,7 @@ public class ReportFeatureOnMark extends ReportFeatureForMPP<FeatureInputMark> {
         try {
             FeatureCalculatorSingle<FeatureInputMark> session = createAndStartSession();
 
-            ImageDimensions dimensions = createImageDim();
+            Dimensions dimensions = createImageDim();
 
             double val =
                     session.calculate(new FeatureInputMark(mark.get(), Optional.of(dimensions)));

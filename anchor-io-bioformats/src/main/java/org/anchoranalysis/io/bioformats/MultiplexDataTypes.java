@@ -35,12 +35,12 @@ import org.anchoranalysis.image.channel.factory.ChannelFactoryInt;
 import org.anchoranalysis.image.channel.factory.ChannelFactoryShort;
 import org.anchoranalysis.image.channel.factory.ChannelFactorySingleType;
 import org.anchoranalysis.image.io.RasterIOException;
+import org.anchoranalysis.image.voxel.datatype.FloatVoxelType;
+import org.anchoranalysis.image.voxel.datatype.SignedShortVoxelType;
+import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
+import org.anchoranalysis.image.voxel.datatype.UnsignedIntVoxelType;
+import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeFloat;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeSignedShort;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedInt;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedShort;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class MultiplexDataTypes {
@@ -48,13 +48,13 @@ class MultiplexDataTypes {
     public static VoxelDataType multiplexFormat(int pixelType) throws RasterIOException {
         switch (pixelType) {
             case FormatTools.UINT8:
-                return VoxelDataTypeUnsignedByte.INSTANCE;
+                return UnsignedByteVoxelType.INSTANCE;
             case FormatTools.UINT16:
-                return VoxelDataTypeUnsignedShort.INSTANCE;
+                return UnsignedShortVoxelType.INSTANCE;
             case FormatTools.INT16:
-                return VoxelDataTypeSignedShort.instance;
+                return SignedShortVoxelType.instance;
             case FormatTools.FLOAT:
-                return VoxelDataTypeFloat.INSTANCE;
+                return FloatVoxelType.INSTANCE;
             default:
                 throw new RasterIOException(
                         String.format(
@@ -64,15 +64,15 @@ class MultiplexDataTypes {
     }
 
     public static ChannelFactorySingleType multiplexVoxelDataType(VoxelDataType voxelDataType) {
-        if (voxelDataType.equals(VoxelDataTypeUnsignedByte.INSTANCE)) {
+        if (voxelDataType.equals(UnsignedByteVoxelType.INSTANCE)) {
             return new ChannelFactoryByte();
-        } else if (voxelDataType.equals(VoxelDataTypeUnsignedShort.INSTANCE)) {
+        } else if (voxelDataType.equals(UnsignedShortVoxelType.INSTANCE)) {
             return new ChannelFactoryShort();
-        } else if (voxelDataType.equals(VoxelDataTypeSignedShort.instance)) {
+        } else if (voxelDataType.equals(SignedShortVoxelType.instance)) {
             return new ChannelFactoryShort();
-        } else if (voxelDataType.equals(VoxelDataTypeFloat.INSTANCE)) {
+        } else if (voxelDataType.equals(FloatVoxelType.INSTANCE)) {
             return new ChannelFactoryFloat();
-        } else if (voxelDataType.equals(VoxelDataTypeUnsignedInt.INSTANCE)) {
+        } else if (voxelDataType.equals(UnsignedIntVoxelType.INSTANCE)) {
             return new ChannelFactoryInt();
         } else {
             throw new UnsupportedOperationException();

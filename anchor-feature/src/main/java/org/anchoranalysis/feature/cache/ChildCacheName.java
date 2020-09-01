@@ -33,8 +33,8 @@ import lombok.EqualsAndHashCode;
  * part-name
  *
  * <ul>
- *   a class -> guaranteed to be unique for the class an option part-name (string) -> a further
- *   division of the class into different caches
+ *   <li>a class: guaranteed to be unique for the class
+ *   <li>an optional part-name (string): a further division of the class into different caches
  * </ul>
  */
 @EqualsAndHashCode

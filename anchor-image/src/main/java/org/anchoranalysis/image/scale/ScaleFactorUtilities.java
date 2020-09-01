@@ -43,7 +43,7 @@ public class ScaleFactorUtilities {
      * @param target target extent (only X and Y dimensions are considered)
      * @return the scaling-factor to scale the source to be the same size as the target
      */
-    public static ScaleFactor calcRelativeScale(Extent source, Extent target) {
+    public static ScaleFactor relativeScale(Extent source, Extent target) {
         return new ScaleFactor(
                 deriveScalingFactor(target.x(), source.x()),
                 deriveScalingFactor(target.y(), source.y()));

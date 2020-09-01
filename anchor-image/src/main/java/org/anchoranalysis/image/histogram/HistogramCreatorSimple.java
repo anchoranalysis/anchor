@@ -30,6 +30,6 @@ public class HistogramCreatorSimple implements HistogramCreator {
 
     @Override
     public Histogram create() {
-        return new HistogramArray(255);
+        return new Histogram(255);
     }
 }

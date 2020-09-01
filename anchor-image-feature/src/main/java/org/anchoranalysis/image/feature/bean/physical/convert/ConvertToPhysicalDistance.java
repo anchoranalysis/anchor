@@ -34,48 +34,49 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.unit.SpatialConversionUtilities.UnitSuffix;
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
-import org.anchoranalysis.feature.calc.FeatureInitParams;
-import org.anchoranalysis.feature.input.FeatureInputWithRes;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureInitParams;
+import org.anchoranalysis.feature.input.FeatureInputWithResolution;
 import org.anchoranalysis.image.bean.orientation.DirectionVectorBean;
 import org.anchoranalysis.image.bean.orientation.VectorInDirection;
 import org.anchoranalysis.image.convert.ImageUnitConverter;
-import org.anchoranalysis.image.extent.ImageResolution;
+import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.orientation.DirectionVector;
 
 //
 @NoArgsConstructor
-public class ConvertToPhysicalDistance<T extends FeatureInputWithRes> extends FeatureConvertRes<T> {
+public class ConvertToPhysicalDistance<T extends FeatureInputWithResolution>
+        extends FeatureConvertRes<T> {
 
     // START BEAN PROPERTIES
 
     /** Direction of the distance being converted, defaults to a unit vector along the X-axis */
     @BeanField @Getter @Setter
-    private DirectionVectorBean directionVector = new VectorInDirection(1.0, 0, 0);
+    private DirectionVectorBean direction = new VectorInDirection(1.0, 0, 0);
     // END BEAN PROPERTIES
 
-    private DirectionVector dv;
+    private DirectionVector vectorInDirection;
 
     public ConvertToPhysicalDistance(
             Feature<T> feature, UnitSuffix unitType, DirectionVector directionVector) {
         super(feature, unitType);
-        this.directionVector = new VectorInDirection(directionVector);
+        this.direction = new VectorInDirection(directionVector);
     }
 
     @Override
     protected void beforeCalc(FeatureInitParams paramsInit) throws InitException {
         super.beforeCalc(paramsInit);
         try {
-            dv = directionVector.createVector();
+            vectorInDirection = direction.createVector();
         } catch (CreateException e) {
             throw new InitException(e);
         }
     }
 
     @Override
-    protected double convertToPhysical(double value, ImageResolution res)
+    protected double convertToPhysical(double value, Resolution res)
             throws FeatureCalculationException {
         // We use arbitrary direction as everything should be the same in a isometric XY plane
-        return ImageUnitConverter.convertToPhysicalDistance(value, res, dv);
+        return ImageUnitConverter.convertToPhysicalDistance(value, res, vectorInDirection);
     }
 }

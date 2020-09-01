@@ -37,15 +37,16 @@ import org.anchoranalysis.core.error.OperationFailedException;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class HistogramStatistics {
 
-    public static double coefficientOfVariation(Histogram hist) throws OperationFailedException {
-        double mean = hist.mean();
+    public static double coefficientOfVariation(Histogram histogram)
+            throws OperationFailedException {
+        double mean = histogram.mean();
 
         if (mean == 0) {
             throw new OperationFailedException(
                     "The mean is 0 so the coefficient-of-variation is undefined");
         }
 
-        return hist.standardDeviation() / mean;
+        return histogram.standardDeviation() / mean;
     }
 
     public static double kurtosis(Histogram hist) throws OperationFailedException {
@@ -73,7 +74,7 @@ public class HistogramStatistics {
         double sd = hist.standardDeviation();
 
         // Calculated using formula in https://en.wikipedia.org/wiki/Skewness
-        long firstTerm = hist.calcSumCubes() / count;
+        long firstTerm = hist.calculateSumCubes() / count;
         double secondTerm = -3.0 * mean * sd * sd;
         double thirdTerm = mean * mean * mean;
 

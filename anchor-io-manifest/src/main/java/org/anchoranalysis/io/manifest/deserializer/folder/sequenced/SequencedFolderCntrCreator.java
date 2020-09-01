@@ -60,7 +60,7 @@ public abstract class SequencedFolderCntrCreator<T> implements GetterFromIndex<T
                 throw new IllegalArgumentException(String.format("Cannot find index %s", indexStr));
             }
 
-            Path path = foundList.get(0).calcPath();
+            Path path = foundList.get(0).calculatePath();
 
             return createFromFilePath(path);
         } catch (CreateException e) {

@@ -33,13 +33,13 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.unit.SpatialConversionUtilities;
 import org.anchoranalysis.core.unit.SpatialConversionUtilities.UnitSuffix;
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
-import org.anchoranalysis.feature.input.FeatureInputWithRes;
-import org.anchoranalysis.image.extent.ImageResolution;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.feature.input.FeatureInputWithResolution;
+import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.feature.bean.physical.FeatureSingleElemWithRes;
 
 @NoArgsConstructor
-public abstract class FeatureConvertRes<T extends FeatureInputWithRes>
+public abstract class FeatureConvertRes<T extends FeatureInputWithResolution>
         extends FeatureSingleElemWithRes<T> {
 
     // START BEAN PROPERTIES
@@ -52,13 +52,13 @@ public abstract class FeatureConvertRes<T extends FeatureInputWithRes>
     }
 
     @Override
-    protected double calcWithRes(double value, ImageResolution res)
+    protected double calculateWithResolution(double value, Resolution resolution)
             throws FeatureCalculationException {
-        double valuePhysical = convertToPhysical(value, res);
+        double valuePhysical = convertToPhysical(value, resolution);
         return convertToUnits(valuePhysical);
     }
 
-    protected abstract double convertToPhysical(double value, ImageResolution res)
+    protected abstract double convertToPhysical(double value, Resolution res)
             throws FeatureCalculationException;
 
     private double convertToUnits(double valuePhysical) {

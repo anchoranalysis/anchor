@@ -51,9 +51,9 @@ public final class DirectionVector {
     }
 
     /**
-     * Constructor - creates a direction-vector aligned to a particular axis
+     * Creates a direction aligned to a particular axis.
      *
-     * @param axisName
+     * @param axisType
      */
     public DirectionVector(AxisType axisType) {
         switch (axisType) {

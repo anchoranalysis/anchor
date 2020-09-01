@@ -37,8 +37,8 @@ import org.anchoranalysis.image.object.ObjectMask;
 /**
  * An R-Tree of object-masks (indexed via a derived bounding-box).
  *
- * @see <a href="https://en.wikipedia.org/wiki/R-tree">Wikipedia's R-tree</a>
- * @see {@link BoundingBoxRTree} for a related structure only on bounding-boxes
+ * @see <a href="https://en.wikipedia.org/wiki/R-tree">R-tree on Wikipedia</a>
+ * @see BoundingBoxRTree for a related structure operating only on bounding-boxes
  * @author Owen Feehan
  */
 @Accessors(fluent = true)
@@ -51,10 +51,9 @@ public class ObjectCollectionRTree {
     @Getter private ObjectCollection objects;
 
     /**
-     * Constructor - create
+     * Creates an r-tree for particular objects.
      *
-     * @param objects
-     * @param extractBoundingBox
+     * @param objects the objects
      */
     public ObjectCollectionRTree(ObjectCollection objects) {
         this.objects = objects;

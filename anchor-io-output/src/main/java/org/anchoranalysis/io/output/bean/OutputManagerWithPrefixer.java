@@ -100,7 +100,7 @@ public abstract class OutputManagerWithPrefixer extends OutputManager {
             FilePathPrefix prefix = filePathPrefixer.rootFolderPrefix(expIdentifier, context);
             writeOperationRecorder.init(prefix.getFolderPath());
 
-            return new BoundOutputManager(
+            return BoundOutputManager.createExistingWithPrefix(
                     this,
                     prefix,
                     getOutputWriteSettings(),

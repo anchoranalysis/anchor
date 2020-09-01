@@ -30,14 +30,14 @@ import java.nio.IntBuffer;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.VoxelsAsInt;
+import org.anchoranalysis.image.voxel.datatype.UnsignedIntVoxelType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedInt;
 import org.anchoranalysis.image.voxel.pixelsforslice.PixelsForSlice;
 import org.anchoranalysis.image.voxel.pixelsforslice.PixelsFromIntBufferArr;
 
 final class FactoryInt implements VoxelsFactoryTypeBound<IntBuffer> {
 
-    private static final VoxelDataType DATA_TYPE = VoxelDataTypeUnsignedInt.INSTANCE;
+    private static final VoxelDataType DATA_TYPE = UnsignedIntVoxelType.INSTANCE;
 
     @Override
     public Voxels<IntBuffer> create(PixelsForSlice<IntBuffer> pixelsForPlane) {

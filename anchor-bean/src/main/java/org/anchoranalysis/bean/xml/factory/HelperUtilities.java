@@ -31,7 +31,6 @@ import java.util.function.Function;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.bean.StringBeanCollection;
-import org.anchoranalysis.bean.xml.error.BeanXmlException;
 import org.apache.commons.configuration.HierarchicalConfiguration;
 import org.apache.commons.configuration.beanutils.BeanDeclaration;
 import org.apache.commons.configuration.beanutils.BeanHelper;
@@ -68,7 +67,6 @@ class HelperUtilities {
      * @param collectionToPopulate the collection to populate
      * @param declaration the top-most XML bean declaration
      * @return {@code collectionToPopulate}
-     * @throws BeanXmlException
      */
     public static StringBeanCollection populateStringCollection(
             StringBeanCollection collectionToPopulate, BeanDeclaration declaration) {
@@ -101,7 +99,6 @@ class HelperUtilities {
      * @param collectionToPopulate the collection to populate
      * @param declaration the top-most XML bean declaration
      * @return {@code collectionToPopulate}
-     * @throws BeanXmlException
      */
     private static StringBeanCollection populateStringCollectionFromAttribute(
             StringBeanCollection collectionToPopulate, XMLBeanDeclaration declaration) {

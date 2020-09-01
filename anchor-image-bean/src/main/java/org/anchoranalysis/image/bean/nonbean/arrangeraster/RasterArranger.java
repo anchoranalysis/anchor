@@ -32,8 +32,8 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.channel.factory.ChannelFactorySingleType;
 import org.anchoranalysis.image.extent.BoundingBox;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
@@ -41,13 +41,13 @@ import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 public class RasterArranger {
 
     private BoundingBoxesOnPlane boundingBoxes;
-    private ImageDimensions dimensions;
+    private Dimensions dimensions;
 
-    public void init(ArrangeRaster arrangeRaster, List<RGBStack> list) throws InitException {
+    public void init(ArrangeRaster arrange, List<RGBStack> list) throws InitException {
 
         Iterator<RGBStack> rasterIterator = list.iterator();
         try {
-            this.boundingBoxes = arrangeRaster.createBoundingBoxesOnPlane(rasterIterator);
+            this.boundingBoxes = arrange.createBoundingBoxesOnPlane(rasterIterator);
         } catch (ArrangeRasterException e) {
             throw new InitException(e);
         }
@@ -56,7 +56,7 @@ public class RasterArranger {
             throw new InitException("rasterIterator has more items than can be accomodated");
         }
 
-        dimensions = new ImageDimensions(boundingBoxes.extent());
+        dimensions = new Dimensions(boundingBoxes.extent());
     }
 
     public RGBStack createStack(List<RGBStack> list, ChannelFactorySingleType factory) {
@@ -95,8 +95,8 @@ public class RasterArranger {
 
         assert (stackIn.getNumberChannels() == stackOut.getNumberChannels());
 
-        Extent extent = stackIn.dimensions().extent();
-        Extent extentOut = stackIn.dimensions().extent();
+        Extent extent = stackIn.extent();
+        Extent extentOut = stackIn.extent();
 
         ReadableTuple3i leftCrnr = box.cornerMin();
         int xEnd = leftCrnr.x() + box.extent().x() - 1;

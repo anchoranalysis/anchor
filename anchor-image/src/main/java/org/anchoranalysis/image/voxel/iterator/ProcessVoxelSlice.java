@@ -27,12 +27,11 @@
 package org.anchoranalysis.image.voxel.iterator;
 
 import java.nio.Buffer;
-import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 
 /**
- * Processes a 3D point like {@link ProcessVoxelOffset} but also retrieves a {@link VoxelBuffer} for
- * the current z-slice.
+ * Processes a 3D point like {@link ProcessVoxel} but also retrieves a {@link VoxelBuffer} for the
+ * current z-slice.
  *
  * <p>It is very similar to {@link ProcessVoxelSliceBuffer} but uses {@link VoxelBuffer} instead of
  * a {@link Buffer}.
@@ -42,16 +41,12 @@ import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 @FunctionalInterface
 public interface ProcessVoxelSlice<T extends Buffer> {
 
-    /** Notifies the processor that there has been a change in slice (z global coordinate) */
-    default void notifyChangeSlice(int z) {}
-
     /**
      * Processes a voxel location in a buffer
      *
-     * @param point a point with global coordinates
-     * @param buffer a buffer for the current slice for which {@link offsetSlice} refers to a
-     *     particular location
+     * @param buffer a buffer for the current slice for which {@code offset} refers to a particular
+     *     location
      * @param offset an offset value for the current slice (i.e. indexing XY only, but not Z)
      */
-    void process(Point3i point, VoxelBuffer<T> buffer, int offset);
+    void process(VoxelBuffer<T> buffer, int offset);
 }

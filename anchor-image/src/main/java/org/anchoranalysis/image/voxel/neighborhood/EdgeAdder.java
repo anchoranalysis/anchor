@@ -34,7 +34,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.index.ObjectCollectionRTree;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.object.morph.MorphologicalDilation;
+import org.anchoranalysis.image.object.morphological.MorphologicalDilation;
 
 /**
  * Adds edges if objects neighbor each other

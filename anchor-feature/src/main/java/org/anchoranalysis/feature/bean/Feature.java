@@ -32,14 +32,14 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
-import org.anchoranalysis.bean.init.InitializableBean;
-import org.anchoranalysis.bean.init.property.PropertyInitializer;
+import org.anchoranalysis.bean.initializable.InitializableBean;
+import org.anchoranalysis.bean.initializable.property.PropertyInitializer;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListFactory;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
-import org.anchoranalysis.feature.calc.FeatureInitParams;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureInitParams;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
@@ -89,8 +89,8 @@ public abstract class Feature<T extends FeatureInput>
     public abstract Class<? extends FeatureInput> inputType();
 
     @Override
-    public final String getBeanDscr() {
-        String paramDscr = getParamDscr();
+    public final String describeBean() {
+        String paramDscr = describeParams();
         if (!paramDscr.isEmpty()) {
             return String.format("%s(%s)", getBeanName(), paramDscr);
         } else {
@@ -98,8 +98,8 @@ public abstract class Feature<T extends FeatureInput>
         }
     }
 
-    public String getDscrLong() {
-        return getBeanDscr();
+    public String descriptionLong() {
+        return describeBean();
     }
 
     /**
@@ -120,32 +120,26 @@ public abstract class Feature<T extends FeatureInput>
         if (!getCustomName().isEmpty()) {
             return getCustomName();
         } else {
-            return getDscrLong();
+            return descriptionLong();
         }
     }
 
-    public String getDscrWithCustomName() {
+    public String descriptionWithCustomName() {
         if (!getCustomName().isEmpty()) {
-            return String.format("%s: %s", getCustomName(), getBeanDscr());
+            return String.format("%s: %s", getCustomName(), describeBean());
         } else {
-            return getBeanDscr();
+            return describeBean();
         }
     }
 
-    public double calcCheckInit(SessionInput<T> input) throws FeatureCalculationException {
+    public double calculateCheckInitialized(SessionInput<T> input)
+            throws FeatureCalculationException {
         if (!isInitialized()) {
             throw new FeatureCalculationException(
                     String.format("The feature (%s) has not been initialized", this.toString()));
         }
 
-        return calc(input);
-    }
-
-    // Calculates a value for some parameters
-    protected abstract double calc(SessionInput<T> input) throws FeatureCalculationException;
-
-    protected void duplicateHelper(Feature<FeatureInput> out) {
-        out.customName = customName;
+        return calculate(input);
     }
 
     /**
@@ -161,22 +155,11 @@ public abstract class Feature<T extends FeatureInput>
      */
     public final FeatureList<FeatureInput> createListChildFeatures()
             throws BeanMisconfiguredException {
-
-        return FeatureListFactory.wrapReuse(
-                findChildrenOfClass(getOrCreateBeanFields(), Feature.class));
+        return FeatureListFactory.wrapReuse(findFieldsOfClass(Feature.class));
     }
 
-    public String getParamDscr() {
-        return describeChildBeans();
-    }
-
-    /**
-     * Dummy method, that children can optionally override
-     *
-     * @param paramsInit initialization parameters
-     */
-    protected void beforeCalc(FeatureInitParams paramsInit) throws InitException {
-        // Does nothing. To be overridden in children if needed.
+    public String describeParams() {
+        return describeChildren();
     }
 
     @Override
@@ -188,5 +171,21 @@ public abstract class Feature<T extends FeatureInput>
     @SuppressWarnings("unchecked")
     public <S extends T> Feature<S> downcast() {
         return (Feature<S>) this;
+    }
+
+    /**
+     * Dummy method, that children can optionally override
+     *
+     * @param paramsInit initialization parameters
+     */
+    protected void beforeCalc(FeatureInitParams paramsInit) throws InitException {
+        // Does nothing. To be overridden in children if needed.
+    }
+
+    // Calculates a value for some parameters
+    protected abstract double calculate(SessionInput<T> input) throws FeatureCalculationException;
+
+    protected void duplicateHelper(Feature<FeatureInput> out) {
+        out.customName = customName;
     }
 }

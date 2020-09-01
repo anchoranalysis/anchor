@@ -38,15 +38,15 @@ import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.object.ObjectCollectionFactory;
 import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.object.factory.ObjectCollectionFactory;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
-import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelDataTypeException;
+import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelTypeException;
+import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
+import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedShort;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class HistogramFactory {
@@ -70,10 +70,10 @@ public class HistogramFactory {
             throws CreateException {
 
         if (histograms.isEmpty()) {
-            return new HistogramArray(maxBinVal);
+            return new Histogram(maxBinVal);
         }
 
-        Histogram out = new HistogramArray(maxBinVal);
+        Histogram out = new Histogram(maxBinVal);
         for (Histogram h : histograms) {
             try {
                 out.addHistogram(h);
@@ -84,28 +84,27 @@ public class HistogramFactory {
         return out;
     }
 
-    public static Histogram create(Channel chnl) throws CreateException {
+    public static Histogram create(Channel channel) throws CreateException {
 
         try {
-            return create(chnl.voxels());
-        } catch (IncorrectVoxelDataTypeException e) {
-            throw new CreateException("Cannot create histogram from ImgChnl", e);
+            return create(channel.voxels());
+        } catch (IncorrectVoxelTypeException e) {
+            throw new CreateException("Cannot create histogram from channel", e);
         }
     }
 
-    public static Histogram create(Channel chnl, Mask mask) throws CreateException {
+    public static Histogram create(Channel channel, Mask mask) throws CreateException {
 
-        if (!chnl.dimensions().extent().equals(mask.dimensions().extent())) {
-            throw new CreateException("Size of chnl and mask do not match");
+        if (!channel.extent().equals(mask.extent())) {
+            throw new CreateException("Size of channel and mask do not match");
         }
 
-        Histogram total = new HistogramArray((int) chnl.getVoxelDataType().maxValue());
+        Histogram total = new Histogram((int) channel.getVoxelDataType().maxValue());
 
-        Voxels<?> voxels = chnl.voxels().any();
-
-        Histogram h = createWithMask(voxels, new ObjectMask(mask.binaryVoxels()));
+        Histogram histogramForObject =
+                createWithMask(channel.voxels().any(), new ObjectMask(mask.binaryVoxels()));
         try {
-            total.addHistogram(h);
+            total.addHistogram(histogramForObject);
         } catch (OperationFailedException e) {
             assert false;
         }
@@ -113,17 +112,17 @@ public class HistogramFactory {
         return total;
     }
 
-    public static Histogram create(Channel chnl, ObjectMask object) {
-        return create(chnl, ObjectCollectionFactory.of(object));
+    public static Histogram create(Channel channel, ObjectMask object) {
+        return create(channel, ObjectCollectionFactory.of(object));
     }
 
-    public static Histogram create(Channel chnl, ObjectCollection objects) {
-        return createWithMasks(chnl.voxels(), objects);
+    public static Histogram create(Channel channel, ObjectCollection objects) {
+        return createWithMasks(channel.voxels(), objects);
     }
 
     public static Histogram create(VoxelBuffer<?> inputBuffer) {
 
-        Histogram hist = new HistogramArray((int) inputBuffer.dataType().maxValue());
+        Histogram hist = new Histogram((int) inputBuffer.dataType().maxValue());
         addBufferToHistogram(hist, inputBuffer, inputBuffer.size());
         return hist;
     }
@@ -135,7 +134,7 @@ public class HistogramFactory {
     public static Histogram create(VoxelsWrapper inputBuffer, Optional<ObjectMask> object) {
 
         if (!isDataTypeSupported(inputBuffer.getVoxelDataType())) {
-            throw new IncorrectVoxelDataTypeException(
+            throw new IncorrectVoxelTypeException(
                     String.format("Data type %s is not supported", inputBuffer.getVoxelDataType()));
         }
 
@@ -147,13 +146,13 @@ public class HistogramFactory {
     }
 
     private static boolean isDataTypeSupported(VoxelDataType dataType) {
-        return dataType.equals(VoxelDataTypeUnsignedByte.INSTANCE)
-                || dataType.equals(VoxelDataTypeUnsignedShort.INSTANCE);
+        return dataType.equals(UnsignedByteVoxelType.INSTANCE)
+                || dataType.equals(UnsignedShortVoxelType.INSTANCE);
     }
 
     private static Histogram createWithMask(Voxels<?> inputBuffer, ObjectMask object) {
 
-        Histogram histogram = new HistogramArray((int) inputBuffer.dataType().maxValue());
+        Histogram histogram = new Histogram((int) inputBuffer.dataType().maxValue());
 
         Extent extent = inputBuffer.extent();
 
@@ -187,7 +186,7 @@ public class HistogramFactory {
 
     private static Histogram createWithMasks(VoxelsWrapper voxels, ObjectCollection objects) {
 
-        Histogram total = new HistogramArray((int) voxels.getVoxelDataType().maxValue());
+        Histogram total = new Histogram((int) voxels.getVoxelDataType().maxValue());
 
         try {
             for (ObjectMask objectMask : objects) {
@@ -204,7 +203,7 @@ public class HistogramFactory {
 
     private static Histogram create(Voxels<?> inputBox) {
 
-        Histogram hist = new HistogramArray((int) inputBox.dataType().maxValue());
+        Histogram hist = new Histogram((int) inputBox.dataType().maxValue());
 
         int volumeXY = inputBox.extent().volumeXY();
 
@@ -222,8 +221,8 @@ public class HistogramFactory {
     }
 
     public static Histogram createHistogramIgnoreZero(
-            Channel chnl, ObjectMask object, boolean ignoreZero) {
-        Histogram hist = create(chnl, object);
+            Channel channel, ObjectMask object, boolean ignoreZero) {
+        Histogram hist = create(channel, object);
         if (ignoreZero) {
             hist.zeroValue(0);
         }

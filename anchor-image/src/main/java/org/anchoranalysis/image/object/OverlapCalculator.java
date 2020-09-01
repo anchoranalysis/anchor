@@ -37,7 +37,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class OverlapCalculator {
 
-    public static double calcOverlapRatio(ObjectMask objA, ObjectMask objB, ObjectMask objMerged) {
+    public static double calculateOverlapRatio(
+            ObjectMask objA, ObjectMask objB, ObjectMask objMerged) {
 
         int intersectingVoxels = objA.countIntersectingVoxels(objB);
         if (intersectingVoxels == 0) {

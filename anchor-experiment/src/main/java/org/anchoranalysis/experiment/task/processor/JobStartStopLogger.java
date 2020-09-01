@@ -54,8 +54,8 @@ public class JobStartStopLogger {
      * @param logger if non-NULL, write messages to logger. If null, no messages are written
      * @param showHashSeperators indicates if lines of hashes should be placed before and after each
      *     log message (adds emphasis)
-     * @param showOngoingJobsLess When the number of ongoing jobs is less than this threshold, they
-     *     are shown in event logs. 0 disables.
+     * @param showOngoingJobsLessThan When the number of ongoing jobs is less than this threshold,
+     *     they are shown in event logs. 0 disables.
      * @param monitor
      */
     public JobStartStopLogger(

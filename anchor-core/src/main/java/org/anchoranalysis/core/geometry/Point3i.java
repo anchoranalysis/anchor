@@ -35,7 +35,7 @@ public final class Point3i extends Tuple3i {
     /** */
     private static final long serialVersionUID = 1L;
 
-    /** Constructor - creates the points with a 0 in each dimension */
+    /** Creates the points with a 0 in each dimension */
     public Point3i() {
         // Initializes with zeroes
     }
@@ -78,23 +78,32 @@ public final class Point3i extends Tuple3i {
 
     /** Performs an addition without changing any values in an existing point */
     public static Point3i immutableAdd(ReadableTuple3i point, ReadableTuple3i toAdd) {
-        Point3i pointDup = new Point3i(point);
-        pointDup.add(toAdd);
-        return pointDup;
+        Point3i pointCopy = new Point3i(point);
+        pointCopy.add(toAdd);
+        return pointCopy;
+    }
+
+    /** Performs an addition without changing any values in an existing point */
+    public static Point3i immutableAdd(ReadableTuple3i point, int x, int y, int z) {
+        Point3i pointCopy = new Point3i(point);
+        pointCopy.incrementX(x);
+        pointCopy.incrementY(y);
+        pointCopy.incrementZ(z);
+        return pointCopy;
     }
 
     /** Performs a subtraction without changing any values in an existing point */
     public static Point3i immutableSubtract(ReadableTuple3i point, ReadableTuple3i toSubtract) {
-        Point3i pointDup = new Point3i(point);
-        pointDup.subtract(toSubtract);
-        return pointDup;
+        Point3i pointCopy = new Point3i(point);
+        pointCopy.subtract(toSubtract);
+        return pointCopy;
     }
 
     /** Performs a scale without changing any values in an existing point */
     public static Point3i immutableScale(ReadableTuple3i point, int factor) {
-        Point3i pointDup = new Point3i(point);
-        pointDup.scale(factor);
-        return pointDup;
+        Point3i pointCopy = new Point3i(point);
+        pointCopy.scale(factor);
+        return pointCopy;
     }
 
     /** Applies an operation to each element across two points */

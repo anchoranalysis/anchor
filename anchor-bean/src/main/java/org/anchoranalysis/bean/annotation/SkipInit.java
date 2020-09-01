@@ -29,6 +29,6 @@ package org.anchoranalysis.bean.annotation;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
-// Indicates that a field of a class should be ignored during the normal recursive initialisation
+/** Indicates that this particular bean-field should be ignored during (recursive) initialisation */
 @Retention(RetentionPolicy.RUNTIME)
 public @interface SkipInit {}

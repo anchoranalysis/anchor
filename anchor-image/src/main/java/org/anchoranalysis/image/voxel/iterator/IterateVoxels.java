@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.image.voxel.iterator;
 
+import com.google.common.base.Preconditions;
 import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.util.Optional;
@@ -129,40 +130,6 @@ public class IterateVoxels {
     }
 
     /**
-     * Calls each voxel in an object-mask until a point is found
-     *
-     * @param object object-mask
-     * @return the first point found
-     */
-    public static Optional<Point3i> findFirstPointOnObjectMask(ObjectMask object) {
-
-        Extent extentMask = object.extent();
-        ReadableTuple3i cornerMin = object.boundingBox().cornerMin();
-        byte valueOn = object.binaryValuesByte().getOnByte();
-
-        for (int z = 0; z < extentMask.z(); z++) {
-
-            // For 3d we need to translate the global index back to local
-            int z1 = cornerMin.z() + z;
-
-            ByteBuffer bbOM = object.sliceBufferLocal(z);
-
-            for (int y = 0; y < extentMask.y(); y++) {
-                int y1 = cornerMin.y() + y;
-
-                for (int x = 0; x < extentMask.x(); x++) {
-
-                    if (bbOM.get() == valueOn) {
-                        int x1 = cornerMin.x() + x;
-                        return Optional.of(new Point3i(x1, y1, z1));
-                    }
-                }
-            }
-        }
-        return Optional.empty();
-    }
-
-    /**
      * Iterate over each voxel in an {@link Extent}
      *
      * @param extent the extent to be iterated over
@@ -205,7 +172,8 @@ public class IterateVoxels {
     /**
      * Iterate over each voxel in an extent that matches a predicate
      *
-     * @param box the extent through which every point is tested to see if it matches the predicate
+     * @param extent the extent through which every point is tested to see if it matches the
+     *     predicate
      * @param process is called for each voxel within the bounding-box using GLOBAL coordinates.
      */
     public static void callEachPoint(
@@ -258,8 +226,7 @@ public class IterateVoxels {
     }
 
     /**
-     * Iterate over each voxel in a bounding-box - with an associated buffer for each slice from a
-     * voxel-buffer
+     * Iterate over each voxel in a bounding-box - with <b>one</b> associated buffer for each slice
      *
      * @param voxels voxels in which which {@link BoundingBox} refers to a subregion.
      * @param box the box that is used as a condition on what voxels to iterate i.e. only voxels
@@ -270,6 +237,77 @@ public class IterateVoxels {
     public static <T extends Buffer> void callEachPoint(
             Voxels<T> voxels, BoundingBox box, ProcessVoxelSliceBuffer<T> process) {
         callEachPoint(box, new RetrieveBufferForSlice<>(voxels, process));
+    }
+
+    /**
+     * Iterate over each voxel in a bounding-box - with <b>two</b> associated buffers for each slice
+     *
+     * <p>The extent's of both {@code voxels1} and {@code voxels2} must be equal.
+     *
+     * @param voxels1 voxels in which which {@link BoundingBox} refers to a subregion, and which
+     *     provides the <b>first</b> buffer
+     * @param voxels2 voxels in which which {@link BoundingBox} refers to a subregion, and which
+     *     provides the <b>second</b> buffer
+     * @param process is called for each voxel within the bounding-box using GLOBAL coordinates.
+     * @param <T> buffer-type for voxels
+     */
+    public static <T extends Buffer> void callEachPointTwo(
+            Voxels<T> voxels1, Voxels<T> voxels2, ProcessVoxelTwoSliceBuffers<T> process) {
+        Preconditions.checkArgument(voxels1.extent().equals(voxels2.extent()));
+        callEachPoint(
+                voxels1.extent(), new RetrieveBuffersForTwoSlices<>(voxels1, voxels2, process));
+    }
+
+    /**
+     * Iterate over each voxel in a bounding-box - with <b>three</b> associated buffers for each
+     * slice
+     *
+     * <p>The extent's of both {@code voxels1} and {@code voxels2} and {@code voxels3} must be
+     * equal.
+     *
+     * @param voxels1 voxels in which which {@link BoundingBox} refers to a subregion, and which
+     *     provides the <b>first</b> buffer
+     * @param voxels2 voxels in which which {@link BoundingBox} refers to a subregion, and which
+     *     provides the <b>second</b> buffer
+     * @param voxels3 voxels in which which {@link BoundingBox} refers to a subregion, and which
+     *     provides the <b>third</b> buffer
+     * @param process is called for each voxel within the bounding-box using GLOBAL coordinates.
+     * @param <T> buffer-type for voxels
+     */
+    public static <T extends Buffer> void callEachPointThree(
+            Voxels<T> voxels1,
+            Voxels<T> voxels2,
+            Voxels<T> voxels3,
+            ProcessVoxelThreeSliceBuffers<T> process) {
+        Preconditions.checkArgument(voxels1.extent().equals(voxels2.extent()));
+        Preconditions.checkArgument(voxels2.extent().equals(voxels3.extent()));
+        callEachPoint(
+                voxels1.extent(),
+                new RetrieveBuffersForThreeSlices<>(voxels1, voxels2, voxels3, process));
+    }
+
+    /**
+     * Iterate over each voxel with a corresponding ON value in an object-mask - and with <b>two</b>
+     * associated buffers for each slice
+     *
+     * <p>The extent's of both {@code voxels1} and {@code voxels2} must be equal.
+     *
+     * @param voxels1 voxels in which which {@link BoundingBox} refers to a subregion, and which
+     *     provides the <b>first</b> buffer
+     * @param voxels2 voxels in which which {@link BoundingBox} refers to a subregion, and which
+     *     provides the <b>second</b> buffer
+     * @param object an object-mask which restricts which voxels of {@code voxels1} and {@code
+     *     voxels2} are iterated
+     * @param process is called for each voxel within the bounding-box using GLOBAL coordinates.
+     * @param <T> buffer-type for voxels
+     */
+    public static <T extends Buffer> void callEachPointTwo(
+            Voxels<T> voxels1,
+            Voxels<T> voxels2,
+            ObjectMask object,
+            ProcessVoxelTwoSliceBuffers<T> process) {
+        Preconditions.checkArgument(voxels1.extent().equals(voxels2.extent()));
+        callEachPoint(object, new RetrieveBuffersForTwoSlices<>(voxels1, voxels2, process));
     }
 
     /**
@@ -324,10 +362,11 @@ public class IterateVoxels {
     /**
      * Iterate over each voxel in a mask - with an associated buffer for each slice from a voxel-bo
      *
-     * @param voxels voxels for which {@link} refers to a subregion.
+     * @param voxels voxels to iterate over (if the corresponding mask voxel is <i>on</i>)
      * @param mask the mask is used as a condition on what voxels to iterate i.e. only voxels within
      *     these bounds
-     * @param process is called for each voxel within the bounding-box using GLOBAL coordinates.
+     * @param process is called for each voxel within the bounding-box using <i>global</i>
+     *     coordinates.
      * @param <T> buffer-type for voxels
      */
     public static <T extends Buffer> void callEachPoint(

@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.image.feature.evaluator;
 
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.object.ObjectMask;
 
 @FunctionalInterface

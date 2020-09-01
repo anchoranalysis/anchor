@@ -32,38 +32,38 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.bean.list.FeatureList;
-import org.anchoranalysis.feature.calc.NamedFeatureCalculationException;
-import org.anchoranalysis.feature.calc.results.ResultsVector;
+import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
+import org.anchoranalysis.feature.calculate.results.ResultsVector;
+import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.feature.name.FeatureNameList;
-import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.feature.session.FeatureTableCalculator;
 
 /**
- * A particular type of feature-session where successive pairs of objects are evaluated by features
- * in five different ways:
+ * A feature-session to evaluate pairs of objects.
  *
- * <p><div>
+ * <p>Successive pairs are evaluated in five different ways:
  *
  * <ul>
- *   <li>the image in which the object exists (on {code listImage}) i.e. the nrg-stack.
+ *   <li>the image in which the object exists (on {code listImage}) i.e. the energy-stack.
  *   <li>the left-object in the pair (on {@code listSingle})
  *   <li>the right-object in the pair (on {@code listSingle})
  *   <li>the pair (on {code listPair})
  *   <li>both objects merged together (on {code listSingle}}
  * </ul>
  *
- * </div>
- *
  * <p>Due to the predictable pattern, feature-calculations can be cached predictably and
  * appropriately to avoid redundancies.
  *
- * <p><div> Two types of caching are applied to avoid redundancy
- * <li>The internal calculation caches of first/second/merged are reused as the internal calculation
- *     sub-caches in pair.
- * <li>The entire results are cached (as a function of the input) for first/second, as the same
- *     inputs reappear multiple times. </div>
+ * <p>Two types of caching are applied to avoid redundancy:
+ *
+ * <ul>
+ *   <li>The internal calculation caches of first/second/merged are reused as the internal
+ *       calculation sub-caches in pair.
+ *   <li>The entire results are cached (as a function of the input) for first/second, as the same
+ *       inputs reappear multiple times.
+ * </ul>
  *
  * @author Owen Feehan
  */
@@ -83,18 +83,21 @@ public class PairsTableCalculator implements FeatureTableCalculator<FeatureInput
     }
 
     @Override
-    public void start(ImageInitParams soImage, Optional<NRGStackWithParams> nrgStack, Logger logger)
+    public void start(ImageInitParams soImage, Optional<EnergyStack> energyStack, Logger logger)
             throws InitException {
 
         calculator =
                 new CombinedCalculator(
-                        features, new CreateCalculatorHelper(nrgStack, logger), include, soImage);
+                        features,
+                        new CreateCalculatorHelper(energyStack, logger),
+                        include,
+                        soImage);
     }
 
     @Override
     public ResultsVector calculate(FeatureInputPairObjects input)
-            throws NamedFeatureCalculationException {
-        return calculator.calcForInput(input, Optional.empty());
+            throws NamedFeatureCalculateException {
+        return calculator.calculateForInput(input, Optional.empty());
     }
 
     @Override
@@ -108,19 +111,19 @@ public class PairsTableCalculator implements FeatureTableCalculator<FeatureInput
             FeatureInputPairObjects input, ErrorReporter errorReporter) {
 
         try {
-            return calculator.calcForInput(input, Optional.of(errorReporter));
-        } catch (NamedFeatureCalculationException e) {
+            return calculator.calculateForInput(input, Optional.of(errorReporter));
+        } catch (NamedFeatureCalculateException e) {
             errorReporter.recordError(PairsTableCalculator.class, e);
 
-            ResultsVector rv = new ResultsVector(sizeFeatures());
-            rv.setErrorAll(e);
-            return rv;
+            ResultsVector results = new ResultsVector(sizeFeatures());
+            results.setErrorAll(e);
+            return results;
         }
     }
 
-    public ResultsVector calcMaybeSuppressErrors(
+    public ResultsVector calculateMaybeSuppressErrors(
             FeatureInputPairObjects input, ErrorReporter errorReporter)
-            throws NamedFeatureCalculationException {
+            throws NamedFeatureCalculateException {
         if (suppressErrors) {
             return calculateSuppressErrors(input, errorReporter);
         } else {

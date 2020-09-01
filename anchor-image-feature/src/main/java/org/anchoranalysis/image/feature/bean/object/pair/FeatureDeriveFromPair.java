@@ -34,7 +34,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.feature.object.calculation.CalculateInputFromPair;
 import org.anchoranalysis.image.feature.object.calculation.CalculateInputFromPair.Extract;
 import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
@@ -80,6 +80,6 @@ public abstract class FeatureDeriveFromPair extends FeaturePairObjects {
             SessionInput<FeatureInputPairObjects> input, Extract extract, ChildCacheName cacheName)
             throws FeatureCalculationException {
 
-        return input.forChild().calc(item, new CalculateInputFromPair(extract), cacheName);
+        return input.forChild().calculate(item, new CalculateInputFromPair(extract), cacheName);
     }
 }

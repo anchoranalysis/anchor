@@ -35,27 +35,27 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.channel.converter.attached.ChannelConverterAttached;
+import org.anchoranalysis.image.channel.converter.voxels.VoxelsConverter;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.BoundingBox;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.scale.ScaleFactor;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.image.stack.region.chnlconverter.attached.ChnlConverterAttached;
-import org.anchoranalysis.image.stack.region.chnlconverter.voxelbox.VoxelsConverter;
 import org.anchoranalysis.image.voxel.Voxels;
-import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelDataTypeException;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedShort;
+import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelTypeException;
+import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
+import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 
 @AllArgsConstructor
 public class RegionExtracterFromDisplayStack implements RegionExtracter {
 
     /** Used to convert our source buffer to bytes, not called if it's already bytes */
-    private List<Optional<ChnlConverterAttached<Channel, ByteBuffer>>> listChnlConverter;
+    private List<Optional<ChannelConverterAttached<Channel, ByteBuffer>>> listChannelConverter;
 
     /** Current displayStack */
     private Stack stack;
@@ -67,20 +67,20 @@ public class RegionExtracterFromDisplayStack implements RegionExtracter {
         Stack out = null;
         for (int c = 0; c < stack.getNumberChannels(); c++) {
 
-            Channel chnl =
+            Channel channel =
                     extractRegionFrom(
                             stack.getChannel(c),
                             box,
                             zoomFactor,
-                            listChnlConverter
+                            listChannelConverter
                                     .get(c)
-                                    .map(ChnlConverterAttached::getVoxelsConverter));
+                                    .map(ChannelConverterAttached::getVoxelsConverter));
 
             if (c == 0) {
-                out = new Stack(chnl);
+                out = new Stack(channel);
             } else {
                 try {
-                    out.addChannel(chnl);
+                    out.addChannel(channel);
                 } catch (IncorrectImageSizeException e) {
                     assert false;
                 }
@@ -98,13 +98,13 @@ public class RegionExtracterFromDisplayStack implements RegionExtracter {
             Channel extractedSlice,
             BoundingBox box,
             double zoomFactor,
-            Optional<VoxelsConverter<ByteBuffer>> chnlConverter)
+            Optional<VoxelsConverter<ByteBuffer>> channelConverter)
             throws OperationFailedException {
 
         ScaleFactor sf = new ScaleFactor(zoomFactor);
 
         // We calculate how big our outgoing voxels will be
-        ImageDimensions dimensions = extractedSlice.dimensions().scaleXYBy(sf);
+        Dimensions dimensions = extractedSlice.dimensions().scaleXYBy(sf);
 
         Extent extentTrgt = box.extent().scaleXYBy(sf);
 
@@ -112,22 +112,22 @@ public class RegionExtracterFromDisplayStack implements RegionExtracter {
 
         MeanInterpolator interpolator = (zoomFactor < 1) ? new MeanInterpolator(zoomFactor) : null;
 
-        if (extractedSlice.getVoxelDataType().equals(VoxelDataTypeUnsignedByte.INSTANCE)) {
+        if (extractedSlice.getVoxelDataType().equals(UnsignedByteVoxelType.INSTANCE)) {
             interpolateRegionFromByte(
                     extractedSlice.voxels().asByte(),
                     voxels,
-                    extractedSlice.dimensions().extent(),
+                    extractedSlice.extent(),
                     extentTrgt,
                     box,
                     zoomFactor,
                     interpolator);
 
-            if (chnlConverter.isPresent()) {
-                chnlConverter.get().convertFromByte(voxels, voxels);
+            if (channelConverter.isPresent()) {
+                channelConverter.get().convertFromByte(voxels, voxels);
             }
 
-        } else if (extractedSlice.getVoxelDataType().equals(VoxelDataTypeUnsignedShort.INSTANCE)
-                && chnlConverter.isPresent()) {
+        } else if (extractedSlice.getVoxelDataType().equals(UnsignedShortVoxelType.INSTANCE)
+                && channelConverter.isPresent()) {
 
             Voxels<ShortBuffer> bufferIntermediate =
                     VoxelsFactory.getShort().createInitialized(extentTrgt);
@@ -141,17 +141,17 @@ public class RegionExtracterFromDisplayStack implements RegionExtracter {
                     interpolator);
 
             // We now convert the ShortBuffer into bytes
-            chnlConverter.get().convertFromShort(bufferIntermediate, voxels);
+            channelConverter.get().convertFromShort(bufferIntermediate, voxels);
 
         } else {
-            throw new IncorrectVoxelDataTypeException(
+            throw new IncorrectVoxelTypeException(
                     String.format(
-                            "dataType %s is unsupported without chnlConverter",
+                            "dataType %s is unsupported without channelConverter",
                             extractedSlice.getVoxelDataType()));
         }
 
         return ChannelFactory.instance()
-                .get(VoxelDataTypeUnsignedByte.INSTANCE)
+                .get(UnsignedByteVoxelType.INSTANCE)
                 .create(voxels, dimensions.resolution());
     }
 

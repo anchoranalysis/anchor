@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.bean.xml;
 
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -43,6 +42,14 @@ import org.apache.commons.configuration.XMLConfiguration;
 import org.apache.commons.configuration.beanutils.BeanHelper;
 import org.apache.commons.configuration.beanutils.XMLBeanDeclaration;
 
+/**
+ * Creates beans based on XML specifying their properties (including nested children).
+ *
+ * <p>This is the principle means of loading beans, allowing XML files to provide inversion of
+ * control.
+ *
+ * @author Owen Feehan
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class BeanXmlLoader {
 
@@ -96,7 +103,6 @@ public class BeanXmlLoader {
      * @return an initialized bean
      * @throws BeanXmlException problem with reading the beanXML from the filesystem
      * @throws LocalisedBeanException problem occurs somewhere processing a configuration
-     * @throws IOException some kind of io error
      */
     public static <T> T loadBeanLocalized(Path path, String xmlPath)
             throws BeanXmlException, LocalisedBeanException {
@@ -127,7 +133,7 @@ public class BeanXmlLoader {
      * @return an initialized bean
      * @throws BeanXmlException if something goes wrong
      */
-    public static <T extends IAssociateXmlUponLoad> T loadBeanAssociatedXml(
+    public static <T extends AssociateXmlUponLoad> T loadBeanAssociatedXml(
             Path path, String xmlPath) throws BeanXmlException {
         try {
             return loadBeanAssociatedXmlLocalized(path, xmlPath);
@@ -151,7 +157,7 @@ public class BeanXmlLoader {
      * @param xmlPath xml-path to where the bean is located within the XML
      * @param <T> bean-type
      */
-    private static <T extends IAssociateXmlUponLoad> T loadBeanAssociatedXmlLocalized(
+    private static <T extends AssociateXmlUponLoad> T loadBeanAssociatedXmlLocalized(
             Path path, String xmlPath) throws BeanXmlException, LocalisedBeanException {
         checkBeansRegistered();
         try {
@@ -187,8 +193,9 @@ public class BeanXmlLoader {
      * @param xmlPath the path of the bean in the XML file
      * @param currentFilePath the path to the XML-file on the filesystem, this should be an absolute
      *     path
-     * @return
-     * @throws LocalisedBeanException
+     * @return a newly created bean populated from the XML
+     * @throws LocalisedBeanException if invalid XML exists or anything else goes wrong during
+     *     loading
      */
     private static <T> T createFromXMLConfigurationLocalised(
             HierarchicalConfiguration config, String xmlPath, Path currentFilePath)
@@ -225,8 +232,16 @@ public class BeanXmlLoader {
         }
     }
 
-    // CurrentFilePath is the file where the xml was retrieved from, allowing us to process relative
-    // paths to other files
+    /**
+     * Creates a bean from a {@link HierarchicalConfiguration} describing it
+     *
+     * @param <T> type of bean
+     * @param config the configuration
+     * @param xmlPath xpath describing where in the XML the bean is specified
+     * @param currentFilePath the file where the xml was retrieved from, allowing us to process
+     *     relative paths to other files
+     * @return newly created bean
+     */
     @SuppressWarnings("unchecked")
     private static <T> T createFromXMLConfiguration(
             HierarchicalConfiguration config, String xmlPath, Path currentFilePath) {

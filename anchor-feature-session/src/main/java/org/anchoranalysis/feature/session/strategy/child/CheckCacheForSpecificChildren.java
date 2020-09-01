@@ -28,13 +28,14 @@ package org.anchoranalysis.feature.session.strategy.child;
 
 import java.util.Optional;
 import java.util.Set;
+import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.cache.calculation.CacheCreator;
-import org.anchoranalysis.feature.cache.calculation.FeatureSessionCache;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.cache.calculate.CacheCreator;
+import org.anchoranalysis.feature.cache.calculate.FeatureSessionCache;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.session.strategy.replace.CacheAndReuseStrategy;
 
@@ -45,23 +46,18 @@ import org.anchoranalysis.feature.session.strategy.replace.CacheAndReuseStrategy
  * <p>This is used to "redirect" certain child-caches to reuse sessions elsewhere.
  *
  * @author Owen Feehan
- * @param <T> feature input-type
  */
+@RequiredArgsConstructor
 public class CheckCacheForSpecificChildren implements FindChildStrategy {
 
-    private Class<?> cacheInputType;
-    private CacheTransferSourceCollection source;
+    // START REQUIRED ARGUMENTS
+    private final Class<?> cacheInputType;
+    private final CacheTransferSourceCollection source;
+    // END REQUIRED ARGUMENTS
 
     // The fallback cache is used if none of the existing child caches contain the item, or have
     //  been initialized yet. It's created lazily.
     private CacheAndReuseStrategy<FeatureInput> fallbackCache = null;
-
-    public CheckCacheForSpecificChildren(
-            Class<?> cacheInputType, CacheTransferSourceCollection source) {
-        super();
-        this.source = source;
-        this.cacheInputType = cacheInputType;
-    }
 
     @Override
     public <V extends FeatureInput> FeatureSessionCache<V> childCacheFor(

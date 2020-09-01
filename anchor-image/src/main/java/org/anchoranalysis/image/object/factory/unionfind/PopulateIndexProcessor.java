@@ -72,7 +72,7 @@ class PopulateIndexProcessor<T extends Buffer> implements ProcessVoxelSliceBuffe
         if (bufferReaderWriter.isBufferOn(buffer, offsetSlice, bv, bvb)
                 && bbIndex.get(offsetSlice) == 0) {
 
-            int neighborLabel = mergeWithNeighbors.calcMinNeighborLabel(point, 0, offsetSlice);
+            int neighborLabel = mergeWithNeighbors.minNeighborLabel(point, 0, offsetSlice);
             if (neighborLabel == -1) {
                 bufferReaderWriter.putBufferCnt(buffer, offsetSlice, count);
                 bbIndex.put(offsetSlice, count);

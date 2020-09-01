@@ -1,5 +1,7 @@
 package org.anchoranalysis.core.functional.function;
 
+import java.util.function.ToIntFunction;
+
 /*-
  * #%L
  * anchor-core
@@ -27,11 +29,11 @@ package org.anchoranalysis.core.functional.function;
  */
 
 /**
- * Like {@java.util.ToIntFunction} but can also thrown an exception.
+ * Like {@link ToIntFunction} but can also thrown an exception.
  *
  * @author Owen Feehan
  * @param <S> argument-type
- * @param <E> exception-type that can be thrown
+ * @param <E> exception-type that can be thrown during {@code applyAsInt}
  */
 @FunctionalInterface
 public interface CheckedToIntFunction<S, E extends Exception> {

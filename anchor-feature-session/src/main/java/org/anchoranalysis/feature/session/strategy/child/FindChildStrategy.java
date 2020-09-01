@@ -29,9 +29,9 @@ package org.anchoranalysis.feature.session.strategy.child;
 import java.util.Optional;
 import java.util.Set;
 import org.anchoranalysis.feature.cache.ChildCacheName;
-import org.anchoranalysis.feature.cache.calculation.CacheCreator;
-import org.anchoranalysis.feature.cache.calculation.FeatureSessionCache;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.cache.calculate.CacheCreator;
+import org.anchoranalysis.feature.cache.calculate.FeatureSessionCache;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 public interface FindChildStrategy {

@@ -36,7 +36,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactoryByte;
 import org.anchoranalysis.image.channel.factory.ChannelFactorySingleType;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferByte;
@@ -48,8 +48,8 @@ public class CreateStackFromBufferedImage {
 
     public static Stack create(BufferedImage bufferedImage) throws OperationFailedException {
 
-        ImageDimensions dimensions =
-                new ImageDimensions(bufferedImage.getWidth(), bufferedImage.getHeight(), 1);
+        Dimensions dimensions =
+                new Dimensions(bufferedImage.getWidth(), bufferedImage.getHeight(), 1);
 
         byte[][] arr = bytesFromBufferedImage(bufferedImage);
 
@@ -65,7 +65,7 @@ public class CreateStackFromBufferedImage {
         }
     }
 
-    private static Channel createChannelFor(ImageDimensions dimensions, byte[] arr) {
+    private static Channel createChannelFor(Dimensions dimensions, byte[] arr) {
         Channel channel = FACTORY.createEmptyUninitialised(dimensions);
         channel.voxels().asByte().slices().replaceSlice(0, VoxelBufferByte.wrap(arr));
         return channel;

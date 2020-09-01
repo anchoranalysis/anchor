@@ -29,6 +29,7 @@ package org.anchoranalysis.image.bean.arrangeraster;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -57,14 +58,10 @@ public class ArrangeRasterTile extends ArrangeRasterBean {
     @BeanField @Getter @Setter private ArrangeRasterBean cellDefault = new SingleRaster();
     // END BEAN PROPERTIES
 
+    @AllArgsConstructor
     private class CreateTable implements TableItemArrangement.TableCreator<BoundingBoxesOnPlane> {
 
-        private Iterator<RGBStack> rasterIterator;
-
-        public CreateTable(Iterator<RGBStack> rasterIterator) {
-            super();
-            this.rasterIterator = rasterIterator;
-        }
+        private final Iterator<RGBStack> rasterIterator;
 
         // We can make this more efficient by using a lookup table for the cells
         // But as there should be relatively few exceptions, we just always loop
@@ -74,8 +71,8 @@ public class ArrangeRasterTile extends ArrangeRasterBean {
             if (cells != null) {
                 for (ArrangeRasterCell cell : cells) {
                     if (cell.getRow() == rowPos && cell.getCol() == colPos) {
-                        assert (cell.getArrangeRaster() != null);
-                        return cell.getArrangeRaster();
+                        assert (cell.getArrange() != null);
+                        return cell.getArrange();
                     }
                 }
             }

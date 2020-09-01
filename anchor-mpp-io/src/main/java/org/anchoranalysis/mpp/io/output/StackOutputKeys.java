@@ -33,7 +33,7 @@ import lombok.NoArgsConstructor;
 public class StackOutputKeys {
 
     public static final String STACK = "stack";
-    public static final String CFG = "cfg";
+    public static final String MARKS = "marks";
     public static final String HISTOGRAM = "histogram";
     public static final String OBJECTS = "objects";
 }

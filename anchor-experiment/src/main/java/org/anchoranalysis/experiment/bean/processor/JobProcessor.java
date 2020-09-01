@@ -65,7 +65,6 @@ public abstract class JobProcessor<T extends InputFromManager, S>
      * @param rootOutputManager
      * @param inputObjects
      * @param paramsExperiment
-     * @return
      * @throws ExperimentExecutionException
      */
     public void executeLogStats(

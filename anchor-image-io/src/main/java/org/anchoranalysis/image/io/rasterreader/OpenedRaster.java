@@ -29,7 +29,7 @@ package org.anchoranalysis.image.io.rasterreader;
 import java.util.List;
 import java.util.Optional;
 import org.anchoranalysis.core.progress.ProgressReporter;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.stack.TimeSequence;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
@@ -38,14 +38,14 @@ public interface OpenedRaster extends AutoCloseable {
 
     // Opens a time-series as a particular type. If it's not the correct type, an error is thrown
     default TimeSequence openCheckType(
-            int seriesIndex, ProgressReporter progressReporter, VoxelDataType chnlDataType)
+            int seriesIndex, ProgressReporter progressReporter, VoxelDataType channelDataType)
             throws RasterIOException {
 
         TimeSequence ts = open(seriesIndex, progressReporter);
 
-        if (!ts.allChnlsHaveType(chnlDataType)) {
+        if (!ts.allChannelsHaveType(channelDataType)) {
             throw new RasterIOException(
-                    String.format("File does not have dataType %s", chnlDataType));
+                    String.format("File does not have dataType %s", channelDataType));
         }
 
         return ts;
@@ -69,5 +69,5 @@ public interface OpenedRaster extends AutoCloseable {
 
     void close() throws RasterIOException;
 
-    ImageDimensions dimensionsForSeries(int seriesIndex) throws RasterIOException;
+    Dimensions dimensionsForSeries(int seriesIndex) throws RasterIOException;
 }

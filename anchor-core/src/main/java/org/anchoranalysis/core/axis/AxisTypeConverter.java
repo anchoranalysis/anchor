@@ -59,7 +59,7 @@ public class AxisTypeConverter {
         }
     }
 
-    /** An index representing each dimension where X->0, Y->1, Z->2 */
+    /** An index representing each dimension (0 for X, 1 for Y, 2 for Z) */
     public static int dimensionIndexFor(AxisType axis) throws AxisTypeException {
         switch (axis) {
             case X:

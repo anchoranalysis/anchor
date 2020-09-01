@@ -28,10 +28,10 @@ package org.anchoranalysis.image.feature.object.input;
 
 import java.util.Optional;
 import lombok.EqualsAndHashCode;
-import org.anchoranalysis.feature.input.FeatureInputNRG;
-import org.anchoranalysis.feature.nrg.NRGStackWithParams;
+import org.anchoranalysis.feature.energy.EnergyStack;
+import org.anchoranalysis.feature.input.FeatureInputEnergy;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.object.ops.ObjectMaskMerger;
+import org.anchoranalysis.image.object.combine.ObjectMaskMerger;
 
 /**
  * A pair of objects (first and second) and maybe a merged version of both
@@ -44,7 +44,7 @@ import org.anchoranalysis.image.object.ops.ObjectMaskMerger;
  * @author Owen Feehan
  */
 @EqualsAndHashCode(callSuper = true)
-public class FeatureInputPairObjects extends FeatureInputNRG {
+public class FeatureInputPairObjects extends FeatureInputEnergy {
 
     private ObjectMask first;
     private ObjectMask second;
@@ -55,29 +55,28 @@ public class FeatureInputPairObjects extends FeatureInputNRG {
         this(first, second, Optional.empty());
     }
 
-    public FeatureInputPairObjects(
-            ObjectMask first, ObjectMask second, NRGStackWithParams nrgStack) {
-        this(first, second, Optional.of(nrgStack));
+    public FeatureInputPairObjects(ObjectMask first, ObjectMask second, EnergyStack energyStack) {
+        this(first, second, Optional.of(energyStack));
     }
 
     public FeatureInputPairObjects(
-            ObjectMask first, ObjectMask second, Optional<NRGStackWithParams> nrgStack) {
-        this(first, second, nrgStack, Optional.empty());
+            ObjectMask first, ObjectMask second, Optional<EnergyStack> energyStack) {
+        this(first, second, energyStack, Optional.empty());
     }
 
     public FeatureInputPairObjects(
             ObjectMask first,
             ObjectMask second,
-            Optional<NRGStackWithParams> nrgStack,
+            Optional<EnergyStack> energyStack,
             Optional<ObjectMask> merged) {
-        super(nrgStack);
+        super(energyStack);
         this.first = first;
         this.second = second;
         this.merged = merged;
     }
 
     protected FeatureInputPairObjects(FeatureInputPairObjects src) {
-        super(src.getNrgStackOptional());
+        super(src.getEnergyStackOptional());
         this.first = src.first;
         this.second = src.second;
         this.merged = src.merged;

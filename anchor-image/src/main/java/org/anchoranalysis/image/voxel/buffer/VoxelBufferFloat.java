@@ -28,8 +28,8 @@ package org.anchoranalysis.image.voxel.buffer;
 
 import java.nio.FloatBuffer;
 import org.anchoranalysis.image.convert.ByteConverter;
+import org.anchoranalysis.image.voxel.datatype.FloatVoxelType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeFloat;
 
 public final class VoxelBufferFloat extends VoxelBuffer<FloatBuffer> {
 
@@ -60,7 +60,7 @@ public final class VoxelBufferFloat extends VoxelBuffer<FloatBuffer> {
 
     @Override
     public VoxelDataType dataType() {
-        return VoxelDataTypeFloat.INSTANCE;
+        return FloatVoxelType.INSTANCE;
     }
 
     public static VoxelBufferFloat allocate(int size) {

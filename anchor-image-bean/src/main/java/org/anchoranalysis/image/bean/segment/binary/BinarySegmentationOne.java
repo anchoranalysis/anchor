@@ -40,7 +40,7 @@ import org.anchoranalysis.image.voxel.VoxelsWrapper;
 public abstract class BinarySegmentationOne extends BinarySegmentation {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private BinarySegmentation sgmn;
+    @BeanField @Getter @Setter private BinarySegmentation segment;
     // END BEAN PROPERTIES
 
     @Override
@@ -49,10 +49,10 @@ public abstract class BinarySegmentationOne extends BinarySegmentation {
             BinarySegmentationParameters params,
             Optional<ObjectMask> objectMask)
             throws SegmentationFailedException {
-        return sgmnFromSgmn(voxels, params, objectMask, sgmn);
+        return segmentFromExistingSegmentation(voxels, params, objectMask, segment);
     }
 
-    protected abstract BinaryVoxels<ByteBuffer> sgmnFromSgmn(
+    protected abstract BinaryVoxels<ByteBuffer> segmentFromExistingSegmentation(
             VoxelsWrapper voxels,
             BinarySegmentationParameters params,
             Optional<ObjectMask> object,

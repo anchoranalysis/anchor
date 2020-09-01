@@ -28,7 +28,7 @@ package org.anchoranalysis.annotation.io.assignment;
 
 import lombok.AllArgsConstructor;
 import lombok.Value;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.object.ObjectMask;
 
 @Value
@@ -39,7 +39,7 @@ class ObjectMaskPair {
     private final ObjectMask right;
     private final double overlapRatio;
 
-    public boolean atBorderXY(ImageDimensions dimensions) {
+    public boolean atBorderXY(Dimensions dimensions) {
         return left.boundingBox().atBorderXY(dimensions)
                 || right.boundingBox().atBorderXY(dimensions);
     }

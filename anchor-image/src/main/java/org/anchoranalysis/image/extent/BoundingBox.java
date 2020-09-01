@@ -67,7 +67,7 @@ public final class BoundingBox implements Serializable {
      *
      * @param dimensions the dimensions
      */
-    public BoundingBox(ImageDimensions dimensions) {
+    public BoundingBox(Dimensions dimensions) {
         this(dimensions.extent());
     }
 
@@ -90,8 +90,7 @@ public final class BoundingBox implements Serializable {
     }
 
     /**
-     * Constructor - creates a new bounding-box from two points (a minimum corner and a maximum
-     * corner)
+     * Creates from two {@code double} points (a minimum corner and a maximum corner)
      *
      * @param cornerMinInclusive minimum point in each dimension of the bounding-box (that exists
      *     inside the box)
@@ -105,8 +104,7 @@ public final class BoundingBox implements Serializable {
     }
 
     /**
-     * Constructor - creates a new bounding-box from two points (a minimum corner and a maximum
-     * corner)
+     * Creates from two {@code int} points (a minimum corner and a maximum corner)
      *
      * @param cornerMinInclusive minimum point in each dimension of the bounding-box (that exists
      *     inside the box)
@@ -142,10 +140,10 @@ public final class BoundingBox implements Serializable {
     }
 
     /**
-     * Similar to {@link midpoint} but not always identical. It is the mean of all the points in the
-     * box, and guaranteed to be integral.
+     * Similar to {@link #midpoint} but not always identical. It is the mean of all the points in
+     * the box, and guaranteed to be integral.
      *
-     * <p>It should be the same in each dimension as (crnr+extent-1)/2
+     * <p>It should always be identical in each dimension to {@code (corner()+extent()-1)/2}
      *
      * @return the center-of-gravity
      */
@@ -169,7 +167,7 @@ public final class BoundingBox implements Serializable {
         return new BoundingBox(cornerMin, extent.duplicateChangeZ(extentZ));
     }
 
-    public boolean atBorder(ImageDimensions dimensions) {
+    public boolean atBorder(Dimensions dimensions) {
 
         if (atBorderXY(dimensions)) {
             return true;
@@ -178,7 +176,7 @@ public final class BoundingBox implements Serializable {
         return atBorderZ(dimensions);
     }
 
-    public boolean atBorderXY(ImageDimensions dimensions) {
+    public boolean atBorderXY(Dimensions dimensions) {
 
         ReadableTuple3i cornerMax = this.calculateCornerMaxExclusive();
 
@@ -195,7 +193,7 @@ public final class BoundingBox implements Serializable {
         return cornerMax.y() == dimensions.y();
     }
 
-    public boolean atBorderZ(ImageDimensions dimensions) {
+    public boolean atBorderZ(Dimensions dimensions) {
 
         ReadableTuple3i cornerMax = this.calculateCornerMaxExclusive();
 
@@ -218,9 +216,9 @@ public final class BoundingBox implements Serializable {
     }
 
     /**
-     * The maximum (right-most) point <i>inside</i> the box
+     * The maximum (right-most) point <i>inside</i> the box.
      *
-     * <p>This means that iterators should be {@code <= #calcCornerMax()}
+     * <p>This means that iterators should be {@code <= calculateCornerMax()}.
      *
      * @return the maximum point inside the box in each dimension
      */
@@ -233,11 +231,11 @@ public final class BoundingBox implements Serializable {
     }
 
     /**
-     * The maximum (right-most) point just <i> outside the box
+     * The maximum (right-most) point just outside the box.
      *
-     * <p>It is equivalent to {@code < #calcCornerMax()} plus {@code 1} in each dimension.
+     * <p>It is equivalent to {@code < calculateCornerMax()} plus {@code 1} in each dimension.
      *
-     * <p>This means that iterators should be {@code < #calcCornerMaxExclusive()}
+     * <p>This means that iterators should be {@code < calculateCornerMaxExclusive()}.
      *
      * @return the maximum point inside the box in each dimension
      */
@@ -397,7 +395,8 @@ public final class BoundingBox implements Serializable {
     }
 
     /**
-     * Reflects the bounding box through the origin (i.e. x,y,z -> -x, -y, -z)
+     * Reflects the bounding box through the origin (i.e. {@code x, y, z} becomes {@code -x, -y,
+     * -z})
      *
      * @return a bounding-box reflected through the origin
      */
@@ -435,7 +434,7 @@ public final class BoundingBox implements Serializable {
      * Scales the bounding-box corner-point, and assigns a new extent
      *
      * @param scaleFactor scaling-factor
-     * @param extent extent to assign
+     * @param extentToAssign extent to assign
      * @return a new bounding-box with scaled corner-point and the specified extent
      */
     public BoundingBox scale(ScaleFactor scaleFactor, Extent extentToAssign) {
@@ -467,12 +466,12 @@ public final class BoundingBox implements Serializable {
 
     private Point3d meanOfExtent(int subtractFromEachDimension) {
         return new Point3d(
-                calcMeanForDim(ReadableTuple3i::x, subtractFromEachDimension),
-                calcMeanForDim(ReadableTuple3i::y, subtractFromEachDimension),
-                calcMeanForDim(ReadableTuple3i::z, subtractFromEachDimension));
+                calculateMeanForDim(ReadableTuple3i::x, subtractFromEachDimension),
+                calculateMeanForDim(ReadableTuple3i::y, subtractFromEachDimension),
+                calculateMeanForDim(ReadableTuple3i::z, subtractFromEachDimension));
     }
 
-    private double calcMeanForDim(
+    private double calculateMeanForDim(
             ToDoubleFunction<ReadableTuple3i> extractDim, int subtractFromEachDimension) {
         double midPointInExtent =
                 (extractDim.applyAsDouble(extent.asTuple()) - subtractFromEachDimension) / 2;

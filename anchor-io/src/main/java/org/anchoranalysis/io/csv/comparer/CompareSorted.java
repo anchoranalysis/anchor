@@ -94,7 +94,6 @@ class CompareSorted {
      * @param file1
      * @param file2
      * @return true if both files have equal numbers of lines, false otherwise
-     * @throws IOException
      */
     private boolean loadFromFiles(OpenedCSVFile file1, OpenedCSVFile file2)
             throws CSVReaderException {

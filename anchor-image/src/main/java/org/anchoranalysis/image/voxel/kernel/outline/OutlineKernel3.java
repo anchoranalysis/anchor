@@ -30,19 +30,15 @@ import java.nio.ByteBuffer;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 
-// Keeps any on pixel that touches an off pixel, off otheriwse
+// Keeps any on pixel that touches an off pixel, off otherwise
 public class OutlineKernel3 extends OutlineKernel3Base {
 
     public OutlineKernel3(BinaryValuesByte bv, boolean outsideAtThreshold, boolean useZ) {
-        this(bv, outsideAtThreshold, useZ, false);
+        this(bv, new OutlineKernelParameters(outsideAtThreshold, useZ, false));
     }
 
-    public OutlineKernel3(
-            BinaryValuesByte bv,
-            boolean outsideAtThreshold,
-            boolean useZ,
-            boolean ignoreAtThreshold) {
-        super(bv, outsideAtThreshold, useZ, ignoreAtThreshold);
+    public OutlineKernel3(BinaryValuesByte bv, OutlineKernelParameters params) {
+        super(bv, params);
     }
 
     /**

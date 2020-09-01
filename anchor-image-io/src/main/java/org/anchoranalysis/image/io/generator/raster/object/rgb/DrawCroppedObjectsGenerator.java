@@ -30,21 +30,21 @@ import com.google.common.base.Functions;
 import io.vavr.control.Either;
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.anchor.overlay.bean.DrawObject;
-import org.anchoranalysis.anchor.overlay.writer.ObjectDrawAttributes;
 import org.anchoranalysis.core.color.ColorIndex;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.size.Padding;
 import org.anchoranalysis.image.extent.BoundingBox;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.io.stack.ConvertDisplayStackToRGB;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.object.ops.ObjectMaskMerger;
+import org.anchoranalysis.image.object.combine.ObjectMaskMerger;
 import org.anchoranalysis.image.object.properties.ObjectCollectionWithProperties;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
+import org.anchoranalysis.overlay.bean.DrawObject;
+import org.anchoranalysis.overlay.writer.ObjectDrawAttributes;
 
 /**
  * Similar to {@link DrawObjectsGenerator}
@@ -65,7 +65,7 @@ public class DrawCroppedObjectsGenerator extends ObjectsOnRGBGenerator {
     }
 
     @Override
-    protected RGBStack generateBackground(Either<ImageDimensions, DisplayStack> background)
+    protected RGBStack generateBackground(Either<Dimensions, DisplayStack> background)
             throws CreateException {
         Extent extent = background.fold(Functions.identity(), DisplayStack::dimensions).extent();
 
@@ -82,7 +82,7 @@ public class DrawCroppedObjectsGenerator extends ObjectsOnRGBGenerator {
 
         // Extract the relevant piece of background
         return background.fold(
-                dimensions -> createEmptyStackFor(new ImageDimensions(box.extent())),
+                dimensions -> createEmptyStackFor(new Dimensions(box.extent())),
                 stack -> ConvertDisplayStackToRGB.convertCropped(stack, box));
     }
 

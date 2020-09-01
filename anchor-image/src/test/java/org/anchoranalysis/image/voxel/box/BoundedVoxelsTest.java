@@ -33,6 +33,7 @@ import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.BoundedVoxels;
+import org.anchoranalysis.image.voxel.BoundedVoxelsFactory;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 import org.junit.Test;
 
@@ -47,14 +48,20 @@ public class BoundedVoxelsTest {
     public void testGrowObjectOutsideClipRegion() throws OperationFailedException {
 
         // A bounding box that overlaps with the extent
-        Extent extent = new Extent(20, 20, 20);
+        Extent extent = extent(20);
 
         BoundedVoxels<ByteBuffer> box =
-                new BoundedVoxels<ByteBuffer>(
-                        new BoundingBox(new Point3i(10, 10, 10), new Extent(15, 15, 15)),
-                        VoxelsFactory.getByte());
+                BoundedVoxelsFactory.createByte(new BoundingBox(point(10), extent(15)));
 
-        Point3i grow = new Point3i(1, 1, 1);
+        Point3i grow = point(1);
         box.growBuffer(grow, grow, Optional.of(extent), VoxelsFactory.getByte());
+    }
+
+    private static Point3i point(int value) {
+        return new Point3i(value, value, value);
+    }
+
+    private static Extent extent(int value) {
+        return new Extent(value, value, value);
     }
 }

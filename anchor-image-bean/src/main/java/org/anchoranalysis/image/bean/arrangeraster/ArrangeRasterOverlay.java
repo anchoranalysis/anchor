@@ -34,8 +34,8 @@ import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.bean.nonbean.arrangeraster.ArrangeRasterException;
 import org.anchoranalysis.image.bean.nonbean.arrangeraster.BoundingBoxesOnPlane;
 import org.anchoranalysis.image.extent.BoundingBox;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
 
 // Overlays one image on the other
@@ -58,11 +58,11 @@ public class ArrangeRasterOverlay extends ArrangeRasterBean {
     // END BEAN PROPERTIES
 
     @Override
-    public String getBeanDscr() {
+    public String describeBean() {
         return getBeanName();
     }
 
-    private int calcHorizontalPos(BoundingBoxesOnPlane boxSet, ImageDimensions dimensions) {
+    private int positionHorizontal(BoundingBoxesOnPlane boxSet, Dimensions dimensions) {
 
         if (horizontalAlign.equalsIgnoreCase("left")) {
             return 0;
@@ -73,7 +73,7 @@ public class ArrangeRasterOverlay extends ArrangeRasterBean {
         }
     }
 
-    private int calcVerticalPos(BoundingBoxesOnPlane boxSet, ImageDimensions dimensions) {
+    private int positionVertical(BoundingBoxesOnPlane boxSet, Dimensions dimensions) {
 
         if (verticalAlign.equalsIgnoreCase("top")) {
             return 0;
@@ -84,7 +84,7 @@ public class ArrangeRasterOverlay extends ArrangeRasterBean {
         }
     }
 
-    private int calcZPos(BoundingBoxesOnPlane boxSet, ImageDimensions dimensions) {
+    private int positionZ(BoundingBoxesOnPlane boxSet, Dimensions dimensions) {
 
         if (zAlign.equalsIgnoreCase("bottom") || zAlign.equalsIgnoreCase("repeat")) {
             return 0;
@@ -112,12 +112,11 @@ public class ArrangeRasterOverlay extends ArrangeRasterBean {
 
         RGBStack overlayImg = rasterIterator.next();
 
-        Extent overlayE =
-                deriveExtent(overlayImg.channelAt(0).dimensions().extent(), boxSet.extent());
+        Extent overlayE = deriveExtent(overlayImg.channelAt(0).extent(), boxSet.extent());
 
-        int hPos = calcHorizontalPos(boxSet, overlayImg.dimensions());
-        int vPos = calcVerticalPos(boxSet, overlayImg.dimensions());
-        int zPos = calcZPos(boxSet, overlayImg.dimensions());
+        int hPos = positionHorizontal(boxSet, overlayImg.dimensions());
+        int vPos = positionVertical(boxSet, overlayImg.dimensions());
+        int zPos = positionZ(boxSet, overlayImg.dimensions());
 
         boxSet.add(new BoundingBox(new Point3i(hPos, vPos, zPos), overlayE));
         return boxSet;

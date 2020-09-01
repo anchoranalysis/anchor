@@ -31,17 +31,17 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.input.FeatureInput;
-import org.anchoranalysis.image.bean.provider.ImageDimProvider;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.bean.provider.DimensionsProvider;
+import org.anchoranalysis.image.extent.Dimensions;
 
 public abstract class ReportFeatureForMPP<T extends FeatureInput>
         extends ReportFeatureEvaluator<T> {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private ImageDimProvider dimensions;
+    @BeanField @Getter @Setter private DimensionsProvider dimensions;
     // END BEAN PROPERTIES
 
-    protected ImageDimensions createImageDim() throws CreateException {
+    protected Dimensions createImageDim() throws CreateException {
         return dimensions.create();
     }
 }

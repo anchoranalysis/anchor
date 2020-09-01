@@ -44,11 +44,11 @@ class SubNodeKeysHelper {
      *
      * <p>It only finds direct sub-nodes (i.e. it is not recursive)
      *
-     * <p>e.g. for an example with two children (namedChnlProviderList and namedStackProviderList)
-     * the following is returned: Key: namedChnlProviderList[@config-class] Key:
-     * namedChnlProviderList[@config-factory] Key: namedChnlProviderList[@filePath] Key:
-     * namedStackProviderList[@config-class] Key: namedStackProviderList[@config-factory] Key:
-     * namedStackProviderList[@filePath]
+     * <p>e.g. for an example with two children (namedChannelProviderList and
+     * namedStackProviderList) the following is returned: Key:
+     * namedChannelProviderList[@config-class] Key: namedChannelProviderList[@config-factory] Key:
+     * namedChannelProviderList[@filePath] Key: namedStackProviderList[@config-class] Key:
+     * namedStackProviderList[@config-factory] Key: namedStackProviderList[@filePath]
      *
      * <p>We remove the [] component, and combine into a set for uniqueness to retrieve the desired
      * two items.

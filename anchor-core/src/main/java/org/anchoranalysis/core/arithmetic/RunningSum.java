@@ -27,6 +27,7 @@ package org.anchoranalysis.core.arithmetic;
  */
 
 import java.io.Serializable;
+import lombok.Getter;
 
 /**
  * Mutable class that allows for incrementing jointly sum and count variables, so as to eventually
@@ -41,18 +42,33 @@ public class RunningSum implements Serializable {
     /** */
     private static final long serialVersionUID = -2147459521030056604L;
 
-    private double sum = 0;
-    private int cnt = 0;
+    /** The running sum */
+    @Getter private double sum = 0;
+
+    /** The running count */
+    @Getter private int count = 0;
 
     /**
      * Calculates the mean
      *
-     * @return the mean or
-     *     <pre>NaN</pre>
-     *     if the count is zero.
+     * @return the mean or {@code NaN} if the count is zero.
      */
     public double mean() {
-        return (cnt != 0) ? sum / cnt : Double.NaN;
+        return mean(Double.NaN);
+    }
+
+    /**
+     * Calculates the mean
+     *
+     * @param valueIfCountZero value to use if the count is zero
+     * @return the mean or {@code valueIfCountZero} if the count is zero.
+     */
+    public double mean(double valueIfCountZero) {
+        if (count != 0) {
+            return sum / count;
+        } else {
+            return valueIfCountZero;
+        }
     }
 
     /** Calculate the mean and then reset to zero */
@@ -65,17 +81,7 @@ public class RunningSum implements Serializable {
     /** Reset the sum and count to zero */
     public void reset() {
         sum = 0.0;
-        cnt = 0;
-    }
-
-    /** The sum */
-    public double getSum() {
-        return sum;
-    }
-
-    /** The count */
-    public int getCount() {
-        return cnt;
+        count = 0;
     }
 
     /**
@@ -85,7 +91,7 @@ public class RunningSum implements Serializable {
      */
     public void increment(double sumIncrement) {
         sum += sumIncrement;
-        cnt++;
+        count++;
     }
 
     /**
@@ -96,7 +102,7 @@ public class RunningSum implements Serializable {
      */
     public void increment(double sumIncrement, int countIncrement) {
         sum += sumIncrement;
-        cnt += countIncrement;
+        count += countIncrement;
     }
 
     /**
@@ -106,7 +112,7 @@ public class RunningSum implements Serializable {
      */
     public void increment(RunningSum runningSum) {
         sum += runningSum.getSum();
-        cnt += runningSum.getCount();
+        count += runningSum.getCount();
     }
 
     /**
@@ -117,7 +123,7 @@ public class RunningSum implements Serializable {
     public RunningSum duplicate() {
         RunningSum out = new RunningSum();
         out.sum = sum;
-        out.cnt = cnt;
+        out.count = count;
         return out;
     }
 }

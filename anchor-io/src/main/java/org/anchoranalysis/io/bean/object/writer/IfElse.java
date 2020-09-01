@@ -30,16 +30,16 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.anchoranalysis.anchor.overlay.bean.DrawObject;
-import org.anchoranalysis.anchor.overlay.writer.ObjectDrawAttributes;
-import org.anchoranalysis.anchor.overlay.writer.PrecalcOverlay;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.object.properties.ObjectWithProperties;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
+import org.anchoranalysis.overlay.bean.DrawObject;
+import org.anchoranalysis.overlay.writer.ObjectDrawAttributes;
+import org.anchoranalysis.overlay.writer.PrecalculationOverlay;
 
 /**
  * Branches to two different writers depending on a binary condition.
@@ -70,14 +70,14 @@ public class IfElse extends DrawObject {
     }
 
     @Override
-    public PrecalcOverlay precalculate(ObjectWithProperties object, ImageDimensions dim)
+    public PrecalculationOverlay precalculate(ObjectWithProperties object, Dimensions dim)
             throws CreateException {
 
         // We calculate both the TRUE and FALSE precalculations
-        PrecalcOverlay precalcTrue = whenTrue.precalculate(object, dim);
-        PrecalcOverlay precalcFalse = whenFalse.precalculate(object, dim);
+        PrecalculationOverlay precalculationTrue = whenTrue.precalculate(object, dim);
+        PrecalculationOverlay precalculationFalse = whenFalse.precalculate(object, dim);
 
-        return new PrecalcOverlay(object) {
+        return new PrecalculationOverlay(object) {
 
             @Override
             public void writePrecalculatedMask(
@@ -91,10 +91,10 @@ public class IfElse extends DrawObject {
                         && condition
                                 .get()
                                 .isTrue(object, background, attributes.idFor(object, iteration))) {
-                    precalcTrue.writePrecalculatedMask(
+                    precalculationTrue.writePrecalculatedMask(
                             background, attributes, iteration, restrictTo);
                 } else {
-                    precalcFalse.writePrecalculatedMask(
+                    precalculationFalse.writePrecalculatedMask(
                             background, attributes, iteration, restrictTo);
                 }
             }

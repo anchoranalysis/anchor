@@ -104,7 +104,7 @@ public class FeatureListStoreUtilities {
         }
 
         if (paramsOnlyInDescription) {
-            return feature.getParamDscr();
+            return feature.describeParams();
         } else {
             return feature.getFriendlyName();
         }

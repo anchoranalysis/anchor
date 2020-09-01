@@ -28,7 +28,7 @@ package org.anchoranalysis.io.bioformats.copyconvert.tofloat;
 
 import java.io.IOException;
 import java.nio.FloatBuffer;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferFloat;
@@ -36,8 +36,8 @@ import org.anchoranalysis.io.bioformats.copyconvert.ConvertTo;
 
 public abstract class ConvertToFloat extends ConvertTo<FloatBuffer> {
 
-    private int sizeBytesChnl;
-    private ImageDimensions dimensions;
+    private int sizeBytesChannel;
+    private Dimensions dimensions;
 
     public ConvertToFloat() {
         super(VoxelsWrapper::asFloat);
@@ -46,19 +46,19 @@ public abstract class ConvertToFloat extends ConvertTo<FloatBuffer> {
     protected abstract int bytesPerPixel();
 
     @Override
-    protected void setupBefore(ImageDimensions dimensions, int numChnlsPerByteArray) {
-        sizeBytesChnl = dimensions.x() * dimensions.y() * bytesPerPixel();
+    protected void setupBefore(Dimensions dimensions, int numChannelsPerByteArray) {
+        sizeBytesChannel = dimensions.x() * dimensions.y() * bytesPerPixel();
         this.dimensions = dimensions;
     }
 
     @Override
-    protected VoxelBuffer<FloatBuffer> convertSingleChnl(byte[] src, int channelRelative)
+    protected VoxelBuffer<FloatBuffer> convertSingleChannel(byte[] src, int channelRelative)
             throws IOException {
-        int index = (sizeBytesChnl * channelRelative);
+        int index = (sizeBytesChannel * channelRelative);
         float[] fArr = convertIntegerBytesToFloatArray(dimensions, src, index);
         return VoxelBufferFloat.wrap(fArr);
     }
 
     protected abstract float[] convertIntegerBytesToFloatArray(
-            ImageDimensions dimensions, byte[] src, int srcOffset) throws IOException;
+            Dimensions dimensions, byte[] src, int srcOffset) throws IOException;
 }

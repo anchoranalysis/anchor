@@ -27,43 +27,41 @@
 package org.anchoranalysis.image.voxel.iterator;
 
 import java.nio.Buffer;
+import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.voxel.Voxels;
 
 /**
- * Exposes a {@link ProcessVoxelOffset} as a {@link ProcessVoxelSliceBuffer} by retrieving a buffer
- * from voxels for each z-slice.
+ * Exposes a {@link ProcessVoxel} as a {@link ProcessVoxelSliceBuffer} by retrieving a buffer from
+ * voxels for each z-slice.
  *
- * <p>Note that {@link} notifyChangeZ need not be be called for all slices (perhaps only a subset),
- * but {@link process} must be called for ALL voxels on a given slice.
+ * <p>Note that {@link #notifyChangeSlice} <b>need not</b> be be called for all slices (perhaps only
+ * a subset), but {@link #process} <b>must</b> be called for ALL voxels on a given slice.
  *
  * @author Owen Feehan
  * @param <T> buffer-type for slice
  */
+@RequiredArgsConstructor
 public final class RetrieveBufferForSlice<T extends Buffer> implements ProcessVoxel {
 
+    // START REQUIRED ARGUMENTS
     private final Voxels<T> voxels;
-    private final ProcessVoxelSliceBuffer<T> process;
+    private final ProcessVoxelSliceBuffer<T> processor;
+    // END REQUIRED ARGUMENTS
 
     private T bufferSlice;
     /** A 2D offset within the current slice */
     private int offsetWithinSlice;
 
-    public RetrieveBufferForSlice(Voxels<T> voxels, ProcessVoxelSliceBuffer<T> process) {
-        super();
-        this.voxels = voxels;
-        this.process = process;
-    }
-
     @Override
     public void notifyChangeSlice(int z) {
-        process.notifyChangeSlice(z);
+        processor.notifyChangeSlice(z);
         offsetWithinSlice = 0;
         this.bufferSlice = voxels.sliceBuffer(z);
     }
 
     @Override
     public void process(Point3i point) {
-        process.process(point, bufferSlice, offsetWithinSlice++);
+        processor.process(point, bufferSlice, offsetWithinSlice++);
     }
 }

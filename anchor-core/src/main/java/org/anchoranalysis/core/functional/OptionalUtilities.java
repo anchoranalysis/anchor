@@ -44,40 +44,38 @@ import org.anchoranalysis.core.functional.function.CheckedSupplier;
 public class OptionalUtilities {
 
     /**
-     * Like {@link Optional::map} but tolerates an exception in the mapping function, which is
+     * Like {@link Optional#map} but tolerates an exception in the mapping function, which is
      * immediately thrown.
      *
-     * @param <S> incoming optional-type for map
-     * @param <T> outgoing optional-type for map
+     * @param <S> optional-type
      * @param <E> exception that may be thrown during mapping
-     * @param opt incoming optional
-     * @param mapFunc the function that does the mapping from incoming to outgoing
-     * @return the outgoing "mapped" optional
-     * @throws E an exception if the mapping function throws it
+     * @param optional incoming optional
+     * @param consumerFunction the function that is called if an optional contains a vlaue
+     * @throws E an exception if {@code consumerFunction} throws it
      */
     public static <S, E extends Exception> void ifPresent(
-            Optional<S> opt, CheckedConsumer<S, E> consumerFunc) throws E {
-        if (opt.isPresent()) {
-            consumerFunc.accept(opt.get());
+            Optional<S> optional, CheckedConsumer<S, E> consumerFunction) throws E {
+        if (optional.isPresent()) {
+            consumerFunction.accept(optional.get());
         }
     }
 
     /**
-     * Like {@link Optional::map} but tolerates an exception in the mapping function, which is
+     * Like {@link Optional#map} but tolerates an exception in the mapping function, which is
      * immediately thrown.
      *
      * @param <S> incoming optional-type for map
      * @param <T> outgoing optional-type for map
      * @param <E> exception that may be thrown during mapping
-     * @param opt incoming optional
-     * @param mapFunc the function that does the mapping from incoming to outgoing
+     * @param optional incoming optional
+     * @param mapFunction the function that does the mapping from incoming to outgoing
      * @return the outgoing "mapped" optional
      * @throws E an exception if the mapping function throws it
      */
     public static <S, T, E extends Exception> Optional<T> map(
-            Optional<S> opt, CheckedFunction<S, T, E> mapFunc) throws E {
-        if (opt.isPresent()) {
-            T target = mapFunc.apply(opt.get());
+            Optional<S> optional, CheckedFunction<S, T, E> mapFunction) throws E {
+        if (optional.isPresent()) {
+            T target = mapFunction.apply(optional.get());
             return Optional.of(target);
         } else {
             return Optional.empty();
@@ -85,21 +83,41 @@ public class OptionalUtilities {
     }
 
     /**
-     * Like {@link Optional::flatMap} but tolerates an exception in the mapping function, which is
+     * Like {@link Optional#orElseGet} but tolerates an exception in the supplier function, which is
+     * immediately thrown.
+     *
+     * @param <T> optional-type
+     * @param <E> exception that may be thrown during mapping
+     * @param optional incoming optional
+     * @param supplier supplies a value if the optional is empty
+     * @return the outgoing optional
+     * @throws E an exception if the supplier throws it
+     */
+    public static <T, E extends Exception> T orElseGet(
+            Optional<T> optional, CheckedSupplier<T, E> supplier) throws E {
+        if (optional.isPresent()) {
+            return optional.get();
+        } else {
+            return supplier.get();
+        }
+    }
+
+    /**
+     * Like {@link Optional#flatMap} but tolerates an exception in the mapping function, which is
      * immediately thrown.
      *
      * @param <S> incoming optional-type for map
      * @param <T> outgoing optional-type for map
      * @param <E> exception that may be thrown during mapping
-     * @param opt incoming optional
-     * @param mapFunc the function that does the mapping from incoming to outgoing
+     * @param optional incoming optional
+     * @param mapFunction the function that does the mapping from incoming to outgoing
      * @return the outgoing "mapped" optional
      * @throws E an exception if the mapping function throws it
      */
     public static <S, T, E extends Exception> Optional<T> flatMap(
-            Optional<S> opt, CheckedFunction<S, Optional<T>, E> mapFunc) throws E {
-        if (opt.isPresent()) {
-            return mapFunc.apply(opt.get());
+            Optional<S> optional, CheckedFunction<S, Optional<T>, E> mapFunction) throws E {
+        if (optional.isPresent()) {
+            return mapFunction.apply(optional.get());
         } else {
             return Optional.empty();
         }
@@ -114,14 +132,14 @@ public class OptionalUtilities {
      * @param <V> second incoming optional-type for map
      * @param optional1 first incoming optional
      * @param optional2 second incoming optional
-     * @param mapFunc the function that does the mapping from both incoming objects to outgoing
+     * @param mapFunction the function that does the mapping from both incoming objects to outgoing
      * @return the outgoing "mapped" optional (empty() if either incoming optional is empty)
      */
     public static <T, U, V, E extends Exception> Optional<T> mapBoth(
-            Optional<U> optional1, Optional<V> optional2, CheckedBiFunction<U, V, T, E> mapFunc)
+            Optional<U> optional1, Optional<V> optional2, CheckedBiFunction<U, V, T, E> mapFunction)
             throws E {
         if (optional1.isPresent() && optional2.isPresent()) {
-            return Optional.of(mapFunc.apply(optional1.get(), optional2.get()));
+            return Optional.of(mapFunction.apply(optional1.get(), optional2.get()));
         } else {
             return Optional.empty();
         }

@@ -26,16 +26,18 @@
 
 package org.anchoranalysis.bean;
 
-import org.anchoranalysis.bean.init.InitializableBean;
-import org.anchoranalysis.bean.init.params.NullInitParams;
-import org.anchoranalysis.bean.init.property.PropertyInitializer;
-import org.anchoranalysis.bean.init.property.SimplePropertyDefiner;
+import org.anchoranalysis.bean.initializable.InitializableBean;
+import org.anchoranalysis.bean.initializable.params.NullInitParams;
+import org.anchoranalysis.bean.initializable.property.PropertyInitializer;
+import org.anchoranalysis.bean.initializable.property.SimplePropertyDefiner;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.log.Logger;
 
 /**
+ * A base class for beans that require initialization but the initializations needs no parameters.
+ *
  * @author Owen Feehan
- * @param <T> bean-type
+ * @param <T> bean family-type
  */
 public abstract class NullParamsBean<T> extends InitializableBean<T, NullInitParams> {
 

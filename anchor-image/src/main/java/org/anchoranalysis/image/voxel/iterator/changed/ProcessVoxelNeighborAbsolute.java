@@ -37,7 +37,7 @@ public interface ProcessVoxelNeighborAbsolute<T> {
     /**
      * The value and offset for the source point (around which we process neighbors)
      *
-     * <p>This function should always be called before {@link processPoint}
+     * <p>This function should always be called before {@link #processPoint}
      *
      * <p>It can be called repeatedly for different points (resetting state each time).
      *
@@ -57,9 +57,9 @@ public interface ProcessVoxelNeighborAbsolute<T> {
     /**
      * Processes a particular point
      *
-     * @param zChange the change in X-dimension to reach this neighbor relative to the source
+     * @param xChange the change in x-dimension to reach this neighbor relative to the source
      *     coordinate
-     * @param yChange the change in Y-dimension to reach this neighbor relative to the source
+     * @param yChange the change in y-dimension to reach this neighbor relative to the source
      *     coordinate
      * @param x the cordinates for this point (the neighboring point) in global (absolute) terms
      *     i.e. NOT relative to a bounding-box

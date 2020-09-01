@@ -26,10 +26,9 @@
 
 package org.anchoranalysis.image.bean.provider;
 
-import org.anchoranalysis.bean.Provider;
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.bean.provider.Provider;
 import org.anchoranalysis.image.bean.ImageBean;
-import org.anchoranalysis.image.stack.Stack;
+import org.anchoranalysis.image.provider.ProviderAsStack;
 
 /**
  * A provider base-class that as well as providing type S, also provide a stack
@@ -37,8 +36,5 @@ import org.anchoranalysis.image.stack.Stack;
  * @param <T> family-type common base-class for all beans in this category
  * @param <S> provider-type what is provided
  */
-public abstract class BeanProviderAsStackBase<T, S> extends ImageBean<T> implements Provider<S> {
-
-    /** Creates from the image-bean in the form of a stack */
-    public abstract Stack createAsStack() throws CreateException;
-}
+public abstract class BeanProviderAsStackBase<T, S> extends ImageBean<T>
+        implements Provider<S>, ProviderAsStack {}

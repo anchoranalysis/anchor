@@ -29,8 +29,8 @@ package org.anchoranalysis.feature.session.calculator;
 import java.util.function.Consumer;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.feature.bean.list.FeatureList;
-import org.anchoranalysis.feature.calc.NamedFeatureCalculationException;
-import org.anchoranalysis.feature.calc.results.ResultsVector;
+import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
+import org.anchoranalysis.feature.calculate.results.ResultsVector;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
@@ -58,14 +58,14 @@ public class FeatureCalculatorMultiChangeInput<T extends FeatureInput>
         this.funcToApplyChange = funcToApplyChange;
     }
 
-    public ResultsVector calculate(T input) throws NamedFeatureCalculationException {
+    public ResultsVector calculate(T input) throws NamedFeatureCalculateException {
         funcToApplyChange.accept(input);
         return calculator.calculate(input);
     }
 
     @Override
     public ResultsVector calculate(T input, FeatureList<T> featuresSubset)
-            throws NamedFeatureCalculationException {
+            throws NamedFeatureCalculateException {
         funcToApplyChange.accept(input);
         return calculator.calculate(input, featuresSubset);
     }

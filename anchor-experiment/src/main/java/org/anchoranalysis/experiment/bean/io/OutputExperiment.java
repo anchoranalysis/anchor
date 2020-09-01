@@ -154,7 +154,6 @@ public abstract class OutputExperiment extends Experiment {
     }
 
     private void initBeforeExec(ParametersExperiment params) throws ExperimentExecutionException {
-        UpdateLog4JOutputManager.updateLog4J(params.getOutputManager());
         params.getLoggerExperiment().start();
         OutputExperimentLogHelper.maybeLogStart(params);
 

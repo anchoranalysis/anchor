@@ -32,20 +32,19 @@ import java.util.List;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.anchor.overlay.bean.DrawObject;
 import org.anchoranalysis.annotation.io.assignment.Assignment;
 import org.anchoranalysis.core.color.ColorList;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.bean.provider.stack.StackProviderArrangeRaster;
-import org.anchoranalysis.image.io.bean.stack.arrange.StackProviderWithLabel;
+import org.anchoranalysis.image.bean.provider.stack.ArrangeRaster;
+import org.anchoranalysis.image.io.bean.stack.StackProviderWithLabel;
 import org.anchoranalysis.image.io.generator.raster.RasterGenerator;
 import org.anchoranalysis.image.io.generator.raster.StackGenerator;
 import org.anchoranalysis.image.io.generator.raster.object.rgb.DrawObjectsGenerator;
 import org.anchoranalysis.image.io.stack.TileRasters;
 import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.object.ObjectCollectionFactory;
 import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.object.factory.ObjectCollectionFactory;
 import org.anchoranalysis.image.object.properties.ObjectCollectionWithProperties;
 import org.anchoranalysis.image.object.properties.ObjectWithProperties;
 import org.anchoranalysis.image.stack.DisplayStack;
@@ -56,6 +55,7 @@ import org.anchoranalysis.io.bean.object.writer.IfElse;
 import org.anchoranalysis.io.bean.object.writer.Outline;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import org.anchoranalysis.overlay.bean.DrawObject;
 
 public class AssignmentGenerator extends RasterGenerator {
 
@@ -75,12 +75,7 @@ public class AssignmentGenerator extends RasterGenerator {
     /**
      * @param background
      * @param assignment
-     * @param colorSetGeneratorPaired
-     * @param colorSetGeneratorUnpaired
      * @param mipOutline
-     * @param factory
-     * @param replaceMatchesWithSolids if TRUE, then any matching objects are displayed as solids,
-     *     rather than outlines. if FALSE, all objects are displayed as outlines.
      */
     AssignmentGenerator(
             DisplayStack background,
@@ -104,7 +99,7 @@ public class AssignmentGenerator extends RasterGenerator {
     @Override
     public Stack generate() throws OutputWriteFailedException {
 
-        StackProviderArrangeRaster stackProvider =
+        ArrangeRaster stackProvider =
                 createTiledStackProvider(
                         createRGBOutlineStack(true),
                         createRGBOutlineStack(false),
@@ -121,7 +116,7 @@ public class AssignmentGenerator extends RasterGenerator {
         }
     }
 
-    private static StackProviderArrangeRaster createTiledStackProvider(
+    private static ArrangeRaster createTiledStackProvider(
             Stack stackLeft, Stack stackRight, String nameLeft, String nameRight) {
         List<StackProviderWithLabel> listProvider = new ArrayList<>();
         listProvider.add(new StackProviderWithLabel(stackLeft, nameLeft));
@@ -182,7 +177,7 @@ public class AssignmentGenerator extends RasterGenerator {
     }
 
     private DrawObject createOutlineWriter() {
-        return new Outline(outlineWidth, mipOutline);
+        return new Outline(outlineWidth, !mipOutline);
     }
 
     @Override

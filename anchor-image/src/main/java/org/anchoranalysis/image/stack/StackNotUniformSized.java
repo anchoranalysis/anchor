@@ -32,7 +32,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 
 public class StackNotUniformSized implements Iterable<Channel> {
@@ -70,7 +70,7 @@ public class StackNotUniformSized implements Iterable<Channel> {
         StackNotUniformSized stackOut = new StackNotUniformSized();
         for (int c = 0; c < channels.size(); c++) {
             // TODO make more efficient than duplicate()
-            stackOut.addChannel(channels.get(c).duplicate().maxIntensityProjection());
+            stackOut.addChannel(channels.get(c).duplicate().projectMax());
         }
         return stackOut;
     }
@@ -79,8 +79,8 @@ public class StackNotUniformSized implements Iterable<Channel> {
         channels.clear();
     }
 
-    public final void addChannel(Channel chnl) {
-        channels.add(chnl);
+    public final void addChannel(Channel channel) {
+        channels.add(channel);
     }
 
     public final Channel getChannel(int index) {
@@ -91,7 +91,7 @@ public class StackNotUniformSized implements Iterable<Channel> {
         return channels.size();
     }
 
-    public ImageDimensions getFirstDimensions() {
+    public Dimensions getFirstDimensions() {
         assert (getNumberChannels() > 0);
         return channels.get(0).dimensions();
     }
@@ -102,7 +102,7 @@ public class StackNotUniformSized implements Iterable<Channel> {
             return true;
         }
 
-        ImageDimensions dimensions = channels.get(0).dimensions();
+        Dimensions dimensions = channels.get(0).dimensions();
 
         for (int c = 1; c < channels.size(); c++) {
 

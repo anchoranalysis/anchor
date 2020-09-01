@@ -29,6 +29,7 @@ package org.anchoranalysis.image.bean.provider;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.bean.provider.Provider;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.object.ObjectCollection;
 
@@ -41,7 +42,7 @@ import org.anchoranalysis.image.object.ObjectCollection;
 public abstract class ObjectCollectionProviderUnary extends ObjectCollectionProvider {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private ObjectCollectionProvider objects;
+    @BeanField @Getter @Setter private Provider<ObjectCollection> objects;
     // END BEAN PROPERTIES
 
     @Override

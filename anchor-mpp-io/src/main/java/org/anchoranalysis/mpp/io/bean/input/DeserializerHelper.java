@@ -29,23 +29,24 @@ package org.anchoranalysis.mpp.io.bean.input;
 import java.nio.file.Path;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 import org.anchoranalysis.annotation.mark.MarkAnnotation;
 import org.anchoranalysis.io.bean.deserializer.XStreamDeserializer;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
+import org.anchoranalysis.mpp.mark.MarkCollection;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class DeserializerHelper {
 
-    private static XStreamDeserializer<Cfg> deserializerCfg = new XStreamDeserializer<>();
+    private static XStreamDeserializer<MarkCollection> deserializerMarks =
+            new XStreamDeserializer<>();
     private static XStreamDeserializer<MarkAnnotation> deserializerAnnotation =
             new XStreamDeserializer<>();
 
-    public static Cfg deserializeCfg(Path path) throws DeserializationFailedException {
-        return deserializerCfg.deserialize(path);
+    public static MarkCollection deserializeMarks(Path path) throws DeserializationFailedException {
+        return deserializerMarks.deserialize(path);
     }
 
-    public static Cfg deserializeCfgFromAnnotation(
+    public static MarkCollection deserializeMarksFromAnnotation(
             Path outPath, boolean includeAccepted, boolean includeRejected)
             throws DeserializationFailedException {
         MarkAnnotation ann = deserializerAnnotation.deserialize(outPath);
@@ -56,16 +57,16 @@ class DeserializerHelper {
             throw new DeserializationFailedException("Annotation was never accepted");
         }
 
-        Cfg cfgOut = new Cfg();
+        MarkCollection marksOut = new MarkCollection();
 
         if (includeAccepted) {
-            cfgOut.addAll(ann.getCfg());
+            marksOut.addAll(ann.getMarks());
         }
 
-        if (includeRejected && ann.getCfgReject() != null) {
-            cfgOut.addAll(ann.getCfgReject());
+        if (includeRejected && ann.getMarksReject() != null) {
+            marksOut.addAll(ann.getMarksReject());
         }
 
-        return cfgOut;
+        return marksOut;
     }
 }

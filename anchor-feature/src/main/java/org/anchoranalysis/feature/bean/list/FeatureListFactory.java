@@ -37,6 +37,7 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.bean.provider.Provider;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.functional.CheckedStream;
 import org.anchoranalysis.core.functional.function.CheckedFunction;
@@ -84,7 +85,7 @@ public class FeatureListFactory {
      * @throws CreateException
      */
     public static <T extends FeatureInput> FeatureList<T> fromProvider(
-            FeatureProvider<T> featureProvider) throws CreateException {
+            Provider<Feature<T>> featureProvider) throws CreateException {
         return from(featureProvider.create());
     }
 
@@ -144,7 +145,7 @@ public class FeatureListFactory {
      *
      * @param <T> input-type of feature(s) in list
      * @param list the list to wrap
-     * @return a newly-created feature-list, using the same features as the {@link list} argument
+     * @return a newly-created feature-list, using the same features as the {@code list} argument
      *     but not the same list data structure.
      */
     public static <T extends FeatureInput> FeatureList<T> wrapDuplicate(List<Feature<T>> list) {
@@ -182,7 +183,7 @@ public class FeatureListFactory {
      * @param predicate only items in {@code iterable} that fulfill this condition will be mapped
      * @param mapFunc function for mapping
      * @return a newly created feature-list, with the result (in order) of the mapping of each item
-     *     in {@link iterable}
+     *     in {@code iterable}
      * @throws E exception if it occurs during mapping
      */
     public static <S, T extends FeatureInput, E extends Exception> FeatureList<T> mapFromFiltered(
@@ -208,7 +209,7 @@ public class FeatureListFactory {
      * @param iterable source of entities to be mapped
      * @param flatMapFunc function for mapping
      * @return a newly created feature-list, with the result (in order) of the mapping of each item
-     *     in {@link iterable}
+     *     in {@code iterable}
      * @throws E exception if it occurs during mapping
      */
     public static <S, T extends FeatureInput, E extends Exception>

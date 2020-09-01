@@ -28,25 +28,19 @@ package org.anchoranalysis.bean.permute.property;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import lombok.AllArgsConstructor;
 
 /**
  * Represents a sequence of integers to satisfy {@code start <= i <= end} (in certain increments)
  *
  * @author Owen Feehan
  */
+@AllArgsConstructor
 class SequenceIntegerIterator implements Iterator<Integer> {
 
+    private int current;
     private final int end;
     private final int increment;
-
-    private int current;
-
-    public SequenceIntegerIterator(int start, int end, int increment) {
-        super();
-        this.current = start;
-        this.end = end;
-        this.increment = increment;
-    }
 
     @Override
     public boolean hasNext() {

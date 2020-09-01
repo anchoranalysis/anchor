@@ -36,7 +36,7 @@ import org.anchoranalysis.image.bean.nonbean.arrangeraster.ArrangeRaster;
 public class ArrangeRasterCell extends AnchorBean<ArrangeRasterCell> {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private ArrangeRaster arrangeRaster;
+    @BeanField @Getter @Setter private ArrangeRaster arrange;
 
     @BeanField @NonNegative @Getter @Setter private int row;
 

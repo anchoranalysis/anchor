@@ -39,9 +39,10 @@ import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.channel.factory.ChannelFactorySingleType;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.ImageDimensions;
-import org.anchoranalysis.image.extent.ImageResolution;
+import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
+import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.interpolator.Interpolator;
 import org.anchoranalysis.image.interpolator.InterpolatorFactory;
 import org.anchoranalysis.image.object.ObjectMask;
@@ -49,8 +50,8 @@ import org.anchoranalysis.image.scale.ScaleFactor;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.VoxelsPredicate;
 import org.anchoranalysis.image.voxel.assigner.VoxelsAssigner;
-import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelDataTypeException;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
+import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelTypeException;
+import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.image.voxel.thresholder.VoxelsThresholder;
 
 /**
@@ -64,7 +65,7 @@ import org.anchoranalysis.image.voxel.thresholder.VoxelsThresholder;
 public class Mask {
 
     private static final ChannelFactorySingleType FACTORY =
-            ChannelFactory.instance().get(VoxelDataTypeUnsignedByte.INSTANCE);
+            ChannelFactory.instance().get(UnsignedByteVoxelType.INSTANCE);
 
     /**
      * The underlying channel which contains the binary-values. It is always has data-type of
@@ -83,7 +84,7 @@ public class Mask {
     private final Interpolator interpolator;
 
     /**
-     * Constructor - creates a mask from an existing channel using default values for OFF (0) and ON
+     * Creates a mask from an existing channel using default values for OFF (0) and ON
      * (255)
      *
      * <p>The channel should have maximally two distinct intensity values, represeting OFF and ON
@@ -100,7 +101,7 @@ public class Mask {
     }
 
     /**
-     * Constructor - creates a mask from an existing channel
+     * Creates a mask from an existing channel
      *
      * <p>The channel should have maximally two distinct intensity values, represeting OFF and ON
      * states
@@ -117,30 +118,30 @@ public class Mask {
         this.binaryValues = binaryValues;
         this.binaryValuesByte = binaryValues.createByte();
 
-        if (!channel.getVoxelDataType().equals(VoxelDataTypeUnsignedByte.INSTANCE)) {
-            throw new IncorrectVoxelDataTypeException(
-                    "Only unsigned 8-bit data type is supported for BinaryChnl");
+        if (!channel.getVoxelDataType().equals(UnsignedByteVoxelType.INSTANCE)) {
+            throw new IncorrectVoxelTypeException(
+                    "Only unsigned 8-bit data type is supported for mask");
         }
 
         this.interpolator = createInterpolator(binaryValues);
     }
 
     /**
-     * Constructor - creates a mask from an existing binary-voxels using default image resolution
+     * Creates a mask from an existing binary-voxels using default image resolution
      *
      * @param voxels the binary-voxels to be reused as the internal buffer of the mask
      */
     public Mask(BinaryVoxels<ByteBuffer> voxels) {
-        this(voxels, new ImageResolution());
+        this(voxels, new Resolution());
     }
 
     /**
-     * Constructor - creates a mask from an existing binary-voxels using default image resolution
+     * Creates a mask from an existing binary-voxels using default image resolution
      *
      * @param voxels the binary-voxels to be reused as the internal buffer of the mask
      * @param resolution the image-resolution to assign
      */
-    public Mask(BinaryVoxels<ByteBuffer> voxels, ImageResolution resolution) {
+    public Mask(BinaryVoxels<ByteBuffer> voxels, Resolution resolution) {
         this.channel = FACTORY.create(voxels.voxels(), resolution);
         this.binaryValues = voxels.binaryValues();
         this.binaryValuesByte = binaryValues.createByte();
@@ -149,7 +150,7 @@ public class Mask {
     }
 
     /**
-     * Constructor - creates a new empty mask of particular dimensions and with particular
+     * Creates a new empty mask of particular dimensions and with particular
      * binaryvalues
      *
      * <p>Default mask values for OFF (0) and ON (255) are employed.
@@ -157,20 +158,20 @@ public class Mask {
      * @param dimensions the dimensions for the newly-created mask
      * @param binaryValues the binary-values to use for the newly created mask
      */
-    public Mask(ImageDimensions dimensions, BinaryValues binaryValues) {
+    public Mask(Dimensions dimensions, BinaryValues binaryValues) {
         this(FACTORY.createEmptyInitialised(dimensions), binaryValues);
     }
 
-    public ImageDimensions dimensions() {
+    public Dimensions dimensions() {
         return channel.dimensions();
     }
 
     public Voxels<ByteBuffer> voxels() {
         try {
             return channel.voxels().asByte();
-        } catch (IncorrectVoxelDataTypeException e) {
-            throw new IncorrectVoxelDataTypeException(
-                    "Associated imgChnl does contain have unsigned 8-bit data (byte)");
+        } catch (IncorrectVoxelTypeException e) {
+            throw new IncorrectVoxelTypeException(
+                    "Associated imgChannel does contain have unsigned 8-bit data (byte)");
         }
     }
 
@@ -194,12 +195,12 @@ public class Mask {
         Preconditions.checkArgument(channel.dimensions().contains(box));
         return new ObjectMask(
                 box,
-                channel.voxels().asByte().extracter().region(box, reuseIfPossible),
+                channel.voxels().asByte().extract().region(box, reuseIfPossible),
                 binaryValues);
     }
 
     public Mask flattenZ() {
-        return new Mask(channel.maxIntensityProjection(), binaryValues);
+        return new Mask(channel.projectMax(), binaryValues);
     }
 
     public VoxelsPredicate voxelsOn() {
@@ -243,6 +244,10 @@ public class Mask {
         return channel.assignValue(binaryValues.getOffInt());
     }
 
+    public ByteBuffer sliceBuffer(int z) {
+        return channel.voxels().asByte().sliceBuffer(z);
+    }
+
     private void applyThreshold(Mask mask) {
         int thresholdVal = (binaryValues.getOnInt() + binaryValues.getOffInt()) / 2;
 
@@ -252,5 +257,45 @@ public class Mask {
 
     private Interpolator createInterpolator(BinaryValues binaryValues) {
         return InterpolatorFactory.getInstance().binaryResizing(binaryValues.getOffInt());
+    }
+
+    public int getOffInt() {
+        return binaryValues.getOffInt();
+    }
+
+    public int getOnInt() {
+        return binaryValues.getOnInt();
+    }
+
+    public boolean equals(Object o) {
+        return binaryValues.equals(o);
+    }
+
+    public int hashCode() {
+        return binaryValues.hashCode();
+    }
+
+    public BinaryValuesByte createByte() {
+        return binaryValues.createByte();
+    }
+
+    public BinaryValues createInverted() {
+        return binaryValues.createInverted();
+    }
+
+    public String toString() {
+        return binaryValues.toString();
+    }
+
+    public byte getOffByte() {
+        return binaryValuesByte.getOffByte();
+    }
+
+    public byte getOnByte() {
+        return binaryValuesByte.getOnByte();
+    }
+
+    public Extent extent() {
+        return channel.extent();
     }
 }

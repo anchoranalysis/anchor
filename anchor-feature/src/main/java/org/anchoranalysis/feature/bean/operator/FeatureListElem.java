@@ -36,7 +36,7 @@ import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.input.FeatureInput;
-import org.anchoranalysis.feature.input.descriptor.FeatureInputType;
+import org.anchoranalysis.feature.input.FeatureInputType;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class FeatureListElem<T extends FeatureInput> extends Feature<T> {
@@ -58,12 +58,11 @@ public abstract class FeatureListElem<T extends FeatureInput> extends Feature<T>
      * A string description of all the items of the list concatenated together with a character in
      * between
      *
-     * @param list
      * @param operatorDscr
      * @return
      */
     protected String descriptionForList(String operatorDscr) {
-        return String.join(operatorDscr, FunctionalList.mapToList(list, Feature::getDscrLong));
+        return String.join(operatorDscr, FunctionalList.mapToList(list, Feature::descriptionLong));
     }
 
     public void setList(List<Feature<T>> list) {

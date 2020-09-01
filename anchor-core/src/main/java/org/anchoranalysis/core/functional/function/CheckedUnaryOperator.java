@@ -1,5 +1,7 @@
 package org.anchoranalysis.core.functional.function;
 
+import java.util.function.UnaryOperator;
+
 /*-
  * #%L
  * anchor-core
@@ -27,7 +29,7 @@ package org.anchoranalysis.core.functional.function;
  */
 
 /**
- * Like a {@UnaryOperator} but allows an exception to be thrown
+ * Like a {@link UnaryOperator} but allows an exception to be thrown
  *
  * @author Owen Feehan
  * @param <T> input and output-type of operator

@@ -29,12 +29,12 @@ package org.anchoranalysis.image.feature.object.input;
 import java.util.Optional;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import org.anchoranalysis.feature.input.FeatureInputNRG;
-import org.anchoranalysis.feature.nrg.NRGStackWithParams;
+import org.anchoranalysis.feature.energy.EnergyStack;
+import org.anchoranalysis.feature.input.FeatureInputEnergy;
 import org.anchoranalysis.image.object.ObjectMask;
 
 /**
- * An input representing a single object-mask (with maybe an NRG-stack associated)
+ * An input representing a single object-mask (with maybe an energy-stack associated)
  *
  * <p>Equals and hash-code must be sensibly defined as these inputs can be used as keys in a cache.
  * The equals implementation assumes equals of {@link ObjectMask} is shallow and computationally
@@ -43,7 +43,7 @@ import org.anchoranalysis.image.object.ObjectMask;
  * @author Owen Feehan
  */
 @EqualsAndHashCode(callSuper = true)
-public class FeatureInputSingleObject extends FeatureInputNRG {
+public class FeatureInputSingleObject extends FeatureInputEnergy {
 
     @Getter private ObjectMask object;
 
@@ -51,12 +51,12 @@ public class FeatureInputSingleObject extends FeatureInputNRG {
         this(object, Optional.empty());
     }
 
-    public FeatureInputSingleObject(ObjectMask object, NRGStackWithParams nrgStack) {
-        this(object, Optional.of(nrgStack));
+    public FeatureInputSingleObject(ObjectMask object, EnergyStack energyStack) {
+        this(object, Optional.of(energyStack));
     }
 
-    public FeatureInputSingleObject(ObjectMask object, Optional<NRGStackWithParams> nrgStack) {
-        super(nrgStack);
+    public FeatureInputSingleObject(ObjectMask object, Optional<EnergyStack> energyStack) {
+        super(energyStack);
         this.object = object;
     }
 

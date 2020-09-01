@@ -51,6 +51,10 @@ public class StringLabelsForCsvRow {
     /** an identifier for a higher-level group which the row belongs to (foreign key) */
     @Getter private final Optional<MultiName> group;
 
+    public StringLabelsForCsvRow(String identifier) {
+        this( Optional.of(new String[]{identifier}), Optional.empty() );
+    }
+    
     public void addToRow(List<TypedValue> csvRow) {
         identifier.ifPresent(stringArr -> addStringArrayToRow(stringArr, csvRow));
         group.ifPresent(stringArr -> addStringIterableToRow(stringArr, csvRow));

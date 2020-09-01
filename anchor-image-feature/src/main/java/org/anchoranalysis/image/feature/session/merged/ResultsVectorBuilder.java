@@ -29,9 +29,8 @@ package org.anchoranalysis.image.feature.session.merged;
 import java.util.Optional;
 import java.util.function.Function;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
-import org.anchoranalysis.feature.calc.NamedFeatureCalculationException;
-import org.anchoranalysis.feature.calc.results.ResultsVector;
+import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
+import org.anchoranalysis.feature.calculate.results.ResultsVector;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
@@ -42,7 +41,7 @@ class ResultsVectorBuilder {
 
     private Optional<ErrorReporter> errorReporter;
     private ResultsVector out;
-    private int cnt;
+    private int count;
 
     /**
      * Constructor
@@ -55,35 +54,34 @@ class ResultsVectorBuilder {
         super();
         this.errorReporter = errorReporter;
         this.out = new ResultsVector(size);
-        this.cnt = 0;
+        this.count = 0;
     }
 
     /** Calculates and inserts a derived obj-mask params from a merged. */
-    public void calcAndInsert(
+    public void calculateAndInsert(
             FeatureInputPairObjects inputPair,
             Function<FeatureInputPairObjects, ObjectMask> extractObj,
-            FeatureCalculatorMulti<FeatureInputSingleObject> calc)
-            throws NamedFeatureCalculationException {
+            FeatureCalculatorMulti<FeatureInputSingleObject> calculator)
+            throws NamedFeatureCalculateException {
         FeatureInputSingleObject inputSingle =
                 new FeatureInputSingleObject(extractObj.apply(inputPair));
-        calcAndInsert(inputSingle, calc);
+        calculateAndInsert(inputSingle, calculator);
     }
 
     /**
      * Calculates the parameters belong to a particular session and inserts into a ResultsVector
      *
      * @param input
-     * @param calc
-     * @throws FeatureCalculationException
+     * @param calculator
      */
-    public <T extends FeatureInput> void calcAndInsert(T input, FeatureCalculatorMulti<T> calc)
-            throws NamedFeatureCalculationException {
+    public <T extends FeatureInput> void calculateAndInsert(
+            T input, FeatureCalculatorMulti<T> calculator) throws NamedFeatureCalculateException {
         ResultsVector rvImage =
                 errorReporter.isPresent()
-                        ? calc.calculateSuppressErrors(input, errorReporter.get())
-                        : calc.calculate(input);
-        out.set(cnt, rvImage);
-        cnt += rvImage.length();
+                        ? calculator.calculateSuppressErrors(input, errorReporter.get())
+                        : calculator.calculate(input);
+        out.set(count, rvImage);
+        count += rvImage.length();
     }
 
     public ResultsVector getResultsVector() {

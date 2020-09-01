@@ -31,7 +31,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.input.FeatureInput;
-import org.anchoranalysis.feature.input.descriptor.FeatureInputType;
+import org.anchoranalysis.feature.input.FeatureInputType;
 
 public abstract class FeatureDoubleElem<T extends FeatureInput> extends Feature<T> {
 

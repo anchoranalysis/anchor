@@ -70,7 +70,7 @@ public class SizeXY extends AnchorBean<SizeXY> {
     /**
      * Creates an extent with identical width and height and a specific depth (z-extent)
      *
-     * @param the depth for the extent
+     * @param depth the depth for the extent
      * @return the newly created extent
      */
     public Extent asExtent(int depth) {

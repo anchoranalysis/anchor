@@ -37,12 +37,12 @@ public interface NameValue<T> {
     /** The associated name */
     String getName();
 
-    /** @link getName() */
+    /** Sets the associated namme */
     void setName(String name);
 
     /** The associated value */
     T getValue();
 
-    /** @link getValue() */
+    /** Sets the associated value */
     void setValue(T item);
 }

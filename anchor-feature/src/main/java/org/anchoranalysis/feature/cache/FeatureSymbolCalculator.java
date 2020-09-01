@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.feature.cache;
 
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
@@ -39,20 +39,20 @@ public interface FeatureSymbolCalculator<T extends FeatureInput> {
 
     /**
      * Due to scoping (different prefixes that can exist), an ID needs to be resolved to a
-     * unique-string before it can be passed to calcFeatureByID
+     * unique-string before it can be passed to {@code calculateFeatureByIdentifier}
      *
-     * @param id
+     * @param identifier
      * @return
      */
-    String resolveFeatureID(String id);
+    String resolveFeatureIdentifier(String identifier);
 
     /**
-     * Searches for a feature that matches a particular ID
+     * Searches for a feature that matches a particular identifier
      *
-     * @param resolvedID
+     * @param resolvedIdentifier the identifier
      * @param input
      * @throws FeatureCalculationException
      */
-    double calcFeatureByID(String resolvedID, SessionInput<T> input)
+    double calculateFeatureByIdentifier(String resolvedIdentifier, SessionInput<T> input)
             throws FeatureCalculationException;
 }

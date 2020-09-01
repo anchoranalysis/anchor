@@ -38,7 +38,7 @@ import org.anchoranalysis.core.name.value.SimpleNameValue;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.input.FeatureInput;
-import org.anchoranalysis.feature.input.descriptor.FeatureInputType;
+import org.anchoranalysis.feature.input.FeatureInputType;
 import org.apache.commons.collections.MultiMap;
 import org.apache.commons.collections.map.MultiValueMap;
 

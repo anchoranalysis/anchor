@@ -28,7 +28,7 @@ package org.anchoranalysis.image.feature.object.calculation;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
-import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
+import org.anchoranalysis.feature.cache.calculate.FeatureCalculation;
 import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectMask;
@@ -36,12 +36,13 @@ import org.anchoranalysis.image.object.ObjectMask;
 /**
  * Calculates a single-input from a pair
  *
- * <p><div> Three states are possible:
+ * <p>Three states are possible:
  *
  * <ul>
  *   <li>First
  *   <li>Second
- *   <li>Merged </div>
+ *   <li>Merged
+ * </ul>
  *
  * @author Owen Feehan
  */
@@ -61,7 +62,7 @@ public class CalculateInputFromPair
     @Override
     protected FeatureInputSingleObject execute(FeatureInputPairObjects input) {
         FeatureInputSingleObject paramsNew = new FeatureInputSingleObject(extractObj(input));
-        paramsNew.setNrgStack(input.getNrgStackOptional());
+        paramsNew.setEnergyStack(input.getEnergyStackOptional());
         return paramsNew;
     }
 

@@ -27,7 +27,7 @@
 package org.anchoranalysis.io.bioformats.copyconvert.tobyte;
 
 import java.nio.ByteBuffer;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferByte;
 
@@ -35,28 +35,30 @@ public class ByteFrom8BitUnsignedInterleaving extends ConvertToByte {
 
     private int bytesPerPixelOut = 1;
     private int sizeXY;
-    private int numChnlsPerByteArray;
+    private int numChannelsPerByteArray;
 
     @Override
-    protected void setupBefore(ImageDimensions dimensions, int numChnlsPerByteArray) {
+    protected void setupBefore(Dimensions dimensions, int numChannelsPerByteArray) {
         sizeXY = dimensions.x() * dimensions.y();
-        this.numChnlsPerByteArray = numChnlsPerByteArray;
+        this.numChannelsPerByteArray = numChannelsPerByteArray;
     }
 
     @Override
-    protected VoxelBuffer<ByteBuffer> convertSingleChnl(byte[] src, int channelRelative) {
+    protected VoxelBuffer<ByteBuffer> convertSingleChannel(byte[] src, int channelRelative) {
         ByteBuffer buffer = ByteBuffer.wrap(src);
 
         int sizeTotalBytes = sizeXY * bytesPerPixelOut;
-        byte[] crntChnlBytes = new byte[sizeTotalBytes];
+        byte[] crntChannelBytes = new byte[sizeTotalBytes];
 
         // Loop through the relevant positions
-        int totalBytesBuffer = sizeXY * numChnlsPerByteArray;
+        int totalBytesBuffer = sizeXY * numChannelsPerByteArray;
 
         int indOut = 0;
-        for (int indIn = channelRelative; indIn < totalBytesBuffer; indIn += numChnlsPerByteArray) {
-            crntChnlBytes[indOut++] = buffer.get(indIn);
+        for (int indIn = channelRelative;
+                indIn < totalBytesBuffer;
+                indIn += numChannelsPerByteArray) {
+            crntChannelBytes[indOut++] = buffer.get(indIn);
         }
-        return VoxelBufferByte.wrap(crntChnlBytes);
+        return VoxelBufferByte.wrap(crntChannelBytes);
     }
 }

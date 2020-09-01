@@ -87,13 +87,6 @@ public class DualComparer {
      * identical, apart from these ignored columns.
      *
      * @param path path to compare
-     * @param regExSeperator seperator (reg ex for split function())
-     * @param firstLineHeaders does the first line have headers?
-     * @param numFirstColumnsToIgnore the number of columns (leftmost) that are ignored when
-     *     comparing
-     * @param sortLines if true, all lines in the CSV file are sorted before comparison. if false,
-     *     the order remains unchanged.
-     * @param rejectZeroRows throws an exception if either of the CSV files have zero rows
      * @param messageStream if non-equal, additional explanation messages are printed here
      * @return TRUE if the csv-files are identical apart from the ignored columns, fALSE otherwise
      * @throws CSVReaderException if something goes wrong with csv I/O or a csv file is reject

@@ -105,7 +105,7 @@ public final class ObjectMaskStream {
      * <p>Precondition: the new bounding-box's extent must be greater than or equal to the existing
      * extent in all dimensions.
      *
-     * @param mapFunc maps the bounding-box to a new bounding-box
+     * @param boxToAssign the bounding box to assign to the newly created object
      * @return a newly created object-collection
      */
     public ObjectCollection mapBoundingBoxChangeExtent(BoundingBox boxToAssign) {

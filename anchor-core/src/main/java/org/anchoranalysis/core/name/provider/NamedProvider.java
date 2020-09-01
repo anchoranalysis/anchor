@@ -56,7 +56,7 @@ public interface NamedProvider<T> {
      * Gets one element of the provider (arbitrarily)
      *
      * @return one of the elements of the array (arbitrary which one)
-     * @throws NamedProviderGetException if the array has no elements
+     * @throws OperationFailedException if the array has no elements
      */
     default T getArbitraryElement() throws OperationFailedException {
 

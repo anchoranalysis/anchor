@@ -29,10 +29,8 @@ package org.anchoranalysis.mpp.io.input;
 import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.anchor.mpp.bean.MPPBean;
-import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.bean.define.Define;
-import org.anchoranalysis.bean.init.property.PropertyInitializer;
+import org.anchoranalysis.bean.initializable.property.PropertyInitializer;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.name.provider.NamedProvider;
@@ -42,6 +40,8 @@ import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
+import org.anchoranalysis.mpp.bean.MPPBean;
+import org.anchoranalysis.mpp.bean.init.MPPInitParams;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class MPPInitParamsFactory {

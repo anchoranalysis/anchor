@@ -1,17 +1,41 @@
+/*-
+ * #%L
+ * anchor-image
+ * %%
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
+ * %%
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ * #L%
+ */
 package org.anchoranalysis.image.voxel.assigner;
 
 import java.nio.Buffer;
 import java.util.Optional;
 import java.util.function.IntPredicate;
 import lombok.RequiredArgsConstructor;
-import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
-import org.anchoranalysis.image.voxel.iterator.IterateVoxelsAsInt;
+import org.anchoranalysis.image.voxel.iterator.IterateVoxelsVoxelBoxAsInt;
 
 @RequiredArgsConstructor
 abstract class Base<T extends Buffer> implements VoxelsAssigner {
@@ -71,24 +95,32 @@ abstract class Base<T extends Buffer> implements VoxelsAssigner {
     protected abstract void assignAtBufferPosition(T buffer, int index);
 
     @Override
-    public int toObject(ObjectMask object) {
-        return toObject(object, Optional.empty());
+    public void toObject(ObjectMask object) {
+        toObject(object, Optional.empty());
     }
 
     @Override
-    public int toObject(ObjectMask object, IntPredicate voxelPredicate) {
+    public boolean toObject(ObjectMask object, IntPredicate voxelPredicate) {
 
         // First check if all voxels on the object match the predicate
-        if (IterateVoxelsAsInt.allPointsMatchPredicate(voxels, object, voxelPredicate)) {
-            return toObject(object);
+        if (IterateVoxelsVoxelBoxAsInt.allPointsMatchPredicate(voxels, object, voxelPredicate)) {
+            toObject(object, Optional.empty());
+            return true;
         } else {
-            return -1; // Failure code that at least one voxel didn't match
+            return false;
         }
     }
 
     @Override
-    public int toObject(ObjectMask object, BoundingBox restrictTo) {
-        return toObject(object, Optional.of(restrictTo));
+    public void toObject(ObjectMask object, BoundingBox restrictTo) {
+        toObject(object, Optional.of(restrictTo));
+    }
+
+    @Override
+    public void toEitherTwoObjects( // NOSONAR
+            ObjectMask object1, ObjectMask object2, BoundingBox restrictTo) {
+        toObject(object1, restrictTo);
+        toObject(object2, restrictTo);
     }
 
     /**
@@ -105,22 +137,12 @@ abstract class Base<T extends Buffer> implements VoxelsAssigner {
      * @param restrictTo optionally, a restriction on where in the object-mask to process (expressed
      *     in the same coordinates as {@code object}). Its extent must be equal to {@code
      *     boxToBeAssigned}.
-     * @return the number of voxels successfully "set"
      */
-    private int toObject(ObjectMask object, Optional<BoundingBox> restrictTo) {
-        return IterateVoxelsAsInt.callEachPoint(
-                voxels,
-                object,
-                restrictTo,
-                (Point3i point, VoxelBuffer<T> buffer, int offset) ->
-                        buffer.putInt(offset, valueToAssign));
+    private void toObject(ObjectMask object, Optional<BoundingBox> restrictTo) {
+        IterateVoxelsVoxelBoxAsInt.callEachPoint(voxels, object, restrictTo, this::assignToBuffer);
     }
 
-    @Override
-    public int toEitherTwoObjects( // NOSONAR
-            ObjectMask object1, ObjectMask object2, BoundingBox restrictTo) {
-        int countFirst = toObject(object1, restrictTo);
-        int countSecond = toObject(object2, restrictTo);
-        return countFirst + countSecond;
+    private void assignToBuffer(VoxelBuffer<T> buffer, int offset) {
+        buffer.putInt(offset, valueToAssign);
     }
 }

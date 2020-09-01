@@ -33,7 +33,7 @@ import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.NoSharedState;
 import org.anchoranalysis.image.io.RasterIOException;
-import org.anchoranalysis.image.io.input.NamedChnlsInput;
+import org.anchoranalysis.image.io.input.NamedChannelsInput;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 
@@ -44,22 +44,17 @@ import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
  *
  * @author Owen Feehan
  */
-public abstract class RasterTask extends TaskWithoutSharedState<NamedChnlsInput> {
+public abstract class RasterTask extends TaskWithoutSharedState<NamedChannelsInput> {
 
     @Override
-    public InputTypesExpected inputTypesExpected() {
-        return new InputTypesExpected(NamedChnlsInput.class);
-    }
-
-    @Override
-    public void doJobOnInputObject(InputBound<NamedChnlsInput, NoSharedState> params)
+    public void doJobOnInputObject(InputBound<NamedChannelsInput, NoSharedState> params)
             throws JobExecutionException {
 
-        NamedChnlsInput inputObject = params.getInputObject();
+        NamedChannelsInput inputObject = params.getInputObject();
         BoundOutputManagerRouteErrors outputManager = params.getOutputManager();
 
         try {
-            int numSeries = inputObject.numSeries();
+            int numSeries = inputObject.numberSeries();
 
             startSeries(outputManager, params.getLogger().errorReporter());
 
@@ -88,9 +83,15 @@ public abstract class RasterTask extends TaskWithoutSharedState<NamedChnlsInput>
      * @throws JobExecutionException
      */
     public abstract void doStack(
-            NamedChnlsInput inputObject, int seriesIndex, int numSeries, BoundIOContext context)
+            NamedChannelsInput inputObject, int seriesIndex, int numSeries, BoundIOContext context)
             throws JobExecutionException;
 
     public abstract void endSeries(BoundOutputManagerRouteErrors outputManager)
             throws JobExecutionException;
+    
+
+    @Override
+    public InputTypesExpected inputTypesExpected() {
+        return new InputTypesExpected(NamedChannelsInput.class);
+    }
 }

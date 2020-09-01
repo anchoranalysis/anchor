@@ -51,8 +51,8 @@ public class FileWrite implements Serializable {
         this.parentFolder = parentFolder;
     }
 
-    public Path calcPath() {
-        return parentFolder.calcPath().resolve(fileName);
+    public Path calculatePath() {
+        return parentFolder.calculatePath().resolve(fileName);
     }
 
     public void setIndex(String index) {

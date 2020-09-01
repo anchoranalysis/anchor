@@ -31,8 +31,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.extent.ImageDimensions;
-import org.anchoranalysis.image.extent.ImageResolution;
+import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactoryTypeBound;
@@ -45,15 +45,15 @@ public abstract class ChannelFactorySingleType {
     @Getter private final VoxelDataType dataType;
     private final VoxelsFactoryTypeBound<? extends Buffer> factory;
 
-    public Channel createEmptyInitialised(ImageDimensions dim) {
+    public Channel createEmptyInitialised(Dimensions dim) {
         return create(factory.createInitialized(dim.extent()), dim.resolution());
     }
 
-    public Channel createEmptyUninitialised(ImageDimensions dimensions) {
+    public Channel createEmptyUninitialised(Dimensions dimensions) {
         return create(factory.createUninitialized(dimensions.extent()), dimensions.resolution());
     }
 
-    public Channel create(Voxels<? extends Buffer> bufferAccess, ImageResolution resolution) {
+    public Channel create(Voxels<? extends Buffer> bufferAccess, Resolution resolution) {
         return new Channel(bufferAccess, resolution);
     }
 }

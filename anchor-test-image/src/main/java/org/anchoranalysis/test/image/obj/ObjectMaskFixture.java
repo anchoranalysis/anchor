@@ -35,8 +35,8 @@ import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelsFactory;
 import org.anchoranalysis.image.extent.BoundingBox;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
@@ -45,7 +45,7 @@ import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 @AllArgsConstructor
 public class ObjectMaskFixture {
 
-    private final ImageDimensions dimensions;
+    private final Dimensions dimensions;
 
     public ObjectMask create1() {
         Extent extent = new Extent(20, 34, 11);

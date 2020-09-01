@@ -33,9 +33,9 @@ import loci.formats.meta.IMetadata;
 import ome.units.UNITS;
 import ome.units.quantity.Length;
 import org.anchoranalysis.core.geometry.Point3d;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.extent.ImageDimensions;
-import org.anchoranalysis.image.extent.ImageResolution;
+import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.io.bioformats.bean.options.ReadOptions;
 
 public class DimensionsCreator {
@@ -47,7 +47,7 @@ public class DimensionsCreator {
         this.lociMetadata = lociMetadata;
     }
 
-    public ImageDimensions apply(IFormatReader reader, ReadOptions readOptions, int seriesIndex) {
+    public Dimensions apply(IFormatReader reader, ReadOptions readOptions, int seriesIndex) {
 
         assert (lociMetadata != null);
 
@@ -59,9 +59,9 @@ public class DimensionsCreator {
 
         metadataDim(metadata -> metadata.getPixelsPhysicalSizeZ(seriesIndex), res::setZ);
 
-        return new ImageDimensions(
+        return new Dimensions(
                 new Extent(reader.getSizeX(), reader.getSizeY(), readOptions.sizeZ(reader)),
-                new ImageResolution(res));
+                new Resolution(res));
     }
 
     private void metadataDim(Function<IMetadata, Length> funcDimRes, DoubleConsumer setter) {

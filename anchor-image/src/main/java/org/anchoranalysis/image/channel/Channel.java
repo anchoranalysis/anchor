@@ -33,14 +33,16 @@ import lombok.experimental.Accessors;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.ImageDimensions;
-import org.anchoranalysis.image.extent.ImageResolution;
+import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
+import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.histogram.HistogramFactory;
 import org.anchoranalysis.image.interpolator.Interpolator;
 import org.anchoranalysis.image.interpolator.InterpolatorImgLib2Lanczos;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.scale.ScaleFactor;
+import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.VoxelsPredicate;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
@@ -67,7 +69,7 @@ public class Channel {
 
     private static final ChannelFactory FACTORY = ChannelFactory.instance();
 
-    @Getter private ImageDimensions dimensions;
+    @Getter private Dimensions dimensions;
 
     private Voxels<? extends Buffer> voxels;
 
@@ -77,13 +79,13 @@ public class Channel {
      * @param voxels
      * @param resolution
      */
-    public Channel(Voxels<? extends Buffer> voxels, ImageResolution resolution) {
-        this.dimensions = new ImageDimensions(voxels.extent(), resolution);
+    public Channel(Voxels<? extends Buffer> voxels, Resolution resolution) {
+        this.dimensions = new Dimensions(voxels.extent(), resolution);
         this.voxels = voxels;
     }
 
     public ObjectMask equalMask(BoundingBox box, int equalVal) {
-        return voxels.extracter().voxelsEqualTo(equalVal).deriveObject(box);
+        return voxels.extract().voxelsEqualTo(equalVal).deriveObject(box);
     }
 
     public VoxelsWrapper voxels() {
@@ -110,8 +112,7 @@ public class Channel {
 
     /** Creates a new channel contain only of a particular slice (reusing the voxel buffers) */
     public Channel extractSlice(int z) {
-        return ChannelFactory.instance()
-                .create(voxels.extracter().slice(z), dimensions.resolution());
+        return ChannelFactory.instance().create(voxels.extract().slice(z), dimensions.resolution());
     }
 
     public Channel scaleXY(ScaleFactor scaleFactor) {
@@ -134,19 +135,19 @@ public class Channel {
 
         assert (FACTORY != null);
 
-        ImageDimensions dimensionsScaled = dimensions.scaleXYTo(x, y);
+        Dimensions dimensionsScaled = dimensions.scaleXYTo(x, y);
 
-        Voxels<? extends Buffer> ba = voxels.extracter().resizedXY(x, y, interpolator);
+        Voxels<? extends Buffer> ba = voxels.extract().resizedXY(x, y, interpolator);
         assert (ba.extent().volumeXY() == ba.sliceBuffer(0).capacity());
         return FACTORY.create(ba, dimensionsScaled.resolution());
     }
 
-    public Channel maxIntensityProjection() {
-        return flattenZProjection(VoxelsExtracter::projectionMax);
+    public Channel projectMax() {
+        return flattenZProjection(VoxelsExtracter::projectMax);
     }
 
-    public Channel meanIntensityProjection() {
-        return flattenZProjection(VoxelsExtracter::projectionMean);
+    public Channel projectMean() {
+        return flattenZProjection(VoxelsExtracter::projectMean);
     }
 
     // Duplicates the current channel
@@ -164,7 +165,7 @@ public class Channel {
      *     above
      */
     public VoxelsPredicate voxelsEqualTo(int equalToValue) {
-        return voxels.extracter().voxelsEqualTo(equalToValue);
+        return voxels.extract().voxelsEqualTo(equalToValue);
     }
 
     /**
@@ -175,10 +176,10 @@ public class Channel {
      *     above
      */
     public VoxelsPredicate voxelsGreaterThan(int threshold) {
-        return voxels.extracter().voxelsGreaterThan(threshold);
+        return voxels.extract().voxelsGreaterThan(threshold);
     }
 
-    public void updateResolution(ImageResolution res) {
+    public void updateResolution(Resolution res) {
         dimensions = dimensions.duplicateChangeRes(res);
     }
 
@@ -204,7 +205,6 @@ public class Channel {
      * Flattens the voxels in the z direction, only if necessary (i.e. there's more than 1 z
      * dimension).
      *
-     * @param voxels voxels to be flattened (i.e. 3D)
      * @param flattener function to perform the flattening
      * @return flattened box (i.e. 2D)
      */
@@ -212,7 +212,7 @@ public class Channel {
         int prevZSize = voxels.extent().z();
         if (prevZSize > 1) {
             return FACTORY.create(
-                    flattener.apply(voxels.extracter()),
+                    flattener.apply(voxels.extract()),
                     dimensions.resolution().duplicateFlattenZ(prevZSize));
         } else {
             return this;
@@ -227,7 +227,11 @@ public class Channel {
         return voxels.assignValue(valueToAssign);
     }
 
-    public VoxelsExtracter<? extends Buffer> extracter() { // NOSONAR
-        return voxels.extracter();
+    public VoxelsExtracter<? extends Buffer> extract() { // NOSONAR
+        return voxels.extract();
+    }
+
+    public Extent extent() {
+        return voxels.extent();
     }
 }

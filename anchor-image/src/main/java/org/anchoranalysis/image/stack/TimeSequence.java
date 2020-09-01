@@ -30,7 +30,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 
 @NoArgsConstructor
@@ -63,10 +63,10 @@ public class TimeSequence implements Iterable<Stack> {
     }
 
     // Returns true if the data type of all channels is equal to
-    public boolean allChnlsHaveType(VoxelDataType chnlDataType) {
+    public boolean allChannelsHaveType(VoxelDataType channelDataType) {
 
         for (Stack stack : this) {
-            if (!stack.allChannelsHaveType(chnlDataType)) {
+            if (!stack.allChannelsHaveType(channelDataType)) {
                 return false;
             }
         }
@@ -74,7 +74,7 @@ public class TimeSequence implements Iterable<Stack> {
     }
 
     // Assumes all dimensions are the same, but doesn't check
-    public ImageDimensions dimensions() {
+    public Dimensions dimensions() {
         return list.get(0).dimensions();
     }
 }

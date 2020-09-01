@@ -1,3 +1,28 @@
+/*-
+ * #%L
+ * anchor-image
+ * %%
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
+ * %%
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ * #L%
+ */
 package org.anchoranalysis.image.object;
 
 import com.google.common.base.Preconditions;
@@ -7,8 +32,9 @@ import lombok.Getter;
 import lombok.experimental.Accessors;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.ImageDimensions;
-import org.anchoranalysis.image.object.ops.ObjectMaskMerger;
+import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.object.combine.ObjectMaskMerger;
+import org.anchoranalysis.image.object.factory.ObjectCollectionFactory;
 
 /**
  * One or more objects with the a bounding-box that contains them all fully
@@ -29,7 +55,7 @@ public class ObjectsWithBoundingBox {
     @Getter private final BoundingBox boundingBox;
 
     /**
-     * Constructor - create for a single object, using its current bounding-box
+     * Creates for a single object, using its current bounding-box.
      *
      * @param object the object
      */
@@ -39,7 +65,7 @@ public class ObjectsWithBoundingBox {
     }
 
     /**
-     * Constructor - create for a collection of objects, minimally fitting a bounding-box around all
+     * Creates for a collection of objects, minimally fitting a bounding-box around all
      * objects
      *
      * @param objects objects
@@ -72,7 +98,7 @@ public class ObjectsWithBoundingBox {
      * @throws OperationFailedException if the image-dimensions don't contain the existing
      *     bounding-boc
      */
-    public ObjectsWithBoundingBox mapObjectsToUseEntireImage(ImageDimensions dimensions)
+    public ObjectsWithBoundingBox mapObjectsToUseEntireImage(Dimensions dimensions)
             throws OperationFailedException {
         if (!dimensions.contains(boundingBox)) {
             throw new OperationFailedException(

@@ -33,7 +33,7 @@ import org.anchoranalysis.core.log.MessageLogger;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class MemoryUtilities {
 
-    public static long calcMemoryUsage() {
+    public static long calculateMemoryUsage() {
         Runtime runtime = java.lang.Runtime.getRuntime();
         long totalMemory = runtime.totalMemory();
         long freeMemory = runtime.freeMemory();

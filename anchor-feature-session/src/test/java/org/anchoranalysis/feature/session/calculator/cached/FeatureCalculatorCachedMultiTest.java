@@ -28,9 +28,9 @@ package org.anchoranalysis.feature.session.calculator.cached;
 
 import static org.junit.Assert.*;
 
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
-import org.anchoranalysis.feature.calc.NamedFeatureCalculationException;
-import org.anchoranalysis.feature.calc.results.ResultsVector;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
+import org.anchoranalysis.feature.calculate.results.ResultsVector;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -55,10 +55,10 @@ public class FeatureCalculatorCachedMultiTest {
      * Checks the cache contains an item, when a new item with different object but identical to an
      * existing one is passed
      *
-     * @throws NamedFeatureCalculationException
+     * @throws NamedFeatureCalculateException
      */
     @Test
-    public void testCacheContainsExisting() throws NamedFeatureCalculationException {
+    public void testCacheContainsExisting() throws NamedFeatureCalculateException {
 
         assertCurrentLoad(0);
 

@@ -28,6 +28,7 @@ package org.anchoranalysis.bean.xml.factory;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Optional;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.xml.error.BeanMisconfiguredXmlException;
@@ -121,13 +122,13 @@ public class AnchorDefaultBeanFactory implements BeanFactory {
                 && exc.getMessage().equals("java.util.List.<init>()"));
     }
 
-    /** Returns null as {@Optional} is not supported by {@link BeanFactory} interface. */
+    /** Returns null as {@link Optional} is not supported by {@link BeanFactory} interface. */
     @Override
     public Class<?> getDefaultBeanClass() {
         return null;
     }
 
-    protected Object createBeanInstance(Class<?> beanClass, BeanDeclaration data)
+    protected Object createBeanInstance(Class<?> beanClass, BeanDeclaration data) // NOSONAR
             throws Exception // NOSONAR
             {
         return beanClass.getConstructor().newInstance();

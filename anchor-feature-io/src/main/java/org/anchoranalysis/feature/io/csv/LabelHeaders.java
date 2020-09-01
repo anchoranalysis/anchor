@@ -58,4 +58,13 @@ public class LabelHeaders {
     public String[] allHeaders() {
         return ArrayUtils.addAll(nonGroupHeaders, groupHeaders);
     }
+    
+    /**
+     * Creates with only non-group headers
+     * 
+     * @param nonGroupHeaders headers describing the non-feature columns outputted in the CSV related to identifying a row
+     */
+    public LabelHeaders(String[] nonGroupHeaders) {
+        this( nonGroupHeaders, new String[]{} );
+    }
 }

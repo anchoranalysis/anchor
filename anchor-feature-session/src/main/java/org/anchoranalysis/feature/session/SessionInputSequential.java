@@ -34,15 +34,15 @@ import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.feature.cache.FeatureSymbolCalculator;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.cache.calculation.CacheCreator;
-import org.anchoranalysis.feature.cache.calculation.CalcForChild;
-import org.anchoranalysis.feature.cache.calculation.CalculationResolver;
-import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
-import org.anchoranalysis.feature.cache.calculation.FeatureSessionCache;
-import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
-import org.anchoranalysis.feature.calc.NamedFeatureCalculationException;
-import org.anchoranalysis.feature.calc.results.ResultsVector;
+import org.anchoranalysis.feature.cache.calculate.CacheCreator;
+import org.anchoranalysis.feature.cache.calculate.CalculateForChild;
+import org.anchoranalysis.feature.cache.calculate.CalculationResolver;
+import org.anchoranalysis.feature.cache.calculate.FeatureCalculation;
+import org.anchoranalysis.feature.cache.calculate.FeatureSessionCache;
+import org.anchoranalysis.feature.cache.calculate.ResolvedCalculation;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
+import org.anchoranalysis.feature.calculate.results.ResultsVector;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.session.strategy.child.DefaultFindChildStrategy;
 import org.anchoranalysis.feature.session.strategy.child.FindChildStrategy;
@@ -56,7 +56,7 @@ import org.anchoranalysis.feature.session.strategy.child.FindChildStrategy;
 public class SessionInputSequential<T extends FeatureInput> implements SessionInput<T> {
 
     /** Implements operations which should occur using child-caches rather than in the main cache */
-    private class ChildCalculator implements CalcForChild<T> {
+    private class ChildCalculator implements CalculateForChild<T> {
 
         private FindChildStrategy findChild;
 
@@ -66,29 +66,30 @@ public class SessionInputSequential<T extends FeatureInput> implements SessionIn
         }
 
         @Override
-        public <S extends FeatureInput> double calc(
+        public <S extends FeatureInput> double calculate(
                 Feature<S> feature,
-                FeatureCalculation<S, T> calcInput,
+                FeatureCalculation<S, T> calculation,
                 ChildCacheName childCacheName)
                 throws FeatureCalculationException {
-            return calc(feature, SessionInputSequential.this.calc(calcInput), childCacheName);
+            return calculate(
+                    feature, SessionInputSequential.this.calc(calculation), childCacheName);
         }
 
         @Override
-        public <S extends FeatureInput> double calc(
+        public <S extends FeatureInput> double calculate(
                 Feature<S> feature, S input, ChildCacheName childCacheName)
                 throws FeatureCalculationException {
 
             FeatureSessionCache<S> child = childCacheFor(childCacheName, input);
             return child.calculator()
-                    .calc(
+                    .calculate(
                             feature,
                             new SessionInputSequential<S>(
                                     input, child, cacheFactory, findChild.strategyForGrandchild()));
         }
 
         @Override
-        public <V extends FeatureInput, U> U calc(
+        public <V extends FeatureInput, U> U calculate(
                 ChildCacheName childCacheName,
                 V input,
                 Function<CalculationResolver<V>, ResolvedCalculation<U, V>> funcCalc)
@@ -189,11 +190,11 @@ public class SessionInputSequential<T extends FeatureInput> implements SessionIn
 
     @Override
     public double calc(Feature<T> feature) throws FeatureCalculationException {
-        return cache.calculator().calc(feature, this);
+        return cache.calculator().calculate(feature, this);
     }
 
     @Override
-    public ResultsVector calc(FeatureList<T> features) throws NamedFeatureCalculationException {
+    public ResultsVector calc(FeatureList<T> features) throws NamedFeatureCalculateException {
         return cache.calculator().calc(features, this);
     }
 
@@ -218,7 +219,7 @@ public class SessionInputSequential<T extends FeatureInput> implements SessionIn
     }
 
     @Override
-    public CalcForChild<T> forChild() {
+    public CalculateForChild<T> forChild() {
         return childCalc;
     }
 

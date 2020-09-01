@@ -39,21 +39,22 @@ import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.channel.converter.ConversionPolicy;
+import org.anchoranalysis.image.channel.converter.attached.ChannelConverterAttached;
+import org.anchoranalysis.image.channel.converter.attached.channel.ChannelConverterUpperLowerQuantileIntensity;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.stack.bufferedimage.BufferedImageFactory;
 import org.anchoranalysis.image.stack.region.RegionExtracter;
 import org.anchoranalysis.image.stack.region.RegionExtracterFromDisplayStack;
-import org.anchoranalysis.image.stack.region.chnlconverter.ConversionPolicy;
-import org.anchoranalysis.image.stack.region.chnlconverter.attached.ChnlConverterAttached;
-import org.anchoranalysis.image.stack.region.chnlconverter.attached.chnl.ChnlConverterChnlUpperLowerQuantileIntensity;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
+import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 
 /**
@@ -71,7 +72,7 @@ public class DisplayStack {
     private static final double QUANTILE_UPPER = 0.9999;
 
     private final Stack stack;
-    private final List<Optional<ChnlConverterAttached<Channel, ByteBuffer>>> listConverters;
+    private final List<Optional<ChannelConverterAttached<Channel, ByteBuffer>>> listConverters;
     private final ChannelMapper mapper;
 
     // START: constructors
@@ -83,14 +84,15 @@ public class DisplayStack {
 
     // We don't need to worry about channel numbers
     private DisplayStack(
-            Stack stack, List<Optional<ChnlConverterAttached<Channel, ByteBuffer>>> listConverters)
+            Stack stack,
+            List<Optional<ChannelConverterAttached<Channel, ByteBuffer>>> listConverters)
             throws CreateException {
         this.stack = stack;
         this.listConverters = listConverters;
         this.mapper = createChannelMapper();
 
         for (int index = 0; index < stack.getNumberChannels(); index++) {
-            Optional<ChnlConverterAttached<Channel, ByteBuffer>> converter =
+            Optional<ChannelConverterAttached<Channel, ByteBuffer>> converter =
                     listConverters.get(index);
             if (converter.isPresent()) {
                 try {
@@ -141,8 +143,12 @@ public class DisplayStack {
         return listConverters.stream().filter(Optional::isPresent).count();
     }
 
-    public ImageDimensions dimensions() {
+    public Dimensions dimensions() {
         return stack.dimensions();
+    }
+
+    public Extent extent() {
+        return dimensions().extent();
     }
 
     public final int getNumberChannels() {
@@ -175,7 +181,7 @@ public class DisplayStack {
                                 stack.getChannel(index)
                                         .dimensions()
                                         .duplicateChangeExtent(box.extent()),
-                                VoxelDataTypeUnsignedByte.INSTANCE);
+                                UnsignedByteVoxelType.INSTANCE);
 
         mapper.callChannelIfSupported(
                 index,
@@ -226,14 +232,12 @@ public class DisplayStack {
                             VoxelsFactory.getByte().createInitialized(destinationBox.extent());
                     converter.getVoxelsConverter().convertFrom(destBoxNonByte, destBoxByte);
 
-                    destBoxByte
-                            .extracter()
-                            .boxCopyTo(allLocalBox, voxelsDestination, destinationBox);
+                    destBoxByte.extract().boxCopyTo(allLocalBox, voxelsDestination, destinationBox);
                 },
                 channel ->
                         channel.voxels()
                                 .asByte()
-                                .extracter()
+                                .extract()
                                 .boxCopyTo(sourceBox, voxelsDestination, destinationBox));
     }
 
@@ -247,18 +251,18 @@ public class DisplayStack {
     }
 
     public int getUnconvertedVoxelAt(int channelIndex, Point3i point) {
-        return stack.getChannel(channelIndex).extracter().voxel(point);
+        return stack.getChannel(channelIndex).extract().voxel(point);
     }
 
     public RegionExtracter createRegionExtracter() {
         return new RegionExtracterFromDisplayStack(listConverters, stack);
     }
 
-    public DisplayStack maxIntensityProjection() throws OperationFailedException {
+    public DisplayStack maximumIntensityProjection() {
         try {
             return new DisplayStack(stack.maximumIntensityProjection(), listConverters);
         } catch (CreateException e) {
-            throw new OperationFailedException(e);
+            throw new AnchorImpossibleSituationException();
         }
     }
 
@@ -269,10 +273,7 @@ public class DisplayStack {
     public BufferedImage createBufferedImage() throws CreateException {
         if (stack.getNumberChannels() == 3) {
             return BufferedImageFactory.createRGB(
-                    voxelsForChannel(0),
-                    voxelsForChannel(1),
-                    voxelsForChannel(2),
-                    stack.dimensions().extent());
+                    voxelsForChannel(0), voxelsForChannel(1), voxelsForChannel(2), stack.extent());
         }
         return BufferedImageFactory.createGrayscale(voxelsForChannel(0));
     }
@@ -306,7 +307,7 @@ public class DisplayStack {
     @SuppressWarnings("unchecked")
     private Voxels<ByteBuffer> voxelsForChannelBoundingBox(int channelIndex, BoundingBox box) {
 
-        Voxels<?> voxelsUnconverted = stack.getChannel(channelIndex).extracter().region(box, true);
+        Voxels<?> voxelsUnconverted = stack.getChannel(channelIndex).extract().region(box, true);
         return mapper.mapChannelIfSupported(
                 channelIndex,
                 (channel, converter) ->
@@ -341,7 +342,7 @@ public class DisplayStack {
     }
 
     private void setConverterFor(
-            int channelIndex, ChnlConverterAttached<Channel, ByteBuffer> converter)
+            int channelIndex, ChannelConverterAttached<Channel, ByteBuffer> converter)
             throws SetOperationFailedException {
         try {
             converter.attachObject(stack.getChannel(channelIndex));
@@ -356,10 +357,10 @@ public class DisplayStack {
         for (int index = 0; index < getNumberChannels(); index++) {
             if (!stack.getChannel(index)
                     .getVoxelDataType()
-                    .equals(VoxelDataTypeUnsignedByte.INSTANCE)) {
+                    .equals(UnsignedByteVoxelType.INSTANCE)) {
                 setConverterFor(
                         index,
-                        new ChnlConverterChnlUpperLowerQuantileIntensity(
+                        new ChannelConverterUpperLowerQuantileIntensity(
                                 QUANTILE_LOWER, QUANTILE_UPPER));
             }
         }

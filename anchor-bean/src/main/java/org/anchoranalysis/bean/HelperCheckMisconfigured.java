@@ -100,22 +100,21 @@ class HelperCheckMisconfigured {
      * <p>If no default can be found in the map, an exception is thrown.
      *
      * @param classType the type of the class to find a default for
-     * @param defaultInstances all available defaultInstances
      * @return the default-instance associated with the class. Null is not possible.
      * @throws BeanMisconfiguredException if no matching default can be found
      */
     private Object findDefaultInstance(Class<?> classType) throws BeanMisconfiguredException {
 
-        Object obj = defaultInstances.get(classType);
+        Object object = defaultInstances.get(classType);
 
-        if (obj == null) {
+        if (object == null) {
             throw new BeanMisconfiguredException(
                     String.format(
                             "No default property can be found for class '%s'",
                             classType.getName()));
         }
 
-        return obj;
+        return object;
     }
 
     @SuppressWarnings("unchecked")

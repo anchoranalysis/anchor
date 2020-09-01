@@ -39,7 +39,7 @@ import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
  *
  * @author Owen Feehan
  * @param <T> input-object type
- * @aram <S> shared-state type
+ * @param <S> shared-state type
  */
 @AllArgsConstructor
 public class InputBound<T, S> {

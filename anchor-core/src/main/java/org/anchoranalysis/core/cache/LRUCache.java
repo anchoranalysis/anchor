@@ -40,7 +40,7 @@ import org.anchoranalysis.core.index.GetOperationFailedException;
  * A cache that discards items that haven't being used recently or frequently (as per Guava's
  * size-based eviction's defaults)
  *
- * <p>See <a href="https://github.com/google/guava/wiki/CachesExplained>Guava's Caches Explained</a>
+ * <p>See <a href="https://github.com/google/guava/wiki/CachesExplained">Guava Caches Explained</a>
  *
  * <p>It's thread-safe.
  *

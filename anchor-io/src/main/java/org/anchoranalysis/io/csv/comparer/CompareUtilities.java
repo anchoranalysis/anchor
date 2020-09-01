@@ -105,7 +105,7 @@ class CompareUtilities {
      * @param messageStream if non-equal, additional explanation messages are printed here
      * @param line1 an array of strings for first line
      * @param line2 an array of strings for second line
-     * @param delimter a string that separates each column
+     * @param delimeter a string that separates each column
      */
     public static void printTwoLines(
             PrintStream messageStream, String[] line1, String[] line2, String delimeter) {

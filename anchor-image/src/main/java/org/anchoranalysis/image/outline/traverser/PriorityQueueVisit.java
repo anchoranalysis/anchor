@@ -29,7 +29,7 @@ package org.anchoranalysis.image.outline.traverser;
 import java.util.ArrayList;
 import java.util.List;
 import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.outline.traverser.visitedpixels.VisitedPixels;
+import org.anchoranalysis.image.outline.traverser.visited.VisitedVoxels;
 
 /** A priority-queue of what pixels to visit next */
 class PriorityQueueVisit {
@@ -40,7 +40,7 @@ class PriorityQueueVisit {
         next = new ArrayList<>();
     }
 
-    public Point3iWithDistance pop(VisitedPixels visitedPixels) {
+    public Point3iWithDistance pop(VisitedVoxels visitedPixels) {
         // Find point which is closest to the end of the visited pixels
         // We prioritise visits in this order to keep the chain as connected as possible
         int index = findIndexWithMinDistance(next, visitedPixels);
@@ -74,7 +74,7 @@ class PriorityQueueVisit {
     }
 
     private static int findIndexWithMinDistance(
-            List<Point3iWithDistance> next, VisitedPixels visitedPixels) {
+            List<Point3iWithDistance> next, VisitedVoxels visitedPixels) {
 
         int distanceMin = Integer.MAX_VALUE;
         int index = -1;

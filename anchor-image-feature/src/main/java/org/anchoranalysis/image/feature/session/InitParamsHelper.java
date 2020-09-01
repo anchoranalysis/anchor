@@ -31,18 +31,18 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.name.store.SharedObjects;
 import org.anchoranalysis.core.params.KeyValueParams;
-import org.anchoranalysis.feature.calc.FeatureInitParams;
-import org.anchoranalysis.feature.nrg.NRGStackWithParams;
+import org.anchoranalysis.feature.calculate.FeatureInitParams;
+import org.anchoranalysis.feature.energy.EnergyStack;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class InitParamsHelper {
 
     public static FeatureInitParams createInitParams(
-            Optional<SharedObjects> sharedObjects, Optional<NRGStackWithParams> nrgStack) {
+            Optional<SharedObjects> sharedObjects, Optional<EnergyStack> energyStack) {
 
-        Optional<KeyValueParams> kvp = nrgStack.map(NRGStackWithParams::getParams);
+        Optional<KeyValueParams> kvp = energyStack.map(EnergyStack::getParams);
 
         return new FeatureInitParams(
-                kvp, nrgStack.map(NRGStackWithParams::getNrgStack), sharedObjects);
+                kvp, energyStack.map(EnergyStack::getEnergyStack), sharedObjects);
     }
 }

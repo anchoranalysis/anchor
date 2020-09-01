@@ -30,7 +30,7 @@ import lombok.NoArgsConstructor;
  */
 
 /**
- * Utilities for arithmetic operations involving type {@link double}
+ * Utilities for arithmetic operations involving type {@code double}
  *
  * @author Owen Feehan
  */

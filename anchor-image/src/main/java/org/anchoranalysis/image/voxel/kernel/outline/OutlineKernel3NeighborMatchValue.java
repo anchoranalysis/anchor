@@ -43,29 +43,19 @@ public class OutlineKernel3NeighborMatchValue extends OutlineKernel3Base {
     private ObjectMask object;
 
     public OutlineKernel3NeighborMatchValue(
-            boolean outsideAtThreshold,
-            boolean useZ,
             ObjectMask object,
             BinaryVoxels<ByteBuffer> voxelsRequireHigh,
-            boolean ignoreAtThreshold) {
-        this(
-                object.binaryValuesByte(),
-                outsideAtThreshold,
-                useZ,
-                object,
-                voxelsRequireHigh,
-                ignoreAtThreshold);
+            OutlineKernelParameters params) {
+        this(object.binaryValuesByte(), object, voxelsRequireHigh, params);
     }
 
     // Constructor
     private OutlineKernel3NeighborMatchValue(
             BinaryValuesByte bv,
-            boolean outsideAtThreshold,
-            boolean useZ,
             ObjectMask object,
             BinaryVoxels<ByteBuffer> voxelsRequireHigh,
-            boolean ignoreAtThreshold) {
-        super(bv, outsideAtThreshold, useZ, ignoreAtThreshold);
+            OutlineKernelParameters params) {
+        super(bv, params);
         this.voxelsRequireHigh = voxelsRequireHigh;
         this.object = object;
         this.bvRequireHigh = voxelsRequireHigh.binaryValues().createByte();

@@ -33,8 +33,8 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
-import org.anchoranalysis.feature.calc.FeatureInitParams;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureInitParams;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
@@ -65,7 +65,6 @@ public class FeatureSession {
      * @param feature the feature
      * @param logger a logger
      * @return a calculator that will calculate just this feature for each parameter.
-     * @throws FeatureCalculationException
      * @throws InitException
      */
     public static <T extends FeatureInput> FeatureCalculatorSingle<T> with(
@@ -81,7 +80,6 @@ public class FeatureSession {
      * @param sharedFeatures
      * @param logger a logger
      * @return a calculator that will calculate just this feature for each parameter.
-     * @throws FeatureCalculationException
      */
     public static <T extends FeatureInput> FeatureCalculatorSingle<T> with(
             Feature<T> feature, SharedFeatureMulti sharedFeatures, Logger logger)
@@ -108,7 +106,6 @@ public class FeatureSession {
      * @param logger a logger
      * @return a calculator that will call calculate all the features in the list for each
      *     parameter.
-     * @throws FeatureCalculationException
      */
     public static <T extends FeatureInput> FeatureCalculatorMulti<T> with(
             FeatureList<T> features, Logger logger) throws InitException {

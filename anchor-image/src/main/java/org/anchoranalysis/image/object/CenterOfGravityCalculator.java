@@ -45,7 +45,7 @@ final class CenterOfGravityCalculator {
      * @param object
      * @return the center-of-gravity or (NaN, NaN, NaN) if there are no pixels.
      */
-    public static Point3d calcCenterOfGravity(ObjectMask object) {
+    public static Point3d centerOfGravity(ObjectMask object) {
 
         int cnt = 0;
         Point3d sum = new Point3d();
@@ -79,13 +79,13 @@ final class CenterOfGravityCalculator {
     }
 
     /**
-     * Like {@link #calcCenterOfGravity} but for a specific axis.
+     * Like {@link #centerOfGravity} but for a specific axis.
      *
      * @param object the object whose center-of-gravity is to be calculated on one axis.
      * @param axisType which axis
      * @return the cog for that axis, or NaN if there are no points.
      */
-    public static double calcCenterOfGravityForAxis(ObjectMask object, AxisType axisType) {
+    public static double centerOfGravityForAxis(ObjectMask object, AxisType axisType) {
 
         int cnt = 0;
         double sum = 0.0;

@@ -53,7 +53,7 @@ public final class VoxelsAsByte extends Voxels<ByteBuffer> {
     }
 
     @Override
-    public VoxelsExtracter<ByteBuffer> extracter() {
+    public VoxelsExtracter<ByteBuffer> extract() {
         return VoxelsExtracterFactory.createByte(this);
     }
 

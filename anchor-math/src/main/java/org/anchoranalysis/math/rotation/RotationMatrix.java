@@ -53,7 +53,7 @@ public class RotationMatrix implements Serializable {
         this.delegate = matrix;
     }
 
-    public Point3d calcRotatedPoint(Point3d pointIn) {
+    public Point3d rotatedPoint(Point3d pointIn) {
 
         if (delegate.rows() == 3) {
             double[] dIn = new double[3];
@@ -61,21 +61,21 @@ public class RotationMatrix implements Serializable {
             dIn[1] = pointIn.y();
             dIn[2] = pointIn.z();
 
-            double[] rot = calcRotatedPoint(dIn);
+            double[] rot = rotatedPoint(dIn);
             return new Point3d(rot[0], rot[1], rot[2]);
         } else if (delegate.rows() == 2) {
             double[] dIn = new double[2];
             dIn[0] = pointIn.x();
             dIn[1] = pointIn.y();
 
-            double[] rot = calcRotatedPoint(dIn);
+            double[] rot = rotatedPoint(dIn);
             return new Point3d(rot[0], rot[1], 0);
         } else {
             throw new AnchorImpossibleSituationException();
         }
     }
 
-    public double[] calcRotatedPoint(double[] pointIn) {
+    public double[] rotatedPoint(double[] pointIn) {
         Preconditions.checkArgument(pointIn.length == delegate.rows());
 
         int numDim = pointIn.length;

@@ -67,7 +67,7 @@ public class Default extends ReadOptions {
     }
 
     @Override
-    public int chnlsPerByteArray(IFormatReader reader) {
+    public int channelsPerByteArray(IFormatReader reader) {
         return reader.getRGBChannelCount();
     }
 
@@ -98,10 +98,10 @@ public class Default extends ReadOptions {
     private static Optional<List<String>> determineChannelNamesWithPrefix(
             IFormatReader reader, String prefixString) {
 
-        int numChnl = reader.getSizeC();
+        int numChannel = reader.getSizeC();
 
         ArrayList<String> names = new ArrayList<>();
-        for (int i = 0; i < numChnl; i++) {
+        for (int i = 0; i < numChannel; i++) {
             Object o = reader.getMetadataValue(prefixString + i);
             if (o == null) {
                 return Optional.empty();

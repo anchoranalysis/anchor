@@ -29,29 +29,29 @@ package org.anchoranalysis.image.convert;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.axis.AxisType;
-import org.anchoranalysis.image.extent.ImageResolution;
+import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.orientation.DirectionVector;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ImageUnitConverter {
 
-    public static double convertToPhysicalVolume(double value, ImageResolution res) {
+    public static double convertToPhysicalVolume(double value, Resolution res) {
         return value * res.unitVolume();
     }
 
-    public static double convertToPhysicalArea(double value, ImageResolution res) {
+    public static double convertToPhysicalArea(double value, Resolution res) {
         return value * res.unitArea();
     }
 
-    public static double convertFromPhysicalVolume(double value, ImageResolution res) {
+    public static double convertFromPhysicalVolume(double value, Resolution res) {
         return value / res.unitVolume();
     }
 
-    public static double convertFromPhysicalArea(double value, ImageResolution res) {
+    public static double convertFromPhysicalArea(double value, Resolution res) {
         return value / res.unitArea();
     }
 
-    private static double unitDistanceForDirection(ImageResolution res, DirectionVector dirVector) {
+    private static double unitDistanceForDirection(Resolution res, DirectionVector dirVector) {
         double x = (dirVector.x()) * res.x();
         double y = (dirVector.y()) * res.y();
         double z = (dirVector.z()) * res.z();
@@ -59,16 +59,16 @@ public class ImageUnitConverter {
     }
 
     public static double convertToPhysicalDistance(
-            double value, ImageResolution res, DirectionVector dirVector) {
+            double value, Resolution res, DirectionVector dirVector) {
         return value * unitDistanceForDirection(res, dirVector);
     }
 
     public static double convertFromPhysicalDistance(
-            double value, ImageResolution res, DirectionVector dirVector) {
+            double value, Resolution res, DirectionVector dirVector) {
         return value / unitDistanceForDirection(res, dirVector);
     }
 
-    public static double convertFromMeters(double unitMeters, ImageResolution res) {
+    public static double convertFromMeters(double unitMeters, Resolution res) {
         DirectionVector unitX = new DirectionVector(AxisType.X);
         return ImageUnitConverter.convertFromPhysicalDistance(unitMeters, res, unitX);
     }

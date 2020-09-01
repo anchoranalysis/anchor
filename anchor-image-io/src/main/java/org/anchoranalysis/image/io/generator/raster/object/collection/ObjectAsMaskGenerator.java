@@ -34,13 +34,13 @@ import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.ImageDimensions;
-import org.anchoranalysis.image.extent.ImageResolution;
+import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.io.generator.raster.RasterGenerator;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.voxel.Voxels;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
+import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.generator.IterableGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
@@ -56,14 +56,14 @@ public class ObjectAsMaskGenerator extends RasterGenerator
         implements IterableGenerator<ObjectMask> {
 
     // START REQUIRED ARGUMENTS
-    private final ImageResolution resolution;
+    private final Resolution resolution;
     // END REQUIRED ARGUMENTS
 
     private ObjectMask element;
 
-    /** Constructor - creates using a default image-resolution */
+    /** Creates using a default image-resolution. */
     public ObjectAsMaskGenerator() {
-        this(new ImageResolution());
+        this(new Resolution());
     }
 
     @Override
@@ -111,17 +111,16 @@ public class ObjectAsMaskGenerator extends RasterGenerator
      * @param resolution resolution to use for the channel
      * @return the newly created channel
      */
-    private static Channel createChannelFromMask(
-            ObjectMask objectMask, ImageResolution resolution) {
+    private static Channel createChannelFromMask(ObjectMask objectMask, Resolution resolution) {
 
         int outOnValue = BinaryValuesByte.getDefault().getOnByte();
 
         BoundingBox box = objectMask.boundingBox();
 
-        ImageDimensions dimensions = new ImageDimensions(box.extent(), resolution);
+        Dimensions dimensions = new Dimensions(box.extent(), resolution);
 
         Channel channelNew =
-                ChannelFactory.instance().create(dimensions, VoxelDataTypeUnsignedByte.INSTANCE);
+                ChannelFactory.instance().create(dimensions, UnsignedByteVoxelType.INSTANCE);
 
         Voxels<ByteBuffer> voxelsNew = channelNew.voxels().asByte();
 

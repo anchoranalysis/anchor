@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.mpp.io.bean.input;
 
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.function.Function;
@@ -107,19 +106,19 @@ class AppendHelper {
                 debugMode);
     }
 
-    public static void appendCfg(
+    public static void appendMarks(
             List<NamedBean<FilePathGenerator>> listPaths,
             final MultiInput inputObject,
             boolean debugMode) {
         append(
                 inputObject,
                 listPaths,
-                MultiInput::cfg,
-                DeserializerHelper::deserializeCfg,
+                MultiInput::marks,
+                DeserializerHelper::deserializeMarks,
                 debugMode);
     }
 
-    public static void appendCfgFromAnnotation(
+    public static void appendMarksFromAnnotation(
             List<NamedBean<FilePathGenerator>> listPaths,
             MultiInput inputObject,
             boolean includeAccepted,
@@ -129,9 +128,9 @@ class AppendHelper {
         append(
                 inputObject,
                 listPaths,
-                MultiInput::cfg,
+                MultiInput::marks,
                 outPath ->
-                        DeserializerHelper.deserializeCfgFromAnnotation(
+                        DeserializerHelper.deserializeMarksFromAnnotation(
                                 outPath, includeAccepted, includeRejected),
                 debugMode);
     }
@@ -157,7 +156,6 @@ class AppendHelper {
      * @param extractMap extracts an OperationMap from inputObject
      * @param reader converts from a path to the object of interest
      * @param debugMode
-     * @throws IOException
      */
     private static <T> void append(
             MultiInput inputObject,

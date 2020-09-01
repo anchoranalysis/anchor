@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.experiment.task;
 
-import java.io.IOException;
 import java.nio.file.Path;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -67,7 +66,6 @@ class ManifestClashChecker {
      *
      * @param experimentalDirectory the root directory associated with the experiment
      * @return TRUE if it would clash, FALSE otherwise
-     * @throws IOException
      */
     private static boolean wouldClashWithExperimentRoot(
             Path experimentalDirectory, FilePathPrefix fpp) {

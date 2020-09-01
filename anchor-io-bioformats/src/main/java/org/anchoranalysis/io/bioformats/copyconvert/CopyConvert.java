@@ -35,7 +35,7 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporterIncrement;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.io.bioformats.DestChnlForIndex;
+import org.anchoranalysis.io.bioformats.DestinationChannelForIndex;
 import org.anchoranalysis.io.bioformats.bean.options.ReadOptions;
 
 /**
@@ -53,11 +53,6 @@ public class CopyConvert {
      * @param reader the source of the copy
      * @param dest the destination of the copy
      * @param progressReporter
-     * @param imageDimensions
-     * @param numberChannels
-     * @param numberFrames
-     * @param bitsPerPixel
-     * @param numChnlsPerByteArray
      * @throws FormatException
      * @throws IOException
      */
@@ -69,24 +64,25 @@ public class CopyConvert {
             ConvertTo<?> convertTo,
             ReadOptions readOptions)
             throws FormatException, IOException {
-        int numChnlsPerByteArray = readOptions.chnlsPerByteArray(reader);
+        int numberChannelsPerByteArray = readOptions.channelsPerByteArray(reader);
 
-        int numByteArraysPerIteration =
-                calcByteArraysPerIter(targetShape.getNumberChannels(), numChnlsPerByteArray);
+        int numberByteArraysPerIteration =
+                calculateByteArraysPerIteration(
+                        targetShape.getNumberChannels(), numberChannelsPerByteArray);
 
         try (ProgressReporterIncrement pri = new ProgressReporterIncrement(progressReporter)) {
 
             pri.setMax(targetShape.totalNumberSlices());
             pri.open();
 
-            IterateOverSlices.iterateDimOrder(
+            IterateOverSlices.iterateDimensionsOrder(
                     reader.getDimensionOrder(),
                     targetShape,
-                    numByteArraysPerIteration,
+                    numberByteArraysPerIteration,
                     (t, z, c, readerIndex) -> {
 
                         /** Selects a destination channel for a particular relative channel */
-                        DestChnlForIndex destC =
+                        DestinationChannelForIndex destC =
                                 channelRelative ->
                                         dest.get(
                                                 destIndex(
@@ -96,32 +92,32 @@ public class CopyConvert {
 
                         byte[] b = reader.openBytes(readerIndex);
 
-                        convertTo.copyAllChnls(
+                        convertTo.copyAllChannels(
                                 targetShape.getImageDimensions(),
                                 b,
                                 destC,
                                 z,
-                                numChnlsPerByteArray);
+                                numberChannelsPerByteArray);
 
                         pri.update();
                     });
         }
     }
 
-    private static int calcByteArraysPerIter(int numChnl, int numChnlsPerByteArray)
+    private static int calculateByteArraysPerIteration(int numChannel, int numChannelsPerByteArray)
             throws FormatException {
 
-        if ((numChnl % numChnlsPerByteArray) != 0) {
+        if ((numChannel % numChannelsPerByteArray) != 0) {
             throw new FormatException(
                     String.format(
-                            "numChnls(%d) mod numChnlsPerByteArray(%d) != 0",
-                            numChnl, numChnlsPerByteArray));
+                            "numChannels(%d) mod numChannelsPerByteArray(%d) != 0",
+                            numChannel, numChannelsPerByteArray));
         }
 
-        return numChnl / numChnlsPerByteArray;
+        return numChannel / numChannelsPerByteArray;
     }
 
-    private static int destIndex(int c, int t, int numChnlsPerFrame) {
-        return (t * numChnlsPerFrame) + c;
+    private static int destIndex(int c, int t, int numChannelsPerFrame) {
+        return (t * numChannelsPerFrame) + c;
     }
 }

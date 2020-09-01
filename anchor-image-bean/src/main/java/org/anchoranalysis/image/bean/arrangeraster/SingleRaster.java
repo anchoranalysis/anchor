@@ -45,7 +45,7 @@ public class SingleRaster extends ArrangeRasterBean {
 
         RGBStack stack = rasterIterator.next();
 
-        Extent extent = stack.channelAt(0).dimensions().extent();
+        Extent extent = stack.channelAt(0).extent();
 
         return new BoundingBoxesOnPlane(extent, new BoundingBox(extent));
     }

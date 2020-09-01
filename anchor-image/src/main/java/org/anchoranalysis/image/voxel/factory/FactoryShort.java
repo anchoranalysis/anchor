@@ -30,14 +30,14 @@ import java.nio.ShortBuffer;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.VoxelsAsShort;
+import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedShort;
 import org.anchoranalysis.image.voxel.pixelsforslice.PixelsForSlice;
 import org.anchoranalysis.image.voxel.pixelsforslice.PixelsFromShortBufferArr;
 
 final class FactoryShort implements VoxelsFactoryTypeBound<ShortBuffer> {
 
-    private static final VoxelDataType DATA_TYPE = VoxelDataTypeUnsignedShort.INSTANCE;
+    private static final VoxelDataType DATA_TYPE = UnsignedShortVoxelType.INSTANCE;
 
     @Override
     public Voxels<ShortBuffer> create(PixelsForSlice<ShortBuffer> pixelsForPlane) {

@@ -32,9 +32,9 @@ import org.anchoranalysis.image.object.ObjectMask;
 
 public interface Assignment {
 
-    int numPaired();
+    int numberPaired();
 
-    int numUnassigned(boolean left);
+    int numberUnassigned(boolean left);
 
     List<ObjectMask> getListPaired(boolean left);
 

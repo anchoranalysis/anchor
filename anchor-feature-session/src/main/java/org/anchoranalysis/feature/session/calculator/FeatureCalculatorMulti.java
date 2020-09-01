@@ -28,9 +28,8 @@ package org.anchoranalysis.feature.session.calculator;
 
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.feature.bean.list.FeatureList;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
-import org.anchoranalysis.feature.calc.NamedFeatureCalculationException;
-import org.anchoranalysis.feature.calc.results.ResultsVector;
+import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
+import org.anchoranalysis.feature.calculate.results.ResultsVector;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
@@ -42,14 +41,14 @@ import org.anchoranalysis.feature.input.FeatureInput;
 public interface FeatureCalculatorMulti<T extends FeatureInput> {
 
     /** Performs one calculation throwing an exception if something goes wrong */
-    ResultsVector calculate(T input) throws NamedFeatureCalculationException;
+    ResultsVector calculate(T input) throws NamedFeatureCalculateException;
 
     /**
      * Performs one calculation on a sub-set of the feature list throwing an exception if something
      * goes wrong
      */
     ResultsVector calculate(T input, FeatureList<T> featuresSubset)
-            throws NamedFeatureCalculationException;
+            throws NamedFeatureCalculateException;
 
     /**
      * Performs one calculation recording the error to an ErrorReporter if anything goes wrong, but
@@ -58,14 +57,14 @@ public interface FeatureCalculatorMulti<T extends FeatureInput> {
     ResultsVector calculateSuppressErrors(T input, ErrorReporter errorReporter);
 
     /**
-     * Performs one calculation, either calling {@link #calculate(T)} or {@link #calcSuppressErrors}
-     * depending on a flag
+     * Performs one calculation, either calling {@link #calculate} or {@link
+     * #calculateSuppressErrors} depending on a flag
      *
-     * @throws FeatureCalculationException if suppress errors is FALSE and an error occurs during
+     * @throws NamedFeatureCalculateException if suppress errors is FALSE and an error occurs during
      *     calculation
      */
-    default ResultsVector calc(T input, ErrorReporter errorReporter, boolean suppressErrors)
-            throws NamedFeatureCalculationException {
+    default ResultsVector calculate(T input, ErrorReporter errorReporter, boolean suppressErrors)
+            throws NamedFeatureCalculateException {
         if (suppressErrors) {
             return calculateSuppressErrors(input, errorReporter);
         } else {

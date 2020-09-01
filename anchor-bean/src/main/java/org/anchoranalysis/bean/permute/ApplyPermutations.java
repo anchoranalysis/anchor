@@ -39,7 +39,8 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 
 /**
- * Applies a PermuteProperty to a bean to create new duplicated beans each with a permutation
+ * Applies a {@link PermuteProperty} to a bean to create new duplicated beans each with a
+ * permutation
  *
  * @author Owen Feehan
  */
@@ -47,56 +48,63 @@ import org.anchoranalysis.core.error.OperationFailedException;
 public class ApplyPermutations<T extends AnchorBean<T>> {
 
     @FunctionalInterface
-    public interface INameGetter<S> {
+    public interface NameGetter<S> {
         String getName(S obj);
     }
 
     @FunctionalInterface
-    public interface INameSetter<S> {
+    public interface NameSetter<S> {
         void setName(S obj, String name);
     }
 
-    private final INameGetter<T> nameGetter;
-    private final INameSetter<T> nameSetter;
+    private final NameGetter<T> nameGetter;
+    private final NameSetter<T> nameSetter;
 
     /**
      * Takes a list of beans, and creates a permuted version, updating the custom names
      *
-     * <p>If both nameGetter and nameSetter are non-NULL, then a .XXX is appended to the name of the
-     * duplicated bean where XXX identifies the permutation.
+     * <p>If both {@code nameGetter} and {@code nameSetter} are non-null, then a
      *
-     * @param listIn FeatureList in
-     * @param pp Which property to permute, and all the values for the permutation
+     * <pre>.XXX</pre>
+     *
+     * is appended to the name of the duplicated bean where
+     *
+     * <pre>XXX</pre>
+     *
+     * identifies the permutation.
+     *
+     * @param beans list of beans on which a permutation is applied
+     * @param propertyToPermute the property to permute, and all the values for the permutation
      * @param setter for setting the permutation onto the property
-     * @param <T> bean-type
+     * @param <S> permutation-type
      * @return a list containing the permuted beans
      * @throws CreateException if something goes wrong
      */
     public <S> List<T> applyPermutationsToCreateDuplicates(
-            List<T> listIn, PermuteProperty<S> pp, PermutationSetter setter)
+            List<T> beans, PermuteProperty<S> propertyToPermute, PermutationSetter setter)
             throws CreateException {
 
-        List<T> listOut = new ArrayList<>();
+        List<T> out = new ArrayList<>();
 
         try {
-            for (T featIn : listIn) {
-                Iterator<S> vals = pp.propertyValues();
+            for (T bean : beans) {
+                Iterator<S> vals = propertyToPermute.propertyValues();
 
                 while (vals.hasNext()) {
                     S propVal = vals.next();
                     assert propVal != null;
 
-                    T featDup = featIn.duplicateBean();
-                    assert featDup != null;
+                    T beanDuplicated = bean.duplicateBean();
+                    assert beanDuplicated != null;
 
-                    setter.setPermutation(featDup, propVal);
-                    listOut.add(featDup);
+                    setter.setPermutation(beanDuplicated, propVal);
+                    out.add(beanDuplicated);
 
-                    maybeSetNewName(featDup, pp, propVal);
+                    maybeSetNewName(beanDuplicated, propertyToPermute, propVal);
                 }
             }
 
-            return listOut;
+            return out;
 
         } catch (BeanDuplicateException
                 | IllegalArgumentException

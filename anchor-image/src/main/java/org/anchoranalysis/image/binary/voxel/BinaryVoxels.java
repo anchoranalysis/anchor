@@ -37,6 +37,7 @@ import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.assigner.VoxelsAssigner;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.extracter.VoxelsExtracter;
+import org.anchoranalysis.image.voxel.pixelsforslice.PixelsForSlice;
 
 /**
  * Like {@link Voxels} but should only contain two distinct intensity-values representing ON and OFF
@@ -73,17 +74,17 @@ public abstract class BinaryVoxels<T extends Buffer> implements BinaryOnOffSette
     }
 
     public boolean hasOnVoxel() {
-        return voxels.extracter().voxelsEqualTo(binaryValues.getOnInt()).anyExists();
+        return voxels.extract().voxelsEqualTo(binaryValues.getOnInt()).anyExists();
     }
 
     public boolean hasOffVoxel() {
-        return voxels.extracter().voxelsEqualTo(binaryValues.getOffInt()).anyExists();
+        return voxels.extract().voxelsEqualTo(binaryValues.getOffInt()).anyExists();
     }
 
     public abstract BinaryVoxels<T> duplicate();
 
     public BinaryVoxels<T> extractSlice(int z) throws CreateException {
-        return binaryVoxelsFor(extracter().slice(z), binaryValues());
+        return binaryVoxelsFor(extract().slice(z), binaryValues());
     }
 
     protected abstract BinaryVoxels<T> binaryVoxelsFor(Voxels<T> slice, BinaryValues binaryValues);
@@ -101,11 +102,11 @@ public abstract class BinaryVoxels<T extends Buffer> implements BinaryOnOffSette
     }
 
     public int countOn() {
-        return voxels.extracter().voxelsEqualTo(binaryValues.getOnInt()).count();
+        return voxels.extract().voxelsEqualTo(binaryValues.getOnInt()).count();
     }
 
     public int countOff() {
-        return voxels.extracter().voxelsEqualTo(binaryValues.getOffInt()).count();
+        return voxels.extract().voxelsEqualTo(binaryValues.getOffInt()).count();
     }
 
     public T sliceBuffer(int z) {
@@ -116,7 +117,11 @@ public abstract class BinaryVoxels<T extends Buffer> implements BinaryOnOffSette
         return voxels.slice(z);
     }
 
-    public VoxelsExtracter<T> extracter() {
-        return voxels.extracter();
+    public VoxelsExtracter<T> extract() {
+        return voxels.extract();
+    }
+
+    public PixelsForSlice<T> slices() {
+        return voxels.slices();
     }
 }

@@ -35,7 +35,6 @@ import org.anchoranalysis.image.stack.Stack;
 public class CreateCombinedStack {
 
     public static NamedProvider<Stack> apply(ImageInitParams so) {
-        return new CombineDiverseProvidersAsStacks(
-                so.getStackCollection(), so.getChnlCollection(), so.getBinaryImageCollection());
+        return new CombineDiverseProvidersAsStacks(so.stacks(), so.channels(), so.masks());
     }
 }

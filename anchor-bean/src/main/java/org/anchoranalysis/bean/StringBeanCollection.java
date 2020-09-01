@@ -26,11 +26,16 @@
 
 package org.anchoranalysis.bean;
 
+/**
+ * A bean that provides a collection of Strings.
+ *
+ * @author Owen Feehan
+ */
 public interface StringBeanCollection extends Iterable<String> {
 
-    void add(String s);
+    void add(String text);
 
-    boolean contains(String s);
+    boolean contains(String text);
 
     boolean isEmpty();
 }

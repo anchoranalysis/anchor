@@ -34,7 +34,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.name.value.NameValue;
 
 /**
- * A bean with an associated (textual) name
+ * A bean with an associated textual name.
  *
  * @author Owen Feehan
  * @param <T> item type

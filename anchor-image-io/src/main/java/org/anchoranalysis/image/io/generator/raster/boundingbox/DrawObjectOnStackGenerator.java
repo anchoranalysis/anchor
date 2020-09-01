@@ -33,7 +33,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.io.generator.raster.RasterGenerator;
 import org.anchoranalysis.image.io.generator.raster.object.rgb.DrawObjectsGenerator;
 import org.anchoranalysis.image.object.ObjectCollection;
@@ -175,12 +175,11 @@ public class DrawObjectOnStackGenerator extends RasterGenerator
         return drawObjectsGenerator.generate();
     }
 
-    private Either<ImageDimensions, DisplayStack> createBackground()
-            throws OutputWriteFailedException {
+    private Either<Dimensions, DisplayStack> createBackground() throws OutputWriteFailedException {
 
         if (!backgroundGenerator.isPresent()) {
             // Exit early if there's no background to be extracted
-            return Either.left(new ImageDimensions(element.boundingBox().extent()));
+            return Either.left(new Dimensions(element.boundingBox().extent()));
         }
 
         try {

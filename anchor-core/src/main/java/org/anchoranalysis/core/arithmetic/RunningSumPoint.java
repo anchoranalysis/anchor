@@ -80,8 +80,8 @@ public final class RunningSumPoint {
     }
 
     /**
-     * The count for Z dimension (this is identical to {@link getCountXY} if only 3D points have ben
-     * added)
+     * The count for Z dimension (this is identical to {@link #getCountXY} if only 3D points have
+     * ben added)
      */
     public int getCountZ() {
         return forDim(2).getCount();

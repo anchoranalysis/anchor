@@ -36,7 +36,7 @@ import org.apache.commons.lang.time.StopWatch;
  * first starts until the last completes.
  *
  * @author Owen Feehan
- * @param E exception throw if operation fails
+ * @param <E> exception throw if operation fails
  */
 class MeasuringSemaphoreExecutor<E extends Exception> {
     private int cnt = 0;
@@ -51,12 +51,12 @@ class MeasuringSemaphoreExecutor<E extends Exception> {
         StopWatch sw = new StopWatch();
         sw.start();
 
-        long memoryBefore = MemoryUtilities.calcMemoryUsage();
+        long memoryBefore = MemoryUtilities.calculateMemoryUsage();
 
         T obj = exec.get();
         long timeTaken = Math.max(sw.getTime() - subExecTime, 0);
 
-        long memoryAfter = MemoryUtilities.calcMemoryUsage();
+        long memoryAfter = MemoryUtilities.calculateMemoryUsage();
         long memoryAdded = memoryAfter - memoryBefore;
 
         long memoryUsed = Math.max(memoryAdded - subMem, 0);

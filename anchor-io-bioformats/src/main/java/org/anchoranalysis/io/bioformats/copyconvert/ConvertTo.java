@@ -29,89 +29,86 @@ package org.anchoranalysis.io.bioformats.copyconvert;
 import java.io.IOException;
 import java.nio.Buffer;
 import java.util.function.Function;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import lombok.RequiredArgsConstructor;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
-import org.anchoranalysis.io.bioformats.DestChnlForIndex;
+import org.anchoranalysis.io.bioformats.DestinationChannelForIndex;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /** Converts a subset of bytes from a byte[] to one or more destination Channels */
+@RequiredArgsConstructor
 public abstract class ConvertTo<T extends Buffer> {
 
     private static Log log = LogFactory.getLog(ConvertTo.class);
 
-    private Function<VoxelsWrapper, Voxels<T>> funcCastWrapper;
+    // START REQUIRED ARGUMENTS
+    /** how to convert a {@link VoxelsWrapper} to the specific destination-type */
+    private final Function<VoxelsWrapper, Voxels<T>> functionCast;
+    // END REQUIRED ARGUMENTS
 
     /**
-     * Default constructor
-     *
-     * @param funcCastWrapper how to convert a {@link VoxelsWrapper} to the specific
-     *     destination-type
-     */
-    public ConvertTo(Function<VoxelsWrapper, Voxels<T>> funcCastWrapper) {
-        super();
-        this.funcCastWrapper = funcCastWrapper;
-    }
-
-    /**
-     * Copies the channels in the source buffer into a particular Chnl
+     * Copies the channels in the source buffer into a particular Channel
      *
      * @param dimensions scene-dimension
      * @param src the buffer we copy all channels from
-     * @param funcDestChnl finds an appropriate destination channel for a particular
+     * @param destination finds an appropriate destination channel for a particular
      *     relative-channel-index
      * @param z the current slice we are working on
-     * @param numChnlsPerByteArray the total number of channels found in any one instance of src
+     * @param numChannelsPerByteArray the total number of channels found in any one instance of src
      * @throws IOException
      */
-    public void copyAllChnls(
-            ImageDimensions dimensions,
+    public void copyAllChannels(
+            Dimensions dimensions,
             byte[] src,
-            DestChnlForIndex dest,
+            DestinationChannelForIndex destination,
             int z,
-            int numChnlsPerByteArray)
+            int numChannelsPerByteArray)
             throws IOException {
 
         log.debug(String.format("copy to byte %d start", z));
 
-        setupBefore(dimensions, numChnlsPerByteArray);
+        setupBefore(dimensions, numChannelsPerByteArray);
 
-        for (int channelRelative = 0; channelRelative < numChnlsPerByteArray; channelRelative++) {
+        for (int channelRelative = 0;
+                channelRelative < numChannelsPerByteArray;
+                channelRelative++) {
 
-            VoxelBuffer<T> converted = convertSingleChnl(src, channelRelative);
-            copyBytesIntoDestChnl(converted, funcCastWrapper, dest, z, channelRelative);
+            VoxelBuffer<T> converted = convertSingleChannel(src, channelRelative);
+            copyBytesIntoDestination(converted, functionCast, destination, z, channelRelative);
         }
 
         log.debug(String.format("copy to byte %d end", z));
     }
 
     /**
-     * Always called before any batch of calls to convertSingleChnl
+     * Always called before any batch of calls to convertSingleChannel
      *
      * @param dimensions dimension
-     * @param numChnlsPerByteArray the number of channels that are found in the byte-array that will
-     *     be passed to convertSingleChnl
+     * @param numChannelsPerByteArray the number of channels that are found in the byte-array that
+     *     will be passed to convertSingleChannel
      */
-    protected abstract void setupBefore(ImageDimensions dimensions, int numChnlsPerByteArray);
+    protected abstract void setupBefore(Dimensions dimensions, int numChannelsPerByteArray);
 
     /**
      * Converts a single-channel only
      *
      * @param src source buffer containing the bytes we copy from
-     * @param cRel 0 if the buffer contains only 1 channel per byte array, or otherwise the index of
-     *     the channel
+     * @param channelIndexRelative 0 if the buffer contains only 1 channel per byte array, or
+     *     otherwise the index of the channel
      */
-    protected abstract VoxelBuffer<T> convertSingleChnl(byte[] src, int cRel) throws IOException;
+    protected abstract VoxelBuffer<T> convertSingleChannel(byte[] src, int channelIndexRelative)
+            throws IOException;
 
-    public static <S extends Buffer> void copyBytesIntoDestChnl(
+    public static <S extends Buffer> void copyBytesIntoDestination(
             VoxelBuffer<S> voxelBuffer,
-            Function<VoxelsWrapper, Voxels<S>> funcCastWrapper,
-            DestChnlForIndex dest,
+            Function<VoxelsWrapper, Voxels<S>> functionCast,
+            DestinationChannelForIndex destination,
             int z,
-            int cRel) {
-        Voxels<S> voxels = funcCastWrapper.apply(dest.get(cRel).voxels());
+            int channelIndexRelative) {
+        Voxels<S> voxels = functionCast.apply(destination.get(channelIndexRelative).voxels());
         voxels.slices().replaceSlice(z, voxelBuffer);
     }
 }

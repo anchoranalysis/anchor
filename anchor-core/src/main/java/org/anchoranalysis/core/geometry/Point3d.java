@@ -77,7 +77,7 @@ public final class Point3d extends Tuple3d {
     /**
      * Square of Euclidean distance from this point to another
      *
-     * @param other the other point
+     * @param point the other point
      * @return the distance-squared
      */
     public double distanceSquared(Point3i point) {
@@ -155,6 +155,15 @@ public final class Point3d extends Tuple3d {
         Point3d pointDup = new Point3d(point);
         pointDup.add(toAdd);
         return pointDup;
+    }
+
+    /** Performs an addition without changing any values in an existing point */
+    public static Point3d immutableAdd(Point3d point, int x, int y, int z) {
+        Point3d pointCopy = new Point3d(point);
+        pointCopy.incrementX(x);
+        pointCopy.incrementY(y);
+        pointCopy.incrementZ(z);
+        return pointCopy;
     }
 
     /** Performs a subtraction without changing any values in an existing point */

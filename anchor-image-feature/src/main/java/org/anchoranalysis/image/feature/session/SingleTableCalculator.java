@@ -32,11 +32,11 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.bean.list.FeatureList;
-import org.anchoranalysis.feature.calc.NamedFeatureCalculationException;
-import org.anchoranalysis.feature.calc.results.ResultsVector;
+import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
+import org.anchoranalysis.feature.calculate.results.ResultsVector;
+import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.feature.list.NamedFeatureStore;
 import org.anchoranalysis.feature.name.FeatureNameList;
-import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
@@ -49,18 +49,18 @@ public class SingleTableCalculator implements FeatureTableCalculator<FeatureInpu
     private final NamedFeatureStore<FeatureInputSingleObject> namedFeatureStore;
     // END REQUIRED ARGUMENTS
 
-    private FeatureCalculatorMulti<FeatureInputSingleObject> session;
+    private FeatureCalculatorMulti<FeatureInputSingleObject> calculator;
 
     @Override
-    public void start(ImageInitParams soImage, Optional<NRGStackWithParams> nrgStack, Logger logger)
+    public void start(ImageInitParams soImage, Optional<EnergyStack> energyStack, Logger logger)
             throws InitException {
 
-        session =
+        calculator =
                 FeatureSession.with(
                         namedFeatureStore.listFeatures(),
                         InitParamsHelper.createInitParams(
-                                Optional.of(soImage.getSharedObjects()), nrgStack),
-                        soImage.getFeature().getSharedFeatureSet(),
+                                Optional.of(soImage.getSharedObjects()), energyStack),
+                        soImage.features().getSharedFeatureSet(),
                         logger);
     }
 
@@ -71,21 +71,21 @@ public class SingleTableCalculator implements FeatureTableCalculator<FeatureInpu
 
     @Override
     public ResultsVector calculate(FeatureInputSingleObject input)
-            throws NamedFeatureCalculationException {
-        return session.calculate(input);
+            throws NamedFeatureCalculateException {
+        return calculator.calculate(input);
     }
 
     @Override
     public ResultsVector calculate(
             FeatureInputSingleObject input, FeatureList<FeatureInputSingleObject> featuresSubset)
-            throws NamedFeatureCalculationException {
-        return session.calculate(input, featuresSubset);
+            throws NamedFeatureCalculateException {
+        return calculator.calculate(input, featuresSubset);
     }
 
     @Override
     public ResultsVector calculateSuppressErrors(
             FeatureInputSingleObject input, ErrorReporter errorReporter) {
-        return session.calculateSuppressErrors(input, errorReporter);
+        return calculator.calculateSuppressErrors(input, errorReporter);
     }
 
     @Override
