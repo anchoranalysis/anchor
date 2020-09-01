@@ -7,6 +7,7 @@
     </parent>
   <artifactId>anchor-io-manifest</artifactId>
   <version>0.0.1-SNAPSHOT</version>
+  <description>Manifests for recording outputs from an experiment.</description>
   <build>
 
 				        

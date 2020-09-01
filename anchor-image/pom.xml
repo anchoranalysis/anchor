@@ -7,7 +7,7 @@
     </parent> 
   <artifactId>anchor-image</artifactId>
   <version>0.0.8-SNAPSHOT</version>
-
+  <description>Core (non-bean) data objects for images (stacks, channels, voxel manipulation etc.)</description>
    <dependencies>
     
     <dependency>

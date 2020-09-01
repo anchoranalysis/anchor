@@ -7,6 +7,7 @@
     </parent>
   <artifactId>anchor-image-experiment</artifactId>
   <version>0.0.8-SNAPSHOT</version>
+  <description>Base classes for general tasks that involve images (more specific base classes are better put into plugins).</description>
   <dependencies>
     <dependency>
 	  <groupId>${project.groupId}</groupId>

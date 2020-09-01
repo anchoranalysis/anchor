@@ -7,7 +7,7 @@
     </parent>  
   <artifactId>anchor-bean</artifactId>
   <version>0.0.8-SNAPSHOT</version>
-  
+  <description>Dependency injection framework and object-model.</description>
   <dependencies>
     <dependency>
 	  <groupId>${project.groupId}</groupId>

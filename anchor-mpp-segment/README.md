@@ -1,4 +1,4 @@
-# anchor-mpp-sgmn
+# anchor-mpp-segment
 
 Segmentation involving objects in `anchor-mpp`.
 

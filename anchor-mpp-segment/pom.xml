@@ -7,6 +7,7 @@
     </parent>
   <artifactId>anchor-mpp-segment</artifactId>
   <version>0.0.8-SNAPSHOT</version>
+  <description>Segmentation involving objects in anchor-mpp.</description>
 <dependencies>
     <dependency>
 	  <groupId>${project.groupId}</groupId>
