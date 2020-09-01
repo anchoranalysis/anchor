@@ -68,16 +68,19 @@ import org.anchoranalysis.image.voxel.iterator.IterateVoxelsByte;
 import org.anchoranalysis.image.voxel.thresholder.VoxelsThresholder;
 
 /**
- * An object expressed in voxels, bounded within overall space
+ * An object expressed in voxels, bounded within overall space.
  *
- * <p>A bounding-box defines a box within the overall space, and a raster-mask defines which voxels
- * inside the bounding-box belong to the object.
+ * <p>A bounding-box specifies a location within an image, and a raster-mask specifies which voxels
+ * inside this box belong to the object.
  *
- * <p>Each voxel in the raster-mask must be one of two states, an ON value and an OFF value
+ * <p>Each voxel in the raster-mask must be one of two states, either <i>on</i> or <i>off</i>. The object is
+ * specified by all voxels that are <i>on</i>.
+ * 
+ * <p><i>on</i> voxels need not be contiguous (i.e. one connected component).
  *
  * <p>The interfaces for assigning, extracting voxels etc. all expect <i>global</i> coordinates.
  *
- * <p>These voxels are MUTABLE.
+ * <p>These voxels are <b>mutable</b>.
  */
 @Accessors(fluent = true)
 public class ObjectMask {
@@ -98,7 +101,7 @@ public class ObjectMask {
     /**
      * Creates an object-mask with a corner at the origin (i.e. corner is 0,0,0)
      *
-     * <p>Default binary-values of (OFF=0, ON=255) are used.
+     * <p>Default binary-values of (off=0, on=255) are used.
      *
      * @param voxels voxels to be used in the object-mask
      */
@@ -107,9 +110,9 @@ public class ObjectMask {
     }
 
     /**
-     * Creates an object-mask to corresponding to a bounding-box with all pixels OFF (0)
+     * Creates an object-mask to corresponding to a bounding-box with all pixels off (0)
      *
-     * <p>Default binary-values of (OFF=0, ON=255) are used.
+     * <p>Default binary-values of (off=0, on=255) are used.
      *
      * @param box bounding-box
      */
@@ -122,7 +125,7 @@ public class ObjectMask {
      *
      * <p>The voxels are reused without duplication.
      *
-     * <p>Default binary-values of (OFF=0, ON=255) are used.
+     * <p>Default binary-values of (off=0, on=255) are used.
      *
      * @param voxels voxels to be used in the object-mask
      */
@@ -199,7 +202,7 @@ public class ObjectMask {
     /**
      * Replaces the voxels in the object-mask.
      *
-     * <p>This is an IMMUTABLE operation, and a new object-mask is created.
+     * <p>This is an <b>immutable</b> operation, and a new object-mask is created.
      *
      * @param voxelsToAssign voxels to be assigned.
      * @return a new object with the replacement voxels but identical in other respects.
@@ -241,7 +244,7 @@ public class ObjectMask {
     /**
      * Produces a scaled-version of an object-mask.
      *
-     * <p>This is an IMMUTABLE operation.
+     * <p>This is an <b>immutable</b> operation.
      *
      * @param factor scale-factor
      * @return a scaled object-mask
@@ -408,7 +411,7 @@ public class ObjectMask {
     /**
      * A maximum-intensity projection (flattens in z dimension)
      *
-     * <p>This is an IMMUTABLE operation.
+     * <p>This is an <b>immutable</b> operation.
      *
      * @return a new object-mask flattened in Z dimension.
      */
@@ -663,7 +666,7 @@ public class ObjectMask {
     /**
      * Creates a new object-mask with coordinates changed to be relative to another box.
      *
-     * <p>This is an IMMUTABLE operation.
+     * <p>This is an <b>immutable</b> operation.
      *
      * @param box box used as a reference point, against which new relative coordinates are
      *     calculated.

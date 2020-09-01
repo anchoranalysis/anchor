@@ -75,7 +75,7 @@ public final class RunningSumPoint {
     }
 
     /** The count for XY dimensions (guaranteed to always be the same */
-    public int getCountXY() {
+    public long getCountXY() {
         return forDim(0).getCount();
     }
 
@@ -83,7 +83,7 @@ public final class RunningSumPoint {
      * The count for Z dimension (this is identical to {@link #getCountXY} if only 3D points have
      * ben added)
      */
-    public int getCountZ() {
+    public long getCountZ() {
         return forDim(2).getCount();
     }
 

@@ -27,29 +27,32 @@
 package org.anchoranalysis.mpp.io.bean.input;
 
 import java.nio.file.Path;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-import org.anchoranalysis.annotation.mark.MarkAnnotation;
+import org.anchoranalysis.annotation.mark.DualMarksAnnotation;
 import org.anchoranalysis.io.bean.deserializer.XStreamDeserializer;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
 import org.anchoranalysis.mpp.mark.MarkCollection;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-class DeserializerHelper {
+/**
+ * 
+ * @author Owen Feehan
+ *
+ * @param <T> rejection-reason
+ */
+class DeserializerHelper<T> {
 
-    private static XStreamDeserializer<MarkCollection> deserializerMarks =
+    private XStreamDeserializer<MarkCollection> deserializerMarks =
             new XStreamDeserializer<>();
-    private static XStreamDeserializer<MarkAnnotation> deserializerAnnotation =
+    private XStreamDeserializer<DualMarksAnnotation<T>> deserializerAnnotation =
             new XStreamDeserializer<>();
 
-    public static MarkCollection deserializeMarks(Path path) throws DeserializationFailedException {
+    public MarkCollection deserializeMarks(Path path) throws DeserializationFailedException {
         return deserializerMarks.deserialize(path);
     }
 
-    public static MarkCollection deserializeMarksFromAnnotation(
+    public MarkCollection deserializeMarksFromAnnotation(
             Path outPath, boolean includeAccepted, boolean includeRejected)
             throws DeserializationFailedException {
-        MarkAnnotation ann = deserializerAnnotation.deserialize(outPath);
+        DualMarksAnnotation<T> ann = deserializerAnnotation.deserialize(outPath);
         if (!ann.isFinished()) {
             throw new DeserializationFailedException("Annotation was never finished");
         }
@@ -60,7 +63,7 @@ class DeserializerHelper {
         MarkCollection marksOut = new MarkCollection();
 
         if (includeAccepted) {
-            marksOut.addAll(ann.getMarks());
+            marksOut.addAll(ann.marks());
         }
 
         if (includeRejected && ann.getMarksReject() != null) {

@@ -38,7 +38,7 @@ import org.anchoranalysis.image.scale.ScaleFactor;
  * The resolution of an image i.e. what a single voxel represents in physical units (meters) in x,
  * y, z
  *
- * <p>This class is IMMUTABLE.
+ * <p>This class is <b>immutable</b>.
  *
  * @author Owen Feehan
  */

@@ -12,6 +12,7 @@
 				        
   
   </build>
+  <description>Reading / writing without specific application.</description>
 	<dependencies>
 	    <dependency>
 	    	<groupId>commons-lang</groupId>

@@ -29,23 +29,24 @@ package org.anchoranalysis.annotation.mark;
 import java.util.Calendar;
 import java.util.Date;
 import lombok.Getter;
-import org.anchoranalysis.annotation.AnnotationWithMarks;
 import org.anchoranalysis.core.error.OptionalOperationUnsupportedException;
-import org.anchoranalysis.mpp.bean.regionmap.RegionMap;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMapSingleton;
+import org.anchoranalysis.mpp.bean.regionmap.RegionMembershipWithFlags;
 import org.anchoranalysis.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.mpp.mark.MarkCollection;
 
 /**
- * An annotation that consists of two sets of marks (accepted marks, and rejected marks) as well as
- * a possible reason for rejecting the entire image
+ * An annotation that consists of two sets of marks, accepted and rejected.
+ * 
+ * <p>It also contains a possible reason for rejecting the entire image.
  *
  * @author Owen Feehan
+ * @param <T> rejection-reason
  */
-public class MarkAnnotation extends AnnotationWithMarks {
+public class DualMarksAnnotation<T> implements AnnotationWithMarks {
 
     @Getter private boolean accepted = false;
-    @Getter private RejectionReason rejectionReason;
+    @Getter private T rejectionReason;
 
     /** Marks in annotation */
     private MarkCollection marks;
@@ -61,31 +62,41 @@ public class MarkAnnotation extends AnnotationWithMarks {
     // Hard-coded regionID
     private int regionID = GlobalRegionIdentifiers.SUBMARK_INSIDE;
 
-    public void markAccepted(MarkCollection marks, MarkCollection marksReject) {
+    /**
+     * Assigns marks with an overall <i>accepted</i> state.
+     * 
+     * @param dualMark the marks to assign to the annotation.
+     */
+    public void assignAccepted(DualMarks dualMark) {
         finished = true;
         accepted = true;
-        this.marks = marks;
-        this.marksReject = marksReject;
-        recordCurrentTime();
+        assign(dualMark);
     }
 
-    public void markPaused(MarkCollection marks, MarkCollection marksReject) {
+    /**
+     * Assigns marks with an overall <i>paused</i> state.
+     * 
+     * @param dualMark the marks to assign to the annotation.
+     */
+    public void assignPaused(DualMarks dualMark) {
         finished = false;
         accepted = true;
-        this.marks = marks;
-        this.marksReject = marksReject;
-        recordCurrentTime();
+        assign(dualMark);
     }
-
-    // Marks the image as a whole as being rejected
-    // We record the so far accepted/rejected configurations in case we change our mind lafter
-    public void markRejected(
-            MarkCollection marks, MarkCollection marksReject, RejectionReason reason) {
+    
+    /**
+     * Assigns marks with an overall <i>rejected</i> state.
+     * 
+     * <p>The so far accepted/rejected marks are still stored in case there's a later change of mind.
+     * 
+     * @param dualMark the marks to assign to the annotation.
+     * @param reason the reason for rejection
+     */
+    public void assignRejected(
+            DualMarks dualMark, T reason) {
         accepted = false;
         finished = true;
-        this.marks = marks;
-        this.marksReject = marksReject;
-        recordCurrentTime();
+        assign(dualMark);
         this.rejectionReason = reason;
     }
 
@@ -94,22 +105,29 @@ public class MarkAnnotation extends AnnotationWithMarks {
     }
 
     @Override
-    public MarkCollection getMarks() {
+    public MarkCollection marks() {
         return marks;
     }
 
-    @Override
-    public RegionMap getRegionMap() {
-        return RegionMapSingleton.instance();
-    }
-
-    @Override
-    public int getRegionID() {
-        return regionID;
-    }
-
+    /**
+     * Scales the marks in the annotation in X and Y dimensions.
+     * 
+     * @param scaleFactor how much to scale by
+     * @throws OptionalOperationUnsupportedException if the type of mark used in the annotation does not supported scaling.
+     */
     public void scaleXY(double scaleFactor) throws OptionalOperationUnsupportedException {
         marks.scaleXY(scaleFactor);
         marksReject.scaleXY(scaleFactor);
+    }
+
+    @Override
+    public RegionMembershipWithFlags region() {
+        return RegionMapSingleton.instance().membershipWithFlagsForIndex(regionID);
+    }
+        
+    private void assign(DualMarks dualMark) {
+        this.marks = dualMark.accepted();
+        this.marksReject = dualMark.rejected();
+        recordCurrentTime();
     }
 }

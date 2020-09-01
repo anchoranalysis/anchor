@@ -7,6 +7,7 @@
     </parent> 
   <artifactId>anchor-feature</artifactId>
   <version>0.0.8-SNAPSHOT</version>
+  <description>Defines a feature generically and related utilities.</description>
    <dependencies>
 	   <dependency>
 		  <groupId>${project.groupId}</groupId>

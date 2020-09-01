@@ -31,15 +31,22 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.histogram.Histogram;
 
 /**
- * Calculates a level (threshold) from a histogram
+ * Calculates a threshold-level from a histogram.
  *
- * <p>A well-behaved CalculateLevel should implements equals() and hashCode() If it doesn't, these
- * methods should assert(false)
+ * <p>A well-behaved {@link CalculateLevel} should implements {@link #equals} and {@link #hashCode}. If this is not possible, these
+ * methods should instead throw a run-time exception.
  *
  * @author Owen Feehan
  */
 public abstract class CalculateLevel extends NullParamsBean<CalculateLevel> {
 
+    /**
+     * Determines a voxel intensity that can be used for thresholding.
+     * 
+     * @param histogram a histogram of voxel-intensities from which a threshold-level can be derived.
+     * @return the selected intensity
+     * @throws OperationFailedException if anything goes wrong
+     */
     public abstract int calculateLevel(Histogram histogram) throws OperationFailedException;
 
     @Override

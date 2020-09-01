@@ -7,6 +7,7 @@
     </parent>
   <artifactId>anchor-annotation-io</artifactId>
   <version>0.0.2-SNAPSHOT</version>
+  <description>Reading / writing related to anchor-annotation</description>
  <dependencies>
  
     <dependency>

@@ -7,7 +7,7 @@
     </parent>
   <artifactId>anchor-test</artifactId>
   <version>0.0.8-SNAPSHOT</version>
-	
+	<description>Reusable test fixtures/utilities (at highest generality).</description>
 	<dependencies>
 	
 		<!--  External dependencies -->

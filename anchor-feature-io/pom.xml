@@ -7,6 +7,7 @@
     </parent>
   <artifactId>anchor-feature-io</artifactId>
   <version>0.0.8-SNAPSHOT</version>
+  <description>Reading / writing related to anchor-feature.</description>
  <dependencies>
    <dependency>
 	  <groupId>${project.groupId}</groupId>

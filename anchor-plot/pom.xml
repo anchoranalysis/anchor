@@ -7,6 +7,7 @@
     </parent>
   <artifactId>anchor-plot</artifactId>
   <version>0.0.8-SNAPSHOT</version>
+  <description>Plotting of some basic charts.</description>
   <dependencies>
     <dependency>
 	  <groupId>${project.groupId}</groupId>

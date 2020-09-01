@@ -337,12 +337,12 @@ public class Ellipsoid extends ConicBase implements Serializable {
 
     // NB objects are scaled in pre-rotated position i.e. when aligned to axes
     @Override
-    public void scale(double multFactor) {
-        super.scale(multFactor);
+    public void scale(double scaleFactor) {
+        super.scale(scaleFactor);
 
-        this.radii.setX(this.radii.x() * multFactor);
-        this.radii.setY(this.radii.y() * multFactor);
-        this.radii.setZ(this.radii.z() * multFactor);
+        this.radii.setX(this.radii.x() * scaleFactor);
+        this.radii.setY(this.radii.y() * scaleFactor);
+        this.radii.setZ(this.radii.z() * scaleFactor);
         updateAfterMarkChange();
     }
 

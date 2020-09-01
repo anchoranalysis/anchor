@@ -44,7 +44,7 @@ class AggregatePoints implements ProcessVoxel {
         runningSum.increment(point);
     }
 
-    public int count() {
+    public long count() {
         return runningSum.getCountXY();
     }
 

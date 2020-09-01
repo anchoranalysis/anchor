@@ -83,11 +83,17 @@ public abstract class Mark implements Serializable, Identifiable {
 
     public abstract double volume(int regionID);
 
-    // String representation of mark
+    /** String representation of the mark */
     @Override
     public abstract String toString();
 
-    public abstract void scale(double multFactor) throws OptionalOperationUnsupportedException;
+    /**
+     * Scales the mark in X and Y dimensions.
+     * 
+     * @param scaleFactor how much to scale by.
+     * @throws OptionalOperationUnsupportedException if the type of mark used in the annotation does not supported scaling.
+     */
+    public abstract void scale(double scaleFactor) throws OptionalOperationUnsupportedException;
 
     public abstract int numDims();
 

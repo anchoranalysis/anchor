@@ -100,15 +100,15 @@ public abstract class MarkWithPositionAndSingleRadius extends MarkWithPosition
      * scene-resolution
      */
     @Override
-    public void scale(double multFactor) {
-        super.scale(multFactor);
+    public void scale(double scaleFactor) {
+        super.scale(scaleFactor);
 
         if (this.boundRadius != null) {
             this.boundRadius = this.boundRadius.duplicate();
-            this.boundRadius.scale(multFactor);
+            this.boundRadius.scale(scaleFactor);
         }
 
-        setRadius(this.radius * multFactor);
+        setRadius(this.radius * scaleFactor);
     }
 
     @Override

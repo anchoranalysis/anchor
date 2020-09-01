@@ -29,7 +29,7 @@ package org.anchoranalysis.annotation.io.mark;
 import java.nio.file.Path;
 import java.util.Optional;
 import org.anchoranalysis.annotation.io.AnnotationReader;
-import org.anchoranalysis.annotation.mark.MarkAnnotation;
+import org.anchoranalysis.annotation.mark.DualMarksAnnotation;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.io.bean.deserializer.XStreamDeserializer;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
@@ -38,8 +38,15 @@ import org.anchoranalysis.mpp.io.marks.MarkCollectionDeserializer;
 import org.anchoranalysis.mpp.mark.MarkCollection;
 import lombok.AllArgsConstructor;
 
+/**
+ * Reads a {@link DualMarksAnnotation} from a path on the file-system.
+ * 
+ * @author Owen Feehan
+ *
+ * @param <T> rejection-reason type
+ */
 @AllArgsConstructor
-public class MarkAnnotationReader implements AnnotationReader<MarkAnnotation> {
+public class MarkAnnotationReader<T> implements AnnotationReader<DualMarksAnnotation<T>> {
 
     private static final MarkCollectionDeserializer DESERIALIZER = new MarkCollectionDeserializer();
     
@@ -50,12 +57,12 @@ public class MarkAnnotationReader implements AnnotationReader<MarkAnnotation> {
     }
 
     @Override
-    public Optional<MarkAnnotation> read(Path path) throws AnchorIOException {
+    public Optional<DualMarksAnnotation<T>> read(Path path) throws AnchorIOException {
 
         Optional<Path> pathMaybeChanged = fileNameToRead(path);
         try {
             return OptionalUtilities.map(
-                    pathMaybeChanged, MarkAnnotationReader::readAnnotationFromPath);
+                    pathMaybeChanged, this::readAnnotationFromPath);
         } catch (DeserializationFailedException e) {
             throw new AnchorIOException("Cannot deserialize annotation", e);
         }
@@ -86,9 +93,9 @@ public class MarkAnnotationReader implements AnnotationReader<MarkAnnotation> {
         return Optional.empty();
     }
 
-    private static MarkAnnotation readAnnotationFromPath(Path annotationPath)
+    private DualMarksAnnotation<T> readAnnotationFromPath(Path annotationPath)
             throws DeserializationFailedException {
-        XStreamDeserializer<MarkAnnotation> deserialized = new XStreamDeserializer<>();
+        XStreamDeserializer<DualMarksAnnotation<T>> deserialized = new XStreamDeserializer<>();
         return deserialized.deserialize(annotationPath);
     }
 }

@@ -7,6 +7,7 @@
     </parent>
   <artifactId>anchor-io-generator</artifactId>
   <version>0.0.1-SNAPSHOT</version>
+  <description>Generators for producing output.</description>
   <build>
 
 				        

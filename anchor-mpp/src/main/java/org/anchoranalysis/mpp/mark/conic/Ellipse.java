@@ -318,9 +318,9 @@ public class Ellipse extends ConicBase implements Serializable {
 
     // NB objects are scaled in pre-rotated position i.e. when aligned to axes
     @Override
-    public void scale(double multFactor) {
-        super.scale(multFactor);
-        this.radii.scale(multFactor);
+    public void scale(double scaleFactor) {
+        super.scale(scaleFactor);
+        this.radii.scale(scaleFactor);
         updateAfterMarkChange();
     }
 

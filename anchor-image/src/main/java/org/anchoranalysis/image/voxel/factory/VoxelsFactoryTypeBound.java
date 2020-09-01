@@ -35,7 +35,7 @@ import org.anchoranalysis.image.voxel.pixelsforslice.PixelsForSlice;
 /**
  * A factory for creating voxels with a particular buffer-type
  *
- * <p>This class (and all its sub-classes) are IMMUTABLE.
+ * <p>This class (and all its sub-classes) are <b>immutable</b>.
  *
  * @author Owen Feehan
  * @param <T> buffer-type

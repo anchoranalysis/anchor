@@ -32,18 +32,21 @@ import org.anchoranalysis.core.relation.RelationToValue;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 
 /**
- * Selects only the "high" pixels from a binary mask
+ * Selects anything that is <b>not</b> <i>off</i> voxels from a binary mask.
  *
- * <p>Uses the default "high" value of 255
+ * <p>Uses the default off value of 255.
+ *
+ * <p>Note this is not the same as selecting <i>on</i> voxels which would only select voxels of value
+ * 255. There's undefined space {@code > 1} and {@code < 255}.
  *
  * @author Owen Feehan
  */
 @EqualsAndHashCode(callSuper = true)
-public class BinaryHighVoxels extends BinaryVoxelsBase {
+public class BinaryNotOffVoxels extends BinaryVoxelsBase {
 
     @Override
     public double threshold() {
-        return (double) (BinaryValues.getDefault().getOnInt() - 1);
+        return BinaryValues.getDefault().getOffInt();
     }
 
     @Override

@@ -46,13 +46,18 @@ import org.anchoranalysis.mpp.io.input.MultiInputSubMap;
 
 class AppendHelper {
 
-    /** Reads an object from a path */
+    private static final DeserializerHelper<?> DESERIALIZER = new DeserializerHelper<>();
+    
+    /** Reads an object from a path. */
     @FunctionalInterface
     private interface ReadFromPath<T> {
         T apply(Path in) throws Exception; // NOSONAR
     }
 
-    // We assume all the input files are single channel images
+    /** 
+     * 
+     *  <p>It is assumed the input files are single channel images.
+     **/
     public static void appendStack(
             List<NamedBean<FilePathGenerator>> listPaths,
             final MultiInput inputObject,
@@ -114,7 +119,7 @@ class AppendHelper {
                 inputObject,
                 listPaths,
                 MultiInput::marks,
-                DeserializerHelper::deserializeMarks,
+                DESERIALIZER::deserializeMarks,
                 debugMode);
     }
 
@@ -130,7 +135,7 @@ class AppendHelper {
                 listPaths,
                 MultiInput::marks,
                 outPath ->
-                        DeserializerHelper.deserializeMarksFromAnnotation(
+                DESERIALIZER.deserializeMarksFromAnnotation(
                                 outPath, includeAccepted, includeRejected),
                 debugMode);
     }
@@ -164,24 +169,24 @@ class AppendHelper {
             ReadFromPath<T> reader,
             boolean debugMode) {
 
-        for (NamedBean<FilePathGenerator> ni : list) {
+        for (NamedBean<FilePathGenerator> namedBean : list) {
 
             MultiInputSubMap<T> map = extractMap.apply(inputObject);
 
-            map.add(ni.getName(), () -> readObjectForAppend(inputObject, reader, ni, debugMode));
+            map.add(namedBean.getName(), () -> readObjectForAppend(inputObject, reader, namedBean, debugMode));
         }
     }
 
     private static <T> T readObjectForAppend(
             MultiInput inputObject,
             ReadFromPath<T> reader,
-            NamedBean<FilePathGenerator> ni,
+            NamedBean<FilePathGenerator> namedBean,
             boolean debugMode)
             throws OperationFailedException {
         try {
             return reader.apply(
                     OperationOutFilePath.outPathFor(
-                            ni.getValue(), inputObject::pathForBinding, debugMode));
+                            namedBean.getValue(), inputObject::pathForBinding, debugMode));
         } catch (Exception e) {
             throw new OperationFailedException("An error occured appending to the multi-input", e);
         }
@@ -189,8 +194,8 @@ class AppendHelper {
 
     private static TimeSequence openRaster(Path path, RasterReader rasterReader)
             throws RasterIOException {
-        try (OpenedRaster or = rasterReader.openFile(path)) {
-            return or.open(0, ProgressReporterNull.get());
+        try (OpenedRaster openedRaster = rasterReader.openFile(path)) {
+            return openedRaster.open(0, ProgressReporterNull.get());
         }
     }
 }

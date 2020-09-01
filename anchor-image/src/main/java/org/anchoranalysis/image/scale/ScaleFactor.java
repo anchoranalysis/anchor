@@ -33,7 +33,7 @@ import lombok.experimental.Accessors;
 /**
  * What to scale x and y dimensions by
  *
- * <p>This class is IMMUTABLE.
+ * <p>This class is <b>immutable</b>.
  *
  * @author Owen Feehan
  */

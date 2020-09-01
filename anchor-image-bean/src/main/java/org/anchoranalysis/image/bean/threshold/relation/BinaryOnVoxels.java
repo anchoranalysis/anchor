@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-io-ij
+ * anchor-image-bean
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -24,34 +24,30 @@
  * #L%
  */
 
-package org.anchoranalysis.io.imagej.bean.raster.writer;
+package org.anchoranalysis.image.bean.threshold.relation;
 
-import ij.io.FileSaver;
-import org.anchoranalysis.image.io.RasterIOException;
+import lombok.EqualsAndHashCode;
+import org.anchoranalysis.core.relation.GreaterThan;
+import org.anchoranalysis.core.relation.RelationToValue;
+import org.anchoranalysis.image.binary.values.BinaryValues;
 
 /**
- * Writes a PNG image using ImageJ.
- * 
- * <p>The extension .png is employed by default.
- * 
- * @author Owen Feehan
+ * Selects only the <i>on</i> pixels from a binary mask.
  *
+ * <p>Uses the default on value of 255.
+ *
+ * @author Owen Feehan
  */
-public class PNG extends NoTimeSeries {
+@EqualsAndHashCode(callSuper = true)
+public class BinaryOnVoxels extends BinaryVoxelsBase {
 
     @Override
-    protected boolean writeRaster(FileSaver fileSaver, String path, boolean asStack)
-            throws RasterIOException {
-
-        if (asStack) {
-            throw new RasterIOException("Writing as stack unsupported for this format");
-        } else {
-            return fileSaver.saveAsPng(path);
-        }
+    public double threshold() {
+        return (double) (BinaryValues.getDefault().getOnInt() - 1);
     }
 
     @Override
-    public String defaultExtension() {
-        return "png";
+    public RelationToValue relation() {
+        return new GreaterThan();
     }
 }

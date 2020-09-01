@@ -7,6 +7,7 @@
     </parent>
   <artifactId>anchor-io-bioformats</artifactId>
   <version>0.0.1-SNAPSHOT</version>
+  <description>Input / output that uses Bioformats.</description>
    <licenses>
     <license>
       <name>The Apache Software License, Version 2.0</name>

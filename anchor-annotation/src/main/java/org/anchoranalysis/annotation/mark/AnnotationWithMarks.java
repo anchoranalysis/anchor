@@ -24,25 +24,46 @@
  * #L%
  */
 
-package org.anchoranalysis.annotation;
+package org.anchoranalysis.annotation.mark;
 
+import org.anchoranalysis.annotation.Annotation;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.mpp.bean.regionmap.RegionMap;
+import org.anchoranalysis.mpp.bean.regionmap.RegionMembershipWithFlags;
 import org.anchoranalysis.mpp.mark.MarkCollection;
 
-public abstract class AnnotationWithMarks implements Annotation {
+/**
+ * An image-annotation that involves a mark-collection.
+ * 
+ * @author Owen Feehan
+ *
+ */
+public interface AnnotationWithMarks extends Annotation {
 
-    public abstract MarkCollection getMarks();
+    /** 
+     * The marks associated with the annotation
+     * 
+     * @return the marks
+     * */
+    MarkCollection marks();
 
-    protected abstract RegionMap getRegionMap();
+    /**
+     * The region(s) of the marks that specifies the annotation.
+     * 
+     * <p>As marks have multiple regions, this identifies which regions are included in the annotation.
+     * @return the identifier
+     */
+    RegionMembershipWithFlags region();
 
-    protected abstract int getRegionID();
-
-    public ObjectCollection convertToObjects(Dimensions dimensions) {
-        return getMarks()
+    /**
+     * Creates an object-collection that is a voxelized representation of the marks in the annotation.
+     * @param dimensions size of image the annotations pertain to.
+     * @return newly created objects
+     */
+    default ObjectCollection convertToObjects(Dimensions dimensions) {
+        return marks()
                 .deriveObjects(
-                        dimensions, getRegionMap().membershipWithFlagsForIndex(getRegionID()))
+                        dimensions, region())
                 .withoutProperties();
     }
 }

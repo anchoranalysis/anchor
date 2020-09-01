@@ -7,6 +7,7 @@
     </parent>
   <artifactId>anchor-mpp</artifactId>
   <version>0.0.8-SNAPSHOT</version>
+  <description>Core data classes for Marked Point Processes (marks, configuration etc.)</description>
    <dependencies>
     <dependency>
 	  <groupId>${project.groupId}</groupId>

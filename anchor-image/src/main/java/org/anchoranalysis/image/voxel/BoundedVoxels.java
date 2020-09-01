@@ -118,7 +118,7 @@ public class BoundedVoxels<T extends Buffer> {
     /**
      * Replaces the voxels in the box.
      *
-     * <p>This is an IMMUTABLE operation, and a new {@link Voxels} are created.
+     * <p>This is an <b>immutable</b> operation, and a new {@link Voxels} are created.
      *
      * @param voxelsToAssign voxels to be assigned.
      * @return a newly created replacement voxels but with an identical bounding-box
@@ -206,7 +206,7 @@ public class BoundedVoxels<T extends Buffer> {
     /**
      * Creates a scaled-version (in XY dimensions only) of the current bounding-box
      *
-     * <p>This is an IMMUTABLE operation.
+     * <p>This is an <b>immutable</b> operation.
      *
      * @param scaleFactor what to scale X and Y dimensions by?
      * @param interpolator means of interpolating between pixels
@@ -234,7 +234,7 @@ public class BoundedVoxels<T extends Buffer> {
     /**
      * A maximum-intensity projection (flattens in z dimension)
      *
-     * <p>This is an IMMUTABLE operation.
+     * <p>This is an <b>immutable</b> operation.
      *
      * @return newly-created bounded-voxels flattened in Z dimension.
      */
@@ -372,7 +372,7 @@ public class BoundedVoxels<T extends Buffer> {
      * Applies a function to map the bounding-box to a new-value (whose extent should be unchanged
      * in value)
      *
-     * <p>This is an IMMUTABLE operation, but the existing voxel-buffers are reused in the new
+     * <p>This is an <b>immutable</b> operation, but the existing voxel-buffers are reused in the new
      * object.
      *
      * @return a new object-mask with the updated bounding box
@@ -390,7 +390,7 @@ public class BoundedVoxels<T extends Buffer> {
     /**
      * Extracts a particular slice.
      *
-     * <p>This is an IMMUTABLE operation, but the voxels-buffer for the slice is reused.
+     * <p>This is an <b>immutable</b> operation, but the voxels-buffer for the slice is reused.
      *
      * @param sliceIndex which slice to extract (z) in global coordinates
      * @return the extracted-slice (bounded)

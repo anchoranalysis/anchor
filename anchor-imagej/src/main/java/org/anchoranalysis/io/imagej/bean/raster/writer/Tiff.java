@@ -39,11 +39,11 @@ import ij.io.FileSaver;
 public class Tiff extends SupportsTimeSeries {
 
     @Override
-    protected boolean writeRaster(FileSaver fs, String outPath, boolean asStack) {
+    protected boolean writeRaster(FileSaver fileSaver, String path, boolean asStack) {
         if (asStack) {
-            return fs.saveAsTiffStack(outPath);
+            return fileSaver.saveAsTiffStack(path);
         } else {
-            return fs.saveAsTiff(outPath);
+            return fileSaver.saveAsTiff(path);
         }
     }
 

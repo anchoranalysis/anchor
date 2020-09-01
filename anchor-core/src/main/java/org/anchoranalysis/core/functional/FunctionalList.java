@@ -167,7 +167,35 @@ public class FunctionalList {
             Class<? extends Exception> throwableClass,
             CheckedFunction<S, T, E> mapFunction)
             throws E {
-        return CheckedStream.map(collection.stream(), throwableClass, mapFunction)
+        return mapToList(collection.stream(), throwableClass, mapFunction);
+    }
+    
+    /**
+     * Like {@link #mapToList(Object[], Function)} but tolerates exceptions in the mapping function.
+     *
+     * @param  <S> parameter-type for function
+     * @param  <T> return-type for function
+     * @param  <E> exception that can be thrown by {code mapFunction}
+     * @param array the array to be mapped
+     * @param mapFunction function to do the mapping
+     * @return a list with the same size and same order, but using derived elements that are a
+     *     result of the mapping
+     * @throws E if the exception is thrown during mapping
+     */
+    public static <S, T, E extends Exception> List<T> mapToList(
+            S[] array,
+            Class<? extends Exception> throwableClass,
+            CheckedFunction<S, T, E> mapFunction)
+            throws E {
+        return mapToList(Arrays.stream(array), throwableClass, mapFunction);
+    }
+    
+    private static <S, T, E extends Exception> List<T> mapToList(
+            Stream<S> stream,
+            Class<? extends Exception> throwableClass,
+            CheckedFunction<S, T, E> mapFunction)
+            throws E {
+        return CheckedStream.map(stream, throwableClass, mapFunction)
                 .collect(Collectors.toList());
     }
 }

@@ -7,6 +7,7 @@
     </parent> 
   <artifactId>anchor-image-bean</artifactId>
   <version>0.0.8-SNAPSHOT</version>
+  <description>Core (bean) data objects for images (providers, filtering, segmentation etc.)</description>
   <dependencies>
 	  <dependency>
 		  <groupId>${project.groupId}</groupId>
