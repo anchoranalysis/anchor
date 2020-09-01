@@ -31,19 +31,19 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
+import org.anchoranalysis.core.arithmetic.RunningSum;
 import org.anchoranalysis.experiment.task.TaskStatistics;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 public class ConcurrentJobMonitor implements Iterable<SubmittedJob> {
 
-    private int totalNumJobs;
+    // START REQUIRED FIELDS
+    private final long totalNumberJobs;
+    // END REQUIRED FIELDS
 
     // All submitted tasks
     private List<SubmittedJob> list = new ArrayList<>();
-
-    public ConcurrentJobMonitor(int totalNumJobs) {
-        super();
-        this.totalNumJobs = totalNumJobs;
-    }
 
     public synchronized boolean add(SubmittedJob e) {
         return list.add(e);
@@ -51,13 +51,13 @@ public class ConcurrentJobMonitor implements Iterable<SubmittedJob> {
 
     public synchronized String currentStateDescription() {
 
-        long numJobsCompleted = numberCompletedJobs();
-        long numJobsExecuting = numberExecutingJobs();
-        long numJobsRemaining = totalNumJobs - numJobsCompleted - numJobsExecuting;
+        long numberJobsCompleted = numberCompletedJobs();
+        long numberJobsExecuting = numberExecutingJobs();
+        long numberJobsRemaining = totalNumberJobs - numberJobsCompleted - numberJobsExecuting;
 
         return String.format(
                 "%3d compl, %3d exec, %3d rem of %3d",
-                numJobsCompleted, numJobsExecuting, numJobsRemaining, totalNumJobs);
+                numberJobsCompleted, numberJobsExecuting, numberJobsRemaining, totalNumberJobs);
     }
 
     public synchronized String ongoingTasksLessThan(int num) {
@@ -85,7 +85,7 @@ public class ConcurrentJobMonitor implements Iterable<SubmittedJob> {
     }
 
     public synchronized long numberOngoingJobs() {
-        return totalNumJobs - numberCompletedJobs();
+        return totalNumberJobs - numberCompletedJobs();
     }
 
     public synchronized long numberCompletedJobs() {
@@ -104,21 +104,11 @@ public class ConcurrentJobMonitor implements Iterable<SubmittedJob> {
         return numberJobs(JobState::isExecuting);
     }
 
-    public synchronized long sumCompletedSuccessfullyExectionTime() {
-        return sumExectionTime(JobState::isCompletedSuccessfully);
-    }
-
-    public synchronized long sumCompletedFailureExectionTime() {
-        return sumExectionTime(JobState::isCompletedFailure);
-    }
-
     public synchronized TaskStatistics createStatistics() {
-        TaskStatistics stats = new TaskStatistics(getTotalNumTasks());
-        stats.setNumCompletedSuccess(
-                numberCompletedSuccessfullyJobs(), sumCompletedSuccessfullyExectionTime());
-        stats.setNumCompletedFailed(
-                numberCompletedFailureJobs(), sumCompletedFailureExectionTime());
-        return stats;
+        return new TaskStatistics(
+                getTotalNumberTasks(),
+                runningSum(JobState::isCompletedSuccessfully),
+                runningSum(JobState::isCompletedFailure));
     }
 
     @Override
@@ -126,16 +116,20 @@ public class ConcurrentJobMonitor implements Iterable<SubmittedJob> {
         return list.iterator();
     }
 
-    public int getTotalNumTasks() {
-        return totalNumJobs;
+    public long getTotalNumberTasks() {
+        return totalNumberJobs;
+    }
+    
+    private RunningSum runningSum(Predicate<JobState> predicate) {
+        return new RunningSum( sumExectionTime(predicate), numberJobs(predicate) );
     }
 
-    private long numberJobs(Predicate<JobState> pred) {
-        return filteredJobs(pred).count();
+    private long numberJobs(Predicate<JobState> predicate) {
+        return filteredJobs(predicate).count();
     }
 
-    private long sumExectionTime(Predicate<JobState> pred) {
-        return filteredJobs(pred).mapToLong(s -> s.getJobState().getTime()).sum();
+    private long sumExectionTime(Predicate<JobState> predicate) {
+        return filteredJobs(predicate).mapToLong(s -> s.getJobState().getTime()).sum();
     }
 
     private Stream<SubmittedJob> filteredJobs(Predicate<JobState> pred) {

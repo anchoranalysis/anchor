@@ -71,7 +71,7 @@ public class JobStartStopLogger {
         this.showHashSeperators = showHashSeperators;
         this.showOngoingJobsLessThan = showOngoingJobsLessThan;
 
-        this.disableLogMessages = monitor.getTotalNumTasks() <= 1 || !logger.isPresent();
+        this.disableLogMessages = monitor.getTotalNumberTasks() <= 1 || !logger.isPresent();
     }
 
     public synchronized void logStart(JobDescription job) {

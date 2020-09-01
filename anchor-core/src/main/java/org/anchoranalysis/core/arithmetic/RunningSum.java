@@ -27,7 +27,9 @@ package org.anchoranalysis.core.arithmetic;
  */
 
 import java.io.Serializable;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 /**
  * Mutable class that allows for incrementing jointly sum and count variables, so as to eventually
@@ -37,6 +39,7 @@ import lombok.Getter;
  *
  * @author Owen Feehan
  */
+@NoArgsConstructor @AllArgsConstructor
 public class RunningSum implements Serializable {
 
     /** */
@@ -46,7 +49,7 @@ public class RunningSum implements Serializable {
     @Getter private double sum = 0;
 
     /** The running count */
-    @Getter private int count = 0;
+    @Getter private long count = 0;
 
     /**
      * Calculates the mean
@@ -100,7 +103,7 @@ public class RunningSum implements Serializable {
      * @param sumIncrement increment-value for sum
      * @param countIncrement increment-value for count
      */
-    public void increment(double sumIncrement, int countIncrement) {
+    public void increment(double sumIncrement, long countIncrement) {
         sum += sumIncrement;
         count += countIncrement;
     }

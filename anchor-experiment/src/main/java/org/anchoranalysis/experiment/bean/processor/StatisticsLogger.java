@@ -49,25 +49,25 @@ class StatisticsLogger {
      */
     public void logTextualMessage(TaskStatistics stats) {
 
-        if (stats.isAllSuccessful()) {
+        if (stats.allSuccessful()) {
             logMessageAboutTasks(
                     "All ",
-                    stats.numCompletedSuccess(),
+                    stats.numberCompletedSuccess(),
                     " completed successfully.",
                     stats::meanExecutionTimeSuccess);
         } else {
 
             logMessageAboutTasks(
                     "",
-                    stats.numCompletedSuccess(),
+                    stats.numberCompletedSuccess(),
                     String.format(
-                            " out of %d completed successfully.", stats.numTotalScheduledJobs()),
+                            " out of %d completed successfully.", stats.numberTotalScheduledJobs()),
                     stats::meanExecutionTimeSuccess);
 
             logMessageAboutTasks(
-                    "", stats.numCompletedFailed(), " failed.", stats::meanExecutionTimeFailed);
+                    "", stats.numberCompletedFailed(), " failed.", stats::meanExecutionTimeFailed);
 
-            long numNotCompleted = stats.numNotCompleted();
+            long numNotCompleted = stats.numberNotCompleted();
             if (numNotCompleted > 0) {
                 logger.logFormatted(
                         "%s were never submitted.", maybePluralizeJobs(numNotCompleted));

@@ -47,6 +47,7 @@ import org.anchoranalysis.experiment.task.processor.JobState;
 import org.anchoranalysis.experiment.task.processor.SubmittedJob;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import com.google.common.base.Preconditions;
 
 /**
  * Executes jobs in parallel
@@ -57,11 +58,11 @@ import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
  */
 public class ParallelProcessor<T extends InputFromManager, S> extends JobProcessor<T, S> {
 
-    // START BEAN
+    // START BEAN PROPERTIES
     /**
      * Theoretical maximum number of (CPU) processors to use in parallel.
      * 
-     * <p>In effect, the effective maximum is {@code min(maxNumberProcessors,numberAvailableProcessors)}, usually lower.
+     * <p>In practice, the effective maximum is {@code min(maxNumberProcessors,numberAvailableProcessors)}, usually lower.
      */
     @BeanField @Getter @Setter private int maxNumberProcessors = 64;
 
@@ -84,7 +85,7 @@ public class ParallelProcessor<T extends InputFromManager, S> extends JobProcess
      * How many GPU processors to use when this is possible as a substitute for a CPU processor
      */
     @BeanField @Getter @Setter private int numberGPUProcessors = 1;
-    // END BEAN
+    // END BEAN PROPERTIES
 
     @Override
     protected TaskStatistics execute(
@@ -93,6 +94,8 @@ public class ParallelProcessor<T extends InputFromManager, S> extends JobProcess
             ParametersExperiment paramsExperiment)
             throws ExperimentExecutionException {
 
+        int initialNumberJobs = inputObjects.size();
+        
         int numberProcessors =
                 selectNumProcessors(
                         paramsExperiment.getLoggerExperiment(),
@@ -102,7 +105,7 @@ public class ParallelProcessor<T extends InputFromManager, S> extends JobProcess
         
         S sharedState = getTask().beforeAnyJobIsExecuted(rootOutputManager, concurrencyPlan, paramsExperiment);
 
-        ExecutorService eservice = Executors.newFixedThreadPool(numberProcessors);
+        ExecutorService executorService = Executors.newFixedThreadPool(numberProcessors);
 
         int count = 1;
 
@@ -112,7 +115,7 @@ public class ParallelProcessor<T extends InputFromManager, S> extends JobProcess
         while (iterator.hasNext()) {
             T input = iterator.next();
             try {
-                submitJob(eservice, input, count, sharedState, paramsExperiment, monitor);
+                submitJob(executorService, input, count, sharedState, paramsExperiment, monitor);
                 count++;
             } finally {
                 iterator.remove();
@@ -121,12 +124,16 @@ public class ParallelProcessor<T extends InputFromManager, S> extends JobProcess
 
         // This will make the executor accept no new threads
         // and finish all existing threads in the queue
-        eservice.shutdown();
+        executorService.shutdown();
 
         // Wait until all threads are finish
-        while (!eservice.isTerminated())
+        while (!executorService.isTerminated())
             ;
 
+        Preconditions.checkArgument( monitor.numberExecutingJobs()==0 );
+        Preconditions.checkArgument( monitor.numberOngoingJobs()==0 );
+        Preconditions.checkArgument( monitor.numberCompletedJobs()==initialNumberJobs );
+        
         getTask().afterAllJobsAreExecuted(sharedState, paramsExperiment.getContext());
         return monitor.createStatistics();
     }
@@ -135,49 +142,48 @@ public class ParallelProcessor<T extends InputFromManager, S> extends JobProcess
 
         int availableProcessors = Runtime.getRuntime().availableProcessors();
 
-        int nrOfProcessors = availableProcessors - keepProcessorsFree;
+        int numberOfProcessors = availableProcessors - keepProcessorsFree;
 
         if (maxNumberProcessors > 0) {
-            nrOfProcessors = Math.min(nrOfProcessors, maxNumberProcessors);
+            numberOfProcessors = Math.min(numberOfProcessors, maxNumberProcessors);
         }
 
         if (detailedLogging) {
             logger.logFormatted(
                     "Using %s from: %d",
-                    LanguageUtilities.prefixPluralizeMaybe(nrOfProcessors, "processor"),
+                    LanguageUtilities.prefixPluralizeMaybe(numberOfProcessors, "processor"),
                     availableProcessors);
         }
 
-        return nrOfProcessors;
+        return numberOfProcessors;
     }
 
     private void submitJob(
-            ExecutorService eservice,
-            T inputObj,
+            ExecutorService executorService,
+            T input,
             int index,
             S sharedState,
             ParametersExperiment paramsExperiment,
             ConcurrentJobMonitor monitor) {
 
-        JobDescription td = new JobDescription(inputObj.descriptiveName(), index);
+        JobDescription description = new JobDescription(input.descriptiveName(), index);
 
         ParametersUnbound<T, S> paramsUnbound =
                 new ParametersUnbound<>(
-                        paramsExperiment, inputObj, sharedState, isSuppressExceptions());
+                        paramsExperiment, input, sharedState, isSuppressExceptions());
 
         // Task always gets duplicated when it's called
-        JobState taskState = new JobState();
-        eservice.submit(
+        JobState state = new JobState();
+        executorService.submit(
                 new CallableJob<>(
                         getTask(),
                         paramsUnbound,
-                        taskState,
-                        td,
+                        state,
+                        description,
                         monitor,
                         loggerForMonitor(paramsExperiment),
                         showOngoingJobsLessThan));
 
-        SubmittedJob submittedTask = new SubmittedJob(td, taskState);
-        monitor.add(submittedTask);
+        monitor.add( new SubmittedJob(description, state) );
     }
 }
