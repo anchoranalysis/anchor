@@ -43,6 +43,7 @@ import org.anchoranalysis.core.functional.CheckedStream;
 import org.anchoranalysis.core.functional.function.CheckedFunction;
 import org.anchoranalysis.core.functional.function.CheckedPredicate;
 import org.anchoranalysis.image.extent.BoundingBox;
+import lombok.AllArgsConstructor;
 
 /**
  * A custom "stream" like class for various functional-programming operations on {@link
@@ -50,17 +51,13 @@ import org.anchoranalysis.image.extent.BoundingBox;
  *
  * @author Owen Feehan
  */
+@AllArgsConstructor
 public final class ObjectMaskStream {
 
     private ObjectCollection delegate;
 
-    public ObjectMaskStream(ObjectCollection delegate) {
-        super();
-        this.delegate = delegate;
-    }
-
     /**
-     * Creates a new {@link ObjectCollection} after mapping each item to another
+     * Creates a new {@link ObjectCollection} after mapping each item to another.
      *
      * <p>This is an <i>immutable</i> operation.
      *
@@ -80,7 +77,7 @@ public final class ObjectMaskStream {
 
     /**
      * Creates a new {@link ObjectCollection} after mapping the bounding-box on each object (whose
-     * extent should remain unchanged)
+     * extent should remain unchanged).
      *
      * <p>See {@link ObjectMask#mapBoundingBoxPreserveExtent(UnaryOperator)} for details on the
      * mapping.
@@ -113,7 +110,7 @@ public final class ObjectMaskStream {
     }
 
     /**
-     * Creates a new {@link List} after mapping each item to another type
+     * Creates a new {@link List} after mapping each item to another type.
      *
      * <p>This is an <i>immutable</i> operation.
      *
@@ -156,7 +153,7 @@ public final class ObjectMaskStream {
     }
 
     /**
-     * Creates a new {@link SortedSet} after mapping each item to another type
+     * Creates a new {@link SortedSet} after mapping each item to another type.
      *
      * <p>This is an <i>immutable</i> operation.
      *
@@ -176,7 +173,7 @@ public final class ObjectMaskStream {
     }
 
     /**
-     * Creates a new {@link ObjectCollection} after mapping each item to several others
+     * Creates a new {@link ObjectCollection} after mapping each item to several others.
      *
      * <p>This is an <i>immutable</i> operation.
      *
@@ -268,7 +265,7 @@ public final class ObjectMaskStream {
     }
 
     /**
-     * Performs a {@link #filter} and then a {@link #map}
+     * Performs a {@link #filter} and then a {@link #map}.
      *
      * <p>This is an <i>immutable</i> operation.
      *
@@ -304,13 +301,13 @@ public final class ObjectMaskStream {
         return delegate.streamStandardJava().anyMatch(predicate);
     }
 
-    /** Converts to a {@link HashSet} (newly-created) */
+    /** Converts to a {@link HashSet} (newly-created). */
     public Set<ObjectMask> toSet() {
         return delegate.streamStandardJava().collect(Collectors.toCollection(HashSet::new));
     }
 
     /**
-     * Finds the maximum value of a function applied to each object in the collection
+     * Finds the maximum value of a function applied to each object in the collection.
      *
      * @param function function to apply
      * @return the maximum-int found by applying the function to each object (so long as the
@@ -321,7 +318,7 @@ public final class ObjectMaskStream {
     }
 
     /**
-     * Finds the minimum value of a function applied to each object in the collection
+     * Finds the minimum value of a function applied to each object in the collection.
      *
      * @param function function to apply
      * @return the minimum-int found by applying the function to each object (so long as the
