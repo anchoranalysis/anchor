@@ -38,7 +38,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
- * Base class for writing a raster using ImageJ
+ * Base class for writing a raster using ImageJ.
  * 
  * @author Owen Feehan
  *
@@ -59,7 +59,16 @@ public abstract class ImageJRasterWriter extends RasterWriter {
         writeStackTimeCheck(stack, filePath, false);
     }
 
-    protected abstract boolean writeRaster(FileSaver fs, String outPath, boolean asStack)
+    /**
+     * Writes an annotation to the filesystem at {@code outPath}.
+     * 
+     * @param fileSaver imagej class for saving files
+     * @param path where to write the annotation to
+     * @param asStack whether the output will produce a stack (many images together) or not.
+     * @return true if successfully written.
+     * @throws RasterIOException if anything goes wrong writing the input.
+     */
+    protected abstract boolean writeRaster(FileSaver fileSaver, String path, boolean asStack)
             throws RasterIOException;
 
     private void writeStackTimeCheck(Stack stack, Path filePath, boolean makeRGB)
@@ -77,16 +86,24 @@ public abstract class ImageJRasterWriter extends RasterWriter {
         writeStackTime(stack, filePath, makeRGB);
     }
 
-    protected void writeStackTime(Stack stack, Path filePath, boolean makeRGB)
+    /**
+     * Writes a stack as a time-sequence (many images together in a single file.).
+     * 
+     * @param stack the stack to write
+     * @param path where on the fileystem to write to
+     * @param makeRGB if true, the image is saved as a RGB image rather than independent channels.
+     * @throws RasterIOException if anything goes wrong writing.
+     */
+    protected void writeStackTime(Stack stack, Path path, boolean makeRGB)
             throws RasterIOException {
 
-        log.debug(String.format("Writing image %s", filePath));
+        log.debug(String.format("Writing image %s", path));
 
         Dimensions dimensions = stack.getChannel(0).dimensions();
 
         ImagePlus imp = ConvertToImagePlus.from(stack, makeRGB);
 
-        writeImagePlus(imp, filePath, (stack.getChannel(0).dimensions().z() > 1));
+        writeImagePlus(imp, path, (stack.getChannel(0).dimensions().z() > 1));
 
         imp.close();
 
@@ -97,7 +114,7 @@ public abstract class ImageJRasterWriter extends RasterWriter {
                             imp.getNSlices(), dimensions.z()));
         }
 
-        log.debug(String.format("Finished writing image %s", filePath));
+        log.debug(String.format("Finished writing image %s", path));
     }
 
     private void writeImagePlus(ImagePlus imp, Path filePath, boolean asStack)

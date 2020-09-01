@@ -92,12 +92,12 @@ public class PointList extends PointListBase {
     }
 
     @Override
-    public void scale(double multFactor) throws OptionalOperationUnsupportedException {
+    public void scale(double scaleFactor) throws OptionalOperationUnsupportedException {
 
         for (int i = 0; i < getPoints().size(); i++) {
 
             Point3d point = getPoints().get(i);
-            point.scale(multFactor);
+            point.scale(scaleFactor);
         }
     }
 

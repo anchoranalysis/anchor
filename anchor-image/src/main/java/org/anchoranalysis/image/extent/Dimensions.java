@@ -40,7 +40,7 @@ import org.anchoranalysis.image.scale.ScaleFactorUtilities;
 /**
  * The dimensions of an image (in voxels), together with the image resolution
  *
- * <p>This class is IMMUTABLE.
+ * <p>This class is <b>immutable</b>.
  */
 @EqualsAndHashCode
 @Accessors(fluent = true)

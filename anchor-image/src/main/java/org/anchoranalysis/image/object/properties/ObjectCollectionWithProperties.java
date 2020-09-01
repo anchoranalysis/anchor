@@ -85,7 +85,7 @@ public class ObjectCollectionWithProperties implements Iterable<ObjectWithProper
     /**
      * Returns the contained-objects without corresponding properties
      *
-     * <p>This is an IMMUTABLE operation.
+     * <p>This is an <b>immutable</b> operation.
      */
     public ObjectCollection withoutProperties() {
         return ObjectCollectionFactory.mapFrom(delegate, ObjectWithProperties::withoutProperties);

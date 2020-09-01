@@ -27,30 +27,30 @@
 package org.anchoranalysis.image.bean.threshold.relation;
 
 import lombok.EqualsAndHashCode;
-import org.anchoranalysis.core.relation.GreaterThan;
+import org.anchoranalysis.core.relation.LessThan;
 import org.anchoranalysis.core.relation.RelationToValue;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 
 /**
- * Selects anything that is NOT "low" pixels from a binary mask
+ * Selects anything that is <b>not</b> <i>on</i> voxels from a binary mask.
  *
- * <p>Uses the default "low" value of 255
+ * <p>Uses the default on value of 255.
  *
- * <p>Note this is not the same as selecting "high" pixels which would only select pixels of value
- * 255. There's undefined space {@code > 1} and {@code < 255}.
+ * <p>Note this is not the same as selecting <i>off</i> voxels which would only select values of 0.
+ * There's fuzzy undefined space {@code > 1} and {@code < 255}.
  *
  * @author Owen Feehan
  */
 @EqualsAndHashCode(callSuper = true)
-public class BinaryNotLowVoxels extends BinaryVoxelsBase {
+public class BinaryNotOnVoxels extends BinaryVoxelsBase {
 
     @Override
     public double threshold() {
-        return BinaryValues.getDefault().getOffInt();
+        return BinaryValues.getDefault().getOnInt();
     }
 
     @Override
     public RelationToValue relation() {
-        return new GreaterThan();
+        return new LessThan();
     }
 }

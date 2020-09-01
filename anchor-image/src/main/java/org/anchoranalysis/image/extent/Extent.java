@@ -44,7 +44,7 @@ import org.anchoranalysis.image.scale.ScaleFactorUtilities;
 /**
  * Width, height etc. of image in 2 or 3 dimensions
  *
- * <p>This class is IMMUTABLE
+ * <p>This class is <b>immutable</b>
  */
 public final class Extent implements Serializable {
 
@@ -175,7 +175,7 @@ public final class Extent implements Serializable {
     /**
      * Exposes the extent as a tuple.
      *
-     * <p>IMPORTANT! This class is designed to be IMMUTABLE, so this tuple should be treated as
+     * <p>IMPORTANT! This class is designed to be <b>immutable</b>, so this tuple should be treated as
      * read-only, and never modified.
      *
      * @return the extent's width, height, depth as a tuple

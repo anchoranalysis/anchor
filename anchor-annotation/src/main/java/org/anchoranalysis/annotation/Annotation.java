@@ -26,5 +26,9 @@
 
 package org.anchoranalysis.annotation;
 
-/** Parent class of different types of image annotations */
+/** 
+ * Base class for types of image annotations.
+ * 
+ * <p>Annotations are a form of ground-truth associated with an image, or part of an image.
+ **/
 public interface Annotation {}

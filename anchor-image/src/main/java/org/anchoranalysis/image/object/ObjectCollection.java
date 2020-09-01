@@ -69,7 +69,7 @@ public class ObjectCollection implements Iterable<ObjectMask> {
      * Shifts the bounding-box of each object by adding to it i.e. adds a vector to the corner
      * position
      *
-     * <p>This is an IMMUTABLE operation.
+     * <p>This is an <b>immutable</b> operation.
      *
      * <p>
      *
@@ -200,7 +200,7 @@ public class ObjectCollection implements Iterable<ObjectMask> {
      * <p>It is desirable scale objects together, as interpolation can be done so that adjacent
      * boundaries pre-scaling remain adjacent after scaling (only if there's no overlap among them).
      *
-     * <p>This is an IMMUTABLE operation.
+     * <p>This is an <b>immutable</b> operation.
      *
      * @param factor scaling-factor
      * @return a new collection with scaled object-masks (existing object-masks are unaltered)
@@ -316,7 +316,7 @@ public class ObjectCollection implements Iterable<ObjectMask> {
     /**
      * A subset of the collection identified by particular indices.
      *
-     * <p>This is an IMMUTABLE operation.
+     * <p>This is an <b>immutable</b> operation.
      *
      * @param indices index of each element to keep in new collection.
      * @return newly-created collection with only the indexed elements.
@@ -328,7 +328,7 @@ public class ObjectCollection implements Iterable<ObjectMask> {
     /**
      * Exposes the underlying objects as a list
      *
-     * <p>Be CAREFUL when manipulating this list, as it is the same list used internally in the
+     * <p>Be careful when manipulating this list, as it is the same list used internally in the
      * object.
      *
      * @return a list with the object-masks in this collection

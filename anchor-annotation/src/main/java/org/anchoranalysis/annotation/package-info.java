@@ -24,7 +24,7 @@
  * #L%
  */
 /**
- * Different types of ground truth for an image.
+ * Ground truth for an image in diverse forms.
  *
  * @author Owen Feehan
  */

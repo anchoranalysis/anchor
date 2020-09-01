@@ -67,8 +67,8 @@ public abstract class MarkWithPosition extends Mark implements Serializable {
     }
 
     @Override
-    public void scale(double multFactor) {
-        scaleXYPoint(this.pos, multFactor);
+    public void scale(double scaleFactor) {
+        scaleXYPoint(this.pos, scaleFactor);
     }
 
     public static void scaleXYPoint(Point3d point, double multFactor) {

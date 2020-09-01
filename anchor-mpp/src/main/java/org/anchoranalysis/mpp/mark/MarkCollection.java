@@ -177,6 +177,12 @@ public final class MarkCollection implements Iterable<Mark>, Serializable {
                                 dimensions, regionMembership, BinaryValuesByte.getDefault()));
     }
 
+    /**
+     * Scales the mark in X and Y dimensions.
+     * 
+     * @param scaleFactor how much to scale by.
+     * @throws OptionalOperationUnsupportedException if the type of mark used in the annotation does not supported scaling.
+     */
     public void scaleXY(double scaleFactor) throws OptionalOperationUnsupportedException {
 
         for (Mark mark : marks) {

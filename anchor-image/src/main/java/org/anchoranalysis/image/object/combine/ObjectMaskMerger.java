@@ -47,7 +47,7 @@ public class ObjectMaskMerger {
     /**
      * Merges two objects together
      *
-     * <p>This is an IMMUTABLE operation.
+     * <p>This is an <b>immutable</b> operation.
      *
      * <p>The merged box has a minimal bounding-box to fit both objects.
      *

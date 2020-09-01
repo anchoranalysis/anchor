@@ -46,6 +46,8 @@ import org.anchoranalysis.mpp.io.input.MultiInputSubMap;
 
 class AppendHelper {
 
+    private static final DeserializerHelper<?> DESERIALIZER = new DeserializerHelper<>();
+    
     /** Reads an object from a path */
     @FunctionalInterface
     private interface ReadFromPath<T> {
@@ -114,7 +116,7 @@ class AppendHelper {
                 inputObject,
                 listPaths,
                 MultiInput::marks,
-                DeserializerHelper::deserializeMarks,
+                DESERIALIZER::deserializeMarks,
                 debugMode);
     }
 
@@ -130,7 +132,7 @@ class AppendHelper {
                 listPaths,
                 MultiInput::marks,
                 outPath ->
-                        DeserializerHelper.deserializeMarksFromAnnotation(
+                DESERIALIZER.deserializeMarksFromAnnotation(
                                 outPath, includeAccepted, includeRejected),
                 debugMode);
     }

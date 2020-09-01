@@ -116,9 +116,9 @@ public class LineSegment extends Mark {
     }
 
     @Override
-    public void scale(double multFactor) {
-        MarkWithPosition.scaleXYPoint(distanceCalcToLine.getStartPoint(), multFactor);
-        MarkWithPosition.scaleXYPoint(distanceCalcToLine.getEndPoint(), multFactor);
+    public void scale(double scaleFactor) {
+        MarkWithPosition.scaleXYPoint(distanceCalcToLine.getStartPoint(), scaleFactor);
+        MarkWithPosition.scaleXYPoint(distanceCalcToLine.getEndPoint(), scaleFactor);
     }
 
     @Override

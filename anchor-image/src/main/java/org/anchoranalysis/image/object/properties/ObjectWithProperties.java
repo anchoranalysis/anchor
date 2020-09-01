@@ -74,7 +74,7 @@ public class ObjectWithProperties {
      * <p>Note the properties are not duplicated, and the new object will reference the same
      * properties.
      *
-     * <p>This is an IMMUTABLE operation
+     * <p>This is an <b>immutable</b> operation
      *
      * @param funcMap
      * @return the mapped object (with identical properties) to previously.

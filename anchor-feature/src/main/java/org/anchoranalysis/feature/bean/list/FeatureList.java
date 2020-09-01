@@ -106,7 +106,7 @@ public class FeatureList<T extends FeatureInput> extends AnchorBean<FeatureList<
     /**
      * Filters inputs and then performs a {@link #map}
      *
-     * <p>This is an IMMUTABLE operation.
+     * <p>This is an <b>immutable</b> operation.
      *
      * @param <S> input-type of feature to be created as result of mapping
      * @param <E> exception that can be thrown during mapping
@@ -130,7 +130,7 @@ public class FeatureList<T extends FeatureInput> extends AnchorBean<FeatureList<
     /**
      * Appends one or more additional (optional) feature-lists
      *
-     * <p>This is an IMMUTABLE operation and the existing list is not altered.
+     * <p>This is an <b>immutable</b> operation and the existing list is not altered.
      *
      * @param featureList the optional feature-lists to append
      * @return a newly-created list with all the existing features, as well as any optional

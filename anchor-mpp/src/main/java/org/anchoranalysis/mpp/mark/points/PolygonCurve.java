@@ -131,7 +131,7 @@ public class PolygonCurve extends PointListBase {
     }
 
     @Override
-    public void scale(double multFactor) throws OptionalOperationUnsupportedException {
+    public void scale(double scaleFactor) throws OptionalOperationUnsupportedException {
         throw new OptionalOperationUnsupportedException("Not supported");
     }
 

@@ -32,17 +32,23 @@ import java.nio.file.Path;
 import org.anchoranalysis.annotation.Annotation;
 import org.anchoranalysis.annotation.io.AnnotationWriter;
 import org.anchoranalysis.annotation.io.WriterUtilities;
-import org.anchoranalysis.annotation.mark.MarkAnnotation;
+import org.anchoranalysis.annotation.mark.DualMarksAnnotation;
 import org.anchoranalysis.io.generator.serialized.XStreamGenerator;
 import lombok.Getter;
 import lombok.Setter;
 
-public class MarkAnnotationWriter implements AnnotationWriter<MarkAnnotation> {
+/**
+ * 
+ * @author Owen Feehan
+ *
+ * @param <T> rejection-reason
+ */
+public class MarkAnnotationWriter<T> implements AnnotationWriter<DualMarksAnnotation<T>> {
 
     @Getter @Setter private boolean disablePathModification = false;
 
     @Override
-    public void write(MarkAnnotation annotation, Path path) throws IOException {
+    public void write(DualMarksAnnotation<T> annotation, Path path) throws IOException {
 
         Path annotationPathUnfinished = TempPathCreator.deriveTempPath(path);
 

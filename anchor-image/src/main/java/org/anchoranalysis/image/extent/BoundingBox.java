@@ -42,12 +42,11 @@ import org.anchoranalysis.image.scale.ScaleFactorUtilities;
 import org.anchoranalysis.image.voxel.Voxels;
 
 /**
- * A bounding-box in 2 or 3 dimensions
+ * A bounding-box in 2 or 3 dimensions.
  *
- * <p>A 2D bounding-box should always have a z-extent of 1 pixel.
+ * <p>A 2D bounding-box should always have a extent in z-dimension of 1 voxel.
  *
- * <p>This is an <i>immutable</i> class. All operations are immutable (i.e. do not modify the state
- * of the existing object).
+ * <p>This is an <i>immutable</i> class. No operation modifies the state of the existing object.
  */
 @EqualsAndHashCode
 @Accessors(fluent = true)
@@ -63,7 +62,7 @@ public final class BoundingBox implements Serializable {
     @Getter private final Extent extent;
 
     /**
-     * Constructs a bounding-box to cover the entirety of certain dimensions
+     * Constructs a bounding-box to cover the entirety of certain dimensions.
      *
      * @param dimensions the dimensions
      */
@@ -72,7 +71,7 @@ public final class BoundingBox implements Serializable {
     }
 
     /**
-     * Constructs a bounding-box to cover the entirety of certain voxels
+     * Constructs a bounding-box to cover the entirety of certain voxels.
      *
      * @param voxels the voxels
      */
@@ -81,7 +80,7 @@ public final class BoundingBox implements Serializable {
     }
 
     /**
-     * Constructs a bounding-box to cover the entirety of a certain extent
+     * Constructs a bounding-box to cover the entirety of a certain extent.
      *
      * @param extent the extent
      */
@@ -90,7 +89,7 @@ public final class BoundingBox implements Serializable {
     }
 
     /**
-     * Creates from two {@code double} points (a minimum corner and a maximum corner)
+     * Creates from two {@code double} points (a minimum corner and a maximum corner).
      *
      * @param cornerMinInclusive minimum point in each dimension of the bounding-box (that exists
      *     inside the box)
@@ -104,7 +103,7 @@ public final class BoundingBox implements Serializable {
     }
 
     /**
-     * Creates from two {@code int} points (a minimum corner and a maximum corner)
+     * Creates from two {@code int} points (a minimum corner and a maximum corner).
      *
      * @param cornerMinInclusive minimum point in each dimension of the bounding-box (that exists
      *     inside the box)
@@ -355,7 +354,9 @@ public final class BoundingBox implements Serializable {
     }
 
     /**
-     * Shifts the bounding-box by adding to it i.e. adds a vector to the corner position
+     * Shifts the bounding-box forwards.
+     * 
+     * <p>i.e. adds a vector to the corner position.
      *
      * @param shift what to add to the corner position
      * @return newly created bounding-box with shifted corner position and identical extent
@@ -365,9 +366,11 @@ public final class BoundingBox implements Serializable {
     }
 
     /**
-     * Shifts the bounding-box by subtracting from i.e. subtracts a vector from the corner position
+     * Shifts the bounding-box backwards.
+     * 
+     * <p>i.e. subtracts a vector from the corner position.
      *
-     * @param shift what to sutract from the corner position
+     * @param shift what to subtract from the corner position
      * @return newly created bounding-box with shifted corner position and identical extent
      */
     public BoundingBox shiftBackBy(ReadableTuple3i shift) {
@@ -375,7 +378,7 @@ public final class BoundingBox implements Serializable {
     }
 
     /**
-     * Assigns a new corner-location to the bounding-box
+     * Assigns a new corner-location to the bounding-box.
      *
      * @param cornerMinNew the new corner
      * @return a bounding-box with a new corner and the same extent

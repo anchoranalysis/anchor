@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-image-bean
+ * anchor-gui-annotation
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -24,30 +24,29 @@
  * #L%
  */
 
-package org.anchoranalysis.image.bean.threshold.relation;
+package org.anchoranalysis.annotation.mark;
 
-import lombok.EqualsAndHashCode;
-import org.anchoranalysis.core.relation.LessThan;
-import org.anchoranalysis.core.relation.RelationToValue;
-import org.anchoranalysis.image.binary.values.BinaryValues;
+import org.anchoranalysis.mpp.mark.MarkCollection;
 
 /**
- * Selects only the "low" pixels from a binary mask
- *
- * <p>Uses the default "low" value of 0
- *
+ * Two mark-collections, one considered <i>accepted</i> and the other <i>rejected</i>.
+ * 
  * @author Owen Feehan
+ *
  */
-@EqualsAndHashCode(callSuper = true)
-public class BinaryLowVoxels extends BinaryVoxelsBase {
+public interface DualMarks {
 
-    @Override
-    public double threshold() {
-        return (double) (BinaryValues.getDefault().getOffInt() + 1);
-    }
+    /**
+     * The accepted marks.
+     * 
+     * @return an existing mark-collection.
+     */
+    MarkCollection accepted();
 
-    @Override
-    public RelationToValue relation() {
-        return new LessThan();
-    }
+    /**
+     * The rejected marks.
+     * 
+     * @return an existing mark-collection.
+     */
+    MarkCollection rejected();
 }
