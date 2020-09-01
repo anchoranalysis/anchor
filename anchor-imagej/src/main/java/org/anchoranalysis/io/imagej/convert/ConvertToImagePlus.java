@@ -104,8 +104,9 @@ public class ConvertToImagePlus {
     }
     
     /**
-     * Creates an {@link ImagePlus} from <i>one slice<</i> of a {@code Voxels<ByteBuffer> voxels}.
-     * @param voxels 
+     * Creates an {@link ImagePlus} from <i>one slice</i> of a {@code Voxels<ByteBuffer> voxels}.
+     * 
+     * @param voxels the voxels from which a slice will be extracted to be converted
      * @param sliceIndex slice-index (z coordinate) to extract
      * @param name the name to use in the image-plus
      * @return a newly created image-plus, reusing the input channels's buffer without copying.
