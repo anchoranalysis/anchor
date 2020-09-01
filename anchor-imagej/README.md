@@ -1,6 +1,6 @@
-# anchor-io-ij
+# anchor-imageJ
 
-Input / output that uses [ImageJ](https://imagej.net/Welcome).
+Converters (between Anchor's data-structures and Image's) and IO that uses [ImageJ](https://imagej.net/Welcome).
 
 ## What is Anchor?
 
