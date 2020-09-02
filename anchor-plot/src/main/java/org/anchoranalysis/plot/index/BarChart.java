@@ -83,7 +83,7 @@ public class BarChart<T> extends GraphIndexBaseCategorical<T, DefaultCategoryDat
      * @param seriesNames
      * @param labelGetter
      * @param yValGetter
-     * @param colorGetter custom color getter or NULL to indicate we use defaults
+     * @param colorGetter custom color getter or null to indicate we use defaults
      * @param stacked
      */
     public BarChart(

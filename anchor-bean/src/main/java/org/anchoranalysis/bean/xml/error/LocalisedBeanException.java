@@ -37,7 +37,7 @@ import org.anchoranalysis.core.error.combinable.AnchorCombinableException;
  * Combines many exceptions into a single exception, searching for a Cause and creating message
  * string, incorporating the other strings
  *
- * <p>All nested exceptions are traversed until NULL is found as a cause.
+ * <p>All nested exceptions are traversed until null is found as a cause.
  *
  * <p>To determine the message string: 1. If the exception is of class LocalisedBeanException, its
  * filenameDscr is added as a newline 2. If the exception is another class, it is not included in

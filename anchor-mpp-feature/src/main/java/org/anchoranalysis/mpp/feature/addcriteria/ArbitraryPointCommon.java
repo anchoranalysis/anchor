@@ -36,7 +36,7 @@ import org.anchoranalysis.mpp.mark.points.PointList;
 import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 
 /**
- * If one arbitrarily point overlaps between two MarkPointList then TRUE, otherwise FALSE
+ * If one arbitrarily point overlaps between two MarkPointList then true, otherwise false
  *
  * <p>This is useful for mutually exclusive sets of points, where iff one arbitrary point intersects
  * with another set, then they must be identical.

@@ -72,7 +72,7 @@ public class AddCriteriaEnergyPair implements AddCriteria<EnergyPair> {
         return Optional.of(energyPairs.shallowDuplicate().append(featuresAddCriteria));
     }
 
-    // Returns NULL if to reject an edge
+    // Returns null if to reject an edge
     @Override
     public Optional<EnergyPair> generateEdge(
             VoxelizedMarkMemo mark1,

@@ -71,7 +71,7 @@ public class EnergySchemeCreatorByElement extends EnergySchemeCreator {
     @BeanField @OptionalBean @Getter @Setter private KeyValueParamsProvider params;
 
     /**
-     * If TRUE, the names of the imageFeatures are taken as a combination of the namedItem and the
+     * If true, the names of the imageFeatures are taken as a combination of the namedItem and the
      * actual features
      */
     @BeanField @Getter @Setter private boolean includeFeatureNames = false;

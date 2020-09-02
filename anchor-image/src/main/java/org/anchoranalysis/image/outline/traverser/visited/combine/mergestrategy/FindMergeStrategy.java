@@ -38,7 +38,7 @@ class FindMergeStrategy {
      * <p>If we cannot merge one-end to another-end, we need to chop off bits. And we wish to
      * minimize the bits we chop off
      *
-     * @return strategy or NULL if we simply discard toMerge
+     * @return strategy or null if we simply discard toMerge
      */
     public static MergeStrategy apply(PathWithClosest keep, PathWithClosest merge) {
 

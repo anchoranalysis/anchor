@@ -70,7 +70,7 @@ public class FeatureInitParams implements BeanInitParams {
     }
 
     public FeatureInitParams(EnergyStack energyStack) {
-        this.energyStack = Optional.of(energyStack.getEnergyStack());
+        this.energyStack = Optional.of(energyStack.withoutParams());
         this.keyValueParams = Optional.of(energyStack.getParams());
         this.sharedObjects = Optional.empty();
     }

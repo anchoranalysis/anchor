@@ -488,7 +488,7 @@ public class ObjectMask {
      * <p>See {@link VoxelsExtracter#region} for more details.
      *
      * @param box bounding-box in absolute coordinates.
-     * @param reuseIfPossible if TRUE the existing object will be reused if possible, otherwise a
+     * @param reuseIfPossible if true the existing object will be reused if possible, otherwise a
      *     new object is always created.
      * @return an object-mask corresponding to the requested region, either newly-created or reused
      * @throws CreateException

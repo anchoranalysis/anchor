@@ -109,15 +109,15 @@ public class MorphologicalDilation {
      * <p>TODO: merge do3D and zOnly parameters into an enum
      *
      * @param bvb input-buffer
-     * @param do3D if TRUE, 6-neighborhood dilation, otherwise 4-neighnrouhood
+     * @param do3D if true, 6-neighborhood dilation, otherwise 4-neighnrouhood
      * @param iterations number of dilations
      * @param backgroundVb optional background-buffer that can influence the dilation with the
      *     minIntensityValue
      * @param minIntensityValue minimumIntensity on the background, for a pixel to be included
-     * @param zOnly if TRUE, only peforms dilation in z direction. Requires do3D to be TRUE
-     * @param outsideAtThreshold if TRUE, pixels outside the buffer are treated as ON, otherwise as
+     * @param zOnly if true, only peforms dilation in z direction. Requires do3D to be true
+     * @param outsideAtThreshold if true, pixels outside the buffer are treated as ON, otherwise as
      *     OFF
-     * @param acceptConditions if non-NULL, imposes a condition on each iteration that must be
+     * @param acceptConditions if non-null, imposes a condition on each iteration that must be
      *     passed
      * @return a new buffer containing the results of the dilation-operations
      * @throws CreateException

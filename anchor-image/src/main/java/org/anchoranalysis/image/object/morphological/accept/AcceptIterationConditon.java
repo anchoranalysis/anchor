@@ -42,7 +42,7 @@ public interface AcceptIterationConditon {
     /**
      * @param voxels
      * @param bvb
-     * @return TRUE if the particular iteration should be accepted, FALSE otherwise
+     * @return true if the particular iteration should be accepted, false otherwise
      */
     boolean acceptIteration(Voxels<ByteBuffer> voxels, BinaryValues bvb)
             throws OperationFailedException;

@@ -117,7 +117,7 @@ public class ExperimentExecutionArguments {
     /**
      * Activates debug-mode
      *
-     * @param debugContains either NULL (no debugContains specified) or a string used for filtering
+     * @param debugContains either null (no debugContains specified) or a string used for filtering
      *     items during debug
      */
     public void activateDebugMode(String debugContains) {

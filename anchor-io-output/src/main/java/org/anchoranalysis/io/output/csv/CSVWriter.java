@@ -71,7 +71,7 @@ public class CSVWriter implements AutoCloseable {
     }
 
     /**
-     * Creates and starts a CSVWriter (it's always allowed, so will never return NULL)
+     * Creates and starts a CSVWriter (it's always allowed, so will never return null)
      *
      * @param path path to write the CSV to
      * @return the csv-writer

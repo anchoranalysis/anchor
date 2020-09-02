@@ -241,7 +241,7 @@ public class TestLoader {
      *
      * @param doc1 first document
      * @param doc2 second document
-     * @return TRUE if their contents match, FALSE otherwise
+     * @return true if their contents match, false otherwise
      */
     public static boolean areXmlEqual(Document doc1, Document doc2) {
         return areXmlEqual(Input.fromDocument(doc1), Input.fromDocument(doc2));

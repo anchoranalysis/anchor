@@ -51,7 +51,7 @@ public class JobStartStopLogger {
 
     /**
      * @param jobDscrText A noun describing the job that appears in the log e.g. "Job"
-     * @param logger if non-NULL, write messages to logger. If null, no messages are written
+     * @param logger if non-null, write messages to logger. If null, no messages are written
      * @param showHashSeperators indicates if lines of hashes should be placed before and after each
      *     log message (adds emphasis)
      * @param showOngoingJobsLessThan When the number of ongoing jobs is less than this threshold,

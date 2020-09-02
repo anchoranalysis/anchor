@@ -73,7 +73,7 @@ public class ContiguousVoxelPath {
      * tail
      *
      * @param point the point to add
-     * @return TRUE if point was successfully added, FALSE if the point could not be added
+     * @return true if point was successfully added, false if the point could not be added
      */
     public boolean maybeAddPointToClosestEnd(Point3i point) {
 

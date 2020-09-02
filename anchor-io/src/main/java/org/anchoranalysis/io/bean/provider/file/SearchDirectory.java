@@ -51,13 +51,13 @@ public class SearchDirectory extends FileProviderWithDirectoryString {
     @BeanField @Getter @Setter private int maxDirectoryDepth = -1;
 
     /**
-     * if TRUE, case is ignored in the pattern matching. Otherwise the system-default is used i.e.
+     * if true, case is ignored in the pattern matching. Otherwise the system-default is used i.e.
      * Windows ignores case, Linux doesn't
      */
     @BeanField @Getter @Setter private boolean ignoreHidden = true;
 
     /**
-     * if TRUE, continues when a directory-access-error occurs (logging it), otherwise throws an
+     * if true, continues when a directory-access-error occurs (logging it), otherwise throws an
      * exception
      */
     @BeanField @Getter @Setter private boolean acceptDirectoryErrors = false;

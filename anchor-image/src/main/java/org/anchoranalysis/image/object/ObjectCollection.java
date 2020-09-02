@@ -165,7 +165,7 @@ public class ObjectCollection implements Iterable<ObjectMask> {
      * A string representation of all objects in the collection using their center of gravities (and
      * optionally indices)
      *
-     * @param newlines if TRUE a newline separates each item, otherwise a whitespace
+     * @param newlines if true a newline separates each item, otherwise a whitespace
      * @param includeIndices whether to additionally show the index of each item beside its center
      *     of gravity
      * @return a descriptive string of the collection (begining and ending with parantheses)

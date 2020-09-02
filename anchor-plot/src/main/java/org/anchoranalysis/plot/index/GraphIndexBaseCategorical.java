@@ -51,7 +51,7 @@ public abstract class GraphIndexBaseCategorical<T, S extends CategoryDataset>
      * @param graphName
      * @param seriesNames
      * @param labelGetter
-     * @param colorGetter color-getter or NULL to use default colors
+     * @param colorGetter color-getter or null to use default colors
      */
     public GraphIndexBaseCategorical(
             String graphName,

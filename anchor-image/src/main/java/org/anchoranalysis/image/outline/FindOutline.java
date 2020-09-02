@@ -66,7 +66,7 @@ public class FindOutline {
      * @param mask the mask to find an outline for
      * @param numberErosions the number of erosions, effectively determining how thick the outline
      *     is
-     * @param force2D if TRUE, 2D will ALWAYS be used irrespective of the guessing
+     * @param force2D if true, 2D will ALWAYS be used irrespective of the guessing
      * @param outlineAtBoundary if true, an edge is shown also for the boundary of the scene. if
      *     false, this is not shown.
      * @return a newly-created mask showing only the outline

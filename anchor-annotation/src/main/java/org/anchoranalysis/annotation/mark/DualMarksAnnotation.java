@@ -51,7 +51,7 @@ public class DualMarksAnnotation<T> implements AnnotationWithMarks {
     /** Marks in annotation */
     private MarkCollection marks;
 
-    /** Marks covering area that should be rejected, can be NULL */
+    /** Marks covering area that should be rejected, can be null */
     @Getter private MarkCollection marksReject;
 
     /** Number of seconds since the UNIX epoch */

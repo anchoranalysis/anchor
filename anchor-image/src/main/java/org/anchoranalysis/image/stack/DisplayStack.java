@@ -198,7 +198,7 @@ public class DisplayStack {
     /**
      * Derives a {@link Stack} from the display-stack that will be converted to 8-bit if necessary.
      *
-     * @param alwaysNew iff TRUE channels are always created new during conversion, otherwise only
+     * @param alwaysNew iff true channels are always created new during conversion, otherwise only
      *     if needed
      * @return a stack with either 1 or 3 channels (depending on what's passed into display-stack),
      *     all of which are unsigned 8-bit.

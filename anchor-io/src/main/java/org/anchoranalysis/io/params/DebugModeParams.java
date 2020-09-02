@@ -49,7 +49,7 @@ public class DebugModeParams {
     /**
      * Constructor
      *
-     * @param contains an optional string used to filter inputs. If NULL, then disabled.
+     * @param contains an optional string used to filter inputs. If null, then disabled.
      */
     public DebugModeParams(String contains) {
         super();

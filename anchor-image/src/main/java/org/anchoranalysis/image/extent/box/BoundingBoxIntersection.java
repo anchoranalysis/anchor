@@ -76,7 +76,7 @@ public final class BoundingBoxIntersection {
      * bounding-box of intersection
      *
      * @param other the other bounding-box to check intersection with
-     * @param createIntersectionBox iff TRUE the bounding-box of the intersection is returned,
+     * @param createIntersectionBox iff true the bounding-box of the intersection is returned,
      *     otherwise the existing (source) bounding-box is returned
      * @return a bounding-box if there is intersection (where box depends on {@link
      *     #createIntersection} or empty() if there is no intersection.

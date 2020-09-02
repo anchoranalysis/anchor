@@ -46,7 +46,7 @@ public class BoundingBoxCalculator {
      *
      * @param pos center-point
      * @param radius size of scalar radius
-     * @param do3D 3 dimensions (XYZ) iff TRUE, otherwise 2 dimensions (XZ)
+     * @param do3D 3 dimensions (XYZ) iff true, otherwise 2 dimensions (XZ)
      * @param bndScene bounds on the scene, used to clip the bounding-box
      * @return a newly created bounding-box
      */
@@ -62,7 +62,7 @@ public class BoundingBoxCalculator {
      *
      * @param center center-point
      * @param radiiMatrix a matrix with resolved-radii for each dimension
-     * @param do3D 3 dimensions (XYZ) iff TRUE, otherwise 2 dimensions (XZ)
+     * @param do3D 3 dimensions (XYZ) iff true, otherwise 2 dimensions (XZ)
      * @param dimensions image-bounds, used to clip the bounding-box
      * @return a newly created bounding-box
      */

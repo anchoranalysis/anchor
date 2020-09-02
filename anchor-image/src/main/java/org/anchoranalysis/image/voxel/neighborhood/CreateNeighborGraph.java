@@ -48,7 +48,7 @@ import org.anchoranalysis.image.voxel.neighborhood.EdgeAdder.AddEdge;
 @RequiredArgsConstructor
 public class CreateNeighborGraph<V> {
 
-    /** iff TRUE outputs an undirected graph, otherwise directed */
+    /** iff true outputs an undirected graph, otherwise directed */
     private boolean undirected = true;
 
     private final EdgeAdderParameters edgeAdderParams;

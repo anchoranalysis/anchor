@@ -89,7 +89,7 @@ public class ResultsVector {
         return obj.toString();
     }
 
-    // Returns a double, or NULL if the object is an exception
+    // Returns a double, or null if the object is an exception
     public Optional<Double> getDoubleOrNull(int i) {
 
         Object obj = arr[i];

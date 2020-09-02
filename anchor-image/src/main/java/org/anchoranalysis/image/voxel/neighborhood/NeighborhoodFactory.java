@@ -43,7 +43,7 @@ public class NeighborhoodFactory {
     /**
      * Gets an appropriate neighborhood
      *
-     * @param big if TRUE, a big neighborhood, if FALSE a small one
+     * @param big if true, a big neighborhood, if false a small one
      * @return the neighborhood
      */
     public static Neighborhood of(boolean big) {

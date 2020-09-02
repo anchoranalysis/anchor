@@ -71,11 +71,11 @@ public interface VoxelsExtracter<T extends Buffer> {
      * <p>Depending on policy, an the existing box will be reused if possible (if the region
      * requested is equal to the box as a whole), useful to avoid unnecessary new memory allocation.
      *
-     * <p>If {@code reuseIfPossible} is FALSE, it is guaranteed that a new voxels will always be
+     * <p>If {@code reuseIfPossible} is false, it is guaranteed that a new voxels will always be
      * created.
      *
      * @param box a bounding-box indicating the regions desired (not be larger than the extent)
-     * @param reuseIfPossible if TRUE the existing box will be reused if possible,, otherwise a new
+     * @param reuseIfPossible if true the existing box will be reused if possible,, otherwise a new
      *     box is always created.
      * @return voxels corresponding to the requested region, either newly-created or reused
      */

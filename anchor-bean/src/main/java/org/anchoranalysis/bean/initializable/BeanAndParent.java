@@ -35,7 +35,7 @@ class BeanAndParent {
     /** The bean */
     private AnchorBean<?> bean;
 
-    /** Parent bean, or NULL if the bean doesn't have a parent */
+    /** Parent bean, or null if the bean doesn't have a parent */
     private BeanAndParent parent;
 
     public BeanAndParent(AnchorBean<?> bean, BeanAndParent parent) {

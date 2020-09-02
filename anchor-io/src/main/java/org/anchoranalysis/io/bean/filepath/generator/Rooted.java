@@ -45,12 +45,12 @@ public class Rooted extends FilePathGenerator {
     @BeanField @Getter @Setter private String rootName;
 
     /**
-     * if TRUE, the root is not added to the outFilePath, and the path is instead localized against
-     * the location of the BeanXML. if FALSE, nothing is changed
+     * if true, the root is not added to the outFilePath, and the path is instead localized against
+     * the location of the BeanXML. if false, nothing is changed
      */
     @BeanField @Getter @Setter private boolean suppressRootOut = false;
 
-    /** if TRUE, the pathIn and pathOut are logged. Useful for debugging */
+    /** if true, the pathIn and pathOut are logged. Useful for debugging */
     @BeanField @Getter @Setter private boolean logPath = false;
     // END BEAN PROPERTIES
 

@@ -55,7 +55,7 @@ public abstract class CountKernelNeighborhoodBase extends CountKernel {
     private boolean ignoreAtThreshold = false;
 
     /**
-     * If TRUE, a voxel is allowed to have more than 1 neighbor. If FALSE, once at least one
+     * If true, a voxel is allowed to have more than 1 neighbor. If false, once at least one
      * neighbor is found, it exists with a count of 1
      */
     private boolean multipleMatchesPerVoxel = false;

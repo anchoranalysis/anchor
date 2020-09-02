@@ -43,7 +43,7 @@ public class GraphWithEdgeTypes<V, E> {
     private HashSet<V> setVertices;
     private HashBasedTable<V, V, EdgeTypeWithVertices<V, E>> tableEdge;
 
-    // If TRUE it's an undirected graph, otherwise directed graph
+    // If true it's an undirected graph, otherwise directed graph
     private boolean undirected = true;
 
     public GraphWithEdgeTypes(boolean undirected) {

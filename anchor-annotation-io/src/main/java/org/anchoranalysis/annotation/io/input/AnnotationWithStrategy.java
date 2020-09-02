@@ -63,7 +63,7 @@ public class AnnotationWithStrategy<T extends AnnotatorStrategy> implements Inpu
     }
 
     /**
-     * A label to be used when aggregrating this annotation with others, or NULL if this makes no
+     * A label to be used when aggregrating this annotation with others, or null if this makes no
      * sense
      *
      * @throws AnchorIOException

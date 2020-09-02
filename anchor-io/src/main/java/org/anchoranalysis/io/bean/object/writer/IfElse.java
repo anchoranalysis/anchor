@@ -73,7 +73,7 @@ public class IfElse extends DrawObject {
     public PrecalculationOverlay precalculate(ObjectWithProperties object, Dimensions dim)
             throws CreateException {
 
-        // We calculate both the TRUE and FALSE precalculations
+        // We calculate both the true and false precalculations
         PrecalculationOverlay precalculationTrue = whenTrue.precalculate(object, dim);
         PrecalculationOverlay precalculationFalse = whenFalse.precalculate(object, dim);
 

@@ -32,6 +32,6 @@ import org.anchoranalysis.core.geometry.Point3d;
 // Proposes a position
 public interface OptionalPointProposer {
 
-    // Proposes a position, or NULL if there is no position to propose
+    // Proposes a position, or null if there is no position to propose
     Optional<Point3d> propose(ProposerContext context);
 }

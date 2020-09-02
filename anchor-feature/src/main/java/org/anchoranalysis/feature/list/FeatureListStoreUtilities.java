@@ -55,7 +55,7 @@ public class FeatureListStoreUtilities {
      * @param <T> feature-type
      * @param featureList feature-list
      * @param nameParent the parent-name of the list
-     * @param paramsOnlyInDescription iff TRUE, only describe the parameters of the features, but
+     * @param paramsOnlyInDescription iff true, only describe the parameters of the features, but
      *     not the name. Otherwise both are described.
      * @param store store features are added to
      */
@@ -81,7 +81,7 @@ public class FeatureListStoreUtilities {
 
     /**
      * Names in the store take the form nameParent.featureDescription unless useOnlyParentName is
-     * TRUE, in which case they are called simply nameParent
+     * true, in which case they are called simply nameParent
      */
     private static <T extends FeatureInput> String determineFeatureName(
             Feature<T> feature,

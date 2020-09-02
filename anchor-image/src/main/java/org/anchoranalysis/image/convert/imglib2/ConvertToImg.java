@@ -63,7 +63,7 @@ public class ConvertToImg {
      * @param voxels the voxels to convert
      * @return an {@link Img} object reusing the buffers of {@code voxels}.
      */
-    public static Img<? extends RealType<?>> from(VoxelsWrapper voxels) {
+    public static Img<? extends RealType<?>> from(VoxelsWrapper voxels) {   // NOSONAR
 
         VoxelDataType dataType = voxels.getVoxelDataType();
 

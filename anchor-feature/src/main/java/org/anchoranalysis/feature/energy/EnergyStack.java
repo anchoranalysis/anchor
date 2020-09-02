@@ -39,48 +39,48 @@ import org.anchoranalysis.image.stack.Stack;
 // An energy-stack with associated parameters
 public class EnergyStack {
 
-    @Getter private final EnergyStackWithoutParams energyStack;
+    private final EnergyStackWithoutParams delegate;
     @Getter @Setter private KeyValueParams params;
 
     public EnergyStack(Channel channel) {
         super();
-        this.energyStack = new EnergyStackWithoutParams(channel);
+        this.delegate = new EnergyStackWithoutParams(channel);
         this.params = new KeyValueParams();
     }
 
     public EnergyStack(EnergyStackWithoutParams energyStack) {
         super();
-        this.energyStack = energyStack;
+        this.delegate = energyStack;
         this.params = new KeyValueParams();
     }
 
     public EnergyStack(EnergyStackWithoutParams energyStack, KeyValueParams params) {
         super();
-        this.energyStack = energyStack;
+        this.delegate = energyStack;
         this.params = params;
     }
 
     public EnergyStack(Stack stackIn, KeyValueParams params) {
-        this.energyStack = new EnergyStackWithoutParams(stackIn);
+        this.delegate = new EnergyStackWithoutParams(stackIn);
         this.params = params;
     }
 
     public EnergyStack(Stack stackIn) {
-        this.energyStack = new EnergyStackWithoutParams(stackIn);
+        this.delegate = new EnergyStackWithoutParams(stackIn);
         this.params = new KeyValueParams();
     }
 
     public EnergyStack(Dimensions dimensions) {
-        this.energyStack = new EnergyStackWithoutParams(dimensions);
+        this.delegate = new EnergyStackWithoutParams(dimensions);
         this.params = new KeyValueParams();
     }
 
     public EnergyStack extractSlice(int z) throws OperationFailedException {
-        return new EnergyStack(energyStack.extractSlice(z), params);
+        return new EnergyStack(delegate.extractSlice(z), params);
     }
 
     public Dimensions dimensions() {
-        return energyStack.dimensions();
+        return delegate.dimensions();
     }
     
     public Resolution resolution() {
@@ -88,18 +88,27 @@ public class EnergyStack {
     }
 
     public EnergyStack copyChangeParams(KeyValueParams paramsToAssign) {
-        return new EnergyStack(energyStack, paramsToAssign);
+        return new EnergyStack(delegate, paramsToAssign);
     }
 
     public Channel getChannel(int index) {
-        return energyStack.getChannel(index);
+        return delegate.getChannel(index);
     }
 
     public Stack asStack() {
-        return energyStack.asStack();
+        return delegate.asStack();
     }
 
     public Extent extent() {
-        return energyStack.extent();
+        return delegate.extent();
+    }
+
+    /**
+     * The energy-stack without associated parameters.
+     * 
+     * @return a representation of the energy-stack without params (not newly created).
+     */
+    public EnergyStackWithoutParams withoutParams() {
+        return delegate;
     }
 }

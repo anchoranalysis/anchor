@@ -56,7 +56,7 @@ public class RootPath extends AnchorBean<RootPath> {
     /*** A path on a filesystem to the directory, that defines the root */
     @BeanField @Getter @Setter private String path;
 
-    /*** If TRUE this root is preferred, when executing a job in debugging mode */
+    /*** If true this root is preferred, when executing a job in debugging mode */
     @BeanField @Getter @Setter private boolean debug = false;
 
     // END PROPERTIES

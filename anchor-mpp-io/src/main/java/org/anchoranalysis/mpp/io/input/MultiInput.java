@@ -109,7 +109,7 @@ public class MultiInput implements ProvidesStackInput, InputForMPPBean {
     public void close(ErrorReporter errorReporter) {
         stack.close(errorReporter);
 
-        // We set all these objects to NULL so the garbage collector can free up memory
+        // We set all these objects to null so the garbage collector can free up memory
         // This probably isn't necessary, as the MultiInput object should get garbage-collected ASAP
         //   but just in case
         mapMarks = null;

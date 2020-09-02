@@ -111,7 +111,7 @@ public class BioformatsOpenedRaster implements OpenedRaster {
         return sizeT;
     }
 
-    /** Returns a list of channel-names or NULL if they are not available */
+    /** Returns a list of channel-names or null if they are not available */
     public Optional<List<String>> channelNames() {
         return channelNames;
     }

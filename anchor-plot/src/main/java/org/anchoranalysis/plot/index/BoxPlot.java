@@ -45,7 +45,7 @@ public class BoxPlot<T> extends GraphIndexBaseCategorical<T, DefaultBoxAndWhiske
 
     private GetForSeries<T, BoxAndWhiskerItem> boxAndWhiskerItemGetter;
 
-    // colorGetter can be NULL to indicate that we do not use custom colors
+    // colorGetter can be null to indicate that we do not use custom colors
     public BoxPlot(
             String graphName,
             String[] seriesNames,

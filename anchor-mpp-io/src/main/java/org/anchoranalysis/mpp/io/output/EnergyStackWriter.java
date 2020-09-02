@@ -48,7 +48,7 @@ public class EnergyStackWriter {
         GeneratorSequenceUtilities.generateListAsSubfolder(
                 FOLDER_CHANNEL,
                 2,
-                energyStack.getEnergyStack().asStack().asListChannels(),
+                energyStack.withoutParams().asStack().asListChannels(),
                 new ChannelGenerator(MANIFEST_FUNCTION_CHANNEL),
                 context);
 

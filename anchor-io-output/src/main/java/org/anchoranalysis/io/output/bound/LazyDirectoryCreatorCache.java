@@ -57,7 +57,7 @@ public class LazyDirectoryCreatorCache {
      * Creates for a root-direction
      * 
      * @param rootDirectory a root directory, in which all paths subsequently passed to {@link #getOrCreate} should reside.
-     * @param deleteExisting if TRUE, deletes any existing folder that exists in paths we create. if FALSE, an error is thrown if an existing directory exists.
+     * @param deleteExisting if true, deletes any existing folder that exists in paths we create. if false, an error is thrown if an existing directory exists.
      */
     public LazyDirectoryCreatorCache(Path rootDirectory, boolean deleteExisting) {
         this.rootDirectory = rootDirectory.normalize();

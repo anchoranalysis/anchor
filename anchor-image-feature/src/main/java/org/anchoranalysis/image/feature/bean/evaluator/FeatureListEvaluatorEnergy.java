@@ -39,7 +39,6 @@ import org.anchoranalysis.core.name.store.SharedObjects;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.feature.input.FeatureInput;
-import org.anchoranalysis.feature.input.FeatureInputEnergy;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMultiChangeInput;
 import org.anchoranalysis.image.feature.evaluator.NamedFeatureCalculatorMulti;
 import org.anchoranalysis.image.stack.Stack;
@@ -69,14 +68,8 @@ public class FeatureListEvaluatorEnergy<T extends FeatureInput> extends FeatureL
                 calculator ->
                         new FeatureCalculatorMultiChangeInput<>(
                                 calculator,
-                                params -> {
-                                    // Use reflection, to only set the energyStack on params that
-                                    // supports them
-                                    if (params instanceof FeatureInputEnergy
-                                            && energyStack.isPresent()) {
-                                        ((FeatureInputEnergy) params)
-                                                .setEnergyStack(energyStack.get());
-                                    }
-                                }));
+                                keyValueParams -> EnergyStackHelper.setEnergyStackOnParams(keyValueParams, energyStack)
+                        )
+                );
     }
 }

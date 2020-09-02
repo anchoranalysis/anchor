@@ -68,7 +68,7 @@ public class MarkAnnotationReader<T> implements AnnotationReader<DualMarksAnnota
         }
     }
 
-    // Reads an annotation if it can, returns NULL otherwise
+    // Reads an annotation if it can, returns null otherwise
     public MarkCollection readDefaultMarks(Path path) throws DeserializationFailedException {
         return DESERIALIZER.deserialize(path);
     }

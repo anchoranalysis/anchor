@@ -89,7 +89,7 @@ public class TestLoaderImageIO {
      *
      * @param path1 first-path to compare
      * @param path2 second-path to compare
-     * @return TRUE if the images are equal (every pixel is identical, and data-types are the same)
+     * @return true if the images are equal (every pixel is identical, and data-types are the same)
      * @throws FileNotFoundException if one or both of the files cannot be found
      */
     public boolean compareTwoImages(String path1, String path2) throws FileNotFoundException {
@@ -103,7 +103,7 @@ public class TestLoaderImageIO {
      * @param path1 first-path to compare
      * @param loader2 loader to use for path2
      * @param path2 second-path to compare
-     * @return TRUE if the images are equal (every pixel is identical, and data-types are the same)
+     * @return true if the images are equal (every pixel is identical, and data-types are the same)
      * @throws FileNotFoundException if one or both of the files cannot be found
      */
     public static boolean compareTwoImages(
@@ -154,7 +154,7 @@ public class TestLoaderImageIO {
      *
      * @param path1 first-path
      * @param path2 second-path
-     * @return TRUE if the object-mask-collection are equal (every object-pixel is identical)
+     * @return true if the object-mask-collection are equal (every object-pixel is identical)
      */
     public boolean compareTwoObjectCollections(String path1, String path2) {
 

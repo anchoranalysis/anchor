@@ -65,7 +65,7 @@ class ManifestClashChecker {
      * directory 2. have a prefix, which is prepended to all files, and keeps them unique
      *
      * @param experimentalDirectory the root directory associated with the experiment
-     * @return TRUE if it would clash, FALSE otherwise
+     * @return true if it would clash, false otherwise
      */
     private static boolean wouldClashWithExperimentRoot(
             Path experimentalDirectory, FilePathPrefix fpp) {

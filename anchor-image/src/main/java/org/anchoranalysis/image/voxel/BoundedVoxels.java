@@ -311,7 +311,7 @@ public class BoundedVoxels<T extends Buffer> {
      *
      * @see VoxelsExtracter#region
      * @param box bounding-box in absolute coordinates.
-     * @param reuseIfPossible if TRUE the existing box will be reused if possible, otherwise a new
+     * @param reuseIfPossible if true the existing box will be reused if possible, otherwise a new
      *     box is always created.
      * @return bounded0voxels corresponding to the requested region, either newly-created or reused
      * @throws CreateException

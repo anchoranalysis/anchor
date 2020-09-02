@@ -114,7 +114,7 @@ public class GroupedResultsVectorCollection implements Closeable {
      * </pre>
      *
      * @param featuresAggregate aggregate-features
-     * @param includeGroups iff TRUE a group-column is included in the CSV file and the group
+     * @param includeGroups iff true a group-column is included in the CSV file and the group
      *     exports occur, otherwise not
      * @throws AnchorIOException
      */

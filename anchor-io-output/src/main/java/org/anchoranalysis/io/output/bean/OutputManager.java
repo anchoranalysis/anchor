@@ -43,7 +43,7 @@ public abstract class OutputManager extends AnchorBean<OutputManager> {
     public abstract boolean isOutputAllowed(String outputName);
 
     /**
-     * A second-level of OutputAllowed for a particular key, or NULL if none is defined for this key
+     * A second-level of OutputAllowed for a particular key, or null if none is defined for this key
      */
     public abstract OutputAllowed outputAllowedSecondLevel(String key);
 

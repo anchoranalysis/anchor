@@ -70,7 +70,7 @@ public interface Interpolator {
             Extent extentDestination);
 
     /**
-     * Returns TRUE if it's possible for values to be created after interpolation that aren't found
+     * Returns true if it's possible for values to be created after interpolation that aren't found
      * in the input-image. Returns the destination buffer (either as passed, or a new one that was
      * created)
      *

@@ -63,7 +63,7 @@ public class DualComparer {
      * Compare two images that have an identical path, but in two different test loaders
      *
      * @param path path to compare
-     * @return TRUE if the images are equal (every pixel is identical, and data-types are the same)
+     * @return true if the images are equal (every pixel is identical, and data-types are the same)
      * @throws FileNotFoundException if one or both of the files cannot be found
      */
     public boolean compareTwoImages(String path) throws FileNotFoundException {
@@ -75,7 +75,7 @@ public class DualComparer {
      * identical for equality.
      *
      * @param path path to compare
-     * @return TRUE if the xml-documents are equal, fALSE otherwise
+     * @return true if the xml-documents are equal, fALSE otherwise
      */
     public boolean compareTwoXmlDocuments(String path) {
         return TestLoader.areXmlEqual(
@@ -88,7 +88,7 @@ public class DualComparer {
      *
      * @param path path to compare
      * @param messageStream if non-equal, additional explanation messages are printed here
-     * @return TRUE if the csv-files are identical apart from the ignored columns, fALSE otherwise
+     * @return true if the csv-files are identical apart from the ignored columns, fALSE otherwise
      * @throws CSVReaderException if something goes wrong with csv I/O or a csv file is reject
      */
     public boolean compareTwoCsvFiles(String path, CSVComparer comparer, PrintStream messageStream)

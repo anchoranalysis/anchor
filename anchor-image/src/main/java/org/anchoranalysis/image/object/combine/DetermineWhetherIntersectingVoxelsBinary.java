@@ -103,7 +103,7 @@ public class DetermineWhetherIntersectingVoxelsBinary {
     }
 
     /**
-     * @return Point3i NULL if no intersection exists, otherwise first point of intersection found
+     * @return Point3i null if no intersection exists, otherwise first point of intersection found
      *     (newly-created)
      */
     private Optional<Point3i> hasIntersectingVoxels(

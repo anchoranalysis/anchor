@@ -158,13 +158,13 @@ public class ApplyKernel {
     }
 
     /**
-     * Applies the kernel to voxels until a positive value is returned, then exits with TRUE
+     * Applies the kernel to voxels until a positive value is returned, then exits with true
      *
      * @param kernel the kernel to be applied
      * @param voxels the voxels to iterate over
      * @param box a bounding-box (coordinates relative to voxels) that restricts where iteration
      *     occurs. Must be contained within voxels.
-     * @return TRUE if a positive-value is encountered, 0 if it never is encountered
+     * @return true if a positive-value is encountered, 0 if it never is encountered
      * @throws OperationFailedException
      */
     public static boolean applyUntilPositive(

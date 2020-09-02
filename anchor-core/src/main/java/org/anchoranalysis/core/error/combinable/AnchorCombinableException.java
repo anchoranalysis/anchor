@@ -152,7 +152,7 @@ public abstract class AnchorCombinableException extends AnchorCheckedException {
     /**
      * Are there nested-exceptions (according to our traversal rules) that are combinable?
      *
-     * @return TRUE if there are, FALSE otherwise
+     * @return true if there are, false otherwise
      */
     protected boolean hasNoCombinableNestedExceptions() {
         return findMostDeepCombinableException() == this;

@@ -36,7 +36,6 @@ import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsProvider;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.feature.input.FeatureInput;
-import org.anchoranalysis.feature.input.FeatureInputEnergy;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingleChangeInput;
 import org.anchoranalysis.image.stack.Stack;
@@ -62,12 +61,8 @@ public class FeatureEvaluatorWithEnergy<T extends FeatureInput> extends FeatureE
 
         return new FeatureCalculatorSingleChangeInput<>(
                 session,
-                params -> {
-                    // Use reflection, to only set the energyStack on params that supports them
-                    if (params instanceof FeatureInputEnergy && energyStack.isPresent()) {
-                        ((FeatureInputEnergy) params).setEnergyStack(energyStack.get());
-                    }
-                });
+                keyValueParams -> EnergyStackHelper.setEnergyStackOnParams(keyValueParams, energyStack)
+                );
     }
 
     public Optional<EnergyStack> energyStack() throws OperationFailedException {

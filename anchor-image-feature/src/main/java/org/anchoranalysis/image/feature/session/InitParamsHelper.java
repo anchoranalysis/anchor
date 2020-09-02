@@ -43,6 +43,6 @@ public class InitParamsHelper {
         Optional<KeyValueParams> kvp = energyStack.map(EnergyStack::getParams);
 
         return new FeatureInitParams(
-                kvp, energyStack.map(EnergyStack::getEnergyStack), sharedObjects);
+                kvp, energyStack.map(EnergyStack::withoutParams), sharedObjects);
     }
 }

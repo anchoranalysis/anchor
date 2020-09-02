@@ -35,6 +35,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.energy.EnergyStack;
+import org.anchoranalysis.feature.input.FeatureInputEnergy;
 import org.anchoranalysis.image.stack.Stack;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -56,6 +57,13 @@ class EnergyStackHelper {
             }
         } catch (CreateException e) {
             throw new OperationFailedException(e);
+        }
+    }
+        
+    public static <T> void setEnergyStackOnParams(T params, Optional<EnergyStack> energyStack) {
+        // Use reflection, to only set the energyStack on params that supports them
+        if (params instanceof FeatureInputEnergy && energyStack.isPresent()) {
+            ((FeatureInputEnergy) params).setEnergyStack(energyStack.get());
         }
     }
 }
