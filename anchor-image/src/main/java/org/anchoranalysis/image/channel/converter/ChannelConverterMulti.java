@@ -32,25 +32,35 @@ import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedIntVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
+import lombok.AllArgsConstructor;
 
+/**
+ * Converts a channel from one type to multiple other types.
+ *
+ * @author Owen Feehan
+ */
+@AllArgsConstructor
 public class ChannelConverterMulti {
 
-    private ConversionPolicy conversionPolicy = ConversionPolicy.DO_NOT_CHANGE_EXISTING;
+    private static final ConversionPolicy POLICY = ConversionPolicy.DO_NOT_CHANGE_EXISTING;
 
-    public ChannelConverterMulti() {
-        super();
+    public Channel convert(Channel channel, VoxelDataType outputType) {
+
+        if (channel.getVoxelDataType().equals(outputType)) {
+            return channel;
+        } else {
+            return converterFor(outputType).convert(channel, POLICY);
+        }
     }
+    
+    private ChannelConverter<?> converterFor(VoxelDataType outputType) {
 
-    public Channel convert(Channel channelIn, VoxelDataType outputType) {
-
-        if (channelIn.getVoxelDataType().equals(outputType)) {
-            return channelIn;
-        } else if (outputType.equals(UnsignedByteVoxelType.INSTANCE)) {
-            return new ChannelConverterToUnsignedByte().convert(channelIn, conversionPolicy);
+        if (outputType.equals(UnsignedByteVoxelType.INSTANCE)) {
+            return new ToUnsignedByte();
         } else if (outputType.equals(UnsignedShortVoxelType.INSTANCE)) {
-            return new ChannelConverterToUnsignedShort().convert(channelIn, conversionPolicy);
+            return new ToUnsignedShort();
         } else if (outputType.equals(FloatVoxelType.INSTANCE)) {
-            return new ChannelConverterToFloat().convert(channelIn, conversionPolicy);
+            return new ToFloat();
         } else if (outputType.equals(UnsignedIntVoxelType.INSTANCE)) {
             throw new UnsupportedOperationException(
                     "UnsignedInt is not yet supported for this operation");

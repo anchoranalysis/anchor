@@ -27,7 +27,7 @@
 package org.anchoranalysis.io.generator.histogram;
 
 import java.nio.file.Path;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -39,29 +39,26 @@ import org.anchoranalysis.io.output.csv.CSVWriter;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class HistogramCSVWriter {
 
+    private static final List<String> HEADERS = Arrays.asList("intensity", "count");
+    
     public static void writeHistogramToFile(Histogram histogram, Path filePath, boolean ignoreZeros)
             throws AnchorIOException {
 
-        List<String> headers = new ArrayList<>();
-        headers.add("intensity");
-        headers.add("count");
-
         try (CSVWriter writer = CSVWriter.create(filePath)) {
-            writer.writeHeaders(headers);
+            writer.writeHeaders(HEADERS);
 
-            for (int i = histogram.getMinBin(); i <= histogram.getMaxBin(); i++) {
-                List<TypedValue> list = new ArrayList<>();
+            histogram.iterateBins( (bin,count) -> { 
 
-                int histVal = histogram.getCount(i);
-
-                if (ignoreZeros && histVal == 0) {
-                    continue;
+                // Skip any zeros if we are ignoring zeros
+                if (!ignoreZeros || count != 0) {
+                    writer.writeRow( createTypedValues(bin,count) );
                 }
-
-                list.add(new TypedValue(i, 0));
-                list.add(new TypedValue(histVal, 0));
-                writer.writeRow(list);
-            }
+                
+            });
         }
+    }
+    
+    private static List<TypedValue> createTypedValues(int bin, int count) {
+        return Arrays.asList(new TypedValue(bin, 0), new TypedValue(count, 0));
     }
 }

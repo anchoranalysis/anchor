@@ -27,7 +27,7 @@
 package org.anchoranalysis.image.voxel.buffer;
 
 import java.nio.FloatBuffer;
-import org.anchoranalysis.image.convert.ByteConverter;
+import org.anchoranalysis.image.convert.PrimitiveConverter;
 import org.anchoranalysis.image.voxel.datatype.FloatVoxelType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 
@@ -55,7 +55,7 @@ public final class VoxelBufferFloat extends VoxelBuffer<FloatBuffer> {
 
     @Override
     public VoxelBuffer<FloatBuffer> duplicate() {
-        return new VoxelBufferFloat(ByteConverter.copy(delegate));
+        return new VoxelBufferFloat(DuplicateBuffer.copy(delegate));
     }
 
     @Override
@@ -79,7 +79,7 @@ public final class VoxelBufferFloat extends VoxelBuffer<FloatBuffer> {
 
     @Override
     public void putByte(int index, byte val) {
-        delegate.put(index, (float) ByteConverter.unsignedByteToInt(val));
+        delegate.put(index, (float) PrimitiveConverter.unsignedByteToInt(val));
     }
 
     @Override

@@ -27,29 +27,18 @@
 package org.anchoranalysis.io.bioformats.copyconvert.tobyte;
 
 import java.nio.ByteBuffer;
-import org.anchoranalysis.image.extent.Dimensions;
-import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
-import org.anchoranalysis.image.voxel.buffer.VoxelBufferByte;
 
 public class ByteFrom8BitUnsignedNoInterleaving extends ConvertToByte {
 
-    private int bytesPerPixel = 1;
-    private int sizeXY;
-
     @Override
-    protected void setupBefore(Dimensions dimensions, int numChannelsPerByteArray) {
-        sizeXY = dimensions.x() * dimensions.y();
+    protected void convert(byte[] source, byte[] destination, int channelRelative) {
+        ByteBuffer buffer = ByteBuffer.wrap(source);
+        buffer.position(sizeBytes * channelRelative);
+        buffer.get(destination, 0, sizeBytes);
     }
-
+    
     @Override
-    protected VoxelBuffer<ByteBuffer> convertSingleChannel(byte[] src, int channelRelative) {
-        ByteBuffer buffer = ByteBuffer.wrap(src);
-
-        int sizeTotalBytes = sizeXY * bytesPerPixel;
-        byte[] crntChannelBytes = new byte[sizeTotalBytes];
-
-        buffer.position(sizeTotalBytes * channelRelative);
-        buffer.get(crntChannelBytes, 0, sizeTotalBytes);
-        return VoxelBufferByte.wrap(crntChannelBytes);
+    protected int calculateBytesPerPixel(int numberChannelsPerArray) {
+        return 1;
     }
 }

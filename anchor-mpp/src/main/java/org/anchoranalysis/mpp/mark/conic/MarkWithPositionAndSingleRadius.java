@@ -34,8 +34,8 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.geometry.Point3d;
-import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.mpp.bean.bound.Bound;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMembershipUtilities;
 import org.anchoranalysis.mpp.mark.GlobalRegionIdentifiers;
@@ -114,7 +114,7 @@ public abstract class MarkWithPositionAndSingleRadius extends MarkWithPosition
     @Override
     public BoundingBox box(Dimensions dimensions, int regionID) {
         return BoundingBoxCalculator.boxFromBounds(
-                getPos(), radiusForRegion(regionID) + ADDED_TO_RADIUS, numDims() == 3, dimensions);
+                getPos(), radiusForRegion(regionID) + ADDED_TO_RADIUS, numberDimensions() == 3, dimensions);
     }
 
     @Override

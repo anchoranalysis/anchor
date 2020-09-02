@@ -35,13 +35,13 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.converter.ChannelConverter;
-import org.anchoranalysis.image.channel.converter.ChannelConverterToUnsignedShort;
+import org.anchoranalysis.image.channel.converter.ToUnsignedShort;
 import org.anchoranalysis.image.channel.converter.ConversionPolicy;
 import org.anchoranalysis.image.channel.converter.voxels.ConvertToShortScaleByType;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
-import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
+import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.io.generator.raster.StringRasterGenerator;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
@@ -104,7 +104,7 @@ public class GenerateString extends StackProvider {
 
             if (createShort) {
                 ChannelConverter<ShortBuffer> cc =
-                        new ChannelConverterToUnsignedShort(new ConvertToShortScaleByType());
+                        new ToUnsignedShort(new ConvertToShortScaleByType());
 
                 stack = cc.convert(stack, ConversionPolicy.CHANGE_EXISTING_CHANNEL);
             }

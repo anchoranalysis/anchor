@@ -41,12 +41,12 @@ import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.converter.ConversionPolicy;
 import org.anchoranalysis.image.channel.converter.attached.ChannelConverterAttached;
-import org.anchoranalysis.image.channel.converter.attached.channel.ChannelConverterUpperLowerQuantileIntensity;
+import org.anchoranalysis.image.channel.converter.attached.channel.UpperLowerQuantileIntensity;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
-import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
+import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.stack.bufferedimage.BufferedImageFactory;
 import org.anchoranalysis.image.stack.region.RegionExtracter;
 import org.anchoranalysis.image.stack.region.RegionExtracterFromDisplayStack;
@@ -360,7 +360,7 @@ public class DisplayStack {
                     .equals(UnsignedByteVoxelType.INSTANCE)) {
                 setConverterFor(
                         index,
-                        new ChannelConverterUpperLowerQuantileIntensity(
+                        new UpperLowerQuantileIntensity(
                                 QUANTILE_LOWER, QUANTILE_UPPER));
             }
         }

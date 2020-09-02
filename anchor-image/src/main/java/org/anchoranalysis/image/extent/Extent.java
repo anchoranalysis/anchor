@@ -30,6 +30,7 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.function.Consumer;
 import java.util.function.IntPredicate;
+import java.util.stream.IntStream;
 import org.anchoranalysis.core.axis.AxisType;
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.core.functional.function.CheckedIntConsumer;
@@ -38,13 +39,14 @@ import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.core.geometry.consumer.OffsettedPointTwoDimensionalConsumer;
+import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.scale.ScaleFactor;
 import org.anchoranalysis.image.scale.ScaleFactorUtilities;
 
 /**
- * Width, height etc. of image in 2 or 3 dimensions
+ * Width, height etc. of image in 2 or 3 dimensions.
  *
- * <p>This class is <b>immutable</b>
+ * <p>This class is <b>immutable</b>.
  */
 public final class Extent implements Serializable {
 
@@ -431,7 +433,7 @@ public final class Extent implements Serializable {
      * Calls processor once for each z-value in the range unless {@code indexPredicate} returns
      * false.
      *
-     * <p>This occurs sequentially from 0 (inclusive) to {@code z()} (exclusive)
+     * <p>This occurs sequentially from 0 (inclusive) to {@code z()} (exclusive).
      *
      * <p>As soon as the {@code indexPredicate} returns false, the iteration stops.
      *
@@ -445,6 +447,17 @@ public final class Extent implements Serializable {
             }
         }
         return true;
+    }
+    
+    /**
+     * Streams over the range of z values 
+     * 
+     * <p>The values range from 0 (inclusive) to {@code z()} (exclusive).
+     *  
+     * @return the stream
+     */
+    public IntStream streamOverZ() {
+        return IntStream.range(0, size.z());
     }
 
     private Point3i immutablePointOperation(Consumer<Point3i> pointOperation) {

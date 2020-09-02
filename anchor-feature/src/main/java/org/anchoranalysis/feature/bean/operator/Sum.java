@@ -54,7 +54,7 @@ public class Sum<T extends FeatureInput> extends FeatureListElem<T> {
         double result = 0;
 
         for (Feature<T> elem : getList()) {
-            double resultInd = input.calc(elem);
+            double resultInd = input.calculate(elem);
 
             if (ignoreNaN && Double.isNaN(resultInd)) {
                 continue;

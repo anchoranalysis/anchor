@@ -27,7 +27,7 @@
 package org.anchoranalysis.image.voxel.buffer.max;
 
 import java.nio.ShortBuffer;
-import org.anchoranalysis.image.convert.ByteConverter;
+import org.anchoranalysis.image.convert.PrimitiveConverter;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 
@@ -41,8 +41,8 @@ public class MaxIntensityBufferShort extends MaxIntensityBuffer<ShortBuffer> {
     protected void addBuffer(ShortBuffer pixels, ShortBuffer flatBuffer) {
         short inPixel = pixels.get();
         short flatPixel = flatBuffer.get();
-        if (ByteConverter.unsignedShortToInt(inPixel)
-                > ByteConverter.unsignedShortToInt(flatPixel)) {
+        if (PrimitiveConverter.unsignedShortToInt(inPixel)
+                > PrimitiveConverter.unsignedShortToInt(flatPixel)) {
             flatBuffer.put(flatBuffer.position() - 1, inPixel);
         }
     }

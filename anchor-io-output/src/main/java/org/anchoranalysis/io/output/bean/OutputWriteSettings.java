@@ -37,9 +37,9 @@ import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.core.color.ColorIndex;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.io.bean.color.generator.ColorSetGenerator;
-import org.anchoranalysis.io.bean.color.generator.HSBColorSetGenerator;
-import org.anchoranalysis.io.bean.color.generator.ShuffleColorSetGenerator;
+import org.anchoranalysis.io.bean.color.list.ColorListFactory;
+import org.anchoranalysis.io.bean.color.list.HSB;
+import org.anchoranalysis.io.bean.color.list.Shuffle;
 import org.anchoranalysis.io.color.ColorIndexModulo;
 
 /*
@@ -53,8 +53,8 @@ public class OutputWriteSettings extends AnchorBean<OutputWriteSettings> {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter
-    private ColorSetGenerator defaultColorSetGenerator =
-            new ShuffleColorSetGenerator(new HSBColorSetGenerator());
+    private ColorListFactory defaultColorSetGenerator =
+            new Shuffle(new HSB());
 
     /**
      * Specifies a writer bean instance for a particular type of writer (identified by the writer
@@ -120,7 +120,7 @@ public class OutputWriteSettings extends AnchorBean<OutputWriteSettings> {
     }
 
     public ColorIndex defaultColorIndexFor(int numberColors) throws OperationFailedException {
-        return new ColorIndexModulo(getDefaultColorSetGenerator().generateColors(numberColors));
+        return new ColorIndexModulo(getDefaultColorSetGenerator().create(numberColors));
     }
 
     public String getExtensionHTML() {

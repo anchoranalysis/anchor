@@ -32,7 +32,7 @@ import static org.junit.Assert.*;
 import java.util.Optional;
 import java.util.function.Consumer;
 import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.extent.BoundingBox;
+import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.junit.Test;
 

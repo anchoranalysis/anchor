@@ -29,7 +29,7 @@ package org.anchoranalysis.overlay.writer;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.extent.BoundingBox;
+import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.object.properties.ObjectWithProperties;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
 

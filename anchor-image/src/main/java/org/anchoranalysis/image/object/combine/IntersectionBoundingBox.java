@@ -27,8 +27,8 @@
 package org.anchoranalysis.image.object.combine;
 
 import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
+import org.anchoranalysis.image.extent.box.BoundingBox;
 
 /**
  * A bounding box where intersection occurs

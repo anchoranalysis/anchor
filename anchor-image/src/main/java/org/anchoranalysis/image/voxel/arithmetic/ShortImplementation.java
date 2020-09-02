@@ -27,7 +27,7 @@ package org.anchoranalysis.image.voxel.arithmetic;
 
 import java.nio.ShortBuffer;
 import java.util.function.IntFunction;
-import org.anchoranalysis.image.convert.ByteConverter;
+import org.anchoranalysis.image.convert.PrimitiveConverter;
 import org.anchoranalysis.image.extent.Extent;
 
 /**
@@ -74,7 +74,7 @@ class ShortImplementation extends Base<ShortBuffer> {
 
     private static short multiplyBy(short value, double factor) {
         // TODO do we need to cast to an int first, or can it not just be done directly to a short?
-        int mult = (int) (ByteConverter.unsignedShortToInt(value) * factor);
+        int mult = (int) (PrimitiveConverter.unsignedShortToInt(value) * factor);
         return (short) mult;
     }
 }

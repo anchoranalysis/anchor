@@ -54,12 +54,12 @@ public class BoundUnitless extends BoundMinMax {
     }
 
     @Override
-    public double getMinResolved(Resolution sr, boolean do3D) {
+    public double getMinResolved(Resolution resolution, boolean do3D) {
         return getMin();
     }
 
     @Override
-    public double getMaxResolved(Resolution sr, boolean do3D) {
+    public double getMaxResolved(Resolution resolution, boolean do3D) {
         return getMax();
     }
 

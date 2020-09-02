@@ -27,57 +27,53 @@
 package org.anchoranalysis.io.bioformats.copyconvert.tofloat;
 
 import com.google.common.io.LittleEndianDataInputStream;
+import lombok.RequiredArgsConstructor;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
 import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.extent.Extent;
 
+@RequiredArgsConstructor
 public class FloatFrom32Bit extends ConvertToFloat {
 
-    private boolean littleEndian;
-
-    public FloatFrom32Bit(boolean littleEndian) {
-        super();
-        this.littleEndian = littleEndian;
-    }
+    // START REQUIRED ARGUMENTS
+    private final boolean littleEndian;
+    // END REQUIRED ARGUMENTS
 
     @Override
     protected float[] convertIntegerBytesToFloatArray(
-            Dimensions dimensions, byte[] src, int srcOffset) throws IOException {
+            Dimensions dimensions, byte[] source, int offsetInSource) throws IOException {
 
-        float[] fArr = new float[dimensions.volumeXY()];
-        int cntLoc = 0;
+        // TODO should offsetInSource be ignored here?
+        
+        float[] out = new float[dimensions.volumeXY()];
 
-        ByteArrayInputStream bis = new ByteArrayInputStream(src);
+        ByteArrayInputStream streamByte = new ByteArrayInputStream(source);
 
         if (littleEndian) {
-
-            try (LittleEndianDataInputStream dis = new LittleEndianDataInputStream(bis)) {
-                for (int y = 0; y < dimensions.y(); y++) {
-                    for (int x = 0; x < dimensions.x(); x++) {
-                        fArr[cntLoc++] = dis.readFloat();
-                    }
-                }
-                return fArr;
-            }
-
+            return copyLittleEndian(streamByte, out, dimensions.extent());
         } else {
-
-            try (DataInputStream dis = new DataInputStream(bis)) {
-                for (int y = 0; y < dimensions.y(); y++) {
-                    for (int x = 0; x < dimensions.x(); x++) {
-
-                        float f = dis.readFloat();
-                        fArr[cntLoc++] = f;
-                    }
-                }
-                return fArr;
-            }
+            return copyBigEndian(streamByte, out, dimensions.extent());
         }
     }
 
     @Override
     protected int bytesPerPixel() {
         return 4;
+    }
+    
+    private static float[] copyLittleEndian(ByteArrayInputStream streamByte, float[] out, Extent extent) throws IOException {
+        try (LittleEndianDataInputStream stream = new LittleEndianDataInputStream(streamByte)) {
+            extent.iterateOverXYOffset( index -> out[index] = stream.readFloat() );
+            return out;
+        }        
+    }
+    
+    private static float[] copyBigEndian(ByteArrayInputStream streamByte, float[] out, Extent extent) throws IOException {
+        try (DataInputStream stream = new DataInputStream(streamByte)) {
+            extent.iterateOverXYOffset( index -> out[index] = stream.readFloat() );
+            return out;
+        }        
     }
 }

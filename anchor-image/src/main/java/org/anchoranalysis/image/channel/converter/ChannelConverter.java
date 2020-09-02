@@ -40,7 +40,7 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactoryTypeBound;
 
 /**
- * Converts a channel from one type to another
+ * Converts a channel from one type to another specific type.
  *
  * @author Owen Feehan
  * @param <T> type to convert to (destination-type)

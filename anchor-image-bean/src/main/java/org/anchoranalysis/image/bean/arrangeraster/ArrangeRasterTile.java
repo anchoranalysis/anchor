@@ -41,8 +41,8 @@ import org.anchoranalysis.image.bean.nonbean.arrangeraster.ArrangeRasterExceptio
 import org.anchoranalysis.image.bean.nonbean.arrangeraster.BoundingBoxesOnPlane;
 import org.anchoranalysis.image.bean.nonbean.arrangeraster.TableItemArrangement;
 import org.anchoranalysis.image.bean.nonbean.arrangeraster.TableItemException;
-import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
+import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
 
 public class ArrangeRasterTile extends ArrangeRasterBean {

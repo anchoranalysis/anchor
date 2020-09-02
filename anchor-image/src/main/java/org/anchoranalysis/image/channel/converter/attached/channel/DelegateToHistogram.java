@@ -43,11 +43,10 @@ class DelegateToHistogram<T extends Buffer> implements ChannelConverterAttached<
     private final ChannelConverterAttached<Histogram, T> delegate;
 
     @Override
-    public void attachObject(Channel obj) throws OperationFailedException {
+    public void attachObject(Channel object) throws OperationFailedException {
 
         try {
-            Histogram histogram = HistogramFactory.create(obj);
-            delegate.attachObject(histogram);
+            delegate.attachObject( HistogramFactory.create(object) );
 
         } catch (CreateException e) {
             throw new OperationFailedException(e);

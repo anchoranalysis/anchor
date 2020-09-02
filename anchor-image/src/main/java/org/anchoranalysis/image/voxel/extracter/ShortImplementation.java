@@ -26,7 +26,7 @@
 package org.anchoranalysis.image.voxel.extracter;
 
 import java.nio.ShortBuffer;
-import org.anchoranalysis.image.convert.ByteConverter;
+import org.anchoranalysis.image.convert.PrimitiveConverter;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.max.MaxIntensityBufferShort;
@@ -83,7 +83,7 @@ class ShortImplementation extends Base<ShortBuffer> {
 
     @Override
     protected int voxelAtBufferIndex(ShortBuffer buffer, int index) {
-        return ByteConverter.unsignedShortToInt(buffer.get(index));
+        return PrimitiveConverter.unsignedShortToInt(buffer.get(index));
     }
 
     @Override

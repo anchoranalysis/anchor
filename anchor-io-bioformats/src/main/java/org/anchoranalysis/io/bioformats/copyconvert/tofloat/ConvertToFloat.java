@@ -46,19 +46,19 @@ public abstract class ConvertToFloat extends ConvertTo<FloatBuffer> {
     protected abstract int bytesPerPixel();
 
     @Override
-    protected void setupBefore(Dimensions dimensions, int numChannelsPerByteArray) {
+    protected void setupBefore(Dimensions dimensions, int numberChannelsPerArray) {
         sizeBytesChannel = dimensions.x() * dimensions.y() * bytesPerPixel();
         this.dimensions = dimensions;
     }
 
     @Override
-    protected VoxelBuffer<FloatBuffer> convertSingleChannel(byte[] src, int channelRelative)
+    protected VoxelBuffer<FloatBuffer> convertSingleChannel(byte[] source, int channelRelative)
             throws IOException {
         int index = (sizeBytesChannel * channelRelative);
-        float[] fArr = convertIntegerBytesToFloatArray(dimensions, src, index);
+        float[] fArr = convertIntegerBytesToFloatArray(dimensions, source, index);
         return VoxelBufferFloat.wrap(fArr);
     }
 
     protected abstract float[] convertIntegerBytesToFloatArray(
-            Dimensions dimensions, byte[] src, int srcOffset) throws IOException;
+            Dimensions dimensions, byte[] source, int offsetInSource) throws IOException;
 }

@@ -42,7 +42,7 @@ import java.util.stream.Collectors;
 import org.anchoranalysis.core.functional.CheckedStream;
 import org.anchoranalysis.core.functional.function.CheckedFunction;
 import org.anchoranalysis.core.functional.function.CheckedPredicate;
-import org.anchoranalysis.image.extent.BoundingBox;
+import org.anchoranalysis.image.extent.box.BoundingBox;
 import lombok.AllArgsConstructor;
 
 /**

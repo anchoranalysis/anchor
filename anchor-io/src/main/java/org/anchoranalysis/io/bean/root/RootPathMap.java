@@ -40,9 +40,9 @@ import org.apache.commons.collections.MultiMap;
 import org.apache.commons.collections.map.MultiValueMap;
 
 /**
- * A collection of RootPath objects indexed by their name.
+ * A collection of root-paths indexed by their name.
  *
- * <p>Currently exists as a SINGLETON
+ * <p>Currently exists as a singleton.
  *
  * @author Owen Feehan
  */

@@ -28,6 +28,7 @@ package org.anchoranalysis.image.extent;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.image.extent.box.BoundingBox;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class BoundingBoxFixture {

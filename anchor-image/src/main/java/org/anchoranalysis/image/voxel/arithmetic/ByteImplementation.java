@@ -27,7 +27,7 @@ package org.anchoranalysis.image.voxel.arithmetic;
 
 import java.nio.ByteBuffer;
 import java.util.function.IntFunction;
-import org.anchoranalysis.image.convert.ByteConverter;
+import org.anchoranalysis.image.convert.PrimitiveConverter;
 import org.anchoranalysis.image.extent.Extent;
 
 class ByteImplementation extends Base<ByteBuffer> {
@@ -65,15 +65,15 @@ class ByteImplementation extends Base<ByteBuffer> {
     }
 
     private static byte addClippedByte(int value, byte pixelValue) {
-        return (byte) addClipped(value, ByteConverter.unsignedByteToInt(pixelValue));
+        return (byte) addClipped(value, PrimitiveConverter.unsignedByteToInt(pixelValue));
     }
 
     private static byte subtractFromClippedByte(int valueToSubtractFrom, byte pixelValue) {
-        return (byte) (valueToSubtractFrom - ByteConverter.unsignedByteToInt(pixelValue));
+        return (byte) (valueToSubtractFrom - PrimitiveConverter.unsignedByteToInt(pixelValue));
     }
 
     private static byte scaleClippedByte(double factor, byte pixelValue) {
-        return (byte) scaleClipped(factor, ByteConverter.unsignedByteToInt(pixelValue));
+        return (byte) scaleClipped(factor, PrimitiveConverter.unsignedByteToInt(pixelValue));
     }
 
     private static int scaleClipped(double factor, int pixelValue) {

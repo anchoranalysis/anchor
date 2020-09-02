@@ -33,8 +33,9 @@ import org.anchoranalysis.image.channel.converter.ConversionPolicy;
 import org.anchoranalysis.image.channel.converter.voxels.VoxelsConverter;
 
 /**
- * A ChannelConverter that has been permanently attached to a particular object (to give more
- * information for the conversion)
+ * A channel-converter that has been permanently attached to a particular object.
+ * 
+ * <p>This object can provide necessary parameters (e.g. ranges of voxel intensities) for the conversion.
  *
  * @author Owen Feehan
  * @param <S> attachment-type
@@ -42,7 +43,7 @@ import org.anchoranalysis.image.channel.converter.voxels.VoxelsConverter;
  */
 public interface ChannelConverterAttached<S, T extends Buffer> {
 
-    void attachObject(S obj) throws OperationFailedException;
+    void attachObject(S object) throws OperationFailedException;
 
     Channel convert(Channel channel, ConversionPolicy changeExisting);
 

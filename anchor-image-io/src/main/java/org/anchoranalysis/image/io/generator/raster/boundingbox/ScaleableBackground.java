@@ -32,8 +32,8 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
-import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
+import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.interpolator.Interpolator;
 import org.anchoranalysis.image.scale.ScaleFactor;
 import org.anchoranalysis.image.stack.Stack;
@@ -184,6 +184,6 @@ public class ScaleableBackground {
     }
 
     private Channel channelFor(Voxels<?> voxels) {
-        return ChannelFactory.instance().create(voxels, stack.dimensions().resolution());
+        return ChannelFactory.instance().create(voxels, stack.resolution());
     }
 }

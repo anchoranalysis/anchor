@@ -30,7 +30,7 @@ import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
-import org.anchoranalysis.image.convert.ByteConverter;
+import org.anchoranalysis.image.convert.PrimitiveConverter;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferFloat;
 
@@ -75,7 +75,7 @@ public final class ConvertToFloatNoScaling extends VoxelsConverter<FloatBuffer> 
         while (bufferIn.buffer().hasRemaining()) {
             bufferOut
                     .buffer()
-                    .put((float) ByteConverter.unsignedByteToInt(bufferIn.buffer().get()));
+                    .put((float) PrimitiveConverter.unsignedByteToInt(bufferIn.buffer().get()));
         }
 
         return bufferOut;

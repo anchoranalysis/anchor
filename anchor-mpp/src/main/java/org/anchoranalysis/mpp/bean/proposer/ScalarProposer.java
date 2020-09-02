@@ -33,6 +33,6 @@ import org.anchoranalysis.image.extent.Resolution;
 
 public abstract class ScalarProposer extends NullParamsBean<ScalarProposer> {
 
-    public abstract double propose(RandomNumberGenerator randomNumberGenerator, Resolution res)
+    public abstract double propose(RandomNumberGenerator randomNumberGenerator, Resolution resolution)
             throws OperationFailedException;
 }

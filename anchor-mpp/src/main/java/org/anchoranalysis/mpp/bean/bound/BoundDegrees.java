@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.mpp.bean.bound;
 
-import org.anchoranalysis.core.unit.AngleConversionUtilities;
 import org.anchoranalysis.image.extent.Resolution;
 
 //
@@ -42,22 +41,26 @@ public class BoundDegrees extends BoundMinMax {
         super(0, 360);
     }
 
-    public BoundDegrees(BoundDegrees src) {
-        super(src);
+    public BoundDegrees(BoundDegrees source) {
+        super(source);
     }
 
     @Override
-    public double getMinResolved(Resolution sr, boolean do3D) {
-        return AngleConversionUtilities.convertDegreesToRadians(getMin());
+    public double getMinResolved(Resolution resolution, boolean do3D) {
+        return convertDegreesToRadians(getMin());
     }
 
     @Override
-    public double getMaxResolved(Resolution sr, boolean do3D) {
-        return AngleConversionUtilities.convertDegreesToRadians(getMax());
+    public double getMaxResolved(Resolution resolution, boolean do3D) {
+        return convertDegreesToRadians(getMax());
     }
 
     @Override
     public Bound duplicate() {
         return new BoundDegrees(this);
+    }
+    
+    private static double convertDegreesToRadians(double degrees) {
+        return (Math.PI / 180) * degrees;
     }
 }

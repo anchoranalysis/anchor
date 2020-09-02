@@ -28,17 +28,16 @@ package org.anchoranalysis.image.feature.bean.physical.convert;
 
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInputWithResolution;
-import org.anchoranalysis.image.convert.ImageUnitConverter;
-import org.anchoranalysis.image.extent.Resolution;
+import org.anchoranalysis.image.extent.UnitConverter;
 
 // converts a feature to a physical distance in a XY place that is isometric
 public class ConvertToPhysicalAreaXY<T extends FeatureInputWithResolution>
-        extends FeatureConvertRes<T> {
+        extends FeatureConvertUnits<T> {
 
     @Override
-    protected double convertToPhysical(double value, Resolution res)
+    protected double convertToPhysical(double value, UnitConverter unitConverter)
             throws FeatureCalculationException {
         // We use arbitrary direction as everything should be the same in a isometric XY plane
-        return ImageUnitConverter.convertToPhysicalArea(value, res);
+        return unitConverter.toPhysicalArea(value);
     }
 }

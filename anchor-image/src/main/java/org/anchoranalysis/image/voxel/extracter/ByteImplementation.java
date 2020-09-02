@@ -26,7 +26,7 @@
 package org.anchoranalysis.image.voxel.extracter;
 
 import java.nio.ByteBuffer;
-import org.anchoranalysis.image.convert.ByteConverter;
+import org.anchoranalysis.image.convert.PrimitiveConverter;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.max.MaxIntensityBufferByte;
@@ -50,7 +50,7 @@ class ByteImplementation extends Base<ByteBuffer> {
 
     @Override
     protected int voxelAtBufferIndex(ByteBuffer buffer, int index) {
-        return ByteConverter.unsignedByteToInt(buffer.get(index));
+        return PrimitiveConverter.unsignedByteToInt(buffer.get(index));
     }
 
     @Override
@@ -88,11 +88,11 @@ class ByteImplementation extends Base<ByteBuffer> {
 
     @Override
     protected boolean bufferValueGreaterThan(ByteBuffer buffer, int threshold) {
-        return ByteConverter.unsignedByteToInt(buffer.get()) > threshold;
+        return PrimitiveConverter.unsignedByteToInt(buffer.get()) > threshold;
     }
 
     @Override
     protected boolean bufferValueEqualTo(ByteBuffer buffer, int value) {
-        return ByteConverter.unsignedByteToInt(buffer.get()) == value;
+        return PrimitiveConverter.unsignedByteToInt(buffer.get()) == value;
     }
 }

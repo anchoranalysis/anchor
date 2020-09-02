@@ -27,7 +27,6 @@
 package org.anchoranalysis.image.voxel.buffer;
 
 import java.nio.Buffer;
-import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramFactory;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 
@@ -52,20 +51,19 @@ public abstract class VoxelBuffer<T extends Buffer> {
 
     public abstract int size();
 
-    public void transferFrom(int destIndex, VoxelBuffer<T> src) {
-        transferFrom(destIndex, src, destIndex);
+    public void transferFrom(int destIndex, VoxelBuffer<T> source) {
+        transferFrom(destIndex, source, destIndex);
     }
 
-    public void transferFromConvert(int destIndex, VoxelBuffer<?> src, int srcIndex) {
-        int val = src.getInt(srcIndex);
+    public void transferFromConvert(int destIndex, VoxelBuffer<?> source, int srcIndex) {
+        int val = source.getInt(srcIndex);
         putInt(destIndex, val);
     }
 
     @Override
     public String toString() {
-        Histogram h = HistogramFactory.create(this);
-        return h.toString();
+        return HistogramFactory.create(this).toString();
     }
 
-    public abstract void transferFrom(int destIndex, VoxelBuffer<T> src, int srcIndex);
+    public abstract void transferFrom(int destIndex, VoxelBuffer<T> source, int srcIndex);
 }

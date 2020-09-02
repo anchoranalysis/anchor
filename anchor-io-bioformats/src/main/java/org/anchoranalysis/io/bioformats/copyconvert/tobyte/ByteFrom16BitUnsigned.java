@@ -26,64 +26,57 @@
 
 package org.anchoranalysis.io.bioformats.copyconvert.tobyte;
 
-import java.nio.ByteBuffer;
-import loci.common.DataTools;
 import org.anchoranalysis.image.extent.Dimensions;
-import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
-import org.anchoranalysis.image.voxel.buffer.VoxelBufferByte;
+import loci.common.DataTools;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 public class ByteFrom16BitUnsigned extends ConvertToByte {
 
-    private int bytesPerPixel;
-    private int sizeXY;
-    private int sizeBytes;
+    // START REQUIRED ARGUMENTS
+    private final boolean littleEndian;
+    private final int maxTotalBits;
+    // END REQUIRED ARGUMENTS
 
-    private boolean littleEndian;
-    private int maxTotalBits;
-
-    public ByteFrom16BitUnsigned(boolean littleEndian, int maxTotalBits) {
-        super();
-        this.littleEndian = littleEndian;
-        this.maxTotalBits = maxTotalBits;
-    }
-
+    private ApplyScaling applyScaling;
+    
     @Override
-    protected void setupBefore(Dimensions dimensions, int numChannelsPerByteArray) {
-        bytesPerPixel = 2 * numChannelsPerByteArray;
-        sizeXY = dimensions.x() * dimensions.y();
-        sizeBytes = sizeXY * bytesPerPixel;
-    }
-
-    @Override
-    protected VoxelBuffer<ByteBuffer> convertSingleChannel(byte[] src, int channelRelative) {
+    protected void setupBefore(Dimensions dimensions, int numberChannelsPerArray) {
+        super.setupBefore(dimensions, numberChannelsPerArray);
         // we assign a default that maps from 16-bit to 8-bit
-        ApplyScaling applyScaling = new ApplyScaling(ConvertHelper.twoToPower(8 - maxTotalBits), 0);
-
-        byte[] crntChannelBytes = new byte[sizeXY];
-
-        int indOut = 0;
-        for (int indIn = 0; indIn < sizeBytes; indIn += bytesPerPixel) {
-            int s =
-                    (int)
-                            DataTools.bytesToShort(
-                                    src, indIn + (channelRelative * 2), 2, littleEndian);
+        applyScaling = new ApplyScaling(ConvertHelper.twoToPower(8 - maxTotalBits), 0);
+    }
+    
+    @Override
+    protected void convert(byte[] source, byte[] destination, int channelRelative) {
+        
+        int indexOut = 0;
+        for (int indexIn = 0; indexIn < sizeBytes; indexIn += bytesPerPixel) {
+            
+            int indexInPlus = indexIn + (channelRelative * 2);
+            
+            int value = (int) DataTools.bytesToShort(source, indexInPlus, 2, littleEndian);
 
             // Make unsigned
-            if (s < 0) {
-                s += 65536;
+            if (value < 0) {
+                value += 65536;
             }
 
-            s = applyScaling.apply(s);
+            value = applyScaling.apply(value);
 
-            if (s > 255) {
-                s = 255;
+            if (value > 255) {
+                value = 255;
             }
-            if (s < 0) {
-                s = 0;
+            if (value < 0) {
+                value = 0;
             }
 
-            crntChannelBytes[indOut++] = (byte) (s);
+            destination[indexOut++] = (byte) (value);
         }
-        return VoxelBufferByte.wrap(crntChannelBytes);
+    }
+    
+    @Override
+    protected int calculateBytesPerPixel(int numberChannelsPerArray) {
+        return 2 * numberChannelsPerArray;
     }
 }

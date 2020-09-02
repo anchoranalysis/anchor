@@ -36,10 +36,12 @@ import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.GroupingRoot;
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.functional.FunctionalList;
 
 /**
- * A bean where the definitions of many different NamedBeans can be specified and are indexed by a
- * collection of keys.
+ * A bean where the definitions of many different {@link NamedBean}s can be specified.
+ * 
+ * <p>These definitions are indexed by string identifiers.
  *
  * @author Owen Feehan
  */
@@ -49,12 +51,11 @@ public class Define extends AnchorBean<Define> {
     private Map<Class<?>, List<NamedBean<?>>> map = new HashMap<>();
 
     /**
-     * Adds a named-bean to our definitions, using the {#link
-     * org.anchoranalysis.bean.annotation.GroupingRoot} annotation to determine a group where
+     * Adds a named-bean to our definitions, using the {#link GroupingRoot} annotation to determine a group where
      * definitions are stored.
      *
-     * <p>Any added-bean must of a type that contains the GroupingRoot annotation in its class
-     * hierarchy
+     * <p>Any added-bean must of a type that contains the {@link GroupingRoot} annotation in its class
+     * hierarchy.
      *
      * @param bean a named-bean to add
      * @throws OperationFailedException
@@ -77,8 +78,7 @@ public class Define extends AnchorBean<Define> {
      */
     public void addAll(Define source) throws OperationFailedException {
         for (Class<?> key : source.keySet()) {
-            List<NamedBean<AnchorBean<?>>> beans = source.getList(key);
-            addList(beans);
+            addList(source.getList(key));
         }
     }
 
@@ -93,11 +93,7 @@ public class Define extends AnchorBean<Define> {
         }
 
         // We always create a new list, as a workaround for our inability to cast
-        List<NamedBean<T>> listOut = new ArrayList<>();
-        for (NamedBean<?> ni : listIn) {
-            listOut.add((NamedBean<T>) ni);
-        }
-        return listOut;
+        return FunctionalList.mapToList(listIn, bean -> (NamedBean<T>) bean );
     }
 
     @Override
@@ -106,10 +102,8 @@ public class Define extends AnchorBean<Define> {
         // We must also copy the map, and duplicate its contents, as otherwise a new empty
         Define out = new Define();
         for (Entry<Class<?>, List<NamedBean<?>>> entry : map.entrySet()) {
-            List<NamedBean<?>> dupList = duplicateList(entry.getValue());
-            out.map.put(entry.getKey(), dupList);
+            out.map.put(entry.getKey(), duplicateList(entry.getValue()));
         }
-
         return out;
     }
 
@@ -123,12 +117,17 @@ public class Define extends AnchorBean<Define> {
         return map.keySet();
     }
 
+    /**
+     * Gets an existing list for a group, or creates one if it doesn't already exist
+     *
+     * @return an existing or newly-created list
+     */
+    private List<NamedBean<?>> listForGroup(Class<?> groupingRoot) {
+        return map.computeIfAbsent(groupingRoot, key -> new ArrayList<>());
+    }
+    
     private static List<NamedBean<?>> duplicateList(List<NamedBean<?>> in) {
-        List<NamedBean<?>> out = new ArrayList<>();
-        for (NamedBean<?> nb : in) {
-            out.add(nb.duplicateBean());
-        }
-        return out;
+        return FunctionalList.mapToList(in, NamedBean::duplicateBean);
     }
 
     private static Class<?> findGroupingRoot(Class<?> leaf) throws OperationFailedException {
@@ -146,14 +145,5 @@ public class Define extends AnchorBean<Define> {
                 String.format(
                         "Bean-class %s is missing a groupingRoot. This must exist in the class-hierarchy for any item in a NamedDefinitions",
                         leaf));
-    }
-
-    /**
-     * Gets an existing list for a group, or creates one if it doesn't already exist
-     *
-     * @return an existing or newly-created list
-     */
-    private List<NamedBean<?>> listForGroup(Class<?> groupingRoot) {
-        return map.computeIfAbsent(groupingRoot, key -> new ArrayList<>());
     }
 }

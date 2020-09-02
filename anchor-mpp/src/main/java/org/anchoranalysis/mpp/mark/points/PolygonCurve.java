@@ -28,8 +28,8 @@ package org.anchoranalysis.mpp.mark.points;
 
 import org.anchoranalysis.core.error.OptionalOperationUnsupportedException;
 import org.anchoranalysis.core.geometry.Point3d;
-import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMembershipUtilities;
 import org.anchoranalysis.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.mpp.mark.Mark;
@@ -136,7 +136,7 @@ public class PolygonCurve extends PointListBase {
     }
 
     @Override
-    public int numDims() {
+    public int numberDimensions() {
         return 2;
     }
 

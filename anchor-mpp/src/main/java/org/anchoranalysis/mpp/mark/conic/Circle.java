@@ -82,7 +82,7 @@ public class Circle extends MarkWithPositionAndSingleRadius {
     }
 
     @Override
-    public int numDims() {
+    public int numberDimensions() {
         return 2;
     }
 }

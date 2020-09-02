@@ -28,7 +28,7 @@ package org.anchoranalysis.image.voxel.buffer.mean;
 
 import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
-import org.anchoranalysis.image.convert.ByteConverter;
+import org.anchoranalysis.image.convert.PrimitiveConverter;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 
@@ -42,7 +42,7 @@ public class MeanIntensityShortBuffer extends MeanIntensityBuffer<ShortBuffer> {
     @Override
     protected void processPixel(ShortBuffer pixels, int index) {
         short inPixel = pixels.get(index);
-        incrSumBuffer(index, ByteConverter.unsignedShortToInt(inPixel));
+        incrSumBuffer(index, PrimitiveConverter.unsignedShortToInt(inPixel));
     }
 
     @Override

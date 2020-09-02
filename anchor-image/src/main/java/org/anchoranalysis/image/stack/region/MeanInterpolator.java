@@ -29,7 +29,7 @@ package org.anchoranalysis.image.stack.region;
 import java.nio.ByteBuffer;
 import java.nio.ShortBuffer;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.convert.ByteConverter;
+import org.anchoranalysis.image.convert.PrimitiveConverter;
 import org.anchoranalysis.image.extent.Extent;
 
 class MeanInterpolator {
@@ -63,7 +63,7 @@ class MeanInterpolator {
                 int x1 = x0 + x;
 
                 if (e.contains(x1, y1, 0)) {
-                    int val = ByteConverter.unsignedByteToInt(bb.get(e.offset(x0 + x, y1)));
+                    int val = PrimitiveConverter.unsignedByteToInt(bb.get(e.offset(x0 + x, y1)));
                     sum += val;
 
                     cnt++;
@@ -93,7 +93,7 @@ class MeanInterpolator {
                 int x1 = x0 + x;
 
                 if (e.contains(x1, y1, 0)) {
-                    int val = ByteConverter.unsignedShortToInt(bb.get(e.offset(x0 + x, y1)));
+                    int val = PrimitiveConverter.unsignedShortToInt(bb.get(e.offset(x0 + x, y1)));
                     sum += val;
 
                     cnt++;

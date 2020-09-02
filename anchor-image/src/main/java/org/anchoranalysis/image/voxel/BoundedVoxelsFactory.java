@@ -29,7 +29,7 @@ import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.image.extent.BoundingBox;
+import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)

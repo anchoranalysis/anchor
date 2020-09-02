@@ -34,16 +34,16 @@ import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.bean.ImageBean;
 import org.anchoranalysis.image.histogram.Histogram;
 
-/** Calculates a per-pixel score */
+/** Calculates a per-voxel score */
 public abstract class VoxelScore extends ImageBean<VoxelScore> {
 
     /**
-     * Initializes the pixels-score.
+     * Initializes the voxels-score.
      *
-     * <p>Must be called before calc()
+     * <p>Must be called before {@link #calculate}.
      *
      * @param histograms one or more histograms associated with this calculation
-     * @param keyValueParams optional key-value params associated with this calculation
+     * @param keyValueParams optional {@link KeyValueParams} associated with this calculation
      * @throws InitException if anything goes wrong
      */
     public void init(List<Histogram> histograms, Optional<KeyValueParams> keyValueParams)
@@ -51,5 +51,5 @@ public abstract class VoxelScore extends ImageBean<VoxelScore> {
         // TO be overridden if needed
     }
 
-    public abstract double calculate(int[] pixelVals) throws FeatureCalculationException;
+    public abstract double calculate(int[] voxelIntensities) throws FeatureCalculationException;
 }

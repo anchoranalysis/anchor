@@ -33,6 +33,7 @@ import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.extent.Extent;
+import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.stack.Stack;
 
 // An energy-stack with associated parameters
@@ -80,6 +81,10 @@ public class EnergyStack {
 
     public Dimensions dimensions() {
         return energyStack.dimensions();
+    }
+    
+    public Resolution resolution() {
+        return dimensions().resolution();
     }
 
     public EnergyStack copyChangeParams(KeyValueParams paramsToAssign) {

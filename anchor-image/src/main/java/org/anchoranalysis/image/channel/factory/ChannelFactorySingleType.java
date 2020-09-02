@@ -45,8 +45,8 @@ public abstract class ChannelFactorySingleType {
     @Getter private final VoxelDataType dataType;
     private final VoxelsFactoryTypeBound<? extends Buffer> factory;
 
-    public Channel createEmptyInitialised(Dimensions dim) {
-        return create(factory.createInitialized(dim.extent()), dim.resolution());
+    public Channel createEmptyInitialised(Dimensions dimensions) {
+        return create(factory.createInitialized(dimensions.extent()), dimensions.resolution());
     }
 
     public Channel createEmptyUninitialised(Dimensions dimensions) {

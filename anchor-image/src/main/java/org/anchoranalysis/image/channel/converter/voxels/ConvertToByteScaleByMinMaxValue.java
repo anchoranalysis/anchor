@@ -30,7 +30,7 @@ import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
-import org.anchoranalysis.image.convert.ByteConverter;
+import org.anchoranalysis.image.convert.PrimitiveConverter;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferByte;
 
@@ -112,7 +112,7 @@ public final class ConvertToByteScaleByMinMaxValue extends VoxelsConverter<ByteB
 
         while (bufferIn.buffer().hasRemaining()) {
 
-            int valOrig = ByteConverter.unsignedShortToInt(bufferIn.buffer().get());
+            int valOrig = PrimitiveConverter.unsignedShortToInt(bufferIn.buffer().get());
 
             double val = scale * (valOrig - subtract);
 

@@ -27,7 +27,7 @@
 package org.anchoranalysis.image.voxel.buffer;
 
 import java.nio.ShortBuffer;
-import org.anchoranalysis.image.convert.ByteConverter;
+import org.anchoranalysis.image.convert.PrimitiveConverter;
 import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 
@@ -59,7 +59,7 @@ public final class VoxelBufferShort extends VoxelBuffer<ShortBuffer> {
 
     @Override
     public VoxelBuffer<ShortBuffer> duplicate() {
-        return new VoxelBufferShort(ByteConverter.copy(delegate));
+        return new VoxelBufferShort(DuplicateBuffer.copy(delegate));
     }
 
     @Override
@@ -69,7 +69,7 @@ public final class VoxelBufferShort extends VoxelBuffer<ShortBuffer> {
 
     @Override
     public int getInt(int index) {
-        return ByteConverter.unsignedShortToInt(delegate.get(index));
+        return PrimitiveConverter.unsignedShortToInt(delegate.get(index));
     }
 
     @Override
@@ -79,7 +79,7 @@ public final class VoxelBufferShort extends VoxelBuffer<ShortBuffer> {
 
     @Override
     public void putByte(int index, byte val) {
-        delegate.put(index, (short) ByteConverter.unsignedByteToInt(val));
+        delegate.put(index, (short) PrimitiveConverter.unsignedByteToInt(val));
     }
 
     @Override

@@ -25,7 +25,7 @@
  */
 package org.anchoranalysis.image.voxel;
 
-import org.anchoranalysis.image.extent.BoundingBox;
+import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.object.ObjectMask;
 
 /**

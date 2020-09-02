@@ -28,40 +28,40 @@ package org.anchoranalysis.io.bioformats.copyconvert.toint;
 
 import java.nio.IntBuffer;
 import loci.common.DataTools;
+import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferInt;
 
+@RequiredArgsConstructor
 public class IntFromUnsigned32BitInt extends ConvertToInt {
 
-    private int bytesPerPixel = 4;
+    private static final int BYTES_PER_PIXEL = 4;
+    
+    // START REQUIRED ARGUMENTS
+    private final boolean littleEndian;
+    // END REQUIRED ARGUMENTS
+    
     private int sizeXY;
     private int sizeBytes;
 
-    private boolean littleEndian;
-
-    public IntFromUnsigned32BitInt(boolean littleEndian) {
-        super();
-        this.littleEndian = littleEndian;
-    }
-
     @Override
-    protected void setupBefore(Dimensions dimensions, int numChannelsPerByteArray) {
+    protected void setupBefore(Dimensions dimensions, int numberChannelsPerArray) {
         sizeXY = dimensions.x() * dimensions.y();
-        sizeBytes = sizeXY * bytesPerPixel;
+        sizeBytes = sizeXY * BYTES_PER_PIXEL;
     }
 
     @Override
-    protected VoxelBuffer<IntBuffer> convertSingleChannel(byte[] src, int channelRelative) {
+    protected VoxelBuffer<IntBuffer> convertSingleChannel(byte[] source, int channelRelative) {
 
-        int[] crntChannelBytes = new int[sizeXY];
+        int[] out = new int[sizeXY];
 
-        int indOut = 0;
-        for (int indIn = 0; indIn < sizeBytes; indIn += bytesPerPixel) {
-            int s = DataTools.bytesToInt(src, indIn, bytesPerPixel, littleEndian);
-            crntChannelBytes[indOut++] = s;
+        int indexOut = 0;
+        for (int indexIn = 0; indexIn < sizeBytes; indexIn += BYTES_PER_PIXEL) {
+            int s = DataTools.bytesToInt(source, indexIn, BYTES_PER_PIXEL, littleEndian);
+            out[indexOut++] = s;
         }
 
-        return VoxelBufferInt.wrap(crntChannelBytes);
+        return VoxelBufferInt.wrap(out);
     }
 }

@@ -38,7 +38,9 @@ import org.anchoranalysis.io.bioformats.DestinationChannelForIndex;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-/** Converts a subset of bytes from a byte[] to one or more destination Channels */
+/** 
+ * Converts a subset of bytes from a byte[] to one or more destination channels.
+ * */
 @RequiredArgsConstructor
 public abstract class ConvertTo<T extends Buffer> {
 
@@ -50,14 +52,14 @@ public abstract class ConvertTo<T extends Buffer> {
     // END REQUIRED ARGUMENTS
 
     /**
-     * Copies the channels in the source buffer into a particular Channel
+     * Copies the channels in the source buffer into a particular {@link DestinationChannelForIndex}.
      *
      * @param dimensions scene-dimension
      * @param src the buffer we copy all channels from
      * @param destination finds an appropriate destination channel for a particular
      *     relative-channel-index
      * @param z the current slice we are working on
-     * @param numChannelsPerByteArray the total number of channels found in any one instance of src
+     * @param numChannelsPerArray the total number of channels found in any one instance of src
      * @throws IOException
      */
     public void copyAllChannels(
@@ -65,15 +67,15 @@ public abstract class ConvertTo<T extends Buffer> {
             byte[] src,
             DestinationChannelForIndex destination,
             int z,
-            int numChannelsPerByteArray)
+            int numChannelsPerArray)
             throws IOException {
 
         log.debug(String.format("copy to byte %d start", z));
 
-        setupBefore(dimensions, numChannelsPerByteArray);
+        setupBefore(dimensions, numChannelsPerArray);
 
         for (int channelRelative = 0;
-                channelRelative < numChannelsPerByteArray;
+                channelRelative < numChannelsPerArray;
                 channelRelative++) {
 
             VoxelBuffer<T> converted = convertSingleChannel(src, channelRelative);
@@ -84,22 +86,22 @@ public abstract class ConvertTo<T extends Buffer> {
     }
 
     /**
-     * Always called before any batch of calls to convertSingleChannel
+     * Always called before any batch of calls to {@link #convertSingleChannel}.
      *
      * @param dimensions dimension
-     * @param numChannelsPerByteArray the number of channels that are found in the byte-array that
+     * @param numberChannelsPerArray the number of channels that are found in the byte-array that
      *     will be passed to convertSingleChannel
      */
-    protected abstract void setupBefore(Dimensions dimensions, int numChannelsPerByteArray);
+    protected abstract void setupBefore(Dimensions dimensions, int numberChannelsPerArray);
 
     /**
-     * Converts a single-channel only
+     * Converts a single-channel only.
      *
-     * @param src source buffer containing the bytes we copy from
+     * @param source source buffer containing the bytes we copy from
      * @param channelIndexRelative 0 if the buffer contains only 1 channel per byte array, or
      *     otherwise the index of the channel
      */
-    protected abstract VoxelBuffer<T> convertSingleChannel(byte[] src, int channelIndexRelative)
+    protected abstract VoxelBuffer<T> convertSingleChannel(byte[] source, int channelIndexRelative)
             throws IOException;
 
     public static <S extends Buffer> void copyBytesIntoDestination(

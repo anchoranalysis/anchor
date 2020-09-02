@@ -36,9 +36,9 @@ import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.core.geometry.consumer.PointThreeDimensionalConsumer;
 import org.anchoranalysis.image.binary.mask.Mask;
-import org.anchoranalysis.image.convert.ByteConverter;
-import org.anchoranalysis.image.extent.BoundingBox;
+import org.anchoranalysis.image.convert.PrimitiveConverter;
 import org.anchoranalysis.image.extent.Extent;
+import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.BoundedVoxels;
 import org.anchoranalysis.image.voxel.Voxels;
@@ -195,8 +195,8 @@ public class IterateVoxelsByte {
 
                 int result =
                         operation.apply(
-                                ByteConverter.unsignedByteToInt(b1),
-                                ByteConverter.unsignedByteToInt(b2));
+                                PrimitiveConverter.unsignedByteToInt(b1),
+                                PrimitiveConverter.unsignedByteToInt(b2));
                 out.put((byte) result);
             }
 
@@ -228,7 +228,7 @@ public class IterateVoxelsByte {
     }
 
     private static void addFromBufferToRunning(ByteBuffer buffer, int offset, RunningSum running) {
-        int intensity = ByteConverter.unsignedByteToInt(buffer.get(offset));
+        int intensity = PrimitiveConverter.unsignedByteToInt(buffer.get(offset));
         running.increment(intensity, 1);
     }
 }

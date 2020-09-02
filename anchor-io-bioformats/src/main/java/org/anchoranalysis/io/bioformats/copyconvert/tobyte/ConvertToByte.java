@@ -27,12 +27,37 @@
 package org.anchoranalysis.io.bioformats.copyconvert.tobyte;
 
 import java.nio.ByteBuffer;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
+import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
+import org.anchoranalysis.image.voxel.buffer.VoxelBufferByte;
 import org.anchoranalysis.io.bioformats.copyconvert.ConvertTo;
 
 public abstract class ConvertToByte extends ConvertTo<ByteBuffer> {
-
+    
+    protected int sizeXY;
+    protected int bytesPerPixel;
+    protected int sizeBytes;
+    
     public ConvertToByte() {
         super(VoxelsWrapper::asByte);
     }
+
+    @Override
+    protected void setupBefore(Dimensions dimensions, int numberChannelsPerArray) {
+        sizeXY = dimensions.volumeXY();
+        bytesPerPixel = calculateBytesPerPixel(numberChannelsPerArray);
+        sizeBytes = sizeXY * bytesPerPixel;
+    }
+    
+    @Override
+    protected VoxelBuffer<ByteBuffer> convertSingleChannel(byte[] source, int channelRelative) {
+        byte[] out = new byte[sizeXY];
+        convert(source, out, channelRelative);
+        return VoxelBufferByte.wrap(out);
+    }
+    
+    protected abstract void convert(byte[] source, byte[] destination, int channelRelative);
+        
+    protected abstract int calculateBytesPerPixel(int numberChannelsPerArray);
 }

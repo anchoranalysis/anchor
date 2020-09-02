@@ -32,16 +32,17 @@ import lombok.Getter;
 import lombok.experimental.Accessors;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
-import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.extent.Resolution;
+import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.histogram.HistogramFactory;
 import org.anchoranalysis.image.interpolator.Interpolator;
 import org.anchoranalysis.image.interpolator.InterpolatorImgLib2Lanczos;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.scale.ScaleFactor;
+import org.anchoranalysis.image.scale.ScaleFactorUtilities;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.VoxelsPredicate;
@@ -52,13 +53,14 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.image.voxel.extracter.VoxelsExtracter;
 
 /**
- * A channel from an image
+ * A channel from an image.
  *
  * <p>This is one of the key image-processing classes in Anchor. An image may have one channel
  * (grayscale) or several. Channels of identical size can be bundled together to form a {@link
- * Stack}
+ * Stack}.
  *
- * <p>The channel has an underlying
+ * <p>The channel's voxels have an underlying data-type that is not exposed as a templated parameter, but
+ * can be accessed via {@link #getVoxelDataType}.
  *
  * @author Owen Feehan
  */
@@ -122,8 +124,8 @@ public class Channel {
     public Channel scaleXY(ScaleFactor scaleFactor, Interpolator interpolator) {
         // We round as sometimes we get values which, for example, are 7.999999, intended to be 8,
         // due to how we use our ScaleFactors
-        int newSizeX = (int) Math.round(scaleFactor.x() * dimensions().x());
-        int newSizeY = (int) Math.round(scaleFactor.y() * dimensions().y());
+        int newSizeX = ScaleFactorUtilities.scaleQuantity(scaleFactor.x(), dimensions().x());
+        int newSizeY = ScaleFactorUtilities.scaleQuantity(scaleFactor.y(), dimensions().y());
         return resizeXY(newSizeX, newSizeY, interpolator);
     }
 
@@ -137,9 +139,9 @@ public class Channel {
 
         Dimensions dimensionsScaled = dimensions.scaleXYTo(x, y);
 
-        Voxels<? extends Buffer> ba = voxels.extract().resizedXY(x, y, interpolator);
-        assert (ba.extent().volumeXY() == ba.sliceBuffer(0).capacity());
-        return FACTORY.create(ba, dimensionsScaled.resolution());
+        Voxels<? extends Buffer> resized = voxels.extract().resizedXY(x, y, interpolator);
+        assert (resized.extent().volumeXY() == resized.sliceBuffer(0).capacity());
+        return FACTORY.create(resized, dimensionsScaled.resolution());
     }
 
     public Channel projectMax() {
@@ -152,9 +154,9 @@ public class Channel {
 
     // Duplicates the current channel
     public Channel duplicate() {
-        Channel dup = FACTORY.create(voxels.duplicate(), dimensions().resolution());
-        assert (dup.voxels.extent().equals(voxels.extent()));
-        return dup;
+        Channel duplicated = FACTORY.create(voxels.duplicate(), dimensions().resolution());
+        assert (duplicated.voxels.extent().equals(voxels.extent()));
+        return duplicated;
     }
 
     /**
@@ -179,8 +181,8 @@ public class Channel {
         return voxels.extract().voxelsGreaterThan(threshold);
     }
 
-    public void updateResolution(Resolution res) {
-        dimensions = dimensions.duplicateChangeRes(res);
+    public void updateResolution(Resolution resolution) {
+        dimensions = dimensions.duplicateChangeRes(resolution);
     }
 
     public VoxelDataType getVoxelDataType() {
@@ -233,5 +235,9 @@ public class Channel {
 
     public Extent extent() {
         return voxels.extent();
+    }
+
+    public Resolution resolution() {
+        return dimensions.resolution();
     }
 }

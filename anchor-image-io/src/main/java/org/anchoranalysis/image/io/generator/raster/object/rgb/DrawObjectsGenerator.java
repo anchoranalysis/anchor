@@ -36,7 +36,7 @@ import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.properties.ObjectCollectionWithProperties;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
-import org.anchoranalysis.io.bean.color.generator.HSBColorSetGenerator;
+import org.anchoranalysis.io.bean.color.list.HSB;
 import org.anchoranalysis.io.bean.object.writer.Outline;
 import org.anchoranalysis.io.color.ColorIndexModulo;
 import org.anchoranalysis.overlay.bean.DrawObject;
@@ -132,7 +132,7 @@ public class DrawObjectsGenerator extends ObjectsOnRGBGenerator {
     }
 
     private static ColorIndex defaultColorsFor(int size) {
-        return new HSBColorSetGenerator().generateColors(size);
+        return new HSB().create(size);
     }
     
 

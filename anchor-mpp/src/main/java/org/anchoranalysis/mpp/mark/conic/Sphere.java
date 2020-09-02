@@ -79,7 +79,7 @@ public class Sphere extends MarkWithPositionAndSingleRadius {
     }
 
     @Override
-    public int numDims() {
+    public int numberDimensions() {
         return 3;
     }
 }

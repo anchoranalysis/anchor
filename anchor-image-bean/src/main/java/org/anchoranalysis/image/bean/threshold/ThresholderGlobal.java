@@ -61,13 +61,13 @@ public class ThresholderGlobal extends Thresholder {
     }
 
     private BinaryVoxels<ByteBuffer> thresholdForHistogram(
-            Histogram hist,
+            Histogram histogram,
             VoxelsWrapper inputBuffer,
             BinaryValuesByte bvOut,
             Optional<ObjectMask> objectMask)
             throws OperationFailedException {
 
-        int thresholdVal = calculateLevel.calculateLevel(hist);
+        int thresholdVal = calculateLevel.calculateLevel(histogram);
         assert (thresholdVal >= 0);
         return VoxelsThresholder.thresholdForLevel(
                 inputBuffer, thresholdVal, bvOut, objectMask, false);

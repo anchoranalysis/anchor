@@ -34,11 +34,12 @@ import lombok.experimental.Accessors;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
+import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.scale.ScaleFactor;
 import org.anchoranalysis.image.scale.ScaleFactorUtilities;
 
 /**
- * The dimensions of an image (in voxels), together with the image resolution
+ * The dimensions of an image (in voxels), together with the image resolution.
  *
  * <p>This class is <b>immutable</b>.
  */
@@ -146,5 +147,14 @@ public final class Dimensions implements Serializable {
     @Override
     public String toString() {
         return extent.toString();
+    }
+
+    /**
+     * Converts voxelized measurements to/from physical units.
+     * 
+     * @return a converter that will perform conversions using current resolution.
+     */
+    public UnitConverter unitConvert() {
+        return resolution.unitConvert();
     }
 }

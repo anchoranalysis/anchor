@@ -38,8 +38,8 @@ import org.anchoranalysis.core.geometry.Point2d;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.PointConverter;
-import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.orientation.Orientation2D;
 import org.anchoranalysis.image.points.BoundingBoxFromPoints;
 import org.anchoranalysis.math.rotation.RotationMatrix;
@@ -175,7 +175,7 @@ public class RotatableBoundingBox extends MarkWithPosition {
     }
 
     @Override
-    public int numDims() {
+    public int numberDimensions() {
         return 2;
     }
 

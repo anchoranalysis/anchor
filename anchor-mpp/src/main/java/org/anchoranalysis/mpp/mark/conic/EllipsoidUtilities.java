@@ -35,7 +35,7 @@ import org.anchoranalysis.math.rotation.RotationMatrix;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class EllipsoidUtilities {
 
-    public static double[] normalisedRadii(Ellipsoid mark, Resolution res) {
+    public static double[] normalisedRadii(Ellipsoid mark, Resolution resolution) {
         // We re-calculate all the bounds to take account of the different z-resolution
 
         // We get the rotated points of (1,0,0)*getRadii().x() and (0,1,0)*getRadii().y() and
@@ -46,7 +46,7 @@ public class EllipsoidUtilities {
         Point3d yRot = rotMatrix.rotatedPoint(new Point3d(0, mark.getRadii().y(), 0));
         Point3d zRot = rotMatrix.rotatedPoint(new Point3d(0, 0, mark.getRadii().z()));
 
-        double zRel = res.getZRelativeResolution();
+        double zRel = resolution.zRelative();
         // We adjust each point for the z contribution
         xRot.setZ(xRot.z() * zRel);
         yRot.setZ(yRot.z() * zRel);

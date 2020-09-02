@@ -41,8 +41,16 @@ import org.apache.commons.lang.ArrayUtils;
 
 public final class Histogram {
 
+    /**
+     * Consumers a bin and corresponding count.
+     */
+    @FunctionalInterface
+    public interface BinConsumer {
+        void accept(int bin, int count);
+    }
+    
     /** Minimum bin-value (by default 0) inclusive */
-    @Getter private int minBin;
+    private int minBin;
 
     /** Maximum bin-value inclusive */
     @Getter private int maxBin;
@@ -109,7 +117,7 @@ public final class Histogram {
     }
 
     public void removeBelowThreshold(int threshold) {
-        for (int bin = getMinBin(); bin < threshold; bin++) {
+        for (int bin = minBin; bin < threshold; bin++) {
             zeroValue(bin);
         }
         // Now chop off the unneeded values and set a new minimum
@@ -135,12 +143,12 @@ public final class Histogram {
             throw new OperationFailedException(
                     "Cannot add histograms with different max-bin-values");
         }
-        if (this.getMinBin() != other.getMinBin()) {
+        if (this.minBin != other.minBin) {
             throw new OperationFailedException(
                     "Cannot add histograms with different min-bin-values");
         }
 
-        for (int bin = getMinBin(); bin <= getMaxBin(); bin++) {
+        for (int bin = minBin; bin <= getMaxBin(); bin++) {
             int otherCount = other.getCount(bin);
             incrementCount(bin, otherCount);
             sumCount += otherCount;
@@ -430,12 +438,12 @@ public final class Histogram {
 
     public Histogram extractValuesFromRight(long numberValues) {
 
-        Histogram out = new Histogram(getMaxBin());
+        Histogram out = new Histogram(maxBin);
 
         long remaining = numberValues;
 
         // We keep taking pixels from the histogram until we have reached our quota
-        for (int bin = getMaxBin(); bin >= getMinBin(); bin--) {
+        for (int bin = getMaxBin(); bin >= minBin; bin--) {
 
             int count = getCount(bin);
 
@@ -454,12 +462,12 @@ public final class Histogram {
 
     public Histogram extractValuesFromLeft(long numberValues) {
 
-        Histogram out = new Histogram(getMaxBin());
+        Histogram out = new Histogram(maxBin);
 
         long remaining = numberValues;
 
         // We keep taking pixels from the histogram until we have reached our quota
-        for (int bin = getMinBin(); bin <= getMaxBin(); bin++) {
+        for (int bin = minBin; bin <= getMaxBin(); bin++) {
 
             int count = getCount(bin);
 
@@ -496,6 +504,29 @@ public final class Histogram {
         }
 
         return sum / sumCount;
+    }
+    
+    /**
+     * Calls {@code consumer} for every bin-value, <i>increasing</i> from min to max.
+     * 
+     * @param consumer called for every bin
+     */
+    public void iterateBins( BinConsumer consumer) {
+        for (int bin = minBin; bin <= maxBin; bin++) {
+            consumer.accept(bin, getCount(bin));
+        }
+    }
+    
+    /**
+     * Calls {@code consumer} for every bin-value until a limit, <i>increasing</i> from min to limit (inclusive).
+     * 
+     * @param limit the maximum-bin to consume
+     * @param consumer called for every bin
+     */
+    public void iterateBinsUntil(int limit, BinConsumer consumer) {
+        for (int bin = minBin; bin <= limit; bin++) {
+            consumer.accept(bin, getCount(bin) );
+        }
     }
 
     private long calculateSumHelper(LongUnaryOperator func) {

@@ -28,7 +28,7 @@ package org.anchoranalysis.image.object.combine;
 
 import java.nio.ByteBuffer;
 import java.util.Optional;
-import org.anchoranalysis.image.extent.BoundingBox;
+import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.voxel.BoundedVoxels;
 
 public abstract class CountIntersectingVoxels {

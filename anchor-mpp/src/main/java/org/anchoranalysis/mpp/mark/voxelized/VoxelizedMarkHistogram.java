@@ -34,9 +34,9 @@ import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
-import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.extent.Extent;
+import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.BoundedVoxels;
@@ -117,7 +117,7 @@ class VoxelizedMarkHistogram implements VoxelizedMark {
     public VoxelStatistics statisticsForAllSlicesMaskSlice(
             int channelID, int regionID, int maskChannelID) {
 
-        Histogram h = new Histogram(255);
+        Histogram histogram = new Histogram(255);
 
         // We loop through each slice
         for (int z = 0; z < partitionList.get(0).numSlices(); z++) {
@@ -127,13 +127,13 @@ class VoxelizedMarkHistogram implements VoxelizedMark {
 
             if (hMaskChannel.hasAboveZero()) {
                 try {
-                    h.addHistogram(hChannel);
+                    histogram.addHistogram(hChannel);
                 } catch (OperationFailedException e) {
                     throw new AnchorImpossibleSituationException();
                 }
             }
         }
-        return new VoxelStatisticsFromHistogram(h);
+        return new VoxelStatisticsFromHistogram(histogram);
     }
 
     // Calculates the pixels for a mark

@@ -47,8 +47,8 @@ public abstract class BoundMinMax extends Bound {
         delegate = new ResolvedBound(min, max);
     }
 
-    public BoundMinMax(BoundMinMax src) {
-        delegate = new ResolvedBound(src.delegate);
+    public BoundMinMax(BoundMinMax source) {
+        delegate = new ResolvedBound(source.delegate);
     }
 
     // Getters and Setters

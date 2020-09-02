@@ -55,11 +55,11 @@ public class RotationBounds3D extends RotationBounds {
 
     @Override
     public Orientation randomOrientation(
-            RandomNumberGenerator randomNumberGenerator, Resolution res) {
+            RandomNumberGenerator randomNumberGenerator, Resolution resolution) {
         return new Orientation3DEulerAngles(
-                randomizeRot(rotationX, randomNumberGenerator, res),
-                randomizeRot(rotationY, randomNumberGenerator, res),
-                randomizeRot(rotationZ, randomNumberGenerator, res));
+                randomizeRotation(rotationX, randomNumberGenerator, resolution),
+                randomizeRotation(rotationY, randomNumberGenerator, resolution),
+                randomizeRotation(rotationZ, randomNumberGenerator, resolution));
     }
 
     @Override
@@ -69,8 +69,8 @@ public class RotationBounds3D extends RotationBounds {
                 getBeanName(), getRotationX(), getRotationY(), rotationZ);
     }
 
-    private static double randomizeRot(
-            Bound bound, RandomNumberGenerator randomNumberGenerator, Resolution res) {
-        return bound.resolve(res, true).randOpen(randomNumberGenerator);
+    private static double randomizeRotation(
+            Bound bound, RandomNumberGenerator randomNumberGenerator, Resolution resolution) {
+        return bound.resolve(resolution, true).randOpen(randomNumberGenerator);
     }
 }

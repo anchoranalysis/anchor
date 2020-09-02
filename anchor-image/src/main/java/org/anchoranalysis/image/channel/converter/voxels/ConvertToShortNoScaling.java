@@ -30,7 +30,7 @@ import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
-import org.anchoranalysis.image.convert.ByteConverter;
+import org.anchoranalysis.image.convert.PrimitiveConverter;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferShort;
 import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
@@ -64,7 +64,7 @@ public final class ConvertToShortNoScaling extends VoxelsConverter<ShortBuffer> 
         ShortBuffer bufferOut = ShortBuffer.allocate(bufferIn.buffer().capacity());
 
         while (bufferIn.buffer().hasRemaining()) {
-            bufferOut.put((byte) ByteConverter.unsignedIntToShort(bufferIn.buffer().get()));
+            bufferOut.put((byte) PrimitiveConverter.unsignedIntToShort(bufferIn.buffer().get()));
         }
 
         return VoxelBufferShort.wrap(bufferOut);
@@ -80,7 +80,7 @@ public final class ConvertToShortNoScaling extends VoxelsConverter<ShortBuffer> 
         ShortBuffer bufferOut = ShortBuffer.allocate(bufferIn.buffer().capacity());
 
         while (bufferIn.buffer().hasRemaining()) {
-            bufferOut.put((byte) ByteConverter.unsignedByteToShort(bufferIn.buffer().get()));
+            bufferOut.put((byte) PrimitiveConverter.unsignedByteToShort(bufferIn.buffer().get()));
         }
 
         return VoxelBufferShort.wrap(bufferOut);

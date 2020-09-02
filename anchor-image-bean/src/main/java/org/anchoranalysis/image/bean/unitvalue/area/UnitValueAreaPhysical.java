@@ -30,11 +30,8 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.unit.SpatialConversionUtilities;
-import org.anchoranalysis.core.unit.SpatialConversionUtilities.UnitSuffix;
 import org.anchoranalysis.image.bean.nonbean.error.UnitValueException;
-import org.anchoranalysis.image.convert.ImageUnitConverter;
-import org.anchoranalysis.image.extent.Resolution;
+import org.anchoranalysis.image.extent.UnitConverter;
 
 /**
  * Area expressed in physical coordinates
@@ -44,28 +41,23 @@ import org.anchoranalysis.image.extent.Resolution;
 public class UnitValueAreaPhysical extends UnitValueArea {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private String prefix = "";
+    @BeanField @Getter @Setter private String unitType = "";
     // END BEAN PROPERTIES
 
     @Override
-    public double resolveToVoxels(Optional<Resolution> resolution) throws UnitValueException {
+    public double resolveToVoxels(Optional<UnitConverter> unitConverter) throws UnitValueException {
 
-        if (!resolution.isPresent()) {
+        if (!unitConverter.isPresent()) {
             throw new UnitValueException(
                     "An image resolution is required to calculate physical-area but it is missing");
         }
-
-        UnitSuffix unitPrefix = SpatialConversionUtilities.suffixFromMeterString(prefix);
-
-        double valueAsBase = SpatialConversionUtilities.convertFromUnits(getValue(), unitPrefix);
-
-        return ImageUnitConverter.convertFromPhysicalArea(valueAsBase, resolution.get());
+        return unitConverter.get().fromPhysicalArea(getValue(), unitType);
     }
 
     @Override
     public String toString() {
-        if (prefix != null && !prefix.isEmpty()) {
-            return String.format("%.2f%s", getValue(), prefix);
+        if (unitType != null && !unitType.isEmpty()) {
+            return String.format("%.2f%s", getValue(), unitType);
         } else {
             return String.format("%.2f", getValue());
         }

@@ -27,7 +27,7 @@
 package org.anchoranalysis.image.voxel.buffer;
 
 import java.nio.ByteBuffer;
-import org.anchoranalysis.image.convert.ByteConverter;
+import org.anchoranalysis.image.convert.PrimitiveConverter;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 
@@ -75,7 +75,7 @@ public final class VoxelBufferByte extends VoxelBuffer<ByteBuffer> {
 
     @Override
     public VoxelBuffer<ByteBuffer> duplicate() {
-        return new VoxelBufferByte(ByteConverter.copy(delegate));
+        return new VoxelBufferByte(DuplicateBuffer.copy(delegate));
     }
 
     @Override
@@ -85,7 +85,7 @@ public final class VoxelBufferByte extends VoxelBuffer<ByteBuffer> {
 
     @Override
     public int getInt(int index) {
-        return ByteConverter.unsignedByteToInt(delegate.get(index));
+        return PrimitiveConverter.unsignedByteToInt(delegate.get(index));
     }
 
     @Override

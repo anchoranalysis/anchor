@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.stream.Stream;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
+import org.anchoranalysis.core.functional.RepeatUtilities;
 import org.anchoranalysis.core.functional.function.CheckedBiFunction;
 import org.anchoranalysis.core.functional.function.CheckedUnaryOperator;
 import org.anchoranalysis.image.channel.Channel;
@@ -65,9 +66,7 @@ public class Stack implements Iterable<Channel> {
 
     public Stack(Dimensions dimensions, ChannelFactorySingleType factory, int numberChannels) {
         this();
-        for (int i = 0; i < numberChannels; i++) {
-            delegate.addChannel(factory.createEmptyInitialised(dimensions));
-        }
+        RepeatUtilities.repeat(numberChannels, () -> delegate.addChannel(factory.createEmptyInitialised(dimensions)));
     }
 
     public Stack(Channel... channels) throws IncorrectImageSizeException {
@@ -202,6 +201,10 @@ public class Stack implements Iterable<Channel> {
     public Dimensions dimensions() {
         return delegate.getChannel(0).dimensions();
     }
+    
+    public Resolution resolution() {
+        return dimensions().resolution();
+    }
 
     public Extent extent() {
         return dimensions().extent();
@@ -230,11 +233,11 @@ public class Stack implements Iterable<Channel> {
     }
 
     public List<Channel> asListChannels() {
-        ArrayList<Channel> list = new ArrayList<>();
-        for (int i = 0; i < delegate.getNumberChannels(); i++) {
-            list.add(delegate.getChannel(i));
+        ArrayList<Channel> out = new ArrayList<>();
+        for (Channel channel : delegate) {
+            out.add(channel);
         }
-        return list;
+        return out;
     }
 
     // Returns true if the data type of all channels is equal to
@@ -281,16 +284,16 @@ public class Stack implements Iterable<Channel> {
 
         HashCodeBuilder builder = new HashCodeBuilder().append(getNumberChannels());
 
-        for (int i = 0; i < getNumberChannels(); i++) {
-            builder.append(getChannel(i));
+        for (Channel channel : this) {
+            builder.append(channel);
         }
 
         return builder.toHashCode();
     }
 
-    public void updateResolution(Resolution res) {
-        for (int i = 0; i < getNumberChannels(); i++) {
-            getChannel(i).updateResolution(res);
+    public void updateResolution(Resolution resolution) {
+        for (Channel channel : this) {
+            channel.updateResolution(resolution);
         }
     }
 }
