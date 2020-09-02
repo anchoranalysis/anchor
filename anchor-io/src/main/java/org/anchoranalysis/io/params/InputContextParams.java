@@ -57,7 +57,7 @@ public class InputContextParams {
     @Getter @Setter private Set<String> inputFilterExtensions = fallBackFilterExtensions();
 
     /** Parameters for debug-mode (only defined if we are in debug mode) */
-    @Getter @Setter private Optional<DebugModeParams> debugModeParams;
+    @Getter @Setter private Optional<DebugModeParams> debugModeParams = Optional.empty();
 
     // This should always be ab absolute path, never a relative one
     public void setInputDir(Optional<Path> inputDir) throws IOException {

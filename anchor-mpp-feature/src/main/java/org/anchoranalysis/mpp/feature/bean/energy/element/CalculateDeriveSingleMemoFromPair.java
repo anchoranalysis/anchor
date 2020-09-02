@@ -43,6 +43,6 @@ public class CalculateDeriveSingleMemoFromPair
     @Override
     protected FeatureInputSingleMemo execute(FeatureInputPairMemo input) {
         return new FeatureInputSingleMemo(
-                first ? input.getObj1() : input.getObj2(), input.getEnergyStackOptional());
+                first ? input.getObject1() : input.getObject2(), input.getEnergyStackOptional());
     }
 }

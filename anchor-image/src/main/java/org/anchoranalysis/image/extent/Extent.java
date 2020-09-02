@@ -316,12 +316,12 @@ public final class Extent implements Serializable {
                         }));
     }
 
-    public Extent subtract(ReadableTuple3i toSubtract) {
-        return new Extent(Point3i.immutableSubtract(size, toSubtract));
+    public Point3i subtract(ReadableTuple3i toSubtract) {
+        return Point3i.immutableSubtract(size, toSubtract);
     }
 
     public Extent divide(int factor) {
-        return new Extent(immutablePointOperation(p -> p.divideBy(factor)));
+        return new Extent(immutablePointOperation(point -> point.divideBy(factor)));
     }
 
     /**

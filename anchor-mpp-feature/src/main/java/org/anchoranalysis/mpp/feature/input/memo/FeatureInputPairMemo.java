@@ -28,36 +28,22 @@ package org.anchoranalysis.mpp.feature.input.memo;
 
 import java.util.Optional;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Value;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.feature.input.FeatureInputEnergy;
 import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = true) @Value
 public class FeatureInputPairMemo extends FeatureInputEnergy {
 
-    private VoxelizedMarkMemo obj1;
-    private VoxelizedMarkMemo obj2;
+    private VoxelizedMarkMemo object1;
+    private VoxelizedMarkMemo object2;
 
     public FeatureInputPairMemo(
-            VoxelizedMarkMemo obj1, VoxelizedMarkMemo obj2, EnergyStack energyStack) {
+            VoxelizedMarkMemo object1, VoxelizedMarkMemo object2, EnergyStack energyStack) {
         super(Optional.of(energyStack));
-        this.obj1 = obj1;
-        this.obj2 = obj2;
-    }
-
-    public VoxelizedMarkMemo getObj1() {
-        return obj1;
-    }
-
-    public void setObj1(VoxelizedMarkMemo obj1) {
-        this.obj1 = obj1;
-    }
-
-    public VoxelizedMarkMemo getObj2() {
-        return obj2;
-    }
-
-    public void setObj2(VoxelizedMarkMemo obj2) {
-        this.obj2 = obj2;
+        this.object1 = object1;
+        this.object2 = object2;
     }
 }

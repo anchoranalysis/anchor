@@ -57,10 +57,10 @@ public abstract class FeatureListProviderReferencedFeatures<T extends FeatureInp
 
     private void ensureReferencedFeaturesCalled(SharedFeaturesInitParams so) throws InitException {
         if (referencesFeatureListCreator != null && so != null) {
-            for (String s : referencesFeatureListCreator.set()) {
+            for (String featureListReference : referencesFeatureListCreator.set()) {
 
                 try {
-                    so.getFeatureListSet().getException(s);
+                    so.getFeatureListSet().getException(featureListReference);
                 } catch (NamedProviderGetException e) {
                     throw new InitException(e.summarize());
                 }
