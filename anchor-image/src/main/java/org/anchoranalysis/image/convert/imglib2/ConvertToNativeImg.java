@@ -42,7 +42,7 @@ import net.imglib2.type.numeric.real.FloatType;
 
 /**
  * Converts the {@link Voxels} and {@link VoxelBuffer} data-types used in Anchor to the {@link
- * NativeImg} used in <a href="https://imagej.net/ImgLib2>ImgLib2</a>.
+ * NativeImg} used in <a href="https://imagej.net/ImgLib2">ImgLib2</a>.
  *
  * @author Owen Feehan
  */

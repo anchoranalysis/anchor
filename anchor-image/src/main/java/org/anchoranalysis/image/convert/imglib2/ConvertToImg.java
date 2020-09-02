@@ -48,7 +48,7 @@ import lombok.NoArgsConstructor;
 
 /**
  * Converts the {@link Voxels} and {@link VoxelBuffer} data-types used in Anchor to the {@link
- * Img} used in <a href="https://imagej.net/ImgLib2>ImgLib2</a>.
+ * Img} used in <a href="https://imagej.net/ImgLib2">ImgLib2</a>.
  *
  * @author Owen Feehan
  */

@@ -24,22 +24,42 @@
  * #L%
  */
 
-package org.anchoranalysis.mpp.segment.kernel;
+package org.anchoranalysis.mpp.segment.optimization.feedback.aggregate;
 
-import org.anchoranalysis.mpp.segment.kernel.proposer.KernelWithIdentifier;
-import org.anchoranalysis.mpp.segment.optimization.step.OptimizationStep;
-import org.anchoranalysis.mpp.segment.transformer.TransformationContext;
+import java.util.ArrayList;
+import org.anchoranalysis.mpp.segment.optimization.feedback.FeedbackBeginParameters;
+import org.anchoranalysis.mpp.segment.optimization.step.Reporting;
 
-/**
- * @author Owen Feehan
- * @param <S> kernel-type
- * @param <T> assignment type
- */
-public interface KernelAssigner<S, T> {
+public class AggregateReceiverList<T> implements AggregateReceiver<T> {
 
-    void assignProposal(
-            OptimizationStep<S, T> optStep,
-            TransformationContext context,
-            KernelWithIdentifier<S> kernel)
-            throws KernelCalculateEnergyException;
+    private ArrayList<AggregateReceiver<T>> delegate = new ArrayList<>();
+
+    public boolean add(AggregateReceiver<T> e) {
+        return delegate.add(e);
+    }
+
+    @Override
+    public void aggStart(FeedbackBeginParameters<T> initParams, Aggregator agg)
+            throws AggregatorException {
+
+        for (AggregateReceiver<T> receiver : delegate) {
+            receiver.aggStart(initParams, agg);
+        }
+    }
+
+    @Override
+    public void aggEnd(Aggregator agg) throws AggregatorException {
+
+        for (AggregateReceiver<T> receiver : delegate) {
+            receiver.aggEnd(agg);
+        }
+    }
+
+    @Override
+    public void aggReport(Reporting<T> reporting, Aggregator agg) throws AggregatorException {
+
+        for (AggregateReceiver<T> receiver : delegate) {
+            receiver.aggReport(reporting, agg);
+        }
+    }
 }

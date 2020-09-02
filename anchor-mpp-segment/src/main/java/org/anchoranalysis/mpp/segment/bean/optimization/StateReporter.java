@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-image-bean
+ * anchor-mpp-sgmn
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -23,7 +23,21 @@
  * THE SOFTWARE.
  * #L%
  */
+
+package org.anchoranalysis.mpp.segment.bean.optimization;
+
+import java.util.Optional;
+import org.anchoranalysis.bean.AnchorBean;
+import org.anchoranalysis.mpp.segment.transformer.StateTransformer;
+
 /**
- * Reusable relations to a threshold.
+ * Converts the optimization state to a form that the reporter needs
+ *
+ * @author Owen Feehan
  */
-package org.anchoranalysis.image.bean.threshold.relation;
+public abstract class StateReporter<T, S> extends AnchorBean<StateReporter<T, S>> {
+
+    public abstract StateTransformer<T, S> primaryReport();
+
+    public abstract Optional<StateTransformer<T, S>> secondaryReport();
+}
