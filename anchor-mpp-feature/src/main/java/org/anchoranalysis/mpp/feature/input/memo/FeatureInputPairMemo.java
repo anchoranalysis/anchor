@@ -28,7 +28,6 @@ package org.anchoranalysis.mpp.feature.input.memo;
 
 import java.util.Optional;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import lombok.Value;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.feature.input.FeatureInputEnergy;

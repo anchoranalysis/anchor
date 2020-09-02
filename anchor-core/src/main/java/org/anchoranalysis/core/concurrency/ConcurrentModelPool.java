@@ -26,8 +26,8 @@
 package org.anchoranalysis.core.concurrency;
 
 import java.util.concurrent.PriorityBlockingQueue;
-import java.util.function.Function;
 import java.util.stream.IntStream;
+import org.anchoranalysis.core.functional.function.CheckedFunction;
 
 /**
  * Keeps concurrent copies of a model to be used by different threads.
@@ -64,22 +64,34 @@ public class ConcurrentModelPool<T> {
         queue = new PriorityBlockingQueue<>();
         
         addNumberModels( plan.numberGPUs(), true, createModel);
-        addNumberModels( plan.totalMinusGPUs(), false, createModel);
+        
+        // We deliberately create as many GPUs as the total-number of jobs, in case the GPUs are abandoned.
+        addNumberModels( plan.totalNumber(), false, createModel);
     }
     
     /**
      * Execute on the next available model (or wait until one becomes available)
      *
-     * @param functionToExecute function to execute on a given model
-     * @param <S> return type 
-     * @throws InterruptedException
+     * @param functionToExecute function to execute on a given model, possibly throwing an exception.
+     * @param <S> return type
+     * @throws Throwable 
      */
-    public <S> S excuteOrWait( Function<T,S> functionToExecute ) throws InterruptedException {
-        WithPriority<T> model = getOrWait();
-        try {
-            return functionToExecute.apply(model.get());
-        } finally {
-            giveBack(model);
+    public <S> S excuteOrWait( CheckedFunction<T,S,ConcurrentModelException> functionToExecute ) throws Throwable {  // NOSONAR
+        while(true) {
+            WithPriority<T> model = getOrWait();
+            try {
+                S returnValue = functionToExecute.apply(model.get());
+                
+                // When finished executing without error we return the model to the pool
+                giveBack(model);
+                return returnValue;
+            } catch (ConcurrentModelException e) {
+                if (!model.isGPU()) {
+                    // Rethrow if error occurred on a CPU
+                    throw e.getCause();
+                }
+                // Otherwise we try to execute the function again on the next available model (which will be eventually a CPU).
+            }
         }
     }
     
