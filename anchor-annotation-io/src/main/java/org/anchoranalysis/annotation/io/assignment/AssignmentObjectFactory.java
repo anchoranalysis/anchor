@@ -102,7 +102,7 @@ public class AssignmentObjectFactory {
 
         FeatureCalculatorSingle<FeatureInputPairObjects> session;
         try {
-            session = featureEvaluator.createAndStartSession();
+            session = featureEvaluator.createFeatureSession();
         } catch (OperationFailedException e) {
             throw new FeatureCalculationException(e);
         }

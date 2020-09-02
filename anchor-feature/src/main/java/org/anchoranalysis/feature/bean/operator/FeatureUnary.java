@@ -26,23 +26,34 @@
 
 package org.anchoranalysis.feature.bean.operator;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
- * A single-element feature that accepts the most generic of parameters {#link {@link FeatureInput}}
+ * A feature that contains another feature as a bean-parameter.
+ * 
+ * <p>Usually some conversion occurs between one feature-type and another.
  *
  * @author Owen Feehan
- * @param <T> input-type
+ * @param <T> input-type used for calculating feature
+ * @param <S> input-type used for the "item" that is the single element
  */
-public abstract class FeatureGenericSingleElem<T extends FeatureInput>
-        extends FeatureSingleElem<T, T> {
+@NoArgsConstructor
+@AllArgsConstructor
+public abstract class FeatureUnary<T extends FeatureInput, S extends FeatureInput>
+        extends Feature<T> {
 
-    public FeatureGenericSingleElem() {
-        super();
-    }
+    // START BEAN PARAMETERS
+    @BeanField @Getter @Setter private Feature<S> item = null;
+    // END BEAN PARAMETERS
 
-    public FeatureGenericSingleElem(Feature<T> feature) {
-        super(feature);
+    @Override
+    public Class<? extends FeatureInput> inputType() {
+        return item.inputType();
     }
 }

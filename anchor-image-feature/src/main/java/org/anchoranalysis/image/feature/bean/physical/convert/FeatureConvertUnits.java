@@ -37,11 +37,11 @@ import org.anchoranalysis.image.extent.UnitConverter;
 import org.anchoranalysis.image.extent.SpatialUnits.UnitSuffix;
 import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.extent.SpatialUnits;
-import org.anchoranalysis.image.feature.bean.physical.FeatureSingleElemWithResolution;
+import org.anchoranalysis.image.feature.bean.physical.WithResolutionBase;
 
 @NoArgsConstructor
 public abstract class FeatureConvertUnits<T extends FeatureInputWithResolution>
-        extends FeatureSingleElemWithResolution<T> {
+        extends WithResolutionBase<T> {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private String unitType;

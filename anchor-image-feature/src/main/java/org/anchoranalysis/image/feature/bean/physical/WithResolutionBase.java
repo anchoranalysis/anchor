@@ -28,17 +28,17 @@ package org.anchoranalysis.image.feature.bean.physical;
 
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.bean.operator.FeatureGenericSingleElem;
+import org.anchoranalysis.feature.bean.operator.FeatureUnaryGeneric;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInputWithResolution;
 import org.anchoranalysis.image.extent.Resolution;
 
 @NoArgsConstructor
-public abstract class FeatureSingleElemWithResolution<T extends FeatureInputWithResolution>
-        extends FeatureGenericSingleElem<T> {
+public abstract class WithResolutionBase<T extends FeatureInputWithResolution>
+        extends FeatureUnaryGeneric<T> {
 
-    public FeatureSingleElemWithResolution(Feature<T> feature) {
+    public WithResolutionBase(Feature<T> feature) {
         super(feature);
     }
 

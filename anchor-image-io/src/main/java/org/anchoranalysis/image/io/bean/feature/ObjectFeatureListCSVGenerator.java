@@ -82,7 +82,7 @@ class ObjectFeatureListCSVGenerator extends CSVGenerator
 
         try {
             NamedFeatureCalculatorMulti<FeatureInputSingleObject> tuple =
-                    featureEvaluator.createAndStartSession(
+                    featureEvaluator.createFeatureSession(
                             this::createFullFeatureList, sharedObjects);
             this.featureCalculator = tuple.getCalculator();
 

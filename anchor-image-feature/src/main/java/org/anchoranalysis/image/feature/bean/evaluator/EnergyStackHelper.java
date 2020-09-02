@@ -60,10 +60,10 @@ class EnergyStackHelper {
         }
     }
         
-    public static <T> void setEnergyStackOnParams(T params, Optional<EnergyStack> energyStack) {
+    public static <T> void maybeSetEnergyStackOnInput(T input, Optional<EnergyStack> energyStack) {
         // Use reflection, to only set the energyStack on params that supports them
-        if (params instanceof FeatureInputEnergy && energyStack.isPresent()) {
-            ((FeatureInputEnergy) params).setEnergyStack(energyStack.get());
+        if (input instanceof FeatureInputEnergy && energyStack.isPresent()) {
+            ((FeatureInputEnergy) input).setEnergyStack(energyStack.get());
         }
     }
 }

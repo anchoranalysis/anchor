@@ -52,7 +52,7 @@ public abstract class ReportFeatureEvaluator<T extends FeatureInput>
     }
 
     protected FeatureCalculatorSingle<T> createAndStartSession() throws OperationFailedException {
-        return featureEvaluator.createAndStartSession();
+        return featureEvaluator.createFeatureSession();
     }
 
     @Override
