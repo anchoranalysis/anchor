@@ -87,8 +87,14 @@ public class GeneratorSequenceIncrementalWriter<T> implements GeneratorSequenceI
 
     @Override
     public void add(T element) throws OutputWriteFailedException {
-        delegate.add(element, String.valueOf(iter));
-        iter++;
+        try {
+            delegate.add(element, String.valueOf(iter));
+        } finally {
+            // We always update the index, even if an exception occurred. This is because:
+            //  1. By design, it shouldn't change the intended indexing.
+            //  2. A downstream generator has already updated its sequence-type.
+            iter++;
+        }
     }
 
     @Override
