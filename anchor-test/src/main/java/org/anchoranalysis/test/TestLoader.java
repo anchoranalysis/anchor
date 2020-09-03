@@ -80,7 +80,7 @@ public class TestLoader {
     /**
      * Creates a new test-data loader finding "src/test/resources" using the Maven working directory
      *
-     * @return a testLoader associated with MAVEN_WORKING_DIR/src/test/resources/
+     * @return a loader associated with MAVEN_WORKING_DIR/src/test/resources/
      */
     public static TestLoader createFromMavenWorkingDirectory() {
         return new TestLoader("src/test/resources");
@@ -91,7 +91,7 @@ public class TestLoader {
      * working directory
      *
      * @param toAppendToDirectory appended to maven working dir to determine final directory
-     * @return a testLoader associated with the MAVEN_WORKING_DIR/src/test/resources/PLUS_SOMETHING
+     * @return a loader associated with the MAVEN_WORKING_DIR/src/test/resources/PLUS_SOMETHING
      */
     public static TestLoader createFromMavenWorkingDirectory(String toAppendToDirectory) {
         Path path = Paths.get("src/test/resources").resolve(toAppendToDirectory);
@@ -102,7 +102,7 @@ public class TestLoader {
      * Creates a new test-data loader using an explicit File path as root
      *
      * @param rootDirectory the path where the root folder is
-     * @return a testLoader associated with the explicit root
+     * @return a loader associated with the explicit root
      */
     public static TestLoader createFromExplicitDirectory(String rootDirectory) {
         return createFromExplicitDirectory(Paths.get(rootDirectory));
@@ -112,7 +112,7 @@ public class TestLoader {
      * Creates a new test-data loader using an explicit File path as root
      *
      * @param rootDirectory the path where the root folder is
-     * @return a testLoader associated with the explicit root
+     * @return a loader associated with the explicit root
      */
     public static TestLoader createFromExplicitDirectory(Path rootDirectory) {
         return new TestLoader(rootDirectory);

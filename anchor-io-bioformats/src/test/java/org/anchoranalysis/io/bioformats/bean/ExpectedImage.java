@@ -48,16 +48,16 @@ import lombok.AllArgsConstructor;
     /** Which intensity value to count */
     private int intensityValueToCount;
     
-    public void openAndAssert(RasterReader rasterReader, TestLoader testLoader) throws RasterIOException {
-        Stack stack = openStackFromReader(rasterReader, testLoader);
+    public void openAndAssert(RasterReader rasterReader, TestLoader loader) throws RasterIOException {
+        Stack stack = openStackFromReader(rasterReader, loader);
         assertEqualsPrefix("voxel data type", expectedDataType, stack.getChannel(0).getVoxelDataType() );
         assertEqualsPrefix("number channels", expectedNumberChannels, stack.getNumberChannels() );
         assertEqualsPrefix("count of voxels==" + intensityValueToCount, expectedCount, stack.getChannel(0).voxelsEqualTo(intensityValueToCount).count());
     }
     
-    private Stack openStackFromReader(RasterReader reader, TestLoader testLoader) throws RasterIOException {
+    private Stack openStackFromReader(RasterReader reader, TestLoader loader) throws RasterIOException {
         
-        Path path = testLoader.resolveTestPath( relativePath() );
+        Path path = loader.resolveTestPath( relativePath() );
         
         OpenedRaster openedRaster = reader.openFile(path);
         TimeSequence timeSequence = openedRaster.open(0, ProgressReporterNull.get());
