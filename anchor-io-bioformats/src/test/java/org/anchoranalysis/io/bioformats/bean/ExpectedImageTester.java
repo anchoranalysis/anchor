@@ -51,6 +51,10 @@ class ExpectedImageTester {
     public void assertUnsigned8BitThreeChannels(String extension, int expectedCount) throws RasterIOException {
         new ExpectedImage(extension, "unsigned_8bit_three_channels", expectedCount, 3, UnsignedByteVoxelType.INSTANCE, INTENSITY_TO_COUNT_UNSIGNED_8_BIT).openAndAssert(reader, loader);
     }
+    
+    public void assertUnsigned16BitThreeChannels(String extension, int expectedCount) throws RasterIOException {
+        new ExpectedImage(extension, "unsigned_16bit_three_channels", expectedCount, 3, UnsignedShortVoxelType.INSTANCE, INTENSITY_TO_COUNT_UNSIGNED_16_BIT).openAndAssert(reader, loader);
+    }
         
     private void assertRGB(String extension, int expectedCount) throws RasterIOException {
         new ExpectedImage(extension, "rgb", expectedCount, 3, UnsignedByteVoxelType.INSTANCE, INTENSITY_TO_COUNT_UNSIGNED_8_BIT).openAndAssert(reader, loader);

@@ -43,6 +43,7 @@ public class BioformatsReaderTest {
         tester.assertRGBAndUnsigned8BitUncompressed(EXTENSION_TIFF);
         tester.assertUnsigned16Bit(EXTENSION_TIFF, 16);
         tester.assertUnsigned8BitThreeChannels(EXTENSION_TIFF, ExpectedImageTester.COUNT_RGB_UNCOMPRESSED);
+        tester.assertUnsigned16BitThreeChannels(EXTENSION_TIFF, 62);
     }
     
     @Test

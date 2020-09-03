@@ -26,12 +26,14 @@
 
 package org.anchoranalysis.io.bioformats.copyconvert.toshort;
 
+import java.nio.ByteBuffer;
 import java.nio.ShortBuffer;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferShort;
 import org.anchoranalysis.io.bioformats.copyconvert.ConvertTo;
+import com.google.common.base.Preconditions;
 import loci.common.DataTools;
 
 public abstract class ConvertToShort extends ConvertTo<ShortBuffer> {
@@ -57,13 +59,15 @@ public abstract class ConvertToShort extends ConvertTo<ShortBuffer> {
     }
     
     @Override
-    protected VoxelBuffer<ShortBuffer> convertSingleChannel(byte[] sourceBuffer, int channelRelative) {
+    protected VoxelBuffer<ShortBuffer> convertSingleChannel(ByteBuffer sourceBuffer, int channelIndexRelative) {
+        Preconditions.checkArgument(channelIndexRelative==0, "interleaving not supported for short data");
+        
+        byte[] buffer = sourceBuffer.array();
+        
+        ShortBuffer out = ShortBuffer.allocate(sizeXY);
 
-        short[] out = new short[sizeXY];
-
-        int indexOut = 0;
         for (int indexIn = 0; indexIn < sizeBytes; indexIn += BYTES_PER_PIXEL) {
-            out[indexOut++] = convertValue( valueFromBuffer(sourceBuffer, indexIn) );
+            out.put( convertValue( valueFromBuffer(buffer, indexIn) ) );
         }
 
         return VoxelBufferShort.wrap(out);

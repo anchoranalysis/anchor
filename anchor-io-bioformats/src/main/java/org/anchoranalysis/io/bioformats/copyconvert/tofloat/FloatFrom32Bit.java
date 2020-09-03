@@ -31,6 +31,7 @@ import lombok.RequiredArgsConstructor;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.extent.Extent;
 
@@ -43,13 +44,15 @@ public class FloatFrom32Bit extends ConvertToFloat {
 
     @Override
     protected float[] convertIntegerBytesToFloatArray(
-            Dimensions dimensions, byte[] source, int offsetInSource) throws IOException {
+            Dimensions dimensions, ByteBuffer source, int offsetInSource) throws IOException {
 
         // TODO should offsetInSource be ignored here?
         
+        byte[] sourceArray = source.array();
+        
         float[] out = new float[dimensions.volumeXY()];
 
-        ByteArrayInputStream streamByte = new ByteArrayInputStream(source);
+        ByteArrayInputStream streamByte = new ByteArrayInputStream(sourceArray);
 
         if (littleEndian) {
             return copyLittleEndian(streamByte, out, dimensions.extent());

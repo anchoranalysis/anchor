@@ -48,12 +48,18 @@ public class ByteFrom32BitUnsignedInt extends ConvertToByte {
     }
 
     @Override
-    protected void convert(byte[] source, ByteBuffer destination, int channelRelative) {
+    protected ByteBuffer convert(ByteBuffer source, int channelIndexRelative) {
 
+        ByteBuffer destination = allocateBuffer();
+        
+        byte[] sourceArray = source.array();
+        
         for (int indexIn = 0; indexIn < sizeBytes; indexIn += bytesPerPixel) {
-            int value = DataTools.bytesToInt(source, indexIn, littleEndian);
+            int value = DataTools.bytesToInt(sourceArray, indexIn, littleEndian);
             destination.put( (byte) (value * convertRatio) );
         }
+        
+        return destination;
     }
 
     @Override

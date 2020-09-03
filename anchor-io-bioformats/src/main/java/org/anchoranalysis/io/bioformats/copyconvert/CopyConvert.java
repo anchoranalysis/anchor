@@ -27,6 +27,7 @@
 package org.anchoranalysis.io.bioformats.copyconvert;
 
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.util.List;
 import loci.formats.FormatException;
 import loci.formats.IFormatReader;
@@ -82,20 +83,20 @@ public class CopyConvert {
                     (t, z, c, readerIndex) -> {
 
                         /** Selects a destination channel for a particular relative channel */
-                        DestinationChannelForIndex destC =
-                                channelRelative ->
+                        DestinationChannelForIndex destinationChannel =
+                                channelIndexRelative ->
                                         dest.get(
                                                 destIndex(
-                                                        c + channelRelative,
+                                                        c + channelIndexRelative,
                                                         t,
                                                         targetShape.getNumberChannels()));
 
-                        byte[] b = reader.openBytes(readerIndex);
+                        byte[] bufferArray = reader.openBytes(readerIndex);
 
                         convertTo.copyAllChannels(
                                 targetShape.getImageDimensions(),
-                                b,
-                                destC,
+                                ByteBuffer.wrap(bufferArray),
+                                destinationChannel,
                                 z,
                                 numberChannelsPerByteArray);
 

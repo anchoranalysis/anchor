@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.io.bioformats.copyconvert.toshort;
 
-public class ShortFromSignedShort extends ConvertToShort {
+public final class ShortFromSignedShort extends ConvertToShort {
 
     public ShortFromSignedShort(boolean littleEndian) {
         super(littleEndian);

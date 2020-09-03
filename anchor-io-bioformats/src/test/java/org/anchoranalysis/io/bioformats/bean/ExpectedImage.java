@@ -23,6 +23,8 @@ import lombok.AllArgsConstructor;
  * <li>the count of intensity values equal to a particular value.
  * </ul>
  * 
+ * <p>The path of image should be, relative to the test-loader, images/<b>${extension}</b>/<b>${fileNameWithoutExtension}</b>.<b>${extension}</b>
+ * 
  * @author Owen Feehan
  *
  */

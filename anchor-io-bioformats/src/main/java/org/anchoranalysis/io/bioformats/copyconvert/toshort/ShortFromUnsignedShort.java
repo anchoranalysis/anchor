@@ -28,7 +28,7 @@ package org.anchoranalysis.io.bioformats.copyconvert.toshort;
 
 import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
 
-public class ShortFromUnsignedShort extends ConvertToShort {
+public final class ShortFromUnsignedShort extends ConvertToShort {
 
     public ShortFromUnsignedShort(boolean littleEndian) {
         super(littleEndian);

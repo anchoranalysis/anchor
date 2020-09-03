@@ -67,8 +67,13 @@ public class DimensionsCreator {
     private void metadataDim(Function<IMetadata, Length> funcDimRes, DoubleConsumer setter) {
         Length len = funcDimRes.apply(lociMetadata);
         if (len != null) {
-            Double dbl = len.value(UNITS.METER).doubleValue();
-            setter.accept(dbl);
+            Number converted = len.value(UNITS.METER);
+            
+            // A null implies that len can not be converted to meters as units, so we abandon
+            if (converted != null) {
+                Double dbl = converted.doubleValue();
+                setter.accept(dbl);
+            }
         }
     }
 }

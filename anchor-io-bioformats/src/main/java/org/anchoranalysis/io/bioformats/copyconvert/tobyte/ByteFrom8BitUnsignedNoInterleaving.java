@@ -31,11 +31,17 @@ import java.nio.ByteBuffer;
 public class ByteFrom8BitUnsignedNoInterleaving extends ConvertToByte {
 
     @Override
-    protected void convert(byte[] source, ByteBuffer destination, int channelRelative) {
-        ByteBuffer buffer = ByteBuffer.wrap(source);
-        buffer.position(sizeBytes * channelRelative);
-        buffer.limit( buffer.position() + sizeBytes );
-        destination.put(buffer);
+    protected ByteBuffer convert(ByteBuffer source, int channelIndexRelative) {
+        if (source.capacity()==sizeXY && channelIndexRelative==0) {
+            // Reuse the existing buffer, if it's single channeled
+            return source;
+        } else {
+            ByteBuffer destination = allocateBuffer();
+            source.position(sizeBytes * channelIndexRelative);
+            source.limit( source.position() + sizeBytes );
+            destination.put(source);
+            return destination;
+        }
     }
     
     @Override

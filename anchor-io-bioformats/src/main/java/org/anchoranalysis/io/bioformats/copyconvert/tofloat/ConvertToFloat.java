@@ -27,12 +27,14 @@
 package org.anchoranalysis.io.bioformats.copyconvert.tofloat;
 
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferFloat;
 import org.anchoranalysis.io.bioformats.copyconvert.ConvertTo;
+import com.google.common.base.Preconditions;
 
 public abstract class ConvertToFloat extends ConvertTo<FloatBuffer> {
 
@@ -52,13 +54,13 @@ public abstract class ConvertToFloat extends ConvertTo<FloatBuffer> {
     }
 
     @Override
-    protected VoxelBuffer<FloatBuffer> convertSingleChannel(byte[] source, int channelRelative)
+    protected VoxelBuffer<FloatBuffer> convertSingleChannel(ByteBuffer source, int channelIndexRelative)
             throws IOException {
-        int index = (sizeBytesChannel * channelRelative);
-        float[] fArr = convertIntegerBytesToFloatArray(dimensions, source, index);
+        Preconditions.checkArgument(channelIndexRelative==0, "interleaving not supported for int data");
+        float[] fArr = convertIntegerBytesToFloatArray(dimensions, source, sizeBytesChannel);
         return VoxelBufferFloat.wrap(fArr);
     }
 
     protected abstract float[] convertIntegerBytesToFloatArray(
-            Dimensions dimensions, byte[] source, int offsetInSource) throws IOException;
+            Dimensions dimensions, ByteBuffer source, int offsetInSource) throws IOException;
 }

@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.io.bioformats.copyconvert.tofloat;
 
+import java.nio.ByteBuffer;
 import org.anchoranalysis.image.convert.PrimitiveConverter;
 import org.anchoranalysis.image.extent.Dimensions;
 
@@ -33,14 +34,14 @@ public class FloatFrom8Bit extends ConvertToFloat {
 
     @Override
     protected float[] convertIntegerBytesToFloatArray(
-            Dimensions dimensions, byte[] source, int offsetInSource) {
+            Dimensions dimensions, ByteBuffer source, int offsetInSource) {
 
         float[] out = new float[dimensions.x() * dimensions.y()];
 
         int indexOut = 0;
         for (int y = 0; y < dimensions.y(); y++) {
             for (int x = 0; x < dimensions.x(); x++) {
-                float value = PrimitiveConverter.unsignedByteToInt(source[offsetInSource++]);
+                float value = PrimitiveConverter.unsignedByteToInt(source.get(offsetInSource++));
                 out[indexOut++] = value;
             }
         }

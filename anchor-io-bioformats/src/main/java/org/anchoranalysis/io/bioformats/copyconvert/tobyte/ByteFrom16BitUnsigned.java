@@ -49,13 +49,17 @@ public class ByteFrom16BitUnsigned extends ConvertToByte {
     }
     
     @Override
-    protected void convert(byte[] source, ByteBuffer destination, int channelRelative) {
+    protected ByteBuffer convert(ByteBuffer source, int channelIndexRelative) {
+        
+        ByteBuffer destination = allocateBuffer();
+        
+        byte[] sourceArray = source.array();
         
         for (int indexIn = 0; indexIn < sizeBytes; indexIn += bytesPerPixel) {
             
-            int indexInPlus = indexIn + (channelRelative * 2);
+            int indexInPlus = indexIn + (channelIndexRelative * 2);
             
-            int value = (int) DataTools.bytesToShort(source, indexInPlus, 2, littleEndian);
+            int value = (int) DataTools.bytesToShort(sourceArray, indexInPlus, 2, littleEndian);
 
             // Make unsigned
             if (value < 0) {
@@ -73,6 +77,7 @@ public class ByteFrom16BitUnsigned extends ConvertToByte {
 
             destination.put( (byte) (value) );
         }
+        return destination;
     }
     
     @Override

@@ -38,10 +38,14 @@ public class ByteFrom32BitFloat extends ConvertToByte {
     // END REQUIRED ARGUMENTS
 
     @Override
-    protected void convert(byte[] source, ByteBuffer destination, int channelRelative) {
+    protected ByteBuffer convert(ByteBuffer source, int channelIndexRelative) {
 
+        ByteBuffer destination = allocateBuffer();
+        
+        byte[] sourceArray = source.array();
+        
         for (int indexIn = 0; indexIn < sizeBytes; indexIn += bytesPerPixel) {
-            float value = DataTools.bytesToFloat(source, indexIn, littleEndian);
+            float value = DataTools.bytesToFloat(sourceArray, indexIn, littleEndian);
 
             if (value > 255) {
                 value = 255;
@@ -51,6 +55,8 @@ public class ByteFrom32BitFloat extends ConvertToByte {
             }
             destination.put( (byte) (value) );
         }
+        
+        return destination;
     }
     
     @Override
