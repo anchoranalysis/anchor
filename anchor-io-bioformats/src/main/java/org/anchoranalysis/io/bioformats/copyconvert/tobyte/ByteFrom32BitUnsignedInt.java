@@ -28,6 +28,7 @@ package org.anchoranalysis.io.bioformats.copyconvert.tobyte;
 
 import loci.common.DataTools;
 import lombok.RequiredArgsConstructor;
+import java.nio.ByteBuffer;
 import org.anchoranalysis.image.extent.Dimensions;
 
 @RequiredArgsConstructor
@@ -47,11 +48,11 @@ public class ByteFrom32BitUnsignedInt extends ConvertToByte {
     }
 
     @Override
-    protected void convert(byte[] source, byte[] destination, int channelRelative) {
-        int indexOut = 0;
+    protected void convert(byte[] source, ByteBuffer destination, int channelRelative) {
+
         for (int indexIn = 0; indexIn < sizeBytes; indexIn += bytesPerPixel) {
             int value = DataTools.bytesToInt(source, indexIn, littleEndian);
-            destination[indexOut++] = (byte) (value * convertRatio);
+            destination.put( (byte) (value * convertRatio) );
         }
     }
 

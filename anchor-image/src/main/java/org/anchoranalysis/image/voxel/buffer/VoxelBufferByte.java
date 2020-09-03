@@ -48,7 +48,7 @@ public final class VoxelBufferByte extends VoxelBuffer<ByteBuffer> {
         return new VoxelBufferByte(ByteBuffer.wrap(arr));
     }
 
-    public static VoxelBufferByte wrap(ByteBuffer buffer) {
+    public static VoxelBuffer<ByteBuffer> wrap(ByteBuffer buffer) {
         return new VoxelBufferByte(buffer);
     }
 

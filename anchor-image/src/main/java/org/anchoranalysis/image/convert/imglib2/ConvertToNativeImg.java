@@ -50,14 +50,14 @@ import net.imglib2.type.numeric.real.FloatType;
 public class ConvertToNativeImg {
     
   public static NativeImg<UnsignedByteType, ByteArray> fromByte(Voxels<ByteBuffer> voxels) {
-      return Wrap.allSlices(voxels, Transform::asArray, UnsignedByteType::new);
+      return Wrap.allSlices(voxels, ArrayFactory::fromByte, UnsignedByteType::new);
   }
 
   public static NativeImg<UnsignedShortType, ShortArray> fromShort(Voxels<ShortBuffer> voxels) {
-      return Wrap.allSlices(voxels, Transform::asArray, UnsignedShortType::new);
+      return Wrap.allSlices(voxels, ArrayFactory::fromShort, UnsignedShortType::new);
   }
 
   public static NativeImg<FloatType, FloatArray> fromFloat(Voxels<FloatBuffer> voxels) {
-      return Wrap.allSlices(voxels, Transform::asArray, FloatType::new);
+      return Wrap.allSlices(voxels, ArrayFactory::fromFloat, FloatType::new);
   }
 }

@@ -31,10 +31,11 @@ import java.nio.ByteBuffer;
 public class ByteFrom8BitUnsignedNoInterleaving extends ConvertToByte {
 
     @Override
-    protected void convert(byte[] source, byte[] destination, int channelRelative) {
+    protected void convert(byte[] source, ByteBuffer destination, int channelRelative) {
         ByteBuffer buffer = ByteBuffer.wrap(source);
         buffer.position(sizeBytes * channelRelative);
-        buffer.get(destination, 0, sizeBytes);
+        buffer.limit( buffer.position() + sizeBytes );
+        destination.put(buffer);
     }
     
     @Override

@@ -96,7 +96,7 @@ public final class Dimensions implements Serializable {
         return new Dimensions(extent.duplicateChangeZ(z), resolution);
     }
 
-    public Dimensions duplicateChangeRes(Resolution resolutionToAssign) {
+    public Dimensions duplicateChangeResolution(Resolution resolutionToAssign) {
         return new Dimensions(extent, resolutionToAssign);
     }
 
@@ -156,5 +156,20 @@ public final class Dimensions implements Serializable {
      */
     public UnitConverter unitConvert() {
         return resolution.unitConvert();
+    }
+    
+    /**
+     * Checks equality betwen this object and another {@link Dimensions}, maybe not comparing image-resolution.
+     * 
+     * @param other the object to compare with
+     * @param compareResolution if true image resolution is compared, otherwise it is ignored.
+     * @return true iff the two objects are equal by the above criteria.
+     */
+    public boolean equals(Dimensions other, boolean compareResolution) {
+        if (compareResolution) {
+            return equals(other);
+        } else {
+            return extent.equals(other.extent);
+        }
     }
 }

@@ -38,7 +38,6 @@ import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.Dimensions;
-import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.io.generator.raster.DisplayStackGenerator;
 import org.anchoranalysis.image.io.generator.raster.object.collection.ObjectAsMaskGenerator;
@@ -100,6 +99,17 @@ public class WriteIntoFolder implements TestRule {
         return folder.apply(base, description);
     }
 
+    /**
+     * Writes a stack up to a maximum of three channels.
+     * 
+     * @param outputName
+     * @param stack
+     * @throws CreateException
+     */
+    public void writeStack(String outputName, Stack stack) throws CreateException {
+        writeStack(outputName, DisplayStack.create(stack.extractUpToThreeChannels()) );
+    }
+    
     public void writeStack(String outputName, DisplayStack stack) {
 
         setupOutputManagerIfNecessary();
@@ -145,7 +155,7 @@ public class WriteIntoFolder implements TestRule {
 
     public void writeVoxels(String outputName, Voxels<ByteBuffer> voxels) {
 
-        Channel channel = ChannelFactory.instance().create(voxels, new Resolution());
+        Channel channel = ChannelFactory.instance().create(voxels);
 
         writeChannel(outputName, channel);
     }

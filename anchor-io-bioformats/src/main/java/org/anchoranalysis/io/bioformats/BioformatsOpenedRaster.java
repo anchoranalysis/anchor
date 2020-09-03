@@ -180,7 +180,7 @@ public class BioformatsOpenedRaster implements OpenedRaster {
     }
 
     private List<Channel> createUninitialisedChannels(
-            Dimensions dimensions, TimeSequence ts, ChannelFactorySingleType factory)
+            Dimensions dimensions, TimeSequence timeSequence, ChannelFactorySingleType factory)
             throws IncorrectImageSizeException {
 
         /** A list of all channels i.e. aggregating the channels associated with each stack */
@@ -195,7 +195,7 @@ public class BioformatsOpenedRaster implements OpenedRaster {
                 stack.addChannel(channel);
                 listAllChannels.add(channel);
             }
-            ts.add(stack);
+            timeSequence.add(stack);
         }
 
         return listAllChannels;

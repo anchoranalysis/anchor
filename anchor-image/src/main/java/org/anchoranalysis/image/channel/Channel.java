@@ -182,7 +182,7 @@ public class Channel {
     }
 
     public void updateResolution(Resolution resolution) {
-        dimensions = dimensions.duplicateChangeRes(resolution);
+        dimensions = dimensions.duplicateChangeResolution(resolution);
     }
 
     public VoxelDataType getVoxelDataType() {
@@ -199,8 +199,15 @@ public class Channel {
         }
     }
 
-    public boolean equalsDeep(Channel other) {
-        return dimensions.equals(other.dimensions) && voxels.equalsDeep(other.voxels);
+    /**
+     * Are the two channels equal using a deep voxel by voxel comparison?
+     * 
+     * @param other the channel to compare with
+     * @param compareResolution if true, image-resolution must also be equal, otherwise it is not compared.
+     * @return true if they are deemed equal, false otherwise.
+     */
+    public boolean equalsDeep(Channel other, boolean compareResolution) {
+        return dimensions.equals(other.dimensions, compareResolution) && voxels.equalsDeep(other.voxels);
     }
 
     /**

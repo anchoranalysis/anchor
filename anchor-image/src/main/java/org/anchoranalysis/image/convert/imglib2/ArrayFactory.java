@@ -36,17 +36,17 @@ import net.imglib2.img.basictypeaccess.array.FloatArray;
 import net.imglib2.img.basictypeaccess.array.ShortArray;
 
 @NoArgsConstructor(access=AccessLevel.PRIVATE)
-class Transform {
+class ArrayFactory {
     
-    public static ByteArray asArray(ByteBuffer buffer) {
+    public static ByteArray fromByte(ByteBuffer buffer) {
         return new ByteArray(buffer.array());
     }
     
-    public static ShortArray asArray(ShortBuffer buffer) {
+    public static ShortArray fromShort(ShortBuffer buffer) {
         return new ShortArray(buffer.array());
     }
     
-    public static FloatArray asArray(FloatBuffer buffer) {
+    public static FloatArray fromFloat(FloatBuffer buffer) {
         return new FloatArray(buffer.array());
     }
 }

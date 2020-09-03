@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.io.bioformats.copyconvert.tobyte;
 
+import java.nio.ByteBuffer;
 import org.anchoranalysis.image.extent.Dimensions;
 
 public class ByteFrom8BitUnsignedInterleaving extends ConvertToByte {
@@ -39,16 +40,15 @@ public class ByteFrom8BitUnsignedInterleaving extends ConvertToByte {
     }
 
     @Override
-    protected void convert(byte[] source, byte[] destination, int channelRelative) {
+    protected void convert(byte[] source, ByteBuffer destination, int channelRelative) {
 
         // Loop through the relevant positions
         int totalBytesSource = sizeXY * numberChannelsPerArray;
 
-        int indexOut = 0;
         for (int indexIn = channelRelative;
                 indexIn < totalBytesSource;
                 indexIn += numberChannelsPerArray) {
-            destination[indexOut++] = source[indexIn];
+            destination.put( source[indexIn] );
         }
     }
     

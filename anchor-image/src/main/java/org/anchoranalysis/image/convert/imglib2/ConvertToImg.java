@@ -85,17 +85,17 @@ public class ConvertToImg {
     
     public static Img<UnsignedByteType> fromByte(
             VoxelBuffer<ByteBuffer> buffer, Extent extent) {
-        return Wrap.buffer(buffer, extent, Transform::asArray, UnsignedByteType::new);
+        return Wrap.buffer(buffer, extent, ArrayFactory::fromByte, UnsignedByteType::new);
     }
 
     public static Img<UnsignedShortType> fromShort(
             VoxelBuffer<ShortBuffer> buffer, Extent extent) {
-        return Wrap.buffer(buffer, extent, Transform::asArray, UnsignedShortType::new);
+        return Wrap.buffer(buffer, extent, ArrayFactory::fromShort, UnsignedShortType::new);
     }
 
     public static Img<FloatType> fromFloat(
             VoxelBuffer<FloatBuffer> buffer, Extent extent) {
-        return Wrap.buffer(buffer, extent, Transform::asArray, FloatType::new);
+        return Wrap.buffer(buffer, extent, ArrayFactory::fromFloat, FloatType::new);
     }
     
     public static Img<UnsignedByteType> fromByte(Voxels<ByteBuffer> voxels) {

@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.io.bioformats.copyconvert.tobyte;
 
+import java.nio.ByteBuffer;
 import loci.common.DataTools;
 import lombok.RequiredArgsConstructor;
 
@@ -37,8 +38,8 @@ public class ByteFrom32BitFloat extends ConvertToByte {
     // END REQUIRED ARGUMENTS
 
     @Override
-    protected void convert(byte[] source, byte[] destination, int channelRelative) {
-        int indexOut = 0;
+    protected void convert(byte[] source, ByteBuffer destination, int channelRelative) {
+
         for (int indexIn = 0; indexIn < sizeBytes; indexIn += bytesPerPixel) {
             float value = DataTools.bytesToFloat(source, indexIn, littleEndian);
 
@@ -48,7 +49,7 @@ public class ByteFrom32BitFloat extends ConvertToByte {
             if (value < 0) {
                 value = 0;
             }
-            destination[indexOut++] = (byte) (value);
+            destination.put( (byte) (value) );
         }
     }
     

@@ -264,15 +264,25 @@ public class Stack implements Iterable<Channel> {
         if (!(obj instanceof Stack)) {
             return false;
         }
+        
+        return equalsDeep( (Stack) obj, true);
+    }
 
-        Stack objCast = (Stack) obj;
+    /**
+     * Are the two stack equal using a deep voxel by voxel comparison of each channel?
+     * 
+     * @param other the stack to compare with
+     * @param compareResolution if true, the image-resolution is also compared for each channel.
+     * @return true if they are deemed equals, false otherwise.
+     */
+    public boolean equalsDeep(Stack other, boolean compareResolution) {
 
-        if (getNumberChannels() != objCast.getNumberChannels()) {
+        if (getNumberChannels() != other.getNumberChannels()) {
             return false;
         }
 
         for (int i = 0; i < getNumberChannels(); i++) {
-            if (!getChannel(i).equalsDeep(objCast.getChannel(i))) {
+            if (!getChannel(i).equalsDeep(other.getChannel(i), compareResolution)) {
                 return false;
             }
         }

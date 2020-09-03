@@ -52,12 +52,12 @@ public abstract class ConvertToByte extends ConvertTo<ByteBuffer> {
     
     @Override
     protected VoxelBuffer<ByteBuffer> convertSingleChannel(byte[] source, int channelRelative) {
-        byte[] out = new byte[sizeXY];
+        ByteBuffer out = ByteBuffer.allocate(sizeXY);
         convert(source, out, channelRelative);
         return VoxelBufferByte.wrap(out);
     }
     
-    protected abstract void convert(byte[] source, byte[] destination, int channelRelative);
+    protected abstract void convert(byte[] source, ByteBuffer destination, int channelRelative);
         
     protected abstract int calculateBytesPerPixel(int numberChannelsPerArray);
 }
