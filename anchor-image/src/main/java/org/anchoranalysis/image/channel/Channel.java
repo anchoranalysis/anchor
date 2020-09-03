@@ -129,6 +129,14 @@ public class Channel {
         return resizeXY(newSizeX, newSizeY, interpolator);
     }
 
+    public Channel resizeXY(Extent extent) {
+        return resizeXY(extent, DEFAULT_INTERPOLATOR);
+    }
+    
+    public Channel resizeXY(Extent extent, Interpolator interpolator) {
+        return resizeXY(extent.x(), extent.y(), interpolator);
+    }
+    
     public Channel resizeXY(int x, int y) {
         return resizeXY(x, y, DEFAULT_INTERPOLATOR);
     }
