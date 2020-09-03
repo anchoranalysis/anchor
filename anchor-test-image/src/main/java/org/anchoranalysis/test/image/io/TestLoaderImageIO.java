@@ -28,6 +28,7 @@ package org.anchoranalysis.test.image.io;
 
 import java.io.FileNotFoundException;
 import java.nio.file.Path;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
@@ -43,6 +44,7 @@ import org.anchoranalysis.io.deserializer.DeserializationFailedException;
 import org.anchoranalysis.test.TestDataLoadException;
 import org.anchoranalysis.test.TestLoader;
 
+@AllArgsConstructor
 public class TestLoaderImageIO {
 
     /** Delegate loader (for non image-related loading) */

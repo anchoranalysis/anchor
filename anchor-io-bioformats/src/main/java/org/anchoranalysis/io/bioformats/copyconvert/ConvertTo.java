@@ -79,7 +79,7 @@ public abstract class ConvertTo<T extends Buffer> {
                 channelRelative++) {
 
             VoxelBuffer<T> converted = convertSingleChannel(src, channelRelative);
-            copyBytesIntoDestination(converted, functionCast, destination, z, channelRelative);
+            placeSliceInDestination(converted, functionCast, destination, z, channelRelative);
         }
 
         log.debug(String.format("copy to byte %d end", z));
@@ -104,7 +104,7 @@ public abstract class ConvertTo<T extends Buffer> {
     protected abstract VoxelBuffer<T> convertSingleChannel(byte[] source, int channelIndexRelative)
             throws IOException;
 
-    public static <S extends Buffer> void copyBytesIntoDestination(
+    public static <S extends Buffer> void placeSliceInDestination(
             VoxelBuffer<S> voxelBuffer,
             Function<VoxelsWrapper, Voxels<S>> functionCast,
             DestinationChannelForIndex destination,
