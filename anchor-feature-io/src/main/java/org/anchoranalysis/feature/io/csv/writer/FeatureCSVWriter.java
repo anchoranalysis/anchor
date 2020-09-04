@@ -27,51 +27,43 @@
 package org.anchoranalysis.feature.io.csv.writer;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import org.anchoranalysis.core.text.TypedValue;
 import org.anchoranalysis.feature.calculate.results.ResultsVector;
 import org.anchoranalysis.feature.calculate.results.ResultsVectorCollection;
-import org.anchoranalysis.feature.io.csv.StringLabelsForCsvRow;
-import org.anchoranalysis.feature.name.FeatureNameList;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.io.output.csv.CSVWriter;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 public class FeatureCSVWriter {
 
-    private CSVWriter writer; // If null, it mean's the writer is not switched ON
-
-    private FeatureCSVWriter(CSVWriter writer) {
-        this.writer = writer;
-    }
+    /** Underlying CSV write, which if null, it means the writer is disabled */
+    private final CSVWriter writer; 
 
     public static Optional<FeatureCSVWriter> create(
-            String outputName,
-            BoundOutputManagerRouteErrors outputManager,
-            String[] firstHeaderNames,
-            FeatureNameList featureNames)
+            FeatureCSVMetadata metadata,
+            BoundOutputManagerRouteErrors outputManager
+    )
             throws AnchorIOException {
 
-        List<String> allHeaders = new ArrayList<>(Arrays.asList(firstHeaderNames));
-        allHeaders.addAll(featureNames.asList());
-
-        if (!outputManager.isOutputAllowed(outputName)) {
+        if (!outputManager.isOutputAllowed(metadata.getOutputName())) {
             return Optional.of(new FeatureCSVWriter(null));
         }
 
-        Optional<CSVWriter> writer =
-                CSVWriter.createFromOutputManager(outputName, outputManager.getDelegate());
-        return writer.map(
-                w -> {
-                    w.writeHeaders(allHeaders);
-                    return new FeatureCSVWriter(w);
+        Optional<CSVWriter> writerOptional =
+                CSVWriter.createFromOutputManager(metadata.getOutputName(), outputManager.getDelegate());
+        return writerOptional.map(
+                writer -> {
+                    writer.writeHeaders(metadata.getHeaders());
+                    return new FeatureCSVWriter(writer);
                 });
     }
 
     public void addResultsVector(
-            StringLabelsForCsvRow identifier, ResultsVector resultsFromFeatures) {
+            RowLabels identifier, ResultsVector resultsFromFeatures) {
         if (writer == null) {
             return;
         }
@@ -90,7 +82,7 @@ public class FeatureCSVWriter {
     }
 
     public void addResultsVector(
-            StringLabelsForCsvRow identifier,
+            RowLabels identifier,
             ResultsVectorCollection resultsCollectionFromFeatures) {
 
         if (writer == null) {
@@ -120,7 +112,7 @@ public class FeatureCSVWriter {
      * @return
      */
     private static List<TypedValue> buildCsvRow(
-            StringLabelsForCsvRow identifier, ResultsVector resultsFromFeatures) {
+            RowLabels identifier, ResultsVector resultsFromFeatures) {
 
         List<TypedValue> csvRow = new ArrayList<>();
         identifier.addToRow(csvRow);

@@ -31,7 +31,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.color.ColorList;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.functional.RepeatUtilities;
+import org.anchoranalysis.core.functional.FunctionalIterate;
 
 public class Repeat extends ColorListFactory {
 
@@ -47,7 +47,7 @@ public class Repeat extends ColorListFactory {
         ColorList in = colors.create(size);
 
         ColorList out = new ColorList();
-        RepeatUtilities.repeat(times, () -> out.addAll(in) );
+        FunctionalIterate.repeat(times, () -> out.addAll(in) );
         return out;
     }
 }

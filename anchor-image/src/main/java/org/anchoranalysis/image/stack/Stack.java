@@ -32,7 +32,7 @@ import java.util.List;
 import java.util.stream.Stream;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
-import org.anchoranalysis.core.functional.RepeatUtilities;
+import org.anchoranalysis.core.functional.FunctionalIterate;
 import org.anchoranalysis.core.functional.function.CheckedBiFunction;
 import org.anchoranalysis.core.functional.function.CheckedUnaryOperator;
 import org.anchoranalysis.image.channel.Channel;
@@ -66,7 +66,7 @@ public class Stack implements Iterable<Channel> {
 
     public Stack(Dimensions dimensions, ChannelFactorySingleType factory, int numberChannels) {
         this();
-        RepeatUtilities.repeat(numberChannels, () -> delegate.addChannel(factory.createEmptyInitialised(dimensions)));
+        FunctionalIterate.repeat(numberChannels, () -> delegate.addChannel(factory.createEmptyInitialised(dimensions)));
     }
 
     public Stack(Channel... channels) throws IncorrectImageSizeException {

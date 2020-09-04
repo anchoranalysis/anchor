@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.feature.io.csv;
+package org.anchoranalysis.feature.io.csv.results;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -53,7 +53,7 @@ public class LabelHeaders {
     /**
      * The non-group and group headers combined (in this order respectively)
      *
-     * @return the combined headers
+     * @return the combined headers in a newly created array
      */
     public String[] allHeaders() {
         return ArrayUtils.addAll(nonGroupHeaders, groupHeaders);

@@ -25,6 +25,9 @@
  */
 package org.anchoranalysis.core.functional;
 
+import java.util.Map;
+import java.util.Map.Entry;
+import org.anchoranalysis.core.functional.function.CheckedBiConsumer;
 import org.anchoranalysis.core.functional.function.CheckedBooleanSupplier;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -36,7 +39,7 @@ import lombok.NoArgsConstructor;
  *
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class RepeatUtilities {
+public class FunctionalIterate {
 
     /**
      * Repeats an operation a number of times.
@@ -66,5 +69,21 @@ public class RepeatUtilities {
             }
         }
         return false;
+    }
+    
+    /**
+     * Iterate through all entries in a {@link Map}.
+     * 
+     * @param <K> map key type, see corresponding parameter in @{link Map}.
+     * @param <V> map value type, see corresponding parameter in @{link Map}.
+     * @param <E> an exception that may be thrown by {@code consumer}.
+     * @param map the map whose entries will be iterated.
+     * @param consumer called for each entry.
+     * @throws E if throw by {@code consumer}.
+     */
+    public static <K, V, E extends Exception> void iterateMap( Map<K,V> map, CheckedBiConsumer<K, V, E> consumer ) throws E {
+        for( Entry<K,V> entry : map.entrySet()) {
+            consumer.accept( entry.getKey(), entry.getValue() );
+        }
     }
 }

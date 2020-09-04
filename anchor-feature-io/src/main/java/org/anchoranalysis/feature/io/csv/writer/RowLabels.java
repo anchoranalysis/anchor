@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.feature.io.csv;
+package org.anchoranalysis.feature.io.csv.writer;
 
 import java.util.Arrays;
 import java.util.List;
@@ -35,12 +35,12 @@ import org.anchoranalysis.core.text.TypedValue;
 import org.anchoranalysis.feature.io.csv.name.MultiName;
 
 /**
- * Labels associated with feature-results in an outputted CSV row
+ * Labels for each row of feature-results in the outputted CSV row.
  *
  * @author Owen Feehan
  */
 @AllArgsConstructor
-public class StringLabelsForCsvRow {
+public class RowLabels {
 
     /**
      * identifier unique identifier for the row taking all elements together (together a primary
@@ -51,22 +51,27 @@ public class StringLabelsForCsvRow {
     /** an identifier for a higher-level group which the row belongs to (foreign key) */
     @Getter private final Optional<MultiName> group;
 
-    public StringLabelsForCsvRow(String identifier) {
+    public RowLabels(String identifier) {
         this( Optional.of(new String[]{identifier}), Optional.empty() );
     }
     
+    /**
+     * Adds the identifiers to a row to be outputted in a features CSV.
+     * 
+     * @param csvRow the row of typed-values that will be outputted
+     */
     public void addToRow(List<TypedValue> csvRow) {
-        identifier.ifPresent(stringArr -> addStringArrayToRow(stringArr, csvRow));
-        group.ifPresent(stringArr -> addStringIterableToRow(stringArr, csvRow));
+        identifier.ifPresent(array -> addStringArrayToRow(array, csvRow));
+        group.ifPresent(multiName -> addStringIterableToRow(multiName, csvRow));
     }
 
-    private static void addStringArrayToRow(String[] arr, List<TypedValue> csvRow) {
-        Arrays.stream(arr).forEach(str -> csvRow.add(new TypedValue(str)));
+    private static void addStringArrayToRow(String[] array, List<TypedValue> csvRow) {
+        Arrays.stream(array).forEach(str -> csvRow.add(new TypedValue(str)));
     }
 
-    private static void addStringIterableToRow(Iterable<String> itr, List<TypedValue> csvRow) {
-        for (String str : itr) {
-            csvRow.add(new TypedValue(str));
+    private static void addStringIterableToRow(Iterable<String> iterable, List<TypedValue> csvRow) {
+        for (String string : iterable) {
+            csvRow.add(new TypedValue(string));
         }
     }
 }
