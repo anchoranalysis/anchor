@@ -25,7 +25,7 @@
  */
 package org.anchoranalysis.image.voxel.arithmetic;
 
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
@@ -38,7 +38,7 @@ import org.anchoranalysis.image.extent.Extent;
 public class VoxelsArithmeticFactory {
 
     /**
-     * Create voxels-arithmethic for {@link ByteBuffer}
+     * Create voxels-arithmethic for {@link UnsignedByteBuffer}
      *
      * @param extent the extent of the voxels on which arithmetic is to be performed
      * @param bufferForSlice a buffer for a particular slice index (set at the initial position in
@@ -46,7 +46,7 @@ public class VoxelsArithmeticFactory {
      * @return a newly-created voxels-arithmetic
      */
     public static VoxelsArithmetic createByte(
-            Extent extent, IntFunction<ByteBuffer> bufferForSlice) {
+            Extent extent, IntFunction<UnsignedByteBuffer> bufferForSlice) {
         return new ByteImplementation(extent, bufferForSlice);
     }
 

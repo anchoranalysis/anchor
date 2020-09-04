@@ -26,47 +26,45 @@
 
 package org.anchoranalysis.image.voxel.buffer;
 
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.nio.ByteBuffer;
-import org.anchoranalysis.image.convert.PrimitiveConverter;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
+import lombok.AllArgsConstructor;
 
-public final class VoxelBufferByte extends VoxelBuffer<ByteBuffer> {
+@AllArgsConstructor
+public final class VoxelBufferByte extends VoxelBuffer<UnsignedByteBuffer> {
 
-    private final ByteBuffer delegate;
-
-    private VoxelBufferByte(ByteBuffer delegate) {
-        super();
-        this.delegate = delegate;
-    }
+    private final UnsignedByteBuffer delegate;
 
     public static VoxelBufferByte allocate(int size) {
-        return new VoxelBufferByte(ByteBuffer.allocate(size));
+        return new VoxelBufferByte(UnsignedByteBuffer.allocate(size));
     }
 
-    public static VoxelBufferByte wrap(byte[] arr) {
-        return new VoxelBufferByte(ByteBuffer.wrap(arr));
+    public static VoxelBufferByte wrapArray(byte[] arr) {
+        return new VoxelBufferByte(UnsignedByteBuffer.wrap(arr));
     }
 
-    public static VoxelBuffer<ByteBuffer> wrap(ByteBuffer buffer) {
+    public static VoxelBuffer<UnsignedByteBuffer> wrapBuffer(UnsignedByteBuffer buffer) {
         return new VoxelBufferByte(buffer);
+    }
+    
+    public static VoxelBuffer<UnsignedByteBuffer> wrapUnsigned(ByteBuffer buffer) {
+        return wrapBuffer( new UnsignedByteBuffer(buffer) );
     }
 
     @Override
-    public ByteBuffer buffer() {
+    public UnsignedByteBuffer buffer() {
         return delegate;
-    }
-
-    public byte get() {
-        return delegate.get();
     }
 
     public byte get(int index) {
         return delegate.get(index);
     }
 
-    public ByteBuffer put(int index, byte b) {
-        return delegate.put(index, b);
+    public UnsignedByteBuffer put(int index, byte b) {
+        delegate.put(index, b);
+        return delegate;
     }
 
     public final byte[] array() {
@@ -74,7 +72,7 @@ public final class VoxelBufferByte extends VoxelBuffer<ByteBuffer> {
     }
 
     @Override
-    public VoxelBuffer<ByteBuffer> duplicate() {
+    public VoxelBuffer<UnsignedByteBuffer> duplicate() {
         return new VoxelBufferByte(DuplicateBuffer.copy(delegate));
     }
 
@@ -85,7 +83,7 @@ public final class VoxelBufferByte extends VoxelBuffer<ByteBuffer> {
 
     @Override
     public int getInt(int index) {
-        return PrimitiveConverter.unsignedByteToInt(delegate.get(index));
+        return delegate.getInt(index);
     }
 
     @Override
@@ -99,7 +97,7 @@ public final class VoxelBufferByte extends VoxelBuffer<ByteBuffer> {
     }
 
     @Override
-    public void transferFrom(int destIndex, VoxelBuffer<ByteBuffer> src, int srcIndex) {
+    public void transferFrom(int destIndex, VoxelBuffer<UnsignedByteBuffer> src, int srcIndex) {
         delegate.put(destIndex, src.buffer().get(srcIndex));
     }
 

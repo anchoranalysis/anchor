@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.image.voxel.kernel;
 
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.Voxels;
@@ -71,7 +71,7 @@ public abstract class Kernel {
         return Math.min(point.x() + getSizeHalf(), extent.x() - 1);
     }
 
-    public abstract void init(Voxels<ByteBuffer> in);
+    public abstract void init(Voxels<UnsignedByteBuffer> in);
 
     public abstract void notifyZChange(LocalSlices inSlices, int z);
 }

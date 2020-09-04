@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.image.voxel.iterator.changed;
 
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.extent.Extent;
@@ -49,7 +49,7 @@ final class WithinObjectMask<T> implements ProcessVoxelNeighbor<T> {
     private Point3i relativeToCorner;
 
     // Current ByteBuffer for the object-mask
-    private ByteBuffer bbOM;
+    private UnsignedByteBuffer bbOM;
     private byte maskOffVal;
 
     private int maskOffsetXYAtPoint;

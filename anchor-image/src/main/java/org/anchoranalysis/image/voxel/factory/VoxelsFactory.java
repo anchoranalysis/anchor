@@ -26,8 +26,7 @@
 
 package org.anchoranalysis.image.voxel.factory;
 
-import java.nio.Buffer;
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
@@ -39,12 +38,12 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.image.voxel.pixelsforslice.PixelsForSlice;
 
 public class VoxelsFactory
-        extends VoxelDataTypeFactoryMultiplexer<VoxelsFactoryTypeBound<? extends Buffer>> {
+        extends VoxelDataTypeFactoryMultiplexer<VoxelsFactoryTypeBound<?>> {
 
     // Singleton
     private static VoxelsFactory instance;
 
-    private static final VoxelsFactoryTypeBound<ByteBuffer> FACTORY_BYTE = new FactoryByte();
+    private static final VoxelsFactoryTypeBound<UnsignedByteBuffer> FACTORY_BYTE = new FactoryByte();
     private static final VoxelsFactoryTypeBound<ShortBuffer> FACTORY_SHORT = new FactoryShort();
     private static final VoxelsFactoryTypeBound<IntBuffer> FACTORY_INT = new FactoryInt();
     private static final VoxelsFactoryTypeBound<FloatBuffer> FACTORY_FLOAT = new FactoryFloat();
@@ -61,7 +60,7 @@ public class VoxelsFactory
         return instance;
     }
 
-    public <T extends Buffer> VoxelsWrapper create(
+    public <T> VoxelsWrapper create(
             PixelsForSlice<T> pixelsForPlane, VoxelDataType dataType) {
         @SuppressWarnings("unchecked")
         VoxelsFactoryTypeBound<T> factory = (VoxelsFactoryTypeBound<T>) get(dataType);
@@ -75,7 +74,7 @@ public class VoxelsFactory
         return new VoxelsWrapper(buffer);
     }
 
-    public static VoxelsFactoryTypeBound<ByteBuffer> getByte() {
+    public static VoxelsFactoryTypeBound<UnsignedByteBuffer> getByte() {
         return FACTORY_BYTE;
     }
 

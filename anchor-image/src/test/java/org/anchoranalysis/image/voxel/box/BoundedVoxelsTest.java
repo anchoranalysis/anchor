@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.image.voxel.box;
 
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.util.Optional;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3i;
@@ -50,7 +50,7 @@ public class BoundedVoxelsTest {
         // A bounding box that overlaps with the extent
         Extent extent = extent(20);
 
-        BoundedVoxels<ByteBuffer> box =
+        BoundedVoxels<UnsignedByteBuffer> box =
                 BoundedVoxelsFactory.createByte(new BoundingBox(point(10), extent(15)));
 
         Point3i grow = point(1);

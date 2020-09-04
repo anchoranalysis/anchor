@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.image.channel.converter.attached.histogram;
 
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.converter.ToUnsignedByte;
@@ -37,7 +37,7 @@ import org.anchoranalysis.image.channel.converter.voxels.VoxelsConverter;
 import org.anchoranalysis.image.histogram.Histogram;
 
 public class MaxIntensityFromHistogram
-        implements ChannelConverterAttached<Histogram, ByteBuffer> {
+        implements ChannelConverterAttached<Histogram, UnsignedByteBuffer> {
 
     private ConvertToByteScaleByMaxValue voxelsConverter;
 
@@ -61,7 +61,7 @@ public class MaxIntensityFromHistogram
     }
 
     @Override
-    public VoxelsConverter<ByteBuffer> getVoxelsConverter() {
+    public VoxelsConverter<UnsignedByteBuffer> getVoxelsConverter() {
         return voxelsConverter;
     }
 }

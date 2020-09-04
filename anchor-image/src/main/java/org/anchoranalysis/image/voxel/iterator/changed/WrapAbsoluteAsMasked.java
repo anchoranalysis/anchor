@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.image.voxel.iterator.changed;
 
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 
 /**
  * Wraps a {@link ProcessVoxelNeighborAbsolute} as a {@link ProcessChangedPointAbsoluteMasked}
@@ -48,7 +48,7 @@ public final class WrapAbsoluteAsMasked<T> implements ProcessChangedPointAbsolut
     }
 
     @Override
-    public void notifyChangeZ(int zChange, int z, ByteBuffer objectMaskBuffer) {
+    public void notifyChangeZ(int zChange, int z, UnsignedByteBuffer objectMaskBuffer) {
         delegate.notifyChangeZ(zChange, z);
     }
 

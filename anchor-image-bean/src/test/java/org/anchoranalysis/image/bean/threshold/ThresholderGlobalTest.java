@@ -29,7 +29,7 @@ package org.anchoranalysis.image.bean.threshold;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.util.Optional;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3i;
@@ -85,7 +85,7 @@ public class ThresholderGlobalTest {
             throws OperationFailedException {
         Thresholder thresholder = createThresholder();
 
-        BinaryVoxels<ByteBuffer> out =
+        BinaryVoxels<UnsignedByteBuffer> out =
                 thresholder.threshold(
                         voxels, BinaryValuesByte.getDefault(), Optional.empty(), object);
 
@@ -112,7 +112,7 @@ public class ThresholderGlobalTest {
 
         Extent extentHalf = new Extent(SCENE_WIDTH / 2, SCENE_HEIGHT, SCENE_DEPTH);
 
-        Voxels<ByteBuffer> voxels = VoxelsFactory.getByte().createInitialized(SCENE_EXTENT);
+        Voxels<UnsignedByteBuffer> voxels = VoxelsFactory.getByte().createInitialized(SCENE_EXTENT);
 
         BoundingBox left = new BoundingBox(new Point3i(0, 0, 0), extentHalf);
         BoundingBox right = new BoundingBox(new Point3i(SCENE_WIDTH / 2, 0, 0), extentHalf);
@@ -125,11 +125,11 @@ public class ThresholderGlobalTest {
         return new VoxelsWrapper(voxels);
     }
 
-    private static void writeModulo(Voxels<ByteBuffer> voxels, BoundingBox box, int addToPixels) {
+    private static void writeModulo(Voxels<UnsignedByteBuffer> voxels, BoundingBox box, int addToPixels) {
         IterateVoxels.callEachPoint(
                 voxels,
                 box,
-                (Point3i point, ByteBuffer buffer, int offset) ->
+                (Point3i point, UnsignedByteBuffer buffer, int offset) ->
                         buffer.put(
                                 offset, (byte) ((point.y() % 50 + point.x() % 50) + addToPixels)));
     }

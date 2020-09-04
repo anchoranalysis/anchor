@@ -27,16 +27,17 @@
 package org.anchoranalysis.io.bioformats.copyconvert.tobyte;
 
 import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 
 public class ByteFrom8BitUnsignedNoInterleaving extends ConvertToByte {
 
     @Override
-    protected ByteBuffer convert(ByteBuffer source, int channelIndexRelative) {
+    protected UnsignedByteBuffer convert(ByteBuffer source, int channelIndexRelative) {
         if (source.capacity()==sizeXY && channelIndexRelative==0) {
             // Reuse the existing buffer, if it's single channeled
-            return source;
+            return new UnsignedByteBuffer(source);
         } else {
-            ByteBuffer destination = allocateBuffer();
+            UnsignedByteBuffer destination = allocateBuffer();
             source.position(sizeBytes * channelIndexRelative);
             source.limit( source.position() + sizeBytes );
             destination.put(source);

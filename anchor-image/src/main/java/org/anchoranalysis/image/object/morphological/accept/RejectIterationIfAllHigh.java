@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.image.object.morphological.accept;
 
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelsFactory;
 import org.anchoranalysis.image.voxel.Voxels;
@@ -34,7 +34,7 @@ import org.anchoranalysis.image.voxel.Voxels;
 public class RejectIterationIfAllHigh implements AcceptIterationConditon {
 
     @Override
-    public boolean acceptIteration(Voxels<ByteBuffer> voxels, BinaryValues bvb) {
+    public boolean acceptIteration(Voxels<UnsignedByteBuffer> voxels, BinaryValues bvb) {
         // We exit early if there's no off-pixel
         return BinaryVoxelsFactory.reuseByte(voxels, bvb).hasOffVoxel();
     }

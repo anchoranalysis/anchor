@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.image.object.combine;
 
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.util.Optional;
 import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.voxel.BoundedVoxels;
@@ -41,7 +41,7 @@ public abstract class CountIntersectingVoxels {
      * @return
      */
     public int countIntersectingVoxels(
-            BoundedVoxels<ByteBuffer> src, BoundedVoxels<ByteBuffer> other) {
+            BoundedVoxels<UnsignedByteBuffer> src, BoundedVoxels<UnsignedByteBuffer> other) {
         // Find the common bounding box
         Optional<BoundingBox> boxIntersect =
                 src.boundingBox().intersection().with(other.boundingBox());
@@ -57,8 +57,8 @@ public abstract class CountIntersectingVoxels {
 
     // count intersecting pixels
     private int countIntersectingVoxelsFromBBox(
-            BoundedVoxels<ByteBuffer> src,
-            BoundedVoxels<ByteBuffer> other,
+            BoundedVoxels<UnsignedByteBuffer> src,
+            BoundedVoxels<UnsignedByteBuffer> other,
             BoundingBox boxIntersect) {
         IntersectionBoundingBox box =
                 IntersectionBoundingBox.create(
@@ -69,10 +69,10 @@ public abstract class CountIntersectingVoxels {
         int cnt = 0;
         for (int z = box.z().min(); z < box.z().max(); z++) {
 
-            ByteBuffer buffer = src.voxels().sliceBuffer(z);
+            UnsignedByteBuffer buffer = src.voxels().sliceBuffer(z);
 
             int zOther = z + box.z().rel();
-            ByteBuffer bufferOther = other.voxels().sliceBuffer(zOther);
+            UnsignedByteBuffer bufferOther = other.voxels().sliceBuffer(zOther);
 
             cnt += countIntersectingVoxels(buffer, bufferOther, box);
         }
@@ -81,5 +81,5 @@ public abstract class CountIntersectingVoxels {
     }
 
     protected abstract int countIntersectingVoxels(
-            ByteBuffer buffer1, ByteBuffer buffer2, IntersectionBoundingBox box);
+            UnsignedByteBuffer buffer1, UnsignedByteBuffer buffer2, IntersectionBoundingBox box);
 }

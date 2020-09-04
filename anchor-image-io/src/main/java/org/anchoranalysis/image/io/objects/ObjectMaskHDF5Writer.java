@@ -29,7 +29,7 @@ package org.anchoranalysis.image.io.objects;
 import ch.systemsx.cisd.base.mdarray.MDByteArray;
 import ch.systemsx.cisd.hdf5.HDF5IntStorageFeatures;
 import ch.systemsx.cisd.hdf5.IHDF5Writer;
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.util.function.ToIntFunction;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
@@ -88,7 +88,7 @@ class ObjectMaskHDF5Writer {
         writer.uint32().setAttr(pathHDF5, attrName, crnrVal.intValue());
     }
 
-    private static MDByteArray byteArray(BinaryVoxels<ByteBuffer> bvb) {
+    private static MDByteArray byteArray(BinaryVoxels<UnsignedByteBuffer> bvb) {
 
         Extent extent = bvb.extent();
 
@@ -96,11 +96,11 @@ class ObjectMaskHDF5Writer {
 
         for (int z = 0; z < extent.z(); z++) {
 
-            ByteBuffer bb = bvb.sliceBuffer(z);
+            UnsignedByteBuffer buffer = bvb.sliceBuffer(z);
 
             for (int y = 0; y < extent.y(); y++) {
                 for (int x = 0; x < extent.x(); x++) {
-                    md.set(bb.get(extent.offset(x, y)), x, y, z);
+                    md.set(buffer.get(extent.offset(x, y)), x, y, z);
                 }
             }
         }

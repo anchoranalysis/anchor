@@ -25,7 +25,6 @@
  */
 package org.anchoranalysis.image.voxel.assigner;
 
-import java.nio.Buffer;
 import java.util.Optional;
 import java.util.function.IntPredicate;
 import lombok.RequiredArgsConstructor;
@@ -38,7 +37,7 @@ import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.iterator.IterateVoxelsVoxelBoxAsInt;
 
 @RequiredArgsConstructor
-abstract class Base<T extends Buffer> implements VoxelsAssigner {
+abstract class Base<T> implements VoxelsAssigner {
 
     // START REQUIRED ARGUMENTS
     /** The voxels that are assigned to */

@@ -27,7 +27,6 @@
 package org.anchoranalysis.io.bioformats.copyconvert;
 
 import java.io.IOException;
-import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.util.function.Function;
 import lombok.RequiredArgsConstructor;
@@ -43,7 +42,7 @@ import org.apache.commons.logging.LogFactory;
  * Converts a subset of bytes from a byte[] to one or more destination channels.
  * */
 @RequiredArgsConstructor
-public abstract class ConvertTo<T extends Buffer> {
+public abstract class ConvertTo<T> {
 
     private static Log log = LogFactory.getLog(ConvertTo.class);
 
@@ -105,7 +104,7 @@ public abstract class ConvertTo<T extends Buffer> {
     protected abstract VoxelBuffer<T> convertSingleChannel(ByteBuffer source, int channelIndexRelative)
             throws IOException;
 
-    public static <S extends Buffer> void placeSliceInDestination(
+    public static <S> void placeSliceInDestination(
             VoxelBuffer<S> voxelBuffer,
             Function<VoxelsWrapper, Voxels<S>> functionCast,
             DestinationChannelForIndex destination,

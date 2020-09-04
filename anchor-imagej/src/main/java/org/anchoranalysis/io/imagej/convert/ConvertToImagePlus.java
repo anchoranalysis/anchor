@@ -25,7 +25,7 @@
  */
 package org.anchoranalysis.io.imagej.convert;
 
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.Dimensions;
@@ -104,14 +104,14 @@ public class ConvertToImagePlus {
     }
     
     /**
-     * Creates an {@link ImagePlus} from <i>one slice</i> of a {@code Voxels<ByteBuffer> voxels}.
+     * Creates an {@link ImagePlus} from <i>one slice</i> of a {@code Voxels<UnsignedByteBuffer> voxels}.
      * 
      * @param voxels the voxels from which a slice will be extracted to be converted
      * @param sliceIndex slice-index (z coordinate) to extract
      * @param name the name to use in the image-plus
      * @return a newly created image-plus, reusing the input channels's buffer without copying.
      */
-    public static ImagePlus fromSlice( Voxels<ByteBuffer> voxels, int sliceIndex, String name ) {
+    public static ImagePlus fromSlice( Voxels<UnsignedByteBuffer> voxels, int sliceIndex, String name ) {
         ImageProcessor processor = ConvertToImageProcessor.fromByte(voxels.slices(), sliceIndex);
         return new ImagePlus(name, processor);
     }

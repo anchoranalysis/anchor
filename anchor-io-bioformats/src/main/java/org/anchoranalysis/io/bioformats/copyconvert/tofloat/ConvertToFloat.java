@@ -58,7 +58,7 @@ public abstract class ConvertToFloat extends ConvertTo<FloatBuffer> {
             throws IOException {
         Preconditions.checkArgument(channelIndexRelative==0, "interleaving not supported for int data");
         float[] fArr = convertIntegerBytesToFloatArray(dimensions, source, sizeBytesChannel);
-        return VoxelBufferFloat.wrap(fArr);
+        return VoxelBufferFloat.wrapArray(fArr);
     }
 
     protected abstract float[] convertIntegerBytesToFloatArray(

@@ -25,7 +25,7 @@
  */
 package org.anchoranalysis.io.imagej.convert;
 
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.util.function.IntFunction;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -78,9 +78,9 @@ class ImageStackFactory {
 
         int channelIndex = 0;
 
-        Voxels<ByteBuffer> voxelsRed = extractChannel(stack, channelIndex++);
-        Voxels<ByteBuffer> voxelsGreen = extractChannel(stack, channelIndex++);
-        Voxels<ByteBuffer> voxelsBlue = extractChannel(stack, channelIndex);
+        Voxels<UnsignedByteBuffer> voxelsRed = extractChannel(stack, channelIndex++);
+        Voxels<UnsignedByteBuffer> voxelsGreen = extractChannel(stack, channelIndex++);
+        Voxels<UnsignedByteBuffer> voxelsBlue = extractChannel(stack, channelIndex);
         
         return createFromProcessorsStream(extent, z ->
             Stream.of( createColorProcessor(extent, z, voxelsRed, voxelsGreen, voxelsBlue) )
@@ -143,7 +143,7 @@ class ImageStackFactory {
         );
     }
 
-    private static ColorProcessor createColorProcessor(Extent extent, int z, Voxels<ByteBuffer> voxelsRed, Voxels<ByteBuffer> voxelsGreen, Voxels<ByteBuffer> voxelsBlue) {
+    private static ColorProcessor createColorProcessor(Extent extent, int z, Voxels<UnsignedByteBuffer> voxelsRed, Voxels<UnsignedByteBuffer> voxelsGreen, Voxels<UnsignedByteBuffer> voxelsBlue) {
         ColorProcessor processor = new ColorProcessor(extent.x(), extent.y());
 
         byte[] redPixels = extractSlice(voxelsRed, z);
@@ -154,11 +154,11 @@ class ImageStackFactory {
         return processor;
     }
     
-    private static Voxels<ByteBuffer> extractChannel(RGBStack stack, int channelIndex) {
+    private static Voxels<UnsignedByteBuffer> extractChannel(RGBStack stack, int channelIndex) {
         return stack.channelAt(channelIndex).voxels().asByte();
     }
 
-    private static byte[] extractSlice(Voxels<ByteBuffer> voxels, int z) {
+    private static byte[] extractSlice(Voxels<UnsignedByteBuffer> voxels, int z) {
         return voxels.sliceBuffer(z).array();
     }
 }

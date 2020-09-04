@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.image.points;
 
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.util.function.Consumer;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
@@ -56,7 +56,7 @@ class ConsumePointsFromMaskSliced {
     private final int skipAfterSuccessiveEmptySlices;
     private final ReadableTuple3i cornerMin;
     private final ReadableTuple3i cornerMax;
-    private final Voxels<ByteBuffer> voxels;
+    private final Voxels<UnsignedByteBuffer> voxels;
     private final BinaryValuesByte bvb;
     private final int startZ;
     private final Consumer<Point3i> consumer;
@@ -86,9 +86,9 @@ class ConsumePointsFromMaskSliced {
     public void firstHalf() {
         for (int z = startZ; z <= cornerMax.z(); z++) {
 
-            ByteBuffer bb = voxels.sliceBuffer(z);
+            UnsignedByteBuffer buffer = voxels.sliceBuffer(z);
 
-            if (!addPointsFromSlice(bb, z)) {
+            if (!addPointsFromSlice(buffer, z)) {
                 successiveEmptySlices = 0;
 
                 // We don't increase the counter until we've been inside a non-empty slice
@@ -104,7 +104,7 @@ class ConsumePointsFromMaskSliced {
     public void secondHalf() {
         for (int z = (startZ - 1); z >= cornerMin.z(); z--) {
 
-            ByteBuffer bb = voxels.sliceBuffer(z);
+            UnsignedByteBuffer bb = voxels.sliceBuffer(z);
 
             if (!addPointsFromSlice(bb, z)) {
                 successiveEmptySlices = 0;
@@ -119,7 +119,7 @@ class ConsumePointsFromMaskSliced {
         }
     }
 
-    private boolean addPointsFromSlice(ByteBuffer bb, int z) {
+    private boolean addPointsFromSlice(UnsignedByteBuffer bb, int z) {
 
         boolean addedToSlice = false;
         for (int y = cornerMin.y(); y <= cornerMax.y(); y++) {

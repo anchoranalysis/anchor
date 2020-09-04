@@ -66,6 +66,6 @@ public class IntFromUnsigned32BitInt extends ConvertToInt {
             out[indexOut++] = value;
         }
 
-        return VoxelBufferInt.wrap(out);
+        return VoxelBufferInt.wrapArray(out);
     }
 }

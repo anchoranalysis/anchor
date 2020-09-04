@@ -25,8 +25,7 @@
  */
 package org.anchoranalysis.image.voxel.arithmetic;
 
-import java.nio.Buffer;
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.util.function.IntFunction;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -42,7 +41,7 @@ import org.anchoranalysis.image.object.ObjectMask;
  * @param <T> buffer-type
  */
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
-abstract class Base<T extends Buffer> implements VoxelsArithmetic {
+abstract class Base<T> implements VoxelsArithmetic {
 
     // START REQUIRED ARGUMENTS
     /** The extent of the voxels on which arithmetic is to be performed */
@@ -83,12 +82,12 @@ abstract class Base<T extends Buffer> implements VoxelsArithmetic {
         for (int z = box.cornerMin().z(); z < pointMax.z(); z++) {
 
             T pixels = bufferForSlice.apply(z);
-            ByteBuffer pixelsMask = object.sliceBufferGlobal(z);
+            UnsignedByteBuffer pixelsMask = object.sliceBufferGlobal(z);
 
             for (int y = box.cornerMin().y(); y < pointMax.y(); y++) {
                 for (int x = box.cornerMin().x(); x < pointMax.x(); x++) {
 
-                    if (pixelsMask.get() == maskOnByte) {
+                    if (pixelsMask.getByte() == maskOnByte) {
                         addToBufferIndex(pixels, extent.offset(x, y), valueToBeAdded);
                     }
                 }
@@ -107,12 +106,12 @@ abstract class Base<T extends Buffer> implements VoxelsArithmetic {
         for (int z = box.cornerMin().z(); z <= pointMax.z(); z++) {
 
             T pixels = bufferForSlice.apply(z);
-            ByteBuffer pixelsMask = object.sliceBufferGlobal(z);
+            UnsignedByteBuffer pixelsMask = object.sliceBufferGlobal(z);
 
             for (int y = box.cornerMin().y(); y <= pointMax.y(); y++) {
                 for (int x = box.cornerMin().x(); x <= pointMax.x(); x++) {
 
-                    if (pixelsMask.get() == maskOnByte) {
+                    if (pixelsMask.getByte() == maskOnByte) {
                         int index = extent.offset(x, y);
 
                         multiplyByBufferIndex(pixels, index, factor);

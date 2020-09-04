@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.image.voxel;
 
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.arithmetic.VoxelsArithmetic;
 import org.anchoranalysis.image.voxel.arithmetic.VoxelsArithmeticFactory;
 import org.anchoranalysis.image.voxel.assigner.VoxelsAssigner;
@@ -36,15 +36,15 @@ import org.anchoranalysis.image.voxel.extracter.VoxelsExtracterFactory;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 import org.anchoranalysis.image.voxel.pixelsforslice.PixelsForSlice;
 
-public final class VoxelsAsByte extends Voxels<ByteBuffer> {
+public final class VoxelsAsByte extends Voxels<UnsignedByteBuffer> {
 
-    public VoxelsAsByte(PixelsForSlice<ByteBuffer> slices) {
+    public VoxelsAsByte(PixelsForSlice<UnsignedByteBuffer> slices) {
         super(slices, VoxelsFactory.getByte(), createArithmetic(slices));
     }
 
     @Override
-    protected boolean areBufferValuesEqual(ByteBuffer buffer1, ByteBuffer buffer2) {
-        return buffer1.get() == buffer2.get();
+    protected boolean areBufferValuesEqual(UnsignedByteBuffer buffer1, UnsignedByteBuffer buffer2) {
+        return buffer1.getByte() == buffer2.getByte();
     }
 
     @Override
@@ -53,11 +53,21 @@ public final class VoxelsAsByte extends Voxels<ByteBuffer> {
     }
 
     @Override
-    public VoxelsExtracter<ByteBuffer> extract() {
+    public VoxelsExtracter<UnsignedByteBuffer> extract() {
         return VoxelsExtracterFactory.createByte(this);
     }
 
-    private static VoxelsArithmetic createArithmetic(PixelsForSlice<ByteBuffer> slices) {
+    private static VoxelsArithmetic createArithmetic(PixelsForSlice<UnsignedByteBuffer> slices) {
         return VoxelsArithmeticFactory.createByte(slices.extent(), slices::sliceBuffer);
+    }
+
+    @Override
+    public boolean hasRemaining(UnsignedByteBuffer buffer) {
+        return buffer.hasRemaining();
+    }
+
+    @Override
+    public void setBufferPosition(UnsignedByteBuffer buffer, int offset) {
+        buffer.position(offset);
     }
 }

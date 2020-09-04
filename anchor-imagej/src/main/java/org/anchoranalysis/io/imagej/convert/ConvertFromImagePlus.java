@@ -25,7 +25,6 @@
  */
 package org.anchoranalysis.io.imagej.convert;
 
-import java.nio.Buffer;
 import java.util.function.Function;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.Extent;
@@ -82,13 +81,13 @@ public class ConvertFromImagePlus {
         }
     }
 
-    private static <T extends Buffer> VoxelsWrapper deriveCopiedVoxels(ImagePlus image, VoxelsFactoryTypeBound<T> factory, Function<ImageProcessor,VoxelBuffer<T>> convertProcessor) {
+    private static <T> VoxelsWrapper deriveCopiedVoxels(ImagePlus image, VoxelsFactoryTypeBound<T> factory, Function<ImageProcessor,VoxelBuffer<T>> convertProcessor) {
         Voxels<T> voxels = factory.createInitialized( deriveExtent(image) );
         copyStackIntoVoxels(image.getImageStack(), voxels, convertProcessor);
         return new VoxelsWrapper(voxels);
     }
         
-    private static <T extends Buffer> void copyStackIntoVoxels(
+    private static <T> void copyStackIntoVoxels(
             ImageStack source, Voxels<T> destination, Function<ImageProcessor,VoxelBuffer<T>> convertProcessor) {
         destination.extent().iterateOverZ( z-> {
             ImageProcessor processor = source.getProcessor(z + 1);

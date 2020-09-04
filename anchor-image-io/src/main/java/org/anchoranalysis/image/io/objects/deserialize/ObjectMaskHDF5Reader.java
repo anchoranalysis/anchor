@@ -29,7 +29,7 @@ package org.anchoranalysis.image.io.objects.deserialize;
 import ch.systemsx.cisd.base.mdarray.MDByteArray;
 import ch.systemsx.cisd.hdf5.IHDF5IntReader;
 import ch.systemsx.cisd.hdf5.IHDF5Reader;
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.box.BoundingBox;
@@ -41,7 +41,7 @@ class ObjectMaskHDF5Reader {
 
     public ObjectMask apply(IHDF5Reader reader, String datasetPath) {
 
-        Voxels<ByteBuffer> voxels = createVoxels(reader.uint8().readMDArray(datasetPath));
+        Voxels<UnsignedByteBuffer> voxels = createVoxels(reader.uint8().readMDArray(datasetPath));
 
         BoundingBox box =
                 new BoundingBox(cornerPoint(reader.uint32(), datasetPath), voxels.extent());
@@ -70,17 +70,17 @@ class ObjectMaskHDF5Reader {
      * @param mdb
      * @return
      */
-    private Voxels<ByteBuffer> createVoxels(MDByteArray mdb) {
-        Extent e = extractExtent(mdb);
-        Voxels<ByteBuffer> voxels = VoxelsFactory.getByte().createInitialized(e);
+    private Voxels<UnsignedByteBuffer> createVoxels(MDByteArray mdb) {
+        Extent extent = extractExtent(mdb);
+        Voxels<UnsignedByteBuffer> voxels = VoxelsFactory.getByte().createInitialized(extent);
 
-        for (int z = 0; z < e.z(); z++) {
+        for (int z = 0; z < extent.z(); z++) {
 
-            ByteBuffer bb = voxels.sliceBuffer(z);
+            UnsignedByteBuffer buffer = voxels.sliceBuffer(z);
 
-            for (int y = 0; y < e.y(); y++) {
-                for (int x = 0; x < e.x(); x++) {
-                    bb.put(e.offset(x, y), mdb.get(x, y, z));
+            for (int y = 0; y < extent.y(); y++) {
+                for (int x = 0; x < extent.x(); x++) {
+                    buffer.put(extent.offset(x, y), mdb.get(x, y, z));
                 }
             }
         }

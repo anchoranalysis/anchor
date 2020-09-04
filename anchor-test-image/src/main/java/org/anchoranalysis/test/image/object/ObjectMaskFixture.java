@@ -28,7 +28,7 @@ package org.anchoranalysis.test.image.object;
 
 import static org.junit.Assert.assertTrue;
 
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.values.BinaryValues;
@@ -70,14 +70,14 @@ public class ObjectMaskFixture {
 
         assertTrue(dimensions.contains(box));
 
-        Voxels<ByteBuffer> voxels = VoxelsFactory.getByte().createInitialized(extent);
+        Voxels<UnsignedByteBuffer> voxels = VoxelsFactory.getByte().createInitialized(extent);
         BinaryValues bv = BinaryValues.getDefault();
         BinaryValuesByte bvb = bv.createByte();
 
         boolean atLeastOneHigh = false;
 
         for (int z = 0; z < extent.z(); z++) {
-            VoxelBuffer<ByteBuffer> slice = voxels.slice(z);
+            VoxelBuffer<UnsignedByteBuffer> slice = voxels.slice(z);
 
             for (int y = 0; y < extent.y(); y++) {
                 for (int x = 0; x < extent.x(); x++) {

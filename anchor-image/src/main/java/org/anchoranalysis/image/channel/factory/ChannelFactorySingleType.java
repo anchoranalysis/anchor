@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.image.channel.factory;
 
-import java.nio.Buffer;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.experimental.Accessors;
@@ -43,7 +42,7 @@ import org.anchoranalysis.image.voxel.factory.VoxelsFactoryTypeBound;
 public abstract class ChannelFactorySingleType {
 
     @Getter private final VoxelDataType dataType;
-    private final VoxelsFactoryTypeBound<? extends Buffer> factory;
+    private final VoxelsFactoryTypeBound<?> factory;
 
     public Channel createEmptyInitialised(Dimensions dimensions) {
         return create(factory.createInitialized(dimensions.extent()), dimensions.resolution());

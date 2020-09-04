@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.image.voxel.buffer.max;
 
-import java.nio.Buffer;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactoryTypeBound;
@@ -37,7 +36,7 @@ import org.anchoranalysis.image.voxel.factory.VoxelsFactoryTypeBound;
  * @author Owen Feehan
  * @param <T> type of buffer used, both as input and result, of the maximum intesnity projection
  */
-public abstract class MaxIntensityBuffer<T extends Buffer> {
+public abstract class MaxIntensityBuffer<T> {
 
     /** Target buffer, where the maximum-intensity pixels are stored */
     private Voxels<T> target;
@@ -50,7 +49,7 @@ public abstract class MaxIntensityBuffer<T extends Buffer> {
 
         T flatBuffer = target.sliceBuffer(0);
 
-        while (pixels.hasRemaining()) {
+        while (target.hasRemaining(pixels)) {
             addBuffer(pixels, flatBuffer);
         }
     }

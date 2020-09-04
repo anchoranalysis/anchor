@@ -27,14 +27,14 @@
 package org.anchoranalysis.image.voxel.pixelsforslice;
 
 import com.google.common.base.Preconditions;
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferByte;
 
-public class PixelsFromByteBufferArr implements PixelsForSlice<ByteBuffer> {
+public class PixelsFromByteBufferArr implements PixelsForSlice<UnsignedByteBuffer> {
 
-    private final VoxelBuffer<ByteBuffer>[] buffer;
+    private final VoxelBuffer<UnsignedByteBuffer>[] buffer;
     private final Extent extent;
 
     private PixelsFromByteBufferArr(Extent extent) {
@@ -65,15 +65,15 @@ public class PixelsFromByteBufferArr implements PixelsForSlice<ByteBuffer> {
     // END FACTORY METHODS
 
     @Override
-    public void replaceSlice(int z, VoxelBuffer<ByteBuffer> pixels) {
+    public void replaceSlice(int z, VoxelBuffer<UnsignedByteBuffer> pixels) {
         buffer[z] = pixels;
         buffer[z].buffer().clear();
     }
 
     @Override
-    public VoxelBuffer<ByteBuffer> slice(int z) {
+    public VoxelBuffer<UnsignedByteBuffer> slice(int z) {
         Preconditions.checkArgument(z >= 0);
-        VoxelBuffer<ByteBuffer> buf = buffer[z];
+        VoxelBuffer<UnsignedByteBuffer> buf = buffer[z];
         buf.buffer().clear();
         return buf;
     }

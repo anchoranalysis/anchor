@@ -26,7 +26,7 @@
 package org.anchoranalysis.image.voxel.iterator;
 
 import com.google.common.base.Preconditions;
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.util.Optional;
 import java.util.function.Consumer;
 import lombok.AccessLevel;
@@ -58,7 +58,7 @@ public class IterateVoxelsByte {
      * @param consumer called for every matching voxel
      */
     public static void iterateEqualValuesReusePoint(
-            Voxels<ByteBuffer> voxels, byte equalToValue, Consumer<Point3i> consumer) {
+            Voxels<UnsignedByteBuffer> voxels, byte equalToValue, Consumer<Point3i> consumer) {
         IterateVoxels.callEachPoint(
                 voxels,
                 (point, buffer, offset) -> {
@@ -76,7 +76,7 @@ public class IterateVoxelsByte {
      * @param consumer called for every matching voxel
      */
     public static void iterateEqualValues(
-            Voxels<ByteBuffer> voxels, byte equalToValue, PointThreeDimensionalConsumer consumer) {
+            Voxels<UnsignedByteBuffer> voxels, byte equalToValue, PointThreeDimensionalConsumer consumer) {
         Extent extent = voxels.extent();
         extent.iterateOverZ(z -> iterateEqualValuesSlice(voxels, z, equalToValue, consumer));
     }
@@ -90,16 +90,16 @@ public class IterateVoxelsByte {
      * @param consumer called for every matching voxel
      */
     public static void iterateEqualValuesSlice(
-            Voxels<ByteBuffer> voxels,
+            Voxels<UnsignedByteBuffer> voxels,
             int sliceIndex,
             byte equalToValue,
             PointThreeDimensionalConsumer consumer) {
-        ByteBuffer buffer = voxels.sliceBuffer(sliceIndex);
+        UnsignedByteBuffer buffer = voxels.sliceBuffer(sliceIndex);
 
         voxels.extent()
                 .iterateOverXY(
                         (x, y, offset) -> {
-                            if (buffer.get() == equalToValue) {
+                            if (buffer.getByte() == equalToValue) {
                                 consumer.accept(x, y, sliceIndex);
                             }
                         });
@@ -114,20 +114,20 @@ public class IterateVoxelsByte {
      *     are equal-to.
      */
     public static Optional<Point3i> iterateUntilFirstEqual(
-            BoundedVoxels<ByteBuffer> voxels, byte equalToValue) {
+            BoundedVoxels<UnsignedByteBuffer> voxels, byte equalToValue) {
 
         Extent extentMask = voxels.extent();
         ReadableTuple3i corner = voxels.boundingBox().cornerMin();
 
         for (int z = 0; z < extentMask.z(); z++) {
 
-            ByteBuffer bufferMask = voxels.sliceBufferLocal(z);
+            UnsignedByteBuffer bufferMask = voxels.sliceBufferLocal(z);
 
             for (int y = 0; y < extentMask.y(); y++) {
 
                 for (int x = 0; x < extentMask.x(); x++) {
 
-                    if (bufferMask.get() == equalToValue) {
+                    if (bufferMask.getByte() == equalToValue) {
                         return Optional.of(new Point3i(corner.x() + x, corner.y(), corner.z() + z));
                     }
                 }
@@ -146,7 +146,7 @@ public class IterateVoxelsByte {
      * @param mask only voxels who correspond to an ON voxels in the mask are included
      * @return the running-sum
      */
-    public static RunningSum calculateSumAndCount(Voxels<ByteBuffer> voxelsIntensity, Mask mask) {
+    public static RunningSum calculateSumAndCount(Voxels<UnsignedByteBuffer> voxelsIntensity, Mask mask) {
         Preconditions.checkArgument(voxelsIntensity.extent().equals(mask.extent()));
 
         RunningSum running = new RunningSum();
@@ -175,29 +175,21 @@ public class IterateVoxelsByte {
      * @param operation is called for each voxel within the bounding-box using GLOBAL coordinates.
      */
     public static void callEachPointWithBinaryOperation(
-            Voxels<ByteBuffer> voxelsIn1,
-            Voxels<ByteBuffer> voxelsIn2,
-            Voxels<ByteBuffer> voxelsOut,
+            Voxels<UnsignedByteBuffer> voxelsIn1,
+            Voxels<UnsignedByteBuffer> voxelsIn2,
+            Voxels<UnsignedByteBuffer> voxelsOut,
             IntBinaryOperation operation) {
         Preconditions.checkArgument(voxelsIn1.extent().equals(voxelsIn2.extent()));
         Preconditions.checkArgument(voxelsIn2.extent().equals(voxelsOut.extent()));
 
         for (int z = 0; z < voxelsOut.extent().z(); z++) {
 
-            ByteBuffer in1 = voxelsIn1.sliceBuffer(z);
-            ByteBuffer in2 = voxelsIn2.sliceBuffer(z);
-            ByteBuffer out = voxelsOut.sliceBuffer(z);
+            UnsignedByteBuffer in1 = voxelsIn1.sliceBuffer(z);
+            UnsignedByteBuffer in2 = voxelsIn2.sliceBuffer(z);
+            UnsignedByteBuffer out = voxelsOut.sliceBuffer(z);
 
             while (in1.hasRemaining()) {
-
-                byte b1 = in1.get();
-                byte b2 = in2.get();
-
-                int result =
-                        operation.apply(
-                                PrimitiveConverter.unsignedByteToInt(b1),
-                                PrimitiveConverter.unsignedByteToInt(b2));
-                out.put((byte) result);
+                out.putInt( operation.apply(in1.getInt(), in2.getInt()) );
             }
 
             assert (!in2.hasRemaining());
@@ -215,7 +207,7 @@ public class IterateVoxelsByte {
      * @return the running-sum
      */
     public static RunningSum calculateSumAndCount(
-            Voxels<ByteBuffer> voxelsIntensity, ObjectMask object) {
+            Voxels<UnsignedByteBuffer> voxelsIntensity, ObjectMask object) {
 
         RunningSum running = new RunningSum();
 
@@ -227,7 +219,7 @@ public class IterateVoxelsByte {
         return running;
     }
 
-    private static void addFromBufferToRunning(ByteBuffer buffer, int offset, RunningSum running) {
+    private static void addFromBufferToRunning(UnsignedByteBuffer buffer, int offset, RunningSum running) {
         int intensity = PrimitiveConverter.unsignedByteToInt(buffer.get(offset));
         running.increment(intensity, 1);
     }

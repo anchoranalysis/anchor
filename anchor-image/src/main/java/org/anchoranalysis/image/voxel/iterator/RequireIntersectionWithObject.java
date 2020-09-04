@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.image.voxel.iterator;
 
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.object.ObjectMask;
 
@@ -44,7 +44,7 @@ final class RequireIntersectionWithObject implements ProcessVoxel {
     private final ObjectMask objectMask;
     private final byte byteOn;
 
-    private ByteBuffer bbMask;
+    private UnsignedByteBuffer bbMask;
 
     /**
      * Constructor

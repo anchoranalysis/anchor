@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.mpp.overlap;
 
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
@@ -48,20 +48,20 @@ class CountIntersectingVoxelsRegionMembershipMask {
     private final byte regionMembershipFlag;
 
     public int countIntersectingVoxelsMaskGlobal(
-            BoundedVoxels<ByteBuffer> src,
-            BoundedVoxels<ByteBuffer> other,
-            Voxels<ByteBuffer> maskGlobal,
+            BoundedVoxels<UnsignedByteBuffer> src,
+            BoundedVoxels<UnsignedByteBuffer> other,
+            Voxels<UnsignedByteBuffer> maskGlobal,
             byte onMaskGlobal) {
         return countCheckIntersection(
                 src, other, src.boundingBox(), other.boundingBox(), maskGlobal, onMaskGlobal);
     }
 
     private int countCheckIntersection(
-            BoundedVoxels<ByteBuffer> src,
-            BoundedVoxels<ByteBuffer> other,
+            BoundedVoxels<UnsignedByteBuffer> src,
+            BoundedVoxels<UnsignedByteBuffer> other,
             BoundingBox srcBox,
             BoundingBox otherBox,
-            Voxels<ByteBuffer> maskGlobal,
+            Voxels<UnsignedByteBuffer> maskGlobal,
             byte onMaskGlobal) {
 
         // Find the common bounding box
@@ -80,10 +80,10 @@ class CountIntersectingVoxelsRegionMembershipMask {
     // count intersecting pixels, but only includes a pixel ifs marked as onMaskGlobal in the mask
     //   voxel buffer
     private int countIntersectingVoxelsFromBBoxMaskGlobal(
-            BoundedVoxels<ByteBuffer> src,
-            BoundedVoxels<ByteBuffer> other,
+            BoundedVoxels<UnsignedByteBuffer> src,
+            BoundedVoxels<UnsignedByteBuffer> other,
             BoundingBox boxIntersect,
-            Voxels<ByteBuffer> maskGlobal,
+            Voxels<UnsignedByteBuffer> maskGlobal,
             byte onMaskGlobal) {
         Extent eGlobalMask = maskGlobal.extent();
 
@@ -97,13 +97,13 @@ class CountIntersectingVoxelsRegionMembershipMask {
 
         for (int z = box.z().min(); z < box.z().max(); z++) {
 
-            ByteBuffer buffer = src.voxels().sliceBuffer(z);
+            UnsignedByteBuffer buffer = src.voxels().sliceBuffer(z);
 
             int zOther = z + box.z().rel();
             int zGlobal = z + src.boundingBox().cornerMin().z();
 
-            ByteBuffer bufferOther = other.voxels().sliceBuffer(zOther);
-            ByteBuffer bufferMaskGlobal = maskGlobal.sliceBuffer(zGlobal);
+            UnsignedByteBuffer bufferOther = other.voxels().sliceBuffer(zOther);
+            UnsignedByteBuffer bufferMaskGlobal = maskGlobal.sliceBuffer(zGlobal);
 
             buffer.clear();
             bufferOther.clear();
@@ -123,9 +123,9 @@ class CountIntersectingVoxelsRegionMembershipMask {
     }
 
     private int countIntersectingVoxelsOnGlobalMask(
-            ByteBuffer buffer1,
-            ByteBuffer buffer2,
-            ByteBuffer bufferMaskGlobal,
+            UnsignedByteBuffer buffer1,
+            UnsignedByteBuffer buffer2,
+            UnsignedByteBuffer bufferMaskGlobal,
             IntersectionBoundingBox box,
             ReadableTuple3i pointGlobalRel,
             Extent extentGlobal,

@@ -25,8 +25,7 @@
  */
 package org.anchoranalysis.image.voxel.extracter;
 
-import java.nio.Buffer;
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
@@ -42,7 +41,7 @@ import org.anchoranalysis.image.voxel.VoxelsPredicate;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
 
 @AllArgsConstructor
-abstract class Base<T extends Buffer> implements VoxelsExtracter<T> {
+abstract class Base<T> implements VoxelsExtracter<T> {
 
     // START REQUIRED ARGUMENTS
     /** The voxels to extract from */
@@ -126,7 +125,7 @@ abstract class Base<T extends Buffer> implements VoxelsExtracter<T> {
             T srcArr = voxels.sliceBuffer(z);
             T destArr = voxelsDestination.sliceBuffer(z + relativePosition.z());
 
-            ByteBuffer maskBuffer = object.sliceBufferGlobal(z);
+            UnsignedByteBuffer maskBuffer = object.sliceBufferGlobal(z);
 
             for (int y = sourceStart.y(); y <= sourceEnd.y(); y++) {
                 for (int x = sourceStart.x(); x <= sourceEnd.x(); x++) {
@@ -137,7 +136,7 @@ abstract class Base<T extends Buffer> implements VoxelsExtracter<T> {
                                     .extent()
                                     .offset(x + relativePosition.x(), y + relativePosition.y());
 
-                    if (maskBuffer.get() == bvb.getOnByte()) {
+                    if (maskBuffer.getByte() == bvb.getOnByte()) {
                         copyBufferIndexTo(srcArr, srcIndex, destArr, destIndex);
                     }
                 }
@@ -152,12 +151,12 @@ abstract class Base<T extends Buffer> implements VoxelsExtracter<T> {
 
         Voxels<T> bufferTarget = voxels.factory().createInitialized(extentResized);
 
-        assert (bufferTarget.sliceBuffer(0).capacity() == extentResized.volumeXY());
+        assert (bufferTarget.slice(0).size() == extentResized.volumeXY());
 
         InterpolateUtilities.transferSlicesResizeXY(
                 new VoxelsWrapper(voxels), new VoxelsWrapper(bufferTarget), interpolator);
 
-        assert (bufferTarget.sliceBuffer(0).capacity() == extentResized.volumeXY());
+        assert (bufferTarget.slice(0).size() == extentResized.volumeXY());
         return bufferTarget;
     }
 
@@ -166,6 +165,8 @@ abstract class Base<T extends Buffer> implements VoxelsExtracter<T> {
         return new PredicateImplementation<>(
                 voxels.extent(),
                 voxels::sliceBuffer,
+                voxels::hasRemaining,
+                voxels::setBufferPosition,
                 buffer -> bufferValueEqualTo(buffer, equalToValue));
     }
 
@@ -174,6 +175,8 @@ abstract class Base<T extends Buffer> implements VoxelsExtracter<T> {
         return new PredicateImplementation<>(
                 voxels.extent(),
                 voxels::sliceBuffer,
+                voxels::hasRemaining,
+                voxels::setBufferPosition,
                 buffer -> bufferValueGreaterThan(buffer, threshold));
     }
 

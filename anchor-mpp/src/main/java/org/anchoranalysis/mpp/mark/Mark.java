@@ -27,7 +27,7 @@
 package org.anchoranalysis.mpp.mark;
 
 import java.io.Serializable;
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.util.Optional;
 import java.util.function.DoubleUnaryOperator;
 import lombok.NoArgsConstructor;
@@ -149,7 +149,7 @@ public abstract class Mark implements Serializable, Identifiable {
         for (point.setZ(box.cornerMin().z()); point.z() <= maxPos.z(); point.incrementZ()) {
 
             int zLocal = point.z() - box.cornerMin().z();
-            ByteBuffer maskSlice = object.sliceBufferLocal(zLocal);
+            UnsignedByteBuffer maskSlice = object.sliceBufferLocal(zLocal);
 
             int cnt = 0;
             for (point.setY(box.cornerMin().y()); point.y() <= maxPos.y(); point.incrementY()) {
@@ -188,7 +188,7 @@ public abstract class Mark implements Serializable, Identifiable {
         for (point.setZ(box.cornerMin().z()); point.z() <= maxPos.z(); point.incrementZ()) {
 
             int zLocal = point.z() - box.cornerMin().z();
-            ByteBuffer maskSlice = object.sliceBufferLocal(zLocal);
+            UnsignedByteBuffer maskSlice = object.sliceBufferLocal(zLocal);
 
             // Z coordinates are the same as we only scale in XY
             pointScaled.setZ(point.z());

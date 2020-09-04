@@ -27,7 +27,7 @@
 package org.anchoranalysis.image.outline;
 
 import com.google.common.base.Preconditions;
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
@@ -122,7 +122,7 @@ public class FindOutline {
 
         ObjectMask objectDuplicated = object.duplicate();
 
-        BinaryVoxels<ByteBuffer> voxelsOut =
+        BinaryVoxels<UnsignedByteBuffer> voxelsOut =
                 outlineMultiplex(
                         objectDuplicated.binaryVoxels(), numberErosions, do3D, outlineAtBoundary);
         return new ObjectMask(objectDuplicated.boundingBox(), voxelsOut);
@@ -136,11 +136,11 @@ public class FindOutline {
             boolean do3D,
             boolean outlineAtBoundary) {
 
-        BinaryVoxels<ByteBuffer> voxels =
+        BinaryVoxels<UnsignedByteBuffer> voxels =
                 BinaryVoxelsFactory.reuseByte(
                         maskToFindOutlineFor.voxels(), maskToFindOutlineFor.binaryValues());
 
-        BinaryVoxels<ByteBuffer> outline =
+        BinaryVoxels<UnsignedByteBuffer> outline =
                 outlineMultiplex(voxels, numberErosions, do3D, outlineAtBoundary);
 
         try {
@@ -150,8 +150,8 @@ public class FindOutline {
         }
     }
 
-    private static BinaryVoxels<ByteBuffer> outlineMultiplex(
-            BinaryVoxels<ByteBuffer> voxels,
+    private static BinaryVoxels<UnsignedByteBuffer> outlineMultiplex(
+            BinaryVoxels<UnsignedByteBuffer> voxels,
             int numberErosions,
             boolean do3D,
             boolean outlineAtBoundary) {
@@ -164,8 +164,8 @@ public class FindOutline {
     }
 
     /** Find an outline only 1 pixel deep by using a kernel directly */
-    private static BinaryVoxels<ByteBuffer> outlineByKernel(
-            BinaryVoxels<ByteBuffer> voxels, boolean outlineAtBoundary, boolean do3D) {
+    private static BinaryVoxels<UnsignedByteBuffer> outlineByKernel(
+            BinaryVoxels<UnsignedByteBuffer> voxels, boolean outlineAtBoundary, boolean do3D) {
 
         // if our solid is too small, we don't apply the kernel, as it fails on anything less than
         // 3x3, and instead we simply return the solid as it is
@@ -177,7 +177,7 @@ public class FindOutline {
 
         BinaryKernel kernel = new OutlineKernel3(bvb, !outlineAtBoundary, do3D);
 
-        Voxels<ByteBuffer> out = ApplyKernel.apply(kernel, voxels.voxels(), bvb);
+        Voxels<UnsignedByteBuffer> out = ApplyKernel.apply(kernel, voxels.voxels(), bvb);
         return BinaryVoxelsFactory.reuseByte(out, voxels.binaryValues());
     }
 
@@ -185,14 +185,14 @@ public class FindOutline {
      * Find an outline by doing (maybe more than 1) morphological erosions, and subtracting from
      * original object
      */
-    private static BinaryVoxels<ByteBuffer> outlineByErosion(
-            BinaryVoxels<ByteBuffer> voxels,
+    private static BinaryVoxels<UnsignedByteBuffer> outlineByErosion(
+            BinaryVoxels<UnsignedByteBuffer> voxels,
             int numberErosions,
             boolean outlineAtBoundary,
             boolean do3D) {
 
         // Otherwise if > 1
-        Voxels<ByteBuffer> eroded = multipleErode(voxels, numberErosions, outlineAtBoundary, do3D);
+        Voxels<UnsignedByteBuffer> eroded = multipleErode(voxels, numberErosions, outlineAtBoundary, do3D);
 
         // Binary and between the original version and the eroded version
         assert (eroded != null);
@@ -201,8 +201,8 @@ public class FindOutline {
         return voxels;
     }
 
-    private static Voxels<ByteBuffer> multipleErode(
-            BinaryVoxels<ByteBuffer> voxels,
+    private static Voxels<UnsignedByteBuffer> multipleErode(
+            BinaryVoxels<UnsignedByteBuffer> voxels,
             int numberErosions,
             boolean erodeAtBoundary,
             boolean do3D) {
@@ -210,7 +210,7 @@ public class FindOutline {
         BinaryValuesByte bvb = voxels.binaryValues().createByte();
         BinaryKernel kernelErosion = new ErosionKernel3(bvb, erodeAtBoundary, do3D);
 
-        Voxels<ByteBuffer> eroded = ApplyKernel.apply(kernelErosion, voxels.voxels(), bvb);
+        Voxels<UnsignedByteBuffer> eroded = ApplyKernel.apply(kernelErosion, voxels.voxels(), bvb);
         for (int i = 1; i < numberErosions; i++) {
             eroded = ApplyKernel.apply(kernelErosion, eroded, bvb);
         }

@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.image.bean.threshold;
 
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.util.Optional;
 import org.anchoranalysis.bean.NullParamsBean;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -57,7 +57,7 @@ public abstract class Thresholder extends NullParamsBean<VoxelsThresholder> {
      * @throws OperationFailedException
      * @throws OperationFailedException
      */
-    public BinaryVoxels<ByteBuffer> threshold(VoxelsWrapper voxels, BinaryValuesByte binaryValues)
+    public BinaryVoxels<UnsignedByteBuffer> threshold(VoxelsWrapper voxels, BinaryValuesByte binaryValues)
             throws OperationFailedException {
         return threshold(voxels, binaryValues, Optional.empty(), Optional.empty());
     }
@@ -80,7 +80,7 @@ public abstract class Thresholder extends NullParamsBean<VoxelsThresholder> {
      *     voxel-buffers.
      * @throws OperationFailedException
      */
-    public abstract BinaryVoxels<ByteBuffer> threshold(
+    public abstract BinaryVoxels<UnsignedByteBuffer> threshold(
             VoxelsWrapper voxels,
             BinaryValuesByte binaryValues,
             Optional<Histogram> histogram,

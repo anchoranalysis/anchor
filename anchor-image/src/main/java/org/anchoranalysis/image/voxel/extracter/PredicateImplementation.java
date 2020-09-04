@@ -25,8 +25,7 @@
  */
 package org.anchoranalysis.image.voxel.extracter;
 
-import java.nio.Buffer;
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.util.function.IntFunction;
 import java.util.function.Predicate;
 import lombok.RequiredArgsConstructor;
@@ -43,14 +42,30 @@ import org.anchoranalysis.image.voxel.VoxelsPredicate;
  * @param <T> buffer-type
  */
 @RequiredArgsConstructor
-class PredicateImplementation<T extends Buffer> implements VoxelsPredicate {
+class PredicateImplementation<T> implements VoxelsPredicate {
 
+    /** Are there voxels remaining in the buffer? */
+    public static interface HasRemaining<T> {
+        boolean hasRemaining(T buffer);
+    }
+    
+    /** Are there voxels remaining in the buffer? */
+    public static interface SetBufferPosition<T> {
+        void position(T buffer, int offset);
+    }
+    
     // START REQUIRED ARGUMENTS
     /** The extent of the voxels on which the predicate is to be performed */
     private final Extent extent;
 
     /** A buffer for a particular slice index */
     private final IntFunction<T> bufferForSlice;
+    
+    /** Whether there's remaining voxels? */
+    private final HasRemaining<T> hasRemaining;
+    
+    /** Sets the position in the buffer */
+    private final SetBufferPosition<T> setBufferPosition;
 
     /** Checks if the current value of a buffer matches a predicate */
     private final Predicate<T> predicate;
@@ -64,7 +79,7 @@ class PredicateImplementation<T extends Buffer> implements VoxelsPredicate {
         for (int z = 0; z < zMax; z++) {
 
             T buffer = bufferForSlice.apply(z);
-            while (buffer.hasRemaining()) {
+            while (hasRemaining.hasRemaining(buffer)) {
 
                 if (predicate.test(buffer)) {
                     return true;
@@ -83,7 +98,7 @@ class PredicateImplementation<T extends Buffer> implements VoxelsPredicate {
         for (int z = 0; z < zMax; z++) {
             T buffer = bufferForSlice.apply(z);
 
-            while (buffer.hasRemaining()) {
+            while (hasRemaining.hasRemaining(buffer)) {
                 if (predicate.test(buffer)) {
                     count++;
                 }
@@ -105,7 +120,7 @@ class PredicateImplementation<T extends Buffer> implements VoxelsPredicate {
         for (int z = srcStart.z(); z <= srcEnd.z(); z++) {
 
             T srcArr = bufferForSlice.apply(z);
-            ByteBuffer maskBuffer = object.sliceBufferGlobal(z);
+            UnsignedByteBuffer maskBuffer = object.sliceBufferGlobal(z);
 
             for (int y = srcStart.y(); y <= srcEnd.y(); y++) {
                 for (int x = srcStart.x(); x <= srcEnd.x(); x++) {
@@ -113,7 +128,7 @@ class PredicateImplementation<T extends Buffer> implements VoxelsPredicate {
                     if (maskBuffer.get(object.offsetGlobal(x, y)) == maskOnVal) {
 
                         int srcIndex = extent.offset(x, y);
-                        srcArr.position(srcIndex);
+                        setBufferPosition.position(srcArr, srcIndex);
 
                         if (predicate.test(srcArr)) {
                             count++;
@@ -133,7 +148,7 @@ class PredicateImplementation<T extends Buffer> implements VoxelsPredicate {
         for (int z = 0; z < zMax; z++) {
             T buffer = bufferForSlice.apply(z);
 
-            while (buffer.hasRemaining()) {
+            while (hasRemaining.hasRemaining(buffer)) {
                 if (predicate.test(buffer)) {
                     if (count == threshold) {
                         // We've reached the threshold, positive outcome
@@ -156,7 +171,7 @@ class PredicateImplementation<T extends Buffer> implements VoxelsPredicate {
         for (int z = 0; z < zMax; z++) {
             T buffer = bufferForSlice.apply(z);
 
-            while (buffer.hasRemaining()) {
+            while (hasRemaining.hasRemaining(buffer)) {
                 if (predicate.test(buffer)) {
                     count++;
                     if (count == threshold) {
@@ -182,14 +197,14 @@ class PredicateImplementation<T extends Buffer> implements VoxelsPredicate {
         for (int z = box.cornerMin().z(); z <= pointMax.z(); z++) {
 
             T pixelIn = bufferForSlice.apply(z);
-            ByteBuffer pixelOut = object.sliceBufferGlobal(z);
+            UnsignedByteBuffer pixelOut = object.sliceBufferGlobal(z);
 
             int ind = 0;
             for (int y = box.cornerMin().y(); y <= pointMax.y(); y++) {
                 for (int x = box.cornerMin().x(); x <= pointMax.x(); x++) {
 
                     int index = extent.offset(x, y);
-                    pixelIn.position(index);
+                    setBufferPosition.position(pixelIn, index);
 
                     if (predicate.test(pixelIn)) {
                         pixelOut.put(ind, outOn);

@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.image.channel.converter.voxels;
 
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
@@ -42,17 +42,17 @@ import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
 //
 // Note that the Type.MAX_VALUE in Java assumes siged types.  So we multiply by two to get unsigned
 // sizes
-public final class ConvertToByteScaleByType extends VoxelsConverter<ByteBuffer> {
+public final class ConvertToByteScaleByType extends VoxelsConverter<UnsignedByteBuffer> {
 
     // This doesn't really make sense for a float, as the maximum value is so much higher, so we
     // take
     //  it as being the same as Integer.MAX_VALUE
     @Override
-    public VoxelBuffer<ByteBuffer> convertFromFloat(VoxelBuffer<FloatBuffer> bufferIn) {
+    public VoxelBuffer<UnsignedByteBuffer> convertFromFloat(VoxelBuffer<FloatBuffer> bufferIn) {
 
         double div = (double) UnsignedIntVoxelType.MAX_VALUE / UnsignedByteVoxelType.MAX_VALUE_INT;
 
-        ByteBuffer bufferOut = ByteBuffer.allocate(bufferIn.buffer().capacity());
+        UnsignedByteBuffer bufferOut = UnsignedByteBuffer.allocate(bufferIn.buffer().capacity());
 
         while (bufferIn.buffer().hasRemaining()) {
             double f = bufferIn.buffer().get();
@@ -62,39 +62,39 @@ public final class ConvertToByteScaleByType extends VoxelsConverter<ByteBuffer> 
             bufferOut.put((byte) f);
         }
 
-        return VoxelBufferByte.wrap(bufferOut);
+        return VoxelBufferByte.wrapBuffer(bufferOut);
     }
 
     @Override
-    public VoxelBuffer<ByteBuffer> convertFromInt(VoxelBuffer<IntBuffer> bufferIn) {
+    public VoxelBuffer<UnsignedByteBuffer> convertFromInt(VoxelBuffer<IntBuffer> bufferIn) {
 
         double div = (double) UnsignedIntVoxelType.MAX_VALUE / UnsignedByteVoxelType.MAX_VALUE;
 
-        ByteBuffer bufferOut = ByteBuffer.allocate(bufferIn.buffer().capacity());
+        UnsignedByteBuffer bufferOut = UnsignedByteBuffer.allocate(bufferIn.buffer().capacity());
 
         while (bufferIn.buffer().hasRemaining()) {
             bufferOut.put((byte) (bufferIn.buffer().get() / div));
         }
 
-        return VoxelBufferByte.wrap(bufferOut);
+        return VoxelBufferByte.wrapBuffer(bufferOut);
     }
 
     @Override
-    public VoxelBuffer<ByteBuffer> convertFromShort(VoxelBuffer<ShortBuffer> bufferIn) {
+    public VoxelBuffer<UnsignedByteBuffer> convertFromShort(VoxelBuffer<ShortBuffer> bufferIn) {
 
         double div = (double) UnsignedShortVoxelType.MAX_VALUE / UnsignedByteVoxelType.MAX_VALUE;
 
-        ByteBuffer bufferOut = ByteBuffer.allocate(bufferIn.buffer().capacity());
+        UnsignedByteBuffer bufferOut = UnsignedByteBuffer.allocate(bufferIn.buffer().capacity());
 
         while (bufferIn.buffer().hasRemaining()) {
             bufferOut.put((byte) (bufferIn.buffer().get() / div));
         }
 
-        return VoxelBufferByte.wrap(bufferOut);
+        return VoxelBufferByte.wrapBuffer(bufferOut);
     }
 
     @Override
-    public VoxelBuffer<ByteBuffer> convertFromByte(VoxelBuffer<ByteBuffer> in) {
+    public VoxelBuffer<UnsignedByteBuffer> convertFromByte(VoxelBuffer<UnsignedByteBuffer> in) {
         return in.duplicate();
     }
 }

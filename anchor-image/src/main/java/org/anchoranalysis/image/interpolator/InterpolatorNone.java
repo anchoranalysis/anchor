@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.image.interpolator;
 
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.nio.ShortBuffer;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
@@ -35,9 +35,9 @@ import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 public class InterpolatorNone implements Interpolator {
 
     @Override
-    public VoxelBuffer<ByteBuffer> interpolateByte(
-            VoxelBuffer<ByteBuffer> voxelsSource,
-            VoxelBuffer<ByteBuffer> voxelsDestination,
+    public VoxelBuffer<UnsignedByteBuffer> interpolateByte(
+            VoxelBuffer<UnsignedByteBuffer> voxelsSource,
+            VoxelBuffer<UnsignedByteBuffer> voxelsDestination,
             Extent extentSource,
             Extent extentDestination) {
 
@@ -57,7 +57,7 @@ public class InterpolatorNone implements Interpolator {
         return voxelsDestination;
     }
 
-    private static void copyByte(ByteBuffer bbIn, ByteBuffer bbOut, Extent eIn, Extent eOut) {
+    private static void copyByte(UnsignedByteBuffer bbIn, UnsignedByteBuffer bbOut, Extent eIn, Extent eOut) {
 
         double xScale = intDiv(eIn.x(), eOut.x());
         double yScale = intDiv(eIn.y(), eOut.y());

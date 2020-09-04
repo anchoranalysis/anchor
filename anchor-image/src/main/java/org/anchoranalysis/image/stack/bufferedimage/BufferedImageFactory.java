@@ -27,7 +27,7 @@
 package org.anchoranalysis.image.stack.bufferedimage;
 
 import java.awt.image.BufferedImage;
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.error.CreateException;
@@ -37,7 +37,7 @@ import org.anchoranalysis.image.voxel.Voxels;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class BufferedImageFactory {
 
-    public static BufferedImage createGrayscale(Voxels<ByteBuffer> voxels) throws CreateException {
+    public static BufferedImage createGrayscale(Voxels<UnsignedByteBuffer> voxels) throws CreateException {
 
         Extent e = voxels.extent();
         checkExtentZ(e);
@@ -46,7 +46,7 @@ public class BufferedImageFactory {
     }
 
     public static BufferedImage createRGB(
-            Voxels<ByteBuffer> red, Voxels<ByteBuffer> green, Voxels<ByteBuffer> blue, Extent e)
+            Voxels<UnsignedByteBuffer> red, Voxels<UnsignedByteBuffer> green, Voxels<UnsignedByteBuffer> blue, Extent e)
             throws CreateException {
         checkExtentZ(e);
 
@@ -63,7 +63,7 @@ public class BufferedImageFactory {
         return bi;
     }
 
-    private static ByteBuffer firstBuffer(Voxels<ByteBuffer> voxels, Extent e, String dscr)
+    private static UnsignedByteBuffer firstBuffer(Voxels<UnsignedByteBuffer> voxels, Extent e, String dscr)
             throws CreateException {
 
         if (!voxels.extent().equals(e)) {
@@ -74,7 +74,7 @@ public class BufferedImageFactory {
     }
 
     private static BufferedImage createBufferedImageFromGrayscaleBuffer(
-            ByteBuffer bbGray, Extent extent) {
+            UnsignedByteBuffer bbGray, Extent extent) {
 
         BufferedImage image =
                 new BufferedImage(extent.x(), extent.y(), BufferedImage.TYPE_BYTE_GRAY);
@@ -86,7 +86,7 @@ public class BufferedImageFactory {
     }
 
     private static byte[] createCombinedByteArray(
-            Extent e, ByteBuffer bbRed, ByteBuffer bbGreen, ByteBuffer bbBlue) {
+            Extent e, UnsignedByteBuffer bbRed, UnsignedByteBuffer bbGreen, UnsignedByteBuffer bbBlue) {
 
         int size = e.calculateVolumeAsInt();
         byte[] arrComb = new byte[size * 3];

@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.mpp.mark.voxelized;
 
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.util.List;
 import lombok.Getter;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -77,12 +77,12 @@ class VoxelizedMarkHistogram implements VoxelizedMark {
     }
 
     @Override
-    public BoundedVoxels<ByteBuffer> voxels() {
+    public BoundedVoxels<UnsignedByteBuffer> voxels() {
         return object.boundedVoxels();
     }
 
     @Override
-    public BoundedVoxels<ByteBuffer> voxelsMaximumIntensityProjection() {
+    public BoundedVoxels<UnsignedByteBuffer> voxelsMaximumIntensityProjection() {
         return objectFlattened.boundedVoxels();
     }
 
@@ -151,7 +151,7 @@ class VoxelizedMarkHistogram implements VoxelizedMark {
         partitionList.init(
                 FACTORY, stack.getNumberChannels(), regionMap.numRegions(), localExtent.z());
 
-        ByteBuffer bufferMIP = getObjectFlattened().sliceBufferLocal(0);
+        UnsignedByteBuffer bufferMIP = getObjectFlattened().sliceBufferLocal(0);
 
         for (int z = box.cornerMin().z(); z <= cornerMax.z(); z++) {
 
@@ -178,7 +178,7 @@ class VoxelizedMarkHistogram implements VoxelizedMark {
             Extent localExtent,
             Dimensions dimensions,
             BufferArrayList bufferArrList,
-            ByteBuffer bufferMIP,
+            UnsignedByteBuffer bufferMIP,
             RegionMap regionMap) {
 
         Point3d running = new Point3d();
@@ -189,7 +189,7 @@ class VoxelizedMarkHistogram implements VoxelizedMark {
         List<RegionMembershipWithFlags> listRegionMembership =
                 regionMap.createListMembershipWithFlags();
 
-        ByteBuffer buffer = object.sliceBufferLocal(zLocal);
+        UnsignedByteBuffer buffer = object.sliceBufferLocal(zLocal);
 
         for (int y = box.cornerMin().y(); y <= cornerMax.y(); y++) {
             running.setY(y + 0.5);
@@ -221,7 +221,7 @@ class VoxelizedMarkHistogram implements VoxelizedMark {
         }
     }
 
-    private static byte membershipMIP(byte membership, ByteBuffer bufferMIP, int localOffset) {
+    private static byte membershipMIP(byte membership, UnsignedByteBuffer bufferMIP, int localOffset) {
         byte membershipMIP = bufferMIP.get(localOffset);
         membershipMIP = (byte) (membershipMIP | membership);
         return membershipMIP;

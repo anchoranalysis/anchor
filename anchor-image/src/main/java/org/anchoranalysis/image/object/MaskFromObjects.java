@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.image.object;
 
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.geometry.Point3i;
@@ -100,12 +100,12 @@ public class MaskFromObjects {
     }
 
     private static void assignValueToObjects(
-            Voxels<ByteBuffer> voxels, ObjectCollection objects, byte valueToAssign) {
+            Voxels<UnsignedByteBuffer> voxels, ObjectCollection objects, byte valueToAssign) {
         objects.forEach(object -> writeObjectOntoVoxels(object, voxels, valueToAssign));
     }
 
     private static void writeObjectOntoVoxels(
-            ObjectMask object, Voxels<ByteBuffer> voxelsOut, byte outValByte) {
+            ObjectMask object, Voxels<UnsignedByteBuffer> voxelsOut, byte outValByte) {
 
         BoundingBox box = object.boundingBox();
 
@@ -120,9 +120,9 @@ public class MaskFromObjects {
                 pointGlobal.z() <= maxGlobal.z();
                 pointGlobal.incrementZ(), pointLocal.incrementZ()) {
 
-            ByteBuffer maskIn = object.sliceBufferLocal(pointLocal.z());
+            UnsignedByteBuffer maskIn = object.sliceBufferLocal(pointLocal.z());
 
-            ByteBuffer pixelsOut = voxelsOut.sliceBuffer(pointGlobal.z());
+            UnsignedByteBuffer pixelsOut = voxelsOut.sliceBuffer(pointGlobal.z());
             writeToBufferMasked(
                     maskIn,
                     pixelsOut,
@@ -136,8 +136,8 @@ public class MaskFromObjects {
     }
 
     private static void writeToBufferMasked(
-            ByteBuffer maskIn,
-            ByteBuffer pixelsOut,
+            UnsignedByteBuffer maskIn,
+            UnsignedByteBuffer pixelsOut,
             Extent extentOut,
             ReadableTuple3i cornerMin,
             Point3i pointGlobal,
@@ -153,7 +153,7 @@ public class MaskFromObjects {
                     pointGlobal.x() <= maxGlobal.x();
                     pointGlobal.incrementX()) {
 
-                if (maskIn.get() == matchValue) {
+                if (maskIn.getByte() == matchValue) {
                     pixelsOut.put(extentOut.offsetSlice(pointGlobal), outValByte);
                 }
             }

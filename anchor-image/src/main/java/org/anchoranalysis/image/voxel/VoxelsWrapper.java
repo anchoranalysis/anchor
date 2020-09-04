@@ -26,8 +26,7 @@
 
 package org.anchoranalysis.image.voxel;
 
-import java.nio.Buffer;
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
@@ -62,7 +61,7 @@ public class VoxelsWrapper {
         this.voxels = voxels;
     }
 
-    public static VoxelsWrapper wrap(Voxels<? extends Buffer> voxels) {
+    public static VoxelsWrapper wrap(Voxels<?> voxels) {
         return new VoxelsWrapper(voxels);
     }
 
@@ -73,7 +72,7 @@ public class VoxelsWrapper {
     
     /** Casts voxels to a particular type */
     @SuppressWarnings("unchecked")
-    public <T extends Buffer> Voxels<T> castTo() { // NOSONAR
+    public <T> Voxels<T> castTo() { // NOSONAR
         return (Voxels<T>) voxels;
     }
 
@@ -87,14 +86,14 @@ public class VoxelsWrapper {
     }
 
     @SuppressWarnings("unchecked")
-    public Voxels<ByteBuffer> asByte() {
+    public Voxels<UnsignedByteBuffer> asByte() {
 
         if (!dataType.equals(UnsignedByteVoxelType.INSTANCE)) {
             throw new IncorrectVoxelTypeException(
                     "Voxels do not contain unsigned 8-bit data (byte)");
         }
 
-        return (Voxels<ByteBuffer>) voxels;
+        return (Voxels<UnsignedByteBuffer>) voxels;
     }
 
     @SuppressWarnings("unchecked")
@@ -135,8 +134,8 @@ public class VoxelsWrapper {
      * @param alwaysDuplicate
      * @return
      */
-    public Voxels<ByteBuffer> asByteOrCreateEmpty(boolean alwaysDuplicate) {
-        Voxels<ByteBuffer> boxOut;
+    public Voxels<UnsignedByteBuffer> asByteOrCreateEmpty(boolean alwaysDuplicate) {
+        Voxels<UnsignedByteBuffer> boxOut;
 
         // If the input-channel is Byte then we do it in-place
         // Otherwise we create new voxels
@@ -194,7 +193,7 @@ public class VoxelsWrapper {
         }
     }
 
-    private static <T extends Buffer> VoxelBuffer<T> sourceSlice(
+    private static <T> VoxelBuffer<T> sourceSlice(
             Voxels<T> sourceVoxels, int sliceIndexSource, boolean duplicate) {
         if (duplicate) {
             return sourceVoxels.slice(sliceIndexSource);

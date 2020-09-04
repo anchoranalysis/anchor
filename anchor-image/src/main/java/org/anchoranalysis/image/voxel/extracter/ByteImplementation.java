@@ -25,7 +25,7 @@
  */
 package org.anchoranalysis.image.voxel.extracter;
 
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.convert.PrimitiveConverter;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.Voxels;
@@ -33,28 +33,28 @@ import org.anchoranalysis.image.voxel.buffer.max.MaxIntensityBufferByte;
 import org.anchoranalysis.image.voxel.buffer.mean.MeanIntensityByteBuffer;
 import org.anchoranalysis.image.voxel.iterator.IterateVoxelsVoxelBoxAsInt;
 
-class ByteImplementation extends Base<ByteBuffer> {
+class ByteImplementation extends Base<UnsignedByteBuffer> {
 
-    public ByteImplementation(Voxels<ByteBuffer> voxels) {
+    public ByteImplementation(Voxels<UnsignedByteBuffer> voxels) {
         super(voxels);
     }
 
     @Override
     public void copyBufferIndexTo(
-            ByteBuffer sourceBuffer,
+            UnsignedByteBuffer sourceBuffer,
             int sourceIndex,
-            ByteBuffer destinationBuffer,
+            UnsignedByteBuffer destinationBuffer,
             int destinationIndex) {
         destinationBuffer.put(destinationIndex, sourceBuffer.get(sourceIndex));
     }
 
     @Override
-    protected int voxelAtBufferIndex(ByteBuffer buffer, int index) {
+    protected int voxelAtBufferIndex(UnsignedByteBuffer buffer, int index) {
         return PrimitiveConverter.unsignedByteToInt(buffer.get(index));
     }
 
     @Override
-    public Voxels<ByteBuffer> projectMax() {
+    public Voxels<UnsignedByteBuffer> projectMax() {
 
         Extent extent = voxels.extent();
 
@@ -68,17 +68,17 @@ class ByteImplementation extends Base<ByteBuffer> {
     }
 
     @Override
-    public Voxels<ByteBuffer> projectMean() {
+    public Voxels<UnsignedByteBuffer> projectMean() {
 
         Extent extent = voxels.extent();
 
-        MeanIntensityByteBuffer mi = new MeanIntensityByteBuffer(extent);
+        MeanIntensityByteBuffer projection = new MeanIntensityByteBuffer(extent);
 
         for (int z = 0; z < extent.z(); z++) {
-            mi.projectSlice(voxels.sliceBuffer(z));
+            projection.projectSlice(voxels.sliceBuffer(z));
         }
 
-        return mi.getFlatBuffer();
+        return projection.getFlatBuffer();
     }
 
     @Override
@@ -87,12 +87,12 @@ class ByteImplementation extends Base<ByteBuffer> {
     }
 
     @Override
-    protected boolean bufferValueGreaterThan(ByteBuffer buffer, int threshold) {
-        return PrimitiveConverter.unsignedByteToInt(buffer.get()) > threshold;
+    protected boolean bufferValueGreaterThan(UnsignedByteBuffer buffer, int threshold) {
+        return buffer.getInt() > threshold;
     }
 
     @Override
-    protected boolean bufferValueEqualTo(ByteBuffer buffer, int value) {
-        return PrimitiveConverter.unsignedByteToInt(buffer.get()) == value;
+    protected boolean bufferValueEqualTo(UnsignedByteBuffer buffer, int value) {
+        return buffer.getInt() == value;
     }
 }

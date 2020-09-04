@@ -26,8 +26,7 @@
 
 package org.anchoranalysis.image.channel.converter.voxels;
 
-import java.nio.Buffer;
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
@@ -48,7 +47,7 @@ import org.anchoranalysis.image.voxel.factory.VoxelsFactoryTypeBound;
  * @author Owen Feehan
  * @param <T> destination-type (what the voxels will be converted <b>to</b>)
  */
-public abstract class VoxelsConverter<T extends Buffer> {
+public abstract class VoxelsConverter<T> {
 
     public Voxels<T> convertFrom(VoxelsWrapper voxelsIn, VoxelsFactoryTypeBound<T> factory) {
         Voxels<T> voxelsOut = factory.createInitialized(voxelsIn.any().extent());
@@ -70,7 +69,7 @@ public abstract class VoxelsConverter<T extends Buffer> {
         }
     }
 
-    public void convertFromByte(Voxels<ByteBuffer> in, Voxels<T> out) {
+    public void convertFromByte(Voxels<UnsignedByteBuffer> in, Voxels<T> out) {
         convertFrom(in, out, this::convertFromByte);
     }
 
@@ -86,7 +85,7 @@ public abstract class VoxelsConverter<T extends Buffer> {
         convertFrom(in, out, this::convertFromFloat);
     }
 
-    public abstract VoxelBuffer<T> convertFromByte(VoxelBuffer<ByteBuffer> in);
+    public abstract VoxelBuffer<T> convertFromByte(VoxelBuffer<UnsignedByteBuffer> in);
 
     public abstract VoxelBuffer<T> convertFromFloat(VoxelBuffer<FloatBuffer> in);
 
@@ -94,7 +93,7 @@ public abstract class VoxelsConverter<T extends Buffer> {
 
     public abstract VoxelBuffer<T> convertFromShort(VoxelBuffer<ShortBuffer> in);
 
-    private <S extends Buffer> void convertFrom(
+    private <S> void convertFrom(
             Voxels<S> in, Voxels<T> out, Function<VoxelBuffer<S>, VoxelBuffer<T>> converter) {
         in.extent().iterateOverZ(z -> out.replaceSlice(z, converter.apply(in.slice(z))));
     }

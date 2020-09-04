@@ -26,18 +26,18 @@
 
 package org.anchoranalysis.image.channel.converter;
 
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.channel.converter.voxels.ConvertToByteScaleByMinMaxValue;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 
 /**
- * Converts from other data types to {@link ByteBuffer} (unsigned 8-bit) scaling from the range of the source data-type.
+ * Converts from other data types to {@link UnsignedByteBuffer} (unsigned 8-bit) scaling from the range of the source data-type.
  * 
  * @author Owen Feehan
  *
  */
-public class ToUnsignedByteScaleByMinMaxValue extends ChannelConverter<ByteBuffer> {
+public class ToUnsignedByteScaleByMinMaxValue extends ChannelConverter<UnsignedByteBuffer> {
 
     // Min and max are inclusive
     public ToUnsignedByteScaleByMinMaxValue(int min, int max) {

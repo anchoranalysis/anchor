@@ -27,6 +27,7 @@ package org.anchoranalysis.image.voxel.buffer;
 
 import java.nio.Buffer;
 import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
@@ -44,7 +45,7 @@ import lombok.NoArgsConstructor;
 class DuplicateBuffer {
 
     @SuppressWarnings("unchecked")
-    public static <T extends Buffer> T copy(T buffer) {
+    public static <T> T copy(T buffer) {
 
         if (buffer instanceof ByteBuffer) {
             return (T) copy((ByteBuffer) buffer);
@@ -54,6 +55,8 @@ class DuplicateBuffer {
             return (T) copy((ShortBuffer) buffer);
         } else if (buffer instanceof IntBuffer) {
             return (T) copy((IntBuffer) buffer);
+        } if (buffer instanceof UnsignedByteBuffer) {
+            return (T) copy((UnsignedByteBuffer) buffer);
         } else {
             throw new AnchorImpossibleSituationException();
         }
@@ -84,5 +87,9 @@ class DuplicateBuffer {
         buffer.rewind();
         clone.flip();
         return clone;
+    }
+    
+    public static UnsignedByteBuffer copy(UnsignedByteBuffer buffer) {
+        return new UnsignedByteBuffer( copy(buffer.getDelegate()) );
     }
 }

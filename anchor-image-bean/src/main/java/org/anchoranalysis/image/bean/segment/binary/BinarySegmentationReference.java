@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.image.bean.segment.binary;
 
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
@@ -59,7 +59,7 @@ public class BinarySegmentationReference extends BinarySegmentation {
     }
 
     @Override
-    public BinaryVoxels<ByteBuffer> segment(
+    public BinaryVoxels<UnsignedByteBuffer> segment(
             VoxelsWrapper voxels,
             BinarySegmentationParameters params,
             Optional<ObjectMask> objectMask)

@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.image.channel.converter;
 
-import java.nio.Buffer;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
@@ -46,7 +45,7 @@ import org.anchoranalysis.image.voxel.factory.VoxelsFactoryTypeBound;
  * @param <T> type to convert to (destination-type)
  */
 @AllArgsConstructor
-public abstract class ChannelConverter<T extends Buffer> {
+public abstract class ChannelConverter<T> {
 
     private VoxelDataType dataTypeTarget;
     @Getter private VoxelsConverter<T> voxelsConverter;

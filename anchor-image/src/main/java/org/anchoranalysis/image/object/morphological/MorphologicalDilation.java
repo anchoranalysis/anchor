@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.image.object.morphological;
 
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -83,11 +83,11 @@ public class MorphologicalDilation {
         }
     }
 
-    public static BinaryVoxels<ByteBuffer> dilate(
-            BinaryVoxels<ByteBuffer> bvb,
+    public static BinaryVoxels<UnsignedByteBuffer> dilate(
+            BinaryVoxels<UnsignedByteBuffer> bvb,
             boolean do3D,
             int iterations,
-            Optional<Voxels<ByteBuffer>> backgroundVb,
+            Optional<Voxels<UnsignedByteBuffer>> backgroundVb,
             int minIntensityValue,
             boolean bigNeighborhood)
             throws CreateException {
@@ -122,11 +122,11 @@ public class MorphologicalDilation {
      * @return a new buffer containing the results of the dilation-operations
      * @throws CreateException
      */
-    public static BinaryVoxels<ByteBuffer> dilate(
-            BinaryVoxels<ByteBuffer> bvb,
+    public static BinaryVoxels<UnsignedByteBuffer> dilate(
+            BinaryVoxels<UnsignedByteBuffer> bvb,
             boolean do3D,
             int iterations,
-            Optional<Voxels<ByteBuffer>> backgroundVb,
+            Optional<Voxels<UnsignedByteBuffer>> backgroundVb,
             int minIntensityValue,
             boolean zOnly,
             boolean outsideAtThreshold,
@@ -144,9 +144,9 @@ public class MorphologicalDilation {
                         outsideAtThreshold,
                         bigNeighborhood);
 
-        Voxels<ByteBuffer> buf = bvb.voxels();
+        Voxels<UnsignedByteBuffer> buf = bvb.voxels();
         for (int i = 0; i < iterations; i++) {
-            Voxels<ByteBuffer> next =
+            Voxels<UnsignedByteBuffer> next =
                     ApplyKernel.apply(kernelDilation, buf, bvb.binaryValues().createByte());
 
             try {
@@ -166,7 +166,7 @@ public class MorphologicalDilation {
     private static BinaryKernel createDilationKernel(
             BinaryValuesByte bv,
             boolean do3D,
-            Optional<Voxels<ByteBuffer>> backgroundVb,
+            Optional<Voxels<UnsignedByteBuffer>> backgroundVb,
             int minIntensityValue,
             boolean zOnly,
             boolean outsideAtThreshold,

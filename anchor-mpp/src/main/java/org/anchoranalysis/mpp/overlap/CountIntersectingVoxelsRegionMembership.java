@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.mpp.overlap;
 
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.image.object.combine.CountIntersectingVoxels;
 import org.anchoranalysis.image.object.combine.IntersectionBoundingBox;
@@ -44,7 +44,7 @@ class CountIntersectingVoxelsRegionMembership extends CountIntersectingVoxels {
 
     @Override
     protected int countIntersectingVoxels(
-            ByteBuffer buffer1, ByteBuffer buffer2, IntersectionBoundingBox box) {
+            UnsignedByteBuffer buffer1, UnsignedByteBuffer buffer2, IntersectionBoundingBox box) {
 
         int cnt = 0;
         for (int y = box.y().min(); y < box.y().max(); y++) {

@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.image.voxel.iterator.changed;
 
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 
 /**
  * Processes a point which has been translated (changed) relative to another point - and includes
@@ -49,7 +49,7 @@ public interface ProcessChangedPointAbsoluteMasked<T> {
     void initSource(int sourceVal, int sourceOffsetXY);
 
     /** Notifies the processor that there has been a change in z-coordinate */
-    default void notifyChangeZ(int zChange, int z, ByteBuffer objectMaskBuffer) {}
+    default void notifyChangeZ(int zChange, int z, UnsignedByteBuffer objectMaskBuffer) {}
 
     /** Processes a particular point */
     boolean processPoint(int xChange, int yChange, int x1, int y1, int objectMaskOffset);

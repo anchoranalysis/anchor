@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.image.voxel.kernel;
 
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.convert.PrimitiveConverter;
 import org.anchoranalysis.image.voxel.Voxels;
@@ -36,11 +36,11 @@ public class ConditionalKernel extends BinaryKernel {
 
     private BinaryKernel kernel;
     private int minValue;
-    private Voxels<ByteBuffer> voxelsIntensity;
+    private Voxels<UnsignedByteBuffer> voxelsIntensity;
 
     // Constructor
     public ConditionalKernel(
-            BinaryKernel kernel, int minValue, Voxels<ByteBuffer> voxelsIntensity) {
+            BinaryKernel kernel, int minValue, Voxels<UnsignedByteBuffer> voxelsIntensity) {
         super(kernel.getSize());
         this.kernel = kernel;
         this.minValue = minValue;
@@ -64,7 +64,7 @@ public class ConditionalKernel extends BinaryKernel {
     }
 
     @Override
-    public void init(Voxels<ByteBuffer> in) {
+    public void init(Voxels<UnsignedByteBuffer> in) {
         kernel.init(in);
     }
 

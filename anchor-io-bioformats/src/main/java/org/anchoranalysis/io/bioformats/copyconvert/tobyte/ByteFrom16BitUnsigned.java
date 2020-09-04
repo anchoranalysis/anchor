@@ -27,6 +27,7 @@
 package org.anchoranalysis.io.bioformats.copyconvert.tobyte;
 
 import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.extent.Dimensions;
 import loci.common.DataTools;
 import lombok.RequiredArgsConstructor;
@@ -49,9 +50,9 @@ public class ByteFrom16BitUnsigned extends ConvertToByte {
     }
     
     @Override
-    protected ByteBuffer convert(ByteBuffer source, int channelIndexRelative) {
+    protected UnsignedByteBuffer convert(ByteBuffer source, int channelIndexRelative) {
         
-        ByteBuffer destination = allocateBuffer();
+        UnsignedByteBuffer destination = allocateBuffer();
         
         byte[] sourceArray = source.array();
         

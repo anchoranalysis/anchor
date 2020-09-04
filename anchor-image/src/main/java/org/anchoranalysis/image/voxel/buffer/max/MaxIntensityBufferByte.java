@@ -26,23 +26,23 @@
 
 package org.anchoranalysis.image.voxel.buffer.max;
 
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.convert.PrimitiveConverter;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 
-public class MaxIntensityBufferByte extends MaxIntensityBuffer<ByteBuffer> {
+public class MaxIntensityBufferByte extends MaxIntensityBuffer<UnsignedByteBuffer> {
 
     public MaxIntensityBufferByte(Extent srcExtent) {
         super(srcExtent, VoxelsFactory.getByte());
     }
 
     @Override
-    protected void addBuffer(ByteBuffer pixels, ByteBuffer flatBuffer) {
-        byte inPixel = pixels.get();
-        byte flatPixel = flatBuffer.get();
-        if (PrimitiveConverter.unsignedByteToInt(inPixel) > PrimitiveConverter.unsignedByteToInt(flatPixel)) {
-            flatBuffer.put(flatBuffer.position() - 1, inPixel);
+    protected void addBuffer(UnsignedByteBuffer pixels, UnsignedByteBuffer flatBuffer) {
+        byte inPixel = pixels.getByte();
+        int flatPixel = flatBuffer.getInt();
+        if (PrimitiveConverter.unsignedByteToInt(inPixel) > flatPixel) {
+            flatBuffer.putByte(flatBuffer.position() - 1, inPixel);
         }
     }
 }

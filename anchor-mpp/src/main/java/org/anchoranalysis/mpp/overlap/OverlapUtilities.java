@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.mpp.overlap;
 
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.image.voxel.Voxels;
@@ -70,7 +70,7 @@ public class OverlapUtilities {
             VoxelizedMarkMemo pmm1,
             VoxelizedMarkMemo pmm2,
             int regionID,
-            Voxels<ByteBuffer> globalMask,
+            Voxels<UnsignedByteBuffer> globalMask,
             byte onGlobalMask) {
         Mark mark1 = pmm1.getMark();
         Mark mark2 = pmm2.getMark();

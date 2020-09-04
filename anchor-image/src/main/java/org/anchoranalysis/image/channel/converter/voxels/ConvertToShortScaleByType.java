@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.image.channel.converter.voxels;
 
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
@@ -62,7 +62,7 @@ public final class ConvertToShortScaleByType extends VoxelsConverter<ShortBuffer
             bufferOut.put((short) f);
         }
 
-        return VoxelBufferShort.wrap(bufferOut);
+        return VoxelBufferShort.wrapBuffer(bufferOut);
     }
 
     @Override
@@ -76,7 +76,7 @@ public final class ConvertToShortScaleByType extends VoxelsConverter<ShortBuffer
             bufferOut.put((short) (bufferIn.buffer().get() / div));
         }
 
-        return VoxelBufferShort.wrap(bufferOut);
+        return VoxelBufferShort.wrapBuffer(bufferOut);
     }
 
     @Override
@@ -85,16 +85,16 @@ public final class ConvertToShortScaleByType extends VoxelsConverter<ShortBuffer
     }
 
     @Override
-    public VoxelBuffer<ShortBuffer> convertFromByte(VoxelBuffer<ByteBuffer> bufferIn) {
+    public VoxelBuffer<ShortBuffer> convertFromByte(VoxelBuffer<UnsignedByteBuffer> bufferIn) {
         double mult =
                 (double) UnsignedShortVoxelType.MAX_VALUE_INT / UnsignedByteVoxelType.MAX_VALUE_INT;
 
         ShortBuffer bufferOut = ShortBuffer.allocate(bufferIn.buffer().capacity());
 
         while (bufferIn.buffer().hasRemaining()) {
-            bufferOut.put((short) (bufferIn.buffer().get() * mult));
+            bufferOut.put((short) (bufferIn.buffer().getByte() * mult));
         }
 
-        return VoxelBufferShort.wrap(bufferOut);
+        return VoxelBufferShort.wrapBuffer(bufferOut);
     }
 }

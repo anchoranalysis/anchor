@@ -26,23 +26,23 @@
 
 package org.anchoranalysis.image.voxel.thresholder;
 
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.convert.PrimitiveConverter;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.iterator.ProcessVoxelSliceBuffer;
 
-final class PointProcessor implements ProcessVoxelSliceBuffer<ByteBuffer> {
+final class PointProcessor implements ProcessVoxelSliceBuffer<UnsignedByteBuffer> {
 
     private final int level;
-    private final Voxels<ByteBuffer> voxelsOut;
+    private final Voxels<UnsignedByteBuffer> voxelsOut;
     private final byte byteOn;
     private final byte byteOff;
 
-    private ByteBuffer bbOut;
+    private UnsignedByteBuffer bbOut;
 
-    public PointProcessor(int level, Voxels<ByteBuffer> boxOut, BinaryValuesByte bvOut) {
+    public PointProcessor(int level, Voxels<UnsignedByteBuffer> boxOut, BinaryValuesByte bvOut) {
         super();
         this.level = level;
         this.voxelsOut = boxOut;
@@ -56,7 +56,7 @@ final class PointProcessor implements ProcessVoxelSliceBuffer<ByteBuffer> {
     }
 
     @Override
-    public void process(Point3i point, ByteBuffer buffer, int offset) {
+    public void process(Point3i point, UnsignedByteBuffer buffer, int offset) {
         int val = PrimitiveConverter.unsignedByteToInt(buffer.get(offset));
 
         bbOut.put(offset, val >= level ? byteOn : byteOff);

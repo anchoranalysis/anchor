@@ -26,8 +26,7 @@
 package org.anchoranalysis.image.voxel.iterator;
 
 import com.google.common.base.Preconditions;
-import java.nio.Buffer;
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.util.Optional;
 import java.util.function.IntPredicate;
 import java.util.function.IntUnaryOperator;
@@ -135,7 +134,7 @@ public class IterateVoxelsVoxelBoxAsInt {
      *     the predicate
      * @return true if the predicate returns true for all points on the object-mask, false otherwise
      */
-    public static <T extends Buffer> boolean allPointsMatchPredicate(
+    public static <T> boolean allPointsMatchPredicate(
             Voxels<T> voxels, ObjectMask object, IntPredicate predicate) {
 
         ReadableTuple3i cornerMin = object.boundingBox().cornerMin();
@@ -149,12 +148,12 @@ public class IterateVoxelsVoxelBoxAsInt {
         for (point.setZ(cornerMin.z()); point.z() < cornerMax.z(); point.incrementZ()) {
 
             VoxelBuffer<T> buffer = voxels.slice(point.z());
-            ByteBuffer sliceMask = object.sliceBufferGlobal(point.z());
+            UnsignedByteBuffer sliceMask = object.sliceBufferGlobal(point.z());
 
             for (point.setY(cornerMin.y()); point.y() < cornerMax.y(); point.incrementY()) {
                 for (point.setX(cornerMin.x()); point.x() < cornerMax.x(); point.incrementX()) {
 
-                    if (sliceMask.get() == maskMatchValue) {
+                    if (sliceMask.getByte() == maskMatchValue) {
 
                         int offset = extentVoxels.offsetSlice(point);
 
@@ -263,7 +262,7 @@ public class IterateVoxelsVoxelBoxAsInt {
         for (point.setZ(cornerMin.z()); point.z() < cornerMax.z(); point.incrementZ()) {
 
             VoxelBuffer<T> buffer = voxels.slice(point.z());
-            ByteBuffer sliceMask = object.sliceBufferLocal(point.z() + maskShift.z());
+            UnsignedByteBuffer sliceMask = object.sliceBufferLocal(point.z() + maskShift.z());
 
             for (point.setY(cornerMin.y()); point.y() < cornerMax.y(); point.incrementY()) {
                 for (point.setX(cornerMin.x()); point.x() < cornerMax.x(); point.incrementX()) {

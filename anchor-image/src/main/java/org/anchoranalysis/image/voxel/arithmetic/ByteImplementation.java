@@ -25,41 +25,41 @@
  */
 package org.anchoranalysis.image.voxel.arithmetic;
 
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.util.function.IntFunction;
 import org.anchoranalysis.image.convert.PrimitiveConverter;
 import org.anchoranalysis.image.extent.Extent;
 
-class ByteImplementation extends Base<ByteBuffer> {
+class ByteImplementation extends Base<UnsignedByteBuffer> {
 
-    public ByteImplementation(Extent extent, IntFunction<ByteBuffer> bufferForSlice) {
+    public ByteImplementation(Extent extent, IntFunction<UnsignedByteBuffer> bufferForSlice) {
         super(extent, bufferForSlice);
     }
 
     @Override
-    protected void multiplyBuffer(ByteBuffer buffer, double factor) {
+    protected void multiplyBuffer(UnsignedByteBuffer buffer, double factor) {
         while (buffer.hasRemaining()) {
-            byte mult = scaleClippedByte(factor, buffer.get());
+            byte mult = scaleClippedByte(factor, buffer.getByte());
             buffer.put(buffer.position() - 1, mult);
         }
     }
 
     @Override
-    protected void subtractFromBuffer(ByteBuffer buffer, int valueToSubtractFrom) {
+    protected void subtractFromBuffer(UnsignedByteBuffer buffer, int valueToSubtractFrom) {
         while (buffer.hasRemaining()) {
-            byte subtracted = subtractFromClippedByte(valueToSubtractFrom, buffer.get());
+            byte subtracted = subtractFromClippedByte(valueToSubtractFrom, buffer.getByte());
             buffer.put(buffer.position() - 1, subtracted);
         }
     }
 
     @Override
-    protected void multiplyByBufferIndex(ByteBuffer buffer, int index, double factor) {
+    protected void multiplyByBufferIndex(UnsignedByteBuffer buffer, int index, double factor) {
         byte mult = scaleClippedByte(factor, buffer.get(index));
         buffer.put(index, mult);
     }
 
     @Override
-    protected void addToBufferIndex(ByteBuffer buffer, int index, int valueToBeAdded) {
+    protected void addToBufferIndex(UnsignedByteBuffer buffer, int index, int valueToBeAdded) {
         byte added = addClippedByte(valueToBeAdded, buffer.get(index));
         buffer.put(index, added);
     }

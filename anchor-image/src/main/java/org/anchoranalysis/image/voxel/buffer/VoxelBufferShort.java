@@ -30,25 +30,22 @@ import java.nio.ShortBuffer;
 import org.anchoranalysis.image.convert.PrimitiveConverter;
 import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
+import lombok.AllArgsConstructor;
 
+@AllArgsConstructor
 public final class VoxelBufferShort extends VoxelBuffer<ShortBuffer> {
 
     private final ShortBuffer delegate;
-
-    public VoxelBufferShort(ShortBuffer delegate) {
-        super();
-        this.delegate = delegate;
-    }
 
     public static VoxelBufferShort allocate(int size) {
         return new VoxelBufferShort(ShortBuffer.allocate(size));
     }
 
-    public static VoxelBufferShort wrap(short[] arr) {
+    public static VoxelBufferShort wrapArray(short[] arr) {
         return new VoxelBufferShort(ShortBuffer.wrap(arr));
     }
 
-    public static VoxelBuffer<ShortBuffer> wrap(ShortBuffer buffer) {
+    public static VoxelBuffer<ShortBuffer> wrapBuffer(ShortBuffer buffer) {
         return new VoxelBufferShort(buffer);
     }
 

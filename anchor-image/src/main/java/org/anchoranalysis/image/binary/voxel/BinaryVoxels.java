@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.image.binary.voxel;
 
-import java.nio.Buffer;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.experimental.Accessors;
@@ -48,7 +47,7 @@ import org.anchoranalysis.image.voxel.pixelsforslice.PixelsForSlice;
  */
 @AllArgsConstructor
 @Accessors(fluent = true)
-public abstract class BinaryVoxels<T extends Buffer> implements BinaryOnOffSetter {
+public abstract class BinaryVoxels<T> implements BinaryOnOffSetter {
 
     /**
      * Voxels that should only have two intensity-values (representing ON and OFF states). This is

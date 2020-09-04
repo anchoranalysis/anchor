@@ -25,8 +25,7 @@
  */
 package org.anchoranalysis.image.voxel.extracter;
 
-import java.nio.Buffer;
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
@@ -39,12 +38,12 @@ import org.anchoranalysis.image.voxel.Voxels;
 public class VoxelsExtracterFactory {
 
     /**
-     * Create voxels-extracter for {@link ByteBuffer}
+     * Create voxels-extracter for {@link UnsignedByteBuffer}
      *
      * @param voxels the voxels to extract from
      * @return a newly created extracter
      */
-    public static VoxelsExtracter<ByteBuffer> createByte(Voxels<ByteBuffer> voxels) {
+    public static VoxelsExtracter<UnsignedByteBuffer> createByte(Voxels<UnsignedByteBuffer> voxels) {
         return new ByteImplementation(voxels);
     }
 
@@ -91,7 +90,7 @@ public class VoxelsExtracterFactory {
      * @return an extracter that performs translation from global-coordinates to the coordinate
      *     system expected by the delegate
      */
-    public static <T extends Buffer> VoxelsExtracter<T> atCorner(
+    public static <T> VoxelsExtracter<T> atCorner(
             ReadableTuple3i corner, VoxelsExtracter<T> delegate) {
         return new AtCorner<>(corner, delegate);
     }

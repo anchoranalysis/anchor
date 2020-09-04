@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.image.channel.converter.attached;
 
-import java.nio.Buffer;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.converter.ConversionPolicy;
@@ -41,7 +40,7 @@ import org.anchoranalysis.image.channel.converter.voxels.VoxelsConverter;
  * @param <S> attachment-type
  * @param <T> destination-type
  */
-public interface ChannelConverterAttached<S, T extends Buffer> {
+public interface ChannelConverterAttached<S, T> {
 
     void attachObject(S object) throws OperationFailedException;
 

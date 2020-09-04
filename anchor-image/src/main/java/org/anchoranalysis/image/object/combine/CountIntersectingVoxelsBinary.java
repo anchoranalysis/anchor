@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.image.object.combine;
 
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 
 /**
@@ -47,7 +47,7 @@ public class CountIntersectingVoxelsBinary extends CountIntersectingVoxels {
 
     @Override
     protected int countIntersectingVoxels(
-            ByteBuffer buffer1, ByteBuffer buffer2, IntersectionBoundingBox box) {
+            UnsignedByteBuffer buffer1, UnsignedByteBuffer buffer2, IntersectionBoundingBox box) {
 
         int cnt = 0;
         for (int y = box.y().min(); y < box.y().max(); y++) {

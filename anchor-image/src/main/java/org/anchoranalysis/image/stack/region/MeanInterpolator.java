@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.image.stack.region;
 
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.nio.ShortBuffer;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.convert.PrimitiveConverter;
@@ -48,7 +48,7 @@ class MeanInterpolator {
         sizeY = size;
     }
 
-    public byte getInterpolatedPixelByte(int x0, int y0, ByteBuffer bb, Extent e)
+    public byte getInterpolatedPixelByte(int x0, int y0, UnsignedByteBuffer buffer, Extent extent)
             throws OperationFailedException {
 
         int sum = 0;
@@ -62,8 +62,8 @@ class MeanInterpolator {
 
                 int x1 = x0 + x;
 
-                if (e.contains(x1, y1, 0)) {
-                    int val = PrimitiveConverter.unsignedByteToInt(bb.get(e.offset(x0 + x, y1)));
+                if (extent.contains(x1, y1, 0)) {
+                    int val = PrimitiveConverter.unsignedByteToInt(buffer.get(extent.offset(x0 + x, y1)));
                     sum += val;
 
                     cnt++;

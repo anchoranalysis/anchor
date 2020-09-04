@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.image.voxel;
 
-import java.nio.Buffer;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
@@ -37,7 +36,7 @@ import org.anchoranalysis.image.voxel.pixelsforslice.PixelsForSlice;
  * @param <T> buffer-type
  */
 @AllArgsConstructor
-class SubrangeVoxelAccess<T extends Buffer> implements PixelsForSlice<T> {
+class SubrangeVoxelAccess<T> implements PixelsForSlice<T> {
 
     private int zRelative;
     private Extent extent;

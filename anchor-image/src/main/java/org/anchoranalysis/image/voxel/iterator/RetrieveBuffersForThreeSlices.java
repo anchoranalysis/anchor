@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.image.voxel.iterator;
 
-import java.nio.Buffer;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.voxel.Voxels;
@@ -42,7 +41,7 @@ import org.anchoranalysis.image.voxel.Voxels;
  * @param <T> buffer-type for slice
  */
 @RequiredArgsConstructor
-public final class RetrieveBuffersForThreeSlices<T extends Buffer> implements ProcessVoxel {
+public final class RetrieveBuffersForThreeSlices<T> implements ProcessVoxel {
 
     // START REQUIRED ARGUMENTS
     /** Voxels for first buffer */

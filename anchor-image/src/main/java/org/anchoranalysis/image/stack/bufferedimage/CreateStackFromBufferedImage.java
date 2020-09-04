@@ -67,7 +67,7 @@ public class CreateStackFromBufferedImage {
 
     private static Channel createChannelFor(Dimensions dimensions, byte[] arr) {
         Channel channel = FACTORY.createEmptyUninitialised(dimensions);
-        channel.voxels().asByte().slices().replaceSlice(0, VoxelBufferByte.wrap(arr));
+        channel.voxels().asByte().slices().replaceSlice(0, VoxelBufferByte.wrapArray(arr));
         return channel;
     }
 

@@ -30,25 +30,22 @@ import java.nio.IntBuffer;
 import org.anchoranalysis.image.convert.PrimitiveConverter;
 import org.anchoranalysis.image.voxel.datatype.UnsignedIntVoxelType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
+import lombok.AllArgsConstructor;
 
+@AllArgsConstructor
 public final class VoxelBufferInt extends VoxelBuffer<IntBuffer> {
 
     private final IntBuffer delegate;
-
-    public VoxelBufferInt(IntBuffer delegate) {
-        super();
-        this.delegate = delegate;
-    }
 
     public static VoxelBufferInt allocate(int size) {
         return new VoxelBufferInt(IntBuffer.allocate(size));
     }
 
-    public static VoxelBufferInt wrap(int[] arr) {
+    public static VoxelBufferInt wrapArray(int[] arr) {
         return new VoxelBufferInt(IntBuffer.wrap(arr));
     }
 
-    public static VoxelBufferInt wrap(IntBuffer buffer) {
+    public static VoxelBufferInt wrapBuffer(IntBuffer buffer) {
         return new VoxelBufferInt(buffer);
     }
 

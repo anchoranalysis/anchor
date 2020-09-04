@@ -27,8 +27,7 @@
 package org.anchoranalysis.image.voxel.iterator;
 
 import com.google.common.base.Preconditions;
-import java.nio.Buffer;
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.util.Optional;
 import java.util.function.Predicate;
 import lombok.AccessLevel;
@@ -220,7 +219,7 @@ public class IterateVoxels {
      * @param process is called for each voxel within the bounding-box using GLOBAL coordinates.
      * @param <T> buffer-type for voxels
      */
-    public static <T extends Buffer> void callEachPoint(
+    public static <T> void callEachPoint(
             Voxels<T> voxels, ProcessVoxelSliceBuffer<T> process) {
         callEachPoint(voxels.extent(), new RetrieveBufferForSlice<>(voxels, process));
     }
@@ -234,7 +233,7 @@ public class IterateVoxels {
      * @param process is called for each voxel within the bounding-box using GLOBAL coordinates.
      * @param <T> buffer-type for voxels
      */
-    public static <T extends Buffer> void callEachPoint(
+    public static <T> void callEachPoint(
             Voxels<T> voxels, BoundingBox box, ProcessVoxelSliceBuffer<T> process) {
         callEachPoint(box, new RetrieveBufferForSlice<>(voxels, process));
     }
@@ -251,7 +250,7 @@ public class IterateVoxels {
      * @param process is called for each voxel within the bounding-box using GLOBAL coordinates.
      * @param <T> buffer-type for voxels
      */
-    public static <T extends Buffer> void callEachPointTwo(
+    public static <T> void callEachPointTwo(
             Voxels<T> voxels1, Voxels<T> voxels2, ProcessVoxelTwoSliceBuffers<T> process) {
         Preconditions.checkArgument(voxels1.extent().equals(voxels2.extent()));
         callEachPoint(
@@ -274,7 +273,7 @@ public class IterateVoxels {
      * @param process is called for each voxel within the bounding-box using GLOBAL coordinates.
      * @param <T> buffer-type for voxels
      */
-    public static <T extends Buffer> void callEachPointThree(
+    public static <T> void callEachPointThree(
             Voxels<T> voxels1,
             Voxels<T> voxels2,
             Voxels<T> voxels3,
@@ -301,7 +300,7 @@ public class IterateVoxels {
      * @param process is called for each voxel within the bounding-box using GLOBAL coordinates.
      * @param <T> buffer-type for voxels
      */
-    public static <T extends Buffer> void callEachPointTwo(
+    public static <T> void callEachPointTwo(
             Voxels<T> voxels1,
             Voxels<T> voxels2,
             ObjectMask object,
@@ -321,7 +320,7 @@ public class IterateVoxels {
      * @param process is called for each voxel within the bounding-box using GLOBAL coordinates.
      * @param <T> buffer-type for voxels
      */
-    public static <T extends Buffer> void callEachPoint(
+    public static <T> void callEachPoint(
             Voxels<T> voxels, ObjectMask object, ProcessVoxelSliceBuffer<T> process) {
         /**
          * This is re-implemented in full, as reusing existing code with {@link AddOffsets} and /
@@ -341,7 +340,7 @@ public class IterateVoxels {
         for (point.setZ(cornerMin.z()); point.z() < cornerMax.z(); point.incrementZ()) {
 
             T buffer = voxels.sliceBuffer(point.z());
-            ByteBuffer bufferObject = object.sliceBufferGlobal(point.z());
+            UnsignedByteBuffer bufferObject = object.sliceBufferGlobal(point.z());
             process.notifyChangeSlice(point.z());
 
             for (point.setY(cornerMin.y()); point.y() < cornerMax.y(); point.incrementY()) {
@@ -350,7 +349,7 @@ public class IterateVoxels {
 
                 for (point.setX(cornerMin.x()); point.x() < cornerMax.x(); point.incrementX()) {
 
-                    if (bufferObject.get() == valueOn) {
+                    if (bufferObject.getByte() == valueOn) {
                         process.process(point, buffer, offset);
                     }
                     offset++;
@@ -369,7 +368,7 @@ public class IterateVoxels {
      *     coordinates.
      * @param <T> buffer-type for voxels
      */
-    public static <T extends Buffer> void callEachPoint(
+    public static <T> void callEachPoint(
             Voxels<T> voxels, Mask mask, ProcessVoxelSliceBuffer<T> process) {
         // Treat it as one giant object box. This will involve some additions and subtractions of 0
         // during the processing of voxels
@@ -385,7 +384,7 @@ public class IterateVoxels {
      *
      * <p>This is similar behaviour to {@link #callEachPoint} but adds a buffer for each slice.
      */
-    public static <T extends Buffer> void callEachPoint(
+    public static <T> void callEachPoint(
             Voxels<T> voxels, Optional<ObjectMask> objectMask, ProcessVoxelSliceBuffer<T> process) {
         Extent extent = voxels.extent();
 

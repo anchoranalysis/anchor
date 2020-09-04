@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.image.io.generator.raster.object.collection;
 
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.geometry.Point3i;
@@ -122,7 +122,7 @@ public class ObjectAsMaskGenerator extends RasterGenerator
         Channel channelNew =
                 ChannelFactory.instance().create(dimensions, UnsignedByteVoxelType.INSTANCE);
 
-        Voxels<ByteBuffer> voxelsNew = channelNew.voxels().asByte();
+        Voxels<UnsignedByteBuffer> voxelsNew = channelNew.voxels().asByte();
 
         byte matchValue = objectMask.binaryValuesByte().getOnByte();
         byte outOnValueByte = (byte) outOnValue;
@@ -131,16 +131,14 @@ public class ObjectAsMaskGenerator extends RasterGenerator
 
         for (pointLocal.setZ(0); pointLocal.z() < dimensions.z(); pointLocal.incrementZ()) {
 
-            ByteBuffer pixelsIn = objectMask.sliceBufferLocal(pointLocal.z());
-            ByteBuffer pixelsOut = voxelsNew.sliceBuffer(pointLocal.z());
+            UnsignedByteBuffer pixelsIn = objectMask.sliceBufferLocal(pointLocal.z());
+            UnsignedByteBuffer pixelsOut = voxelsNew.sliceBuffer(pointLocal.z());
 
             while (pixelsIn.hasRemaining()) {
 
-                if (pixelsIn.get() != matchValue) {
-                    continue;
+                if (pixelsIn.getByte() == matchValue) {
+                    pixelsOut.put(pixelsIn.position() - 1, outOnValueByte);
                 }
-
-                pixelsOut.put(pixelsIn.position() - 1, outOnValueByte);
             }
         }
 

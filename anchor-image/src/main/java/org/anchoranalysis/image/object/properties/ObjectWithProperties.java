@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.image.object.properties;
 
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -111,7 +111,7 @@ public class ObjectWithProperties {
         return object;
     }
 
-    public ByteBuffer sliceBufferLocal(int sliceIndexRelative) {
+    public UnsignedByteBuffer sliceBufferLocal(int sliceIndexRelative) {
         return object.sliceBufferLocal(sliceIndexRelative);
     }
 }

@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.image.stack.rgb;
 
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.color.RGBColor;
@@ -40,9 +40,9 @@ public class RGBOutputUtils {
             RGBColor color,
             Point3i point,
             Dimensions dimensions,
-            ByteBuffer red,
-            ByteBuffer blue,
-            ByteBuffer green) {
+            UnsignedByteBuffer red,
+            UnsignedByteBuffer blue,
+            UnsignedByteBuffer green) {
         int index = dimensions.offsetSlice(point);
         red.put(index, (byte) color.getRed());
         green.put(index, (byte) color.getGreen());

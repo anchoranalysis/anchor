@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.image.channel.converter.attached.channel;
 
-import java.nio.Buffer;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -38,7 +37,7 @@ import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramFactory;
 
 @RequiredArgsConstructor
-class DelegateToHistogram<T extends Buffer> implements ChannelConverterAttached<Channel, T> {
+class DelegateToHistogram<T> implements ChannelConverterAttached<Channel, T> {
 
     private final ChannelConverterAttached<Histogram, T> delegate;
 

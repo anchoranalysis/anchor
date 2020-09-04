@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.image.bean.nonbean.init;
 
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.util.Optional;
 import java.util.Set;
 import lombok.Getter;
@@ -96,7 +96,7 @@ class CombineDiverseProvidersAsStacks implements NamedProvider<Stack> {
 
         Channel channelNew = FACTORY.createEmptyInitialised(sourceObject.dimensions());
 
-        BinaryVoxels<ByteBuffer> bvb = sourceObject.binaryVoxels();
+        BinaryVoxels<UnsignedByteBuffer> bvb = sourceObject.binaryVoxels();
 
         // For each region we get a mask for what equals the binary mask
         ObjectMask object =

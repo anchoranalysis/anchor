@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.image.binary.mask.combine;
 
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.image.binary.mask.Mask;
@@ -61,8 +61,8 @@ public class MaskAnd {
      * @param bvbSecond binary-values to mask second voxels
      */
     public static void apply(
-            Voxels<ByteBuffer> voxelsFirst,
-            Voxels<ByteBuffer> voxelsSecond,
+            Voxels<UnsignedByteBuffer> voxelsFirst,
+            Voxels<UnsignedByteBuffer> voxelsSecond,
             BinaryValuesByte bvbFirst,
             BinaryValuesByte bvbSecond) {
 

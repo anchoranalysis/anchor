@@ -70,7 +70,7 @@ public abstract class ConvertToShort extends ConvertTo<ShortBuffer> {
             out.put( convertValue( valueFromBuffer(buffer, indexIn) ) );
         }
 
-        return VoxelBufferShort.wrap(out);
+        return VoxelBufferShort.wrapBuffer(out);
     }
     
     protected abstract short convertValue(short value);

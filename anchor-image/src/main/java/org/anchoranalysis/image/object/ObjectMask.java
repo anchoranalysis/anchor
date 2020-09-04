@@ -27,7 +27,7 @@
 package org.anchoranalysis.image.object;
 
 import com.google.common.base.Preconditions;
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -88,15 +88,15 @@ public class ObjectMask {
     private static final ObjectsFromConnectedComponentsFactory CONNECTED_COMPONENT_CREATOR =
             new ObjectsFromConnectedComponentsFactory(true);
 
-    private static final VoxelsFactoryTypeBound<ByteBuffer> FACTORY = VoxelsFactory.getByte();
+    private static final VoxelsFactoryTypeBound<UnsignedByteBuffer> FACTORY = VoxelsFactory.getByte();
 
-    private final BoundedVoxels<ByteBuffer> voxels;
+    private final BoundedVoxels<UnsignedByteBuffer> voxels;
 
     @Getter private final BinaryValues binaryValues;
     @Getter private final BinaryValuesByte binaryValuesByte;
     private final Interpolator interpolator;
 
-    @Getter private final VoxelsExtracter<ByteBuffer> extract;
+    @Getter private final VoxelsExtracter<UnsignedByteBuffer> extract;
 
     /**
      * Creates an object-mask with a corner at the origin (i.e. corner is 0,0,0)
@@ -105,7 +105,7 @@ public class ObjectMask {
      *
      * @param voxels voxels to be used in the object-mask
      */
-    public ObjectMask(Voxels<ByteBuffer> voxels) {
+    public ObjectMask(Voxels<UnsignedByteBuffer> voxels) {
         this(new BoundedVoxels<>(voxels));
     }
 
@@ -129,27 +129,27 @@ public class ObjectMask {
      *
      * @param voxels voxels to be used in the object-mask
      */
-    public ObjectMask(BoundedVoxels<ByteBuffer> voxels) {
+    public ObjectMask(BoundedVoxels<UnsignedByteBuffer> voxels) {
         this(voxels, BinaryValues.getDefault());
     }
 
-    public ObjectMask(BinaryVoxels<ByteBuffer> voxels) {
+    public ObjectMask(BinaryVoxels<UnsignedByteBuffer> voxels) {
         this(new BoundedVoxels<>(voxels.voxels()), voxels.binaryValues());
     }
 
-    public ObjectMask(BoundingBox box, Voxels<ByteBuffer> voxels) {
+    public ObjectMask(BoundingBox box, Voxels<UnsignedByteBuffer> voxels) {
         this(new BoundedVoxels<>(box, voxels));
     }
 
-    public ObjectMask(BoundingBox box, Voxels<ByteBuffer> voxels, BinaryValues binaryValues) {
+    public ObjectMask(BoundingBox box, Voxels<UnsignedByteBuffer> voxels, BinaryValues binaryValues) {
         this(new BoundedVoxels<>(box, voxels), binaryValues);
     }
 
-    public ObjectMask(BoundingBox box, BinaryVoxels<ByteBuffer> voxels) {
+    public ObjectMask(BoundingBox box, BinaryVoxels<UnsignedByteBuffer> voxels) {
         this(new BoundedVoxels<>(box, voxels.voxels()), voxels.binaryValues());
     }
 
-    public ObjectMask(BoundedVoxels<ByteBuffer> voxels, BinaryValues binaryValues) {
+    public ObjectMask(BoundedVoxels<UnsignedByteBuffer> voxels, BinaryValues binaryValues) {
         this.voxels = voxels;
         this.binaryValues = binaryValues;
         this.binaryValuesByte = binaryValues.createByte();
@@ -158,7 +158,7 @@ public class ObjectMask {
     }
 
     public ObjectMask(
-            BoundingBox box, Voxels<ByteBuffer> voxels, BinaryValuesByte binaryValuesByte) {
+            BoundingBox box, Voxels<UnsignedByteBuffer> voxels, BinaryValuesByte binaryValuesByte) {
         this.voxels = new BoundedVoxels<>(box, voxels);
         this.binaryValues = binaryValuesByte.createInt();
         this.binaryValuesByte = binaryValuesByte;
@@ -185,7 +185,7 @@ public class ObjectMask {
     }
 
     private ObjectMask(
-            BoundedVoxels<ByteBuffer> voxels,
+            BoundedVoxels<UnsignedByteBuffer> voxels,
             BinaryValues binaryValues,
             BinaryValuesByte binaryValuesByte) {
         this.voxels = voxels;
@@ -207,7 +207,7 @@ public class ObjectMask {
      * @param voxelsToAssign voxels to be assigned.
      * @return a new object with the replacement voxels but identical in other respects.
      */
-    public ObjectMask replaceVoxels(Voxels<ByteBuffer> voxelsToAssign) {
+    public ObjectMask replaceVoxels(Voxels<UnsignedByteBuffer> voxelsToAssign) {
         return new ObjectMask(voxels.replaceVoxels(voxelsToAssign), binaryValues);
     }
 
@@ -277,7 +277,7 @@ public class ObjectMask {
         if ((binaryValues.getOnInt() == 255 && binaryValues.getOffInt() == 0)
                 || (binaryValues.getOnInt() == 0 && binaryValues.getOffInt() == 255)) {
 
-            BoundedVoxels<ByteBuffer> scaled = voxels.scale(factor, interpolator, clipTo);
+            BoundedVoxels<UnsignedByteBuffer> scaled = voxels.scale(factor, interpolator, clipTo);
 
             // We should do a thresholding afterwards to make sure our values correspond to the two
             // binary values
@@ -383,7 +383,7 @@ public class ObjectMask {
         BinaryValues bvOut = BinaryValues.getDefault();
 
         // We initially set all pixels to ON
-        BoundedVoxels<ByteBuffer> voxelsMaskOut =
+        BoundedVoxels<UnsignedByteBuffer> voxelsMaskOut =
                 BoundedVoxelsFactory.createByte(boxIntersect.get());
         voxelsMaskOut.assignValue(bvOut.getOnInt()).toAll();
 
@@ -423,11 +423,11 @@ public class ObjectMask {
         return voxels.boundingBox();
     }
 
-    public BinaryVoxels<ByteBuffer> binaryVoxels() {
+    public BinaryVoxels<UnsignedByteBuffer> binaryVoxels() {
         return BinaryVoxelsFactory.reuseByte(voxels.voxels(), binaryValues);
     }
 
-    public Voxels<ByteBuffer> voxels() {
+    public Voxels<UnsignedByteBuffer> voxels() {
         return voxels.voxels();
     }
 
@@ -443,7 +443,7 @@ public class ObjectMask {
         return offsetRelative(x - boundingBox().cornerMin().x(), y - boundingBox().cornerMin().y());
     }
 
-    public BoundedVoxels<ByteBuffer> boundedVoxels() {
+    public BoundedVoxels<UnsignedByteBuffer> boundedVoxels() {
         return voxels;
     }
 
@@ -553,7 +553,7 @@ public class ObjectMask {
      * @param sliceIndexRelative sliceIndex (z) relative to the bounding-box of the object-mask
      * @return the buffer
      */
-    public ByteBuffer sliceBufferLocal(int sliceIndexRelative) {
+    public UnsignedByteBuffer sliceBufferLocal(int sliceIndexRelative) {
         return voxels.sliceBufferLocal(sliceIndexRelative);
     }
 
@@ -563,7 +563,7 @@ public class ObjectMask {
      * @param sliceIndexGlobal sliceIndex (z) in global coordinates
      * @return the buffer
      */
-    public ByteBuffer sliceBufferGlobal(int sliceIndexGlobal) {
+    public UnsignedByteBuffer sliceBufferGlobal(int sliceIndexGlobal) {
         return voxels.sliceBufferGlobal(sliceIndexGlobal);
     }
 
@@ -651,7 +651,7 @@ public class ObjectMask {
             return mapBoundingBoxPreserveExtent(boxToAssign);
         }
 
-        Voxels<ByteBuffer> voxelsLarge =
+        Voxels<UnsignedByteBuffer> voxelsLarge =
                 VoxelsFactory.getByte().createInitialized(boxToAssign.extent());
 
         BoundingBox bbLocal = voxels.boundingBox().relativePositionToBox(boxToAssign);

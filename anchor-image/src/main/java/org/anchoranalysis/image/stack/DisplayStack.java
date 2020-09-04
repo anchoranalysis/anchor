@@ -28,7 +28,7 @@ package org.anchoranalysis.image.stack;
 
 import com.google.common.base.Functions;
 import java.awt.image.BufferedImage;
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -72,7 +72,7 @@ public class DisplayStack {
     private static final double QUANTILE_UPPER = 0.9999;
 
     private final Stack stack;
-    private final List<Optional<ChannelConverterAttached<Channel, ByteBuffer>>> listConverters;
+    private final List<Optional<ChannelConverterAttached<Channel, UnsignedByteBuffer>>> listConverters;
     private final ChannelMapper mapper;
 
     // START: constructors
@@ -85,14 +85,14 @@ public class DisplayStack {
     // We don't need to worry about channel numbers
     private DisplayStack(
             Stack stack,
-            List<Optional<ChannelConverterAttached<Channel, ByteBuffer>>> listConverters)
+            List<Optional<ChannelConverterAttached<Channel, UnsignedByteBuffer>>> listConverters)
             throws CreateException {
         this.stack = stack;
         this.listConverters = listConverters;
         this.mapper = createChannelMapper();
 
         for (int index = 0; index < stack.getNumberChannels(); index++) {
-            Optional<ChannelConverterAttached<Channel, ByteBuffer>> converter =
+            Optional<ChannelConverterAttached<Channel, UnsignedByteBuffer>> converter =
                     listConverters.get(index);
             if (converter.isPresent()) {
                 try {
@@ -215,7 +215,7 @@ public class DisplayStack {
     public void copyPixelsTo(
             int channelIndex,
             BoundingBox sourceBox,
-            Voxels<ByteBuffer> voxelsDestination,
+            Voxels<UnsignedByteBuffer> voxelsDestination,
             BoundingBox destinationBox) {
 
         mapper.callChannelIfSupported(
@@ -228,7 +228,7 @@ public class DisplayStack {
                                     .create(destinationBox.extent(), channel.getVoxelDataType());
                     channel.voxels().copyVoxelsTo(sourceBox, destBoxNonByte, allLocalBox);
 
-                    Voxels<ByteBuffer> destBoxByte =
+                    Voxels<UnsignedByteBuffer> destBoxByte =
                             VoxelsFactory.getByte().createInitialized(destinationBox.extent());
                     converter.getVoxelsConverter().convertFrom(destBoxNonByte, destBoxByte);
 
@@ -294,7 +294,7 @@ public class DisplayStack {
         return BufferedImageFactory.createGrayscale(voxelsForChannelBoundingBox(0, box));
     }
 
-    private Voxels<ByteBuffer> voxelsForChannel(int channelIndex) {
+    private Voxels<UnsignedByteBuffer> voxelsForChannel(int channelIndex) {
         return mapper.mapChannelIfSupported(
                 channelIndex,
                 (channel, converter) ->
@@ -305,7 +305,7 @@ public class DisplayStack {
     }
 
     @SuppressWarnings("unchecked")
-    private Voxels<ByteBuffer> voxelsForChannelBoundingBox(int channelIndex, BoundingBox box) {
+    private Voxels<UnsignedByteBuffer> voxelsForChannelBoundingBox(int channelIndex, BoundingBox box) {
 
         Voxels<?> voxelsUnconverted = stack.getChannel(channelIndex).extract().region(box, true);
         return mapper.mapChannelIfSupported(
@@ -316,7 +316,7 @@ public class DisplayStack {
                                 .convertFrom(
                                         new VoxelsWrapper(voxelsUnconverted),
                                         VoxelsFactory.getByte()),
-                channel -> (Voxels<ByteBuffer>) voxelsUnconverted);
+                channel -> (Voxels<UnsignedByteBuffer>) voxelsUnconverted);
     }
 
     private Stack deriveStack(IntFunction<Channel> indexToChannel) {
@@ -342,7 +342,7 @@ public class DisplayStack {
     }
 
     private void setConverterFor(
-            int channelIndex, ChannelConverterAttached<Channel, ByteBuffer> converter)
+            int channelIndex, ChannelConverterAttached<Channel, UnsignedByteBuffer> converter)
             throws SetOperationFailedException {
         try {
             converter.attachObject(stack.getChannel(channelIndex));

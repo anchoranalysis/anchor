@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.image.binary.voxel;
 
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.nio.IntBuffer;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -49,8 +49,8 @@ public class BinaryVoxelsFactory {
      * @param extent the size of the voxels
      * @return newly created binary-voxels of specified size with all voxels initialized to ON.
      */
-    public static BinaryVoxels<ByteBuffer> createEmptyOn(Extent extent) {
-        BinaryVoxels<ByteBuffer> voxels = createEmptyOff(extent);
+    public static BinaryVoxels<UnsignedByteBuffer> createEmptyOn(Extent extent) {
+        BinaryVoxels<UnsignedByteBuffer> voxels = createEmptyOff(extent);
         voxels.assignOn().toAll();
         return voxels;
     }
@@ -62,9 +62,9 @@ public class BinaryVoxelsFactory {
      * @return newly created binary-voxels of specified size with all voxels initialized to OFF.
      */
     @SuppressWarnings("unchecked")
-    public static BinaryVoxels<ByteBuffer> createEmptyOff(Extent extent) {
+    public static BinaryVoxels<UnsignedByteBuffer> createEmptyOff(Extent extent) {
         try {
-            return (BinaryVoxels<ByteBuffer>)
+            return (BinaryVoxels<UnsignedByteBuffer>)
                     createEmptyOff(extent, UnsignedByteVoxelType.INSTANCE);
         } catch (CreateException e) {
             throw new AnchorImpossibleSituationException();
@@ -101,7 +101,7 @@ public class BinaryVoxelsFactory {
      * @param voxels voxel-buffer to treat as binary (and internally reused)
      * @return newly created binary-voxels reusing existing voxels internally
      */
-    public static BinaryVoxels<ByteBuffer> reuseByte(Voxels<ByteBuffer> voxels) {
+    public static BinaryVoxels<UnsignedByteBuffer> reuseByte(Voxels<UnsignedByteBuffer> voxels) {
         return reuseByte(voxels, BinaryValues.getDefault());
     }
 
@@ -115,8 +115,8 @@ public class BinaryVoxelsFactory {
      * @param binaryValues how to interpret OFF and ON states
      * @return newly created binary-voxels reusing existing voxels internally
      */
-    public static BinaryVoxels<ByteBuffer> reuseByte(
-            Voxels<ByteBuffer> voxels, BinaryValues binaryValues) {
+    public static BinaryVoxels<UnsignedByteBuffer> reuseByte(
+            Voxels<UnsignedByteBuffer> voxels, BinaryValues binaryValues) {
         return new BinaryVoxelsByte(voxels, binaryValues);
     }
 

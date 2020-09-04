@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.image.voxel.thresholder;
 
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -44,19 +44,19 @@ import org.anchoranalysis.image.voxel.iterator.IterateVoxels;
 public class VoxelsThresholder {
 
     public static void thresholdForLevel(
-            Voxels<ByteBuffer> inputBuffer, int level, BinaryValuesByte bvOut) {
+            Voxels<UnsignedByteBuffer> inputBuffer, int level, BinaryValuesByte bvOut) {
         // We know that as the inputType is byte, it will be performed in place
         thresholdForLevel(VoxelsWrapper.wrap(inputBuffer), level, bvOut, Optional.empty(), false);
     }
 
     // Perform inplace
-    public static BinaryVoxels<ByteBuffer> thresholdForLevel(
+    public static BinaryVoxels<UnsignedByteBuffer> thresholdForLevel(
             VoxelsWrapper inputBuffer,
             int level,
             BinaryValuesByte bvOut,
             Optional<ObjectMask> objectMask,
             boolean alwaysDuplicate) {
-        Voxels<ByteBuffer> boxOut = inputBuffer.asByteOrCreateEmpty(alwaysDuplicate);
+        Voxels<UnsignedByteBuffer> boxOut = inputBuffer.asByteOrCreateEmpty(alwaysDuplicate);
 
         if (inputBuffer.getVoxelDataType().equals(UnsignedByteVoxelType.INSTANCE)) {
 

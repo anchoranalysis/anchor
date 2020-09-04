@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.image.histogram;
 
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.util.Collection;
 import java.util.Optional;
 import lombok.AccessLevel;
@@ -163,7 +163,7 @@ public class HistogramFactory {
         for (int z = cornerMin.z(); z <= cornerMax.z(); z++) {
 
             VoxelBuffer<?> bb = inputBuffer.slice(z);
-            ByteBuffer bbMask = object.sliceBufferGlobal(z);
+            UnsignedByteBuffer bbMask = object.sliceBufferGlobal(z);
 
             for (int y = cornerMin.y(); y <= cornerMax.y(); y++) {
                 for (int x = cornerMin.x(); x <= cornerMax.x(); x++) {

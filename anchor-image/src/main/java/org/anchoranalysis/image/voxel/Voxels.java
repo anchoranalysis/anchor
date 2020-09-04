@@ -29,6 +29,7 @@ package org.anchoranalysis.image.voxel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.experimental.Accessors;
+import java.nio.Buffer;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.arithmetic.VoxelsArithmetic;
 import org.anchoranalysis.image.voxel.assigner.VoxelsAssigner;
@@ -137,6 +138,25 @@ public abstract class Voxels<T> {
         slices().replaceSlice(sliceIndexToUpdate, bufferToAssign);
     }
 
+    /** 
+     * Are there voxels remaining in the buffer?
+     * 
+     * <p>This is meant in the sense of Java's NIO {@link Buffer} classes.
+     *
+     * @param buffer
+     * @return true if there are voxels remaining in the buffer, false otherwise
+     **/
+    public abstract boolean hasRemaining(T buffer);
+    
+    
+    /**
+     * Sets the position in the buffer.
+     * 
+     * @param buffer the buffer
+     * @param offset the offset
+     */
+    public abstract void setBufferPosition(T buffer, int offset);
+    
     /**
      * Checks if the current values from <i>two buffers are equal</i>
      *

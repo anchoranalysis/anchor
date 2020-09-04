@@ -30,21 +30,18 @@ import java.nio.FloatBuffer;
 import org.anchoranalysis.image.convert.PrimitiveConverter;
 import org.anchoranalysis.image.voxel.datatype.FloatVoxelType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
+import lombok.AllArgsConstructor;
 
+@AllArgsConstructor
 public final class VoxelBufferFloat extends VoxelBuffer<FloatBuffer> {
 
     private final FloatBuffer delegate;
 
-    private VoxelBufferFloat(FloatBuffer delegate) {
-        super();
-        this.delegate = delegate;
-    }
-
-    public static VoxelBufferFloat wrap(float[] arr) {
+    public static VoxelBufferFloat wrapArray(float[] arr) {
         return new VoxelBufferFloat(FloatBuffer.wrap(arr));
     }
 
-    public static VoxelBufferFloat wrap(FloatBuffer buffer) {
+    public static VoxelBufferFloat wrapBuffer(FloatBuffer buffer) {
         return new VoxelBufferFloat(buffer);
     }
 

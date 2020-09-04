@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.image.object.factory.unionfind;
 
-import java.nio.Buffer;
 import java.nio.IntBuffer;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.values.BinaryValues;
@@ -35,7 +34,7 @@ import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.iterator.ProcessVoxelSliceBuffer;
 
-class PopulateIndexProcessor<T extends Buffer> implements ProcessVoxelSliceBuffer<T> {
+class PopulateIndexProcessor<T> implements ProcessVoxelSliceBuffer<T> {
 
     private Voxels<IntBuffer> indexBuffer;
     private MergeWithNeighbors mergeWithNeighbors;
@@ -74,7 +73,7 @@ class PopulateIndexProcessor<T extends Buffer> implements ProcessVoxelSliceBuffe
 
             int neighborLabel = mergeWithNeighbors.minNeighborLabel(point, 0, offsetSlice);
             if (neighborLabel == -1) {
-                bufferReaderWriter.putBufferCnt(buffer, offsetSlice, count);
+                bufferReaderWriter.putBufferCount(buffer, offsetSlice, count);
                 bbIndex.put(offsetSlice, count);
                 mergeWithNeighbors.addElement(count);
                 count++;

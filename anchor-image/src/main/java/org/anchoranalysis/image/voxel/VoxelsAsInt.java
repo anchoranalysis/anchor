@@ -60,4 +60,14 @@ public final class VoxelsAsInt extends Voxels<IntBuffer> {
     public VoxelsExtracter<IntBuffer> extract() {
         return VoxelsExtracterFactory.createInt(this);
     }
+    
+    @Override
+    public boolean hasRemaining(IntBuffer buffer) {
+        return buffer.hasRemaining();
+    }
+    
+    @Override
+    public void setBufferPosition(IntBuffer buffer, int offset) {
+        buffer.position(offset);
+    }
 }

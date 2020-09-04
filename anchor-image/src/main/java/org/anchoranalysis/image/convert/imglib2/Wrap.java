@@ -25,7 +25,6 @@
  */
 package org.anchoranalysis.image.convert.imglib2;
 
-import java.nio.Buffer;
 import java.util.List;
 import java.util.function.Function;
 import org.anchoranalysis.core.functional.FunctionalList;
@@ -45,7 +44,7 @@ import net.imglib2.util.Fraction;
 @NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class Wrap {
     
-    public static <S extends NativeType<S>, T extends ArrayDataAccess<T>, U extends Buffer>
+    public static <S extends NativeType<S>, T extends ArrayDataAccess<T>, U>
             NativeImg<S, T> allSlices(
                     Voxels<U> voxels,
                     Function<U, T> transform,
@@ -57,7 +56,7 @@ public class Wrap {
         return Wrap.updateType(image, createType);
     }
     
-    public static <S extends NativeType<S>, T, U extends Buffer> NativeImg<S, T> buffer(
+    public static <S extends NativeType<S>, T, U> NativeImg<S, T> buffer(
             VoxelBuffer<U> buffer,
             Extent extent,
             Function<U, T> transform,
@@ -72,7 +71,7 @@ public class Wrap {
         return image;
     }
         
-    private static <T, U extends Buffer> List<T> slicesFor(
+    private static <T, U> List<T> slicesFor(
             Voxels<U> voxels, Function<U, T> transformSlice) {
         return FunctionalList.of( voxels.extent().streamOverZ()
                 .mapToObj(z -> transformSlice.apply(voxels.sliceBuffer(z))));

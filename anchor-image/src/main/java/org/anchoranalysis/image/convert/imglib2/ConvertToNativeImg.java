@@ -25,7 +25,7 @@
  */
 package org.anchoranalysis.image.convert.imglib2;
 
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
 import org.anchoranalysis.image.voxel.Voxels;
@@ -49,7 +49,7 @@ import net.imglib2.type.numeric.real.FloatType;
 @NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class ConvertToNativeImg {
     
-  public static NativeImg<UnsignedByteType, ByteArray> fromByte(Voxels<ByteBuffer> voxels) {
+  public static NativeImg<UnsignedByteType, ByteArray> fromByte(Voxels<UnsignedByteBuffer> voxels) {
       return Wrap.allSlices(voxels, ArrayFactory::fromByte, UnsignedByteType::new);
   }
 

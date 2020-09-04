@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.image.voxel.factory;
 
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.VoxelsAsByte;
@@ -35,22 +35,22 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.image.voxel.pixelsforslice.PixelsForSlice;
 import org.anchoranalysis.image.voxel.pixelsforslice.PixelsFromByteBufferArr;
 
-final class FactoryByte implements VoxelsFactoryTypeBound<ByteBuffer> {
+final class FactoryByte implements VoxelsFactoryTypeBound<UnsignedByteBuffer> {
 
     private static final VoxelDataType DATA_TYPE = UnsignedByteVoxelType.INSTANCE;
 
     @Override
-    public Voxels<ByteBuffer> create(PixelsForSlice<ByteBuffer> pixelsForPlane) {
+    public Voxels<UnsignedByteBuffer> create(PixelsForSlice<UnsignedByteBuffer> pixelsForPlane) {
         return new VoxelsAsByte(pixelsForPlane);
     }
 
     @Override
-    public Voxels<ByteBuffer> createInitialized(Extent extent) {
+    public Voxels<UnsignedByteBuffer> createInitialized(Extent extent) {
         return new VoxelsAsByte(PixelsFromByteBufferArr.createInitialized(extent));
     }
 
     @Override
-    public Voxels<ByteBuffer> createUninitialized(Extent extent) {
+    public Voxels<UnsignedByteBuffer> createUninitialized(Extent extent) {
         return new VoxelsAsByte(PixelsFromByteBufferArr.createUninitialized(extent));
     }
 

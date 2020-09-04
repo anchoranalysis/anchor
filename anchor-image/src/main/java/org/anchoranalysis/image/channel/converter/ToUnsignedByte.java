@@ -26,27 +26,27 @@
 
 package org.anchoranalysis.image.channel.converter;
 
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.channel.converter.voxels.ConvertToByteNoScaling;
 import org.anchoranalysis.image.channel.converter.voxels.VoxelsConverter;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 
 /**
- * Converts from other data types to {@link ByteBuffer} (unsigned 8-bit) without scaling.
+ * Converts from other data types to {@link UnsignedByteBuffer} (unsigned 8-bit) without scaling.
  * 
- * <p>This implies undefined behaviour for values in the source data-type that lie outside the range of {@link ByteBuffer}.
+ * <p>This implies undefined behaviour for values in the source data-type that lie outside the range of {@link UnsignedByteBuffer}.
  * 
  * @author Owen Feehan
  *
  */
-public class ToUnsignedByte extends ChannelConverter<ByteBuffer> {
+public class ToUnsignedByte extends ChannelConverter<UnsignedByteBuffer> {
 
     public ToUnsignedByte() {
         this(new ConvertToByteNoScaling());
     }
 
-    public ToUnsignedByte(VoxelsConverter<ByteBuffer> voxelsConverter) {
+    public ToUnsignedByte(VoxelsConverter<UnsignedByteBuffer> voxelsConverter) {
         super(UnsignedByteVoxelType.INSTANCE, voxelsConverter, VoxelsFactory.getByte());
     }
 }

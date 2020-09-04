@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.image.interpolator;
 
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.nio.ShortBuffer;
 import lombok.RequiredArgsConstructor;
 import net.imglib2.Cursor;
@@ -82,9 +82,9 @@ public abstract class InterpolatorImgLib2 implements Interpolator {
     private int extendValue = 0;
 
     @Override
-    public VoxelBuffer<ByteBuffer> interpolateByte(
-            VoxelBuffer<ByteBuffer> voxelsSource,
-            VoxelBuffer<ByteBuffer> voxelsDestination,
+    public VoxelBuffer<UnsignedByteBuffer> interpolateByte(
+            VoxelBuffer<UnsignedByteBuffer> voxelsSource,
+            VoxelBuffer<UnsignedByteBuffer> voxelsDestination,
             Extent extentSource,
             Extent extentDestination) {
 

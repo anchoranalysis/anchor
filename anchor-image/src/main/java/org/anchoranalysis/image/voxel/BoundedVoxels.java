@@ -27,7 +27,6 @@
 package org.anchoranalysis.image.voxel;
 
 import com.google.common.base.Preconditions;
-import java.nio.Buffer;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.experimental.Accessors;
@@ -55,7 +54,7 @@ import org.anchoranalysis.image.voxel.factory.VoxelsFactoryTypeBound;
  * @param <T> buffer-type
  */
 @Accessors(fluent = true)
-public class BoundedVoxels<T extends Buffer> {
+public class BoundedVoxels<T> {
 
     private static final Point3i ALL_ONES_2D = new Point3i(1, 1, 0);
     private static final Point3i ALL_ONES_3D = new Point3i(1, 1, 1);

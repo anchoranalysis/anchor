@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.image.object.morphological.accept;
 
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -37,7 +37,7 @@ public class AcceptIterationList implements AcceptIterationConditon {
     private List<AcceptIterationConditon> list = new ArrayList<>();
 
     @Override
-    public boolean acceptIteration(Voxels<ByteBuffer> voxels, BinaryValues bvb)
+    public boolean acceptIteration(Voxels<UnsignedByteBuffer> voxels, BinaryValues bvb)
             throws OperationFailedException {
         for (AcceptIterationConditon ai : list) {
             if (!ai.acceptIteration(voxels, bvb)) {

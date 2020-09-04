@@ -39,7 +39,7 @@ final class ReadWriteInt extends BufferReadWrite<IntBuffer> {
     }
 
     @Override
-    protected void putBufferCnt(IntBuffer buffer, int offset, int cnt) {
-        buffer.put(offset, cnt);
+    protected void putBufferCount(IntBuffer buffer, int offset, int count) {
+        buffer.put(offset, count);
     }
 }

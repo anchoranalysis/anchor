@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.image.object;
 
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.axis.AxisType;
@@ -54,7 +54,7 @@ final class CenterOfGravityCalculator {
 
         for (int z = 0; z < extent.z(); z++) {
 
-            ByteBuffer bb = object.sliceBufferLocal(z);
+            UnsignedByteBuffer bb = object.sliceBufferLocal(z);
 
             int offset = 0;
             for (int y = 0; y < extent.y(); y++) {
@@ -94,13 +94,13 @@ final class CenterOfGravityCalculator {
 
         for (int z = 0; z < extent.z(); z++) {
 
-            ByteBuffer bb = object.sliceBufferLocal(z);
+            UnsignedByteBuffer buffer = object.sliceBufferLocal(z);
 
             int offset = 0;
             for (int y = 0; y < extent.y(); y++) {
                 for (int x = 0; x < extent.x(); x++) {
 
-                    if (bb.get(offset) == onByte) {
+                    if (buffer.get(offset) == onByte) {
                         sum += AxisTypeConverter.valueFor(axisType, x, y, z);
                         cnt++;
                     }

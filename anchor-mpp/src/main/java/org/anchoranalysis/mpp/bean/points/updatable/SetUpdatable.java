@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.mpp.bean.points.updatable;
 
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -120,14 +120,14 @@ public class SetUpdatable extends UpdatablePointsContainer {
 
         Extent extent = maskChannel.extent();
 
-        Voxels<ByteBuffer> voxelsBinary = maskChannel.voxels().asByte();
+        Voxels<UnsignedByteBuffer> voxelsBinary = maskChannel.voxels().asByte();
 
         // Where we actually do the work
         Point3i position = new Point3i();
 
         for (position.setZ(0); position.z() < dimensions.z(); position.incrementZ()) {
 
-            ByteBuffer bbBinaryImage = voxelsBinary.sliceBuffer(position.z());
+            UnsignedByteBuffer bbBinaryImage = voxelsBinary.sliceBuffer(position.z());
 
             for (position.setY(0); position.y() < dimensions.y(); position.incrementY()) {
                 for (position.setX(0); position.x() < dimensions.x(); position.incrementX()) {
@@ -175,13 +175,13 @@ public class SetUpdatable extends UpdatablePointsContainer {
         RegionMembership rm = newMark.getRegionMap().membershipForIndex(regionID);
         byte flags = rm.flags();
 
-        BoundedVoxels<ByteBuffer> voxels = pxlMark.voxels();
+        BoundedVoxels<UnsignedByteBuffer> voxels = pxlMark.voxels();
         Extent extent = voxels.extent();
 
         Point3i position = new Point3i();
         for (position.setZ(0); position.z() < extent.z(); position.incrementZ()) {
 
-            ByteBuffer buffer = voxels.sliceBufferLocal(position.z());
+            UnsignedByteBuffer buffer = voxels.sliceBufferLocal(position.z());
 
             for (position.setY(0); position.y() < extent.y(); position.incrementY()) {
                 for (position.setX(0); position.x() < extent.x(); position.incrementX()) {
@@ -220,12 +220,12 @@ public class SetUpdatable extends UpdatablePointsContainer {
 
         RegionMembership rm = markToAdd.getRegionMap().membershipForIndex(regionID);
 
-        BoundedVoxels<ByteBuffer> voxels = pxlMark.voxels();
+        BoundedVoxels<UnsignedByteBuffer> voxels = pxlMark.voxels();
         Extent e = voxels.extent();
 
         BinaryValuesByte bvb = mask.binaryValues().createByte();
 
-        Voxels<ByteBuffer> voxelsBinary = maskChannel.voxels().asByte();
+        Voxels<UnsignedByteBuffer> voxelsBinary = maskChannel.voxels().asByte();
 
         Point3i point = new Point3i();
         for (point.setZ(0); point.z() < e.z(); point.incrementZ()) {
@@ -249,8 +249,8 @@ public class SetUpdatable extends UpdatablePointsContainer {
             Point3i crntExtentPoint,
             ReadableTuple3i crnrPoint,
             Extent extent,
-            ByteBuffer buffer,
-            ByteBuffer bbBinaryImage,
+            UnsignedByteBuffer buffer,
+            UnsignedByteBuffer bbBinaryImage,
             BinaryValuesByte bvb,
             int zGlobal,
             RegionMembership rm,

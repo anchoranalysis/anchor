@@ -26,8 +26,7 @@
 
 package org.anchoranalysis.image.object.factory.unionfind;
 
-import java.nio.Buffer;
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.nio.IntBuffer;
 import java.util.HashSet;
 import java.util.Map;
@@ -67,7 +66,7 @@ public class ConnectedComponentUnionFind {
      *     (modified) during processing.
      * @return the connected-components derived from the voxels
      */
-    public ObjectCollection deriveConnectedByte(BinaryVoxels<ByteBuffer> voxels) {
+    public ObjectCollection deriveConnectedByte(BinaryVoxels<UnsignedByteBuffer> voxels) {
         ObjectCollection objects = new ObjectCollection();
         visitRegion(voxels, objects, minNumberVoxels, new ReadWriteByte());
         return objects;
@@ -86,7 +85,7 @@ public class ConnectedComponentUnionFind {
         return objects;
     }
 
-    private <T extends Buffer> void visitRegion(
+    private <T> void visitRegion(
             BinaryVoxels<T> visited,
             ObjectCollection objects,
             int minNumberVoxels,
@@ -113,7 +112,7 @@ public class ConnectedComponentUnionFind {
                 indexBuffer, unionIndex, indexBuffer.extent().z() > 1, bigNeighborhood);
     }
 
-    private static <T extends Buffer> int populateIndexFromBinary(
+    private static <T> int populateIndexFromBinary(
             BinaryVoxels<T> visited, PopulateIndexProcessor<T> process) {
         IterateVoxels.callEachPoint(visited.voxels(), process);
         return process.getCount() - 1;

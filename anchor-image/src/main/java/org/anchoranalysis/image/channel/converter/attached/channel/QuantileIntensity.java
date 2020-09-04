@@ -26,11 +26,11 @@
 
 package org.anchoranalysis.image.channel.converter.attached.channel;
 
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.channel.converter.attached.histogram.QuantileIntensityFromHistogram;
 
 // Scales by a quantile of the intensity values of an image
-public class QuantileIntensity extends DelegateToHistogram<ByteBuffer> {
+public class QuantileIntensity extends DelegateToHistogram<UnsignedByteBuffer> {
 
     public QuantileIntensity(double quantile) {
         super(new QuantileIntensityFromHistogram(quantile));

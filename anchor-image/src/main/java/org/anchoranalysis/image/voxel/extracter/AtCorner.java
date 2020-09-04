@@ -25,7 +25,6 @@
  */
 package org.anchoranalysis.image.voxel.extracter;
 
-import java.nio.Buffer;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
@@ -45,7 +44,7 @@ import org.anchoranalysis.image.voxel.VoxelsPredicate;
  * @author Owen Feehan
  */
 @AllArgsConstructor
-class AtCorner<T extends Buffer> implements VoxelsExtracter<T> {
+class AtCorner<T> implements VoxelsExtracter<T> {
 
     /** The corner at which the voxels referred to by {@code delegate} are considered to exist */
     private ReadableTuple3i corner;

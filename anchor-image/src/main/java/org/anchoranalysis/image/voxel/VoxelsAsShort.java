@@ -60,4 +60,14 @@ public final class VoxelsAsShort extends Voxels<ShortBuffer> {
     public VoxelsExtracter<ShortBuffer> extract() {
         return VoxelsExtracterFactory.createShort(this);
     }
+    
+    @Override
+    public boolean hasRemaining(ShortBuffer buffer) {
+        return buffer.hasRemaining();
+    }
+    
+    @Override
+    public void setBufferPosition(ShortBuffer buffer, int offset) {
+        buffer.position(offset);
+    }
 }

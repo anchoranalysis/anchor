@@ -60,4 +60,13 @@ public final class VoxelsAsFloat extends Voxels<FloatBuffer> {
     public VoxelsExtracter<FloatBuffer> extract() {
         return VoxelsExtracterFactory.createFloat(this);
     }
+    
+    @Override
+    public boolean hasRemaining(FloatBuffer buffer) {
+        return buffer.hasRemaining();
+    }
+    @Override
+    public void setBufferPosition(FloatBuffer buffer, int offset) {
+        buffer.position(offset);
+    }
 }

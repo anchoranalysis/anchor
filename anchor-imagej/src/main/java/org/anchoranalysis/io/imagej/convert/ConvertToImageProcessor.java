@@ -29,7 +29,7 @@ package org.anchoranalysis.io.imagej.convert;
 import ij.process.ByteProcessor;
 import ij.process.ImageProcessor;
 import ij.process.ShortProcessor;
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.nio.ShortBuffer;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -82,13 +82,13 @@ public class ConvertToImageProcessor {
     }
     
     /**
-     * Creates a {@link ImageProcessor} by extracting a slice from a {@link PixelsForSlice} of type {@link ByteBuffer}.
+     * Creates a {@link ImageProcessor} by extracting a slice from a {@link PixelsForSlice} of type {@link UnsignedByteBuffer}.
      * 
      * @param pixelsForSlice the pixels to extract a slice from.
      * @param z slice-index
      * @return a newly created image-processor (reusing the existing buffer).
      */
-    public static ImageProcessor fromByte(PixelsForSlice<ByteBuffer> pixelsForSlice, int z) {
+    public static ImageProcessor fromByte(PixelsForSlice<UnsignedByteBuffer> pixelsForSlice, int z) {
         return fromByte(pixelsForSlice.slice(z), pixelsForSlice.extent());
     }
 
@@ -112,7 +112,7 @@ public class ConvertToImageProcessor {
      * @param extent the size of image to create
      * @return a newly created image-processor (reusing the existing buffer).
      */
-    public static ImageProcessor fromByte(VoxelBuffer<ByteBuffer> slice, Extent extent) {
+    public static ImageProcessor fromByte(VoxelBuffer<UnsignedByteBuffer> slice, Extent extent) {
         return new ByteProcessor(extent.x(), extent.y(), slice.buffer().array(), null);
     }
 

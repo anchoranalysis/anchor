@@ -26,7 +26,7 @@
 package org.anchoranalysis.test.image;
 
 import io.vavr.control.Either;
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.nio.file.Path;
 import java.util.List;
 import lombok.Getter;
@@ -153,7 +153,7 @@ public class WriteIntoFolder implements TestRule {
         writeObjectsEither(outputName, objects, Either.right(displayStackFor(background)));
     }
 
-    public void writeVoxels(String outputName, Voxels<ByteBuffer> voxels) {
+    public void writeVoxels(String outputName, Voxels<UnsignedByteBuffer> voxels) {
 
         Channel channel = ChannelFactory.instance().create(voxels);
 

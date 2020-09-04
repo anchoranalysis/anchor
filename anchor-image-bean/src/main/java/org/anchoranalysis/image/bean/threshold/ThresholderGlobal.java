@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.image.bean.threshold;
 
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
@@ -47,7 +47,7 @@ public class ThresholderGlobal extends Thresholder {
     // END BEAN PARAMETERS
 
     @Override
-    public BinaryVoxels<ByteBuffer> threshold(
+    public BinaryVoxels<UnsignedByteBuffer> threshold(
             VoxelsWrapper inputBuffer,
             BinaryValuesByte bvOut,
             Optional<Histogram> histogram,
@@ -60,7 +60,7 @@ public class ThresholderGlobal extends Thresholder {
                 objectMask);
     }
 
-    private BinaryVoxels<ByteBuffer> thresholdForHistogram(
+    private BinaryVoxels<UnsignedByteBuffer> thresholdForHistogram(
             Histogram histogram,
             VoxelsWrapper inputBuffer,
             BinaryValuesByte bvOut,

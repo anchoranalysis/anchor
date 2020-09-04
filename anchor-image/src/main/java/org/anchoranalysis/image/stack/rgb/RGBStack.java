@@ -27,7 +27,7 @@
 package org.anchoranalysis.image.stack.rgb;
 
 import com.google.common.base.Preconditions;
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.color.RGBColor;
@@ -179,11 +179,11 @@ public class RGBStack {
 
         byte objectMaskOn = object.binaryValuesByte().getOnByte();
 
-        ByteBuffer inArr = object.sliceBufferLocal(zLocal);
+        UnsignedByteBuffer inArr = object.sliceBufferLocal(zLocal);
 
-        ByteBuffer red = extractBuffer(0, pointGlobal.z());
-        ByteBuffer green = extractBuffer(1, pointGlobal.z());
-        ByteBuffer blue = extractBuffer(2, pointGlobal.z());
+        UnsignedByteBuffer red = extractBuffer(0, pointGlobal.z());
+        UnsignedByteBuffer green = extractBuffer(1, pointGlobal.z());
+        UnsignedByteBuffer blue = extractBuffer(2, pointGlobal.z());
 
         Extent eMask = object.boundingBox().extent();
 
@@ -210,7 +210,7 @@ public class RGBStack {
         }
     }
 
-    private ByteBuffer extractBuffer(int channelIndex, int zIndex) {
+    private UnsignedByteBuffer extractBuffer(int channelIndex, int zIndex) {
         return stack.getChannel(channelIndex).voxels().asByte().slice(zIndex).buffer();
     }
 

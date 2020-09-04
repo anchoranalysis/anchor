@@ -25,7 +25,7 @@
  */
 package org.anchoranalysis.image.convert.imglib2;
 
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
 import lombok.AccessLevel;
@@ -38,7 +38,7 @@ import net.imglib2.img.basictypeaccess.array.ShortArray;
 @NoArgsConstructor(access=AccessLevel.PRIVATE)
 class ArrayFactory {
     
-    public static ByteArray fromByte(ByteBuffer buffer) {
+    public static ByteArray fromByte(UnsignedByteBuffer buffer) {
         return new ByteArray(buffer.array());
     }
     

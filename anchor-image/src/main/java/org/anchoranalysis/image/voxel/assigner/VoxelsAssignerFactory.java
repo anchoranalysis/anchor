@@ -25,7 +25,7 @@
  */
 package org.anchoranalysis.image.voxel.assigner;
 
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
@@ -38,13 +38,13 @@ import org.anchoranalysis.image.voxel.Voxels;
 public class VoxelsAssignerFactory {
 
     /**
-     * Create voxels-assigner for {@link ByteBuffer}
+     * Create voxels-assigner for {@link UnsignedByteBuffer}
      *
      * @param voxels the voxels on which arithmetic is to be performed
      * @param valueToAssign the voxel-value to assign
      * @return a newly created assigner
      */
-    public static VoxelsAssigner createByte(Voxels<ByteBuffer> voxels, int valueToAssign) {
+    public static VoxelsAssigner createByte(Voxels<UnsignedByteBuffer> voxels, int valueToAssign) {
         return new ByteImplementation(voxels, valueToAssign);
     }
 
