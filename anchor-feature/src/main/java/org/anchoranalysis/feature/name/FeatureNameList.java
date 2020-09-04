@@ -33,6 +33,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import org.anchoranalysis.core.functional.FunctionalIterate;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import lombok.AccessLevel;
@@ -149,7 +150,7 @@ public class FeatureNameList implements Iterable<String> {
      * @param names the feature-names to insert
      */
     public void insertBeginning(String[] names) {
-        Arrays.stream(names).forEach(this::insertBeginning);
+        FunctionalIterate.reverseIterateArray(names, this::insertBeginning);
     }
 
     @Override

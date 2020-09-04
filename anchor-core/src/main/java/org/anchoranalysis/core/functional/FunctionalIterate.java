@@ -29,6 +29,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import org.anchoranalysis.core.functional.function.CheckedBiConsumer;
 import org.anchoranalysis.core.functional.function.CheckedBooleanSupplier;
+import org.anchoranalysis.core.functional.function.CheckedConsumer;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -81,9 +82,24 @@ public class FunctionalIterate {
      * @param consumer called for each entry.
      * @throws E if throw by {@code consumer}.
      */
-    public static <K, V, E extends Exception> void iterateMap( Map<K,V> map, CheckedBiConsumer<K, V, E> consumer ) throws E {
+    public static <K, V, E extends Exception> void iterateMap( Map<K,V> map, CheckedBiConsumer<K, V, E> consumer) throws E {
         for( Entry<K,V> entry : map.entrySet()) {
             consumer.accept( entry.getKey(), entry.getValue() );
+        }
+    }
+    
+    /**
+     * Iterates through every element in an array in reverse order
+     * 
+     * @param <T> array element type
+     * @param <E> an exception that may be thrown by {@code consumer}.
+     * @param array the array
+     * @param consumer called for each element in the array.
+     * @throws E if throw by {@code consumer}.
+     */
+    public static <T, E extends Exception> void reverseIterateArray( T[] array, CheckedConsumer<T,E> consumer) throws E {
+        for( int i=(array.length-1); i>=0; i--) {
+            consumer.accept(array[i]);
         }
     }
 }
