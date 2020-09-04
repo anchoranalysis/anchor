@@ -26,15 +26,14 @@
 
 package org.anchoranalysis.image.voxel.buffer;
 
-import java.nio.Buffer;
 import org.anchoranalysis.image.histogram.HistogramFactory;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 
 /**
  * @author Owen Feehan
- * @param <T> nuffer-type
+ * @param <T> buffer-type
  */
-public abstract class VoxelBuffer<T extends Buffer> {
+public abstract class VoxelBuffer<T> {
 
     public abstract VoxelDataType dataType();
 

@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.image.voxel.pixelsforslice;
 
-import java.nio.Buffer;
 import java.util.function.Consumer;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
@@ -36,7 +35,7 @@ import org.anchoranalysis.image.voxel.iterator.ProcessVoxelSlice;
  * @author Owen Feehan
  * @param <T> buffer-type
  */
-public interface PixelsForSlice<T extends Buffer> {
+public interface PixelsForSlice<T> {
 
     VoxelBuffer<T> slice(int z);
 

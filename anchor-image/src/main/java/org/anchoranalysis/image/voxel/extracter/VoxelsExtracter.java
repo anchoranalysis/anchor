@@ -25,7 +25,6 @@
  */
 package org.anchoranalysis.image.voxel.extracter;
 
-import java.nio.Buffer;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.interpolator.Interpolator;
@@ -37,8 +36,9 @@ import org.anchoranalysis.image.voxel.VoxelsPredicate;
  * Provides method to read/copy/duplicate portions of voxels
  *
  * @author Owen Feehan
+ * @param <T> buffer-type
  */
-public interface VoxelsExtracter<T extends Buffer> {
+public interface VoxelsExtracter<T> {
 
     /**
      * Gets the value of one particular value

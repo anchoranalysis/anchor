@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.image.voxel.buffer;
 
-import java.nio.Buffer;
 import lombok.Getter;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.Voxels;
@@ -39,7 +38,7 @@ import org.anchoranalysis.image.voxel.Voxels;
  *
  * @param <T> buffer-type
  */
-public final class SlidingBuffer<T extends Buffer> {
+public final class SlidingBuffer<T> {
 
     @Getter private final Voxels<T> voxels;
 

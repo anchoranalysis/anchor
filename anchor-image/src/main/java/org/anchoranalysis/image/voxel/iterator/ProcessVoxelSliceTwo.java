@@ -41,7 +41,7 @@ import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
  * @param <T> second buffer-type
  */
 @FunctionalInterface
-public interface ProcessVoxelSliceTwo<S extends Buffer, T extends Buffer> {
+public interface ProcessVoxelSliceTwo<S, T> {
 
     /**
      * Processes a voxel location in a buffer

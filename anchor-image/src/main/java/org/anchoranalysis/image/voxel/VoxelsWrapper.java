@@ -54,9 +54,9 @@ import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 public class VoxelsWrapper {
 
     private VoxelDataType dataType;
-    private Voxels<? extends Buffer> voxels;
+    private Voxels<?> voxels;
 
-    public VoxelsWrapper(Voxels<? extends Buffer> voxels) {
+    public VoxelsWrapper(Voxels<?> voxels) {
         super();
         this.dataType = voxels.dataType();
         this.voxels = voxels;
@@ -67,7 +67,7 @@ public class VoxelsWrapper {
     }
 
     /** Returns voxels that are not cast to any specific buffer type */
-    public Voxels<? extends Buffer> any() { // NOSONAR
+    public Voxels<?> any() { // NOSONAR
         return voxels;
     }
     
@@ -77,7 +77,7 @@ public class VoxelsWrapper {
         return (Voxels<T>) voxels;
     }
 
-    public Voxels<? extends Buffer> match(VoxelDataType match) { // NOSONAR
+    public Voxels<?> match(VoxelDataType match) { // NOSONAR
         if (match.equals(dataType)) {
             return voxels;
         } else {
@@ -203,7 +203,7 @@ public class VoxelsWrapper {
         }
     }
 
-    public VoxelBuffer<? extends Buffer> slice(int z) { // NOSONAR
+    public VoxelBuffer<?> slice(int z) { // NOSONAR
         return voxels.slice(z);
     }
 
@@ -219,7 +219,7 @@ public class VoxelsWrapper {
         return voxels.assignValue(valueToAssign);
     }
 
-    public VoxelsExtracter<? extends Buffer> extract() { // NOSONAR
+    public VoxelsExtracter<?> extract() { // NOSONAR
         return voxels.extract();
     }
 }

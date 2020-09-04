@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.image.voxel;
 
-import java.nio.Buffer;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.experimental.Accessors;
@@ -54,7 +53,7 @@ import org.anchoranalysis.image.voxel.pixelsforslice.PixelsForSlice;
  */
 @Accessors(fluent = true)
 @AllArgsConstructor
-public abstract class Voxels<T extends Buffer> {
+public abstract class Voxels<T> {
 
     @Getter private final PixelsForSlice<T> slices;
     @Getter private final VoxelsFactoryTypeBound<T> factory;
@@ -120,16 +119,7 @@ public abstract class Voxels<T extends Buffer> {
                         z -> {
                             T buffer1 = sliceBuffer(z);
                             T buffer2 = (T) other.sliceBuffer(z);
-
-                            while (buffer1.hasRemaining()) {
-
-                                if (!areBufferValuesEqual(buffer1, buffer2)) {
-                                    return false;
-                                }
-                            }
-
-                            assert (!buffer2.hasRemaining());
-                            return true;
+                            return buffer1.equals(buffer2);
                         });
 
         return true;

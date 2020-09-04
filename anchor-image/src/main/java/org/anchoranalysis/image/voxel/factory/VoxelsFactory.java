@@ -71,7 +71,7 @@ public class VoxelsFactory
 
     public VoxelsWrapper create(Extent e, VoxelDataType dataType) {
         VoxelsFactoryTypeBound<?> factory = get(dataType);
-        Voxels<? extends Buffer> buffer = factory.createInitialized(e);
+        Voxels<?> buffer = factory.createInitialized(e);
         return new VoxelsWrapper(buffer);
     }
 

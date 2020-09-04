@@ -36,10 +36,11 @@ import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
  * <p>It is very similar to {@link ProcessVoxelSliceBuffer} but uses {@link VoxelBuffer} instead of
  * a {@link Buffer}.
  *
+ * @param <T> buffer-type
  * @author Owen Feehan
  */
 @FunctionalInterface
-public interface ProcessVoxelSlice<T extends Buffer> {
+public interface ProcessVoxelSlice<T> {
 
     /**
      * Processes a voxel location in a buffer

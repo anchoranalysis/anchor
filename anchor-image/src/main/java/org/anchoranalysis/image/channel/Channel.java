@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.image.channel;
 
-import java.nio.Buffer;
 import java.util.function.Function;
 import lombok.Getter;
 import lombok.experimental.Accessors;
@@ -73,7 +72,7 @@ public class Channel {
 
     @Getter private Dimensions dimensions;
 
-    private Voxels<? extends Buffer> voxels;
+    private Voxels<?> voxels;
 
     /**
      * Constructor
@@ -81,7 +80,7 @@ public class Channel {
      * @param voxels
      * @param resolution
      */
-    public Channel(Voxels<? extends Buffer> voxels, Resolution resolution) {
+    public Channel(Voxels<?> voxels, Resolution resolution) {
         this.dimensions = new Dimensions(voxels.extent(), resolution);
         this.voxels = voxels;
     }
@@ -147,8 +146,7 @@ public class Channel {
 
         Dimensions dimensionsScaled = dimensions.scaleXYTo(x, y);
 
-        Voxels<? extends Buffer> resized = voxels.extract().resizedXY(x, y, interpolator);
-        assert (resized.extent().volumeXY() == resized.sliceBuffer(0).capacity());
+        Voxels<?> resized = voxels.extract().resizedXY(x, y, interpolator);
         return FACTORY.create(resized, dimensionsScaled.resolution());
     }
 
@@ -244,7 +242,7 @@ public class Channel {
         return voxels.assignValue(valueToAssign);
     }
 
-    public VoxelsExtracter<? extends Buffer> extract() { // NOSONAR
+    public VoxelsExtracter<?> extract() { // NOSONAR
         return voxels.extract();
     }
 

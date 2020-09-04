@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.image.voxel.factory;
 
-import java.nio.Buffer;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
@@ -42,7 +41,7 @@ import com.google.common.base.Preconditions;
  * @author Owen Feehan
  * @param <T> buffer-type
  */
-public interface VoxelsFactoryTypeBound<T extends Buffer> {
+public interface VoxelsFactoryTypeBound<T> {
 
     Voxels<T> create(PixelsForSlice<T> pixelsForPlane);
 

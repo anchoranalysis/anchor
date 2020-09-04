@@ -53,7 +53,7 @@ public abstract class ChannelFactorySingleType {
         return create(factory.createUninitialized(dimensions.extent()), dimensions.resolution());
     }
 
-    public Channel create(Voxels<? extends Buffer> bufferAccess, Resolution resolution) {
+    public Channel create(Voxels<?> bufferAccess, Resolution resolution) {
         return new Channel(bufferAccess, resolution);
     }
 }

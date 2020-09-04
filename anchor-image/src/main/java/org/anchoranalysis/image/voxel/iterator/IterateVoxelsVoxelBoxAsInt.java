@@ -181,7 +181,7 @@ public class IterateVoxelsVoxelBoxAsInt {
      * @param object the object-mask (global coordinates)
      * @param process processes each point that fulfills the conditions
      */
-    public static <T extends Buffer> void callEachPoint(
+    public static <T> void callEachPoint(
             Voxels<T> voxels, ObjectMask object, ProcessVoxelSlice<T> process) {
         callEachPoint(voxels, object, Optional.empty(), process);
     }
@@ -197,7 +197,7 @@ public class IterateVoxelsVoxelBoxAsInt {
      * @param restrictTo optional sub-region of object-mask (global coordinates)
      * @param process processes each point that fulfills the conditions
      */
-    public static <T extends Buffer> void callEachPoint(
+    public static <T> void callEachPoint(
             Voxels<T> voxels,
             ObjectMask object,
             Optional<BoundingBox> restrictTo,
@@ -237,7 +237,7 @@ public class IterateVoxelsVoxelBoxAsInt {
      *     bounding-box
      * @param process processes each point that fulfills the conditions
      */
-    private static <T extends Buffer> void callEachPoint(
+    private static <T> void callEachPoint(
             Voxels<T> voxels,
             BoundingBox boxVoxels,
             ObjectMask object,
@@ -294,7 +294,7 @@ public class IterateVoxelsVoxelBoxAsInt {
      * @param process is called for each voxel within the bounding-box using GLOBAL coordinates.
      * @param <T> buffer-type for voxels
      */
-    public static <S extends Buffer, T extends Buffer> void callEachPointTwo(
+    public static <S, T> void callEachPointTwo(
             Voxels<S> voxels1, Voxels<T> voxels2, ProcessVoxelSliceTwo<S, T> process) {
         Preconditions.checkArgument(voxels1.extent().equals(voxels2.extent()));
 
