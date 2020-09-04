@@ -35,6 +35,8 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.histogram.Histogram;
+import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
+import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
 import org.anchoranalysis.io.csv.reader.CSVReaderByLine;
 import org.anchoranalysis.io.csv.reader.CSVReaderByLine.ReadByLine;
 import org.anchoranalysis.io.csv.reader.CSVReaderException;
@@ -56,20 +58,20 @@ public class HistogramCSVReader {
     private static void addLineToMap(Map<Integer, Integer> map, String[] line)
             throws OperationFailedException {
 
-        float binF = Float.parseFloat(line[0]);
-        int bin = (int) binF;
+        float binAsFloat = Float.parseFloat(line[0]);
+        int bin = (int) binAsFloat;
 
-        if (binF != bin) {
+        if (binAsFloat != bin) {
             throw new OperationFailedException(
-                    String.format("Bin-value of %f is not integer.", binF));
+                    String.format("Bin-value of %f is not integer.", binAsFloat));
         }
 
-        float countF = Float.parseFloat(line[1]);
-        int count = (int) countF;
+        float countAsFloat = Float.parseFloat(line[1]);
+        int count = (int) countAsFloat;
 
-        if (countF != count) {
+        if (countAsFloat != count) {
             throw new OperationFailedException(
-                    String.format("Count-value of %f is not integer.", countF));
+                    String.format("Count-value of %f is not integer.", countAsFloat));
         }
 
         if (map.containsKey(bin)) {
@@ -92,21 +94,13 @@ public class HistogramCSVReader {
         return max;
     }
 
-    private static int guessMaxHistVal(int maxBinVal) {
-        if (maxBinVal <= 255) {
-            return 255;
-        } else {
-            return 65535;
-        }
-    }
-
-    private static Histogram histogramFromMap(Map<Integer, Integer> map) {
+    private static Histogram histogramFromMap(Map<Integer, Integer> map) throws CSVReaderException {
 
         // We get the highest-intensity value from the map
         int maxCsvValue = maxValue(map.keySet());
 
         // We guess the upper limit of the histogram to match an unsigned 8-bit or 16-bit image
-        int maxHistogramValue = guessMaxHistVal(maxCsvValue);
+        int maxHistogramValue = guessMaxHistogramBin(maxCsvValue);
 
         Histogram histogram = new Histogram(maxHistogramValue);
 
@@ -114,5 +108,15 @@ public class HistogramCSVReader {
             histogram.incrementValueBy(entry.getKey(), entry.getValue());
         }
         return histogram;
+    }
+    
+    private static int guessMaxHistogramBin(int maxCsvValue) throws CSVReaderException {
+        if (maxCsvValue <= UnsignedByteVoxelType.MAX_VALUE) {
+            return UnsignedByteVoxelType.MAX_VALUE_INT;
+        } else if (maxCsvValue <= UnsignedShortVoxelType.MAX_VALUE) {
+            return UnsignedShortVoxelType.MAX_VALUE_INT;
+        } else {
+            throw new CSVReaderException("Histograms can only supported for a maximum-value of " + UnsignedShortVoxelType.MAX_VALUE_INT);
+        }
     }
 }
