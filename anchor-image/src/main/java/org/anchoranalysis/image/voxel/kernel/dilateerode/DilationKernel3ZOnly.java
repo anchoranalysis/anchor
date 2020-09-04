@@ -45,7 +45,7 @@ public final class DilationKernel3ZOnly extends BinaryKernelMorph3 {
     }
 
     @Override
-    public boolean accptPos(int ind, Point3i point) {
+    public boolean acceptPoint(int ind, Point3i point) {
 
         ByteBuffer inArrZ = inSlices.getLocal(0);
         ByteBuffer inArrZLess1 = inSlices.getLocal(-1);

@@ -80,7 +80,7 @@ public class ApplyKernel {
             for (point.setY(0); point.y() < extent.y(); point.incrementY()) {
                 for (point.setX(0); point.x() < extent.x(); point.incrementX()) {
 
-                    if (kernel.accptPos(ind, point)) {
+                    if (kernel.acceptPoint(ind, point)) {
                         outArr.put(ind, outBinary.getOnByte());
                     } else {
                         outArr.put(ind, outBinary.getOffByte());
@@ -229,7 +229,7 @@ public class ApplyKernel {
             for (point.setY(0); point.y() < extent.y(); point.incrementY()) {
                 for (point.setX(0); point.x() < extent.x(); point.incrementX()) {
 
-                    if (kernel.accptPos(ind, point)) {
+                    if (kernel.acceptPoint(ind, point)) {
                         cnt++;
                     }
 
@@ -273,7 +273,7 @@ public class ApplyKernel {
 
                     int indKernel = extent.offsetSlice(point);
 
-                    if (bufMask.get(ind) == bvb.getOnByte() && kernel.accptPos(indKernel, point)) {
+                    if (bufMask.get(ind) == bvb.getOnByte() && kernel.acceptPoint(indKernel, point)) {
                         cnt++;
                     }
 

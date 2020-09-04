@@ -99,7 +99,7 @@ public class DensityKernel extends BinaryKernel {
     }
 
     @Override
-    public boolean accptPos(int ind, Point3i point) {
+    public boolean acceptPoint(int ind, Point3i point) {
 
         // We count the number of on pixels inside a kernel
 

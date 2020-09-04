@@ -50,7 +50,7 @@ public final class ErosionKernel3 extends BinaryKernelMorph3Extent {
      * <p>Apologies that it is difficult to read with high cognitive-complexity.
      */
     @Override
-    public boolean accptPos(int ind, Point3i point) {
+    public boolean acceptPoint(int ind, Point3i point) {
 
         ByteBuffer inArrZ = inSlices.getLocal(0);
         ByteBuffer inArrZLess1 = inSlices.getLocal(-1);

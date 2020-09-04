@@ -82,7 +82,7 @@ public class MaxDensityKernel3 extends BinaryKernel {
      * <p>Apologies that it is difficult to read with high cognitive-complexity.
      */
     @Override
-    public boolean accptPos(int ind, Point3i point) {
+    public boolean acceptPoint(int ind, Point3i point) {
 
         int cnt = 0;
 
