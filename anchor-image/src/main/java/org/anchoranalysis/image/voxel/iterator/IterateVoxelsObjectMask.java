@@ -33,7 +33,6 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
-import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.box.BoundingBox;
@@ -51,11 +50,7 @@ import org.anchoranalysis.image.voxel.iterator.process.ProcessVoxelBufferUnary;
  * Utilities for iterating over the subset of voxels corresponding to an <i>on</i> state in an
  * {@link ObjectMask}.
  *
- * <p>The utilities operate on one or more {@link Voxels} or {@link Channel}.
- *
- * <p>
- *
- * <p>A processor is called on each selected voxel.
+ * <p>The utilities operate on one or more {@link Voxels}. A processor is called on each selected voxel.
  *
  * @author Owen Feehan
  */
@@ -72,25 +67,6 @@ public class IterateVoxelsObjectMask {
     public static void withPoint(ObjectMask object, ProcessPoint process) {
         IterateVoxelsBoundingBox.withPoint(
                 object.boundingBox(), new RequireIntersectionWithObject(process, object));
-    }
-
-    /**
-     * Iterate over all points that are located on a object-mask or else all points in an extent.
-     *
-     * @param objectMask an optional object-mask that is used as a condition on what voxels to
-     *     iterate. If not defined, all voxels are iterated over.
-     * @param extent if object-mask isn't defined, then all the voxels in this {@link Extent} are
-     *     iterated over instead
-     * @param process process is called for each voxel (on the entire {@link Extent} or on the
-     *     object-mask depending) using GLOBAL coordinates.
-     */
-    public static void withPoint(
-            Optional<ObjectMask> objectMask, Extent extent, ProcessPoint process) {
-        if (objectMask.isPresent()) {
-            withPoint(objectMask.get(), process);
-        } else {
-            IterateVoxelsAll.withPoint(extent, process);
-        }
     }
 
     /**
@@ -166,36 +142,6 @@ public class IterateVoxelsObjectMask {
                     offset++;
                 }
             }
-        }
-    }
-
-    /**
-     * Iterate over each voxel on an object-mask with <b>one</b> associated <b>buffer</b>.
-     *
-     * <p>This is similar behaviour to {@link #withPoint} but adds a buffer for each slice.
-     *
-     * @param objectMask an optional object-mask that is used as a condition on what voxels to
-     *     iterate. If not defined, all voxels are iterated over.
-     * @param voxels voxels where buffers extracted from be processed, and which define the global
-     *     coordinate space
-     * @param process is called for each voxel within the bounding-box using GLOBAL coordinates.
-     * @param <T> buffer-type for voxels
-     */
-    public static <T> void withBuffer(
-            Optional<ObjectMask> objectMask, Voxels<T> voxels, ProcessBufferUnary<T> process) {
-        Extent extent = voxels.extent();
-
-        // Note the offsets must be added before any additional restriction like an object-mask, to
-        // make
-        // sure they are calculated for EVERY process.
-        // Therefore we {@link AddOffsets} must be interested as the top-most level in the
-        // processing chain
-        // (i.e. {@link AddOffsets} must delegate to {@link RequireIntersectionWithMask} but not the
-        // other way round.
-        if (objectMask.isPresent()) {
-            withBuffer(objectMask.get(), voxels, process);
-        } else {
-            IterateVoxelsAll.withPoint(extent, new RetrieveBufferForSlice<T>(voxels, process));
         }
     }
 
@@ -293,7 +239,7 @@ public class IterateVoxelsObjectMask {
 
         buffer.seek(objectMask.map(object -> object.boundingBox().cornerMin().z()).orElse(0));
 
-        withPoint(objectMask, buffer.extent(), new SlidingBufferProcessor(buffer, process));
+        IterateVoxelsObjectMaskOptional.withPoint(objectMask, buffer.extent(), new SlidingBufferProcessor(buffer, process));
     }
 
     /**

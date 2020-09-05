@@ -31,7 +31,6 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
-import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.iterator.process.ProcessBufferUnary;
@@ -40,11 +39,7 @@ import org.anchoranalysis.image.voxel.iterator.process.ProcessPoint;
 /**
  * Utilities for iterating over the subset of image voxels within a bounding-box.
  *
- * <p>The utilities operate on one or more {@link Voxels} or {@link Channel}.
- *
- * <p>
- *
- * <p>A processor is called on each selected voxel.
+ * <p>The utilities operate on one or more {@link Voxels}. A processor is called on each selected voxel.
  *
  * @author Owen Feehan
  */
