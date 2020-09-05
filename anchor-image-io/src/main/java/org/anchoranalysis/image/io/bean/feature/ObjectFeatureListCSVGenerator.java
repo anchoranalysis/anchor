@@ -39,8 +39,8 @@ import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListFactory;
 import org.anchoranalysis.feature.calculate.results.ResultsVectorCollection;
 import org.anchoranalysis.feature.input.FeatureInput;
-import org.anchoranalysis.feature.io.csv.writer.FeatureListCSVGeneratorVertical;
-import org.anchoranalysis.feature.io.csv.writer.TableCSVGenerator;
+import org.anchoranalysis.feature.io.csv.FeatureListCSVGeneratorVertical;
+import org.anchoranalysis.feature.io.csv.FeatureTableCSVGenerator;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.image.extent.SpatialUnits.UnitSuffix;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureListEvaluator;
@@ -66,7 +66,7 @@ class ObjectFeatureListCSVGenerator extends CSVGenerator
 
     private FeatureCalculatorMulti<FeatureInputSingleObject> featureCalculator;
 
-    private TableCSVGenerator<ResultsVectorCollection> delegate;
+    private FeatureTableCSVGenerator<ResultsVectorCollection> delegate;
 
     private final Logger logger;
 

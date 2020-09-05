@@ -1,18 +1,30 @@
-package org.anchoranalysis.feature.io.csv.results.group;
+package org.anchoranalysis.feature.io.results.group;
 
 import java.util.Optional;
 import org.anchoranalysis.feature.calculate.results.ResultsVector;
 import org.anchoranalysis.feature.input.FeatureInputResults;
-import org.anchoranalysis.feature.io.csv.results.ResultsWriterMetadata;
-import org.anchoranalysis.feature.io.csv.writer.FeatureCSVMetadata;
-import org.anchoranalysis.feature.io.csv.writer.FeatureCSVWriter;
-import org.anchoranalysis.feature.io.csv.writer.RowLabels;
+import org.anchoranalysis.feature.io.csv.FeatureCSVMetadata;
+import org.anchoranalysis.feature.io.csv.FeatureCSVWriter;
+import org.anchoranalysis.feature.io.csv.RowLabels;
+import org.anchoranalysis.feature.io.results.ResultsWriterMetadata;
 import org.anchoranalysis.feature.list.NamedFeatureStore;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.bound.CacheSubdirectoryContext;
 import lombok.RequiredArgsConstructor;
 
+/**
+ * Writes outputs pertaining to groups to the filesystem.
+ * 
+ * <p>Two categories of outputs occur:
+ * <ul>
+ * <li>Aggregate output (a CSV file showing aggregate features for <i>all</i> groups).
+ * <li>Group outputs (XML and specific CSV files with features only for the group).
+ * </ul>
+ * 
+ * @author Owen Feehan
+ *
+ */
 @RequiredArgsConstructor
 public class GroupWriter {
     
@@ -40,29 +52,29 @@ public class GroupWriter {
     /**
      * Writes outputs for groups that have been previously added with {@link #addResultsFor}.
      * 
-     * @param featuresAggregate
-     * @param includeGroups
-     * @param context
-     * @param contextGroups
-     * @throws AnchorIOException
+     * @param featuresAggregate features for aggregating existing results-calculations, if enabled
+     * @param includeGroups whether to output "groups"
+     * @param contextAggregated input-output context for the aggregage outputs 
+     * @param contextGroups input-output context for the group outputs
+     * @throws AnchorIOException if any input-output errors occur
      */
     public void writeGroupResults(Optional<NamedFeatureStore<FeatureInputResults>> featuresAggregate, boolean includeGroups,
-            BoundIOContext context, CacheSubdirectoryContext contextGroups) throws AnchorIOException {
+            BoundIOContext contextAggregated, CacheSubdirectoryContext contextGroups) throws AnchorIOException {
         if (includeGroups) {
-            writeAllGroups(contextGroups);
+            writeGroupXMLAndIntoCSV(contextGroups);
         }
 
         if (featuresAggregate.isPresent()) {
-            writeAggregated(featuresAggregate.get(), context, contextGroups);
+            writeAggregated(featuresAggregate.get(), contextAggregated, contextGroups);
         }
     }
 
-    private void writeAllGroups(CacheSubdirectoryContext context) {
+    private void writeGroupXMLAndIntoCSV(CacheSubdirectoryContext contextGroups) {
         outputMetadata.outputNames().getCsvFeaturesGroup().ifPresent( outputName -> {
             WriteCSVForGroup groupedCSVWriter = new WriteCSVForGroup(
                     outputName,
                     outputMetadata.featureNamesNonAggregate(),
-                    context
+                    contextGroups
             );
             map.iterateResults(groupedCSVWriter::write);
         });
@@ -70,7 +82,7 @@ public class GroupWriter {
 
     private void writeAggregated(
             NamedFeatureStore<FeatureInputResults> featuresAggregate,
-            BoundIOContext context,
+            BoundIOContext contextAggregated,
             CacheSubdirectoryContext contextGroups)
             throws AnchorIOException {
         
@@ -87,7 +99,7 @@ public class GroupWriter {
         }
 
         Optional<FeatureCSVWriter> csvWriter =
-                FeatureCSVWriter.create(csvMetadata.get(), context.getOutputManager());
+                FeatureCSVWriter.create(csvMetadata.get(), contextAggregated.getOutputManager());
 
         try {
             map.iterateResults( (groupName,results) -> {

@@ -1,9 +1,9 @@
-package org.anchoranalysis.feature.io.csv.results.group;
+package org.anchoranalysis.feature.io.results.group;
 
 import java.util.Optional;
 import org.anchoranalysis.feature.calculate.results.ResultsVectorCollection;
-import org.anchoranalysis.feature.io.csv.name.MultiName;
-import org.anchoranalysis.feature.io.csv.writer.FeatureListCSVGeneratorHorizontal;
+import org.anchoranalysis.feature.io.csv.FeatureListCSVGeneratorHorizontal;
+import org.anchoranalysis.feature.io.name.MultiName;
 import org.anchoranalysis.feature.name.FeatureNameList;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.io.output.bound.CacheSubdirectoryContext;

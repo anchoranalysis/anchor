@@ -24,16 +24,16 @@
  * #L%
  */
 
-package org.anchoranalysis.feature.io.csv.results;
+package org.anchoranalysis.feature.io.results;
 
 import java.io.Closeable;
 import java.io.IOException;
 import java.util.Optional;
 import org.anchoranalysis.feature.calculate.results.ResultsVector;
 import org.anchoranalysis.feature.input.FeatureInputResults;
-import org.anchoranalysis.feature.io.csv.results.group.GroupWriter;
-import org.anchoranalysis.feature.io.csv.writer.FeatureCSVWriter;
-import org.anchoranalysis.feature.io.csv.writer.RowLabels;
+import org.anchoranalysis.feature.io.csv.FeatureCSVWriter;
+import org.anchoranalysis.feature.io.csv.RowLabels;
+import org.anchoranalysis.feature.io.results.group.GroupWriter;
 import org.anchoranalysis.feature.list.NamedFeatureStore;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.manifest.ManifestFolderDescription;
@@ -42,7 +42,7 @@ import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.bound.CacheSubdirectoryContext;
 
 /**
- * Feature calculation results that can be outputted directly into a CSV, but also written as groups.
+ * Feature calculation results that can be outputted in different ways.
  * 
  * The outputs are (based upon the default output-names in {@link ResultsWriterOutputNames}):
  * <pre>
@@ -72,6 +72,13 @@ public class ResultsWriter implements Closeable {
     private Optional<FeatureCSVWriter> writer;
     private GroupWriter groupWriter;
 
+    /**
+     * Creates for metadata and in a particular directory.
+     * 
+     * @param outputMetadata metadata needed for determing output-names and CSV headers.
+     * @param context defines the direction in which outputs occur.
+     * @throws AnchorIOException if I/O fails.
+     */
     public ResultsWriter(
             ResultsWriterMetadata outputMetadata, BoundIOContext context)
             throws AnchorIOException {
@@ -83,6 +90,15 @@ public class ResultsWriter implements Closeable {
         groupWriter = new GroupWriter(outputMetadata);
     }
 
+    /**
+     * Adds feature-calculation results to be written.
+     * 
+     * <p>Depending on the output type, these results are either immediately written or
+     * else stored in memory to be written later (collectively after all results have been added).
+     * 
+     * @param labels labels that identify the results.
+     * @param results the results.
+     */
     public void addResultsFor(RowLabels labels, ResultsVector results) {
 
         // Place into the group writer, to be written later
@@ -90,7 +106,7 @@ public class ResultsWriter implements Closeable {
 
         // Write feature-value directly into CSV
         if (writer.isPresent()) {
-            writer.get().addResultsVector(labels, results);
+            writer.get().addRow(labels, results);
         }
     }
 
@@ -100,7 +116,8 @@ public class ResultsWriter implements Closeable {
      * @param featuresAggregate aggregate-features
      * @param includeGroups iff true a group-column is included in the CSV file and the group
      *     exports occur, otherwise not
-     * @throws AnchorIOException
+     * @param context input-output context
+     * @throws AnchorIOException if any input-output errors occur
      */
     public void writeResultsForAllGroups(
             Optional<NamedFeatureStore<FeatureInputResults>> featuresAggregate,

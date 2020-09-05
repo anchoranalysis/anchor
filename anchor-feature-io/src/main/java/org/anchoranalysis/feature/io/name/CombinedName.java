@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.feature.io.csv.name;
+package org.anchoranalysis.feature.io.name;
 
 import java.util.Arrays;
 import java.util.Iterator;
@@ -41,23 +41,29 @@ public class CombinedName implements MultiName {
 
     private static final String SEPARATOR = "/";
 
-    /** The key used for aggregating */
-    private String directoryPart;
+    /** The first-part (and key used for aggregating). */
+    private String key;
 
-    /** All the names not used in aggregating joined togther */
-    private String filePart;
+    /** The second-part (all the names not used in aggregating joined together). */
+    private String remainder;
 
     /**
-     * All names combined together in a single string with a forward slash as seperator.
+     * All names combined together in a single string with a forward slash as separator.
      *
      * <p>The primaryName is used for aggregating. The rest are not. primaryName/secondaryName
      */
     private String allTogether;
 
-    public CombinedName(String directoryPart, String filePart) {
-        this.directoryPart = directoryPart;
-        this.filePart = filePart;
-        this.allTogether = String.join(SEPARATOR, directoryPart, filePart);
+    /**
+     * Creates with explicit strings for both parts.
+     * 
+     * @param key first-part (and key used for aggregating).
+     * @param remainder the second-part (all the names not used in aggregating joined together).
+     */
+    public CombinedName(String key, String remainder) {
+        this.key = key;
+        this.remainder = remainder;
+        this.allTogether = String.join(SEPARATOR, key, remainder);
     }
 
     @Override
@@ -76,19 +82,19 @@ public class CombinedName implements MultiName {
     }
 
     @Override
-    public Optional<String> directoryPart() {
+    public Optional<String> firstPart() {
         // The primary name is used for aggregation
-        return Optional.of(directoryPart);
+        return Optional.of(key);
     }
 
     @Override
     public Iterator<String> iterator() {
-        return Arrays.asList(directoryPart, filePart).iterator();
+        return Arrays.asList(key, remainder).iterator();
     }
 
     @Override
-    public String filePart() {
-        return filePart;
+    public String secondPart() {
+        return remainder;
     }
 
     @Override
@@ -103,13 +109,13 @@ public class CombinedName implements MultiName {
 
             CombinedName otherCast = (CombinedName) other;
 
-            int cmp = directoryPart.compareTo(otherCast.directoryPart);
+            int compareResult = key.compareTo(otherCast.key);
 
-            if (cmp != 0) {
-                return cmp;
+            if (compareResult != 0) {
+                return compareResult;
             }
 
-            return filePart.compareTo(otherCast.filePart);
+            return remainder.compareTo(otherCast.remainder);
         } else {
             return 1;
         }

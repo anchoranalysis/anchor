@@ -1,4 +1,4 @@
-package org.anchoranalysis.feature.io.csv.results;
+package org.anchoranalysis.feature.io.results;
 
 import java.util.Optional;
 import org.anchoranalysis.core.functional.OptionalUtilities;
@@ -26,12 +26,17 @@ public class ResultsWriterOutputNames {
     /** The name of the XML file outputted with aggregated values for each group, if enabled. */
     @Getter private Optional<String> xmlAggregatedGroup;
     
+    /**
+     * Creates using default names, equivalent to a prefix of <i>features</i>.
+     * 
+     * <p>All outputs are enabled.
+     */
     public ResultsWriterOutputNames() {
         this("features", true, true);
     }
     
     /**
-     * Creates output-names based upon a prefix
+     * Creates output-names based upon a prefix.
      * 
      * @param prefix prefix used to determine the output-names
      * @param enableAggregated whether to enable the aggregated outputs

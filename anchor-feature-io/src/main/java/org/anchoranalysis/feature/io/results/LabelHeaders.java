@@ -24,26 +24,47 @@
  * #L%
  */
 
-package org.anchoranalysis.feature.io.csv.name;
+package org.anchoranalysis.feature.io.results;
 
-import java.util.Optional;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import org.apache.commons.lang3.ArrayUtils;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class MultiNameFactory {
+/**
+ * Headers in a CSV file for the non-results (i.e. labels) part of a feature-row
+ *
+ * @author Owen Feehan
+ */
+@AllArgsConstructor
+public class LabelHeaders {
 
     /**
-     * Creates either a multi-name that is either has a single part or a double part (with a group
-     * as first part)
-     *
-     * @param groupIdentifier if present, a group identifier that becomes the first part
-     * @param nonGroupIdentifier the non-group part of the identifier that is present irrespective
-     * @return the created multi-name
+     * Headers describing the non-feature columns outputted in the CSV related to identifying a row
+     * (but not its group)
      */
-    public static MultiName create(Optional<String> groupIdentifier, String nonGroupIdentifier) {
-        return groupIdentifier
-                .map(id -> (MultiName) new CombinedName(id, nonGroupIdentifier))
-                .orElseGet(() -> new SimpleName(nonGroupIdentifier));
+    private String[] nonGroupHeaders;
+
+    /**
+     * Headers describing the non-feature columns outputted in the CSV related to identifying the
+     * group of a row
+     */
+    @Getter private String[] groupHeaders;
+
+    /**
+     * The non-group and group headers combined (in this order respectively)
+     *
+     * @return the combined headers in a newly created array
+     */
+    public String[] allHeaders() {
+        return ArrayUtils.addAll(nonGroupHeaders, groupHeaders);
+    }
+    
+    /**
+     * Creates with only non-group headers
+     * 
+     * @param nonGroupHeaders headers describing the non-feature columns outputted in the CSV related to identifying a row
+     */
+    public LabelHeaders(String[] nonGroupHeaders) {
+        this( nonGroupHeaders, new String[]{} );
     }
 }

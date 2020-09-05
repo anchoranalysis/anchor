@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.feature.io.csv.writer;
+package org.anchoranalysis.feature.io.csv;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,17 +36,32 @@ import org.anchoranalysis.io.output.csv.CSVWriter;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 /**
- * CSV file where each Feature is a column (spanning horizontally)
+ * CSV file where each feature is a column (spanning horizontally).
  *
  * @author Owen Feehan
  */
-public class FeatureListCSVGeneratorHorizontal extends TableCSVGenerator<ResultsVectorCollection> {
+public class FeatureListCSVGeneratorHorizontal extends FeatureTableCSVGenerator<ResultsVectorCollection> {
 
+    /**
+     * Creates without setting any <i>results</i> (i.e. row-data).
+     * 
+     * <p>The CSV file is populated with the <i>results</i> of calculations corresponding to these features.
+     * 
+     * @param manifestFunction identifier of function for the manifest file.
+     * @param featureNames names-of-features that will appear in results.
+     */
     public FeatureListCSVGeneratorHorizontal(
             String manifestFunction, FeatureNameList featureNames) {
         super(manifestFunction, featureNames.asList());
     }
 
+    /**
+     * Creates without setting any <i>results</i> (i.e. row-data).
+     * 
+     * @param manifestFunction identifier of function for the manifest file.
+     * @param featureNames names-of-features in {@code results}.
+     * @param results the results (i.e. row data) to set as current element for the generator.
+     */
     public FeatureListCSVGeneratorHorizontal(
             String manifestFunction,
             FeatureNameList featureNames,
@@ -56,17 +71,17 @@ public class FeatureListCSVGeneratorHorizontal extends TableCSVGenerator<Results
     }
 
     @Override
-    protected void writeRowsAndColumns(
-            CSVWriter writer, ResultsVectorCollection featureValues, List<String> headerNames)
+    protected void writeFeaturesToCSV(
+            CSVWriter writer, ResultsVectorCollection allFeatureResults, List<String> headerNames)
             throws OutputWriteFailedException {
 
         // We add a header line
         writer.writeHeaders(headerNames);
 
-        for (ResultsVector rv : featureValues) {
+        for (ResultsVector results : allFeatureResults) {
 
             List<TypedValue> csvRow = new ArrayList<>();
-            rv.addToTypeValueCollection(csvRow, 10);
+            results.addToTypeValueCollection(csvRow, 10);
             writer.writeRow(csvRow);
         }
     }

@@ -24,53 +24,33 @@
  * #L%
  */
 
-package org.anchoranalysis.feature.io.csv.name;
+package org.anchoranalysis.feature.io.name;
 
-import java.util.Iterator;
 import java.util.Optional;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import org.apache.commons.collections.iterators.SingletonIterator;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 /**
- * A name with only one part, and is always unique
- *
+ * Creates {@link MultiName}.
+ * 
  * @author Owen Feehan
+ *
  */
-@AllArgsConstructor
-@EqualsAndHashCode
-public class SimpleName implements MultiName {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public class MultiNameFactory {
 
-    private String name;
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public Iterator<String> iterator() {
-        return new SingletonIterator(name);
-    }
-
-    @Override
-    public Optional<String> directoryPart() {
-        return Optional.empty();
-    }
-
-    @Override
-    public String filePart() {
-        return name;
-    }
-
-    @Override
-    public int compareTo(MultiName other) {
-
-        if (other instanceof SimpleName) {
-            return name.compareTo(((SimpleName) other).name);
-        } else {
-            return -1;
-        }
-    }
-
-    @Override
-    public String toString() {
-        return name;
+    /**
+     * Creates either a multi-name that is either has a single part or a double part.
+     * 
+     * <p>The first part is always a grouping key for aggregation.
+     *
+     * @param groupIdentifier if present, a group identifier that becomes the first part
+     * @param nonGroupIdentifier the non-group part of the identifier that is present irrespective
+     * @return the created multi-name
+     */
+    public static MultiName create(Optional<String> groupIdentifier, String nonGroupIdentifier) {
+        return groupIdentifier
+                .map(id -> (MultiName) new CombinedName(id, nonGroupIdentifier))
+                .orElseGet(() -> new SimpleName(nonGroupIdentifier));
     }
 }

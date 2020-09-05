@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.feature.io.csv.writer;
+package org.anchoranalysis.feature.io.csv;
 
 import java.nio.file.Path;
 import java.util.List;
@@ -37,18 +37,24 @@ import org.anchoranalysis.io.output.csv.CSVWriter;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 /**
- * Generates a CSV file like a table
+ * Base class for a {@link IterableGenerator} that outputs a feature-table in CSV format.
  *
  * @author Owen Feehan
- * @param <T> rows-object type
+ * @param <T> type of object that describes <i>all</i> rows of feature calculations.
  */
-public abstract class TableCSVGenerator<T> extends CSVGenerator implements IterableGenerator<T> {
+public abstract class FeatureTableCSVGenerator<T> extends CSVGenerator implements IterableGenerator<T> {
 
     private List<String> headerNames;
 
     private T element;
 
-    public TableCSVGenerator(String manifestFunction, List<String> headerNames) {
+    /**
+     * Creates for a particular manifest-function and headers.
+     * 
+     * @param manifestFunction the manifest-function.
+     * @param headerNames the headers of all columns for the CSV output.
+     */
+    public FeatureTableCSVGenerator(String manifestFunction, List<String> headerNames) {
         super(manifestFunction);
         this.headerNames = headerNames;
     }
@@ -73,12 +79,20 @@ public abstract class TableCSVGenerator<T> extends CSVGenerator implements Itera
             throws OutputWriteFailedException {
 
         try (CSVWriter writer = CSVWriter.create(filePath)) {
-            writeRowsAndColumns(writer, element, headerNames);
+            writeFeaturesToCSV(writer, element, headerNames);
         } catch (AnchorIOException e) {
             throw new OutputWriteFailedException(e);
         }
     }
 
-    protected abstract void writeRowsAndColumns(CSVWriter writer, T rows, List<String> headerNames)
+    /**
+     * Writes the features to the CSV-file.
+     * 
+     * @param writer the write to use
+     * @param allFeatureResults all rows to write
+     * @param headerNames header-names for columns, corresponding to the data in {@code rows}.
+     * @throws OutputWriteFailedException if the output cannot be written.
+     */
+    protected abstract void writeFeaturesToCSV(CSVWriter writer, T allFeatureResults, List<String> headerNames)
             throws OutputWriteFailedException;
 }

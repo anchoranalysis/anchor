@@ -24,47 +24,53 @@
  * #L%
  */
 
-package org.anchoranalysis.feature.io.csv.results;
+package org.anchoranalysis.feature.io.name;
 
+import java.util.Iterator;
+import java.util.Optional;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
-import org.apache.commons.lang3.ArrayUtils;
+import lombok.EqualsAndHashCode;
+import org.apache.commons.collections.iterators.SingletonIterator;
 
 /**
- * Headers in a CSV file for the non-results (i.e. labels) part of a feature-row
+ * A name with only one part, and is always unique.
  *
  * @author Owen Feehan
  */
 @AllArgsConstructor
-public class LabelHeaders {
+@EqualsAndHashCode
+public class SimpleName implements MultiName {
 
-    /**
-     * Headers describing the non-feature columns outputted in the CSV related to identifying a row
-     * (but not its group)
-     */
-    private String[] nonGroupHeaders;
+    private String name;
 
-    /**
-     * Headers describing the non-feature columns outputted in the CSV related to identifying the
-     * group of a row
-     */
-    @Getter private String[] groupHeaders;
-
-    /**
-     * The non-group and group headers combined (in this order respectively)
-     *
-     * @return the combined headers in a newly created array
-     */
-    public String[] allHeaders() {
-        return ArrayUtils.addAll(nonGroupHeaders, groupHeaders);
+    @SuppressWarnings("unchecked")
+    @Override
+    public Iterator<String> iterator() {
+        return new SingletonIterator(name);
     }
-    
-    /**
-     * Creates with only non-group headers
-     * 
-     * @param nonGroupHeaders headers describing the non-feature columns outputted in the CSV related to identifying a row
-     */
-    public LabelHeaders(String[] nonGroupHeaders) {
-        this( nonGroupHeaders, new String[]{} );
+
+    @Override
+    public Optional<String> firstPart() {
+        return Optional.empty();
+    }
+
+    @Override
+    public String secondPart() {
+        return name;
+    }
+
+    @Override
+    public int compareTo(MultiName other) {
+
+        if (other instanceof SimpleName) {
+            return name.compareTo(((SimpleName) other).name);
+        } else {
+            return -1;
+        }
+    }
+
+    @Override
+    public String toString() {
+        return name;
     }
 }

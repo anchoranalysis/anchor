@@ -24,30 +24,42 @@
  * #L%
  */
 
-package org.anchoranalysis.feature.io.csv.writer;
+package org.anchoranalysis.feature.io.csv;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.anchoranalysis.core.text.TypedValue;
 import org.anchoranalysis.feature.calculate.results.ResultsVector;
-import org.anchoranalysis.feature.calculate.results.ResultsVectorCollection;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.io.output.csv.CSVWriter;
 import lombok.RequiredArgsConstructor;
 
+/**
+ * Writes the results of feature-calculations as a CSV file.
+ * 
+ * @author Owen Feehan
+ *
+ */
 @RequiredArgsConstructor
 public class FeatureCSVWriter {
 
     /** Underlying CSV write, which if null, it means the writer is disabled */
     private final CSVWriter writer; 
 
+    /**
+     * Maybe creates a {@link FeatureCSVWriter} depending if the output is allowed.
+     * 
+     * @param metadata metadata needed for writing the reeature-results
+     * @param outputManager determines if the output is allowed.
+     * @return a write, if it is allowed.
+     * @throws AnchorIOException if I/O fails.
+     */
     public static Optional<FeatureCSVWriter> create(
             FeatureCSVMetadata metadata,
             BoundOutputManagerRouteErrors outputManager
-    )
-            throws AnchorIOException {
+    ) throws AnchorIOException {
 
         if (!outputManager.isOutputAllowed(metadata.getOutputName())) {
             return Optional.of(new FeatureCSVWriter(null));
@@ -62,16 +74,24 @@ public class FeatureCSVWriter {
                 });
     }
 
-    public void addResultsVector(
-            RowLabels identifier, ResultsVector resultsFromFeatures) {
+    /**
+     * Directly adds a row of feature-values.
+     * 
+     * @param labels laels for the row
+     * @param featureResults results for the row
+     */
+    public void addRow(RowLabels labels, ResultsVector featureResults) {
         if (writer == null) {
             return;
         }
-
-        addRow(buildCsvRow(identifier, resultsFromFeatures));
+        addRow(buildCsvRow(labels, featureResults));
     }
 
-    /** Directly adds a row without any ResultsVector */
+    /** 
+     * Directly adds a row in the form of typed-values.
+     * 
+     * @param values a list of typed-values corresponding to a row in a CSV file.
+     */
     public void addRow(List<TypedValue> values) {
 
         if (writer == null) {
@@ -81,22 +101,12 @@ public class FeatureCSVWriter {
         writer.writeRow(values);
     }
 
-    public void addResultsVector(
-            RowLabels identifier,
-            ResultsVectorCollection resultsCollectionFromFeatures) {
-
-        if (writer == null) {
-            return;
-        }
-
-        for (ResultsVector rv : resultsCollectionFromFeatures) {
-            assert (rv != null);
-            addResultsVector(identifier, rv);
-        }
-    }
-
+    /**
+     * Closes any open file-handles.
+     * 
+     * <p>This operation should always be called <i>once</i> at the end of writing.
+     */
     public void close() {
-
         if (writer == null) {
             return;
         }
@@ -108,8 +118,8 @@ public class FeatureCSVWriter {
      * Build a row for the CSV output
      *
      * @param identifier unique identifier for the row and/or the group it belongs to
-     * @param resultsFromFeatures results to incluide in row
-     * @return
+     * @param resultsFromFeatures results to include in row
+     * @return a list of typed-values as forms a row in a CSV file.
      */
     private static List<TypedValue> buildCsvRow(
             RowLabels identifier, ResultsVector resultsFromFeatures) {

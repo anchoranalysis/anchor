@@ -1,8 +1,8 @@
-package org.anchoranalysis.feature.io.csv.results;
+package org.anchoranalysis.feature.io.results;
 
 import java.util.Optional;
 import org.anchoranalysis.feature.input.FeatureInputResults;
-import org.anchoranalysis.feature.io.csv.writer.FeatureCSVMetadata;
+import org.anchoranalysis.feature.io.csv.FeatureCSVMetadata;
 import org.anchoranalysis.feature.list.NamedFeatureStore;
 import org.anchoranalysis.feature.name.FeatureNameList;
 import lombok.Getter;
@@ -35,6 +35,12 @@ public class ResultsWriterMetadata {
      */
     @Getter private final FeatureNameList featureNamesNonAggregate;
     
+    /**
+     * Creates with default output-names.
+     * 
+     * @param labelHeaders headers for the CSV File
+     * @param featureNamesNonAggregate names of each feature in the feature columns.
+     */
     public ResultsWriterMetadata(LabelHeaders labelHeaders, FeatureNameList featureNamesNonAggregate) {
         this.outputNames = new ResultsWriterOutputNames();
         this.labelHeaders = labelHeaders;
@@ -53,6 +59,7 @@ public class ResultsWriterMetadata {
     /**
      * Derives metadata for the aggregated CSV output, if enabled.
      * 
+     * @param featuresAggregate features to be used for aggregating existing features.
      * @return newly created metadata, or {@code Optional.empty()} if its disabled.
      */
     public Optional<FeatureCSVMetadata> metadataAggregated(NamedFeatureStore<FeatureInputResults> featuresAggregate) {

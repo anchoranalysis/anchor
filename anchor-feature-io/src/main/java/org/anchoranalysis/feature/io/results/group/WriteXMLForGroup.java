@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.feature.io.csv.results.group;
+package org.anchoranalysis.feature.io.results.group;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -40,11 +40,11 @@ import org.anchoranalysis.feature.calculate.results.ResultsVector;
 import org.anchoranalysis.feature.calculate.results.ResultsVectorCollection;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.input.FeatureInputResults;
-import org.anchoranalysis.feature.io.csv.name.MultiName;
-import org.anchoranalysis.feature.io.csv.results.ResultsWriter;
-import org.anchoranalysis.feature.io.csv.results.ResultsWriterMetadata;
-import org.anchoranalysis.feature.io.csv.writer.FeatureCSVWriter;
-import org.anchoranalysis.feature.io.csv.writer.RowLabels;
+import org.anchoranalysis.feature.io.csv.FeatureCSVWriter;
+import org.anchoranalysis.feature.io.csv.RowLabels;
+import org.anchoranalysis.feature.io.name.MultiName;
+import org.anchoranalysis.feature.io.results.ResultsWriter;
+import org.anchoranalysis.feature.io.results.ResultsWriterMetadata;
 import org.anchoranalysis.feature.list.NamedFeatureStore;
 import org.anchoranalysis.feature.name.FeatureNameList;
 import org.anchoranalysis.feature.session.FeatureSession;
@@ -70,7 +70,16 @@ class WriteXMLForGroup {
     private NamedFeatureStore<FeatureInputResults> featuresAggregate;
     private ResultsVectorCollection results;
     
-    public void maybeWrite(Optional<MultiName> groupName, ResultsWriterMetadata metadata, Optional<FeatureCSVWriter> csvWriter, CacheSubdirectoryContext contextGroups) throws AnchorIOException {
+    /**
+     * Write the aggregated groups to the filesystem as XML, if enabled.
+     * 
+     * @param groupName a group-name, if it exists.
+     * @param metadata metadata for writing results to the filesystem.
+     * @param csvWriter a CSV-writer, if it's enabled.
+     * @param context a cached set of input-output contexts for directories for each group.
+     * @throws AnchorIOException if an input-output problem occurs.
+     */
+    public void maybeWrite(Optional<MultiName> groupName, ResultsWriterMetadata metadata, Optional<FeatureCSVWriter> csvWriter, CacheSubdirectoryContext context) throws AnchorIOException {
             OptionalUtilities.ifPresent(
                 metadata.outputNames().getXmlAggregatedGroup(), 
                 outputName -> maybeWriteForOutput(
@@ -78,7 +87,7 @@ class WriteXMLForGroup {
                     groupName,
                     metadata.featureNamesNonAggregate(),
                     csvWriter,
-                    contextGroups.get(groupName.map(MultiName::toString)))
+                    context.get(groupName.map(MultiName::toString)))
             );
     }
     
@@ -99,7 +108,7 @@ class WriteXMLForGroup {
 
             // Write the aggregated-features into the csv file
             csvWriterAggregate.ifPresent( writer ->
-                writer.addResultsVector(new RowLabels(Optional.empty(), groupName), aggregated) 
+                writer.addRow(new RowLabels(Optional.empty(), groupName), aggregated) 
             );
         }
     }

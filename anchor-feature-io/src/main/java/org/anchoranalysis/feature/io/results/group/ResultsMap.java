@@ -1,4 +1,4 @@
-package org.anchoranalysis.feature.io.csv.results.group;
+package org.anchoranalysis.feature.io.results.group;
 
 import java.util.Comparator;
 import java.util.Optional;
@@ -7,8 +7,8 @@ import org.anchoranalysis.core.functional.FunctionalIterate;
 import org.anchoranalysis.core.functional.function.CheckedBiConsumer;
 import org.anchoranalysis.feature.calculate.results.ResultsVector;
 import org.anchoranalysis.feature.calculate.results.ResultsVectorCollection;
-import org.anchoranalysis.feature.io.csv.name.MultiName;
-import org.anchoranalysis.feature.io.csv.writer.RowLabels;
+import org.anchoranalysis.feature.io.csv.RowLabels;
+import org.anchoranalysis.feature.io.name.MultiName;
 import com.google.common.collect.Comparators;
 
 class ResultsMap {

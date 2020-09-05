@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.feature.io.csv.writer;
+package org.anchoranalysis.feature.io.csv;
 
 import java.util.Arrays;
 import java.util.List;
@@ -32,7 +32,7 @@ import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.anchoranalysis.core.text.TypedValue;
-import org.anchoranalysis.feature.io.csv.name.MultiName;
+import org.anchoranalysis.feature.io.name.MultiName;
 
 /**
  * Labels for each row of feature-results in the outputted CSV row.
@@ -43,14 +43,18 @@ import org.anchoranalysis.feature.io.csv.name.MultiName;
 public class RowLabels {
 
     /**
-     * identifier unique identifier for the row taking all elements together (together a primary
-     * key)
+     * Unique identifier for the row taking all elements together (together a primary key).
      */
     private final Optional<String[]> identifier;
 
     /** an identifier for a higher-level group which the row belongs to (foreign key) */
     @Getter private final Optional<MultiName> group;
 
+    /**
+     * Creates with a single string as an identifier.
+     * 
+     * @param identifier the identifier.
+     */
     public RowLabels(String identifier) {
         this( Optional.of(new String[]{identifier}), Optional.empty() );
     }

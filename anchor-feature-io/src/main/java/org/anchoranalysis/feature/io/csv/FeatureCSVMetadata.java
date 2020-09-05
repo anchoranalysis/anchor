@@ -1,4 +1,4 @@
-package org.anchoranalysis.feature.io.csv.writer;
+package org.anchoranalysis.feature.io.csv;
 
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -10,8 +10,7 @@ import lombok.Value;
  * <p>i.e. headers, the output-name etc.
  * 
  * @author Owen Feehan
- *
- */
+  */
 @Value @AllArgsConstructor
 public class FeatureCSVMetadata {
 
