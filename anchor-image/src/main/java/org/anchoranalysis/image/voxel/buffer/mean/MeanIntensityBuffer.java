@@ -60,7 +60,7 @@ public abstract class MeanIntensityBuffer<T> {
     protected abstract void finalizeBuffer();
 
     /** Increments a particular offset in the sum bufffer by a certain amount */
-    protected void incrSumBuffer(int index, int toAdd) {
+    protected void incrementSumBuffer(int index, int toAdd) {
         FloatBuffer sumBuffer = sumBuffer();
         sumBuffer.put(index, sumBuffer.get(index) + toAdd);
     }

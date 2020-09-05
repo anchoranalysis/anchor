@@ -349,7 +349,7 @@ public class IterateVoxels {
 
                 for (point.setX(cornerMin.x()); point.x() < cornerMax.x(); point.incrementX()) {
 
-                    if (bufferObject.getByte() == valueOn) {
+                    if (bufferObject.getRaw() == valueOn) {
                         process.process(point, buffer, offset);
                     }
                     offset++;

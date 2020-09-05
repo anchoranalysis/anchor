@@ -24,17 +24,17 @@
  * #L%
  */
 
-package org.anchoranalysis.mpp.pixelpart.factory;
+package org.anchoranalysis.mpp.voxel.partition.factory;
 
-import org.anchoranalysis.mpp.pixelpart.PixelPart;
+import org.anchoranalysis.mpp.voxel.partition.VoxelPartition;
 
 /**
  * @author Owen Feehan
  * @param <T> part-type
  */
-public interface PixelPartFactory<T> {
+public interface VoxelPartitionFactory<T> {
 
-    PixelPart<T> create(int numSlices);
+    VoxelPartition<T> create(int numSlices);
 
     void addUnused(T part);
 }

@@ -140,11 +140,11 @@ class CountIntersectingVoxelsRegionMembershipMask {
                 int xOther = x + box.x().rel();
                 int xGlobal = x + pointGlobalRel.x();
 
-                byte globalMask = bufferMaskGlobal.get(extentGlobal.offset(xGlobal, yGlobal));
+                byte globalMask = bufferMaskGlobal.getRaw(extentGlobal.offset(xGlobal, yGlobal));
                 if (globalMask == onMaskGlobal) {
 
-                    byte posCheck = buffer1.get(box.e1().offset(x, y));
-                    byte posCheckOther = buffer2.get(box.e2().offset(xOther, yOther));
+                    byte posCheck = buffer1.getRaw(box.e1().offset(x, y));
+                    byte posCheckOther = buffer2.getRaw(box.e2().offset(xOther, yOther));
 
                     if (isPixelInRegion(posCheck) && isPixelInRegion(posCheckOther)) {
                         cnt++;

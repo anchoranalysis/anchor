@@ -60,7 +60,7 @@ public class OutlineKernel3 extends OutlineKernel3Base {
         int x = point.x();
         int y = point.y();
 
-        if (bv.isOff(inArrZ.get(ind))) {
+        if (bv.isOff(inArrZ.getRaw(ind))) {
             return false;
         }
 
@@ -68,7 +68,7 @@ public class OutlineKernel3 extends OutlineKernel3Base {
         x--;
         ind--;
         if (x >= 0) {
-            if (bv.isOff(inArrZ.get(ind))) {
+            if (bv.isOff(inArrZ.getRaw(ind))) {
                 return true;
             }
         } else {
@@ -80,7 +80,7 @@ public class OutlineKernel3 extends OutlineKernel3Base {
         x += 2;
         ind += 2;
         if (x < extent.x()) {
-            if (bv.isOff(inArrZ.get(ind))) {
+            if (bv.isOff(inArrZ.getRaw(ind))) {
                 return true;
             }
         } else {
@@ -94,7 +94,7 @@ public class OutlineKernel3 extends OutlineKernel3Base {
         y--;
         ind -= xLength;
         if (y >= 0) {
-            if (bv.isOff(inArrZ.get(ind))) {
+            if (bv.isOff(inArrZ.getRaw(ind))) {
                 return true;
             }
         } else {
@@ -106,7 +106,7 @@ public class OutlineKernel3 extends OutlineKernel3Base {
         y += 2;
         ind += (2 * xLength);
         if (y < (extent.y())) {
-            if (bv.isOff(inArrZ.get(ind))) {
+            if (bv.isOff(inArrZ.getRaw(ind))) {
                 return true;
             }
         } else {
@@ -119,7 +119,7 @@ public class OutlineKernel3 extends OutlineKernel3Base {
         if (useZ) {
 
             if (inArrZLess1 != null) {
-                if (bv.isOff(inArrZLess1.get(ind))) {
+                if (bv.isOff(inArrZLess1.getRaw(ind))) {
                     return true;
                 }
             } else {
@@ -129,7 +129,7 @@ public class OutlineKernel3 extends OutlineKernel3Base {
             }
 
             if (inArrZPlus1 != null) {
-                if (bv.isOff(inArrZPlus1.get(ind))) {
+                if (bv.isOff(inArrZPlus1.getRaw(ind))) {
                     return true;
                 }
             } else {

@@ -157,14 +157,14 @@ public class ConnectedComponentUnionFind {
         Extent extent = indexBuffer.extent();
         for (point.setZ(0); point.z() < extent.z(); point.incrementZ()) {
 
-            IntBuffer bbIndex = indexBuffer.sliceBuffer(point.z());
+            IntBuffer bufferIndex = indexBuffer.sliceBuffer(point.z());
 
             int offset = 0;
 
             for (point.setY(0); point.y() < extent.y(); point.incrementY()) {
                 for (point.setX(0); point.x() < extent.x(); point.incrementX()) {
 
-                    int idBig = bbIndex.get(offset);
+                    int idBig = bufferIndex.get(offset);
                     if (idBig != 0) {
 
                         Integer idSmall = mapIDOrdered.get(unionIndex.find(idBig));
@@ -172,7 +172,7 @@ public class ConnectedComponentUnionFind {
                         PointRangeWithCount box = boxArr[idSmall - 1];
                         box.add(point);
 
-                        bbIndex.put(offset, idSmall);
+                        bufferIndex.put(offset, idSmall);
                     }
                     offset++;
                 }

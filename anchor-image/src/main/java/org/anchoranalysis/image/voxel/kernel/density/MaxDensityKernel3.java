@@ -95,7 +95,7 @@ public class MaxDensityKernel3 extends BinaryKernel {
         int x = point.x();
         int y = point.y();
 
-        if (bv.isOn(inArrZ.get(ind))) {
+        if (bv.isOn(inArrZ.getRaw(ind))) {
             cnt++;
         }
 
@@ -103,7 +103,7 @@ public class MaxDensityKernel3 extends BinaryKernel {
         x--;
         ind--;
         if (x >= 0) {
-            if (bv.isOn(inArrZ.get(ind))) {
+            if (bv.isOn(inArrZ.getRaw(ind))) {
                 cnt++;
             }
         } else {
@@ -115,7 +115,7 @@ public class MaxDensityKernel3 extends BinaryKernel {
         x += 2;
         ind += 2;
         if (x < extent.x()) {
-            if (bv.isOn(inArrZ.get(ind))) {
+            if (bv.isOn(inArrZ.getRaw(ind))) {
                 cnt++;
             }
         } else {
@@ -129,7 +129,7 @@ public class MaxDensityKernel3 extends BinaryKernel {
         y--;
         ind -= xLength;
         if (y >= 0) {
-            if (bv.isOn(inArrZ.get(ind))) {
+            if (bv.isOn(inArrZ.getRaw(ind))) {
                 cnt++;
             }
         } else {
@@ -141,7 +141,7 @@ public class MaxDensityKernel3 extends BinaryKernel {
         y += 2;
         ind += (2 * xLength);
         if (y < (extent.y())) {
-            if (bv.isOn(inArrZ.get(ind))) {
+            if (bv.isOn(inArrZ.getRaw(ind))) {
                 cnt++;
             }
         } else {
@@ -154,7 +154,7 @@ public class MaxDensityKernel3 extends BinaryKernel {
         if (useZ) {
 
             if (inArrZLess1 != null) {
-                if (bv.isOn(inArrZLess1.get(ind))) {
+                if (bv.isOn(inArrZLess1.getRaw(ind))) {
                     cnt++;
                 }
             } else {
@@ -164,7 +164,7 @@ public class MaxDensityKernel3 extends BinaryKernel {
             }
 
             if (inArrZPlus1 != null) {
-                if (bv.isOn(inArrZPlus1.get(ind))) {
+                if (bv.isOn(inArrZPlus1.getRaw(ind))) {
                     cnt++;
                 }
             } else {

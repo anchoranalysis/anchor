@@ -42,15 +42,15 @@ public final class VoxelBufferUnsignedByte extends VoxelBuffer<UnsignedByteBuffe
     }
 
     public static VoxelBufferUnsignedByte wrapArray(byte[] arr) {
-        return new VoxelBufferUnsignedByte(UnsignedByteBuffer.wrap(arr));
+        return new VoxelBufferUnsignedByte(UnsignedByteBuffer.wrapRaw(arr));
     }
 
     public static VoxelBuffer<UnsignedByteBuffer> wrapBuffer(UnsignedByteBuffer buffer) {
         return new VoxelBufferUnsignedByte(buffer);
     }
     
-    public static VoxelBuffer<UnsignedByteBuffer> wrapUnsigned(ByteBuffer buffer) {
-        return wrapBuffer( new UnsignedByteBuffer(buffer) );
+    public static VoxelBuffer<UnsignedByteBuffer> wrapRaw(ByteBuffer buffer) {
+        return wrapBuffer( UnsignedByteBuffer.wrapRaw(buffer) );
     }
 
     @Override
@@ -59,11 +59,11 @@ public final class VoxelBufferUnsignedByte extends VoxelBuffer<UnsignedByteBuffe
     }
 
     public byte get(int index) {
-        return delegate.getByte(index);
+        return delegate.getRaw(index);
     }
 
     public UnsignedByteBuffer put(int index, byte b) {
-        delegate.putByte(index, b);
+        delegate.putRaw(index, b);
         return delegate;
     }
 
@@ -83,22 +83,22 @@ public final class VoxelBufferUnsignedByte extends VoxelBuffer<UnsignedByteBuffe
 
     @Override
     public int getInt(int index) {
-        return delegate.getInt(index);
+        return delegate.getUnsignedByte(index);
     }
 
     @Override
     public void putInt(int index, int value) {
-        delegate.put(index, (byte) value);
+        delegate.putUnsignedByte(index, value);
     }
 
     @Override
     public void putByte(int index, byte value) {
-        delegate.put(index, value);
+        delegate.putRaw(index, value);
     }
 
     @Override
     public void transferFrom(int destinationIndex, VoxelBuffer<UnsignedByteBuffer> src, int sourceIndex) {
-        delegate.put(destinationIndex, src.buffer().get(sourceIndex));
+        delegate.putRaw(destinationIndex, src.buffer().getRaw(sourceIndex));
     }
 
     @Override

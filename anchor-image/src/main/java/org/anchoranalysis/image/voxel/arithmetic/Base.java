@@ -87,7 +87,7 @@ abstract class Base<T> implements VoxelsArithmetic {
             for (int y = box.cornerMin().y(); y < pointMax.y(); y++) {
                 for (int x = box.cornerMin().x(); x < pointMax.x(); x++) {
 
-                    if (pixelsMask.getByte() == maskOnByte) {
+                    if (pixelsMask.getRaw() == maskOnByte) {
                         addToBufferIndex(pixels, extent.offset(x, y), valueToBeAdded);
                     }
                 }
@@ -111,7 +111,7 @@ abstract class Base<T> implements VoxelsArithmetic {
             for (int y = box.cornerMin().y(); y <= pointMax.y(); y++) {
                 for (int x = box.cornerMin().x(); x <= pointMax.x(); x++) {
 
-                    if (pixelsMask.getByte() == maskOnByte) {
+                    if (pixelsMask.getRaw() == maskOnByte) {
                         int index = extent.offset(x, y);
 
                         multiplyByBufferIndex(pixels, index, factor);

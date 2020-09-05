@@ -92,7 +92,7 @@ public final class ConvertToShortScaleByType extends VoxelsConverter<ShortBuffer
         ShortBuffer bufferOut = ShortBuffer.allocate(bufferIn.buffer().capacity());
 
         while (bufferIn.buffer().hasRemaining()) {
-            bufferOut.put((short) (bufferIn.buffer().getByte() * mult));
+            bufferOut.put((short) (bufferIn.buffer().getRaw() * mult));
         }
 
         return VoxelBufferShort.wrapBuffer(bufferOut);

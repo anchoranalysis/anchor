@@ -39,10 +39,10 @@ public class MaxIntensityBufferByte extends MaxIntensityBuffer<UnsignedByteBuffe
 
     @Override
     protected void addBuffer(UnsignedByteBuffer pixels, UnsignedByteBuffer flatBuffer) {
-        byte inPixel = pixels.getByte();
-        int flatPixel = flatBuffer.getInt();
+        byte inPixel = pixels.getRaw();
+        int flatPixel = flatBuffer.getUnsignedByte();
         if (PrimitiveConverter.unsignedByteToInt(inPixel) > flatPixel) {
-            flatBuffer.putByte(flatBuffer.position() - 1, inPixel);
+            flatBuffer.putRaw(flatBuffer.position() - 1, inPixel);
         }
     }
 }

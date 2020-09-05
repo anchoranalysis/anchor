@@ -153,7 +153,7 @@ public class IterateVoxelsVoxelBoxAsInt {
             for (point.setY(cornerMin.y()); point.y() < cornerMax.y(); point.incrementY()) {
                 for (point.setX(cornerMin.x()); point.x() < cornerMax.x(); point.incrementX()) {
 
-                    if (sliceMask.getByte() == maskMatchValue) {
+                    if (sliceMask.getRaw() == maskMatchValue) {
 
                         int offset = extentVoxels.offsetSlice(point);
 
@@ -271,7 +271,7 @@ public class IterateVoxelsVoxelBoxAsInt {
                             extentObject.offset(
                                     point.x() + maskShift.x(), point.y() + maskShift.y());
 
-                    if (sliceMask.get(indexMask) == maskMatchValue) {
+                    if (sliceMask.getRaw(indexMask) == maskMatchValue) {
 
                         int offset = extentVoxels.offsetSlice(point);
                         process.process(buffer, offset);

@@ -39,41 +39,25 @@ class ByteImplementation extends Base<UnsignedByteBuffer> {
     @Override
     protected void multiplyBuffer(UnsignedByteBuffer buffer, double factor) {
         while (buffer.hasRemaining()) {
-            byte mult = scaleClippedByte(factor, buffer.getByte());
-            buffer.put(buffer.position() - 1, mult);
+            buffer.putUnsignedByte(buffer.position() - 1, scaleClipped(factor, buffer.getUnsignedByte()));
         }
     }
 
     @Override
     protected void subtractFromBuffer(UnsignedByteBuffer buffer, int valueToSubtractFrom) {
         while (buffer.hasRemaining()) {
-            byte subtracted = subtractFromClippedByte(valueToSubtractFrom, buffer.getByte());
-            buffer.put(buffer.position() - 1, subtracted);
+            buffer.putUnsignedByte(buffer.position() - 1, valueToSubtractFrom - buffer.getUnsignedByte());
         }
     }
 
     @Override
     protected void multiplyByBufferIndex(UnsignedByteBuffer buffer, int index, double factor) {
-        byte mult = scaleClippedByte(factor, buffer.get(index));
-        buffer.put(index, mult);
+        buffer.putUnsignedByte(index, scaleClipped(factor, buffer.getUnsignedByte(index)));
     }
 
     @Override
     protected void addToBufferIndex(UnsignedByteBuffer buffer, int index, int valueToBeAdded) {
-        byte added = addClippedByte(valueToBeAdded, buffer.get(index));
-        buffer.put(index, added);
-    }
-
-    private static byte addClippedByte(int value, byte pixelValue) {
-        return (byte) addClipped(value, PrimitiveConverter.unsignedByteToInt(pixelValue));
-    }
-
-    private static byte subtractFromClippedByte(int valueToSubtractFrom, byte pixelValue) {
-        return (byte) (valueToSubtractFrom - PrimitiveConverter.unsignedByteToInt(pixelValue));
-    }
-
-    private static byte scaleClippedByte(double factor, byte pixelValue) {
-        return (byte) scaleClipped(factor, PrimitiveConverter.unsignedByteToInt(pixelValue));
+        buffer.putUnsignedByte(index, addClipped(valueToBeAdded, buffer.getUnsignedByte(index)));
     }
 
     private static int scaleClipped(double factor, int pixelValue) {

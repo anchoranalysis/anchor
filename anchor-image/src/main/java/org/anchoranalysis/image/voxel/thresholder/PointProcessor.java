@@ -29,7 +29,6 @@ package org.anchoranalysis.image.voxel.thresholder;
 import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
-import org.anchoranalysis.image.convert.PrimitiveConverter;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.iterator.ProcessVoxelSliceBuffer;
 
@@ -40,7 +39,7 @@ final class PointProcessor implements ProcessVoxelSliceBuffer<UnsignedByteBuffer
     private final byte byteOn;
     private final byte byteOff;
 
-    private UnsignedByteBuffer bbOut;
+    private UnsignedByteBuffer bufferOut;
 
     public PointProcessor(int level, Voxels<UnsignedByteBuffer> boxOut, BinaryValuesByte bvOut) {
         super();
@@ -52,13 +51,12 @@ final class PointProcessor implements ProcessVoxelSliceBuffer<UnsignedByteBuffer
 
     @Override
     public void notifyChangeSlice(int z) {
-        bbOut = voxelsOut.sliceBuffer(z);
+        bufferOut = voxelsOut.sliceBuffer(z);
     }
 
     @Override
     public void process(Point3i point, UnsignedByteBuffer buffer, int offset) {
-        int val = PrimitiveConverter.unsignedByteToInt(buffer.get(offset));
-
-        bbOut.put(offset, val >= level ? byteOn : byteOff);
+        int value = buffer.getUnsignedByte(offset);
+        bufferOut.putRaw(offset, value >= level ? byteOn : byteOff);
     }
 }

@@ -24,55 +24,25 @@
  * #L%
  */
 
-package org.anchoranalysis.mpp.pixelpart;
+package org.anchoranalysis.mpp.voxel.partition.factory;
 
-import java.util.ArrayList;
-import java.util.List;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramCreator;
-import org.anchoranalysis.mpp.pixelpart.factory.PixelPartFactory;
+import org.anchoranalysis.image.histogram.HistogramCreatorSimple;
+import org.anchoranalysis.mpp.voxel.partition.VoxelPartitionHistogram;
+import org.anchoranalysis.mpp.voxel.partition.VoxelPartition;
 
-public class PixelPartHistogram implements PixelPart<Histogram> {
+public class VoxelPartitonFactoryHistogram implements VoxelPartitionFactory<Histogram> {
 
-    private Histogram combined;
-    private List<Histogram> list;
+    private HistogramCreator factorySimple = new HistogramCreatorSimple();
 
-    public PixelPartHistogram(int numSlices, HistogramCreator histogramFactory) {
-
-        combined = histogramFactory.create();
-
-        list = new ArrayList<>();
-        for (int i = 0; i < numSlices; i++) {
-            list.add(histogramFactory.create());
-        }
+    @Override
+    public VoxelPartition<Histogram> create(int numSlices) {
+        return new VoxelPartitionHistogram(numSlices, factorySimple);
     }
 
     @Override
-    public Histogram getSlice(int sliceID) {
-        return list.get(sliceID);
-    }
-
-    @Override
-    public void addForSlice(int sliceID, int val) {
-        list.get(sliceID).incrementValue(val);
-        combined.incrementValue(val);
-    }
-
-    @Override
-    public Histogram getCombined() {
-        return combined;
-    }
-
-    @Override
-    public void cleanUp(PixelPartFactory<Histogram> factory) {
-        factory.addUnused(combined);
-        for (int i = 0; i < list.size(); i++) {
-            factory.addUnused(list.get(i));
-        }
-    }
-
-    @Override
-    public int numSlices() {
-        return list.size();
+    public void addUnused(Histogram part) {
+        // NOTHING TO DO
     }
 }

@@ -55,11 +55,7 @@ public final class ConvertToByteScaleByType extends VoxelsConverter<UnsignedByte
         UnsignedByteBuffer bufferOut = UnsignedByteBuffer.allocate(bufferIn.buffer().capacity());
 
         while (bufferIn.buffer().hasRemaining()) {
-            double f = bufferIn.buffer().get();
-
-            f = f / div;
-
-            bufferOut.put((byte) f);
+            bufferOut.putDouble(bufferIn.buffer().get() / div);
         }
 
         return VoxelBufferUnsignedByte.wrapBuffer(bufferOut);
@@ -73,7 +69,7 @@ public final class ConvertToByteScaleByType extends VoxelsConverter<UnsignedByte
         UnsignedByteBuffer bufferOut = UnsignedByteBuffer.allocate(bufferIn.buffer().capacity());
 
         while (bufferIn.buffer().hasRemaining()) {
-            bufferOut.put((byte) (bufferIn.buffer().get() / div));
+            bufferOut.putDouble(bufferIn.buffer().get() / div);
         }
 
         return VoxelBufferUnsignedByte.wrapBuffer(bufferOut);
@@ -87,7 +83,7 @@ public final class ConvertToByteScaleByType extends VoxelsConverter<UnsignedByte
         UnsignedByteBuffer bufferOut = UnsignedByteBuffer.allocate(bufferIn.buffer().capacity());
 
         while (bufferIn.buffer().hasRemaining()) {
-            bufferOut.put((byte) (bufferIn.buffer().get() / div));
+            bufferOut.putDouble(bufferIn.buffer().get() / div);
         }
 
         return VoxelBufferUnsignedByte.wrapBuffer(bufferOut);

@@ -24,17 +24,17 @@
  * #L%
  */
 
-package org.anchoranalysis.mpp.pixelpart;
+package org.anchoranalysis.mpp.voxel.partition;
 
-import org.anchoranalysis.mpp.pixelpart.factory.PixelPartFactory;
+import org.anchoranalysis.mpp.voxel.partition.factory.VoxelPartitionFactory;
 
 /**
- * A partition of pixels
+ * A partition of voxels
  *
  * @author Owen Feehan
  * @param <T> part-type
  */
-public interface PixelPart<T> {
+public interface VoxelPartition<T> {
 
     // Should only be used read-only, if we want to maintain integrity with the combined list
     T getSlice(int sliceID);
@@ -44,7 +44,7 @@ public interface PixelPart<T> {
     // Should only be used read-only
     T getCombined();
 
-    void cleanUp(PixelPartFactory<T> factory);
+    void cleanUp(VoxelPartitionFactory<T> factory);
 
     int numSlices();
 }

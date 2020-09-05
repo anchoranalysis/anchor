@@ -113,7 +113,7 @@ class ConsiderNeighbors {
         int offset = outline.extent().offsetSlice(point);
 
         // Check if the buffer allows us to read the pixel
-        if (buffer.getByte(offset) == bvb.getOffByte()) {
+        if (buffer.getRaw(offset) == bvb.getOffByte()) {
             return false;
         }
 
@@ -122,7 +122,7 @@ class ConsiderNeighbors {
             return false;
         }
 
-        buffer.putByte(offset, bvb.getOffByte());
+        buffer.putRaw(offset, bvb.getOffByte());
 
         return true;
     }

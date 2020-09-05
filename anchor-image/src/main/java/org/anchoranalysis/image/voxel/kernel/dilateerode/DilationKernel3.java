@@ -68,7 +68,7 @@ public final class DilationKernel3 extends BinaryKernelMorph3Extent {
         int x = point.x();
         int y = point.y();
 
-        if (bv.isOn(inArrZ.get(ind))) {
+        if (bv.isOn(inArrZ.getRaw(ind))) {
             return true;
         }
 
@@ -76,7 +76,7 @@ public final class DilationKernel3 extends BinaryKernelMorph3Extent {
         x--;
         ind--;
         if (x >= 0) {
-            if (bv.isOn(inArrZ.get(ind))) {
+            if (bv.isOn(inArrZ.getRaw(ind))) {
                 return true;
             }
         } else {
@@ -88,7 +88,7 @@ public final class DilationKernel3 extends BinaryKernelMorph3Extent {
         x += 2;
         ind += 2;
         if (x < extent.x()) {
-            if (bv.isOn(inArrZ.get(ind))) {
+            if (bv.isOn(inArrZ.getRaw(ind))) {
                 return true;
             }
         } else {
@@ -103,7 +103,7 @@ public final class DilationKernel3 extends BinaryKernelMorph3Extent {
         y--;
         ind -= xLength;
         if (y >= 0) {
-            if (bv.isOn(inArrZ.get(ind))) {
+            if (bv.isOn(inArrZ.getRaw(ind))) {
                 return true;
             }
         } else {
@@ -115,7 +115,7 @@ public final class DilationKernel3 extends BinaryKernelMorph3Extent {
         y += 2;
         ind += (2 * xLength);
         if (y < (extent.y())) {
-            if (bv.isOn(inArrZ.get(ind))) {
+            if (bv.isOn(inArrZ.getRaw(ind))) {
                 return true;
             }
         } else {
@@ -137,7 +137,7 @@ public final class DilationKernel3 extends BinaryKernelMorph3Extent {
             ind -= xLength;
 
             if (x >= 0 && y >= 0) {
-                if (bv.isOn(inArrZ.get(ind))) {
+                if (bv.isOn(inArrZ.getRaw(ind))) {
                     return true;
                 }
             } else {
@@ -151,7 +151,7 @@ public final class DilationKernel3 extends BinaryKernelMorph3Extent {
             y += 2;
             ind += (2 * xLength);
             if (x >= 0 && y < (extent.y())) {
-                if (bv.isOn(inArrZ.get(ind))) {
+                if (bv.isOn(inArrZ.getRaw(ind))) {
                     return true;
                 }
             } else {
@@ -171,7 +171,7 @@ public final class DilationKernel3 extends BinaryKernelMorph3Extent {
             // x +1, y-1
 
             if (x < extent.x() && y >= 0) {
-                if (bv.isOn(inArrZ.get(ind))) {
+                if (bv.isOn(inArrZ.getRaw(ind))) {
                     return true;
                 }
             } else {
@@ -185,7 +185,7 @@ public final class DilationKernel3 extends BinaryKernelMorph3Extent {
             y += 2;
             ind += (2 * xLength);
             if (x < extent.x() && y < (extent.y())) {
-                if (bv.isOn(inArrZ.get(ind))) {
+                if (bv.isOn(inArrZ.getRaw(ind))) {
                     return true;
                 }
             } else {
@@ -201,7 +201,7 @@ public final class DilationKernel3 extends BinaryKernelMorph3Extent {
         if (useZ) {
 
             if (inArrZLess1 != null) {
-                if (bv.isOn(inArrZLess1.get(ind))) {
+                if (bv.isOn(inArrZLess1.getRaw(ind))) {
                     return true;
                 }
             } else {
@@ -211,7 +211,7 @@ public final class DilationKernel3 extends BinaryKernelMorph3Extent {
             }
 
             if (inArrZPlus1 != null) {
-                if (bv.isOn(inArrZPlus1.get(ind))) {
+                if (bv.isOn(inArrZPlus1.getRaw(ind))) {
                     return true;
                 }
             } else {

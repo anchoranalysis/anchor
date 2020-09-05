@@ -40,7 +40,7 @@ public abstract class ProcessVoxelNeighborAbsoluteWithSlidingBuffer<T>
     private final SlidingBuffer<?> rbb;
     private final Extent extent;
 
-    private VoxelBuffer<?> bb;
+    private VoxelBuffer<?> buffer;
     protected int zChange;
     protected int sourceVal;
     private int sourceOffsetXY;
@@ -58,7 +58,7 @@ public abstract class ProcessVoxelNeighborAbsoluteWithSlidingBuffer<T>
 
     @Override
     public void notifyChangeZ(int zChange, int z) {
-        bb = rbb.bufferRel(zChange);
+        buffer = rbb.bufferRel(zChange);
         this.zChange = zChange;
     }
 
@@ -71,15 +71,15 @@ public abstract class ProcessVoxelNeighborAbsoluteWithSlidingBuffer<T>
     }
 
     protected int getInt(int index) {
-        return bb.getInt(index);
+        return buffer.getInt(index);
     }
 
     protected void putInt(int index, int valToAssign) {
-        bb.putInt(index, valToAssign);
+        buffer.putInt(index, valToAssign);
     }
 
     protected int getInt(int xChange, int yChange) {
-        return bb.getInt(changedOffset(xChange, yChange));
+        return buffer.getInt(changedOffset(xChange, yChange));
     }
 
     public Extent extent() {

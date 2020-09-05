@@ -49,8 +49,8 @@ public class MaskOr {
                 first.voxels(),
                 second.voxels(),
                 (point, bufferSource, bufferReceive, offset) -> {
-                    if (bufferReceive.get(offset) == receiveOn) {
-                        bufferSource.put(offset, sourceOn);
+                    if (bufferReceive.getRaw(offset) == receiveOn) {
+                        bufferSource.putRaw(offset, sourceOn);
                     }
                 });
     }

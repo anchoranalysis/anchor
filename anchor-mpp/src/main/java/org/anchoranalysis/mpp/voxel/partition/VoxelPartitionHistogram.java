@@ -24,41 +24,55 @@
  * #L%
  */
 
-package org.anchoranalysis.mpp.pixelpart;
+package org.anchoranalysis.mpp.voxel.partition;
 
 import java.util.ArrayList;
-import org.anchoranalysis.mpp.pixelpart.factory.PixelPartFactory;
+import java.util.List;
+import org.anchoranalysis.image.histogram.Histogram;
+import org.anchoranalysis.image.histogram.HistogramCreator;
+import org.anchoranalysis.mpp.voxel.partition.factory.VoxelPartitionFactory;
 
-/**
- * @author Owen Feehan
- * @param <T> part-type
- */
-public class IndexByChannel<T> {
+public class VoxelPartitionHistogram implements VoxelPartition<Histogram> {
 
-    private ArrayList<IndexByRegion<T>> delegate = new ArrayList<>();
+    private Histogram combined;
+    private List<Histogram> list;
 
-    public boolean add(IndexByRegion<T> e) {
-        return delegate.add(e);
-    }
+    public VoxelPartitionHistogram(int numSlices, HistogramCreator histogramFactory) {
 
-    public void init(PixelPartFactory<T> factory, int numChannel, int numRegions, int numSlices) {
+        combined = histogramFactory.create();
 
-        for (int i = 0; i < numChannel; i++) {
-            delegate.add(new IndexByRegion<>(factory, numRegions, numSlices));
+        list = new ArrayList<>();
+        for (int i = 0; i < numSlices; i++) {
+            list.add(histogramFactory.create());
         }
     }
 
-    public IndexByRegion<T> get(int index) {
-        return delegate.get(index);
+    @Override
+    public Histogram getSlice(int sliceID) {
+        return list.get(sliceID);
     }
 
-    public int size() {
-        return delegate.size();
+    @Override
+    public void addForSlice(int sliceID, int val) {
+        list.get(sliceID).incrementValue(val);
+        combined.incrementValue(val);
     }
 
-    public void cleanUp(PixelPartFactory<T> factory) {
-        for (int i = 0; i < delegate.size(); i++) {
-            delegate.get(i).cleanUp(factory);
+    @Override
+    public Histogram getCombined() {
+        return combined;
+    }
+
+    @Override
+    public void cleanUp(VoxelPartitionFactory<Histogram> factory) {
+        factory.addUnused(combined);
+        for (int i = 0; i < list.size(); i++) {
+            factory.addUnused(list.get(i));
         }
+    }
+
+    @Override
+    public int numSlices() {
+        return list.size();
     }
 }

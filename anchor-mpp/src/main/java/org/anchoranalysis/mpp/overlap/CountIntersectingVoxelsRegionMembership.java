@@ -53,8 +53,8 @@ class CountIntersectingVoxelsRegionMembership extends CountIntersectingVoxels {
             for (int x = box.x().min(); x < box.x().max(); x++) {
                 int xOther = x + box.x().rel();
 
-                byte posCheck = buffer1.get(box.e1().offset(x, y));
-                byte posCheckOther = buffer2.get(box.e2().offset(xOther, yOther));
+                byte posCheck = buffer1.getRaw(box.e1().offset(x, y));
+                byte posCheckOther = buffer2.getRaw(box.e2().offset(xOther, yOther));
 
                 if (isPixelInRegion(posCheck) && isPixelInRegion(posCheckOther)) {
                     cnt++;

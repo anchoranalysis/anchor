@@ -45,13 +45,13 @@ import org.anchoranalysis.image.voxel.statistics.VoxelStatisticsFromHistogram;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMap;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMembershipWithFlags;
 import org.anchoranalysis.mpp.mark.Mark;
-import org.anchoranalysis.mpp.pixelpart.IndexByChannel;
-import org.anchoranalysis.mpp.pixelpart.factory.PixelPartFactory;
-import org.anchoranalysis.mpp.pixelpart.factory.PixelPartFactoryHistogram;
+import org.anchoranalysis.mpp.voxel.partition.IndexByChannel;
+import org.anchoranalysis.mpp.voxel.partition.factory.VoxelPartitionFactory;
+import org.anchoranalysis.mpp.voxel.partition.factory.VoxelPartitonFactoryHistogram;
 
 class VoxelizedMarkHistogram implements VoxelizedMark {
 
-    private static final PixelPartFactory<Histogram> FACTORY = new PixelPartFactoryHistogram();
+    private static final VoxelPartitionFactory<Histogram> FACTORY = new VoxelPartitonFactoryHistogram();
 
     // Quick access to what is inside and what is outside
     private final IndexByChannel<Histogram> partitionList;
@@ -207,8 +207,8 @@ class VoxelizedMarkHistogram implements VoxelizedMark {
 
                 byte membership = mark.isPointInside(new Point3d(running));
 
-                buffer.put(localOffset, membership);
-                bufferMIP.put(localOffset, membershipMIP(membership, bufferMIP, localOffset));
+                buffer.putRaw(localOffset, membership);
+                bufferMIP.putRaw(localOffset, membershipMIP(membership, bufferMIP, localOffset));
 
                 AddVoxelsToHistogram.addVoxels(
                         membership,
@@ -222,7 +222,7 @@ class VoxelizedMarkHistogram implements VoxelizedMark {
     }
 
     private static byte membershipMIP(byte membership, UnsignedByteBuffer bufferMIP, int localOffset) {
-        byte membershipMIP = bufferMIP.get(localOffset);
+        byte membershipMIP = bufferMIP.getRaw(localOffset);
         membershipMIP = (byte) (membershipMIP | membership);
         return membershipMIP;
     }

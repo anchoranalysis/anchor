@@ -77,13 +77,13 @@ public class MaskXor {
                 voxelsSecond,
                 (point, bufferSource, bufferReceive, offset) -> {
                     boolean identicalStates =
-                            (bufferSource.get(offset) == sourceOn)
-                                    == (bufferReceive.get(offset) == receiveOn);
+                            (bufferSource.getRaw(offset) == sourceOn)
+                                    == (bufferReceive.getRaw(offset) == receiveOn);
 
                     if (identicalStates) {
-                        bufferSource.put(offset, sourceOff);
+                        bufferSource.putRaw(offset, sourceOff);
                     } else {
-                        bufferSource.put(offset, sourceOn);
+                        bufferSource.putRaw(offset, sourceOn);
                     }
                 });
     }

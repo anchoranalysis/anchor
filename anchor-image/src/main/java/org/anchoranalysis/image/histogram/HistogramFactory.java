@@ -162,8 +162,8 @@ public class HistogramFactory {
 
         for (int z = cornerMin.z(); z <= cornerMax.z(); z++) {
 
-            VoxelBuffer<?> bb = inputBuffer.slice(z);
-            UnsignedByteBuffer bbMask = object.sliceBufferGlobal(z);
+            VoxelBuffer<?> buffer = inputBuffer.slice(z);
+            UnsignedByteBuffer bufferMask = object.sliceBufferGlobal(z);
 
             for (int y = cornerMin.y(); y <= cornerMax.y(); y++) {
                 for (int x = cornerMin.x(); x <= cornerMax.x(); x++) {
@@ -171,10 +171,10 @@ public class HistogramFactory {
                     int offset = extent.offset(x, y);
                     int offsetMask = object.offsetGlobal(x, y);
 
-                    byte valueOnMask = bbMask.get(offsetMask);
+                    byte valueOnMask = bufferMask.getRaw(offsetMask);
 
                     if (valueOnMask == matchValue) {
-                        int val = bb.getInt(offset);
+                        int val = buffer.getInt(offset);
                         histogram.incrementValue(val);
                     }
                 }
@@ -212,9 +212,9 @@ public class HistogramFactory {
         return histogram;
     }
 
-    private static void addBufferToHistogram(Histogram histogram, VoxelBuffer<?> bb, int maxOffset) {
+    private static void addBufferToHistogram(Histogram histogram, VoxelBuffer<?> buffer, int maxOffset) {
         for (int offset = 0; offset < maxOffset; offset++) {
-            int val = bb.getInt(offset);
+            int val = buffer.getInt(offset);
             histogram.incrementValue(val);
         }
     }

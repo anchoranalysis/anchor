@@ -136,8 +136,8 @@ public class ObjectAsMaskGenerator extends RasterGenerator
 
             while (pixelsIn.hasRemaining()) {
 
-                if (pixelsIn.getByte() == matchValue) {
-                    pixelsOut.put(pixelsIn.position() - 1, outOnValueByte);
+                if (pixelsIn.getRaw() == matchValue) {
+                    pixelsOut.putRaw(pixelsIn.position() - 1, outOnValueByte);
                 }
             }
         }

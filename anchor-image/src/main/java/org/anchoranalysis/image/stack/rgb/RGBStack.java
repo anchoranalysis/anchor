@@ -200,12 +200,10 @@ public class RGBStack {
                                 pointGlobal.x() - object.boundingBox().cornerMin().x(),
                                 pointGlobal.y() - object.boundingBox().cornerMin().y());
 
-                if (inArr.get(objectMaskOffset) != objectMaskOn) {
-                    continue;
+                if (inArr.getRaw(objectMaskOffset) == objectMaskOn) {
+                    RGBOutputUtils.writeRGBColorToByteArray(
+                            color, pointGlobal, stack.getChannel(0).dimensions(), red, blue, green);
                 }
-
-                RGBOutputUtils.writeRGBColorToByteArr(
-                        color, pointGlobal, stack.getChannel(0).dimensions(), red, blue, green);
             }
         }
     }

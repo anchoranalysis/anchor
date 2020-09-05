@@ -57,7 +57,7 @@ public class ByteFrom32BitUnsignedInt extends ConvertToByte {
         
         for (int indexIn = 0; indexIn < sizeBytes; indexIn += bytesPerPixel) {
             int value = DataTools.bytesToInt(sourceArray, indexIn, littleEndian);
-            destination.put( (byte) (value * convertRatio) );
+            destination.putDouble(value * convertRatio);
         }
         
         return destination;

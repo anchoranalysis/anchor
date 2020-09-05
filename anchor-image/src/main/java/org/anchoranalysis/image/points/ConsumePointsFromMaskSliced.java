@@ -104,9 +104,9 @@ class ConsumePointsFromMaskSliced {
     public void secondHalf() {
         for (int z = (startZ - 1); z >= cornerMin.z(); z--) {
 
-            UnsignedByteBuffer bb = voxels.sliceBuffer(z);
+            UnsignedByteBuffer buffer = voxels.sliceBuffer(z);
 
-            if (!addPointsFromSlice(bb, z)) {
+            if (!addPointsFromSlice(buffer, z)) {
                 successiveEmptySlices = 0;
 
                 // We don't increase the counter until we've been inside a non-empty slice
@@ -119,14 +119,14 @@ class ConsumePointsFromMaskSliced {
         }
     }
 
-    private boolean addPointsFromSlice(UnsignedByteBuffer bb, int z) {
+    private boolean addPointsFromSlice(UnsignedByteBuffer buffer, int z) {
 
         boolean addedToSlice = false;
         for (int y = cornerMin.y(); y <= cornerMax.y(); y++) {
             for (int x = cornerMin.x(); x <= cornerMax.x(); x++) {
 
                 int offset = extent.offset(x, y);
-                if (bb.get(offset) == bvb.getOnByte()) {
+                if (buffer.getRaw(offset) == bvb.getOnByte()) {
                     addedToSlice = true;
                     consumer.accept(new Point3i(x, y, z));
                 }

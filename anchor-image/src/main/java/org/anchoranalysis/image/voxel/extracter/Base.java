@@ -136,7 +136,7 @@ abstract class Base<T> implements VoxelsExtracter<T> {
                                     .extent()
                                     .offset(x + relativePosition.x(), y + relativePosition.y());
 
-                    if (maskBuffer.getByte() == bvb.getOnByte()) {
+                    if (maskBuffer.getRaw() == bvb.getOnByte()) {
                         copyBufferIndexTo(srcArr, srcIndex, destArr, destIndex);
                     }
                 }

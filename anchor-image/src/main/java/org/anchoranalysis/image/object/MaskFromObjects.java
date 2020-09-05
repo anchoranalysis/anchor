@@ -153,8 +153,8 @@ public class MaskFromObjects {
                     pointGlobal.x() <= maxGlobal.x();
                     pointGlobal.incrementX()) {
 
-                if (maskIn.getByte() == matchValue) {
-                    pixelsOut.put(extentOut.offsetSlice(pointGlobal), outValByte);
+                if (maskIn.getRaw() == matchValue) {
+                    pixelsOut.putRaw(extentOut.offsetSlice(pointGlobal), outValByte);
                 }
             }
         }

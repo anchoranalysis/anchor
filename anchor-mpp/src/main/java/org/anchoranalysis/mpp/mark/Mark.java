@@ -151,16 +151,16 @@ public abstract class Mark implements Serializable, Identifiable {
             int zLocal = point.z() - box.cornerMin().z();
             UnsignedByteBuffer maskSlice = object.sliceBufferLocal(zLocal);
 
-            int cnt = 0;
+            int count = 0;
             for (point.setY(box.cornerMin().y()); point.y() <= maxPos.y(); point.incrementY()) {
                 for (point.setX(box.cornerMin().x()); point.x() <= maxPos.x(); point.incrementX()) {
 
                     byte membership = evalPointInside(point);
 
                     if (rm.isMemberFlag(membership)) {
-                        maskSlice.put(cnt, maskOn);
+                        maskSlice.putRaw(count, maskOn);
                     }
-                    cnt++;
+                    count++;
                 }
             }
         }
@@ -193,7 +193,7 @@ public abstract class Mark implements Serializable, Identifiable {
             // Z coordinates are the same as we only scale in XY
             pointScaled.setZ(point.z());
 
-            int cnt = 0;
+            int count = 0;
             for (point.setY(box.cornerMin().y()); point.y() <= maxPos.y(); point.incrementY()) {
                 for (point.setX(box.cornerMin().x()); point.x() <= maxPos.x(); point.incrementX()) {
 
@@ -203,9 +203,9 @@ public abstract class Mark implements Serializable, Identifiable {
                     byte membership = isPointInside(pointScaled);
 
                     if (rm.isMemberFlag(membership)) {
-                        maskSlice.put(cnt, maskOn);
+                        maskSlice.putRaw(count, maskOn);
                     }
-                    cnt++;
+                    count++;
                 }
             }
         }

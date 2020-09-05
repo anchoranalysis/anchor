@@ -45,7 +45,7 @@ public class ByteFrom8BitUnsignedInterleaving extends ConvertToByte {
 
         if (source.capacity()==sizeXY && channelIndexRelative==0) {
             // Reuse the existing buffer, if it's single channeled
-            return new UnsignedByteBuffer(source);
+            return UnsignedByteBuffer.wrapRaw(source);
         } else {
             UnsignedByteBuffer destination = allocateBuffer();
             
@@ -55,7 +55,7 @@ public class ByteFrom8BitUnsignedInterleaving extends ConvertToByte {
             for (int indexIn = channelIndexRelative;
                     indexIn < totalBytesSource;
                     indexIn += numberChannelsPerArray) {
-                destination.put( source.get(indexIn) );
+                destination.putRaw( source.get(indexIn) );
             }
             
             return destination;

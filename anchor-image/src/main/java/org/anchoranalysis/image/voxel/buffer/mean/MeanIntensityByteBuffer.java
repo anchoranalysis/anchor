@@ -28,7 +28,6 @@ package org.anchoranalysis.image.voxel.buffer.mean;
 
 import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.nio.FloatBuffer;
-import org.anchoranalysis.image.convert.PrimitiveConverter;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 
@@ -41,18 +40,17 @@ public class MeanIntensityByteBuffer extends MeanIntensityBuffer<UnsignedByteBuf
 
     @Override
     protected void processPixel(UnsignedByteBuffer pixels, int index) {
-        byte inPixel = pixels.get(index);
-        incrSumBuffer(index, PrimitiveConverter.unsignedByteToInt(inPixel));
+        incrementSumBuffer(index, pixels.getUnsignedByte(index));
     }
 
     @Override
     public void finalizeBuffer() {
         int maxIndex = volumeXY();
 
-        UnsignedByteBuffer bbFlat = flatBuffer();
-        FloatBuffer bbSum = sumBuffer();
+        UnsignedByteBuffer bufferFlat = flatBuffer();
+        FloatBuffer bufferSum = sumBuffer();
         for (int i = 0; i < maxIndex; i++) {
-            bbFlat.put(i, (byte) (bbSum.get(i) / numberSlicesProcessed()));
+            bufferFlat.putFloat(i, bufferSum.get(i) / numberSlicesProcessed());
         }
     }
 }

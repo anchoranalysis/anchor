@@ -44,7 +44,7 @@ final class RequireIntersectionWithObject implements ProcessVoxel {
     private final ObjectMask objectMask;
     private final byte byteOn;
 
-    private UnsignedByteBuffer bbMask;
+    private UnsignedByteBuffer bufferObject;
 
     /**
      * Constructor
@@ -62,7 +62,7 @@ final class RequireIntersectionWithObject implements ProcessVoxel {
     @Override
     public void notifyChangeSlice(int z) {
         process.notifyChangeSlice(z);
-        bbMask = objectMask.sliceBufferGlobal(z);
+        bufferObject = objectMask.sliceBufferGlobal(z);
     }
 
     @Override
@@ -82,6 +82,6 @@ final class RequireIntersectionWithObject implements ProcessVoxel {
         int offsetMask = objectMask.offsetGlobal(point.x(), point.y());
 
         // We skip if our containing object-mask doesn't include it
-        return (bbMask.get(offsetMask) == byteOn);
+        return (bufferObject.getRaw(offsetMask) == byteOn);
     }
 }

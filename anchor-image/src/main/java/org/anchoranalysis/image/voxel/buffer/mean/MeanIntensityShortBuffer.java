@@ -42,17 +42,17 @@ public class MeanIntensityShortBuffer extends MeanIntensityBuffer<ShortBuffer> {
     @Override
     protected void processPixel(ShortBuffer pixels, int index) {
         short inPixel = pixels.get(index);
-        incrSumBuffer(index, PrimitiveConverter.unsignedShortToInt(inPixel));
+        incrementSumBuffer(index, PrimitiveConverter.unsignedShortToInt(inPixel));
     }
 
     @Override
     public void finalizeBuffer() {
         int maxIndex = volumeXY();
 
-        ShortBuffer bbFlat = flatBuffer();
-        FloatBuffer bbSum = sumBuffer();
+        ShortBuffer bufferFlat = flatBuffer();
+        FloatBuffer bufferSum = sumBuffer();
         for (int i = 0; i < maxIndex; i++) {
-            bbFlat.put(i, (byte) (bbSum.get(i) / numberSlicesProcessed()));
+            bufferFlat.put(i, (byte) (bufferSum.get(i) / numberSlicesProcessed()));
         }
     }
 }

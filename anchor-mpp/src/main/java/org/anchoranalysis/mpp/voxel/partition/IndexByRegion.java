@@ -24,41 +24,48 @@
  * #L%
  */
 
-package org.anchoranalysis.mpp.pixelpart.factory;
+package org.anchoranalysis.mpp.voxel.partition;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.mpp.pixelpart.PixelPart;
-import org.anchoranalysis.mpp.pixelpart.PixelPartHistogram;
+import org.anchoranalysis.mpp.voxel.partition.factory.VoxelPartitionFactory;
 
-public class PixelPartFactoryHistogramReuse implements PixelPartFactory<Histogram> {
+/**
+ * @author Owen Feehan
+ * @param <T> part-type
+ */
+public class IndexByRegion<T> {
 
-    private int maxSize = 100;
-    private List<Histogram> listUnused = new ArrayList<>();
+    private List<VoxelPartition<T>> list;
 
-    @Override
-    public PixelPart<Histogram> create(int numSlices) {
-        return new PixelPartHistogram(numSlices, this::createHistogram);
-    }
-
-    @Override
-    public void addUnused(Histogram part) {
-        if (listUnused.size() < maxSize) {
-            listUnused.add(part);
+    public IndexByRegion(VoxelPartitionFactory<T> factory, int numRegions, int numSlices) {
+        list = new ArrayList<>();
+        for (int i = 0; i < numRegions; i++) {
+            list.add(factory.create(numSlices));
         }
     }
 
-    private Histogram createHistogram() {
-        if (!listUnused.isEmpty()) {
-            // we retrieve one from the unused list and reset it
+    // Should only be used RO, if we want to maintain integrity with the combined list
+    public T getForAllSlices(int regionID) {
+        return list.get(regionID).getCombined();
+    }
 
-            Histogram histogram = listUnused.remove(0);
-            histogram.reset();
-            return histogram;
+    // Should only be used RO, if we want to maintain integrity with the combined list
+    public T getForSlice(int regionID, int sliceID) {
+        return list.get(regionID).getSlice(sliceID);
+    }
 
-        } else {
-            return new Histogram(255);
+    public void addToVoxelList(int regionID, int sliceID, int val) {
+        list.get(regionID).addForSlice(sliceID, val);
+    }
+
+    public void cleanUp(VoxelPartitionFactory<T> factory) {
+        for (int i = 0; i < list.size(); i++) {
+            list.get(i).cleanUp(factory);
         }
+    }
+
+    public int numSlices() {
+        return list.get(0).numSlices();
     }
 }

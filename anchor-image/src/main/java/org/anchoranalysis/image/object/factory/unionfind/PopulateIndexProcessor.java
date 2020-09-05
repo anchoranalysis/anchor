@@ -42,7 +42,7 @@ class PopulateIndexProcessor<T> implements ProcessVoxelSliceBuffer<T> {
     private BinaryValuesByte bvb;
     private final BufferReadWrite<T> bufferReaderWriter;
 
-    private IntBuffer bbIndex;
+    private IntBuffer bufferIndex;
     private int count = 1;
 
     public PopulateIndexProcessor(
@@ -60,7 +60,7 @@ class PopulateIndexProcessor<T> implements ProcessVoxelSliceBuffer<T> {
 
     @Override
     public void notifyChangeSlice(int z) {
-        bbIndex = indexBuffer.sliceBuffer(z);
+        bufferIndex = indexBuffer.sliceBuffer(z);
         if (z != 0) {
             mergeWithNeighbors.shift();
         }
@@ -69,16 +69,16 @@ class PopulateIndexProcessor<T> implements ProcessVoxelSliceBuffer<T> {
     @Override
     public void process(Point3i point, T buffer, int offsetSlice) {
         if (bufferReaderWriter.isBufferOn(buffer, offsetSlice, bv, bvb)
-                && bbIndex.get(offsetSlice) == 0) {
+                && bufferIndex.get(offsetSlice) == 0) {
 
             int neighborLabel = mergeWithNeighbors.minNeighborLabel(point, 0, offsetSlice);
             if (neighborLabel == -1) {
                 bufferReaderWriter.putBufferCount(buffer, offsetSlice, count);
-                bbIndex.put(offsetSlice, count);
+                bufferIndex.put(offsetSlice, count);
                 mergeWithNeighbors.addElement(count);
                 count++;
             } else {
-                bbIndex.put(offsetSlice, neighborLabel);
+                bufferIndex.put(offsetSlice, neighborLabel);
             }
         }
     }

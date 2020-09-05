@@ -81,9 +81,9 @@ public class ApplyKernel {
                 for (point.setX(0); point.x() < extent.x(); point.incrementX()) {
 
                     if (kernel.acceptPoint(ind, point)) {
-                        outArr.put(ind, outBinary.getOnByte());
+                        outArr.putRaw(ind, outBinary.getOnByte());
                     } else {
-                        outArr.put(ind, outBinary.getOffByte());
+                        outArr.putRaw(ind, outBinary.getOffByte());
                     }
 
                     ind++;
@@ -149,7 +149,7 @@ public class ApplyKernel {
                         point.incrementX()) {
 
                     int ind = extent.offsetSlice(point);
-                    cnt += kernel.countAtPos(ind, point);
+                    cnt += kernel.countAtPosition(ind, point);
                 }
             }
         }
@@ -198,7 +198,7 @@ public class ApplyKernel {
                         point.incrementX()) {
 
                     int ind = extent.offsetSlice(point);
-                    if (kernel.countAtPos(ind, point) > 0) {
+                    if (kernel.countAtPosition(ind, point) > 0) {
                         return true;
                     }
                 }
@@ -246,7 +246,7 @@ public class ApplyKernel {
 
         int localSlicesSize = 3;
 
-        int cnt = 0;
+        int count = 0;
 
         BoundingBox box = object.boundingBox();
         ReadableTuple3i cornerMin = box.cornerMin();
@@ -273,8 +273,8 @@ public class ApplyKernel {
 
                     int indKernel = extent.offsetSlice(point);
 
-                    if (bufMask.get(ind) == bvb.getOnByte() && kernel.acceptPoint(indKernel, point)) {
-                        cnt++;
+                    if (bufMask.getRaw(ind) == bvb.getOnByte() && kernel.acceptPoint(indKernel, point)) {
+                        count++;
                     }
 
                     ind++;
@@ -282,6 +282,6 @@ public class ApplyKernel {
             }
         }
 
-        return cnt;
+        return count;
     }
 }

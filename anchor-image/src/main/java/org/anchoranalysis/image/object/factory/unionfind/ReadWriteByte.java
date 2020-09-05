@@ -35,11 +35,11 @@ final class ReadWriteByte extends BufferReadWrite<UnsignedByteBuffer> {
     @Override
     protected boolean isBufferOn(
             UnsignedByteBuffer buffer, int offset, BinaryValues bv, BinaryValuesByte bvb) {
-        return buffer.getByte(offset) == bvb.getOnByte();
+        return buffer.getRaw(offset) == bvb.getOnByte();
     }
 
     @Override
     protected void putBufferCount(UnsignedByteBuffer buffer, int offset, int count) {
-        buffer.putInt(offset, count);
+        buffer.putUnsignedByte(offset, count);
     }
 }

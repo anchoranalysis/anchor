@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.image.voxel.kernel;
 
-import java.nio.ByteBuffer;
 import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.Voxels;
 
@@ -59,6 +58,6 @@ public class LocalSlices {
     // If an invalid index is requested null is returned
     public UnsignedByteBuffer getLocal(int rel) {
         byte[] slice = arr[rel + shift];
-        return slice != null ? new UnsignedByteBuffer(ByteBuffer.wrap(slice)) : null;
+        return slice != null ? UnsignedByteBuffer.wrapRaw(slice) : null;
     }
 }

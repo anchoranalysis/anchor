@@ -30,7 +30,6 @@ import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
-import org.anchoranalysis.image.convert.PrimitiveConverter;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferUnsignedByte;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
@@ -45,14 +44,14 @@ public final class ConvertToByteNoScaling extends VoxelsConverter<UnsignedByteBu
         UnsignedByteBuffer bufferOut = UnsignedByteBuffer.allocate(bufferIn.buffer().capacity());
 
         while (bufferIn.buffer().hasRemaining()) {
-            float f = bufferIn.buffer().get();
-            if (f > UnsignedByteVoxelType.MAX_VALUE_INT) {
-                f = UnsignedByteVoxelType.MAX_VALUE_INT;
+            float value = bufferIn.buffer().get();
+            if (value > UnsignedByteVoxelType.MAX_VALUE_INT) {
+                value = UnsignedByteVoxelType.MAX_VALUE_INT;
             }
-            if (f < 0) {
-                f = 0;
+            if (value < 0) {
+                value = 0;
             }
-            bufferOut.put((byte) f);
+            bufferOut.putFloat(value);
         }
 
         return VoxelBufferUnsignedByte.wrapBuffer(bufferOut);
@@ -64,7 +63,7 @@ public final class ConvertToByteNoScaling extends VoxelsConverter<UnsignedByteBu
         UnsignedByteBuffer bufferOut = UnsignedByteBuffer.allocate(bufferIn.buffer().capacity());
 
         while (bufferIn.buffer().hasRemaining()) {
-            bufferOut.put((byte) PrimitiveConverter.unsignedIntToLong(bufferIn.buffer().get()));
+            bufferOut.putUnsignedInt(bufferIn.buffer().get());
         }
 
         return VoxelBufferUnsignedByte.wrapBuffer(bufferOut);
@@ -76,7 +75,7 @@ public final class ConvertToByteNoScaling extends VoxelsConverter<UnsignedByteBu
         UnsignedByteBuffer bufferOut = UnsignedByteBuffer.allocate(bufferIn.buffer().capacity());
 
         while (bufferIn.buffer().hasRemaining()) {
-            bufferOut.put((byte) PrimitiveConverter.unsignedShortToInt(bufferIn.buffer().get()));
+            bufferOut.putUnsignedShort(bufferIn.buffer().get());
         }
 
         return VoxelBufferUnsignedByte.wrapBuffer(bufferOut);

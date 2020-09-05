@@ -62,9 +62,9 @@ public class MaskIfHighLow {
                 first.voxels(),
                 second.voxels(),
                 (point, bufferSource, bufferReceive, offset) -> {
-                    if (bufferSource.get(offset) == sourceOn
-                            && bufferReceive.get(offset) == receiveOn) {
-                        bufferSource.put(offset, sourceOff);
+                    if (bufferSource.getRaw(offset) == sourceOn
+                            && bufferReceive.getRaw(offset) == receiveOn) {
+                        bufferSource.putRaw(offset, sourceOff);
                     }
                 });
     }

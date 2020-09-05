@@ -130,7 +130,7 @@ public class ThresholderGlobalTest {
                 voxels,
                 box,
                 (Point3i point, UnsignedByteBuffer buffer, int offset) ->
-                        buffer.put(
-                                offset, (byte) ((point.y() % 50 + point.x() % 50) + addToPixels)));
+                        buffer.putUnsignedByte(
+                                offset, (point.y() % 50 + point.x() % 50) + addToPixels));
     }
 }

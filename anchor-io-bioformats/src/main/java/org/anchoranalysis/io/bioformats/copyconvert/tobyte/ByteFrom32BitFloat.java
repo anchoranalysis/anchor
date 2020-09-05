@@ -54,7 +54,7 @@ public class ByteFrom32BitFloat extends ConvertToByte {
             if (value < 0) {
                 value = 0;
             }
-            destination.put( (byte) (value) );
+            destination.putFloat(value);
         }
         
         return destination;

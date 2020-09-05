@@ -90,6 +90,6 @@ class DuplicateBuffer {
     }
     
     public static UnsignedByteBuffer copy(UnsignedByteBuffer buffer) {
-        return new UnsignedByteBuffer( copy(buffer.getDelegate()) );
+        return UnsignedByteBuffer.wrapRaw( copy(buffer.getDelegate()) );
     }
 }

@@ -80,7 +80,7 @@ public final class ConvertToShortNoScaling extends VoxelsConverter<ShortBuffer> 
         ShortBuffer bufferOut = ShortBuffer.allocate(bufferIn.size());
 
         while (bufferIn.buffer().hasRemaining()) {
-            bufferOut.put((byte) bufferIn.buffer().getInt());
+            bufferOut.put((byte) bufferIn.buffer().getUnsignedByte());
         }
 
         return VoxelBufferShort.wrapBuffer(bufferOut);

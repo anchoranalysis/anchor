@@ -127,12 +127,12 @@ public class SetUpdatable extends UpdatablePointsContainer {
 
         for (position.setZ(0); position.z() < dimensions.z(); position.incrementZ()) {
 
-            UnsignedByteBuffer bbBinaryImage = voxelsBinary.sliceBuffer(position.z());
+            UnsignedByteBuffer bufferMask = voxelsBinary.sliceBuffer(position.z());
 
             for (position.setY(0); position.y() < dimensions.y(); position.incrementY()) {
                 for (position.setX(0); position.x() < dimensions.x(); position.incrementX()) {
 
-                    if (bbBinaryImage.get(extent.offsetSlice(position)) == bvb.getOnByte()) {
+                    if (bufferMask.getRaw(extent.offsetSlice(position)) == bvb.getOnByte()) {
                         setPoints.add(PointConverter.doubleFromInt(position));
                     }
                 }
@@ -186,7 +186,7 @@ public class SetUpdatable extends UpdatablePointsContainer {
             for (position.setY(0); position.y() < extent.y(); position.incrementY()) {
                 for (position.setX(0); position.x() < extent.x(); position.incrementX()) {
 
-                    byte membership = buffer.get(extent.offset(position.x(), position.y()));
+                    byte membership = buffer.getRaw(extent.offset(position.x(), position.y()));
 
                     if (!rm.isMemberFlag(membership, flags)) {
                         rmvPoint(position, crnrPoint);
@@ -246,32 +246,32 @@ public class SetUpdatable extends UpdatablePointsContainer {
     }
 
     private void addPointsForSlice( // NOSONAR
-            Point3i crntExtentPoint,
-            ReadableTuple3i crnrPoint,
+            Point3i cornerExtentPoint,
+            ReadableTuple3i cornerPoint,
             Extent extent,
             UnsignedByteBuffer buffer,
-            UnsignedByteBuffer bbBinaryImage,
+            UnsignedByteBuffer bufferMask,
             BinaryValuesByte bvb,
             int zGlobal,
             RegionMembership rm,
             List<VoxelizedMarkMemo> neighbors) {
         byte flags = rm.flags();
 
-        for (crntExtentPoint.setY(0);
-                crntExtentPoint.y() < extent.y();
-                crntExtentPoint.incrementY()) {
-            int yGlobal = crnrPoint.y() + crntExtentPoint.y();
+        for (cornerExtentPoint.setY(0);
+                cornerExtentPoint.y() < extent.y();
+                cornerExtentPoint.incrementY()) {
+            int yGlobal = cornerPoint.y() + cornerExtentPoint.y();
 
-            for (crntExtentPoint.setX(0);
-                    crntExtentPoint.x() < extent.x();
-                    crntExtentPoint.incrementX()) {
+            for (cornerExtentPoint.setX(0);
+                    cornerExtentPoint.x() < extent.x();
+                    cornerExtentPoint.incrementX()) {
 
-                int xGlobal = crnrPoint.x() + crntExtentPoint.x();
+                int xGlobal = cornerPoint.x() + cornerExtentPoint.x();
 
                 int globOffset = extent.offset(xGlobal, yGlobal);
-                byte posCheck = buffer.get(extent.offset(crntExtentPoint.x(), crntExtentPoint.y()));
+                byte posCheck = buffer.getRaw(extent.offset(cornerExtentPoint.x(), cornerExtentPoint.y()));
                 if (rm.isMemberFlag(posCheck, flags)
-                        && bbBinaryImage.get(globOffset) == bvb.getOnByte()) {
+                        && bufferMask.getRaw(globOffset) == bvb.getOnByte()) {
 
                     Point3d pointGlobal = new Point3d(xGlobal, yGlobal, zGlobal);
 

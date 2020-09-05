@@ -116,7 +116,7 @@ class PredicateImplementation<T> implements VoxelsPredicate {
             for (int y = srcStart.y(); y <= srcEnd.y(); y++) {
                 for (int x = srcStart.x(); x <= srcEnd.x(); x++) {
 
-                    if (maskBuffer.get(object.offsetGlobal(x, y)) == maskOnVal) {
+                    if (maskBuffer.getRaw(object.offsetGlobal(x, y)) == maskOnVal) {
 
                         int srcIndex = extent.offset(x, y);
                         srcArr.position(srcIndex);
@@ -190,7 +190,7 @@ class PredicateImplementation<T> implements VoxelsPredicate {
             VoxelBuffer<T> pixelIn = voxels.slice(z);
             UnsignedByteBuffer pixelOut = object.sliceBufferGlobal(z);
 
-            int ind = 0;
+            int indexMask = 0;
             for (int y = box.cornerMin().y(); y <= pointMax.y(); y++) {
                 for (int x = box.cornerMin().x(); x <= pointMax.x(); x++) {
 
@@ -198,10 +198,10 @@ class PredicateImplementation<T> implements VoxelsPredicate {
                     pixelIn.position(index);
 
                     if (predicate.test(pixelIn.buffer())) {
-                        pixelOut.put(ind, outOn);
+                        pixelOut.putRaw(indexMask, outOn);
                     }
 
-                    ind++;
+                    indexMask++;
                 }
             }
         }

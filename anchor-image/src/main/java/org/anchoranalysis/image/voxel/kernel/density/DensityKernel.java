@@ -87,7 +87,7 @@ public class DensityKernel extends BinaryKernel {
 
                 while (indLocal <= indLocalMax) {
 
-                    if (bv.isOn(arr.get(indLocal))) {
+                    if (bv.isOn(arr.getRaw(indLocal))) {
                         density.incrOn();
                     }
                     indLocal++;

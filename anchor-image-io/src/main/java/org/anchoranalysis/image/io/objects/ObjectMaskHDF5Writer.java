@@ -100,7 +100,7 @@ class ObjectMaskHDF5Writer {
 
             for (int y = 0; y < extent.y(); y++) {
                 for (int x = 0; x < extent.x(); x++) {
-                    md.set(buffer.get(extent.offset(x, y)), x, y, z);
+                    md.set(buffer.getRaw(extent.offset(x, y)), x, y, z);
                 }
             }
         }

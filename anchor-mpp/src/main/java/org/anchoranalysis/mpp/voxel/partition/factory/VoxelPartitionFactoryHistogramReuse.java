@@ -24,25 +24,41 @@
  * #L%
  */
 
-package org.anchoranalysis.mpp.pixelpart.factory;
+package org.anchoranalysis.mpp.voxel.partition.factory;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.image.histogram.HistogramCreator;
-import org.anchoranalysis.image.histogram.HistogramCreatorSimple;
-import org.anchoranalysis.mpp.pixelpart.PixelPart;
-import org.anchoranalysis.mpp.pixelpart.PixelPartHistogram;
+import org.anchoranalysis.mpp.voxel.partition.VoxelPartitionHistogram;
+import org.anchoranalysis.mpp.voxel.partition.VoxelPartition;
 
-public class PixelPartFactoryHistogram implements PixelPartFactory<Histogram> {
+public class VoxelPartitionFactoryHistogramReuse implements VoxelPartitionFactory<Histogram> {
 
-    private HistogramCreator factorySimple = new HistogramCreatorSimple();
+    private int maxSize = 100;
+    private List<Histogram> listUnused = new ArrayList<>();
 
     @Override
-    public PixelPart<Histogram> create(int numSlices) {
-        return new PixelPartHistogram(numSlices, factorySimple);
+    public VoxelPartition<Histogram> create(int numSlices) {
+        return new VoxelPartitionHistogram(numSlices, this::createHistogram);
     }
 
     @Override
     public void addUnused(Histogram part) {
-        // NOTHING TO DO
+        if (listUnused.size() < maxSize) {
+            listUnused.add(part);
+        }
+    }
+
+    private Histogram createHistogram() {
+        if (!listUnused.isEmpty()) {
+            // we retrieve one from the unused list and reset it
+
+            Histogram histogram = listUnused.remove(0);
+            histogram.reset();
+            return histogram;
+
+        } else {
+            return new Histogram(255);
+        }
     }
 }

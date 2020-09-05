@@ -188,7 +188,7 @@ public class Mask {
 
         int offset = voxels().extent().offsetSlice(point);
 
-        return buffer.getByte(offset) == binaryValuesByte.getOnByte();
+        return buffer.getRaw(offset) == binaryValuesByte.getOnByte();
     }
 
     public Mask duplicate() {

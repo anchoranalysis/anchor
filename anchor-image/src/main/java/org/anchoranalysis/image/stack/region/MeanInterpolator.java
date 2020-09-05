@@ -52,7 +52,7 @@ class MeanInterpolator {
             throws OperationFailedException {
 
         int sum = 0;
-        int cnt = 0;
+        int count = 0;
 
         for (int y = 0; y < sizeY; y++) {
 
@@ -63,22 +63,21 @@ class MeanInterpolator {
                 int x1 = x0 + x;
 
                 if (extent.contains(x1, y1, 0)) {
-                    int val = PrimitiveConverter.unsignedByteToInt(buffer.get(extent.offset(x0 + x, y1)));
-                    sum += val;
+                    sum += buffer.getUnsignedByte(extent.offset(x0 + x, y1));
 
-                    cnt++;
+                    count++;
                 }
             }
         }
 
-        if (cnt == 0) {
+        if (count == 0) {
             throw new OperationFailedException(EXC_ZERO_CNT);
         }
 
-        return (byte) (sum / cnt);
+        return (byte) (sum / count);
     }
 
-    public short getInterpolatedPixelShort(int x0, int y0, ShortBuffer bb, Extent e)
+    public short getInterpolatedPixelShort(int x0, int y0, ShortBuffer buffer, Extent e)
             throws OperationFailedException {
 
         int sum = 0;
@@ -93,7 +92,7 @@ class MeanInterpolator {
                 int x1 = x0 + x;
 
                 if (e.contains(x1, y1, 0)) {
-                    int val = PrimitiveConverter.unsignedShortToInt(bb.get(e.offset(x0 + x, y1)));
+                    int val = PrimitiveConverter.unsignedShortToInt(buffer.get(e.offset(x0 + x, y1)));
                     sum += val;
 
                     cnt++;

@@ -35,7 +35,7 @@ public class ByteFrom8BitUnsignedNoInterleaving extends ConvertToByte {
     protected UnsignedByteBuffer convert(ByteBuffer source, int channelIndexRelative) {
         if (source.capacity()==sizeXY && channelIndexRelative==0) {
             // Reuse the existing buffer, if it's single channeled
-            return new UnsignedByteBuffer(source);
+            return UnsignedByteBuffer.wrapRaw(source);
         } else {
             UnsignedByteBuffer destination = allocateBuffer();
             source.position(sizeBytes * channelIndexRelative);

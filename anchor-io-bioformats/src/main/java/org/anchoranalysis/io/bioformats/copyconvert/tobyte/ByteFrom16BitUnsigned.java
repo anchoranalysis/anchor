@@ -76,7 +76,7 @@ public class ByteFrom16BitUnsigned extends ConvertToByte {
                 value = 0;
             }
 
-            destination.put( (byte) (value) );
+            destination.putUnsignedByte(value);
         }
         return destination;
     }

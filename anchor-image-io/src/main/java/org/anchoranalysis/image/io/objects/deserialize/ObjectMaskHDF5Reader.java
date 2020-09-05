@@ -80,7 +80,7 @@ class ObjectMaskHDF5Reader {
 
             for (int y = 0; y < extent.y(); y++) {
                 for (int x = 0; x < extent.x(); x++) {
-                    buffer.put(extent.offset(x, y), mdb.get(x, y, z));
+                    buffer.putRaw(extent.offset(x, y), mdb.get(x, y, z));
                 }
             }
         }

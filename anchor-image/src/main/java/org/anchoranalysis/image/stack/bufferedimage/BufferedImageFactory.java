@@ -74,30 +74,30 @@ public class BufferedImageFactory {
     }
 
     private static BufferedImage createBufferedImageFromGrayscaleBuffer(
-            UnsignedByteBuffer bbGray, Extent extent) {
+            UnsignedByteBuffer bufferGray, Extent extent) {
 
         BufferedImage image =
                 new BufferedImage(extent.x(), extent.y(), BufferedImage.TYPE_BYTE_GRAY);
 
-        byte[] arr = bbGray.array();
+        byte[] arr = bufferGray.array();
         image.getWritableTile(0, 0).setDataElements(0, 0, extent.x(), extent.y(), arr);
 
         return image;
     }
 
     private static byte[] createCombinedByteArray(
-            Extent e, UnsignedByteBuffer bbRed, UnsignedByteBuffer bbGreen, UnsignedByteBuffer bbBlue) {
+            Extent e, UnsignedByteBuffer bufferRed, UnsignedByteBuffer bufferGreen, UnsignedByteBuffer bufferBlue) {
 
         int size = e.calculateVolumeAsInt();
-        byte[] arrComb = new byte[size * 3];
-        int cnt = 0;
+        byte[] combined = new byte[size * 3];
+        int count = 0;
         for (int i = 0; i < size; i++) {
 
-            arrComb[cnt++] = bbRed.get(i);
-            arrComb[cnt++] = bbGreen.get(i);
-            arrComb[cnt++] = bbBlue.get(i);
+            combined[count++] = bufferRed.getRaw(i);
+            combined[count++] = bufferGreen.getRaw(i);
+            combined[count++] = bufferBlue.getRaw(i);
         }
-        return arrComb;
+        return combined;
     }
 
     private static void checkExtentZ(Extent e) throws CreateException {

@@ -95,6 +95,6 @@ public class CountKernelNeighborhoodMask extends CountKernelNeighborhoodBase {
         }
 
         int indexGlobal = voxelsRequireHigh.extent().offset(x1, y1);
-        return bvRequireHigh.isOn(inArr.get(indexGlobal));
+        return bvRequireHigh.isOn(inArr.getRaw(indexGlobal));
     }
 }

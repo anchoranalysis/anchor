@@ -41,8 +41,7 @@ class BufferArrayList {
     public void init(EnergyStackWithoutParams stack, int z) {
 
         for (int c = 0; c < stack.getNumberChannels(); c++) {
-            UnsignedByteBuffer bb = stack.getChannel(c).voxels().asByte().slices().slice(z).buffer();
-            delegate.add(bb);
+            delegate.add(stack.getChannel(c).voxels().asByte().slices().slice(z).buffer());
         }
     }
 

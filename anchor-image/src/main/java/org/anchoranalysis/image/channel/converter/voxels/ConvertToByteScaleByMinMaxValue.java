@@ -64,18 +64,18 @@ public final class ConvertToByteScaleByMinMaxValue extends VoxelsConverter<Unsig
         UnsignedByteBuffer bufferOut = UnsignedByteBuffer.allocate(bufferIn.buffer().capacity());
 
         while (bufferIn.buffer().hasRemaining()) {
-            float val = bufferIn.buffer().get();
+            float value = bufferIn.buffer().get();
 
-            val = (int) scale * (val - subtract);
+            value = (int) scale * (value - subtract);
 
-            if (val > 255) {
-                val = 255;
+            if (value > 255) {
+                value = 255;
             }
-            if (val < 0) {
-                val = 0;
+            if (value < 0) {
+                value = 0;
             }
 
-            bufferOut.put((byte) val);
+            bufferOut.putFloat(value);
         }
 
         return VoxelBufferUnsignedByte.wrapBuffer(bufferOut);
@@ -90,16 +90,16 @@ public final class ConvertToByteScaleByMinMaxValue extends VoxelsConverter<Unsig
 
             long valOrig = bufferIn.buffer().get();
 
-            double val = scale * (valOrig - subtract);
+            double value = scale * (valOrig - subtract);
 
-            if (val > 255) {
-                val = 255;
+            if (value > 255) {
+                value = 255;
             }
-            if (val < 0) {
-                val = 0;
+            if (value < 0) {
+                value = 0;
             }
 
-            bufferOut.put((byte) val);
+            bufferOut.putDouble(value);
         }
 
         return VoxelBufferUnsignedByte.wrapBuffer(bufferOut);
@@ -114,16 +114,16 @@ public final class ConvertToByteScaleByMinMaxValue extends VoxelsConverter<Unsig
 
             int valOrig = PrimitiveConverter.unsignedShortToInt(bufferIn.buffer().get());
 
-            double val = scale * (valOrig - subtract);
+            double value = scale * (valOrig - subtract);
 
-            if (val > 255) {
-                val = 255;
+            if (value > 255) {
+                value = 255;
             }
-            if (val < 0) {
-                val = 0;
+            if (value < 0) {
+                value = 0;
             }
 
-            bufferOut.put((byte) val);
+            bufferOut.putDouble(value);
         }
 
         return VoxelBufferUnsignedByte.wrapBuffer(bufferOut);

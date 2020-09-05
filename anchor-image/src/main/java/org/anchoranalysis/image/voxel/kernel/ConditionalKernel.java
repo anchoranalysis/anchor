@@ -28,7 +28,6 @@ package org.anchoranalysis.image.voxel.kernel;
 
 import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.convert.PrimitiveConverter;
 import org.anchoranalysis.image.voxel.Voxels;
 
 // Erosion with a 3x3 or 3x3x3 kernel
@@ -50,13 +49,12 @@ public class ConditionalKernel extends BinaryKernel {
     @Override
     public boolean acceptPoint(int ind, Point3i point) {
 
-        byte valByte =
+        int value =
                 voxelsIntensity
                         .sliceBuffer(point.z())
-                        .get(voxelsIntensity.extent().offsetSlice(point));
-        int val = PrimitiveConverter.unsignedByteToInt(valByte);
+                        .getUnsignedByte(voxelsIntensity.extent().offsetSlice(point));
 
-        if (val < minValue) {
+        if (value < minValue) {
             return false;
         }
 

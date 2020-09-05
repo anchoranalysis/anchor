@@ -61,7 +61,7 @@ public final class ErosionKernel3 extends BinaryKernelMorph3Extent {
         int x = point.x();
         int y = point.y();
 
-        if (bv.isOff(inArrZ.get(ind))) {
+        if (bv.isOff(inArrZ.getRaw(ind))) {
             return false;
         }
 
@@ -69,7 +69,7 @@ public final class ErosionKernel3 extends BinaryKernelMorph3Extent {
         x--;
         ind--;
         if (x >= 0) {
-            if (bv.isOff(inArrZ.get(ind))) {
+            if (bv.isOff(inArrZ.getRaw(ind))) {
                 return false;
             }
         } else {
@@ -81,7 +81,7 @@ public final class ErosionKernel3 extends BinaryKernelMorph3Extent {
         x += 2;
         ind += 2;
         if (x < extent.x()) {
-            if (bv.isOff(inArrZ.get(ind))) {
+            if (bv.isOff(inArrZ.getRaw(ind))) {
                 return false;
             }
         } else {
@@ -95,7 +95,7 @@ public final class ErosionKernel3 extends BinaryKernelMorph3Extent {
         y--;
         ind -= xLength;
         if (y >= 0) {
-            if (bv.isOff(inArrZ.get(ind))) {
+            if (bv.isOff(inArrZ.getRaw(ind))) {
                 return false;
             }
         } else {
@@ -107,7 +107,7 @@ public final class ErosionKernel3 extends BinaryKernelMorph3Extent {
         y += 2;
         ind += (2 * xLength);
         if (y < (extent.y())) {
-            if (bv.isOff(inArrZ.get(ind))) {
+            if (bv.isOff(inArrZ.getRaw(ind))) {
                 return false;
             }
         } else {
@@ -120,7 +120,7 @@ public final class ErosionKernel3 extends BinaryKernelMorph3Extent {
         if (useZ) {
 
             if (inArrZLess1 != null) {
-                if (bv.isOff(inArrZLess1.get(ind))) {
+                if (bv.isOff(inArrZLess1.getRaw(ind))) {
                     return false;
                 }
             } else {
@@ -130,7 +130,7 @@ public final class ErosionKernel3 extends BinaryKernelMorph3Extent {
             }
 
             if (inArrZPlus1 != null) {
-                if (bv.isOff(inArrZPlus1.get(ind))) {
+                if (bv.isOff(inArrZPlus1.getRaw(ind))) {
                     return false;
                 }
             } else {

@@ -36,7 +36,6 @@ import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.core.geometry.consumer.PointThreeDimensionalConsumer;
 import org.anchoranalysis.image.binary.mask.Mask;
-import org.anchoranalysis.image.convert.PrimitiveConverter;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.object.ObjectMask;
@@ -62,7 +61,7 @@ public class IterateVoxelsByte {
         IterateVoxels.callEachPoint(
                 voxels,
                 (point, buffer, offset) -> {
-                    if (buffer.get(offset) == equalToValue) {
+                    if (buffer.getRaw(offset) == equalToValue) {
                         consumer.accept(point);
                     }
                 });
@@ -99,7 +98,7 @@ public class IterateVoxelsByte {
         voxels.extent()
                 .iterateOverXY(
                         (x, y, offset) -> {
-                            if (buffer.getByte() == equalToValue) {
+                            if (buffer.getRaw() == equalToValue) {
                                 consumer.accept(x, y, sliceIndex);
                             }
                         });
@@ -127,7 +126,7 @@ public class IterateVoxelsByte {
 
                 for (int x = 0; x < extentMask.x(); x++) {
 
-                    if (bufferMask.getByte() == equalToValue) {
+                    if (bufferMask.getRaw() == equalToValue) {
                         return Optional.of(new Point3i(corner.x() + x, corner.y(), corner.z() + z));
                     }
                 }
@@ -189,7 +188,7 @@ public class IterateVoxelsByte {
             UnsignedByteBuffer out = voxelsOut.sliceBuffer(z);
 
             while (in1.hasRemaining()) {
-                out.putInt( operation.apply(in1.getInt(), in2.getInt()) );
+                out.putUnsignedByte( operation.apply(in1.getUnsignedByte(), in2.getUnsignedByte()) );
             }
 
             assert (!in2.hasRemaining());
@@ -220,7 +219,6 @@ public class IterateVoxelsByte {
     }
 
     private static void addFromBufferToRunning(UnsignedByteBuffer buffer, int offset, RunningSum running) {
-        int intensity = PrimitiveConverter.unsignedByteToInt(buffer.get(offset));
-        running.increment(intensity, 1);
+        running.increment(buffer.getUnsignedByte(offset), 1);
     }
 }

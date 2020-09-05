@@ -92,7 +92,7 @@ public class OutlineKernel3NeighborMatchValue extends OutlineKernel3Base {
         int x = point.x();
         int y = point.y();
 
-        if (bv.isOff(inArrZ.get(ind))) {
+        if (bv.isOff(inArrZ.getRaw(ind))) {
             return false;
         }
 
@@ -100,7 +100,7 @@ public class OutlineKernel3NeighborMatchValue extends OutlineKernel3Base {
         x--;
         ind--;
         if (x >= 0) {
-            if (bv.isOff(inArrZ.get(ind))) {
+            if (bv.isOff(inArrZ.getRaw(ind))) {
                 return checkIfRequireHighIsTrue(inArrR, point, -1, 0);
             }
         } else {
@@ -112,7 +112,7 @@ public class OutlineKernel3NeighborMatchValue extends OutlineKernel3Base {
         x += 2;
         ind += 2;
         if (x < extent.x()) {
-            if (bv.isOff(inArrZ.get(ind))) {
+            if (bv.isOff(inArrZ.getRaw(ind))) {
                 return checkIfRequireHighIsTrue(inArrR, point, +1, 0);
             }
         } else {
@@ -126,7 +126,7 @@ public class OutlineKernel3NeighborMatchValue extends OutlineKernel3Base {
         y--;
         ind -= xLength;
         if (y >= 0) {
-            if (bv.isOff(inArrZ.get(ind))) {
+            if (bv.isOff(inArrZ.getRaw(ind))) {
                 return checkIfRequireHighIsTrue(inArrR, point, 0, -1);
             }
         } else {
@@ -138,7 +138,7 @@ public class OutlineKernel3NeighborMatchValue extends OutlineKernel3Base {
         y += 2;
         ind += (2 * xLength);
         if (y < (extent.y())) {
-            if (bv.isOff(inArrZ.get(ind))) {
+            if (bv.isOff(inArrZ.getRaw(ind))) {
                 return checkIfRequireHighIsTrue(inArrR, point, 0, +1);
             }
         } else {
@@ -151,7 +151,7 @@ public class OutlineKernel3NeighborMatchValue extends OutlineKernel3Base {
         if (useZ) {
 
             if (inArrZLess1 != null) {
-                if (bv.isOff(inArrZLess1.get(ind))) {
+                if (bv.isOff(inArrZLess1.getRaw(ind))) {
                     return checkIfRequireHighIsTrue(inArrRLess1, point, 0, 0);
                 }
             } else {
@@ -161,7 +161,7 @@ public class OutlineKernel3NeighborMatchValue extends OutlineKernel3Base {
             }
 
             if (inArrZPlus1 != null) {
-                if (bv.isOff(inArrZPlus1.get(ind))) {
+                if (bv.isOff(inArrZPlus1.getRaw(ind))) {
                     return checkIfRequireHighIsTrue(inArrRPlus1, point, 0, 0);
                 }
             } else {
@@ -194,6 +194,6 @@ public class OutlineKernel3NeighborMatchValue extends OutlineKernel3Base {
         }
 
         int intGlobal = voxelsRequireHigh.extent().offset(x1, y1);
-        return bvRequireHigh.isOn(inArr.get(intGlobal));
+        return bvRequireHigh.isOn(inArr.getRaw(intGlobal));
     }
 }

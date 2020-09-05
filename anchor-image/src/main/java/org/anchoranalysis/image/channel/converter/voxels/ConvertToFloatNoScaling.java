@@ -74,7 +74,7 @@ public final class ConvertToFloatNoScaling extends VoxelsConverter<FloatBuffer> 
         while (bufferIn.buffer().hasRemaining()) {
             bufferOut
                     .buffer()
-                    .put((float) bufferIn.buffer().getInt());
+                    .put((float) bufferIn.buffer().getUnsignedByte());
         }
 
         return bufferOut;

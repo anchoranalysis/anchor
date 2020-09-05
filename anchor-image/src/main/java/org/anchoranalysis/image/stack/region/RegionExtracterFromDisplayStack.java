@@ -172,8 +172,8 @@ public class RegionExtracterFromDisplayStack implements RegionExtracter {
         ReadableTuple3i cornerMax = box.calculateCornerMax();
         for (int z = cornerMin.z(); z <= cornerMax.z(); z++) {
 
-            UnsignedByteBuffer bbIn = voxelsSrc.sliceBuffer(z);
-            UnsignedByteBuffer bbOut = voxelsDest.sliceBuffer(z - cornerMin.z());
+            UnsignedByteBuffer bufferIn = voxelsSrc.sliceBuffer(z);
+            UnsignedByteBuffer bufferOut = voxelsDest.sliceBuffer(z - cornerMin.z());
 
             // We go through every pixel in the new width, and height, and sample from the original
             // image
@@ -186,13 +186,13 @@ public class RegionExtracterFromDisplayStack implements RegionExtracter {
                     int xOrig = ((int) (x / zoomFactor)) + cornerMin.x();
 
                     // We get the byte to write
-                    byte b =
+                    byte value =
                             (interpolator != null)
                                     ? interpolator.getInterpolatedPixelByte(
-                                            xOrig, yOrig, bbIn, extentSrc)
-                                    : bbIn.get(extentSrc.offset(xOrig, yOrig));
+                                            xOrig, yOrig, bufferIn, extentSrc)
+                                    : bufferIn.getRaw(extentSrc.offset(xOrig, yOrig));
 
-                    bbOut.put(indOut++, b);
+                    bufferOut.putRaw(indOut++, value);
                 }
             }
         }
@@ -218,8 +218,8 @@ public class RegionExtracterFromDisplayStack implements RegionExtracter {
             assert (voxelsSrc.slice(z) != null);
             assert (voxelsDest.slice(z - cornerMin.z()) != null);
 
-            ShortBuffer bbIn = voxelsSrc.sliceBuffer(z);
-            ShortBuffer bbOut = voxelsDest.slice(z - cornerMin.z()).buffer();
+            ShortBuffer bufferIn = voxelsSrc.sliceBuffer(z);
+            ShortBuffer bufferOut = voxelsDest.slice(z - cornerMin.z()).buffer();
 
             // We go through every pixel in the new width, and height, and sample from the original
             // image
@@ -235,10 +235,10 @@ public class RegionExtracterFromDisplayStack implements RegionExtracter {
                     short s =
                             (interpolator != null)
                                     ? interpolator.getInterpolatedPixelShort(
-                                            xOrig, yOrig, bbIn, extentSrc)
-                                    : bbIn.get(extentSrc.offset(xOrig, yOrig));
+                                            xOrig, yOrig, bufferIn, extentSrc)
+                                    : bufferIn.get(extentSrc.offset(xOrig, yOrig));
 
-                    bbOut.put(indOut++, s);
+                    bufferOut.put(indOut++, s);
                 }
             }
         }

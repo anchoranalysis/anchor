@@ -41,12 +41,12 @@ class ByteImplementation extends Base<UnsignedByteBuffer> {
     @Override
     protected void assignToEntireBuffer(UnsignedByteBuffer buffer) {
         while (buffer.hasRemaining()) {
-            buffer.put(valueCast);
+            buffer.putRaw(valueCast);
         }
     }
 
     @Override
     protected void assignAtBufferPosition(UnsignedByteBuffer buffer, int index) {
-        buffer.put(index, valueCast);
+        buffer.putRaw(index, valueCast);
     }
 }

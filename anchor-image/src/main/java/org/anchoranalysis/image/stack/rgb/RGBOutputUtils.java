@@ -36,7 +36,7 @@ import org.anchoranalysis.image.extent.Dimensions;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class RGBOutputUtils {
 
-    public static void writeRGBColorToByteArr(
+    public static void writeRGBColorToByteArray(
             RGBColor color,
             Point3i point,
             Dimensions dimensions,
@@ -44,8 +44,8 @@ public class RGBOutputUtils {
             UnsignedByteBuffer blue,
             UnsignedByteBuffer green) {
         int index = dimensions.offsetSlice(point);
-        red.put(index, (byte) color.getRed());
-        green.put(index, (byte) color.getGreen());
-        blue.put(index, (byte) color.getBlue());
+        red.putUnsignedByte(index, color.getRed());
+        green.putUnsignedByte(index, color.getGreen());
+        blue.putUnsignedByte(index, color.getBlue());
     }
 }

@@ -51,12 +51,12 @@ public final class DilationKernel3ZOnly extends BinaryKernelMorph3 {
         UnsignedByteBuffer inArrZLess1 = inSlices.getLocal(-1);
         UnsignedByteBuffer inArrZPlus1 = inSlices.getLocal(+1);
 
-        if (bv.isOn(inArrZ.get(ind))) {
+        if (bv.isOn(inArrZ.getRaw(ind))) {
             return true;
         }
 
         if (inArrZLess1 != null) {
-            if (bv.isOn(inArrZLess1.get(ind))) {
+            if (bv.isOn(inArrZLess1.getRaw(ind))) {
                 return true;
             }
         } else {
@@ -66,7 +66,7 @@ public final class DilationKernel3ZOnly extends BinaryKernelMorph3 {
         }
 
         if (inArrZPlus1 != null) {
-            if (bv.isOn(inArrZPlus1.get(ind))) {
+            if (bv.isOn(inArrZPlus1.getRaw(ind))) {
                 return true;
             }
         } else {

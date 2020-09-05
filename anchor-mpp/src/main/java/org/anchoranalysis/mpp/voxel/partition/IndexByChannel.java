@@ -24,48 +24,41 @@
  * #L%
  */
 
-package org.anchoranalysis.mpp.pixelpart;
+package org.anchoranalysis.mpp.voxel.partition;
 
 import java.util.ArrayList;
-import java.util.List;
-import org.anchoranalysis.mpp.pixelpart.factory.PixelPartFactory;
+import org.anchoranalysis.mpp.voxel.partition.factory.VoxelPartitionFactory;
 
 /**
  * @author Owen Feehan
  * @param <T> part-type
  */
-public class IndexByRegion<T> {
+public class IndexByChannel<T> {
 
-    private List<PixelPart<T>> list;
+    private ArrayList<IndexByRegion<T>> delegate = new ArrayList<>();
 
-    public IndexByRegion(PixelPartFactory<T> factory, int numRegions, int numSlices) {
-        list = new ArrayList<>();
-        for (int i = 0; i < numRegions; i++) {
-            list.add(factory.create(numSlices));
+    public boolean add(IndexByRegion<T> e) {
+        return delegate.add(e);
+    }
+
+    public void init(VoxelPartitionFactory<T> factory, int numChannel, int numRegions, int numSlices) {
+
+        for (int i = 0; i < numChannel; i++) {
+            delegate.add(new IndexByRegion<>(factory, numRegions, numSlices));
         }
     }
 
-    // Should only be used RO, if we want to maintain integrity with the combined list
-    public T getForAllSlices(int regionID) {
-        return list.get(regionID).getCombined();
+    public IndexByRegion<T> get(int index) {
+        return delegate.get(index);
     }
 
-    // Should only be used RO, if we want to maintain integrity with the combined list
-    public T getForSlice(int regionID, int sliceID) {
-        return list.get(regionID).getSlice(sliceID);
+    public int size() {
+        return delegate.size();
     }
 
-    public void addToPxlList(int regionID, int sliceID, int val) {
-        list.get(regionID).addForSlice(sliceID, val);
-    }
-
-    public void cleanUp(PixelPartFactory<T> factory) {
-        for (int i = 0; i < list.size(); i++) {
-            list.get(i).cleanUp(factory);
+    public void cleanUp(VoxelPartitionFactory<T> factory) {
+        for (int i = 0; i < delegate.size(); i++) {
+            delegate.get(i).cleanUp(factory);
         }
-    }
-
-    public int numSlices() {
-        return list.get(0).numSlices();
     }
 }

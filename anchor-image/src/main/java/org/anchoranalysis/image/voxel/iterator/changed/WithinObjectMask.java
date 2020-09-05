@@ -49,7 +49,7 @@ final class WithinObjectMask<T> implements ProcessVoxelNeighbor<T> {
     private Point3i relativeToCorner;
 
     // Current ByteBuffer for the object-mask
-    private UnsignedByteBuffer bbOM;
+    private UnsignedByteBuffer bufferObject;
     private byte maskOffVal;
 
     private int maskOffsetXYAtPoint;
@@ -79,14 +79,14 @@ final class WithinObjectMask<T> implements ProcessVoxelNeighbor<T> {
         int relZ1 = relativeToCorner.z() + zChange;
 
         if (relZ1 < 0 || relZ1 >= extent.z()) {
-            this.bbOM = null;
+            this.bufferObject = null;
             return false;
         }
 
         int zRel = z1 - cornerMin.z();
-        this.bbOM = object.sliceBufferLocal(zRel);
+        this.bufferObject = object.sliceBufferLocal(zRel);
 
-        delegate.notifyChangeZ(zChange, z1, bbOM);
+        delegate.notifyChangeZ(zChange, z1, bufferObject);
         return true;
     }
 
@@ -117,11 +117,9 @@ final class WithinObjectMask<T> implements ProcessVoxelNeighbor<T> {
 
         int offset = maskOffsetXYAtPoint + xChange + (yChange * extent.x());
 
-        if (bbOM.get(offset) == maskOffVal) {
-            return;
+        if (bufferObject.getRaw(offset) != maskOffVal) {
+            delegate.processPoint(xChange, yChange, x1, y1, offset);
         }
-
-        delegate.processPoint(xChange, yChange, x1, y1, offset);
     }
 
     @Override

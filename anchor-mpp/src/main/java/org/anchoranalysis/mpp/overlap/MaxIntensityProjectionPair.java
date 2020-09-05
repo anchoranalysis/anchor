@@ -99,12 +99,12 @@ public class MaxIntensityProjectionPair {
             UnsignedByteBuffer bufferOut,
             BinaryValuesByte bvb,
             RegionMembershipWithFlags rmFlags) {
-        byte b = buffer.get(offset);
+        byte b = buffer.getRaw(offset);
         if (rmFlags.isMemberFlag(b)) {
-            bufferOut.put(offset, bvb.getOnByte());
+            bufferOut.putRaw(offset, bvb.getOnByte());
         } else {
             if (bvb.getOffByte() != 0) {
-                bufferOut.put(offset, bvb.getOffByte());
+                bufferOut.putRaw(offset, bvb.getOffByte());
             }
         }
     }
