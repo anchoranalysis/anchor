@@ -21,6 +21,48 @@ public abstract class UnsignedBuffer {
     private Buffer delegate;
     
     /**
+     * Puts a float at the current buffer position.
+     * 
+     * <p>A conversion occurs from float to short.
+     * 
+     * @param value the float.
+     */
+    public abstract void putFloat(float value);
+    
+    /**
+     * Puts a float at a particular buffer position.
+     * 
+     * <p>A conversion occurs from float to byte.
+     * 
+     * @param index the buffer position
+     * @param value the float.
+     */
+    public abstract void putFloat(int index, float value);
+    
+    /**
+     * Puts a double at the current buffer position.
+     * 
+     * @param value the double
+     */
+    public abstract void putDouble(double value);
+    
+    /**
+     * Puts a double at a particular buffer position.
+     * 
+     * @param index the buffer position
+     * @param value the double
+     */
+    public abstract void putDouble(int index, double value);
+    
+    
+    /**
+     * Puts a long at the current buffer position.
+     * 
+     * @param value the long.
+     */
+    public abstract void putLong(long value);
+    
+    /**
      * Whether there are elements between the current position and the limit {@link Buffer#hasRemaining}.
      * 
      * @return true iff elements exist

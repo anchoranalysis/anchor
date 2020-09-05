@@ -151,50 +151,29 @@ public final class UnsignedIntBuffer extends UnsignedBuffer {
         putRaw( index, (int) value);
     }
 
-    /**
-     * Puts a float at the current buffer position.
-     * 
-     * <p>A conversion occurs from float to int.
-     * 
-     * @param value the float.
-     */
+    @Override
     public void putFloat(float value) {
         putRaw((int) value);
     }
-    
-    /**
-     * Puts a float at a particular buffer position.
-     * 
-     * <p>A conversion occurs from float to int.
-     * 
-     * @param index the buffer position
-     * @param value the float.
-     */ 
+
+    @Override
     public void putFloat(int index, float value) {
         putRaw(index, (int) value);
     }
-    
-    /**
-     * Puts a double at the current buffer position.
-     * 
-     * <p>A conversion occurs from double to int.
-     * 
-     * @param value the double
-     */
+
+    @Override
     public void putDouble(double value) {
         putRaw((int) value);
     }
 
-    /**
-     * Puts a double at a particular buffer position.
-     * 
-     * <p>A conversion occurs from double to int.
-     * 
-     * @param index the buffer position
-     * @param value the double
-     */
+    @Override
     public void putDouble(int index, double value) {
         putRaw(index, (int) value);
+    }
+    
+    @Override
+    public void putLong(long value) {
+        putUnsigned(value);
     }
     
     /**

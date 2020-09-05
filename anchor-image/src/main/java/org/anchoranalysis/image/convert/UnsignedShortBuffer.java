@@ -16,7 +16,7 @@ import lombok.Getter;
  * @author Owen Feehan
  *
  */
-public final class UnsignedShortBuffer extends UnsignedBuffer {
+public final class UnsignedShortBuffer extends UnsignedBufferAsInt {
 
     /** The underlying storage buffer, to which calls are delegated with our without conversion. */
     @Getter private final ShortBuffer delegate;
@@ -84,21 +84,12 @@ public final class UnsignedShortBuffer extends UnsignedBuffer {
         return delegate.get(index);
     }
     
-    /**
-     * Gets an unsigned-short (represented as a int) at the current buffer position.
-     * 
-     * @return unsigned-short (represented by a int)
-     */
+    @Override
     public int getUnsigned() {
         return PrimitiveConverter.unsignedShortToInt( getRaw() );
     }
     
-    /**
-     * Gets an unsigned-short (represented as a int) at a particular buffer position.
-     * 
-     * @param index the buffer position
-     * @return unsigned-short (represented by a int)
-     */
+    @Override
     public int getUnsigned(int index) {
         return PrimitiveConverter.unsignedShortToInt( getRaw(index) );
     }
@@ -126,82 +117,37 @@ public final class UnsignedShortBuffer extends UnsignedBuffer {
         delegate.put(index, value);
     }
     
-    /**
-     * Puts an unsigned-short (represented by an int) at current buffer position.
-     * 
-     * <p>A conversion occurs from int to short.
-     * 
-     * @param value the unsigned-short (represented by an int)
-     */
+    @Override
     public void putUnsigned(int value) {
         putRaw( (short) value);
     }
     
-    /**
-     * Puts an unsigned-short (represented as a int) a particular buffer position.
-     * 
-     * <p>A conversion occurs from int to short.
-     * 
-     * @param index the buffer position
-     * @param value the unsigned-short (represented by an int)
-     */
+    @Override
     public void putUnsigned(int index, int value) {
         putRaw( index, (short) value);
     }
     
-    /**
-     * Puts a long at the current buffer position.
-     * 
-     * <p>A conversion occurs from long to short.
-     * 
-     * @param value the long.
-     */
+    @Override
     public void putLong(long value) {
         putRaw((short) value);
     }
 
-    /**
-     * Puts a float at the current buffer position.
-     * 
-     * <p>A conversion occurs from float to short.
-     * 
-     * @param value the float.
-     */
+    @Override
     public void putFloat(float value) {
         putRaw((short) value);
     }
-    
-    /**
-     * Puts a float at a particular buffer position.
-     * 
-     * <p>A conversion occurs from float to short.
-     * 
-     * @param index the buffer position
-     * @param value the float.
-     */ 
+
+    @Override
     public void putFloat(int index, float value) {
         putRaw(index, (short) value);
     }
     
-    /**
-     * Puts a double at the current buffer position.
-     * 
-     * <p>A conversion occurs from double to short.
-     * 
-     * @param value the double
-     */
+    @Override
     public void putDouble(double value) {
         putRaw((short) value);
     }
 
-    /**
-     * Puts a double at a particular buffer position.
-     * 
-     * <p>A conversion occurs from double to short.
-     * 
-     * @param index the buffer position
-     * @param value the double
-     */
+    @Override
     public void putDouble(int index, double value) {
         putRaw(index, (short) value);
     }

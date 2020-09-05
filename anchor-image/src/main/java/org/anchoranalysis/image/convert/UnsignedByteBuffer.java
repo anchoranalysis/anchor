@@ -16,7 +16,7 @@ import lombok.Getter;
  * @author Owen Feehan
  *
  */
-public final class UnsignedByteBuffer extends UnsignedBuffer {
+public final class UnsignedByteBuffer extends UnsignedBufferAsInt {
 
     /** The underlying storage buffer, to which calls are delegated with our without conversion. */
     @Getter private final ByteBuffer delegate;
@@ -84,22 +84,13 @@ public final class UnsignedByteBuffer extends UnsignedBuffer {
     public byte getRaw(int index) {
         return delegate.get(index);
     }
-    
-    /**
-     * Gets an unsigned-byte (represented as a int) at the current buffer position.
-     * 
-     * @return unsigned-byte (represented by a int)
-     */
+
+    @Override
     public int getUnsigned() {
         return PrimitiveConverter.unsignedByteToInt( getRaw() );
     }
 
-    /**
-     * Gets an unsigned-byte (represented as a int) at a particular buffer position.
-     * 
-     * @param index the buffer position
-     * @return unsigned-byte (represented by a int)
-     */
+    @Override
     public int getUnsigned(int index) {
         return PrimitiveConverter.unsignedByteToInt( getRaw(index) );
     }
@@ -127,25 +118,12 @@ public final class UnsignedByteBuffer extends UnsignedBuffer {
         delegate.put(index, value);
     }
     
-    /**
-     * Puts an unsigned-byte (represented by an int) at current buffer position.
-     * 
-     * <p>A conversion occurs from int to byte.
-     * 
-     * @param value the unsigned-byte (represented by an int)
-     */
+    @Override
     public void putUnsigned(int value) {
         putRaw( (byte) value);
     }
 
-    /**
-     * Puts an unsigned-byte (represented as a int) a particular buffer position.
-     * 
-     * <p>A conversion occurs from int to byte.
-     * 
-     * @param index the buffer position
-     * @param value the unsigned-byte (represented by an int)
-     */
+    @Override
     public void putUnsigned(int index, int value) {
         putRaw(index, (byte) value);
     }
@@ -161,59 +139,27 @@ public final class UnsignedByteBuffer extends UnsignedBuffer {
         putRaw( (byte) PrimitiveConverter.unsignedIntToLong(value) );
     }
     
-    /**
-     * Puts a long at the current buffer position.
-     * 
-     * <p>A conversion occurs from long to byte.
-     * 
-     * @param value the long.
-     */
+    @Override
     public void putLong(long value) {
         putRaw((byte) value);
     }
     
-    /**
-     * Puts a float at the current buffer position.
-     * 
-     * <p>A conversion occurs from float to byte.
-     * 
-     * @param value the float.
-     */
+    @Override
     public void putFloat(float value) {
         putRaw( (byte) value);
     }
 
-    /**
-     * Puts a float at a particular buffer position.
-     * 
-     * <p>A conversion occurs from float to byte.
-     * 
-     * @param index the buffer position
-     * @param value the float.
-     */    
+    @Override
     public void putFloat(int index, float value) {
         putRaw( index, (byte) value);
     }
-    
-    /**
-     * Puts a double at the current buffer position.
-     * 
-     * <p>A conversion occurs from double to byte.
-     * 
-     * @param value the double
-     */
+
+    @Override
     public void putDouble(double value) {
         putRaw( (byte) value);
     }
     
-    /**
-     * Puts a double at a particular buffer position.
-     * 
-     * <p>A conversion occurs from double to byte.
-     * 
-     * @param index the buffer position
-     * @param value the double
-     */
+    @Override
     public void putDouble(int index, double value) {
         putRaw(index, (byte) value);
     }
