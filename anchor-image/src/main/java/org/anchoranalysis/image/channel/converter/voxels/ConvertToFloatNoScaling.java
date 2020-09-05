@@ -28,7 +28,7 @@ package org.anchoranalysis.image.channel.converter.voxels;
 
 import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
+import org.anchoranalysis.image.convert.UnsignedIntBuffer;
 import org.anchoranalysis.image.convert.UnsignedShortBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferFloat;
@@ -43,12 +43,12 @@ public final class ConvertToFloatNoScaling extends VoxelsConverter<FloatBuffer> 
     }
 
     @Override
-    public VoxelBuffer<FloatBuffer> convertFromInt(VoxelBuffer<IntBuffer> bufferIn) {
+    public VoxelBuffer<FloatBuffer> convertFromInt(VoxelBuffer<UnsignedIntBuffer> bufferIn) {
 
         FloatBuffer bufferOut = FloatBuffer.allocate(bufferIn.buffer().capacity());
 
         while (bufferIn.buffer().hasRemaining()) {
-            bufferOut.put((float) bufferIn.buffer().get());
+            bufferOut.put((float) bufferIn.buffer().getUnsigned());
         }
 
         return VoxelBufferFloat.wrapBuffer(bufferOut);

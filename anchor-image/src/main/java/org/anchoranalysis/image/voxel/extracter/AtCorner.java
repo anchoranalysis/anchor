@@ -105,7 +105,7 @@ class AtCorner<T> implements VoxelsExtracter<T> {
     }
 
     @Override
-    public int voxelWithMaxIntensity() {
+    public long voxelWithMaxIntensity() {
         return delegate.voxelWithMaxIntensity();
     }
 

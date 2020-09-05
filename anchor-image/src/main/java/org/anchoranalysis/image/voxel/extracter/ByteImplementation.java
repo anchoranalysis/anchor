@@ -81,7 +81,7 @@ class ByteImplementation extends Base<UnsignedByteBuffer> {
     }
 
     @Override
-    public int voxelWithMaxIntensity() {
+    public long voxelWithMaxIntensity() {
         return IterateVoxelsVoxelBoxAsInt.findMaxValue(voxels);
     }
 

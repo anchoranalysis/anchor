@@ -25,19 +25,19 @@
  */
 package org.anchoranalysis.image.voxel.extracter;
 
-import java.nio.IntBuffer;
+import org.anchoranalysis.image.convert.UnsignedIntBuffer;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.max.MaxIntensityBufferInt;
 
-class IntImplementation extends Base<IntBuffer> {
+class IntImplementation extends Base<UnsignedIntBuffer> {
 
-    public IntImplementation(Voxels<IntBuffer> voxels) {
+    public IntImplementation(Voxels<UnsignedIntBuffer> voxels) {
         super(voxels);
     }
 
     @Override
-    public Voxels<IntBuffer> projectMax() {
+    public Voxels<UnsignedIntBuffer> projectMax() {
 
         Extent extent = voxels.extent();
 
@@ -51,25 +51,25 @@ class IntImplementation extends Base<IntBuffer> {
     }
 
     @Override
-    public Voxels<IntBuffer> projectMean() {
+    public Voxels<UnsignedIntBuffer> projectMean() {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public int voxelWithMaxIntensity() {
+    public long voxelWithMaxIntensity() {
 
-        int max = 0;
+        long max = 0;
         boolean first = true;
 
         Extent extent = voxels.extent();
 
         for (int z = 0; z < extent.z(); z++) {
 
-            IntBuffer pixels = voxels.sliceBuffer(z);
+            UnsignedIntBuffer pixels = voxels.sliceBuffer(z);
 
             while (pixels.hasRemaining()) {
 
-                int val = pixels.get();
+                long val = pixels.getUnsigned();
                 if (first || val > max) {
                     max = val;
                     first = false;
@@ -81,25 +81,25 @@ class IntImplementation extends Base<IntBuffer> {
 
     @Override
     protected void copyBufferIndexTo(
-            IntBuffer sourceBuffer,
+            UnsignedIntBuffer sourceBuffer,
             int sourceIndex,
-            IntBuffer destinationBuffer,
+            UnsignedIntBuffer destinationBuffer,
             int destinationIndex) {
-        destinationBuffer.put(destinationIndex, sourceBuffer.get(sourceIndex));
+        destinationBuffer.putRaw(destinationIndex, sourceBuffer.getRaw(sourceIndex));
     }
 
     @Override
-    protected int voxelAtBufferIndex(IntBuffer buffer, int index) {
-        return buffer.get(index);
+    protected int voxelAtBufferIndex(UnsignedIntBuffer buffer, int index) {
+        return (int) buffer.getUnsigned(index);
     }
 
     @Override
-    protected boolean bufferValueGreaterThan(IntBuffer buffer, int threshold) {
-        return buffer.get() > threshold;
+    protected boolean bufferValueGreaterThan(UnsignedIntBuffer buffer, int threshold) {
+        return buffer.getRaw() > threshold;
     }
 
     @Override
-    protected boolean bufferValueEqualTo(IntBuffer buffer, int value) {
-        return buffer.get() == value;
+    protected boolean bufferValueEqualTo(UnsignedIntBuffer buffer, int value) {
+        return buffer.getRaw() == value;
     }
 }

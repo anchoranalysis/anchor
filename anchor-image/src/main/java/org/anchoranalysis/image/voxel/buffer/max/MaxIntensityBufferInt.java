@@ -26,22 +26,22 @@
 
 package org.anchoranalysis.image.voxel.buffer.max;
 
-import java.nio.IntBuffer;
+import org.anchoranalysis.image.convert.UnsignedIntBuffer;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 
-public class MaxIntensityBufferInt extends MaxIntensityBuffer<IntBuffer> {
+public class MaxIntensityBufferInt extends MaxIntensityBuffer<UnsignedIntBuffer> {
 
     public MaxIntensityBufferInt(Extent srcExtent) {
         super(srcExtent, VoxelsFactory.getInt());
     }
 
     @Override
-    protected void addBuffer(IntBuffer pixels, IntBuffer flatBuffer) {
-        int inPixel = pixels.get();
-        int flatPixel = flatBuffer.get();
+    protected void addBuffer(UnsignedIntBuffer pixels, UnsignedIntBuffer flatBuffer) {
+        long inPixel = pixels.getUnsigned();
+        long flatPixel = flatBuffer.getUnsigned();
         if (inPixel > flatPixel) {
-            flatBuffer.put(flatBuffer.position() - 1, inPixel);
+            flatBuffer.putUnsigned(flatBuffer.position() - 1, inPixel);
         }
     }
 }

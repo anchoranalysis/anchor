@@ -28,7 +28,7 @@ package org.anchoranalysis.image.channel.converter.voxels;
 
 import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
+import org.anchoranalysis.image.convert.UnsignedIntBuffer;
 import org.anchoranalysis.image.convert.UnsignedShortBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferUnsignedShort;
@@ -58,12 +58,12 @@ public final class ConvertToShortNoScaling extends VoxelsConverter<UnsignedShort
     }
 
     @Override
-    public VoxelBuffer<UnsignedShortBuffer> convertFromInt(VoxelBuffer<IntBuffer> bufferIn) {
+    public VoxelBuffer<UnsignedShortBuffer> convertFromInt(VoxelBuffer<UnsignedIntBuffer> bufferIn) {
 
         UnsignedShortBuffer bufferOut = UnsignedShortBuffer.allocate(bufferIn.buffer().capacity());
 
         while (bufferIn.buffer().hasRemaining()) {
-            bufferOut.putUnsigned(bufferIn.buffer().get());
+            bufferOut.putLong(bufferIn.buffer().getUnsigned());
         }
 
         return VoxelBufferUnsignedShort.wrapBuffer(bufferOut);

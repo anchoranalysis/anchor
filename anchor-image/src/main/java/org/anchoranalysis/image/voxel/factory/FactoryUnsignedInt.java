@@ -26,32 +26,32 @@
 
 package org.anchoranalysis.image.voxel.factory;
 
-import org.anchoranalysis.image.convert.UnsignedShortBuffer;
+import org.anchoranalysis.image.convert.UnsignedIntBuffer;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.Voxels;
-import org.anchoranalysis.image.voxel.VoxelsAsShort;
-import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
+import org.anchoranalysis.image.voxel.VoxelsAsInt;
+import org.anchoranalysis.image.voxel.datatype.UnsignedIntVoxelType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.image.voxel.pixelsforslice.PixelsForSlice;
-import org.anchoranalysis.image.voxel.pixelsforslice.PixelsFromShortBufferArr;
+import org.anchoranalysis.image.voxel.pixelsforslice.PixelsFromIntBufferArr;
 
-final class FactoryShort implements VoxelsFactoryTypeBound<UnsignedShortBuffer> {
+final class FactoryUnsignedInt implements VoxelsFactoryTypeBound<UnsignedIntBuffer> {
 
-    private static final VoxelDataType DATA_TYPE = UnsignedShortVoxelType.INSTANCE;
+    private static final VoxelDataType DATA_TYPE = UnsignedIntVoxelType.INSTANCE;
 
     @Override
-    public Voxels<UnsignedShortBuffer> create(PixelsForSlice<UnsignedShortBuffer> pixelsForPlane) {
-        return new VoxelsAsShort(pixelsForPlane);
+    public Voxels<UnsignedIntBuffer> create(PixelsForSlice<UnsignedIntBuffer> pixelsForPlane) {
+        return new VoxelsAsInt(pixelsForPlane);
     }
 
     @Override
-    public Voxels<UnsignedShortBuffer> createInitialized(Extent extent) {
-        return new VoxelsAsShort(PixelsFromShortBufferArr.createInitialized(extent));
+    public Voxels<UnsignedIntBuffer> createInitialized(Extent extent) {
+        return new VoxelsAsInt(PixelsFromIntBufferArr.createInitialized(extent));
     }
 
     @Override
-    public Voxels<UnsignedShortBuffer> createUninitialized(Extent extent) {
-        return new VoxelsAsShort(PixelsFromShortBufferArr.createUninitialized(extent));
+    public Voxels<UnsignedIntBuffer> createUninitialized(Extent extent) {
+        return new VoxelsAsInt(PixelsFromIntBufferArr.createUninitialized(extent));
     }
 
     @Override

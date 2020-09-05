@@ -27,7 +27,7 @@
 package org.anchoranalysis.image.binary.voxel;
 
 import org.anchoranalysis.image.convert.UnsignedByteBuffer;
-import java.nio.IntBuffer;
+import org.anchoranalysis.image.convert.UnsignedIntBuffer;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.error.CreateException;
@@ -130,8 +130,8 @@ public class BinaryVoxelsFactory {
      * @param binaryValues how to interpret OFF and ON states
      * @return newly created binary-voxels reusing existing voxels internally
      */
-    public static BinaryVoxels<IntBuffer> reuseInt(
-            Voxels<IntBuffer> voxels, BinaryValues binaryValues) {
+    public static BinaryVoxels<UnsignedIntBuffer> reuseInt(
+            Voxels<UnsignedIntBuffer> voxels, BinaryValues binaryValues) {
         return new BinaryVoxelsInt(voxels, binaryValues);
     }
 }

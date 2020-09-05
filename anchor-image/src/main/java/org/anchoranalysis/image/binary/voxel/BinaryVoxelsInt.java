@@ -26,20 +26,20 @@
 
 package org.anchoranalysis.image.binary.voxel;
 
-import java.nio.IntBuffer;
+import org.anchoranalysis.image.convert.UnsignedIntBuffer;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.voxel.Voxels;
 
-class BinaryVoxelsInt extends BinaryVoxels<IntBuffer> {
+class BinaryVoxelsInt extends BinaryVoxels<UnsignedIntBuffer> {
 
-    public BinaryVoxelsInt(Voxels<IntBuffer> voxels, BinaryValues bv) {
+    public BinaryVoxelsInt(Voxels<UnsignedIntBuffer> voxels, BinaryValues bv) {
         super(voxels, bv);
     }
 
     @Override
     public boolean isOn(int x, int y, int z) {
         int offset = voxels().extent().offset(x, y);
-        return voxels().sliceBuffer(z).get(offset) != binaryValues().getOffInt();
+        return voxels().sliceBuffer(z).getRaw(offset) != binaryValues().getOffInt();
     }
 
     @Override
@@ -50,23 +50,23 @@ class BinaryVoxelsInt extends BinaryVoxels<IntBuffer> {
     @Override
     public void setOn(int x, int y, int z) {
         int offset = voxels().extent().offset(x, y);
-        voxels().sliceBuffer(z).put(offset, binaryValues().getOnInt());
+        voxels().sliceBuffer(z).putRaw(offset, binaryValues().getOnInt());
     }
 
     @Override
     public void setOff(int x, int y, int z) {
         int offset = voxels().extent().offset(x, y);
-        voxels().sliceBuffer(z).put(offset, binaryValues().getOffInt());
+        voxels().sliceBuffer(z).putRaw(offset, binaryValues().getOffInt());
     }
 
     @Override
-    public BinaryVoxels<IntBuffer> duplicate() {
+    public BinaryVoxels<UnsignedIntBuffer> duplicate() {
         return new BinaryVoxelsInt(voxels().duplicate(), binaryValues());
     }
 
     @Override
-    protected BinaryVoxels<IntBuffer> binaryVoxelsFor(
-            Voxels<IntBuffer> slice, BinaryValues binaryValues) {
+    protected BinaryVoxels<UnsignedIntBuffer> binaryVoxelsFor(
+            Voxels<UnsignedIntBuffer> slice, BinaryValues binaryValues) {
         return new BinaryVoxelsInt(slice, binaryValues);
     }
 }

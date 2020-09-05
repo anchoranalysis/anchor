@@ -26,37 +26,37 @@
 
 package org.anchoranalysis.image.voxel.buffer;
 
-import java.nio.IntBuffer;
+import org.anchoranalysis.image.convert.UnsignedIntBuffer;
 import org.anchoranalysis.image.convert.PrimitiveConverter;
 import org.anchoranalysis.image.voxel.datatype.UnsignedIntVoxelType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public final class VoxelBufferInt extends VoxelBuffer<IntBuffer> {
+public final class VoxelBufferUnsignedInt extends VoxelBuffer<UnsignedIntBuffer> {
 
-    private final IntBuffer delegate;
+    private final UnsignedIntBuffer delegate;
 
-    public static VoxelBufferInt allocate(int size) {
-        return new VoxelBufferInt(IntBuffer.allocate(size));
+    public static VoxelBufferUnsignedInt allocate(int size) {
+        return new VoxelBufferUnsignedInt(UnsignedIntBuffer.allocate(size));
     }
 
-    public static VoxelBufferInt wrapArray(int[] arr) {
-        return new VoxelBufferInt(IntBuffer.wrap(arr));
+    public static VoxelBufferUnsignedInt wrapArray(int[] array) {
+        return new VoxelBufferUnsignedInt(UnsignedIntBuffer.wrapRaw(array));
     }
 
-    public static VoxelBufferInt wrapBuffer(IntBuffer buffer) {
-        return new VoxelBufferInt(buffer);
+    public static VoxelBufferUnsignedInt wrapBuffer(UnsignedIntBuffer buffer) {
+        return new VoxelBufferUnsignedInt(buffer);
     }
 
     @Override
-    public IntBuffer buffer() {
+    public UnsignedIntBuffer buffer() {
         return delegate;
     }
 
     @Override
-    public VoxelBuffer<IntBuffer> duplicate() {
-        return new VoxelBufferInt(DuplicateBuffer.copy(delegate));
+    public VoxelBuffer<UnsignedIntBuffer> duplicate() {
+        return new VoxelBufferUnsignedInt(DuplicateBuffer.copy(delegate));
     }
 
     @Override
@@ -66,22 +66,22 @@ public final class VoxelBufferInt extends VoxelBuffer<IntBuffer> {
 
     @Override
     public int getInt(int index) {
-        return PrimitiveConverter.unsignedIntToInt(delegate.get(index));
+        return delegate.getRaw(index);
     }
 
     @Override
     public void putInt(int index, int value) {
-        delegate.put(index, value);
+        delegate.putRaw(index, value);
     }
 
     @Override
     public void putByte(int index, byte value) {
-        delegate.put(index, PrimitiveConverter.unsignedByteToInt(value));
+        delegate.putRaw(index, PrimitiveConverter.unsignedByteToInt(value));
     }
 
     @Override
-    public void transferFrom(int destinationIndex, VoxelBuffer<IntBuffer> src, int sourceIndex) {
-        delegate.put(destinationIndex, src.buffer().get(sourceIndex));
+    public void transferFrom(int destinationIndex, VoxelBuffer<UnsignedIntBuffer> src, int sourceIndex) {
+        delegate.putRaw(destinationIndex, src.buffer().getRaw(sourceIndex));
     }
 
     @Override

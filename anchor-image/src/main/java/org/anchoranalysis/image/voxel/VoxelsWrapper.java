@@ -29,7 +29,7 @@ package org.anchoranalysis.image.voxel;
 import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.convert.UnsignedShortBuffer;
 import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
+import org.anchoranalysis.image.convert.UnsignedIntBuffer;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.object.ObjectMask;
@@ -118,14 +118,14 @@ public class VoxelsWrapper {
     }
 
     @SuppressWarnings("unchecked")
-    public Voxels<IntBuffer> asInt() {
+    public Voxels<UnsignedIntBuffer> asInt() {
 
         if (!dataType.equals(UnsignedIntVoxelType.INSTANCE)) {
             throw new IncorrectVoxelTypeException(
                     "Voxels do not contain unsigned 32-bit data (int)");
         }
 
-        return (Voxels<IntBuffer>) voxels;
+        return (Voxels<UnsignedIntBuffer>) voxels;
     }
 
     /**

@@ -59,7 +59,7 @@ public class PrimitiveConverter {
     }
 
     public static long unsignedIntToLong(int value) {
-        return (long) value;
+        return Integer.toUnsignedLong(value);
     }
 
     public static int unsignedIntToInt(int value) {

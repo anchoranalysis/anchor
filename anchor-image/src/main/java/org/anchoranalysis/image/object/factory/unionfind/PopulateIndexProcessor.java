@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.image.object.factory.unionfind;
 
-import java.nio.IntBuffer;
+import org.anchoranalysis.image.convert.UnsignedIntBuffer;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
@@ -36,18 +36,18 @@ import org.anchoranalysis.image.voxel.iterator.ProcessVoxelSliceBuffer;
 
 class PopulateIndexProcessor<T> implements ProcessVoxelSliceBuffer<T> {
 
-    private Voxels<IntBuffer> indexBuffer;
+    private Voxels<UnsignedIntBuffer> indexBuffer;
     private MergeWithNeighbors mergeWithNeighbors;
     private BinaryValues bv;
     private BinaryValuesByte bvb;
     private final BufferReadWrite<T> bufferReaderWriter;
 
-    private IntBuffer bufferIndex;
+    private UnsignedIntBuffer bufferIndex;
     private int count = 1;
 
     public PopulateIndexProcessor(
             BinaryVoxels<T> visited,
-            Voxels<IntBuffer> indexBuffer,
+            Voxels<UnsignedIntBuffer> indexBuffer,
             MergeWithNeighbors mergeWithNeighbors,
             BufferReadWrite<T> bufferReaderWriter) {
         this.indexBuffer = indexBuffer;
@@ -69,12 +69,12 @@ class PopulateIndexProcessor<T> implements ProcessVoxelSliceBuffer<T> {
     @Override
     public void process(Point3i point, T buffer, int offsetSlice) {
         if (bufferReaderWriter.isBufferOn(buffer, offsetSlice, bv, bvb)
-                && bufferIndex.get(offsetSlice) == 0) {
+                && bufferIndex.getRaw(offsetSlice) == 0) {
 
             int neighborLabel = mergeWithNeighbors.minNeighborLabel(point, 0, offsetSlice);
             if (neighborLabel == -1) {
                 bufferReaderWriter.putBufferCount(buffer, offsetSlice, count);
-                bufferIndex.put(offsetSlice, count);
+                bufferIndex.putRaw(offsetSlice, count);
                 mergeWithNeighbors.addElement(count);
                 count++;
             } else {

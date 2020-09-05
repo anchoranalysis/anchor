@@ -26,14 +26,14 @@
 
 package org.anchoranalysis.image.voxel.pixelsforslice;
 
-import java.nio.IntBuffer;
+import org.anchoranalysis.image.convert.UnsignedIntBuffer;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
-import org.anchoranalysis.image.voxel.buffer.VoxelBufferInt;
+import org.anchoranalysis.image.voxel.buffer.VoxelBufferUnsignedInt;
 
-public class PixelsFromIntBufferArr implements PixelsForSlice<IntBuffer> {
+public class PixelsFromIntBufferArr implements PixelsForSlice<UnsignedIntBuffer> {
 
-    private final VoxelBuffer<IntBuffer>[] buffer;
+    private final VoxelBuffer<UnsignedIntBuffer>[] buffer;
     private final Extent extent;
 
     private PixelsFromIntBufferArr(Extent extent) {
@@ -41,13 +41,13 @@ public class PixelsFromIntBufferArr implements PixelsForSlice<IntBuffer> {
 
         this.extent = extent;
 
-        buffer = new VoxelBufferInt[extent.z()];
+        buffer = new VoxelBufferUnsignedInt[extent.z()];
     }
 
     private void init() {
         int volumeXY = extent.volumeXY();
         for (int z = 0; z < extent.z(); z++) {
-            buffer[z] = VoxelBufferInt.allocate(volumeXY);
+            buffer[z] = VoxelBufferUnsignedInt.allocate(volumeXY);
         }
     }
 
@@ -64,14 +64,14 @@ public class PixelsFromIntBufferArr implements PixelsForSlice<IntBuffer> {
     // END FACTORY METHODS
 
     @Override
-    public void replaceSlice(int z, VoxelBuffer<IntBuffer> pixels) {
+    public void replaceSlice(int z, VoxelBuffer<UnsignedIntBuffer> pixels) {
         pixels.buffer().clear();
         buffer[z] = pixels;
     }
 
     @Override
-    public VoxelBuffer<IntBuffer> slice(int z) {
-        VoxelBuffer<IntBuffer> buf = buffer[z];
+    public VoxelBuffer<UnsignedIntBuffer> slice(int z) {
+        VoxelBuffer<UnsignedIntBuffer> buf = buffer[z];
         buf.buffer().clear();
         return buf;
     }

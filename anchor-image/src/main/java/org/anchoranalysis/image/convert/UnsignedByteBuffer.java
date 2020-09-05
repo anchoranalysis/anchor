@@ -18,6 +18,7 @@ import lombok.Getter;
  */
 public final class UnsignedByteBuffer extends UnsignedBuffer {
 
+    /** The underlying storage buffer, to which calls are delegated with our without conversion. */
     @Getter private final ByteBuffer delegate;
     
     /**
@@ -31,7 +32,7 @@ public final class UnsignedByteBuffer extends UnsignedBuffer {
     }
 
     /**
-     * Exposes a raw byte-array as a buffer with unsigned bytes.
+     * Exposes a raw byte-array as a buffer with unsigned-bytes.
      * 
      * @param array the byte-array
      * @return a new instance of {@link UnsignedByteBuffer} that reuses {@code array} internally. 
@@ -41,7 +42,7 @@ public final class UnsignedByteBuffer extends UnsignedBuffer {
     }
 
     /**
-     * Exposes a raw {@link ByteBuffer} as a buffer with unsigned bytes.
+     * Exposes a raw {@link ByteBuffer} as a buffer with unsigned-bytes.
      * 
      * @param bufferRaw the raw-buffer
      * @return a new instance of {@link UnsignedByteBuffer} that reuses {@code bufferRaw} internally. 
@@ -158,6 +159,17 @@ public final class UnsignedByteBuffer extends UnsignedBuffer {
      */
     public void putUnsignedInt(int value) {
         putRaw( (byte) PrimitiveConverter.unsignedIntToLong(value) );
+    }
+    
+    /**
+     * Puts a long at the current buffer position.
+     * 
+     * <p>A conversion occurs from long to byte.
+     * 
+     * @param value the long.
+     */
+    public void putLong(long value) {
+        putRaw((byte) value);
     }
     
     /**

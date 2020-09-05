@@ -1,7 +1,7 @@
 package org.anchoranalysis.image.convert;
 
-import java.nio.ByteBuffer;
 import java.nio.ShortBuffer;
+import lombok.Getter;
 
 /**
  * Wraps a {@code ShortBuffer} but automatically performs conversion to {@code int}.
@@ -18,7 +18,8 @@ import java.nio.ShortBuffer;
  */
 public final class UnsignedShortBuffer extends UnsignedBuffer {
 
-    private final ShortBuffer delegate;
+    /** The underlying storage buffer, to which calls are delegated with our without conversion. */
+    @Getter private final ShortBuffer delegate;
 
     /**
      * Allocates a new (direct) buffer of unsigned-shorts.
@@ -31,9 +32,9 @@ public final class UnsignedShortBuffer extends UnsignedBuffer {
     }
 
     /**
-     * Exposes a raw byte-array as a buffer with unsigned-shorts.
+     * Exposes a raw short-array as a buffer with unsigned-shorts.
      * 
-     * @param array the byte-array
+     * @param array the short-array
      * @return a new instance of {@link UnsignedShortBuffer} that reuses {@code array} internally. 
      */
     public static UnsignedShortBuffer wrapRaw(short[] array) {
@@ -41,7 +42,7 @@ public final class UnsignedShortBuffer extends UnsignedBuffer {
     }
 
     /**
-     * Exposes a raw {@link UnsignedShortBuffer} as a buffer with unsigned shorts.
+     * Exposes a raw {@link UnsignedShortBuffer} as a buffer with unsigned-shorts.
      * 
      * @param bufferRaw the raw-buffer
      * @return a new instance of {@link UnsignedShortBuffer} that reuses {@code bufferRaw} internally. 
@@ -146,6 +147,17 @@ public final class UnsignedShortBuffer extends UnsignedBuffer {
      */
     public void putUnsigned(int index, int value) {
         putRaw( index, (short) value);
+    }
+    
+    /**
+     * Puts a long at the current buffer position.
+     * 
+     * <p>A conversion occurs from long to short.
+     * 
+     * @param value the long.
+     */
+    public void putLong(long value) {
+        putRaw((short) value);
     }
 
     /**

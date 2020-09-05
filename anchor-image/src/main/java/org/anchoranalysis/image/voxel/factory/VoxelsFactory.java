@@ -28,7 +28,7 @@ package org.anchoranalysis.image.voxel.factory;
 
 import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
+import org.anchoranalysis.image.convert.UnsignedIntBuffer;
 import org.anchoranalysis.image.convert.UnsignedShortBuffer;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.factory.VoxelDataTypeFactoryMultiplexer;
@@ -43,10 +43,10 @@ public class VoxelsFactory
     // Singleton
     private static VoxelsFactory instance;
 
-    private static final VoxelsFactoryTypeBound<UnsignedByteBuffer> FACTORY_BYTE = new FactoryByte();
-    private static final VoxelsFactoryTypeBound<UnsignedShortBuffer> FACTORY_SHORT = new FactoryShort();
-    private static final VoxelsFactoryTypeBound<IntBuffer> FACTORY_INT = new FactoryInt();
-    private static final VoxelsFactoryTypeBound<FloatBuffer> FACTORY_FLOAT = new FactoryFloat();
+    private static final VoxelsFactoryTypeBound<UnsignedByteBuffer> FACTORY_BYTE = new FactoryUnsignedByte();
+    private static final VoxelsFactoryTypeBound<UnsignedShortBuffer> FACTORY_SHORT = new FactoryUnsignedShort();
+    private static final VoxelsFactoryTypeBound<UnsignedIntBuffer> FACTORY_INT = new FactoryUnsignedInt();
+    private static final VoxelsFactoryTypeBound<FloatBuffer> FACTORY_FLOAT = new FactoryUnsignedFloat();
 
     private VoxelsFactory() {
         super(FACTORY_BYTE, FACTORY_SHORT, FACTORY_INT, FACTORY_FLOAT);
@@ -82,7 +82,7 @@ public class VoxelsFactory
         return FACTORY_SHORT;
     }
 
-    public static VoxelsFactoryTypeBound<IntBuffer> getInt() {
+    public static VoxelsFactoryTypeBound<UnsignedIntBuffer> getInt() {
         return FACTORY_INT;
     }
 

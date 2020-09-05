@@ -28,7 +28,7 @@ package org.anchoranalysis.image.channel.converter.voxels;
 
 import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
+import org.anchoranalysis.image.convert.UnsignedIntBuffer;
 import org.anchoranalysis.image.convert.UnsignedShortBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferUnsignedByte;
@@ -47,7 +47,7 @@ public final class ConvertToByteScaleByMaxValue extends VoxelsConverter<Unsigned
         setMaxValue(maxValue);
     }
 
-    public void setMaxValue(int maxValue) {
+    public void setMaxValue(long maxValue) {
         this.scale = 255.0 / maxValue;
     }
 
@@ -78,24 +78,22 @@ public final class ConvertToByteScaleByMaxValue extends VoxelsConverter<Unsigned
     }
 
     @Override
-    public VoxelBuffer<UnsignedByteBuffer> convertFromInt(VoxelBuffer<IntBuffer> bufferIn) {
+    public VoxelBuffer<UnsignedByteBuffer> convertFromInt(VoxelBuffer<UnsignedIntBuffer> bufferIn) {
 
         UnsignedByteBuffer bufferOut = UnsignedByteBuffer.allocate(bufferIn.buffer().capacity());
 
         while (bufferIn.buffer().hasRemaining()) {
 
-            long valOrig = bufferIn.buffer().get();
+            double value = scale * bufferIn.buffer().getUnsigned();
 
-            double val = scale * valOrig;
-
-            if (val > 255) {
-                val = 255;
+            if (value > 255) {
+                value = 255;
             }
-            if (val < 0) {
-                val = 0;
+            if (value < 0) {
+                value = 0;
             }
 
-            bufferOut.putDouble(val);
+            bufferOut.putDouble(value);
         }
 
         return VoxelBufferUnsignedByte.wrapBuffer(bufferOut);

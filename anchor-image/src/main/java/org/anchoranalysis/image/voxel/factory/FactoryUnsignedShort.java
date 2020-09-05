@@ -26,32 +26,32 @@
 
 package org.anchoranalysis.image.voxel.factory;
 
-import java.nio.IntBuffer;
+import org.anchoranalysis.image.convert.UnsignedShortBuffer;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.Voxels;
-import org.anchoranalysis.image.voxel.VoxelsAsInt;
-import org.anchoranalysis.image.voxel.datatype.UnsignedIntVoxelType;
+import org.anchoranalysis.image.voxel.VoxelsAsShort;
+import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.image.voxel.pixelsforslice.PixelsForSlice;
-import org.anchoranalysis.image.voxel.pixelsforslice.PixelsFromIntBufferArr;
+import org.anchoranalysis.image.voxel.pixelsforslice.PixelsFromShortBufferArr;
 
-final class FactoryInt implements VoxelsFactoryTypeBound<IntBuffer> {
+final class FactoryUnsignedShort implements VoxelsFactoryTypeBound<UnsignedShortBuffer> {
 
-    private static final VoxelDataType DATA_TYPE = UnsignedIntVoxelType.INSTANCE;
+    private static final VoxelDataType DATA_TYPE = UnsignedShortVoxelType.INSTANCE;
 
     @Override
-    public Voxels<IntBuffer> create(PixelsForSlice<IntBuffer> pixelsForPlane) {
-        return new VoxelsAsInt(pixelsForPlane);
+    public Voxels<UnsignedShortBuffer> create(PixelsForSlice<UnsignedShortBuffer> pixelsForPlane) {
+        return new VoxelsAsShort(pixelsForPlane);
     }
 
     @Override
-    public Voxels<IntBuffer> createInitialized(Extent extent) {
-        return new VoxelsAsInt(PixelsFromIntBufferArr.createInitialized(extent));
+    public Voxels<UnsignedShortBuffer> createInitialized(Extent extent) {
+        return new VoxelsAsShort(PixelsFromShortBufferArr.createInitialized(extent));
     }
 
     @Override
-    public Voxels<IntBuffer> createUninitialized(Extent extent) {
-        return new VoxelsAsInt(PixelsFromIntBufferArr.createUninitialized(extent));
+    public Voxels<UnsignedShortBuffer> createUninitialized(Extent extent) {
+        return new VoxelsAsShort(PixelsFromShortBufferArr.createUninitialized(extent));
     }
 
     @Override

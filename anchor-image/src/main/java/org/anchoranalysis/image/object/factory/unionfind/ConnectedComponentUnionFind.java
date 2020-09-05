@@ -27,7 +27,7 @@
 package org.anchoranalysis.image.object.factory.unionfind;
 
 import org.anchoranalysis.image.convert.UnsignedByteBuffer;
-import java.nio.IntBuffer;
+import org.anchoranalysis.image.convert.UnsignedIntBuffer;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -79,7 +79,7 @@ public class ConnectedComponentUnionFind {
      *     (modified) during processing.
      * @return the connected-components derived from the voxels
      */
-    public ObjectCollection deriveConnectedInt(BinaryVoxels<IntBuffer> voxels) {
+    public ObjectCollection deriveConnectedInt(BinaryVoxels<UnsignedIntBuffer> voxels) {
         ObjectCollection objects = ObjectCollectionFactory.empty();
         visitRegion(voxels, objects, minNumberVoxels, new ReadWriteInt());
         return objects;
@@ -92,7 +92,7 @@ public class ConnectedComponentUnionFind {
             BufferReadWrite<T> bufferReaderWriter) {
 
         UnionFind<Integer> unionIndex = new UnionFind<>(new HashSet<Integer>());
-        Voxels<IntBuffer> indexBuffer = VoxelsFactory.getInt().createInitialized(visited.extent());
+        Voxels<UnsignedIntBuffer> indexBuffer = VoxelsFactory.getInt().createInitialized(visited.extent());
 
         int maxBigIDAdded =
                 populateIndexFromBinary(
@@ -107,7 +107,7 @@ public class ConnectedComponentUnionFind {
     }
 
     private MergeWithNeighbors createMergeWithNeighbors(
-            Voxels<IntBuffer> indexBuffer, UnionFind<Integer> unionIndex) {
+            Voxels<UnsignedIntBuffer> indexBuffer, UnionFind<Integer> unionIndex) {
         return new MergeWithNeighbors(
                 indexBuffer, unionIndex, indexBuffer.extent().z() > 1, bigNeighborhood);
     }
@@ -148,7 +148,7 @@ public class ConnectedComponentUnionFind {
     }
 
     private static void addPointsAndAssignNewIDs(
-            Voxels<IntBuffer> indexBuffer,
+            Voxels<UnsignedIntBuffer> indexBuffer,
             UnionFind<Integer> unionIndex,
             Map<Integer, Integer> mapIDOrdered,
             PointRangeWithCount[] boxArr) {
@@ -157,14 +157,14 @@ public class ConnectedComponentUnionFind {
         Extent extent = indexBuffer.extent();
         for (point.setZ(0); point.z() < extent.z(); point.incrementZ()) {
 
-            IntBuffer bufferIndex = indexBuffer.sliceBuffer(point.z());
+            UnsignedIntBuffer bufferIndex = indexBuffer.sliceBuffer(point.z());
 
             int offset = 0;
 
             for (point.setY(0); point.y() < extent.y(); point.incrementY()) {
                 for (point.setX(0); point.x() < extent.x(); point.incrementX()) {
 
-                    int idBig = bufferIndex.get(offset);
+                    int idBig = bufferIndex.getRaw(offset);
                     if (idBig != 0) {
 
                         Integer idSmall = mapIDOrdered.get(unionIndex.find(idBig));
@@ -172,7 +172,7 @@ public class ConnectedComponentUnionFind {
                         PointRangeWithCount box = boxArr[idSmall - 1];
                         box.add(point);
 
-                        bufferIndex.put(offset, idSmall);
+                        bufferIndex.putRaw(offset, idSmall);
                     }
                     offset++;
                 }
@@ -183,11 +183,11 @@ public class ConnectedComponentUnionFind {
     private static ObjectCollection extractMasksInto(
             PointRangeWithCount[] boxArr,
             Map<Integer, Integer> mapIDOrdered,
-            Voxels<IntBuffer> indexBuffer,
+            Voxels<UnsignedIntBuffer> indexBuffer,
             int minNumberVoxels,
             ObjectCollection objects) {
 
-        VoxelsExtracter<IntBuffer> extracter = indexBuffer.extract();
+        VoxelsExtracter<UnsignedIntBuffer> extracter = indexBuffer.extract();
 
         for (int smallID : mapIDOrdered.values()) {
 
@@ -210,7 +210,7 @@ public class ConnectedComponentUnionFind {
     private static void processIndexBuffer(
             int maxBigIDAdded,
             UnionFind<Integer> unionIndex,
-            Voxels<IntBuffer> indexBuffer,
+            Voxels<UnsignedIntBuffer> indexBuffer,
             ObjectCollection objects,
             int minNumberVoxels) {
         Set<Integer> primaryIDs = setFromUnionFind(maxBigIDAdded, unionIndex);

@@ -27,7 +27,7 @@ package org.anchoranalysis.image.voxel.arithmetic;
 
 import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
+import org.anchoranalysis.image.convert.UnsignedIntBuffer;
 import org.anchoranalysis.image.convert.UnsignedShortBuffer;
 import java.util.function.IntFunction;
 import lombok.AccessLevel;
@@ -77,14 +77,14 @@ public class VoxelsArithmeticFactory {
     }
 
     /**
-     * Create voxels-arithmethic for {@link IntBuffer}
+     * Create voxels-arithmethic for {@link UnsignedIntBuffer}
      *
      * @param extent the extent of the voxels on which arithmetic is to be performed
      * @param bufferForSlice a buffer for a particular slice index (set at the initial position in
      *     the buffer)
      * @return
      */
-    public static VoxelsArithmetic createInt(Extent extent, IntFunction<IntBuffer> bufferForSlice) {
+    public static VoxelsArithmetic createInt(Extent extent, IntFunction<UnsignedIntBuffer> bufferForSlice) {
         return new IntImplementation(extent, bufferForSlice);
     }
 }

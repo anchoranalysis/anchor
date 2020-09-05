@@ -26,7 +26,7 @@
 package org.anchoranalysis.image.voxel;
 
 import org.anchoranalysis.image.convert.UnsignedByteBuffer;
-import java.nio.IntBuffer;
+import org.anchoranalysis.image.convert.UnsignedIntBuffer;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.image.extent.box.BoundingBox;
@@ -39,7 +39,7 @@ public class BoundedVoxelsFactory {
         return new BoundedVoxels<>(box, VoxelsFactory.getByte().createInitialized(box.extent()));
     }
 
-    public static BoundedVoxels<IntBuffer> createInt(BoundingBox box) {
+    public static BoundedVoxels<UnsignedIntBuffer> createInt(BoundingBox box) {
         return new BoundedVoxels<>(box, VoxelsFactory.getInt().createInitialized(box.extent()));
     }
 }

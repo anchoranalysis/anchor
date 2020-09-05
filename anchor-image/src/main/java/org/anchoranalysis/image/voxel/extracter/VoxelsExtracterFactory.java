@@ -27,7 +27,7 @@ package org.anchoranalysis.image.voxel.extracter;
 
 import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
+import org.anchoranalysis.image.convert.UnsignedIntBuffer;
 import org.anchoranalysis.image.convert.UnsignedShortBuffer;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -68,12 +68,12 @@ public class VoxelsExtracterFactory {
     }
 
     /**
-     * Create voxels-extracter for {@link IntBuffer}
+     * Create voxels-extracter for {@link UnsignedIntBuffer}
      *
      * @param voxels the voxels to extract from
      * @return a newly created extracter
      */
-    public static VoxelsExtracter<IntBuffer> createInt(Voxels<IntBuffer> voxels) {
+    public static VoxelsExtracter<UnsignedIntBuffer> createInt(Voxels<UnsignedIntBuffer> voxels) {
         return new IntImplementation(voxels);
     }
 

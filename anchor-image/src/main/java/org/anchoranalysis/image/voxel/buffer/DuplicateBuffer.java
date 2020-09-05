@@ -27,43 +27,24 @@ package org.anchoranalysis.image.voxel.buffer;
 
 import java.nio.Buffer;
 import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedBuffer;
 import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
+import org.anchoranalysis.image.convert.UnsignedIntBuffer;
 import java.nio.ShortBuffer;
 import org.anchoranalysis.image.convert.UnsignedShortBuffer;
-import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 /**
- * Deep-copies {@link Buffer} and its child-types.
+ * Deep-copies all child classes of {@link Buffer} and {@link UnsignedBuffer}.
  * 
  * @author Owen Feehan
  *
  */
 @NoArgsConstructor(access=AccessLevel.PRIVATE)
 class DuplicateBuffer {
-
-    @SuppressWarnings("unchecked")
-    public static <T> T copy(T buffer) {
-
-        if (buffer instanceof ByteBuffer) {
-            return (T) copy((ByteBuffer) buffer);
-        } else if (buffer instanceof FloatBuffer) {
-            return (T) copy((FloatBuffer) buffer);
-        } else if (buffer instanceof ShortBuffer) {
-            return (T) copy((ShortBuffer) buffer);
-        } else if (buffer instanceof IntBuffer) {
-            return (T) copy((IntBuffer) buffer);
-        } if (buffer instanceof UnsignedByteBuffer) {
-            return (T) copy((UnsignedByteBuffer) buffer);
-        } if (buffer instanceof UnsignedShortBuffer) {
-            return (T) copy((UnsignedShortBuffer) buffer);
-        } else {
-            throw new AnchorImpossibleSituationException();
-        }
-    }
 
     public static ByteBuffer copy(ByteBuffer buffer) {
         ByteBuffer clone = ByteBuffer.allocate(buffer.capacity());
@@ -92,7 +73,24 @@ class DuplicateBuffer {
         return clone;
     }
     
+    public static IntBuffer copy(IntBuffer buffer) {
+        IntBuffer clone = IntBuffer.allocate(buffer.capacity());
+        buffer.rewind(); // copy from the beginning
+        clone.put(buffer);
+        buffer.rewind();
+        clone.flip();
+        return clone;
+    }
+    
     public static UnsignedByteBuffer copy(UnsignedByteBuffer buffer) {
         return UnsignedByteBuffer.wrapRaw( copy(buffer.getDelegate()) );
+    }
+    
+    public static UnsignedShortBuffer copy(UnsignedShortBuffer buffer) {
+        return UnsignedShortBuffer.wrapRaw( copy(buffer.getDelegate()) );
+    }
+    
+    public static UnsignedIntBuffer copy(UnsignedIntBuffer buffer) {
+        return UnsignedIntBuffer.wrapRaw( copy(buffer.getDelegate()) );
     }
 }

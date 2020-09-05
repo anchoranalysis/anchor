@@ -27,12 +27,12 @@
 package org.anchoranalysis.io.bioformats.copyconvert.toint;
 
 import java.nio.ByteBuffer;
-import java.nio.IntBuffer;
+import org.anchoranalysis.image.convert.UnsignedIntBuffer;
 import loci.common.DataTools;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
-import org.anchoranalysis.image.voxel.buffer.VoxelBufferInt;
+import org.anchoranalysis.image.voxel.buffer.VoxelBufferUnsignedInt;
 import com.google.common.base.Preconditions;
 
 @RequiredArgsConstructor
@@ -54,7 +54,7 @@ public class IntFromUnsigned32BitInt extends ConvertToInt {
     }
 
     @Override
-    protected VoxelBuffer<IntBuffer> convertSingleChannel(ByteBuffer source, int channelIndexRelative) {
+    protected VoxelBuffer<UnsignedIntBuffer> convertSingleChannel(ByteBuffer source, int channelIndexRelative) {
         Preconditions.checkArgument(channelIndexRelative==0, "interleaving not supported for int data");
         
         byte[] sourceArray = source.array();
@@ -66,6 +66,6 @@ public class IntFromUnsigned32BitInt extends ConvertToInt {
             out[indexOut++] = value;
         }
 
-        return VoxelBufferInt.wrapArray(out);
+        return VoxelBufferUnsignedInt.wrapArray(out);
     }
 }

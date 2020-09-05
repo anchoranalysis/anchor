@@ -76,7 +76,7 @@ class ShortImplementation extends Base<UnsignedShortBuffer> {
     }
 
     @Override
-    public int voxelWithMaxIntensity() {
+    public long voxelWithMaxIntensity() {
         return IterateVoxelsVoxelBoxAsInt.findMaxValue(voxels);
     }
 

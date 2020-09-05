@@ -35,7 +35,7 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.image.voxel.pixelsforslice.PixelsForSlice;
 import org.anchoranalysis.image.voxel.pixelsforslice.PixelsFromFloatBufferArr;
 
-final class FactoryFloat implements VoxelsFactoryTypeBound<FloatBuffer> {
+final class FactoryUnsignedFloat implements VoxelsFactoryTypeBound<FloatBuffer> {
 
     private static final VoxelDataType DATA_TYPE = FloatVoxelType.INSTANCE;
 
