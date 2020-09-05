@@ -56,10 +56,10 @@ public class BinaryVoxelsFactory {
     }
 
     /**
-     * Creates binary-voxels using unsigned 8-bit byte type and with all voxels set to OFF (0)
+     * Creates binary-voxels using unsigned 8-bit byte type and with all voxels set to <i>off</i> (0).
      *
      * @param extent the size of the voxels
-     * @return newly created binary-voxels of specified size with all voxels initialized to OFF.
+     * @return newly created binary-voxels of specified size with all voxels initialized to <i>off</i>.
      */
     @SuppressWarnings("unchecked")
     public static BinaryVoxels<UnsignedByteBuffer> createEmptyOff(Extent extent) {

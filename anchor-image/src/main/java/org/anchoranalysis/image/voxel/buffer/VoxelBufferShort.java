@@ -70,22 +70,37 @@ public final class VoxelBufferShort extends VoxelBuffer<ShortBuffer> {
     }
 
     @Override
-    public void putInt(int index, int val) {
-        delegate.put(index, (short) val);
+    public void putInt(int index, int value) {
+        delegate.put(index, (short) value);
     }
 
     @Override
-    public void putByte(int index, byte val) {
-        delegate.put(index, (short) PrimitiveConverter.unsignedByteToInt(val));
+    public void putByte(int index, byte value) {
+        delegate.put(index, (short) PrimitiveConverter.unsignedByteToInt(value));
     }
 
     @Override
-    public void transferFrom(int destIndex, VoxelBuffer<ShortBuffer> src, int srcIndex) {
-        delegate.put(destIndex, src.buffer().get(srcIndex));
+    public void transferFrom(int destinationIndex, VoxelBuffer<ShortBuffer> src, int sourceIndex) {
+        delegate.put(destinationIndex, src.buffer().get(sourceIndex));
     }
 
     @Override
     public int size() {
         return delegate.capacity();
+    }
+    
+    @Override
+    public boolean hasRemaining() {
+        return delegate.hasRemaining();
+    }
+    
+    @Override
+    public void position(int newPosition) {
+        delegate.position(newPosition);
+    }
+    
+    @Override
+    public boolean isDirect() {
+        return delegate.isDirect();
     }
 }

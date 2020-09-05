@@ -31,7 +31,7 @@ import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
-import org.anchoranalysis.image.voxel.buffer.VoxelBufferByte;
+import org.anchoranalysis.image.voxel.buffer.VoxelBufferUnsignedByte;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedIntVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
@@ -62,7 +62,7 @@ public final class ConvertToByteScaleByType extends VoxelsConverter<UnsignedByte
             bufferOut.put((byte) f);
         }
 
-        return VoxelBufferByte.wrapBuffer(bufferOut);
+        return VoxelBufferUnsignedByte.wrapBuffer(bufferOut);
     }
 
     @Override
@@ -76,7 +76,7 @@ public final class ConvertToByteScaleByType extends VoxelsConverter<UnsignedByte
             bufferOut.put((byte) (bufferIn.buffer().get() / div));
         }
 
-        return VoxelBufferByte.wrapBuffer(bufferOut);
+        return VoxelBufferUnsignedByte.wrapBuffer(bufferOut);
     }
 
     @Override
@@ -90,7 +90,7 @@ public final class ConvertToByteScaleByType extends VoxelsConverter<UnsignedByte
             bufferOut.put((byte) (bufferIn.buffer().get() / div));
         }
 
-        return VoxelBufferByte.wrapBuffer(bufferOut);
+        return VoxelBufferUnsignedByte.wrapBuffer(bufferOut);
     }
 
     @Override

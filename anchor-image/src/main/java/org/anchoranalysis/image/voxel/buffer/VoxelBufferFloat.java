@@ -70,22 +70,37 @@ public final class VoxelBufferFloat extends VoxelBuffer<FloatBuffer> {
     }
 
     @Override
-    public void putInt(int index, int val) {
-        delegate.put(index, (float) val);
+    public void putInt(int index, int value) {
+        delegate.put(index, (float) value);
     }
 
     @Override
-    public void putByte(int index, byte val) {
-        delegate.put(index, (float) PrimitiveConverter.unsignedByteToInt(val));
+    public void putByte(int index, byte value) {
+        delegate.put(index, (float) PrimitiveConverter.unsignedByteToInt(value));
     }
 
     @Override
-    public void transferFrom(int destIndex, VoxelBuffer<FloatBuffer> src, int srcIndex) {
-        delegate.put(destIndex, src.buffer().get(srcIndex));
+    public void transferFrom(int destinationIndex, VoxelBuffer<FloatBuffer> src, int sourceIndex) {
+        delegate.put(destinationIndex, src.buffer().get(sourceIndex));
     }
 
     @Override
     public int size() {
         return delegate.capacity();
+    }
+
+    @Override
+    public boolean hasRemaining() {
+        return delegate.hasRemaining();
+    }
+
+    @Override
+    public void position(int newPosition) {
+        delegate.position(newPosition);
+    }
+
+    @Override
+    public boolean isDirect() {
+        return delegate.isDirect();
     }
 }

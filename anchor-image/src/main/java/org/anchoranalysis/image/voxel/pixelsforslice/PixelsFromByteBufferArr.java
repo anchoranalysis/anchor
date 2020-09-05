@@ -30,7 +30,7 @@ import com.google.common.base.Preconditions;
 import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
-import org.anchoranalysis.image.voxel.buffer.VoxelBufferByte;
+import org.anchoranalysis.image.voxel.buffer.VoxelBufferUnsignedByte;
 
 public class PixelsFromByteBufferArr implements PixelsForSlice<UnsignedByteBuffer> {
 
@@ -42,13 +42,13 @@ public class PixelsFromByteBufferArr implements PixelsForSlice<UnsignedByteBuffe
 
         this.extent = extent;
 
-        buffer = new VoxelBufferByte[extent.z()];
+        buffer = new VoxelBufferUnsignedByte[extent.z()];
     }
 
     private void init() {
         int volumeXY = extent.volumeXY();
         for (int z = 0; z < extent.z(); z++) {
-            buffer[z] = VoxelBufferByte.allocate(volumeXY);
+            buffer[z] = VoxelBufferUnsignedByte.allocate(volumeXY);
         }
     }
 

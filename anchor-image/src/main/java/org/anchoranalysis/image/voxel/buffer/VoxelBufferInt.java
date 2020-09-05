@@ -70,22 +70,37 @@ public final class VoxelBufferInt extends VoxelBuffer<IntBuffer> {
     }
 
     @Override
-    public void putInt(int index, int val) {
-        delegate.put(index, val);
+    public void putInt(int index, int value) {
+        delegate.put(index, value);
     }
 
     @Override
-    public void putByte(int index, byte val) {
-        delegate.put(index, PrimitiveConverter.unsignedByteToInt(val));
+    public void putByte(int index, byte value) {
+        delegate.put(index, PrimitiveConverter.unsignedByteToInt(value));
     }
 
     @Override
-    public void transferFrom(int destIndex, VoxelBuffer<IntBuffer> src, int srcIndex) {
-        delegate.put(destIndex, src.buffer().get(srcIndex));
+    public void transferFrom(int destinationIndex, VoxelBuffer<IntBuffer> src, int sourceIndex) {
+        delegate.put(destinationIndex, src.buffer().get(sourceIndex));
     }
 
     @Override
     public int size() {
         return delegate.capacity();
+    }
+    
+    @Override
+    public boolean hasRemaining() {
+        return delegate.hasRemaining();
+    }
+
+    @Override
+    public void position(int newPosition) {
+        delegate.position(newPosition);
+    }
+    
+    @Override
+    public boolean isDirect() {
+        return delegate.isDirect();
     }
 }

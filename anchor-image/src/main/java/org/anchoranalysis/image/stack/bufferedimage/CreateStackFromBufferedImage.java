@@ -39,7 +39,7 @@ import org.anchoranalysis.image.channel.factory.ChannelFactorySingleType;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.image.voxel.buffer.VoxelBufferByte;
+import org.anchoranalysis.image.voxel.buffer.VoxelBufferUnsignedByte;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CreateStackFromBufferedImage {
@@ -67,7 +67,7 @@ public class CreateStackFromBufferedImage {
 
     private static Channel createChannelFor(Dimensions dimensions, byte[] arr) {
         Channel channel = FACTORY.createEmptyUninitialised(dimensions);
-        channel.voxels().asByte().slices().replaceSlice(0, VoxelBufferByte.wrapArray(arr));
+        channel.voxels().asByte().slices().replaceSlice(0, VoxelBufferUnsignedByte.wrapArray(arr));
         return channel;
     }
 

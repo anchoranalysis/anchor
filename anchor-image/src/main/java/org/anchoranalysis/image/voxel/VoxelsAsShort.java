@@ -43,11 +43,6 @@ public final class VoxelsAsShort extends Voxels<ShortBuffer> {
     }
 
     @Override
-    protected boolean areBufferValuesEqual(ShortBuffer buffer1, ShortBuffer buffer2) {
-        return buffer1.get() == buffer2.get();
-    }
-
-    @Override
     public VoxelsAssigner assignValue(int valueToAssign) {
         return VoxelsAssignerFactory.createShort(this, valueToAssign);
     }
@@ -59,15 +54,5 @@ public final class VoxelsAsShort extends Voxels<ShortBuffer> {
     @Override
     public VoxelsExtracter<ShortBuffer> extract() {
         return VoxelsExtracterFactory.createShort(this);
-    }
-    
-    @Override
-    public boolean hasRemaining(ShortBuffer buffer) {
-        return buffer.hasRemaining();
-    }
-    
-    @Override
-    public void setBufferPosition(ShortBuffer buffer, int offset) {
-        buffer.position(offset);
     }
 }

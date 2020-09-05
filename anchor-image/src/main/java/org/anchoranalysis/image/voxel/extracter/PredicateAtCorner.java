@@ -42,10 +42,10 @@ import org.anchoranalysis.image.voxel.VoxelsPredicate;
 @AllArgsConstructor
 class PredicateAtCorner implements VoxelsPredicate {
 
-    /** The corner at which the voxels referred to by {@code delegate} are considered to exist */
+    /** The corner at which the voxels referred to by {@code delegate} are considered to exist. */
     private ReadableTuple3i corner;
 
-    /** Delegate */
+    /** Delegate. */
     private VoxelsPredicate delegate;
 
     @Override

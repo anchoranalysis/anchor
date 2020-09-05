@@ -28,6 +28,7 @@ package org.anchoranalysis.image.voxel.buffer.max;
 
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.Voxels;
+import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactoryTypeBound;
 
 /**
@@ -41,16 +42,16 @@ public abstract class MaxIntensityBuffer<T> {
     /** Target buffer, where the maximum-intensity pixels are stored */
     private Voxels<T> target;
 
-    public MaxIntensityBuffer(Extent srcExtent, VoxelsFactoryTypeBound<T> factory) {
-        target = factory.createInitialized(new Extent(srcExtent.x(), srcExtent.y()));
+    public MaxIntensityBuffer(Extent extent, VoxelsFactoryTypeBound<T> factory) {
+        target = factory.createInitialized(extent.flattenZ());
     }
 
     public void projectSlice(T pixels) {
 
-        T flatBuffer = target.sliceBuffer(0);
+        VoxelBuffer<T> flatBuffer = target.slice(0);
 
-        while (target.hasRemaining(pixels)) {
-            addBuffer(pixels, flatBuffer);
+        while (flatBuffer.hasRemaining()) {
+            addBuffer(pixels, flatBuffer.buffer());
         }
     }
 

@@ -84,12 +84,12 @@ public final class UnsignedByteBuffer {
         return delegate.array();
     }
 
-    public ByteBuffer put(ByteBuffer src) {
-        return delegate.put(src);
+    public ByteBuffer put(ByteBuffer source) {
+        return delegate.put(source);
     }
     
-    public ByteBuffer put(UnsignedByteBuffer src) {
-        return delegate.put(src.getDelegate());
+    public ByteBuffer put(UnsignedByteBuffer source) {
+        return delegate.put(source.getDelegate());
     }
 
     public final int capacity() {
@@ -100,7 +100,25 @@ public final class UnsignedByteBuffer {
         return delegate.clear();
     }
 
-    public final Buffer position(int arg0) {
-        return delegate.position(arg0);
+    /**
+     * Assigns a new position to the buffer.
+     * 
+     * <p>This is meant in the sense of Java's NIO {@link Buffer} classes.
+     * 
+     * @param newPosition the offset to assign as position.
+     */
+    public final Buffer position(int newPosition) {
+        return delegate.position(newPosition);
+    }
+
+    /**
+     * Is this buffer direct or non-direct?
+     * 
+     * <p>This is meant in the sense of Java's NIO {@link Buffer} classes.
+     * 
+     * @return true iff the buffer is direct.
+     */  
+    public boolean isDirect() {
+        return delegate.isDirect();
     }
 }

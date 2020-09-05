@@ -32,7 +32,7 @@ import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
 import org.anchoranalysis.image.convert.PrimitiveConverter;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
-import org.anchoranalysis.image.voxel.buffer.VoxelBufferByte;
+import org.anchoranalysis.image.voxel.buffer.VoxelBufferUnsignedByte;
 
 // Converts voxel buffers to a unsigned 8-bit buffer scaling against a the minimum and maximum
 // constant.
@@ -78,7 +78,7 @@ public final class ConvertToByteScaleByMinMaxValue extends VoxelsConverter<Unsig
             bufferOut.put((byte) val);
         }
 
-        return VoxelBufferByte.wrapBuffer(bufferOut);
+        return VoxelBufferUnsignedByte.wrapBuffer(bufferOut);
     }
 
     @Override
@@ -102,7 +102,7 @@ public final class ConvertToByteScaleByMinMaxValue extends VoxelsConverter<Unsig
             bufferOut.put((byte) val);
         }
 
-        return VoxelBufferByte.wrapBuffer(bufferOut);
+        return VoxelBufferUnsignedByte.wrapBuffer(bufferOut);
     }
 
     @Override
@@ -126,7 +126,7 @@ public final class ConvertToByteScaleByMinMaxValue extends VoxelsConverter<Unsig
             bufferOut.put((byte) val);
         }
 
-        return VoxelBufferByte.wrapBuffer(bufferOut);
+        return VoxelBufferUnsignedByte.wrapBuffer(bufferOut);
     }
 
     @Override

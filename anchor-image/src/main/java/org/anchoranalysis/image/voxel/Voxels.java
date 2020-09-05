@@ -29,7 +29,6 @@ package org.anchoranalysis.image.voxel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.experimental.Accessors;
-import java.nio.Buffer;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.arithmetic.VoxelsArithmetic;
 import org.anchoranalysis.image.voxel.assigner.VoxelsAssigner;
@@ -84,19 +83,19 @@ public abstract class Voxels<T> {
     public T sliceBuffer(int z) {
         return slice(z).buffer();
     }
-
+    
     public Extent extent() {
         return slices.extent();
     }
 
     public Voxels<T> duplicate() {
-        Voxels<T> bufferAccess = factory.createInitialized(slices().extent());
+        Voxels<T> out = factory.createInitialized(slices().extent());
 
-        for (int z = 0; z < extent().z(); z++) {
-            bufferAccess.replaceSlice(z, slice(z).duplicate());
-        }
+        extent().iterateOverZ( z->
+            out.replaceSlice(z, slice(z).duplicate())
+        );
 
-        return bufferAccess;
+        return out;
     }
 
     /**
@@ -137,34 +136,4 @@ public abstract class Voxels<T> {
     public void replaceSlice(int sliceIndexToUpdate, VoxelBuffer<T> bufferToAssign) {
         slices().replaceSlice(sliceIndexToUpdate, bufferToAssign);
     }
-
-    /** 
-     * Are there voxels remaining in the buffer?
-     * 
-     * <p>This is meant in the sense of Java's NIO {@link Buffer} classes.
-     *
-     * @param buffer
-     * @return true if there are voxels remaining in the buffer, false otherwise
-     **/
-    public abstract boolean hasRemaining(T buffer);
-    
-    
-    /**
-     * Sets the position in the buffer.
-     * 
-     * @param buffer the buffer
-     * @param offset the offset
-     */
-    public abstract void setBufferPosition(T buffer, int offset);
-    
-    /**
-     * Checks if the current values from <i>two buffers are equal</i>
-     *
-     * <p>(i.e. by calling {@code get()} on the buffer)
-     *
-     * @param buffer1 provides first-value to compare
-     * @param buffer2 provides second-value to compare
-     * @return true iff the current values from both buffers are equal to each other
-     */
-    protected abstract boolean areBufferValuesEqual(T buffer1, T buffer2);
 }

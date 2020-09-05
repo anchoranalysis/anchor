@@ -43,11 +43,6 @@ public final class VoxelsAsInt extends Voxels<IntBuffer> {
     }
 
     @Override
-    protected boolean areBufferValuesEqual(IntBuffer buffer1, IntBuffer buffer2) {
-        return buffer1.get() == buffer2.get();
-    }
-
-    @Override
     public VoxelsAssigner assignValue(int valueToAssign) {
         return VoxelsAssignerFactory.createInt(this, valueToAssign);
     }
@@ -59,15 +54,5 @@ public final class VoxelsAsInt extends Voxels<IntBuffer> {
     @Override
     public VoxelsExtracter<IntBuffer> extract() {
         return VoxelsExtracterFactory.createInt(this);
-    }
-    
-    @Override
-    public boolean hasRemaining(IntBuffer buffer) {
-        return buffer.hasRemaining();
-    }
-    
-    @Override
-    public void setBufferPosition(IntBuffer buffer, int offset) {
-        buffer.position(offset);
     }
 }

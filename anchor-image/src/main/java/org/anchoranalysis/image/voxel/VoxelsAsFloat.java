@@ -43,11 +43,6 @@ public final class VoxelsAsFloat extends Voxels<FloatBuffer> {
     }
 
     @Override
-    protected boolean areBufferValuesEqual(FloatBuffer buffer1, FloatBuffer buffer2) {
-        return buffer1.get() == buffer2.get();
-    }
-
-    @Override
     public VoxelsAssigner assignValue(int valueToAssign) {
         return VoxelsAssignerFactory.createFloat(this, valueToAssign);
     }
@@ -59,14 +54,5 @@ public final class VoxelsAsFloat extends Voxels<FloatBuffer> {
     @Override
     public VoxelsExtracter<FloatBuffer> extract() {
         return VoxelsExtracterFactory.createFloat(this);
-    }
-    
-    @Override
-    public boolean hasRemaining(FloatBuffer buffer) {
-        return buffer.hasRemaining();
-    }
-    @Override
-    public void setBufferPosition(FloatBuffer buffer, int offset) {
-        buffer.position(offset);
     }
 }

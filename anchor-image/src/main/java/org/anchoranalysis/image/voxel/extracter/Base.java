@@ -163,20 +163,14 @@ abstract class Base<T> implements VoxelsExtracter<T> {
     @Override
     public VoxelsPredicate voxelsEqualTo(int equalToValue) {
         return new PredicateImplementation<>(
-                voxels.extent(),
-                voxels::sliceBuffer,
-                voxels::hasRemaining,
-                voxels::setBufferPosition,
+                voxels,
                 buffer -> bufferValueEqualTo(buffer, equalToValue));
     }
 
     @Override
     public VoxelsPredicate voxelsGreaterThan(int threshold) {
         return new PredicateImplementation<>(
-                voxels.extent(),
-                voxels::sliceBuffer,
-                voxels::hasRemaining,
-                voxels::setBufferPosition,
+                voxels,
                 buffer -> bufferValueGreaterThan(buffer, threshold));
     }
 
@@ -199,7 +193,7 @@ abstract class Base<T> implements VoxelsExtracter<T> {
     /**
      * Checks if the current value from a buffer is <i>equal to</i> a constant value
      *
-     * <p>(i.e. by calling {@code get()} on the buffer)
+     * <p>(i.e. by calling {@code get()} on the buffer).
      *
      * @param buffer provides the value to compare
      * @param value the constant-value

@@ -36,15 +36,10 @@ import org.anchoranalysis.image.voxel.extracter.VoxelsExtracterFactory;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 import org.anchoranalysis.image.voxel.pixelsforslice.PixelsForSlice;
 
-public final class VoxelsAsByte extends Voxels<UnsignedByteBuffer> {
+public final class VoxelsUnsignedByte extends Voxels<UnsignedByteBuffer> {
 
-    public VoxelsAsByte(PixelsForSlice<UnsignedByteBuffer> slices) {
+    public VoxelsUnsignedByte(PixelsForSlice<UnsignedByteBuffer> slices) {
         super(slices, VoxelsFactory.getByte(), createArithmetic(slices));
-    }
-
-    @Override
-    protected boolean areBufferValuesEqual(UnsignedByteBuffer buffer1, UnsignedByteBuffer buffer2) {
-        return buffer1.getByte() == buffer2.getByte();
     }
 
     @Override
@@ -59,15 +54,5 @@ public final class VoxelsAsByte extends Voxels<UnsignedByteBuffer> {
 
     private static VoxelsArithmetic createArithmetic(PixelsForSlice<UnsignedByteBuffer> slices) {
         return VoxelsArithmeticFactory.createByte(slices.extent(), slices::sliceBuffer);
-    }
-
-    @Override
-    public boolean hasRemaining(UnsignedByteBuffer buffer) {
-        return buffer.hasRemaining();
-    }
-
-    @Override
-    public void setBufferPosition(UnsignedByteBuffer buffer, int offset) {
-        buffer.position(offset);
     }
 }

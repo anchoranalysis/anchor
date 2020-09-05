@@ -29,7 +29,7 @@ package org.anchoranalysis.image.voxel.factory;
 import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.Voxels;
-import org.anchoranalysis.image.voxel.VoxelsAsByte;
+import org.anchoranalysis.image.voxel.VoxelsUnsignedByte;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.image.voxel.pixelsforslice.PixelsForSlice;
@@ -41,17 +41,17 @@ final class FactoryByte implements VoxelsFactoryTypeBound<UnsignedByteBuffer> {
 
     @Override
     public Voxels<UnsignedByteBuffer> create(PixelsForSlice<UnsignedByteBuffer> pixelsForPlane) {
-        return new VoxelsAsByte(pixelsForPlane);
+        return new VoxelsUnsignedByte(pixelsForPlane);
     }
 
     @Override
     public Voxels<UnsignedByteBuffer> createInitialized(Extent extent) {
-        return new VoxelsAsByte(PixelsFromByteBufferArr.createInitialized(extent));
+        return new VoxelsUnsignedByte(PixelsFromByteBufferArr.createInitialized(extent));
     }
 
     @Override
     public Voxels<UnsignedByteBuffer> createUninitialized(Extent extent) {
-        return new VoxelsAsByte(PixelsFromByteBufferArr.createUninitialized(extent));
+        return new VoxelsUnsignedByte(PixelsFromByteBufferArr.createUninitialized(extent));
     }
 
     @Override

@@ -28,7 +28,7 @@ package org.anchoranalysis.io.imagej.convert;
 import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.nio.ShortBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
-import org.anchoranalysis.image.voxel.buffer.VoxelBufferByte;
+import org.anchoranalysis.image.voxel.buffer.VoxelBufferUnsignedByte;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferShort;
 import ij.process.ImageProcessor;
 import lombok.AccessLevel;
@@ -51,7 +51,7 @@ public class ConvertToVoxelBuffer {
      */
     public static VoxelBuffer<UnsignedByteBuffer> asByte(ImageProcessor processor) {
         byte[] arr = (byte[]) processor.getPixels();
-        return VoxelBufferByte.wrapArray(arr);
+        return VoxelBufferUnsignedByte.wrapArray(arr);
     }
 
     /**

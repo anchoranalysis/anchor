@@ -32,7 +32,7 @@ import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
 import org.anchoranalysis.image.convert.PrimitiveConverter;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
-import org.anchoranalysis.image.voxel.buffer.VoxelBufferByte;
+import org.anchoranalysis.image.voxel.buffer.VoxelBufferUnsignedByte;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 
 // Converts voxel buffers to a unsigned 8-bit buffer without scaling any values.
@@ -55,7 +55,7 @@ public final class ConvertToByteNoScaling extends VoxelsConverter<UnsignedByteBu
             bufferOut.put((byte) f);
         }
 
-        return VoxelBufferByte.wrapBuffer(bufferOut);
+        return VoxelBufferUnsignedByte.wrapBuffer(bufferOut);
     }
 
     @Override
@@ -67,7 +67,7 @@ public final class ConvertToByteNoScaling extends VoxelsConverter<UnsignedByteBu
             bufferOut.put((byte) PrimitiveConverter.unsignedIntToLong(bufferIn.buffer().get()));
         }
 
-        return VoxelBufferByte.wrapBuffer(bufferOut);
+        return VoxelBufferUnsignedByte.wrapBuffer(bufferOut);
     }
 
     @Override
@@ -79,7 +79,7 @@ public final class ConvertToByteNoScaling extends VoxelsConverter<UnsignedByteBu
             bufferOut.put((byte) PrimitiveConverter.unsignedShortToInt(bufferIn.buffer().get()));
         }
 
-        return VoxelBufferByte.wrapBuffer(bufferOut);
+        return VoxelBufferUnsignedByte.wrapBuffer(bufferOut);
     }
 
     @Override

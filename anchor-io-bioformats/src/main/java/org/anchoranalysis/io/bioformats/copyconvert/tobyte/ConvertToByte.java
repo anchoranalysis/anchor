@@ -31,7 +31,7 @@ import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
-import org.anchoranalysis.image.voxel.buffer.VoxelBufferByte;
+import org.anchoranalysis.image.voxel.buffer.VoxelBufferUnsignedByte;
 import org.anchoranalysis.io.bioformats.copyconvert.ConvertTo;
 
 public abstract class ConvertToByte extends ConvertTo<UnsignedByteBuffer> {
@@ -53,7 +53,7 @@ public abstract class ConvertToByte extends ConvertTo<UnsignedByteBuffer> {
     
     @Override
     protected VoxelBuffer<UnsignedByteBuffer> convertSingleChannel(ByteBuffer source, int channelIndexRelative) {
-        return VoxelBufferByte.wrapBuffer( convert(source, channelIndexRelative) );
+        return VoxelBufferUnsignedByte.wrapBuffer( convert(source, channelIndexRelative) );
     }
     
     protected UnsignedByteBuffer allocateBuffer() {
