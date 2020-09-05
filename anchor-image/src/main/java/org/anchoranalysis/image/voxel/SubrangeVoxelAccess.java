@@ -29,14 +29,16 @@ package org.anchoranalysis.image.voxel;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
-import org.anchoranalysis.image.voxel.pixelsforslice.PixelsForSlice;
+import org.anchoranalysis.image.voxel.sliceindex.SliceBufferIndex;
 
 /**
+ * Exposes a subset of z-slices as if they were independently an image.
+ * 
  * @author Owen Feehan
  * @param <T> buffer-type
  */
 @AllArgsConstructor
-class SubrangeVoxelAccess<T> implements PixelsForSlice<T> {
+class SubrangeVoxelAccess<T> implements SliceBufferIndex<T> {
 
     private int zRelative;
     private Extent extent;

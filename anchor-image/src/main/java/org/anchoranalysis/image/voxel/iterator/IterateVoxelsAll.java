@@ -57,7 +57,7 @@ public class IterateVoxelsAll {
      * Iterate over each voxel - with <b>one</b> associated <b>buffer</b> for each slice.
      *
      * @param voxels voxels to be iterated over (in their entirety)
-     * @param process is called for each voxel within the bounding-box using GLOBAL coordinates.
+     * @param process is called for each voxel within the bounding-box using <i>global</i> coordinates.
      * @param <T> buffer-type for voxels
      */
     public static <T> void withBuffer(Voxels<T> voxels, ProcessBufferUnary<T> process) {
@@ -85,7 +85,7 @@ public class IterateVoxelsAll {
      *     provides the <b>first</b> buffer
      * @param voxels2 voxels in which which {@link BoundingBox} refers to a subregion, and which
      *     provides the <b>second</b> buffer
-     * @param process is called for each voxel within the bounding-box using GLOBAL coordinates.
+     * @param process is called for each voxel within the bounding-box using <i>global</i> coordinates.
      * @param <T> buffer-type for voxels
      */
     public static <T> void withTwoBuffers(
@@ -106,7 +106,7 @@ public class IterateVoxelsAll {
      *     provides the <b>second</b> buffer
      * @param voxels3 voxels in which which {@link BoundingBox} refers to a subregion, and which
      *     provides the <b>third</b> buffer
-     * @param process is called for each voxel within the bounding-box using GLOBAL coordinates.
+     * @param process is called for each voxel within the bounding-box using <i>global</i> coordinates.
      * @param <T> buffer-type for voxels
      */
     public static <T> void withThreeBuffers(
@@ -131,7 +131,7 @@ public class IterateVoxelsAll {
      *     provides the <b>first</b> buffer
      * @param voxels2 voxels in which which {@link BoundingBox} refers to a subregion, and which
      *     provides the <b>second</b> buffer
-     * @param process is called for each voxel within the bounding-box using GLOBAL coordinates.
+     * @param process is called for each voxel within the bounding-box using <i>global</i> coordinates.
      * @param <T> buffer-type for voxels
      */
     public static <S, T> void withTwoVoxelBuffers(
@@ -236,7 +236,7 @@ public class IterateVoxelsAll {
      *     provides the <b>second inwards</b> buffer
      * @param voxelsOut voxels in which which {@link BoundingBox} refers to a subregion, and which
      *     provides the <b>outwards</b> buffer
-     * @param operation is called for each voxel within the bounding-box using GLOBAL coordinates.
+     * @param operation is called for each voxel within the bounding-box using <i>global</i> coordinates.
      */
     public static void binaryOperation(
             Voxels<UnsignedByteBuffer> voxelsIn1,

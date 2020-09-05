@@ -28,7 +28,7 @@ package org.anchoranalysis.image.bean.channel.converter;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.ImageBean;
-import org.anchoranalysis.image.channel.converter.ChannelConverter;
+import org.anchoranalysis.image.channel.convert.ChannelConverter;
 
 /** Converts a channel from one type to another */
 public abstract class ConvertChannelTo extends ImageBean<ConvertChannelTo> {

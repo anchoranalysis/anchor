@@ -34,11 +34,11 @@ import org.anchoranalysis.image.voxel.assigner.VoxelsAssignerFactory;
 import org.anchoranalysis.image.voxel.extracter.VoxelsExtracter;
 import org.anchoranalysis.image.voxel.extracter.VoxelsExtracterFactory;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
-import org.anchoranalysis.image.voxel.pixelsforslice.PixelsForSlice;
+import org.anchoranalysis.image.voxel.sliceindex.SliceBufferIndex;
 
 public final class VoxelsAsFloat extends Voxels<FloatBuffer> {
 
-    public VoxelsAsFloat(PixelsForSlice<FloatBuffer> slices) {
+    public VoxelsAsFloat(SliceBufferIndex<FloatBuffer> slices) {
         super(slices, VoxelsFactory.getFloat(), createArithmetic(slices));
     }
 
@@ -47,7 +47,7 @@ public final class VoxelsAsFloat extends Voxels<FloatBuffer> {
         return VoxelsAssignerFactory.createFloat(this, valueToAssign);
     }
 
-    private static VoxelsArithmetic createArithmetic(PixelsForSlice<FloatBuffer> slices) {
+    private static VoxelsArithmetic createArithmetic(SliceBufferIndex<FloatBuffer> slices) {
         return VoxelsArithmeticFactory.createFloat(slices.extent(), slices::sliceBuffer);
     }
 

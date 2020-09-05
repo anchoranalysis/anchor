@@ -61,7 +61,7 @@ public class IterateVoxelsObjectMask {
      *
      * @param object the object-mask that is used as a condition on what voxels to iterate
      * @param process process is called for each voxel with that satisfies the conditions using
-     *     GLOBAL coordinates.
+     *     <i>global</i> coordinates.
      */
     public static void withPoint(ObjectMask object, ProcessPoint process) {
         IterateVoxelsBoundingBox.withPoint(
@@ -103,7 +103,7 @@ public class IterateVoxelsObjectMask {
      *     voxels within these bounds
      * @param voxels voxels where buffers extracted from be processed, and which define the global
      *     coordinate space
-     * @param process is called for each voxel within the bounding-box using GLOBAL coordinates.
+     * @param process is called for each voxel within the bounding-box using <i>global</i> coordinates.
      * @param <T> buffer-type for voxels
      */
     public static <T> void withBuffer(
@@ -156,7 +156,7 @@ public class IterateVoxelsObjectMask {
      *     provides the <b>first</b> buffer
      * @param voxels2 voxels in which which {@link BoundingBox} refers to a subregion, and which
      *     provides the <b>second</b> buffer
-     * @param process is called for each voxel within the bounding-box using GLOBAL coordinates.
+     * @param process is called for each voxel within the bounding-box using <i>global</i> coordinates.
      * @param <T> buffer-type for voxels
      */
     public static <T> void withTwoBuffers(

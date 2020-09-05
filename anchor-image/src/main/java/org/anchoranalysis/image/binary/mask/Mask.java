@@ -103,7 +103,7 @@ public class Mask {
      * Creates a mask from an existing channel
      *
      * <p>The channel should have maximally two distinct intensity values, represeting OFF and ON
-     * states
+     * states.
      *
      * <p>Precondition: no check occurs that only OFF and ON voxels exist in a channel, so please
      * call only with valid input.
@@ -135,7 +135,7 @@ public class Mask {
     }
 
     /**
-     * Creates a mask from an existing binary-voxels using default image resolution
+     * Creates a mask from an existing binary-voxels and a specific image resolution.
      *
      * @param voxels the binary-voxels to be reused as the internal buffer of the mask
      * @param resolution the image-resolution to assign

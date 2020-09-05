@@ -32,26 +32,26 @@ import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.VoxelsAsShort;
 import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
-import org.anchoranalysis.image.voxel.pixelsforslice.PixelsForSlice;
-import org.anchoranalysis.image.voxel.pixelsforslice.PixelsFromShortBufferArr;
+import org.anchoranalysis.image.voxel.sliceindex.FromShort;
+import org.anchoranalysis.image.voxel.sliceindex.SliceBufferIndex;
 
 final class FactoryUnsignedShort implements VoxelsFactoryTypeBound<UnsignedShortBuffer> {
 
     private static final VoxelDataType DATA_TYPE = UnsignedShortVoxelType.INSTANCE;
 
     @Override
-    public Voxels<UnsignedShortBuffer> create(PixelsForSlice<UnsignedShortBuffer> pixelsForPlane) {
+    public Voxels<UnsignedShortBuffer> create(SliceBufferIndex<UnsignedShortBuffer> pixelsForPlane) {
         return new VoxelsAsShort(pixelsForPlane);
     }
 
     @Override
     public Voxels<UnsignedShortBuffer> createInitialized(Extent extent) {
-        return new VoxelsAsShort(PixelsFromShortBufferArr.createInitialized(extent));
+        return new VoxelsAsShort(FromShort.createInitialized(extent));
     }
 
     @Override
     public Voxels<UnsignedShortBuffer> createUninitialized(Extent extent) {
-        return new VoxelsAsShort(PixelsFromShortBufferArr.createUninitialized(extent));
+        return new VoxelsAsShort(FromShort.createUninitialized(extent));
     }
 
     @Override

@@ -31,7 +31,7 @@ import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
-import org.anchoranalysis.image.voxel.pixelsforslice.PixelsForSlice;
+import org.anchoranalysis.image.voxel.sliceindex.SliceBufferIndex;
 
 /**
  * A factory for creating voxels with a particular buffer-type
@@ -43,7 +43,7 @@ import org.anchoranalysis.image.voxel.pixelsforslice.PixelsForSlice;
  */
 public interface VoxelsFactoryTypeBound<T> {
 
-    Voxels<T> create(PixelsForSlice<T> pixelsForPlane);
+    Voxels<T> create(SliceBufferIndex<T> pixelsForPlane);
 
     Voxels<T> createInitialized(Extent extent);
 

@@ -31,11 +31,11 @@ import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.convert.UnsignedIntBuffer;
 import org.anchoranalysis.image.convert.UnsignedShortBuffer;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.factory.VoxelDataTypeFactoryMultiplexer;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
-import org.anchoranalysis.image.voxel.pixelsforslice.PixelsForSlice;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeFactoryMultiplexer;
+import org.anchoranalysis.image.voxel.sliceindex.SliceBufferIndex;
 
 public class VoxelsFactory extends VoxelDataTypeFactoryMultiplexer<VoxelsFactoryTypeBound<?>> {
 
@@ -63,7 +63,7 @@ public class VoxelsFactory extends VoxelDataTypeFactoryMultiplexer<VoxelsFactory
         return instance;
     }
 
-    public <T> VoxelsWrapper create(PixelsForSlice<T> pixelsForPlane, VoxelDataType dataType) {
+    public <T> VoxelsWrapper create(SliceBufferIndex<T> pixelsForPlane, VoxelDataType dataType) {
         @SuppressWarnings("unchecked")
         VoxelsFactoryTypeBound<T> factory = (VoxelsFactoryTypeBound<T>) get(dataType);
         Voxels<T> buffer = factory.create(pixelsForPlane);

@@ -36,7 +36,7 @@ import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.assigner.VoxelsAssigner;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.extracter.VoxelsExtracter;
-import org.anchoranalysis.image.voxel.pixelsforslice.PixelsForSlice;
+import org.anchoranalysis.image.voxel.sliceindex.SliceBufferIndex;
 
 /**
  * Like {@link Voxels} but should only contain two distinct intensity-values representing ON and OFF
@@ -120,7 +120,7 @@ public abstract class BinaryVoxels<T> implements BinaryOnOffSetter {
         return voxels.extract();
     }
 
-    public PixelsForSlice<T> slices() {
+    public SliceBufferIndex<T> slices() {
         return voxels.slices();
     }
 }

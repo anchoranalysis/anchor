@@ -417,7 +417,7 @@ public class BoundedVoxels<T> {
     }
 
     /**
-     * Assigns a value to a bounded-voxels accepting GLOBAL coordinates for objects, boxes etc.
+     * Assigns a value to a bounded-voxels accepting <i>global</i> coordinates for objects, boxes etc.
      *
      * @param valueToAssign value to assign
      * @return an assigner that expects global co-ordinates

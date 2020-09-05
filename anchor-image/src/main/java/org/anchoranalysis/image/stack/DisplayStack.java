@@ -38,9 +38,9 @@ import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.channel.converter.ConversionPolicy;
-import org.anchoranalysis.image.channel.converter.attached.ChannelConverterAttached;
-import org.anchoranalysis.image.channel.converter.attached.channel.UpperLowerQuantileIntensity;
+import org.anchoranalysis.image.channel.convert.ConversionPolicy;
+import org.anchoranalysis.image.channel.convert.attached.ChannelConverterAttached;
+import org.anchoranalysis.image.channel.convert.attached.channel.UpperLowerQuantileIntensity;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.extent.Dimensions;

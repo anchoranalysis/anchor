@@ -24,7 +24,6 @@
  * #L%
  */
 /**
- * Classes and converters for image-channels, one component of a {@link
- * org.anchoranalysis.image.stack.Stack}.
+ * The {@link org.anchoranalysis.image.channel.Channel} core data-class and related operations and converters.
  */
 package org.anchoranalysis.image.channel;

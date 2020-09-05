@@ -41,7 +41,7 @@ import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelTypeException;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
-import org.anchoranalysis.image.voxel.pixelsforslice.PixelsForSlice;
+import org.anchoranalysis.image.voxel.sliceindex.SliceBufferIndex;
 
 /**
  * Converts other voxel data-structures (as used by Anchor) to an ImageJ {@link ImageProcessor}.
@@ -80,7 +80,7 @@ public class ConvertToImageProcessor {
     }
 
     /**
-     * Creates a {@link ImageProcessor} by extracting a slice from a {@link PixelsForSlice} of type
+     * Creates a {@link ImageProcessor} by extracting a slice from a {@link SliceBufferIndex} of type
      * {@link UnsignedByteBuffer}.
      *
      * @param pixelsForSlice the pixels to extract a slice from.
@@ -88,12 +88,12 @@ public class ConvertToImageProcessor {
      * @return a newly created image-processor (reusing the existing buffer).
      */
     public static ImageProcessor fromByte(
-            PixelsForSlice<UnsignedByteBuffer> pixelsForSlice, int z) {
+            SliceBufferIndex<UnsignedByteBuffer> pixelsForSlice, int z) {
         return fromByte(pixelsForSlice.slice(z), pixelsForSlice.extent());
     }
 
     /**
-     * Creates a {@link ImageProcessor} by extracting a slice from a {@link PixelsForSlice} of type
+     * Creates a {@link ImageProcessor} by extracting a slice from a {@link SliceBufferIndex} of type
      * {@link UnsignedShortBuffer}.
      *
      * @param pixelsForSlice the pixels to extract a slice from.
@@ -101,7 +101,7 @@ public class ConvertToImageProcessor {
      * @return a newly created image-processor (reusing the existing buffer).
      */
     public static ImageProcessor fromShort(
-            PixelsForSlice<UnsignedShortBuffer> pixelsForSlice, int z) {
+            SliceBufferIndex<UnsignedShortBuffer> pixelsForSlice, int z) {
         return fromShort(pixelsForSlice.slice(z), pixelsForSlice.extent());
     }
 

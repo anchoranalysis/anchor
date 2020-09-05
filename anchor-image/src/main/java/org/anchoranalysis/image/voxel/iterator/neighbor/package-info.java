@@ -23,5 +23,5 @@
  * THE SOFTWARE.
  * #L%
  */
-/** Iterating over the neighbouring pixels to a point. */
+/** Iterating over a point's neighboring voxels. */
 package org.anchoranalysis.image.voxel.iterator.neighbor;

@@ -36,7 +36,7 @@ import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.image.voxel.extracter.VoxelsExtracter;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactoryTypeBound;
-import org.anchoranalysis.image.voxel.pixelsforslice.PixelsForSlice;
+import org.anchoranalysis.image.voxel.sliceindex.SliceBufferIndex;
 
 /**
  * A box (3-dimensions) with voxel-data.
@@ -55,7 +55,7 @@ import org.anchoranalysis.image.voxel.pixelsforslice.PixelsForSlice;
 @AllArgsConstructor
 public abstract class Voxels<T> {
 
-    @Getter private final PixelsForSlice<T> slices;
+    @Getter private final SliceBufferIndex<T> slices;
     @Getter private final VoxelsFactoryTypeBound<T> factory;
 
     /** Methods to manipulate the voxel-values via arithmetic */
