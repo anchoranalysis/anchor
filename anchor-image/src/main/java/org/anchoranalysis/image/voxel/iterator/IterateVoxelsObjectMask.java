@@ -224,25 +224,6 @@ public class IterateVoxelsObjectMask {
     }
 
     /**
-     * Iterate over each voxel in a sliding-buffer, optionally restricting it to be only voxels in a
-     * certain object
-     *
-     * @param buffer a sliding-buffer whose voxels are iterated over, partially (if an objectmask is
-     *     defined) or as a whole (if no onject-mask is defined)
-     * @param objectMask an optional object-mask that is used as a condition on what voxels to
-     *     iterate
-     * @param process process is called for each voxel (on the entire {@link SlidingBuffer} or on
-     *     the object-mask depending) using GLOBAL coordinates.
-     */
-    public static void withSlidingBuffer(
-            Optional<ObjectMask> objectMask, SlidingBuffer<?> buffer, ProcessPoint process) {
-
-        buffer.seek(objectMask.map(object -> object.boundingBox().cornerMin().z()).orElse(0));
-
-        IterateVoxelsObjectMaskOptional.withPoint(objectMask, buffer.extent(), new SlidingBufferProcessor(buffer, process));
-    }
-
-    /**
      * Do all points on an object-mask match a predicate on the point's voxel-intensity?
      *
      * <p>The voxel-value of the current buffer is passed to the predicate.
