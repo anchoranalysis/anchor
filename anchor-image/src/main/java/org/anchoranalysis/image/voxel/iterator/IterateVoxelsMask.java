@@ -40,11 +40,7 @@ import org.anchoranalysis.image.voxel.iterator.process.ProcessBufferUnary;
  * Utilities for iterating over the subset of voxels corresponding to an <i>on</i> state in a {@link
  * Mask}.
  *
- * <p>The utilities operate on one or more {@link Voxels} or {@link Channel}.
- *
- * <p>
- *
- * <p>A processor is called on each selected voxel.
+ * <p>The utilities operate on one or more {@link Voxels}. A processor is called on each selected voxel.
  *
  * @author Owen Feehan
  */
@@ -54,9 +50,9 @@ public class IterateVoxelsMask {
     /**
      * Iterate over each voxel in a mask - with an associated buffer for each slice from a voxel-bo
      *
-     * @param voxels voxels to iterate over (if the corresponding mask voxel is <i>on</i>)
      * @param mask the mask is used as a condition on what voxels to iterate i.e. only voxels within
      *     these bounds
+     * @param voxels voxels to iterate over (if the corresponding mask voxel is <i>on</i>)
      * @param process is called for each voxel within the bounding-box using <i>global</i>
      *     coordinates.
      * @param <T> buffer-type for voxels

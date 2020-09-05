@@ -47,5 +47,6 @@
  *   <li>One or more {@link org.anchoranalysis.image.voxel.Voxels} to provide buffers or {@link
  *       org.anchoranalysis.image.voxel.buffer.VoxelBuffer}.
  *   <li>A functional-interface called a <i>processor</i> that is applied to each matching voxel.
+ * </ol>
  */
 package org.anchoranalysis.image.voxel.iterator;
