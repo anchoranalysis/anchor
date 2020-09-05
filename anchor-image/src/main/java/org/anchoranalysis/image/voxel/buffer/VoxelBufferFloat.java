@@ -85,7 +85,7 @@ public final class VoxelBufferFloat extends VoxelBuffer<FloatBuffer> {
     }
 
     @Override
-    public int size() {
+    public int capacity() {
         return delegate.capacity();
     }
 

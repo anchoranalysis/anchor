@@ -44,7 +44,7 @@ import org.anchoranalysis.image.object.factory.ObjectCollectionFactory;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.extracter.VoxelsExtracter;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
-import org.anchoranalysis.image.voxel.iterator.IterateVoxels;
+import org.anchoranalysis.image.voxel.iterator.IterateVoxelsAll;
 import org.jgrapht.alg.util.UnionFind;
 
 @AllArgsConstructor
@@ -114,7 +114,7 @@ public class ConnectedComponentUnionFind {
 
     private static <T> int populateIndexFromBinary(
             BinaryVoxels<T> visited, PopulateIndexProcessor<T> process) {
-        IterateVoxels.callEachPoint(visited.voxels(), process);
+        IterateVoxelsAll.withBuffer(visited.voxels(), process);
         return process.getCount() - 1;
     }
 

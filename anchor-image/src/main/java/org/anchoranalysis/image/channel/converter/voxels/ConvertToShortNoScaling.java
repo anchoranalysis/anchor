@@ -76,7 +76,7 @@ public final class ConvertToShortNoScaling extends VoxelsConverter<UnsignedShort
 
     @Override
     public VoxelBuffer<UnsignedShortBuffer> convertFromByte(VoxelBuffer<UnsignedByteBuffer> bufferIn) {
-        UnsignedShortBuffer bufferOut = UnsignedShortBuffer.allocate(bufferIn.size());
+        UnsignedShortBuffer bufferOut = UnsignedShortBuffer.allocate(bufferIn.capacity());
 
         while (bufferIn.buffer().hasRemaining()) {
             bufferOut.putUnsigned(bufferIn.buffer().getUnsigned());

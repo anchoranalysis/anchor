@@ -52,7 +52,7 @@ public interface VoxelsFactoryTypeBound<T> {
     VoxelDataType dataType();
     
     default Voxels<T> createForBuffer( VoxelBuffer<T> buffer, Extent extent ) {
-        Preconditions.checkArgument( extent.volumeXY()==buffer.size() );
+        Preconditions.checkArgument( extent.volumeXY()==buffer.capacity() );
         
         Voxels<T> out = createUninitialized(extent);
         out.replaceSlice(0, buffer);

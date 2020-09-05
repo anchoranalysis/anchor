@@ -29,7 +29,7 @@ package org.anchoranalysis.image.voxel.pixelsforslice;
 import java.util.function.Consumer;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
-import org.anchoranalysis.image.voxel.iterator.ProcessVoxelSlice;
+import org.anchoranalysis.image.voxel.iterator.process.ProcessVoxelBufferUnary;
 
 /**
  * @author Owen Feehan
@@ -69,7 +69,7 @@ public interface PixelsForSlice<T> {
      *
      * @param process called for each offset on each slice
      */
-    default void iterateOverSlicesAndOffsets(ProcessVoxelSlice<T> process) {
+    default void iterateOverSlicesAndOffsets(ProcessVoxelBufferUnary<T> process) {
         iterateOverSlices(
                 buffer -> extent().iterateOverXYOffset(offset -> process.process(buffer, offset)));
     }

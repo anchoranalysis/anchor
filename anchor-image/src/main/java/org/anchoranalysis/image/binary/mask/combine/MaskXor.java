@@ -32,7 +32,7 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.voxel.Voxels;
-import org.anchoranalysis.image.voxel.iterator.IterateVoxels;
+import org.anchoranalysis.image.voxel.iterator.IterateVoxelsAll;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class MaskXor {
@@ -72,7 +72,7 @@ public class MaskXor {
 
         byte receiveOn = bvbSecond.getOnByte();
 
-        IterateVoxels.callEachPointTwo(
+        IterateVoxelsAll.withTwoBuffers(
                 voxelsFirst,
                 voxelsSecond,
                 (point, bufferSource, bufferReceive, offset) -> {

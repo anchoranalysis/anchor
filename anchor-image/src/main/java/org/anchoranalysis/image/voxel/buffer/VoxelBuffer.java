@@ -49,14 +49,48 @@ public abstract class VoxelBuffer<T> {
 
     public abstract VoxelBuffer<T> duplicate();
 
-    // Gets the underlying buffer-item converted to an int
+    /** 
+     * Gets an element from the buffer at a particular position, converting, if necessary, to an int.
+     *
+     * <p>Note this can provide slower access than reading directly in the native buffer type.
+     * 
+     * <p>The <i>advantage</i> is that all buffer-types implement {@code getInt} and {@code putInt} so no type-specific
+     * code needs to be written.
+     * 
+     * <p>The <i>disadvantage</i> is that this can be less efficient, unless conversion to {@code int} needs
+     * to occur anyway.
+     * 
+     * @param index the index in the buffer
+     */
     public abstract int getInt(int index);
 
+    /** 
+     * Puts an int in the buffer at a particular position, converting, if necessary, to the buffer type.
+     *
+     * <p>Note this can provide slower access than reading directly in the native buffer type. See the note in {@link #getInt(int)}.
+     * 
+     * @param index the index in the buffer
+     * @param value value to put in the biffer
+     */
     public abstract void putInt(int index, int value);
+
+    /** 
+     * Puts a byte in the buffer at a particular position, converting, if necessary, to the buffer type.
+     *
+     * @param index the index in the buffer
+     * @param value value to put in the biffer
+     */
 
     public abstract void putByte(int index, byte value);
 
-    public abstract int size();
+    /**
+     * The capacity (i.e. size) of the buffer.
+     * 
+     * <p>This is meant in the sense of Java's NIO {@link Buffer} classes.
+     * 
+     * @return the size
+     */
+    public abstract int capacity();
     
     /** 
      * Are there voxels remaining in a buffer?

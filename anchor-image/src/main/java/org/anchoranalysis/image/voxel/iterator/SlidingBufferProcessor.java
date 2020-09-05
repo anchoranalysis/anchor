@@ -29,6 +29,7 @@ package org.anchoranalysis.image.voxel.iterator;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.voxel.buffer.SlidingBuffer;
+import org.anchoranalysis.image.voxel.iterator.process.ProcessPoint;
 
 /**
  * Slides along a {@link SlidingBuffer} as points are being processed.
@@ -36,10 +37,10 @@ import org.anchoranalysis.image.voxel.buffer.SlidingBuffer;
  * @author Owen Feehan
  */
 @AllArgsConstructor
-final class SlidingBufferProcessor implements ProcessVoxel {
+final class SlidingBufferProcessor implements ProcessPoint {
 
     private final SlidingBuffer<?> buffer;
-    private final ProcessVoxel process;
+    private final ProcessPoint process;
 
     @Override
     public void process(Point3i point) {

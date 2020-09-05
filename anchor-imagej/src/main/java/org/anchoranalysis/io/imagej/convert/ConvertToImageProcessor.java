@@ -64,12 +64,12 @@ public class ConvertToImageProcessor {
      */
     public static ImageProcessor from(VoxelsWrapper voxels, int z) {
 
-        if (voxels.any().extent().volumeXY() != voxels.slice(z).size()) {
+        if (voxels.any().extent().volumeXY() != voxels.slice(z).capacity()) {
             throw new AnchorFriendlyRuntimeException(
                     String.format(
                             "Extent volume (%d) and buffer-capacity (%d) are not equal",
                             voxels.any().extent().volumeXY(),
-                            voxels.slice(z).size()));
+                            voxels.slice(z).capacity()));
         }
 
         if (voxels.getVoxelDataType().equals(DATA_TYPE_BYTE)) {

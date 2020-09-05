@@ -151,12 +151,12 @@ abstract class Base<T> implements VoxelsExtracter<T> {
 
         Voxels<T> bufferTarget = voxels.factory().createInitialized(extentResized);
 
-        assert (bufferTarget.slice(0).size() == extentResized.volumeXY());
+        assert (bufferTarget.slice(0).capacity() == extentResized.volumeXY());
 
         InterpolateUtilities.transferSlicesResizeXY(
                 new VoxelsWrapper(voxels), new VoxelsWrapper(bufferTarget), interpolator);
 
-        assert (bufferTarget.slice(0).size() == extentResized.volumeXY());
+        assert (bufferTarget.slice(0).capacity() == extentResized.volumeXY());
         return bufferTarget;
     }
 

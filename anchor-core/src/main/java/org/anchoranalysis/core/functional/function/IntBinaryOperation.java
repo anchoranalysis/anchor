@@ -23,7 +23,7 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.image.voxel.iterator;
+package org.anchoranalysis.core.functional.function;
 
 /**
  * A binary operation on two int-values that produces an int

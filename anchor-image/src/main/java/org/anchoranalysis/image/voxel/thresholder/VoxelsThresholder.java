@@ -37,7 +37,7 @@ import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
-import org.anchoranalysis.image.voxel.iterator.IterateVoxels;
+import org.anchoranalysis.image.voxel.iterator.IterateVoxelsObjectMask;
 
 /** Performs threshold operation on voxels */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -60,8 +60,8 @@ public class VoxelsThresholder {
 
         if (inputBuffer.getVoxelDataType().equals(UnsignedByteVoxelType.INSTANCE)) {
 
-            IterateVoxels.callEachPoint(
-                    inputBuffer.asByte(), objectMask, new PointProcessor(level, boxOut, bvOut));
+            IterateVoxelsObjectMask.withBuffer(
+                    objectMask, inputBuffer.asByte(), new PointProcessor(level, boxOut, bvOut));
         }
 
         return BinaryVoxelsFactory.reuseByte(boxOut, bvOut.createInt());

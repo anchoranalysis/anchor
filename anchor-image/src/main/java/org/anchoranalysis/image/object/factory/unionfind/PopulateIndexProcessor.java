@@ -32,9 +32,9 @@ import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.voxel.Voxels;
-import org.anchoranalysis.image.voxel.iterator.ProcessVoxelSliceBuffer;
+import org.anchoranalysis.image.voxel.iterator.process.ProcessBufferUnary;
 
-class PopulateIndexProcessor<T> implements ProcessVoxelSliceBuffer<T> {
+class PopulateIndexProcessor<T> implements ProcessBufferUnary<T> {
 
     private Voxels<UnsignedIntBuffer> indexBuffer;
     private MergeWithNeighbors mergeWithNeighbors;

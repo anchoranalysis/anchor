@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.image.voxel.iterator.changed;
+package org.anchoranalysis.image.voxel.iterator.neighbor;
 
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.buffer.SlidingBuffer;

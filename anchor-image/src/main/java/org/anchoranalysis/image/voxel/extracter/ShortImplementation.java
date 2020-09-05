@@ -30,7 +30,7 @@ import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.max.MaxIntensityBufferShort;
 import org.anchoranalysis.image.voxel.buffer.mean.MeanIntensityShortBuffer;
-import org.anchoranalysis.image.voxel.iterator.IterateVoxelsVoxelBoxAsInt;
+import org.anchoranalysis.image.voxel.iterator.IterateVoxelsAll;
 
 class ShortImplementation extends Base<UnsignedShortBuffer> {
 
@@ -77,7 +77,7 @@ class ShortImplementation extends Base<UnsignedShortBuffer> {
 
     @Override
     public long voxelWithMaxIntensity() {
-        return IterateVoxelsVoxelBoxAsInt.findMaxValue(voxels);
+        return IterateVoxelsAll.intensityMax(voxels);
     }
 
     @Override

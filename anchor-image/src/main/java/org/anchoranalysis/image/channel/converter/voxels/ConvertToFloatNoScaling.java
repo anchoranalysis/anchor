@@ -69,7 +69,7 @@ public final class ConvertToFloatNoScaling extends VoxelsConverter<FloatBuffer> 
     @Override
     public VoxelBuffer<FloatBuffer> convertFromByte(VoxelBuffer<UnsignedByteBuffer> bufferIn) {
 
-        VoxelBufferFloat bufferOut = VoxelBufferFloat.allocate(bufferIn.size());
+        VoxelBufferFloat bufferOut = VoxelBufferFloat.allocate(bufferIn.capacity());
 
         while (bufferIn.buffer().hasRemaining()) {
             bufferOut

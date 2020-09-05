@@ -24,17 +24,15 @@
  * #L%
  */
 
-package org.anchoranalysis.image.voxel.iterator.changed;
-
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
+package org.anchoranalysis.image.voxel.iterator.neighbor;
 
 /**
- * Processes a point which has been translated (changed) relative to another point - and includes
- * global coordinates and includes an object-mask buffer
+ * Processes a point that is a neighbor of another - includes global (absolute) coordinates for this
+ * point.
  *
  * @param <T> result-type that can be collected after processing
  */
-public interface ProcessChangedPointAbsoluteMasked<T> {
+public interface ProcessVoxelNeighborAbsolute<T> {
 
     /**
      * The value and offset for the source point (around which we process neighbors)
@@ -48,11 +46,27 @@ public interface ProcessChangedPointAbsoluteMasked<T> {
      */
     void initSource(int sourceVal, int sourceOffsetXY);
 
-    /** Notifies the processor that there has been a change in z-coordinate */
-    default void notifyChangeZ(int zChange, int z, UnsignedByteBuffer objectMaskBuffer) {}
+    /**
+     * Notifies the processor that there has been a change in z-coordinate
+     *
+     * @param zChange the change in the Z-dimension to reach this neighbor relative to the source
+     *     coordinate
+     */
+    default void notifyChangeZ(int zChange, int z) {}
 
-    /** Processes a particular point */
-    boolean processPoint(int xChange, int yChange, int x1, int y1, int objectMaskOffset);
+    /**
+     * Processes a particular point
+     *
+     * @param xChange the change in x-dimension to reach this neighbor relative to the source
+     *     coordinate
+     * @param yChange the change in y-dimension to reach this neighbor relative to the source
+     *     coordinate
+     * @param x the cordinates for this point (the neighboring point) in global (absolute) terms
+     *     i.e. NOT relative to a bounding-box
+     * @param y the cordinates for this point (the neighboring point) in global (absolute) terms
+     *     i.e. NOT relative to a bounding-box
+     */
+    boolean processPoint(int xChange, int yChange, int x, int y);
 
     /** Collects the result of the operation after processing neighbor pixels */
     public abstract T collectResult();

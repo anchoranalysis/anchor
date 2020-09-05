@@ -24,41 +24,36 @@
  * #L%
  */
 
-package org.anchoranalysis.image.voxel.iterator.changed;
+package org.anchoranalysis.image.voxel.iterator.process;
 
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
+import java.nio.Buffer;
+import org.anchoranalysis.core.geometry.Point3i;
 
 /**
- * Wraps a {@link ProcessVoxelNeighborAbsolute} as a {@link ProcessChangedPointAbsoluteMasked}
+ * Processes a 3D point like {@link ProcessPoint} but also retrieves <b>two</b> {@link Buffer} for
+ * the current z-slice.
  *
- * @param <T> result-type that can be collected after processing
+ * <p>It is very similar to {@link ProcessBufferUnary} but uses two {@link Buffer} of the same
+ * type instead of a single one.
+ *
+ * @param <T> type of both buffers
+ * @author Owen Feehan
  */
-public final class WrapAbsoluteAsMasked<T> implements ProcessChangedPointAbsoluteMasked<T> {
+@FunctionalInterface
+public interface ProcessBufferBinary<T> {
 
-    private final ProcessVoxelNeighborAbsolute<T> delegate;
+    /** Notifies the processor that there has been a change in slice (z global coordinate) */
+    default void notifyChangeSlice(int z) {}
 
-    public WrapAbsoluteAsMasked(ProcessVoxelNeighborAbsolute<T> delegate) {
-        super();
-        this.delegate = delegate;
-    }
-
-    @Override
-    public void initSource(int sourceVal, int sourceOffsetXY) {
-        delegate.initSource(sourceVal, sourceOffsetXY);
-    }
-
-    @Override
-    public void notifyChangeZ(int zChange, int z, UnsignedByteBuffer objectMaskBuffer) {
-        delegate.notifyChangeZ(zChange, z);
-    }
-
-    @Override
-    public boolean processPoint(int xChange, int yChange, int x1, int y1, int objectMaskOffset) {
-        return delegate.processPoint(xChange, yChange, x1, y1);
-    }
-
-    @Override
-    public T collectResult() {
-        return delegate.collectResult();
-    }
+    /**
+     * Processes a voxel location in a buffer
+     *
+     * @param point a point with global coordinates
+     * @param buffer1 first buffer for the current slice for which {@code offsetSlice} refers to a
+     *     particular location
+     * @param buffer2 second buffer for the current slice for which {@code offsetSlice} refers to a
+     *     particular location
+     * @param offset an offset value for the current slice (i.e. indexing XY only, but not Z)
+     */
+    void process(Point3i point, T buffer1, T buffer2, int offset);
 }

@@ -29,6 +29,7 @@ package org.anchoranalysis.image.voxel.iterator;
 import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.voxel.iterator.process.ProcessPoint;
 
 /**
  * Only processes a point if it lines on the region of an object-mask
@@ -37,9 +38,9 @@ import org.anchoranalysis.image.object.ObjectMask;
  *
  * @author Owen Feehan
  */
-final class RequireIntersectionWithObject implements ProcessVoxel {
+final class RequireIntersectionWithObject implements ProcessPoint {
 
-    private final ProcessVoxel process;
+    private final ProcessPoint process;
 
     private final ObjectMask objectMask;
     private final byte byteOn;
@@ -52,7 +53,7 @@ final class RequireIntersectionWithObject implements ProcessVoxel {
      * @param process the processor to call on the region of the object-mask
      * @param objectMask the object-mask that defines the "on" region which is processed only.
      */
-    public RequireIntersectionWithObject(ProcessVoxel process, ObjectMask objectMask) {
+    public RequireIntersectionWithObject(ProcessPoint process, ObjectMask objectMask) {
         super();
         this.process = process;
         this.objectMask = objectMask;

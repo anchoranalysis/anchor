@@ -82,6 +82,6 @@ public class InterpolateUtilities {
             }
         }
         Preconditions.checkArgument(
-                trgt.slice(0).size() == extentTarget.volumeXY());
+                trgt.slice(0).capacity() == extentTarget.volumeXY());
     }
 }

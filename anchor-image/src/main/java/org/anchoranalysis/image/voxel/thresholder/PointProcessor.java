@@ -30,9 +30,9 @@ import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.voxel.Voxels;
-import org.anchoranalysis.image.voxel.iterator.ProcessVoxelSliceBuffer;
+import org.anchoranalysis.image.voxel.iterator.process.ProcessBufferUnary;
 
-final class PointProcessor implements ProcessVoxelSliceBuffer<UnsignedByteBuffer> {
+final class PointProcessor implements ProcessBufferUnary<UnsignedByteBuffer> {
 
     private final int level;
     private final Voxels<UnsignedByteBuffer> voxelsOut;

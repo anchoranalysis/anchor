@@ -24,23 +24,41 @@
  * #L%
  */
 
-package org.anchoranalysis.image.voxel.iterator;
+package org.anchoranalysis.image.voxel.iterator.neighbor;
 
-import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 
 /**
- * Processes a 3D point
+ * Wraps a {@link ProcessVoxelNeighborAbsolute} as a {@link ProcessChangedPointAbsoluteMasked}
  *
- * @author Owen Feehan
+ * @param <T> result-type that can be collected after processing
  */
-@FunctionalInterface
-public interface ProcessVoxel {
+public final class WrapAbsoluteAsMasked<T> implements ProcessChangedPointAbsoluteMasked<T> {
 
-    /** Notifies the processor that there has been a change in y-coordinate */
-    default void notifyChangeY(int y) {}
+    private final ProcessVoxelNeighborAbsolute<T> delegate;
 
-    /** Notifies the processor that there has been a change in z-coordinate */
-    default void notifyChangeSlice(int z) {}
+    public WrapAbsoluteAsMasked(ProcessVoxelNeighborAbsolute<T> delegate) {
+        super();
+        this.delegate = delegate;
+    }
 
-    void process(Point3i point);
+    @Override
+    public void initSource(int sourceVal, int sourceOffsetXY) {
+        delegate.initSource(sourceVal, sourceOffsetXY);
+    }
+
+    @Override
+    public void notifyChangeZ(int zChange, int z, UnsignedByteBuffer objectMaskBuffer) {
+        delegate.notifyChangeZ(zChange, z);
+    }
+
+    @Override
+    public boolean processPoint(int xChange, int yChange, int x1, int y1, int objectMaskOffset) {
+        return delegate.processPoint(xChange, yChange, x1, y1);
+    }
+
+    @Override
+    public T collectResult() {
+        return delegate.collectResult();
+    }
 }

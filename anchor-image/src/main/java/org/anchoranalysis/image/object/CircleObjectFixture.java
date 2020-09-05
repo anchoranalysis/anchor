@@ -33,7 +33,7 @@ import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.PointConverter;
 import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.voxel.assigner.VoxelsAssigner;
-import org.anchoranalysis.image.voxel.iterator.IterateVoxels;
+import org.anchoranalysis.image.voxel.iterator.IterateVoxelsBoundingBox;
 
 /**
  * Creates object-masks that are circles in different ways
@@ -91,7 +91,7 @@ public class CircleObjectFixture {
 
         ObjectMask object = new ObjectMask(box);
         VoxelsAssigner assigner = object.assignOn();
-        IterateVoxels.callEachPoint(
+        IterateVoxelsBoundingBox.withMatchingPoints(
                 box, point -> center3d.distanceSquared(point) <= radiusSquared, assigner::toVoxel);
         return object;
     }

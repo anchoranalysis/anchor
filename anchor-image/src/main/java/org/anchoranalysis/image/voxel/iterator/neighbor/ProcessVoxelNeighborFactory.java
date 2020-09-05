@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.image.voxel.iterator.changed;
+package org.anchoranalysis.image.voxel.iterator.neighbor;
 
 import java.util.Optional;
 import lombok.AccessLevel;

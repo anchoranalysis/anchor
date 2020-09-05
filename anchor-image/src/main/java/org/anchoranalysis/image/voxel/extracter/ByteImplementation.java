@@ -30,7 +30,7 @@ import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.max.MaxIntensityBufferByte;
 import org.anchoranalysis.image.voxel.buffer.mean.MeanIntensityByteBuffer;
-import org.anchoranalysis.image.voxel.iterator.IterateVoxelsVoxelBoxAsInt;
+import org.anchoranalysis.image.voxel.iterator.IterateVoxelsAll;
 
 class ByteImplementation extends Base<UnsignedByteBuffer> {
 
@@ -82,7 +82,7 @@ class ByteImplementation extends Base<UnsignedByteBuffer> {
 
     @Override
     public long voxelWithMaxIntensity() {
-        return IterateVoxelsVoxelBoxAsInt.findMaxValue(voxels);
+        return IterateVoxelsAll.intensityMax(voxels);
     }
 
     @Override

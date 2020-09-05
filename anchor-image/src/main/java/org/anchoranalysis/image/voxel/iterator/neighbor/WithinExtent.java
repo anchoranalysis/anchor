@@ -24,13 +24,13 @@
  * #L%
  */
 
-package org.anchoranalysis.image.voxel.iterator.changed;
+package org.anchoranalysis.image.voxel.iterator.neighbor;
 
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.extent.Extent;
 
 /**
- * Only processes points within a certain extent
+ * Only processes points within a certain extent.
  *
  * <p>Any points outside this extent are rejected.
  *

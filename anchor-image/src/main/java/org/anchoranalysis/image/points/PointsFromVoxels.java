@@ -43,7 +43,7 @@ import org.anchoranalysis.core.geometry.PointConverter;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
-import org.anchoranalysis.image.voxel.iterator.IterateVoxelsByte;
+import org.anchoranalysis.image.voxel.iterator.IterateVoxelsEqualTo;
 
 /**
  * Converts binary-voxels into points
@@ -154,7 +154,7 @@ public class PointsFromVoxels {
             BinaryVoxels<UnsignedByteBuffer> voxels, ReadableTuple3i shift, Consumer<Point2i> consumer) {
 
         BinaryValuesByte bvb = voxels.binaryValues().createByte();
-        IterateVoxelsByte.iterateEqualValuesSlice(
+        IterateVoxelsEqualTo.equalToPrimitiveSlice(
                 voxels.voxels(),
                 0,
                 bvb.getOnByte(),
@@ -171,7 +171,7 @@ public class PointsFromVoxels {
     private static void consumePoints3i(
             BinaryVoxels<UnsignedByteBuffer> voxels, ReadableTuple3i shift, Consumer<Point3i> consumer) {
         BinaryValuesByte bvb = voxels.binaryValues().createByte();
-        IterateVoxelsByte.iterateEqualValues(
+        IterateVoxelsEqualTo.equalToPrimitive(
                 voxels.voxels(),
                 bvb.getOnByte(),
                 (x, y, z) -> consumer.accept(Point3i.immutableAdd(shift, x, y, z)));
@@ -187,7 +187,7 @@ public class PointsFromVoxels {
     private static void consumePoints3d(
             BinaryVoxels<UnsignedByteBuffer> voxels, Point3d add, Consumer<Point3d> consumer) {
         BinaryValuesByte bvb = voxels.binaryValues().createByte();
-        IterateVoxelsByte.iterateEqualValues(
+        IterateVoxelsEqualTo.equalToPrimitive(
                 voxels.voxels(),
                 bvb.getOnByte(),
                 (x, y, z) -> consumer.accept(Point3d.immutableAdd(add, x, y, z)));

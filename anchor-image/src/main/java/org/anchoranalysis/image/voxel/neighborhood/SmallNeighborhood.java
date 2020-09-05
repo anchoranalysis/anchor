@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.image.voxel.neighborhood;
 
-import org.anchoranalysis.image.voxel.iterator.changed.ProcessVoxelNeighbor;
+import org.anchoranalysis.image.voxel.iterator.neighbor.ProcessVoxelNeighbor;
 
 // 4 or 6 connectivity
 final class SmallNeighborhood implements Neighborhood {

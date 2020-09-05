@@ -64,7 +64,7 @@ import org.anchoranalysis.image.voxel.assigner.VoxelsAssigner;
 import org.anchoranalysis.image.voxel.extracter.VoxelsExtracter;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactoryTypeBound;
-import org.anchoranalysis.image.voxel.iterator.IterateVoxelsByte;
+import org.anchoranalysis.image.voxel.iterator.IterateVoxelsEqualTo;
 import org.anchoranalysis.image.voxel.thresholder.VoxelsThresholder;
 
 /**
@@ -543,7 +543,7 @@ public class ObjectMask {
         }
 
         // Second, if needed, we iterate until we find any "ON" value
-        return IterateVoxelsByte.iterateUntilFirstEqual(
+        return IterateVoxelsEqualTo.untilFirstIntensityEqualTo(
                 boundedVoxels(), binaryValuesByte().getOnByte());
     }
 
@@ -704,7 +704,7 @@ public class ObjectMask {
      */
     public List<Point3i> derivePointsLocal() {
         List<Point3i> points = new ArrayList<>();
-        IterateVoxelsByte.iterateEqualValues(
+        IterateVoxelsEqualTo.equalToPrimitive(
                 voxels.voxels(),
                 binaryValuesByte().getOnByte(),
                 (x, y, z) -> points.add(new Point3i(x, y, z)));

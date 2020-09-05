@@ -24,16 +24,16 @@
  * #L%
  */
 
-package org.anchoranalysis.image.voxel.iterator;
+package org.anchoranalysis.image.voxel.iterator.process;
 
 import java.nio.Buffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 
 /**
- * Processes a 3D point like {@link ProcessVoxel} but also retrieves <b>two</b> {@link VoxelBuffer}s
+ * Processes a 3D point like {@link ProcessPoint} but also retrieves <b>two</b> {@link VoxelBuffer}s
  * for the current z-slice.
  *
- * <p>It is very similar to {@link ProcessVoxelSliceBuffer} but uses {@link VoxelBuffer} instead of
+ * <p>It is very similar to {@link ProcessBufferUnary} but uses {@link VoxelBuffer} instead of
  * a {@link Buffer}.
  *
  * @author Owen Feehan
@@ -41,7 +41,7 @@ import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
  * @param <T> second buffer-type
  */
 @FunctionalInterface
-public interface ProcessVoxelSliceTwo<S, T> {
+public interface ProcessVoxelBufferBinary<S, T> {
 
     /**
      * Processes a voxel location in a buffer

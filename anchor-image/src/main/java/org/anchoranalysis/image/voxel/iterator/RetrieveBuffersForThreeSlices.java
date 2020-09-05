@@ -29,9 +29,12 @@ package org.anchoranalysis.image.voxel.iterator;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.voxel.Voxels;
+import org.anchoranalysis.image.voxel.iterator.process.ProcessPoint;
+import org.anchoranalysis.image.voxel.iterator.process.ProcessBufferUnary;
+import org.anchoranalysis.image.voxel.iterator.process.ProcessBufferTernary;
 
 /**
- * Exposes a {@link ProcessVoxel} as a {@link ProcessVoxelSliceBuffer} by retrieving <b>three</b>
+ * Exposes a {@link ProcessPoint} as a {@link ProcessBufferUnary} by retrieving <b>three</b>
  * buffers for each z-slice.
  *
  * <p>Note that {@link #notifyChangeSlice} <b>need not</b> be be called for all slices (perhaps only
@@ -41,7 +44,7 @@ import org.anchoranalysis.image.voxel.Voxels;
  * @param <T> buffer-type for slice
  */
 @RequiredArgsConstructor
-public final class RetrieveBuffersForThreeSlices<T> implements ProcessVoxel {
+final class RetrieveBuffersForThreeSlices<T> implements ProcessPoint {
 
     // START REQUIRED ARGUMENTS
     /** Voxels for first buffer */
@@ -54,7 +57,7 @@ public final class RetrieveBuffersForThreeSlices<T> implements ProcessVoxel {
     private final Voxels<T> voxels3;
 
     /** Processor */
-    private final ProcessVoxelThreeSliceBuffers<T> processor;
+    private final ProcessBufferTernary<T> processor;
     // END REQUIRED ARGUMENTS
 
     private T bufferSlice1;

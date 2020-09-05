@@ -122,7 +122,7 @@ public class HistogramFactory {
     public static Histogram create(VoxelBuffer<?> inputBuffer) {
 
         Histogram histogram = new Histogram((int) inputBuffer.dataType().maxValue());
-        addBufferToHistogram(histogram, inputBuffer, inputBuffer.size());
+        addBufferToHistogram(histogram, inputBuffer, inputBuffer.capacity());
         return histogram;
     }
 

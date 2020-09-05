@@ -114,7 +114,7 @@ public final class VoxelBufferUnsignedShort extends VoxelBuffer<UnsignedShortBuf
     }
 
     @Override
-    public int size() {
+    public int capacity() {
         return delegate.capacity();
     }
     

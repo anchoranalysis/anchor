@@ -41,7 +41,7 @@ import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
-import org.anchoranalysis.image.voxel.iterator.IterateVoxels;
+import org.anchoranalysis.image.voxel.iterator.IterateVoxelsBoundingBox;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -126,9 +126,9 @@ public class ThresholderGlobalTest {
     }
 
     private static void writeModulo(Voxels<UnsignedByteBuffer> voxels, BoundingBox box, int addToPixels) {
-        IterateVoxels.callEachPoint(
-                voxels,
+        IterateVoxelsBoundingBox.withBuffer(
                 box,
+                voxels,
                 (Point3i point, UnsignedByteBuffer buffer, int offset) ->
                         buffer.putUnsigned(
                                 offset, (point.y() % 50 + point.x() % 50) + addToPixels));

@@ -24,33 +24,23 @@
  * #L%
  */
 
-package org.anchoranalysis.image.voxel.iterator;
+package org.anchoranalysis.image.voxel.iterator.process;
 
 import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 
 /**
- * Processes a 3D point like {@link ProcessVoxel} but also retrieves a buffer for the
- * current z-slice.
- *
- * <p>It is very similar to {@link ProcessVoxelSlice} but uses buffer instead of a {@link
- * VoxelBuffer}.
+ * Processes a 3D point
  *
  * @author Owen Feehan
  */
 @FunctionalInterface
-public interface ProcessVoxelSliceBuffer<T> {
+public interface ProcessPoint {
 
-    /** Notifies the processor that there has been a change in slice (z global coordinate) */
+    /** Notifies the processor that there has been a change in y-coordinate */
+    default void notifyChangeY(int y) {}
+
+    /** Notifies the processor that there has been a change in z-coordinate */
     default void notifyChangeSlice(int z) {}
 
-    /**
-     * Processes a voxel location in a buffer
-     *
-     * @param point a point with global coordinates
-     * @param buffer a buffer for the current slice for which {code offset} refers to a particular
-     *     location
-     * @param offset an offset value for the current slice (i.e. indexing XY only, but not Z)
-     */
-    void process(Point3i point, T buffer, int offset);
+    void process(Point3i point);
 }

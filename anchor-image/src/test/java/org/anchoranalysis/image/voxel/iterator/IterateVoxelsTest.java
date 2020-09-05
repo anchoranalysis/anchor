@@ -100,7 +100,7 @@ public class IterateVoxelsTest {
                 message,
                 expectedNumVoxels,
                 object.boundingBox().centerOfGravity(),
-                counter -> IterateVoxels.callEachPoint(object, counter));
+                counter -> IterateVoxelsObjectMask.withPoint(object, counter));
     }
 
     private void testIntersectionObjects(
@@ -113,7 +113,7 @@ public class IterateVoxelsTest {
                 message,
                 expectedNumVoxels,
                 expectedCenter,
-                counter -> IterateVoxels.overMasks(object1, Optional.of(object2), counter));
+                counter -> IterateVoxelsObjectMask.withPoint(object1, Optional.of(object2), counter));
     }
 
     private void testBoundingBox(String message, BoundingBox box) {
@@ -121,7 +121,7 @@ public class IterateVoxelsTest {
                 message,
                 box.extent().calculateVolume(),
                 box.centerOfGravity(),
-                counter -> IterateVoxels.callEachPoint(box, counter));
+                counter -> IterateVoxelsBoundingBox.withPoint(box, counter));
     }
 
     private void testCounter(
