@@ -113,7 +113,8 @@ public class IterateVoxelsTest {
                 message,
                 expectedNumVoxels,
                 expectedCenter,
-                counter -> IterateVoxelsObjectMask.withPoint(object1, Optional.of(object2), counter));
+                counter ->
+                        IterateVoxelsObjectMask.withPoint(object1, Optional.of(object2), counter));
     }
 
     private void testBoundingBox(String message, BoundingBox box) {

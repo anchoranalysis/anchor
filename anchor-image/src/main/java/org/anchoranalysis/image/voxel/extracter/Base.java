@@ -25,11 +25,11 @@
  */
 package org.anchoranalysis.image.voxel.extracter;
 
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.interpolator.InterpolateUtilities;
@@ -163,15 +163,13 @@ abstract class Base<T> implements VoxelsExtracter<T> {
     @Override
     public VoxelsPredicate voxelsEqualTo(int equalToValue) {
         return new PredicateImplementation<>(
-                voxels,
-                buffer -> bufferValueEqualTo(buffer, equalToValue));
+                voxels, buffer -> bufferValueEqualTo(buffer, equalToValue));
     }
 
     @Override
     public VoxelsPredicate voxelsGreaterThan(int threshold) {
         return new PredicateImplementation<>(
-                voxels,
-                buffer -> bufferValueGreaterThan(buffer, threshold));
+                voxels, buffer -> bufferValueGreaterThan(buffer, threshold));
     }
 
     protected abstract void copyBufferIndexTo(

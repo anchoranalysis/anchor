@@ -26,11 +26,11 @@
 
 package org.anchoranalysis.image.voxel.buffer;
 
-import org.anchoranalysis.image.convert.UnsignedIntBuffer;
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.image.convert.PrimitiveConverter;
+import org.anchoranalysis.image.convert.UnsignedIntBuffer;
 import org.anchoranalysis.image.voxel.datatype.UnsignedIntVoxelType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
-import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public final class VoxelBufferUnsignedInt extends VoxelBuffer<UnsignedIntBuffer> {
@@ -80,7 +80,8 @@ public final class VoxelBufferUnsignedInt extends VoxelBuffer<UnsignedIntBuffer>
     }
 
     @Override
-    public void transferFrom(int destinationIndex, VoxelBuffer<UnsignedIntBuffer> src, int sourceIndex) {
+    public void transferFrom(
+            int destinationIndex, VoxelBuffer<UnsignedIntBuffer> src, int sourceIndex) {
         delegate.putRaw(destinationIndex, src.buffer().getRaw(sourceIndex));
     }
 
@@ -88,7 +89,7 @@ public final class VoxelBufferUnsignedInt extends VoxelBuffer<UnsignedIntBuffer>
     public int capacity() {
         return delegate.capacity();
     }
-    
+
     @Override
     public boolean hasRemaining() {
         return delegate.hasRemaining();
@@ -98,7 +99,7 @@ public final class VoxelBufferUnsignedInt extends VoxelBuffer<UnsignedIntBuffer>
     public void position(int newPosition) {
         delegate.position(newPosition);
     }
-    
+
     @Override
     public boolean isDirect() {
         return delegate.isDirect();

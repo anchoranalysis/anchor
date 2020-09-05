@@ -26,11 +26,11 @@
 
 package org.anchoranalysis.image.voxel.buffer;
 
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.nio.ByteBuffer;
+import lombok.AllArgsConstructor;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
-import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public final class VoxelBufferUnsignedByte extends VoxelBuffer<UnsignedByteBuffer> {
@@ -39,7 +39,7 @@ public final class VoxelBufferUnsignedByte extends VoxelBuffer<UnsignedByteBuffe
 
     /**
      * Allocates a new voxel-buffer of given size.
-     * 
+     *
      * @param capacity the capacity (size).
      * @return a new {@link VoxelBuffer} with newly allocated (non-direct) memory.
      */
@@ -49,7 +49,7 @@ public final class VoxelBufferUnsignedByte extends VoxelBuffer<UnsignedByteBuffe
 
     /**
      * Wraps an existing array (encoding unsigned bytes as a signed array) as a voxel-buffer.
-     * 
+     *
      * @param array the array to wrap
      * @return a new {@link VoxelBuffer} reusing the array internally.
      */
@@ -59,22 +59,22 @@ public final class VoxelBufferUnsignedByte extends VoxelBuffer<UnsignedByteBuffe
 
     /**
      * Wraps an unsigned-buffer into a voxel-buffer.
-     * 
+     *
      * @param buffer the buffer to wrap
      * @return a new {@link VoxelBuffer} reusing the buffer internally.
      */
     public static VoxelBuffer<UnsignedByteBuffer> wrapBuffer(UnsignedByteBuffer buffer) {
         return new VoxelBufferUnsignedByte(buffer);
     }
-    
+
     /**
      * Wraps an unsigned-buffer (represented by a NIO signed-buffer) into a voxel-buffer.
-     * 
+     *
      * @param buffer the signed-buffer to wrap as unsigned
      * @return a new {@link VoxelBuffer} reusing the buffer internally.
      */
     public static VoxelBuffer<UnsignedByteBuffer> wrapRaw(ByteBuffer buffer) {
-        return wrapBuffer( UnsignedByteBuffer.wrapRaw(buffer) );
+        return wrapBuffer(UnsignedByteBuffer.wrapRaw(buffer));
     }
 
     @Override
@@ -121,7 +121,8 @@ public final class VoxelBufferUnsignedByte extends VoxelBuffer<UnsignedByteBuffe
     }
 
     @Override
-    public void transferFrom(int destinationIndex, VoxelBuffer<UnsignedByteBuffer> src, int sourceIndex) {
+    public void transferFrom(
+            int destinationIndex, VoxelBuffer<UnsignedByteBuffer> src, int sourceIndex) {
         delegate.putRaw(destinationIndex, src.buffer().getRaw(sourceIndex));
     }
 
@@ -129,17 +130,17 @@ public final class VoxelBufferUnsignedByte extends VoxelBuffer<UnsignedByteBuffe
     public int capacity() {
         return delegate.capacity();
     }
-    
+
     @Override
     public boolean hasRemaining() {
         return delegate.hasRemaining();
     }
-    
+
     @Override
     public void position(int newPosition) {
         delegate.position(newPosition);
     }
-    
+
     @Override
     public boolean isDirect() {
         return delegate.isDirect();

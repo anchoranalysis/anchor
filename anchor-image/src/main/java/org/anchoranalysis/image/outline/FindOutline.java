@@ -27,7 +27,6 @@
 package org.anchoranalysis.image.outline;
 
 import com.google.common.base.Preconditions;
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
@@ -36,6 +35,7 @@ import org.anchoranalysis.image.binary.mask.combine.MaskXor;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelsFactory;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.object.ObjectMask;
@@ -192,7 +192,8 @@ public class FindOutline {
             boolean do3D) {
 
         // Otherwise if > 1
-        Voxels<UnsignedByteBuffer> eroded = multipleErode(voxels, numberErosions, outlineAtBoundary, do3D);
+        Voxels<UnsignedByteBuffer> eroded =
+                multipleErode(voxels, numberErosions, outlineAtBoundary, do3D);
 
         // Binary and between the original version and the eroded version
         assert (eroded != null);

@@ -26,13 +26,13 @@
 
 package org.anchoranalysis.image.voxel.kernel;
 
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.object.ObjectMask;
@@ -49,9 +49,11 @@ import org.anchoranalysis.image.voxel.kernel.count.CountKernel;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ApplyKernel {
 
-    private static final VoxelsFactoryTypeBound<UnsignedByteBuffer> FACTORY = VoxelsFactory.getByte();
+    private static final VoxelsFactoryTypeBound<UnsignedByteBuffer> FACTORY =
+            VoxelsFactory.getByte();
 
-    public static Voxels<UnsignedByteBuffer> apply(BinaryKernel kernel, Voxels<UnsignedByteBuffer> in) {
+    public static Voxels<UnsignedByteBuffer> apply(
+            BinaryKernel kernel, Voxels<UnsignedByteBuffer> in) {
         return apply(kernel, in, BinaryValuesByte.getDefault());
     }
 
@@ -117,7 +119,8 @@ public class ApplyKernel {
      * @return the sum of the count value returned by the kernel over all iterated voxels
      * @throws OperationFailedException
      */
-    public static int applyForCount(CountKernel kernel, Voxels<UnsignedByteBuffer> voxels, BoundingBox box)
+    public static int applyForCount(
+            CountKernel kernel, Voxels<UnsignedByteBuffer> voxels, BoundingBox box)
             throws OperationFailedException {
 
         if (!voxels.extent().contains(box)) {
@@ -273,7 +276,8 @@ public class ApplyKernel {
 
                     int indKernel = extent.offsetSlice(point);
 
-                    if (bufMask.getRaw(ind) == bvb.getOnByte() && kernel.acceptPoint(indKernel, point)) {
+                    if (bufMask.getRaw(ind) == bvb.getOnByte()
+                            && kernel.acceptPoint(indKernel, point)) {
                         count++;
                     }
 

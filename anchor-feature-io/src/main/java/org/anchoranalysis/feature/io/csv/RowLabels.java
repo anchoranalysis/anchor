@@ -42,9 +42,7 @@ import org.anchoranalysis.feature.io.name.MultiName;
 @AllArgsConstructor
 public class RowLabels {
 
-    /**
-     * Unique identifier for the row taking all elements together (together a primary key).
-     */
+    /** Unique identifier for the row taking all elements together (together a primary key). */
     private final Optional<String[]> identifier;
 
     /** an identifier for a higher-level group which the row belongs to (foreign key) */
@@ -52,16 +50,16 @@ public class RowLabels {
 
     /**
      * Creates with a single string as an identifier.
-     * 
+     *
      * @param identifier the identifier.
      */
     public RowLabels(String identifier) {
-        this( Optional.of(new String[]{identifier}), Optional.empty() );
+        this(Optional.of(new String[] {identifier}), Optional.empty());
     }
-    
+
     /**
      * Adds the identifiers to a row to be outputted in a features CSV.
-     * 
+     *
      * @param csvRow the row of typed-values that will be outputted
      */
     public void addToRow(List<TypedValue> csvRow) {

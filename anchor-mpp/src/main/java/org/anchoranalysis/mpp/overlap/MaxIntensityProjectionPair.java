@@ -26,11 +26,11 @@
 
 package org.anchoranalysis.mpp.overlap;
 
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelsFactory;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.BoundedVoxels;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
@@ -73,7 +73,8 @@ public class MaxIntensityProjectionPair {
     private static BinaryVoxels<UnsignedByteBuffer> createBinaryVoxelsForFlag(
             Voxels<UnsignedByteBuffer> voxels, RegionMembershipWithFlags rmFlags) {
 
-        Voxels<UnsignedByteBuffer> voxelsOut = VoxelsFactory.getByte().createInitialized(voxels.extent());
+        Voxels<UnsignedByteBuffer> voxelsOut =
+                VoxelsFactory.getByte().createInitialized(voxels.extent());
 
         BinaryValuesByte bvb = BinaryValuesByte.getDefault();
 
@@ -111,7 +112,8 @@ public class MaxIntensityProjectionPair {
 
     private static BoundedVoxels<UnsignedByteBuffer> intensityProjectionFor(
             BoundedVoxels<UnsignedByteBuffer> voxels, RegionMembershipWithFlags rmFlags) {
-        BinaryVoxels<UnsignedByteBuffer> voxelsBinary = createBinaryVoxelsForFlag(voxels.voxels(), rmFlags);
+        BinaryVoxels<UnsignedByteBuffer> voxelsBinary =
+                createBinaryVoxelsForFlag(voxels.voxels(), rmFlags);
 
         BoundedVoxels<UnsignedByteBuffer> voxelsBounded =
                 new BoundedVoxels<>(voxels.boundingBox(), voxelsBinary.voxels());

@@ -50,23 +50,23 @@ import org.anchoranalysis.image.feature.evaluator.NamedFeatureCalculatorMulti;
  * Defines a list of features and provides a means to calculate inputs for it, a session.
  *
  * @author Owen Feehan
- *
  * @param <T> feature input-type
  */
 public class FeatureListEvaluator<T extends FeatureInput>
         extends FeatureRelatedBean<FeatureListEvaluator<T>> {
 
     // START BEAN PROPERTIES
-    /** A list of providers, combined together to form a list of features, to be calculated in a session */
-    @BeanField @Getter @Setter
-    private List<FeatureProvider<T>> features = new ArrayList<>();
+    /**
+     * A list of providers, combined together to form a list of features, to be calculated in a
+     * session
+     */
+    @BeanField @Getter @Setter private List<FeatureProvider<T>> features = new ArrayList<>();
     // END BEAN PROPERTIES
 
     /**
      * Creates session for evaluating {@code features}.
-     * 
+     *
      * @return the calculator for a newly created session.
-     * 
      * @throws OperationFailedException
      */
     public NamedFeatureCalculatorMulti<T> createFeatureSession(

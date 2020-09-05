@@ -41,14 +41,12 @@ import org.apache.commons.lang.ArrayUtils;
 
 public final class Histogram {
 
-    /**
-     * Consumers a bin and corresponding count.
-     */
+    /** Consumers a bin and corresponding count. */
     @FunctionalInterface
     public interface BinConsumer {
         void accept(int bin, int count);
     }
-    
+
     /** Minimum bin-value (by default 0) inclusive */
     private int minBin;
 
@@ -505,27 +503,28 @@ public final class Histogram {
 
         return sum / sumCount;
     }
-    
+
     /**
      * Calls {@code consumer} for every bin-value, <i>increasing</i> from min to max.
-     * 
+     *
      * @param consumer called for every bin
      */
-    public void iterateBins( BinConsumer consumer) {
+    public void iterateBins(BinConsumer consumer) {
         for (int bin = minBin; bin <= maxBin; bin++) {
             consumer.accept(bin, getCount(bin));
         }
     }
-    
+
     /**
-     * Calls {@code consumer} for every bin-value until a limit, <i>increasing</i> from min to limit (inclusive).
-     * 
+     * Calls {@code consumer} for every bin-value until a limit, <i>increasing</i> from min to limit
+     * (inclusive).
+     *
      * @param limit the maximum-bin to consume
      * @param consumer called for every bin
      */
     public void iterateBinsUntil(int limit, BinConsumer consumer) {
         for (int bin = minBin; bin <= limit; bin++) {
-            consumer.accept(bin, getCount(bin) );
+            consumer.accept(bin, getCount(bin));
         }
     }
 

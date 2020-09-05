@@ -26,11 +26,11 @@
 
 package org.anchoranalysis.mpp.segment.optimization.feedback;
 
+import lombok.Data;
 import org.anchoranalysis.mpp.segment.kernel.proposer.WeightedKernelList;
 import org.anchoranalysis.mpp.segment.optimization.OptimizationContext;
 import org.anchoranalysis.mpp.segment.optimization.feedback.aggregate.AggregateTriggerBank;
 import org.anchoranalysis.mpp.segment.optimization.feedback.period.PeriodTriggerBank;
-import lombok.Data;
 
 @Data
 public class FeedbackBeginParameters<T> {

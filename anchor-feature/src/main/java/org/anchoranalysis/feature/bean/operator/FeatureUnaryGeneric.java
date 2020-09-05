@@ -26,9 +26,9 @@
 
 package org.anchoranalysis.feature.bean.operator;
 
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.input.FeatureInput;
-import lombok.NoArgsConstructor;
 
 /**
  * A {@link FeatureUnary} that accepts any {#link {@link FeatureInput}} irrespective of type.
@@ -37,8 +37,7 @@ import lombok.NoArgsConstructor;
  * @param <T> input-type
  */
 @NoArgsConstructor
-public abstract class FeatureUnaryGeneric<T extends FeatureInput>
-        extends FeatureUnary<T, T> {
+public abstract class FeatureUnaryGeneric<T extends FeatureInput> extends FeatureUnary<T, T> {
 
     public FeatureUnaryGeneric(Feature<T> feature) {
         super(feature);

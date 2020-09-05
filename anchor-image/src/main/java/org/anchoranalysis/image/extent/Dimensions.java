@@ -151,16 +151,17 @@ public final class Dimensions implements Serializable {
 
     /**
      * Converts voxelized measurements to/from physical units.
-     * 
+     *
      * @return a converter that will perform conversions using current resolution.
      */
     public UnitConverter unitConvert() {
         return resolution.unitConvert();
     }
-    
+
     /**
-     * Checks equality betwen this object and another {@link Dimensions}, maybe not comparing image-resolution.
-     * 
+     * Checks equality betwen this object and another {@link Dimensions}, maybe not comparing
+     * image-resolution.
+     *
      * @param other the object to compare with
      * @param compareResolution if true image resolution is compared, otherwise it is ignored.
      * @return true iff the two objects are equal by the above criteria.

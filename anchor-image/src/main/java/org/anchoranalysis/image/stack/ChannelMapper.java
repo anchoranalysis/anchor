@@ -25,7 +25,6 @@
  */
 package org.anchoranalysis.image.stack;
 
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
@@ -36,6 +35,7 @@ import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.converter.attached.ChannelConverterAttached;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 
 /**
@@ -47,7 +47,8 @@ import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 public class ChannelMapper {
 
     private IntFunction<Channel> channelGetter;
-    private IntFunction<Optional<ChannelConverterAttached<Channel, UnsignedByteBuffer>>> converterGetter;
+    private IntFunction<Optional<ChannelConverterAttached<Channel, UnsignedByteBuffer>>>
+            converterGetter;
 
     public <T> T mapChannelIfSupported(
             int channelIndex,

@@ -26,9 +26,9 @@
 
 package org.anchoranalysis.image.feature.bean.evaluator;
 
+import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
-import java.util.Optional;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.provider.Provider;
@@ -46,11 +46,10 @@ import org.anchoranalysis.image.stack.Stack;
 
 /**
  * Defines a feature and provides a means to calculate inputs for it, a session.
- * 
- * <p>Optionally, an energy stack can be associated with these inputs.
- * 
- * @author Owen Feehan
  *
+ * <p>Optionally, an energy stack can be associated with these inputs.
+ *
+ * @author Owen Feehan
  * @param <T> feature input-type
  */
 public class FeatureEvaluator<T extends FeatureInput>
@@ -59,19 +58,21 @@ public class FeatureEvaluator<T extends FeatureInput>
     // START BEAN PROPERTIES
     /** The single feature that will be calculated (possibly repeatedly) in the session */
     @BeanField @Getter @Setter private Feature<T> feature;
-    
+
     /** Optionally specifies an energy-stack to be associated with every calculation input. */
     @BeanField @OptionalBean @Getter @Setter private Provider<Stack> stackEnergy;
 
-    /** Parameters to optionally associated with {@code stackEnergy}, and meaningless if {@code stackEnergy} is not specified. */ 
+    /**
+     * Parameters to optionally associated with {@code stackEnergy}, and meaningless if {@code
+     * stackEnergy} is not specified.
+     */
     @BeanField @OptionalBean @Getter @Setter private KeyValueParamsProvider params;
     // END BEAN PROPERTIES
 
     /**
      * Creates session for evaluating {@code feature} optionally adding an energy-stack.
-     * 
+     *
      * @return the calculator for a newly created session.
-     * 
      * @throws OperationFailedException
      */
     public FeatureCalculatorSingle<T> createFeatureSession() throws OperationFailedException {
@@ -80,7 +81,7 @@ public class FeatureEvaluator<T extends FeatureInput>
 
     /**
      * The specified energy stack.
-     * 
+     *
      * @return the energy stack if it is specified.
      * @throws OperationFailedException if the energy-stack is specified but cannot be created.
      */
@@ -98,17 +99,17 @@ public class FeatureEvaluator<T extends FeatureInput>
             throw new OperationFailedException(e);
         }
     }
-    
-    private FeatureCalculatorSingle<T> maybeAddEnergyStack(FeatureCalculatorSingle<T> calculator) throws OperationFailedException {
-        if (stackEnergy!=null) {
+
+    private FeatureCalculatorSingle<T> maybeAddEnergyStack(FeatureCalculatorSingle<T> calculator)
+            throws OperationFailedException {
+        if (stackEnergy != null) {
             final Optional<EnergyStack> energyStack = energyStack();
 
             return new FeatureCalculatorSingleChangeInput<>(
-                calculator,
-                input -> EnergyStackHelper.maybeSetEnergyStackOnInput(input, energyStack)
-            );            
+                    calculator,
+                    input -> EnergyStackHelper.maybeSetEnergyStackOnInput(input, energyStack));
         } else {
             return calculator;
-        }        
+        }
     }
 }

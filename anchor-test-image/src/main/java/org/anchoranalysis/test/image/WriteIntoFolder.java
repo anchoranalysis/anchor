@@ -26,7 +26,6 @@
 package org.anchoranalysis.test.image;
 
 import io.vavr.control.Either;
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.nio.file.Path;
 import java.util.List;
 import lombok.Getter;
@@ -37,6 +36,7 @@ import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.io.generator.raster.DisplayStackGenerator;
@@ -101,15 +101,15 @@ public class WriteIntoFolder implements TestRule {
 
     /**
      * Writes a stack up to a maximum of three channels.
-     * 
+     *
      * @param outputName
      * @param stack
      * @throws CreateException
      */
     public void writeStack(String outputName, Stack stack) throws CreateException {
-        writeStack(outputName, DisplayStack.create(stack.extractUpToThreeChannels()) );
+        writeStack(outputName, DisplayStack.create(stack.extractUpToThreeChannels()));
     }
-    
+
     public void writeStack(String outputName, DisplayStack stack) {
 
         setupOutputManagerIfNecessary();
@@ -216,7 +216,8 @@ public class WriteIntoFolder implements TestRule {
 
         setupOutputManagerIfNecessary();
 
-        DrawObjectsGenerator generatorObjects = DrawObjectsGenerator.outlineVariedColors(objects, 1, background);
+        DrawObjectsGenerator generatorObjects =
+                DrawObjectsGenerator.outlineVariedColors(objects, 1, background);
 
         outputManager.getWriterAlwaysAllowed().write(outputName, () -> generatorObjects);
     }

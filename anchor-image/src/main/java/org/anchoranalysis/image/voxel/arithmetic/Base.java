@@ -25,11 +25,11 @@
  */
 package org.anchoranalysis.image.voxel.arithmetic;
 
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.util.function.IntFunction;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.object.ObjectMask;

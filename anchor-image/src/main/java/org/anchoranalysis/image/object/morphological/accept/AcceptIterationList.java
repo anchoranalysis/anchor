@@ -26,11 +26,11 @@
 
 package org.anchoranalysis.image.object.morphological.accept;
 
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.binary.values.BinaryValues;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.Voxels;
 
 public class AcceptIterationList implements AcceptIterationConditon {

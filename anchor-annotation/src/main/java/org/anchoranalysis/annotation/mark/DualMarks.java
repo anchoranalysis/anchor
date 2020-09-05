@@ -30,22 +30,21 @@ import org.anchoranalysis.mpp.mark.MarkCollection;
 
 /**
  * Two mark-collections, one considered <i>accepted</i> and the other <i>rejected</i>.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public interface DualMarks {
 
     /**
      * The accepted marks.
-     * 
+     *
      * @return an existing mark-collection.
      */
     MarkCollection accepted();
 
     /**
      * The rejected marks.
-     * 
+     *
      * @return an existing mark-collection.
      */
     MarkCollection rejected();

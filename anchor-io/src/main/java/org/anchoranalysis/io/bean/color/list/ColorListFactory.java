@@ -32,15 +32,14 @@ import org.anchoranalysis.core.error.OperationFailedException;
 
 /**
  * Creates a list of colors.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public abstract class ColorListFactory extends AnchorBean<ColorListFactory> {
 
     /**
      * Creates a list of colors of particular size.
-     * 
+     *
      * @param size the size of the list
      * @return a newly created list with colors
      * @throws OperationFailedException

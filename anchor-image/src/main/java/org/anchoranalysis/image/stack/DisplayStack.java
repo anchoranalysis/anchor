@@ -28,7 +28,6 @@ package org.anchoranalysis.image.stack;
 
 import com.google.common.base.Functions;
 import java.awt.image.BufferedImage;
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -43,6 +42,7 @@ import org.anchoranalysis.image.channel.converter.ConversionPolicy;
 import org.anchoranalysis.image.channel.converter.attached.ChannelConverterAttached;
 import org.anchoranalysis.image.channel.converter.attached.channel.UpperLowerQuantileIntensity;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
@@ -72,7 +72,8 @@ public class DisplayStack {
     private static final double QUANTILE_UPPER = 0.9999;
 
     private final Stack stack;
-    private final List<Optional<ChannelConverterAttached<Channel, UnsignedByteBuffer>>> listConverters;
+    private final List<Optional<ChannelConverterAttached<Channel, UnsignedByteBuffer>>>
+            listConverters;
     private final ChannelMapper mapper;
 
     // START: constructors
@@ -305,7 +306,8 @@ public class DisplayStack {
     }
 
     @SuppressWarnings("unchecked")
-    private Voxels<UnsignedByteBuffer> voxelsForChannelBoundingBox(int channelIndex, BoundingBox box) {
+    private Voxels<UnsignedByteBuffer> voxelsForChannelBoundingBox(
+            int channelIndex, BoundingBox box) {
 
         Voxels<?> voxelsUnconverted = stack.getChannel(channelIndex).extract().region(box, true);
         return mapper.mapChannelIfSupported(
@@ -359,9 +361,7 @@ public class DisplayStack {
                     .getVoxelDataType()
                     .equals(UnsignedByteVoxelType.INSTANCE)) {
                 setConverterFor(
-                        index,
-                        new UpperLowerQuantileIntensity(
-                                QUANTILE_LOWER, QUANTILE_UPPER));
+                        index, new UpperLowerQuantileIntensity(QUANTILE_LOWER, QUANTILE_UPPER));
             }
         }
     }

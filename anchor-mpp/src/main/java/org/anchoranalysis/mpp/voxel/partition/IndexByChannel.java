@@ -41,7 +41,8 @@ public class IndexByChannel<T> {
         return delegate.add(e);
     }
 
-    public void init(VoxelPartitionFactory<T> factory, int numChannel, int numRegions, int numSlices) {
+    public void init(
+            VoxelPartitionFactory<T> factory, int numChannel, int numRegions, int numSlices) {
 
         for (int i = 0; i < numChannel; i++) {
             delegate.add(new IndexByRegion<>(factory, numRegions, numSlices));

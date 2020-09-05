@@ -68,7 +68,7 @@ public class DimensionsCreator {
         Length len = funcDimRes.apply(lociMetadata);
         if (len != null) {
             Number converted = len.value(UNITS.METER);
-            
+
             // A null implies that len can not be converted to meters as units, so we abandon
             if (converted != null) {
                 Double dbl = converted.doubleValue();

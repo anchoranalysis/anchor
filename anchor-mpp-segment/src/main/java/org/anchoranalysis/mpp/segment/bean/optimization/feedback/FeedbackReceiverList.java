@@ -31,9 +31,9 @@ import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.mpp.segment.optimization.feedback.FeedbackReceiver;
-import org.anchoranalysis.mpp.segment.optimization.feedback.FeedbackEndParameters;
 import org.anchoranalysis.mpp.segment.optimization.feedback.FeedbackBeginParameters;
+import org.anchoranalysis.mpp.segment.optimization.feedback.FeedbackEndParameters;
+import org.anchoranalysis.mpp.segment.optimization.feedback.FeedbackReceiver;
 import org.anchoranalysis.mpp.segment.optimization.feedback.ReporterException;
 import org.anchoranalysis.mpp.segment.optimization.step.Reporting;
 

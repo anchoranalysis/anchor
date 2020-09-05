@@ -25,13 +25,13 @@
  */
 package org.anchoranalysis.image.voxel.extracter;
 
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.nio.FloatBuffer;
-import org.anchoranalysis.image.convert.UnsignedIntBuffer;
-import org.anchoranalysis.image.convert.UnsignedShortBuffer;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedIntBuffer;
+import org.anchoranalysis.image.convert.UnsignedShortBuffer;
 import org.anchoranalysis.image.voxel.Voxels;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -43,7 +43,8 @@ public class VoxelsExtracterFactory {
      * @param voxels the voxels to extract from
      * @return a newly created extracter
      */
-    public static VoxelsExtracter<UnsignedByteBuffer> createByte(Voxels<UnsignedByteBuffer> voxels) {
+    public static VoxelsExtracter<UnsignedByteBuffer> createByte(
+            Voxels<UnsignedByteBuffer> voxels) {
         return new ByteImplementation(voxels);
     }
 
@@ -53,7 +54,8 @@ public class VoxelsExtracterFactory {
      * @param voxels the voxels to extract from
      * @return a newly created extracter
      */
-    public static VoxelsExtracter<UnsignedShortBuffer> createShort(Voxels<UnsignedShortBuffer> voxels) {
+    public static VoxelsExtracter<UnsignedShortBuffer> createShort(
+            Voxels<UnsignedShortBuffer> voxels) {
         return new ShortImplementation(voxels);
     }
 

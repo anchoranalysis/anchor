@@ -1,5 +1,6 @@
 /**
- * Annotations that decorate fields in an <a href="https://www.anchoranalysis.org/developer_guide_anchor_beans.html">Anchor Bean</a>.
+ * Annotations that decorate fields in an <a
+ * href="https://www.anchoranalysis.org/developer_guide_anchor_beans.html">Anchor Bean</a>.
  */
 package org.anchoranalysis.bean.annotation;
 /*-

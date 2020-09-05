@@ -34,36 +34,36 @@ import org.anchoranalysis.mpp.mark.MarkCollection;
 
 /**
  * An image-annotation that involves a mark-collection.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public interface AnnotationWithMarks extends Annotation {
 
-    /** 
+    /**
      * The marks associated with the annotation
-     * 
+     *
      * @return the marks
-     * */
+     */
     MarkCollection marks();
 
     /**
      * The region(s) of the marks that specifies the annotation.
-     * 
-     * <p>As marks have multiple regions, this identifies which regions are included in the annotation.
+     *
+     * <p>As marks have multiple regions, this identifies which regions are included in the
+     * annotation.
+     *
      * @return the identifier
      */
     RegionMembershipWithFlags region();
 
     /**
-     * Creates an object-collection that is a voxelized representation of the marks in the annotation.
+     * Creates an object-collection that is a voxelized representation of the marks in the
+     * annotation.
+     *
      * @param dimensions size of image the annotations pertain to.
      * @return newly created objects
      */
     default ObjectCollection convertToObjects(Dimensions dimensions) {
-        return marks()
-                .deriveObjects(
-                        dimensions, region())
-                .withoutProperties();
+        return marks().deriveObjects(dimensions, region()).withoutProperties();
     }
 }

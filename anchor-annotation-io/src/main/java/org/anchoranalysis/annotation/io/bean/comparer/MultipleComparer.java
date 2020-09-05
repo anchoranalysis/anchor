@@ -149,10 +149,7 @@ public class MultipleComparer extends AnchorBean<MultipleComparer> {
 
             ColorPool colorPool =
                     new ColorPool(
-                            assignment.numberPaired(),
-                            colorSetGenerator,
-                            new VeryBright(),
-                            true);
+                            assignment.numberPaired(), colorSetGenerator, new VeryBright(), true);
 
             AssignmentGenerator generator =
                     AssignmentGeneratorFactory.createAssignmentGenerator(

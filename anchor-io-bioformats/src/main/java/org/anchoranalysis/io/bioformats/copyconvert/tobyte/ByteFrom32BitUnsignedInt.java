@@ -26,20 +26,20 @@
 
 package org.anchoranalysis.io.bioformats.copyconvert.tobyte;
 
+import java.nio.ByteBuffer;
 import loci.common.DataTools;
 import lombok.RequiredArgsConstructor;
-import java.nio.ByteBuffer;
 import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.extent.Dimensions;
 
 @RequiredArgsConstructor
 public class ByteFrom32BitUnsignedInt extends ConvertToByte {
-    
+
     // START REQUIRED ARGUMENTS
     private final int effectiveBitsPerPixel;
     private final boolean littleEndian;
     // END REQUIRED ARGUMENTS
-    
+
     private double convertRatio;
 
     @Override
@@ -52,14 +52,14 @@ public class ByteFrom32BitUnsignedInt extends ConvertToByte {
     protected UnsignedByteBuffer convert(ByteBuffer source, int channelIndexRelative) {
 
         UnsignedByteBuffer destination = allocateBuffer();
-        
+
         byte[] sourceArray = source.array();
-        
+
         for (int indexIn = 0; indexIn < sizeBytes; indexIn += bytesPerPixel) {
             int value = DataTools.bytesToInt(sourceArray, indexIn, littleEndian);
             destination.putDouble(value * convertRatio);
         }
-        
+
         return destination;
     }
 
@@ -67,7 +67,7 @@ public class ByteFrom32BitUnsignedInt extends ConvertToByte {
     protected int calculateBytesPerPixel(int numberChannelsPerArray) {
         return 4;
     }
-    
+
     private double calculateConvertRatio() {
         if (effectiveBitsPerPixel == 32) {
             return 1.0;

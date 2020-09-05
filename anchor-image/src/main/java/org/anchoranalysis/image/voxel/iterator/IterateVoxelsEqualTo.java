@@ -25,7 +25,6 @@
  */
 package org.anchoranalysis.image.voxel.iterator;
 
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.util.Optional;
 import java.util.function.Consumer;
 import lombok.AccessLevel;
@@ -33,22 +32,23 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.core.geometry.consumer.PointThreeDimensionalConsumer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.BoundedVoxels;
 import org.anchoranalysis.image.voxel.Voxels;
 
 /**
- * Like {@link IterateVoxelsAll} but specifically for equal-to operations on {@link Voxels} of type {@link UnsignedByteBuffer}.
- *  
- * @author Owen Feehan
+ * Like {@link IterateVoxelsAll} but specifically for equal-to operations on {@link Voxels} of type
+ * {@link UnsignedByteBuffer}.
  *
+ * @author Owen Feehan
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class IterateVoxelsEqualTo {
 
     /**
-     * Iterates all points with a specific voxel intensity-value, reusing the {@link Point3i} in each
-     * iteration.
+     * Iterates all points with a specific voxel intensity-value, reusing the {@link Point3i} in
+     * each iteration.
      *
      * <p>This means that the same {@link Point3i} instance is passed to the consumer each time and
      * is <b>not</b> newly created for each matching voxel.
@@ -69,14 +69,17 @@ public class IterateVoxelsEqualTo {
     }
 
     /**
-     * Iterates through all points with a specific voxel intensity-value, passing coordinates as primitive types.
+     * Iterates through all points with a specific voxel intensity-value, passing coordinates as
+     * primitive types.
      *
      * @param voxels voxels to iterate through
      * @param equalToValue voxels match if they are equal to this value
      * @param consumer called for every matching voxel
      */
     public static void equalToPrimitive(
-            Voxels<UnsignedByteBuffer> voxels, byte equalToValue, PointThreeDimensionalConsumer consumer) {
+            Voxels<UnsignedByteBuffer> voxels,
+            byte equalToValue,
+            PointThreeDimensionalConsumer consumer) {
         Extent extent = voxels.extent();
         extent.iterateOverZ(z -> equalToPrimitiveSlice(voxels, z, equalToValue, consumer));
     }

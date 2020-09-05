@@ -82,7 +82,7 @@ public class EnergyStack {
     public Dimensions dimensions() {
         return delegate.dimensions();
     }
-    
+
     public Resolution resolution() {
         return dimensions().resolution();
     }
@@ -105,7 +105,7 @@ public class EnergyStack {
 
     /**
      * The energy-stack without associated parameters.
-     * 
+     *
      * @return a representation of the energy-stack without params (not newly created).
      */
     public EnergyStackWithoutParams withoutParams() {

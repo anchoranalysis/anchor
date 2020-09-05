@@ -32,12 +32,11 @@ import lombok.NoArgsConstructor;
 
 /**
  * Type conversion between primitive data types.
- * 
- * <p>This class is intended to help with conversion of elements retrieved from {@link Buffer}
- * and its child-types.
- * 
- * @author Owen Feehan
  *
+ * <p>This class is intended to help with conversion of elements retrieved from {@link Buffer} and
+ * its child-types.
+ *
+ * @author Owen Feehan
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class PrimitiveConverter {

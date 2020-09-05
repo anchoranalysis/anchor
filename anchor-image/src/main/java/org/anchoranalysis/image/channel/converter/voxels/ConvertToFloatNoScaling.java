@@ -26,8 +26,8 @@
 
 package org.anchoranalysis.image.channel.converter.voxels;
 
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.nio.FloatBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.convert.UnsignedIntBuffer;
 import org.anchoranalysis.image.convert.UnsignedShortBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
@@ -72,9 +72,7 @@ public final class ConvertToFloatNoScaling extends VoxelsConverter<FloatBuffer> 
         VoxelBufferFloat bufferOut = VoxelBufferFloat.allocate(bufferIn.capacity());
 
         while (bufferIn.buffer().hasRemaining()) {
-            bufferOut
-                    .buffer()
-                    .put((float) bufferIn.buffer().getUnsigned());
+            bufferOut.buffer().put((float) bufferIn.buffer().getUnsigned());
         }
 
         return bufferOut;

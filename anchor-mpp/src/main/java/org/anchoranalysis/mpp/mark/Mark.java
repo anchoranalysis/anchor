@@ -27,7 +27,6 @@
 package org.anchoranalysis.mpp.mark;
 
 import java.io.Serializable;
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.util.Optional;
 import java.util.function.DoubleUnaryOperator;
 import lombok.NoArgsConstructor;
@@ -37,11 +36,12 @@ import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.PointConverter;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.extent.Dimensions;
-import org.anchoranalysis.image.extent.UnitConverter;
-import org.anchoranalysis.image.extent.SpatialUnits.UnitSuffix;
-import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.extent.Resolution;
+import org.anchoranalysis.image.extent.SpatialUnits.UnitSuffix;
+import org.anchoranalysis.image.extent.UnitConverter;
+import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.object.properties.ObjectWithProperties;
 import org.anchoranalysis.image.scale.ScaleFactor;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMembershipWithFlags;
@@ -90,9 +90,10 @@ public abstract class Mark implements Serializable, Identifiable {
 
     /**
      * Scales the mark in X and Y dimensions.
-     * 
+     *
      * @param scaleFactor how much to scale by.
-     * @throws OptionalOperationUnsupportedException if the type of mark used in the annotation does not supported scaling.
+     * @throws OptionalOperationUnsupportedException if the type of mark used in the annotation does
+     *     not supported scaling.
      */
     public abstract void scale(double scaleFactor) throws OptionalOperationUnsupportedException;
 
@@ -244,12 +245,16 @@ public abstract class Mark implements Serializable, Identifiable {
 
             String name = numberDimensions() == 3 ? "Volume" : "Area";
 
-            UnitSuffix unit = numberDimensions() == 3 ? UnitSuffix.CUBIC_MICRO : UnitSuffix.SQUARE_MICRO;
+            UnitSuffix unit =
+                    numberDimensions() == 3 ? UnitSuffix.CUBIC_MICRO : UnitSuffix.SQUARE_MICRO;
 
             DoubleUnaryOperator conversionFunc =
-                    numberDimensions() == 3 ? unitConverter::toPhysicalVolume : unitConverter::toPhysicalArea;
+                    numberDimensions() == 3
+                            ? unitConverter::toPhysicalVolume
+                            : unitConverter::toPhysicalArea;
 
-            nvc.addWithUnits(String.format("%s [geom] %d", name, region), vol, conversionFunc, unit);
+            nvc.addWithUnits(
+                    String.format("%s [geom] %d", name, region), vol, conversionFunc, unit);
         }
     }
 }

@@ -31,8 +31,8 @@ import loci.common.LogbackTools;
 
 /**
  * Singleton class for making sure Bioformats is configured configured.
- * 
- * <p>This configuration disables logging from bioformats. 
+ *
+ * <p>This configuration disables logging from bioformats.
  *
  * @author Owen Feehan
  */

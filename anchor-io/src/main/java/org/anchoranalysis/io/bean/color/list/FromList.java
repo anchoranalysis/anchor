@@ -37,11 +37,10 @@ import org.anchoranalysis.io.bean.color.RGBColorBean;
 
 /**
  * Specifies a list of colors by a list.
- * 
- * <p>If the list is too small for size, then it is extended by repeating the ultimate item.
- * 
- * @author Owen Feehan
  *
+ * <p>If the list is too small for size, then it is extended by repeating the ultimate item.
+ *
+ * @author Owen Feehan
  */
 public class FromList extends ColorListFactory {
 
@@ -55,7 +54,7 @@ public class FromList extends ColorListFactory {
 
         try {
             ColorList out = new ColorList();
-            
+
             for (RGBColorBean item : colors) {
                 addDuplicate(out, item);
             }
@@ -70,7 +69,7 @@ public class FromList extends ColorListFactory {
             throw new OperationFailedException(e);
         }
     }
-    
+
     private void addDuplicate(ColorList out, RGBColorBean bean) {
         out.add(bean.rgbColor().duplicate());
     }

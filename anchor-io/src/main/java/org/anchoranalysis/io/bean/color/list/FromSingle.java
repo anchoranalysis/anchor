@@ -35,9 +35,8 @@ import org.anchoranalysis.io.bean.color.RGBColorBean;
 
 /**
  * A single color repeated to meet the size.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class FromSingle extends ColorListFactory {
 

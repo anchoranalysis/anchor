@@ -36,7 +36,7 @@ import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
  * A feature that contains another feature as a bean-parameter.
- * 
+ *
  * <p>Usually some conversion occurs between one feature-type and another.
  *
  * @author Owen Feehan

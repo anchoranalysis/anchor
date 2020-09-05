@@ -54,16 +54,13 @@ public class OverlayProperties implements Iterable<NameValue<String>> {
     public void addWithUnits(
             String name, double value, DoubleUnaryOperator convertToUnits, UnitSuffix unitSuffix) {
         double valueUnits =
-                SpatialUnits.convertToUnits(
-                        convertToUnits.applyAsDouble(value), unitSuffix);
+                SpatialUnits.convertToUnits(convertToUnits.applyAsDouble(value), unitSuffix);
 
         add(
                 name,
                 String.format(
                         "%2.2f (%.2f%s)",
-                        value,
-                        valueUnits,
-                        SpatialUnits.suffixStringForMeters(unitSuffix)));
+                        value, valueUnits, SpatialUnits.suffixStringForMeters(unitSuffix)));
     }
 
     public void addDoubleAsString(String name, double val) {

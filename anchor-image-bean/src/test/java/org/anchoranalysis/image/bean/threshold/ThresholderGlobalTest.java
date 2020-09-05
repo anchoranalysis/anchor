@@ -29,12 +29,12 @@ package org.anchoranalysis.image.bean.threshold;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.util.Optional;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.object.ObjectMask;
@@ -125,7 +125,8 @@ public class ThresholderGlobalTest {
         return new VoxelsWrapper(voxels);
     }
 
-    private static void writeModulo(Voxels<UnsignedByteBuffer> voxels, BoundingBox box, int addToPixels) {
+    private static void writeModulo(
+            Voxels<UnsignedByteBuffer> voxels, BoundingBox box, int addToPixels) {
         IterateVoxelsBoundingBox.withBuffer(
                 box,
                 voxels,

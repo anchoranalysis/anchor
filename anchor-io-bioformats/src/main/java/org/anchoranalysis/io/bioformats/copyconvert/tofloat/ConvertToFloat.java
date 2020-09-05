@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.io.bioformats.copyconvert.tofloat;
 
+import com.google.common.base.Preconditions;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
@@ -34,7 +35,6 @@ import org.anchoranalysis.image.voxel.VoxelsWrapper;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferFloat;
 import org.anchoranalysis.io.bioformats.copyconvert.ConvertTo;
-import com.google.common.base.Preconditions;
 
 public abstract class ConvertToFloat extends ConvertTo<FloatBuffer> {
 
@@ -54,9 +54,10 @@ public abstract class ConvertToFloat extends ConvertTo<FloatBuffer> {
     }
 
     @Override
-    protected VoxelBuffer<FloatBuffer> convertSingleChannel(ByteBuffer source, int channelIndexRelative)
-            throws IOException {
-        Preconditions.checkArgument(channelIndexRelative==0, "interleaving not supported for int data");
+    protected VoxelBuffer<FloatBuffer> convertSingleChannel(
+            ByteBuffer source, int channelIndexRelative) throws IOException {
+        Preconditions.checkArgument(
+                channelIndexRelative == 0, "interleaving not supported for int data");
         float[] fArr = convertIntegerBytesToFloatArray(dimensions, source, sizeBytesChannel);
         return VoxelBufferFloat.wrapArray(fArr);
     }

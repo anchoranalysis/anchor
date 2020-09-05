@@ -26,8 +26,8 @@
 
 package org.anchoranalysis.mpp.overlap;
 
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import lombok.AllArgsConstructor;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.object.combine.CountIntersectingVoxels;
 import org.anchoranalysis.image.object.combine.IntersectionBoundingBox;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMembershipUtilities;

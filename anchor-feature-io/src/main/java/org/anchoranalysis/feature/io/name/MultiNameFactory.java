@@ -32,16 +32,15 @@ import lombok.NoArgsConstructor;
 
 /**
  * Creates {@link MultiName}.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class MultiNameFactory {
 
     /**
      * Creates either a multi-name that is either has a single part or a double part.
-     * 
+     *
      * <p>The first part is always a grouping key for aggregation.
      *
      * @param groupIdentifier if present, a group identifier that becomes the first part

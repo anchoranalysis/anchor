@@ -39,7 +39,9 @@ public class ObjectOutputter extends SeedCollectionOutputter {
     // END BEAN PROPERTIES
 
     public void output(
-            SeedCollection seeds, Resolution resolution, BoundOutputManagerRouteErrors outputManager) {
+            SeedCollection seeds,
+            Resolution resolution,
+            BoundOutputManagerRouteErrors outputManager) {
 
         IterableGeneratorWriter.writeSubfolder(
                 outputManager,

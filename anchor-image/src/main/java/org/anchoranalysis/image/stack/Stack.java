@@ -66,7 +66,9 @@ public class Stack implements Iterable<Channel> {
 
     public Stack(Dimensions dimensions, ChannelFactorySingleType factory, int numberChannels) {
         this();
-        FunctionalIterate.repeat(numberChannels, () -> delegate.addChannel(factory.createEmptyInitialised(dimensions)));
+        FunctionalIterate.repeat(
+                numberChannels,
+                () -> delegate.addChannel(factory.createEmptyInitialised(dimensions)));
     }
 
     public Stack(Channel... channels) throws IncorrectImageSizeException {
@@ -201,7 +203,7 @@ public class Stack implements Iterable<Channel> {
     public Dimensions dimensions() {
         return delegate.getChannel(0).dimensions();
     }
-    
+
     public Resolution resolution() {
         return dimensions().resolution();
     }
@@ -264,13 +266,13 @@ public class Stack implements Iterable<Channel> {
         if (!(obj instanceof Stack)) {
             return false;
         }
-        
-        return equalsDeep( (Stack) obj, true);
+
+        return equalsDeep((Stack) obj, true);
     }
 
     /**
      * Are the two stack equal using a deep voxel by voxel comparison of each channel?
-     * 
+     *
      * @param other the stack to compare with
      * @param compareResolution if true, the image-resolution is also compared for each channel.
      * @return true if they are deemed equals, false otherwise.

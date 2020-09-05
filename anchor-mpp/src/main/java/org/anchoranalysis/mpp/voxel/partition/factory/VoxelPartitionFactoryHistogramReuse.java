@@ -29,8 +29,8 @@ package org.anchoranalysis.mpp.voxel.partition.factory;
 import java.util.ArrayList;
 import java.util.List;
 import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.mpp.voxel.partition.VoxelPartitionHistogram;
 import org.anchoranalysis.mpp.voxel.partition.VoxelPartition;
+import org.anchoranalysis.mpp.voxel.partition.VoxelPartitionHistogram;
 
 public class VoxelPartitionFactoryHistogramReuse implements VoxelPartitionFactory<Histogram> {
 

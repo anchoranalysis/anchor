@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.mpp.segment.optimization.feedback.aggregate;
 
+import lombok.Getter;
 import org.anchoranalysis.mpp.segment.bean.optimization.ExtractScoreSize;
 import org.anchoranalysis.mpp.segment.optimization.feedback.FeedbackBeginParameters;
 import org.anchoranalysis.mpp.segment.optimization.feedback.ReporterException;
@@ -33,7 +34,6 @@ import org.anchoranalysis.mpp.segment.optimization.feedback.period.PeriodReceive
 import org.anchoranalysis.mpp.segment.optimization.feedback.period.PeriodReceiverException;
 import org.anchoranalysis.mpp.segment.optimization.feedback.period.PeriodTriggerBank;
 import org.anchoranalysis.mpp.segment.optimization.step.Reporting;
-import lombok.Getter;
 
 class AggregateTrigger<S, T extends AggregateReceiver<S>> {
 

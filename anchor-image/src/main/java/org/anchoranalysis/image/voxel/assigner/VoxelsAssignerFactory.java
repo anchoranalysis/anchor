@@ -25,13 +25,13 @@
  */
 package org.anchoranalysis.image.voxel.assigner;
 
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.nio.FloatBuffer;
-import org.anchoranalysis.image.convert.UnsignedIntBuffer;
-import org.anchoranalysis.image.convert.UnsignedShortBuffer;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedIntBuffer;
+import org.anchoranalysis.image.convert.UnsignedShortBuffer;
 import org.anchoranalysis.image.voxel.Voxels;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -55,7 +55,8 @@ public class VoxelsAssignerFactory {
      * @param valueToAssign the voxel-value to assign
      * @return a newly created assigner
      */
-    public static VoxelsAssigner createShort(Voxels<UnsignedShortBuffer> voxels, int valueToAssign) {
+    public static VoxelsAssigner createShort(
+            Voxels<UnsignedShortBuffer> voxels, int valueToAssign) {
         return new ShortImplementation(voxels, valueToAssign);
     }
 

@@ -35,5 +35,7 @@ import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 public abstract class SeedCollectionOutputter extends AnchorBean<SeedCollectionOutputter> {
 
     public abstract void output(
-            SeedCollection seeds, Resolution resolution, BoundOutputManagerRouteErrors outputManager);
+            SeedCollection seeds,
+            Resolution resolution,
+            BoundOutputManagerRouteErrors outputManager);
 }

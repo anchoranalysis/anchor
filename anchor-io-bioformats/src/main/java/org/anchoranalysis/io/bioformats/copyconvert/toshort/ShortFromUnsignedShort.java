@@ -38,7 +38,7 @@ public final class ShortFromUnsignedShort extends ConvertToShort {
     protected short convertValue(short value) {
 
         int valueAsInt = value;
-        
+
         // Make positive
         if (valueAsInt < 0) {
             valueAsInt += (UnsignedShortVoxelType.MAX_VALUE_INT + 1);
@@ -50,7 +50,7 @@ public final class ShortFromUnsignedShort extends ConvertToShort {
         if (valueAsInt < 0) {
             valueAsInt = 0;
         }
-        
+
         return (short) valueAsInt;
     }
 }

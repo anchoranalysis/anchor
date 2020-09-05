@@ -26,8 +26,6 @@
 
 package org.anchoranalysis.image.object.factory.unionfind;
 
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
-import org.anchoranalysis.image.convert.UnsignedIntBuffer;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -38,6 +36,8 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedIntBuffer;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.factory.ObjectCollectionFactory;
@@ -92,7 +92,8 @@ public class ConnectedComponentUnionFind {
             BufferReadWrite<T> bufferReaderWriter) {
 
         UnionFind<Integer> unionIndex = new UnionFind<>(new HashSet<Integer>());
-        Voxels<UnsignedIntBuffer> indexBuffer = VoxelsFactory.getInt().createInitialized(visited.extent());
+        Voxels<UnsignedIntBuffer> indexBuffer =
+                VoxelsFactory.getInt().createInitialized(visited.extent());
 
         int maxBigIDAdded =
                 populateIndexFromBinary(

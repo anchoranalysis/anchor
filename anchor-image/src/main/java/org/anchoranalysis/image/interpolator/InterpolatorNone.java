@@ -57,7 +57,11 @@ public class InterpolatorNone implements Interpolator {
         return voxelsDestination;
     }
 
-    private static void copyByte(UnsignedByteBuffer bufferIn, UnsignedByteBuffer bufferOut, Extent extentIn, Extent extentOut) {
+    private static void copyByte(
+            UnsignedByteBuffer bufferIn,
+            UnsignedByteBuffer bufferOut,
+            Extent extentIn,
+            Extent extentOut) {
 
         double xScale = intDiv(extentIn.x(), extentOut.x());
         double yScale = intDiv(extentIn.y(), extentOut.y());
@@ -69,12 +73,16 @@ public class InterpolatorNone implements Interpolator {
                 int xOrig = intMin(xScale * x, extentIn.x() - 1);
                 int yOrig = intMin(yScale * y, extentIn.y() - 1);
 
-                bufferOut.putRaw( bufferIn.getRaw(extentIn.offset(xOrig, yOrig)) );
+                bufferOut.putRaw(bufferIn.getRaw(extentIn.offset(xOrig, yOrig)));
             }
         }
     }
 
-    private static void copyShort(UnsignedShortBuffer bufferIn, UnsignedShortBuffer bufferOut, Extent extentIn, Extent extentOut) {
+    private static void copyShort(
+            UnsignedShortBuffer bufferIn,
+            UnsignedShortBuffer bufferOut,
+            Extent extentIn,
+            Extent extentOut) {
 
         double xScale = intDiv(extentIn.x(), extentOut.x());
         double yScale = intDiv(extentIn.y(), extentOut.y());
@@ -86,7 +94,7 @@ public class InterpolatorNone implements Interpolator {
                 int xOrig = intMin(xScale * x, extentIn.x() - 1);
                 int yOrig = intMin(yScale * y, extentIn.y() - 1);
 
-                bufferOut.putRaw( bufferIn.getRaw(extentIn.offset(xOrig, yOrig)) );
+                bufferOut.putRaw(bufferIn.getRaw(extentIn.offset(xOrig, yOrig)));
             }
         }
     }

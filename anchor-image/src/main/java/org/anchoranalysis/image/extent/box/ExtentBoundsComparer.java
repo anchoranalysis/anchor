@@ -36,9 +36,10 @@ import lombok.experimental.Accessors;
 import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 
-/** 
- * Helper routines for calculating the union/intersection of two bounding-boxes along a particular axis.
- **/
+/**
+ * Helper routines for calculating the union/intersection of two bounding-boxes along a particular
+ * axis.
+ */
 @Value
 @Accessors(fluent = true)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)

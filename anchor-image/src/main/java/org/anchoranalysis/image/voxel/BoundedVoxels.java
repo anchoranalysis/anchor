@@ -371,8 +371,8 @@ public class BoundedVoxels<T> {
      * Applies a function to map the bounding-box to a new-value (whose extent should be unchanged
      * in value)
      *
-     * <p>This is an <b>immutable</b> operation, but the existing voxel-buffers are reused in the new
-     * object.
+     * <p>This is an <b>immutable</b> operation, but the existing voxel-buffers are reused in the
+     * new object.
      *
      * @return a new object-mask with the updated bounding box
      */

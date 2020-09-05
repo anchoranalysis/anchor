@@ -58,8 +58,11 @@ public class SequentialProcessor<T extends InputFromManager, S> extends JobProce
             throws ExperimentExecutionException {
 
         ConcurrencyPlan concurrencyPlan = ConcurrencyPlan.singleProcessor(1);
-        
-        S sharedState = getTask().beforeAnyJobIsExecuted(rootOutputManager, concurrencyPlan, paramsExperiment);
+
+        S sharedState =
+                getTask()
+                        .beforeAnyJobIsExecuted(
+                                rootOutputManager, concurrencyPlan, paramsExperiment);
 
         TaskStatistics stats =
                 executeAllJobs(

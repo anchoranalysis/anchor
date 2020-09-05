@@ -26,21 +26,20 @@
 
 package org.anchoranalysis.image.channel.converter.attached.histogram;
 
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.channel.converter.ToUnsignedByte;
 import org.anchoranalysis.image.channel.converter.ConversionPolicy;
+import org.anchoranalysis.image.channel.converter.ToUnsignedByte;
 import org.anchoranalysis.image.channel.converter.attached.ChannelConverterAttached;
 import org.anchoranalysis.image.channel.converter.voxels.ConvertToByteScaleByMinMaxValue;
 import org.anchoranalysis.image.channel.converter.voxels.VoxelsConverter;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.histogram.Histogram;
 
 /**
  * Scales by a lower and upper quantile of the intensity values of an image
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class UpperLowerQuantileIntensityFromHistogram
         implements ChannelConverterAttached<Histogram, UnsignedByteBuffer> {
@@ -52,8 +51,7 @@ public class UpperLowerQuantileIntensityFromHistogram
     private double scaleUpper = 0.0;
     private ToUnsignedByte delegate;
 
-    public UpperLowerQuantileIntensityFromHistogram(
-            double quantileLower, double quantileUpper) {
+    public UpperLowerQuantileIntensityFromHistogram(double quantileLower, double quantileUpper) {
         this(quantileLower, quantileUpper, 1.0, 1.0);
     }
 

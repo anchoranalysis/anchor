@@ -36,7 +36,7 @@ import org.anchoranalysis.image.scale.ScaleFactor;
 
 /**
  * The resolution of an image.
- * 
+ *
  * <p>i.e. what a single voxel represents in physical units (meters) in x, y, z dimensions.
  *
  * <p>This class is <b>immutable</b>.
@@ -120,7 +120,7 @@ public final class Resolution implements Serializable {
 
     /**
      * The square of the distance between two points taking account image-resolution.
-     * 
+     *
      * @param point1 first point
      * @param point2 second point
      * @return the square of the distance between the two points
@@ -134,7 +134,7 @@ public final class Resolution implements Serializable {
 
     /**
      * The square of the distance between two points taking account image-resolution.
-     * 
+     *
      * @param point1 first point
      * @param point2 second point
      * @return the square of the distance between the two points
@@ -160,7 +160,7 @@ public final class Resolution implements Serializable {
         int sy = point1.y() - point2.y();
         double sz = ((double) point1.z()) - point2.z();
 
-        return sumSquaresZRelative(sx,  sy,  sz);
+        return sumSquaresZRelative(sx, sy, sz);
     }
 
     public double distanceZRelative(Point3d point1, Point3d point2) {
@@ -173,12 +173,12 @@ public final class Resolution implements Serializable {
         double sy = point1.y() - point2.y();
         double sz = point1.z() - point2.z();
 
-        return sumSquaresZRelative(sx,  sy,  sz);
+        return sumSquaresZRelative(sx, sy, sz);
     }
 
     /**
      * Converts voxelized measurements to/from physical units.
-     * 
+     *
      * @return a converter that will perform conversions using current resolution.
      */
     public UnitConverter unitConvert() {
@@ -187,7 +187,7 @@ public final class Resolution implements Serializable {
 
     /**
      * Assumes x and y has constant resolution, and gives the relative resolution of z to x or y.
-     * 
+     *
      * @return
      */
     public double zRelative() {
@@ -206,16 +206,16 @@ public final class Resolution implements Serializable {
     public final double valueByDimension(AxisType axisType) {
         return res.valueByDimension(axisType);
     }
-    
+
     private double sumSquares(double distanceX, double distanceY, double distanceZ) {
         distanceX *= x();
         distanceY *= y();
         distanceZ *= z();
-        return Math.pow(distanceX, 2) + Math.pow(distanceY, 2) + Math.pow(distanceZ, 2);        
+        return Math.pow(distanceX, 2) + Math.pow(distanceY, 2) + Math.pow(distanceZ, 2);
     }
-    
+
     private double sumSquaresZRelative(double distanceX, double distanceY, double distanceZ) {
         distanceZ *= zRelative();
-        return Math.pow(distanceX, 2) + Math.pow(distanceY, 2) + Math.pow(distanceZ, 2);        
+        return Math.pow(distanceX, 2) + Math.pow(distanceY, 2) + Math.pow(distanceZ, 2);
     }
 }

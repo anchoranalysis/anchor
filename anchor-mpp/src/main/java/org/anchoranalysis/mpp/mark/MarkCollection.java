@@ -51,7 +51,8 @@ import org.anchoranalysis.mpp.bean.regionmap.RegionMembership;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMembershipWithFlags;
 
 /**
- * A collection of marks, termed a <i>configuration</i> in marked-point-processes academic literature.
+ * A collection of marks, termed a <i>configuration</i> in marked-point-processes academic
+ * literature.
  *
  * @author Owen Feehan
  */
@@ -179,9 +180,10 @@ public final class MarkCollection implements Iterable<Mark>, Serializable {
 
     /**
      * Scales the mark in X and Y dimensions.
-     * 
+     *
      * @param scaleFactor how much to scale by.
-     * @throws OptionalOperationUnsupportedException if the type of mark used in the annotation does not supported scaling.
+     * @throws OptionalOperationUnsupportedException if the type of mark used in the annotation does
+     *     not supported scaling.
      */
     public void scaleXY(double scaleFactor) throws OptionalOperationUnsupportedException {
 

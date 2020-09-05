@@ -36,8 +36,8 @@ import org.anchoranalysis.image.binary.values.BinaryValues;
  *
  * <p>Uses the default off value of 255.
  *
- * <p>Note this is not the same as selecting <i>on</i> voxels which would only select voxels of value
- * 255. There's undefined space {@code > 1} and {@code < 255}.
+ * <p>Note this is not the same as selecting <i>on</i> voxels which would only select voxels of
+ * value 255. There's undefined space {@code > 1} and {@code < 255}.
  *
  * @author Owen Feehan
  */

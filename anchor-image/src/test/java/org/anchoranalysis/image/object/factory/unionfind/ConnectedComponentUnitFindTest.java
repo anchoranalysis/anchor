@@ -105,8 +105,8 @@ public class ConnectedComponentUnitFindTest {
                 allSizesEqualExceptOne(objects, expectedSingleObjectSize));
     }
 
-    private <T> BinaryVoxels<T> createBufferWithObjects(
-            VoxelDataType bufferDataType, boolean do3D) throws CreateException {
+    private <T> BinaryVoxels<T> createBufferWithObjects(VoxelDataType bufferDataType, boolean do3D)
+            throws CreateException {
 
         ObjectMaskFixture fixture = new ObjectMaskFixture(do3D);
 

@@ -26,13 +26,13 @@
 
 package org.anchoranalysis.image.binary.voxel;
 
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
-import org.anchoranalysis.image.convert.UnsignedIntBuffer;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.image.binary.values.BinaryValues;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedIntBuffer;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
@@ -56,10 +56,12 @@ public class BinaryVoxelsFactory {
     }
 
     /**
-     * Creates binary-voxels using unsigned 8-bit byte type and with all voxels set to <i>off</i> (0).
+     * Creates binary-voxels using unsigned 8-bit byte type and with all voxels set to <i>off</i>
+     * (0).
      *
      * @param extent the size of the voxels
-     * @return newly created binary-voxels of specified size with all voxels initialized to <i>off</i>.
+     * @return newly created binary-voxels of specified size with all voxels initialized to
+     *     <i>off</i>.
      */
     @SuppressWarnings("unchecked")
     public static BinaryVoxels<UnsignedByteBuffer> createEmptyOff(Extent extent) {

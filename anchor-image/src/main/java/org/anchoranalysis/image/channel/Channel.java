@@ -58,8 +58,8 @@ import org.anchoranalysis.image.voxel.extracter.VoxelsExtracter;
  * (grayscale) or several. Channels of identical size can be bundled together to form a {@link
  * Stack}.
  *
- * <p>The channel's voxels have an underlying data-type that is not exposed as a templated parameter, but
- * can be accessed via {@link #getVoxelDataType}.
+ * <p>The channel's voxels have an underlying data-type that is not exposed as a templated
+ * parameter, but can be accessed via {@link #getVoxelDataType}.
  *
  * @author Owen Feehan
  */
@@ -131,11 +131,11 @@ public class Channel {
     public Channel resizeXY(Extent extent) {
         return resizeXY(extent, DEFAULT_INTERPOLATOR);
     }
-    
+
     public Channel resizeXY(Extent extent, Interpolator interpolator) {
         return resizeXY(extent.x(), extent.y(), interpolator);
     }
-    
+
     public Channel resizeXY(int x, int y) {
         return resizeXY(x, y, DEFAULT_INTERPOLATOR);
     }
@@ -207,13 +207,15 @@ public class Channel {
 
     /**
      * Are the two channels equal using a deep voxel by voxel comparison?
-     * 
+     *
      * @param other the channel to compare with
-     * @param compareResolution if true, image-resolution must also be equal, otherwise it is not compared.
+     * @param compareResolution if true, image-resolution must also be equal, otherwise it is not
+     *     compared.
      * @return true if they are deemed equal, false otherwise.
      */
     public boolean equalsDeep(Channel other, boolean compareResolution) {
-        return dimensions.equals(other.dimensions, compareResolution) && voxels.equalsDeep(other.voxels);
+        return dimensions.equals(other.dimensions, compareResolution)
+                && voxels.equalsDeep(other.voxels);
     }
 
     /**

@@ -29,6 +29,9 @@ package org.anchoranalysis.bean.annotation;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
-/** Indicates that a field of a class can be set to null (omitted), otherwise by default a bean must always have a non-null value. */
+/**
+ * Indicates that a field of a class can be set to null (omitted), otherwise by default a bean must
+ * always have a non-null value.
+ */
 @Retention(RetentionPolicy.RUNTIME)
 public @interface OptionalBean {}

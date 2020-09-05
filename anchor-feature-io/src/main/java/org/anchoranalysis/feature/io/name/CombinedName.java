@@ -56,7 +56,7 @@ public class CombinedName implements MultiName {
 
     /**
      * Creates with explicit strings for both parts.
-     * 
+     *
      * @param key first-part (and key used for aggregating).
      * @param remainder the second-part (all the names not used in aggregating joined together).
      */

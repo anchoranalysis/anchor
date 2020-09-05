@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -27,23 +27,22 @@ package org.anchoranalysis.image.voxel.buffer;
 
 import java.nio.Buffer;
 import java.nio.ByteBuffer;
-import org.anchoranalysis.image.convert.UnsignedBuffer;
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
-import org.anchoranalysis.image.convert.UnsignedIntBuffer;
 import java.nio.ShortBuffer;
-import org.anchoranalysis.image.convert.UnsignedShortBuffer;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.image.convert.UnsignedBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedIntBuffer;
+import org.anchoranalysis.image.convert.UnsignedShortBuffer;
 
 /**
  * Deep-copies all child classes of {@link Buffer} and {@link UnsignedBuffer}.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 class DuplicateBuffer {
 
     public static ByteBuffer copy(ByteBuffer buffer) {
@@ -72,7 +71,7 @@ class DuplicateBuffer {
         clone.flip();
         return clone;
     }
-    
+
     public static IntBuffer copy(IntBuffer buffer) {
         IntBuffer clone = IntBuffer.allocate(buffer.capacity());
         buffer.rewind(); // copy from the beginning
@@ -81,16 +80,16 @@ class DuplicateBuffer {
         clone.flip();
         return clone;
     }
-    
+
     public static UnsignedByteBuffer copy(UnsignedByteBuffer buffer) {
-        return UnsignedByteBuffer.wrapRaw( copy(buffer.getDelegate()) );
+        return UnsignedByteBuffer.wrapRaw(copy(buffer.getDelegate()));
     }
-    
+
     public static UnsignedShortBuffer copy(UnsignedShortBuffer buffer) {
-        return UnsignedShortBuffer.wrapRaw( copy(buffer.getDelegate()) );
+        return UnsignedShortBuffer.wrapRaw(copy(buffer.getDelegate()));
     }
-    
+
     public static UnsignedIntBuffer copy(UnsignedIntBuffer buffer) {
-        return UnsignedIntBuffer.wrapRaw( copy(buffer.getDelegate()) );
+        return UnsignedIntBuffer.wrapRaw(copy(buffer.getDelegate()));
     }
 }

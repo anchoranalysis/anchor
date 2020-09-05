@@ -26,9 +26,9 @@
 
 package org.anchoranalysis.image.object.morphological.accept;
 
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelsFactory;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.Voxels;
 
 public class RejectIterationIfAllHigh implements AcceptIterationConditon {

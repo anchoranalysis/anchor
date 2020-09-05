@@ -33,18 +33,18 @@ public class ByteFrom8BitUnsignedNoInterleaving extends ConvertToByte {
 
     @Override
     protected UnsignedByteBuffer convert(ByteBuffer source, int channelIndexRelative) {
-        if (source.capacity()==sizeXY && channelIndexRelative==0) {
+        if (source.capacity() == sizeXY && channelIndexRelative == 0) {
             // Reuse the existing buffer, if it's single channeled
             return UnsignedByteBuffer.wrapRaw(source);
         } else {
             UnsignedByteBuffer destination = allocateBuffer();
             source.position(sizeBytes * channelIndexRelative);
-            source.limit( source.position() + sizeBytes );
+            source.limit(source.position() + sizeBytes);
             destination.put(source);
             return destination;
         }
     }
-    
+
     @Override
     protected int calculateBytesPerPixel(int numberChannelsPerArray) {
         return 1;

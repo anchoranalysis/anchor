@@ -56,7 +56,7 @@ import org.anchoranalysis.io.output.bound.CacheSubdirectoryContext;
 
 /**
  * Writes the aggregated results for a single group as XML to the filesystem.
- * 
+ *
  * <p>The results are also added to a {@code csvWriterAggregate} if it is defined.
  *
  * @author Owen Feehan
@@ -66,31 +66,36 @@ class WriteXMLForGroup {
 
     private static final ManifestDescription MANIFEST_DESCRIPTION =
             new ManifestDescription("paramsXML", "aggregateObjects");
-    
+
     private NamedFeatureStore<FeatureInputResults> featuresAggregate;
     private ResultsVectorCollection results;
-    
+
     /**
      * Write the aggregated groups to the filesystem as XML, if enabled.
-     * 
+     *
      * @param groupName a group-name, if it exists.
      * @param metadata metadata for writing results to the filesystem.
      * @param csvWriter a CSV-writer, if it's enabled.
      * @param context a cached set of input-output contexts for directories for each group.
      * @throws AnchorIOException if an input-output problem occurs.
      */
-    public void maybeWrite(Optional<MultiName> groupName, ResultsWriterMetadata metadata, Optional<FeatureCSVWriter> csvWriter, CacheSubdirectoryContext context) throws AnchorIOException {
-            OptionalUtilities.ifPresent(
-                metadata.outputNames().getXmlAggregatedGroup(), 
-                outputName -> maybeWriteForOutput(
-                    outputName,
-                    groupName,
-                    metadata.featureNamesNonAggregate(),
-                    csvWriter,
-                    context.get(groupName.map(MultiName::toString)))
-            );
+    public void maybeWrite(
+            Optional<MultiName> groupName,
+            ResultsWriterMetadata metadata,
+            Optional<FeatureCSVWriter> csvWriter,
+            CacheSubdirectoryContext context)
+            throws AnchorIOException {
+        OptionalUtilities.ifPresent(
+                metadata.outputNames().getXmlAggregatedGroup(),
+                outputName ->
+                        maybeWriteForOutput(
+                                outputName,
+                                groupName,
+                                metadata.featureNamesNonAggregate(),
+                                csvWriter,
+                                context.get(groupName.map(MultiName::toString))));
     }
-    
+
     private void maybeWriteForOutput(
             String outputName,
             Optional<MultiName> groupName,
@@ -107,14 +112,15 @@ class WriteXMLForGroup {
             }
 
             // Write the aggregated-features into the csv file
-            csvWriterAggregate.ifPresent( writer ->
-                writer.addRow(new RowLabels(Optional.empty(), groupName), aggregated) 
-            );
+            csvWriterAggregate.ifPresent(
+                    writer ->
+                            writer.addRow(new RowLabels(Optional.empty(), groupName), aggregated));
         }
     }
 
     /** Calculates an aggregate results vector */
-    private ResultsVector aggregateResults(FeatureNameList featureNames, Logger logger) throws AnchorIOException {
+    private ResultsVector aggregateResults(FeatureNameList featureNames, Logger logger)
+            throws AnchorIOException {
 
         FeatureCalculatorMulti<FeatureInputResults> calculator;
 
@@ -132,8 +138,11 @@ class WriteXMLForGroup {
         return calculator.calculateSuppressErrors(input, logger.errorReporter());
     }
 
-    private static <T extends FeatureInput> void writeAggregatedAsParams( String outputName,
-            NamedFeatureStore<T> featuresAggregate, ResultsVector results, BoundIOContext context) {
+    private static <T extends FeatureInput> void writeAggregatedAsParams(
+            String outputName,
+            NamedFeatureStore<T> featuresAggregate,
+            ResultsVector results,
+            BoundIOContext context) {
 
         KeyValueParams paramsOut = new KeyValueParams();
 
@@ -155,9 +164,7 @@ class WriteXMLForGroup {
                 paramsOut.writeToFile(fileOutPath.get());
             }
         } catch (IOException e) {
-            context.getLogger()
-                    .errorReporter()
-                    .recordError(ResultsWriter.class, e);
+            context.getLogger().errorReporter().recordError(ResultsWriter.class, e);
         }
     }
 }

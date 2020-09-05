@@ -26,8 +26,8 @@
 
 package org.anchoranalysis.image.channel.converter.voxels;
 
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.nio.FloatBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.convert.UnsignedIntBuffer;
 import org.anchoranalysis.image.convert.UnsignedShortBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
@@ -66,7 +66,8 @@ public final class ConvertToShortScaleByType extends VoxelsConverter<UnsignedSho
     }
 
     @Override
-    public VoxelBuffer<UnsignedShortBuffer> convertFromInt(VoxelBuffer<UnsignedIntBuffer> bufferIn) {
+    public VoxelBuffer<UnsignedShortBuffer> convertFromInt(
+            VoxelBuffer<UnsignedIntBuffer> bufferIn) {
 
         double div = (double) UnsignedIntVoxelType.MAX_VALUE / UnsignedShortVoxelType.MAX_VALUE_INT;
 
@@ -80,12 +81,14 @@ public final class ConvertToShortScaleByType extends VoxelsConverter<UnsignedSho
     }
 
     @Override
-    public VoxelBuffer<UnsignedShortBuffer> convertFromShort(VoxelBuffer<UnsignedShortBuffer> bufferIn) {
+    public VoxelBuffer<UnsignedShortBuffer> convertFromShort(
+            VoxelBuffer<UnsignedShortBuffer> bufferIn) {
         return bufferIn.duplicate();
     }
 
     @Override
-    public VoxelBuffer<UnsignedShortBuffer> convertFromByte(VoxelBuffer<UnsignedByteBuffer> bufferIn) {
+    public VoxelBuffer<UnsignedShortBuffer> convertFromByte(
+            VoxelBuffer<UnsignedByteBuffer> bufferIn) {
         double mult =
                 (double) UnsignedShortVoxelType.MAX_VALUE_INT / UnsignedByteVoxelType.MAX_VALUE_INT;
 

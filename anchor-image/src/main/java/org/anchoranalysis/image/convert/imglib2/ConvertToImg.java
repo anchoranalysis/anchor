@@ -26,14 +26,16 @@
 
 package org.anchoranalysis.image.convert.imglib2;
 
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.nio.FloatBuffer;
-import org.anchoranalysis.image.convert.UnsignedShortBuffer;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import net.imglib2.img.Img;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.type.numeric.integer.UnsignedByteType;
 import net.imglib2.type.numeric.integer.UnsignedShortType;
 import net.imglib2.type.numeric.real.FloatType;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedShortBuffer;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
@@ -43,27 +45,26 @@ import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelTypeException;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 
 /**
- * Converts the {@link Voxels} and {@link VoxelBuffer} data-types used in Anchor to the {@link
- * Img} used in <a href="https://imagej.net/ImgLib2">ImgLib2</a>.
+ * Converts the {@link Voxels} and {@link VoxelBuffer} data-types used in Anchor to the {@link Img}
+ * used in <a href="https://imagej.net/ImgLib2">ImgLib2</a>.
  *
  * @author Owen Feehan
  */
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ConvertToImg {
 
     /**
-     * Converts from a {@link VoxelsWrapper} (Anchor structure) to a {@link Img} (ImgLib2 structure).
-     * 
+     * Converts from a {@link VoxelsWrapper} (Anchor structure) to a {@link Img} (ImgLib2
+     * structure).
+     *
      * <p>The voxel buffers are reused (without duplication).
-     * 
+     *
      * @param voxels the voxels to convert
      * @return an {@link Img} object reusing the buffers of {@code voxels}.
      */
-    public static Img<? extends RealType<?>> from(VoxelsWrapper voxels) {   // NOSONAR
+    public static Img<? extends RealType<?>> from(VoxelsWrapper voxels) { // NOSONAR
 
         VoxelDataType dataType = voxels.getVoxelDataType();
 
@@ -79,10 +80,11 @@ public class ConvertToImg {
         }
     }
 
-    public static Img<? extends RealType<?>> fromSlice(VoxelsWrapper voxels, int sliceIndex) {  // NOSONAR
+    public static Img<? extends RealType<?>> fromSlice(
+            VoxelsWrapper voxels, int sliceIndex) { // NOSONAR
         return fromBuffer(voxels.slice(sliceIndex), voxels.extent());
     }
-    
+
     public static Img<UnsignedByteType> fromByte(
             VoxelBuffer<UnsignedByteBuffer> buffer, Extent extent) {
         return Wrap.buffer(buffer, extent, ArrayFactory::fromByte, UnsignedByteType::new);
@@ -93,30 +95,30 @@ public class ConvertToImg {
         return Wrap.buffer(buffer, extent, ArrayFactory::fromShort, UnsignedShortType::new);
     }
 
-    public static Img<FloatType> fromFloat(
-            VoxelBuffer<FloatBuffer> buffer, Extent extent) {
+    public static Img<FloatType> fromFloat(VoxelBuffer<FloatBuffer> buffer, Extent extent) {
         return Wrap.buffer(buffer, extent, ArrayFactory::fromFloat, FloatType::new);
     }
-    
+
     public static Img<UnsignedByteType> fromByte(Voxels<UnsignedByteBuffer> voxels) {
         return ConvertToNativeImg.fromByte(voxels);
     }
-    
+
     public static Img<UnsignedShortType> fromShort(Voxels<UnsignedShortBuffer> voxels) {
         return ConvertToNativeImg.fromShort(voxels);
     }
-    
+
     public static Img<FloatType> fromFloat(Voxels<FloatBuffer> voxels) {
         return ConvertToNativeImg.fromFloat(voxels);
     }
 
     @SuppressWarnings("unchecked")
-    private static Img<? extends RealType<?>> fromBuffer(VoxelBuffer<?> voxels, Extent extent) {   // NOSONAR
+    private static Img<? extends RealType<?>> fromBuffer(
+            VoxelBuffer<?> voxels, Extent extent) { // NOSONAR
 
         VoxelDataType dataType = voxels.dataType();
 
         if (dataType.equals(UnsignedByteVoxelType.INSTANCE)) {
-            return fromByte( (VoxelBuffer<UnsignedByteBuffer>) voxels, extent);
+            return fromByte((VoxelBuffer<UnsignedByteBuffer>) voxels, extent);
         } else if (dataType.equals(UnsignedShortVoxelType.INSTANCE)) {
             return fromShort((VoxelBuffer<UnsignedShortBuffer>) voxels, extent);
         } else if (dataType.equals(FloatVoxelType.INSTANCE)) {

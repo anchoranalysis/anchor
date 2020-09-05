@@ -38,15 +38,17 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 /**
  * CSV file where each feature is a row (spanning vertically).
  *
- * <p>The CSV file is populated with the <i>results</i> of calculations corresponding to these features.
- * 
+ * <p>The CSV file is populated with the <i>results</i> of calculations corresponding to these
+ * features.
+ *
  * @author Owen Feehan
  */
-public class FeatureListCSVGeneratorVertical extends FeatureTableCSVGenerator<ResultsVectorCollection> {
+public class FeatureListCSVGeneratorVertical
+        extends FeatureTableCSVGenerator<ResultsVectorCollection> {
 
     /**
      * Creates without setting any <i>results</i> (i.e. column-data).
-     * 
+     *
      * @param manifestFunction identifier of function for the manifest file.
      * @param featureNames names-of-features that will appear in results.
      */
@@ -69,7 +71,10 @@ public class FeatureListCSVGeneratorVertical extends FeatureTableCSVGenerator<Re
     }
 
     private static List<TypedValue> generateRow(
-            String featureName, ResultsVectorCollection allFeatureResults, int featureIndex, int size)
+            String featureName,
+            ResultsVectorCollection allFeatureResults,
+            int featureIndex,
+            int size)
             throws OutputWriteFailedException {
 
         List<TypedValue> csvRow = new ArrayList<>();

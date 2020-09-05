@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.image.feature.session.merged;
 
+import lombok.Getter;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListFactory;
@@ -38,7 +39,6 @@ import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
-import lombok.Getter;
 
 /**
  * The list of features that can be used in a {@link PairsTableCalculator}
@@ -50,7 +50,7 @@ public class MergedPairsFeatures {
     @Getter private FeatureList<FeatureInputStack> image;
 
     @Getter private FeatureList<FeatureInputSingleObject> single;
-    
+
     @Getter private FeatureList<FeatureInputPairObjects> pair;
 
     /**

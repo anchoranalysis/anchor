@@ -38,8 +38,8 @@ import org.anchoranalysis.feature.calculate.FeatureInitParams;
 import org.anchoranalysis.feature.input.FeatureInputWithResolution;
 import org.anchoranalysis.image.bean.orientation.DirectionVectorBean;
 import org.anchoranalysis.image.bean.orientation.VectorInDirection;
-import org.anchoranalysis.image.extent.UnitConverter;
 import org.anchoranalysis.image.extent.SpatialUnits.UnitSuffix;
+import org.anchoranalysis.image.extent.UnitConverter;
 import org.anchoranalysis.image.orientation.DirectionVector;
 
 //

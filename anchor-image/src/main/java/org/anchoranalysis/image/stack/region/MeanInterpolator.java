@@ -26,9 +26,9 @@
 
 package org.anchoranalysis.image.stack.region;
 
+import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.convert.UnsignedShortBuffer;
-import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.extent.Extent;
 
 class MeanInterpolator {

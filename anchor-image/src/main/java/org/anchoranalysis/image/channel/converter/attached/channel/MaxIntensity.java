@@ -26,13 +26,13 @@
 
 package org.anchoranalysis.image.channel.converter.attached.channel;
 
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.channel.converter.ToUnsignedByte;
 import org.anchoranalysis.image.channel.converter.ConversionPolicy;
+import org.anchoranalysis.image.channel.converter.ToUnsignedByte;
 import org.anchoranalysis.image.channel.converter.attached.ChannelConverterAttached;
 import org.anchoranalysis.image.channel.converter.voxels.ConvertToByteScaleByMaxValue;
 import org.anchoranalysis.image.channel.converter.voxels.VoxelsConverter;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 
 public class MaxIntensity implements ChannelConverterAttached<Channel, UnsignedByteBuffer> {
 
@@ -49,7 +49,7 @@ public class MaxIntensity implements ChannelConverterAttached<Channel, UnsignedB
 
     @Override
     public void attachObject(Channel channel) {
-        voxelsConverter.setMaxValue( channel.extract().voxelWithMaxIntensity() );
+        voxelsConverter.setMaxValue(channel.extract().voxelWithMaxIntensity());
     }
 
     @Override

@@ -204,7 +204,8 @@ public class SessionInputSequential<T extends FeatureInput> implements SessionIn
     }
 
     @Override
-    public <S> S calculate(ResolvedCalculation<S, T> calculation) throws FeatureCalculationException {
+    public <S> S calculate(ResolvedCalculation<S, T> calculation)
+            throws FeatureCalculationException {
         return calculation.getOrCalculate(input);
     }
 

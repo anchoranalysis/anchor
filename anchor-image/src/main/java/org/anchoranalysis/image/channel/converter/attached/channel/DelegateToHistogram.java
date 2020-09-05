@@ -45,7 +45,7 @@ class DelegateToHistogram<T> implements ChannelConverterAttached<Channel, T> {
     public void attachObject(Channel object) throws OperationFailedException {
 
         try {
-            delegate.attachObject( HistogramFactory.create(object) );
+            delegate.attachObject(HistogramFactory.create(object));
 
         } catch (CreateException e) {
             throw new OperationFailedException(e);

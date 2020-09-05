@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -25,11 +25,7 @@
  */
 package org.anchoranalysis.image.convert.imglib2;
 
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.nio.FloatBuffer;
-import org.anchoranalysis.image.convert.UnsignedShortBuffer;
-import org.anchoranalysis.image.voxel.Voxels;
-import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import net.imglib2.img.NativeImg;
@@ -39,6 +35,10 @@ import net.imglib2.img.basictypeaccess.array.ShortArray;
 import net.imglib2.type.numeric.integer.UnsignedByteType;
 import net.imglib2.type.numeric.integer.UnsignedShortType;
 import net.imglib2.type.numeric.real.FloatType;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedShortBuffer;
+import org.anchoranalysis.image.voxel.Voxels;
+import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 
 /**
  * Converts the {@link Voxels} and {@link VoxelBuffer} data-types used in Anchor to the {@link
@@ -46,18 +46,20 @@ import net.imglib2.type.numeric.real.FloatType;
  *
  * @author Owen Feehan
  */
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ConvertToNativeImg {
-    
-  public static NativeImg<UnsignedByteType, ByteArray> fromByte(Voxels<UnsignedByteBuffer> voxels) {
-      return Wrap.allSlices(voxels, ArrayFactory::fromByte, UnsignedByteType::new);
-  }
 
-  public static NativeImg<UnsignedShortType, ShortArray> fromShort(Voxels<UnsignedShortBuffer> voxels) {
-      return Wrap.allSlices(voxels, ArrayFactory::fromShort, UnsignedShortType::new);
-  }
+    public static NativeImg<UnsignedByteType, ByteArray> fromByte(
+            Voxels<UnsignedByteBuffer> voxels) {
+        return Wrap.allSlices(voxels, ArrayFactory::fromByte, UnsignedByteType::new);
+    }
 
-  public static NativeImg<FloatType, FloatArray> fromFloat(Voxels<FloatBuffer> voxels) {
-      return Wrap.allSlices(voxels, ArrayFactory::fromFloat, FloatType::new);
-  }
+    public static NativeImg<UnsignedShortType, ShortArray> fromShort(
+            Voxels<UnsignedShortBuffer> voxels) {
+        return Wrap.allSlices(voxels, ArrayFactory::fromShort, UnsignedShortType::new);
+    }
+
+    public static NativeImg<FloatType, FloatArray> fromFloat(Voxels<FloatBuffer> voxels) {
+        return Wrap.allSlices(voxels, ArrayFactory::fromFloat, FloatType::new);
+    }
 }

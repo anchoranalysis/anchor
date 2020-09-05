@@ -26,13 +26,13 @@
 
 package org.anchoranalysis.image.channel.converter;
 
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.voxel.datatype.FloatVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedIntVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
-import lombok.AllArgsConstructor;
 
 /**
  * Converts a channel from one type to multiple other types.
@@ -52,7 +52,7 @@ public class ChannelConverterMulti {
             return converterFor(outputType).convert(channel, POLICY);
         }
     }
-    
+
     private ChannelConverter<?> converterFor(VoxelDataType outputType) {
 
         if (outputType.equals(UnsignedByteVoxelType.INSTANCE)) {

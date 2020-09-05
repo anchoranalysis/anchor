@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -29,20 +29,24 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode
-@AllArgsConstructor public class WithPriority<T> implements Comparable<WithPriority<T>> {
+@AllArgsConstructor
+public class WithPriority<T> implements Comparable<WithPriority<T>> {
 
     private T model;
     private boolean gpu;
-    
+
     public T get() {
         return model;
     }
-    
+
     public boolean isGPU() {
         return gpu;
     }
 
-    /** Orders so that {@code hasPriority==true} has higher priority in queue to {@code hasPriority==false} */
+    /**
+     * Orders so that {@code hasPriority==true} has higher priority in queue to {@code
+     * hasPriority==false}
+     */
     @Override
     public int compareTo(WithPriority<T> other) {
         return Boolean.compare(other.gpu, gpu);

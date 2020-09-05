@@ -25,10 +25,10 @@
  */
 package org.anchoranalysis.image.voxel.extracter;
 
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.util.function.Predicate;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.object.ObjectMask;
@@ -49,12 +49,12 @@ class PredicateImplementation<T> implements VoxelsPredicate {
     /** The voxels on which the predicate is based. */
     private final Voxels<T> voxels;
     // END REQUIRED ARGUMENTS
-    
+
     /** Are there voxels remaining in the buffer? */
     public static interface SetBufferPosition<T> {
         void position(T buffer, int offset);
     }
-    
+
     // START REQUIRED ARGUMENTS
     /** Checks if the current value of a buffer matches a predicate */
     private final Predicate<T> predicate;
@@ -107,7 +107,7 @@ class PredicateImplementation<T> implements VoxelsPredicate {
         byte maskOnVal = object.binaryValuesByte().getOnByte();
 
         Extent extent = voxels.extent();
-        
+
         for (int z = srcStart.z(); z <= srcEnd.z(); z++) {
 
             VoxelBuffer<T> srcArr = voxels.slice(z);

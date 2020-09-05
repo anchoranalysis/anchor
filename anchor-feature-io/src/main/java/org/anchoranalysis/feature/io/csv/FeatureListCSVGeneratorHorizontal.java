@@ -40,13 +40,15 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
  *
  * @author Owen Feehan
  */
-public class FeatureListCSVGeneratorHorizontal extends FeatureTableCSVGenerator<ResultsVectorCollection> {
+public class FeatureListCSVGeneratorHorizontal
+        extends FeatureTableCSVGenerator<ResultsVectorCollection> {
 
     /**
      * Creates without setting any <i>results</i> (i.e. row-data).
-     * 
-     * <p>The CSV file is populated with the <i>results</i> of calculations corresponding to these features.
-     * 
+     *
+     * <p>The CSV file is populated with the <i>results</i> of calculations corresponding to these
+     * features.
+     *
      * @param manifestFunction identifier of function for the manifest file.
      * @param featureNames names-of-features that will appear in results.
      */
@@ -57,7 +59,7 @@ public class FeatureListCSVGeneratorHorizontal extends FeatureTableCSVGenerator<
 
     /**
      * Creates without setting any <i>results</i> (i.e. row-data).
-     * 
+     *
      * @param manifestFunction identifier of function for the manifest file.
      * @param featureNames names-of-features in {@code results}.
      * @param results the results (i.e. row data) to set as current element for the generator.

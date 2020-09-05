@@ -27,8 +27,8 @@
 package org.anchoranalysis.image.bean.unitvalue.area;
 
 import java.util.Optional;
-import org.anchoranalysis.image.extent.UnitConverter;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.image.extent.UnitConverter;
 
 /**
  * Area expressed as square pixels

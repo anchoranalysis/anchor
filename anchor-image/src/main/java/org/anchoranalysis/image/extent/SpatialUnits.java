@@ -31,15 +31,16 @@ import lombok.NoArgsConstructor;
 
 /**
  * Units to describe spatial quantities.
- * 
+ *
  * <p>These units can be specified by a string or an enum.
  *
  * <p>e.g. find a enum for <i>nm</i>
+ *
  * <p>e.g. find a string representation for <i>NANO</i>
  *
  * @author Owen Feehan
  */
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class SpatialUnits {
 
     private static final String STR_MICRO_CHAR = "\u00B5";
@@ -62,9 +63,9 @@ public class SpatialUnits {
 
     /**
      * A string that describes the suffix for meters.
-     * 
-     * e.g. {@code m^2} or {@code nm^3} etc.
-     *  
+     *
+     * <p>e.g. {@code m^2} or {@code nm^3} etc.
+     *
      * @param suffix the suffix to describe
      * @return a string describing the suffix as applied to meters.
      */
@@ -92,23 +93,22 @@ public class SpatialUnits {
                 throw new IllegalArgumentException(unsupportedUnitType(suffix));
         }
     }
-    
+
     /**
      * Converts a value in base-units <b>to</b> another unit-type.
-     * 
+     *
      * @param valueBaseUnits the value in base units
      * @param unitSuffix the suffix describing the desired unit
      * @return the value in units of type @{code unitSuffix}
      */
     public static double convertToUnits(double valueBaseUnits, String unitSuffix) { // NOSONAR
-        SpatialUnits.UnitSuffix suffix =
-                SpatialUnits.suffixFromMeterString(unitSuffix);
+        SpatialUnits.UnitSuffix suffix = SpatialUnits.suffixFromMeterString(unitSuffix);
         return convertToUnits(valueBaseUnits, suffix);
     }
 
     /**
      * Converts a value in base-units <b>to</b> another unit-type.
-     * 
+     *
      * @param valueBaseUnits the value in base units
      * @param unitSuffix the suffix describing the desired unit
      * @return the value in units of type @{code unitSuffix}
@@ -147,20 +147,19 @@ public class SpatialUnits {
 
     /**
      * Converts a value <b>from</b> another unit-type to base units.
-     * 
+     *
      * @param valueUnits the value in base units
      * @param unitSuffix the suffix associated with {@code valueUnits}
      * @return the value in base units
      */
     public static double convertFromUnits(double valueUnits, String unitSuffix) { // NOSONAR
-        SpatialUnits.UnitSuffix suffix =
-                SpatialUnits.suffixFromMeterString(unitSuffix);
+        SpatialUnits.UnitSuffix suffix = SpatialUnits.suffixFromMeterString(unitSuffix);
         return convertFromUnits(valueUnits, suffix);
     }
 
     /**
      * Converts a value <b>from</b> another unit-type to base units.
-     * 
+     *
      * @param valueUnits the value in base units
      * @param unitSuffix the suffix associated with {@code valueUnits}
      * @return the value in base units
@@ -223,7 +222,7 @@ public class SpatialUnits {
 
         throw new IllegalArgumentException(unsupportedString(suffixStr));
     }
-    
+
     private static String unsupportedString(String suffixStr) {
         return String.format("Suffix string: '%s' not supported", suffixStr);
     }

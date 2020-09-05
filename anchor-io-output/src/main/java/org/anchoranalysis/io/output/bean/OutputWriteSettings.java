@@ -53,8 +53,7 @@ public class OutputWriteSettings extends AnchorBean<OutputWriteSettings> {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter
-    private ColorListFactory defaultColorSetGenerator =
-            new Shuffle(new HSB());
+    private ColorListFactory defaultColorSetGenerator = new Shuffle(new HSB());
 
     /**
      * Specifies a writer bean instance for a particular type of writer (identified by the writer

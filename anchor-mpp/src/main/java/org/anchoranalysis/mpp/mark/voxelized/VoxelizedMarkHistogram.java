@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.mpp.mark.voxelized;
 
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.util.List;
 import lombok.Getter;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -34,6 +33,7 @@ import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.box.BoundingBox;
@@ -51,7 +51,8 @@ import org.anchoranalysis.mpp.voxel.partition.factory.VoxelPartitonFactoryHistog
 
 class VoxelizedMarkHistogram implements VoxelizedMark {
 
-    private static final VoxelPartitionFactory<Histogram> FACTORY = new VoxelPartitonFactoryHistogram();
+    private static final VoxelPartitionFactory<Histogram> FACTORY =
+            new VoxelPartitonFactoryHistogram();
 
     // Quick access to what is inside and what is outside
     private final IndexByChannel<Histogram> partitionList;
@@ -221,7 +222,8 @@ class VoxelizedMarkHistogram implements VoxelizedMark {
         }
     }
 
-    private static byte membershipMIP(byte membership, UnsignedByteBuffer bufferMIP, int localOffset) {
+    private static byte membershipMIP(
+            byte membership, UnsignedByteBuffer bufferMIP, int localOffset) {
         byte membershipMIP = bufferMIP.getRaw(localOffset);
         membershipMIP = (byte) (membershipMIP | membership);
         return membershipMIP;

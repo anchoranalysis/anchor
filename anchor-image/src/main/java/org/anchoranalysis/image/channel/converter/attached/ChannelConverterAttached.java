@@ -33,8 +33,9 @@ import org.anchoranalysis.image.channel.converter.voxels.VoxelsConverter;
 
 /**
  * A channel-converter that has been permanently attached to a particular object.
- * 
- * <p>This object can provide necessary parameters (e.g. ranges of voxel intensities) for the conversion.
+ *
+ * <p>This object can provide necessary parameters (e.g. ranges of voxel intensities) for the
+ * conversion.
  *
  * @author Owen Feehan
  * @param <S> attachment-type

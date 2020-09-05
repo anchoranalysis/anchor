@@ -44,7 +44,7 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 public class OutputFeatureTable extends ImageBean<OutputFeatureTable> {
 
     private static final String OUTPUT_NAME_OBJECTS_FEATURE_LIST = "features";
-    
+
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private ObjectCollectionProvider objects;
 

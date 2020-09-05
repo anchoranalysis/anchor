@@ -59,7 +59,7 @@ public class BoundDegrees extends BoundMinMax {
     public Bound duplicate() {
         return new BoundDegrees(this);
     }
-    
+
     private static double convertDegreesToRadians(double degrees) {
         return (Math.PI / 180) * degrees;
     }

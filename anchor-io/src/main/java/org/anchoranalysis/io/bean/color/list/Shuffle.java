@@ -36,9 +36,8 @@ import org.anchoranalysis.core.error.OperationFailedException;
 
 /**
  * Creates a list and then randomizes the order of the colors.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 @AllArgsConstructor
 @NoArgsConstructor

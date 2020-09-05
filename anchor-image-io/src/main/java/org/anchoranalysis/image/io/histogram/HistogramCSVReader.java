@@ -109,14 +109,16 @@ public class HistogramCSVReader {
         }
         return histogram;
     }
-    
+
     private static int guessMaxHistogramBin(int maxCsvValue) throws CSVReaderException {
         if (maxCsvValue <= UnsignedByteVoxelType.MAX_VALUE) {
             return UnsignedByteVoxelType.MAX_VALUE_INT;
         } else if (maxCsvValue <= UnsignedShortVoxelType.MAX_VALUE) {
             return UnsignedShortVoxelType.MAX_VALUE_INT;
         } else {
-            throw new CSVReaderException("Histograms can only supported for a maximum-value of " + UnsignedShortVoxelType.MAX_VALUE_INT);
+            throw new CSVReaderException(
+                    "Histograms can only supported for a maximum-value of "
+                            + UnsignedShortVoxelType.MAX_VALUE_INT);
         }
     }
 }

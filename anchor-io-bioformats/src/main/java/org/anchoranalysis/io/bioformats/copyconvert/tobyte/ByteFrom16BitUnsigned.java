@@ -27,10 +27,10 @@
 package org.anchoranalysis.io.bioformats.copyconvert.tobyte;
 
 import java.nio.ByteBuffer;
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
-import org.anchoranalysis.image.extent.Dimensions;
 import loci.common.DataTools;
 import lombok.RequiredArgsConstructor;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
+import org.anchoranalysis.image.extent.Dimensions;
 
 @RequiredArgsConstructor
 public class ByteFrom16BitUnsigned extends ConvertToByte {
@@ -41,25 +41,25 @@ public class ByteFrom16BitUnsigned extends ConvertToByte {
     // END REQUIRED ARGUMENTS
 
     private ApplyScaling applyScaling;
-    
+
     @Override
     protected void setupBefore(Dimensions dimensions, int numberChannelsPerArray) {
         super.setupBefore(dimensions, numberChannelsPerArray);
         // we assign a default that maps from 16-bit to 8-bit
         applyScaling = new ApplyScaling(ConvertHelper.twoToPower(8 - maxTotalBits), 0);
     }
-    
+
     @Override
     protected UnsignedByteBuffer convert(ByteBuffer source, int channelIndexRelative) {
-        
+
         UnsignedByteBuffer destination = allocateBuffer();
-        
+
         byte[] sourceArray = source.array();
-        
+
         for (int indexIn = 0; indexIn < sizeBytes; indexIn += bytesPerPixel) {
-            
+
             int indexInPlus = indexIn + (channelIndexRelative * 2);
-            
+
             int value = (int) DataTools.bytesToShort(sourceArray, indexInPlus, 2, littleEndian);
 
             // Make unsigned
@@ -80,7 +80,7 @@ public class ByteFrom16BitUnsigned extends ConvertToByte {
         }
         return destination;
     }
-    
+
     @Override
     protected int calculateBytesPerPixel(int numberChannelsPerArray) {
         return 2 * numberChannelsPerArray;

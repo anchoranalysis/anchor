@@ -26,9 +26,9 @@
 
 package org.anchoranalysis.image.voxel.kernel.density;
 
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.kernel.BinaryKernel;
 import org.anchoranalysis.image.voxel.kernel.LocalSlices;
@@ -60,7 +60,8 @@ public class DensityKernel extends BinaryKernel {
         this.minDensityRatio = minDensityRatio;
     }
 
-    private Density calculateDensity(Voxels<UnsignedByteBuffer> in, LocalSlices inSlices, Point3i point) {
+    private Density calculateDensity(
+            Voxels<UnsignedByteBuffer> in, LocalSlices inSlices, Point3i point) {
 
         // We count the number of on pixels inside a kernel
 

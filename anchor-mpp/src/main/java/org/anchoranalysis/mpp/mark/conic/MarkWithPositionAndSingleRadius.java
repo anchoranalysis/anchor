@@ -114,7 +114,10 @@ public abstract class MarkWithPositionAndSingleRadius extends MarkWithPosition
     @Override
     public BoundingBox box(Dimensions dimensions, int regionID) {
         return BoundingBoxCalculator.boxFromBounds(
-                getPos(), radiusForRegion(regionID) + ADDED_TO_RADIUS, numberDimensions() == 3, dimensions);
+                getPos(),
+                radiusForRegion(regionID) + ADDED_TO_RADIUS,
+                numberDimensions() == 3,
+                dimensions);
     }
 
     @Override

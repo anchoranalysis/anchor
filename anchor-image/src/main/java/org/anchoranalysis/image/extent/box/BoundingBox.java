@@ -357,7 +357,7 @@ public final class BoundingBox implements Serializable {
 
     /**
      * Shifts the bounding-box forwards.
-     * 
+     *
      * <p>i.e. adds a vector to the corner position.
      *
      * @param shift what to add to the corner position
@@ -369,7 +369,7 @@ public final class BoundingBox implements Serializable {
 
     /**
      * Shifts the bounding-box backwards.
-     * 
+     *
      * <p>i.e. subtracts a vector from the corner position.
      *
      * @param shift what to subtract from the corner position

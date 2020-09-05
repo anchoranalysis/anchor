@@ -26,10 +26,10 @@
 
 package org.anchoranalysis.image.voxel;
 
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
-import org.anchoranalysis.image.convert.UnsignedShortBuffer;
 import java.nio.FloatBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.convert.UnsignedIntBuffer;
+import org.anchoranalysis.image.convert.UnsignedShortBuffer;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.object.ObjectMask;
@@ -69,7 +69,7 @@ public class VoxelsWrapper {
     public Voxels<?> any() { // NOSONAR
         return voxels;
     }
-    
+
     /** Casts voxels to a particular type */
     @SuppressWarnings("unchecked")
     public <T> Voxels<T> castTo() { // NOSONAR

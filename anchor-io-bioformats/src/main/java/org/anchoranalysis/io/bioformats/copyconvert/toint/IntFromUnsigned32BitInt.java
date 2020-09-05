@@ -26,24 +26,24 @@
 
 package org.anchoranalysis.io.bioformats.copyconvert.toint;
 
+import com.google.common.base.Preconditions;
 import java.nio.ByteBuffer;
-import org.anchoranalysis.image.convert.UnsignedIntBuffer;
 import loci.common.DataTools;
 import lombok.RequiredArgsConstructor;
+import org.anchoranalysis.image.convert.UnsignedIntBuffer;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferUnsignedInt;
-import com.google.common.base.Preconditions;
 
 @RequiredArgsConstructor
 public class IntFromUnsigned32BitInt extends ConvertToInt {
 
     private static final int BYTES_PER_PIXEL = 4;
-    
+
     // START REQUIRED ARGUMENTS
     private final boolean littleEndian;
     // END REQUIRED ARGUMENTS
-    
+
     private int sizeXY;
     private int sizeBytes;
 
@@ -54,9 +54,11 @@ public class IntFromUnsigned32BitInt extends ConvertToInt {
     }
 
     @Override
-    protected VoxelBuffer<UnsignedIntBuffer> convertSingleChannel(ByteBuffer source, int channelIndexRelative) {
-        Preconditions.checkArgument(channelIndexRelative==0, "interleaving not supported for int data");
-        
+    protected VoxelBuffer<UnsignedIntBuffer> convertSingleChannel(
+            ByteBuffer source, int channelIndexRelative) {
+        Preconditions.checkArgument(
+                channelIndexRelative == 0, "interleaving not supported for int data");
+
         byte[] sourceArray = source.array();
         int[] out = new int[sizeXY];
 

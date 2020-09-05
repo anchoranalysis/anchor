@@ -27,9 +27,9 @@
 package org.anchoranalysis.io.bioformats.copyconvert.tobyte;
 
 import java.nio.ByteBuffer;
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import loci.common.DataTools;
 import lombok.RequiredArgsConstructor;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 
 @RequiredArgsConstructor
 public class ByteFrom32BitFloat extends ConvertToByte {
@@ -42,9 +42,9 @@ public class ByteFrom32BitFloat extends ConvertToByte {
     protected UnsignedByteBuffer convert(ByteBuffer source, int channelIndexRelative) {
 
         UnsignedByteBuffer destination = allocateBuffer();
-        
+
         byte[] sourceArray = source.array();
-        
+
         for (int indexIn = 0; indexIn < sizeBytes; indexIn += bytesPerPixel) {
             float value = DataTools.bytesToFloat(sourceArray, indexIn, littleEndian);
 
@@ -56,10 +56,10 @@ public class ByteFrom32BitFloat extends ConvertToByte {
             }
             destination.putFloat(value);
         }
-        
+
         return destination;
     }
-    
+
     @Override
     protected int calculateBytesPerPixel(int numberChannelsPerArray) {
         return 4;

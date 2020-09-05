@@ -26,8 +26,8 @@
 
 package org.anchoranalysis.image.channel.converter.attached.channel;
 
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.channel.converter.attached.histogram.QuantileIntensityFromHistogram;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 
 // Scales by a quantile of the intensity values of an image
 public class QuantileIntensity extends DelegateToHistogram<UnsignedByteBuffer> {

@@ -26,55 +26,57 @@
 
 package org.anchoranalysis.experiment.task;
 
-import org.anchoranalysis.core.arithmetic.RunningSum;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
+import org.anchoranalysis.core.arithmetic.RunningSum;
 
 /**
  * Maintains statistics on the execution of a task (considering jobs in aggregate)
  *
  * @author Owen Feehan
  */
-@RequiredArgsConstructor @Accessors(fluent=true)
+@RequiredArgsConstructor
+@Accessors(fluent = true)
 public class TaskStatistics {
 
     // START REQUIRED ARGUMENTS
     /** Total number of scheduled jobs. */
     @Getter private final long numberTotalScheduledJobs;
-    
+
     /** Execution time (in milliseconds) for of tasks that successfully completed. */
     private final RunningSum success;
-    
+
     /** Execution time (in milliseconds) for of tasks that failed. */
     private final RunningSum failed;
     // END REQUIRED ARGUMENTS
 
     /**
      * Number of jobs that have not been completed.
-     * 
+     *
      * @return
      */
     public long numberNotCompleted() {
-        long numberNotCompleted = numberTotalScheduledJobs - numberCompletedSuccess() - numberCompletedFailed();
+        long numberNotCompleted =
+                numberTotalScheduledJobs - numberCompletedSuccess() - numberCompletedFailed();
         assert numberNotCompleted >= 0;
         return numberNotCompleted;
     }
 
-    /** 
+    /**
      * Mean execution-time of successfully-completed jobs in milliseconds.
-     * 
+     *
      * @return the mean-time
-     * */
+     */
     public double meanExecutionTimeSuccess() {
         return success.mean();
     }
 
-    /** 
+    /**
      * Mean execution-time of failed jobs in milliseconds.
-     * 
+     *
      * @return the mean-time
-     **/
+     */
     public double meanExecutionTimeFailed() {
         return failed.mean();
     }

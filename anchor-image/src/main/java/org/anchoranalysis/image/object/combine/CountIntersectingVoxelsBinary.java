@@ -26,8 +26,8 @@
 
 package org.anchoranalysis.image.object.combine;
 
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 
 /**
  * Counts the number of intersecting voxels where each buffer is encoded as Binary-Values

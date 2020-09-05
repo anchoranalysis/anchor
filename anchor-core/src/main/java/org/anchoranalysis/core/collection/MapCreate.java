@@ -65,7 +65,7 @@ public class MapCreate<K, V> {
     public Set<Entry<K, V>> entrySet() {
         return map.entrySet();
     }
-    
+
     public Map<K, V> asMap() {
         return map;
     }

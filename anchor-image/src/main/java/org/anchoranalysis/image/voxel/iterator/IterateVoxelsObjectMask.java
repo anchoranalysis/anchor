@@ -1,7 +1,35 @@
+/*-
+ * #%L
+ * anchor-image
+ * %%
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
+ * %%
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ * #L%
+ */
 package org.anchoranalysis.image.voxel.iterator;
 
+import com.google.common.base.Preconditions;
 import java.util.Optional;
 import java.util.function.IntPredicate;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
@@ -14,24 +42,24 @@ import org.anchoranalysis.image.voxel.ExtentMatchHelper;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.SlidingBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
+import org.anchoranalysis.image.voxel.iterator.process.ProcessBufferBinary;
+import org.anchoranalysis.image.voxel.iterator.process.ProcessBufferUnary;
 import org.anchoranalysis.image.voxel.iterator.process.ProcessPoint;
 import org.anchoranalysis.image.voxel.iterator.process.ProcessVoxelBufferUnary;
-import org.anchoranalysis.image.voxel.iterator.process.ProcessBufferUnary;
-import org.anchoranalysis.image.voxel.iterator.process.ProcessBufferBinary;
-import com.google.common.base.Preconditions;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 
 /**
- * Utilities for iterating over the subset of voxels corresponding to an <i>on</i> state in an {@link ObjectMask}.
- * 
+ * Utilities for iterating over the subset of voxels corresponding to an <i>on</i> state in an
+ * {@link ObjectMask}.
+ *
  * <p>The utilities operate on one or more {@link Voxels} or {@link Channel}.
- * 
- * <p><p>A processor is called on each selected voxel.
+ *
+ * <p>
+ *
+ * <p>A processor is called on each selected voxel.
  *
  * @author Owen Feehan
  */
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class IterateVoxelsObjectMask {
 
     /**
@@ -42,9 +70,10 @@ public class IterateVoxelsObjectMask {
      *     GLOBAL coordinates.
      */
     public static void withPoint(ObjectMask object, ProcessPoint process) {
-        IterateVoxelsBoundingBox.withPoint(object.boundingBox(), new RequireIntersectionWithObject(process, object));
+        IterateVoxelsBoundingBox.withPoint(
+                object.boundingBox(), new RequireIntersectionWithObject(process, object));
     }
-    
+
     /**
      * Iterate over all points that are located on a object-mask or else all points in an extent.
      *
@@ -63,8 +92,7 @@ public class IterateVoxelsObjectMask {
             IterateVoxelsAll.withPoint(extent, process);
         }
     }
-    
-    
+
     /**
      * Iterate over each point that is located on an object-mask AND optionally a second-mask
      *
@@ -91,11 +119,10 @@ public class IterateVoxelsObjectMask {
             withPoint(firstMask, process);
         }
     }
-   
-    
+
     /**
-     * Iterate over each voxel in an object-mask - with <b>one</b> associated <b>buffer</b> for each slice from
-     * {@link Voxels}.
+     * Iterate over each voxel in an object-mask - with <b>one</b> associated <b>buffer</b> for each
+     * slice from {@link Voxels}.
      *
      * @param object the object-mask is used as a condition on what voxels to iterate i.e. only
      *     voxels within these bounds
@@ -141,13 +168,12 @@ public class IterateVoxelsObjectMask {
             }
         }
     }
-    
-    
+
     /**
      * Iterate over each voxel on an object-mask with <b>one</b> associated <b>buffer</b>.
      *
      * <p>This is similar behaviour to {@link #withPoint} but adds a buffer for each slice.
-     * 
+     *
      * @param objectMask an optional object-mask that is used as a condition on what voxels to
      *     iterate. If not defined, all voxels are iterated over.
      * @param voxels voxels where buffers extracted from be processed, and which define the global
@@ -189,19 +215,18 @@ public class IterateVoxelsObjectMask {
      * @param <T> buffer-type for voxels
      */
     public static <T> void withTwoBuffers(
-            ObjectMask object,            
+            ObjectMask object,
             Voxels<T> voxels1,
             Voxels<T> voxels2,
             ProcessBufferBinary<T> process) {
         Preconditions.checkArgument(voxels1.extent().equals(voxels2.extent()));
-        IterateVoxelsObjectMask.withPoint(object, new RetrieveBuffersForTwoSlices<>(voxels1, voxels2, process));
+        IterateVoxelsObjectMask.withPoint(
+                object, new RetrieveBuffersForTwoSlices<>(voxels1, voxels2, process));
     }
 
-   
-    
     /**
-     * <p>Iterate over each voxel on an object-mask with <b>one</b> associated {@link VoxelBuffer}.
-     * 
+     * Iterate over each voxel on an object-mask with <b>one</b> associated {@link VoxelBuffer}.
+     *
      * <p>Optionally, the iteration can be restricted to a sub-region of the object-mask.
      *
      * @param <T> buffer-type
@@ -215,8 +240,8 @@ public class IterateVoxelsObjectMask {
     }
 
     /**
-     * <p>Iterate over each voxel on an object-mask with <b>two</b> associated {@link VoxelBuffer}s.
-     * 
+     * Iterate over each voxel on an object-mask with <b>two</b> associated {@link VoxelBuffer}s.
+     *
      * <p>Optionally, the iteration can be restricted to a sub-region of the object-mask.
      *
      * @param <T> buffer-type
@@ -226,7 +251,7 @@ public class IterateVoxelsObjectMask {
      * @param process processes each point that fulfills the conditions
      */
     public static <T> void withTwoVoxelBuffers(
-            ObjectMask object,            
+            ObjectMask object,
             Voxels<T> voxels,
             Optional<BoundingBox> restrictTo,
             ProcessVoxelBufferUnary<T> process) {
@@ -270,8 +295,7 @@ public class IterateVoxelsObjectMask {
 
         withPoint(objectMask, buffer.extent(), new SlidingBufferProcessor(buffer, process));
     }
-    
-    
+
     /**
      * Do all points on an object-mask match a predicate on the point's voxel-intensity?
      *
@@ -322,7 +346,7 @@ public class IterateVoxelsObjectMask {
 
         return true;
     }
-    
+
     /**
      * Calls each point on a bounding-box subregion of an object-mask
      *
@@ -380,7 +404,7 @@ public class IterateVoxelsObjectMask {
             }
         }
     }
-    
+
     private static ProcessPoint requireIntersectionTwice(
             ObjectMask object1, ObjectMask object2, ProcessPoint processor) {
         ProcessPoint inner = new RequireIntersectionWithObject(processor, object2);

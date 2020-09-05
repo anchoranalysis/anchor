@@ -26,11 +26,11 @@
 
 package org.anchoranalysis.image.outline.traverser;
 
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.object.ObjectMask;
 
 @AllArgsConstructor

@@ -40,7 +40,7 @@ import org.anchoranalysis.core.functional.FunctionalList;
 
 /**
  * A bean where the definitions of many different {@link NamedBean}s can be specified.
- * 
+ *
  * <p>These definitions are indexed by string identifiers.
  *
  * @author Owen Feehan
@@ -51,11 +51,11 @@ public class Define extends AnchorBean<Define> {
     private Map<Class<?>, List<NamedBean<?>>> map = new HashMap<>();
 
     /**
-     * Adds a named-bean to our definitions, using the {#link GroupingRoot} annotation to determine a group where
-     * definitions are stored.
+     * Adds a named-bean to our definitions, using the {#link GroupingRoot} annotation to determine
+     * a group where definitions are stored.
      *
-     * <p>Any added-bean must of a type that contains the {@link GroupingRoot} annotation in its class
-     * hierarchy.
+     * <p>Any added-bean must of a type that contains the {@link GroupingRoot} annotation in its
+     * class hierarchy.
      *
      * @param bean a named-bean to add
      * @throws OperationFailedException
@@ -93,7 +93,7 @@ public class Define extends AnchorBean<Define> {
         }
 
         // We always create a new list, as a workaround for our inability to cast
-        return FunctionalList.mapToList(listIn, bean -> (NamedBean<T>) bean );
+        return FunctionalList.mapToList(listIn, bean -> (NamedBean<T>) bean);
     }
 
     @Override
@@ -125,7 +125,7 @@ public class Define extends AnchorBean<Define> {
     private List<NamedBean<?>> listForGroup(Class<?> groupingRoot) {
         return map.computeIfAbsent(groupingRoot, key -> new ArrayList<>());
     }
-    
+
     private static List<NamedBean<?>> duplicateList(List<NamedBean<?>> in) {
         return FunctionalList.mapToList(in, NamedBean::duplicateBean);
     }

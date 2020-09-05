@@ -26,11 +26,12 @@
 
 package org.anchoranalysis.mpp.segment.optimization.feedback;
 
-import org.anchoranalysis.core.log.MessageLogger;
 import lombok.AllArgsConstructor;
 import lombok.Value;
+import org.anchoranalysis.core.log.MessageLogger;
 
-@AllArgsConstructor @Value
+@AllArgsConstructor
+@Value
 public class FeedbackEndParameters<T> {
     private T state;
     private MessageLogger logger;

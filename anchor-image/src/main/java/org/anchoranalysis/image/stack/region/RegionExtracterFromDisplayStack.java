@@ -26,8 +26,6 @@
 
 package org.anchoranalysis.image.stack.region;
 
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
-import org.anchoranalysis.image.convert.UnsignedShortBuffer;
 import java.util.List;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
@@ -38,6 +36,8 @@ import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.converter.attached.ChannelConverterAttached;
 import org.anchoranalysis.image.channel.converter.voxels.VoxelsConverter;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedShortBuffer;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
@@ -55,7 +55,8 @@ import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 public class RegionExtracterFromDisplayStack implements RegionExtracter {
 
     /** Used to convert our source buffer to bytes, not called if it's already bytes */
-    private List<Optional<ChannelConverterAttached<Channel, UnsignedByteBuffer>>> listChannelConverter;
+    private List<Optional<ChannelConverterAttached<Channel, UnsignedByteBuffer>>>
+            listChannelConverter;
 
     /** Current displayStack */
     private Stack stack;

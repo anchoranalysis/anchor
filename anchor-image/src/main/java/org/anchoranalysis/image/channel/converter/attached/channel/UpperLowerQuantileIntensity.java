@@ -26,15 +26,13 @@
 
 package org.anchoranalysis.image.channel.converter.attached.channel;
 
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.channel.converter.attached.histogram.UpperLowerQuantileIntensityFromHistogram;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 
 // Scales by a quantile of the intensity values of an image
 public class UpperLowerQuantileIntensity extends DelegateToHistogram<UnsignedByteBuffer> {
 
     public UpperLowerQuantileIntensity(double quantileLower, double quantileUpper) {
-        super(
-                new UpperLowerQuantileIntensityFromHistogram(
-                        quantileLower, quantileUpper));
+        super(new UpperLowerQuantileIntensityFromHistogram(quantileLower, quantileUpper));
     }
 }

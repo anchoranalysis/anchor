@@ -27,7 +27,6 @@
 package org.anchoranalysis.image.object;
 
 import com.google.common.base.Preconditions;
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -47,6 +46,7 @@ import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelsFactory;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.box.BoundingBox;
@@ -73,9 +73,9 @@ import org.anchoranalysis.image.voxel.thresholder.VoxelsThresholder;
  * <p>A bounding-box specifies a location within an image, and a raster-mask specifies which voxels
  * inside this box belong to the object.
  *
- * <p>Each voxel in the raster-mask must be one of two states, either <i>on</i> or <i>off</i>. The object is
- * specified by all voxels that are <i>on</i>.
- * 
+ * <p>Each voxel in the raster-mask must be one of two states, either <i>on</i> or <i>off</i>. The
+ * object is specified by all voxels that are <i>on</i>.
+ *
  * <p><i>on</i> voxels need not be contiguous (i.e. one connected component).
  *
  * <p>The interfaces for assigning, extracting voxels etc. all expect <i>global</i> coordinates.
@@ -88,7 +88,8 @@ public class ObjectMask {
     private static final ObjectsFromConnectedComponentsFactory CONNECTED_COMPONENT_CREATOR =
             new ObjectsFromConnectedComponentsFactory(true);
 
-    private static final VoxelsFactoryTypeBound<UnsignedByteBuffer> FACTORY = VoxelsFactory.getByte();
+    private static final VoxelsFactoryTypeBound<UnsignedByteBuffer> FACTORY =
+            VoxelsFactory.getByte();
 
     private final BoundedVoxels<UnsignedByteBuffer> voxels;
 
@@ -141,7 +142,8 @@ public class ObjectMask {
         this(new BoundedVoxels<>(box, voxels));
     }
 
-    public ObjectMask(BoundingBox box, Voxels<UnsignedByteBuffer> voxels, BinaryValues binaryValues) {
+    public ObjectMask(
+            BoundingBox box, Voxels<UnsignedByteBuffer> voxels, BinaryValues binaryValues) {
         this(new BoundedVoxels<>(box, voxels), binaryValues);
     }
 

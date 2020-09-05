@@ -31,8 +31,9 @@ import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.generator.raster.series.StackSeries;
 
 /**
- * Base class for {@link ImageJRasterWriter} that <b>doesn't</b> support writing time-series as a stack.
- * 
+ * Base class for {@link ImageJRasterWriter} that <b>doesn't</b> support writing time-series as a
+ * stack.
+ *
  * @author Owen Feehan
  */
 public abstract class NoTimeSeries extends ImageJRasterWriter {

@@ -65,8 +65,7 @@ public class ObjectsWithBoundingBox {
     }
 
     /**
-     * Creates for a collection of objects, minimally fitting a bounding-box around all
-     * objects
+     * Creates for a collection of objects, minimally fitting a bounding-box around all objects
      *
      * @param objects objects
      * @throws OperationFailedException if the object-collection is empty

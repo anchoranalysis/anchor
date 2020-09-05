@@ -61,10 +61,7 @@ public class DualComparerFactory {
     }
 
     public static DualComparer compareTwoSubdirectoriesInLoader(
-            TestLoader loader1,
-            String subdirectory1,
-            TestLoader loader2,
-            String subdirectory2) {
+            TestLoader loader1, String subdirectory1, TestLoader loader2, String subdirectory2) {
         return new DualComparer(
                 loader1.createForSubdirectory(subdirectory1),
                 loader2.createForSubdirectory(subdirectory2));

@@ -30,11 +30,10 @@ import ij.io.FileSaver;
 
 /**
  * Writes a TIFF image using ImageJ.
- * 
- * <p>The extension .tif is employed by default.
- * 
- * @author Owen Feehan
  *
+ * <p>The extension .tif is employed by default.
+ *
+ * @author Owen Feehan
  */
 public class Tiff extends SupportsTimeSeries {
 

@@ -33,7 +33,8 @@ import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.feature.input.FeatureInputEnergy;
 import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 
-@EqualsAndHashCode(callSuper = true) @Value
+@EqualsAndHashCode(callSuper = true)
+@Value
 public class FeatureInputPairMemo extends FeatureInputEnergy {
 
     private VoxelizedMarkMemo object1;

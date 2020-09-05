@@ -79,6 +79,7 @@ public final class BinaryValuesByte implements Serializable {
 
     public BinaryValues createInt() {
         return new BinaryValues(
-                PrimitiveConverter.unsignedByteToInt(offByte), PrimitiveConverter.unsignedByteToInt(onByte));
+                PrimitiveConverter.unsignedByteToInt(offByte),
+                PrimitiveConverter.unsignedByteToInt(onByte));
     }
 }

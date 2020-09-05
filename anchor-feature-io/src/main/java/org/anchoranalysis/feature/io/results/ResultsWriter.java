@@ -43,8 +43,9 @@ import org.anchoranalysis.io.output.bound.CacheSubdirectoryContext;
 
 /**
  * Feature calculation results that can be outputted in different ways.
- * 
- * The outputs are (based upon the default output-names in {@link ResultsWriterOutputNames}):
+ *
+ * <p>The outputs are (based upon the default output-names in {@link ResultsWriterOutputNames}):
+ *
  * <pre>
  * Two CSV files outputted:
  *    features.csv:              all the features in a single CSV file
@@ -54,9 +55,8 @@ import org.anchoranalysis.io.output.bound.CacheSubdirectoryContext;
  *    featuresGroup.csv:            the features for a particular-group
  *    featuresAggregatedGroup.xml   the aggregate-functions applied to this particular-group (in an XML format)
  * </pre>
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class ResultsWriter implements Closeable {
 
@@ -74,28 +74,29 @@ public class ResultsWriter implements Closeable {
 
     /**
      * Creates for metadata and in a particular directory.
-     * 
+     *
      * @param outputMetadata metadata needed for determing output-names and CSV headers.
      * @param context defines the direction in which outputs occur.
      * @throws AnchorIOException if I/O fails.
      */
-    public ResultsWriter(
-            ResultsWriterMetadata outputMetadata, BoundIOContext context)
+    public ResultsWriter(ResultsWriterMetadata outputMetadata, BoundIOContext context)
             throws AnchorIOException {
 
         // Where non-group results are outputted
-        writer = FeatureCSVWriter.create(outputMetadata.metadataNonAggregated(), context.getOutputManager());
-        
+        writer =
+                FeatureCSVWriter.create(
+                        outputMetadata.metadataNonAggregated(), context.getOutputManager());
+
         // Where group results are outputted
         groupWriter = new GroupWriter(outputMetadata);
     }
 
     /**
      * Adds feature-calculation results to be written.
-     * 
-     * <p>Depending on the output type, these results are either immediately written or
-     * else stored in memory to be written later (collectively after all results have been added).
-     * 
+     *
+     * <p>Depending on the output type, these results are either immediately written or else stored
+     * in memory to be written later (collectively after all results have been added).
+     *
      * @param labels labels that identify the results.
      * @param results the results.
      */
@@ -132,7 +133,7 @@ public class ResultsWriter implements Closeable {
 
         groupWriter.writeGroupResults(featuresAggregate, includeGroups, context, contextGroups);
     }
-    
+
     @Override
     public void close() throws IOException {
         writer.ifPresent(FeatureCSVWriter::close);

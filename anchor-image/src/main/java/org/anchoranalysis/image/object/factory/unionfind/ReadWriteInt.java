@@ -26,9 +26,9 @@
 
 package org.anchoranalysis.image.object.factory.unionfind;
 
-import org.anchoranalysis.image.convert.UnsignedIntBuffer;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
+import org.anchoranalysis.image.convert.UnsignedIntBuffer;
 
 final class ReadWriteInt extends BufferReadWrite<UnsignedIntBuffer> {
 

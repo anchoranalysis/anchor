@@ -31,10 +31,11 @@ import org.anchoranalysis.core.color.RGBColor;
 
 /**
  * Creates a list by repeating a defined list of very bright colors.
- * 
- * <p>Thanks to the <a href="http://tango-project.org/Tango_Icon_Theme_Guidelines/">Tango project's theme guidelines</a>.
- * @author Owen Feehan
  *
+ * <p>Thanks to the <a href="http://tango-project.org/Tango_Icon_Theme_Guidelines/">Tango project's
+ * theme guidelines</a>.
+ *
+ * @author Owen Feehan
  */
 public class VeryBright extends ColorListFactory {
 
@@ -58,7 +59,7 @@ public class VeryBright extends ColorListFactory {
                 "#FF9900", // Orange
                 "#33FFFF"
             };
-    
+
     @Override
     public ColorList create(int size) {
 

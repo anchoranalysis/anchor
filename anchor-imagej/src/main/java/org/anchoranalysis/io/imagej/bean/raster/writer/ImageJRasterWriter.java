@@ -39,9 +39,8 @@ import org.apache.commons.logging.LogFactory;
 
 /**
  * Base class for writing a raster using ImageJ.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public abstract class ImageJRasterWriter extends RasterWriter {
 
@@ -61,7 +60,7 @@ public abstract class ImageJRasterWriter extends RasterWriter {
 
     /**
      * Writes an annotation to the filesystem at {@code outPath}.
-     * 
+     *
      * @param fileSaver imagej class for saving files
      * @param path where to write the annotation to
      * @param asStack whether the output will produce a stack (many images together) or not.
@@ -88,7 +87,7 @@ public abstract class ImageJRasterWriter extends RasterWriter {
 
     /**
      * Writes a stack as a time-sequence (many images together in a single file.).
-     * 
+     *
      * @param stack the stack to write
      * @param path where on the fileystem to write to
      * @param makeRGB if true, the image is saved as a RGB image rather than independent channels.

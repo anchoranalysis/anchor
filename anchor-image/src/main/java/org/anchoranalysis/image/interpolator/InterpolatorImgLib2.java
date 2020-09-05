@@ -26,8 +26,6 @@
 
 package org.anchoranalysis.image.interpolator;
 
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
-import org.anchoranalysis.image.convert.UnsignedShortBuffer;
 import lombok.RequiredArgsConstructor;
 import net.imglib2.Cursor;
 import net.imglib2.RandomAccessible;
@@ -41,6 +39,8 @@ import net.imglib2.type.numeric.integer.UnsignedByteType;
 import net.imglib2.type.numeric.integer.UnsignedShortType;
 import net.imglib2.view.ExtendedRandomAccessibleInterval;
 import net.imglib2.view.Views;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedShortBuffer;
 import org.anchoranalysis.image.convert.imglib2.ConvertToImg;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
@@ -107,7 +107,8 @@ public abstract class InterpolatorImgLib2 implements Interpolator {
             Extent extentDestination) {
 
         Img<UnsignedShortType> imIng = ConvertToImg.fromShort(voxelsSource, extentSource);
-        Img<UnsignedShortType> imgOut = ConvertToImg.fromShort(voxelsDestination, extentDestination);
+        Img<UnsignedShortType> imgOut =
+                ConvertToImg.fromShort(voxelsDestination, extentDestination);
 
         RealRandomAccessible<UnsignedShortType> interpolant =
                 Views.interpolate(outOfBoundsView(imIng), factoryShort);

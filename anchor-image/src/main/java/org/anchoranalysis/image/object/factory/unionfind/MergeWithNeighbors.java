@@ -26,8 +26,8 @@
 
 package org.anchoranalysis.image.object.factory.unionfind;
 
-import org.anchoranalysis.image.convert.UnsignedIntBuffer;
 import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.image.convert.UnsignedIntBuffer;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.SlidingBuffer;
 import org.anchoranalysis.image.voxel.iterator.neighbor.IterateVoxelsNeighbors;
@@ -47,7 +47,8 @@ final class MergeWithNeighbors {
 
         private final UnionFind<Integer> unionIndex;
 
-        public PointTester(SlidingBuffer<UnsignedIntBuffer> slidingIndex, UnionFind<Integer> unionIndex) {
+        public PointTester(
+                SlidingBuffer<UnsignedIntBuffer> slidingIndex, UnionFind<Integer> unionIndex) {
             super(slidingIndex);
             this.unionIndex = unionIndex;
         }

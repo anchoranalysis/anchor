@@ -26,9 +26,9 @@
 
 package org.anchoranalysis.image.channel.converter;
 
-import org.anchoranalysis.image.convert.UnsignedShortBuffer;
 import org.anchoranalysis.image.channel.converter.voxels.ConvertToShortNoScaling;
 import org.anchoranalysis.image.channel.converter.voxels.VoxelsConverter;
+import org.anchoranalysis.image.convert.UnsignedShortBuffer;
 import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 

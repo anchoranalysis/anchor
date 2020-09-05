@@ -30,10 +30,10 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.Collection;
 
-/** 
+/**
  * Indicates that a collection must have at least one item.
- * 
+ *
  * <p>It applicable only to a {@link Collection} bean-field.
- * */
+ */
 @Retention(RetentionPolicy.RUNTIME)
 public @interface NonEmpty {}

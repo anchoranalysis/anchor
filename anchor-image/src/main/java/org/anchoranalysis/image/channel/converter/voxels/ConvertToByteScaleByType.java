@@ -26,8 +26,8 @@
 
 package org.anchoranalysis.image.channel.converter.voxels;
 
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.nio.FloatBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.convert.UnsignedIntBuffer;
 import org.anchoranalysis.image.convert.UnsignedShortBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
@@ -76,7 +76,8 @@ public final class ConvertToByteScaleByType extends VoxelsConverter<UnsignedByte
     }
 
     @Override
-    public VoxelBuffer<UnsignedByteBuffer> convertFromShort(VoxelBuffer<UnsignedShortBuffer> bufferIn) {
+    public VoxelBuffer<UnsignedByteBuffer> convertFromShort(
+            VoxelBuffer<UnsignedShortBuffer> bufferIn) {
 
         double div = (double) UnsignedShortVoxelType.MAX_VALUE / UnsignedByteVoxelType.MAX_VALUE;
 

@@ -56,7 +56,7 @@ import org.anchoranalysis.io.bioformats.copyconvert.ImageFileShape;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-@Accessors(fluent=true)
+@Accessors(fluent = true)
 public class BioformatsOpenedRaster implements OpenedRaster {
 
     private final IFormatReader reader;
@@ -66,7 +66,7 @@ public class BioformatsOpenedRaster implements OpenedRaster {
 
     /** A list of channel-names or null if they are not available. */
     @Getter private final int numberChannels;
-    
+
     private final int sizeT;
     private final boolean rgb;
     private final int bitsPerPixel;
@@ -115,7 +115,7 @@ public class BioformatsOpenedRaster implements OpenedRaster {
     public int numberFrames() {
         return sizeT;
     }
-    
+
     @Override
     public int bitDepth() throws RasterIOException {
         return bitsPerPixel;

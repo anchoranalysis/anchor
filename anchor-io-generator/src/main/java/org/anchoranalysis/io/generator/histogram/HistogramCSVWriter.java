@@ -40,24 +40,24 @@ import org.anchoranalysis.io.output.csv.CSVWriter;
 class HistogramCSVWriter {
 
     private static final List<String> HEADERS = Arrays.asList("intensity", "count");
-    
+
     public static void writeHistogramToFile(Histogram histogram, Path filePath, boolean ignoreZeros)
             throws AnchorIOException {
 
         try (CSVWriter writer = CSVWriter.create(filePath)) {
             writer.writeHeaders(HEADERS);
 
-            histogram.iterateBins( (bin,count) -> { 
+            histogram.iterateBins(
+                    (bin, count) -> {
 
-                // Skip any zeros if we are ignoring zeros
-                if (!ignoreZeros || count != 0) {
-                    writer.writeRow( createTypedValues(bin,count) );
-                }
-                
-            });
+                        // Skip any zeros if we are ignoring zeros
+                        if (!ignoreZeros || count != 0) {
+                            writer.writeRow(createTypedValues(bin, count));
+                        }
+                    });
         }
     }
-    
+
     private static List<TypedValue> createTypedValues(int bin, int count) {
         return Arrays.asList(new TypedValue(bin, 0), new TypedValue(count, 0));
     }

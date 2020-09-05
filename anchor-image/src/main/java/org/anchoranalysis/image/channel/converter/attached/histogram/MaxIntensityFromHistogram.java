@@ -26,14 +26,14 @@
 
 package org.anchoranalysis.image.channel.converter.attached.histogram;
 
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.channel.converter.ToUnsignedByte;
 import org.anchoranalysis.image.channel.converter.ConversionPolicy;
+import org.anchoranalysis.image.channel.converter.ToUnsignedByte;
 import org.anchoranalysis.image.channel.converter.attached.ChannelConverterAttached;
 import org.anchoranalysis.image.channel.converter.voxels.ConvertToByteScaleByMaxValue;
 import org.anchoranalysis.image.channel.converter.voxels.VoxelsConverter;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.histogram.Histogram;
 
 public class MaxIntensityFromHistogram
@@ -52,7 +52,7 @@ public class MaxIntensityFromHistogram
 
     @Override
     public void attachObject(Histogram histogram) throws OperationFailedException {
-        voxelsConverter.setMaxValue( histogram.calculateMaximum() );
+        voxelsConverter.setMaxValue(histogram.calculateMaximum());
     }
 
     @Override

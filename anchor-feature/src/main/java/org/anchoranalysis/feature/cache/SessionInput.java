@@ -46,9 +46,7 @@ import org.anchoranalysis.feature.input.FeatureInput;
  */
 public interface SessionInput<T extends FeatureInput> {
 
-    /** 
-     * Returns the underlying feature-input (independent of the session)
-     */
+    /** Returns the underlying feature-input (independent of the session) */
     T get();
 
     /**

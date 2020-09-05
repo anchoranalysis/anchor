@@ -27,7 +27,6 @@
 package org.anchoranalysis.image.binary.mask;
 
 import com.google.common.base.Preconditions;
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import org.anchoranalysis.core.geometry.Point3i;
@@ -38,6 +37,7 @@ import org.anchoranalysis.image.binary.voxel.BinaryVoxelsFactory;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.channel.factory.ChannelFactorySingleType;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
@@ -84,8 +84,7 @@ public class Mask {
     private final Interpolator interpolator;
 
     /**
-     * Creates a mask from an existing channel using default values for OFF (0) and ON
-     * (255)
+     * Creates a mask from an existing channel using default values for OFF (0) and ON (255)
      *
      * <p>The channel should have maximally two distinct intensity values, represeting OFF and ON
      * states
@@ -150,8 +149,7 @@ public class Mask {
     }
 
     /**
-     * Creates a new empty mask of particular dimensions and with particular
-     * binaryvalues
+     * Creates a new empty mask of particular dimensions and with particular binaryvalues
      *
      * <p>Default mask values for OFF (0) and ON (255) are employed.
      *
@@ -165,7 +163,7 @@ public class Mask {
     public Dimensions dimensions() {
         return channel.dimensions();
     }
-    
+
     public Resolution resolution() {
         return dimensions().resolution();
     }
@@ -236,7 +234,8 @@ public class Mask {
         return new Mask(channel.extractSlice(z), binaryValues);
     }
 
-    public void replaceBy(BinaryVoxels<UnsignedByteBuffer> voxels) throws IncorrectImageSizeException {
+    public void replaceBy(BinaryVoxels<UnsignedByteBuffer> voxels)
+            throws IncorrectImageSizeException {
         channel.replaceVoxels(voxels.voxels());
     }
 

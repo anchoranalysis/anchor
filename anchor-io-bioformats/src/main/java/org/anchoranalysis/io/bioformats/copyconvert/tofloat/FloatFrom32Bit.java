@@ -27,11 +27,11 @@
 package org.anchoranalysis.io.bioformats.copyconvert.tofloat;
 
 import com.google.common.io.LittleEndianDataInputStream;
-import lombok.RequiredArgsConstructor;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.extent.Extent;
 
@@ -47,9 +47,9 @@ public class FloatFrom32Bit extends ConvertToFloat {
             Dimensions dimensions, ByteBuffer source, int offsetInSource) throws IOException {
 
         // TODO should offsetInSource be ignored here?
-        
+
         byte[] sourceArray = source.array();
-        
+
         float[] out = new float[dimensions.volumeXY()];
 
         ByteArrayInputStream streamByte = new ByteArrayInputStream(sourceArray);
@@ -65,18 +65,20 @@ public class FloatFrom32Bit extends ConvertToFloat {
     protected int bytesPerPixel() {
         return 4;
     }
-    
-    private static float[] copyLittleEndian(ByteArrayInputStream streamByte, float[] out, Extent extent) throws IOException {
+
+    private static float[] copyLittleEndian(
+            ByteArrayInputStream streamByte, float[] out, Extent extent) throws IOException {
         try (LittleEndianDataInputStream stream = new LittleEndianDataInputStream(streamByte)) {
-            extent.iterateOverXYOffset( index -> out[index] = stream.readFloat() );
+            extent.iterateOverXYOffset(index -> out[index] = stream.readFloat());
             return out;
-        }        
+        }
     }
-    
-    private static float[] copyBigEndian(ByteArrayInputStream streamByte, float[] out, Extent extent) throws IOException {
+
+    private static float[] copyBigEndian(
+            ByteArrayInputStream streamByte, float[] out, Extent extent) throws IOException {
         try (DataInputStream stream = new DataInputStream(streamByte)) {
-            extent.iterateOverXYOffset( index -> out[index] = stream.readFloat() );
+            extent.iterateOverXYOffset(index -> out[index] = stream.readFloat());
             return out;
-        }        
+        }
     }
 }

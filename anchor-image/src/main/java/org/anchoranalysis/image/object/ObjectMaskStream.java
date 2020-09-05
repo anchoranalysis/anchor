@@ -39,11 +39,11 @@ import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
 import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.functional.CheckedStream;
 import org.anchoranalysis.core.functional.function.CheckedFunction;
 import org.anchoranalysis.core.functional.function.CheckedPredicate;
 import org.anchoranalysis.image.extent.box.BoundingBox;
-import lombok.AllArgsConstructor;
 
 /**
  * A custom "stream" like class for various functional-programming operations on {@link

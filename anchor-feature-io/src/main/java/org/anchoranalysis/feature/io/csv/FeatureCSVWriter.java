@@ -29,44 +29,43 @@ package org.anchoranalysis.feature.io.csv;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.text.TypedValue;
 import org.anchoranalysis.feature.calculate.results.ResultsVector;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.io.output.csv.CSVWriter;
-import lombok.RequiredArgsConstructor;
 
 /**
  * Writes the results of feature-calculations as a CSV file.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 @RequiredArgsConstructor
 public class FeatureCSVWriter {
 
     /** Underlying CSV write, which if null, it means the writer is disabled */
-    private final CSVWriter writer; 
+    private final CSVWriter writer;
 
     /**
      * Maybe creates a {@link FeatureCSVWriter} depending if the output is allowed.
-     * 
+     *
      * @param metadata metadata needed for writing the reeature-results
      * @param outputManager determines if the output is allowed.
      * @return a write, if it is allowed.
      * @throws AnchorIOException if I/O fails.
      */
     public static Optional<FeatureCSVWriter> create(
-            FeatureCSVMetadata metadata,
-            BoundOutputManagerRouteErrors outputManager
-    ) throws AnchorIOException {
+            FeatureCSVMetadata metadata, BoundOutputManagerRouteErrors outputManager)
+            throws AnchorIOException {
 
         if (!outputManager.isOutputAllowed(metadata.getOutputName())) {
             return Optional.of(new FeatureCSVWriter(null));
         }
 
         Optional<CSVWriter> writerOptional =
-                CSVWriter.createFromOutputManager(metadata.getOutputName(), outputManager.getDelegate());
+                CSVWriter.createFromOutputManager(
+                        metadata.getOutputName(), outputManager.getDelegate());
         return writerOptional.map(
                 writer -> {
                     writer.writeHeaders(metadata.getHeaders());
@@ -76,7 +75,7 @@ public class FeatureCSVWriter {
 
     /**
      * Directly adds a row of feature-values.
-     * 
+     *
      * @param labels laels for the row
      * @param featureResults results for the row
      */
@@ -87,9 +86,9 @@ public class FeatureCSVWriter {
         addRow(buildCsvRow(labels, featureResults));
     }
 
-    /** 
+    /**
      * Directly adds a row in the form of typed-values.
-     * 
+     *
      * @param values a list of typed-values corresponding to a row in a CSV file.
      */
     public void addRow(List<TypedValue> values) {
@@ -103,7 +102,7 @@ public class FeatureCSVWriter {
 
     /**
      * Closes any open file-handles.
-     * 
+     *
      * <p>This operation should always be called <i>once</i> at the end of writing.
      */
     public void close() {

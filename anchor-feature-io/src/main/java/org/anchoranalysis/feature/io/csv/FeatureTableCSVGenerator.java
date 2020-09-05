@@ -42,7 +42,8 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
  * @author Owen Feehan
  * @param <T> type of object that describes <i>all</i> rows of feature calculations.
  */
-public abstract class FeatureTableCSVGenerator<T> extends CSVGenerator implements IterableGenerator<T> {
+public abstract class FeatureTableCSVGenerator<T> extends CSVGenerator
+        implements IterableGenerator<T> {
 
     private List<String> headerNames;
 
@@ -50,7 +51,7 @@ public abstract class FeatureTableCSVGenerator<T> extends CSVGenerator implement
 
     /**
      * Creates for a particular manifest-function and headers.
-     * 
+     *
      * @param manifestFunction the manifest-function.
      * @param headerNames the headers of all columns for the CSV output.
      */
@@ -87,12 +88,13 @@ public abstract class FeatureTableCSVGenerator<T> extends CSVGenerator implement
 
     /**
      * Writes the features to the CSV-file.
-     * 
+     *
      * @param writer the write to use
      * @param allFeatureResults all rows to write
      * @param headerNames header-names for columns, corresponding to the data in {@code rows}.
      * @throws OutputWriteFailedException if the output cannot be written.
      */
-    protected abstract void writeFeaturesToCSV(CSVWriter writer, T allFeatureResults, List<String> headerNames)
+    protected abstract void writeFeaturesToCSV(
+            CSVWriter writer, T allFeatureResults, List<String> headerNames)
             throws OutputWriteFailedException;
 }

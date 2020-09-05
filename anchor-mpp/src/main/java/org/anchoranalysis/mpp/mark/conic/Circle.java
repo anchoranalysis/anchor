@@ -43,16 +43,16 @@ public class Circle extends MarkWithPositionAndSingleRadius {
 
     /**
      * Creates with a radius within particular bounds.
-     * 
+     *
      * @param boundRadius
      */
     public Circle(Bound boundRadius) {
         super(boundRadius);
     }
-    
+
     /**
      * Copy constructor
-     * 
+     *
      * @param source
      */
     public Circle(Circle source) {

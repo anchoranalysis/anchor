@@ -40,9 +40,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.functional.function.CheckedFunction;
 
-/** 
- * Utilities functions for manipulating or creating {@link java.util.List} in a functional way
- **/
+/** Utilities functions for manipulating or creating {@link java.util.List} in a functional way */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class FunctionalList {
 
@@ -51,15 +49,15 @@ public class FunctionalList {
      *
      * <p>This function's purpose is mostly an convenience utility to make source-code easier to
      * read, as the paradigm below (although very idiomatic) occurs frequently.
-     * 
+     *
      * @param <T> item-type
      * @param stream the stream to create the list from
      * @return the created list.
      */
     public static <T> List<T> of(Stream<T> stream) {
-        return stream.collect( Collectors.toList() );
+        return stream.collect(Collectors.toList());
     }
-        
+
     /**
      * Maps a stream to a list with each element derived from a corresponding element in the
      * original collection.
@@ -77,7 +75,7 @@ public class FunctionalList {
     public static <S, T> List<T> mapToList(Stream<S> stream, Function<S, T> mapFunction) {
         return stream.map(mapFunction).collect(Collectors.toList());
     }
-    
+
     /**
      * Maps a collection to a list with each element derived from a corresponding element in the
      * original collection.
@@ -188,7 +186,7 @@ public class FunctionalList {
             throws E {
         return mapToList(collection.stream(), throwableClass, mapFunction);
     }
-    
+
     /**
      * Like {@link #mapToList(Object[], Function)} but tolerates exceptions in the mapping function.
      *
@@ -208,7 +206,7 @@ public class FunctionalList {
             throws E {
         return mapToList(Arrays.stream(array), throwableClass, mapFunction);
     }
-    
+
     /**
      * Filters a collection and maps the result to a list
      *
@@ -223,13 +221,12 @@ public class FunctionalList {
     public static <T> List<T> filterToList(Collection<T> collection, Predicate<T> predicate) {
         return collection.stream().filter(predicate).collect(Collectors.toList());
     }
-    
+
     private static <S, T, E extends Exception> List<T> mapToList(
             Stream<S> stream,
             Class<? extends Exception> throwableClass,
             CheckedFunction<S, T, E> mapFunction)
             throws E {
-        return CheckedStream.map(stream, throwableClass, mapFunction)
-                .collect(Collectors.toList());
+        return CheckedStream.map(stream, throwableClass, mapFunction).collect(Collectors.toList());
     }
 }

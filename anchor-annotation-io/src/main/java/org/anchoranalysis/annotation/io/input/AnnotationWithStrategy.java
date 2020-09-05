@@ -31,13 +31,13 @@ import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import lombok.Getter;
 import org.anchoranalysis.annotation.io.bean.AnnotatorStrategy;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.image.stack.NamedStacksSupplier;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.InputFromManager;
-import lombok.Getter;
 
 /**
  * An annotation that has been combined with it's strategy
@@ -48,7 +48,7 @@ public class AnnotationWithStrategy<T extends AnnotatorStrategy> implements Inpu
 
     private ProvidesStackInput input;
     @Getter private T strategy;
-    
+
     /** Path to annotation */
     @Getter private Path path;
 

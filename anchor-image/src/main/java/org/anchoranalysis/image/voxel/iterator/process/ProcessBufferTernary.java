@@ -29,11 +29,11 @@ package org.anchoranalysis.image.voxel.iterator.process;
 import org.anchoranalysis.core.geometry.Point3i;
 
 /**
- * Processes a 3D point like {@link ProcessPoint} but also retrieves <b>three</b> buffers for
- * the current z-slice.
+ * Processes a 3D point like {@link ProcessPoint} but also retrieves <b>three</b> buffers for the
+ * current z-slice.
  *
- * <p>It is very similar to {@link ProcessBufferUnary} but uses two buffers of the same
- * type instead of a single one.
+ * <p>It is very similar to {@link ProcessBufferUnary} but uses two buffers of the same type instead
+ * of a single one.
  *
  * @param <T> type of both buffers
  * @author Owen Feehan

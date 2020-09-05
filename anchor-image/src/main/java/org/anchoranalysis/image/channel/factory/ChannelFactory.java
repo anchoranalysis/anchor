@@ -77,7 +77,7 @@ public class ChannelFactory extends VoxelDataTypeFactoryMultiplexer<ChannelFacto
     public Channel create(Voxels<?> voxels) {
         return create(voxels, new Resolution());
     }
-    
+
     public Channel create(Voxels<?> voxels, Resolution resolution) {
         return get(voxels.dataType()).create(voxels, resolution);
     }

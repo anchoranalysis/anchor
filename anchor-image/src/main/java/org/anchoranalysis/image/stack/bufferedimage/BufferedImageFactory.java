@@ -27,17 +27,18 @@
 package org.anchoranalysis.image.stack.bufferedimage;
 
 import java.awt.image.BufferedImage;
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.Voxels;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class BufferedImageFactory {
 
-    public static BufferedImage createGrayscale(Voxels<UnsignedByteBuffer> voxels) throws CreateException {
+    public static BufferedImage createGrayscale(Voxels<UnsignedByteBuffer> voxels)
+            throws CreateException {
 
         Extent e = voxels.extent();
         checkExtentZ(e);
@@ -46,7 +47,10 @@ public class BufferedImageFactory {
     }
 
     public static BufferedImage createRGB(
-            Voxels<UnsignedByteBuffer> red, Voxels<UnsignedByteBuffer> green, Voxels<UnsignedByteBuffer> blue, Extent e)
+            Voxels<UnsignedByteBuffer> red,
+            Voxels<UnsignedByteBuffer> green,
+            Voxels<UnsignedByteBuffer> blue,
+            Extent e)
             throws CreateException {
         checkExtentZ(e);
 
@@ -63,8 +67,8 @@ public class BufferedImageFactory {
         return bi;
     }
 
-    private static UnsignedByteBuffer firstBuffer(Voxels<UnsignedByteBuffer> voxels, Extent e, String dscr)
-            throws CreateException {
+    private static UnsignedByteBuffer firstBuffer(
+            Voxels<UnsignedByteBuffer> voxels, Extent e, String dscr) throws CreateException {
 
         if (!voxels.extent().equals(e)) {
             throw new CreateException(dscr + " channel extent does not match");
@@ -86,7 +90,10 @@ public class BufferedImageFactory {
     }
 
     private static byte[] createCombinedByteArray(
-            Extent e, UnsignedByteBuffer bufferRed, UnsignedByteBuffer bufferGreen, UnsignedByteBuffer bufferBlue) {
+            Extent e,
+            UnsignedByteBuffer bufferRed,
+            UnsignedByteBuffer bufferGreen,
+            UnsignedByteBuffer bufferBlue) {
 
         int size = e.calculateVolumeAsInt();
         byte[] combined = new byte[size * 3];

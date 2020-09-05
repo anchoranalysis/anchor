@@ -83,7 +83,7 @@ public abstract class Voxels<T> {
     public T sliceBuffer(int z) {
         return slice(z).buffer();
     }
-    
+
     public Extent extent() {
         return slices.extent();
     }
@@ -91,9 +91,7 @@ public abstract class Voxels<T> {
     public Voxels<T> duplicate() {
         Voxels<T> out = factory.createInitialized(slices().extent());
 
-        extent().iterateOverZ( z->
-            out.replaceSlice(z, slice(z).duplicate())
-        );
+        extent().iterateOverZ(z -> out.replaceSlice(z, slice(z).duplicate()));
 
         return out;
     }

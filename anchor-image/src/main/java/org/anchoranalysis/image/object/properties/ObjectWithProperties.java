@@ -26,13 +26,13 @@
 
 package org.anchoranalysis.image.object.properties;
 
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.function.UnaryOperator;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.object.ObjectMask;
 

@@ -25,8 +25,8 @@
  */
 package org.anchoranalysis.image.voxel.arithmetic;
 
-import org.anchoranalysis.image.convert.UnsignedShortBuffer;
 import java.util.function.IntFunction;
+import org.anchoranalysis.image.convert.UnsignedShortBuffer;
 import org.anchoranalysis.image.extent.Extent;
 
 /**

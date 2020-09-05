@@ -59,7 +59,7 @@ class EnergyStackHelper {
             throw new OperationFailedException(e);
         }
     }
-        
+
     public static <T> void maybeSetEnergyStackOnInput(T input, Optional<EnergyStack> energyStack) {
         // Use reflection, to only set the energyStack on params that supports them
         if (input instanceof FeatureInputEnergy && energyStack.isPresent()) {

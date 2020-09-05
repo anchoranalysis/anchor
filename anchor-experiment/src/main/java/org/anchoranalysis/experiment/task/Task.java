@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.experiment.task;
 
+import com.google.common.base.Preconditions;
 import java.util.Optional;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.core.concurrency.ConcurrencyPlan;
@@ -45,7 +46,6 @@ import org.anchoranalysis.io.output.bound.BoundOutputManager;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.io.output.writer.WriterRouterErrors;
 import org.apache.commons.lang.time.StopWatch;
-import com.google.common.base.Preconditions;
 
 /**
  * A task which performs some kind of processing on a specific input-object
@@ -68,23 +68,26 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
 
     /** Is the execution-time of the task per-input expected to be very quick to execute? */
     public abstract boolean hasVeryQuickPerInputExecution();
-    
+
     /**
      * Called <i>once</i> before all calls to {@link #executeJob}.
-     * 
+     *
      * @param outputManager the output-manager for the experiment (not for an individual job)
-     * @param concurrencyPlan available numbers of processors that can call {@link #executeJob} 
+     * @param concurrencyPlan available numbers of processors that can call {@link #executeJob}
      * @param params the experiment-parameters
-     * @return the shared-state that is passed to each call to {@link #executeJob} and to {@link #afterAllJobsAreExecuted}.
+     * @return the shared-state that is passed to each call to {@link #executeJob} and to {@link
+     *     #afterAllJobsAreExecuted}.
      * @throws ExperimentExecutionException
      */
     public abstract S beforeAnyJobIsExecuted(
-            BoundOutputManagerRouteErrors outputManager, ConcurrencyPlan concurrencyPlan, ParametersExperiment params)
+            BoundOutputManagerRouteErrors outputManager,
+            ConcurrencyPlan concurrencyPlan,
+            ParametersExperiment params)
             throws ExperimentExecutionException;
 
     /**
      * Runs the task on one particular input (a job)
-     * 
+     *
      * @param paramsUnbound parameters for the input (unbound to any output location)
      * @return whether the job finished successfully or not
      * @throws JobExecutionException if anything goes wrong with the job which is <b>not</b> logged.
@@ -105,10 +108,10 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
                 bindOtherParams(paramsUnbound, outputManagerTask, manifestTask);
         return executeJobLogExceptions(paramsBound, paramsUnbound.isSuppressExceptions());
     }
-    
+
     /**
      * Called <i>once</i> after all calls to {@link #executeJob}.
-     * 
+     *
      * @param sharedState the shared-state
      * @param context IO-context for experiment (not for an invidual job)
      * @throws ExperimentExecutionException

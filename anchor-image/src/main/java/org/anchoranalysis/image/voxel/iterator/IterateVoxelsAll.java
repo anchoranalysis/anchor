@@ -1,7 +1,35 @@
+/*-
+ * #%L
+ * anchor-image
+ * %%
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
+ * %%
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ * #L%
+ */
 package org.anchoranalysis.image.voxel.iterator;
 
+import com.google.common.base.Preconditions;
 import java.util.function.IntPredicate;
 import java.util.function.IntUnaryOperator;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.functional.function.IntBinaryOperation;
 import org.anchoranalysis.image.convert.UnsignedBufferAsInt;
 import org.anchoranalysis.image.convert.UnsignedByteBuffer;
@@ -9,23 +37,20 @@ import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
+import org.anchoranalysis.image.voxel.iterator.process.ProcessBufferBinary;
+import org.anchoranalysis.image.voxel.iterator.process.ProcessBufferTernary;
+import org.anchoranalysis.image.voxel.iterator.process.ProcessBufferUnary;
 import org.anchoranalysis.image.voxel.iterator.process.ProcessPoint;
 import org.anchoranalysis.image.voxel.iterator.process.ProcessVoxelBufferBinary;
-import org.anchoranalysis.image.voxel.iterator.process.ProcessBufferUnary;
-import org.anchoranalysis.image.voxel.iterator.process.ProcessBufferTernary;
-import org.anchoranalysis.image.voxel.iterator.process.ProcessBufferBinary;
-import com.google.common.base.Preconditions;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 
 /**
  * Utilities for iterating over <i>all</i> voxels in one or more {@link Voxels}.
- * 
+ *
  * <p>A processor is called on each voxel.
  *
  * @author Owen Feehan
  */
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class IterateVoxelsAll {
 
     /**
@@ -35,11 +60,9 @@ public class IterateVoxelsAll {
      * @param process is called for each voxel within the bounding-box using GLOBAL coordinates.
      * @param <T> buffer-type for voxels
      */
-    public static <T> void withBuffer(
-            Voxels<T> voxels, ProcessBufferUnary<T> process) {
+    public static <T> void withBuffer(Voxels<T> voxels, ProcessBufferUnary<T> process) {
         withPoint(voxels.extent(), new RetrieveBufferForSlice<>(voxels, process));
     }
-    
 
     /**
      * Iterate over each voxel in an {@link Extent}
@@ -51,10 +74,10 @@ public class IterateVoxelsAll {
     public static void withPoint(Extent extent, ProcessPoint process) {
         IterateVoxelsBoundingBox.withPoint(new BoundingBox(extent), process);
     }
-    
-    
+
     /**
-     * Iterate over each voxel in a bounding-box - with <b>two</b> associated <b>buffers</b> for each slice
+     * Iterate over each voxel in a bounding-box - with <b>two</b> associated <b>buffers</b> for
+     * each slice
      *
      * <p>The extent's of both {@code voxels1} and {@code voxels2} must be equal.
      *
@@ -68,8 +91,7 @@ public class IterateVoxelsAll {
     public static <T> void withTwoBuffers(
             Voxels<T> voxels1, Voxels<T> voxels2, ProcessBufferBinary<T> process) {
         Preconditions.checkArgument(voxels1.extent().equals(voxels2.extent()));
-        withPoint(
-                voxels1.extent(), new RetrieveBuffersForTwoSlices<>(voxels1, voxels2, process));
+        withPoint(voxels1.extent(), new RetrieveBuffersForTwoSlices<>(voxels1, voxels2, process));
     }
 
     /**
@@ -98,10 +120,10 @@ public class IterateVoxelsAll {
                 voxels1.extent(),
                 new RetrieveBuffersForThreeSlices<>(voxels1, voxels2, voxels3, process));
     }
-    
-    
+
     /**
-     * Iterate over each voxel in a bounding-box - with <b>two</b> associated <b>voxel-buffers</b> for each slice
+     * Iterate over each voxel in a bounding-box - with <b>two</b> associated <b>voxel-buffers</b>
+     * for each slice
      *
      * <p>The extent's of both {@code voxels1} and {@code voxels2} must be equal.
      *
@@ -129,7 +151,6 @@ public class IterateVoxelsAll {
                             }
                         });
     }
-        
 
     /**
      * Changes each voxel, reading and writing the buffer as an {@code int}.
@@ -147,8 +168,7 @@ public class IterateVoxelsAll {
                             buffer.putInt(offset, operator.applyAsInt(value));
                         });
     }
-    
-    
+
     /**
      * Finds the maximum intensity-value (as an int) among all voxels.
      *
@@ -178,11 +198,10 @@ public class IterateVoxelsAll {
         }
         return max;
     }
-        
-    
+
     /**
-     * Assigns a value to any voxel whose intensity matches a predicate, reading and writing the buffer as an {@code
-     * int}.
+     * Assigns a value to any voxel whose intensity matches a predicate, reading and writing the
+     * buffer as an {@code int}.
      *
      * <p>Note this provides slower access than operating on the native-types.
      *
@@ -202,11 +221,11 @@ public class IterateVoxelsAll {
                             }
                         });
     }
-    
-    
+
     /**
      * Iterate over each voxel in a bounding-box - applying a binary operation with values from
-     * <b>two</b> input {@code Voxels<UnsignedByteBuffer>} for each slice and writing it into an output {@code Voxels<UnsignedByteBuffer>}.
+     * <b>two</b> input {@code Voxels<UnsignedByteBuffer>} for each slice and writing it into an
+     * output {@code Voxels<UnsignedByteBuffer>}.
      *
      * <p>The extent's of both {@code voxelsIn1} and {@code voxelsIn2} and {@code voxelsOut} must be
      * equal.
@@ -227,18 +246,21 @@ public class IterateVoxelsAll {
         Preconditions.checkArgument(voxelsIn1.extent().equals(voxelsIn2.extent()));
         Preconditions.checkArgument(voxelsIn2.extent().equals(voxelsOut.extent()));
 
-        voxelsOut.extent().iterateOverZ( z-> {
+        voxelsOut
+                .extent()
+                .iterateOverZ(
+                        z -> {
+                            UnsignedByteBuffer in1 = voxelsIn1.sliceBuffer(z);
+                            UnsignedByteBuffer in2 = voxelsIn2.sliceBuffer(z);
+                            UnsignedByteBuffer out = voxelsOut.sliceBuffer(z);
 
-            UnsignedByteBuffer in1 = voxelsIn1.sliceBuffer(z);
-            UnsignedByteBuffer in2 = voxelsIn2.sliceBuffer(z);
-            UnsignedByteBuffer out = voxelsOut.sliceBuffer(z);
+                            while (in1.hasRemaining()) {
+                                out.putUnsigned(
+                                        operation.apply(in1.getUnsigned(), in2.getUnsigned()));
+                            }
 
-            while (in1.hasRemaining()) {
-                out.putUnsigned( operation.apply(in1.getUnsigned(), in2.getUnsigned()) );
-            }
-
-            assert (!in2.hasRemaining());
-            assert (!out.hasRemaining());
-        });
+                            assert (!in2.hasRemaining());
+                            assert (!out.hasRemaining());
+                        });
     }
 }

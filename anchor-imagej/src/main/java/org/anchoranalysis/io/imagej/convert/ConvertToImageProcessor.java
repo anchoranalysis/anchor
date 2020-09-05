@@ -29,11 +29,11 @@ package org.anchoranalysis.io.imagej.convert;
 import ij.process.ByteProcessor;
 import ij.process.ImageProcessor;
 import ij.process.ShortProcessor;
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
-import org.anchoranalysis.image.convert.UnsignedShortBuffer;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedShortBuffer;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
@@ -45,9 +45,8 @@ import org.anchoranalysis.image.voxel.pixelsforslice.PixelsForSlice;
 
 /**
  * Converts other voxel data-structures (as used by Anchor) to an ImageJ {@link ImageProcessor}.
- *  
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ConvertToImageProcessor {
@@ -57,7 +56,7 @@ public class ConvertToImageProcessor {
 
     /**
      * Creates a {@link ImageProcessor} by extracting a slice from a {@link VoxelsWrapper}.
-     * 
+     *
      * @param voxels the voxels to extract a slice from.
      * @param z slice-index
      * @return a newly created image-procesor (reusing the existing buffer).
@@ -68,8 +67,7 @@ public class ConvertToImageProcessor {
             throw new AnchorFriendlyRuntimeException(
                     String.format(
                             "Extent volume (%d) and buffer-capacity (%d) are not equal",
-                            voxels.any().extent().volumeXY(),
-                            voxels.slice(z).capacity()));
+                            voxels.any().extent().volumeXY(), voxels.slice(z).capacity()));
         }
 
         if (voxels.getVoxelDataType().equals(DATA_TYPE_BYTE)) {
@@ -80,34 +78,37 @@ public class ConvertToImageProcessor {
             throw new IncorrectVoxelTypeException("Only byte or short data types are supported");
         }
     }
-    
+
     /**
-     * Creates a {@link ImageProcessor} by extracting a slice from a {@link PixelsForSlice} of type {@link UnsignedByteBuffer}.
-     * 
+     * Creates a {@link ImageProcessor} by extracting a slice from a {@link PixelsForSlice} of type
+     * {@link UnsignedByteBuffer}.
+     *
      * @param pixelsForSlice the pixels to extract a slice from.
      * @param z slice-index
      * @return a newly created image-processor (reusing the existing buffer).
      */
-    public static ImageProcessor fromByte(PixelsForSlice<UnsignedByteBuffer> pixelsForSlice, int z) {
+    public static ImageProcessor fromByte(
+            PixelsForSlice<UnsignedByteBuffer> pixelsForSlice, int z) {
         return fromByte(pixelsForSlice.slice(z), pixelsForSlice.extent());
     }
 
     /**
-     * Creates a {@link ImageProcessor} by extracting a slice from a {@link PixelsForSlice} of type {@link UnsignedShortBuffer}.
-     * 
+     * Creates a {@link ImageProcessor} by extracting a slice from a {@link PixelsForSlice} of type
+     * {@link UnsignedShortBuffer}.
+     *
      * @param pixelsForSlice the pixels to extract a slice from.
      * @param z slice-index
      * @return a newly created image-processor (reusing the existing buffer).
      */
-
     public static ImageProcessor fromShort(
             PixelsForSlice<UnsignedShortBuffer> pixelsForSlice, int z) {
         return fromShort(pixelsForSlice.slice(z), pixelsForSlice.extent());
     }
-    
+
     /**
-     * Creates a {@link ImageProcessor} from voxel-buffer (of type {@code ByteBuffer}) that is already a slice.
-     * 
+     * Creates a {@link ImageProcessor} from voxel-buffer (of type {@code ByteBuffer}) that is
+     * already a slice.
+     *
      * @param slice the voxels representing a slice
      * @param extent the size of image to create
      * @return a newly created image-processor (reusing the existing buffer).
@@ -117,14 +118,14 @@ public class ConvertToImageProcessor {
     }
 
     /**
-     * Creates a {@link ImageProcessor} from voxel-buffer (of type {@code ShortBuffer}) that is already a slice.
-     * 
+     * Creates a {@link ImageProcessor} from voxel-buffer (of type {@code ShortBuffer}) that is
+     * already a slice.
+     *
      * @param slice the voxels representing a slice
      * @param extent the size of image to create
      * @return a newly created image-processor (reusing the existing buffer).
      */
-    public static ImageProcessor fromShort(
-            VoxelBuffer<UnsignedShortBuffer> slice, Extent extent) {
+    public static ImageProcessor fromShort(VoxelBuffer<UnsignedShortBuffer> slice, Extent extent) {
         return new ShortProcessor(extent.x(), extent.y(), slice.buffer().array(), null);
     }
 }

@@ -25,13 +25,13 @@
  */
 package org.anchoranalysis.image.voxel.arithmetic;
 
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.nio.FloatBuffer;
-import org.anchoranalysis.image.convert.UnsignedIntBuffer;
-import org.anchoranalysis.image.convert.UnsignedShortBuffer;
 import java.util.function.IntFunction;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedIntBuffer;
+import org.anchoranalysis.image.convert.UnsignedShortBuffer;
 import org.anchoranalysis.image.extent.Extent;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -84,7 +84,8 @@ public class VoxelsArithmeticFactory {
      *     the buffer)
      * @return
      */
-    public static VoxelsArithmetic createInt(Extent extent, IntFunction<UnsignedIntBuffer> bufferForSlice) {
+    public static VoxelsArithmetic createInt(
+            Extent extent, IntFunction<UnsignedIntBuffer> bufferForSlice) {
         return new IntImplementation(extent, bufferForSlice);
     }
 }

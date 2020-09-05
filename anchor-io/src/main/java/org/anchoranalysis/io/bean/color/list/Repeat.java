@@ -47,7 +47,7 @@ public class Repeat extends ColorListFactory {
         ColorList in = colors.create(size);
 
         ColorList out = new ColorList();
-        FunctionalIterate.repeat(times, () -> out.addAll(in) );
+        FunctionalIterate.repeat(times, () -> out.addAll(in));
         return out;
     }
 }

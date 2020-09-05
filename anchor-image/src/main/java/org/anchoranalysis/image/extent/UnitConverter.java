@@ -32,19 +32,18 @@ import org.anchoranalysis.image.orientation.DirectionVector;
 
 /**
  * Converts from voxelized units to different physical measurements of area / volume / distance.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 @AllArgsConstructor
 public class UnitConverter {
 
     /** The image-resolution used to resolve physical measurements in different directions. */
     private final Resolution resolution;
-    
+
     /**
      * Converts an area from square voxels to square meters.
-     * 
+     *
      * @param value the area in square voxels
      * @return the area converted into square meters.
      */
@@ -54,7 +53,7 @@ public class UnitConverter {
 
     /**
      * Converts an area from square voxels to physical units.
-     * 
+     *
      * @param value the area in square voxels
      * @param unitType unit-type to convert to ala {@link SpatialUnits}.
      * @return the area converted into physical units (of type {@code unitType}).
@@ -65,7 +64,7 @@ public class UnitConverter {
 
     /**
      * Converts a volume from cubic voxels to cubic meters.
-     * 
+     *
      * @param value the volume in cubic voxels
      * @return the volume converted into cubic meters.
      */
@@ -75,7 +74,7 @@ public class UnitConverter {
 
     /**
      * Converts a volume from cubic voxels to physical units.
-     * 
+     *
      * @param value the volume in cubic voxels
      * @param unitType unit-type to convert to ala {@link SpatialUnits}.
      * @return the volume converted into physical units (of type {@code unitType}).
@@ -86,19 +85,18 @@ public class UnitConverter {
 
     /**
      * Converts a distance from voxels to meters.
-     * 
+     *
      * @param value the distance in voxels
      * @param direction the direction in which the distance is measured
      * @return the distance converted into meters.
      */
-    public double toPhysicalDistance(
-            double value, DirectionVector direction) {
+    public double toPhysicalDistance(double value, DirectionVector direction) {
         return value * unitDistanceForDirection(direction);
     }
 
     /**
      * Converts a distance from voxels to physical units.
-     * 
+     *
      * @param value the distance in voxels
      * @param direction the direction in which the distance is measured
      * @param unitType unit-type to convert to ala {@link SpatialUnits}.
@@ -107,13 +105,12 @@ public class UnitConverter {
     public double toPhysicalDistance(double value, DirectionVector direction, String unitType) {
         return SpatialUnits.convertToUnits(toPhysicalDistance(value, direction), unitType);
     }
-    
-    
+
     /**
      * Converts from physical-volume to voxels.
      *
      * <p>The physical unit-type is assumed to be cubic-meters.
-     * 
+     *
      * @param value the value in physical units
      * @return the area converted into voxels.
      */
@@ -123,7 +120,7 @@ public class UnitConverter {
 
     /**
      * Converts from physical-volume to voxels.
-     * 
+     *
      * @param value the value in physical units
      * @param unitType unit-type of value ala {@link SpatialUnits}
      * @return the area converted into voxels.
@@ -135,19 +132,19 @@ public class UnitConverter {
 
     /**
      * Converts from physical-area to pixels.
-     * 
+     *
      * <p>The physical unit-type is assumed to be square-meters.
-     * 
+     *
      * @param value the value in physical units
      * @return the area converted into pixels.
      */
     public double fromPhysicalArea(double value) {
         return value / resolution.unitArea();
     }
-    
+
     /**
      * Converts from physical-area to pixels.
-     * 
+     *
      * @param value the value in physical units
      * @param unitType physical-unit type ala {@link SpatialUnits}
      * @return the area converted into pixels.
@@ -159,24 +156,23 @@ public class UnitConverter {
 
     /**
      * Converts from physical-distance to voxels.
-     * 
+     *
      * <p>The physical unit-type is assumed to be meters.
-     * 
+     *
      * @param value the value in physical units
      * @param direction the direction in which the distance is measured
      * @return the distance converted into voxels.
      */
-    public double fromPhysicalDistance(
-            double value, DirectionVector direction) {
+    public double fromPhysicalDistance(double value, DirectionVector direction) {
         return value / unitDistanceForDirection(direction);
     }
 
     /**
      * Converts from physical-distance to voxels.
-     * 
-     * <p>The physical unit-type is assumed to be meters, and the direction
-     * of the distance is assumed to be along the X axis.
-     * 
+     *
+     * <p>The physical unit-type is assumed to be meters, and the direction of the distance is
+     * assumed to be along the X axis.
+     *
      * @param value the value in physical units
      * @return the distance converted into voxels.
      */

@@ -30,38 +30,39 @@ import java.util.Optional;
 
 /**
  * A name that that uniquely identifies an entity, and is composed of two parts.
- * 
+ *
  * <p>The first part is also a grouping key for aggregation.
+ *
  * <p>Together both the first and second parts uniquely identify an entity.
  *
  * @author Owen Feehan
  */
 public interface MultiName extends Iterable<String>, Comparable<MultiName> {
 
-    /** 
+    /**
      * The first part, and grouping key.
-     * 
+     *
      * @return the name of part, if it exists.
      */
     Optional<String> firstPart();
 
-    /** 
+    /**
      * The second part of the name.
-     * 
-     * @return the name of the part.  
+     *
+     * @return the name of the part.
      */
     String secondPart();
 
     /**
      * The full name, including both directory and file part, as a string.
-     *  
+     *
      * @return the name
      */
     String toString();
 
     /**
      * If another name is equal to the current name
-     * 
+     *
      * @param other the other name
      * @return true iff the two objects are equal
      */

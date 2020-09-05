@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.experiment.task.processor;
 
+import com.google.common.base.Preconditions;
 import java.util.Optional;
 import java.util.concurrent.Callable;
 import org.anchoranalysis.core.error.reporter.ErrorReporterIntoLog;
@@ -34,7 +35,6 @@ import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.task.ParametersUnbound;
 import org.anchoranalysis.experiment.task.Task;
 import org.anchoranalysis.io.input.InputFromManager;
-import com.google.common.base.Preconditions;
 
 /**
  * A job derived from a {@link Task} that can be placed on different threads
@@ -96,10 +96,10 @@ public class CallableJob<T extends InputFromManager, S>
             logger.logEnd(jobDescription, jobState, success);
             return Optional.empty();
 
-        } catch (Throwable e) { // NOSONAR 
+        } catch (Throwable e) { // NOSONAR
             // Note that throwable is needed here instead of Exception, so that Errors don't
             // cause errors in our job monitoring.
-            
+
             // If executeTask is called with supressException==true then exceptions shouldn't occur
             // here as a rule from specific-tasks,
             //   as they should be logged internally to task-log. So if any error is actually thrown
@@ -119,7 +119,7 @@ public class CallableJob<T extends InputFromManager, S>
 
             return Optional.of(new JobExecutionException(e));
         } finally {
-            Preconditions.checkArgument( !jobState.isExecuting() ); 
+            Preconditions.checkArgument(!jobState.isExecuting());
         }
     }
 }

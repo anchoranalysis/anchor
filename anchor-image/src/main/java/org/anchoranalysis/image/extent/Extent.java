@@ -177,8 +177,8 @@ public final class Extent implements Serializable {
     /**
      * Exposes the extent as a tuple.
      *
-     * <p>IMPORTANT! This class is designed to be <b>immutable</b>, so this tuple should be treated as
-     * read-only, and never modified.
+     * <p>IMPORTANT! This class is designed to be <b>immutable</b>, so this tuple should be treated
+     * as read-only, and never modified.
      *
      * @return the extent's width, height, depth as a tuple
      */
@@ -448,12 +448,12 @@ public final class Extent implements Serializable {
         }
         return true;
     }
-    
+
     /**
-     * Streams over the range of z values 
-     * 
+     * Streams over the range of z values
+     *
      * <p>The values range from 0 (inclusive) to {@code z()} (exclusive).
-     *  
+     *
      * @return the stream
      */
     public IntStream streamOverZ() {

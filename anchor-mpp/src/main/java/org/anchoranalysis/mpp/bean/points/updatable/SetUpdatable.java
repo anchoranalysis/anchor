@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.mpp.bean.points.updatable;
 
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -46,6 +45,7 @@ import org.anchoranalysis.feature.shared.SharedFeatureMulti;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.BoundedVoxels;
@@ -269,7 +269,8 @@ public class SetUpdatable extends UpdatablePointsContainer {
                 int xGlobal = cornerPoint.x() + cornerExtentPoint.x();
 
                 int globOffset = extent.offset(xGlobal, yGlobal);
-                byte posCheck = buffer.getRaw(extent.offset(cornerExtentPoint.x(), cornerExtentPoint.y()));
+                byte posCheck =
+                        buffer.getRaw(extent.offset(cornerExtentPoint.x(), cornerExtentPoint.y()));
                 if (rm.isMemberFlag(posCheck, flags)
                         && bufferMask.getRaw(globOffset) == bvb.getOnByte()) {
 

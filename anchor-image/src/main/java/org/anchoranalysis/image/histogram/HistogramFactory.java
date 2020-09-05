@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.image.histogram;
 
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.util.Collection;
 import java.util.Optional;
 import lombok.AccessLevel;
@@ -36,6 +35,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
@@ -212,7 +212,8 @@ public class HistogramFactory {
         return histogram;
     }
 
-    private static void addBufferToHistogram(Histogram histogram, VoxelBuffer<?> buffer, int maxOffset) {
+    private static void addBufferToHistogram(
+            Histogram histogram, VoxelBuffer<?> buffer, int maxOffset) {
         for (int offset = 0; offset < maxOffset; offset++) {
             int val = buffer.getInt(offset);
             histogram.incrementValue(val);

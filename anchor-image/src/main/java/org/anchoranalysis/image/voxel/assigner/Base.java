@@ -138,7 +138,8 @@ abstract class Base<T> implements VoxelsAssigner {
      *     boxToBeAssigned}.
      */
     private void toObject(ObjectMask object, Optional<BoundingBox> restrictTo) {
-        IterateVoxelsObjectMask.withTwoVoxelBuffers(object, voxels, restrictTo, this::assignToBuffer);
+        IterateVoxelsObjectMask.withTwoVoxelBuffers(
+                object, voxels, restrictTo, this::assignToBuffer);
     }
 
     private void assignToBuffer(VoxelBuffer<T> buffer, int offset) {

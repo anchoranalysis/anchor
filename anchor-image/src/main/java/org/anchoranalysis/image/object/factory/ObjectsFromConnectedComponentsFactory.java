@@ -26,18 +26,17 @@
 
 package org.anchoranalysis.image.object.factory;
 
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
-import org.anchoranalysis.image.convert.UnsignedIntBuffer;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedIntBuffer;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.factory.unionfind.ConnectedComponentUnionFind;
 
 /**
  * Creates a {@link ObjectCollection} from the connected-components of a mask or binary-voxels.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class ObjectsFromConnectedComponentsFactory {
 
