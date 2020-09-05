@@ -1,7 +1,21 @@
 package org.anchoranalysis.image.convert;
 
+import java.nio.ByteBuffer;
 import java.nio.ShortBuffer;
 
+/**
+ * Wraps a {@code ShortBuffer} but automatically performs conversion to {@code int}.
+ * 
+ * <p>The conversion applies to {@link ShortBuffer#get} and {@link ShortBuffer#put} of single
+ * elements, but not to any mass get or put operations.
+ * 
+ * <p>The user has a choice of getting/setting using raw ({@link #getRaw}, {@link #putRaw} etc.) or
+ * unsigned-conversion ({@link #getUnsigned}, {@link #putUnsigned} etc.) methods. The raw methods are always more
+ * efficient, and so should be preferred when conversion is not needed.
+ * 
+ * @author Owen Feehan
+ *
+ */
 public final class UnsignedShortBuffer extends UnsignedBuffer {
 
     private final ShortBuffer delegate;

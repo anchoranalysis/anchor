@@ -6,6 +6,11 @@ import lombok.AllArgsConstructor;
 /**
  * Base class for buffers that represent an unsigned-type in the signed-equivalent-type NIO {@link Buffer}.
  * 
+ * <p>This class exists as Java does not supported unsigned primitive types (apart from char), so
+ * it is necessary to explicitly convert an unsigned primitive type to a larger primitive type for
+ * arithmetic operations (e.g. unsigned bytes need to be converted to short or higher, unsigned shorts
+ * to int or higher, unsigned int to long or higher).
+ * 
  * @author Owen Feehan
  *
  */
