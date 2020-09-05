@@ -29,7 +29,7 @@ package org.anchoranalysis.image.channel.converter.voxels;
 import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
-import java.nio.ShortBuffer;
+import org.anchoranalysis.image.convert.UnsignedShortBuffer;
 import java.util.function.Function;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
@@ -73,7 +73,7 @@ public abstract class VoxelsConverter<T> {
         convertFrom(in, out, this::convertFromByte);
     }
 
-    public void convertFromShort(Voxels<ShortBuffer> in, Voxels<T> out) {
+    public void convertFromShort(Voxels<UnsignedShortBuffer> in, Voxels<T> out) {
         convertFrom(in, out, this::convertFromShort);
     }
 
@@ -91,7 +91,7 @@ public abstract class VoxelsConverter<T> {
 
     public abstract VoxelBuffer<T> convertFromInt(VoxelBuffer<IntBuffer> in);
 
-    public abstract VoxelBuffer<T> convertFromShort(VoxelBuffer<ShortBuffer> in);
+    public abstract VoxelBuffer<T> convertFromShort(VoxelBuffer<UnsignedShortBuffer> in);
 
     private <S> void convertFrom(
             Voxels<S> in, Voxels<T> out, Function<VoxelBuffer<S>, VoxelBuffer<T>> converter) {

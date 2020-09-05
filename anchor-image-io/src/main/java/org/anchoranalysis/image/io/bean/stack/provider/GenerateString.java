@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.image.io.bean.stack.provider;
 
-import java.nio.ShortBuffer;
+import org.anchoranalysis.image.convert.UnsignedShortBuffer;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -103,10 +103,10 @@ public class GenerateString extends StackProvider {
             Stack stack = stringRasterGenerator.generateStack();
 
             if (createShort) {
-                ChannelConverter<ShortBuffer> cc =
+                ChannelConverter<UnsignedShortBuffer> conveter =
                         new ToUnsignedShort(new ConvertToShortScaleByType());
 
-                stack = cc.convert(stack, ConversionPolicy.CHANGE_EXISTING_CHANNEL);
+                stack = conveter.convert(stack, ConversionPolicy.CHANGE_EXISTING_CHANNEL);
             }
 
             if (intensityProvider != null) {

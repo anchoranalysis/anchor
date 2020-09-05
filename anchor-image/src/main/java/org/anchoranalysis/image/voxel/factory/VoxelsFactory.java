@@ -29,7 +29,7 @@ package org.anchoranalysis.image.voxel.factory;
 import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
-import java.nio.ShortBuffer;
+import org.anchoranalysis.image.convert.UnsignedShortBuffer;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.factory.VoxelDataTypeFactoryMultiplexer;
 import org.anchoranalysis.image.voxel.Voxels;
@@ -44,7 +44,7 @@ public class VoxelsFactory
     private static VoxelsFactory instance;
 
     private static final VoxelsFactoryTypeBound<UnsignedByteBuffer> FACTORY_BYTE = new FactoryByte();
-    private static final VoxelsFactoryTypeBound<ShortBuffer> FACTORY_SHORT = new FactoryShort();
+    private static final VoxelsFactoryTypeBound<UnsignedShortBuffer> FACTORY_SHORT = new FactoryShort();
     private static final VoxelsFactoryTypeBound<IntBuffer> FACTORY_INT = new FactoryInt();
     private static final VoxelsFactoryTypeBound<FloatBuffer> FACTORY_FLOAT = new FactoryFloat();
 
@@ -78,7 +78,7 @@ public class VoxelsFactory
         return FACTORY_BYTE;
     }
 
-    public static VoxelsFactoryTypeBound<ShortBuffer> getShort() {
+    public static VoxelsFactoryTypeBound<UnsignedShortBuffer> getShort() {
         return FACTORY_SHORT;
     }
 

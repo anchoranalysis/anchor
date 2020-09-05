@@ -52,7 +52,7 @@ public class ConditionalKernel extends BinaryKernel {
         int value =
                 voxelsIntensity
                         .sliceBuffer(point.z())
-                        .getUnsignedByte(voxelsIntensity.extent().offsetSlice(point));
+                        .getUnsigned(voxelsIntensity.extent().offsetSlice(point));
 
         if (value < minValue) {
             return false;

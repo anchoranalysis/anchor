@@ -27,7 +27,7 @@ package org.anchoranalysis.image.convert.imglib2;
 
 import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.nio.FloatBuffer;
-import java.nio.ShortBuffer;
+import org.anchoranalysis.image.convert.UnsignedShortBuffer;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import lombok.AccessLevel;
@@ -53,7 +53,7 @@ public class ConvertToNativeImg {
       return Wrap.allSlices(voxels, ArrayFactory::fromByte, UnsignedByteType::new);
   }
 
-  public static NativeImg<UnsignedShortType, ShortArray> fromShort(Voxels<ShortBuffer> voxels) {
+  public static NativeImg<UnsignedShortType, ShortArray> fromShort(Voxels<UnsignedShortBuffer> voxels) {
       return Wrap.allSlices(voxels, ArrayFactory::fromShort, UnsignedShortType::new);
   }
 

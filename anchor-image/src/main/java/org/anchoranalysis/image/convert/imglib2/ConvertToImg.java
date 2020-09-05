@@ -28,7 +28,7 @@ package org.anchoranalysis.image.convert.imglib2;
 
 import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.nio.FloatBuffer;
-import java.nio.ShortBuffer;
+import org.anchoranalysis.image.convert.UnsignedShortBuffer;
 import net.imglib2.img.Img;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.type.numeric.integer.UnsignedByteType;
@@ -89,7 +89,7 @@ public class ConvertToImg {
     }
 
     public static Img<UnsignedShortType> fromShort(
-            VoxelBuffer<ShortBuffer> buffer, Extent extent) {
+            VoxelBuffer<UnsignedShortBuffer> buffer, Extent extent) {
         return Wrap.buffer(buffer, extent, ArrayFactory::fromShort, UnsignedShortType::new);
     }
 
@@ -102,7 +102,7 @@ public class ConvertToImg {
         return ConvertToNativeImg.fromByte(voxels);
     }
     
-    public static Img<UnsignedShortType> fromShort(Voxels<ShortBuffer> voxels) {
+    public static Img<UnsignedShortType> fromShort(Voxels<UnsignedShortBuffer> voxels) {
         return ConvertToNativeImg.fromShort(voxels);
     }
     
@@ -118,7 +118,7 @@ public class ConvertToImg {
         if (dataType.equals(UnsignedByteVoxelType.INSTANCE)) {
             return fromByte( (VoxelBuffer<UnsignedByteBuffer>) voxels, extent);
         } else if (dataType.equals(UnsignedShortVoxelType.INSTANCE)) {
-            return fromShort((VoxelBuffer<ShortBuffer>) voxels, extent);
+            return fromShort((VoxelBuffer<UnsignedShortBuffer>) voxels, extent);
         } else if (dataType.equals(FloatVoxelType.INSTANCE)) {
             return fromFloat((VoxelBuffer<FloatBuffer>) voxels, extent);
         } else {

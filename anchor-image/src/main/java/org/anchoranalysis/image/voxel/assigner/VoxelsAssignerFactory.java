@@ -28,7 +28,7 @@ package org.anchoranalysis.image.voxel.assigner;
 import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
-import java.nio.ShortBuffer;
+import org.anchoranalysis.image.convert.UnsignedShortBuffer;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
@@ -49,13 +49,13 @@ public class VoxelsAssignerFactory {
     }
 
     /**
-     * Create voxels-assigner for {@link ShortBuffer}
+     * Create voxels-assigner for {@link UnsignedShortBuffer}
      *
      * @param voxels the voxels on which arithmetic is to be performed
      * @param valueToAssign the voxel-value to assign
      * @return a newly created assigner
      */
-    public static VoxelsAssigner createShort(Voxels<ShortBuffer> voxels, int valueToAssign) {
+    public static VoxelsAssigner createShort(Voxels<UnsignedShortBuffer> voxels, int valueToAssign) {
         return new ShortImplementation(voxels, valueToAssign);
     }
 

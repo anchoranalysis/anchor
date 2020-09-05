@@ -49,7 +49,7 @@ class ByteImplementation extends Base<UnsignedByteBuffer> {
 
     @Override
     protected int voxelAtBufferIndex(UnsignedByteBuffer buffer, int index) {
-        return buffer.getUnsignedByte(index);
+        return buffer.getUnsigned(index);
     }
 
     @Override
@@ -87,11 +87,11 @@ class ByteImplementation extends Base<UnsignedByteBuffer> {
 
     @Override
     protected boolean bufferValueGreaterThan(UnsignedByteBuffer buffer, int threshold) {
-        return buffer.getUnsignedByte() > threshold;
+        return buffer.getUnsigned() > threshold;
     }
 
     @Override
     protected boolean bufferValueEqualTo(UnsignedByteBuffer buffer, int value) {
-        return buffer.getUnsignedByte() == value;
+        return buffer.getUnsigned() == value;
     }
 }

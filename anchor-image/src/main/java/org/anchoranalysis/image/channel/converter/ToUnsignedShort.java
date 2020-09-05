@@ -26,20 +26,20 @@
 
 package org.anchoranalysis.image.channel.converter;
 
-import java.nio.ShortBuffer;
+import org.anchoranalysis.image.convert.UnsignedShortBuffer;
 import org.anchoranalysis.image.channel.converter.voxels.ConvertToShortNoScaling;
 import org.anchoranalysis.image.channel.converter.voxels.VoxelsConverter;
 import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 
 // Converts from other data types to Byte (unsigned 8-bit) without scaling any other data types
-public class ToUnsignedShort extends ChannelConverter<ShortBuffer> {
+public class ToUnsignedShort extends ChannelConverter<UnsignedShortBuffer> {
 
     public ToUnsignedShort() {
         this(new ConvertToShortNoScaling());
     }
 
-    public ToUnsignedShort(VoxelsConverter<ShortBuffer> voxelsConverter) {
+    public ToUnsignedShort(VoxelsConverter<UnsignedShortBuffer> voxelsConverter) {
         super(UnsignedShortVoxelType.INSTANCE, voxelsConverter, VoxelsFactory.getShort());
     }
 }

@@ -27,7 +27,6 @@
 package org.anchoranalysis.image.convert;
 
 import java.nio.Buffer;
-import com.google.common.primitives.UnsignedBytes;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -44,11 +43,11 @@ import lombok.NoArgsConstructor;
 public class PrimitiveConverter {
 
     public static int unsignedByteToInt(byte value) {
-        return UnsignedBytes.toInt(value);
+        return Byte.toUnsignedInt(value);
     }
 
     public static int unsignedShortToInt(short value) {
-        return value & 0xffff;
+        return Short.toUnsignedInt(value);
     }
 
     public static int unsignedIntToShort(int value) {

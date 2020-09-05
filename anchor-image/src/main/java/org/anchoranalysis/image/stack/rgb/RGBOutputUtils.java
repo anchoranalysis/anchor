@@ -44,8 +44,8 @@ public class RGBOutputUtils {
             UnsignedByteBuffer blue,
             UnsignedByteBuffer green) {
         int index = dimensions.offsetSlice(point);
-        red.putUnsignedByte(index, color.getRed());
-        green.putUnsignedByte(index, color.getGreen());
-        blue.putUnsignedByte(index, color.getBlue());
+        red.putUnsigned(index, color.getRed());
+        green.putUnsigned(index, color.getGreen());
+        blue.putUnsigned(index, color.getBlue());
     }
 }

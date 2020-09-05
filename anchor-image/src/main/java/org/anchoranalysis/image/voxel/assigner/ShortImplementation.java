@@ -25,27 +25,27 @@
  */
 package org.anchoranalysis.image.voxel.assigner;
 
-import java.nio.ShortBuffer;
+import org.anchoranalysis.image.convert.UnsignedShortBuffer;
 import org.anchoranalysis.image.voxel.Voxels;
 
-class ShortImplementation extends Base<ShortBuffer> {
+class ShortImplementation extends Base<UnsignedShortBuffer> {
 
     private final short valueCast;
 
-    public ShortImplementation(Voxels<ShortBuffer> voxels, int valueToAssign) {
+    public ShortImplementation(Voxels<UnsignedShortBuffer> voxels, int valueToAssign) {
         super(voxels, valueToAssign);
 
         valueCast = (short) valueToAssign;
     }
 
-    protected void assignToEntireBuffer(ShortBuffer buffer) {
+    protected void assignToEntireBuffer(UnsignedShortBuffer buffer) {
         while (buffer.hasRemaining()) {
-            buffer.put(valueCast);
+            buffer.putRaw(valueCast);
         }
     }
 
     @Override
-    protected void assignAtBufferPosition(ShortBuffer buffer, int index) {
-        buffer.put(index, (short) valueToAssign);
+    protected void assignAtBufferPosition(UnsignedShortBuffer buffer, int index) {
+        buffer.putRaw(index, valueCast);
     }
 }

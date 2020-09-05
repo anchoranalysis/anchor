@@ -57,7 +57,7 @@ class AddVoxelsToHistogram {
             int r,
             int zLocal) {
         for (int i = 0; i < partitionList.size(); i++) {
-            partitionList.get(i).addToVoxelList(r, zLocal, bufferArrList.get(i).getUnsignedByte(globalOffset));
+            partitionList.get(i).addToVoxelList(r, zLocal, bufferArrList.get(i).getUnsigned(globalOffset));
         }
     }
 

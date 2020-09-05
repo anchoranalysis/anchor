@@ -26,14 +26,14 @@
 
 package org.anchoranalysis.image.voxel.pixelsforslice;
 
-import java.nio.ShortBuffer;
+import org.anchoranalysis.image.convert.UnsignedShortBuffer;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
-import org.anchoranalysis.image.voxel.buffer.VoxelBufferShort;
+import org.anchoranalysis.image.voxel.buffer.VoxelBufferUnsignedShort;
 
-public class PixelsFromShortBufferArr implements PixelsForSlice<ShortBuffer> {
+public class PixelsFromShortBufferArr implements PixelsForSlice<UnsignedShortBuffer> {
 
-    private final VoxelBuffer<ShortBuffer>[] buffer;
+    private final VoxelBuffer<UnsignedShortBuffer>[] buffer;
     private final Extent extent;
 
     private PixelsFromShortBufferArr(Extent extent) {
@@ -41,13 +41,13 @@ public class PixelsFromShortBufferArr implements PixelsForSlice<ShortBuffer> {
 
         this.extent = extent;
 
-        buffer = new VoxelBufferShort[extent.z()];
+        buffer = new VoxelBufferUnsignedShort[extent.z()];
     }
 
     private void init() {
         int volumeXY = extent.volumeXY();
         for (int z = 0; z < extent.z(); z++) {
-            buffer[z] = VoxelBufferShort.allocate(volumeXY);
+            buffer[z] = VoxelBufferUnsignedShort.allocate(volumeXY);
             assert (buffer[z].buffer().array().length == volumeXY);
         }
     }
@@ -65,14 +65,14 @@ public class PixelsFromShortBufferArr implements PixelsForSlice<ShortBuffer> {
     // END FACTORY METHODS
 
     @Override
-    public void replaceSlice(int z, VoxelBuffer<ShortBuffer> pixels) {
+    public void replaceSlice(int z, VoxelBuffer<UnsignedShortBuffer> pixels) {
         pixels.buffer().clear();
         buffer[z] = pixels;
     }
 
     @Override
-    public VoxelBuffer<ShortBuffer> slice(int z) {
-        VoxelBuffer<ShortBuffer> buf = buffer[z];
+    public VoxelBuffer<UnsignedShortBuffer> slice(int z) {
+        VoxelBuffer<UnsignedShortBuffer> buf = buffer[z];
         buf.buffer().clear();
         return buf;
     }

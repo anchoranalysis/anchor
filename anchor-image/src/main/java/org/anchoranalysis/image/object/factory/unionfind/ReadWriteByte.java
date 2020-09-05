@@ -40,6 +40,6 @@ final class ReadWriteByte extends BufferReadWrite<UnsignedByteBuffer> {
 
     @Override
     protected void putBufferCount(UnsignedByteBuffer buffer, int offset, int count) {
-        buffer.putUnsignedByte(offset, count);
+        buffer.putUnsigned(offset, count);
     }
 }

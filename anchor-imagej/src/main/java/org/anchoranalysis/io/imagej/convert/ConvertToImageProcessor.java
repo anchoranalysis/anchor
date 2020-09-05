@@ -30,7 +30,7 @@ import ij.process.ByteProcessor;
 import ij.process.ImageProcessor;
 import ij.process.ShortProcessor;
 import org.anchoranalysis.image.convert.UnsignedByteBuffer;
-import java.nio.ShortBuffer;
+import org.anchoranalysis.image.convert.UnsignedShortBuffer;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
@@ -93,7 +93,7 @@ public class ConvertToImageProcessor {
     }
 
     /**
-     * Creates a {@link ImageProcessor} by extracting a slice from a {@link PixelsForSlice} of type {@link ShortBuffer}.
+     * Creates a {@link ImageProcessor} by extracting a slice from a {@link PixelsForSlice} of type {@link UnsignedShortBuffer}.
      * 
      * @param pixelsForSlice the pixels to extract a slice from.
      * @param z slice-index
@@ -101,7 +101,7 @@ public class ConvertToImageProcessor {
      */
 
     public static ImageProcessor fromShort(
-            PixelsForSlice<ShortBuffer> pixelsForSlice, int z) {
+            PixelsForSlice<UnsignedShortBuffer> pixelsForSlice, int z) {
         return fromShort(pixelsForSlice.slice(z), pixelsForSlice.extent());
     }
     
@@ -124,7 +124,7 @@ public class ConvertToImageProcessor {
      * @return a newly created image-processor (reusing the existing buffer).
      */
     public static ImageProcessor fromShort(
-            VoxelBuffer<ShortBuffer> slice, Extent extent) {
+            VoxelBuffer<UnsignedShortBuffer> slice, Extent extent) {
         return new ShortProcessor(extent.x(), extent.y(), slice.buffer().array(), null);
     }
 }

@@ -1,9 +1,6 @@
 package org.anchoranalysis.image.convert;
 
-import java.nio.Buffer;
 import java.nio.ByteBuffer;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
@@ -13,14 +10,13 @@ import lombok.Getter;
  * elements, but not to any mass get or put operations.
  * 
  * <p>The user has a choice of getting/setting using raw ({@link #getRaw}, {@link #putRaw} etc.) or
- * unsigned-conversion ({@link #getUnsignedByte}, {@link #putUnsignedByte} etc.) methods. The raw methods are always more
+ * unsigned-conversion ({@link #getUnsigned}, {@link #putUnsigned} etc.) methods. The raw methods are always more
  * efficient, and so should be preferred when conversion is not needed.
  * 
  * @author Owen Feehan
  *
  */
-@AllArgsConstructor(access=AccessLevel.PRIVATE)
-public final class UnsignedByteBuffer {
+public final class UnsignedByteBuffer extends UnsignedBuffer {
 
     @Getter private final ByteBuffer delegate;
     
@@ -53,11 +49,22 @@ public final class UnsignedByteBuffer {
     public static UnsignedByteBuffer wrapRaw(ByteBuffer bufferRaw) {
         return new UnsignedByteBuffer(bufferRaw);
     }
+
+    
+    /**
+     * Creates given a delegate.
+     * 
+     * @param delegate the delegate
+     */
+    private UnsignedByteBuffer(ByteBuffer delegate) {
+        super(delegate);
+        this.delegate = delegate;
+    }
     
     /**
      * Gets an unsigned-byte (represented as a byte) at the current buffer position.
      * 
-     * <p>No further conversion occurs, so this method is more efficient than {@link #getUnsignedByte()}.
+     * <p>No further conversion occurs, so this method is more efficient than {@link #getUnsigned()}.
      * 
      * @return unsigned-byte (represented by a byte)
      */
@@ -68,7 +75,7 @@ public final class UnsignedByteBuffer {
     /**
      * Gets an unsigned-byte (represented as a byte) at a particular buffer position.
      * 
-     * <p>No further conversion occurs, so this method is more efficient than {@link #getUnsignedByte(int)}.
+     * <p>No further conversion occurs, so this method is more efficient than {@link #getUnsigned(int)}.
      * 
      * @param index the buffer position
      * @return unsigned-byte (represented by a byte)
@@ -82,7 +89,7 @@ public final class UnsignedByteBuffer {
      * 
      * @return unsigned-byte (represented by a int)
      */
-    public int getUnsignedByte() {
+    public int getUnsigned() {
         return PrimitiveConverter.unsignedByteToInt( getRaw() );
     }
 
@@ -92,14 +99,14 @@ public final class UnsignedByteBuffer {
      * @param index the buffer position
      * @return unsigned-byte (represented by a int)
      */
-    public int getUnsignedByte(int index) {
+    public int getUnsigned(int index) {
         return PrimitiveConverter.unsignedByteToInt( getRaw(index) );
     }
     
     /**
      * Puts an unsigned-byte (represented as a byte) at the current buffer position.
      * 
-     * <p>No further conversion occurs, so this method is more efficient than {@link #putUnsignedByte(int)}.
+     * <p>No further conversion occurs, so this method is more efficient than {@link #putUnsigned(int)}.
      * 
      * @param value unsigned-byte (represented by a byte)
      */
@@ -110,7 +117,7 @@ public final class UnsignedByteBuffer {
     /**
      * Puts an unsigned-byte (represented as a byte) a particular buffer position.
      * 
-     * <p>No further conversion occurs, so this method is more efficient than {@link #putUnsignedByte(int,int)}.
+     * <p>No further conversion occurs, so this method is more efficient than {@link #putUnsigned(int,int)}.
      * 
      * @param index the buffer position
      * @param value the unsigned-byte (represented by an int)
@@ -126,7 +133,7 @@ public final class UnsignedByteBuffer {
      * 
      * @param value the unsigned-byte (represented by an int)
      */
-    public void putUnsignedByte(int value) {
+    public void putUnsigned(int value) {
         putRaw( (byte) value);
     }
 
@@ -138,19 +145,8 @@ public final class UnsignedByteBuffer {
      * @param index the buffer position
      * @param value the unsigned-byte (represented by an int)
      */
-    public void putUnsignedByte(int index, int value) {
+    public void putUnsigned(int index, int value) {
         putRaw(index, (byte) value);
-    }
-
-    /**
-     * Puts an unsigned-short (represented by a short) at current buffer position.
-     * 
-     * <p>A conversion occurs from short to int and then to byte.
-     * 
-     * @param value the unsigned-short (represented by a short)
-     */
-    public void putUnsignedShort(short value) {
-        putRaw( (byte) PrimitiveConverter.unsignedShortToInt(value) );
     }
 
     /**
@@ -165,7 +161,7 @@ public final class UnsignedByteBuffer {
     }
     
     /**
-     * Puts a signed float (represented by a float) at the current buffer position.
+     * Puts a float at the current buffer position.
      * 
      * <p>A conversion occurs from float to byte.
      * 
@@ -176,7 +172,7 @@ public final class UnsignedByteBuffer {
     }
 
     /**
-     * Puts a signed float (represented by a float) at a particular buffer position.
+     * Puts a float at a particular buffer position.
      * 
      * <p>A conversion occurs from float to byte.
      * 
@@ -188,7 +184,7 @@ public final class UnsignedByteBuffer {
     }
     
     /**
-     * Puts a signed double (represented by a double) at the current buffer position.
+     * Puts a double at the current buffer position.
      * 
      * <p>A conversion occurs from double to byte.
      * 
@@ -196,6 +192,18 @@ public final class UnsignedByteBuffer {
      */
     public void putDouble(double value) {
         putRaw( (byte) value);
+    }
+    
+    /**
+     * Puts a double at a particular buffer position.
+     * 
+     * <p>A conversion occurs from double to byte.
+     * 
+     * @param index the buffer position
+     * @param value the double
+     */
+    public void putDouble(int index, double value) {
+        putRaw(index, (byte) value);
     }
 
     /**
@@ -219,69 +227,13 @@ public final class UnsignedByteBuffer {
     public void put(UnsignedByteBuffer source) {
         delegate.put(source.getDelegate());
     }
-
+        
     /**
-     * Whether there are elements between the current position and the limit {@link Buffer#hasRemaining}.
-     * 
-     * @return true iff elements exist
-     */
-    public final boolean hasRemaining() {
-        return delegate.hasRemaining();
-    }
-
-    /**
-     * The position of the buffer ala {@link Buffer#position}.
-     * 
-     * @return the position
-     */
-    public final int position() {
-        return delegate.position();
-    }
-
-    /**
-     * Assigns a new position to the buffer.
-     * 
-     * <p>This is meant in the sense of Java's NIO {@link Buffer} classes.
-     * 
-     * @param newPosition the index to assign as position.
-     */
-    public final Buffer position(int newPosition) {
-        return delegate.position(newPosition);
-    }
-    
-    /**
-     * The array of the buffer ala {@link Buffer#array}.
+     * The array of the buffer ala {@link ByteBuffer#array}.
      * 
      * @return the array
      */
     public final byte[] array() {
         return delegate.array();
-    }
-    
-    /**
-     * The capacity of the buffer ala {@link Buffer#capacity}.
-     * 
-     * @return the capacity
-     */
-    public final int capacity() {
-        return delegate.capacity();
-    }
-
-    /**
-     * Clears the buffer ala {@link Buffer#clear}.
-     */
-    public final void clear() {
-        delegate.clear();
-    }
-    
-    /**
-     * Is this buffer direct or non-direct?
-     * 
-     * <p>This is meant in the sense of Java's NIO {@link Buffer} classes.
-     * 
-     * @return true iff the buffer is direct.
-     */  
-    public boolean isDirect() {
-        return delegate.isDirect();
     }
 }

@@ -31,6 +31,7 @@ import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
+import org.anchoranalysis.image.convert.UnsignedShortBuffer;
 import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -57,6 +58,8 @@ class DuplicateBuffer {
             return (T) copy((IntBuffer) buffer);
         } if (buffer instanceof UnsignedByteBuffer) {
             return (T) copy((UnsignedByteBuffer) buffer);
+        } if (buffer instanceof UnsignedShortBuffer) {
+            return (T) copy((UnsignedShortBuffer) buffer);
         } else {
             throw new AnchorImpossibleSituationException();
         }

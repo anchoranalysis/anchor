@@ -188,7 +188,7 @@ public class IterateVoxelsByte {
             UnsignedByteBuffer out = voxelsOut.sliceBuffer(z);
 
             while (in1.hasRemaining()) {
-                out.putUnsignedByte( operation.apply(in1.getUnsignedByte(), in2.getUnsignedByte()) );
+                out.putUnsigned( operation.apply(in1.getUnsigned(), in2.getUnsigned()) );
             }
 
             assert (!in2.hasRemaining());
@@ -219,6 +219,6 @@ public class IterateVoxelsByte {
     }
 
     private static void addFromBufferToRunning(UnsignedByteBuffer buffer, int offset, RunningSum running) {
-        running.increment(buffer.getUnsignedByte(offset), 1);
+        running.increment(buffer.getUnsigned(offset), 1);
     }
 }

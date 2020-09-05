@@ -27,16 +27,16 @@
 package org.anchoranalysis.io.bioformats.copyconvert.toshort;
 
 import java.nio.ByteBuffer;
-import java.nio.ShortBuffer;
+import org.anchoranalysis.image.convert.UnsignedShortBuffer;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
-import org.anchoranalysis.image.voxel.buffer.VoxelBufferShort;
+import org.anchoranalysis.image.voxel.buffer.VoxelBufferUnsignedShort;
 import org.anchoranalysis.io.bioformats.copyconvert.ConvertTo;
 import com.google.common.base.Preconditions;
 import loci.common.DataTools;
 
-public abstract class ConvertToShort extends ConvertTo<ShortBuffer> {
+public abstract class ConvertToShort extends ConvertTo<UnsignedShortBuffer> {
 
     private static final int BYTES_PER_PIXEL = 2;
     
@@ -59,18 +59,18 @@ public abstract class ConvertToShort extends ConvertTo<ShortBuffer> {
     }
     
     @Override
-    protected VoxelBuffer<ShortBuffer> convertSingleChannel(ByteBuffer sourceBuffer, int channelIndexRelative) {
+    protected VoxelBuffer<UnsignedShortBuffer> convertSingleChannel(ByteBuffer sourceBuffer, int channelIndexRelative) {
         Preconditions.checkArgument(channelIndexRelative==0, "interleaving not supported for short data");
         
         byte[] buffer = sourceBuffer.array();
         
-        ShortBuffer out = ShortBuffer.allocate(sizeXY);
+        UnsignedShortBuffer out = UnsignedShortBuffer.allocate(sizeXY);
 
         for (int indexIn = 0; indexIn < sizeBytes; indexIn += BYTES_PER_PIXEL) {
-            out.put( convertValue( valueFromBuffer(buffer, indexIn) ) );
+            out.putRaw( convertValue( valueFromBuffer(buffer, indexIn) ) );
         }
 
-        return VoxelBufferShort.wrapBuffer(out);
+        return VoxelBufferUnsignedShort.wrapBuffer(out);
     }
     
     protected abstract short convertValue(short value);

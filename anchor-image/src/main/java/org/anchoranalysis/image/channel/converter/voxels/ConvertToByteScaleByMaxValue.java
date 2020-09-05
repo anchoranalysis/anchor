@@ -29,8 +29,7 @@ package org.anchoranalysis.image.channel.converter.voxels;
 import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
-import java.nio.ShortBuffer;
-import org.anchoranalysis.image.convert.PrimitiveConverter;
+import org.anchoranalysis.image.convert.UnsignedShortBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferUnsignedByte;
 
@@ -103,24 +102,22 @@ public final class ConvertToByteScaleByMaxValue extends VoxelsConverter<Unsigned
     }
 
     @Override
-    public VoxelBuffer<UnsignedByteBuffer> convertFromShort(VoxelBuffer<ShortBuffer> bufferIn) {
+    public VoxelBuffer<UnsignedByteBuffer> convertFromShort(VoxelBuffer<UnsignedShortBuffer> bufferIn) {
 
         UnsignedByteBuffer bufferOut = UnsignedByteBuffer.allocate(bufferIn.buffer().capacity());
 
         while (bufferIn.buffer().hasRemaining()) {
 
-            int valOrig = PrimitiveConverter.unsignedShortToInt(bufferIn.buffer().get());
+            double value = scale * bufferIn.buffer().getUnsigned();
 
-            double val = scale * valOrig;
-
-            if (val > 255) {
-                val = 255;
+            if (value > 255) {
+                value = 255;
             }
-            if (val < 0) {
-                val = 0;
+            if (value < 0) {
+                value = 0;
             }
 
-            bufferOut.putDouble(val);
+            bufferOut.putDouble(value);
         }
 
         return VoxelBufferUnsignedByte.wrapBuffer(bufferOut);

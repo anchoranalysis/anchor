@@ -40,7 +40,7 @@ public class MeanIntensityByteBuffer extends MeanIntensityBuffer<UnsignedByteBuf
 
     @Override
     protected void processPixel(UnsignedByteBuffer pixels, int index) {
-        incrementSumBuffer(index, pixels.getUnsignedByte(index));
+        incrementSumBuffer(index, pixels.getUnsigned(index));
     }
 
     @Override

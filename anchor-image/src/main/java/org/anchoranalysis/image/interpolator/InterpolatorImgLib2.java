@@ -27,7 +27,7 @@
 package org.anchoranalysis.image.interpolator;
 
 import org.anchoranalysis.image.convert.UnsignedByteBuffer;
-import java.nio.ShortBuffer;
+import org.anchoranalysis.image.convert.UnsignedShortBuffer;
 import lombok.RequiredArgsConstructor;
 import net.imglib2.Cursor;
 import net.imglib2.RandomAccessible;
@@ -100,9 +100,9 @@ public abstract class InterpolatorImgLib2 implements Interpolator {
     }
 
     @Override
-    public VoxelBuffer<ShortBuffer> interpolateShort(
-            VoxelBuffer<ShortBuffer> voxelsSource,
-            VoxelBuffer<ShortBuffer> voxelsDestination,
+    public VoxelBuffer<UnsignedShortBuffer> interpolateShort(
+            VoxelBuffer<UnsignedShortBuffer> voxelsSource,
+            VoxelBuffer<UnsignedShortBuffer> voxelsDestination,
             Extent extentSource,
             Extent extentDestination) {
 

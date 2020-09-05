@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.image.voxel.buffer;
 
+import org.anchoranalysis.image.convert.UnsignedShortBuffer;
 import java.nio.ShortBuffer;
 import org.anchoranalysis.image.convert.PrimitiveConverter;
 import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
@@ -33,30 +34,58 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public final class VoxelBufferShort extends VoxelBuffer<ShortBuffer> {
+public final class VoxelBufferUnsignedShort extends VoxelBuffer<UnsignedShortBuffer> {
 
-    private final ShortBuffer delegate;
+    private final UnsignedShortBuffer delegate;
 
-    public static VoxelBufferShort allocate(int size) {
-        return new VoxelBufferShort(ShortBuffer.allocate(size));
+    /**
+     * Allocates a new voxel-buffer of given size.
+     * 
+     * @param capacity the capacity (size).
+     * @return a new {@link VoxelBuffer} with newly allocated (non-direct) memory.
+     */
+    public static VoxelBuffer<UnsignedShortBuffer> allocate(int capacity) {
+        return new VoxelBufferUnsignedShort(UnsignedShortBuffer.allocate(capacity));
     }
 
-    public static VoxelBufferShort wrapArray(short[] arr) {
-        return new VoxelBufferShort(ShortBuffer.wrap(arr));
+    /**
+     * Wraps an existing array (encoding unsigned shorts as a signed array) as a voxel-buffer.
+     * 
+     * @param array the array to wrap
+     * @return a new {@link VoxelBuffer} reusing the array internally.
+     */
+    public static VoxelBuffer<UnsignedShortBuffer> wrapArray(short[] array) {
+        return new VoxelBufferUnsignedShort(UnsignedShortBuffer.wrapRaw(array));
     }
 
-    public static VoxelBuffer<ShortBuffer> wrapBuffer(ShortBuffer buffer) {
-        return new VoxelBufferShort(buffer);
+    /**
+     * Wraps an unsigned-buffer into a voxel-buffer.
+     * 
+     * @param buffer the buffer to wrap
+     * @return a new {@link VoxelBuffer} reusing the buffer internally.
+     */
+    public static VoxelBuffer<UnsignedShortBuffer> wrapBuffer(UnsignedShortBuffer buffer) {
+        return new VoxelBufferUnsignedShort(buffer);
     }
-
+    
+    /**
+     * Wraps an unsigned-buffer (represented by a NIO signed-buffer) into a voxel-buffer.
+     * 
+     * @param buffer the signed-buffer to wrap as unsigned
+     * @return a new {@link VoxelBuffer} reusing the buffer internally.
+     */
+    public static VoxelBuffer<UnsignedShortBuffer> wrapRaw(ShortBuffer buffer) {
+        return wrapBuffer( UnsignedShortBuffer.wrapRaw(buffer) );
+    }
+    
     @Override
-    public ShortBuffer buffer() {
+    public UnsignedShortBuffer buffer() {
         return delegate;
     }
 
     @Override
-    public VoxelBuffer<ShortBuffer> duplicate() {
-        return new VoxelBufferShort(DuplicateBuffer.copy(delegate));
+    public VoxelBuffer<UnsignedShortBuffer> duplicate() {
+        return new VoxelBufferUnsignedShort(DuplicateBuffer.copy(delegate));
     }
 
     @Override
@@ -66,22 +95,22 @@ public final class VoxelBufferShort extends VoxelBuffer<ShortBuffer> {
 
     @Override
     public int getInt(int index) {
-        return PrimitiveConverter.unsignedShortToInt(delegate.get(index));
+        return delegate.getUnsigned(index);
     }
 
     @Override
     public void putInt(int index, int value) {
-        delegate.put(index, (short) value);
+        delegate.putUnsigned(index, value);
     }
 
     @Override
     public void putByte(int index, byte value) {
-        delegate.put(index, (short) PrimitiveConverter.unsignedByteToInt(value));
+        delegate.putUnsigned(index, PrimitiveConverter.unsignedByteToInt(value));
     }
 
     @Override
-    public void transferFrom(int destinationIndex, VoxelBuffer<ShortBuffer> src, int sourceIndex) {
-        delegate.put(destinationIndex, src.buffer().get(sourceIndex));
+    public void transferFrom(int destinationIndex, VoxelBuffer<UnsignedShortBuffer> src, int sourceIndex) {
+        delegate.putRaw(destinationIndex, src.buffer().getRaw(sourceIndex));
     }
 
     @Override

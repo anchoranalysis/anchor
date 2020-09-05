@@ -27,9 +27,8 @@
 package org.anchoranalysis.image.stack.region;
 
 import org.anchoranalysis.image.convert.UnsignedByteBuffer;
-import java.nio.ShortBuffer;
+import org.anchoranalysis.image.convert.UnsignedShortBuffer;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.convert.PrimitiveConverter;
 import org.anchoranalysis.image.extent.Extent;
 
 class MeanInterpolator {
@@ -63,7 +62,7 @@ class MeanInterpolator {
                 int x1 = x0 + x;
 
                 if (extent.contains(x1, y1, 0)) {
-                    sum += buffer.getUnsignedByte(extent.offset(x0 + x, y1));
+                    sum += buffer.getUnsigned(extent.offset(x0 + x, y1));
 
                     count++;
                 }
@@ -77,11 +76,11 @@ class MeanInterpolator {
         return (byte) (sum / count);
     }
 
-    public short getInterpolatedPixelShort(int x0, int y0, ShortBuffer buffer, Extent e)
+    public short getInterpolatedPixelShort(int x0, int y0, UnsignedShortBuffer buffer, Extent e)
             throws OperationFailedException {
 
         int sum = 0;
-        int cnt = 0;
+        int count = 0;
 
         for (int y = 0; y < sizeY; y++) {
 
@@ -92,18 +91,17 @@ class MeanInterpolator {
                 int x1 = x0 + x;
 
                 if (e.contains(x1, y1, 0)) {
-                    int val = PrimitiveConverter.unsignedShortToInt(buffer.get(e.offset(x0 + x, y1)));
-                    sum += val;
+                    sum += buffer.getUnsigned(e.offset(x0 + x, y1));
 
-                    cnt++;
+                    count++;
                 }
             }
         }
 
-        if (cnt == 0) {
+        if (count == 0) {
             throw new OperationFailedException(EXC_ZERO_CNT);
         }
 
-        return (short) (sum / cnt);
+        return (short) (sum / count);
     }
 }

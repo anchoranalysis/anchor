@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.image.voxel;
 
-import java.nio.ShortBuffer;
+import org.anchoranalysis.image.convert.UnsignedShortBuffer;
 import org.anchoranalysis.image.voxel.arithmetic.VoxelsArithmetic;
 import org.anchoranalysis.image.voxel.arithmetic.VoxelsArithmeticFactory;
 import org.anchoranalysis.image.voxel.assigner.VoxelsAssigner;
@@ -36,9 +36,9 @@ import org.anchoranalysis.image.voxel.extracter.VoxelsExtracterFactory;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 import org.anchoranalysis.image.voxel.pixelsforslice.PixelsForSlice;
 
-public final class VoxelsAsShort extends Voxels<ShortBuffer> {
+public final class VoxelsAsShort extends Voxels<UnsignedShortBuffer> {
 
-    public VoxelsAsShort(PixelsForSlice<ShortBuffer> slices) {
+    public VoxelsAsShort(PixelsForSlice<UnsignedShortBuffer> slices) {
         super(slices, VoxelsFactory.getShort(), createArithmetic(slices));
     }
 
@@ -47,12 +47,12 @@ public final class VoxelsAsShort extends Voxels<ShortBuffer> {
         return VoxelsAssignerFactory.createShort(this, valueToAssign);
     }
 
-    private static VoxelsArithmetic createArithmetic(PixelsForSlice<ShortBuffer> slices) {
+    private static VoxelsArithmetic createArithmetic(PixelsForSlice<UnsignedShortBuffer> slices) {
         return VoxelsArithmeticFactory.createShort(slices.extent(), slices::sliceBuffer);
     }
 
     @Override
-    public VoxelsExtracter<ShortBuffer> extract() {
+    public VoxelsExtracter<UnsignedShortBuffer> extract() {
         return VoxelsExtracterFactory.createShort(this);
     }
 }

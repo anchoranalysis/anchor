@@ -27,7 +27,7 @@
 package org.anchoranalysis.image.interpolator;
 
 import org.anchoranalysis.image.convert.UnsignedByteBuffer;
-import java.nio.ShortBuffer;
+import org.anchoranalysis.image.convert.UnsignedShortBuffer;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 
@@ -63,9 +63,9 @@ public interface Interpolator {
      * @param extentDestination extent corresponding to {@code extentDestination}
      * @return the destination buffer (either as passed, or a new one that was created)
      */
-    VoxelBuffer<ShortBuffer> interpolateShort(
-            VoxelBuffer<ShortBuffer> voxelsSource,
-            VoxelBuffer<ShortBuffer> voxelsDestination,
+    VoxelBuffer<UnsignedShortBuffer> interpolateShort(
+            VoxelBuffer<UnsignedShortBuffer> voxelsSource,
+            VoxelBuffer<UnsignedShortBuffer> voxelsDestination,
             Extent extentSource,
             Extent extentDestination);
 

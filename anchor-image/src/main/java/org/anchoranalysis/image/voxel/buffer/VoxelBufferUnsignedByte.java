@@ -37,18 +37,42 @@ public final class VoxelBufferUnsignedByte extends VoxelBuffer<UnsignedByteBuffe
 
     private final UnsignedByteBuffer delegate;
 
-    public static VoxelBufferUnsignedByte allocate(int size) {
-        return new VoxelBufferUnsignedByte(UnsignedByteBuffer.allocate(size));
+    /**
+     * Allocates a new voxel-buffer of given size.
+     * 
+     * @param capacity the capacity (size).
+     * @return a new {@link VoxelBuffer} with newly allocated (non-direct) memory.
+     */
+    public static VoxelBuffer<UnsignedByteBuffer> allocate(int capacity) {
+        return new VoxelBufferUnsignedByte(UnsignedByteBuffer.allocate(capacity));
     }
 
-    public static VoxelBufferUnsignedByte wrapArray(byte[] arr) {
-        return new VoxelBufferUnsignedByte(UnsignedByteBuffer.wrapRaw(arr));
+    /**
+     * Wraps an existing array (encoding unsigned bytes as a signed array) as a voxel-buffer.
+     * 
+     * @param array the array to wrap
+     * @return a new {@link VoxelBuffer} reusing the array internally.
+     */
+    public static VoxelBuffer<UnsignedByteBuffer> wrapArray(byte[] array) {
+        return new VoxelBufferUnsignedByte(UnsignedByteBuffer.wrapRaw(array));
     }
 
+    /**
+     * Wraps an unsigned-buffer into a voxel-buffer.
+     * 
+     * @param buffer the buffer to wrap
+     * @return a new {@link VoxelBuffer} reusing the buffer internally.
+     */
     public static VoxelBuffer<UnsignedByteBuffer> wrapBuffer(UnsignedByteBuffer buffer) {
         return new VoxelBufferUnsignedByte(buffer);
     }
     
+    /**
+     * Wraps an unsigned-buffer (represented by a NIO signed-buffer) into a voxel-buffer.
+     * 
+     * @param buffer the signed-buffer to wrap as unsigned
+     * @return a new {@link VoxelBuffer} reusing the buffer internally.
+     */
     public static VoxelBuffer<UnsignedByteBuffer> wrapRaw(ByteBuffer buffer) {
         return wrapBuffer( UnsignedByteBuffer.wrapRaw(buffer) );
     }
@@ -83,12 +107,12 @@ public final class VoxelBufferUnsignedByte extends VoxelBuffer<UnsignedByteBuffe
 
     @Override
     public int getInt(int index) {
-        return delegate.getUnsignedByte(index);
+        return delegate.getUnsigned(index);
     }
 
     @Override
     public void putInt(int index, int value) {
-        delegate.putUnsignedByte(index, value);
+        delegate.putUnsigned(index, value);
     }
 
     @Override

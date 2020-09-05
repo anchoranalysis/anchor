@@ -27,7 +27,7 @@
 package org.anchoranalysis.image.stack.region;
 
 import org.anchoranalysis.image.convert.UnsignedByteBuffer;
-import java.nio.ShortBuffer;
+import org.anchoranalysis.image.convert.UnsignedShortBuffer;
 import java.util.List;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
@@ -129,7 +129,7 @@ public class RegionExtracterFromDisplayStack implements RegionExtracter {
         } else if (extractedSlice.getVoxelDataType().equals(UnsignedShortVoxelType.INSTANCE)
                 && channelConverter.isPresent()) {
 
-            Voxels<ShortBuffer> bufferIntermediate =
+            Voxels<UnsignedShortBuffer> bufferIntermediate =
                     VoxelsFactory.getShort().createInitialized(extentTrgt);
             interpolateRegionFromShort(
                     extractedSlice.voxels().asShort(),
@@ -202,8 +202,8 @@ public class RegionExtracterFromDisplayStack implements RegionExtracter {
     // extentSrcSlice is the source-size (the single slice we've extracted from the buffer to
     // interpolate from)
     private static void interpolateRegionFromShort(
-            Voxels<ShortBuffer> voxelsSrc,
-            Voxels<ShortBuffer> voxelsDest,
+            Voxels<UnsignedShortBuffer> voxelsSrc,
+            Voxels<UnsignedShortBuffer> voxelsDest,
             Extent extentSrc,
             Extent extentTrgt,
             BoundingBox box,
@@ -218,8 +218,8 @@ public class RegionExtracterFromDisplayStack implements RegionExtracter {
             assert (voxelsSrc.slice(z) != null);
             assert (voxelsDest.slice(z - cornerMin.z()) != null);
 
-            ShortBuffer bufferIn = voxelsSrc.sliceBuffer(z);
-            ShortBuffer bufferOut = voxelsDest.slice(z - cornerMin.z()).buffer();
+            UnsignedShortBuffer bufferIn = voxelsSrc.sliceBuffer(z);
+            UnsignedShortBuffer bufferOut = voxelsDest.slice(z - cornerMin.z()).buffer();
 
             // We go through every pixel in the new width, and height, and sample from the original
             // image
@@ -232,13 +232,13 @@ public class RegionExtracterFromDisplayStack implements RegionExtracter {
                     int xOrig = ((int) (x / zoomFactor)) + cornerMin.x();
 
                     // We get the byte to write
-                    short s =
+                    short value =
                             (interpolator != null)
                                     ? interpolator.getInterpolatedPixelShort(
                                             xOrig, yOrig, bufferIn, extentSrc)
-                                    : bufferIn.get(extentSrc.offset(xOrig, yOrig));
+                                    : bufferIn.getRaw(extentSrc.offset(xOrig, yOrig));
 
-                    bufferOut.put(indOut++, s);
+                    bufferOut.putRaw(indOut++, value);
                 }
             }
         }
