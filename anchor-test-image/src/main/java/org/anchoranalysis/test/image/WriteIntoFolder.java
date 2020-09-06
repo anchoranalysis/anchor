@@ -31,9 +31,7 @@ import java.util.List;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
-import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.convert.UnsignedByteBuffer;
@@ -44,7 +42,7 @@ import org.anchoranalysis.image.io.generator.raster.object.collection.ObjectAsMa
 import org.anchoranalysis.image.io.generator.raster.object.rgb.DrawObjectsGenerator;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.object.ObjectsWithBoundingBox;
+import org.anchoranalysis.image.object.BoundedList;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.voxel.Voxels;
@@ -229,15 +227,15 @@ public class WriteIntoFolder implements TestRule {
             return FALLBACK_SIZE;
         }
 
-        try {
-            BoundingBox boxSpans = new ObjectsWithBoundingBox(objects).boundingBox();
+        BoundingBox boxSpans = boundingBoxThatSpans(objects);
 
-            BoundingBox boxCentered =
-                    boxSpans.changeExtent(boxSpans.extent().growBy(boxSpans.cornerMin()));
+        BoundingBox boxCentered =
+                boxSpans.changeExtent(boxSpans.extent().growBy(boxSpans.cornerMin()));
 
-            return new Dimensions(boxCentered.calculateCornerMaxExclusive());
-        } catch (OperationFailedException e) {
-            throw new AnchorImpossibleSituationException();
-        }
+        return new Dimensions(boxCentered.calculateCornerMaxExclusive());
+    }
+    
+    private static BoundingBox boundingBoxThatSpans(ObjectCollection objects) {
+        return new BoundedList<>(objects.asList(), ObjectMask::boundingBox).boundingBox();
     }
 }

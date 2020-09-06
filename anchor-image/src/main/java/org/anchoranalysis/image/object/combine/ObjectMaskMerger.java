@@ -75,37 +75,7 @@ public class ObjectMaskMerger {
         return out;
     }
 
-    /**
-     * Merges all the bounding boxes of a collection of objects.
-     *
-     * @param objects a stream of objects whose bounding-boxes are to be merged
-     * @return a bounding-box just large enough to include all the bounding-boxes of the objects
-     * @throws OperationFailedException if the object-collection is empty
-     */
-    public static BoundingBox mergeBoundingBoxes(ObjectCollection objects)
-            throws OperationFailedException {
-
-        if (objects.isEmpty()) {
-            throw new OperationFailedException(
-                    "The object-collection is empty, at least one object is required for this operation");
-        }
-
-        return mergeBoundingBoxes(objects.streamStandardJava());
-    }
-
-    /**
-     * Merges all the bounding boxes of a stream of objects.
-     *
-     * @param objects a stream of objects whose bounding-boxes are to be merged
-     * @return a bounding-box just large enough to include all the bounding-boxes of the objects
-     */
-    public static BoundingBox mergeBoundingBoxes(Stream<ObjectMask> objects) {
-        return objects // NOSONAR
-                .map(ObjectMask::boundingBox)
-                .reduce( // NOSONAR
-                        (boundingBox, other) -> boundingBox.union().with(other))
-                .get();
-    }
+    
 
     /**
      * Merges all the objects together that are found in a collection
@@ -146,6 +116,34 @@ public class ObjectMaskMerger {
         }
 
         return objectOut;
+    }
+
+    /**
+     * Merges all the bounding boxes of a collection of objects.
+     *
+     * @param objects a stream of objects whose bounding-boxes are to be merged
+     * @return a bounding-box just large enough to include all the bounding-boxes of the objects
+     * @throws OperationFailedException if the object-collection is empty
+     */
+    public static BoundingBox mergeBoundingBoxes(ObjectCollection objects)
+            throws OperationFailedException {
+
+        if (objects.isEmpty()) {
+            throw new OperationFailedException(
+                    "The object-collection is empty, at least one object is required for this operation");
+        }
+
+        return mergeBoundingBoxes(objects.streamStandardJava());
+    }
+    
+    /**
+     * Merges all the bounding boxes of a stream of objects.
+     *
+     * @param objects a stream of objects whose bounding-boxes are to be merged
+     * @return a bounding-box just large enough to include all the bounding-boxes of the objects
+     */
+    public static BoundingBox mergeBoundingBoxes(Stream<ObjectMask> objects) {
+        return BoundingBoxMerger.mergeBoundingBoxes(objects.map(ObjectMask::boundingBox));
     }
 
     private static void copyPixelsCheckMask(
