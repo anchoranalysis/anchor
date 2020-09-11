@@ -23,16 +23,30 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.image.object;
 
-import lombok.Value;
+package org.anchoranalysis.image.voxel.iterator.process;
 
-@Value
-public class OverlappingObject {
+import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 
-    /** Original unscaled object before any operations */
-    private ObjectMask original;
+/**
+ * Processes a 3D point like {@link ProcessVoxelBufferUnary} but also exposes a {@link Point3i}.
+ *
+ * @param <T> buffer-type
+ * @param <E> exception that may be thrown by the processor.
+ * @author Owen Feehan
+ */
+@FunctionalInterface
+public interface ProcessVoxelBufferUnaryWithPoint<T,E extends Exception> {
 
-    /** After pre-operation but before scaling */
-    private ObjectMask afterPreoperation;
+    /**
+     * Processes a voxel location in a buffer
+     *
+     * @param point a point with global coordinates
+     * @param buffer a buffer for the current slice for which {@code offset} refers to a particular
+     *     location
+     * @param offset an offset value for the current slice (i.e. indexing XY only, but not Z)
+     * @throws E if anything goes wrong
+     */
+    void process(Point3i point, VoxelBuffer<T> buffer, int offset) throws E;
 }

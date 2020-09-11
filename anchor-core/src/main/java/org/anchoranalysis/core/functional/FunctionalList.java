@@ -1,5 +1,7 @@
 package org.anchoranalysis.core.functional;
 
+import java.util.ArrayList;
+
 /*-
  * #%L
  * anchor-core
@@ -38,6 +40,7 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.core.functional.function.CheckedBiFunction;
 import org.anchoranalysis.core.functional.function.CheckedFunction;
 
 /** Utilities functions for manipulating or creating {@link java.util.List} in a functional way */
@@ -220,6 +223,64 @@ public class FunctionalList {
      */
     public static <T> List<T> filterToList(Collection<T> collection, Predicate<T> predicate) {
         return collection.stream().filter(predicate).collect(Collectors.toList());
+    }
+    
+    /**
+     * Creates a new collection by filtering a list and then mapping to a list of another type.
+     *
+     * @param <S> type that will be mapped from
+     * @param <T> type that will be mapped to
+     * @param <E> exception that may be thrown during mapping
+     * @param list incoming list to be mapped
+     * @param mapFunction function for mapping
+     * @return a newly created list
+     * @throws E if an exception is thrown during mapping
+     */
+    public static <S, T, E extends Exception> List<T> filterAndMapToList(
+            List<S> list,
+            Predicate<S> predicate,
+            CheckedFunction<S, T, E> mapFunction)
+            throws E {
+        
+        List<T> out = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++) {
+
+            S item = list.get(i);
+
+            if (predicate.test(item)) {
+                out.add(mapFunction.apply(item));
+            }
+        }
+        return out;
+    }
+    
+    /**
+     * Creates a new collection by filtering a list and then mapping (with an index) to a list of another type.
+     *
+     * @param <S> type that will be mapped from
+     * @param <T> type that will be mapped to
+     * @param <E> exception that may be thrown during mapping
+     * @param list incoming list to be mapped
+     * @param mapFuncWithIndex function for mapping, also including an index (the original position
+     *     in the bounding-box)
+     * @return a newly created list
+     * @throws E if an exception is thrown during mapping
+     */
+    public static <S, T, E extends Exception> List<T> filterAndMapWithIndexToList(
+            List<S> list,
+            Predicate<S> predicate,
+            CheckedBiFunction<S, Integer, T, E> mapFuncWithIndex)
+            throws E {
+        List<T> out = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++) {
+
+            S item = list.get(i);
+
+            if (predicate.test(item)) {
+                out.add(mapFuncWithIndex.apply(item, i));
+            }
+        }
+        return out;
     }
 
     private static <S, T, E extends Exception> List<T> mapToList(

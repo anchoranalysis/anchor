@@ -49,7 +49,7 @@ public class ObjectCollectionRTree {
 
     /** All objects stored in the r-tree (whose order corresponds to indices in {@code delegate} */
     @Getter private ObjectCollection objects;
-
+    
     /**
      * Creates an r-tree for particular objects.
      *

@@ -40,7 +40,7 @@ import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.voxel.Voxels;
 
 /**
- * Creates a mask from one or more objects
+ * Creates a mask from one or more objects.
  *
  * @author Owen Feehan
  */

@@ -310,7 +310,7 @@ public class ObjectCollectionFactory {
     }
 
     /**
-     * Creates a new collection by filtering and a list and then mapping it to {@link ObjectMask}
+     * Creates a new collection by filtering a list and then mapping from it to {@link ObjectMask}.
      *
      * @param <T> type that will be mapped to {@link ObjectCollection}
      * @param <E> exception that be thrown during mapping
@@ -318,7 +318,6 @@ public class ObjectCollectionFactory {
      * @param mapFuncWithIndex function for mapping, also including an index (the original position
      *     in the bounding-box)
      * @return a newly created ObjectCollection
-     * @throws E
      * @throws E if an exception is thrown during mapping
      */
     public static <T, E extends Exception> ObjectCollection filterAndMapWithIndexFrom(
@@ -331,11 +330,9 @@ public class ObjectCollectionFactory {
 
             T item = list.get(i);
 
-            if (!predicate.test(item)) {
-                continue;
+            if (predicate.test(item)) {
+                out.add(mapFuncWithIndex.apply(item, i));
             }
-
-            out.add(mapFuncWithIndex.apply(item, i));
         }
         return out;
     }

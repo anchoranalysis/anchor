@@ -23,7 +23,7 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.image.object;
+package org.anchoranalysis.image.extent.box;
 
 import com.google.common.base.Preconditions;
 import lombok.AllArgsConstructor;
@@ -35,7 +35,6 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Stream;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.object.combine.BoundingBoxMerger;
 
 /**
@@ -58,7 +57,7 @@ public class BoundedList<T> {
     /** A bounding-box that must contain all elements in the collection */
     @Getter private final BoundingBox boundingBox;
 
-    /** Extracts a bounding box from an element. The operation is assumed to involve no computational cost. */
+    /** Extracts a bounding box from an element. The operation is assumed to involve negligible computational cost. */
     private final Function<T,BoundingBox> extractBoundingBox;
     
     /**
@@ -103,7 +102,7 @@ public class BoundedList<T> {
      *
      * <p>The operation is <i>immutable</i>.
      *
-     * @param elementsToAdd objects to add (unchanged)
+     * @param elementsToAdd elements to add (unchanged)
      * @return a newly created {@link BoundedList} with existing and added elements and the same
      *     bounding-box
      */
@@ -115,7 +114,7 @@ public class BoundedList<T> {
         return new BoundedList<>(list, boundingBox, extractBoundingBox);
     }
 
-    /** The number of objects */
+    /** The number of elements */
     public int size() {
         return list.size();
     }

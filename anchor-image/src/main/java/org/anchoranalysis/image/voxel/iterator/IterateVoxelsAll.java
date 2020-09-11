@@ -31,6 +31,7 @@ import java.util.function.IntUnaryOperator;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.functional.function.IntBinaryOperation;
+import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.convert.UnsignedBufferAsInt;
 import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.extent.Extent;
@@ -42,6 +43,8 @@ import org.anchoranalysis.image.voxel.iterator.process.ProcessBufferTernary;
 import org.anchoranalysis.image.voxel.iterator.process.ProcessBufferUnary;
 import org.anchoranalysis.image.voxel.iterator.process.ProcessPoint;
 import org.anchoranalysis.image.voxel.iterator.process.ProcessVoxelBufferBinary;
+import org.anchoranalysis.image.voxel.iterator.process.ProcessVoxelBufferUnary;
+import org.anchoranalysis.image.voxel.iterator.process.ProcessVoxelBufferUnaryWithPoint;
 
 /**
  * Utilities for iterating over <i>all</i> voxels in one or more {@link Voxels}.
@@ -54,17 +57,6 @@ import org.anchoranalysis.image.voxel.iterator.process.ProcessVoxelBufferBinary;
 public class IterateVoxelsAll {
 
     /**
-     * Iterate over each voxel - with <b>one</b> associated <b>buffer</b> for each slice.
-     *
-     * @param voxels voxels to be iterated over (in their entirety)
-     * @param process is called for each voxel within the bounding-box using <i>global</i> coordinates.
-     * @param <T> buffer-type for voxels
-     */
-    public static <T> void withBuffer(Voxels<T> voxels, ProcessBufferUnary<T> process) {
-        withPoint(voxels.extent(), new RetrieveBufferForSlice<>(voxels, process));
-    }
-
-    /**
      * Iterate over each voxel in an {@link Extent}
      *
      * @param extent the extent to be iterated over
@@ -75,6 +67,17 @@ public class IterateVoxelsAll {
         IterateVoxelsBoundingBox.withPoint(new BoundingBox(extent), process);
     }
 
+    /**
+     * Iterate over each voxel - with <b>one</b> associated <b>buffer</b> for each slice.
+     *
+     * @param voxels voxels to be iterated over (in their entirety)
+     * @param process is called for each voxel within the bounding-box using <i>global</i> coordinates.
+     * @param <T> buffer-type for voxels
+     */
+    public static <T> void withBuffer(Voxels<T> voxels, ProcessBufferUnary<T> process) {
+        withPoint(voxels.extent(), new RetrieveBufferForSlice<>(voxels, process));
+    }
+    
     /**
      * Iterate over each voxel in a bounding-box - with <b>two</b> associated <b>buffers</b> for
      * each slice
@@ -121,6 +124,57 @@ public class IterateVoxelsAll {
                 new RetrieveBuffersForThreeSlices<>(voxels1, voxels2, voxels3, process));
     }
 
+    /**
+     * Iterate over each voxel - with <b>one</b> associated <b>voxel-buffer</b> for each slice.
+     *
+     * <p>It is similar to {@link #withVoxelBuffer(Voxels, ProcessVoxelBufferUnaryWithPoint)} but a {@link Point3i} is <i>not</i> exposed.
+     * 
+     * @param voxels voxels to be iterated over (in their entirety)
+     * @param process is called for each voxel within the bounding-box using <i>global</i> coordinates.
+     * @param <T> buffer-type for voxels
+     */
+    public static <T> void withVoxelBuffer(Voxels<T> voxels, ProcessVoxelBufferUnary<T> process) {
+        
+        int volumeXY = voxels.extent().volumeXY();
+
+        voxels.extent().iterateOverZ(
+            z -> {
+                VoxelBuffer<T> buffer = voxels.slice(z);
+
+                for (int offset = 0; offset < volumeXY; offset++) {
+                    process.process(buffer, offset);
+                }
+            });
+    }
+    
+    /**
+     * Iterate over each voxel - with <b>one</b> associated <b>voxel-buffer</b> for each slice.
+     * 
+     * <p>It is similar to {@link #withVoxelBuffer(Voxels, ProcessVoxelBufferUnary)} but a {@link Point3i} is also exposed.
+     *
+     * @param voxels voxels to be iterated over (in their entirety)
+     * @param process is called for each voxel within the bounding-box using <i>global</i> coordinates.
+     * @param <T> buffer-type for voxels
+     * @throws E exception that may be thrown by the processor
+     */
+    public static <T,E extends Exception> void withVoxelBuffer(Voxels<T> voxels, ProcessVoxelBufferUnaryWithPoint<T,E> process) throws E {
+
+        Extent extentVoxels = voxels.extent();
+
+        Point3i point = new Point3i();
+        for (point.setZ(0); point.z() < extentVoxels.z(); point.incrementZ()) {
+
+            VoxelBuffer<T> buffer = voxels.slice(point.z());
+
+            int offset = 0;
+            for (point.setY(0); point.y() < extentVoxels.y(); point.incrementY()) {
+                for (point.setX(0); point.x() < extentVoxels.x(); point.incrementX()) {
+                    process.process(point, buffer, offset++);
+                }
+            }
+        }
+    }
+    
     /**
      * Iterate over each voxel in a bounding-box - with <b>two</b> associated <b>voxel-buffers</b>
      * for each slice

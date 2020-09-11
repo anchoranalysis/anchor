@@ -23,7 +23,7 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.image.object;
+package org.anchoranalysis.image.object.scale;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,75 +36,84 @@ import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.Extent;
+import org.anchoranalysis.image.extent.box.BoundedList;
 import org.anchoranalysis.image.interpolator.Interpolator;
 import org.anchoranalysis.image.interpolator.InterpolatorImgLib2NearestNeighbor;
+import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.object.label.DecodeLabels;
+import org.anchoranalysis.image.object.label.LabelObjects;
+import org.anchoranalysis.image.object.label.OverlappingObject;
 import org.anchoranalysis.image.scale.ScaleFactor;
 
 /**
- * Objects labelled and scaled.
+ * Elements labelled and scaled in a raster.
  *
- * <p>Objects are variously scaled collectively in a raster if non-overlapping (to produce the
- * tightest borders between neighbouring objects), or else independently if overlapping.
+ * <p>Elements (with object-representations) are variously scaled collectively in a raster if non-overlapping (to produce the
+ * tightest borders between neighboring objects), or else independently if overlapping.
  *
  * @author Owen Feehan
  */
-class ScaledLabelledObjects {
+class ScaledLabels<T> {
 
     private static final Interpolator INTERPOLATOR = createInterpolatorForLabels();
 
-    private Map<Integer, ObjectMask> labelMapping = new HashMap<>();
+    private Map<Integer, T> labelMapping = new HashMap<>();
 
-    private List<OverlappingObject> objectsOverlap = new ArrayList<>();
+    private List<OverlappingObject<T>> objectsOverlap = new ArrayList<>();
 
     private final Channel labelsScaled;
     private final ScaleFactor scaleFactor;
     private final int numberLabels;
     private final Point3i cornerScaled;
+    
+    /** Access the object-mask-representation of elements of type {@code T}. */
+    private final AccessObjectMask<T> access;
 
-    public ScaledLabelledObjects(
-            ObjectsWithBoundingBox objectsWithBox,
-            Optional<UnaryOperator<ObjectMask>> preOperation,
-            ScaleFactor scaleFactor)
+    public ScaledLabels(
+            BoundedList<T> boundedElements,
+            Optional<UnaryOperator<T>> preOperation,
+            ScaleFactor scaleFactor,
+            AccessObjectMask<T> access)
             throws CreateException {
         this.scaleFactor = scaleFactor;
+        this.access = access;
 
-        Channel labels = createLabels(objectsWithBox, preOperation);
+        Channel labels = createLabels(boundedElements, preOperation);
 
-        // Scale the raster with nearest neighbour interpolation
-        labelsScaled = labels.scaleXY(scaleFactor, INTERPOLATOR);
+        // Scale the raster with nearest neighbor interpolation
+        this.labelsScaled = labels.scaleXY(scaleFactor, INTERPOLATOR);
 
         // Inferring the number of labels that have been produced
-        numberLabels = objectsWithBox.size() - objectsOverlap.size();
+        this.numberLabels = boundedElements.size() - objectsOverlap.size();
 
-        cornerScaled = scaleCorner(objectsWithBox.boundingBox().cornerMin(), scaleFactor);
+        this.cornerScaled = scaleCorner(boundedElements.boundingBox().cornerMin(), scaleFactor);
     }
 
     /**
-     * Constructs a map from unscaled to scale for all objects (whether overlapping or not)
+     * Constructs a map from unscaled to scaled for all objects (whether overlapping or not)
      *
      * @throws CreateException
      */
-    public Map<ObjectMask, ObjectMask> buildMapOfAllScaledObjects(
-            Optional<UnaryOperator<ObjectMask>> postOperation) throws CreateException {
+    public Map<T, T> buildMapOfAllScaledObjects(Optional<UnaryOperator<T>> postOperation) throws CreateException {
 
-        UnaryOperator<ObjectMask> postOperationWithShift =
+        UnaryOperator<T> postOperationWithShift =
                 object -> shiftByAndMaybePost(object, cornerScaled, postOperation);
 
         // Read the objects from the raster Ids, and create a corresponding scaled object
-        Map<ObjectMask, ObjectMask> map =
-                new CreateObjectsFromLabels(labelsScaled.voxels().any(), 1, numberLabels)
+        Map<T, T> map =
+                new DecodeLabels<>(labelsScaled.voxels().any(), 1, numberLabels, access::createFrom)
                         .create(labelMapping, postOperationWithShift);
 
         // Scaling the overlapping objects
-        objectsOverlap.stream()
-                .forEach(
-                        overlappingObject ->
-                                scaleObjectIndependently(
-                                        overlappingObject,
-                                        labelsScaled.extent(),
-                                        scaleFactor,
-                                        map,
-                                        postOperationWithShift));
+        for( int i=0; i<objectsOverlap.size(); i++) {
+            scaleObjectIndependently(
+                    objectsOverlap.get(i),
+                    i,
+                    labelsScaled.extent(),
+                    scaleFactor,
+                    map,
+                    postOperationWithShift);
+        }
 
         return map;
     }
@@ -114,10 +123,10 @@ class ScaledLabelledObjects {
      * overlapping objects in {@code objectsOverlap}
      */
     private Channel createLabels(
-            ObjectsWithBoundingBox objectsWithBox, Optional<UnaryOperator<ObjectMask>> preOperation)
+            BoundedList<T> elementsWithBox, Optional<UnaryOperator<T>> preOperation)
             throws CreateException {
-        LabelObjects labeller = new LabelObjects(preOperation, Optional.of(objectsOverlap::add));
-        return labeller.createLabelledChannelForObjects(objectsWithBox, Optional.of(labelMapping));
+        LabelObjects<T> labeller = new LabelObjects<>(preOperation, Optional.of(objectsOverlap::add), access::objectFor, access::shiftBy);
+        return labeller.createLabelledChannel(elementsWithBox, Optional.of(labelMapping));
     }
 
     /**
@@ -127,11 +136,11 @@ class ScaledLabelledObjects {
      * @param shift how much to shift the object by
      * @return the object shifted and with the post-operation applied (if it's defined)
      */
-    private ObjectMask shiftByAndMaybePost(
-            ObjectMask object,
+    private T shiftByAndMaybePost(
+            T object,
             ReadableTuple3i shift,
-            Optional<UnaryOperator<ObjectMask>> postOperation) {
-        ObjectMask shifted = object.shiftBy(shift);
+            Optional<UnaryOperator<T>> postOperation) {
+        T shifted = access.shiftBy(object,shift);
         if (postOperation.isPresent()) {
             return postOperation.get().apply(shifted);
         } else {
@@ -140,14 +149,15 @@ class ScaledLabelledObjects {
     }
 
     /** Scales an object independently of the others, and adds to the map */
-    private static void scaleObjectIndependently(
-            OverlappingObject unscaled,
+    private void scaleObjectIndependently(
+            OverlappingObject<T> unscaled,
+            int index,
             Extent extent,
             ScaleFactor scaleFactor,
-            Map<ObjectMask, ObjectMask> map,
-            UnaryOperator<ObjectMask> postOp) {
+            Map<T, T> map,
+            UnaryOperator<T> postOp) {
         ObjectMask scaled = unscaled.getAfterPreoperation().scale(scaleFactor, Optional.of(extent));
-        map.put(unscaled.getOriginal(), postOp.apply(scaled));
+        map.put(unscaled.getOriginal(), postOp.apply(access.createFrom(index, scaled)) );
     }
 
     private static Point3i scaleCorner(ReadableTuple3i cornerUnscaled, ScaleFactor scaleFactor) {
@@ -158,10 +168,10 @@ class ScaledLabelledObjects {
     }
 
     /**
-     * We use a nearest neighbour interpolator as we want only distinct labels as an output,
+     * We use a nearest neighbor interpolator as we want only distinct labels as an output,
      * therefore no combining of intensity values
      *
-     * @return a nearest-neighbour interpolator with boundaries extended as 0
+     * @return a nearest-neighbor interpolator with boundaries extended as 0
      */
     private static Interpolator createInterpolatorForLabels() {
         InterpolatorImgLib2NearestNeighbor interpolator = new InterpolatorImgLib2NearestNeighbor();
