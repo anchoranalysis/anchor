@@ -39,6 +39,8 @@ import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.core.geometry.consumer.OffsettedPointTwoDimensionalConsumer;
+import org.anchoranalysis.core.geometry.consumer.OffsettedScalarTwoDimensionalConsumer;
+import org.anchoranalysis.core.geometry.consumer.PointTwoDimensionalConsumer;
 import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.scale.ScaleFactor;
 import org.anchoranalysis.image.scale.ScaleFactorUtilities;
@@ -378,7 +380,7 @@ public final class Extent implements Serializable {
     }
 
     /**
-     * Calls processor once for each x and y-values in the range
+     * Calls processor once for each x and y-values in the range.
      *
      * <p>This occurs in ascending order (x-dimension increments first, y-dimension increments
      * second)
@@ -388,7 +390,7 @@ public final class Extent implements Serializable {
      * @throws E if {@code indexConsumer} throws this exception
      */
     public <E extends Exception> void iterateOverXY(
-            OffsettedPointTwoDimensionalConsumer<E> pointConsumer) throws E {
+            OffsettedScalarTwoDimensionalConsumer<E> pointConsumer) throws E {
         int offset = 0;
         for (int y = 0; y < size.y(); y++) {
             for (int x = 0; x < size.x(); x++) {
@@ -396,14 +398,31 @@ public final class Extent implements Serializable {
             }
         }
     }
-
+    
     /**
-     * Calls processor once for each x and y-values but <i>only</i> passing an offset
+     * Calls processor once for each x and y-values in the range.
      *
      * <p>This occurs in ascending order (x-dimension increments first, y-dimension increments
      * second)
      *
-     * @param <E> a checked-exception that {@code indexConsumer} may throw
+     * @param pointConsumer called for each point
+     */
+    public void iterateOverXY(PointTwoDimensionalConsumer pointConsumer) {
+        Point2i point = new Point2i();
+        for (point.setY(0); point.y() < size.y(); point.incrementY()) {
+            for (point.setX(0); point.x() < size.x(); point.incrementX()) {
+                pointConsumer.accept(point);
+            }
+        }
+    }
+
+    /**
+     * Calls processor once for each x and y-values but <i>only</i> passing an offset.
+     *
+     * <p>This occurs in ascending order (x-dimension increments first, y-dimension increments
+     * second)
+     *
+     * @param <E> a checked-exception that {@code offsetConsumer} may throw
      * @param offsetConsumer called for each point with the offset
      * @throws E if {@code indexConsumer} throws this exception
      */
@@ -411,6 +430,24 @@ public final class Extent implements Serializable {
             throws E {
         for (int offset = 0; offset < areaXY; offset++) {
             offsetConsumer.accept(offset);
+        }
+    }
+    
+    /**
+     * Calls processor once for each x and y-values in the range.
+     *
+     * <p>This occurs in ascending order (x-dimension increments first, y-dimension increments
+     * second)
+     *
+     * @param pointConsumer called for each point
+     */
+    public void iterateOverXYOffset(OffsettedPointTwoDimensionalConsumer pointConsumer) {
+        int offset = 0;
+        Point2i point = new Point2i();
+        for (point.setY(0); point.y() < size.y(); point.incrementY()) {
+            for (point.setX(0); point.x() < size.x(); point.incrementX()) {
+                pointConsumer.accept(point, offset++);
+            }
         }
     }
 

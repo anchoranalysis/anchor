@@ -27,20 +27,21 @@ package org.anchoranalysis.core.geometry.consumer;
 
 import java.util.function.Consumer;
 import java.util.function.IntConsumer;
-import org.anchoranalysis.core.geometry.Point2i;
 
 /**
- * Like a {@link IntConsumer} but accepts two coordinates of a point as scalar arguments.
+ * Like a {@link IntConsumer} but accepts three coordinates of a point as scalar arguments.
  *
  * @author Owen Feehan
  */
 @FunctionalInterface
-public interface PointTwoDimensionalConsumer {
+public interface ScalarThreeDimensionalConsumer {
     
     /**
      * Accepts a point like with a {@link Consumer} in general.
      * 
-     * @param point the current iteration point in a buffer.
+     * @param x coordinate in x-dimension of the current iteration position.
+     * @param y coordinate in y-dimension of the current iteration position.
+     * @param z coordinate in z-dimension of the current iteration position.
      */
-    void accept(Point2i point);
+    void accept(int x, int y, int z);
 }

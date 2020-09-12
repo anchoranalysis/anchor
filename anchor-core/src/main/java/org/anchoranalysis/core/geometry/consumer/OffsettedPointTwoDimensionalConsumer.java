@@ -25,24 +25,21 @@
  */
 package org.anchoranalysis.core.geometry.consumer;
 
-import java.util.function.IntConsumer;
+import java.util.function.Consumer;
+import org.anchoranalysis.core.geometry.Point2i;
 
 /**
- * Like a {@link IntConsumer} but accepts two coordinates of a point and an offset value
+ * Like a {@link PointTwoDimensionalConsumer} but also has a buffer offset.
  *
  * @author Owen Feehan
- * @param <E> a checked-exception that can be thrown during consumption
  */
 @FunctionalInterface
-public interface OffsettedPointTwoDimensionalConsumer<E extends Exception> {
-
+public interface OffsettedPointTwoDimensionalConsumer {
+    
     /**
-     * Accepts a point
-     *
-     * @param x local x coordinate during iteration
-     * @param y local y coordinate during iteration
-     * @param offset offset based on current x and y values
-     * @throws E
+     * Accepts a point like with a {@link Consumer} in general.
+     * 
+     * @param point the current iteration point in a buffer.
      */
-    void accept(int x, int y, int offset) throws E;
+    void accept(Point2i point, int offset);
 }

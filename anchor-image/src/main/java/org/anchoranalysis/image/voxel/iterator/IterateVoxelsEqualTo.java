@@ -31,7 +31,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
-import org.anchoranalysis.core.geometry.consumer.PointThreeDimensionalConsumer;
+import org.anchoranalysis.core.geometry.consumer.ScalarThreeDimensionalConsumer;
 import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.BoundedVoxels;
@@ -79,7 +79,7 @@ public class IterateVoxelsEqualTo {
     public static void equalToPrimitive(
             Voxels<UnsignedByteBuffer> voxels,
             byte equalToValue,
-            PointThreeDimensionalConsumer consumer) {
+            ScalarThreeDimensionalConsumer consumer) {
         Extent extent = voxels.extent();
         extent.iterateOverZ(z -> equalToPrimitiveSlice(voxels, z, equalToValue, consumer));
     }
@@ -96,7 +96,7 @@ public class IterateVoxelsEqualTo {
             Voxels<UnsignedByteBuffer> voxels,
             int sliceIndex,
             byte equalToValue,
-            PointThreeDimensionalConsumer consumer) {
+            ScalarThreeDimensionalConsumer consumer) {
         UnsignedByteBuffer buffer = voxels.sliceBuffer(sliceIndex);
 
         voxels.extent()
