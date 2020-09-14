@@ -203,7 +203,7 @@ public class IterateVoxelsObjectMask {
         BoundingBox boxVoxels = restrictTo.orElseGet(
             () -> object.boundingBox().clipTo(voxels.extent()) );
 
-        assert( voxels.extent().contains(boxVoxels) );
+        Preconditions.checkArgument( voxels.extent().contains(boxVoxels) );
         
         Optional<BoundingBox> restrictToIntersection =
                 OptionalUtilities.flatMap(
