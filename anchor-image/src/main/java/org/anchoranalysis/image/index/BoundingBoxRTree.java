@@ -117,7 +117,6 @@ public class BoundingBoxRTree {
     public void add(int i, BoundingBox box) {
         float[] coords = minPoint(box);
         float[] dimensions = extent(box);
-
         rTree.insert(coords, dimensions, i);
     }
 

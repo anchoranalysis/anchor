@@ -30,7 +30,7 @@ import java.util.List;
 import java.util.function.Function;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.graph.GraphWithEdgeTypes;
+import org.anchoranalysis.core.graph.GraphWithPayload;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.index.ObjectCollectionRTree;
 import org.anchoranalysis.image.object.ObjectCollection;
@@ -79,7 +79,7 @@ public class CreateNeighborGraph<V> {
      * @return the newly created graph
      * @throws CreateException
      */
-    public <E> GraphWithEdgeTypes<V, E> createGraph(
+    public <E> GraphWithPayload<V, E> createGraph(
             List<V> vertices,
             Function<V, ObjectMask> vertexToObject,
             EdgeFromVertices<V, E> edgeFromVertices,
@@ -88,7 +88,7 @@ public class CreateNeighborGraph<V> {
             throws CreateException {
 
         // Graph of neighboring objects, with the number of common pixels as an edge
-        GraphWithEdgeTypes<V, E> graph = new GraphWithEdgeTypes<>(undirected);
+        GraphWithPayload<V, E> graph = new GraphWithPayload<>(undirected);
 
         // Objects from each vertex
         ObjectCollection objects = ObjectCollectionFactory.mapFrom(vertices, vertexToObject::apply);
@@ -126,7 +126,7 @@ public class CreateNeighborGraph<V> {
     }
 
     private static <V, E> AddEdge<V> createAndAddEdge(
-            GraphWithEdgeTypes<V, E> graph, EdgeFromVertices<V, E> edgeFromVertices) {
+            GraphWithPayload<V, E> graph, EdgeFromVertices<V, E> edgeFromVertices) {
         return (vertex1, vertex2, numPixels) ->
                 graph.addEdge(
                         vertex1, vertex2, edgeFromVertices.createEdge(vertex1, vertex2, numPixels));

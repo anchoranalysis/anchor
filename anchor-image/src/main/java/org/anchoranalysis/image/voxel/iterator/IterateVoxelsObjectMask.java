@@ -200,8 +200,11 @@ public class IterateVoxelsObjectMask {
             Voxels<T> voxels,
             Optional<BoundingBox> restrictTo,
             ProcessVoxelBufferUnary<T> process) {
-        BoundingBox boxVoxels = restrictTo.orElseGet(object::boundingBox);
+        BoundingBox boxVoxels = restrictTo.orElseGet(
+            () -> object.boundingBox().clipTo(voxels.extent()) );
 
+        assert( voxels.extent().contains(boxVoxels) );
+        
         Optional<BoundingBox> restrictToIntersection =
                 OptionalUtilities.flatMap(
                         restrictTo, box -> box.intersection().with(object.boundingBox()));
@@ -293,6 +296,8 @@ public class IterateVoxelsObjectMask {
             BoundingBox boxRelativeToObject,
             ProcessVoxelBufferUnary<T> process) {
 
+        assert( voxels.extent().contains(boxVoxels) );
+        
         ExtentMatchHelper.checkExtentMatch(boxVoxels, boxRelativeToObject);
 
         ReadableTuple3i cornerMin = boxVoxels.cornerMin();

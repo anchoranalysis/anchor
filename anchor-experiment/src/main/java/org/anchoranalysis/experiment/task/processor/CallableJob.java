@@ -29,9 +29,10 @@ package org.anchoranalysis.experiment.task.processor;
 import com.google.common.base.Preconditions;
 import java.util.Optional;
 import java.util.concurrent.Callable;
-import org.anchoranalysis.core.error.reporter.ErrorReporterIntoLog;
+import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.experiment.JobExecutionException;
+import org.anchoranalysis.experiment.task.ErrorReporterForTask;
 import org.anchoranalysis.experiment.task.ParametersUnbound;
 import org.anchoranalysis.experiment.task.Task;
 import org.anchoranalysis.io.input.InputFromManager;
@@ -91,9 +92,9 @@ public class CallableJob<T extends InputFromManager, S>
             logger.logStart(jobDescription);
 
             boolean success = taskDup.executeJob(paramsUnbound);
-
-            jobState.markAsCompleted(success);
-            logger.logEnd(jobDescription, jobState, success);
+            
+            closeJobStateAndLog(success);
+            
             return Optional.empty();
 
         } catch (Throwable e) { // NOSONAR
@@ -108,18 +109,19 @@ public class CallableJob<T extends InputFromManager, S>
             // If executeTask is called with supressException==false then we arrive here fairly
             // easily, and record the error in the experiment-log just
             //  in case, even though it's probably already in the task log.
-
-            ErrorReporterIntoLog errorReporter =
-                    new ErrorReporterIntoLog(
-                            paramsUnbound.getParametersExperiment().getLoggerExperiment());
+            ErrorReporter errorReporter = new ErrorReporterForTask(paramsUnbound.getParametersExperiment().getLoggerExperiment());
             errorReporter.recordError(CallableJob.class, e);
 
-            jobState.markAsCompleted(false);
-            logger.logEnd(jobDescription, jobState, false);
+            closeJobStateAndLog(false);
 
             return Optional.of(new JobExecutionException(e));
         } finally {
             Preconditions.checkArgument(!jobState.isExecuting());
         }
+    }
+    
+    private void closeJobStateAndLog( boolean success ) {
+        jobState.markAsCompleted(success);
+        logger.logEnd(jobDescription, jobState, success);
     }
 }

@@ -40,7 +40,7 @@ import org.anchoranalysis.image.object.morphological.MorphologicalDilation;
  * Adds edges if objects neighbor each other
  *
  * @author Owen Feehan
- * @param <V> vertice-type
+ * @param <V> vertex-type
  */
 @RequiredArgsConstructor
 class EdgeAdder<V> {
@@ -49,7 +49,7 @@ class EdgeAdder<V> {
     /** a list of vertices */
     private final List<V> verticesAsList;
 
-    /** how to convert a individual vertice to an object-mask */
+    /** how to convert a individual vertex to an object-mask */
     private final Function<V, ObjectMask> vertexToObject;
 
     /** the rTree underpinning the vertices (or rather their derived object-masks) */

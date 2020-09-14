@@ -30,10 +30,11 @@ import java.util.List;
 import java.util.Optional;
 import org.anchoranalysis.core.concurrency.ConcurrencyPlan;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
-import org.anchoranalysis.core.error.reporter.ErrorReporterIntoLog;
 import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
+import org.anchoranalysis.experiment.log.reporter.StatefulMessageLogger;
+import org.anchoranalysis.experiment.task.ErrorReporterForTask;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.experiment.task.ParametersUnbound;
 import org.anchoranalysis.experiment.task.TaskStatistics;
@@ -93,15 +94,15 @@ public class SequentialProcessor<T extends InputFromManager, S> extends JobProce
     }
 
     private boolean executeJobAndLog(
-            T inputObj, S sharedState, ParametersExperiment paramsExperiment) {
+            T inputObject, S sharedState, ParametersExperiment paramsExperiment) {
 
-        MessageLogger logger = paramsExperiment.getLoggerExperiment();
-        ErrorReporter errorReporter = new ErrorReporterIntoLog(logger);
+        StatefulMessageLogger logger = paramsExperiment.getLoggerExperiment();
+        ErrorReporter errorReporter = new ErrorReporterForTask(logger);
 
         try {
             ParametersUnbound<T, S> paramsUnbound =
                     new ParametersUnbound<>(
-                            paramsExperiment, inputObj, sharedState, isSuppressExceptions());
+                            paramsExperiment, inputObject, sharedState, isSuppressExceptions());
             return getTask().executeJob(paramsUnbound);
 
         } catch (JobExecutionException e) {

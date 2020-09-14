@@ -29,7 +29,7 @@ package org.anchoranalysis.mpp.feature.energy.saved;
 import java.util.Set;
 import lombok.Getter;
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.graph.EdgeTypeWithVertices;
+import org.anchoranalysis.core.graph.TypedEdge;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.feature.shared.SharedFeatureMulti;
@@ -93,8 +93,8 @@ public class EnergySavedPairs implements UpdatableMarkSet {
     private double totalEnergyForMark(Mark mark) {
 
         double total = 0;
-        for (EdgeTypeWithVertices<Mark, EnergyPair> pair : this.pairCollection.getPairsFor(mark)) {
-            total += pair.getEdge().getEnergyTotal().getTotal();
+        for (TypedEdge<Mark, EnergyPair> pair : this.pairCollection.getPairsFor(mark)) {
+            total += pair.getPayload().getEnergyTotal().getTotal();
         }
         assert !Double.isNaN(total);
 

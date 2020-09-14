@@ -73,7 +73,7 @@ public class ParametersExperiment {
                         experimentArguments,
                         wrapErrors(outputManager, loggerExperiment),
                         loggerExperiment,
-                        new ErrorReporterIntoLog(loggerExperiment));
+                        new ErrorReporterForTask(loggerExperiment));
 
         this.experimentIdentifier = experimentIdentifier;
         this.experimentalManifest = experimentalManifest;

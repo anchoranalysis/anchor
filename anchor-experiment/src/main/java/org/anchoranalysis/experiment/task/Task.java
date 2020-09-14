@@ -31,7 +31,6 @@ import java.util.Optional;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.core.concurrency.ConcurrencyPlan;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
-import org.anchoranalysis.core.error.reporter.ErrorReporterIntoLog;
 import org.anchoranalysis.core.memory.MemoryUtilities;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
@@ -151,7 +150,7 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
         StatefulMessageLogger loggerJob =
                 createJobLog(paramsUnbound.getParametersExperiment(), outputManagerTask);
 
-        ErrorReporter errorReporterJob = new ErrorReporterIntoLog(loggerJob);
+        ErrorReporter errorReporterJob = new ErrorReporterForTask(loggerJob);
 
         // We initialise the output manager
         BoundOutputManagerRouteErrors outputManagerTaskRouteErrors =
@@ -208,7 +207,9 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
 
             successfullyFinished = true;
 
-        } catch (Exception e) {
+        } catch (Throwable e) { // NOSONAR
+            // We need to catch both exceptions and errors in order to recover from failure in
+            // the specific task. Other tasks will continue executing.
             params.getLogger().errorReporter().recordError(Task.class, e);
             loggerJob.log(
                     "This error was fatal. The specific job will end early, but the experiment will otherwise continue.");
