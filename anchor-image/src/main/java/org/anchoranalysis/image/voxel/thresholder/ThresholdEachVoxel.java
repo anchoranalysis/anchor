@@ -32,7 +32,13 @@ import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.iterator.process.ProcessBufferUnary;
 
-final class PointProcessor implements ProcessBufferUnary<UnsignedByteBuffer> {
+/**
+ * Puts an <i>on</i> voxel in the output-buffer if {@code voxel-value >= level} or <i>off</i> otherwise.
+ * 
+ * @author Owen Feehan
+ *
+ */
+final class ThresholdEachVoxel implements ProcessBufferUnary<UnsignedByteBuffer> {
 
     private final int level;
     private final Voxels<UnsignedByteBuffer> voxelsOut;
@@ -41,7 +47,7 @@ final class PointProcessor implements ProcessBufferUnary<UnsignedByteBuffer> {
 
     private UnsignedByteBuffer bufferOut;
 
-    public PointProcessor(int level, Voxels<UnsignedByteBuffer> boxOut, BinaryValuesByte bvOut) {
+    public ThresholdEachVoxel(int level, Voxels<UnsignedByteBuffer> boxOut, BinaryValuesByte bvOut) {
         super();
         this.level = level;
         this.voxelsOut = boxOut;

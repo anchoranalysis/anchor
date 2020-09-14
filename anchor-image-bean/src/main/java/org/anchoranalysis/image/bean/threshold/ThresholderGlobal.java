@@ -27,7 +27,9 @@
 package org.anchoranalysis.image.bean.threshold;
 
 import java.util.Optional;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -40,12 +42,25 @@ import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
 import org.anchoranalysis.image.voxel.thresholder.VoxelsThresholder;
 
+/**
+ * Performs global thresholding.
+ * 
+ * <p>This implies that the threshold-level is identical for every voxel.
+ * 
+ * <p>The thresholding occurs inplace on the existing voxels i.e. a new buffer is not created.
+ * 
+ * <p>An <i>on</i> voxel is placed in the buffer if {@code voxel-value >= level} or <i>off</i> otherwise.
+ * 
+ * @author Owen Feehan
+ *
+ */
+@NoArgsConstructor @AllArgsConstructor
 public class ThresholderGlobal extends Thresholder {
 
     // START BEAN PARAMETERS
     @BeanField @Getter @Setter private CalculateLevel calculateLevel;
     // END BEAN PARAMETERS
-
+    
     @Override
     public BinaryVoxels<UnsignedByteBuffer> threshold(
             VoxelsWrapper inputBuffer,

@@ -164,7 +164,7 @@ public class LabelObjects<T> {
 
             boolean voxelsAssigned =
                     channel.assignValue(index)
-                            .toObject(objectAfterOp, voxelValue -> voxelValue == 0);
+                            .toObjectWhile(objectAfterOp, voxelValue -> voxelValue == 0);
             if (voxelsAssigned) {
                 // Add mapping from label to input-element
                 if (mapLabelsToBefore.isPresent()) {

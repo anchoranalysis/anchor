@@ -45,6 +45,22 @@ import org.anchoranalysis.image.voxel.thresholder.VoxelsThresholder;
 public abstract class Thresholder extends NullParamsBean<VoxelsThresholder> {
 
     /**
+     * Like {@link #threshold(VoxelsWrapper)} but using default binary-values.
+     *
+     * <p>The default values are <i>off</i>(0) and <i>on</i>(255).
+     *
+     * @param voxels the voxels to be thresholded
+     * @return a binary-channel as described above, which may possibly reuse the input
+     *     voxel-buffers.
+     * @throws OperationFailedException
+     * @throws OperationFailedException
+     */
+    public BinaryVoxels<UnsignedByteBuffer> threshold(
+            VoxelsWrapper voxels) throws OperationFailedException {
+        return threshold(voxels, BinaryValuesByte.getDefault());
+    }
+    
+    /**
      * Like {@link #threshold(VoxelsWrapper, BinaryValuesByte, Optional, Optional)} applying the
      * thresholding to the entire set of voxels.
      *
