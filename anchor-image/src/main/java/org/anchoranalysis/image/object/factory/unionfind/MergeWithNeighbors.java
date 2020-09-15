@@ -26,14 +26,14 @@
 
 package org.anchoranalysis.image.object.factory.unionfind;
 
-import java.nio.IntBuffer;
 import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.image.convert.UnsignedIntBuffer;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.SlidingBuffer;
-import org.anchoranalysis.image.voxel.iterator.IterateVoxels;
-import org.anchoranalysis.image.voxel.iterator.changed.ProcessVoxelNeighbor;
-import org.anchoranalysis.image.voxel.iterator.changed.ProcessVoxelNeighborAbsoluteWithSlidingBuffer;
-import org.anchoranalysis.image.voxel.iterator.changed.ProcessVoxelNeighborFactory;
+import org.anchoranalysis.image.voxel.iterator.neighbor.IterateVoxelsNeighbors;
+import org.anchoranalysis.image.voxel.iterator.neighbor.ProcessVoxelNeighbor;
+import org.anchoranalysis.image.voxel.iterator.neighbor.ProcessVoxelNeighborAbsoluteWithSlidingBuffer;
+import org.anchoranalysis.image.voxel.iterator.neighbor.ProcessVoxelNeighborFactory;
 import org.anchoranalysis.image.voxel.neighborhood.Neighborhood;
 import org.anchoranalysis.image.voxel.neighborhood.NeighborhoodFactory;
 import org.jgrapht.alg.util.UnionFind;
@@ -45,9 +45,10 @@ final class MergeWithNeighbors {
 
         private int minLabel;
 
-        private UnionFind<Integer> unionIndex;
+        private final UnionFind<Integer> unionIndex;
 
-        public PointTester(SlidingBuffer<IntBuffer> slidingIndex, UnionFind<Integer> unionIndex) {
+        public PointTester(
+                SlidingBuffer<UnsignedIntBuffer> slidingIndex, UnionFind<Integer> unionIndex) {
             super(slidingIndex);
             this.unionIndex = unionIndex;
         }
@@ -94,11 +95,11 @@ final class MergeWithNeighbors {
     private final boolean do3D;
     private final ProcessVoxelNeighbor<Integer> process;
     private final Neighborhood neighborhood;
-    private final SlidingBuffer<IntBuffer> slidingIndex;
+    private final SlidingBuffer<UnsignedIntBuffer> slidingIndex;
     private final UnionFind<Integer> unionIndex;
 
     public MergeWithNeighbors(
-            Voxels<IntBuffer> indexBuffer,
+            Voxels<UnsignedIntBuffer> indexBuffer,
             UnionFind<Integer> unionIndex,
             boolean do3D,
             boolean bigNeighborhood) {
@@ -117,7 +118,7 @@ final class MergeWithNeighbors {
      * indicates that there is no indexed neighbor
      */
     public int minNeighborLabel(Point3i point, int exstVal, int indxBuffer) {
-        return IterateVoxels.callEachPointInNeighborhood(
+        return IterateVoxelsNeighbors.callEachPointInNeighborhood(
                 point, neighborhood, do3D, process, exstVal, indxBuffer);
     }
 

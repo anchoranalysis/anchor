@@ -27,7 +27,6 @@
 package org.anchoranalysis.image.stack.rgb;
 
 import com.google.common.base.Preconditions;
-import java.nio.ByteBuffer;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.color.RGBColor;
@@ -38,10 +37,11 @@ import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactorySingleType;
-import org.anchoranalysis.image.extent.BoundingBox;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
+import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
@@ -179,11 +179,11 @@ public class RGBStack {
 
         byte objectMaskOn = object.binaryValuesByte().getOnByte();
 
-        ByteBuffer inArr = object.sliceBufferLocal(zLocal);
+        UnsignedByteBuffer inArr = object.sliceBufferLocal(zLocal);
 
-        ByteBuffer red = extractBuffer(0, pointGlobal.z());
-        ByteBuffer green = extractBuffer(1, pointGlobal.z());
-        ByteBuffer blue = extractBuffer(2, pointGlobal.z());
+        UnsignedByteBuffer red = extractBuffer(0, pointGlobal.z());
+        UnsignedByteBuffer green = extractBuffer(1, pointGlobal.z());
+        UnsignedByteBuffer blue = extractBuffer(2, pointGlobal.z());
 
         Extent eMask = object.boundingBox().extent();
 
@@ -200,17 +200,15 @@ public class RGBStack {
                                 pointGlobal.x() - object.boundingBox().cornerMin().x(),
                                 pointGlobal.y() - object.boundingBox().cornerMin().y());
 
-                if (inArr.get(objectMaskOffset) != objectMaskOn) {
-                    continue;
+                if (inArr.getRaw(objectMaskOffset) == objectMaskOn) {
+                    RGBOutputUtils.writeRGBColorToByteArray(
+                            color, pointGlobal, stack.getChannel(0).dimensions(), red, blue, green);
                 }
-
-                RGBOutputUtils.writeRGBColorToByteArr(
-                        color, pointGlobal, stack.getChannel(0).dimensions(), red, blue, green);
             }
         }
     }
 
-    private ByteBuffer extractBuffer(int channelIndex, int zIndex) {
+    private UnsignedByteBuffer extractBuffer(int channelIndex, int zIndex) {
         return stack.getChannel(channelIndex).voxels().asByte().slice(zIndex).buffer();
     }
 

@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.image.voxel.kernel;
 
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.Voxels;
 
 // Caches a small number of slices around which we wish to work, so the memory
@@ -37,7 +37,7 @@ public class LocalSlices {
     private final int shift;
 
     // Loads the local slices
-    public LocalSlices(int z, int kernelSize, Voxels<ByteBuffer> voxels) {
+    public LocalSlices(int z, int kernelSize, Voxels<UnsignedByteBuffer> voxels) {
         super();
 
         arr = new byte[kernelSize][];
@@ -56,8 +56,8 @@ public class LocalSlices {
 
     // All local access is done relative (e.g. -1, -2, +1, +2 etc.)
     // If an invalid index is requested null is returned
-    public ByteBuffer getLocal(int rel) {
+    public UnsignedByteBuffer getLocal(int rel) {
         byte[] slice = arr[rel + shift];
-        return slice != null ? ByteBuffer.wrap(slice) : null;
+        return slice != null ? UnsignedByteBuffer.wrapRaw(slice) : null;
     }
 }

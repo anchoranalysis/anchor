@@ -25,31 +25,30 @@
  */
 package org.anchoranalysis.image.voxel.extracter;
 
-import java.nio.ShortBuffer;
-import org.anchoranalysis.image.convert.ByteConverter;
+import org.anchoranalysis.image.convert.UnsignedShortBuffer;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.max.MaxIntensityBufferShort;
 import org.anchoranalysis.image.voxel.buffer.mean.MeanIntensityShortBuffer;
-import org.anchoranalysis.image.voxel.iterator.IterateVoxelsVoxelBoxAsInt;
+import org.anchoranalysis.image.voxel.iterator.IterateVoxelsAll;
 
-class ShortImplementation extends Base<ShortBuffer> {
+class ShortImplementation extends Base<UnsignedShortBuffer> {
 
-    public ShortImplementation(Voxels<ShortBuffer> voxels) {
+    public ShortImplementation(Voxels<UnsignedShortBuffer> voxels) {
         super(voxels);
     }
 
     @Override
     public void copyBufferIndexTo(
-            ShortBuffer sourceBuffer,
+            UnsignedShortBuffer sourceBuffer,
             int sourceIndex,
-            ShortBuffer destinationBuffer,
+            UnsignedShortBuffer destinationBuffer,
             int destinationIndex) {
-        destinationBuffer.put(destinationIndex, sourceBuffer.get(sourceIndex));
+        destinationBuffer.putRaw(destinationIndex, sourceBuffer.getRaw(sourceIndex));
     }
 
     @Override
-    public Voxels<ShortBuffer> projectMax() {
+    public Voxels<UnsignedShortBuffer> projectMax() {
 
         Extent extent = voxels.extent();
 
@@ -63,7 +62,7 @@ class ShortImplementation extends Base<ShortBuffer> {
     }
 
     @Override
-    public Voxels<ShortBuffer> projectMean() {
+    public Voxels<UnsignedShortBuffer> projectMean() {
 
         Extent extent = voxels.extent();
 
@@ -77,22 +76,22 @@ class ShortImplementation extends Base<ShortBuffer> {
     }
 
     @Override
-    public int voxelWithMaxIntensity() {
-        return IterateVoxelsVoxelBoxAsInt.findMaxValue(voxels);
+    public long voxelWithMaxIntensity() {
+        return IterateVoxelsAll.intensityMax(voxels);
     }
 
     @Override
-    protected int voxelAtBufferIndex(ShortBuffer buffer, int index) {
-        return ByteConverter.unsignedShortToInt(buffer.get(index));
+    protected int voxelAtBufferIndex(UnsignedShortBuffer buffer, int index) {
+        return buffer.getUnsigned(index);
     }
 
     @Override
-    protected boolean bufferValueGreaterThan(ShortBuffer buffer, int threshold) {
-        return buffer.get() > threshold;
+    protected boolean bufferValueGreaterThan(UnsignedShortBuffer buffer, int threshold) {
+        return buffer.getUnsigned() > threshold;
     }
 
     @Override
-    protected boolean bufferValueEqualTo(ShortBuffer buffer, int value) {
-        return buffer.get() == value;
+    protected boolean bufferValueEqualTo(UnsignedShortBuffer buffer, int value) {
+        return buffer.getUnsigned() == value;
     }
 }

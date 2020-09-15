@@ -54,20 +54,17 @@ public class DualComparerFactory {
     }
 
     public static DualComparer compareTwoSubdirectoriesInLoader(
-            TestLoader testLoader, String subdirectory1, String subdirectory2) {
+            TestLoader loader, String subdirectory1, String subdirectory2) {
         return new DualComparer(
-                testLoader.createForSubdirectory(subdirectory1),
-                testLoader.createForSubdirectory(subdirectory2));
+                loader.createForSubdirectory(subdirectory1),
+                loader.createForSubdirectory(subdirectory2));
     }
 
     public static DualComparer compareTwoSubdirectoriesInLoader(
-            TestLoader testLoader1,
-            String subdirectory1,
-            TestLoader testLoader2,
-            String subdirectory2) {
+            TestLoader loader1, String subdirectory1, TestLoader loader2, String subdirectory2) {
         return new DualComparer(
-                testLoader1.createForSubdirectory(subdirectory1),
-                testLoader2.createForSubdirectory(subdirectory2));
+                loader1.createForSubdirectory(subdirectory1),
+                loader2.createForSubdirectory(subdirectory2));
     }
 
     private static TestLoader loaderTemporaryFolder(

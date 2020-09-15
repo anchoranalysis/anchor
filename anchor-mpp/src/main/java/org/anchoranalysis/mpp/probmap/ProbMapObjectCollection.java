@@ -101,8 +101,8 @@ public class ProbMapObjectCollection implements ProbMap {
             int slice = (int) (index3D / volXY);
             int index2D = (int) (index3D % volXY);
 
-            byte b = object.sliceBufferLocal(slice).get(index2D);
-            if (b == object.binaryValuesByte().getOnByte()) {
+            byte value = object.sliceBufferLocal(slice).getRaw(index2D);
+            if (value == object.binaryValuesByte().getOnByte()) {
 
                 int xRel = index2D % exY;
                 int yRel = index2D / exY;

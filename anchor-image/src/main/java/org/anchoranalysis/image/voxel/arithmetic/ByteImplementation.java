@@ -25,55 +25,38 @@
  */
 package org.anchoranalysis.image.voxel.arithmetic;
 
-import java.nio.ByteBuffer;
 import java.util.function.IntFunction;
-import org.anchoranalysis.image.convert.ByteConverter;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.extent.Extent;
 
-class ByteImplementation extends Base<ByteBuffer> {
+class ByteImplementation extends Base<UnsignedByteBuffer> {
 
-    public ByteImplementation(Extent extent, IntFunction<ByteBuffer> bufferForSlice) {
+    public ByteImplementation(Extent extent, IntFunction<UnsignedByteBuffer> bufferForSlice) {
         super(extent, bufferForSlice);
     }
 
     @Override
-    protected void multiplyBuffer(ByteBuffer buffer, double factor) {
+    protected void multiplyBuffer(UnsignedByteBuffer buffer, double factor) {
         while (buffer.hasRemaining()) {
-            byte mult = scaleClippedByte(factor, buffer.get());
-            buffer.put(buffer.position() - 1, mult);
+            buffer.putUnsigned(buffer.position() - 1, scaleClipped(factor, buffer.getUnsigned()));
         }
     }
 
     @Override
-    protected void subtractFromBuffer(ByteBuffer buffer, int valueToSubtractFrom) {
+    protected void subtractFromBuffer(UnsignedByteBuffer buffer, int valueToSubtractFrom) {
         while (buffer.hasRemaining()) {
-            byte subtracted = subtractFromClippedByte(valueToSubtractFrom, buffer.get());
-            buffer.put(buffer.position() - 1, subtracted);
+            buffer.putUnsigned(buffer.position() - 1, valueToSubtractFrom - buffer.getUnsigned());
         }
     }
 
     @Override
-    protected void multiplyByBufferIndex(ByteBuffer buffer, int index, double factor) {
-        byte mult = scaleClippedByte(factor, buffer.get(index));
-        buffer.put(index, mult);
+    protected void multiplyByBufferIndex(UnsignedByteBuffer buffer, int index, double factor) {
+        buffer.putUnsigned(index, scaleClipped(factor, buffer.getUnsigned(index)));
     }
 
     @Override
-    protected void addToBufferIndex(ByteBuffer buffer, int index, int valueToBeAdded) {
-        byte added = addClippedByte(valueToBeAdded, buffer.get(index));
-        buffer.put(index, added);
-    }
-
-    private static byte addClippedByte(int value, byte pixelValue) {
-        return (byte) addClipped(value, ByteConverter.unsignedByteToInt(pixelValue));
-    }
-
-    private static byte subtractFromClippedByte(int valueToSubtractFrom, byte pixelValue) {
-        return (byte) (valueToSubtractFrom - ByteConverter.unsignedByteToInt(pixelValue));
-    }
-
-    private static byte scaleClippedByte(double factor, byte pixelValue) {
-        return (byte) scaleClipped(factor, ByteConverter.unsignedByteToInt(pixelValue));
+    protected void addToBufferIndex(UnsignedByteBuffer buffer, int index, int valueToBeAdded) {
+        buffer.putUnsigned(index, addClipped(valueToBeAdded, buffer.getUnsigned(index)));
     }
 
     private static int scaleClipped(double factor, int pixelValue) {

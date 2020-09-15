@@ -77,9 +77,9 @@ public class MergeCandidate {
     /**
      * Chops of one-side of keep, and one-side of merge
      *
-     * @param keepLeft if TRUE, chops off the left-side of keep, if FALSE rather the right-side
-     * @param mergeLeft if TRUE, chops off the left-side of merge, if FALSE rather the right-side
-     * @param replace if TRUE, replaces the points with a loop. if FALSE, simply removes them
+     * @param keepLeft if true, chops off the left-side of keep, if false rather the right-side
+     * @param mergeLeft if true, chops off the left-side of merge, if false rather the right-side
+     * @param replace if true, replaces the points with a loop. if false, simply removes them
      */
     public void removeOrReplace(boolean keepLeft, boolean mergeLeft, boolean replace) {
         removeOrReplaceOnPath(keep, keepLeft, replace);

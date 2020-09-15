@@ -25,14 +25,13 @@
  */
 package org.anchoranalysis.image.voxel.extracter;
 
-import java.nio.Buffer;
-import java.nio.ByteBuffer;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
-import org.anchoranalysis.image.extent.BoundingBox;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.extent.Extent;
+import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.interpolator.InterpolateUtilities;
 import org.anchoranalysis.image.interpolator.Interpolator;
 import org.anchoranalysis.image.object.ObjectMask;
@@ -42,7 +41,7 @@ import org.anchoranalysis.image.voxel.VoxelsPredicate;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
 
 @AllArgsConstructor
-abstract class Base<T extends Buffer> implements VoxelsExtracter<T> {
+abstract class Base<T> implements VoxelsExtracter<T> {
 
     // START REQUIRED ARGUMENTS
     /** The voxels to extract from */
@@ -126,7 +125,7 @@ abstract class Base<T extends Buffer> implements VoxelsExtracter<T> {
             T srcArr = voxels.sliceBuffer(z);
             T destArr = voxelsDestination.sliceBuffer(z + relativePosition.z());
 
-            ByteBuffer maskBuffer = object.sliceBufferGlobal(z);
+            UnsignedByteBuffer maskBuffer = object.sliceBufferGlobal(z);
 
             for (int y = sourceStart.y(); y <= sourceEnd.y(); y++) {
                 for (int x = sourceStart.x(); x <= sourceEnd.x(); x++) {
@@ -137,7 +136,7 @@ abstract class Base<T extends Buffer> implements VoxelsExtracter<T> {
                                     .extent()
                                     .offset(x + relativePosition.x(), y + relativePosition.y());
 
-                    if (maskBuffer.get() == bvb.getOnByte()) {
+                    if (maskBuffer.getRaw() == bvb.getOnByte()) {
                         copyBufferIndexTo(srcArr, srcIndex, destArr, destIndex);
                     }
                 }
@@ -152,29 +151,25 @@ abstract class Base<T extends Buffer> implements VoxelsExtracter<T> {
 
         Voxels<T> bufferTarget = voxels.factory().createInitialized(extentResized);
 
-        assert (bufferTarget.sliceBuffer(0).capacity() == extentResized.volumeXY());
+        assert (bufferTarget.slice(0).capacity() == extentResized.volumeXY());
 
         InterpolateUtilities.transferSlicesResizeXY(
                 new VoxelsWrapper(voxels), new VoxelsWrapper(bufferTarget), interpolator);
 
-        assert (bufferTarget.sliceBuffer(0).capacity() == extentResized.volumeXY());
+        assert (bufferTarget.slice(0).capacity() == extentResized.volumeXY());
         return bufferTarget;
     }
 
     @Override
     public VoxelsPredicate voxelsEqualTo(int equalToValue) {
         return new PredicateImplementation<>(
-                voxels.extent(),
-                voxels::sliceBuffer,
-                buffer -> bufferValueEqualTo(buffer, equalToValue));
+                voxels, buffer -> bufferValueEqualTo(buffer, equalToValue));
     }
 
     @Override
     public VoxelsPredicate voxelsGreaterThan(int threshold) {
         return new PredicateImplementation<>(
-                voxels.extent(),
-                voxels::sliceBuffer,
-                buffer -> bufferValueGreaterThan(buffer, threshold));
+                voxels, buffer -> bufferValueGreaterThan(buffer, threshold));
     }
 
     protected abstract void copyBufferIndexTo(
@@ -196,7 +191,7 @@ abstract class Base<T extends Buffer> implements VoxelsExtracter<T> {
     /**
      * Checks if the current value from a buffer is <i>equal to</i> a constant value
      *
-     * <p>(i.e. by calling {@code get()} on the buffer)
+     * <p>(i.e. by calling {@code get()} on the buffer).
      *
      * @param buffer provides the value to compare
      * @param value the constant-value

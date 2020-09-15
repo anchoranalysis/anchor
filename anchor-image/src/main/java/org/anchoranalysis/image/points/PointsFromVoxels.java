@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.image.points;
 
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.SortedSet;
@@ -43,7 +42,8 @@ import org.anchoranalysis.core.geometry.PointConverter;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
-import org.anchoranalysis.image.voxel.iterator.IterateVoxelsByte;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
+import org.anchoranalysis.image.voxel.iterator.IterateVoxelsEqualTo;
 
 /**
  * Converts binary-voxels into points
@@ -62,7 +62,8 @@ public class PointsFromVoxels {
      * @return a newly created list
      * @throws CreateException if the voxels have three dimensions
      */
-    public static List<Point2i> listFrom2i(BinaryVoxels<ByteBuffer> voxels) throws CreateException {
+    public static List<Point2i> listFrom2i(BinaryVoxels<UnsignedByteBuffer> voxels)
+            throws CreateException {
         return listFrom2i(voxels, ZERO_SHIFT);
     }
 
@@ -72,7 +73,7 @@ public class PointsFromVoxels {
      * @param voxels binary-voxels, in each ON voxel represents a point
      * @return a newly created list
      */
-    public static List<Point3i> listFrom3i(BinaryVoxels<ByteBuffer> voxels) {
+    public static List<Point3i> listFrom3i(BinaryVoxels<UnsignedByteBuffer> voxels) {
         return listFrom3i(voxels, ZERO_SHIFT);
     }
 
@@ -84,8 +85,8 @@ public class PointsFromVoxels {
      * @return a newly created list
      * @throws CreateException if the voxels have three dimensions
      */
-    public static List<Point2i> listFrom2i(BinaryVoxels<ByteBuffer> voxels, ReadableTuple3i shift)
-            throws CreateException {
+    public static List<Point2i> listFrom2i(
+            BinaryVoxels<UnsignedByteBuffer> voxels, ReadableTuple3i shift) throws CreateException {
 
         List<Point2i> out = new ArrayList<>();
 
@@ -105,7 +106,8 @@ public class PointsFromVoxels {
      * @param shift adds this shift to each point
      * @return a newly created list
      */
-    public static List<Point3i> listFrom3i(BinaryVoxels<ByteBuffer> voxels, ReadableTuple3i shift) {
+    public static List<Point3i> listFrom3i(
+            BinaryVoxels<UnsignedByteBuffer> voxels, ReadableTuple3i shift) {
         List<Point3i> points = new ArrayList<>();
         PointsFromVoxels.consumePoints3i(voxels, shift, points::add);
         return points;
@@ -119,7 +121,7 @@ public class PointsFromVoxels {
      * @return a newly created list
      */
     public static SortedSet<Point3i> setFrom3i(
-            BinaryVoxels<ByteBuffer> voxels, ReadableTuple3i shift) {
+            BinaryVoxels<UnsignedByteBuffer> voxels, ReadableTuple3i shift) {
         SortedSet<Point3i> points = new TreeSet<>(new Comparator3i<>());
         PointsFromVoxels.consumePoints3i(voxels, shift, points::add);
         return points;
@@ -132,7 +134,8 @@ public class PointsFromVoxels {
      * @param shift adds this shift to each point
      * @return a newly created list
      */
-    public static List<Point3d> listFrom3d(BinaryVoxels<ByteBuffer> voxels, ReadableTuple3i shift) {
+    public static List<Point3d> listFrom3d(
+            BinaryVoxels<UnsignedByteBuffer> voxels, ReadableTuple3i shift) {
         List<Point3d> points = new ArrayList<>();
         PointsFromVoxels.consumePoints3d(voxels, PointConverter.doubleFromInt(shift), points::add);
         return points;
@@ -151,10 +154,12 @@ public class PointsFromVoxels {
      * @param consumer called for each point
      */
     static void consumePoints2i(
-            BinaryVoxels<ByteBuffer> voxels, ReadableTuple3i shift, Consumer<Point2i> consumer) {
+            BinaryVoxels<UnsignedByteBuffer> voxels,
+            ReadableTuple3i shift,
+            Consumer<Point2i> consumer) {
 
         BinaryValuesByte bvb = voxels.binaryValues().createByte();
-        IterateVoxelsByte.iterateEqualValuesSlice(
+        IterateVoxelsEqualTo.equalToPrimitiveSlice(
                 voxels.voxels(),
                 0,
                 bvb.getOnByte(),
@@ -169,9 +174,11 @@ public class PointsFromVoxels {
      * @param consumer called for each point
      */
     private static void consumePoints3i(
-            BinaryVoxels<ByteBuffer> voxels, ReadableTuple3i shift, Consumer<Point3i> consumer) {
+            BinaryVoxels<UnsignedByteBuffer> voxels,
+            ReadableTuple3i shift,
+            Consumer<Point3i> consumer) {
         BinaryValuesByte bvb = voxels.binaryValues().createByte();
-        IterateVoxelsByte.iterateEqualValues(
+        IterateVoxelsEqualTo.equalToPrimitive(
                 voxels.voxels(),
                 bvb.getOnByte(),
                 (x, y, z) -> consumer.accept(Point3i.immutableAdd(shift, x, y, z)));
@@ -185,9 +192,9 @@ public class PointsFromVoxels {
      * @param consumer called for each point
      */
     private static void consumePoints3d(
-            BinaryVoxels<ByteBuffer> voxels, Point3d add, Consumer<Point3d> consumer) {
+            BinaryVoxels<UnsignedByteBuffer> voxels, Point3d add, Consumer<Point3d> consumer) {
         BinaryValuesByte bvb = voxels.binaryValues().createByte();
-        IterateVoxelsByte.iterateEqualValues(
+        IterateVoxelsEqualTo.equalToPrimitive(
                 voxels.voxels(),
                 bvb.getOnByte(),
                 (x, y, z) -> consumer.accept(Point3d.immutableAdd(add, x, y, z)));

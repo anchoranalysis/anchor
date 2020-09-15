@@ -26,14 +26,14 @@
 
 package org.anchoranalysis.image.object.morphological;
 
-import java.nio.ByteBuffer;
 import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
-import org.anchoranalysis.image.extent.BoundingBox;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.extent.Extent;
+import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.morphological.accept.AcceptIterationConditon;
 import org.anchoranalysis.image.voxel.Voxels;
@@ -68,7 +68,7 @@ public class MorphologicalErosion {
             objectOut = object.duplicate();
         }
 
-        BinaryVoxels<ByteBuffer> eroded =
+        BinaryVoxels<UnsignedByteBuffer> eroded =
                 erode(
                         objectOut.binaryVoxels(),
                         do3D,
@@ -94,11 +94,11 @@ public class MorphologicalErosion {
      * @return
      * @throws CreateException
      */
-    public static BinaryVoxels<ByteBuffer> erode(
-            BinaryVoxels<ByteBuffer> bvb,
+    public static BinaryVoxels<UnsignedByteBuffer> erode(
+            BinaryVoxels<UnsignedByteBuffer> bvb,
             boolean do3D,
             int iterations,
-            Optional<Voxels<ByteBuffer>> backgroundVb,
+            Optional<Voxels<UnsignedByteBuffer>> backgroundVb,
             int minIntensityValue,
             boolean outsideAtThreshold,
             Optional<AcceptIterationConditon>
@@ -107,7 +107,7 @@ public class MorphologicalErosion {
             ) throws CreateException {
 
         bvb.invert();
-        BinaryVoxels<ByteBuffer> dilated =
+        BinaryVoxels<UnsignedByteBuffer> dilated =
                 MorphologicalDilation.dilate(
                         bvb,
                         do3D,

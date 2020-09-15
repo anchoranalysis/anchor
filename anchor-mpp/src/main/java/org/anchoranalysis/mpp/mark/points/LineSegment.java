@@ -30,8 +30,8 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.PointConverter;
-import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.points.BoundingBoxFromPoints;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMembershipUtilities;
 import org.anchoranalysis.mpp.mark.GlobalRegionIdentifiers;
@@ -106,7 +106,7 @@ public class LineSegment extends Mark {
     }
 
     @Override
-    public int numDims() {
+    public int numberDimensions() {
         return 3;
     }
 

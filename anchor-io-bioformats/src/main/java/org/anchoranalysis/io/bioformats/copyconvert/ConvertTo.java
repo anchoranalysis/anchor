@@ -27,7 +27,7 @@
 package org.anchoranalysis.io.bioformats.copyconvert;
 
 import java.io.IOException;
-import java.nio.Buffer;
+import java.nio.ByteBuffer;
 import java.util.function.Function;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.image.extent.Dimensions;
@@ -38,9 +38,9 @@ import org.anchoranalysis.io.bioformats.DestinationChannelForIndex;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-/** Converts a subset of bytes from a byte[] to one or more destination Channels */
+/** Converts a subset of bytes from a byte[] to one or more destination channels. */
 @RequiredArgsConstructor
-public abstract class ConvertTo<T extends Buffer> {
+public abstract class ConvertTo<T> {
 
     private static Log log = LogFactory.getLog(ConvertTo.class);
 
@@ -50,59 +50,61 @@ public abstract class ConvertTo<T extends Buffer> {
     // END REQUIRED ARGUMENTS
 
     /**
-     * Copies the channels in the source buffer into a particular Channel
+     * Copies the channels in the source buffer into a particular {@link
+     * DestinationChannelForIndex}.
      *
      * @param dimensions scene-dimension
-     * @param src the buffer we copy all channels from
+     * @param source the buffer we copy all channels from
      * @param destination finds an appropriate destination channel for a particular
      *     relative-channel-index
      * @param z the current slice we are working on
-     * @param numChannelsPerByteArray the total number of channels found in any one instance of src
+     * @param numberChannelsPerArray the total number of channels found in any one instance of
+     *     {@code source} (more than 1 if interleaving is present)
      * @throws IOException
      */
     public void copyAllChannels(
             Dimensions dimensions,
-            byte[] src,
+            ByteBuffer source,
             DestinationChannelForIndex destination,
             int z,
-            int numChannelsPerByteArray)
+            int numberChannelsPerArray)
             throws IOException {
 
         log.debug(String.format("copy to byte %d start", z));
 
-        setupBefore(dimensions, numChannelsPerByteArray);
+        setupBefore(dimensions, numberChannelsPerArray);
 
-        for (int channelRelative = 0;
-                channelRelative < numChannelsPerByteArray;
-                channelRelative++) {
+        for (int channelIndexRelative = 0;
+                channelIndexRelative < numberChannelsPerArray;
+                channelIndexRelative++) {
 
-            VoxelBuffer<T> converted = convertSingleChannel(src, channelRelative);
-            copyBytesIntoDestination(converted, functionCast, destination, z, channelRelative);
+            VoxelBuffer<T> converted = convertSingleChannel(source, channelIndexRelative);
+            placeSliceInDestination(converted, functionCast, destination, z, channelIndexRelative);
         }
 
         log.debug(String.format("copy to byte %d end", z));
     }
 
     /**
-     * Always called before any batch of calls to convertSingleChannel
+     * Always called before any batch of calls to {@link #convertSingleChannel}.
      *
      * @param dimensions dimension
-     * @param numChannelsPerByteArray the number of channels that are found in the byte-array that
+     * @param numberChannelsPerArray the number of channels that are found in the byte-array that
      *     will be passed to convertSingleChannel
      */
-    protected abstract void setupBefore(Dimensions dimensions, int numChannelsPerByteArray);
+    protected abstract void setupBefore(Dimensions dimensions, int numberChannelsPerArray);
 
     /**
-     * Converts a single-channel only
+     * Converts a single-channel only.
      *
-     * @param src source buffer containing the bytes we copy from
-     * @param channelIndexRelative 0 if the buffer contains only 1 channel per byte array, or
-     *     otherwise the index of the channel
+     * @param source source buffer containing the bytes we copy from
+     * @param channelIndexRelative 0 if the buffer is non interleaved, or otherwise the index of the
+     *     channel among the interleaved channels (which is only supported for 8-bit data)
      */
-    protected abstract VoxelBuffer<T> convertSingleChannel(byte[] src, int channelIndexRelative)
-            throws IOException;
+    protected abstract VoxelBuffer<T> convertSingleChannel(
+            ByteBuffer source, int channelIndexRelative) throws IOException;
 
-    public static <S extends Buffer> void copyBytesIntoDestination(
+    public static <S> void placeSliceInDestination(
             VoxelBuffer<S> voxelBuffer,
             Function<VoxelsWrapper, Voxels<S>> functionCast,
             DestinationChannelForIndex destination,

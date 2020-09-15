@@ -27,7 +27,6 @@
 package org.anchoranalysis.mpp.mark;
 
 import java.io.Serializable;
-import java.nio.ByteBuffer;
 import java.util.Optional;
 import java.util.function.DoubleUnaryOperator;
 import lombok.NoArgsConstructor;
@@ -36,11 +35,13 @@ import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.PointConverter;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
-import org.anchoranalysis.core.unit.SpatialConversionUtilities.UnitSuffix;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
-import org.anchoranalysis.image.extent.BoundingBox;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.extent.Resolution;
+import org.anchoranalysis.image.extent.SpatialUnits.UnitSuffix;
+import org.anchoranalysis.image.extent.UnitConverter;
+import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.object.properties.ObjectWithProperties;
 import org.anchoranalysis.image.scale.ScaleFactor;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMembershipWithFlags;
@@ -89,13 +90,14 @@ public abstract class Mark implements Serializable, Identifiable {
 
     /**
      * Scales the mark in X and Y dimensions.
-     * 
+     *
      * @param scaleFactor how much to scale by.
-     * @throws OptionalOperationUnsupportedException if the type of mark used in the annotation does not supported scaling.
+     * @throws OptionalOperationUnsupportedException if the type of mark used in the annotation does
+     *     not supported scaling.
      */
     public abstract void scale(double scaleFactor) throws OptionalOperationUnsupportedException;
 
-    public abstract int numDims();
+    public abstract int numberDimensions();
 
     // center point
     public abstract Point3d centerPoint();
@@ -148,18 +150,18 @@ public abstract class Mark implements Serializable, Identifiable {
         for (point.setZ(box.cornerMin().z()); point.z() <= maxPos.z(); point.incrementZ()) {
 
             int zLocal = point.z() - box.cornerMin().z();
-            ByteBuffer maskSlice = object.sliceBufferLocal(zLocal);
+            UnsignedByteBuffer maskSlice = object.sliceBufferLocal(zLocal);
 
-            int cnt = 0;
+            int count = 0;
             for (point.setY(box.cornerMin().y()); point.y() <= maxPos.y(); point.incrementY()) {
                 for (point.setX(box.cornerMin().x()); point.x() <= maxPos.x(); point.incrementX()) {
 
                     byte membership = evalPointInside(point);
 
                     if (rm.isMemberFlag(membership)) {
-                        maskSlice.put(cnt, maskOn);
+                        maskSlice.putRaw(count, maskOn);
                     }
-                    cnt++;
+                    count++;
                 }
             }
         }
@@ -187,12 +189,12 @@ public abstract class Mark implements Serializable, Identifiable {
         for (point.setZ(box.cornerMin().z()); point.z() <= maxPos.z(); point.incrementZ()) {
 
             int zLocal = point.z() - box.cornerMin().z();
-            ByteBuffer maskSlice = object.sliceBufferLocal(zLocal);
+            UnsignedByteBuffer maskSlice = object.sliceBufferLocal(zLocal);
 
             // Z coordinates are the same as we only scale in XY
             pointScaled.setZ(point.z());
 
-            int cnt = 0;
+            int count = 0;
             for (point.setY(box.cornerMin().y()); point.y() <= maxPos.y(); point.incrementY()) {
                 for (point.setX(box.cornerMin().x()); point.x() <= maxPos.x(); point.incrementX()) {
 
@@ -202,9 +204,9 @@ public abstract class Mark implements Serializable, Identifiable {
                     byte membership = isPointInside(pointScaled);
 
                     if (rm.isMemberFlag(membership)) {
-                        maskSlice.put(cnt, maskOn);
+                        maskSlice.putRaw(count, maskOn);
                     }
-                    cnt++;
+                    count++;
                 }
             }
         }
@@ -224,31 +226,35 @@ public abstract class Mark implements Serializable, Identifiable {
         this.id = id;
     }
 
-    public OverlayProperties generateProperties(Resolution res) {
+    public OverlayProperties generateProperties(Resolution resolution) {
 
         OverlayProperties nvc = new OverlayProperties();
         nvc.add("Type", getName());
         nvc.add("ID", Integer.toString(getId()));
-        if (res == null) {
+        if (resolution == null) {
             return nvc;
         }
 
-        addPropertiesForRegions(nvc, res);
+        addPropertiesForRegions(nvc, resolution.unitConvert());
         return nvc;
     }
 
-    private void addPropertiesForRegions(OverlayProperties nvc, Resolution res) {
-        for (int r = 0; r < numberRegions(); r++) {
-            double vol = volume(r);
+    private void addPropertiesForRegions(OverlayProperties nvc, UnitConverter unitConverter) {
+        for (int region = 0; region < numberRegions(); region++) {
+            double vol = volume(region);
 
-            String name = numDims() == 3 ? "Volume" : "Area";
+            String name = numberDimensions() == 3 ? "Volume" : "Area";
 
-            UnitSuffix unit = numDims() == 3 ? UnitSuffix.CUBIC_MICRO : UnitSuffix.SQUARE_MICRO;
+            UnitSuffix unit =
+                    numberDimensions() == 3 ? UnitSuffix.CUBIC_MICRO : UnitSuffix.SQUARE_MICRO;
 
             DoubleUnaryOperator conversionFunc =
-                    numDims() == 3 ? res::convertVolume : res::convertArea;
+                    numberDimensions() == 3
+                            ? unitConverter::toPhysicalVolume
+                            : unitConverter::toPhysicalArea;
 
-            nvc.addWithUnits(String.format("%s [geom] %d", name, r), vol, conversionFunc, unit);
+            nvc.addWithUnits(
+                    String.format("%s [geom] %d", name, region), vol, conversionFunc, unit);
         }
     }
 }

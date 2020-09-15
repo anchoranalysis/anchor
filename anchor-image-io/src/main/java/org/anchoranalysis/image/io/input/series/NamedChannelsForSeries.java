@@ -63,8 +63,7 @@ public interface NamedChannelsForSeries extends ChannelGetter {
 
     Dimensions dimensions() throws RasterIOException;
 
-    void addAsSeparateChannels(
-            NamedStacks stacks, int timeIndex, ProgressReporter progressReporter)
+    void addAsSeparateChannels(NamedStacks stacks, int timeIndex, ProgressReporter progressReporter)
             throws OperationFailedException;
 
     void addAsSeparateChannels(NamedProviderStore<TimeSequence> stacks, int timeIndex)

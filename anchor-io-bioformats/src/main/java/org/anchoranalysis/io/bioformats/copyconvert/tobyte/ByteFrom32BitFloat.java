@@ -28,46 +28,40 @@ package org.anchoranalysis.io.bioformats.copyconvert.tobyte;
 
 import java.nio.ByteBuffer;
 import loci.common.DataTools;
-import org.anchoranalysis.image.extent.Dimensions;
-import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
-import org.anchoranalysis.image.voxel.buffer.VoxelBufferByte;
+import lombok.RequiredArgsConstructor;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 
+@RequiredArgsConstructor
 public class ByteFrom32BitFloat extends ConvertToByte {
 
-    private static final int BYTES_PER_PIXEL = 4;
-
-    private int sizeXY;
-    private int sizeBytes;
-
-    private boolean littleEndian;
-
-    public ByteFrom32BitFloat(boolean littleEndian) {
-        super();
-        this.littleEndian = littleEndian;
-    }
+    // START REQUIRED ARGUMENTS
+    private final boolean littleEndian;
+    // END REQUIRED ARGUMENTS
 
     @Override
-    protected void setupBefore(Dimensions dimensions, int numChannelsPerByteArray) {
-        sizeXY = dimensions.x() * dimensions.y();
-        sizeBytes = sizeXY * BYTES_PER_PIXEL;
-    }
+    protected UnsignedByteBuffer convert(ByteBuffer source, int channelIndexRelative) {
 
-    @Override
-    protected VoxelBuffer<ByteBuffer> convertSingleChannel(byte[] src, int channelRelative) {
-        byte[] crntChannelBytes = new byte[sizeXY];
+        UnsignedByteBuffer destination = allocateBuffer();
 
-        int indOut = 0;
-        for (int indIn = 0; indIn < sizeBytes; indIn += BYTES_PER_PIXEL) {
-            float f = DataTools.bytesToFloat(src, indIn, littleEndian);
+        byte[] sourceArray = source.array();
 
-            if (f > 255) {
-                f = 255;
+        for (int indexIn = 0; indexIn < sizeBytes; indexIn += bytesPerPixel) {
+            float value = DataTools.bytesToFloat(sourceArray, indexIn, littleEndian);
+
+            if (value > 255) {
+                value = 255;
             }
-            if (f < 0) {
-                f = 0;
+            if (value < 0) {
+                value = 0;
             }
-            crntChannelBytes[indOut++] = (byte) (f);
+            destination.putFloat(value);
         }
-        return VoxelBufferByte.wrap(crntChannelBytes);
+
+        return destination;
+    }
+
+    @Override
+    protected int calculateBytesPerPixel(int numberChannelsPerArray) {
+        return 4;
     }
 }

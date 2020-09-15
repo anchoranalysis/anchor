@@ -147,7 +147,7 @@ public class SequentialSession<T extends FeatureInput> implements FeatureCalcula
         checkIsStarted();
 
         try {
-            return replaceSession.createOrReuse(params).calc(featuresSubset);
+            return replaceSession.createOrReuse(params).calculate(featuresSubset);
         } catch (CreateException e) {
             throw new NamedFeatureCalculateException(e);
         }
@@ -206,7 +206,7 @@ public class SequentialSession<T extends FeatureInput> implements FeatureCalcula
             Feature<T> f = listFeatures.get(i);
 
             try {
-                res.set(i, cacheableParams.calc(f));
+                res.set(i, cacheableParams.calculate(f));
 
             } catch (FeatureCalculationException e) {
                 if (reportErrors) {
@@ -232,7 +232,7 @@ public class SequentialSession<T extends FeatureInput> implements FeatureCalcula
             Feature<T> feature = listFeatures.get(i);
 
             try {
-                double val = sessionInput.calc(feature);
+                double val = sessionInput.calculate(feature);
                 res.set(i, val);
             } catch (FeatureCalculationException e) {
                 throw new NamedFeatureCalculateException(feature.getFriendlyName(), e.getMessage());

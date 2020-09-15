@@ -26,28 +26,30 @@
 
 package org.anchoranalysis.image.voxel.factory;
 
-import java.nio.Buffer;
-import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
-import java.nio.ShortBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedIntBuffer;
+import org.anchoranalysis.image.convert.UnsignedShortBuffer;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.factory.VoxelDataTypeFactoryMultiplexer;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
-import org.anchoranalysis.image.voxel.pixelsforslice.PixelsForSlice;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeFactoryMultiplexer;
+import org.anchoranalysis.image.voxel.sliceindex.SliceBufferIndex;
 
-public class VoxelsFactory
-        extends VoxelDataTypeFactoryMultiplexer<VoxelsFactoryTypeBound<? extends Buffer>> {
+public class VoxelsFactory extends VoxelDataTypeFactoryMultiplexer<VoxelsFactoryTypeBound<?>> {
 
     // Singleton
     private static VoxelsFactory instance;
 
-    private static final VoxelsFactoryTypeBound<ByteBuffer> FACTORY_BYTE = new FactoryByte();
-    private static final VoxelsFactoryTypeBound<ShortBuffer> FACTORY_SHORT = new FactoryShort();
-    private static final VoxelsFactoryTypeBound<IntBuffer> FACTORY_INT = new FactoryInt();
-    private static final VoxelsFactoryTypeBound<FloatBuffer> FACTORY_FLOAT = new FactoryFloat();
+    private static final VoxelsFactoryTypeBound<UnsignedByteBuffer> FACTORY_BYTE =
+            new FactoryUnsignedByte();
+    private static final VoxelsFactoryTypeBound<UnsignedShortBuffer> FACTORY_SHORT =
+            new FactoryUnsignedShort();
+    private static final VoxelsFactoryTypeBound<UnsignedIntBuffer> FACTORY_INT =
+            new FactoryUnsignedInt();
+    private static final VoxelsFactoryTypeBound<FloatBuffer> FACTORY_FLOAT =
+            new FactoryUnsignedFloat();
 
     private VoxelsFactory() {
         super(FACTORY_BYTE, FACTORY_SHORT, FACTORY_INT, FACTORY_FLOAT);
@@ -61,8 +63,7 @@ public class VoxelsFactory
         return instance;
     }
 
-    public <T extends Buffer> VoxelsWrapper create(
-            PixelsForSlice<T> pixelsForPlane, VoxelDataType dataType) {
+    public <T> VoxelsWrapper create(SliceBufferIndex<T> pixelsForPlane, VoxelDataType dataType) {
         @SuppressWarnings("unchecked")
         VoxelsFactoryTypeBound<T> factory = (VoxelsFactoryTypeBound<T>) get(dataType);
         Voxels<T> buffer = factory.create(pixelsForPlane);
@@ -71,19 +72,19 @@ public class VoxelsFactory
 
     public VoxelsWrapper create(Extent e, VoxelDataType dataType) {
         VoxelsFactoryTypeBound<?> factory = get(dataType);
-        Voxels<? extends Buffer> buffer = factory.createInitialized(e);
+        Voxels<?> buffer = factory.createInitialized(e);
         return new VoxelsWrapper(buffer);
     }
 
-    public static VoxelsFactoryTypeBound<ByteBuffer> getByte() {
+    public static VoxelsFactoryTypeBound<UnsignedByteBuffer> getByte() {
         return FACTORY_BYTE;
     }
 
-    public static VoxelsFactoryTypeBound<ShortBuffer> getShort() {
+    public static VoxelsFactoryTypeBound<UnsignedShortBuffer> getShort() {
         return FACTORY_SHORT;
     }
 
-    public static VoxelsFactoryTypeBound<IntBuffer> getInt() {
+    public static VoxelsFactoryTypeBound<UnsignedIntBuffer> getInt() {
         return FACTORY_INT;
     }
 

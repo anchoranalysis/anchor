@@ -25,28 +25,28 @@
  */
 package org.anchoranalysis.image.voxel.assigner;
 
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.Voxels;
 
-class ByteImplementation extends Base<ByteBuffer> {
+class ByteImplementation extends Base<UnsignedByteBuffer> {
 
     private final byte valueCast;
 
-    public ByteImplementation(Voxels<ByteBuffer> voxels, int valueToAssign) {
+    public ByteImplementation(Voxels<UnsignedByteBuffer> voxels, int valueToAssign) {
         super(voxels, valueToAssign);
 
         valueCast = (byte) valueToAssign;
     }
 
     @Override
-    protected void assignToEntireBuffer(ByteBuffer buffer) {
+    protected void assignToEntireBuffer(UnsignedByteBuffer buffer) {
         while (buffer.hasRemaining()) {
-            buffer.put(valueCast);
+            buffer.putRaw(valueCast);
         }
     }
 
     @Override
-    protected void assignAtBufferPosition(ByteBuffer buffer, int index) {
-        buffer.put(index, valueCast);
+    protected void assignAtBufferPosition(UnsignedByteBuffer buffer, int index) {
+        buffer.putRaw(index, valueCast);
     }
 }

@@ -32,6 +32,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import org.anchoranalysis.core.functional.FunctionalIterate;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 
@@ -40,6 +43,7 @@ import org.anchoranalysis.feature.bean.list.FeatureList;
  *
  * @author Owen Feehan
  */
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class FeatureNameList implements Iterable<String> {
 
     private List<String> delegate;
@@ -77,15 +81,6 @@ public class FeatureNameList implements Iterable<String> {
             out.add(delegate.get(i), i);
         }
         return out;
-    }
-
-    /**
-     * Inserts a new feature-name at the beginning of the list
-     *
-     * @param name feature-name
-     */
-    public void insertBeginning(String name) {
-        delegate.add(0, name);
     }
 
     public FeatureNameList shallowCopy() {
@@ -135,6 +130,24 @@ public class FeatureNameList implements Iterable<String> {
         for (Feature<?> f : list) {
             delegate.add(prefix + f.getCustomName());
         }
+    }
+
+    /**
+     * Inserts a new feature-name at the beginning of the list
+     *
+     * @param name feature-name
+     */
+    public void insertBeginning(String name) {
+        delegate.add(0, name);
+    }
+
+    /**
+     * Inserts new feature-names at the beginning of the list
+     *
+     * @param names the feature-names to insert
+     */
+    public void insertBeginning(String[] names) {
+        FunctionalIterate.reverseIterateArray(names, this::insertBeginning);
     }
 
     @Override

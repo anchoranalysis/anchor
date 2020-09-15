@@ -26,9 +26,8 @@
 
 package org.anchoranalysis.image.voxel.kernel;
 
-import java.nio.ByteBuffer;
 import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.convert.ByteConverter;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.Voxels;
 
 // Erosion with a 3x3 or 3x3x3 kernel
@@ -36,11 +35,11 @@ public class ConditionalKernel extends BinaryKernel {
 
     private BinaryKernel kernel;
     private int minValue;
-    private Voxels<ByteBuffer> voxelsIntensity;
+    private Voxels<UnsignedByteBuffer> voxelsIntensity;
 
     // Constructor
     public ConditionalKernel(
-            BinaryKernel kernel, int minValue, Voxels<ByteBuffer> voxelsIntensity) {
+            BinaryKernel kernel, int minValue, Voxels<UnsignedByteBuffer> voxelsIntensity) {
         super(kernel.getSize());
         this.kernel = kernel;
         this.minValue = minValue;
@@ -48,23 +47,22 @@ public class ConditionalKernel extends BinaryKernel {
     }
 
     @Override
-    public boolean accptPos(int ind, Point3i point) {
+    public boolean acceptPoint(int ind, Point3i point) {
 
-        byte valByte =
+        int value =
                 voxelsIntensity
                         .sliceBuffer(point.z())
-                        .get(voxelsIntensity.extent().offsetSlice(point));
-        int val = ByteConverter.unsignedByteToInt(valByte);
+                        .getUnsigned(voxelsIntensity.extent().offsetSlice(point));
 
-        if (val < minValue) {
+        if (value < minValue) {
             return false;
         }
 
-        return kernel.accptPos(ind, point);
+        return kernel.acceptPoint(ind, point);
     }
 
     @Override
-    public void init(Voxels<ByteBuffer> in) {
+    public void init(Voxels<UnsignedByteBuffer> in) {
         kernel.init(in);
     }
 

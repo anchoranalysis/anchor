@@ -43,9 +43,9 @@ public class EdgeAdderParameters {
      */
     private final boolean preventObjectIntersection;
 
-    /** iff TRUE each combination of neighbors is tested only once, otherwise twice */
+    /** iff true each combination of neighbors is tested only once, otherwise twice */
     private boolean testBothDirections = false;
 
-    /** iff TRUE uses a big-neighborhood (8 or 26 connectivity) for dilation */
+    /** iff true uses a big-neighborhood (8 or 26 connectivity) for dilation */
     private boolean bigNeighborhood = false;
 }

@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.image.voxel;
 
-import java.nio.Buffer;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.experimental.Accessors;
@@ -37,7 +36,7 @@ import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.image.voxel.extracter.VoxelsExtracter;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactoryTypeBound;
-import org.anchoranalysis.image.voxel.pixelsforslice.PixelsForSlice;
+import org.anchoranalysis.image.voxel.sliceindex.SliceBufferIndex;
 
 /**
  * A box (3-dimensions) with voxel-data.
@@ -54,9 +53,9 @@ import org.anchoranalysis.image.voxel.pixelsforslice.PixelsForSlice;
  */
 @Accessors(fluent = true)
 @AllArgsConstructor
-public abstract class Voxels<T extends Buffer> {
+public abstract class Voxels<T> {
 
-    @Getter private final PixelsForSlice<T> slices;
+    @Getter private final SliceBufferIndex<T> slices;
     @Getter private final VoxelsFactoryTypeBound<T> factory;
 
     /** Methods to manipulate the voxel-values via arithmetic */
@@ -90,13 +89,11 @@ public abstract class Voxels<T extends Buffer> {
     }
 
     public Voxels<T> duplicate() {
-        Voxels<T> bufferAccess = factory.createInitialized(slices().extent());
+        Voxels<T> out = factory.createInitialized(slices().extent());
 
-        for (int z = 0; z < extent().z(); z++) {
-            bufferAccess.replaceSlice(z, slice(z).duplicate());
-        }
+        extent().iterateOverZ(z -> out.replaceSlice(z, slice(z).duplicate()));
 
-        return bufferAccess;
+        return out;
     }
 
     /**
@@ -120,16 +117,7 @@ public abstract class Voxels<T extends Buffer> {
                         z -> {
                             T buffer1 = sliceBuffer(z);
                             T buffer2 = (T) other.sliceBuffer(z);
-
-                            while (buffer1.hasRemaining()) {
-
-                                if (!areBufferValuesEqual(buffer1, buffer2)) {
-                                    return false;
-                                }
-                            }
-
-                            assert (!buffer2.hasRemaining());
-                            return true;
+                            return buffer1.equals(buffer2);
                         });
 
         return true;
@@ -146,15 +134,4 @@ public abstract class Voxels<T extends Buffer> {
     public void replaceSlice(int sliceIndexToUpdate, VoxelBuffer<T> bufferToAssign) {
         slices().replaceSlice(sliceIndexToUpdate, bufferToAssign);
     }
-
-    /**
-     * Checks if the current values from <i>two buffers are equal</i>
-     *
-     * <p>(i.e. by calling {@code get()} on the buffer)
-     *
-     * @param buffer1 provides first-value to compare
-     * @param buffer2 provides second-value to compare
-     * @return true iff the current values from both buffers are equal to each other
-     */
-    protected abstract boolean areBufferValuesEqual(T buffer1, T buffer2);
 }

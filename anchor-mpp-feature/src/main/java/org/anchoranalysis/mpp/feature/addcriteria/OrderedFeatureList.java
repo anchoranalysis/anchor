@@ -34,7 +34,7 @@ import org.anchoranalysis.feature.input.FeatureInput;
 public interface OrderedFeatureList<T extends FeatureInput> {
 
     /**
-     * A list of features used to determine the add-criteria, or NULL if irrelevant. The order
+     * A list of features used to determine the add-criteria, or null if irrelevant. The order
      * features appear in this list, will be used to determine the FeatureSessionCreateParams passed
      * to generateEdge()
      *

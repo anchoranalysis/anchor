@@ -34,6 +34,7 @@ import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.extent.Resolution;
+import org.anchoranalysis.image.extent.UnitConverter;
 
 @AllArgsConstructor
 @EqualsAndHashCode
@@ -43,6 +44,10 @@ public abstract class FeatureInputEnergy implements FeatureInputParams {
 
     public FeatureInputEnergy() {
         this(Optional.empty());
+    }
+
+    public Optional<UnitConverter> getUnitConverterOptional() {
+        return getResolutionOptional().map(Resolution::unitConvert);
     }
 
     @Override

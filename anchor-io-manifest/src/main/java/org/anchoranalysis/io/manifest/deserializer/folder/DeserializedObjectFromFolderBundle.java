@@ -73,7 +73,7 @@ public class DeserializedObjectFromFolderBundle<T extends Serializable>
         int bundleIndex =
                 orderProvider.order(String.valueOf(index)) / bundleParameters.getBundleSize();
 
-        // This HashMap can contain NULL keys representing deliberately null objects
+        // This HashMap can contain null keys representing deliberately null objects
         Map<Integer, T> map = this.cache.get(bundleIndex);
 
         if (!map.containsKey(index)) {

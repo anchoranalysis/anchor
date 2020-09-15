@@ -26,29 +26,28 @@
 
 package org.anchoranalysis.image.object.factory.unionfind;
 
-import java.nio.Buffer;
-import java.nio.IntBuffer;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
+import org.anchoranalysis.image.convert.UnsignedIntBuffer;
 import org.anchoranalysis.image.voxel.Voxels;
-import org.anchoranalysis.image.voxel.iterator.ProcessVoxelSliceBuffer;
+import org.anchoranalysis.image.voxel.iterator.process.ProcessBufferUnary;
 
-class PopulateIndexProcessor<T extends Buffer> implements ProcessVoxelSliceBuffer<T> {
+class PopulateIndexProcessor<T> implements ProcessBufferUnary<T> {
 
-    private Voxels<IntBuffer> indexBuffer;
+    private Voxels<UnsignedIntBuffer> indexBuffer;
     private MergeWithNeighbors mergeWithNeighbors;
     private BinaryValues bv;
     private BinaryValuesByte bvb;
     private final BufferReadWrite<T> bufferReaderWriter;
 
-    private IntBuffer bbIndex;
+    private UnsignedIntBuffer bufferIndex;
     private int count = 1;
 
     public PopulateIndexProcessor(
             BinaryVoxels<T> visited,
-            Voxels<IntBuffer> indexBuffer,
+            Voxels<UnsignedIntBuffer> indexBuffer,
             MergeWithNeighbors mergeWithNeighbors,
             BufferReadWrite<T> bufferReaderWriter) {
         this.indexBuffer = indexBuffer;
@@ -61,7 +60,7 @@ class PopulateIndexProcessor<T extends Buffer> implements ProcessVoxelSliceBuffe
 
     @Override
     public void notifyChangeSlice(int z) {
-        bbIndex = indexBuffer.sliceBuffer(z);
+        bufferIndex = indexBuffer.sliceBuffer(z);
         if (z != 0) {
             mergeWithNeighbors.shift();
         }
@@ -70,16 +69,16 @@ class PopulateIndexProcessor<T extends Buffer> implements ProcessVoxelSliceBuffe
     @Override
     public void process(Point3i point, T buffer, int offsetSlice) {
         if (bufferReaderWriter.isBufferOn(buffer, offsetSlice, bv, bvb)
-                && bbIndex.get(offsetSlice) == 0) {
+                && bufferIndex.getRaw(offsetSlice) == 0) {
 
             int neighborLabel = mergeWithNeighbors.minNeighborLabel(point, 0, offsetSlice);
             if (neighborLabel == -1) {
-                bufferReaderWriter.putBufferCnt(buffer, offsetSlice, count);
-                bbIndex.put(offsetSlice, count);
+                bufferReaderWriter.putBufferCount(buffer, offsetSlice, count);
+                bufferIndex.putRaw(offsetSlice, count);
                 mergeWithNeighbors.addElement(count);
                 count++;
             } else {
-                bbIndex.put(offsetSlice, neighborLabel);
+                bufferIndex.put(offsetSlice, neighborLabel);
             }
         }
     }

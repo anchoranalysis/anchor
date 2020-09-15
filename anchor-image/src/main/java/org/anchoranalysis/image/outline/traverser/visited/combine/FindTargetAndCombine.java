@@ -41,7 +41,7 @@ class FindTargetAndCombine {
     /**
      * Tries to combine the first path from the list with another (closest by distance).
      *
-     * <p>Returns TRUE when a successful combination occurs, FALSE otherwise
+     * <p>Returns true when a successful combination occurs, false otherwise
      */
     public boolean combineAnyTwoPaths() {
 

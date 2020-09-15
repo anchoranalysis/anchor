@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.image.interpolator.transfer;
 
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.interpolator.Interpolator;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
@@ -38,9 +38,9 @@ import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 //   type which messes up our scaling
 public class TransferViaByte implements Transfer {
 
-    private final Voxels<ByteBuffer> source;
-    private final Voxels<ByteBuffer> destination;
-    private VoxelBuffer<ByteBuffer> slice;
+    private final Voxels<UnsignedByteBuffer> source;
+    private final Voxels<UnsignedByteBuffer> destination;
+    private VoxelBuffer<UnsignedByteBuffer> slice;
 
     public TransferViaByte(VoxelsWrapper source, VoxelsWrapper destination) {
         this.source = source.asByte();
@@ -59,8 +59,8 @@ public class TransferViaByte implements Transfer {
 
     @Override
     public void transferTo(int z, Interpolator interpolator) {
-        VoxelBuffer<ByteBuffer> bufIn = destination.slice(z);
-        VoxelBuffer<ByteBuffer> bufOut =
+        VoxelBuffer<UnsignedByteBuffer> bufIn = destination.slice(z);
+        VoxelBuffer<UnsignedByteBuffer> bufOut =
                 interpolator.interpolateByte(slice, bufIn, source.extent(), destination.extent());
         if (!bufOut.equals(bufIn)) {
             destination.replaceSlice(z, bufOut);

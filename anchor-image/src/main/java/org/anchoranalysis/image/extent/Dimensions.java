@@ -34,11 +34,12 @@ import lombok.experimental.Accessors;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
+import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.scale.ScaleFactor;
 import org.anchoranalysis.image.scale.ScaleFactorUtilities;
 
 /**
- * The dimensions of an image (in voxels), together with the image resolution
+ * The dimensions of an image (in voxels), together with the image resolution.
  *
  * <p>This class is <b>immutable</b>.
  */
@@ -95,7 +96,7 @@ public final class Dimensions implements Serializable {
         return new Dimensions(extent.duplicateChangeZ(z), resolution);
     }
 
-    public Dimensions duplicateChangeRes(Resolution resolutionToAssign) {
+    public Dimensions duplicateChangeResolution(Resolution resolutionToAssign) {
         return new Dimensions(extent, resolutionToAssign);
     }
 
@@ -146,5 +147,30 @@ public final class Dimensions implements Serializable {
     @Override
     public String toString() {
         return extent.toString();
+    }
+
+    /**
+     * Converts voxelized measurements to/from physical units.
+     *
+     * @return a converter that will perform conversions using current resolution.
+     */
+    public UnitConverter unitConvert() {
+        return resolution.unitConvert();
+    }
+
+    /**
+     * Checks equality betwen this object and another {@link Dimensions}, maybe not comparing
+     * image-resolution.
+     *
+     * @param other the object to compare with
+     * @param compareResolution if true image resolution is compared, otherwise it is ignored.
+     * @return true iff the two objects are equal by the above criteria.
+     */
+    public boolean equals(Dimensions other, boolean compareResolution) {
+        if (compareResolution) {
+            return equals(other);
+        } else {
+            return extent.equals(other.extent);
+        }
     }
 }

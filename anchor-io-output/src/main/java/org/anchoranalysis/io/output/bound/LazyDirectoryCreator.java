@@ -56,7 +56,10 @@ class LazyDirectoryCreator implements WriterExecuteBeforeEveryOperation {
     /** Whether to delete the existing directory if it exists */
     private final boolean deleteExisting;
 
-    /** A parent whose {@link #execute} is called before our {@link #execute} is called (if empty(), ignored) */
+    /**
+     * A parent whose {@link #execute} is called before our {@link #execute} is called (if empty(),
+     * ignored)
+     */
     private final Optional<WriterExecuteBeforeEveryOperation> parent;
     // END REQUIRED ARGUMENTS
 

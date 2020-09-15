@@ -26,11 +26,15 @@
 
 package org.anchoranalysis.image.index;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.extent.BoundingBox;
+import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 
@@ -38,18 +42,18 @@ import org.anchoranalysis.image.object.ObjectMask;
  * An R-Tree of object-masks (indexed via a derived bounding-box).
  *
  * @see <a href="https://en.wikipedia.org/wiki/R-tree">R-tree on Wikipedia</a>
- * @see BoundingBoxRTree for a related structure operating only on bounding-boxes
+ * @see RTree for a related structure operating only on bounding-boxes
  * @author Owen Feehan
  */
 @Accessors(fluent = true)
 public class ObjectCollectionRTree {
 
     /** An r-tree that stores indices of the objects for each bounding-box */
-    private BoundingBoxRTree tree;
+    private RTree<Integer> tree;
 
     /** All objects stored in the r-tree (whose order corresponds to indices in {@code delegate} */
     @Getter private ObjectCollection objects;
-
+    
     /**
      * Creates an r-tree for particular objects.
      *
@@ -57,10 +61,9 @@ public class ObjectCollectionRTree {
      */
     public ObjectCollectionRTree(ObjectCollection objects) {
         this.objects = objects;
-        tree = new BoundingBoxRTree(objects.size());
-
-        for (int i = 0; i < objects.size(); i++) {
-            tree.add(i, objects.get(i).boundingBox());
+        tree = new RTree<>(objects.size());
+        for( int i=0; i<objects.size(); i++) {
+            tree.add( objects.get(i).boundingBox(), i );
         }
     }
 
@@ -71,13 +74,19 @@ public class ObjectCollectionRTree {
                 .filterSubset(object -> object.contains(point), tree.contains(point));
     }
 
-    public ObjectCollection intersectsWith(ObjectMask object) {
+    /**
+     * All objects that intersect with another object.
+     * 
+     * @param objectToIntersectWith the object with which other object should intersect
+     * @return a newly created collection of all objects that intersect with {@code objectToIntersectWith}.
+     */
+    public ObjectCollection intersectsWith(ObjectMask objectToIntersectWith) {
         // We do an additional check to make sure the point is inside the object,
         //  as points can be inside the Bounding Box but not inside the object
         return objects.stream()
                 .filterSubset(
-                        omInd -> omInd.hasIntersectingVoxels(object),
-                        tree.intersectsWith(object.boundingBox()));
+                        object -> object.hasIntersectingVoxels(objectToIntersectWith),
+                        tree.intersectsWith(objectToIntersectWith.boundingBox()));
     }
 
     public ObjectCollection intersectsWith(BoundingBox box) {
@@ -86,5 +95,53 @@ public class ObjectCollectionRTree {
 
     public List<Integer> intersectsWithAsIndices(BoundingBox box) {
         return tree.intersectsWith(box);
+    }
+    
+    /**
+     * Splits the collection of objects into spatially separate <i>clusters</i>.
+     * 
+     * <p>Any objects whose bounding-boxes intersect belong to the same cluster, but otherwise
+     * not.
+     * 
+     * <p>This is similar to a simplified <a href="https://en.wikipedia.org/wiki/DBSCAN">DB Scan algorithm</a>.
+     * 
+     * @return a list of object-collections, each object-collection is guaranteed to be spatially separate from the others.
+     */
+    public List<ObjectCollection> spatiallySeperate() {
+        Set<Integer> unprocessed = IntStream.range(0, objects.size()).boxed().collect( Collectors.toSet() );
+        List<ObjectCollection> out = new ArrayList<>();
+        
+        while(!unprocessed.isEmpty()) {
+            
+            Integer identifier = unprocessed.iterator().next();
+            
+            ObjectCollection spatiallyConnected = new ObjectCollection();
+            addSpatiallyConnected(spatiallyConnected.asList(), identifier, unprocessed);
+            out.add(spatiallyConnected);
+        }
+        assert(unprocessed.isEmpty());
+        return out;
+    }
+    
+    private void addSpatiallyConnected( List<ObjectMask> spatiallyConnected, Integer identifier, Set<Integer> unprocessed ) {
+
+        unprocessed.remove(identifier);
+        
+        
+        ObjectMask source = objects.get(identifier);
+        spatiallyConnected.add(source);
+        List<Integer> queue = tree.intersectsWith( source.boundingBox() );
+        
+        while(!queue.isEmpty()) {
+            Integer current = queue.remove(0);
+            
+            if (unprocessed.contains(current)) {
+                unprocessed.remove(current);
+        
+                ObjectMask currentObject = objects.get(current);
+                spatiallyConnected.add(currentObject);
+                queue.addAll( tree.intersectsWith( currentObject.boundingBox() ) );
+            }
+        }
     }
 }

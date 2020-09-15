@@ -40,7 +40,7 @@ import org.anchoranalysis.feature.input.FeatureInput;
 public class Sum<T extends FeatureInput> extends FeatureListElem<T> {
 
     // START BEAN PROPERTIES
-    /** If TRUE, we ignore any NaN values. Otherwise the sum becomes NaN */
+    /** If true, we ignore any NaN values. Otherwise the sum becomes NaN */
     @BeanField @Getter @Setter private boolean ignoreNaN;
     // END BEAN PROPERTIES
 
@@ -54,7 +54,7 @@ public class Sum<T extends FeatureInput> extends FeatureListElem<T> {
         double result = 0;
 
         for (Feature<T> elem : getList()) {
-            double resultInd = input.calc(elem);
+            double resultInd = input.calculate(elem);
 
             if (ignoreNaN && Double.isNaN(resultInd)) {
                 continue;

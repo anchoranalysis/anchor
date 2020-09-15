@@ -58,8 +58,8 @@ import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.io.bean.color.generator.ColorSetGenerator;
-import org.anchoranalysis.io.bean.color.generator.VeryBrightColorSetGenerator;
+import org.anchoranalysis.io.bean.color.list.ColorListFactory;
+import org.anchoranalysis.io.bean.color.list.VeryBright;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 /**
@@ -84,7 +84,7 @@ public class MultipleComparer extends AnchorBean<MultipleComparer> {
             AnnotationWithMarks annotation,
             DisplayStack background,
             Path annotationPath,
-            ColorSetGenerator colorSetGenerator,
+            ColorListFactory colorSetGenerator,
             Path modelDirectory,
             Logger logger,
             boolean debugMode)
@@ -129,7 +129,7 @@ public class MultipleComparer extends AnchorBean<MultipleComparer> {
             ObjectCollection compareObjects,
             DisplayStack background,
             String rightName,
-            ColorSetGenerator colorSetGenerator)
+            ColorListFactory colorSetGenerator)
             throws CreateException {
         // Don't know how it's possible for an object with 0 pixels to end up here, but it's somehow
         // happening, so we prevent it from interfereing
@@ -149,10 +149,7 @@ public class MultipleComparer extends AnchorBean<MultipleComparer> {
 
             ColorPool colorPool =
                     new ColorPool(
-                            assignment.numberPaired(),
-                            colorSetGenerator,
-                            new VeryBrightColorSetGenerator(),
-                            true);
+                            assignment.numberPaired(), colorSetGenerator, new VeryBright(), true);
 
             AssignmentGenerator generator =
                     AssignmentGeneratorFactory.createAssignmentGenerator(

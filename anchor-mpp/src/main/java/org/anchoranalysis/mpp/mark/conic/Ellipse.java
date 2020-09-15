@@ -43,9 +43,9 @@ import lombok.Setter;
 import org.anchoranalysis.core.geometry.Point2d;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
-import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.extent.Resolution;
+import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.object.properties.ObjectWithProperties;
 import org.anchoranalysis.image.orientation.Orientation;
 import org.anchoranalysis.image.orientation.Orientation2D;
@@ -370,7 +370,7 @@ public class Ellipse extends ConicBase implements Serializable {
     }
 
     @Override
-    public int numDims() {
+    public int numberDimensions() {
         return 2;
     }
 
@@ -380,7 +380,7 @@ public class Ellipse extends ConicBase implements Serializable {
     }
 
     @Override
-    public double[] createRadiiArrayResolved(Resolution res) {
+    public double[] createRadiiArrayResolved(Resolution resolution) {
         return twoElementArray(radii.x(), radii.y());
     }
 
@@ -395,10 +395,10 @@ public class Ellipse extends ConicBase implements Serializable {
     }
 
     private void addAxisOrientationProperties(
-            ObjectWithProperties object, RegionMembershipWithFlags rm) {
+            ObjectWithProperties object, RegionMembershipWithFlags region) {
 
         // NOTE can we do this more smartly?
-        double radiiFactor = rm.getRegionID() == 0 ? 1.0 : 1.0 + shellRad;
+        double radiiFactor = region.getRegionID() == 0 ? 1.0 : 1.0 + shellRad;
 
         double radiusProjectedX = radii.x() * radiiFactor;
 

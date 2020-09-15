@@ -26,11 +26,11 @@
 
 package org.anchoranalysis.io.bioformats.copyconvert.toint;
 
-import java.nio.IntBuffer;
+import org.anchoranalysis.image.convert.UnsignedIntBuffer;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
 import org.anchoranalysis.io.bioformats.copyconvert.ConvertTo;
 
-public abstract class ConvertToInt extends ConvertTo<IntBuffer> {
+public abstract class ConvertToInt extends ConvertTo<UnsignedIntBuffer> {
 
     public ConvertToInt() {
         super(VoxelsWrapper::asInt);

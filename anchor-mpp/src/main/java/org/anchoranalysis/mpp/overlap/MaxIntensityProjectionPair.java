@@ -26,11 +26,11 @@
 
 package org.anchoranalysis.mpp.overlap;
 
-import java.nio.ByteBuffer;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelsFactory;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.BoundedVoxels;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
@@ -38,12 +38,12 @@ import org.anchoranalysis.mpp.bean.regionmap.RegionMembershipWithFlags;
 
 public class MaxIntensityProjectionPair {
 
-    private final BoundedVoxels<ByteBuffer> voxelsProjected1;
-    private final BoundedVoxels<ByteBuffer> voxelsProjected2;
+    private final BoundedVoxels<UnsignedByteBuffer> voxelsProjected1;
+    private final BoundedVoxels<UnsignedByteBuffer> voxelsProjected2;
 
     public MaxIntensityProjectionPair(
-            BoundedVoxels<ByteBuffer> voxels1,
-            BoundedVoxels<ByteBuffer> voxels2,
+            BoundedVoxels<UnsignedByteBuffer> voxels1,
+            BoundedVoxels<UnsignedByteBuffer> voxels2,
             RegionMembershipWithFlags rmFlags1,
             RegionMembershipWithFlags rmFlags2) {
         voxelsProjected1 = intensityProjectionFor(voxels1, rmFlags1);
@@ -70,22 +70,23 @@ public class MaxIntensityProjectionPair {
         return Math.min(cnt1, cnt2);
     }
 
-    private static BinaryVoxels<ByteBuffer> createBinaryVoxelsForFlag(
-            Voxels<ByteBuffer> voxels, RegionMembershipWithFlags rmFlags) {
+    private static BinaryVoxels<UnsignedByteBuffer> createBinaryVoxelsForFlag(
+            Voxels<UnsignedByteBuffer> voxels, RegionMembershipWithFlags rmFlags) {
 
-        Voxels<ByteBuffer> voxelsOut = VoxelsFactory.getByte().createInitialized(voxels.extent());
+        Voxels<UnsignedByteBuffer> voxelsOut =
+                VoxelsFactory.getByte().createInitialized(voxels.extent());
 
         BinaryValuesByte bvb = BinaryValuesByte.getDefault();
 
         for (int z = 0; z < voxels.extent().z(); z++) {
 
-            ByteBuffer bb = voxels.sliceBuffer(z);
-            ByteBuffer bbOut = voxelsOut.sliceBuffer(z);
+            UnsignedByteBuffer buffer = voxels.sliceBuffer(z);
+            UnsignedByteBuffer bufferOut = voxelsOut.sliceBuffer(z);
 
             int offset = 0;
             for (int y = 0; y < voxels.extent().y(); y++) {
                 for (int x = 0; x < voxels.extent().x(); x++) {
-                    maybeOutputByte(offset++, bb, bbOut, bvb, rmFlags);
+                    maybeOutputByte(offset++, buffer, bufferOut, bvb, rmFlags);
                 }
             }
         }
@@ -95,25 +96,26 @@ public class MaxIntensityProjectionPair {
 
     private static void maybeOutputByte(
             int offset,
-            ByteBuffer bb,
-            ByteBuffer bbOut,
+            UnsignedByteBuffer buffer,
+            UnsignedByteBuffer bufferOut,
             BinaryValuesByte bvb,
             RegionMembershipWithFlags rmFlags) {
-        byte b = bb.get(offset);
+        byte b = buffer.getRaw(offset);
         if (rmFlags.isMemberFlag(b)) {
-            bbOut.put(offset, bvb.getOnByte());
+            bufferOut.putRaw(offset, bvb.getOnByte());
         } else {
             if (bvb.getOffByte() != 0) {
-                bbOut.put(offset, bvb.getOffByte());
+                bufferOut.putRaw(offset, bvb.getOffByte());
             }
         }
     }
 
-    private static BoundedVoxels<ByteBuffer> intensityProjectionFor(
-            BoundedVoxels<ByteBuffer> voxels, RegionMembershipWithFlags rmFlags) {
-        BinaryVoxels<ByteBuffer> voxelsBinary = createBinaryVoxelsForFlag(voxels.voxels(), rmFlags);
+    private static BoundedVoxels<UnsignedByteBuffer> intensityProjectionFor(
+            BoundedVoxels<UnsignedByteBuffer> voxels, RegionMembershipWithFlags rmFlags) {
+        BinaryVoxels<UnsignedByteBuffer> voxelsBinary =
+                createBinaryVoxelsForFlag(voxels.voxels(), rmFlags);
 
-        BoundedVoxels<ByteBuffer> voxelsBounded =
+        BoundedVoxels<UnsignedByteBuffer> voxelsBounded =
                 new BoundedVoxels<>(voxels.boundingBox(), voxelsBinary.voxels());
 
         return voxelsBounded.projectMax();

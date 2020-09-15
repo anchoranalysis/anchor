@@ -31,9 +31,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
+import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.arithmetic.RunningSum;
 import org.anchoranalysis.experiment.task.TaskStatistics;
-import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public class ConcurrentJobMonitor implements Iterable<SubmittedJob> {
@@ -119,9 +119,9 @@ public class ConcurrentJobMonitor implements Iterable<SubmittedJob> {
     public long getTotalNumberTasks() {
         return totalNumberJobs;
     }
-    
+
     private RunningSum runningSum(Predicate<JobState> predicate) {
-        return new RunningSum( sumExectionTime(predicate), numberJobs(predicate) );
+        return new RunningSum(sumExectionTime(predicate), numberJobs(predicate));
     }
 
     private long numberJobs(Predicate<JobState> predicate) {

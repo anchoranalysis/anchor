@@ -27,32 +27,33 @@
 package org.anchoranalysis.image.bean.nonbean.parameters;
 
 import java.util.Optional;
+import org.anchoranalysis.image.bean.segment.binary.BinarySegmentation;
 import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.histogram.Histogram;
 
-/** Parameters that are optionally associated with BinarySgmn */
+/** Parameters that are optionally associated with a {@link BinarySegmentation} */
 public class BinarySegmentationParameters {
 
     private Optional<Histogram> histogram;
-    private Optional<Resolution> res;
+    private Optional<Resolution> resolution;
 
     public BinarySegmentationParameters() {
-        this.res = Optional.empty();
+        this.resolution = Optional.empty();
         this.histogram = Optional.empty();
     }
 
-    public BinarySegmentationParameters(Resolution res) {
-        this(res, Optional.empty());
+    public BinarySegmentationParameters(Resolution resolution) {
+        this(resolution, Optional.empty());
     }
 
     /**
      * Constructor
      *
-     * @param res image-resolution
+     * @param resolution image-resolution
      * @param histogram a histogram describing the intensity-values of the entire channel
      */
-    public BinarySegmentationParameters(Resolution res, Optional<Histogram> histogram) {
-        this.res = Optional.of(res);
+    public BinarySegmentationParameters(Resolution resolution, Optional<Histogram> histogram) {
+        this.resolution = Optional.of(resolution);
         this.histogram = histogram;
     }
 
@@ -61,6 +62,6 @@ public class BinarySegmentationParameters {
     }
 
     public Optional<Resolution> getRes() {
-        return res;
+        return resolution;
     }
 }

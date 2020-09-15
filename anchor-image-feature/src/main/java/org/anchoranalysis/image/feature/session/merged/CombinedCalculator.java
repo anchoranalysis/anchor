@@ -84,8 +84,7 @@ class CombinedCalculator {
         this.features = features;
         this.include = include;
 
-        calculatorImage =
-                features.createCalculator(cc, soImage, CachingStrategies.cacheAndReuse());
+        calculatorImage = features.createCalculator(cc, soImage, CachingStrategies.cacheAndReuse());
 
         BoundReplaceStrategy<
                         FeatureInputSingleObject, CacheAndReuseStrategy<FeatureInputSingleObject>>
@@ -206,7 +205,7 @@ class CombinedCalculator {
      * Integer value from boolean
      *
      * @param b
-     * @return 0 for FALSE, 1 for TRUE
+     * @return 0 for false, 1 for true
      */
     private static int integerFromBoolean(boolean b) {
         return b ? 1 : 0;

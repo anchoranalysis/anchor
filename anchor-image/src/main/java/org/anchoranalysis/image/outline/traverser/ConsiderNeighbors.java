@@ -26,11 +26,11 @@
 
 package org.anchoranalysis.image.outline.traverser;
 
-import java.nio.ByteBuffer;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.object.ObjectMask;
 
 @AllArgsConstructor
@@ -109,11 +109,11 @@ class ConsiderNeighbors {
             return false;
         }
 
-        ByteBuffer bb = outline.sliceBufferLocal(point.z());
+        UnsignedByteBuffer buffer = outline.sliceBufferLocal(point.z());
         int offset = outline.extent().offsetSlice(point);
 
         // Check if the buffer allows us to read the pixel
-        if (bb.get(offset) == bvb.getOffByte()) {
+        if (buffer.getRaw(offset) == bvb.getOffByte()) {
             return false;
         }
 
@@ -122,7 +122,7 @@ class ConsiderNeighbors {
             return false;
         }
 
-        bb.put(offset, bvb.getOffByte());
+        buffer.putRaw(offset, bvb.getOffByte());
 
         return true;
     }

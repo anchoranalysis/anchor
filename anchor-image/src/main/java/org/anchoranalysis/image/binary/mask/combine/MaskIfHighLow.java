@@ -29,7 +29,7 @@ package org.anchoranalysis.image.binary.mask.combine;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.image.binary.mask.Mask;
-import org.anchoranalysis.image.voxel.iterator.IterateVoxels;
+import org.anchoranalysis.image.voxel.iterator.IterateVoxelsAll;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class MaskIfHighLow {
@@ -58,13 +58,13 @@ public class MaskIfHighLow {
         byte sourceOff = first.getOffByte();
         byte receiveOn = second.getOnByte();
 
-        IterateVoxels.callEachPointTwo(
+        IterateVoxelsAll.withTwoBuffers(
                 first.voxels(),
                 second.voxels(),
                 (point, bufferSource, bufferReceive, offset) -> {
-                    if (bufferSource.get(offset) == sourceOn
-                            && bufferReceive.get(offset) == receiveOn) {
-                        bufferSource.put(offset, sourceOff);
+                    if (bufferSource.getRaw(offset) == sourceOn
+                            && bufferReceive.getRaw(offset) == receiveOn) {
+                        bufferSource.putRaw(offset, sourceOff);
                     }
                 });
     }

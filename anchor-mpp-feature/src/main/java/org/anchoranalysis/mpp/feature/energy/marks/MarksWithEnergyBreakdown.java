@@ -241,7 +241,7 @@ public class MarksWithEnergyBreakdown implements Serializable {
                         getIndividual(),
                         index,
                         newMark,
-                        energyStack.getEnergyStack(),
+                        energyStack.withoutParams(),
                         marks.getEnergyScheme());
         try {
             VoxelizedMarkMemo oldPxlMarkMemo = wrapperInd.getMemoForMark(getMarks(), oldMark);
@@ -253,7 +253,7 @@ public class MarksWithEnergyBreakdown implements Serializable {
         assert (getPair().isMarksSpan(marks.getMarks()));
 
         // we can also calculate both afresh, but slower
-        updateTotal(wrapperInd, energyStack.getEnergyStack());
+        updateTotal(wrapperInd, energyStack.withoutParams());
 
         assert ((marks.getEnergyTotal()
                         - getIndividual().getEnergyTotal()

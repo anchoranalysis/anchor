@@ -27,7 +27,7 @@ package org.anchoranalysis.image.voxel.extracter;
 
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
-import org.anchoranalysis.image.extent.BoundingBox;
+import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.VoxelsPredicate;
 
@@ -42,10 +42,10 @@ import org.anchoranalysis.image.voxel.VoxelsPredicate;
 @AllArgsConstructor
 class PredicateAtCorner implements VoxelsPredicate {
 
-    /** The corner at which the voxels referred to by {@code delegate} are considered to exist */
+    /** The corner at which the voxels referred to by {@code delegate} are considered to exist. */
     private ReadableTuple3i corner;
 
-    /** Delegate */
+    /** Delegate. */
     private VoxelsPredicate delegate;
 
     @Override

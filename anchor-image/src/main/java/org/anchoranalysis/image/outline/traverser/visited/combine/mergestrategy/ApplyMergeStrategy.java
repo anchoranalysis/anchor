@@ -68,7 +68,7 @@ class ApplyMergeStrategy extends MergeStrategy {
      * Maybe reverses a list of points
      *
      * @param points
-     * @param reverseFlag iff TRUE, the points are reversed.
+     * @param reverseFlag iff true, the points are reversed.
      * @return either the existing list (if not reversed) or a newly created reversed list
      */
     private static List<Point3i> maybeReverse(List<Point3i> points, boolean reverseFlag) {
@@ -82,7 +82,7 @@ class ApplyMergeStrategy extends MergeStrategy {
     /**
      * @param toKeep the path which will be kept
      * @param toCombine the path which will be combined with toKeep
-     * @param insertLeft if TRUE toCombine is added at the start toKeep, if FALSE rather at the end
+     * @param insertLeft if true toCombine is added at the start toKeep, if false rather at the end
      */
     private static void appendListToPath(
             ContiguousVoxelPath toKeep, List<Point3i> toCombine, boolean insertLeft) {

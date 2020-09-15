@@ -26,13 +26,13 @@
 
 package org.anchoranalysis.image.binary.voxel;
 
-import java.nio.ByteBuffer;
-import java.nio.IntBuffer;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.image.binary.values.BinaryValues;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedIntBuffer;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
@@ -49,22 +49,24 @@ public class BinaryVoxelsFactory {
      * @param extent the size of the voxels
      * @return newly created binary-voxels of specified size with all voxels initialized to ON.
      */
-    public static BinaryVoxels<ByteBuffer> createEmptyOn(Extent extent) {
-        BinaryVoxels<ByteBuffer> voxels = createEmptyOff(extent);
+    public static BinaryVoxels<UnsignedByteBuffer> createEmptyOn(Extent extent) {
+        BinaryVoxels<UnsignedByteBuffer> voxels = createEmptyOff(extent);
         voxels.assignOn().toAll();
         return voxels;
     }
 
     /**
-     * Creates binary-voxels using unsigned 8-bit byte type and with all voxels set to OFF (0)
+     * Creates binary-voxels using unsigned 8-bit byte type and with all voxels set to <i>off</i>
+     * (0).
      *
      * @param extent the size of the voxels
-     * @return newly created binary-voxels of specified size with all voxels initialized to OFF.
+     * @return newly created binary-voxels of specified size with all voxels initialized to
+     *     <i>off</i>.
      */
     @SuppressWarnings("unchecked")
-    public static BinaryVoxels<ByteBuffer> createEmptyOff(Extent extent) {
+    public static BinaryVoxels<UnsignedByteBuffer> createEmptyOff(Extent extent) {
         try {
-            return (BinaryVoxels<ByteBuffer>)
+            return (BinaryVoxels<UnsignedByteBuffer>)
                     createEmptyOff(extent, UnsignedByteVoxelType.INSTANCE);
         } catch (CreateException e) {
             throw new AnchorImpossibleSituationException();
@@ -101,7 +103,7 @@ public class BinaryVoxelsFactory {
      * @param voxels voxel-buffer to treat as binary (and internally reused)
      * @return newly created binary-voxels reusing existing voxels internally
      */
-    public static BinaryVoxels<ByteBuffer> reuseByte(Voxels<ByteBuffer> voxels) {
+    public static BinaryVoxels<UnsignedByteBuffer> reuseByte(Voxels<UnsignedByteBuffer> voxels) {
         return reuseByte(voxels, BinaryValues.getDefault());
     }
 
@@ -115,8 +117,8 @@ public class BinaryVoxelsFactory {
      * @param binaryValues how to interpret OFF and ON states
      * @return newly created binary-voxels reusing existing voxels internally
      */
-    public static BinaryVoxels<ByteBuffer> reuseByte(
-            Voxels<ByteBuffer> voxels, BinaryValues binaryValues) {
+    public static BinaryVoxels<UnsignedByteBuffer> reuseByte(
+            Voxels<UnsignedByteBuffer> voxels, BinaryValues binaryValues) {
         return new BinaryVoxelsByte(voxels, binaryValues);
     }
 
@@ -130,8 +132,8 @@ public class BinaryVoxelsFactory {
      * @param binaryValues how to interpret OFF and ON states
      * @return newly created binary-voxels reusing existing voxels internally
      */
-    public static BinaryVoxels<IntBuffer> reuseInt(
-            Voxels<IntBuffer> voxels, BinaryValues binaryValues) {
+    public static BinaryVoxels<UnsignedIntBuffer> reuseInt(
+            Voxels<UnsignedIntBuffer> voxels, BinaryValues binaryValues) {
         return new BinaryVoxelsInt(voxels, binaryValues);
     }
 }

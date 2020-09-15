@@ -25,24 +25,24 @@
  */
 package org.anchoranalysis.image.voxel.assigner;
 
-import java.nio.IntBuffer;
+import org.anchoranalysis.image.convert.UnsignedIntBuffer;
 import org.anchoranalysis.image.voxel.Voxels;
 
-class IntImplementation extends Base<IntBuffer> {
+class IntImplementation extends Base<UnsignedIntBuffer> {
 
-    public IntImplementation(Voxels<IntBuffer> voxels, int valueToAssign) {
+    public IntImplementation(Voxels<UnsignedIntBuffer> voxels, int valueToAssign) {
         super(voxels, valueToAssign);
     }
 
     @Override
-    protected void assignToEntireBuffer(IntBuffer buffer) {
+    protected void assignToEntireBuffer(UnsignedIntBuffer buffer) {
         while (buffer.hasRemaining()) {
-            buffer.put(valueToAssign);
+            buffer.putRaw(valueToAssign);
         }
     }
 
     @Override
-    protected void assignAtBufferPosition(IntBuffer buffer, int index) {
-        buffer.put(index, valueToAssign);
+    protected void assignAtBufferPosition(UnsignedIntBuffer buffer, int index) {
+        buffer.putRaw(index, valueToAssign);
     }
 }

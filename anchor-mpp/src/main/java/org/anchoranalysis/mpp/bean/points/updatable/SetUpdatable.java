@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.mpp.bean.points.updatable;
 
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -46,6 +45,7 @@ import org.anchoranalysis.feature.shared.SharedFeatureMulti;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.BoundedVoxels;
@@ -120,19 +120,19 @@ public class SetUpdatable extends UpdatablePointsContainer {
 
         Extent extent = maskChannel.extent();
 
-        Voxels<ByteBuffer> voxelsBinary = maskChannel.voxels().asByte();
+        Voxels<UnsignedByteBuffer> voxelsBinary = maskChannel.voxels().asByte();
 
         // Where we actually do the work
         Point3i position = new Point3i();
 
         for (position.setZ(0); position.z() < dimensions.z(); position.incrementZ()) {
 
-            ByteBuffer bbBinaryImage = voxelsBinary.sliceBuffer(position.z());
+            UnsignedByteBuffer bufferMask = voxelsBinary.sliceBuffer(position.z());
 
             for (position.setY(0); position.y() < dimensions.y(); position.incrementY()) {
                 for (position.setX(0); position.x() < dimensions.x(); position.incrementX()) {
 
-                    if (bbBinaryImage.get(extent.offsetSlice(position)) == bvb.getOnByte()) {
+                    if (bufferMask.getRaw(extent.offsetSlice(position)) == bvb.getOnByte()) {
                         setPoints.add(PointConverter.doubleFromInt(position));
                     }
                 }
@@ -175,18 +175,18 @@ public class SetUpdatable extends UpdatablePointsContainer {
         RegionMembership rm = newMark.getRegionMap().membershipForIndex(regionID);
         byte flags = rm.flags();
 
-        BoundedVoxels<ByteBuffer> voxels = pxlMark.voxels();
+        BoundedVoxels<UnsignedByteBuffer> voxels = pxlMark.voxels();
         Extent extent = voxels.extent();
 
         Point3i position = new Point3i();
         for (position.setZ(0); position.z() < extent.z(); position.incrementZ()) {
 
-            ByteBuffer buffer = voxels.sliceBufferLocal(position.z());
+            UnsignedByteBuffer buffer = voxels.sliceBufferLocal(position.z());
 
             for (position.setY(0); position.y() < extent.y(); position.incrementY()) {
                 for (position.setX(0); position.x() < extent.x(); position.incrementX()) {
 
-                    byte membership = buffer.get(extent.offset(position.x(), position.y()));
+                    byte membership = buffer.getRaw(extent.offset(position.x(), position.y()));
 
                     if (!rm.isMemberFlag(membership, flags)) {
                         rmvPoint(position, crnrPoint);
@@ -220,12 +220,12 @@ public class SetUpdatable extends UpdatablePointsContainer {
 
         RegionMembership rm = markToAdd.getRegionMap().membershipForIndex(regionID);
 
-        BoundedVoxels<ByteBuffer> voxels = pxlMark.voxels();
+        BoundedVoxels<UnsignedByteBuffer> voxels = pxlMark.voxels();
         Extent e = voxels.extent();
 
         BinaryValuesByte bvb = mask.binaryValues().createByte();
 
-        Voxels<ByteBuffer> voxelsBinary = maskChannel.voxels().asByte();
+        Voxels<UnsignedByteBuffer> voxelsBinary = maskChannel.voxels().asByte();
 
         Point3i point = new Point3i();
         for (point.setZ(0); point.z() < e.z(); point.incrementZ()) {
@@ -246,32 +246,33 @@ public class SetUpdatable extends UpdatablePointsContainer {
     }
 
     private void addPointsForSlice( // NOSONAR
-            Point3i crntExtentPoint,
-            ReadableTuple3i crnrPoint,
+            Point3i cornerExtentPoint,
+            ReadableTuple3i cornerPoint,
             Extent extent,
-            ByteBuffer buffer,
-            ByteBuffer bbBinaryImage,
+            UnsignedByteBuffer buffer,
+            UnsignedByteBuffer bufferMask,
             BinaryValuesByte bvb,
             int zGlobal,
             RegionMembership rm,
             List<VoxelizedMarkMemo> neighbors) {
         byte flags = rm.flags();
 
-        for (crntExtentPoint.setY(0);
-                crntExtentPoint.y() < extent.y();
-                crntExtentPoint.incrementY()) {
-            int yGlobal = crnrPoint.y() + crntExtentPoint.y();
+        for (cornerExtentPoint.setY(0);
+                cornerExtentPoint.y() < extent.y();
+                cornerExtentPoint.incrementY()) {
+            int yGlobal = cornerPoint.y() + cornerExtentPoint.y();
 
-            for (crntExtentPoint.setX(0);
-                    crntExtentPoint.x() < extent.x();
-                    crntExtentPoint.incrementX()) {
+            for (cornerExtentPoint.setX(0);
+                    cornerExtentPoint.x() < extent.x();
+                    cornerExtentPoint.incrementX()) {
 
-                int xGlobal = crnrPoint.x() + crntExtentPoint.x();
+                int xGlobal = cornerPoint.x() + cornerExtentPoint.x();
 
                 int globOffset = extent.offset(xGlobal, yGlobal);
-                byte posCheck = buffer.get(extent.offset(crntExtentPoint.x(), crntExtentPoint.y()));
+                byte posCheck =
+                        buffer.getRaw(extent.offset(cornerExtentPoint.x(), cornerExtentPoint.y()));
                 if (rm.isMemberFlag(posCheck, flags)
-                        && bbBinaryImage.get(globOffset) == bvb.getOnByte()) {
+                        && bufferMask.getRaw(globOffset) == bvb.getOnByte()) {
 
                     Point3d pointGlobal = new Point3d(xGlobal, yGlobal, zGlobal);
 

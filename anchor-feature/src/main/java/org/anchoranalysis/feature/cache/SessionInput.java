@@ -55,7 +55,7 @@ public interface SessionInput<T extends FeatureInput> {
      * @param feature the feature to calculate with
      * @return the result of the calculation
      */
-    double calc(Feature<T> feature) throws FeatureCalculationException;
+    double calculate(Feature<T> feature) throws FeatureCalculationException;
 
     /**
      * Calculates the results of several features using this input
@@ -63,7 +63,7 @@ public interface SessionInput<T extends FeatureInput> {
      * @param features features to calculate with
      * @return the results of each feature's calculation respectively
      */
-    ResultsVector calc(FeatureList<T> features) throws NamedFeatureCalculateException;
+    ResultsVector calculate(FeatureList<T> features) throws NamedFeatureCalculateException;
 
     /**
      * Calculates a feature-calculation after resolving it against the main cache
@@ -73,17 +73,17 @@ public interface SessionInput<T extends FeatureInput> {
      * @return the result of the calculation
      * @throws FeatureCalculationException
      */
-    <S> S calc(FeatureCalculation<S, T> calculation) throws FeatureCalculationException;
+    <S> S calculate(FeatureCalculation<S, T> calculation) throws FeatureCalculationException;
 
     /**
      * Calculates a resolved Feature-calculation
      *
      * @param <S> return-type of the calculation
-     * @param cc the feature-calculation to resolve
+     * @param calculation the feature-calculation to resolve
      * @return the result of the calculation
      * @throws FeatureCalculationException
      */
-    <S> S calc(ResolvedCalculation<S, T> cc) throws FeatureCalculationException;
+    <S> S calculate(ResolvedCalculation<S, T> calculation) throws FeatureCalculationException;
 
     /**
      * Returns a resolver for calculations

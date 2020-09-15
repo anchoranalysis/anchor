@@ -26,14 +26,14 @@
 
 package org.anchoranalysis.image.points;
 
-import java.nio.ByteBuffer;
 import java.util.function.Consumer;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
-import org.anchoranalysis.image.extent.BoundingBox;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.extent.Extent;
+import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.voxel.Voxels;
 
 /**
@@ -56,7 +56,7 @@ class ConsumePointsFromMaskSliced {
     private final int skipAfterSuccessiveEmptySlices;
     private final ReadableTuple3i cornerMin;
     private final ReadableTuple3i cornerMax;
-    private final Voxels<ByteBuffer> voxels;
+    private final Voxels<UnsignedByteBuffer> voxels;
     private final BinaryValuesByte bvb;
     private final int startZ;
     private final Consumer<Point3i> consumer;
@@ -86,9 +86,9 @@ class ConsumePointsFromMaskSliced {
     public void firstHalf() {
         for (int z = startZ; z <= cornerMax.z(); z++) {
 
-            ByteBuffer bb = voxels.sliceBuffer(z);
+            UnsignedByteBuffer buffer = voxels.sliceBuffer(z);
 
-            if (!addPointsFromSlice(bb, z)) {
+            if (!addPointsFromSlice(buffer, z)) {
                 successiveEmptySlices = 0;
 
                 // We don't increase the counter until we've been inside a non-empty slice
@@ -104,9 +104,9 @@ class ConsumePointsFromMaskSliced {
     public void secondHalf() {
         for (int z = (startZ - 1); z >= cornerMin.z(); z--) {
 
-            ByteBuffer bb = voxels.sliceBuffer(z);
+            UnsignedByteBuffer buffer = voxels.sliceBuffer(z);
 
-            if (!addPointsFromSlice(bb, z)) {
+            if (!addPointsFromSlice(buffer, z)) {
                 successiveEmptySlices = 0;
 
                 // We don't increase the counter until we've been inside a non-empty slice
@@ -119,14 +119,14 @@ class ConsumePointsFromMaskSliced {
         }
     }
 
-    private boolean addPointsFromSlice(ByteBuffer bb, int z) {
+    private boolean addPointsFromSlice(UnsignedByteBuffer buffer, int z) {
 
         boolean addedToSlice = false;
         for (int y = cornerMin.y(); y <= cornerMax.y(); y++) {
             for (int x = cornerMin.x(); x <= cornerMax.x(); x++) {
 
                 int offset = extent.offset(x, y);
-                if (bb.get(offset) == bvb.getOnByte()) {
+                if (buffer.getRaw(offset) == bvb.getOnByte()) {
                     addedToSlice = true;
                     consumer.accept(new Point3i(x, y, z));
                 }

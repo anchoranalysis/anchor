@@ -26,9 +26,10 @@
 
 package org.anchoranalysis.image.voxel.iterator;
 
-import java.nio.ByteBuffer;
 import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.voxel.iterator.process.ProcessPoint;
 
 /**
  * Only processes a point if it lines on the region of an object-mask
@@ -37,14 +38,14 @@ import org.anchoranalysis.image.object.ObjectMask;
  *
  * @author Owen Feehan
  */
-final class RequireIntersectionWithObject implements ProcessVoxel {
+final class RequireIntersectionWithObject implements ProcessPoint {
 
-    private final ProcessVoxel process;
+    private final ProcessPoint process;
 
     private final ObjectMask objectMask;
     private final byte byteOn;
 
-    private ByteBuffer bbMask;
+    private UnsignedByteBuffer bufferObject;
 
     /**
      * Constructor
@@ -52,7 +53,7 @@ final class RequireIntersectionWithObject implements ProcessVoxel {
      * @param process the processor to call on the region of the object-mask
      * @param objectMask the object-mask that defines the "on" region which is processed only.
      */
-    public RequireIntersectionWithObject(ProcessVoxel process, ObjectMask objectMask) {
+    public RequireIntersectionWithObject(ProcessPoint process, ObjectMask objectMask) {
         super();
         this.process = process;
         this.objectMask = objectMask;
@@ -62,7 +63,7 @@ final class RequireIntersectionWithObject implements ProcessVoxel {
     @Override
     public void notifyChangeSlice(int z) {
         process.notifyChangeSlice(z);
-        bbMask = objectMask.sliceBufferGlobal(z);
+        bufferObject = objectMask.sliceBufferGlobal(z);
     }
 
     @Override
@@ -82,6 +83,6 @@ final class RequireIntersectionWithObject implements ProcessVoxel {
         int offsetMask = objectMask.offsetGlobal(point.x(), point.y());
 
         // We skip if our containing object-mask doesn't include it
-        return (bbMask.get(offsetMask) == byteOn);
+        return (bufferObject.getRaw(offsetMask) == byteOn);
     }
 }

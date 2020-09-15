@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.image.object;
 
-import java.nio.ByteBuffer;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.geometry.Point3i;
@@ -34,13 +33,14 @@ import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.mask.MaskFactory;
 import org.anchoranalysis.image.binary.values.BinaryValues;
-import org.anchoranalysis.image.extent.BoundingBox;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.extent.Extent;
+import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.voxel.Voxels;
 
 /**
- * Creates a mask from one or more objects
+ * Creates a mask from one or more objects.
  *
  * @author Owen Feehan
  */
@@ -100,12 +100,12 @@ public class MaskFromObjects {
     }
 
     private static void assignValueToObjects(
-            Voxels<ByteBuffer> voxels, ObjectCollection objects, byte valueToAssign) {
+            Voxels<UnsignedByteBuffer> voxels, ObjectCollection objects, byte valueToAssign) {
         objects.forEach(object -> writeObjectOntoVoxels(object, voxels, valueToAssign));
     }
 
     private static void writeObjectOntoVoxels(
-            ObjectMask object, Voxels<ByteBuffer> voxelsOut, byte outValByte) {
+            ObjectMask object, Voxels<UnsignedByteBuffer> voxelsOut, byte outValByte) {
 
         BoundingBox box = object.boundingBox();
 
@@ -120,9 +120,9 @@ public class MaskFromObjects {
                 pointGlobal.z() <= maxGlobal.z();
                 pointGlobal.incrementZ(), pointLocal.incrementZ()) {
 
-            ByteBuffer maskIn = object.sliceBufferLocal(pointLocal.z());
+            UnsignedByteBuffer maskIn = object.sliceBufferLocal(pointLocal.z());
 
-            ByteBuffer pixelsOut = voxelsOut.sliceBuffer(pointGlobal.z());
+            UnsignedByteBuffer pixelsOut = voxelsOut.sliceBuffer(pointGlobal.z());
             writeToBufferMasked(
                     maskIn,
                     pixelsOut,
@@ -136,8 +136,8 @@ public class MaskFromObjects {
     }
 
     private static void writeToBufferMasked(
-            ByteBuffer maskIn,
-            ByteBuffer pixelsOut,
+            UnsignedByteBuffer maskIn,
+            UnsignedByteBuffer pixelsOut,
             Extent extentOut,
             ReadableTuple3i cornerMin,
             Point3i pointGlobal,
@@ -153,8 +153,8 @@ public class MaskFromObjects {
                     pointGlobal.x() <= maxGlobal.x();
                     pointGlobal.incrementX()) {
 
-                if (maskIn.get() == matchValue) {
-                    pixelsOut.put(extentOut.offsetSlice(pointGlobal), outValByte);
+                if (maskIn.getRaw() == matchValue) {
+                    pixelsOut.putRaw(extentOut.offsetSlice(pointGlobal), outValByte);
                 }
             }
         }

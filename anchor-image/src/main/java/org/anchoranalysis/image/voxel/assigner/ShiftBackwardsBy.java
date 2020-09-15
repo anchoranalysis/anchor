@@ -28,7 +28,7 @@ package org.anchoranalysis.image.voxel.assigner;
 import java.util.function.IntPredicate;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
-import org.anchoranalysis.image.extent.BoundingBox;
+import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.object.ObjectMask;
 
 /**
@@ -70,15 +70,20 @@ class ShiftBackwardsBy implements VoxelsAssigner {
     }
 
     @Override
-    public boolean toObject(ObjectMask object, IntPredicate voxelPredicate) {
-        return voxelsAssigner.toObject(shift(object), voxelPredicate);
+    public void toObjectIf(ObjectMask object, IntPredicate voxelPredicate) {
+        voxelsAssigner.toObjectIf(shift(object), voxelPredicate);
+    }
+    
+    @Override
+    public boolean toObjectWhile(ObjectMask object, IntPredicate voxelPredicate) {
+        return voxelsAssigner.toObjectWhile(shift(object), voxelPredicate);
     }
 
     @Override
     public void toObject(ObjectMask object, BoundingBox restrictTo) {
         voxelsAssigner.toObject(shift(object), shift(restrictTo));
     }
-
+    
     @Override
     public void toEitherTwoObjects(ObjectMask object1, ObjectMask object2, BoundingBox restrictTo) {
         voxelsAssigner.toEitherTwoObjects(shift(object1), shift(object2), shift(restrictTo));
@@ -91,4 +96,5 @@ class ShiftBackwardsBy implements VoxelsAssigner {
     private ObjectMask shift(ObjectMask object) {
         return object.shiftBackBy(shift);
     }
+
 }

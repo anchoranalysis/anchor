@@ -33,10 +33,10 @@ import java.util.function.Predicate;
 /** Some constraints on which paths to match */
 public class PathMatchConstraints {
 
-    /** Only accepts files where the predicate returns TRUE */
+    /** Only accepts files where the predicate returns true */
     private Predicate<Path> matcherFile;
 
-    /** Only accepts any containing directories where the predicate returns TRUE */
+    /** Only accepts any containing directories where the predicate returns true */
     private Predicate<Path> matcherDir;
 
     /** Limits on the depth of how many sub-directories are recursed */

@@ -35,11 +35,11 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 /**
  * Like a {@link StackGenerator} but first applies a maximum-intensity-projection.
- *  
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
-public class ProjectMeanGenerator extends RasterGenerator implements IterableObjectGenerator<Stack, Stack> {
+public class ProjectMeanGenerator extends RasterGenerator
+        implements IterableObjectGenerator<Stack, Stack> {
 
     private StackGenerator delegate;
 

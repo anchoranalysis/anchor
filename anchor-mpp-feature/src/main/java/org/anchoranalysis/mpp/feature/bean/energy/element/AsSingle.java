@@ -29,7 +29,7 @@ package org.anchoranalysis.mpp.feature.bean.energy.element;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.feature.bean.operator.FeatureSingleElem;
+import org.anchoranalysis.feature.bean.operator.FeatureUnary;
 import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
@@ -42,7 +42,7 @@ import org.anchoranalysis.mpp.feature.input.memo.FeatureInputSingleMemo;
  *
  * @author Owen Feehan
  */
-public class AsSingle extends FeatureSingleElem<FeatureInputPairMemo, FeatureInputSingleMemo> {
+public class AsSingle extends FeatureUnary<FeatureInputPairMemo, FeatureInputSingleMemo> {
 
     // START BEAN PROPERTIES
     /** Iff true, first object is used, otherwise the second */

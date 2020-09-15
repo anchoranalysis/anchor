@@ -111,15 +111,15 @@ public abstract class MarkWithPosition extends Mark implements Serializable {
     public OverlayProperties generateProperties(Resolution sr) {
         OverlayProperties op = super.generateProperties(sr);
 
-        int numDims = numDims();
+        int dimensions = numberDimensions();
 
-        if (numDims >= 1) {
+        if (dimensions >= 1) {
             op.addDoubleAsString("Pos X", pos.x());
         }
-        if (numDims >= 2) {
+        if (dimensions >= 2) {
             op.addDoubleAsString("Pos Y", pos.y());
         }
-        if (numDims >= 3) {
+        if (dimensions >= 3) {
             op.addDoubleAsString("Pos Z", pos.z());
         }
         return op;

@@ -49,15 +49,15 @@ public class HistogramStatistics {
         return histogram.standardDeviation() / mean;
     }
 
-    public static double kurtosis(Histogram hist) throws OperationFailedException {
+    public static double kurtosis(Histogram histogram) throws OperationFailedException {
 
         // Kurtosis is calculated as in
         // http://www.macroption.com/kurtosis-formula/
-        double histMean = hist.mean();
+        double histogramMean = histogram.mean();
 
-        double fourthMomentAboutMean = hist.mean(4.0, histMean);
+        double fourthMomentAboutMean = histogram.mean(4.0, histogramMean);
 
-        double varSquared = Math.pow(hist.variance(), 2.0);
+        double varSquared = Math.pow(histogram.variance(), 2.0);
 
         if (varSquared == 0) {
             // We don't return infinity, but rather the maximum value allowed
@@ -67,14 +67,14 @@ public class HistogramStatistics {
         return fourthMomentAboutMean / varSquared;
     }
 
-    public static double skewness(Histogram hist) throws OperationFailedException {
+    public static double skewness(Histogram histogram) throws OperationFailedException {
 
-        long count = hist.getTotalCount();
-        double mean = hist.mean();
-        double sd = hist.standardDeviation();
+        long count = histogram.getTotalCount();
+        double mean = histogram.mean();
+        double sd = histogram.standardDeviation();
 
         // Calculated using formula in https://en.wikipedia.org/wiki/Skewness
-        long firstTerm = hist.calculateSumCubes() / count;
+        long firstTerm = histogram.calculateSumCubes() / count;
         double secondTerm = -3.0 * mean * sd * sd;
         double thirdTerm = mean * mean * mean;
 

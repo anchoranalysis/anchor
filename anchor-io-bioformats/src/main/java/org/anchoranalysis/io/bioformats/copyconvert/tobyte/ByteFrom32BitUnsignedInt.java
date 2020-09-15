@@ -28,45 +28,44 @@ package org.anchoranalysis.io.bioformats.copyconvert.tobyte;
 
 import java.nio.ByteBuffer;
 import loci.common.DataTools;
+import lombok.RequiredArgsConstructor;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.extent.Dimensions;
-import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
-import org.anchoranalysis.image.voxel.buffer.VoxelBufferByte;
 
+@RequiredArgsConstructor
 public class ByteFrom32BitUnsignedInt extends ConvertToByte {
 
+    // START REQUIRED ARGUMENTS
+    private final int effectiveBitsPerPixel;
+    private final boolean littleEndian;
+    // END REQUIRED ARGUMENTS
+
     private double convertRatio;
-    private int bytesPerPixel = 4;
-    private int sizeXY;
-    private int sizeBytes;
-
-    private int effectiveBitsPerPixel;
-    private boolean littleEndian;
-
-    public ByteFrom32BitUnsignedInt(int effectiveBitsPerPixel, boolean littleEndian) {
-        super();
-        this.effectiveBitsPerPixel = effectiveBitsPerPixel;
-        this.littleEndian = littleEndian;
-    }
 
     @Override
-    protected void setupBefore(Dimensions dimensions, int numChannelsPerByteArray) {
-
+    protected void setupBefore(Dimensions dimensions, int numberChannelsPerArray) {
+        super.setupBefore(dimensions, numberChannelsPerArray);
         convertRatio = calculateConvertRatio();
-
-        sizeXY = dimensions.x() * dimensions.y();
-        sizeBytes = sizeXY * bytesPerPixel;
     }
 
     @Override
-    protected VoxelBuffer<ByteBuffer> convertSingleChannel(byte[] src, int channelRelative) {
-        byte[] crntChannelBytes = new byte[sizeXY];
+    protected UnsignedByteBuffer convert(ByteBuffer source, int channelIndexRelative) {
 
-        int indOut = 0;
-        for (int indIn = 0; indIn < sizeBytes; indIn += bytesPerPixel) {
-            int i = DataTools.bytesToInt(src, indIn, littleEndian);
-            crntChannelBytes[indOut++] = (byte) (i * convertRatio);
+        UnsignedByteBuffer destination = allocateBuffer();
+
+        byte[] sourceArray = source.array();
+
+        for (int indexIn = 0; indexIn < sizeBytes; indexIn += bytesPerPixel) {
+            int value = DataTools.bytesToInt(sourceArray, indexIn, littleEndian);
+            destination.putDouble(value * convertRatio);
         }
-        return VoxelBufferByte.wrap(crntChannelBytes);
+
+        return destination;
+    }
+
+    @Override
+    protected int calculateBytesPerPixel(int numberChannelsPerArray) {
+        return 4;
     }
 
     private double calculateConvertRatio() {

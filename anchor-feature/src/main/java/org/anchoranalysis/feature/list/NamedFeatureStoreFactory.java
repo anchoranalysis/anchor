@@ -40,7 +40,7 @@ import org.anchoranalysis.feature.input.FeatureInput;
 public class NamedFeatureStoreFactory {
 
     /**
-     * iff TRUE, only describe the parameters of the features, but not the name. Otherwise both are
+     * iff true, only describe the parameters of the features, but not the name. Otherwise both are
      * described.
      */
     private boolean paramsOnlyInDescription = false;

@@ -26,20 +26,20 @@
 
 package org.anchoranalysis.image.object.factory.unionfind;
 
-import java.nio.ByteBuffer;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 
-final class ReadWriteByte extends BufferReadWrite<ByteBuffer> {
+final class ReadWriteByte extends BufferReadWrite<UnsignedByteBuffer> {
 
     @Override
     protected boolean isBufferOn(
-            ByteBuffer buffer, int offset, BinaryValues bv, BinaryValuesByte bvb) {
-        return buffer.get(offset) == bvb.getOnByte();
+            UnsignedByteBuffer buffer, int offset, BinaryValues bv, BinaryValuesByte bvb) {
+        return buffer.getRaw(offset) == bvb.getOnByte();
     }
 
     @Override
-    protected void putBufferCnt(ByteBuffer buffer, int offset, int cnt) {
-        buffer.put(offset, (byte) cnt);
+    protected void putBufferCount(UnsignedByteBuffer buffer, int offset, int count) {
+        buffer.putUnsigned(offset, count);
     }
 }

@@ -30,10 +30,9 @@ import java.util.List;
 import java.util.function.IntConsumer;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.image.convert.ByteConverter;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMembershipWithFlags;
-import org.anchoranalysis.mpp.pixelpart.IndexByChannel;
+import org.anchoranalysis.mpp.voxel.partition.IndexByChannel;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class AddVoxelsToHistogram {
@@ -58,8 +57,9 @@ class AddVoxelsToHistogram {
             int r,
             int zLocal) {
         for (int i = 0; i < partitionList.size(); i++) {
-            byte val = bufferArrList.get(i).get(globalOffset);
-            partitionList.get(i).addToPxlList(r, zLocal, ByteConverter.unsignedByteToInt(val));
+            partitionList
+                    .get(i)
+                    .addToVoxelList(r, zLocal, bufferArrList.get(i).getUnsigned(globalOffset));
         }
     }
 

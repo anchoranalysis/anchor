@@ -27,7 +27,6 @@
 package org.anchoranalysis.image.voxel;
 
 import com.google.common.base.Preconditions;
-import java.nio.Buffer;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.experimental.Accessors;
@@ -36,8 +35,8 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.OperationFailedRuntimeException;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
-import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
+import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.interpolator.Interpolator;
 import org.anchoranalysis.image.scale.ScaleFactor;
 import org.anchoranalysis.image.voxel.arithmetic.VoxelsArithmetic;
@@ -55,7 +54,7 @@ import org.anchoranalysis.image.voxel.factory.VoxelsFactoryTypeBound;
  * @param <T> buffer-type
  */
 @Accessors(fluent = true)
-public class BoundedVoxels<T extends Buffer> {
+public class BoundedVoxels<T> {
 
     private static final Point3i ALL_ONES_2D = new Point3i(1, 1, 0);
     private static final Point3i ALL_ONES_3D = new Point3i(1, 1, 1);
@@ -311,7 +310,7 @@ public class BoundedVoxels<T extends Buffer> {
      *
      * @see VoxelsExtracter#region
      * @param box bounding-box in absolute coordinates.
-     * @param reuseIfPossible if TRUE the existing box will be reused if possible, otherwise a new
+     * @param reuseIfPossible if true the existing box will be reused if possible, otherwise a new
      *     box is always created.
      * @return bounded0voxels corresponding to the requested region, either newly-created or reused
      * @throws CreateException
@@ -372,8 +371,8 @@ public class BoundedVoxels<T extends Buffer> {
      * Applies a function to map the bounding-box to a new-value (whose extent should be unchanged
      * in value)
      *
-     * <p>This is an <b>immutable</b> operation, but the existing voxel-buffers are reused in the new
-     * object.
+     * <p>This is an <b>immutable</b> operation, but the existing voxel-buffers are reused in the
+     * new object.
      *
      * @return a new object-mask with the updated bounding box
      */
@@ -418,7 +417,7 @@ public class BoundedVoxels<T extends Buffer> {
     }
 
     /**
-     * Assigns a value to a bounded-voxels accepting GLOBAL coordinates for objects, boxes etc.
+     * Assigns a value to a bounded-voxels accepting <i>global</i> coordinates for objects, boxes etc.
      *
      * @param valueToAssign value to assign
      * @return an assigner that expects global co-ordinates

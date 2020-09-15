@@ -48,7 +48,7 @@ class ResettableSet<T extends ResettableCalculation> {
      * Finds an existing object if its parameters match, otherwise adds target to the list.
      *
      * @param target
-     * @param logger if non-NULL logging messages are written out indicating if the object was added
+     * @param logger if non-null logging messages are written out indicating if the object was added
      *     or not
      * @return an existing CachedCalculation if found, otherwise target if added
      */

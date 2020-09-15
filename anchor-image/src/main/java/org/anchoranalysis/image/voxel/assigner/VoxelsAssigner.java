@@ -27,7 +27,7 @@ package org.anchoranalysis.image.voxel.assigner;
 
 import java.util.function.IntPredicate;
 import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.extent.BoundingBox;
+import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.object.ObjectMask;
 
 /**
@@ -79,18 +79,32 @@ public interface VoxelsAssigner {
     void toObject(ObjectMask object);
 
     /**
+     * Sets voxels in a box to a particular value if they match an object-mask <b>and</b> a voxel
+     * matches a predicate
+     *
+     * <p>Unlike {@link #toObjectWhile(ObjectMask, IntPredicate)} this operation will not abort
+     * if a voxel fails to match a predicate, but rather keep on iterating through all voxels.
+     *
+     * @param object the object-mask to restrict which values in the buffer are assigned
+     * @param voxelPredicate the existing value of any voxel to be written must match this
+     *     predicate
+     */
+    void toObjectIf(ObjectMask object, IntPredicate voxelPredicate);
+    
+    /**
      * Sets voxels in a box to a particular value if they match an object-mask <b>and</b> each voxel
      * matches a predicate
      *
      * <p>If any one of the voxels in the object doesn't match the predicate, the operation is
-     * aborted, and nothing is written at all.
+     * aborted, and nothing is written at all. This behaviour is different to {@link #toObjectIf} which
+     * will keep on iterating.
      *
      * @param object the object-mask to restrict which values in the buffer are assigned
      * @param voxelPredicate the existing value of every voxel to be written must match this
      *     predicate, otherwise no voxels are set at all
      * @return if at least one voxel was set
      */
-    boolean toObject(ObjectMask object, IntPredicate voxelPredicate);
+    boolean toObjectWhile(ObjectMask object, IntPredicate voxelPredicate);
 
     /**
      * Sets voxels in a box to a particular value if they match a object-mask (but only a part of

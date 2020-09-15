@@ -29,18 +29,16 @@ package org.anchoranalysis.annotation.io.mark;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.annotation.Annotation;
 import org.anchoranalysis.annotation.io.AnnotationWriter;
 import org.anchoranalysis.annotation.io.WriterUtilities;
 import org.anchoranalysis.annotation.mark.DualMarksAnnotation;
 import org.anchoranalysis.io.generator.serialized.XStreamGenerator;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
- * 
  * @author Owen Feehan
- *
  * @param <T> rejection-reason
  */
 public class MarkAnnotationWriter<T> implements AnnotationWriter<DualMarksAnnotation<T>> {

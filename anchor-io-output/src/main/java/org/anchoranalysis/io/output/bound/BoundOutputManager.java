@@ -77,10 +77,11 @@ public class BoundOutputManager {
      * @param destination directory to associate with output-amanger
      * @param deleteExistingFolder if true this directory if it already exists is deleted before
      *     executing the experiment, otherwise an exception is thrown if it exists.
-     * @throws BindFailedException 
+     * @throws BindFailedException
      */
-    public static BoundOutputManager createPermissive(Path destination, boolean deleteExistingFolder) throws BindFailedException {
-       return createExistingWithPrefix(
+    public static BoundOutputManager createPermissive(
+            Path destination, boolean deleteExistingFolder) throws BindFailedException {
+        return createExistingWithPrefix(
                 new OutputManagerPermissive(),
                 new FilePathPrefix(destination),
                 new OutputWriteSettings(),
@@ -96,14 +97,15 @@ public class BoundOutputManager {
      * @param outputWriteSettings
      * @param deleteExistingFolder if true this directory if it already exists is deleted before
      *     executing the experiment, otherwise an exception is thrown if it exists.
-     * @throws BindFailedException 
+     * @throws BindFailedException
      */
     public static BoundOutputManager createExistingWithPrefix(
             OutputManager outputManager,
             FilePathPrefix prefix,
             OutputWriteSettings outputWriteSettings,
             WriteOperationRecorder writeOperationRecorder,
-            boolean deleteExistingFolder) throws BindFailedException {
+            boolean deleteExistingFolder)
+            throws BindFailedException {
         return new BoundOutputManager(
                 outputManager,
                 prefix,
@@ -120,8 +122,7 @@ public class BoundOutputManager {
      * @param prefix
      * @param outputWriteSettings
      * @param writeOperationRecorder
-     * @param parent iff defined, parent initializer to call, before our own initializer is
-     *     called.
+     * @param parent iff defined, parent initializer to call, before our own initializer is called.
      */
     private BoundOutputManager(
             OutputManager outputManager,
@@ -129,7 +130,8 @@ public class BoundOutputManager {
             OutputWriteSettings outputWriteSettings,
             WriteOperationRecorder writeOperationRecorder,
             LazyDirectoryCreatorCache directoryCreator,
-            Optional<WriterExecuteBeforeEveryOperation> parent) throws BindFailedException {
+            Optional<WriterExecuteBeforeEveryOperation> parent)
+            throws BindFailedException {
 
         this.boundFilePathPrefix = prefix;
         this.outputManager = outputManager;
@@ -138,12 +140,14 @@ public class BoundOutputManager {
         this.directoryCreator = directoryCreator;
 
         try {
-            this.parentDirectoryCreator = directoryCreator.getOrCreate(prefix.getFolderPath(), parent);
+            this.parentDirectoryCreator =
+                    directoryCreator.getOrCreate(prefix.getFolderPath(), parent);
         } catch (GetOperationFailedException e) {
             throw new BindFailedException(e);
         }
         writerAlwaysAllowed = new AlwaysAllowed(this, this.parentDirectoryCreator);
-        writerCheckIfAllowed = new CheckIfAllowed(this, this.parentDirectoryCreator, writerAlwaysAllowed);
+        writerCheckIfAllowed =
+                new CheckIfAllowed(this, this.parentDirectoryCreator, writerAlwaysAllowed);
     }
 
     /** Adds an additional operation recorder alongside any existing recorders */
@@ -160,7 +164,7 @@ public class BoundOutputManager {
             Optional<ManifestRecorder> experimentalManifestRecorder,
             FilePathPrefixerParams context)
             throws BindFailedException {
-        
+
         try {
             FilePathPrefix prefix =
                     outputManager.prefixForFile(
@@ -211,7 +215,8 @@ public class BoundOutputManager {
                     directoryCreator,
                     Optional.of(parentDirectoryCreator));
         } catch (BindFailedException e) {
-            // This exception can only be thrown if the prefix-path doesn't reside within the rootDirectory
+            // This exception can only be thrown if the prefix-path doesn't reside within the
+            // rootDirectory
             // of the directoryCreator, which should never occur in this class.
             throw new AnchorImpossibleSituationException();
         }

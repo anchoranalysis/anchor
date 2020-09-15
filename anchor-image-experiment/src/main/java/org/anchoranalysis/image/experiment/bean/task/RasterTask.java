@@ -88,7 +88,6 @@ public abstract class RasterTask extends TaskWithoutSharedState<NamedChannelsInp
 
     public abstract void endSeries(BoundOutputManagerRouteErrors outputManager)
             throws JobExecutionException;
-    
 
     @Override
     public InputTypesExpected inputTypesExpected() {

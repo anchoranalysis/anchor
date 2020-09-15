@@ -43,7 +43,7 @@ public class Sphere extends MarkWithPositionAndSingleRadius {
 
     /**
      * Creates with a radius within particular bounds.
-     * 
+     *
      * @param boundRadius
      */
     public Sphere(Bound boundRadius) {
@@ -79,7 +79,7 @@ public class Sphere extends MarkWithPositionAndSingleRadius {
     }
 
     @Override
-    public int numDims() {
+    public int numberDimensions() {
         return 3;
     }
 }

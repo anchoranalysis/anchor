@@ -50,7 +50,7 @@ public class FromXmlList extends DefineAdderBean {
     @BeanField @Getter @Setter private String name;
 
     /**
-     * If TRUE, a prefix is prepended to the name of each added bean. The prefix is: the name
+     * If true, a prefix is prepended to the name of each added bean. The prefix is: the name
      * followed by a full-stop.
      */
     @BeanField @Getter @Setter private boolean prefix = false;

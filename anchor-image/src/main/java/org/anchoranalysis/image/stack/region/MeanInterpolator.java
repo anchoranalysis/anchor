@@ -26,10 +26,9 @@
 
 package org.anchoranalysis.image.stack.region;
 
-import java.nio.ByteBuffer;
-import java.nio.ShortBuffer;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.convert.ByteConverter;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedShortBuffer;
 import org.anchoranalysis.image.extent.Extent;
 
 class MeanInterpolator {
@@ -48,11 +47,11 @@ class MeanInterpolator {
         sizeY = size;
     }
 
-    public byte getInterpolatedPixelByte(int x0, int y0, ByteBuffer bb, Extent e)
+    public byte getInterpolatedPixelByte(int x0, int y0, UnsignedByteBuffer buffer, Extent extent)
             throws OperationFailedException {
 
         int sum = 0;
-        int cnt = 0;
+        int count = 0;
 
         for (int y = 0; y < sizeY; y++) {
 
@@ -62,27 +61,26 @@ class MeanInterpolator {
 
                 int x1 = x0 + x;
 
-                if (e.contains(x1, y1, 0)) {
-                    int val = ByteConverter.unsignedByteToInt(bb.get(e.offset(x0 + x, y1)));
-                    sum += val;
+                if (extent.contains(x1, y1, 0)) {
+                    sum += buffer.getUnsigned(extent.offset(x0 + x, y1));
 
-                    cnt++;
+                    count++;
                 }
             }
         }
 
-        if (cnt == 0) {
+        if (count == 0) {
             throw new OperationFailedException(EXC_ZERO_CNT);
         }
 
-        return (byte) (sum / cnt);
+        return (byte) (sum / count);
     }
 
-    public short getInterpolatedPixelShort(int x0, int y0, ShortBuffer bb, Extent e)
+    public short getInterpolatedPixelShort(int x0, int y0, UnsignedShortBuffer buffer, Extent e)
             throws OperationFailedException {
 
         int sum = 0;
-        int cnt = 0;
+        int count = 0;
 
         for (int y = 0; y < sizeY; y++) {
 
@@ -93,18 +91,17 @@ class MeanInterpolator {
                 int x1 = x0 + x;
 
                 if (e.contains(x1, y1, 0)) {
-                    int val = ByteConverter.unsignedShortToInt(bb.get(e.offset(x0 + x, y1)));
-                    sum += val;
+                    sum += buffer.getUnsigned(e.offset(x0 + x, y1));
 
-                    cnt++;
+                    count++;
                 }
             }
         }
 
-        if (cnt == 0) {
+        if (count == 0) {
             throw new OperationFailedException(EXC_ZERO_CNT);
         }
 
-        return (short) (sum / cnt);
+        return (short) (sum / count);
     }
 }

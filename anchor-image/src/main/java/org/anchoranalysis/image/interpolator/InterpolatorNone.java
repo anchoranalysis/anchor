@@ -26,8 +26,8 @@
 
 package org.anchoranalysis.image.interpolator;
 
-import java.nio.ByteBuffer;
-import java.nio.ShortBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedShortBuffer;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 
@@ -35,9 +35,9 @@ import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 public class InterpolatorNone implements Interpolator {
 
     @Override
-    public VoxelBuffer<ByteBuffer> interpolateByte(
-            VoxelBuffer<ByteBuffer> voxelsSource,
-            VoxelBuffer<ByteBuffer> voxelsDestination,
+    public VoxelBuffer<UnsignedByteBuffer> interpolateByte(
+            VoxelBuffer<UnsignedByteBuffer> voxelsSource,
+            VoxelBuffer<UnsignedByteBuffer> voxelsDestination,
             Extent extentSource,
             Extent extentDestination) {
 
@@ -47,9 +47,9 @@ public class InterpolatorNone implements Interpolator {
     }
 
     @Override
-    public VoxelBuffer<ShortBuffer> interpolateShort(
-            VoxelBuffer<ShortBuffer> voxelsSource,
-            VoxelBuffer<ShortBuffer> voxelsDestination,
+    public VoxelBuffer<UnsignedShortBuffer> interpolateShort(
+            VoxelBuffer<UnsignedShortBuffer> voxelsSource,
+            VoxelBuffer<UnsignedShortBuffer> voxelsDestination,
             Extent extentSource,
             Extent extentDestination) {
         copyShort(
@@ -57,38 +57,44 @@ public class InterpolatorNone implements Interpolator {
         return voxelsDestination;
     }
 
-    private static void copyByte(ByteBuffer bbIn, ByteBuffer bbOut, Extent eIn, Extent eOut) {
+    private static void copyByte(
+            UnsignedByteBuffer bufferIn,
+            UnsignedByteBuffer bufferOut,
+            Extent extentIn,
+            Extent extentOut) {
 
-        double xScale = intDiv(eIn.x(), eOut.x());
-        double yScale = intDiv(eIn.y(), eOut.y());
+        double xScale = intDiv(extentIn.x(), extentOut.x());
+        double yScale = intDiv(extentIn.y(), extentOut.y());
 
         // We loop through every pixel in the output buffer
-        for (int y = 0; y < eOut.y(); y++) {
-            for (int x = 0; x < eOut.x(); x++) {
+        for (int y = 0; y < extentOut.y(); y++) {
+            for (int x = 0; x < extentOut.x(); x++) {
 
-                int xOrig = intMin(xScale * x, eIn.x() - 1);
-                int yOrig = intMin(yScale * y, eIn.y() - 1);
+                int xOrig = intMin(xScale * x, extentIn.x() - 1);
+                int yOrig = intMin(yScale * y, extentIn.y() - 1);
 
-                byte orig = bbIn.get(eIn.offset(xOrig, yOrig));
-                bbOut.put(orig);
+                bufferOut.putRaw(bufferIn.getRaw(extentIn.offset(xOrig, yOrig)));
             }
         }
     }
 
-    private static void copyShort(ShortBuffer bbIn, ShortBuffer bbOut, Extent eIn, Extent eOut) {
+    private static void copyShort(
+            UnsignedShortBuffer bufferIn,
+            UnsignedShortBuffer bufferOut,
+            Extent extentIn,
+            Extent extentOut) {
 
-        double xScale = intDiv(eIn.x(), eOut.x());
-        double yScale = intDiv(eIn.y(), eOut.y());
+        double xScale = intDiv(extentIn.x(), extentOut.x());
+        double yScale = intDiv(extentIn.y(), extentOut.y());
 
         // We loop through every pixel in the output buffer
-        for (int y = 0; y < eOut.y(); y++) {
-            for (int x = 0; x < eOut.x(); x++) {
+        for (int y = 0; y < extentOut.y(); y++) {
+            for (int x = 0; x < extentOut.x(); x++) {
 
-                int xOrig = intMin(xScale * x, eIn.x() - 1);
-                int yOrig = intMin(yScale * y, eIn.y() - 1);
+                int xOrig = intMin(xScale * x, extentIn.x() - 1);
+                int yOrig = intMin(yScale * y, extentIn.y() - 1);
 
-                short orig = bbIn.get(eIn.offset(xOrig, yOrig));
-                bbOut.put(orig);
+                bufferOut.putRaw(bufferIn.getRaw(extentIn.offset(xOrig, yOrig)));
             }
         }
     }

@@ -34,7 +34,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point2i;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.mask.Mask;
-import org.anchoranalysis.image.extent.BoundingBox;
+import org.anchoranalysis.image.extent.box.BoundingBox;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class PointsFromMask {

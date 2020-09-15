@@ -26,14 +26,16 @@
 
 package org.anchoranalysis.image.voxel.iterator;
 
-import java.nio.Buffer;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.voxel.Voxels;
+import org.anchoranalysis.image.voxel.iterator.process.ProcessBufferTernary;
+import org.anchoranalysis.image.voxel.iterator.process.ProcessBufferUnary;
+import org.anchoranalysis.image.voxel.iterator.process.ProcessPoint;
 
 /**
- * Exposes a {@link ProcessVoxel} as a {@link ProcessVoxelSliceBuffer} by retrieving <b>three</b>
- * buffers for each z-slice.
+ * Exposes a {@link ProcessPoint} as a {@link ProcessBufferUnary} by retrieving <b>three</b> buffers
+ * for each z-slice.
  *
  * <p>Note that {@link #notifyChangeSlice} <b>need not</b> be be called for all slices (perhaps only
  * a subset), but {@link #process} <b>must</b> be called for ALL voxels on a given slice.
@@ -42,7 +44,7 @@ import org.anchoranalysis.image.voxel.Voxels;
  * @param <T> buffer-type for slice
  */
 @RequiredArgsConstructor
-public final class RetrieveBuffersForThreeSlices<T extends Buffer> implements ProcessVoxel {
+final class RetrieveBuffersForThreeSlices<T> implements ProcessPoint {
 
     // START REQUIRED ARGUMENTS
     /** Voxels for first buffer */
@@ -55,7 +57,7 @@ public final class RetrieveBuffersForThreeSlices<T extends Buffer> implements Pr
     private final Voxels<T> voxels3;
 
     /** Processor */
-    private final ProcessVoxelThreeSliceBuffers<T> processor;
+    private final ProcessBufferTernary<T> processor;
     // END REQUIRED ARGUMENTS
 
     private T bufferSlice1;

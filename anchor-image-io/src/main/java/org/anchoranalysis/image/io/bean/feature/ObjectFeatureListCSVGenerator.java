@@ -34,15 +34,15 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.name.store.SharedObjects;
-import org.anchoranalysis.core.unit.SpatialConversionUtilities.UnitSuffix;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListFactory;
 import org.anchoranalysis.feature.calculate.results.ResultsVectorCollection;
 import org.anchoranalysis.feature.input.FeatureInput;
-import org.anchoranalysis.feature.io.csv.writer.FeatureListCSVGeneratorVertical;
-import org.anchoranalysis.feature.io.csv.writer.TableCSVGenerator;
+import org.anchoranalysis.feature.io.csv.FeatureListCSVGeneratorVertical;
+import org.anchoranalysis.feature.io.csv.FeatureTableCSVGenerator;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
+import org.anchoranalysis.image.extent.SpatialUnits.UnitSuffix;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureListEvaluator;
 import org.anchoranalysis.image.feature.bean.object.single.CenterOfGravity;
 import org.anchoranalysis.image.feature.bean.object.single.NumberVoxels;
@@ -66,7 +66,7 @@ class ObjectFeatureListCSVGenerator extends CSVGenerator
 
     private FeatureCalculatorMulti<FeatureInputSingleObject> featureCalculator;
 
-    private TableCSVGenerator<ResultsVectorCollection> delegate;
+    private FeatureTableCSVGenerator<ResultsVectorCollection> delegate;
 
     private final Logger logger;
 
@@ -82,7 +82,7 @@ class ObjectFeatureListCSVGenerator extends CSVGenerator
 
         try {
             NamedFeatureCalculatorMulti<FeatureInputSingleObject> tuple =
-                    featureEvaluator.createAndStartSession(
+                    featureEvaluator.createFeatureSession(
                             this::createFullFeatureList, sharedObjects);
             this.featureCalculator = tuple.getCalculator();
 

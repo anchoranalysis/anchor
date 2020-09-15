@@ -77,7 +77,7 @@ public class MatchExtensions extends FileMatcher {
     private boolean matchesAnyExtension(Path path, Set<String> fileExtensions) {
 
         if (fileExtensions.isEmpty()) {
-            // Note SPECIAL CASE. When empty, the check isn't applied, so is always TRUE
+            // Note SPECIAL CASE. When empty, the check isn't applied, so is always true
             return true;
         }
 

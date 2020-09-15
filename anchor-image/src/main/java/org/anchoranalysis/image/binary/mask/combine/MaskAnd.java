@@ -26,13 +26,13 @@
 
 package org.anchoranalysis.image.binary.mask.combine;
 
-import java.nio.ByteBuffer;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.Voxels;
-import org.anchoranalysis.image.voxel.iterator.IterateVoxels;
+import org.anchoranalysis.image.voxel.iterator.IterateVoxelsAll;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class MaskAnd {
@@ -61,8 +61,8 @@ public class MaskAnd {
      * @param bvbSecond binary-values to mask second voxels
      */
     public static void apply(
-            Voxels<ByteBuffer> voxelsFirst,
-            Voxels<ByteBuffer> voxelsSecond,
+            Voxels<UnsignedByteBuffer> voxelsFirst,
+            Voxels<UnsignedByteBuffer> voxelsSecond,
             BinaryValuesByte bvbFirst,
             BinaryValuesByte bvbSecond) {
 
@@ -70,14 +70,14 @@ public class MaskAnd {
         byte sourceOff = bvbFirst.getOffByte();
         byte receiveOff = bvbSecond.getOffByte();
 
-        IterateVoxels.callEachPointTwo(
+        IterateVoxelsAll.withTwoBuffers(
                 voxelsFirst,
                 voxelsSecond,
                 (point, bufferSource, bufferReceive, offset) -> {
-                    if (bufferSource.get(offset) == sourceOn
-                            && bufferReceive.get(offset) == receiveOff) {
+                    if (bufferSource.getRaw(offset) == sourceOn
+                            && bufferReceive.getRaw(offset) == receiveOff) {
                         // source is ON but receive is OFF, so we change the buffer
-                        bufferSource.put(offset, sourceOff);
+                        bufferSource.putRaw(offset, sourceOff);
                     }
                 });
     }

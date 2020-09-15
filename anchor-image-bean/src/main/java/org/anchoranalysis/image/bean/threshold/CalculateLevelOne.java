@@ -40,7 +40,7 @@ public abstract class CalculateLevelOne extends CalculateLevel {
     @BeanField @Getter @Setter private CalculateLevel calculateLevel;
     // END BEAN PROPERTIES
 
-    protected int calculateLevelIncoming(Histogram hist) throws OperationFailedException {
-        return calculateLevel.calculateLevel(hist);
+    protected int calculateLevelIncoming(Histogram histogram) throws OperationFailedException {
+        return calculateLevel.calculateLevel(histogram);
     }
 }

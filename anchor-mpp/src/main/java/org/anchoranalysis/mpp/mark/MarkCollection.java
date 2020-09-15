@@ -42,8 +42,8 @@ import org.anchoranalysis.core.error.OptionalOperationUnsupportedException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
-import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.object.properties.ObjectCollectionWithProperties;
 import org.anchoranalysis.image.object.properties.ObjectCollectionWithPropertiesFactory;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMap;
@@ -51,7 +51,8 @@ import org.anchoranalysis.mpp.bean.regionmap.RegionMembership;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMembershipWithFlags;
 
 /**
- * A collection of marks, termed a <i>configuration</i> in marked-point-processes academic literature.
+ * A collection of marks, termed a <i>configuration</i> in marked-point-processes academic
+ * literature.
  *
  * @author Owen Feehan
  */
@@ -179,9 +180,10 @@ public final class MarkCollection implements Iterable<Mark>, Serializable {
 
     /**
      * Scales the mark in X and Y dimensions.
-     * 
+     *
      * @param scaleFactor how much to scale by.
-     * @throws OptionalOperationUnsupportedException if the type of mark used in the annotation does not supported scaling.
+     * @throws OptionalOperationUnsupportedException if the type of mark used in the annotation does
+     *     not supported scaling.
      */
     public void scaleXY(double scaleFactor) throws OptionalOperationUnsupportedException {
 

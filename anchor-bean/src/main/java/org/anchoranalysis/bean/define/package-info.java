@@ -1,6 +1,4 @@
-/**
- * {@link org.anchoranalysis.bean.define.Define} and related-classes.
- */
+/** {@link org.anchoranalysis.bean.define.Define} and related-classes. */
 package org.anchoranalysis.bean.define;
 /*-
  * #%L

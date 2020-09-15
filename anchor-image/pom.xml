@@ -65,7 +65,6 @@
 	    <version>${imglib2.version}</version>
 	</dependency>
 	
-	
 	<dependency>
 	  <groupId>newbrightidea-util</groupId>
 	  <artifactId>newbrightidea-util</artifactId>

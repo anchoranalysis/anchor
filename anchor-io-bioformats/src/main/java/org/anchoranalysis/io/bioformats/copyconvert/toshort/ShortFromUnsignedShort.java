@@ -26,56 +26,31 @@
 
 package org.anchoranalysis.io.bioformats.copyconvert.toshort;
 
-import java.nio.ShortBuffer;
-import loci.common.DataTools;
-import org.anchoranalysis.image.extent.Dimensions;
-import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
-import org.anchoranalysis.image.voxel.buffer.VoxelBufferShort;
 import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
 
-public class ShortFromUnsignedShort extends ConvertToShort {
-
-    private int bytesPerPixel = 2;
-    private int sizeXY;
-    private int sizeBytes;
-
-    private boolean littleEndian;
+public final class ShortFromUnsignedShort extends ConvertToShort {
 
     public ShortFromUnsignedShort(boolean littleEndian) {
-        super();
-        this.littleEndian = littleEndian;
+        super(littleEndian);
     }
 
     @Override
-    protected void setupBefore(Dimensions dimensions, int numChannelsPerByteArray) {
-        sizeXY = dimensions.x() * dimensions.y();
-        sizeBytes = sizeXY * bytesPerPixel;
-    }
+    protected short convertValue(short value) {
 
-    @Override
-    protected VoxelBuffer<ShortBuffer> convertSingleChannel(byte[] src, int channelRelative) {
+        int valueAsInt = value;
 
-        short[] crntChannelBytes = new short[sizeXY];
-
-        int indOut = 0;
-        for (int indIn = 0; indIn < sizeBytes; indIn += bytesPerPixel) {
-            int s = DataTools.bytesToShort(src, indIn, bytesPerPixel, littleEndian);
-
-            // Make positive
-            if (s < 0) {
-                s += (UnsignedShortVoxelType.MAX_VALUE_INT + 1);
-            }
-
-            if (s > UnsignedShortVoxelType.MAX_VALUE_INT) {
-                s = UnsignedShortVoxelType.MAX_VALUE_INT;
-            }
-            if (s < 0) {
-                s = 0;
-            }
-
-            crntChannelBytes[indOut++] = (short) s;
+        // Make positive
+        if (valueAsInt < 0) {
+            valueAsInt += (UnsignedShortVoxelType.MAX_VALUE_INT + 1);
         }
 
-        return VoxelBufferShort.wrap(crntChannelBytes);
+        if (valueAsInt > UnsignedShortVoxelType.MAX_VALUE_INT) {
+            valueAsInt = UnsignedShortVoxelType.MAX_VALUE_INT;
+        }
+        if (valueAsInt < 0) {
+            valueAsInt = 0;
+        }
+
+        return (short) valueAsInt;
     }
 }

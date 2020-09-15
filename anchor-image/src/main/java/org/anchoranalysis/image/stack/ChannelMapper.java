@@ -25,7 +25,6 @@
  */
 package org.anchoranalysis.image.stack;
 
-import java.nio.ByteBuffer;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
@@ -35,7 +34,8 @@ import java.util.function.IntFunction;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.channel.converter.attached.ChannelConverterAttached;
+import org.anchoranalysis.image.channel.convert.attached.ChannelConverterAttached;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 
 /**
@@ -47,15 +47,16 @@ import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 public class ChannelMapper {
 
     private IntFunction<Channel> channelGetter;
-    private IntFunction<Optional<ChannelConverterAttached<Channel, ByteBuffer>>> converterGetter;
+    private IntFunction<Optional<ChannelConverterAttached<Channel, UnsignedByteBuffer>>>
+            converterGetter;
 
     public <T> T mapChannelIfSupported(
             int channelIndex,
-            BiFunction<Channel, ChannelConverterAttached<Channel, ByteBuffer>, T> mapper,
+            BiFunction<Channel, ChannelConverterAttached<Channel, UnsignedByteBuffer>, T> mapper,
             Function<Channel, T> fallback) {
 
         Channel channel = channelGetter.apply(channelIndex);
-        Optional<ChannelConverterAttached<Channel, ByteBuffer>> optional =
+        Optional<ChannelConverterAttached<Channel, UnsignedByteBuffer>> optional =
                 converterGetter.apply(channelIndex);
 
         if (optional.isPresent()) {
@@ -71,7 +72,7 @@ public class ChannelMapper {
 
     public void callChannelIfSupported(
             int channelIndex,
-            BiConsumer<Channel, ChannelConverterAttached<Channel, ByteBuffer>> consumer,
+            BiConsumer<Channel, ChannelConverterAttached<Channel, UnsignedByteBuffer>> consumer,
             Consumer<Channel> fallback) {
         // We perform the call via a mapping that returns null
         mapChannelIfSupported(channelIndex, convertConsumer(consumer), convertConsumer(fallback));

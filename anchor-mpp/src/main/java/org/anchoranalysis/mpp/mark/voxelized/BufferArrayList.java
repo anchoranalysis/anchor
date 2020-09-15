@@ -26,27 +26,26 @@
 
 package org.anchoranalysis.mpp.mark.voxelized;
 
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 
 class BufferArrayList {
 
-    private ArrayList<ByteBuffer> delegate = new ArrayList<>();
+    private ArrayList<UnsignedByteBuffer> delegate = new ArrayList<>();
 
-    public boolean add(ByteBuffer e) {
+    public boolean add(UnsignedByteBuffer e) {
         return delegate.add(e);
     }
 
     public void init(EnergyStackWithoutParams stack, int z) {
 
         for (int c = 0; c < stack.getNumberChannels(); c++) {
-            ByteBuffer bb = stack.getChannel(c).voxels().asByte().slices().slice(z).buffer();
-            delegate.add(bb);
+            delegate.add(stack.getChannel(c).voxels().asByte().slices().slice(z).buffer());
         }
     }
 
-    public ByteBuffer get(int index) {
+    public UnsignedByteBuffer get(int index) {
         return delegate.get(index);
     }
 }

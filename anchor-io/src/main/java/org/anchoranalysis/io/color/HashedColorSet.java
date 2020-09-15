@@ -31,7 +31,7 @@ import org.anchoranalysis.core.color.ColorIndex;
 import org.anchoranalysis.core.color.ColorList;
 import org.anchoranalysis.core.color.RGBColor;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.io.bean.color.generator.ColorSetGenerator;
+import org.anchoranalysis.io.bean.color.list.ColorListFactory;
 
 // Associates an id with a color from an existing color set, and remembers the association
 //  for next time
@@ -44,10 +44,10 @@ public class HashedColorSet implements ColorIndex {
     private int crntIndex = 0;
 
     // Constructor
-    public HashedColorSet(ColorSetGenerator colorSetGnrtr, int uniqueCols)
+    public HashedColorSet(ColorListFactory colorSetGnrtr, int uniqueCols)
             throws OperationFailedException {
         super();
-        this.colorList = colorSetGnrtr.generateColors(uniqueCols);
+        this.colorList = colorSetGnrtr.create(uniqueCols);
     }
 
     @Override

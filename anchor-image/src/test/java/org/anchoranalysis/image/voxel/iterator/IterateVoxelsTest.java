@@ -32,7 +32,7 @@ import static org.junit.Assert.*;
 import java.util.Optional;
 import java.util.function.Consumer;
 import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.extent.BoundingBox;
+import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.junit.Test;
 
@@ -100,7 +100,7 @@ public class IterateVoxelsTest {
                 message,
                 expectedNumVoxels,
                 object.boundingBox().centerOfGravity(),
-                counter -> IterateVoxels.callEachPoint(object, counter));
+                counter -> IterateVoxelsObjectMask.withPoint(object, counter));
     }
 
     private void testIntersectionObjects(
@@ -113,7 +113,8 @@ public class IterateVoxelsTest {
                 message,
                 expectedNumVoxels,
                 expectedCenter,
-                counter -> IterateVoxels.overMasks(object1, Optional.of(object2), counter));
+                counter ->
+                        IterateVoxelsObjectMask.withPoint(object1, Optional.of(object2), counter));
     }
 
     private void testBoundingBox(String message, BoundingBox box) {
@@ -121,7 +122,7 @@ public class IterateVoxelsTest {
                 message,
                 box.extent().calculateVolume(),
                 box.centerOfGravity(),
-                counter -> IterateVoxels.callEachPoint(box, counter));
+                counter -> IterateVoxelsBoundingBox.withPoint(box, counter));
     }
 
     private void testCounter(

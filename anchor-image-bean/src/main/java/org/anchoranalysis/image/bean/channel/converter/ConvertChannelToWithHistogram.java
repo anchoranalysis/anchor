@@ -27,7 +27,7 @@
 package org.anchoranalysis.image.bean.channel.converter;
 
 import org.anchoranalysis.bean.AnchorBean;
-import org.anchoranalysis.image.channel.converter.attached.ChannelConverterAttached;
+import org.anchoranalysis.image.channel.convert.attached.ChannelConverterAttached;
 import org.anchoranalysis.image.histogram.Histogram;
 
 public abstract class ConvertChannelToWithHistogram

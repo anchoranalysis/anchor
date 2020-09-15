@@ -29,13 +29,14 @@ package org.anchoranalysis.image.voxel.iterator;
 import org.anchoranalysis.core.arithmetic.RunningSumPoint;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.PointConverter;
+import org.anchoranalysis.image.voxel.iterator.process.ProcessPoint;
 
 /**
  * Aggregates points as they are successively processed
  *
  * @author Owen Feehan
  */
-class AggregatePoints implements ProcessVoxel {
+class AggregatePoints implements ProcessPoint {
 
     private RunningSumPoint runningSum = new RunningSumPoint();
 

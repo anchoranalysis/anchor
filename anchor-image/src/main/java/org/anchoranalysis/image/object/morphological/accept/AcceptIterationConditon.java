@@ -26,9 +26,9 @@
 
 package org.anchoranalysis.image.object.morphological.accept;
 
-import java.nio.ByteBuffer;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.binary.values.BinaryValues;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.Voxels;
 
 /**
@@ -42,8 +42,8 @@ public interface AcceptIterationConditon {
     /**
      * @param voxels
      * @param bvb
-     * @return TRUE if the particular iteration should be accepted, FALSE otherwise
+     * @return true if the particular iteration should be accepted, false otherwise
      */
-    boolean acceptIteration(Voxels<ByteBuffer> voxels, BinaryValues bvb)
+    boolean acceptIteration(Voxels<UnsignedByteBuffer> voxels, BinaryValues bvb)
             throws OperationFailedException;
 }

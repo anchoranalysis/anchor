@@ -53,7 +53,7 @@ public class CSVReaderByLine {
          * The headers of the CSV file
          *
          * @throws CSVReaderException
-         * @return a string or NULL if the headers don't exist
+         * @return a string or null if the headers don't exist
          */
         String[] headers() throws CSVReaderException;
 

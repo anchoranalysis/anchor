@@ -55,8 +55,8 @@ public class ImageMoments {
      *
      * @param matrixPoints a matrix where each row represents a point (n x 3) and each column an
      *     axis
-     * @param suppressZ iff TRUE the z-dimension is ignored
-     * @param sortAscending if TRUE, eigenValues are sorted in ascendingOrder, if FALSE in
+     * @param suppressZ iff true the z-dimension is ignored
+     * @param sortAscending if true, eigenValues are sorted in ascendingOrder, if false in
      *     descending order
      */
     public ImageMoments(DoubleMatrix2D matrixPoints, boolean suppressZ, boolean sortAscending) {

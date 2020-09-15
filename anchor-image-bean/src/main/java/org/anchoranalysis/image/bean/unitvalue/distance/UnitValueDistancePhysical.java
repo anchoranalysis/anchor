@@ -32,10 +32,8 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.unit.SpatialConversionUtilities;
-import org.anchoranalysis.core.unit.SpatialConversionUtilities.UnitSuffix;
-import org.anchoranalysis.image.convert.ImageUnitConverter;
-import org.anchoranalysis.image.extent.Resolution;
+import org.anchoranalysis.image.extent.SpatialUnits;
+import org.anchoranalysis.image.extent.UnitConverter;
 import org.anchoranalysis.image.orientation.DirectionVector;
 
 // Measures either area or volume (depending if the do3D flag is employed)
@@ -51,18 +49,16 @@ public class UnitValueDistancePhysical extends UnitValueDistance {
     // END BEAN PROPERTIES
 
     @Override
-    public double resolve(Optional<Resolution> res, DirectionVector dirVector)
+    public double resolve(Optional<UnitConverter> unitConverter, DirectionVector direction)
             throws OperationFailedException {
 
-        if (!res.isPresent()) {
+        if (!unitConverter.isPresent()) {
             throw new OperationFailedException(
                     "An image-resolution is missing, so cannot calculate physical distances");
         }
 
-        UnitSuffix unitPrefix = SpatialConversionUtilities.suffixFromMeterString(unitType);
+        double valueAsBase = SpatialUnits.convertFromUnits(value, unitType);
 
-        double valueAsBase = SpatialConversionUtilities.convertFromUnits(value, unitPrefix);
-
-        return ImageUnitConverter.convertFromPhysicalDistance(valueAsBase, res.get(), dirVector);
+        return unitConverter.get().fromPhysicalDistance(valueAsBase, direction);
     }
 }

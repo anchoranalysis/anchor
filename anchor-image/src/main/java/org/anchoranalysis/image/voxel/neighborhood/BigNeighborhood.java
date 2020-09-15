@@ -27,7 +27,7 @@
 package org.anchoranalysis.image.voxel.neighborhood;
 
 import lombok.AllArgsConstructor;
-import org.anchoranalysis.image.voxel.iterator.changed.ProcessVoxelNeighbor;
+import org.anchoranalysis.image.voxel.iterator.neighbor.ProcessVoxelNeighbor;
 
 /**
  * Provides either 8-connectivity or 26-connectivity as an neighborhood.

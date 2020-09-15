@@ -29,7 +29,6 @@ package org.anchoranalysis.image.object.factory.unionfind;
 import static org.anchoranalysis.image.voxel.iterator.ObjectMaskFixture.*;
 import static org.junit.Assert.*;
 
-import java.nio.Buffer;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3i;
@@ -106,8 +105,8 @@ public class ConnectedComponentUnitFindTest {
                 allSizesEqualExceptOne(objects, expectedSingleObjectSize));
     }
 
-    private <T extends Buffer> BinaryVoxels<T> createBufferWithObjects(
-            VoxelDataType bufferDataType, boolean do3D) throws CreateException {
+    private <T> BinaryVoxels<T> createBufferWithObjects(VoxelDataType bufferDataType, boolean do3D)
+            throws CreateException {
 
         ObjectMaskFixture fixture = new ObjectMaskFixture(do3D);
 

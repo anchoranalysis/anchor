@@ -35,10 +35,11 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
+import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.core.functional.OptionalUtilities;
-import org.anchoranalysis.core.graph.EdgeTypeWithVertices;
-import org.anchoranalysis.core.graph.GraphWithEdgeTypes;
+import org.anchoranalysis.core.graph.TypedEdge;
+import org.anchoranalysis.core.graph.GraphWithPayload;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.feature.bean.list.FeatureList;
@@ -71,7 +72,7 @@ import org.anchoranalysis.mpp.pair.RandomCollection;
  */
 public class RandomCollectionWithAddCriteria<T> extends RandomCollection<T> {
 
-    private GraphWithEdgeTypes<Mark, T> graph;
+    private GraphWithPayload<Mark, T> graph;
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private Class<?> pairTypeClass;
@@ -86,7 +87,7 @@ public class RandomCollectionWithAddCriteria<T> extends RandomCollection<T> {
 
     public RandomCollectionWithAddCriteria(Class<?> pairTypeClass) {
         this.pairTypeClass = pairTypeClass;
-        graph = new GraphWithEdgeTypes<>(true);
+        graph = new GraphWithPayload<>(true);
     }
 
     public RandomCollectionWithAddCriteria<T> shallowCopy() {
@@ -121,7 +122,7 @@ public class RandomCollectionWithAddCriteria<T> extends RandomCollection<T> {
         this.sharedFeatures = sharedFeatures;
 
         try {
-            this.graph = new GraphWithEdgeTypes<>(true);
+            this.graph = new GraphWithPayload<>(true);
 
             // Add all marks as vertices
             for (int i = 0; i < marks.size(); i++) {
@@ -187,26 +188,26 @@ public class RandomCollectionWithAddCriteria<T> extends RandomCollection<T> {
     public void remove(MemoForIndex marksExisting, VoxelizedMarkMemo mark)
             throws UpdateMarkSetException {
         checkInit();
-        this.graph.removeVertex(mark.getMark());
+        try {
+            this.graph.removeVertex(mark.getMark());
+        } catch (OperationFailedException e) {
+            throw new UpdateMarkSetException(e);
+        }
     }
 
     // START DELEGATES
-    // Each edge can appear many times
-    public Collection<EdgeTypeWithVertices<Mark, T>> getPairsWithPossibleDuplicates() {
-        return graph.edgeSetWithPossibleDuplicates();
-    }
 
     // Each pair appears twice
     public Set<T> createPairsUnique() {
         HashSet<T> setOut = new HashSet<>();
-        for (EdgeTypeWithVertices<Mark, T> pair : getPairsWithPossibleDuplicates()) {
-            setOut.add(pair.getEdge());
+        for (TypedEdge<Mark, T> pair : pairsMaybeDuplicates()) {
+            setOut.add(pair.getPayload());
         }
         return setOut;
     }
 
-    public Collection<EdgeTypeWithVertices<Mark, T>> getPairsFor(Mark mark) {
-        return graph.edgesOf(mark);
+    public Collection<TypedEdge<Mark, T>> getPairsFor(Mark mark) {
+        return graph.outgoingEdgesFor(mark);
     }
 
     public boolean containsMark(Mark mark) {
@@ -214,7 +215,7 @@ public class RandomCollectionWithAddCriteria<T> extends RandomCollection<T> {
     }
 
     public Collection<Mark> getMarks() {
-        return graph.vertexSet();
+        return graph.vertices();
     }
 
     public boolean isMarksSpan(MarkCollection marks) {
@@ -242,7 +243,7 @@ public class RandomCollectionWithAddCriteria<T> extends RandomCollection<T> {
     @Override
     public T sampleRandomPairNonUniform(RandomNumberGenerator randomNumberGenerator) {
 
-        int count = this.graph.edgeSetWithPossibleDuplicates().size();
+        int count = this.graph.edgesMaybeDuplicates().size();
 
         if (count == 0) {
             throw new AnchorFriendlyRuntimeException("No edges exist to sample from");
@@ -252,9 +253,9 @@ public class RandomCollectionWithAddCriteria<T> extends RandomCollection<T> {
         int index = randomNumberGenerator.sampleIntFromRange(count);
 
         int i = 0;
-        for (EdgeTypeWithVertices<Mark, T> di : getPairsWithPossibleDuplicates()) {
+        for (TypedEdge<Mark, T> edge : pairsMaybeDuplicates()) {
             if (i++ == index) {
-                return di.getEdge();
+                return edge.getPayload();
             }
         }
 
@@ -323,6 +324,11 @@ public class RandomCollectionWithAddCriteria<T> extends RandomCollection<T> {
         }
     }
 
+    // Each edge can appear many times
+    private Collection<TypedEdge<Mark, T>> pairsMaybeDuplicates() {
+        return graph.edgesMaybeDuplicates();
+    }
+    
     private void checkInit() throws UpdateMarkSetException {
         if (!hasInit) {
             throw new UpdateMarkSetException("object has not been initialized");

@@ -41,7 +41,8 @@ import org.anchoranalysis.core.error.OperationFailedException;
  * @param <T> destination type
  * @param <U> intermediate type
  */
-@NoArgsConstructor @AllArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 public class Compose<S, T, U> extends StateTransformerBean<S, T> {
 
     // START BEAN PROPERTIES
@@ -51,7 +52,7 @@ public class Compose<S, T, U> extends StateTransformerBean<S, T> {
     /** Second transformation from {@code U} to {@code T} */
     @BeanField @Getter @Setter private StateTransformerBean<U, T> second;
     // END BEAN PROPERTIES
-    
+
     @Override
     public T transform(S in, TransformationContext context) throws OperationFailedException {
 

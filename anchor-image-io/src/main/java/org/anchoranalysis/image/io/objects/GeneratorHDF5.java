@@ -55,17 +55,17 @@ public class GeneratorHDF5 extends SingleFileTypeGenerator
     // END REQUIRED ARGUMENTS
 
     private ObjectCollection element;
-    
+
     /**
      * Creates with an element (and compressed set to true)
-     * 
+     *
      * @param objects the initial element for the generator
      */
     public GeneratorHDF5(ObjectCollection objects) {
         this(true);
         this.element = objects;
     }
-    
+
     public static void writeObjectsToFile(ObjectCollection objects, Path filePath) {
         GeneratorHDF5 generator = new GeneratorHDF5(true);
         generator.setIterableElement(objects);

@@ -26,9 +26,9 @@
 
 package org.anchoranalysis.image.voxel.kernel.density;
 
-import java.nio.ByteBuffer;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.kernel.BinaryKernel;
@@ -65,7 +65,7 @@ public class MaxDensityKernel3 extends BinaryKernel {
     }
 
     @Override
-    public void init(Voxels<ByteBuffer> in) {
+    public void init(Voxels<UnsignedByteBuffer> in) {
         this.extent = in.extent();
     }
 
@@ -82,20 +82,20 @@ public class MaxDensityKernel3 extends BinaryKernel {
      * <p>Apologies that it is difficult to read with high cognitive-complexity.
      */
     @Override
-    public boolean accptPos(int ind, Point3i point) {
+    public boolean acceptPoint(int ind, Point3i point) {
 
         int cnt = 0;
 
-        ByteBuffer inArrZ = inSlices.getLocal(0);
-        ByteBuffer inArrZLess1 = inSlices.getLocal(-1);
-        ByteBuffer inArrZPlus1 = inSlices.getLocal(+1);
+        UnsignedByteBuffer inArrZ = inSlices.getLocal(0);
+        UnsignedByteBuffer inArrZLess1 = inSlices.getLocal(-1);
+        UnsignedByteBuffer inArrZPlus1 = inSlices.getLocal(+1);
 
         int xLength = extent.x();
 
         int x = point.x();
         int y = point.y();
 
-        if (bv.isOn(inArrZ.get(ind))) {
+        if (bv.isOn(inArrZ.getRaw(ind))) {
             cnt++;
         }
 
@@ -103,7 +103,7 @@ public class MaxDensityKernel3 extends BinaryKernel {
         x--;
         ind--;
         if (x >= 0) {
-            if (bv.isOn(inArrZ.get(ind))) {
+            if (bv.isOn(inArrZ.getRaw(ind))) {
                 cnt++;
             }
         } else {
@@ -115,7 +115,7 @@ public class MaxDensityKernel3 extends BinaryKernel {
         x += 2;
         ind += 2;
         if (x < extent.x()) {
-            if (bv.isOn(inArrZ.get(ind))) {
+            if (bv.isOn(inArrZ.getRaw(ind))) {
                 cnt++;
             }
         } else {
@@ -129,7 +129,7 @@ public class MaxDensityKernel3 extends BinaryKernel {
         y--;
         ind -= xLength;
         if (y >= 0) {
-            if (bv.isOn(inArrZ.get(ind))) {
+            if (bv.isOn(inArrZ.getRaw(ind))) {
                 cnt++;
             }
         } else {
@@ -141,7 +141,7 @@ public class MaxDensityKernel3 extends BinaryKernel {
         y += 2;
         ind += (2 * xLength);
         if (y < (extent.y())) {
-            if (bv.isOn(inArrZ.get(ind))) {
+            if (bv.isOn(inArrZ.getRaw(ind))) {
                 cnt++;
             }
         } else {
@@ -154,7 +154,7 @@ public class MaxDensityKernel3 extends BinaryKernel {
         if (useZ) {
 
             if (inArrZLess1 != null) {
-                if (bv.isOn(inArrZLess1.get(ind))) {
+                if (bv.isOn(inArrZLess1.getRaw(ind))) {
                     cnt++;
                 }
             } else {
@@ -164,7 +164,7 @@ public class MaxDensityKernel3 extends BinaryKernel {
             }
 
             if (inArrZPlus1 != null) {
-                if (bv.isOn(inArrZPlus1.get(ind))) {
+                if (bv.isOn(inArrZPlus1.getRaw(ind))) {
                     cnt++;
                 }
             } else {

@@ -26,7 +26,9 @@
 
 package org.anchoranalysis.io.bioformats.copyconvert.tofloat;
 
+import com.google.common.base.Preconditions;
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
@@ -46,19 +48,20 @@ public abstract class ConvertToFloat extends ConvertTo<FloatBuffer> {
     protected abstract int bytesPerPixel();
 
     @Override
-    protected void setupBefore(Dimensions dimensions, int numChannelsPerByteArray) {
+    protected void setupBefore(Dimensions dimensions, int numberChannelsPerArray) {
         sizeBytesChannel = dimensions.x() * dimensions.y() * bytesPerPixel();
         this.dimensions = dimensions;
     }
 
     @Override
-    protected VoxelBuffer<FloatBuffer> convertSingleChannel(byte[] src, int channelRelative)
-            throws IOException {
-        int index = (sizeBytesChannel * channelRelative);
-        float[] fArr = convertIntegerBytesToFloatArray(dimensions, src, index);
-        return VoxelBufferFloat.wrap(fArr);
+    protected VoxelBuffer<FloatBuffer> convertSingleChannel(
+            ByteBuffer source, int channelIndexRelative) throws IOException {
+        Preconditions.checkArgument(
+                channelIndexRelative == 0, "interleaving not supported for int data");
+        float[] fArr = convertIntegerBytesToFloatArray(dimensions, source, sizeBytesChannel);
+        return VoxelBufferFloat.wrapArray(fArr);
     }
 
     protected abstract float[] convertIntegerBytesToFloatArray(
-            Dimensions dimensions, byte[] src, int srcOffset) throws IOException;
+            Dimensions dimensions, ByteBuffer source, int offsetInSource) throws IOException;
 }

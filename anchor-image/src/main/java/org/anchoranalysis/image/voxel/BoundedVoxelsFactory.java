@@ -25,21 +25,21 @@
  */
 package org.anchoranalysis.image.voxel;
 
-import java.nio.ByteBuffer;
-import java.nio.IntBuffer;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.image.extent.BoundingBox;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedIntBuffer;
+import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class BoundedVoxelsFactory {
 
-    public static BoundedVoxels<ByteBuffer> createByte(BoundingBox box) {
+    public static BoundedVoxels<UnsignedByteBuffer> createByte(BoundingBox box) {
         return new BoundedVoxels<>(box, VoxelsFactory.getByte().createInitialized(box.extent()));
     }
 
-    public static BoundedVoxels<IntBuffer> createInt(BoundingBox box) {
+    public static BoundedVoxels<UnsignedIntBuffer> createInt(BoundingBox box) {
         return new BoundedVoxels<>(box, VoxelsFactory.getInt().createInitialized(box.extent()));
     }
 }

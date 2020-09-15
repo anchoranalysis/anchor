@@ -27,7 +27,6 @@
 package org.anchoranalysis.image.binary.mask;
 
 import com.google.common.base.Preconditions;
-import java.nio.ByteBuffer;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import org.anchoranalysis.core.geometry.Point3i;
@@ -38,11 +37,12 @@ import org.anchoranalysis.image.binary.voxel.BinaryVoxelsFactory;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.channel.factory.ChannelFactorySingleType;
-import org.anchoranalysis.image.extent.BoundingBox;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.extent.Resolution;
+import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.interpolator.Interpolator;
 import org.anchoranalysis.image.interpolator.InterpolatorFactory;
 import org.anchoranalysis.image.object.ObjectMask;
@@ -84,8 +84,7 @@ public class Mask {
     private final Interpolator interpolator;
 
     /**
-     * Creates a mask from an existing channel using default values for OFF (0) and ON
-     * (255)
+     * Creates a mask from an existing channel using default values for OFF (0) and ON (255)
      *
      * <p>The channel should have maximally two distinct intensity values, represeting OFF and ON
      * states
@@ -104,7 +103,7 @@ public class Mask {
      * Creates a mask from an existing channel
      *
      * <p>The channel should have maximally two distinct intensity values, represeting OFF and ON
-     * states
+     * states.
      *
      * <p>Precondition: no check occurs that only OFF and ON voxels exist in a channel, so please
      * call only with valid input.
@@ -131,17 +130,17 @@ public class Mask {
      *
      * @param voxels the binary-voxels to be reused as the internal buffer of the mask
      */
-    public Mask(BinaryVoxels<ByteBuffer> voxels) {
+    public Mask(BinaryVoxels<UnsignedByteBuffer> voxels) {
         this(voxels, new Resolution());
     }
 
     /**
-     * Creates a mask from an existing binary-voxels using default image resolution
+     * Creates a mask from an existing binary-voxels and a specific image resolution.
      *
      * @param voxels the binary-voxels to be reused as the internal buffer of the mask
      * @param resolution the image-resolution to assign
      */
-    public Mask(BinaryVoxels<ByteBuffer> voxels, Resolution resolution) {
+    public Mask(BinaryVoxels<UnsignedByteBuffer> voxels, Resolution resolution) {
         this.channel = FACTORY.create(voxels.voxels(), resolution);
         this.binaryValues = voxels.binaryValues();
         this.binaryValuesByte = binaryValues.createByte();
@@ -150,8 +149,7 @@ public class Mask {
     }
 
     /**
-     * Creates a new empty mask of particular dimensions and with particular
-     * binaryvalues
+     * Creates a new empty mask of particular dimensions and with particular binaryvalues
      *
      * <p>Default mask values for OFF (0) and ON (255) are employed.
      *
@@ -166,7 +164,11 @@ public class Mask {
         return channel.dimensions();
     }
 
-    public Voxels<ByteBuffer> voxels() {
+    public Resolution resolution() {
+        return dimensions().resolution();
+    }
+
+    public Voxels<UnsignedByteBuffer> voxels() {
         try {
             return channel.voxels().asByte();
         } catch (IncorrectVoxelTypeException e) {
@@ -175,16 +177,16 @@ public class Mask {
         }
     }
 
-    public BinaryVoxels<ByteBuffer> binaryVoxels() {
+    public BinaryVoxels<UnsignedByteBuffer> binaryVoxels() {
         return BinaryVoxelsFactory.reuseByte(voxels(), binaryValues);
     }
 
     public boolean isPointOn(Point3i point) {
-        ByteBuffer bb = voxels().sliceBuffer(point.z());
+        UnsignedByteBuffer buffer = voxels().sliceBuffer(point.z());
 
         int offset = voxels().extent().offsetSlice(point);
 
-        return bb.get(offset) == binaryValuesByte.getOnByte();
+        return buffer.getRaw(offset) == binaryValuesByte.getOnByte();
     }
 
     public Mask duplicate() {
@@ -232,7 +234,8 @@ public class Mask {
         return new Mask(channel.extractSlice(z), binaryValues);
     }
 
-    public void replaceBy(BinaryVoxels<ByteBuffer> voxels) throws IncorrectImageSizeException {
+    public void replaceBy(BinaryVoxels<UnsignedByteBuffer> voxels)
+            throws IncorrectImageSizeException {
         channel.replaceVoxels(voxels.voxels());
     }
 
@@ -244,7 +247,7 @@ public class Mask {
         return channel.assignValue(binaryValues.getOffInt());
     }
 
-    public ByteBuffer sliceBuffer(int z) {
+    public UnsignedByteBuffer sliceBuffer(int z) {
         return channel.voxels().asByte().sliceBuffer(z);
     }
 

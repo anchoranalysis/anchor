@@ -32,7 +32,7 @@ import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.math.statistics.VarianceCalculator;
 
 /**
- * Allows retrieval of statistics in relation to pixels
+ * Allows retrieval of statistics about voxel intensities.
  *
  * @author Owen Feehan
  */

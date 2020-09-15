@@ -26,12 +26,12 @@
 
 package org.anchoranalysis.image.object;
 
-import java.nio.ByteBuffer;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.axis.AxisType;
 import org.anchoranalysis.core.axis.AxisTypeConverter;
 import org.anchoranalysis.core.geometry.Point3d;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.extent.Extent;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -47,33 +47,33 @@ final class CenterOfGravityCalculator {
      */
     public static Point3d centerOfGravity(ObjectMask object) {
 
-        int cnt = 0;
+        int count = 0;
         Point3d sum = new Point3d();
         byte onByte = object.binaryValuesByte().getOnByte();
         Extent extent = object.extent();
 
         for (int z = 0; z < extent.z(); z++) {
 
-            ByteBuffer bb = object.sliceBufferLocal(z);
+            UnsignedByteBuffer buffer = object.sliceBufferLocal(z);
 
             int offset = 0;
             for (int y = 0; y < extent.y(); y++) {
                 for (int x = 0; x < extent.x(); x++) {
 
-                    if (bb.get(offset) == onByte) {
+                    if (buffer.getRaw(offset) == onByte) {
                         sum.add(x, y, z);
-                        cnt++;
+                        count++;
                     }
                     offset++;
                 }
             }
         }
 
-        if (cnt == 0) {
+        if (count == 0) {
             return emptyPoint();
         }
 
-        sum.divideBy(cnt);
+        sum.divideBy(count);
         sum.add(object.boundingBox().cornerMin());
         return sum;
     }
@@ -87,33 +87,33 @@ final class CenterOfGravityCalculator {
      */
     public static double centerOfGravityForAxis(ObjectMask object, AxisType axisType) {
 
-        int cnt = 0;
+        int count = 0;
         double sum = 0.0;
         byte onByte = object.binaryValuesByte().getOnByte();
         Extent extent = object.extent();
 
         for (int z = 0; z < extent.z(); z++) {
 
-            ByteBuffer bb = object.sliceBufferLocal(z);
+            UnsignedByteBuffer buffer = object.sliceBufferLocal(z);
 
             int offset = 0;
             for (int y = 0; y < extent.y(); y++) {
                 for (int x = 0; x < extent.x(); x++) {
 
-                    if (bb.get(offset) == onByte) {
+                    if (buffer.getRaw(offset) == onByte) {
                         sum += AxisTypeConverter.valueFor(axisType, x, y, z);
-                        cnt++;
+                        count++;
                     }
                     offset++;
                 }
             }
         }
 
-        if (cnt == 0) {
+        if (count == 0) {
             return Double.NaN;
         }
 
-        return (sum / cnt) + object.boundingBox().cornerMin().byDimension(axisType);
+        return (sum / count) + object.boundingBox().cornerMin().byDimension(axisType);
     }
 
     private static Point3d emptyPoint() {

@@ -91,7 +91,7 @@ public class FeatureInputPairObjects extends FeatureInputEnergy {
     }
 
     /**
-     * Returns a merged version of the two-objects available (or NULL if not available)
+     * Returns a merged version of the two-objects available (or null if not available)
      *
      * @return the merged object-mask
      */

@@ -30,7 +30,7 @@ import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.outline.traverser.path.ContiguousVoxelPath;
 
 /**
- * A path and a location onto which a merge can occur, and the index of the vertice in the original
+ * A path and a location onto which a merge can occur, and the index of the vertex in the original
  * list
  *
  * @author Owen Feehan

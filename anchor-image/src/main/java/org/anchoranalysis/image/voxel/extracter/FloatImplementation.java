@@ -65,7 +65,7 @@ class FloatImplementation extends Base<FloatBuffer> {
     }
 
     @Override
-    public int voxelWithMaxIntensity() {
+    public long voxelWithMaxIntensity() {
 
         float max = 0;
         boolean first = true;
@@ -85,7 +85,7 @@ class FloatImplementation extends Base<FloatBuffer> {
                 }
             }
         }
-        return (int) Math.ceil(max);
+        return (long) Math.ceil(max);
     }
 
     @Override

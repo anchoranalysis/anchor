@@ -25,41 +25,38 @@
  */
 package org.anchoranalysis.image.voxel.arithmetic;
 
-import java.nio.IntBuffer;
 import java.util.function.IntFunction;
+import org.anchoranalysis.image.convert.UnsignedIntBuffer;
 import org.anchoranalysis.image.extent.Extent;
 
-class IntImplementation extends Base<IntBuffer> {
+class IntImplementation extends Base<UnsignedIntBuffer> {
 
-    public IntImplementation(Extent extent, IntFunction<IntBuffer> bufferForSlice) {
+    public IntImplementation(Extent extent, IntFunction<UnsignedIntBuffer> bufferForSlice) {
         super(extent, bufferForSlice);
     }
 
     @Override
-    protected void multiplyBuffer(IntBuffer buffer, double factor) {
+    protected void multiplyBuffer(UnsignedIntBuffer buffer, double factor) {
         while (buffer.hasRemaining()) {
-            int mult = (int) (buffer.get() * factor);
-            buffer.put(buffer.position() - 1, mult);
+            buffer.putDouble(buffer.position() - 1, buffer.getUnsigned() * factor);
         }
     }
 
     @Override
-    protected void subtractFromBuffer(IntBuffer buffer, int valueToSubtractFrom) {
+    protected void subtractFromBuffer(UnsignedIntBuffer buffer, int valueToSubtractFrom) {
         while (buffer.hasRemaining()) {
-            int newVal = valueToSubtractFrom - buffer.get();
-            buffer.put(buffer.position() - 1, newVal);
+            buffer.putUnsigned(buffer.position() - 1, valueToSubtractFrom - buffer.getUnsigned());
         }
     }
 
     // TODO when values are too small or too large
     @Override
-    protected void addToBufferIndex(IntBuffer buffer, int index, int valueToBeAdded) {
-        int intVal = buffer.get(index) + valueToBeAdded;
-        buffer.put(index, intVal);
+    protected void addToBufferIndex(UnsignedIntBuffer buffer, int index, int valueToBeAdded) {
+        buffer.putUnsigned(index, buffer.getUnsigned(index) + valueToBeAdded);
     }
 
     @Override
-    protected void multiplyByBufferIndex(IntBuffer buffer, int index, double factor) {
+    protected void multiplyByBufferIndex(UnsignedIntBuffer buffer, int index, double factor) {
         throw new IllegalArgumentException("Currently unsupported method");
     }
 }

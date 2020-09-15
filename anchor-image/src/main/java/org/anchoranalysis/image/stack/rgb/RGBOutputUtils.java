@@ -26,26 +26,26 @@
 
 package org.anchoranalysis.image.stack.rgb;
 
-import java.nio.ByteBuffer;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.color.RGBColor;
 import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.extent.Dimensions;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class RGBOutputUtils {
 
-    public static void writeRGBColorToByteArr(
+    public static void writeRGBColorToByteArray(
             RGBColor color,
             Point3i point,
             Dimensions dimensions,
-            ByteBuffer red,
-            ByteBuffer blue,
-            ByteBuffer green) {
+            UnsignedByteBuffer red,
+            UnsignedByteBuffer blue,
+            UnsignedByteBuffer green) {
         int index = dimensions.offsetSlice(point);
-        red.put(index, (byte) color.getRed());
-        green.put(index, (byte) color.getGreen());
-        blue.put(index, (byte) color.getBlue());
+        red.putUnsigned(index, color.getRed());
+        green.putUnsigned(index, color.getGreen());
+        blue.putUnsigned(index, color.getBlue());
     }
 }

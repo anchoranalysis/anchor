@@ -28,7 +28,7 @@ package org.anchoranalysis.image.bean.unitvalue.area;
 
 import java.util.Optional;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.image.extent.Resolution;
+import org.anchoranalysis.image.extent.UnitConverter;
 
 /**
  * Area expressed as square pixels
@@ -43,7 +43,7 @@ public class UnitValueAreaPixels extends UnitValueArea {
     }
 
     @Override
-    public double resolveToVoxels(Optional<Resolution> resolution) {
+    public double resolveToVoxels(Optional<UnitConverter> unitConverter) {
         return getValue();
     }
 

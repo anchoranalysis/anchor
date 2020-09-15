@@ -28,18 +28,19 @@ package org.anchoranalysis.image.io.generator.raster.boundingbox;
 
 import io.vavr.control.Either;
 import java.util.Optional;
+import java.util.stream.Stream;
 import org.anchoranalysis.core.color.ColorIndex;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.index.SetOperationFailedException;
-import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.extent.box.BoundedList;
+import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.io.generator.raster.RasterGenerator;
 import org.anchoranalysis.image.io.generator.raster.object.rgb.DrawObjectsGenerator;
-import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.object.ObjectsWithBoundingBox;
 import org.anchoranalysis.image.object.properties.ObjectCollectionWithProperties;
+import org.anchoranalysis.image.object.properties.ObjectWithProperties;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.bean.object.writer.Outline;
@@ -58,7 +59,7 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
  * @author Owen Feehan
  */
 public class DrawObjectOnStackGenerator extends RasterGenerator
-        implements IterableObjectGenerator<ObjectsWithBoundingBox, Stack> {
+        implements IterableObjectGenerator<BoundedList<ObjectMask>, Stack> {
 
     private static final ManifestDescription MANIFEST_DESCRIPTION =
             new ManifestDescription("raster", "extractedObjectOutline");
@@ -69,7 +70,7 @@ public class DrawObjectOnStackGenerator extends RasterGenerator
     private final boolean flatten;
     // END REQUIRED ARGUMENTS
 
-    private ObjectsWithBoundingBox element;
+    private BoundedList<ObjectMask> element;
 
     /**
      * Creates the generator with a stack as the background - and with default color green and
@@ -162,12 +163,13 @@ public class DrawObjectOnStackGenerator extends RasterGenerator
         // Apply the generator
         drawObjectsGenerator.setBackground(createBackground());
 
-        ObjectsWithBoundingBox objects = this.getIterableElement();
+        BoundedList<ObjectMask> objects = this.getIterableElement();
 
-        ObjectCollection objectsForDrawing =
-                objects.objects().stream()
-                        .map(object -> prepareObjectForDrawing(object, objects.boundingBox()));
-
+        Stream<ObjectWithProperties> objectsForDrawing = 
+                objects.stream().map( object -> new ObjectWithProperties(
+                        prepareObjectForDrawing(object, objects.boundingBox()) ) 
+                );
+        
         // An object-mask that is relative to the extracted section
         drawObjectsGenerator.setIterableElement(
                 new ObjectCollectionWithProperties(objectsForDrawing));
@@ -202,12 +204,12 @@ public class DrawObjectOnStackGenerator extends RasterGenerator
     }
 
     @Override
-    public ObjectsWithBoundingBox getIterableElement() {
+    public BoundedList<ObjectMask> getIterableElement() {
         return element;
     }
 
     @Override
-    public void setIterableElement(ObjectsWithBoundingBox element) {
+    public void setIterableElement(BoundedList<ObjectMask> element) {
         this.element = element;
     }
 

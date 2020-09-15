@@ -43,18 +43,18 @@ public class BoundPhysicalExtent extends BoundMinMax {
         super(min, max);
     }
 
-    public BoundPhysicalExtent(BoundPhysicalExtent src) {
-        super(src);
+    public BoundPhysicalExtent(BoundPhysicalExtent source) {
+        super(source);
     }
 
     @Override
-    public double getMinResolved(Resolution sr, boolean do3D) {
-        return getMin() / sr.min(do3D);
+    public double getMinResolved(Resolution resolution, boolean do3D) {
+        return getMin() / resolution.min(do3D);
     }
 
     @Override
-    public double getMaxResolved(Resolution sr, boolean do3D) {
-        return getMax() / sr.min(do3D);
+    public double getMaxResolved(Resolution resolution, boolean do3D) {
+        return getMax() / resolution.min(do3D);
     }
 
     @Override

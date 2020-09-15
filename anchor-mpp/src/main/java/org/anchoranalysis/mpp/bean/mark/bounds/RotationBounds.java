@@ -34,5 +34,5 @@ import org.anchoranalysis.image.orientation.Orientation;
 public abstract class RotationBounds extends AnchorBean<RotationBounds> {
 
     public abstract Orientation randomOrientation(
-            RandomNumberGenerator randomNumberGenerator, Resolution res);
+            RandomNumberGenerator randomNumberGenerator, Resolution resolution);
 }

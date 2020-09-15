@@ -43,6 +43,6 @@ public class NumberVoxels extends FeatureSingleObject {
     @Override
     public double calculate(SessionInput<FeatureInputSingleObject> input)
             throws FeatureCalculationException {
-        return input.calc(new CalculateNumVoxels(mip));
+        return input.calculate(new CalculateNumVoxels(mip));
     }
 }

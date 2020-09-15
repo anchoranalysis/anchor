@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.image.object.morphological;
 
-import java.nio.ByteBuffer;
 import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -36,6 +35,7 @@ import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelsFactory;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.morphological.accept.AcceptIterationConditon;
@@ -83,11 +83,11 @@ public class MorphologicalDilation {
         }
     }
 
-    public static BinaryVoxels<ByteBuffer> dilate(
-            BinaryVoxels<ByteBuffer> bvb,
+    public static BinaryVoxels<UnsignedByteBuffer> dilate(
+            BinaryVoxels<UnsignedByteBuffer> bvb,
             boolean do3D,
             int iterations,
-            Optional<Voxels<ByteBuffer>> backgroundVb,
+            Optional<Voxels<UnsignedByteBuffer>> backgroundVb,
             int minIntensityValue,
             boolean bigNeighborhood)
             throws CreateException {
@@ -109,24 +109,24 @@ public class MorphologicalDilation {
      * <p>TODO: merge do3D and zOnly parameters into an enum
      *
      * @param bvb input-buffer
-     * @param do3D if TRUE, 6-neighborhood dilation, otherwise 4-neighnrouhood
+     * @param do3D if true, 6-neighborhood dilation, otherwise 4-neighnrouhood
      * @param iterations number of dilations
      * @param backgroundVb optional background-buffer that can influence the dilation with the
      *     minIntensityValue
      * @param minIntensityValue minimumIntensity on the background, for a pixel to be included
-     * @param zOnly if TRUE, only peforms dilation in z direction. Requires do3D to be TRUE
-     * @param outsideAtThreshold if TRUE, pixels outside the buffer are treated as ON, otherwise as
+     * @param zOnly if true, only peforms dilation in z direction. Requires do3D to be true
+     * @param outsideAtThreshold if true, pixels outside the buffer are treated as ON, otherwise as
      *     OFF
-     * @param acceptConditions if non-NULL, imposes a condition on each iteration that must be
+     * @param acceptConditions if non-null, imposes a condition on each iteration that must be
      *     passed
      * @return a new buffer containing the results of the dilation-operations
      * @throws CreateException
      */
-    public static BinaryVoxels<ByteBuffer> dilate(
-            BinaryVoxels<ByteBuffer> bvb,
+    public static BinaryVoxels<UnsignedByteBuffer> dilate(
+            BinaryVoxels<UnsignedByteBuffer> bvb,
             boolean do3D,
             int iterations,
-            Optional<Voxels<ByteBuffer>> backgroundVb,
+            Optional<Voxels<UnsignedByteBuffer>> backgroundVb,
             int minIntensityValue,
             boolean zOnly,
             boolean outsideAtThreshold,
@@ -144,9 +144,9 @@ public class MorphologicalDilation {
                         outsideAtThreshold,
                         bigNeighborhood);
 
-        Voxels<ByteBuffer> buf = bvb.voxels();
+        Voxels<UnsignedByteBuffer> buf = bvb.voxels();
         for (int i = 0; i < iterations; i++) {
-            Voxels<ByteBuffer> next =
+            Voxels<UnsignedByteBuffer> next =
                     ApplyKernel.apply(kernelDilation, buf, bvb.binaryValues().createByte());
 
             try {
@@ -166,7 +166,7 @@ public class MorphologicalDilation {
     private static BinaryKernel createDilationKernel(
             BinaryValuesByte bv,
             boolean do3D,
-            Optional<Voxels<ByteBuffer>> backgroundVb,
+            Optional<Voxels<UnsignedByteBuffer>> backgroundVb,
             int minIntensityValue,
             boolean zOnly,
             boolean outsideAtThreshold,

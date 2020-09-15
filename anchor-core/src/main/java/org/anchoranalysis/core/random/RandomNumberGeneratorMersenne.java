@@ -33,11 +33,10 @@ import cern.jet.random.engine.RandomEngine;
 
 /**
  * Implements a random-number generator using the {@link MersenneTwister} algorithm.
- * 
- * <p>Either one fixed constant-seed or the system clock will be used as a seed.
- * 
- * @author Owen Feehan
  *
+ * <p>Either one fixed constant-seed or the system clock will be used as a seed.
+ *
+ * @author Owen Feehan
  */
 public class RandomNumberGeneratorMersenne implements RandomNumberGenerator {
 

@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.image.histogram;
 
-import java.nio.ByteBuffer;
 import java.util.Collection;
 import java.util.Optional;
 import lombok.AccessLevel;
@@ -36,6 +35,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
@@ -58,10 +58,9 @@ public class HistogramFactory {
             throw new CreateException("Cannot determine a maxBinVal as the collection is empty");
         }
 
-        Histogram h = histograms.iterator().next();
+        Histogram histogram = histograms.iterator().next();
 
-        int maxBinVal = h.getMaxBin();
-        return create(histograms, maxBinVal);
+        return create(histograms, histogram.getMaxBin());
     }
 
     // Creates histograms from a collection of existing histograms
@@ -74,9 +73,9 @@ public class HistogramFactory {
         }
 
         Histogram out = new Histogram(maxBinVal);
-        for (Histogram h : histograms) {
+        for (Histogram histogram : histograms) {
             try {
-                out.addHistogram(h);
+                out.addHistogram(histogram);
             } catch (OperationFailedException e) {
                 throw new CreateException(e);
             }
@@ -122,9 +121,9 @@ public class HistogramFactory {
 
     public static Histogram create(VoxelBuffer<?> inputBuffer) {
 
-        Histogram hist = new Histogram((int) inputBuffer.dataType().maxValue());
-        addBufferToHistogram(hist, inputBuffer, inputBuffer.size());
-        return hist;
+        Histogram histogram = new Histogram((int) inputBuffer.dataType().maxValue());
+        addBufferToHistogram(histogram, inputBuffer, inputBuffer.capacity());
+        return histogram;
     }
 
     public static Histogram create(VoxelsWrapper inputBuffer) {
@@ -163,8 +162,8 @@ public class HistogramFactory {
 
         for (int z = cornerMin.z(); z <= cornerMax.z(); z++) {
 
-            VoxelBuffer<?> bb = inputBuffer.slice(z);
-            ByteBuffer bbMask = object.sliceBufferGlobal(z);
+            VoxelBuffer<?> buffer = inputBuffer.slice(z);
+            UnsignedByteBuffer bufferMask = object.sliceBufferGlobal(z);
 
             for (int y = cornerMin.y(); y <= cornerMax.y(); y++) {
                 for (int x = cornerMin.x(); x <= cornerMax.x(); x++) {
@@ -172,10 +171,10 @@ public class HistogramFactory {
                     int offset = extent.offset(x, y);
                     int offsetMask = object.offsetGlobal(x, y);
 
-                    byte valueOnMask = bbMask.get(offsetMask);
+                    byte valueOnMask = bufferMask.getRaw(offsetMask);
 
                     if (valueOnMask == matchValue) {
-                        int val = bb.getInt(offset);
+                        int val = buffer.getInt(offset);
                         histogram.incrementValue(val);
                     }
                 }
@@ -203,29 +202,30 @@ public class HistogramFactory {
 
     private static Histogram create(Voxels<?> inputBox) {
 
-        Histogram hist = new Histogram((int) inputBox.dataType().maxValue());
+        Histogram histogram = new Histogram((int) inputBox.dataType().maxValue());
 
         int volumeXY = inputBox.extent().volumeXY();
 
         inputBox.extent()
-                .iterateOverZ(z -> addBufferToHistogram(hist, inputBox.slice(z), volumeXY));
+                .iterateOverZ(z -> addBufferToHistogram(histogram, inputBox.slice(z), volumeXY));
 
-        return hist;
+        return histogram;
     }
 
-    private static void addBufferToHistogram(Histogram hist, VoxelBuffer<?> bb, int maxOffset) {
+    private static void addBufferToHistogram(
+            Histogram histogram, VoxelBuffer<?> buffer, int maxOffset) {
         for (int offset = 0; offset < maxOffset; offset++) {
-            int val = bb.getInt(offset);
-            hist.incrementValue(val);
+            int val = buffer.getInt(offset);
+            histogram.incrementValue(val);
         }
     }
 
     public static Histogram createHistogramIgnoreZero(
             Channel channel, ObjectMask object, boolean ignoreZero) {
-        Histogram hist = create(channel, object);
+        Histogram histogram = create(channel, object);
         if (ignoreZero) {
-            hist.zeroValue(0);
+            histogram.zeroValue(0);
         }
-        return hist;
+        return histogram;
     }
 }

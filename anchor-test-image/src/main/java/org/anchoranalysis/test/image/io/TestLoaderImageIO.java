@@ -28,6 +28,7 @@ package org.anchoranalysis.test.image.io;
 
 import java.io.FileNotFoundException;
 import java.nio.file.Path;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
@@ -43,16 +44,17 @@ import org.anchoranalysis.io.deserializer.DeserializationFailedException;
 import org.anchoranalysis.test.TestDataLoadException;
 import org.anchoranalysis.test.TestLoader;
 
+@AllArgsConstructor
 public class TestLoaderImageIO {
 
     /** Delegate loader (for non image-related loading) */
-    @Getter private TestLoader testLoader;
+    @Getter private TestLoader loader;
 
-    /** Reads rasters from filesystme */
+    /** Reads rasters from filesystem */
     private RasterReader rasterReader;
 
-    public TestLoaderImageIO(TestLoader testLoader) {
-        this.testLoader = testLoader;
+    public TestLoaderImageIO(TestLoader loader) {
+        this.loader = loader;
 
         TestReaderWriterUtilities.ensureRasterReader();
         rasterReader = RegisterBeanFactories.getDefaultInstances().get(RasterReader.class);
@@ -69,7 +71,7 @@ public class TestLoaderImageIO {
     public Stack openStackFromTestPath(String testPath) {
         ConfigureBioformatsLogging.instance().makeSureConfigured();
 
-        Path filePath = testLoader.resolveTestPath(testPath);
+        Path filePath = loader.resolveTestPath(testPath);
         return openStackFromFilePath(filePath);
     }
 
@@ -89,7 +91,7 @@ public class TestLoaderImageIO {
      *
      * @param path1 first-path to compare
      * @param path2 second-path to compare
-     * @return TRUE if the images are equal (every pixel is identical, and data-types are the same)
+     * @return true if the images are equal (every pixel is identical, and data-types are the same)
      * @throws FileNotFoundException if one or both of the files cannot be found
      */
     public boolean compareTwoImages(String path1, String path2) throws FileNotFoundException {
@@ -103,18 +105,18 @@ public class TestLoaderImageIO {
      * @param path1 first-path to compare
      * @param loader2 loader to use for path2
      * @param path2 second-path to compare
-     * @return TRUE if the images are equal (every pixel is identical, and data-types are the same)
+     * @return true if the images are equal (every pixel is identical, and data-types are the same)
      * @throws FileNotFoundException if one or both of the files cannot be found
      */
     public static boolean compareTwoImages(
             TestLoaderImageIO loader1, String path1, TestLoaderImageIO loader2, String path2)
             throws FileNotFoundException {
 
-        if (!loader1.getTestLoader().doesPathExist(path1)) {
+        if (!loader1.doesPathExist(path1)) {
             throw new FileNotFoundException(path1);
         }
 
-        if (!loader2.getTestLoader().doesPathExist(path2)) {
+        if (!loader2.doesPathExist(path2)) {
             throw new FileNotFoundException(path2);
         }
 
@@ -126,7 +128,7 @@ public class TestLoaderImageIO {
     }
 
     public ObjectCollection openObjectsFromTestPath(String testFolderPath) {
-        Path filePath = testLoader.resolveTestPath(testFolderPath);
+        Path filePath = loader.resolveTestPath(testFolderPath);
         return openObjectsFromFilePath(filePath);
     }
 
@@ -154,17 +156,17 @@ public class TestLoaderImageIO {
      *
      * @param path1 first-path
      * @param path2 second-path
-     * @return TRUE if the object-mask-collection are equal (every object-pixel is identical)
+     * @return true if the object-mask-collection are equal (every object-pixel is identical)
      */
     public boolean compareTwoObjectCollections(String path1, String path2) {
 
-        if (!getTestLoader().doesPathExist(path1)) {
+        if (!loader.doesPathExist(path1)) {
             throw new TestDataLoadException(
                     String.format(
                             "The first-path cannot be found in the first test-loader: %s", path1));
         }
 
-        if (!getTestLoader().doesPathExist(path2)) {
+        if (!loader.doesPathExist(path2)) {
             throw new TestDataLoadException(
                     String.format(
                             "The second-path cannot be found in the second test-loader: %s",
@@ -179,7 +181,7 @@ public class TestLoaderImageIO {
     }
 
     public Path resolveTestPath(String testPath) {
-        return testLoader.resolveTestPath(testPath);
+        return loader.resolveTestPath(testPath);
     }
 
     private static Channel extractChannel(Stack stack) {
@@ -188,5 +190,9 @@ public class TestLoaderImageIO {
                     "Loading a stack which contains more than one channel, when only one channel is intended");
         }
         return stack.getChannel(0);
+    }
+
+    public boolean doesPathExist(String testFilePath) {
+        return loader.doesPathExist(testFilePath);
     }
 }

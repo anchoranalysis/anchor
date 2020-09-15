@@ -25,9 +25,8 @@
  */
 package org.anchoranalysis.image.voxel.extracter;
 
-import java.nio.Buffer;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
-import org.anchoranalysis.image.extent.BoundingBox;
+import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.interpolator.Interpolator;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.Voxels;
@@ -37,8 +36,9 @@ import org.anchoranalysis.image.voxel.VoxelsPredicate;
  * Provides method to read/copy/duplicate portions of voxels
  *
  * @author Owen Feehan
+ * @param <T> buffer-type
  */
-public interface VoxelsExtracter<T extends Buffer> {
+public interface VoxelsExtracter<T> {
 
     /**
      * Gets the value of one particular value
@@ -71,11 +71,11 @@ public interface VoxelsExtracter<T extends Buffer> {
      * <p>Depending on policy, an the existing box will be reused if possible (if the region
      * requested is equal to the box as a whole), useful to avoid unnecessary new memory allocation.
      *
-     * <p>If {@code reuseIfPossible} is FALSE, it is guaranteed that a new voxels will always be
+     * <p>If {@code reuseIfPossible} is false, it is guaranteed that a new voxels will always be
      * created.
      *
      * @param box a bounding-box indicating the regions desired (not be larger than the extent)
-     * @param reuseIfPossible if TRUE the existing box will be reused if possible,, otherwise a new
+     * @param reuseIfPossible if true the existing box will be reused if possible,, otherwise a new
      *     box is always created.
      * @return voxels corresponding to the requested region, either newly-created or reused
      */
@@ -156,9 +156,9 @@ public interface VoxelsExtracter<T extends Buffer> {
     VoxelsPredicate voxelsGreaterThan(int threshold);
 
     /**
-     * Finds the maximum-value of any voxel and rounds up (ceiling) to nearest integer
+     * Finds the maximum-value of any voxel and rounds up (ceiling) to nearest long
      *
      * @return the maximum-value
      */
-    int voxelWithMaxIntensity();
+    long voxelWithMaxIntensity();
 }

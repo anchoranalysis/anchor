@@ -26,12 +26,12 @@
 
 package org.anchoranalysis.image.voxel.iterator;
 
-import java.nio.ByteBuffer;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
-import org.anchoranalysis.image.extent.BoundingBox;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.extent.Extent;
+import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.object.ObjectMask;
 
 /**
@@ -72,7 +72,7 @@ public class ObjectMaskFixture {
 
     private void removeEachCorner(ObjectMask object) {
 
-        BinaryVoxels<ByteBuffer> bvb = object.binaryVoxels();
+        BinaryVoxels<UnsignedByteBuffer> bvb = object.binaryVoxels();
 
         Extent e = object.boundingBox().extent();
         int widthMinusOne = e.x() - 1;

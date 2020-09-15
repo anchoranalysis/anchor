@@ -26,42 +26,47 @@
 
 package org.anchoranalysis.image.voxel.thresholder;
 
-import java.nio.ByteBuffer;
 import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelsFactory;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
-import org.anchoranalysis.image.voxel.iterator.IterateVoxels;
+import org.anchoranalysis.image.voxel.iterator.IterateVoxelsObjectMaskOptional;
 
-/** Performs threshold operation on voxels */
+/** 
+ * Performs threshold operation on voxels.
+ * 
+ * <p>An <i>on</i> voxel is placed in the output-buffer if {@code voxel-value >= level} or <i>off</i> otherwise.
+ * 
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class VoxelsThresholder {
 
     public static void thresholdForLevel(
-            Voxels<ByteBuffer> inputBuffer, int level, BinaryValuesByte bvOut) {
+            Voxels<UnsignedByteBuffer> inputBuffer, int level, BinaryValuesByte bvOut) {
         // We know that as the inputType is byte, it will be performed in place
         thresholdForLevel(VoxelsWrapper.wrap(inputBuffer), level, bvOut, Optional.empty(), false);
     }
 
     // Perform inplace
-    public static BinaryVoxels<ByteBuffer> thresholdForLevel(
+    public static BinaryVoxels<UnsignedByteBuffer> thresholdForLevel(
             VoxelsWrapper inputBuffer,
             int level,
             BinaryValuesByte bvOut,
             Optional<ObjectMask> objectMask,
             boolean alwaysDuplicate) {
-        Voxels<ByteBuffer> boxOut = inputBuffer.asByteOrCreateEmpty(alwaysDuplicate);
+        Voxels<UnsignedByteBuffer> boxOut = inputBuffer.asByteOrCreateEmpty(alwaysDuplicate);
 
         if (inputBuffer.getVoxelDataType().equals(UnsignedByteVoxelType.INSTANCE)) {
 
-            IterateVoxels.callEachPoint(
-                    inputBuffer.asByte(), objectMask, new PointProcessor(level, boxOut, bvOut));
+            IterateVoxelsObjectMaskOptional.withBuffer(
+                    objectMask, inputBuffer.asByte(), new ThresholdEachVoxel(level, boxOut, bvOut));
         }
 
         return BinaryVoxelsFactory.reuseByte(boxOut, bvOut.createInt());

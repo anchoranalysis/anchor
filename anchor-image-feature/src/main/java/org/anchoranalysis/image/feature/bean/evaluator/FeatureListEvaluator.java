@@ -46,36 +46,49 @@ import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.image.feature.evaluator.NamedFeatureCalculatorMulti;
 
-public abstract class FeatureListEvaluator<T extends FeatureInput>
+/**
+ * Defines a list of features and provides a means to calculate inputs for it, a session.
+ *
+ * @author Owen Feehan
+ * @param <T> feature input-type
+ */
+public class FeatureListEvaluator<T extends FeatureInput>
         extends FeatureRelatedBean<FeatureListEvaluator<T>> {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter
-    private List<FeatureProvider<T>> listFeatureProvider = new ArrayList<>();
+    /**
+     * A list of providers, combined together to form a list of features, to be calculated in a
+     * session
+     */
+    @BeanField @Getter @Setter private List<FeatureProvider<T>> features = new ArrayList<>();
     // END BEAN PROPERTIES
 
-    public NamedFeatureCalculatorMulti<T> createAndStartSession(
+    /**
+     * Creates session for evaluating {@code features}.
+     *
+     * @return the calculator for a newly created session.
+     * @throws OperationFailedException
+     */
+    public NamedFeatureCalculatorMulti<T> createFeatureSession(
             UnaryOperator<FeatureList<T>> addFeatures, SharedObjects sharedObjects)
             throws OperationFailedException {
 
         try {
-            FeatureList<T> features =
-                    addFeatures.apply(FeatureListFactory.fromProviders(listFeatureProvider));
+            FeatureList<T> featuresCreated =
+                    addFeatures.apply(FeatureListFactory.fromProviders(features));
 
-            if (features.size() == 0) {
+            if (featuresCreated.size() == 0) {
                 throw new OperationFailedException("No features are set");
             }
 
-            FeatureInitParams paramsInit = new FeatureInitParams(sharedObjects);
-
             FeatureCalculatorMulti<T> calculator =
                     FeatureSession.with(
-                            features,
-                            paramsInit,
+                            featuresCreated,
+                            new FeatureInitParams(sharedObjects),
                             getInitializationParameters().getSharedFeatureSet(),
                             getLogger());
 
-            return new NamedFeatureCalculatorMulti<>(calculator, features.createNames());
+            return new NamedFeatureCalculatorMulti<>(calculator, featuresCreated.createNames());
 
         } catch (CreateException | InitException e) {
             throw new OperationFailedException(e);

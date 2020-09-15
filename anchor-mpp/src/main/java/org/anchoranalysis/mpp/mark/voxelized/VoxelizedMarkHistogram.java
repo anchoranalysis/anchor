@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.mpp.mark.voxelized;
 
-import java.nio.ByteBuffer;
 import java.util.List;
 import lombok.Getter;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -34,9 +33,10 @@ import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
-import org.anchoranalysis.image.extent.BoundingBox;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.extent.Extent;
+import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.BoundedVoxels;
@@ -45,13 +45,14 @@ import org.anchoranalysis.image.voxel.statistics.VoxelStatisticsFromHistogram;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMap;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMembershipWithFlags;
 import org.anchoranalysis.mpp.mark.Mark;
-import org.anchoranalysis.mpp.pixelpart.IndexByChannel;
-import org.anchoranalysis.mpp.pixelpart.factory.PixelPartFactory;
-import org.anchoranalysis.mpp.pixelpart.factory.PixelPartFactoryHistogram;
+import org.anchoranalysis.mpp.voxel.partition.IndexByChannel;
+import org.anchoranalysis.mpp.voxel.partition.factory.VoxelPartitionFactory;
+import org.anchoranalysis.mpp.voxel.partition.factory.VoxelPartitonFactoryHistogram;
 
 class VoxelizedMarkHistogram implements VoxelizedMark {
 
-    private static final PixelPartFactory<Histogram> FACTORY = new PixelPartFactoryHistogram();
+    private static final VoxelPartitionFactory<Histogram> FACTORY =
+            new VoxelPartitonFactoryHistogram();
 
     // Quick access to what is inside and what is outside
     private final IndexByChannel<Histogram> partitionList;
@@ -77,12 +78,12 @@ class VoxelizedMarkHistogram implements VoxelizedMark {
     }
 
     @Override
-    public BoundedVoxels<ByteBuffer> voxels() {
+    public BoundedVoxels<UnsignedByteBuffer> voxels() {
         return object.boundedVoxels();
     }
 
     @Override
-    public BoundedVoxels<ByteBuffer> voxelsMaximumIntensityProjection() {
+    public BoundedVoxels<UnsignedByteBuffer> voxelsMaximumIntensityProjection() {
         return objectFlattened.boundedVoxels();
     }
 
@@ -117,7 +118,7 @@ class VoxelizedMarkHistogram implements VoxelizedMark {
     public VoxelStatistics statisticsForAllSlicesMaskSlice(
             int channelID, int regionID, int maskChannelID) {
 
-        Histogram h = new Histogram(255);
+        Histogram histogram = new Histogram(255);
 
         // We loop through each slice
         for (int z = 0; z < partitionList.get(0).numSlices(); z++) {
@@ -127,13 +128,13 @@ class VoxelizedMarkHistogram implements VoxelizedMark {
 
             if (hMaskChannel.hasAboveZero()) {
                 try {
-                    h.addHistogram(hChannel);
+                    histogram.addHistogram(hChannel);
                 } catch (OperationFailedException e) {
                     throw new AnchorImpossibleSituationException();
                 }
             }
         }
-        return new VoxelStatisticsFromHistogram(h);
+        return new VoxelStatisticsFromHistogram(histogram);
     }
 
     // Calculates the pixels for a mark
@@ -151,7 +152,7 @@ class VoxelizedMarkHistogram implements VoxelizedMark {
         partitionList.init(
                 FACTORY, stack.getNumberChannels(), regionMap.numRegions(), localExtent.z());
 
-        ByteBuffer bufferMIP = getObjectFlattened().sliceBufferLocal(0);
+        UnsignedByteBuffer bufferMIP = getObjectFlattened().sliceBufferLocal(0);
 
         for (int z = box.cornerMin().z(); z <= cornerMax.z(); z++) {
 
@@ -178,7 +179,7 @@ class VoxelizedMarkHistogram implements VoxelizedMark {
             Extent localExtent,
             Dimensions dimensions,
             BufferArrayList bufferArrList,
-            ByteBuffer bufferMIP,
+            UnsignedByteBuffer bufferMIP,
             RegionMap regionMap) {
 
         Point3d running = new Point3d();
@@ -189,7 +190,7 @@ class VoxelizedMarkHistogram implements VoxelizedMark {
         List<RegionMembershipWithFlags> listRegionMembership =
                 regionMap.createListMembershipWithFlags();
 
-        ByteBuffer buffer = object.sliceBufferLocal(zLocal);
+        UnsignedByteBuffer buffer = object.sliceBufferLocal(zLocal);
 
         for (int y = box.cornerMin().y(); y <= cornerMax.y(); y++) {
             running.setY(y + 0.5);
@@ -207,8 +208,8 @@ class VoxelizedMarkHistogram implements VoxelizedMark {
 
                 byte membership = mark.isPointInside(new Point3d(running));
 
-                buffer.put(localOffset, membership);
-                bufferMIP.put(localOffset, membershipMIP(membership, bufferMIP, localOffset));
+                buffer.putRaw(localOffset, membership);
+                bufferMIP.putRaw(localOffset, membershipMIP(membership, bufferMIP, localOffset));
 
                 AddVoxelsToHistogram.addVoxels(
                         membership,
@@ -221,8 +222,9 @@ class VoxelizedMarkHistogram implements VoxelizedMark {
         }
     }
 
-    private static byte membershipMIP(byte membership, ByteBuffer bufferMIP, int localOffset) {
-        byte membershipMIP = bufferMIP.get(localOffset);
+    private static byte membershipMIP(
+            byte membership, UnsignedByteBuffer bufferMIP, int localOffset) {
+        byte membershipMIP = bufferMIP.getRaw(localOffset);
         membershipMIP = (byte) (membershipMIP | membership);
         return membershipMIP;
     }

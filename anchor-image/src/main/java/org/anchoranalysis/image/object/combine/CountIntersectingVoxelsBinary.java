@@ -26,8 +26,8 @@
 
 package org.anchoranalysis.image.object.combine;
 
-import java.nio.ByteBuffer;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 
 /**
  * Counts the number of intersecting voxels where each buffer is encoded as Binary-Values
@@ -47,7 +47,7 @@ public class CountIntersectingVoxelsBinary extends CountIntersectingVoxels {
 
     @Override
     protected int countIntersectingVoxels(
-            ByteBuffer buffer1, ByteBuffer buffer2, IntersectionBoundingBox box) {
+            UnsignedByteBuffer buffer1, UnsignedByteBuffer buffer2, IntersectionBoundingBox box) {
 
         int cnt = 0;
         for (int y = box.y().min(); y < box.y().max(); y++) {
@@ -56,8 +56,8 @@ public class CountIntersectingVoxelsBinary extends CountIntersectingVoxels {
             for (int x = box.x().min(); x < box.x().max(); x++) {
                 int xOther = x + box.x().rel();
 
-                byte posCheck = buffer1.get(box.e1().offset(x, y));
-                byte posCheckOther = buffer2.get(box.e2().offset(xOther, yOther));
+                byte posCheck = buffer1.getRaw(box.e1().offset(x, y));
+                byte posCheckOther = buffer2.getRaw(box.e2().offset(xOther, yOther));
 
                 if (posCheck == byteOn1 && posCheckOther == byteOn2) {
                     cnt++;

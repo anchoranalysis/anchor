@@ -26,11 +26,12 @@
 
 package org.anchoranalysis.image.voxel.factory;
 
-import java.nio.Buffer;
+import com.google.common.base.Preconditions;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.Voxels;
+import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
-import org.anchoranalysis.image.voxel.pixelsforslice.PixelsForSlice;
+import org.anchoranalysis.image.voxel.sliceindex.SliceBufferIndex;
 
 /**
  * A factory for creating voxels with a particular buffer-type
@@ -40,13 +41,21 @@ import org.anchoranalysis.image.voxel.pixelsforslice.PixelsForSlice;
  * @author Owen Feehan
  * @param <T> buffer-type
  */
-public interface VoxelsFactoryTypeBound<T extends Buffer> {
+public interface VoxelsFactoryTypeBound<T> {
 
-    Voxels<T> create(PixelsForSlice<T> pixelsForPlane);
+    Voxels<T> create(SliceBufferIndex<T> pixelsForPlane);
 
     Voxels<T> createInitialized(Extent extent);
 
     Voxels<T> createUninitialized(Extent extent);
 
     VoxelDataType dataType();
+
+    default Voxels<T> createForBuffer(VoxelBuffer<T> buffer, Extent extent) {
+        Preconditions.checkArgument(extent.volumeXY() == buffer.capacity());
+
+        Voxels<T> out = createUninitialized(extent);
+        out.replaceSlice(0, buffer);
+        return out;
+    }
 }

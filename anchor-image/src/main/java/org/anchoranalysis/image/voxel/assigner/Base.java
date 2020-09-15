@@ -25,20 +25,19 @@
  */
 package org.anchoranalysis.image.voxel.assigner;
 
-import java.nio.Buffer;
 import java.util.Optional;
 import java.util.function.IntPredicate;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
-import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
+import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
-import org.anchoranalysis.image.voxel.iterator.IterateVoxelsVoxelBoxAsInt;
+import org.anchoranalysis.image.voxel.iterator.IterateVoxelsObjectMask;
 
 @RequiredArgsConstructor
-abstract class Base<T extends Buffer> implements VoxelsAssigner {
+abstract class Base<T> implements VoxelsAssigner {
 
     // START REQUIRED ARGUMENTS
     /** The voxels that are assigned to */
@@ -99,18 +98,29 @@ abstract class Base<T extends Buffer> implements VoxelsAssigner {
         toObject(object, Optional.empty());
     }
 
+
     @Override
-    public boolean toObject(ObjectMask object, IntPredicate voxelPredicate) {
+    public void toObjectIf(ObjectMask object, IntPredicate voxelPredicate) {
+        IterateVoxelsObjectMask.withVoxelBuffer(object, voxels, (buffer, offset)-> {
+            int existingValue = buffer.getInt(offset);
+            if (voxelPredicate.test(existingValue)) {
+                assignToBuffer(buffer, offset);
+            }
+        });
+    }
+    
+    @Override
+    public boolean toObjectWhile(ObjectMask object, IntPredicate voxelPredicate) {
 
         // First check if all voxels on the object match the predicate
-        if (IterateVoxelsVoxelBoxAsInt.allPointsMatchPredicate(voxels, object, voxelPredicate)) {
+        if (IterateVoxelsObjectMask.allMatchIntensity(object, voxels, voxelPredicate)) {
             toObject(object, Optional.empty());
             return true;
         } else {
             return false;
         }
     }
-
+    
     @Override
     public void toObject(ObjectMask object, BoundingBox restrictTo) {
         toObject(object, Optional.of(restrictTo));
@@ -139,9 +149,10 @@ abstract class Base<T extends Buffer> implements VoxelsAssigner {
      *     boxToBeAssigned}.
      */
     private void toObject(ObjectMask object, Optional<BoundingBox> restrictTo) {
-        IterateVoxelsVoxelBoxAsInt.callEachPoint(voxels, object, restrictTo, this::assignToBuffer);
+        IterateVoxelsObjectMask.withTwoVoxelBuffers(
+                object, voxels, restrictTo, this::assignToBuffer);
     }
-
+    
     private void assignToBuffer(VoxelBuffer<T> buffer, int offset) {
         buffer.putInt(offset, valueToAssign);
     }

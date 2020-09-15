@@ -26,13 +26,13 @@
 
 package org.anchoranalysis.image.bean.segment.binary;
 
-import java.nio.ByteBuffer;
 import java.util.Optional;
 import org.anchoranalysis.bean.annotation.GroupingRoot;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.bean.nonbean.parameters.BinarySegmentationParameters;
 import org.anchoranalysis.image.bean.segment.SegmentationBean;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
 
@@ -49,7 +49,7 @@ public abstract class BinarySegmentation extends SegmentationBean<BinarySegmenta
      * @return voxels for a mask on the input-buffer (reused or newly created as deemed appropriate)
      * @throws SegmentationFailedException
      */
-    public abstract BinaryVoxels<ByteBuffer> segment(
+    public abstract BinaryVoxels<UnsignedByteBuffer> segment(
             VoxelsWrapper voxels,
             BinarySegmentationParameters params,
             Optional<ObjectMask> objectMask)

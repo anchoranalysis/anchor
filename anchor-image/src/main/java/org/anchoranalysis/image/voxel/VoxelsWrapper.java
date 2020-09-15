@@ -26,13 +26,12 @@
 
 package org.anchoranalysis.image.voxel;
 
-import java.nio.Buffer;
-import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
-import java.nio.ShortBuffer;
-import org.anchoranalysis.image.extent.BoundingBox;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedIntBuffer;
+import org.anchoranalysis.image.convert.UnsignedShortBuffer;
 import org.anchoranalysis.image.extent.Extent;
+import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.arithmetic.VoxelsArithmetic;
 import org.anchoranalysis.image.voxel.assigner.VoxelsAssigner;
@@ -54,30 +53,30 @@ import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 public class VoxelsWrapper {
 
     private VoxelDataType dataType;
-    private Voxels<? extends Buffer> voxels;
+    private Voxels<?> voxels;
 
-    public VoxelsWrapper(Voxels<? extends Buffer> voxels) {
+    public VoxelsWrapper(Voxels<?> voxels) {
         super();
         this.dataType = voxels.dataType();
         this.voxels = voxels;
     }
 
-    public static VoxelsWrapper wrap(Voxels<? extends Buffer> voxels) {
+    public static VoxelsWrapper wrap(Voxels<?> voxels) {
         return new VoxelsWrapper(voxels);
     }
 
     /** Returns voxels that are not cast to any specific buffer type */
-    public Voxels<? extends Buffer> any() { // NOSONAR
+    public Voxels<?> any() { // NOSONAR
         return voxels;
     }
-    
+
     /** Casts voxels to a particular type */
     @SuppressWarnings("unchecked")
-    public <T extends Buffer> Voxels<T> castTo() { // NOSONAR
+    public <T> Voxels<T> castTo() { // NOSONAR
         return (Voxels<T>) voxels;
     }
 
-    public Voxels<? extends Buffer> match(VoxelDataType match) { // NOSONAR
+    public Voxels<?> match(VoxelDataType match) { // NOSONAR
         if (match.equals(dataType)) {
             return voxels;
         } else {
@@ -87,14 +86,14 @@ public class VoxelsWrapper {
     }
 
     @SuppressWarnings("unchecked")
-    public Voxels<ByteBuffer> asByte() {
+    public Voxels<UnsignedByteBuffer> asByte() {
 
         if (!dataType.equals(UnsignedByteVoxelType.INSTANCE)) {
             throw new IncorrectVoxelTypeException(
                     "Voxels do not contain unsigned 8-bit data (byte)");
         }
 
-        return (Voxels<ByteBuffer>) voxels;
+        return (Voxels<UnsignedByteBuffer>) voxels;
     }
 
     @SuppressWarnings("unchecked")
@@ -108,25 +107,25 @@ public class VoxelsWrapper {
     }
 
     @SuppressWarnings("unchecked")
-    public Voxels<ShortBuffer> asShort() {
+    public Voxels<UnsignedShortBuffer> asShort() {
 
         if (!dataType.equals(UnsignedShortVoxelType.INSTANCE)) {
             throw new IncorrectVoxelTypeException(
                     "Voxels do not contain unsigned 16-bit data (int)");
         }
 
-        return (Voxels<ShortBuffer>) voxels;
+        return (Voxels<UnsignedShortBuffer>) voxels;
     }
 
     @SuppressWarnings("unchecked")
-    public Voxels<IntBuffer> asInt() {
+    public Voxels<UnsignedIntBuffer> asInt() {
 
         if (!dataType.equals(UnsignedIntVoxelType.INSTANCE)) {
             throw new IncorrectVoxelTypeException(
                     "Voxels do not contain unsigned 32-bit data (int)");
         }
 
-        return (Voxels<IntBuffer>) voxels;
+        return (Voxels<UnsignedIntBuffer>) voxels;
     }
 
     /**
@@ -135,8 +134,8 @@ public class VoxelsWrapper {
      * @param alwaysDuplicate
      * @return
      */
-    public Voxels<ByteBuffer> asByteOrCreateEmpty(boolean alwaysDuplicate) {
-        Voxels<ByteBuffer> boxOut;
+    public Voxels<UnsignedByteBuffer> asByteOrCreateEmpty(boolean alwaysDuplicate) {
+        Voxels<UnsignedByteBuffer> boxOut;
 
         // If the input-channel is Byte then we do it in-place
         // Otherwise we create new voxels
@@ -194,7 +193,7 @@ public class VoxelsWrapper {
         }
     }
 
-    private static <T extends Buffer> VoxelBuffer<T> sourceSlice(
+    private static <T> VoxelBuffer<T> sourceSlice(
             Voxels<T> sourceVoxels, int sliceIndexSource, boolean duplicate) {
         if (duplicate) {
             return sourceVoxels.slice(sliceIndexSource);
@@ -203,7 +202,7 @@ public class VoxelsWrapper {
         }
     }
 
-    public VoxelBuffer<? extends Buffer> slice(int z) { // NOSONAR
+    public VoxelBuffer<?> slice(int z) { // NOSONAR
         return voxels.slice(z);
     }
 
@@ -219,7 +218,7 @@ public class VoxelsWrapper {
         return voxels.assignValue(valueToAssign);
     }
 
-    public VoxelsExtracter<? extends Buffer> extract() { // NOSONAR
+    public VoxelsExtracter<?> extract() { // NOSONAR
         return voxels.extract();
     }
 }

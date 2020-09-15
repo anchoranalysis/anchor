@@ -27,24 +27,21 @@
 package org.anchoranalysis.image.voxel.buffer;
 
 import java.nio.FloatBuffer;
-import org.anchoranalysis.image.convert.ByteConverter;
+import lombok.AllArgsConstructor;
+import org.anchoranalysis.image.convert.PrimitiveConverter;
 import org.anchoranalysis.image.voxel.datatype.FloatVoxelType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 
+@AllArgsConstructor
 public final class VoxelBufferFloat extends VoxelBuffer<FloatBuffer> {
 
     private final FloatBuffer delegate;
 
-    private VoxelBufferFloat(FloatBuffer delegate) {
-        super();
-        this.delegate = delegate;
-    }
-
-    public static VoxelBufferFloat wrap(float[] arr) {
+    public static VoxelBufferFloat wrapArray(float[] arr) {
         return new VoxelBufferFloat(FloatBuffer.wrap(arr));
     }
 
-    public static VoxelBufferFloat wrap(FloatBuffer buffer) {
+    public static VoxelBufferFloat wrapBuffer(FloatBuffer buffer) {
         return new VoxelBufferFloat(buffer);
     }
 
@@ -55,7 +52,7 @@ public final class VoxelBufferFloat extends VoxelBuffer<FloatBuffer> {
 
     @Override
     public VoxelBuffer<FloatBuffer> duplicate() {
-        return new VoxelBufferFloat(ByteConverter.copy(delegate));
+        return new VoxelBufferFloat(DuplicateBuffer.copy(delegate));
     }
 
     @Override
@@ -73,22 +70,37 @@ public final class VoxelBufferFloat extends VoxelBuffer<FloatBuffer> {
     }
 
     @Override
-    public void putInt(int index, int val) {
-        delegate.put(index, (float) val);
+    public void putInt(int index, int value) {
+        delegate.put(index, (float) value);
     }
 
     @Override
-    public void putByte(int index, byte val) {
-        delegate.put(index, (float) ByteConverter.unsignedByteToInt(val));
+    public void putByte(int index, byte value) {
+        delegate.put(index, (float) PrimitiveConverter.unsignedByteToInt(value));
     }
 
     @Override
-    public void transferFrom(int destIndex, VoxelBuffer<FloatBuffer> src, int srcIndex) {
-        delegate.put(destIndex, src.buffer().get(srcIndex));
+    public void transferFrom(int destinationIndex, VoxelBuffer<FloatBuffer> src, int sourceIndex) {
+        delegate.put(destinationIndex, src.buffer().get(sourceIndex));
     }
 
     @Override
-    public int size() {
+    public int capacity() {
         return delegate.capacity();
+    }
+
+    @Override
+    public boolean hasRemaining() {
+        return delegate.hasRemaining();
+    }
+
+    @Override
+    public void position(int newPosition) {
+        delegate.position(newPosition);
+    }
+
+    @Override
+    public boolean isDirect() {
+        return delegate.isDirect();
     }
 }

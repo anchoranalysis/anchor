@@ -30,6 +30,7 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.function.Consumer;
 import java.util.function.IntPredicate;
+import java.util.stream.IntStream;
 import org.anchoranalysis.core.axis.AxisType;
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.core.functional.function.CheckedIntConsumer;
@@ -38,13 +39,16 @@ import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.core.geometry.consumer.OffsettedPointTwoDimensionalConsumer;
+import org.anchoranalysis.core.geometry.consumer.OffsettedScalarTwoDimensionalConsumer;
+import org.anchoranalysis.core.geometry.consumer.PointTwoDimensionalConsumer;
+import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.scale.ScaleFactor;
 import org.anchoranalysis.image.scale.ScaleFactorUtilities;
 
 /**
- * Width, height etc. of image in 2 or 3 dimensions
+ * Width, height etc. of image in 2 or 3 dimensions.
  *
- * <p>This class is <b>immutable</b>
+ * <p>This class is <b>immutable</b>.
  */
 public final class Extent implements Serializable {
 
@@ -175,8 +179,8 @@ public final class Extent implements Serializable {
     /**
      * Exposes the extent as a tuple.
      *
-     * <p>IMPORTANT! This class is designed to be <b>immutable</b>, so this tuple should be treated as
-     * read-only, and never modified.
+     * <p>IMPORTANT! This class is designed to be <b>immutable</b>, so this tuple should be treated
+     * as read-only, and never modified.
      *
      * @return the extent's width, height, depth as a tuple
      */
@@ -314,12 +318,12 @@ public final class Extent implements Serializable {
                         }));
     }
 
-    public Extent subtract(ReadableTuple3i toSubtract) {
-        return new Extent(Point3i.immutableSubtract(size, toSubtract));
+    public Point3i subtract(ReadableTuple3i toSubtract) {
+        return Point3i.immutableSubtract(size, toSubtract);
     }
 
     public Extent divide(int factor) {
-        return new Extent(immutablePointOperation(p -> p.divideBy(factor)));
+        return new Extent(immutablePointOperation(point -> point.divideBy(factor)));
     }
 
     /**
@@ -376,7 +380,7 @@ public final class Extent implements Serializable {
     }
 
     /**
-     * Calls processor once for each x and y-values in the range
+     * Calls processor once for each x and y-values in the range.
      *
      * <p>This occurs in ascending order (x-dimension increments first, y-dimension increments
      * second)
@@ -386,7 +390,7 @@ public final class Extent implements Serializable {
      * @throws E if {@code indexConsumer} throws this exception
      */
     public <E extends Exception> void iterateOverXY(
-            OffsettedPointTwoDimensionalConsumer<E> pointConsumer) throws E {
+            OffsettedScalarTwoDimensionalConsumer<E> pointConsumer) throws E {
         int offset = 0;
         for (int y = 0; y < size.y(); y++) {
             for (int x = 0; x < size.x(); x++) {
@@ -394,14 +398,31 @@ public final class Extent implements Serializable {
             }
         }
     }
-
+    
     /**
-     * Calls processor once for each x and y-values but <i>only</i> passing an offset
+     * Calls processor once for each x and y-values in the range.
      *
      * <p>This occurs in ascending order (x-dimension increments first, y-dimension increments
      * second)
      *
-     * @param <E> a checked-exception that {@code indexConsumer} may throw
+     * @param pointConsumer called for each point
+     */
+    public void iterateOverXY(PointTwoDimensionalConsumer pointConsumer) {
+        Point2i point = new Point2i();
+        for (point.setY(0); point.y() < size.y(); point.incrementY()) {
+            for (point.setX(0); point.x() < size.x(); point.incrementX()) {
+                pointConsumer.accept(point);
+            }
+        }
+    }
+
+    /**
+     * Calls processor once for each x and y-values but <i>only</i> passing an offset.
+     *
+     * <p>This occurs in ascending order (x-dimension increments first, y-dimension increments
+     * second)
+     *
+     * @param <E> a checked-exception that {@code offsetConsumer} may throw
      * @param offsetConsumer called for each point with the offset
      * @throws E if {@code indexConsumer} throws this exception
      */
@@ -409,6 +430,24 @@ public final class Extent implements Serializable {
             throws E {
         for (int offset = 0; offset < areaXY; offset++) {
             offsetConsumer.accept(offset);
+        }
+    }
+    
+    /**
+     * Calls processor once for each x and y-values in the range.
+     *
+     * <p>This occurs in ascending order (x-dimension increments first, y-dimension increments
+     * second)
+     *
+     * @param pointConsumer called for each point
+     */
+    public void iterateOverXYOffset(OffsettedPointTwoDimensionalConsumer pointConsumer) {
+        int offset = 0;
+        Point2i point = new Point2i();
+        for (point.setY(0); point.y() < size.y(); point.incrementY()) {
+            for (point.setX(0); point.x() < size.x(); point.incrementX()) {
+                pointConsumer.accept(point, offset++);
+            }
         }
     }
 
@@ -431,7 +470,7 @@ public final class Extent implements Serializable {
      * Calls processor once for each z-value in the range unless {@code indexPredicate} returns
      * false.
      *
-     * <p>This occurs sequentially from 0 (inclusive) to {@code z()} (exclusive)
+     * <p>This occurs sequentially from 0 (inclusive) to {@code z()} (exclusive).
      *
      * <p>As soon as the {@code indexPredicate} returns false, the iteration stops.
      *
@@ -445,6 +484,17 @@ public final class Extent implements Serializable {
             }
         }
         return true;
+    }
+
+    /**
+     * Streams over the range of z values
+     *
+     * <p>The values range from 0 (inclusive) to {@code z()} (exclusive).
+     *
+     * @return the stream
+     */
+    public IntStream streamOverZ() {
+        return IntStream.range(0, size.z());
     }
 
     private Point3i immutablePointOperation(Consumer<Point3i> pointOperation) {

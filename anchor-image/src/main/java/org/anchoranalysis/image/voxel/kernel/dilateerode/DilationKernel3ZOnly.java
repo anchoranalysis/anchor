@@ -26,9 +26,9 @@
 
 package org.anchoranalysis.image.voxel.kernel.dilateerode;
 
-import java.nio.ByteBuffer;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.Voxels;
 
 // Erosion with a 3x3 or 3x3x3 kernel
@@ -40,23 +40,23 @@ public final class DilationKernel3ZOnly extends BinaryKernelMorph3 {
     }
 
     @Override
-    public void init(Voxels<ByteBuffer> in) {
+    public void init(Voxels<UnsignedByteBuffer> in) {
         // NOTHING TO DO
     }
 
     @Override
-    public boolean accptPos(int ind, Point3i point) {
+    public boolean acceptPoint(int ind, Point3i point) {
 
-        ByteBuffer inArrZ = inSlices.getLocal(0);
-        ByteBuffer inArrZLess1 = inSlices.getLocal(-1);
-        ByteBuffer inArrZPlus1 = inSlices.getLocal(+1);
+        UnsignedByteBuffer inArrZ = inSlices.getLocal(0);
+        UnsignedByteBuffer inArrZLess1 = inSlices.getLocal(-1);
+        UnsignedByteBuffer inArrZPlus1 = inSlices.getLocal(+1);
 
-        if (bv.isOn(inArrZ.get(ind))) {
+        if (bv.isOn(inArrZ.getRaw(ind))) {
             return true;
         }
 
         if (inArrZLess1 != null) {
-            if (bv.isOn(inArrZLess1.get(ind))) {
+            if (bv.isOn(inArrZLess1.getRaw(ind))) {
                 return true;
             }
         } else {
@@ -66,7 +66,7 @@ public final class DilationKernel3ZOnly extends BinaryKernelMorph3 {
         }
 
         if (inArrZPlus1 != null) {
-            if (bv.isOn(inArrZPlus1.get(ind))) {
+            if (bv.isOn(inArrZPlus1.getRaw(ind))) {
                 return true;
             }
         } else {

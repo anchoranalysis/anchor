@@ -68,8 +68,8 @@ public class EllipseBounds extends EllipseBoundsWithoutRotation {
 
     @Override
     public Orientation randomOrientation(
-            RandomNumberGenerator randomNumberGenerator, Resolution res) {
+            RandomNumberGenerator randomNumberGenerator, Resolution resolution) {
         return new Orientation2D(
-                getRotationAngle().resolve(res, false).randOpen(randomNumberGenerator));
+                getRotationAngle().resolve(resolution, false).randOpen(randomNumberGenerator));
     }
 }

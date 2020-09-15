@@ -33,15 +33,12 @@ import org.anchoranalysis.io.deserializer.DeserializationFailedException;
 import org.anchoranalysis.mpp.mark.MarkCollection;
 
 /**
- * 
  * @author Owen Feehan
- *
  * @param <T> rejection-reason
  */
 class DeserializerHelper<T> {
 
-    private XStreamDeserializer<MarkCollection> deserializerMarks =
-            new XStreamDeserializer<>();
+    private XStreamDeserializer<MarkCollection> deserializerMarks = new XStreamDeserializer<>();
     private XStreamDeserializer<DualMarksAnnotation<T>> deserializerAnnotation =
             new XStreamDeserializer<>();
 

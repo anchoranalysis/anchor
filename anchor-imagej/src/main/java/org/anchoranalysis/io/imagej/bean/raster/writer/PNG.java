@@ -31,11 +31,10 @@ import org.anchoranalysis.image.io.RasterIOException;
 
 /**
  * Writes a PNG image using ImageJ.
- * 
- * <p>The extension .png is employed by default.
- * 
- * @author Owen Feehan
  *
+ * <p>The extension .png is employed by default.
+ *
+ * @author Owen Feehan
  */
 public class PNG extends NoTimeSeries {
 

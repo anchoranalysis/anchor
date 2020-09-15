@@ -27,15 +27,21 @@
 package org.anchoranalysis.image.voxel.buffer;
 
 import java.nio.Buffer;
-import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramFactory;
+import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 
 /**
+ * A buffer of voxel-values, usually corresponding to a single z-slice in {@link Voxels}.
+ *
+ * <p>The operations are modelled on the NIO {@link Buffer} classes that can provide the underlying
+ * buffers, but parameter {@code T} need not strictly be a sub-class of {@link Buffer}. This is
+ * useful for automatically wrapping signed to unsigned values with custom buffers.
+ *
  * @author Owen Feehan
- * @param <T> nuffer-type
+ * @param <T> buffer-type
  */
-public abstract class VoxelBuffer<T extends Buffer> {
+public abstract class VoxelBuffer<T> {
 
     public abstract VoxelDataType dataType();
 
@@ -43,29 +49,87 @@ public abstract class VoxelBuffer<T extends Buffer> {
 
     public abstract VoxelBuffer<T> duplicate();
 
-    // Gets the underlying buffer-item converted to an int
+    /**
+     * Gets an element from the buffer at a particular position, converting, if necessary, to an
+     * int.
+     *
+     * <p>Note this can provide slower access than reading directly in the native buffer type.
+     *
+     * <p>The <i>advantage</i> is that all buffer-types implement {@code getInt} and {@code putInt}
+     * so no type-specific code needs to be written.
+     *
+     * <p>The <i>disadvantage</i> is that this can be less efficient, unless conversion to {@code
+     * int} needs to occur anyway.
+     *
+     * @param index the index in the buffer
+     */
     public abstract int getInt(int index);
 
-    public abstract void putInt(int index, int val);
+    /**
+     * Puts an int in the buffer at a particular position, converting, if necessary, to the buffer
+     * type.
+     *
+     * <p>Note this can provide slower access than reading directly in the native buffer type. See
+     * the note in {@link #getInt(int)}.
+     *
+     * @param index the index in the buffer
+     * @param value value to put in the biffer
+     */
+    public abstract void putInt(int index, int value);
 
-    public abstract void putByte(int index, byte val);
+    /**
+     * Puts a byte in the buffer at a particular position, converting, if necessary, to the buffer
+     * type.
+     *
+     * @param index the index in the buffer
+     * @param value value to put in the biffer
+     */
+    public abstract void putByte(int index, byte value);
 
-    public abstract int size();
+    /**
+     * The capacity (i.e. size) of the buffer.
+     *
+     * <p>This is meant in the sense of Java's NIO {@link Buffer} classes.
+     *
+     * @return the size
+     */
+    public abstract int capacity();
 
-    public void transferFrom(int destIndex, VoxelBuffer<T> src) {
-        transferFrom(destIndex, src, destIndex);
-    }
+    /**
+     * Are there voxels remaining in a buffer?
+     *
+     * <p>This is meant in the sense of Java's NIO {@link Buffer} classes.
+     *
+     * @return true if there are voxels remaining in the buffer, false otherwise.
+     */
+    public abstract boolean hasRemaining();
 
-    public void transferFromConvert(int destIndex, VoxelBuffer<?> src, int srcIndex) {
-        int val = src.getInt(srcIndex);
-        putInt(destIndex, val);
+    /**
+     * Assigns a new position to the buffer.
+     *
+     * <p>This is meant in the sense of Java's NIO {@link Buffer} classes.
+     *
+     * @param newPosition the offset to assign as position.
+     */
+    public abstract void position(int newPosition);
+
+    /**
+     * Is this buffer direct or non-direct?
+     *
+     * <p>This is meant in the sense of Java's NIO {@link Buffer} classes.
+     *
+     * @return true iff the buffer is direct.
+     */
+    public abstract boolean isDirect();
+
+    public void transferFromConvert(int destinationIndex, VoxelBuffer<?> source, int sourceIndex) {
+        putInt(destinationIndex, source.getInt(sourceIndex));
     }
 
     @Override
     public String toString() {
-        Histogram h = HistogramFactory.create(this);
-        return h.toString();
+        return HistogramFactory.create(this).toString();
     }
 
-    public abstract void transferFrom(int destIndex, VoxelBuffer<T> src, int srcIndex);
+    public abstract void transferFrom(int destinationIndex, VoxelBuffer<T> source, int sourceIndex);
 }

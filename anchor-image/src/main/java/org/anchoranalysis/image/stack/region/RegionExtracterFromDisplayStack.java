@@ -26,8 +26,6 @@
 
 package org.anchoranalysis.image.stack.region;
 
-import java.nio.ByteBuffer;
-import java.nio.ShortBuffer;
 import java.util.List;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
@@ -35,17 +33,19 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.channel.converter.attached.ChannelConverterAttached;
-import org.anchoranalysis.image.channel.converter.voxels.VoxelsConverter;
+import org.anchoranalysis.image.channel.convert.attached.ChannelConverterAttached;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
-import org.anchoranalysis.image.extent.BoundingBox;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedShortBuffer;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
+import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.scale.ScaleFactor;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.voxel.Voxels;
+import org.anchoranalysis.image.voxel.convert.VoxelsConverter;
 import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelTypeException;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
@@ -55,7 +55,8 @@ import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 public class RegionExtracterFromDisplayStack implements RegionExtracter {
 
     /** Used to convert our source buffer to bytes, not called if it's already bytes */
-    private List<Optional<ChannelConverterAttached<Channel, ByteBuffer>>> listChannelConverter;
+    private List<Optional<ChannelConverterAttached<Channel, UnsignedByteBuffer>>>
+            listChannelConverter;
 
     /** Current displayStack */
     private Stack stack;
@@ -98,7 +99,7 @@ public class RegionExtracterFromDisplayStack implements RegionExtracter {
             Channel extractedSlice,
             BoundingBox box,
             double zoomFactor,
-            Optional<VoxelsConverter<ByteBuffer>> channelConverter)
+            Optional<VoxelsConverter<UnsignedByteBuffer>> channelConverter)
             throws OperationFailedException {
 
         ScaleFactor sf = new ScaleFactor(zoomFactor);
@@ -108,7 +109,7 @@ public class RegionExtracterFromDisplayStack implements RegionExtracter {
 
         Extent extentTrgt = box.extent().scaleXYBy(sf);
 
-        Voxels<ByteBuffer> voxels = VoxelsFactory.getByte().createInitialized(extentTrgt);
+        Voxels<UnsignedByteBuffer> voxels = VoxelsFactory.getByte().createInitialized(extentTrgt);
 
         MeanInterpolator interpolator = (zoomFactor < 1) ? new MeanInterpolator(zoomFactor) : null;
 
@@ -129,7 +130,7 @@ public class RegionExtracterFromDisplayStack implements RegionExtracter {
         } else if (extractedSlice.getVoxelDataType().equals(UnsignedShortVoxelType.INSTANCE)
                 && channelConverter.isPresent()) {
 
-            Voxels<ShortBuffer> bufferIntermediate =
+            Voxels<UnsignedShortBuffer> bufferIntermediate =
                     VoxelsFactory.getShort().createInitialized(extentTrgt);
             interpolateRegionFromShort(
                     extractedSlice.voxels().asShort(),
@@ -159,8 +160,8 @@ public class RegionExtracterFromDisplayStack implements RegionExtracter {
     // extentSrcSlice is the source-size (the single slice we've extracted from the buffer to
     // interpolate from)
     private static void interpolateRegionFromByte(
-            Voxels<ByteBuffer> voxelsSrc,
-            Voxels<ByteBuffer> voxelsDest,
+            Voxels<UnsignedByteBuffer> voxelsSrc,
+            Voxels<UnsignedByteBuffer> voxelsDest,
             Extent extentSrc,
             Extent extentTrgt,
             BoundingBox box,
@@ -172,8 +173,8 @@ public class RegionExtracterFromDisplayStack implements RegionExtracter {
         ReadableTuple3i cornerMax = box.calculateCornerMax();
         for (int z = cornerMin.z(); z <= cornerMax.z(); z++) {
 
-            ByteBuffer bbIn = voxelsSrc.sliceBuffer(z);
-            ByteBuffer bbOut = voxelsDest.sliceBuffer(z - cornerMin.z());
+            UnsignedByteBuffer bufferIn = voxelsSrc.sliceBuffer(z);
+            UnsignedByteBuffer bufferOut = voxelsDest.sliceBuffer(z - cornerMin.z());
 
             // We go through every pixel in the new width, and height, and sample from the original
             // image
@@ -186,13 +187,13 @@ public class RegionExtracterFromDisplayStack implements RegionExtracter {
                     int xOrig = ((int) (x / zoomFactor)) + cornerMin.x();
 
                     // We get the byte to write
-                    byte b =
+                    byte value =
                             (interpolator != null)
                                     ? interpolator.getInterpolatedPixelByte(
-                                            xOrig, yOrig, bbIn, extentSrc)
-                                    : bbIn.get(extentSrc.offset(xOrig, yOrig));
+                                            xOrig, yOrig, bufferIn, extentSrc)
+                                    : bufferIn.getRaw(extentSrc.offset(xOrig, yOrig));
 
-                    bbOut.put(indOut++, b);
+                    bufferOut.putRaw(indOut++, value);
                 }
             }
         }
@@ -202,8 +203,8 @@ public class RegionExtracterFromDisplayStack implements RegionExtracter {
     // extentSrcSlice is the source-size (the single slice we've extracted from the buffer to
     // interpolate from)
     private static void interpolateRegionFromShort(
-            Voxels<ShortBuffer> voxelsSrc,
-            Voxels<ShortBuffer> voxelsDest,
+            Voxels<UnsignedShortBuffer> voxelsSrc,
+            Voxels<UnsignedShortBuffer> voxelsDest,
             Extent extentSrc,
             Extent extentTrgt,
             BoundingBox box,
@@ -218,8 +219,8 @@ public class RegionExtracterFromDisplayStack implements RegionExtracter {
             assert (voxelsSrc.slice(z) != null);
             assert (voxelsDest.slice(z - cornerMin.z()) != null);
 
-            ShortBuffer bbIn = voxelsSrc.sliceBuffer(z);
-            ShortBuffer bbOut = voxelsDest.slice(z - cornerMin.z()).buffer();
+            UnsignedShortBuffer bufferIn = voxelsSrc.sliceBuffer(z);
+            UnsignedShortBuffer bufferOut = voxelsDest.slice(z - cornerMin.z()).buffer();
 
             // We go through every pixel in the new width, and height, and sample from the original
             // image
@@ -232,13 +233,13 @@ public class RegionExtracterFromDisplayStack implements RegionExtracter {
                     int xOrig = ((int) (x / zoomFactor)) + cornerMin.x();
 
                     // We get the byte to write
-                    short s =
+                    short value =
                             (interpolator != null)
                                     ? interpolator.getInterpolatedPixelShort(
-                                            xOrig, yOrig, bbIn, extentSrc)
-                                    : bbIn.get(extentSrc.offset(xOrig, yOrig));
+                                            xOrig, yOrig, bufferIn, extentSrc)
+                                    : bufferIn.getRaw(extentSrc.offset(xOrig, yOrig));
 
-                    bbOut.put(indOut++, s);
+                    bufferOut.putRaw(indOut++, value);
                 }
             }
         }

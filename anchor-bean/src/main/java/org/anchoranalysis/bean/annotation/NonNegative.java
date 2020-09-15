@@ -29,10 +29,10 @@ package org.anchoranalysis.bean.annotation;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
-/** 
+/**
  * The bean-field should have a value {@code >= 0}
- * 
+ *
  * <p>Only applicable to numerical types (Integer, Short, Double, Long).
- * */
+ */
 @Retention(RetentionPolicy.RUNTIME)
 public @interface NonNegative {}

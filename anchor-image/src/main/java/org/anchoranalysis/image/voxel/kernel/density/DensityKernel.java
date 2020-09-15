@@ -26,9 +26,9 @@
 
 package org.anchoranalysis.image.voxel.kernel.density;
 
-import java.nio.ByteBuffer;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.kernel.BinaryKernel;
 import org.anchoranalysis.image.voxel.kernel.LocalSlices;
@@ -38,7 +38,7 @@ public class DensityKernel extends BinaryKernel {
     private BinaryValuesByte bv;
     private double minDensityRatio;
 
-    private Voxels<ByteBuffer> in;
+    private Voxels<UnsignedByteBuffer> in;
     private LocalSlices inSlices;
 
     private static class Density {
@@ -60,7 +60,8 @@ public class DensityKernel extends BinaryKernel {
         this.minDensityRatio = minDensityRatio;
     }
 
-    private Density calculateDensity(Voxels<ByteBuffer> in, LocalSlices inSlices, Point3i point) {
+    private Density calculateDensity(
+            Voxels<UnsignedByteBuffer> in, LocalSlices inSlices, Point3i point) {
 
         // We count the number of on pixels inside a kernel
 
@@ -74,7 +75,7 @@ public class DensityKernel extends BinaryKernel {
 
         for (int z = (-1 * getSizeHalf()); z <= getSizeHalf(); z++) {
 
-            ByteBuffer arr = inSlices.getLocal(z);
+            UnsignedByteBuffer arr = inSlices.getLocal(z);
 
             if (arr == null) {
                 continue;
@@ -87,7 +88,7 @@ public class DensityKernel extends BinaryKernel {
 
                 while (indLocal <= indLocalMax) {
 
-                    if (bv.isOn(arr.get(indLocal))) {
+                    if (bv.isOn(arr.getRaw(indLocal))) {
                         density.incrOn();
                     }
                     indLocal++;
@@ -99,7 +100,7 @@ public class DensityKernel extends BinaryKernel {
     }
 
     @Override
-    public boolean accptPos(int ind, Point3i point) {
+    public boolean acceptPoint(int ind, Point3i point) {
 
         // We count the number of on pixels inside a kernel
 
@@ -111,7 +112,7 @@ public class DensityKernel extends BinaryKernel {
     }
 
     @Override
-    public void init(Voxels<ByteBuffer> in) {
+    public void init(Voxels<UnsignedByteBuffer> in) {
         this.in = in;
     }
 

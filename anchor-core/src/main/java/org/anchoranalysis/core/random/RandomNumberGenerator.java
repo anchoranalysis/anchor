@@ -37,7 +37,10 @@ import java.util.List;
  */
 public interface RandomNumberGenerator {
 
-    /** Samples from a uniformly-distributed range between 0.0 (<i>exclusive</i>) and 1.0 (<i>exclusive</i>). */
+    /**
+     * Samples from a uniformly-distributed range between 0.0 (<i>exclusive</i>) and 1.0
+     * (<i>exclusive</i>).
+     */
     double sampleDoubleZeroAndOne();
 
     /** Generates a Poisson random variable with particular parameterization. */
@@ -52,24 +55,24 @@ public interface RandomNumberGenerator {
     }
 
     /**
-     * Generates a uniformly random discrete number within a range from 0 (<i>inclusive</i>) to {@code
-     * endExclusive}.
+     * Generates a uniformly random discrete number within a range from 0 (<i>inclusive</i>) to
+     * {@code endExclusive}.
      */
     default int sampleIntFromRange(int endExclusive) {
         return (int) (sampleDoubleZeroAndOne() * endExclusive);
     }
 
     /**
-     * Generates a uniformly random discrete number within a range from 0 (<i>inclusive</i>) to {@code
-     * endExclusive}.
+     * Generates a uniformly random discrete number within a range from 0 (<i>inclusive</i>) to
+     * {@code endExclusive}.
      */
     default long sampleLongFromRange(long endExclusive) {
         return (long) (sampleDoubleZeroAndOne() * endExclusive);
     }
 
     /**
-     * Generates a uniformly random floating-point number within a range from {@code 0} (<i>exclusive</i>) to
-     * {@code endExclusive}.
+     * Generates a uniformly random floating-point number within a range from {@code 0}
+     * (<i>exclusive</i>) to {@code endExclusive}.
      */
     default double sampleDoubleFromRange(double endExclusive) {
         return sampleDoubleZeroAndOne() * endExclusive;

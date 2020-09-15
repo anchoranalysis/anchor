@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.image.bean.segment.binary;
 
-import java.nio.ByteBuffer;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
@@ -37,6 +36,7 @@ import org.anchoranalysis.image.bean.nonbean.parameters.BinarySegmentationParame
 import org.anchoranalysis.image.bean.threshold.Thresholder;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
 
@@ -47,7 +47,7 @@ public class BinarySegmentationThreshold extends BinarySegmentation {
     // END PARAMETERS
 
     @Override
-    public BinaryVoxels<ByteBuffer> segment(
+    public BinaryVoxels<UnsignedByteBuffer> segment(
             VoxelsWrapper voxels,
             BinarySegmentationParameters params,
             Optional<ObjectMask> objectMask)

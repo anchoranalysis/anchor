@@ -26,8 +26,8 @@
 
 package org.anchoranalysis.mpp.overlap;
 
-import java.nio.ByteBuffer;
 import lombok.AllArgsConstructor;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.object.combine.CountIntersectingVoxels;
 import org.anchoranalysis.image.object.combine.IntersectionBoundingBox;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMembershipUtilities;
@@ -44,7 +44,7 @@ class CountIntersectingVoxelsRegionMembership extends CountIntersectingVoxels {
 
     @Override
     protected int countIntersectingVoxels(
-            ByteBuffer buffer1, ByteBuffer buffer2, IntersectionBoundingBox box) {
+            UnsignedByteBuffer buffer1, UnsignedByteBuffer buffer2, IntersectionBoundingBox box) {
 
         int cnt = 0;
         for (int y = box.y().min(); y < box.y().max(); y++) {
@@ -53,8 +53,8 @@ class CountIntersectingVoxelsRegionMembership extends CountIntersectingVoxels {
             for (int x = box.x().min(); x < box.x().max(); x++) {
                 int xOther = x + box.x().rel();
 
-                byte posCheck = buffer1.get(box.e1().offset(x, y));
-                byte posCheckOther = buffer2.get(box.e2().offset(xOther, yOther));
+                byte posCheck = buffer1.getRaw(box.e1().offset(x, y));
+                byte posCheckOther = buffer2.getRaw(box.e2().offset(xOther, yOther));
 
                 if (isPixelInRegion(posCheck) && isPixelInRegion(posCheckOther)) {
                     cnt++;

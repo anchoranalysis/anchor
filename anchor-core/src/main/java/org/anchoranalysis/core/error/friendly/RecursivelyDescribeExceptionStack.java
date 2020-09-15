@@ -155,7 +155,7 @@ public class RecursivelyDescribeExceptionStack {
      * If there's a message it's used, otherwise the SimpleName of the exception
      *
      * @param exc exception to extract a descripive "message" from
-     * @param showExceptionTypeIfUnfriendly iff TRUE the exception-class is included in the message
+     * @param showExceptionTypeIfUnfriendly iff true the exception-class is included in the message
      *     for "unfriendly" exceptions
      */
     private static String messageFromExc(Throwable exc, boolean showExceptionTypeIfUnfriendly) {

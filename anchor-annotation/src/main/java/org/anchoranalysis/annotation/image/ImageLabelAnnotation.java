@@ -31,7 +31,7 @@ import lombok.Value;
 import org.anchoranalysis.annotation.Annotation;
 
 /**
- * A single label that pertains to an image
+ * A single label that pertains to an image.
  *
  * @author Owen Feehan
  */

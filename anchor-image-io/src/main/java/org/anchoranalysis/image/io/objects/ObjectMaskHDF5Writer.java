@@ -29,11 +29,11 @@ package org.anchoranalysis.image.io.objects;
 import ch.systemsx.cisd.base.mdarray.MDByteArray;
 import ch.systemsx.cisd.hdf5.HDF5IntStorageFeatures;
 import ch.systemsx.cisd.hdf5.IHDF5Writer;
-import java.nio.ByteBuffer;
 import java.util.function.ToIntFunction;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.ObjectMask;
 
@@ -88,7 +88,7 @@ class ObjectMaskHDF5Writer {
         writer.uint32().setAttr(pathHDF5, attrName, crnrVal.intValue());
     }
 
-    private static MDByteArray byteArray(BinaryVoxels<ByteBuffer> bvb) {
+    private static MDByteArray byteArray(BinaryVoxels<UnsignedByteBuffer> bvb) {
 
         Extent extent = bvb.extent();
 
@@ -96,11 +96,11 @@ class ObjectMaskHDF5Writer {
 
         for (int z = 0; z < extent.z(); z++) {
 
-            ByteBuffer bb = bvb.sliceBuffer(z);
+            UnsignedByteBuffer buffer = bvb.sliceBuffer(z);
 
             for (int y = 0; y < extent.y(); y++) {
                 for (int x = 0; x < extent.x(); x++) {
-                    md.set(bb.get(extent.offset(x, y)), x, y, z);
+                    md.set(buffer.getRaw(extent.offset(x, y)), x, y, z);
                 }
             }
         }

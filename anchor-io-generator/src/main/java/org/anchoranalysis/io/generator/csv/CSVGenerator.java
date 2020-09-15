@@ -33,7 +33,7 @@ import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 
 public abstract class CSVGenerator extends SingleFileTypeGenerator {
 
-    private String manifestFunction;
+    private final String manifestFunction;
 
     protected CSVGenerator(String manifestFunction) {
         this.manifestFunction = manifestFunction;

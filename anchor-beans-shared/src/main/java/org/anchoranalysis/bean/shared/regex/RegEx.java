@@ -44,7 +44,7 @@ public abstract class RegEx extends AnchorBean<RegEx> {
      * Returns a boolean whether the regular-expression successfully matches a string or not
      *
      * @param str string to match against the regular-expression
-     * @return TRUE if successfully matched, FALSE otherwise
+     * @return true if successfully matched, false otherwise
      */
     public boolean hasMatch(String str) {
         return match(str).isPresent();

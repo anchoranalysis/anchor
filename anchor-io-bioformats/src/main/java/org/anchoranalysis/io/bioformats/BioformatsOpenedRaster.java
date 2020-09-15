@@ -35,6 +35,8 @@ import java.util.Optional;
 import loci.formats.FormatException;
 import loci.formats.IFormatReader;
 import loci.formats.meta.IMetadata;
+import lombok.Getter;
+import lombok.experimental.Accessors;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.image.channel.Channel;
@@ -54,6 +56,7 @@ import org.anchoranalysis.io.bioformats.copyconvert.ImageFileShape;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+@Accessors(fluent = true)
 public class BioformatsOpenedRaster implements OpenedRaster {
 
     private final IFormatReader reader;
@@ -61,12 +64,14 @@ public class BioformatsOpenedRaster implements OpenedRaster {
 
     private final IMetadata lociMetadata;
 
-    private final int numChannel;
+    /** A list of channel-names or null if they are not available. */
+    @Getter private final int numberChannels;
+
     private final int sizeT;
     private final boolean rgb;
     private final int bitsPerPixel;
 
-    private final Optional<List<String>> channelNames;
+    @Getter private final Optional<List<String>> channelNames;
 
     private static final Log LOG = LogFactory.getLog(BioformatsOpenedRaster.class);
 
@@ -85,7 +90,7 @@ public class BioformatsOpenedRaster implements OpenedRaster {
         sizeT = readOptions.sizeT(reader);
         rgb = readOptions.isRGB(reader);
         bitsPerPixel = readOptions.effectiveBitsPerPixel(reader);
-        numChannel = readOptions.sizeC(reader);
+        numberChannels = readOptions.sizeC(reader);
 
         channelNames = readOptions.determineChannelNames(reader);
     }
@@ -109,15 +114,6 @@ public class BioformatsOpenedRaster implements OpenedRaster {
     @Override
     public int numberFrames() {
         return sizeT;
-    }
-
-    /** Returns a list of channel-names or NULL if they are not available */
-    public Optional<List<String>> channelNames() {
-        return channelNames;
-    }
-
-    public int numberChannels() {
-        return numChannel;
     }
 
     @Override
@@ -152,7 +148,7 @@ public class BioformatsOpenedRaster implements OpenedRaster {
         try {
             LOG.debug(String.format("Opening series %d as %s", seriesIndex, dataType));
 
-            LOG.debug(String.format("Size T = %d; Size C = %d", sizeT, numChannel));
+            LOG.debug(String.format("Size T = %d; Size C = %d", sizeT, numberChannels));
 
             reader.setSeries(seriesIndex);
 
@@ -180,7 +176,7 @@ public class BioformatsOpenedRaster implements OpenedRaster {
     }
 
     private List<Channel> createUninitialisedChannels(
-            Dimensions dimensions, TimeSequence ts, ChannelFactorySingleType factory)
+            Dimensions dimensions, TimeSequence timeSequence, ChannelFactorySingleType factory)
             throws IncorrectImageSizeException {
 
         /** A list of all channels i.e. aggregating the channels associated with each stack */
@@ -188,14 +184,14 @@ public class BioformatsOpenedRaster implements OpenedRaster {
 
         for (int t = 0; t < sizeT; t++) {
             Stack stack = new Stack();
-            for (int c = 0; c < numChannel; c++) {
+            for (int c = 0; c < numberChannels; c++) {
 
                 Channel channel = factory.createEmptyUninitialised(dimensions);
 
                 stack.addChannel(channel);
                 listAllChannels.add(channel);
             }
-            ts.add(stack);
+            timeSequence.add(stack);
         }
 
         return listAllChannels;
@@ -218,7 +214,7 @@ public class BioformatsOpenedRaster implements OpenedRaster {
                 reader,
                 listChannels,
                 progressReporter,
-                new ImageFileShape(dimensions, numChannel, sizeT),
+                new ImageFileShape(dimensions, numberChannels, sizeT),
                 convertTo,
                 readOptions);
     }

@@ -47,17 +47,14 @@ import org.anchoranalysis.mpp.io.input.MultiInputSubMap;
 class AppendHelper {
 
     private static final DeserializerHelper<?> DESERIALIZER = new DeserializerHelper<>();
-    
+
     /** Reads an object from a path. */
     @FunctionalInterface
     private interface ReadFromPath<T> {
         T apply(Path in) throws Exception; // NOSONAR
     }
 
-    /** 
-     * 
-     *  <p>It is assumed the input files are single channel images.
-     **/
+    /** It is assumed the input files are single channel images. */
     public static void appendStack(
             List<NamedBean<FilePathGenerator>> listPaths,
             final MultiInput inputObject,
@@ -135,7 +132,7 @@ class AppendHelper {
                 listPaths,
                 MultiInput::marks,
                 outPath ->
-                DESERIALIZER.deserializeMarksFromAnnotation(
+                        DESERIALIZER.deserializeMarksFromAnnotation(
                                 outPath, includeAccepted, includeRejected),
                 debugMode);
     }
@@ -173,7 +170,9 @@ class AppendHelper {
 
             MultiInputSubMap<T> map = extractMap.apply(inputObject);
 
-            map.add(namedBean.getName(), () -> readObjectForAppend(inputObject, reader, namedBean, debugMode));
+            map.add(
+                    namedBean.getName(),
+                    () -> readObjectForAppend(inputObject, reader, namedBean, debugMode));
         }
     }
 

@@ -38,9 +38,9 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.core.geometry.Point3d;
-import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.extent.Resolution;
+import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.orientation.Orientation;
 import org.anchoranalysis.image.orientation.Orientation3DEulerAngles;
 import org.anchoranalysis.mpp.mark.GlobalRegionIdentifiers;
@@ -367,7 +367,7 @@ public class Ellipsoid extends ConicBase implements Serializable {
     }
 
     @Override
-    public int numDims() {
+    public int numberDimensions() {
         return 3;
     }
 

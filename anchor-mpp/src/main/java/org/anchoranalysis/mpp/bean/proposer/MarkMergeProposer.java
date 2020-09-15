@@ -40,7 +40,7 @@ import org.anchoranalysis.mpp.proposer.ProposerContext;
 public abstract class MarkMergeProposer extends ProposerBean<MarkMergeProposer>
         implements CompatibleWithMark {
 
-    // Returns a merged mark or NULL
+    // Returns a merged mark or null
     public abstract Optional<Mark> propose(
             VoxelizedMarkMemo mark1, VoxelizedMarkMemo mark2, ProposerContext context)
             throws ProposalAbnormalFailureException;

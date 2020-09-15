@@ -72,7 +72,7 @@ public class SessionInputSequential<T extends FeatureInput> implements SessionIn
                 ChildCacheName childCacheName)
                 throws FeatureCalculationException {
             return calculate(
-                    feature, SessionInputSequential.this.calc(calculation), childCacheName);
+                    feature, SessionInputSequential.this.calculate(calculation), childCacheName);
         }
 
         @Override
@@ -189,23 +189,24 @@ public class SessionInputSequential<T extends FeatureInput> implements SessionIn
     }
 
     @Override
-    public double calc(Feature<T> feature) throws FeatureCalculationException {
+    public double calculate(Feature<T> feature) throws FeatureCalculationException {
         return cache.calculator().calculate(feature, this);
     }
 
     @Override
-    public ResultsVector calc(FeatureList<T> features) throws NamedFeatureCalculateException {
+    public ResultsVector calculate(FeatureList<T> features) throws NamedFeatureCalculateException {
         return cache.calculator().calc(features, this);
     }
 
     @Override
-    public <S> S calc(FeatureCalculation<S, T> cc) throws FeatureCalculationException {
+    public <S> S calculate(FeatureCalculation<S, T> cc) throws FeatureCalculationException {
         return resolver().search(cc).getOrCalculate(input);
     }
 
     @Override
-    public <S> S calc(ResolvedCalculation<S, T> cc) throws FeatureCalculationException {
-        return cc.getOrCalculate(input);
+    public <S> S calculate(ResolvedCalculation<S, T> calculation)
+            throws FeatureCalculationException {
+        return calculation.getOrCalculate(input);
     }
 
     @Override

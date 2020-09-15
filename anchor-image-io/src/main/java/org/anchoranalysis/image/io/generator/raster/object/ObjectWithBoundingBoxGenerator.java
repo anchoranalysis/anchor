@@ -36,15 +36,14 @@ import org.anchoranalysis.io.generator.combined.IterableCombinedListGenerator;
 import org.anchoranalysis.io.generator.serialized.ObjectOutputStreamGenerator;
 
 /**
- * Like {@link org.anchoranalysis.image.io.generator.raster.object.collection.ObjectAsMaskGenerator}
- * but also outputs a serialized bounding box.
+ * Like {@link ObjectAsMaskGenerator} but additionally outputs a serialized bounding box.
  *
  * @author Owen Feehan
  */
 public class ObjectWithBoundingBoxGenerator extends IterableCombinedListGenerator<ObjectMask> {
 
-    public ObjectWithBoundingBoxGenerator(Resolution res) {
-        this(new ObjectAsMaskGenerator(res));
+    public ObjectWithBoundingBoxGenerator(Resolution resolution) {
+        this(new ObjectAsMaskGenerator(resolution));
     }
 
     private ObjectWithBoundingBoxGenerator(IterableGenerator<ObjectMask> generator) {

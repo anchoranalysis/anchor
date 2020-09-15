@@ -27,41 +27,20 @@
 package org.anchoranalysis.image.feature.histogram;
 
 import java.util.Optional;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.anchoranalysis.feature.input.FeatureInputWithResolution;
 import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.histogram.Histogram;
 
+@AllArgsConstructor
 public class FeatureInputHistogram implements FeatureInputWithResolution {
 
-    private Histogram histogram;
-    private Optional<Resolution> res;
-
-    /**
-     * Constructor
-     *
-     * @param histogram
-     * @param res can be NULL so features should expect it
-     */
-    public FeatureInputHistogram(Histogram histogram, Optional<Resolution> res) {
-        super();
-        this.histogram = histogram;
-        this.res = res;
-    }
+    @Getter private Histogram histogram;
+    private Optional<Resolution> resolution;
 
     @Override
     public Optional<Resolution> getResolutionOptional() {
-        return res;
-    }
-
-    public Histogram getHistogram() {
-        return histogram;
-    }
-
-    public void setHistogram(Histogram histogram) {
-        this.histogram = histogram;
-    }
-
-    public void setRes(Resolution res) {
-        this.res = Optional.of(res);
+        return resolution;
     }
 }

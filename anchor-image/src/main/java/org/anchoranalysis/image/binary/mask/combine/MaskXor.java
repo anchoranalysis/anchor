@@ -26,13 +26,13 @@
 
 package org.anchoranalysis.image.binary.mask.combine;
 
-import java.nio.ByteBuffer;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.Voxels;
-import org.anchoranalysis.image.voxel.iterator.IterateVoxels;
+import org.anchoranalysis.image.voxel.iterator.IterateVoxelsAll;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class MaskXor {
@@ -62,8 +62,8 @@ public class MaskXor {
      * @param bvbSecond binary-values to mask the second voxels
      */
     public static void apply(
-            Voxels<ByteBuffer> voxelsFirst,
-            Voxels<ByteBuffer> voxelsSecond,
+            Voxels<UnsignedByteBuffer> voxelsFirst,
+            Voxels<UnsignedByteBuffer> voxelsSecond,
             BinaryValuesByte bvbFirst,
             BinaryValuesByte bvbSecond) {
 
@@ -72,18 +72,18 @@ public class MaskXor {
 
         byte receiveOn = bvbSecond.getOnByte();
 
-        IterateVoxels.callEachPointTwo(
+        IterateVoxelsAll.withTwoBuffers(
                 voxelsFirst,
                 voxelsSecond,
                 (point, bufferSource, bufferReceive, offset) -> {
                     boolean identicalStates =
-                            (bufferSource.get(offset) == sourceOn)
-                                    == (bufferReceive.get(offset) == receiveOn);
+                            (bufferSource.getRaw(offset) == sourceOn)
+                                    == (bufferReceive.getRaw(offset) == receiveOn);
 
                     if (identicalStates) {
-                        bufferSource.put(offset, sourceOff);
+                        bufferSource.putRaw(offset, sourceOff);
                     } else {
-                        bufferSource.put(offset, sourceOn);
+                        bufferSource.putRaw(offset, sourceOn);
                     }
                 });
     }

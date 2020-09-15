@@ -26,18 +26,17 @@
 
 package org.anchoranalysis.image.object.factory;
 
-import java.nio.ByteBuffer;
-import java.nio.IntBuffer;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedIntBuffer;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.factory.unionfind.ConnectedComponentUnionFind;
 
 /**
  * Creates a {@link ObjectCollection} from the connected-components of a mask or binary-voxels.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class ObjectsFromConnectedComponentsFactory {
 
@@ -64,12 +63,12 @@ public class ObjectsFromConnectedComponentsFactory {
     }
 
     // This consumes the voxel buffer 'vb'
-    public ObjectCollection createConnectedComponents(BinaryVoxels<ByteBuffer> voxels) {
+    public ObjectCollection createConnectedComponents(BinaryVoxels<UnsignedByteBuffer> voxels) {
         return unionFind.deriveConnectedByte(voxels);
     }
 
     // This consumes the voxel buffer 'vb'
-    public ObjectCollection create(BinaryVoxels<IntBuffer> voxels) {
+    public ObjectCollection create(BinaryVoxels<UnsignedIntBuffer> voxels) {
         return unionFind.deriveConnectedInt(voxels);
     }
 }

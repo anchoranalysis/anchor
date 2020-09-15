@@ -26,16 +26,16 @@
 
 package org.anchoranalysis.image.io.generator.raster.object.collection;
 
-import java.nio.ByteBuffer;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
-import org.anchoranalysis.image.extent.BoundingBox;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.extent.Resolution;
+import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.io.generator.raster.RasterGenerator;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.stack.Stack;
@@ -122,7 +122,7 @@ public class ObjectAsMaskGenerator extends RasterGenerator
         Channel channelNew =
                 ChannelFactory.instance().create(dimensions, UnsignedByteVoxelType.INSTANCE);
 
-        Voxels<ByteBuffer> voxelsNew = channelNew.voxels().asByte();
+        Voxels<UnsignedByteBuffer> voxelsNew = channelNew.voxels().asByte();
 
         byte matchValue = objectMask.binaryValuesByte().getOnByte();
         byte outOnValueByte = (byte) outOnValue;
@@ -131,16 +131,14 @@ public class ObjectAsMaskGenerator extends RasterGenerator
 
         for (pointLocal.setZ(0); pointLocal.z() < dimensions.z(); pointLocal.incrementZ()) {
 
-            ByteBuffer pixelsIn = objectMask.sliceBufferLocal(pointLocal.z());
-            ByteBuffer pixelsOut = voxelsNew.sliceBuffer(pointLocal.z());
+            UnsignedByteBuffer pixelsIn = objectMask.sliceBufferLocal(pointLocal.z());
+            UnsignedByteBuffer pixelsOut = voxelsNew.sliceBuffer(pointLocal.z());
 
             while (pixelsIn.hasRemaining()) {
 
-                if (pixelsIn.get() != matchValue) {
-                    continue;
+                if (pixelsIn.getRaw() == matchValue) {
+                    pixelsOut.putRaw(pixelsIn.position() - 1, outOnValueByte);
                 }
-
-                pixelsOut.put(pixelsIn.position() - 1, outOnValueByte);
             }
         }
 

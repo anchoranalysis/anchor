@@ -94,7 +94,7 @@ public abstract class Kernel<T> extends MPPBean<Kernel<T>> implements Compatible
     /**
      * The mark ids that were changed in the last energy calculation for the kernel
      *
-     * <p>Guaranteed only to be called, if energy calculation did not return NULL
+     * <p>Guaranteed only to be called, if energy calculation did not return null
      *
      * @return an array of mark IDs
      */

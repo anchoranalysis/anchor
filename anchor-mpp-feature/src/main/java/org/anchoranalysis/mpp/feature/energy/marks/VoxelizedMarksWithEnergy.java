@@ -216,7 +216,7 @@ public final class VoxelizedMarksWithEnergy {
             MemoCollection memo =
                     new MemoCollection(
                             marks.getIndividual(),
-                            energyStack.getEnergyStack(),
+                            energyStack.withoutParams(),
                             marks.getMarks(),
                             marks.getEnergyScheme());
 
@@ -224,7 +224,7 @@ public final class VoxelizedMarksWithEnergy {
 
             // Some energy components need to be calculated in terms of interactions
             //  this we need to track in an intelligent way
-            marks.updateTotal(memo, energyStack.getEnergyStack());
+            marks.updateTotal(memo, energyStack.withoutParams());
 
             return memo;
         } catch (InitException e) {

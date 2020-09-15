@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.image.voxel.neighborhood;
 
-import org.anchoranalysis.image.voxel.iterator.changed.ProcessVoxelNeighbor;
+import org.anchoranalysis.image.voxel.iterator.neighbor.ProcessVoxelNeighbor;
 
 public interface Neighborhood {
 

@@ -26,8 +26,8 @@
 
 package org.anchoranalysis.image.feature.objmask;
 
-import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
+import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.object.ObjectMask;
 
 /**

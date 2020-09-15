@@ -26,8 +26,8 @@
 
 package org.anchoranalysis.image.voxel.kernel;
 
-import java.nio.ByteBuffer;
 import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.Voxels;
 
 public class AndKernel extends BinaryKernel {
@@ -42,7 +42,7 @@ public class AndKernel extends BinaryKernel {
     }
 
     @Override
-    public void init(Voxels<ByteBuffer> in) {
+    public void init(Voxels<UnsignedByteBuffer> in) {
         kernel1.init(in);
         kernel2.init(in);
     }
@@ -54,7 +54,7 @@ public class AndKernel extends BinaryKernel {
     }
 
     @Override
-    public boolean accptPos(int ind, Point3i point) {
-        return kernel1.accptPos(ind, point) && kernel2.accptPos(ind, point);
+    public boolean acceptPoint(int ind, Point3i point) {
+        return kernel1.acceptPoint(ind, point) && kernel2.acceptPoint(ind, point);
     }
 }

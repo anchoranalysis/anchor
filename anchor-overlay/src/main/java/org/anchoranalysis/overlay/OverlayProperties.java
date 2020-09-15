@@ -31,8 +31,8 @@ import java.util.function.DoubleUnaryOperator;
 import org.anchoranalysis.core.name.provider.NameValueSet;
 import org.anchoranalysis.core.name.value.NameValue;
 import org.anchoranalysis.core.name.value.SimpleNameValue;
-import org.anchoranalysis.core.unit.SpatialConversionUtilities;
-import org.anchoranalysis.core.unit.SpatialConversionUtilities.UnitSuffix;
+import org.anchoranalysis.image.extent.SpatialUnits;
+import org.anchoranalysis.image.extent.SpatialUnits.UnitSuffix;
 
 public class OverlayProperties implements Iterable<NameValue<String>> {
 
@@ -54,16 +54,13 @@ public class OverlayProperties implements Iterable<NameValue<String>> {
     public void addWithUnits(
             String name, double value, DoubleUnaryOperator convertToUnits, UnitSuffix unitSuffix) {
         double valueUnits =
-                SpatialConversionUtilities.convertToUnits(
-                        convertToUnits.applyAsDouble(value), unitSuffix);
+                SpatialUnits.convertToUnits(convertToUnits.applyAsDouble(value), unitSuffix);
 
         add(
                 name,
                 String.format(
                         "%2.2f (%.2f%s)",
-                        value,
-                        valueUnits,
-                        SpatialConversionUtilities.unitMeterStringDisplay(unitSuffix)));
+                        value, valueUnits, SpatialUnits.suffixStringForMeters(unitSuffix)));
     }
 
     public void addDoubleAsString(String name, double val) {

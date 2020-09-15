@@ -26,10 +26,10 @@
 
 package org.anchoranalysis.image.voxel.kernel.outline;
 
-import java.nio.ByteBuffer;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.kernel.LocalSlices;
 
@@ -37,14 +37,14 @@ import org.anchoranalysis.image.voxel.kernel.LocalSlices;
 // in voxelsRequireHigh
 public class OutlineKernel3NeighborMatchValue extends OutlineKernel3Base {
 
-    private BinaryVoxels<ByteBuffer> voxelsRequireHigh;
+    private BinaryVoxels<UnsignedByteBuffer> voxelsRequireHigh;
     private LocalSlices localSlicesRequireHigh;
     private BinaryValuesByte bvRequireHigh;
     private ObjectMask object;
 
     public OutlineKernel3NeighborMatchValue(
             ObjectMask object,
-            BinaryVoxels<ByteBuffer> voxelsRequireHigh,
+            BinaryVoxels<UnsignedByteBuffer> voxelsRequireHigh,
             OutlineKernelParameters params) {
         this(object.binaryValuesByte(), object, voxelsRequireHigh, params);
     }
@@ -53,7 +53,7 @@ public class OutlineKernel3NeighborMatchValue extends OutlineKernel3Base {
     private OutlineKernel3NeighborMatchValue(
             BinaryValuesByte bv,
             ObjectMask object,
-            BinaryVoxels<ByteBuffer> voxelsRequireHigh,
+            BinaryVoxels<UnsignedByteBuffer> voxelsRequireHigh,
             OutlineKernelParameters params) {
         super(bv, params);
         this.voxelsRequireHigh = voxelsRequireHigh;
@@ -77,22 +77,22 @@ public class OutlineKernel3NeighborMatchValue extends OutlineKernel3Base {
      * <p>Apologies that it is difficult to read with high cognitive-complexity.
      */
     @Override
-    public boolean accptPos(int ind, Point3i point) {
+    public boolean acceptPoint(int ind, Point3i point) {
 
-        ByteBuffer inArrZ = inSlices.getLocal(0);
-        ByteBuffer inArrZLess1 = inSlices.getLocal(-1);
-        ByteBuffer inArrZPlus1 = inSlices.getLocal(+1);
+        UnsignedByteBuffer inArrZ = inSlices.getLocal(0);
+        UnsignedByteBuffer inArrZLess1 = inSlices.getLocal(-1);
+        UnsignedByteBuffer inArrZPlus1 = inSlices.getLocal(+1);
 
-        ByteBuffer inArrR = localSlicesRequireHigh.getLocal(0);
-        ByteBuffer inArrRLess1 = localSlicesRequireHigh.getLocal(-1);
-        ByteBuffer inArrRPlus1 = localSlicesRequireHigh.getLocal(+1);
+        UnsignedByteBuffer inArrR = localSlicesRequireHigh.getLocal(0);
+        UnsignedByteBuffer inArrRLess1 = localSlicesRequireHigh.getLocal(-1);
+        UnsignedByteBuffer inArrRPlus1 = localSlicesRequireHigh.getLocal(+1);
 
         int xLength = extent.x();
 
         int x = point.x();
         int y = point.y();
 
-        if (bv.isOff(inArrZ.get(ind))) {
+        if (bv.isOff(inArrZ.getRaw(ind))) {
             return false;
         }
 
@@ -100,7 +100,7 @@ public class OutlineKernel3NeighborMatchValue extends OutlineKernel3Base {
         x--;
         ind--;
         if (x >= 0) {
-            if (bv.isOff(inArrZ.get(ind))) {
+            if (bv.isOff(inArrZ.getRaw(ind))) {
                 return checkIfRequireHighIsTrue(inArrR, point, -1, 0);
             }
         } else {
@@ -112,7 +112,7 @@ public class OutlineKernel3NeighborMatchValue extends OutlineKernel3Base {
         x += 2;
         ind += 2;
         if (x < extent.x()) {
-            if (bv.isOff(inArrZ.get(ind))) {
+            if (bv.isOff(inArrZ.getRaw(ind))) {
                 return checkIfRequireHighIsTrue(inArrR, point, +1, 0);
             }
         } else {
@@ -126,7 +126,7 @@ public class OutlineKernel3NeighborMatchValue extends OutlineKernel3Base {
         y--;
         ind -= xLength;
         if (y >= 0) {
-            if (bv.isOff(inArrZ.get(ind))) {
+            if (bv.isOff(inArrZ.getRaw(ind))) {
                 return checkIfRequireHighIsTrue(inArrR, point, 0, -1);
             }
         } else {
@@ -138,7 +138,7 @@ public class OutlineKernel3NeighborMatchValue extends OutlineKernel3Base {
         y += 2;
         ind += (2 * xLength);
         if (y < (extent.y())) {
-            if (bv.isOff(inArrZ.get(ind))) {
+            if (bv.isOff(inArrZ.getRaw(ind))) {
                 return checkIfRequireHighIsTrue(inArrR, point, 0, +1);
             }
         } else {
@@ -151,7 +151,7 @@ public class OutlineKernel3NeighborMatchValue extends OutlineKernel3Base {
         if (useZ) {
 
             if (inArrZLess1 != null) {
-                if (bv.isOff(inArrZLess1.get(ind))) {
+                if (bv.isOff(inArrZLess1.getRaw(ind))) {
                     return checkIfRequireHighIsTrue(inArrRLess1, point, 0, 0);
                 }
             } else {
@@ -161,7 +161,7 @@ public class OutlineKernel3NeighborMatchValue extends OutlineKernel3Base {
             }
 
             if (inArrZPlus1 != null) {
-                if (bv.isOff(inArrZPlus1.get(ind))) {
+                if (bv.isOff(inArrZPlus1.getRaw(ind))) {
                     return checkIfRequireHighIsTrue(inArrRPlus1, point, 0, 0);
                 }
             } else {
@@ -175,7 +175,7 @@ public class OutlineKernel3NeighborMatchValue extends OutlineKernel3Base {
     }
 
     private boolean checkIfRequireHighIsTrue(
-            ByteBuffer inArr, Point3i point, int xShift, int yShift) {
+            UnsignedByteBuffer inArr, Point3i point, int xShift, int yShift) {
 
         if (inArr == null) {
             return outsideAtThreshold;
@@ -194,6 +194,6 @@ public class OutlineKernel3NeighborMatchValue extends OutlineKernel3Base {
         }
 
         int intGlobal = voxelsRequireHigh.extent().offset(x1, y1);
-        return bvRequireHigh.isOn(inArr.get(intGlobal));
+        return bvRequireHigh.isOn(inArr.getRaw(intGlobal));
     }
 }

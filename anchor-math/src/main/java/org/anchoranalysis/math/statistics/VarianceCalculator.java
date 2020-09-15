@@ -44,16 +44,16 @@ public class VarianceCalculator {
     private long sumSquares = 0;
     private long count = 0;
 
-    public void add(int histCount, long k) {
+    public void add(int histogramCount, long k) {
         // Longs to avoid hitting maximum value
-        long addSum = ((long) histCount) * k;
+        long addSum = ((long) histogramCount) * k;
         long addSumSquares = addSum * k;
         assert (addSum >= 0);
         assert (addSumSquares >= 0);
 
         sum += addSum;
         sumSquares += addSumSquares;
-        count += histCount;
+        count += histogramCount;
     }
 
     // If all variables are greater-equal than there corresponding variables in other

@@ -50,7 +50,7 @@ public class ChannelSetVoxelsTest {
         Channel channel = ChannelFactory.instance().create(dimensions, FloatVoxelType.INSTANCE);
 
         Voxels<FloatBuffer> voxels = channel.voxels().asFloat();
-        voxels.slices().replaceSlice(0, VoxelBufferFloat.wrap(new float[] {1, 2, 3, 4}));
+        voxels.slices().replaceSlice(0, VoxelBufferFloat.wrapArray(new float[] {1, 2, 3, 4}));
 
         VoxelsExtracter<FloatBuffer> extracter = voxels.extract();
         assertVoxelEquals(1.0f, 0, 0, extracter);

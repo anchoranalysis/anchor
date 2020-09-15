@@ -27,12 +27,11 @@
 package org.anchoranalysis.image.voxel.buffer.mean;
 
 import java.nio.FloatBuffer;
-import java.nio.ShortBuffer;
-import org.anchoranalysis.image.convert.ByteConverter;
+import org.anchoranalysis.image.convert.UnsignedShortBuffer;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 
-public class MeanIntensityShortBuffer extends MeanIntensityBuffer<ShortBuffer> {
+public class MeanIntensityShortBuffer extends MeanIntensityBuffer<UnsignedShortBuffer> {
 
     /** Simple constructor since no preprocessing is necessary. */
     public MeanIntensityShortBuffer(Extent srcExtent) {
@@ -40,19 +39,18 @@ public class MeanIntensityShortBuffer extends MeanIntensityBuffer<ShortBuffer> {
     }
 
     @Override
-    protected void processPixel(ShortBuffer pixels, int index) {
-        short inPixel = pixels.get(index);
-        incrSumBuffer(index, ByteConverter.unsignedShortToInt(inPixel));
+    protected void processPixel(UnsignedShortBuffer pixels, int index) {
+        incrementSumBuffer(index, pixels.getUnsigned(index));
     }
 
     @Override
     public void finalizeBuffer() {
         int maxIndex = volumeXY();
 
-        ShortBuffer bbFlat = flatBuffer();
-        FloatBuffer bbSum = sumBuffer();
+        UnsignedShortBuffer bufferFlat = flatBuffer();
+        FloatBuffer bufferSum = sumBuffer();
         for (int i = 0; i < maxIndex; i++) {
-            bbFlat.put(i, (byte) (bbSum.get(i) / numberSlicesProcessed()));
+            bufferFlat.putFloat(i, bufferSum.get(i) / numberSlicesProcessed());
         }
     }
 }

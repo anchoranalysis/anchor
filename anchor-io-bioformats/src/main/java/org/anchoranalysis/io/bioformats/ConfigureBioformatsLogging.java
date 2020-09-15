@@ -30,8 +30,9 @@ import loci.common.DebugTools;
 import loci.common.LogbackTools;
 
 /**
- * SINGLETON class for making sure Log4j is configured from a file log4j.xml that restricts the
- * output from the bioformats plugin
+ * Singleton class for making sure Bioformats is configured configured.
+ *
+ * <p>This configuration disables logging from bioformats.
  *
  * @author Owen Feehan
  */

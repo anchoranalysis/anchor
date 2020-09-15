@@ -30,11 +30,8 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.unit.SpatialConversionUtilities;
-import org.anchoranalysis.core.unit.SpatialConversionUtilities.UnitSuffix;
 import org.anchoranalysis.image.bean.nonbean.error.UnitValueException;
-import org.anchoranalysis.image.convert.ImageUnitConverter;
-import org.anchoranalysis.image.extent.Resolution;
+import org.anchoranalysis.image.extent.UnitConverter;
 
 // Measures either area or volume (depending if the do3D flag is employed)
 public class UnitValueVolumePhysical extends UnitValueVolume {
@@ -46,17 +43,13 @@ public class UnitValueVolumePhysical extends UnitValueVolume {
     // END VALUE
 
     @Override
-    public double resolveToVoxels(Optional<Resolution> resolution) throws UnitValueException {
-        if (!resolution.isPresent()) {
+    public double resolveToVoxels(Optional<UnitConverter> unitConverter) throws UnitValueException {
+        if (!unitConverter.isPresent()) {
             throw new UnitValueException(
                     "An image resolution is required to calculate physical-volume but it is missing");
         }
 
-        UnitSuffix unitPrefix = SpatialConversionUtilities.suffixFromMeterString(unitType);
-
-        double valueAsBase = SpatialConversionUtilities.convertFromUnits(value, unitPrefix);
-
-        return ImageUnitConverter.convertFromPhysicalVolume(valueAsBase, resolution.get());
+        return unitConverter.get().fromPhysicalVolume(value, unitType);
     }
 
     @Override

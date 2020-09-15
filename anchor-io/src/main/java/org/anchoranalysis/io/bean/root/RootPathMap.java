@@ -40,9 +40,9 @@ import org.apache.commons.collections.MultiMap;
 import org.apache.commons.collections.map.MultiValueMap;
 
 /**
- * A collection of RootPath objects indexed by their name.
+ * A collection of root-paths indexed by their name.
  *
- * <p>Currently exists as a SINGLETON
+ * <p>Currently exists as a singleton.
  *
  * @author Owen Feehan
  */
@@ -129,7 +129,7 @@ public class RootPathMap {
      * Finds a root to match a name and debug/status
      *
      * @param name this name must match
-     * @param debug if TRUE, priority is given to root paths which also match debug.
+     * @param debug if true, priority is given to root paths which also match debug.
      * @return the found root, or an exception if one cannot be found
      * @throws AnchorIOException
      */
@@ -144,7 +144,7 @@ public class RootPathMap {
         }
 
         // With the currently implementation there can be a maximum of two items with the same name
-        // (with debug=TRUE/FALSE)
+        // (with debug=true/false)
         assert (exst.size() < 3);
         if (exst.size() == 1) {
             // Always take the first one
@@ -169,7 +169,7 @@ public class RootPathMap {
      * entry)
      *
      * @param item item to check
-     * @return TRUE if it is contained, FALSE is if it not
+     * @return true if it is contained, false is if it not
      */
     private boolean contains(RootPath item) {
         @SuppressWarnings("unchecked")

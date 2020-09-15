@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.image.io.bean.stack.provider;
 
-import java.nio.ShortBuffer;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -34,16 +33,17 @@ import org.anchoranalysis.bean.provider.Provider;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.channel.converter.ChannelConverter;
-import org.anchoranalysis.image.channel.converter.ChannelConverterToUnsignedShort;
-import org.anchoranalysis.image.channel.converter.ConversionPolicy;
-import org.anchoranalysis.image.channel.converter.voxels.ConvertToShortScaleByType;
+import org.anchoranalysis.image.channel.convert.ChannelConverter;
+import org.anchoranalysis.image.channel.convert.ConversionPolicy;
+import org.anchoranalysis.image.channel.convert.ToUnsignedShort;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
-import org.anchoranalysis.image.extent.BoundingBox;
+import org.anchoranalysis.image.convert.UnsignedShortBuffer;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
+import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.io.generator.raster.StringRasterGenerator;
 import org.anchoranalysis.image.stack.Stack;
+import org.anchoranalysis.image.voxel.convert.ConvertToShortScaleByType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
@@ -87,10 +87,10 @@ public class GenerateString extends StackProvider {
         }
     }
 
-    private static int maxValueFromStack(Stack stack) {
-        int max = 0;
+    private static long maxValueFromStack(Stack stack) {
+        long max = 0;
         for (Channel channel : stack) {
-            int channelVal = channel.extract().voxelWithMaxIntensity();
+            long channelVal = channel.extract().voxelWithMaxIntensity();
             if (channelVal > max) {
                 max = channelVal;
             }
@@ -103,10 +103,10 @@ public class GenerateString extends StackProvider {
             Stack stack = stringRasterGenerator.generateStack();
 
             if (createShort) {
-                ChannelConverter<ShortBuffer> cc =
-                        new ChannelConverterToUnsignedShort(new ConvertToShortScaleByType());
+                ChannelConverter<UnsignedShortBuffer> conveter =
+                        new ToUnsignedShort(new ConvertToShortScaleByType());
 
-                stack = cc.convert(stack, ConversionPolicy.CHANGE_EXISTING_CHANNEL);
+                stack = conveter.convert(stack, ConversionPolicy.CHANGE_EXISTING_CHANNEL);
             }
 
             if (intensityProvider != null) {

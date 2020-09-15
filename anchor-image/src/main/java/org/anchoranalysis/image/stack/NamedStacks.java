@@ -57,7 +57,7 @@ public class NamedStacks implements NamedProviderStore<Stack> {
     public void add(String identifier, StoreSupplier<Stack> supplier) {
         map.put(identifier, supplier);
     }
-    
+
     public Optional<StoreSupplier<Stack>> getAsSupplier(String identifier) {
         return Optional.ofNullable(map.get(identifier));
     }
@@ -137,10 +137,10 @@ public class NamedStacks implements NamedProviderStore<Stack> {
         }
         return out;
     }
-    
+
     /**
      * Number of stacks
-     * 
+     *
      * @return the number of stacks
      */
     public int size() {

@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.test.image;
 
-import java.nio.Buffer;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactoryByte;
 import org.anchoranalysis.image.extent.Dimensions;
@@ -75,7 +74,7 @@ public class ChannelFixture {
         // Populate the channel with values
         for (int z = 0; z < e.z(); z++) {
 
-            VoxelBuffer<? extends Buffer> slice = channel.voxels().slice(z);
+            VoxelBuffer<?> slice = channel.voxels().slice(z);
 
             for (int x = 0; x < e.x(); x++) {
                 for (int y = 0; y < e.y(); y++) {

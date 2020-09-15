@@ -25,36 +25,37 @@
  */
 package org.anchoranalysis.image.voxel.extracter;
 
-import java.nio.Buffer;
-import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
-import java.nio.ShortBuffer;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedIntBuffer;
+import org.anchoranalysis.image.convert.UnsignedShortBuffer;
 import org.anchoranalysis.image.voxel.Voxels;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class VoxelsExtracterFactory {
 
     /**
-     * Create voxels-extracter for {@link ByteBuffer}
+     * Create voxels-extracter for {@link UnsignedByteBuffer}.
      *
      * @param voxels the voxels to extract from
      * @return a newly created extracter
      */
-    public static VoxelsExtracter<ByteBuffer> createByte(Voxels<ByteBuffer> voxels) {
+    public static VoxelsExtracter<UnsignedByteBuffer> createByte(
+            Voxels<UnsignedByteBuffer> voxels) {
         return new ByteImplementation(voxels);
     }
 
     /**
-     * Create voxels-extracter for {@link ShortBuffer}
+     * Create voxels-extracter for {@link UnsignedShortBuffer}.
      *
      * @param voxels the voxels to extract from
      * @return a newly created extracter
      */
-    public static VoxelsExtracter<ShortBuffer> createShort(Voxels<ShortBuffer> voxels) {
+    public static VoxelsExtracter<UnsignedShortBuffer> createShort(
+            Voxels<UnsignedShortBuffer> voxels) {
         return new ShortImplementation(voxels);
     }
 
@@ -69,12 +70,12 @@ public class VoxelsExtracterFactory {
     }
 
     /**
-     * Create voxels-extracter for {@link IntBuffer}
+     * Create voxels-extracter for {@link UnsignedIntBuffer}
      *
      * @param voxels the voxels to extract from
      * @return a newly created extracter
      */
-    public static VoxelsExtracter<IntBuffer> createInt(Voxels<IntBuffer> voxels) {
+    public static VoxelsExtracter<UnsignedIntBuffer> createInt(Voxels<UnsignedIntBuffer> voxels) {
         return new IntImplementation(voxels);
     }
 
@@ -91,7 +92,7 @@ public class VoxelsExtracterFactory {
      * @return an extracter that performs translation from global-coordinates to the coordinate
      *     system expected by the delegate
      */
-    public static <T extends Buffer> VoxelsExtracter<T> atCorner(
+    public static <T> VoxelsExtracter<T> atCorner(
             ReadableTuple3i corner, VoxelsExtracter<T> delegate) {
         return new AtCorner<>(corner, delegate);
     }

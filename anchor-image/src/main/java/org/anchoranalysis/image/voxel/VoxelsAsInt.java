@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.image.voxel;
 
-import java.nio.IntBuffer;
+import org.anchoranalysis.image.convert.UnsignedIntBuffer;
 import org.anchoranalysis.image.voxel.arithmetic.VoxelsArithmetic;
 import org.anchoranalysis.image.voxel.arithmetic.VoxelsArithmeticFactory;
 import org.anchoranalysis.image.voxel.assigner.VoxelsAssigner;
@@ -34,17 +34,12 @@ import org.anchoranalysis.image.voxel.assigner.VoxelsAssignerFactory;
 import org.anchoranalysis.image.voxel.extracter.VoxelsExtracter;
 import org.anchoranalysis.image.voxel.extracter.VoxelsExtracterFactory;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
-import org.anchoranalysis.image.voxel.pixelsforslice.PixelsForSlice;
+import org.anchoranalysis.image.voxel.sliceindex.SliceBufferIndex;
 
-public final class VoxelsAsInt extends Voxels<IntBuffer> {
+public final class VoxelsAsInt extends Voxels<UnsignedIntBuffer> {
 
-    public VoxelsAsInt(PixelsForSlice<IntBuffer> slices) {
+    public VoxelsAsInt(SliceBufferIndex<UnsignedIntBuffer> slices) {
         super(slices, VoxelsFactory.getInt(), createArithmetic(slices));
-    }
-
-    @Override
-    protected boolean areBufferValuesEqual(IntBuffer buffer1, IntBuffer buffer2) {
-        return buffer1.get() == buffer2.get();
     }
 
     @Override
@@ -52,12 +47,12 @@ public final class VoxelsAsInt extends Voxels<IntBuffer> {
         return VoxelsAssignerFactory.createInt(this, valueToAssign);
     }
 
-    private static VoxelsArithmetic createArithmetic(PixelsForSlice<IntBuffer> slices) {
+    private static VoxelsArithmetic createArithmetic(SliceBufferIndex<UnsignedIntBuffer> slices) {
         return VoxelsArithmeticFactory.createInt(slices.extent(), slices::sliceBuffer);
     }
 
     @Override
-    public VoxelsExtracter<IntBuffer> extract() {
+    public VoxelsExtracter<UnsignedIntBuffer> extract() {
         return VoxelsExtracterFactory.createInt(this);
     }
 }

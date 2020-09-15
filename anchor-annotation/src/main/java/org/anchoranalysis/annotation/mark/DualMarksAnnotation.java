@@ -37,7 +37,7 @@ import org.anchoranalysis.mpp.mark.MarkCollection;
 
 /**
  * An annotation that consists of two sets of marks, accepted and rejected.
- * 
+ *
  * <p>It also contains a possible reason for rejecting the entire image.
  *
  * @author Owen Feehan
@@ -51,7 +51,7 @@ public class DualMarksAnnotation<T> implements AnnotationWithMarks {
     /** Marks in annotation */
     private MarkCollection marks;
 
-    /** Marks covering area that should be rejected, can be NULL */
+    /** Marks covering area that should be rejected, can be null */
     @Getter private MarkCollection marksReject;
 
     /** Number of seconds since the UNIX epoch */
@@ -64,7 +64,7 @@ public class DualMarksAnnotation<T> implements AnnotationWithMarks {
 
     /**
      * Assigns marks with an overall <i>accepted</i> state.
-     * 
+     *
      * @param dualMark the marks to assign to the annotation.
      */
     public void assignAccepted(DualMarks dualMark) {
@@ -75,7 +75,7 @@ public class DualMarksAnnotation<T> implements AnnotationWithMarks {
 
     /**
      * Assigns marks with an overall <i>paused</i> state.
-     * 
+     *
      * @param dualMark the marks to assign to the annotation.
      */
     public void assignPaused(DualMarks dualMark) {
@@ -83,17 +83,17 @@ public class DualMarksAnnotation<T> implements AnnotationWithMarks {
         accepted = true;
         assign(dualMark);
     }
-    
+
     /**
      * Assigns marks with an overall <i>rejected</i> state.
-     * 
-     * <p>The so far accepted/rejected marks are still stored in case there's a later change of mind.
-     * 
+     *
+     * <p>The so far accepted/rejected marks are still stored in case there's a later change of
+     * mind.
+     *
      * @param dualMark the marks to assign to the annotation.
      * @param reason the reason for rejection
      */
-    public void assignRejected(
-            DualMarks dualMark, T reason) {
+    public void assignRejected(DualMarks dualMark, T reason) {
         accepted = false;
         finished = true;
         assign(dualMark);
@@ -111,9 +111,10 @@ public class DualMarksAnnotation<T> implements AnnotationWithMarks {
 
     /**
      * Scales the marks in the annotation in X and Y dimensions.
-     * 
+     *
      * @param scaleFactor how much to scale by
-     * @throws OptionalOperationUnsupportedException if the type of mark used in the annotation does not supported scaling.
+     * @throws OptionalOperationUnsupportedException if the type of mark used in the annotation does
+     *     not supported scaling.
      */
     public void scaleXY(double scaleFactor) throws OptionalOperationUnsupportedException {
         marks.scaleXY(scaleFactor);
@@ -124,7 +125,7 @@ public class DualMarksAnnotation<T> implements AnnotationWithMarks {
     public RegionMembershipWithFlags region() {
         return RegionMapSingleton.instance().membershipWithFlagsForIndex(regionID);
     }
-        
+
     private void assign(DualMarks dualMark) {
         this.marks = dualMark.accepted();
         this.marksReject = dualMark.rejected();

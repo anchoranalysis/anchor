@@ -27,7 +27,7 @@
 package org.anchoranalysis.mpp.segment.kernel;
 
 import org.anchoranalysis.mpp.segment.kernel.proposer.KernelWithIdentifier;
-import org.anchoranalysis.mpp.segment.optscheme.step.OptimizationStep;
+import org.anchoranalysis.mpp.segment.optimization.step.OptimizationStep;
 import org.anchoranalysis.mpp.segment.transformer.TransformationContext;
 
 /**

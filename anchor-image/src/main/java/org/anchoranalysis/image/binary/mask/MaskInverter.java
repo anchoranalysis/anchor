@@ -26,12 +26,12 @@
 
 package org.anchoranalysis.image.binary.mask;
 
-import java.nio.ByteBuffer;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.Voxels;
 
@@ -50,7 +50,7 @@ public class MaskInverter {
      * @return a newly created inverted object
      */
     public static ObjectMask invertObjectDuplicate(ObjectMask object) {
-        BinaryVoxels<ByteBuffer> voxels = object.binaryVoxels().duplicate();
+        BinaryVoxels<UnsignedByteBuffer> voxels = object.binaryVoxels().duplicate();
         voxels.invert();
         return new ObjectMask(voxels);
     }
@@ -69,21 +69,21 @@ public class MaskInverter {
         invertVoxels(mask.voxels(), bvb);
     }
 
-    private static void invertVoxels(Voxels<ByteBuffer> voxels, BinaryValuesByte bvb) {
+    private static void invertVoxels(Voxels<UnsignedByteBuffer> voxels, BinaryValuesByte bvb) {
         for (int z = 0; z < voxels.extent().z(); z++) {
 
-            ByteBuffer bb = voxels.sliceBuffer(z);
+            UnsignedByteBuffer buffer = voxels.sliceBuffer(z);
 
             int offset = 0;
             for (int y = 0; y < voxels.extent().y(); y++) {
                 for (int x = 0; x < voxels.extent().x(); x++) {
 
-                    byte val = bb.get(offset);
+                    byte val = buffer.getRaw(offset);
 
                     if (val == bvb.getOnByte()) {
-                        bb.put(offset, bvb.getOffByte());
+                        buffer.putRaw(offset, bvb.getOffByte());
                     } else {
-                        bb.put(offset, bvb.getOnByte());
+                        buffer.putRaw(offset, bvb.getOnByte());
                     }
 
                     offset++;

@@ -27,38 +27,43 @@
 package org.anchoranalysis.io.bioformats.copyconvert.tobyte;
 
 import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.extent.Dimensions;
-import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
-import org.anchoranalysis.image.voxel.buffer.VoxelBufferByte;
 
 public class ByteFrom8BitUnsignedInterleaving extends ConvertToByte {
 
-    private int bytesPerPixelOut = 1;
-    private int sizeXY;
-    private int numChannelsPerByteArray;
+    private int numberChannelsPerArray;
 
     @Override
-    protected void setupBefore(Dimensions dimensions, int numChannelsPerByteArray) {
-        sizeXY = dimensions.x() * dimensions.y();
-        this.numChannelsPerByteArray = numChannelsPerByteArray;
+    protected void setupBefore(Dimensions dimensions, int numberChannelsPerArray) {
+        super.setupBefore(dimensions, numberChannelsPerArray);
+        this.numberChannelsPerArray = numberChannelsPerArray;
     }
 
     @Override
-    protected VoxelBuffer<ByteBuffer> convertSingleChannel(byte[] src, int channelRelative) {
-        ByteBuffer buffer = ByteBuffer.wrap(src);
+    protected UnsignedByteBuffer convert(ByteBuffer source, int channelIndexRelative) {
 
-        int sizeTotalBytes = sizeXY * bytesPerPixelOut;
-        byte[] crntChannelBytes = new byte[sizeTotalBytes];
+        if (source.capacity() == sizeXY && channelIndexRelative == 0) {
+            // Reuse the existing buffer, if it's single channeled
+            return UnsignedByteBuffer.wrapRaw(source);
+        } else {
+            UnsignedByteBuffer destination = allocateBuffer();
 
-        // Loop through the relevant positions
-        int totalBytesBuffer = sizeXY * numChannelsPerByteArray;
+            // Loop through the relevant positions
+            int totalBytesSource = sizeXY * numberChannelsPerArray;
 
-        int indOut = 0;
-        for (int indIn = channelRelative;
-                indIn < totalBytesBuffer;
-                indIn += numChannelsPerByteArray) {
-            crntChannelBytes[indOut++] = buffer.get(indIn);
+            for (int indexIn = channelIndexRelative;
+                    indexIn < totalBytesSource;
+                    indexIn += numberChannelsPerArray) {
+                destination.putRaw(source.get(indexIn));
+            }
+
+            return destination;
         }
-        return VoxelBufferByte.wrap(crntChannelBytes);
+    }
+
+    @Override
+    protected int calculateBytesPerPixel(int numberChannelsPerArray) {
+        return 1;
     }
 }

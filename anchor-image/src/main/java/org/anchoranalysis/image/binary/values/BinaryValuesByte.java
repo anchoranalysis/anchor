@@ -30,7 +30,7 @@ import java.io.Serializable;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import org.anchoranalysis.image.convert.ByteConverter;
+import org.anchoranalysis.image.convert.PrimitiveConverter;
 
 /**
  * Two values representing {@code byte} binary states in an unsigned-byte buffer e.g. {@code 0} for
@@ -79,6 +79,7 @@ public final class BinaryValuesByte implements Serializable {
 
     public BinaryValues createInt() {
         return new BinaryValues(
-                ByteConverter.unsignedByteToInt(offByte), ByteConverter.unsignedByteToInt(onByte));
+                PrimitiveConverter.unsignedByteToInt(offByte),
+                PrimitiveConverter.unsignedByteToInt(onByte));
     }
 }

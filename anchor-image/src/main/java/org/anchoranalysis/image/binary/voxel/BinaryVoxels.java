@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.image.binary.voxel;
 
-import java.nio.Buffer;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.experimental.Accessors;
@@ -37,7 +36,7 @@ import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.assigner.VoxelsAssigner;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.extracter.VoxelsExtracter;
-import org.anchoranalysis.image.voxel.pixelsforslice.PixelsForSlice;
+import org.anchoranalysis.image.voxel.sliceindex.SliceBufferIndex;
 
 /**
  * Like {@link Voxels} but should only contain two distinct intensity-values representing ON and OFF
@@ -48,7 +47,7 @@ import org.anchoranalysis.image.voxel.pixelsforslice.PixelsForSlice;
  */
 @AllArgsConstructor
 @Accessors(fluent = true)
-public abstract class BinaryVoxels<T extends Buffer> implements BinaryOnOffSetter {
+public abstract class BinaryVoxels<T> implements BinaryOnOffSetter {
 
     /**
      * Voxels that should only have two intensity-values (representing ON and OFF states). This is
@@ -121,7 +120,7 @@ public abstract class BinaryVoxels<T extends Buffer> implements BinaryOnOffSette
         return voxels.extract();
     }
 
-    public PixelsForSlice<T> slices() {
+    public SliceBufferIndex<T> slices() {
         return voxels.slices();
     }
 }
