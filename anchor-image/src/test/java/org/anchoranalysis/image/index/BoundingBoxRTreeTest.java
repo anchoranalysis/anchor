@@ -40,23 +40,22 @@ public class BoundingBoxRTreeTest {
     private static final BoundingBox BOX2 = BoundingBoxFixture.of(20, 20);
     private static final BoundingBox BOX3 = BoundingBoxFixture.of(15, 10);
 
-    private static final int ID1 = 1;
-    private static final int ID2 = 2;
-    private static final int ID3 = 3;
+    private static final int ID1 = 0;
+    private static final int ID2 = 1;
+    private static final int ID3 = 2;
 
-    private BoundingBoxRTree rtree;
+    private RTree<Integer> tree;
 
     @Before
     public void before() {
-        rtree = new BoundingBoxRTree(200);
-        rtree.add(ID1, BOX1);
-        rtree.add(ID2, BOX2);
-        rtree.add(ID3, BOX3);
+        tree.add(BOX1, ID1);
+        tree.add(BOX2, ID2);
+        tree.add(BOX3, ID3);
     }
 
     /**
      * Tests that the boxes intersect as expected when bounding-boxes intersect, but not when they
-     * are exactly ajcacent
+     * are exactly adjacent
      */
     @Test
     public void testIntersectsWith() {
@@ -66,6 +65,6 @@ public class BoundingBoxRTreeTest {
     }
 
     private void assertIntersectsWith(String message, BoundingBox box, List<Integer> ids) {
-        assertEquals(message, ids, rtree.intersectsWith(box));
+        assertEquals(message, ids, tree.intersectsWith(box));
     }
 }
