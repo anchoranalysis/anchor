@@ -113,7 +113,7 @@ public class BoundedList<T> {
      * <p>The new box must contain the existing box.
      *
      * @param boxToAssign the new bounding-box to assign
-     * @parma mappingFunction applied to each element of the list to generate new element
+     * @param mappingFunction applied to each element of the list to generate new element
      * @return newly-created with the same list but a different bounding-box
      */
     public BoundedList<T> assignBoundingBoxAndMap(
