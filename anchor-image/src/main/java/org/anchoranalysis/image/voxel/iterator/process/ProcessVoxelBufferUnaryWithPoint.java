@@ -37,7 +37,7 @@ import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
  * @author Owen Feehan
  */
 @FunctionalInterface
-public interface ProcessVoxelBufferUnaryWithPoint<T,E extends Exception> {
+public interface ProcessVoxelBufferUnaryWithPoint<T, E extends Exception> {
 
     /**
      * Processes a voxel location in a buffer

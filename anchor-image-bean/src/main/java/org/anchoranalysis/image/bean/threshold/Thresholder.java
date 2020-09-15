@@ -55,11 +55,11 @@ public abstract class Thresholder extends NullParamsBean<VoxelsThresholder> {
      * @throws OperationFailedException
      * @throws OperationFailedException
      */
-    public BinaryVoxels<UnsignedByteBuffer> threshold(
-            VoxelsWrapper voxels) throws OperationFailedException {
+    public BinaryVoxels<UnsignedByteBuffer> threshold(VoxelsWrapper voxels)
+            throws OperationFailedException {
         return threshold(voxels, BinaryValuesByte.getDefault());
     }
-    
+
     /**
      * Like {@link #threshold(VoxelsWrapper, BinaryValuesByte, Optional, Optional)} applying the
      * thresholding to the entire set of voxels.

@@ -75,8 +75,6 @@ public class ObjectMaskMerger {
         return out;
     }
 
-    
-
     /**
      * Merges all the objects together that are found in a collection
      *
@@ -135,7 +133,7 @@ public class ObjectMaskMerger {
 
         return mergeBoundingBoxes(objects.streamStandardJava());
     }
-    
+
     /**
      * Merges all the bounding boxes of a stream of objects.
      *

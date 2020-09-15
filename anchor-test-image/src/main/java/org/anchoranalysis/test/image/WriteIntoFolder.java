@@ -234,7 +234,7 @@ public class WriteIntoFolder implements TestRule {
 
         return new Dimensions(boxCentered.calculateCornerMaxExclusive());
     }
-    
+
     private static BoundingBox boundingBoxThatSpans(ObjectCollection objects) {
         return BoundedList.createFromList(objects.asList(), ObjectMask::boundingBox).boundingBox();
     }

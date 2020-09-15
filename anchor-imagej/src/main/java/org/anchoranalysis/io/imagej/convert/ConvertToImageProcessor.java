@@ -80,8 +80,8 @@ public class ConvertToImageProcessor {
     }
 
     /**
-     * Creates a {@link ImageProcessor} by extracting a slice from a {@link SliceBufferIndex} of type
-     * {@link UnsignedByteBuffer}.
+     * Creates a {@link ImageProcessor} by extracting a slice from a {@link SliceBufferIndex} of
+     * type {@link UnsignedByteBuffer}.
      *
      * @param pixelsForSlice the pixels to extract a slice from.
      * @param z slice-index
@@ -93,8 +93,8 @@ public class ConvertToImageProcessor {
     }
 
     /**
-     * Creates a {@link ImageProcessor} by extracting a slice from a {@link SliceBufferIndex} of type
-     * {@link UnsignedShortBuffer}.
+     * Creates a {@link ImageProcessor} by extracting a slice from a {@link SliceBufferIndex} of
+     * type {@link UnsignedShortBuffer}.
      *
      * @param pixelsForSlice the pixels to extract a slice from.
      * @param z slice-index

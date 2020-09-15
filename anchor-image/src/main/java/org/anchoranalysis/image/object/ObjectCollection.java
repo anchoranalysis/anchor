@@ -51,7 +51,7 @@ import org.anchoranalysis.image.scale.ScaleFactor;
 public class ObjectCollection implements Iterable<ObjectMask> {
 
     private final List<ObjectMask> delegate;
-    
+
     /** Creates with no objects */
     public ObjectCollection() {
         delegate = new ArrayList<>();
@@ -222,7 +222,8 @@ public class ObjectCollection implements Iterable<ObjectMask> {
      * @return a new collection with scaled object-masks (existing object-masks are unaltered)
      * @throws OperationFailedException
      */
-    public ScaledElements<ObjectMask> scale(ScaleFactor factor, Extent clipTo) throws OperationFailedException {
+    public ScaledElements<ObjectMask> scale(ScaleFactor factor, Extent clipTo)
+            throws OperationFailedException {
         return Scaler.scaleObjects(this, factor, clipTo);
     }
 

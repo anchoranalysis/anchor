@@ -33,7 +33,7 @@ import org.anchoranalysis.image.voxel.sliceindex.SliceBufferIndex;
 
 /**
  * Exposes a subset of z-slices as if they were independently an image.
- * 
+ *
  * @author Owen Feehan
  * @param <T> buffer-type
  */

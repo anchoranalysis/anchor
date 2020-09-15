@@ -35,10 +35,10 @@ import java.util.function.IntConsumer;
  */
 @FunctionalInterface
 public interface ScalarThreeDimensionalConsumer {
-    
+
     /**
      * Accepts a point like with a {@link Consumer} in general.
-     * 
+     *
      * @param x coordinate in x-dimension of the current iteration position.
      * @param y coordinate in y-dimension of the current iteration position.
      * @param z coordinate in z-dimension of the current iteration position.

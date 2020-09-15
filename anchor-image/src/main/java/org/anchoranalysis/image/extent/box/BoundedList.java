@@ -26,32 +26,33 @@
 package org.anchoranalysis.image.extent.box;
 
 import com.google.common.base.Preconditions;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.experimental.Accessors;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.experimental.Accessors;
 import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.image.object.combine.BoundingBoxMerger;
 
 /**
- * One or more elements, each with an individual bounding-box, and collectively with a bounding-box that fully contains them all.
+ * One or more elements, each with an individual bounding-box, and collectively with a bounding-box
+ * that fully contains them all.
  *
  * @author Owen Feehan
  * @param <T> type of element in the collection
  */
-@AllArgsConstructor(access=AccessLevel.PRIVATE)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Accessors(fluent = true)
 public class BoundedList<T> {
 
     /**
      * The collection of element with bounding-boxes.
-     * 
+     *
      * <p>This collection should not be altered after the constructor (treated immutably).
      */
     @Getter private final List<T> list;
@@ -59,34 +60,43 @@ public class BoundedList<T> {
     /** A bounding-box that must contain all elements in the collection */
     @Getter private final BoundingBox boundingBox;
 
-    /** Extracts a bounding box from an element. The operation is assumed to involve negligible computational cost. */
-    private final Function<T,BoundingBox> extractBoundingBox;
-    
+    /**
+     * Extracts a bounding box from an element. The operation is assumed to involve negligible
+     * computational cost.
+     */
+    private final Function<T, BoundingBox> extractBoundingBox;
+
     /**
      * Creates for a single element, using its current bounding-box.
      *
      * @param element the single element
-     * @param extractBoundingBox extracts a bounding box from an element. The operation is assumed to involve no computational cost.
+     * @param extractBoundingBox extracts a bounding box from an element. The operation is assumed
+     *     to involve no computational cost.
      */
-    public static <T> BoundedList<T> createSingle(T element, Function<T,BoundingBox> extractBoundingBox) {
-        return new BoundedList<>( Arrays.asList(element), extractBoundingBox.apply(element), extractBoundingBox );
+    public static <T> BoundedList<T> createSingle(
+            T element, Function<T, BoundingBox> extractBoundingBox) {
+        return new BoundedList<>(
+                Arrays.asList(element), extractBoundingBox.apply(element), extractBoundingBox);
     }
 
     /**
      * Creates for a list, minimally fitting a bounding-box around all elements
      *
      * @param list the list
-     * @param extractBoundingBox extracts a bounding box from an element. The operation is assumed to involve no computational cost.
+     * @param extractBoundingBox extracts a bounding box from an element. The operation is assumed
+     *     to involve no computational cost.
      */
-    public static <T> BoundedList<T> createFromList(List<T> list, Function<T,BoundingBox> extractBoundingBox) {
+    public static <T> BoundedList<T> createFromList(
+            List<T> list, Function<T, BoundingBox> extractBoundingBox) {
         Preconditions.checkArgument(!list.isEmpty());
-        BoundingBox mergedBox = BoundingBoxMerger.mergeBoundingBoxes( list.stream().map(extractBoundingBox) );
+        BoundingBox mergedBox =
+                BoundingBoxMerger.mergeBoundingBoxes(list.stream().map(extractBoundingBox));
         return new BoundedList<>(list, mergedBox, extractBoundingBox);
     }
 
     /**
      * Assigns a new containing bounding-box.
-     * 
+     *
      * <p>The new box must contain the existing box.
      *
      * @param boxToAssign the new bounding-box to assign
@@ -97,21 +107,21 @@ public class BoundedList<T> {
         return new BoundedList<>(list, boxToAssign, extractBoundingBox);
     }
 
-
     /**
      * Assigns a new containing bounding-box and maps each individual element.
-     * 
+     *
      * <p>The new box must contain the existing box.
      *
      * @param boxToAssign the new bounding-box to assign
      * @parma mappingFunction applied to each element of the list to generate new element
      * @return newly-created with the same list but a different bounding-box
      */
-    public BoundedList<T> assignBoundingBoxAndMap(BoundingBox boxToAssign, UnaryOperator<T> mappingFunction ) {
+    public BoundedList<T> assignBoundingBoxAndMap(
+            BoundingBox boxToAssign, UnaryOperator<T> mappingFunction) {
         return new BoundedList<>(
-           FunctionalList.mapToList(list, mappingFunction), boxToAssign, extractBoundingBox);
+                FunctionalList.mapToList(list, mappingFunction), boxToAssign, extractBoundingBox);
     }
-    
+
     /**
      * Adds elements without changing the bounding-box
      *

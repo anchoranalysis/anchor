@@ -25,14 +25,13 @@
  */
 package org.anchoranalysis.image.object.label;
 
-import org.anchoranalysis.image.object.ObjectMask;
 import lombok.Value;
+import org.anchoranalysis.image.object.ObjectMask;
 
 /**
  * An object-mask that is founded to overlap with another during labelling.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  * @param <T> original element-type that provided the object-mask representation.
  */
 @Value

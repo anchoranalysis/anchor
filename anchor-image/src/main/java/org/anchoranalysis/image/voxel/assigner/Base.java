@@ -98,17 +98,19 @@ abstract class Base<T> implements VoxelsAssigner {
         toObject(object, Optional.empty());
     }
 
-
     @Override
     public void toObjectIf(ObjectMask object, IntPredicate voxelPredicate) {
-        IterateVoxelsObjectMask.withVoxelBuffer(object, voxels, (buffer, offset)-> {
-            int existingValue = buffer.getInt(offset);
-            if (voxelPredicate.test(existingValue)) {
-                assignToBuffer(buffer, offset);
-            }
-        });
+        IterateVoxelsObjectMask.withVoxelBuffer(
+                object,
+                voxels,
+                (buffer, offset) -> {
+                    int existingValue = buffer.getInt(offset);
+                    if (voxelPredicate.test(existingValue)) {
+                        assignToBuffer(buffer, offset);
+                    }
+                });
     }
-    
+
     @Override
     public boolean toObjectWhile(ObjectMask object, IntPredicate voxelPredicate) {
 
@@ -120,7 +122,7 @@ abstract class Base<T> implements VoxelsAssigner {
             return false;
         }
     }
-    
+
     @Override
     public void toObject(ObjectMask object, BoundingBox restrictTo) {
         toObject(object, Optional.of(restrictTo));
@@ -152,7 +154,7 @@ abstract class Base<T> implements VoxelsAssigner {
         IterateVoxelsObjectMask.withTwoVoxelBuffers(
                 object, voxels, restrictTo, this::assignToBuffer);
     }
-    
+
     private void assignToBuffer(VoxelBuffer<T> buffer, int offset) {
         buffer.putInt(offset, valueToAssign);
     }

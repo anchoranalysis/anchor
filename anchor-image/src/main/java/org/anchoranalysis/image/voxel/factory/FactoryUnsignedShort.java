@@ -40,7 +40,8 @@ final class FactoryUnsignedShort implements VoxelsFactoryTypeBound<UnsignedShort
     private static final VoxelDataType DATA_TYPE = UnsignedShortVoxelType.INSTANCE;
 
     @Override
-    public Voxels<UnsignedShortBuffer> create(SliceBufferIndex<UnsignedShortBuffer> pixelsForPlane) {
+    public Voxels<UnsignedShortBuffer> create(
+            SliceBufferIndex<UnsignedShortBuffer> pixelsForPlane) {
         return new VoxelsAsShort(pixelsForPlane);
     }
 

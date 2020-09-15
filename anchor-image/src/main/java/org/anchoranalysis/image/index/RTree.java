@@ -60,12 +60,14 @@ public class RTree<T> {
         // Insist that maxEntries is at least twice the minimum num items
         int maxNumberEntries = Math.max(maxNumberEntriesSuggested, MIN_NUMBER_ENTRIES * 2);
 
-        tree = new com.newbrightidea.util.RTree<>(maxNumberEntries, MIN_NUMBER_ENTRIES, NUMBER_DIMENSIONS);
+        tree =
+                new com.newbrightidea.util.RTree<>(
+                        maxNumberEntries, MIN_NUMBER_ENTRIES, NUMBER_DIMENSIONS);
     }
 
     /**
      * Adds a bounding-box with a corresponding index.
-     * 
+     *
      * @param box the box to add
      * @param payload the payload associated with the bounding-box
      */
@@ -74,10 +76,10 @@ public class RTree<T> {
         float[] dimensions = extent(box);
         tree.insert(coords, dimensions, payload);
     }
-    
+
     /**
      * Which bounding-boxes contain a particular point.
-     * 
+     *
      * @param point the point
      * @return indices for all bounding-boxes that contain {@code point}.
      */

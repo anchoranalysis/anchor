@@ -43,9 +43,8 @@ import org.anchoranalysis.image.voxel.iterator.IterateVoxelsAll;
 
 /**
  * Decodes a labelled raster into derived objects or object-like elements.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  * @param <T> element-type (an object-mask, or some class containing an object-mask).
  */
 @AllArgsConstructor
@@ -53,12 +52,11 @@ public class DecodeLabels<T> {
 
     /** The label used for background voxels i.e. voxels that exist in no object. */
     private static final int BACKGROUND_LABEL = 0;
-    
+
     /**
      * Creates an element from the scaled-object and its index
-     * 
-     * @author Owen Feehan
      *
+     * @author Owen Feehan
      * @param <T> element-type (an object-mask, or some class containing an object-mask).
      */
     @FunctionalInterface
@@ -76,10 +74,9 @@ public class DecodeLabels<T> {
 
     /** Maximum label-value inclusive */
     private int maxLabelInclusive;
-    
+
     /** Create scaled element from a scaled-object and corresponding index. */
     private CreateElementFromScaledObject<T> createScaledElement;
-    
 
     /**
      * Creates a map of elements to other elements that are labelled with unique integers
@@ -89,12 +86,11 @@ public class DecodeLabels<T> {
      *     should map to a unique key)
      * @param operationAfterScaling an operation to apply after labelling, but before the element is
      *     placed in the map
-     * @return a map constructed key from {@code labelMap} and value as the element is derived from the
-     *     label - for each label
+     * @return a map constructed key from {@code labelMap} and value as the element is derived from
+     *     the label - for each label
      * @throws CreateException
      */
-    public Map<T, T> create(
-            Map<Integer, T> labelMap, UnaryOperator<T> operationAfterScaling)
+    public Map<T, T> create(Map<Integer, T> labelMap, UnaryOperator<T> operationAfterScaling)
             throws CreateException {
 
         /** an object for every label (as there is no minimum volume) */
@@ -116,16 +112,16 @@ public class DecodeLabels<T> {
             return FunctionalList.filterAndMapWithIndexToList(
                     deriveBoundingBoxes(),
                     box -> box.extent().volumeXY() >= smallVolumeThreshold,
-                    this::elementForIndex
-            );
+                    this::elementForIndex);
         } catch (OperationFailedException e) {
             throw new CreateException(e);
         }
     }
-    
+
     private T elementForIndex(BoundingBox box, int index) {
         // The labels begin at 1
-        return createScaledElement.createFrom(index, voxels.extract().voxelsEqualTo(index + 1).deriveObject(box) );        
+        return createScaledElement.createFrom(
+                index, voxels.extract().voxelsEqualTo(index + 1).deriveObject(box));
     }
 
     /**
@@ -143,21 +139,24 @@ public class DecodeLabels<T> {
                         .mapToObj(index -> new PointRange())
                         .collect(Collectors.toList());
 
-        IterateVoxelsAll.withVoxelBuffer(voxels, (point, buffer, offset) -> {
-            int label = buffer.getInt(offset);
+        IterateVoxelsAll.withVoxelBuffer(
+                voxels,
+                (point, buffer, offset) -> {
+                    int label = buffer.getInt(offset);
 
-            if (label != BACKGROUND_LABEL) {
-                try {
-                    list.get(label - 1).add(point);
-                } catch (IndexOutOfBoundsException e) {
-                    throw new OperationFailedException(
-                            "An invalid index occurred, which is probably a result of setting incorrect min and max labels as parameters",
-                            e);
-                }
-            }
-        });
+                    if (label != BACKGROUND_LABEL) {
+                        try {
+                            list.get(label - 1).add(point);
+                        } catch (IndexOutOfBoundsException e) {
+                            throw new OperationFailedException(
+                                    "An invalid index occurred, which is probably a result of setting incorrect min and max labels as parameters",
+                                    e);
+                        }
+                    }
+                });
 
         /** Convert to bounding-boxes after filtering any empty point-ranges */
-        return FunctionalList.filterAndMapToList(list, pointRange -> !pointRange.isEmpty(), PointRange::deriveBoundingBoxNoCheck);
+        return FunctionalList.filterAndMapToList(
+                list, pointRange -> !pointRange.isEmpty(), PointRange::deriveBoundingBoxNoCheck);
     }
 }

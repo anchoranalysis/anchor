@@ -26,7 +26,8 @@
 package org.anchoranalysis.core.geometry.consumer;
 
 /**
- * Like a {@link ScalarTwoDimensionalConsumer} but accepts two coordinates of a point and an offset value.
+ * Like a {@link ScalarTwoDimensionalConsumer} but accepts two coordinates of a point and an offset
+ * value.
  *
  * @author Owen Feehan
  * @param <E> a checked-exception that can be thrown during consumption

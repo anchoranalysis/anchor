@@ -35,10 +35,10 @@ import java.util.function.IntConsumer;
  */
 @FunctionalInterface
 public interface ScalarTwoDimensionalConsumer {
-    
+
     /**
      * Accepts a point like with a {@link Consumer} in general.
-     * 
+     *
      * @param x coordinate in x-dimension of the current iteration position.
      * @param y coordinate in y-dimension of the current iteration position.
      */

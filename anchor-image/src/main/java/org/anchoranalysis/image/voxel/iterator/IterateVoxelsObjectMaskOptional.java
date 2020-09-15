@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,22 +26,23 @@
 package org.anchoranalysis.image.voxel.iterator;
 
 import java.util.Optional;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.SlidingBuffer;
 import org.anchoranalysis.image.voxel.iterator.process.ProcessBufferUnary;
 import org.anchoranalysis.image.voxel.iterator.process.ProcessPoint;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 
 /**
  * Utilities for iterating over the subset of voxels corresponding to an <i>on</i> state in an
  * optional {@link ObjectMask}.
  *
  * <p>If the {@link ObjectMask} is not defined, then <i>all</i> voxels are iterated over.
- * 
- * <p>The utilities operate on one or more {@link Voxels}. A processor is called on each selected voxel.
+ *
+ * <p>The utilities operate on one or more {@link Voxels}. A processor is called on each selected
+ * voxel.
  *
  * @author Owen Feehan
  */
@@ -66,7 +67,7 @@ public class IterateVoxelsObjectMaskOptional {
             IterateVoxelsAll.withPoint(extent, process);
         }
     }
-    
+
     /**
      * Iterate over each voxel on an object-mask with <b>one</b> associated <b>buffer</b>.
      *
@@ -74,7 +75,8 @@ public class IterateVoxelsObjectMaskOptional {
      *     iterate. If not defined, all voxels are iterated over.
      * @param voxels voxels where buffers extracted from be processed, and which define the global
      *     coordinate space
-     * @param process is called for each voxel within the bounding-box using <i>global</i> coordinates.
+     * @param process is called for each voxel within the bounding-box using <i>global</i>
+     *     coordinates.
      * @param <T> buffer-type for voxels
      */
     public static <T> void withBuffer(
@@ -93,7 +95,6 @@ public class IterateVoxelsObjectMaskOptional {
             IterateVoxelsAll.withBuffer(voxels, process);
         }
     }
-    
 
     /**
      * Iterate over each voxel in a sliding-buffer, optionally restricting it to be only voxels in a

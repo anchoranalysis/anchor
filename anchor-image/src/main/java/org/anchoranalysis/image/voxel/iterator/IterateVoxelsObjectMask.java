@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -49,7 +49,8 @@ import org.anchoranalysis.image.voxel.iterator.process.ProcessVoxelBufferUnary;
  * Utilities for iterating over the subset of voxels corresponding to an <i>on</i> state in an
  * {@link ObjectMask}.
  *
- * <p>The utilities operate on one or more {@link Voxels}. A processor is called on each selected voxel.
+ * <p>The utilities operate on one or more {@link Voxels}. A processor is called on each selected
+ * voxel.
  *
  * @author Owen Feehan
  */
@@ -103,7 +104,8 @@ public class IterateVoxelsObjectMask {
      *     voxels within these bounds
      * @param voxels voxels where buffers extracted from be processed, and which define the global
      *     coordinate space
-     * @param process is called for each voxel within the bounding-box using <i>global</i> coordinates.
+     * @param process is called for each voxel within the bounding-box using <i>global</i>
+     *     coordinates.
      * @param <T> buffer-type for voxels
      */
     public static <T> void withBuffer(
@@ -156,7 +158,8 @@ public class IterateVoxelsObjectMask {
      *     provides the <b>first</b> buffer
      * @param voxels2 voxels in which which {@link BoundingBox} refers to a subregion, and which
      *     provides the <b>second</b> buffer
-     * @param process is called for each voxel within the bounding-box using <i>global</i> coordinates.
+     * @param process is called for each voxel within the bounding-box using <i>global</i>
+     *     coordinates.
      * @param <T> buffer-type for voxels
      */
     public static <T> void withTwoBuffers(
@@ -200,11 +203,11 @@ public class IterateVoxelsObjectMask {
             Voxels<T> voxels,
             Optional<BoundingBox> restrictTo,
             ProcessVoxelBufferUnary<T> process) {
-        BoundingBox boxVoxels = restrictTo.orElseGet(
-            () -> object.boundingBox().clipTo(voxels.extent()) );
+        BoundingBox boxVoxels =
+                restrictTo.orElseGet(() -> object.boundingBox().clipTo(voxels.extent()));
 
-        Preconditions.checkArgument( voxels.extent().contains(boxVoxels) );
-        
+        Preconditions.checkArgument(voxels.extent().contains(boxVoxels));
+
         Optional<BoundingBox> restrictToIntersection =
                 OptionalUtilities.flatMap(
                         restrictTo, box -> box.intersection().with(object.boundingBox()));
@@ -296,8 +299,8 @@ public class IterateVoxelsObjectMask {
             BoundingBox boxRelativeToObject,
             ProcessVoxelBufferUnary<T> process) {
 
-        assert( voxels.extent().contains(boxVoxels) );
-        
+        assert (voxels.extent().contains(boxVoxels));
+
         ExtentMatchHelper.checkExtentMatch(boxVoxels, boxRelativeToObject);
 
         ReadableTuple3i cornerMin = boxVoxels.cornerMin();

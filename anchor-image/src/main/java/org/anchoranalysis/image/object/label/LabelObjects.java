@@ -46,11 +46,11 @@ import org.anchoranalysis.image.object.ObjectMask;
 /**
  * Writes a unique ID (successive integer IDs) for each elements's voxels into a channel, and 0 for
  * background.
- * 
+ *
  * <p>An element can be an object-mask or any other class from which an object-mask can be derived.
  *
  * @author Owen Feehan
- * @param <T> element-type, which must be an object-mask or an element containing an object-mask. 
+ * @param <T> element-type, which must be an object-mask or an element containing an object-mask.
  */
 @AllArgsConstructor
 @RequiredArgsConstructor
@@ -67,32 +67,30 @@ public class LabelObjects<T> {
      * applied}). Otherwise, an exception is thrown if an overlapping object is encountered.
      */
     private Optional<Consumer<OverlappingObject<T>>> overlappingObjectConsumer = Optional.empty();
-    
-    /**
-     * Extracts an object-mask representation from an element
-     */
-    private final Function<T,ObjectMask> extractObject;
-        
-    /**
-     * Shifts the element in the positive direction.
-     */
-    private final BiFunction<T,ReadableTuple3i,T> shiftElement;
+
+    /** Extracts an object-mask representation from an element */
+    private final Function<T, ObjectMask> extractObject;
+
+    /** Shifts the element in the positive direction. */
+    private final BiFunction<T, ReadableTuple3i, T> shiftElement;
 
     /**
-     * Creates a channel that contains a unique integer (label) for each element's object-representation.
-     * 
-     * <p>Specifically, a channel is created that is exactly the same-size as the bounding-box around a collection of
-     * element, and labels the background with 0, and each element in the list with an
-     * incrementing unique integer identifier.
+     * Creates a channel that contains a unique integer (label) for each element's
+     * object-representation.
+     *
+     * <p>Specifically, a channel is created that is exactly the same-size as the bounding-box
+     * around a collection of element, and labels the background with 0, and each element in the
+     * list with an incrementing unique integer identifier.
      *
      * @param elements the elements to write IDs for and a bounding-box that contains them all.
-     * @param mapLabels if set, an entry is added for every labelled element (unscaled) to the label it is assigned
-     * @return a channel of the same-size as the containing bounding-box in {@code elements} and with unique IDs for each element, and 0 for voxels not belonging to any element
+     * @param mapLabels if set, an entry is added for every labelled element (unscaled) to the label
+     *     it is assigned
+     * @return a channel of the same-size as the containing bounding-box in {@code elements} and
+     *     with unique IDs for each element, and 0 for voxels not belonging to any element
      * @throws CreateException
      */
     public Channel createLabelledChannel(
-            BoundedList<T> elements, Optional<Map<Integer, T>> mapLabels)
-            throws CreateException {
+            BoundedList<T> elements, Optional<Map<Integer, T>> mapLabels) throws CreateException {
 
         // A channel that is exactly the size of the bounding box for the elements
         Channel channel =
@@ -107,18 +105,19 @@ public class LabelObjects<T> {
                 channel,
                 elements.list(),
                 mapLabels,
-                element -> shiftElement.apply(maybeApplyBefore(element), shiftBackMult) );
+                element -> shiftElement.apply(maybeApplyBefore(element), shiftBackMult));
 
         return channel;
     }
 
     /**
-     * Replaces the contents of the channel so that all element's voxels are labelled with successive
-     * unique integer identifiers 1,2,3 etc. and voxels in no element are 0.
+     * Replaces the contents of the channel so that all element's voxels are labelled with
+     * successive unique integer identifiers 1,2,3 etc. and voxels in no element are 0.
      *
      * @param channel the channel whose voxels will be replaced
      * @param elements the element to write IDs for
-     * @param mapLabels if set, an entry is added for every labelled element (unscaled) to the label it is assigned
+     * @param mapLabels if set, an entry is added for every labelled element (unscaled) to the label
+     *     it is assigned
      * @throws CreateException
      */
     public void labelElements(
@@ -143,8 +142,8 @@ public class LabelObjects<T> {
      * @param elements the elements to write labels for
      * @param mapLabelsToBefore if set, an entry is added for each label to the before version of an
      *     element (before scaling any any other operation)
-     * @param operationAfterMap an operation applied to each element after they are maybe added
-     *     to {@code mapLabelsToBefore} but before their labels are written to voxels
+     * @param operationAfterMap an operation applied to each element after they are maybe added to
+     *     {@code mapLabelsToBefore} but before their labels are written to voxels
      * @throws CreateException if there are more than 255 objects, or if two objects overlap (and
      *     {@code overlappingObjectConsumer} is not set)
      */
@@ -160,7 +159,7 @@ public class LabelObjects<T> {
         int index = 1;
         for (T element : elements) {
 
-            ObjectMask objectAfterOp = extractObject.apply( operationAfterMap.apply(element) );
+            ObjectMask objectAfterOp = extractObject.apply(operationAfterMap.apply(element));
 
             boolean voxelsAssigned =
                     channel.assignValue(index)

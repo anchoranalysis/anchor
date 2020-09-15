@@ -1,7 +1,5 @@
 package org.anchoranalysis.core.functional;
 
-import java.util.ArrayList;
-
 /*-
  * #%L
  * anchor-core
@@ -28,6 +26,7 @@ import java.util.ArrayList;
  * #L%
  */
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -224,7 +223,7 @@ public class FunctionalList {
     public static <T> List<T> filterToList(Collection<T> collection, Predicate<T> predicate) {
         return collection.stream().filter(predicate).collect(Collectors.toList());
     }
-    
+
     /**
      * Creates a new collection by filtering a list and then mapping to a list of another type.
      *
@@ -237,11 +236,8 @@ public class FunctionalList {
      * @throws E if an exception is thrown during mapping
      */
     public static <S, T, E extends Exception> List<T> filterAndMapToList(
-            List<S> list,
-            Predicate<S> predicate,
-            CheckedFunction<S, T, E> mapFunction)
-            throws E {
-        
+            List<S> list, Predicate<S> predicate, CheckedFunction<S, T, E> mapFunction) throws E {
+
         List<T> out = new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {
 
@@ -253,9 +249,10 @@ public class FunctionalList {
         }
         return out;
     }
-    
+
     /**
-     * Creates a new collection by filtering a list and then mapping (with an index) to a list of another type.
+     * Creates a new collection by filtering a list and then mapping (with an index) to a list of
+     * another type.
      *
      * @param <S> type that will be mapped from
      * @param <T> type that will be mapped to

@@ -47,7 +47,7 @@ public class FromFloat implements SliceBufferIndex<FloatBuffer> {
         return new FromFloat(extent);
     }
     // END FACTORY METHODS
-    
+
     private FromFloat(Extent extent) {
         this.extent = extent;
         buffer = new VoxelBufferFloat[extent.z()];

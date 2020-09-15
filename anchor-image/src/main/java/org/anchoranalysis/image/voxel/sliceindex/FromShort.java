@@ -47,7 +47,7 @@ public class FromShort implements SliceBufferIndex<UnsignedShortBuffer> {
         return new FromShort(extent);
     }
     // END FACTORY METHODS
-    
+
     private FromShort(Extent extent) {
         assert (extent.z() > 0);
 

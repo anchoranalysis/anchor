@@ -33,7 +33,7 @@ import org.anchoranalysis.image.voxel.iterator.process.ProcessVoxelBufferUnary;
 
 /**
  * Provides voxel-buffers for each z-slice.
- * 
+ *
  * @author Owen Feehan
  * @param <T> buffer-type
  */

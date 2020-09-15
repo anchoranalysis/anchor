@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -39,7 +39,8 @@ import org.anchoranalysis.image.voxel.iterator.process.ProcessBufferUnary;
  * Utilities for iterating over the subset of voxels corresponding to an <i>on</i> state in a {@link
  * Mask}.
  *
- * <p>The utilities operate on one or more {@link Voxels}. A processor is called on each selected voxel.
+ * <p>The utilities operate on one or more {@link Voxels}. A processor is called on each selected
+ * voxel.
  *
  * @author Owen Feehan
  */

@@ -35,10 +35,10 @@ import org.anchoranalysis.core.geometry.Point2i;
  */
 @FunctionalInterface
 public interface OffsettedPointTwoDimensionalConsumer {
-    
+
     /**
      * Accepts a point like with a {@link Consumer} in general.
-     * 
+     *
      * @param point the current iteration point in a buffer.
      */
     void accept(Point2i point, int offset);

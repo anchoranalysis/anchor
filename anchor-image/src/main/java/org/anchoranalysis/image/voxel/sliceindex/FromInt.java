@@ -47,7 +47,7 @@ public class FromInt implements SliceBufferIndex<UnsignedIntBuffer> {
         return new FromInt(extent);
     }
     // END FACTORY METHODS
-    
+
     private FromInt(Extent extent) {
         assert (extent.z() > 0);
 

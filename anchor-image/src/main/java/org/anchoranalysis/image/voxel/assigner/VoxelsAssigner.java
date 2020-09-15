@@ -82,22 +82,21 @@ public interface VoxelsAssigner {
      * Sets voxels in a box to a particular value if they match an object-mask <b>and</b> a voxel
      * matches a predicate
      *
-     * <p>Unlike {@link #toObjectWhile(ObjectMask, IntPredicate)} this operation will not abort
-     * if a voxel fails to match a predicate, but rather keep on iterating through all voxels.
+     * <p>Unlike {@link #toObjectWhile(ObjectMask, IntPredicate)} this operation will not abort if a
+     * voxel fails to match a predicate, but rather keep on iterating through all voxels.
      *
      * @param object the object-mask to restrict which values in the buffer are assigned
-     * @param voxelPredicate the existing value of any voxel to be written must match this
-     *     predicate
+     * @param voxelPredicate the existing value of any voxel to be written must match this predicate
      */
     void toObjectIf(ObjectMask object, IntPredicate voxelPredicate);
-    
+
     /**
      * Sets voxels in a box to a particular value if they match an object-mask <b>and</b> each voxel
      * matches a predicate
      *
      * <p>If any one of the voxels in the object doesn't match the predicate, the operation is
-     * aborted, and nothing is written at all. This behaviour is different to {@link #toObjectIf} which
-     * will keep on iterating.
+     * aborted, and nothing is written at all. This behaviour is different to {@link #toObjectIf}
+     * which will keep on iterating.
      *
      * @param object the object-mask to restrict which values in the buffer are assigned
      * @param voxelPredicate the existing value of every voxel to be written must match this

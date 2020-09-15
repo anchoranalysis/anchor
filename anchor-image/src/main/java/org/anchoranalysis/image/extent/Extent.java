@@ -398,7 +398,7 @@ public final class Extent implements Serializable {
             }
         }
     }
-    
+
     /**
      * Calls processor once for each x and y-values in the range.
      *
@@ -432,7 +432,7 @@ public final class Extent implements Serializable {
             offsetConsumer.accept(offset);
         }
     }
-    
+
     /**
      * Calls processor once for each x and y-values in the range.
      *

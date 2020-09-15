@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -31,15 +31,14 @@ import org.anchoranalysis.core.log.MessageLogger;
 
 /**
  * An error-reporter that replaces particular errors/exceptions with user-friendly messages.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class ErrorReporterForTask implements ErrorReporter {
 
     private ErrorReporter delegate;
-    
-    public ErrorReporterForTask( MessageLogger logger ) {
+
+    public ErrorReporterForTask(MessageLogger logger) {
         delegate = new ErrorReporterIntoLog(logger);
     }
 
@@ -47,7 +46,9 @@ public class ErrorReporterForTask implements ErrorReporter {
     public void recordError(Class<?> classOriginating, Throwable exc) {
         if (exc instanceof OutOfMemoryError) {
             // Special behaviour for out-of-memory errors
-            delegate.recordError(classOriginating, "There is insufficient memory available for this task. Consider allocating more memory to the Java Virtual Machine with the -XmX argument.");
+            delegate.recordError(
+                    classOriginating,
+                    "There is insufficient memory available for this task. Consider allocating more memory to the Java Virtual Machine with the -XmX argument.");
         } else {
             delegate.recordError(classOriginating, exc);
         }

@@ -92,9 +92,9 @@ public class CallableJob<T extends InputFromManager, S>
             logger.logStart(jobDescription);
 
             boolean success = taskDup.executeJob(paramsUnbound);
-            
+
             closeJobStateAndLog(success);
-            
+
             return Optional.empty();
 
         } catch (Throwable e) { // NOSONAR
@@ -109,7 +109,9 @@ public class CallableJob<T extends InputFromManager, S>
             // If executeTask is called with supressException==false then we arrive here fairly
             // easily, and record the error in the experiment-log just
             //  in case, even though it's probably already in the task log.
-            ErrorReporter errorReporter = new ErrorReporterForTask(paramsUnbound.getParametersExperiment().getLoggerExperiment());
+            ErrorReporter errorReporter =
+                    new ErrorReporterForTask(
+                            paramsUnbound.getParametersExperiment().getLoggerExperiment());
             errorReporter.recordError(CallableJob.class, e);
 
             closeJobStateAndLog(false);
@@ -119,8 +121,8 @@ public class CallableJob<T extends InputFromManager, S>
             Preconditions.checkArgument(!jobState.isExecuting());
         }
     }
-    
-    private void closeJobStateAndLog( boolean success ) {
+
+    private void closeJobStateAndLog(boolean success) {
         jobState.markAsCompleted(success);
         logger.logEnd(jobDescription, jobState, success);
     }

@@ -39,7 +39,8 @@ import org.anchoranalysis.image.voxel.iterator.process.ProcessPoint;
 /**
  * Utilities for iterating over the subset of image voxels within a bounding-box.
  *
- * <p>The utilities operate on one or more {@link Voxels}. A processor is called on each selected voxel.
+ * <p>The utilities operate on one or more {@link Voxels}. A processor is called on each selected
+ * voxel.
  *
  * @author Owen Feehan
  */
@@ -51,7 +52,8 @@ public class IterateVoxelsBoundingBox {
      *
      * @param box the box that is used as a condition on what voxels to iterate i.e. only voxels
      *     within these bounds
-     * @param process is called for each voxel within the bounding-box using <i>global</i> coordinates.
+     * @param process is called for each voxel within the bounding-box using <i>global</i>
+     *     coordinates.
      */
     public static void withPoint(BoundingBox box, ProcessPoint process) {
 
@@ -80,7 +82,8 @@ public class IterateVoxelsBoundingBox {
      *
      * @param box the box that is used as a condition on what voxels to iterate i.e. only voxels
      *     within these bounds
-     * @param process is called for each voxel within the bounding-box using <i>global</i> coordinates.
+     * @param process is called for each voxel within the bounding-box using <i>global</i>
+     *     coordinates.
      */
     public static void withMatchingPoints(
             BoundingBox box, Predicate<Point3i> predicate, ProcessPoint process) {
@@ -113,7 +116,8 @@ public class IterateVoxelsBoundingBox {
      * @param voxels voxels in which which {@link BoundingBox} refers to a subregion.
      * @param box the box that is used as a condition on what voxels to iterate i.e. only voxels
      *     within these bounds
-     * @param process is called for each voxel within the bounding-box using <i>global</i> coordinates.
+     * @param process is called for each voxel within the bounding-box using <i>global</i>
+     *     coordinates.
      * @param <T> buffer-type for voxels
      */
     public static <T> void withBuffer(

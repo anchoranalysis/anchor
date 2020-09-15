@@ -48,8 +48,9 @@ import org.anchoranalysis.image.scale.ScaleFactor;
 /**
  * Elements labelled and scaled in a raster.
  *
- * <p>Elements (with object-representations) are variously scaled collectively in a raster if non-overlapping (to produce the
- * tightest borders between neighboring objects), or else independently if overlapping.
+ * <p>Elements (with object-representations) are variously scaled collectively in a raster if
+ * non-overlapping (to produce the tightest borders between neighboring objects), or else
+ * independently if overlapping.
  *
  * @author Owen Feehan
  */
@@ -65,7 +66,7 @@ class ScaledLabels<T> {
     private final ScaleFactor scaleFactor;
     private final int numberLabels;
     private final Point3i cornerScaled;
-    
+
     /** Access the object-mask-representation of elements of type {@code T}. */
     private final AccessObjectMask<T> access;
 
@@ -94,7 +95,8 @@ class ScaledLabels<T> {
      *
      * @throws CreateException
      */
-    public Map<T, T> buildMapOfAllScaledObjects(Optional<UnaryOperator<T>> postOperation) throws CreateException {
+    public Map<T, T> buildMapOfAllScaledObjects(Optional<UnaryOperator<T>> postOperation)
+            throws CreateException {
 
         UnaryOperator<T> postOperationWithShift =
                 object -> shiftByAndMaybePost(object, cornerScaled, postOperation);
@@ -105,7 +107,7 @@ class ScaledLabels<T> {
                         .create(labelMapping, postOperationWithShift);
 
         // Scaling the overlapping objects
-        for( int i=0; i<objectsOverlap.size(); i++) {
+        for (int i = 0; i < objectsOverlap.size(); i++) {
             scaleObjectIndependently(
                     objectsOverlap.get(i),
                     i,
@@ -125,7 +127,12 @@ class ScaledLabels<T> {
     private Channel createLabels(
             BoundedList<T> elementsWithBox, Optional<UnaryOperator<T>> preOperation)
             throws CreateException {
-        LabelObjects<T> labeller = new LabelObjects<>(preOperation, Optional.of(objectsOverlap::add), access::objectFor, access::shiftBy);
+        LabelObjects<T> labeller =
+                new LabelObjects<>(
+                        preOperation,
+                        Optional.of(objectsOverlap::add),
+                        access::objectFor,
+                        access::shiftBy);
         return labeller.createLabelledChannel(elementsWithBox, Optional.of(labelMapping));
     }
 
@@ -137,10 +144,8 @@ class ScaledLabels<T> {
      * @return the object shifted and with the post-operation applied (if it's defined)
      */
     private T shiftByAndMaybePost(
-            T object,
-            ReadableTuple3i shift,
-            Optional<UnaryOperator<T>> postOperation) {
-        T shifted = access.shiftBy(object,shift);
+            T object, ReadableTuple3i shift, Optional<UnaryOperator<T>> postOperation) {
+        T shifted = access.shiftBy(object, shift);
         if (postOperation.isPresent()) {
             return postOperation.get().apply(shifted);
         } else {
@@ -157,7 +162,7 @@ class ScaledLabels<T> {
             Map<T, T> map,
             UnaryOperator<T> postOp) {
         ObjectMask scaled = unscaled.getAfterPreoperation().scale(scaleFactor, Optional.of(extent));
-        map.put(unscaled.getOriginal(), postOp.apply(access.createFrom(index, scaled)) );
+        map.put(unscaled.getOriginal(), postOp.apply(access.createFrom(index, scaled)));
     }
 
     private static Point3i scaleCorner(ReadableTuple3i cornerUnscaled, ScaleFactor scaleFactor) {

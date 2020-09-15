@@ -39,10 +39,9 @@ import org.anchoranalysis.image.scale.ScaleFactor;
 
 /**
  * A list of elements with an object-mask representation that have been scaled.
- * 
- * <p>When scaling object-masks, so as to keep boundaries between objects exact, objects
- * need to be scaled collectively using a particular interpolation procedure rather than
- * collectively.
+ *
+ * <p>When scaling object-masks, so as to keep boundaries between objects exact, objects need to be
+ * scaled collectively using a particular interpolation procedure rather than collectively.
  *
  * <p>If any elements overlap with other elements, they are scaled separately independently of the
  * others.
@@ -77,20 +76,23 @@ public class ScaledElements<T> {
         }
 
         /** Creates a list of elements with a bounding-box around all elements */
-        BoundedList<T> boundedElements = BoundedList.createFromList(elements, access::boundingBoxFor);
+        BoundedList<T> boundedElements =
+                BoundedList.createFromList(elements, access::boundingBoxFor);
 
-        ScaledLabels<T> labels = new ScaledLabels<>(boundedElements, preOperation, scaleFactor, access);
+        ScaledLabels<T> labels =
+                new ScaledLabels<>(boundedElements, preOperation, scaleFactor, access);
         elementsScaled = labels.buildMapOfAllScaledObjects(postOperation);
     }
 
     /**
      * Gets the scaled version of an element given the unscaled element.
-     * 
+     *
      * <p>The unscaled element must be an identical to that passed into the constructor.
      *
      * @param unscaledElement the unscaled-element
      * @return the corresponding scaled element
-     * @throws GetOperationFailedException if the unscaled element was never passed to the constructor
+     * @throws GetOperationFailedException if the unscaled element was never passed to the
+     *     constructor
      */
     public T scaledObjectFor(T unscaledElement) throws GetOperationFailedException {
         T scaled = elementsScaled.get(unscaledElement);
@@ -103,7 +105,8 @@ public class ScaledElements<T> {
     }
 
     /**
-     * Returns the scaled-elements as a collection but without preserving the original element order.
+     * Returns the scaled-elements as a collection but without preserving the original element
+     * order.
      *
      * <p>The total number of objects is identical to the unscaled objects, just the order may
      * differ.
@@ -113,20 +116,22 @@ public class ScaledElements<T> {
     public Collection<T> asCollectionOrderNotPreserved() {
         return elementsScaled.values();
     }
-    
+
     /**
      * Returns a list of scaled-elements corresponding to a list of unscaled-elements
-     * 
-     * @param unscaledElements the list of unscaled-elements (all items must have been previously passed to the constructor, but the order need not be identical).
-     * @return a newly created list where each elements is respectively the scaled-element for the corresponding input element
+     *
+     * @param unscaledElements the list of unscaled-elements (all items must have been previously
+     *     passed to the constructor, but the order need not be identical).
+     * @return a newly created list where each elements is respectively the scaled-element for the
+     *     corresponding input element
      */
-    public List<T> asListOrderPreserved( List<T> unscaledElements ) {
-        return FunctionalList.mapToList(unscaledElements, elementsScaled::get );
+    public List<T> asListOrderPreserved(List<T> unscaledElements) {
+        return FunctionalList.mapToList(unscaledElements, elementsScaled::get);
     }
 
     /**
      * Number of scaled-elements.
-     * 
+     *
      * @return the number of elements.
      */
     public int size() {

@@ -56,8 +56,8 @@ class MapForLabelsCreator<T> {
     private int minLabelInclusive;
 
     /**
-     * Creates a map from the input-elements to output-elements (their derived labelled elements with
-     * an operation applied)
+     * Creates a map from the input-elements to output-elements (their derived labelled elements
+     * with an operation applied)
      *
      * @return the newly created map
      */

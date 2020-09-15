@@ -165,11 +165,14 @@ public class DrawObjectOnStackGenerator extends RasterGenerator
 
         BoundedList<ObjectMask> objects = this.getIterableElement();
 
-        Stream<ObjectWithProperties> objectsForDrawing = 
-                objects.stream().map( object -> new ObjectWithProperties(
-                        prepareObjectForDrawing(object, objects.boundingBox()) ) 
-                );
-        
+        Stream<ObjectWithProperties> objectsForDrawing =
+                objects.stream()
+                        .map(
+                                object ->
+                                        new ObjectWithProperties(
+                                                prepareObjectForDrawing(
+                                                        object, objects.boundingBox())));
+
         // An object-mask that is relative to the extracted section
         drawObjectsGenerator.setIterableElement(
                 new ObjectCollectionWithProperties(objectsForDrawing));

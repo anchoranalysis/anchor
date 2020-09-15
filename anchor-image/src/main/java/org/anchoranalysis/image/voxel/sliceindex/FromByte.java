@@ -48,7 +48,7 @@ public class FromByte implements SliceBufferIndex<UnsignedByteBuffer> {
         return new FromByte(extent);
     }
     // END FACTORY METHODS
-    
+
     private FromByte(Extent extent) {
         assert (extent.z() > 0);
 
@@ -75,7 +75,7 @@ public class FromByte implements SliceBufferIndex<UnsignedByteBuffer> {
     public Extent extent() {
         return extent;
     }
-    
+
     private void init() {
         int volumeXY = extent.volumeXY();
         for (int z = 0; z < extent.z(); z++) {
