@@ -77,7 +77,7 @@ public class ScaledElements<T> {
         }
 
         /** Creates a list of elements with a bounding-box around all elements */
-        BoundedList<T> boundedElements = new BoundedList<>(elements, access::boundingBoxFor);
+        BoundedList<T> boundedElements = BoundedList.createFromList(elements, access::boundingBoxFor);
 
         ScaledLabels<T> labels = new ScaledLabels<>(boundedElements, preOperation, scaleFactor, access);
         elementsScaled = labels.buildMapOfAllScaledObjects(postOperation);

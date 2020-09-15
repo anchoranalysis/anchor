@@ -26,6 +26,7 @@
 package org.anchoranalysis.image.extent.box;
 
 import com.google.common.base.Preconditions;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.experimental.Accessors;
@@ -33,8 +34,9 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.Function;
+import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.image.object.combine.BoundingBoxMerger;
 
 /**
@@ -43,7 +45,7 @@ import org.anchoranalysis.image.object.combine.BoundingBoxMerger;
  * @author Owen Feehan
  * @param <T> type of element in the collection
  */
-@AllArgsConstructor
+@AllArgsConstructor(access=AccessLevel.PRIVATE)
 @Accessors(fluent = true)
 public class BoundedList<T> {
 
@@ -66,10 +68,8 @@ public class BoundedList<T> {
      * @param element the single element
      * @param extractBoundingBox extracts a bounding box from an element. The operation is assumed to involve no computational cost.
      */
-    public BoundedList(T element, Function<T,BoundingBox> extractBoundingBox) {
-        this.list = Arrays.asList(element);
-        this.boundingBox = extractBoundingBox.apply(element);
-        this.extractBoundingBox = extractBoundingBox;
+    public static <T> BoundedList<T> createSingle(T element, Function<T,BoundingBox> extractBoundingBox) {
+        return new BoundedList<>( Arrays.asList(element), extractBoundingBox.apply(element), extractBoundingBox );
     }
 
     /**
@@ -78,25 +78,40 @@ public class BoundedList<T> {
      * @param list the list
      * @param extractBoundingBox extracts a bounding box from an element. The operation is assumed to involve no computational cost.
      */
-    public BoundedList(List<T> list, Function<T,BoundingBox> extractBoundingBox) {
+    public static <T> BoundedList<T> createFromList(List<T> list, Function<T,BoundingBox> extractBoundingBox) {
         Preconditions.checkArgument(!list.isEmpty());
-        this.list = list;
-        this.boundingBox = BoundingBoxMerger.mergeBoundingBoxes( list.stream().map(extractBoundingBox) );
-        this.extractBoundingBox = extractBoundingBox;
+        BoundingBox mergedBox = BoundingBoxMerger.mergeBoundingBoxes( list.stream().map(extractBoundingBox) );
+        return new BoundedList<>(list, mergedBox, extractBoundingBox);
     }
 
     /**
-     * Maps the containing bounding-box to a larger one (that must contain the existing box)
+     * Assigns a new containing bounding-box.
+     * 
+     * <p>The new box must contain the existing box.
      *
-     * @param boundingBoxToAssign the new bounding-box to assign
+     * @param boxToAssign the new bounding-box to assign
      * @return newly-created with the same list but a different bounding-box
-     * @throws OperationFailedException if the new bounding-box does not contain the existing one
      */
-    public BoundedList<T> mapBoundingBoxToBigger(BoundingBox boundingBoxToAssign)
-            throws OperationFailedException {
-        return new BoundedList<>(list, boundingBoxToAssign, extractBoundingBox);
+    public BoundedList<T> assignBoundingBox(BoundingBox boxToAssign) {
+        Preconditions.checkArgument(boxToAssign.contains().box(boundingBox));
+        return new BoundedList<>(list, boxToAssign, extractBoundingBox);
     }
 
+
+    /**
+     * Assigns a new containing bounding-box and maps each individual element.
+     * 
+     * <p>The new box must contain the existing box.
+     *
+     * @param boxToAssign the new bounding-box to assign
+     * @parma mappingFunction applied to each element of the list to generate new element
+     * @return newly-created with the same list but a different bounding-box
+     */
+    public BoundedList<T> assignBoundingBoxAndMap(BoundingBox boxToAssign, UnaryOperator<T> mappingFunction ) {
+        return new BoundedList<>(
+           FunctionalList.mapToList(list, mappingFunction), boxToAssign, extractBoundingBox);
+    }
+    
     /**
      * Adds elements without changing the bounding-box
      *
@@ -108,9 +123,6 @@ public class BoundedList<T> {
      */
     public BoundedList<T> addObjectsNoBoundingBoxChange(Collection<T> elementsToAdd) {
         list.addAll(elementsToAdd);
-        for (T toAdd : elementsToAdd) {
-            assert (boundingBox.intersection().existsWith( extractBoundingBox.apply(toAdd) ));
-        }
         return new BoundedList<>(list, boundingBox, extractBoundingBox);
     }
 
@@ -124,6 +136,7 @@ public class BoundedList<T> {
         return list.get(index);
     }
 
+    /** A stream of elements in the list. */
     public Stream<T> stream() {
         return list.stream();
     }

@@ -33,8 +33,9 @@ import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.input.FeatureInputResults;
 
 /**
- * Features that process {@link ResultsVectorCollection} i.e. the result of the calculation of some
- * other features.
+ * Features that process {@link ResultsVectorCollection}.
+ * 
+ * <p>i.e. the result of the calculation of some other features.
  *
  * <p>This is useful for applying some aggregate statistics (min, max etc.) to the results of
  * multiple features calculated together.

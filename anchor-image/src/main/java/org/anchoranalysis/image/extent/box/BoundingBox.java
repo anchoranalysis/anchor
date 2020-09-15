@@ -483,17 +483,17 @@ public final class BoundingBox implements Serializable {
         return extractDim.applyAsDouble(cornerMin) + midPointInExtent;
     }
 
-    private static int closestPointOnAxis(double val, int axisMin, int axisMax) {
+    private static int closestPointOnAxis(double value, int axisMin, int axisMax) {
 
-        if (val < axisMin) {
+        if (value < axisMin) {
             return axisMin;
         }
 
-        if (val > axisMax) {
+        if (value > axisMax) {
             return axisMax;
         }
 
-        return (int) val;
+        return (int) value;
     }
 
     private static Point3i multiplyByTwo(Tuple3i point) {

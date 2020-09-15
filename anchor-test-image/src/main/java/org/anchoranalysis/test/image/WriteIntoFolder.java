@@ -236,6 +236,6 @@ public class WriteIntoFolder implements TestRule {
     }
     
     private static BoundingBox boundingBoxThatSpans(ObjectCollection objects) {
-        return new BoundedList<>(objects.asList(), ObjectMask::boundingBox).boundingBox();
+        return BoundedList.createFromList(objects.asList(), ObjectMask::boundingBox).boundingBox();
     }
 }
