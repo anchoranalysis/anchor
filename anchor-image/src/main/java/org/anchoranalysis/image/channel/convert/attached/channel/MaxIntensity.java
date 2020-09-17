@@ -31,18 +31,18 @@ import org.anchoranalysis.image.channel.convert.ConversionPolicy;
 import org.anchoranalysis.image.channel.convert.ToUnsignedByte;
 import org.anchoranalysis.image.channel.convert.attached.ChannelConverterAttached;
 import org.anchoranalysis.image.convert.UnsignedByteBuffer;
-import org.anchoranalysis.image.voxel.convert.ConvertToByteScaleByMaxValue;
+import org.anchoranalysis.image.voxel.convert.ToByteScaleByMaxValue;
 import org.anchoranalysis.image.voxel.convert.VoxelsConverter;
 
 public class MaxIntensity implements ChannelConverterAttached<Channel, UnsignedByteBuffer> {
 
-    private ConvertToByteScaleByMaxValue voxelsConverter;
+    private ToByteScaleByMaxValue voxelsConverter;
 
     private ToUnsignedByte delegate;
 
     public MaxIntensity() {
         // Initialize with a dummy value
-        voxelsConverter = new ConvertToByteScaleByMaxValue(1);
+        voxelsConverter = new ToByteScaleByMaxValue(1);
 
         delegate = new ToUnsignedByte(voxelsConverter);
     }

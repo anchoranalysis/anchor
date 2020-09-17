@@ -27,7 +27,7 @@
 package org.anchoranalysis.image.channel.convert;
 
 import org.anchoranalysis.image.convert.UnsignedShortBuffer;
-import org.anchoranalysis.image.voxel.convert.ConvertToShortNoScaling;
+import org.anchoranalysis.image.voxel.convert.ToShortNoScaling;
 import org.anchoranalysis.image.voxel.convert.VoxelsConverter;
 import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
@@ -36,10 +36,10 @@ import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 public class ToUnsignedShort extends ChannelConverter<UnsignedShortBuffer> {
 
     public ToUnsignedShort() {
-        this(new ConvertToShortNoScaling());
+        this(new ToShortNoScaling());
     }
 
     public ToUnsignedShort(VoxelsConverter<UnsignedShortBuffer> voxelsConverter) {
-        super(UnsignedShortVoxelType.INSTANCE, voxelsConverter, VoxelsFactory.getShort());
+        super(UnsignedShortVoxelType.INSTANCE, voxelsConverter, VoxelsFactory.getUnsignedShort());
     }
 }

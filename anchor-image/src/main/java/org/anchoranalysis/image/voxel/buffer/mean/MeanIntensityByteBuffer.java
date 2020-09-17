@@ -35,7 +35,7 @@ public class MeanIntensityByteBuffer extends MeanIntensityBuffer<UnsignedByteBuf
 
     /** Simple constructor since no preprocessing is necessary. */
     public MeanIntensityByteBuffer(Extent srcExtent) {
-        super(VoxelsFactory.getByte(), srcExtent);
+        super(VoxelsFactory.getUnsignedByte(), srcExtent);
     }
 
     @Override

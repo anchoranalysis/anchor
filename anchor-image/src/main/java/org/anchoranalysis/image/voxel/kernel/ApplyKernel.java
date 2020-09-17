@@ -50,7 +50,7 @@ import org.anchoranalysis.image.voxel.kernel.count.CountKernel;
 public class ApplyKernel {
 
     private static final VoxelsFactoryTypeBound<UnsignedByteBuffer> FACTORY =
-            VoxelsFactory.getByte();
+            VoxelsFactory.getUnsignedByte();
 
     public static Voxels<UnsignedByteBuffer> apply(
             BinaryKernel kernel, Voxels<UnsignedByteBuffer> in) {

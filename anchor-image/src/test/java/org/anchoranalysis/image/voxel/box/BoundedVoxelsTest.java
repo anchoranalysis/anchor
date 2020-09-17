@@ -54,7 +54,7 @@ public class BoundedVoxelsTest {
                 BoundedVoxelsFactory.createByte(new BoundingBox(point(10), extent(15)));
 
         Point3i grow = point(1);
-        box.growBuffer(grow, grow, Optional.of(extent), VoxelsFactory.getByte());
+        box.growBuffer(grow, grow, Optional.of(extent), VoxelsFactory.getUnsignedByte());
     }
 
     private static Point3i point(int value) {

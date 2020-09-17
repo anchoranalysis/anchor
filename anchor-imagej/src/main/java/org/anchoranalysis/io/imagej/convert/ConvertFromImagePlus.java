@@ -72,10 +72,10 @@ public class ConvertFromImagePlus {
     public static VoxelsWrapper toVoxels(ImagePlus image) {
 
         if (image.getType() == ImagePlus.GRAY8) {
-            return deriveCopiedVoxels(image, VoxelsFactory.getByte(), ConvertToVoxelBuffer::asByte);
+            return deriveCopiedVoxels(image, VoxelsFactory.getUnsignedByte(), ConvertToVoxelBuffer::asByte);
         } else if (image.getType() == ImagePlus.GRAY16) {
             return deriveCopiedVoxels(
-                    image, VoxelsFactory.getShort(), ConvertToVoxelBuffer::asShort);
+                    image, VoxelsFactory.getUnsignedShort(), ConvertToVoxelBuffer::asShort);
         } else {
             throw new IncorrectVoxelTypeException("Only unsigned-8 and unsigned 16bit supported");
         }

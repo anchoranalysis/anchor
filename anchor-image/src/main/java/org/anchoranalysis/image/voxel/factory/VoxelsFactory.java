@@ -42,17 +42,17 @@ public class VoxelsFactory extends VoxelDataTypeFactoryMultiplexer<VoxelsFactory
     // Singleton
     private static VoxelsFactory instance;
 
-    private static final VoxelsFactoryTypeBound<UnsignedByteBuffer> FACTORY_BYTE =
+    private static final VoxelsFactoryTypeBound<UnsignedByteBuffer> FACTORY_UNSIGNED_BYTE =
             new FactoryUnsignedByte();
-    private static final VoxelsFactoryTypeBound<UnsignedShortBuffer> FACTORY_SHORT =
+    private static final VoxelsFactoryTypeBound<UnsignedShortBuffer> FACTORY_UNSIGNED_SHORT =
             new FactoryUnsignedShort();
-    private static final VoxelsFactoryTypeBound<UnsignedIntBuffer> FACTORY_INT =
+    private static final VoxelsFactoryTypeBound<UnsignedIntBuffer> FACTORY_UNSIGNED_INT =
             new FactoryUnsignedInt();
     private static final VoxelsFactoryTypeBound<FloatBuffer> FACTORY_FLOAT =
             new FactoryUnsignedFloat();
 
     private VoxelsFactory() {
-        super(FACTORY_BYTE, FACTORY_SHORT, FACTORY_INT, FACTORY_FLOAT);
+        super(FACTORY_UNSIGNED_BYTE, FACTORY_UNSIGNED_SHORT, FACTORY_UNSIGNED_INT, FACTORY_FLOAT);
     }
 
     /** Singleton */
@@ -76,16 +76,16 @@ public class VoxelsFactory extends VoxelDataTypeFactoryMultiplexer<VoxelsFactory
         return new VoxelsWrapper(buffer);
     }
 
-    public static VoxelsFactoryTypeBound<UnsignedByteBuffer> getByte() {
-        return FACTORY_BYTE;
+    public static VoxelsFactoryTypeBound<UnsignedByteBuffer> getUnsignedByte() {
+        return FACTORY_UNSIGNED_BYTE;
     }
 
-    public static VoxelsFactoryTypeBound<UnsignedShortBuffer> getShort() {
-        return FACTORY_SHORT;
+    public static VoxelsFactoryTypeBound<UnsignedShortBuffer> getUnsignedShort() {
+        return FACTORY_UNSIGNED_SHORT;
     }
 
-    public static VoxelsFactoryTypeBound<UnsignedIntBuffer> getInt() {
-        return FACTORY_INT;
+    public static VoxelsFactoryTypeBound<UnsignedIntBuffer> getUnsignedInt() {
+        return FACTORY_UNSIGNED_INT;
     }
 
     public static VoxelsFactoryTypeBound<FloatBuffer> getFloat() {

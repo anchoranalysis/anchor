@@ -27,74 +27,153 @@
 package org.anchoranalysis.image.voxel.convert;
 
 import java.nio.FloatBuffer;
-import java.util.function.BiConsumer;
+import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.convert.UnsignedIntBuffer;
 import org.anchoranalysis.image.convert.UnsignedShortBuffer;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
-import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.datatype.FloatVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedIntVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactoryTypeBound;
+import org.anchoranalysis.image.voxel.iterator.IterateVoxelsRemaining;
+import org.anchoranalysis.image.voxel.iterator.process.buffer.ProcessBufferBinaryWithoutOffset;
 
 /**
- * Converts voxels from one data-type to another
+ * Converts voxels from one data-type to another.
  *
  * @author Owen Feehan
  * @param <T> destination-type (what the voxels will be converted <b>to</b>)
  */
 public abstract class VoxelsConverter<T> {
 
-    public Voxels<T> convertFrom(VoxelsWrapper voxelsIn, VoxelsFactoryTypeBound<T> factory) {
-        Voxels<T> voxelsOut = factory.createInitialized(voxelsIn.any().extent());
-        convertFrom(voxelsIn, voxelsOut);
+    /**
+     * Creates a new voxels of type {@code T} and copies the voxels from {@code from}.
+     * 
+     * @param from where the voxels are copied from (the source)
+     * @param factory a factory that creates {@link Voxels} of tyoe {@code T}.
+     * @return a newly created {@link Voxels} with values copied from {@code source}.
+     */
+    public Voxels<T> convertFrom(VoxelsWrapper from, VoxelsFactoryTypeBound<T> factory) {
+        Voxels<T> voxelsOut = factory.createInitialized(from.any().extent());
+        try {
+            copyFrom(from, voxelsOut);
+        } catch (OperationFailedException e) {
+            throw new AnchorImpossibleSituationException();
+        }
         return voxelsOut;
     }
 
-    public void convertFrom(VoxelsWrapper voxelsIn, Voxels<T> voxelsOut) {
-        // Otherwise, depending on the input type we spawn in different directions
-        VoxelDataType inType = voxelsIn.getVoxelDataType();
-        if (inType.equals(UnsignedByteVoxelType.INSTANCE)) {
-            convertFromByte(voxelsIn.asByte(), voxelsOut);
-        } else if (inType.equals(FloatVoxelType.INSTANCE)) {
-            convertFromFloat(voxelsIn.asFloat(), voxelsOut);
-        } else if (inType.equals(UnsignedShortVoxelType.INSTANCE)) {
-            convertFromShort(voxelsIn.asShort(), voxelsOut);
-        } else if (inType.equals(UnsignedIntVoxelType.INSTANCE)) {
-            convertFromInt(voxelsIn.asInt(), voxelsOut);
+    /**
+     * Copies voxels from a source (of any type) to voxels of type {@code T}.
+     * 
+     * @param from where the voxels are copied from (the source)
+     * @param to where the voxels are copied to (the destination)
+     * @throws OperationFailedException if the extents of {@code from} and {@code to} are not equal.
+     */
+    public void copyFrom(VoxelsWrapper from, Voxels<T> to) throws OperationFailedException {
+
+        VoxelDataType fromType = from.getVoxelDataType();
+        if (fromType.equals(UnsignedByteVoxelType.INSTANCE)) {
+            copyFromUnsignedByte(from.asByte(), to);
+        } else if (fromType.equals(FloatVoxelType.INSTANCE)) {
+            copyFromFloat(from.asFloat(), to);
+        } else if (fromType.equals(UnsignedShortVoxelType.INSTANCE)) {
+            copyFromUnsignedShort(from.asShort(), to);
+        } else if (fromType.equals(UnsignedIntVoxelType.INSTANCE)) {
+            copyFromUnsignedInt(from.asInt(), to);
         }
     }
 
-    public void convertFromByte(Voxels<UnsignedByteBuffer> in, Voxels<T> out) {
-        convertAllSlices(in, out, this::convertFromByte);
+    /**
+     * Copies voxels from a source of type @{link UnsignedByteBuffer} to voxels of type {@code T}.
+     * 
+     * @param from where the voxels are copied from (the source)
+     * @param to where the voxels are copied to (the destination)
+     * @throws OperationFailedException if the extents of {@code from} and {@code to} are not equal.
+     */
+    public void copyFromUnsignedByte(Voxels<UnsignedByteBuffer> from, Voxels<T> to) throws OperationFailedException {
+        convertAllSlices(from, to, this::convertUnsignedByte);
     }
 
-    public void convertFromShort(Voxels<UnsignedShortBuffer> in, Voxels<T> out) {
-        convertAllSlices(in, out, this::convertFromShort);
+    /**
+     * Copies voxels from a source of type @{link UnsignedShortBuffer} to voxels of type {@code T}.
+     * 
+     * @param from where the voxels are copied from (the source)
+     * @param to where the voxels are copied to (the destination)
+     * @throws OperationFailedException if the extents of {@code from} and {@code to} are not equal.
+     */
+    public void copyFromUnsignedShort(Voxels<UnsignedShortBuffer> from, Voxels<T> to) throws OperationFailedException {
+        convertAllSlices(from, to, this::convertUnsignedShort);
     }
 
-    public void convertFromInt(Voxels<UnsignedIntBuffer> in, Voxels<T> out) {
-        convertAllSlices(in, out, this::convertFromInt);
+    /**
+     * Copies voxels from a source of type @{link UnsignedIntBuffer} to voxels of type {@code T}.
+     * 
+     * @param from where the voxels are copied from (the source)
+     * @param to where the voxels are copied to (the destination)
+     * @throws OperationFailedException if the extents of {@code from} and {@code to} are not equal.
+     */
+    public void copyFromUnsignedInt(Voxels<UnsignedIntBuffer> from, Voxels<T> to) throws OperationFailedException {
+        convertAllSlices(from, to, this::convertUnsignedInt);
     }
 
-    public void convertFromFloat(Voxels<FloatBuffer> in, Voxels<T> out) {
-        convertAllSlices(in, out, this::convertFromFloat);
+    /**
+     * Copies voxels from a source of type @{link FloatBuffer} to voxels of type {@code T}.
+     * 
+     * @param from where the voxels are copied from (the source)
+     * @param to where the voxels are copied to (the destination)
+     * @throws OperationFailedException if the extents of {@code from} and {@code to} are not equal.
+     */
+    public void copyFromFloat(Voxels<FloatBuffer> from, Voxels<T> to) throws OperationFailedException {
+        convertAllSlices(from, to, this::convertFloat);
     }
-
-    protected abstract void convertFromByte(VoxelBuffer<UnsignedByteBuffer> in, VoxelBuffer<T> out);
-
-    protected abstract void convertFromFloat(VoxelBuffer<FloatBuffer> in, VoxelBuffer<T> out);
-
-    protected abstract void convertFromInt(VoxelBuffer<UnsignedIntBuffer> in, VoxelBuffer<T> out);
-
-    protected abstract void convertFromShort(VoxelBuffer<UnsignedShortBuffer> in, VoxelBuffer<T> out);
+    
+    /**
+     *  Copies a value from the current position in a {@link UnsignedByteBuffer} to the current position in a buffer of type {@code T}.
+     *  
+     *  @param in the current position of this buffer gives the value to convert, and the position is incremented.
+     *  @param out the converted value is written to the current position of this buffer, and the position is incremented.
+     */
+    protected abstract void convertUnsignedByte(UnsignedByteBuffer in, T out);
+    
+    /**
+     *  Copies a value from the current position in a {@link UnsignedShortBuffer} to the current position in a buffer of type {@code T}.
+     *  
+     *  @param in the current position of this buffer gives the value to convert, and the position is incremented.
+     *  @param out the converted value is written to the current position of this buffer, and the position is incremented.
+     */
+    protected abstract void convertUnsignedShort(UnsignedShortBuffer in, T out);
+    
+    /**
+     *  Copies a value from the current position in a {@link UnsignedIntBuffer} to the current position in a buffer of type {@code T}.
+     *  
+     *  @param in the current position of this buffer gives the value to convert, and the position is incremented.
+     *  @param out the converted value is written to the current position of this buffer, and the position is incremented.
+     */
+    protected abstract void convertUnsignedInt(UnsignedIntBuffer in, T out);
+    
+    /**
+     *  Copies a value from the current position in a {@link FloatBuffer} to the current position in a buffer of type {@code T}.
+     *  
+     *  @param in the current position of this buffer gives the value to convert, and the position is incremented.
+     *  @param out the converted value is written to the current position of this buffer, and the position is incremented.
+     */
+    protected abstract void convertFloat(FloatBuffer in, T out);
     
     private <S> void convertAllSlices(
-            Voxels<S> in, Voxels<T> out, BiConsumer<VoxelBuffer<S>, VoxelBuffer<T>> converter) {
-        in.extent().iterateOverZ(z -> converter.accept(in.slice(z), out.slice(z)));
+            Voxels<S> in, Voxels<T> out, ProcessBufferBinaryWithoutOffset<S,T> process) throws OperationFailedException {
+
+        if (!in.extent().equals(out.extent())) {
+            throw new OperationFailedException(
+               String.format("The extent of the source (%s) is not equal to the destination (%s)", in, out) );
+        }
+        in.extent().iterateOverZ(z ->
+            IterateVoxelsRemaining.withTwoBuffersWithoutOffset(in.slice(z), out.slice(z), process)
+        );
     }
 }

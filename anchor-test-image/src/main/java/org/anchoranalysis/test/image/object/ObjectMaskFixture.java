@@ -70,7 +70,7 @@ public class ObjectMaskFixture {
 
         assertTrue(dimensions.contains(box));
 
-        Voxels<UnsignedByteBuffer> voxels = VoxelsFactory.getByte().createInitialized(extent);
+        Voxels<UnsignedByteBuffer> voxels = VoxelsFactory.getUnsignedByte().createInitialized(extent);
         BinaryValues bv = BinaryValues.getDefault();
         BinaryValuesByte bvb = bv.createByte();
 

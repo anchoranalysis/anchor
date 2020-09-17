@@ -24,14 +24,38 @@
  * #L%
  */
 
-package org.anchoranalysis.image.channel.factory;
+package org.anchoranalysis.image.voxel.convert;
 
-import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
-import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
+import java.nio.FloatBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedIntBuffer;
+import org.anchoranalysis.image.convert.UnsignedShortBuffer;
 
-public class ChannelFactoryShort extends ChannelFactorySingleType {
+/**
+ * Converts voxel buffers to a {@link FloatBuffer} without scaling any values.
+ * 
+ * @author Owen Feehan
+ *
+ */
+public final class ToFloatNoScaling extends VoxelsConverter<FloatBuffer> {
 
-    public ChannelFactoryShort() {
-        super(UnsignedShortVoxelType.INSTANCE, VoxelsFactory.getUnsignedShort());
+    @Override
+    protected void convertUnsignedByte(UnsignedByteBuffer in, FloatBuffer out) {
+        out.put((float) in.getUnsigned());
+    }
+
+    @Override
+    protected void convertUnsignedShort(UnsignedShortBuffer in, FloatBuffer out) {
+        out.put((float) in.getUnsigned());
+    }
+
+    @Override
+    protected void convertUnsignedInt(UnsignedIntBuffer in, FloatBuffer out) {
+        out.put((float) in.getUnsigned());
+    }
+
+    @Override
+    protected void convertFloat(FloatBuffer in, FloatBuffer out) {
+        out.put(in.get());
     }
 }

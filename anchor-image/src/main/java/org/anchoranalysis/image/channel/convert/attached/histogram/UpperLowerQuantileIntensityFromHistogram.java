@@ -33,7 +33,7 @@ import org.anchoranalysis.image.channel.convert.ToUnsignedByte;
 import org.anchoranalysis.image.channel.convert.attached.ChannelConverterAttached;
 import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.image.voxel.convert.ConvertToByteScaleByMinMaxValue;
+import org.anchoranalysis.image.voxel.convert.ToByteScaleByMinMaxValue;
 import org.anchoranalysis.image.voxel.convert.VoxelsConverter;
 
 /**
@@ -44,7 +44,7 @@ import org.anchoranalysis.image.voxel.convert.VoxelsConverter;
 public class UpperLowerQuantileIntensityFromHistogram
         implements ChannelConverterAttached<Histogram, UnsignedByteBuffer> {
 
-    private ConvertToByteScaleByMinMaxValue voxelsConverter;
+    private ToByteScaleByMinMaxValue voxelsConverter;
     private double quantileLower = 0.0;
     private double quantileUpper = 1.0;
     private double scaleLower = 0.0;
@@ -58,7 +58,7 @@ public class UpperLowerQuantileIntensityFromHistogram
     public UpperLowerQuantileIntensityFromHistogram(
             double quantileLower, double quantileUpper, double scaleLower, double scaleUpper) {
         // Initialize with a dummy value
-        voxelsConverter = new ConvertToByteScaleByMinMaxValue(0, 1);
+        voxelsConverter = new ToByteScaleByMinMaxValue(0, 1);
         this.quantileLower = quantileLower;
         this.quantileUpper = quantileUpper;
         this.scaleUpper = scaleUpper;

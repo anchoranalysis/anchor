@@ -74,7 +74,7 @@ public class MaxIntensityProjectionPair {
             Voxels<UnsignedByteBuffer> voxels, RegionMembershipWithFlags rmFlags) {
 
         Voxels<UnsignedByteBuffer> voxelsOut =
-                VoxelsFactory.getByte().createInitialized(voxels.extent());
+                VoxelsFactory.getUnsignedByte().createInitialized(voxels.extent());
 
         BinaryValuesByte bvb = BinaryValuesByte.getDefault();
 

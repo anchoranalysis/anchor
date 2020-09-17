@@ -151,6 +151,21 @@ public final class UnsignedShortBuffer extends UnsignedBufferAsInt {
     public void putUnsigned(int value) {
         putRaw((short) value);
     }
+    
+    /**
+     * Puts a long at the current buffer position, clipping to ensure the value is within the range {@code (0,255)}.
+     *
+     * @param value the float
+     */
+    public void putUnsignedClipped(int value) {
+        if (value > UnsignedShortVoxelType.MAX_VALUE_INT) {
+            putUnsigned(UnsignedShortVoxelType.MAX_VALUE_INT);
+        } else if (value < 0) {
+            putUnsigned(0);
+        } else {
+            putUnsigned(value);
+        }
+    }
 
     @Override
     public void putUnsigned(int index, int value) {
@@ -160,6 +175,21 @@ public final class UnsignedShortBuffer extends UnsignedBufferAsInt {
     @Override
     public void putLong(long value) {
         putRaw((short) value);
+    }
+    
+    /**
+     * Puts a long at the current buffer position, clipping to ensure the value is within the range {@code (0,255)}.
+     *
+     * @param value the float
+     */
+    public void putLongClipped(long value) {
+        if (value > UnsignedShortVoxelType.MAX_VALUE_INT) {
+            putUnsigned(UnsignedShortVoxelType.MAX_VALUE_INT);
+        } else if (value < 0) {
+            putUnsigned(0);
+        } else {
+            putLong(value);
+        }
     }
 
     @Override
@@ -174,12 +204,12 @@ public final class UnsignedShortBuffer extends UnsignedBufferAsInt {
      */
     public void putFloatClipped(float value) {
         if (value > UnsignedShortVoxelType.MAX_VALUE_INT) {
-            value = UnsignedShortVoxelType.MAX_VALUE_INT;
+            putUnsigned(UnsignedShortVoxelType.MAX_VALUE_INT);
+        } else if (value < 0) {
+            putUnsigned(0);
+        } else {
+            putFloat(value);
         }
-        if (value < 0) {
-            value = 0;
-        }
-        putFloat(value);
     }
 
     @Override

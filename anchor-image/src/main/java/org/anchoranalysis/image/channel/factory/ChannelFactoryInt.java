@@ -32,6 +32,6 @@ import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 public class ChannelFactoryInt extends ChannelFactorySingleType {
 
     public ChannelFactoryInt() {
-        super(UnsignedIntVoxelType.INSTANCE, VoxelsFactory.getInt());
+        super(UnsignedIntVoxelType.INSTANCE, VoxelsFactory.getUnsignedInt());
     }
 }

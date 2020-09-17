@@ -109,7 +109,7 @@ public class RegionExtracterFromDisplayStack implements RegionExtracter {
 
         Extent extentTrgt = box.extent().scaleXYBy(sf);
 
-        Voxels<UnsignedByteBuffer> voxels = VoxelsFactory.getByte().createInitialized(extentTrgt);
+        Voxels<UnsignedByteBuffer> voxels = VoxelsFactory.getUnsignedByte().createInitialized(extentTrgt);
 
         MeanInterpolator interpolator = (zoomFactor < 1) ? new MeanInterpolator(zoomFactor) : null;
 
@@ -124,14 +124,14 @@ public class RegionExtracterFromDisplayStack implements RegionExtracter {
                     interpolator);
 
             if (channelConverter.isPresent()) {
-                channelConverter.get().convertFromByte(voxels, voxels);
+                channelConverter.get().copyFromUnsignedByte(voxels, voxels);
             }
 
         } else if (extractedSlice.getVoxelDataType().equals(UnsignedShortVoxelType.INSTANCE)
                 && channelConverter.isPresent()) {
 
             Voxels<UnsignedShortBuffer> bufferIntermediate =
-                    VoxelsFactory.getShort().createInitialized(extentTrgt);
+                    VoxelsFactory.getUnsignedShort().createInitialized(extentTrgt);
             interpolateRegionFromShort(
                     extractedSlice.voxels().asShort(),
                     bufferIntermediate,
@@ -142,7 +142,7 @@ public class RegionExtracterFromDisplayStack implements RegionExtracter {
                     interpolator);
 
             // We now convert the ShortBuffer into bytes
-            channelConverter.get().convertFromShort(bufferIntermediate, voxels);
+            channelConverter.get().copyFromUnsignedShort(bufferIntermediate, voxels);
 
         } else {
             throw new IncorrectVoxelTypeException(

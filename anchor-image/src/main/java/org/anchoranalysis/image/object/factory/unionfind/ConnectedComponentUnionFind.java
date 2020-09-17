@@ -93,7 +93,7 @@ public class ConnectedComponentUnionFind {
 
         UnionFind<Integer> unionIndex = new UnionFind<>(new HashSet<Integer>());
         Voxels<UnsignedIntBuffer> indexBuffer =
-                VoxelsFactory.getInt().createInitialized(visited.extent());
+                VoxelsFactory.getUnsignedInt().createInitialized(visited.extent());
 
         int maxBigIDAdded =
                 populateIndexFromBinary(

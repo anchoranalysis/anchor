@@ -30,52 +30,45 @@ import java.nio.FloatBuffer;
 import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.convert.UnsignedIntBuffer;
 import org.anchoranalysis.image.convert.UnsignedShortBuffer;
-import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedIntVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
-import org.anchoranalysis.image.voxel.iterator.IterateVoxelsRemaining;
 
-// Converts voxel buffers to a unsigned 8-bit buffer scaling against the maximum value in each
-// buffer.
-// So there is no clipping of values, but some might become very small.
-//
-// Note that the Type.MAX_VALUE in Java assumes siged types.  So we multiply by two to get unsigned
-// sizes
-public final class ConvertToByteScaleByType extends VoxelsConverter<UnsignedByteBuffer> {
+/**
+ * Converts voxel buffers to a {@link UnsignedByteBuffer} scaling against the maximum value in each buffer.
+ * 
+ * <p>There is no clipping of values, but some might become very small.
+ * 
+ * @author Owen Feehan
+ *
+ */
+public final class ToByteScaleByType extends ToByte {
 
     private static final int DIVIDE_BY_UNSIGNED_INT = (int) (UnsignedIntVoxelType.MAX_VALUE / UnsignedByteVoxelType.MAX_VALUE);
     
     private static final int DIVIDE_BY_UNSIGNED_SHORT = (int) (UnsignedShortVoxelType.MAX_VALUE / UnsignedByteVoxelType.MAX_VALUE);
-    
-    // This doesn't really make sense for a float, as the maximum value is so much higher, so we
-    // take
-    //  it as being the same as Integer.MAX_VALUE
+
     @Override
-    public void convertFromFloat(VoxelBuffer<FloatBuffer> bufferIn, VoxelBuffer<UnsignedByteBuffer> bufferOut) {
-        IterateVoxelsRemaining.withTwoBuffersWithoutOffset(bufferIn, bufferOut, (in,out) -> 
-            out.putFloat(in.get() / DIVIDE_BY_UNSIGNED_INT)
-        );
+    protected void convertUnsignedShort(UnsignedShortBuffer in, UnsignedByteBuffer out) {
+        out.putUnsigned(in.getUnsigned() / DIVIDE_BY_UNSIGNED_SHORT);
     }
 
     @Override
-    public void convertFromShort(VoxelBuffer<UnsignedShortBuffer> bufferIn, VoxelBuffer<UnsignedByteBuffer> bufferOut) {
-        IterateVoxelsRemaining.withTwoBuffersWithoutOffset(bufferIn, bufferOut, (in,out) -> 
-            out.putUnsigned(in.getUnsigned() / DIVIDE_BY_UNSIGNED_SHORT)
-        );
+    protected void convertUnsignedInt(UnsignedIntBuffer in, UnsignedByteBuffer out) {
+        out.putLong(in.getUnsigned() / DIVIDE_BY_UNSIGNED_INT);
     }
 
+    /**
+     *  Converts the current position in a {@link FloatBuffer} to the current position in a {@link UnsignedShortBuffer}.
+     *  
+     *  <p>We pretend the maximum effective value of the float is the same as UnsignedIntVoxelType.MAX_VALUE,
+     *  and scale to this range fits the buffer.
+     *  
+     *  @param in the current position of this buffer gives the value to convert, and the position is incremented.
+     *  @param out the converted value is written to the current position of this buffer, and the position is incremented.
+     */
     @Override
-    public void convertFromInt(VoxelBuffer<UnsignedIntBuffer> bufferIn, VoxelBuffer<UnsignedByteBuffer> bufferOut) {
-        IterateVoxelsRemaining.withTwoBuffersWithoutOffset(bufferIn, bufferOut, (in,out) -> 
-            out.putLong(in.getUnsigned() / DIVIDE_BY_UNSIGNED_INT)
-        );
-    }
-    
-    @Override
-    public void convertFromByte(VoxelBuffer<UnsignedByteBuffer> bufferIn, VoxelBuffer<UnsignedByteBuffer> bufferOut) {
-        IterateVoxelsRemaining.withTwoBuffersWithoutOffset(bufferIn, bufferOut, (in,out) -> 
-            out.putRaw( in.getRaw() )
-        );
+    protected void convertFloat(FloatBuffer in, UnsignedByteBuffer out) {
+        out.putFloat(in.get() / DIVIDE_BY_UNSIGNED_INT);
     }
 }

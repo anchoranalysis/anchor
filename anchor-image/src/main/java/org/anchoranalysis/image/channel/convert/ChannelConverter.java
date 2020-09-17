@@ -28,6 +28,7 @@ package org.anchoranalysis.image.channel.convert;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
@@ -90,14 +91,15 @@ public abstract class ChannelConverter<T> {
             voxelsOut = (Voxels<T>) channelOut.voxels().match(dataTypeTarget);
         }
 
-        voxelsConverter.convertFrom(channelIn.voxels(), voxelsOut);
-
-        if (changeExisting == ConversionPolicy.CHANGE_EXISTING_CHANNEL) {
-            try {
+        try {
+            voxelsConverter.copyFrom(channelIn.voxels(), voxelsOut);
+            
+            if (changeExisting == ConversionPolicy.CHANGE_EXISTING_CHANNEL) {
                 channelOut.replaceVoxels(voxelsOut);
-            } catch (IncorrectImageSizeException e) {
-                throw new AnchorImpossibleSituationException();
             }
+            
+        } catch (OperationFailedException | IncorrectImageSizeException e1) {
+            throw new AnchorImpossibleSituationException();
         }
 
         return channelOut;

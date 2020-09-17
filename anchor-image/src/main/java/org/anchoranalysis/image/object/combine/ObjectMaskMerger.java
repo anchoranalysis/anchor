@@ -69,7 +69,7 @@ public class ObjectMaskMerger {
         BoundingBox box = first.boundingBox().union().with(second.boundingBox());
 
         ObjectMask out =
-                new ObjectMask(box, VoxelsFactory.getByte().createInitialized(box.extent()));
+                new ObjectMask(box, VoxelsFactory.getUnsignedByte().createInitialized(box.extent()));
         copyPixelsCheckMask(first, out, box);
         copyPixelsCheckMask(second, out, box);
         return out;
@@ -96,7 +96,7 @@ public class ObjectMaskMerger {
         BoundingBox box = mergeBoundingBoxes(objects.streamStandardJava());
 
         ObjectMask objectOut =
-                new ObjectMask(box, VoxelsFactory.getByte().createInitialized(box.extent()));
+                new ObjectMask(box, VoxelsFactory.getUnsignedByte().createInitialized(box.extent()));
 
         BinaryValues bv = null;
         for (ObjectMask objectMask : objects) {

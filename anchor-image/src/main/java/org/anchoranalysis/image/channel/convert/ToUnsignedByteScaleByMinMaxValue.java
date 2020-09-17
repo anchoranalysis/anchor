@@ -27,7 +27,7 @@
 package org.anchoranalysis.image.channel.convert;
 
 import org.anchoranalysis.image.convert.UnsignedByteBuffer;
-import org.anchoranalysis.image.voxel.convert.ConvertToByteScaleByMinMaxValue;
+import org.anchoranalysis.image.voxel.convert.ToByteScaleByMinMaxValue;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 
@@ -43,7 +43,7 @@ public class ToUnsignedByteScaleByMinMaxValue extends ChannelConverter<UnsignedB
     public ToUnsignedByteScaleByMinMaxValue(int min, int max) {
         super(
                 UnsignedByteVoxelType.INSTANCE,
-                new ConvertToByteScaleByMinMaxValue(min, max),
-                VoxelsFactory.getByte());
+                new ToByteScaleByMinMaxValue(min, max),
+                VoxelsFactory.getUnsignedByte());
     }
 }

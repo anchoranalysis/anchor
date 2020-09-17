@@ -32,6 +32,6 @@ import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 public class ChannelFactoryByte extends ChannelFactorySingleType {
 
     public ChannelFactoryByte() {
-        super(UnsignedByteVoxelType.INSTANCE, VoxelsFactory.getByte());
+        super(UnsignedByteVoxelType.INSTANCE, VoxelsFactory.getUnsignedByte());
     }
 }

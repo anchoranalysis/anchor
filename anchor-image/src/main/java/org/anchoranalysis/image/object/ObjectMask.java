@@ -89,7 +89,7 @@ public class ObjectMask {
             new ObjectsFromConnectedComponentsFactory(true);
 
     private static final VoxelsFactoryTypeBound<UnsignedByteBuffer> FACTORY =
-            VoxelsFactory.getByte();
+            VoxelsFactory.getUnsignedByte();
 
     private final BoundedVoxels<UnsignedByteBuffer> voxels;
 
@@ -654,7 +654,7 @@ public class ObjectMask {
         }
 
         Voxels<UnsignedByteBuffer> voxelsLarge =
-                VoxelsFactory.getByte().createInitialized(boxToAssign.extent());
+                VoxelsFactory.getUnsignedByte().createInitialized(boxToAssign.extent());
 
         BoundingBox bbLocal = voxels.boundingBox().relativePositionToBox(boxToAssign);
 

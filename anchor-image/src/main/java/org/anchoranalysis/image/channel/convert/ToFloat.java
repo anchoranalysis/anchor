@@ -27,7 +27,7 @@
 package org.anchoranalysis.image.channel.convert;
 
 import java.nio.FloatBuffer;
-import org.anchoranalysis.image.voxel.convert.ConvertToFloatNoScaling;
+import org.anchoranalysis.image.voxel.convert.ToFloatNoScaling;
 import org.anchoranalysis.image.voxel.datatype.FloatVoxelType;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 
@@ -35,6 +35,6 @@ import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 public class ToFloat extends ChannelConverter<FloatBuffer> {
 
     public ToFloat() {
-        super(FloatVoxelType.INSTANCE, new ConvertToFloatNoScaling(), VoxelsFactory.getFloat());
+        super(FloatVoxelType.INSTANCE, new ToFloatNoScaling(), VoxelsFactory.getFloat());
     }
 }

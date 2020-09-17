@@ -33,19 +33,19 @@ import org.anchoranalysis.image.channel.convert.ToUnsignedByte;
 import org.anchoranalysis.image.channel.convert.attached.ChannelConverterAttached;
 import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.image.voxel.convert.ConvertToByteScaleByMaxValue;
+import org.anchoranalysis.image.voxel.convert.ToByteScaleByMaxValue;
 import org.anchoranalysis.image.voxel.convert.VoxelsConverter;
 
 public class MaxIntensityFromHistogram
         implements ChannelConverterAttached<Histogram, UnsignedByteBuffer> {
 
-    private ConvertToByteScaleByMaxValue voxelsConverter;
+    private ToByteScaleByMaxValue voxelsConverter;
 
     private ToUnsignedByte delegate;
 
     public MaxIntensityFromHistogram() {
         // Initialize with a dummy value
-        voxelsConverter = new ConvertToByteScaleByMaxValue(1);
+        voxelsConverter = new ToByteScaleByMaxValue(1);
 
         delegate = new ToUnsignedByte(voxelsConverter);
     }

@@ -33,7 +33,7 @@ import org.anchoranalysis.image.channel.convert.ToUnsignedByte;
 import org.anchoranalysis.image.channel.convert.attached.ChannelConverterAttached;
 import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.image.voxel.convert.ConvertToByteScaleByMaxValue;
+import org.anchoranalysis.image.voxel.convert.ToByteScaleByMaxValue;
 import org.anchoranalysis.image.voxel.convert.VoxelsConverter;
 
 /**
@@ -44,13 +44,13 @@ import org.anchoranalysis.image.voxel.convert.VoxelsConverter;
 public class QuantileIntensityFromHistogram
         implements ChannelConverterAttached<Histogram, UnsignedByteBuffer> {
 
-    private ConvertToByteScaleByMaxValue voxelsConverter;
+    private ToByteScaleByMaxValue voxelsConverter;
     private double quantile = 1.0;
     private ToUnsignedByte delegate;
 
     public QuantileIntensityFromHistogram(double quantile) {
         // Initialize with a dummy value
-        voxelsConverter = new ConvertToByteScaleByMaxValue(1);
+        voxelsConverter = new ToByteScaleByMaxValue(1);
         this.quantile = quantile;
         delegate = new ToUnsignedByte(voxelsConverter);
     }

@@ -34,7 +34,7 @@ import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 public class MaxIntensityBufferByte extends MaxIntensityBuffer<UnsignedByteBuffer> {
 
     public MaxIntensityBufferByte(Extent srcExtent) {
-        super(srcExtent, VoxelsFactory.getByte());
+        super(srcExtent, VoxelsFactory.getUnsignedByte());
     }
 
     @Override

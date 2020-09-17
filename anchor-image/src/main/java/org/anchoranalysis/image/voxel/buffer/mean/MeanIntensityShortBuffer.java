@@ -35,7 +35,7 @@ public class MeanIntensityShortBuffer extends MeanIntensityBuffer<UnsignedShortB
 
     /** Simple constructor since no preprocessing is necessary. */
     public MeanIntensityShortBuffer(Extent srcExtent) {
-        super(VoxelsFactory.getShort(), srcExtent);
+        super(VoxelsFactory.getUnsignedShort(), srcExtent);
     }
 
     @Override

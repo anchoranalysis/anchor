@@ -43,7 +43,7 @@ import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.io.generator.raster.StringRasterGenerator;
 import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.image.voxel.convert.ConvertToShortScaleByType;
+import org.anchoranalysis.image.voxel.convert.ToShortScaleByType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
@@ -104,7 +104,7 @@ public class GenerateString extends StackProvider {
 
             if (createShort) {
                 ChannelConverter<UnsignedShortBuffer> conveter =
-                        new ToUnsignedShort(new ConvertToShortScaleByType());
+                        new ToUnsignedShort(new ToShortScaleByType());
 
                 stack = conveter.convert(stack, ConversionPolicy.CHANGE_EXISTING_CHANNEL);
             }

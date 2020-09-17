@@ -39,7 +39,7 @@ import org.anchoranalysis.image.voxel.sliceindex.SliceBufferIndex;
 public final class VoxelsUnsignedByte extends Voxels<UnsignedByteBuffer> {
 
     public VoxelsUnsignedByte(SliceBufferIndex<UnsignedByteBuffer> slices) {
-        super(slices, VoxelsFactory.getByte(), createArithmetic(slices));
+        super(slices, VoxelsFactory.getUnsignedByte(), createArithmetic(slices));
     }
 
     @Override

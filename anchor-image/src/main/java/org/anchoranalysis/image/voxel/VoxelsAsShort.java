@@ -39,7 +39,7 @@ import org.anchoranalysis.image.voxel.sliceindex.SliceBufferIndex;
 public final class VoxelsAsShort extends Voxels<UnsignedShortBuffer> {
 
     public VoxelsAsShort(SliceBufferIndex<UnsignedShortBuffer> slices) {
-        super(slices, VoxelsFactory.getShort(), createArithmetic(slices));
+        super(slices, VoxelsFactory.getUnsignedShort(), createArithmetic(slices));
     }
 
     @Override

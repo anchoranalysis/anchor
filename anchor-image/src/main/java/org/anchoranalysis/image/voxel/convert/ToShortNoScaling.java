@@ -30,38 +30,34 @@ import java.nio.FloatBuffer;
 import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.convert.UnsignedIntBuffer;
 import org.anchoranalysis.image.convert.UnsignedShortBuffer;
-import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
-import org.anchoranalysis.image.voxel.iterator.IterateVoxelsRemaining;
 
-// Converts voxel buffers to a unsigned 8-bit buffer without scaling any values.
-// So values larger than 255 are clipped
-public final class ConvertToFloatNoScaling extends VoxelsConverter<FloatBuffer> {
+/**
+ * Converts voxel buffers to a unsigned 16-bit buffer without scaling any values.
+ * 
+ * <p>Values greater than 65535  are clipped to 65535 .
+ * 
+ * @author Owen Feehan
+ *
+ */
+public final class ToShortNoScaling extends VoxelsConverter<UnsignedShortBuffer> {
 
     @Override
-    public void convertFromFloat(VoxelBuffer<FloatBuffer> bufferIn, VoxelBuffer<FloatBuffer> bufferOut) {
-        IterateVoxelsRemaining.withTwoBuffersWithoutOffset(bufferIn, bufferOut, (in,out) -> 
-            out.put(in.get())
-        );
+    protected void convertUnsignedByte(UnsignedByteBuffer in, UnsignedShortBuffer out) {
+        out.putUnsigned(in.getUnsigned());
     }
 
     @Override
-    public void convertFromInt(VoxelBuffer<UnsignedIntBuffer> bufferIn, VoxelBuffer<FloatBuffer> bufferOut) {
-        IterateVoxelsRemaining.withTwoBuffersWithoutOffset(bufferIn, bufferOut, (in,out) -> 
-            out.put((float) bufferIn.buffer().getUnsigned())
-        );
+    protected void convertUnsignedShort(UnsignedShortBuffer in, UnsignedShortBuffer out) {
+        out.putRaw(in.getRaw());
     }
 
     @Override
-    public void convertFromShort(VoxelBuffer<UnsignedShortBuffer> bufferIn, VoxelBuffer<FloatBuffer> bufferOut) {
-        IterateVoxelsRemaining.withTwoBuffersWithoutOffset(bufferIn, bufferOut, (in,out) -> 
-            out.put((float) in.getUnsigned())
-        );
+    protected void convertUnsignedInt(UnsignedIntBuffer in, UnsignedShortBuffer out) {
+        out.putLongClipped(in.getUnsigned());
     }
 
     @Override
-    public void convertFromByte(VoxelBuffer<UnsignedByteBuffer> bufferIn, VoxelBuffer<FloatBuffer> bufferOut) {
-        IterateVoxelsRemaining.withTwoBuffersWithoutOffset(bufferIn, bufferOut, (in,out) -> 
-            out.put((float) in.getUnsigned())
-        );
+    protected void convertFloat(FloatBuffer in, UnsignedShortBuffer out) {
+        out.putFloatClipped(in.get());
     }
 }

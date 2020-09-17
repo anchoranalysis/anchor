@@ -229,10 +229,7 @@ public class DisplayStack {
                                     .create(destinationBox.extent(), channel.getVoxelDataType());
                     channel.voxels().copyVoxelsTo(sourceBox, destBoxNonByte, allLocalBox);
 
-                    Voxels<UnsignedByteBuffer> destBoxByte =
-                            VoxelsFactory.getByte().createInitialized(destinationBox.extent());
-                    converter.getVoxelsConverter().convertFrom(destBoxNonByte, destBoxByte);
-
+                    Voxels<UnsignedByteBuffer> destBoxByte = converter.getVoxelsConverter().convertFrom(destBoxNonByte, VoxelsFactory.getUnsignedByte());
                     destBoxByte.extract().boxCopyTo(allLocalBox, voxelsDestination, destinationBox);
                 },
                 channel ->
@@ -301,7 +298,7 @@ public class DisplayStack {
                 (channel, converter) ->
                         converter
                                 .getVoxelsConverter()
-                                .convertFrom(channel.voxels(), VoxelsFactory.getByte()),
+                                .convertFrom(channel.voxels(), VoxelsFactory.getUnsignedByte()),
                 channel -> channel.voxels().asByte());
     }
 
@@ -317,7 +314,7 @@ public class DisplayStack {
                                 .getVoxelsConverter()
                                 .convertFrom(
                                         new VoxelsWrapper(voxelsUnconverted),
-                                        VoxelsFactory.getByte()),
+                                        VoxelsFactory.getUnsignedByte()),
                 channel -> (Voxels<UnsignedByteBuffer>) voxelsUnconverted);
     }
 
