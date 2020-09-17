@@ -27,6 +27,7 @@
 package org.anchoranalysis.image.stack;
 
 import com.google.common.base.Functions;
+import lombok.Getter;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
@@ -48,8 +49,6 @@ import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.stack.bufferedimage.BufferedImageFactory;
-import org.anchoranalysis.image.stack.region.RegionExtracter;
-import org.anchoranalysis.image.stack.region.RegionExtracterFromDisplayStack;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
@@ -71,15 +70,15 @@ public class DisplayStack {
     private static final double QUANTILE_LOWER = 0.0001;
     private static final double QUANTILE_UPPER = 0.9999;
 
-    private final Stack stack;
-    private final List<Optional<ChannelConverterAttached<Channel, UnsignedByteBuffer>>>
-            listConverters;
+    @Getter private final Stack stack;
+    @Getter private final List<Optional<ChannelConverterAttached<Channel, UnsignedByteBuffer>>>
+            converters;
     private final ChannelMapper mapper;
 
     // START: constructors
     private DisplayStack(Stack stack) {
         this.stack = stack;
-        this.listConverters = new ArrayList<>();
+        this.converters = new ArrayList<>();
         this.mapper = createChannelMapper();
     }
 
@@ -89,7 +88,7 @@ public class DisplayStack {
             List<Optional<ChannelConverterAttached<Channel, UnsignedByteBuffer>>> listConverters)
             throws CreateException {
         this.stack = stack;
-        this.listConverters = listConverters;
+        this.converters = listConverters;
         this.mapper = createChannelMapper();
 
         for (int index = 0; index < stack.getNumberChannels(); index++) {
@@ -141,7 +140,7 @@ public class DisplayStack {
     // END: factory methods
 
     public long numberNonNullConverters() {
-        return listConverters.stream().filter(Optional::isPresent).count();
+        return converters.stream().filter(Optional::isPresent).count();
     }
 
     public Dimensions dimensions() {
@@ -252,20 +251,16 @@ public class DisplayStack {
         return stack.getChannel(channelIndex).extract().voxel(point);
     }
 
-    public RegionExtracter createRegionExtracter() {
-        return new RegionExtracterFromDisplayStack(listConverters, stack);
-    }
-
     public DisplayStack maximumIntensityProjection() {
         try {
-            return new DisplayStack(stack.maximumIntensityProjection(), listConverters);
+            return new DisplayStack(stack.maximumIntensityProjection(), converters);
         } catch (CreateException e) {
             throw new AnchorImpossibleSituationException();
         }
     }
 
     public DisplayStack extractSlice(int z) throws CreateException {
-        return new DisplayStack(stack.extractSlice(z), listConverters);
+        return new DisplayStack(stack.extractSlice(z), converters);
     }
 
     public BufferedImage createBufferedImage() throws CreateException {
@@ -336,7 +331,7 @@ public class DisplayStack {
 
     private void addEmptyConverters(int number) {
         for (int c = 0; c < number; c++) {
-            listConverters.add(Optional.empty());
+            converters.add(Optional.empty());
         }
     }
 
@@ -348,7 +343,7 @@ public class DisplayStack {
         } catch (OperationFailedException e) {
             throw new SetOperationFailedException(e);
         }
-        listConverters.set(channelIndex, Optional.of(converter));
+        converters.set(channelIndex, Optional.of(converter));
     }
 
     private void addConvertersAsNeeded() throws SetOperationFailedException {
@@ -382,6 +377,6 @@ public class DisplayStack {
     }
 
     private ChannelMapper createChannelMapper() {
-        return new ChannelMapper(stack::getChannel, listConverters::get);
+        return new ChannelMapper(stack::getChannel, converters::get);
     }
 }
