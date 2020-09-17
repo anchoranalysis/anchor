@@ -61,20 +61,20 @@ public final class ConvertToByteScaleByMinMaxValue extends VoxelsConverter<Unsig
     //  it as being the same as Integer.MAX_VALUE
     @Override
     public void convertFromFloat(VoxelBuffer<FloatBuffer> bufferIn, VoxelBuffer<UnsignedByteBuffer> bufferOut) {
-        convertFrom(bufferIn, (in,out) ->
+        convertFrom(bufferIn, bufferOut, (in,out) ->
             out.putFloatClipped( scale * (in.get() - subtract) ));
     }
 
     @Override
     public void convertFromInt(VoxelBuffer<UnsignedIntBuffer> bufferIn, VoxelBuffer<UnsignedByteBuffer> bufferOut) {
-        convertFrom(bufferIn, (in,out) ->
+        convertFrom(bufferIn, bufferOut,(in,out) ->
             out.putFloatClipped( scale * (in.getUnsigned() - subtract) ) );
     }
 
     @Override
     public void convertFromShort(
             VoxelBuffer<UnsignedShortBuffer> bufferIn, VoxelBuffer<UnsignedByteBuffer> bufferOut) {
-        convertFrom(bufferIn, (in,out) ->
+        convertFrom(bufferIn, bufferOut, (in,out) ->
             out.putFloatClipped( scale * (in.getUnsigned() - subtract) ) );
     }
 
@@ -85,9 +85,7 @@ public final class ConvertToByteScaleByMinMaxValue extends VoxelsConverter<Unsig
         );
     }
     
-    private <S> VoxelBuffer<UnsignedByteBuffer> convertFrom( VoxelBuffer<S> bufferIn, ProcessBufferBinaryWithoutOffset<S,UnsignedByteBuffer> process ) {
-        VoxelBuffer<UnsignedByteBuffer> bufferOut = VoxelBufferUnsignedByte.allocate(bufferIn.capacity());
+    private <S> void convertFrom( VoxelBuffer<S> bufferIn, VoxelBuffer<UnsignedByteBuffer> bufferOut, ProcessBufferBinaryWithoutOffset<S,UnsignedByteBuffer> process ) {
         IterateVoxelsRemaining.withTwoBuffersWithoutOffset(bufferIn, bufferOut, process);
-        return bufferOut;
     }
 }
