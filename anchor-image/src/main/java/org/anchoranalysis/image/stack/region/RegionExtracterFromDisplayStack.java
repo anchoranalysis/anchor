@@ -183,7 +183,7 @@ public class RegionExtracterFromDisplayStack implements RegionExtracter {
 
             // We go through every pixel in the new width, and height, and sample from the original
             // image
-            int indOut = 0;
+            int index = 0;
             for (int y = 0; y < extentTarget.y(); y++) {
 
                 int yOriginal = scaleToOriginal(y,zoomFactor) + cornerMin.y();
@@ -193,9 +193,9 @@ public class RegionExtracterFromDisplayStack implements RegionExtracter {
 
                     Point2i point = new Point2i(xOriginal, yOriginal);
                     
-                    transferPoint(interpolator, point, indOut, sliceFrom, sliceTo, extentSource);
+                    transferPoint(interpolator, point, index, sliceFrom, sliceTo, extentSource);
                     
-                    indOut++;
+                    index++;
                 }
             }
         }
