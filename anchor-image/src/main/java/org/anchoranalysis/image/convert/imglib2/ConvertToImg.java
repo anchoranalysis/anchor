@@ -80,8 +80,8 @@ public class ConvertToImg {
         }
     }
 
-    public static Img<? extends RealType<?>> fromSlice(
-            VoxelsWrapper voxels, int sliceIndex) { // NOSONAR
+    public static Img<? extends RealType<?>> fromSlice( // NOSONAR
+            VoxelsWrapper voxels, int sliceIndex) { 
         return fromBuffer(voxels.slice(sliceIndex), voxels.extent());
     }
 
