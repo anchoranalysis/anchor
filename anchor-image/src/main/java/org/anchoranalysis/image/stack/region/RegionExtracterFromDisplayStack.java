@@ -31,6 +31,7 @@ import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.geometry.Point2i;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.channel.Channel;
@@ -114,7 +115,7 @@ public class RegionExtracterFromDisplayStack implements RegionExtracter {
 
         Voxels<UnsignedByteBuffer> voxels = VoxelsFactory.getUnsignedByte().createInitialized(extentTarget);
 
-        MeanInterpolator interpolator = (zoomFactor < 1) ? new MeanInterpolator(zoomFactor) : null;
+        Optional<MeanInterpolator> interpolator = OptionalUtilities.createFromFlag(zoomFactor < 1, () -> new MeanInterpolator(zoomFactor));
 
         if (extractedSlice.getVoxelDataType().equals(UnsignedByteVoxelType.INSTANCE)) {
             interpolateRegion(
@@ -166,7 +167,7 @@ public class RegionExtracterFromDisplayStack implements RegionExtracter {
             Extent extentTarget,
             BoundingBox box,
             double zoomFactor,
-            MeanInterpolator interpolator)
+            Optional<MeanInterpolator> interpolator)
             throws OperationFailedException {
 
         ReadableTuple3i cornerMin = box.cornerMin();
@@ -177,34 +178,39 @@ public class RegionExtracterFromDisplayStack implements RegionExtracter {
             assert (to.slice(z - cornerMin.z()) != null);
 
             VoxelBuffer<T> sliceFrom = from.slice(z);
-            T bufferIn = sliceFrom.buffer();
             
             VoxelBuffer<T> sliceTo = to.slice(z - cornerMin.z());
-            T bufferOut = sliceTo.buffer();
 
             // We go through every pixel in the new width, and height, and sample from the original
             // image
             int indOut = 0;
             for (int y = 0; y < extentTarget.y(); y++) {
 
-                int yOrig = ((int) (y / zoomFactor)) + cornerMin.y();
+                int yOriginal = scaleToOriginal(y,zoomFactor) + cornerMin.y();
                 for (int x = 0; x < extentTarget.x(); x++) {
 
-                    int xOrig = ((int) (x / zoomFactor)) + cornerMin.x();
+                    int xOriginal = scaleToOriginal(x,zoomFactor) + cornerMin.x();
 
-                    Point2i point = new Point2i(xOrig, yOrig);
+                    Point2i point = new Point2i(xOriginal, yOriginal);
                     
-                    if (interpolator!=null) {
-                        double value = interpolator.interpolateVoxelsAt(
-                                point, bufferIn, extentSource);
-                        bufferOut.putDouble(indOut, value);
-                    } else {
-                        sliceTo.transferFrom(indOut, sliceFrom, extentSource.offset(point));
-                    }
+                    transferPoint(interpolator, point, indOut, sliceFrom, sliceTo, extentSource);
                     
                     indOut++;
                 }
             }
+        }
+    }
+    
+    private static int scaleToOriginal(int valueUnscaled, double zoomFactor) {
+        return (int) (valueUnscaled / zoomFactor);
+    }
+    
+    private static <T extends UnsignedBufferAsInt> void transferPoint(Optional<MeanInterpolator> interpolator, Point2i point, int sourceIndex, VoxelBuffer<T> sliceFrom, VoxelBuffer<T> sliceTo, Extent extentSource) throws OperationFailedException {
+        if (interpolator.isPresent()) {
+            double value = interpolator.get().interpolateVoxelsAt(point, sliceFrom.buffer(), extentSource);
+            sliceTo.buffer().putDouble(sourceIndex, value);
+        } else {
+            sliceTo.transferFrom(sourceIndex, sliceFrom, extentSource.offset(point));
         }
     }
 }
