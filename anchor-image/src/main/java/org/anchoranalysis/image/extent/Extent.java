@@ -272,6 +272,10 @@ public final class Extent implements Serializable {
         return z >= 0 && z < z();
     }
 
+    public boolean contains(Point2i point) {
+        return containsX(point.x()) && containsY(point.y());
+    }
+    
     public boolean contains(Point3d point) {
         return containsX(point.x()) && containsY(point.y()) && containsZ(point.z());
     }
@@ -403,7 +407,7 @@ public final class Extent implements Serializable {
      * Calls processor once for each x and y-values in the range.
      *
      * <p>This occurs in ascending order (x-dimension increments first, y-dimension increments
-     * second)
+     * second).
      *
      * @param pointConsumer called for each point
      */
@@ -411,6 +415,28 @@ public final class Extent implements Serializable {
         Point2i point = new Point2i();
         for (point.setY(0); point.y() < size.y(); point.incrementY()) {
             for (point.setX(0); point.x() < size.x(); point.incrementX()) {
+                pointConsumer.accept(point);
+            }
+        }
+    }
+    
+    /**
+     * Calls processor once for each x and y-values in the range, with a shift added.
+     *
+     * <p>This occurs in ascending order (x-dimension increments first, y-dimension increments
+     * second).
+     *
+     * @param shift a shift added to each point, so the effective iteration occurs over @{@code extent + shift}.
+     * @param pointConsumer called for each point
+     */
+    public void iterateOverXYWithShift(Point2i shift, PointTwoDimensionalConsumer pointConsumer) {
+        
+        int maxX = size.x() + shift.x();
+        int maxY = size.y() + shift.y();
+        
+        Point2i point = new Point2i();
+        for (point.setY(shift.y()); point.y() < maxX; point.incrementY()) {
+            for (point.setX(shift.x()); point.x() < maxY; point.incrementX()) {
                 pointConsumer.accept(point);
             }
         }

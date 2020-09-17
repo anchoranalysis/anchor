@@ -26,9 +26,10 @@
 
 package org.anchoranalysis.image.stack.region;
 
+import org.anchoranalysis.core.arithmetic.RunningSum;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
-import org.anchoranalysis.image.convert.UnsignedShortBuffer;
+import org.anchoranalysis.core.geometry.Point2i;
+import org.anchoranalysis.image.convert.UnsignedBufferAsInt;
 import org.anchoranalysis.image.extent.Extent;
 
 class MeanInterpolator {
@@ -36,72 +37,42 @@ class MeanInterpolator {
     private static final String EXC_ZERO_CNT =
             "\"The interpolator has a count of 0, and cannot return a valid value\"";
 
-    private int sizeX;
-    private int sizeY;
+    private final Extent sizeToInterpolate;
 
+    /** To avoid repeatedly recreating on the heap */
+    private final RunningSum runningSum = new RunningSum();
+    
     public MeanInterpolator(double zoomFactor) {
         double zoomFactorInv = 1 / zoomFactor;
         int size = (int) Math.round(zoomFactorInv);
 
-        sizeX = size;
-        sizeY = size;
+        sizeToInterpolate = new Extent(size,size);
     }
 
-    public byte getInterpolatedPixelByte(int x0, int y0, UnsignedByteBuffer buffer, Extent extent)
+    /**
+     * Finds the mean of voxels at a particular point plus a certain extent.
+     * 
+     * @param cornerPoint
+     * @param buffer
+     * @param extent
+     * @return
+     * @throws OperationFailedException
+     */
+    public double interpolateVoxelsAt(Point2i cornerPoint, UnsignedBufferAsInt buffer, Extent extent)
             throws OperationFailedException {
 
-        int sum = 0;
-        int count = 0;
-
-        for (int y = 0; y < sizeY; y++) {
-
-            int y1 = y0 + y;
-
-            for (int x = 0; x < sizeX; x++) {
-
-                int x1 = x0 + x;
-
-                if (extent.contains(x1, y1, 0)) {
-                    sum += buffer.getUnsigned(extent.offset(x0 + x, y1));
-
-                    count++;
-                }
+        runningSum.reset();
+        
+        sizeToInterpolate.iterateOverXYWithShift(cornerPoint, point -> {
+            if (extent.contains(point)) {
+                runningSum.increment( buffer.getUnsigned(extent.offset(point)) );
             }
-        }
+        });
 
-        if (count == 0) {
+        if (runningSum.getCount() == 0) {
             throw new OperationFailedException(EXC_ZERO_CNT);
         }
 
-        return (byte) (sum / count);
-    }
-
-    public short getInterpolatedPixelShort(int x0, int y0, UnsignedShortBuffer buffer, Extent e)
-            throws OperationFailedException {
-
-        int sum = 0;
-        int count = 0;
-
-        for (int y = 0; y < sizeY; y++) {
-
-            int y1 = y0 + y;
-
-            for (int x = 0; x < sizeX; x++) {
-
-                int x1 = x0 + x;
-
-                if (e.contains(x1, y1, 0)) {
-                    sum += buffer.getUnsigned(e.offset(x0 + x, y1));
-
-                    count++;
-                }
-            }
-        }
-
-        if (count == 0) {
-            throw new OperationFailedException(EXC_ZERO_CNT);
-        }
-
-        return (short) (sum / count);
+        return runningSum.mean();
     }
 }

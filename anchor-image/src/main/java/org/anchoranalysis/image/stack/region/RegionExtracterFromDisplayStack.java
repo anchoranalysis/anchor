@@ -31,10 +31,12 @@ import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.geometry.Point2i;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.convert.attached.ChannelConverterAttached;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
+import org.anchoranalysis.image.convert.UnsignedBufferAsInt;
 import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.convert.UnsignedShortBuffer;
 import org.anchoranalysis.image.extent.Dimensions;
@@ -45,6 +47,7 @@ import org.anchoranalysis.image.scale.ScaleFactor;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.voxel.Voxels;
+import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.convert.VoxelsConverter;
 import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelTypeException;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
@@ -114,7 +117,7 @@ public class RegionExtracterFromDisplayStack implements RegionExtracter {
         MeanInterpolator interpolator = (zoomFactor < 1) ? new MeanInterpolator(zoomFactor) : null;
 
         if (extractedSlice.getVoxelDataType().equals(UnsignedByteVoxelType.INSTANCE)) {
-            interpolateRegionFromByte(
+            interpolateRegion(
                     extractedSlice.voxels().asByte(),
                     voxels,
                     extractedSlice.extent(),
@@ -132,7 +135,7 @@ public class RegionExtracterFromDisplayStack implements RegionExtracter {
 
             Voxels<UnsignedShortBuffer> bufferIntermediate =
                     VoxelsFactory.getUnsignedShort().createInitialized(extentTarget);
-            interpolateRegionFromShort(
+            interpolateRegion(
                     extractedSlice.voxels().asShort(),
                     bufferIntermediate,
                     extractedSlice.dimensions().extent(),
@@ -155,56 +158,10 @@ public class RegionExtracterFromDisplayStack implements RegionExtracter {
                 .get(UnsignedByteVoxelType.INSTANCE)
                 .create(voxels, dimensions.resolution());
     }
-
-    // extentTrgt is the target-size (where we write this region)
-    // extentSource is the source-size (the single slice we've extracted from the buffer to
-    // interpolate from)
-    private static void interpolateRegionFromByte(
-            Voxels<UnsignedByteBuffer> from,
-            Voxels<UnsignedByteBuffer> to,
-            Extent extentSource,
-            Extent extentTarget,
-            BoundingBox box,
-            double zoomFactor,
-            MeanInterpolator interpolator)
-            throws OperationFailedException {
-
-        ReadableTuple3i cornerMin = box.cornerMin();
-        ReadableTuple3i cornerMax = box.calculateCornerMax();
-        for (int z = cornerMin.z(); z <= cornerMax.z(); z++) {
-
-            UnsignedByteBuffer bufferIn = from.sliceBuffer(z);
-            UnsignedByteBuffer bufferOut = to.sliceBuffer(z - cornerMin.z());
-
-            // We go through every pixel in the new width, and height, and sample from the original
-            // image
-            int indOut = 0;
-            for (int y = 0; y < extentTarget.y(); y++) {
-
-                int yOrig = ((int) (y / zoomFactor)) + cornerMin.y();
-                for (int x = 0; x < extentTarget.x(); x++) {
-
-                    int xOrig = ((int) (x / zoomFactor)) + cornerMin.x();
-
-                    // We get the byte to write
-                    byte value =
-                            (interpolator != null)
-                                    ? interpolator.getInterpolatedPixelByte(
-                                            xOrig, yOrig, bufferIn, extentSource)
-                                    : bufferIn.getRaw(extentSource.offset(xOrig, yOrig));
-
-                    bufferOut.putRaw(indOut++, value);
-                }
-            }
-        }
-    }
-
-    // extentTarget is the target-size (where we write this region)
-    // extentSource is the source-size (the single slice we've extracted from the buffer to
-    // interpolate from)
-    private static void interpolateRegionFromShort(
-            Voxels<UnsignedShortBuffer> from,
-            Voxels<UnsignedShortBuffer> to,
+    
+    private static <T extends UnsignedBufferAsInt> void interpolateRegion(
+            Voxels<T> from,
+            Voxels<T> to,
             Extent extentSource,
             Extent extentTarget,
             BoundingBox box,
@@ -219,8 +176,11 @@ public class RegionExtracterFromDisplayStack implements RegionExtracter {
             assert (from.slice(z) != null);
             assert (to.slice(z - cornerMin.z()) != null);
 
-            UnsignedShortBuffer bufferIn = from.sliceBuffer(z);
-            UnsignedShortBuffer bufferOut = to.slice(z - cornerMin.z()).buffer();
+            VoxelBuffer<T> sliceFrom = from.slice(z);
+            T bufferIn = sliceFrom.buffer();
+            
+            VoxelBuffer<T> sliceTo = to.slice(z - cornerMin.z());
+            T bufferOut = sliceTo.buffer();
 
             // We go through every pixel in the new width, and height, and sample from the original
             // image
@@ -232,14 +192,17 @@ public class RegionExtracterFromDisplayStack implements RegionExtracter {
 
                     int xOrig = ((int) (x / zoomFactor)) + cornerMin.x();
 
-                    // We get the byte to write
-                    short value =
-                            (interpolator != null)
-                                    ? interpolator.getInterpolatedPixelShort(
-                                            xOrig, yOrig, bufferIn, extentSource)
-                                    : bufferIn.getRaw(extentSource.offset(xOrig, yOrig));
-
-                    bufferOut.putRaw(indOut++, value);
+                    Point2i point = new Point2i(xOrig, yOrig);
+                    
+                    if (interpolator!=null) {
+                        double value = interpolator.interpolateVoxelsAt(
+                                point, bufferIn, extentSource);
+                        bufferOut.putDouble(indOut, value);
+                    } else {
+                        sliceTo.transferFrom(indOut, sliceFrom, extentSource.offset(point));
+                    }
+                    
+                    indOut++;
                 }
             }
         }
