@@ -58,7 +58,7 @@ public class MaskIfHighLow {
         byte sourceOff = first.getOffByte();
         byte receiveOn = second.getOnByte();
 
-        IterateVoxelsAll.withTwoBuffers(
+        IterateVoxelsAll.withTwoBuffersAndPoint(
                 first.voxels(),
                 second.voxels(),
                 (point, bufferSource, bufferReceive, offset) -> {

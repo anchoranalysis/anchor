@@ -27,7 +27,7 @@
 package org.anchoranalysis.image.voxel.convert;
 
 import java.nio.FloatBuffer;
-import java.util.function.Function;
+import java.util.function.BiConsumer;
 import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.convert.UnsignedIntBuffer;
 import org.anchoranalysis.image.convert.UnsignedShortBuffer;
@@ -70,31 +70,31 @@ public abstract class VoxelsConverter<T> {
     }
 
     public void convertFromByte(Voxels<UnsignedByteBuffer> in, Voxels<T> out) {
-        convertFrom(in, out, this::convertFromByte);
+        convertAllSlices(in, out, this::convertFromByte);
     }
 
     public void convertFromShort(Voxels<UnsignedShortBuffer> in, Voxels<T> out) {
-        convertFrom(in, out, this::convertFromShort);
+        convertAllSlices(in, out, this::convertFromShort);
     }
 
     public void convertFromInt(Voxels<UnsignedIntBuffer> in, Voxels<T> out) {
-        convertFrom(in, out, this::convertFromInt);
+        convertAllSlices(in, out, this::convertFromInt);
     }
 
     public void convertFromFloat(Voxels<FloatBuffer> in, Voxels<T> out) {
-        convertFrom(in, out, this::convertFromFloat);
+        convertAllSlices(in, out, this::convertFromFloat);
     }
 
-    public abstract VoxelBuffer<T> convertFromByte(VoxelBuffer<UnsignedByteBuffer> in);
+    protected abstract void convertFromByte(VoxelBuffer<UnsignedByteBuffer> in, VoxelBuffer<T> out);
 
-    public abstract VoxelBuffer<T> convertFromFloat(VoxelBuffer<FloatBuffer> in);
+    protected abstract void convertFromFloat(VoxelBuffer<FloatBuffer> in, VoxelBuffer<T> out);
 
-    public abstract VoxelBuffer<T> convertFromInt(VoxelBuffer<UnsignedIntBuffer> in);
+    protected abstract void convertFromInt(VoxelBuffer<UnsignedIntBuffer> in, VoxelBuffer<T> out);
 
-    public abstract VoxelBuffer<T> convertFromShort(VoxelBuffer<UnsignedShortBuffer> in);
-
-    private <S> void convertFrom(
-            Voxels<S> in, Voxels<T> out, Function<VoxelBuffer<S>, VoxelBuffer<T>> converter) {
-        in.extent().iterateOverZ(z -> out.replaceSlice(z, converter.apply(in.slice(z))));
+    protected abstract void convertFromShort(VoxelBuffer<UnsignedShortBuffer> in, VoxelBuffer<T> out);
+    
+    private <S> void convertAllSlices(
+            Voxels<S> in, Voxels<T> out, BiConsumer<VoxelBuffer<S>, VoxelBuffer<T>> converter) {
+        in.extent().iterateOverZ(z -> converter.accept(in.slice(z), out.slice(z)));
     }
 }

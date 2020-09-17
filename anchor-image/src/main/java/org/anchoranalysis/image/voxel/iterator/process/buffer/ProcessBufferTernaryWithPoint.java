@@ -23,41 +23,39 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.image.voxel.iterator.neighbor;
+
+package org.anchoranalysis.image.voxel.iterator.process.buffer;
 
 import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.voxel.neighborhood.Neighborhood;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import org.anchoranalysis.image.voxel.iterator.process.ProcessPoint;
 
 /**
- * Utilities for iterating over the neighboring voxels to a given point.
+ * Processes a 3D point like {@link ProcessPoint} but also retrieves <b>three</b> buffers for the
+ * current z-slice.
  *
+ * <p>It is very similar to {@link ProcessBufferUnaryWithPoint} but uses two buffers of the same type instead
+ * of a single one.
+ *
+ * @param <T> type of both buffers
  * @author Owen Feehan
  */
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
-public class IterateVoxelsNeighbors {
+@FunctionalInterface
+public interface ProcessBufferTernaryWithPoint<T> {
+
+    /** Notifies the processor that there has been a change in slice (z global coordinate) */
+    default void notifyChangeSlice(int z) {}
 
     /**
-     * Iterate over each point in the neighborhood of an existing point.
+     * Processes a voxel location in a buffer
      *
-     * <p>It also sets the source in {@code process}.
-     *
-     * @param sourcePoint the point to iterate over its neighborhood
-     * @param neighborhood a definition of what constitutes the neighborhood
-     * @param do3D whether to iterate in 2D or 3D
-     * @param process is called for each voxel in the neighborhood of the source-point.
-     * @return the result after processing each point in the neighborhood
+     * @param point a point with global coordinates
+     * @param buffer1 first buffer for the current slice for which {@code offset} refers to a
+     *     particular location
+     * @param buffer2 second buffer for the current slice for which {@code offset} refers to a
+     *     particular location
+     * @param buffer3 third buffer for the current slice for which {@code offset} refers to a
+     *     particular location
+     * @param offset an offset value for the current slice (i.e. indexing XY only, but not Z)
      */
-    public static <T> T callEachPointInNeighborhood(
-            Point3i sourcePoint,
-            Neighborhood neighborhood,
-            boolean do3D,
-            ProcessVoxelNeighbor<T> process,
-            int sourceVal,
-            int sourceOffsetXY) {
-        process.initSource(sourcePoint, sourceVal, sourceOffsetXY);
-        neighborhood.processAllPointsInNeighborhood(do3D, process);
-        return process.collectResult();
-    }
+    void process(Point3i point, T buffer1, T buffer2, T buffer3, int offset);
 }

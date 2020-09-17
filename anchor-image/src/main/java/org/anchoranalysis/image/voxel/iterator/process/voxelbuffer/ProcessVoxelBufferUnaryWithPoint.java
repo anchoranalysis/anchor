@@ -24,37 +24,29 @@
  * #L%
  */
 
-package org.anchoranalysis.image.voxel.iterator.process;
+package org.anchoranalysis.image.voxel.iterator.process.voxelbuffer;
 
 import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 
 /**
- * Processes a 3D point like {@link ProcessPoint} but also retrieves <b>three</b> buffers for the
- * current z-slice.
+ * Processes a 3D point like {@link ProcessVoxelBufferUnary} but also exposes a {@link Point3i}.
  *
- * <p>It is very similar to {@link ProcessBufferUnary} but uses two buffers of the same type instead
- * of a single one.
- *
- * @param <T> type of both buffers
+ * @param <T> buffer-type
+ * @param <E> exception that may be thrown by the processor.
  * @author Owen Feehan
  */
 @FunctionalInterface
-public interface ProcessBufferTernary<T> {
-
-    /** Notifies the processor that there has been a change in slice (z global coordinate) */
-    default void notifyChangeSlice(int z) {}
+public interface ProcessVoxelBufferUnaryWithPoint<T, E extends Exception> {
 
     /**
-     * Processes a voxel location in a buffer
+     * Processes a voxel location in a buffer.
      *
      * @param point a point with global coordinates
-     * @param buffer1 first buffer for the current slice for which {@code offset} refers to a
-     *     particular location
-     * @param buffer2 second buffer for the current slice for which {@code offset} refers to a
-     *     particular location
-     * @param buffer3 third buffer for the current slice for which {@code offset} refers to a
-     *     particular location
+     * @param buffer a buffer for the current slice for which {@code offset} refers to a particular
+     *     location
      * @param offset an offset value for the current slice (i.e. indexing XY only, but not Z)
+     * @throws E if anything goes wrong
      */
-    void process(Point3i point, T buffer1, T buffer2, T buffer3, int offset);
+    void process(Point3i point, VoxelBuffer<T> buffer, int offset) throws E;
 }

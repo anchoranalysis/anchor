@@ -38,13 +38,13 @@ import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
-import org.anchoranalysis.image.voxel.iterator.process.ProcessBufferBinary;
-import org.anchoranalysis.image.voxel.iterator.process.ProcessBufferTernary;
-import org.anchoranalysis.image.voxel.iterator.process.ProcessBufferUnary;
 import org.anchoranalysis.image.voxel.iterator.process.ProcessPoint;
-import org.anchoranalysis.image.voxel.iterator.process.ProcessVoxelBufferBinary;
-import org.anchoranalysis.image.voxel.iterator.process.ProcessVoxelBufferUnary;
-import org.anchoranalysis.image.voxel.iterator.process.ProcessVoxelBufferUnaryWithPoint;
+import org.anchoranalysis.image.voxel.iterator.process.buffer.ProcessBufferBinaryWithPoint;
+import org.anchoranalysis.image.voxel.iterator.process.buffer.ProcessBufferTernaryWithPoint;
+import org.anchoranalysis.image.voxel.iterator.process.buffer.ProcessBufferUnaryWithPoint;
+import org.anchoranalysis.image.voxel.iterator.process.voxelbuffer.ProcessVoxelBufferBinary;
+import org.anchoranalysis.image.voxel.iterator.process.voxelbuffer.ProcessVoxelBufferUnary;
+import org.anchoranalysis.image.voxel.iterator.process.voxelbuffer.ProcessVoxelBufferUnaryWithPoint;
 
 /**
  * Utilities for iterating over <i>all</i> voxels in one or more {@link Voxels}.
@@ -75,12 +75,12 @@ public class IterateVoxelsAll {
      *     coordinates.
      * @param <T> buffer-type for voxels
      */
-    public static <T> void withBuffer(Voxels<T> voxels, ProcessBufferUnary<T> process) {
+    public static <T> void withBuffer(Voxels<T> voxels, ProcessBufferUnaryWithPoint<T> process) {
         withPoint(voxels.extent(), new RetrieveBufferForSlice<>(voxels, process));
     }
 
     /**
-     * Iterate over each voxel in a bounding-box - with <b>two</b> associated <b>buffers</b> for
+     * Iterate over each voxel - with <b>two</b> associated <b>buffers</b> for
      * each slice
      *
      * <p>The extent's of both {@code voxels1} and {@code voxels2} must be equal.
@@ -93,8 +93,8 @@ public class IterateVoxelsAll {
      *     coordinates.
      * @param <T> buffer-type for voxels
      */
-    public static <T> void withTwoBuffers(
-            Voxels<T> voxels1, Voxels<T> voxels2, ProcessBufferBinary<T> process) {
+    public static <T> void withTwoBuffersAndPoint(
+            Voxels<T> voxels1, Voxels<T> voxels2, ProcessBufferBinaryWithPoint<T> process) {
         Preconditions.checkArgument(voxels1.extent().equals(voxels2.extent()));
         withPoint(voxels1.extent(), new RetrieveBuffersForTwoSlices<>(voxels1, voxels2, process));
     }
@@ -119,7 +119,7 @@ public class IterateVoxelsAll {
             Voxels<T> voxels1,
             Voxels<T> voxels2,
             Voxels<T> voxels3,
-            ProcessBufferTernary<T> process) {
+            ProcessBufferTernaryWithPoint<T> process) {
         Preconditions.checkArgument(voxels1.extent().equals(voxels2.extent()));
         Preconditions.checkArgument(voxels2.extent().equals(voxels3.extent()));
         withPoint(

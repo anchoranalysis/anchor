@@ -45,7 +45,7 @@ public class MaskOr {
         byte sourceOn = first.getOnByte();
         byte receiveOn = second.getOnByte();
 
-        IterateVoxelsAll.withTwoBuffers(
+        IterateVoxelsAll.withTwoBuffersAndPoint(
                 first.voxels(),
                 second.voxels(),
                 (point, bufferSource, bufferReceive, offset) -> {

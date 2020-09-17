@@ -33,8 +33,8 @@ import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.voxel.Voxels;
-import org.anchoranalysis.image.voxel.iterator.process.ProcessBufferUnary;
 import org.anchoranalysis.image.voxel.iterator.process.ProcessPoint;
+import org.anchoranalysis.image.voxel.iterator.process.buffer.ProcessBufferUnaryWithPoint;
 
 /**
  * Utilities for iterating over the subset of image voxels within a bounding-box.
@@ -121,7 +121,7 @@ public class IterateVoxelsBoundingBox {
      * @param <T> buffer-type for voxels
      */
     public static <T> void withBuffer(
-            BoundingBox box, Voxels<T> voxels, ProcessBufferUnary<T> process) {
+            BoundingBox box, Voxels<T> voxels, ProcessBufferUnaryWithPoint<T> process) {
         withPoint(box, new RetrieveBufferForSlice<>(voxels, process));
     }
 }

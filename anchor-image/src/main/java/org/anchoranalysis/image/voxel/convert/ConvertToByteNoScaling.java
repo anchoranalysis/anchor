@@ -31,59 +31,38 @@ import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.convert.UnsignedIntBuffer;
 import org.anchoranalysis.image.convert.UnsignedShortBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
-import org.anchoranalysis.image.voxel.buffer.VoxelBufferUnsignedByte;
-import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
+import org.anchoranalysis.image.voxel.iterator.IterateVoxelsRemaining;
 
 // Converts voxel buffers to a unsigned 8-bit buffer without scaling any values.
 // So values larger than 255 are clipped
 public final class ConvertToByteNoScaling extends VoxelsConverter<UnsignedByteBuffer> {
 
     @Override
-    public VoxelBuffer<UnsignedByteBuffer> convertFromFloat(VoxelBuffer<FloatBuffer> bufferIn) {
-
-        UnsignedByteBuffer bufferOut = UnsignedByteBuffer.allocate(bufferIn.buffer().capacity());
-
-        while (bufferIn.buffer().hasRemaining()) {
-            float value = bufferIn.buffer().get();
-            if (value > UnsignedByteVoxelType.MAX_VALUE_INT) {
-                value = UnsignedByteVoxelType.MAX_VALUE_INT;
-            }
-            if (value < 0) {
-                value = 0;
-            }
-            bufferOut.putFloat(value);
-        }
-
-        return VoxelBufferUnsignedByte.wrapBuffer(bufferOut);
+    public void convertFromFloat(VoxelBuffer<FloatBuffer> bufferIn, VoxelBuffer<UnsignedByteBuffer> bufferOut) {
+        IterateVoxelsRemaining.withTwoBuffersWithoutOffset(bufferIn, bufferOut, (in,out) ->
+            out.putFloatClipped( in.get() )            
+        );
     }
 
     @Override
-    public VoxelBuffer<UnsignedByteBuffer> convertFromInt(VoxelBuffer<UnsignedIntBuffer> bufferIn) {
-
-        UnsignedByteBuffer bufferOut = UnsignedByteBuffer.allocate(bufferIn.buffer().capacity());
-
-        while (bufferIn.buffer().hasRemaining()) {
-            bufferOut.putLong(bufferIn.buffer().getUnsigned());
-        }
-
-        return VoxelBufferUnsignedByte.wrapBuffer(bufferOut);
+    public void convertFromInt(VoxelBuffer<UnsignedIntBuffer> bufferIn, VoxelBuffer<UnsignedByteBuffer> bufferOut) {
+        IterateVoxelsRemaining.withTwoBuffersWithoutOffset(bufferIn, bufferOut, (in,out) ->
+            out.putLong(in.getUnsigned())
+        );
     }
 
     @Override
-    public VoxelBuffer<UnsignedByteBuffer> convertFromShort(
-            VoxelBuffer<UnsignedShortBuffer> bufferIn) {
-
-        UnsignedByteBuffer bufferOut = UnsignedByteBuffer.allocate(bufferIn.buffer().capacity());
-
-        while (bufferIn.buffer().hasRemaining()) {
-            bufferOut.putUnsigned(bufferIn.buffer().getUnsigned());
-        }
-
-        return VoxelBufferUnsignedByte.wrapBuffer(bufferOut);
+    public void convertFromShort(
+            VoxelBuffer<UnsignedShortBuffer> bufferIn, VoxelBuffer<UnsignedByteBuffer> bufferOut) {
+        IterateVoxelsRemaining.withTwoBuffersWithoutOffset(bufferIn, bufferOut, (in,out) ->
+            out.putUnsigned(in.getUnsigned())
+        );
     }
 
     @Override
-    public VoxelBuffer<UnsignedByteBuffer> convertFromByte(VoxelBuffer<UnsignedByteBuffer> in) {
-        return in.duplicate();
+    public void convertFromByte(VoxelBuffer<UnsignedByteBuffer> bufferIn, VoxelBuffer<UnsignedByteBuffer> bufferOut) {
+        IterateVoxelsRemaining.withTwoBuffersWithoutOffset(bufferIn, bufferOut, (in,out) ->
+            out.putRaw( in.getRaw() )
+        );
     }
 }

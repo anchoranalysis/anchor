@@ -72,7 +72,7 @@ public class MaskXor {
 
         byte receiveOn = bvbSecond.getOnByte();
 
-        IterateVoxelsAll.withTwoBuffers(
+        IterateVoxelsAll.withTwoBuffersAndPoint(
                 voxelsFirst,
                 voxelsSecond,
                 (point, bufferSource, bufferReceive, offset) -> {

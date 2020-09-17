@@ -33,7 +33,7 @@ import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.Voxels;
-import org.anchoranalysis.image.voxel.iterator.process.ProcessBufferUnary;
+import org.anchoranalysis.image.voxel.iterator.process.buffer.ProcessBufferUnaryWithPoint;
 
 /**
  * Utilities for iterating over the subset of voxels corresponding to an <i>on</i> state in a {@link
@@ -57,7 +57,7 @@ public class IterateVoxelsMask {
      *     coordinates.
      * @param <T> buffer-type for voxels
      */
-    public static <T> void withBuffer(Mask mask, Voxels<T> voxels, ProcessBufferUnary<T> process) {
+    public static <T> void withBuffer(Mask mask, Voxels<T> voxels, ProcessBufferUnaryWithPoint<T> process) {
         // Treat it as one giant object box. This will involve some additions and subtractions of 0
         // during the processing of voxels
         // but after some quick emperical checks, it doesn't seem to make a performance difference.

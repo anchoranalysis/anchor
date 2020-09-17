@@ -48,6 +48,7 @@ public class BoundingBoxRTreeTest {
 
     @Before
     public void before() {
+        tree = new RTree<>(7);
         tree.add(BOX1, ID1);
         tree.add(BOX2, ID2);
         tree.add(BOX3, ID3);

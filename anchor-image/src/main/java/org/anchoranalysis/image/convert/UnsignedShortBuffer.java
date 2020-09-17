@@ -26,6 +26,7 @@
 package org.anchoranalysis.image.convert;
 
 import java.nio.ShortBuffer;
+import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
 import lombok.Getter;
 
 /**
@@ -164,6 +165,21 @@ public final class UnsignedShortBuffer extends UnsignedBufferAsInt {
     @Override
     public void putFloat(float value) {
         putRaw((short) value);
+    }
+    
+    /**
+     * Puts a float at the current buffer position, clipping to ensure the value is within the range {@code (0,255)}.
+     *
+     * @param value the float
+     */
+    public void putFloatClipped(float value) {
+        if (value > UnsignedShortVoxelType.MAX_VALUE_INT) {
+            value = UnsignedShortVoxelType.MAX_VALUE_INT;
+        }
+        if (value < 0) {
+            value = 0;
+        }
+        putFloat(value);
     }
 
     @Override

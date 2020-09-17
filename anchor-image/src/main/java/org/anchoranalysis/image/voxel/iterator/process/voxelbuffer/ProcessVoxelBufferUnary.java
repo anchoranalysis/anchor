@@ -24,45 +24,32 @@
  * #L%
  */
 
-package org.anchoranalysis.image.voxel.iterator;
+package org.anchoranalysis.image.voxel.iterator.process.voxelbuffer;
 
-import lombok.RequiredArgsConstructor;
-import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.voxel.Voxels;
+import java.nio.Buffer;
+import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.iterator.process.ProcessPoint;
 import org.anchoranalysis.image.voxel.iterator.process.buffer.ProcessBufferUnaryWithPoint;
 
 /**
- * Exposes a {@link ProcessPoint} as a {@link ProcessBufferUnaryWithPoint} by retrieving a buffer from voxels
- * for each z-slice.
+ * Processes a 3D point like {@link ProcessPoint} but also retrieves a {@link VoxelBuffer} for the
+ * current z-slice.
  *
- * <p>Note that {@link #notifyChangeSlice} <b>need not</b> be be called for all slices (perhaps only
- * a subset), but {@link #process} <b>must</b> be called for ALL voxels on a given slice.
+ * <p>It is very similar to {@link ProcessBufferUnaryWithPoint} but uses {@link VoxelBuffer} instead of a
+ * {@link Buffer}.
  *
+ * @param <T> buffer-type
  * @author Owen Feehan
- * @param <T> buffer-type for slice
  */
-@RequiredArgsConstructor
-final class RetrieveBufferForSlice<T> implements ProcessPoint {
+@FunctionalInterface
+public interface ProcessVoxelBufferUnary<T> {
 
-    // START REQUIRED ARGUMENTS
-    private final Voxels<T> voxels;
-    private final ProcessBufferUnaryWithPoint<T> processor;
-    // END REQUIRED ARGUMENTS
-
-    private T bufferSlice;
-    /** A 2D offset within the current slice */
-    private int offsetWithinSlice;
-
-    @Override
-    public void notifyChangeSlice(int z) {
-        processor.notifyChangeSlice(z);
-        offsetWithinSlice = 0;
-        this.bufferSlice = voxels.sliceBuffer(z);
-    }
-
-    @Override
-    public void process(Point3i point) {
-        processor.process(point, bufferSlice, offsetWithinSlice++);
-    }
+    /**
+     * Processes a voxel location in a buffer.
+     *
+     * @param buffer a buffer for the current slice for which {@code offset} refers to a particular
+     *     location
+     * @param offset an offset value for the current slice (i.e. indexing XY only, but not Z)
+     */
+    void process(VoxelBuffer<T> buffer, int offset);
 }

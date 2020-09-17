@@ -24,29 +24,29 @@
  * #L%
  */
 
-package org.anchoranalysis.image.voxel.iterator.process;
+package org.anchoranalysis.image.voxel.iterator.process.voxelbuffer;
 
-import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 
 /**
- * Processes a 3D point like {@link ProcessVoxelBufferUnary} but also exposes a {@link Point3i}.
+ * Processes <b>two</b> voxel-buffers for each z-slice jointly, without any offset or point.
+ * 
+ * <p>This is intended for usage with the relative {@code get} and {@code #put} methods of buffer classes.
  *
- * @param <T> buffer-type
- * @param <E> exception that may be thrown by the processor.
  * @author Owen Feehan
+ * @param <S> first buffer-type
+ * @param <T> second buffer-type
  */
 @FunctionalInterface
-public interface ProcessVoxelBufferUnaryWithPoint<T, E extends Exception> {
+public interface ProcessVoxelBufferBinaryWithoutOffset<S, T> {
 
     /**
      * Processes a voxel location in a buffer
      *
-     * @param point a point with global coordinates
-     * @param buffer a buffer for the current slice for which {@code offset} refers to a particular
-     *     location
-     * @param offset an offset value for the current slice (i.e. indexing XY only, but not Z)
-     * @throws E if anything goes wrong
+     * @param buffer1 first buffer for the current slice for which {@code offset} refers to a
+     *     particular location
+     * @param buffer2 second buffer for the current slice for which {@code offset} refers to a
+     *     particular location
      */
-    void process(Point3i point, VoxelBuffer<T> buffer, int offset) throws E;
+    void process(VoxelBuffer<S> buffer1, VoxelBuffer<T> buffer2);
 }

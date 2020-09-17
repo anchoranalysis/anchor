@@ -40,10 +40,10 @@ import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.ExtentMatchHelper;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
-import org.anchoranalysis.image.voxel.iterator.process.ProcessBufferBinary;
-import org.anchoranalysis.image.voxel.iterator.process.ProcessBufferUnary;
 import org.anchoranalysis.image.voxel.iterator.process.ProcessPoint;
-import org.anchoranalysis.image.voxel.iterator.process.ProcessVoxelBufferUnary;
+import org.anchoranalysis.image.voxel.iterator.process.buffer.ProcessBufferBinaryWithPoint;
+import org.anchoranalysis.image.voxel.iterator.process.buffer.ProcessBufferUnaryWithPoint;
+import org.anchoranalysis.image.voxel.iterator.process.voxelbuffer.ProcessVoxelBufferUnary;
 
 /**
  * Utilities for iterating over the subset of voxels corresponding to an <i>on</i> state in an
@@ -109,7 +109,7 @@ public class IterateVoxelsObjectMask {
      * @param <T> buffer-type for voxels
      */
     public static <T> void withBuffer(
-            ObjectMask object, Voxels<T> voxels, ProcessBufferUnary<T> process) {
+            ObjectMask object, Voxels<T> voxels, ProcessBufferUnaryWithPoint<T> process) {
         /**
          * This is re-implemented in full, as reusing existing code with {@link AddOffsets} and /
          * {@link RequireIntersectionWithMask} was not inlining using default JVM settings / Based
@@ -166,7 +166,7 @@ public class IterateVoxelsObjectMask {
             ObjectMask object,
             Voxels<T> voxels1,
             Voxels<T> voxels2,
-            ProcessBufferBinary<T> process) {
+            ProcessBufferBinaryWithPoint<T> process) {
         Preconditions.checkArgument(voxels1.extent().equals(voxels2.extent()));
         IterateVoxelsObjectMask.withPoint(
                 object, new RetrieveBuffersForTwoSlices<>(voxels1, voxels2, process));

@@ -32,8 +32,8 @@ import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.SlidingBuffer;
-import org.anchoranalysis.image.voxel.iterator.process.ProcessBufferUnary;
 import org.anchoranalysis.image.voxel.iterator.process.ProcessPoint;
+import org.anchoranalysis.image.voxel.iterator.process.buffer.ProcessBufferUnaryWithPoint;
 
 /**
  * Utilities for iterating over the subset of voxels corresponding to an <i>on</i> state in an
@@ -80,7 +80,7 @@ public class IterateVoxelsObjectMaskOptional {
      * @param <T> buffer-type for voxels
      */
     public static <T> void withBuffer(
-            Optional<ObjectMask> objectMask, Voxels<T> voxels, ProcessBufferUnary<T> process) {
+            Optional<ObjectMask> objectMask, Voxels<T> voxels, ProcessBufferUnaryWithPoint<T> process) {
 
         // Note the offsets must be added before any additional restriction like an object-mask, to
         // make

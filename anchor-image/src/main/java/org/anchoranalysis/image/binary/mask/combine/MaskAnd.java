@@ -70,7 +70,7 @@ public class MaskAnd {
         byte sourceOff = bvbFirst.getOffByte();
         byte receiveOff = bvbSecond.getOffByte();
 
-        IterateVoxelsAll.withTwoBuffers(
+        IterateVoxelsAll.withTwoBuffersAndPoint(
                 voxelsFirst,
                 voxelsSecond,
                 (point, bufferSource, bufferReceive, offset) -> {

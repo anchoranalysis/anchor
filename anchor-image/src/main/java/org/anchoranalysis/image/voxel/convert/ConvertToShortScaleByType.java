@@ -31,10 +31,10 @@ import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.convert.UnsignedIntBuffer;
 import org.anchoranalysis.image.convert.UnsignedShortBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
-import org.anchoranalysis.image.voxel.buffer.VoxelBufferUnsignedShort;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedIntVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
+import org.anchoranalysis.image.voxel.iterator.IterateVoxelsRemaining;
 
 // Converts voxel buffers to a unsigned 8-bit buffer scaling against the maximum value in each
 // buffer.
@@ -44,60 +44,41 @@ import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
 // sizes
 public final class ConvertToShortScaleByType extends VoxelsConverter<UnsignedShortBuffer> {
 
+    private static final int DIVIDE_BY_UNSIGNED_INT = (int) (UnsignedIntVoxelType.MAX_VALUE / UnsignedShortVoxelType.MAX_VALUE);
+    
+    private static final int MULTIPLY_BY_UNSIGNED_BYTE = (int) (UnsignedShortVoxelType.MAX_VALUE / UnsignedByteVoxelType.MAX_VALUE);
+    
     // This doesn't really make sense for a float, as the maximum value is so much higher, so we
     // take
     //  it as being the same as Integer.MAX_VALUE
     @Override
-    public VoxelBuffer<UnsignedShortBuffer> convertFromFloat(VoxelBuffer<FloatBuffer> bufferIn) {
+    public void convertFromFloat(VoxelBuffer<FloatBuffer> bufferIn, VoxelBuffer<UnsignedShortBuffer> bufferOut) {
 
-        double div = (double) UnsignedIntVoxelType.MAX_VALUE / UnsignedShortVoxelType.MAX_VALUE_INT;
-
-        UnsignedShortBuffer bufferOut = UnsignedShortBuffer.allocate(bufferIn.buffer().capacity());
-
-        while (bufferIn.buffer().hasRemaining()) {
-            double f = bufferIn.buffer().get();
-
-            f = f / div;
-
-            bufferOut.putDouble(f);
-        }
-
-        return VoxelBufferUnsignedShort.wrapBuffer(bufferOut);
+        IterateVoxelsRemaining.withTwoBuffersWithoutOffset(bufferIn, bufferOut, (in,out) ->
+            out.putDouble(in.get() / DIVIDE_BY_UNSIGNED_INT)
+        );
     }
 
     @Override
-    public VoxelBuffer<UnsignedShortBuffer> convertFromInt(
-            VoxelBuffer<UnsignedIntBuffer> bufferIn) {
+    public void convertFromInt(
+            VoxelBuffer<UnsignedIntBuffer> bufferIn, VoxelBuffer<UnsignedShortBuffer> bufferOut) {
 
-        double div = (double) UnsignedIntVoxelType.MAX_VALUE / UnsignedShortVoxelType.MAX_VALUE_INT;
-
-        UnsignedShortBuffer bufferOut = UnsignedShortBuffer.allocate(bufferIn.buffer().capacity());
-
-        while (bufferIn.buffer().hasRemaining()) {
-            bufferOut.putDouble(bufferIn.buffer().getUnsigned() / div);
-        }
-
-        return VoxelBufferUnsignedShort.wrapBuffer(bufferOut);
+        IterateVoxelsRemaining.withTwoBuffersWithoutOffset(bufferIn, bufferOut, (in,out) ->
+            out.putLong(in.getUnsigned() / DIVIDE_BY_UNSIGNED_INT)
+        );
     }
 
     @Override
-    public VoxelBuffer<UnsignedShortBuffer> convertFromShort(
-            VoxelBuffer<UnsignedShortBuffer> bufferIn) {
-        return bufferIn.duplicate();
+    public void convertFromShort(VoxelBuffer<UnsignedShortBuffer> bufferIn, VoxelBuffer<UnsignedShortBuffer> bufferOut) {
+        IterateVoxelsRemaining.withTwoBuffersWithoutOffset(bufferIn, bufferOut, (in,out) -> 
+            out.putRaw(in.getRaw())
+        );
     }
 
     @Override
-    public VoxelBuffer<UnsignedShortBuffer> convertFromByte(
-            VoxelBuffer<UnsignedByteBuffer> bufferIn) {
-        double mult =
-                (double) UnsignedShortVoxelType.MAX_VALUE_INT / UnsignedByteVoxelType.MAX_VALUE_INT;
-
-        UnsignedShortBuffer bufferOut = UnsignedShortBuffer.allocate(bufferIn.buffer().capacity());
-
-        while (bufferIn.buffer().hasRemaining()) {
-            bufferOut.putDouble(bufferIn.buffer().getRaw() * mult);
-        }
-
-        return VoxelBufferUnsignedShort.wrapBuffer(bufferOut);
+    public void convertFromByte(VoxelBuffer<UnsignedByteBuffer> bufferIn, VoxelBuffer<UnsignedShortBuffer> bufferOut) {
+        IterateVoxelsRemaining.withTwoBuffersWithoutOffset(bufferIn, bufferOut, (in,out) ->
+            out.putUnsigned(in.getUnsigned() * MULTIPLY_BY_UNSIGNED_BYTE)
+        );
     }
 }

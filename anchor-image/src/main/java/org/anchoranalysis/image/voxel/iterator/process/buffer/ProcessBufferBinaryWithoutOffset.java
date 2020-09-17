@@ -24,30 +24,28 @@
  * #L%
  */
 
-package org.anchoranalysis.image.voxel.iterator.process;
-
-import java.nio.Buffer;
-import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
+package org.anchoranalysis.image.voxel.iterator.process.buffer;
 
 /**
- * Processes a 3D point like {@link ProcessPoint} but also retrieves a {@link VoxelBuffer} for the
- * current z-slice.
+ * Processes <b>two</b> buffers for each z-slice jointly, without any offset or point.
+ * 
+ * <p>This is intended for usage with the relative {@code get} and {@code #put} methods of buffer classes.
  *
- * <p>It is very similar to {@link ProcessBufferUnary} but uses {@link VoxelBuffer} instead of a
- * {@link Buffer}.
- *
- * @param <T> buffer-type
+ * @param <S> type of first buffer
+ * @param <T> type of second buffer
  * @author Owen Feehan
  */
 @FunctionalInterface
-public interface ProcessVoxelBufferUnary<T> {
+public interface ProcessBufferBinaryWithoutOffset<S,T> {
+
+    /** Notifies the processor that there has been a change in slice (z global coordinate) */
+    default void notifyChangeSlice(int z) {}
 
     /**
      * Processes a voxel location in a buffer
      *
-     * @param buffer a buffer for the current slice for which {@code offset} refers to a particular
-     *     location
-     * @param offset an offset value for the current slice (i.e. indexing XY only, but not Z)
+     * @param buffer1 first buffer for the current slice
+     * @param buffer2 second buffer for the current slice
      */
-    void process(VoxelBuffer<T> buffer, int offset);
+    void process(S buffer1, T buffer2);
 }
