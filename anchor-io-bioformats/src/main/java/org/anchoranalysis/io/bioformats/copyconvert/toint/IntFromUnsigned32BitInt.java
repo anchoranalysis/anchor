@@ -33,7 +33,7 @@ import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.image.convert.UnsignedIntBuffer;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
-import org.anchoranalysis.image.voxel.buffer.VoxelBufferUnsignedInt;
+import org.anchoranalysis.image.voxel.buffer.VoxelBufferWrap;
 
 @RequiredArgsConstructor
 public class IntFromUnsigned32BitInt extends ConvertToInt {
@@ -68,6 +68,6 @@ public class IntFromUnsigned32BitInt extends ConvertToInt {
             out[indexOut++] = value;
         }
 
-        return VoxelBufferUnsignedInt.wrapArray(out);
+        return VoxelBufferWrap.unsignedIntArray(out);
     }
 }

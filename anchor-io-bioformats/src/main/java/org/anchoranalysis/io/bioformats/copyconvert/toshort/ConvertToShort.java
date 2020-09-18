@@ -33,7 +33,7 @@ import org.anchoranalysis.image.convert.UnsignedShortBuffer;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
-import org.anchoranalysis.image.voxel.buffer.VoxelBufferUnsignedShort;
+import org.anchoranalysis.image.voxel.buffer.VoxelBufferWrap;
 import org.anchoranalysis.io.bioformats.copyconvert.ConvertTo;
 
 public abstract class ConvertToShort extends ConvertTo<UnsignedShortBuffer> {
@@ -72,7 +72,7 @@ public abstract class ConvertToShort extends ConvertTo<UnsignedShortBuffer> {
             out.putRaw(convertValue(valueFromBuffer(buffer, indexIn)));
         }
 
-        return VoxelBufferUnsignedShort.wrapBuffer(out);
+        return VoxelBufferWrap.unsignedShortBuffer(out);
     }
 
     protected abstract short convertValue(short value);

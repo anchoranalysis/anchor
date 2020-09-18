@@ -33,7 +33,7 @@ import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.voxel.Voxels;
-import org.anchoranalysis.image.voxel.buffer.VoxelBufferFloat;
+import org.anchoranalysis.image.voxel.buffer.VoxelBufferWrap;
 import org.anchoranalysis.image.voxel.datatype.FloatVoxelType;
 import org.anchoranalysis.image.voxel.extracter.VoxelsExtracter;
 import org.junit.Test;
@@ -50,7 +50,7 @@ public class ChannelSetVoxelsTest {
         Channel channel = ChannelFactory.instance().create(dimensions, FloatVoxelType.INSTANCE);
 
         Voxels<FloatBuffer> voxels = channel.voxels().asFloat();
-        voxels.slices().replaceSlice(0, VoxelBufferFloat.wrapArray(new float[] {1, 2, 3, 4}));
+        voxels.slices().replaceSlice(0, VoxelBufferWrap.floatArray(new float[] {1, 2, 3, 4}));
 
         VoxelsExtracter<FloatBuffer> extracter = voxels.extract();
         assertVoxelEquals(1.0f, 0, 0, extracter);

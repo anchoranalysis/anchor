@@ -33,17 +33,9 @@ import org.anchoranalysis.image.voxel.datatype.FloatVoxelType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 
 @AllArgsConstructor
-public final class VoxelBufferFloat extends VoxelBuffer<FloatBuffer> {
+final class VoxelBufferFloat extends VoxelBuffer<FloatBuffer> {
 
     private final FloatBuffer delegate;
-
-    public static VoxelBufferFloat wrapArray(float[] arr) {
-        return new VoxelBufferFloat(FloatBuffer.wrap(arr));
-    }
-
-    public static VoxelBufferFloat wrapBuffer(FloatBuffer buffer) {
-        return new VoxelBufferFloat(buffer);
-    }
 
     @Override
     public FloatBuffer buffer() {
@@ -58,10 +50,6 @@ public final class VoxelBufferFloat extends VoxelBuffer<FloatBuffer> {
     @Override
     public VoxelDataType dataType() {
         return FloatVoxelType.INSTANCE;
-    }
-
-    public static VoxelBufferFloat allocate(int size) {
-        return new VoxelBufferFloat(FloatBuffer.allocate(size));
     }
 
     @Override

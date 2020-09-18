@@ -30,7 +30,7 @@ import com.google.common.base.Preconditions;
 import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
-import org.anchoranalysis.image.voxel.buffer.VoxelBufferUnsignedByte;
+import org.anchoranalysis.image.voxel.buffer.VoxelBufferFactory;
 
 public class FromByte implements SliceBufferIndex<UnsignedByteBuffer> {
 
@@ -54,7 +54,7 @@ public class FromByte implements SliceBufferIndex<UnsignedByteBuffer> {
 
         this.extent = extent;
 
-        buffer = new VoxelBufferUnsignedByte[extent.z()];
+        buffer = VoxelBufferFactory.allocateUnsignedByteArray(extent.z());
     }
 
     @Override
@@ -66,9 +66,9 @@ public class FromByte implements SliceBufferIndex<UnsignedByteBuffer> {
     @Override
     public VoxelBuffer<UnsignedByteBuffer> slice(int z) {
         Preconditions.checkArgument(z >= 0);
-        VoxelBuffer<UnsignedByteBuffer> buf = buffer[z];
-        buf.buffer().clear();
-        return buf;
+        VoxelBuffer<UnsignedByteBuffer> bufferSlice = buffer[z];
+        bufferSlice.buffer().clear();
+        return bufferSlice;
     }
 
     @Override
@@ -78,8 +78,8 @@ public class FromByte implements SliceBufferIndex<UnsignedByteBuffer> {
 
     private void init() {
         int volumeXY = extent.volumeXY();
-        for (int z = 0; z < extent.z(); z++) {
-            buffer[z] = VoxelBufferUnsignedByte.allocate(volumeXY);
-        }
+        extent.iterateOverZ( z ->
+            buffer[z] = VoxelBufferFactory.allocateUnsignedByte(volumeXY)
+        );
     }
 }

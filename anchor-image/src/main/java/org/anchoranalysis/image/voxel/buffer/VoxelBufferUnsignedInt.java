@@ -33,21 +33,9 @@ import org.anchoranalysis.image.voxel.datatype.UnsignedIntVoxelType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 
 @AllArgsConstructor
-public final class VoxelBufferUnsignedInt extends VoxelBuffer<UnsignedIntBuffer> {
+final class VoxelBufferUnsignedInt extends VoxelBuffer<UnsignedIntBuffer> {
 
     private final UnsignedIntBuffer delegate;
-
-    public static VoxelBufferUnsignedInt allocate(int size) {
-        return new VoxelBufferUnsignedInt(UnsignedIntBuffer.allocate(size));
-    }
-
-    public static VoxelBufferUnsignedInt wrapArray(int[] array) {
-        return new VoxelBufferUnsignedInt(UnsignedIntBuffer.wrapRaw(array));
-    }
-
-    public static VoxelBufferUnsignedInt wrapBuffer(UnsignedIntBuffer buffer) {
-        return new VoxelBufferUnsignedInt(buffer);
-    }
 
     @Override
     public UnsignedIntBuffer buffer() {

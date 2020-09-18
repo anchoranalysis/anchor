@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.image.voxel.buffer;
 
-import java.nio.ShortBuffer;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.image.convert.PrimitiveConverter;
 import org.anchoranalysis.image.convert.UnsignedShortBuffer;
@@ -34,49 +33,9 @@ import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 
 @AllArgsConstructor
-public final class VoxelBufferUnsignedShort extends VoxelBuffer<UnsignedShortBuffer> {
+final class VoxelBufferUnsignedShort extends VoxelBuffer<UnsignedShortBuffer> {
 
     private final UnsignedShortBuffer delegate;
-
-    /**
-     * Allocates a new voxel-buffer of given size.
-     *
-     * @param capacity the capacity (size).
-     * @return a new {@link VoxelBuffer} with newly allocated (non-direct) memory.
-     */
-    public static VoxelBuffer<UnsignedShortBuffer> allocate(int capacity) {
-        return new VoxelBufferUnsignedShort(UnsignedShortBuffer.allocate(capacity));
-    }
-
-    /**
-     * Wraps an existing array (encoding unsigned shorts as a signed array) as a voxel-buffer.
-     *
-     * @param array the array to wrap
-     * @return a new {@link VoxelBuffer} reusing the array internally.
-     */
-    public static VoxelBuffer<UnsignedShortBuffer> wrapArray(short[] array) {
-        return new VoxelBufferUnsignedShort(UnsignedShortBuffer.wrapRaw(array));
-    }
-
-    /**
-     * Wraps an unsigned-buffer into a voxel-buffer.
-     *
-     * @param buffer the buffer to wrap
-     * @return a new {@link VoxelBuffer} reusing the buffer internally.
-     */
-    public static VoxelBuffer<UnsignedShortBuffer> wrapBuffer(UnsignedShortBuffer buffer) {
-        return new VoxelBufferUnsignedShort(buffer);
-    }
-
-    /**
-     * Wraps an unsigned-buffer (represented by a NIO signed-buffer) into a voxel-buffer.
-     *
-     * @param buffer the signed-buffer to wrap as unsigned
-     * @return a new {@link VoxelBuffer} reusing the buffer internally.
-     */
-    public static VoxelBuffer<UnsignedShortBuffer> wrapRaw(ShortBuffer buffer) {
-        return wrapBuffer(UnsignedShortBuffer.wrapRaw(buffer));
-    }
 
     @Override
     public UnsignedShortBuffer buffer() {

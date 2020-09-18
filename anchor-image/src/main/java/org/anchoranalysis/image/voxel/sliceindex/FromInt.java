@@ -29,7 +29,7 @@ package org.anchoranalysis.image.voxel.sliceindex;
 import org.anchoranalysis.image.convert.UnsignedIntBuffer;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
-import org.anchoranalysis.image.voxel.buffer.VoxelBufferUnsignedInt;
+import org.anchoranalysis.image.voxel.buffer.VoxelBufferFactory;
 
 public class FromInt implements SliceBufferIndex<UnsignedIntBuffer> {
 
@@ -53,13 +53,13 @@ public class FromInt implements SliceBufferIndex<UnsignedIntBuffer> {
 
         this.extent = extent;
 
-        buffer = new VoxelBufferUnsignedInt[extent.z()];
+        buffer = VoxelBufferFactory.allocateUnsignedIntArray(extent.z());
     }
 
     private void init() {
         int volumeXY = extent.volumeXY();
         for (int z = 0; z < extent.z(); z++) {
-            buffer[z] = VoxelBufferUnsignedInt.allocate(volumeXY);
+            buffer[z] = VoxelBufferFactory.allocateUnsignedInt(volumeXY);
         }
     }
 
