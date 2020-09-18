@@ -23,35 +23,25 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.image.index;
+package org.anchoranalysis.image.extent.rtree;
 
 import static org.junit.Assert.assertEquals;
 
 import java.util.Arrays;
 import java.util.List;
-import org.anchoranalysis.image.extent.BoundingBoxFixture;
 import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.junit.Before;
 import org.junit.Test;
+import static org.anchoranalysis.image.extent.rtree.BoxFixture.*;
 
 public class BoundingBoxRTreeTest {
 
-    private static final BoundingBox BOX1 = BoundingBoxFixture.of(10, 10);
-    private static final BoundingBox BOX2 = BoundingBoxFixture.of(20, 20);
-    private static final BoundingBox BOX3 = BoundingBoxFixture.of(15, 10);
-
-    private static final int ID1 = 0;
-    private static final int ID2 = 1;
-    private static final int ID3 = 2;
-
-    private RTree<Integer> tree;
+    private RTree<BoundingBox> tree;
 
     @Before
     public void before() {
         tree = new RTree<>(7);
-        tree.add(BOX1, ID1);
-        tree.add(BOX2, ID2);
-        tree.add(BOX3, ID3);
+        BoxFixture.addFirstCluster(tree);
     }
 
     /**
@@ -60,12 +50,12 @@ public class BoundingBoxRTreeTest {
      */
     @Test
     public void testIntersectsWith() {
-        assertIntersectsWith("box1", BOX1, Arrays.asList(ID1, ID3));
-        assertIntersectsWith("box2", BOX2, Arrays.asList(ID2, ID3));
-        assertIntersectsWith("box3", BOX3, Arrays.asList(ID1, ID2, ID3));
+        assertIntersectsWith("box1", BOX1, Arrays.asList(BOX1, BOX3));
+        assertIntersectsWith("box2", BOX2, Arrays.asList(BOX2, BOX3));
+        assertIntersectsWith("box3", BOX3, Arrays.asList(BOX1, BOX2, BOX3));
     }
 
-    private void assertIntersectsWith(String message, BoundingBox box, List<Integer> ids) {
+    private void assertIntersectsWith(String message, BoundingBox box, List<BoundingBox> ids) {
         assertEquals(message, ids, tree.intersectsWith(box));
     }
 }

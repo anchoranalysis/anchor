@@ -32,7 +32,7 @@ import java.util.function.Function;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.index.ObjectCollectionRTree;
+import org.anchoranalysis.image.extent.rtree.ObjectCollectionRTree;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.morphological.MorphologicalDilation;
 
