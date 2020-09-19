@@ -30,20 +30,14 @@ import java.util.Collection;
 import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.io.generator.IterableSingleFileTypeGenerator;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import lombok.AllArgsConstructor;
 
+@AllArgsConstructor
 public class GeneratorSequenceIncrementalCollection<T, C>
         implements GeneratorSequenceIncremental<T> {
 
-    private IterableSingleFileTypeGenerator<T, C> iterableGenerator;
     private Collection<C> collection;
-
-    public GeneratorSequenceIncrementalCollection(
-            Collection<C> collection, IterableSingleFileTypeGenerator<T, C> iterableGenerator) {
-        super();
-
-        this.collection = collection;
-        this.iterableGenerator = iterableGenerator;
-    }
+    private IterableSingleFileTypeGenerator<T, C> iterableGenerator;
 
     @Override
     public void add(T element) throws OutputWriteFailedException {

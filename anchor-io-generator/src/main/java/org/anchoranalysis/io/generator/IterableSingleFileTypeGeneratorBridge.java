@@ -27,8 +27,13 @@
 package org.anchoranalysis.io.generator;
 
 import lombok.RequiredArgsConstructor;
+import java.nio.file.Path;
+import java.util.Optional;
+import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.functional.function.CheckedFunction;
 import org.anchoranalysis.core.index.SetOperationFailedException;
+import org.anchoranalysis.io.manifest.ManifestDescription;
+import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 /**
@@ -41,7 +46,7 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
  * @param <V> hidden-iterator-type
  */
 @RequiredArgsConstructor
-public class IterableIntermediateGeneratorBridge<S, T, V> implements IterableSingleFileTypeGenerator<T, S>, IterableGenerator<T> {
+public class IterableSingleFileTypeGeneratorBridge<S, T, V> extends SingleFileTypeGenerator<T,S> implements IterableSingleFileTypeGenerator<T, S>, IterableGenerator<T> {
 
     // START REQUIRED ARGUMENTS
     private final IterableSingleFileTypeGenerator<V, S> internalGenerator;
@@ -68,9 +73,7 @@ public class IterableIntermediateGeneratorBridge<S, T, V> implements IterableSin
 
     @Override
     public SingleFileTypeGenerator<T,S> getGenerator() {
-        assert(false);
-        //return internalGenerator.getGenerator();
-        return null;
+        return this;
     }
 
     @Override
@@ -81,5 +84,28 @@ public class IterableIntermediateGeneratorBridge<S, T, V> implements IterableSin
     @Override
     public void end() throws OutputWriteFailedException {
         internalGenerator.end();
+    }
+
+
+    @Override
+    public String getFileExtension(OutputWriteSettings outputWriteSettings)
+            throws OperationFailedException {
+        return internalGenerator.getGenerator().getFileExtension(outputWriteSettings);
+    }
+
+    @Override
+    public Optional<ManifestDescription> createManifestDescription() {
+        return internalGenerator.getGenerator().createManifestDescription();
+    }
+
+    @Override
+    public S transform() throws OutputWriteFailedException {
+        return internalGenerator.getGenerator().transform();
+    }
+
+    @Override
+    public void writeToFile(OutputWriteSettings outputWriteSettings, Path filePath)
+            throws OutputWriteFailedException {
+        internalGenerator.getGenerator().writeToFile(outputWriteSettings, filePath);
     }
 }

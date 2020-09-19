@@ -31,7 +31,7 @@ import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.io.generator.IterableSingleFileTypeGenerator;
+import org.anchoranalysis.io.generator.SingleFileTypeGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
@@ -43,7 +43,7 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 public class RasterGeneratorDelegateToDisplayStack<T> extends RasterGenerator<T> {
 
     // START REQUIRED ARGUMENTS
-    private final IterableSingleFileTypeGenerator<T, DisplayStack> delegate;
+    private final SingleFileTypeGenerator<T, DisplayStack> delegate;
     private final boolean rgb;
     // START END ARGUMENTS
 
