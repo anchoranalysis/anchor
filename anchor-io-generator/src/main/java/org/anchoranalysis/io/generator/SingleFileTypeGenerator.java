@@ -46,7 +46,7 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
  * @param <T> iteration-type
  * @param <S> type after any necessary preprocessing 
  */
-public abstract class SingleFileTypeGenerator<T,S> implements Generator, IterableSingleFileTypeGenerator<T, S> {
+public abstract class SingleFileTypeGenerator<T,S> implements Generator<T>, IterableSingleFileTypeGenerator<T, S> {
 
     /**
      * Applies any necessary preprocessing, to create an element suitable for writing to the filesystem.

@@ -75,5 +75,5 @@ public interface IterableGenerator<T> {
      * 
      * @return the associated generator
      */
-    Generator getGenerator();
+    Generator<T> getGenerator();
 }

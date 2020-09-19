@@ -42,7 +42,7 @@ import org.anchoranalysis.io.output.bound.BoundOutputManager;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 public class BundledObjectOutputStreamGenerator<T extends Serializable>
-        implements Generator, IterableGenerator<T> {
+        implements Generator<T>, IterableGenerator<T> {
 
     private T element;
 
@@ -114,7 +114,7 @@ public class BundledObjectOutputStreamGenerator<T extends Serializable>
 
         if (generatorSequence.isOn()) {
 
-            Generator bundleParametersGenerator =
+            Generator<?> bundleParametersGenerator =
                     new ObjectOutputStreamGenerator<>(
                             bundleParameters, Optional.of("bundleParameters"));
 
@@ -156,7 +156,7 @@ public class BundledObjectOutputStreamGenerator<T extends Serializable>
     }
 
     @Override
-    public Generator getGenerator() {
+    public Generator<T> getGenerator() {
         return this;
     }
 }

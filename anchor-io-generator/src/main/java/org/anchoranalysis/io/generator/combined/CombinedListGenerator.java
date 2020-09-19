@@ -123,7 +123,7 @@ public class CombinedListGenerator<T>
     }
 
     @Override
-    public Generator getGenerator() {
+    public Generator<T> getGenerator() {
         return this;
     }
 

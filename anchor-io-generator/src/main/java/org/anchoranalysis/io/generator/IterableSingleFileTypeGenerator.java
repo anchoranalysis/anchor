@@ -37,5 +37,5 @@ package org.anchoranalysis.io.generator;
 public interface IterableSingleFileTypeGenerator<T, S> extends IterableGenerator<T> {
 
     @Override
-    SingleFileTypeGenerator<?,S> getGenerator();
+    SingleFileTypeGenerator<T,S> getGenerator();
 }

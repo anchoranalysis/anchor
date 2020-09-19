@@ -68,7 +68,7 @@ public class DisplayStackGenerator extends OneStageGenerator<DisplayStack> {
     }
 
     @Override
-    public SingleFileTypeGenerator<?,DisplayStack> getGenerator() {
+    public SingleFileTypeGenerator<DisplayStack,DisplayStack> getGenerator() {
         return this;
     }
 

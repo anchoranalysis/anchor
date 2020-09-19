@@ -32,8 +32,8 @@ import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 /**
- * Allows us to call an {@code IterableGenerator<V,S>} as if it was an {@code
- * IterableGenerator<T,S>} using an function to connect the two
+ * Allows us to call an {@code IterableSingleFileTypeGenerator<V,S>} as if it was an {@code
+ * IterableSingleFileTypeGenerator<T,S>} using an function to connect the two
  *
  * @author Owen Feehan
  * @param <S> generator-type
@@ -41,7 +41,7 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
  * @param <V> hidden-iterator-type
  */
 @RequiredArgsConstructor
-public class IterableIntermediateGeneratorBridge<S, T, V> implements IterableSingleFileTypeGenerator<T, S> {
+public class IterableIntermediateGeneratorBridge<S, T, V> implements IterableSingleFileTypeGenerator<T, S>, IterableGenerator<T> {
 
     // START REQUIRED ARGUMENTS
     private final IterableSingleFileTypeGenerator<V, S> internalGenerator;
@@ -67,8 +67,10 @@ public class IterableIntermediateGeneratorBridge<S, T, V> implements IterableSin
     }
 
     @Override
-    public SingleFileTypeGenerator<?,S> getGenerator() {
-        return internalGenerator.getGenerator();
+    public SingleFileTypeGenerator<T,S> getGenerator() {
+        assert(false);
+        //return internalGenerator.getGenerator();
+        return null;
     }
 
     @Override

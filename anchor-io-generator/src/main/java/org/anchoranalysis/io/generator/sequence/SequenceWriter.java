@@ -42,7 +42,7 @@ public interface SequenceWriter {
 
     boolean isOn();
 
-    void write(GenerateWritableItem<Generator> generator, String index)
+    void write(GenerateWritableItem<Generator<?>> generator, String index)
             throws OutputWriteFailedException;
 
     Optional<BoundOutputManager> getOutputManagerForFiles();

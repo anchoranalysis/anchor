@@ -48,7 +48,7 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
  */
 @RequiredArgsConstructor
 public class SubfolderGenerator<T, S extends Collection<T>>
-        implements Generator, IterableGenerator<S> {
+        implements Generator<S>, IterableGenerator<S> {
 
     // START REQUIRED ARGUMENTS
     private final IterableGenerator<T> generator;
@@ -96,7 +96,7 @@ public class SubfolderGenerator<T, S extends Collection<T>>
     }
 
     @Override
-    public Generator getGenerator() {
+    public Generator<S> getGenerator() {
         return this;
     }
 

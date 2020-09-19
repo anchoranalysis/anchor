@@ -49,7 +49,7 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
  * @param <T> destination-type
  */
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-public class IterableGeneratorBridge<S, T> implements Generator, IterableGenerator<S> {
+public class IterableGeneratorBridge<S, T> implements Generator<S>, IterableGenerator<S> {
 
     // START REQUIRED ARGUMENTS
     /** The generator that accepts the destination type */
@@ -112,8 +112,8 @@ public class IterableGeneratorBridge<S, T> implements Generator, IterableGenerat
     }
 
     @Override
-    public Generator getGenerator() {
-        return generator.getGenerator();
+    public Generator<S> getGenerator() {
+        return this;
     }
 
     @Override

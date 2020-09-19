@@ -32,4 +32,4 @@ package org.anchoranalysis.io.generator;
  * @author Owen Feehan
  *
  */
-public interface MultipleFileTypeGenerator<T> extends Generator, IterableGenerator<T> {}
+public interface MultipleFileTypeGenerator<T> extends Generator<T>, IterableGenerator<T> {}

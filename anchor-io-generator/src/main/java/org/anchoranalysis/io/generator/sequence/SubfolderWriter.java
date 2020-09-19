@@ -103,7 +103,7 @@ public class SubfolderWriter implements SequenceWriter {
     }
 
     @Override
-    public void write(GenerateWritableItem<Generator> generator, String index)
+    public void write(GenerateWritableItem<Generator<?>> generator, String index)
             throws OutputWriteFailedException {
 
         if (!isOn()) {

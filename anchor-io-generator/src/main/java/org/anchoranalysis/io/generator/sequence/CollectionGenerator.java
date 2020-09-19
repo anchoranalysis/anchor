@@ -41,7 +41,7 @@ import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor @AllArgsConstructor
-public class CollectionGenerator<T> implements Generator, IterableGenerator<Collection<T>> {
+public class CollectionGenerator<T> implements Generator<Collection<T>>, IterableGenerator<Collection<T>> {
 
     // START REQUIRED ARGUMENTS
     private final String subfolderName;
@@ -127,7 +127,7 @@ public class CollectionGenerator<T> implements Generator, IterableGenerator<Coll
     }
 
     @Override
-    public Generator getGenerator() {
+    public Generator<Collection<T>> getGenerator() {
         return this;
     }
 }

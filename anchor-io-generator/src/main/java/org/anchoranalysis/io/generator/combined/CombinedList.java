@@ -39,13 +39,13 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 class CombinedList {
 
-    private ArrayList<OptionalNameValue<Generator>> list = new ArrayList<>();
+    private ArrayList<OptionalNameValue<Generator<?>>> list = new ArrayList<>();
 
     public Optional<FileType[]> getFileTypes(OutputWriteSettings outputWriteSettings) throws OperationFailedException {
 
         ArrayList<FileType> all = new ArrayList<>();
 
-        for (OptionalNameValue<Generator> namedGenerator : list) {
+        for (OptionalNameValue<Generator<?>> namedGenerator : list) {
             Optional<FileType[]> fileTypeArray = namedGenerator.getValue().getFileTypes(outputWriteSettings);
             fileTypeArray.ifPresent(
                     fileTypes -> {
@@ -65,7 +65,7 @@ class CombinedList {
     public void write(OutputNameStyle outputNameStyle, BoundOutputManager outputManager)
             throws OutputWriteFailedException {
 
-        for (OptionalNameValue<Generator> ni : list) {
+        for (OptionalNameValue<Generator<?>> ni : list) {
             ni.getName().ifPresent(outputNameStyle::setOutputName);
             ni.getValue().write(outputNameStyle, outputManager);
         }
@@ -78,7 +78,7 @@ class CombinedList {
             throws OutputWriteFailedException {
 
         int maxWritten = -1;
-        for (OptionalNameValue<Generator> ni : list) {
+        for (OptionalNameValue<Generator<?>> ni : list) {
 
             if (ni.getName().isPresent()) {
                 outputNameStyle = outputNameStyle.duplicate();
@@ -101,7 +101,7 @@ class CombinedList {
      * @param generator the generator to add
      * @param name optional-name, which if included, is set as the output-name for the generator
      */
-    public void add(Generator generator, Optional<String> name) {
+    public void add(Generator<?> generator, Optional<String> name) {
         list.add(new OptionalNameValue<>(name, generator));
     }
 }

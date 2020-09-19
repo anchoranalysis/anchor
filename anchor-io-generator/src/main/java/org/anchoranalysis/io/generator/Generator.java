@@ -36,9 +36,9 @@ import org.anchoranalysis.io.output.writer.WritableItem;
  * A class that writes a particular type of object(s) to the file-system.
  * 
  * @author Owen Feehan
- *
+ * @param <T> input-type for generator (that can also be iterated over)
  */
-public interface Generator extends WritableItem {
+public interface Generator<T> extends WritableItem {
 
     /** 
      * The types of files the generator writes to the file-system.
