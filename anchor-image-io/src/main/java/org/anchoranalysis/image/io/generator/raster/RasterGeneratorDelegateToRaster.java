@@ -14,7 +14,7 @@ import lombok.RequiredArgsConstructor;
  * 
  * <p>Specifically, a conversion may occur before:
  * <ul>
- * <li>Calling {@link #setIterableElement(Object)}.
+ * <li>Calling {@link #assignElement(Object)}.
  * <li>Calling {@link #transform()}.
  * </ul>
  * 
@@ -51,16 +51,16 @@ public abstract class RasterGeneratorDelegateToRaster<S,T> extends RasterGenerat
     protected abstract Stack convertBeforeTransform(Stack stack);
     
     @Override
-    public final T getIterableElement() {
+    public final T getElement() {
         return element;
     }
 
     @Override
-    public void setIterableElement(T element) throws SetOperationFailedException {
+    public void assignElement(T element) throws SetOperationFailedException {
         this.element = element;
         
         try {
-            delegate.setIterableElement( convertBeforeSetter(element) );
+            delegate.assignElement( convertBeforeSetter(element) );
         } catch (OperationFailedException e) {
             throw new SetOperationFailedException(e);
         }

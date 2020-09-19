@@ -35,7 +35,7 @@ import java.util.Optional;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
-public class XStreamGenerator<T> extends SerializedIterableGenerator<T> {
+public class XStreamGenerator<T> extends SerializedGenerator<T> {
 
     public XStreamGenerator(Optional<String> manifestFunction) {
         super(manifestFunction);
@@ -60,7 +60,7 @@ public class XStreamGenerator<T> extends SerializedIterableGenerator<T> {
     protected void writeToFile(OutputWriteSettings outputWriteSettings, Path filePath, T element)
             throws OutputWriteFailedException {
         try {
-            writeObjectToFile(getIterableElement(), filePath);
+            writeObjectToFile(getElement(), filePath);
         } catch (IOException e) {
             throw new OutputWriteFailedException(e);
         }

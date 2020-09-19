@@ -27,14 +27,14 @@
 package org.anchoranalysis.io.generator.csv;
 
 import java.util.Optional;
-import org.anchoranalysis.io.generator.OneStageGeneratorWithElement;
+import org.anchoranalysis.io.generator.OneStageGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor(access=AccessLevel.PROTECTED)
-public abstract class CSVGenerator<T> extends OneStageGeneratorWithElement<T> {
+public abstract class CSVGenerator<T> extends OneStageGenerator<T> {
 
     private final String manifestFunction;
     

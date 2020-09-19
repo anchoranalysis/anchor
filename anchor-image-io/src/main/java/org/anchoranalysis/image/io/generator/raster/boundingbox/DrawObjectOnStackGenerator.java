@@ -32,7 +32,6 @@ import java.util.stream.Stream;
 import org.anchoranalysis.core.color.ColorIndex;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.extent.box.BoundedList;
 import org.anchoranalysis.image.extent.box.BoundingBox;
@@ -44,7 +43,7 @@ import org.anchoranalysis.image.object.properties.ObjectWithProperties;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.bean.object.writer.Outline;
-import org.anchoranalysis.io.generator.IterableSingleFileTypeGenerator;
+import org.anchoranalysis.io.generator.SingleFileTypeGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
@@ -64,7 +63,7 @@ public class DrawObjectOnStackGenerator extends RasterGeneratorWithElement<Bound
 
     // START REQUIRED ARGUMENTS
     private final DrawObjectsGenerator drawObjectsGenerator;
-    private final Optional<IterableSingleFileTypeGenerator<BoundingBox, Stack>> backgroundGenerator;
+    private final Optional<SingleFileTypeGenerator<BoundingBox, Stack>> backgroundGenerator;
     private final boolean flatten;
     // END REQUIRED ARGUMENTS
 
@@ -87,7 +86,7 @@ public class DrawObjectOnStackGenerator extends RasterGeneratorWithElement<Bound
      * in Z
      *
      * @param outlineWidth width of the outline around an object
-     * @param colors colors to use for outling of objects
+     * @param colors colors to use for outlining of objects
      * @return
      */
     public static DrawObjectOnStackGenerator createWithEmptyBackground(
@@ -119,10 +118,10 @@ public class DrawObjectOnStackGenerator extends RasterGeneratorWithElement<Bound
      *
      * @param backgroundGenerator generates a background for a bounding-box
      * @param outlineWidth width of the outline around an object
-     * @param colors colors to use for outling of objects
+     * @param colors colors to use for outlining of objects
      */
     public static DrawObjectOnStackGenerator createFromGenerator(
-            IterableSingleFileTypeGenerator<BoundingBox, Stack> backgroundGenerator,
+            SingleFileTypeGenerator<BoundingBox, Stack> backgroundGenerator,
             int outlineWidth,
             ColorIndex colors) {
         return new DrawObjectOnStackGenerator(
@@ -140,7 +139,7 @@ public class DrawObjectOnStackGenerator extends RasterGeneratorWithElement<Bound
      *     and bounding-box)
      */
     private DrawObjectOnStackGenerator(
-            Optional<IterableSingleFileTypeGenerator<BoundingBox, Stack>> backgroundGenerator,
+            Optional<SingleFileTypeGenerator<BoundingBox, Stack>> backgroundGenerator,
             int outlineWidth,
             ColorIndex colorIndex,
             boolean flatten) {
@@ -152,14 +151,14 @@ public class DrawObjectOnStackGenerator extends RasterGeneratorWithElement<Bound
     @Override
     public Stack transform() throws OutputWriteFailedException {
 
-        if (getIterableElement() == null) {
+        if (getElement() == null) {
             throw new OutputWriteFailedException("no mutable element set");
         }
 
         // Apply the generator
         drawObjectsGenerator.setBackground(createBackground());
 
-        BoundedList<ObjectMask> objects = this.getIterableElement();
+        BoundedList<ObjectMask> objects = this.getElement();
 
         Stream<ObjectWithProperties> objectsForDrawing =
                 objects.stream()
@@ -170,28 +169,19 @@ public class DrawObjectOnStackGenerator extends RasterGeneratorWithElement<Bound
                                                         object, objects.boundingBox())));
 
         // An object-mask that is relative to the extracted section
-        drawObjectsGenerator.setIterableElement(
-                new ObjectCollectionWithProperties(objectsForDrawing));
-
-        return drawObjectsGenerator.transform();
+        return drawObjectsGenerator.transform(new ObjectCollectionWithProperties(objectsForDrawing));
     }
 
     private Either<Dimensions, DisplayStack> createBackground() throws OutputWriteFailedException {
 
-        BoundedList<ObjectMask> element = getIterableElement();
+        BoundedList<ObjectMask> element = getElement();
         
         if (!backgroundGenerator.isPresent()) {
             // Exit early if there's no background to be extracted
             return Either.left(new Dimensions(element.boundingBox().extent()));
         }
 
-        try {
-            backgroundGenerator.get().setIterableElement(element.boundingBox());
-        } catch (SetOperationFailedException e) {
-            throw new OutputWriteFailedException(e);
-        }
-
-        Stack channelExtracted = backgroundGenerator.get().getGenerator().transform();
+        Stack channelExtracted = backgroundGenerator.get().transform(element.boundingBox());
 
         if (flatten) {
             channelExtracted = channelExtracted.maximumIntensityProjection();

@@ -28,7 +28,9 @@ package org.anchoranalysis.image.io.generator.raster.object.collection;
 
 import java.util.Optional;
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.Accessors;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.io.generator.raster.RasterGeneratorWithElement;
 import org.anchoranalysis.image.object.ObjectCollection;
@@ -39,16 +41,16 @@ import org.anchoranalysis.io.manifest.ManifestDescription;
  *
  * @author Owen Feehan
  */
-@RequiredArgsConstructor(access=AccessLevel.PROTECTED)
+@RequiredArgsConstructor(access=AccessLevel.PROTECTED) @Accessors(fluent=true)
 public abstract class ObjectsGenerator extends RasterGeneratorWithElement<ObjectCollection> {
 
     // START REQUIRED ARGUMENTS
-    private final Dimensions dimensions;
+    @Getter private final Dimensions dimensions;
     // END REQUIRED ARGUMENTS
 
     protected ObjectsGenerator(Dimensions dimensions, ObjectCollection objects) {
         this.dimensions = dimensions;
-        setIterableElement(objects);
+        assignElement(objects);
     }
     
     @Override
@@ -62,10 +64,6 @@ public abstract class ObjectsGenerator extends RasterGeneratorWithElement<Object
     }
 
     protected ObjectCollection getObjects() {
-        return getIterableElement();
-    }
-
-    public Dimensions dimensions() {
-        return dimensions;
+        return getElement();
     }
 }

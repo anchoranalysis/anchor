@@ -36,7 +36,7 @@ import org.anchoranalysis.core.name.store.StoreSupplier;
 import org.anchoranalysis.image.io.generator.raster.StackGenerator;
 import org.anchoranalysis.image.stack.NamedStacks;
 import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.io.generator.collection.IterableGeneratorOutputHelper;
+import org.anchoranalysis.io.generator.collection.GeneratorOutputHelper;
 import org.anchoranalysis.io.output.bean.allowed.OutputAllowed;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
@@ -104,7 +104,7 @@ public class StacksOutputter {
             ErrorReporter errorReporter,
             boolean suppressSubfoldersIn) {
         StackGenerator generator = createStackGenerator();
-        IterableGeneratorOutputHelper.output(
+        GeneratorOutputHelper.output(
                 namedCollection,
                 generator,
                 outputManager,
@@ -122,7 +122,7 @@ public class StacksOutputter {
             boolean suppressSubfoldersIn)
             throws OutputWriteFailedException {
         StackGenerator generator = createStackGenerator();
-        IterableGeneratorOutputHelper.outputWithException(
+        GeneratorOutputHelper.outputWithException(
                 namedCollection,
                 generator,
                 outputManager,

@@ -30,7 +30,7 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.io.generator.IterableGenerator;
+import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.generator.sequence.GeneratorSequenceNonIncrementalWriter;
 import org.anchoranalysis.io.manifest.sequencetype.IncrementalSequenceType;
 import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
@@ -95,8 +95,8 @@ public abstract class PeriodicSubfolderReporter<T>
         return new IntegerSuffixOutputNameStyle(outputName, 10);
     }
 
-    // We setup the manifest from an IterableGenerator
-    protected IncrementalSequenceType init(IterableGenerator<T> iterableGenerator)
+    // We setup the manifest from a Generator
+    protected IncrementalSequenceType init(Generator<T> generator)
             throws OutputWriteFailedException {
 
         IncrementalSequenceType sequenceType = new IncrementalSequenceType();
@@ -109,7 +109,7 @@ public abstract class PeriodicSubfolderReporter<T>
                         getParentOutputManager().getDelegate(),
                         outputStyle.getOutputName(),
                         outputStyle,
-                        iterableGenerator,
+                        generator,
                         true);
 
         this.sequenceWriter.start(sequenceType, -1);

@@ -32,7 +32,6 @@ import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.io.generator.Generator;
-import org.anchoranalysis.io.generator.IterableGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.manifest.file.FileType;
 import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
@@ -47,11 +46,10 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
  * @param <S> collection-type
  */
 @RequiredArgsConstructor
-public class SubfolderGenerator<T, S extends Collection<T>>
-        implements Generator<S>, IterableGenerator<S> {
+public class SubfolderGenerator<T, S extends Collection<T>> implements Generator<S> {
 
     // START REQUIRED ARGUMENTS
-    private final IterableGenerator<T> generator;
+    private final Generator<T> generator;
     private final String collectionOutputName;
     // END REQUIRED ARGUMENTS
 
@@ -62,7 +60,7 @@ public class SubfolderGenerator<T, S extends Collection<T>>
             throws OutputWriteFailedException {
 
         String filePhysicalName = outputNameStyle.getPhysicalName();
-        IterableGeneratorWriter.writeSubfolder(
+        GeneratorSubfolderWriter.writeSubfolder(
                 outputManager, filePhysicalName, collectionOutputName, generator, element, false);
     }
 
@@ -75,29 +73,24 @@ public class SubfolderGenerator<T, S extends Collection<T>>
 
         String filePhysicalName = outputNameStyle.getPhysicalName(index);
 
-        IterableGeneratorWriter.writeSubfolder(
+        GeneratorSubfolderWriter.writeSubfolder(
                 outputManager, filePhysicalName, collectionOutputName, generator, element, false);
         return 1;
     }
 
     @Override
     public Optional<FileType[]> getFileTypes(OutputWriteSettings outputWriteSettings) throws OperationFailedException {
-        return generator.getGenerator().getFileTypes(outputWriteSettings);
+        return generator.getFileTypes(outputWriteSettings);
     }
 
     @Override
-    public S getIterableElement() {
+    public S getElement() {
         return element;
     }
 
     @Override
-    public void setIterableElement(S element) throws SetOperationFailedException {
+    public void assignElement(S element) throws SetOperationFailedException {
         this.element = element;
-    }
-
-    @Override
-    public Generator<S> getGenerator() {
-        return this;
     }
 
     public static ManifestDescription createManifestDescription(String type) {

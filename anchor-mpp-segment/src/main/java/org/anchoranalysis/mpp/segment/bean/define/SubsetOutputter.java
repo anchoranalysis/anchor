@@ -28,38 +28,23 @@ package org.anchoranalysis.mpp.segment.bean.define;
 
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.name.provider.NamedProvider;
-import org.anchoranalysis.io.generator.IterableGenerator;
-import org.anchoranalysis.io.generator.collection.IterableGeneratorOutputHelper;
+import org.anchoranalysis.io.generator.Generator;
+import org.anchoranalysis.io.generator.collection.GeneratorOutputHelper;
 import org.anchoranalysis.io.output.bean.allowed.OutputAllowed;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import lombok.AllArgsConstructor;
 
+@AllArgsConstructor
 class SubsetOutputter<T> {
+    
     private NamedProvider<T> providers;
     private OutputAllowed oa;
-    private IterableGenerator<T> generator;
+    private Generator<T> generator;
     private BoundOutputManager outputManager;
     private String outputName;
     private String suffix;
     private boolean suppressSubfoldersIn;
-
-    public SubsetOutputter(
-            NamedProvider<T> providers,
-            OutputAllowed oa,
-            IterableGenerator<T> generator,
-            BoundOutputManager outputManager,
-            String outputName,
-            String suffix,
-            boolean suppressSubfoldersIn) {
-        super();
-        this.providers = providers;
-        this.oa = oa;
-        this.generator = generator;
-        this.outputManager = outputManager;
-        this.outputName = outputName;
-        this.suffix = suffix;
-        this.suppressSubfoldersIn = suppressSubfoldersIn;
-    }
 
     public void outputSubset(ErrorReporter errorReporter) {
 
@@ -67,8 +52,8 @@ class SubsetOutputter<T> {
             return;
         }
 
-        IterableGeneratorOutputHelper.output(
-                IterableGeneratorOutputHelper.subset(providers, oa, errorReporter),
+        GeneratorOutputHelper.output(
+                GeneratorOutputHelper.subset(providers, oa, errorReporter),
                 generator,
                 outputManager,
                 outputName,
@@ -83,8 +68,8 @@ class SubsetOutputter<T> {
             return;
         }
 
-        IterableGeneratorOutputHelper.outputWithException(
-                IterableGeneratorOutputHelper.subsetWithException(providers, oa),
+        GeneratorOutputHelper.outputWithException(
+                GeneratorOutputHelper.subsetWithException(providers, oa),
                 generator,
                 outputManager,
                 outputName,

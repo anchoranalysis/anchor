@@ -47,7 +47,7 @@ import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.voxel.Voxels;
-import org.anchoranalysis.io.generator.collection.IterableGeneratorWriter;
+import org.anchoranalysis.io.generator.collection.GeneratorSubfolderWriter;
 import org.anchoranalysis.io.output.bound.BindFailedException;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.test.image.io.OutputManagerFixture;
@@ -113,7 +113,7 @@ public class WriteIntoFolder implements TestRule {
 
         setupOutputManagerIfNecessary();
 
-        generatorStack.setIterableElement(stack);
+        generatorStack.assignElement(stack);
 
         outputManager.getWriterAlwaysAllowed().write(outputName, () -> generatorStack);
     }
@@ -122,7 +122,7 @@ public class WriteIntoFolder implements TestRule {
 
         setupOutputManagerIfNecessary();
 
-        generatorSingleObject.setIterableElement(object);
+        generatorSingleObject.assignElement(object);
 
         outputManager.getWriterAlwaysAllowed().write(outputName, () -> generatorSingleObject);
     }
@@ -170,7 +170,7 @@ public class WriteIntoFolder implements TestRule {
 
         setupOutputManagerIfNecessary();
 
-        IterableGeneratorWriter.writeSubfolder(
+        GeneratorSubfolderWriter.writeSubfolder(
                 outputManager, outputName, outputName, () -> generatorStack, stacks, true);
     }
 

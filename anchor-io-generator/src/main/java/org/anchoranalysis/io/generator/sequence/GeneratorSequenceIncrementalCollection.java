@@ -27,8 +27,7 @@
 package org.anchoranalysis.io.generator.sequence;
 
 import java.util.Collection;
-import org.anchoranalysis.core.index.SetOperationFailedException;
-import org.anchoranalysis.io.generator.IterableSingleFileTypeGenerator;
+import org.anchoranalysis.io.generator.SingleFileTypeGenerator;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import lombok.AllArgsConstructor;
 
@@ -37,28 +36,20 @@ public class GeneratorSequenceIncrementalCollection<T, C>
         implements GeneratorSequenceIncremental<T> {
 
     private Collection<C> collection;
-    private IterableSingleFileTypeGenerator<T, C> iterableGenerator;
+    private SingleFileTypeGenerator<T, C> generator;
 
     @Override
     public void add(T element) throws OutputWriteFailedException {
-
-        try {
-            iterableGenerator.setIterableElement(element);
-
-            C generatedElement = iterableGenerator.getGenerator().transform();
-            collection.add(generatedElement);
-        } catch (SetOperationFailedException e) {
-            throw new OutputWriteFailedException(e);
-        }
+        collection.add( generator.transform(element) );
     }
 
     @Override
     public void start() throws OutputWriteFailedException {
-        iterableGenerator.start();
+        generator.start();
     }
 
     @Override
     public void end() throws OutputWriteFailedException {
-        iterableGenerator.end();
+        generator.end();
     }
 }

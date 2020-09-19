@@ -33,7 +33,7 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.core.index.SetOperationFailedException;
-import org.anchoranalysis.io.generator.IterableGenerator;
+import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.manifest.file.FileType;
 import org.anchoranalysis.io.manifest.sequencetype.SequenceType;
@@ -47,7 +47,7 @@ public class GeneratorSequenceNonIncrementalWriter<T>
 
     private BoundOutputManager parentOutputManager = null;
 
-    private IterableGenerator<T> iterableGenerator;
+    private Generator<T> generator;
 
     private SequenceType sequenceType;
 
@@ -62,13 +62,13 @@ public class GeneratorSequenceNonIncrementalWriter<T>
             BoundOutputManager outputManager,
             String subfolderName,
             IndexableOutputNameStyle outputNameStyle,
-            IterableGenerator<T> iterableGenerator,
+            Generator<T> generator,
             boolean checkIfAllowed) {
         this(
                 outputManager,
                 subfolderName,
                 outputNameStyle,
-                iterableGenerator,
+                generator,
                 checkIfAllowed,
                 null);
     }
@@ -78,7 +78,7 @@ public class GeneratorSequenceNonIncrementalWriter<T>
             BoundOutputManager outputManager,
             String subfolderName,
             IndexableOutputNameStyle outputNameStyle,
-            IterableGenerator<T> iterableGenerator,
+            Generator<T> generator,
             boolean checkIfAllowed,
             ManifestDescription folderManifestDescription) {
 
@@ -94,7 +94,7 @@ public class GeneratorSequenceNonIncrementalWriter<T>
                         folderManifestDescription,
                         checkIfAllowed);
         this.parentOutputManager = outputManager;
-        this.iterableGenerator = iterableGenerator;
+        this.generator = generator;
     }
 
     public boolean isOn() {
@@ -106,8 +106,7 @@ public class GeneratorSequenceNonIncrementalWriter<T>
             // For now we only take the first FileType from the generator, we will have to modify this
             // in future
             FileType[] fileTypes =
-                    iterableGenerator
-                            .getGenerator()
+                    generator
                             .getFileTypes(this.parentOutputManager.getOutputWriteSettings())
                             .orElseThrow(
                                     () ->
@@ -124,7 +123,7 @@ public class GeneratorSequenceNonIncrementalWriter<T>
     public void add(T element, String index) throws OutputWriteFailedException {
 
         try {
-            iterableGenerator.setIterableElement(element);
+            generator.assignElement(element);
 
             // We delay the initialisation of subFolder until the first iteration and we have a
             // valid generator
@@ -141,7 +140,7 @@ public class GeneratorSequenceNonIncrementalWriter<T>
 
             sequenceType.update(index);
             this.sequenceWriter.write(
-                    () -> iterableGenerator.getGenerator(), String.valueOf(index));
+                    () -> generator, String.valueOf(index));
         } catch (InitException | SequenceTypeException | SetOperationFailedException e) {
             throw new OutputWriteFailedException(e);
         }
@@ -150,13 +149,13 @@ public class GeneratorSequenceNonIncrementalWriter<T>
     @Override
     public void start(SequenceType sequenceType, int totalNumAdd)
             throws OutputWriteFailedException {
-        iterableGenerator.start();
+        generator.start();
         this.sequenceType = sequenceType;
     }
 
     @Override
     public void end() throws OutputWriteFailedException {
-        iterableGenerator.end();
+        generator.end();
     }
 
     public Optional<BoundOutputManager> getSubFolderOutputManager() {

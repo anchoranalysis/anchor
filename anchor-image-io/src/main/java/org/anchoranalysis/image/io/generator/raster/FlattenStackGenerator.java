@@ -39,10 +39,6 @@ public class FlattenStackGenerator extends RasterGeneratorDelegateToRaster<Stack
     public FlattenStackGenerator(boolean padIfNec, String manifestFunction) {
         super( new StackGenerator(padIfNec, manifestFunction) );
     }
-
-    public FlattenStackGenerator(Stack element, boolean padIfNec, String manifestFunction) {
-        super( new StackGenerator(element, padIfNec, manifestFunction) );
-    }
     
     @Override
     protected Stack convertBeforeSetter(Stack element) throws OperationFailedException {

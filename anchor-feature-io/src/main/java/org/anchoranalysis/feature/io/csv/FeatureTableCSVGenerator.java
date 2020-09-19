@@ -29,14 +29,14 @@ package org.anchoranalysis.feature.io.csv;
 import java.nio.file.Path;
 import java.util.List;
 import org.anchoranalysis.io.error.AnchorIOException;
-import org.anchoranalysis.io.generator.IterableGenerator;
+import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.generator.csv.CSVGenerator;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.csv.CSVWriter;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 /**
- * Base class for a {@link IterableGenerator} that outputs a feature-table in CSV format.
+ * Base class for a {@link Generator} that outputs a feature-table in CSV format.
  *
  * @author Owen Feehan
  * @param <T> type of object that describes <i>all</i> rows of feature calculations.
@@ -61,7 +61,7 @@ public abstract class FeatureTableCSVGenerator<T> extends CSVGenerator<T> {
             throws OutputWriteFailedException {
 
         try (CSVWriter writer = CSVWriter.create(filePath)) {
-            writeFeaturesToCSV(writer, getIterableElement(), headerNames);
+            writeFeaturesToCSV(writer, getElement(), headerNames);
         } catch (AnchorIOException e) {
             throw new OutputWriteFailedException(e);
         }

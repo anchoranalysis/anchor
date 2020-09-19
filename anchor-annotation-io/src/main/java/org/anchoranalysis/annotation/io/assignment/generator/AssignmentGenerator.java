@@ -101,7 +101,7 @@ public class AssignmentGenerator extends RasterGeneratorWithElement<Assignment> 
         this.flatten = flatten;
         this.colorPool = colorPool;
 
-        setIterableElement(assignment);
+        assignElement(assignment);
         
         delegate = new StackGenerator(true, "assignmentComparison");
     }
@@ -114,7 +114,7 @@ public class AssignmentGenerator extends RasterGeneratorWithElement<Assignment> 
     @Override
     public Stack transform() throws OutputWriteFailedException {
 
-        Assignment assignment = getIterableElement();
+        Assignment assignment = getElement();
         
         ArrangeRaster stackProvider =
                 createTiledStackProvider(
@@ -124,9 +124,7 @@ public class AssignmentGenerator extends RasterGeneratorWithElement<Assignment> 
                         rightName);
 
         try {
-            Stack combined = stackProvider.create();
-            delegate.setIterableElement(combined);
-            return delegate.transform();
+            return delegate.transform(stackProvider.create());
 
         } catch (CreateException e) {
             throw new OutputWriteFailedException(e);

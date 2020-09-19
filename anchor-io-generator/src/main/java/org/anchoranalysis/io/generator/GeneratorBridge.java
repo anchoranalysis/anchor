@@ -42,18 +42,20 @@ import org.anchoranalysis.io.output.bound.BoundOutputManager;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 /**
- * Exposes a {@code IterableGenerator<S>} as if it was an {@code IterableGenerator<T>}.
+ * Exposes a {@code Generator<S>} as if it was an {@code Generator<T>}.
  *
  * @author Owen Feehan
  * @param <S> source-type
  * @param <T> destination-type
  */
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-public class IterableGeneratorBridge<S, T> implements Generator<S>, IterableGenerator<S> {
+public class GeneratorBridge<S, T> implements Generator<S> {
 
+    private S element;
+    
     // START REQUIRED ARGUMENTS
     /** The generator that accepts the destination type */
-    private final IterableGenerator<T> generator;
+    private final Generator<T> generator;
 
     /** Maps the source-type to one or more instances of the destination type */
     private final CheckedFunction<S, Stream<T>, ?> bridge;
@@ -70,9 +72,9 @@ public class IterableGeneratorBridge<S, T> implements Generator<S>, IterableGene
      * @return a generator that accepts source-types as iterators, but actually calls a generator
      *     that uses destination types
      */
-    public static <S, T> IterableGeneratorBridge<S, T> createOneToOne(
-            IterableGenerator<T> generator, CheckedFunction<S, T, ?> bridge) {
-        return new IterableGeneratorBridge<>(generator, item -> Stream.of(bridge.apply(item)));
+    public static <S, T> GeneratorBridge<S, T> createOneToOne(
+            Generator<T> generator, CheckedFunction<S, T, ?> bridge) {
+        return new GeneratorBridge<>(generator, item -> Stream.of(bridge.apply(item)));
     }
 
     /**
@@ -86,34 +88,27 @@ public class IterableGeneratorBridge<S, T> implements Generator<S>, IterableGene
      * @return a generator that accepts source-types as iterators, but actually calls a generator
      *     that uses destination types
      */
-    public static <S, T> IterableGeneratorBridge<S, T> createOneToMany(
-            IterableGenerator<T> generator, CheckedFunction<S, Stream<T>, ?> bridge) {
-        return new IterableGeneratorBridge<>(generator, bridge);
+    public static <S, T> GeneratorBridge<S, T> createOneToMany(
+            Generator<T> generator, CheckedFunction<S, Stream<T>, ?> bridge) {
+        return new GeneratorBridge<>(generator, bridge);
     }
 
-    private S element;
-
     @Override
-    public S getIterableElement() {
+    public S getElement() {
         return this.element;
     }
 
     @Override
-    public void setIterableElement(S element) throws SetOperationFailedException {
+    public void assignElement(S element) throws SetOperationFailedException {
         this.element = element;
         try {
             CheckedStream.forEach(
                     bridge.apply(element),
                     SetOperationFailedException.class,
-                    generator::setIterableElement);
+                    generator::assignElement);
         } catch (Exception e) {
             throw new SetOperationFailedException(e);
         }
-    }
-
-    @Override
-    public Generator<S> getGenerator() {
-        return this;
     }
 
     @Override
@@ -129,7 +124,7 @@ public class IterableGeneratorBridge<S, T> implements Generator<S>, IterableGene
     @Override
     public void write(OutputNameStyle outputNameStyle, BoundOutputManager outputManager)
             throws OutputWriteFailedException {
-        generator.getGenerator().write(outputNameStyle, outputManager);
+        generator.write(outputNameStyle, outputManager);
     }
 
     @Override
@@ -138,11 +133,11 @@ public class IterableGeneratorBridge<S, T> implements Generator<S>, IterableGene
             String index,
             BoundOutputManager outputManager)
             throws OutputWriteFailedException {
-        return generator.getGenerator().write(outputNameStyle, index, outputManager);
+        return generator.write(outputNameStyle, index, outputManager);
     }
 
     @Override
     public Optional<FileType[]> getFileTypes(OutputWriteSettings outputWriteSettings) throws OperationFailedException {
-        return generator.getGenerator().getFileTypes(outputWriteSettings);
+        return generator.getFileTypes(outputWriteSettings);
     }
 }

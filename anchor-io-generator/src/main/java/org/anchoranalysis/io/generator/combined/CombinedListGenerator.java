@@ -37,7 +37,6 @@ import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.core.name.value.NameValue;
 import org.anchoranalysis.io.generator.Generator;
-import org.anchoranalysis.io.generator.IterableGenerator;
 import org.anchoranalysis.io.generator.MultipleFileTypeGenerator;
 import org.anchoranalysis.io.manifest.file.FileType;
 import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
@@ -47,7 +46,7 @@ import org.anchoranalysis.io.output.bound.BoundOutputManager;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 /**
- * Several iterable-generators combined together with a common iteration-type
+ * Several generators combined together with a common iteration-type.
  *
  * <p>One generator must always exist. Zero generators is never allowed.
  *
@@ -58,30 +57,30 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
  * @param <T>
  */
 public class CombinedListGenerator<T>
-        implements MultipleFileTypeGenerator<T>, IterableGenerator<T> {
+        implements MultipleFileTypeGenerator<T> {
 
     private final CombinedList delegate = new CombinedList();
 
-    private final List<IterableGenerator<T>> list = new ArrayList<>();
+    private final List<Generator<T>> list = new ArrayList<>();
 
-    public CombinedListGenerator(NameValue<IterableGenerator<T>> namedGenerator) {
+    public CombinedListGenerator(NameValue<Generator<T>> namedGenerator) {
         add(namedGenerator.getValue(), Optional.of(namedGenerator.getName()));
     }
 
-    public CombinedListGenerator(Stream<NameValue<IterableGenerator<T>>> namedGenerators) {
+    public CombinedListGenerator(Stream<NameValue<Generator<T>>> namedGenerators) {
         namedGenerators.forEach(item -> add(item.getValue(), Optional.of(item.getName())));
         checkNonEmptyList();
     }
 
     @SafeVarargs
-    public CombinedListGenerator(IterableGenerator<T>... generator) {
+    public CombinedListGenerator(Generator<T>... generator) {
         Arrays.stream(generator).forEach(gen -> add(gen, Optional.empty()));
         checkNonEmptyList();
     }
 
     @Override
     public void start() throws OutputWriteFailedException {
-        for (IterableGenerator<T> generator : list) {
+        for (Generator<T> generator : list) {
             generator.start();
         }
     }
@@ -107,40 +106,35 @@ public class CombinedListGenerator<T>
     }
 
     @Override
-    public T getIterableElement() {
+    public T getElement() {
         if (list.isEmpty()) {
             throw new AnchorFriendlyRuntimeException("List of generators is empty");
         }
-        return list.get(0).getIterableElement();
+        return list.get(0).getElement();
     }
 
     @Override
-    public void setIterableElement(T element) throws SetOperationFailedException {
+    public void assignElement(T element) throws SetOperationFailedException {
 
-        for (IterableGenerator<T> generator : list) {
-            generator.setIterableElement(element);
+        for (Generator<T> generator : list) {
+            generator.assignElement(element);
         }
     }
 
-    @Override
-    public Generator<T> getGenerator() {
-        return this;
-    }
-
-    public void add(String name, IterableGenerator<T> element) {
+    public void add(String name, Generator<T> element) {
         add(element, Optional.of(name));
     }
 
     @Override
     public void end() throws OutputWriteFailedException {
-        for (IterableGenerator<T> generator : list) {
+        for (Generator<T> generator : list) {
             generator.end();
         }
     }
 
-    private void add(IterableGenerator<T> element, Optional<String> name) {
+    private void add(Generator<T> element, Optional<String> name) {
         list.add(element);
-        delegate.add(element.getGenerator(), name);
+        delegate.add(element, name);
     }
 
     private void checkNonEmptyList() {

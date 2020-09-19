@@ -69,7 +69,7 @@ public class DrawCroppedObjectsGenerator extends ObjectsOnRGBGenerator {
             throws CreateException {
         Extent extent = background.fold(Functions.identity(), DisplayStack::dimensions).extent();
 
-        ObjectCollection objects = getIterableElement().withoutProperties();
+        ObjectCollection objects = getElement().withoutProperties();
 
         if (objects.isEmpty()) {
             throw new CreateException("This generator expects at least one object to be present");
@@ -89,7 +89,7 @@ public class DrawCroppedObjectsGenerator extends ObjectsOnRGBGenerator {
     @Override
     protected ObjectCollectionWithProperties generateMasks() throws CreateException {
         // Create a new set of object-masks, relative to the box position
-        return relativeTo(getIterableElement().withoutProperties(), box);
+        return relativeTo(getElement().withoutProperties(), box);
     }
 
     private BoundingBox growBBBox(BoundingBox box, Extent containingExtent) {

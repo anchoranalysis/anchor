@@ -30,7 +30,6 @@ import java.util.Collection;
 import java.util.Optional;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.io.generator.Generator;
-import org.anchoranalysis.io.generator.IterableGenerator;
 import org.anchoranalysis.io.manifest.file.FileType;
 import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.namestyle.OutputNameStyle;
@@ -40,12 +39,19 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
+/**
+ * Writes a collection of items via a generator into a subfolder.
+ * 
+ * @author Owen Feehan
+ *
+ * @param <T>
+ */
 @RequiredArgsConstructor @AllArgsConstructor
-public class CollectionGenerator<T> implements Generator<Collection<T>>, IterableGenerator<Collection<T>> {
+public class CollectionGenerator<T> implements Generator<Collection<T>> {
 
     // START REQUIRED ARGUMENTS
     private final String subfolderName;
-    private final IterableGenerator<T> generator;
+    private final Generator<T> generator;
     private final BoundOutputManager outputManager;
     private final int numDigits;
     private final boolean checkIfAllowed;
@@ -103,16 +109,16 @@ public class CollectionGenerator<T> implements Generator<Collection<T>>, Iterabl
 
     @Override
     public Optional<FileType[]> getFileTypes(OutputWriteSettings outputWriteSettings) throws OperationFailedException {
-        return generator.getGenerator().getFileTypes(outputWriteSettings);
+        return generator.getFileTypes(outputWriteSettings);
     }
 
     @Override
-    public Collection<T> getIterableElement() {
+    public Collection<T> getElement() {
         return collection;
     }
 
     @Override
-    public void setIterableElement(Collection<T> element) {
+    public void assignElement(Collection<T> element) {
         this.collection = element;
     }
 
@@ -124,10 +130,5 @@ public class CollectionGenerator<T> implements Generator<Collection<T>>, Iterabl
     @Override
     public void end() throws OutputWriteFailedException {
         generator.end();
-    }
-
-    @Override
-    public Generator<Collection<T>> getGenerator() {
-        return this;
     }
 }

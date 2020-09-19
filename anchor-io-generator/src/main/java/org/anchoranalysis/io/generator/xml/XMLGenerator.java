@@ -26,10 +26,10 @@
 
 package org.anchoranalysis.io.generator.xml;
 
-import org.anchoranalysis.io.generator.OneStageGeneratorWithElement;
+import org.anchoranalysis.io.generator.OneStageGenerator;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 
-public abstract class XMLGenerator<T> extends OneStageGeneratorWithElement<T> {
+public abstract class XMLGenerator<T> extends OneStageGenerator<T> {
 
     @Override
     public String getFileExtension(OutputWriteSettings outputWriteSettings) {

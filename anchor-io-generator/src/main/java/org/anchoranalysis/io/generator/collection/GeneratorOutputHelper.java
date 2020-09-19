@@ -36,7 +36,7 @@ import org.anchoranalysis.core.name.provider.NameValueSet;
 import org.anchoranalysis.core.name.provider.NamedProvider;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.name.value.SimpleNameValue;
-import org.anchoranalysis.io.generator.IterableGenerator;
+import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.generator.sequence.GeneratorSequenceNonIncrementalRerouterErrors;
 import org.anchoranalysis.io.generator.sequence.GeneratorSequenceNonIncrementalWriter;
 import org.anchoranalysis.io.manifest.sequencetype.SetSequenceType;
@@ -46,12 +46,12 @@ import org.anchoranalysis.io.output.bound.BoundOutputManager;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class IterableGeneratorOutputHelper {
+public class GeneratorOutputHelper {
 
     // TODO remove padding for energyStack and switch to single channel outputs
     public static <T> void output(
             NamedProvider<T> providers,
-            IterableGenerator<T> generator,
+            Generator<T> generator,
             BoundOutputManager outputManager,
             String outputName,
             String prefix,
@@ -82,7 +82,7 @@ public class IterableGeneratorOutputHelper {
             try {
                 writer.add(providers.getException(name), name);
             } catch (NamedProviderGetException e) {
-                errorReporter.recordError(IterableGeneratorOutputHelper.class, e.summarize());
+                errorReporter.recordError(GeneratorOutputHelper.class, e.summarize());
             }
         }
 
@@ -91,7 +91,7 @@ public class IterableGeneratorOutputHelper {
 
     public static <T> void outputWithException(
             NamedProvider<T> providers,
-            IterableGenerator<T> generator,
+            Generator<T> generator,
             BoundOutputManager outputManager,
             String outputName,
             String suffix,
@@ -158,7 +158,7 @@ public class IterableGeneratorOutputHelper {
                 try {
                     out.add(new SimpleNameValue<>(name, providers.getException(name)));
                 } catch (NamedProviderGetException e) {
-                    errorReporter.recordError(IterableGeneratorOutputHelper.class, e.summarize());
+                    errorReporter.recordError(GeneratorOutputHelper.class, e.summarize());
                 }
             }
         }

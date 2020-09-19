@@ -29,7 +29,6 @@ package org.anchoranalysis.io.generator.serialized;
 import java.io.Serializable;
 import java.util.Optional;
 import org.anchoranalysis.io.generator.Generator;
-import org.anchoranalysis.io.generator.IterableGenerator;
 import org.anchoranalysis.io.generator.sequence.GeneratorSequenceIncrementalWriter;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.manifest.deserializer.bundle.Bundle;
@@ -41,8 +40,7 @@ import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
-public class BundledObjectOutputStreamGenerator<T extends Serializable>
-        implements Generator<T>, IterableGenerator<T> {
+public class BundledObjectOutputStreamGenerator<T extends Serializable> implements Generator<T> {
 
     private T element;
 
@@ -146,17 +144,12 @@ public class BundledObjectOutputStreamGenerator<T extends Serializable>
     }
 
     @Override
-    public T getIterableElement() {
+    public T getElement() {
         return element;
     }
 
     @Override
-    public void setIterableElement(T element) {
+    public void assignElement(T element) {
         this.element = element;
-    }
-
-    @Override
-    public Generator<T> getGenerator() {
-        return this;
     }
 }

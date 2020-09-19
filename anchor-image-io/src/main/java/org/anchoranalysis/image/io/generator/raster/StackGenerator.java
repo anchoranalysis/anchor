@@ -32,10 +32,12 @@ import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import lombok.AllArgsConstructor;
 
+@AllArgsConstructor
 public class StackGenerator extends RasterGeneratorWithElement<Stack> {
 
-    private boolean padIfNec;
+    private boolean padIfNecessary;
     private String manifestFunction;
 
     // Won't do any padding
@@ -43,18 +45,12 @@ public class StackGenerator extends RasterGeneratorWithElement<Stack> {
         this(false, manifestFunction);
     }
 
-    public StackGenerator(boolean padIfNec, String manifestFunction) {
-        super();
-        this.padIfNec = padIfNec;
-        this.manifestFunction = manifestFunction;
-    }
-
     // Notes pads the passed channel, would be better if it makes a new stack first
-    public StackGenerator(Stack stack, boolean padIfNec, String manifestFunction) {
+    public StackGenerator(boolean padIfNecessary, String manifestFunction, Stack stack) {
         super();
-        this.padIfNec = padIfNec;
+        this.padIfNecessary = padIfNecessary;
         this.manifestFunction = manifestFunction;
-        setIterableElement(stack);
+        assignElement(stack);
     }
 
     public static Stack generateStack(Stack stackIn, boolean padIfNec)
@@ -82,7 +78,7 @@ public class StackGenerator extends RasterGeneratorWithElement<Stack> {
 
     @Override
     public Stack transform() throws OutputWriteFailedException {
-        return generateStack(getIterableElement(), padIfNec);
+        return generateStack(getElement(), padIfNecessary);
     }
 
     @Override
@@ -92,7 +88,7 @@ public class StackGenerator extends RasterGeneratorWithElement<Stack> {
 
     @Override
     public boolean isRGB() {
-        int numberChannels = getIterableElement().getNumberChannels();
-        return numberChannels == 3 || (numberChannels == 2 && padIfNec);
+        int numberChannels = getElement().getNumberChannels();
+        return numberChannels == 3 || (numberChannels == 2 && padIfNecessary);
     }
 }

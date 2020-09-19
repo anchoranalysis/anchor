@@ -64,7 +64,7 @@ public abstract class MarksGeneratorBase extends RasterGeneratorWithElement<Colo
         this.marks = marks;
         this.idGetter = idGetter;
         this.regionMembership = regionMembership;
-        this.setIterableElement(marks);
+        this.assignElement(marks);
     }
 
     @Override
@@ -72,11 +72,11 @@ public abstract class MarksGeneratorBase extends RasterGeneratorWithElement<Colo
         try {
             RGBStack stack = ConvertDisplayStackToRGB.convert(background(marks.getStack()));
 
-            ColoredOverlayCollection oc =
+            ColoredOverlayCollection overlays =
                     OverlayCollectionMarkFactory.createColor(
                             marks.getMarksColored(), regionMembership);
 
-            writer.writeOverlays(oc, stack, idGetter);
+            writer.writeOverlays(overlays, stack, idGetter);
 
             return stack.asStack();
 

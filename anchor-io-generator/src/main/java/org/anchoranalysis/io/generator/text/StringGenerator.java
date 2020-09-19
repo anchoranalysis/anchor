@@ -29,12 +29,12 @@ package org.anchoranalysis.io.generator.text;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Optional;
-import org.anchoranalysis.io.generator.OneStageGeneratorWithElement;
+import org.anchoranalysis.io.generator.OneStageGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
-public class StringGenerator extends OneStageGeneratorWithElement<String> {
+public class StringGenerator extends OneStageGenerator<String> {
 
     public StringGenerator(String element) {
         super(element);
@@ -45,7 +45,7 @@ public class StringGenerator extends OneStageGeneratorWithElement<String> {
             throws OutputWriteFailedException {
 
         try {
-            WriteStringToFile.apply( getIterableElement(), filePath);
+            WriteStringToFile.apply( getElement(), filePath);
         } catch (IOException e) {
             throw new OutputWriteFailedException(e);
         }

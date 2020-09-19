@@ -30,7 +30,7 @@ import java.util.Collection;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.functional.function.CheckedSupplier;
-import org.anchoranalysis.io.generator.IterableGenerator;
+import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.generator.sequence.CollectionGenerator;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
@@ -39,14 +39,20 @@ import org.anchoranalysis.io.output.writer.WritableItem;
 import org.anchoranalysis.io.output.writer.Writer;
 import org.anchoranalysis.io.output.writer.WriterRouterErrors;
 
+/**
+ * Writes a collection of items via a generator into a subfolder.
+ * 
+ * @author Owen Feehan
+ *
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class IterableGeneratorWriter {
+public class GeneratorSubfolderWriter {
 
     public static <T> void writeSubfolder(
             BoundOutputManager outputManager,
             String outputNameFolder,
             String outputNameSubfolder,
-            IterableGenerator<T> generatorIterable,
+            Generator<T> generatorIterable,
             Collection<T> collection,
             boolean checkIfAllowed)
             throws OutputWriteFailedException {
@@ -66,7 +72,7 @@ public class IterableGeneratorWriter {
             BoundOutputManagerRouteErrors outputManager,
             String outputNameFolder,
             String outputNameSubfolder,
-            CheckedSupplier<IterableGenerator<T>, OutputWriteFailedException> generatorIterable,
+            CheckedSupplier<Generator<T>, OutputWriteFailedException> generatorIterable,
             Collection<T> collection,
             boolean checkIfAllowed) {
         extractWriter(outputManager, checkIfAllowed)
@@ -101,7 +107,7 @@ public class IterableGeneratorWriter {
     private static <T> WritableItem createOutputWriter(
             Collection<T> collection,
             String outputNameFolder,
-            IterableGenerator<T> generatorIterable,
+            Generator<T> generatorIterable,
             BoundOutputManager outputManager,
             boolean checkIfAllowed) {
         return new CollectionGenerator<>(

@@ -123,7 +123,7 @@ public class SubfolderWriter implements SequenceWriter {
         }
     }
 
-    // Requires the iterableGenerator to be in a valid state
+    // Requires the generator to be in a valid state
     private ManifestDescription createFolderDescription(FileType[] fileTypes) {
         if (folderManifestDescription != null) {
             return folderManifestDescription;

@@ -64,21 +64,21 @@ public class RasterGeneratorDelegateToDisplayStack<T> extends RasterGenerator<T>
 
     @Override
     public Optional<ManifestDescription> createManifestDescription() {
-        return delegate.getGenerator().createManifestDescription();
+        return delegate.createManifestDescription();
     }
 
     @Override
     public Stack transform() throws OutputWriteFailedException {
-        return delegate.getGenerator().transform().deriveStack(false);
+        return delegate.transform().deriveStack(false);
     }
 
     @Override
-    public T getIterableElement() {
-        return delegate.getIterableElement();
+    public T getElement() {
+        return delegate.getElement();
     }
 
     @Override
-    public void setIterableElement(T element) throws SetOperationFailedException {
-        delegate.setIterableElement(element);
+    public void assignElement(T element) throws SetOperationFailedException {
+        delegate.assignElement(element);
     }
 }

@@ -55,10 +55,10 @@ public class MarksFlattenedGenerator extends MarksGeneratorBase {
 
     public MarksFlattenedGenerator(
             DrawObject drawObject,
-            ColoredMarksWithDisplayStack cws,
+            ColoredMarksWithDisplayStack marks,
             IDGetter<Overlay> idGetter,
             RegionMembershipWithFlags regionMembership) {
-        super(createWriter(drawObject), cws, idGetter, regionMembership);
+        super(createWriter(drawObject), marks, idGetter, regionMembership);
     }
 
     @Override

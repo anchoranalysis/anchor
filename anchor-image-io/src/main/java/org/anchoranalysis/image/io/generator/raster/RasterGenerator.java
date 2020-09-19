@@ -32,7 +32,7 @@ import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.bean.rasterwriter.RasterWriter;
 import org.anchoranalysis.image.io.rasterwriter.RasterWriteOptions;
 import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.io.generator.TwoStageGenerator;
+import org.anchoranalysis.io.generator.SingleFileTypeGenerator;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
@@ -41,7 +41,7 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
  * @author Owen Feehan
  *
  */
-public abstract class RasterGenerator<T> extends TwoStageGenerator<T,Stack> {
+public abstract class RasterGenerator<T> extends SingleFileTypeGenerator<T,Stack> {
 
     public abstract boolean isRGB() throws OutputWriteFailedException;
 
@@ -77,10 +77,5 @@ public abstract class RasterGenerator<T> extends TwoStageGenerator<T,Stack> {
     @Override
     public String getFileExtension(OutputWriteSettings outputWriteSettings) throws OperationFailedException {
         return RasterWriterUtilities.fileExtensionForDefaultRasterWriter(outputWriteSettings, rasterOptions);
-    }
-
-    @Override
-    public final TwoStageGenerator<T,Stack> getGenerator() {
-        return this;
     }
 }

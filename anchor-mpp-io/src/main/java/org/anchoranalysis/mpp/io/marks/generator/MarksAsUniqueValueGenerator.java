@@ -40,17 +40,17 @@ import org.anchoranalysis.mpp.mark.MarkCollection;
 public class MarksAsUniqueValueGenerator extends RasterGeneratorWithElement<MarkCollection> {
 
     private ObjectsAsUniqueValueGenerator delegate;
-    private RegionMembershipWithFlags rm;
+    private RegionMembershipWithFlags regionMembership;
 
-    public MarksAsUniqueValueGenerator(Dimensions dimensions, RegionMembershipWithFlags rm) {
+    public MarksAsUniqueValueGenerator(Dimensions dimensions, RegionMembershipWithFlags regionMembership) {
         delegate = new ObjectsAsUniqueValueGenerator(dimensions);
-        this.rm = rm;
+        this.regionMembership = regionMembership;
     }
 
     public MarksAsUniqueValueGenerator(
-            Dimensions dimensions, RegionMembershipWithFlags rm, MarkCollection marks) {
-        this(dimensions, rm);
-        setIterableElement(marks);
+            Dimensions dimensions, RegionMembershipWithFlags regionMembership, MarkCollection marks) {
+        this(dimensions, regionMembership);
+        assignElement(marks);
     }
 
     @Override
@@ -62,9 +62,8 @@ public class MarksAsUniqueValueGenerator extends RasterGeneratorWithElement<Mark
     public Stack transform() throws OutputWriteFailedException {
 
         ObjectCollectionWithProperties objects =
-                getIterableElement().deriveObjects(delegate.dimensions(), this.rm);
-        delegate.setIterableElement(objects.withoutProperties());
-        return delegate.transform();
+                getElement().deriveObjects(delegate.dimensions(), this.regionMembership);
+        return delegate.transform(objects.withoutProperties());
     }
 
     @Override

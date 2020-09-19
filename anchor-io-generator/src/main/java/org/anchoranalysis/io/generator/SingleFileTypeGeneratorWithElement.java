@@ -27,53 +27,32 @@
 package org.anchoranalysis.io.generator;
 
 import org.anchoranalysis.core.index.SetOperationFailedException;
-import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import lombok.NoArgsConstructor;
 
 /**
- * A {@link Generator} that can repeatedly write different elements of the same type.
- *
+ * A {@link SingleFileTypeGenerator} with an associated element.
+ * 
  * @author Owen Feehan
+ *
  * @param <T> iteration-type
+ * @param <S> intermediate-type that is created in the first stage after transforming an element of type {@code T}.
  */
-public interface IterableGenerator<T> {
+@NoArgsConstructor
+public abstract class SingleFileTypeGeneratorWithElement<T,S> extends SingleFileTypeGenerator<T,S> {
 
-    /** 
-     * Gets the current element.
-     * 
-     * @return the element that will be written at next write-operation.
-     **/
-    T getIterableElement();
-
-    /**
-     * Sets a new current element to be written at next write-operation.
-     *
-     * @param element the element
-     * @throws SetOperationFailedException
-     */
-    void setIterableElement(T element) throws SetOperationFailedException;
-
-    /**
-     * This should always be called once before any write-operations.
-     * 
-     * @throws OutputWriteFailedException
-     */
-    default void start() throws OutputWriteFailedException {
-        // NOTHING TO DO
+    private T element;
+    
+    public SingleFileTypeGeneratorWithElement(T element) {
+        this.element = element;
+    }
+    
+    @Override
+    public T getElement() {
+        return element;
     }
 
-    /**
-     * This should always be called once after all write-operations are completed.
-     * 
-     * @throws OutputWriteFailedException
-     */
-    default void end() throws OutputWriteFailedException {
-        // NOTHING TO DO
+    @Override
+    public void assignElement(T element) throws SetOperationFailedException {
+        this.element = element;
     }
-
-    /**
-     * The generator that will be used for write-operations.
-     * 
-     * @return the associated generator
-     */
-    Generator<T> getGenerator();
 }

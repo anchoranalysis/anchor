@@ -69,7 +69,7 @@ public class FeatureListCSVGeneratorHorizontal
             FeatureNameList featureNames,
             ResultsVectorCollection results) {
         this(manifestFunction, featureNames);
-        setIterableElement(results);
+        assignElement(results);
     }
 
     @Override

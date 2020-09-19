@@ -27,7 +27,7 @@
 package org.anchoranalysis.io.generator.sequence;
 
 import java.util.Optional;
-import org.anchoranalysis.io.generator.IterableGenerator;
+import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.manifest.sequencetype.IncrementalSequenceType;
 import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
@@ -38,7 +38,7 @@ public class GeneratorSequenceIncrementalWriter<T> implements GeneratorSequenceI
 
     private GeneratorSequenceNonIncrementalWriter<T> delegate;
 
-    private int iter = 0;
+    private int iteration = 0;
     private int startIndex = 0;
 
     // Automatically create a ManifestDescription for the folder from the Generator
@@ -46,7 +46,7 @@ public class GeneratorSequenceIncrementalWriter<T> implements GeneratorSequenceI
             BoundOutputManager outputManager,
             String subfolderName,
             IndexableOutputNameStyle outputNameStyle,
-            IterableGenerator<T> iterableGenerator,
+            Generator<T> generator,
             int startIndex,
             boolean checkIfAllowed) {
         delegate =
@@ -54,9 +54,9 @@ public class GeneratorSequenceIncrementalWriter<T> implements GeneratorSequenceI
                         outputManager,
                         subfolderName,
                         outputNameStyle,
-                        iterableGenerator,
+                        generator,
                         checkIfAllowed);
-        this.iter = startIndex;
+        this.iteration = startIndex;
         this.startIndex = startIndex;
     }
 
@@ -65,7 +65,7 @@ public class GeneratorSequenceIncrementalWriter<T> implements GeneratorSequenceI
             BoundOutputManager outputManager,
             String subfolderName,
             IndexableOutputNameStyle outputNameStyle,
-            IterableGenerator<T> iterableGenerator,
+            Generator<T> generator,
             ManifestDescription folderManifestDescription,
             int startIndex,
             boolean checkIfAllowed) {
@@ -74,7 +74,7 @@ public class GeneratorSequenceIncrementalWriter<T> implements GeneratorSequenceI
                         outputManager,
                         subfolderName,
                         outputNameStyle,
-                        iterableGenerator,
+                        generator,
                         checkIfAllowed,
                         folderManifestDescription);
         this.startIndex = startIndex;
@@ -88,12 +88,12 @@ public class GeneratorSequenceIncrementalWriter<T> implements GeneratorSequenceI
     @Override
     public void add(T element) throws OutputWriteFailedException {
         try {
-            delegate.add(element, String.valueOf(iter));
+            delegate.add(element, String.valueOf(iteration));
         } finally {
             // We always update the index, even if an exception occurred. This is because:
             //  1. By design, it shouldn't change the intended indexing.
             //  2. A downstream generator has already updated its sequence-type.
-            iter++;
+            iteration++;
         }
     }
 

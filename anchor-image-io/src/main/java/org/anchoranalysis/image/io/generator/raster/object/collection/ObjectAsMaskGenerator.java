@@ -64,11 +64,11 @@ public class ObjectAsMaskGenerator extends RasterGeneratorWithElement<ObjectMask
     @Override
     public Stack transform() throws OutputWriteFailedException {
 
-        if (getIterableElement() == null) {
+        if (getElement() == null) {
             throw new OutputWriteFailedException("no mutable element set");
         }
 
-        return new Stack(createChannelFromMask(getIterableElement(), resolution));
+        return new Stack(createChannelFromMask(getElement(), resolution));
     }
 
     @Override

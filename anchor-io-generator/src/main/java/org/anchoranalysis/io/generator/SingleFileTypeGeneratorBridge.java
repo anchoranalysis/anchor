@@ -37,8 +37,8 @@ import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 /**
- * Allows us to call an {@code IterableSingleFileTypeGenerator<V,S>} as if it was an {@code
- * IterableSingleFileTypeGenerator<T,S>} using an function to connect the two
+ * Allows us to call an {@code SingleFileTypeGenerator<V,S>} as if it was an {@code
+ * SingleFileTypeGenerator<T,S>} using an function to connect the two
  *
  * @author Owen Feehan
  * @param <S> generator-type
@@ -46,66 +46,54 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
  * @param <V> hidden-iterator-type
  */
 @RequiredArgsConstructor
-public class IterableSingleFileTypeGeneratorBridge<S, T, V> extends SingleFileTypeGenerator<T,S> implements IterableSingleFileTypeGenerator<T, S>, IterableGenerator<T> {
+public class SingleFileTypeGeneratorBridge<S, T, V> extends SingleFileTypeGeneratorWithElement<T,S> {
 
     // START REQUIRED ARGUMENTS
-    private final IterableSingleFileTypeGenerator<V, S> internalGenerator;
+    private final SingleFileTypeGenerator<V, S> delegate;
     private final CheckedFunction<T, V, ? extends Throwable> elementBridge;
     // END REQUIRED ARGUMENTS
 
-    private T element;
-
     @Override
-    public T getIterableElement() {
-        return this.element;
-    }
-
-    @Override
-    public void setIterableElement(T element) throws SetOperationFailedException {
-        this.element = element;
+    public void assignElement(T element) throws SetOperationFailedException {
+        super.assignElement(element);
         try {
             V bridgedElement = elementBridge.apply(element);
-            internalGenerator.setIterableElement(bridgedElement);
+            delegate.assignElement(bridgedElement);
         } catch (Exception e) {
             throw new SetOperationFailedException(e);
         }
     }
 
     @Override
-    public SingleFileTypeGenerator<T,S> getGenerator() {
-        return this;
-    }
-
-    @Override
     public void start() throws OutputWriteFailedException {
-        internalGenerator.start();
+        delegate.start();
     }
 
     @Override
     public void end() throws OutputWriteFailedException {
-        internalGenerator.end();
+        delegate.end();
     }
 
 
     @Override
     public String getFileExtension(OutputWriteSettings outputWriteSettings)
             throws OperationFailedException {
-        return internalGenerator.getGenerator().getFileExtension(outputWriteSettings);
+        return delegate.getFileExtension(outputWriteSettings);
     }
 
     @Override
     public Optional<ManifestDescription> createManifestDescription() {
-        return internalGenerator.getGenerator().createManifestDescription();
+        return delegate.createManifestDescription();
     }
 
     @Override
     public S transform() throws OutputWriteFailedException {
-        return internalGenerator.getGenerator().transform();
+        return delegate.transform();
     }
 
     @Override
     public void writeToFile(OutputWriteSettings outputWriteSettings, Path filePath)
             throws OutputWriteFailedException {
-        internalGenerator.getGenerator().writeToFile(outputWriteSettings, filePath);
+        delegate.writeToFile(outputWriteSettings, filePath);
     }
 }

@@ -94,13 +94,13 @@ class ObjectFeatureListCSVGenerator extends CSVGenerator<ObjectCollection> {
         // We calculate a results vector for each object, across all features in memory. This is
         // more efficient
         ResultsVectorCollection rvc = new ResultsVectorCollection();
-        for (ObjectMask objectMask : getIterableElement()) {
+        for (ObjectMask objectMask : getElement()) {
             rvc.add(
                     featureCalculator.calculateSuppressErrors(
                             new FeatureInputSingleObject(objectMask), logger.errorReporter()));
         }
 
-        delegate.setIterableElement(rvc);
+        delegate.assignElement(rvc);
         delegate.writeToFile(outputWriteSettings, filePath);
     }
 

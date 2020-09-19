@@ -32,7 +32,7 @@ import lombok.AllArgsConstructor;
 import java.nio.file.Path;
 import java.util.Optional;
 import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.io.generator.OneStageGeneratorWithElement;
+import org.anchoranalysis.io.generator.OneStageGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 
@@ -42,7 +42,7 @@ import org.anchoranalysis.io.output.bean.OutputWriteSettings;
  * @author Owen Feehan
  */
 @AllArgsConstructor
-public class HDF5ObjectsGenerator extends OneStageGeneratorWithElement<ObjectCollection> {
+public class HDF5ObjectsGenerator extends OneStageGenerator<ObjectCollection> {
 
     // Name of the attribute in the root of the HDF5 that stores the number of objects
     public static final String NUM_OBJECTS_ATTRIBUTE_NAME = "numberObjects";
@@ -64,14 +64,14 @@ public class HDF5ObjectsGenerator extends OneStageGeneratorWithElement<ObjectCol
 
     public static void writeObjectsToFile(ObjectCollection objects, Path filePath) {
         HDF5ObjectsGenerator generator = new HDF5ObjectsGenerator(true);
-        generator.setIterableElement(objects);
+        generator.assignElement(objects);
         generator.writeToFile(new OutputWriteSettings(), filePath);
     }
 
     @Override
     public void writeToFile(OutputWriteSettings outputWriteSettings, Path filePath) {
         // Write a HDF file
-        writeObjects(getIterableElement(), filePath);
+        writeObjects(getElement(), filePath);
     }
 
     @Override

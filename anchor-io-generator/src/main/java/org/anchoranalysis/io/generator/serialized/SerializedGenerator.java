@@ -28,23 +28,23 @@ package org.anchoranalysis.io.generator.serialized;
 
 import java.nio.file.Path;
 import java.util.Optional;
-import org.anchoranalysis.io.generator.OneStageGeneratorWithElement;
+import org.anchoranalysis.io.generator.OneStageGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
-public abstract class SerializedIterableGenerator<T> extends OneStageGeneratorWithElement<T> {
+public abstract class SerializedGenerator<T> extends OneStageGenerator<T> {
 
     private Optional<String> manifestFunction;
 
-    public SerializedIterableGenerator(Optional<String> manifestFunction) {
+    public SerializedGenerator(Optional<String> manifestFunction) {
         super();
         this.manifestFunction = manifestFunction;
     }
 
-    public SerializedIterableGenerator(T element, Optional<String> manifestFunction) {
+    public SerializedGenerator(T element, Optional<String> manifestFunction) {
         super();
-        setIterableElement(element);
+        assignElement(element);
         this.manifestFunction = manifestFunction;
     }
 
@@ -52,11 +52,11 @@ public abstract class SerializedIterableGenerator<T> extends OneStageGeneratorWi
     public void writeToFile(OutputWriteSettings outputWriteSettings, Path filePath)
             throws OutputWriteFailedException {
 
-        if (getIterableElement() == null) {
+        if (getElement() == null) {
             throw new OutputWriteFailedException("no mutable element set");
         }
 
-        writeToFile(outputWriteSettings, filePath, getIterableElement());
+        writeToFile(outputWriteSettings, filePath, getElement());
     }
 
     @Override

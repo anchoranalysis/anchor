@@ -31,7 +31,6 @@ import java.util.Optional;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.io.generator.OneStageGenerator;
-import org.anchoranalysis.io.generator.SingleFileTypeGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
@@ -39,7 +38,6 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 public class DisplayStackGenerator extends OneStageGenerator<DisplayStack> {
 
     private StackGenerator delegate;
-    private DisplayStack item;
 
     public DisplayStackGenerator(String manifestFunction) {
         delegate = new StackGenerator(manifestFunction);
@@ -52,29 +50,15 @@ public class DisplayStackGenerator extends OneStageGenerator<DisplayStack> {
 
     @Override
     public void end() throws OutputWriteFailedException {
+        super.end();
         delegate.end();
     }
 
     @Override
-    public DisplayStack getIterableElement() {
-        return item;
-    }
+    public void assignElement(DisplayStack element) {
+        super.assignElement(element);
 
-    @Override
-    public void setIterableElement(DisplayStack element) {
-        this.item = element;
-
-        delegate.setIterableElement(element.deriveStack(false));
-    }
-
-    @Override
-    public SingleFileTypeGenerator<DisplayStack,DisplayStack> getGenerator() {
-        return this;
-    }
-
-    @Override
-    public DisplayStack transform() throws OutputWriteFailedException {
-        return item;
+        delegate.assignElement(element.deriveStack(false));
     }
 
     @Override

@@ -29,7 +29,7 @@ package org.anchoranalysis.image.io.bean.seed;
 import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.io.generator.raster.object.ObjectWithBoundingBoxGenerator;
 import org.anchoranalysis.image.seed.SeedCollection;
-import org.anchoranalysis.io.generator.collection.IterableGeneratorWriter;
+import org.anchoranalysis.io.generator.collection.GeneratorSubfolderWriter;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 
 public class ObjectOutputter extends SeedCollectionOutputter {
@@ -43,7 +43,7 @@ public class ObjectOutputter extends SeedCollectionOutputter {
             Resolution resolution,
             BoundOutputManagerRouteErrors outputManager) {
 
-        IterableGeneratorWriter.writeSubfolder(
+        GeneratorSubfolderWriter.writeSubfolder(
                 outputManager,
                 "seeds",
                 "seeds",

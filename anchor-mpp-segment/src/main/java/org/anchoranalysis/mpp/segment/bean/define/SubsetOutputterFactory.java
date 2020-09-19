@@ -33,7 +33,7 @@ import org.anchoranalysis.core.name.store.NamedProviderStore;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.io.objects.ObjectCollectionWriter;
 import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.io.generator.IterableGenerator;
+import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.generator.histogram.HistogramCSVGenerator;
 import org.anchoranalysis.io.generator.serialized.XStreamGenerator;
 import org.anchoranalysis.io.output.bean.allowed.OutputAllowed;
@@ -85,7 +85,7 @@ class SubsetOutputterFactory {
 
     private <T> SubsetOutputter<T> create(
             NamedProviderStore<T> store,
-            IterableGenerator<T> generator,
+            Generator<T> generator,
             Function<BoundOutputManagerRouteErrors, OutputAllowed> outputAllowedFunc,
             String id) {
         return new SubsetOutputter<>(

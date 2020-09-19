@@ -52,12 +52,12 @@ public class ExtractBoundingBoxAreaFromStackGenerator extends RasterGeneratorWit
     @Override
     public Stack transform() throws OutputWriteFailedException {
 
-        if (getIterableElement() == null) {
+        if (getElement() == null) {
             throw new OutputWriteFailedException("no mutable element set");
         }
 
         try {
-            return background.extractRegionFromStack(getIterableElement());
+            return background.extractRegionFromStack(getElement());
 
         } catch (CreateException e) {
             throw new OutputWriteFailedException(e);

@@ -47,22 +47,22 @@ public class ChannelGenerator extends RasterGeneratorWithElement<Channel> {
     
     public ChannelGenerator(String manifestFunction, Channel channel) {
         this(manifestFunction);
-        setIterableElement(channel);
+        assignElement(channel);
     }
 
     public ChannelGenerator(Channel channel) {
         this("channel");
-        setIterableElement(channel);
+        assignElement(channel);
     }
 
     @Override
     public Stack transform() throws OutputWriteFailedException {
 
-        if (getIterableElement() == null) {
+        if (getElement() == null) {
             throw new OutputWriteFailedException("no mutable element set");
         }
 
-        return new Stack(getIterableElement());
+        return new Stack(getElement());
     }
 
     @Override

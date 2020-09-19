@@ -30,25 +30,25 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Optional;
 import org.anchoranalysis.core.params.KeyValueParams;
-import org.anchoranalysis.io.generator.OneStageGeneratorWithElement;
+import org.anchoranalysis.io.generator.OneStageGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
-public class KeyValueParamsGenerator extends OneStageGeneratorWithElement<KeyValueParams> {
+public class KeyValueParamsGenerator extends OneStageGenerator<KeyValueParams> {
 
     private final String manifestFunction;
 
     public KeyValueParamsGenerator(KeyValueParams params, String manifestFunction) {
         this.manifestFunction = manifestFunction;
-        setIterableElement(params);
+        assignElement(params);
     }
     
     @Override
     public void writeToFile(OutputWriteSettings outputWriteSettings, Path filePath)
             throws OutputWriteFailedException {
         try {
-            getIterableElement().writeToFile(filePath);
+            getElement().writeToFile(filePath);
         } catch (IOException e) {
             throw new OutputWriteFailedException(e);
         }

@@ -40,14 +40,14 @@ public class XMLConfigurationWrapperGenerator extends XMLGenerator<XMLConfigurat
 
     public XMLConfigurationWrapperGenerator(XMLConfiguration config) {
         super();
-        setIterableElement(config);
+        assignElement(config);
     }
 
     @Override
     public void writeToFile(OutputWriteSettings outputWriteSettings, Path filePath)
             throws OutputWriteFailedException {
         try {
-            XmlOutputter.writeXmlToFile(getIterableElement().getDocument(), filePath);
+            XmlOutputter.writeXmlToFile(getElement().getDocument(), filePath);
         } catch (TransformerException | IOException e) {
             throw new OutputWriteFailedException(e);
         }

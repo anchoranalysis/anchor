@@ -34,7 +34,7 @@ import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.image.bean.arrangeraster.ArrangeRasterBean;
 import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.io.generator.IterableSingleFileTypeGenerator;
+import org.anchoranalysis.io.generator.SingleFileTypeGenerator;
 
 /**
  * Combines a number of generators of Raster images by tiling their outputs together
@@ -51,14 +51,14 @@ public class CombineRasterGenerator<T> extends AnchorBean<CombineRasterGenerator
 
     // A list of all generators to be tiled (left to right, then top to bottom)
     @BeanField @Getter @Setter
-    private List<IterableSingleFileTypeGenerator<T, Stack>> generatorList = new ArrayList<>();
+    private List<SingleFileTypeGenerator<T, Stack>> generatorList = new ArrayList<>();
     // END BEAN PROPERTIES
 
-    public void add(IterableSingleFileTypeGenerator<T, Stack> generator) {
+    public void add(SingleFileTypeGenerator<T, Stack> generator) {
         generatorList.add(generator);
     }
 
-    public IterableSingleFileTypeGenerator<T, Stack> createGenerator() {
+    public SingleFileTypeGenerator<T, Stack> createGenerator() {
         return new CombineGenerator<>(arrange, generatorList);
     }
 

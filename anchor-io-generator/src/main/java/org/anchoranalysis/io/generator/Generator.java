@@ -28,12 +28,16 @@ package org.anchoranalysis.io.generator;
 
 import java.util.Optional;
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.io.manifest.file.FileType;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.writer.WritableItem;
 
 /**
  * A class that writes a particular type of object(s) to the file-system.
+ * 
+ * <p>The objects to be written are always a function only of the current <i>element</i>.
  * 
  * @author Owen Feehan
  * @param <T> input-type for generator (that can also be iterated over)
@@ -48,4 +52,37 @@ public interface Generator<T> extends WritableItem {
      * @throws OperationFailedException if anything goes wrong
      */
     Optional<FileType[]> getFileTypes(OutputWriteSettings outputWriteSettings) throws OperationFailedException;
+    
+    /** 
+     * Gets the current element.
+     * 
+     * @return the element that will be written at next write-operation.
+     **/
+    T getElement();
+
+    /**
+     * Assigns the current element to be written at next write-operation.
+     *
+     * @param element the element
+     * @throws SetOperationFailedException
+     */
+    void assignElement(T element) throws SetOperationFailedException;
+
+    /**
+     * This should always be called once before any write-operations.
+     * 
+     * @throws OutputWriteFailedException
+     */
+    default void start() throws OutputWriteFailedException {
+        // NOTHING TO DO
+    }
+
+    /**
+     * This should always be called once after all write-operations are completed.
+     * 
+     * @throws OutputWriteFailedException
+     */
+    default void end() throws OutputWriteFailedException {
+        // NOTHING TO DO
+    }
 }

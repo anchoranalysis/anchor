@@ -7,12 +7,12 @@ public abstract class RasterGeneratorWithElement<T> extends RasterGenerator<T> {
     private T element;
 
     @Override
-    public final T getIterableElement() {
+    public final T getElement() {
         return element;
     }
 
     @Override
-    public final void setIterableElement(T element) {
+    public final void assignElement(T element) {
         this.element = element;
     }
         

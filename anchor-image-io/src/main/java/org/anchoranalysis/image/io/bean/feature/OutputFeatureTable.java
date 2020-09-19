@@ -78,7 +78,7 @@ public class OutputFeatureTable extends ImageBean<OutputFeatureTable> {
             ObjectFeatureListCSVGenerator generator =
                     new ObjectFeatureListCSVGenerator(
                             feature, getInitializationParameters().getSharedObjects(), logger);
-            generator.setIterableElement(objects);
+            generator.assignElement(objects);
             return generator;
         } catch (CreateException e) {
             throw new OutputWriteFailedException(e);

@@ -69,7 +69,7 @@ public class DrawObjectsGenerator extends ObjectsOnRGBGenerator {
             Either<Dimensions, DisplayStack> background,
             ColorIndex colorIndex) {
         super(drawObject, new ObjectDrawAttributes(colorIndex), background);
-        this.setIterableElement(objects);
+        this.assignElement(objects);
     }
 
     /**
@@ -133,7 +133,7 @@ public class DrawObjectsGenerator extends ObjectsOnRGBGenerator {
 
     @Override
     protected ObjectCollectionWithProperties generateMasks() {
-        return getIterableElement();
+        return getElement();
     }
 
     private static ColorIndex defaultColorsFor(int size) {

@@ -4,6 +4,7 @@ import java.nio.file.Path;
 import java.util.Optional;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.functional.OptionalUtilities;
+import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.manifest.file.FileType;
 import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
@@ -20,12 +21,28 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
  * @param <T> iteration-type
  * @param <S> type after any necessary preprocessing 
  */
-public abstract class SingleFileTypeGenerator<T,S> implements Generator<T>, IterableSingleFileTypeGenerator<T, S> {
+public abstract class SingleFileTypeGenerator<T,S> implements Generator<T> {
 
+    /**
+     * Assigns a new element, and then calls {@link #transform()}.
+     * 
+     * @param element element to be assigned and then transformed
+     * @return the transformed element after necessary preprocessing.
+     * @throws OutputWriteFailedException
+     */
+    public S transform(T element) throws OutputWriteFailedException {
+        try {
+            assignElement(element);
+        } catch (SetOperationFailedException e) {
+            throw new OutputWriteFailedException(e);
+        }
+        return transform();
+    }
+    
     /**
      * Applies any necessary preprocessing, to create an element suitable for writing to the filesystem.
      * 
-     * @return the iteration-type after necessary preprocessing.
+     * @return the transformed element after necessary preprocessing.
      * 
      * @throws OutputWriteFailedException if anything goes wrong
      */
@@ -81,7 +98,6 @@ public abstract class SingleFileTypeGenerator<T,S> implements Generator<T>, Iter
             BoundOutputManager outputManager)
             throws OutputWriteFailedException {
 
-        assert (outputManager.getOutputWriteSettings() != null);
         try {
             Path outFilePath =
                     outputManager.outFilePath(

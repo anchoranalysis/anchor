@@ -33,8 +33,8 @@ import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.io.generator.raster.object.ObjectWithBoundingBoxGenerator;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.io.generator.IterableGenerator;
-import org.anchoranalysis.io.generator.IterableGeneratorBridge;
+import org.anchoranalysis.io.generator.Generator;
+import org.anchoranalysis.io.generator.GeneratorBridge;
 import org.anchoranalysis.io.generator.collection.SubfolderGenerator;
 
 /**
@@ -47,20 +47,20 @@ import org.anchoranalysis.io.generator.collection.SubfolderGenerator;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class TIFFDirectoryObjectsGenerator {
 
-    public static IterableGenerator<ObjectCollection> create() {
+    public static Generator<ObjectCollection> create() {
 
         // Creates a TIFF for each object inside a a directory
-        IterableGenerator<ObjectMask> objectGenerator =
+        Generator<ObjectMask> objectGenerator =
                 new ObjectWithBoundingBoxGenerator(new Resolution());
 
         // Creates a subfolder for each List of objects passed to the generator
         // We must use a list as it is required to be of type Collection<T> where T is the type
         // being iterated
         // We don't specify a sceneres as we don't know what images they belong to
-        IterableGenerator<List<ObjectMask>> listGenerator =
+        Generator<List<ObjectMask>> listGenerator =
                 new SubfolderGenerator<>(objectGenerator, "objs");
 
         // Finally we expose the list-generator as an ObjectCollection generator externally
-        return IterableGeneratorBridge.createOneToOne(listGenerator, ObjectCollection::asList);
+        return GeneratorBridge.createOneToOne(listGenerator, ObjectCollection::asList);
     }
 }
