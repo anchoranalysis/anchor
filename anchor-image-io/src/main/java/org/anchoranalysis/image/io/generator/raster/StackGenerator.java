@@ -30,15 +30,11 @@ import java.util.Optional;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.io.generator.IterableObjectGenerator;
-import org.anchoranalysis.io.generator.ObjectGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
-public class StackGenerator extends RasterGenerator
-        implements IterableObjectGenerator<Stack, Stack> {
+public class StackGenerator extends RasterGeneratorWithElement<Stack> {
 
-    private Stack stackIn;
     private boolean padIfNec;
     private String manifestFunction;
 
@@ -56,9 +52,9 @@ public class StackGenerator extends RasterGenerator
     // Notes pads the passed channel, would be better if it makes a new stack first
     public StackGenerator(Stack stack, boolean padIfNec, String manifestFunction) {
         super();
-        this.stackIn = stack;
         this.padIfNec = padIfNec;
         this.manifestFunction = manifestFunction;
+        setIterableElement(stack);
     }
 
     public static Stack generateStack(Stack stackIn, boolean padIfNec)
@@ -85,9 +81,8 @@ public class StackGenerator extends RasterGenerator
     }
 
     @Override
-    public Stack generate() throws OutputWriteFailedException {
-        assert (stackIn != null);
-        return generateStack(stackIn, padIfNec);
+    public Stack transform() throws OutputWriteFailedException {
+        return generateStack(getIterableElement(), padIfNec);
     }
 
     @Override
@@ -96,27 +91,8 @@ public class StackGenerator extends RasterGenerator
     }
 
     @Override
-    public ObjectGenerator<Stack> getGenerator() {
-        return this;
-    }
-
-    @Override
-    public Stack getIterableElement() {
-        return stackIn;
-    }
-
-    @Override
-    public void setIterableElement(Stack element) {
-        this.stackIn = element;
-    }
-
-    @Override
-    public void end() throws OutputWriteFailedException {
-        this.stackIn = null;
-    }
-
-    @Override
     public boolean isRGB() {
-        return stackIn.getNumberChannels() == 3 || (stackIn.getNumberChannels() == 2 && padIfNec);
+        int numberChannels = getIterableElement().getNumberChannels();
+        return numberChannels == 3 || (numberChannels == 2 && padIfNec);
     }
 }

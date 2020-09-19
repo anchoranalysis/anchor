@@ -27,52 +27,42 @@
 package org.anchoranalysis.image.io.generator.raster;
 
 import java.util.Optional;
-import lombok.AllArgsConstructor;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.io.generator.IterableObjectGenerator;
-import org.anchoranalysis.io.generator.ObjectGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import lombok.AllArgsConstructor;
 
+/**
+ * Writes a single channel to a file.
+ * 
+ * @author Owen Feehan
+ *
+ */
 @AllArgsConstructor
-public class ChannelGenerator extends RasterGenerator
-        implements IterableObjectGenerator<Channel, Stack> {
+public class ChannelGenerator extends RasterGeneratorWithElement<Channel> {
 
-    private Channel channel;
-    private String manifestFunction;
-
-    public ChannelGenerator(String manifestFunction) {
-        this.manifestFunction = manifestFunction;
+    /** Function that is associated in the manifest with this output. */
+    private final String manifestFunction;
+    
+    public ChannelGenerator(String manifestFunction, Channel channel) {
+        this(manifestFunction);
+        setIterableElement(channel);
     }
 
     public ChannelGenerator(Channel channel) {
-        this(channel, "channel");
+        this("channel");
+        setIterableElement(channel);
     }
 
     @Override
-    public Stack generate() throws OutputWriteFailedException {
+    public Stack transform() throws OutputWriteFailedException {
 
         if (getIterableElement() == null) {
             throw new OutputWriteFailedException("no mutable element set");
         }
 
         return new Stack(getIterableElement());
-    }
-
-    @Override
-    public Channel getIterableElement() {
-        return channel;
-    }
-
-    @Override
-    public void setIterableElement(Channel element) {
-        this.channel = element;
-    }
-
-    @Override
-    public ObjectGenerator<Stack> getGenerator() {
-        return this;
     }
 
     @Override

@@ -523,17 +523,25 @@ public final class Extent implements Serializable {
         return IntStream.range(0, size.z());
     }
 
-    private Point3i immutablePointOperation(Consumer<Point3i> pointOperation) {
-        Point3i lenDup = new Point3i(size);
-        pointOperation.accept(lenDup);
-        return lenDup;
-    }
-
-    private int[] deriveArray() {
+    
+    /**
+     * Derives an three-element array with each dimension in the extent.
+     *  
+     * @return a newly created three-element array with respectively extents for the x, y and z dimensions.
+     */
+    public int[] deriveArray() {
         int[] arr = new int[3];
         arr[0] = x();
         arr[1] = y();
         arr[2] = z();
         return arr;
     }
+    
+    private Point3i immutablePointOperation(Consumer<Point3i> pointOperation) {
+        Point3i lenDup = new Point3i(size);
+        pointOperation.accept(lenDup);
+        return lenDup;
+    }
+
+
 }

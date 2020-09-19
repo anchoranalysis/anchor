@@ -33,6 +33,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.function.IntFunction;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -207,6 +208,24 @@ public class FunctionalList {
             CheckedFunction<S, T, E> mapFunction)
             throws E {
         return mapToList(Arrays.stream(array), throwableClass, mapFunction);
+    }
+    
+    /**
+     * Creates a list of elements, where each element corresponds to an index in a range.
+     *
+     * @param <T> elment-type in the list
+     * @param startInclusive minimum-element in range (inclusive)
+     * @param endExclusive maximum-element in range (exclusive)
+     * @param mapFunction function to do the mapping
+     * @return a list with an element for every item in the range
+     */
+    public static <T> List<T> mapRangeToList(
+            int startInclusive,
+            int endExclusive,
+            IntFunction<T> mapFunction) {
+        return IntStream.range(startInclusive, endExclusive)
+                .mapToObj(mapFunction)
+                .collect(Collectors.toList());
     }
 
     /**

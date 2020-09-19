@@ -37,6 +37,6 @@ public class ObjectCollectionWriter {
     public static final String MANIFEST_DESCRIPTION = "objects";
 
     public static IterableGenerator<ObjectCollection> generator() {
-        return new GeneratorHDF5(true);
+        return new HDF5ObjectsGenerator(true);
     }
 }

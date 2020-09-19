@@ -41,10 +41,10 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
  * @param <V> hidden-iterator-type
  */
 @RequiredArgsConstructor
-public class IterableObjectGeneratorBridge<S, T, V> implements IterableObjectGenerator<T, S> {
+public class IterableIntermediateGeneratorBridge<S, T, V> implements IterableSingleFileTypeGenerator<T, S> {
 
     // START REQUIRED ARGUMENTS
-    private final IterableObjectGenerator<V, S> internalGenerator;
+    private final IterableSingleFileTypeGenerator<V, S> internalGenerator;
     private final CheckedFunction<T, V, ? extends Throwable> elementBridge;
     // END REQUIRED ARGUMENTS
 
@@ -67,7 +67,7 @@ public class IterableObjectGeneratorBridge<S, T, V> implements IterableObjectGen
     }
 
     @Override
-    public ObjectGenerator<S> getGenerator() {
+    public SingleFileTypeGenerator<?,S> getGenerator() {
         return internalGenerator.getGenerator();
     }
 

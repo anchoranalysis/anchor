@@ -29,23 +29,26 @@ package org.anchoranalysis.io.generator.serialized;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Optional;
-import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.params.KeyValueParams;
+import org.anchoranalysis.io.generator.OneStageGeneratorWithElement;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
-@AllArgsConstructor
-public class KeyValueParamsGenerator extends SerializedGenerator {
+public class KeyValueParamsGenerator extends OneStageGeneratorWithElement<KeyValueParams> {
 
-    private KeyValueParams params;
-    private String manifestFunction;
+    private final String manifestFunction;
 
+    public KeyValueParamsGenerator(KeyValueParams params, String manifestFunction) {
+        this.manifestFunction = manifestFunction;
+        setIterableElement(params);
+    }
+    
     @Override
     public void writeToFile(OutputWriteSettings outputWriteSettings, Path filePath)
             throws OutputWriteFailedException {
         try {
-            params.writeToFile(filePath);
+            getIterableElement().writeToFile(filePath);
         } catch (IOException e) {
             throw new OutputWriteFailedException(e);
         }

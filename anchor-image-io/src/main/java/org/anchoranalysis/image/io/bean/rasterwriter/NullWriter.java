@@ -29,12 +29,13 @@ package org.anchoranalysis.image.io.bean.rasterwriter;
 import java.nio.file.Path;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.generator.raster.series.StackSeries;
+import org.anchoranalysis.image.io.rasterwriter.RasterWriteOptions;
 import org.anchoranalysis.image.stack.Stack;
 
 public class NullWriter extends RasterWriter {
 
     @Override
-    public String defaultExtension() {
+    public String fileExtension(RasterWriteOptions multiplexOptions) {
         return "tif";
     }
 

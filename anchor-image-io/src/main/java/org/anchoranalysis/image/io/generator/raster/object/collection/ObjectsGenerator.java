@@ -27,14 +27,11 @@
 package org.anchoranalysis.image.io.generator.raster.object.collection;
 
 import java.util.Optional;
-import lombok.AllArgsConstructor;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
-import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.image.extent.Dimensions;
-import org.anchoranalysis.image.io.generator.raster.RasterGenerator;
+import org.anchoranalysis.image.io.generator.raster.RasterGeneratorWithElement;
 import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.io.generator.Generator;
-import org.anchoranalysis.io.generator.IterableGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 
 /**
@@ -42,17 +39,18 @@ import org.anchoranalysis.io.manifest.ManifestDescription;
  *
  * @author Owen Feehan
  */
-@AllArgsConstructor
-@RequiredArgsConstructor
-public abstract class ObjectsGenerator extends RasterGenerator
-        implements IterableGenerator<ObjectCollection> {
+@RequiredArgsConstructor(access=AccessLevel.PROTECTED)
+public abstract class ObjectsGenerator extends RasterGeneratorWithElement<ObjectCollection> {
 
     // START REQUIRED ARGUMENTS
     private final Dimensions dimensions;
     // END REQUIRED ARGUMENTS
 
-    private ObjectCollection objects;
-
+    protected ObjectsGenerator(Dimensions dimensions, ObjectCollection objects) {
+        this.dimensions = dimensions;
+        setIterableElement(objects);
+    }
+    
     @Override
     public Optional<ManifestDescription> createManifestDescription() {
         return Optional.of(new ManifestDescription("raster", "maskCollection"));
@@ -63,23 +61,8 @@ public abstract class ObjectsGenerator extends RasterGenerator
         return false;
     }
 
-    @Override
-    public ObjectCollection getIterableElement() {
-        return objects;
-    }
-
-    @Override
-    public void setIterableElement(ObjectCollection element) throws SetOperationFailedException {
-        this.objects = element;
-    }
-
-    @Override
-    public Generator getGenerator() {
-        return this;
-    }
-
     protected ObjectCollection getObjects() {
-        return objects;
+        return getIterableElement();
     }
 
     public Dimensions dimensions() {

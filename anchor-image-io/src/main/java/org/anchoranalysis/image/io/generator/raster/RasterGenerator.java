@@ -27,22 +27,37 @@
 package org.anchoranalysis.image.io.generator.raster;
 
 import java.nio.file.Path;
+import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.bean.rasterwriter.RasterWriter;
+import org.anchoranalysis.image.io.rasterwriter.RasterWriteOptions;
 import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.io.generator.ObjectGenerator;
+import org.anchoranalysis.io.generator.TwoStageGenerator;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
-public abstract class RasterGenerator extends ObjectGenerator<Stack> {
+/**
+ * 
+ * @author Owen Feehan
+ *
+ */
+public abstract class RasterGenerator<T> extends TwoStageGenerator<T,Stack> {
 
     public abstract boolean isRGB() throws OutputWriteFailedException;
 
+    private RasterWriteOptions rasterOptions;
+    
+    //public RasterGenerator(RasterWriteOptions rasterOptions) {
+    public RasterGenerator() {
+        super();
+        //this.rasterOptions = rasterOptions;
+    }    
+        
     @Override
     public void writeToFile(OutputWriteSettings outputWriteSettings, Path filePath)
             throws OutputWriteFailedException {
 
-        Stack stack = generate();
+        Stack stack = transform();
         writeToFile(stack, outputWriteSettings, filePath, isRGB());
     }
 
@@ -60,7 +75,12 @@ public abstract class RasterGenerator extends ObjectGenerator<Stack> {
     }
 
     @Override
-    public String getFileExtension(OutputWriteSettings outputWriteSettings) {
-        return RasterWriterUtilities.getDefaultRasterFileExtension(outputWriteSettings);
+    public String getFileExtension(OutputWriteSettings outputWriteSettings) throws OperationFailedException {
+        return RasterWriterUtilities.fileExtensionForDefaultRasterWriter(outputWriteSettings, rasterOptions);
+    }
+
+    @Override
+    public final TwoStageGenerator<T,Stack> getGenerator() {
+        return this;
     }
 }

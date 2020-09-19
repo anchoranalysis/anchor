@@ -67,9 +67,13 @@ public class FolderWriteIndexableOutputName extends FolderWriteWithPath {
             String index) {
         // CURRENTLY - we do no check
     }
-
-    // We apply the match to each element in our sequence type, if the folder
-    //   has no SequenceType then something is wrong and we throw an exception
+    
+    /**
+     * Finds a file.
+     * 
+     * <p>We apply the match to each element in our sequence type, if the folder
+     * has no SequenceType then something is wrong and we throw an exception.
+     */
     @Override
     public void findFile(List<FileWrite> foundList, Match<FileWrite> match, boolean recursive) {
         SequenceType sequenceType = getManifestFolderDescription().getSequenceType();
@@ -91,13 +95,13 @@ public class FolderWriteIndexableOutputName extends FolderWriteWithPath {
 
     private FileWrite createFileWrite(String index, FileType fileType) {
 
-        FileWrite fw = new FileWrite();
-        fw.setFileName(outputName.getPhysicalName(index) + "." + fileType.getFileExtension());
-        fw.setOutputName(outputName.getOutputName());
-        fw.setManifestDescription(fileType.getManifestDescription());
-        fw.setIndex(index);
-        fw.setParentFolder(this);
-        return fw;
+        FileWrite write = new FileWrite();
+        write.setFileName(outputName.getPhysicalName(index) + "." + fileType.getFileExtension());
+        write.setOutputName(outputName.getOutputName());
+        write.setManifestDescription(fileType.getManifestDescription());
+        write.setIndex(index);
+        write.setParentFolder(this);
+        return write;
     }
 
     @Override

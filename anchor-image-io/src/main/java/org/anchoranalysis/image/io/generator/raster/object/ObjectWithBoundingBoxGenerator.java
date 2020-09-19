@@ -32,7 +32,7 @@ import org.anchoranalysis.image.io.generator.raster.object.collection.ObjectAsMa
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.io.generator.IterableGenerator;
 import org.anchoranalysis.io.generator.IterableGeneratorBridge;
-import org.anchoranalysis.io.generator.combined.IterableCombinedListGenerator;
+import org.anchoranalysis.io.generator.combined.CombinedListGenerator;
 import org.anchoranalysis.io.generator.serialized.ObjectOutputStreamGenerator;
 
 /**
@@ -40,7 +40,7 @@ import org.anchoranalysis.io.generator.serialized.ObjectOutputStreamGenerator;
  *
  * @author Owen Feehan
  */
-public class ObjectWithBoundingBoxGenerator extends IterableCombinedListGenerator<ObjectMask> {
+public class ObjectWithBoundingBoxGenerator extends CombinedListGenerator<ObjectMask> {
 
     public ObjectWithBoundingBoxGenerator(Resolution resolution) {
         this(new ObjectAsMaskGenerator(resolution));

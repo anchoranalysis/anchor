@@ -30,24 +30,50 @@ import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 /**
- * A generator that can be iterated over by changing elements
+ * A {@link Generator} that can repeatedly write different elements of the same type.
  *
  * @author Owen Feehan
  * @param <T> iteration-type
  */
 public interface IterableGenerator<T> {
 
+    /** 
+     * Gets the current element.
+     * 
+     * @return the element that will be written at next write-operation.
+     **/
     T getIterableElement();
 
+    /**
+     * Sets a new current element to be written at next write-operation.
+     *
+     * @param element the element
+     * @throws SetOperationFailedException
+     */
     void setIterableElement(T element) throws SetOperationFailedException;
 
+    /**
+     * This should always be called once before any write-operations.
+     * 
+     * @throws OutputWriteFailedException
+     */
     default void start() throws OutputWriteFailedException {
         // NOTHING TO DO
     }
 
+    /**
+     * This should always be called once after all write-operations are completed.
+     * 
+     * @throws OutputWriteFailedException
+     */
     default void end() throws OutputWriteFailedException {
         // NOTHING TO DO
     }
 
+    /**
+     * The generator that will be used for write-operations.
+     * 
+     * @return the associated generator
+     */
     Generator getGenerator();
 }

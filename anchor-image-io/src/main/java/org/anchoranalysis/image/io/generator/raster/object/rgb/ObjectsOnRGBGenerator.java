@@ -35,13 +35,11 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.channel.factory.ChannelFactoryByte;
 import org.anchoranalysis.image.channel.factory.ChannelFactorySingleType;
 import org.anchoranalysis.image.extent.Dimensions;
-import org.anchoranalysis.image.io.generator.raster.RasterGenerator;
+import org.anchoranalysis.image.io.generator.raster.RasterGeneratorWithElement;
 import org.anchoranalysis.image.object.properties.ObjectCollectionWithProperties;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
-import org.anchoranalysis.io.generator.IterableObjectGenerator;
-import org.anchoranalysis.io.generator.ObjectGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.overlay.bean.DrawObject;
@@ -52,8 +50,7 @@ import org.anchoranalysis.overlay.writer.ObjectDrawAttributes;
  *
  * @author Owen Feehan
  */
-public abstract class ObjectsOnRGBGenerator extends RasterGenerator
-        implements IterableObjectGenerator<ObjectCollectionWithProperties, Stack> {
+public abstract class ObjectsOnRGBGenerator extends RasterGeneratorWithElement<ObjectCollectionWithProperties> {
 
     private static final ChannelFactorySingleType CHANNEL_FACTORY = new ChannelFactoryByte();
 
@@ -67,9 +64,6 @@ public abstract class ObjectsOnRGBGenerator extends RasterGenerator
     @Getter @Setter private Either<Dimensions, DisplayStack> background;
     // END REQUIRED ARGUMENTS
 
-    // Iterable element
-    private ObjectCollectionWithProperties element;
-
     public ObjectsOnRGBGenerator(
             DrawObject drawObject,
             ObjectDrawAttributes attributes,
@@ -81,7 +75,7 @@ public abstract class ObjectsOnRGBGenerator extends RasterGenerator
     }
 
     @Override
-    public Stack generate() throws OutputWriteFailedException {
+    public Stack transform() throws OutputWriteFailedException {
         try {
             if (background == null) {
                 throw new OutputWriteFailedException(
@@ -94,31 +88,6 @@ public abstract class ObjectsOnRGBGenerator extends RasterGenerator
         } catch (OperationFailedException | CreateException e) {
             throw new OutputWriteFailedException(e);
         }
-    }
-
-    @Override
-    public ObjectCollectionWithProperties getIterableElement() {
-        return element;
-    }
-
-    @Override
-    public void setIterableElement(ObjectCollectionWithProperties element) {
-        this.element = element;
-    }
-
-    @Override
-    public ObjectGenerator<Stack> getGenerator() {
-        return this;
-    }
-
-    @Override
-    public void start() throws OutputWriteFailedException {
-        // NOTHING TO DO
-    }
-
-    @Override
-    public void end() throws OutputWriteFailedException {
-        // NOTHING TO DO
     }
 
     @Override

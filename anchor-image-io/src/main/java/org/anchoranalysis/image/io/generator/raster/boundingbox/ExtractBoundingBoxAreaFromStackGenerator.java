@@ -30,10 +30,8 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.extent.box.BoundingBox;
-import org.anchoranalysis.image.io.generator.raster.RasterGenerator;
+import org.anchoranalysis.image.io.generator.raster.RasterGeneratorWithElement;
 import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.io.generator.IterableObjectGenerator;
-import org.anchoranalysis.io.generator.ObjectGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
@@ -43,8 +41,7 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
  * @author Owen Feehan
  */
 @RequiredArgsConstructor
-public class ExtractBoundingBoxAreaFromStackGenerator extends RasterGenerator
-        implements IterableObjectGenerator<BoundingBox, Stack> {
+public class ExtractBoundingBoxAreaFromStackGenerator extends RasterGeneratorWithElement<BoundingBox> {
 
     private static final String MANIFEST_FUNCTION = "boundingBoxExtract";
 
@@ -52,36 +49,19 @@ public class ExtractBoundingBoxAreaFromStackGenerator extends RasterGenerator
     private final ScaleableBackground background;
     // END REQUIRED ARGUMENTS
 
-    private BoundingBox element;
-
     @Override
-    public Stack generate() throws OutputWriteFailedException {
+    public Stack transform() throws OutputWriteFailedException {
 
         if (getIterableElement() == null) {
             throw new OutputWriteFailedException("no mutable element set");
         }
 
         try {
-            return background.extractRegionFromStack(element);
+            return background.extractRegionFromStack(getIterableElement());
 
         } catch (CreateException e) {
             throw new OutputWriteFailedException(e);
         }
-    }
-
-    @Override
-    public BoundingBox getIterableElement() {
-        return element;
-    }
-
-    @Override
-    public void setIterableElement(BoundingBox element) {
-        this.element = element;
-    }
-
-    @Override
-    public ObjectGenerator<Stack> getGenerator() {
-        return this;
     }
 
     @Override

@@ -28,16 +28,13 @@ package org.anchoranalysis.io.generator.serialized;
 
 import java.nio.file.Path;
 import java.util.Optional;
-import org.anchoranalysis.io.generator.Generator;
-import org.anchoranalysis.io.generator.IterableGenerator;
+import org.anchoranalysis.io.generator.OneStageGeneratorWithElement;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
-public abstract class SerializedIterableGenerator<T> extends SerializedGenerator
-        implements IterableGenerator<T> {
+public abstract class SerializedIterableGenerator<T> extends OneStageGeneratorWithElement<T> {
 
-    private T element = null;
     private Optional<String> manifestFunction;
 
     public SerializedIterableGenerator(Optional<String> manifestFunction) {
@@ -47,7 +44,7 @@ public abstract class SerializedIterableGenerator<T> extends SerializedGenerator
 
     public SerializedIterableGenerator(T element, Optional<String> manifestFunction) {
         super();
-        this.element = element;
+        setIterableElement(element);
         this.manifestFunction = manifestFunction;
     }
 
@@ -79,19 +76,4 @@ public abstract class SerializedIterableGenerator<T> extends SerializedGenerator
 
     /** Appended to the standard "serialized" extension, to form the complete extension */
     protected abstract String extensionSuffix(OutputWriteSettings outputWriteSettings);
-
-    @Override
-    public T getIterableElement() {
-        return this.element;
-    }
-
-    @Override
-    public void setIterableElement(T element) {
-        this.element = element;
-    }
-
-    @Override
-    public Generator getGenerator() {
-        return this;
-    }
 }

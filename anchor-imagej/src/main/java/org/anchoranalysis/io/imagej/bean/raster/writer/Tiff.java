@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.io.imagej.bean.raster.writer;
 
+import org.anchoranalysis.image.io.rasterwriter.RasterWriteOptions;
 import ij.io.FileSaver;
 
 /**
@@ -47,7 +48,7 @@ public class Tiff extends SupportsTimeSeries {
     }
 
     @Override
-    public String defaultExtension() {
+    public String fileExtension(RasterWriteOptions multiplexOptions) {
         return "tif";
     }
 }

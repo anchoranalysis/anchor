@@ -51,10 +51,10 @@ public class ObjectsMergedAsMaskGenerator extends ObjectsGenerator {
     }
 
     @Override
-    public Stack generate() throws OutputWriteFailedException {
+    public Stack transform() throws OutputWriteFailedException {
         Mask mask =
                 MaskFromObjects.createFromObjects(
                         getObjects(), dimensions(), BinaryValues.getDefault());
-        return new ChannelGenerator(mask.channel(), "maskCollection").generate();
+        return new ChannelGenerator("maskCollection", mask.channel()).transform();
     }
 }

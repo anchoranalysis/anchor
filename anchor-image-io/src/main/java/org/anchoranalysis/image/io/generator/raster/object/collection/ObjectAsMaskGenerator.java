@@ -36,13 +36,11 @@ import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.extent.box.BoundingBox;
-import org.anchoranalysis.image.io.generator.raster.RasterGenerator;
+import org.anchoranalysis.image.io.generator.raster.RasterGeneratorWithElement;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
-import org.anchoranalysis.io.generator.Generator;
-import org.anchoranalysis.io.generator.IterableGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
@@ -52,14 +50,11 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
  * @author Owen Feehan
  */
 @RequiredArgsConstructor
-public class ObjectAsMaskGenerator extends RasterGenerator
-        implements IterableGenerator<ObjectMask> {
+public class ObjectAsMaskGenerator extends RasterGeneratorWithElement<ObjectMask> {
 
     // START REQUIRED ARGUMENTS
     private final Resolution resolution;
     // END REQUIRED ARGUMENTS
-
-    private ObjectMask element;
 
     /** Creates using a default image-resolution. */
     public ObjectAsMaskGenerator() {
@@ -67,28 +62,13 @@ public class ObjectAsMaskGenerator extends RasterGenerator
     }
 
     @Override
-    public Stack generate() throws OutputWriteFailedException {
+    public Stack transform() throws OutputWriteFailedException {
 
         if (getIterableElement() == null) {
             throw new OutputWriteFailedException("no mutable element set");
         }
 
         return new Stack(createChannelFromMask(getIterableElement(), resolution));
-    }
-
-    @Override
-    public ObjectMask getIterableElement() {
-        return this.element;
-    }
-
-    @Override
-    public void setIterableElement(ObjectMask element) {
-        this.element = element;
-    }
-
-    @Override
-    public Generator getGenerator() {
-        return this;
     }
 
     @Override

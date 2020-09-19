@@ -28,23 +28,25 @@ package org.anchoranalysis.image.io.generator.raster.series;
 
 import java.nio.file.Path;
 import java.util.Optional;
+import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.bean.rasterwriter.RasterWriter;
 import org.anchoranalysis.image.io.generator.raster.RasterWriterUtilities;
-import org.anchoranalysis.io.generator.SingleFileTypeGenerator;
+import org.anchoranalysis.image.io.rasterwriter.RasterWriteOptions;
+import org.anchoranalysis.io.generator.OneStageGeneratorWithElement;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
-public class RGBTimeSeriesGenerator extends SingleFileTypeGenerator {
+public class RGBTimeSeriesGenerator extends OneStageGeneratorWithElement<StackSeries> {
 
-    private StackSeries stackSeries;
-
-    public RGBTimeSeriesGenerator(StackSeries stackSeries) {
-        super();
-        this.stackSeries = stackSeries;
+    private final RasterWriteOptions rasterOptions;
+    
+    public RGBTimeSeriesGenerator(StackSeries stackSeries, RasterWriteOptions rasterOptions) {
+        this.rasterOptions = rasterOptions;
+        setIterableElement(stackSeries);
     }
-
+    
     @Override
     public void writeToFile(OutputWriteSettings outputWriteSettings, Path filePath)
             throws OutputWriteFailedException {
@@ -52,15 +54,15 @@ public class RGBTimeSeriesGenerator extends SingleFileTypeGenerator {
         try {
             RasterWriter rasterWriter =
                     RasterWriterUtilities.getDefaultRasterWriter(outputWriteSettings);
-            rasterWriter.writeTimeSeriesStackByte(stackSeries, filePath, true);
+            rasterWriter.writeTimeSeriesStackByte(getIterableElement(), filePath, true);
         } catch (RasterIOException e) {
             throw new OutputWriteFailedException(e);
         }
     }
 
     @Override
-    public String getFileExtension(OutputWriteSettings outputWriteSettings) {
-        return RasterWriterUtilities.getDefaultRasterFileExtension(outputWriteSettings);
+    public String getFileExtension(OutputWriteSettings outputWriteSettings) throws OperationFailedException {
+        return RasterWriterUtilities.fileExtensionForDefaultRasterWriter(outputWriteSettings, rasterOptions);
     }
 
     @Override

@@ -26,9 +26,18 @@
 
 package org.anchoranalysis.io.generator.combined;
 
+import com.google.common.base.Preconditions;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
+import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
+import org.anchoranalysis.core.index.SetOperationFailedException;
+import org.anchoranalysis.core.name.value.NameValue;
 import org.anchoranalysis.io.generator.Generator;
+import org.anchoranalysis.io.generator.IterableGenerator;
 import org.anchoranalysis.io.generator.MultipleFileTypeGenerator;
 import org.anchoranalysis.io.manifest.file.FileType;
 import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
@@ -37,41 +46,50 @@ import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
-// currently untested
-public class CombinedListGenerator implements MultipleFileTypeGenerator {
+/**
+ * Several iterable-generators combined together with a common iteration-type
+ *
+ * <p>One generator must always exist. Zero generators is never allowed.
+ *
+ * <p>TODO We can probably have a more efficient implementation by not using the
+ * CombinedListGenerator as a delegate but we leave it for now
+ *
+ * @author Owen Feehan
+ * @param <T>
+ */
+public class CombinedListGenerator<T>
+        implements MultipleFileTypeGenerator<T>, IterableGenerator<T> {
 
-    private ArrayList<OptionalNameValue<Generator>> list = new ArrayList<>();
+    private final CombinedList delegate = new CombinedList();
+
+    private final List<IterableGenerator<T>> list = new ArrayList<>();
+
+    public CombinedListGenerator(NameValue<IterableGenerator<T>> namedGenerator) {
+        add(namedGenerator.getValue(), Optional.of(namedGenerator.getName()));
+    }
+
+    public CombinedListGenerator(Stream<NameValue<IterableGenerator<T>>> namedGenerators) {
+        namedGenerators.forEach(item -> add(item.getValue(), Optional.of(item.getName())));
+        checkNonEmptyList();
+    }
+
+    @SafeVarargs
+    public CombinedListGenerator(IterableGenerator<T>... generator) {
+        Arrays.stream(generator).forEach(gen -> add(gen, Optional.empty()));
+        checkNonEmptyList();
+    }
 
     @Override
-    public Optional<FileType[]> getFileTypes(OutputWriteSettings outputWriteSettings) {
-
-        ArrayList<FileType> all = new ArrayList<>();
-
-        for (OptionalNameValue<Generator> ni : list) {
-            Optional<FileType[]> arr = ni.getValue().getFileTypes(outputWriteSettings);
-            arr.ifPresent(
-                    a -> {
-                        for (int i = 0; i < a.length; i++) {
-                            all.add(a[i]);
-                        }
-                    });
-        }
-
-        if (!all.isEmpty()) {
-            return Optional.of(all.toArray(new FileType[] {}));
-        } else {
-            return Optional.empty();
+    public void start() throws OutputWriteFailedException {
+        for (IterableGenerator<T> generator : list) {
+            generator.start();
         }
     }
 
     @Override
     public void write(OutputNameStyle outputNameStyle, BoundOutputManager outputManager)
             throws OutputWriteFailedException {
-
-        for (OptionalNameValue<Generator> ni : list) {
-            ni.getName().ifPresent(outputNameStyle::setOutputName);
-            ni.getValue().write(outputNameStyle, outputManager);
-        }
+        delegate.write(outputNameStyle, outputManager);
     }
 
     @Override
@@ -80,32 +98,52 @@ public class CombinedListGenerator implements MultipleFileTypeGenerator {
             String index,
             BoundOutputManager outputManager)
             throws OutputWriteFailedException {
-
-        int maxWritten = -1;
-        for (OptionalNameValue<Generator> ni : list) {
-
-            if (ni.getName().isPresent()) {
-                outputNameStyle = outputNameStyle.duplicate();
-                outputNameStyle.setOutputName(ni.getName().get());
-            }
-
-            int numWritten = ni.getValue().write(outputNameStyle, index, outputManager);
-            maxWritten = Math.max(maxWritten, numWritten);
-        }
-
-        return maxWritten;
+        return delegate.write(outputNameStyle, index, outputManager);
     }
 
-    /**
-     * Adds a generator with an optional-name.
-     *
-     * <p>Note that everything should have a name, or nothing should. Please don't mix. This is not
-     * currently checked.
-     *
-     * @param generator the generator to add
-     * @param name optional-name, which if included, is set as the output-name for the generator
-     */
-    public void add(Generator generator, Optional<String> name) {
-        list.add(new OptionalNameValue<>(name, generator));
+    @Override
+    public Optional<FileType[]> getFileTypes(OutputWriteSettings outputWriteSettings) throws OperationFailedException {
+        return delegate.getFileTypes(outputWriteSettings);
+    }
+
+    @Override
+    public T getIterableElement() {
+        if (list.isEmpty()) {
+            throw new AnchorFriendlyRuntimeException("List of generators is empty");
+        }
+        return list.get(0).getIterableElement();
+    }
+
+    @Override
+    public void setIterableElement(T element) throws SetOperationFailedException {
+
+        for (IterableGenerator<T> generator : list) {
+            generator.setIterableElement(element);
+        }
+    }
+
+    @Override
+    public Generator getGenerator() {
+        return this;
+    }
+
+    public void add(String name, IterableGenerator<T> element) {
+        add(element, Optional.of(name));
+    }
+
+    @Override
+    public void end() throws OutputWriteFailedException {
+        for (IterableGenerator<T> generator : list) {
+            generator.end();
+        }
+    }
+
+    private void add(IterableGenerator<T> element, Optional<String> name) {
+        list.add(element);
+        delegate.add(element.getGenerator(), name);
+    }
+
+    private void checkNonEmptyList() {
+        Preconditions.checkArgument(!list.isEmpty());
     }
 }

@@ -28,8 +28,10 @@ package org.anchoranalysis.image.io.generator.raster;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.bean.rasterwriter.RasterWriter;
+import org.anchoranalysis.image.io.rasterwriter.RasterWriteOptions;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -52,12 +54,11 @@ public class RasterWriterUtilities {
         return defaultWriter;
     }
 
-    public static String getDefaultRasterFileExtension(OutputWriteSettings outputWriteSettings) {
-        RasterWriter defaultWriter =
-                (RasterWriter) outputWriteSettings.getWriterInstance(RasterWriter.class);
-        if (defaultWriter == null) {
-            return ".unknown";
+    public static String fileExtensionForDefaultRasterWriter(OutputWriteSettings outputWriteSettings, RasterWriteOptions rasterOptions) throws OperationFailedException {
+        try {
+            return getDefaultRasterWriter(outputWriteSettings).fileExtension(rasterOptions);
+        } catch (RasterIOException e) {
+            throw new OperationFailedException(e);
         }
-        return defaultWriter.defaultExtension();
     }
 }

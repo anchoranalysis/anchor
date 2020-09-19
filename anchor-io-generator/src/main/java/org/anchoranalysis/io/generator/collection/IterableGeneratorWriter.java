@@ -105,6 +105,6 @@ public class IterableGeneratorWriter {
             BoundOutputManager outputManager,
             boolean checkIfAllowed) {
         return new CollectionGenerator<>(
-                collection, outputNameFolder, generatorIterable, outputManager, 3, checkIfAllowed);
+                outputNameFolder, generatorIterable, outputManager, 3, checkIfAllowed, collection);
     }
 }

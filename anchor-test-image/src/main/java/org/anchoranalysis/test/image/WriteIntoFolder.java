@@ -32,6 +32,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
+import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.convert.UnsignedByteBuffer;
@@ -117,7 +118,7 @@ public class WriteIntoFolder implements TestRule {
         outputManager.getWriterAlwaysAllowed().write(outputName, () -> generatorStack);
     }
 
-    public void writeObject(String outputName, ObjectMask object) {
+    public void writeObject(String outputName, ObjectMask object) throws SetOperationFailedException {
 
         setupOutputManagerIfNecessary();
 

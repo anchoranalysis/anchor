@@ -45,7 +45,7 @@ import org.anchoranalysis.io.generator.collection.SubfolderGenerator;
  * @author Owen Feehan
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class GeneratorTIFFDirectory {
+public class TIFFDirectoryObjectsGenerator {
 
     public static IterableGenerator<ObjectCollection> create() {
 

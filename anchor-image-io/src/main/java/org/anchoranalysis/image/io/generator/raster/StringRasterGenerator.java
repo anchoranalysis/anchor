@@ -46,8 +46,7 @@ import org.anchoranalysis.image.bean.spatial.SizeXY;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.bufferedimage.CreateStackFromBufferedImage;
 import org.anchoranalysis.io.bean.color.RGBColorBean;
-import org.anchoranalysis.io.generator.IterableObjectGenerator;
-import org.anchoranalysis.io.generator.ObjectGenerator;
+import org.anchoranalysis.io.generator.IterableSingleFileTypeGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
@@ -87,21 +86,14 @@ public class StringRasterGenerator extends AnchorBean<StringRasterGenerator> {
     // END BEAN PROPERTIES
 
     // A generator associated with this bean
-    private class Generator extends RasterGenerator
-            implements IterableObjectGenerator<String, Stack> {
+    private class Generator extends RasterGeneratorWithElement<String> {
 
-        @Override
-        public String getIterableElement() {
-            return text;
+        public Generator(String text) {
+            setIterableElement(text);
         }
 
         @Override
-        public void setIterableElement(String element) {
-            StringRasterGenerator.this.text = element;
-        }
-
-        @Override
-        public Stack generate() throws OutputWriteFailedException {
+        public Stack transform() throws OutputWriteFailedException {
 
             SizeXY resolvedSize =
                     Optional.ofNullable(size).orElseGet(this::alternativeSizeFromDefault);
@@ -115,7 +107,7 @@ public class StringRasterGenerator extends AnchorBean<StringRasterGenerator> {
                             BufferedImage.TYPE_INT_RGB);
             Graphics2D graphics = createGraphicsFromBufferedImage(bufferedImage);
 
-            drawCenteredString(text, resolvedSize, graphics);
+            drawCenteredString(getIterableElement(), resolvedSize, graphics);
 
             try {
                 return CreateStackFromBufferedImage.create(bufferedImage);
@@ -132,11 +124,6 @@ public class StringRasterGenerator extends AnchorBean<StringRasterGenerator> {
         @Override
         public Optional<ManifestDescription> createManifestDescription() {
             return Optional.of(new ManifestDescription("raster", "text"));
-        }
-
-        @Override
-        public ObjectGenerator<Stack> getGenerator() {
-            return this;
         }
 
         private Graphics2D createGraphicsFromBufferedImage(BufferedImage bufferedImage) {
@@ -183,12 +170,12 @@ public class StringRasterGenerator extends AnchorBean<StringRasterGenerator> {
     }
 
     /** Creates an iterable-generator, which produces a drawn string on an image when generated */
-    public IterableObjectGenerator<String, Stack> createGenerator() {
-        return new Generator();
+    public IterableSingleFileTypeGenerator<String, Stack> createGenerator() {
+        return new Generator(text);
     }
 
     /** Creates a stack with the drawn string on an image */
     public Stack generateStack() throws OutputWriteFailedException {
-        return new Generator().generate();
+        return new Generator(text).transform();
     }
 }

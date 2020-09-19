@@ -29,28 +29,25 @@ package org.anchoranalysis.image.io.generator.raster;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.io.generator.IterableObjectGenerator;
-import org.anchoranalysis.io.generator.ObjectGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 @AllArgsConstructor
-public class StackOperationGenerator extends RasterGenerator
-        implements IterableObjectGenerator<StackToWriteSupplier, Stack> {
+public class StackOperationGenerator extends RasterGeneratorWithElement<StackToWriteSupplier> {
 
-    private StackToWriteSupplier element;
     private boolean padIfNec;
     private String manifestFunction;
 
-    public StackOperationGenerator(boolean padIfNec, String manifestFunction) {
+    public StackOperationGenerator(boolean padIfNec, String manifestFunction, StackToWriteSupplier stackToWriteSupplier) {
         super();
         this.padIfNec = padIfNec;
         this.manifestFunction = manifestFunction;
+        setIterableElement(stackToWriteSupplier);
     }
 
     @Override
-    public Stack generate() throws OutputWriteFailedException {
-        return StackGenerator.generateStack(element.get(), padIfNec);
+    public Stack transform() throws OutputWriteFailedException {
+        return StackGenerator.generateStack(getIterableElement().get(), padIfNec);
     }
 
     @Override
@@ -59,23 +56,9 @@ public class StackOperationGenerator extends RasterGenerator
     }
 
     @Override
-    public ObjectGenerator<Stack> getGenerator() {
-        return this;
-    }
-
-    @Override
-    public StackToWriteSupplier getIterableElement() {
-        return element;
-    }
-
-    @Override
-    public void setIterableElement(StackToWriteSupplier element) {
-        this.element = element;
-    }
-
-    @Override
     public boolean isRGB() throws OutputWriteFailedException {
-        return element.get().getNumberChannels() == 3
-                || (element.get().getNumberChannels() == 2 && padIfNec);
+        // TODO is it costing anything to call getIterableElement twice?
+        int numberChannels = getIterableElement().get().getNumberChannels();
+        return numberChannels==3 || (numberChannels==2 && padIfNec);
     }
 }

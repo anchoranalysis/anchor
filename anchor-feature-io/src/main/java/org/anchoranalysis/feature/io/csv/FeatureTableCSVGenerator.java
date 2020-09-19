@@ -29,7 +29,6 @@ package org.anchoranalysis.feature.io.csv;
 import java.nio.file.Path;
 import java.util.List;
 import org.anchoranalysis.io.error.AnchorIOException;
-import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.generator.IterableGenerator;
 import org.anchoranalysis.io.generator.csv.CSVGenerator;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
@@ -42,12 +41,9 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
  * @author Owen Feehan
  * @param <T> type of object that describes <i>all</i> rows of feature calculations.
  */
-public abstract class FeatureTableCSVGenerator<T> extends CSVGenerator
-        implements IterableGenerator<T> {
+public abstract class FeatureTableCSVGenerator<T> extends CSVGenerator<T> {
 
     private List<String> headerNames;
-
-    private T element;
 
     /**
      * Creates for a particular manifest-function and headers.
@@ -61,26 +57,11 @@ public abstract class FeatureTableCSVGenerator<T> extends CSVGenerator
     }
 
     @Override
-    public T getIterableElement() {
-        return element;
-    }
-
-    @Override
-    public void setIterableElement(T element) {
-        this.element = element;
-    }
-
-    @Override
-    public Generator getGenerator() {
-        return this;
-    }
-
-    @Override
     public void writeToFile(OutputWriteSettings outputWriteSettings, Path filePath)
             throws OutputWriteFailedException {
 
         try (CSVWriter writer = CSVWriter.create(filePath)) {
-            writeFeaturesToCSV(writer, element, headerNames);
+            writeFeaturesToCSV(writer, getIterableElement(), headerNames);
         } catch (AnchorIOException e) {
             throw new OutputWriteFailedException(e);
         }

@@ -30,6 +30,7 @@ import java.util.Optional;
 import java.util.stream.Stream;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.functional.CheckedStream;
 import org.anchoranalysis.core.functional.function.CheckedFunction;
 import org.anchoranalysis.core.index.SetOperationFailedException;
@@ -41,7 +42,7 @@ import org.anchoranalysis.io.output.bound.BoundOutputManager;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 /**
- * Allows us to call an {@code IterableGenerator<S>} as if it was an {@code IterableGenerator<T>}
+ * Exposes a {@code IterableGenerator<S>} as if it was an {@code IterableGenerator<T>}.
  *
  * @author Owen Feehan
  * @param <S> source-type
@@ -141,7 +142,7 @@ public class IterableGeneratorBridge<S, T> implements Generator, IterableGenerat
     }
 
     @Override
-    public Optional<FileType[]> getFileTypes(OutputWriteSettings outputWriteSettings) {
+    public Optional<FileType[]> getFileTypes(OutputWriteSettings outputWriteSettings) throws OperationFailedException {
         return generator.getGenerator().getFileTypes(outputWriteSettings);
     }
 }

@@ -28,15 +28,15 @@ package org.anchoranalysis.image.io.generator.raster;
 
 import java.nio.file.Path;
 import java.util.Optional;
+import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.stack.DisplayStack;
-import org.anchoranalysis.io.generator.IterableObjectGenerator;
-import org.anchoranalysis.io.generator.ObjectGenerator;
+import org.anchoranalysis.io.generator.OneStageGenerator;
+import org.anchoranalysis.io.generator.SingleFileTypeGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
-public class DisplayStackGenerator extends ObjectGenerator<DisplayStack>
-        implements IterableObjectGenerator<DisplayStack, DisplayStack> {
+public class DisplayStackGenerator extends OneStageGenerator<DisplayStack> {
 
     private StackGenerator delegate;
     private DisplayStack item;
@@ -68,12 +68,12 @@ public class DisplayStackGenerator extends ObjectGenerator<DisplayStack>
     }
 
     @Override
-    public ObjectGenerator<DisplayStack> getGenerator() {
+    public SingleFileTypeGenerator<?,DisplayStack> getGenerator() {
         return this;
     }
 
     @Override
-    public DisplayStack generate() throws OutputWriteFailedException {
+    public DisplayStack transform() throws OutputWriteFailedException {
         return item;
     }
 
@@ -84,7 +84,7 @@ public class DisplayStackGenerator extends ObjectGenerator<DisplayStack>
     }
 
     @Override
-    public String getFileExtension(OutputWriteSettings outputWriteSettings) {
+    public String getFileExtension(OutputWriteSettings outputWriteSettings) throws OperationFailedException {
         return delegate.getFileExtension(outputWriteSettings);
     }
 

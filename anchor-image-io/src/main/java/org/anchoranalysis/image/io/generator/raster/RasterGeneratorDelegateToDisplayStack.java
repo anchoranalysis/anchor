@@ -27,56 +27,25 @@
 package org.anchoranalysis.image.io.generator.raster;
 
 import java.util.Optional;
+import lombok.RequiredArgsConstructor;
+import org.anchoranalysis.core.index.SetOperationFailedException;
+import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.io.generator.IterableObjectGenerator;
-import org.anchoranalysis.io.generator.ObjectGenerator;
+import org.anchoranalysis.io.generator.IterableSingleFileTypeGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 /**
- * Like a {@link StackGenerator} but first applies a maximum-intensity-projection.
- *
  * @author Owen Feehan
+ * @param <T> iteration-type
  */
-public class ProjectMeanGenerator extends RasterGenerator
-        implements IterableObjectGenerator<Stack, Stack> {
+@RequiredArgsConstructor
+public class RasterGeneratorDelegateToDisplayStack<T> extends RasterGenerator<T> {
 
-    private StackGenerator delegate;
-
-    public ProjectMeanGenerator(boolean padIfNec, String manifestFunction) {
-        delegate = new StackGenerator(padIfNec, manifestFunction);
-    }
-
-    public ProjectMeanGenerator(Stack element, boolean padIfNec, String manifestFunction) {
-        delegate = new StackGenerator(element, padIfNec, manifestFunction);
-    }
-
-    @Override
-    public boolean isRGB() {
-        return delegate.isRGB();
-    }
-
-    @Override
-    public Stack generate() throws OutputWriteFailedException {
-
-        Stack stack = delegate.getIterableElement();
-        return stack.maximumIntensityProjection();
-    }
-
-    @Override
-    public Optional<ManifestDescription> createManifestDescription() {
-        return delegate.createManifestDescription();
-    }
-
-    @Override
-    public Stack getIterableElement() {
-        return delegate.getIterableElement();
-    }
-
-    @Override
-    public void setIterableElement(Stack element) {
-        delegate.setIterableElement(element);
-    }
+    // START REQUIRED ARGUMENTS
+    private final IterableSingleFileTypeGenerator<T, DisplayStack> delegate;
+    private final boolean rgb;
+    // START END ARGUMENTS
 
     @Override
     public void start() throws OutputWriteFailedException {
@@ -89,7 +58,27 @@ public class ProjectMeanGenerator extends RasterGenerator
     }
 
     @Override
-    public ObjectGenerator<Stack> getGenerator() {
-        return this;
+    public boolean isRGB() {
+        return rgb;
+    }
+
+    @Override
+    public Optional<ManifestDescription> createManifestDescription() {
+        return delegate.getGenerator().createManifestDescription();
+    }
+
+    @Override
+    public Stack transform() throws OutputWriteFailedException {
+        return delegate.getGenerator().transform().deriveStack(false);
+    }
+
+    @Override
+    public T getIterableElement() {
+        return delegate.getIterableElement();
+    }
+
+    @Override
+    public void setIterableElement(T element) throws SetOperationFailedException {
+        delegate.setIterableElement(element);
     }
 }

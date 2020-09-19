@@ -106,9 +106,9 @@ public class RGBColor {
     // from
     // http://stackoverflow.com/questions/946544/good-text-foreground-color-for-a-given-background-color
     public RGBColor textColor() {
-        double grayDbl = 0.299 * getRed() + 0.587 * getGreen() + 0.114 * getBlue();
+        double grayDouble = 0.299 * getRed() + 0.587 * getGreen() + 0.114 * getBlue();
 
-        if (grayDbl < 186) {
+        if (grayDouble < 186) {
             return new RGBColor(255, 255, 255);
         } else {
             return new RGBColor(0, 0, 0);

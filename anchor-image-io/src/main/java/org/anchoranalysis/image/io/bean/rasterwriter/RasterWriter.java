@@ -30,14 +30,16 @@ import java.nio.file.Path;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.generator.raster.series.StackSeries;
+import org.anchoranalysis.image.io.rasterwriter.RasterWriteOptions;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
 
 public abstract class RasterWriter extends AnchorBean<RasterWriter> {
 
-    // Get the default extension for a writer
-    public abstract String defaultExtension();
+    /** File-extensions for files written by this writer. 
+     * @param multiplexOptions TODO*/
+    public abstract String fileExtension(RasterWriteOptions multiplexOptions);
 
     public abstract void writeTimeSeriesStackByte(
             StackSeries stackSeries, Path filePath, boolean makeRGB) throws RasterIOException;

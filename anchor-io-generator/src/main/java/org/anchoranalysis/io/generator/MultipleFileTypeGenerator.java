@@ -26,4 +26,10 @@
 
 package org.anchoranalysis.io.generator;
 
-public interface MultipleFileTypeGenerator extends Generator {}
+/**
+ * A {@link Generator} that creates multiple different file-types.
+ * 
+ * @author Owen Feehan
+ *
+ */
+public interface MultipleFileTypeGenerator<T> extends Generator, IterableGenerator<T> {}

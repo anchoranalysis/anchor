@@ -24,16 +24,12 @@
  * #L%
  */
 
-package org.anchoranalysis.io.generator.collection;
+package org.anchoranalysis.io.generator.combined;
 
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.Optional;
-import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.io.generator.Generator;
-import org.anchoranalysis.io.generator.IterableGenerator;
-import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.manifest.file.FileType;
 import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.namestyle.OutputNameStyle;
@@ -41,66 +37,71 @@ import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
-/**
- * @author Owen Feehan
- * @param <T>
- * @param <S> collection-type
- */
-@RequiredArgsConstructor
-public class SubfolderGenerator<T, S extends Collection<T>>
-        implements Generator, IterableGenerator<S> {
+class CombinedList {
 
-    // START REQUIRED ARGUMENTS
-    private final IterableGenerator<T> generator;
-    private final String collectionOutputName;
-    // END REQUIRED ARGUMENTS
+    private ArrayList<OptionalNameValue<Generator>> list = new ArrayList<>();
 
-    private S element;
+    public Optional<FileType[]> getFileTypes(OutputWriteSettings outputWriteSettings) throws OperationFailedException {
 
-    @Override
+        ArrayList<FileType> all = new ArrayList<>();
+
+        for (OptionalNameValue<Generator> namedGenerator : list) {
+            Optional<FileType[]> fileTypeArray = namedGenerator.getValue().getFileTypes(outputWriteSettings);
+            fileTypeArray.ifPresent(
+                    fileTypes -> {
+                        for (int i = 0; i < fileTypes.length; i++) {
+                            all.add(fileTypes[i]);
+                        }
+                    });
+        }
+
+        if (!all.isEmpty()) {
+            return Optional.of(all.toArray(new FileType[] {}));
+        } else {
+            return Optional.empty();
+        }
+    }
+
     public void write(OutputNameStyle outputNameStyle, BoundOutputManager outputManager)
             throws OutputWriteFailedException {
 
-        String filePhysicalName = outputNameStyle.getPhysicalName();
-        IterableGeneratorWriter.writeSubfolder(
-                outputManager, filePhysicalName, collectionOutputName, generator, element, false);
+        for (OptionalNameValue<Generator> ni : list) {
+            ni.getName().ifPresent(outputNameStyle::setOutputName);
+            ni.getValue().write(outputNameStyle, outputManager);
+        }
     }
 
-    @Override
     public int write(
             IndexableOutputNameStyle outputNameStyle,
             String index,
             BoundOutputManager outputManager)
             throws OutputWriteFailedException {
 
-        String filePhysicalName = outputNameStyle.getPhysicalName(index);
+        int maxWritten = -1;
+        for (OptionalNameValue<Generator> ni : list) {
 
-        IterableGeneratorWriter.writeSubfolder(
-                outputManager, filePhysicalName, collectionOutputName, generator, element, false);
-        return 1;
+            if (ni.getName().isPresent()) {
+                outputNameStyle = outputNameStyle.duplicate();
+                outputNameStyle.setOutputName(ni.getName().get());
+            }
+
+            int numWritten = ni.getValue().write(outputNameStyle, index, outputManager);
+            maxWritten = Math.max(maxWritten, numWritten);
+        }
+
+        return maxWritten;
     }
 
-    @Override
-    public Optional<FileType[]> getFileTypes(OutputWriteSettings outputWriteSettings) throws OperationFailedException {
-        return generator.getGenerator().getFileTypes(outputWriteSettings);
-    }
-
-    @Override
-    public S getIterableElement() {
-        return element;
-    }
-
-    @Override
-    public void setIterableElement(S element) throws SetOperationFailedException {
-        this.element = element;
-    }
-
-    @Override
-    public Generator getGenerator() {
-        return this;
-    }
-
-    public static ManifestDescription createManifestDescription(String type) {
-        return new ManifestDescription("subfolder", type);
+    /**
+     * Adds a generator with an optional-name.
+     *
+     * <p>Note that everything should have a name, or nothing should. Please don't mix. This is not
+     * currently checked.
+     *
+     * @param generator the generator to add
+     * @param name optional-name, which if included, is set as the output-name for the generator
+     */
+    public void add(Generator generator, Optional<String> name) {
+        list.add(new OptionalNameValue<>(name, generator));
     }
 }

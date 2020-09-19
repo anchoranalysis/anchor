@@ -26,21 +26,16 @@
 
 package org.anchoranalysis.io.generator;
 
-import org.anchoranalysis.core.index.SetOperationFailedException;
-
 /**
+ * An {@link SingleFileTypeGenerator} that can repeatedly write elements.
+ * 
  * @author Owen Feehan
+ * 
  * @param <T> iteration-type
- * @param <S> generated-type
+ * @param <S> intermediate-type
  */
-public interface IterableObjectGenerator<T, S> extends IterableGenerator<T> {
+public interface IterableSingleFileTypeGenerator<T, S> extends IterableGenerator<T> {
 
     @Override
-    T getIterableElement();
-
-    @Override
-    void setIterableElement(T element) throws SetOperationFailedException;
-
-    @Override
-    ObjectGenerator<S> getGenerator();
+    SingleFileTypeGenerator<?,S> getGenerator();
 }

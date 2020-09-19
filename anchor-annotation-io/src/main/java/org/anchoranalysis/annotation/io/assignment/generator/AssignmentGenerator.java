@@ -38,7 +38,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.stack.ArrangeRaster;
 import org.anchoranalysis.image.io.bean.stack.StackProviderWithLabel;
-import org.anchoranalysis.image.io.generator.raster.RasterGenerator;
+import org.anchoranalysis.image.io.generator.raster.RasterGeneratorWithElement;
 import org.anchoranalysis.image.io.generator.raster.StackGenerator;
 import org.anchoranalysis.image.io.generator.raster.object.rgb.DrawObjectsGenerator;
 import org.anchoranalysis.image.io.stack.TileRasters;
@@ -57,37 +57,52 @@ import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.overlay.bean.DrawObject;
 
-public class AssignmentGenerator extends RasterGenerator {
+/**
+ * Outputs a raster showing an {@link Assignment} on a background.
+ * 
+ * <p>Specifically two tiled backgrounds appear, one left, and one right, and objects
+ * are colored on left and right panels, to indicate how they appear in the assignment.
+ * 
+ * @author Owen Feehan
+ *
+ */
+public class AssignmentGenerator extends RasterGeneratorWithElement<Assignment> {
 
     private DisplayStack background;
-    private Assignment assignment;
     private StackGenerator delegate;
-    private boolean mipOutline;
+    private boolean flatten;
 
     private ColorPool colorPool;
 
+    /** How many pixels should the outline be around objects */
     @Getter @Setter private int outlineWidth = 1;
 
+    /** Name printed in left-panel. */
     @Getter @Setter private String leftName = "annotation";
 
+    /** Name printed in right-panel. */
     @Getter @Setter private String rightName = "result";
 
     /**
-     * @param background
-     * @param assignment
-     * @param mipOutline
+     * Create with a background and assignment
+     * 
+     * @param background the background, which will feature in both left and right panes
+     * @param assignment the assignment
+     * @param colorPool
+     * @param flatten whether to flatten (maximum intensity projection) in the z-dimension
      */
     AssignmentGenerator(
             DisplayStack background,
             Assignment assignment,
             ColorPool colorPool,
-            boolean mipOutline) {
+            boolean flatten) {
         super();
         this.background = background;
-        this.assignment = assignment;
-        this.mipOutline = mipOutline;
+        this.flatten = flatten;
         this.colorPool = colorPool;
 
+        setIterableElement(assignment);
+        
         delegate = new StackGenerator(true, "assignmentComparison");
     }
 
@@ -97,19 +112,21 @@ public class AssignmentGenerator extends RasterGenerator {
     }
 
     @Override
-    public Stack generate() throws OutputWriteFailedException {
+    public Stack transform() throws OutputWriteFailedException {
 
+        Assignment assignment = getIterableElement();
+        
         ArrangeRaster stackProvider =
                 createTiledStackProvider(
-                        createRGBOutlineStack(true),
-                        createRGBOutlineStack(false),
+                        createRGBOutlineStack(true, assignment),
+                        createRGBOutlineStack(false, assignment),
                         leftName,
                         rightName);
 
         try {
             Stack combined = stackProvider.create();
             delegate.setIterableElement(combined);
-            return delegate.generate();
+            return delegate.transform();
 
         } catch (CreateException e) {
             throw new OutputWriteFailedException(e);
@@ -125,7 +142,7 @@ public class AssignmentGenerator extends RasterGenerator {
         return TileRasters.createStackProvider(listProvider, 2, false, false, true);
     }
 
-    private Stack createRGBOutlineStack(boolean left) throws OutputWriteFailedException {
+    private Stack createRGBOutlineStack(boolean left, Assignment assignment) throws OutputWriteFailedException {
         try {
             return createRGBOutlineStack(
                     assignment.getListPaired(left), colorPool, assignment.getListUnassigned(left));
@@ -143,7 +160,7 @@ public class AssignmentGenerator extends RasterGenerator {
                         otherObjects,
                         colorPool.createColors(otherObjects.size()),
                         ObjectCollectionFactory.of(matchedObjects, otherObjects))
-                .generate();
+                .transform();
     }
 
     private DrawObjectsGenerator createGenerator(
@@ -177,7 +194,7 @@ public class AssignmentGenerator extends RasterGenerator {
     }
 
     private DrawObject createOutlineWriter() {
-        return new Outline(outlineWidth, !mipOutline);
+        return new Outline(outlineWidth, !flatten);
     }
 
     @Override

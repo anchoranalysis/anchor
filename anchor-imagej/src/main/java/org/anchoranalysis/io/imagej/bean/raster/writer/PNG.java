@@ -28,6 +28,7 @@ package org.anchoranalysis.io.imagej.bean.raster.writer;
 
 import ij.io.FileSaver;
 import org.anchoranalysis.image.io.RasterIOException;
+import org.anchoranalysis.image.io.rasterwriter.RasterWriteOptions;
 
 /**
  * Writes a PNG image using ImageJ.
@@ -50,7 +51,7 @@ public class PNG extends NoTimeSeries {
     }
 
     @Override
-    public String defaultExtension() {
+    public String fileExtension(RasterWriteOptions multiplexOptions) {
         return "png";
     }
 }

@@ -52,15 +52,12 @@ import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.orientation.DirectionVector;
-import org.anchoranalysis.io.generator.Generator;
-import org.anchoranalysis.io.generator.IterableGenerator;
 import org.anchoranalysis.io.generator.csv.CSVGenerator;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 /** @author Owen Feehan */
-class ObjectFeatureListCSVGenerator extends CSVGenerator
-        implements IterableGenerator<ObjectCollection> {
+class ObjectFeatureListCSVGenerator extends CSVGenerator<ObjectCollection> {
 
     private static final String MANIFEST_FUNCTION = "objectFeatures";
 
@@ -69,8 +66,6 @@ class ObjectFeatureListCSVGenerator extends CSVGenerator
     private FeatureTableCSVGenerator<ResultsVectorCollection> delegate;
 
     private final Logger logger;
-
-    private ObjectCollection element; // Iteration element
 
     public ObjectFeatureListCSVGenerator(
             FeatureListEvaluator<FeatureInputSingleObject> featureEvaluator,
@@ -93,18 +88,13 @@ class ObjectFeatureListCSVGenerator extends CSVGenerator
     }
 
     @Override
-    public Generator getGenerator() {
-        return this;
-    }
-
-    @Override
     public void writeToFile(OutputWriteSettings outputWriteSettings, Path filePath)
             throws OutputWriteFailedException {
 
         // We calculate a results vector for each object, across all features in memory. This is
         // more efficient
         ResultsVectorCollection rvc = new ResultsVectorCollection();
-        for (ObjectMask objectMask : element) {
+        for (ObjectMask objectMask : getIterableElement()) {
             rvc.add(
                     featureCalculator.calculateSuppressErrors(
                             new FeatureInputSingleObject(objectMask), logger.errorReporter()));
@@ -112,16 +102,6 @@ class ObjectFeatureListCSVGenerator extends CSVGenerator
 
         delegate.setIterableElement(rvc);
         delegate.writeToFile(outputWriteSettings, filePath);
-    }
-
-    @Override
-    public ObjectCollection getIterableElement() {
-        return element;
-    }
-
-    @Override
-    public void setIterableElement(ObjectCollection element) {
-        this.element = element;
     }
 
     // Puts in some extra descriptive features at the start

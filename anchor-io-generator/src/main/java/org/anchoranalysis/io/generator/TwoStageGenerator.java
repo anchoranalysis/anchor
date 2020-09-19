@@ -24,16 +24,16 @@
  * #L%
  */
 
-package org.anchoranalysis.io.generator.serialized;
+package org.anchoranalysis.io.generator;
 
-import java.nio.file.Path;
-import org.anchoranalysis.io.generator.SingleFileTypeGenerator;
-import org.anchoranalysis.io.output.bean.OutputWriteSettings;
-import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+/**
+ * A {@link Generator} that operates in two stages, first transforming an element, then writing it to the file-system
+ * 
+ * @author Owen Feehan
+ *
+ * @param <T> iteration-type
+ * @param <S> intermediate-type that is created in the first stage after transforming an element of type {@code T}.
+ */
+public abstract class TwoStageGenerator<T,S> extends SingleFileTypeGenerator<T,S> {
 
-public abstract class SerializedGenerator extends SingleFileTypeGenerator {
-
-    @Override
-    public abstract void writeToFile(OutputWriteSettings outputWriteSettings, Path filePath)
-            throws OutputWriteFailedException;
 }

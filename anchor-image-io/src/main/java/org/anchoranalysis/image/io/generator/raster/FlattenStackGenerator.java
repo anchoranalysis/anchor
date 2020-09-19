@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-io-generator
+ * anchor-image-io
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -24,12 +24,33 @@
  * #L%
  */
 
-package org.anchoranalysis.io.generator;
+package org.anchoranalysis.image.io.generator.raster;
 
-import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.image.stack.Stack;
 
-// Generates an object, that is subsequently written to the file system
-public abstract class ObjectGenerator<S> extends SingleFileTypeGenerator {
+/**
+ * Like a {@link StackGenerator} but first applies a maximum-intensity-projection.
+ *
+ * @author Owen Feehan
+ */
+public class FlattenStackGenerator extends RasterGeneratorDelegateToRaster<Stack,Stack> {
 
-    public abstract S generate() throws OutputWriteFailedException;
+    public FlattenStackGenerator(boolean padIfNec, String manifestFunction) {
+        super( new StackGenerator(padIfNec, manifestFunction) );
+    }
+
+    public FlattenStackGenerator(Stack element, boolean padIfNec, String manifestFunction) {
+        super( new StackGenerator(element, padIfNec, manifestFunction) );
+    }
+    
+    @Override
+    protected Stack convertBeforeSetter(Stack element) throws OperationFailedException {
+        return element;
+    }
+
+    @Override
+    protected Stack convertBeforeTransform(Stack stack) {
+        return stack.maximumIntensityProjection();
+    }
 }

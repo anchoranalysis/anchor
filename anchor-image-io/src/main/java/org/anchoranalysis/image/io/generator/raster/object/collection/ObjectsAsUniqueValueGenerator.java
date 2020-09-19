@@ -56,7 +56,7 @@ public class ObjectsAsUniqueValueGenerator extends ObjectsGenerator {
     }
 
     @Override
-    public Stack generate() throws OutputWriteFailedException {
+    public Stack transform() throws OutputWriteFailedException {
 
         Channel out = factory.createEmptyInitialised(dimensions());
 
@@ -73,6 +73,6 @@ public class ObjectsAsUniqueValueGenerator extends ObjectsGenerator {
             out.assignValue(val++).toObject(object);
         }
 
-        return new ChannelGenerator(out, "maskCollection").generate();
+        return new ChannelGenerator("maskCollection", out).transform();
     }
 }

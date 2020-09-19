@@ -30,6 +30,7 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.core.error.InitException;
+import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.io.generator.IterableGenerator;
@@ -101,19 +102,22 @@ public class GeneratorSequenceNonIncrementalWriter<T>
     }
 
     private void initOnFirstAdd() throws InitException {
-
-        // For now we only take the first FileType from the generator, we will have to modify this
-        // in future
-        FileType[] fileTypes =
-                iterableGenerator
-                        .getGenerator()
-                        .getFileTypes(this.parentOutputManager.getOutputWriteSettings())
-                        .orElseThrow(
-                                () ->
-                                        new InitException(
-                                                "This operation requires file-types to be defined by the generator"));
-
-        this.sequenceWriter.init(fileTypes, this.sequenceType, this.suppressSubfolder);
+        try {
+            // For now we only take the first FileType from the generator, we will have to modify this
+            // in future
+            FileType[] fileTypes =
+                    iterableGenerator
+                            .getGenerator()
+                            .getFileTypes(this.parentOutputManager.getOutputWriteSettings())
+                            .orElseThrow(
+                                    () ->
+                                            new InitException(
+                                                    "This operation requires file-types to be defined by the generator"));
+    
+            this.sequenceWriter.init(fileTypes, this.sequenceType, this.suppressSubfolder);
+        } catch (OperationFailedException e) {
+            throw new InitException(e);
+        }
     }
 
     @Override

@@ -27,18 +27,17 @@
 package org.anchoranalysis.io.generator.csv;
 
 import java.util.Optional;
-import org.anchoranalysis.io.generator.SingleFileTypeGenerator;
+import org.anchoranalysis.io.generator.OneStageGeneratorWithElement;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 
-public abstract class CSVGenerator extends SingleFileTypeGenerator {
+@AllArgsConstructor(access=AccessLevel.PROTECTED)
+public abstract class CSVGenerator<T> extends OneStageGeneratorWithElement<T> {
 
     private final String manifestFunction;
-
-    protected CSVGenerator(String manifestFunction) {
-        this.manifestFunction = manifestFunction;
-    }
-
+    
     @Override
     public String getFileExtension(OutputWriteSettings outputWriteSettings) {
         return "csv";

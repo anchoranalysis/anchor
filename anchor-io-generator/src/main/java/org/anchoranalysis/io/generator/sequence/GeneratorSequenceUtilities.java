@@ -30,7 +30,7 @@ import java.util.Collection;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.io.generator.IterableObjectGenerator;
+import org.anchoranalysis.io.generator.IterableSingleFileTypeGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.namestyle.IntegerSuffixOutputNameStyle;
@@ -45,7 +45,7 @@ public class GeneratorSequenceUtilities {
             String folderName,
             int numDigits,
             Collection<T> items,
-            IterableObjectGenerator<T, Stack> generator,
+            IterableSingleFileTypeGenerator<T, Stack> generator,
             BoundIOContext context) {
         IndexableOutputNameStyle outputStyle =
                 new IntegerSuffixOutputNameStyle(folderName, numDigits);
@@ -75,7 +75,7 @@ public class GeneratorSequenceUtilities {
             String folderName,
             int numDigits,
             Collection<T> items,
-            IterableObjectGenerator<T, Stack> generator,
+            IterableSingleFileTypeGenerator<T, Stack> generator,
             BoundOutputManagerRouteErrors outputManager)
             throws OutputWriteFailedException {
 

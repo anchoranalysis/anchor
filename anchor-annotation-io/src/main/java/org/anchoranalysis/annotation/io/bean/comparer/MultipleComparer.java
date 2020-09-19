@@ -161,7 +161,7 @@ public class MultipleComparer extends AnchorBean<MultipleComparer> {
                             3,
                             true);
 
-            return new SimpleNameValue<>(rightName, generator.generate());
+            return new SimpleNameValue<>(rightName, generator.transform());
 
         } catch (FeatureCalculationException | OutputWriteFailedException e1) {
             throw new CreateException(e1);

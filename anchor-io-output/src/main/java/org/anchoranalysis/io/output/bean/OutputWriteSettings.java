@@ -42,12 +42,13 @@ import org.anchoranalysis.io.bean.color.list.HSB;
 import org.anchoranalysis.io.bean.color.list.Shuffle;
 import org.anchoranalysis.io.color.ColorIndexModulo;
 
-/*
- *
- * It is very important that init() is run before using the bean. This normally occurs from checkMisconfigured() that
+/**
+ * Settings for how to write output, including default writers.
+ * 
+ * <p>It is very important that {@link #init} is run before using the bean. This normally occurs from checkMisconfigured() that
  *   is called automatically from the bean-loading framework
  *
- *   But if the bean is not loaded through this mechanism, please call init explicitly before usage
+ * <p>However, if the bean is not loaded through this mechanism, please call {@link #init} explicitly before usage
  */
 public class OutputWriteSettings extends AnchorBean<OutputWriteSettings> {
 
@@ -100,7 +101,7 @@ public class OutputWriteSettings extends AnchorBean<OutputWriteSettings> {
     }
 
     /**
-     * Gets a writer-instance for type c
+     * Gets a writer-instance for a particular {@code writerParentClass}.
      *
      * <p>1. First, it looks for a match among the bean-field 'writers' 2. If no match is found,
      * then it looks among the general default-instances 3. If no match is found, then it returns
@@ -108,14 +109,14 @@ public class OutputWriteSettings extends AnchorBean<OutputWriteSettings> {
      *
      * <p>When a writer is returned, it will always inherits from type c.
      *
-     * @param c the class identifying which type of writer is sought
+     * @param writerParentClass the class identifying which type of writer is sought
      * @return a matching writer, or null.
      */
-    public Object getWriterInstance(Class<?> c) {
+    public Object getWriterInstance(Class<?> writerParentClass) {
         assert (writerInstances != null);
 
         // We look for the default instance, corresponding to the particular class
-        return writerInstances.get(c);
+        return writerInstances.get(writerParentClass);
     }
 
     public ColorIndex defaultColorIndexFor(int numberColors) throws OperationFailedException {

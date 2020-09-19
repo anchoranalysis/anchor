@@ -27,24 +27,19 @@
 package org.anchoranalysis.mpp.io.marks.generator;
 
 import java.util.Optional;
-import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.image.extent.Dimensions;
-import org.anchoranalysis.image.io.generator.raster.RasterGenerator;
+import org.anchoranalysis.image.io.generator.raster.RasterGeneratorWithElement;
 import org.anchoranalysis.image.io.generator.raster.object.collection.ObjectsAsUniqueValueGenerator;
 import org.anchoranalysis.image.object.properties.ObjectCollectionWithProperties;
 import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.io.generator.Generator;
-import org.anchoranalysis.io.generator.IterableGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMembershipWithFlags;
 import org.anchoranalysis.mpp.mark.MarkCollection;
 
-public class MarksAsUniqueValueGenerator extends RasterGenerator
-        implements IterableGenerator<MarkCollection> {
+public class MarksAsUniqueValueGenerator extends RasterGeneratorWithElement<MarkCollection> {
 
     private ObjectsAsUniqueValueGenerator delegate;
-    private MarkCollection marks;
     private RegionMembershipWithFlags rm;
 
     public MarksAsUniqueValueGenerator(Dimensions dimensions, RegionMembershipWithFlags rm) {
@@ -55,7 +50,7 @@ public class MarksAsUniqueValueGenerator extends RasterGenerator
     public MarksAsUniqueValueGenerator(
             Dimensions dimensions, RegionMembershipWithFlags rm, MarkCollection marks) {
         this(dimensions, rm);
-        this.marks = marks;
+        setIterableElement(marks);
     }
 
     @Override
@@ -64,31 +59,17 @@ public class MarksAsUniqueValueGenerator extends RasterGenerator
     }
 
     @Override
-    public Stack generate() throws OutputWriteFailedException {
+    public Stack transform() throws OutputWriteFailedException {
 
         ObjectCollectionWithProperties objects =
-                marks.deriveObjects(delegate.dimensions(), this.rm);
-        try {
-            delegate.setIterableElement(objects.withoutProperties());
-        } catch (SetOperationFailedException e) {
-            throw new OutputWriteFailedException(e);
-        }
-        return delegate.generate();
+                getIterableElement().deriveObjects(delegate.dimensions(), this.rm);
+        delegate.setIterableElement(objects.withoutProperties());
+        return delegate.transform();
     }
 
     @Override
     public Optional<ManifestDescription> createManifestDescription() {
         return delegate.createManifestDescription();
-    }
-
-    @Override
-    public MarkCollection getIterableElement() {
-        return marks;
-    }
-
-    @Override
-    public void setIterableElement(MarkCollection element) throws SetOperationFailedException {
-        this.marks = element;
     }
 
     @Override
@@ -99,10 +80,5 @@ public class MarksAsUniqueValueGenerator extends RasterGenerator
     @Override
     public void end() throws OutputWriteFailedException {
         delegate.end();
-    }
-
-    @Override
-    public Generator getGenerator() {
-        return this;
     }
 }

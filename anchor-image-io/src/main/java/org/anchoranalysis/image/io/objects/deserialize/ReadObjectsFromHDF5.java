@@ -31,7 +31,7 @@ import ch.systemsx.cisd.hdf5.IHDF5Reader;
 import ch.systemsx.cisd.hdf5.exceptions.HDF5FileNotFoundException;
 import java.nio.file.Path;
 import java.util.List;
-import org.anchoranalysis.image.io.objects.GeneratorHDF5;
+import org.anchoranalysis.image.io.objects.HDF5ObjectsGenerator;
 import org.anchoranalysis.image.io.objects.HDF5PathHelper;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.factory.ObjectCollectionFactory;
@@ -79,7 +79,7 @@ class ReadObjectsFromHDF5 implements Deserializer<ObjectCollection> {
         // objects present
         int numberObjects =
                 ObjectMaskHDF5Reader.extractIntAttr(
-                        reader.uint32(), "/", GeneratorHDF5.NUM_OBJECTS_ATTR_NAME);
+                        reader.uint32(), "/", HDF5ObjectsGenerator.NUM_OBJECTS_ATTRIBUTE_NAME);
         if (numberObjects == 0) {
             return ObjectCollectionFactory.empty();
         }

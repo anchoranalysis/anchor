@@ -27,11 +27,25 @@
 package org.anchoranalysis.io.generator;
 
 import java.util.Optional;
+import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.io.manifest.file.FileType;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.writer.WritableItem;
 
+/**
+ * A class that writes a particular type of object(s) to the file-system.
+ * 
+ * @author Owen Feehan
+ *
+ */
 public interface Generator extends WritableItem {
 
-    Optional<FileType[]> getFileTypes(OutputWriteSettings outputWriteSettings);
+    /** 
+     * The types of files the generator writes to the file-system.
+     * 
+     * @param outputWriteSettings general settings for outputting
+     * @return an array of all file-types written, if any exist
+     * @throws OperationFailedException if anything goes wrong
+     */
+    Optional<FileType[]> getFileTypes(OutputWriteSettings outputWriteSettings) throws OperationFailedException;
 }

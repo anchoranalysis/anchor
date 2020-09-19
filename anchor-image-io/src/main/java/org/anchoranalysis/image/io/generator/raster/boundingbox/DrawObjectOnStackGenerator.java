@@ -36,7 +36,7 @@ import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.extent.box.BoundedList;
 import org.anchoranalysis.image.extent.box.BoundingBox;
-import org.anchoranalysis.image.io.generator.raster.RasterGenerator;
+import org.anchoranalysis.image.io.generator.raster.RasterGeneratorWithElement;
 import org.anchoranalysis.image.io.generator.raster.object.rgb.DrawObjectsGenerator;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.properties.ObjectCollectionWithProperties;
@@ -44,8 +44,7 @@ import org.anchoranalysis.image.object.properties.ObjectWithProperties;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.bean.object.writer.Outline;
-import org.anchoranalysis.io.generator.IterableObjectGenerator;
-import org.anchoranalysis.io.generator.ObjectGenerator;
+import org.anchoranalysis.io.generator.IterableSingleFileTypeGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
@@ -58,19 +57,16 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
  *
  * @author Owen Feehan
  */
-public class DrawObjectOnStackGenerator extends RasterGenerator
-        implements IterableObjectGenerator<BoundedList<ObjectMask>, Stack> {
+public class DrawObjectOnStackGenerator extends RasterGeneratorWithElement<BoundedList<ObjectMask>> {
 
     private static final ManifestDescription MANIFEST_DESCRIPTION =
             new ManifestDescription("raster", "extractedObjectOutline");
 
     // START REQUIRED ARGUMENTS
     private final DrawObjectsGenerator drawObjectsGenerator;
-    private final Optional<IterableObjectGenerator<BoundingBox, Stack>> backgroundGenerator;
+    private final Optional<IterableSingleFileTypeGenerator<BoundingBox, Stack>> backgroundGenerator;
     private final boolean flatten;
     // END REQUIRED ARGUMENTS
-
-    private BoundedList<ObjectMask> element;
 
     /**
      * Creates the generator with a stack as the background - and with default color green and
@@ -126,7 +122,7 @@ public class DrawObjectOnStackGenerator extends RasterGenerator
      * @param colors colors to use for outling of objects
      */
     public static DrawObjectOnStackGenerator createFromGenerator(
-            IterableObjectGenerator<BoundingBox, Stack> backgroundGenerator,
+            IterableSingleFileTypeGenerator<BoundingBox, Stack> backgroundGenerator,
             int outlineWidth,
             ColorIndex colors) {
         return new DrawObjectOnStackGenerator(
@@ -144,7 +140,7 @@ public class DrawObjectOnStackGenerator extends RasterGenerator
      *     and bounding-box)
      */
     private DrawObjectOnStackGenerator(
-            Optional<IterableObjectGenerator<BoundingBox, Stack>> backgroundGenerator,
+            Optional<IterableSingleFileTypeGenerator<BoundingBox, Stack>> backgroundGenerator,
             int outlineWidth,
             ColorIndex colorIndex,
             boolean flatten) {
@@ -154,7 +150,7 @@ public class DrawObjectOnStackGenerator extends RasterGenerator
     }
 
     @Override
-    public Stack generate() throws OutputWriteFailedException {
+    public Stack transform() throws OutputWriteFailedException {
 
         if (getIterableElement() == null) {
             throw new OutputWriteFailedException("no mutable element set");
@@ -177,11 +173,13 @@ public class DrawObjectOnStackGenerator extends RasterGenerator
         drawObjectsGenerator.setIterableElement(
                 new ObjectCollectionWithProperties(objectsForDrawing));
 
-        return drawObjectsGenerator.generate();
+        return drawObjectsGenerator.transform();
     }
 
     private Either<Dimensions, DisplayStack> createBackground() throws OutputWriteFailedException {
 
+        BoundedList<ObjectMask> element = getIterableElement();
+        
         if (!backgroundGenerator.isPresent()) {
             // Exit early if there's no background to be extracted
             return Either.left(new Dimensions(element.boundingBox().extent()));
@@ -193,7 +191,7 @@ public class DrawObjectOnStackGenerator extends RasterGenerator
             throw new OutputWriteFailedException(e);
         }
 
-        Stack channelExtracted = backgroundGenerator.get().getGenerator().generate();
+        Stack channelExtracted = backgroundGenerator.get().getGenerator().transform();
 
         if (flatten) {
             channelExtracted = channelExtracted.maximumIntensityProjection();
@@ -204,21 +202,6 @@ public class DrawObjectOnStackGenerator extends RasterGenerator
         } catch (CreateException e) {
             throw new OutputWriteFailedException(e);
         }
-    }
-
-    @Override
-    public BoundedList<ObjectMask> getIterableElement() {
-        return element;
-    }
-
-    @Override
-    public void setIterableElement(BoundedList<ObjectMask> element) {
-        this.element = element;
-    }
-
-    @Override
-    public ObjectGenerator<Stack> getGenerator() {
-        return this;
     }
 
     @Override
