@@ -29,11 +29,18 @@ package org.anchoranalysis.image.io.generator.raster;
 import java.util.Optional;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
+import org.anchoranalysis.image.io.rasterwriter.RasterWriteOptions;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import lombok.AllArgsConstructor;
 
+/**
+ * Writes a stack to the file-system.
+ * 
+ * @author Owen Feehan
+ *
+ */
 @AllArgsConstructor
 public class StackGenerator extends RasterGeneratorWithElement<Stack> {
 
@@ -90,5 +97,10 @@ public class StackGenerator extends RasterGeneratorWithElement<Stack> {
     public boolean isRGB() {
         int numberChannels = getElement().getNumberChannels();
         return numberChannels == 3 || (numberChannels == 2 && padIfNecessary);
+    }
+        
+    @Override
+    public RasterWriteOptions rasterWriteOptions() {
+        return RasterWriteOptions.maybeRGB(isRGB());
     }
 }

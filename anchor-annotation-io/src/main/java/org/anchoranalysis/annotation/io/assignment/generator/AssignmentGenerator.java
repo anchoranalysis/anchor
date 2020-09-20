@@ -41,6 +41,7 @@ import org.anchoranalysis.image.io.bean.stack.StackProviderWithLabel;
 import org.anchoranalysis.image.io.generator.raster.RasterGeneratorWithElement;
 import org.anchoranalysis.image.io.generator.raster.StackGenerator;
 import org.anchoranalysis.image.io.generator.raster.object.rgb.DrawObjectsGenerator;
+import org.anchoranalysis.image.io.rasterwriter.RasterWriteOptions;
 import org.anchoranalysis.image.io.stack.TileRasters;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
@@ -198,5 +199,10 @@ public class AssignmentGenerator extends RasterGeneratorWithElement<Assignment> 
     @Override
     public Optional<ManifestDescription> createManifestDescription() {
         return Optional.of(new ManifestDescription("raster", "assignment"));
+    }
+
+    @Override
+    public RasterWriteOptions rasterWriteOptions() {
+        return RasterWriteOptions.rgbMaybe3D();
     }
 }

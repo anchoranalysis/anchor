@@ -34,9 +34,9 @@ import org.anchoranalysis.bean.provider.Provider;
 import org.anchoranalysis.image.bean.arrangeraster.ArrangeRasterOverlay;
 import org.anchoranalysis.image.bean.arrangeraster.ArrangeRasterTile;
 import org.anchoranalysis.image.bean.provider.stack.ArrangeRaster;
+import org.anchoranalysis.image.io.bean.generator.StringRasterGenerator;
 import org.anchoranalysis.image.io.bean.stack.StackProviderWithLabel;
 import org.anchoranalysis.image.io.bean.stack.provider.GenerateString;
-import org.anchoranalysis.image.io.generator.raster.StringRasterGenerator;
 import org.anchoranalysis.image.stack.Stack;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)

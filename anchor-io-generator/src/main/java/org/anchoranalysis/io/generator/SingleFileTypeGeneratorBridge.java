@@ -38,7 +38,7 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 /**
  * Allows us to call an {@code SingleFileTypeGenerator<V,S>} as if it was an {@code
- * SingleFileTypeGenerator<T,S>} using an function to connect the two
+ * SingleFileTypeGenerator<T,S>} using an function to connect the two.
  *
  * @author Owen Feehan
  * @param <S> generator-type

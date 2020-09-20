@@ -32,6 +32,7 @@ import lombok.Setter;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.idgetter.IDGetter;
 import org.anchoranalysis.image.io.generator.raster.RasterGeneratorWithElement;
+import org.anchoranalysis.image.io.rasterwriter.RasterWriteOptions;
 import org.anchoranalysis.image.io.stack.ConvertDisplayStackToRGB;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
@@ -95,5 +96,10 @@ public abstract class MarksGeneratorBase extends RasterGeneratorWithElement<Colo
     @Override
     public Optional<ManifestDescription> createManifestDescription() {
         return Optional.of(new ManifestDescription("raster", manifestDescriptionFunction));
+    }
+
+    @Override
+    public RasterWriteOptions rasterWriteOptions() {
+        return RasterWriteOptions.rgbMaybe3D();
     }
 }

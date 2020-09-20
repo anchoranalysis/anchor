@@ -41,7 +41,7 @@ import org.anchoranalysis.image.convert.UnsignedShortBuffer;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.extent.box.BoundingBox;
-import org.anchoranalysis.image.io.generator.raster.StringRasterGenerator;
+import org.anchoranalysis.image.io.bean.generator.StringRasterGenerator;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.voxel.convert.ToShortScaleByType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;

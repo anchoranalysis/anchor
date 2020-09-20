@@ -37,6 +37,7 @@ import org.anchoranalysis.image.bean.arrangeraster.ArrangeRasterBean;
 import org.anchoranalysis.image.bean.nonbean.arrangeraster.RasterArranger;
 import org.anchoranalysis.image.channel.factory.ChannelFactoryByte;
 import org.anchoranalysis.image.io.generator.raster.RasterGenerator;
+import org.anchoranalysis.image.io.rasterwriter.RasterWriteOptions;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
 import org.anchoranalysis.io.generator.SingleFileTypeGenerator;
@@ -48,8 +49,8 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 class CombineGenerator<T> extends RasterGenerator<T> {
 
     private final ArrangeRasterBean arrangeRaster;
-    private final List<SingleFileTypeGenerator<T, Stack>> generatorList;
-
+    private final List<RasterGenerator<T>> generators;
+    
     @Override
     public Stack transform() throws OutputWriteFailedException {
 
@@ -74,7 +75,7 @@ class CombineGenerator<T> extends RasterGenerator<T> {
 
     @Override
     public String getFileExtension(OutputWriteSettings outputWriteSettings) throws OperationFailedException {
-        return generatorList.get(0).getFileExtension(outputWriteSettings);
+        return generators.get(0).getFileExtension(outputWriteSettings);
     }
 
     @Override
@@ -85,7 +86,7 @@ class CombineGenerator<T> extends RasterGenerator<T> {
     @Override
     public void start() throws OutputWriteFailedException {
 
-        for (SingleFileTypeGenerator<T, Stack> generator : generatorList) {
+        for (RasterGenerator<T> generator : generators) {
             generator.start();
         }
     }
@@ -93,32 +94,37 @@ class CombineGenerator<T> extends RasterGenerator<T> {
     @Override
     public void end() throws OutputWriteFailedException {
 
-        for (SingleFileTypeGenerator<T, Stack> generator : generatorList) {
+        for (RasterGenerator<T> generator : generators) {
             generator.end();
         }
     }
 
     @Override
     public T getElement() {
-        return generatorList.get(0).getElement();
+        return generators.get(0).getElement();
     }
     
     @Override
     public void assignElement(T element) throws SetOperationFailedException {
-        for (SingleFileTypeGenerator<T, Stack> generator : generatorList) {
+        for (SingleFileTypeGenerator<T, Stack> generator : generators) {
             generator.assignElement(element);
         }
     }
 
     @Override
     public boolean isRGB() {
-        return true;
+        return generators.stream().allMatch(RasterGenerator::isRGB);
     }
-
+    
     private List<RGBStack> generateAll() throws OutputWriteFailedException {
         return FunctionalList.mapToList(
-                generatorList,
+                generators,
                 OutputWriteFailedException.class,
                 generator -> new RGBStack(generator.transform()));
+    }
+
+    @Override
+    public RasterWriteOptions rasterWriteOptions() {
+        return generators.stream().map(RasterGenerator::rasterWriteOptions).reduce( (first,second) -> first.and(second) ).get();    // NOSONAR
     }
 }

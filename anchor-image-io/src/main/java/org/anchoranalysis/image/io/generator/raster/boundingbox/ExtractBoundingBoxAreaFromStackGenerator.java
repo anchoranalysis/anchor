@@ -31,6 +31,7 @@ import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.io.generator.raster.RasterGeneratorWithElement;
+import org.anchoranalysis.image.io.rasterwriter.RasterWriteOptions;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
@@ -72,5 +73,10 @@ public class ExtractBoundingBoxAreaFromStackGenerator extends RasterGeneratorWit
     @Override
     public boolean isRGB() {
         return background.getNumberChannels() == 3;
+    }
+
+    @Override
+    public RasterWriteOptions rasterWriteOptions() {
+        return RasterWriteOptions.maybeRGB(isRGB());
     }
 }

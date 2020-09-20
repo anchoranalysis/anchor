@@ -36,6 +36,7 @@ import org.anchoranalysis.image.channel.factory.ChannelFactoryByte;
 import org.anchoranalysis.image.channel.factory.ChannelFactorySingleType;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.io.generator.raster.RasterGeneratorWithElement;
+import org.anchoranalysis.image.io.rasterwriter.RasterWriteOptions;
 import org.anchoranalysis.image.object.properties.ObjectCollectionWithProperties;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
@@ -98,6 +99,11 @@ public abstract class ObjectsOnRGBGenerator extends RasterGeneratorWithElement<O
     @Override
     public Optional<ManifestDescription> createManifestDescription() {
         return Optional.of(MANIFEST_DESCRIPTION);
+    }
+    
+    @Override
+    public RasterWriteOptions rasterWriteOptions() {
+        return RasterWriteOptions.rgbMaybe3D();
     }
 
     protected abstract RGBStack generateBackground(Either<Dimensions, DisplayStack> background)

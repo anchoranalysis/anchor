@@ -29,6 +29,7 @@ package org.anchoranalysis.image.io.generator.raster;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.index.SetOperationFailedException;
+import org.anchoranalysis.image.io.rasterwriter.RasterWriteOptions;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.generator.SingleFileTypeGenerator;
@@ -41,7 +42,7 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
  */
 @RequiredArgsConstructor
 public class RasterGeneratorDelegateToDisplayStack<T> extends RasterGenerator<T> {
-
+    
     // START REQUIRED ARGUMENTS
     private final SingleFileTypeGenerator<T, DisplayStack> delegate;
     private final boolean rgb;
@@ -80,5 +81,10 @@ public class RasterGeneratorDelegateToDisplayStack<T> extends RasterGenerator<T>
     @Override
     public void assignElement(T element) throws SetOperationFailedException {
         delegate.assignElement(element);
+    }
+
+    @Override
+    public RasterWriteOptions rasterWriteOptions() {
+        return RasterWriteOptions.maybeRGB(rgb);
     }
 }

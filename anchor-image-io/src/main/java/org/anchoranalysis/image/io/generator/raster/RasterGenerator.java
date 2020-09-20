@@ -43,16 +43,8 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
  */
 public abstract class RasterGenerator<T> extends SingleFileTypeGenerator<T,Stack> {
 
-    public abstract boolean isRGB() throws OutputWriteFailedException;
-
-    private RasterWriteOptions rasterOptions;
-    
-    //public RasterGenerator(RasterWriteOptions rasterOptions) {
-    public RasterGenerator() {
-        super();
-        //this.rasterOptions = rasterOptions;
-    }    
-        
+    public abstract boolean isRGB();
+            
     @Override
     public void writeToFile(OutputWriteSettings outputWriteSettings, Path filePath)
             throws OutputWriteFailedException {
@@ -76,6 +68,8 @@ public abstract class RasterGenerator<T> extends SingleFileTypeGenerator<T,Stack
 
     @Override
     public String getFileExtension(OutputWriteSettings outputWriteSettings) throws OperationFailedException {
-        return RasterWriterUtilities.fileExtensionForDefaultRasterWriter(outputWriteSettings, rasterOptions);
+        return RasterWriterUtilities.fileExtensionForDefaultRasterWriter(outputWriteSettings, rasterWriteOptions());
     }
+    
+    public abstract RasterWriteOptions rasterWriteOptions();
 }

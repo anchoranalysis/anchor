@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.image.io.generator.raster;
+package org.anchoranalysis.image.io.bean.generator;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -43,10 +43,12 @@ import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.color.RGBColor;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.spatial.SizeXY;
+import org.anchoranalysis.image.io.generator.raster.RasterGenerator;
+import org.anchoranalysis.image.io.generator.raster.RasterGeneratorWithElement;
+import org.anchoranalysis.image.io.rasterwriter.RasterWriteOptions;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.bufferedimage.CreateStackFromBufferedImage;
 import org.anchoranalysis.io.bean.color.RGBColorBean;
-import org.anchoranalysis.io.generator.SingleFileTypeGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
@@ -125,6 +127,11 @@ public class StringRasterGenerator extends AnchorBean<StringRasterGenerator> {
         public Optional<ManifestDescription> createManifestDescription() {
             return Optional.of(new ManifestDescription("raster", "text"));
         }
+        
+        @Override
+        public RasterWriteOptions rasterWriteOptions() {
+            return RasterWriteOptions.rgbMaybe3D();
+        }
 
         private Graphics2D createGraphicsFromBufferedImage(BufferedImage bufferedImage) {
 
@@ -170,7 +177,7 @@ public class StringRasterGenerator extends AnchorBean<StringRasterGenerator> {
     }
 
     /** Creates an iterable-generator, which produces a drawn string on an image when generated */
-    public SingleFileTypeGenerator<String, Stack> createGenerator() {
+    public RasterGenerator<String> createGenerator() {
         return new Generator(text);
     }
 

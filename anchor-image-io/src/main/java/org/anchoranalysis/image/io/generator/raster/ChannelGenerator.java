@@ -28,6 +28,7 @@ package org.anchoranalysis.image.io.generator.raster;
 
 import java.util.Optional;
 import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.io.rasterwriter.RasterWriteOptions;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
@@ -73,5 +74,10 @@ public class ChannelGenerator extends RasterGeneratorWithElement<Channel> {
     @Override
     public boolean isRGB() {
         return false;
+    }
+
+    @Override
+    public RasterWriteOptions rasterWriteOptions() {
+        return RasterWriteOptions.singleChannelMaybe3D();
     }
 }

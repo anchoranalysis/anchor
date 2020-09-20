@@ -30,6 +30,7 @@ import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.io.generator.raster.ChannelGenerator;
+import org.anchoranalysis.image.io.rasterwriter.RasterWriteOptions;
 import org.anchoranalysis.image.object.MaskFromObjects;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.stack.Stack;
@@ -56,5 +57,10 @@ public class ObjectsMergedAsMaskGenerator extends ObjectsGenerator {
                 MaskFromObjects.createFromObjects(
                         getObjects(), dimensions(), BinaryValues.getDefault());
         return new ChannelGenerator("maskCollection", mask.channel()).transform();
+    }
+
+    @Override
+    public RasterWriteOptions rasterWriteOptions() {
+        return RasterWriteOptions.singleChannelMaybe3D();
     }
 }

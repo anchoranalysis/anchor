@@ -30,6 +30,7 @@ import java.util.Optional;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.io.generator.raster.RasterGeneratorWithElement;
 import org.anchoranalysis.image.io.generator.raster.object.collection.ObjectsAsUniqueValueGenerator;
+import org.anchoranalysis.image.io.rasterwriter.RasterWriteOptions;
 import org.anchoranalysis.image.object.properties.ObjectCollectionWithProperties;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.manifest.ManifestDescription;
@@ -79,5 +80,10 @@ public class MarksAsUniqueValueGenerator extends RasterGeneratorWithElement<Mark
     @Override
     public void end() throws OutputWriteFailedException {
         delegate.end();
+    }
+
+    @Override
+    public RasterWriteOptions rasterWriteOptions() {
+        return delegate.rasterWriteOptions();
     }
 }

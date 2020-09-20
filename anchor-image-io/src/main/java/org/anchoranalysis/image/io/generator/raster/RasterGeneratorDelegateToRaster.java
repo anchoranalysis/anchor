@@ -3,6 +3,7 @@ package org.anchoranalysis.image.io.generator.raster;
 import java.util.Optional;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.index.SetOperationFailedException;
+import org.anchoranalysis.image.io.rasterwriter.RasterWriteOptions;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
@@ -72,7 +73,7 @@ public abstract class RasterGeneratorDelegateToRaster<S,T> extends RasterGenerat
     }
     
     @Override
-    public boolean isRGB() throws OutputWriteFailedException {
+    public boolean isRGB() {
         return delegate.isRGB();
     }
     
@@ -91,5 +92,10 @@ public abstract class RasterGeneratorDelegateToRaster<S,T> extends RasterGenerat
     public void end() throws OutputWriteFailedException {
         delegate.end();
         this.element = null;
+    }
+    
+    @Override
+    public RasterWriteOptions rasterWriteOptions() {
+        return delegate.rasterWriteOptions();
     }
 }

@@ -33,8 +33,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.image.bean.arrangeraster.ArrangeRasterBean;
-import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.io.generator.SingleFileTypeGenerator;
+import org.anchoranalysis.image.io.generator.raster.RasterGenerator;
 
 /**
  * Combines a number of generators of Raster images by tiling their outputs together
@@ -51,14 +50,14 @@ public class CombineRasterGenerator<T> extends AnchorBean<CombineRasterGenerator
 
     // A list of all generators to be tiled (left to right, then top to bottom)
     @BeanField @Getter @Setter
-    private List<SingleFileTypeGenerator<T, Stack>> generatorList = new ArrayList<>();
+    private List<RasterGenerator<T>> generatorList = new ArrayList<>();
     // END BEAN PROPERTIES
 
-    public void add(SingleFileTypeGenerator<T, Stack> generator) {
+    public void add(RasterGenerator<T> generator) {
         generatorList.add(generator);
     }
 
-    public SingleFileTypeGenerator<T, Stack> createGenerator() {
+    public RasterGenerator<T> createGenerator() {
         return new CombineGenerator<>(arrange, generatorList);
     }
 
