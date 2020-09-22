@@ -96,12 +96,12 @@ public class RGBStack {
     }
 
     /**
-     * Copy constructor
+     * Copy constructor, deep copies channels.
      *
      * @param source where to copy from
      */
     private RGBStack(RGBStack source) {
-        stack = source.stack.duplicate();
+        stack = source.stack.duplicateDeep();
     }
 
     public RGBStack(Channel red, Channel green, Channel blue) throws IncorrectImageSizeException {

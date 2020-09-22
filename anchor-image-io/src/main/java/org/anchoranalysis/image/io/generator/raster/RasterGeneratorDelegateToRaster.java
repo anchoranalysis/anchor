@@ -41,7 +41,7 @@ public abstract class RasterGeneratorDelegateToRaster<S,T> extends RasterGenerat
      * @return converted element
      * @throws OperationFailedException if anything goes wrong during conversion
      **/ 
-    protected abstract S convertBeforeSetter(T element) throws OperationFailedException;
+    protected abstract S convertBeforeAssign(T element) throws OperationFailedException;
     
     /** 
      * Converts an element before calling {@link #transform()} on the {@code delegate}.
@@ -61,7 +61,7 @@ public abstract class RasterGeneratorDelegateToRaster<S,T> extends RasterGenerat
         this.element = element;
         
         try {
-            delegate.assignElement( convertBeforeSetter(element) );
+            delegate.assignElement( convertBeforeAssign(element) );
         } catch (OperationFailedException e) {
             throw new SetOperationFailedException(e);
         }

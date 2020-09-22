@@ -73,6 +73,14 @@ public class RasterWriteOptions {
         return new RasterWriteOptions(always2D, true, false);
     }
     
+    public static RasterWriteOptions maybeRGB(boolean rgb, boolean always2D) {
+        if (always2D) {
+            return new RasterWriteOptions(true, rgb, rgb);
+        } else {
+             return maybeRGB(rgb);
+        }
+    }
+    
     public static RasterWriteOptions maybeRGB(boolean rgb) {
         if (rgb) {
             return RGB_MAYBE_3D;

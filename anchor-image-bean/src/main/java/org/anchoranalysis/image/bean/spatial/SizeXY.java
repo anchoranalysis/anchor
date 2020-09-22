@@ -76,4 +76,9 @@ public class SizeXY extends AnchorBean<SizeXY> {
     public Extent asExtent(int depth) {
         return new Extent(width, height, depth);
     }
+
+    @Override
+    public String toString() {
+        return String.format("[%d,%d]", width, height);
+    }
 }

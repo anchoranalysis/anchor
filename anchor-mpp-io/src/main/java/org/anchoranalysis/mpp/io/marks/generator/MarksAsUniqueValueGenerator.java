@@ -74,11 +74,13 @@ public class MarksAsUniqueValueGenerator extends RasterGeneratorWithElement<Mark
 
     @Override
     public void start() throws OutputWriteFailedException {
+        super.start();
         delegate.start();
     }
 
     @Override
     public void end() throws OutputWriteFailedException {
+        super.end();
         delegate.end();
     }
 

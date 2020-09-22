@@ -28,7 +28,6 @@ package org.anchoranalysis.image.io.generator.raster;
 
 import java.util.Optional;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.io.rasterwriter.RasterWriteOptions;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.manifest.ManifestDescription;
@@ -44,15 +43,32 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class StackGenerator extends RasterGeneratorWithElement<Stack> {
 
+    /** Iff true, in the specific case of a 2-channel stack, an additional blank channel is added to make it 3-channels. */
     private boolean padIfNecessary;
+    
+    /** Function stored in manifest for this generator. */
     private String manifestFunction;
-
-    // Won't do any padding
-    public StackGenerator(String manifestFunction) {
-        this(false, manifestFunction);
+    
+    /** If true, a stack is guaranteed always to have only one z-slice. If false, it may be 2D or 3D. */
+    private boolean always2D;
+    
+    /**
+     * Creates a generator that performs no padding.
+     * 
+     * @param manifestFunction manifestFunction function stored in manifest for this generator
+     * @param always2D if true, a stack is guaranteed always to be 2D (i.e. have only one z-slice). If false, it may be 2D or 3D.
+     */
+    public StackGenerator(String manifestFunction, boolean always2D) {
+        this(false, manifestFunction, always2D);
     }
 
-    // Notes pads the passed channel, would be better if it makes a new stack first
+    /**
+     * Creates the generator.
+     *  
+     * @param padIfNecessary iff true, in the specific case of a 2-channel stack, an additional blank channel is added to make it 3-channels.
+     * @param manifestFunction function stored in manifest for this generator.
+     * @param stack the initial element
+     */
     public StackGenerator(boolean padIfNecessary, String manifestFunction, Stack stack) {
         super();
         this.padIfNecessary = padIfNecessary;
@@ -60,32 +76,19 @@ public class StackGenerator extends RasterGeneratorWithElement<Stack> {
         assignElement(stack);
     }
 
-    public static Stack generateStack(Stack stackIn, boolean padIfNec)
-            throws OutputWriteFailedException {
-        Stack stackOut = new Stack();
+    @Override
+    public Stack transform() throws OutputWriteFailedException {
+        Stack out = getElement().duplicateShallow();
 
         try {
-            for (int c = 0; c < stackIn.getNumberChannels(); c++) {
-                stackOut.addChannel(stackIn.getChannel(c));
-            }
-        } catch (IncorrectImageSizeException e) {
-            throw new OutputWriteFailedException(e);
-        }
-
-        try {
-            if (padIfNec && stackOut.getNumberChannels() == 2) {
-                stackOut.addBlankChannel();
+            if (padIfNecessary && out.getNumberChannels() == 2) {
+                out.addBlankChannel();
             }
         } catch (OperationFailedException e) {
             throw new OutputWriteFailedException(e);
         }
 
-        return stackOut;
-    }
-
-    @Override
-    public Stack transform() throws OutputWriteFailedException {
-        return generateStack(getElement(), padIfNecessary);
+        return out;
     }
 
     @Override
@@ -101,6 +104,6 @@ public class StackGenerator extends RasterGeneratorWithElement<Stack> {
         
     @Override
     public RasterWriteOptions rasterWriteOptions() {
-        return RasterWriteOptions.maybeRGB(isRGB());
+        return RasterWriteOptions.maybeRGB(isRGB(), always2D);
     }
 }

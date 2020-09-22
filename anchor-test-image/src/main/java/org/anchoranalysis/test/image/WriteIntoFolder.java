@@ -32,6 +32,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
+import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
@@ -89,7 +90,7 @@ public class WriteIntoFolder implements TestRule {
 
     private BoundOutputManagerRouteErrors outputManager;
 
-    private DisplayStackGenerator generatorStack = new DisplayStackGenerator("irrelevant");
+    private DisplayStackGenerator generatorStack = new DisplayStackGenerator("irrelevant", false);
 
     private ObjectAsMaskGenerator generatorSingleObject = new ObjectAsMaskGenerator();
 
@@ -113,8 +114,12 @@ public class WriteIntoFolder implements TestRule {
 
         setupOutputManagerIfNecessary();
 
-        generatorStack.assignElement(stack);
-
+        try {
+            generatorStack.assignElement(stack);
+        } catch (SetOperationFailedException e) {
+            throw new AnchorImpossibleSituationException();
+        }
+    
         outputManager.getWriterAlwaysAllowed().write(outputName, () -> generatorStack);
     }
 
@@ -166,7 +171,14 @@ public class WriteIntoFolder implements TestRule {
         writeStack(outputName, displayStackFor(channel));
     }
 
-    public void writeList(String outputName, List<DisplayStack> stacks) {
+    /**
+     * Writes a list of display-stacks
+     * 
+     * @param outputName the output-name
+     * @param stacks the list of display-stacks
+     * @param always2D if true, the stacks are guaranteed to always to have only one z-slice (which can influence the output format).
+     */
+    public void writeList(String outputName, List<DisplayStack> stacks, boolean always2D) {
 
         setupOutputManagerIfNecessary();
 

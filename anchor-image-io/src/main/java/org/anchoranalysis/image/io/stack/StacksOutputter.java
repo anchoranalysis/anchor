@@ -158,8 +158,7 @@ public class StacksOutputter {
     }
 
     private static StackGenerator createStackGenerator() {
-        String manifestFunction = "stackFromCollection";
-        return new StackGenerator(true, manifestFunction);
+        return new StackGenerator(true, "stackFromCollection", false);
     }
 
     private static NamedStacks stackSubset(

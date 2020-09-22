@@ -26,54 +26,35 @@
 
 package org.anchoranalysis.image.io.generator.raster;
 
-import java.nio.file.Path;
-import java.util.Optional;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.stack.DisplayStack;
-import org.anchoranalysis.io.generator.OneStageGenerator;
-import org.anchoranalysis.io.manifest.ManifestDescription;
-import org.anchoranalysis.io.output.bean.OutputWriteSettings;
-import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import org.anchoranalysis.image.stack.Stack;
 
-public class DisplayStackGenerator extends OneStageGenerator<DisplayStack> {
+/**
+ * Writes a display-stack to the file-system.
+ * 
+ * @author Owen Feehan
+ *
+ */
+public class DisplayStackGenerator extends RasterGeneratorDelegateToRaster<Stack,DisplayStack> {
 
-    private StackGenerator delegate;
-
-    public DisplayStackGenerator(String manifestFunction) {
-        delegate = new StackGenerator(manifestFunction);
+    /**
+     * Creates the generator.
+     *  
+     * @param manifestFunction function-stored in manifest for this generator
+     * @param always2D if true, a stack is guaranteed always to be 2D (i.e. have only one z-slice). If false, it may be 2D or 3D.
+     */
+    public DisplayStackGenerator(String manifestFunction, boolean always2D) {
+        super( new StackGenerator(manifestFunction, always2D) );
+    }
+    
+    @Override
+    protected Stack convertBeforeAssign(DisplayStack element) throws OperationFailedException {
+        return element.deriveStack(false);
     }
 
     @Override
-    public void start() throws OutputWriteFailedException {
-        delegate.start();
-    }
-
-    @Override
-    public void end() throws OutputWriteFailedException {
-        super.end();
-        delegate.end();
-    }
-
-    @Override
-    public void assignElement(DisplayStack element) {
-        super.assignElement(element);
-
-        delegate.assignElement(element.deriveStack(false));
-    }
-
-    @Override
-    public void writeToFile(OutputWriteSettings outputWriteSettings, Path filePath)
-            throws OutputWriteFailedException {
-        delegate.writeToFile(outputWriteSettings, filePath);
-    }
-
-    @Override
-    public String getFileExtension(OutputWriteSettings outputWriteSettings) throws OperationFailedException {
-        return delegate.getFileExtension(outputWriteSettings);
-    }
-
-    @Override
-    public Optional<ManifestDescription> createManifestDescription() {
-        return delegate.createManifestDescription();
+    protected Stack convertBeforeTransform(Stack stack) {
+        return stack;
     }
 }

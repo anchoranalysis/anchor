@@ -104,7 +104,7 @@ public class AssignmentGenerator extends RasterGeneratorWithElement<Assignment> 
 
         assignElement(assignment);
         
-        delegate = new StackGenerator(true, "assignmentComparison");
+        delegate = new StackGenerator(true, "assignmentComparison", false);
     }
 
     @Override

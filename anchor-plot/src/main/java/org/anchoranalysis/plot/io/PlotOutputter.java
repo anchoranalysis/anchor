@@ -32,9 +32,9 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.plot.PlotInstance;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class GraphOutputter {
+public class PlotOutputter {
 
-    public static BufferedImage createBufferedImage(PlotInstance gi, int width, int height) {
-        return gi.getChart().createBufferedImage(width, height);
+    public static BufferedImage createBufferedImage(PlotInstance plotInstance, int width, int height) {
+        return plotInstance.getChart().createBufferedImage(width, height);
     }
 }

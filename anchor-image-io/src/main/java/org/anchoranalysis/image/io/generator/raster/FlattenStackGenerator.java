@@ -38,7 +38,7 @@ import org.anchoranalysis.image.stack.Stack;
 public class FlattenStackGenerator extends RasterGeneratorDelegateToRaster<Stack,Stack> {
 
     public FlattenStackGenerator(boolean padIfNec, String manifestFunction) {
-        super( new StackGenerator(padIfNec, manifestFunction) );
+        super( new StackGenerator(padIfNec, manifestFunction, true) );
     }
     
     @Override
@@ -47,7 +47,7 @@ public class FlattenStackGenerator extends RasterGeneratorDelegateToRaster<Stack
     }
     
     @Override
-    protected Stack convertBeforeSetter(Stack element) throws OperationFailedException {
+    protected Stack convertBeforeAssign(Stack element) throws OperationFailedException {
         return element;
     }
 

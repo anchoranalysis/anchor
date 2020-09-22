@@ -48,8 +48,7 @@ public class RasterReaderUtilities {
                 throw new RasterIOException("there must be exactly one series");
             }
 
-            Stack stack = openedRaster.open(0, ProgressReporterNull.get()).get(0);
-            return stack.duplicate();
+            return openedRaster.open(0, ProgressReporterNull.get()).get(0);
         } finally {
             openedRaster.close();
         }

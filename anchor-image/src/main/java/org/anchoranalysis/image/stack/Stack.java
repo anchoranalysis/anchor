@@ -89,7 +89,7 @@ public class Stack implements Iterable<Channel> {
         delegate = stack;
     }
 
-    /** Copy constructor */
+    /** Copy constructor (deep-copies channels) */
     private Stack(Stack src) {
         delegate = src.delegate.duplicate();
     }
@@ -212,8 +212,32 @@ public class Stack implements Iterable<Channel> {
         return dimensions().extent();
     }
 
-    public Stack duplicate() {
+    /**
+     * Performs a deep copy of the stack, so that all channels are duplicated.
+     * 
+     * @return a new stack with deep-copied channels.
+     */
+    public Stack duplicateDeep() {
         return new Stack(this);
+    }
+    
+    /**
+     * Performs a shallow copy of the stack, so that all channels are reused.
+     * 
+     * @return a new stack with reused channels.
+     */
+    public Stack duplicateShallow() {
+        Stack out = new Stack();
+
+        try {
+            for (int index = 0; index < getNumberChannels(); index++) {
+                out.addChannel(getChannel(index));
+            }
+        } catch (IncorrectImageSizeException e) {
+            throw new AnchorImpossibleSituationException();
+        }
+        
+        return out;
     }
 
     public Stack extractUpToThreeChannels() {
