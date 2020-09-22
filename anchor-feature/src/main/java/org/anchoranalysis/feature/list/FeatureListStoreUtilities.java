@@ -72,9 +72,8 @@ public class FeatureListStoreUtilities {
                     determineFeatureName(
                             features, nameParent, featureList.size() == 1, paramsOnlyInDescription);
 
-            // We duplicate so that when run in parallel each thread has its own local state for
-            // each feature
-            //  and uses seperate cached calculation lists
+            // We duplicate so that when run in parallel each thread has its own local state
+            // for each feature and uses separate cached calculation lists.
             store.add(chosenName, features.duplicateBean());
         }
     }

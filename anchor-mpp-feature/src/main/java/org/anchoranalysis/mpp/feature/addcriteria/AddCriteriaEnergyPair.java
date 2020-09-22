@@ -82,7 +82,7 @@ public class AddCriteriaEnergyPair implements AddCriteria<EnergyPair> {
             boolean do3D)
             throws CreateException {
 
-        // We have to split our FeatureSession in two seperate sessions:
+        // We have to split our FeatureSession in two separate sessions:
         //       some features for the includeMarks
         //   and some features for energyPairs
 

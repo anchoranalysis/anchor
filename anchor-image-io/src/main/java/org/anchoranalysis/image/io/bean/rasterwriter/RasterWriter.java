@@ -35,15 +35,32 @@ import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
 
+/**
+ * Writes a stack (i.e. raster) to the file-system.
+ * 
+ * @author Owen Feehan
+ *
+ */
 public abstract class RasterWriter extends AnchorBean<RasterWriter> {
 
-    /** File-extensions for files written by this writer. 
-     * @param multiplexOptions TODO*/
-    public abstract String fileExtension(RasterWriteOptions multiplexOptions);
+    /** 
+     * File-extensions for files written by this writer.
+     *  
+     * @param writeOptions options which may influence how a raster is written.
+     */
+    public abstract String fileExtension(RasterWriteOptions writeOptions);
 
     public abstract void writeTimeSeriesStackByte(
             StackSeries stackSeries, Path filePath, boolean makeRGB) throws RasterIOException;
 
+    /**
+     * Writes a stack to the filesystem at a particular path.
+     * 
+     * @param stack the stack to write
+     * @param filePath the path to write hte file to
+     * @param makeRGB if TRUE, the image should be written as a RGB image, rather than as separate channels.
+     * @throws RasterIOException if anything goes wrong whle writing.
+     */
     public void writeStack(Stack stack, Path filePath, boolean makeRGB) throws RasterIOException {
 
         if (stack.allChannelsHaveType(UnsignedByteVoxelType.INSTANCE)) {

@@ -109,7 +109,7 @@ public class ObjectCollectionRTree {
      * @return a list of object-collections, each object-collection is guaranteed to be spatially
      *     separate from the others.
      */
-    public List<ObjectCollection> spatiallySeperate() {
+    public List<ObjectCollection> spatiallySeparate() {
         Set<Integer> unprocessed =
                 IntStream.range(0, objects.size()).boxed().collect(Collectors.toSet());
         List<ObjectCollection> out = new ArrayList<>();

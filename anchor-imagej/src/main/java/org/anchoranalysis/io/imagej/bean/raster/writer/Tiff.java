@@ -48,7 +48,7 @@ public class Tiff extends SupportsTimeSeries {
     }
 
     @Override
-    public String fileExtension(RasterWriteOptions multiplexOptions) {
+    public String fileExtension(RasterWriteOptions writeOptions) {
         return "tif";
     }
 }

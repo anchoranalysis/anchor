@@ -51,7 +51,7 @@ public class PNG extends NoTimeSeries {
     }
 
     @Override
-    public String fileExtension(RasterWriteOptions multiplexOptions) {
+    public String fileExtension(RasterWriteOptions writeOptions) {
         return "png";
     }
 }
