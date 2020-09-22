@@ -252,6 +252,15 @@ public class Stack implements Iterable<Channel> {
         }
         return out;
     }
+    
+    /**
+     * Does the stack have more than one slice in the z-dimension?
+     * 
+     * @return true if there is more than one z slice, false if there is 1
+     */
+    public boolean hasMoreThanOneSlice() {
+        return delegate.getChannel(0).dimensions().z() > 1;
+    }
 
     @Override
     public Iterator<Channel> iterator() {

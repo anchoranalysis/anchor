@@ -56,7 +56,7 @@ class WalkSingleDir {
         } catch (FileSystemException e) {
             throw new FindFilesException(
                     String.format(
-                            "An file-system error occurring accessing directory: %s", e.getFile()));
+                            "An filesystem error occurring accessing directory: %s", e.getFile()));
         } catch (IOException e) {
             throw new FindFilesException(
                     String.format("An IO error occurring accessing directory: %s", e.toString()));

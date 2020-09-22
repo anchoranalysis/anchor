@@ -30,6 +30,7 @@ import java.nio.file.Path;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.generator.raster.series.StackSeries;
+import org.anchoranalysis.image.io.rasterwriter.RasterWriteOptions;
 
 /**
  * Base class for {@link ImageJRasterWriter} that <b>does</b> support writing time-series as a
@@ -40,7 +41,7 @@ import org.anchoranalysis.image.io.generator.raster.series.StackSeries;
 public abstract class SupportsTimeSeries extends ImageJRasterWriter {
 
     @Override
-    public void writeTimeSeriesStackByte(StackSeries stackSeries, Path filePath, boolean makeRGB)
+    public void writeStackSeries(StackSeries stackSeries, Path filePath, boolean makeRGB, RasterWriteOptions writeOptions)
             throws RasterIOException {
 
         try {

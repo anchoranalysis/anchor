@@ -35,7 +35,7 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.writer.WritableItem;
 
 /**
- * A class that writes a particular type of object(s) to the file-system.
+ * A class that writes a particular type of object(s) to the filesystem.
  * 
  * <p>The objects to be written are always a function only of the current <i>element</i>.
  * 
@@ -45,7 +45,7 @@ import org.anchoranalysis.io.output.writer.WritableItem;
 public interface Generator<T> extends WritableItem {
 
     /** 
-     * The types of files the generator writes to the file-system.
+     * The types of files the generator writes to the filesystem.
      * 
      * @param outputWriteSettings general settings for outputting
      * @return an array of all file-types written, if any exist

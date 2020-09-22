@@ -28,15 +28,31 @@ package org.anchoranalysis.image.io.generator.raster;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import java.nio.file.Path;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.bean.rasterwriter.RasterWriter;
 import org.anchoranalysis.image.io.rasterwriter.RasterWriteOptions;
+import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class RasterWriterUtilities {
+    
+    public static void writeRasterUsingDefault(
+            Stack stack, OutputWriteSettings outputWriteSettings, Path filePath, boolean rgb, RasterWriteOptions writeOptions)
+            throws OutputWriteFailedException {
 
+        try {
+            RasterWriter rasterWriter =
+                    RasterWriterUtilities.getDefaultRasterWriter(outputWriteSettings);
+            rasterWriter.writeStack(stack, filePath, rgb, writeOptions );
+        } catch (RasterIOException e) {
+            throw new OutputWriteFailedException(e);
+        }
+    }
+    
     /**
      * Gets the default raster-writer associated with outputWriteSettings
      *

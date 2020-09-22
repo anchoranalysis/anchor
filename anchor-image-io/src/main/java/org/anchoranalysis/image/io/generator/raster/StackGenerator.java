@@ -35,7 +35,7 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import lombok.AllArgsConstructor;
 
 /**
- * Writes a stack to the file-system.
+ * Writes a stack to the filesystem.
  * 
  * @author Owen Feehan
  *

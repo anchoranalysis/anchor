@@ -44,7 +44,7 @@ import org.xml.sax.SAXParseException;
 class HelperReadXml {
 
     /**
-     * Reads an XML file from the file-system, and wraps it as BeanXML
+     * Reads an XML file from the filesystem, and wraps it as BeanXML
      *
      * @param filePath path of the file to read
      * @return the wrapped XML file
@@ -65,7 +65,7 @@ class HelperReadXml {
     }
 
     /**
-     * Reads an XML file from a path (either on the file-system, or a resource-file)
+     * Reads an XML file from a path (either on the filesystem, or a resource-file)
      *
      * @param src the stream to read the BeanXML from
      * @return the wrapped XML file

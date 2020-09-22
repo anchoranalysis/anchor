@@ -31,7 +31,7 @@ import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
 
 /**
- * Writes a display-stack to the file-system.
+ * Writes a display-stack to the filesystem.
  * 
  * @author Owen Feehan
  *

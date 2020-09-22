@@ -58,7 +58,7 @@ public abstract class AnchorBean<F> {
     private List<Field> listBeanFields;
 
     /**
-     * A local path on the file-system associated with this bean (from serialization) if defined.
+     * A local path on the filesystem associated with this bean (from serialization) if defined.
      * Otherwise null.
      */
     @Getter @Nullable private Path localPath;
@@ -95,7 +95,7 @@ public abstract class AnchorBean<F> {
      *
      * <p>It is sometimes useful to override this method so as to include other files.
      *
-     * @param path a path on the file-system which is associated with the bean (can be null,
+     * @param path a path on the filesystem which is associated with the bean (can be null,
      *     indicating no localization)
      * @throws BeanMisconfiguredException if a relative-path is passed
      */

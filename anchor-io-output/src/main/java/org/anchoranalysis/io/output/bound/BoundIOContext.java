@@ -35,7 +35,7 @@ import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.io.manifest.ManifestFolderDescription;
 
 /**
- * Certain parameters that are exposed after any file-system binding for inputs and outputs has
+ * Certain parameters that are exposed after any filesystem binding for inputs and outputs has
  * occurred.
  *
  * @author Owen Feehan

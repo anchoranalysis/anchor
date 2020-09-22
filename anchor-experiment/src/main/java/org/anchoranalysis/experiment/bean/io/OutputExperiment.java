@@ -182,7 +182,7 @@ public abstract class OutputExperiment extends Experiment {
                         () -> new XMLConfigurationWrapperGenerator(getXMLConfiguration()));
     }
 
-    /** Maybe writes the execution time to the file-system */
+    /** Maybe writes the execution time to the filesystem */
     private void writeExecutionTime(
             BoundOutputManagerRouteErrors rootOutputManager, StopWatch stopWatchExperiment) {
         rootOutputManager

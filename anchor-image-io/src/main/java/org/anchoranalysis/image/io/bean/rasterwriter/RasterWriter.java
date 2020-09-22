@@ -32,11 +32,9 @@ import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.generator.raster.series.StackSeries;
 import org.anchoranalysis.image.io.rasterwriter.RasterWriteOptions;
 import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
-import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
 
 /**
- * Writes a stack (i.e. raster) to the file-system.
+ * Writes a stack (i.e. raster) to the filesystem.
  * 
  * @author Owen Feehan
  *
@@ -50,32 +48,26 @@ public abstract class RasterWriter extends AnchorBean<RasterWriter> {
      */
     public abstract String fileExtension(RasterWriteOptions writeOptions);
 
-    public abstract void writeTimeSeriesStackByte(
-            StackSeries stackSeries, Path filePath, boolean makeRGB) throws RasterIOException;
-
     /**
      * Writes a stack to the filesystem at a particular path.
      * 
      * @param stack the stack to write
-     * @param filePath the path to write hte file to
+     * @param filePath the path to write the file to
      * @param makeRGB if TRUE, the image should be written as a RGB image, rather than as separate channels.
+     * @param writeOptions options which may influence how a raster is written.
      * @throws RasterIOException if anything goes wrong whle writing.
      */
-    public void writeStack(Stack stack, Path filePath, boolean makeRGB) throws RasterIOException {
-
-        if (stack.allChannelsHaveType(UnsignedByteVoxelType.INSTANCE)) {
-            writeStackByte((Stack) stack, filePath, makeRGB);
-        } else if (stack.allChannelsHaveType(UnsignedShortVoxelType.INSTANCE)) {
-            writeStackShort((Stack) stack, filePath, makeRGB);
-        } else {
-            throw new RasterIOException(
-                    "Channels in stack are neither homogenously unsigned 8-bit (byte) or unsigned 16-bit (short). Other combinations unsupported");
-        }
-    }
-
-    public abstract void writeStackByte(Stack stack, Path filePath, boolean makeRGB)
-            throws RasterIOException;
-
-    public abstract void writeStackShort(Stack stack, Path filePath, boolean makeRGB)
-            throws RasterIOException;
+    public abstract void writeStack(Stack stack, Path filePath, boolean makeRGB, RasterWriteOptions writeOptions) throws RasterIOException;
+    
+    /**
+     * Writes a series of stacks to the filesystem at a particular path.
+     * 
+     * @param stackSeries the series of stacks
+     * @param filePath the path to write the file to
+     * @param makeRGB if TRUE, the image should be written as a RGB image, rather than as separate channels.
+     * @param writeOptions options which may influence how a raster is written.
+     * @throws RasterIOException
+     */
+    public abstract void writeStackSeries(
+            StackSeries stackSeries, Path filePath, boolean makeRGB, RasterWriteOptions writeOptions) throws RasterIOException;
 }

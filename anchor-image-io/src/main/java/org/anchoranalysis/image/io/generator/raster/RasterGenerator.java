@@ -28,8 +28,6 @@ package org.anchoranalysis.image.io.generator.raster;
 
 import java.nio.file.Path;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.io.RasterIOException;
-import org.anchoranalysis.image.io.bean.rasterwriter.RasterWriter;
 import org.anchoranalysis.image.io.rasterwriter.RasterWriteOptions;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.generator.SingleFileTypeGenerator;
@@ -48,22 +46,8 @@ public abstract class RasterGenerator<T> extends SingleFileTypeGenerator<T,Stack
     @Override
     public void writeToFile(OutputWriteSettings outputWriteSettings, Path filePath)
             throws OutputWriteFailedException {
-
-        Stack stack = transform();
-        writeToFile(stack, outputWriteSettings, filePath, isRGB());
-    }
-
-    public static void writeToFile(
-            Stack stack, OutputWriteSettings outputWriteSettings, Path filePath, boolean rgb)
-            throws OutputWriteFailedException {
-
-        try {
-            RasterWriter rasterWriter =
-                    RasterWriterUtilities.getDefaultRasterWriter(outputWriteSettings);
-            rasterWriter.writeStack(stack, filePath, rgb);
-        } catch (RasterIOException e) {
-            throw new OutputWriteFailedException(e);
-        }
+        RasterWriterUtilities.writeRasterUsingDefault(transform(), outputWriteSettings,
+                filePath, isRGB(), rasterWriteOptions());
     }
 
     @Override

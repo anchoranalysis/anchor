@@ -39,7 +39,7 @@ import org.anchoranalysis.mpp.io.marks.MarkCollectionDeserializer;
 import org.anchoranalysis.mpp.mark.MarkCollection;
 
 /**
- * Reads a {@link DualMarksAnnotation} from a path on the file-system.
+ * Reads a {@link DualMarksAnnotation} from a path on the filesystem.
  *
  * @author Owen Feehan
  * @param <T> rejection-reason type

@@ -33,7 +33,7 @@ import org.anchoranalysis.annotation.Annotation;
 public interface AnnotationWriter<T extends Annotation> {
 
     /**
-     * Saves the annotation to the file-system
+     * Saves the annotation to the filesystem
      *
      * @param annotation the annotation to save
      * @param path the path to write to (or a slightly-modified path is derived from this)
