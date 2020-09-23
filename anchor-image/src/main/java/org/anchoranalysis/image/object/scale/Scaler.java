@@ -42,7 +42,7 @@ import org.anchoranalysis.image.scale.ScaleFactor;
  *
  * <p>If each object-mask is scaled independently, touching but non-overlapping objects can become
  * overlapping when scaled. This provides a <i>collective</i> scaling procedure that avoids this
- * using nearest-neighbour interpolation.
+ * using nearest-neighbor interpolation.
  *
  * @author Owen Feehan
  */
