@@ -50,13 +50,13 @@ import org.apache.commons.configuration.beanutils.XMLBeanDeclaration;
  */
 public class ListBeanFactory<T> extends AnchorBeanFactory {
 
-    private ICreateFromList<T> creator;
+    private CreateFromList<T> creator;
 
     public ListBeanFactory() {
         // FOR BEAN INITIALIZATION
     }
 
-    public ListBeanFactory(ICreateFromList<T> creator) {
+    public ListBeanFactory(CreateFromList<T> creator) {
         super();
         this.creator = creator;
     }

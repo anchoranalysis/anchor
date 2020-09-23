@@ -1,3 +1,6 @@
+/**
+ * Adding beans to collections.
+ */
 package org.anchoranalysis.bean.store;
 /*-
  * #%L

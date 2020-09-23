@@ -32,7 +32,7 @@ import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.define.DefineFactory;
 import org.anchoranalysis.bean.xml.factory.AnchorBeanFactory;
 import org.anchoranalysis.bean.xml.factory.AnchorDefaultBeanFactory;
-import org.anchoranalysis.bean.xml.factory.ICreateFromList;
+import org.anchoranalysis.bean.xml.factory.CreateFromList;
 import org.anchoranalysis.bean.xml.factory.IncludeBeanFactory;
 import org.anchoranalysis.bean.xml.factory.IncludeListFactory;
 import org.anchoranalysis.bean.xml.factory.ListBeanFactory;
@@ -131,7 +131,7 @@ public final class RegisterBeanFactories {
      * @param creator creator used to make list-bean
      * @param <T> list item type
      */
-    public static <T> void register(String factoryName, ICreateFromList<T> creator) {
+    public static <T> void register(String factoryName, CreateFromList<T> creator) {
         register(factoryName, new ListBeanFactory<>(creator));
     }
 

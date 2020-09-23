@@ -1,3 +1,6 @@
+/**
+ * Custom factories for loading beans in custom ways from XML. 
+ */
 package org.anchoranalysis.bean.xml.factory;
 /*-
  * #%L

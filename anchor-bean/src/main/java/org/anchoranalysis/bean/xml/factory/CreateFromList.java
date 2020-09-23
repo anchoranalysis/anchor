@@ -29,7 +29,7 @@ package org.anchoranalysis.bean.xml.factory;
 import java.util.List;
 
 @FunctionalInterface
-public interface ICreateFromList<T> {
+public interface CreateFromList<T> {
 
     Object create(List<T> list);
 }

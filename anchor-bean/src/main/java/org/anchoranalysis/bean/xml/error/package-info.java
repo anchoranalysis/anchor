@@ -1,3 +1,6 @@
+/**
+ * Exceptions that can thrown when loading beans from XML.
+ */
 package org.anchoranalysis.bean.xml.error;
 /*-
  * #%L

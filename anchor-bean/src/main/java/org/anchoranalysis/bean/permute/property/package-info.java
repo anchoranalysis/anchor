@@ -1,3 +1,6 @@
+/**
+ * Applying permutations to the properties of a bean.
+ */
 package org.anchoranalysis.bean.permute.property;
 /*-
  * #%L
