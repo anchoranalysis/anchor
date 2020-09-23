@@ -28,6 +28,8 @@ package org.anchoranalysis.image.io.generator.raster.object.rgb;
 
 import io.vavr.control.Either;
 import java.util.Optional;
+import java.util.function.Function;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.core.error.CreateException;
@@ -51,6 +53,7 @@ import org.anchoranalysis.overlay.writer.ObjectDrawAttributes;
  *
  * @author Owen Feehan
  */
+@AllArgsConstructor
 public abstract class ObjectsOnRGBGenerator extends RasterGeneratorWithElement<ObjectCollectionWithProperties> {
 
     private static final ChannelFactorySingleType CHANNEL_FACTORY = new ChannelFactoryByte();
@@ -59,21 +62,15 @@ public abstract class ObjectsOnRGBGenerator extends RasterGeneratorWithElement<O
             new ManifestDescription("raster", "rgbObjects");
 
     // START REQUIRED ARGUMENTS
+    /** Determines how an object is drawn (on the background). */
     private final DrawObject drawObject;
+    
+    /** An association of color and/or other identifies with each object. */
     private final ObjectDrawAttributes attributes;
 
+    /** A background image or dimensions to define an empty background. */
     @Getter @Setter private Either<Dimensions, DisplayStack> background;
     // END REQUIRED ARGUMENTS
-
-    public ObjectsOnRGBGenerator(
-            DrawObject drawObject,
-            ObjectDrawAttributes attributes,
-            Either<Dimensions, DisplayStack> background) {
-        super();
-        this.drawObject = drawObject;
-        this.attributes = attributes;
-        this.background = background;
-    }
 
     @Override
     public Stack transform() throws OutputWriteFailedException {
@@ -103,7 +100,7 @@ public abstract class ObjectsOnRGBGenerator extends RasterGeneratorWithElement<O
     
     @Override
     public RasterWriteOptions rasterWriteOptions() {
-        return RasterWriteOptions.rgbMaybe3D();
+        return RasterWriteOptions.rgb( isAlways2D() );
     }
 
     protected abstract RGBStack generateBackground(Either<Dimensions, DisplayStack> background)
@@ -113,5 +110,9 @@ public abstract class ObjectsOnRGBGenerator extends RasterGeneratorWithElement<O
 
     protected static RGBStack createEmptyStackFor(Dimensions dimensions) {
         return new RGBStack(dimensions, CHANNEL_FACTORY);
+    }
+    
+    private boolean isAlways2D() {
+        return background.fold(Function.identity(), DisplayStack::dimensions).z()==1;
     }
 }

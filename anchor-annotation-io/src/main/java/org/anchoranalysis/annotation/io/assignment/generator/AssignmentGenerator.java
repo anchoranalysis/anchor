@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.annotation.io.assignment.generator;
 
-import io.vavr.control.Either;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -132,6 +131,16 @@ public class AssignmentGenerator extends RasterGeneratorWithElement<Assignment> 
         }
     }
 
+    @Override
+    public Optional<ManifestDescription> createManifestDescription() {
+        return Optional.of(new ManifestDescription("raster", "assignment"));
+    }
+
+    @Override
+    public RasterWriteOptions rasterWriteOptions() {
+        return RasterWriteOptions.rgbMaybe3D();
+    }
+
     private static ArrangeRaster createTiledStackProvider(
             Stack stackLeft, Stack stackRight, String nameLeft, String nameRight) {
         List<StackProviderWithLabel> listProvider = new ArrayList<>();
@@ -176,12 +185,12 @@ public class AssignmentGenerator extends RasterGeneratorWithElement<Assignment> 
     }
 
     private DrawObjectsGenerator createGenerator(
-            DrawObject drawObject, ColorList cols, ObjectCollection objects) {
-        return new DrawObjectsGenerator(
+            DrawObject drawObject, ColorList colors, ObjectCollection objects) {
+        return DrawObjectsGenerator.withBackgroundAndColors(
                 drawObject,
                 new ObjectCollectionWithProperties(objects),
-                Either.right(background),
-                cols);
+                background,
+                colors);
     }
 
     private DrawObject createConditionalWriter(List<ObjectMask> otherObjects, DrawObject writer) {
@@ -194,15 +203,5 @@ public class AssignmentGenerator extends RasterGeneratorWithElement<Assignment> 
 
     private DrawObject createOutlineWriter() {
         return new Outline(outlineWidth, !flatten);
-    }
-
-    @Override
-    public Optional<ManifestDescription> createManifestDescription() {
-        return Optional.of(new ManifestDescription("raster", "assignment"));
-    }
-
-    @Override
-    public RasterWriteOptions rasterWriteOptions() {
-        return RasterWriteOptions.rgbMaybe3D();
     }
 }

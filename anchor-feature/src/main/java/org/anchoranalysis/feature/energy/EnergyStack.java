@@ -36,7 +36,12 @@ import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.stack.Stack;
 
-// An energy-stack with associated parameters
+/**
+ * An energy-stack with associated {@link KeyValueParams}.
+ * 
+ * @author Owen Feehan
+ *
+ */
 public class EnergyStack {
 
     private final EnergyStackWithoutParams delegate;
@@ -78,11 +83,30 @@ public class EnergyStack {
     public EnergyStack extractSlice(int z) throws OperationFailedException {
         return new EnergyStack(delegate.extractSlice(z), params);
     }
+    
+    /**
+     * Does exactly one z-slice exist in the energy stack?
+     * 
+     * @return true iff the number of z-slices is 1
+     */
+    public boolean hasOneSlice() {
+        return dimensions().extent().z()==1;
+    }
 
+    /**
+     * The image-dimensions associated with the energy-stack.
+     * 
+     * @return the image-dimensions.
+     */
     public Dimensions dimensions() {
         return delegate.dimensions();
     }
 
+    /**
+     * The image-resolution asssociated with the energy-stack.
+     * 
+     * @return the image-resolution.
+     */
     public Resolution resolution() {
         return dimensions().resolution();
     }

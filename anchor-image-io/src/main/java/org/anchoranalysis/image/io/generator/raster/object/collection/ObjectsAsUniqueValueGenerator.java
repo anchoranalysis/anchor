@@ -30,7 +30,6 @@ import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactoryByte;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.io.generator.raster.ChannelGenerator;
-import org.anchoranalysis.image.io.rasterwriter.RasterWriteOptions;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.stack.Stack;
@@ -68,16 +67,12 @@ public class ObjectsAsUniqueValueGenerator extends ObjectsGenerator {
                             getObjects().size()));
         }
 
-        int val = 1;
+        int value = 1;
 
         for (ObjectMask object : getObjects()) {
-            out.assignValue(val++).toObject(object);
+            out.assignValue(value++).toObject(object);
         }
 
         return new ChannelGenerator("maskCollection", out).transform();
-    }
-    @Override
-    public RasterWriteOptions rasterWriteOptions() {
-        return RasterWriteOptions.singleChannelMaybe3D();
     }
 }

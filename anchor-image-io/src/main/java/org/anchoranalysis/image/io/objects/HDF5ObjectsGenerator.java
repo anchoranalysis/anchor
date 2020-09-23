@@ -62,12 +62,6 @@ public class HDF5ObjectsGenerator extends OneStageGenerator<ObjectCollection> {
         this.compressed = true;
     }
 
-    public static void writeObjectsToFile(ObjectCollection objects, Path filePath) {
-        HDF5ObjectsGenerator generator = new HDF5ObjectsGenerator(true);
-        generator.assignElement(objects);
-        generator.writeToFile(new OutputWriteSettings(), filePath);
-    }
-
     @Override
     public void writeToFile(OutputWriteSettings outputWriteSettings, Path filePath) {
         // Write a HDF file

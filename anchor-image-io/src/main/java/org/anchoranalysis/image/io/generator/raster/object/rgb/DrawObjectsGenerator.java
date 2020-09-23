@@ -49,27 +49,30 @@ import org.anchoranalysis.overlay.writer.ObjectDrawAttributes;
  */
 public class DrawObjectsGenerator extends ObjectsOnRGBGenerator {
 
-    /**
-     * Creates generator without any element set
-     *
-     * @param drawObject how to draw the object
-     * @param colorIndex what determines the colors for succesive objects
-     */
-    public DrawObjectsGenerator(DrawObject drawObject, ColorIndex colorIndex) {
-        this(
-                drawObject,
-                null, // No element yet to iterate
-                null, // No background set yet
-                colorIndex);
-    }
-
-    public DrawObjectsGenerator(
+    private DrawObjectsGenerator(
             DrawObject drawObject,
             ObjectCollectionWithProperties objects,
             Either<Dimensions, DisplayStack> background,
             ColorIndex colorIndex) {
         super(drawObject, new ObjectDrawAttributes(colorIndex), background);
         this.assignElement(objects);
+    }
+    
+    /**
+     * A generator that draws an object in a particular way with particular colors and background.
+     *
+     * @param drawObject how to draw the object
+     * @param objects the objects
+     * @param background the background
+     * @param colorIndex the colors
+     * @return the generator
+     */
+    public static DrawObjectsGenerator withBackgroundAndColors(
+            DrawObject drawObject,
+            ObjectCollectionWithProperties objects,
+            DisplayStack background,
+            ColorIndex colorIndex) {
+        return new DrawObjectsGenerator(drawObject, objects, Either.right(background), colorIndex);
     }
 
     /**
@@ -87,10 +90,27 @@ public class DrawObjectsGenerator extends ObjectsOnRGBGenerator {
     }
 
     /**
+     * A generator that draws an outline around objects using a particular color-index.
+     *
+     * @param outlineWidth the width of the outline
+     * @param colorIndex the color-index
+     * @return the generator
+     */
+    public static DrawObjectsGenerator outlineWithColorIndex(
+            int outlineWidth,
+            ColorIndex colorIndex) {
+        return new DrawObjectsGenerator(
+                new Outline(outlineWidth),
+                null,
+                null,
+                colorIndex);
+    }
+    
+    /**
      * A generator that draws an outline around objects on a background using varied colors for the
      * objects.
      *
-     * @param objects the objects
+     * @param objects the objects to outline (set as the element on the generator)
      * @param outlineWidth the width of the outline
      * @param background the background or dimensions for a background (drawn as all black)
      * @return the generator

@@ -33,11 +33,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.io.generator.raster.RasterGeneratorWithElement;
+import org.anchoranalysis.image.io.rasterwriter.RasterWriteOptions;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 
 /**
- * Base class for generators that accept a set of objects as input
+ * Base class for generators that accept a set of objects as input.
  *
  * @author Owen Feehan
  */
@@ -45,6 +46,7 @@ import org.anchoranalysis.io.manifest.ManifestDescription;
 public abstract class ObjectsGenerator extends RasterGeneratorWithElement<ObjectCollection> {
 
     // START REQUIRED ARGUMENTS
+    /** The dimensions associated with the objects (assumed to be constant across any change in element). */
     @Getter private final Dimensions dimensions;
     // END REQUIRED ARGUMENTS
 
@@ -62,7 +64,12 @@ public abstract class ObjectsGenerator extends RasterGeneratorWithElement<Object
     public boolean isRGB() {
         return false;
     }
-
+    
+    @Override
+    public RasterWriteOptions rasterWriteOptions() {
+        return RasterWriteOptions.singleChannelMaybe3D(dimensions.z()==1);
+    }
+    
     protected ObjectCollection getObjects() {
         return getElement();
     }

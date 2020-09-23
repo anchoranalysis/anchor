@@ -49,7 +49,7 @@ public class EnergyStackWriter {
                 FOLDER_CHANNEL,
                 2,
                 energyStack.withoutParams().asStack().asListChannels(),
-                new ChannelGenerator(MANIFEST_FUNCTION_CHANNEL),
+                new ChannelGenerator(MANIFEST_FUNCTION_CHANNEL, energyStack.hasOneSlice()),
                 context);
 
         if (energyStack.getParams() != null) {

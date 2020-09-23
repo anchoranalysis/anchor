@@ -63,16 +63,14 @@ public class StackGenerator extends RasterGeneratorWithElement<Stack> {
     }
 
     /**
-     * Creates the generator.
+     * Creates the generator from a stack, inferring whether all stacks will be 2D from this stack's dimensions.
      *  
      * @param padIfNecessary iff true, in the specific case of a 2-channel stack, an additional blank channel is added to make it 3-channels.
      * @param manifestFunction function stored in manifest for this generator.
      * @param stack the initial element
      */
     public StackGenerator(boolean padIfNecessary, String manifestFunction, Stack stack) {
-        super();
-        this.padIfNecessary = padIfNecessary;
-        this.manifestFunction = manifestFunction;
+        this(padIfNecessary, manifestFunction, stack.extent().z()==1);
         assignElement(stack);
     }
 

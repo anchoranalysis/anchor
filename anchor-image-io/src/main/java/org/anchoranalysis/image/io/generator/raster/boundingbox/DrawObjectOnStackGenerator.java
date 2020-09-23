@@ -43,7 +43,6 @@ import org.anchoranalysis.image.object.properties.ObjectCollectionWithProperties
 import org.anchoranalysis.image.object.properties.ObjectWithProperties;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.io.bean.object.writer.Outline;
 import org.anchoranalysis.io.generator.SingleFileTypeGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
@@ -144,7 +143,7 @@ public class DrawObjectOnStackGenerator extends RasterGeneratorWithElement<Bound
             int outlineWidth,
             ColorIndex colorIndex,
             boolean flatten) {
-        this.drawObjectsGenerator = new DrawObjectsGenerator(new Outline(outlineWidth), colorIndex);
+        this.drawObjectsGenerator = DrawObjectsGenerator.outlineWithColorIndex(outlineWidth, colorIndex);
         this.backgroundGenerator = backgroundGenerator;
         this.flatten = flatten;
     }

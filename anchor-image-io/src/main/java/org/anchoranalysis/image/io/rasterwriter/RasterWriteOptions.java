@@ -15,19 +15,21 @@ import lombok.Value;
 @Value @AllArgsConstructor(access=AccessLevel.PRIVATE)
 public class RasterWriteOptions {
 
-    private static final RasterWriteOptions RGB_ALWAYS_2D = rgb(true);
+    private static final RasterWriteOptions RGB_ALWAYS_2D = new RasterWriteOptions(true, true, true);
     
-    private static final RasterWriteOptions RGB_MAYBE_3D = rgb(false);
+    private static final RasterWriteOptions RGB_MAYBE_3D = new RasterWriteOptions(false, true, true);
     
-    private static final RasterWriteOptions ALWAYS_SINGLE_CHANNEL_MAYBE_3D = alwaysOneOrThreeChannels(false);
+    private static final RasterWriteOptions ONE_OR_THREE_CHANNELS_ALWAYS_2D = new RasterWriteOptions(true, true, false);
     
+    private static final RasterWriteOptions ONE_OR_THREE_CHANNELS_MAYBE_3D = new RasterWriteOptions(false, true, false);
+        
     /** True the output is guaranteed to only ever 2D i.e. maximally one z-slice? */
     private boolean always2D;
     
     /** The number of channels is guaranteed to be 1 or 3 in the output. */
     private boolean alwaysOneOrThreeChannels;
 
-    /*** Whether it's an RGB image (exactly three channels visualzied jointly, rather than independently) */
+    /*** Whether it's an RGB image (exactly three channels visualized jointly, rather than independently) */
     private boolean rgb;
     
     /**
@@ -62,15 +64,19 @@ public class RasterWriteOptions {
     }
 
     public static RasterWriteOptions binaryChannelMaybe3D() {
-        return singleChannelMaybe3D();
+        return singleChannelMaybe3D(false);
     }
     
-    public static RasterWriteOptions singleChannelMaybe3D() {
-        return ALWAYS_SINGLE_CHANNEL_MAYBE_3D;
+    public static RasterWriteOptions singleChannelMaybe3D(boolean always2D) {
+        if (always2D) {
+            return ONE_OR_THREE_CHANNELS_ALWAYS_2D;
+        } else {
+            return ONE_OR_THREE_CHANNELS_MAYBE_3D;
+        }
     }
     
     public static RasterWriteOptions alwaysOneOrThreeChannels(boolean always2D) {
-        return new RasterWriteOptions(always2D, true, false);
+        return singleChannelMaybe3D(always2D);
     }
     
     public static RasterWriteOptions maybeRGB(boolean rgb, boolean always2D) {
@@ -89,7 +95,11 @@ public class RasterWriteOptions {
         }
     }
         
-    private static RasterWriteOptions rgb(boolean always2D) {
-        return new RasterWriteOptions(always2D, true, true);
+    public static RasterWriteOptions rgb(boolean always2D) {
+        if (always2D) {
+            return RGB_ALWAYS_2D;
+        } else {
+            return RGB_MAYBE_3D;
+        }
     }
 }
