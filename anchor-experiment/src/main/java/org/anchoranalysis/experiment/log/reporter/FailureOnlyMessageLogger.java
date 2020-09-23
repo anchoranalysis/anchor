@@ -34,9 +34,9 @@ import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
 
 /**
- * Writes text to a file, but only if close is called with a successful=true
+ * Writes text to a file, but only if {@link #close} is called with {@code successful==true}.
  *
- * <p>The text cannot be written immediately, so is saved until close() is called.
+ * <p>The text cannot be written immediately, so is saved until {@link #close} is called.
  *
  * @author feehano
  */
@@ -49,12 +49,12 @@ public class FailureOnlyMessageLogger implements StatefulMessageLogger {
     private final ErrorReporter errorReporter;
     // END REQUIRED ARGUMENTS
 
-    private StringBuilder sb;
+    private StringBuilder builder;
 
     @Override
     public void log(String message) {
-        sb.append(message);
-        sb.append(System.lineSeparator());
+        builder.append(message);
+        builder.append(System.lineSeparator());
     }
 
     @Override
@@ -64,13 +64,13 @@ public class FailureOnlyMessageLogger implements StatefulMessageLogger {
 
     @Override
     public void start() {
-        sb = new StringBuilder();
+        builder = new StringBuilder();
     }
 
     @Override
     public void close(boolean successful) {
         if (!successful) {
-            writeStringToFile(sb.toString());
+            writeStringToFile(builder.toString());
         }
     }
 
