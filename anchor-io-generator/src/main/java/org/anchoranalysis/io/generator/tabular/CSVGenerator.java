@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.io.generator.csv;
+package org.anchoranalysis.io.generator.tabular;
 
 import java.util.Optional;
 import org.anchoranalysis.io.generator.OneStageGenerator;

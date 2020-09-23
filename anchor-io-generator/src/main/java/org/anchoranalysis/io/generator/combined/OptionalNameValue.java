@@ -27,30 +27,21 @@
 package org.anchoranalysis.io.generator.combined;
 
 import java.util.Optional;
+import lombok.AllArgsConstructor;
+import lombok.Value;
 
 /**
- * A simple container expressing a name-value pair
+ * A simple container expressing a value and an associationed optional name.
  *
  * @author Owen Feehan
  * @param <V> value-type
  */
+@Value @AllArgsConstructor
 public class OptionalNameValue<V> {
 
+    /** An optional-name. */
     private Optional<String> name;
 
+    /** The value. */
     private V value;
-
-    public OptionalNameValue(Optional<String> name, V value) {
-        super();
-        this.name = name;
-        this.value = value;
-    }
-
-    public Optional<String> getName() {
-        return name;
-    }
-
-    public V getValue() {
-        return value;
-    }
 }

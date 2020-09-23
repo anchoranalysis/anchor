@@ -29,7 +29,7 @@ package org.anchoranalysis.io.generator.histogram;
 import java.nio.file.Path;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.io.error.AnchorIOException;
-import org.anchoranalysis.io.generator.csv.CSVGenerator;
+import org.anchoranalysis.io.generator.tabular.CSVGenerator;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import lombok.Getter;

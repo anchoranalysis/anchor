@@ -30,6 +30,7 @@ package org.anchoranalysis.io.generator;
  * A {@link Generator} that creates multiple different file-types.
  * 
  * @author Owen Feehan
+ * @param <T> element-type
  *
  */
 public interface MultipleFileTypeGenerator<T> extends Generator<T> {}

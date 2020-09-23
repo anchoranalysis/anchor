@@ -50,11 +50,8 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
  *
  * <p>One generator must always exist. Zero generators is never allowed.
  *
- * <p>TODO We can probably have a more efficient implementation by not using the
- * CombinedListGenerator as a delegate but we leave it for now
- *
  * @author Owen Feehan
- * @param <T>
+ * @param <T> element-type
  */
 public class CombinedListGenerator<T>
         implements MultipleFileTypeGenerator<T> {

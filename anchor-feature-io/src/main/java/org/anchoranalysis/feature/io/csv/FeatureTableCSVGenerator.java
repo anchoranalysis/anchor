@@ -30,7 +30,7 @@ import java.nio.file.Path;
 import java.util.List;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.generator.Generator;
-import org.anchoranalysis.io.generator.csv.CSVGenerator;
+import org.anchoranalysis.io.generator.tabular.CSVGenerator;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.csv.CSVWriter;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
