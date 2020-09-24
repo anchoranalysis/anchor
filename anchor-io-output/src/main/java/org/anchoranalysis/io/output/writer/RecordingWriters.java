@@ -11,6 +11,7 @@ import lombok.experimental.Accessors;
  * <ul>
  * <li>A {@link CheckIfAllowed} that selectively outputs certain output-names.
  * <li>A {@link AlwaysAllowed} that allows all output-names.
+ * </ul>
  * 
  * @author Owen Feehan
  */
