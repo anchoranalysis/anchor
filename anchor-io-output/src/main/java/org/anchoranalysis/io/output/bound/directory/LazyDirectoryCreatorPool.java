@@ -39,13 +39,13 @@ import org.anchoranalysis.io.output.writer.WriterExecuteBeforeEveryOperation;
 import lombok.Getter;
 
 /**
- * Memoizes an associated {@link LazyDirectoryCreator} for a given directory.
+ * A pool that memoizes and stores an associated {@link LazyDirectoryCreator} for directories.
  * 
  * <p>Directories are first normalized, and all must exist within a particular {@code rootDirectory}.
  *
  * @author Owen Feehan
  */
-class LazyDirectoryCreatorCache {
+class LazyDirectoryCreatorPool {
 
     // START REQUIRED ARGUMENTS
     /** If true, any existing directory at the intended path for creation, is first deleted. If false, an exception is thrown in this circumstance. */
@@ -66,7 +66,7 @@ class LazyDirectoryCreatorCache {
      * @param deleteExisting if true, deletes any existing folder that exists in paths we create. if
      *     false, an error is thrown if an existing directory exists.
      */
-    public LazyDirectoryCreatorCache(Path rootDirectory, boolean deleteExisting) {
+    public LazyDirectoryCreatorPool(Path rootDirectory, boolean deleteExisting) {
         this.rootDirectory = rootDirectory.normalize();
         this.deleteExisting = deleteExisting;
     }

@@ -31,8 +31,6 @@ import static org.junit.Assert.assertTrue;
 import java.nio.file.Path;
 import java.util.Optional;
 import org.anchoranalysis.core.index.GetOperationFailedException;
-import org.anchoranalysis.io.output.bound.directory.LazyDirectoryCreator;
-import org.anchoranalysis.io.output.bound.directory.LazyDirectoryCreatorCache;
 import org.anchoranalysis.io.output.writer.WriterExecuteBeforeEveryOperation;
 import org.junit.Before;
 import org.junit.Rule;
@@ -51,11 +49,11 @@ public class LazyDirectoryCreatorCacheTest {
     private static final String RELATIVE_PATH_DIRECT = "path1";
     private static final String RELATIVE_PATH_NESTED = "path1/nested1";
 
-    private LazyDirectoryCreatorCache directoryCreator;
+    private LazyDirectoryCreatorPool directoryCreator;
 
     @Before
     public void setup() {
-        directoryCreator = new LazyDirectoryCreatorCache(folder.getRoot().toPath(), false);
+        directoryCreator = new LazyDirectoryCreatorPool(folder.getRoot().toPath(), false);
     }
 
     @Test

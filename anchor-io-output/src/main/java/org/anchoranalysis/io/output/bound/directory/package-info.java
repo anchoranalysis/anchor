@@ -1,4 +1,4 @@
 /**
- * A particular directory that is used as a binding-path by {@link org.anchoranalysis.io.output.bound.BoundOutputManager}.
+ * {@link org.anchoranalysis.io.output.bound.directory.BoundDirectory} and related classes.
  */
 package org.anchoranalysis.io.output.bound.directory;
