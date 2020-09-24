@@ -37,6 +37,8 @@ import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 /**
+ * Delegates a {@link RasterGenerator} to a {@code SingleFileTypeGenerator<T, DisplayStack>}.
+ * 
  * @author Owen Feehan
  * @param <T> iteration-type
  */

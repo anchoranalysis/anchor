@@ -82,7 +82,7 @@ class CombinedList {
 
             if (ni.getName().isPresent()) {
                 outputNameStyle = outputNameStyle.duplicate();
-                outputNameStyle.setOutputName(ni.getName().get());
+                outputNameStyle.setOutputName(ni.getName().get());  // NOSONAR
             }
 
             int numWritten = ni.getValue().write(outputNameStyle, index, outputManager);

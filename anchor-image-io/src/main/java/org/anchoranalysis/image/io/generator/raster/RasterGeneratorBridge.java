@@ -26,16 +26,9 @@
 
 package org.anchoranalysis.image.io.generator.raster;
 
-import lombok.RequiredArgsConstructor;
-import java.nio.file.Path;
-import java.util.Optional;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.functional.function.CheckedFunction;
-import org.anchoranalysis.core.index.SetOperationFailedException;
-import org.anchoranalysis.image.io.rasterwriter.RasterWriteOptions;
 import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.io.manifest.ManifestDescription;
-import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 /**
@@ -46,65 +39,33 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
  * @param <T> exposed-iterator type
  * @param <V> hidden-iterator-type
  */
-@RequiredArgsConstructor
-public class RasterGeneratorBridge<T, V> extends RasterGeneratorWithCheckedElement<T> {
+public class RasterGeneratorBridge<T, V> extends RasterGeneratorDelegateToRaster<V,T> {
 
     // START REQUIRED ARGUMENTS
-    private final RasterGenerator<V> delegate;
     private final CheckedFunction<T, V, ? extends Throwable> elementBridge;
     // END REQUIRED ARGUMENTS
 
-    @Override
-    public void assignElement(T element) throws SetOperationFailedException {
-        super.assignElement(element);
-        try {
-            V bridgedElement = elementBridge.apply(element);
-            delegate.assignElement(bridgedElement);
-        } catch (Exception e) {
-            throw new SetOperationFailedException(e);
-        }
-    }
-
-    @Override
-    public void start() throws OutputWriteFailedException {
-        delegate.start();
-    }
-
-    @Override
-    public void end() throws OutputWriteFailedException {
-        delegate.end();
-    }
-
-
-    @Override
-    public String getFileExtension(OutputWriteSettings outputWriteSettings)
-            throws OperationFailedException {
-        return delegate.getFileExtension(outputWriteSettings);
-    }
-
-    @Override
-    public Optional<ManifestDescription> createManifestDescription() {
-        return delegate.createManifestDescription();
+    public RasterGeneratorBridge(RasterGenerator<V> delegate, CheckedFunction<T, V, ? extends Throwable> elementBridge) {
+        super(delegate);
+        this.elementBridge = elementBridge;
     }
 
     @Override
     public Stack transform() throws OutputWriteFailedException {
-        return delegate.transform();
+        return getDelegate().transform();
     }
 
     @Override
-    public void writeToFile(OutputWriteSettings outputWriteSettings, Path filePath)
-            throws OutputWriteFailedException {
-        delegate.writeToFile(outputWriteSettings, filePath);
+    protected V convertBeforeAssign(T element) throws OperationFailedException {
+        try {
+            return elementBridge.apply(element);
+        } catch (Exception e) {
+            throw new OperationFailedException(e);
+        }
     }
 
     @Override
-    public boolean isRGB() {
-        return delegate.isRGB();
-    }
-
-    @Override
-    public RasterWriteOptions rasterWriteOptions() {
-        return delegate.rasterWriteOptions();
+    protected Stack convertBeforeTransform(Stack stack) {
+        return stack;
     }
 }
