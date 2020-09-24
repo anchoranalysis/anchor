@@ -84,7 +84,7 @@ public class MorphologicalDilation {
     }
 
     public static BinaryVoxels<UnsignedByteBuffer> dilate(
-            BinaryVoxels<UnsignedByteBuffer> bvb,
+            BinaryVoxels<UnsignedByteBuffer> voxels,
             boolean do3D,
             int iterations,
             Optional<Voxels<UnsignedByteBuffer>> backgroundVb,
@@ -92,12 +92,11 @@ public class MorphologicalDilation {
             boolean bigNeighborhood)
             throws CreateException {
         return dilate(
-                bvb,
-                do3D,
+                voxels,
+                SelectDimensionsFactory.of(do3D),
                 iterations,
                 backgroundVb,
                 minIntensityValue,
-                false,
                 false,
                 Optional.empty(),
                 bigNeighborhood);
@@ -106,15 +105,12 @@ public class MorphologicalDilation {
     /**
      * Performs a morpholgical dilation operation
      *
-     * <p>TODO: merge do3D and zOnly parameters into an enum
-     *
-     * @param bvb input-buffer
-     * @param do3D if true, 6-neighborhood dilation, otherwise 4-neighnrouhood
+     * @param voxels input-voxels
+     * @param dimensions selects which dimensions dilation is applied on
      * @param iterations number of dilations
-     * @param backgroundVb optional background-buffer that can influence the dilation with the
+     * @param background optional background-buffer that can influence the dilation with the
      *     minIntensityValue
      * @param minIntensityValue minimumIntensity on the background, for a pixel to be included
-     * @param zOnly if true, only peforms dilation in z direction. Requires do3D to be true
      * @param outsideAtThreshold if true, pixels outside the buffer are treated as ON, otherwise as
      *     OFF
      * @param acceptConditions if non-null, imposes a condition on each iteration that must be
@@ -123,12 +119,11 @@ public class MorphologicalDilation {
      * @throws CreateException
      */
     public static BinaryVoxels<UnsignedByteBuffer> dilate(
-            BinaryVoxels<UnsignedByteBuffer> bvb,
-            boolean do3D,
+            BinaryVoxels<UnsignedByteBuffer> voxels,
+            SelectDimensions dimensions,
             int iterations,
-            Optional<Voxels<UnsignedByteBuffer>> backgroundVb,
+            Optional<Voxels<UnsignedByteBuffer>> background,
             int minIntensityValue,
-            boolean zOnly,
             boolean outsideAtThreshold,
             Optional<AcceptIterationConditon> acceptConditions,
             boolean bigNeighborhood)
@@ -136,22 +131,21 @@ public class MorphologicalDilation {
 
         BinaryKernel kernelDilation =
                 createDilationKernel(
-                        bvb.binaryValues().createByte(),
-                        do3D,
-                        backgroundVb,
+                        voxels.binaryValues().createByte(),
+                        dimensions,
+                        background,
                         minIntensityValue,
-                        zOnly,
                         outsideAtThreshold,
                         bigNeighborhood);
 
-        Voxels<UnsignedByteBuffer> buf = bvb.voxels();
+        Voxels<UnsignedByteBuffer> buf = voxels.voxels();
         for (int i = 0; i < iterations; i++) {
             Voxels<UnsignedByteBuffer> next =
-                    ApplyKernel.apply(kernelDilation, buf, bvb.binaryValues().createByte());
+                    ApplyKernel.apply(kernelDilation, buf, voxels.binaryValues().createByte());
 
             try {
                 if (acceptConditions.isPresent()
-                        && !acceptConditions.get().acceptIteration(next, bvb.binaryValues())) {
+                        && !acceptConditions.get().acceptIteration(next, voxels.binaryValues())) {
                     break;
                 }
             } catch (OperationFailedException e) {
@@ -160,38 +154,40 @@ public class MorphologicalDilation {
 
             buf = next;
         }
-        return BinaryVoxelsFactory.reuseByte(buf, bvb.binaryValues());
+        return BinaryVoxelsFactory.reuseByte(buf, voxels.binaryValues());
     }
 
     private static BinaryKernel createDilationKernel(
-            BinaryValuesByte bv,
-            boolean do3D,
+            BinaryValuesByte binaryValues,
+            SelectDimensions dimensions,
             Optional<Voxels<UnsignedByteBuffer>> backgroundVb,
             int minIntensityValue,
-            boolean zOnly,
             boolean outsideAtThreshold,
             boolean bigNeighborhood)
             throws CreateException {
 
-        BinaryKernel kernelDilation;
-
-        if (zOnly) {
-
-            if (bigNeighborhood) {
-                throw new CreateException("Big-neighborhood not supported for zOnly");
-            }
-
-            kernelDilation = new DilationKernel3ZOnly(bv, outsideAtThreshold);
-        } else {
-            kernelDilation = new DilationKernel3(bv, outsideAtThreshold, do3D, bigNeighborhood);
-        }
-
-        // TODO HACK FIX , how we handle the different regions
+        BinaryKernel kernelDilation = createDilationKernel(binaryValues, dimensions, outsideAtThreshold, bigNeighborhood);
 
         if (minIntensityValue > 0 && backgroundVb.isPresent()) {
             return new ConditionalKernel(kernelDilation, minIntensityValue, backgroundVb.get());
         } else {
             return kernelDilation;
         }
+    }
+    
+    private static BinaryKernel createDilationKernel(
+            BinaryValuesByte binaryValues,
+            SelectDimensions dimensions,
+            boolean outsideAtThreshold,
+            boolean bigNeighborhood) throws CreateException {
+        if (dimensions==SelectDimensions.Z_ONLY) {
+            if (bigNeighborhood) {
+                throw new CreateException("Big-neighborhood not supported for zOnly");
+            }
+
+            return new DilationKernel3ZOnly(binaryValues, outsideAtThreshold);
+        } else {
+            return new DilationKernel3(binaryValues, outsideAtThreshold, dimensions==SelectDimensions.ALL_DIMENSIONS, bigNeighborhood);
+        }        
     }
 }

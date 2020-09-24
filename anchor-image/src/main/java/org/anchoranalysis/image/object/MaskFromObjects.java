@@ -28,15 +28,11 @@ package org.anchoranalysis.image.object;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.mask.MaskFactory;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.extent.Dimensions;
-import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.voxel.Voxels;
 
 /**
@@ -100,63 +96,7 @@ public class MaskFromObjects {
     }
 
     private static void assignValueToObjects(
-            Voxels<UnsignedByteBuffer> voxels, ObjectCollection objects, byte valueToAssign) {
-        objects.forEach(object -> writeObjectOntoVoxels(object, voxels, valueToAssign));
-    }
-
-    private static void writeObjectOntoVoxels(
-            ObjectMask object, Voxels<UnsignedByteBuffer> voxelsOut, byte outValByte) {
-
-        BoundingBox box = object.boundingBox();
-
-        ReadableTuple3i maxGlobal = box.calculateCornerMax();
-        Point3i pointGlobal = new Point3i();
-        Point3i pointLocal = new Point3i();
-
-        byte matchValue = object.binaryValuesByte().getOnByte();
-
-        pointLocal.setZ(0);
-        for (pointGlobal.setZ(box.cornerMin().z());
-                pointGlobal.z() <= maxGlobal.z();
-                pointGlobal.incrementZ(), pointLocal.incrementZ()) {
-
-            UnsignedByteBuffer maskIn = object.sliceBufferLocal(pointLocal.z());
-
-            UnsignedByteBuffer pixelsOut = voxelsOut.sliceBuffer(pointGlobal.z());
-            writeToBufferMasked(
-                    maskIn,
-                    pixelsOut,
-                    voxelsOut.extent(),
-                    box.cornerMin(),
-                    pointGlobal,
-                    maxGlobal,
-                    matchValue,
-                    outValByte);
-        }
-    }
-
-    private static void writeToBufferMasked(
-            UnsignedByteBuffer maskIn,
-            UnsignedByteBuffer pixelsOut,
-            Extent extentOut,
-            ReadableTuple3i cornerMin,
-            Point3i pointGlobal,
-            ReadableTuple3i maxGlobal,
-            byte matchValue,
-            byte outValByte) {
-
-        for (pointGlobal.setY(cornerMin.y());
-                pointGlobal.y() <= maxGlobal.y();
-                pointGlobal.incrementY()) {
-
-            for (pointGlobal.setX(cornerMin.x());
-                    pointGlobal.x() <= maxGlobal.x();
-                    pointGlobal.incrementX()) {
-
-                if (maskIn.getRaw() == matchValue) {
-                    pixelsOut.putRaw(extentOut.offsetSlice(pointGlobal), outValByte);
-                }
-            }
-        }
+            Voxels<UnsignedByteBuffer> voxels, ObjectCollection objects, int valueToAssign) {
+        objects.forEach(object -> voxels.assignValue(valueToAssign).toObject(object) );
     }
 }

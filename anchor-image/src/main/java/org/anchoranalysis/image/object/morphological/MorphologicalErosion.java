@@ -110,11 +110,10 @@ public class MorphologicalErosion {
         BinaryVoxels<UnsignedByteBuffer> dilated =
                 MorphologicalDilation.dilate(
                         bvb,
-                        do3D,
+                        SelectDimensionsFactory.of(do3D),
                         iterations,
                         backgroundVb,
                         minIntensityValue,
-                        false,
                         outsideAtThreshold,
                         acceptConditionsDilation,
                         false);
