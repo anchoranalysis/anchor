@@ -48,7 +48,7 @@ import org.anchoranalysis.mpp.io.input.MultiInput;
 
 // An input stack
 @NoArgsConstructor
-public class MultiInputManager extends MultiInputManagerBase {
+public class MultiInputManager extends InputManager<MultiInput> {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private String inputName = MultiInput.DEFAULT_IMAGE_INPUT_NAME;
