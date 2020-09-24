@@ -38,7 +38,7 @@ import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.title.LegendTitle;
 
-public class GraphColorScheme extends AnchorBean<GraphColorScheme> {
+public class PlotColorScheme extends AnchorBean<PlotColorScheme> {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter

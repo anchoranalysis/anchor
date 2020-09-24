@@ -34,13 +34,13 @@ import org.anchoranalysis.plot.GetForSeries;
 import org.jfree.data.category.CategoryDataset;
 
 /**
- * Base for categorical data types
+ * Base class for plots involving categorical data types.
  *
  * @param <T>
  * @param <S>
  */
-public abstract class GraphIndexBaseCategorical<T, S extends CategoryDataset>
-        extends GraphIndexBase<T, S> {
+public abstract class PlotIndexBaseCategorical<T, S extends CategoryDataset>
+        extends PlotIndexBase<T, S> {
 
     private final GetForSeries<T, String> labelGetter;
     private final GetForSeries<T, Paint> colorGetter;
@@ -53,7 +53,7 @@ public abstract class GraphIndexBaseCategorical<T, S extends CategoryDataset>
      * @param labelGetter
      * @param colorGetter color-getter or null to use default colors
      */
-    public GraphIndexBaseCategorical(
+    public PlotIndexBaseCategorical(
             String graphName,
             String[] seriesNames,
             GetForSeries<T, String> labelGetter,
@@ -77,7 +77,7 @@ public abstract class GraphIndexBaseCategorical<T, S extends CategoryDataset>
         while (itr.hasNext()) {
             T item = itr.next();
 
-            for (int s = 0; s < getNumSeries(); s++) {
+            for (int s = 0; s < getNumberSeries(); s++) {
                 String label = labelGetter.get(item, s);
 
                 addLabelToDataset(dataset, item, s, getSeriesNameFor(s), label);

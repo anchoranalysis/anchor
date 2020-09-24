@@ -28,6 +28,7 @@ package org.anchoranalysis.plot;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Data
@@ -36,6 +37,7 @@ import lombok.NoArgsConstructor;
 public class AxisLimits {
 
     // Inclusive
+    @Getter
     private double axisMin = Double.POSITIVE_INFINITY;
 
     // Inclusive
@@ -46,10 +48,6 @@ public class AxisLimits {
         newObj.axisMin = this.axisMin;
         newObj.axisMax = this.axisMax;
         return newObj;
-    }
-
-    public double getAxisMin() {
-        return axisMin;
     }
 
     public void addIgnoreInfinity(double value) {

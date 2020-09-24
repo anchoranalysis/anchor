@@ -27,12 +27,14 @@
 package org.anchoranalysis.plot.index;
 
 import hep.aida.bin.DynamicBin1D;
+import lombok.Getter;
+import lombok.Setter;
 import java.awt.Paint;
 import java.util.Optional;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.plot.AxisLimits;
 import org.anchoranalysis.plot.GetForSeries;
-import org.anchoranalysis.plot.bean.colorscheme.GraphColorScheme;
+import org.anchoranalysis.plot.bean.colorscheme.PlotColorScheme;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.CategoryAxis;
@@ -45,16 +47,15 @@ import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
 
 /**
- * A line graph with 1 or more series, with an index on the x-axis and a container with items from
- * which lines are calculated
+ * A bar plot, stacked or non-stacked.
  *
- * @param <T> cntr-item-type
+ * @param <T> item-type
  */
-public class BarChart<T> extends GraphIndexBaseCategorical<T, DefaultCategoryDataset> {
+public class BarPlot<T> extends PlotIndexBaseCategorical<T, DefaultCategoryDataset> {
 
-    private GetForSeries<T, Double> yValGetter;
+    @Getter private GetForSeries<T, Double> yValGetter;
 
-    private boolean showDomainAxis = true;
+    @Getter @Setter private boolean showDomainAxis = true;
 
     private boolean stacked = false;
 
@@ -86,7 +87,7 @@ public class BarChart<T> extends GraphIndexBaseCategorical<T, DefaultCategoryDat
      * @param colorGetter custom color getter or null to indicate we use defaults
      * @param stacked
      */
-    public BarChart(
+    public BarPlot(
             String graphName,
             String[] seriesNames,
             GetForSeries<T, String> labelGetter,
@@ -112,7 +113,7 @@ public class BarChart<T> extends GraphIndexBaseCategorical<T, DefaultCategoryDat
     protected JFreeChart createChart(
             DefaultCategoryDataset dataset, String title, Optional<AxisLimits> rangeLimits) {
 
-        GraphColorScheme graphColorScheme = getGraphColorScheme();
+        PlotColorScheme graphColorScheme = getGraphColorScheme();
 
         assert (graphColorScheme != null);
 
@@ -157,30 +158,8 @@ public class BarChart<T> extends GraphIndexBaseCategorical<T, DefaultCategoryDat
 
     @Override
     protected Optional<AxisLimits> rangeLimitsIfEmpty(DefaultCategoryDataset dataset) {
-        DynamicBin1D d = new DynamicBin1D();
-
-        for (int x = 0; x < dataset.getColumnCount(); x++) {
-            for (int y = 0; y < dataset.getRowCount(); y++) {
-                d.add(dataset.getValue(y, x).doubleValue());
-            }
-        }
-
-        AxisLimits limitsOut = new AxisLimits();
-        limitsOut.setAxisMin(d.min());
-        limitsOut.setAxisMax(d.max());
-        return Optional.of(limitsOut);
-    }
-
-    public boolean isShowDomainAxis() {
-        return showDomainAxis;
-    }
-
-    public void setShowDomainAxis(boolean showDomainAxis) {
-        this.showDomainAxis = showDomainAxis;
-    }
-
-    public GetForSeries<T, Double> getyValGetter() {
-        return yValGetter;
+        DynamicBin1D bin = binOfValues(dataset);
+        return Optional.of(new AxisLimits(bin.min(), bin.max()));
     }
 
     private JFreeChart createInitialChartObject(CategoryDataset dataset, String title) {
@@ -213,5 +192,17 @@ public class BarChart<T> extends GraphIndexBaseCategorical<T, DefaultCategoryDat
     @Override
     protected DefaultCategoryDataset createDefaultDataset() {
         return new DefaultCategoryDataset();
+    }
+        
+    private static DynamicBin1D binOfValues(DefaultCategoryDataset dataset) {
+        DynamicBin1D bin = new DynamicBin1D();
+
+        for (int x = 0; x < dataset.getColumnCount(); x++) {
+            for (int y = 0; y < dataset.getRowCount(); y++) {
+                bin.add(dataset.getValue(y, x).doubleValue());
+            }
+        }
+        
+        return bin;
     }
 }

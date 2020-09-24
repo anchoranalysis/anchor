@@ -41,7 +41,7 @@ import org.jfree.data.statistics.BoxAndWhiskerItem;
 import org.jfree.data.statistics.DefaultBoxAndWhiskerCategoryDataset;
 
 /** @param <T> container item type */
-public class BoxPlot<T> extends GraphIndexBaseCategorical<T, DefaultBoxAndWhiskerCategoryDataset> {
+public class BoxPlot<T> extends PlotIndexBaseCategorical<T, DefaultBoxAndWhiskerCategoryDataset> {
 
     private GetForSeries<T, BoxAndWhiskerItem> boxAndWhiskerItemGetter;
 

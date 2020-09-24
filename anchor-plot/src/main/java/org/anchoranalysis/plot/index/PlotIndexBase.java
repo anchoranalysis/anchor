@@ -32,25 +32,27 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.plot.AxisLimits;
 import org.anchoranalysis.plot.PlotInstance;
-import org.anchoranalysis.plot.bean.colorscheme.GraphColorScheme;
+import org.anchoranalysis.plot.bean.colorscheme.PlotColorScheme;
 import org.jfree.chart.JFreeChart;
 import org.jfree.data.general.Dataset;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * @author Owen Feehan
  * @param <T> container item-type
  * @param <S> dataset-type
  */
-public abstract class GraphIndexBase<T, S extends Dataset> {
+public abstract class PlotIndexBase<T, S extends Dataset> {
 
     private String graphName;
     private String[] seriesNames;
 
-    private int numSeries;
+    @Getter private int numberSeries;
 
-    private GraphColorScheme graphColorScheme = new GraphColorScheme();
+    @Getter @Setter private PlotColorScheme graphColorScheme = new PlotColorScheme();
 
-    private GraphAxisLabels labels = new GraphAxisLabels();
+    @Getter private PlotAxisLabels labels = new PlotAxisLabels();
 
     /**
      * Constructor
@@ -58,24 +60,24 @@ public abstract class GraphIndexBase<T, S extends Dataset> {
      * @param graphName
      * @param seriesNames
      */
-    public GraphIndexBase(String graphName, String[] seriesNames) {
+    public PlotIndexBase(String graphName, String[] seriesNames) {
 
         this.graphName = graphName;
         this.seriesNames = seriesNames;
 
-        numSeries = seriesNames.length;
+        numberSeries = seriesNames.length;
     }
 
     public PlotInstance createWithRangeLimits(
-            Iterator<T> itr, Optional<AxisLimits> proposedRangeLimits) throws CreateException {
+            Iterator<T> items, Optional<AxisLimits> proposedRangeLimits) throws CreateException {
 
         try {
-            if (numSeries <= 0) {
+            if (numberSeries <= 0) {
                 throw new CreateException("There must be at least one seriesName");
             }
 
             // This will create the dataset
-            S dataset = createDataset(itr);
+            S dataset = createDataset(items);
 
             // We populate our outgoing limits from the plot
             if (!proposedRangeLimits.isPresent()) {
@@ -92,22 +94,6 @@ public abstract class GraphIndexBase<T, S extends Dataset> {
         }
     }
 
-    public GraphColorScheme getGraphColorScheme() {
-        return graphColorScheme;
-    }
-
-    public void setGraphColorScheme(GraphColorScheme graphColorScheme) {
-        this.graphColorScheme = graphColorScheme;
-    }
-
-    public GraphAxisLabels getLabels() {
-        return labels;
-    }
-
-    protected int getNumSeries() {
-        return numSeries;
-    }
-
     protected abstract Optional<AxisLimits> rangeLimitsIfEmpty(S dataset);
 
     protected abstract JFreeChart createChart(
@@ -116,7 +102,7 @@ public abstract class GraphIndexBase<T, S extends Dataset> {
     protected abstract S createDataset(Iterator<T> itr) throws GetOperationFailedException;
 
     protected boolean multipleSeries() {
-        return numSeries > 1;
+        return numberSeries > 1;
     }
 
     protected String getSeriesNameFor(int index) {

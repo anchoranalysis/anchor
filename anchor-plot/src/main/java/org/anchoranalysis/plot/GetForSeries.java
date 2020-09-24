@@ -35,5 +35,5 @@ import org.anchoranalysis.core.index.GetOperationFailedException;
  */
 @FunctionalInterface
 public interface GetForSeries<T, S> {
-    S get(T item, int seriesNum) throws GetOperationFailedException;
+    S get(T item, int seriesIndex) throws GetOperationFailedException;
 }

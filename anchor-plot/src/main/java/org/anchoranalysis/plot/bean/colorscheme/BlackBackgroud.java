@@ -24,17 +24,26 @@
  * #L%
  */
 
-package org.anchoranalysis.plot.io;
+package org.anchoranalysis.plot.bean.colorscheme;
 
-import java.awt.image.BufferedImage;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-import org.anchoranalysis.plot.PlotInstance;
+import java.awt.Color;
+import org.anchoranalysis.io.bean.color.RGBColorBean;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class PlotOutputter {
+/**
+ * A black background and white axes.
+ * 
+ * @author Owen Feehan
+ *
+ */
+public class BlackBackgroud extends PlotColorScheme {
 
-    public static BufferedImage createBufferedImage(PlotInstance plotInstance, int width, int height) {
-        return plotInstance.getChart().createBufferedImage(width, height);
+    public BlackBackgroud() {
+        setBackgroundColor(beanFor(Color.BLACK));
+        setPlotBackgroundColor(beanFor(Color.BLACK));
+        setAxisColor(beanFor(Color.WHITE));
+    }
+    
+    private static RGBColorBean beanFor(java.awt.Color delegate) {
+        return new RGBColorBean(delegate);
     }
 }

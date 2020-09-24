@@ -46,12 +46,13 @@ import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
 /**
- * A line graph with 1 or more series, with an index on the x-axis and a container with items from
- * which lines are calculated
+ * A line graph with 1 or more series, with an index on the x-axis.
+ * 
+ * <p>Lines are calculated from a container of items.
  *
- * @param <T> container item type
+ * @param <T> item-type in container.
  */
-public class LinePlot<T extends IndexGetter> extends GraphIndexBase<T, XYDataset> {
+public class LinePlot<T extends IndexGetter> extends PlotIndexBase<T, XYDataset> {
 
     @Getter @Setter private int numPoints = 1000;
 
@@ -90,7 +91,7 @@ public class LinePlot<T extends IndexGetter> extends GraphIndexBase<T, XYDataset
         while (itr.hasNext()) {
             T item = itr.next();
 
-            for (int s = 0; s < getNumSeries(); s++) {
+            for (int s = 0; s < getNumberSeries(); s++) {
                 double yVal = yValGetter.getYVal(item, s);
                 seriesArr[s].add(item.getIndex(), yVal);
 
@@ -104,7 +105,7 @@ public class LinePlot<T extends IndexGetter> extends GraphIndexBase<T, XYDataset
 
         XYSeriesCollection dataset = new XYSeriesCollection();
 
-        for (int s = 0; s < getNumSeries(); s++) {
+        for (int s = 0; s < getNumberSeries(); s++) {
             dataset.addSeries(seriesArr[s]);
         }
 
@@ -146,7 +147,7 @@ public class LinePlot<T extends IndexGetter> extends GraphIndexBase<T, XYDataset
 
         final XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer();
 
-        for (int s = 0; s < getNumSeries(); s++) {
+        for (int s = 0; s < getNumberSeries(); s++) {
             renderer.setSeriesShapesVisible(s, false);
             renderer.setSeriesShapesVisible(s, false);
             renderer.setSeriesShapesVisible(s, false);
@@ -190,8 +191,8 @@ public class LinePlot<T extends IndexGetter> extends GraphIndexBase<T, XYDataset
     }
 
     private XYSeries[] createXYSeriesArray() {
-        XYSeries[] arr = new XYSeries[getNumSeries()];
-        for (int s = 0; s < getNumSeries(); s++) {
+        XYSeries[] arr = new XYSeries[getNumberSeries()];
+        for (int s = 0; s < getNumberSeries(); s++) {
             arr[s] = new XYSeries(getSeriesNameFor(s));
         }
         return arr;

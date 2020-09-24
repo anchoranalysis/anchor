@@ -24,16 +24,19 @@
  * #L%
  */
 
-package org.anchoranalysis.plot.bean.colorscheme;
+package org.anchoranalysis.plot.index;
 
-import org.anchoranalysis.io.bean.color.RGBColorBean;
+import lombok.Getter;
+import lombok.Setter;
 
-public class BlackBackgroudGraphColorScheme extends GraphColorScheme {
+/** Labels for x and y axis in graph */
+public class PlotAxisLabels {
 
-    public BlackBackgroudGraphColorScheme() {
+    @Getter @Setter private String x = "Index";
+    @Getter @Setter private String y = "Value";
 
-        setBackgroundColor(new RGBColorBean(0, 0, 0));
-        setPlotBackgroundColor(new RGBColorBean(0, 0, 0));
-        setAxisColor(new RGBColorBean(255, 255, 255));
+    public void setXY(String x, String y) {
+        this.x = x;
+        this.y = y;
     }
 }
