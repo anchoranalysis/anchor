@@ -46,11 +46,15 @@ public class BoundDirectory {
      * @throws BindFailedException
      */
     public BoundDirectory bindToDirectory(Path directoryPath) throws BindFailedException {
-        Preconditions.checkArgument( directoryCreator.getRootDirectory().normalize().toString().contains(directoryPath.getParent().toString()) );
+        Preconditions.checkArgument( rootDirectoryContains(directoryPath) );
         try {
             return new BoundDirectory(directoryCreator, Optional.of( directoryCreator.getOrCreate(directoryPath, parentDirectoryCreator)) );
         } catch (GetOperationFailedException e) {
             throw new BindFailedException(e);
         }        
+    }
+    
+    private boolean rootDirectoryContains(Path path) {
+        return path.normalize().toString().contains(directoryCreator.getRootDirectory().toString());
     }
 }
