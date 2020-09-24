@@ -54,7 +54,7 @@ import org.jfree.data.xy.XYSeriesCollection;
  */
 public class LinePlot<T extends IndexGetter> extends PlotIndexBase<T, XYDataset> {
 
-    @Getter @Setter private int numPoints = 1000;
+    @Getter @Setter private int numberPoints = 1000;
 
     @Getter @Setter private int minMaxIgnoreBeforeIndex = 0;
 
