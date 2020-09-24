@@ -23,21 +23,27 @@
  * THE SOFTWARE.
  * #L%
  */
+package org.anchoranalysis.io.output.bound.directory;
 
-package org.anchoranalysis.io.output.bean;
+import lombok.Getter;
+import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
+import org.anchoranalysis.io.output.writer.WriterExecuteBeforeEveryOperation;
 
-import org.anchoranalysis.io.output.bean.allowed.AllOutputAllowed;
-import org.anchoranalysis.io.output.bean.allowed.OutputAllowed;
+/**
+ * An operation has been called only once, or else is throws an exception if called again.
+ *
+ * @author Owen Feehan
+ */
+class OneTimeOperation implements WriterExecuteBeforeEveryOperation {
 
-public class OutputManagerPermissive extends OutputManagerWithPrefixer {
+    @Getter private boolean called = false;
 
     @Override
-    public boolean isOutputAllowed(String outputName) {
-        return true;
-    }
-
-    @Override
-    public OutputAllowed outputAllowedSecondLevel(String key) {
-        return new AllOutputAllowed();
+    public void execute() {
+        if (called == false) {
+            this.called = true;
+        } else {
+            throw new AnchorFriendlyRuntimeException("execute() has already been called");
+        }
     }
 }

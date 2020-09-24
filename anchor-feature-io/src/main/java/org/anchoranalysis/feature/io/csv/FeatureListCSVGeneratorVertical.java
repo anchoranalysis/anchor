@@ -32,7 +32,7 @@ import org.anchoranalysis.core.text.TypedValue;
 import org.anchoranalysis.feature.calculate.results.ResultsVector;
 import org.anchoranalysis.feature.calculate.results.ResultsVectorCollection;
 import org.anchoranalysis.feature.name.FeatureNameList;
-import org.anchoranalysis.io.output.csv.CSVWriter;
+import org.anchoranalysis.io.generator.tabular.CSVWriter;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 /**

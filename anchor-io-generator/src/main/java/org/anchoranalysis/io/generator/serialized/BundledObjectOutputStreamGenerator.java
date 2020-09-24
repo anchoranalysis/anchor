@@ -125,7 +125,8 @@ public class BundledObjectOutputStreamGenerator<T extends Serializable> implemen
                                                     "No subfolder output-manager exists"));
 
             subfolderOutputManager
-                    .getWriterAlwaysAllowed()
+                    .getWriters()
+                    .alwaysAllowed()
                     .write("bundleParameters", () -> bundleParametersGenerator);
         }
 

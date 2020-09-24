@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.io.output.bound;
+package org.anchoranalysis.io.output.bound.directory;
 
 import java.nio.file.Path;
 import java.util.Optional;
@@ -35,9 +35,9 @@ import org.anchoranalysis.io.output.writer.WriterExecuteBeforeEveryOperation;
 import org.apache.commons.io.FileUtils;
 
 /**
- * Creates the output-directory lazily on the first occasion {@link #execute} is called
+ * Creates the output-directory lazily on the first occasion {@link #execute} is called.
  *
- * <p>Depending on settings, the initialization routine involves:
+ * <p>Depending on settings, the initialization routine:
  *
  * <ul>
  *   <li>checks if a directory already exists at the path, and throws an errror

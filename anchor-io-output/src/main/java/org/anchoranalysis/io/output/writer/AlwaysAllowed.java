@@ -34,40 +34,47 @@ import org.anchoranalysis.io.manifest.ManifestFolderDescription;
 import org.anchoranalysis.io.manifest.folder.FolderWriteWithPath;
 import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.namestyle.IntegerSuffixOutputNameStyle;
-import org.anchoranalysis.io.namestyle.OutputNameStyle;
-import org.anchoranalysis.io.output.bean.OutputWriteSettings;
+import org.anchoranalysis.io.namestyle.SimpleOutputNameStyle;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
+/**
+ * Allows every output, irrespective of whether the {@link BoundOutputManager} allows the output-name.
+ * 
+ * @author Owen Feehan
+ *
+ */
 @RequiredArgsConstructor
 public class AlwaysAllowed implements Writer {
 
     // START REQUIRED ARGUMENTS
     /** Bound output manager */
-    private final BoundOutputManager bom;
+    private final BoundOutputManager outputManager;
 
     /** Execute before every operation */
     private final WriterExecuteBeforeEveryOperation preop;
     // END REQUIRED ARGUMENTS
 
     @Override
-    public Optional<BoundOutputManager> bindAsSubdirectory(
+    public Optional<BoundOutputManager> createSubdirectory(
             String outputName,
             ManifestFolderDescription manifestDescription,
-            Optional<FolderWriteWithPath> folder)
+            Optional<FolderWriteWithPath> manifestFolder)
             throws OutputWriteFailedException {
 
         preop.execute();
-        return Optional.of(bom.deriveSubdirectory(outputName, manifestDescription, folder));
+        return Optional.of(outputManager.deriveSubdirectory(outputName, manifestDescription, manifestFolder));
     }
 
     @Override
-    public void writeSubfolder(String outputName, GenerateWritableItem<?> collectionGenerator)
+    public boolean writeSubdirectoryWithGenerator(String outputName, GenerateWritableItem<?> collectionGenerator)
             throws OutputWriteFailedException {
 
         preop.execute();
 
-        collectionGenerator.generate().write(new IntegerSuffixOutputNameStyle(outputName, 3), bom);
+        collectionGenerator.get().write(new IntegerSuffixOutputNameStyle(outputName, 3), outputManager);
+        
+        return true;
     }
 
     @Override
@@ -78,16 +85,16 @@ public class AlwaysAllowed implements Writer {
             throws OutputWriteFailedException {
 
         preop.execute();
-        return generator.generate().write(outputNameStyle, index, bom);
+        return generator.get().write(outputNameStyle, index, outputManager);
     }
 
     // Write a file without checking if the outputName is allowed
     @Override
-    public void write(OutputNameStyle outputNameStyle, GenerateWritableItem<?> generator)
+    public boolean write(String outputName, GenerateWritableItem<?> generator)
             throws OutputWriteFailedException {
-
         preop.execute();
-        generator.generate().write(outputNameStyle, bom);
+        generator.get().write( new SimpleOutputNameStyle(outputName), outputManager);
+        return true;
     }
 
     // A non-generator way of creating outputs, that are still included in the manifest
@@ -96,23 +103,15 @@ public class AlwaysAllowed implements Writer {
     public Optional<Path> writeGenerateFilename(
             String outputName,
             String extension,
-            Optional<ManifestDescription> manifestDescription,
-            String outputNamePrefix,
-            String outputNameSuffix,
-            String index) {
+            Optional<ManifestDescription> manifestDescription) {
 
         preop.execute();
 
         Path outPath =
-                bom.outFilePath(outputNamePrefix + outputName + outputNameSuffix + "." + extension);
+                outputManager.outFilePath(outputName + "." + extension);
 
         manifestDescription.ifPresent(
-                md -> bom.writeFileToOperationRecorder(outputName, outPath, md, index));
+                md -> outputManager.writeFileToOperationRecorder(outputName, outPath, md, ""));
         return Optional.of(outPath);
-    }
-
-    @Override
-    public OutputWriteSettings getOutputWriteSettings() {
-        return bom.getOutputWriteSettings();
     }
 }

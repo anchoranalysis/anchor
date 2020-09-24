@@ -23,4 +23,4 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.io.output.bound;
+package org.anchoranalysis.io.output.bound.directory;

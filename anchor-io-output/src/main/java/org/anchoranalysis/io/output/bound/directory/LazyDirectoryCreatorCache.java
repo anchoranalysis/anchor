@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.io.output.bound;
+package org.anchoranalysis.io.output.bound.directory;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -36,19 +36,23 @@ import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.filepath.prefixer.PathDifferenceFromBase;
 import org.anchoranalysis.io.output.writer.WriterExecuteBeforeEveryOperation;
+import lombok.Getter;
 
 /**
- * Memoizes {@link LazyDirectoryCreator} creation for a given directory (normalized) that must exist
- * within a {@code rootDirectory}.
+ * Memoizes an associated {@link LazyDirectoryCreator} for a given directory.
+ * 
+ * <p>Directories are first normalized, and all must exist within a particular {@code rootDirectory}.
  *
  * @author Owen Feehan
  */
-public class LazyDirectoryCreatorCache {
+class LazyDirectoryCreatorCache {
 
     // START REQUIRED ARGUMENTS
+    /** If true, any existing directory at the intended path for creation, is first deleted. If false, an exception is thrown in this circumstance. */
     private final boolean deleteExisting;
 
-    private final Path rootDirectory;
+    /** The root directory in which <i>all</i> memoized directories must exist. */
+    @Getter private final Path rootDirectory;
     // END REQUIRED ARGUMENTS
 
     // Cache all directories created by Path
@@ -119,7 +123,7 @@ public class LazyDirectoryCreatorCache {
         Iterator<Path> iterator = pathDifference.iterator();
 
         // Successively changed as we iterate over directories, but the first directory calls the
-        // parameer opBefore
+        // parameter opBefore
         Optional<WriterExecuteBeforeEveryOperation> opBeforeRunning = opBefore;
 
         // Successively changed as we iterate over directories

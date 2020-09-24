@@ -27,7 +27,7 @@
 package org.anchoranalysis.experiment.io;
 
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.io.output.bean.OutputManager;
+import org.anchoranalysis.io.output.bean.manager.OutputManager;
 
 /**
  * If an experiment implements this interface, the input-manager of an an experiment can be replaced

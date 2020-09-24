@@ -33,14 +33,19 @@ import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.manifest.ManifestFolderDescription;
 import org.anchoranalysis.io.manifest.folder.FolderWriteWithPath;
 import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
-import org.anchoranalysis.io.namestyle.OutputNameStyle;
-import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
+/**
+ * Only allows outputs, if the output-name is allowed in the {@link BoundOutputManager}.
+ * @author Owen Feehan
+ *
+ */
 @RequiredArgsConstructor
 public class CheckIfAllowed implements Writer {
 
+    public static final int NUMBER_ELEMENTS_WRITTEN_NOT_ALLOWED = -2;
+    
     // START REQUIRED ARGUMENTS
     /** The associated output-manager */
     private final BoundOutputManager outputManager;
@@ -48,14 +53,15 @@ public class CheckIfAllowed implements Writer {
     /** Execute before every operation */
     private final WriterExecuteBeforeEveryOperation preop;
 
+    /** The writer. */
     private final Writer writer;
     // END REQUIRED ARGUMENTS
 
     @Override
-    public Optional<BoundOutputManager> bindAsSubdirectory(
+    public Optional<BoundOutputManager> createSubdirectory(
             String outputName,
             ManifestFolderDescription manifestDescription,
-            Optional<FolderWriteWithPath> folder)
+            Optional<FolderWriteWithPath> manifestFolder)
             throws OutputWriteFailedException {
 
         if (!outputManager.isOutputAllowed(outputName)) {
@@ -64,20 +70,22 @@ public class CheckIfAllowed implements Writer {
 
         preop.execute();
 
-        return writer.bindAsSubdirectory(outputName, manifestDescription, folder);
+        return writer.createSubdirectory(outputName, manifestDescription, manifestFolder);
     }
 
     @Override
-    public void writeSubfolder(String outputName, GenerateWritableItem<?> collectionGenerator)
+    public boolean writeSubdirectoryWithGenerator(String outputName, GenerateWritableItem<?> collectionGenerator)
             throws OutputWriteFailedException {
 
         if (!outputManager.isOutputAllowed(outputName)) {
-            return;
+            return false;
         }
 
         preop.execute();
 
-        writer.writeSubfolder(outputName, collectionGenerator);
+        writer.writeSubdirectoryWithGenerator(outputName, collectionGenerator);
+        
+        return true;
     }
 
     @Override
@@ -88,7 +96,7 @@ public class CheckIfAllowed implements Writer {
             throws OutputWriteFailedException {
 
         if (!outputManager.isOutputAllowed(outputNameStyle.getOutputName())) {
-            return -1;
+            return NUMBER_ELEMENTS_WRITTEN_NOT_ALLOWED;
         }
 
         preop.execute();
@@ -97,24 +105,25 @@ public class CheckIfAllowed implements Writer {
     }
 
     @Override
-    public void write(OutputNameStyle outputNameStyle, GenerateWritableItem<?> generator)
+    public boolean write(String outputName, GenerateWritableItem<?> generator)
             throws OutputWriteFailedException {
 
-        if (!outputManager.isOutputAllowed(outputNameStyle.getOutputName())) return;
+        if (!outputManager.isOutputAllowed(outputName)) {
+            return false;
+        }
 
         preop.execute();
 
-        writer.write(outputNameStyle, generator);
+        writer.write(outputName, generator);
+        
+        return true;
     }
 
     @Override
     public Optional<Path> writeGenerateFilename(
             String outputName,
             String extension,
-            Optional<ManifestDescription> manifestDescription,
-            String outputNamePrefix,
-            String outputNameSuffix,
-            String index) {
+            Optional<ManifestDescription> manifestDescription) {
 
         if (!outputManager.isOutputAllowed(outputName)) {
             return Optional.empty();
@@ -125,14 +134,6 @@ public class CheckIfAllowed implements Writer {
         return writer.writeGenerateFilename(
                 outputName,
                 extension,
-                manifestDescription,
-                outputNamePrefix,
-                outputNameSuffix,
-                index);
-    }
-
-    @Override
-    public OutputWriteSettings getOutputWriteSettings() {
-        return outputManager.getOutputWriteSettings();
+                manifestDescription);
     }
 }

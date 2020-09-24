@@ -47,7 +47,7 @@ import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.InputFromManager;
-import org.anchoranalysis.io.output.bean.OutputManager;
+import org.anchoranalysis.io.output.bean.manager.OutputManager;
 
 /**
  * @author Owen Feehan

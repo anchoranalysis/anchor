@@ -32,8 +32,8 @@ import java.util.function.Supplier;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.log.MessageLogger;
+import org.anchoranalysis.io.generator.text.TextFileOutput;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
-import org.anchoranalysis.io.output.file.FileOutput;
 
 /**
  * Logs messages to a text-file.
@@ -46,11 +46,11 @@ import org.anchoranalysis.io.output.file.FileOutput;
 public class TextFileMessageLogger implements StatefulMessageLogger {
 
     // START REQUIRED ARGUMENTS
-    private final Supplier<Optional<FileOutput>> fileOutputSupplier;
+    private final Supplier<Optional<TextFileOutput>> fileOutputSupplier;
     private final ErrorReporter errorReporter;
     // END REQUIRED ARGUMENTS
 
-    private Optional<FileOutput> fileOutput = Optional.empty();
+    private Optional<TextFileOutput> fileOutput = Optional.empty();
     private Optional<PrintWriter> printWriter = Optional.empty();
 
     /**
@@ -61,7 +61,7 @@ public class TextFileMessageLogger implements StatefulMessageLogger {
      *     and no further logging occurs.
      */
     public TextFileMessageLogger(String filePath, ErrorReporter errorReporter) {
-        this.fileOutputSupplier = () -> Optional.of(new FileOutput(filePath));
+        this.fileOutputSupplier = () -> Optional.of(new TextFileOutput(filePath));
         this.errorReporter = errorReporter;
     }
 
@@ -117,6 +117,6 @@ public class TextFileMessageLogger implements StatefulMessageLogger {
 
     @Override
     public void close(boolean successful) {
-        fileOutput.ifPresent(FileOutput::end);
+        fileOutput.ifPresent(TextFileOutput::end);
     }
 }

@@ -44,7 +44,7 @@ import lombok.RequiredArgsConstructor;
  * 
  * @author Owen Feehan
  *
- * @param <T>
+ * @param <T> element-type
  */
 @RequiredArgsConstructor @AllArgsConstructor
 public class CollectionGenerator<T> implements Generator<Collection<T>> {

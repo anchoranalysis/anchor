@@ -83,11 +83,11 @@ public class BoundOutputManagerRouteErrors {
     }
 
     public WriterRouterErrors getWriterAlwaysAllowed() {
-        return new WriterRouterErrors(delegate.getWriterAlwaysAllowed(), errorReporter);
+        return new WriterRouterErrors(delegate.getWriters().alwaysAllowed(), errorReporter);
     }
 
     public WriterRouterErrors getWriterCheckIfAllowed() {
-        return new WriterRouterErrors(delegate.getWriterCheckIfAllowed(), errorReporter);
+        return new WriterRouterErrors(delegate.getWriters().checkIfAllowed(), errorReporter);
     }
 
     @Override

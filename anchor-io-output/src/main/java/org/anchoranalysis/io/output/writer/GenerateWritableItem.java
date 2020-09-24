@@ -28,13 +28,19 @@ package org.anchoranalysis.io.output.writer;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 /**
- * Creates a writable-item to be outputted
+ * Creates a generator to output files.
  *
  * @author Owen Feehan
- * @param <T> writable-item
+ * @param <T> generator-type
  */
 @FunctionalInterface
 public interface GenerateWritableItem<T extends WritableItem> {
 
-    T generate() throws OutputWriteFailedException;
+    /**
+     * Gets/creates the generator.
+     * 
+     * @return the generator
+     * @throws OutputWriteFailedException
+     */
+    T get() throws OutputWriteFailedException;
 }

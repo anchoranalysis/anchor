@@ -64,9 +64,9 @@ public class SubfolderWriter implements SequenceWriter {
         } else {
             Writer writer =
                     checkIfAllowed
-                            ? parentOutputManager.getWriterCheckIfAllowed()
-                            : parentOutputManager.getWriterAlwaysAllowed();
-            return writer.bindAsSubdirectory(
+                            ? parentOutputManager.getWriters().checkIfAllowed()
+                            : parentOutputManager.getWriters().alwaysAllowed();
+            return writer.createSubdirectory(
                     subfolderName, folderDescription, Optional.of(subFolderWrite));
         }
     }
@@ -98,11 +98,6 @@ public class SubfolderWriter implements SequenceWriter {
     }
 
     @Override
-    public boolean isOn() {
-        return subFolderOutputManager.isPresent();
-    }
-
-    @Override
     public void write(GenerateWritableItem<Generator<?>> generator, String index)
             throws OutputWriteFailedException {
 
@@ -113,16 +108,28 @@ public class SubfolderWriter implements SequenceWriter {
         if (checkIfAllowed) {
             this.subFolderOutputManager // NOSONAR
                     .get()
-                    .getWriterCheckIfAllowed()
+                    .getWriters()
+                    .checkIfAllowed()
                     .write(outputNameStyle, generator, index);
         } else {
             this.subFolderOutputManager // NOSONAR
                     .get()
-                    .getWriterAlwaysAllowed()
+                    .getWriters()
+                    .alwaysAllowed()
                     .write(outputNameStyle, generator, index);
         }
     }
 
+    @Override
+    public Optional<BoundOutputManager> getOutputManagerForFiles() {
+        return subFolderOutputManager;
+    }
+    
+    @Override
+    public boolean isOn() {
+        return subFolderOutputManager.isPresent();
+    }
+    
     // Requires the generator to be in a valid state
     private ManifestDescription createFolderDescription(FileType[] fileTypes) {
         if (folderManifestDescription != null) {
@@ -168,10 +175,5 @@ public class SubfolderWriter implements SequenceWriter {
         }
 
         return new ManifestDescription(type, function);
-    }
-
-    @Override
-    public Optional<BoundOutputManager> getOutputManagerForFiles() {
-        return subFolderOutputManager;
     }
 }

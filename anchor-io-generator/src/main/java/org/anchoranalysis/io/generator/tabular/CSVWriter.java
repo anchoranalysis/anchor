@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.io.output.csv;
+package org.anchoranalysis.io.generator.tabular;
 
 import java.io.PrintWriter;
 import java.nio.file.Path;
@@ -33,9 +33,9 @@ import java.util.Optional;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.text.TypedValue;
 import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.generator.text.TextFileOutput;
+import org.anchoranalysis.io.generator.text.TextFileOutputFromManager;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
-import org.anchoranalysis.io.output.file.FileOutput;
-import org.anchoranalysis.io.output.file.FileOutputFromManager;
 
 // Can be called by different threads, so synchronization is important
 public class CSVWriter implements AutoCloseable {
@@ -44,12 +44,12 @@ public class CSVWriter implements AutoCloseable {
     private String doubleQuotes = "\"";
 
     private PrintWriter writer;
-    private FileOutput output;
+    private TextFileOutput output;
 
     private boolean writtenHeaders = false;
 
     /**
-     * Creates and starts a CSVWriter if it's allowed, otherwise returns null
+     * Creates and starts a CSVWriter if it's allowed, otherwise returns {@link Optional#empty}.
      *
      * @param outputName output-name
      * @param outputManager output-manager
@@ -63,10 +63,10 @@ public class CSVWriter implements AutoCloseable {
             return Optional.empty();
         }
 
-        Optional<FileOutput> output =
-                FileOutputFromManager.create("csv", Optional.empty(), outputManager, outputName);
+        Optional<TextFileOutput> output =
+                TextFileOutputFromManager.create("csv", Optional.empty(), outputManager, outputName);
 
-        OptionalUtilities.ifPresent(output, FileOutput::start);
+        OptionalUtilities.ifPresent(output, TextFileOutput::start);
         return output.map(CSVWriter::new);
     }
 
@@ -78,12 +78,12 @@ public class CSVWriter implements AutoCloseable {
      * @throws AnchorIOException
      */
     public static CSVWriter create(Path path) throws AnchorIOException {
-        FileOutput output = new FileOutput(path.toString());
+        TextFileOutput output = new TextFileOutput(path.toString());
         output.start();
         return new CSVWriter(output);
     }
 
-    private CSVWriter(FileOutput output) {
+    private CSVWriter(TextFileOutput output) {
         this.output = output;
         this.writer = output.getWriter();
     }

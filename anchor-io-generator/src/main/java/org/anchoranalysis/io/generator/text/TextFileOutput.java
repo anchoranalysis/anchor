@@ -24,46 +24,46 @@
  * #L%
  */
 
-package org.anchoranalysis.io.output.file;
+package org.anchoranalysis.io.generator.text;
 
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import org.anchoranalysis.io.error.AnchorIOException;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
-public class FileOutput {
+/**
+ * Utility for writing to a text-file at a particular path, but only if it is enabled.
+ * 
+ * @author Owen Feehan
+ *
+ */
+@RequiredArgsConstructor
+public class TextFileOutput {
 
+    // START REQUIRED ARGUMENTS
     private final String filePath;
+    // END REQUIRED ARGUMENTS
 
     // Files for writing out
-    private PrintWriter out;
-
-    public FileOutput(String filePath) {
-        super();
-        this.filePath = filePath;
-    }
+    @Getter private PrintWriter writer;
 
     public void start() throws AnchorIOException {
         try {
-            FileWriter fileWriter = new FileWriter(filePath);
-
-            this.out = new PrintWriter(fileWriter);
+             this.writer = new PrintWriter( new FileWriter(filePath) );  // NOSONAR
         } catch (IOException e) {
             throw new AnchorIOException("Cannot create file-writer", e);
         }
     }
 
     public boolean isEnabled() {
-        return (out != null);
-    }
-
-    public PrintWriter getWriter() {
-        return this.out;
+        return writer != null;
     }
 
     public void end() {
-        if (out != null) {
-            out.close();
+        if (writer != null) {
+            writer.close();
         }
     }
 }

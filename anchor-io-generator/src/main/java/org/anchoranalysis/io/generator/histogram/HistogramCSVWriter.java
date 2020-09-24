@@ -34,7 +34,7 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.text.TypedValue;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.io.error.AnchorIOException;
-import org.anchoranalysis.io.output.csv.CSVWriter;
+import org.anchoranalysis.io.generator.tabular.CSVWriter;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class HistogramCSVWriter {

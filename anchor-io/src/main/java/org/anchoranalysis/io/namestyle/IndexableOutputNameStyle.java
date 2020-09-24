@@ -26,21 +26,24 @@
 
 package org.anchoranalysis.io.namestyle;
 
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+
+/**
+ * An output-name with an index somehow appended or prepended in a particular style.
+ *
+ * <p>The no-arguments constructor exists only for deserialization.
+ * 
+ * @author Owen Feehan
+ *
+ */
+@NoArgsConstructor @AllArgsConstructor
 public abstract class IndexableOutputNameStyle extends OutputNameStyle {
 
-    /** */
     private static final long serialVersionUID = -2393013576294162543L;
 
+    /** The output-name (without any index). */
     private String outputName;
-
-    // Only for deserialization
-    public IndexableOutputNameStyle() {
-        super();
-    }
-
-    public IndexableOutputNameStyle(String outputName) {
-        this.outputName = outputName;
-    }
 
     /**
      * Copy constructor
@@ -50,8 +53,6 @@ public abstract class IndexableOutputNameStyle extends OutputNameStyle {
     protected IndexableOutputNameStyle(IndexableOutputNameStyle src) {
         this.outputName = src.outputName;
     }
-
-    protected abstract String outputFormatString();
 
     public String getPhysicalName(int index) {
         return getPhysicalName(Integer.toString(index));
@@ -64,9 +65,6 @@ public abstract class IndexableOutputNameStyle extends OutputNameStyle {
 
     @Override
     public abstract IndexableOutputNameStyle duplicate();
-
-    /** Constructs a full name from the output format string and an index */
-    protected abstract String nameFromOutputFormatString(String outputFormatString, String index);
 
     @Override
     public String getOutputName() {
@@ -83,4 +81,9 @@ public abstract class IndexableOutputNameStyle extends OutputNameStyle {
         throw new UnsupportedOperationException(
                 "an index is required for getPhysicalName in this class");
     }
+
+    /** Constructs a full name from the output format string and an index */
+    protected abstract String nameFromOutputFormatString(String outputFormatString, String index);
+    
+    protected abstract String outputFormatString();
 }

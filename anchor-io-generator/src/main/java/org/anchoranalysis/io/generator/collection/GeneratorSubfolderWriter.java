@@ -57,7 +57,7 @@ public class GeneratorSubfolderWriter {
             boolean checkIfAllowed)
             throws OutputWriteFailedException {
         extractWriter(outputManager, checkIfAllowed)
-                .writeSubfolder(
+                .writeSubdirectoryWithGenerator(
                         outputNameSubfolder,
                         () ->
                                 createOutputWriter(
@@ -76,7 +76,7 @@ public class GeneratorSubfolderWriter {
             Collection<T> collection,
             boolean checkIfAllowed) {
         extractWriter(outputManager, checkIfAllowed)
-                .writeSubfolder(
+                .writeSubfolderWithGenerator(
                         outputNameSubfolder,
                         () ->
                                 createOutputWriter(
@@ -89,9 +89,9 @@ public class GeneratorSubfolderWriter {
 
     private static Writer extractWriter(BoundOutputManager outputManager, boolean checkIfAllowed) {
         if (checkIfAllowed) {
-            return outputManager.getWriterCheckIfAllowed();
+            return outputManager.getWriters().checkIfAllowed();
         } else {
-            return outputManager.getWriterAlwaysAllowed();
+            return outputManager.getWriters().alwaysAllowed();
         }
     }
 

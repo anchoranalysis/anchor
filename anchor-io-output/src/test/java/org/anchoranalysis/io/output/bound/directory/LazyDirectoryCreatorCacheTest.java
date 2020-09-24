@@ -23,7 +23,7 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.io.output.bound;
+package org.anchoranalysis.io.output.bound.directory;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -31,6 +31,8 @@ import static org.junit.Assert.assertTrue;
 import java.nio.file.Path;
 import java.util.Optional;
 import org.anchoranalysis.core.index.GetOperationFailedException;
+import org.anchoranalysis.io.output.bound.directory.LazyDirectoryCreator;
+import org.anchoranalysis.io.output.bound.directory.LazyDirectoryCreatorCache;
 import org.anchoranalysis.io.output.writer.WriterExecuteBeforeEveryOperation;
 import org.junit.Before;
 import org.junit.Rule;

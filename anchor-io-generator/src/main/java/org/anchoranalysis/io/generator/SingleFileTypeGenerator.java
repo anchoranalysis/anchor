@@ -66,7 +66,9 @@ public abstract class SingleFileTypeGenerator<T,S> implements Generator<T> {
                 outputManager);
     }
 
-    // We delegate to a much simpler method, for single file generators
+    /**
+     * As only a single-file is involved, this methods delegates to a simpler virtual method.
+     */
     @Override
     public int write(
             IndexableOutputNameStyle outputNameStyle,

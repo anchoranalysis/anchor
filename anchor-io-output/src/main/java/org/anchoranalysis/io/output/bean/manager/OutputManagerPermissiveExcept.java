@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.io.output.bean;
+package org.anchoranalysis.io.output.bean.manager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
