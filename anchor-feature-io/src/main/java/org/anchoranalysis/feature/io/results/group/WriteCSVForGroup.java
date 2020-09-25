@@ -27,10 +27,10 @@ package org.anchoranalysis.feature.io.results.group;
 
 import java.util.Optional;
 import lombok.AllArgsConstructor;
-import org.anchoranalysis.feature.calculate.results.ResultsVectorCollection;
 import org.anchoranalysis.feature.io.csv.FeatureListCSVGeneratorHorizontal;
 import org.anchoranalysis.feature.io.name.MultiName;
 import org.anchoranalysis.feature.name.FeatureNameList;
+import org.anchoranalysis.feature.results.ResultsVectorList;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.io.output.bound.CacheSubdirectoryContext;
 
@@ -48,7 +48,7 @@ class WriteCSVForGroup {
     private FeatureNameList featureNames;
     private CacheSubdirectoryContext context;
 
-    public void write(Optional<MultiName> groupName, ResultsVectorCollection results) {
+    public void write(Optional<MultiName> groupName, ResultsVectorList results) {
         if (groupName.isPresent()) {
             writeGroupFeatures(
                     context.get(groupName.map(MultiName::toString)).getOutputManager(), results);
@@ -57,7 +57,7 @@ class WriteCSVForGroup {
 
     /** Writes a table of features in CSV for a particular group */
     private void writeGroupFeatures(
-            BoundOutputManagerRouteErrors outputManager, ResultsVectorCollection results) {
+            BoundOutputManagerRouteErrors outputManager, ResultsVectorList results) {
         outputManager
                 .getWriterCheckIfAllowed()
                 .write(

@@ -27,7 +27,7 @@
 package org.anchoranalysis.feature.session.cache.horizontal;
 
 import org.anchoranalysis.feature.bean.list.FeatureList;
-import org.anchoranalysis.feature.cache.calculate.FeatureSessionCache;
+import org.anchoranalysis.feature.calculate.cache.FeatureSessionCache;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.session.cache.FeatureSessionCacheFactory;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;

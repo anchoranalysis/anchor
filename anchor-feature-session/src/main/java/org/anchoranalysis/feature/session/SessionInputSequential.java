@@ -31,21 +31,22 @@ import java.util.Set;
 import java.util.function.Function;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
-import org.anchoranalysis.feature.cache.ChildCacheName;
-import org.anchoranalysis.feature.cache.FeatureSymbolCalculator;
-import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.cache.calculate.CacheCreator;
-import org.anchoranalysis.feature.cache.calculate.CalculateForChild;
-import org.anchoranalysis.feature.cache.calculate.CalculationResolver;
-import org.anchoranalysis.feature.cache.calculate.FeatureCalculation;
-import org.anchoranalysis.feature.cache.calculate.FeatureSessionCache;
-import org.anchoranalysis.feature.cache.calculate.ResolvedCalculation;
+import org.anchoranalysis.feature.calculate.FeatureCalculation;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
-import org.anchoranalysis.feature.calculate.results.ResultsVector;
+import org.anchoranalysis.feature.calculate.cache.CacheCreator;
+import org.anchoranalysis.feature.calculate.cache.CalculateForChild;
+import org.anchoranalysis.feature.calculate.cache.CalculationResolver;
+import org.anchoranalysis.feature.calculate.cache.ChildCacheName;
+import org.anchoranalysis.feature.calculate.cache.FeatureSessionCache;
+import org.anchoranalysis.feature.calculate.cache.FeatureSymbolCalculator;
+import org.anchoranalysis.feature.calculate.cache.ResolvedCalculation;
+import org.anchoranalysis.feature.calculate.cache.SessionInput;
 import org.anchoranalysis.feature.input.FeatureInput;
+import org.anchoranalysis.feature.results.ResultsVector;
 import org.anchoranalysis.feature.session.strategy.child.DefaultFindChildStrategy;
 import org.anchoranalysis.feature.session.strategy.child.FindChildStrategy;
+import lombok.AllArgsConstructor;
 
 /**
  * A feature-input that will be used in a {@link SequentialSession}
@@ -56,14 +57,10 @@ import org.anchoranalysis.feature.session.strategy.child.FindChildStrategy;
 public class SessionInputSequential<T extends FeatureInput> implements SessionInput<T> {
 
     /** Implements operations which should occur using child-caches rather than in the main cache */
+    @AllArgsConstructor
     private class ChildCalculator implements CalculateForChild<T> {
 
         private FindChildStrategy findChild;
-
-        public ChildCalculator(FindChildStrategy findChild) {
-            super();
-            this.findChild = findChild;
-        }
 
         @Override
         public <S extends FeatureInput> double calculate(

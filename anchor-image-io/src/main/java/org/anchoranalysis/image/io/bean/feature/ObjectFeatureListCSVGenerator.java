@@ -37,10 +37,10 @@ import org.anchoranalysis.core.name.store.SharedObjects;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListFactory;
-import org.anchoranalysis.feature.calculate.results.ResultsVectorCollection;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.io.csv.FeatureListCSVGeneratorVertical;
 import org.anchoranalysis.feature.io.csv.FeatureTableCSVGenerator;
+import org.anchoranalysis.feature.results.ResultsVectorList;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.image.extent.SpatialUnits.UnitSuffix;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureListEvaluator;
@@ -63,7 +63,7 @@ class ObjectFeatureListCSVGenerator extends CSVGenerator<ObjectCollection> {
 
     private FeatureCalculatorMulti<FeatureInputSingleObject> featureCalculator;
 
-    private FeatureTableCSVGenerator<ResultsVectorCollection> delegate;
+    private FeatureTableCSVGenerator<ResultsVectorList> delegate;
 
     private final Logger logger;
 
@@ -93,7 +93,7 @@ class ObjectFeatureListCSVGenerator extends CSVGenerator<ObjectCollection> {
 
         // We calculate a results vector for each object, across all features in memory. This is
         // more efficient
-        ResultsVectorCollection results = new ResultsVectorCollection();
+        ResultsVectorList results = new ResultsVectorList();
         for (ObjectMask objectMask : getElement()) {
             results.add(
                     featureCalculator.calculateSuppressErrors(

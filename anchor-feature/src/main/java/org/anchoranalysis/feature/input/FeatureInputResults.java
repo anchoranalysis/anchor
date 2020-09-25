@@ -28,12 +28,12 @@ package org.anchoranalysis.feature.input;
 
 import lombok.EqualsAndHashCode;
 import lombok.Value;
-import org.anchoranalysis.feature.calculate.results.ResultsVectorCollection;
 import org.anchoranalysis.feature.name.FeatureNameMapToIndex;
+import org.anchoranalysis.feature.results.ResultsVectorList;
 
 @Value
 @EqualsAndHashCode(callSuper = false)
 public class FeatureInputResults implements FeatureInput {
-    ResultsVectorCollection resultsVectorCollection;
+    ResultsVectorList results;
     FeatureNameMapToIndex featureNameIndex;
 }

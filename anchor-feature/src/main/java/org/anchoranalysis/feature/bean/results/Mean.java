@@ -30,7 +30,13 @@ import cern.colt.list.DoubleArrayList;
 import cern.jet.stat.Descriptive;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 
-public class Mean extends FeatureResultsFromIndex {
+/**
+ * The mean of the results from a particular feature.
+ * 
+ * @author Owen Feehan
+ *
+ */
+public class Mean extends StatisticForFeature {
 
     @Override
     protected double statisticFromFeatureValue(DoubleArrayList featureVals)

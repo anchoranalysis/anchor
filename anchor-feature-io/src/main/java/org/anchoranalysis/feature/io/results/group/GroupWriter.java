@@ -27,13 +27,13 @@ package org.anchoranalysis.feature.io.results.group;
 
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import org.anchoranalysis.feature.calculate.results.ResultsVector;
 import org.anchoranalysis.feature.input.FeatureInputResults;
 import org.anchoranalysis.feature.io.csv.FeatureCSVMetadata;
 import org.anchoranalysis.feature.io.csv.FeatureCSVWriter;
 import org.anchoranalysis.feature.io.csv.RowLabels;
 import org.anchoranalysis.feature.io.results.ResultsWriterMetadata;
 import org.anchoranalysis.feature.list.NamedFeatureStore;
+import org.anchoranalysis.feature.results.ResultsVector;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.bound.CacheSubdirectoryContext;
@@ -137,7 +137,7 @@ public class GroupWriter {
         try {
             map.iterateResults(
                     (groupName, results) -> {
-                        if (results.size() != 0) {
+                        if (!results.isEmpty()) {
                             new WriteXMLForGroup(featuresAggregate, results)
                                     .maybeWrite(
                                             groupName, outputMetadata, csvWriter, contextGroups);

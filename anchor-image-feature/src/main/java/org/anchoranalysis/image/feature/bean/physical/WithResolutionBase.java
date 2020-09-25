@@ -29,8 +29,8 @@ package org.anchoranalysis.image.feature.bean.physical;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.operator.FeatureUnaryGeneric;
-import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.cache.SessionInput;
 import org.anchoranalysis.feature.input.FeatureInputWithResolution;
 import org.anchoranalysis.image.extent.Resolution;
 

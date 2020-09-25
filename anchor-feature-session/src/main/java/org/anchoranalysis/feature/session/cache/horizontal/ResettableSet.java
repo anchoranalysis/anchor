@@ -29,7 +29,7 @@ package org.anchoranalysis.feature.session.cache.horizontal;
 import java.util.HashMap;
 import java.util.Map;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.feature.cache.calculate.ResettableCalculation;
+import org.anchoranalysis.feature.calculate.cache.ResettableCalculation;
 
 class ResettableSet<T extends ResettableCalculation> {
 

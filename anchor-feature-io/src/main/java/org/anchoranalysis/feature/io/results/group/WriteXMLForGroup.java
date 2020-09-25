@@ -36,8 +36,6 @@ import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.calculate.results.ResultsVector;
-import org.anchoranalysis.feature.calculate.results.ResultsVectorCollection;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.input.FeatureInputResults;
 import org.anchoranalysis.feature.io.csv.FeatureCSVWriter;
@@ -47,6 +45,8 @@ import org.anchoranalysis.feature.io.results.ResultsWriter;
 import org.anchoranalysis.feature.io.results.ResultsWriterMetadata;
 import org.anchoranalysis.feature.list.NamedFeatureStore;
 import org.anchoranalysis.feature.name.FeatureNameList;
+import org.anchoranalysis.feature.results.ResultsVector;
+import org.anchoranalysis.feature.results.ResultsVectorList;
 import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.io.error.AnchorIOException;
@@ -68,7 +68,7 @@ class WriteXMLForGroup {
             new ManifestDescription("paramsXML", "aggregateObjects");
 
     private NamedFeatureStore<FeatureInputResults> featuresAggregate;
-    private ResultsVectorCollection results;
+    private ResultsVectorList results;
 
     /**
      * Write the aggregated groups to the filesystem as XML, if enabled.

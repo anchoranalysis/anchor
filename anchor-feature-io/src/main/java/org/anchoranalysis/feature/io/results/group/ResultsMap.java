@@ -31,10 +31,10 @@ import java.util.Optional;
 import org.anchoranalysis.core.collection.MapCreate;
 import org.anchoranalysis.core.functional.FunctionalIterate;
 import org.anchoranalysis.core.functional.function.CheckedBiConsumer;
-import org.anchoranalysis.feature.calculate.results.ResultsVector;
-import org.anchoranalysis.feature.calculate.results.ResultsVectorCollection;
 import org.anchoranalysis.feature.io.csv.RowLabels;
 import org.anchoranalysis.feature.io.name.MultiName;
+import org.anchoranalysis.feature.results.ResultsVector;
+import org.anchoranalysis.feature.results.ResultsVectorList;
 
 class ResultsMap {
 
@@ -42,9 +42,9 @@ class ResultsMap {
      * A map which stores an aggregate structure for all entries (based on their unique names) and
      * also on an aggregation-key extracted from the name
      */
-    private MapCreate<Optional<MultiName>, ResultsVectorCollection> map =
+    private MapCreate<Optional<MultiName>, ResultsVectorList> map =
             new MapCreate<>(
-                    ResultsVectorCollection::new,
+                    ResultsVectorList::new,
                     Comparators.emptiesFirst(Comparator.naturalOrder()));
 
     public void addResultsFor(RowLabels labels, ResultsVector results) {
@@ -53,7 +53,7 @@ class ResultsMap {
     }
 
     public <E extends Exception> void iterateResults(
-            CheckedBiConsumer<Optional<MultiName>, ResultsVectorCollection, E> consumer) throws E {
+            CheckedBiConsumer<Optional<MultiName>, ResultsVectorList, E> consumer) throws E {
         FunctionalIterate.iterateMap(map.asMap(), consumer);
     }
 

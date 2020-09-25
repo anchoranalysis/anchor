@@ -27,14 +27,14 @@
 package org.anchoranalysis.feature.bean.results;
 
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.calculate.results.ResultsVectorCollection;
+import org.anchoranalysis.feature.calculate.cache.SessionInput;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.input.FeatureInputResults;
+import org.anchoranalysis.feature.results.ResultsVectorList;
 
 /**
- * Features that process {@link ResultsVectorCollection}.
+ * Features that process {@link ResultsVectorList}.
  *
  * <p>i.e. the result of the calculation of some other features.
  *

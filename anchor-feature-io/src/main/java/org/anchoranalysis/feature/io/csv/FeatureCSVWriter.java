@@ -31,7 +31,7 @@ import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.text.TypedValue;
-import org.anchoranalysis.feature.calculate.results.ResultsVector;
+import org.anchoranalysis.feature.results.ResultsVector;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.generator.tabular.CSVWriter;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;

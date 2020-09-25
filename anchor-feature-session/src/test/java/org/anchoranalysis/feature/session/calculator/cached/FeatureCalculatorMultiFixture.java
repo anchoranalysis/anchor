@@ -32,8 +32,8 @@ import static org.mockito.Mockito.when;
 
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
-import org.anchoranalysis.feature.calculate.results.ResultsVector;
 import org.anchoranalysis.feature.input.FeatureInput;
+import org.anchoranalysis.feature.results.ResultsVector;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 
 class FeatureCalculatorMultiFixture {

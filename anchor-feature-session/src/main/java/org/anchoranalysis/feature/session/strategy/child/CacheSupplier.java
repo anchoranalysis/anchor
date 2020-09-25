@@ -28,7 +28,7 @@ package org.anchoranalysis.feature.session.strategy.child;
 
 import java.util.Optional;
 import org.anchoranalysis.core.cache.LRUCache;
-import org.anchoranalysis.feature.cache.SessionInput;
+import org.anchoranalysis.feature.calculate.cache.SessionInput;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 @FunctionalInterface

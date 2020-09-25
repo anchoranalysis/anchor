@@ -29,8 +29,8 @@ package org.anchoranalysis.feature.session.calculator;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
-import org.anchoranalysis.feature.calculate.results.ResultsVector;
 import org.anchoranalysis.feature.input.FeatureInput;
+import org.anchoranalysis.feature.results.ResultsVector;
 
 /**
  * Remembers the first-calculation and always returns this value for all subsequent calculations
