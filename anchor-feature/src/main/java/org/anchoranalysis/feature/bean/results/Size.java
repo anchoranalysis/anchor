@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.feature.bean.results;
 
-import org.anchoranalysis.feature.bean.FeatureResults;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInputResults;
 

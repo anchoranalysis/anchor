@@ -24,8 +24,9 @@
  * #L%
  */
 
-package org.anchoranalysis.feature.bean;
+package org.anchoranalysis.feature.bean.results;
 
+import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.results.ResultsVectorCollection;
