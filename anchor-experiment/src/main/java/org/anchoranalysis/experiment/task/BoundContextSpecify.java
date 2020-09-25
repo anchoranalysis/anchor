@@ -31,11 +31,11 @@ import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.experiment.ExperimentExecutionArguments;
-import org.anchoranalysis.experiment.log.reporter.StatefulMessageLogger;
+import org.anchoranalysis.experiment.log.StatefulMessageLogger;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 
-class BoundContextSpecify implements BoundIOContext {
+public class BoundContextSpecify implements BoundIOContext {
 
     private ExperimentExecutionArguments experimentArguments;
     private BoundOutputManagerRouteErrors outputManager;

@@ -28,8 +28,8 @@ package org.anchoranalysis.experiment.bean.log;
 
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.experiment.ExperimentExecutionArguments;
-import org.anchoranalysis.experiment.log.reporter.StatefulMessageLogger;
-import org.anchoranalysis.experiment.log.reporter.TextFileMessageLogger;
+import org.anchoranalysis.experiment.log.StatefulMessageLogger;
+import org.anchoranalysis.experiment.log.TextFileMessageLogger;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
 
 /**

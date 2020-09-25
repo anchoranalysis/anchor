@@ -38,11 +38,11 @@ import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.bean.log.LoggingDestination;
 import org.anchoranalysis.experiment.bean.log.ToConsole;
 import org.anchoranalysis.experiment.bean.processor.JobProcessor;
-import org.anchoranalysis.experiment.io.IReplaceInputManager;
-import org.anchoranalysis.experiment.io.IReplaceOutputManager;
-import org.anchoranalysis.experiment.io.IReplaceTask;
+import org.anchoranalysis.experiment.bean.task.Task;
+import org.anchoranalysis.experiment.io.ReplaceInputManager;
+import org.anchoranalysis.experiment.io.ReplaceOutputManager;
+import org.anchoranalysis.experiment.io.ReplaceTask;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
-import org.anchoranalysis.experiment.task.Task;
 import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.error.AnchorIOException;
@@ -55,7 +55,7 @@ import org.anchoranalysis.io.output.bean.manager.OutputManager;
  * @param <S> shared-state for job
  */
 public class InputOutputExperiment<T extends InputFromManager, S> extends OutputExperiment
-        implements IReplaceInputManager, IReplaceOutputManager, IReplaceTask<T, S> {
+        implements ReplaceInputManager, ReplaceOutputManager, ReplaceTask<T, S> {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private InputManager<T> input;

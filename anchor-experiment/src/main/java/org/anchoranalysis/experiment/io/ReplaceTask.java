@@ -27,18 +27,18 @@
 package org.anchoranalysis.experiment.io;
 
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.experiment.task.Task;
+import org.anchoranalysis.experiment.bean.task.Task;
 import org.anchoranalysis.io.input.InputFromManager;
 
 /**
- * If an experiment implements this interface, the task of an an experiment can be replaced by
- * another
+/**
+ * Indicates and provides a mechanism that the {@link Task} can be replaced.
  *
  * @param <T> input-object type
  * @param <S> shared-state for job
  * @author Owen Feehan
  */
-public interface IReplaceTask<T extends InputFromManager, S> {
+public interface ReplaceTask<T extends InputFromManager, S> {
 
     public void replaceTask(Task<T, S> taskToReplace) throws OperationFailedException;
 }

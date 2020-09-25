@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.experiment.task;
+package org.anchoranalysis.experiment.bean.task;
 
 import com.google.common.base.Preconditions;
 import java.util.Optional;
@@ -34,7 +34,13 @@ import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.memory.MemoryUtilities;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
-import org.anchoranalysis.experiment.log.reporter.StatefulMessageLogger;
+import org.anchoranalysis.experiment.log.StatefulMessageLogger;
+import org.anchoranalysis.experiment.task.BoundContextSpecify;
+import org.anchoranalysis.experiment.task.ErrorReporterForTask;
+import org.anchoranalysis.experiment.task.InputBound;
+import org.anchoranalysis.experiment.task.InputTypesExpected;
+import org.anchoranalysis.experiment.task.ParametersExperiment;
+import org.anchoranalysis.experiment.task.ParametersUnbound;
 import org.anchoranalysis.io.generator.serialized.ObjectOutputStreamGenerator;
 import org.anchoranalysis.io.generator.serialized.XStreamGenerator;
 import org.anchoranalysis.io.generator.text.StringGenerator;
@@ -85,7 +91,7 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
             throws ExperimentExecutionException;
 
     /**
-     * Runs the task on one particular input (a job)
+     * Runs the task on one particular input (a job).
      *
      * @param paramsUnbound parameters for the input (unbound to any output location)
      * @return whether the job finished successfully or not
@@ -130,7 +136,13 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
      */
     public abstract InputTypesExpected inputTypesExpected();
 
-    public abstract void doJobOnInputObject(InputBound<T, S> input) throws JobExecutionException;
+    /**
+     * Performs the task on a particular input.
+     * 
+     * @param input the input
+     * @throws JobExecutionException
+     */
+    public abstract void doJobOnInput(InputBound<T, S> input) throws JobExecutionException;
 
     /**
      * Creates other objects needed to have a fully bound set of parameters for the task
@@ -237,7 +249,7 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
             throws JobExecutionException {
 
         try {
-            doJobOnInputObject(params);
+            doJobOnInput(params);
         } catch (ClassCastException e) {
             throw new JobExecutionException(
                     "Could not cast one class to another. Have you used a compatible input-manager for the task?",

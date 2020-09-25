@@ -32,9 +32,9 @@ import java.util.concurrent.Callable;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.experiment.JobExecutionException;
+import org.anchoranalysis.experiment.bean.task.Task;
 import org.anchoranalysis.experiment.task.ErrorReporterForTask;
 import org.anchoranalysis.experiment.task.ParametersUnbound;
-import org.anchoranalysis.experiment.task.Task;
 import org.anchoranalysis.io.input.InputFromManager;
 
 /**
@@ -78,7 +78,7 @@ public class CallableJob<T extends InputFromManager, S>
         this.jobDescription = jobDescription;
         this.logger =
                 new JobStartStopLogger(
-                        "Job", loggerMonitor, monitor, false, showOngoingJobsLessThan);
+                        "Job", monitor, false, showOngoingJobsLessThan, loggerMonitor);
     }
 
     @Override

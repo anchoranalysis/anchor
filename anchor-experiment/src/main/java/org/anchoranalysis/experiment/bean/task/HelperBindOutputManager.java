@@ -24,13 +24,14 @@
  * #L%
  */
 
-package org.anchoranalysis.experiment.task;
+package org.anchoranalysis.experiment.bean.task;
 
 import java.nio.file.Path;
 import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.experiment.JobExecutionException;
+import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.io.bean.filepath.prefixer.PathWithDescription;
 import org.anchoranalysis.io.error.FilePathPrefixerException;
 import org.anchoranalysis.io.input.InputFromManager;

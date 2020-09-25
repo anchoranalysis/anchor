@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.experiment.task;
+package org.anchoranalysis.experiment.bean.task;
 
 import java.nio.file.Path;
 import lombok.AccessLevel;

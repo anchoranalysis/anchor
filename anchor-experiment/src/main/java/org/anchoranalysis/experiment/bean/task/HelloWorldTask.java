@@ -52,7 +52,7 @@ public class HelloWorldTask<S extends InputFromManager> extends TaskWithoutShare
     }
 
     @Override
-    public void doJobOnInputObject(InputBound<S, NoSharedState> params)
+    public void doJobOnInput(InputBound<S, NoSharedState> params)
             throws JobExecutionException {
         printMessage(params.getLogger().messageLogger());
     }

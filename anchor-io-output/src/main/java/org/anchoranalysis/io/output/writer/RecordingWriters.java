@@ -25,20 +25,25 @@ public class RecordingWriters {
     @Getter private final Writer checkIfAllowed;
     
     /** All output-names that are passed as arguments to both writers are recorded here. */
-    @Getter private RecordedOutputs recordedOutputs = new RecordedOutputs();
+    @Getter private final RecordedOutputs recordedOutputs;
     
     /**
      * Creates the two writers.
      * 
      * @param outputManager the output-manager with which the writers are associated.
      * @param preop an operation executed before creation of every directory.
+     * @param recordedOutputs all output-names that are passed as arguments to both writers are recorded here.
      */
-    public RecordingWriters(BoundOutputManager outputManager, WriterExecuteBeforeEveryOperation preop) {
-        alwaysAllowed = record(new AlwaysAllowed(outputManager, preop));
-        checkIfAllowed = record(new CheckIfAllowed(outputManager, preop, alwaysAllowed));
+    public RecordingWriters(BoundOutputManager outputManager, WriterExecuteBeforeEveryOperation preop, RecordedOutputs recordedOutputs) {
+        this.recordedOutputs = recordedOutputs;
+        this.alwaysAllowed = record(new AlwaysAllowed(outputManager, preop));
+        this.checkIfAllowed = record(new CheckIfAllowed(outputManager, preop, alwaysAllowed));
     }
     
     private Writer record( Writer writer ) {
-        return new RecordOutputNames(writer, recordedOutputs);
+        // Indexable outputs are ignored, as it is assumed that the outputName
+        // used for the containing directory is the relevant identifier to
+        // show the user
+        return new RecordOutputNames(writer, recordedOutputs, false);
     }
 }

@@ -28,7 +28,9 @@ package org.anchoranalysis.experiment.bean.io;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.experiment.log.Divider;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
+import org.anchoranalysis.io.output.writer.RecordedOutputs;
 import org.apache.commons.lang.time.StopWatch;
 
 /**
@@ -37,7 +39,9 @@ import org.apache.commons.lang.time.StopWatch;
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class OutputExperimentLogHelper {
-
+   
+    private static final Divider DIVIDER = new Divider();
+    
     public static void maybeLogStart(ParametersExperiment params) {
         if (params.isDetailedLogging()) {
             params.getLoggerExperiment()
@@ -53,10 +57,35 @@ class OutputExperimentLogHelper {
         if (params.isDetailedLogging()) {
             params.getLoggerExperiment()
                     .logFormatted(
-                            "Experiment %s completed (%ds) writing to %s",
+                            "%s%n%s%n%s%nExperiment %s completed (%ds) writing to %s",
+                            DIVIDER.withLabel("Outputs"),
+                            summarize( params.getOutputManager().recordedOutputs() ),
+                            DIVIDER.withoutLabel(),
                             params.getExperimentIdentifier(),
                             stopWatchExperiment.getTime() / 1000,
-                            params.getOutputManager().getOutputFolderPath());
+                            params.getOutputManager().getOutputFolderPath()
+                            );
+        }
+    }
+    
+    /**
+     * A string (one or two lines) summarizing what outputs were written or not-written but possible.
+     * 
+     * @return the string
+     */
+    private static String summarize(RecordedOutputs recordedOutputs) {
+        if (recordedOutputs.isEmpty()) {
+            return "No outputs were written as no possible outputs exist.";
+        }
+        
+        if (recordedOutputs.numberAllowed() > 0) {
+            if (recordedOutputs.numberNotAllowed() > 0) {
+                return String.format("Written:\t%s.%nNot written:\t%s.", recordedOutputs.summarizeAllowed(), recordedOutputs.summarizeNotAllowed() );
+            } else {
+                return String.format("All possible outputs were written: %s.", recordedOutputs.summarizeAllowed() );
+            }
+        } else {
+            return String.format("No outputs were written.%nPossible outputs are: %s.", recordedOutputs.summarizeNotAllowed() );
         }
     }
 }

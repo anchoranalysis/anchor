@@ -39,6 +39,7 @@ import org.anchoranalysis.io.manifest.folder.FolderWritePhysical;
 import org.anchoranalysis.io.manifest.operationrecorder.WriteOperationRecorder;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.bean.allowed.OutputAllowed;
+import org.anchoranalysis.io.output.writer.RecordedOutputs;
 import org.anchoranalysis.io.output.writer.WriterRouterErrors;
 
 @RequiredArgsConstructor
@@ -122,5 +123,9 @@ public class BoundOutputManagerRouteErrors {
 
     public String toString() {
         return delegate.toString();
+    }
+
+    public RecordedOutputs recordedOutputs() {
+        return delegate.recordedOutputs();
     }
 }

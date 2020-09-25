@@ -47,7 +47,7 @@ import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 public abstract class RasterTask extends TaskWithoutSharedState<NamedChannelsInput> {
 
     @Override
-    public void doJobOnInputObject(InputBound<NamedChannelsInput, NoSharedState> params)
+    public void doJobOnInput(InputBound<NamedChannelsInput, NoSharedState> params)
             throws JobExecutionException {
 
         NamedChannelsInput inputObject = params.getInputObject();

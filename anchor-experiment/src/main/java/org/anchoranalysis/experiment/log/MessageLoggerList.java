@@ -30,7 +30,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.anchoranalysis.core.log.MessageLogger;
-import org.anchoranalysis.experiment.log.reporter.StatefulMessageLogger;
 
 public class MessageLoggerList implements StatefulMessageLogger {
 

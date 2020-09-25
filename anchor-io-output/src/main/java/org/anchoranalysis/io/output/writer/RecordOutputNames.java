@@ -27,6 +27,9 @@ public class RecordOutputNames implements Writer {
     
     /** What all outputs that this write processes are added to. */
     private final RecordedOutputs recordedOutputs;
+    
+    /** Whether to record the output-names used in indexable outputs (usually the contents of sub-directories)/ */
+    private final boolean includeIndexableOutputs;
     // END REQUIRED ARGUMENTS
 
     @Override
@@ -50,7 +53,9 @@ public class RecordOutputNames implements Writer {
     public int write(IndexableOutputNameStyle outputNameStyle, GenerateWritableItem<?> generator,
             String index) throws OutputWriteFailedException {
         int numberElements = writer.write(outputNameStyle, generator, index);
-        recordedOutputs.add(outputNameStyle.getOutputName(), numberElements!=CheckIfAllowed.NUMBER_ELEMENTS_WRITTEN_NOT_ALLOWED);
+        if (includeIndexableOutputs) {
+            recordedOutputs.add(outputNameStyle.getOutputName(), numberElements!=CheckIfAllowed.NUMBER_ELEMENTS_WRITTEN_NOT_ALLOWED);
+        }
         return numberElements;
     }
 

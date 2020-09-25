@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.experiment.log.reporter;
+package org.anchoranalysis.experiment.log;
 
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;

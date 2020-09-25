@@ -24,24 +24,17 @@
  * #L%
  */
 
-package org.anchoranalysis.experiment.log.reporter;
+package org.anchoranalysis.experiment.io;
 
-import java.util.Optional;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-import org.anchoranalysis.io.generator.text.TextFileOutput;
-import org.anchoranalysis.io.generator.text.TextFileOutputFromManager;
-import org.anchoranalysis.io.manifest.ManifestDescription;
-import org.anchoranalysis.io.output.bound.BoundOutputManager;
+import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.io.bean.input.InputManager;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-class TextFileLogHelper {
+/**
+ * Indicates and provides a mechanism that the {@link InputManager} can be replaced.
+ *
+ * @author Owen Feehan
+ */
+public interface ReplaceInputManager {
 
-    public static Optional<TextFileOutput> createOutput(BoundOutputManager bom, String outputName) {
-        return TextFileOutputFromManager.create(
-                "txt",
-                Optional.of(new ManifestDescription("textlog", "messageLog")),
-                bom,
-                outputName);
-    }
+    public void replaceInputManager(InputManager<?> inputManager) throws OperationFailedException;
 }

@@ -27,15 +27,14 @@
 package org.anchoranalysis.experiment.io;
 
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.io.bean.input.InputManager;
+import org.anchoranalysis.io.output.bean.manager.OutputManager;
 
 /**
- * If an experiment implements this interface, the input-manager of an an experiment can be replaced
- * by another
+ * Indicates and provides a mechanism that the {@link OutputManager} can be replaced.
  *
  * @author Owen Feehan
  */
-public interface IReplaceInputManager {
+public interface ReplaceOutputManager {
 
-    public void replaceInputManager(InputManager<?> inputManager) throws OperationFailedException;
+    public void replaceOutputManager(OutputManager outputManager) throws OperationFailedException;
 }

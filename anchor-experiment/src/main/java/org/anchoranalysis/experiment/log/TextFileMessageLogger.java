@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.experiment.log.reporter;
+package org.anchoranalysis.experiment.log;
 
 import java.io.PrintWriter;
 import java.util.Optional;

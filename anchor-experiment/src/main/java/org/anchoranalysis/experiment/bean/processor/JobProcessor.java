@@ -36,9 +36,10 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
-import org.anchoranalysis.experiment.io.IReplaceTask;
+import org.anchoranalysis.experiment.bean.task.Task;
+import org.anchoranalysis.experiment.io.ReplaceTask;
+import org.anchoranalysis.experiment.log.Divider;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
-import org.anchoranalysis.experiment.task.Task;
 import org.anchoranalysis.experiment.task.TaskStatistics;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
@@ -51,8 +52,10 @@ import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
  * @param <S> shared-state type
  */
 public abstract class JobProcessor<T extends InputFromManager, S>
-        extends AnchorBean<JobProcessor<T, S>> implements IReplaceTask<T, S> {
-
+        extends AnchorBean<JobProcessor<T, S>> implements ReplaceTask<T, S> {
+    
+    private static final Divider DIVIDER = new Divider();
+    
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private Task<T, S> task;
 
@@ -72,6 +75,11 @@ public abstract class JobProcessor<T extends InputFromManager, S>
             List<T> inputObjects,
             ParametersExperiment paramsExperiment)
             throws ExperimentExecutionException {
+        
+        if (paramsExperiment.isDetailedLogging()) {
+            paramsExperiment.getLoggerExperiment().log( DIVIDER.withLabel("Processing") );
+        }
+        
         TaskStatistics stats = execute(rootOutputManager, inputObjects, paramsExperiment);
 
         if (paramsExperiment.isDetailedLogging()) {
@@ -87,8 +95,8 @@ public abstract class JobProcessor<T extends InputFromManager, S>
         // directly
         //  replacing the task, we call this method. In effect, this allows skipping of the task
         // that is replaced.
-        if (IReplaceTask.class.isAssignableFrom(this.task.getClass())) {
-            ((IReplaceTask<T, S>) this.task).replaceTask(taskToReplace);
+        if (ReplaceTask.class.isAssignableFrom(this.task.getClass())) {
+            ((ReplaceTask<T, S>) this.task).replaceTask(taskToReplace);
         } else {
             // If not, then we replace the task directly
             this.task = taskToReplace;

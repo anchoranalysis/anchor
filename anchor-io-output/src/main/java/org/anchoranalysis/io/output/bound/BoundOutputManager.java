@@ -46,6 +46,7 @@ import org.anchoranalysis.io.output.bean.allowed.OutputAllowed;
 import org.anchoranalysis.io.output.bean.manager.OutputManager;
 import org.anchoranalysis.io.output.bean.manager.OutputManagerPermissive;
 import org.anchoranalysis.io.output.bound.directory.BoundDirectory;
+import org.anchoranalysis.io.output.writer.RecordedOutputs;
 import org.anchoranalysis.io.output.writer.RecordingWriters;
 
 /**
@@ -56,18 +57,18 @@ import org.anchoranalysis.io.output.writer.RecordingWriters;
  */
 public class BoundOutputManager {
 
-    @Getter private final OutputManager outputManager;
-
     @Getter private final FilePathPrefix boundFilePathPrefix;
-
-    @Getter private final OutputWriteSettings outputWriteSettings;
 
     private WriteOperationRecorder writeOperationRecorder;
 
     /** The writers associated with this output-manager. */
     @Getter private RecordingWriters writers;
 
+    /** The directory to which the output-manager is bound to. */
     private BoundDirectory directory;
+
+    /** Some variables shared among {@link BoundOutputManager} across successive subdirectories. */
+    private final BoundOutputContext context;
 
     /**
      * Creates, defaulting to a permissive output-manager in a directory, and otherwise default
@@ -106,40 +107,36 @@ public class BoundOutputManager {
             boolean deleteExistingFolder)
             throws BindFailedException {
         return new BoundOutputManager(
-            outputManager,
             prefix,
-            outputWriteSettings,
             writeOperationRecorder,
-            new BoundDirectory(prefix.getFolderPath(), deleteExistingFolder)
+            new BoundDirectory(prefix.getFolderPath(), deleteExistingFolder),
+            new BoundOutputContext(outputManager, outputWriteSettings)
         );
     }
 
     /**
      * Constructor
      *
-     * @param outputManager
      * @param prefix
-     * @param outputWriteSettings
      * @param writeOperationRecorder
      * @param parentDirectory the parent-directory in which this {@link BoundOutputManager} will create a new directory.
+     * @param context
      */
     private BoundOutputManager(
-            OutputManager outputManager,
             FilePathPrefix prefix,
-            OutputWriteSettings outputWriteSettings,
             WriteOperationRecorder writeOperationRecorder,
-            BoundDirectory parentDirectory)
+            BoundDirectory parentDirectory,
+            BoundOutputContext context)
             throws BindFailedException {
 
         this.boundFilePathPrefix = prefix;
-        this.outputManager = outputManager;
-        this.outputWriteSettings = outputWriteSettings;
         this.writeOperationRecorder = writeOperationRecorder;
+        this.context = context;
         
         this.directory = parentDirectory.bindToDirectory(prefix.getFolderPath());
         
         // An operation will always exist in this case, after binding to the path
-        this.writers = new RecordingWriters(this, directory.getParentDirectoryCreator().get());  // NOSONAR
+        this.writers = new RecordingWriters(this, directory.getParentDirectoryCreator().get(), context.getRecordedOutputs());  // NOSONAR
     }
     
     /** 
@@ -158,23 +155,22 @@ public class BoundOutputManager {
             String experimentIdentifier,
             Optional<ManifestRecorder> manifestRecorder,
             Optional<ManifestRecorder> experimentalManifestRecorder,
-            FilePathPrefixerParams context)
+            FilePathPrefixerParams prefixerParams)
             throws BindFailedException {
 
         try {
             FilePathPrefix prefix =
-                    outputManager.prefixForFile(
+                    context.getOutputManager().prefixForFile(
                             input,
                             experimentIdentifier,
                             manifestRecorder,
                             experimentalManifestRecorder,
-                            context);
+                            prefixerParams);
             return new BoundOutputManager(
-                    outputManager,
                     prefix,
-                    outputWriteSettings,
                     writeRecorder(manifestRecorder),
-                    directory
+                    directory,
+                    context
             );
         } catch (FilePathPrefixerException e) {
             throw new BindFailedException(e);
@@ -204,11 +200,10 @@ public class BoundOutputManager {
 
         try {
             return new BoundOutputManager(
-                    outputManager,
                     new FilePathPrefix(folderOut),
-                    outputWriteSettings,
                     recorderNew,
-                    directory);
+                    directory,
+                    context);
         } catch (BindFailedException e) {
             // This exception can only be thrown if the prefix-path doesn't reside within the
             // rootDirectory
@@ -230,6 +225,34 @@ public class BoundOutputManager {
             String outputName, Path path, ManifestDescription manifestDescription, String index) {
         writeOperationRecorder.write(
                 outputName, manifestDescription, boundFilePathPrefix.relativePath(path), index);
+    }
+
+    public boolean isOutputAllowed(String outputName) {
+        return context.getOutputManager().isOutputAllowed(outputName);
+    }
+
+    public OutputAllowed outputAllowedSecondLevel(String key) {
+        return context.getOutputManager().outputAllowedSecondLevel(key);
+    }
+
+    public Path getOutputFolderPath() {
+        return boundFilePathPrefix.getFolderPath();
+    }
+
+    public Path outFilePath(String filePathRelative) {
+        return boundFilePathPrefix.outFilePath(filePathRelative);
+    }
+    
+    public RecordedOutputs recordedOutputs() {
+        return writers.recordedOutputs();
+    }
+
+    public OutputManager getOutputManager() {
+        return context.getOutputManager();
+    }
+
+    public OutputWriteSettings getOutputWriteSettings() {
+        return context.getSettings();
     }
 
     /**
@@ -255,23 +278,7 @@ public class BoundOutputManager {
             return writeOperationRecorder;
         }
     }
-
-    public boolean isOutputAllowed(String outputName) {
-        return outputManager.isOutputAllowed(outputName);
-    }
-
-    public OutputAllowed outputAllowedSecondLevel(String key) {
-        return outputManager.outputAllowedSecondLevel(key);
-    }
-
-    public Path getOutputFolderPath() {
-        return boundFilePathPrefix.getFolderPath();
-    }
-
-    public Path outFilePath(String filePathRelative) {
-        return boundFilePathPrefix.outFilePath(filePathRelative);
-    }
-
+    
     private static WriteOperationRecorder writeRecorder(
             Optional<ManifestRecorder> manifestRecorder) {
         Optional<WriteOperationRecorder> opt =
