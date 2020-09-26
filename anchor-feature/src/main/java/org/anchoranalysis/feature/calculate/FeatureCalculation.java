@@ -63,12 +63,9 @@ public abstract class FeatureCalculation<S, T extends FeatureInput> implements R
      * @throws FeatureCalculationException if the calculation cannot finish for whatever reason
      */
     public synchronized S getOrCalculate(T input) throws FeatureCalculationException {
-
-        // Checks we have the same params, if we call the cached calculation a second-time. This
-        // maybe catches errors.
-        // We only do this when asserts are enabled, as its expensive.
-        assert (checkParamsMatchesInput(input));
-
+        // The input should be equal to the existing input, but this is not checked
+        // as it would add computional cost. Consider an assert with the checkParamsMatchesInput(input)
+        // function for debugging.
         initParams(input);
         return delegate.get();
     }
@@ -99,7 +96,12 @@ public abstract class FeatureCalculation<S, T extends FeatureInput> implements R
         this.input = input;
     }
 
-    /** A check that if params are already set, any new inputs must be identical */
+    /** 
+     * A check that if params are already set, any new inputs must be identical.
+     * 
+     * <p>This method is unused, but delibiberately left for debugging in {@link #getOrCalculate}.  
+     */
+    @SuppressWarnings("unused")
     private boolean checkParamsMatchesInput(T input) {
         if (hasCachedCalculation() && input != null && !input.equals(this.input)) {
             throw new AnchorFriendlyRuntimeException(

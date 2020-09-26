@@ -98,6 +98,7 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
      * @throws JobExecutionException if anything goes wrong with the job which is <b>not</b> logged.
      */
     public boolean executeJob(ParametersUnbound<T, S> paramsUnbound) throws JobExecutionException {
+        
         ManifestRecorder manifestTask = new ManifestRecorder();
 
         // Bind an outputManager for the task

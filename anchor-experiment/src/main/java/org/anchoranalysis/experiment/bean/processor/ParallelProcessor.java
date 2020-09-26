@@ -35,7 +35,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.concurrency.ConcurrencyPlan;
-import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.core.text.LanguageUtilities;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
@@ -85,7 +84,7 @@ public class ParallelProcessor<T extends InputFromManager, S> extends JobProcess
     /** How many GPU processors to use when this is possible as a substitute for a CPU processor */
     @BeanField @Getter @Setter private int numberGPUProcessors = 1;
     // END BEAN PROPERTIES
-
+    
     @Override
     protected TaskStatistics execute(
             BoundOutputManagerRouteErrors rootOutputManager,
@@ -95,20 +94,14 @@ public class ParallelProcessor<T extends InputFromManager, S> extends JobProcess
 
         int initialNumberJobs = inputObjects.size();
 
-        int numberProcessors =
-                selectNumProcessors(
-                        paramsExperiment.getLoggerExperiment(),
-                        paramsExperiment.isDetailedLogging());
-
-        ConcurrencyPlan concurrencyPlan =
-                ConcurrencyPlan.multipleProcessors(numberProcessors, numberGPUProcessors);
+        ConcurrencyPlan concurrencyPlan = createConcurrencyPlan(paramsExperiment);
 
         S sharedState =
                 getTask()
                         .beforeAnyJobIsExecuted(
                                 rootOutputManager, concurrencyPlan, paramsExperiment);
 
-        ExecutorService executorService = Executors.newFixedThreadPool(numberProcessors);
+        ExecutorService executorService = Executors.newFixedThreadPool(concurrencyPlan.totalNumber());
 
         int count = 1;
 
@@ -141,26 +134,6 @@ public class ParallelProcessor<T extends InputFromManager, S> extends JobProcess
         return monitor.createStatistics();
     }
 
-    private int selectNumProcessors(MessageLogger logger, boolean detailedLogging) {
-
-        int availableProcessors = Runtime.getRuntime().availableProcessors();
-
-        int numberOfProcessors = availableProcessors - keepProcessorsFree;
-
-        if (maxNumberProcessors > 0) {
-            numberOfProcessors = Math.min(numberOfProcessors, maxNumberProcessors);
-        }
-
-        if (detailedLogging) {
-            logger.logFormatted(
-                    "Using %s from: %d",
-                    LanguageUtilities.prefixPluralizeMaybe(numberOfProcessors, "processor"),
-                    availableProcessors);
-        }
-
-        return numberOfProcessors;
-    }
-
     private void submitJob(
             ExecutorService executorService,
             T input,
@@ -188,5 +161,32 @@ public class ParallelProcessor<T extends InputFromManager, S> extends JobProcess
                         showOngoingJobsLessThan));
 
         monitor.add(new SubmittedJob(description, state));
+    }
+    
+    private ConcurrencyPlan createConcurrencyPlan(ParametersExperiment paramsExperiment) {
+
+        int availableProcessors = Runtime.getRuntime().availableProcessors();
+        
+        int numberCPUs = selectNumberCPUs(availableProcessors);
+        
+        if (paramsExperiment.isDetailedLogging()) {
+            paramsExperiment.getLoggerExperiment().logFormatted(
+                    "Preparing jobs to run with common initialization.%nUsing %s CPUs from %d, and if needed and if possible, up to %d simultaneous jobs using a GPU.",
+                    LanguageUtilities.prefixPluralizeMaybe(numberCPUs, "processor"),
+                    availableProcessors, numberGPUProcessors);
+        }
+        
+        return ConcurrencyPlan.multipleProcessors(numberCPUs, numberGPUProcessors);
+    }
+    
+    private int selectNumberCPUs(int availableProcessors) {
+
+        int numberOfProcessors = availableProcessors - keepProcessorsFree;
+
+        if (maxNumberProcessors > 0) {
+            numberOfProcessors = Math.min(numberOfProcessors, maxNumberProcessors);
+        }
+
+        return numberOfProcessors;
     }
 }
