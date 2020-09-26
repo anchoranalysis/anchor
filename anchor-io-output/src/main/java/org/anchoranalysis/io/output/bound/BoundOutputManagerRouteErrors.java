@@ -72,17 +72,6 @@ public class BoundOutputManagerRouteErrors {
         delegate.addOperationRecorder(toAdd);
     }
 
-    public BoundOutputManager deriveFromInput(
-            NamedPath path,
-            String expIdentifier,
-            Optional<ManifestRecorder> manifestRecorder,
-            Optional<ManifestRecorder> experimentalManifestRecorder,
-            FilePathPrefixerParams context)
-            throws BindFailedException {
-        return delegate.deriveFromInput(
-                path, expIdentifier, manifestRecorder, experimentalManifestRecorder, context);
-    }
-
     public WriterRouterErrors getWriterAlwaysAllowed() {
         return new WriterRouterErrors(delegate.getWriters().alwaysAllowed(), errorReporter);
     }
@@ -122,6 +111,14 @@ public class BoundOutputManagerRouteErrors {
     }
 
     public OutputEnabledRules outputsEnabled() {
-        return delegate.outputsEnabled();
+        return delegate.getOutputsEnabled();
+    }
+
+    public BoundOutputManager deriveFromInput(NamedPath path, String experimentIdentifier,
+            Optional<ManifestRecorder> manifestRecorder,
+            Optional<ManifestRecorder> experimentalManifestRecorder,
+            FilePathPrefixerParams prefixerParams) throws BindFailedException {
+        return delegate.deriveFromInput(path, experimentIdentifier, manifestRecorder,
+                experimentalManifestRecorder, prefixerParams);
     }
 }

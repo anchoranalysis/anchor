@@ -1,6 +1,7 @@
 package org.anchoranalysis.io.output.bound;
 
-import org.anchoranalysis.io.output.bean.OutputManager;
+import java.util.Optional;
+import org.anchoranalysis.io.bean.filepath.prefixer.FilePathPrefixer;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.writer.RecordedOutputs;
 import lombok.RequiredArgsConstructor;
@@ -16,8 +17,8 @@ import lombok.Value;
 public class BoundOutputContext {
     
     // START REQUIRED ARGUMENTS
-    /** The output-manager associated with this context. */
-    private OutputManager outputManager;
+    /** The prefixer associated with this context. */
+    private Optional<FilePathPrefixer> prefixer;
     
     /** General settings for how to perform outputting. */
     private OutputWriteSettings settings;

@@ -48,7 +48,7 @@ class SubsetOutputter<T> {
 
     public void outputSubset(ErrorReporter errorReporter) {
 
-        if (!outputManager.outputsEnabled().isOutputAllowed(outputName)) {
+        if (!outputManager.getOutputsEnabled().isOutputAllowed(outputName)) {
             return;
         }
 
@@ -64,7 +64,7 @@ class SubsetOutputter<T> {
 
     public void outputSubsetWithException() throws OutputWriteFailedException {
 
-        if (!outputManager.outputsEnabled().isOutputAllowed(outputName)) {
+        if (!outputManager.getOutputsEnabled().isOutputAllowed(outputName)) {
             return;
         }
 

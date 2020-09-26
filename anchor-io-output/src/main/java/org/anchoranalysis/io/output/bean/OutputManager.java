@@ -26,21 +26,13 @@
 
 package org.anchoranalysis.io.output.bean;
 
-import java.nio.file.Path;
-import java.util.Optional;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.bean.filepath.prefixer.FilePathPrefixer;
-import org.anchoranalysis.io.bean.filepath.prefixer.NamedPath;
-import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.error.FilePathPrefixerException;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerParams;
-import org.anchoranalysis.io.filepath.prefixer.PathDifferenceFromBase;
-import org.anchoranalysis.io.manifest.ManifestFolderDescription;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
-import org.anchoranalysis.io.manifest.folder.ExperimentFileFolder;
-import org.anchoranalysis.io.manifest.sequencetype.SetSequenceType;
 import org.anchoranalysis.io.output.bean.rules.OutputEnabledRules;
 import org.anchoranalysis.io.output.bean.rules.Permissive;
 import org.anchoranalysis.io.output.bound.BindFailedException;
@@ -52,9 +44,6 @@ import lombok.Setter;
  * Responsible for making decisions on where output goes and what form it takes.
  **/
 public class OutputManager extends AnchorBean<OutputManager> {
-
-    private static final ManifestFolderDescription MANIFEST_FOLDER_ROOT =
-            new ManifestFolderDescription("root", "experiment", new SetSequenceType());
 
     // BEAN PROPERTIES
     @BeanField @Getter @Setter private FilePathPrefixer filePathPrefixer;
@@ -75,38 +64,6 @@ public class OutputManager extends AnchorBean<OutputManager> {
     private OutputEnabledRules outputsEnabled = new Permissive();
     // END BEAN PROPERTIES
 
-    /**
-     * The prefix to use for outputs pertaining to a particular file.
-     * 
-     * @param path the path from which a prefix is derived
-     * @param experimentIdentifier
-     * @param manifestRecorder
-     * @param experimentalManifestRecorder
-     * @param context
-     * @return
-     * @throws FilePathPrefixerException
-     */
-    public FilePathPrefix prefixForFile(
-            NamedPath path,
-            String experimentIdentifier,
-            Optional<ManifestRecorder> manifestRecorder,
-            Optional<ManifestRecorder> experimentalManifestRecorder,
-            FilePathPrefixerParams context)
-            throws FilePathPrefixerException {
-
-        // Calculate a prefix from the incoming file, and create a file path generator
-        FilePathPrefix prefix = filePathPrefixer.outFilePrefix(path, experimentIdentifier, context);
-
-        PathDifferenceFromBase difference =
-                differenceFromPrefixer(experimentIdentifier, context, prefix.getCombinedPrefix());
-
-        experimentalManifestRecorder.ifPresent(recorder -> writeRootFolderInManifest(recorder, difference.combined()));
-
-        manifestRecorder.ifPresent(recorder -> recorder.init(prefix.getFolderPath()));
-
-        return prefix;
-    }
-
     public BoundOutputManager bindRootFolder(
             String experimentIdentifier,
             ManifestRecorder writeOperationRecorder,
@@ -126,27 +83,6 @@ public class OutputManager extends AnchorBean<OutputManager> {
 
         } catch (FilePathPrefixerException e) {
             throw new BindFailedException(e);
-        }
-    }
-
-    private static void writeRootFolderInManifest(
-            ManifestRecorder manifestRecorderExperiment, Path rootPath) {
-        manifestRecorderExperiment
-                .getRootFolder()
-                .writeFolder(rootPath, MANIFEST_FOLDER_ROOT, new ExperimentFileFolder());
-    }
-
-    private PathDifferenceFromBase differenceFromPrefixer(
-            String expIdentifier, FilePathPrefixerParams context, Path combinedPrefix)
-            throws FilePathPrefixerException {
-        try {
-            return PathDifferenceFromBase.differenceFrom(
-                    this.filePathPrefixer
-                            .rootFolderPrefix(expIdentifier, context)
-                            .getCombinedPrefix(),
-                    combinedPrefix);
-        } catch (AnchorIOException e) {
-            throw new FilePathPrefixerException(e);
         }
     }
 }

@@ -37,7 +37,7 @@ public class RecordingWriters {
     public RecordingWriters(BoundOutputManager outputManager, WriterExecuteBeforeEveryOperation preop, RecordedOutputs recordedOutputs) {
         this.recordedOutputs = recordedOutputs;
         this.alwaysAllowed = record(new AlwaysAllowed(outputManager, preop));
-        this.checkIfAllowed = record(new CheckIfAllowed(outputManager.outputsEnabled(), preop, alwaysAllowed));
+        this.checkIfAllowed = record(new CheckIfAllowed(outputManager.getOutputsEnabled(), preop, alwaysAllowed));
     }
     
     private Writer record( Writer writer ) {
