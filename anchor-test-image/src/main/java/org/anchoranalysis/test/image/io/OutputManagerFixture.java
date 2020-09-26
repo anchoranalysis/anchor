@@ -39,9 +39,8 @@ import org.anchoranalysis.io.error.FilePathPrefixerException;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerParams;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
+import org.anchoranalysis.io.output.bean.OutputManager;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
-import org.anchoranalysis.io.output.bean.manager.OutputManagerPermissive;
-import org.anchoranalysis.io.output.bean.manager.OutputManagerWithPrefixer;
 import org.anchoranalysis.io.output.bound.BindFailedException;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
@@ -84,7 +83,7 @@ public class OutputManagerFixture {
             errorReporter.recordError(OutputManagerFixture.class, e1);
         }
 
-        OutputManagerWithPrefixer outputManager = createOutputManager(pathTempFolder, settings);
+        OutputManager outputManager = createOutputManager(pathTempFolder, settings);
 
         try {
             return outputManager.bindRootFolder(
@@ -96,9 +95,9 @@ public class OutputManagerFixture {
         }
     }
 
-    private static OutputManagerWithPrefixer createOutputManager(
+    private static OutputManager createOutputManager(
             Path pathTempFolder, OutputWriteSettings settings) {
-        OutputManagerWithPrefixer outputManager = new OutputManagerPermissive();
+        OutputManager outputManager = new OutputManager();
         outputManager.setSilentlyDeleteExisting(true);
         outputManager.setOutputWriteSettings(settings);
         outputManager.setFilePathPrefixer(new FilePathPrefixerConstantPath(pathTempFolder));

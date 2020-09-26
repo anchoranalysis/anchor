@@ -27,7 +27,7 @@
 package org.anchoranalysis.experiment.io;
 
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.io.output.bean.manager.OutputManager;
+import org.anchoranalysis.io.output.bean.OutputManager;
 
 /**
  * Indicates and provides a mechanism that the {@link OutputManager} can be replaced.

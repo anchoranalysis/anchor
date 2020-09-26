@@ -41,10 +41,9 @@ import org.anchoranalysis.io.manifest.folder.FolderWriteWithPath;
 import org.anchoranalysis.io.manifest.operationrecorder.DualWriterOperationRecorder;
 import org.anchoranalysis.io.manifest.operationrecorder.NullWriteOperationRecorder;
 import org.anchoranalysis.io.manifest.operationrecorder.WriteOperationRecorder;
+import org.anchoranalysis.io.output.bean.OutputManager;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.bean.allowed.OutputAllowed;
-import org.anchoranalysis.io.output.bean.manager.OutputManager;
-import org.anchoranalysis.io.output.bean.manager.OutputManagerPermissive;
 import org.anchoranalysis.io.output.bound.directory.BoundDirectory;
 import org.anchoranalysis.io.output.writer.RecordedOutputs;
 import org.anchoranalysis.io.output.writer.RecordingWriters;
@@ -82,7 +81,7 @@ public class BoundOutputManager {
     public static BoundOutputManager createPermissive(
             Path destination, boolean deleteExistingFolder) throws BindFailedException {
         return createExistingWithPrefix(
-                new OutputManagerPermissive(),
+                new OutputManager(),
                 new FilePathPrefix(destination),
                 new OutputWriteSettings(),
                 new NullWriteOperationRecorder(),
@@ -228,11 +227,11 @@ public class BoundOutputManager {
     }
 
     public boolean isOutputAllowed(String outputName) {
-        return context.getOutputManager().isOutputAllowed(outputName);
+        return context.getOutputManager().getOutputsEnabled().isOutputAllowed(outputName);
     }
 
     public OutputAllowed outputAllowedSecondLevel(String key) {
-        return context.getOutputManager().outputAllowedSecondLevel(key);
+        return context.getOutputManager().getOutputsEnabled().outputAllowedSecondLevel(key);
     }
 
     public Path getOutputFolderPath() {

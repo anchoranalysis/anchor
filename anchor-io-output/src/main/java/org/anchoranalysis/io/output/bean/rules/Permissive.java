@@ -24,12 +24,12 @@
  * #L%
  */
 
-package org.anchoranalysis.io.output.bean.manager;
+package org.anchoranalysis.io.output.bean.rules;
 
 import org.anchoranalysis.io.output.bean.allowed.AllOutputAllowed;
 import org.anchoranalysis.io.output.bean.allowed.OutputAllowed;
 
-public class OutputManagerPermissive extends OutputManagerWithPrefixer {
+public class Permissive extends OutputEnabledRules {
 
     @Override
     public boolean isOutputAllowed(String outputName) {

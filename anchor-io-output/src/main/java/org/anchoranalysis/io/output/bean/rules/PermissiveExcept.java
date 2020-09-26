@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.io.output.bean.manager;
+package org.anchoranalysis.io.output.bean.rules;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -46,7 +46,7 @@ import org.anchoranalysis.io.output.bean.allowed.SpecificOutputDisallowed;
  * @author Owen Feehan
  */
 @NoArgsConstructor
-public class OutputManagerPermissiveExcept extends OutputManagerWithPrefixer {
+public class PermissiveExcept extends OutputEnabledRules {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private StringSet except;
@@ -56,7 +56,7 @@ public class OutputManagerPermissiveExcept extends OutputManagerWithPrefixer {
     private List<NamedBean<StringSet>> exceptSecondLevel = new ArrayList<>();
     // END BEAN PROPERTIES
 
-    public OutputManagerPermissiveExcept(StringSet except) {
+    public PermissiveExcept(StringSet except) {
         this.except = except;
     }
 

@@ -1,7 +1,7 @@
 package org.anchoranalysis.io.output.bound;
 
+import org.anchoranalysis.io.output.bean.OutputManager;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
-import org.anchoranalysis.io.output.bean.manager.OutputManager;
 import org.anchoranalysis.io.output.writer.RecordedOutputs;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;

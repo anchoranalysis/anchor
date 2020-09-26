@@ -43,7 +43,7 @@ import org.anchoranalysis.io.error.FilePathPrefixerException;
 import org.anchoranalysis.io.generator.text.StringGenerator;
 import org.anchoranalysis.io.generator.xml.XMLConfigurationWrapperGenerator;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
-import org.anchoranalysis.io.output.bean.manager.OutputManager;
+import org.anchoranalysis.io.output.bean.OutputManager;
 import org.anchoranalysis.io.output.bound.BindFailedException;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
