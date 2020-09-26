@@ -37,8 +37,8 @@ import org.anchoranalysis.core.name.provider.NamedProvider;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.name.value.SimpleNameValue;
 import org.anchoranalysis.io.generator.Generator;
+import org.anchoranalysis.io.generator.sequence.GeneratorSequenceNonIncremental;
 import org.anchoranalysis.io.generator.sequence.GeneratorSequenceNonIncrementalRerouterErrors;
-import org.anchoranalysis.io.generator.sequence.GeneratorSequenceNonIncrementalWriter;
 import org.anchoranalysis.io.manifest.sequencetype.SetSequenceType;
 import org.anchoranalysis.io.namestyle.StringSuffixOutputNameStyle;
 import org.anchoranalysis.io.output.bean.allowed.OutputAllowed;
@@ -64,14 +64,13 @@ public class GeneratorOutputHelper {
 
         GeneratorSequenceNonIncrementalRerouterErrors<T> writer =
                 new GeneratorSequenceNonIncrementalRerouterErrors<>(
-                        new GeneratorSequenceNonIncrementalWriter<>(
+                        new GeneratorSequenceNonIncremental<>(
                                 outputManager,
                                 outputNameStyle.getOutputName(),
                                 outputNameStyle,
                                 generator,
-                                true),
+                                true, suppressSubfoldersIn),
                         errorReporter);
-        writer.setSuppressSubfolder(suppressSubfoldersIn);
 
         Set<String> keys = providers.keys();
 
@@ -102,15 +101,13 @@ public class GeneratorOutputHelper {
                 new StringSuffixOutputNameStyle(suffix, suffix + "%s");
         outputNameStyle.setOutputName(outputName);
 
-        GeneratorSequenceNonIncrementalWriter<T> writer =
-                new GeneratorSequenceNonIncrementalWriter<>(
+        GeneratorSequenceNonIncremental<T> writer =
+                new GeneratorSequenceNonIncremental<>(
                         outputManager,
                         outputNameStyle.getOutputName(),
                         outputNameStyle,
                         generator,
-                        true);
-
-        writer.setSuppressSubfolder(suppressSubfoldersIn);
+                        true, suppressSubfoldersIn);
 
         Set<String> keys = providers.keys();
 

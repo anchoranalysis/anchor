@@ -59,7 +59,7 @@ public class FeatureCSVWriter {
             FeatureCSVMetadata metadata, BoundOutputManagerRouteErrors outputManager)
             throws AnchorIOException {
 
-        if (!outputManager.isOutputAllowed(metadata.getOutputName())) {
+        if (!outputManager.outputsEnabled().isOutputAllowed(metadata.getOutputName())) {
             return Optional.of(new FeatureCSVWriter(null));
         }
 

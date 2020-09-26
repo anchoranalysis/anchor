@@ -40,14 +40,14 @@ public abstract class FilePathPrefixer extends AnchorBean<FilePathPrefixer> {
      * Provides a prefix which can be prepended to all output files. The prefix should be an
      * absolute path.
      *
-     * @param input an input to derive a prefix from
+     * @param path an input to derive a prefix from
      * @param experimentIdentifier an identifier for the experiment
      * @param context
      * @return a prefixer
      * @throws FilePathPrefixerException
      */
     public abstract FilePathPrefix outFilePrefix(
-            PathWithDescription input, String experimentIdentifier, FilePathPrefixerParams context)
+            NamedPath path, String experimentIdentifier, FilePathPrefixerParams context)
             throws FilePathPrefixerException;
 
     /**

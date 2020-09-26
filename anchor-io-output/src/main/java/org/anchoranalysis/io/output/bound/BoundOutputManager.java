@@ -30,7 +30,7 @@ import java.nio.file.Path;
 import java.util.Optional;
 import lombok.Getter;
 import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
-import org.anchoranalysis.io.bean.filepath.prefixer.PathWithDescription;
+import org.anchoranalysis.io.bean.filepath.prefixer.NamedPath;
 import org.anchoranalysis.io.error.FilePathPrefixerException;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerParams;
@@ -43,7 +43,7 @@ import org.anchoranalysis.io.manifest.operationrecorder.NullWriteOperationRecord
 import org.anchoranalysis.io.manifest.operationrecorder.WriteOperationRecorder;
 import org.anchoranalysis.io.output.bean.OutputManager;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
-import org.anchoranalysis.io.output.bean.allowed.OutputAllowed;
+import org.anchoranalysis.io.output.bean.rules.OutputEnabledRules;
 import org.anchoranalysis.io.output.bound.directory.BoundDirectory;
 import org.anchoranalysis.io.output.writer.RecordedOutputs;
 import org.anchoranalysis.io.output.writer.RecordingWriters;
@@ -66,6 +66,9 @@ public class BoundOutputManager {
     /** The directory to which the output-manager is bound to. */
     private BoundDirectory directory;
 
+    /** Which outputs are enabled or not enabled. */
+    private OutputEnabledRules outputsEnabled;
+    
     /** Some variables shared among {@link BoundOutputManager} across successive subdirectories. */
     private final BoundOutputContext context;
 
@@ -131,6 +134,7 @@ public class BoundOutputManager {
         this.boundFilePathPrefix = prefix;
         this.writeOperationRecorder = writeOperationRecorder;
         this.context = context;
+        this.outputsEnabled = context.getOutputManager().getOutputsEnabled();
         
         this.directory = parentDirectory.bindToDirectory(prefix.getFolderPath());
         
@@ -148,9 +152,11 @@ public class BoundOutputManager {
 
     /** 
      * Derives a {@link BoundOutputManager} from a file that is somehow relative to the root directory.
+     * 
+     * @param path the full path of an input with an associated-name
      */
     public BoundOutputManager deriveFromInput(
-            PathWithDescription input,
+            NamedPath path,
             String experimentIdentifier,
             Optional<ManifestRecorder> manifestRecorder,
             Optional<ManifestRecorder> experimentalManifestRecorder,
@@ -160,7 +166,7 @@ public class BoundOutputManager {
         try {
             FilePathPrefix prefix =
                     context.getOutputManager().prefixForFile(
-                            input,
+                            path,
                             experimentIdentifier,
                             manifestRecorder,
                             experimentalManifestRecorder,
@@ -225,13 +231,9 @@ public class BoundOutputManager {
         writeOperationRecorder.write(
                 outputName, manifestDescription, boundFilePathPrefix.relativePath(path), index);
     }
-
-    public boolean isOutputAllowed(String outputName) {
-        return context.getOutputManager().getOutputsEnabled().isOutputAllowed(outputName);
-    }
-
-    public OutputAllowed outputAllowedSecondLevel(String key) {
-        return context.getOutputManager().getOutputsEnabled().outputAllowedSecondLevel(key);
+    
+    public OutputEnabledRules outputsEnabled() {
+        return outputsEnabled;
     }
 
     public Path getOutputFolderPath() {
@@ -245,11 +247,7 @@ public class BoundOutputManager {
     public RecordedOutputs recordedOutputs() {
         return writers.recordedOutputs();
     }
-
-    public OutputManager getOutputManager() {
-        return context.getOutputManager();
-    }
-
+    
     public OutputWriteSettings getOutputWriteSettings() {
         return context.getSettings();
     }

@@ -54,7 +54,7 @@ public class OutputFeatureTable extends ImageBean<OutputFeatureTable> {
     public void output(BoundIOContext context) throws IOException {
 
         // Early exit if we're not allowed output anything anyway
-        if (!context.getOutputManager().isOutputAllowed(OUTPUT_NAME_OBJECTS_FEATURE_LIST)) {
+        if (!context.getOutputManager().outputsEnabled().isOutputAllowed(OUTPUT_NAME_OBJECTS_FEATURE_LIST)) {
             return;
         }
 

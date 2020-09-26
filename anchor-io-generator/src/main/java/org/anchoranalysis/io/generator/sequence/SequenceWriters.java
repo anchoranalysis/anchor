@@ -39,37 +39,27 @@ import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.writer.GenerateWritableItem;
+import org.anchoranalysis.io.output.writer.RecordingWriters;
 import org.anchoranalysis.io.output.writer.Writer;
 
+/**
+ * Like {@link RecordingWriters} but for a sequence of items, maybe in a subfolder.
+ * 
+ * @author Owen Feehan
+ *
+ */
 @RequiredArgsConstructor
-public class SubfolderWriter implements SequenceWriter {
+public class SequenceWriters implements SequenceWriter {
 
     // START: REQUIRED ARGUMENTS
-    private final BoundOutputManager parentOutputManager;
+    private final RecordingWriters parentWriters;
     private final String subfolderName;
     private final IndexableOutputNameStyle outputNameStyle;
     private final ManifestDescription folderManifestDescription;
     private final boolean checkIfAllowed;
     // END: REQUIRED ARGUMENTS
 
-    private Optional<BoundOutputManager> subFolderOutputManager = Optional.empty();
-
-    private Optional<BoundOutputManager> createSubfolder(
-            boolean suppressSubfolder,
-            ManifestFolderDescription folderDescription,
-            FolderWriteIndexableOutputName subFolderWrite)
-            throws OutputWriteFailedException {
-        if (suppressSubfolder) {
-            return Optional.of(parentOutputManager);
-        } else {
-            Writer writer =
-                    checkIfAllowed
-                            ? parentOutputManager.getWriters().checkIfAllowed()
-                            : parentOutputManager.getWriters().alwaysAllowed();
-            return writer.createSubdirectory(
-                    subfolderName, folderDescription, Optional.of(subFolderWrite));
-        }
-    }
+    private Optional<RecordingWriters> writers = Optional.empty();
 
     @Override
     public void init(FileType[] fileTypes, SequenceType sequenceType, boolean suppressSubfolder)
@@ -90,8 +80,8 @@ public class SubfolderWriter implements SequenceWriter {
         }
 
         try {
-            this.subFolderOutputManager =
-                    createSubfolder(suppressSubfolder, folderDescription, subFolderWrite);
+            this.writers =
+                    selectWritersMaybeCreateSubdirectory(suppressSubfolder, folderDescription, subFolderWrite);
         } catch (OutputWriteFailedException e) {
             throw new InitException(e);
         }
@@ -106,28 +96,26 @@ public class SubfolderWriter implements SequenceWriter {
         }
 
         if (checkIfAllowed) {
-            this.subFolderOutputManager // NOSONAR
+            this.writers // NOSONAR
                     .get()
-                    .getWriters()
                     .checkIfAllowed()
                     .write(outputNameStyle, generator, index);
         } else {
-            this.subFolderOutputManager // NOSONAR
+            this.writers // NOSONAR
                     .get()
-                    .getWriters()
                     .alwaysAllowed()
                     .write(outputNameStyle, generator, index);
         }
     }
 
     @Override
-    public Optional<BoundOutputManager> getOutputManagerForFiles() {
-        return subFolderOutputManager;
+    public Optional<RecordingWriters> writers() {
+        return writers;
     }
     
     @Override
     public boolean isOn() {
-        return subFolderOutputManager.isPresent();
+        return writers.isPresent();
     }
     
     // Requires the generator to be in a valid state
@@ -175,5 +163,22 @@ public class SubfolderWriter implements SequenceWriter {
         }
 
         return new ManifestDescription(type, function);
+    }
+    
+    private Optional<RecordingWriters> selectWritersMaybeCreateSubdirectory(
+            boolean suppressSubfolder,
+            ManifestFolderDescription folderDescription,
+            FolderWriteIndexableOutputName subFolderWrite)
+            throws OutputWriteFailedException {
+        if (suppressSubfolder) {
+            return Optional.of(parentWriters);
+        } else {
+            Writer writer =
+                    checkIfAllowed
+                            ? parentWriters.checkIfAllowed()
+                            : parentWriters.alwaysAllowed();
+            return writer.createSubdirectory(
+                    subfolderName, folderDescription, Optional.of(subFolderWrite)).map(BoundOutputManager::getWriters);
+        }
     }
 }

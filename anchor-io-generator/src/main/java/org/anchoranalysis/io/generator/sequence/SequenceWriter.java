@@ -31,9 +31,9 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.manifest.file.FileType;
 import org.anchoranalysis.io.manifest.sequencetype.SequenceType;
-import org.anchoranalysis.io.output.bound.BoundOutputManager;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.writer.GenerateWritableItem;
+import org.anchoranalysis.io.output.writer.RecordingWriters;
 
 public interface SequenceWriter {
 
@@ -45,5 +45,5 @@ public interface SequenceWriter {
     void write(GenerateWritableItem<Generator<?>> generator, String index)
             throws OutputWriteFailedException;
 
-    Optional<BoundOutputManager> getOutputManagerForFiles();
+    Optional<RecordingWriters> writers();
 }

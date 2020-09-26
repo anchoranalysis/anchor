@@ -39,6 +39,7 @@ import org.anchoranalysis.io.namestyle.OutputNameStyle;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import org.anchoranalysis.io.output.writer.RecordingWriters;
 
 public class BundledObjectOutputStreamGenerator<T extends Serializable> implements Generator<T> {
 
@@ -116,17 +117,13 @@ public class BundledObjectOutputStreamGenerator<T extends Serializable> implemen
                     new ObjectOutputStreamGenerator<>(
                             bundleParameters, Optional.of("bundleParameters"));
 
-            BoundOutputManager subfolderOutputManager =
-                    generatorSequence
-                            .getSubFolderOutputManager()
+            RecordingWriters subfolderWriters = generatorSequence.getWriters()
                             .orElseThrow(
                                     () ->
                                             new OutputWriteFailedException(
                                                     "No subfolder output-manager exists"));
 
-            subfolderOutputManager
-                    .getWriters()
-                    .alwaysAllowed()
+            subfolderWriters.alwaysAllowed()
                     .write("bundleParameters", () -> bundleParametersGenerator);
         }
 

@@ -33,10 +33,11 @@ import org.anchoranalysis.io.manifest.sequencetype.IncrementalSequenceType;
 import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import org.anchoranalysis.io.output.writer.RecordingWriters;
 
 public class GeneratorSequenceIncrementalWriter<T> implements GeneratorSequenceIncremental<T> {
 
-    private GeneratorSequenceNonIncrementalWriter<T> delegate;
+    private GeneratorSequenceNonIncremental<T> delegate;
 
     private int iteration = 0;
     private int startIndex = 0;
@@ -50,12 +51,12 @@ public class GeneratorSequenceIncrementalWriter<T> implements GeneratorSequenceI
             int startIndex,
             boolean checkIfAllowed) {
         delegate =
-                new GeneratorSequenceNonIncrementalWriter<>(
+                new GeneratorSequenceNonIncremental<>(
                         outputManager,
                         subfolderName,
                         outputNameStyle,
                         generator,
-                        checkIfAllowed);
+                        checkIfAllowed, false);
         this.iteration = startIndex;
         this.startIndex = startIndex;
     }
@@ -70,12 +71,13 @@ public class GeneratorSequenceIncrementalWriter<T> implements GeneratorSequenceI
             int startIndex,
             boolean checkIfAllowed) {
         delegate =
-                new GeneratorSequenceNonIncrementalWriter<>(
+                new GeneratorSequenceNonIncremental<>(
                         outputManager,
                         subfolderName,
                         outputNameStyle,
                         generator,
                         checkIfAllowed,
+                        false,
                         folderManifestDescription);
         this.startIndex = startIndex;
     }
@@ -106,7 +108,7 @@ public class GeneratorSequenceIncrementalWriter<T> implements GeneratorSequenceI
         return delegate.isOn();
     }
 
-    public Optional<BoundOutputManager> getSubFolderOutputManager() {
-        return delegate.getSubFolderOutputManager();
+    public Optional<RecordingWriters> getWriters() {
+        return delegate.writers();
     }
 }

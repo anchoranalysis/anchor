@@ -29,19 +29,13 @@ package org.anchoranalysis.io.generator.sequence;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.io.manifest.sequencetype.SequenceType;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import lombok.AllArgsConstructor;
 
+@AllArgsConstructor
 public class GeneratorSequenceNonIncrementalRerouterErrors<T> {
 
     private GeneratorSequenceNonIncremental<T> delegate;
-
     private ErrorReporter errorReporter;
-
-    public GeneratorSequenceNonIncrementalRerouterErrors(
-            GeneratorSequenceNonIncremental<T> delegate, ErrorReporter errorReporter) {
-        super();
-        this.delegate = delegate;
-        this.errorReporter = errorReporter;
-    }
 
     public void start(SequenceType sequenceType, int totalNumAdd) {
         try {
@@ -66,12 +60,9 @@ public class GeneratorSequenceNonIncrementalRerouterErrors<T> {
             routeError(e);
         }
     }
-
+    
     private void routeError(Exception e) {
         errorReporter.recordError(GeneratorSequenceIncrementalRerouteErrors.class, e);
     }
 
-    public void setSuppressSubfolder(boolean suppressSubfolder) {
-        delegate.setSuppressSubfolder(suppressSubfolder);
-    }
 }

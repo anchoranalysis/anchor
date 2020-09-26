@@ -31,7 +31,7 @@ import java.util.Optional;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.bean.filepath.prefixer.FilePathPrefixer;
-import org.anchoranalysis.io.bean.filepath.prefixer.PathWithDescription;
+import org.anchoranalysis.io.bean.filepath.prefixer.NamedPath;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.error.FilePathPrefixerException;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
@@ -75,22 +75,32 @@ public class OutputManager extends AnchorBean<OutputManager> {
     private OutputEnabledRules outputsEnabled = new Permissive();
     // END BEAN PROPERTIES
 
-    // Binds the output to be connected to a particular file and experiment
+    /**
+     * The prefix to use for outputs pertaining to a particular file.
+     * 
+     * @param path the path from which a prefix is derived
+     * @param experimentIdentifier
+     * @param manifestRecorder
+     * @param experimentalManifestRecorder
+     * @param context
+     * @return
+     * @throws FilePathPrefixerException
+     */
     public FilePathPrefix prefixForFile(
-            PathWithDescription input,
-            String expIdentifier,
+            NamedPath path,
+            String experimentIdentifier,
             Optional<ManifestRecorder> manifestRecorder,
             Optional<ManifestRecorder> experimentalManifestRecorder,
             FilePathPrefixerParams context)
             throws FilePathPrefixerException {
 
         // Calculate a prefix from the incoming file, and create a file path generator
-        FilePathPrefix prefix = filePathPrefixer.outFilePrefix(input, expIdentifier, context);
+        FilePathPrefix prefix = filePathPrefixer.outFilePrefix(path, experimentIdentifier, context);
 
-        PathDifferenceFromBase fpd =
-                differenceFromPrefixer(expIdentifier, context, prefix.getCombinedPrefix());
+        PathDifferenceFromBase difference =
+                differenceFromPrefixer(experimentIdentifier, context, prefix.getCombinedPrefix());
 
-        experimentalManifestRecorder.ifPresent(recorder -> writeRootFolderInManifest(recorder, fpd.combined()));
+        experimentalManifestRecorder.ifPresent(recorder -> writeRootFolderInManifest(recorder, difference.combined()));
 
         manifestRecorder.ifPresent(recorder -> recorder.init(prefix.getFolderPath()));
 
@@ -98,13 +108,13 @@ public class OutputManager extends AnchorBean<OutputManager> {
     }
 
     public BoundOutputManager bindRootFolder(
-            String expIdentifier,
+            String experimentIdentifier,
             ManifestRecorder writeOperationRecorder,
             FilePathPrefixerParams params)
             throws BindFailedException {
 
         try {
-            FilePathPrefix prefix = filePathPrefixer.rootFolderPrefix(expIdentifier, params);
+            FilePathPrefix prefix = filePathPrefixer.rootFolderPrefix(experimentIdentifier, params);
             writeOperationRecorder.init(prefix.getFolderPath());
 
             return BoundOutputManager.createExistingWithPrefix(

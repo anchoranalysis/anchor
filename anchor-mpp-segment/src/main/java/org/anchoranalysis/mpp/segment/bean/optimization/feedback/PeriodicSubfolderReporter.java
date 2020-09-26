@@ -31,7 +31,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.generator.Generator;
-import org.anchoranalysis.io.generator.sequence.GeneratorSequenceNonIncrementalWriter;
+import org.anchoranalysis.io.generator.sequence.GeneratorSequenceNonIncremental;
 import org.anchoranalysis.io.manifest.sequencetype.IncrementalSequenceType;
 import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.namestyle.IntegerSuffixOutputNameStyle;
@@ -52,7 +52,7 @@ public abstract class PeriodicSubfolderReporter<T>
     @BeanField @Getter @Setter private String outputName;
     // END BEAN PROPER
 
-    private GeneratorSequenceNonIncrementalWriter<T> sequenceWriter;
+    private GeneratorSequenceNonIncremental<T> sequenceWriter;
 
     private BoundOutputManagerRouteErrors parentOutputManager;
 
@@ -105,12 +105,12 @@ public abstract class PeriodicSubfolderReporter<T>
 
         IndexableOutputNameStyle outputStyle = generateOutputNameStyle();
         this.sequenceWriter =
-                new GeneratorSequenceNonIncrementalWriter<>(
+                new GeneratorSequenceNonIncremental<>(
                         getParentOutputManager().getDelegate(),
                         outputStyle.getOutputName(),
                         outputStyle,
                         generator,
-                        true);
+                        true, false);
 
         this.sequenceWriter.start(sequenceType, -1);
 
@@ -124,7 +124,7 @@ public abstract class PeriodicSubfolderReporter<T>
         this.parentOutputManager = optInit.getInitContext().getOutputManager();
 
         // Let's only do this if the output is allowed
-        if (!getParentOutputManager().isOutputAllowed(outputName)) {
+        if (!getParentOutputManager().outputsEnabled().isOutputAllowed(outputName)) {
             return;
         }
 

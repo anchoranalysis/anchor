@@ -63,12 +63,12 @@ public class GeneratorSequenceFactory {
     public <T> GeneratorSequenceNonIncremental<T> createNonIncremental(
             Generator<T> generator, BoundOutputManagerRouteErrors outputManager) {
 
-        return new GeneratorSequenceNonIncrementalWriter<>(
+        return new GeneratorSequenceNonIncremental<>(
                 outputManager.getDelegate(),
                 subdirectoryName,
                 outputNameStyle(filePrefixName),
                 generator,
-                CHECK_IF_ALLOWED);
+                CHECK_IF_ALLOWED, false);
     }
 
     private static IntegerSuffixOutputNameStyle outputNameStyle(String outputName) {

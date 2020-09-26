@@ -166,6 +166,6 @@ public class StacksOutputter {
             String secondLevelOutputKey,
             BoundOutputManagerRouteErrors outputManager) {
         return StacksOutputter.subset(
-                stacks, outputManager.outputAllowedSecondLevel(secondLevelOutputKey));
+                stacks, outputManager.outputsEnabled().outputAllowedSecondLevel(secondLevelOutputKey));
     }
 }

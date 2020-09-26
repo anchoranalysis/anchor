@@ -32,7 +32,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
-import org.anchoranalysis.io.bean.filepath.prefixer.PathWithDescription;
+import org.anchoranalysis.io.bean.filepath.prefixer.NamedPath;
 import org.anchoranalysis.io.error.FilePathPrefixerException;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
@@ -66,14 +66,14 @@ class HelperBindOutputManager {
         }
     }
 
-    private static PathWithDescription derivePathWithDescription(InputFromManager input) {
+    private static NamedPath derivePathWithDescription(InputFromManager input) {
         assert (input.pathForBinding().isPresent());
-        return new PathWithDescription(
+        return new NamedPath(
                 input.pathForBinding().get(), input.descriptiveName()); // NOSONAR
     }
 
     private static BoundOutputManager createWithBindingPath(
-            PathWithDescription input,
+            NamedPath path,
             Optional<ManifestRecorder> manifestTask,
             ParametersExperiment params)
             throws BindFailedException, JobExecutionException {
@@ -81,7 +81,7 @@ class HelperBindOutputManager {
             BoundOutputManager boundOutput =
                     params.getOutputManager()
                             .deriveFromInput(
-                                    input,
+                                    path,
                                     params.getExperimentIdentifier(),
                                     manifestTask,
                                     params.getExperimentalManifest(),
@@ -90,7 +90,7 @@ class HelperBindOutputManager {
                 ManifestClashChecker.throwExceptionIfClashes(
                         params.getExperimentalManifest().get(), // NOSONAR
                         boundOutput,
-                        input.getPath());
+                        path.getPath());
             }
             return boundOutput;
         } catch (FilePathPrefixerException e) {

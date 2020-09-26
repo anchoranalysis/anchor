@@ -31,14 +31,14 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
-import org.anchoranalysis.io.bean.filepath.prefixer.PathWithDescription;
+import org.anchoranalysis.io.bean.filepath.prefixer.NamedPath;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerParams;
 import org.anchoranalysis.io.manifest.ManifestFolderDescription;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
 import org.anchoranalysis.io.manifest.folder.FolderWritePhysical;
 import org.anchoranalysis.io.manifest.operationrecorder.WriteOperationRecorder;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
-import org.anchoranalysis.io.output.bean.allowed.OutputAllowed;
+import org.anchoranalysis.io.output.bean.rules.OutputEnabledRules;
 import org.anchoranalysis.io.output.writer.RecordedOutputs;
 import org.anchoranalysis.io.output.writer.WriterRouterErrors;
 
@@ -73,14 +73,14 @@ public class BoundOutputManagerRouteErrors {
     }
 
     public BoundOutputManager deriveFromInput(
-            PathWithDescription input,
+            NamedPath path,
             String expIdentifier,
             Optional<ManifestRecorder> manifestRecorder,
             Optional<ManifestRecorder> experimentalManifestRecorder,
             FilePathPrefixerParams context)
             throws BindFailedException {
         return delegate.deriveFromInput(
-                input, expIdentifier, manifestRecorder, experimentalManifestRecorder, context);
+                path, expIdentifier, manifestRecorder, experimentalManifestRecorder, context);
     }
 
     public WriterRouterErrors getWriterAlwaysAllowed() {
@@ -105,14 +105,6 @@ public class BoundOutputManagerRouteErrors {
         return delegate.getOutputWriteSettings();
     }
 
-    public boolean isOutputAllowed(String outputName) {
-        return delegate.isOutputAllowed(outputName);
-    }
-
-    public OutputAllowed outputAllowedSecondLevel(String key) {
-        return delegate.outputAllowedSecondLevel(key);
-    }
-
     public Path getOutputFolderPath() {
         return delegate.getOutputFolderPath();
     }
@@ -127,5 +119,9 @@ public class BoundOutputManagerRouteErrors {
 
     public RecordedOutputs recordedOutputs() {
         return delegate.recordedOutputs();
+    }
+
+    public OutputEnabledRules outputsEnabled() {
+        return delegate.outputsEnabled();
     }
 }

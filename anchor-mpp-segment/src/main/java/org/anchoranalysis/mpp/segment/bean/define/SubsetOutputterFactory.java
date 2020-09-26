@@ -27,7 +27,6 @@
 package org.anchoranalysis.mpp.segment.bean.define;
 
 import java.util.Optional;
-import java.util.function.Function;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
 import org.anchoranalysis.image.histogram.Histogram;
@@ -36,7 +35,6 @@ import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.generator.histogram.HistogramCSVGenerator;
 import org.anchoranalysis.io.generator.serialized.XStreamGenerator;
-import org.anchoranalysis.io.output.bean.allowed.OutputAllowed;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.mpp.io.output.StackOutputKeys;
@@ -60,8 +58,7 @@ class SubsetOutputterFactory {
         return create(
                 soMPP.getMarksCollection(),
                 new XStreamGenerator<MarkCollection>(Optional.of("marks")),
-                (BoundOutputManagerRouteErrors bom) ->
-                        bom.outputAllowedSecondLevel(StackOutputKeys.MARKS),
+                StackOutputKeys.MARKS,
                 OutputterDirectories.MARKS);
     }
 
@@ -69,8 +66,7 @@ class SubsetOutputterFactory {
         return create(
                 soMPP.getImage().histograms(),
                 new HistogramCSVGenerator(),
-                (BoundOutputManagerRouteErrors bom) ->
-                        bom.outputAllowedSecondLevel(StackOutputKeys.HISTOGRAM),
+                StackOutputKeys.HISTOGRAM,
                 OutputterDirectories.HISTOGRAM);
     }
 
@@ -78,19 +74,18 @@ class SubsetOutputterFactory {
         return create(
                 soMPP.getImage().objects(),
                 ObjectCollectionWriter.generator(),
-                (BoundOutputManagerRouteErrors bom) ->
-                        bom.outputAllowedSecondLevel(StackOutputKeys.OBJECTS),
+                StackOutputKeys.OBJECTS,
                 OutputterDirectories.OBJECT);
     }
 
     private <T> SubsetOutputter<T> create(
             NamedProviderStore<T> store,
             Generator<T> generator,
-            Function<BoundOutputManagerRouteErrors, OutputAllowed> outputAllowedFunc,
+            String outputAllowedSecondLevelKey,
             String id) {
         return new SubsetOutputter<>(
                 store,
-                outputAllowedFunc.apply(outputManager),
+                outputManager.outputsEnabled().outputAllowedSecondLevel(outputAllowedSecondLevelKey),
                 generator,
                 outputManager.getDelegate(),
                 id,
