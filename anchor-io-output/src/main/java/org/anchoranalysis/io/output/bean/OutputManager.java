@@ -85,26 +85,26 @@ public class OutputManager extends AnchorBean<OutputManager> {
             throws FilePathPrefixerException {
 
         // Calculate a prefix from the incoming file, and create a file path generator
-        FilePathPrefix fpp = filePathPrefixer.outFilePrefix(input, expIdentifier, context);
+        FilePathPrefix prefix = filePathPrefixer.outFilePrefix(input, expIdentifier, context);
 
         PathDifferenceFromBase fpd =
-                differenceFromPrefixer(expIdentifier, context, fpp.getCombinedPrefix());
+                differenceFromPrefixer(expIdentifier, context, prefix.getCombinedPrefix());
 
-        experimentalManifestRecorder.ifPresent(mr -> writeRootFolderInManifest(mr, fpd.combined()));
+        experimentalManifestRecorder.ifPresent(recorder -> writeRootFolderInManifest(recorder, fpd.combined()));
 
-        manifestRecorder.ifPresent(mr -> mr.init(fpp.getFolderPath()));
+        manifestRecorder.ifPresent(recorder -> recorder.init(prefix.getFolderPath()));
 
-        return fpp;
+        return prefix;
     }
 
     public BoundOutputManager bindRootFolder(
             String expIdentifier,
             ManifestRecorder writeOperationRecorder,
-            FilePathPrefixerParams context)
+            FilePathPrefixerParams params)
             throws BindFailedException {
 
         try {
-            FilePathPrefix prefix = filePathPrefixer.rootFolderPrefix(expIdentifier, context);
+            FilePathPrefix prefix = filePathPrefixer.rootFolderPrefix(expIdentifier, params);
             writeOperationRecorder.init(prefix.getFolderPath());
 
             return BoundOutputManager.createExistingWithPrefix(
