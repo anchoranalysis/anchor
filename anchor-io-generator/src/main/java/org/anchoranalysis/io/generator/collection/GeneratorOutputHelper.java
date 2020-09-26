@@ -32,6 +32,7 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.error.combinable.AnchorCombinableException;
 import org.anchoranalysis.core.error.friendly.HasFriendlyErrorMessage;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
+import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.name.provider.NameValueSet;
 import org.anchoranalysis.core.name.provider.NamedProvider;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
@@ -66,15 +67,15 @@ public class GeneratorOutputHelper {
                 new GeneratorSequenceNonIncrementalRerouterErrors<>(
                         new GeneratorSequenceNonIncremental<>(
                                 outputManager,
-                                outputNameStyle.getOutputName(),
+                                OptionalUtilities.createFromFlag(!suppressSubfoldersIn, outputNameStyle.getOutputName()),
                                 outputNameStyle,
                                 generator,
-                                true, suppressSubfoldersIn),
+                                true),
                         errorReporter);
 
         Set<String> keys = providers.keys();
 
-        writer.start(new SetSequenceType(), keys.size());
+        writer.start(new SetSequenceType());
 
         for (String name : keys) {
 
@@ -104,14 +105,14 @@ public class GeneratorOutputHelper {
         GeneratorSequenceNonIncremental<T> writer =
                 new GeneratorSequenceNonIncremental<>(
                         outputManager,
-                        outputNameStyle.getOutputName(),
+                        OptionalUtilities.createFromFlag(!suppressSubfoldersIn, outputNameStyle.getOutputName()),
                         outputNameStyle,
                         generator,
-                        true, suppressSubfoldersIn);
+                        true);
 
         Set<String> keys = providers.keys();
 
-        writer.start(new SetSequenceType(), keys.size());
+        writer.start(new SetSequenceType());
 
         for (String name : keys) {
 
@@ -164,13 +165,13 @@ public class GeneratorOutputHelper {
     }
 
     public static <T> NamedProvider<T> subsetWithException(
-            NamedProvider<T> providers, OutputAllowed oa) throws OutputWriteFailedException {
+            NamedProvider<T> providers, OutputAllowed allowed) throws OutputWriteFailedException {
 
         NameValueSet<T> out = new NameValueSet<>();
 
         for (String name : providers.keys()) {
 
-            if (oa.isOutputAllowed(name)) {
+            if (allowed.isOutputAllowed(name)) {
                 try {
                     out.add(new SimpleNameValue<>(name, providers.getException(name)));
                 } catch (NamedProviderGetException e) {

@@ -37,52 +37,43 @@ import org.anchoranalysis.io.manifest.file.FileType;
 import org.anchoranalysis.io.manifest.sequencetype.SequenceType;
 import org.anchoranalysis.io.manifest.sequencetype.SequenceTypeException;
 import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
+import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.writer.RecordingWriters;
 
 public class GeneratorSequenceNonIncremental<T> {
 
-    // totalNumAdd indicates in advance, how many times add will be called
-    // If this is unknown, it should be set to -1
-    // Not all writers support additions when this is unknown
-    private BoundOutputManager parentOutputManager = null;
-
-    private Generator<T> generator;
+    private final Generator<T> generator;
+    private final SequenceWriters sequenceWriter;
+    private final OutputWriteSettings settings;
 
     private SequenceType sequenceType;
-
-    private SequenceWriter sequenceWriter;
-
     private boolean firstAdd = true;
-
-    private boolean suppressSubfolder;
 
     // Automatically create a ManifestDescription for the folder from the Generator
     public GeneratorSequenceNonIncremental(
             BoundOutputManager outputManager,
-            String subfolderName,
+            Optional<String> subfolderName,
             IndexableOutputNameStyle outputNameStyle,
             Generator<T> generator,
-            boolean checkIfAllowed, boolean suppressSubfolder) {
+            boolean checkIfAllowed) {
         this(
                 outputManager,
                 subfolderName,
                 outputNameStyle,
                 generator,
                 checkIfAllowed,
-                suppressSubfolder,
                 null);
     }
 
     // User-specified ManifestDescription for the folder
     public GeneratorSequenceNonIncremental(
             BoundOutputManager outputManager,
-            String subfolderName,
+            Optional<String> subfolderName,
             IndexableOutputNameStyle outputNameStyle,
             Generator<T> generator,
             boolean checkIfAllowed,
-            boolean suppressSubfolder,
             ManifestDescription folderManifestDescription) {
 
         if (!outputManager.getOutputWriteSettings().hasBeenInit()) {
@@ -96,9 +87,8 @@ public class GeneratorSequenceNonIncremental<T> {
                         outputNameStyle,
                         folderManifestDescription,
                         checkIfAllowed);
-        this.parentOutputManager = outputManager;
+        this.settings = outputManager.getOutputWriteSettings();
         this.generator = generator;
-        this.suppressSubfolder = suppressSubfolder;
     }
 
     public boolean isOn() {
@@ -131,7 +121,7 @@ public class GeneratorSequenceNonIncremental<T> {
         }
     }
 
-    public void start(SequenceType sequenceType, int totalNumAdd)
+    public void start(SequenceType sequenceType)
             throws OutputWriteFailedException {
         generator.start();
         this.sequenceType = sequenceType;
@@ -151,13 +141,13 @@ public class GeneratorSequenceNonIncremental<T> {
             // in future
             FileType[] fileTypes =
                     generator
-                            .getFileTypes(this.parentOutputManager.getOutputWriteSettings())
+                            .getFileTypes(settings)
                             .orElseThrow(
                                     () ->
                                             new InitException(
                                                     "This operation requires file-types to be defined by the generator"));
     
-            this.sequenceWriter.init(fileTypes, this.sequenceType, this.suppressSubfolder);
+            this.sequenceWriter.init(fileTypes, this.sequenceType);
         } catch (OperationFailedException e) {
             throw new InitException(e);
         }

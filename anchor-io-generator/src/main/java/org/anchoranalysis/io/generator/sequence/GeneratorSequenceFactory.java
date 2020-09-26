@@ -26,6 +26,7 @@
 package org.anchoranalysis.io.generator.sequence;
 
 import lombok.AllArgsConstructor;
+import java.util.Optional;
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.namestyle.IntegerSuffixOutputNameStyle;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
@@ -65,10 +66,10 @@ public class GeneratorSequenceFactory {
 
         return new GeneratorSequenceNonIncremental<>(
                 outputManager.getDelegate(),
-                subdirectoryName,
+                Optional.of(subdirectoryName),
                 outputNameStyle(filePrefixName),
                 generator,
-                CHECK_IF_ALLOWED, false);
+                CHECK_IF_ALLOWED);
     }
 
     private static IntegerSuffixOutputNameStyle outputNameStyle(String outputName) {

@@ -53,10 +53,10 @@ public class GeneratorSequenceIncrementalWriter<T> implements GeneratorSequenceI
         delegate =
                 new GeneratorSequenceNonIncremental<>(
                         outputManager,
-                        subfolderName,
+                        Optional.of(subfolderName),
                         outputNameStyle,
                         generator,
-                        checkIfAllowed, false);
+                        checkIfAllowed);
         this.iteration = startIndex;
         this.startIndex = startIndex;
     }
@@ -73,18 +73,17 @@ public class GeneratorSequenceIncrementalWriter<T> implements GeneratorSequenceI
         delegate =
                 new GeneratorSequenceNonIncremental<>(
                         outputManager,
-                        subfolderName,
+                        Optional.of(subfolderName),
                         outputNameStyle,
                         generator,
                         checkIfAllowed,
-                        false,
                         folderManifestDescription);
         this.startIndex = startIndex;
     }
 
     @Override
     public void start() throws OutputWriteFailedException {
-        delegate.start(new IncrementalSequenceType(startIndex), -1);
+        delegate.start(new IncrementalSequenceType(startIndex));
     }
 
     @Override

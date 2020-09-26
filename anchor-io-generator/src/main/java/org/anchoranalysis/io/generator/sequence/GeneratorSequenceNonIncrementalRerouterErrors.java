@@ -37,9 +37,9 @@ public class GeneratorSequenceNonIncrementalRerouterErrors<T> {
     private GeneratorSequenceNonIncremental<T> delegate;
     private ErrorReporter errorReporter;
 
-    public void start(SequenceType sequenceType, int totalNumAdd) {
+    public void start(SequenceType sequenceType) {
         try {
-            delegate.start(sequenceType, totalNumAdd);
+            delegate.start(sequenceType);
         } catch (OutputWriteFailedException e) {
             routeError(e);
         }

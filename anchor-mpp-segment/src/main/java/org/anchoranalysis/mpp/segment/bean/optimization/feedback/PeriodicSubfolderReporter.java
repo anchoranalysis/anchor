@@ -107,12 +107,12 @@ public abstract class PeriodicSubfolderReporter<T>
         this.sequenceWriter =
                 new GeneratorSequenceNonIncremental<>(
                         getParentOutputManager().getDelegate(),
-                        outputStyle.getOutputName(),
+                        Optional.of(outputStyle.getOutputName()),
                         outputStyle,
                         generator,
-                        true, false);
+                        true);
 
-        this.sequenceWriter.start(sequenceType, -1);
+        this.sequenceWriter.start(sequenceType);
 
         return sequenceType;
     }

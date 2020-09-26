@@ -27,7 +27,6 @@
 package org.anchoranalysis.io.generator.sequence;
 
 import java.util.Optional;
-import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
@@ -41,6 +40,7 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.writer.GenerateWritableItem;
 import org.anchoranalysis.io.output.writer.RecordingWriters;
 import org.anchoranalysis.io.output.writer.Writer;
+import lombok.RequiredArgsConstructor;
 
 /**
  * Like {@link RecordingWriters} but for a sequence of items, maybe in a subfolder.
@@ -49,11 +49,11 @@ import org.anchoranalysis.io.output.writer.Writer;
  *
  */
 @RequiredArgsConstructor
-public class SequenceWriters implements SequenceWriter {
+class SequenceWriters {
 
     // START: REQUIRED ARGUMENTS
     private final RecordingWriters parentWriters;
-    private final String subfolderName;
+    private final Optional<String> subfolderName;
     private final IndexableOutputNameStyle outputNameStyle;
     private final ManifestDescription folderManifestDescription;
     private final boolean checkIfAllowed;
@@ -61,8 +61,7 @@ public class SequenceWriters implements SequenceWriter {
 
     private Optional<RecordingWriters> writers = Optional.empty();
 
-    @Override
-    public void init(FileType[] fileTypes, SequenceType sequenceType, boolean suppressSubfolder)
+    public void init(FileType[] fileTypes, SequenceType sequenceType)
             throws InitException {
 
         if (fileTypes.length == 0) {
@@ -81,13 +80,12 @@ public class SequenceWriters implements SequenceWriter {
 
         try {
             this.writers =
-                    selectWritersMaybeCreateSubdirectory(suppressSubfolder, folderDescription, subFolderWrite);
+                    selectWritersMaybeCreateSubdirectory(folderDescription, subFolderWrite);
         } catch (OutputWriteFailedException e) {
             throw new InitException(e);
         }
     }
 
-    @Override
     public void write(GenerateWritableItem<Generator<?>> generator, String index)
             throws OutputWriteFailedException {
 
@@ -108,12 +106,10 @@ public class SequenceWriters implements SequenceWriter {
         }
     }
 
-    @Override
     public Optional<RecordingWriters> writers() {
         return writers;
     }
     
-    @Override
     public boolean isOn() {
         return writers.isPresent();
     }
@@ -166,19 +162,18 @@ public class SequenceWriters implements SequenceWriter {
     }
     
     private Optional<RecordingWriters> selectWritersMaybeCreateSubdirectory(
-            boolean suppressSubfolder,
             ManifestFolderDescription folderDescription,
             FolderWriteIndexableOutputName subFolderWrite)
             throws OutputWriteFailedException {
-        if (suppressSubfolder) {
-            return Optional.of(parentWriters);
-        } else {
+        if (subfolderName.isPresent()) {
             Writer writer =
                     checkIfAllowed
                             ? parentWriters.checkIfAllowed()
                             : parentWriters.alwaysAllowed();
             return writer.createSubdirectory(
-                    subfolderName, folderDescription, Optional.of(subFolderWrite)).map(BoundOutputManager::getWriters);
+                    subfolderName.get(), folderDescription, Optional.of(subFolderWrite)).map(BoundOutputManager::getWriters);            
+        } else {
+            return Optional.of(parentWriters);
         }
     }
 }
