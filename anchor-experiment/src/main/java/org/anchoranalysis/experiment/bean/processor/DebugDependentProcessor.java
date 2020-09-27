@@ -34,7 +34,8 @@ import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.experiment.task.TaskStatistics;
 import org.anchoranalysis.io.input.InputFromManager;
-import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.io.output.bound.Outputter;
+import com.google.common.base.Preconditions;
 
 /**
  * Executes different processors depending on whether we are in debug mode or not
@@ -60,16 +61,16 @@ public class DebugDependentProcessor<T extends InputFromManager, S> extends JobP
 
     @Override
     protected TaskStatistics execute(
-            BoundOutputManagerRouteErrors rootOutputManager,
+            Outputter rootOutputter,
             List<T> inputObjects,
             ParametersExperiment paramsExperiment)
             throws ExperimentExecutionException {
 
-        assert (rootOutputManager.getDelegate().getOutputWriteSettings().hasBeenInit());
+        Preconditions.checkArgument(rootOutputter.getChecked().getSettings().hasBeenInit());
 
         JobProcessor<T, S> processor =
                 createProcessor(paramsExperiment.getExperimentArguments().isDebugModeEnabled());
-        return processor.execute(rootOutputManager, inputObjects, paramsExperiment);
+        return processor.execute(rootOutputter, inputObjects, paramsExperiment);
     }
 
     private JobProcessor<T, S> createProcessor(boolean debugMode) {

@@ -42,34 +42,29 @@ import org.anchoranalysis.io.manifest.ManifestRecorder;
 import org.anchoranalysis.io.output.bean.OutputManager;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.bound.BindFailedException;
-import org.anchoranalysis.io.output.bound.BoundOutputManager;
-import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.io.output.bound.OutputterChecked;
+import org.anchoranalysis.io.output.bound.Outputter;
 import org.anchoranalysis.test.LoggingFixture;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class OutputManagerFixture {
+public class OutputterFixture {
 
-    // These operations must occur before creating TempBoundOutputManager
-    private static void globalSetup() {
-        TestReaderWriterUtilities.ensureRasterWriter();
-    }
-
-    public static BoundOutputManagerRouteErrors outputManagerForRouterErrors(Path pathTempFolder)
+    public static Outputter outputter(Path pathTempFolder)
             throws BindFailedException {
 
         ErrorReporter errorReporter = LoggingFixture.suppressedLogErrorReporter().errorReporter();
 
-        return new BoundOutputManagerRouteErrors(
-                createBoundOutputManagerFor(pathTempFolder, errorReporter), errorReporter);
+        return new Outputter(
+                createOutputterChecked(pathTempFolder, errorReporter), errorReporter);
     }
 
-    public static BoundOutputManager outputManagerFor(Path pathTempFolder)
+    public static OutputterChecked outputterFor(Path pathTempFolder)
             throws BindFailedException {
-        return createBoundOutputManagerFor(
+        return createOutputterChecked(
                 pathTempFolder, LoggingFixture.suppressedLogErrorReporter().errorReporter());
     }
 
-    private static BoundOutputManager createBoundOutputManagerFor(
+    private static OutputterChecked createOutputterChecked(
             Path pathTempFolder, ErrorReporter errorReporter) throws BindFailedException {
 
         globalSetup();
@@ -80,7 +75,7 @@ public class OutputManagerFixture {
         try {
             settings.checkMisconfigured(RegisterBeanFactories.getDefaultInstances());
         } catch (BeanMisconfiguredException e1) {
-            errorReporter.recordError(OutputManagerFixture.class, e1);
+            errorReporter.recordError(OutputterFixture.class, e1);
         }
 
         OutputManager outputManager = createOutputManager(pathTempFolder, settings);
@@ -89,6 +84,7 @@ public class OutputManagerFixture {
             return outputManager.bindRootFolder(
                     "debug",
                     new ManifestRecorder(),
+                    Optional.empty(),
                     new FilePathPrefixerParams(false, Optional.empty()));
         } catch (FilePathPrefixerException e) {
             throw new BindFailedException(e);
@@ -104,6 +100,11 @@ public class OutputManagerFixture {
         return outputManager;
     }
 
+    /** These operations must occur before creating the {@link OutputManager}. */
+    private static void globalSetup() {
+        TestReaderWriterUtilities.ensureRasterWriter();
+    }
+    
     private static class FilePathPrefixerConstantPath extends FilePathPrefixer {
 
         private FilePathPrefix prefix;

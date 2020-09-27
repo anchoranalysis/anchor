@@ -31,7 +31,7 @@ import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.manifest.sequencetype.IncrementalSequenceType;
 import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
-import org.anchoranalysis.io.output.bound.BoundOutputManager;
+import org.anchoranalysis.io.output.bound.OutputterChecked;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.writer.RecordingWriters;
 
@@ -44,39 +44,39 @@ public class GeneratorSequenceIncrementalWriter<T> implements GeneratorSequenceI
 
     // Automatically create a ManifestDescription for the folder from the Generator
     public GeneratorSequenceIncrementalWriter(
-            BoundOutputManager outputManager,
+            OutputterChecked outputter,
             String subfolderName,
             IndexableOutputNameStyle outputNameStyle,
             Generator<T> generator,
             int startIndex,
-            boolean checkIfAllowed) {
+            boolean selective) {
         delegate =
                 new GeneratorSequenceNonIncremental<>(
-                        outputManager,
+                        outputter,
                         Optional.of(subfolderName),
                         outputNameStyle,
                         generator,
-                        checkIfAllowed);
+                        selective);
         this.iteration = startIndex;
         this.startIndex = startIndex;
     }
 
     // User-specified ManifestDescription for the folder
     public GeneratorSequenceIncrementalWriter(
-            BoundOutputManager outputManager,
+            OutputterChecked outputter,
             String subfolderName,
             IndexableOutputNameStyle outputNameStyle,
             Generator<T> generator,
             ManifestDescription folderManifestDescription,
             int startIndex,
-            boolean checkIfAllowed) {
+            boolean selective) {
         delegate =
                 new GeneratorSequenceNonIncremental<>(
-                        outputManager,
+                        outputter,
                         Optional.of(subfolderName),
                         outputNameStyle,
                         generator,
-                        checkIfAllowed,
+                        selective,
                         folderManifestDescription);
         this.startIndex = startIndex;
     }

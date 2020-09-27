@@ -44,7 +44,7 @@ public interface BoundIOContext {
 
     Path getModelDirectory();
 
-    BoundOutputManagerRouteErrors getOutputManager();
+    Outputter getOutputter();
 
     boolean isDebugEnabled();
 

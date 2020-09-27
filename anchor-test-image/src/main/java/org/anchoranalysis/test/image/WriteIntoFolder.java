@@ -50,8 +50,8 @@ import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.io.generator.collection.GeneratorSubfolderWriter;
 import org.anchoranalysis.io.output.bound.BindFailedException;
-import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
-import org.anchoranalysis.test.image.io.OutputManagerFixture;
+import org.anchoranalysis.io.output.bound.Outputter;
+import org.anchoranalysis.test.image.io.OutputterFixture;
 import org.junit.rules.TemporaryFolder;
 import org.junit.rules.TestRule;
 import org.junit.runner.Description;
@@ -88,7 +88,7 @@ public class WriteIntoFolder implements TestRule {
         this.printDirectoryToConsole = true;
     }
 
-    private BoundOutputManagerRouteErrors outputManager;
+    private Outputter outputter;
 
     private DisplayStackGenerator generatorStack = new DisplayStackGenerator("irrelevant", false);
 
@@ -112,7 +112,7 @@ public class WriteIntoFolder implements TestRule {
 
     public void writeStack(String outputName, DisplayStack stack) {
 
-        setupOutputManagerIfNecessary();
+        setupOutputterIfNecessary();
 
         try {
             generatorStack.assignElement(stack);
@@ -120,16 +120,16 @@ public class WriteIntoFolder implements TestRule {
             throw new AnchorImpossibleSituationException();
         }
     
-        outputManager.getWriterAlwaysAllowed().write(outputName, () -> generatorStack);
+        outputter.writerPermissive().write(outputName, () -> generatorStack);
     }
 
     public void writeObject(String outputName, ObjectMask object) throws SetOperationFailedException {
 
-        setupOutputManagerIfNecessary();
+        setupOutputterIfNecessary();
 
         generatorSingleObject.assignElement(object);
 
-        outputManager.getWriterAlwaysAllowed().write(outputName, () -> generatorSingleObject);
+        outputter.writerPermissive().write(outputName, () -> generatorSingleObject);
     }
 
     /**
@@ -166,7 +166,7 @@ public class WriteIntoFolder implements TestRule {
 
     public void writeChannel(String outputName, Channel channel) {
 
-        setupOutputManagerIfNecessary();
+        setupOutputterIfNecessary();
 
         writeStack(outputName, displayStackFor(channel));
     }
@@ -180,10 +180,10 @@ public class WriteIntoFolder implements TestRule {
      */
     public void writeList(String outputName, List<DisplayStack> stacks, boolean always2D) {
 
-        setupOutputManagerIfNecessary();
+        setupOutputterIfNecessary();
 
         GeneratorSubfolderWriter.writeSubfolder(
-                outputManager, outputName, outputName, () -> generatorStack, stacks, true);
+                outputter, outputName, outputName, () -> generatorStack, stacks, true);
     }
 
     private static DisplayStack displayStackFor(Channel channel) {
@@ -202,13 +202,13 @@ public class WriteIntoFolder implements TestRule {
         }
     }
 
-    private void setupOutputManagerIfNecessary() {
+    private void setupOutputterIfNecessary() {
         try {
-            if (outputManager == null) {
+            if (outputter == null) {
 
                 Path path = folder.getRoot().toPath();
 
-                outputManager = OutputManagerFixture.outputManagerForRouterErrors(path);
+                outputter = OutputterFixture.outputter(path);
 
                 if (printDirectoryToConsole) {
                     System.out.println("Outputs written in test to: " + path); // NOSONAR
@@ -225,12 +225,12 @@ public class WriteIntoFolder implements TestRule {
             ObjectCollection objects,
             Either<Dimensions, DisplayStack> background) {
 
-        setupOutputManagerIfNecessary();
+        setupOutputterIfNecessary();
 
         DrawObjectsGenerator generatorObjects =
                 DrawObjectsGenerator.outlineVariedColors(objects, 1, background);
 
-        outputManager.getWriterAlwaysAllowed().write(outputName, () -> generatorObjects);
+        outputter.writerPermissive().write(outputName, () -> generatorObjects);
     }
 
     /** Finds dimensions that place the objects in the center */

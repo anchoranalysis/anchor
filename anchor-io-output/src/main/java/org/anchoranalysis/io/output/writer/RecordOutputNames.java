@@ -6,7 +6,7 @@ import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.manifest.ManifestFolderDescription;
 import org.anchoranalysis.io.manifest.folder.FolderWriteWithPath;
 import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
-import org.anchoranalysis.io.output.bound.BoundOutputManager;
+import org.anchoranalysis.io.output.bound.OutputterChecked;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import lombok.RequiredArgsConstructor;
 
@@ -33,12 +33,12 @@ public class RecordOutputNames implements Writer {
     // END REQUIRED ARGUMENTS
 
     @Override
-    public Optional<BoundOutputManager> createSubdirectory(String outputName,
+    public Optional<OutputterChecked> createSubdirectory(String outputName,
             ManifestFolderDescription manifestDescription, Optional<FolderWriteWithPath> manifestFolder)
             throws OutputWriteFailedException {
-        Optional<BoundOutputManager> outputManager = writer.createSubdirectory(outputName, manifestDescription, manifestFolder);
-        recordedOutputs.add(outputName, outputManager.isPresent());
-        return outputManager;
+        Optional<OutputterChecked> outputter = writer.createSubdirectory(outputName, manifestDescription, manifestFolder);
+        recordedOutputs.add(outputName, outputter.isPresent());
+        return outputter;
     }
 
     @Override

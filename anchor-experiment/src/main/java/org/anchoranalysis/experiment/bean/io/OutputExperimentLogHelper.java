@@ -48,22 +48,23 @@ class OutputExperimentLogHelper {
                     .logFormatted(
                             "Experiment %s started writing to %s",
                             params.getExperimentIdentifier(),
-                            params.getOutputManager().getOutputFolderPath());
+                            params.getOutputter().getOutputFolderPath());
         }
     }
 
     public static void maybeLogCompleted(
-            ParametersExperiment params, StopWatch stopWatchExperiment) {
+            RecordedOutputs recordedOutputs, ParametersExperiment params, StopWatch stopWatchExperiment) {
         if (params.isDetailedLogging()) {
+            
             params.getLoggerExperiment()
                     .logFormatted(
                             "%s%n%s%n%s%nExperiment %s completed (%ds) writing to %s",
                             DIVIDER.withLabel("Outputs"),
-                            summarize( params.getOutputManager().recordedOutputs() ),
+                            summarize(recordedOutputs),
                             DIVIDER.withoutLabel(),
                             params.getExperimentIdentifier(),
                             stopWatchExperiment.getTime() / 1000,
-                            params.getOutputManager().getOutputFolderPath()
+                            params.getOutputter().getOutputFolderPath()
                             );
         }
     }

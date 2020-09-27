@@ -33,7 +33,7 @@ import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.manifest.ManifestFolderDescription;
 import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
-import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.io.output.bound.Outputter;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 /**
@@ -67,13 +67,13 @@ public class WriterRouterErrors {
      * @param manifestDescription a manifest-description associated with the sub-directory as a whole.
      * @return an output-manager for the directory if it is allowed, otherwise {@link Optional#empty}.
      */
-    public Optional<BoundOutputManagerRouteErrors> createSubdirectory(
+    public Optional<Outputter> createSubdirectory(
             String outputName, ManifestFolderDescription manifestDescription) {
         try {
             return delegate.createSubdirectory(outputName, manifestDescription, Optional.empty())
-                    .map(output -> new BoundOutputManagerRouteErrors(output, errorReporter));
+                    .map(output -> new Outputter(output, errorReporter));
         } catch (OutputWriteFailedException e) {
-            errorReporter.recordError(BoundOutputManagerRouteErrors.class, e);
+            errorReporter.recordError(Outputter.class, e);
             return Optional.empty();
         }
     }
@@ -89,7 +89,7 @@ public class WriterRouterErrors {
         try {
             delegate.writeSubdirectoryWithGenerator(outputName, generator);
         } catch (OutputWriteFailedException e) {
-            errorReporter.recordError(BoundOutputManagerRouteErrors.class, e);
+            errorReporter.recordError(Outputter.class, e);
         }
     }
 
@@ -108,7 +108,7 @@ public class WriterRouterErrors {
         try {
             return delegate.write(outputNameStyle, generator, index);
         } catch (OutputWriteFailedException e) {
-            errorReporter.recordError(BoundOutputManagerRouteErrors.class, e);
+            errorReporter.recordError(Outputter.class, e);
             return NUMBER_ELEMENTS_WRITTEN_ERRORED;
         }
     }
@@ -123,7 +123,7 @@ public class WriterRouterErrors {
         try {
             delegate.write(outputName, generator);
         } catch (OutputWriteFailedException e) {
-            errorReporter.recordError(BoundOutputManagerRouteErrors.class, e);
+            errorReporter.recordError(Outputter.class, e);
         }
     }
 

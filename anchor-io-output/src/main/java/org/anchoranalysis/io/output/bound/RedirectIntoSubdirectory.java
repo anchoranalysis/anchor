@@ -38,7 +38,7 @@ import org.anchoranalysis.io.manifest.ManifestFolderDescription;
 class RedirectIntoSubdirectory implements BoundIOContext {
 
     private BoundIOContext delegate;
-    private BoundOutputManagerRouteErrors replacementOutputManager;
+    private Outputter replacementOutputter;
 
     public RedirectIntoSubdirectory(
             BoundIOContext delegate,
@@ -46,13 +46,13 @@ class RedirectIntoSubdirectory implements BoundIOContext {
             ManifestFolderDescription manifestDescription) {
         super();
         this.delegate = delegate;
-        this.replacementOutputManager =
-                delegate.getOutputManager().deriveSubdirectory(folderPath, manifestDescription);
+        this.replacementOutputter =
+                delegate.getOutputter().deriveSubdirectory(folderPath, manifestDescription);
     }
 
     @Override
-    public BoundOutputManagerRouteErrors getOutputManager() {
-        return replacementOutputManager;
+    public Outputter getOutputter() {
+        return replacementOutputter;
     }
 
     @Override

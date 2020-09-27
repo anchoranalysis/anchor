@@ -33,7 +33,7 @@ import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.experiment.ExperimentExecutionArguments;
 import org.anchoranalysis.experiment.log.ConsoleMessageLogger;
 import org.anchoranalysis.experiment.log.StatefulMessageLogger;
-import org.anchoranalysis.io.output.bound.BoundOutputManager;
+import org.anchoranalysis.io.output.bound.OutputterChecked;
 
 /**
  * The destination(s) to which log-messages are sent.
@@ -49,25 +49,25 @@ public abstract class LoggingDestination extends AnchorBean<LoggingDestination> 
      * <p>Identical to {@link LoggingDestination#createWithLogFallback} but uses a {@link
      * ConsoleMessageLogger} as the {@code fallbackErrorReporter}.
      *
-     * @param outputManager the output-manager
+     * @param outputter the output-manager
      * @param arguments experiment-arguments
      * @param detailedLogging whether detailed logging should occur in this reporter, or a less
      *     detailed version
      * @return a newly created log-reporter
      */
     public StatefulMessageLogger createWithConsoleFallback(
-            BoundOutputManager outputManager,
+            OutputterChecked outputter,
             ExperimentExecutionArguments arguments,
             boolean detailedLogging) {
         return createWithLogFallback(
-                outputManager, new ConsoleMessageLogger(), arguments, detailedLogging);
+                outputter, new ConsoleMessageLogger(), arguments, detailedLogging);
     }
 
     /**
      * Creates a logger for this destination - and if anything goes wrong reporting fallback into a
      * log.
      *
-     * @param outputManager the output-manager
+     * @param outputter the output-manager
      * @param fallbackErrorReporter where any errors are reported, when trying to create this log.
      * @param arguments experiment-arguments
      * @param detailedLogging whether detailed logging should occur in this reporter, or a less
@@ -75,12 +75,12 @@ public abstract class LoggingDestination extends AnchorBean<LoggingDestination> 
      * @return a newly created log-reporter
      */
     public StatefulMessageLogger createWithLogFallback(
-            BoundOutputManager outputManager,
+            OutputterChecked outputter,
             MessageLogger fallbackErrorReporter,
             ExperimentExecutionArguments arguments,
             boolean detailedLogging) {
         return create(
-                outputManager,
+                outputter,
                 new ErrorReporterIntoLog(fallbackErrorReporter),
                 arguments,
                 detailedLogging);
@@ -89,7 +89,7 @@ public abstract class LoggingDestination extends AnchorBean<LoggingDestination> 
     /**
      * Creates a logger for this destination
      *
-     * @param outputManager the output-manager
+     * @param outputter the output-manager
      * @param fallbackErrorReporter where any errors are reported, when trying to create this log.
      * @param arguments experiment-arguments
      * @param detailedLogging whether detailed logging should occur in this reporter, or a less
@@ -97,7 +97,7 @@ public abstract class LoggingDestination extends AnchorBean<LoggingDestination> 
      * @return a newly created log-reporter
      */
     public abstract StatefulMessageLogger create(
-            BoundOutputManager outputManager,
+            OutputterChecked outputter,
             ErrorReporter fallbackErrorReporter,
             ExperimentExecutionArguments arguments,
             boolean detailedLogging);

@@ -47,8 +47,8 @@ import org.anchoranalysis.io.generator.text.StringGenerator;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
-import org.anchoranalysis.io.output.bound.BoundOutputManager;
-import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.io.output.bound.OutputterChecked;
+import org.anchoranalysis.io.output.bound.Outputter;
 import org.anchoranalysis.io.output.writer.WriterRouterErrors;
 import org.apache.commons.lang.time.StopWatch;
 
@@ -77,7 +77,7 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
     /**
      * Called <i>once</i> before all calls to {@link #executeJob}.
      *
-     * @param outputManager the output-manager for the experiment (not for an individual job)
+     * @param outputter the output-manager for the experiment (not for an individual job)
      * @param concurrencyPlan available numbers of processors that can call {@link #executeJob}
      * @param params the experiment-parameters
      * @return the shared-state that is passed to each call to {@link #executeJob} and to {@link
@@ -85,7 +85,7 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
      * @throws ExperimentExecutionException
      */
     public abstract S beforeAnyJobIsExecuted(
-            BoundOutputManagerRouteErrors outputManager,
+            Outputter outputter,
             ConcurrencyPlan concurrencyPlan,
             ParametersExperiment params)
             throws ExperimentExecutionException;
@@ -101,17 +101,17 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
         
         ManifestRecorder manifestTask = new ManifestRecorder();
 
-        // Bind an outputManager for the task
-        BoundOutputManager outputManagerTask =
-                HelperBindOutputManager.createOutputManagerForTask(
+        // Bind an outputter for the task
+        OutputterChecked outputterTask =
+                HelperBindOutputManager.createOutputterForTask(
                         paramsUnbound.getInputObject(),
                         Optional.of(manifestTask),
                         paramsUnbound.getParametersExperiment());
-        Preconditions.checkArgument(outputManagerTask.getOutputWriteSettings().hasBeenInit());
+        Preconditions.checkArgument(outputterTask.getSettings().hasBeenInit());
 
         // Create bound parameters
         InputBound<T, S> paramsBound =
-                bindOtherParams(paramsUnbound, outputManagerTask, manifestTask);
+                bindOtherParams(paramsUnbound, outputterTask, manifestTask);
         return executeJobLogExceptions(paramsBound, paramsUnbound.isSuppressExceptions());
     }
 
@@ -119,7 +119,7 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
      * Called <i>once</i> after all calls to {@link #executeJob}.
      *
      * @param sharedState the shared-state
-     * @param context IO-context for experiment (not for an invidual job)
+     * @param context IO-context for experiment (not for an individual job)
      * @throws ExperimentExecutionException
      */
     public abstract void afterAllJobsAreExecuted(S sharedState, BoundIOContext context)
@@ -149,25 +149,24 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
      * Creates other objects needed to have a fully bound set of parameters for the task
      *
      * @param paramsUnbound parameters before being bound for a specific task
-     * @param outputManagerTask a bound output manager for the task
+     * @param outputterTaskChecked a bound output manager for the task
      * @param manifestTask a bound manifest for the task
      * @return a complete ParametersBound object with all parameters set to objects bound for the
      *     specific task
      */
     private InputBound<T, S> bindOtherParams(
             ParametersUnbound<T, S> paramsUnbound,
-            BoundOutputManager outputManagerTask,
+            OutputterChecked outputterTaskChecked,
             ManifestRecorder manifestTask) {
 
         // We create a new log reporter for this job only
         StatefulMessageLogger loggerJob =
-                createJobLog(paramsUnbound.getParametersExperiment(), outputManagerTask);
+                createJobLog(paramsUnbound.getParametersExperiment(), outputterTaskChecked);
 
         ErrorReporter errorReporterJob = new ErrorReporterForTask(loggerJob);
 
         // We initialise the output manager
-        BoundOutputManagerRouteErrors outputManagerTaskRouteErrors =
-                new BoundOutputManagerRouteErrors(outputManagerTask, errorReporterJob);
+        Outputter outputterTask = new Outputter(outputterTaskChecked, errorReporterJob);
 
         // We create new parameters bound specifically to the job
         return new InputBound<>(
@@ -177,16 +176,16 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
                 paramsUnbound.getParametersExperiment().isDetailedLogging(),
                 new BoundContextSpecify(
                         paramsUnbound.getParametersExperiment().getExperimentArguments(),
-                        outputManagerTaskRouteErrors,
+                        outputterTask,
                         loggerJob,
                         errorReporterJob));
     }
 
     private StatefulMessageLogger createJobLog(
-            ParametersExperiment params, BoundOutputManager outputManagerTask) {
+            ParametersExperiment params, OutputterChecked outputterTask) {
         return params.getLoggerTaskCreator()
                 .createWithLogFallback(
-                        outputManagerTask,
+                        outputterTask,
                         params.getLoggerExperiment(),
                         params.getExperimentArguments(),
                         params.isDetailedLogging());
@@ -210,7 +209,7 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
                         .messageLogger()
                         .logFormatted(
                                 "Output Folder has path: \t%s",
-                                params.getOutputManager().getOutputFolderPath().toString());
+                                params.getOutputter().getOutputFolderPath().toString());
 
                 loggerJob.logFormatted(
                         "File processing started: %s", params.getInputObject().descriptiveName());
@@ -263,7 +262,7 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
             params.getInputObject().close(params.getLogger().errorReporter());
         }
 
-        WriterRouterErrors writeIfAllowed = params.getOutputManager().getWriterCheckIfAllowed();
+        WriterRouterErrors writeIfAllowed = params.getOutputter().writerSelective();
         writeIfAllowed.write(
                 OUTPUT_NAME_MANIFEST,
                 () ->

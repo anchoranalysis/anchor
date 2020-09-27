@@ -32,14 +32,14 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
-import org.anchoranalysis.io.output.bound.BoundOutputManager;
+import org.anchoranalysis.io.output.bound.OutputterChecked;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class ManifestClashChecker {
 
     public static void throwExceptionIfClashes(
             ManifestRecorder manifestExperiment,
-            BoundOutputManager boundOutput,
+            OutputterChecked boundOutput,
             Path pathForBinding)
             throws JobExecutionException {
         // Now we do a check, to ensure that our experimentalManifest and manifest are going to

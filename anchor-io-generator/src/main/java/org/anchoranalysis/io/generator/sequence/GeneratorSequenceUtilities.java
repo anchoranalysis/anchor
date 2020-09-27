@@ -35,7 +35,7 @@ import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.namestyle.IntegerSuffixOutputNameStyle;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
-import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.io.output.bound.Outputter;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -53,7 +53,7 @@ public class GeneratorSequenceUtilities {
         GeneratorSequenceIncrementalRerouteErrors<T> sequenceWriter =
                 new GeneratorSequenceIncrementalRerouteErrors<>(
                         new GeneratorSequenceIncrementalWriter<>(
-                                context.getOutputManager().getDelegate(),
+                                context.getOutputter().getChecked(),
                                 outputStyle.getOutputName(),
                                 outputStyle,
                                 generator,
@@ -76,7 +76,7 @@ public class GeneratorSequenceUtilities {
             int numDigits,
             Collection<T> items,
             SingleFileTypeGenerator<T, Stack> generator,
-            BoundOutputManagerRouteErrors outputManager)
+            Outputter outputter)
             throws OutputWriteFailedException {
 
         IndexableOutputNameStyle outputStyle =
@@ -84,7 +84,7 @@ public class GeneratorSequenceUtilities {
 
         GeneratorSequenceIncrementalWriter<T> sequenceWriter =
                 new GeneratorSequenceIncrementalWriter<>(
-                        outputManager.getDelegate(),
+                        outputter.getChecked(),
                         outputStyle.getOutputName(),
                         outputStyle,
                         generator,

@@ -33,7 +33,7 @@ import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.io.generator.text.TextFileOutput;
-import org.anchoranalysis.io.output.bound.BoundOutputManager;
+import org.anchoranalysis.io.output.bound.OutputterChecked;
 
 /**
  * Logs messages to a text-file.
@@ -67,18 +67,18 @@ public class TextFileMessageLogger implements StatefulMessageLogger {
 
     /**
      * Constructs a logger that (maybe) writes messages to a text-file, with a path based upon an
-     * <i>output name</i> applied to a {@link BoundOutputManager}.
+     * <i>output name</i> applied to a {@link OutputterChecked}.
      *
-     * <p>The message-log will only be outputted, if allowed by the {@link BoundOutputManager}.
+     * <p>The message-log will only be outputted, if allowed by the {@link OutputterChecked}.
      *
      * @param outputName output-name
-     * @param outputManager output-manager
+     * @param outputter output-manager
      * @param errorReporter error-reporter an error is outputted here if the log cannot be created,
      *     and no further logging occurs.
      */
     public TextFileMessageLogger(
-            String outputName, BoundOutputManager outputManager, ErrorReporter errorReporter) {
-        this.fileOutputSupplier = () -> TextFileLogHelper.createOutput(outputManager, outputName);
+            String outputName, OutputterChecked outputter, ErrorReporter errorReporter) {
+        this.fileOutputSupplier = () -> TextFileLogHelper.createOutput(outputter, outputName);
         this.errorReporter = errorReporter;
     }
 

@@ -34,7 +34,7 @@ import org.anchoranalysis.core.text.TypedValue;
 import org.anchoranalysis.feature.results.ResultsVector;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.generator.tabular.CSVWriter;
-import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.io.output.bound.Outputter;
 
 /**
  * Writes the results of feature-calculations as a CSV file.
@@ -51,21 +51,21 @@ public class FeatureCSVWriter {
      * Maybe creates a {@link FeatureCSVWriter} depending if the output is allowed.
      *
      * @param metadata metadata needed for writing the reeature-results
-     * @param outputManager determines if the output is allowed.
+     * @param outputter determines if the output is allowed.
      * @return a write, if it is allowed.
      * @throws AnchorIOException if I/O fails.
      */
     public static Optional<FeatureCSVWriter> create(
-            FeatureCSVMetadata metadata, BoundOutputManagerRouteErrors outputManager)
+            FeatureCSVMetadata metadata, Outputter outputter)
             throws AnchorIOException {
 
-        if (!outputManager.outputsEnabled().isOutputAllowed(metadata.getOutputName())) {
+        if (!outputter.outputsEnabled().isOutputAllowed(metadata.getOutputName())) {
             return Optional.of(new FeatureCSVWriter(null));
         }
 
         Optional<CSVWriter> writerOptional =
-                CSVWriter.createFromOutputManager(
-                        metadata.getOutputName(), outputManager.getDelegate());
+                CSVWriter.createFromOutputter(
+                        metadata.getOutputName(), outputter.getChecked());
         return writerOptional.map(
                 writer -> {
                     writer.writeHeaders(metadata.getHeaders());

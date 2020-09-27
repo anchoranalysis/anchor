@@ -39,28 +39,33 @@ import org.anchoranalysis.io.manifest.folder.FolderWritePhysical;
 import org.anchoranalysis.io.manifest.operationrecorder.WriteOperationRecorder;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.bean.rules.OutputEnabledRules;
-import org.anchoranalysis.io.output.writer.RecordedOutputs;
 import org.anchoranalysis.io.output.writer.WriterRouterErrors;
 
+/**
+ * Like {@link OutputterChecked} but exceptions are reported in a {@link ErrorReporter}.
+ * 
+ * @author Owen Feehan
+ *
+ */
 @RequiredArgsConstructor
-public class BoundOutputManagerRouteErrors {
+public class Outputter {
 
-    @Getter private final BoundOutputManager delegate;
+    private final OutputterChecked delegate;
 
     @Getter private final ErrorReporter errorReporter;
 
     /**
-     * Creates a new outputManager by appending a relative folder-path to the current {@link
-     * BoundOutputManagerRouteErrors}
+     * Creates a new ink BoundOutputter} by appending a relative folder-path to the current {@link
+     * Outputter}
      *
-     * @see BoundOutputManager#deriveSubdirectory
+     * @see OutputterChecked#deriveSubdirectory
      * @param subdirectoryName the subdirectory-name
      * @param manifestDescription manifest-description
      * @return the new output manager
      */
-    public BoundOutputManagerRouteErrors deriveSubdirectory(
+    public Outputter deriveSubdirectory(
             String subdirectoryName, ManifestFolderDescription manifestDescription) {
-        return new BoundOutputManagerRouteErrors(
+        return new Outputter(
                 delegate.deriveSubdirectory(
                         subdirectoryName,
                         manifestDescription,
@@ -72,12 +77,36 @@ public class BoundOutputManagerRouteErrors {
         delegate.addOperationRecorder(toAdd);
     }
 
-    public WriterRouterErrors getWriterAlwaysAllowed() {
-        return new WriterRouterErrors(delegate.getWriters().alwaysAllowed(), errorReporter);
+    /**
+     * The writer that allows all outputs.
+     * 
+     * @return the permissive writer 
+     */
+    public WriterRouterErrors writerPermissive() {
+        return new WriterRouterErrors(delegate.getWriters().permissive(), errorReporter);
     }
 
-    public WriterRouterErrors getWriterCheckIfAllowed() {
-        return new WriterRouterErrors(delegate.getWriters().checkIfAllowed(), errorReporter);
+    /**
+     * The writer that allows only certain selected outputs.
+     * 
+     * @return the non-permissive writer
+     */
+    public WriterRouterErrors writerSelective() {
+        return new WriterRouterErrors(delegate.getWriters().selective(), errorReporter);
+    }
+    
+    /**
+     * Multiplexes between the {@code selective} and {@code permissive} writers based on a flag.
+     * 
+     * @param selectSelective if true, {@link #writerSelective} is returned, otherwise {@link #writerPermissive}.
+     * @return the chosen writer
+     */
+    public WriterRouterErrors writerMultiplex(boolean selectSelective) {
+        if (selectSelective) {
+            return writerSelective();
+        } else {
+            return writerPermissive();
+        }
     }
 
     @Override
@@ -90,8 +119,8 @@ public class BoundOutputManagerRouteErrors {
         return delegate.hashCode();
     }
 
-    public OutputWriteSettings getOutputWriteSettings() {
-        return delegate.getOutputWriteSettings();
+    public OutputWriteSettings getSettings() {
+        return delegate.getSettings();
     }
 
     public Path getOutputFolderPath() {
@@ -106,19 +135,24 @@ public class BoundOutputManagerRouteErrors {
         return delegate.toString();
     }
 
-    public RecordedOutputs recordedOutputs() {
-        return delegate.recordedOutputs();
-    }
-
     public OutputEnabledRules outputsEnabled() {
         return delegate.getOutputsEnabled();
     }
 
-    public BoundOutputManager deriveFromInput(NamedPath path, String experimentIdentifier,
+    public OutputterChecked deriveFromInput(NamedPath path, String experimentIdentifier,
             Optional<ManifestRecorder> manifestRecorder,
             Optional<ManifestRecorder> experimentalManifestRecorder,
             FilePathPrefixerParams prefixerParams) throws BindFailedException {
         return delegate.deriveFromInput(path, experimentIdentifier, manifestRecorder,
                 experimentalManifestRecorder, prefixerParams);
+    }
+
+    /**
+     * Gets the underlying delegate of {@link Outputter} that throws checked-exceptions instead of using a {@link ErrorReporter}.
+     * 
+     * @return the checked-ouputter
+     */
+    public OutputterChecked getChecked() {
+        return delegate;
     }
 }

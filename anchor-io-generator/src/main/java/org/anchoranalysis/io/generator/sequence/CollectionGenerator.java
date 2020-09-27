@@ -34,7 +34,7 @@ import org.anchoranalysis.io.manifest.file.FileType;
 import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.namestyle.OutputNameStyle;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
-import org.anchoranalysis.io.output.bound.BoundOutputManager;
+import org.anchoranalysis.io.output.bound.OutputterChecked;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -52,25 +52,25 @@ public class CollectionGenerator<T> implements Generator<Collection<T>> {
     // START REQUIRED ARGUMENTS
     private final String subfolderName;
     private final Generator<T> generator;
-    private final BoundOutputManager outputManager;
-    private final int numDigits;
-    private final boolean checkIfAllowed;
+    private final OutputterChecked outputter;
+    private final int numberDigits;
+    private final boolean selective;
     // END REQUIRED ARGUMENTS
     
     private Collection<T> collection;
 
     @Override
-    public void write(OutputNameStyle outputNameStyle, BoundOutputManager outputManager)
+    public void write(OutputNameStyle outputNameStyle, OutputterChecked outputter)
             throws OutputWriteFailedException {
 
-        writeCollection(subfolderName, outputNameStyle.deriveIndexableStyle(numDigits), 0);
+        writeCollection(subfolderName, outputNameStyle.deriveIndexableStyle(numberDigits), 0);
     }
 
     @Override
     public int write(
             IndexableOutputNameStyle outputNameStyle,
             String index,
-            BoundOutputManager outputManager)
+            OutputterChecked outputter)
             throws OutputWriteFailedException {
 
         // In this context, we take the index as an indication of the first id to use - and assume
@@ -88,12 +88,12 @@ public class CollectionGenerator<T> implements Generator<Collection<T>> {
         // We start with id with 0
         GeneratorSequenceIncrementalWriter<T> sequenceWriter =
                 new GeneratorSequenceIncrementalWriter<>(
-                        outputManager,
+                        outputter,
                         subfolderName,
                         outputNameStyle,
                         generator,
                         startIndex,
-                        checkIfAllowed);
+                        selective);
 
         int numWritten = 0;
 

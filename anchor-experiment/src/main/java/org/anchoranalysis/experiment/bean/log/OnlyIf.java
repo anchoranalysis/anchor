@@ -33,7 +33,7 @@ import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.experiment.ExperimentExecutionArguments;
 import org.anchoranalysis.experiment.bean.require.RequireArguments;
 import org.anchoranalysis.experiment.log.StatefulMessageLogger;
-import org.anchoranalysis.io.output.bound.BoundOutputManager;
+import org.anchoranalysis.io.output.bound.OutputterChecked;
 
 /**
  * Logs messages to a particular location ONLY if certain conditions are fulfilled.
@@ -52,12 +52,12 @@ public class OnlyIf extends LoggingDestination {
 
     @Override
     public StatefulMessageLogger create(
-            BoundOutputManager outputManager,
+            OutputterChecked outputter,
             ErrorReporter errorReporter,
             ExperimentExecutionArguments arguments,
             boolean detailedLogging) {
         if (requireArguments.hasAllRequiredArguments(arguments.isDebugModeEnabled())) {
-            return log.create(outputManager, errorReporter, arguments, detailedLogging);
+            return log.create(outputter, errorReporter, arguments, detailedLogging);
         } else {
             return new StatefulNullMessageLogger();
         }

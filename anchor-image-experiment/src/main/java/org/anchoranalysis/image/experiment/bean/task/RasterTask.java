@@ -35,7 +35,7 @@ import org.anchoranalysis.experiment.task.NoSharedState;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.input.NamedChannelsInput;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
-import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.io.output.bound.Outputter;
 
 /**
  * An experiment that primarily takes a raster image as an input
@@ -51,18 +51,18 @@ public abstract class RasterTask extends TaskWithoutSharedState<NamedChannelsInp
             throws JobExecutionException {
 
         NamedChannelsInput inputObject = params.getInputObject();
-        BoundOutputManagerRouteErrors outputManager = params.getOutputManager();
+        Outputter outputter = params.getOutputter();
 
         try {
             int numSeries = inputObject.numberSeries();
 
-            startSeries(outputManager, params.getLogger().errorReporter());
+            startSeries(outputter, params.getLogger().errorReporter());
 
             for (int s = 0; s < numSeries; s++) {
                 doStack(inputObject, s, numSeries, params.context());
             }
 
-            endSeries(outputManager);
+            endSeries(outputter);
 
         } catch (RasterIOException e) {
             throw new JobExecutionException(e);
@@ -70,7 +70,7 @@ public abstract class RasterTask extends TaskWithoutSharedState<NamedChannelsInp
     }
 
     public abstract void startSeries(
-            BoundOutputManagerRouteErrors outputManager, ErrorReporter errorReporter)
+            Outputter outputter, ErrorReporter errorReporter)
             throws JobExecutionException;
 
     /**
@@ -86,7 +86,7 @@ public abstract class RasterTask extends TaskWithoutSharedState<NamedChannelsInp
             NamedChannelsInput inputObject, int seriesIndex, int numSeries, BoundIOContext context)
             throws JobExecutionException;
 
-    public abstract void endSeries(BoundOutputManagerRouteErrors outputManager)
+    public abstract void endSeries(Outputter outputter)
             throws JobExecutionException;
 
     @Override

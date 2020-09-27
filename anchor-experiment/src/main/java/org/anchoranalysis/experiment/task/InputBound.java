@@ -32,7 +32,7 @@ import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.experiment.log.StatefulMessageLogger;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
-import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.io.output.bound.Outputter;
 
 /**
  * Input for executing a task, associated with shared-state and other parameters.
@@ -63,8 +63,8 @@ public class InputBound<T, S> {
         return context;
     }
 
-    public BoundOutputManagerRouteErrors getOutputManager() {
-        return context.getOutputManager();
+    public Outputter getOutputter() {
+        return context.getOutputter();
     }
 
     public Logger getLogger() {

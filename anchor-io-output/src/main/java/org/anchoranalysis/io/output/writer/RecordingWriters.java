@@ -1,6 +1,7 @@
 package org.anchoranalysis.io.output.writer;
 
-import org.anchoranalysis.io.output.bound.BoundOutputManager;
+import java.util.Optional;
+import org.anchoranalysis.io.output.bound.OutputterChecked;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 
@@ -19,31 +20,49 @@ import lombok.experimental.Accessors;
 public class RecordingWriters {
 
     /** A writer that allows all output-names */
-    @Getter private final Writer alwaysAllowed;
+    @Getter private final Writer permissive;
 
-    /** A writer that checks if output-names are allowed. */
-    @Getter private final Writer checkIfAllowed;
+    /** A writer that allows only certain selected output-names */
+    @Getter private final Writer selective;
     
-    /** All output-names that are passed as arguments to both writers are recorded here. */
-    @Getter private final RecordedOutputs recordedOutputs;
+    /** Id defined, all output-names that are passed as arguments to both writers are recorded here. */
+    @Getter private final Optional<RecordedOutputs> recordedOutputs;
     
     /**
      * Creates the two writers.
      * 
-     * @param outputManager the output-manager with which the writers are associated.
+     * @param outputter the output-manager with which the writers are associated.
      * @param preop an operation executed before creation of every directory.
      * @param recordedOutputs all output-names that are passed as arguments to both writers are recorded here.
      */
-    public RecordingWriters(BoundOutputManager outputManager, WriterExecuteBeforeEveryOperation preop, RecordedOutputs recordedOutputs) {
+    public RecordingWriters(OutputterChecked outputter, WriterExecuteBeforeEveryOperation preop, Optional<RecordedOutputs> recordedOutputs) {
         this.recordedOutputs = recordedOutputs;
-        this.alwaysAllowed = record(new AlwaysAllowed(outputManager, preop));
-        this.checkIfAllowed = record(new CheckIfAllowed(outputManager.getOutputsEnabled(), preop, alwaysAllowed));
+        this.permissive = record(new AlwaysAllowed(outputter, preop));
+        this.selective = record(new CheckIfAllowed(outputter.getOutputsEnabled(), preop, permissive));
+    }
+    
+    /**
+     * Multiplexes between the {@code selective} and {@code permissive} writers based on a flag.
+     * 
+     * @param selectSelective if true, {@code selective} is returned, otherwise {@code permissive}.
+     * @return the chosen writer
+     */
+    public Writer multiplex(boolean selectSelective) {
+        if (selectSelective) {
+            return selective;
+        } else {
+            return permissive;
+        }
     }
     
     private Writer record( Writer writer ) {
         // Indexable outputs are ignored, as it is assumed that the outputName
         // used for the containing directory is the relevant identifier to
         // show the user
-        return new RecordOutputNames(writer, recordedOutputs, false);
+        if (recordedOutputs.isPresent()) {
+            return new RecordOutputNames(writer, recordedOutputs.get(), false);
+        } else {
+            return writer;
+        }
     }
 }

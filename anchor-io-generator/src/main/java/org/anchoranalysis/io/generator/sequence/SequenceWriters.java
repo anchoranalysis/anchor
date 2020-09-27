@@ -35,11 +35,10 @@ import org.anchoranalysis.io.manifest.file.FileType;
 import org.anchoranalysis.io.manifest.folder.FolderWriteIndexableOutputName;
 import org.anchoranalysis.io.manifest.sequencetype.SequenceType;
 import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
-import org.anchoranalysis.io.output.bound.BoundOutputManager;
+import org.anchoranalysis.io.output.bound.OutputterChecked;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.writer.GenerateWritableItem;
 import org.anchoranalysis.io.output.writer.RecordingWriters;
-import org.anchoranalysis.io.output.writer.Writer;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -56,7 +55,7 @@ class SequenceWriters {
     private final Optional<String> subfolderName;
     private final IndexableOutputNameStyle outputNameStyle;
     private final ManifestDescription folderManifestDescription;
-    private final boolean checkIfAllowed;
+    private final boolean selectSelective;
     // END: REQUIRED ARGUMENTS
 
     private Optional<RecordingWriters> writers = Optional.empty();
@@ -93,17 +92,10 @@ class SequenceWriters {
             return;
         }
 
-        if (checkIfAllowed) {
-            this.writers // NOSONAR
-                    .get()
-                    .checkIfAllowed()
-                    .write(outputNameStyle, generator, index);
-        } else {
-            this.writers // NOSONAR
-                    .get()
-                    .alwaysAllowed()
-                    .write(outputNameStyle, generator, index);
-        }
+        this.writers 
+            .get()  // NOSONAR
+            .multiplex(selectSelective)
+            .write(outputNameStyle, generator, index);
     }
 
     public Optional<RecordingWriters> writers() {
@@ -166,12 +158,8 @@ class SequenceWriters {
             FolderWriteIndexableOutputName subFolderWrite)
             throws OutputWriteFailedException {
         if (subfolderName.isPresent()) {
-            Writer writer =
-                    checkIfAllowed
-                            ? parentWriters.checkIfAllowed()
-                            : parentWriters.alwaysAllowed();
-            return writer.createSubdirectory(
-                    subfolderName.get(), folderDescription, Optional.of(subFolderWrite)).map(BoundOutputManager::getWriters);            
+            return parentWriters.multiplex(selectSelective).createSubdirectory(
+                    subfolderName.get(), folderDescription, Optional.of(subFolderWrite)).map(OutputterChecked::getWriters);            
         } else {
             return Optional.of(parentWriters);
         }

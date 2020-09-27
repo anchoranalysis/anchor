@@ -32,7 +32,7 @@ import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.manifest.ManifestFolderDescription;
 import org.anchoranalysis.io.manifest.folder.FolderWriteWithPath;
 import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
-import org.anchoranalysis.io.output.bound.BoundOutputManager;
+import org.anchoranalysis.io.output.bound.OutputterChecked;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 /**
@@ -58,7 +58,7 @@ public interface Writer {
      * @return an output-manager for the directory if it is allowed, otherwise {@link Optional#empty}.
      * @throws OutputWriteFailedException
      */
-    Optional<BoundOutputManager> createSubdirectory(
+    Optional<OutputterChecked> createSubdirectory(
             String outputName,
             ManifestFolderDescription manifestDescription,
             Optional<FolderWriteWithPath> manifestFolder)

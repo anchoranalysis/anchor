@@ -54,15 +54,15 @@ public class OutputFeatureTable extends ImageBean<OutputFeatureTable> {
     public void output(BoundIOContext context) throws IOException {
 
         // Early exit if we're not allowed output anything anyway
-        if (!context.getOutputManager().outputsEnabled().isOutputAllowed(OUTPUT_NAME_OBJECTS_FEATURE_LIST)) {
+        if (!context.getOutputter().outputsEnabled().isOutputAllowed(OUTPUT_NAME_OBJECTS_FEATURE_LIST)) {
             return;
         }
 
         try {
             ObjectCollection objectCollection = objects.create();
 
-            context.getOutputManager()
-                    .getWriterCheckIfAllowed()
+            context.getOutputter()
+                    .writerSelective()
                     .write(
                             OUTPUT_NAME_OBJECTS_FEATURE_LIST,
                             () -> createGenerator(objectCollection, context.getLogger()));

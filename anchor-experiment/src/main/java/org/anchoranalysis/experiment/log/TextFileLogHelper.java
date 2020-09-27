@@ -30,15 +30,15 @@ import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.io.generator.text.TextFileOutput;
-import org.anchoranalysis.io.generator.text.TextFileOutputFromManager;
+import org.anchoranalysis.io.generator.text.TextFileOutputter;
 import org.anchoranalysis.io.manifest.ManifestDescription;
-import org.anchoranalysis.io.output.bound.BoundOutputManager;
+import org.anchoranalysis.io.output.bound.OutputterChecked;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class TextFileLogHelper {
 
-    public static Optional<TextFileOutput> createOutput(BoundOutputManager bom, String outputName) {
-        return TextFileOutputFromManager.create(
+    public static Optional<TextFileOutput> createOutput(OutputterChecked bom, String outputName) {
+        return TextFileOutputter.create(
                 "txt",
                 Optional.of(new ManifestDescription("textlog", "messageLog")),
                 bom,

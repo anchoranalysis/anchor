@@ -1,14 +1,11 @@
 package org.anchoranalysis.io.output.bound;
 
-import java.util.Optional;
-import org.anchoranalysis.io.bean.filepath.prefixer.FilePathPrefixer;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
-import org.anchoranalysis.io.output.writer.RecordedOutputs;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
 
 /**
- * Some variables shared among {@link BoundOutputManager} across successive subdirectories.
+ * Some variables shared among {@link OutputterChecked} across successive subdirectories.
  * 
  * @author Owen Feehan
  *
@@ -17,13 +14,7 @@ import lombok.Value;
 public class BoundOutputContext {
     
     // START REQUIRED ARGUMENTS
-    /** The prefixer associated with this context. */
-    private Optional<FilePathPrefixer> prefixer;
-    
     /** General settings for how to perform outputting. */
     private OutputWriteSettings settings;
     // END REQUIRED ARGUMENTS
-    
-    /** A single recorded of outputs is shared across all {@link BoundOutputManager} that use this context. */
-    private RecordedOutputs recordedOutputs = new RecordedOutputs();
 }

@@ -32,7 +32,7 @@ import org.anchoranalysis.experiment.task.NoSharedState;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
-import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.io.output.bound.Outputter;
 
 /**
  * A particular type of task that doesn't share-state between running jobs
@@ -54,7 +54,7 @@ public abstract class TaskWithoutSharedState<T extends InputFromManager>
 
     @Override
     public final NoSharedState beforeAnyJobIsExecuted(
-            BoundOutputManagerRouteErrors outputManager,
+            Outputter outputter,
             ConcurrencyPlan concurrencyPlan,
             ParametersExperiment params)
             throws ExperimentExecutionException {

@@ -35,7 +35,7 @@ import org.anchoranalysis.io.generator.sequence.GeneratorSequenceNonIncremental;
 import org.anchoranalysis.io.manifest.sequencetype.IncrementalSequenceType;
 import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.namestyle.IntegerSuffixOutputNameStyle;
-import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.io.output.bound.Outputter;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
 import org.anchoranalysis.mpp.segment.optimization.feedback.FeedbackBeginParameters;
@@ -54,7 +54,7 @@ public abstract class PeriodicSubfolderReporter<T>
 
     private GeneratorSequenceNonIncremental<T> sequenceWriter;
 
-    private BoundOutputManagerRouteErrors parentOutputManager;
+    private Outputter parentOutputter;
 
     /** Handles period-receiver updates */
     private class AddToWriter implements PeriodReceiver<VoxelizedMarksWithEnergy> {
@@ -106,7 +106,7 @@ public abstract class PeriodicSubfolderReporter<T>
         IndexableOutputNameStyle outputStyle = generateOutputNameStyle();
         this.sequenceWriter =
                 new GeneratorSequenceNonIncremental<>(
-                        getParentOutputManager().getDelegate(),
+                        getParentOutputter().getChecked(),
                         Optional.of(outputStyle.getOutputName()),
                         outputStyle,
                         generator,
@@ -121,10 +121,10 @@ public abstract class PeriodicSubfolderReporter<T>
     public void reportBegin(FeedbackBeginParameters<VoxelizedMarksWithEnergy> optInit)
             throws ReporterException {
 
-        this.parentOutputManager = optInit.getInitContext().getOutputManager();
+        this.parentOutputter = optInit.getInitContext().getOutputter();
 
         // Let's only do this if the output is allowed
-        if (!getParentOutputManager().outputsEnabled().isOutputAllowed(outputName)) {
+        if (!getParentOutputter().outputsEnabled().isOutputAllowed(outputName)) {
             return;
         }
 
@@ -134,8 +134,8 @@ public abstract class PeriodicSubfolderReporter<T>
     protected abstract Optional<T> generateIterableElement(
             Reporting<VoxelizedMarksWithEnergy> reporting) throws ReporterException;
 
-    protected BoundOutputManagerRouteErrors getParentOutputManager() {
-        return parentOutputManager;
+    protected Outputter getParentOutputter() {
+        return parentOutputter;
     }
 
     @Override

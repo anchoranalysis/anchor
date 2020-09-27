@@ -30,7 +30,7 @@ import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.experiment.ExperimentExecutionArguments;
 import org.anchoranalysis.experiment.log.FailureOnlyMessageLogger;
 import org.anchoranalysis.experiment.log.StatefulMessageLogger;
-import org.anchoranalysis.io.output.bound.BoundOutputManager;
+import org.anchoranalysis.io.output.bound.OutputterChecked;
 
 /**
  * Logs to a text file like with {@link org.anchoranalysis.experiment.bean.log.ToTextFile} but the
@@ -47,10 +47,10 @@ public class ToTextFileOnlyIfFailure extends ToTextFileBase {
 
     @Override
     public StatefulMessageLogger create(
-            BoundOutputManager outputManager,
+            OutputterChecked outputter,
             ErrorReporter errorReporter,
             ExperimentExecutionArguments arguments,
             boolean detailedLogging) {
-        return new FailureOnlyMessageLogger(getOutputName(), outputManager, errorReporter);
+        return new FailureOnlyMessageLogger(getOutputName(), outputter, errorReporter);
     }
 }

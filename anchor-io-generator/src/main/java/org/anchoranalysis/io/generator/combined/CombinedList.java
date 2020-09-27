@@ -34,7 +34,7 @@ import org.anchoranalysis.io.manifest.file.FileType;
 import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.namestyle.OutputNameStyle;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
-import org.anchoranalysis.io.output.bound.BoundOutputManager;
+import org.anchoranalysis.io.output.bound.OutputterChecked;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 class CombinedList {
@@ -62,30 +62,30 @@ class CombinedList {
         }
     }
 
-    public void write(OutputNameStyle outputNameStyle, BoundOutputManager outputManager)
+    public void write(OutputNameStyle outputNameStyle, OutputterChecked outputter)
             throws OutputWriteFailedException {
 
-        for (OptionalNameValue<Generator<?>> ni : list) {
-            ni.getName().ifPresent(outputNameStyle::setOutputName);
-            ni.getValue().write(outputNameStyle, outputManager);
+        for (OptionalNameValue<Generator<?>> namedGenerator : list) {
+            namedGenerator.getName().ifPresent(outputNameStyle::setOutputName);
+            namedGenerator.getValue().write(outputNameStyle, outputter);
         }
     }
 
     public int write(
             IndexableOutputNameStyle outputNameStyle,
             String index,
-            BoundOutputManager outputManager)
+            OutputterChecked outputter)
             throws OutputWriteFailedException {
 
         int maxWritten = -1;
-        for (OptionalNameValue<Generator<?>> ni : list) {
+        for (OptionalNameValue<Generator<?>> namedGenerator : list) {
 
-            if (ni.getName().isPresent()) {
+            if (namedGenerator.getName().isPresent()) {
                 outputNameStyle = outputNameStyle.duplicate();
-                outputNameStyle.setOutputName(ni.getName().get());  // NOSONAR
+                outputNameStyle.setOutputName(namedGenerator.getName().get());  // NOSONAR
             }
 
-            int numWritten = ni.getValue().write(outputNameStyle, index, outputManager);
+            int numWritten = namedGenerator.getValue().write(outputNameStyle, index, outputter);
             maxWritten = Math.max(maxWritten, numWritten);
         }
 

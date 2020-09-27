@@ -10,7 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * A particular directory that is used as a binding-path by {@link org.anchoranalysis.io.output.bound.BoundOutputManager}.
+ * A particular directory that is used as a binding-path by {@link org.anchoranalysis.io.output.bound.OutputterChecked}.
  * 
  * @author Owen Feehan
  *
@@ -30,10 +30,10 @@ public class BoundDirectory {
      * Creates for a particular directory.
      * 
      * @param directoryPath the path to the directory
-     * @param deleteExistingFolder if true, any existing directory at the intended path for creation, is first deleted. If false, an exception is thrown in this circumstance.
+     * @param deleteExistingDirectory if true, any existing directory at the intended path for creation, is first deleted. If false, an exception is thrown in this circumstance.
      */
-    public BoundDirectory(Path directoryPath, boolean deleteExistingFolder) {
-        this.directoryCreator = new LazyDirectoryCreatorPool(directoryPath, deleteExistingFolder);
+    public BoundDirectory(Path directoryPath, boolean deleteExistingDirectory) {
+        this.directoryCreator = new LazyDirectoryCreatorPool(directoryPath, deleteExistingDirectory);
         this.parentDirectoryCreator = Optional.empty();
     }
     

@@ -31,7 +31,7 @@ import org.anchoranalysis.feature.io.csv.FeatureListCSVGeneratorHorizontal;
 import org.anchoranalysis.feature.io.name.MultiName;
 import org.anchoranalysis.feature.name.FeatureNameList;
 import org.anchoranalysis.feature.results.ResultsVectorList;
-import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.io.output.bound.Outputter;
 import org.anchoranalysis.io.output.bound.CacheSubdirectoryContext;
 
 /**
@@ -51,15 +51,15 @@ class WriteCSVForGroup {
     public void write(Optional<MultiName> groupName, ResultsVectorList results) {
         if (groupName.isPresent()) {
             writeGroupFeatures(
-                    context.get(groupName.map(MultiName::toString)).getOutputManager(), results);
+                    context.get(groupName.map(MultiName::toString)).getOutputter(), results);
         }
     }
 
     /** Writes a table of features in CSV for a particular group */
     private void writeGroupFeatures(
-            BoundOutputManagerRouteErrors outputManager, ResultsVectorList results) {
-        outputManager
-                .getWriterCheckIfAllowed()
+            Outputter outputter, ResultsVectorList results) {
+        outputter
+                .writerSelective()
                 .write(
                         outputName,
                         () ->

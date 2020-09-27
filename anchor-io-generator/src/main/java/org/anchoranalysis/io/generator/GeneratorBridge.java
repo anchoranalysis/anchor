@@ -38,7 +38,7 @@ import org.anchoranalysis.io.manifest.file.FileType;
 import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.namestyle.OutputNameStyle;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
-import org.anchoranalysis.io.output.bound.BoundOutputManager;
+import org.anchoranalysis.io.output.bound.OutputterChecked;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 /**
@@ -122,18 +122,18 @@ public class GeneratorBridge<S, T> implements Generator<S> {
     }
 
     @Override
-    public void write(OutputNameStyle outputNameStyle, BoundOutputManager outputManager)
+    public void write(OutputNameStyle outputNameStyle, OutputterChecked outputter)
             throws OutputWriteFailedException {
-        generator.write(outputNameStyle, outputManager);
+        generator.write(outputNameStyle, outputter);
     }
 
     @Override
     public int write(
             IndexableOutputNameStyle outputNameStyle,
             String index,
-            BoundOutputManager outputManager)
+            OutputterChecked outputter)
             throws OutputWriteFailedException {
-        return generator.write(outputNameStyle, index, outputManager);
+        return generator.write(outputNameStyle, index, outputter);
     }
 
     @Override

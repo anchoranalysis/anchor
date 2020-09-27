@@ -31,7 +31,7 @@ import lombok.Getter;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
-import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.io.output.bound.Outputter;
 import org.anchoranalysis.mpp.bean.mark.MarkWithIdentifierFactory;
 import org.anchoranalysis.mpp.feature.energy.scheme.EnergySchemeWithSharedFeatures;
 import org.anchoranalysis.mpp.proposer.error.ErrorNodeNull;
@@ -73,8 +73,8 @@ public class OptimizationContext {
         return context.getLogger();
     }
 
-    public BoundOutputManagerRouteErrors getOutputManager() {
-        return context.getOutputManager();
+    public Outputter getOutputter() {
+        return context.getOutputter();
     }
 
     public boolean isDebugEnabled() {

@@ -65,7 +65,7 @@ public class NamedChannelsForSeriesMap implements NamedChannelsForSeries {
         return openedRaster.dimensionsForSeries(seriesNum);
     }
 
-    // The outputManager is in case we want to do any debugging
+    // The outputter is in case we want to do any debugging
     @Override
     public Channel getChannel(String channelName, int timeIndex, ProgressReporter progressReporter)
             throws GetOperationFailedException {
@@ -94,7 +94,7 @@ public class NamedChannelsForSeriesMap implements NamedChannelsForSeries {
         }
     }
 
-    // The outputManager is in case we want to do any debugging
+    // The outputter is in case we want to do any debugging
     @Override
     public Optional<Channel> getChannelOptional(
             String channelName, int t, ProgressReporter progressReporter)

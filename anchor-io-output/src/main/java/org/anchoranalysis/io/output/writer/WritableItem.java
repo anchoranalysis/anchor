@@ -28,7 +28,7 @@ package org.anchoranalysis.io.output.writer;
 
 import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.namestyle.OutputNameStyle;
-import org.anchoranalysis.io.output.bound.BoundOutputManager;
+import org.anchoranalysis.io.output.bound.OutputterChecked;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 /**
@@ -43,10 +43,10 @@ public interface WritableItem {
      * items)
      *
      * @param outputNameStyle
-     * @param outputManager
+     * @param outputter
      * @throws OutputWriteFailedException
      */
-    public abstract void write(OutputNameStyle outputNameStyle, BoundOutputManager outputManager)
+    public abstract void write(OutputNameStyle outputNameStyle, OutputterChecked outputter)
             throws OutputWriteFailedException;
 
     /**
@@ -54,13 +54,13 @@ public interface WritableItem {
      *
      * @param outputNameStyle
      * @param index
-     * @param outputManager
+     * @param outputter
      * @return
      * @throws OutputWriteFailedException
      */
     public abstract int write(
             IndexableOutputNameStyle outputNameStyle,
             String index,
-            BoundOutputManager outputManager)
+            OutputterChecked outputter)
             throws OutputWriteFailedException;
 }

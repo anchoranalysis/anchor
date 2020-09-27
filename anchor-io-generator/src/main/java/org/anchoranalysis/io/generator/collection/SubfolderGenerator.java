@@ -37,7 +37,7 @@ import org.anchoranalysis.io.manifest.file.FileType;
 import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.namestyle.OutputNameStyle;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
-import org.anchoranalysis.io.output.bound.BoundOutputManager;
+import org.anchoranalysis.io.output.bound.OutputterChecked;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 /**
@@ -56,25 +56,25 @@ public class SubfolderGenerator<T, S extends Collection<T>> implements Generator
     private S element;
 
     @Override
-    public void write(OutputNameStyle outputNameStyle, BoundOutputManager outputManager)
+    public void write(OutputNameStyle outputNameStyle, OutputterChecked outputter)
             throws OutputWriteFailedException {
 
         String filePhysicalName = outputNameStyle.getPhysicalName();
         GeneratorSubfolderWriter.writeSubfolder(
-                outputManager, filePhysicalName, collectionOutputName, generator, element, false);
+                outputter, filePhysicalName, collectionOutputName, generator, element, false);
     }
 
     @Override
     public int write(
             IndexableOutputNameStyle outputNameStyle,
             String index,
-            BoundOutputManager outputManager)
+            OutputterChecked outputter)
             throws OutputWriteFailedException {
 
         String filePhysicalName = outputNameStyle.getPhysicalName(index);
 
         GeneratorSubfolderWriter.writeSubfolder(
-                outputManager, filePhysicalName, collectionOutputName, generator, element, false);
+                outputter, filePhysicalName, collectionOutputName, generator, element, false);
         return 1;
     }
 

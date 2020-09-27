@@ -33,24 +33,24 @@ import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.experiment.ExperimentExecutionArguments;
 import org.anchoranalysis.experiment.log.StatefulMessageLogger;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
-import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.io.output.bound.Outputter;
 
 public class BoundContextSpecify implements BoundIOContext {
 
     private ExperimentExecutionArguments experimentArguments;
-    private BoundOutputManagerRouteErrors outputManager;
+    private Outputter outputter;
 
     private StatefulMessageLogger messageLogger;
     private Logger logger; // Always related to the above two fields
 
     public BoundContextSpecify(
             ExperimentExecutionArguments experimentArguments,
-            BoundOutputManagerRouteErrors outputManager,
+            Outputter outputter,
             StatefulMessageLogger logger,
             ErrorReporter errorReporter) {
         super();
         this.experimentArguments = experimentArguments;
-        this.outputManager = outputManager;
+        this.outputter = outputter;
 
         this.messageLogger = logger;
         this.logger = new Logger(logger, errorReporter);
@@ -67,8 +67,8 @@ public class BoundContextSpecify implements BoundIOContext {
     }
 
     @Override
-    public BoundOutputManagerRouteErrors getOutputManager() {
-        return outputManager;
+    public Outputter getOutputter() {
+        return outputter;
     }
 
     @Override

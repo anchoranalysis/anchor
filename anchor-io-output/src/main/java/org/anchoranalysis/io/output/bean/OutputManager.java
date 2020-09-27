@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.io.output.bean;
 
+import java.util.Optional;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.bean.filepath.prefixer.FilePathPrefixer;
@@ -36,7 +37,8 @@ import org.anchoranalysis.io.manifest.ManifestRecorder;
 import org.anchoranalysis.io.output.bean.rules.OutputEnabledRules;
 import org.anchoranalysis.io.output.bean.rules.Permissive;
 import org.anchoranalysis.io.output.bound.BindFailedException;
-import org.anchoranalysis.io.output.bound.BoundOutputManager;
+import org.anchoranalysis.io.output.bound.OutputterChecked;
+import org.anchoranalysis.io.output.writer.RecordedOutputs;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -64,9 +66,10 @@ public class OutputManager extends AnchorBean<OutputManager> {
     private OutputEnabledRules outputsEnabled = new Permissive();
     // END BEAN PROPERTIES
 
-    public BoundOutputManager bindRootFolder(
+    public OutputterChecked bindRootFolder(
             String experimentIdentifier,
             ManifestRecorder writeOperationRecorder,
+            Optional<RecordedOutputs> recordedOutputs,
             FilePathPrefixerParams params)
             throws BindFailedException {
 
@@ -74,11 +77,12 @@ public class OutputManager extends AnchorBean<OutputManager> {
             FilePathPrefix prefix = filePathPrefixer.rootFolderPrefix(experimentIdentifier, params);
             writeOperationRecorder.init(prefix.getFolderPath());
 
-            return BoundOutputManager.createExistingWithPrefix(
+            return OutputterChecked.createFromOutputManager(
                     this,
                     prefix,
                     getOutputWriteSettings(),
                     writeOperationRecorder.getRootFolder(),
+                    recordedOutputs,
                     silentlyDeleteExisting);
 
         } catch (FilePathPrefixerException e) {

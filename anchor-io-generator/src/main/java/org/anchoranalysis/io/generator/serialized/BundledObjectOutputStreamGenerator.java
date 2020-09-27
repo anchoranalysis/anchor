@@ -37,7 +37,7 @@ import org.anchoranalysis.io.manifest.file.FileType;
 import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.namestyle.OutputNameStyle;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
-import org.anchoranalysis.io.output.bound.BoundOutputManager;
+import org.anchoranalysis.io.output.bound.OutputterChecked;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.writer.RecordingWriters;
 
@@ -56,7 +56,7 @@ public class BundledObjectOutputStreamGenerator<T extends Serializable> implemen
     public BundledObjectOutputStreamGenerator(
             BundleParameters bundleParameters,
             IndexableOutputNameStyle indexableOutputNameStyle,
-            BoundOutputManager parentOutputManager,
+            OutputterChecked parentOutputter,
             String manifestDescriptionFunction) {
         this.bundleParameters = bundleParameters;
 
@@ -68,7 +68,7 @@ public class BundledObjectOutputStreamGenerator<T extends Serializable> implemen
 
         generatorSequence =
                 new GeneratorSequenceIncrementalWriter<>(
-                        parentOutputManager,
+                        parentOutputter,
                         indexableOutputNameStyle.getOutputName(),
                         indexableOutputNameStyle,
                         outputGenerator,
@@ -84,7 +84,7 @@ public class BundledObjectOutputStreamGenerator<T extends Serializable> implemen
     }
 
     @Override
-    public void write(OutputNameStyle outputNameStyle, BoundOutputManager outputManager)
+    public void write(OutputNameStyle outputNameStyle, OutputterChecked outputter)
             throws OutputWriteFailedException {
         throw new OutputWriteFailedException(
                 "this generator does not support writes without indexes");
@@ -94,7 +94,7 @@ public class BundledObjectOutputStreamGenerator<T extends Serializable> implemen
     public int write(
             IndexableOutputNameStyle outputNameStyle,
             String index,
-            BoundOutputManager outputManager)
+            OutputterChecked outputter)
             throws OutputWriteFailedException {
         bundle.add(index, element);
 
@@ -123,7 +123,7 @@ public class BundledObjectOutputStreamGenerator<T extends Serializable> implemen
                                             new OutputWriteFailedException(
                                                     "No subfolder output-manager exists"));
 
-            subfolderWriters.alwaysAllowed()
+            subfolderWriters.permissive()
                     .write("bundleParameters", () -> bundleParametersGenerator);
         }
 

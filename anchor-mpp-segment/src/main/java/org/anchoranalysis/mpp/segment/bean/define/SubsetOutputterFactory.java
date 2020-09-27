@@ -35,7 +35,7 @@ import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.generator.histogram.HistogramCSVGenerator;
 import org.anchoranalysis.io.generator.serialized.XStreamGenerator;
-import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.io.output.bound.Outputter;
 import org.anchoranalysis.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.mpp.io.output.StackOutputKeys;
 import org.anchoranalysis.mpp.mark.MarkCollection;
@@ -51,7 +51,7 @@ import org.anchoranalysis.mpp.segment.define.OutputterDirectories;
 class SubsetOutputterFactory {
 
     private MPPInitParams soMPP;
-    private BoundOutputManagerRouteErrors outputManager;
+    private Outputter outputter;
     private boolean suppressSubfolders;
 
     public SubsetOutputter<MarkCollection> marks() {
@@ -85,9 +85,9 @@ class SubsetOutputterFactory {
             String id) {
         return new SubsetOutputter<>(
                 store,
-                outputManager.outputsEnabled().outputAllowedSecondLevel(outputAllowedSecondLevelKey),
+                outputter.outputsEnabled().outputAllowedSecondLevel(outputAllowedSecondLevelKey),
                 generator,
-                outputManager.getDelegate(),
+                outputter.getChecked(),
                 id,
                 "",
                 suppressSubfolders);

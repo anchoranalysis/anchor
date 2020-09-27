@@ -85,7 +85,7 @@ public class ResultsWriter implements Closeable {
         // Where non-group results are outputted
         writer =
                 FeatureCSVWriter.create(
-                        outputMetadata.metadataNonAggregated(), context.getOutputManager());
+                        outputMetadata.metadataNonAggregated(), context.getOutputter());
 
         // Where group results are outputted
         groupWriter = new GroupWriter(outputMetadata);

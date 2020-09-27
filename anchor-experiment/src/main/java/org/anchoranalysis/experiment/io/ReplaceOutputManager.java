@@ -36,5 +36,5 @@ import org.anchoranalysis.io.output.bean.OutputManager;
  */
 public interface ReplaceOutputManager {
 
-    public void replaceOutputManager(OutputManager outputManager) throws OperationFailedException;
+    public void replaceOutputManager(OutputManager outputter) throws OperationFailedException;
 }

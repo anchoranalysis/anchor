@@ -132,7 +132,7 @@ public class GroupWriter {
         }
 
         Optional<FeatureCSVWriter> csvWriter =
-                FeatureCSVWriter.create(csvMetadata.get(), contextAggregated.getOutputManager());
+                FeatureCSVWriter.create(csvMetadata.get(), contextAggregated.getOutputter());
 
         try {
             map.iterateResults(

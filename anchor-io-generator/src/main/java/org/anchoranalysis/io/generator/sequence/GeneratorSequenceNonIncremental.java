@@ -38,7 +38,7 @@ import org.anchoranalysis.io.manifest.sequencetype.SequenceType;
 import org.anchoranalysis.io.manifest.sequencetype.SequenceTypeException;
 import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
-import org.anchoranalysis.io.output.bound.BoundOutputManager;
+import org.anchoranalysis.io.output.bound.OutputterChecked;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.writer.RecordingWriters;
 
@@ -53,41 +53,41 @@ public class GeneratorSequenceNonIncremental<T> {
 
     // Automatically create a ManifestDescription for the folder from the Generator
     public GeneratorSequenceNonIncremental(
-            BoundOutputManager outputManager,
+            OutputterChecked outputter,
             Optional<String> subfolderName,
             IndexableOutputNameStyle outputNameStyle,
             Generator<T> generator,
-            boolean checkIfAllowed) {
+            boolean selective) {
         this(
-                outputManager,
+                outputter,
                 subfolderName,
                 outputNameStyle,
                 generator,
-                checkIfAllowed,
+                selective,
                 null);
     }
 
     // User-specified ManifestDescription for the folder
     public GeneratorSequenceNonIncremental(
-            BoundOutputManager outputManager,
+            OutputterChecked outputter,
             Optional<String> subfolderName,
             IndexableOutputNameStyle outputNameStyle,
             Generator<T> generator,
-            boolean checkIfAllowed,
+            boolean selective,
             ManifestDescription folderManifestDescription) {
 
-        if (!outputManager.getOutputWriteSettings().hasBeenInit()) {
-            throw new AnchorFriendlyRuntimeException("outputManager has not yet been initialized");
+        if (!outputter.getSettings().hasBeenInit()) {
+            throw new AnchorFriendlyRuntimeException("outputter has not yet been initialized");
         }
 
         this.sequenceWriter =
                 new SequenceWriters(
-                        outputManager.getWriters(),
+                        outputter.getWriters(),
                         subfolderName,
                         outputNameStyle,
                         folderManifestDescription,
-                        checkIfAllowed);
-        this.settings = outputManager.getOutputWriteSettings();
+                        selective);
+        this.settings = outputter.getSettings();
         this.generator = generator;
     }
 

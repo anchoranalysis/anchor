@@ -29,17 +29,18 @@ package org.anchoranalysis.io.output.error;
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
 
 /**
- * When an OutputManager already exists. This is thrown as a RuntimeException to cause the
- * application to immediately end.
+ * When an output-directory already exists.
+ * 
+ * <p>This is thrown as a {@link RuntimeException} to cause the application to immediately end.
  *
  * @author Owen Feehan
  */
-public class OutputManagerAlreadyExistsException extends AnchorFriendlyRuntimeException {
+public class OutputDirectoryAlreadyExistsException extends AnchorFriendlyRuntimeException {
 
     /** */
     private static final long serialVersionUID = 1L;
 
-    public OutputManagerAlreadyExistsException(String msg) {
-        super(msg);
+    public OutputDirectoryAlreadyExistsException(String message) {
+        super(message);
     }
 }

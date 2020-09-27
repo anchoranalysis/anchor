@@ -33,7 +33,7 @@ import org.anchoranalysis.image.bean.nonbean.init.CreateCombinedStack;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.io.stack.StacksOutputter;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
-import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.io.output.bound.Outputter;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.mpp.io.output.StackOutputKeys;
@@ -55,7 +55,7 @@ class SharedObjectsOutputter {
             throws OutputWriteFailedException {
         StacksOutputter.outputSubsetWithException(
                 CreateCombinedStack.apply(imageInit),
-                context.getOutputManager(),
+                context.getOutputter(),
                 StackOutputKeys.STACK,
                 suppressSubfolders);
     }
@@ -63,10 +63,10 @@ class SharedObjectsOutputter {
     public static void output(
             MPPInitParams soMPP, boolean suppressSubfolders, BoundIOContext context) {
         ErrorReporter errorReporter = context.getErrorReporter();
-        BoundOutputManagerRouteErrors outputManager = context.getOutputManager();
+        Outputter outputter = context.getOutputter();
 
         SubsetOutputterFactory factory =
-                new SubsetOutputterFactory(soMPP, outputManager, suppressSubfolders);
+                new SubsetOutputterFactory(soMPP, outputter, suppressSubfolders);
         factory.marks().outputSubset(errorReporter);
         factory.histogram().outputSubset(errorReporter);
         factory.objects().outputSubset(errorReporter);
@@ -74,19 +74,19 @@ class SharedObjectsOutputter {
 
     public static void outputWithException(
             MPPInitParams soMPP,
-            BoundOutputManagerRouteErrors outputManager,
+            Outputter outputter,
             boolean suppressSubfolders)
             throws OutputWriteFailedException {
 
-        if (!outputManager.getOutputWriteSettings().hasBeenInit()) {
+        if (!outputter.getSettings().hasBeenInit()) {
             throw new OutputWriteFailedException(
-                    "OutputManager's settings have not yet been initialized");
+                    "The Outputter's settings have not yet been initialized");
         }
 
         SubsetOutputterFactory factory =
-                new SubsetOutputterFactory(soMPP, outputManager, suppressSubfolders);
-        factory.marks().outputSubsetWithException();
-        factory.histogram().outputSubsetWithException();
-        factory.objects().outputSubsetWithException();
+                new SubsetOutputterFactory(soMPP, outputter, suppressSubfolders);
+        factory.marks().outputSubsetChecked();
+        factory.histogram().outputSubsetChecked();
+        factory.objects().outputSubsetChecked();
     }
 }

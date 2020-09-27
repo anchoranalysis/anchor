@@ -43,7 +43,7 @@ import org.anchoranalysis.io.generator.sequence.GeneratorSequenceNonIncrementalR
 import org.anchoranalysis.io.manifest.sequencetype.SetSequenceType;
 import org.anchoranalysis.io.namestyle.StringSuffixOutputNameStyle;
 import org.anchoranalysis.io.output.bean.allowed.OutputAllowed;
-import org.anchoranalysis.io.output.bound.BoundOutputManager;
+import org.anchoranalysis.io.output.bound.OutputterChecked;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -53,7 +53,7 @@ public class GeneratorOutputHelper {
     public static <T> void output(
             NamedProvider<T> providers,
             Generator<T> generator,
-            BoundOutputManager outputManager,
+            OutputterChecked outputter,
             String outputName,
             String prefix,
             ErrorReporter errorReporter,
@@ -66,7 +66,7 @@ public class GeneratorOutputHelper {
         GeneratorSequenceNonIncrementalRerouterErrors<T> writer =
                 new GeneratorSequenceNonIncrementalRerouterErrors<>(
                         new GeneratorSequenceNonIncremental<>(
-                                outputManager,
+                                outputter,
                                 OptionalUtilities.createFromFlag(!suppressSubfoldersIn, outputNameStyle.getOutputName()),
                                 outputNameStyle,
                                 generator,
@@ -92,7 +92,7 @@ public class GeneratorOutputHelper {
     public static <T> void outputWithException(
             NamedProvider<T> providers,
             Generator<T> generator,
-            BoundOutputManager outputManager,
+            OutputterChecked outputter,
             String outputName,
             String suffix,
             boolean suppressSubfoldersIn)
@@ -104,7 +104,7 @@ public class GeneratorOutputHelper {
 
         GeneratorSequenceNonIncremental<T> writer =
                 new GeneratorSequenceNonIncremental<>(
-                        outputManager,
+                        outputter,
                         OptionalUtilities.createFromFlag(!suppressSubfoldersIn, outputNameStyle.getOutputName()),
                         outputNameStyle,
                         generator,

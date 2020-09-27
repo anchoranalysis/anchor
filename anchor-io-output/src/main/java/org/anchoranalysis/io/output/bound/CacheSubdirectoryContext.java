@@ -47,7 +47,7 @@ public class CacheSubdirectoryContext {
     /** A description to use for every created folder */
     private final ManifestFolderDescription manifestFolderDescription;
 
-    private Map<Optional<String>, BoundIOContext> mapOutputManagers = new HashMap<>();
+    private Map<Optional<String>, BoundIOContext> mapContexts = new HashMap<>();
 
     /**
      * Gets (from the cache if it's already there) a context for a subdirectory of given-name
@@ -57,7 +57,7 @@ public class CacheSubdirectoryContext {
      * @return either an existing context for the sub-directory or a newly created one
      */
     public BoundIOContext get(Optional<String> subdirectoryName) {
-        return mapOutputManagers.computeIfAbsent(
+        return mapContexts.computeIfAbsent(
                 subdirectoryName,
                 key -> parentContext.maybeSubdirectory(key, manifestFolderDescription));
     }

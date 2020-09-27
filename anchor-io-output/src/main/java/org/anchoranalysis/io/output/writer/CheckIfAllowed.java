@@ -34,11 +34,11 @@ import org.anchoranalysis.io.manifest.ManifestFolderDescription;
 import org.anchoranalysis.io.manifest.folder.FolderWriteWithPath;
 import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.output.bean.rules.OutputEnabledRules;
-import org.anchoranalysis.io.output.bound.BoundOutputManager;
+import org.anchoranalysis.io.output.bound.OutputterChecked;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 /**
- * Only allows outputs, if the output-name is allowed in the {@link BoundOutputManager}.
+ * Only allows outputs, if the output-name is allowed in the {@link OutputterChecked}.
  * @author Owen Feehan
  *
  */
@@ -59,7 +59,7 @@ public class CheckIfAllowed implements Writer {
     // END REQUIRED ARGUMENTS
 
     @Override
-    public Optional<BoundOutputManager> createSubdirectory(
+    public Optional<OutputterChecked> createSubdirectory(
             String outputName,
             ManifestFolderDescription manifestDescription,
             Optional<FolderWriteWithPath> manifestFolder)

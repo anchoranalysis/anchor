@@ -35,11 +35,11 @@ import org.anchoranalysis.io.manifest.folder.FolderWriteWithPath;
 import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.namestyle.IntegerSuffixOutputNameStyle;
 import org.anchoranalysis.io.namestyle.SimpleOutputNameStyle;
-import org.anchoranalysis.io.output.bound.BoundOutputManager;
+import org.anchoranalysis.io.output.bound.OutputterChecked;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 /**
- * Allows every output, irrespective of whether the {@link BoundOutputManager} allows the output-name.
+ * Allows every output, irrespective of whether the {@link OutputterChecked} allows the output-name.
  * 
  * @author Owen Feehan
  *
@@ -49,21 +49,21 @@ public class AlwaysAllowed implements Writer {
 
     // START REQUIRED ARGUMENTS
     /** Bound output manager */
-    private final BoundOutputManager outputManager;
+    private final OutputterChecked outputter;
 
     /** Execute before every operation */
     private final WriterExecuteBeforeEveryOperation preop;
     // END REQUIRED ARGUMENTS
 
     @Override
-    public Optional<BoundOutputManager> createSubdirectory(
+    public Optional<OutputterChecked> createSubdirectory(
             String outputName,
             ManifestFolderDescription manifestDescription,
             Optional<FolderWriteWithPath> manifestFolder)
             throws OutputWriteFailedException {
 
         preop.execute();
-        return Optional.of(outputManager.deriveSubdirectory(outputName, manifestDescription, manifestFolder));
+        return Optional.of(outputter.deriveSubdirectory(outputName, manifestDescription, manifestFolder));
     }
 
     @Override
@@ -72,7 +72,7 @@ public class AlwaysAllowed implements Writer {
 
         preop.execute();
 
-        collectionGenerator.get().write(new IntegerSuffixOutputNameStyle(outputName, 3), outputManager);
+        collectionGenerator.get().write(new IntegerSuffixOutputNameStyle(outputName, 3), outputter);
         
         return true;
     }
@@ -85,7 +85,7 @@ public class AlwaysAllowed implements Writer {
             throws OutputWriteFailedException {
 
         preop.execute();
-        return generator.get().write(outputNameStyle, index, outputManager);
+        return generator.get().write(outputNameStyle, index, outputter);
     }
 
     // Write a file without checking if the outputName is allowed
@@ -93,7 +93,7 @@ public class AlwaysAllowed implements Writer {
     public boolean write(String outputName, GenerateWritableItem<?> generator)
             throws OutputWriteFailedException {
         preop.execute();
-        generator.get().write( new SimpleOutputNameStyle(outputName), outputManager);
+        generator.get().write( new SimpleOutputNameStyle(outputName), outputter);
         return true;
     }
 
@@ -108,10 +108,10 @@ public class AlwaysAllowed implements Writer {
         preop.execute();
 
         Path outPath =
-                outputManager.outFilePath(outputName + "." + extension);
+                outputter.outFilePath(outputName + "." + extension);
 
         manifestDescription.ifPresent(
-                md -> outputManager.writeFileToOperationRecorder(outputName, outPath, md, ""));
+                md -> outputter.writeFileToOperationRecorder(outputName, outPath, md, ""));
         return Optional.of(outPath);
     }
 }

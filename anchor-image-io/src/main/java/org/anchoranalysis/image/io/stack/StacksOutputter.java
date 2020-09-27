@@ -39,8 +39,8 @@ import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.generator.collection.GeneratorOutputHelper;
 import org.anchoranalysis.io.output.bean.allowed.OutputAllowed;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
-import org.anchoranalysis.io.output.bound.BoundOutputManager;
-import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.io.output.bound.OutputterChecked;
+import org.anchoranalysis.io.output.bound.Outputter;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -58,12 +58,12 @@ public class StacksOutputter {
             String secondLevelOutputKey,
             boolean suppressSubfolders,
             BoundIOContext context) {
-        BoundOutputManagerRouteErrors outputManager = context.getOutputManager();
+        Outputter outputter = context.getOutputter();
 
-        assert (outputManager.getOutputWriteSettings().hasBeenInit());
+        assert (outputter.getSettings().hasBeenInit());
         StacksOutputter.output(
-                stackSubset(stacks, secondLevelOutputKey, outputManager),
-                outputManager.getDelegate(),
+                stackSubset(stacks, secondLevelOutputKey, outputter),
+                outputter.getChecked(),
                 OUTPUT_NAME,
                 PREFIX,
                 context.getErrorReporter(),
@@ -78,36 +78,36 @@ public class StacksOutputter {
      */
     public static void outputSubsetWithException(
             NamedProvider<Stack> stacks,
-            BoundOutputManagerRouteErrors outputManager,
+            Outputter outputter,
             String secondLevelOutputKey,
             boolean suppressSubfolders)
             throws OutputWriteFailedException {
 
-        if (!outputManager.getOutputWriteSettings().hasBeenInit()) {
+        if (!outputter.getSettings().hasBeenInit()) {
             throw new OutputWriteFailedException(
-                    "OutputManager's settings have not yet been initialized");
+                    "Outputter's settings have not yet been initialized");
         }
 
         StacksOutputter.outputWithException(
-                stackSubset(stacks, secondLevelOutputKey, outputManager),
-                outputManager.getDelegate(),
+                stackSubset(stacks, secondLevelOutputKey, outputter),
+                outputter.getChecked(),
                 OUTPUT_NAME,
                 PREFIX,
                 suppressSubfolders);
     }
 
     public static void output(
-            NamedStacks namedCollection,
-            BoundOutputManager outputManager,
+            NamedStacks stacks,
+            OutputterChecked outputter,
             String outputName,
             String prefix,
             ErrorReporter errorReporter,
             boolean suppressSubfoldersIn) {
         StackGenerator generator = createStackGenerator();
         GeneratorOutputHelper.output(
-                namedCollection,
+                stacks,
                 generator,
-                outputManager,
+                outputter,
                 outputName,
                 prefix,
                 errorReporter,
@@ -115,17 +115,17 @@ public class StacksOutputter {
     }
 
     private static void outputWithException(
-            NamedStacks namedCollection,
-            BoundOutputManager outputManager,
+            NamedStacks stacks,
+            OutputterChecked outputter,
             String outputName,
             String suffix,
             boolean suppressSubfoldersIn)
             throws OutputWriteFailedException {
         StackGenerator generator = createStackGenerator();
         GeneratorOutputHelper.outputWithException(
-                namedCollection,
+                stacks,
                 generator,
-                outputManager,
+                outputter,
                 outputName,
                 suffix,
                 suppressSubfoldersIn);
@@ -164,8 +164,8 @@ public class StacksOutputter {
     private static NamedStacks stackSubset(
             NamedProvider<Stack> stacks,
             String secondLevelOutputKey,
-            BoundOutputManagerRouteErrors outputManager) {
+            Outputter outputter) {
         return StacksOutputter.subset(
-                stacks, outputManager.outputsEnabled().outputAllowedSecondLevel(secondLevelOutputKey));
+                stacks, outputter.outputsEnabled().outputAllowedSecondLevel(secondLevelOutputKey));
     }
 }

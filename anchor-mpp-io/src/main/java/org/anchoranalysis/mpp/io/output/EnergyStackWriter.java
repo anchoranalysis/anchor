@@ -53,8 +53,8 @@ public class EnergyStackWriter {
                 context);
 
         if (energyStack.getParams() != null) {
-            context.getOutputManager()
-                    .getWriterCheckIfAllowed()
+            context.getOutputter()
+                    .writerSelective()
                     .write(
                             OUTPUT_PARAMS,
                             () ->

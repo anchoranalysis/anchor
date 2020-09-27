@@ -80,7 +80,7 @@ public class InputOutputExperiment<T extends InputFromManager, S> extends Output
 
             params.setLoggerTaskCreator(logTask);
 
-            taskProcessor.executeLogStats(params.getOutputManager(), inputObjects, params);
+            taskProcessor.executeLogStats(params.getOutputter(), inputObjects, params);
 
         } catch (AnchorIOException | IOException e) {
             throw new ExperimentExecutionException(
@@ -107,8 +107,8 @@ public class InputOutputExperiment<T extends InputFromManager, S> extends Output
     }
 
     @Override
-    public void replaceOutputManager(OutputManager outputManager) throws OperationFailedException {
-        this.setOutput(outputManager);
+    public void replaceOutputManager(OutputManager outputter) throws OperationFailedException {
+        this.setOutput(outputter);
     }
 
     @Override

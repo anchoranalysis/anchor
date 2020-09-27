@@ -31,7 +31,7 @@ import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.io.error.AnchorIOException;
-import org.anchoranalysis.io.output.bound.BoundOutputManager;
+import org.anchoranalysis.io.output.bound.OutputterChecked;
 
 /**
  * Writes text to a file, but only if {@link #close} is called with {@code successful==true}.
@@ -45,7 +45,7 @@ public class FailureOnlyMessageLogger implements StatefulMessageLogger {
 
     // START REQUIRED ARGUMENTS
     private final String outputName;
-    private final BoundOutputManager outputManager;
+    private final OutputterChecked outputter;
     private final ErrorReporter errorReporter;
     // END REQUIRED ARGUMENTS
 
@@ -78,7 +78,7 @@ public class FailureOnlyMessageLogger implements StatefulMessageLogger {
 
         try {
             OptionalUtilities.ifPresent(
-                    TextFileLogHelper.createOutput(outputManager, outputName),
+                    TextFileLogHelper.createOutput(outputter, outputName),
                     output -> {
                         output.start();
                         output.getWriter().append(message);

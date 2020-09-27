@@ -34,8 +34,8 @@ import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.text.TypedValue;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.generator.text.TextFileOutput;
-import org.anchoranalysis.io.generator.text.TextFileOutputFromManager;
-import org.anchoranalysis.io.output.bound.BoundOutputManager;
+import org.anchoranalysis.io.generator.text.TextFileOutputter;
+import org.anchoranalysis.io.output.bound.OutputterChecked;
 
 // Can be called by different threads, so synchronization is important
 public class CSVWriter implements AutoCloseable {
@@ -52,19 +52,19 @@ public class CSVWriter implements AutoCloseable {
      * Creates and starts a CSVWriter if it's allowed, otherwise returns {@link Optional#empty}.
      *
      * @param outputName output-name
-     * @param outputManager output-manager
+     * @param outputter output-manager
      * @return the csv-writer if it's allowed, or empty if it's not.
      * @throws AnchorIOException
      */
-    public static Optional<CSVWriter> createFromOutputManager(
-            String outputName, BoundOutputManager outputManager) throws AnchorIOException {
+    public static Optional<CSVWriter> createFromOutputter(
+            String outputName, OutputterChecked outputter) throws AnchorIOException {
 
-        if (!outputManager.getOutputsEnabled().isOutputAllowed(outputName)) {
+        if (!outputter.getOutputsEnabled().isOutputAllowed(outputName)) {
             return Optional.empty();
         }
 
         Optional<TextFileOutput> output =
-                TextFileOutputFromManager.create("csv", Optional.empty(), outputManager, outputName);
+                TextFileOutputter.create("csv", Optional.empty(), outputter, outputName);
 
         OptionalUtilities.ifPresent(output, TextFileOutput::start);
         return output.map(CSVWriter::new);

@@ -30,7 +30,7 @@ import java.util.Optional;
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.namestyle.IntegerSuffixOutputNameStyle;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
-import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.io.output.bound.Outputter;
 
 @AllArgsConstructor
 public class GeneratorSequenceFactory {
@@ -52,7 +52,7 @@ public class GeneratorSequenceFactory {
 
         return new GeneratorSequenceIncrementalRerouteErrors<>(
                 new GeneratorSequenceIncrementalWriter<>(
-                        context.getOutputManager().getDelegate(),
+                        context.getOutputter().getChecked(),
                         subdirectoryName,
                         outputNameStyle(filePrefixName),
                         generator,
@@ -62,10 +62,10 @@ public class GeneratorSequenceFactory {
     }
 
     public <T> GeneratorSequenceNonIncremental<T> createNonIncremental(
-            Generator<T> generator, BoundOutputManagerRouteErrors outputManager) {
+            Generator<T> generator, Outputter outputter) {
 
         return new GeneratorSequenceNonIncremental<>(
-                outputManager.getDelegate(),
+                outputter.getChecked(),
                 Optional.of(subdirectoryName),
                 outputNameStyle(filePrefixName),
                 generator,

@@ -32,12 +32,10 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.functional.function.CheckedSupplier;
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.generator.sequence.CollectionGenerator;
-import org.anchoranalysis.io.output.bound.BoundOutputManager;
-import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.io.output.bound.OutputterChecked;
+import org.anchoranalysis.io.output.bound.Outputter;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.writer.WritableItem;
-import org.anchoranalysis.io.output.writer.Writer;
-import org.anchoranalysis.io.output.writer.WriterRouterErrors;
 
 /**
  * Writes a collection of items via a generator into a subfolder.
@@ -49,14 +47,14 @@ import org.anchoranalysis.io.output.writer.WriterRouterErrors;
 public class GeneratorSubfolderWriter {
 
     public static <T> void writeSubfolder(
-            BoundOutputManager outputManager,
+            OutputterChecked outputter,
             String outputNameFolder,
             String outputNameSubfolder,
             Generator<T> generatorIterable,
             Collection<T> collection,
-            boolean checkIfAllowed)
+            boolean selective)
             throws OutputWriteFailedException {
-        extractWriter(outputManager, checkIfAllowed)
+        outputter.getWriters().multiplex(selective)
                 .writeSubdirectoryWithGenerator(
                         outputNameSubfolder,
                         () ->
@@ -64,18 +62,18 @@ public class GeneratorSubfolderWriter {
                                         collection,
                                         outputNameFolder,
                                         generatorIterable,
-                                        outputManager,
-                                        checkIfAllowed));
+                                        outputter,
+                                        selective));
     }
 
     public static <T> void writeSubfolder(
-            BoundOutputManagerRouteErrors outputManager,
+            Outputter outputter,
             String outputNameFolder,
             String outputNameSubfolder,
             CheckedSupplier<Generator<T>, OutputWriteFailedException> generatorIterable,
             Collection<T> collection,
-            boolean checkIfAllowed) {
-        extractWriter(outputManager, checkIfAllowed)
+            boolean selective) {
+        outputter.writerMultiplex(selective)
                 .writeSubfolderWithGenerator(
                         outputNameSubfolder,
                         () ->
@@ -83,34 +81,17 @@ public class GeneratorSubfolderWriter {
                                         collection,
                                         outputNameFolder,
                                         generatorIterable.get(),
-                                        outputManager.getDelegate(),
-                                        checkIfAllowed));
-    }
-
-    private static Writer extractWriter(BoundOutputManager outputManager, boolean checkIfAllowed) {
-        if (checkIfAllowed) {
-            return outputManager.getWriters().checkIfAllowed();
-        } else {
-            return outputManager.getWriters().alwaysAllowed();
-        }
-    }
-
-    private static WriterRouterErrors extractWriter(
-            BoundOutputManagerRouteErrors outputManager, boolean checkIfAllowed) {
-        if (checkIfAllowed) {
-            return outputManager.getWriterCheckIfAllowed();
-        } else {
-            return outputManager.getWriterAlwaysAllowed();
-        }
+                                        outputter.getChecked(),
+                                        selective));
     }
 
     private static <T> WritableItem createOutputWriter(
             Collection<T> collection,
             String outputNameFolder,
             Generator<T> generatorIterable,
-            BoundOutputManager outputManager,
-            boolean checkIfAllowed) {
+            OutputterChecked outputter,
+            boolean selective) {
         return new CollectionGenerator<>(
-                outputNameFolder, generatorIterable, outputManager, 3, checkIfAllowed, collection);
+                outputNameFolder, generatorIterable, outputter, 3, selective, collection);
     }
 }

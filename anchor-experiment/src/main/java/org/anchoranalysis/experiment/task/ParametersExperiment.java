@@ -35,8 +35,8 @@ import org.anchoranalysis.experiment.ExperimentExecutionArguments;
 import org.anchoranalysis.experiment.bean.log.LoggingDestination;
 import org.anchoranalysis.experiment.log.StatefulMessageLogger;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
-import org.anchoranalysis.io.output.bound.BoundOutputManager;
-import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.io.output.bound.OutputterChecked;
+import org.anchoranalysis.io.output.bound.Outputter;
 
 /**
  * Parameters for executing a task, when the manifest, log etc. are still bound to the experiment
@@ -65,13 +65,13 @@ public class ParametersExperiment {
             ExperimentExecutionArguments experimentArguments,
             String experimentIdentifier,
             Optional<ManifestRecorder> experimentalManifest,
-            BoundOutputManager outputManager,
+            OutputterChecked outputter,
             StatefulMessageLogger loggerExperiment,
             boolean detailedLogging) {
         this.context =
                 new BoundContextSpecify(
                         experimentArguments,
-                        wrapErrors(outputManager, loggerExperiment),
+                        wrapExceptions(outputter, loggerExperiment),
                         loggerExperiment,
                         new ErrorReporterForTask(loggerExperiment));
 
@@ -80,8 +80,8 @@ public class ParametersExperiment {
         this.detailedLogging = detailedLogging;
     }
 
-    public BoundOutputManagerRouteErrors getOutputManager() {
-        return context.getOutputManager();
+    public Outputter getOutputter() {
+        return context.getOutputter();
     }
 
     public StatefulMessageLogger getLoggerExperiment() {
@@ -92,10 +92,10 @@ public class ParametersExperiment {
         return context.getExperimentArguments();
     }
 
-    /** Redirects any output-errors into the log */
-    private static BoundOutputManagerRouteErrors wrapErrors(
-            BoundOutputManager rootOutputManagerNoErrors, MessageLogger logger) {
-        return new BoundOutputManagerRouteErrors(
-                rootOutputManagerNoErrors, new ErrorReporterIntoLog(logger));
+    /** Redirects any output-exceptions into the log */
+    private static Outputter wrapExceptions(
+            OutputterChecked outputterChecked, MessageLogger logger) {
+        return new Outputter(
+                outputterChecked, new ErrorReporterIntoLog(logger));
     }
 }

@@ -37,14 +37,14 @@ import org.anchoranalysis.io.error.FilePathPrefixerException;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
 import org.anchoranalysis.io.output.bound.BindFailedException;
-import org.anchoranalysis.io.output.bound.BoundOutputManager;
-import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.io.output.bound.OutputterChecked;
+import org.anchoranalysis.io.output.bound.Outputter;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class HelperBindOutputManager {
 
     // If pathForBinding is null, we bind to the root folder instead
-    public static BoundOutputManager createOutputManagerForTask(
+    public static OutputterChecked createOutputterForTask(
             InputFromManager input,
             Optional<ManifestRecorder> manifestTask,
             ParametersExperiment params)
@@ -55,12 +55,12 @@ class HelperBindOutputManager {
                 return createWithBindingPath(
                         derivePathWithDescription(input), manifestTask, params);
             } else {
-                return createWithoutBindingPath(manifestTask, params.getOutputManager());
+                return createWithoutBindingPath(manifestTask, params.getOutputter());
             }
         } catch (BindFailedException e) {
             throw new JobExecutionException(
                     String.format(
-                            "Cannot bind the outputManager to the specific task with pathForBinding=%s and experimentIdentifier='%s'",
+                            "Cannot bind an outputter for the specific task with pathForBinding=%s and experimentIdentifier='%s'",
                             describeInputForBinding(input), params.getExperimentIdentifier()),
                     e);
         }
@@ -72,14 +72,14 @@ class HelperBindOutputManager {
                 input.pathForBinding().get(), input.descriptiveName()); // NOSONAR
     }
 
-    private static BoundOutputManager createWithBindingPath(
+    private static OutputterChecked createWithBindingPath(
             NamedPath path,
             Optional<ManifestRecorder> manifestTask,
             ParametersExperiment params)
             throws BindFailedException, JobExecutionException {
         try {
-            BoundOutputManager boundOutput =
-                    params.getOutputManager()
+            OutputterChecked boundOutput =
+                    params.getOutputter()
                             .deriveFromInput(
                                     path,
                                     params.getExperimentIdentifier(),
@@ -98,14 +98,14 @@ class HelperBindOutputManager {
         }
     }
 
-    private static BoundOutputManager createWithoutBindingPath(
-            Optional<ManifestRecorder> manifestTask, BoundOutputManagerRouteErrors outputManager) {
+    private static OutputterChecked createWithoutBindingPath(
+            Optional<ManifestRecorder> manifestTask, Outputter outputter) {
         manifestTask.ifPresent(
                 mt -> {
-                    mt.init(outputManager.getOutputFolderPath());
-                    outputManager.addOperationRecorder(mt.getRootFolder());
+                    mt.init(outputter.getOutputFolderPath());
+                    outputter.addOperationRecorder(mt.getRootFolder());
                 });
-        return outputManager.getDelegate();
+        return outputter.getChecked();
     }
 
     private static String describeInputForBinding(InputFromManager input) {

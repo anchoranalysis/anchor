@@ -156,8 +156,8 @@ class WriteXMLForGroup {
 
         try {
             Optional<Path> fileOutPath =
-                    context.getOutputManager()
-                            .getWriterCheckIfAllowed()
+                    context.getOutputter()
+                            .writerSelective()
                             .writeGenerateFilename(
                                     outputName, "xml", Optional.of(MANIFEST_DESCRIPTION));
             if (fileOutPath.isPresent()) {

@@ -42,7 +42,7 @@ import org.anchoranalysis.experiment.log.Divider;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.experiment.task.TaskStatistics;
 import org.anchoranalysis.io.input.InputFromManager;
-import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.io.output.bound.Outputter;
 
 /**
  * Processes a job
@@ -65,13 +65,13 @@ public abstract class JobProcessor<T extends InputFromManager, S>
     /**
      * Executes the tasks, gathers statistics, and logs them
      *
-     * @param rootOutputManager
+     * @param rootOutputter
      * @param inputObjects
      * @param paramsExperiment
      * @throws ExperimentExecutionException
      */
     public void executeLogStats(
-            BoundOutputManagerRouteErrors rootOutputManager,
+            Outputter rootOutputter,
             List<T> inputObjects,
             ParametersExperiment paramsExperiment)
             throws ExperimentExecutionException {
@@ -80,7 +80,7 @@ public abstract class JobProcessor<T extends InputFromManager, S>
             paramsExperiment.getLoggerExperiment().log( DIVIDER.withLabel("Processing") );
         }
         
-        TaskStatistics stats = execute(rootOutputManager, inputObjects, paramsExperiment);
+        TaskStatistics stats = execute(rootOutputter, inputObjects, paramsExperiment);
 
         if (paramsExperiment.isDetailedLogging()) {
             logStats(stats, paramsExperiment);
@@ -118,14 +118,14 @@ public abstract class JobProcessor<T extends InputFromManager, S>
      * so as to allow garbage-collection of these items before all jobs are processed (as the list
      * might be quite large).
      *
-     * @param rootOutputManager
+     * @param rootOutputter
      * @param inputObjects
      * @param paramsExperiment
      * @return
      * @throws ExperimentExecutionException
      */
     protected abstract TaskStatistics execute(
-            BoundOutputManagerRouteErrors rootOutputManager,
+            Outputter rootOutputter,
             List<T> inputObjects,
             ParametersExperiment paramsExperiment)
             throws ExperimentExecutionException;

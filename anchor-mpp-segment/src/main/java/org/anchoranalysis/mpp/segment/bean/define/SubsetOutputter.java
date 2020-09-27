@@ -31,7 +31,7 @@ import org.anchoranalysis.core.name.provider.NamedProvider;
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.generator.collection.GeneratorOutputHelper;
 import org.anchoranalysis.io.output.bean.allowed.OutputAllowed;
-import org.anchoranalysis.io.output.bound.BoundOutputManager;
+import org.anchoranalysis.io.output.bound.OutputterChecked;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import lombok.AllArgsConstructor;
 
@@ -41,37 +41,37 @@ class SubsetOutputter<T> {
     private NamedProvider<T> providers;
     private OutputAllowed oa;
     private Generator<T> generator;
-    private BoundOutputManager outputManager;
+    private OutputterChecked outputter;
     private String outputName;
     private String suffix;
     private boolean suppressSubfoldersIn;
 
     public void outputSubset(ErrorReporter errorReporter) {
 
-        if (!outputManager.getOutputsEnabled().isOutputAllowed(outputName)) {
+        if (!outputter.getOutputsEnabled().isOutputAllowed(outputName)) {
             return;
         }
 
         GeneratorOutputHelper.output(
                 GeneratorOutputHelper.subset(providers, oa, errorReporter),
                 generator,
-                outputManager,
+                outputter,
                 outputName,
                 suffix,
                 errorReporter,
                 suppressSubfoldersIn);
     }
 
-    public void outputSubsetWithException() throws OutputWriteFailedException {
+    public void outputSubsetChecked() throws OutputWriteFailedException {
 
-        if (!outputManager.getOutputsEnabled().isOutputAllowed(outputName)) {
+        if (!outputter.getOutputsEnabled().isOutputAllowed(outputName)) {
             return;
         }
 
         GeneratorOutputHelper.outputWithException(
                 GeneratorOutputHelper.subsetWithException(providers, oa),
                 generator,
-                outputManager,
+                outputter,
                 outputName,
                 suffix,
                 suppressSubfoldersIn);

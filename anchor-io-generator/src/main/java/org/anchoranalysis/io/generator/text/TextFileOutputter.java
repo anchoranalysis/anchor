@@ -31,36 +31,36 @@ import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.io.manifest.ManifestDescription;
-import org.anchoranalysis.io.output.bound.BoundOutputManager;
+import org.anchoranalysis.io.output.bound.OutputterChecked;
 
 /**
- * Maybe creates a {@link TextFileOutput} based upon settings in a {@link BoundOutputManager}.
+ * Maybe creates a {@link TextFileOutput} based upon settings in a {@link OutputterChecked}.
  * 
  * @author Owen Feehan
  *
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class TextFileOutputFromManager {
+public class TextFileOutputter {
 
     /**
      * Creates a {@link TextFileOutput}.
      *
      * @param extension file extension
      * @param manifestDescription manifest description
-     * @param outputManager output-manager
+     * @param outputter output-manager
      * @param outputName output-name
      * @return the FileOutput or empty() if it the output is not allowed
      */
     public static Optional<TextFileOutput> create(
             String extension,
             Optional<ManifestDescription> manifestDescription,
-            BoundOutputManager outputManager,
+            OutputterChecked outputter,
             String outputName) {
 
         Optional<Path> fileOutputPath =
-                outputManager
+                outputter
                         .getWriters()
-                        .checkIfAllowed()
+                        .selective()
                         .writeGenerateFilename(
                                 outputName, extension, manifestDescription);
         return fileOutputPath.map(path -> new TextFileOutput(path.toString()));

@@ -46,7 +46,7 @@ import org.anchoranalysis.experiment.task.processor.JobDescription;
 import org.anchoranalysis.experiment.task.processor.JobState;
 import org.anchoranalysis.experiment.task.processor.SubmittedJob;
 import org.anchoranalysis.io.input.InputFromManager;
-import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.io.output.bound.Outputter;
 
 /**
  * Executes jobs in parallel
@@ -87,7 +87,7 @@ public class ParallelProcessor<T extends InputFromManager, S> extends JobProcess
     
     @Override
     protected TaskStatistics execute(
-            BoundOutputManagerRouteErrors rootOutputManager,
+            Outputter rootOutputter,
             List<T> inputObjects,
             ParametersExperiment paramsExperiment)
             throws ExperimentExecutionException {
@@ -99,7 +99,7 @@ public class ParallelProcessor<T extends InputFromManager, S> extends JobProcess
         S sharedState =
                 getTask()
                         .beforeAnyJobIsExecuted(
-                                rootOutputManager, concurrencyPlan, paramsExperiment);
+                                rootOutputter, concurrencyPlan, paramsExperiment);
 
         ExecutorService executorService = Executors.newFixedThreadPool(concurrencyPlan.totalNumber());
 
