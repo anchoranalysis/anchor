@@ -40,7 +40,7 @@ import org.anchoranalysis.experiment.task.ParametersUnbound;
 import org.anchoranalysis.experiment.task.TaskStatistics;
 import org.anchoranalysis.experiment.task.processor.MonitoredSequentialExecutor;
 import org.anchoranalysis.io.input.InputFromManager;
-import org.anchoranalysis.io.output.bound.Outputter;
+import org.anchoranalysis.io.output.outputter.Outputter;
 
 /**
  * Executes jobs sequentially

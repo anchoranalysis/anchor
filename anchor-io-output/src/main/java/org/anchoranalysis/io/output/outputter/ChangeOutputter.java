@@ -24,16 +24,40 @@
  * #L%
  */
 
-package org.anchoranalysis.io.output.bound;
+package org.anchoranalysis.io.output.outputter;
 
-import org.anchoranalysis.core.error.friendly.AnchorFriendlyCheckedException;
+import java.nio.file.Path;
+import org.anchoranalysis.core.log.Logger;
+import lombok.AllArgsConstructor;
 
-public class BindFailedException extends AnchorFriendlyCheckedException {
+/**
+ * Reuses an existing {@link InputOutputContext} but changes the outputter.
+ *
+ * @author Owen Feehan
+ */
+@AllArgsConstructor
+class ChangeOutputter implements InputOutputContext {
 
-    /** */
-    private static final long serialVersionUID = 1L;
+    private InputOutputContext delegate;
+    private Outputter replacementOutputter;
 
-    public BindFailedException(Throwable cause) {
-        super(cause);
+    @Override
+    public Outputter getOutputter() {
+        return replacementOutputter;
+    }
+
+    @Override
+    public Path getModelDirectory() {
+        return delegate.getModelDirectory();
+    }
+
+    @Override
+    public boolean isDebugEnabled() {
+        return delegate.isDebugEnabled();
+    }
+
+    @Override
+    public Logger getLogger() {
+        return delegate.getLogger();
     }
 }

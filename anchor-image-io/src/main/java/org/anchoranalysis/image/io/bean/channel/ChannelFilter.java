@@ -42,7 +42,7 @@ import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.io.channel.ChannelGetter;
 import org.anchoranalysis.image.io.input.ImageInitParamsFactory;
 import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.io.output.bound.BoundIOContext;
+import org.anchoranalysis.io.output.outputter.InputOutputContext;
 
 /**
  * Applies a filter to a particular channel
@@ -61,9 +61,9 @@ public class ChannelFilter extends AnchorBean<ChannelFilter> implements ChannelG
 
     private ChannelGetter channels;
 
-    private BoundIOContext context;
+    private InputOutputContext context;
 
-    public void init(ChannelGetter channels, BoundIOContext context) {
+    public void init(ChannelGetter channels, InputOutputContext context) {
         this.channels = channels;
         this.context = context;
     }

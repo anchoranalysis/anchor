@@ -34,8 +34,8 @@ import org.anchoranalysis.io.manifest.ManifestFolderDescription;
 import org.anchoranalysis.io.manifest.folder.FolderWriteWithPath;
 import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.output.bean.rules.OutputEnabledRules;
-import org.anchoranalysis.io.output.bound.OutputterChecked;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import org.anchoranalysis.io.output.outputter.OutputterChecked;
 
 /**
  * Only allows outputs, if the output-name is allowed in the {@link OutputterChecked}.

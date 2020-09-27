@@ -1,4 +1,4 @@
-package org.anchoranalysis.io.output.bound;
+package org.anchoranalysis.io.output.outputter;
 
 import java.nio.file.Path;
 import java.util.Optional;

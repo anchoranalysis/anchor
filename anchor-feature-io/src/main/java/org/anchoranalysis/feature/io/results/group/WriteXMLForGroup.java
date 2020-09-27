@@ -51,8 +51,8 @@ import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.manifest.ManifestDescription;
-import org.anchoranalysis.io.output.bound.BoundIOContext;
-import org.anchoranalysis.io.output.bound.CacheSubdirectoryContext;
+import org.anchoranalysis.io.output.outputter.InputOutputContext;
+import org.anchoranalysis.io.output.outputter.IntputOutputContextSubdirectoryCache;
 
 /**
  * Writes the aggregated results for a single group as XML to the filesystem.
@@ -83,7 +83,7 @@ class WriteXMLForGroup {
             Optional<MultiName> groupName,
             ResultsWriterMetadata metadata,
             Optional<FeatureCSVWriter> csvWriter,
-            CacheSubdirectoryContext context)
+            IntputOutputContextSubdirectoryCache context)
             throws AnchorIOException {
         OptionalUtilities.ifPresent(
                 metadata.outputNames().getXmlAggregatedGroup(),
@@ -101,7 +101,7 @@ class WriteXMLForGroup {
             Optional<MultiName> groupName,
             FeatureNameList featureNames,
             Optional<FeatureCSVWriter> csvWriterAggregate,
-            BoundIOContext contextGroup)
+            InputOutputContext contextGroup)
             throws AnchorIOException {
         if (csvWriterAggregate.isPresent() || groupName.isPresent()) {
             ResultsVector aggregated = aggregateResults(featureNames, contextGroup.getLogger());
@@ -142,7 +142,7 @@ class WriteXMLForGroup {
             String outputName,
             NamedFeatureStore<T> featuresAggregate,
             ResultsVector results,
-            BoundIOContext context) {
+            InputOutputContext context) {
 
         KeyValueParams paramsOut = new KeyValueParams();
 

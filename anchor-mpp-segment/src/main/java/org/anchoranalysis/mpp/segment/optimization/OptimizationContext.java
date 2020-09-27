@@ -30,8 +30,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
-import org.anchoranalysis.io.output.bound.BoundIOContext;
-import org.anchoranalysis.io.output.bound.Outputter;
+import org.anchoranalysis.io.output.outputter.InputOutputContext;
+import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.mpp.bean.mark.MarkWithIdentifierFactory;
 import org.anchoranalysis.mpp.feature.energy.scheme.EnergySchemeWithSharedFeatures;
 import org.anchoranalysis.mpp.proposer.error.ErrorNodeNull;
@@ -50,7 +50,7 @@ public class OptimizationContext {
 
     @Getter private final TriggerTerminationCondition triggerTerminationCondition;
 
-    private final BoundIOContext context;
+    private final InputOutputContext context;
 
     private final RandomNumberGenerator randomNumberGenerator;
 

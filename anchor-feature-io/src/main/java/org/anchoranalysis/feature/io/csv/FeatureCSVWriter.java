@@ -34,7 +34,7 @@ import org.anchoranalysis.core.text.TypedValue;
 import org.anchoranalysis.feature.results.ResultsVector;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.generator.tabular.CSVWriter;
-import org.anchoranalysis.io.output.bound.Outputter;
+import org.anchoranalysis.io.output.outputter.Outputter;
 
 /**
  * Writes the results of feature-calculations as a CSV file.

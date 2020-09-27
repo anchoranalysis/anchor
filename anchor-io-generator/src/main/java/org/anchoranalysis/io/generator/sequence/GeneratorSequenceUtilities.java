@@ -34,9 +34,9 @@ import org.anchoranalysis.io.generator.SingleFileTypeGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.namestyle.IntegerSuffixOutputNameStyle;
-import org.anchoranalysis.io.output.bound.BoundIOContext;
-import org.anchoranalysis.io.output.bound.Outputter;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import org.anchoranalysis.io.output.outputter.InputOutputContext;
+import org.anchoranalysis.io.output.outputter.Outputter;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class GeneratorSequenceUtilities {
@@ -46,7 +46,7 @@ public class GeneratorSequenceUtilities {
             int numDigits,
             Collection<T> items,
             SingleFileTypeGenerator<T, Stack> generator,
-            BoundIOContext context) {
+            InputOutputContext context) {
         IndexableOutputNameStyle outputStyle =
                 new IntegerSuffixOutputNameStyle(folderName, numDigits);
 

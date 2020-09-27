@@ -34,8 +34,8 @@ import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.NoSharedState;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.input.NamedChannelsInput;
-import org.anchoranalysis.io.output.bound.BoundIOContext;
-import org.anchoranalysis.io.output.bound.Outputter;
+import org.anchoranalysis.io.output.outputter.InputOutputContext;
+import org.anchoranalysis.io.output.outputter.Outputter;
 
 /**
  * An experiment that primarily takes a raster image as an input
@@ -83,7 +83,7 @@ public abstract class RasterTask extends TaskWithoutSharedState<NamedChannelsInp
      * @throws JobExecutionException
      */
     public abstract void doStack(
-            NamedChannelsInput inputObject, int seriesIndex, int numSeries, BoundIOContext context)
+            NamedChannelsInput inputObject, int seriesIndex, int numSeries, InputOutputContext context)
             throws JobExecutionException;
 
     public abstract void endSeries(Outputter outputter)

@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.io.output.bound;
+package org.anchoranalysis.io.output.outputter;
 
 import java.nio.file.Path;
 import java.util.Optional;
@@ -35,42 +35,78 @@ import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.io.manifest.ManifestFolderDescription;
 
 /**
- * Certain parameters that are exposed after any filesystem binding for inputs and outputs has
- * occurred.
+ * A context for performing input generally and outputting to a particular output-directory.
  *
  * @author Owen Feehan
  */
-public interface BoundIOContext {
+public interface InputOutputContext {
 
+    /** 
+     * An input-directory in which models are stored.
+     *
+     * return a path to the model-directory
+     */
     Path getModelDirectory();
 
+    /** 
+     * An outputter that writes to the particular output-directory.
+     *
+     * @return the outputter
+     */
     Outputter getOutputter();
 
+    /**
+     * Is debug-mode enabled?
+     * 
+     * @return true iff debug-mode is enabled
+     */
     boolean isDebugEnabled();
 
+    /**
+     * The associated logger.
+     * 
+     * @return the logger associated with input-output operations.
+     */
     Logger getLogger();
 
+    /**
+     * Creates a {@link CommonContext} a context that contains a subset of this context.
+     * 
+     * @return a newly created {@link CommonContext} reusing the objects from this context. 
+     */
     default CommonContext common() {
         return new CommonContext(getLogger(), getModelDirectory());
     }
 
+    /**
+     * The associated error reporter.
+     * 
+     * @return the error reporter
+     */
     default ErrorReporter getErrorReporter() {
         return getLogger().errorReporter();
     }
 
-    default MessageLogger getLogReporter() {
+    /**
+     * The associated message reporter.
+     * 
+     * @return the message reporter
+     */
+    default MessageLogger getMessageReporter() {
         return getLogger().messageLogger();
     }
 
     /**
-     * Creates a new context that writes instead to a sub-directory
+     * Creates a new context that writes instead to a sub-directory.
      *
      * @param subDirectoryName subdirectory name
      * @return newly created context
      */
-    default BoundIOContext subdirectory(
+    default InputOutputContext subdirectory(
             String subDirectoryName, ManifestFolderDescription manifestFolderDescription) {
-        return new RedirectIntoSubdirectory(this, subDirectoryName, manifestFolderDescription);
+        return new ChangeOutputter(this, 
+                getOutputter().deriveSubdirectory(subDirectoryName, manifestFolderDescription)
+        );
     }
 
     /**
@@ -81,7 +117,7 @@ public interface BoundIOContext {
      *     of this name
      * @return either a newly created context, or the existing context
      */
-    default BoundIOContext maybeSubdirectory(
+    default InputOutputContext maybeSubdirectory(
             Optional<String> subdirectoryName,
             ManifestFolderDescription manifestFolderDescription) {
         return subdirectoryName

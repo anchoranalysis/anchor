@@ -39,8 +39,8 @@ import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.mpp.io.input.InputForMPPBean;
 import org.anchoranalysis.mpp.io.input.MPPInitParamsFactory;
@@ -55,18 +55,18 @@ public abstract class DefineOutputter extends AnchorBean<DefineOutputter> {
     @BeanField @Getter @Setter private boolean suppressOutputExceptions = false;
     // END BEAN PROPERTIES
 
-    protected MPPInitParams createInitParams(InputForMPPBean input, BoundIOContext context)
+    protected MPPInitParams createInitParams(InputForMPPBean input, InputOutputContext context)
             throws CreateException {
         return MPPInitParamsFactory.create(
                 context, Optional.ofNullable(define), Optional.of(input));
     }
 
-    protected MPPInitParams createInitParams(BoundIOContext context) throws CreateException {
+    protected MPPInitParams createInitParams(InputOutputContext context) throws CreateException {
         return MPPInitParamsFactory.create(context, Optional.ofNullable(define), Optional.empty());
     }
 
     protected MPPInitParams createInitParams(
-            BoundIOContext context,
+            InputOutputContext context,
             Optional<NamedProvider<Stack>> stacks,
             Optional<NamedProvider<ObjectCollection>> objects,
             Optional<KeyValueParams> keyValueParams)
@@ -76,7 +76,7 @@ public abstract class DefineOutputter extends AnchorBean<DefineOutputter> {
     }
 
     // General objects can be outputted
-    protected void outputSharedObjects(ImageInitParams initParams, BoundIOContext context)
+    protected void outputSharedObjects(ImageInitParams initParams, InputOutputContext context)
             throws OutputWriteFailedException {
         if (suppressOutputExceptions) {
             SharedObjectsOutputter.output(initParams, suppressSubfolders, context);
@@ -85,7 +85,7 @@ public abstract class DefineOutputter extends AnchorBean<DefineOutputter> {
         }
     }
 
-    protected void outputSharedObjects(MPPInitParams initParams, BoundIOContext context)
+    protected void outputSharedObjects(MPPInitParams initParams, InputOutputContext context)
             throws OutputWriteFailedException {
 
         outputSharedObjects(initParams.getImage(), context);

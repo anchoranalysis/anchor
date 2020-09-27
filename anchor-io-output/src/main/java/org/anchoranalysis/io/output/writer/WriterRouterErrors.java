@@ -33,8 +33,8 @@ import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.manifest.ManifestFolderDescription;
 import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
-import org.anchoranalysis.io.output.bound.Outputter;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import org.anchoranalysis.io.output.outputter.Outputter;
 
 /**
  * Write data via generators to the file system, or creates new sub-directories for writng data to.

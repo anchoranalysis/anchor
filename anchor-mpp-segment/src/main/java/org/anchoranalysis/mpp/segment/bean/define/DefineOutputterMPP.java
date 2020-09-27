@@ -32,8 +32,8 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.io.input.series.NamedChannelsForSeries;
 import org.anchoranalysis.image.stack.wrap.WrapStackAsTimeSequenceStore;
-import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.mpp.io.input.MultiInput;
 
@@ -48,7 +48,7 @@ public class DefineOutputterMPP extends DefineOutputter {
         void process(T initParams) throws OperationFailedException;
     }
 
-    public void processInput(NamedChannelsForSeries ncc, BoundIOContext context)
+    public void processInput(NamedChannelsForSeries ncc, InputOutputContext context)
             throws OperationFailedException {
         try {
             MPPInitParams initParams = super.createInitParams(context);
@@ -64,7 +64,7 @@ public class DefineOutputterMPP extends DefineOutputter {
 
     public void processInputImage(
             MultiInput input,
-            BoundIOContext context,
+            InputOutputContext context,
             OperationWithInitParams<ImageInitParams> operation)
             throws OperationFailedException {
         try {
@@ -81,7 +81,7 @@ public class DefineOutputterMPP extends DefineOutputter {
 
     public void processInputMPP(
             MultiInput input,
-            BoundIOContext context,
+            InputOutputContext context,
             OperationWithInitParams<MPPInitParams> operation)
             throws OperationFailedException {
         try {

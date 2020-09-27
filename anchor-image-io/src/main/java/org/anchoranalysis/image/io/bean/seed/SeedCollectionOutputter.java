@@ -29,7 +29,7 @@ package org.anchoranalysis.image.io.bean.seed;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.seed.SeedCollection;
-import org.anchoranalysis.io.output.bound.Outputter;
+import org.anchoranalysis.io.output.outputter.Outputter;
 
 // Selects a mechanism by which seeds are outputted to the file system
 public abstract class SeedCollectionOutputter extends AnchorBean<SeedCollectionOutputter> {

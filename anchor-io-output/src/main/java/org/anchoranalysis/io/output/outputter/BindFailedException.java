@@ -23,27 +23,22 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.io.output.bound.directory;
 
-import lombok.Getter;
-import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
-import org.anchoranalysis.io.output.writer.WriterExecuteBeforeEveryOperation;
+package org.anchoranalysis.io.output.outputter;
 
-/**
- * An operation has been called only once, or else is throws an exception if called again.
- *
- * @author Owen Feehan
- */
-class OneTimeOperation implements WriterExecuteBeforeEveryOperation {
+import org.anchoranalysis.core.error.friendly.AnchorFriendlyCheckedException;
 
-    @Getter private boolean called = false;
+public class BindFailedException extends AnchorFriendlyCheckedException {
 
-    @Override
-    public void execute() {
-        if (called == false) {
-            this.called = true;
-        } else {
-            throw new AnchorFriendlyRuntimeException("execute() has already been called");
-        }
+
+    /** */
+    private static final long serialVersionUID = 1L;
+    
+    public BindFailedException(String message) {
+        super(message);
+    }
+
+    public BindFailedException(Throwable cause) {
+        super(cause);
     }
 }

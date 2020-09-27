@@ -33,7 +33,7 @@ import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.experiment.ExperimentExecutionArguments;
 import org.anchoranalysis.experiment.bean.require.RequireArguments;
 import org.anchoranalysis.experiment.log.StatefulMessageLogger;
-import org.anchoranalysis.io.output.bound.OutputterChecked;
+import org.anchoranalysis.io.output.outputter.OutputterChecked;
 
 /**
  * Logs messages to a particular location ONLY if certain conditions are fulfilled.

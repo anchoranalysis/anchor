@@ -30,7 +30,7 @@ import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.io.generator.raster.object.ObjectWithBoundingBoxGenerator;
 import org.anchoranalysis.image.seed.SeedCollection;
 import org.anchoranalysis.io.generator.collection.GeneratorSubfolderWriter;
-import org.anchoranalysis.io.output.bound.Outputter;
+import org.anchoranalysis.io.output.outputter.Outputter;
 
 public class ObjectOutputter extends SeedCollectionOutputter {
 

@@ -36,7 +36,7 @@ import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.experiment.ExperimentExecutionArguments;
 import org.anchoranalysis.experiment.log.MessageLoggerList;
 import org.anchoranalysis.experiment.log.StatefulMessageLogger;
-import org.anchoranalysis.io.output.bound.OutputterChecked;
+import org.anchoranalysis.io.output.outputter.OutputterChecked;
 
 /**
  * Rather than logging to one location, logs to multiple locations (from a list).

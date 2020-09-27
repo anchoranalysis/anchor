@@ -31,8 +31,8 @@ import org.anchoranalysis.feature.io.csv.FeatureListCSVGeneratorHorizontal;
 import org.anchoranalysis.feature.io.name.MultiName;
 import org.anchoranalysis.feature.name.FeatureNameList;
 import org.anchoranalysis.feature.results.ResultsVectorList;
-import org.anchoranalysis.io.output.bound.Outputter;
-import org.anchoranalysis.io.output.bound.CacheSubdirectoryContext;
+import org.anchoranalysis.io.output.outputter.IntputOutputContextSubdirectoryCache;
+import org.anchoranalysis.io.output.outputter.Outputter;
 
 /**
  * Writes the aggregated results for a single group as CSV to the filesystem.
@@ -46,7 +46,7 @@ class WriteCSVForGroup {
 
     private String outputName;
     private FeatureNameList featureNames;
-    private CacheSubdirectoryContext context;
+    private IntputOutputContextSubdirectoryCache context;
 
     public void write(Optional<MultiName> groupName, ResultsVectorList results) {
         if (groupName.isPresent()) {

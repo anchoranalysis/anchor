@@ -34,7 +34,7 @@ import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.experiment.task.TaskStatistics;
 import org.anchoranalysis.io.input.InputFromManager;
-import org.anchoranalysis.io.output.bound.Outputter;
+import org.anchoranalysis.io.output.outputter.Outputter;
 import com.google.common.base.Preconditions;
 
 /**

@@ -37,8 +37,8 @@ import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureListEvaluator;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import org.anchoranalysis.io.output.outputter.InputOutputContext;
 
 // Doesn't change the objects, just uses a generator to output a feature list as a CSV
 public class OutputFeatureTable extends ImageBean<OutputFeatureTable> {
@@ -51,7 +51,7 @@ public class OutputFeatureTable extends ImageBean<OutputFeatureTable> {
     @BeanField @Getter @Setter private FeatureListEvaluator<FeatureInputSingleObject> feature;
     // END BEAN PROPERTIES
 
-    public void output(BoundIOContext context) throws IOException {
+    public void output(InputOutputContext context) throws IOException {
 
         // Early exit if we're not allowed output anything anyway
         if (!context.getOutputter().outputsEnabled().isOutputAllowed(OUTPUT_NAME_OBJECTS_FEATURE_LIST)) {

@@ -39,7 +39,7 @@ import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.io.output.bound.BoundIOContext;
+import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.mpp.bean.MPPBean;
 import org.anchoranalysis.mpp.bean.init.MPPInitParams;
 
@@ -49,7 +49,7 @@ public class MPPInitParamsFactory {
     private static final String KEY_VALUE_PARAMS_IDENTIFIER = "input_params";
 
     public static MPPInitParams create(
-            BoundIOContext context,
+            InputOutputContext context,
             Optional<Define> define,
             Optional<? extends InputForMPPBean> input)
             throws CreateException {
@@ -83,7 +83,7 @@ public class MPPInitParamsFactory {
     }
 
     public static MPPInitParams createFromExistingCollections(
-            BoundIOContext context,
+            InputOutputContext context,
             Optional<Define> define,
             Optional<NamedProvider<Stack>> stacks,
             Optional<NamedProvider<ObjectCollection>> objects,

@@ -32,26 +32,26 @@ import java.nio.file.Path;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.io.output.bound.BoundIOContext;
+import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.test.LoggingFixture;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class BoundIOContextFixture {
 
-    public static BoundIOContext withSuppressedLogger(Path modelDir) {
-        BoundIOContext out = withSuppressedLogger();
+    public static InputOutputContext withSuppressedLogger(Path modelDir) {
+        InputOutputContext out = withSuppressedLogger();
         when(out.getModelDirectory()).thenReturn(modelDir);
         return out;
     }
 
-    public static BoundIOContext withSuppressedLogger() {
+    public static InputOutputContext withSuppressedLogger() {
         return withLogger(LoggingFixture.suppressedLogErrorReporter());
     }
 
-    public static BoundIOContext withLogger(Logger logger) {
-        BoundIOContext out = spy(BoundIOContext.class);
+    public static InputOutputContext withLogger(Logger logger) {
+        InputOutputContext out = spy(InputOutputContext.class);
         when(out.getLogger()).thenReturn(logger);
-        when(out.getLogReporter()).thenReturn(logger.messageLogger());
+        when(out.getMessageReporter()).thenReturn(logger.messageLogger());
         when(out.getErrorReporter()).thenReturn(logger.errorReporter());
         return out;
     }

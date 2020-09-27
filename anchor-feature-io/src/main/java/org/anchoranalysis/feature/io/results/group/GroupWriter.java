@@ -35,8 +35,8 @@ import org.anchoranalysis.feature.io.results.ResultsWriterMetadata;
 import org.anchoranalysis.feature.list.NamedFeatureStore;
 import org.anchoranalysis.feature.results.ResultsVector;
 import org.anchoranalysis.io.error.AnchorIOException;
-import org.anchoranalysis.io.output.bound.BoundIOContext;
-import org.anchoranalysis.io.output.bound.CacheSubdirectoryContext;
+import org.anchoranalysis.io.output.outputter.InputOutputContext;
+import org.anchoranalysis.io.output.outputter.IntputOutputContextSubdirectoryCache;
 
 /**
  * Writes outputs pertaining to groups to the filesystem.
@@ -85,8 +85,8 @@ public class GroupWriter {
     public void writeGroupResults(
             Optional<NamedFeatureStore<FeatureInputResults>> featuresAggregate,
             boolean includeGroups,
-            BoundIOContext contextAggregated,
-            CacheSubdirectoryContext contextGroups)
+            InputOutputContext contextAggregated,
+            IntputOutputContextSubdirectoryCache contextGroups)
             throws AnchorIOException {
         if (includeGroups) {
             writeGroupXMLAndIntoCSV(contextGroups);
@@ -97,7 +97,7 @@ public class GroupWriter {
         }
     }
 
-    private void writeGroupXMLAndIntoCSV(CacheSubdirectoryContext contextGroups) {
+    private void writeGroupXMLAndIntoCSV(IntputOutputContextSubdirectoryCache contextGroups) {
         outputMetadata
                 .outputNames()
                 .getCsvFeaturesGroup()
@@ -114,8 +114,8 @@ public class GroupWriter {
 
     private void writeAggregated(
             NamedFeatureStore<FeatureInputResults> featuresAggregate,
-            BoundIOContext contextAggregated,
-            CacheSubdirectoryContext contextGroups)
+            InputOutputContext contextAggregated,
+            IntputOutputContextSubdirectoryCache contextGroups)
             throws AnchorIOException {
 
         if (map.isEmpty()) {

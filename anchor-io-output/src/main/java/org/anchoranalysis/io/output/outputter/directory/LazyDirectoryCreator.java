@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.io.output.bound.directory;
+package org.anchoranalysis.io.output.outputter.directory;
 
 import java.nio.file.Path;
 import java.util.Optional;

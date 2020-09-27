@@ -38,10 +38,10 @@ import org.anchoranalysis.image.stack.NamedStacks;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.generator.collection.GeneratorOutputHelper;
 import org.anchoranalysis.io.output.bean.allowed.OutputAllowed;
-import org.anchoranalysis.io.output.bound.BoundIOContext;
-import org.anchoranalysis.io.output.bound.OutputterChecked;
-import org.anchoranalysis.io.output.bound.Outputter;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import org.anchoranalysis.io.output.outputter.InputOutputContext;
+import org.anchoranalysis.io.output.outputter.Outputter;
+import org.anchoranalysis.io.output.outputter.OutputterChecked;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class StacksOutputter {
@@ -57,7 +57,7 @@ public class StacksOutputter {
             NamedProvider<Stack> stacks,
             String secondLevelOutputKey,
             boolean suppressSubfolders,
-            BoundIOContext context) {
+            InputOutputContext context) {
         Outputter outputter = context.getOutputter();
 
         assert (outputter.getSettings().hasBeenInit());

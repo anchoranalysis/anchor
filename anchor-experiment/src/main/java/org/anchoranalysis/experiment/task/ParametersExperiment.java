@@ -35,8 +35,8 @@ import org.anchoranalysis.experiment.ExperimentExecutionArguments;
 import org.anchoranalysis.experiment.bean.log.LoggingDestination;
 import org.anchoranalysis.experiment.log.StatefulMessageLogger;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
-import org.anchoranalysis.io.output.bound.OutputterChecked;
-import org.anchoranalysis.io.output.bound.Outputter;
+import org.anchoranalysis.io.output.outputter.Outputter;
+import org.anchoranalysis.io.output.outputter.OutputterChecked;
 
 /**
  * Parameters for executing a task, when the manifest, log etc. are still bound to the experiment
@@ -59,7 +59,7 @@ public class ParametersExperiment {
      */
     @Getter private boolean detailedLogging;
 
-    @Getter private BoundContextSpecify context;
+    @Getter private InputOutputContextStateful context;
 
     public ParametersExperiment(
             ExperimentExecutionArguments experimentArguments,
@@ -69,7 +69,7 @@ public class ParametersExperiment {
             StatefulMessageLogger loggerExperiment,
             boolean detailedLogging) {
         this.context =
-                new BoundContextSpecify(
+                new InputOutputContextStateful(
                         experimentArguments,
                         wrapExceptions(outputter, loggerExperiment),
                         loggerExperiment,
@@ -85,7 +85,7 @@ public class ParametersExperiment {
     }
 
     public StatefulMessageLogger getLoggerExperiment() {
-        return context.getStatefulLogReporter();
+        return context.getMessageLogger();
     }
 
     public ExperimentExecutionArguments getExperimentArguments() {

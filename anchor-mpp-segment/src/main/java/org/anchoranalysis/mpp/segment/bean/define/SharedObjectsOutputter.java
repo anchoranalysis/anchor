@@ -32,9 +32,9 @@ import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.image.bean.nonbean.init.CreateCombinedStack;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.io.stack.StacksOutputter;
-import org.anchoranalysis.io.output.bound.BoundIOContext;
-import org.anchoranalysis.io.output.bound.Outputter;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import org.anchoranalysis.io.output.outputter.InputOutputContext;
+import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.mpp.io.output.StackOutputKeys;
 
@@ -42,7 +42,7 @@ import org.anchoranalysis.mpp.io.output.StackOutputKeys;
 class SharedObjectsOutputter {
 
     public static void output(
-            ImageInitParams imageInit, boolean suppressSubfolders, BoundIOContext context) {
+            ImageInitParams imageInit, boolean suppressSubfolders, InputOutputContext context) {
         StacksOutputter.outputSubset(
                 CreateCombinedStack.apply(imageInit),
                 StackOutputKeys.STACK,
@@ -51,7 +51,7 @@ class SharedObjectsOutputter {
     }
 
     public static void outputWithException(
-            ImageInitParams imageInit, boolean suppressSubfolders, BoundIOContext context)
+            ImageInitParams imageInit, boolean suppressSubfolders, InputOutputContext context)
             throws OutputWriteFailedException {
         StacksOutputter.outputSubsetWithException(
                 CreateCombinedStack.apply(imageInit),
@@ -61,7 +61,7 @@ class SharedObjectsOutputter {
     }
 
     public static void output(
-            MPPInitParams soMPP, boolean suppressSubfolders, BoundIOContext context) {
+            MPPInitParams soMPP, boolean suppressSubfolders, InputOutputContext context) {
         ErrorReporter errorReporter = context.getErrorReporter();
         Outputter outputter = context.getOutputter();
 

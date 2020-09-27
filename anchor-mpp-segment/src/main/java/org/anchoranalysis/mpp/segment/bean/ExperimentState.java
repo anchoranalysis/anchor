@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.mpp.segment.bean;
 
-import org.anchoranalysis.io.output.bound.Outputter;
+import org.anchoranalysis.io.output.outputter.Outputter;
 
 // State that only needs to be initialized once can be shared across many calls to the algoritm
 public interface ExperimentState {

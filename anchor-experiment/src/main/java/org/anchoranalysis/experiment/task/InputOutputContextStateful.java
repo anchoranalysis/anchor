@@ -32,10 +32,19 @@ import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.experiment.ExperimentExecutionArguments;
 import org.anchoranalysis.experiment.log.StatefulMessageLogger;
-import org.anchoranalysis.io.output.bound.BoundIOContext;
-import org.anchoranalysis.io.output.bound.Outputter;
+import org.anchoranalysis.io.output.outputter.InputOutputContext;
+import org.anchoranalysis.io.output.outputter.Outputter;
 
-public class BoundContextSpecify implements BoundIOContext {
+/**
+ * This exists as an implementation of {@link InputOutputContext} that exposes a {@link StatefulMessageLogger}.
+ * 
+ * <p>As {@link StatefulMessageLogger} exists only in this package, and not in the package where
+ * {@link InputOutputContext} is defined, the interface and class are deliberately separated.
+ * 
+ * @author Owen Feehan
+ *
+ */
+public class InputOutputContextStateful implements InputOutputContext {
 
     private ExperimentExecutionArguments experimentArguments;
     private Outputter outputter;
@@ -43,7 +52,7 @@ public class BoundContextSpecify implements BoundIOContext {
     private StatefulMessageLogger messageLogger;
     private Logger logger; // Always related to the above two fields
 
-    public BoundContextSpecify(
+    public InputOutputContextStateful(
             ExperimentExecutionArguments experimentArguments,
             Outputter outputter,
             StatefulMessageLogger logger,
@@ -80,7 +89,7 @@ public class BoundContextSpecify implements BoundIOContext {
      * Exposed as {@link StatefulMessageLogger} rather than as {@link MessageLogger} that is found
      * in {@link Logger}
      */
-    public StatefulMessageLogger getStatefulLogReporter() {
+    public StatefulMessageLogger getMessageLogger() {
         return messageLogger;
     }
 

@@ -24,12 +24,11 @@
  * #L%
  */
 
-package org.anchoranalysis.io.output.bound;
+package org.anchoranalysis.io.output.outputter;
 
 import java.nio.file.Path;
 import java.util.Optional;
 import lombok.Getter;
-import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.io.bean.filepath.prefixer.FilePathPrefixer;
 import org.anchoranalysis.io.bean.filepath.prefixer.NamedPath;
@@ -47,7 +46,7 @@ import org.anchoranalysis.io.output.bean.OutputManager;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.bean.rules.OutputEnabledRules;
 import org.anchoranalysis.io.output.bean.rules.Permissive;
-import org.anchoranalysis.io.output.bound.directory.BoundDirectory;
+import org.anchoranalysis.io.output.outputter.directory.BoundDirectory;
 import org.anchoranalysis.io.output.writer.RecordedOutputs;
 import org.anchoranalysis.io.output.writer.RecordingWriters;
 
@@ -86,8 +85,8 @@ public class OutputterChecked {
     /** Records the names of all outputs written to, if defined. */
     private Optional<RecordedOutputs> recordedOutputs;
     
-    /** Some variables shared among {@link OutputterChecked} across successive subdirectories. */
-    private final BoundOutputContext context;
+    /** General settings for writing outputs. */
+    @Getter private OutputWriteSettings settings;
 
     /**
      * Creates, defaulting to a permissive output-manager in a a particular directory.
@@ -115,7 +114,7 @@ public class OutputterChecked {
      *
      * @param outputManager output-manager to determine what is included or not
      * @param prefix the prefix
-     * @param outputWriteSettings associated settings
+     * @param settings associated settings
      * @param deleteExistingDirectory if true this directory if it already exists is deleted before
      *     executing the experiment, otherwise an exception is thrown if it exists.
      * @param recordedOutputs if defined, records output-names that are written / not-written in {@link OutputterChecked} (but not any sub-directories thereof)
@@ -124,7 +123,7 @@ public class OutputterChecked {
     public static OutputterChecked createFromOutputManager(
             OutputManager outputManager,
             FilePathPrefix prefix,
-            OutputWriteSettings outputWriteSettings,
+            OutputWriteSettings settings,
             WriteOperationRecorder writeOperationRecorder,
             Optional<RecordedOutputs> recordedOutputs,
             boolean deleteExistingDirectory)
@@ -136,7 +135,7 @@ public class OutputterChecked {
             outputManager.getOutputsEnabled(),
             Optional.of(outputManager.getFilePathPrefixer()),
             recordedOutputs,
-            new BoundOutputContext(outputWriteSettings)
+            settings
         );
     }
 
@@ -148,7 +147,7 @@ public class OutputterChecked {
      * @param parentDirectory the parent-directory in which this {@link OutputterChecked} will create a new directory.
      * @param prefixer the prefixer associated with this output-manager, if one is defined. otherwise the {@link #deriveFromInput} method will not operate.
      * @param recordedOutputs records the names of all outputs written to, if defined.
-     * @param context
+     * @param settings general settings for writing outputs.
      */
     private OutputterChecked(
             FilePathPrefix prefix,
@@ -157,12 +156,12 @@ public class OutputterChecked {
             OutputEnabledRules outputsEnabled,
             Optional<FilePathPrefixer> prefixer,
             Optional<RecordedOutputs> recordedOutputs,
-            BoundOutputContext context)
+            OutputWriteSettings settings)
             throws BindFailedException {
 
         this.boundFilePathPrefix = prefix;
         this.writeOperationRecorder = writeOperationRecorder;
-        this.context = context;
+        this.settings = settings;
         this.outputsEnabled = outputsEnabled;
         this.prefixer = prefixer;
         this.recordedOutputs = recordedOutputs;
@@ -195,7 +194,7 @@ public class OutputterChecked {
             throws BindFailedException {
 
         FilePathPrefixer prefixerSelected = prefixer.orElseThrow( () ->
-            new BindFailedException( new OperationFailedException("The deriveFromInput operation is not supported on this BoundOutputManager, only on the manager associated with the root directory.")) );
+            new BindFailedException("The deriveFromInput operation is not supported on this BoundOutputManager, only on the manager associated with the root directory.") );
         
         try {
             FilePathPrefix prefix = new PrefixForInput(prefixerSelected, prefixerParams).prefixForFile(
@@ -211,7 +210,7 @@ public class OutputterChecked {
                     outputsEnabled,
                     Optional.empty(),   // The prefixer is no longer defined on sub-directories
                     recordedOutputs,
-                    context
+                    settings
             );
         } catch (FilePathPrefixerException e) {
             throw new BindFailedException(e);
@@ -243,7 +242,7 @@ public class OutputterChecked {
                     new Permissive(), // Allow all outputs in the sub-directory
                     Optional.empty(),   // The prefixer is no longer defined on sub-directories
                     Optional.empty(),   // Output-names are no longer recorded on sub-directories
-                    context);
+                    settings);
         } catch (BindFailedException e) {
             // This exception can only be thrown if the prefix-path doesn't reside within the
             // rootDirectory
@@ -273,10 +272,6 @@ public class OutputterChecked {
 
     public Path outFilePath(String filePathRelative) {
         return boundFilePathPrefix.outFilePath(filePathRelative);
-    }
-    
-    public OutputWriteSettings getSettings() {
-        return context.getSettings();
     }
 
     /**

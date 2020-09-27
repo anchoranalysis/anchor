@@ -33,7 +33,7 @@ import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.experiment.ExperimentExecutionArguments;
 import org.anchoranalysis.experiment.log.ConsoleMessageLogger;
 import org.anchoranalysis.experiment.log.StatefulMessageLogger;
-import org.anchoranalysis.io.output.bound.OutputterChecked;
+import org.anchoranalysis.io.output.outputter.OutputterChecked;
 
 /**
  * The destination(s) to which log-messages are sent.

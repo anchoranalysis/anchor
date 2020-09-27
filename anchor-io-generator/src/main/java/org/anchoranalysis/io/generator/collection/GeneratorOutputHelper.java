@@ -43,8 +43,8 @@ import org.anchoranalysis.io.generator.sequence.GeneratorSequenceNonIncrementalR
 import org.anchoranalysis.io.manifest.sequencetype.SetSequenceType;
 import org.anchoranalysis.io.namestyle.StringSuffixOutputNameStyle;
 import org.anchoranalysis.io.output.bean.allowed.OutputAllowed;
-import org.anchoranalysis.io.output.bound.OutputterChecked;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import org.anchoranalysis.io.output.outputter.OutputterChecked;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class GeneratorOutputHelper {

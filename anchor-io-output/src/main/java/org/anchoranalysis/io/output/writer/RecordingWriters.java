@@ -1,7 +1,7 @@
 package org.anchoranalysis.io.output.writer;
 
 import java.util.Optional;
-import org.anchoranalysis.io.output.bound.OutputterChecked;
+import org.anchoranalysis.io.output.outputter.OutputterChecked;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 

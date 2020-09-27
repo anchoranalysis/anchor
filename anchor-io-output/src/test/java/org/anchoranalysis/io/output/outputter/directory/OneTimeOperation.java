@@ -23,50 +23,27 @@
  * THE SOFTWARE.
  * #L%
  */
+package org.anchoranalysis.io.output.outputter.directory;
 
-package org.anchoranalysis.io.output.bound;
-
-import java.nio.file.Path;
-import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.io.manifest.ManifestFolderDescription;
+import lombok.Getter;
+import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
+import org.anchoranalysis.io.output.writer.WriterExecuteBeforeEveryOperation;
 
 /**
- * Like an existing bound-context but redirects all output into a sub-folder
+ * An operation has been called only once, or else is throws an exception if called again.
  *
  * @author Owen Feehan
  */
-class RedirectIntoSubdirectory implements BoundIOContext {
+class OneTimeOperation implements WriterExecuteBeforeEveryOperation {
 
-    private BoundIOContext delegate;
-    private Outputter replacementOutputter;
-
-    public RedirectIntoSubdirectory(
-            BoundIOContext delegate,
-            String folderPath,
-            ManifestFolderDescription manifestDescription) {
-        super();
-        this.delegate = delegate;
-        this.replacementOutputter =
-                delegate.getOutputter().deriveSubdirectory(folderPath, manifestDescription);
-    }
+    @Getter private boolean called = false;
 
     @Override
-    public Outputter getOutputter() {
-        return replacementOutputter;
-    }
-
-    @Override
-    public Path getModelDirectory() {
-        return delegate.getModelDirectory();
-    }
-
-    @Override
-    public boolean isDebugEnabled() {
-        return delegate.isDebugEnabled();
-    }
-
-    @Override
-    public Logger getLogger() {
-        return delegate.getLogger();
+    public void execute() {
+        if (called == false) {
+            this.called = true;
+        } else {
+            throw new AnchorFriendlyRuntimeException("execute() has already been called");
+        }
     }
 }

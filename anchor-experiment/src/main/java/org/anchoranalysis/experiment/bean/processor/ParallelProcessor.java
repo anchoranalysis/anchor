@@ -46,7 +46,7 @@ import org.anchoranalysis.experiment.task.processor.JobDescription;
 import org.anchoranalysis.experiment.task.processor.JobState;
 import org.anchoranalysis.experiment.task.processor.SubmittedJob;
 import org.anchoranalysis.io.input.InputFromManager;
-import org.anchoranalysis.io.output.bound.Outputter;
+import org.anchoranalysis.io.output.outputter.Outputter;
 
 /**
  * Executes jobs in parallel

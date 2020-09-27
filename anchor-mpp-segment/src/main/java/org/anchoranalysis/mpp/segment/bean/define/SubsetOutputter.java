@@ -31,8 +31,8 @@ import org.anchoranalysis.core.name.provider.NamedProvider;
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.generator.collection.GeneratorOutputHelper;
 import org.anchoranalysis.io.output.bean.allowed.OutputAllowed;
-import org.anchoranalysis.io.output.bound.OutputterChecked;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import org.anchoranalysis.io.output.outputter.OutputterChecked;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor

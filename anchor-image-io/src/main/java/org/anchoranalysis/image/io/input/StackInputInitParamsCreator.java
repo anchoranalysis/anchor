@@ -30,13 +30,13 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
-import org.anchoranalysis.io.output.bound.BoundIOContext;
+import org.anchoranalysis.io.output.outputter.InputOutputContext;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class StackInputInitParamsCreator {
 
     public static ImageInitParams createInitParams(
-            ProvidesStackInput inputObject, BoundIOContext context)
+            ProvidesStackInput inputObject, InputOutputContext context)
             throws OperationFailedException {
         ImageInitParams soImage = ImageInitParamsFactory.create(context);
         inputObject.addToStoreInferNames(soImage.stacks());

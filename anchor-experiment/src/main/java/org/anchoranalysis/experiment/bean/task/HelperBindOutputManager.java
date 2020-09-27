@@ -36,9 +36,9 @@ import org.anchoranalysis.io.bean.filepath.prefixer.NamedPath;
 import org.anchoranalysis.io.error.FilePathPrefixerException;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
-import org.anchoranalysis.io.output.bound.BindFailedException;
-import org.anchoranalysis.io.output.bound.OutputterChecked;
-import org.anchoranalysis.io.output.bound.Outputter;
+import org.anchoranalysis.io.output.outputter.BindFailedException;
+import org.anchoranalysis.io.output.outputter.Outputter;
+import org.anchoranalysis.io.output.outputter.OutputterChecked;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class HelperBindOutputManager {

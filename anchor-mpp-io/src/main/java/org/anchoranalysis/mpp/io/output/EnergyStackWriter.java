@@ -32,7 +32,7 @@ import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.image.io.generator.raster.ChannelGenerator;
 import org.anchoranalysis.io.generator.sequence.GeneratorSequenceUtilities;
 import org.anchoranalysis.io.generator.serialized.KeyValueParamsGenerator;
-import org.anchoranalysis.io.output.bound.BoundIOContext;
+import org.anchoranalysis.io.output.outputter.InputOutputContext;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class EnergyStackWriter {
@@ -43,7 +43,7 @@ public class EnergyStackWriter {
     private static final String MANIFEST_FUNCTION_CHANNEL = "energyStackChannel";
     private static final String MANIFEST_FUNCTION_PARAMS = "energyStackParams";
 
-    public static void writeEnergyStack(EnergyStack energyStack, BoundIOContext context) {
+    public static void writeEnergyStack(EnergyStack energyStack, InputOutputContext context) {
         // We write the energy-stack separately as individual channels
         GeneratorSequenceUtilities.generateListAsSubfolder(
                 FOLDER_CHANNEL,

@@ -28,8 +28,8 @@ package org.anchoranalysis.io.output.writer;
 
 import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.namestyle.OutputNameStyle;
-import org.anchoranalysis.io.output.bound.OutputterChecked;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import org.anchoranalysis.io.output.outputter.OutputterChecked;
 
 /**
  * An item that can be outputted via a write() method

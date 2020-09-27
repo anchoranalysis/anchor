@@ -33,7 +33,7 @@ import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.io.generator.text.TextFileOutput;
-import org.anchoranalysis.io.output.bound.OutputterChecked;
+import org.anchoranalysis.io.output.outputter.OutputterChecked;
 
 /**
  * Logs messages to a text-file.

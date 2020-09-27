@@ -30,7 +30,7 @@ import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.experiment.ExperimentExecutionArguments;
 import org.anchoranalysis.experiment.log.StatefulMessageLogger;
 import org.anchoranalysis.experiment.log.TextFileMessageLogger;
-import org.anchoranalysis.io.output.bound.OutputterChecked;
+import org.anchoranalysis.io.output.outputter.OutputterChecked;
 
 /**
  * Logs to a text-file created in the output-directory under a particular name.

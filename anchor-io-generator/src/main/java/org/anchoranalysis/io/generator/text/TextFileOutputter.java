@@ -31,7 +31,7 @@ import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.io.manifest.ManifestDescription;
-import org.anchoranalysis.io.output.bound.OutputterChecked;
+import org.anchoranalysis.io.output.outputter.OutputterChecked;
 
 /**
  * Maybe creates a {@link TextFileOutput} based upon settings in a {@link OutputterChecked}.

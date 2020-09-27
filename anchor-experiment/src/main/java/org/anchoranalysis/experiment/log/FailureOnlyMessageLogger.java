@@ -31,7 +31,7 @@ import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.io.error.AnchorIOException;
-import org.anchoranalysis.io.output.bound.OutputterChecked;
+import org.anchoranalysis.io.output.outputter.OutputterChecked;
 
 /**
  * Writes text to a file, but only if {@link #close} is called with {@code successful==true}.

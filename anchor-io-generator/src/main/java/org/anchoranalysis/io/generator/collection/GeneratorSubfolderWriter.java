@@ -32,9 +32,9 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.functional.function.CheckedSupplier;
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.generator.sequence.CollectionGenerator;
-import org.anchoranalysis.io.output.bound.OutputterChecked;
-import org.anchoranalysis.io.output.bound.Outputter;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import org.anchoranalysis.io.output.outputter.Outputter;
+import org.anchoranalysis.io.output.outputter.OutputterChecked;
 import org.anchoranalysis.io.output.writer.WritableItem;
 
 /**

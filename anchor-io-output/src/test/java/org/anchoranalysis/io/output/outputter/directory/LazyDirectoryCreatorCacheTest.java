@@ -23,7 +23,7 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.io.output.bound.directory;
+package org.anchoranalysis.io.output.outputter.directory;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;

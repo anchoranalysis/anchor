@@ -1,16 +1,16 @@
-package org.anchoranalysis.io.output.bound.directory;
+package org.anchoranalysis.io.output.outputter.directory;
 
 import java.nio.file.Path;
 import java.util.Optional;
 import org.anchoranalysis.core.index.GetOperationFailedException;
-import org.anchoranalysis.io.output.bound.BindFailedException;
+import org.anchoranalysis.io.output.outputter.BindFailedException;
 import org.anchoranalysis.io.output.writer.WriterExecuteBeforeEveryOperation;
 import com.google.common.base.Preconditions;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * A particular directory that is used as a binding-path by {@link org.anchoranalysis.io.output.bound.OutputterChecked}.
+ * A particular directory that is used as a binding-path by {@link org.anchoranalysis.io.output.outputter.OutputterChecked}.
  * 
  * @author Owen Feehan
  *

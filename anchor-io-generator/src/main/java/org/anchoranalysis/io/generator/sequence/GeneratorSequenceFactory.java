@@ -29,8 +29,8 @@ import lombok.AllArgsConstructor;
 import java.util.Optional;
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.namestyle.IntegerSuffixOutputNameStyle;
-import org.anchoranalysis.io.output.bound.BoundIOContext;
-import org.anchoranalysis.io.output.bound.Outputter;
+import org.anchoranalysis.io.output.outputter.InputOutputContext;
+import org.anchoranalysis.io.output.outputter.Outputter;
 
 @AllArgsConstructor
 public class GeneratorSequenceFactory {
@@ -48,7 +48,7 @@ public class GeneratorSequenceFactory {
     private final String filePrefixName;
 
     public <T> GeneratorSequenceIncrementalRerouteErrors<T> createIncremental(
-            Generator<T> generator, BoundIOContext context) {
+            Generator<T> generator, InputOutputContext context) {
 
         return new GeneratorSequenceIncrementalRerouteErrors<>(
                 new GeneratorSequenceIncrementalWriter<>(

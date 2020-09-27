@@ -31,8 +31,8 @@ import lombok.Getter;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.experiment.log.StatefulMessageLogger;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
-import org.anchoranalysis.io.output.bound.BoundIOContext;
-import org.anchoranalysis.io.output.bound.Outputter;
+import org.anchoranalysis.io.output.outputter.InputOutputContext;
+import org.anchoranalysis.io.output.outputter.Outputter;
 
 /**
  * Input for executing a task, associated with shared-state and other parameters.
@@ -52,14 +52,14 @@ public class InputBound<T, S> {
 
     @Getter private final boolean detailedLogging;
 
-    private final BoundContextSpecify context;
+    private final InputOutputContextStateful context;
 
     /** Immutably changes the input-object */
     public <U> InputBound<U, S> changeInputObject(U inputObjectNew) {
         return new InputBound<>(inputObjectNew, sharedState, manifest, detailedLogging, context);
     }
 
-    public BoundIOContext context() {
+    public InputOutputContext context() {
         return context;
     }
 
@@ -72,6 +72,6 @@ public class InputBound<T, S> {
     }
 
     public StatefulMessageLogger getLogReporterJob() {
-        return context.getStatefulLogReporter();
+        return context.getMessageLogger();
     }
 }

@@ -35,7 +35,7 @@ import org.anchoranalysis.core.memory.MemoryUtilities;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.log.StatefulMessageLogger;
-import org.anchoranalysis.experiment.task.BoundContextSpecify;
+import org.anchoranalysis.experiment.task.InputOutputContextStateful;
 import org.anchoranalysis.experiment.task.ErrorReporterForTask;
 import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
@@ -46,9 +46,9 @@ import org.anchoranalysis.io.generator.serialized.XStreamGenerator;
 import org.anchoranalysis.io.generator.text.StringGenerator;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
-import org.anchoranalysis.io.output.bound.BoundIOContext;
-import org.anchoranalysis.io.output.bound.OutputterChecked;
-import org.anchoranalysis.io.output.bound.Outputter;
+import org.anchoranalysis.io.output.outputter.InputOutputContext;
+import org.anchoranalysis.io.output.outputter.Outputter;
+import org.anchoranalysis.io.output.outputter.OutputterChecked;
 import org.anchoranalysis.io.output.writer.WriterRouterErrors;
 import org.apache.commons.lang.time.StopWatch;
 
@@ -122,7 +122,7 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
      * @param context IO-context for experiment (not for an individual job)
      * @throws ExperimentExecutionException
      */
-    public abstract void afterAllJobsAreExecuted(S sharedState, BoundIOContext context)
+    public abstract void afterAllJobsAreExecuted(S sharedState, InputOutputContext context)
             throws ExperimentExecutionException;
 
     /** Is an input-object compatible with this particular task? */
@@ -174,7 +174,7 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
                 paramsUnbound.getSharedState(),
                 manifestTask,
                 paramsUnbound.getParametersExperiment().isDetailedLogging(),
-                new BoundContextSpecify(
+                new InputOutputContextStateful(
                         paramsUnbound.getParametersExperiment().getExperimentArguments(),
                         outputterTask,
                         loggerJob,

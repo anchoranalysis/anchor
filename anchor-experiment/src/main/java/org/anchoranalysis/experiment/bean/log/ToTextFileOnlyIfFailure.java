@@ -30,7 +30,7 @@ import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.experiment.ExperimentExecutionArguments;
 import org.anchoranalysis.experiment.log.FailureOnlyMessageLogger;
 import org.anchoranalysis.experiment.log.StatefulMessageLogger;
-import org.anchoranalysis.io.output.bound.OutputterChecked;
+import org.anchoranalysis.io.output.outputter.OutputterChecked;
 
 /**
  * Logs to a text file like with {@link org.anchoranalysis.experiment.bean.log.ToTextFile} but the

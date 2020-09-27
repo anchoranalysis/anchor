@@ -38,8 +38,8 @@ import org.anchoranalysis.feature.results.ResultsVector;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.manifest.ManifestFolderDescription;
 import org.anchoranalysis.io.manifest.sequencetype.SetSequenceType;
-import org.anchoranalysis.io.output.bound.BoundIOContext;
-import org.anchoranalysis.io.output.bound.CacheSubdirectoryContext;
+import org.anchoranalysis.io.output.outputter.InputOutputContext;
+import org.anchoranalysis.io.output.outputter.IntputOutputContextSubdirectoryCache;
 
 /**
  * Feature calculation results that can be outputted in different ways.
@@ -79,7 +79,7 @@ public class ResultsWriter implements Closeable {
      * @param context defines the direction in which outputs occur.
      * @throws AnchorIOException if I/O fails.
      */
-    public ResultsWriter(ResultsWriterMetadata outputMetadata, BoundIOContext context)
+    public ResultsWriter(ResultsWriterMetadata outputMetadata, InputOutputContext context)
             throws AnchorIOException {
 
         // Where non-group results are outputted
@@ -123,11 +123,11 @@ public class ResultsWriter implements Closeable {
     public void writeResultsForAllGroups(
             Optional<NamedFeatureStore<FeatureInputResults>> featuresAggregate,
             boolean includeGroups,
-            BoundIOContext context)
+            InputOutputContext context)
             throws AnchorIOException {
 
-        CacheSubdirectoryContext contextGroups =
-                new CacheSubdirectoryContext(
+        IntputOutputContextSubdirectoryCache contextGroups =
+                new IntputOutputContextSubdirectoryCache(
                         context.subdirectory("grouped", MANIFEST_GROUP_ROOT),
                         MANIFEST_GROUP_SUBROOT);
 

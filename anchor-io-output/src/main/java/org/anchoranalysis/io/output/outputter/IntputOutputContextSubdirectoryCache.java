@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.io.output.bound;
+package org.anchoranalysis.io.output.outputter;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -33,21 +33,23 @@ import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.io.manifest.ManifestFolderDescription;
 
 /**
- * Caches sub-directories as they are created, so as to reuse the BoundIOContext, without creating
- * duplicate manifest entries.
+ * Caches a {@link InputOutputContext} for each sub-directory as they are created.
+ * 
+ * <p>This allows reusage of an existing {@link InputOutputContext} in other outputters
+ * without creating duplicate manifest entries.
  *
  * @author Owen Feehan
  */
 @RequiredArgsConstructor
-public class CacheSubdirectoryContext {
+public class IntputOutputContextSubdirectoryCache {
 
     /** the context of the directory in which subdirectories may be created */
-    private final BoundIOContext parentContext;
+    private final InputOutputContext parentContext;
 
     /** A description to use for every created folder */
     private final ManifestFolderDescription manifestFolderDescription;
 
-    private Map<Optional<String>, BoundIOContext> mapContexts = new HashMap<>();
+    private Map<Optional<String>, InputOutputContext> mapContexts = new HashMap<>();
 
     /**
      * Gets (from the cache if it's already there) a context for a subdirectory of given-name
@@ -56,7 +58,7 @@ public class CacheSubdirectoryContext {
      *     returned instead.
      * @return either an existing context for the sub-directory or a newly created one
      */
-    public BoundIOContext get(Optional<String> subdirectoryName) {
+    public InputOutputContext get(Optional<String> subdirectoryName) {
         return mapContexts.computeIfAbsent(
                 subdirectoryName,
                 key -> parentContext.maybeSubdirectory(key, manifestFolderDescription));

@@ -35,8 +35,8 @@ import org.anchoranalysis.io.manifest.folder.FolderWriteWithPath;
 import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.namestyle.IntegerSuffixOutputNameStyle;
 import org.anchoranalysis.io.namestyle.SimpleOutputNameStyle;
-import org.anchoranalysis.io.output.bound.OutputterChecked;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import org.anchoranalysis.io.output.outputter.OutputterChecked;
 
 /**
  * Allows every output, irrespective of whether the {@link OutputterChecked} allows the output-name.
