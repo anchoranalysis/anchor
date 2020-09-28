@@ -29,6 +29,12 @@ package org.anchoranalysis.io.output.bean.rules;
 import org.anchoranalysis.io.output.bean.allowed.AllOutputAllowed;
 import org.anchoranalysis.io.output.bean.allowed.OutputAllowed;
 
+/**
+ * Allows all output-names to be outputted in both first and second level.
+ * 
+ * @author Owen Feehan
+ *
+ */
 public class Permissive extends OutputEnabledRules {
 
     @Override

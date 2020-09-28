@@ -51,8 +51,8 @@ public class CheckIfAllowed implements Writer {
     /** The associated output-manager */
     private final OutputEnabledRules outputEnabled;
 
-    /** Execute before every operation */
-    private final WriterExecuteBeforeEveryOperation preop;
+    /** If defined, execute before every operation */
+    private final Optional<WriterExecuteBeforeEveryOperation> preop;
 
     /** The writer. */
     private final Writer writer;
@@ -69,7 +69,7 @@ public class CheckIfAllowed implements Writer {
             return Optional.empty();
         }
 
-        preop.execute();
+        maybeExecutePreop();
 
         return writer.createSubdirectory(outputName, manifestDescription, manifestFolder);
     }
@@ -82,7 +82,7 @@ public class CheckIfAllowed implements Writer {
             return false;
         }
 
-        preop.execute();
+        maybeExecutePreop();
 
         writer.writeSubdirectoryWithGenerator(outputName, collectionGenerator);
         
@@ -100,7 +100,7 @@ public class CheckIfAllowed implements Writer {
             return NUMBER_ELEMENTS_WRITTEN_NOT_ALLOWED;
         }
 
-        preop.execute();
+        maybeExecutePreop();
 
         return writer.write(outputNameStyle, generator, index);
     }
@@ -113,7 +113,7 @@ public class CheckIfAllowed implements Writer {
             return false;
         }
 
-        preop.execute();
+        maybeExecutePreop();
 
         writer.write(outputName, generator);
         
@@ -130,11 +130,15 @@ public class CheckIfAllowed implements Writer {
             return Optional.empty();
         }
 
-        preop.execute();
+        maybeExecutePreop();
 
         return writer.writeGenerateFilename(
                 outputName,
                 extension,
                 manifestDescription);
+    }
+        
+    private void maybeExecutePreop() {
+        preop.ifPresent(WriterExecuteBeforeEveryOperation::execute);;
     }
 }

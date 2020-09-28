@@ -124,10 +124,6 @@ public class Outputter {
         return delegate.getOutputFolderPath();
     }
 
-    public Path outFilePath(String filePathRelative) {
-        return delegate.outFilePath(filePathRelative);
-    }
-
     public String toString() {
         return delegate.toString();
     }

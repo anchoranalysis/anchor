@@ -13,9 +13,9 @@ class WithoutBindingPathOutputterFactory {
     public static OutputterChecked createWithoutBindingPath(
             Optional<ManifestRecorder> manifestTask, Outputter outputter) {
         manifestTask.ifPresent(
-                mt -> {
-                    mt.init(outputter.getOutputFolderPath());
-                    outputter.addOperationRecorder(mt.getRootFolder());
+                manifest -> {
+                    manifest.init(outputter.getOutputFolderPath());
+                    outputter.addOperationRecorder(manifest.getRootFolder());
                 });
         return outputter.getChecked();
     }

@@ -32,10 +32,10 @@ public class RecordingWriters {
      * Creates the two writers.
      * 
      * @param outputter the output-manager with which the writers are associated.
-     * @param preop an operation executed before creation of every directory.
+     * @param preop an operation executed before creation of every directory, if defined.
      * @param recordedOutputs all output-names that are passed as arguments to both writers are recorded here.
      */
-    public RecordingWriters(OutputterChecked outputter, WriterExecuteBeforeEveryOperation preop, Optional<RecordedOutputs> recordedOutputs) {
+    public RecordingWriters(OutputterChecked outputter, Optional<WriterExecuteBeforeEveryOperation> preop, Optional<RecordedOutputs> recordedOutputs) {
         this.recordedOutputs = recordedOutputs;
         this.permissive = record(new AlwaysAllowed(outputter, preop));
         this.selective = record(new CheckIfAllowed(outputter.getOutputsEnabled(), preop, permissive));

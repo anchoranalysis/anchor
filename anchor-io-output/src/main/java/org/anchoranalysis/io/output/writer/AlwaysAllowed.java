@@ -51,8 +51,8 @@ public class AlwaysAllowed implements Writer {
     /** Bound output manager */
     private final OutputterChecked outputter;
 
-    /** Execute before every operation */
-    private final WriterExecuteBeforeEveryOperation preop;
+    /** Execute before every operation if defined. */
+    private final Optional<WriterExecuteBeforeEveryOperation> preop;
     // END REQUIRED ARGUMENTS
 
     @Override
@@ -62,7 +62,7 @@ public class AlwaysAllowed implements Writer {
             Optional<FolderWriteWithPath> manifestFolder)
             throws OutputWriteFailedException {
 
-        preop.execute();
+        maybeExecutePreop();
         return Optional.of(outputter.deriveSubdirectory(outputName, manifestDescription, manifestFolder));
     }
 
@@ -70,7 +70,7 @@ public class AlwaysAllowed implements Writer {
     public boolean writeSubdirectoryWithGenerator(String outputName, GenerateWritableItem<?> collectionGenerator)
             throws OutputWriteFailedException {
 
-        preop.execute();
+        maybeExecutePreop();
 
         collectionGenerator.get().write(new IntegerSuffixOutputNameStyle(outputName, 3), outputter);
         
@@ -84,7 +84,7 @@ public class AlwaysAllowed implements Writer {
             String index)
             throws OutputWriteFailedException {
 
-        preop.execute();
+        maybeExecutePreop();
         return generator.get().write(outputNameStyle, index, outputter);
     }
 
@@ -92,7 +92,7 @@ public class AlwaysAllowed implements Writer {
     @Override
     public boolean write(String outputName, GenerateWritableItem<?> generator)
             throws OutputWriteFailedException {
-        preop.execute();
+        maybeExecutePreop();
         generator.get().write( new SimpleOutputNameStyle(outputName), outputter);
         return true;
     }
@@ -105,7 +105,7 @@ public class AlwaysAllowed implements Writer {
             String extension,
             Optional<ManifestDescription> manifestDescription) {
 
-        preop.execute();
+        maybeExecutePreop();
 
         Path outPath =
                 outputter.outFilePath(outputName + "." + extension);
@@ -113,5 +113,9 @@ public class AlwaysAllowed implements Writer {
         manifestDescription.ifPresent(
                 md -> outputter.writeFileToOperationRecorder(outputName, outPath, md, ""));
         return Optional.of(outPath);
+    }
+    
+    private void maybeExecutePreop() {
+        preop.ifPresent(WriterExecuteBeforeEveryOperation::execute);;
     }
 }

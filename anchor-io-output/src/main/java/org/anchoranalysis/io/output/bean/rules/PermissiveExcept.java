@@ -41,21 +41,29 @@ import org.anchoranalysis.io.output.bean.allowed.OutputAllowed;
 import org.anchoranalysis.io.output.bean.allowed.SpecificOutputDisallowed;
 
 /**
- * Allows everything to be outputted except a particular list
+ * Allows everything to be outputted except a particular list.
  *
+ * <p>The {@code extendSecondLevel} entries apply to <i>all</i> second-level outputs.
+ * 
  * @author Owen Feehan
  */
 @NoArgsConstructor
 public class PermissiveExcept extends OutputEnabledRules {
 
     // START BEAN PROPERTIES
+    /** Rejects these output-names in the first-level. */
     @BeanField @Getter @Setter private StringSet except;
 
-    /** Ignores all these strings in the second-level (for respect keys) */
+    /** Rejects all these output-names in the second-level (for all first level output-names) */
     @BeanField @Getter @Setter
     private List<NamedBean<StringSet>> exceptSecondLevel = new ArrayList<>();
     // END BEAN PROPERTIES
 
+    /**
+     * Create to reject a specific set of first-level output-names.
+     * 
+     * @param except rejects these output-names in the first-level.
+     */
     public PermissiveExcept(StringSet except) {
         this.except = except;
     }
