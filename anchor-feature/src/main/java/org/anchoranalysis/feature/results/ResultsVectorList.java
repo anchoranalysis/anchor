@@ -34,9 +34,8 @@ import lombok.NoArgsConstructor;
 
 /**
  * A list of elements of type {@link ResultsVector}.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 @NoArgsConstructor
 public class ResultsVectorList implements Iterable<ResultsVector> {

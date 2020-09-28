@@ -31,9 +31,8 @@ import org.anchoranalysis.io.bean.color.RGBColorBean;
 
 /**
  * A black background and white axes.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class BlackBackgroud extends PlotColorScheme {
 
@@ -42,7 +41,7 @@ public class BlackBackgroud extends PlotColorScheme {
         setPlotBackgroundColor(beanFor(Color.BLACK));
         setAxisColor(beanFor(Color.WHITE));
     }
-    
+
     private static RGBColorBean beanFor(java.awt.Color delegate) {
         return new RGBColorBean(delegate);
     }

@@ -27,36 +27,36 @@
 package org.anchoranalysis.image.io.generator.raster;
 
 import java.util.Optional;
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.io.rasterwriter.RasterWriteOptions;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
-import lombok.AllArgsConstructor;
 
 /**
  * Writes a single channel to a file.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 @AllArgsConstructor
 public class ChannelGenerator extends RasterGeneratorWithElement<Channel> {
 
     /** Function that is associated in the manifest with this output. */
     private final String manifestFunction;
-    
+
     /** If true, any channel passed to the generator is guaranteed to be 2D. */
     private final boolean always2D;
 
     /**
-     * Creates a generator with a particular channel assigned and with {@code always2D} calculated from this channel.
-     * 
+     * Creates a generator with a particular channel assigned and with {@code always2D} calculated
+     * from this channel.
+     *
      * @param manifestFunction the manifest-function
      * @param channel the channel to assign
      */
     public ChannelGenerator(String manifestFunction, Channel channel) {
-        this(manifestFunction, channel.extent().z()==1 );
+        this(manifestFunction, channel.extent().z() == 1);
         assignElement(channel);
     }
 

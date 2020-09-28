@@ -36,13 +36,13 @@ import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
 
 /**
- * This exists as an implementation of {@link InputOutputContext} that exposes a {@link StatefulMessageLogger}.
- * 
+ * This exists as an implementation of {@link InputOutputContext} that exposes a {@link
+ * StatefulMessageLogger}.
+ *
  * <p>As {@link StatefulMessageLogger} exists only in this package, and not in the package where
  * {@link InputOutputContext} is defined, the interface and class are deliberately separated.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class InputOutputContextStateful implements InputOutputContext {
 

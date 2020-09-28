@@ -50,11 +50,11 @@ import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.output.MultiLevelOutputEnabled;
 import org.anchoranalysis.io.output.bean.OutputManager;
-import org.anchoranalysis.io.output.bean.rules.OutputEnabledRules;
 
 /**
- * An experiment that uses both an {@link InputManager} to specify inputs and a {@link OutputManager} to specify outputting.
- * 
+ * An experiment that uses both an {@link InputManager} to specify inputs and a {@link
+ * OutputManager} to specify outputting.
+ *
  * @author Owen Feehan
  * @param <T> input-object type
  * @param <S> shared-state for job
@@ -66,17 +66,18 @@ public class InputOutputExperiment<T extends InputFromManager, S> extends Output
     /** The input-manager to specify where/which/how necessary inputs for the experiment occur. */
     @BeanField @Getter @Setter private InputManager<T> input;
 
-    /** What task is associated with the experiment, and how it is processed.
+    /**
+     * What task is associated with the experiment, and how it is processed.
      *
-     *  e.g. how the task processes the inputs in the form of jobs (sequentially, parallel, how many processors? etc.)
+     * <p>e.g. how the task processes the inputs in the form of jobs (sequentially, parallel, how
+     * many processors? etc.)
      */
     @BeanField @Getter @Setter private JobProcessor<T, S> taskProcessor;
 
-    /** 
+    /**
      * Where log messages that <b>do<b> pertain to a specific job (input) appear.
      *
-     * <p>This is in contrast to {@code logExperiment} where non-job specific log messages
-     * appear.
+     * <p>This is in contrast to {@code logExperiment} where non-job specific log messages appear.
      */
     @BeanField @Getter @Setter private LoggingDestination logTask = new ToConsole();
     // END BEAN PROPERTIES
@@ -109,7 +110,8 @@ public class InputOutputExperiment<T extends InputFromManager, S> extends Output
     }
 
     @Override
-    protected void executeExperimentWithParams(ParametersExperiment params) throws ExperimentExecutionException {
+    protected void executeExperimentWithParams(ParametersExperiment params)
+            throws ExperimentExecutionException {
         try {
             List<T> inputObjects =
                     getInput()
@@ -134,7 +136,7 @@ public class InputOutputExperiment<T extends InputFromManager, S> extends Output
     protected Optional<MultiLevelOutputEnabled> defaultOutputs() {
         return taskProcessor.getTask().defaultOutputs();
     }
-    
+
     private void checkCompabilityInputObjects(List<T> inputObjects)
             throws ExperimentExecutionException {
         for (T object : inputObjects) {

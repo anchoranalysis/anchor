@@ -36,14 +36,12 @@ import org.anchoranalysis.io.manifest.folder.FolderWritePhysical;
 import org.anchoranalysis.io.manifest.operationrecorder.WriteOperationRecorder;
 import org.anchoranalysis.io.output.MultiLevelOutputEnabled;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
-import org.anchoranalysis.io.output.bean.rules.OutputEnabledRules;
 import org.anchoranalysis.io.output.writer.WriterRouterErrors;
 
 /**
  * Like {@link OutputterChecked} but exceptions are reported in a {@link ErrorReporter}.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 @RequiredArgsConstructor
 public class Outputter {
@@ -77,8 +75,8 @@ public class Outputter {
 
     /**
      * The writer that allows all outputs.
-     * 
-     * @return the permissive writer 
+     *
+     * @return the permissive writer
      */
     public WriterRouterErrors writerPermissive() {
         return new WriterRouterErrors(delegate.getWriters().permissive(), errorReporter);
@@ -86,17 +84,18 @@ public class Outputter {
 
     /**
      * The writer that allows only certain selected outputs.
-     * 
+     *
      * @return the non-permissive writer
      */
     public WriterRouterErrors writerSelective() {
         return new WriterRouterErrors(delegate.getWriters().selective(), errorReporter);
     }
-    
+
     /**
      * Multiplexes between the {@code selective} and {@code permissive} writers based on a flag.
-     * 
-     * @param selectSelective if true, {@link #writerSelective} is returned, otherwise {@link #writerPermissive}.
+     *
+     * @param selectSelective if true, {@link #writerSelective} is returned, otherwise {@link
+     *     #writerPermissive}.
      * @return the chosen writer
      */
     public WriterRouterErrors writerMultiplex(boolean selectSelective) {
@@ -134,8 +133,9 @@ public class Outputter {
     }
 
     /**
-     * Gets the underlying delegate of {@link Outputter} that throws checked-exceptions instead of using a {@link ErrorReporter}.
-     * 
+     * Gets the underlying delegate of {@link Outputter} that throws checked-exceptions instead of
+     * using a {@link ErrorReporter}.
+     *
      * @return the checked-ouputter
      */
     public OutputterChecked getChecked() {

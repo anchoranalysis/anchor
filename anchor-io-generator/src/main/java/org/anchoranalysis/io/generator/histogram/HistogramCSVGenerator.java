@@ -27,27 +27,26 @@
 package org.anchoranalysis.io.generator.histogram;
 
 import java.nio.file.Path;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.generator.tabular.CSVGenerator;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * Writes a histogram to a CSV file.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class HistogramCSVGenerator extends CSVGenerator<Histogram> {
 
     public HistogramCSVGenerator() {
         super("histogram");
     }
-    
-    /** Iff true bins in the histogram with a zero count are not written */ 
+
+    /** Iff true bins in the histogram with a zero count are not written */
     @Getter @Setter private boolean ignoreZeros = false;
 
     @Override

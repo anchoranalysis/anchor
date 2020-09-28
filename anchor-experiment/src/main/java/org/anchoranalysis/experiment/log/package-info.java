@@ -1,4 +1,2 @@
-/**
- * Helpful classes for logging.
- */
+/** Helpful classes for logging. */
 package org.anchoranalysis.experiment.log;

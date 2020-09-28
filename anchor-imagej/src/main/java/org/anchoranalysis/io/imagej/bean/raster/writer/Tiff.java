@@ -26,8 +26,8 @@
 
 package org.anchoranalysis.io.imagej.bean.raster.writer;
 
-import org.anchoranalysis.image.io.rasterwriter.RasterWriteOptions;
 import ij.io.FileSaver;
+import org.anchoranalysis.image.io.rasterwriter.RasterWriteOptions;
 
 /**
  * Writes a TIFF image using ImageJ.

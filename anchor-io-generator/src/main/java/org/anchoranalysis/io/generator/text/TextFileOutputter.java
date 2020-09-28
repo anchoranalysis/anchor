@@ -35,9 +35,8 @@ import org.anchoranalysis.io.output.outputter.OutputterChecked;
 
 /**
  * Maybe creates a {@link TextFileOutput} based upon settings in a {@link OutputterChecked}.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class TextFileOutputter {
@@ -61,8 +60,7 @@ public class TextFileOutputter {
                 outputter
                         .getWriters()
                         .selective()
-                        .writeGenerateFilename(
-                                outputName, extension, manifestDescription);
+                        .writeGenerateFilename(outputName, extension, manifestDescription);
         return fileOutputPath.map(path -> new TextFileOutput(path.toString()));
     }
 }

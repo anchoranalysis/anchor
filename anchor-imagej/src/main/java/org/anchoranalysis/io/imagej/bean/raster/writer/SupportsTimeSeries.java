@@ -41,7 +41,11 @@ import org.anchoranalysis.image.io.rasterwriter.RasterWriteOptions;
 public abstract class SupportsTimeSeries extends ImageJRasterWriter {
 
     @Override
-    public void writeStackSeries(StackSeries stackSeries, Path filePath, boolean makeRGB, RasterWriteOptions writeOptions)
+    public void writeStackSeries(
+            StackSeries stackSeries,
+            Path filePath,
+            boolean makeRGB,
+            RasterWriteOptions writeOptions)
             throws RasterIOException {
 
         try {

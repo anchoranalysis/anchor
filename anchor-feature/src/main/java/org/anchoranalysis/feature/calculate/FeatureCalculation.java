@@ -35,8 +35,8 @@ import org.anchoranalysis.feature.input.FeatureInput;
  * Caches the result of a feature, until {@link #invalidate()} is called.
  *
  * <p>Implements an equivalence-relation via {@code equals()} that checks if two
- * feature-calculations are identical. This allows the user to search through a collection of
- * {@link FeatureCalculation} to find one with identical parameters and re-use it.
+ * feature-calculations are identical. This allows the user to search through a collection of {@link
+ * FeatureCalculation} to find one with identical parameters and re-use it.
  *
  * <p>IMPORTANT NOTE: It is therefore important to make sure every class has a well-defined {@code
  * equals()} and {@code hashCode()}.
@@ -45,8 +45,9 @@ import org.anchoranalysis.feature.input.FeatureInput;
  * @param <S> result-type of the calculation
  * @param <T> feature input-type
  */
-public abstract class FeatureCalculation<S, T extends FeatureInput> implements ResettableCalculation {
-    
+public abstract class FeatureCalculation<S, T extends FeatureInput>
+        implements ResettableCalculation {
+
     private T input;
 
     // We delegate the actualy execution of the cache
@@ -64,7 +65,8 @@ public abstract class FeatureCalculation<S, T extends FeatureInput> implements R
      */
     public synchronized S getOrCalculate(T input) throws FeatureCalculationException {
         // The input should be equal to the existing input, but this is not checked
-        // as it would add computional cost. Consider an assert with the checkParamsMatchesInput(input)
+        // as it would add computional cost. Consider an assert with the
+        // checkParamsMatchesInput(input)
         // function for debugging.
         initParams(input);
         return delegate.get();
@@ -96,10 +98,10 @@ public abstract class FeatureCalculation<S, T extends FeatureInput> implements R
         this.input = input;
     }
 
-    /** 
+    /**
      * A check that if params are already set, any new inputs must be identical.
-     * 
-     * <p>This method is unused, but delibiberately left for debugging in {@link #getOrCalculate}.  
+     *
+     * <p>This method is unused, but delibiberately left for debugging in {@link #getOrCalculate}.
      */
     @SuppressWarnings("unused")
     private boolean checkParamsMatchesInput(T input) {

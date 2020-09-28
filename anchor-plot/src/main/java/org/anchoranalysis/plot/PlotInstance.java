@@ -36,9 +36,8 @@ import org.jfree.chart.JFreeChart;
 
 /**
  * A {@link Plot} combined with data and parameters, ready to be displayed.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 @RequiredArgsConstructor
 public class PlotInstance {
@@ -49,7 +48,7 @@ public class PlotInstance {
     // END REQUIRED ARGUMENTS
 
     @Getter @Setter private boolean showVerticalAxisLines = true;
-    
+
     public BufferedImage createBufferedImage(int width, int height) {
         return chart.createBufferedImage(width, height);
     }

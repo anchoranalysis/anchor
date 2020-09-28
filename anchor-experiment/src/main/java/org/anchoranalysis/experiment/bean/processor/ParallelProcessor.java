@@ -84,12 +84,10 @@ public class ParallelProcessor<T extends InputFromManager, S> extends JobProcess
     /** How many GPU processors to use when this is possible as a substitute for a CPU processor */
     @BeanField @Getter @Setter private int numberGPUProcessors = 1;
     // END BEAN PROPERTIES
-    
+
     @Override
     protected TaskStatistics execute(
-            Outputter rootOutputter,
-            List<T> inputObjects,
-            ParametersExperiment paramsExperiment)
+            Outputter rootOutputter, List<T> inputObjects, ParametersExperiment paramsExperiment)
             throws ExperimentExecutionException {
 
         int initialNumberJobs = inputObjects.size();
@@ -97,11 +95,10 @@ public class ParallelProcessor<T extends InputFromManager, S> extends JobProcess
         ConcurrencyPlan concurrencyPlan = createConcurrencyPlan(paramsExperiment);
 
         S sharedState =
-                getTask()
-                        .beforeAnyJobIsExecuted(
-                                rootOutputter, concurrencyPlan, paramsExperiment);
+                getTask().beforeAnyJobIsExecuted(rootOutputter, concurrencyPlan, paramsExperiment);
 
-        ExecutorService executorService = Executors.newFixedThreadPool(concurrencyPlan.totalNumber());
+        ExecutorService executorService =
+                Executors.newFixedThreadPool(concurrencyPlan.totalNumber());
 
         int count = 1;
 
@@ -162,23 +159,26 @@ public class ParallelProcessor<T extends InputFromManager, S> extends JobProcess
 
         monitor.add(new SubmittedJob(description, state));
     }
-    
+
     private ConcurrencyPlan createConcurrencyPlan(ParametersExperiment paramsExperiment) {
 
         int availableProcessors = Runtime.getRuntime().availableProcessors();
-        
+
         int numberCPUs = selectNumberCPUs(availableProcessors);
-        
+
         if (paramsExperiment.isDetailedLogging()) {
-            paramsExperiment.getLoggerExperiment().logFormatted(
-                    "Preparing jobs to run with common initialization.%nUsing %s CPUs from %d, and if needed and if possible, up to %d simultaneous jobs using a GPU.",
-                    LanguageUtilities.prefixPluralizeMaybe(numberCPUs, "processor"),
-                    availableProcessors, numberGPUProcessors);
+            paramsExperiment
+                    .getLoggerExperiment()
+                    .logFormatted(
+                            "Preparing jobs to run with common initialization.%nUsing %s CPUs from %d, and if needed and if possible, up to %d simultaneous jobs using a GPU.",
+                            LanguageUtilities.prefixPluralizeMaybe(numberCPUs, "processor"),
+                            availableProcessors,
+                            numberGPUProcessors);
         }
-        
+
         return ConcurrencyPlan.multipleProcessors(numberCPUs, numberGPUProcessors);
     }
-    
+
     private int selectNumberCPUs(int availableProcessors) {
 
         int numberOfProcessors = availableProcessors - keepProcessorsFree;

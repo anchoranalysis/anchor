@@ -38,7 +38,7 @@ public interface GenerateWritableItem<T extends WritableItem> {
 
     /**
      * Gets/creates the generator.
-     * 
+     *
      * @return the generator
      * @throws OutputWriteFailedException
      */

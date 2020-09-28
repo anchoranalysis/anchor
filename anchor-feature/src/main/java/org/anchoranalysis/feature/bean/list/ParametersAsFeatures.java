@@ -41,8 +41,7 @@ import org.anchoranalysis.feature.input.FeatureInput;
  *
  * @author Owen Feehan
  */
-public class ParametersAsFeatures<T extends FeatureInput>
-        extends FeatureListProvider<T> {
+public class ParametersAsFeatures<T extends FeatureInput> extends FeatureListProvider<T> {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private String collectionID = "";

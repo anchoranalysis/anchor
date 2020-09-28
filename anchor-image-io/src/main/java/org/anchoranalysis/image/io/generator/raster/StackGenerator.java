@@ -27,50 +27,57 @@
 package org.anchoranalysis.image.io.generator.raster;
 
 import java.util.Optional;
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.io.rasterwriter.RasterWriteOptions;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
-import lombok.AllArgsConstructor;
 
 /**
  * Writes a stack to the filesystem.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 @AllArgsConstructor
 public class StackGenerator extends RasterGeneratorWithElement<Stack> {
 
-    /** Iff true, in the specific case of a 2-channel stack, an additional blank channel is added to make it 3-channels. */
+    /**
+     * Iff true, in the specific case of a 2-channel stack, an additional blank channel is added to
+     * make it 3-channels.
+     */
     private boolean padIfNecessary;
-    
+
     /** Function stored in manifest for this generator. */
     private String manifestFunction;
-    
-    /** If true, a stack is guaranteed always to have only one z-slice. If false, it may be 2D or 3D. */
+
+    /**
+     * If true, a stack is guaranteed always to have only one z-slice. If false, it may be 2D or 3D.
+     */
     private boolean always2D;
-    
+
     /**
      * Creates a generator that performs no padding.
-     * 
+     *
      * @param manifestFunction manifestFunction function stored in manifest for this generator
-     * @param always2D if true, a stack is guaranteed always to be 2D (i.e. have only one z-slice). If false, it may be 2D or 3D.
+     * @param always2D if true, a stack is guaranteed always to be 2D (i.e. have only one z-slice).
+     *     If false, it may be 2D or 3D.
      */
     public StackGenerator(String manifestFunction, boolean always2D) {
         this(false, manifestFunction, always2D);
     }
 
     /**
-     * Creates the generator from a stack, inferring whether all stacks will be 2D from this stack's dimensions.
-     *  
-     * @param padIfNecessary iff true, in the specific case of a 2-channel stack, an additional blank channel is added to make it 3-channels.
+     * Creates the generator from a stack, inferring whether all stacks will be 2D from this stack's
+     * dimensions.
+     *
+     * @param padIfNecessary iff true, in the specific case of a 2-channel stack, an additional
+     *     blank channel is added to make it 3-channels.
      * @param manifestFunction function stored in manifest for this generator.
      * @param stack the initial element
      */
     public StackGenerator(boolean padIfNecessary, String manifestFunction, Stack stack) {
-        this(padIfNecessary, manifestFunction, stack.extent().z()==1);
+        this(padIfNecessary, manifestFunction, stack.extent().z() == 1);
         assignElement(stack);
     }
 
@@ -99,7 +106,7 @@ public class StackGenerator extends RasterGeneratorWithElement<Stack> {
         int numberChannels = getElement().getNumberChannels();
         return numberChannels == 3 || (numberChannels == 2 && padIfNecessary);
     }
-        
+
     @Override
     public RasterWriteOptions rasterWriteOptions() {
         return RasterWriteOptions.maybeRGB(isRGB(), always2D);

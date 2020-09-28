@@ -32,23 +32,27 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Optional;
+import lombok.Getter;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.filepath.prefixer.PathDifference;
 import org.anchoranalysis.io.output.writer.WriterExecuteBeforeEveryOperation;
-import lombok.Getter;
 
 /**
  * A pool that memoizes and stores an associated {@link LazyDirectoryCreator} for directories.
- * 
- * <p>Directories are first normalized, and all must exist within a particular {@code rootDirectory}.
+ *
+ * <p>Directories are first normalized, and all must exist within a particular {@code
+ * rootDirectory}.
  *
  * @author Owen Feehan
  */
 class LazyDirectoryCreatorPool {
 
     // START REQUIRED ARGUMENTS
-    /** If true, any existing directory at the intended path for creation, is first deleted. If false, an exception is thrown in this circumstance. */
+    /**
+     * If true, any existing directory at the intended path for creation, is first deleted. If
+     * false, an exception is thrown in this circumstance.
+     */
     private final boolean deleteExisting;
 
     /** The root directory in which <i>all</i> memoized directories must exist. */
@@ -163,8 +167,7 @@ class LazyDirectoryCreatorPool {
 
     private Path differenceFromRoot(Path path) throws GetOperationFailedException {
         try {
-            return PathDifference.differenceFrom(rootDirectory, path.normalize())
-                    .combined();
+            return PathDifference.differenceFrom(rootDirectory, path.normalize()).combined();
         } catch (AnchorIOException e) {
             throw new GetOperationFailedException(path.toString(), e);
         }

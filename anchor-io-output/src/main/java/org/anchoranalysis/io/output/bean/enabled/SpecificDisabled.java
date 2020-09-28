@@ -33,16 +33,22 @@ import lombok.Setter;
 import org.anchoranalysis.bean.StringSet;
 import org.anchoranalysis.bean.annotation.BeanField;
 
+/**
+ * Only specific outputs, identified by a textual name, are disabled, and all others are enabled.
+ *
+ * @author Owen Feehan
+ */
 @NoArgsConstructor
 @AllArgsConstructor
 public class SpecificDisabled extends OutputEnabled {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private StringSet outputsDisallowed;
+    /** The names of the outputs that are disbled. */
+    @BeanField @Getter @Setter private StringSet outputsDisabled;
     // END BEAN PROPERTIES
 
     @Override
     public boolean isOutputAllowed(String outputName) {
-        return !outputsDisallowed.contains(outputName);
+        return !outputsDisabled.contains(outputName);
     }
 }

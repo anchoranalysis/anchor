@@ -30,13 +30,12 @@ import org.anchoranalysis.bean.AnchorBean;
 
 /**
  * Imposes a permutation on some property of a bean.
- * 
- * <p>This can be an immediate property of a bean, or
- * property of some nested-bean. e.g.
- * <ul>
- * <li>{@code Bean.x} (immediate property) {@code Bean.child1.child2.child3.x} (nested).
  *
- * <li>All intermediate children must be beans.
+ * <p>This can be an immediate property of a bean, or property of some nested-bean. e.g.
+ *
+ * <ul>
+ *   <li>{@code Bean.x} (immediate property) {@code Bean.child1.child2.child3.x} (nested).
+ *   <li>All intermediate children must be beans.
  * </ul>
  *
  * @author Owen Feehan

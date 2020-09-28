@@ -41,12 +41,12 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 public class RGBTimeSeriesGenerator extends OneStageGenerator<StackSeries> {
 
     private final RasterWriteOptions rasterOptions;
-    
+
     public RGBTimeSeriesGenerator(StackSeries stackSeries, RasterWriteOptions rasterOptions) {
         this.rasterOptions = rasterOptions;
         assignElement(stackSeries);
     }
-    
+
     @Override
     public void writeToFile(OutputWriteSettings outputWriteSettings, Path filePath)
             throws OutputWriteFailedException {
@@ -61,8 +61,10 @@ public class RGBTimeSeriesGenerator extends OneStageGenerator<StackSeries> {
     }
 
     @Override
-    public String getFileExtension(OutputWriteSettings outputWriteSettings) throws OperationFailedException {
-        return RasterWriterUtilities.fileExtensionForDefaultRasterWriter(outputWriteSettings, rasterOptions);
+    public String getFileExtension(OutputWriteSettings outputWriteSettings)
+            throws OperationFailedException {
+        return RasterWriterUtilities.fileExtensionForDefaultRasterWriter(
+                outputWriteSettings, rasterOptions);
     }
 
     @Override

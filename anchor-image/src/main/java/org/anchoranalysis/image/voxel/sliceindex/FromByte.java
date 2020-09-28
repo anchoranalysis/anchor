@@ -78,8 +78,6 @@ public class FromByte implements SliceBufferIndex<UnsignedByteBuffer> {
 
     private void init() {
         int volumeXY = extent.volumeXY();
-        extent.iterateOverZ( z ->
-            buffer[z] = VoxelBufferFactory.allocateUnsignedByte(volumeXY)
-        );
+        extent.iterateOverZ(z -> buffer[z] = VoxelBufferFactory.allocateUnsignedByte(volumeXY));
     }
 }

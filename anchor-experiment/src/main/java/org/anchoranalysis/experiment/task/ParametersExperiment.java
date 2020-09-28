@@ -65,7 +65,7 @@ public class ParametersExperiment {
 
     // This is a means to create new log-reporters for each task
     @Getter @Setter private LoggingDestination loggerTaskCreator;
-    
+
     public ParametersExperiment(
             ExperimentExecutionArguments experimentArguments,
             String experimentIdentifier,
@@ -102,7 +102,6 @@ public class ParametersExperiment {
     /** Redirects any output-exceptions into the log */
     private static Outputter wrapExceptions(
             OutputterChecked outputterChecked, MessageLogger logger) {
-        return new Outputter(
-                outputterChecked, new ErrorReporterIntoLog(logger));
+        return new Outputter(outputterChecked, new ErrorReporterIntoLog(logger));
     }
 }

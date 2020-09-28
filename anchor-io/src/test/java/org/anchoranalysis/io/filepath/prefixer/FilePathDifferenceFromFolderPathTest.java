@@ -101,8 +101,7 @@ public class FilePathDifferenceFromFolderPathTest {
         assertTrue(fdd.getFilename().equals(expectedFilename));
     }
 
-    private PathDifference test(String baseFolderPath, String filePath)
-            throws AnchorIOException {
+    private PathDifference test(String baseFolderPath, String filePath) throws AnchorIOException {
         return PathDifference.differenceFrom(resolve(baseFolderPath), resolve(filePath));
     }
 

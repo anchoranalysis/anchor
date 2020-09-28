@@ -35,8 +35,7 @@ import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.list.NamedFeatureStoreFactory;
 
-public class DefinedNamed<T extends FeatureInput>
-        extends ReferencedFeatures<T> {
+public class DefinedNamed<T extends FeatureInput> extends ReferencedFeatures<T> {
 
     private static final NamedFeatureStoreFactory STORE_FACTORY =
             NamedFeatureStoreFactory.bothNameAndParams();

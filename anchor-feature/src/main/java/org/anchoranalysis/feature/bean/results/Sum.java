@@ -31,9 +31,8 @@ import cern.jet.stat.Descriptive;
 
 /**
  * The sum of the results from a particular feature.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class Sum extends StatisticForFeature {
 

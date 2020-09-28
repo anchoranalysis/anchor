@@ -92,10 +92,11 @@ class ObjectMaskHDF5Writer {
 
         MDByteArray array = new MDByteArray(voxels.extent().deriveArray());
 
-        IterateVoxelsAll.withBuffer(voxels.voxels(), (point, buffer, offset) ->
-            array.set(buffer.getRaw(offset), point.x(), point.y(), point.z())
-        );
-        
+        IterateVoxelsAll.withBuffer(
+                voxels.voxels(),
+                (point, buffer, offset) ->
+                        array.set(buffer.getRaw(offset), point.x(), point.y(), point.z()));
+
         return array;
     }
 }

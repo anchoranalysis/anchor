@@ -26,9 +26,9 @@
 
 package org.anchoranalysis.image.io.generator.raster;
 
+import java.nio.file.Path;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import java.nio.file.Path;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.bean.rasterwriter.RasterWriter;
@@ -39,20 +39,24 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class RasterWriterUtilities {
-    
+
     public static void writeRasterUsingDefault(
-            Stack stack, OutputWriteSettings outputWriteSettings, Path filePath, boolean rgb, RasterWriteOptions writeOptions)
+            Stack stack,
+            OutputWriteSettings outputWriteSettings,
+            Path filePath,
+            boolean rgb,
+            RasterWriteOptions writeOptions)
             throws OutputWriteFailedException {
 
         try {
             RasterWriter rasterWriter =
                     RasterWriterUtilities.getDefaultRasterWriter(outputWriteSettings);
-            rasterWriter.writeStack(stack, filePath, rgb, writeOptions );
+            rasterWriter.writeStack(stack, filePath, rgb, writeOptions);
         } catch (RasterIOException e) {
             throw new OutputWriteFailedException(e);
         }
     }
-    
+
     /**
      * Gets the default raster-writer associated with outputWriteSettings
      *
@@ -70,7 +74,9 @@ public class RasterWriterUtilities {
         return defaultWriter;
     }
 
-    public static String fileExtensionForDefaultRasterWriter(OutputWriteSettings outputWriteSettings, RasterWriteOptions rasterOptions) throws OperationFailedException {
+    public static String fileExtensionForDefaultRasterWriter(
+            OutputWriteSettings outputWriteSettings, RasterWriteOptions rasterOptions)
+            throws OperationFailedException {
         try {
             return getDefaultRasterWriter(outputWriteSettings).fileExtension(rasterOptions);
         } catch (RasterIOException e) {

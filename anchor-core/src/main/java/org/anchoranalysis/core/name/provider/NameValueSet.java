@@ -32,9 +32,9 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.name.value.NameValue;
 import org.anchoranalysis.core.name.value.SimpleNameValue;
-import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 public class NameValueSet<T> implements Iterable<NameValue<T>>, NamedProvider<T> {

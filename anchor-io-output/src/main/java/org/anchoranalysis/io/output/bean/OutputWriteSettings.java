@@ -44,11 +44,12 @@ import org.anchoranalysis.io.color.ColorIndexModulo;
 
 /**
  * Settings for how to write output, including default writers.
- * 
- * <p>It is very important that {@link #init} is run before using the bean. This normally occurs from checkMisconfigured() that
- *   is called automatically from the bean-loading framework
  *
- * <p>However, if the bean is not loaded through this mechanism, please call {@link #init} explicitly before usage
+ * <p>It is very important that {@link #init} is run before using the bean. This normally occurs
+ * from checkMisconfigured() that is called automatically from the bean-loading framework
+ *
+ * <p>However, if the bean is not loaded through this mechanism, please call {@link #init}
+ * explicitly before usage
  */
 public class OutputWriteSettings extends AnchorBean<OutputWriteSettings> {
 

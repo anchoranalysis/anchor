@@ -1,5 +1,3 @@
 package org.anchoranalysis.io.output;
 
-public class MutableSetAllowed {
-
-}
+public class MutableSetAllowed {}

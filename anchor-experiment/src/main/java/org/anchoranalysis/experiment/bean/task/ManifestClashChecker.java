@@ -38,9 +38,7 @@ import org.anchoranalysis.io.output.outputter.OutputterChecked;
 class ManifestClashChecker {
 
     public static void throwExceptionIfClashes(
-            ManifestRecorder manifestExperiment,
-            OutputterChecked boundOutput,
-            Path pathForBinding)
+            ManifestRecorder manifestExperiment, OutputterChecked boundOutput, Path pathForBinding)
             throws JobExecutionException {
         // Now we do a check, to ensure that our experimentalManifest and manifest are going to
         // write files

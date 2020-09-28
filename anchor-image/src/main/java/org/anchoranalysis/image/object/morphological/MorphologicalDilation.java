@@ -166,7 +166,8 @@ public class MorphologicalDilation {
             boolean bigNeighborhood)
             throws CreateException {
 
-        BinaryKernel kernelDilation = createDilationKernel(binaryValues, dimensions, outsideAtThreshold, bigNeighborhood);
+        BinaryKernel kernelDilation =
+                createDilationKernel(binaryValues, dimensions, outsideAtThreshold, bigNeighborhood);
 
         if (minIntensityValue > 0 && backgroundVb.isPresent()) {
             return new ConditionalKernel(kernelDilation, minIntensityValue, backgroundVb.get());
@@ -174,20 +175,25 @@ public class MorphologicalDilation {
             return kernelDilation;
         }
     }
-    
+
     private static BinaryKernel createDilationKernel(
             BinaryValuesByte binaryValues,
             SelectDimensions dimensions,
             boolean outsideAtThreshold,
-            boolean bigNeighborhood) throws CreateException {
-        if (dimensions==SelectDimensions.Z_ONLY) {
+            boolean bigNeighborhood)
+            throws CreateException {
+        if (dimensions == SelectDimensions.Z_ONLY) {
             if (bigNeighborhood) {
                 throw new CreateException("Big-neighborhood not supported for zOnly");
             }
 
             return new DilationKernel3ZOnly(binaryValues, outsideAtThreshold);
         } else {
-            return new DilationKernel3(binaryValues, outsideAtThreshold, dimensions==SelectDimensions.ALL_DIMENSIONS, bigNeighborhood);
-        }        
+            return new DilationKernel3(
+                    binaryValues,
+                    outsideAtThreshold,
+                    dimensions == SelectDimensions.ALL_DIMENSIONS,
+                    bigNeighborhood);
+        }
     }
 }

@@ -26,26 +26,27 @@
 
 package org.anchoranalysis.io.generator;
 
-import org.anchoranalysis.core.index.SetOperationFailedException;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.core.index.SetOperationFailedException;
 
 /**
  * A {@link SingleFileTypeGenerator} with an associated element.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  * @param <T> iteration-type
- * @param <S> intermediate-type that is created in the first stage after transforming an element of type {@code T}.
+ * @param <S> intermediate-type that is created in the first stage after transforming an element of
+ *     type {@code T}.
  */
 @NoArgsConstructor
-public abstract class SingleFileTypeGeneratorWithElement<T,S> extends SingleFileTypeGenerator<T,S> {
+public abstract class SingleFileTypeGeneratorWithElement<T, S>
+        extends SingleFileTypeGenerator<T, S> {
 
     private T element;
-    
+
     public SingleFileTypeGeneratorWithElement(T element) {
         this.element = element;
     }
-    
+
     @Override
     public T getElement() {
         return element;

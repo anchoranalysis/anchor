@@ -1,6 +1,4 @@
-/**
- * Initializing beans with particular parameters, including recursively.
- */
+/** Initializing beans with particular parameters, including recursively. */
 package org.anchoranalysis.bean.initializable;
 /*-
  * #%L

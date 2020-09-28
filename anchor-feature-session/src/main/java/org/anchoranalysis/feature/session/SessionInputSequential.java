@@ -29,6 +29,7 @@ package org.anchoranalysis.feature.session;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.calculate.FeatureCalculation;
@@ -46,7 +47,6 @@ import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.results.ResultsVector;
 import org.anchoranalysis.feature.session.strategy.child.DefaultFindChildStrategy;
 import org.anchoranalysis.feature.session.strategy.child.FindChildStrategy;
-import lombok.AllArgsConstructor;
 
 /**
  * A feature-input that will be used in a {@link SequentialSession}

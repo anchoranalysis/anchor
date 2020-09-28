@@ -42,11 +42,15 @@ import org.anchoranalysis.io.manifest.ManifestDescription;
  *
  * @author Owen Feehan
  */
-@RequiredArgsConstructor(access=AccessLevel.PROTECTED) @Accessors(fluent=true)
+@RequiredArgsConstructor(access = AccessLevel.PROTECTED)
+@Accessors(fluent = true)
 public abstract class ObjectsGenerator extends RasterGeneratorWithElement<ObjectCollection> {
 
     // START REQUIRED ARGUMENTS
-    /** The dimensions associated with the objects (assumed to be constant across any change in element). */
+    /**
+     * The dimensions associated with the objects (assumed to be constant across any change in
+     * element).
+     */
     @Getter private final Dimensions dimensions;
     // END REQUIRED ARGUMENTS
 
@@ -54,7 +58,7 @@ public abstract class ObjectsGenerator extends RasterGeneratorWithElement<Object
         this.dimensions = dimensions;
         assignElement(objects);
     }
-    
+
     @Override
     public Optional<ManifestDescription> createManifestDescription() {
         return Optional.of(new ManifestDescription("raster", "maskCollection"));
@@ -64,12 +68,12 @@ public abstract class ObjectsGenerator extends RasterGeneratorWithElement<Object
     public boolean isRGB() {
         return false;
     }
-    
+
     @Override
     public RasterWriteOptions rasterWriteOptions() {
-        return RasterWriteOptions.singleChannelMaybe3D(dimensions.z()==1);
+        return RasterWriteOptions.singleChannelMaybe3D(dimensions.z() == 1);
     }
-    
+
     protected ObjectCollection getObjects() {
         return getElement();
     }

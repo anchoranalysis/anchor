@@ -36,7 +36,8 @@ import lombok.Value;
  * @author Owen Feehan
  * @param <V> value-type
  */
-@Value @AllArgsConstructor
+@Value
+@AllArgsConstructor
 public class OptionalNameValue<V> {
 
     /** An optional-name. */

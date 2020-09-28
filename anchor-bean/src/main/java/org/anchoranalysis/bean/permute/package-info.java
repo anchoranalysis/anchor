@@ -1,6 +1,4 @@
-/**
- * Applying permutations to a bean's fields.
- */
+/** Applying permutations to a bean's fields. */
 package org.anchoranalysis.bean.permute;
 /*-
  * #%L

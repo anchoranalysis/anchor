@@ -36,28 +36,29 @@ import org.anchoranalysis.io.output.writer.WritableItem;
 
 /**
  * A class that writes a particular type of object(s) to the filesystem.
- * 
+ *
  * <p>The objects to be written are always a function only of the current <i>element</i>.
- * 
+ *
  * @author Owen Feehan
  * @param <T> input-type for generator (that can also be iterated over)
  */
 public interface Generator<T> extends WritableItem {
 
-    /** 
+    /**
      * The types of files the generator writes to the filesystem.
-     * 
+     *
      * @param outputWriteSettings general settings for outputting
      * @return an array of all file-types written, if any exist
      * @throws OperationFailedException if anything goes wrong
      */
-    Optional<FileType[]> getFileTypes(OutputWriteSettings outputWriteSettings) throws OperationFailedException;
-    
-    /** 
+    Optional<FileType[]> getFileTypes(OutputWriteSettings outputWriteSettings)
+            throws OperationFailedException;
+
+    /**
      * Gets the current element.
-     * 
+     *
      * @return the element that will be written at next write-operation.
-     **/
+     */
     T getElement();
 
     /**
@@ -70,7 +71,7 @@ public interface Generator<T> extends WritableItem {
 
     /**
      * This should always be called once before any write-operations.
-     * 
+     *
      * @throws OutputWriteFailedException
      */
     default void start() throws OutputWriteFailedException {
@@ -79,7 +80,7 @@ public interface Generator<T> extends WritableItem {
 
     /**
      * This should always be called once after all write-operations are completed.
-     * 
+     *
      * @throws OutputWriteFailedException
      */
     default void end() throws OutputWriteFailedException {

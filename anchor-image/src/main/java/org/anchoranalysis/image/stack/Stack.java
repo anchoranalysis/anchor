@@ -214,16 +214,16 @@ public class Stack implements Iterable<Channel> {
 
     /**
      * Performs a deep copy of the stack, so that all channels are duplicated.
-     * 
+     *
      * @return a new stack with deep-copied channels.
      */
     public Stack duplicateDeep() {
         return new Stack(this);
     }
-    
+
     /**
      * Performs a shallow copy of the stack, so that all channels are reused.
-     * 
+     *
      * @return a new stack with reused channels.
      */
     public Stack duplicateShallow() {
@@ -236,7 +236,7 @@ public class Stack implements Iterable<Channel> {
         } catch (IncorrectImageSizeException e) {
             throw new AnchorImpossibleSituationException();
         }
-        
+
         return out;
     }
 
@@ -252,10 +252,10 @@ public class Stack implements Iterable<Channel> {
         }
         return out;
     }
-    
+
     /**
      * Does the stack have more than one slice in the z-dimension?
-     * 
+     *
      * @return true if there is more than one z slice, false if there is 1
      */
     public boolean hasMoreThanOneSlice() {

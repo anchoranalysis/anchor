@@ -42,7 +42,8 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
  * @author Owen Feehan
  */
 @RequiredArgsConstructor
-public class ExtractBoundingBoxAreaFromStackGenerator extends RasterGeneratorWithElement<BoundingBox> {
+public class ExtractBoundingBoxAreaFromStackGenerator
+        extends RasterGeneratorWithElement<BoundingBox> {
 
     private static final String MANIFEST_FUNCTION = "boundingBoxExtract";
 

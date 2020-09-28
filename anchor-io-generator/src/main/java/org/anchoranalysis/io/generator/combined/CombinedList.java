@@ -41,12 +41,14 @@ class CombinedList {
 
     private ArrayList<OptionalNameValue<Generator<?>>> list = new ArrayList<>();
 
-    public Optional<FileType[]> getFileTypes(OutputWriteSettings outputWriteSettings) throws OperationFailedException {
+    public Optional<FileType[]> getFileTypes(OutputWriteSettings outputWriteSettings)
+            throws OperationFailedException {
 
         ArrayList<FileType> all = new ArrayList<>();
 
         for (OptionalNameValue<Generator<?>> namedGenerator : list) {
-            Optional<FileType[]> fileTypeArray = namedGenerator.getValue().getFileTypes(outputWriteSettings);
+            Optional<FileType[]> fileTypeArray =
+                    namedGenerator.getValue().getFileTypes(outputWriteSettings);
             fileTypeArray.ifPresent(
                     fileTypes -> {
                         for (int i = 0; i < fileTypes.length; i++) {
@@ -72,9 +74,7 @@ class CombinedList {
     }
 
     public int write(
-            IndexableOutputNameStyle outputNameStyle,
-            String index,
-            OutputterChecked outputter)
+            IndexableOutputNameStyle outputNameStyle, String index, OutputterChecked outputter)
             throws OutputWriteFailedException {
 
         int maxWritten = -1;
@@ -82,7 +82,7 @@ class CombinedList {
 
             if (namedGenerator.getName().isPresent()) {
                 outputNameStyle = outputNameStyle.duplicate();
-                outputNameStyle.setOutputName(namedGenerator.getName().get());  // NOSONAR
+                outputNameStyle.setOutputName(namedGenerator.getName().get()); // NOSONAR
             }
 
             int numWritten = namedGenerator.getValue().write(outputNameStyle, index, outputter);

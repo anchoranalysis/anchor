@@ -29,16 +29,15 @@ package org.anchoranalysis.io.output.bean.enabled;
 import org.anchoranalysis.bean.AnchorBean;
 
 /**
- * Whether a particular output, identified by a textual name, is allowed or not.
- * 
- * @author Owen Feehan
+ * Whether a particular output, identified by a textual name, is enabled or not.
  *
+ * @author Owen Feehan
  */
 public abstract class OutputEnabled extends AnchorBean<OutputEnabled> {
 
     /**
      * Is a particular output-allowed?
-     * 
+     *
      * @param outputName the name of the output
      * @return true iff the output is allowed
      */

@@ -35,39 +35,46 @@ import org.anchoranalysis.image.stack.Stack;
 
 /**
  * Writes a stack (i.e. raster) to the filesystem.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public abstract class RasterWriter extends AnchorBean<RasterWriter> {
 
-    /** 
+    /**
      * File-extensions for files written by this writer.
-     *  
+     *
      * @param writeOptions options which may influence how a raster is written.
      */
     public abstract String fileExtension(RasterWriteOptions writeOptions);
 
     /**
      * Writes a stack to the filesystem at a particular path.
-     * 
+     *
      * @param stack the stack to write
      * @param filePath the path to write the file to
-     * @param makeRGB if TRUE, the image should be written as a RGB image, rather than as separate channels.
+     * @param makeRGB if TRUE, the image should be written as a RGB image, rather than as separate
+     *     channels.
      * @param writeOptions options which may influence how a raster is written.
      * @throws RasterIOException if anything goes wrong whle writing.
      */
-    public abstract void writeStack(Stack stack, Path filePath, boolean makeRGB, RasterWriteOptions writeOptions) throws RasterIOException;
-    
+    public abstract void writeStack(
+            Stack stack, Path filePath, boolean makeRGB, RasterWriteOptions writeOptions)
+            throws RasterIOException;
+
     /**
      * Writes a series of stacks to the filesystem at a particular path.
-     * 
+     *
      * @param stackSeries the series of stacks
      * @param filePath the path to write the file to
-     * @param makeRGB if TRUE, the image should be written as a RGB image, rather than as separate channels.
+     * @param makeRGB if TRUE, the image should be written as a RGB image, rather than as separate
+     *     channels.
      * @param writeOptions options which may influence how a raster is written.
      * @throws RasterIOException
      */
     public abstract void writeStackSeries(
-            StackSeries stackSeries, Path filePath, boolean makeRGB, RasterWriteOptions writeOptions) throws RasterIOException;
+            StackSeries stackSeries,
+            Path filePath,
+            boolean makeRGB,
+            RasterWriteOptions writeOptions)
+            throws RasterIOException;
 }

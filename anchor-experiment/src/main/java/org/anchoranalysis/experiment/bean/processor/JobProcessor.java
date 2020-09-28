@@ -53,9 +53,9 @@ import org.anchoranalysis.io.output.outputter.Outputter;
  */
 public abstract class JobProcessor<T extends InputFromManager, S>
         extends AnchorBean<JobProcessor<T, S>> implements ReplaceTask<T, S> {
-    
+
     private static final Divider DIVIDER = new Divider();
-    
+
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private Task<T, S> task;
 
@@ -71,15 +71,13 @@ public abstract class JobProcessor<T extends InputFromManager, S>
      * @throws ExperimentExecutionException
      */
     public void executeLogStats(
-            Outputter rootOutputter,
-            List<T> inputObjects,
-            ParametersExperiment paramsExperiment)
+            Outputter rootOutputter, List<T> inputObjects, ParametersExperiment paramsExperiment)
             throws ExperimentExecutionException {
-        
+
         if (paramsExperiment.isDetailedLogging()) {
-            paramsExperiment.getLoggerExperiment().log( DIVIDER.withLabel("Processing") );
+            paramsExperiment.getLoggerExperiment().log(DIVIDER.withLabel("Processing"));
         }
-        
+
         TaskStatistics stats = execute(rootOutputter, inputObjects, paramsExperiment);
 
         if (paramsExperiment.isDetailedLogging()) {
@@ -125,9 +123,7 @@ public abstract class JobProcessor<T extends InputFromManager, S>
      * @throws ExperimentExecutionException
      */
     protected abstract TaskStatistics execute(
-            Outputter rootOutputter,
-            List<T> inputObjects,
-            ParametersExperiment paramsExperiment)
+            Outputter rootOutputter, List<T> inputObjects, ParametersExperiment paramsExperiment)
             throws ExperimentExecutionException;
 
     protected Optional<MessageLogger> loggerForMonitor(ParametersExperiment paramsExperiment) {

@@ -59,8 +59,6 @@ public interface WritableItem {
      * @throws OutputWriteFailedException
      */
     public abstract int write(
-            IndexableOutputNameStyle outputNameStyle,
-            String index,
-            OutputterChecked outputter)
+            IndexableOutputNameStyle outputNameStyle, String index, OutputterChecked outputter)
             throws OutputWriteFailedException;
 }

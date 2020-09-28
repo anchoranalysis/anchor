@@ -81,12 +81,12 @@ public class ObjectAsMaskGenerator extends RasterGeneratorWithElement<ObjectMask
     public boolean isRGB() {
         return false;
     }
-    
+
     @Override
     public RasterWriteOptions rasterWriteOptions() {
         return RasterWriteOptions.binaryChannelMaybe3D();
     }
-    
+
     /**
      * Creates a channel for an object-mask
      *

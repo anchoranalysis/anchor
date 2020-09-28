@@ -97,6 +97,6 @@ public class MaskFromObjects {
 
     private static void assignValueToObjects(
             Voxels<UnsignedByteBuffer> voxels, ObjectCollection objects, int valueToAssign) {
-        objects.forEach(object -> voxels.assignValue(valueToAssign).toObject(object) );
+        objects.forEach(object -> voxels.assignValue(valueToAssign).toObject(object));
     }
 }

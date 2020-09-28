@@ -33,8 +33,8 @@ import org.anchoranalysis.image.voxel.iterator.process.ProcessPoint;
 import org.anchoranalysis.image.voxel.iterator.process.buffer.ProcessBufferUnaryWithPoint;
 
 /**
- * Exposes a {@link ProcessPoint} as a {@link ProcessBufferUnaryWithPoint} by retrieving a buffer from voxels
- * for each z-slice.
+ * Exposes a {@link ProcessPoint} as a {@link ProcessBufferUnaryWithPoint} by retrieving a buffer
+ * from voxels for each z-slice.
  *
  * <p>Note that {@link #notifyChangeSlice} <b>need not</b> be be called for all slices (perhaps only
  * a subset), but {@link #process} <b>must</b> be called for ALL voxels on a given slice.

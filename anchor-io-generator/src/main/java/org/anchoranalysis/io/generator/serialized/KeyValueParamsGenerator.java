@@ -43,7 +43,7 @@ public class KeyValueParamsGenerator extends OneStageGenerator<KeyValueParams> {
         this.manifestFunction = manifestFunction;
         assignElement(params);
     }
-    
+
     @Override
     public void writeToFile(OutputWriteSettings outputWriteSettings, Path filePath)
             throws OutputWriteFailedException {

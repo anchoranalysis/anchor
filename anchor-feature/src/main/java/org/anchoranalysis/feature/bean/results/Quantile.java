@@ -34,9 +34,8 @@ import org.anchoranalysis.bean.annotation.BeanField;
 
 /**
  * The quantile of the results from a particular feature.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class Quantile extends StatisticForFeature {
 

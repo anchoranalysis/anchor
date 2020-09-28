@@ -31,20 +31,19 @@ import lombok.NoArgsConstructor;
 
 /**
  * All outputs are allowed irrespective of {@code outputName}.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class All extends OutputEnabled {
-    
-    /** 
+
+    /**
      * A singleton instance of {@link All}.
-     * 
+     *
      * <p>The class retains a public constructor so it can also be instantiated as a bean.
      */
     public static final OutputEnabled INSTANCE = new All();
-    
+
     @Override
     public boolean isOutputAllowed(String outputName) {
         return true;

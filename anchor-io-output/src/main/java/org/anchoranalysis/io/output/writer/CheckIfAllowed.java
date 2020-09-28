@@ -34,20 +34,19 @@ import org.anchoranalysis.io.manifest.ManifestFolderDescription;
 import org.anchoranalysis.io.manifest.folder.FolderWriteWithPath;
 import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.output.MultiLevelOutputEnabled;
-import org.anchoranalysis.io.output.bean.rules.OutputEnabledRules;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
 
 /**
  * Only allows outputs, if the output-name is allowed in the {@link OutputterChecked}.
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 @RequiredArgsConstructor
 public class CheckIfAllowed implements Writer {
 
     public static final int NUMBER_ELEMENTS_WRITTEN_NOT_ALLOWED = -2;
-    
+
     // START REQUIRED ARGUMENTS
     /** The associated output-manager */
     private final MultiLevelOutputEnabled outputEnabled;
@@ -76,7 +75,8 @@ public class CheckIfAllowed implements Writer {
     }
 
     @Override
-    public boolean writeSubdirectoryWithGenerator(String outputName, GenerateWritableItem<?> collectionGenerator)
+    public boolean writeSubdirectoryWithGenerator(
+            String outputName, GenerateWritableItem<?> collectionGenerator)
             throws OutputWriteFailedException {
 
         if (!outputEnabled.isOutputEnabled(outputName)) {
@@ -86,7 +86,7 @@ public class CheckIfAllowed implements Writer {
         maybeExecutePreop();
 
         writer.writeSubdirectoryWithGenerator(outputName, collectionGenerator);
-        
+
         return true;
     }
 
@@ -117,7 +117,7 @@ public class CheckIfAllowed implements Writer {
         maybeExecutePreop();
 
         writer.write(outputName, generator);
-        
+
         return true;
     }
 
@@ -133,13 +133,11 @@ public class CheckIfAllowed implements Writer {
 
         maybeExecutePreop();
 
-        return writer.writeGenerateFilename(
-                outputName,
-                extension,
-                manifestDescription);
+        return writer.writeGenerateFilename(outputName, extension, manifestDescription);
     }
-        
+
     private void maybeExecutePreop() {
-        preop.ifPresent(WriterExecuteBeforeEveryOperation::execute);;
+        preop.ifPresent(WriterExecuteBeforeEveryOperation::execute);
+        ;
     }
 }

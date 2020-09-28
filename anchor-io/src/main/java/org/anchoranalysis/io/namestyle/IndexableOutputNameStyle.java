@@ -33,11 +33,11 @@ import lombok.NoArgsConstructor;
  * An output-name with an index somehow appended or prepended in a particular style.
  *
  * <p>The no-arguments constructor exists only for deserialization.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
-@NoArgsConstructor @AllArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 public abstract class IndexableOutputNameStyle extends OutputNameStyle {
 
     private static final long serialVersionUID = -2393013576294162543L;
@@ -84,6 +84,6 @@ public abstract class IndexableOutputNameStyle extends OutputNameStyle {
 
     /** Constructs a full name from the output format string and an index */
     protected abstract String nameFromOutputFormatString(String outputFormatString, String index);
-    
+
     protected abstract String outputFormatString();
 }

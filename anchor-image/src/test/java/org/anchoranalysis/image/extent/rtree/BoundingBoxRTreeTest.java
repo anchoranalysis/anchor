@@ -25,6 +25,7 @@
  */
 package org.anchoranalysis.image.extent.rtree;
 
+import static org.anchoranalysis.image.extent.rtree.BoxFixture.*;
 import static org.junit.Assert.assertEquals;
 
 import java.util.Arrays;
@@ -32,7 +33,6 @@ import java.util.List;
 import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.junit.Before;
 import org.junit.Test;
-import static org.anchoranalysis.image.extent.rtree.BoxFixture.*;
 
 public class BoundingBoxRTreeTest {
 

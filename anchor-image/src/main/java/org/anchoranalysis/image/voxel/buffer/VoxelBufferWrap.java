@@ -3,19 +3,18 @@ package org.anchoranalysis.image.voxel.buffer;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.convert.UnsignedIntBuffer;
 import org.anchoranalysis.image.convert.UnsignedShortBuffer;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 
 /**
  * Wraps arrays and buffers of primitive-types into {@link VoxelBuffer}.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class VoxelBufferWrap {
 
     /**
@@ -47,7 +46,7 @@ public class VoxelBufferWrap {
     public static VoxelBuffer<UnsignedByteBuffer> unsignedByteRaw(ByteBuffer buffer) {
         return unsignedByteBuffer(UnsignedByteBuffer.wrapRaw(buffer));
     }
-    
+
     /**
      * Wraps an existing array (encoding unsigned shorts as a signed array) as a voxel-buffer.
      *
@@ -77,7 +76,7 @@ public class VoxelBufferWrap {
     public static VoxelBuffer<UnsignedShortBuffer> unsignedShortRaw(ShortBuffer buffer) {
         return unsignedShortBuffer(UnsignedShortBuffer.wrapRaw(buffer));
     }
-    
+
     /**
      * Wraps an unsigned-int buffer into a voxel-buffer.
      *
@@ -107,7 +106,7 @@ public class VoxelBufferWrap {
     public static VoxelBufferFloat floatBuffer(FloatBuffer buffer) {
         return new VoxelBufferFloat(buffer);
     }
-    
+
     /**
      * Wraps an float-array into a voxel-buffer.
      *

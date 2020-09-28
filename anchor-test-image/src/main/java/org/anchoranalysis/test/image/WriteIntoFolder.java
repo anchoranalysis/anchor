@@ -119,11 +119,12 @@ public class WriteIntoFolder implements TestRule {
         } catch (SetOperationFailedException e) {
             throw new AnchorImpossibleSituationException();
         }
-    
+
         outputter.writerPermissive().write(outputName, () -> generatorStack);
     }
 
-    public void writeObject(String outputName, ObjectMask object) throws SetOperationFailedException {
+    public void writeObject(String outputName, ObjectMask object)
+            throws SetOperationFailedException {
 
         setupOutputterIfNecessary();
 
@@ -173,10 +174,11 @@ public class WriteIntoFolder implements TestRule {
 
     /**
      * Writes a list of display-stacks
-     * 
+     *
      * @param outputName the output-name
      * @param stacks the list of display-stacks
-     * @param always2D if true, the stacks are guaranteed to always to have only one z-slice (which can influence the output format).
+     * @param always2D if true, the stacks are guaranteed to always to have only one z-slice (which
+     *     can influence the output format).
      */
     public void writeList(String outputName, List<DisplayStack> stacks, boolean always2D) {
 

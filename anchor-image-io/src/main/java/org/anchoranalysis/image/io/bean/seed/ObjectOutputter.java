@@ -38,10 +38,7 @@ public class ObjectOutputter extends SeedCollectionOutputter {
 
     // END BEAN PROPERTIES
 
-    public void output(
-            SeedCollection seeds,
-            Resolution resolution,
-            Outputter outputter) {
+    public void output(SeedCollection seeds, Resolution resolution, Outputter outputter) {
 
         GeneratorSubfolderWriter.writeSubfolder(
                 outputter,

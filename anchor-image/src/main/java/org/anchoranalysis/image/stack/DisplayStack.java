@@ -27,12 +27,12 @@
 package org.anchoranalysis.image.stack;
 
 import com.google.common.base.Functions;
-import lombok.Getter;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.IntFunction;
+import lombok.Getter;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
@@ -71,8 +71,10 @@ public class DisplayStack {
     private static final double QUANTILE_UPPER = 0.9999;
 
     @Getter private final Stack stack;
-    @Getter private final List<Optional<ChannelConverterAttached<Channel, UnsignedByteBuffer>>>
-            converters;
+
+    @Getter
+    private final List<Optional<ChannelConverterAttached<Channel, UnsignedByteBuffer>>> converters;
+
     private final ChannelMapper mapper;
 
     // START: constructors
@@ -228,7 +230,10 @@ public class DisplayStack {
                                     .create(destinationBox.extent(), channel.getVoxelDataType());
                     channel.voxels().copyVoxelsTo(sourceBox, destBoxNonByte, allLocalBox);
 
-                    Voxels<UnsignedByteBuffer> destBoxByte = converter.getVoxelsConverter().convertFrom(destBoxNonByte, VoxelsFactory.getUnsignedByte());
+                    Voxels<UnsignedByteBuffer> destBoxByte =
+                            converter
+                                    .getVoxelsConverter()
+                                    .convertFrom(destBoxNonByte, VoxelsFactory.getUnsignedByte());
                     destBoxByte.extract().boxCopyTo(allLocalBox, voxelsDestination, destinationBox);
                 },
                 channel ->

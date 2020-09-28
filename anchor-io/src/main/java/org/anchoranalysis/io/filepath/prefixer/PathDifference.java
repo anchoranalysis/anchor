@@ -87,8 +87,7 @@ public class PathDifference {
      * @param baseDirectoryPath the base-directory as a string
      * @param entirePath the entire path as a string
      */
-    private static PathDifference calculateDifference(
-            String baseDirectoryPath, String entirePath) {
+    private static PathDifference calculateDifference(String baseDirectoryPath, String entirePath) {
 
         // Convert the base, and all to forward slashes only
         String base = FilePathToUnixStyleConverter.toStringUnixStyle(baseDirectoryPath);

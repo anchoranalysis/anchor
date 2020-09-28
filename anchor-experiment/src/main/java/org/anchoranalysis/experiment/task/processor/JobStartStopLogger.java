@@ -44,25 +44,34 @@ public class JobStartStopLogger {
 
     /** a noun describing the job that appears in the log e.g. "Job". */
     private final String jobDescriptionText;
-    
+
     /** monitors the progress of jobs */
     private final ConcurrentJobMonitor monitor;
-    
-    /** Indicates if lines of hashes should be placed before and after each log message (adds emphasis) */
+
+    /**
+     * Indicates if lines of hashes should be placed before and after each log message (adds
+     * emphasis)
+     */
     private final boolean showHashSeperators;
-    
-    /** When the number of ongoing jobs is less than this threshold, they are shown in event logs. 0 disables. */
+
+    /**
+     * When the number of ongoing jobs is less than this threshold, they are shown in event logs. 0
+     * disables.
+     */
     private final int showOngoingJobsLessThan;
-    
+
     /** Write messages to logger, if defined. */
     private final Optional<MessageLogger> logger;
-    
-    /** Whether to log messages for each job's events. If there is only a single job, these are not shown. */
+
+    /**
+     * Whether to log messages for each job's events. If there is only a single job, these are not
+     * shown.
+     */
     private final boolean disableLogMessages;
 
     /**
      * Creates a job-logger.
-     * 
+     *
      * @param jobDescriptionText a noun describing the job that appears in the log e.g. "Job"
      * @param logger write messages to logger, if defined.
      * @param showHashSeperators indicates if lines of hashes should be placed before and after each
@@ -89,7 +98,7 @@ public class JobStartStopLogger {
 
     /**
      * Performs logging for when a job starts.
-     * 
+     *
      * @param job the job that was started
      */
     public synchronized void logStart(JobDescription job) {
@@ -102,7 +111,7 @@ public class JobStartStopLogger {
 
     /**
      * Performs logging for when a job ends.
-     * 
+     *
      * @param job the job that ended.
      */
     public synchronized void logEnd(JobDescription job, JobState jobState, boolean success) {

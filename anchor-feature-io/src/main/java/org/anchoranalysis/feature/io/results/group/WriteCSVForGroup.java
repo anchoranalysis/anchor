@@ -56,8 +56,7 @@ class WriteCSVForGroup {
     }
 
     /** Writes a table of features in CSV for a particular group */
-    private void writeGroupFeatures(
-            Outputter outputter, ResultsVectorList results) {
+    private void writeGroupFeatures(Outputter outputter, ResultsVectorList results) {
         outputter
                 .writerSelective()
                 .write(

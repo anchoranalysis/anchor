@@ -49,8 +49,7 @@ public class CombineRasterGenerator<T> extends AnchorBean<CombineRasterGenerator
     @BeanField @Getter @Setter private ArrangeRasterBean arrange;
 
     // A list of all generators to be tiled (left to right, then top to bottom)
-    @BeanField @Getter @Setter
-    private List<RasterGenerator<T>> generatorList = new ArrayList<>();
+    @BeanField @Getter @Setter private List<RasterGenerator<T>> generatorList = new ArrayList<>();
     // END BEAN PROPERTIES
 
     public void add(RasterGenerator<T> generator) {

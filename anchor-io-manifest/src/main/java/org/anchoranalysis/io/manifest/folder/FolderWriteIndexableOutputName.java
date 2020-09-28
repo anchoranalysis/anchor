@@ -67,12 +67,12 @@ public class FolderWriteIndexableOutputName extends FolderWriteWithPath {
             String index) {
         // CURRENTLY - we do no check
     }
-    
+
     /**
      * Finds a file.
-     * 
-     * <p>We apply the match to each element in our sequence type, if the folder
-     * has no SequenceType then something is wrong and we throw an exception.
+     *
+     * <p>We apply the match to each element in our sequence type, if the folder has no SequenceType
+     * then something is wrong and we throw an exception.
      */
     @Override
     public void findFile(List<FileWrite> foundList, Match<FileWrite> match, boolean recursive) {

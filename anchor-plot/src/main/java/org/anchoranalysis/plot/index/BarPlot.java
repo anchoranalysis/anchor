@@ -27,10 +27,10 @@
 package org.anchoranalysis.plot.index;
 
 import hep.aida.bin.DynamicBin1D;
-import lombok.Getter;
-import lombok.Setter;
 import java.awt.Paint;
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.plot.AxisLimits;
 import org.anchoranalysis.plot.GetForSeries;
@@ -193,7 +193,7 @@ public class BarPlot<T> extends PlotIndexBaseCategorical<T, DefaultCategoryDatas
     protected DefaultCategoryDataset createDefaultDataset() {
         return new DefaultCategoryDataset();
     }
-        
+
     private static DynamicBin1D binOfValues(DefaultCategoryDataset dataset) {
         DynamicBin1D bin = new DynamicBin1D();
 
@@ -202,7 +202,7 @@ public class BarPlot<T> extends PlotIndexBaseCategorical<T, DefaultCategoryDatas
                 bin.add(dataset.getValue(y, x).doubleValue());
             }
         }
-        
+
         return bin;
     }
 }

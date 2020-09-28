@@ -44,7 +44,7 @@ import org.anchoranalysis.io.output.bean.enabled.SpecificDisabled;
  * Allows everything to be outputted except a particular list.
  *
  * <p>The {@code extendSecondLevel} entries apply to <i>all</i> second-level outputs.
- * 
+ *
  * @author Owen Feehan
  */
 @NoArgsConstructor
@@ -61,7 +61,7 @@ public class PermissiveExcept extends OutputEnabledRules {
 
     /**
      * Create to reject a specific set of first-level output-names.
-     * 
+     *
      * @param except rejects these output-names in the first-level.
      */
     public PermissiveExcept(StringSet except) {

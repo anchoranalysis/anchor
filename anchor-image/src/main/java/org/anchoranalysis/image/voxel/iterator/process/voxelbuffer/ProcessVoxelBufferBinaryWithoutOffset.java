@@ -30,8 +30,9 @@ import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 
 /**
  * Processes <b>two</b> voxel-buffers for each z-slice jointly, without any offset or point.
- * 
- * <p>This is intended for usage with the relative {@code get} and {@code #put} methods of buffer classes.
+ *
+ * <p>This is intended for usage with the relative {@code get} and {@code #put} methods of buffer
+ * classes.
  *
  * @author Owen Feehan
  * @param <S> first buffer-type

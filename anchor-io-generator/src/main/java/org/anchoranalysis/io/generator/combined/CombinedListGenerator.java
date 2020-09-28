@@ -53,8 +53,7 @@ import org.anchoranalysis.io.output.outputter.OutputterChecked;
  * @author Owen Feehan
  * @param <T> element-type
  */
-public class CombinedListGenerator<T>
-        implements MultipleFileTypeGenerator<T> {
+public class CombinedListGenerator<T> implements MultipleFileTypeGenerator<T> {
 
     private final CombinedList delegate = new CombinedList();
 
@@ -90,15 +89,14 @@ public class CombinedListGenerator<T>
 
     @Override
     public int write(
-            IndexableOutputNameStyle outputNameStyle,
-            String index,
-            OutputterChecked outputter)
+            IndexableOutputNameStyle outputNameStyle, String index, OutputterChecked outputter)
             throws OutputWriteFailedException {
         return delegate.write(outputNameStyle, index, outputter);
     }
 
     @Override
-    public Optional<FileType[]> getFileTypes(OutputWriteSettings outputWriteSettings) throws OperationFailedException {
+    public Optional<FileType[]> getFileTypes(OutputWriteSettings outputWriteSettings)
+            throws OperationFailedException {
         return delegate.getFileTypes(outputWriteSettings);
     }
 

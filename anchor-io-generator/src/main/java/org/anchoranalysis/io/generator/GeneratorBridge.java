@@ -52,7 +52,7 @@ import org.anchoranalysis.io.output.outputter.OutputterChecked;
 public class GeneratorBridge<S, T> implements Generator<S> {
 
     private S element;
-    
+
     // START REQUIRED ARGUMENTS
     /** The generator that accepts the destination type */
     private final Generator<T> generator;
@@ -129,15 +129,14 @@ public class GeneratorBridge<S, T> implements Generator<S> {
 
     @Override
     public int write(
-            IndexableOutputNameStyle outputNameStyle,
-            String index,
-            OutputterChecked outputter)
+            IndexableOutputNameStyle outputNameStyle, String index, OutputterChecked outputter)
             throws OutputWriteFailedException {
         return generator.write(outputNameStyle, index, outputter);
     }
 
     @Override
-    public Optional<FileType[]> getFileTypes(OutputWriteSettings outputWriteSettings) throws OperationFailedException {
+    public Optional<FileType[]> getFileTypes(OutputWriteSettings outputWriteSettings)
+            throws OperationFailedException {
         return generator.getFileTypes(outputWriteSettings);
     }
 }

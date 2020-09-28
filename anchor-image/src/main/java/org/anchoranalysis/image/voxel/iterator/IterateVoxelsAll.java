@@ -80,8 +80,7 @@ public class IterateVoxelsAll {
     }
 
     /**
-     * Iterate over each voxel - with <b>two</b> associated <b>buffers</b> for
-     * each slice
+     * Iterate over each voxel - with <b>two</b> associated <b>buffers</b> for each slice
      *
      * <p>The extent's of both {@code voxels1} and {@code voxels2} must be equal.
      *

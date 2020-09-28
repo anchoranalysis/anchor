@@ -37,8 +37,7 @@ import lombok.NoArgsConstructor;
 public class AxisLimits {
 
     // Inclusive
-    @Getter
-    private double axisMin = Double.POSITIVE_INFINITY;
+    @Getter private double axisMin = Double.POSITIVE_INFINITY;
 
     // Inclusive
     private double axisMax = Double.NEGATIVE_INFINITY;

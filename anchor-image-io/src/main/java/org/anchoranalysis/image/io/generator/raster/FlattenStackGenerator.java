@@ -35,17 +35,17 @@ import org.anchoranalysis.image.stack.Stack;
  *
  * @author Owen Feehan
  */
-public class FlattenStackGenerator extends RasterGeneratorDelegateToRaster<Stack,Stack> {
+public class FlattenStackGenerator extends RasterGeneratorDelegateToRaster<Stack, Stack> {
 
     public FlattenStackGenerator(boolean padIfNec, String manifestFunction) {
-        super( new StackGenerator(padIfNec, manifestFunction, true) );
+        super(new StackGenerator(padIfNec, manifestFunction, true));
     }
-    
+
     @Override
     public RasterWriteOptions rasterWriteOptions() {
         return super.rasterWriteOptions().always2D();
     }
-    
+
     @Override
     protected Stack convertBeforeAssign(Stack element) throws OperationFailedException {
         return element;

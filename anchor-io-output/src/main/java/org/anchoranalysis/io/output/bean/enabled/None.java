@@ -26,6 +26,11 @@
 
 package org.anchoranalysis.io.output.bean.enabled;
 
+/**
+ * No outputs are enabled.
+ *
+ * @author Owen Feehan
+ */
 public class None extends OutputEnabled {
 
     @Override

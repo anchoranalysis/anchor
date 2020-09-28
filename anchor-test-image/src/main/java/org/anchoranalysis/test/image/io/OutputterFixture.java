@@ -43,25 +43,21 @@ import org.anchoranalysis.test.LoggingFixture;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class OutputterFixture {
 
-    public static Outputter outputter(Path pathTempFolder)
-            throws BindFailedException {
-        return outputter(
-                outputterChecked(pathTempFolder));
+    public static Outputter outputter(Path pathTempFolder) throws BindFailedException {
+        return outputter(outputterChecked(pathTempFolder));
     }
-    
-    public static Outputter outputter(OutputManager outputManager)
-            throws BindFailedException {
-        return outputter(
-                outputterChecked(outputManager));
+
+    public static Outputter outputter(OutputManager outputManager) throws BindFailedException {
+        return outputter(outputterChecked(outputManager));
     }
 
     public static OutputterChecked outputterChecked(Path pathTempFolder)
             throws BindFailedException {
-        return outputterChecked(
-                OutputManagerFixture.createOutputManager(pathTempFolder));
+        return outputterChecked(OutputManagerFixture.createOutputManager(pathTempFolder));
     }
 
-    public static OutputterChecked outputterChecked(OutputManager outputManager) throws BindFailedException {
+    public static OutputterChecked outputterChecked(OutputManager outputManager)
+            throws BindFailedException {
         try {
             return outputManager.createExperimentOutputter(
                     "debug",
@@ -73,8 +69,8 @@ public class OutputterFixture {
             throw new BindFailedException(e);
         }
     }
-    
-    private static Outputter outputter(OutputterChecked outputter ) {
+
+    private static Outputter outputter(OutputterChecked outputter) {
         ErrorReporter errorReporter = LoggingFixture.suppressedLogErrorReporter().errorReporter();
         return new Outputter(outputter, errorReporter);
     }

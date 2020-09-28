@@ -31,19 +31,18 @@ import org.anchoranalysis.io.output.bean.enabled.OutputEnabled;
 
 /**
  * Allows all output-names to be outputted in both first and second level.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class Permissive extends OutputEnabledRules {
-    
-    /** 
+
+    /**
      * A singleton instance of {@link Permissive}.
-     * 
+     *
      * <p>The class retains a public constructor so it can also be instantiated as a bean.
      */
     public static final OutputEnabledRules INSTANCE = new Permissive();
-    
+
     @Override
     public OutputEnabled first() {
         return All.INSTANCE;

@@ -34,9 +34,9 @@ import org.anchoranalysis.io.manifest.ManifestFolderDescription;
 
 /**
  * Caches a {@link InputOutputContext} for each sub-directory as they are created.
- * 
- * <p>This allows reusage of an existing {@link InputOutputContext} in other outputters
- * without creating duplicate manifest entries.
+ *
+ * <p>This allows reusage of an existing {@link InputOutputContext} in other outputters without
+ * creating duplicate manifest entries.
  *
  * @author Owen Feehan
  */

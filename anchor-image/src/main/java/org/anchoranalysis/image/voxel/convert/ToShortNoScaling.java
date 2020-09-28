@@ -33,11 +33,10 @@ import org.anchoranalysis.image.convert.UnsignedShortBuffer;
 
 /**
  * Converts voxel buffers to a unsigned 16-bit buffer without scaling any values.
- * 
- * <p>Values greater than 65535  are clipped to 65535 .
- * 
- * @author Owen Feehan
  *
+ * <p>Values greater than 65535 are clipped to 65535 .
+ *
+ * @author Owen Feehan
  */
 public final class ToShortNoScaling extends VoxelsConverter<UnsignedShortBuffer> {
 

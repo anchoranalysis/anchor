@@ -72,7 +72,8 @@ class ObjectMaskHDF5Reader {
      */
     private Voxels<UnsignedByteBuffer> createVoxels(MDByteArray mdb) {
         Extent extent = extractExtent(mdb);
-        Voxels<UnsignedByteBuffer> voxels = VoxelsFactory.getUnsignedByte().createInitialized(extent);
+        Voxels<UnsignedByteBuffer> voxels =
+                VoxelsFactory.getUnsignedByte().createInitialized(extent);
 
         for (int z = 0; z < extent.z(); z++) {
 

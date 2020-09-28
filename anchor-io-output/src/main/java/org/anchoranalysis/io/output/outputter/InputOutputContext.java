@@ -41,14 +41,14 @@ import org.anchoranalysis.io.manifest.ManifestFolderDescription;
  */
 public interface InputOutputContext {
 
-    /** 
+    /**
      * An input-directory in which models are stored.
      *
-     * return a path to the model-directory
+     * <p>return a path to the model-directory
      */
     Path getModelDirectory();
 
-    /** 
+    /**
      * An outputter that writes to the particular output-directory.
      *
      * @return the outputter
@@ -57,22 +57,22 @@ public interface InputOutputContext {
 
     /**
      * Is debug-mode enabled?
-     * 
+     *
      * @return true iff debug-mode is enabled
      */
     boolean isDebugEnabled();
 
     /**
      * The associated logger.
-     * 
+     *
      * @return the logger associated with input-output operations.
      */
     Logger getLogger();
 
     /**
      * Creates a {@link CommonContext} a context that contains a subset of this context.
-     * 
-     * @return a newly created {@link CommonContext} reusing the objects from this context. 
+     *
+     * @return a newly created {@link CommonContext} reusing the objects from this context.
      */
     default CommonContext common() {
         return new CommonContext(getLogger(), getModelDirectory());
@@ -80,7 +80,7 @@ public interface InputOutputContext {
 
     /**
      * The associated error reporter.
-     * 
+     *
      * @return the error reporter
      */
     default ErrorReporter getErrorReporter() {
@@ -89,7 +89,7 @@ public interface InputOutputContext {
 
     /**
      * The associated message reporter.
-     * 
+     *
      * @return the message reporter
      */
     default MessageLogger getMessageReporter() {
@@ -104,9 +104,9 @@ public interface InputOutputContext {
      */
     default InputOutputContext subdirectory(
             String subDirectoryName, ManifestFolderDescription manifestFolderDescription) {
-        return new ChangeOutputter(this, 
-                getOutputter().deriveSubdirectory(subDirectoryName, manifestFolderDescription)
-        );
+        return new ChangeOutputter(
+                this,
+                getOutputter().deriveSubdirectory(subDirectoryName, manifestFolderDescription));
     }
 
     /**

@@ -56,7 +56,8 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
  *
  * @author Owen Feehan
  */
-public class DrawObjectOnStackGenerator extends RasterGeneratorWithElement<BoundedList<ObjectMask>> {
+public class DrawObjectOnStackGenerator
+        extends RasterGeneratorWithElement<BoundedList<ObjectMask>> {
 
     private static final ManifestDescription MANIFEST_DESCRIPTION =
             new ManifestDescription("raster", "extractedObjectOutline");
@@ -143,7 +144,8 @@ public class DrawObjectOnStackGenerator extends RasterGeneratorWithElement<Bound
             int outlineWidth,
             ColorIndex colorIndex,
             boolean flatten) {
-        this.drawObjectsGenerator = DrawObjectsGenerator.outlineWithColorIndex(outlineWidth, colorIndex);
+        this.drawObjectsGenerator =
+                DrawObjectsGenerator.outlineWithColorIndex(outlineWidth, colorIndex);
         this.backgroundGenerator = backgroundGenerator;
         this.flatten = flatten;
     }
@@ -169,13 +171,14 @@ public class DrawObjectOnStackGenerator extends RasterGeneratorWithElement<Bound
                                                         object, objects.boundingBox())));
 
         // An object-mask that is relative to the extracted section
-        return drawObjectsGenerator.transform(new ObjectCollectionWithProperties(objectsForDrawing));
+        return drawObjectsGenerator.transform(
+                new ObjectCollectionWithProperties(objectsForDrawing));
     }
 
     private Either<Dimensions, DisplayStack> createBackground() throws OutputWriteFailedException {
 
         BoundedList<ObjectMask> element = getElement();
-        
+
         if (!backgroundGenerator.isPresent()) {
             // Exit early if there's no background to be extracted
             return Either.left(new Dimensions(element.boundingBox().extent()));
@@ -203,7 +206,7 @@ public class DrawObjectOnStackGenerator extends RasterGeneratorWithElement<Bound
     public boolean isRGB() {
         return drawObjectsGenerator.isRGB();
     }
-    
+
     @Override
     public RasterWriteOptions rasterWriteOptions() {
         return RasterWriteOptions.maybeRGB(isRGB());

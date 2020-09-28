@@ -1,4 +1,2 @@
-/**
- * Plotting data on charts.
- */
+/** Plotting data on charts. */
 package org.anchoranalysis.plot;

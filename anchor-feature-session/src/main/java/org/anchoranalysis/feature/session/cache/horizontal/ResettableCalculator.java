@@ -39,8 +39,7 @@ import org.anchoranalysis.feature.calculate.cache.SessionInput;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 
-class ResettableCalculator<T extends FeatureInput>
-        implements FeatureSessionCalculator<T> {
+class ResettableCalculator<T extends FeatureInput> implements FeatureSessionCalculator<T> {
 
     private ResettableSet<FeatureCalculation<?, T>> setCalculation = new ResettableSet<>(false);
     private ResettableSet<FeatureCalculationMap<?, T, ?, FeatureCalculationException>>
@@ -58,14 +57,12 @@ class ResettableCalculator<T extends FeatureInput>
         this.logger = logger;
     }
 
-    /**
-     * Invalidates internal caches (resets!) so all items will be calculated anew.
-     */
+    /** Invalidates internal caches (resets!) so all items will be calculated anew. */
     public void invalidate() {
         setCalculation.invalidate();
         setCalculationMap.invalidate();
     }
-    
+
     @Override
     public double calculate(Feature<T> feature, SessionInput<T> input)
             throws FeatureCalculationException {
@@ -82,8 +79,7 @@ class ResettableCalculator<T extends FeatureInput>
     @Override
     public <U> ResolvedCalculation<U, T> search(FeatureCalculation<U, T> calculation) {
         return new ResolvedCalculation<>(
-                (FeatureCalculation<U, T>)
-                        setCalculation.findOrAdd(calculation, null));
+                (FeatureCalculation<U, T>) setCalculation.findOrAdd(calculation, null));
     }
 
     @SuppressWarnings("unchecked")

@@ -36,10 +36,10 @@ import org.anchoranalysis.feature.input.FeatureInputResults;
 import org.anchoranalysis.feature.results.ResultsVectorList;
 
 /**
- * Base class for calculating a statistic across all results in a {@link ResultsVectorList} for a particular feature.
- * 
- * @author Owen Feehan
+ * Base class for calculating a statistic across all results in a {@link ResultsVectorList} for a
+ * particular feature.
  *
+ * @author Owen Feehan
  */
 public abstract class StatisticForFeature extends FeatureResults {
 
@@ -72,8 +72,7 @@ public abstract class StatisticForFeature extends FeatureResults {
 
     private static DoubleArrayList arrayListFrom(ResultsVectorList results, int index) {
         DoubleArrayList featureValues = new DoubleArrayList();
-        results.stream().forEach( resultSingle ->
-            featureValues.add(resultSingle.get(index)));
+        results.stream().forEach(resultSingle -> featureValues.add(resultSingle.get(index)));
         return featureValues;
     }
 }

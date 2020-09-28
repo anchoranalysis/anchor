@@ -27,6 +27,7 @@
 package org.anchoranalysis.io.generator.sequence;
 
 import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
@@ -39,13 +40,11 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
 import org.anchoranalysis.io.output.writer.GenerateWritableItem;
 import org.anchoranalysis.io.output.writer.RecordingWriters;
-import lombok.RequiredArgsConstructor;
 
 /**
  * Like {@link RecordingWriters} but for a sequence of items, maybe in a subfolder.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 @RequiredArgsConstructor
 class SequenceWriters {
@@ -60,8 +59,7 @@ class SequenceWriters {
 
     private Optional<RecordingWriters> writers = Optional.empty();
 
-    public void init(FileType[] fileTypes, SequenceType sequenceType)
-            throws InitException {
+    public void init(FileType[] fileTypes, SequenceType sequenceType) throws InitException {
 
         if (fileTypes.length == 0) {
             throw new InitException("The generator has no associated FileTypes");
@@ -78,8 +76,7 @@ class SequenceWriters {
         }
 
         try {
-            this.writers =
-                    selectWritersMaybeCreateSubdirectory(folderDescription, subFolderWrite);
+            this.writers = selectWritersMaybeCreateSubdirectory(folderDescription, subFolderWrite);
         } catch (OutputWriteFailedException e) {
             throw new InitException(e);
         }
@@ -92,20 +89,20 @@ class SequenceWriters {
             return;
         }
 
-        this.writers 
-            .get()  // NOSONAR
-            .multiplex(selectSelective)
-            .write(outputNameStyle, generator, index);
+        this.writers
+                .get() // NOSONAR
+                .multiplex(selectSelective)
+                .write(outputNameStyle, generator, index);
     }
 
     public Optional<RecordingWriters> writers() {
         return writers;
     }
-    
+
     public boolean isOn() {
         return writers.isPresent();
     }
-    
+
     // Requires the generator to be in a valid state
     private ManifestDescription createFolderDescription(FileType[] fileTypes) {
         if (folderManifestDescription != null) {
@@ -152,14 +149,17 @@ class SequenceWriters {
 
         return new ManifestDescription(type, function);
     }
-    
+
     private Optional<RecordingWriters> selectWritersMaybeCreateSubdirectory(
             ManifestFolderDescription folderDescription,
             FolderWriteIndexableOutputName subFolderWrite)
             throws OutputWriteFailedException {
         if (subfolderName.isPresent()) {
-            return parentWriters.multiplex(selectSelective).createSubdirectory(
-                    subfolderName.get(), folderDescription, Optional.of(subFolderWrite)).map(OutputterChecked::getWriters);            
+            return parentWriters
+                    .multiplex(selectSelective)
+                    .createSubdirectory(
+                            subfolderName.get(), folderDescription, Optional.of(subFolderWrite))
+                    .map(OutputterChecked::getWriters);
         } else {
             return Optional.of(parentWriters);
         }

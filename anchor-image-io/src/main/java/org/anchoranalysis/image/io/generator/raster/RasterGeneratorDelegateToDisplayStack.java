@@ -38,13 +38,13 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 /**
  * Delegates a {@link RasterGenerator} to a {@code SingleFileTypeGenerator<T, DisplayStack>}.
- * 
+ *
  * @author Owen Feehan
  * @param <T> iteration-type
  */
 @RequiredArgsConstructor
 public class RasterGeneratorDelegateToDisplayStack<T> extends RasterGenerator<T> {
-    
+
     // START REQUIRED ARGUMENTS
     private final SingleFileTypeGenerator<T, DisplayStack> delegate;
     private final boolean rgb;

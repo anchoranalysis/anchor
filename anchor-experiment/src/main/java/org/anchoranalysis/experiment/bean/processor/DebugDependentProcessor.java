@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.experiment.bean.processor;
 
+import com.google.common.base.Preconditions;
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
@@ -35,7 +36,6 @@ import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.experiment.task.TaskStatistics;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.output.outputter.Outputter;
-import com.google.common.base.Preconditions;
 
 /**
  * Executes different processors depending on whether we are in debug mode or not
@@ -61,9 +61,7 @@ public class DebugDependentProcessor<T extends InputFromManager, S> extends JobP
 
     @Override
     protected TaskStatistics execute(
-            Outputter rootOutputter,
-            List<T> inputObjects,
-            ParametersExperiment paramsExperiment)
+            Outputter rootOutputter, List<T> inputObjects, ParametersExperiment paramsExperiment)
             throws ExperimentExecutionException {
 
         Preconditions.checkArgument(rootOutputter.getChecked().getSettings().hasBeenInit());

@@ -1,6 +1,4 @@
-/**
- * Setter used to impose a permutation on bean properties.
- */
+/** Setter used to impose a permutation on bean properties. */
 package org.anchoranalysis.bean.permute.setter;
 /*-
  * #%L

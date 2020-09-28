@@ -27,8 +27,8 @@
 package org.anchoranalysis.io.output.outputter;
 
 import java.nio.file.Path;
-import org.anchoranalysis.core.log.Logger;
 import lombok.AllArgsConstructor;
+import org.anchoranalysis.core.log.Logger;
 
 /**
  * Reuses an existing {@link InputOutputContext} but changes the outputter.

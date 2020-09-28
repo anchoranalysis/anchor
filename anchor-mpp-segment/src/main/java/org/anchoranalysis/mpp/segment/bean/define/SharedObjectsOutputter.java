@@ -73,9 +73,7 @@ class SharedObjectsOutputter {
     }
 
     public static void outputWithException(
-            MPPInitParams soMPP,
-            Outputter outputter,
-            boolean suppressSubfolders)
+            MPPInitParams soMPP, Outputter outputter, boolean suppressSubfolders)
             throws OutputWriteFailedException {
 
         if (!outputter.getSettings().hasBeenInit()) {

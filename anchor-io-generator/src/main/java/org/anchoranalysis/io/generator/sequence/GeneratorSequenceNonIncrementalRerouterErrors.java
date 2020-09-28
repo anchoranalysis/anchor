@@ -26,10 +26,10 @@
 
 package org.anchoranalysis.io.generator.sequence;
 
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.io.manifest.sequencetype.SequenceType;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
-import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public class GeneratorSequenceNonIncrementalRerouterErrors<T> {
@@ -60,9 +60,8 @@ public class GeneratorSequenceNonIncrementalRerouterErrors<T> {
             routeError(e);
         }
     }
-    
+
     private void routeError(Exception e) {
         errorReporter.recordError(GeneratorSequenceIncrementalRerouteErrors.class, e);
     }
-
 }

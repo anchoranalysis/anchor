@@ -44,8 +44,7 @@ class ResultsMap {
      */
     private MapCreate<Optional<MultiName>, ResultsVectorList> map =
             new MapCreate<>(
-                    ResultsVectorList::new,
-                    Comparators.emptiesFirst(Comparator.naturalOrder()));
+                    ResultsVectorList::new, Comparators.emptiesFirst(Comparator.naturalOrder()));
 
     public void addResultsFor(RowLabels labels, ResultsVector results) {
         // Place into the aggregate structure

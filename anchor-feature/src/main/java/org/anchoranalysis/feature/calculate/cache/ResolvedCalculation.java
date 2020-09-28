@@ -32,7 +32,8 @@ import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
- * Like a {@link FeatureCalculation} but has been resolved against a cache to reuse any existing identical instance.
+ * Like a {@link FeatureCalculation} but has been resolved against a cache to reuse any existing
+ * identical instance.
  *
  * <p>This operation should always occur before a cached-calculation is used
  *

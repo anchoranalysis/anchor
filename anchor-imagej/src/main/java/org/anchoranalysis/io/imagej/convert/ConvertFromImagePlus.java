@@ -72,7 +72,8 @@ public class ConvertFromImagePlus {
     public static VoxelsWrapper toVoxels(ImagePlus image) {
 
         if (image.getType() == ImagePlus.GRAY8) {
-            return deriveCopiedVoxels(image, VoxelsFactory.getUnsignedByte(), ConvertToVoxelBuffer::asByte);
+            return deriveCopiedVoxels(
+                    image, VoxelsFactory.getUnsignedByte(), ConvertToVoxelBuffer::asByte);
         } else if (image.getType() == ImagePlus.GRAY16) {
             return deriveCopiedVoxels(
                     image, VoxelsFactory.getUnsignedShort(), ConvertToVoxelBuffer::asShort);

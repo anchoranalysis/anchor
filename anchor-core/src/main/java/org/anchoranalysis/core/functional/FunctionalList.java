@@ -209,7 +209,7 @@ public class FunctionalList {
             throws E {
         return mapToList(Arrays.stream(array), throwableClass, mapFunction);
     }
-    
+
     /**
      * Creates a list of elements, where each element corresponds to an index in a range.
      *
@@ -220,9 +220,7 @@ public class FunctionalList {
      * @return a list with an element for every item in the range
      */
     public static <T> List<T> mapRangeToList(
-            int startInclusive,
-            int endExclusive,
-            IntFunction<T> mapFunction) {
+            int startInclusive, int endExclusive, IntFunction<T> mapFunction) {
         return IntStream.range(startInclusive, endExclusive)
                 .mapToObj(mapFunction)
                 .collect(Collectors.toList());

@@ -40,8 +40,7 @@ import org.anchoranalysis.feature.input.FeatureInput;
  *
  * @author Owen Feehan
  */
-public class SelectFromShared<T extends FeatureInput>
-        extends ReferencedFeatures<T> {
+public class SelectFromShared<T extends FeatureInput> extends ReferencedFeatures<T> {
 
     // START BEAN PROPERTIES
     @BeanField @OptionalBean @Getter @Setter private RegEx match;

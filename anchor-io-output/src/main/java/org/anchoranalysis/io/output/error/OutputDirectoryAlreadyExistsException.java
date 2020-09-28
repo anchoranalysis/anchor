@@ -30,7 +30,7 @@ import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
 
 /**
  * When an output-directory already exists.
- * 
+ *
  * <p>This is thrown as a {@link RuntimeException} to cause the application to immediately end.
  *
  * @author Owen Feehan

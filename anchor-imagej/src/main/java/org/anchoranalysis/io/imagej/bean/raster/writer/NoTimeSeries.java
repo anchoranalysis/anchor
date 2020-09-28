@@ -40,7 +40,11 @@ import org.anchoranalysis.image.io.rasterwriter.RasterWriteOptions;
 public abstract class NoTimeSeries extends ImageJRasterWriter {
 
     @Override
-    public void writeStackSeries(StackSeries stackSeries, Path filePath, boolean makeRGB, RasterWriteOptions writeOptions)
+    public void writeStackSeries(
+            StackSeries stackSeries,
+            Path filePath,
+            boolean makeRGB,
+            RasterWriteOptions writeOptions)
             throws RasterIOException {
         throw new RasterIOException("Writing as a time-series is unsupported for this format");
     }

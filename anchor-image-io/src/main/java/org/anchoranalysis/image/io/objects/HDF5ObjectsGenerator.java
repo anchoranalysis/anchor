@@ -28,9 +28,9 @@ package org.anchoranalysis.image.io.objects;
 
 import ch.systemsx.cisd.hdf5.HDF5Factory;
 import ch.systemsx.cisd.hdf5.IHDF5Writer;
-import lombok.AllArgsConstructor;
 import java.nio.file.Path;
 import java.util.Optional;
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.io.generator.OneStageGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
@@ -51,7 +51,7 @@ public class HDF5ObjectsGenerator extends OneStageGenerator<ObjectCollection> {
     /** Whether to use compression when writing the object-masks in HDF5. */
     private final boolean compressed;
     // END REQUIRED ARGUMENTS
-    
+
     /**
      * Creates with an element (and compressed set to true)
      *
@@ -78,7 +78,7 @@ public class HDF5ObjectsGenerator extends OneStageGenerator<ObjectCollection> {
         return Optional.of(
                 new ManifestDescription("hdf5", ObjectCollectionWriter.MANIFEST_DESCRIPTION));
     }
-    
+
     private void writeObjects(ObjectCollection objects, Path filePath) {
 
         IHDF5Writer writer = HDF5Factory.open(filePath.toString());
@@ -87,7 +87,8 @@ public class HDF5ObjectsGenerator extends OneStageGenerator<ObjectCollection> {
         try {
             for (int i = 0; i < objects.size(); i++) {
 
-                ObjectMaskHDF5Writer writerHDF5 = new ObjectMaskHDF5Writer(
+                ObjectMaskHDF5Writer writerHDF5 =
+                        new ObjectMaskHDF5Writer(
                                 objects.get(i),
                                 HDF5PathHelper.pathForObject(i),
                                 writer,

@@ -28,6 +28,8 @@ package org.anchoranalysis.io.generator.sequence;
 
 import java.util.Collection;
 import java.util.Optional;
+import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.manifest.file.FileType;
@@ -36,17 +38,15 @@ import org.anchoranalysis.io.namestyle.OutputNameStyle;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
-import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 
 /**
  * Writes a collection of items via a generator into a subfolder.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  * @param <T> element-type
  */
-@RequiredArgsConstructor @AllArgsConstructor
+@RequiredArgsConstructor
+@AllArgsConstructor
 public class CollectionGenerator<T> implements Generator<Collection<T>> {
 
     // START REQUIRED ARGUMENTS
@@ -56,7 +56,7 @@ public class CollectionGenerator<T> implements Generator<Collection<T>> {
     private final int numberDigits;
     private final boolean selective;
     // END REQUIRED ARGUMENTS
-    
+
     private Collection<T> collection;
 
     @Override
@@ -68,9 +68,7 @@ public class CollectionGenerator<T> implements Generator<Collection<T>> {
 
     @Override
     public int write(
-            IndexableOutputNameStyle outputNameStyle,
-            String index,
-            OutputterChecked outputter)
+            IndexableOutputNameStyle outputNameStyle, String index, OutputterChecked outputter)
             throws OutputWriteFailedException {
 
         // In this context, we take the index as an indication of the first id to use - and assume
@@ -108,7 +106,8 @@ public class CollectionGenerator<T> implements Generator<Collection<T>> {
     }
 
     @Override
-    public Optional<FileType[]> getFileTypes(OutputWriteSettings outputWriteSettings) throws OperationFailedException {
+    public Optional<FileType[]> getFileTypes(OutputWriteSettings outputWriteSettings)
+            throws OperationFailedException {
         return generator.getFileTypes(outputWriteSettings);
     }
 

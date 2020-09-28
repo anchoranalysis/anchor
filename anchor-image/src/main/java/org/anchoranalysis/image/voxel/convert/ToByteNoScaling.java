@@ -33,11 +33,10 @@ import org.anchoranalysis.image.convert.UnsignedShortBuffer;
 
 /**
  * Converts voxel buffers to a unsigned 8-bit buffer without scaling any values.
- * 
- * <p>Values larger than 255 are clipped.
- * 
- * @author Owen Feehan
  *
+ * <p>Values larger than 255 are clipped.
+ *
+ * @author Owen Feehan
  */
 public final class ToByteNoScaling extends ToByte {
 
@@ -53,6 +52,6 @@ public final class ToByteNoScaling extends ToByte {
 
     @Override
     protected void convertFloat(FloatBuffer in, UnsignedByteBuffer out) {
-        out.putFloatClipped( in.get() );
+        out.putFloatClipped(in.get());
     }
 }

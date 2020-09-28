@@ -40,27 +40,26 @@ import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 public class BufferedImageFactory {
 
     public static BufferedImage create(Stack stack) throws CreateException {
-        
+
         if (!stack.allChannelsHaveType(UnsignedByteVoxelType.INSTANCE)) {
             throw new CreateException("This writer expects only 8-bit channels");
         }
-        
-        
+
         if (stack.getNumberChannels() == 3) {
             return BufferedImageFactory.createRGB(
-                    extractVoxels(stack,0),
-                    extractVoxels(stack,1),
-                    extractVoxels(stack,2),
+                    extractVoxels(stack, 0),
+                    extractVoxels(stack, 1),
+                    extractVoxels(stack, 2),
                     stack.extent());
         }
-        
-        if (stack.getNumberChannels()==1) {
-            return BufferedImageFactory.createGrayscale( extractVoxels(stack,0) );
+
+        if (stack.getNumberChannels() == 1) {
+            return BufferedImageFactory.createGrayscale(extractVoxels(stack, 0));
         }
-        
+
         throw new CreateException("Only 1 or 3 channels are supported for conversion.");
     }
-    
+
     public static BufferedImage createGrayscale(Voxels<UnsignedByteBuffer> voxels)
             throws CreateException {
 
@@ -136,7 +135,7 @@ public class BufferedImageFactory {
             throw new CreateException("z dimension must be 1");
         }
     }
-        
+
     private static Voxels<UnsignedByteBuffer> extractVoxels(Stack stack, int channelIndex) {
         return stack.getChannel(channelIndex).voxels().asByte();
     }

@@ -43,13 +43,16 @@ public class MarksAsUniqueValueGenerator extends RasterGeneratorWithElement<Mark
     private ObjectsAsUniqueValueGenerator delegate;
     private RegionMembershipWithFlags regionMembership;
 
-    public MarksAsUniqueValueGenerator(Dimensions dimensions, RegionMembershipWithFlags regionMembership) {
+    public MarksAsUniqueValueGenerator(
+            Dimensions dimensions, RegionMembershipWithFlags regionMembership) {
         delegate = new ObjectsAsUniqueValueGenerator(dimensions);
         this.regionMembership = regionMembership;
     }
 
     public MarksAsUniqueValueGenerator(
-            Dimensions dimensions, RegionMembershipWithFlags regionMembership, MarkCollection marks) {
+            Dimensions dimensions,
+            RegionMembershipWithFlags regionMembership,
+            MarkCollection marks) {
         this(dimensions, regionMembership);
         assignElement(marks);
     }

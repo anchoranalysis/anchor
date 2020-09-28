@@ -28,15 +28,16 @@ package org.anchoranalysis.image.voxel.iterator.process.buffer;
 
 /**
  * Processes <b>two</b> buffers for each z-slice jointly, without any offset or point.
- * 
- * <p>This is intended for usage with the relative {@code get} and {@code #put} methods of buffer classes.
+ *
+ * <p>This is intended for usage with the relative {@code get} and {@code #put} methods of buffer
+ * classes.
  *
  * @param <S> type of first buffer
  * @param <T> type of second buffer
  * @author Owen Feehan
  */
 @FunctionalInterface
-public interface ProcessBufferBinaryWithoutOffset<S,T> {
+public interface ProcessBufferBinaryWithoutOffset<S, T> {
 
     /** Notifies the processor that there has been a change in slice (z global coordinate) */
     default void notifyChangeSlice(int z) {}

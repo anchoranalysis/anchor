@@ -28,19 +28,19 @@ package org.anchoranalysis.feature.bean.list;
 
 import java.util.Arrays;
 import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.SkipInit;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.input.FeatureInput;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@AllArgsConstructor @NoArgsConstructor
-public class Define<T extends FeatureInput>
-        extends ReferencedFeatures<T> {
+@AllArgsConstructor
+@NoArgsConstructor
+public class Define<T extends FeatureInput> extends ReferencedFeatures<T> {
 
     // START BEAN PROPERTIES
     @BeanField @SkipInit @Getter @Setter private List<Feature<T>> list;

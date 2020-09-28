@@ -127,7 +127,7 @@ public class StringRasterGenerator extends AnchorBean<StringRasterGenerator> {
         public Optional<ManifestDescription> createManifestDescription() {
             return Optional.of(new ManifestDescription("raster", "text"));
         }
-        
+
         @Override
         public RasterWriteOptions rasterWriteOptions() {
             return RasterWriteOptions.rgbMaybe3D();

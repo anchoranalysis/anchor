@@ -54,9 +54,7 @@ public abstract class TaskWithoutSharedState<T extends InputFromManager>
 
     @Override
     public final NoSharedState beforeAnyJobIsExecuted(
-            Outputter outputter,
-            ConcurrencyPlan concurrencyPlan,
-            ParametersExperiment params)
+            Outputter outputter, ConcurrencyPlan concurrencyPlan, ParametersExperiment params)
             throws ExperimentExecutionException {
         // No shared-state by default, so we use a placeholder shared-state type
         return NoSharedState.INSTANCE;

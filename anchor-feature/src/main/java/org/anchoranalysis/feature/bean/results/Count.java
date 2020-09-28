@@ -31,9 +31,8 @@ import org.anchoranalysis.feature.input.FeatureInputResults;
 
 /**
  * The number of the results from a particular feature.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class Count extends FeatureResults {
 

@@ -1,6 +1,4 @@
-/**
- * Reading Beans from XML files.
- */
+/** Reading Beans from XML files. */
 package org.anchoranalysis.bean.xml;
 /*-
  * #%L

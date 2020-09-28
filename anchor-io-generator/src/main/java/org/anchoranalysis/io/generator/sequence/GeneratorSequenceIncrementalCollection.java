@@ -27,9 +27,9 @@
 package org.anchoranalysis.io.generator.sequence;
 
 import java.util.Collection;
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.io.generator.SingleFileTypeGenerator;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
-import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public class GeneratorSequenceIncrementalCollection<T, C>
@@ -40,7 +40,7 @@ public class GeneratorSequenceIncrementalCollection<T, C>
 
     @Override
     public void add(T element) throws OutputWriteFailedException {
-        collection.add( generator.transform(element) );
+        collection.add(generator.transform(element));
     }
 
     @Override

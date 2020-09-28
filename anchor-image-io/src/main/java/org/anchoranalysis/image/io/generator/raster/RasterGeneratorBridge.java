@@ -32,20 +32,21 @@ import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 /**
- * Allows us to call an {@code RasterGenerator<S>} as if it was an {@code
- * RasterGenerator<T>} using an function to connect the two.
+ * Allows us to call an {@code RasterGenerator<S>} as if it was an {@code RasterGenerator<T>} using
+ * an function to connect the two.
  *
  * @author Owen Feehan
  * @param <T> exposed-iterator type
  * @param <V> hidden-iterator-type
  */
-public class RasterGeneratorBridge<T, V> extends RasterGeneratorDelegateToRaster<V,T> {
+public class RasterGeneratorBridge<T, V> extends RasterGeneratorDelegateToRaster<V, T> {
 
     // START REQUIRED ARGUMENTS
     private final CheckedFunction<T, V, ? extends Throwable> elementBridge;
     // END REQUIRED ARGUMENTS
 
-    public RasterGeneratorBridge(RasterGenerator<V> delegate, CheckedFunction<T, V, ? extends Throwable> elementBridge) {
+    public RasterGeneratorBridge(
+            RasterGenerator<V> delegate, CheckedFunction<T, V, ? extends Throwable> elementBridge) {
         super(delegate);
         this.elementBridge = elementBridge;
     }

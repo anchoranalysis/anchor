@@ -16,9 +16,7 @@ class FilePathPrefixerConstantPath extends FilePathPrefixer {
 
     @Override
     public FilePathPrefix outFilePrefix(
-            NamedPath path,
-            String experimentIdentifier,
-            FilePathPrefixerContext context) {
+            NamedPath path, String experimentIdentifier, FilePathPrefixerContext context) {
         return prefix;
     }
 

@@ -36,10 +36,12 @@ import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 public class BoundedVoxelsFactory {
 
     public static BoundedVoxels<UnsignedByteBuffer> createByte(BoundingBox box) {
-        return new BoundedVoxels<>(box, VoxelsFactory.getUnsignedByte().createInitialized(box.extent()));
+        return new BoundedVoxels<>(
+                box, VoxelsFactory.getUnsignedByte().createInitialized(box.extent()));
     }
 
     public static BoundedVoxels<UnsignedIntBuffer> createInt(BoundingBox box) {
-        return new BoundedVoxels<>(box, VoxelsFactory.getUnsignedInt().createInitialized(box.extent()));
+        return new BoundedVoxels<>(
+                box, VoxelsFactory.getUnsignedInt().createInitialized(box.extent()));
     }
 }

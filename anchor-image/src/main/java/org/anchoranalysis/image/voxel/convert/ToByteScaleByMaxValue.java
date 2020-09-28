@@ -32,10 +32,10 @@ import org.anchoranalysis.image.convert.UnsignedIntBuffer;
 import org.anchoranalysis.image.convert.UnsignedShortBuffer;
 
 /**
- * Converts voxel buffers to a unsigned 8-bit buffer linearly scaling against the maximum constant value.
- * 
- * @author Owen Feehan
+ * Converts voxel buffers to a unsigned 8-bit buffer linearly scaling against the maximum constant
+ * value.
  *
+ * @author Owen Feehan
  */
 public final class ToByteScaleByMaxValue extends ToByte {
 
@@ -52,16 +52,16 @@ public final class ToByteScaleByMaxValue extends ToByte {
 
     @Override
     protected void convertUnsignedShort(UnsignedShortBuffer in, UnsignedByteBuffer out) {
-        out.putFloatClipped( scale * in.getUnsigned() );
+        out.putFloatClipped(scale * in.getUnsigned());
     }
 
     @Override
     protected void convertUnsignedInt(UnsignedIntBuffer in, UnsignedByteBuffer out) {
-        out.putFloatClipped( scale * in.getUnsigned() );
+        out.putFloatClipped(scale * in.getUnsigned());
     }
 
     @Override
     protected void convertFloat(FloatBuffer in, UnsignedByteBuffer out) {
-        out.putFloatClipped( scale * in.get() );
+        out.putFloatClipped(scale * in.get());
     }
 }

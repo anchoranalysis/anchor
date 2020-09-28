@@ -29,15 +29,14 @@ package org.anchoranalysis.io.generator.text;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import org.anchoranalysis.io.error.AnchorIOException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.anchoranalysis.io.error.AnchorIOException;
 
 /**
  * Utility for writing to a text-file at a particular path, but only if it is enabled.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 @RequiredArgsConstructor
 public class TextFileOutput {
@@ -51,7 +50,7 @@ public class TextFileOutput {
 
     public void start() throws AnchorIOException {
         try {
-             this.writer = new PrintWriter( new FileWriter(filePath) );  // NOSONAR
+            this.writer = new PrintWriter(new FileWriter(filePath)); // NOSONAR
         } catch (IOException e) {
             throw new AnchorIOException("Cannot create file-writer", e);
         }

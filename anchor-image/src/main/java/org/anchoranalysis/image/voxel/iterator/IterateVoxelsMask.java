@@ -57,7 +57,8 @@ public class IterateVoxelsMask {
      *     coordinates.
      * @param <T> buffer-type for voxels
      */
-    public static <T> void withBuffer(Mask mask, Voxels<T> voxels, ProcessBufferUnaryWithPoint<T> process) {
+    public static <T> void withBuffer(
+            Mask mask, Voxels<T> voxels, ProcessBufferUnaryWithPoint<T> process) {
         // Treat it as one giant object box. This will involve some additions and subtractions of 0
         // during the processing of voxels
         // but after some quick emperical checks, it doesn't seem to make a performance difference.

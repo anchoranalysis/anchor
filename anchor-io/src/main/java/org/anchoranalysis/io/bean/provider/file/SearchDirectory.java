@@ -67,7 +67,7 @@ public class SearchDirectory extends FileProviderWithDirectoryString {
     @Override
     public Collection<File> matchingFilesForDirectory(Path directory, InputManagerParams params)
             throws FileProviderException {
-        
+
         int maxDirDepth =
                 maxDirectoryDepth >= 0
                         ? maxDirectoryDepth

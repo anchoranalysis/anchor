@@ -34,7 +34,6 @@ import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.NoSharedState;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.output.MultiLevelOutputEnabled;
-import org.anchoranalysis.io.output.bean.rules.OutputEnabledRules;
 
 /**
  * A dummy task that simply writes a message to all log files, specifically: 1. log file for
@@ -53,18 +52,17 @@ public class HelloWorldTask<S extends InputFromManager> extends TaskWithoutShare
     public Optional<MultiLevelOutputEnabled> defaultOutputs() {
         return Optional.empty();
     }
-    
+
     @Override
     public InputTypesExpected inputTypesExpected() {
         return new InputTypesExpected(InputFromManager.class);
     }
 
     @Override
-    public void doJobOnInput(InputBound<S, NoSharedState> params)
-            throws JobExecutionException {
+    public void doJobOnInput(InputBound<S, NoSharedState> params) throws JobExecutionException {
         printMessage(params.getLogger().messageLogger());
     }
-    
+
     @Override
     public boolean hasVeryQuickPerInputExecution() {
         return true;

@@ -59,12 +59,11 @@ import org.anchoranalysis.overlay.bean.DrawObject;
 
 /**
  * Outputs a raster showing an {@link Assignment} on a background.
- * 
- * <p>Specifically two tiled backgrounds appear, one left, and one right, and objects
- * are colored on left and right panels, to indicate how they appear in the assignment.
- * 
- * @author Owen Feehan
  *
+ * <p>Specifically two tiled backgrounds appear, one left, and one right, and objects are colored on
+ * left and right panels, to indicate how they appear in the assignment.
+ *
+ * @author Owen Feehan
  */
 public class AssignmentGenerator extends RasterGeneratorWithElement<Assignment> {
 
@@ -85,24 +84,21 @@ public class AssignmentGenerator extends RasterGeneratorWithElement<Assignment> 
 
     /**
      * Create with a background and assignment
-     * 
+     *
      * @param background the background, which will feature in both left and right panes
      * @param assignment the assignment
      * @param colorPool
      * @param flatten whether to flatten (maximum intensity projection) in the z-dimension
      */
     AssignmentGenerator(
-            DisplayStack background,
-            Assignment assignment,
-            ColorPool colorPool,
-            boolean flatten) {
+            DisplayStack background, Assignment assignment, ColorPool colorPool, boolean flatten) {
         super();
         this.background = background;
         this.flatten = flatten;
         this.colorPool = colorPool;
 
         assignElement(assignment);
-        
+
         delegate = new StackGenerator(true, "assignmentComparison", false);
     }
 
@@ -115,7 +111,7 @@ public class AssignmentGenerator extends RasterGeneratorWithElement<Assignment> 
     public Stack transform() throws OutputWriteFailedException {
 
         Assignment assignment = getElement();
-        
+
         ArrangeRaster stackProvider =
                 createTiledStackProvider(
                         createRGBOutlineStack(true, assignment),
@@ -150,7 +146,8 @@ public class AssignmentGenerator extends RasterGeneratorWithElement<Assignment> 
         return TileRasters.createStackProvider(listProvider, 2, false, false, true);
     }
 
-    private Stack createRGBOutlineStack(boolean left, Assignment assignment) throws OutputWriteFailedException {
+    private Stack createRGBOutlineStack(boolean left, Assignment assignment)
+            throws OutputWriteFailedException {
         try {
             return createRGBOutlineStack(
                     assignment.getListPaired(left), colorPool, assignment.getListUnassigned(left));
@@ -187,10 +184,7 @@ public class AssignmentGenerator extends RasterGeneratorWithElement<Assignment> 
     private DrawObjectsGenerator createGenerator(
             DrawObject drawObject, ColorList colors, ObjectCollection objects) {
         return DrawObjectsGenerator.withBackgroundAndColors(
-                drawObject,
-                new ObjectCollectionWithProperties(objects),
-                background,
-                colors);
+                drawObject, new ObjectCollectionWithProperties(objects), background, colors);
     }
 
     private DrawObject createConditionalWriter(List<ObjectMask> otherObjects, DrawObject writer) {

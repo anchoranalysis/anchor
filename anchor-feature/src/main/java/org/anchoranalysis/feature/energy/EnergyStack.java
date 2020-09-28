@@ -38,9 +38,8 @@ import org.anchoranalysis.image.stack.Stack;
 
 /**
  * An energy-stack with associated {@link KeyValueParams}.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class EnergyStack {
 
@@ -83,19 +82,19 @@ public class EnergyStack {
     public EnergyStack extractSlice(int z) throws OperationFailedException {
         return new EnergyStack(delegate.extractSlice(z), params);
     }
-    
+
     /**
      * Does exactly one z-slice exist in the energy stack?
-     * 
+     *
      * @return true iff the number of z-slices is 1
      */
     public boolean hasOneSlice() {
-        return dimensions().extent().z()==1;
+        return dimensions().extent().z() == 1;
     }
 
     /**
      * The image-dimensions associated with the energy-stack.
-     * 
+     *
      * @return the image-dimensions.
      */
     public Dimensions dimensions() {
@@ -104,7 +103,7 @@ public class EnergyStack {
 
     /**
      * The image-resolution asssociated with the energy-stack.
-     * 
+     *
      * @return the image-resolution.
      */
     public Resolution resolution() {

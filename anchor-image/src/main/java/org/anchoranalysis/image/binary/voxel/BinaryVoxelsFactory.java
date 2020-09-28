@@ -87,10 +87,12 @@ public class BinaryVoxelsFactory {
             Extent extent, VoxelDataType dataType) throws CreateException {
         if (dataType.equals(UnsignedByteVoxelType.INSTANCE)) {
             return new BinaryVoxelsByte(
-                    VoxelsFactory.getUnsignedByte().createInitialized(extent), BinaryValues.getDefault());
+                    VoxelsFactory.getUnsignedByte().createInitialized(extent),
+                    BinaryValues.getDefault());
         } else if (dataType.equals(UnsignedIntVoxelType.INSTANCE)) {
             return new BinaryVoxelsInt(
-                    VoxelsFactory.getUnsignedInt().createInitialized(extent), BinaryValues.getDefault());
+                    VoxelsFactory.getUnsignedInt().createInitialized(extent),
+                    BinaryValues.getDefault());
         } else {
             throw new CreateException(
                     "Unsupported voxel-data-type, only unsigned byte and int are supported");

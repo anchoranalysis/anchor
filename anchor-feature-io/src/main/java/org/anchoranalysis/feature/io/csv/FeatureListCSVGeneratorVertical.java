@@ -43,8 +43,7 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
  *
  * @author Owen Feehan
  */
-public class FeatureListCSVGeneratorVertical
-        extends FeatureTableCSVGenerator<ResultsVectorList> {
+public class FeatureListCSVGeneratorVertical extends FeatureTableCSVGenerator<ResultsVectorList> {
 
     /**
      * Creates without setting any <i>results</i> (i.e. column-data).
@@ -71,10 +70,7 @@ public class FeatureListCSVGeneratorVertical
     }
 
     private static List<TypedValue> generateRow(
-            String featureName,
-            ResultsVectorList allFeatureResults,
-            int featureIndex,
-            int size)
+            String featureName, ResultsVectorList allFeatureResults, int featureIndex, int size)
             throws OutputWriteFailedException {
 
         List<TypedValue> csvRow = new ArrayList<>();

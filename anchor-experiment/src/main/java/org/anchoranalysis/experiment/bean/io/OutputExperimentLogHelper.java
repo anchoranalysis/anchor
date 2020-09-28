@@ -39,9 +39,9 @@ import org.apache.commons.lang.time.StopWatch;
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class OutputExperimentLogHelper {
-   
+
     private static final Divider DIVIDER = new Divider();
-    
+
     public static void maybeLogStart(ParametersExperiment params) {
         if (params.isDetailedLogging()) {
             params.getLoggerExperiment()
@@ -53,9 +53,11 @@ class OutputExperimentLogHelper {
     }
 
     public static void maybeLogCompleted(
-            RecordedOutputs recordedOutputs, ParametersExperiment params, StopWatch stopWatchExperiment) {
+            RecordedOutputs recordedOutputs,
+            ParametersExperiment params,
+            StopWatch stopWatchExperiment) {
         if (params.isDetailedLogging()) {
-            
+
             params.getLoggerExperiment()
                     .logFormatted(
                             "%s%n%s%n%s%nExperiment %s completed (%ds) writing to %s",
@@ -64,29 +66,35 @@ class OutputExperimentLogHelper {
                             DIVIDER.withoutLabel(),
                             params.getExperimentIdentifier(),
                             stopWatchExperiment.getTime() / 1000,
-                            params.getOutputter().getOutputFolderPath()
-                            );
+                            params.getOutputter().getOutputFolderPath());
         }
     }
-    
+
     /**
-     * A string (one or two lines) summarizing what outputs were written or not-written but possible.
-     * 
+     * A string (one or two lines) summarizing what outputs were written or not-written but
+     * possible.
+     *
      * @return the string
      */
     private static String summarize(RecordedOutputs recordedOutputs) {
         if (recordedOutputs.isEmpty()) {
             return "No outputs were written as no possible outputs exist.";
         }
-        
+
         if (recordedOutputs.numberAllowed() > 0) {
             if (recordedOutputs.numberNotAllowed() > 0) {
-                return String.format("Written:\t%s.%nNot written:\t%s.", recordedOutputs.summarizeAllowed(), recordedOutputs.summarizeNotAllowed() );
+                return String.format(
+                        "Written:\t%s.%nNot written:\t%s.",
+                        recordedOutputs.summarizeAllowed(), recordedOutputs.summarizeNotAllowed());
             } else {
-                return String.format("All possible outputs were written: %s.", recordedOutputs.summarizeAllowed() );
+                return String.format(
+                        "All possible outputs were written: %s.",
+                        recordedOutputs.summarizeAllowed());
             }
         } else {
-            return String.format("No outputs were written.%nPossible outputs are: %s.", recordedOutputs.summarizeNotAllowed() );
+            return String.format(
+                    "No outputs were written.%nPossible outputs are: %s.",
+                    recordedOutputs.summarizeNotAllowed());
         }
     }
 }

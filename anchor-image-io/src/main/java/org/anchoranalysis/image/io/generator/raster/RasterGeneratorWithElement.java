@@ -15,7 +15,7 @@ public abstract class RasterGeneratorWithElement<T> extends RasterGenerator<T> {
     public final void assignElement(T element) {
         this.element = element;
     }
-        
+
     @Override
     public void end() throws OutputWriteFailedException {
         // Don't keep element in memory any longer that necessary

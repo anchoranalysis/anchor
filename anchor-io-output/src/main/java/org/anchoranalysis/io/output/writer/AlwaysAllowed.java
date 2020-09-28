@@ -40,9 +40,8 @@ import org.anchoranalysis.io.output.outputter.OutputterChecked;
 
 /**
  * Allows every output, irrespective of whether the {@link OutputterChecked} allows the output-name.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 @RequiredArgsConstructor
 public class AlwaysAllowed implements Writer {
@@ -63,17 +62,19 @@ public class AlwaysAllowed implements Writer {
             throws OutputWriteFailedException {
 
         maybeExecutePreop();
-        return Optional.of(outputter.deriveSubdirectory(outputName, manifestDescription, manifestFolder));
+        return Optional.of(
+                outputter.deriveSubdirectory(outputName, manifestDescription, manifestFolder));
     }
 
     @Override
-    public boolean writeSubdirectoryWithGenerator(String outputName, GenerateWritableItem<?> collectionGenerator)
+    public boolean writeSubdirectoryWithGenerator(
+            String outputName, GenerateWritableItem<?> collectionGenerator)
             throws OutputWriteFailedException {
 
         maybeExecutePreop();
 
         collectionGenerator.get().write(new IntegerSuffixOutputNameStyle(outputName, 3), outputter);
-        
+
         return true;
     }
 
@@ -93,7 +94,7 @@ public class AlwaysAllowed implements Writer {
     public boolean write(String outputName, GenerateWritableItem<?> generator)
             throws OutputWriteFailedException {
         maybeExecutePreop();
-        generator.get().write( new SimpleOutputNameStyle(outputName), outputter);
+        generator.get().write(new SimpleOutputNameStyle(outputName), outputter);
         return true;
     }
 
@@ -107,15 +108,15 @@ public class AlwaysAllowed implements Writer {
 
         maybeExecutePreop();
 
-        Path outPath =
-                outputter.outFilePath(outputName + "." + extension);
+        Path outPath = outputter.outFilePath(outputName + "." + extension);
 
         manifestDescription.ifPresent(
                 md -> outputter.writeFileToOperationRecorder(outputName, outPath, md, ""));
         return Optional.of(outPath);
     }
-    
+
     private void maybeExecutePreop() {
-        preop.ifPresent(WriterExecuteBeforeEveryOperation::execute);;
+        preop.ifPresent(WriterExecuteBeforeEveryOperation::execute);
+        ;
     }
 }

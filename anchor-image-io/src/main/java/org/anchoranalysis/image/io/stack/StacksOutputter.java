@@ -123,12 +123,7 @@ public class StacksOutputter {
             throws OutputWriteFailedException {
         StackGenerator generator = createStackGenerator();
         GeneratorOutputHelper.outputWithException(
-                stacks,
-                generator,
-                outputter,
-                outputName,
-                suffix,
-                suppressSubfoldersIn);
+                stacks, generator, outputter, outputName, suffix, suppressSubfoldersIn);
     }
 
     public static NamedStacks subset(NamedProvider<Stack> stackCollection, OutputEnabled oa) {
@@ -162,9 +157,7 @@ public class StacksOutputter {
     }
 
     private static NamedStacks stackSubset(
-            NamedProvider<Stack> stacks,
-            String secondLevelOutputKey,
-            Outputter outputter) {
+            NamedProvider<Stack> stacks, String secondLevelOutputKey, Outputter outputter) {
         return StacksOutputter.subset(
                 stacks, outputter.outputsEnabled().second(secondLevelOutputKey));
     }

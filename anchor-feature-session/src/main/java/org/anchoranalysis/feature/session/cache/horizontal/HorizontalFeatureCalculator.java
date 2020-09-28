@@ -41,8 +41,7 @@ import org.anchoranalysis.feature.input.FeatureInput;
  * @author Owen Feehan
  * @param <T> feature-input
  */
-class HorizontalFeatureCalculator<T extends FeatureInput>
-        implements FeatureSessionCalculator<T> {
+class HorizontalFeatureCalculator<T extends FeatureInput> implements FeatureSessionCalculator<T> {
 
     private FeatureSessionCalculator<T> delegate;
     private FeatureResultMap<T> map;

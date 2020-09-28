@@ -58,25 +58,25 @@ public abstract class Plot<T> extends AnchorBean<Plot<T>> {
 
     /**
      * Whether to include this particular item in the plot?
-     * 
-     * <p>This function is called for all {@code items} passed in {@link #create(Iterator, Optional, Optional)} to
-     * filter items that are unwanted or contain undefined or invalid data.
-     * 
+     *
+     * <p>This function is called for all {@code items} passed in {@link #create(Iterator, Optional,
+     * Optional)} to filter items that are unwanted or contain undefined or invalid data.
+     *
      * @param item the item to test
-     * @return true iff the item should be included 
+     * @return true iff the item should be included
      */
     public abstract boolean isItemIncluded(T item);
 
     /**
      * The full title of the plot.
-     * 
+     *
      * @return the title
      */
     public abstract String getTitle();
 
     /**
      * A shortened version of {@link #getTitle}.
-     * 
+     *
      * @return the shortened title
      */
     public abstract String getShortTitle();

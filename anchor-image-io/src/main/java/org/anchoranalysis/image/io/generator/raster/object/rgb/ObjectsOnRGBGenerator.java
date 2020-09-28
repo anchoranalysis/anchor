@@ -54,7 +54,8 @@ import org.anchoranalysis.overlay.writer.ObjectDrawAttributes;
  * @author Owen Feehan
  */
 @AllArgsConstructor
-public abstract class ObjectsOnRGBGenerator extends RasterGeneratorWithElement<ObjectCollectionWithProperties> {
+public abstract class ObjectsOnRGBGenerator
+        extends RasterGeneratorWithElement<ObjectCollectionWithProperties> {
 
     private static final ChannelFactorySingleType CHANNEL_FACTORY = new ChannelFactoryByte();
 
@@ -64,7 +65,7 @@ public abstract class ObjectsOnRGBGenerator extends RasterGeneratorWithElement<O
     // START REQUIRED ARGUMENTS
     /** Determines how an object is drawn (on the background). */
     private final DrawObject drawObject;
-    
+
     /** An association of color and/or other identifies with each object. */
     private final ObjectDrawAttributes attributes;
 
@@ -97,10 +98,10 @@ public abstract class ObjectsOnRGBGenerator extends RasterGeneratorWithElement<O
     public Optional<ManifestDescription> createManifestDescription() {
         return Optional.of(MANIFEST_DESCRIPTION);
     }
-    
+
     @Override
     public RasterWriteOptions rasterWriteOptions() {
-        return RasterWriteOptions.rgb( isAlways2D() );
+        return RasterWriteOptions.rgb(isAlways2D());
     }
 
     protected abstract RGBStack generateBackground(Either<Dimensions, DisplayStack> background)
@@ -111,8 +112,8 @@ public abstract class ObjectsOnRGBGenerator extends RasterGeneratorWithElement<O
     protected static RGBStack createEmptyStackFor(Dimensions dimensions) {
         return new RGBStack(dimensions, CHANNEL_FACTORY);
     }
-    
+
     private boolean isAlways2D() {
-        return background.fold(Function.identity(), DisplayStack::dimensions).z()==1;
+        return background.fold(Function.identity(), DisplayStack::dimensions).z() == 1;
     }
 }

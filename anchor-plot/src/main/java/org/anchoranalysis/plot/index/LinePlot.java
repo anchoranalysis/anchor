@@ -47,7 +47,7 @@ import org.jfree.data.xy.XYSeriesCollection;
 
 /**
  * A line graph with 1 or more series, with an index on the x-axis.
- * 
+ *
  * <p>Lines are calculated from a container of items.
  *
  * @param <T> item-type in container.

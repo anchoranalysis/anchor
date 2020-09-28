@@ -31,14 +31,20 @@ import lombok.Setter;
 import org.anchoranalysis.bean.StringSet;
 import org.anchoranalysis.bean.annotation.BeanField;
 
+/**
+ * Only specific outputs, identified by a textual name, are enabled.
+ *
+ * @author Owen Feehan
+ */
 public class SpecificEnabled extends OutputEnabled {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private StringSet outputsAllowed;
+    /** The names of the outputs that are enabled. */
+    @BeanField @Getter @Setter private StringSet outputsEnabled;
     // END BEAN PROPERTIES
 
     @Override
     public boolean isOutputAllowed(String outputName) {
-        return outputsAllowed.contains(outputName);
+        return outputsEnabled.contains(outputName);
     }
 }

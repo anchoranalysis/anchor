@@ -67,7 +67,8 @@ public class GeneratorOutputHelper {
                 new GeneratorSequenceNonIncrementalRerouterErrors<>(
                         new GeneratorSequenceNonIncremental<>(
                                 outputter,
-                                OptionalUtilities.createFromFlag(!suppressSubfoldersIn, outputNameStyle.getOutputName()),
+                                OptionalUtilities.createFromFlag(
+                                        !suppressSubfoldersIn, outputNameStyle.getOutputName()),
                                 outputNameStyle,
                                 generator,
                                 true),
@@ -105,7 +106,8 @@ public class GeneratorOutputHelper {
         GeneratorSequenceNonIncremental<T> writer =
                 new GeneratorSequenceNonIncremental<>(
                         outputter,
-                        OptionalUtilities.createFromFlag(!suppressSubfoldersIn, outputNameStyle.getOutputName()),
+                        OptionalUtilities.createFromFlag(
+                                !suppressSubfoldersIn, outputNameStyle.getOutputName()),
                         outputNameStyle,
                         generator,
                         true);

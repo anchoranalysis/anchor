@@ -1,5 +1,6 @@
 /**
- * Functional-interfaces for processing different combinations of points and raw buffers, but not {@link org.anchoranalysis.image.voxel.buffer.VoxelBuffer}.
+ * Functional-interfaces for processing different combinations of points and raw buffers, but not
+ * {@link org.anchoranalysis.image.voxel.buffer.VoxelBuffer}.
  *
  * <p>These interfaces are called from the iterators within {@code
  * org.anchoranalysis.image.voxel.iterator}.

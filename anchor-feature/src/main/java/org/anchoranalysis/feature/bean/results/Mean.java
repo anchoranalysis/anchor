@@ -32,9 +32,8 @@ import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 
 /**
  * The mean of the results from a particular feature.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class Mean extends StatisticForFeature {
 

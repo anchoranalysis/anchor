@@ -92,9 +92,7 @@ public class BundledObjectOutputStreamGenerator<T extends Serializable> implemen
 
     @Override
     public int write(
-            IndexableOutputNameStyle outputNameStyle,
-            String index,
-            OutputterChecked outputter)
+            IndexableOutputNameStyle outputNameStyle, String index, OutputterChecked outputter)
             throws OutputWriteFailedException {
         bundle.add(index, element);
 
@@ -117,13 +115,16 @@ public class BundledObjectOutputStreamGenerator<T extends Serializable> implemen
                     new ObjectOutputStreamGenerator<>(
                             bundleParameters, Optional.of("bundleParameters"));
 
-            RecordingWriters subfolderWriters = generatorSequence.getWriters()
+            RecordingWriters subfolderWriters =
+                    generatorSequence
+                            .getWriters()
                             .orElseThrow(
                                     () ->
                                             new OutputWriteFailedException(
                                                     "No subfolder output-manager exists"));
 
-            subfolderWriters.permissive()
+            subfolderWriters
+                    .permissive()
                     .write("bundleParameters", () -> bundleParametersGenerator);
         }
 

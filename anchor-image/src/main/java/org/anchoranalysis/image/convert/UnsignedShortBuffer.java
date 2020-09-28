@@ -26,8 +26,8 @@
 package org.anchoranalysis.image.convert;
 
 import java.nio.ShortBuffer;
-import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
 import lombok.Getter;
+import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
 
 /**
  * Wraps a {@code ShortBuffer} but automatically performs conversion to {@code int}.
@@ -151,9 +151,10 @@ public final class UnsignedShortBuffer extends UnsignedBufferAsInt {
     public void putUnsigned(int value) {
         putRaw((short) value);
     }
-    
+
     /**
-     * Puts a long at the current buffer position, clipping to ensure the value is within the range {@code (0,255)}.
+     * Puts a long at the current buffer position, clipping to ensure the value is within the range
+     * {@code (0,255)}.
      *
      * @param value the float
      */
@@ -176,9 +177,10 @@ public final class UnsignedShortBuffer extends UnsignedBufferAsInt {
     public void putLong(long value) {
         putRaw((short) value);
     }
-    
+
     /**
-     * Puts a long at the current buffer position, clipping to ensure the value is within the range {@code (0,255)}.
+     * Puts a long at the current buffer position, clipping to ensure the value is within the range
+     * {@code (0,255)}.
      *
      * @param value the float
      */
@@ -196,9 +198,10 @@ public final class UnsignedShortBuffer extends UnsignedBufferAsInt {
     public void putFloat(float value) {
         putRaw((short) value);
     }
-    
+
     /**
-     * Puts a float at the current buffer position, clipping to ensure the value is within the range {@code (0,255)}.
+     * Puts a float at the current buffer position, clipping to ensure the value is within the range
+     * {@code (0,255)}.
      *
      * @param value the float
      */

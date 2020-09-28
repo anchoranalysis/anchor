@@ -26,9 +26,9 @@
 
 package org.anchoranalysis.io.generator;
 
-import lombok.RequiredArgsConstructor;
 import java.nio.file.Path;
 import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.functional.function.CheckedFunction;
 import org.anchoranalysis.core.index.SetOperationFailedException;
@@ -46,7 +46,8 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
  * @param <V> hidden-iterator-type
  */
 @RequiredArgsConstructor
-public class SingleFileTypeGeneratorBridge<S, T, V> extends SingleFileTypeGeneratorWithElement<T,S> {
+public class SingleFileTypeGeneratorBridge<S, T, V>
+        extends SingleFileTypeGeneratorWithElement<T, S> {
 
     // START REQUIRED ARGUMENTS
     private final SingleFileTypeGenerator<V, S> delegate;
@@ -73,7 +74,6 @@ public class SingleFileTypeGeneratorBridge<S, T, V> extends SingleFileTypeGenera
     public void end() throws OutputWriteFailedException {
         delegate.end();
     }
-
 
     @Override
     public String getFileExtension(OutputWriteSettings outputWriteSettings)

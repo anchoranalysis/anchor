@@ -1,16 +1,16 @@
 package org.anchoranalysis.image.object.morphological;
 
-import org.anchoranalysis.core.error.OperationFailedException;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.core.error.OperationFailedException;
 
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class SelectDimensionsFactory {
-    
+
     public static SelectDimensions of(boolean do3D) {
         return do3D ? SelectDimensions.ALL_DIMENSIONS : SelectDimensions.X_Y_ONLY;
     }
-    
+
     public static SelectDimensions of(boolean do3D, boolean zOnly) throws OperationFailedException {
         if (zOnly) {
             if (do3D) {
@@ -19,7 +19,7 @@ public class SelectDimensionsFactory {
                 throw new OperationFailedException("If zOnly is true, then do3D must also be true");
             }
         } else {
-            return of (do3D);
+            return of(do3D);
         }
     }
 }

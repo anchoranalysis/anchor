@@ -53,17 +53,13 @@ public class SequentialProcessor<T extends InputFromManager, S> extends JobProce
 
     @Override
     protected TaskStatistics execute(
-            Outputter rootOutputter,
-            List<T> inputObjects,
-            ParametersExperiment paramsExperiment)
+            Outputter rootOutputter, List<T> inputObjects, ParametersExperiment paramsExperiment)
             throws ExperimentExecutionException {
 
         ConcurrencyPlan concurrencyPlan = ConcurrencyPlan.singleProcessor(1);
 
         S sharedState =
-                getTask()
-                        .beforeAnyJobIsExecuted(
-                                rootOutputter, concurrencyPlan, paramsExperiment);
+                getTask().beforeAnyJobIsExecuted(rootOutputter, concurrencyPlan, paramsExperiment);
 
         TaskStatistics stats =
                 executeAllJobs(

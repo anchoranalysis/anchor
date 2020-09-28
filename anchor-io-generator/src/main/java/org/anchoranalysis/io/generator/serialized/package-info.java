@@ -1,4 +1,2 @@
-/**
- * Generators for writing serialized objects.
- */
+/** Generators for writing serialized objects. */
 package org.anchoranalysis.io.generator.serialized;

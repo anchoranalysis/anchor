@@ -32,8 +32,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.input.FeatureInput;
 
-public class DefineSingle<T extends FeatureInput>
-        extends ReferencedFeatures<T> {
+public class DefineSingle<T extends FeatureInput> extends ReferencedFeatures<T> {
 
     /** */
 

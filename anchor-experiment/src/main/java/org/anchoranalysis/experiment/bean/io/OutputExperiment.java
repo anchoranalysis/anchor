@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.experiment.bean.io;
 
+import com.google.common.base.Preconditions;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
@@ -45,13 +46,11 @@ import org.anchoranalysis.io.generator.xml.XMLConfigurationWrapperGenerator;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
 import org.anchoranalysis.io.output.MultiLevelOutputEnabled;
 import org.anchoranalysis.io.output.bean.OutputManager;
-import org.anchoranalysis.io.output.bean.rules.OutputEnabledRules;
 import org.anchoranalysis.io.output.outputter.BindFailedException;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
 import org.anchoranalysis.io.output.writer.RecordedOutputs;
 import org.apache.commons.lang.time.StopWatch;
-import com.google.common.base.Preconditions;
 
 /**
  * An experiment that uses a {@link OutputManager} to specify the outputting of results.
@@ -67,11 +66,11 @@ public abstract class OutputExperiment extends Experiment {
     /** The output-manager that specifies how/where/which elements occur duing outputting. */
     @BeanField @Getter @Setter private OutputManager output;
 
-    /** 
+    /**
      * Where log messages that <b>do not<b> pertain to a specific job (input) appear.
      *
-     * <p>Note that in the case of a {@link InputOutputExperiment} an additional log
-     * will be created for each specific job.
+     * <p>Note that in the case of a {@link InputOutputExperiment} an additional log will be created
+     * for each specific job.
      */
     @BeanField @Getter @Setter private LoggingDestination logExperiment = new ToConsole();
 
@@ -88,14 +87,16 @@ public abstract class OutputExperiment extends Experiment {
     @BeanField @Getter @Setter private boolean forceDetailedLogging = false;
     // END BEAN PROPERTIES
 
-    /** If defined, records output-names that are written / not-written during the experiment.
-     * 
-     *  <p>This only occurs for first-level outputs, not second-level outputs. */
+    /**
+     * If defined, records output-names that are written / not-written during the experiment.
+     *
+     * <p>This only occurs for first-level outputs, not second-level outputs.
+     */
     private RecordedOutputs recordedOutputs = new RecordedOutputs();
-    
+
     /**
      * Executes the experiment for given arguments.
-     * 
+     *
      * @param arguments additional run-time configuration/parameters that influences the experiment.
      */
     public void executeExperiment(ExperimentExecutionArguments arguments)
@@ -116,21 +117,22 @@ public abstract class OutputExperiment extends Experiment {
 
     /**
      * Executes the experiment for parameters.
-     * 
-     * @param params a combination of run-time and bean-time specified elements used in the experiment.
-     * 
-     * @throws ExperimentExecutionException if anything occurs stop the experiment finishing its execution
+     *
+     * @param params a combination of run-time and bean-time specified elements used in the
+     *     experiment.
+     * @throws ExperimentExecutionException if anything occurs stop the experiment finishing its
+     *     execution
      */
     protected abstract void executeExperimentWithParams(ParametersExperiment params)
             throws ExperimentExecutionException;
-    
+
     /**
      * If specified, default rules for determine which outputs are enabled or not.
-     * 
+     *
      * @return the default rules if they exist.
      */
     protected abstract Optional<MultiLevelOutputEnabled> defaultOutputs();
-    
+
     private void doExperimentWithParams(ParametersExperiment params)
             throws ExperimentExecutionException {
         try {
@@ -190,7 +192,8 @@ public abstract class OutputExperiment extends Experiment {
                 rootOutputter, expArgs, useDetailedLogging());
     }
 
-    private void initBeforeExecution(ParametersExperiment params) throws ExperimentExecutionException {
+    private void initBeforeExecution(ParametersExperiment params)
+            throws ExperimentExecutionException {
         params.getLoggerExperiment().start();
         OutputExperimentLogHelper.maybeLogStart(params);
 
@@ -220,8 +223,7 @@ public abstract class OutputExperiment extends Experiment {
     }
 
     /** Maybe writes the execution time to the filesystem */
-    private void writeExecutionTime(
-            Outputter rootOutputter, StopWatch stopWatchExperiment) {
+    private void writeExecutionTime(Outputter rootOutputter, StopWatch stopWatchExperiment) {
         rootOutputter
                 .writerSelective()
                 .write(

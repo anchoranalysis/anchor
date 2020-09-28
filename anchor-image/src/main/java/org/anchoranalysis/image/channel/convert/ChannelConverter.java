@@ -93,11 +93,11 @@ public abstract class ChannelConverter<T> {
 
         try {
             voxelsConverter.copyFrom(channelIn.voxels(), voxelsOut);
-            
+
             if (changeExisting == ConversionPolicy.CHANGE_EXISTING_CHANNEL) {
                 channelOut.replaceVoxels(voxelsOut);
             }
-            
+
         } catch (OperationFailedException | IncorrectImageSizeException e1) {
             throw new AnchorImpossibleSituationException();
         }

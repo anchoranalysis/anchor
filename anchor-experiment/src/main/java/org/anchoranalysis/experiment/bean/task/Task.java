@@ -35,9 +35,9 @@ import org.anchoranalysis.core.memory.MemoryUtilities;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.log.StatefulMessageLogger;
-import org.anchoranalysis.experiment.task.InputOutputContextStateful;
 import org.anchoranalysis.experiment.task.ErrorReporterForTask;
 import org.anchoranalysis.experiment.task.InputBound;
+import org.anchoranalysis.experiment.task.InputOutputContextStateful;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.experiment.task.ParametersUnbound;
@@ -47,7 +47,6 @@ import org.anchoranalysis.io.generator.text.StringGenerator;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
 import org.anchoranalysis.io.output.MultiLevelOutputEnabled;
-import org.anchoranalysis.io.output.bean.rules.OutputEnabledRules;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
@@ -87,9 +86,7 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
      * @throws ExperimentExecutionException
      */
     public abstract S beforeAnyJobIsExecuted(
-            Outputter outputter,
-            ConcurrencyPlan concurrencyPlan,
-            ParametersExperiment params)
+            Outputter outputter, ConcurrencyPlan concurrencyPlan, ParametersExperiment params)
             throws ExperimentExecutionException;
 
     /**
@@ -100,7 +97,7 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
      * @throws JobExecutionException if anything goes wrong with the job which is <b>not</b> logged.
      */
     public boolean executeJob(ParametersUnbound<T, S> paramsUnbound) throws JobExecutionException {
-        
+
         ManifestRecorder manifestTask = new ManifestRecorder();
 
         // Bind an outputter for the task
@@ -112,8 +109,7 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
         Preconditions.checkArgument(outputterTask.getSettings().hasBeenInit());
 
         // Create bound parameters
-        InputBound<T, S> paramsBound =
-                bindOtherParams(paramsUnbound, outputterTask, manifestTask);
+        InputBound<T, S> paramsBound = bindOtherParams(paramsUnbound, outputterTask, manifestTask);
         return executeJobLogExceptions(paramsBound, paramsUnbound.isSuppressExceptions());
     }
 
@@ -141,19 +137,19 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
 
     /**
      * Performs the task on a particular input.
-     * 
+     *
      * @param input the input
      * @throws JobExecutionException
      */
     public abstract void doJobOnInput(InputBound<T, S> input) throws JobExecutionException;
-    
+
     /**
      * If specified, default rules for determine which outputs are enabled or not.
-     * 
+     *
      * @return the default rules if they exist.
      */
     public abstract Optional<MultiLevelOutputEnabled> defaultOutputs();
-    
+
     /**
      * Creates other objects needed to have a fully bound set of parameters for the task
      *

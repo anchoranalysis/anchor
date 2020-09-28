@@ -58,13 +58,7 @@ public class GeneratorSequenceNonIncremental<T> {
             IndexableOutputNameStyle outputNameStyle,
             Generator<T> generator,
             boolean selective) {
-        this(
-                outputter,
-                subfolderName,
-                outputNameStyle,
-                generator,
-                selective,
-                null);
+        this(outputter, subfolderName, outputNameStyle, generator, selective, null);
     }
 
     // User-specified ManifestDescription for the folder
@@ -114,15 +108,13 @@ public class GeneratorSequenceNonIncremental<T> {
             }
 
             sequenceType.update(index);
-            this.sequenceWriter.write(
-                    () -> generator, String.valueOf(index));
+            this.sequenceWriter.write(() -> generator, String.valueOf(index));
         } catch (InitException | SequenceTypeException | SetOperationFailedException e) {
             throw new OutputWriteFailedException(e);
         }
     }
 
-    public void start(SequenceType sequenceType)
-            throws OutputWriteFailedException {
+    public void start(SequenceType sequenceType) throws OutputWriteFailedException {
         generator.start();
         this.sequenceType = sequenceType;
     }
@@ -134,10 +126,11 @@ public class GeneratorSequenceNonIncremental<T> {
     public Optional<RecordingWriters> writers() {
         return sequenceWriter.writers();
     }
-    
+
     private void initOnFirstAdd() throws InitException {
         try {
-            // For now we only take the first FileType from the generator, we will have to modify this
+            // For now we only take the first FileType from the generator, we will have to modify
+            // this
             // in future
             FileType[] fileTypes =
                     generator
@@ -146,7 +139,7 @@ public class GeneratorSequenceNonIncremental<T> {
                                     () ->
                                             new InitException(
                                                     "This operation requires file-types to be defined by the generator"));
-    
+
             this.sequenceWriter.init(fileTypes, this.sequenceType);
         } catch (OperationFailedException e) {
             throw new InitException(e);

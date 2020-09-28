@@ -33,7 +33,7 @@ import org.anchoranalysis.io.input.InputFromManager;
 
 /**
  * Base class for describing the inputs to an experiment.
- * 
+ *
  * <p>By inputs, this refers to files that form the necessary input to an experiment.
  *
  * @author Owen Feehan
@@ -42,7 +42,8 @@ import org.anchoranalysis.io.input.InputFromManager;
 public abstract class InputManager<T extends InputFromManager> extends AnchorBean<InputManager<T>> {
 
     /**
-     * The 
+     * The
+     *
      * @param params
      * @return
      * @throws AnchorIOException

@@ -26,8 +26,8 @@
 package org.anchoranalysis.image.convert;
 
 import java.nio.ByteBuffer;
-import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import lombok.Getter;
+import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 
 /**
  * Wraps a {@code ByteBuffer} but automatically performs conversion to {@code int}.
@@ -182,9 +182,10 @@ public final class UnsignedByteBuffer extends UnsignedBufferAsInt {
     public void putFloat(int index, float value) {
         putRaw(index, (byte) value);
     }
-    
+
     /**
-     * Puts a float at the current buffer position, clipping to ensure the value is within the range {@code (0,255)}.
+     * Puts a float at the current buffer position, clipping to ensure the value is within the range
+     * {@code (0,255)}.
      *
      * @param value the float
      */
@@ -202,9 +203,10 @@ public final class UnsignedByteBuffer extends UnsignedBufferAsInt {
     public void putDouble(double value) {
         putRaw((byte) value);
     }
-    
+
     /**
-     * Puts a double at the current buffer position, clipping to ensure the value is within the range {@code (0,255)}.
+     * Puts a double at the current buffer position, clipping to ensure the value is within the
+     * range {@code (0,255)}.
      *
      * @param value the double
      */

@@ -45,7 +45,7 @@ public class StringGenerator extends OneStageGenerator<String> {
             throws OutputWriteFailedException {
 
         try {
-            WriteStringToFile.apply( getElement(), filePath);
+            WriteStringToFile.apply(getElement(), filePath);
         } catch (IOException e) {
             throw new OutputWriteFailedException(e);
         }

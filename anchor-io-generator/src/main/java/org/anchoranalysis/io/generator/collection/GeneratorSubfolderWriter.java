@@ -39,9 +39,8 @@ import org.anchoranalysis.io.output.writer.WritableItem;
 
 /**
  * Writes a collection of items via a generator into a subfolder.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class GeneratorSubfolderWriter {
@@ -54,7 +53,9 @@ public class GeneratorSubfolderWriter {
             Collection<T> collection,
             boolean selective)
             throws OutputWriteFailedException {
-        outputter.getWriters().multiplex(selective)
+        outputter
+                .getWriters()
+                .multiplex(selective)
                 .writeSubdirectoryWithGenerator(
                         outputNameSubfolder,
                         () ->
@@ -73,7 +74,8 @@ public class GeneratorSubfolderWriter {
             CheckedSupplier<Generator<T>, OutputWriteFailedException> generatorIterable,
             Collection<T> collection,
             boolean selective) {
-        outputter.writerMultiplex(selective)
+        outputter
+                .writerMultiplex(selective)
                 .writeSubfolderWithGenerator(
                         outputNameSubfolder,
                         () ->

@@ -47,8 +47,7 @@ public class ResolvedCalculationMap<S, T extends FeatureInput, U> {
      *
      * @param map the cacheable-calculation map that is now considered resolved
      */
-    public ResolvedCalculationMap(
-            FeatureCalculationMap<S, T, U, FeatureCalculationException> map) {
+    public ResolvedCalculationMap(FeatureCalculationMap<S, T, U, FeatureCalculationException> map) {
         super();
         this.map = map;
     }

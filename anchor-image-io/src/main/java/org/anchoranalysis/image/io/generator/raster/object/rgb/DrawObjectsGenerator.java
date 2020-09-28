@@ -57,7 +57,7 @@ public class DrawObjectsGenerator extends ObjectsOnRGBGenerator {
         super(drawObject, new ObjectDrawAttributes(colorIndex), background);
         this.assignElement(objects);
     }
-    
+
     /**
      * A generator that draws an object in a particular way with particular colors and background.
      *
@@ -97,15 +97,10 @@ public class DrawObjectsGenerator extends ObjectsOnRGBGenerator {
      * @return the generator
      */
     public static DrawObjectsGenerator outlineWithColorIndex(
-            int outlineWidth,
-            ColorIndex colorIndex) {
-        return new DrawObjectsGenerator(
-                new Outline(outlineWidth),
-                null,
-                null,
-                colorIndex);
+            int outlineWidth, ColorIndex colorIndex) {
+        return new DrawObjectsGenerator(new Outline(outlineWidth), null, null, colorIndex);
     }
-    
+
     /**
      * A generator that draws an outline around objects on a background using varied colors for the
      * objects.

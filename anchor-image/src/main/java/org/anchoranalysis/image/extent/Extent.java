@@ -275,7 +275,7 @@ public final class Extent implements Serializable {
     public boolean contains(Point2i point) {
         return containsX(point.x()) && containsY(point.y());
     }
-    
+
     public boolean contains(Point3d point) {
         return containsX(point.x()) && containsY(point.y()) && containsZ(point.z());
     }
@@ -419,21 +419,22 @@ public final class Extent implements Serializable {
             }
         }
     }
-    
+
     /**
      * Calls processor once for each x and y-values in the range, with a shift added.
      *
      * <p>This occurs in ascending order (x-dimension increments first, y-dimension increments
      * second).
      *
-     * @param shift a shift added to each point, so the effective iteration occurs over @{@code extent + shift}.
+     * @param shift a shift added to each point, so the effective iteration occurs over @{@code
+     *     extent + shift}.
      * @param pointConsumer called for each point
      */
     public void iterateOverXYWithShift(Point2i shift, PointTwoDimensionalConsumer pointConsumer) {
-        
+
         int maxX = size.x() + shift.x();
         int maxY = size.y() + shift.y();
-        
+
         Point2i point = new Point2i();
         for (point.setY(shift.y()); point.y() < maxX; point.incrementY()) {
             for (point.setX(shift.x()); point.x() < maxY; point.incrementX()) {
@@ -523,11 +524,11 @@ public final class Extent implements Serializable {
         return IntStream.range(0, size.z());
     }
 
-    
     /**
      * Derives an three-element array with each dimension in the extent.
-     *  
-     * @return a newly created three-element array with respectively extents for the x, y and z dimensions.
+     *
+     * @return a newly created three-element array with respectively extents for the x, y and z
+     *     dimensions.
      */
     public int[] deriveArray() {
         int[] arr = new int[3];
@@ -536,12 +537,10 @@ public final class Extent implements Serializable {
         arr[2] = z();
         return arr;
     }
-    
+
     private Point3i immutablePointOperation(Consumer<Point3i> pointOperation) {
         Point3i lenDup = new Point3i(size);
         pointOperation.accept(lenDup);
         return lenDup;
     }
-
-
 }

@@ -66,8 +66,7 @@ public class HorizontalFeatureCache<T extends FeatureInput> implements FeatureSe
         namedFeatures.forEach(map::add);
         sharedFeatures.getSet().stream().map(NameValue::getValue).forEach(map::add);
 
-        calculator =
-                new HorizontalFeatureCalculator<>(cache.calculator(), map, ignorePrefixes);
+        calculator = new HorizontalFeatureCalculator<>(cache.calculator(), map, ignorePrefixes);
     }
 
     @Override

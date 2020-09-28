@@ -50,7 +50,7 @@ class CombineGenerator<T> extends RasterGenerator<T> {
 
     private final ArrangeRasterBean arrangeRaster;
     private final List<RasterGenerator<T>> generators;
-    
+
     @Override
     public Stack transform() throws OutputWriteFailedException {
 
@@ -74,7 +74,8 @@ class CombineGenerator<T> extends RasterGenerator<T> {
     }
 
     @Override
-    public String getFileExtension(OutputWriteSettings outputWriteSettings) throws OperationFailedException {
+    public String getFileExtension(OutputWriteSettings outputWriteSettings)
+            throws OperationFailedException {
         return generators.get(0).getFileExtension(outputWriteSettings);
     }
 
@@ -103,7 +104,7 @@ class CombineGenerator<T> extends RasterGenerator<T> {
     public T getElement() {
         return generators.get(0).getElement();
     }
-    
+
     @Override
     public void assignElement(T element) throws SetOperationFailedException {
         for (SingleFileTypeGenerator<T, Stack> generator : generators) {
@@ -115,7 +116,7 @@ class CombineGenerator<T> extends RasterGenerator<T> {
     public boolean isRGB() {
         return generators.stream().allMatch(RasterGenerator::isRGB);
     }
-    
+
     private List<RGBStack> generateAll() throws OutputWriteFailedException {
         return FunctionalList.mapToList(
                 generators,
@@ -125,6 +126,9 @@ class CombineGenerator<T> extends RasterGenerator<T> {
 
     @Override
     public RasterWriteOptions rasterWriteOptions() {
-        return generators.stream().map(RasterGenerator::rasterWriteOptions).reduce( (first,second) -> first.and(second) ).get();    // NOSONAR
+        return generators.stream()
+                .map(RasterGenerator::rasterWriteOptions)
+                .reduce((first, second) -> first.and(second))
+                .get(); // NOSONAR
     }
 }

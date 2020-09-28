@@ -53,7 +53,8 @@ class TaskOutputterFactory {
                 return BindingPathOutputterFactory.createWithBindingPath(
                         derivePathWithDescription(input), manifestTask, params);
             } else {
-                return WithoutBindingPathOutputterFactory.createWithoutBindingPath(manifestTask, params.getOutputter());
+                return WithoutBindingPathOutputterFactory.createWithoutBindingPath(
+                        manifestTask, params.getOutputter());
             }
         } catch (BindFailedException e) {
             throw new JobExecutionException(
@@ -65,8 +66,7 @@ class TaskOutputterFactory {
     }
 
     private static NamedPath derivePathWithDescription(InputFromManager input) {
-        return new NamedPath(
-                input.pathForBinding().get(), input.descriptiveName()); // NOSONAR
+        return new NamedPath(input.pathForBinding().get(), input.descriptiveName()); // NOSONAR
     }
 
     private static String describeInputForBinding(InputFromManager input) {

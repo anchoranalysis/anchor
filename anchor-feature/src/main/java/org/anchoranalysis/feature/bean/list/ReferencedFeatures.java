@@ -36,8 +36,7 @@ import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
 
-public abstract class ReferencedFeatures<T extends FeatureInput>
-        extends FeatureListProvider<T> {
+public abstract class ReferencedFeatures<T extends FeatureInput> extends FeatureListProvider<T> {
 
     // START BEAN PROPERTIES
     @BeanField @OptionalBean @Getter @Setter

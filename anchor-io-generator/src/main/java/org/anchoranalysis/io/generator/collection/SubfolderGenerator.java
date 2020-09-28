@@ -66,9 +66,7 @@ public class SubfolderGenerator<T, S extends Collection<T>> implements Generator
 
     @Override
     public int write(
-            IndexableOutputNameStyle outputNameStyle,
-            String index,
-            OutputterChecked outputter)
+            IndexableOutputNameStyle outputNameStyle, String index, OutputterChecked outputter)
             throws OutputWriteFailedException {
 
         String filePhysicalName = outputNameStyle.getPhysicalName(index);
@@ -79,7 +77,8 @@ public class SubfolderGenerator<T, S extends Collection<T>> implements Generator
     }
 
     @Override
-    public Optional<FileType[]> getFileTypes(OutputWriteSettings outputWriteSettings) throws OperationFailedException {
+    public Optional<FileType[]> getFileTypes(OutputWriteSettings outputWriteSettings)
+            throws OperationFailedException {
         return generator.getFileTypes(outputWriteSettings);
     }
 

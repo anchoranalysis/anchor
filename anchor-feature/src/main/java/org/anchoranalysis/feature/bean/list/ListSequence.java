@@ -49,8 +49,7 @@ import org.anchoranalysis.feature.input.FeatureInput;
  *
  * @author Owen Feehan
  */
-public class ListSequence<T extends FeatureInput>
-        extends ReferencedFeatures<T> {
+public class ListSequence<T extends FeatureInput> extends ReferencedFeatures<T> {
 
     // START BEAN PROPERTIES
     /** The list feature that is duplicated, and populated. */

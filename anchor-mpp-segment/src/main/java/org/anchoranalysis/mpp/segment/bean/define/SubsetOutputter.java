@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.mpp.segment.bean.define;
 
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.name.provider.NamedProvider;
 import org.anchoranalysis.io.generator.Generator;
@@ -33,11 +34,10 @@ import org.anchoranalysis.io.generator.collection.GeneratorOutputHelper;
 import org.anchoranalysis.io.output.bean.enabled.OutputEnabled;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
-import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 class SubsetOutputter<T> {
-    
+
     private NamedProvider<T> providers;
     private OutputEnabled outputAllowed;
     private Generator<T> generator;

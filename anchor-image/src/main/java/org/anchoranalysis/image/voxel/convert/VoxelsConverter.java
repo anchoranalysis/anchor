@@ -53,7 +53,7 @@ public abstract class VoxelsConverter<T> {
 
     /**
      * Creates a new voxels of type {@code T} and copies the voxels from {@code from}.
-     * 
+     *
      * @param from where the voxels are copied from (the source)
      * @param factory a factory that creates {@link Voxels} of tyoe {@code T}.
      * @return a newly created {@link Voxels} with values copied from {@code source}.
@@ -70,7 +70,7 @@ public abstract class VoxelsConverter<T> {
 
     /**
      * Copies voxels from a source (of any type) to voxels of type {@code T}.
-     * 
+     *
      * @param from where the voxels are copied from (the source)
      * @param to where the voxels are copied to (the destination)
      * @throws OperationFailedException if the extents of {@code from} and {@code to} are not equal.
@@ -91,89 +91,110 @@ public abstract class VoxelsConverter<T> {
 
     /**
      * Copies voxels from a source of type @{link UnsignedByteBuffer} to voxels of type {@code T}.
-     * 
+     *
      * @param from where the voxels are copied from (the source)
      * @param to where the voxels are copied to (the destination)
      * @throws OperationFailedException if the extents of {@code from} and {@code to} are not equal.
      */
-    public void copyFromUnsignedByte(Voxels<UnsignedByteBuffer> from, Voxels<T> to) throws OperationFailedException {
+    public void copyFromUnsignedByte(Voxels<UnsignedByteBuffer> from, Voxels<T> to)
+            throws OperationFailedException {
         convertAllSlices(from, to, this::convertUnsignedByte);
     }
 
     /**
      * Copies voxels from a source of type @{link UnsignedShortBuffer} to voxels of type {@code T}.
-     * 
+     *
      * @param from where the voxels are copied from (the source)
      * @param to where the voxels are copied to (the destination)
      * @throws OperationFailedException if the extents of {@code from} and {@code to} are not equal.
      */
-    public void copyFromUnsignedShort(Voxels<UnsignedShortBuffer> from, Voxels<T> to) throws OperationFailedException {
+    public void copyFromUnsignedShort(Voxels<UnsignedShortBuffer> from, Voxels<T> to)
+            throws OperationFailedException {
         convertAllSlices(from, to, this::convertUnsignedShort);
     }
 
     /**
      * Copies voxels from a source of type @{link UnsignedIntBuffer} to voxels of type {@code T}.
-     * 
+     *
      * @param from where the voxels are copied from (the source)
      * @param to where the voxels are copied to (the destination)
      * @throws OperationFailedException if the extents of {@code from} and {@code to} are not equal.
      */
-    public void copyFromUnsignedInt(Voxels<UnsignedIntBuffer> from, Voxels<T> to) throws OperationFailedException {
+    public void copyFromUnsignedInt(Voxels<UnsignedIntBuffer> from, Voxels<T> to)
+            throws OperationFailedException {
         convertAllSlices(from, to, this::convertUnsignedInt);
     }
 
     /**
      * Copies voxels from a source of type @{link FloatBuffer} to voxels of type {@code T}.
-     * 
+     *
      * @param from where the voxels are copied from (the source)
      * @param to where the voxels are copied to (the destination)
      * @throws OperationFailedException if the extents of {@code from} and {@code to} are not equal.
      */
-    public void copyFromFloat(Voxels<FloatBuffer> from, Voxels<T> to) throws OperationFailedException {
+    public void copyFromFloat(Voxels<FloatBuffer> from, Voxels<T> to)
+            throws OperationFailedException {
         convertAllSlices(from, to, this::convertFloat);
     }
-    
+
     /**
-     *  Copies a value from the current position in a {@link UnsignedByteBuffer} to the current position in a buffer of type {@code T}.
-     *  
-     *  @param in the current position of this buffer gives the value to convert, and the position is incremented.
-     *  @param out the converted value is written to the current position of this buffer, and the position is incremented.
+     * Copies a value from the current position in a {@link UnsignedByteBuffer} to the current
+     * position in a buffer of type {@code T}.
+     *
+     * @param in the current position of this buffer gives the value to convert, and the position is
+     *     incremented.
+     * @param out the converted value is written to the current position of this buffer, and the
+     *     position is incremented.
      */
     protected abstract void convertUnsignedByte(UnsignedByteBuffer in, T out);
-    
+
     /**
-     *  Copies a value from the current position in a {@link UnsignedShortBuffer} to the current position in a buffer of type {@code T}.
-     *  
-     *  @param in the current position of this buffer gives the value to convert, and the position is incremented.
-     *  @param out the converted value is written to the current position of this buffer, and the position is incremented.
+     * Copies a value from the current position in a {@link UnsignedShortBuffer} to the current
+     * position in a buffer of type {@code T}.
+     *
+     * @param in the current position of this buffer gives the value to convert, and the position is
+     *     incremented.
+     * @param out the converted value is written to the current position of this buffer, and the
+     *     position is incremented.
      */
     protected abstract void convertUnsignedShort(UnsignedShortBuffer in, T out);
-    
+
     /**
-     *  Copies a value from the current position in a {@link UnsignedIntBuffer} to the current position in a buffer of type {@code T}.
-     *  
-     *  @param in the current position of this buffer gives the value to convert, and the position is incremented.
-     *  @param out the converted value is written to the current position of this buffer, and the position is incremented.
+     * Copies a value from the current position in a {@link UnsignedIntBuffer} to the current
+     * position in a buffer of type {@code T}.
+     *
+     * @param in the current position of this buffer gives the value to convert, and the position is
+     *     incremented.
+     * @param out the converted value is written to the current position of this buffer, and the
+     *     position is incremented.
      */
     protected abstract void convertUnsignedInt(UnsignedIntBuffer in, T out);
-    
+
     /**
-     *  Copies a value from the current position in a {@link FloatBuffer} to the current position in a buffer of type {@code T}.
-     *  
-     *  @param in the current position of this buffer gives the value to convert, and the position is incremented.
-     *  @param out the converted value is written to the current position of this buffer, and the position is incremented.
+     * Copies a value from the current position in a {@link FloatBuffer} to the current position in
+     * a buffer of type {@code T}.
+     *
+     * @param in the current position of this buffer gives the value to convert, and the position is
+     *     incremented.
+     * @param out the converted value is written to the current position of this buffer, and the
+     *     position is incremented.
      */
     protected abstract void convertFloat(FloatBuffer in, T out);
-    
+
     private <S> void convertAllSlices(
-            Voxels<S> in, Voxels<T> out, ProcessBufferBinaryWithoutOffset<S,T> process) throws OperationFailedException {
+            Voxels<S> in, Voxels<T> out, ProcessBufferBinaryWithoutOffset<S, T> process)
+            throws OperationFailedException {
 
         if (!in.extent().equals(out.extent())) {
             throw new OperationFailedException(
-               String.format("The extent of the source (%s) is not equal to the destination (%s)", in, out) );
+                    String.format(
+                            "The extent of the source (%s) is not equal to the destination (%s)",
+                            in, out));
         }
-        in.extent().iterateOverZ(z ->
-            IterateVoxelsRemaining.withTwoBuffersWithoutOffset(in.slice(z), out.slice(z), process)
-        );
+        in.extent()
+                .iterateOverZ(
+                        z ->
+                                IterateVoxelsRemaining.withTwoBuffersWithoutOffset(
+                                        in.slice(z), out.slice(z), process));
     }
 }

@@ -40,8 +40,7 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
  *
  * @author Owen Feehan
  */
-public class FeatureListCSVGeneratorHorizontal
-        extends FeatureTableCSVGenerator<ResultsVectorList> {
+public class FeatureListCSVGeneratorHorizontal extends FeatureTableCSVGenerator<ResultsVectorList> {
 
     /**
      * Creates without setting any <i>results</i> (i.e. row-data).
@@ -65,9 +64,7 @@ public class FeatureListCSVGeneratorHorizontal
      * @param results the results (i.e. row data) to set as current element for the generator.
      */
     public FeatureListCSVGeneratorHorizontal(
-            String manifestFunction,
-            FeatureNameList featureNames,
-            ResultsVectorList results) {
+            String manifestFunction, FeatureNameList featureNames, ResultsVectorList results) {
         this(manifestFunction, featureNames);
         assignElement(results);
     }

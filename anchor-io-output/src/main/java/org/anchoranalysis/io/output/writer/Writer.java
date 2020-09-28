@@ -37,13 +37,14 @@ import org.anchoranalysis.io.output.outputter.OutputterChecked;
 
 /**
  * Write data via generators to the file system, or creates new sub-directories for writing data to.
- * 
- * <p>This class is similar to {@link WriterRouterErrors} but exceptions are thrown rather than reporting errors.
- * 
+ *
+ * <p>This class is similar to {@link WriterRouterErrors} but exceptions are thrown rather than
+ * reporting errors.
+ *
  * <p>These operations occur in association with the currently bound output manager.
  *
- * <p>The {@link GenerateWritableItem} interface is used so as to avoid object-creation
- * if an operation isn't actually written.
+ * <p>The {@link GenerateWritableItem} interface is used so as to avoid object-creation if an
+ * operation isn't actually written.
  *
  * @author Owen Feehan
  */
@@ -51,11 +52,14 @@ public interface Writer {
 
     /**
      * Maybe creates a sub-directory for writing to.
-     * 
-     * @param outputName the name of the sub-directory. This may determine if an output is allowed or not.
-     * @param manifestDescription a manifest-description associated with the sub-directory as a whole.
+     *
+     * @param outputName the name of the sub-directory. This may determine if an output is allowed
+     *     or not.
+     * @param manifestDescription a manifest-description associated with the sub-directory as a
+     *     whole.
      * @param manifestFolder a manifest-folder if it exists
-     * @return an output-manager for the directory if it is allowed, otherwise {@link Optional#empty}.
+     * @return an output-manager for the directory if it is allowed, otherwise {@link
+     *     Optional#empty}.
      * @throws OutputWriteFailedException
      */
     Optional<OutputterChecked> createSubdirectory(
@@ -66,9 +70,11 @@ public interface Writer {
 
     /**
      * Writes to a sub-directory using a generator, often producing many elements instead of one.
-     * 
-     * @param outputName the name of the sub-directory. This may determine if an output is allowed or not.
-     * @param generator a generator that writes element(s) into the created sub-directory using {@code outputName} and a suffix.
+     *
+     * @param outputName the name of the sub-directory. This may determine if an output is allowed
+     *     or not.
+     * @param generator a generator that writes element(s) into the created sub-directory using
+     *     {@code outputName} and a suffix.
      * @return true if the output was allowed, false otherwise
      * @throws OutputWriteFailedException
      */
@@ -77,11 +83,12 @@ public interface Writer {
 
     /**
      * Writes the current element(s) of the generator to the current directory.
-     * 
+     *
      * @param outputNameStyle how to combine a particular output-name with an index
      * @param generator the generator
      * @param index the index
-     * @return the number of elements written by the generator, including 0 elements, or -2 if the output is not allowed.
+     * @return the number of elements written by the generator, including 0 elements, or -2 if the
+     *     output is not allowed.
      * @throws OutputWriteFailedException
      */
     int write(
@@ -92,9 +99,11 @@ public interface Writer {
 
     /**
      * Writes the current element(s) of the generator to the current directory.
-     * 
-     * @param outputName the name of the sub-directory. This may determine if an output is allowed or not.
-     * @param generator a generator that writes element(s) into the created sub-directory using {@code outputName} and a suffix.
+     *
+     * @param outputName the name of the sub-directory. This may determine if an output is allowed
+     *     or not.
+     * @param generator a generator that writes element(s) into the created sub-directory using
+     *     {@code outputName} and a suffix.
      * @return true if the output was allowed, false otherwise
      * @throws OutputWriteFailedException
      */
@@ -103,16 +112,16 @@ public interface Writer {
 
     /**
      * The path to write a particular output to.
-     * 
-     * <p>This is an alternative means to using a generator (i.e. {@link GenerateWritableItem}) to output data.
      *
-     * @param outputName the output-name. This is the filename without an extension, and may determine if an output is allowed or not.
+     * <p>This is an alternative means to using a generator (i.e. {@link GenerateWritableItem}) to
+     * output data.
+     *
+     * @param outputName the output-name. This is the filename without an extension, and may
+     *     determine if an output is allowed or not.
      * @param extension the extension
      * @param manifestDescription manifest-description associated with the file if it exists.
      * @return the path to write to, if it is allowed, otherwise {@link Optional#empty}.
      */
     Optional<Path> writeGenerateFilename(
-            String outputName,
-            String extension,
-            Optional<ManifestDescription> manifestDescription);
+            String outputName, String extension, Optional<ManifestDescription> manifestDescription);
 }

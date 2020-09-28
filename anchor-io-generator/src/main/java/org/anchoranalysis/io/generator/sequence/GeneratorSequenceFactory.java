@@ -25,8 +25,8 @@
  */
 package org.anchoranalysis.io.generator.sequence;
 
-import lombok.AllArgsConstructor;
 import java.util.Optional;
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.namestyle.IntegerSuffixOutputNameStyle;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;

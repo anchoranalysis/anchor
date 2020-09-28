@@ -28,6 +28,8 @@ package org.anchoranalysis.plot.index;
 
 import java.util.Iterator;
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.plot.AxisLimits;
@@ -35,8 +37,6 @@ import org.anchoranalysis.plot.PlotInstance;
 import org.anchoranalysis.plot.bean.colorscheme.PlotColorScheme;
 import org.jfree.chart.JFreeChart;
 import org.jfree.data.general.Dataset;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * @author Owen Feehan

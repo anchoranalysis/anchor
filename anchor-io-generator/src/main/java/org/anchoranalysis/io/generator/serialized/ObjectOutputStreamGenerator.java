@@ -35,8 +35,7 @@ import java.util.Optional;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
-public class ObjectOutputStreamGenerator<T extends Serializable>
-        extends SerializedGenerator<T> {
+public class ObjectOutputStreamGenerator<T extends Serializable> extends SerializedGenerator<T> {
 
     public ObjectOutputStreamGenerator(Optional<String> manifestFunction) {
         super(manifestFunction);

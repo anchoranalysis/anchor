@@ -33,9 +33,8 @@ import org.anchoranalysis.image.convert.UnsignedShortBuffer;
 
 /**
  * Converts voxel buffers to a {@link FloatBuffer} without scaling any values.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public final class ToFloatNoScaling extends VoxelsConverter<FloatBuffer> {
 

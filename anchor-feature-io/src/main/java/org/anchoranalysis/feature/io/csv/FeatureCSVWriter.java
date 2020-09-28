@@ -56,16 +56,14 @@ public class FeatureCSVWriter {
      * @throws AnchorIOException if I/O fails.
      */
     public static Optional<FeatureCSVWriter> create(
-            FeatureCSVMetadata metadata, Outputter outputter)
-            throws AnchorIOException {
+            FeatureCSVMetadata metadata, Outputter outputter) throws AnchorIOException {
 
         if (!outputter.outputsEnabled().isOutputEnabled(metadata.getOutputName())) {
             return Optional.of(new FeatureCSVWriter(null));
         }
 
         Optional<CSVWriter> writerOptional =
-                CSVWriter.createFromOutputter(
-                        metadata.getOutputName(), outputter.getChecked());
+                CSVWriter.createFromOutputter(metadata.getOutputName(), outputter.getChecked());
         return writerOptional.map(
                 writer -> {
                     writer.writeHeaders(metadata.getHeaders());

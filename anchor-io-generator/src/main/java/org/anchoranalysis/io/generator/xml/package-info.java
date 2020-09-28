@@ -1,4 +1,2 @@
-/**
- * Generators for writing XML data.
- */
+/** Generators for writing XML data. */
 package org.anchoranalysis.io.generator.xml;

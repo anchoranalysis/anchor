@@ -1,4 +1,2 @@
-/**
- * Features shared for referencing among calculations.
- */
+/** Features shared for referencing among calculations. */
 package org.anchoranalysis.feature.shared;
