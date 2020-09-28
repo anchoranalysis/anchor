@@ -28,6 +28,7 @@ package org.anchoranalysis.experiment.bean.io;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -47,9 +48,13 @@ import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.InputFromManager;
+import org.anchoranalysis.io.output.MultiLevelOutputEnabled;
 import org.anchoranalysis.io.output.bean.OutputManager;
+import org.anchoranalysis.io.output.bean.rules.OutputEnabledRules;
 
 /**
+ * An experiment that uses both an {@link InputManager} to specify inputs and a {@link OutputManager} to specify outputting.
+ * 
  * @author Owen Feehan
  * @param <T> input-object type
  * @param <S> shared-state for job
@@ -58,41 +63,28 @@ public class InputOutputExperiment<T extends InputFromManager, S> extends Output
         implements ReplaceInputManager, ReplaceOutputManager, ReplaceTask<T, S> {
 
     // START BEAN PROPERTIES
+    /** The input-manager to specify where/which/how necessary inputs for the experiment occur. */
     @BeanField @Getter @Setter private InputManager<T> input;
 
+    /** What task is associated with the experiment, and how it is processed.
+     *
+     *  e.g. how the task processes the inputs in the form of jobs (sequentially, parallel, how many processors? etc.)
+     */
     @BeanField @Getter @Setter private JobProcessor<T, S> taskProcessor;
 
+    /** 
+     * Where log messages that <b>do<b> pertain to a specific job (input) appear.
+     *
+     * <p>This is in contrast to {@code logExperiment} where non-job specific log messages
+     * appear.
+     */
     @BeanField @Getter @Setter private LoggingDestination logTask = new ToConsole();
     // END BEAN PROPERTIES
 
     @Override
-    protected void execExperiment(ParametersExperiment params) throws ExperimentExecutionException {
-
-        try {
-            List<T> inputObjects =
-                    getInput()
-                            .inputObjects(
-                                    new InputManagerParams(
-                                            params.getExperimentArguments().createInputContext(),
-                                            ProgressReporterNull.get(),
-                                            new Logger(params.getLoggerExperiment())));
-            checkCompabilityInputObjects(inputObjects);
-
-            params.setLoggerTaskCreator(logTask);
-
-            taskProcessor.executeLogStats(params.getOutputter(), inputObjects, params);
-
-        } catch (AnchorIOException | IOException e) {
-            throw new ExperimentExecutionException(
-                    "An error occured while searching for inputs", e);
-        }
-    }
-
-    @Override
     public boolean useDetailedLogging() {
-
-        // Disable detailed-logging if the task has a very quick execution (unless we are in 'force'
-        // mode)
+        // Disable detailed-logging if the task has a very quick execution
+        // (unless we are in 'force' mode).
         if (isForceDetailedLogging() || !taskProcessor.hasVeryQuickPerInputExecution()) {
             return true;
         }
@@ -116,14 +108,41 @@ public class InputOutputExperiment<T extends InputFromManager, S> extends Output
         this.taskProcessor.replaceTask(taskToReplace);
     }
 
+    @Override
+    protected void executeExperimentWithParams(ParametersExperiment params) throws ExperimentExecutionException {
+        try {
+            List<T> inputObjects =
+                    getInput()
+                            .inputs(
+                                    new InputManagerParams(
+                                            params.getExperimentArguments().createInputContext(),
+                                            ProgressReporterNull.get(),
+                                            new Logger(params.getLoggerExperiment())));
+            checkCompabilityInputObjects(inputObjects);
+
+            params.setLoggerTaskCreator(logTask);
+
+            taskProcessor.executeLogStats(params.getOutputter(), inputObjects, params);
+
+        } catch (AnchorIOException | IOException e) {
+            throw new ExperimentExecutionException(
+                    "An error occured while searching for inputs", e);
+        }
+    }
+
+    @Override
+    protected Optional<MultiLevelOutputEnabled> defaultOutputs() {
+        return taskProcessor.getTask().defaultOutputs();
+    }
+    
     private void checkCompabilityInputObjects(List<T> inputObjects)
             throws ExperimentExecutionException {
-        for (T obj : inputObjects) {
-            if (!taskProcessor.isInputObjectCompatibleWith(obj.getClass())) {
+        for (T object : inputObjects) {
+            if (!taskProcessor.isInputObjectCompatibleWith(object.getClass())) {
                 throw new ExperimentExecutionException(
                         String.format(
                                 "Input has an incompatible class for the associated task: %s",
-                                obj.getClass().toString()));
+                                object.getClass().toString()));
             }
         }
     }

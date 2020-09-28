@@ -4,7 +4,7 @@ import java.nio.file.Path;
 import org.anchoranalysis.io.bean.filepath.prefixer.FilePathPrefixer;
 import org.anchoranalysis.io.bean.filepath.prefixer.NamedPath;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
-import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerParams;
+import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerContext;
 
 class FilePathPrefixerConstantPath extends FilePathPrefixer {
 
@@ -18,13 +18,13 @@ class FilePathPrefixerConstantPath extends FilePathPrefixer {
     public FilePathPrefix outFilePrefix(
             NamedPath path,
             String experimentIdentifier,
-            FilePathPrefixerParams context) {
+            FilePathPrefixerContext context) {
         return prefix;
     }
 
     @Override
     public FilePathPrefix rootFolderPrefix(
-            String experimentIdentifier, FilePathPrefixerParams context) {
+            String experimentIdentifier, FilePathPrefixerContext context) {
         return prefix;
     }
 }

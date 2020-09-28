@@ -33,6 +33,7 @@ import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.manifest.ManifestFolderDescription;
 import org.anchoranalysis.io.manifest.folder.FolderWriteWithPath;
 import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
+import org.anchoranalysis.io.output.MultiLevelOutputEnabled;
 import org.anchoranalysis.io.output.bean.rules.OutputEnabledRules;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
@@ -49,7 +50,7 @@ public class CheckIfAllowed implements Writer {
     
     // START REQUIRED ARGUMENTS
     /** The associated output-manager */
-    private final OutputEnabledRules outputEnabled;
+    private final MultiLevelOutputEnabled outputEnabled;
 
     /** If defined, execute before every operation */
     private final Optional<WriterExecuteBeforeEveryOperation> preop;
@@ -65,7 +66,7 @@ public class CheckIfAllowed implements Writer {
             Optional<FolderWriteWithPath> manifestFolder)
             throws OutputWriteFailedException {
 
-        if (!outputEnabled.isOutputAllowed(outputName)) {
+        if (!outputEnabled.isOutputEnabled(outputName)) {
             return Optional.empty();
         }
 
@@ -78,7 +79,7 @@ public class CheckIfAllowed implements Writer {
     public boolean writeSubdirectoryWithGenerator(String outputName, GenerateWritableItem<?> collectionGenerator)
             throws OutputWriteFailedException {
 
-        if (!outputEnabled.isOutputAllowed(outputName)) {
+        if (!outputEnabled.isOutputEnabled(outputName)) {
             return false;
         }
 
@@ -96,7 +97,7 @@ public class CheckIfAllowed implements Writer {
             String index)
             throws OutputWriteFailedException {
 
-        if (!outputEnabled.isOutputAllowed(outputNameStyle.getOutputName())) {
+        if (!outputEnabled.isOutputEnabled(outputNameStyle.getOutputName())) {
             return NUMBER_ELEMENTS_WRITTEN_NOT_ALLOWED;
         }
 
@@ -109,7 +110,7 @@ public class CheckIfAllowed implements Writer {
     public boolean write(String outputName, GenerateWritableItem<?> generator)
             throws OutputWriteFailedException {
 
-        if (!outputEnabled.isOutputAllowed(outputName)) {
+        if (!outputEnabled.isOutputEnabled(outputName)) {
             return false;
         }
 
@@ -126,7 +127,7 @@ public class CheckIfAllowed implements Writer {
             String extension,
             Optional<ManifestDescription> manifestDescription) {
 
-        if (!outputEnabled.isOutputAllowed(outputName)) {
+        if (!outputEnabled.isOutputEnabled(outputName)) {
             return Optional.empty();
         }
 

@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-io
+ * anchor-io-output
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -24,34 +24,12 @@
  * #L%
  */
 
-package org.anchoranalysis.io.filepath.prefixer;
+package org.anchoranalysis.io.output.bean.enabled;
 
-import java.nio.file.Path;
-import java.util.Optional;
-import lombok.Getter;
-import org.anchoranalysis.io.error.FilePathPrefixerException;
+public class None extends OutputEnabled {
 
-public class FilePathPrefixerParams {
-
-    @Getter private boolean debugMode;
-
-    /** A directory indicating where inputs can be located */
-    @Getter private final Optional<Path> outputDirectory;
-
-    public FilePathPrefixerParams(boolean debugMode, Optional<Path> outputDirectory)
-            throws FilePathPrefixerException {
-        super();
-        this.debugMode = debugMode;
-        this.outputDirectory = outputDirectory;
-        checkAbsolutePath();
-    }
-
-    private void checkAbsolutePath() throws FilePathPrefixerException {
-        if (outputDirectory.isPresent() && !outputDirectory.get().isAbsolute()) {
-            throw new FilePathPrefixerException(
-                    String.format(
-                            "An non-absolute path was passed to FilePathPrefixerParams of %s",
-                            outputDirectory.get()));
-        }
+    @Override
+    public boolean isOutputAllowed(String outputName) {
+        return false;
     }
 }

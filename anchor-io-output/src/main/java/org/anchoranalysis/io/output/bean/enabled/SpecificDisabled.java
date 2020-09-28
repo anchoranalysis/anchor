@@ -24,25 +24,25 @@
  * #L%
  */
 
-package org.anchoranalysis.io.output.bean.allowed;
+package org.anchoranalysis.io.output.bean.enabled;
 
-import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.anchoranalysis.bean.StringSet;
+import org.anchoranalysis.bean.annotation.BeanField;
 
-/**
- * All outputs are allowed irrespective of {@code outputName}.
- * 
- * @author Owen Feehan
- *
- */
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
-public class AllOutputAllowed extends OutputAllowed {
+@NoArgsConstructor
+@AllArgsConstructor
+public class SpecificDisabled extends OutputEnabled {
 
-    /** A singleton instance of {@link AllOutputAllowed}. */
-    public static final OutputAllowed INSTANCE = new AllOutputAllowed();
-    
+    // START BEAN PROPERTIES
+    @BeanField @Getter @Setter private StringSet outputsDisallowed;
+    // END BEAN PROPERTIES
+
     @Override
     public boolean isOutputAllowed(String outputName) {
-        return true;
+        return !outputsDisallowed.contains(outputName);
     }
 }

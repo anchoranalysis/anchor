@@ -29,11 +29,14 @@ package org.anchoranalysis.io.output.bean;
 import java.util.Optional;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.io.bean.filepath.prefixer.FilePathPrefixer;
 import org.anchoranalysis.io.error.FilePathPrefixerException;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
-import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerParams;
+import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerContext;
+import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
+import org.anchoranalysis.io.output.MultiLevelOutputEnabled;
 import org.anchoranalysis.io.output.bean.rules.OutputEnabledRules;
 import org.anchoranalysis.io.output.bean.rules.Permissive;
 import org.anchoranalysis.io.output.outputter.BindFailedException;
@@ -44,10 +47,23 @@ import lombok.Setter;
 
 /** 
  * Responsible for making decisions on where output goes and what form it takes.
+ *
+ * <p>An output prefix (with directory and/or file-path components) is calculated
+ * for each input.
+ * 
+ * <p>Rules can be specified in {@code outputsEnabled} as to which
+ * outputs occur or do not occur (from the available outputs in an experiment) when
+ * an experiment is run.
  **/
 public class OutputManager extends AnchorBean<OutputManager> {
 
     // BEAN PROPERTIES
+    /**
+     * Determines a prefix to use when outputting a file based upon an input-path.
+     * 
+     * <p>This method is called with the {@link InputFromManager#pathForBinding} to
+     * determine a output prefix for each input to an experiment.
+     */
     @BeanField @Getter @Setter private FilePathPrefixer filePathPrefixer;
 
     /**
@@ -59,34 +75,71 @@ public class OutputManager extends AnchorBean<OutputManager> {
      */
     @BeanField @Getter @Setter private boolean silentlyDeleteExisting = false;
 
+    /**
+     * General settings (default file extensions, colors etc.) for outtping files.
+     */
     @BeanField @Getter @Setter
     private OutputWriteSettings outputWriteSettings = new OutputWriteSettings();
     
-    @BeanField @Getter @Setter
-    private OutputEnabledRules outputsEnabled = new Permissive();
+    /** Which outputs are enabled or not enabled. If null, default rules are used instead. */
+    @BeanField @OptionalBean @Getter @Setter
+    private OutputEnabledRules outputsEnabled;
     // END BEAN PROPERTIES
 
-    public OutputterChecked bindRootFolder(
+    /**
+     * Creates an outputter for the experiment in general.
+     * 
+     * <p>i.e. this is not an outputter for a specific job.
+     * 
+     * @param experimentIdentifier an identifier for the experiment
+     * @param manifestRecorder where manifest operations are recorded
+     * @param recordedOutputs where output-names are recorded as used/tested
+     * @param prefixerContext parameters for the file-path prefixer
+     * @return a newly created outputter
+     * @throws BindFailedException
+     */
+    public OutputterChecked createExperimentOutputter(
             String experimentIdentifier,
-            ManifestRecorder writeOperationRecorder,
+            ManifestRecorder manifestRecorder,
+            Optional<MultiLevelOutputEnabled> defaultOutputEnabledRules,
             Optional<RecordedOutputs> recordedOutputs,
-            FilePathPrefixerParams params)
+            FilePathPrefixerContext prefixerContext)
             throws BindFailedException {
 
         try {
-            FilePathPrefix prefix = filePathPrefixer.rootFolderPrefix(experimentIdentifier, params);
-            writeOperationRecorder.init(prefix.getFolderPath());
+            FilePathPrefix prefix = filePathPrefixer.rootFolderPrefix(experimentIdentifier, prefixerContext);
+            manifestRecorder.init(prefix.getFolderPath());
 
             return OutputterChecked.createWithPrefix(
                     prefix,
-                    getOutputsEnabled(),
+                    selectOutputEnabled(defaultOutputEnabledRules),
                     getOutputWriteSettings(),
-                    writeOperationRecorder.getRootFolder(),
+                    manifestRecorder.getRootFolder(),
                     recordedOutputs,
                     silentlyDeleteExisting);
 
         } catch (FilePathPrefixerException e) {
             throw new BindFailedException(e);
+        }
+    }
+    
+    /**
+     * Selects which {@link OutputEnabledRules} to employ.
+     * 
+     * <p>The order of precedence is:
+     * <ol>
+     * <li>The {@code outputsEnabled} bean-property in this class.
+     * <li>The {@code defaultOutputEnabledRules} passed into {@link #createExperimentOutputter(String, ManifestRecorder, Optional, Optional, FilePathPrefixerContext)}.
+     * </ol>
+     * 
+     * @param defaultOutputEnabledRules
+     * @return
+     */
+    private MultiLevelOutputEnabled selectOutputEnabled(Optional<MultiLevelOutputEnabled> defaultOutputEnabledRules) {
+        if (outputsEnabled!=null) {
+            return outputsEnabled;
+        } else {
+            return defaultOutputEnabledRules.orElseGet( () -> Permissive.INSTANCE );
         }
     }
 }

@@ -46,6 +46,8 @@ import org.anchoranalysis.io.generator.serialized.XStreamGenerator;
 import org.anchoranalysis.io.generator.text.StringGenerator;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
+import org.anchoranalysis.io.output.MultiLevelOutputEnabled;
+import org.anchoranalysis.io.output.bean.rules.OutputEnabledRules;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
@@ -144,7 +146,14 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
      * @throws JobExecutionException
      */
     public abstract void doJobOnInput(InputBound<T, S> input) throws JobExecutionException;
-
+    
+    /**
+     * If specified, default rules for determine which outputs are enabled or not.
+     * 
+     * @return the default rules if they exist.
+     */
+    public abstract Optional<MultiLevelOutputEnabled> defaultOutputs();
+    
     /**
      * Creates other objects needed to have a fully bound set of parameters for the task
      *

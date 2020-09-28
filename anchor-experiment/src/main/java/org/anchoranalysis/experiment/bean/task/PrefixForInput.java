@@ -7,7 +7,7 @@ import org.anchoranalysis.io.bean.filepath.prefixer.NamedPath;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.error.FilePathPrefixerException;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
-import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerParams;
+import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerContext;
 import org.anchoranalysis.io.filepath.prefixer.PathDifference;
 import org.anchoranalysis.io.manifest.ManifestFolderDescription;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
@@ -23,7 +23,7 @@ class PrefixForInput {
     
     private final FilePathPrefixer prefixer;
     
-    private final FilePathPrefixerParams params;
+    private final FilePathPrefixerContext context;
     
     /**
      * The prefix to use for outputs pertaining to a particular file.
@@ -42,7 +42,7 @@ class PrefixForInput {
             throws FilePathPrefixerException {
 
         // Calculate a prefix from the incoming file, and create a file path generator
-        FilePathPrefix prefix = prefixer.outFilePrefix(path, experimentIdentifier, params);
+        FilePathPrefix prefix = prefixer.outFilePrefix(path, experimentIdentifier, context);
 
         PathDifference difference =
                 differenceFromPrefixer(experimentIdentifier, prefix.getCombinedPrefix());
@@ -56,7 +56,7 @@ class PrefixForInput {
             throws FilePathPrefixerException {
         try {
             return PathDifference.differenceFrom(
-                    prefixer.rootFolderPrefix(experimentIdentifier, params)
+                    prefixer.rootFolderPrefix(experimentIdentifier, context)
                             .getCombinedPrefix(),
                     combinedPrefix);
         } catch (AnchorIOException e) {

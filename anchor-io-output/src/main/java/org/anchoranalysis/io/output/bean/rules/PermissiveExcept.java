@@ -36,9 +36,9 @@ import lombok.Setter;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.StringSet;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.io.output.bean.allowed.AllOutputAllowed;
-import org.anchoranalysis.io.output.bean.allowed.OutputAllowed;
-import org.anchoranalysis.io.output.bean.allowed.SpecificOutputDisallowed;
+import org.anchoranalysis.io.output.bean.enabled.All;
+import org.anchoranalysis.io.output.bean.enabled.OutputEnabled;
+import org.anchoranalysis.io.output.bean.enabled.SpecificDisabled;
 
 /**
  * Allows everything to be outputted except a particular list.
@@ -69,17 +69,17 @@ public class PermissiveExcept extends OutputEnabledRules {
     }
 
     // We cache the second-level map here
-    private Map<String, OutputAllowed> mapSecondLevel = null;
+    private Map<String, OutputEnabled> mapSecondLevel = null;
 
     @Override
-    public OutputAllowed first() {
-        return new SpecificOutputDisallowed(except);
+    public OutputEnabled first() {
+        return new SpecificDisabled(except);
     }
 
     @Override
-    public OutputAllowed second(String outputName) {
+    public OutputEnabled second(String outputName) {
         createSecondLevelMapIfNecessary();
-        return mapSecondLevel.getOrDefault(outputName, AllOutputAllowed.INSTANCE);
+        return mapSecondLevel.getOrDefault(outputName, All.INSTANCE);
     }
 
     private void createSecondLevelMapIfNecessary() {
@@ -88,10 +88,10 @@ public class PermissiveExcept extends OutputEnabledRules {
         }
     }
 
-    private Map<String, OutputAllowed> createSecondLevelMap() {
-        Map<String, OutputAllowed> map = new HashMap<>();
+    private Map<String, OutputEnabled> createSecondLevelMap() {
+        Map<String, OutputEnabled> map = new HashMap<>();
         for (NamedBean<StringSet> bean : exceptSecondLevel) {
-            map.put(bean.getName(), new SpecificOutputDisallowed(bean.getItem()));
+            map.put(bean.getName(), new SpecificDisabled(bean.getItem()));
         }
         return map;
     }

@@ -96,11 +96,11 @@ public class MultiInputManager extends InputManager<MultiInput> {
     }
 
     @Override
-    public List<MultiInput> inputObjects(InputManagerParams params) throws AnchorIOException {
+    public List<MultiInput> inputs(InputManagerParams params) throws AnchorIOException {
 
         List<MultiInput> outList = new ArrayList<>();
 
-        Iterator<? extends ProvidesStackInput> itr = input.inputObjects(params).iterator();
+        Iterator<? extends ProvidesStackInput> itr = input.inputs(params).iterator();
 
         while (itr.hasNext()) {
             ProvidesStackInput mainStack = itr.next();

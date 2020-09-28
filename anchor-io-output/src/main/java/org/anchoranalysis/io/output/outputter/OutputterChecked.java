@@ -37,6 +37,7 @@ import org.anchoranalysis.io.manifest.folder.FolderWriteWithPath;
 import org.anchoranalysis.io.manifest.operationrecorder.DualWriterOperationRecorder;
 import org.anchoranalysis.io.manifest.operationrecorder.NullWriteOperationRecorder;
 import org.anchoranalysis.io.manifest.operationrecorder.WriteOperationRecorder;
+import org.anchoranalysis.io.output.MultiLevelOutputEnabled;
 import org.anchoranalysis.io.output.bean.OutputManager;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.bean.rules.OutputEnabledRules;
@@ -70,7 +71,7 @@ public class OutputterChecked {
     @Getter private RecordingWriters writers;
 
     /** Which outputs are enabled or not enabled. */
-    @Getter private OutputEnabledRules outputsEnabled;
+    @Getter private MultiLevelOutputEnabled outputsEnabled;
     
     /** Records the names of all outputs written to, if defined. */
     private Optional<RecordedOutputs> recordedOutputs;
@@ -92,7 +93,7 @@ public class OutputterChecked {
             Path pathDirectory, boolean deleteExistingDirectory) throws BindFailedException {
         return createWithPrefix(
                 new FilePathPrefix(pathDirectory),
-                new Permissive(),
+                Permissive.INSTANCE,
                 new OutputWriteSettings(),
                 new NullWriteOperationRecorder(),
                 Optional.empty(),
@@ -112,7 +113,7 @@ public class OutputterChecked {
      */
     public static OutputterChecked createWithPrefix(
             FilePathPrefix prefix,
-            OutputEnabledRules outputEnabled,
+            MultiLevelOutputEnabled outputEnabled,
             OutputWriteSettings settings,
             WriteOperationRecorder writeOperationRecorder,
             Optional<RecordedOutputs> recordedOutputs,
@@ -138,7 +139,7 @@ public class OutputterChecked {
     private OutputterChecked(
             OutputterTarget target,
             WriteOperationRecorder writeOperationRecorder,
-            OutputEnabledRules outputsEnabled,
+            MultiLevelOutputEnabled outputsEnabled,
             Optional<RecordedOutputs> recordedOutputs,
             OutputWriteSettings settings) {
         this.target = target;
@@ -202,7 +203,7 @@ public class OutputterChecked {
             return new OutputterChecked(
                     target.changePrefix( new FilePathPrefix(pathSubdirectory) ),
                     writeFolderToOperationRecorder(pathSubdirectory, manifestDescription, manifestFolder),
-                    new Permissive(), // Allow all outputs in the sub-directory
+                    Permissive.INSTANCE, // Allow all outputs in the sub-directory
                     Optional.empty(),   // Output-names are no longer recorded on sub-directories
                     settings);
         } catch (BindFailedException e) {

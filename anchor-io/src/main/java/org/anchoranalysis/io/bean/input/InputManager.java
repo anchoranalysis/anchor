@@ -32,13 +32,20 @@ import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.InputFromManager;
 
 /**
- * Base class for describing the input to an experiment (i.e. which files etc. form the source of
- * the experimenent)
+ * Base class for describing the inputs to an experiment.
+ * 
+ * <p>By inputs, this refers to files that form the necessary input to an experiment.
  *
  * @author Owen Feehan
  * @param <T> input-type
  */
 public abstract class InputManager<T extends InputFromManager> extends AnchorBean<InputManager<T>> {
 
-    public abstract List<T> inputObjects(InputManagerParams params) throws AnchorIOException;
+    /**
+     * The 
+     * @param params
+     * @return
+     * @throws AnchorIOException
+     */
+    public abstract List<T> inputs(InputManagerParams params) throws AnchorIOException;
 }

@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.io.output.bean.allowed;
+package org.anchoranalysis.io.output.bean.enabled;
 
 import org.anchoranalysis.bean.AnchorBean;
 
@@ -34,7 +34,7 @@ import org.anchoranalysis.bean.AnchorBean;
  * @author Owen Feehan
  *
  */
-public abstract class OutputAllowed extends AnchorBean<OutputAllowed> {
+public abstract class OutputEnabled extends AnchorBean<OutputEnabled> {
 
     /**
      * Is a particular output-allowed?

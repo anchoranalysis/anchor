@@ -23,7 +23,7 @@ class BindingPathOutputterFactory {
             ParametersExperiment params)
             throws BindFailedException, JobExecutionException {
         try {
-            FilePathPrefix prefixToAssign = new PrefixForInput(params.getPrefixer(), params.getExperimentArguments().createParamsContext()).prefixForFile(
+            FilePathPrefix prefixToAssign = new PrefixForInput(params.getPrefixer(), params.getExperimentArguments().createPrefixerContext()).prefixForFile(
                     path,
                     params.getExperimentIdentifier(),
                     params.getExperimentalManifest()

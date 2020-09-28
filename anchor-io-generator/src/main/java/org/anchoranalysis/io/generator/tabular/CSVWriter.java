@@ -59,7 +59,7 @@ public class CSVWriter implements AutoCloseable {
     public static Optional<CSVWriter> createFromOutputter(
             String outputName, OutputterChecked outputter) throws AnchorIOException {
 
-        if (!outputter.getOutputsEnabled().isOutputAllowed(outputName)) {
+        if (!outputter.getOutputsEnabled().isOutputEnabled(outputName)) {
             return Optional.empty();
         }
 

@@ -36,7 +36,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.io.error.FilePathPrefixerException;
-import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerParams;
+import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerContext;
 import org.anchoranalysis.io.params.DebugModeParams;
 import org.anchoranalysis.io.params.InputContextParams;
 
@@ -92,8 +92,8 @@ public class ExperimentExecutionArguments {
         return out;
     }
 
-    public FilePathPrefixerParams createParamsContext() throws FilePathPrefixerException {
-        return new FilePathPrefixerParams(isDebugModeEnabled(), outputDirectory);
+    public FilePathPrefixerContext createPrefixerContext() throws FilePathPrefixerException {
+        return new FilePathPrefixerContext(isDebugModeEnabled(), outputDirectory);
     }
 
     public Optional<Path> getInputDirectory() {

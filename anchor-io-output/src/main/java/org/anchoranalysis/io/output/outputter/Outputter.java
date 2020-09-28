@@ -34,6 +34,7 @@ import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.io.manifest.ManifestFolderDescription;
 import org.anchoranalysis.io.manifest.folder.FolderWritePhysical;
 import org.anchoranalysis.io.manifest.operationrecorder.WriteOperationRecorder;
+import org.anchoranalysis.io.output.MultiLevelOutputEnabled;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.bean.rules.OutputEnabledRules;
 import org.anchoranalysis.io.output.writer.WriterRouterErrors;
@@ -128,7 +129,7 @@ public class Outputter {
         return delegate.toString();
     }
 
-    public OutputEnabledRules outputsEnabled() {
+    public MultiLevelOutputEnabled outputsEnabled() {
         return delegate.getOutputsEnabled();
     }
 

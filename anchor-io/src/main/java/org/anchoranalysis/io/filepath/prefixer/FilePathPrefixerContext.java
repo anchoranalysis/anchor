@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-io-output
+ * anchor-io
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -24,25 +24,34 @@
  * #L%
  */
 
-package org.anchoranalysis.io.output.bean.allowed;
+package org.anchoranalysis.io.filepath.prefixer;
 
-import lombok.AllArgsConstructor;
+import java.nio.file.Path;
+import java.util.Optional;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.anchoranalysis.bean.StringSet;
-import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.io.error.FilePathPrefixerException;
 
-@NoArgsConstructor
-@AllArgsConstructor
-public class SpecificOutputDisallowed extends OutputAllowed {
+public class FilePathPrefixerContext {
 
-    // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private StringSet outputsDisallowed;
-    // END BEAN PROPERTIES
+    @Getter private boolean debugMode;
 
-    @Override
-    public boolean isOutputAllowed(String outputName) {
-        return !outputsDisallowed.contains(outputName);
+    /** A directory indicating where inputs can be located */
+    @Getter private final Optional<Path> outputDirectory;
+
+    public FilePathPrefixerContext(boolean debugMode, Optional<Path> outputDirectory)
+            throws FilePathPrefixerException {
+        super();
+        this.debugMode = debugMode;
+        this.outputDirectory = outputDirectory;
+        checkAbsolutePath();
+    }
+
+    private void checkAbsolutePath() throws FilePathPrefixerException {
+        if (outputDirectory.isPresent() && !outputDirectory.get().isAbsolute()) {
+            throw new FilePathPrefixerException(
+                    String.format(
+                            "An non-absolute path was passed to FilePathPrefixerParams of %s",
+                            outputDirectory.get()));
+        }
     }
 }

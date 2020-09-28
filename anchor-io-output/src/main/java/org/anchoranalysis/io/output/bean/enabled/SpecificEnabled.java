@@ -24,12 +24,21 @@
  * #L%
  */
 
-package org.anchoranalysis.io.output.bean.allowed;
+package org.anchoranalysis.io.output.bean.enabled;
 
-public class NoOutputAllowed extends OutputAllowed {
+import lombok.Getter;
+import lombok.Setter;
+import org.anchoranalysis.bean.StringSet;
+import org.anchoranalysis.bean.annotation.BeanField;
+
+public class SpecificEnabled extends OutputEnabled {
+
+    // START BEAN PROPERTIES
+    @BeanField @Getter @Setter private StringSet outputsAllowed;
+    // END BEAN PROPERTIES
 
     @Override
     public boolean isOutputAllowed(String outputName) {
-        return false;
+        return outputsAllowed.contains(outputName);
     }
 }

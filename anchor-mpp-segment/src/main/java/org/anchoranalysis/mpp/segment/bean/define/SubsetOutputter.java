@@ -30,7 +30,7 @@ import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.name.provider.NamedProvider;
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.generator.collection.GeneratorOutputHelper;
-import org.anchoranalysis.io.output.bean.allowed.OutputAllowed;
+import org.anchoranalysis.io.output.bean.enabled.OutputEnabled;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
 import lombok.AllArgsConstructor;
@@ -39,7 +39,7 @@ import lombok.AllArgsConstructor;
 class SubsetOutputter<T> {
     
     private NamedProvider<T> providers;
-    private OutputAllowed outputAllowed;
+    private OutputEnabled outputAllowed;
     private Generator<T> generator;
     private OutputterChecked outputter;
     private String outputName;
@@ -48,7 +48,7 @@ class SubsetOutputter<T> {
 
     public void outputSubset(ErrorReporter errorReporter) {
 
-        if (!outputter.getOutputsEnabled().isOutputAllowed(outputName)) {
+        if (!outputter.getOutputsEnabled().isOutputEnabled(outputName)) {
             return;
         }
 
@@ -64,7 +64,7 @@ class SubsetOutputter<T> {
 
     public void outputSubsetChecked() throws OutputWriteFailedException {
 
-        if (!outputter.getOutputsEnabled().isOutputAllowed(outputName)) {
+        if (!outputter.getOutputsEnabled().isOutputEnabled(outputName)) {
             return;
         }
 

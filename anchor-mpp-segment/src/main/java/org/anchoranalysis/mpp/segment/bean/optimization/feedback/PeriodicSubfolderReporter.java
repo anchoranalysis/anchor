@@ -124,7 +124,7 @@ public abstract class PeriodicSubfolderReporter<T>
         this.parentOutputter = optInit.getInitContext().getOutputter();
 
         // Let's only do this if the output is allowed
-        if (!getParentOutputter().outputsEnabled().isOutputAllowed(outputName)) {
+        if (!getParentOutputter().outputsEnabled().isOutputEnabled(outputName)) {
             return;
         }
 

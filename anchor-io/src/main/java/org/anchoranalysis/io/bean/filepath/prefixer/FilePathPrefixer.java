@@ -32,7 +32,7 @@ import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.error.BeanStrangeException;
 import org.anchoranalysis.io.error.FilePathPrefixerException;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
-import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerParams;
+import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerContext;
 
 public abstract class FilePathPrefixer extends AnchorBean<FilePathPrefixer> {
 
@@ -47,7 +47,7 @@ public abstract class FilePathPrefixer extends AnchorBean<FilePathPrefixer> {
      * @throws FilePathPrefixerException
      */
     public abstract FilePathPrefix outFilePrefix(
-            NamedPath path, String experimentIdentifier, FilePathPrefixerParams context)
+            NamedPath path, String experimentIdentifier, FilePathPrefixerContext context)
             throws FilePathPrefixerException;
 
     /**
@@ -59,7 +59,7 @@ public abstract class FilePathPrefixer extends AnchorBean<FilePathPrefixer> {
      * @throws FilePathPrefixerException
      */
     public abstract FilePathPrefix rootFolderPrefix(
-            String experimentIdentifier, FilePathPrefixerParams context)
+            String experimentIdentifier, FilePathPrefixerContext context)
             throws FilePathPrefixerException;
 
     /**

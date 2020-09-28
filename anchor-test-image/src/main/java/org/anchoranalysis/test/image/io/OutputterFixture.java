@@ -32,7 +32,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.io.error.FilePathPrefixerException;
-import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerParams;
+import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerContext;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
 import org.anchoranalysis.io.output.bean.OutputManager;
 import org.anchoranalysis.io.output.outputter.BindFailedException;
@@ -63,11 +63,12 @@ public class OutputterFixture {
 
     public static OutputterChecked outputterChecked(OutputManager outputManager) throws BindFailedException {
         try {
-            return outputManager.bindRootFolder(
+            return outputManager.createExperimentOutputter(
                     "debug",
                     new ManifestRecorder(),
                     Optional.empty(),
-                    new FilePathPrefixerParams(false, Optional.empty()));
+                    Optional.empty(),
+                    new FilePathPrefixerContext(false, Optional.empty()));
         } catch (FilePathPrefixerException e) {
             throw new BindFailedException(e);
         }

@@ -43,7 +43,9 @@ import org.anchoranalysis.io.error.FilePathPrefixerException;
 import org.anchoranalysis.io.generator.text.StringGenerator;
 import org.anchoranalysis.io.generator.xml.XMLConfigurationWrapperGenerator;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
+import org.anchoranalysis.io.output.MultiLevelOutputEnabled;
 import org.anchoranalysis.io.output.bean.OutputManager;
+import org.anchoranalysis.io.output.bean.rules.OutputEnabledRules;
 import org.anchoranalysis.io.output.outputter.BindFailedException;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
@@ -52,8 +54,7 @@ import org.apache.commons.lang.time.StopWatch;
 import com.google.common.base.Preconditions;
 
 /**
- * An experiment that uses a {@link OutputManager} to control outputting of results (which results
- * are outputted, location etc.)
+ * An experiment that uses a {@link OutputManager} to specify the outputting of results.
  *
  * @author Owen Feehan
  */
@@ -63,10 +64,18 @@ public abstract class OutputExperiment extends Experiment {
     private static final String OUTPUT_NAME_EXECUTION_TIME = "executionTime";
 
     // START BEAN PROPERTIES
+    /** The output-manager that specifies how/where/which elements occur duing outputting. */
     @BeanField @Getter @Setter private OutputManager output;
 
+    /** 
+     * Where log messages that <b>do not<b> pertain to a specific job (input) appear.
+     *
+     * <p>Note that in the case of a {@link InputOutputExperiment} an additional log
+     * will be created for each specific job.
+     */
     @BeanField @Getter @Setter private LoggingDestination logExperiment = new ToConsole();
 
+    /** A name for the experiment. */
     @BeanField @Getter @Setter private ExperimentIdentifier experimentIdentifier;
 
     /**
@@ -79,11 +88,17 @@ public abstract class OutputExperiment extends Experiment {
     @BeanField @Getter @Setter private boolean forceDetailedLogging = false;
     // END BEAN PROPERTIES
 
-    /* If defined, records output-names that are written / not-written in {@link BoundOutputManager} (but not any sub-directories thereof. */
+    /** If defined, records output-names that are written / not-written during the experiment.
+     * 
+     *  <p>This only occurs for first-level outputs, not second-level outputs. */
     private RecordedOutputs recordedOutputs = new RecordedOutputs();
     
-    // Runs the experiment on all files
-    public void doExperiment(ExperimentExecutionArguments arguments)
+    /**
+     * Executes the experiment for given arguments.
+     * 
+     * @param arguments additional run-time configuration/parameters that influences the experiment.
+     */
+    public void executeExperiment(ExperimentExecutionArguments arguments)
             throws ExperimentExecutionException {
 
         try {
@@ -99,53 +114,68 @@ public abstract class OutputExperiment extends Experiment {
         return forceDetailedLogging;
     }
 
+    /**
+     * Executes the experiment for parameters.
+     * 
+     * @param params a combination of run-time and bean-time specified elements used in the experiment.
+     * 
+     * @throws ExperimentExecutionException if anything occurs stop the experiment finishing its execution
+     */
+    protected abstract void executeExperimentWithParams(ParametersExperiment params)
+            throws ExperimentExecutionException;
+    
+    /**
+     * If specified, default rules for determine which outputs are enabled or not.
+     * 
+     * @return the default rules if they exist.
+     */
+    protected abstract Optional<MultiLevelOutputEnabled> defaultOutputs();
+    
     private void doExperimentWithParams(ParametersExperiment params)
             throws ExperimentExecutionException {
         try {
             StopWatch stopWatchExperiment = new StopWatch();
             stopWatchExperiment.start();
 
-            initBeforeExec(params);
-            execExperiment(params);
-            tidyUpAfterExec(params, stopWatchExperiment);
+            initBeforeExecution(params);
+            executeExperimentWithParams(params);
+            tidyUpAfterExecution(params, stopWatchExperiment);
         } finally {
             // An experiment is considered always successful
             params.getLoggerExperiment().close(true);
         }
     }
 
-    protected abstract void execExperiment(ParametersExperiment params)
-            throws ExperimentExecutionException;
-
-    private ParametersExperiment createParams(ExperimentExecutionArguments expArgs)
+    private ParametersExperiment createParams(ExperimentExecutionArguments arguments)
             throws AnchorIOException {
 
         ManifestRecorder experimentalManifest = new ManifestRecorder();
 
-        String experimentId = experimentIdentifier.identifier(expArgs.getTaskName());
+        String experimentId = experimentIdentifier.identifier(arguments.getTaskName());
 
         try {
             OutputterChecked rootOutputter =
                     getOutput()
-                            .bindRootFolder(
+                            .createExperimentOutputter(
                                     experimentId,
                                     experimentalManifest,
+                                    defaultOutputs(),
                                     Optional.of(recordedOutputs),
-                                    expArgs.createParamsContext());
+                                    arguments.createPrefixerContext());
 
             Preconditions.checkArgument(rootOutputter.getSettings().hasBeenInit());
 
-            // Important we bind to a root folder before any log messages go out, as certain log
-            //  appenders require the OutputManager to be set before outputting to the correct
-            // location
-            //  and this only occurs after the call to bindRootFolder()
+            // Important we bind to a root folder before any log messages go out, as
+            // certain log appenders require the OutputManager to be set before outputting
+            // to the correct location and this only occurs after the call to
+            // bindRootFolder()
             return new ParametersExperiment(
-                    expArgs,
+                    arguments,
                     experimentId,
                     Optional.of(experimentalManifest),
                     rootOutputter,
                     getOutput().getFilePathPrefixer(),
-                    createLogger(rootOutputter, expArgs),
+                    createLogger(rootOutputter, arguments),
                     useDetailedLogging());
         } catch (FilePathPrefixerException e) {
             throw new AnchorIOException("Cannot create params-context", e);
@@ -160,7 +190,7 @@ public abstract class OutputExperiment extends Experiment {
                 rootOutputter, expArgs, useDetailedLogging());
     }
 
-    private void initBeforeExec(ParametersExperiment params) throws ExperimentExecutionException {
+    private void initBeforeExecution(ParametersExperiment params) throws ExperimentExecutionException {
         params.getLoggerExperiment().start();
         OutputExperimentLogHelper.maybeLogStart(params);
 
@@ -171,7 +201,7 @@ public abstract class OutputExperiment extends Experiment {
         }
     }
 
-    private void tidyUpAfterExec(ParametersExperiment params, StopWatch stopWatchExperiment) {
+    private void tidyUpAfterExecution(ParametersExperiment params, StopWatch stopWatchExperiment) {
         writeExecutionTime(params.getOutputter(), stopWatchExperiment);
 
         // Outputs after processing

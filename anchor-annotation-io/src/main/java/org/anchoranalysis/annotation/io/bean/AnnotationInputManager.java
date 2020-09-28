@@ -50,13 +50,13 @@ public class AnnotationInputManager<T extends ProvidesStackInput, S extends Anno
     // END BEAN PROPERTIES
 
     @Override
-    public List<AnnotationWithStrategy<S>> inputObjects(InputManagerParams params)
+    public List<AnnotationWithStrategy<S>> inputs(InputManagerParams params)
             throws AnchorIOException {
 
         try (ProgressReporterMultiple prm =
                 new ProgressReporterMultiple(params.getProgressReporter(), 2)) {
 
-            List<T> inputs = input.inputObjects(params);
+            List<T> inputs = input.inputs(params);
 
             prm.incrWorker();
 

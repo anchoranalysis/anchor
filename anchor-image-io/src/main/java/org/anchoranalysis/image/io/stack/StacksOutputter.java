@@ -37,7 +37,7 @@ import org.anchoranalysis.image.io.generator.raster.StackGenerator;
 import org.anchoranalysis.image.stack.NamedStacks;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.generator.collection.GeneratorOutputHelper;
-import org.anchoranalysis.io.output.bean.allowed.OutputAllowed;
+import org.anchoranalysis.io.output.bean.enabled.OutputEnabled;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
@@ -131,7 +131,7 @@ public class StacksOutputter {
                 suppressSubfoldersIn);
     }
 
-    public static NamedStacks subset(NamedProvider<Stack> stackCollection, OutputAllowed oa) {
+    public static NamedStacks subset(NamedProvider<Stack> stackCollection, OutputEnabled oa) {
 
         NamedStacks out = new NamedStacks();
 

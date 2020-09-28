@@ -26,8 +26,8 @@
 
 package org.anchoranalysis.io.output.bean.rules;
 
-import org.anchoranalysis.io.output.bean.allowed.AllOutputAllowed;
-import org.anchoranalysis.io.output.bean.allowed.OutputAllowed;
+import org.anchoranalysis.io.output.bean.enabled.All;
+import org.anchoranalysis.io.output.bean.enabled.OutputEnabled;
 
 /**
  * Allows all output-names to be outputted in both first and second level.
@@ -36,14 +36,21 @@ import org.anchoranalysis.io.output.bean.allowed.OutputAllowed;
  *
  */
 public class Permissive extends OutputEnabledRules {
-
+    
+    /** 
+     * A singleton instance of {@link Permissive}.
+     * 
+     * <p>The class retains a public constructor so it can also be instantiated as a bean.
+     */
+    public static final OutputEnabledRules INSTANCE = new Permissive();
+    
     @Override
-    public OutputAllowed first() {
-        return AllOutputAllowed.INSTANCE;
+    public OutputEnabled first() {
+        return All.INSTANCE;
     }
 
     @Override
-    public OutputAllowed second(String outputName) {
-        return AllOutputAllowed.INSTANCE;
+    public OutputEnabled second(String outputName) {
+        return All.INSTANCE;
     }
 }
