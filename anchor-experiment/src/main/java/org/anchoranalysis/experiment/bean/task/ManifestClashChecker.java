@@ -68,15 +68,13 @@ class ManifestClashChecker {
      * @return true if it would clash, false otherwise
      */
     private static boolean wouldClashWithExperimentRoot(
-            Path experimentalDirectory, FilePathPrefix fpp) {
-        if (!fpp.getFilenamePrefix().isEmpty()) {
+            Path experimentalDirectory, FilePathPrefix prefix) {
+        if (!prefix.getFilenamePrefix().isEmpty()) {
             // We're safe if there's a non-empty filename prefix
             return false;
         }
 
-        Path pathPrefixDir = fpp.getFolderPath();
-
         // We're also safe if they are different directories
-        return (pathPrefixDir.normalize().equals(experimentalDirectory.normalize()));
+        return prefix.getFolderPath().normalize().equals(experimentalDirectory.normalize());
     }
 }

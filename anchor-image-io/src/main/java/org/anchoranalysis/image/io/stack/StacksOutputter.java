@@ -166,6 +166,6 @@ public class StacksOutputter {
             String secondLevelOutputKey,
             Outputter outputter) {
         return StacksOutputter.subset(
-                stacks, outputter.outputsEnabled().outputAllowedSecondLevel(secondLevelOutputKey));
+                stacks, outputter.outputsEnabled().second(secondLevelOutputKey));
     }
 }

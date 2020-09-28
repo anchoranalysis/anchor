@@ -39,7 +39,7 @@ import lombok.AllArgsConstructor;
 class SubsetOutputter<T> {
     
     private NamedProvider<T> providers;
-    private OutputAllowed oa;
+    private OutputAllowed outputAllowed;
     private Generator<T> generator;
     private OutputterChecked outputter;
     private String outputName;
@@ -53,7 +53,7 @@ class SubsetOutputter<T> {
         }
 
         GeneratorOutputHelper.output(
-                GeneratorOutputHelper.subset(providers, oa, errorReporter),
+                GeneratorOutputHelper.subset(providers, outputAllowed, errorReporter),
                 generator,
                 outputter,
                 outputName,
@@ -69,7 +69,7 @@ class SubsetOutputter<T> {
         }
 
         GeneratorOutputHelper.outputWithException(
-                GeneratorOutputHelper.subsetWithException(providers, oa),
+                GeneratorOutputHelper.subsetWithException(providers, outputAllowed),
                 generator,
                 outputter,
                 outputName,

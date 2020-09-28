@@ -85,7 +85,7 @@ class SubsetOutputterFactory {
             String id) {
         return new SubsetOutputter<>(
                 store,
-                outputter.outputsEnabled().outputAllowedSecondLevel(outputAllowedSecondLevelKey),
+                outputter.outputsEnabled().second(outputAllowedSecondLevelKey),
                 generator,
                 outputter.getChecked(),
                 id,

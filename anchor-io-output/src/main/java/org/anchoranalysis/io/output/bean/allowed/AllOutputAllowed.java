@@ -26,8 +26,21 @@
 
 package org.anchoranalysis.io.output.bean.allowed;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+/**
+ * All outputs are allowed irrespective of {@code outputName}.
+ * 
+ * @author Owen Feehan
+ *
+ */
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class AllOutputAllowed extends OutputAllowed {
 
+    /** A singleton instance of {@link AllOutputAllowed}. */
+    public static final OutputAllowed INSTANCE = new AllOutputAllowed();
+    
     @Override
     public boolean isOutputAllowed(String outputName) {
         return true;

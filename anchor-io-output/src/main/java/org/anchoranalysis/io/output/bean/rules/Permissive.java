@@ -32,12 +32,12 @@ import org.anchoranalysis.io.output.bean.allowed.OutputAllowed;
 public class Permissive extends OutputEnabledRules {
 
     @Override
-    public boolean isOutputAllowed(String outputName) {
-        return true;
+    public OutputAllowed first() {
+        return AllOutputAllowed.INSTANCE;
     }
 
     @Override
-    public OutputAllowed outputAllowedSecondLevel(String key) {
-        return new AllOutputAllowed();
+    public OutputAllowed second(String outputName) {
+        return AllOutputAllowed.INSTANCE;
     }
 }

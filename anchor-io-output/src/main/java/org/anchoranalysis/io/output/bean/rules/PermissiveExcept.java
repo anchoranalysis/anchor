@@ -64,14 +64,14 @@ public class PermissiveExcept extends OutputEnabledRules {
     private Map<String, OutputAllowed> mapSecondLevel = null;
 
     @Override
-    public boolean isOutputAllowed(String outputName) {
-        return !except.contains(outputName);
+    public OutputAllowed first() {
+        return new SpecificOutputDisallowed(except);
     }
 
     @Override
-    public OutputAllowed outputAllowedSecondLevel(String key) {
+    public OutputAllowed second(String outputName) {
         createSecondLevelMapIfNecessary();
-        return mapSecondLevel.getOrDefault(key, new AllOutputAllowed());
+        return mapSecondLevel.getOrDefault(outputName, AllOutputAllowed.INSTANCE);
     }
 
     private void createSecondLevelMapIfNecessary() {

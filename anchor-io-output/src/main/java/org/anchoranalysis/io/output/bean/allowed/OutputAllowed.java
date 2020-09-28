@@ -28,7 +28,19 @@ package org.anchoranalysis.io.output.bean.allowed;
 
 import org.anchoranalysis.bean.AnchorBean;
 
+/**
+ * Whether a particular output, identified by a textual name, is allowed or not.
+ * 
+ * @author Owen Feehan
+ *
+ */
 public abstract class OutputAllowed extends AnchorBean<OutputAllowed> {
 
+    /**
+     * Is a particular output-allowed?
+     * 
+     * @param outputName the name of the output
+     * @return true iff the output is allowed
+     */
     public abstract boolean isOutputAllowed(String outputName);
 }
