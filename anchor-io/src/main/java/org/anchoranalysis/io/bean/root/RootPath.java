@@ -34,7 +34,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.error.AnchorIOException;
-import org.anchoranalysis.io.filepath.prefixer.PathDifferenceFromBase;
+import org.anchoranalysis.io.filepath.prefixer.PathDifference;
 
 /**
  * Defines a *root path* i.e. a directory in which files are read/written during analysis
@@ -75,7 +75,7 @@ public class RootPath extends AnchorBean<RootPath> {
         Path rootPath = asPath();
 
         // We get the difference of what is left, or else an exception is thrown if it cannot match
-        PathDifferenceFromBase diff = PathDifferenceFromBase.differenceFrom(rootPath, path);
+        PathDifference diff = PathDifference.differenceFrom(rootPath, path);
         out.setRoot(rootPath);
         out.setRemainder(diff.combined());
         return out;

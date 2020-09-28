@@ -34,7 +34,7 @@ import java.util.Map;
 import java.util.Optional;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.io.error.AnchorIOException;
-import org.anchoranalysis.io.filepath.prefixer.PathDifferenceFromBase;
+import org.anchoranalysis.io.filepath.prefixer.PathDifference;
 import org.anchoranalysis.io.output.writer.WriterExecuteBeforeEveryOperation;
 import lombok.Getter;
 
@@ -163,7 +163,7 @@ class LazyDirectoryCreatorPool {
 
     private Path differenceFromRoot(Path path) throws GetOperationFailedException {
         try {
-            return PathDifferenceFromBase.differenceFrom(rootDirectory, path.normalize())
+            return PathDifference.differenceFrom(rootDirectory, path.normalize())
                     .combined();
         } catch (AnchorIOException e) {
             throw new GetOperationFailedException(path.toString(), e);

@@ -34,7 +34,9 @@ import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.experiment.ExperimentExecutionArguments;
 import org.anchoranalysis.experiment.bean.log.LoggingDestination;
 import org.anchoranalysis.experiment.log.StatefulMessageLogger;
+import org.anchoranalysis.io.bean.filepath.prefixer.FilePathPrefixer;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
+import org.anchoranalysis.io.output.bean.OutputManager;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
 
@@ -46,26 +48,30 @@ import org.anchoranalysis.io.output.outputter.OutputterChecked;
 public class ParametersExperiment {
 
     // Parameters for all tasks in general (the experiment)
-    @Getter private Optional<ManifestRecorder> experimentalManifest;
+    @Getter private final Optional<ManifestRecorder> experimentalManifest;
 
-    @Getter private String experimentIdentifier;
-
-    // This is a means to create new log-reporters for each task
-    @Getter @Setter private LoggingDestination loggerTaskCreator;
+    @Getter private final String experimentIdentifier;
 
     /**
      * Iff true, additional log messages are written to describe each job in terms of its unique
      * name, output folder, average execution time etc.
      */
-    @Getter private boolean detailedLogging;
+    @Getter private final boolean detailedLogging;
 
-    @Getter private InputOutputContextStateful context;
+    @Getter private final InputOutputContextStateful context;
 
+    /** The {@link OutputManager} associated with the experiment which {@link Outputter} uses. */
+    @Getter private final FilePathPrefixer prefixer;
+
+    // This is a means to create new log-reporters for each task
+    @Getter @Setter private LoggingDestination loggerTaskCreator;
+    
     public ParametersExperiment(
             ExperimentExecutionArguments experimentArguments,
             String experimentIdentifier,
             Optional<ManifestRecorder> experimentalManifest,
             OutputterChecked outputter,
+            FilePathPrefixer prefixer,
             StatefulMessageLogger loggerExperiment,
             boolean detailedLogging) {
         this.context =
@@ -78,6 +84,7 @@ public class ParametersExperiment {
         this.experimentIdentifier = experimentIdentifier;
         this.experimentalManifest = experimentalManifest;
         this.detailedLogging = detailedLogging;
+        this.prefixer = prefixer;
     }
 
     public Outputter getOutputter() {

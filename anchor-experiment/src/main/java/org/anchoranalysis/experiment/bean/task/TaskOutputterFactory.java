@@ -33,15 +33,13 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.io.bean.filepath.prefixer.NamedPath;
-import org.anchoranalysis.io.error.FilePathPrefixerException;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
 import org.anchoranalysis.io.output.outputter.BindFailedException;
-import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-class HelperBindOutputManager {
+class TaskOutputterFactory {
 
     // If pathForBinding is null, we bind to the root folder instead
     public static OutputterChecked createOutputterForTask(
@@ -52,10 +50,10 @@ class HelperBindOutputManager {
         try {
             Optional<Path> pathForBinding = input.pathForBinding();
             if (pathForBinding.isPresent()) {
-                return createWithBindingPath(
+                return BindingPathOutputterFactory.createWithBindingPath(
                         derivePathWithDescription(input), manifestTask, params);
             } else {
-                return createWithoutBindingPath(manifestTask, params.getOutputter());
+                return WithoutBindingPathOutputterFactory.createWithoutBindingPath(manifestTask, params.getOutputter());
             }
         } catch (BindFailedException e) {
             throw new JobExecutionException(
@@ -67,50 +65,13 @@ class HelperBindOutputManager {
     }
 
     private static NamedPath derivePathWithDescription(InputFromManager input) {
-        assert (input.pathForBinding().isPresent());
         return new NamedPath(
                 input.pathForBinding().get(), input.descriptiveName()); // NOSONAR
     }
 
-    private static OutputterChecked createWithBindingPath(
-            NamedPath path,
-            Optional<ManifestRecorder> manifestTask,
-            ParametersExperiment params)
-            throws BindFailedException, JobExecutionException {
-        try {
-            OutputterChecked boundOutput =
-                    params.getOutputter()
-                            .deriveFromInput(
-                                    path,
-                                    params.getExperimentIdentifier(),
-                                    manifestTask,
-                                    params.getExperimentalManifest(),
-                                    params.getExperimentArguments().createParamsContext());
-            if (params.getExperimentalManifest().isPresent()) {
-                ManifestClashChecker.throwExceptionIfClashes(
-                        params.getExperimentalManifest().get(), // NOSONAR
-                        boundOutput,
-                        path.getPath());
-            }
-            return boundOutput;
-        } catch (FilePathPrefixerException e) {
-            throw new BindFailedException(e);
-        }
-    }
-
-    private static OutputterChecked createWithoutBindingPath(
-            Optional<ManifestRecorder> manifestTask, Outputter outputter) {
-        manifestTask.ifPresent(
-                mt -> {
-                    mt.init(outputter.getOutputFolderPath());
-                    outputter.addOperationRecorder(mt.getRootFolder());
-                });
-        return outputter.getChecked();
-    }
-
     private static String describeInputForBinding(InputFromManager input) {
         return input.pathForBinding()
-                .map(HelperBindOutputManager::quoteString)
+                .map(TaskOutputterFactory::quoteString)
                 .orElse("<no binding path>");
     }
 

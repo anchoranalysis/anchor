@@ -56,14 +56,14 @@ public class HelloWorldTask<S extends InputFromManager> extends TaskWithoutShare
             throws JobExecutionException {
         printMessage(params.getLogger().messageLogger());
     }
+    
+    @Override
+    public boolean hasVeryQuickPerInputExecution() {
+        return true;
+    }
 
     private void printMessage(MessageLogger logger) {
         logger.log("Hello World");
         logger.log("Consider replacing this task, with one appropriate to your intentions.");
-    }
-
-    @Override
-    public boolean hasVeryQuickPerInputExecution() {
-        return true;
     }
 }

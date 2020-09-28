@@ -47,7 +47,7 @@ class ManifestClashChecker {
         //  to the same folder (without at least having some kind of prefix, to prevent files
         // overwriting each other)
         Path experimentalRoot = manifestExperiment.getRootFolder().getRelativePath();
-        if (wouldClashWithExperimentRoot(experimentalRoot, boundOutput.getBoundFilePathPrefix())) {
+        if (wouldClashWithExperimentRoot(experimentalRoot, boundOutput.getPrefix())) {
             throw new JobExecutionException(
                     String.format(
                             "There is a clash between the bound-prefixer the root experiment directory.%n   Path for binding: %s%n   Root experiment directory: %s%nThey are writing to the same directory, without any prefix, and outputs may collide.",

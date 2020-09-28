@@ -30,14 +30,9 @@ import java.nio.file.Path;
 import java.util.Optional;
 import lombok.Getter;
 import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
-import org.anchoranalysis.io.bean.filepath.prefixer.FilePathPrefixer;
-import org.anchoranalysis.io.bean.filepath.prefixer.NamedPath;
-import org.anchoranalysis.io.error.FilePathPrefixerException;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
-import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerParams;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.manifest.ManifestFolderDescription;
-import org.anchoranalysis.io.manifest.ManifestRecorder;
 import org.anchoranalysis.io.manifest.folder.FolderWriteWithPath;
 import org.anchoranalysis.io.manifest.operationrecorder.DualWriterOperationRecorder;
 import org.anchoranalysis.io.manifest.operationrecorder.NullWriteOperationRecorder;
@@ -58,15 +53,15 @@ import org.anchoranalysis.io.output.writer.RecordingWriters;
  * <p>Further {@link OutputterChecked}s can be derived in sub-directories or with different
  * prefixes.
  * 
- * <p>A prefix can be associated with the outputter, which places a prefix (containing possibly
- * both sub-directory and file-name parts) on output file locations.
+ * <p>A prefix can be associated with the outputter, which prepends a path (containing possibly
+ * both sub-directory and file-name parts) on all outputs.
  *
  * @author Owen Feehan
  *
  */
 public class OutputterChecked {
 
-    @Getter private final FilePathPrefix boundFilePathPrefix;
+    @Getter private final FilePathPrefix prefix;
 
     private WriteOperationRecorder writeOperationRecorder;
 
@@ -78,9 +73,6 @@ public class OutputterChecked {
 
     /** Which outputs are enabled or not enabled. */
     @Getter private OutputEnabledRules outputsEnabled;
-    
-    /** The prefixer associated with this context. */
-    private Optional<FilePathPrefixer> prefixer;
     
     /** Records the names of all outputs written to, if defined. */
     private Optional<RecordedOutputs> recordedOutputs;
@@ -100,9 +92,9 @@ public class OutputterChecked {
      */
     public static OutputterChecked createForDirectoryPermissive(
             Path pathDirectory, boolean deleteExistingDirectory) throws BindFailedException {
-        return createFromOutputManager(
-                new OutputManager(),
+        return createWithPrefix(
                 new FilePathPrefix(pathDirectory),
+                new Permissive(),
                 new OutputWriteSettings(),
                 new NullWriteOperationRecorder(),
                 Optional.empty(),
@@ -112,7 +104,7 @@ public class OutputterChecked {
     /**
      * Creates a bound output-manager from an existing {@link OutputManager} with a prefix.
      *
-     * @param outputManager output-manager to determine what is included or not
+     * @param outputEnabled which outputs are enabled or not
      * @param prefix the prefix
      * @param settings associated settings
      * @param deleteExistingDirectory if true this directory if it already exists is deleted before
@@ -120,9 +112,9 @@ public class OutputterChecked {
      * @param recordedOutputs if defined, records output-names that are written / not-written in {@link OutputterChecked} (but not any sub-directories thereof)
      * @throws BindFailedException if a directory cannot be created at the intended path.
      */
-    public static OutputterChecked createFromOutputManager(
-            OutputManager outputManager,
+    public static OutputterChecked createWithPrefix(
             FilePathPrefix prefix,
+            OutputEnabledRules outputEnabled,
             OutputWriteSettings settings,
             WriteOperationRecorder writeOperationRecorder,
             Optional<RecordedOutputs> recordedOutputs,
@@ -132,20 +124,18 @@ public class OutputterChecked {
             prefix,
             writeOperationRecorder,
             new BoundDirectory(prefix.getFolderPath(), deleteExistingDirectory),
-            outputManager.getOutputsEnabled(),
-            Optional.of(outputManager.getFilePathPrefixer()),
+            outputEnabled,
             recordedOutputs,
             settings
         );
     }
 
     /**
-     * Constructor
+     * Creates using a parent-directory and a prefix.
      *
-     * @param prefix
-     * @param writeOperationRecorder
+     * @param prefix the prefix associated with this outputter
+     * @param writeOperationRecorder an entry for every outputted filr is written here
      * @param parentDirectory the parent-directory in which this {@link OutputterChecked} will create a new directory.
-     * @param prefixer the prefixer associated with this output-manager, if one is defined. otherwise the {@link #deriveFromInput} method will not operate.
      * @param recordedOutputs records the names of all outputs written to, if defined.
      * @param settings general settings for writing outputs.
      */
@@ -154,16 +144,14 @@ public class OutputterChecked {
             WriteOperationRecorder writeOperationRecorder,
             BoundDirectory parentDirectory,
             OutputEnabledRules outputsEnabled,
-            Optional<FilePathPrefixer> prefixer,
             Optional<RecordedOutputs> recordedOutputs,
             OutputWriteSettings settings)
             throws BindFailedException {
 
-        this.boundFilePathPrefix = prefix;
+        this.prefix = prefix;
         this.writeOperationRecorder = writeOperationRecorder;
         this.settings = settings;
         this.outputsEnabled = outputsEnabled;
-        this.prefixer = prefixer;
         this.recordedOutputs = recordedOutputs;
         
         this.directory = parentDirectory.bindToDirectory(prefix.getFolderPath());
@@ -181,40 +169,27 @@ public class OutputterChecked {
     }
 
     /** 
-     * Derives a {@link OutputterChecked} from a file that is somehow relative to the root directory.
+     * Creates a {@link OutputterChecked} with a changed prefix and {@link WriteOperationRecorder}.
      * 
-     * @param path the full path of an input with an associated-name
+     * <p>All other attributes are identical to the {@link OutputterChecked} on which this method is called.
+     * 
+     * @param prefixToAssign prefix to assign
+     * @param writeOperationRecorderToAssign writer operator to use for the newly created {@link OutputterChecked}.
+     * @return a newly created identical {@link OutputterChecked} apart from the two aforementioned changes.
+     * @throws BindFailedException 
      */
-    public OutputterChecked deriveFromInput(
-            NamedPath path,
-            String experimentIdentifier,
-            Optional<ManifestRecorder> manifestRecorder,
-            Optional<ManifestRecorder> experimentalManifestRecorder,
-            FilePathPrefixerParams prefixerParams)
-            throws BindFailedException {
-
-        FilePathPrefixer prefixerSelected = prefixer.orElseThrow( () ->
-            new BindFailedException("The deriveFromInput operation is not supported on this BoundOutputManager, only on the manager associated with the root directory.") );
-        
-        try {
-            FilePathPrefix prefix = new PrefixForInput(prefixerSelected, prefixerParams).prefixForFile(
-                            path,
-                            experimentIdentifier,
-                            manifestRecorder,
-                            experimentalManifestRecorder
-                            );
-            return new OutputterChecked(
-                    prefix,
-                    writeRecorder(manifestRecorder),
-                    directory,
-                    outputsEnabled,
-                    Optional.empty(),   // The prefixer is no longer defined on sub-directories
-                    recordedOutputs,
-                    settings
-            );
-        } catch (FilePathPrefixerException e) {
-            throw new BindFailedException(e);
-        }
+    public OutputterChecked changePrefix(
+        FilePathPrefix prefixToAssign,
+        WriteOperationRecorder writeOperationRecorderToAssign
+    ) throws BindFailedException {
+        return new OutputterChecked(
+                prefixToAssign,
+                writeOperationRecorderToAssign,
+                directory,
+                outputsEnabled,
+                recordedOutputs,
+                settings
+        );
     }
 
     /**
@@ -240,7 +215,6 @@ public class OutputterChecked {
                     writeFolderToOperationRecorder(pathSubdirectory, manifestDescription, manifestFolder),
                     directory,
                     new Permissive(), // Allow all outputs in the sub-directory
-                    Optional.empty(),   // The prefixer is no longer defined on sub-directories
                     Optional.empty(),   // Output-names are no longer recorded on sub-directories
                     settings);
         } catch (BindFailedException e) {
@@ -263,15 +237,15 @@ public class OutputterChecked {
     public void writeFileToOperationRecorder(
             String outputName, Path path, ManifestDescription manifestDescription, String index) {
         writeOperationRecorder.write(
-                outputName, manifestDescription, boundFilePathPrefix.relativePath(path), index);
+                outputName, manifestDescription, prefix.relativePath(path), index);
     }
 
     public Path getOutputFolderPath() {
-        return boundFilePathPrefix.getFolderPath();
+        return prefix.getFolderPath();
     }
 
     public Path outFilePath(String filePathRelative) {
-        return boundFilePathPrefix.outFilePath(filePathRelative);
+        return prefix.outFilePath(filePathRelative);
     }
 
     /**
@@ -290,18 +264,11 @@ public class OutputterChecked {
         if (manifestFolder.isPresent()) {
             // Assume the folder are writing to has no path
             return writeOperationRecorder.writeFolder(
-                    boundFilePathPrefix.relativePath(path),
+                    prefix.relativePath(path),
                     manifestDescription,
                     manifestFolder.get());
         } else {
             return writeOperationRecorder;
         }
-    }
-    
-    private static WriteOperationRecorder writeRecorder(
-            Optional<ManifestRecorder> manifestRecorder) {
-        Optional<WriteOperationRecorder> opt =
-                manifestRecorder.map(ManifestRecorder::getRootFolder);
-        return opt.orElse(new NullWriteOperationRecorder());
     }
 }

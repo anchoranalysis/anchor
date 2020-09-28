@@ -31,10 +31,7 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
-import org.anchoranalysis.io.bean.filepath.prefixer.NamedPath;
-import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerParams;
 import org.anchoranalysis.io.manifest.ManifestFolderDescription;
-import org.anchoranalysis.io.manifest.ManifestRecorder;
 import org.anchoranalysis.io.manifest.folder.FolderWritePhysical;
 import org.anchoranalysis.io.manifest.operationrecorder.WriteOperationRecorder;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
@@ -137,14 +134,6 @@ public class Outputter {
 
     public OutputEnabledRules outputsEnabled() {
         return delegate.getOutputsEnabled();
-    }
-
-    public OutputterChecked deriveFromInput(NamedPath path, String experimentIdentifier,
-            Optional<ManifestRecorder> manifestRecorder,
-            Optional<ManifestRecorder> experimentalManifestRecorder,
-            FilePathPrefixerParams prefixerParams) throws BindFailedException {
-        return delegate.deriveFromInput(path, experimentIdentifier, manifestRecorder,
-                experimentalManifestRecorder, prefixerParams);
     }
 
     /**

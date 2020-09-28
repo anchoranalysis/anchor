@@ -40,34 +40,36 @@ import org.anchoranalysis.io.filepath.FilePathToUnixStyleConverter;
 /**
  * Calculates the "difference" between a path and a base
  *
- * <p>i.e. if a base is <code>c:\root\somePrefix_</code> and a file is <code>
+ * <p>e.g. if a base is <code>c:\root\somePrefix_</code> and a file is <code>
  * c:\root\somePrefix_someFile.xml</code> then the difference is <code>_someFile.xml</code>
  *
- * <p>The difference is recorded separately as folder and filename components
+ * <p>The difference is recorded separately as directory and filename components
  *
  * <p>Internally, both paths are converted to absolute paths and URIs.
  *
  * @author Owen Feehan
  */
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-public class PathDifferenceFromBase {
+public class PathDifference {
 
+    /** The file-name component of the difference, if it exists. */
     @Getter private final String filename;
 
-    @Getter private final Optional<Path> folder;
+    /** The directory component of the difference, if it exists. */
+    @Getter private final Optional<Path> directory;
 
     /**
      * Finds the difference between a path and a base
      *
-     * @param baseFolderPath path to a base folder
+     * @param baseDirectoryPath path to a base directory
      * @param filePath the path to resolve
      * @throws AnchorIOException if the canonical file cannot be found
      */
-    public static PathDifferenceFromBase differenceFrom(Path baseFolderPath, Path filePath)
+    public static PathDifference differenceFrom(Path baseDirectoryPath, Path filePath)
             throws AnchorIOException {
 
         try {
-            String base = baseFolderPath.toFile().getCanonicalFile().toURI().getPath();
+            String base = baseDirectoryPath.toFile().getCanonicalFile().toURI().getPath();
             String all = filePath.toFile().getCanonicalFile().toURI().getPath();
 
             // As we've converted to URIs the seperator is always a forward slash
@@ -78,18 +80,18 @@ public class PathDifferenceFromBase {
     }
 
     /**
-     * Performs the difference
+     * Performs the difference.
      *
-     * <p>Assumes base is a folder. Relies on this.
+     * <p>Assumes base is a directory. Relies on this.
      *
-     * @param baseFolderPath the base-folder as a string
+     * @param baseDirectoryPath the base-directory as a string
      * @param entirePath the entire path as a string
      */
-    private static PathDifferenceFromBase calculateDifference(
-            String baseFolderPath, String entirePath) {
+    private static PathDifference calculateDifference(
+            String baseDirectoryPath, String entirePath) {
 
         // Convert the base, and all to forward slashes only
-        String base = FilePathToUnixStyleConverter.toStringUnixStyle(baseFolderPath);
+        String base = FilePathToUnixStyleConverter.toStringUnixStyle(baseDirectoryPath);
         String all = FilePathToUnixStyleConverter.toStringUnixStyle(entirePath);
 
         // if base is non-empty, but doesn't end in a directory separator we add one
@@ -109,22 +111,22 @@ public class PathDifferenceFromBase {
     }
 
     /**
-     * The folder (if it exists) and filename combined.
+     * The directory-component (if it exists) and filename-component combined.
      *
      * @return the combined-path
      */
     public Path combined() {
-        if (folder.isPresent()) {
-            return folder.get().resolve(getFilename());
+        if (directory.isPresent()) {
+            return directory.get().resolve(getFilename());
         } else {
             return Paths.get(getFilename());
         }
     }
 
-    private static PathDifferenceFromBase differenceFromRemainder(String remainder) {
+    private static PathDifference differenceFromRemainder(String remainder) {
         File remainderFile = new File(remainder);
 
-        return new PathDifferenceFromBase(
+        return new PathDifference(
                 remainderFile.getName(),
                 Optional.ofNullable(remainderFile.getParentFile()).map(File::toPath));
     }

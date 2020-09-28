@@ -96,14 +96,14 @@ public class FilePathDifferenceFromFolderPathTest {
     private void test(
             String baseFolderPath, String filePath, String expectedFolder, String expectedFilename)
             throws AnchorIOException {
-        PathDifferenceFromBase fdd = test(baseFolderPath, filePath);
-        assertTrue(fdd.getFolder().equals(Optional.of(resolve(expectedFolder))));
+        PathDifference fdd = test(baseFolderPath, filePath);
+        assertTrue(fdd.getDirectory().equals(Optional.of(resolve(expectedFolder))));
         assertTrue(fdd.getFilename().equals(expectedFilename));
     }
 
-    private PathDifferenceFromBase test(String baseFolderPath, String filePath)
+    private PathDifference test(String baseFolderPath, String filePath)
             throws AnchorIOException {
-        return PathDifferenceFromBase.differenceFrom(resolve(baseFolderPath), resolve(filePath));
+        return PathDifference.differenceFrom(resolve(baseFolderPath), resolve(filePath));
     }
 
     private Path resolve(String path) {

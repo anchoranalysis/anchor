@@ -77,9 +77,9 @@ public class OutputManager extends AnchorBean<OutputManager> {
             FilePathPrefix prefix = filePathPrefixer.rootFolderPrefix(experimentIdentifier, params);
             writeOperationRecorder.init(prefix.getFolderPath());
 
-            return OutputterChecked.createFromOutputManager(
-                    this,
+            return OutputterChecked.createWithPrefix(
                     prefix,
+                    getOutputsEnabled(),
                     getOutputWriteSettings(),
                     writeOperationRecorder.getRootFolder(),
                     recordedOutputs,

@@ -144,6 +144,7 @@ public abstract class OutputExperiment extends Experiment {
                     experimentId,
                     Optional.of(experimentalManifest),
                     rootOutputter,
+                    getOutput().getFilePathPrefixer(),
                     createLogger(rootOutputter, expArgs),
                     useDetailedLogging());
         } catch (FilePathPrefixerException e) {

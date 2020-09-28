@@ -103,7 +103,7 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
 
         // Bind an outputter for the task
         OutputterChecked outputterTask =
-                HelperBindOutputManager.createOutputterForTask(
+                TaskOutputterFactory.createOutputterForTask(
                         paramsUnbound.getInputObject(),
                         Optional.of(manifestTask),
                         paramsUnbound.getParametersExperiment());
@@ -165,7 +165,7 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
 
         ErrorReporter errorReporterJob = new ErrorReporterForTask(loggerJob);
 
-        // We initialise the output manager
+        // We initialize the output manager
         Outputter outputterTask = new Outputter(outputterTaskChecked, errorReporterJob);
 
         // We create new parameters bound specifically to the job
