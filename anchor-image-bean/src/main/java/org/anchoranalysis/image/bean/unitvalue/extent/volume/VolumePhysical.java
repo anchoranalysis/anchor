@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-image-io
+ * anchor-image-bean
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -24,44 +24,40 @@
  * #L%
  */
 
-package org.anchoranalysis.image.io.bean.generator;
+package org.anchoranalysis.image.bean.unitvalue.extent.volume;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.image.bean.spatial.arrange.ArrangeStackBean;
-import org.anchoranalysis.image.io.generator.raster.RasterGenerator;
+import org.anchoranalysis.image.bean.nonbean.error.UnitValueException;
+import org.anchoranalysis.image.extent.UnitConverter;
 
-/**
- * Combines a number of generators of Raster images by tiling their outputs together
- *
- * <p>The order of generators is left to right, then top to bottom
- *
- * @author Owen Feehan
- * @param <T> iteration-type
- */
-public class CombineRasterGenerator<T> extends AnchorBean<CombineRasterGenerator<T>> {
+// Measures either area or volume (depending if the do3D flag is employed)
+public class VolumePhysical extends UnitValueVolume {
 
-    // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private ArrangeStackBean arrange;
+    // START VALUE
+    @BeanField @Getter @Setter private double value; // value in metres
 
-    // A list of all generators to be tiled (left to right, then top to bottom)
-    @BeanField @Getter @Setter private List<RasterGenerator<T>> generatorList = new ArrayList<>();
-    // END BEAN PROPERTIES
+    @BeanField @Getter @Setter private String unitType = "";
+    // END VALUE
 
-    public void add(RasterGenerator<T> generator) {
-        generatorList.add(generator);
-    }
+    @Override
+    public double resolveToVoxels(Optional<UnitConverter> unitConverter) throws UnitValueException {
+        if (!unitConverter.isPresent()) {
+            throw new UnitValueException(
+                    "An image resolution is required to calculate physical-volume but it is missing");
+        }
 
-    public RasterGenerator<T> createGenerator() {
-        return new CombineGenerator<>(arrange, generatorList);
+        return unitConverter.get().fromPhysicalVolume(value, unitType);
     }
 
     @Override
-    public String describeBean() {
-        return getBeanName();
+    public String toString() {
+        if (unitType != null && !unitType.isEmpty()) {
+            return String.format("%.2f%s", value, unitType);
+        } else {
+            return String.format("%.2f", value);
+        }
     }
 }

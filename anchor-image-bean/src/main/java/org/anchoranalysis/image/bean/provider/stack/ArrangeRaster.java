@@ -34,8 +34,8 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.provider.Provider;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.image.bean.arrangeraster.ArrangeRasterBean;
-import org.anchoranalysis.image.bean.nonbean.arrangeraster.RasterArranger;
+import org.anchoranalysis.image.bean.nonbean.spatial.arrange.RasterArranger;
+import org.anchoranalysis.image.bean.spatial.arrange.ArrangeStackBean;
 import org.anchoranalysis.image.channel.factory.ChannelFactoryByte;
 import org.anchoranalysis.image.channel.factory.ChannelFactoryShort;
 import org.anchoranalysis.image.channel.factory.ChannelFactorySingleType;
@@ -51,7 +51,7 @@ import org.anchoranalysis.image.stack.rgb.RGBStack;
 public class ArrangeRaster extends StackProvider {
 
     // START BEAN
-    @BeanField @Getter @Setter private ArrangeRasterBean arrange;
+    @BeanField @Getter @Setter private ArrangeStackBean arrange;
 
     /** If set, ensures every stack is converted into 3 channels */
     @BeanField @Getter @Setter private boolean forceRGB = false;

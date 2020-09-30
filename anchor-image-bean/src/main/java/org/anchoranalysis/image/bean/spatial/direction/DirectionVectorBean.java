@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-image-io
+ * anchor-image-bean
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -23,25 +23,23 @@
  * THE SOFTWARE.
  * #L%
  */
+package org.anchoranalysis.image.bean.spatial.direction;
 
-package org.anchoranalysis.image.io.bean;
+import org.anchoranalysis.bean.AnchorBean;
+import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.image.orientation.DirectionVector;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-import org.anchoranalysis.bean.xml.RegisterBeanFactories;
-import org.anchoranalysis.bean.xml.factory.IndirectlyFromListBeanFactory;
-import org.anchoranalysis.bean.xml.factory.ListBeanFactory;
-import org.anchoranalysis.image.bean.spatial.arrange.Cell;
-import org.anchoranalysis.image.io.channel.NamedEntriesCreator;
+/**
+ * A bean that creates a {@link DirectionVector}
+ *
+ * @author Owen Feehan
+ */
+public abstract class DirectionVectorBean extends AnchorBean<DirectionVectorBean> {
 
-// An externally loadable component of the system
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-public final class RegisterBeanFactoriesIO {
-
-    public static void registerBeanFactories() {
-        RegisterBeanFactories.register(
-                "imgChannelMap", new IndirectlyFromListBeanFactory<>(new NamedEntriesCreator()));
-        RegisterBeanFactories.register(
-                "arrangeRasterCellList", new ListBeanFactory<Cell>());
-    }
+    /**
+     * Creates a vector in a particular direction
+     *
+     * @return the created vector
+     */
+    public abstract DirectionVector createVector() throws CreateException;
 }

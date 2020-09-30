@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-image-io
+ * anchor-image-bean
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -24,24 +24,10 @@
  * #L%
  */
 
-package org.anchoranalysis.image.io.bean;
+package org.anchoranalysis.image.bean.spatial.arrange;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-import org.anchoranalysis.bean.xml.RegisterBeanFactories;
-import org.anchoranalysis.bean.xml.factory.IndirectlyFromListBeanFactory;
-import org.anchoranalysis.bean.xml.factory.ListBeanFactory;
-import org.anchoranalysis.image.bean.spatial.arrange.Cell;
-import org.anchoranalysis.image.io.channel.NamedEntriesCreator;
+import org.anchoranalysis.bean.AnchorBean;
+import org.anchoranalysis.image.bean.nonbean.spatial.arrange.ArrangeStack;
 
-// An externally loadable component of the system
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-public final class RegisterBeanFactoriesIO {
-
-    public static void registerBeanFactories() {
-        RegisterBeanFactories.register(
-                "imgChannelMap", new IndirectlyFromListBeanFactory<>(new NamedEntriesCreator()));
-        RegisterBeanFactories.register(
-                "arrangeRasterCellList", new ListBeanFactory<Cell>());
-    }
-}
+public abstract class ArrangeStackBean extends AnchorBean<ArrangeStackBean>
+        implements ArrangeStack {}

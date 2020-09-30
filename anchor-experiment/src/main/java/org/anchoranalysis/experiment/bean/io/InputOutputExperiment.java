@@ -60,7 +60,7 @@ import org.anchoranalysis.io.output.bean.OutputManager;
  * <table>
  * <caption></caption>
  * <thead>
- * <tr><th>Output Name</th><th>Enabled by default?</th><th>Description</th></tr>
+ * <tr><th>Output Name</th><th>Default?</th><th>Description</th></tr>
  * </thead>
  * <tbody>
  * <tr><td>experiment_log</td><td>yes</td><td>A textual log file for non-job-specific messages, one for the entire experiment.</td></tr>

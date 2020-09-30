@@ -23,5 +23,5 @@
  * THE SOFTWARE.
  * #L%
  */
-/** Beans to define space in an image such as size and padding. */
+/** Beans to define entities or operate that consider Euclidian space. */
 package org.anchoranalysis.image.bean.spatial;

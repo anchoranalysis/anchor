@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-image-io
+ * anchor-image-bean
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -24,44 +24,35 @@
  * #L%
  */
 
-package org.anchoranalysis.image.io.bean.generator;
+package org.anchoranalysis.image.bean.spatial.direction;
 
-import java.util.ArrayList;
-import java.util.List;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.image.bean.spatial.arrange.ArrangeStackBean;
-import org.anchoranalysis.image.io.generator.raster.RasterGenerator;
+import org.anchoranalysis.image.orientation.DirectionVector;
 
-/**
- * Combines a number of generators of Raster images by tiling their outputs together
- *
- * <p>The order of generators is left to right, then top to bottom
- *
- * @author Owen Feehan
- * @param <T> iteration-type
- */
-public class CombineRasterGenerator<T> extends AnchorBean<CombineRasterGenerator<T>> {
+@NoArgsConstructor
+@AllArgsConstructor
+public class VectorInDirection extends DirectionVectorBean {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private ArrangeStackBean arrange;
+    @BeanField @Getter @Setter private double x = 0;
 
-    // A list of all generators to be tiled (left to right, then top to bottom)
-    @BeanField @Getter @Setter private List<RasterGenerator<T>> generatorList = new ArrayList<>();
+    @BeanField @Getter @Setter private double y = 0;
+
+    @BeanField @Getter @Setter private double z = 0;
     // END BEAN PROPERTIES
 
-    public void add(RasterGenerator<T> generator) {
-        generatorList.add(generator);
-    }
-
-    public RasterGenerator<T> createGenerator() {
-        return new CombineGenerator<>(arrange, generatorList);
+    public VectorInDirection(DirectionVector vector) {
+        this.x = vector.x();
+        this.y = vector.y();
+        this.z = vector.z();
     }
 
     @Override
-    public String describeBean() {
-        return getBeanName();
+    public DirectionVector createVector() {
+        return new DirectionVector(x, y, z);
     }
 }

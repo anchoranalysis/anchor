@@ -31,9 +31,9 @@ import java.util.List;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.bean.provider.Provider;
-import org.anchoranalysis.image.bean.arrangeraster.ArrangeRasterOverlay;
-import org.anchoranalysis.image.bean.arrangeraster.ArrangeRasterTile;
 import org.anchoranalysis.image.bean.provider.stack.ArrangeRaster;
+import org.anchoranalysis.image.bean.spatial.arrange.Overlay;
+import org.anchoranalysis.image.bean.spatial.arrange.Tile;
 import org.anchoranalysis.image.io.bean.generator.StringRasterGenerator;
 import org.anchoranalysis.image.io.bean.stack.StackProviderWithLabel;
 import org.anchoranalysis.image.io.bean.stack.provider.GenerateString;
@@ -60,11 +60,11 @@ public class TileRasters {
             spar.getList().add(addGenerateString(provider, createShort, scaleLabel, expandLabelZ));
         }
 
-        ArrangeRasterTile art = new ArrangeRasterTile();
+        Tile art = new Tile();
         art.setNumCols(numCols);
         art.setNumRows((int) Math.ceil(((double) list.size()) / numCols));
 
-        ArrangeRasterOverlay arOverlay = new ArrangeRasterOverlay();
+        Overlay arOverlay = new Overlay();
         arOverlay.setHorizontalAlign("left");
         arOverlay.setVerticalAlign("top");
         arOverlay.setZAlign("repeat");

@@ -33,8 +33,8 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.core.index.SetOperationFailedException;
-import org.anchoranalysis.image.bean.arrangeraster.ArrangeRasterBean;
-import org.anchoranalysis.image.bean.nonbean.arrangeraster.RasterArranger;
+import org.anchoranalysis.image.bean.nonbean.spatial.arrange.RasterArranger;
+import org.anchoranalysis.image.bean.spatial.arrange.ArrangeStackBean;
 import org.anchoranalysis.image.channel.factory.ChannelFactoryByte;
 import org.anchoranalysis.image.io.generator.raster.RasterGenerator;
 import org.anchoranalysis.image.io.rasterwriter.RasterWriteOptions;
@@ -48,7 +48,7 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 @AllArgsConstructor
 class CombineGenerator<T> extends RasterGenerator<T> {
 
-    private final ArrangeRasterBean arrangeRaster;
+    private final ArrangeStackBean arrangeRaster;
     private final List<RasterGenerator<T>> generators;
 
     @Override

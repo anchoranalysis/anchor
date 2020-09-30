@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-image-io
+ * anchor-image-bean
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -24,44 +24,41 @@
  * #L%
  */
 
-package org.anchoranalysis.image.io.bean.generator;
+package org.anchoranalysis.image.bean.unitvalue.distance;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.bean.AnchorBean;
+import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.image.bean.spatial.arrange.ArrangeStackBean;
-import org.anchoranalysis.image.io.generator.raster.RasterGenerator;
+import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.image.extent.SpatialUnits;
+import org.anchoranalysis.image.extent.UnitConverter;
+import org.anchoranalysis.image.orientation.DirectionVector;
 
-/**
- * Combines a number of generators of Raster images by tiling their outputs together
- *
- * <p>The order of generators is left to right, then top to bottom
- *
- * @author Owen Feehan
- * @param <T> iteration-type
- */
-public class CombineRasterGenerator<T> extends AnchorBean<CombineRasterGenerator<T>> {
+// Measures either area or volume (depending if the do3D flag is employed)
+public class DistancePhysical extends UnitValueDistance {
+
+    /** */
+    private static final long serialVersionUID = 1L;
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private ArrangeStackBean arrange;
+    @BeanField @Getter @Setter private double value;
 
-    // A list of all generators to be tiled (left to right, then top to bottom)
-    @BeanField @Getter @Setter private List<RasterGenerator<T>> generatorList = new ArrayList<>();
+    @BeanField @AllowEmpty @Getter @Setter private String unitType;
     // END BEAN PROPERTIES
 
-    public void add(RasterGenerator<T> generator) {
-        generatorList.add(generator);
-    }
-
-    public RasterGenerator<T> createGenerator() {
-        return new CombineGenerator<>(arrange, generatorList);
-    }
-
     @Override
-    public String describeBean() {
-        return getBeanName();
+    public double resolve(Optional<UnitConverter> unitConverter, DirectionVector direction)
+            throws OperationFailedException {
+
+        if (!unitConverter.isPresent()) {
+            throw new OperationFailedException(
+                    "An image-resolution is missing, so cannot calculate physical distances");
+        }
+
+        double valueAsBase = SpatialUnits.convertFromUnits(value, unitType);
+
+        return unitConverter.get().fromPhysicalDistance(valueAsBase, direction);
     }
 }

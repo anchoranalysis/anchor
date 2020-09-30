@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-image-io
+ * anchor-image-bean
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -24,24 +24,52 @@
  * #L%
  */
 
-package org.anchoranalysis.image.io.bean;
+package org.anchoranalysis.image.bean.nonbean.spatial.arrange;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-import org.anchoranalysis.bean.xml.RegisterBeanFactories;
-import org.anchoranalysis.bean.xml.factory.IndirectlyFromListBeanFactory;
-import org.anchoranalysis.bean.xml.factory.ListBeanFactory;
-import org.anchoranalysis.image.bean.spatial.arrange.Cell;
-import org.anchoranalysis.image.io.channel.NamedEntriesCreator;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import lombok.RequiredArgsConstructor;
+import lombok.Value;
+import lombok.experimental.Accessors;
+import org.anchoranalysis.image.extent.Extent;
+import org.anchoranalysis.image.extent.box.BoundingBox;
 
-// An externally loadable component of the system
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-public final class RegisterBeanFactoriesIO {
+/**
+ * Describes a set of bounding boxes on top of a plane
+ *
+ * @author Owen Feehan
+ */
+@RequiredArgsConstructor
+@Value
+@Accessors(fluent = true)
+public class BoundingBoxesOnPlane implements Iterable<BoundingBox> {
 
-    public static void registerBeanFactories() {
-        RegisterBeanFactories.register(
-                "imgChannelMap", new IndirectlyFromListBeanFactory<>(new NamedEntriesCreator()));
-        RegisterBeanFactories.register(
-                "arrangeRasterCellList", new ListBeanFactory<Cell>());
+    // START REQUIRED ARGUMENTS
+    private final Extent extent;
+    // END REQUIRED ARGUMENTS
+
+    private List<BoundingBox> list = new ArrayList<>();
+
+    public BoundingBoxesOnPlane(Extent extent, BoundingBox box) {
+        this(extent);
+        add(box);
+    }
+
+    public void add(BoundingBox boundingBox) {
+        list.add(boundingBox);
+    }
+
+    public BoundingBox get(int index) {
+        return list.get(index);
+    }
+
+    public Iterator<BoundingBox> boxIterator() {
+        return list.iterator();
+    }
+
+    @Override
+    public Iterator<BoundingBox> iterator() {
+        return boxIterator();
     }
 }

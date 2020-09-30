@@ -49,7 +49,7 @@ import org.anchoranalysis.io.output.outputter.InputOutputContext;
  * <table>
  * <caption></caption>
  * <thead>
- * <tr><th>Output Name</th><th>Enabled by default?</th><th>Description</th></tr>
+ * <tr><th>Output Name</th><th>Default?</th><th>Description</th></tr>
  * </thead>
  * <tbody>
  * <tr><td>features</td><td>yes</td><td>A CSV of calculated-features for objects.</td></tr>

@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-image-io
+ * anchor-image-bean
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -23,25 +23,29 @@
  * THE SOFTWARE.
  * #L%
  */
+package org.anchoranalysis.image.bean.spatial.direction;
 
-package org.anchoranalysis.image.io.bean;
+import lombok.Getter;
+import lombok.Setter;
+import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.axis.AxisTypeConverter;
+import org.anchoranalysis.core.axis.AxisTypeException;
+import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.image.orientation.DirectionVector;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-import org.anchoranalysis.bean.xml.RegisterBeanFactories;
-import org.anchoranalysis.bean.xml.factory.IndirectlyFromListBeanFactory;
-import org.anchoranalysis.bean.xml.factory.ListBeanFactory;
-import org.anchoranalysis.image.bean.spatial.arrange.Cell;
-import org.anchoranalysis.image.io.channel.NamedEntriesCreator;
+public class AxisAlignedUnitVector extends DirectionVectorBean {
 
-// An externally loadable component of the system
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-public final class RegisterBeanFactoriesIO {
+    // START BEAN PROPERTIES
+    /** Which axis the unit-vector will align with. {@code x} or {@code y} or {@code z} */
+    @BeanField @Getter @Setter private String axis;
+    // END BEAN PROPRERTIES
 
-    public static void registerBeanFactories() {
-        RegisterBeanFactories.register(
-                "imgChannelMap", new IndirectlyFromListBeanFactory<>(new NamedEntriesCreator()));
-        RegisterBeanFactories.register(
-                "arrangeRasterCellList", new ListBeanFactory<Cell>());
+    @Override
+    public DirectionVector createVector() throws CreateException {
+        try {
+            return new DirectionVector(AxisTypeConverter.createFromString(axis));
+        } catch (AxisTypeException e) {
+            throw new CreateException(e);
+        }
     }
 }

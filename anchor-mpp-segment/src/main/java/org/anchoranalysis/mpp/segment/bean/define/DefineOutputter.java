@@ -55,7 +55,7 @@ import org.anchoranalysis.mpp.mark.Mark;
  * <table>
  * <caption></caption>
  * <thead>
- * <tr><th>Output Name</th><th>Enabled by default?</th><th>Description</th></tr>
+ * <tr><th>Output Name</th><th>Default?</th><th>Description</th></tr>
  * </thead>
  * <tbody>
  * <tr><td>stacks</td><td>yes</td><td>Image-stacks that are produced.</td></tr>

@@ -56,8 +56,8 @@ import org.apache.commons.lang.time.StopWatch;
 /**
  * A task which performs some kind of processing on a specific input-object
  *
- * <p>We distinguish between ParametersUnbound which are parameters generally used for tasks in an
- * experiment and ParametersBound which is created in a further step, when several of these
+ * <p>{@link ParametersUnbound} which are parameters generally used for tasks in an
+ * experiment, whereas {@link InputBound} is created in a further step, when several of these
  * parameters are replaced with new more specific-objects for the specific task.
  *
  * <p>e.g. we move from a logger and manifest for the experiment as a whole, to a logger and
@@ -68,11 +68,11 @@ import org.apache.commons.lang.time.StopWatch;
  * <table>
  * <caption></caption>
  * <thead>
- * <tr><th>Output Name</th><th>Enabled by default?</th><th>Description</th></tr>
+ * <tr><th>Output Name</th><th>Default?</th><th>Description</th></tr>
  * </thead>
  * <tbody>
  * <tr><td>manifest</td><td>no</td><td>A XML and Java serialized <i>.ser</i> file describing all files outputted.</td></tr>
- * <tr><td rowspan="3">And the typically also the outputs from {@link InputOutputExperiment}.</td></tr>
+ * <tr><td rowspan="3">outputs from {@link InputOutputExperiment}.</td></tr>
  * </tbody>
  * </table>
  *
