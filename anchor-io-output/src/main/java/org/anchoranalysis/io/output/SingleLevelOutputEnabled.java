@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-feature
+ * anchor-io-output
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -23,5 +23,15 @@
  * THE SOFTWARE.
  * #L%
  */
-/** Features shared for referencing among calculations. */
-package org.anchoranalysis.feature.shared;
+package org.anchoranalysis.io.output;
+
+public interface SingleLevelOutputEnabled {
+
+    /**
+     * Is a particular a particular output-enabled?
+     *
+     * @param outputName the name of the output
+     * @return true iff the output is allowed
+     */
+    boolean isOutputEnabled(String outputName);
+}

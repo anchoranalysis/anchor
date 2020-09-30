@@ -41,13 +41,10 @@ import org.anchoranalysis.experiment.log.StatefulMessageLogger;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.error.FilePathPrefixerException;
-import org.anchoranalysis.io.generator.text.StringGenerator;
-import org.anchoranalysis.io.generator.xml.XMLConfigurationWrapperGenerator;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
-import org.anchoranalysis.io.output.MultiLevelOutputEnabled;
+import org.anchoranalysis.io.output.OutputEnabledMutable;
 import org.anchoranalysis.io.output.bean.OutputManager;
 import org.anchoranalysis.io.output.outputter.BindFailedException;
-import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
 import org.anchoranalysis.io.output.writer.RecordedOutputs;
 import org.apache.commons.lang.time.StopWatch;
@@ -59,15 +56,12 @@ import org.apache.commons.lang.time.StopWatch;
  */
 public abstract class OutputExperiment extends Experiment {
 
-    private static final String OUTPUT_NAME_CONFIG_COPY = "config";
-    private static final String OUTPUT_NAME_EXECUTION_TIME = "executionTime";
-
     // START BEAN PROPERTIES
     /** The output-manager that specifies how/where/which elements occur duing outputting. */
     @BeanField @Getter @Setter private OutputManager output;
 
     /**
-     * Where log messages that <b>do not<b> pertain to a specific job (input) appear.
+     * Where log messages that <b>do not</b> pertain to a specific job (input) appear.
      *
      * <p>Note that in the case of a {@link InputOutputExperiment} an additional log will be created
      * for each specific job.
@@ -131,7 +125,7 @@ public abstract class OutputExperiment extends Experiment {
      *
      * @return the default rules if they exist.
      */
-    protected abstract Optional<MultiLevelOutputEnabled> defaultOutputs();
+    protected abstract Optional<OutputEnabledMutable> defaultOutputs();
 
     private void doExperimentWithParams(ParametersExperiment params)
             throws ExperimentExecutionException {
@@ -197,37 +191,16 @@ public abstract class OutputExperiment extends Experiment {
         params.getLoggerExperiment().start();
         OutputExperimentLogHelper.maybeLogStart(params);
 
-        writeConfigCopy(params.getOutputter());
-
         if (!params.getOutputter().getChecked().getSettings().hasBeenInit()) {
             throw new ExperimentExecutionException("Experiment has not been initialized");
         }
     }
 
     private void tidyUpAfterExecution(ParametersExperiment params, StopWatch stopWatchExperiment) {
-        writeExecutionTime(params.getOutputter(), stopWatchExperiment);
 
         // Outputs after processing
         stopWatchExperiment.stop();
 
         OutputExperimentLogHelper.maybeLogCompleted(recordedOutputs, params, stopWatchExperiment);
-    }
-
-    /** Maybe writes a copy of a configuration */
-    private void writeConfigCopy(Outputter rootOutputter) {
-        rootOutputter
-                .writerSelective()
-                .write(
-                        OUTPUT_NAME_CONFIG_COPY,
-                        () -> new XMLConfigurationWrapperGenerator(getXMLConfiguration()));
-    }
-
-    /** Maybe writes the execution time to the filesystem */
-    private void writeExecutionTime(Outputter rootOutputter, StopWatch stopWatchExperiment) {
-        rootOutputter
-                .writerSelective()
-                .write(
-                        OUTPUT_NAME_EXECUTION_TIME,
-                        () -> new StringGenerator(Long.toString(stopWatchExperiment.getTime())));
     }
 }

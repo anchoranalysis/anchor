@@ -50,16 +50,16 @@ public abstract class RasterTask extends TaskWithoutSharedState<NamedChannelsInp
     public void doJobOnInput(InputBound<NamedChannelsInput, NoSharedState> params)
             throws JobExecutionException {
 
-        NamedChannelsInput inputObject = params.getInputObject();
+        NamedChannelsInput input = params.getInput();
         Outputter outputter = params.getOutputter();
 
         try {
-            int numSeries = inputObject.numberSeries();
+            int numberSeries = input.numberSeries();
 
             startSeries(outputter, params.getLogger().errorReporter());
 
-            for (int s = 0; s < numSeries; s++) {
-                doStack(inputObject, s, numSeries, params.context());
+            for (int s = 0; s < numberSeries; s++) {
+                doStack(input, s, numberSeries, params.context());
             }
 
             endSeries(outputter);
@@ -75,16 +75,16 @@ public abstract class RasterTask extends TaskWithoutSharedState<NamedChannelsInp
     /**
      * Processes one stack from a series
      *
-     * @param inputObject the input-object corresponding to this stack (a set of named-channels)
+     * @param input the input-object corresponding to this stack (a set of named-channels)
      * @param seriesIndex the index that is being currently processed from the series
-     * @param numSeries the total number of images in the series (constant for a given task)
+     * @param numberSeries the total number of images in the series (constant for a given task)
      * @param context IO context
      * @throws JobExecutionException
      */
     public abstract void doStack(
-            NamedChannelsInput inputObject,
+            NamedChannelsInput input,
             int seriesIndex,
-            int numSeries,
+            int numberSeries,
             InputOutputContext context)
             throws JobExecutionException;
 

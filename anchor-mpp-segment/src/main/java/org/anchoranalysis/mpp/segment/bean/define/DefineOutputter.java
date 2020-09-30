@@ -38,13 +38,33 @@ import org.anchoranalysis.core.name.provider.NamedProvider;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.stack.Stack;
+import org.anchoranalysis.io.output.OutputEnabledMutable;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.mpp.io.input.InputForMPPBean;
 import org.anchoranalysis.mpp.io.input.MPPInitParamsFactory;
+import org.anchoranalysis.mpp.mark.Mark;
 
+/**
+ * After using applying a {@link Define} on inputs, output produced entities (images, histograms, objects etc.)
+ * 
+ * <p>The following outputs are produced:
+ * <table>
+ * <caption></caption>
+ * <thead>
+ * <tr><th>Output Name</th><th>Enabled by default?</th><th>Description</th></tr>
+ * </thead>
+ * <tbody>
+ * <tr><td>stacks</td><td>yes</td><td>Image-stacks that are produced.</td></tr>
+ * <tr><td>objects</td><td>yes</td><td>Collections of {@link ObjectMask}s that are produced as HDF5</td></tr>
+ * <tr><td>histograms</td><td>yes</td><td>Histograms that are produced as CSV.</td></tr>
+ * <tr><td>marks</td><td>yes</td><td>Collections of {@link Mark}s that are produced as serialized XML.</td></tr>
+ * </tbody>
+ * </table>
+ */
 public abstract class DefineOutputter extends AnchorBean<DefineOutputter> {
 
     // START BEAN PROPERTIES
@@ -55,6 +75,15 @@ public abstract class DefineOutputter extends AnchorBean<DefineOutputter> {
     @BeanField @Getter @Setter private boolean suppressOutputExceptions = false;
     // END BEAN PROPERTIES
 
+    /**
+     * Adds all possible output-names to a {@link OutputEnabledMutable}.
+     * 
+     * @param outputEnabled where to add all possible output-names
+     */
+    public void addAllOutputs(OutputEnabledMutable outputEnabled) {
+        SharedObjectsOutputter.addAllOutputs(outputEnabled);
+    }
+    
     protected MPPInitParams createInitParams(InputForMPPBean input, InputOutputContext context)
             throws CreateException {
         return MPPInitParamsFactory.create(

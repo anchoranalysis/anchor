@@ -53,7 +53,7 @@ public class SequentialProcessor<T extends InputFromManager, S> extends JobProce
 
     @Override
     protected TaskStatistics execute(
-            Outputter rootOutputter, List<T> inputObjects, ParametersExperiment paramsExperiment)
+            Outputter rootOutputter, List<T> inputs, ParametersExperiment paramsExperiment)
             throws ExperimentExecutionException {
 
         ConcurrencyPlan concurrencyPlan = ConcurrencyPlan.singleProcessor(1);
@@ -63,7 +63,7 @@ public class SequentialProcessor<T extends InputFromManager, S> extends JobProce
 
         TaskStatistics stats =
                 executeAllJobs(
-                        inputObjects,
+                        inputs,
                         sharedState,
                         paramsExperiment,
                         loggerForMonitor(paramsExperiment));
@@ -74,7 +74,7 @@ public class SequentialProcessor<T extends InputFromManager, S> extends JobProce
     }
 
     private TaskStatistics executeAllJobs(
-            List<T> inputObjects,
+            List<T> inputs,
             S sharedState,
             ParametersExperiment paramsExperiment,
             Optional<MessageLogger> loggerMonitor) {
@@ -86,11 +86,11 @@ public class SequentialProcessor<T extends InputFromManager, S> extends JobProce
                         loggerMonitor,
                         false);
 
-        return seqExecutor.executeEachWithMonitor("Job: ", inputObjects);
+        return seqExecutor.executeEachWithMonitor("Job: ", inputs);
     }
 
     private boolean executeJobAndLog(
-            T inputObject, S sharedState, ParametersExperiment paramsExperiment) {
+            T input, S sharedState, ParametersExperiment paramsExperiment) {
 
         StatefulMessageLogger logger = paramsExperiment.getLoggerExperiment();
         ErrorReporter errorReporter = new ErrorReporterForTask(logger);
@@ -98,7 +98,7 @@ public class SequentialProcessor<T extends InputFromManager, S> extends JobProce
         try {
             ParametersUnbound<T, S> paramsUnbound =
                     new ParametersUnbound<>(
-                            paramsExperiment, inputObject, sharedState, isSuppressExceptions());
+                            paramsExperiment, input, sharedState, isSuppressExceptions());
             return getTask().executeJob(paramsUnbound);
 
         } catch (JobExecutionException e) {

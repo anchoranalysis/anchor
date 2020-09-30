@@ -39,6 +39,7 @@ import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerContext;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
 import org.anchoranalysis.io.output.MultiLevelOutputEnabled;
+import org.anchoranalysis.io.output.OutputEnabledMutable;
 import org.anchoranalysis.io.output.bean.rules.OutputEnabledRules;
 import org.anchoranalysis.io.output.bean.rules.Permissive;
 import org.anchoranalysis.io.output.outputter.BindFailedException;
@@ -96,7 +97,7 @@ public class OutputManager extends AnchorBean<OutputManager> {
     public OutputterChecked createExperimentOutputter(
             String experimentIdentifier,
             ManifestRecorder manifestRecorder,
-            Optional<MultiLevelOutputEnabled> defaultOutputEnabledRules,
+            Optional<OutputEnabledMutable> defaultOutputEnabledRules,
             Optional<RecordedOutputs> recordedOutputs,
             FilePathPrefixerContext prefixerContext)
             throws BindFailedException {
@@ -135,11 +136,13 @@ public class OutputManager extends AnchorBean<OutputManager> {
      * @return
      */
     private MultiLevelOutputEnabled selectOutputEnabled(
-            Optional<MultiLevelOutputEnabled> defaultOutputEnabledRules) {
+            Optional<OutputEnabledMutable> defaultOutputEnabledRules) {
         if (outputsEnabled != null) {
             return outputsEnabled;
+        } else if (defaultOutputEnabledRules.isPresent()) {
+            return defaultOutputEnabledRules.get();
         } else {
-            return defaultOutputEnabledRules.orElseGet(() -> Permissive.INSTANCE);
+            return Permissive.INSTANCE;
         }
     }
 }

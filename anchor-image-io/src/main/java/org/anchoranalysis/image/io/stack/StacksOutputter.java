@@ -46,7 +46,8 @@ import org.anchoranalysis.io.output.outputter.OutputterChecked;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class StacksOutputter {
 
-    public static final String OUTPUT_NAME = "stacks";
+    public static final String OUTPUT_STACKS = "stacks";
+    
     private static final String PREFIX = "";
 
     /**
@@ -64,7 +65,7 @@ public class StacksOutputter {
         StacksOutputter.output(
                 stackSubset(stacks, secondLevelOutputKey, outputter),
                 outputter.getChecked(),
-                OUTPUT_NAME,
+                OUTPUT_STACKS,
                 PREFIX,
                 context.getErrorReporter(),
                 suppressSubfolders);
@@ -91,7 +92,7 @@ public class StacksOutputter {
         StacksOutputter.outputWithException(
                 stackSubset(stacks, secondLevelOutputKey, outputter),
                 outputter.getChecked(),
-                OUTPUT_NAME,
+                StacksOutputter.OUTPUT_STACKS,
                 PREFIX,
                 suppressSubfolders);
     }
@@ -132,7 +133,7 @@ public class StacksOutputter {
 
         for (String name : stackCollection.keys()) {
 
-            if (oa.isOutputAllowed(name)) {
+            if (oa.isOutputEnabled(name)) {
                 out.add(name, extractStackCached(stackCollection, name));
             }
         }

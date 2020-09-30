@@ -40,23 +40,49 @@ import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 
-// Doesn't change the objects, just uses a generator to output a feature list as a CSV
+/**
+ * Specifies a table of feature-calculations on objects.
+ * 
+ * <p>Note the input objects are not changed during feature-calculation and outputting.
+ * 
+ * <p>The following outputs are produced:
+ * <table>
+ * <caption></caption>
+ * <thead>
+ * <tr><th>Output Name</th><th>Enabled by default?</th><th>Description</th></tr>
+ * </thead>
+ * <tbody>
+ * <tr><td>features</td><td>yes</td><td>A CSV of calculated-features for objects.</td></tr>
+ * </tbody>
+ * </table>
+ * 
+ * @author Owen Feehan
+ *
+ */
 public class OutputFeatureTable extends ImageBean<OutputFeatureTable> {
 
-    private static final String OUTPUT_NAME_OBJECTS_FEATURE_LIST = "features";
+    public static final String OUTPUT_FEATURE_TABLE = "features";
 
     // START BEAN PROPERTIES
+    /** The objects for which features are calculated. */
     @BeanField @Getter @Setter private ObjectCollectionProvider objects;
 
+    /** A list of features to calculate in an evaluation context. */
     @BeanField @Getter @Setter private FeatureListEvaluator<FeatureInputSingleObject> feature;
     // END BEAN PROPERTIES
 
+    /**
+     * Outputs the feature-table.
+     * 
+     * @param context the input-output context.
+     * @throws IOException if anything goes wrong when outputting.
+     */
     public void output(InputOutputContext context) throws IOException {
 
         // Early exit if we're not allowed output anything anyway
         if (!context.getOutputter()
                 .outputsEnabled()
-                .isOutputEnabled(OUTPUT_NAME_OBJECTS_FEATURE_LIST)) {
+                .isOutputEnabled(OUTPUT_FEATURE_TABLE)) {
             return;
         }
 
@@ -66,7 +92,7 @@ public class OutputFeatureTable extends ImageBean<OutputFeatureTable> {
             context.getOutputter()
                     .writerSelective()
                     .write(
-                            OUTPUT_NAME_OBJECTS_FEATURE_LIST,
+                            OUTPUT_FEATURE_TABLE,
                             () -> createGenerator(objectCollection, context.getLogger()));
 
         } catch (CreateException e) {

@@ -57,11 +57,11 @@ class AppendHelper {
     /** It is assumed the input files are single channel images. */
     public static void appendStack(
             List<NamedBean<FilePathGenerator>> listPaths,
-            final MultiInput inputObject,
+            MultiInput input,
             boolean debugMode,
             final RasterReader rasterReader) {
         append(
-                inputObject,
+                input,
                 listPaths,
                 MultiInput::stack,
                 outPath -> {
@@ -76,10 +76,10 @@ class AppendHelper {
 
     public static void appendHistogram(
             List<NamedBean<FilePathGenerator>> listPaths,
-            MultiInput inputObject,
+            MultiInput input,
             boolean debugMode) {
         append(
-                inputObject,
+                input,
                 listPaths,
                 MultiInput::histogram,
                 HistogramCSVReader::readHistogramFromFile,
@@ -88,20 +88,20 @@ class AppendHelper {
 
     public static void appendFilePath(
             List<NamedBean<FilePathGenerator>> listPaths,
-            MultiInput inputObject,
+            MultiInput input,
             boolean debugMode) {
-        append(inputObject, listPaths, MultiInput::filePath, outPath -> outPath, debugMode);
+        append(input, listPaths, MultiInput::filePath, outPath -> outPath, debugMode);
     }
 
     public static void appendKeyValueParams(
             List<NamedBean<FilePathGenerator>> listPaths,
-            final MultiInput inputObject,
+            MultiInput input,
             boolean debugMode) {
 
         // Delayed-calculation of the appending path as it can be a bit expensive when multiplied by
         // so many items
         append(
-                inputObject,
+                input,
                 listPaths,
                 MultiInput::keyValueParams,
                 KeyValueParams::readFromFile,
@@ -110,10 +110,10 @@ class AppendHelper {
 
     public static void appendMarks(
             List<NamedBean<FilePathGenerator>> listPaths,
-            final MultiInput inputObject,
+            MultiInput input,
             boolean debugMode) {
         append(
-                inputObject,
+                input,
                 listPaths,
                 MultiInput::marks,
                 DESERIALIZER::deserializeMarks,
@@ -122,13 +122,13 @@ class AppendHelper {
 
     public static void appendMarksFromAnnotation(
             List<NamedBean<FilePathGenerator>> listPaths,
-            MultiInput inputObject,
+            MultiInput input,
             boolean includeAccepted,
             boolean includeRejected,
             boolean debugMode) {
 
         append(
-                inputObject,
+                input,
                 listPaths,
                 MultiInput::marks,
                 outPath ->
@@ -139,10 +139,10 @@ class AppendHelper {
 
     public static void appendObjects(
             List<NamedBean<FilePathGenerator>> listPaths,
-            MultiInput inputObject,
+            MultiInput input,
             boolean debugMode) {
         append(
-                inputObject,
+                input,
                 listPaths,
                 MultiInput::objects,
                 ObjectCollectionReader::createFromPath,
@@ -153,14 +153,14 @@ class AppendHelper {
      * Appends new items to a particular OperationMap associated with the MultiInput by transforming
      * paths
      *
-     * @param inputObject the input-object
+     * @param input the input-object
      * @param list file-generations to read paths from
-     * @param extractMap extracts an OperationMap from inputObject
+     * @param extractMap extracts an OperationMap from {@code input}
      * @param reader converts from a path to the object of interest
      * @param debugMode
      */
     private static <T> void append(
-            MultiInput inputObject,
+            MultiInput input,
             List<NamedBean<FilePathGenerator>> list,
             Function<MultiInput, MultiInputSubMap<T>> extractMap,
             ReadFromPath<T> reader,
@@ -168,16 +168,16 @@ class AppendHelper {
 
         for (NamedBean<FilePathGenerator> namedBean : list) {
 
-            MultiInputSubMap<T> map = extractMap.apply(inputObject);
+            MultiInputSubMap<T> map = extractMap.apply(input);
 
             map.add(
                     namedBean.getName(),
-                    () -> readObjectForAppend(inputObject, reader, namedBean, debugMode));
+                    () -> readObjectForAppend(input, reader, namedBean, debugMode));
         }
     }
 
     private static <T> T readObjectForAppend(
-            MultiInput inputObject,
+            MultiInput input,
             ReadFromPath<T> reader,
             NamedBean<FilePathGenerator> namedBean,
             boolean debugMode)
@@ -185,7 +185,7 @@ class AppendHelper {
         try {
             return reader.apply(
                     OperationOutFilePath.outPathFor(
-                            namedBean.getValue(), inputObject::pathForBinding, debugMode));
+                            namedBean.getValue(), input::pathForBinding, debugMode));
         } catch (Exception e) {
             throw new OperationFailedException("An error occured appending to the multi-input", e);
         }

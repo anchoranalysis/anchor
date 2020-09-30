@@ -87,10 +87,10 @@ public class ParallelProcessor<T extends InputFromManager, S> extends JobProcess
 
     @Override
     protected TaskStatistics execute(
-            Outputter rootOutputter, List<T> inputObjects, ParametersExperiment paramsExperiment)
+            Outputter rootOutputter, List<T> inputs, ParametersExperiment paramsExperiment)
             throws ExperimentExecutionException {
 
-        int initialNumberJobs = inputObjects.size();
+        int initialNumberJobs = inputs.size();
 
         ConcurrencyPlan concurrencyPlan = createConcurrencyPlan(paramsExperiment);
 
@@ -102,9 +102,9 @@ public class ParallelProcessor<T extends InputFromManager, S> extends JobProcess
 
         int count = 1;
 
-        ConcurrentJobMonitor monitor = new ConcurrentJobMonitor(inputObjects.size());
+        ConcurrentJobMonitor monitor = new ConcurrentJobMonitor(inputs.size());
 
-        ListIterator<T> iterator = inputObjects.listIterator();
+        ListIterator<T> iterator = inputs.listIterator();
         while (iterator.hasNext()) {
             T input = iterator.next();
             try {

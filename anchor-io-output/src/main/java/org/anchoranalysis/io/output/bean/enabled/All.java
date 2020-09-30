@@ -45,7 +45,7 @@ public class All extends OutputEnabled {
     public static final OutputEnabled INSTANCE = new All();
 
     @Override
-    public boolean isOutputAllowed(String outputName) {
+    public boolean isOutputEnabled(String outputName) {
         return true;
     }
 }

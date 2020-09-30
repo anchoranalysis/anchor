@@ -38,7 +38,7 @@ public class ParametersUnbound<T, S> {
 
     ParametersExperiment parametersExperiment;
 
-    T inputObject;
+    T input;
 
     S sharedState;
 

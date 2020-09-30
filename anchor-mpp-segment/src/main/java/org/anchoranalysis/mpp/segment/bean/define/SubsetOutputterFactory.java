@@ -43,7 +43,7 @@ import org.anchoranalysis.mpp.segment.define.OutputterDirectories;
 
 /**
  * This class will expect for the following second-level output keys: {@link StackOutputKeys#MARKS}
- * {@link StackOutputKeys#HISTOGRAM} {@link StackOutputKeys#OBJECTS}
+ * {@link StackOutputKeys#HISTOGRAM} {@link StackOutputKeys#OBJECT}
  *
  * @author Owen Feehan
  */
@@ -62,33 +62,33 @@ class SubsetOutputterFactory {
                 OutputterDirectories.MARKS);
     }
 
-    public SubsetOutputter<Histogram> histogram() {
+    public SubsetOutputter<Histogram> histograms() {
         return create(
                 soMPP.getImage().histograms(),
                 new HistogramCSVGenerator(),
                 StackOutputKeys.HISTOGRAM,
-                OutputterDirectories.HISTOGRAM);
+                OutputterDirectories.HISTOGRAMS);
     }
 
     public SubsetOutputter<ObjectCollection> objects() {
         return create(
                 soMPP.getImage().objects(),
                 ObjectCollectionWriter.generator(),
-                StackOutputKeys.OBJECTS,
-                OutputterDirectories.OBJECT);
+                StackOutputKeys.OBJECT,
+                OutputterDirectories.OBJECTS);
     }
 
     private <T> SubsetOutputter<T> create(
             NamedProviderStore<T> store,
             Generator<T> generator,
             String outputAllowedSecondLevelKey,
-            String id) {
+            String directoryName) {
         return new SubsetOutputter<>(
                 store,
                 outputter.outputsEnabled().second(outputAllowedSecondLevelKey),
                 generator,
                 outputter.getChecked(),
-                id,
+                directoryName,
                 "",
                 suppressSubfolders);
     }

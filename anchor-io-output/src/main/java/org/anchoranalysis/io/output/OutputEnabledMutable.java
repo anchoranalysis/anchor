@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- *
+ * 
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- *
+ * 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -23,28 +23,54 @@
  * THE SOFTWARE.
  * #L%
  */
+package org.anchoranalysis.io.output;
 
-package org.anchoranalysis.io.output.bean.enabled;
-
-import lombok.Getter;
-import lombok.Setter;
-import org.anchoranalysis.bean.StringSet;
-import org.anchoranalysis.bean.annotation.BeanField;
+import java.util.HashSet;
+import java.util.Set;
+import org.anchoranalysis.io.output.bean.enabled.All;
+import org.anchoranalysis.io.output.bean.enabled.OutputEnabled;
 
 /**
- * Only specific outputs, identified by a textual name, are enabled.
- *
+ * A specific set of first-level outputs are enabled, to which more can be added.
+ * 
  * @author Owen Feehan
+ *
  */
-public class SpecificEnabled extends OutputEnabled {
+public class OutputEnabledMutable implements MultiLevelOutputEnabled, SingleLevelOutputEnabled {
 
-    // START BEAN PROPERTIES
-    /** The names of the outputs that are enabled. */
-    @BeanField @Getter @Setter private StringSet outputsEnabled;
-    // END BEAN PROPERTIES
-
+    private Set<String> enabledOutputNames = new HashSet<>();
+    
+    /**
+     * Creates with one or more enabled outputs.
+     * 
+     * @param outputNames the names of the enabled-outputs
+     */
+    public OutputEnabledMutable(String ... outputNames) {
+        for( String outputName : outputNames ) {
+            addEnabledOutput(outputName);
+        }
+    }
+    
     @Override
     public boolean isOutputEnabled(String outputName) {
-        return outputsEnabled.contains(outputName);
+        return enabledOutputNames.contains(outputName);
+    }
+
+    @Override
+    public OutputEnabled second(String outputName) {
+        return All.INSTANCE;
+    }
+    
+    /**
+     * Adds more enabled outputs.
+     * 
+     * @param outputNames the names of the enabled-outputs
+     * @return the current object
+     */
+    public OutputEnabledMutable addEnabledOutput(String ...outputNames) {
+        for( String outputName : outputNames ) {
+            enabledOutputNames.add(outputName);
+        }
+        return this;
     }
 }

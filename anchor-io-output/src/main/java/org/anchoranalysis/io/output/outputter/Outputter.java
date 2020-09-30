@@ -51,7 +51,7 @@ public class Outputter {
     @Getter private final ErrorReporter errorReporter;
 
     /**
-     * Creates a new ink BoundOutputter} by appending a relative folder-path to the current {@link
+     * Creates a new {@link Outputter} by appending a relative folder-path to the current {@link
      * Outputter}
      *
      * @see OutputterChecked#deriveSubdirectory
@@ -90,7 +90,7 @@ public class Outputter {
     public WriterRouterErrors writerSelective() {
         return new WriterRouterErrors(delegate.getWriters().selective(), errorReporter);
     }
-
+    
     /**
      * Multiplexes between the {@code selective} and {@code permissive} writers based on a flag.
      *
@@ -105,6 +105,16 @@ public class Outputter {
             return writerPermissive();
         }
     }
+    
+    /**
+     * A writer that performs a second-level check on which outputs occur, but writes to the top-level directory.
+     *
+     * @return a newly created writer checking on particular second-level otuput names.
+     */
+    public WriterRouterErrors writerSecondLevel(String outputNameFirstLevel) {
+        return new WriterRouterErrors( delegate.getWriters().secondLevel(outputNameFirstLevel), errorReporter);
+    }
+    
 
     @Override
     public boolean equals(Object obj) {

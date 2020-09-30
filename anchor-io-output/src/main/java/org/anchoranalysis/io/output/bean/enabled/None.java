@@ -34,7 +34,7 @@ package org.anchoranalysis.io.output.bean.enabled;
 public class None extends OutputEnabled {
 
     @Override
-    public boolean isOutputAllowed(String outputName) {
+    public boolean isOutputEnabled(String outputName) {
         return false;
     }
 }

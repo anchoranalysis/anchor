@@ -34,6 +34,7 @@ import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.memory.MemoryUtilities;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
+import org.anchoranalysis.experiment.bean.io.InputOutputExperiment;
 import org.anchoranalysis.experiment.log.StatefulMessageLogger;
 import org.anchoranalysis.experiment.task.ErrorReporterForTask;
 import org.anchoranalysis.experiment.task.InputBound;
@@ -43,10 +44,9 @@ import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.experiment.task.ParametersUnbound;
 import org.anchoranalysis.io.generator.serialized.ObjectOutputStreamGenerator;
 import org.anchoranalysis.io.generator.serialized.XStreamGenerator;
-import org.anchoranalysis.io.generator.text.StringGenerator;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
-import org.anchoranalysis.io.output.MultiLevelOutputEnabled;
+import org.anchoranalysis.io.output.OutputEnabledMutable;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
@@ -62,6 +62,19 @@ import org.apache.commons.lang.time.StopWatch;
  *
  * <p>e.g. we move from a logger and manifest for the experiment as a whole, to a logger and
  * manifest for the task itself
+ * 
+ * <p>The following outputs are produced:
+ * 
+ * <table>
+ * <caption></caption>
+ * <thead>
+ * <tr><th>Output Name</th><th>Enabled by default?</th><th>Description</th></tr>
+ * </thead>
+ * <tbody>
+ * <tr><td>manifest</td><td>no</td><td>A XML and Java serialized <i>.ser</i> file describing all files outputted.</td></tr>
+ * <tr><td rowspan="3">And the typically also the outputs from {@link InputOutputExperiment}.</td></tr>
+ * </tbody>
+ * </table>
  *
  * @author Owen Feehan
  * @param <T> input-object type
@@ -70,7 +83,6 @@ import org.apache.commons.lang.time.StopWatch;
 public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Task<T, S>> {
 
     private static final String OUTPUT_NAME_MANIFEST = "manifest";
-    private static final String OUTPUT_NAME_EXECUTION_TIME = "executionTime";
 
     /** Is the execution-time of the task per-input expected to be very quick to execute? */
     public abstract boolean hasVeryQuickPerInputExecution();
@@ -103,7 +115,7 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
         // Bind an outputter for the task
         OutputterChecked outputterTask =
                 TaskOutputterFactory.createOutputterForTask(
-                        paramsUnbound.getInputObject(),
+                        paramsUnbound.getInput(),
                         Optional.of(manifestTask),
                         paramsUnbound.getParametersExperiment());
         Preconditions.checkArgument(outputterTask.getSettings().hasBeenInit());
@@ -124,8 +136,8 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
             throws ExperimentExecutionException;
 
     /** Is an input-object compatible with this particular task? */
-    public boolean isInputObjectCompatibleWith(Class<? extends InputFromManager> inputObjectClass) {
-        return inputTypesExpected().doesClassInheritFromAny(inputObjectClass);
+    public boolean isInputCompatibleWith(Class<? extends InputFromManager> inputClass) {
+        return inputTypesExpected().doesClassInheritFromAny(inputClass);
     }
 
     /**
@@ -148,8 +160,10 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
      *
      * @return the default rules if they exist.
      */
-    public abstract Optional<MultiLevelOutputEnabled> defaultOutputs();
-
+    public OutputEnabledMutable defaultOutputs() {
+        return new OutputEnabledMutable();
+    }
+    
     /**
      * Creates other objects needed to have a fully bound set of parameters for the task
      *
@@ -175,7 +189,7 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
 
         // We create new parameters bound specifically to the job
         return new InputBound<>(
-                paramsUnbound.getInputObject(),
+                paramsUnbound.getInput(),
                 paramsUnbound.getSharedState(),
                 manifestTask,
                 paramsUnbound.getParametersExperiment().isDetailedLogging(),
@@ -210,14 +224,8 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
 
             if (params.isDetailedLogging()) {
 
-                params.getLogger()
-                        .messageLogger()
-                        .logFormatted(
-                                "Output Folder has path: \t%s",
-                                params.getOutputter().getOutputFolderPath().toString());
-
                 loggerJob.logFormatted(
-                        "File processing started: %s", params.getInputObject().descriptiveName());
+                        "File processing started: %s", params.getInput().descriptiveName());
             }
 
             executeJobAdditionalOutputs(params, stopWatchFile);
@@ -241,7 +249,7 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
             if (params.isDetailedLogging()) {
                 loggerJob.logFormatted(
                         "File processing ended:   %s (time taken = %ds)",
-                        params.getInputObject().descriptiveName(), stopWatchFile.getTime() / 1000);
+                        params.getInput().descriptiveName(), stopWatchFile.getTime() / 1000);
                 MemoryUtilities.logMemoryUsage("End file processing", loggerJob);
             }
 
@@ -263,8 +271,8 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
             // We close the input objects as soon as the task is completed, so as to free up file
             // handles
             // NB Deal with this in the future... if a task is never called, then close() might
-            // never be called on the InputObject
-            params.getInputObject().close(params.getLogger().errorReporter());
+            // never be called on the input-object
+            params.getInput().close(params.getLogger().errorReporter());
         }
 
         WriterRouterErrors writeIfAllowed = params.getOutputter().writerSelective();
@@ -282,10 +290,5 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
                                 params.getManifest(),
                                 Optional.empty() // Don't put into the manifest
                                 ));
-        // This is written after the manfiests are already written, so it won't exist in the
-        // manifest
-        writeIfAllowed.write(
-                OUTPUT_NAME_EXECUTION_TIME,
-                () -> new StringGenerator(Long.toString(stopWatchFile.getTime())));
     }
 }

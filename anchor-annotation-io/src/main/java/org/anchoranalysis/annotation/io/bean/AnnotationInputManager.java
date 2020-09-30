@@ -69,10 +69,10 @@ public class AnnotationInputManager<T extends ProvidesStackInput, S extends Anno
     }
 
     private List<AnnotationWithStrategy<S>> createListInput(
-            List<T> listInputObjects, ProgressReporter progressReporter) throws AnchorIOException {
+            List<T> listInputs, ProgressReporter progressReporter) throws AnchorIOException {
         return FunctionalProgress.mapList(
-                listInputObjects,
+                listInputs,
                 progressReporter,
-                inputObject -> new AnnotationWithStrategy<S>(inputObject, annotatorStrategy));
+                input -> new AnnotationWithStrategy<S>(input, annotatorStrategy));
     }
 }

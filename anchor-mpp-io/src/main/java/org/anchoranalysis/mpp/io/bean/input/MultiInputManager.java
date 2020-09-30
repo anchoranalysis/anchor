@@ -105,30 +105,30 @@ public class MultiInputManager extends InputManager<MultiInput> {
         while (itr.hasNext()) {
             ProvidesStackInput mainStack = itr.next();
 
-            MultiInput inputObject = new MultiInput(inputName, mainStack);
-            appendFromLists(inputObject, params.isDebugModeActivated());
+            MultiInput input = new MultiInput(inputName, mainStack);
+            appendFromLists(input, params.isDebugModeActivated());
 
-            outList.add(inputObject);
+            outList.add(input);
         }
 
         return outList;
     }
 
-    private void appendFromLists(MultiInput inputObject, boolean doDebug) {
-        appendStack(appendStack, inputObject, doDebug, rasterReader);
-        appendFromVariousMarksSources(inputObject, doDebug);
-        appendObjects(appendObjects, inputObject, doDebug);
-        appendKeyValueParams(listAppendKeyValueParams, inputObject, doDebug);
-        appendHistogram(appendHistogram, inputObject, doDebug);
-        appendFilePath(listAppendFilePath, inputObject, doDebug);
+    private void appendFromLists(MultiInput input, boolean doDebug) {
+        appendStack(appendStack, input, doDebug, rasterReader);
+        appendFromVariousMarksSources(input, doDebug);
+        appendObjects(appendObjects, input, doDebug);
+        appendKeyValueParams(listAppendKeyValueParams, input, doDebug);
+        appendHistogram(appendHistogram, input, doDebug);
+        appendFilePath(listAppendFilePath, input, doDebug);
     }
 
-    private void appendFromVariousMarksSources(MultiInput inputObject, boolean doDebug) {
-        appendMarks(listAppendMarks, inputObject, doDebug);
-        appendMarksFromAnnotation(listAppendMarksFromAnnotation, inputObject, true, true, doDebug);
+    private void appendFromVariousMarksSources(MultiInput input, boolean doDebug) {
+        appendMarks(listAppendMarks, input, doDebug);
+        appendMarksFromAnnotation(listAppendMarksFromAnnotation, input, true, true, doDebug);
         appendMarksFromAnnotation(
-                listAppendMarksFromAnnotationAcceptedOnly, inputObject, true, false, doDebug);
+                listAppendMarksFromAnnotationAcceptedOnly, input, true, false, doDebug);
         appendMarksFromAnnotation(
-                listAppendMarksFromAnnotationRejectedOnly, inputObject, false, true, doDebug);
+                listAppendMarksFromAnnotationRejectedOnly, input, false, true, doDebug);
     }
 }

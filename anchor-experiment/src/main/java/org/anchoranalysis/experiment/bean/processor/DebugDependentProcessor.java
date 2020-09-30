@@ -47,7 +47,10 @@ import org.anchoranalysis.io.output.outputter.Outputter;
 public class DebugDependentProcessor<T extends InputFromManager, S> extends JobProcessor<T, S> {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private int maxNumProcessors;
+    /**
+     * An upper limit on the number of the processors that can be simultaneously used in parallel, if they are available.
+     */
+    @BeanField @Getter @Setter private int maxNumberProcessors;
 
     /**
      * How many processors to avoid using for the tasks.
@@ -61,29 +64,37 @@ public class DebugDependentProcessor<T extends InputFromManager, S> extends JobP
 
     @Override
     protected TaskStatistics execute(
-            Outputter rootOutputter, List<T> inputObjects, ParametersExperiment paramsExperiment)
+            Outputter rootOutputter, List<T> inputs, ParametersExperiment paramsExperiment)
             throws ExperimentExecutionException {
 
         Preconditions.checkArgument(rootOutputter.getChecked().getSettings().hasBeenInit());
 
         JobProcessor<T, S> processor =
                 createProcessor(paramsExperiment.getExperimentArguments().isDebugModeEnabled());
-        return processor.execute(rootOutputter, inputObjects, paramsExperiment);
+        return processor.execute(rootOutputter, inputs, paramsExperiment);
     }
 
     private JobProcessor<T, S> createProcessor(boolean debugMode) {
         if (debugMode) {
-            SequentialProcessor<T, S> sp = new SequentialProcessor<>();
-            sp.setTask(getTask());
-            sp.setSuppressExceptions(isSuppressExceptions());
-            return sp;
+            return createSequentialProcessor();
         } else {
-            ParallelProcessor<T, S> pp = new ParallelProcessor<>();
-            pp.setMaxNumberProcessors(maxNumProcessors);
-            pp.setTask(getTask());
-            pp.setSuppressExceptions(isSuppressExceptions());
-            pp.setKeepProcessorsFree(keepProcessorsFree);
-            return pp;
+            return creareParallelProcessor();
         }
+    }
+    
+    private SequentialProcessor<T, S> createSequentialProcessor() {
+        SequentialProcessor<T, S> processor = new SequentialProcessor<>();
+        processor.setTask(getTask());
+        processor.setSuppressExceptions(isSuppressExceptions());
+        return processor;
+    }
+    
+    private ParallelProcessor<T, S> creareParallelProcessor() {
+        ParallelProcessor<T, S> processor = new ParallelProcessor<>();
+        processor.setMaxNumberProcessors(maxNumberProcessors);
+        processor.setTask(getTask());
+        processor.setSuppressExceptions(isSuppressExceptions());
+        processor.setKeepProcessorsFree(keepProcessorsFree);
+        return processor;
     }
 }

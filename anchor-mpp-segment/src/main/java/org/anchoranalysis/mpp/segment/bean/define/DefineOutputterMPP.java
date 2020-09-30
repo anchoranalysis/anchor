@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.mpp.segment.bean.define;
 
-import org.anchoranalysis.bean.define.Define;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
@@ -37,10 +36,6 @@ import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.mpp.io.input.MultiInput;
 
-/**
- * Helper for tasks that uses a {@link Define} in association with an input to execute some tasks,
- * and then outputs results *
- */
 public class DefineOutputterMPP extends DefineOutputter {
 
     @FunctionalInterface

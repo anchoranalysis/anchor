@@ -74,20 +74,20 @@ public interface ProvidesStackInput extends InputFromManager {
      * Adds the current object to a named-store of stacks
      *
      * @param stacks
-     * @param seriesNum
+     * @param seriesIndex
      * @param progressReporter
      * @throws OperationFailedException
      */
     void addToStoreInferNames(
             NamedProviderStore<TimeSequence> stacks,
-            int seriesNum,
+            int seriesIndex,
             ProgressReporter progressReporter)
             throws OperationFailedException;
 
     void addToStoreWithName(
             String name,
-            NamedProviderStore<TimeSequence> stackCollection,
-            int seriesNum,
+            NamedProviderStore<TimeSequence> stacks,
+            int seriesIndex,
             ProgressReporter progressReporter)
             throws OperationFailedException;
 

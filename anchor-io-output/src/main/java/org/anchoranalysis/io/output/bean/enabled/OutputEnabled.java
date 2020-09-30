@@ -27,19 +27,13 @@
 package org.anchoranalysis.io.output.bean.enabled;
 
 import org.anchoranalysis.bean.AnchorBean;
+import org.anchoranalysis.io.output.SingleLevelOutputEnabled;
 
 /**
  * Whether a particular output, identified by a textual name, is enabled or not.
  *
  * @author Owen Feehan
  */
-public abstract class OutputEnabled extends AnchorBean<OutputEnabled> {
+public abstract class OutputEnabled extends AnchorBean<OutputEnabled> implements SingleLevelOutputEnabled {
 
-    /**
-     * Is a particular output-allowed?
-     *
-     * @param outputName the name of the output
-     * @return true iff the output is allowed
-     */
-    public abstract boolean isOutputAllowed(String outputName);
 }

@@ -66,19 +66,19 @@ public abstract class JobProcessor<T extends InputFromManager, S>
      * Executes the tasks, gathers statistics, and logs them
      *
      * @param rootOutputter
-     * @param inputObjects
+     * @param inputs
      * @param paramsExperiment
      * @throws ExperimentExecutionException
      */
     public void executeLogStats(
-            Outputter rootOutputter, List<T> inputObjects, ParametersExperiment paramsExperiment)
+            Outputter rootOutputter, List<T> inputs, ParametersExperiment paramsExperiment)
             throws ExperimentExecutionException {
 
         if (paramsExperiment.isDetailedLogging()) {
             paramsExperiment.getLoggerExperiment().log(DIVIDER.withLabel("Processing"));
         }
 
-        TaskStatistics stats = execute(rootOutputter, inputObjects, paramsExperiment);
+        TaskStatistics stats = execute(rootOutputter, inputs, paramsExperiment);
 
         if (paramsExperiment.isDetailedLogging()) {
             logStats(stats, paramsExperiment);
@@ -102,8 +102,8 @@ public abstract class JobProcessor<T extends InputFromManager, S>
     }
 
     /** Is an input-object compatible with this particular task? */
-    public boolean isInputObjectCompatibleWith(Class<? extends InputFromManager> inputObjectClass) {
-        return task.isInputObjectCompatibleWith(inputObjectClass);
+    public boolean isInputCompatibleWith(Class<? extends InputFromManager> inputClass) {
+        return task.isInputCompatibleWith(inputClass);
     }
 
     /** Is the execution-time of the task per-input expected to be very quick to execute? */
@@ -112,18 +112,18 @@ public abstract class JobProcessor<T extends InputFromManager, S>
     }
 
     /**
-     * The job processor is expected to remove items from the inputObjects List as they are consumed
+     * The job processor is expected to remove items from the inputs-list as they are consumed
      * so as to allow garbage-collection of these items before all jobs are processed (as the list
      * might be quite large).
      *
      * @param rootOutputter
-     * @param inputObjects
+     * @param inputs
      * @param paramsExperiment
      * @return
      * @throws ExperimentExecutionException
      */
     protected abstract TaskStatistics execute(
-            Outputter rootOutputter, List<T> inputObjects, ParametersExperiment paramsExperiment)
+            Outputter rootOutputter, List<T> inputs, ParametersExperiment paramsExperiment)
             throws ExperimentExecutionException;
 
     protected Optional<MessageLogger> loggerForMonitor(ParametersExperiment paramsExperiment) {

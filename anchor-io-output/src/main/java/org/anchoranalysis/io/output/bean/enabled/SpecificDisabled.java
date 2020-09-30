@@ -48,7 +48,7 @@ public class SpecificDisabled extends OutputEnabled {
     // END BEAN PROPERTIES
 
     @Override
-    public boolean isOutputAllowed(String outputName) {
+    public boolean isOutputEnabled(String outputName) {
         return !outputsDisabled.contains(outputName);
     }
 }

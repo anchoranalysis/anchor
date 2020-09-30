@@ -143,12 +143,20 @@ public class OutputterChecked {
         this.target = target;
         this.writeOperationRecorder = writeOperationRecorder;
         this.settings = settings;
-        this.outputsEnabled = outputsEnabled;
         this.recordedOutputs = recordedOutputs;
+        this.outputsEnabled = maybeRecordOutputNames(outputsEnabled);
 
         this.writers =
                 new RecordingWriters(
                         this, target.getParentDirectoryCreator(), recordedOutputs); // NOSONAR
+    }
+    
+    private MultiLevelOutputEnabled maybeRecordOutputNames(MultiLevelOutputEnabled outputsEnabled) {
+        if (recordedOutputs.isPresent()) {
+            return new RecordOutputNamesForOutputEnabled(outputsEnabled,recordedOutputs.get());
+        } else {
+            return outputsEnabled;
+        }
     }
 
     /** Adds an additional operation recorder alongside any existing recorders. */

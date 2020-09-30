@@ -44,7 +44,7 @@ import org.anchoranalysis.io.output.outputter.Outputter;
 @AllArgsConstructor
 public class InputBound<T, S> {
 
-    @Getter private final T inputObject;
+    @Getter private final T input;
 
     @Getter private final S sharedState;
 
@@ -55,8 +55,8 @@ public class InputBound<T, S> {
     private final InputOutputContextStateful context;
 
     /** Immutably changes the input-object */
-    public <U> InputBound<U, S> changeInputObject(U inputObjectNew) {
-        return new InputBound<>(inputObjectNew, sharedState, manifest, detailedLogging, context);
+    public <U> InputBound<U, S> changeInput(U inputToAssign) {
+        return new InputBound<>(inputToAssign, sharedState, manifest, detailedLogging, context);
     }
 
     public InputOutputContext context() {

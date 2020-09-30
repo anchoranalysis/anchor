@@ -154,7 +154,7 @@ public class GeneratorOutputHelper {
 
         for (String name : providers.keys()) {
 
-            if (oa.isOutputAllowed(name)) {
+            if (oa.isOutputEnabled(name)) {
                 try {
                     out.add(new SimpleNameValue<>(name, providers.getException(name)));
                 } catch (NamedProviderGetException e) {
@@ -173,7 +173,7 @@ public class GeneratorOutputHelper {
 
         for (String name : providers.keys()) {
 
-            if (allowed.isOutputAllowed(name)) {
+            if (allowed.isOutputEnabled(name)) {
                 try {
                     out.add(new SimpleNameValue<>(name, providers.getException(name)));
                 } catch (NamedProviderGetException e) {

@@ -81,20 +81,20 @@ class OutputExperimentLogHelper {
             return "No outputs were written as no possible outputs exist.";
         }
 
-        if (recordedOutputs.numberAllowed() > 0) {
+        if (recordedOutputs.numberEnabled() > 0) {
             if (recordedOutputs.numberNotAllowed() > 0) {
                 return String.format(
                         "Written:\t%s.%nNot written:\t%s.",
-                        recordedOutputs.summarizeAllowed(), recordedOutputs.summarizeNotAllowed());
+                        recordedOutputs.summarizeEnabled(), recordedOutputs.summarizeDisabled());
             } else {
                 return String.format(
                         "All possible outputs were written: %s.",
-                        recordedOutputs.summarizeAllowed());
+                        recordedOutputs.summarizeEnabled());
             }
         } else {
             return String.format(
                     "No outputs were written.%nPossible outputs are: %s.",
-                    recordedOutputs.summarizeNotAllowed());
+                    recordedOutputs.summarizeDisabled());
         }
     }
 }

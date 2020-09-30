@@ -33,7 +33,7 @@ import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.manifest.ManifestFolderDescription;
 import org.anchoranalysis.io.manifest.folder.FolderWriteWithPath;
 import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
-import org.anchoranalysis.io.output.MultiLevelOutputEnabled;
+import org.anchoranalysis.io.output.SingleLevelOutputEnabled;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
 
@@ -48,8 +48,8 @@ public class CheckIfAllowed implements Writer {
     public static final int NUMBER_ELEMENTS_WRITTEN_NOT_ALLOWED = -2;
 
     // START REQUIRED ARGUMENTS
-    /** The associated output-manager */
-    private final MultiLevelOutputEnabled outputEnabled;
+    /** Whether a particular output is enabled or not? */
+    private final SingleLevelOutputEnabled outputEnabled;
 
     /** If defined, execute before every operation */
     private final Optional<WriterExecuteBeforeEveryOperation> preop;
@@ -138,6 +138,5 @@ public class CheckIfAllowed implements Writer {
 
     private void maybeExecutePreop() {
         preop.ifPresent(WriterExecuteBeforeEveryOperation::execute);
-        ;
     }
 }

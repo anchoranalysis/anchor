@@ -32,11 +32,13 @@ import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.image.bean.nonbean.init.CreateCombinedStack;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.io.stack.StacksOutputter;
+import org.anchoranalysis.io.output.OutputEnabledMutable;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.mpp.io.output.StackOutputKeys;
+import org.anchoranalysis.mpp.segment.define.OutputterDirectories;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class SharedObjectsOutputter {
@@ -68,7 +70,7 @@ class SharedObjectsOutputter {
         SubsetOutputterFactory factory =
                 new SubsetOutputterFactory(soMPP, outputter, suppressSubfolders);
         factory.marks().outputSubset(errorReporter);
-        factory.histogram().outputSubset(errorReporter);
+        factory.histograms().outputSubset(errorReporter);
         factory.objects().outputSubset(errorReporter);
     }
 
@@ -84,7 +86,16 @@ class SharedObjectsOutputter {
         SubsetOutputterFactory factory =
                 new SubsetOutputterFactory(soMPP, outputter, suppressSubfolders);
         factory.marks().outputSubsetChecked();
-        factory.histogram().outputSubsetChecked();
+        factory.histograms().outputSubsetChecked();
         factory.objects().outputSubsetChecked();
+    }
+    
+    /**
+     * Adds all possible output-names to a {@link OutputEnabledMutable}.
+     * 
+     * @param outputEnabled where to add all possible output-names
+     */
+    public static void addAllOutputs(OutputEnabledMutable outputEnabled) {
+        outputEnabled.addEnabledOutput(StacksOutputter.OUTPUT_STACKS, OutputterDirectories.MARKS, OutputterDirectories.HISTOGRAMS, OutputterDirectories.OBJECTS);
     }
 }

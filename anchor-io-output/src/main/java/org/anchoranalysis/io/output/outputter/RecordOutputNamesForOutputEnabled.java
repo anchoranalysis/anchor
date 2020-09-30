@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-feature
+ * anchor-io-output
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -23,5 +23,36 @@
  * THE SOFTWARE.
  * #L%
  */
-/** Features shared for referencing among calculations. */
-package org.anchoranalysis.feature.shared;
+package org.anchoranalysis.io.output.outputter;
+
+import org.anchoranalysis.io.output.MultiLevelOutputEnabled;
+import org.anchoranalysis.io.output.bean.enabled.OutputEnabled;
+import org.anchoranalysis.io.output.writer.RecordedOutputs;
+import lombok.AllArgsConstructor;
+
+@AllArgsConstructor
+class RecordOutputNamesForOutputEnabled implements MultiLevelOutputEnabled {
+
+    // START REQUIRED ARGUMENTS
+    /** What all outputs that this write processes are added to. */
+    private final MultiLevelOutputEnabled outputEnabled;
+    
+    /** What all outputs that this write processes are added to. */
+    private final RecordedOutputs recordedOutputs;
+    // END REQUIRED ARGUMENTS
+
+    @Override
+    public boolean isOutputEnabled(String outputName) {
+
+        boolean enabled = outputEnabled.isOutputEnabled(outputName);
+        
+        recordedOutputs.add(outputName, enabled);
+        
+        return enabled;
+    }
+
+    @Override
+    public OutputEnabled second(String outputName) {
+        return outputEnabled.second(outputName);
+    }
+}

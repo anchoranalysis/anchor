@@ -48,12 +48,25 @@ import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.InputFromManager;
-import org.anchoranalysis.io.output.MultiLevelOutputEnabled;
+import org.anchoranalysis.io.output.OutputEnabledMutable;
 import org.anchoranalysis.io.output.bean.OutputManager;
 
 /**
  * An experiment that uses both an {@link InputManager} to specify inputs and a {@link
  * OutputManager} to specify outputting.
+ * 
+ * <p>The following outputs are produced:
+ * 
+ * <table>
+ * <caption></caption>
+ * <thead>
+ * <tr><th>Output Name</th><th>Enabled by default?</th><th>Description</th></tr>
+ * </thead>
+ * <tbody>
+ * <tr><td>experiment_log</td><td>yes</td><td>A textual log file for non-job-specific messages, one for the entire experiment.</td></tr>
+ * <tr><td>job_log</td><td>yes</td><td>A textual log file for job-specific messages, one for each job.</td></tr>
+ * </tbody>
+ * </table>
  *
  * @author Owen Feehan
  * @param <T> input-object type
@@ -62,6 +75,10 @@ import org.anchoranalysis.io.output.bean.OutputManager;
 public class InputOutputExperiment<T extends InputFromManager, S> extends OutputExperiment
         implements ReplaceInputManager, ReplaceOutputManager, ReplaceTask<T, S> {
 
+    private static final String OUTPUT_EXPERIMENT_LOG = "experiment_log";
+    
+    private static final String OUTPUT_JOB_LOG = "job_log";
+    
     // START BEAN PROPERTIES
     /** The input-manager to specify where/which/how necessary inputs for the experiment occur. */
     @BeanField @Getter @Setter private InputManager<T> input;
@@ -75,7 +92,7 @@ public class InputOutputExperiment<T extends InputFromManager, S> extends Output
     @BeanField @Getter @Setter private JobProcessor<T, S> taskProcessor;
 
     /**
-     * Where log messages that <b>do<b> pertain to a specific job (input) appear.
+     * Where log messages that <b>do</b> pertain to a specific job (input) appear.
      *
      * <p>This is in contrast to {@code logExperiment} where non-job specific log messages appear.
      */
@@ -113,18 +130,18 @@ public class InputOutputExperiment<T extends InputFromManager, S> extends Output
     protected void executeExperimentWithParams(ParametersExperiment params)
             throws ExperimentExecutionException {
         try {
-            List<T> inputObjects =
+            List<T> inputs =
                     getInput()
                             .inputs(
                                     new InputManagerParams(
                                             params.getExperimentArguments().createInputContext(),
                                             ProgressReporterNull.get(),
                                             new Logger(params.getLoggerExperiment())));
-            checkCompabilityInputObjects(inputObjects);
+            checkCompabilityInputs(inputs);
 
             params.setLoggerTaskCreator(logTask);
 
-            taskProcessor.executeLogStats(params.getOutputter(), inputObjects, params);
+            taskProcessor.executeLogStats(params.getOutputter(), inputs, params);
 
         } catch (AnchorIOException | IOException e) {
             throw new ExperimentExecutionException(
@@ -133,18 +150,20 @@ public class InputOutputExperiment<T extends InputFromManager, S> extends Output
     }
 
     @Override
-    protected Optional<MultiLevelOutputEnabled> defaultOutputs() {
-        return taskProcessor.getTask().defaultOutputs();
+    protected Optional<OutputEnabledMutable> defaultOutputs() {
+        OutputEnabledMutable taskDefaultOutputs = taskProcessor.getTask().defaultOutputs();
+        taskDefaultOutputs.addEnabledOutput(OUTPUT_EXPERIMENT_LOG, OUTPUT_JOB_LOG);
+        return Optional.of(taskDefaultOutputs);
     }
 
-    private void checkCompabilityInputObjects(List<T> inputObjects)
+    private void checkCompabilityInputs(List<T> listInputs)
             throws ExperimentExecutionException {
-        for (T object : inputObjects) {
-            if (!taskProcessor.isInputObjectCompatibleWith(object.getClass())) {
+        for (T input : listInputs) {
+            if (!taskProcessor.isInputCompatibleWith(input.getClass())) {
                 throw new ExperimentExecutionException(
                         String.format(
                                 "Input has an incompatible class for the associated task: %s",
-                                object.getClass().toString()));
+                                input.getClass().toString()));
             }
         }
     }
