@@ -5,6 +5,12 @@ import org.anchoranalysis.io.output.writer.MultiLevelRecordedOutputs;
 import org.anchoranalysis.io.output.writer.RecordedOutputs;
 import lombok.AllArgsConstructor;
 
+/**
+ * Generates a multiline string summarizing the contents of a {@link MultiLevelRecordedOutputs}.
+ * 
+ * @author Owen Feehan
+ *
+ */
 @AllArgsConstructor
 class SummarizeRecordedOutputs {
 
@@ -34,9 +40,9 @@ class SummarizeRecordedOutputs {
     private String summarizeWritten(RecordedOutputs first) {
         StringBuilder builder = new StringBuilder();
         if (first.numberDisabled() > 0) {
-            addLineSummary("Written", true, builder);
+            addLineSummary("Enabled", true, builder);
             builder.append( System.lineSeparator() );
-            addLineSummary("Not written", false, builder);
+            addLineSummary("Disabled", false, builder);
         } else {
             addLineSummary("All possible outputs were written", true, builder);
         }

@@ -90,7 +90,7 @@ class SubsetOutputterFactory {
             String directoryName) {
         return new SubsetOutputter<>(
                 store,
-                outputter.outputsEnabled().second(directoryName, IgnoreUnderscorePrefix.INSTANCE),
+                () -> outputter.outputsEnabled().second(directoryName, IgnoreUnderscorePrefix.INSTANCE),
                 generator,
                 outputter.getChecked(),
                 directoryName,

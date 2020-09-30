@@ -27,6 +27,7 @@
 package org.anchoranalysis.mpp.segment.bean.define;
 
 import lombok.AllArgsConstructor;
+import java.util.function.Supplier;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.name.provider.NamedProvider;
 import org.anchoranalysis.io.generator.Generator;
@@ -38,8 +39,8 @@ import org.anchoranalysis.io.output.outputter.OutputterChecked;
 @AllArgsConstructor
 class SubsetOutputter<T> {
 
-    private NamedProvider<T> providers;
-    private SingleLevelOutputEnabled outputEnabled;
+    private NamedProvider<T> provider;
+    private Supplier<SingleLevelOutputEnabled> outputEnabledSecondLevel;
     private Generator<T> generator;
     private OutputterChecked outputter;
     private String outputName;
@@ -48,12 +49,12 @@ class SubsetOutputter<T> {
 
     public void outputSubset(ErrorReporter errorReporter) {
 
-        if (!outputter.getOutputsEnabled().isOutputEnabled(outputName)) {
+        if (shouldExitEarly()) {
             return;
         }
 
         GeneratorOutputHelper.output(
-                GeneratorOutputHelper.subset(providers, outputEnabled, errorReporter),
+                GeneratorOutputHelper.subset(provider, outputEnabledSecondLevel.get(), errorReporter),
                 generator,
                 outputter,
                 outputName,
@@ -64,16 +65,21 @@ class SubsetOutputter<T> {
 
     public void outputSubsetChecked() throws OutputWriteFailedException {
 
-        if (!outputter.getOutputsEnabled().isOutputEnabled(outputName)) {
+        if (shouldExitEarly()) {
             return;
         }
 
         GeneratorOutputHelper.outputWithException(
-                GeneratorOutputHelper.subsetWithException(providers, outputEnabled),
+                GeneratorOutputHelper.subsetWithException(provider, outputEnabledSecondLevel.get()),
                 generator,
                 outputter,
                 outputName,
                 suffix,
                 suppressSubfoldersIn);
+    }
+        
+    /** Exit early if the output is disabled, or if there are no providers to output */
+    private boolean shouldExitEarly() {
+        return provider.isEmpty() || !outputter.getOutputsEnabled().isOutputEnabled(outputName);
     }
 }
