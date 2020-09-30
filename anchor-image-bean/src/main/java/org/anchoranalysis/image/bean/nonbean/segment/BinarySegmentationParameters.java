@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.image.bean.nonbean.parameters;
+package org.anchoranalysis.image.bean.nonbean.segment;
 
 import java.util.Optional;
 import org.anchoranalysis.image.bean.segment.binary.BinarySegmentation;

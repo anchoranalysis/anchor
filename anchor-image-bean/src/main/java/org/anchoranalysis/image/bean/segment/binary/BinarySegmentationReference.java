@@ -34,7 +34,7 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
-import org.anchoranalysis.image.bean.nonbean.parameters.BinarySegmentationParameters;
+import org.anchoranalysis.image.bean.nonbean.segment.BinarySegmentationParameters;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.object.ObjectMask;

@@ -31,7 +31,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
-import org.anchoranalysis.image.bean.nonbean.parameters.BinarySegmentationParameters;
+import org.anchoranalysis.image.bean.nonbean.segment.BinarySegmentationParameters;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.object.ObjectMask;

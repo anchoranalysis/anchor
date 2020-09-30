@@ -27,12 +27,12 @@
 package org.anchoranalysis.image.bean.interpolator;
 
 import org.anchoranalysis.image.interpolator.Interpolator;
-import org.anchoranalysis.image.interpolator.InterpolatorImgLib2Linear;
+import org.anchoranalysis.image.interpolator.InterpolatorImgLib2Lanczos;
 
-public class InterpolatorBeanLinear extends InterpolatorBean {
+public class ImgLib2Lanczos extends InterpolatorBean {
 
     @Override
     public Interpolator create() {
-        return new InterpolatorImgLib2Linear();
+        return new InterpolatorImgLib2Lanczos();
     }
 }
