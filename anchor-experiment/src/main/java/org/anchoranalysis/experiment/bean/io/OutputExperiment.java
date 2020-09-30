@@ -46,7 +46,7 @@ import org.anchoranalysis.io.output.OutputEnabledMutable;
 import org.anchoranalysis.io.output.bean.OutputManager;
 import org.anchoranalysis.io.output.outputter.BindFailedException;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
-import org.anchoranalysis.io.output.writer.RecordedOutputs;
+import org.anchoranalysis.io.output.writer.MultiLevelRecordedOutputs;
 import org.apache.commons.lang.time.StopWatch;
 
 /**
@@ -86,7 +86,7 @@ public abstract class OutputExperiment extends Experiment {
      *
      * <p>This only occurs for first-level outputs, not second-level outputs.
      */
-    private RecordedOutputs recordedOutputs = new RecordedOutputs();
+    private MultiLevelRecordedOutputs recordedOutputs = new MultiLevelRecordedOutputs();
 
     /**
      * Executes the experiment for given arguments.

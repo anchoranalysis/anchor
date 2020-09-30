@@ -27,8 +27,6 @@ package org.anchoranalysis.io.output;
 
 import java.util.HashSet;
 import java.util.Set;
-import org.anchoranalysis.io.output.bean.enabled.All;
-import org.anchoranalysis.io.output.bean.enabled.OutputEnabled;
 
 /**
  * A specific set of first-level outputs are enabled, to which more can be added.
@@ -55,11 +53,6 @@ public class OutputEnabledMutable implements MultiLevelOutputEnabled, SingleLeve
     public boolean isOutputEnabled(String outputName) {
         return enabledOutputNames.contains(outputName);
     }
-
-    @Override
-    public OutputEnabled second(String outputName) {
-        return All.INSTANCE;
-    }
     
     /**
      * Adds more enabled outputs.
@@ -72,5 +65,10 @@ public class OutputEnabledMutable implements MultiLevelOutputEnabled, SingleLeve
             enabledOutputNames.add(outputName);
         }
         return this;
+    }
+
+    @Override
+    public SingleLevelOutputEnabled second(String outputName, SingleLevelOutputEnabled alternative) {
+        return alternative;
     }
 }

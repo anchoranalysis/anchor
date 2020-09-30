@@ -37,7 +37,6 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.mpp.bean.init.MPPInitParams;
-import org.anchoranalysis.mpp.io.output.StackOutputKeys;
 import org.anchoranalysis.mpp.segment.define.OutputterDirectories;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -47,7 +46,6 @@ class SharedObjectsOutputter {
             ImageInitParams imageInit, boolean suppressSubfolders, InputOutputContext context) {
         StacksOutputter.outputSubset(
                 CreateCombinedStack.apply(imageInit),
-                StackOutputKeys.STACK,
                 suppressSubfolders,
                 context);
     }
@@ -58,7 +56,6 @@ class SharedObjectsOutputter {
         StacksOutputter.outputSubsetWithException(
                 CreateCombinedStack.apply(imageInit),
                 context.getOutputter(),
-                StackOutputKeys.STACK,
                 suppressSubfolders);
     }
 
@@ -96,6 +93,6 @@ class SharedObjectsOutputter {
      * @param outputEnabled where to add all possible output-names
      */
     public static void addAllOutputs(OutputEnabledMutable outputEnabled) {
-        outputEnabled.addEnabledOutput(StacksOutputter.OUTPUT_STACKS, OutputterDirectories.MARKS, OutputterDirectories.HISTOGRAMS, OutputterDirectories.OBJECTS);
+        outputEnabled.addEnabledOutput(OutputterDirectories.STACKS, OutputterDirectories.MARKS, OutputterDirectories.HISTOGRAMS, OutputterDirectories.OBJECTS);
     }
 }

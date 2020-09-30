@@ -26,9 +26,12 @@
 package org.anchoranalysis.io.output.writer;
 
 import java.util.Optional;
+import java.util.function.Function;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import org.anchoranalysis.io.output.MultiLevelOutputEnabled;
+import org.anchoranalysis.io.output.SingleLevelOutputEnabled;
+import org.anchoranalysis.io.output.bean.enabled.IgnoreUnderscorePrefix;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
 
 /**
@@ -56,9 +59,9 @@ public class RecordingWriters {
     private final Writer selectiveRecording;
 
     /**
-     * Id defined, all output-names that are passed as arguments to both writers are recorded here.
+     * If defined, all output-names that are passed as arguments to both writers are recorded here.
      */
-    @Getter private final Optional<RecordedOutputs> recordedOutputs;
+    @Getter private final Optional<MultiLevelRecordedOutputs> recordedOutputs;
     
     private final MultiLevelOutputEnabled outputEnabled;
 
@@ -73,13 +76,13 @@ public class RecordingWriters {
     public RecordingWriters(
             OutputterChecked outputter,
             Optional<WriterExecuteBeforeEveryOperation> preop,
-            Optional<RecordedOutputs> recordedOutputs) {
+            Optional<MultiLevelRecordedOutputs> recordedOutputs) {
         this.recordedOutputs = recordedOutputs;
         this.outputEnabled = outputter.getOutputsEnabled();
         this.permissiveNoRecording = new AlwaysAllowed(outputter, preop);
-        this.permissiveRecording = record(permissiveNoRecording);
+        this.permissiveRecording = recordFirstLevel(permissiveNoRecording);
         this.selectiveRecording =
-                record(new CheckIfAllowed(outputter.getOutputsEnabled(), preop, permissiveRecording));
+                recordFirstLevel(new CheckIfAllowed(outputter.getOutputsEnabled(), preop, permissiveRecording));
     }
 
     /**
@@ -102,7 +105,9 @@ public class RecordingWriters {
      * @return a newly created writer checking on particular second-level otuput names.
      */
     public Writer secondLevel(String outputNameFirstLevel) {
-        return new CheckIfAllowed(outputEnabled.second(outputNameFirstLevel), Optional.empty(), permissiveNoRecording);
+        SingleLevelOutputEnabled outputEnabledSecondLevel = outputEnabled.second(outputNameFirstLevel, IgnoreUnderscorePrefix.INSTANCE);
+        Writer secondLevelWriter = new CheckIfAllowed(outputEnabledSecondLevel, Optional.empty(), permissiveNoRecording);
+        return recordSecondLevel(secondLevelWriter, outputNameFirstLevel);
     }
 
     /** A writer that allows all output-names, and records the written output-names */
@@ -115,12 +120,21 @@ public class RecordingWriters {
         return selectiveRecording;
     }
 
-    private Writer record(Writer writer) {
+    /** Records the writer as a first-level output. */
+    private Writer recordFirstLevel(Writer writer) {
+        return record(writer, MultiLevelRecordedOutputs::first);
+    }
+    
+    private Writer recordSecondLevel(Writer writer, String outputNameFirstLevel) {
+        return record(writer, multiLevel -> multiLevel.second(outputNameFirstLevel) );
+    }
+    
+    private Writer record(Writer writer, Function<MultiLevelRecordedOutputs,RecordedOutputs> extractRecordedOutputs) {
         // Indexable outputs are ignored, as it is assumed that the outputName
         // used for the containing directory is the relevant identifier to
         // show the user
         if (recordedOutputs.isPresent()) {
-            return new RecordOutputNamesForWriter(writer, recordedOutputs.get(), false);
+            return new RecordOutputNamesForWriter(writer, extractRecordedOutputs.apply(recordedOutputs.get()), false);
         } else {
             return writer;
         }

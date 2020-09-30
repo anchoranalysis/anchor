@@ -44,7 +44,7 @@ import org.anchoranalysis.io.output.bean.rules.OutputEnabledRules;
 import org.anchoranalysis.io.output.bean.rules.Permissive;
 import org.anchoranalysis.io.output.outputter.BindFailedException;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
-import org.anchoranalysis.io.output.writer.RecordedOutputs;
+import org.anchoranalysis.io.output.writer.MultiLevelRecordedOutputs;
 
 /**
  * Responsible for making decisions on where output goes and what form it takes.
@@ -98,7 +98,7 @@ public class OutputManager extends AnchorBean<OutputManager> {
             String experimentIdentifier,
             ManifestRecorder manifestRecorder,
             Optional<OutputEnabledMutable> defaultOutputEnabledRules,
-            Optional<RecordedOutputs> recordedOutputs,
+            Optional<MultiLevelRecordedOutputs> recordedOutputs,
             FilePathPrefixerContext prefixerContext)
             throws BindFailedException {
 

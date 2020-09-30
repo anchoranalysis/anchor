@@ -78,8 +78,22 @@ public class RecordedOutputs {
      *
      * @return the number of names
      */
-    public int numberNotAllowed() {
+    public int numberDisabled() {
         return namesDisabled.size();
+    }
+    
+    /**
+     * Multiplex between {@link #numberEnabled()} and {@link #numberDisabled()}.
+     * 
+     * @param enabled if true, consider the number of output names that were enabled, otherwise those that were disabled.
+     * @return the number of output-names that were enabled/disabled (depending on {@code enabled}.
+     */
+    public int numberMultiplex(boolean enabled) {
+        if (enabled) {
+            return numberEnabled();
+        } else {
+            return numberDisabled();
+        }
     }
 
     /**
@@ -111,6 +125,20 @@ public class RecordedOutputs {
      */
     public String summarizeDisabled() {
         return summarizeNames(namesDisabled);
+    }
+    
+    /**
+     * Multiplex between {@link #summarizeEnabled()} and {@link #summarizeDisabled()}.
+     * 
+     * @param enabled if true, perform a summary of output names that were enabled, otherwise those that were disabled.
+     * @return a summarize of the output-names as a string, separated by a comma and a space, and are alphabetically-ordered.
+     */
+    public String summarizeMultiplex(boolean enabled) {
+        if (enabled) {
+            return summarizeEnabled();
+        } else {
+            return summarizeDisabled();
+        }
     }
 
     private static String summarizeNames(Set<String> names) {

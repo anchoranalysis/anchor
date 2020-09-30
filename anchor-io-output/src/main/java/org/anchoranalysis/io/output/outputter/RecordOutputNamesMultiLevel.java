@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- *
+ * 
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- *
+ * 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -23,34 +23,43 @@
  * THE SOFTWARE.
  * #L%
  */
+package org.anchoranalysis.io.output.outputter;
 
-package org.anchoranalysis.io.output.bean.rules;
-
-import java.util.Optional;
+import org.anchoranalysis.io.output.MultiLevelOutputEnabled;
 import org.anchoranalysis.io.output.SingleLevelOutputEnabled;
-import org.anchoranalysis.io.output.bean.enabled.All;
+import org.anchoranalysis.io.output.writer.MultiLevelRecordedOutputs;
+import lombok.AllArgsConstructor;
 
-/**
- * Allows all output-names to be outputted in both first and second level.
- *
- * @author Owen Feehan
- */
-public class Permissive extends OutputEnabledRules {
+@AllArgsConstructor
+class RecordOutputNamesMultiLevel implements MultiLevelOutputEnabled {
 
-    /**
-     * A singleton instance of {@link Permissive}.
-     *
-     * <p>The class retains a public constructor so it can also be instantiated as a bean.
-     */
-    public static final OutputEnabledRules INSTANCE = new Permissive();
+    // START REQUIRED ARGUMENTS
+    /** What all outputs that this write processes are added to. */
+    private final MultiLevelOutputEnabled outputEnabled;
+    
+    /** What all outputs that this write processes are added to. */
+    private final MultiLevelRecordedOutputs recordedOutputs;
+    // END REQUIRED ARGUMENTS
 
     @Override
-    public SingleLevelOutputEnabled first() {
-        return All.INSTANCE;
+    public boolean isOutputEnabled(String outputName) {
+
+        boolean enabled = outputEnabled.isOutputEnabled(outputName);
+        
+        recordedOutputs.first().add(outputName, enabled);
+        
+        return enabled;
     }
 
     @Override
-    protected Optional<SingleLevelOutputEnabled> selectSecond(String outputName) {
-        return Optional.of(All.INSTANCE);
+    public SingleLevelOutputEnabled second(String outputName, SingleLevelOutputEnabled alternative) {
+        return wrap( outputEnabled.second(outputName, alternative), outputName );
+    }
+    
+    private SingleLevelOutputEnabled wrap(SingleLevelOutputEnabled outputEnabled, String outputName) {
+        return new RecordOutputNamesSingle(
+            outputEnabled,
+            recordedOutputs.second(outputName)
+        );
     }
 }

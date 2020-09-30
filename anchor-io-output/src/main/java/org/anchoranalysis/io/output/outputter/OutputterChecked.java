@@ -42,7 +42,7 @@ import org.anchoranalysis.io.output.bean.OutputManager;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.bean.rules.Permissive;
 import org.anchoranalysis.io.output.outputter.directory.OutputterTarget;
-import org.anchoranalysis.io.output.writer.RecordedOutputs;
+import org.anchoranalysis.io.output.writer.MultiLevelRecordedOutputs;
 import org.anchoranalysis.io.output.writer.RecordingWriters;
 
 /**
@@ -72,7 +72,7 @@ public class OutputterChecked {
     @Getter private MultiLevelOutputEnabled outputsEnabled;
 
     /** Records the names of all outputs written to, if defined. */
-    private Optional<RecordedOutputs> recordedOutputs;
+    private Optional<MultiLevelRecordedOutputs> recordedOutputs;
 
     /** General settings for writing outputs. */
     @Getter private OutputWriteSettings settings;
@@ -115,7 +115,7 @@ public class OutputterChecked {
             MultiLevelOutputEnabled outputEnabled,
             OutputWriteSettings settings,
             WriteOperationRecorder writeOperationRecorder,
-            Optional<RecordedOutputs> recordedOutputs,
+            Optional<MultiLevelRecordedOutputs> recordedOutputs,
             boolean deleteExistingDirectory)
             throws BindFailedException {
         return new OutputterChecked(
@@ -138,7 +138,7 @@ public class OutputterChecked {
             OutputterTarget target,
             WriteOperationRecorder writeOperationRecorder,
             MultiLevelOutputEnabled outputsEnabled,
-            Optional<RecordedOutputs> recordedOutputs,
+            Optional<MultiLevelRecordedOutputs> recordedOutputs,
             OutputWriteSettings settings) {
         this.target = target;
         this.writeOperationRecorder = writeOperationRecorder;
@@ -153,7 +153,7 @@ public class OutputterChecked {
     
     private MultiLevelOutputEnabled maybeRecordOutputNames(MultiLevelOutputEnabled outputsEnabled) {
         if (recordedOutputs.isPresent()) {
-            return new RecordOutputNamesForOutputEnabled(outputsEnabled,recordedOutputs.get());
+            return new RecordOutputNamesMultiLevel(outputsEnabled,recordedOutputs.get());
         } else {
             return outputsEnabled;
         }

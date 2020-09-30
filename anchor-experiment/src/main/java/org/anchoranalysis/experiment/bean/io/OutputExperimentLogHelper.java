@@ -30,7 +30,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.experiment.log.Divider;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
-import org.anchoranalysis.io.output.writer.RecordedOutputs;
+import org.anchoranalysis.io.output.writer.MultiLevelRecordedOutputs;
 import org.apache.commons.lang.time.StopWatch;
 
 /**
@@ -53,7 +53,7 @@ class OutputExperimentLogHelper {
     }
 
     public static void maybeLogCompleted(
-            RecordedOutputs recordedOutputs,
+            MultiLevelRecordedOutputs recordedOutputs,
             ParametersExperiment params,
             StopWatch stopWatchExperiment) {
         if (params.isDetailedLogging()) {
@@ -62,39 +62,11 @@ class OutputExperimentLogHelper {
                     .logFormatted(
                             "%s%n%s%n%s%nExperiment %s completed (%ds) writing to %s",
                             DIVIDER.withLabel("Outputs"),
-                            summarize(recordedOutputs),
+                            new SummarizeRecordedOutputs(recordedOutputs).summarize(),
                             DIVIDER.withoutLabel(),
                             params.getExperimentIdentifier(),
                             stopWatchExperiment.getTime() / 1000,
                             params.getOutputter().getOutputFolderPath());
-        }
-    }
-
-    /**
-     * A string (one or two lines) summarizing what outputs were written or not-written but
-     * possible.
-     *
-     * @return the string
-     */
-    private static String summarize(RecordedOutputs recordedOutputs) {
-        if (recordedOutputs.isEmpty()) {
-            return "No outputs were written as no possible outputs exist.";
-        }
-
-        if (recordedOutputs.numberEnabled() > 0) {
-            if (recordedOutputs.numberNotAllowed() > 0) {
-                return String.format(
-                        "Written:\t%s.%nNot written:\t%s.",
-                        recordedOutputs.summarizeEnabled(), recordedOutputs.summarizeDisabled());
-            } else {
-                return String.format(
-                        "All possible outputs were written: %s.",
-                        recordedOutputs.summarizeEnabled());
-            }
-        } else {
-            return String.format(
-                    "No outputs were written.%nPossible outputs are: %s.",
-                    recordedOutputs.summarizeDisabled());
         }
     }
 }

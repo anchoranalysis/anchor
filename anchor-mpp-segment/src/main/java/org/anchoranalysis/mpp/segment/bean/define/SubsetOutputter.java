@@ -31,7 +31,7 @@ import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.name.provider.NamedProvider;
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.generator.collection.GeneratorOutputHelper;
-import org.anchoranalysis.io.output.bean.enabled.OutputEnabled;
+import org.anchoranalysis.io.output.SingleLevelOutputEnabled;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
 
@@ -39,7 +39,7 @@ import org.anchoranalysis.io.output.outputter.OutputterChecked;
 class SubsetOutputter<T> {
 
     private NamedProvider<T> providers;
-    private OutputEnabled outputAllowed;
+    private SingleLevelOutputEnabled outputEnabled;
     private Generator<T> generator;
     private OutputterChecked outputter;
     private String outputName;
@@ -53,7 +53,7 @@ class SubsetOutputter<T> {
         }
 
         GeneratorOutputHelper.output(
-                GeneratorOutputHelper.subset(providers, outputAllowed, errorReporter),
+                GeneratorOutputHelper.subset(providers, outputEnabled, errorReporter),
                 generator,
                 outputter,
                 outputName,
@@ -69,7 +69,7 @@ class SubsetOutputter<T> {
         }
 
         GeneratorOutputHelper.outputWithException(
-                GeneratorOutputHelper.subsetWithException(providers, outputAllowed),
+                GeneratorOutputHelper.subsetWithException(providers, outputEnabled),
                 generator,
                 outputter,
                 outputName,

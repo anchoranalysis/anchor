@@ -25,8 +25,10 @@
  */
 package org.anchoranalysis.io.output.bean.rules;
 
+import java.util.Optional;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.io.output.MultiLevelOutputEnabled;
+import org.anchoranalysis.io.output.SingleLevelOutputEnabled;
 import org.anchoranalysis.io.output.bean.enabled.OutputEnabled;
 
 /**
@@ -42,7 +44,7 @@ public abstract class OutputEnabledRules extends AnchorBean<OutputEnabledRules>
      *
      * @return a class that indicates whether top-level outputs are allowed
      */
-    public abstract OutputEnabled first();
+    public abstract SingleLevelOutputEnabled first();
 
     /**
      * Is a particular <b>first-level</b> output-allowed?
@@ -54,4 +56,17 @@ public abstract class OutputEnabledRules extends AnchorBean<OutputEnabledRules>
     public boolean isOutputEnabled(String outputName) {
         return first().isOutputEnabled(outputName);
     }
+    
+    @Override
+    public SingleLevelOutputEnabled second(String outputName, SingleLevelOutputEnabled alternative) {
+        return selectSecond(outputName).orElse(alternative);
+    }
+    
+    /**
+     * A second-level of {@link OutputEnabled} for a particular {@code outputName} as used in
+     * first-level.
+     * 
+     * @return the a matching {@link OutputEnabled} if one is defined for the particular {@code outputName}, otherwise {@link Optional#empty}. 
+     */
+    protected abstract Optional<SingleLevelOutputEnabled> selectSecond(String outputName);
 }

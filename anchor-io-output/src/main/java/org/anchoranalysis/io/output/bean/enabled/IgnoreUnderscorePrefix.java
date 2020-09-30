@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -23,36 +23,32 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.io.output.outputter;
 
-import org.anchoranalysis.io.output.MultiLevelOutputEnabled;
-import org.anchoranalysis.io.output.bean.enabled.OutputEnabled;
-import org.anchoranalysis.io.output.writer.RecordedOutputs;
-import lombok.AllArgsConstructor;
+package org.anchoranalysis.io.output.bean.enabled;
 
-@AllArgsConstructor
-class RecordOutputNamesForOutputEnabled implements MultiLevelOutputEnabled {
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
-    // START REQUIRED ARGUMENTS
-    /** What all outputs that this write processes are added to. */
-    private final MultiLevelOutputEnabled outputEnabled;
-    
-    /** What all outputs that this write processes are added to. */
-    private final RecordedOutputs recordedOutputs;
-    // END REQUIRED ARGUMENTS
+/**
+ * All outputs are allowed unless the name's first character is an underscore.
+ * 
+ * <p>This is intended as a filter to allow declaration of certain <i>private</i> entities
+ * that are not typically outputted, unless explicitly specified.
+ *
+ * @author Owen Feehan
+ */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public class IgnoreUnderscorePrefix extends OutputEnabled {
+
+    /**
+     * A singleton instance of {@link IgnoreUnderscorePrefix}.
+     *
+     * <p>The class retains a public constructor so it can also be instantiated as a bean.
+     */
+    public static final OutputEnabled INSTANCE = new IgnoreUnderscorePrefix();
 
     @Override
     public boolean isOutputEnabled(String outputName) {
-
-        boolean enabled = outputEnabled.isOutputEnabled(outputName);
-        
-        recordedOutputs.add(outputName, enabled);
-        
-        return enabled;
-    }
-
-    @Override
-    public OutputEnabled second(String outputName) {
-        return outputEnabled.second(outputName);
+        return outputName.isEmpty() || outputName.charAt(0)=='_';
     }
 }

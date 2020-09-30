@@ -35,15 +35,24 @@ import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.generator.histogram.HistogramCSVGenerator;
 import org.anchoranalysis.io.generator.serialized.XStreamGenerator;
+import org.anchoranalysis.io.output.bean.enabled.IgnoreUnderscorePrefix;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.mpp.bean.init.MPPInitParams;
-import org.anchoranalysis.mpp.io.output.StackOutputKeys;
 import org.anchoranalysis.mpp.mark.MarkCollection;
 import org.anchoranalysis.mpp.segment.define.OutputterDirectories;
 
 /**
- * This class will expect for the following second-level output keys: {@link StackOutputKeys#MARKS}
- * {@link StackOutputKeys#HISTOGRAM} {@link StackOutputKeys#OBJECT}
+ * This class will output for certain outputs with second-level optionally defined.
+ * 
+ * These outputs are:
+ * 
+ * <ul>
+ * <li>{@link OutputterDirectories#STACKS}
+ * <li>{@link OutputterDirectories#MARKS}
+ * <li>{@link OutputterDirectories#HISTOGRAMS}
+ * <li>{@link OutputterDirectories#OBJECTS}
+ * 
+ * TODO merge OutputterDirectories and StackOutputKeys.
  *
  * @author Owen Feehan
  */
@@ -58,7 +67,6 @@ class SubsetOutputterFactory {
         return create(
                 soMPP.getMarksCollection(),
                 new XStreamGenerator<MarkCollection>(Optional.of("marks")),
-                StackOutputKeys.MARKS,
                 OutputterDirectories.MARKS);
     }
 
@@ -66,7 +74,6 @@ class SubsetOutputterFactory {
         return create(
                 soMPP.getImage().histograms(),
                 new HistogramCSVGenerator(),
-                StackOutputKeys.HISTOGRAM,
                 OutputterDirectories.HISTOGRAMS);
     }
 
@@ -74,18 +81,16 @@ class SubsetOutputterFactory {
         return create(
                 soMPP.getImage().objects(),
                 ObjectCollectionWriter.generator(),
-                StackOutputKeys.OBJECT,
                 OutputterDirectories.OBJECTS);
     }
 
     private <T> SubsetOutputter<T> create(
             NamedProviderStore<T> store,
             Generator<T> generator,
-            String outputAllowedSecondLevelKey,
             String directoryName) {
         return new SubsetOutputter<>(
                 store,
-                outputter.outputsEnabled().second(outputAllowedSecondLevelKey),
+                outputter.outputsEnabled().second(directoryName, IgnoreUnderscorePrefix.INSTANCE),
                 generator,
                 outputter.getChecked(),
                 directoryName,

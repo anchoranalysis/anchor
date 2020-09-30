@@ -44,10 +44,13 @@ import org.anchoranalysis.io.output.bean.enabled.OutputEnabled;
  * @author Owen Feehan
  */
 public interface MultiLevelOutputEnabled extends SingleLevelOutputEnabled {
-
+    
     /**
      * A second-level of {@link OutputEnabled} for a particular {@code outputName} as used in
      * first-level.
+     * 
+     * @param alternative if no second-level is defined, this alternative is used.
+     * @return the a matching {@link OutputEnabled} if one is defined for the particular {@code outputName}, otherwise {@code alternative}. 
      */
-    OutputEnabled second(String outputName);
+    SingleLevelOutputEnabled second(String outputName, SingleLevelOutputEnabled alternative);
 }

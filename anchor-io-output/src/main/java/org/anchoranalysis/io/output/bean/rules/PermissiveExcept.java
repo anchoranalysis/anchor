@@ -30,12 +30,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.StringSet;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.io.output.SingleLevelOutputEnabled;
 import org.anchoranalysis.io.output.bean.enabled.All;
 import org.anchoranalysis.io.output.bean.enabled.OutputEnabled;
 import org.anchoranalysis.io.output.bean.enabled.SpecificDisabled;
@@ -59,6 +61,9 @@ public class PermissiveExcept extends OutputEnabledRules {
     private List<NamedBean<StringSet>> exceptSecondLevel = new ArrayList<>();
     // END BEAN PROPERTIES
 
+    // We cache the second-level map here.
+    private Map<String, OutputEnabled> mapSecondLevel = null;
+    
     /**
      * Create to reject a specific set of first-level output-names.
      *
@@ -68,18 +73,17 @@ public class PermissiveExcept extends OutputEnabledRules {
         this.except = except;
     }
 
-    // We cache the second-level map here
-    private Map<String, OutputEnabled> mapSecondLevel = null;
-
     @Override
     public OutputEnabled first() {
         return new SpecificDisabled(except);
     }
 
     @Override
-    public OutputEnabled second(String outputName) {
+    protected Optional<SingleLevelOutputEnabled> selectSecond(String outputName) {
         createSecondLevelMapIfNecessary();
-        return mapSecondLevel.getOrDefault(outputName, All.INSTANCE);
+        return Optional.of(
+           mapSecondLevel.getOrDefault(outputName, All.INSTANCE)
+        );
     }
 
     private void createSecondLevelMapIfNecessary() {

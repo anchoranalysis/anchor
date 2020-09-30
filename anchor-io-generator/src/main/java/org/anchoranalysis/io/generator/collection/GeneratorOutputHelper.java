@@ -42,7 +42,7 @@ import org.anchoranalysis.io.generator.sequence.GeneratorSequenceNonIncremental;
 import org.anchoranalysis.io.generator.sequence.GeneratorSequenceNonIncrementalRerouterErrors;
 import org.anchoranalysis.io.manifest.sequencetype.SetSequenceType;
 import org.anchoranalysis.io.namestyle.StringSuffixOutputNameStyle;
-import org.anchoranalysis.io.output.bean.enabled.OutputEnabled;
+import org.anchoranalysis.io.output.SingleLevelOutputEnabled;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
 
@@ -148,13 +148,13 @@ public class GeneratorOutputHelper {
     }
 
     public static <T> NamedProvider<T> subset(
-            NamedProvider<T> providers, OutputEnabled oa, ErrorReporter errorReporter) {
+            NamedProvider<T> providers, SingleLevelOutputEnabled outputEnabled, ErrorReporter errorReporter) {
 
         NameValueSet<T> out = new NameValueSet<>();
 
         for (String name : providers.keys()) {
 
-            if (oa.isOutputEnabled(name)) {
+            if (outputEnabled.isOutputEnabled(name)) {
                 try {
                     out.add(new SimpleNameValue<>(name, providers.getException(name)));
                 } catch (NamedProviderGetException e) {
@@ -167,13 +167,13 @@ public class GeneratorOutputHelper {
     }
 
     public static <T> NamedProvider<T> subsetWithException(
-            NamedProvider<T> providers, OutputEnabled allowed) throws OutputWriteFailedException {
+            NamedProvider<T> providers, SingleLevelOutputEnabled outputEnabled) throws OutputWriteFailedException {
 
         NameValueSet<T> out = new NameValueSet<>();
 
         for (String name : providers.keys()) {
 
-            if (allowed.isOutputEnabled(name)) {
+            if (outputEnabled.isOutputEnabled(name)) {
                 try {
                     out.add(new SimpleNameValue<>(name, providers.getException(name)));
                 } catch (NamedProviderGetException e) {

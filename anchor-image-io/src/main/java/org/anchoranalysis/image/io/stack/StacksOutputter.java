@@ -37,7 +37,8 @@ import org.anchoranalysis.image.io.generator.raster.StackGenerator;
 import org.anchoranalysis.image.stack.NamedStacks;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.generator.collection.GeneratorOutputHelper;
-import org.anchoranalysis.io.output.bean.enabled.OutputEnabled;
+import org.anchoranalysis.io.output.SingleLevelOutputEnabled;
+import org.anchoranalysis.io.output.bean.enabled.IgnoreUnderscorePrefix;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
@@ -56,14 +57,13 @@ public class StacksOutputter {
      */
     public static void outputSubset(
             NamedProvider<Stack> stacks,
-            String secondLevelOutputKey,
             boolean suppressSubfolders,
             InputOutputContext context) {
         Outputter outputter = context.getOutputter();
 
         assert (outputter.getSettings().hasBeenInit());
         StacksOutputter.output(
-                stackSubset(stacks, secondLevelOutputKey, outputter),
+                stackSubset(stacks, OUTPUT_STACKS, outputter),
                 outputter.getChecked(),
                 OUTPUT_STACKS,
                 PREFIX,
@@ -80,7 +80,6 @@ public class StacksOutputter {
     public static void outputSubsetWithException(
             NamedProvider<Stack> stacks,
             Outputter outputter,
-            String secondLevelOutputKey,
             boolean suppressSubfolders)
             throws OutputWriteFailedException {
 
@@ -90,7 +89,7 @@ public class StacksOutputter {
         }
 
         StacksOutputter.outputWithException(
-                stackSubset(stacks, secondLevelOutputKey, outputter),
+                stackSubset(stacks, StacksOutputter.OUTPUT_STACKS, outputter),
                 outputter.getChecked(),
                 StacksOutputter.OUTPUT_STACKS,
                 PREFIX,
@@ -127,13 +126,13 @@ public class StacksOutputter {
                 stacks, generator, outputter, outputName, suffix, suppressSubfoldersIn);
     }
 
-    public static NamedStacks subset(NamedProvider<Stack> stackCollection, OutputEnabled oa) {
+    public static NamedStacks subset(NamedProvider<Stack> stackCollection, SingleLevelOutputEnabled outputEnabled) {
 
         NamedStacks out = new NamedStacks();
 
         for (String name : stackCollection.keys()) {
 
-            if (oa.isOutputEnabled(name)) {
+            if (outputEnabled.isOutputEnabled(name)) {
                 out.add(name, extractStackCached(stackCollection, name));
             }
         }
@@ -160,6 +159,6 @@ public class StacksOutputter {
     private static NamedStacks stackSubset(
             NamedProvider<Stack> stacks, String secondLevelOutputKey, Outputter outputter) {
         return StacksOutputter.subset(
-                stacks, outputter.outputsEnabled().second(secondLevelOutputKey));
+                stacks, outputter.outputsEnabled().second(secondLevelOutputKey,IgnoreUnderscorePrefix.INSTANCE));
     }
 }
