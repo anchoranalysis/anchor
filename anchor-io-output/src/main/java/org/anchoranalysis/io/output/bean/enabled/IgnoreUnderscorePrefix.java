@@ -49,6 +49,6 @@ public class IgnoreUnderscorePrefix extends OutputEnabled {
 
     @Override
     public boolean isOutputEnabled(String outputName) {
-        return outputName.isEmpty() || outputName.charAt(0)=='_';
+        return outputName.isEmpty() || outputName.charAt(0)!='_';
     }
 }
