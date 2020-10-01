@@ -38,14 +38,16 @@ class ByteImplementation extends Base<UnsignedByteBuffer> {
     @Override
     protected void multiplyBuffer(UnsignedByteBuffer buffer, double factor) {
         while (buffer.hasRemaining()) {
-            buffer.putUnsigned(buffer.position() - 1, scaleClipped(factor, buffer.getUnsigned()));
+            int valueToAssign = scaleClipped(factor, buffer.getUnsigned());
+            buffer.putUnsigned(buffer.position() - 1, valueToAssign);
         }
     }
 
     @Override
     protected void subtractFromBuffer(UnsignedByteBuffer buffer, int valueToSubtractFrom) {
         while (buffer.hasRemaining()) {
-            buffer.putUnsigned(buffer.position() - 1, valueToSubtractFrom - buffer.getUnsigned());
+            int valueToAssign = valueToSubtractFrom - buffer.getUnsigned();
+            buffer.putUnsigned(buffer.position() - 1, valueToAssign);
         }
     }
 

@@ -80,23 +80,20 @@ public abstract class ChannelConverter<T> {
         Channel channelOut;
         Voxels<T> voxelsOut;
 
-        if (changeExisting == ConversionPolicy.CHANGE_EXISTING_CHANNEL) {
-            channelOut = channelIn;
-            // We need to create a new voxel buffer
-            voxelsOut = voxelsFactory.createInitialized(channelIn.dimensions().extent());
-        } else {
-            channelOut =
-                    ChannelFactory.instance()
-                            .createUninitialised(channelIn.dimensions(), dataTypeTarget);
-            voxelsOut = (Voxels<T>) channelOut.voxels().match(dataTypeTarget);
-        }
-
         try {
-            voxelsConverter.copyFrom(channelIn.voxels(), voxelsOut);
-
             if (changeExisting == ConversionPolicy.CHANGE_EXISTING_CHANNEL) {
+                channelOut = channelIn;
+                // We need to create a new voxel buffer
+                voxelsOut = voxelsFactory.createInitialized(channelIn.dimensions().extent());
                 channelOut.replaceVoxels(voxelsOut);
+            } else {
+                channelOut =
+                        ChannelFactory.instance()
+                                .create(channelIn.dimensions(), dataTypeTarget);
+                voxelsOut = (Voxels<T>) channelOut.voxels().match(dataTypeTarget);                        
             }
+            
+            voxelsConverter.copyFrom(channelIn.voxels(), voxelsOut);
 
         } catch (OperationFailedException | IncorrectImageSizeException e1) {
             throw new AnchorImpossibleSituationException();

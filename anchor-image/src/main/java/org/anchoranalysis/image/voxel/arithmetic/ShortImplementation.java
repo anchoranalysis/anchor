@@ -43,7 +43,8 @@ class ShortImplementation extends Base<UnsignedShortBuffer> {
     @Override
     protected void multiplyBuffer(UnsignedShortBuffer buffer, double factor) {
         while (buffer.hasRemaining()) {
-            buffer.putDouble(buffer.position() - 1, buffer.getUnsigned() * factor);
+            double valueToAssign = buffer.getUnsigned() * factor;
+            buffer.putDouble(buffer.position() - 1, valueToAssign);
         }
     }
 
@@ -56,7 +57,8 @@ class ShortImplementation extends Base<UnsignedShortBuffer> {
     protected void subtractFromBuffer(UnsignedShortBuffer buffer, int valueToSubtractFrom) {
 
         while (buffer.hasRemaining()) {
-            buffer.putUnsigned(buffer.position() - 1, valueToSubtractFrom - buffer.getUnsigned());
+            int valueToAssign = valueToSubtractFrom - buffer.getUnsigned();
+            buffer.putUnsigned(buffer.position() - 1, valueToAssign);
         }
     }
 
