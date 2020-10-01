@@ -83,6 +83,15 @@ public class RecordedOutputs {
     }
     
     /**
+     * If there is at least one enabled output.
+     * 
+     * @return true if there is at least one output-name exists that was enabled.
+     */
+    public boolean hasAtLeastOneEnabled() {
+        return !namesEnabled.isEmpty();
+    }
+    
+    /**
      * If there is at least one disabled output.
      * 
      * @return true if there is at least one output-name exists that was disabled.
@@ -90,18 +99,18 @@ public class RecordedOutputs {
     public boolean hasAtLeastOneDisabled() {
         return !namesDisabled.isEmpty();
     }
-    
+
     /**
-     * Multiplex between {@link #numberEnabled()} and {@link #numberDisabled()}.
+     * Multiplex between {@link #hasAtLeastOneEnabled()} and {@link #hasAtLeastOneDisabled()}.
      * 
      * @param enabled if true, consider the number of output names that were enabled, otherwise those that were disabled.
-     * @return the number of output-names that were enabled/disabled (depending on {@code enabled}.
+     * @return true if there is at least one output-name exists that was enabled/disabled.
      */
-    public int numberMultiplex(boolean enabled) {
+    public boolean hasAtLeastOneMultiplex(boolean enabled) {
         if (enabled) {
-            return numberEnabled();
+            return hasAtLeastOneEnabled();
         } else {
-            return numberDisabled();
+            return hasAtLeastOneDisabled();
         }
     }
 

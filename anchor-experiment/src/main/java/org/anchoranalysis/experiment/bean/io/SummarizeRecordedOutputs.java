@@ -28,7 +28,7 @@ class SummarizeRecordedOutputs {
         }
 
         if (recordedOutputs.first().numberEnabled() > 0) {
-            return summarizeWritten(recordedOutputs.first());
+            return summarizeWritten();
         } else {
             return String.format(
                     "No outputs were written.%nPossible outputs are: %s.",
@@ -37,7 +37,7 @@ class SummarizeRecordedOutputs {
     }
     
     /** Summarizes a situation where at least one output was written. */
-    private String summarizeWritten(RecordedOutputs first) {
+    private String summarizeWritten() {
         StringBuilder builder = new StringBuilder();
         if (recordedOutputs.hasAtLeastOneDisabled()) {
             addLineSummary("Enabled", true, builder);
@@ -64,8 +64,7 @@ class SummarizeRecordedOutputs {
      */
     private void addSecondLevelLines(StringBuilder builder, boolean written) {
         for( Entry<String, RecordedOutputs> entry : recordedOutputs.secondEntries() ) {
-            int number = entry.getValue().numberMultiplex(written); 
-            if (number > 0) {
+            if (entry.getValue().hasAtLeastOneMultiplex(written)) {
                 builder.append( System.lineSeparator() );
                 builder.append("|- ");
                 builder.append(entry.getKey());
