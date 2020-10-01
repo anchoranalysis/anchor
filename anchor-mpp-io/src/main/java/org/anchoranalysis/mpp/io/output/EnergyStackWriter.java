@@ -30,14 +30,35 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.image.io.generator.raster.ChannelGenerator;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.io.generator.sequence.GeneratorSequenceUtilities;
 import org.anchoranalysis.io.generator.serialized.KeyValueParamsGenerator;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
+import org.anchoranalysis.mpp.mark.Mark;
 
+/**
+ * Writes an energy-stack.
+ * 
+ * <p>The following outputs are produced:
+ * 
+ * <table>
+ * <caption></caption>
+ * <thead>
+ * <tr><th>Output Name</th><th>Default?</th><th>Description</th></tr>
+ * </thead>
+ * <tbody>
+ * <tr><td>energyStack</td><td>no</td><td>Each channel of the energy-stack as a seperate image.</td></tr>
+ * <tr><td>energyStackParams</td><td>no</td><td>XML serialization of the key-value parameters associated with the energy stack.</td></tr>
+ *  * </tbody>
+ * </table>
+ *
+ * @author Owen Feehan
+ *
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class EnergyStackWriter {
 
-    private static final String FOLDER_CHANNEL = "energyStack";
+    private static final String OUTPUT_ENERGY_STACK_DIRECTORY = "energyStack";
     private static final String OUTPUT_PARAMS = "energyStackParams";
 
     private static final String MANIFEST_FUNCTION_CHANNEL = "energyStackChannel";
@@ -46,7 +67,7 @@ public class EnergyStackWriter {
     public static void writeEnergyStack(EnergyStack energyStack, InputOutputContext context) {
         // We write the energy-stack separately as individual channels
         GeneratorSequenceUtilities.generateListAsSubfolder(
-                FOLDER_CHANNEL,
+                OUTPUT_ENERGY_STACK_DIRECTORY,
                 2,
                 energyStack.withoutParams().asStack().asListChannels(),
                 new ChannelGenerator(MANIFEST_FUNCTION_CHANNEL, energyStack.hasOneSlice()),
