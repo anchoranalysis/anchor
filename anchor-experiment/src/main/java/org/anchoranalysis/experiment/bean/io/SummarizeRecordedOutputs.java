@@ -27,7 +27,7 @@ class SummarizeRecordedOutputs {
             return "No outputs were written as no possible outputs exist.";
         }
 
-        if (recordedOutputs.first().numberEnabled() > 0) {
+        if (recordedOutputs.first().hasAtLeastOneEnabled()) {
             return summarizeWritten();
         } else {
             return String.format(
