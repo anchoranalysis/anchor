@@ -188,12 +188,14 @@ public class OutputterChecked {
      * @param subdirectoryName the subdirectory-name
      * @param manifestDescription manifest-description
      * @param manifestFolder manifest-folder
+     * @param inheritOutputRulesAndRecording if true, the output rules and recording are inherited from the parent directory. if false, they are not, and all outputs are allowed and are unrecorded.
      * @return a bound-output-manager for the subdirectory
      */
     public OutputterChecked deriveSubdirectory(
             String subdirectoryName,
             ManifestFolderDescription manifestDescription,
-            Optional<FolderWriteWithPath> manifestFolder) {
+            Optional<FolderWriteWithPath> manifestFolder,
+            boolean inheritOutputRulesAndRecording) {
 
         // Construct a sub-directory for the desired outputName
         Path pathSubdirectory = outFilePath(subdirectoryName);
@@ -203,8 +205,8 @@ public class OutputterChecked {
                     target.changePrefix(new FilePathPrefix(pathSubdirectory)),
                     writeFolderToOperationRecorder(
                             pathSubdirectory, manifestDescription, manifestFolder),
-                    Permissive.INSTANCE, // Allow all outputs in the sub-directory
-                    Optional.empty(), // Output-names are no longer recorded on sub-directories
+                    inheritOutputRulesAndRecording ? outputsEnabled : Permissive.INSTANCE, // Allow all outputs in the sub-directory
+                    inheritOutputRulesAndRecording ? recordedOutputs : Optional.empty(), // Output-names are no longer recorded on sub-directories
                     settings);
         } catch (BindFailedException e) {
             // This exception can only be thrown if the prefix-path doesn't reside within the

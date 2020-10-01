@@ -3,6 +3,7 @@ package org.anchoranalysis.io.output.recorded;
 import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Set;
+import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 
@@ -28,6 +29,11 @@ public class MultiLevelRecordedOutputs {
      * @return
      */
     public RecordedOutputs second(String outputName) {
+        
+        if (!first.isRecordedAsEnabled(outputName)) {
+            throw new AnchorFriendlyRuntimeException("output-name has been recorded as a second-level output, without having being recorded as a first-level output: " + outputName);
+        }
+        
         return second.computeIfAbsent(outputName, name -> new RecordedOutputs() );
     }
 

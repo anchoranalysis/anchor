@@ -66,10 +66,10 @@ class RecordOutputNamesForWriter implements Writer {
     public Optional<OutputterChecked> createSubdirectory(
             String outputName,
             ManifestFolderDescription manifestDescription,
-            Optional<FolderWriteWithPath> manifestFolder)
+            Optional<FolderWriteWithPath> manifestFolder, boolean inheritOutputRulesAndRecording)
             throws OutputWriteFailedException {
         Optional<OutputterChecked> outputter =
-                writer.createSubdirectory(outputName, manifestDescription, manifestFolder);
+                writer.createSubdirectory(outputName, manifestDescription, manifestFolder, inheritOutputRulesAndRecording);
         recordedOutputs.add(outputName, outputter.isPresent());
         return outputter;
     }

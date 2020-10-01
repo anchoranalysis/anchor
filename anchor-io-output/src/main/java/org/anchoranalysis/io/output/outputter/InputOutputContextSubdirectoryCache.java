@@ -41,13 +41,16 @@ import org.anchoranalysis.io.manifest.ManifestFolderDescription;
  * @author Owen Feehan
  */
 @RequiredArgsConstructor
-public class IntputOutputContextSubdirectoryCache {
+public class InputOutputContextSubdirectoryCache {
 
     /** the context of the directory in which subdirectories may be created */
     private final InputOutputContext parentContext;
 
     /** A description to use for every created folder */
     private final ManifestFolderDescription manifestFolderDescription;
+    
+    /** If true, the output rules and recording are inherited from the parent directory. if false, they are not, and all outputs are allowed and are unrecorded. */
+    private final boolean inheritOutputRulesAndRecording;
 
     private Map<Optional<String>, InputOutputContext> mapContexts = new HashMap<>();
 
@@ -61,6 +64,6 @@ public class IntputOutputContextSubdirectoryCache {
     public InputOutputContext get(Optional<String> subdirectoryName) {
         return mapContexts.computeIfAbsent(
                 subdirectoryName,
-                key -> parentContext.maybeSubdirectory(key, manifestFolderDescription));
+                key -> parentContext.maybeSubdirectory(key, manifestFolderDescription, inheritOutputRulesAndRecording));
     }
 }

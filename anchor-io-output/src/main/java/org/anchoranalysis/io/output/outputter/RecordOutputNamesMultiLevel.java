@@ -53,6 +53,7 @@ class RecordOutputNamesMultiLevel implements MultiLevelOutputEnabled {
 
     @Override
     public SingleLevelOutputEnabled second(String outputName) {
+        
         return wrap( outputEnabled.second(outputName), outputName );
     }
     

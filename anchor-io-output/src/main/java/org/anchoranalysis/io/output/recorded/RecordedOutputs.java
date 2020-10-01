@@ -158,6 +158,16 @@ public class RecordedOutputs {
             return summarizeDisabled();
         }
     }
+    
+    /**
+     * Is a particular output-name recorded as enabled?
+     * 
+     * @param outputName the output-name
+     * @return true if the output-name has been recorded as enabled
+     */
+    public boolean isRecordedAsEnabled(String outputName) {
+        return namesEnabled.contains(outputName);
+    }
 
     private static String summarizeNames(Set<String> names) {
         return String.join(", ", names);

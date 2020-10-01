@@ -58,12 +58,13 @@ public class AlwaysAllowed implements Writer {
     public Optional<OutputterChecked> createSubdirectory(
             String outputName,
             ManifestFolderDescription manifestDescription,
-            Optional<FolderWriteWithPath> manifestFolder)
+            Optional<FolderWriteWithPath> manifestFolder,
+            boolean inheritOutputRulesAndRecording)
             throws OutputWriteFailedException {
 
         maybeExecutePreop();
         return Optional.of(
-                outputter.deriveSubdirectory(outputName, manifestDescription, manifestFolder));
+                outputter.deriveSubdirectory(outputName, manifestDescription, manifestFolder, inheritOutputRulesAndRecording));
     }
 
     @Override

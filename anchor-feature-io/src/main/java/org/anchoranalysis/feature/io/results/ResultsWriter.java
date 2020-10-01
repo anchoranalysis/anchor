@@ -39,7 +39,7 @@ import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.manifest.ManifestFolderDescription;
 import org.anchoranalysis.io.manifest.sequencetype.SetSequenceType;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
-import org.anchoranalysis.io.output.outputter.IntputOutputContextSubdirectoryCache;
+import org.anchoranalysis.io.output.outputter.InputOutputContextSubdirectoryCache;
 
 /**
  * Feature calculation results that can be outputted in different ways.
@@ -126,10 +126,11 @@ public class ResultsWriter implements Closeable {
             InputOutputContext context)
             throws AnchorIOException {
 
-        IntputOutputContextSubdirectoryCache contextGroups =
-                new IntputOutputContextSubdirectoryCache(
-                        context.subdirectory("grouped", MANIFEST_GROUP_ROOT),
-                        MANIFEST_GROUP_SUBROOT);
+        InputOutputContextSubdirectoryCache contextGroups =
+                new InputOutputContextSubdirectoryCache(
+                        context.subdirectory("grouped", MANIFEST_GROUP_ROOT, true),
+                        MANIFEST_GROUP_SUBROOT,
+                        true);
 
         groupWriter.writeGroupResults(featuresAggregate, includeGroups, context, contextGroups);
     }

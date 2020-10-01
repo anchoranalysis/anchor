@@ -158,7 +158,7 @@ class SequenceWriters {
             return parentWriters
                     .multiplex(selectSelective)
                     .createSubdirectory(
-                            subfolderName.get(), folderDescription, Optional.of(subFolderWrite))
+                            subfolderName.get(), folderDescription, Optional.of(subFolderWrite), false)
                     .map(OutputterChecked::getWriters);
         } else {
             return Optional.of(parentWriters);

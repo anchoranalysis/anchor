@@ -52,7 +52,7 @@ import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
-import org.anchoranalysis.io.output.outputter.IntputOutputContextSubdirectoryCache;
+import org.anchoranalysis.io.output.outputter.InputOutputContextSubdirectoryCache;
 
 /**
  * Writes the aggregated results for a single group as XML to the filesystem.
@@ -83,7 +83,7 @@ class WriteXMLForGroup {
             Optional<MultiName> groupName,
             ResultsWriterMetadata metadata,
             Optional<FeatureCSVWriter> csvWriter,
-            IntputOutputContextSubdirectoryCache context)
+            InputOutputContextSubdirectoryCache context)
             throws AnchorIOException {
         OptionalUtilities.ifPresent(
                 metadata.outputNames().getXmlAggregatedGroup(),

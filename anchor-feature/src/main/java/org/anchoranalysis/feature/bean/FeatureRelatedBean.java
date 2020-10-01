@@ -33,7 +33,6 @@ import org.anchoranalysis.bean.initializable.property.ExtractFromParam;
 import org.anchoranalysis.bean.initializable.property.PropertyInitializer;
 import org.anchoranalysis.bean.initializable.property.SimplePropertyDefiner;
 import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsInitParams;
-import org.anchoranalysis.feature.calculate.FeatureInitParams;
 import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
 
 /**

@@ -57,15 +57,17 @@ public class Outputter {
      * @see OutputterChecked#deriveSubdirectory
      * @param subdirectoryName the subdirectory-name
      * @param manifestDescription manifest-description
+     * @param inheritOutputRulesAndRecording if true, the output rules and recording are inherited from the parent directory. if false, they are not, and all outputs are allowed and are unrecorded.
      * @return the new output manager
      */
     public Outputter deriveSubdirectory(
-            String subdirectoryName, ManifestFolderDescription manifestDescription) {
+            String subdirectoryName, ManifestFolderDescription manifestDescription, boolean inheritOutputRulesAndRecording) {
         return new Outputter(
                 delegate.deriveSubdirectory(
                         subdirectoryName,
                         manifestDescription,
-                        Optional.of(new FolderWritePhysical())),
+                        Optional.of(new FolderWritePhysical()),
+                        inheritOutputRulesAndRecording),
                 errorReporter);
     }
 

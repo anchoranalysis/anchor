@@ -59,15 +59,16 @@ public class StacksOutputter {
             boolean suppressSubfolders,
             InputOutputContext context) {
         Outputter outputter = context.getOutputter();
-
-        assert (outputter.getSettings().hasBeenInit());
-        StacksOutputter.output(
-                stackSubset(stacks, OUTPUT_STACKS, outputter),
-                outputter.getChecked(),
-                OUTPUT_STACKS,
-                PREFIX,
-                context.getErrorReporter(),
-                suppressSubfolders);
+        
+        if (outputter.outputsEnabled().isOutputEnabled(StacksOutputter.OUTPUT_STACKS)) {
+            StacksOutputter.output(
+                    stackSubset(stacks, OUTPUT_STACKS, outputter),
+                    outputter.getChecked(),
+                    OUTPUT_STACKS,
+                    PREFIX,
+                    context.getErrorReporter(),
+                    suppressSubfolders);
+        }
     }
 
     /**
@@ -81,20 +82,17 @@ public class StacksOutputter {
             Outputter outputter,
             boolean suppressSubfolders)
             throws OutputWriteFailedException {
-
-        if (!outputter.getSettings().hasBeenInit()) {
-            throw new OutputWriteFailedException(
-                    "Outputter's settings have not yet been initialized");
+        
+        if (outputter.outputsEnabled().isOutputEnabled(StacksOutputter.OUTPUT_STACKS)) {
+            StacksOutputter.outputWithException(
+                    stackSubset(stacks, StacksOutputter.OUTPUT_STACKS, outputter),
+                    outputter.getChecked(),
+                    StacksOutputter.OUTPUT_STACKS,
+                    PREFIX,
+                    suppressSubfolders);
         }
-
-        StacksOutputter.outputWithException(
-                stackSubset(stacks, StacksOutputter.OUTPUT_STACKS, outputter),
-                outputter.getChecked(),
-                StacksOutputter.OUTPUT_STACKS,
-                PREFIX,
-                suppressSubfolders);
     }
-
+    
     public static void output(
             NamedStacks stacks,
             OutputterChecked outputter,
@@ -112,7 +110,7 @@ public class StacksOutputter {
                 errorReporter,
                 suppressSubfoldersIn);
     }
-
+    
     private static void outputWithException(
             NamedStacks stacks,
             OutputterChecked outputter,

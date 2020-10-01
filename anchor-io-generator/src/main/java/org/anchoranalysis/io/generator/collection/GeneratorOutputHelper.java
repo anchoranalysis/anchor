@@ -58,6 +58,10 @@ public class GeneratorOutputHelper {
             String prefix,
             ErrorReporter errorReporter,
             boolean suppressSubfoldersIn) {
+        
+        if (!outputter.getOutputsEnabled().isOutputEnabled(outputName)) {
+            return;
+        }
 
         StringSuffixOutputNameStyle outputNameStyle =
                 new StringSuffixOutputNameStyle(prefix, prefix + "%s");
@@ -98,6 +102,10 @@ public class GeneratorOutputHelper {
             String suffix,
             boolean suppressSubfoldersIn)
             throws OutputWriteFailedException {
+        
+        if (!outputter.getOutputsEnabled().isOutputEnabled(outputName)) {
+            return;
+        }
 
         StringSuffixOutputNameStyle outputNameStyle =
                 new StringSuffixOutputNameStyle(suffix, suffix + "%s");
