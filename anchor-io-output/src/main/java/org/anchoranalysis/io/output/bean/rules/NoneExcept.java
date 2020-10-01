@@ -30,28 +30,30 @@ import java.util.Optional;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.bean.StringSet;
 import org.anchoranalysis.io.output.bean.enabled.All;
+import org.anchoranalysis.io.output.bean.enabled.None;
 import org.anchoranalysis.io.output.bean.enabled.SpecificDisabled;
+import org.anchoranalysis.io.output.bean.enabled.SpecificEnabled;
 import org.anchoranalysis.io.output.enabled.multi.MultiLevelOutputEnabled;
 import org.anchoranalysis.io.output.enabled.single.SingleLevelOutputEnabled;
 
 /**
- * All outputs are enabled except particular ones.
+ * All outputs are disabled except particular ones.
  *
  * @author Owen Feehan
  */
 @NoArgsConstructor
-public class PermissiveExcept extends OutputEnableRulesSpecify {
+public class NoneExcept extends OutputEnableRulesSpecify {
     
-    private class PermissiveExceptImplementation implements MultiLevelOutputEnabled {
+    private class NoneExceptImplementation implements MultiLevelOutputEnabled {
 
         @Override
         public boolean isOutputEnabled(String outputName) {
-            return !firstLevelContains(outputName);
+            return firstLevelContains(outputName);
         }
 
         @Override
         public SingleLevelOutputEnabled second(String outputName) {
-            return secondLevelOutputs(outputName, All.INSTANCE);
+            return secondLevelOutputs(outputName, None.INSTANCE);
         }
     }
     
@@ -60,17 +62,17 @@ public class PermissiveExcept extends OutputEnableRulesSpecify {
      *
      * @param first first-level output-names
      */
-    public PermissiveExcept(StringSet first) {
+    public NoneExcept(StringSet first) {
         super(first);
     }
 
     @Override
     public MultiLevelOutputEnabled create(Optional<MultiLevelOutputEnabled> defaultRules) {
-        return new PermissiveExceptImplementation();
+        return new NoneExceptImplementation();
     }
 
     @Override
     protected SingleLevelOutputEnabled createSecondLevelFromSet(StringSet outputNames) {
-        return new SpecificDisabled(outputNames);
+        return new SpecificEnabled(outputNames);
     }
 }

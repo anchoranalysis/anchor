@@ -33,6 +33,7 @@ import org.anchoranalysis.bean.initializable.property.ExtractFromParam;
 import org.anchoranalysis.bean.initializable.property.PropertyInitializer;
 import org.anchoranalysis.bean.initializable.property.SimplePropertyDefiner;
 import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsInitParams;
+import org.anchoranalysis.feature.calculate.FeatureInitParams;
 import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
 
 /**
@@ -53,6 +54,7 @@ public abstract class FeatureRelatedBean<T> extends InitializableBean<T, SharedF
     private static List<ExtractFromParam<SharedFeaturesInitParams, ?>> paramExtracters() {
         return Arrays.asList(
                 new ExtractFromParam<>(
-                        KeyValueParamsInitParams.class, SharedFeaturesInitParams::getParams));
+                        KeyValueParamsInitParams.class, SharedFeaturesInitParams::getParams)
+                );
     }
 }
