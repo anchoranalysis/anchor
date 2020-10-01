@@ -39,4 +39,24 @@ public class MultiLevelRecordedOutputs {
     public Set<Entry<String, RecordedOutputs>> secondEntries() {
         return second.entrySet();
     }
+    
+    /**
+     * If there is at least one disabled output.
+     * 
+     * @return true if there is at least one output-name exists that was disabled.
+     */
+    public boolean hasAtLeastOneDisabled() {
+        
+        if (first.hasAtLeastOneDisabled()) {
+            return true;
+        }
+        
+        for(Entry<String, RecordedOutputs> entry : second.entrySet()) {
+            if (entry.getValue().hasAtLeastOneDisabled()) {
+                return true;
+            }
+        }
+        
+        return false;
+    }
 }

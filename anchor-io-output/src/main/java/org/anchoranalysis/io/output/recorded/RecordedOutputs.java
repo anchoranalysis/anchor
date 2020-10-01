@@ -83,6 +83,15 @@ public class RecordedOutputs {
     }
     
     /**
+     * If there is at least one disabled output.
+     * 
+     * @return true if there is at least one output-name exists that was disabled.
+     */
+    public boolean hasAtLeastOneDisabled() {
+        return !namesDisabled.isEmpty();
+    }
+    
+    /**
      * Multiplex between {@link #numberEnabled()} and {@link #numberDisabled()}.
      * 
      * @param enabled if true, consider the number of output names that were enabled, otherwise those that were disabled.

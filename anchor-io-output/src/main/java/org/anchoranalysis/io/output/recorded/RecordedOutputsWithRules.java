@@ -74,7 +74,7 @@ public class RecordedOutputsWithRules {
     public MultiLevelOutputEnabled selectOutputEnabled(
             Optional<OutputEnabledRules> rulesHigherPrecedence) {
         if (rulesHigherPrecedence.isPresent()) {
-            return additionalCombinedWith(rulesHigherPrecedence.get());
+            return additionalCombinedWith(rulesHigherPrecedence.get().create(defaultRules));
         } else if (defaultRules.isPresent()) {
             return additionalCombinedWith(defaultRules.get());
         } else {

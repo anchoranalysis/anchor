@@ -39,7 +39,7 @@ class SummarizeRecordedOutputs {
     /** Summarizes a situation where at least one output was written. */
     private String summarizeWritten(RecordedOutputs first) {
         StringBuilder builder = new StringBuilder();
-        if (first.numberDisabled() > 0) {
+        if (recordedOutputs.hasAtLeastOneDisabled()) {
             addLineSummary("Enabled", true, builder);
             builder.append( System.lineSeparator() );
             addLineSummary("Disabled", false, builder);

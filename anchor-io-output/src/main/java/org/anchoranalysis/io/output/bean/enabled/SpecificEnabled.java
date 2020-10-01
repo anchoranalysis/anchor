@@ -26,7 +26,9 @@
 
 package org.anchoranalysis.io.output.bean.enabled;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.StringSet;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -36,6 +38,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
  *
  * @author Owen Feehan
  */
+@NoArgsConstructor @AllArgsConstructor
 public class SpecificEnabled extends OutputEnabled {
 
     // START BEAN PROPERTIES

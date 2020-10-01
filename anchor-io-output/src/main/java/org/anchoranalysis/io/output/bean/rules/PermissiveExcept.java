@@ -26,74 +26,51 @@
 
 package org.anchoranalysis.io.output.bean.rules;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import lombok.Getter;
+import java.util.Optional;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.StringSet;
-import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.output.bean.enabled.All;
-import org.anchoranalysis.io.output.bean.enabled.OutputEnabled;
 import org.anchoranalysis.io.output.bean.enabled.SpecificDisabled;
+import org.anchoranalysis.io.output.enabled.multi.MultiLevelOutputEnabled;
 import org.anchoranalysis.io.output.enabled.single.SingleLevelOutputEnabled;
 
 /**
- * Allows everything to be outputted except a particular list.
- *
- * <p>The {@code extendSecondLevel} entries apply to <i>all</i> second-level outputs.
+ * All outputs are enabled except particular ones.
  *
  * @author Owen Feehan
  */
 @NoArgsConstructor
-public class PermissiveExcept extends OutputEnabledRules {
+public class PermissiveExcept extends OutputEnableRulesSpecify {
+    
+    private class PermissiveExceptImplementation implements MultiLevelOutputEnabled {
 
-    // START BEAN PROPERTIES
-    /** Rejects these output-names in the first-level. */
-    @BeanField @Getter @Setter private StringSet except;
+        @Override
+        public boolean isOutputEnabled(String outputName) {
+            return !firstLevelContains(outputName);
+        }
 
-    /** Rejects all these output-names in the second-level (for all first level output-names) */
-    @BeanField @Getter @Setter
-    private List<NamedBean<StringSet>> exceptSecondLevel = new ArrayList<>();
-    // END BEAN PROPERTIES
-
-    // We cache the second-level map here.
-    private Map<String, OutputEnabled> mapSecondLevel = null;
+        @Override
+        public SingleLevelOutputEnabled second(String outputName) {
+            return secondLevelOutputs(outputName, All.INSTANCE);
+        }
+    }
     
     /**
      * Create to reject a specific set of first-level output-names.
      *
-     * @param except rejects these output-names in the first-level.
+     * @param first first-level output-names
      */
-    public PermissiveExcept(StringSet except) {
-        this.except = except;
+    public PermissiveExcept(StringSet first) {
+        super(first);
     }
 
     @Override
-    public OutputEnabled first() {
-        return new SpecificDisabled(except);
+    public MultiLevelOutputEnabled create(Optional<MultiLevelOutputEnabled> defaultRules) {
+        return new PermissiveExceptImplementation();
     }
 
     @Override
-    public SingleLevelOutputEnabled second(String outputName) {
-        createSecondLevelMapIfNecessary();
-        return mapSecondLevel.getOrDefault(outputName, All.INSTANCE);
-    }
-
-    private void createSecondLevelMapIfNecessary() {
-        if (mapSecondLevel == null) {
-            mapSecondLevel = createSecondLevelMap();
-        }
-    }
-
-    private Map<String, OutputEnabled> createSecondLevelMap() {
-        Map<String, OutputEnabled> map = new HashMap<>();
-        for (NamedBean<StringSet> bean : exceptSecondLevel) {
-            map.put(bean.getName(), new SpecificDisabled(bean.getItem()));
-        }
-        return map;
+    protected SingleLevelOutputEnabled createSecondLevelFromSet(StringSet outputNames) {
+        return new SpecificDisabled(outputNames);
     }
 }

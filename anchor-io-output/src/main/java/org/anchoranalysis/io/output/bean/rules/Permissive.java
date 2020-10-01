@@ -26,7 +26,9 @@
 
 package org.anchoranalysis.io.output.bean.rules;
 
+import java.util.Optional;
 import org.anchoranalysis.io.output.bean.enabled.All;
+import org.anchoranalysis.io.output.enabled.multi.MultiLevelOutputEnabled;
 import org.anchoranalysis.io.output.enabled.single.SingleLevelOutputEnabled;
 
 /**
@@ -41,15 +43,22 @@ public class Permissive extends OutputEnabledRules {
      *
      * <p>The class retains a public constructor so it can also be instantiated as a bean.
      */
-    public static final OutputEnabledRules INSTANCE = new Permissive();
+    public static final MultiLevelOutputEnabled INSTANCE = new PermissiveImplementation();
 
-    @Override
-    public SingleLevelOutputEnabled first() {
-        return All.INSTANCE;
+    private static class PermissiveImplementation implements MultiLevelOutputEnabled {
+        @Override
+        public boolean isOutputEnabled(String outputName) {
+            return true;
+        }
+
+        @Override
+        public SingleLevelOutputEnabled second(String outputName) {
+            return All.INSTANCE;
+        }
     }
-
+    
     @Override
-    public SingleLevelOutputEnabled second(String outputName) {
-        return All.INSTANCE;
+    public MultiLevelOutputEnabled create(Optional<MultiLevelOutputEnabled> defaultRules) {
+        return INSTANCE;
     }
 }

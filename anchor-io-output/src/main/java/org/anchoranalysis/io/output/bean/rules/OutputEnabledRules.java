@@ -25,33 +25,22 @@
  */
 package org.anchoranalysis.io.output.bean.rules;
 
+import java.util.Optional;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.io.output.enabled.multi.MultiLevelOutputEnabled;
-import org.anchoranalysis.io.output.enabled.single.SingleLevelOutputEnabled;
 
 /**
  * Bean that specifies an implementation of {@link MultiLevelOutputEnabled}.
  *
  * @author Owen Feehan
  */
-public abstract class OutputEnabledRules extends AnchorBean<OutputEnabledRules>
-        implements MultiLevelOutputEnabled {
+public abstract class OutputEnabledRules extends AnchorBean<OutputEnabledRules> {
 
-    /**
-     * Is a particular output (first-level) allowed?
-     *
-     * @return a class that indicates whether top-level outputs are allowed
+    /** 
+     * Creates rules for determining whether an output is enabled or disabled. 
+     * 
+     * @param defaultRules default output-enabled rules that may exist.
+     * @return rules for determining whether particular outputs are enabled.
      */
-    public abstract SingleLevelOutputEnabled first();
-
-    /**
-     * Is a particular <b>first-level</b> output-allowed?
-     *
-     * @param outputName the name of the output
-     * @return true iff the output is allowed
-     */
-    @Override
-    public boolean isOutputEnabled(String outputName) {
-        return first().isOutputEnabled(outputName);
-    }
+    public abstract MultiLevelOutputEnabled create(Optional<MultiLevelOutputEnabled> defaultRules);
 }
