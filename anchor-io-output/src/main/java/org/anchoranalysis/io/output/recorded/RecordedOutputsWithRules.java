@@ -3,7 +3,6 @@ package org.anchoranalysis.io.output.recorded;
 import java.util.Optional;
 import org.anchoranalysis.io.output.bean.rules.OutputEnabledRules;
 import org.anchoranalysis.io.output.bean.rules.Permissive;
-import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.enabled.multi.MultiLevelOutputEnabled;
 import org.anchoranalysis.io.output.enabled.multi.MultiLevelOr;
 import lombok.Getter;
@@ -28,14 +27,14 @@ public class RecordedOutputsWithRules {
      * 
      * <p>Note that this object is treated as mutable, and additional outputs may be added.
      */
-    private final Optional<OutputEnabledMutable> defaultRules;
+    private final Optional<MultiLevelOutputEnabled> defaultRules;
     
     /**
      * Enabled-outputs that were always added to whichever rules are employed.
      * 
      * <p>e.g. these can be user-supplied outputs as <i>extras</i> from the command-line.
      */
-    private final Optional<OutputEnabledMutable> additionalOutputs;
+    private final Optional<MultiLevelOutputEnabled> additionalOutputs;
     
     /**
      * Creates with no rules or outputs defined.
@@ -52,7 +51,7 @@ public class RecordedOutputsWithRules {
      * @param recordedOutputs where output-names are recorded as they are written / queried
      * @param defaultRules default rules for which outputs are enabled.
      */
-    public RecordedOutputsWithRules(MultiLevelRecordedOutputs recordedOutputs, OutputEnabledMutable defaultRules, Optional<OutputEnabledMutable> additionalOutputs) {
+    public RecordedOutputsWithRules(MultiLevelRecordedOutputs recordedOutputs, MultiLevelOutputEnabled defaultRules, Optional<MultiLevelOutputEnabled> additionalOutputs) {
         this.recordedOutputs = Optional.of(recordedOutputs);
         this.defaultRules = Optional.of(defaultRules);
         this.additionalOutputs = additionalOutputs;
@@ -84,16 +83,11 @@ public class RecordedOutputsWithRules {
         }
     }
     
-    private MultiLevelOutputEnabled additionalCombinedWith( OutputEnabledMutable outputEnabled ) {
-        additionalOutputs.ifPresent(outputEnabled::addEnabledOutputs);
-        return outputEnabled;
-    }
-    
-    private MultiLevelOutputEnabled additionalCombinedWith( OutputEnabledRules outputEnabledRules ) {
+    private MultiLevelOutputEnabled additionalCombinedWith( MultiLevelOutputEnabled other ) {
         if (additionalOutputs.isPresent()) {
-            return new MultiLevelOr(additionalOutputs.get(), outputEnabledRules);
+            return new MultiLevelOr(additionalOutputs.get(), other);
         } else {
-            return outputEnabledRules;
+            return other;
         }
     }
 }

@@ -38,7 +38,7 @@ import org.anchoranalysis.bean.OptionalFactory;
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.io.error.FilePathPrefixerException;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerContext;
-import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
+import org.anchoranalysis.io.output.enabled.multi.MultiLevelOutputEnabled;
 import org.anchoranalysis.io.params.DebugModeParams;
 import org.anchoranalysis.io.params.InputContextParams;
 
@@ -64,7 +64,7 @@ public class ExperimentExecutionArguments {
     @Setter private Optional<String> inputFilterGlob = Optional.empty();
     
     /** Outputs enabled for experiment that are added to a task's default outputs. */
-    @Getter @Setter private Optional<OutputEnabledMutable> additionalOutputEnabled = Optional.empty();
+    @Getter @Setter private Optional<MultiLevelOutputEnabled> additionalOutputEnabled = Optional.empty();
 
     /**
      * If defined, a set of extension filters that can be applied on inputDirectory
@@ -130,7 +130,7 @@ public class ExperimentExecutionArguments {
      * 
      * @param outputs the outputs to add
      */
-    public void assignAdditionalOutputs(OutputEnabledMutable outputs) {
+    public void assignAdditionalOutputs(MultiLevelOutputEnabled outputs) {
         this.additionalOutputEnabled = Optional.of(outputs);
     }
 

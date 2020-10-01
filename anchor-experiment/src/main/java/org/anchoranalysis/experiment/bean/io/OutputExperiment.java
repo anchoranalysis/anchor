@@ -43,7 +43,7 @@ import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.error.FilePathPrefixerException;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
 import org.anchoranalysis.io.output.bean.OutputManager;
-import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
+import org.anchoranalysis.io.output.enabled.multi.MultiLevelOutputEnabled;
 import org.anchoranalysis.io.output.outputter.BindFailedException;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
 import org.anchoranalysis.io.output.recorded.MultiLevelRecordedOutputs;
@@ -126,7 +126,7 @@ public abstract class OutputExperiment extends Experiment {
      *
      * @return the default rules if they exist.
      */
-    protected abstract OutputEnabledMutable defaultOutputs();
+    protected abstract MultiLevelOutputEnabled defaultOutputs();
 
     private void doExperimentWithParams(ParametersExperiment params)
             throws ExperimentExecutionException {
@@ -151,14 +151,12 @@ public abstract class OutputExperiment extends Experiment {
         String experimentId = experimentIdentifier.identifier(arguments.getTaskName());
 
         try {
-            OutputEnabledMutable outputEnabled = defaultOutputs();
-            
             OutputterChecked rootOutputter =
                     getOutput()
                             .createExperimentOutputter(
                                     experimentId,
                                     experimentalManifest,
-                                    new RecordedOutputsWithRules(recordedOutputs, outputEnabled, arguments.getAdditionalOutputEnabled()),
+                                    new RecordedOutputsWithRules(recordedOutputs, defaultOutputs(), arguments.getAdditionalOutputEnabled()),
                                     arguments.createPrefixerContext());
 
             Preconditions.checkArgument(rootOutputter.getSettings().hasBeenInit());

@@ -49,6 +49,7 @@ import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.output.bean.OutputManager;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
+import org.anchoranalysis.io.output.enabled.multi.MultiLevelOutputEnabled;
 
 /**
  * An experiment that uses both an {@link InputManager} to specify inputs and a {@link
@@ -148,7 +149,7 @@ public class InputOutputExperiment<T extends InputFromManager, S> extends Output
     }
 
     @Override
-    protected OutputEnabledMutable defaultOutputs() {
+    protected MultiLevelOutputEnabled defaultOutputs() {
         OutputEnabledMutable taskDefaultOutputs = taskProcessor.getTask().defaultOutputs();
         taskDefaultOutputs.addEnabledOutputFirst(OUTPUT_EXPERIMENT_LOG, OUTPUT_JOB_LOG);
         return taskDefaultOutputs;
