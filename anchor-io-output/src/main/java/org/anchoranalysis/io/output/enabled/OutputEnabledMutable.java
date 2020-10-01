@@ -41,7 +41,7 @@ import org.anchoranalysis.io.output.enabled.single.SingleLevelOr;
  * @author Owen Feehan
  *
  */
-public class OutputEnabledMutable implements MultiLevelOutputEnabled, SingleLevelOutputEnabled {
+public class OutputEnabledMutable implements MultiLevelOutputEnabled {
 
     /** First level output-names. */
     private Set<String> enabledFirst = new HashSet<>();
