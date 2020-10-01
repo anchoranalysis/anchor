@@ -23,5 +23,5 @@
  * THE SOFTWARE.
  * #L%
  */
-/** Whether a particular output is allowed or not from a single set of outputs. */
+/** Beans indicating whether a particular output is enabled or not. */
 package org.anchoranalysis.io.output.bean.enabled;

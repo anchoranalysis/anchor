@@ -28,7 +28,6 @@ package org.anchoranalysis.experiment.bean.io;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -48,8 +47,8 @@ import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.InputFromManager;
-import org.anchoranalysis.io.output.OutputEnabledMutable;
 import org.anchoranalysis.io.output.bean.OutputManager;
+import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 
 /**
  * An experiment that uses both an {@link InputManager} to specify inputs and a {@link
@@ -130,13 +129,12 @@ public class InputOutputExperiment<T extends InputFromManager, S> extends Output
     protected void executeExperimentWithParams(ParametersExperiment params)
             throws ExperimentExecutionException {
         try {
-            List<T> inputs =
-                    getInput()
-                            .inputs(
-                                    new InputManagerParams(
-                                            params.getExperimentArguments().createInputContext(),
-                                            ProgressReporterNull.get(),
-                                            new Logger(params.getLoggerExperiment())));
+            InputManagerParams paramsInput = new InputManagerParams(
+                    params.getExperimentArguments().createInputContext(),
+                    ProgressReporterNull.get(),
+                    new Logger(params.getLoggerExperiment()));
+            
+            List<T> inputs =  getInput().inputs(paramsInput);
             checkCompabilityInputs(inputs);
 
             params.setLoggerTaskCreator(logTask);
@@ -150,20 +148,20 @@ public class InputOutputExperiment<T extends InputFromManager, S> extends Output
     }
 
     @Override
-    protected Optional<OutputEnabledMutable> defaultOutputs() {
+    protected OutputEnabledMutable defaultOutputs() {
         OutputEnabledMutable taskDefaultOutputs = taskProcessor.getTask().defaultOutputs();
-        taskDefaultOutputs.addEnabledOutput(OUTPUT_EXPERIMENT_LOG, OUTPUT_JOB_LOG);
-        return Optional.of(taskDefaultOutputs);
+        taskDefaultOutputs.addEnabledOutputFirst(OUTPUT_EXPERIMENT_LOG, OUTPUT_JOB_LOG);
+        return taskDefaultOutputs;
     }
 
     private void checkCompabilityInputs(List<T> listInputs)
             throws ExperimentExecutionException {
-        for (T input : listInputs) {
-            if (!taskProcessor.isInputCompatibleWith(input.getClass())) {
+        for (T inputObject : listInputs) {
+            if (!taskProcessor.isInputCompatibleWith(inputObject.getClass())) {
                 throw new ExperimentExecutionException(
                         String.format(
                                 "Input has an incompatible class for the associated task: %s",
-                                input.getClass().toString()));
+                                inputObject.getClass().toString()));
             }
         }
     }

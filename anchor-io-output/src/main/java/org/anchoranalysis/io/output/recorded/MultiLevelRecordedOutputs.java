@@ -1,4 +1,4 @@
-package org.anchoranalysis.io.output.writer;
+package org.anchoranalysis.io.output.recorded;
 
 import java.util.HashMap;
 import java.util.Map.Entry;

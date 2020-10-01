@@ -23,15 +23,34 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.io.output;
+package org.anchoranalysis.io.output.enabled.multi;
 
-public interface SingleLevelOutputEnabled {
+import org.anchoranalysis.io.output.bean.enabled.OutputEnabled;
+import org.anchoranalysis.io.output.enabled.single.SingleLevelOutputEnabled;
 
+/**
+ * Whether an output is enabled or not in a context of hierarchy of different rules for outputting.
+ *
+ * <p>The rules have two levels:
+ *
+ * <ul>
+ *   <li>a first-level (top-most) enabling particular output-names via a {@link SingleLevelOutputEnabled}.
+ *   <li>a second-level, given a particular output-name from the first-level, enabling particular
+ *       sub-output-names or not.
+ * </ul>
+ *
+ * <p>e.g. the first-level might enable a collection of images in general or not, and the
+ * second-level might enable particular names of particular images or not.
+ *
+ * @author Owen Feehan
+ */
+public interface MultiLevelOutputEnabled extends SingleLevelOutputEnabled {
+    
     /**
-     * Is a particular a particular output-enabled?
-     *
-     * @param outputName the name of the output
-     * @return true iff the output is allowed
+     * A second-level of {@link OutputEnabled} for a particular {@code outputName} as used in
+     * first-level.
+     * 
+     * @return an appropriate {@link OutputEnabled} for the second-level. 
      */
-    boolean isOutputEnabled(String outputName);
+    SingleLevelOutputEnabled second(String outputName);
 }

@@ -38,13 +38,10 @@ import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerContext;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
-import org.anchoranalysis.io.output.MultiLevelOutputEnabled;
-import org.anchoranalysis.io.output.OutputEnabledMutable;
 import org.anchoranalysis.io.output.bean.rules.OutputEnabledRules;
-import org.anchoranalysis.io.output.bean.rules.Permissive;
 import org.anchoranalysis.io.output.outputter.BindFailedException;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
-import org.anchoranalysis.io.output.writer.MultiLevelRecordedOutputs;
+import org.anchoranalysis.io.output.recorded.RecordedOutputsWithRules;
 
 /**
  * Responsible for making decisions on where output goes and what form it takes.
@@ -97,8 +94,7 @@ public class OutputManager extends AnchorBean<OutputManager> {
     public OutputterChecked createExperimentOutputter(
             String experimentIdentifier,
             ManifestRecorder manifestRecorder,
-            Optional<OutputEnabledMutable> defaultOutputEnabledRules,
-            Optional<MultiLevelRecordedOutputs> recordedOutputs,
+            RecordedOutputsWithRules recordedOutputs,
             FilePathPrefixerContext prefixerContext)
             throws BindFailedException {
 
@@ -109,40 +105,14 @@ public class OutputManager extends AnchorBean<OutputManager> {
 
             return OutputterChecked.createWithPrefix(
                     prefix,
-                    selectOutputEnabled(defaultOutputEnabledRules),
+                    recordedOutputs.selectOutputEnabled( Optional.ofNullable(outputsEnabled) ),
                     getOutputWriteSettings(),
                     manifestRecorder.getRootFolder(),
-                    recordedOutputs,
+                    recordedOutputs.getRecordedOutputs(),
                     silentlyDeleteExisting);
 
         } catch (FilePathPrefixerException e) {
             throw new BindFailedException(e);
-        }
-    }
-
-    /**
-     * Selects which {@link OutputEnabledRules} to employ.
-     *
-     * <p>The order of precedence is:
-     *
-     * <ol>
-     *   <li>The {@code outputsEnabled} bean-property in this class.
-     *   <li>The {@code defaultOutputEnabledRules} passed into {@link
-     *       #createExperimentOutputter(String, ManifestRecorder, Optional, Optional,
-     *       FilePathPrefixerContext)}.
-     * </ol>
-     *
-     * @param defaultOutputEnabledRules
-     * @return
-     */
-    private MultiLevelOutputEnabled selectOutputEnabled(
-            Optional<OutputEnabledMutable> defaultOutputEnabledRules) {
-        if (outputsEnabled != null) {
-            return outputsEnabled;
-        } else if (defaultOutputEnabledRules.isPresent()) {
-            return defaultOutputEnabledRules.get();
-        } else {
-            return Permissive.INSTANCE;
         }
     }
 }

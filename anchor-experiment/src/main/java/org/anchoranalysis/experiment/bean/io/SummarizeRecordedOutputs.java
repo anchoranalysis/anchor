@@ -1,8 +1,8 @@
 package org.anchoranalysis.experiment.bean.io;
 
 import java.util.Map.Entry;
-import org.anchoranalysis.io.output.writer.MultiLevelRecordedOutputs;
-import org.anchoranalysis.io.output.writer.RecordedOutputs;
+import org.anchoranalysis.io.output.recorded.MultiLevelRecordedOutputs;
+import org.anchoranalysis.io.output.recorded.RecordedOutputs;
 import lombok.AllArgsConstructor;
 
 /**

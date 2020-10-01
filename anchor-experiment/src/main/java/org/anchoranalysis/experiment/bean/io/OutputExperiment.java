@@ -42,11 +42,12 @@ import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.error.FilePathPrefixerException;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
-import org.anchoranalysis.io.output.OutputEnabledMutable;
 import org.anchoranalysis.io.output.bean.OutputManager;
+import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.outputter.BindFailedException;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
-import org.anchoranalysis.io.output.writer.MultiLevelRecordedOutputs;
+import org.anchoranalysis.io.output.recorded.MultiLevelRecordedOutputs;
+import org.anchoranalysis.io.output.recorded.RecordedOutputsWithRules;
 import org.apache.commons.lang.time.StopWatch;
 
 /**
@@ -125,7 +126,7 @@ public abstract class OutputExperiment extends Experiment {
      *
      * @return the default rules if they exist.
      */
-    protected abstract Optional<OutputEnabledMutable> defaultOutputs();
+    protected abstract OutputEnabledMutable defaultOutputs();
 
     private void doExperimentWithParams(ParametersExperiment params)
             throws ExperimentExecutionException {
@@ -150,13 +151,14 @@ public abstract class OutputExperiment extends Experiment {
         String experimentId = experimentIdentifier.identifier(arguments.getTaskName());
 
         try {
+            OutputEnabledMutable outputEnabled = defaultOutputs();
+            
             OutputterChecked rootOutputter =
                     getOutput()
                             .createExperimentOutputter(
                                     experimentId,
                                     experimentalManifest,
-                                    defaultOutputs(),
-                                    Optional.of(recordedOutputs),
+                                    new RecordedOutputsWithRules(recordedOutputs, outputEnabled, arguments.getAdditionalOutputEnabled()),
                                     arguments.createPrefixerContext());
 
             Preconditions.checkArgument(rootOutputter.getSettings().hasBeenInit());

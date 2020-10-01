@@ -33,7 +33,7 @@ import org.anchoranalysis.io.manifest.sequencetype.IncrementalSequenceType;
 import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
-import org.anchoranalysis.io.output.writer.RecordingWriters;
+import org.anchoranalysis.io.output.recorded.RecordingWriters;
 
 public class GeneratorSequenceIncrementalWriter<T> implements GeneratorSequenceIncremental<T> {
 

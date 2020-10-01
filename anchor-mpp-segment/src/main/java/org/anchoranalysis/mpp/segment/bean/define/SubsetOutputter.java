@@ -32,7 +32,7 @@ import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.name.provider.NamedProvider;
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.generator.collection.GeneratorOutputHelper;
-import org.anchoranalysis.io.output.SingleLevelOutputEnabled;
+import org.anchoranalysis.io.output.enabled.single.SingleLevelOutputEnabled;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
 

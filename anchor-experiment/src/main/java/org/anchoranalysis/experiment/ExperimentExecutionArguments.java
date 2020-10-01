@@ -37,6 +37,7 @@ import lombok.Setter;
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.io.error.FilePathPrefixerException;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerContext;
+import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.params.DebugModeParams;
 import org.anchoranalysis.io.params.InputContextParams;
 
@@ -50,7 +51,7 @@ public class ExperimentExecutionArguments {
     private Optional<List<Path>> inputPaths = Optional.empty();
 
     /** A directory indicating where inputs can be located */
-    private Optional<Path> inputDirectory = Optional.empty();
+    @Getter private Optional<Path> inputDirectory = Optional.empty();
 
     /** A directory indicating where inputs can be located */
     @Getter @Setter private Optional<Path> outputDirectory = Optional.empty();
@@ -60,6 +61,9 @@ public class ExperimentExecutionArguments {
 
     /** If non-null, a glob that is applied on inputDirectory */
     @Setter private Optional<String> inputFilterGlob = Optional.empty();
+    
+    /** Outputs enabled for experiment that are added to a task's default outputs. */
+    @Getter @Setter private Optional<OutputEnabledMutable> additionalOutputEnabled = Optional.empty();
 
     /**
      * If defined, a set of extension filters that can be applied on inputDirectory
@@ -96,10 +100,6 @@ public class ExperimentExecutionArguments {
         return new FilePathPrefixerContext(isDebugModeEnabled(), outputDirectory);
     }
 
-    public Optional<Path> getInputDirectory() {
-        return inputDirectory;
-    }
-
     // The path will be converted to an absolute path, if it hasn't been already, based upon the
     // current working directory
     public void setInputDirectory(Optional<Path> inputDirectory) {
@@ -122,6 +122,15 @@ public class ExperimentExecutionArguments {
      */
     public void activateDebugMode(String debugContains) {
         debugModeParams = Optional.of(new DebugModeParams(debugContains));
+    }
+    
+    /**
+     * Assigns outputs to be added to the default outputs for a task.
+     * 
+     * @param outputs the outputs to add
+     */
+    public void assignAdditionalOutputs(OutputEnabledMutable outputs) {
+        this.additionalOutputEnabled = Optional.of(outputs);
     }
 
     public boolean isDebugModeEnabled() {

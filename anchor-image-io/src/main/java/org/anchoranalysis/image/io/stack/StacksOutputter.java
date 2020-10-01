@@ -37,8 +37,7 @@ import org.anchoranalysis.image.io.generator.raster.StackGenerator;
 import org.anchoranalysis.image.stack.NamedStacks;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.generator.collection.GeneratorOutputHelper;
-import org.anchoranalysis.io.output.SingleLevelOutputEnabled;
-import org.anchoranalysis.io.output.bean.enabled.IgnoreUnderscorePrefix;
+import org.anchoranalysis.io.output.enabled.single.SingleLevelOutputEnabled;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
@@ -159,6 +158,6 @@ public class StacksOutputter {
     private static NamedStacks stackSubset(
             NamedProvider<Stack> stacks, String secondLevelOutputKey, Outputter outputter) {
         return StacksOutputter.subset(
-                stacks, outputter.outputsEnabled().second(secondLevelOutputKey,IgnoreUnderscorePrefix.INSTANCE));
+                stacks, outputter.outputsEnabled().second(secondLevelOutputKey));
     }
 }

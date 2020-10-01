@@ -40,7 +40,7 @@ import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
-import org.anchoranalysis.io.output.writer.RecordingWriters;
+import org.anchoranalysis.io.output.recorded.RecordingWriters;
 
 public class GeneratorSequenceNonIncremental<T> {
 

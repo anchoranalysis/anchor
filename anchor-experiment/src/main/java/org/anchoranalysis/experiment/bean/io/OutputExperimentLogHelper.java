@@ -30,7 +30,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.experiment.log.Divider;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
-import org.anchoranalysis.io.output.writer.MultiLevelRecordedOutputs;
+import org.anchoranalysis.io.output.recorded.MultiLevelRecordedOutputs;
 import org.apache.commons.lang.time.StopWatch;
 
 /**

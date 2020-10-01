@@ -25,9 +25,9 @@
  */
 package org.anchoranalysis.io.output.outputter;
 
-import org.anchoranalysis.io.output.MultiLevelOutputEnabled;
-import org.anchoranalysis.io.output.SingleLevelOutputEnabled;
-import org.anchoranalysis.io.output.writer.MultiLevelRecordedOutputs;
+import org.anchoranalysis.io.output.enabled.multi.MultiLevelOutputEnabled;
+import org.anchoranalysis.io.output.enabled.single.SingleLevelOutputEnabled;
+import org.anchoranalysis.io.output.recorded.MultiLevelRecordedOutputs;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
@@ -52,8 +52,8 @@ class RecordOutputNamesMultiLevel implements MultiLevelOutputEnabled {
     }
 
     @Override
-    public SingleLevelOutputEnabled second(String outputName, SingleLevelOutputEnabled alternative) {
-        return wrap( outputEnabled.second(outputName, alternative), outputName );
+    public SingleLevelOutputEnabled second(String outputName) {
+        return wrap( outputEnabled.second(outputName), outputName );
     }
     
     private SingleLevelOutputEnabled wrap(SingleLevelOutputEnabled outputEnabled, String outputName) {

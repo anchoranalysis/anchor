@@ -23,7 +23,7 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.io.output.writer;
+package org.anchoranalysis.io.output.recorded;
 
 import java.nio.file.Path;
 import java.util.Optional;
@@ -34,6 +34,9 @@ import org.anchoranalysis.io.manifest.folder.FolderWriteWithPath;
 import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
+import org.anchoranalysis.io.output.writer.CheckIfAllowed;
+import org.anchoranalysis.io.output.writer.GenerateWritableItem;
+import org.anchoranalysis.io.output.writer.Writer;
 
 /**
  * Delegates to another writer while recording output-names passed to functions.

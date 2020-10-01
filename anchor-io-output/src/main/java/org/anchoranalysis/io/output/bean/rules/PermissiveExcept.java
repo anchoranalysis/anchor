@@ -30,17 +30,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.StringSet;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.io.output.SingleLevelOutputEnabled;
 import org.anchoranalysis.io.output.bean.enabled.All;
 import org.anchoranalysis.io.output.bean.enabled.OutputEnabled;
 import org.anchoranalysis.io.output.bean.enabled.SpecificDisabled;
+import org.anchoranalysis.io.output.enabled.single.SingleLevelOutputEnabled;
 
 /**
  * Allows everything to be outputted except a particular list.
@@ -79,11 +78,9 @@ public class PermissiveExcept extends OutputEnabledRules {
     }
 
     @Override
-    protected Optional<SingleLevelOutputEnabled> selectSecond(String outputName) {
+    public SingleLevelOutputEnabled second(String outputName) {
         createSecondLevelMapIfNecessary();
-        return Optional.of(
-           mapSecondLevel.getOrDefault(outputName, All.INSTANCE)
-        );
+        return mapSecondLevel.getOrDefault(outputName, All.INSTANCE);
     }
 
     private void createSecondLevelMapIfNecessary() {

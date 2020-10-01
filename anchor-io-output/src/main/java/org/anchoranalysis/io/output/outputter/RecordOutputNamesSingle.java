@@ -25,8 +25,8 @@
  */
 package org.anchoranalysis.io.output.outputter;
 
-import org.anchoranalysis.io.output.SingleLevelOutputEnabled;
-import org.anchoranalysis.io.output.writer.RecordedOutputs;
+import org.anchoranalysis.io.output.enabled.single.SingleLevelOutputEnabled;
+import org.anchoranalysis.io.output.recorded.RecordedOutputs;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor

@@ -37,13 +37,13 @@ import org.anchoranalysis.io.manifest.folder.FolderWriteWithPath;
 import org.anchoranalysis.io.manifest.operationrecorder.DualWriterOperationRecorder;
 import org.anchoranalysis.io.manifest.operationrecorder.NullWriteOperationRecorder;
 import org.anchoranalysis.io.manifest.operationrecorder.WriteOperationRecorder;
-import org.anchoranalysis.io.output.MultiLevelOutputEnabled;
 import org.anchoranalysis.io.output.bean.OutputManager;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.bean.rules.Permissive;
+import org.anchoranalysis.io.output.enabled.multi.MultiLevelOutputEnabled;
 import org.anchoranalysis.io.output.outputter.directory.OutputterTarget;
-import org.anchoranalysis.io.output.writer.MultiLevelRecordedOutputs;
-import org.anchoranalysis.io.output.writer.RecordingWriters;
+import org.anchoranalysis.io.output.recorded.MultiLevelRecordedOutputs;
+import org.anchoranalysis.io.output.recorded.RecordingWriters;
 
 /**
  * A particular directory on the filesystem in which outputting can occur.
@@ -150,14 +150,6 @@ public class OutputterChecked {
                 new RecordingWriters(
                         this, target.getParentDirectoryCreator(), recordedOutputs); // NOSONAR
     }
-    
-    private MultiLevelOutputEnabled maybeRecordOutputNames(MultiLevelOutputEnabled outputsEnabled) {
-        if (recordedOutputs.isPresent()) {
-            return new RecordOutputNamesMultiLevel(outputsEnabled,recordedOutputs.get());
-        } else {
-            return outputsEnabled;
-        }
-    }
 
     /** Adds an additional operation recorder alongside any existing recorders. */
     public void addOperationRecorder(WriteOperationRecorder toAdd) {
@@ -244,6 +236,10 @@ public class OutputterChecked {
     public Path outFilePath(String filePathRelative) {
         return target.outFilePath(filePathRelative);
     }
+    
+    public FilePathPrefix getPrefix() {
+        return target.getPrefix();
+    }
 
     /**
      * Writes a folder-entry to the operation-recorder (if it exists)
@@ -266,8 +262,12 @@ public class OutputterChecked {
             return writeOperationRecorder;
         }
     }
-
-    public FilePathPrefix getPrefix() {
-        return target.getPrefix();
+    
+    private MultiLevelOutputEnabled maybeRecordOutputNames(MultiLevelOutputEnabled outputsEnabled) {
+        if (recordedOutputs.isPresent()) {
+            return new RecordOutputNamesMultiLevel(outputsEnabled,recordedOutputs.get());
+        } else {
+            return outputsEnabled;
+        }
     }
 }

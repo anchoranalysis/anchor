@@ -27,7 +27,7 @@
 package org.anchoranalysis.io.output.bean.enabled;
 
 import org.anchoranalysis.bean.AnchorBean;
-import org.anchoranalysis.io.output.SingleLevelOutputEnabled;
+import org.anchoranalysis.io.output.enabled.single.SingleLevelOutputEnabled;
 
 /**
  * Whether a particular output, identified by a textual name, is enabled or not.

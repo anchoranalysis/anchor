@@ -35,7 +35,6 @@ import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.generator.histogram.HistogramCSVGenerator;
 import org.anchoranalysis.io.generator.serialized.XStreamGenerator;
-import org.anchoranalysis.io.output.bean.enabled.IgnoreUnderscorePrefix;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.mpp.mark.MarkCollection;
@@ -51,8 +50,6 @@ import org.anchoranalysis.mpp.segment.define.OutputterDirectories;
  * <li>{@link OutputterDirectories#MARKS}
  * <li>{@link OutputterDirectories#HISTOGRAMS}
  * <li>{@link OutputterDirectories#OBJECTS}
- * 
- * TODO merge OutputterDirectories and StackOutputKeys.
  *
  * @author Owen Feehan
  */
@@ -90,7 +87,7 @@ class SubsetOutputterFactory {
             String directoryName) {
         return new SubsetOutputter<>(
                 store,
-                () -> outputter.outputsEnabled().second(directoryName, IgnoreUnderscorePrefix.INSTANCE),
+                () -> outputter.outputsEnabled().second(directoryName),
                 generator,
                 outputter.getChecked(),
                 directoryName,

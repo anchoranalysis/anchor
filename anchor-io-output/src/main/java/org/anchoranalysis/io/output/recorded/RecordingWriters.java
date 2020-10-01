@@ -23,16 +23,19 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.io.output.writer;
+package org.anchoranalysis.io.output.recorded;
 
 import java.util.Optional;
 import java.util.function.Function;
 import lombok.Getter;
 import lombok.experimental.Accessors;
-import org.anchoranalysis.io.output.MultiLevelOutputEnabled;
-import org.anchoranalysis.io.output.SingleLevelOutputEnabled;
-import org.anchoranalysis.io.output.bean.enabled.IgnoreUnderscorePrefix;
+import org.anchoranalysis.io.output.enabled.multi.MultiLevelOutputEnabled;
+import org.anchoranalysis.io.output.enabled.single.SingleLevelOutputEnabled;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
+import org.anchoranalysis.io.output.writer.AlwaysAllowed;
+import org.anchoranalysis.io.output.writer.CheckIfAllowed;
+import org.anchoranalysis.io.output.writer.Writer;
+import org.anchoranalysis.io.output.writer.WriterExecuteBeforeEveryOperation;
 
 /**
  * Two writers that record any output-names that are passed as arguments.
@@ -105,7 +108,7 @@ public class RecordingWriters {
      * @return a newly created writer checking on particular second-level otuput names.
      */
     public Writer secondLevel(String outputNameFirstLevel) {
-        SingleLevelOutputEnabled outputEnabledSecondLevel = outputEnabled.second(outputNameFirstLevel, IgnoreUnderscorePrefix.INSTANCE);
+        SingleLevelOutputEnabled outputEnabledSecondLevel = outputEnabled.second(outputNameFirstLevel);
         Writer secondLevelWriter = new CheckIfAllowed(outputEnabledSecondLevel, Optional.empty(), permissiveNoRecording);
         return recordSecondLevel(secondLevelWriter, outputNameFirstLevel);
     }

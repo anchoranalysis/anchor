@@ -38,8 +38,8 @@ import org.anchoranalysis.io.manifest.sequencetype.SequenceType;
 import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
+import org.anchoranalysis.io.output.recorded.RecordingWriters;
 import org.anchoranalysis.io.output.writer.GenerateWritableItem;
-import org.anchoranalysis.io.output.writer.RecordingWriters;
 
 /**
  * Like {@link RecordingWriters} but for a sequence of items, maybe in a subfolder.

@@ -46,7 +46,8 @@ import org.anchoranalysis.io.generator.serialized.ObjectOutputStreamGenerator;
 import org.anchoranalysis.io.generator.serialized.XStreamGenerator;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
-import org.anchoranalysis.io.output.OutputEnabledMutable;
+import org.anchoranalysis.io.output.bean.enabled.IgnoreUnderscorePrefix;
+import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
@@ -161,7 +162,7 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
      * @return the default rules if they exist.
      */
     public OutputEnabledMutable defaultOutputs() {
-        return new OutputEnabledMutable();
+        return new OutputEnabledMutable(IgnoreUnderscorePrefix.INSTANCE);
     }
     
     /**
@@ -170,7 +171,7 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
      * @param paramsUnbound parameters before being bound for a specific task
      * @param outputterTaskChecked a bound output manager for the task
      * @param manifestTask a bound manifest for the task
-     * @return a complete ParametersBound object with all parameters set to objects bound for the
+     * @return a complete {@link InputBound} with all parameters set to objects bound for the
      *     specific task
      */
     private InputBound<T, S> bindOtherParams(
@@ -228,7 +229,7 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
                         "File processing started: %s", params.getInput().descriptiveName());
             }
 
-            executeJobAdditionalOutputs(params, stopWatchFile);
+            executeJobAdditionalOutputs(params);
 
             successfullyFinished = true;
 
@@ -258,8 +259,7 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
         return successfullyFinished;
     }
 
-    private void executeJobAdditionalOutputs(InputBound<T, S> params, StopWatch stopWatchFile)
-            throws JobExecutionException {
+    private void executeJobAdditionalOutputs(InputBound<T, S> params) throws JobExecutionException {
 
         try {
             doJobOnInput(params);

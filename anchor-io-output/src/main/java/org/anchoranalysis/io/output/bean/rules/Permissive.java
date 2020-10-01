@@ -26,9 +26,8 @@
 
 package org.anchoranalysis.io.output.bean.rules;
 
-import java.util.Optional;
-import org.anchoranalysis.io.output.SingleLevelOutputEnabled;
 import org.anchoranalysis.io.output.bean.enabled.All;
+import org.anchoranalysis.io.output.enabled.single.SingleLevelOutputEnabled;
 
 /**
  * Allows all output-names to be outputted in both first and second level.
@@ -50,7 +49,7 @@ public class Permissive extends OutputEnabledRules {
     }
 
     @Override
-    protected Optional<SingleLevelOutputEnabled> selectSecond(String outputName) {
-        return Optional.of(All.INSTANCE);
+    public SingleLevelOutputEnabled second(String outputName) {
+        return All.INSTANCE;
     }
 }

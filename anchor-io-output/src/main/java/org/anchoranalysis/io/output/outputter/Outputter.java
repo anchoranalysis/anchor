@@ -34,8 +34,8 @@ import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.io.manifest.ManifestFolderDescription;
 import org.anchoranalysis.io.manifest.folder.FolderWritePhysical;
 import org.anchoranalysis.io.manifest.operationrecorder.WriteOperationRecorder;
-import org.anchoranalysis.io.output.MultiLevelOutputEnabled;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
+import org.anchoranalysis.io.output.enabled.multi.MultiLevelOutputEnabled;
 import org.anchoranalysis.io.output.writer.WriterRouterErrors;
 
 /**

@@ -30,16 +30,17 @@ import java.util.Optional;
 import org.anchoranalysis.image.bean.segment.binary.BinarySegmentation;
 import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.histogram.Histogram;
+import lombok.Getter;
 
 /** Parameters that are optionally associated with a {@link BinarySegmentation} */
 public class BinarySegmentationParameters {
 
-    private Optional<Histogram> histogram;
-    private Optional<Resolution> resolution;
+    @Getter private Optional<Histogram> intensityHistogram;
+    @Getter private Optional<Resolution> resolution;
 
     public BinarySegmentationParameters() {
         this.resolution = Optional.empty();
-        this.histogram = Optional.empty();
+        this.intensityHistogram = Optional.empty();
     }
 
     public BinarySegmentationParameters(Resolution resolution) {
@@ -50,18 +51,10 @@ public class BinarySegmentationParameters {
      * Constructor
      *
      * @param resolution image-resolution
-     * @param histogram a histogram describing the intensity-values of the entire channel
+     * @param intensityHistogram a histogram describing the intensity-values of the entire channel
      */
-    public BinarySegmentationParameters(Resolution resolution, Optional<Histogram> histogram) {
+    public BinarySegmentationParameters(Resolution resolution, Optional<Histogram> intensityHistogram) {
         this.resolution = Optional.of(resolution);
-        this.histogram = histogram;
-    }
-
-    public Optional<Histogram> getIntensityHistogram() {
-        return histogram;
-    }
-
-    public Optional<Resolution> getRes() {
-        return resolution;
+        this.intensityHistogram = intensityHistogram;
     }
 }

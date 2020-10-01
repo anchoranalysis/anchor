@@ -32,7 +32,7 @@ import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.image.bean.nonbean.init.CreateCombinedStack;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.io.stack.StacksOutputter;
-import org.anchoranalysis.io.output.OutputEnabledMutable;
+import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
@@ -93,6 +93,6 @@ class SharedObjectsOutputter {
      * @param outputEnabled where to add all possible output-names
      */
     public static void addAllOutputs(OutputEnabledMutable outputEnabled) {
-        outputEnabled.addEnabledOutput(OutputterDirectories.STACKS, OutputterDirectories.MARKS, OutputterDirectories.HISTOGRAMS, OutputterDirectories.OBJECTS);
+        outputEnabled.addEnabledOutputFirst(OutputterDirectories.STACKS, OutputterDirectories.MARKS, OutputterDirectories.HISTOGRAMS, OutputterDirectories.OBJECTS);
     }
 }

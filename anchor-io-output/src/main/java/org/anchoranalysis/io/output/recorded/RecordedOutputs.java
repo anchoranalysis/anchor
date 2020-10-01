@@ -23,7 +23,7 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.io.output.writer;
+package org.anchoranalysis.io.output.recorded;
 
 import java.util.Set;
 import java.util.TreeSet;
