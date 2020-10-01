@@ -26,6 +26,9 @@
 
 package org.anchoranalysis.io.params;
 
+import java.util.Optional;
+import lombok.AllArgsConstructor;
+
 /**
  * An alternative mode of option where behaviours change.
  *
@@ -41,25 +44,16 @@ package org.anchoranalysis.io.params;
  *
  * @author Owen Feehan
  */
+@AllArgsConstructor
 public class DebugModeParams {
 
-    /** If null, this is disabled * */
-    private String contains = null;
-
-    /**
-     * Constructor
-     *
-     * @param contains an optional string used to filter inputs. If null, then disabled.
-     */
-    public DebugModeParams(String contains) {
-        super();
-        this.contains = contains;
-    }
+    /** An optional string used to filter inputs. If null, then disabled. */
+    private Optional<String> contains;
 
     /** @return contains, or an empty string if null. */
     public String containsOrEmpty() {
-        if (contains != null) {
-            return contains;
+        if (contains.isPresent()) {
+            return contains.get();
         } else {
             return "";
         }

@@ -34,6 +34,7 @@ import java.util.Set;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.anchoranalysis.bean.OptionalFactory;
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.io.error.FilePathPrefixerException;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerContext;
@@ -105,11 +106,11 @@ public class ExperimentExecutionArguments {
     public void setInputDirectory(Optional<Path> inputDirectory) {
         this.inputDirectory =
                 inputDirectory.map(
-                        dir -> {
-                            if (!dir.isAbsolute()) {
-                                return dir.toAbsolutePath().normalize();
+                        directory -> {
+                            if (!directory.isAbsolute()) {
+                                return directory.toAbsolutePath().normalize();
                             } else {
-                                return dir.normalize();
+                                return directory.normalize();
                             }
                         });
     }
@@ -117,11 +118,11 @@ public class ExperimentExecutionArguments {
     /**
      * Activates debug-mode
      *
-     * @param debugContains either null (no debugContains specified) or a string used for filtering
-     *     items during debug
+     * @param debugContains maybe a string used for filtering inputs during debugging, or an empty-string if this isn't enabled
      */
     public void activateDebugMode(String debugContains) {
-        debugModeParams = Optional.of(new DebugModeParams(debugContains));
+        Optional<String> debugContainsAsOptional = OptionalFactory.create(debugContains.isEmpty(), () -> debugContains);
+        debugModeParams = Optional.of( new DebugModeParams(debugContainsAsOptional) );
     }
     
     /**
