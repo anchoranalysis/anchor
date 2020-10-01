@@ -60,16 +60,16 @@ public class InputContextParams {
     @Getter @Setter private Optional<DebugModeParams> debugModeParams = Optional.empty();
 
     // This should always be ab absolute path, never a relative one
-    public void setInputDirectory(Optional<Path> inputDir) throws IOException {
-        OptionalUtilities.ifPresent(inputDir, InputContextParams::checkAbsolutePath);
-        this.inputDirectory = inputDir;
+    public void setInputDirectory(Optional<Path> inputDirectory) throws IOException {
+        OptionalUtilities.ifPresent(inputDirectory, InputContextParams::checkAbsolutePath);
+        this.inputDirectory = inputDirectory;
     }
 
-    private static void checkAbsolutePath(Path inputDir) throws IOException {
-        if (!inputDir.isAbsolute()) {
+    private static void checkAbsolutePath(Path inputDirectory) throws IOException {
+        if (!inputDirectory.isAbsolute()) {
             throw new IOException(
                     String.format(
-                            "An non-absolute path was passed to setInputDir() of %s", inputDir));
+                            "An non-absolute path was passed to setInputDirectory() of %s", inputDirectory));
         }
     }
 
