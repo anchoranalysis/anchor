@@ -84,7 +84,7 @@ public abstract class FileProviderWithDirectoryString extends FileProviderWithDi
         if (localized) {
             return localRoot();
         } else {
-            return inputContext.getInputDir().orElseGet(() -> Paths.get("."));
+            return inputContext.getInputDirectory().orElseGet(() -> Paths.get("."));
         }
     }
 

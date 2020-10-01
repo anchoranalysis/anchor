@@ -48,7 +48,7 @@ public class InputContextParams {
     @Getter @Setter private Optional<List<Path>> inputPaths;
 
     /** If defined, a directory which can be used by beans to find input */
-    @Getter private Optional<Path> inputDir;
+    @Getter private Optional<Path> inputDirectory;
 
     /** A glob that can be used by beans to filter input */
     @Getter @Setter private String inputFilterGlob = "*";
@@ -60,9 +60,9 @@ public class InputContextParams {
     @Getter @Setter private Optional<DebugModeParams> debugModeParams = Optional.empty();
 
     // This should always be ab absolute path, never a relative one
-    public void setInputDir(Optional<Path> inputDir) throws IOException {
+    public void setInputDirectory(Optional<Path> inputDir) throws IOException {
         OptionalUtilities.ifPresent(inputDir, InputContextParams::checkAbsolutePath);
-        this.inputDir = inputDir;
+        this.inputDirectory = inputDir;
     }
 
     private static void checkAbsolutePath(Path inputDir) throws IOException {

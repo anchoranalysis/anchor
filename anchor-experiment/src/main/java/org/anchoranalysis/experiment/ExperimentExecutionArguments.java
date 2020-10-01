@@ -89,7 +89,7 @@ public class ExperimentExecutionArguments {
     public InputContextParams createInputContext() throws IOException {
         InputContextParams out = new InputContextParams();
         out.setDebugModeParams(debugModeParams);
-        out.setInputDir(inputDirectory);
+        out.setInputDirectory(inputDirectory);
         out.setInputPaths(inputPaths);
         inputFilterGlob.ifPresent(out::setInputFilterGlob);
         inputFilterExtensions.ifPresent(out::setInputFilterExtensions);
