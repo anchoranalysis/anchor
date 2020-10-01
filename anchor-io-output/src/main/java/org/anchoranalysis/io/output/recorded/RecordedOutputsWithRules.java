@@ -4,7 +4,6 @@ import java.util.Optional;
 import org.anchoranalysis.io.output.bean.rules.OutputEnabledRules;
 import org.anchoranalysis.io.output.bean.rules.Permissive;
 import org.anchoranalysis.io.output.enabled.multi.MultiLevelOutputEnabled;
-import org.anchoranalysis.io.output.enabled.multi.MultiLevelOr;
 import lombok.Getter;
 
 /**
@@ -34,7 +33,7 @@ public class RecordedOutputsWithRules {
      * 
      * <p>e.g. these can be user-supplied outputs as <i>extras</i> from the command-line.
      */
-    private final Optional<MultiLevelOutputEnabled> additionalOutputs;
+    private final Optional<OutputEnabledDelta> delta;
     
     /**
      * Creates with no rules or outputs defined.
@@ -42,7 +41,7 @@ public class RecordedOutputsWithRules {
     public RecordedOutputsWithRules() {
         this.recordedOutputs = Optional.empty();
         this.defaultRules = Optional.empty();
-        this.additionalOutputs = Optional.empty();
+        this.delta = Optional.empty();
     }
     
     /**
@@ -51,10 +50,10 @@ public class RecordedOutputsWithRules {
      * @param recordedOutputs where output-names are recorded as they are written / queried
      * @param defaultRules default rules for which outputs are enabled.
      */
-    public RecordedOutputsWithRules(MultiLevelRecordedOutputs recordedOutputs, MultiLevelOutputEnabled defaultRules, Optional<MultiLevelOutputEnabled> additionalOutputs) {
+    public RecordedOutputsWithRules(MultiLevelRecordedOutputs recordedOutputs, MultiLevelOutputEnabled defaultRules, OutputEnabledDelta delta) {
         this.recordedOutputs = Optional.of(recordedOutputs);
         this.defaultRules = Optional.of(defaultRules);
-        this.additionalOutputs = additionalOutputs;
+        this.delta = Optional.of(delta);
     }
     
     /**
@@ -84,8 +83,8 @@ public class RecordedOutputsWithRules {
     }
     
     private MultiLevelOutputEnabled additionalCombinedWith( MultiLevelOutputEnabled other ) {
-        if (additionalOutputs.isPresent()) {
-            return new MultiLevelOr(additionalOutputs.get(), other);
+        if (delta.isPresent()) {
+            return delta.get().applyDelta(other);
         } else {
             return other;
         }

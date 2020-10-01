@@ -38,7 +38,8 @@ import org.anchoranalysis.bean.OptionalFactory;
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.io.error.FilePathPrefixerException;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerContext;
-import org.anchoranalysis.io.output.enabled.multi.MultiLevelOutputEnabled;
+import org.anchoranalysis.io.output.bean.OutputManager;
+import org.anchoranalysis.io.output.recorded.OutputEnabledDelta;
 import org.anchoranalysis.io.params.DebugModeParams;
 import org.anchoranalysis.io.params.InputContextParams;
 
@@ -63,8 +64,13 @@ public class ExperimentExecutionArguments {
     /** If non-null, a glob that is applied on inputDirectory */
     @Setter private Optional<String> inputFilterGlob = Optional.empty();
     
-    /** Outputs enabled for experiment that are added to a task's default outputs. */
-    @Getter @Setter private Optional<MultiLevelOutputEnabled> additionalOutputEnabled = Optional.empty();
+    /** 
+     * Additions/subtractions of outputs for the experiment supplied by the user.
+     * 
+     * <p>These are applied to an existing source of output-enabled rules (e.g. defaults from a task, or rules
+     * defined in the experiment's {@link OutputManager}. 
+     */
+    @Getter private OutputEnabledDelta outputEnabledDelta = new OutputEnabledDelta();
 
     /**
      * If defined, a set of extension filters that can be applied on inputDirectory
@@ -123,15 +129,6 @@ public class ExperimentExecutionArguments {
     public void activateDebugMode(String debugContains) {
         Optional<String> debugContainsAsOptional = OptionalFactory.create(debugContains.isEmpty(), () -> debugContains);
         debugModeParams = Optional.of( new DebugModeParams(debugContainsAsOptional) );
-    }
-    
-    /**
-     * Assigns outputs to be added to the default outputs for a task.
-     * 
-     * @param outputs the outputs to add
-     */
-    public void assignAdditionalOutputs(MultiLevelOutputEnabled outputs) {
-        this.additionalOutputEnabled = Optional.of(outputs);
     }
 
     public boolean isDebugModeEnabled() {
