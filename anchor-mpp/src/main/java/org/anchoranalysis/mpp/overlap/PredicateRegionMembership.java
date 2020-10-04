@@ -27,9 +27,7 @@
 package org.anchoranalysis.mpp.overlap;
 
 import lombok.AllArgsConstructor;
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
-import org.anchoranalysis.image.object.combine.CountIntersectingVoxels;
-import org.anchoranalysis.image.object.combine.IntersectionBoundingBox;
+import org.anchoranalysis.image.voxel.iterator.predicate.PredicateTwoBytes;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMembershipUtilities;
 
 /**
@@ -38,33 +36,16 @@ import org.anchoranalysis.mpp.bean.regionmap.RegionMembershipUtilities;
  * @author Owen Feehan
  */
 @AllArgsConstructor
-class CountIntersectingVoxelsRegionMembership extends CountIntersectingVoxels {
+class PredicateRegionMembership implements PredicateTwoBytes {
 
     private final byte regionMembershipFlag;
 
     @Override
-    protected int countIntersectingVoxels(
-            UnsignedByteBuffer buffer1, UnsignedByteBuffer buffer2, IntersectionBoundingBox box) {
-
-        int cnt = 0;
-        for (int y = box.y().min(); y < box.y().max(); y++) {
-            int yOther = y + box.y().rel();
-
-            for (int x = box.x().min(); x < box.x().max(); x++) {
-                int xOther = x + box.x().rel();
-
-                byte posCheck = buffer1.getRaw(box.e1().offset(x, y));
-                byte posCheckOther = buffer2.getRaw(box.e2().offset(xOther, yOther));
-
-                if (isPixelInRegion(posCheck) && isPixelInRegion(posCheckOther)) {
-                    cnt++;
-                }
-            }
-        }
-        return cnt;
+    public boolean test(byte first, byte second) {
+        return isVoxelInRegion(first) && isVoxelInRegion(second);
     }
-
-    private boolean isPixelInRegion(byte pixelVal) {
+    
+    private boolean isVoxelInRegion(byte pixelVal) {
         return RegionMembershipUtilities.isMemberFlagAnd(pixelVal, regionMembershipFlag);
     }
 }

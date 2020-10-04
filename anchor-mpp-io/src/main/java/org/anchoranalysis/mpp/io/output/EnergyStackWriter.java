@@ -30,11 +30,9 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.image.io.generator.raster.ChannelGenerator;
-import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.io.generator.sequence.GeneratorSequenceUtilities;
 import org.anchoranalysis.io.generator.serialized.KeyValueParamsGenerator;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
-import org.anchoranalysis.mpp.mark.Mark;
 
 /**
  * Writes an energy-stack.

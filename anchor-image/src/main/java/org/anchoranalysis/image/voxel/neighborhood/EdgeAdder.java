@@ -123,13 +123,13 @@ class EdgeAdder<V> {
         }
 
         // How many border pixels shared between the two?
-        int numBorderPixels = numBorderPixels(dilated, other);
-        if (numBorderPixels > 0) {
-            addEdge.addEdge(vertexWith, vertexOther, numBorderPixels);
+        int numberSharedVoxels = numberBorderVoxels(dilated, other);
+        if (numberSharedVoxels > 0) {
+            addEdge.addEdge(vertexWith, vertexOther, numberSharedVoxels);
         }
     }
 
-    private static int numBorderPixels(ObjectMask object1Dilated, ObjectMask object2) {
+    private static int numberBorderVoxels(ObjectMask object1Dilated, ObjectMask object2) {
         return object1Dilated.countIntersectingVoxels(object2);
     }
 }

@@ -52,8 +52,6 @@ import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.interpolator.Interpolator;
 import org.anchoranalysis.image.interpolator.InterpolatorFactory;
-import org.anchoranalysis.image.object.combine.CountIntersectingVoxelsBinary;
-import org.anchoranalysis.image.object.combine.DetermineWhetherIntersectingVoxelsBinary;
 import org.anchoranalysis.image.object.factory.ObjectsFromConnectedComponentsFactory;
 import org.anchoranalysis.image.scale.ScaleFactor;
 import org.anchoranalysis.image.voxel.BoundedVoxels;
@@ -65,6 +63,7 @@ import org.anchoranalysis.image.voxel.extracter.VoxelsExtracter;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactoryTypeBound;
 import org.anchoranalysis.image.voxel.iterator.IterateVoxelsEqualTo;
+import org.anchoranalysis.image.voxel.iterator.intersecting.CountVoxelsIntersectingObjects;
 import org.anchoranalysis.image.voxel.thresholder.VoxelsThresholder;
 
 /**
@@ -232,15 +231,29 @@ public class ObjectMask {
         return binaryValuesByte.equals(other.binaryValuesByte);
     }
 
+    /**
+     * Counts the number of intersecting-voxels between two object-masks.
+     * 
+     * <p>This is an <i>immutable</i> operation.
+     * 
+     * @param other the other object-mask to consider
+     * @return number of <i>on</i>-voxels the two object-masks have in common.
+     */
     public int countIntersectingVoxels(ObjectMask other) {
-        return new CountIntersectingVoxelsBinary(binaryValuesByte(), other.binaryValuesByte())
-                .countIntersectingVoxels(voxels, other.voxels);
+        return CountVoxelsIntersectingObjects.countIntersectingVoxels(this, other);
     }
 
+    /**
+     * Determines whether there are any intersecting voxels on two object-masks.
+     * 
+     * <p>This is an <i>immutable</i> operation.
+     * 
+     * <p>The algorithm exits as soon as an intersecting voxel is encountered i.e. as early as possible.
+     * @param other the other object-mask to consider
+     * @return true if at least one voxel exists that is <i>on</i> in both object-masks.
+     */
     public boolean hasIntersectingVoxels(ObjectMask other) {
-        return new DetermineWhetherIntersectingVoxelsBinary(
-                        binaryValuesByte(), other.binaryValuesByte())
-                .hasIntersectingVoxels(voxels, other.voxels);
+        return CountVoxelsIntersectingObjects.hasIntersectingVoxels(this, other);
     }
 
     /**

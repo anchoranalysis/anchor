@@ -30,11 +30,11 @@ import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.iterator.process.ProcessPoint;
-import org.anchoranalysis.image.voxel.iterator.process.buffer.ProcessBufferTernaryWithPoint;
-import org.anchoranalysis.image.voxel.iterator.process.buffer.ProcessBufferUnaryWithPoint;
+import org.anchoranalysis.image.voxel.iterator.process.buffer.ProcessBufferTernary;
+import org.anchoranalysis.image.voxel.iterator.process.buffer.ProcessBufferUnary;
 
 /**
- * Exposes a {@link ProcessPoint} as a {@link ProcessBufferUnaryWithPoint} by retrieving
+ * Exposes a {@link ProcessPoint} as a {@link ProcessBufferUnary} by retrieving
  * <b>three</b> buffers for each z-slice.
  *
  * <p>Note that {@link #notifyChangeSlice} <b>need not</b> be be called for all slices (perhaps only
@@ -57,7 +57,7 @@ final class RetrieveBuffersForThreeSlices<T> implements ProcessPoint {
     private final Voxels<T> voxels3;
 
     /** Processor */
-    private final ProcessBufferTernaryWithPoint<T> processor;
+    private final ProcessBufferTernary<T> processor;
     // END REQUIRED ARGUMENTS
 
     private T bufferSlice1;
@@ -78,6 +78,7 @@ final class RetrieveBuffersForThreeSlices<T> implements ProcessPoint {
 
     @Override
     public void process(Point3i point) {
-        processor.process(point, bufferSlice1, bufferSlice2, bufferSlice3, offsetWithinSlice++);
+        int offset = offsetWithinSlice++;
+        processor.process(point, bufferSlice1, bufferSlice2, bufferSlice3, offset, offset, offset);
     }
 }

@@ -39,9 +39,9 @@ import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.iterator.process.ProcessPoint;
-import org.anchoranalysis.image.voxel.iterator.process.buffer.ProcessBufferBinaryWithPoint;
-import org.anchoranalysis.image.voxel.iterator.process.buffer.ProcessBufferTernaryWithPoint;
-import org.anchoranalysis.image.voxel.iterator.process.buffer.ProcessBufferUnaryWithPoint;
+import org.anchoranalysis.image.voxel.iterator.process.buffer.ProcessBufferBinary;
+import org.anchoranalysis.image.voxel.iterator.process.buffer.ProcessBufferTernary;
+import org.anchoranalysis.image.voxel.iterator.process.buffer.ProcessBufferUnary;
 import org.anchoranalysis.image.voxel.iterator.process.voxelbuffer.ProcessVoxelBufferBinary;
 import org.anchoranalysis.image.voxel.iterator.process.voxelbuffer.ProcessVoxelBufferUnary;
 import org.anchoranalysis.image.voxel.iterator.process.voxelbuffer.ProcessVoxelBufferUnaryWithPoint;
@@ -75,7 +75,7 @@ public class IterateVoxelsAll {
      *     coordinates.
      * @param <T> buffer-type for voxels
      */
-    public static <T> void withBuffer(Voxels<T> voxels, ProcessBufferUnaryWithPoint<T> process) {
+    public static <T> void withBuffer(Voxels<T> voxels, ProcessBufferUnary<T> process) {
         withPoint(voxels.extent(), new RetrieveBufferForSlice<>(voxels, process));
     }
 
@@ -93,7 +93,7 @@ public class IterateVoxelsAll {
      * @param <T> buffer-type for voxels
      */
     public static <T> void withTwoBuffersAndPoint(
-            Voxels<T> voxels1, Voxels<T> voxels2, ProcessBufferBinaryWithPoint<T> process) {
+            Voxels<T> voxels1, Voxels<T> voxels2, ProcessBufferBinary<T> process) {
         Preconditions.checkArgument(voxels1.extent().equals(voxels2.extent()));
         withPoint(voxels1.extent(), new RetrieveBuffersForTwoSlices<>(voxels1, voxels2, process));
     }
@@ -118,7 +118,7 @@ public class IterateVoxelsAll {
             Voxels<T> voxels1,
             Voxels<T> voxels2,
             Voxels<T> voxels3,
-            ProcessBufferTernaryWithPoint<T> process) {
+            ProcessBufferTernary<T> process) {
         Preconditions.checkArgument(voxels1.extent().equals(voxels2.extent()));
         Preconditions.checkArgument(voxels2.extent().equals(voxels3.extent()));
         withPoint(

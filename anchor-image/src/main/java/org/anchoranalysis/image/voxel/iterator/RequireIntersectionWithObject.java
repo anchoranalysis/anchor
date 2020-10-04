@@ -83,6 +83,6 @@ final class RequireIntersectionWithObject implements ProcessPoint {
         int offsetMask = objectMask.offsetGlobal(point.x(), point.y());
 
         // We skip if our containing object-mask doesn't include it
-        return (bufferObject.getRaw(offsetMask) == byteOn);
+        return bufferObject.getRaw(offsetMask) == byteOn;
     }
 }

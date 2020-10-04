@@ -30,7 +30,7 @@ import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.Voxels;
-import org.anchoranalysis.image.voxel.iterator.process.buffer.ProcessBufferUnaryWithPoint;
+import org.anchoranalysis.image.voxel.iterator.process.buffer.ProcessBufferUnary;
 
 /**
  * Puts an <i>on</i> voxel in the output-buffer if {@code voxel-value >= level} or <i>off</i>
@@ -38,7 +38,7 @@ import org.anchoranalysis.image.voxel.iterator.process.buffer.ProcessBufferUnary
  *
  * @author Owen Feehan
  */
-final class ThresholdEachVoxel implements ProcessBufferUnaryWithPoint<UnsignedByteBuffer> {
+final class ThresholdEachVoxel implements ProcessBufferUnary<UnsignedByteBuffer> {
 
     private final int level;
     private final Voxels<UnsignedByteBuffer> voxelsOut;

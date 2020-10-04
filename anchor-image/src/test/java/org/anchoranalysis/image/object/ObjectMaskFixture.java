@@ -24,19 +24,22 @@
  * #L%
  */
 
-package org.anchoranalysis.image.voxel.iterator;
+package org.anchoranalysis.image.object;
 
 import lombok.RequiredArgsConstructor;
+import org.anchoranalysis.core.geometry.Point2i;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.box.BoundingBox;
-import org.anchoranalysis.image.object.ObjectMask;
 
 /**
- * Creates object-masks of a certain shape
+ * Creates object-masks of a certain shape.
  *
+ * <p>The object-masks are entirely filled-in (rectangular to fill bounding-box) or
+ * filled-in except single-voxel corners in the X and Y dimensions.
+ * 
  * @author Owen Feehan
  */
 @RequiredArgsConstructor
@@ -52,9 +55,17 @@ public class ObjectMaskFixture {
     public static final int OBJECT_NUM_VOXELS_3D = OBJECT_NUM_VOXELS_2D * ObjectMaskFixture.DEPTH;
 
     // START REQUIRED ARGUMENTS
+    /** Whether to remove single-voxel pixels from corners or not */
+    private final boolean removeCorners;
+    
+    /** Whether to create a 3D object or a 2D object. */
     private final boolean do3D;
     // END REQUIRED ARGUMENTS
 
+    public ObjectMask filledMask(Point2i corner) {
+        return filledMask(corner.x(), corner.y());
+    }
+    
     public ObjectMask filledMask(int cornerX, int cornerY) {
         return filledMask(cornerX, cornerY, WIDTH, HEIGHT);
     }
@@ -66,7 +77,9 @@ public class ObjectMaskFixture {
 
         ObjectMask object = new ObjectMask(new BoundingBox(corner, extent));
         object.assignOn().toAll();
-        removeEachCorner(object);
+        if (removeCorners) {
+            removeEachCorner(object);
+        }
         return object;
     }
 

@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.image.object.factory.unionfind;
 
-import static org.anchoranalysis.image.voxel.iterator.ObjectMaskFixture.*;
+import static org.anchoranalysis.image.object.ObjectMaskFixture.*;
 import static org.junit.Assert.*;
 
 import org.anchoranalysis.core.error.CreateException;
@@ -37,12 +37,12 @@ import org.anchoranalysis.image.binary.voxel.BinaryVoxelsFactory;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.object.ObjectMaskFixture;
 import org.anchoranalysis.image.object.factory.ObjectCollectionFactory;
 import org.anchoranalysis.image.voxel.assigner.VoxelsAssigner;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedIntVoxelType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
-import org.anchoranalysis.image.voxel.iterator.ObjectMaskFixture;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -58,11 +58,11 @@ public class ConnectedComponentUnitFindTest {
      */
     private static final int DISTANCE_BETWEEN = 10;
 
-    private ConnectedComponentUnionFind cc;
+    private ConnectedComponentUnionFind connectedComponents;
 
     @Before
     public void setup() {
-        cc = new ConnectedComponentUnionFind(1, false);
+        connectedComponents = new ConnectedComponentUnionFind(1, false);
     }
 
     @Test
@@ -88,12 +88,12 @@ public class ConnectedComponentUnitFindTest {
 
     private ObjectCollection deriveInt(boolean do3D)
             throws OperationFailedException, CreateException {
-        return cc.deriveConnectedInt(createBufferWithObjects(UnsignedIntVoxelType.INSTANCE, do3D));
+        return connectedComponents.deriveConnectedInt(createBufferWithObjects(UnsignedIntVoxelType.INSTANCE, do3D));
     }
 
     private ObjectCollection deriveByte(boolean do3D)
             throws OperationFailedException, CreateException {
-        return cc.deriveConnectedByte(
+        return connectedComponents.deriveConnectedByte(
                 createBufferWithObjects(UnsignedByteVoxelType.INSTANCE, do3D));
     }
 
@@ -108,7 +108,7 @@ public class ConnectedComponentUnitFindTest {
     private <T> BinaryVoxels<T> createBufferWithObjects(VoxelDataType bufferDataType, boolean do3D)
             throws CreateException {
 
-        ObjectMaskFixture fixture = new ObjectMaskFixture(do3D);
+        ObjectMaskFixture fixture = new ObjectMaskFixture(true, do3D);
 
         Extent extent =
                 new Extent(

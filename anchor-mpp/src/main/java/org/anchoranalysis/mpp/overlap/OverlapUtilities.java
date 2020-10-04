@@ -52,8 +52,7 @@ public class OverlapUtilities {
         // Otherwise we do it the slow way by seeing if any pixels intersect
         // between the two bounding box
         byte flag = RegionMembershipUtilities.flagForRegion(regionID);
-        return new CountIntersectingVoxelsRegionMembership(flag)
-                .countIntersectingVoxels(pmm1.voxelized().voxels(), pmm2.voxelized().voxels());
+        return new CountIntersectingVoxels(flag).count(pmm1.voxelized().voxels(), pmm2.voxelized().voxels());
     }
 
     /**
@@ -85,8 +84,8 @@ public class OverlapUtilities {
         // Otherwise we do it the slow way by seeing if any pixels intersect between the two
         // bounding box
         byte flag = RegionMembershipUtilities.flagForRegion(regionID);
-        return new CountIntersectingVoxelsRegionMembershipMask(flag)
-                .countIntersectingVoxelsMaskGlobal(
+        return new CountIntersectingVoxels(flag)
+                .countMasked(
                         pmm1.voxelized().voxels(),
                         pmm2.voxelized().voxels(),
                         globalMask,

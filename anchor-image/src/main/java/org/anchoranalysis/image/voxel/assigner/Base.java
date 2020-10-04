@@ -100,7 +100,7 @@ abstract class Base<T> implements VoxelsAssigner {
 
     @Override
     public void toObjectIf(ObjectMask object, IntPredicate voxelPredicate) {
-        IterateVoxelsObjectMask.withVoxelBuffer(
+        IterateVoxelsObjectMask.withBuffer(
                 object,
                 voxels,
                 (buffer, offset) -> {
@@ -151,7 +151,7 @@ abstract class Base<T> implements VoxelsAssigner {
      *     boxToBeAssigned}.
      */
     private void toObject(ObjectMask object, Optional<BoundingBox> restrictTo) {
-        IterateVoxelsObjectMask.withTwoVoxelBuffers(
+        IterateVoxelsObjectMask.withBuffer(
                 object, voxels, restrictTo, this::assignToBuffer);
     }
 

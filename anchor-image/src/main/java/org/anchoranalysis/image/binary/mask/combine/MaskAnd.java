@@ -73,11 +73,11 @@ public class MaskAnd {
         IterateVoxelsAll.withTwoBuffersAndPoint(
                 voxelsFirst,
                 voxelsSecond,
-                (point, bufferSource, bufferReceive, offset) -> {
-                    if (bufferSource.getRaw(offset) == sourceOn
-                            && bufferReceive.getRaw(offset) == receiveOff) {
+                (point, bufferSource, bufferReceive, offsetSource, offsetReceive) -> {
+                    if (bufferSource.getRaw(offsetSource) == sourceOn
+                            && bufferReceive.getRaw(offsetReceive) == receiveOff) {
                         // source is ON but receive is OFF, so we change the buffer
-                        bufferSource.putRaw(offset, sourceOff);
+                        bufferSource.putRaw(offsetSource, sourceOff);
                     }
                 });
     }

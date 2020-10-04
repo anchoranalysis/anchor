@@ -41,6 +41,13 @@ public class MaxIntensityProjectionPair {
     private final BoundedVoxels<UnsignedByteBuffer> voxelsProjected1;
     private final BoundedVoxels<UnsignedByteBuffer> voxelsProjected2;
 
+    /**
+     * Counts intersecting (i.e. voxels that are part of the same region) voxels.
+     * 
+     * <p>Relies on the binary voxel buffer ON being 255.
+     */
+    private final CountIntersectingVoxels counter = new CountIntersectingVoxels((byte) 1);
+    
     public MaxIntensityProjectionPair(
             BoundedVoxels<UnsignedByteBuffer> voxels1,
             BoundedVoxels<UnsignedByteBuffer> voxels2,
@@ -51,23 +58,21 @@ public class MaxIntensityProjectionPair {
     }
 
     public int countIntersectingVoxels() {
-        // Relies on the binary voxel buffer ON being 255
-        return new CountIntersectingVoxelsRegionMembership((byte) 1)
-                .countIntersectingVoxels(voxelsProjected1, voxelsProjected2);
+        return counter.count(voxelsProjected1, voxelsProjected2);
     }
 
     public int minArea() {
-        int cnt1 =
+        int count1 =
                 voxelsProjected1
                         .extract()
                         .voxelsEqualTo(BinaryValues.getDefault().getOnInt())
                         .count();
-        int cnt2 =
+        int count2 =
                 voxelsProjected2
                         .extract()
                         .voxelsEqualTo(BinaryValues.getDefault().getOnInt())
                         .count();
-        return Math.min(cnt1, cnt2);
+        return Math.min(count1, count2);
     }
 
     private static BinaryVoxels<UnsignedByteBuffer> createBinaryVoxelsForFlag(

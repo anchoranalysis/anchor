@@ -75,15 +75,15 @@ public class MaskXor {
         IterateVoxelsAll.withTwoBuffersAndPoint(
                 voxelsFirst,
                 voxelsSecond,
-                (point, bufferSource, bufferReceive, offset) -> {
+                (point, bufferSource, bufferReceive, offsetSource, offsetReceive) -> {
                     boolean identicalStates =
-                            (bufferSource.getRaw(offset) == sourceOn)
-                                    == (bufferReceive.getRaw(offset) == receiveOn);
+                            (bufferSource.getRaw(offsetSource) == sourceOn)
+                                    == (bufferReceive.getRaw(offsetReceive) == receiveOn);
 
                     if (identicalStates) {
-                        bufferSource.putRaw(offset, sourceOff);
+                        bufferSource.putRaw(offsetSource, sourceOff);
                     } else {
-                        bufferSource.putRaw(offset, sourceOn);
+                        bufferSource.putRaw(offsetSource, sourceOn);
                     }
                 });
     }

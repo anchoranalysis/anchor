@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-image
+ * anchor-mpp
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -24,46 +24,37 @@
  * #L%
  */
 
-package org.anchoranalysis.image.object.combine;
+package org.anchoranalysis.mpp.overlap;
 
-import org.anchoranalysis.image.binary.values.BinaryValuesByte;
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.image.convert.UnsignedByteBuffer;
+import org.anchoranalysis.image.voxel.BoundedVoxels;
+import org.anchoranalysis.image.voxel.Voxels;
+import org.anchoranalysis.image.voxel.iterator.intersecting.CountVoxelsIntersectingBounded;
 
 /**
- * Counts the number of intersecting voxels where each buffer is encoded as Binary-Values
+ * Counts the number of intersecting-pixels where bytes are encoded as region memberships
  *
  * @author Owen Feehan
  */
-public class CountIntersectingVoxelsBinary extends CountIntersectingVoxels {
+@AllArgsConstructor
+class CountIntersectingVoxels {
 
-    private byte byteOn1;
-    private byte byteOn2;
+    private final PredicateRegionMembership predicate;
 
-    public CountIntersectingVoxelsBinary(BinaryValuesByte bvb1, BinaryValuesByte bvb2) {
-        super();
-        this.byteOn1 = bvb1.getOnByte();
-        this.byteOn2 = bvb2.getOnByte();
+    public CountIntersectingVoxels(byte regionMembershipFlag) {
+        predicate = new PredicateRegionMembership(regionMembershipFlag);
+    }
+    
+    public int count(BoundedVoxels<UnsignedByteBuffer> voxels1, BoundedVoxels<UnsignedByteBuffer> voxels2) {
+        return CountVoxelsIntersectingBounded.countByte(voxels1, voxels2, predicate);
     }
 
-    @Override
-    protected int countIntersectingVoxels(
-            UnsignedByteBuffer buffer1, UnsignedByteBuffer buffer2, IntersectionBoundingBox box) {
-
-        int cnt = 0;
-        for (int y = box.y().min(); y < box.y().max(); y++) {
-            int yOther = y + box.y().rel();
-
-            for (int x = box.x().min(); x < box.x().max(); x++) {
-                int xOther = x + box.x().rel();
-
-                byte posCheck = buffer1.getRaw(box.e1().offset(x, y));
-                byte posCheckOther = buffer2.getRaw(box.e2().offset(xOther, yOther));
-
-                if (posCheck == byteOn1 && posCheckOther == byteOn2) {
-                    cnt++;
-                }
-            }
-        }
-        return cnt;
+    public int countMasked(
+            BoundedVoxels<UnsignedByteBuffer> voxels1,
+            BoundedVoxels<UnsignedByteBuffer> voxels2,
+            Voxels<UnsignedByteBuffer> maskGlobal,
+            byte onMaskGlobal) {
+        return CountVoxelsIntersectingBounded.countByteMasked(maskGlobal, onMaskGlobal, voxels1, voxels2, predicate); 
     }
 }

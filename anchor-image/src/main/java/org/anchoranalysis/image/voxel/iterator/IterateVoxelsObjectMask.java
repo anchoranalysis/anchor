@@ -41,8 +41,8 @@ import org.anchoranalysis.image.voxel.ExtentMatchHelper;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.iterator.process.ProcessPoint;
-import org.anchoranalysis.image.voxel.iterator.process.buffer.ProcessBufferBinaryWithPoint;
-import org.anchoranalysis.image.voxel.iterator.process.buffer.ProcessBufferUnaryWithPoint;
+import org.anchoranalysis.image.voxel.iterator.process.buffer.ProcessBufferBinary;
+import org.anchoranalysis.image.voxel.iterator.process.buffer.ProcessBufferUnary;
 import org.anchoranalysis.image.voxel.iterator.process.voxelbuffer.ProcessVoxelBufferUnary;
 
 /**
@@ -109,7 +109,7 @@ public class IterateVoxelsObjectMask {
      * @param <T> buffer-type for voxels
      */
     public static <T> void withBuffer(
-            ObjectMask object, Voxels<T> voxels, ProcessBufferUnaryWithPoint<T> process) {
+            ObjectMask object, Voxels<T> voxels, ProcessBufferUnary<T> process) {
         /**
          * This is re-implemented in full, as reusing existing code with {@link AddOffsets} and /
          * {@link RequireIntersectionWithMask} was not inlining using default JVM settings / Based
@@ -148,9 +148,9 @@ public class IterateVoxelsObjectMask {
 
     /**
      * Iterate over each voxel with a corresponding ON value in an object-mask - and with <b>two</b>
-     * associated <b>buffers</b> for each slice.
+     * associated <b>buffers</b> for each slice covering the <b>all the global space</b> i.e. the entire image.
      *
-     * <p>The extent's of both {@code voxels1} and {@code voxels2} must be equal.
+     * <p>The extent's of both {@code voxels1} and {@code voxels2} must be equal, and equal to the coordinate space {@object} is defined on.
      *
      * @param object an object-mask which restricts which voxels of {@code voxels1} and {@code
      *     voxels2} are iterated
@@ -166,7 +166,7 @@ public class IterateVoxelsObjectMask {
             ObjectMask object,
             Voxels<T> voxels1,
             Voxels<T> voxels2,
-            ProcessBufferBinaryWithPoint<T> process) {
+            ProcessBufferBinary<T> process) {
         Preconditions.checkArgument(voxels1.extent().equals(voxels2.extent()));
         IterateVoxelsObjectMask.withPoint(
                 object, new RetrieveBuffersForTwoSlices<>(voxels1, voxels2, process));
@@ -182,13 +182,13 @@ public class IterateVoxelsObjectMask {
      * @param object the object-mask (global coordinates)
      * @param process processes each point that fulfills the conditions
      */
-    public static <T> void withVoxelBuffer(
+    public static <T> void withBuffer(
             ObjectMask object, Voxels<T> voxels, ProcessVoxelBufferUnary<T> process) {
-        withTwoVoxelBuffers(object, voxels, Optional.empty(), process);
+        withBuffer(object, voxels, Optional.empty(), process);
     }
 
     /**
-     * Iterate over each voxel on an object-mask with <b>two</b> associated {@link VoxelBuffer}s.
+     * Iterate over each voxel on an object-mask with <b>one</b> associated {@link VoxelBuffer}.
      *
      * <p>Optionally, the iteration can be restricted to a sub-region of the object-mask.
      *
@@ -198,7 +198,7 @@ public class IterateVoxelsObjectMask {
      * @param restrictTo optional sub-region of object-mask (global coordinates)
      * @param process processes each point that fulfills the conditions
      */
-    public static <T> void withTwoVoxelBuffers(
+    public static <T> void withBuffer(
             ObjectMask object,
             Voxels<T> voxels,
             Optional<BoundingBox> restrictTo,

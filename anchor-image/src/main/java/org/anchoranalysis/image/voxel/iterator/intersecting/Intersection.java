@@ -24,38 +24,40 @@
  * #L%
  */
 
-package org.anchoranalysis.image.voxel.iterator.process.buffer;
+package org.anchoranalysis.image.voxel.iterator.intersecting;
 
 import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.voxel.iterator.process.ProcessPoint;
+import org.anchoranalysis.image.extent.box.BoundingBox;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Value;
+import lombok.experimental.Accessors;
 
 /**
- * Processes a 3D point like {@link ProcessPoint} but also retrieves <b>three</b> buffers for the
- * current z-slice.
+ * A bounding box where intersection occurs of two boxes, together with relative position of the second box to the first.  
  *
- * <p>It is very similar to {@link ProcessBufferUnaryWithPoint} but uses two buffers of the same
- * type instead of a single one.
- *
- * @param <T> type of both buffers
  * @author Owen Feehan
  */
-@FunctionalInterface
-public interface ProcessBufferTernaryWithPoint<T> {
+@AllArgsConstructor(access=AccessLevel.PRIVATE) @Accessors(fluent=true) @Value
+class Intersection {
 
-    /** Notifies the processor that there has been a change in slice (z global coordinate) */
-    default void notifyChangeSlice(int z) {}
+    /** Bounding-box of the intersection relative to box1 */
+    private BoundingBox intersectingBox;
+    
+    /** Relative position of {@code box2} to the {@code box1}. */
+    private Point3i relative;
 
-    /**
-     * Processes a voxel location in a buffer
-     *
-     * @param point a point with global coordinates
-     * @param buffer1 first buffer for the current slice for which {@code offset} refers to a
-     *     particular location
-     * @param buffer2 second buffer for the current slice for which {@code offset} refers to a
-     *     particular location
-     * @param buffer3 third buffer for the current slice for which {@code offset} refers to a
-     *     particular location
-     * @param offset an offset value for the current slice (i.e. indexing XY only, but not Z)
-     */
-    void process(Point3i point, T buffer1, T buffer2, T buffer3, int offset);
+    public static Intersection create(
+            BoundingBox box1, BoundingBox box2, BoundingBox boxIntersect) {
+
+        Point3i relativeIntersectionToBox1 = boxIntersect.relativePositionTo(box1);
+
+        Point3i relativeBox2ToBox1 =
+                Point3i.immutableSubtract(box1.cornerMin(), box2.cornerMin());
+
+        return new Intersection(
+                new BoundingBox(relativeIntersectionToBox1,boxIntersect.extent()),
+                relativeBox2ToBox1
+        );
+    }
 }

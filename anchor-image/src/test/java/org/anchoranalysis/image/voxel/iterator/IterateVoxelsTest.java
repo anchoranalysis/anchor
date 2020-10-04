@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.image.voxel.iterator;
 
-import static org.anchoranalysis.image.voxel.iterator.ObjectMaskFixture.*;
+import static org.anchoranalysis.image.object.ObjectMaskFixture.*;
 import static org.junit.Assert.*;
 
 import java.util.Optional;
@@ -34,6 +34,7 @@ import java.util.function.Consumer;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.object.ObjectMaskFixture;
 import org.junit.Test;
 
 public class IterateVoxelsTest {
@@ -77,7 +78,7 @@ public class IterateVoxelsTest {
             int expectedIntersectionNumVoxels,
             Point3i expectedIntersectionCenter) {
 
-        ObjectMaskFixture objectsFixture = new ObjectMaskFixture(do3D);
+        ObjectMaskFixture objectsFixture = new ObjectMaskFixture(true, do3D);
 
         ObjectMask object1 = objectsFixture.filledMask(20, Y_MASK_1);
         ObjectMask object2 =

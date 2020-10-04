@@ -24,9 +24,11 @@
  * #L%
  */
 /**
- * Functional-interfaces for processing different combinations of points and buffers.
+ * Functional-interfaces for processing different combinations of points and buffers that do not return a value.
  *
  * <p>These interfaces are called from the iterators within {@code
  * org.anchoranalysis.image.voxel.iterator}.
+ * 
+ * <p>See {@code org.anchoranalysis.image.voxel.iterator.predicate} for similar interfaces that return a boolean.
  */
 package org.anchoranalysis.image.voxel.iterator.process;
