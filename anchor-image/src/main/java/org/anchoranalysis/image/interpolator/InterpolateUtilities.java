@@ -30,9 +30,6 @@ import com.google.common.base.Preconditions;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.interpolator.transfer.Transfer;
-import org.anchoranalysis.image.interpolator.transfer.TransferViaByte;
-import org.anchoranalysis.image.interpolator.transfer.TransferViaShort;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
 import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelTypeException;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
@@ -41,7 +38,7 @@ import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class InterpolateUtilities {
 
-    private static Transfer createTransfer(VoxelsWrapper source, VoxelsWrapper destination) {
+    private static TransferViaSpecificType<?> createTransfer(VoxelsWrapper source, VoxelsWrapper destination) {
 
         if (!source.getVoxelDataType().equals(destination.getVoxelDataType())) {
             throw new IncorrectVoxelTypeException(
@@ -49,9 +46,13 @@ public class InterpolateUtilities {
         }
 
         if (source.getVoxelDataType().equals(UnsignedByteVoxelType.INSTANCE)) {
-            return new TransferViaByte(source, destination);
+            return new TransferViaSpecificType<>(source, destination, VoxelsWrapper::asByte, 
+              (interpolator, voxelsSource, voxelsDestination, extentSource, extentDestination) -> interpolator.interpolateByte(voxelsSource, voxelsDestination, extentSource, extentDestination)
+            );
         } else if (source.getVoxelDataType().equals(UnsignedShortVoxelType.INSTANCE)) {
-            return new TransferViaShort(source, destination);
+            return new TransferViaSpecificType<>(source, destination, VoxelsWrapper::asShort, 
+                (interpolator, voxelsSource, voxelsDestination, extentSource, extentDestination) -> interpolator.interpolateShort(voxelsSource, voxelsDestination, extentSource, extentDestination)
+              );
         } else {
             throw new IncorrectVoxelTypeException("Only unsigned byte and short are supported");
         }
@@ -63,7 +64,7 @@ public class InterpolateUtilities {
         Extent extentSource = src.any().extent();
         Extent extentTarget = trgt.any().extent();
 
-        Transfer transfer = createTransfer(src, trgt);
+        TransferViaSpecificType<?> transfer = createTransfer(src, trgt);
 
         for (int z = 0; z < extentSource.z(); z++) {
 

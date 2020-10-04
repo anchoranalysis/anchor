@@ -37,7 +37,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import org.anchoranalysis.core.functional.FunctionalList;
-import org.anchoranalysis.image.object.combine.BoundingBoxMerger;
+import org.anchoranalysis.image.merge.BoundingBoxMerger;
 
 /**
  * One or more elements, each with an individual bounding-box, and collectively with a bounding-box

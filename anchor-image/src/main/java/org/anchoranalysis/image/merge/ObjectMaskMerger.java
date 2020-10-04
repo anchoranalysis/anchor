@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.image.object.combine;
+package org.anchoranalysis.image.merge;
 
 import java.util.stream.Stream;
 import lombok.AccessLevel;

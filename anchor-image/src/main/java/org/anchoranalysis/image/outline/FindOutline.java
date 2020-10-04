@@ -46,7 +46,7 @@ import org.anchoranalysis.image.voxel.kernel.dilateerode.ErosionKernel3;
 import org.anchoranalysis.image.voxel.kernel.outline.OutlineKernel3;
 
 /**
- * Finds outline voxels i.e. pixels on the contour/edge of the object
+ * Finds outline voxels i.e. pixels on the contour/edge of the object.
  *
  * <p>Specifically, it converts a solid-object (where all voxels inside an object are ON) into where
  * only pixels on the contour are ON
