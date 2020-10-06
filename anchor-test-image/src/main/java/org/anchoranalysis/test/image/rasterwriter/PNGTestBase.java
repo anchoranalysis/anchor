@@ -1,6 +1,7 @@
 package org.anchoranalysis.test.image.rasterwriter;
 
 import java.io.IOException;
+import java.util.Optional;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.bean.rasterwriter.RasterWriter;
 import org.junit.Test;
@@ -14,7 +15,7 @@ import org.junit.Test;
 public abstract class PNGTestBase extends RasterWriterTestBase {
     
     public PNGTestBase() {
-        super("png", false);
+        super("png", false, true, Optional.of("tif"));
     }
 
     @Test

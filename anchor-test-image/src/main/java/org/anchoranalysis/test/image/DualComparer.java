@@ -68,7 +68,20 @@ public class DualComparer {
      * @throws FileNotFoundException if one or both of the files cannot be found
      */
     public boolean compareTwoImages(String path) throws FileNotFoundException {
-        return TestLoaderImageIO.compareTwoImages(loaderImage1, path, loaderImage2, path);
+        return TestLoaderImageIO.compareTwoImages(loaderImage1, path, loaderImage2, path, false);
+    }
+    
+    /**
+     * Compare two images with different paths, but in two different test loaders
+     *
+     * @param path1 relative-path (compared to root of first loader) of first image
+     * @param path2 relative-path (compared to root of second loader) of second image
+     * @param ignoreResolutionDifferences if true any differences in image-resolution are not considered
+     * @return true if the images are equal (every pixel is identical, and data-types are the same)
+     * @throws FileNotFoundException if one or both of the files cannot be found
+     */
+    public boolean compareTwoImages(String path1, String path2, boolean ignoreResolutionDifferences) throws FileNotFoundException {
+        return TestLoaderImageIO.compareTwoImages(loaderImage1, path1, loaderImage2, path2, ignoreResolutionDifferences);
     }
 
     /**

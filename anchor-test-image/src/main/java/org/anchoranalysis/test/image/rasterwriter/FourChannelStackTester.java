@@ -4,13 +4,15 @@ import static org.junit.Assert.assertTrue;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Optional;
+import org.anchoranalysis.core.functional.function.CheckedPredicate;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.bean.rasterwriter.RasterWriter;
 import org.anchoranalysis.image.io.rasterwriter.RasterWriteOptions;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.test.image.ChannelFixture;
-import org.anchoranalysis.test.image.DualComparerTemporaryFolder;
+import org.anchoranalysis.test.image.DualComparer;
 import org.anchoranalysis.test.image.StackFixture;
 import lombok.AllArgsConstructor;
 
@@ -29,8 +31,14 @@ public class FourChannelStackTester {
     /** The writer to use for creating new raster-files that are tested for bytewise equality against saved rasters. */
     private RasterWriter writer;
     
-    /** The comparer used for comparing the newly create files with the saved rasters. */
-    private final DualComparerTemporaryFolder comparer;
+    /** The directory to write new files to. */
+    private Path directoryToWriteTo;
+    
+    /** The comparer used for comparing bytewise to the newly created files with the saved rasters. */
+    private final Optional<DualComparer> comparerBytewise;
+    
+    /** The comparer used for comparing voxelwise to the newly created files with the saved rasters. */
+    private final Optional<DualComparerWithExtension> comparerVoxelwise;
     
     /** The extension to use for writing and testing files.
      * 
@@ -97,14 +105,40 @@ public class FourChannelStackTester {
     private void test(String filename, int numberChannels, boolean makeRGB, Extent extent) throws RasterIOException, IOException {
         Stack stack = StackFixture.create(numberChannels, extent);
         
-        Path pathWritten = writer.writeStackWithExtension(stack, comparer.resolveTemporaryFile(filename), makeRGB, RasterWriteOptions.rgbMaybe3D() );
+        Path pathWritten = writer.writeStackWithExtension(stack, directoryToWriteTo.resolve(filename), makeRGB, RasterWriteOptions.rgbMaybe3D() );
         
         assertTrue( filename + "_minimumFileSize", Files.size(pathWritten) > MINIMUM_FILE_SIZE );
         
+        if (comparerBytewise.isPresent()) {
+            performComparison(filename, "_binaryCompare", pathWritten, fileToCompare ->
+                comparerBytewise.get().compareTwoBinaryFiles( addSelectedExtension(fileToCompare) )
+            );
+        }
+        
+        if (comparerVoxelwise.isPresent()) {
+            performComparison(filename, "_voxelwiseCompare", pathWritten, fileToCompare ->
+                comparerVoxelwise.get().getComparer().compareTwoImages(
+                    addSelectedExtension(fileToCompare),
+                    addExtension(fileToCompare, comparerVoxelwise.get().getExtension()),
+                    true
+               )
+            );
+        }
+    }
+    
+    private String addSelectedExtension(String filename) {
+        return addExtension(filename, extension);
+    }
+    
+    private static String addExtension(String filename, String extensionToAdd) {
+        return filename + "." + extensionToAdd;
+    }
+    
+    private void performComparison(String filename, String suffix, Path path, CheckedPredicate<String,IOException> comparer) throws IOException {
         try {
-            assertTrue( filename + "_binaryCompare", comparer.compareTwoBinaryFiles(filename + "." + extension) );
+            assertTrue( filename + suffix, comparer.test(filename) );
         } catch (IOException e) {
-            System.err.printf("The test wrote a file to temporary-folder directory at:%n%s%n", pathWritten);
+            System.err.printf("The test wrote a file to temporary-folder directory at:%n%s%n", path);   // NOSONAR
             throw new IOException(
               String.format("The comparer threw an IOException, which likely means it cannot find an appropriate raster to compare against for %s.", filename), e );
         }

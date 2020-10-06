@@ -95,7 +95,7 @@ public class TestLoaderImageIO {
      * @throws FileNotFoundException if one or both of the files cannot be found
      */
     public boolean compareTwoImages(String path1, String path2) throws FileNotFoundException {
-        return compareTwoImages(this, path1, this, path2);
+        return compareTwoImages(this, path1, this, path2, false);
     }
 
     /**
@@ -105,11 +105,12 @@ public class TestLoaderImageIO {
      * @param path1 first-path to compare
      * @param loader2 loader to use for path2
      * @param path2 second-path to compare
+     * @param ignoreResolutionDifferences if true any differences in image-resolution are not considered
      * @return true if the images are equal (every pixel is identical, and data-types are the same)
      * @throws FileNotFoundException if one or both of the files cannot be found
      */
     public static boolean compareTwoImages(
-            TestLoaderImageIO loader1, String path1, TestLoaderImageIO loader2, String path2)
+            TestLoaderImageIO loader1, String path1, TestLoaderImageIO loader2, String path2, boolean ignoreResolutionDifferences)
             throws FileNotFoundException {
 
         if (!loader1.doesPathExist(path1)) {
@@ -124,7 +125,7 @@ public class TestLoaderImageIO {
 
         Stack stackSaved = loader2.openStackFromTestPath(path2);
 
-        return stackWritten.equals(stackSaved);
+        return stackWritten.equalsDeep(stackSaved, !ignoreResolutionDifferences);
     }
 
     public ObjectCollection openObjectsFromTestPath(String testFolderPath) {
