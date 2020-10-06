@@ -47,6 +47,7 @@ public abstract class ImageJRasterWriter extends RasterWriter {
 
     private static Log log = LogFactory.getLog(ImageJRasterWriter.class);
 
+    
     @Override
     public void writeStack(
             Stack stack, Path filePath, boolean makeRGB, RasterWriteOptions writeOptions)
@@ -54,10 +55,14 @@ public abstract class ImageJRasterWriter extends RasterWriter {
         if (!(stack.getNumberChannels() == 1 || stack.getNumberChannels() == 3)) {
             throw new RasterIOException("Stack must have 1 or 3 channels");
         }
+        
+        if (!stack.allChannelsHaveIdenticalType()) {
+            throw new RasterIOException("Stack must have identically-typed channels");
+        }
 
         if (makeRGB && (stack.getNumberChannels() != 3)) {
             throw new RasterIOException(
-                    "To make an RGB image, the stack must have exactly 3 channels");
+                    "To make an RGB image, the stack must have exactly 3 channels.");
         }
 
         writeStackTime(stack, filePath, makeRGB);

@@ -99,6 +99,15 @@ public class GraphWithPayload<V, P> {
     public int numberVertices() {
         return vertices.size();
     }
+    
+    /**
+     * The number of edges in the graph.
+     *
+     * @return the number of edges
+     */
+    public int numberEdges() {
+        return edgesUnique().size();
+    }
 
     /**
      * Does the graph contain a particular vertex?

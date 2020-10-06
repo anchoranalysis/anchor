@@ -52,7 +52,7 @@ class MultiplexDataTypes {
             case FormatTools.UINT16:
                 return UnsignedShortVoxelType.INSTANCE;
             case FormatTools.INT16:
-                return SignedShortVoxelType.instance;
+                return SignedShortVoxelType.INSTANCE;
             case FormatTools.FLOAT:
                 return FloatVoxelType.INSTANCE;
             default:
@@ -68,7 +68,7 @@ class MultiplexDataTypes {
             return new ChannelFactoryByte();
         } else if (voxelDataType.equals(UnsignedShortVoxelType.INSTANCE)) {
             return new ChannelFactoryShort();
-        } else if (voxelDataType.equals(SignedShortVoxelType.instance)) {
+        } else if (voxelDataType.equals(SignedShortVoxelType.INSTANCE)) {
             return new ChannelFactoryShort();
         } else if (voxelDataType.equals(FloatVoxelType.INSTANCE)) {
             return new ChannelFactoryFloat();

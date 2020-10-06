@@ -94,7 +94,7 @@ public class ConvertToFactory {
         if (targetDataType.equals(UnsignedByteVoxelType.INSTANCE)) {
             return toByte(bitsPerPixel, effectiveBitsPerPixel, littleEndian, floatingPoint, signed);
         } else if (targetDataType.equals(UnsignedShortVoxelType.INSTANCE)
-                || targetDataType.equals(SignedShortVoxelType.instance)) {
+                || targetDataType.equals(SignedShortVoxelType.INSTANCE)) {
             return toShort(bitsPerPixel, littleEndian, signed);
         } else if (targetDataType.equals(FloatVoxelType.INSTANCE)) {
             return toFloat(bitsPerPixel, littleEndian, signed);

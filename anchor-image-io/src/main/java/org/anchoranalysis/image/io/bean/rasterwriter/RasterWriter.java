@@ -41,6 +41,28 @@ import org.anchoranalysis.image.stack.Stack;
 public abstract class RasterWriter extends AnchorBean<RasterWriter> {
 
     /**
+     * Writes a stack to the filesystem at a particular path with an extension appended to the path.
+     *
+     * @param stack the stack to write
+     * @param filePath the path to write the file to, apart from an extension.
+     * @param makeRGB if TRUE, the image should be written as a RGB image, rather than as separate
+     *     channels.
+     * @param writeOptions options which may influence how a raster is written.
+     * @return the full path (including extension) used for writing.
+     * @throws RasterIOException if anything goes wrong whle writing.
+     */
+    public Path writeStackWithExtension(
+            Stack stack, Path filePath, boolean makeRGB, RasterWriteOptions writeOptions)
+            throws RasterIOException {
+        
+        String fileNameWithExtension = filePath.getFileName() + "." + fileExtension(writeOptions);
+        Path filePathWithExtension = filePath.resolveSibling(fileNameWithExtension);
+        writeStack(stack, filePathWithExtension, makeRGB, writeOptions);
+        return filePathWithExtension;
+    }
+    
+    
+    /**
      * File-extensions for files written by this writer.
      *
      * @param writeOptions options which may influence how a raster is written.

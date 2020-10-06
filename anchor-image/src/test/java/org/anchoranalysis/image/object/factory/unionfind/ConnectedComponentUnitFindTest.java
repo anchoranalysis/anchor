@@ -26,19 +26,17 @@
 
 package org.anchoranalysis.image.object.factory.unionfind;
 
-import static org.anchoranalysis.image.object.ObjectMaskFixture.*;
 import static org.junit.Assert.*;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelsFactory;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectCollectionFixture;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.ObjectMaskFixture;
-import org.anchoranalysis.image.object.factory.ObjectCollectionFactory;
 import org.anchoranalysis.image.voxel.assigner.VoxelsAssigner;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedIntVoxelType;
@@ -48,21 +46,14 @@ import org.junit.Test;
 
 public class ConnectedComponentUnitFindTest {
 
-    private static final int NUM_NON_OVERLAPPING_OBJECTS = 5;
-    private static final int NUM_OVERLAPPING_OBJECTS = 3;
-    private static final int NUM_OBJECTS = NUM_NON_OVERLAPPING_OBJECTS + NUM_OVERLAPPING_OBJECTS;
-
-    /**
-     * Used as a positive between non-overlapping objects, or as a negative shift between
-     * overlapping objects
-     */
-    private static final int DISTANCE_BETWEEN = 10;
-
     private ConnectedComponentUnionFind connectedComponents;
 
+    private ObjectCollectionFixture objectsFixture;
+    
     @Before
     public void setup() {
         connectedComponents = new ConnectedComponentUnionFind(1, false);
+        objectsFixture = new ObjectCollectionFixture();
     }
 
     @Test
@@ -77,7 +68,6 @@ public class ConnectedComponentUnitFindTest {
 
     @Test
     public void testByte3d() throws OperationFailedException, CreateException {
-
         testObjects(deriveInt(true), ObjectMaskFixture.OBJECT_NUM_VOXELS_3D);
     }
 
@@ -88,6 +78,7 @@ public class ConnectedComponentUnitFindTest {
 
     private ObjectCollection deriveInt(boolean do3D)
             throws OperationFailedException, CreateException {
+        objectsFixture.setDo3D(do3D);
         return connectedComponents.deriveConnectedInt(createBufferWithObjects(UnsignedIntVoxelType.INSTANCE, do3D));
     }
 
@@ -99,7 +90,7 @@ public class ConnectedComponentUnitFindTest {
 
     private void testObjects(ObjectCollection objects, int expectedSingleObjectSize)
             throws CreateException, OperationFailedException {
-        assertEquals("number of objects", NUM_NON_OVERLAPPING_OBJECTS + 1, objects.size());
+        assertEquals("number of objects", objectsFixture.getNumberNonOverlappingObjects() + 1, objects.size());
         assertTrue(
                 "size of all objects except one",
                 allSizesEqualExceptOne(objects, expectedSingleObjectSize));
@@ -107,43 +98,19 @@ public class ConnectedComponentUnitFindTest {
 
     private <T> BinaryVoxels<T> createBufferWithObjects(VoxelDataType bufferDataType, boolean do3D)
             throws CreateException {
-
-        ObjectMaskFixture fixture = new ObjectMaskFixture(true, do3D);
-
-        Extent extent =
-                new Extent(
-                        NUM_OBJECTS * (WIDTH + DISTANCE_BETWEEN),
-                        NUM_OBJECTS * (HEIGHT + DISTANCE_BETWEEN),
-                        DEPTH);
+        
+        ObjectCollectionFixture fixture = new ObjectCollectionFixture();
+        fixture.setDo3D(do3D);
+        
+        Extent extent = fixture.extentLargerThanAllObjects();
 
         @SuppressWarnings("unchecked")
         BinaryVoxels<T> voxels =
                 (BinaryVoxels<T>) BinaryVoxelsFactory.createEmptyOff(extent, bufferDataType);
 
         VoxelsAssigner assigner = voxels.assignOn();
-        createObjects(fixture).forEach(assigner::toObject);
+        fixture.createObjects(true).forEach(assigner::toObject);
         return voxels;
-    }
-
-    private ObjectCollection createObjects(ObjectMaskFixture fixture) {
-        Point3i running = new Point3i();
-        return ObjectCollectionFactory.of(
-                generateObjectsAndIncrementRunning(
-                        NUM_NON_OVERLAPPING_OBJECTS, DISTANCE_BETWEEN, running, fixture),
-                generateObjectsAndIncrementRunning(
-                        NUM_OVERLAPPING_OBJECTS, -DISTANCE_BETWEEN, running, fixture));
-    }
-
-    private static ObjectCollection generateObjectsAndIncrementRunning(
-            int numberObjects, int shift, Point3i running, ObjectMaskFixture fixture) {
-        return ObjectCollectionFactory.fromRepeated(
-                numberObjects,
-                () -> {
-                    ObjectMask object = fixture.filledMask(running.x(), running.y());
-                    running.incrementX(WIDTH + shift);
-                    running.incrementY(HEIGHT + shift);
-                    return object;
-                });
     }
 
     /**

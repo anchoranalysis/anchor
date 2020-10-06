@@ -27,21 +27,17 @@
 package org.anchoranalysis.image.voxel.datatype;
 
 import org.apache.commons.lang.builder.HashCodeBuilder;
+import lombok.AllArgsConstructor;
 
 // The type of data contained within the channel
+@AllArgsConstructor
 public abstract class VoxelDataType {
 
-    private int numBits;
+    /** The number of bits required to represent a voxel. */
+    private int numberBits;
     private String typeIdentifier;
     private long maxValue;
     private long minValue;
-
-    protected VoxelDataType(int numBits, String typeIdentifier, long maxValue, long minValue) {
-        this.numBits = numBits;
-        this.typeIdentifier = typeIdentifier;
-        this.maxValue = maxValue;
-        this.minValue = minValue;
-    }
 
     @Override
     public boolean equals(Object obj) {
@@ -77,7 +73,7 @@ public abstract class VoxelDataType {
     public abstract boolean isUnsigned();
 
     public final int numBits() {
-        return numBits;
+        return numberBits;
     }
 
     @Override

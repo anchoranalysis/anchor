@@ -39,6 +39,8 @@ import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
+import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
+import com.google.common.base.Preconditions;
 
 /**
  * Routines for creating a {@link ImageStack}.
@@ -71,7 +73,7 @@ class ImageStackFactory {
      * @return a newly created {@link ImageStack}
      */
     public static ImageStack createRGB(RGBStack stack) {
-
+        Preconditions.checkArgument(stack.allChannelsHaveType(UnsignedByteVoxelType.INSTANCE));
         Extent extent = stack.channelAt(0).extent();
 
         int channelIndex = 0;

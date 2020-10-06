@@ -34,7 +34,7 @@ import lombok.Value;
 public class EdgeAdderParameters {
 
     /**
-     * Iff true, objects can only be neighbors if they have no intersecting voxels
+     * Iff true, objects can only be neighbors if they have no intersecting voxels.
      *
      * <p>Use case: Given a partition of objects, we don't need to check if objects-intersect as
      * it's not possible by definition (a partition). However, if we have objects that can

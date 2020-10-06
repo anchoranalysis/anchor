@@ -66,6 +66,10 @@ public abstract class OneOrThreeChannelsWriter extends RasterWriter {
             Stack stack, Path filePath, boolean makeRGB, RasterWriteOptions writeOptions)
             throws RasterIOException {
 
+        if (stack.getNumberChannels() == 1 && makeRGB) {
+            throw new RasterIOException("1-channel images cannot be created as RGB");
+        }
+        
         if (stack.getNumberChannels() == 3 && !makeRGB) {
             throw new RasterIOException("3-channel images can only be created as RGB");
         }

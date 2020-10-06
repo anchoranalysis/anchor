@@ -31,7 +31,7 @@ public class SignedShortVoxelType extends SignedVoxelType {
     public static final long MIN_VALUE = -32768;
     public static final long MAX_VALUE = 32767;
 
-    public static final SignedShortVoxelType instance = new SignedShortVoxelType();
+    public static final SignedShortVoxelType INSTANCE = new SignedShortVoxelType();
 
     private SignedShortVoxelType() {
         super(16, "signed16", MAX_VALUE, MIN_VALUE);

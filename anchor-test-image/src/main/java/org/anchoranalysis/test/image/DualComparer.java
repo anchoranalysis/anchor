@@ -36,6 +36,7 @@ import org.anchoranalysis.io.csv.comparer.CSVComparer;
 import org.anchoranalysis.io.csv.reader.CSVReaderException;
 import org.anchoranalysis.test.TestLoader;
 import org.anchoranalysis.test.image.io.TestLoaderImageIO;
+import com.google.common.io.Files;
 
 /**
  * Allows for comparison of objects that exist on different test loaders
@@ -62,7 +63,7 @@ public class DualComparer {
     /**
      * Compare two images that have an identical path, but in two different test loaders
      *
-     * @param path path to compare
+     * @param path relative-path (compared to root of both loaders) of files to compare
      * @return true if the images are equal (every pixel is identical, and data-types are the same)
      * @throws FileNotFoundException if one or both of the files cannot be found
      */
@@ -74,7 +75,7 @@ public class DualComparer {
      * Compare two XML documents. They are compared by their DOM trees, but they need to be
      * identical for equality.
      *
-     * @param path path to compare
+     * @param path relative-path (compared to root of both loaders) of files to compare
      * @return true if the xml-documents are equal, fALSE otherwise
      */
     public boolean compareTwoXmlDocuments(String path) {
@@ -86,7 +87,7 @@ public class DualComparer {
      * Compare two CSV files, ignoring the first numFirstColumnsToIgnore. They need to be exactly
      * identical, apart from these ignored columns.
      *
-     * @param path path to compare
+     * @param path relative-path (compared to root of both loaders) of files to compare
      * @param messageStream if non-equal, additional explanation messages are printed here
      * @return true if the csv-files are identical apart from the ignored columns, fALSE otherwise
      * @throws CSVReaderException if something goes wrong with csv I/O or a csv file is reject
@@ -100,15 +101,30 @@ public class DualComparer {
     }
 
     /**
-     * Compare two object-mask-collections
+     * Compare two object-mask-collections.
      *
-     * @param path path to compare
+     * @param path relative-path (compared to root of both loaders) of files to compare
+     * @return true if both paths return object-collections that are voxelwise identical.
      * @throws IOException if something goes wrong with I/O
      */
     public boolean compareTwoObjectCollections(String path) throws IOException {
         ObjectCollection objects1 = loaderImage1.openObjectsFromTestPath(path);
         ObjectCollection objects2 = loaderImage2.openObjectsFromTestPath(path);
         return objects1.equalsDeep(objects2);
+    }
+    
+    /**
+     * Compare two binary-files.
+     * 
+     * @param path relative-path (compared to root of both loaders) of files to compare
+     * @return true if both paths have binary-files that are bytewise identical
+     * @throws IOException if something goes wrong with I/O
+     */
+    public boolean compareTwoBinaryFiles(String path) throws IOException {
+        return Files.equal(
+           loaderImage1.resolveTestPath(path).toFile(),
+           loaderImage2.resolveTestPath(path).toFile()
+        );
     }
 
     public boolean compareTwoSubdirectories(String path) {
