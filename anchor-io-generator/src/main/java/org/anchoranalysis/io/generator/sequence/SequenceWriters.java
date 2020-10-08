@@ -89,8 +89,8 @@ class SequenceWriters {
             return;
         }
 
-        this.writers
-                .get() // NOSONAR
+        this.writers    // NOSONAR
+                .get() 
                 .multiplex(selectSelective)
                 .write(outputNameStyle, generator, index);
     }

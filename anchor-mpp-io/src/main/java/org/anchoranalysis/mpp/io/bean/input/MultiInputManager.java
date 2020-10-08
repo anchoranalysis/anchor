@@ -29,7 +29,6 @@ package org.anchoranalysis.mpp.io.bean.input;
 import static org.anchoranalysis.mpp.io.bean.input.AppendHelper.*;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -38,6 +37,7 @@ import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.bean.annotation.OptionalBean;
+import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
@@ -97,21 +97,11 @@ public class MultiInputManager extends InputManager<MultiInput> {
 
     @Override
     public List<MultiInput> inputs(InputManagerParams params) throws AnchorIOException {
-
-        List<MultiInput> outList = new ArrayList<>();
-
-        Iterator<? extends ProvidesStackInput> itr = input.inputs(params).iterator();
-
-        while (itr.hasNext()) {
-            ProvidesStackInput mainStack = itr.next();
-
-            MultiInput input = new MultiInput(inputName, mainStack);
-            appendFromLists(input, params.isDebugModeActivated());
-
-            outList.add(input);
-        }
-
-        return outList;
+        return FunctionalList.mapToList( input.inputs(params), mainStack -> {
+            MultiInput inputToAdd = new MultiInput(inputName, mainStack);
+            appendFromLists(inputToAdd, params.isDebugModeActivated());
+            return inputToAdd;
+        });
     }
 
     private void appendFromLists(MultiInput input, boolean doDebug) {
