@@ -27,6 +27,7 @@
 package org.anchoranalysis.image.voxel.buffer;
 
 import lombok.AllArgsConstructor;
+import java.nio.ByteBuffer;
 import org.anchoranalysis.image.convert.PrimitiveConverter;
 import org.anchoranalysis.image.convert.UnsignedShortBuffer;
 import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
@@ -91,5 +92,13 @@ final class VoxelBufferUnsignedShort extends VoxelBuffer<UnsignedShortBuffer> {
     @Override
     public boolean isDirect() {
         return delegate.isDirect();
+    }
+
+    @Override
+    public byte[] underlyingBytes() {
+        short[] array = delegate.array();
+        ByteBuffer buffer = ByteBuffer.allocate(array.length * 2);
+        buffer.asShortBuffer().put(array);
+        return buffer.array();
     }
 }

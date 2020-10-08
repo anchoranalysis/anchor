@@ -229,6 +229,29 @@ public final class UnsignedShortBuffer extends UnsignedBufferAsInt {
     public void putDouble(int index, double value) {
         putRaw(index, (short) value);
     }
+    
+    /**
+     * Relative put-method from an unsigned short buffer, represented by a {@link ShortBuffer}.
+     *
+     * <p>This is identical to {@link ShortBuffer#put(ShortBuffer)}, with no return value.
+     *
+     * @param source source of bytes to put
+     */
+    public void put(ShortBuffer source) {
+        delegate.put(source);
+    }
+    
+    /**
+     * Relative put-method from an unsigned short buffer, represented by a {@link
+     * UnsignedShortBuffer}.
+     *
+     * <p>This is identical to {@link ShortBuffer#put(ShortBuffer)}, with no return value.
+     *
+     * @param source source of bytes to put
+     */
+    public void put(UnsignedShortBuffer source) {
+        delegate.put(source.getDelegate());
+    }
 
     /**
      * The array of the buffer ala {@link ShortBuffer#array}.

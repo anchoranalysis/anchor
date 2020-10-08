@@ -30,6 +30,7 @@ import java.nio.ByteBuffer;
 import loci.common.DataTools;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.image.convert.UnsignedByteBuffer;
+import com.google.common.base.Preconditions;
 
 @RequiredArgsConstructor
 public class ByteFrom32BitFloat extends ConvertToByte {
@@ -40,7 +41,9 @@ public class ByteFrom32BitFloat extends ConvertToByte {
 
     @Override
     protected UnsignedByteBuffer convert(ByteBuffer source, int channelIndexRelative) {
-
+        Preconditions.checkArgument(
+                channelIndexRelative == 0, "interleaving not supported");
+        
         UnsignedByteBuffer destination = allocateBuffer();
 
         byte[] sourceArray = source.array();

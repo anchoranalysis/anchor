@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.image.voxel.buffer;
 
+import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.image.convert.PrimitiveConverter;
@@ -90,5 +91,13 @@ final class VoxelBufferFloat extends VoxelBuffer<FloatBuffer> {
     @Override
     public boolean isDirect() {
         return delegate.isDirect();
+    }
+    
+    @Override
+    public byte[] underlyingBytes() {
+        float[] array = delegate.array();
+        ByteBuffer buffer = ByteBuffer.allocate(array.length * 4);
+        buffer.asFloatBuffer().put(array);
+        return buffer.array();
     }
 }

@@ -27,6 +27,7 @@
 package org.anchoranalysis.image.voxel.buffer;
 
 import lombok.AllArgsConstructor;
+import java.nio.ByteBuffer;
 import org.anchoranalysis.image.convert.PrimitiveConverter;
 import org.anchoranalysis.image.convert.UnsignedIntBuffer;
 import org.anchoranalysis.image.voxel.datatype.UnsignedIntVoxelType;
@@ -91,5 +92,13 @@ final class VoxelBufferUnsignedInt extends VoxelBuffer<UnsignedIntBuffer> {
     @Override
     public boolean isDirect() {
         return delegate.isDirect();
+    }
+
+    @Override
+    public byte[] underlyingBytes() {
+        int[] array = delegate.array();
+        ByteBuffer buffer = ByteBuffer.allocate(array.length * 4);
+        buffer.asIntBuffer().put(array);
+        return buffer.array();
     }
 }

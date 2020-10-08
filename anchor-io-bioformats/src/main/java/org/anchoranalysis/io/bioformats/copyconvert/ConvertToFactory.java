@@ -75,8 +75,10 @@ public class ConvertToFactory {
             VoxelDataType targetDataType, int bitsPerPixel) throws CreateException {
         if (targetDataType.equals(UnsignedByteVoxelType.INSTANCE) && bitsPerPixel == 8) {
             return new ByteFrom8BitUnsignedInterleaving();
+        } else if (targetDataType.equals(UnsignedShortVoxelType.INSTANCE) && bitsPerPixel == 16) {
+            return new ShortFromUnsignedShort(false);            
         } else {
-            throw new CreateException("For interleaved formats only 8-bits are supported");
+            throw new CreateException("For interleaved formats only 8 and 16-bits are supported");
         }
     }
 
@@ -172,11 +174,11 @@ public class ConvertToFactory {
 
         if (bitsPerPixel == 8 && !signed) {
             return new FloatFrom8Bit();
-        } else if (bitsPerPixel == 32 && !signed) {
+        } else if (bitsPerPixel == 32 && signed) {
             return new FloatFrom32Bit(littleEndian);
         } else {
             return throwBitsPerPixelException(
-                    "float", "either unsigned 8 bits or 32 bits", bitsPerPixel);
+                    "float", "either unsigned 8 bits or signed 32 bits", bitsPerPixel);
         }
     }
 

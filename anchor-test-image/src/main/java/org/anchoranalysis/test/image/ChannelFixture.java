@@ -28,10 +28,11 @@ package org.anchoranalysis.test.image;
 
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.channel.factory.ChannelFactoryByte;
+import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.image.voxel.iterator.IterateVoxelsAll;
 
 public class ChannelFixture {
@@ -71,11 +72,11 @@ public class ChannelFixture {
     public static final Extent LARGE_2D = LARGE_3D.flattenZ();
     // END: image size examples
 
-    public static Channel createChannel(Extent extent, IntensityFunction createIntensity) {
+    public static Channel createChannel(Extent extent, IntensityFunction createIntensity, VoxelDataType channelVoxelType) {
 
         Dimensions dimensions = new Dimensions(extent, ImageResFixture.INSTANCE);
 
-        Channel channel = new ChannelFactoryByte().createEmptyInitialised(dimensions);
+        Channel channel = ChannelFactory.instance().get(channelVoxelType).createEmptyInitialised(dimensions);
 
         IterateVoxelsAll.withVoxelBuffer(channel.voxels().any(), (point, buffer, offset) -> 
             buffer.putInt(offset, createIntensity.valueFor(point))

@@ -30,6 +30,7 @@ import lombok.AllArgsConstructor;
 import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
+import com.google.common.base.Preconditions;
 
 @AllArgsConstructor
 final class VoxelBufferUnsignedByte extends VoxelBuffer<UnsignedByteBuffer> {
@@ -48,10 +49,6 @@ final class VoxelBufferUnsignedByte extends VoxelBuffer<UnsignedByteBuffer> {
     public UnsignedByteBuffer put(int index, byte b) {
         delegate.putRaw(index, b);
         return delegate;
-    }
-
-    public final byte[] array() {
-        return delegate.array();
     }
 
     @Override
@@ -103,5 +100,11 @@ final class VoxelBufferUnsignedByte extends VoxelBuffer<UnsignedByteBuffer> {
     @Override
     public boolean isDirect() {
         return delegate.isDirect();
+    }
+
+    @Override
+    public byte[] underlyingBytes() {
+        Preconditions.checkArgument(!isDirect());
+        return delegate.array();
     }
 }

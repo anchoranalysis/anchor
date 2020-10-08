@@ -70,7 +70,7 @@ public abstract class ConvertTo<T> {
             int numberChannelsPerArray)
             throws IOException {
 
-        log.debug(String.format("copy to byte %d start", z));
+        log.debug(String.format("copy to %d start", z));
 
         setupBefore(dimensions, numberChannelsPerArray);
 

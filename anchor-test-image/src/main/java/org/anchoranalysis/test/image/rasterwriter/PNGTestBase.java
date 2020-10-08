@@ -4,6 +4,10 @@ import java.io.IOException;
 import java.util.Optional;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.bean.rasterwriter.RasterWriter;
+import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
+import org.anchoranalysis.image.voxel.datatype.UnsignedIntVoxelType;
+import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.junit.Test;
 
 /**
@@ -14,13 +18,21 @@ import org.junit.Test;
  */
 public abstract class PNGTestBase extends RasterWriterTestBase {
     
+    /** All possible voxel types that can be supported. */
+    protected final static VoxelDataType[] ALL_SUPPORTED_VOXEL_TYPES = { UnsignedByteVoxelType.INSTANCE, UnsignedShortVoxelType.INSTANCE };
+    
     public PNGTestBase() {
-        super("png", false, true, Optional.of("tif"));
+        super("png", false, true, Optional.of("ome.xml"));
     }
 
     @Test
     public void testSingleChannel() throws RasterIOException, IOException {
-        tester.testSingleChannel();
+        tester.testSingleChannel(ALL_SUPPORTED_VOXEL_TYPES);
+    }
+    
+    @Test(expected=RasterIOException.class)
+    public void testSingleChannelInt() throws RasterIOException, IOException {
+        tester.testSingleChannel(UnsignedIntVoxelType.INSTANCE);
     }
         
     @Test(expected=RasterIOException.class)
@@ -39,8 +51,8 @@ public abstract class PNGTestBase extends RasterWriterTestBase {
     }
     
     @Test
-    public void testThreeChannelsRGB() throws RasterIOException, IOException {
-        tester.testThreeChannelsRGB();
+    public void testThreeChannelsRGBUnsignedByte() throws RasterIOException, IOException {
+        tester.testThreeChannelsRGB(UnsignedByteVoxelType.INSTANCE);
     }
     
     @Test(expected=RasterIOException.class)

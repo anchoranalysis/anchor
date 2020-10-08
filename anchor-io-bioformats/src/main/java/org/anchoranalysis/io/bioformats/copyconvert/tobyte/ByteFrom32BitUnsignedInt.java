@@ -31,6 +31,7 @@ import loci.common.DataTools;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.extent.Dimensions;
+import com.google.common.base.Preconditions;
 
 @RequiredArgsConstructor
 public class ByteFrom32BitUnsignedInt extends ConvertToByte {
@@ -50,6 +51,8 @@ public class ByteFrom32BitUnsignedInt extends ConvertToByte {
 
     @Override
     protected UnsignedByteBuffer convert(ByteBuffer source, int channelIndexRelative) {
+        Preconditions.checkArgument(
+                channelIndexRelative == 0, "interleaving not supported");
 
         UnsignedByteBuffer destination = allocateBuffer();
 

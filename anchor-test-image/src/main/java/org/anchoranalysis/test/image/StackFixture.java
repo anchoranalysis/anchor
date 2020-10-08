@@ -7,6 +7,7 @@ import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.stack.Stack;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.test.image.ChannelFixture.IntensityFunction;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -25,11 +26,12 @@ public class StackFixture {
      * 
      * @param numberChannels how many channels in the stack?
      * @param extent the size of each channel.
+     * @param channelsVoxelType voxel data-type for all the created channels
      * @return the newly created-stack with newly-created channels.
      */
-    public static Stack create(int numberChannels, Extent extent) {
+    public static Stack create(int numberChannels, Extent extent, VoxelDataType channelsVoxelType) {
         Stream<Channel> channels = IntStream.range(0, numberChannels).mapToObj( index ->
-            ChannelFixture.createChannel(extent, multiplexIntensity(index))
+            ChannelFixture.createChannel(extent, multiplexIntensity(index), channelsVoxelType)
         );
         try {
             return new Stack(channels);

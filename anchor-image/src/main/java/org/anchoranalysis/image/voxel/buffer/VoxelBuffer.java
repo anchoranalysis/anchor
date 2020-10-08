@@ -122,9 +122,18 @@ public abstract class VoxelBuffer<T> {
      */
     public abstract boolean isDirect();
 
+    
+    /**
+     * An array of bytes that underlies the buffer (and can be written into a file).
+     * 
+     * @return an existing or newly created byte-array
+     */
+    public abstract byte[] underlyingBytes();
+    
     public void transferFromConvert(int destinationIndex, VoxelBuffer<?> source, int sourceIndex) {
         putInt(destinationIndex, source.getInt(sourceIndex));
     }
+            
 
     @Override
     public String toString() {

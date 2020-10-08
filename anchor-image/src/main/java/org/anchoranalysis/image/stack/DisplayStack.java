@@ -273,7 +273,7 @@ public class DisplayStack {
             return BufferedImageFactory.createRGB(
                     voxelsForChannel(0), voxelsForChannel(1), voxelsForChannel(2), stack.extent());
         }
-        return BufferedImageFactory.createGrayscale(voxelsForChannel(0));
+        return BufferedImageFactory.createGrayscaleByte(voxelsForChannel(0));
     }
 
     public BufferedImage createBufferedImageBBox(BoundingBox box) throws CreateException {
@@ -289,7 +289,7 @@ public class DisplayStack {
                     voxelsForChannelBoundingBox(2, box),
                     box.extent());
         }
-        return BufferedImageFactory.createGrayscale(voxelsForChannelBoundingBox(0, box));
+        return BufferedImageFactory.createGrayscaleByte(voxelsForChannelBoundingBox(0, box));
     }
 
     private Voxels<UnsignedByteBuffer> voxelsForChannel(int channelIndex) {
