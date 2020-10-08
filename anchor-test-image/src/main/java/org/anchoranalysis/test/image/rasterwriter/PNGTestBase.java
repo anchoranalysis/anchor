@@ -11,7 +11,15 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.junit.Test;
 
 /**
- * For testing all {@link RasterWriter}s that create TIFFs.
+ * For testing all {@link RasterWriter}s that create PNGs.
+ * 
+ * <p>It assumes;
+ * <ul>
+ * <li>8-bit and 16-bit grayscale is supported
+ * <li>8-bit RGB is supported
+ * </ul>
+ * 
+ * And no other formats are supported.
  * 
  * @author Owen Feehan
  *
