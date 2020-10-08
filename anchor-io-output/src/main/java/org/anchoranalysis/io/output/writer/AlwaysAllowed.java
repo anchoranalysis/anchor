@@ -122,6 +122,5 @@ public class AlwaysAllowed implements Writer {
 
     private void maybeExecutePreop() {
         preop.ifPresent(WriterExecuteBeforeEveryOperation::execute);
-        ;
     }
 }

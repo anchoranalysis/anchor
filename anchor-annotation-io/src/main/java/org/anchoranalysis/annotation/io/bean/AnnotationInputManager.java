@@ -53,16 +53,16 @@ public class AnnotationInputManager<T extends ProvidesStackInput, S extends Anno
     public List<AnnotationWithStrategy<S>> inputs(InputManagerParams params)
             throws AnchorIOException {
 
-        try (ProgressReporterMultiple prm =
+        try (ProgressReporterMultiple progressMultiple =
                 new ProgressReporterMultiple(params.getProgressReporter(), 2)) {
 
             List<T> inputs = input.inputs(params);
 
-            prm.incrWorker();
+            progressMultiple.incrWorker();
 
             List<AnnotationWithStrategy<S>> outList =
-                    createListInput(inputs, new ProgressReporterOneOfMany(prm));
-            prm.incrWorker();
+                    createListInput(inputs, new ProgressReporterOneOfMany(progressMultiple));
+            progressMultiple.incrWorker();
 
             return outList;
         }
@@ -73,6 +73,6 @@ public class AnnotationInputManager<T extends ProvidesStackInput, S extends Anno
         return FunctionalProgress.mapList(
                 listInputs,
                 progressReporter,
-                input -> new AnnotationWithStrategy<S>(input, annotatorStrategy));
+                annotationInput -> new AnnotationWithStrategy<S>(annotationInput, annotatorStrategy));
     }
 }
