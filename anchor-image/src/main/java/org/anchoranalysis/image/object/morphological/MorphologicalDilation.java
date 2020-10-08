@@ -32,7 +32,6 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelsFactory;
 import org.anchoranalysis.image.convert.UnsignedByteBuffer;
@@ -42,9 +41,6 @@ import org.anchoranalysis.image.object.morphological.accept.AcceptIterationCondi
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.kernel.ApplyKernel;
 import org.anchoranalysis.image.voxel.kernel.BinaryKernel;
-import org.anchoranalysis.image.voxel.kernel.ConditionalKernel;
-import org.anchoranalysis.image.voxel.kernel.dilateerode.DilationKernel3;
-import org.anchoranalysis.image.voxel.kernel.dilateerode.DilationKernel3ZOnly;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class MorphologicalDilation {
@@ -93,107 +89,60 @@ public class MorphologicalDilation {
             throws CreateException {
         return dilate(
                 voxels,
-                SelectDimensionsFactory.of(do3D),
                 iterations,
                 backgroundVb,
                 minIntensityValue,
-                false,
                 Optional.empty(),
-                bigNeighborhood);
+                new DilationKernelFactory(SelectDimensionsFactory.of(do3D),false,bigNeighborhood)
+                );
     }
 
     /**
      * Performs a morpholgical dilation operation
      *
-     * @param voxels input-voxels
-     * @param dimensions selects which dimensions dilation is applied on
+     * @param voxelsBinary input-voxels
      * @param iterations number of dilations
      * @param background optional background-buffer that can influence the dilation with the
      *     minIntensityValue
      * @param minIntensityValue minimumIntensity on the background, for a pixel to be included
-     * @param outsideAtThreshold if true, pixels outside the buffer are treated as ON, otherwise as
-     *     OFF
      * @param acceptConditions if non-null, imposes a condition on each iteration that must be
      *     passed
      * @return a new buffer containing the results of the dilation-operations
      * @throws CreateException
      */
     public static BinaryVoxels<UnsignedByteBuffer> dilate(
-            BinaryVoxels<UnsignedByteBuffer> voxels,
-            SelectDimensions dimensions,
+            BinaryVoxels<UnsignedByteBuffer> voxelsBinary,
             int iterations,
             Optional<Voxels<UnsignedByteBuffer>> background,
             int minIntensityValue,
-            boolean outsideAtThreshold,
             Optional<AcceptIterationConditon> acceptConditions,
-            boolean bigNeighborhood)
+            DilationKernelFactory dilationKernelFactory)
             throws CreateException {
 
         BinaryKernel kernelDilation =
-                createDilationKernel(
-                        voxels.binaryValues().createByte(),
-                        dimensions,
+                dilationKernelFactory.createDilationKernel(
+                        voxelsBinary.binaryValues().createByte(),
                         background,
-                        minIntensityValue,
-                        outsideAtThreshold,
-                        bigNeighborhood);
+                        minIntensityValue
+                        );
 
-        Voxels<UnsignedByteBuffer> buf = voxels.voxels();
+        Voxels<UnsignedByteBuffer> voxels = voxelsBinary.voxels();
+        
         for (int i = 0; i < iterations; i++) {
             Voxels<UnsignedByteBuffer> next =
-                    ApplyKernel.apply(kernelDilation, buf, voxels.binaryValues().createByte());
+                    ApplyKernel.apply(kernelDilation, voxels, voxelsBinary.binaryValues().createByte());
 
             try {
                 if (acceptConditions.isPresent()
-                        && !acceptConditions.get().acceptIteration(next, voxels.binaryValues())) {
+                        && !acceptConditions.get().acceptIteration(next, voxelsBinary.binaryValues())) {
                     break;
                 }
             } catch (OperationFailedException e) {
                 throw new CreateException(e);
             }
 
-            buf = next;
+            voxels = next;
         }
-        return BinaryVoxelsFactory.reuseByte(buf, voxels.binaryValues());
-    }
-
-    private static BinaryKernel createDilationKernel(
-            BinaryValuesByte binaryValues,
-            SelectDimensions dimensions,
-            Optional<Voxels<UnsignedByteBuffer>> backgroundVb,
-            int minIntensityValue,
-            boolean outsideAtThreshold,
-            boolean bigNeighborhood)
-            throws CreateException {
-
-        BinaryKernel kernelDilation =
-                createDilationKernel(binaryValues, dimensions, outsideAtThreshold, bigNeighborhood);
-
-        if (minIntensityValue > 0 && backgroundVb.isPresent()) {
-            return new ConditionalKernel(kernelDilation, minIntensityValue, backgroundVb.get());
-        } else {
-            return kernelDilation;
-        }
-    }
-
-    private static BinaryKernel createDilationKernel(
-            BinaryValuesByte binaryValues,
-            SelectDimensions dimensions,
-            boolean outsideAtThreshold,
-            boolean bigNeighborhood)
-            throws CreateException {
-        if (dimensions == SelectDimensions.Z_ONLY) {
-            if (bigNeighborhood) {
-                throw new CreateException("Big-neighborhood not supported for zOnly");
-            }
-
-            return new DilationKernel3ZOnly(binaryValues, outsideAtThreshold);
-        } else {
-            return new DilationKernel3(
-                    binaryValues,
-                    outsideAtThreshold,
-                    dimensions == SelectDimensions.ALL_DIMENSIONS,
-                    bigNeighborhood);
-        }
+        return BinaryVoxelsFactory.reuseByte(voxels, voxelsBinary.binaryValues());
     }
 }
