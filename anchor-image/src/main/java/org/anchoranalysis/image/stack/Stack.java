@@ -277,18 +277,18 @@ public class Stack implements Iterable<Channel> {
 
     /**
      * Determines if all channels have an identical voxel data-type.
-     * 
+     *
      * @return true iff all channels have an identical voxel data-type.
      */
     public boolean allChannelsHaveIdenticalType() {
-        if (getNumberChannels()<=1) {
+        if (getNumberChannels() <= 1) {
             return true;
         }
-        
+
         VoxelDataType channelDataType = null;
         for (Channel channel : this) {
-            
-            if (channelDataType==null) {
+
+            if (channelDataType == null) {
                 channelDataType = channel.getVoxelDataType();
             } else {
                 if (!channel.getVoxelDataType().equals(channelDataType)) {
@@ -298,11 +298,10 @@ public class Stack implements Iterable<Channel> {
         }
         return true;
     }
-    
-    
+
     /**
      * Determines if all channels have a specific data-type.
-     * 
+     *
      * @param channelDataType the specific data-type
      * @return true iff all channels have {@code channelDataType} as their voxel data-type.
      */
@@ -315,7 +314,7 @@ public class Stack implements Iterable<Channel> {
         }
         return true;
     }
-    
+
     @Override
     public boolean equals(Object obj) {
 

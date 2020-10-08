@@ -64,7 +64,11 @@ public class AlwaysAllowed implements Writer {
 
         maybeExecutePreop();
         return Optional.of(
-                outputter.deriveSubdirectory(outputName, manifestDescription, manifestFolder, inheritOutputRulesAndRecording));
+                outputter.deriveSubdirectory(
+                        outputName,
+                        manifestDescription,
+                        manifestFolder,
+                        inheritOutputRulesAndRecording));
     }
 
     @Override

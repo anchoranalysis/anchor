@@ -112,9 +112,9 @@ public abstract class JobProcessor<T extends InputFromManager, S>
     }
 
     /**
-     * The job processor is expected to remove items from the inputs-list as they are consumed
-     * so as to allow garbage-collection of these items before all jobs are processed (as the list
-     * might be quite large).
+     * The job processor is expected to remove items from the inputs-list as they are consumed so as
+     * to allow garbage-collection of these items before all jobs are processed (as the list might
+     * be quite large).
      *
      * @param rootOutputter
      * @param inputs

@@ -27,10 +27,10 @@
 package org.anchoranalysis.image.bean.nonbean.segment;
 
 import java.util.Optional;
+import lombok.Getter;
 import org.anchoranalysis.image.bean.segment.binary.BinarySegmentation;
 import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.histogram.Histogram;
-import lombok.Getter;
 
 /** Parameters that are optionally associated with a {@link BinarySegmentation} */
 public class BinarySegmentationParameters {
@@ -53,7 +53,8 @@ public class BinarySegmentationParameters {
      * @param resolution image-resolution
      * @param intensityHistogram a histogram describing the intensity-values of the entire channel
      */
-    public BinarySegmentationParameters(Resolution resolution, Optional<Histogram> intensityHistogram) {
+    public BinarySegmentationParameters(
+            Resolution resolution, Optional<Histogram> intensityHistogram) {
         this.resolution = Optional.of(resolution);
         this.intensityHistogram = intensityHistogram;
     }

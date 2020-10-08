@@ -54,9 +54,9 @@ import org.anchoranalysis.io.output.enabled.multi.MultiLevelOutputEnabled;
 /**
  * An experiment that uses both an {@link InputManager} to specify inputs and a {@link
  * OutputManager} to specify outputting.
- * 
+ *
  * <p>The following outputs are produced:
- * 
+ *
  * <table>
  * <caption></caption>
  * <thead>
@@ -76,9 +76,9 @@ public class InputOutputExperiment<T extends InputFromManager, S> extends Output
         implements ReplaceInputManager, ReplaceOutputManager, ReplaceTask<T, S> {
 
     private static final String OUTPUT_EXPERIMENT_LOG = "experiment_log";
-    
+
     private static final String OUTPUT_JOB_LOG = "job_log";
-    
+
     // START BEAN PROPERTIES
     /** The input-manager to specify where/which/how necessary inputs for the experiment occur. */
     @BeanField @Getter @Setter private InputManager<T> input;
@@ -130,12 +130,13 @@ public class InputOutputExperiment<T extends InputFromManager, S> extends Output
     protected void executeExperimentWithParams(ParametersExperiment params)
             throws ExperimentExecutionException {
         try {
-            InputManagerParams paramsInput = new InputManagerParams(
-                    params.getExperimentArguments().createInputContext(),
-                    ProgressReporterNull.get(),
-                    new Logger(params.getLoggerExperiment()));
-            
-            List<T> inputs =  getInput().inputs(paramsInput);
+            InputManagerParams paramsInput =
+                    new InputManagerParams(
+                            params.getExperimentArguments().createInputContext(),
+                            ProgressReporterNull.get(),
+                            new Logger(params.getLoggerExperiment()));
+
+            List<T> inputs = getInput().inputs(paramsInput);
             checkCompabilityInputs(inputs);
 
             params.setLoggerTaskCreator(logTask);
@@ -155,8 +156,7 @@ public class InputOutputExperiment<T extends InputFromManager, S> extends Output
         return taskDefaultOutputs;
     }
 
-    private void checkCompabilityInputs(List<T> listInputs)
-            throws ExperimentExecutionException {
+    private void checkCompabilityInputs(List<T> listInputs) throws ExperimentExecutionException {
         for (T inputObject : listInputs) {
             if (!taskProcessor.isInputCompatibleWith(inputObject.getClass())) {
                 throw new ExperimentExecutionException(

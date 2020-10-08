@@ -69,7 +69,8 @@ public class InputContextParams {
         if (!inputDirectory.isAbsolute()) {
             throw new IOException(
                     String.format(
-                            "An non-absolute path was passed to setInputDirectory() of %s", inputDirectory));
+                            "An non-absolute path was passed to setInputDirectory() of %s",
+                            inputDirectory));
         }
     }
 

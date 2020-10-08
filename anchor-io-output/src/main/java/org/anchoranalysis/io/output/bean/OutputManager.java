@@ -105,7 +105,7 @@ public class OutputManager extends AnchorBean<OutputManager> {
 
             return OutputterChecked.createWithPrefix(
                     prefix,
-                    recordedOutputs.selectOutputEnabled( Optional.ofNullable(outputsEnabled) ),
+                    recordedOutputs.selectOutputEnabled(Optional.ofNullable(outputsEnabled)),
                     getOutputWriteSettings(),
                     manifestRecorder.getRootFolder(),
                     recordedOutputs.getRecordedOutputs(),

@@ -68,6 +68,8 @@ public class EnergyStackFixture {
 
     private static void addChannel(Stack stack, Extent size, IntensityFunction intensityFunction)
             throws IncorrectImageSizeException {
-        stack.addChannel(ChannelFixture.createChannel(size, intensityFunction, UnsignedByteVoxelType.INSTANCE));
+        stack.addChannel(
+                ChannelFixture.createChannel(
+                        size, intensityFunction, UnsignedByteVoxelType.INSTANCE));
     }
 }

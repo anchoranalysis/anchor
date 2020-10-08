@@ -36,9 +36,9 @@ import org.anchoranalysis.io.output.outputter.InputOutputContext;
 
 /**
  * Writes an energy-stack.
- * 
+ *
  * <p>The following outputs are produced:
- * 
+ *
  * <table>
  * <caption></caption>
  * <thead>
@@ -51,7 +51,6 @@ import org.anchoranalysis.io.output.outputter.InputOutputContext;
  * </table>
  *
  * @author Owen Feehan
- *
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class EnergyStackWriter {

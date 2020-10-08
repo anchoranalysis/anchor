@@ -47,19 +47,20 @@ import org.anchoranalysis.image.voxel.neighborhood.EdgeAdder.AddEdge;
 class NeighborGraphCreator<V> {
 
     private final EdgeAdderParameters edgeAdderParams;
-    
+
     /** iff true outputs an undirected graph, otherwise directed */
     private boolean undirected = true;
-    
+
     /**
      * Creates a graph of neighbour objects
-     * 
-     * @param preventObjectIntersection iff true, objects can only be neighbors if they have no intersecting voxels.
+     *
+     * @param preventObjectIntersection iff true, objects can only be neighbors if they have no
+     *     intersecting voxels.
      */
     public NeighborGraphCreator(boolean preventObjectIntersection) {
         edgeAdderParams = new EdgeAdderParameters(preventObjectIntersection);
     }
-    
+
     /**
      * Creates an edge from two neighboring vertices
      *
@@ -71,9 +72,10 @@ class NeighborGraphCreator<V> {
     public interface EdgeFromVertices<V, E> {
         E createEdge(V v1, V v2, int numberNeighboringPixels);
     }
-    
+
     /**
-     * Create the graph for a given list of vertices, where edges represent the number of intersecting voxels between objects.
+     * Create the graph for a given list of vertices, where edges represent the number of
+     * intersecting voxels between objects.
      *
      * @param vertices vertices to construct graph from
      * @param vertexToObject converts the vertex to an object-mask (called repeatedly so should be
@@ -89,7 +91,12 @@ class NeighborGraphCreator<V> {
             Extent sceneExtent,
             boolean do3D)
             throws CreateException {
-        return createGraph(vertices, vertexToObject, (v1, v2, numberVoxels) -> numberVoxels, sceneExtent, do3D);
+        return createGraph(
+                vertices,
+                vertexToObject,
+                (v1, v2, numberVoxels) -> numberVoxels,
+                sceneExtent,
+                do3D);
     }
 
     /**

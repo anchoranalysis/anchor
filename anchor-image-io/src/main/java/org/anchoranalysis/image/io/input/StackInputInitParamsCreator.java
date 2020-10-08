@@ -36,8 +36,7 @@ import org.anchoranalysis.io.output.outputter.InputOutputContext;
 public class StackInputInitParamsCreator {
 
     public static ImageInitParams createInitParams(
-            ProvidesStackInput input, InputOutputContext context)
-            throws OperationFailedException {
+            ProvidesStackInput input, InputOutputContext context) throws OperationFailedException {
         ImageInitParams soImage = ImageInitParamsFactory.create(context);
         input.addToStoreInferNames(soImage.stacks());
         return soImage;

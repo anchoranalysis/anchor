@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.test.image;
 
+import com.google.common.io.Files;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintStream;
@@ -36,7 +37,6 @@ import org.anchoranalysis.io.csv.comparer.CSVComparer;
 import org.anchoranalysis.io.csv.reader.CSVReaderException;
 import org.anchoranalysis.test.TestLoader;
 import org.anchoranalysis.test.image.io.TestLoaderImageIO;
-import com.google.common.io.Files;
 
 /**
  * Allows for comparison of objects that exist on different test loaders
@@ -70,18 +70,21 @@ public class DualComparer {
     public boolean compareTwoImages(String path) throws FileNotFoundException {
         return TestLoaderImageIO.compareTwoImages(loaderImage1, path, loaderImage2, path, false);
     }
-    
+
     /**
      * Compare two images with different paths, but in two different test loaders
      *
      * @param path1 relative-path (compared to root of first loader) of first image
      * @param path2 relative-path (compared to root of second loader) of second image
-     * @param ignoreResolutionDifferences if true any differences in image-resolution are not considered
+     * @param ignoreResolutionDifferences if true any differences in image-resolution are not
+     *     considered
      * @return true if the images are equal (every pixel is identical, and data-types are the same)
      * @throws FileNotFoundException if one or both of the files cannot be found
      */
-    public boolean compareTwoImages(String path1, String path2, boolean ignoreResolutionDifferences) throws FileNotFoundException {
-        return TestLoaderImageIO.compareTwoImages(loaderImage1, path1, loaderImage2, path2, ignoreResolutionDifferences);
+    public boolean compareTwoImages(String path1, String path2, boolean ignoreResolutionDifferences)
+            throws FileNotFoundException {
+        return TestLoaderImageIO.compareTwoImages(
+                loaderImage1, path1, loaderImage2, path2, ignoreResolutionDifferences);
     }
 
     /**
@@ -125,19 +128,18 @@ public class DualComparer {
         ObjectCollection objects2 = loaderImage2.openObjectsFromTestPath(path);
         return objects1.equalsDeep(objects2);
     }
-    
+
     /**
      * Compare two binary-files.
-     * 
+     *
      * @param path relative-path (compared to root of both loaders) of files to compare
      * @return true if both paths have binary-files that are bytewise identical
      * @throws IOException if something goes wrong with I/O
      */
     public boolean compareTwoBinaryFiles(String path) throws IOException {
         return Files.equal(
-           loaderImage1.resolveTestPath(path).toFile(),
-           loaderImage2.resolveTestPath(path).toFile()
-        );
+                loaderImage1.resolveTestPath(path).toFile(),
+                loaderImage2.resolveTestPath(path).toFile());
     }
 
     public boolean compareTwoSubdirectories(String path) {

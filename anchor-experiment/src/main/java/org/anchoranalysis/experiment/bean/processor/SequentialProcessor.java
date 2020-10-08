@@ -63,10 +63,7 @@ public class SequentialProcessor<T extends InputFromManager, S> extends JobProce
 
         TaskStatistics stats =
                 executeAllJobs(
-                        inputs,
-                        sharedState,
-                        paramsExperiment,
-                        loggerForMonitor(paramsExperiment));
+                        inputs, sharedState, paramsExperiment, loggerForMonitor(paramsExperiment));
 
         getTask().afterAllJobsAreExecuted(sharedState, paramsExperiment.getContext());
 

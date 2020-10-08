@@ -5,9 +5,8 @@ import lombok.AllArgsConstructor;
 
 /**
  * Outputs are enabled if they are contained in a set.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 @AllArgsConstructor
 public class SingleLevelInSet implements SingleLevelOutputEnabled {

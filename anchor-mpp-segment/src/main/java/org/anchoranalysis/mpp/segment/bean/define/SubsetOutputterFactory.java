@@ -42,14 +42,14 @@ import org.anchoranalysis.mpp.segment.define.OutputterDirectories;
 
 /**
  * This class will output for certain outputs with second-level optionally defined.
- * 
- * These outputs are:
- * 
+ *
+ * <p>These outputs are:
+ *
  * <ul>
- * <li>{@link OutputterDirectories#STACKS}
- * <li>{@link OutputterDirectories#MARKS}
- * <li>{@link OutputterDirectories#HISTOGRAMS}
- * <li>{@link OutputterDirectories#OBJECTS}
+ *   <li>{@link OutputterDirectories#STACKS}
+ *   <li>{@link OutputterDirectories#MARKS}
+ *   <li>{@link OutputterDirectories#HISTOGRAMS}
+ *   <li>{@link OutputterDirectories#OBJECTS}
  *
  * @author Owen Feehan
  */
@@ -82,9 +82,7 @@ class SubsetOutputterFactory {
     }
 
     private <T> SubsetOutputter<T> create(
-            NamedProviderStore<T> store,
-            Generator<T> generator,
-            String directoryName) {
+            NamedProviderStore<T> store, Generator<T> generator, String directoryName) {
         return new SubsetOutputter<>(
                 store,
                 () -> outputter.outputsEnabled().second(directoryName),

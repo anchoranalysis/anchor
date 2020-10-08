@@ -229,7 +229,7 @@ public final class UnsignedShortBuffer extends UnsignedBufferAsInt {
     public void putDouble(int index, double value) {
         putRaw(index, (short) value);
     }
-    
+
     /**
      * Relative put-method from an unsigned short buffer, represented by a {@link ShortBuffer}.
      *
@@ -240,7 +240,7 @@ public final class UnsignedShortBuffer extends UnsignedBufferAsInt {
     public void put(ShortBuffer source) {
         delegate.put(source);
     }
-    
+
     /**
      * Relative put-method from an unsigned short buffer, represented by a {@link
      * UnsignedShortBuffer}.

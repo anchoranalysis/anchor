@@ -75,9 +75,7 @@ class AppendHelper {
     }
 
     public static void appendHistogram(
-            List<NamedBean<FilePathGenerator>> listPaths,
-            MultiInput input,
-            boolean debugMode) {
+            List<NamedBean<FilePathGenerator>> listPaths, MultiInput input, boolean debugMode) {
         append(
                 input,
                 listPaths,
@@ -87,16 +85,12 @@ class AppendHelper {
     }
 
     public static void appendFilePath(
-            List<NamedBean<FilePathGenerator>> listPaths,
-            MultiInput input,
-            boolean debugMode) {
+            List<NamedBean<FilePathGenerator>> listPaths, MultiInput input, boolean debugMode) {
         append(input, listPaths, MultiInput::filePath, outPath -> outPath, debugMode);
     }
 
     public static void appendKeyValueParams(
-            List<NamedBean<FilePathGenerator>> listPaths,
-            MultiInput input,
-            boolean debugMode) {
+            List<NamedBean<FilePathGenerator>> listPaths, MultiInput input, boolean debugMode) {
 
         // Delayed-calculation of the appending path as it can be a bit expensive when multiplied by
         // so many items
@@ -109,15 +103,8 @@ class AppendHelper {
     }
 
     public static void appendMarks(
-            List<NamedBean<FilePathGenerator>> listPaths,
-            MultiInput input,
-            boolean debugMode) {
-        append(
-                input,
-                listPaths,
-                MultiInput::marks,
-                DESERIALIZER::deserializeMarks,
-                debugMode);
+            List<NamedBean<FilePathGenerator>> listPaths, MultiInput input, boolean debugMode) {
+        append(input, listPaths, MultiInput::marks, DESERIALIZER::deserializeMarks, debugMode);
     }
 
     public static void appendMarksFromAnnotation(
@@ -138,9 +125,7 @@ class AppendHelper {
     }
 
     public static void appendObjects(
-            List<NamedBean<FilePathGenerator>> listPaths,
-            MultiInput input,
-            boolean debugMode) {
+            List<NamedBean<FilePathGenerator>> listPaths, MultiInput input, boolean debugMode) {
         append(
                 input,
                 listPaths,

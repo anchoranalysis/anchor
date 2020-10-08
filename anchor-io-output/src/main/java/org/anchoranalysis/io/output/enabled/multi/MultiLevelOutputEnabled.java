@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -34,7 +34,8 @@ import org.anchoranalysis.io.output.enabled.single.SingleLevelOutputEnabled;
  * <p>The rules have two levels:
  *
  * <ul>
- *   <li>a first-level (top-most) enabling particular output-names via a {@link SingleLevelOutputEnabled}.
+ *   <li>a first-level (top-most) enabling particular output-names via a {@link
+ *       SingleLevelOutputEnabled}.
  *   <li>a second-level, given a particular output-name from the first-level, enabling particular
  *       sub-output-names or not.
  * </ul>
@@ -45,12 +46,12 @@ import org.anchoranalysis.io.output.enabled.single.SingleLevelOutputEnabled;
  * @author Owen Feehan
  */
 public interface MultiLevelOutputEnabled extends SingleLevelOutputEnabled {
-    
+
     /**
      * A second-level of {@link OutputEnabled} for a particular {@code outputName} as used in
      * first-level.
-     * 
-     * @return an appropriate {@link OutputEnabled} for the second-level. 
+     *
+     * @return an appropriate {@link OutputEnabled} for the second-level.
      */
     SingleLevelOutputEnabled second(String outputName);
 }

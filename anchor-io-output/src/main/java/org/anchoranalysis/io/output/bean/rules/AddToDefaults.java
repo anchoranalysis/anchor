@@ -10,9 +10,8 @@ import org.anchoranalysis.io.output.enabled.single.SingleLevelOutputEnabled;
 
 /**
  * Adds additional outputs-names to be enabled to the defaults.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class AddToDefaults extends OutputEnableRulesSpecify {
 
@@ -28,22 +27,23 @@ public class AddToDefaults extends OutputEnableRulesSpecify {
             return secondLevelOutputs(outputName, None.INSTANCE);
         }
     }
-    
+
     @Override
     public MultiLevelOutputEnabled create(Optional<MultiLevelOutputEnabled> defaultRules) {
-        return maybeWrap( new AddImplementation(), defaultRules );
+        return maybeWrap(new AddImplementation(), defaultRules);
     }
 
     @Override
     protected SingleLevelOutputEnabled createSecondLevelFromSet(StringSet outputNames) {
         return new SpecificEnabled(outputNames);
     }
-    
-    private MultiLevelOutputEnabled maybeWrap(MultiLevelOutputEnabled source, Optional<MultiLevelOutputEnabled> defaultRules) {
+
+    private MultiLevelOutputEnabled maybeWrap(
+            MultiLevelOutputEnabled source, Optional<MultiLevelOutputEnabled> defaultRules) {
         if (defaultRules.isPresent()) {
             return new MultiLevelOr(source, defaultRules.get());
         } else {
             return source;
-        } 
+        }
     }
 }

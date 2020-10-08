@@ -52,8 +52,7 @@ public class Tile extends ArrangeStackBean {
 
     @BeanField @Positive @Getter @Setter private int numCols = -1;
 
-    @BeanField @OptionalBean @Getter @Setter
-    private List<Cell> cells = new ArrayList<>();
+    @BeanField @OptionalBean @Getter @Setter private List<Cell> cells = new ArrayList<>();
 
     @BeanField @Getter @Setter private ArrangeStackBean cellDefault = new Single();
     // END BEAN PROPERTIES

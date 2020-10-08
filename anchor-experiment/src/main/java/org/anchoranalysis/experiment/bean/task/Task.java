@@ -57,15 +57,15 @@ import org.apache.commons.lang.time.StopWatch;
 /**
  * A task which performs some kind of processing on a specific input-object
  *
- * <p>{@link ParametersUnbound} which are parameters generally used for tasks in an
- * experiment, whereas {@link InputBound} is created in a further step, when several of these
- * parameters are replaced with new more specific-objects for the specific task.
+ * <p>{@link ParametersUnbound} which are parameters generally used for tasks in an experiment,
+ * whereas {@link InputBound} is created in a further step, when several of these parameters are
+ * replaced with new more specific-objects for the specific task.
  *
  * <p>e.g. we move from a logger and manifest for the experiment as a whole, to a logger and
  * manifest for the task itself
- * 
+ *
  * <p>The following outputs are produced:
- * 
+ *
  * <table>
  * <caption></caption>
  * <thead>
@@ -164,7 +164,7 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
     public OutputEnabledMutable defaultOutputs() {
         return new OutputEnabledMutable(IgnoreUnderscorePrefix.INSTANCE);
     }
-    
+
     /**
      * Creates other objects needed to have a fully bound set of parameters for the task
      *

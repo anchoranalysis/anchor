@@ -82,10 +82,7 @@ public abstract class RasterTask extends TaskWithoutSharedState<NamedChannelsInp
      * @throws JobExecutionException
      */
     public abstract void doStack(
-            NamedChannelsInput input,
-            int seriesIndex,
-            int numberSeries,
-            InputOutputContext context)
+            NamedChannelsInput input, int seriesIndex, int numberSeries, InputOutputContext context)
             throws JobExecutionException;
 
     public abstract void endSeries(Outputter outputter) throws JobExecutionException;

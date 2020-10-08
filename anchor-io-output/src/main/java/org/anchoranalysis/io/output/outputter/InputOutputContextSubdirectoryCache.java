@@ -48,8 +48,11 @@ public class InputOutputContextSubdirectoryCache {
 
     /** A description to use for every created folder */
     private final ManifestFolderDescription manifestFolderDescription;
-    
-    /** If true, the output rules and recording are inherited from the parent directory. if false, they are not, and all outputs are allowed and are unrecorded. */
+
+    /**
+     * If true, the output rules and recording are inherited from the parent directory. if false,
+     * they are not, and all outputs are allowed and are unrecorded.
+     */
     private final boolean inheritOutputRulesAndRecording;
 
     private Map<Optional<String>, InputOutputContext> mapContexts = new HashMap<>();
@@ -64,6 +67,8 @@ public class InputOutputContextSubdirectoryCache {
     public InputOutputContext get(Optional<String> subdirectoryName) {
         return mapContexts.computeIfAbsent(
                 subdirectoryName,
-                key -> parentContext.maybeSubdirectory(key, manifestFolderDescription, inheritOutputRulesAndRecording));
+                key ->
+                        parentContext.maybeSubdirectory(
+                                key, manifestFolderDescription, inheritOutputRulesAndRecording));
     }
 }

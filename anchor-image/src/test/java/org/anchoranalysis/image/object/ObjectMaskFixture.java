@@ -37,9 +37,9 @@ import org.anchoranalysis.image.extent.box.BoundingBox;
 /**
  * Creates object-masks of a certain shape.
  *
- * <p>The object-masks are entirely filled-in (rectangular to fill bounding-box) or
- * filled-in except single-voxel corners in the X and Y dimensions.
- * 
+ * <p>The object-masks are entirely filled-in (rectangular to fill bounding-box) or filled-in except
+ * single-voxel corners in the X and Y dimensions.
+ *
  * @author Owen Feehan
  */
 @RequiredArgsConstructor
@@ -57,7 +57,7 @@ public class ObjectMaskFixture {
     // START REQUIRED ARGUMENTS
     /** Whether to remove single-voxel pixels from corners or not */
     private final boolean removeCorners;
-    
+
     /** Whether to create a 3D object or a 2D object. */
     private final boolean do3D;
     // END REQUIRED ARGUMENTS
@@ -65,7 +65,7 @@ public class ObjectMaskFixture {
     public ObjectMask filledMask(Point2i corner) {
         return filledMask(corner.x(), corner.y());
     }
-    
+
     public ObjectMask filledMask(int cornerX, int cornerY) {
         return filledMask(cornerX, cornerY, WIDTH, HEIGHT);
     }

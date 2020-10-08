@@ -58,7 +58,7 @@ public class GeneratorOutputHelper {
             String prefix,
             ErrorReporter errorReporter,
             boolean suppressSubfoldersIn) {
-        
+
         if (!outputter.getOutputsEnabled().isOutputEnabled(outputName)) {
             return;
         }
@@ -102,7 +102,7 @@ public class GeneratorOutputHelper {
             String suffix,
             boolean suppressSubfoldersIn)
             throws OutputWriteFailedException {
-        
+
         if (!outputter.getOutputsEnabled().isOutputEnabled(outputName)) {
             return;
         }
@@ -156,7 +156,9 @@ public class GeneratorOutputHelper {
     }
 
     public static <T> NamedProvider<T> subset(
-            NamedProvider<T> providers, SingleLevelOutputEnabled outputEnabled, ErrorReporter errorReporter) {
+            NamedProvider<T> providers,
+            SingleLevelOutputEnabled outputEnabled,
+            ErrorReporter errorReporter) {
 
         NameValueSet<T> out = new NameValueSet<>();
 
@@ -175,7 +177,8 @@ public class GeneratorOutputHelper {
     }
 
     public static <T> NamedProvider<T> subsetWithException(
-            NamedProvider<T> providers, SingleLevelOutputEnabled outputEnabled) throws OutputWriteFailedException {
+            NamedProvider<T> providers, SingleLevelOutputEnabled outputEnabled)
+            throws OutputWriteFailedException {
 
         NameValueSet<T> out = new NameValueSet<>();
 

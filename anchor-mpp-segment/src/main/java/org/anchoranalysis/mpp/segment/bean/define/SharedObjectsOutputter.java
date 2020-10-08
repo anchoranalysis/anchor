@@ -45,18 +45,14 @@ class SharedObjectsOutputter {
     public static void output(
             ImageInitParams imageInit, boolean suppressSubfolders, InputOutputContext context) {
         StacksOutputter.outputSubset(
-                CreateCombinedStack.apply(imageInit),
-                suppressSubfolders,
-                context);
+                CreateCombinedStack.apply(imageInit), suppressSubfolders, context);
     }
 
     public static void outputWithException(
             ImageInitParams imageInit, boolean suppressSubfolders, InputOutputContext context)
             throws OutputWriteFailedException {
         StacksOutputter.outputSubsetWithException(
-                CreateCombinedStack.apply(imageInit),
-                context.getOutputter(),
-                suppressSubfolders);
+                CreateCombinedStack.apply(imageInit), context.getOutputter(), suppressSubfolders);
     }
 
     public static void output(
@@ -86,13 +82,17 @@ class SharedObjectsOutputter {
         factory.histograms().outputSubsetChecked();
         factory.objects().outputSubsetChecked();
     }
-    
+
     /**
      * Adds all possible output-names to a {@link OutputEnabledMutable}.
-     * 
+     *
      * @param outputEnabled where to add all possible output-names
      */
     public static void addAllOutputs(OutputEnabledMutable outputEnabled) {
-        outputEnabled.addEnabledOutputFirst(OutputterDirectories.STACKS, OutputterDirectories.MARKS, OutputterDirectories.HISTOGRAMS, OutputterDirectories.OBJECTS);
+        outputEnabled.addEnabledOutputFirst(
+                OutputterDirectories.STACKS,
+                OutputterDirectories.MARKS,
+                OutputterDirectories.HISTOGRAMS,
+                OutputterDirectories.OBJECTS);
     }
 }

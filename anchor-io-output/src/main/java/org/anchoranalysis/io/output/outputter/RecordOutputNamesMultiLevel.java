@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -25,10 +25,10 @@
  */
 package org.anchoranalysis.io.output.outputter;
 
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.io.output.enabled.multi.MultiLevelOutputEnabled;
 import org.anchoranalysis.io.output.enabled.single.SingleLevelOutputEnabled;
 import org.anchoranalysis.io.output.recorded.MultiLevelRecordedOutputs;
-import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 class RecordOutputNamesMultiLevel implements MultiLevelOutputEnabled {
@@ -36,7 +36,7 @@ class RecordOutputNamesMultiLevel implements MultiLevelOutputEnabled {
     // START REQUIRED ARGUMENTS
     /** What all outputs that this write processes are added to. */
     private final MultiLevelOutputEnabled outputEnabled;
-    
+
     /** What all outputs that this write processes are added to. */
     private final MultiLevelRecordedOutputs recordedOutputs;
     // END REQUIRED ARGUMENTS
@@ -45,22 +45,20 @@ class RecordOutputNamesMultiLevel implements MultiLevelOutputEnabled {
     public boolean isOutputEnabled(String outputName) {
 
         boolean enabled = outputEnabled.isOutputEnabled(outputName);
-        
+
         recordedOutputs.first().add(outputName, enabled);
-        
+
         return enabled;
     }
 
     @Override
     public SingleLevelOutputEnabled second(String outputName) {
-        
-        return wrap( outputEnabled.second(outputName), outputName );
+
+        return wrap(outputEnabled.second(outputName), outputName);
     }
-    
-    private SingleLevelOutputEnabled wrap(SingleLevelOutputEnabled outputEnabled, String outputName) {
-        return new RecordOutputNamesSingle(
-            outputEnabled,
-            recordedOutputs.second(outputName)
-        );
+
+    private SingleLevelOutputEnabled wrap(
+            SingleLevelOutputEnabled outputEnabled, String outputName) {
+        return new RecordOutputNamesSingle(outputEnabled, recordedOutputs.second(outputName));
     }
 }

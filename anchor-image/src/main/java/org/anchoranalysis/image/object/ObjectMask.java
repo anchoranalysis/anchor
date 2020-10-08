@@ -233,9 +233,9 @@ public class ObjectMask {
 
     /**
      * Counts the number of intersecting-voxels between two object-masks.
-     * 
+     *
      * <p>This is an <i>immutable</i> operation.
-     * 
+     *
      * @param other the other object-mask to consider
      * @return number of <i>on</i>-voxels the two object-masks have in common.
      */
@@ -245,10 +245,12 @@ public class ObjectMask {
 
     /**
      * Determines whether there are any intersecting voxels on two object-masks.
-     * 
+     *
      * <p>This is an <i>immutable</i> operation.
-     * 
-     * <p>The algorithm exits as soon as an intersecting voxel is encountered i.e. as early as possible.
+     *
+     * <p>The algorithm exits as soon as an intersecting voxel is encountered i.e. as early as
+     * possible.
+     *
      * @param other the other object-mask to consider
      * @return true if at least one voxel exists that is <i>on</i> in both object-masks.
      */

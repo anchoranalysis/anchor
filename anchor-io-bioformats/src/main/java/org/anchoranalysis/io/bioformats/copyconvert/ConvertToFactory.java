@@ -76,7 +76,7 @@ public class ConvertToFactory {
         if (targetDataType.equals(UnsignedByteVoxelType.INSTANCE) && bitsPerPixel == 8) {
             return new ByteFrom8BitUnsignedInterleaving();
         } else if (targetDataType.equals(UnsignedShortVoxelType.INSTANCE) && bitsPerPixel == 16) {
-            return new ShortFromUnsignedShort(false);            
+            return new ShortFromUnsignedShort(false);
         } else {
             throw new CreateException("For interleaved formats only 8 and 16-bits are supported");
         }

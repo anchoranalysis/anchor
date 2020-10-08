@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -31,50 +31,52 @@ import java.util.Optional;
 import java.util.Set;
 import org.anchoranalysis.io.output.bean.enabled.None;
 import org.anchoranalysis.io.output.enabled.multi.MultiLevelOutputEnabled;
-import org.anchoranalysis.io.output.enabled.single.SingleLevelOutputEnabled;
 import org.anchoranalysis.io.output.enabled.single.SingleLevelInSet;
 import org.anchoranalysis.io.output.enabled.single.SingleLevelOr;
+import org.anchoranalysis.io.output.enabled.single.SingleLevelOutputEnabled;
 
 /**
  * A specific set of first-level outputs are enabled, to which more can be added.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class OutputEnabledMutable implements MultiLevelOutputEnabled {
 
     /** First level output-names. */
     private Set<String> enabledFirst = new HashSet<>();
-    
-    /** Second level output-names indexed by the first-level output with which they are associated. */
+
+    /**
+     * Second level output-names indexed by the first-level output with which they are associated.
+     */
     private SecondLevelOutputEnabled enabledSecond = new SecondLevelOutputEnabled();
-    
-    /** Employed in addition to {@code enabledSecond} to enable second-level outputs. */ 
+
+    /** Employed in addition to {@code enabledSecond} to enable second-level outputs. */
     private final Optional<SingleLevelOutputEnabled> additionalSecond;
 
     /**
      * Creates with one or more enabled outputs.
-     * 
+     *
      * @param outputNames the names of the enabled-outputs
      */
-    public OutputEnabledMutable(String ... outputNames) {
-        this( Optional.empty(), outputNames );
+    public OutputEnabledMutable(String... outputNames) {
+        this(Optional.empty(), outputNames);
     }
-    
+
     /**
      * Creates with one or more enabled outputs.
-     * 
+     *
      * @param outputNames the names of the enabled-outputs
      */
-    public OutputEnabledMutable(SingleLevelOutputEnabled additionalSecond, String ... outputNames) {
-        this( Optional.of(additionalSecond), outputNames );
+    public OutputEnabledMutable(SingleLevelOutputEnabled additionalSecond, String... outputNames) {
+        this(Optional.of(additionalSecond), outputNames);
     }
-    
-    private OutputEnabledMutable(Optional<SingleLevelOutputEnabled> additionalSecond, String[] outputNames) {
+
+    private OutputEnabledMutable(
+            Optional<SingleLevelOutputEnabled> additionalSecond, String[] outputNames) {
         this.additionalSecond = additionalSecond;
         Arrays.stream(outputNames).forEach(this::addEnabledOutputFirst);
     }
-    
+
     @Override
     public boolean isOutputEnabled(String outputName) {
         return enabledFirst.contains(outputName);
@@ -82,40 +84,42 @@ public class OutputEnabledMutable implements MultiLevelOutputEnabled {
 
     @Override
     public SingleLevelOutputEnabled second(String outputName) {
-        Optional<Set<String>> outputs = enabledSecond.secondLevelOutputsFor(outputName); 
+        Optional<Set<String>> outputs = enabledSecond.secondLevelOutputsFor(outputName);
         if (outputs.isPresent()) {
             return maybeCombineWithAdditional(outputs.get());
         } else {
             return additionalSecond.orElse(None.INSTANCE);
         }
     }
-    
+
     /**
      * Adds enabled first-level outputs.
-     * 
+     *
      * @param outputNames the names of the enabled-outputs
      * @return the current object
      */
-    public OutputEnabledMutable addEnabledOutputFirst(String ... outputNames) {
+    public OutputEnabledMutable addEnabledOutputFirst(String... outputNames) {
         Arrays.stream(outputNames).forEach(enabledFirst::add);
         return this;
     }
-    
+
     /**
      * Adds enabled second-level outputs.
-     * 
-     * @param outputNameFirstLevel the first-level output with which the second-level outputs are associated.
+     *
+     * @param outputNameFirstLevel the first-level output with which the second-level outputs are
+     *     associated.
      * @param outputNames the names of the enabled-outputs
      * @return the current object
      */
-    public OutputEnabledMutable addEnabledOutputSecond(String outputNameFirstLevel, String ...outputNames) {
+    public OutputEnabledMutable addEnabledOutputSecond(
+            String outputNameFirstLevel, String... outputNames) {
         enabledSecond.addEnabledOutputs(outputNameFirstLevel, outputNames);
         return this;
     }
-    
+
     /**
      * Adds enabled outputs from another {@link OutputEnabledMutable}.
-     * 
+     *
      * @param other the other {@link OutputEnabledMutable} to add from
      * @return the current object
      */
@@ -124,7 +128,7 @@ public class OutputEnabledMutable implements MultiLevelOutputEnabled {
         enabledSecond.addEnabledOutputs(other.enabledSecond);
         return this;
     }
-    
+
     private SingleLevelOutputEnabled maybeCombineWithAdditional(Set<String> outputs) {
         SingleLevelInSet existingOutputs = new SingleLevelInSet(outputs);
         if (additionalSecond.isPresent()) {

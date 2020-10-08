@@ -34,6 +34,5 @@ import org.anchoranalysis.io.output.enabled.single.SingleLevelOutputEnabled;
  *
  * @author Owen Feehan
  */
-public abstract class OutputEnabled extends AnchorBean<OutputEnabled> implements SingleLevelOutputEnabled {
-
-}
+public abstract class OutputEnabled extends AnchorBean<OutputEnabled>
+        implements SingleLevelOutputEnabled {}

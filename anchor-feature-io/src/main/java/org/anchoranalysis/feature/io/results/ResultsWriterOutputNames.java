@@ -41,7 +41,7 @@ public class ResultsWriterOutputNames {
 
     /** If not otherwise specified, the output name for a non-aggregated CSV of the results. */
     public static final String OUTPUT_DEFAULT_NON_AGGREGATED = "features";
-    
+
     /** The CSV of non-aggregated feature-results */
     @Getter private String csvFeaturesNonAggregated;
 

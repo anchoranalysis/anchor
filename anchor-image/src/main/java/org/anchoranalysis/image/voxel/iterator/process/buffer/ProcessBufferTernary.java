@@ -33,8 +33,8 @@ import org.anchoranalysis.image.voxel.iterator.process.ProcessPoint;
  * Processes a 3D point like {@link ProcessPoint} but also retrieves <b>three</b> buffers for the
  * current z-slice.
  *
- * <p>It is very similar to {@link ProcessBufferUnary} but uses two buffers of the same
- * type instead of a single one.
+ * <p>It is very similar to {@link ProcessBufferUnary} but uses two buffers of the same type instead
+ * of a single one.
  *
  * @param <T> type of both buffers
  * @author Owen Feehan
@@ -55,9 +55,13 @@ public interface ProcessBufferTernary<T> {
      *     particular location
      * @param buffer3 third buffer for the current slice for which {@code offset} refers to a
      *     particular location
-     * @param offset1 an offset value for the current slice for {@code buffer1} (i.e. indexing XY only, but not Z)
-     * @param offset2 an offset value for the current slice for {@code buffer2} (i.e. indexing XY only, but not Z)
-     * @param offset3 an offset value for the current slice for {@code buffer3} (i.e. indexing XY only, but not Z)
+     * @param offset1 an offset value for the current slice for {@code buffer1} (i.e. indexing XY
+     *     only, but not Z)
+     * @param offset2 an offset value for the current slice for {@code buffer2} (i.e. indexing XY
+     *     only, but not Z)
+     * @param offset3 an offset value for the current slice for {@code buffer3} (i.e. indexing XY
+     *     only, but not Z)
      */
-    void process(Point3i point, T buffer1, T buffer2, T buffer3, int offset1, int offset2, int offset3);
+    void process(
+            Point3i point, T buffer1, T buffer2, T buffer3, int offset1, int offset2, int offset3);
 }

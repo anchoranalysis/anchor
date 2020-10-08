@@ -99,7 +99,7 @@ public class GraphWithPayload<V, P> {
     public int numberVertices() {
         return vertices.size();
     }
-    
+
     /**
      * The number of edges in the graph.
      *

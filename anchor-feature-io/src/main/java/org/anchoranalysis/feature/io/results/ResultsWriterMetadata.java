@@ -50,7 +50,7 @@ public class ResultsWriterMetadata {
 
     /** Names of each feature in the feature columns. */
     @Getter private final FeatureNameList featureNamesNonAggregate;
-    
+
     /** Names for any outputs produced by {@link ResultsWriter}. */
     @Getter private final ResultsWriterOutputNames outputNames;
 

@@ -49,9 +49,11 @@ import org.anchoranalysis.mpp.io.input.MPPInitParamsFactory;
 import org.anchoranalysis.mpp.mark.Mark;
 
 /**
- * After using applying a {@link Define} on inputs, output produced entities (images, histograms, objects etc.)
- * 
+ * After using applying a {@link Define} on inputs, output produced entities (images, histograms,
+ * objects etc.)
+ *
  * <p>The following outputs are produced:
+ *
  * <table>
  * <caption></caption>
  * <thead>
@@ -77,13 +79,13 @@ public abstract class DefineOutputter extends AnchorBean<DefineOutputter> {
 
     /**
      * Adds all possible output-names to a {@link OutputEnabledMutable}.
-     * 
+     *
      * @param outputEnabled where to add all possible output-names
      */
     public void addAllOutputs(OutputEnabledMutable outputEnabled) {
         SharedObjectsOutputter.addAllOutputs(outputEnabled);
     }
-    
+
     protected MPPInitParams createInitParams(InputForMPPBean input, InputOutputContext context)
             throws CreateException {
         return MPPInitParamsFactory.create(

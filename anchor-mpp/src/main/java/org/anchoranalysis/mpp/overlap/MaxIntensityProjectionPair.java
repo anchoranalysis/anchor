@@ -43,11 +43,11 @@ public class MaxIntensityProjectionPair {
 
     /**
      * Counts intersecting (i.e. voxels that are part of the same region) voxels.
-     * 
+     *
      * <p>Relies on the binary voxel buffer ON being 255.
      */
     private final CountIntersectingVoxels counter = new CountIntersectingVoxels((byte) 1);
-    
+
     public MaxIntensityProjectionPair(
             BoundedVoxels<UnsignedByteBuffer> voxels1,
             BoundedVoxels<UnsignedByteBuffer> voxels2,

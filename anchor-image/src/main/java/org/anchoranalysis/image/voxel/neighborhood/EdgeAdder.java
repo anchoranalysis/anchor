@@ -122,12 +122,13 @@ class EdgeAdder<V> {
             return;
         }
 
-        System.out.printf("Comparing objectDilated=%s with other=%s  bboxOverlap=%s  intersection=%s%n", 
+        System.out.printf(
+                "Comparing objectDilated=%s with other=%s  bboxOverlap=%s  intersection=%s%n",
                 dilated,
                 other,
                 dilated.boundingBox().intersection().existsWith(other.boundingBox()) ? "yes" : "no",
                 dilated.hasIntersectingVoxels(other) ? "yes" : "no");
-                
+
         // How many border pixels shared between the two?
         int numberSharedVoxels = numberBorderVoxels(dilated, other);
         if (numberSharedVoxels > 0) {

@@ -63,12 +63,12 @@ public class ExperimentExecutionArguments {
 
     /** If non-null, a glob that is applied on inputDirectory */
     @Setter private Optional<String> inputFilterGlob = Optional.empty();
-    
-    /** 
+
+    /**
      * Additions/subtractions of outputs for the experiment supplied by the user.
-     * 
-     * <p>These are applied to an existing source of output-enabled rules (e.g. defaults from a task, or rules
-     * defined in the experiment's {@link OutputManager}. 
+     *
+     * <p>These are applied to an existing source of output-enabled rules (e.g. defaults from a
+     * task, or rules defined in the experiment's {@link OutputManager}.
      */
     @Getter private OutputEnabledDelta outputEnabledDelta = new OutputEnabledDelta();
 
@@ -124,11 +124,13 @@ public class ExperimentExecutionArguments {
     /**
      * Activates debug-mode
      *
-     * @param debugContains maybe a string used for filtering inputs during debugging, or an empty-string if this isn't enabled
+     * @param debugContains maybe a string used for filtering inputs during debugging, or an
+     *     empty-string if this isn't enabled
      */
     public void activateDebugMode(String debugContains) {
-        Optional<String> debugContainsAsOptional = OptionalFactory.create(debugContains.isEmpty(), () -> debugContains);
-        debugModeParams = Optional.of( new DebugModeParams(debugContainsAsOptional) );
+        Optional<String> debugContainsAsOptional =
+                OptionalFactory.create(debugContains.isEmpty(), () -> debugContains);
+        debugModeParams = Optional.of(new DebugModeParams(debugContainsAsOptional));
     }
 
     public boolean isDebugModeEnabled() {

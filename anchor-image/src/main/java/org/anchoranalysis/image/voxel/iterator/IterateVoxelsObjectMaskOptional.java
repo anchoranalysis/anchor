@@ -80,9 +80,7 @@ public class IterateVoxelsObjectMaskOptional {
      * @param <T> buffer-type for voxels
      */
     public static <T> void withBuffer(
-            Optional<ObjectMask> objectMask,
-            Voxels<T> voxels,
-            ProcessBufferUnary<T> process) {
+            Optional<ObjectMask> objectMask, Voxels<T> voxels, ProcessBufferUnary<T> process) {
 
         // Note the offsets must be added before any additional restriction like an object-mask, to
         // make

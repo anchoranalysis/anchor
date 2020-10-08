@@ -89,8 +89,8 @@ class SequenceWriters {
             return;
         }
 
-        this.writers    // NOSONAR
-                .get() 
+        this.writers // NOSONAR
+                .get()
                 .multiplex(selectSelective)
                 .write(outputNameStyle, generator, index);
     }
@@ -158,7 +158,10 @@ class SequenceWriters {
             return parentWriters
                     .multiplex(selectSelective)
                     .createSubdirectory(
-                            subfolderName.get(), folderDescription, Optional.of(subFolderWrite), false)
+                            subfolderName.get(),
+                            folderDescription,
+                            Optional.of(subFolderWrite),
+                            false)
                     .map(OutputterChecked::getWriters);
         } else {
             return Optional.of(parentWriters);

@@ -30,7 +30,7 @@ import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.voxel.iterator.process.buffer.ProcessBufferBinary;
 
 /**
- * <p>Like {@link ProcessBufferBinary} but returns a boolean.
+ * Like {@link ProcessBufferBinary} but returns a boolean.
  *
  * @param <T> type of both buffers
  * @author Owen Feehan
@@ -49,8 +49,10 @@ public interface PredicateBufferBinary<T> {
      *     particular location
      * @param buffer2 second buffer for the current slice for which {@code offsetSlice} refers to a
      *     particular location
-     * @param offset1 an offset value for the current slice for <b>buffer1</b> (i.e. indexing XY only, but not Z)
-     * @param offset2 an offset value for the current slice for <b>buffer2</b> (i.e. indexing XY only, but not Z)
+     * @param offset1 an offset value for the current slice for <b>buffer1</b> (i.e. indexing XY
+     *     only, but not Z)
+     * @param offset2 an offset value for the current slice for <b>buffer2</b> (i.e. indexing XY
+     *     only, but not Z)
      * @return true if the predicate is satisfied
      */
     boolean test(Point3i point, T buffer1, T buffer2, int offset1, int offset2);

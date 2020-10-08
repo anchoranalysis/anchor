@@ -38,7 +38,8 @@ import org.anchoranalysis.bean.annotation.BeanField;
  *
  * @author Owen Feehan
  */
-@NoArgsConstructor @AllArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 public class SpecificEnabled extends OutputEnabled {
 
     // START BEAN PROPERTIES

@@ -100,14 +100,22 @@ public interface InputOutputContext {
      * Creates a new context that writes instead to a sub-directory.
      *
      * @param subDirectoryName subdirectory name
-     * @param inheritOutputRulesAndRecording if true, the output rules and recording are inherited from the parent directory. if false, they are not, and all outputs are allowed and are unrecorded.
+     * @param inheritOutputRulesAndRecording if true, the output rules and recording are inherited
+     *     from the parent directory. if false, they are not, and all outputs are allowed and are
+     *     unrecorded.
      * @return newly created context
      */
     default InputOutputContext subdirectory(
-            String subDirectoryName, ManifestFolderDescription manifestFolderDescription, boolean inheritOutputRulesAndRecording) {
+            String subDirectoryName,
+            ManifestFolderDescription manifestFolderDescription,
+            boolean inheritOutputRulesAndRecording) {
         return new ChangeOutputter(
                 this,
-                getOutputter().deriveSubdirectory(subDirectoryName, manifestFolderDescription, inheritOutputRulesAndRecording));
+                getOutputter()
+                        .deriveSubdirectory(
+                                subDirectoryName,
+                                manifestFolderDescription,
+                                inheritOutputRulesAndRecording));
     }
 
     /**
@@ -116,14 +124,22 @@ public interface InputOutputContext {
      *
      * @param subdirectoryName if defined, a new context is created that writes into a sub-directory
      *     of this name
-     * @param inheritOutputRulesAndRecording if true, the output rules and recording are inherited from the parent directory. if false, they are not, and all outputs are allowed and are unrecorded.
+     * @param inheritOutputRulesAndRecording if true, the output rules and recording are inherited
+     *     from the parent directory. if false, they are not, and all outputs are allowed and are
+     *     unrecorded.
      * @return either a newly created context, or the existing context
      */
     default InputOutputContext maybeSubdirectory(
             Optional<String> subdirectoryName,
-            ManifestFolderDescription manifestFolderDescription, boolean inheritOutputRulesAndRecording) {
+            ManifestFolderDescription manifestFolderDescription,
+            boolean inheritOutputRulesAndRecording) {
         return subdirectoryName
-                .map(name -> subdirectory(name, manifestFolderDescription, inheritOutputRulesAndRecording))
+                .map(
+                        name ->
+                                subdirectory(
+                                        name,
+                                        manifestFolderDescription,
+                                        inheritOutputRulesAndRecording))
                 .orElse(this);
     }
 }

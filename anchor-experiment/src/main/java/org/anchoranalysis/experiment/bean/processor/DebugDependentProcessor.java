@@ -48,7 +48,8 @@ public class DebugDependentProcessor<T extends InputFromManager, S> extends JobP
 
     // START BEAN PROPERTIES
     /**
-     * An upper limit on the number of the processors that can be simultaneously used in parallel, if they are available.
+     * An upper limit on the number of the processors that can be simultaneously used in parallel,
+     * if they are available.
      */
     @BeanField @Getter @Setter private int maxNumberProcessors;
 
@@ -81,14 +82,14 @@ public class DebugDependentProcessor<T extends InputFromManager, S> extends JobP
             return creareParallelProcessor();
         }
     }
-    
+
     private SequentialProcessor<T, S> createSequentialProcessor() {
         SequentialProcessor<T, S> processor = new SequentialProcessor<>();
         processor.setTask(getTask());
         processor.setSuppressExceptions(isSuppressExceptions());
         return processor;
     }
-    
+
     private ParallelProcessor<T, S> creareParallelProcessor() {
         ParallelProcessor<T, S> processor = new ParallelProcessor<>();
         processor.setMaxNumberProcessors(maxNumberProcessors);

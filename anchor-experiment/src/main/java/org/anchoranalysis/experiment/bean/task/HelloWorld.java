@@ -45,7 +45,7 @@ import org.anchoranalysis.io.input.InputFromManager;
  * @author Owen Feehan
  */
 public class HelloWorld<S extends InputFromManager> extends TaskWithoutSharedState<S> {
-    
+
     @Override
     public InputTypesExpected inputTypesExpected() {
         return new InputTypesExpected(InputFromManager.class);

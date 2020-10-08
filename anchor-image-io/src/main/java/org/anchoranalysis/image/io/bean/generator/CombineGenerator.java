@@ -126,9 +126,9 @@ class CombineGenerator<T> extends RasterGenerator<T> {
 
     @Override
     public RasterWriteOptions rasterWriteOptions() {
-        return generators.stream()  // NOSONAR
+        return generators.stream() // NOSONAR
                 .map(RasterGenerator::rasterWriteOptions)
                 .reduce((first, second) -> first.and(second))
-                .get(); 
+                .get();
     }
 }

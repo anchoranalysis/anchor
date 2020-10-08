@@ -56,7 +56,7 @@ public class Permissive extends OutputEnabledRules {
             return All.INSTANCE;
         }
     }
-    
+
     @Override
     public MultiLevelOutputEnabled create(Optional<MultiLevelOutputEnabled> defaultRules) {
         return INSTANCE;

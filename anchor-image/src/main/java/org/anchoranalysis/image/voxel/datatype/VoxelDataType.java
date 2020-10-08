@@ -26,8 +26,8 @@
 
 package org.anchoranalysis.image.voxel.datatype;
 
-import org.apache.commons.lang.builder.HashCodeBuilder;
 import lombok.AllArgsConstructor;
+import org.apache.commons.lang.builder.HashCodeBuilder;
 
 // The type of data contained within the channel
 @AllArgsConstructor
@@ -35,6 +35,7 @@ public abstract class VoxelDataType {
 
     /** The number of bits required to represent a voxel. */
     private int numberBits;
+
     private String typeIdentifier;
     private long maxValue;
     private long minValue;

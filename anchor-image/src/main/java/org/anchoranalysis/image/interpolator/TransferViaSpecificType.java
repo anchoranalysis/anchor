@@ -8,16 +8,20 @@ import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 
 /**
  * Transfers voxels via a specific data-type.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  * @param <T> voxel-data-type
  */
 class TransferViaSpecificType<T> {
 
     @FunctionalInterface
     public interface TransferSlice<T> {
-        VoxelBuffer<T> transferSlice(Interpolator interpolator, VoxelBuffer<T> sourceBuffer, VoxelBuffer<T> destinationBuffer, Extent extentSource, Extent extentDestination);
+        VoxelBuffer<T> transferSlice(
+                Interpolator interpolator,
+                VoxelBuffer<T> sourceBuffer,
+                VoxelBuffer<T> destinationBuffer,
+                Extent extentSource,
+                Extent extentDestination);
     }
 
     private final TransferSlice<T> transferSlice;
@@ -25,7 +29,11 @@ class TransferViaSpecificType<T> {
     private final Voxels<T> destination;
     private VoxelBuffer<T> slice;
 
-    public TransferViaSpecificType(VoxelsWrapper source, VoxelsWrapper destination, Function<VoxelsWrapper,Voxels<T>> extractVoxels, TransferSlice<T> transferSlice) {
+    public TransferViaSpecificType(
+            VoxelsWrapper source,
+            VoxelsWrapper destination,
+            Function<VoxelsWrapper, Voxels<T>> extractVoxels,
+            TransferSlice<T> transferSlice) {
         this.source = extractVoxels.apply(source);
         this.destination = extractVoxels.apply(destination);
         this.transferSlice = transferSlice;
@@ -41,7 +49,13 @@ class TransferViaSpecificType<T> {
 
     public void transferTo(int z, Interpolator interpolator) {
         VoxelBuffer<T> destinationSlice = destination.slice(z);
-        VoxelBuffer<T> transferredSlice = transferSlice.transferSlice(interpolator, slice, destinationSlice, source.extent(), destination.extent());
+        VoxelBuffer<T> transferredSlice =
+                transferSlice.transferSlice(
+                        interpolator,
+                        slice,
+                        destinationSlice,
+                        source.extent(),
+                        destination.extent());
         if (!transferredSlice.equals(destinationSlice)) {
             destination.replaceSlice(z, transferredSlice);
         }

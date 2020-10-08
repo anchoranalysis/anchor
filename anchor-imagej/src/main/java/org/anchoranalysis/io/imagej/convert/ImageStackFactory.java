@@ -25,6 +25,7 @@
  */
 package org.anchoranalysis.io.imagej.convert;
 
+import com.google.common.base.Preconditions;
 import ij.ImageStack;
 import ij.process.ColorProcessor;
 import ij.process.ImageProcessor;
@@ -40,7 +41,6 @@ import org.anchoranalysis.image.stack.rgb.RGBStack;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
-import com.google.common.base.Preconditions;
 
 /**
  * Routines for creating a {@link ImageStack}.

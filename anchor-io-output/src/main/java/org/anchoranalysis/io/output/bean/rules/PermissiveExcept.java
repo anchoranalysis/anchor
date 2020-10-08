@@ -41,7 +41,7 @@ import org.anchoranalysis.io.output.enabled.single.SingleLevelOutputEnabled;
  */
 @NoArgsConstructor
 public class PermissiveExcept extends OutputEnableRulesSpecify {
-    
+
     private class PermissiveExceptImplementation implements MultiLevelOutputEnabled {
 
         @Override
@@ -54,7 +54,7 @@ public class PermissiveExcept extends OutputEnableRulesSpecify {
             return secondLevelOutputs(outputName, All.INSTANCE);
         }
     }
-    
+
     /**
      * Create with first-level output names
      *

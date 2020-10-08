@@ -38,7 +38,8 @@ import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class InterpolateUtilities {
 
-    private static TransferViaSpecificType<?> createTransfer(VoxelsWrapper source, VoxelsWrapper destination) {
+    private static TransferViaSpecificType<?> createTransfer(
+            VoxelsWrapper source, VoxelsWrapper destination) {
 
         if (!source.getVoxelDataType().equals(destination.getVoxelDataType())) {
             throw new IncorrectVoxelTypeException(
@@ -46,13 +47,35 @@ public class InterpolateUtilities {
         }
 
         if (source.getVoxelDataType().equals(UnsignedByteVoxelType.INSTANCE)) {
-            return new TransferViaSpecificType<>(source, destination, VoxelsWrapper::asByte, 
-              (interpolator, voxelsSource, voxelsDestination, extentSource, extentDestination) -> interpolator.interpolateByte(voxelsSource, voxelsDestination, extentSource, extentDestination)
-            );
+            return new TransferViaSpecificType<>(
+                    source,
+                    destination,
+                    VoxelsWrapper::asByte,
+                    (interpolator,
+                            voxelsSource,
+                            voxelsDestination,
+                            extentSource,
+                            extentDestination) ->
+                            interpolator.interpolateByte(
+                                    voxelsSource,
+                                    voxelsDestination,
+                                    extentSource,
+                                    extentDestination));
         } else if (source.getVoxelDataType().equals(UnsignedShortVoxelType.INSTANCE)) {
-            return new TransferViaSpecificType<>(source, destination, VoxelsWrapper::asShort, 
-                (interpolator, voxelsSource, voxelsDestination, extentSource, extentDestination) -> interpolator.interpolateShort(voxelsSource, voxelsDestination, extentSource, extentDestination)
-              );
+            return new TransferViaSpecificType<>(
+                    source,
+                    destination,
+                    VoxelsWrapper::asShort,
+                    (interpolator,
+                            voxelsSource,
+                            voxelsDestination,
+                            extentSource,
+                            extentDestination) ->
+                            interpolator.interpolateShort(
+                                    voxelsSource,
+                                    voxelsDestination,
+                                    extentSource,
+                                    extentDestination));
         } else {
             throw new IncorrectVoxelTypeException("Only unsigned byte and short are supported");
         }

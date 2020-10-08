@@ -26,8 +26,8 @@
 
 package org.anchoranalysis.mpp.segment.bean.define;
 
-import lombok.AllArgsConstructor;
 import java.util.function.Supplier;
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.name.provider.NamedProvider;
 import org.anchoranalysis.io.generator.Generator;
@@ -54,7 +54,8 @@ class SubsetOutputter<T> {
         }
 
         GeneratorOutputHelper.output(
-                GeneratorOutputHelper.subset(provider, outputEnabledSecondLevel.get(), errorReporter),
+                GeneratorOutputHelper.subset(
+                        provider, outputEnabledSecondLevel.get(), errorReporter),
                 generator,
                 outputter,
                 outputName,
@@ -77,7 +78,7 @@ class SubsetOutputter<T> {
                 suffix,
                 suppressSubfoldersIn);
     }
-        
+
     /** Exit early if the output is disabled, or if there are no providers to output */
     private boolean shouldExitEarly() {
         return provider.isEmpty() || !outputter.getOutputsEnabled().isOutputEnabled(outputName);

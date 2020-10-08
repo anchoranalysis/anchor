@@ -5,16 +5,15 @@ import lombok.AllArgsConstructor;
 
 /**
  * Base class for a {@link SingleLevelOutputEnabled} that combines two existing such classes.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
-@AllArgsConstructor(access=AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class SingleLevelBinary implements SingleLevelOutputEnabled {
 
     /** The first source of output-names that are enabled. */
     private final SingleLevelOutputEnabled enabled1;
-    
+
     /** The second source of output-names that are enabled. */
     private final SingleLevelOutputEnabled enabled2;
 
@@ -22,6 +21,6 @@ public abstract class SingleLevelBinary implements SingleLevelOutputEnabled {
     public boolean isOutputEnabled(String outputName) {
         return combine(enabled1.isOutputEnabled(outputName), enabled2.isOutputEnabled(outputName));
     }
-    
+
     public abstract boolean combine(boolean first, boolean second);
 }

@@ -52,7 +52,7 @@ class MultiplexDataTypes {
             case FormatTools.UINT16:
                 return UnsignedShortVoxelType.INSTANCE;
             case FormatTools.UINT32:
-                return UnsignedIntVoxelType.INSTANCE;                
+                return UnsignedIntVoxelType.INSTANCE;
             case FormatTools.INT16:
                 return SignedShortVoxelType.INSTANCE;
             case FormatTools.FLOAT:

@@ -57,11 +57,15 @@ public class Outputter {
      * @see OutputterChecked#deriveSubdirectory
      * @param subdirectoryName the subdirectory-name
      * @param manifestDescription manifest-description
-     * @param inheritOutputRulesAndRecording if true, the output rules and recording are inherited from the parent directory. if false, they are not, and all outputs are allowed and are unrecorded.
+     * @param inheritOutputRulesAndRecording if true, the output rules and recording are inherited
+     *     from the parent directory. if false, they are not, and all outputs are allowed and are
+     *     unrecorded.
      * @return the new output manager
      */
     public Outputter deriveSubdirectory(
-            String subdirectoryName, ManifestFolderDescription manifestDescription, boolean inheritOutputRulesAndRecording) {
+            String subdirectoryName,
+            ManifestFolderDescription manifestDescription,
+            boolean inheritOutputRulesAndRecording) {
         return new Outputter(
                 delegate.deriveSubdirectory(
                         subdirectoryName,
@@ -92,7 +96,7 @@ public class Outputter {
     public WriterRouterErrors writerSelective() {
         return new WriterRouterErrors(delegate.getWriters().selective(), errorReporter);
     }
-    
+
     /**
      * Multiplexes between the {@code selective} and {@code permissive} writers based on a flag.
      *
@@ -107,16 +111,17 @@ public class Outputter {
             return writerPermissive();
         }
     }
-    
+
     /**
-     * A writer that performs a second-level check on which outputs occur, but writes to the top-level directory.
+     * A writer that performs a second-level check on which outputs occur, but writes to the
+     * top-level directory.
      *
      * @return a newly created writer checking on particular second-level otuput names.
      */
     public WriterRouterErrors writerSecondLevel(String outputNameFirstLevel) {
-        return new WriterRouterErrors( delegate.getWriters().secondLevel(outputNameFirstLevel), errorReporter);
+        return new WriterRouterErrors(
+                delegate.getWriters().secondLevel(outputNameFirstLevel), errorReporter);
     }
-    
 
     @Override
     public boolean equals(Object obj) {

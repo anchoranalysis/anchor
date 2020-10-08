@@ -35,8 +35,8 @@ import org.anchoranalysis.image.voxel.iterator.process.buffer.ProcessBufferUnary
  * Processes a 3D point like {@link ProcessPoint} but also retrieves <b>two</b> {@link VoxelBuffer}s
  * for the current z-slice.
  *
- * <p>It is very similar to {@link ProcessBufferUnary} but uses {@link VoxelBuffer} instead
- * of a {@link Buffer}.
+ * <p>It is very similar to {@link ProcessBufferUnary} but uses {@link VoxelBuffer} instead of a
+ * {@link Buffer}.
  *
  * @author Owen Feehan
  * @param <S> first buffer-type

@@ -42,10 +42,11 @@ import org.anchoranalysis.io.output.outputter.InputOutputContext;
 
 /**
  * Specifies a table of feature-calculations on objects.
- * 
+ *
  * <p>Note the input objects are not changed during feature-calculation and outputting.
- * 
+ *
  * <p>The following outputs are produced:
+ *
  * <table>
  * <caption></caption>
  * <thead>
@@ -55,9 +56,8 @@ import org.anchoranalysis.io.output.outputter.InputOutputContext;
  * <tr><td>features</td><td>yes</td><td>A CSV of calculated-features for objects.</td></tr>
  * </tbody>
  * </table>
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class OutputFeatureTable extends ImageBean<OutputFeatureTable> {
 
@@ -73,16 +73,14 @@ public class OutputFeatureTable extends ImageBean<OutputFeatureTable> {
 
     /**
      * Outputs the feature-table.
-     * 
+     *
      * @param context the input-output context.
      * @throws IOException if anything goes wrong when outputting.
      */
     public void output(InputOutputContext context) throws IOException {
 
         // Early exit if we're not allowed output anything anyway
-        if (!context.getOutputter()
-                .outputsEnabled()
-                .isOutputEnabled(OUTPUT_FEATURE_TABLE)) {
+        if (!context.getOutputter().outputsEnabled().isOutputEnabled(OUTPUT_FEATURE_TABLE)) {
             return;
         }
 

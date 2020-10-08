@@ -40,11 +40,11 @@ public class ChannelFixture {
     // Creates an intensity value for a given location
     @FunctionalInterface
     public interface IntensityFunction {
-        
+
         default int valueFor(Point3i point) {
             return valueFor(point.x(), point.y(), point.z());
         }
-        
+
         int valueFor(int x, int y, int z);
     }
 
@@ -72,15 +72,17 @@ public class ChannelFixture {
     public static final Extent LARGE_2D = LARGE_3D.flattenZ();
     // END: image size examples
 
-    public static Channel createChannel(Extent extent, IntensityFunction createIntensity, VoxelDataType channelVoxelType) {
+    public static Channel createChannel(
+            Extent extent, IntensityFunction createIntensity, VoxelDataType channelVoxelType) {
 
         Dimensions dimensions = new Dimensions(extent, ImageResFixture.INSTANCE);
 
-        Channel channel = ChannelFactory.instance().get(channelVoxelType).createEmptyInitialised(dimensions);
+        Channel channel =
+                ChannelFactory.instance().get(channelVoxelType).createEmptyInitialised(dimensions);
 
-        IterateVoxelsAll.withVoxelBuffer(channel.voxels().any(), (point, buffer, offset) -> 
-            buffer.putInt(offset, createIntensity.valueFor(point))
-        );
+        IterateVoxelsAll.withVoxelBuffer(
+                channel.voxels().any(),
+                (point, buffer, offset) -> buffer.putInt(offset, createIntensity.valueFor(point)));
 
         return channel;
     }

@@ -26,24 +26,27 @@
 
 package org.anchoranalysis.image.voxel.iterator.intersecting;
 
-import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.extent.box.BoundingBox;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Value;
 import lombok.experimental.Accessors;
+import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.image.extent.box.BoundingBox;
 
 /**
- * A bounding box where intersection occurs of two boxes, together with relative position of the second box to the first.  
+ * A bounding box where intersection occurs of two boxes, together with relative position of the
+ * second box to the first.
  *
  * @author Owen Feehan
  */
-@AllArgsConstructor(access=AccessLevel.PRIVATE) @Accessors(fluent=true) @Value
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@Accessors(fluent = true)
+@Value
 class Intersection {
 
     /** Bounding-box of the intersection relative to box1 */
     private BoundingBox intersectingBox;
-    
+
     /** Relative position of {@code box2} to the {@code box1}. */
     private Point3i relative;
 
@@ -52,12 +55,10 @@ class Intersection {
 
         Point3i relativeIntersectionToBox1 = boxIntersect.relativePositionTo(box1);
 
-        Point3i relativeBox2ToBox1 =
-                Point3i.immutableSubtract(box1.cornerMin(), box2.cornerMin());
+        Point3i relativeBox2ToBox1 = Point3i.immutableSubtract(box1.cornerMin(), box2.cornerMin());
 
         return new Intersection(
-                new BoundingBox(relativeIntersectionToBox1,boxIntersect.extent()),
-                relativeBox2ToBox1
-        );
+                new BoundingBox(relativeIntersectionToBox1, boxIntersect.extent()),
+                relativeBox2ToBox1);
     }
 }

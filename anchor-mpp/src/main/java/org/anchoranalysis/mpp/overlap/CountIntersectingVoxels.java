@@ -45,8 +45,9 @@ class CountIntersectingVoxels {
     public CountIntersectingVoxels(byte regionMembershipFlag) {
         predicate = new PredicateRegionMembership(regionMembershipFlag);
     }
-    
-    public int count(BoundedVoxels<UnsignedByteBuffer> voxels1, BoundedVoxels<UnsignedByteBuffer> voxels2) {
+
+    public int count(
+            BoundedVoxels<UnsignedByteBuffer> voxels1, BoundedVoxels<UnsignedByteBuffer> voxels2) {
         return CountVoxelsIntersectingBounded.countByte(voxels1, voxels2, predicate);
     }
 
@@ -55,6 +56,7 @@ class CountIntersectingVoxels {
             BoundedVoxels<UnsignedByteBuffer> voxels2,
             Voxels<UnsignedByteBuffer> maskGlobal,
             byte onMaskGlobal) {
-        return CountVoxelsIntersectingBounded.countByteMasked(maskGlobal, onMaskGlobal, voxels1, voxels2, predicate); 
+        return CountVoxelsIntersectingBounded.countByteMasked(
+                maskGlobal, onMaskGlobal, voxels1, voxels2, predicate);
     }
 }

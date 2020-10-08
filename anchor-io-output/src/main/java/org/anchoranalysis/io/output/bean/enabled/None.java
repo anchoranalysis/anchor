@@ -39,7 +39,7 @@ public class None extends OutputEnabled {
      * <p>The class retains a public constructor so it can also be instantiated as a bean.
      */
     public static final OutputEnabled INSTANCE = new None();
-    
+
     @Override
     public boolean isOutputEnabled(String outputName) {
         return false;

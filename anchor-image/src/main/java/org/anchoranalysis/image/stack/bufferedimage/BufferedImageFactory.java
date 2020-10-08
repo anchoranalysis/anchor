@@ -57,34 +57,41 @@ public class BufferedImageFactory {
                 return BufferedImageFactory.createGrayscaleByte(extractVoxelsAsByte(stack, 0));
             }
 
-            throw new CreateException("Only single or three- channeled are supported for unsigned 8-bit conversion.");            
+            throw new CreateException(
+                    "Only single or three- channeled are supported for unsigned 8-bit conversion.");
         } else if (stack.allChannelsHaveType(UnsignedShortVoxelType.INSTANCE)) {
-            
+
             if (stack.getNumberChannels() == 1) {
                 return BufferedImageFactory.createGrayscaleShort(extractVoxelsAsShort(stack, 0));
             }
-            
-            throw new CreateException("Only single-channeled images are supported for unsigned 16-bit conversion.");
+
+            throw new CreateException(
+                    "Only single-channeled images are supported for unsigned 16-bit conversion.");
         } else {
-            throw new CreateException("Only single or three-channeled unsigned 8-bit images or single-chanelled unsigned 16-bit images are supported.");
+            throw new CreateException(
+                    "Only single or three-channeled unsigned 8-bit images or single-chanelled unsigned 16-bit images are supported.");
         }
     }
 
-    public static BufferedImage createGrayscaleByte(Voxels<UnsignedByteBuffer> voxels) throws CreateException {
+    public static BufferedImage createGrayscaleByte(Voxels<UnsignedByteBuffer> voxels)
+            throws CreateException {
         return createGrayscale(voxels, BufferedImage.TYPE_BYTE_GRAY, UnsignedByteBuffer::array);
     }
-    
-    private static BufferedImage createGrayscaleShort(Voxels<UnsignedShortBuffer> voxels) throws CreateException {
+
+    private static BufferedImage createGrayscaleShort(Voxels<UnsignedShortBuffer> voxels)
+            throws CreateException {
         return createGrayscale(voxels, BufferedImage.TYPE_USHORT_GRAY, UnsignedShortBuffer::array);
     }
-    
-    private static <T> BufferedImage createGrayscale(Voxels<T> voxels, int pixelType, Function<T,Object> extractArray)
+
+    private static <T> BufferedImage createGrayscale(
+            Voxels<T> voxels, int pixelType, Function<T, Object> extractArray)
             throws CreateException {
 
         Extent extent = voxels.extent();
         checkExtentZ(extent);
 
-        return createBufferedImageFromGrayscaleBuffer( extractArray.apply(voxels.sliceBuffer(0)), extent, pixelType);
+        return createBufferedImageFromGrayscaleBuffer(
+                extractArray.apply(voxels.sliceBuffer(0)), extent, pixelType);
     }
 
     public static BufferedImage createRGB(
@@ -121,8 +128,7 @@ public class BufferedImageFactory {
     private static BufferedImage createBufferedImageFromGrayscaleBuffer(
             Object voxels, Extent extent, int imageType) {
 
-        BufferedImage image =
-                new BufferedImage(extent.x(), extent.y(), imageType);
+        BufferedImage image = new BufferedImage(extent.x(), extent.y(), imageType);
         image.getWritableTile(0, 0).setDataElements(0, 0, extent.x(), extent.y(), voxels);
         return image;
     }
@@ -154,7 +160,7 @@ public class BufferedImageFactory {
     private static Voxels<UnsignedByteBuffer> extractVoxelsAsByte(Stack stack, int channelIndex) {
         return stack.getChannel(channelIndex).voxels().asByte();
     }
-    
+
     private static Voxels<UnsignedShortBuffer> extractVoxelsAsShort(Stack stack, int channelIndex) {
         return stack.getChannel(channelIndex).voxels().asShort();
     }

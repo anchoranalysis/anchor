@@ -66,12 +66,10 @@ public abstract class ConvertToShort extends ConvertTo<UnsignedShortBuffer> {
         byte[] buffer = sourceBuffer.array();
 
         UnsignedShortBuffer out = UnsignedShortBuffer.allocate(sizeXY);
-        
+
         int increment = numberChannelsPerArray * BYTES_PER_PIXEL;
 
-        for (int indexIn = channelIndexRelative;
-                indexIn < sizeBytes;
-                indexIn += increment) {
+        for (int indexIn = channelIndexRelative; indexIn < sizeBytes; indexIn += increment) {
             out.putRaw(convertValue(valueFromBuffer(buffer, indexIn)));
         }
 

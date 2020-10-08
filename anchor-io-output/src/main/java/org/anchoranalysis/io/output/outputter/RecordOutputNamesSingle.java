@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -25,9 +25,9 @@
  */
 package org.anchoranalysis.io.output.outputter;
 
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.io.output.enabled.single.SingleLevelOutputEnabled;
 import org.anchoranalysis.io.output.recorded.RecordedOutputs;
-import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 class RecordOutputNamesSingle implements SingleLevelOutputEnabled {
@@ -35,7 +35,7 @@ class RecordOutputNamesSingle implements SingleLevelOutputEnabled {
     // START REQUIRED ARGUMENTS
     /** What all outputs that this write processes are added to. */
     private final SingleLevelOutputEnabled outputEnabled;
-    
+
     /** What all outputs that this write processes are added to. */
     private final RecordedOutputs recordedOutputs;
     // END REQUIRED ARGUMENTS
@@ -44,9 +44,9 @@ class RecordOutputNamesSingle implements SingleLevelOutputEnabled {
     public boolean isOutputEnabled(String outputName) {
 
         boolean enabled = outputEnabled.isOutputEnabled(outputName);
-        
+
         recordedOutputs.add(outputName, enabled);
-        
+
         return enabled;
     }
 }

@@ -31,9 +31,9 @@ import lombok.NoArgsConstructor;
 
 /**
  * All outputs are allowed unless the name's first character is an underscore.
- * 
- * <p>This is intended as a filter to allow declaration of certain <i>private</i> entities
- * that are not typically outputted, unless explicitly specified.
+ *
+ * <p>This is intended as a filter to allow declaration of certain <i>private</i> entities that are
+ * not typically outputted, unless explicitly specified.
  *
  * @author Owen Feehan
  */
@@ -49,6 +49,6 @@ public class IgnoreUnderscorePrefix extends OutputEnabled {
 
     @Override
     public boolean isOutputEnabled(String outputName) {
-        return outputName.isEmpty() || outputName.charAt(0)!='_';
+        return outputName.isEmpty() || outputName.charAt(0) != '_';
     }
 }

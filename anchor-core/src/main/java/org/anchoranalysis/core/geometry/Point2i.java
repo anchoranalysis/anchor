@@ -45,14 +45,14 @@ public final class Point2i implements Serializable {
 
     /**
      * Copy constructor.
-     * 
+     *
      * @param point point to copy from
      */
     public Point2i(Point2i point) {
         x = point.x();
         y = point.y();
     }
-    
+
     public int x() {
         return x;
     }
@@ -76,12 +76,12 @@ public final class Point2i implements Serializable {
     public void incrementY(int val) {
         this.y += val;
     }
-    
+
     public final void add(Point2i point) {
         this.x = this.x + point.x();
         this.y = this.y + point.y();
     }
-    
+
     /** Performs an addition without changing any values in an existing point */
     public static Point2i immutableAdd(Point2i point, Point2i toAdd) {
         Point2i pointCopy = new Point2i(point);

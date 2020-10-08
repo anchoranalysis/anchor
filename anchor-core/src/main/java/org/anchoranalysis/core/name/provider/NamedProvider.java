@@ -71,10 +71,10 @@ public interface NamedProvider<T> {
             throw new OperationFailedException(e.summarize());
         }
     }
-    
+
     /**
      * Are there any items in the provider
-     * 
+     *
      * @return true iff at least one item exists
      */
     default boolean isEmpty() {

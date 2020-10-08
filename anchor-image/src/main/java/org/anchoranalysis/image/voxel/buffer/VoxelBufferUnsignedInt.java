@@ -26,8 +26,8 @@
 
 package org.anchoranalysis.image.voxel.buffer;
 
-import lombok.AllArgsConstructor;
 import java.nio.ByteBuffer;
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.image.convert.PrimitiveConverter;
 import org.anchoranalysis.image.convert.UnsignedIntBuffer;
 import org.anchoranalysis.image.voxel.datatype.UnsignedIntVoxelType;

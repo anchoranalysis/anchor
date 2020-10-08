@@ -26,11 +26,11 @@
 
 package org.anchoranalysis.image.voxel.buffer;
 
+import com.google.common.base.Preconditions;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
-import com.google.common.base.Preconditions;
 
 @AllArgsConstructor
 final class VoxelBufferUnsignedByte extends VoxelBuffer<UnsignedByteBuffer> {

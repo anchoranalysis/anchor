@@ -53,7 +53,6 @@ public abstract class FeatureRelatedBean<T> extends InitializableBean<T, SharedF
     private static List<ExtractFromParam<SharedFeaturesInitParams, ?>> paramExtracters() {
         return Arrays.asList(
                 new ExtractFromParam<>(
-                        KeyValueParamsInitParams.class, SharedFeaturesInitParams::getParams)
-                );
+                        KeyValueParamsInitParams.class, SharedFeaturesInitParams::getParams));
     }
 }

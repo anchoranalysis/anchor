@@ -88,11 +88,10 @@ public abstract class ChannelConverter<T> {
                 channelOut.replaceVoxels(voxelsOut);
             } else {
                 channelOut =
-                        ChannelFactory.instance()
-                                .create(channelIn.dimensions(), dataTypeTarget);
-                voxelsOut = (Voxels<T>) channelOut.voxels().match(dataTypeTarget);                        
+                        ChannelFactory.instance().create(channelIn.dimensions(), dataTypeTarget);
+                voxelsOut = (Voxels<T>) channelOut.voxels().match(dataTypeTarget);
             }
-            
+
             voxelsConverter.copyFrom(channelIn.voxels(), voxelsOut);
 
         } catch (OperationFailedException | IncorrectImageSizeException e1) {

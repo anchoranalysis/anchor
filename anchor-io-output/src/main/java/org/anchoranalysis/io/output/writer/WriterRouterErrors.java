@@ -67,14 +67,22 @@ public class WriterRouterErrors {
      * @param outputName the name of the sub-directory
      * @param manifestDescription a manifest-description associated with the sub-directory as a
      *     whole.
-     * @param inheritOutputRulesAndRecording if true, the output rules and recording are inherited from the parent directory. if false, they are not, and all outputs are allowed and are unrecorded.     
+     * @param inheritOutputRulesAndRecording if true, the output rules and recording are inherited
+     *     from the parent directory. if false, they are not, and all outputs are allowed and are
+     *     unrecorded.
      * @return an output-manager for the directory if it is allowed, otherwise {@link
      *     Optional#empty}.
      */
     public Optional<Outputter> createSubdirectory(
-            String outputName, ManifestFolderDescription manifestDescription, boolean inheritOutputRulesAndRecording) {
+            String outputName,
+            ManifestFolderDescription manifestDescription,
+            boolean inheritOutputRulesAndRecording) {
         try {
-            return delegate.createSubdirectory(outputName, manifestDescription, Optional.empty(), inheritOutputRulesAndRecording)
+            return delegate.createSubdirectory(
+                            outputName,
+                            manifestDescription,
+                            Optional.empty(),
+                            inheritOutputRulesAndRecording)
                     .map(output -> new Outputter(output, errorReporter));
         } catch (OutputWriteFailedException e) {
             errorReporter.recordError(Outputter.class, e);

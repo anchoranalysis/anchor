@@ -47,7 +47,7 @@ import org.anchoranalysis.io.output.outputter.OutputterChecked;
 public class StacksOutputter {
 
     public static final String OUTPUT_STACKS = "stacks";
-    
+
     private static final String PREFIX = "";
 
     /**
@@ -55,11 +55,9 @@ public class StacksOutputter {
      * wrong
      */
     public static void outputSubset(
-            NamedProvider<Stack> stacks,
-            boolean suppressSubfolders,
-            InputOutputContext context) {
+            NamedProvider<Stack> stacks, boolean suppressSubfolders, InputOutputContext context) {
         Outputter outputter = context.getOutputter();
-        
+
         if (outputter.outputsEnabled().isOutputEnabled(StacksOutputter.OUTPUT_STACKS)) {
             StacksOutputter.output(
                     stackSubset(stacks, OUTPUT_STACKS, outputter),
@@ -78,11 +76,9 @@ public class StacksOutputter {
      * @throws OutputWriteFailedException if anything goes wrong
      */
     public static void outputSubsetWithException(
-            NamedProvider<Stack> stacks,
-            Outputter outputter,
-            boolean suppressSubfolders)
+            NamedProvider<Stack> stacks, Outputter outputter, boolean suppressSubfolders)
             throws OutputWriteFailedException {
-        
+
         if (outputter.outputsEnabled().isOutputEnabled(StacksOutputter.OUTPUT_STACKS)) {
             StacksOutputter.outputWithException(
                     stackSubset(stacks, StacksOutputter.OUTPUT_STACKS, outputter),
@@ -92,7 +88,7 @@ public class StacksOutputter {
                     suppressSubfolders);
         }
     }
-    
+
     public static void output(
             NamedStacks stacks,
             OutputterChecked outputter,
@@ -110,7 +106,7 @@ public class StacksOutputter {
                 errorReporter,
                 suppressSubfoldersIn);
     }
-    
+
     private static void outputWithException(
             NamedStacks stacks,
             OutputterChecked outputter,
@@ -123,7 +119,8 @@ public class StacksOutputter {
                 stacks, generator, outputter, outputName, suffix, suppressSubfoldersIn);
     }
 
-    public static NamedStacks subset(NamedProvider<Stack> stackCollection, SingleLevelOutputEnabled outputEnabled) {
+    public static NamedStacks subset(
+            NamedProvider<Stack> stackCollection, SingleLevelOutputEnabled outputEnabled) {
 
         NamedStacks out = new NamedStacks();
 

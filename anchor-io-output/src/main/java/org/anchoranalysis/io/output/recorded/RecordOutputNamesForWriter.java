@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -66,10 +66,15 @@ class RecordOutputNamesForWriter implements Writer {
     public Optional<OutputterChecked> createSubdirectory(
             String outputName,
             ManifestFolderDescription manifestDescription,
-            Optional<FolderWriteWithPath> manifestFolder, boolean inheritOutputRulesAndRecording)
+            Optional<FolderWriteWithPath> manifestFolder,
+            boolean inheritOutputRulesAndRecording)
             throws OutputWriteFailedException {
         Optional<OutputterChecked> outputter =
-                writer.createSubdirectory(outputName, manifestDescription, manifestFolder, inheritOutputRulesAndRecording);
+                writer.createSubdirectory(
+                        outputName,
+                        manifestDescription,
+                        manifestFolder,
+                        inheritOutputRulesAndRecording);
         recordedOutputs.add(outputName, outputter.isPresent());
         return outputter;
     }

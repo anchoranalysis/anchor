@@ -97,11 +97,13 @@ public class MultiInputManager extends InputManager<MultiInput> {
 
     @Override
     public List<MultiInput> inputs(InputManagerParams params) throws AnchorIOException {
-        return FunctionalList.mapToList( input.inputs(params), mainStack -> {
-            MultiInput inputToAdd = new MultiInput(inputName, mainStack);
-            appendFromLists(inputToAdd, params.isDebugModeActivated());
-            return inputToAdd;
-        });
+        return FunctionalList.mapToList(
+                input.inputs(params),
+                mainStack -> {
+                    MultiInput inputToAdd = new MultiInput(inputName, mainStack);
+                    appendFromLists(inputToAdd, params.isDebugModeActivated());
+                    return inputToAdd;
+                });
     }
 
     private void appendFromLists(MultiInput input, boolean doDebug) {

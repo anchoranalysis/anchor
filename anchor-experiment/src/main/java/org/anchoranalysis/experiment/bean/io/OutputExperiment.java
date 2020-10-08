@@ -156,7 +156,10 @@ public abstract class OutputExperiment extends Experiment {
                             .createExperimentOutputter(
                                     experimentId,
                                     experimentalManifest,
-                                    new RecordedOutputsWithRules(recordedOutputs, defaultOutputs(), arguments.getOutputEnabledDelta()),
+                                    new RecordedOutputsWithRules(
+                                            recordedOutputs,
+                                            defaultOutputs(),
+                                            arguments.getOutputEnabledDelta()),
                                     arguments.createPrefixerContext());
 
             Preconditions.checkArgument(rootOutputter.getSettings().hasBeenInit());

@@ -157,7 +157,7 @@ public class JobStartStopLogger {
 
     private void logMaybeDivider() {
         if (showHashSeperators) {
-            logger.get().log(DIVIDER.withoutLabel());   // NOSONAR
+            logger.get().log(DIVIDER.withoutLabel()); // NOSONAR
         }
     }
 

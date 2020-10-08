@@ -1,2 +1,2 @@
-/** Merges two or more entities. */ 
+/** Merges two or more entities. */
 package org.anchoranalysis.image.merge;

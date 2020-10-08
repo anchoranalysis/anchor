@@ -1,15 +1,16 @@
 package org.anchoranalysis.io.output.recorded;
 
 import java.util.Optional;
+import lombok.Getter;
 import org.anchoranalysis.io.output.bean.rules.OutputEnabledRules;
 import org.anchoranalysis.io.output.bean.rules.Permissive;
 import org.anchoranalysis.io.output.enabled.multi.MultiLevelOutputEnabled;
-import lombok.Getter;
 
 /**
- * Rules to determine what outputting occurs, together with maybe an entity that records the output-names that are used when writing / querying.
- * @author Owen Feehan
+ * Rules to determine what outputting occurs, together with maybe an entity that records the
+ * output-names that are used when writing / querying.
  *
+ * @author Owen Feehan
  */
 public class RecordedOutputsWithRules {
 
@@ -18,44 +19,44 @@ public class RecordedOutputsWithRules {
      *
      * <p>This only occurs for first-level outputs, not second-level outputs.
      */
-    @Getter
-    private final Optional<MultiLevelRecordedOutputs> recordedOutputs;
-    
+    @Getter private final Optional<MultiLevelRecordedOutputs> recordedOutputs;
+
     /**
      * If defined, default output-enabled rules for the particular task.
-     * 
+     *
      * <p>Note that this object is treated as mutable, and additional outputs may be added.
      */
     private final Optional<MultiLevelOutputEnabled> defaultRules;
-    
+
     /**
      * Enabled-outputs that were always added to whichever rules are employed.
-     * 
+     *
      * <p>e.g. these can be user-supplied outputs as <i>extras</i> from the command-line.
      */
     private final Optional<OutputEnabledDelta> delta;
-    
-    /**
-     * Creates with no rules or outputs defined.
-     */
+
+    /** Creates with no rules or outputs defined. */
     public RecordedOutputsWithRules() {
         this.recordedOutputs = Optional.empty();
         this.defaultRules = Optional.empty();
         this.delta = Optional.empty();
     }
-    
+
     /**
      * Creates with all elements defined.
-     * 
+     *
      * @param recordedOutputs where output-names are recorded as they are written / queried
      * @param defaultRules default rules for which outputs are enabled.
      */
-    public RecordedOutputsWithRules(MultiLevelRecordedOutputs recordedOutputs, MultiLevelOutputEnabled defaultRules, OutputEnabledDelta delta) {
+    public RecordedOutputsWithRules(
+            MultiLevelRecordedOutputs recordedOutputs,
+            MultiLevelOutputEnabled defaultRules,
+            OutputEnabledDelta delta) {
         this.recordedOutputs = Optional.of(recordedOutputs);
         this.defaultRules = Optional.of(defaultRules);
         this.delta = Optional.of(delta);
     }
-    
+
     /**
      * Selects which {@link OutputEnabledRules} to employ.
      *
@@ -65,11 +66,12 @@ public class RecordedOutputsWithRules {
      *   <li>{@code rulesHigherPrecedence} combined with user-supplied additions.
      *   <li>{@code defaultRules} combined with user-supplied additions.
      * </ol>
-     * 
+     *
      * <p>Any user-supplied additional outputs are also added to both if they exist.
      *
      * @param rulesHigherPrecedence output-rules defined in the experiment, if they exist.
-     * @return a {@link MultiLevelOutputEnabled} that combines one of the two sources of rules with user-supplied additional outputs.
+     * @return a {@link MultiLevelOutputEnabled} that combines one of the two sources of rules with
+     *     user-supplied additional outputs.
      */
     public MultiLevelOutputEnabled selectOutputEnabled(
             Optional<OutputEnabledRules> rulesHigherPrecedence) {
@@ -81,8 +83,8 @@ public class RecordedOutputsWithRules {
             return Permissive.INSTANCE;
         }
     }
-    
-    private MultiLevelOutputEnabled additionalCombinedWith( MultiLevelOutputEnabled other ) {
+
+    private MultiLevelOutputEnabled additionalCombinedWith(MultiLevelOutputEnabled other) {
         if (delta.isPresent()) {
             return delta.get().applyDelta(other);
         } else {

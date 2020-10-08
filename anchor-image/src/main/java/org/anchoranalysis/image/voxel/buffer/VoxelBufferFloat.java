@@ -92,7 +92,7 @@ final class VoxelBufferFloat extends VoxelBuffer<FloatBuffer> {
     public boolean isDirect() {
         return delegate.isDirect();
     }
-    
+
     @Override
     public byte[] underlyingBytes() {
         float[] array = delegate.array();

@@ -54,14 +54,13 @@ public abstract class RasterWriter extends AnchorBean<RasterWriter> {
     public Path writeStackWithExtension(
             Stack stack, Path filePath, boolean makeRGB, RasterWriteOptions writeOptions)
             throws RasterIOException {
-        
+
         String fileNameWithExtension = filePath.getFileName() + "." + fileExtension(writeOptions);
         Path filePathWithExtension = filePath.resolveSibling(fileNameWithExtension);
         writeStack(stack, filePathWithExtension, makeRGB, writeOptions);
         return filePathWithExtension;
     }
-    
-    
+
     /**
      * File-extensions for files written by this writer.
      *

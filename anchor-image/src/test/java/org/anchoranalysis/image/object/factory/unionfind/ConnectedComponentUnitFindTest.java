@@ -49,7 +49,7 @@ public class ConnectedComponentUnitFindTest {
     private ConnectedComponentUnionFind connectedComponents;
 
     private ObjectCollectionFixture objectsFixture;
-    
+
     @Before
     public void setup() {
         connectedComponents = new ConnectedComponentUnionFind(1, false);
@@ -79,7 +79,8 @@ public class ConnectedComponentUnitFindTest {
     private ObjectCollection deriveInt(boolean do3D)
             throws OperationFailedException, CreateException {
         objectsFixture.setDo3D(do3D);
-        return connectedComponents.deriveConnectedInt(createBufferWithObjects(UnsignedIntVoxelType.INSTANCE, do3D));
+        return connectedComponents.deriveConnectedInt(
+                createBufferWithObjects(UnsignedIntVoxelType.INSTANCE, do3D));
     }
 
     private ObjectCollection deriveByte(boolean do3D)
@@ -90,7 +91,10 @@ public class ConnectedComponentUnitFindTest {
 
     private void testObjects(ObjectCollection objects, int expectedSingleObjectSize)
             throws CreateException, OperationFailedException {
-        assertEquals("number of objects", objectsFixture.getNumberNonOverlappingObjects() + 1, objects.size());
+        assertEquals(
+                "number of objects",
+                objectsFixture.getNumberNonOverlappingObjects() + 1,
+                objects.size());
         assertTrue(
                 "size of all objects except one",
                 allSizesEqualExceptOne(objects, expectedSingleObjectSize));
@@ -98,10 +102,10 @@ public class ConnectedComponentUnitFindTest {
 
     private <T> BinaryVoxels<T> createBufferWithObjects(VoxelDataType bufferDataType, boolean do3D)
             throws CreateException {
-        
+
         ObjectCollectionFixture fixture = new ObjectCollectionFixture();
         fixture.setDo3D(do3D);
-        
+
         Extent extent = fixture.extentLargerThanAllObjects();
 
         @SuppressWarnings("unchecked")
