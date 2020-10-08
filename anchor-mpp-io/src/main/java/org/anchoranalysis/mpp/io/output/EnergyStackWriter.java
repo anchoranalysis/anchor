@@ -47,7 +47,7 @@ import org.anchoranalysis.io.output.outputter.InputOutputContext;
  * <tbody>
  * <tr><td>energyStack</td><td>no</td><td>Each channel of the energy-stack as a seperate image.</td></tr>
  * <tr><td>energyStackParams</td><td>no</td><td>XML serialization of the key-value parameters associated with the energy stack.</td></tr>
- *  * </tbody>
+ * </tbody>
  * </table>
  *
  * @author Owen Feehan
