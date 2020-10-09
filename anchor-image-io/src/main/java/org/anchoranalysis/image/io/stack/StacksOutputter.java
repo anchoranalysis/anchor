@@ -43,111 +43,126 @@ import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
 
+/**
+ * Outputs a named-set of stacks, performing appropriate checks on what is enabled or not.
+ * 
+ * @author Owen Feehan
+ *
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class StacksOutputter {
 
-    public static final String OUTPUT_STACKS = "stacks";
-
-    private static final String PREFIX = "";
-
+    private static final String MANIFEST_FUNCTION = "stackFromCollection";
+   
     /**
-     * Only outputs stacks whose names are allowed by the output-manager - and logs if anything goes
-     * wrong
+     * Outputs a set of named-stacks to a directory, and logs if anything goes
+     * wrong without throwing an exception.
+     * 
+     * <p>A second-level output manager filters which stacks are written.
+     * 
+     * @param stacks the stacks to output (or a subset thereof according to the second-level output manager)
+     * @param outputName name to use for the directory, for checking if it is enabled, and for the second-level outputs
+     * @param suppressSubfolders if true, a separate subdirectory is not created, and rather the outputs occur in the parent directory.
+     * @param context determines where and how the outputting occurs 
      */
-    public static void outputSubset(
-            NamedProvider<Stack> stacks, boolean suppressSubfolders, InputOutputContext context) {
+    public static void output(
+            NamedProvider<Stack> stacks, String outputName, boolean suppressSubfolders, InputOutputContext context) {
         Outputter outputter = context.getOutputter();
 
-        if (outputter.outputsEnabled().isOutputEnabled(StacksOutputter.OUTPUT_STACKS)) {
-            StacksOutputter.output(
-                    stackSubset(stacks, OUTPUT_STACKS, outputter),
+        if (outputter.outputsEnabled().isOutputEnabled(outputName)) {
+            outputAfterSubsetting(
+                    stackSubset(stacks, outputName, outputter),
                     outputter.getChecked(),
-                    OUTPUT_STACKS,
-                    PREFIX,
+                    outputName,
                     context.getErrorReporter(),
                     suppressSubfolders);
         }
     }
 
     /**
-     * Only outputs stacks whose names are allowed by the output-manager - and throws an exception
-     * if anything goes wrong
-     *
-     * @throws OutputWriteFailedException if anything goes wrong
+     * Outputs a set of named-stacks to a directory, and throws an exception
+     * if anything goes wrong.
+     * 
+     * <p>A second-level output manager filters which stacks are written. 
+     * 
+     * @param stacks the stacks to output (or a subset thereof according to the second-level output manager)
+     * @param outputName name to use for the directory, for checking if it is allowed, and for the second-level outputs
+     * @param suppressSubfolders if true, a separate subdirectory is not created, and rather the outputs occur in the parent directory.
+     * @param outputter determines where and how the outputting occurs
+     * @throws OutputWriteFailedException if the output cannot be written. 
      */
-    public static void outputSubsetWithException(
-            NamedProvider<Stack> stacks, Outputter outputter, boolean suppressSubfolders)
+    public static void outputChecked(
+            NamedProvider<Stack> stacks, String outputName, boolean suppressSubfolders, Outputter outputter)
             throws OutputWriteFailedException {
 
-        if (outputter.outputsEnabled().isOutputEnabled(StacksOutputter.OUTPUT_STACKS)) {
-            StacksOutputter.outputWithException(
-                    stackSubset(stacks, StacksOutputter.OUTPUT_STACKS, outputter),
+        if (outputter.outputsEnabled().isOutputEnabled(outputName)) {
+            outputWithException(
+                    stackSubset(stacks, outputName, outputter),
                     outputter.getChecked(),
-                    StacksOutputter.OUTPUT_STACKS,
-                    PREFIX,
+                    outputName,
                     suppressSubfolders);
         }
     }
 
-    public static void output(
-            NamedStacks stacks,
+    private static void outputAfterSubsetting(
+            NamedProvider<Stack> stacks,
             OutputterChecked outputter,
             String outputName,
-            String prefix,
             ErrorReporter errorReporter,
             boolean suppressSubfoldersIn) {
-        StackGenerator generator = createStackGenerator();
+        
+        StackGenerator generator = createStackGenerator(stacks);
         GeneratorOutputHelper.output(
                 stacks,
                 generator,
                 outputter,
                 outputName,
-                prefix,
+                "",
                 errorReporter,
                 suppressSubfoldersIn);
     }
-
-    private static void outputWithException(
-            NamedStacks stacks,
-            OutputterChecked outputter,
-            String outputName,
-            String suffix,
-            boolean suppressSubfoldersIn)
-            throws OutputWriteFailedException {
-        StackGenerator generator = createStackGenerator();
-        GeneratorOutputHelper.outputWithException(
-                stacks, generator, outputter, outputName, suffix, suppressSubfoldersIn);
-    }
-
-    public static NamedStacks subset(
-            NamedProvider<Stack> stackCollection, SingleLevelOutputEnabled outputEnabled) {
+    
+    private static NamedStacks subset(
+            NamedProvider<Stack> stacks, SingleLevelOutputEnabled outputEnabled) {
 
         NamedStacks out = new NamedStacks();
 
-        for (String name : stackCollection.keys()) {
+        for (String name : stacks.keys()) {
 
             if (outputEnabled.isOutputEnabled(name)) {
-                out.add(name, extractStackCached(stackCollection, name));
+                out.add(name, extractStackCached(stacks, name));
             }
         }
 
         return out;
     }
 
+    private static void outputWithException(
+            NamedStacks stacks,
+            OutputterChecked outputter,
+            String outputName,
+            boolean suppressSubfoldersIn)
+            throws OutputWriteFailedException {
+        
+        StackGenerator generator = createStackGenerator(stacks);
+        GeneratorOutputHelper.outputWithException(
+                stacks, generator, outputter, outputName, "", suppressSubfoldersIn);
+    }
+    
     private static StoreSupplier<Stack> extractStackCached(
-            NamedProvider<Stack> stackCollection, String name) {
+            NamedProvider<Stack> stacks, String name) {
         return StoreSupplier.cache(
                 () -> {
                     try {
-                        return stackCollection.getException(name);
+                        return stacks.getException(name);
                     } catch (NamedProviderGetException e) {
                         throw new OperationFailedException(e);
                     }
                 });
     }
 
-    private static StackGenerator createStackGenerator() {
-        return new StackGenerator(true, "stackFromCollection", false);
+    private static StackGenerator createStackGenerator(NamedProvider<Stack> stacks) {
+        return new StackGenerator(true, MANIFEST_FUNCTION, false);
     }
 
     private static NamedStacks stackSubset(

@@ -26,7 +26,8 @@ public class DualStackComparer {
      * <p>This is useful for building a set of rasters to compare against, when they don't already
      * exist.
      */
-    private static final Optional<String> PATH_COPY_TO = Optional.empty();
+    //private static final Optional<String> PATH_COPY_TO = Optional.empty();
+    private static final Optional<String> PATH_COPY_TO = Optional.of("C:\\Users\\owen\\Desktop\\testCopy");
 
     /** A minimum file-size for all written rasters, below which we assume an error has occurred. */
     private static final int MINIMUM_FILE_SIZE = 20;

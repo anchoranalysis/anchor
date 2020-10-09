@@ -30,7 +30,6 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.image.bean.nonbean.init.CreateCombinedStack;
-import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.io.stack.StacksOutputter;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
@@ -43,31 +42,21 @@ import org.anchoranalysis.mpp.segment.define.OutputterDirectories;
 class SharedObjectsOutputter {
 
     public static void output(
-            ImageInitParams imageInit, boolean suppressSubfolders, InputOutputContext context) {
-        StacksOutputter.outputSubset(
-                CreateCombinedStack.apply(imageInit), suppressSubfolders, context);
-    }
-
-    public static void outputWithException(
-            ImageInitParams imageInit, boolean suppressSubfolders, InputOutputContext context)
-            throws OutputWriteFailedException {
-        StacksOutputter.outputSubsetWithException(
-                CreateCombinedStack.apply(imageInit), context.getOutputter(), suppressSubfolders);
-    }
-
-    public static void output(
-            MPPInitParams soMPP, boolean suppressSubfolders, InputOutputContext context) {
+            MPPInitParams initParams, boolean suppressSubfolders, InputOutputContext context) {
         ErrorReporter errorReporter = context.getErrorReporter();
         Outputter outputter = context.getOutputter();
 
+        StacksOutputter.output(
+                CreateCombinedStack.apply(initParams.getImage()), OutputterDirectories.STACKS, suppressSubfolders, context);
+        
         SubsetOutputterFactory factory =
-                new SubsetOutputterFactory(soMPP, outputter, suppressSubfolders);
+                new SubsetOutputterFactory(initParams, outputter, suppressSubfolders);
         factory.marks().outputSubset(errorReporter);
         factory.histograms().outputSubset(errorReporter);
         factory.objects().outputSubset(errorReporter);
     }
 
-    public static void outputWithException(
+    public static void outputChecked(
             MPPInitParams soMPP, Outputter outputter, boolean suppressSubfolders)
             throws OutputWriteFailedException {
 
@@ -76,6 +65,10 @@ class SharedObjectsOutputter {
                     "The Outputter's settings have not yet been initialized");
         }
 
+        StacksOutputter.outputChecked(
+                CreateCombinedStack.apply(soMPP.getImage()), OutputterDirectories.STACKS,
+                suppressSubfolders, outputter);
+        
         SubsetOutputterFactory factory =
                 new SubsetOutputterFactory(soMPP, outputter, suppressSubfolders);
         factory.marks().outputSubsetChecked();

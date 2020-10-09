@@ -28,7 +28,6 @@ package org.anchoranalysis.mpp.segment.define;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.image.io.stack.StacksOutputter;
 
 /**
  * Directories into which collections of different types of objects are written to in a
@@ -40,7 +39,7 @@ import org.anchoranalysis.image.io.stack.StacksOutputter;
 public class OutputterDirectories {
 
     /** Where stacks are typically placed in a define-experiment output */
-    public static final String STACKS = StacksOutputter.OUTPUT_STACKS;
+    public static final String STACKS = "stacks";
 
     /** Where collections of objects are typically placed in a define-experiment output */
     public static final String OBJECTS = "objects";

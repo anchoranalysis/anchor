@@ -122,9 +122,8 @@ final class VoxelBufferUnsignedShort extends VoxelBuffer<UnsignedShortBuffer> {
         if (underlyingBytes.isPresent()) {
             return underlyingBytes.get().array();
         } else {
-            short[] array = delegate.array();
-            ByteBuffer buffer = ByteBuffer.allocate(array.length * 2);
-            buffer.asShortBuffer().put(array);
+            ByteBuffer buffer = ByteBuffer.allocate(delegate.capacity() * 2);
+            buffer.asShortBuffer().put(delegate.getDelegate());
             return buffer.array();
         }
     }

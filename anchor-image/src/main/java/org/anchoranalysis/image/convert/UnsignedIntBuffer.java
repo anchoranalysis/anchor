@@ -26,7 +26,6 @@
 package org.anchoranalysis.image.convert;
 
 import java.nio.IntBuffer;
-import java.nio.ShortBuffer;
 import lombok.Getter;
 
 /**
@@ -201,17 +200,6 @@ public final class UnsignedIntBuffer extends UnsignedBuffer {
     @Override
     public void putLong(long value) {
         putUnsigned(value);
-    }
-
-    /**
-     * The array of the buffer ala {@link ShortBuffer#array}.
-     *
-     * <p>Note that that {@link #hasArray} should first be called to check an array exists.
-     *
-     * @return the array
-     */
-    public final int[] array() {
-        return delegate.array();
     }
 
     public IntBuffer put(int arg0, int arg1) {

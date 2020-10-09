@@ -114,9 +114,8 @@ final class VoxelBufferFloat extends VoxelBuffer<FloatBuffer> {
 
     @Override
     public byte[] underlyingBytes() {
-        float[] array = delegate.array();
-        ByteBuffer buffer = ByteBuffer.allocate(array.length * 4);
-        buffer.asFloatBuffer().put(array);
+        ByteBuffer buffer = ByteBuffer.allocate(delegate.capacity() * 4);
+        buffer.asFloatBuffer().put(delegate);
         return buffer.array();
     }
 }

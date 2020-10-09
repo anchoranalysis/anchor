@@ -36,7 +36,6 @@ import org.anchoranalysis.bean.define.Define;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.name.provider.NamedProvider;
 import org.anchoranalysis.core.params.KeyValueParams;
-import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.stack.Stack;
@@ -106,25 +105,13 @@ public abstract class DefineOutputter extends AnchorBean<DefineOutputter> {
                 context, Optional.ofNullable(define), stacks, objects, keyValueParams);
     }
 
-    // General objects can be outputted
-    protected void outputSharedObjects(ImageInitParams initParams, InputOutputContext context)
-            throws OutputWriteFailedException {
-        if (suppressOutputExceptions) {
-            SharedObjectsOutputter.output(initParams, suppressSubfolders, context);
-        } else {
-            SharedObjectsOutputter.outputWithException(initParams, suppressSubfolders, context);
-        }
-    }
-
     protected void outputSharedObjects(MPPInitParams initParams, InputOutputContext context)
             throws OutputWriteFailedException {
 
-        outputSharedObjects(initParams.getImage(), context);
-
         if (suppressOutputExceptions) {
             SharedObjectsOutputter.output(initParams, suppressSubfolders, context);
         } else {
-            SharedObjectsOutputter.outputWithException(
+            SharedObjectsOutputter.outputChecked(
                     initParams, context.getOutputter(), suppressSubfolders);
         }
     }

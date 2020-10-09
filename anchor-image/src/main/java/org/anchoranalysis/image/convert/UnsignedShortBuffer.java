@@ -256,11 +256,18 @@ public final class UnsignedShortBuffer extends UnsignedBufferAsInt {
     /**
      * The array of the buffer ala {@link ShortBuffer#array}.
      *
-     * <p>Note that that {@link #hasArray} should first be called to check an array exists.
+     * <p>Unlike {@link ShortBuffer#array} an array will always be returned,
+     * copying it into a newly created array, if it cannot be directly accessed.
      *
      * @return the array
      */
     public final short[] array() {
-        return delegate.array();
+        if (delegate.hasArray()) {
+            return delegate.array();
+        } else {
+            short[] array = new short[delegate.capacity()];
+            delegate.get(array);
+            return array;
+        }
     }
 }

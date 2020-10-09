@@ -251,9 +251,18 @@ public final class UnsignedByteBuffer extends UnsignedBufferAsInt {
     /**
      * The array of the buffer ala {@link ByteBuffer#array}.
      *
+     * <p>Unlike {@link ByteBuffer#array} an array will always be returned,
+     * copying it into a newly created array, if it cannot be directly accessed.
+     * 
      * @return the array
      */
     public final byte[] array() {
-        return delegate.array();
+        if (delegate.hasArray()) {
+            return delegate.array();
+        } else {
+            byte[] array = new byte[delegate.capacity()];
+            delegate.get(array);
+            return array;
+        }
     }
 }

@@ -43,11 +43,11 @@ public class DefineOutputterMPP extends DefineOutputter {
         void process(T initParams) throws OperationFailedException;
     }
 
-    public void processInput(NamedChannelsForSeries ncc, InputOutputContext context)
+    public void processInput(NamedChannelsForSeries channels, InputOutputContext context)
             throws OperationFailedException {
         try {
             MPPInitParams initParams = super.createInitParams(context);
-            ncc.addAsSeparateChannels(
+            channels.addAsSeparateChannels(
                     new WrapStackAsTimeSequenceStore(initParams.getImage().stacks()), 0);
 
             super.outputSharedObjects(initParams, context);

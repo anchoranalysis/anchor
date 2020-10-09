@@ -47,8 +47,9 @@ import org.anchoranalysis.io.manifest.match.helper.filewrite.FileWriteFileFuncti
  */
 public class FinderSerializedObject<T> extends FinderSingleFile {
 
+    private final String function;
+    
     private Optional<T> deserializedObject = Optional.empty();
-    private String function;
 
     /** Provides a memoized (cached) means of access the results of the finder */
     @Getter

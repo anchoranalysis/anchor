@@ -124,7 +124,7 @@ final class VoxelBufferUnsignedByte extends VoxelBuffer<UnsignedByteBuffer> {
 
     @Override
     public byte[] underlyingBytes() {
-        Preconditions.checkArgument(!isDirect());
+        Preconditions.checkArgument(delegate.hasArray());
         return delegate.array();
     }
 }

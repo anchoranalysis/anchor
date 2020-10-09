@@ -122,9 +122,8 @@ final class VoxelBufferUnsignedInt extends VoxelBuffer<UnsignedIntBuffer> {
         if (underlyingBytes.isPresent()) {
             return underlyingBytes.get().array();
         } else {
-            int[] array = delegate.array();
-            ByteBuffer buffer = ByteBuffer.allocate(array.length * 4);
-            buffer.asIntBuffer().put(array);
+            ByteBuffer buffer = ByteBuffer.allocate(delegate.capacity() * 4);
+            buffer.asIntBuffer().put(delegate.getDelegate());
             return buffer.array();
         }
     }

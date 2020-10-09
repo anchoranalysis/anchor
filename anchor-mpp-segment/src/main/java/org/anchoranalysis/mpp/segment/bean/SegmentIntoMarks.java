@@ -37,6 +37,8 @@ import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.experiment.identifiers.StackIdentifiers;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.stack.NamedStacks;
+import org.anchoranalysis.io.output.bean.enabled.IgnoreUnderscorePrefix;
+import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.mpp.mark.MarkCollection;
 
@@ -55,4 +57,13 @@ public abstract class SegmentIntoMarks extends AnchorBean<SegmentIntoMarks> {
             Optional<KeyValueParams> keyValueParams,
             InputOutputContext context)
             throws SegmentationFailedException;
+    
+    /**
+     * If specified, default rules for determine which outputs are enabled or not.
+     *
+     * @return the default rules if they exist.
+     */
+    public OutputEnabledMutable defaultOutputs() {
+        return new OutputEnabledMutable(IgnoreUnderscorePrefix.INSTANCE);
+    }    
 }

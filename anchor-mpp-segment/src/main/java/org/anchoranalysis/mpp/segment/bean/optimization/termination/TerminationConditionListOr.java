@@ -42,14 +42,14 @@ public class TerminationConditionListOr extends TerminationCondition {
     @BeanField @Getter @Setter private List<TerminationCondition> list = new ArrayList<>();
     // END BEAN PROPERTIES
 
-    public TerminationConditionListOr(TerminationCondition cond1, TerminationCondition cond2) {
+    public TerminationConditionListOr(TerminationCondition condition1, TerminationCondition condition2) {
         this();
-        list.add(cond1);
-        list.add(cond2);
+        list.add(condition1);
+        list.add(condition2);
     }
 
-    public boolean add(TerminationCondition tc) {
-        return list.add(tc);
+    public boolean add(TerminationCondition condition) {
+        return list.add(condition);
     }
 
     public int size() {
@@ -57,10 +57,10 @@ public class TerminationConditionListOr extends TerminationCondition {
     }
 
     @Override
-    public boolean continueIterations(int crntIter, double score, int size, MessageLogger logger) {
+    public boolean continueIterations(int currentIteration, double score, int size, MessageLogger logger) {
 
         for (TerminationCondition tc : this.list) {
-            if (!tc.continueIterations(crntIter, score, size, logger)) {
+            if (!tc.continueIterations(currentIteration, score, size, logger)) {
                 return false;
             }
         }
