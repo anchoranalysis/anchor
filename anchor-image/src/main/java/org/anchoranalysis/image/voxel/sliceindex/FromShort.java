@@ -60,7 +60,6 @@ public class FromShort implements SliceBufferIndex<UnsignedShortBuffer> {
         int volumeXY = extent.volumeXY();
         for (int z = 0; z < extent.z(); z++) {
             buffer[z] = VoxelBufferFactory.allocateUnsignedShort(volumeXY);
-            assert (buffer[z].buffer().array().length == volumeXY);
         }
     }
 

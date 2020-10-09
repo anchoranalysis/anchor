@@ -24,20 +24,21 @@
  * #L%
  */
 
-package org.anchoranalysis.io.bioformats.copyconvert.toshort;
+package org.anchoranalysis.io.bioformats.copyconvert.toint;
 
+import com.google.common.base.Preconditions;
 import java.nio.ByteBuffer;
 import loci.common.DataTools;
-import org.anchoranalysis.image.convert.UnsignedShortBuffer;
+import lombok.RequiredArgsConstructor;
+import org.anchoranalysis.image.convert.UnsignedIntBuffer;
 import org.anchoranalysis.image.extent.Dimensions;
-import org.anchoranalysis.image.voxel.VoxelsWrapper;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
-import org.anchoranalysis.image.voxel.buffer.VoxelBufferWrap;
-import org.anchoranalysis.io.bioformats.copyconvert.ConvertTo;
+import org.anchoranalysis.image.voxel.buffer.VoxelBufferFactory;
 
-public abstract class ConvertToShort extends ConvertTo<UnsignedShortBuffer> {
+@RequiredArgsConstructor
+public class UnsignedIntFromUnsignedInt extends ToInt {
 
-    private static final int BYTES_PER_PIXEL = 2;
+    private static final int BYTES_PER_PIXEL = 4;
 
     // START REQUIRED ARGUMENTS
     private final boolean littleEndian;
@@ -45,40 +46,29 @@ public abstract class ConvertToShort extends ConvertTo<UnsignedShortBuffer> {
 
     private int sizeXY;
     private int sizeBytes;
-    private int numberChannelsPerArray;
-
-    public ConvertToShort(boolean littleEndian) {
-        super(VoxelsWrapper::asShort);
-        this.littleEndian = littleEndian;
-    }
 
     @Override
     protected void setupBefore(Dimensions dimensions, int numberChannelsPerArray) {
-        this.sizeXY = dimensions.x() * dimensions.y();
-        this.sizeBytes = sizeXY * BYTES_PER_PIXEL * numberChannelsPerArray;
-        this.numberChannelsPerArray = numberChannelsPerArray;
+        sizeXY = dimensions.x() * dimensions.y();
+        sizeBytes = sizeXY * BYTES_PER_PIXEL;
     }
 
     @Override
-    protected VoxelBuffer<UnsignedShortBuffer> convertSingleChannel(
-            ByteBuffer sourceBuffer, int channelIndexRelative) {
+    protected VoxelBuffer<UnsignedIntBuffer> convertSliceOfSingleChannel(
+            ByteBuffer source, int channelIndexRelative) {
+        Preconditions.checkArgument(
+                channelIndexRelative == 0, "interleaving not supported for int data");
 
-        byte[] buffer = sourceBuffer.array();
+        byte[] sourceArray = source.array();
+        
+        VoxelBuffer<UnsignedIntBuffer> voxels = VoxelBufferFactory.allocateUnsignedInt(sizeXY);
+        UnsignedIntBuffer out = voxels.buffer();
 
-        UnsignedShortBuffer out = UnsignedShortBuffer.allocate(sizeXY);
-
-        int increment = numberChannelsPerArray * BYTES_PER_PIXEL;
-
-        for (int indexIn = channelIndexRelative; indexIn < sizeBytes; indexIn += increment) {
-            out.putRaw(convertValue(valueFromBuffer(buffer, indexIn)));
+        int indexOut = 0;
+        for (int indexIn = 0; indexIn < sizeBytes; indexIn += BYTES_PER_PIXEL) {
+            out.put(indexOut++, DataTools.bytesToInt(sourceArray, indexIn, BYTES_PER_PIXEL, littleEndian));
         }
 
-        return VoxelBufferWrap.unsignedShortBuffer(out);
-    }
-
-    protected abstract short convertValue(short value);
-
-    private short valueFromBuffer(byte[] buffer, int index) {
-        return DataTools.bytesToShort(buffer, index, BYTES_PER_PIXEL, littleEndian);
+        return voxels;
     }
 }

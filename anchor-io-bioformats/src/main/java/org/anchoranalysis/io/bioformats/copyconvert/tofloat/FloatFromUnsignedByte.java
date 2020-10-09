@@ -24,33 +24,31 @@
  * #L%
  */
 
-package org.anchoranalysis.io.bioformats.copyconvert.toshort;
+package org.anchoranalysis.io.bioformats.copyconvert.tofloat;
 
-import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
+import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.PrimitiveConverter;
+import org.anchoranalysis.image.extent.Dimensions;
 
-public final class ShortFromUnsignedShort extends ConvertToShort {
+public class FloatFromUnsignedByte extends ToFloat {
 
-    public ShortFromUnsignedShort(boolean littleEndian) {
-        super(littleEndian);
+    @Override
+    protected float[] convertIntegerBytesToFloatArray(
+            Dimensions dimensions, ByteBuffer source, int offsetInSource) {
+
+        float[] out = new float[dimensions.x() * dimensions.y()];
+
+        int indexOut = 0;
+        for (int y = 0; y < dimensions.y(); y++) {
+            for (int x = 0; x < dimensions.x(); x++) {
+                out[indexOut++] = PrimitiveConverter.unsignedByteToInt(source.get(offsetInSource++));
+            }
+        }
+        return out;
     }
 
     @Override
-    protected short convertValue(short value) {
-
-        int valueAsInt = value;
-
-        // Make positive
-        if (valueAsInt < 0) {
-            valueAsInt += (UnsignedShortVoxelType.MAX_VALUE_INT + 1);
-        }
-
-        if (valueAsInt > UnsignedShortVoxelType.MAX_VALUE_INT) {
-            valueAsInt = UnsignedShortVoxelType.MAX_VALUE_INT;
-        }
-        if (valueAsInt < 0) {
-            valueAsInt = 0;
-        }
-
-        return (short) valueAsInt;
+    protected int bytesPerPixel() {
+        return 1;
     }
 }

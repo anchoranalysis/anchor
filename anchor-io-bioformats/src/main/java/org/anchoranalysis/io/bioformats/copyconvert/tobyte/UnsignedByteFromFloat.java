@@ -24,32 +24,46 @@
  * #L%
  */
 
-package org.anchoranalysis.io.bioformats.copyconvert.tofloat;
+package org.anchoranalysis.io.bioformats.copyconvert.tobyte;
 
+import com.google.common.base.Preconditions;
 import java.nio.ByteBuffer;
-import org.anchoranalysis.image.convert.PrimitiveConverter;
-import org.anchoranalysis.image.extent.Dimensions;
+import loci.common.DataTools;
+import lombok.RequiredArgsConstructor;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 
-public class FloatFrom8Bit extends ConvertToFloat {
+@RequiredArgsConstructor
+public class UnsignedByteFromFloat extends ToUnsignedByte {
+
+    // START REQUIRED ARGUMENTS
+    private final boolean littleEndian;
+    // END REQUIRED ARGUMENTS
 
     @Override
-    protected float[] convertIntegerBytesToFloatArray(
-            Dimensions dimensions, ByteBuffer source, int offsetInSource) {
+    protected UnsignedByteBuffer convert(ByteBuffer source, int channelIndexRelative) {
+        Preconditions.checkArgument(channelIndexRelative == 0, "interleaving not supported");
 
-        float[] out = new float[dimensions.x() * dimensions.y()];
+        UnsignedByteBuffer destination = allocateBuffer();
 
-        int indexOut = 0;
-        for (int y = 0; y < dimensions.y(); y++) {
-            for (int x = 0; x < dimensions.x(); x++) {
-                float value = PrimitiveConverter.unsignedByteToInt(source.get(offsetInSource++));
-                out[indexOut++] = value;
+        byte[] sourceArray = source.array();
+
+        for (int indexIn = 0; indexIn < sizeBytes; indexIn += bytesPerPixel) {
+            float value = DataTools.bytesToFloat(sourceArray, indexIn, littleEndian);
+
+            if (value > 255) {
+                value = 255;
             }
+            if (value < 0) {
+                value = 0;
+            }
+            destination.putFloat(value);
         }
-        return out;
+
+        return destination;
     }
 
     @Override
-    protected int bytesPerPixel() {
-        return 1;
+    protected int calculateBytesPerPixel(int numberChannelsPerArray) {
+        return 4;
     }
 }

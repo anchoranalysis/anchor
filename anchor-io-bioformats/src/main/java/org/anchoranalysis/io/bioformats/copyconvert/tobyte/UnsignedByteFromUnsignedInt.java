@@ -26,44 +26,55 @@
 
 package org.anchoranalysis.io.bioformats.copyconvert.tobyte;
 
+import com.google.common.base.Preconditions;
 import java.nio.ByteBuffer;
+import loci.common.DataTools;
+import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.extent.Dimensions;
 
-public class ByteFrom8BitUnsignedInterleaving extends ConvertToByte {
+@RequiredArgsConstructor
+public class UnsignedByteFromUnsignedInt extends ToUnsignedByte {
 
-    private int numberChannelsPerArray;
+    // START REQUIRED ARGUMENTS
+    private final int effectiveBitsPerPixel;
+    private final boolean littleEndian;
+    // END REQUIRED ARGUMENTS
+
+    private double convertRatio;
 
     @Override
     protected void setupBefore(Dimensions dimensions, int numberChannelsPerArray) {
         super.setupBefore(dimensions, numberChannelsPerArray);
-        this.numberChannelsPerArray = numberChannelsPerArray;
+        convertRatio = calculateConvertRatio();
     }
 
     @Override
     protected UnsignedByteBuffer convert(ByteBuffer source, int channelIndexRelative) {
+        Preconditions.checkArgument(channelIndexRelative == 0, "interleaving not supported");
 
-        if (source.capacity() == sizeXY && channelIndexRelative == 0) {
-            // Reuse the existing buffer, if it's single channeled
-            return UnsignedByteBuffer.wrapRaw(source);
-        } else {
-            UnsignedByteBuffer destination = allocateBuffer();
+        UnsignedByteBuffer destination = allocateBuffer();
 
-            // Loop through the relevant positions
-            int totalBytesSource = sizeXY * numberChannelsPerArray;
+        byte[] sourceArray = source.array();
 
-            for (int indexIn = channelIndexRelative;
-                    indexIn < totalBytesSource;
-                    indexIn += numberChannelsPerArray) {
-                destination.putRaw(source.get(indexIn));
-            }
-
-            return destination;
+        for (int indexIn = 0; indexIn < sizeBytes; indexIn += bytesPerPixel) {
+            int value = DataTools.bytesToInt(sourceArray, indexIn, littleEndian);
+            destination.putDouble(value * convertRatio);
         }
+
+        return destination;
     }
 
     @Override
     protected int calculateBytesPerPixel(int numberChannelsPerArray) {
-        return 1;
+        return 4;
+    }
+
+    private double calculateConvertRatio() {
+        if (effectiveBitsPerPixel == 32) {
+            return 1.0;
+        } else {
+            return ConvertHelper.twoToPower(-1 * (effectiveBitsPerPixel - 8));
+        }
     }
 }

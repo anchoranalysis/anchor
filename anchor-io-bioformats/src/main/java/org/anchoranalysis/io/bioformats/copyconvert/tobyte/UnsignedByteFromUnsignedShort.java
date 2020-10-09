@@ -27,26 +27,62 @@
 package org.anchoranalysis.io.bioformats.copyconvert.tobyte;
 
 import java.nio.ByteBuffer;
+import loci.common.DataTools;
+import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.image.convert.UnsignedByteBuffer;
+import org.anchoranalysis.image.extent.Dimensions;
 
-public class ByteFrom8BitUnsignedNoInterleaving extends ConvertToByte {
+@RequiredArgsConstructor
+public class UnsignedByteFromUnsignedShort extends ToUnsignedByte {
+
+    // START REQUIRED ARGUMENTS
+    private final boolean littleEndian;
+    private final int maxTotalBits;
+    // END REQUIRED ARGUMENTS
+
+    private ApplyScaling applyScaling;
+
+    @Override
+    protected void setupBefore(Dimensions dimensions, int numberChannelsPerArray) {
+        super.setupBefore(dimensions, numberChannelsPerArray);
+        // we assign a default that maps from 16-bit to 8-bit
+        applyScaling = new ApplyScaling(ConvertHelper.twoToPower(8 - maxTotalBits), 0);
+    }
 
     @Override
     protected UnsignedByteBuffer convert(ByteBuffer source, int channelIndexRelative) {
-        if (source.capacity() == sizeXY && channelIndexRelative == 0) {
-            // Reuse the existing buffer, if it's single channeled
-            return UnsignedByteBuffer.wrapRaw(source);
-        } else {
-            UnsignedByteBuffer destination = allocateBuffer();
-            source.position(sizeBytes * channelIndexRelative);
-            source.limit(source.position() + sizeBytes);
-            destination.put(source);
-            return destination;
+
+        UnsignedByteBuffer destination = allocateBuffer();
+
+        byte[] sourceArray = source.array();
+
+        for (int indexIn = 0; indexIn < sizeBytes; indexIn += bytesPerPixel) {
+
+            int indexInPlus = indexIn + (channelIndexRelative * 2);
+
+            int value = (int) DataTools.bytesToShort(sourceArray, indexInPlus, 2, littleEndian);
+
+            // Make unsigned
+            if (value < 0) {
+                value += 65536;
+            }
+
+            value = applyScaling.apply(value);
+
+            if (value > 255) {
+                value = 255;
+            }
+            if (value < 0) {
+                value = 0;
+            }
+
+            destination.putUnsigned(value);
         }
+        return destination;
     }
 
     @Override
     protected int calculateBytesPerPixel(int numberChannelsPerArray) {
-        return 1;
+        return 2 * numberChannelsPerArray;
     }
 }

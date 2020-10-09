@@ -27,16 +27,36 @@
 package org.anchoranalysis.image.voxel.buffer;
 
 import com.google.common.base.Preconditions;
-import lombok.AllArgsConstructor;
+import java.nio.ByteBuffer;
+import java.util.Optional;
 import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 
-@AllArgsConstructor
 final class VoxelBufferUnsignedByte extends VoxelBuffer<UnsignedByteBuffer> {
 
     private final UnsignedByteBuffer delegate;
 
+    /**
+     * Create from a {@link VoxelBufferUnsignedByte} without any underlying bytes.
+     * 
+     * @param buffer the buffer
+     */
+    public VoxelBufferUnsignedByte(UnsignedByteBuffer buffer) {
+        super( Optional.of(buffer.getDelegate()) );
+        this.delegate = buffer;
+    }
+    
+    /**
+     * Creates from underlying bytes, establishing a view over these bytes.
+     * 
+     * @param underlyingBytes the underlying byte representation of the buffer.
+     */
+    public VoxelBufferUnsignedByte(ByteBuffer underlyingBytes) {
+        super( Optional.of(underlyingBytes) );
+        this.delegate = UnsignedByteBuffer.wrapRaw(underlyingBytes);
+    }
+    
     @Override
     public UnsignedByteBuffer buffer() {
         return delegate;

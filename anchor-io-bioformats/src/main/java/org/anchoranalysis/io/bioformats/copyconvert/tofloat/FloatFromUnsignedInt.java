@@ -36,7 +36,7 @@ import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.extent.Extent;
 
 @RequiredArgsConstructor
-public class FloatFrom32Bit extends ConvertToFloat {
+public class FloatFromUnsignedInt extends ToFloat {
 
     // START REQUIRED ARGUMENTS
     private final boolean littleEndian;

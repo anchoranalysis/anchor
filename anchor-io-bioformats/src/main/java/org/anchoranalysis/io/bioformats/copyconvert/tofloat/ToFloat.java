@@ -24,44 +24,44 @@
  * #L%
  */
 
-package org.anchoranalysis.io.bioformats.copyconvert.tobyte;
+package org.anchoranalysis.io.bioformats.copyconvert.tofloat;
 
+import com.google.common.base.Preconditions;
+import java.io.IOException;
 import java.nio.ByteBuffer;
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
+import java.nio.FloatBuffer;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferWrap;
 import org.anchoranalysis.io.bioformats.copyconvert.ConvertTo;
 
-public abstract class ConvertToByte extends ConvertTo<UnsignedByteBuffer> {
+public abstract class ToFloat extends ConvertTo<FloatBuffer> {
 
-    protected int sizeXY;
-    protected int bytesPerPixel;
-    protected int sizeBytes;
+    private int sizeBytesChannel;
+    private Dimensions dimensions;
 
-    public ConvertToByte() {
-        super(VoxelsWrapper::asByte);
+    public ToFloat() {
+        super(VoxelsWrapper::asFloat);
     }
+
+    protected abstract int bytesPerPixel();
 
     @Override
     protected void setupBefore(Dimensions dimensions, int numberChannelsPerArray) {
-        sizeXY = dimensions.volumeXY();
-        bytesPerPixel = calculateBytesPerPixel(numberChannelsPerArray);
-        sizeBytes = sizeXY * bytesPerPixel;
+        sizeBytesChannel = dimensions.x() * dimensions.y() * bytesPerPixel();
+        this.dimensions = dimensions;
     }
 
     @Override
-    protected VoxelBuffer<UnsignedByteBuffer> convertSingleChannel(
-            ByteBuffer source, int channelIndexRelative) {
-        return VoxelBufferWrap.unsignedByteBuffer(convert(source, channelIndexRelative));
+    protected VoxelBuffer<FloatBuffer> convertSliceOfSingleChannel(
+            ByteBuffer source, int channelIndexRelative) throws IOException {
+        Preconditions.checkArgument(
+                channelIndexRelative == 0, "interleaving not supported for int data");
+        float[] fArr = convertIntegerBytesToFloatArray(dimensions, source, sizeBytesChannel);
+        return VoxelBufferWrap.floatArray(fArr);
     }
 
-    protected UnsignedByteBuffer allocateBuffer() {
-        return UnsignedByteBuffer.allocate(sizeXY);
-    }
-
-    protected abstract UnsignedByteBuffer convert(ByteBuffer source, int channelIndexRelative);
-
-    protected abstract int calculateBytesPerPixel(int numberChannelsPerArray);
+    protected abstract float[] convertIntegerBytesToFloatArray(
+            Dimensions dimensions, ByteBuffer source, int offsetInSource) throws IOException;
 }

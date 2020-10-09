@@ -26,44 +26,27 @@
 
 package org.anchoranalysis.io.bioformats.copyconvert.tobyte;
 
-import com.google.common.base.Preconditions;
 import java.nio.ByteBuffer;
-import loci.common.DataTools;
-import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 
-@RequiredArgsConstructor
-public class ByteFrom32BitFloat extends ConvertToByte {
-
-    // START REQUIRED ARGUMENTS
-    private final boolean littleEndian;
-    // END REQUIRED ARGUMENTS
+public class UnsignedByteFromUnsignedByteNoInterleaving extends ToUnsignedByte {
 
     @Override
     protected UnsignedByteBuffer convert(ByteBuffer source, int channelIndexRelative) {
-        Preconditions.checkArgument(channelIndexRelative == 0, "interleaving not supported");
-
-        UnsignedByteBuffer destination = allocateBuffer();
-
-        byte[] sourceArray = source.array();
-
-        for (int indexIn = 0; indexIn < sizeBytes; indexIn += bytesPerPixel) {
-            float value = DataTools.bytesToFloat(sourceArray, indexIn, littleEndian);
-
-            if (value > 255) {
-                value = 255;
-            }
-            if (value < 0) {
-                value = 0;
-            }
-            destination.putFloat(value);
+        if (source.capacity() == sizeXY && channelIndexRelative == 0) {
+            // Reuse the existing buffer, if it's single channeled
+            return UnsignedByteBuffer.wrapRaw(source);
+        } else {
+            UnsignedByteBuffer destination = allocateBuffer();
+            source.position(sizeBytes * channelIndexRelative);
+            source.limit(source.position() + sizeBytes);
+            destination.put(source);
+            return destination;
         }
-
-        return destination;
     }
 
     @Override
     protected int calculateBytesPerPixel(int numberChannelsPerArray) {
-        return 4;
+        return 1;
     }
 }

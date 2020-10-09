@@ -27,17 +27,36 @@
 package org.anchoranalysis.image.voxel.buffer;
 
 import java.nio.ByteBuffer;
-import lombok.AllArgsConstructor;
+import java.util.Optional;
 import org.anchoranalysis.image.convert.PrimitiveConverter;
 import org.anchoranalysis.image.convert.UnsignedIntBuffer;
 import org.anchoranalysis.image.voxel.datatype.UnsignedIntVoxelType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 
-@AllArgsConstructor
 final class VoxelBufferUnsignedInt extends VoxelBuffer<UnsignedIntBuffer> {
 
     private final UnsignedIntBuffer delegate;
 
+    /**
+     * Create from a {@link UnsignedIntBuffer} without any underlying bytes.
+     * 
+     * @param buffer the buffer
+     */
+    public VoxelBufferUnsignedInt(UnsignedIntBuffer buffer) {
+        super( Optional.empty() );
+        this.delegate = buffer;
+    }
+    
+    /**
+     * Creates from underlying bytes, establishing a view over these bytes.
+     * 
+     * @param underlyingBytes the underlying byte representation of the buffer.
+     */
+    public VoxelBufferUnsignedInt(ByteBuffer underlyingBytes) {
+        super( Optional.of(underlyingBytes) );
+        this.delegate = UnsignedIntBuffer.wrapRaw(underlyingBytes.asIntBuffer());
+    }
+    
     @Override
     public UnsignedIntBuffer buffer() {
         return delegate;
@@ -45,7 +64,11 @@ final class VoxelBufferUnsignedInt extends VoxelBuffer<UnsignedIntBuffer> {
 
     @Override
     public VoxelBuffer<UnsignedIntBuffer> duplicate() {
-        return new VoxelBufferUnsignedInt(DuplicateBuffer.copy(delegate));
+        if (underlyingBytes.isPresent()) {
+            return new VoxelBufferUnsignedInt(DuplicateBuffer.copy(underlyingBytes.get()));
+        } else {
+            return new VoxelBufferUnsignedInt(DuplicateBuffer.copy(delegate));
+        }
     }
 
     @Override
@@ -96,9 +119,13 @@ final class VoxelBufferUnsignedInt extends VoxelBuffer<UnsignedIntBuffer> {
 
     @Override
     public byte[] underlyingBytes() {
-        int[] array = delegate.array();
-        ByteBuffer buffer = ByteBuffer.allocate(array.length * 4);
-        buffer.asIntBuffer().put(array);
-        return buffer.array();
+        if (underlyingBytes.isPresent()) {
+            return underlyingBytes.get().array();
+        } else {
+            int[] array = delegate.array();
+            ByteBuffer buffer = ByteBuffer.allocate(array.length * 4);
+            buffer.asIntBuffer().put(array);
+            return buffer.array();
+        }
     }
 }

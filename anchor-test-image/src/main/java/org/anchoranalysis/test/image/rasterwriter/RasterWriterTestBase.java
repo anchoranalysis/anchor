@@ -67,9 +67,9 @@ public abstract class RasterWriterTestBase {
 
     @Before
     public void setup() {
-        tester =
-                new FourChannelStackTester(
-                        createWriter(), folder.getRoot().toPath(), createComparer(), include3D);
+        tester = new FourChannelStackTester(
+            new StackTester(createWriter(), folder.getRoot().toPath(), createComparer(), include3D)
+        );
     }
 
     /** Creates the {@link RasterWriter} to be tested. */

@@ -27,18 +27,30 @@
 package org.anchoranalysis.image.voxel.datatype;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.experimental.Accessors;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-// The type of data contained within the channel
-@AllArgsConstructor
+/**
+ * The type of data one voxel represents in an image-channel.
+ * 
+ * @author Owen Feehan
+ *
+ */
+@AllArgsConstructor @Accessors(fluent=true)
 public abstract class VoxelDataType {
 
     /** The number of bits required to represent a voxel. */
-    private int numberBits;
+    @Getter private int numberBits;
 
+    /** A string to uniquely and compactly describe this type. */
     private String typeIdentifier;
-    private long maxValue;
-    private long minValue;
+    
+    /** The maximum value this type can represent. */
+    @Getter private long maxValue;
+    
+    /** The minimum value this type can represent. */
+    @Getter private long minValue;
 
     @Override
     public boolean equals(Object obj) {
@@ -47,17 +59,17 @@ public abstract class VoxelDataType {
             return false;
         }
 
-        VoxelDataType objC = (VoxelDataType) obj;
+        VoxelDataType otherCasted = (VoxelDataType) obj;
 
-        if (isInteger() != objC.isInteger()) {
+        if (isInteger() != otherCasted.isInteger()) {
             return false;
         }
 
-        if (isUnsigned() != objC.isUnsigned()) {
+        if (isUnsigned() != otherCasted.isUnsigned()) {
             return false;
         }
 
-        return numBits() == objC.numBits();
+        return numberBits() == otherCasted.numberBits();
     }
 
     @Override
@@ -65,7 +77,7 @@ public abstract class VoxelDataType {
         return new HashCodeBuilder()
                 .append(isInteger())
                 .append(isUnsigned())
-                .append(numBits())
+                .append(numberBits())
                 .toHashCode();
     }
 
@@ -73,20 +85,8 @@ public abstract class VoxelDataType {
 
     public abstract boolean isUnsigned();
 
-    public final int numBits() {
-        return numberBits;
-    }
-
     @Override
     public final String toString() {
         return typeIdentifier;
-    }
-
-    public final long maxValue() {
-        return maxValue;
-    }
-
-    public final long minValue() {
-        return minValue;
     }
 }

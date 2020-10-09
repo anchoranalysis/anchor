@@ -24,16 +24,15 @@
  * #L%
  */
 
-package org.anchoranalysis.io.bioformats.copyconvert.toshort;
+package org.anchoranalysis.io.bioformats.copyconvert.toint;
 
-public final class ShortFromSignedShort extends ConvertToShort {
+import org.anchoranalysis.image.convert.UnsignedIntBuffer;
+import org.anchoranalysis.image.voxel.VoxelsWrapper;
+import org.anchoranalysis.io.bioformats.copyconvert.ConvertTo;
 
-    public ShortFromSignedShort(boolean littleEndian) {
-        super(littleEndian);
-    }
+public abstract class ToInt extends ConvertTo<UnsignedIntBuffer> {
 
-    @Override
-    protected short convertValue(short value) {
-        return value;
+    public ToInt() {
+        super(VoxelsWrapper::asInt);
     }
 }

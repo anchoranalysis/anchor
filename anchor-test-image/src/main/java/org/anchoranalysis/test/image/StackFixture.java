@@ -1,8 +1,9 @@
 package org.anchoranalysis.test.image;
 
+import java.util.Optional;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
-import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.image.channel.Channel;
@@ -17,31 +18,41 @@ import org.anchoranalysis.test.image.ChannelFixture.IntensityFunction;
  *
  * @author Owen Feehan
  */
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor @AllArgsConstructor
 public class StackFixture {
-
+    
+    /** If defines, specifies the voxel-data type of the first channel, taking precedence over the {@code channelsVoxelType} argument. */
+    private Optional<VoxelDataType> firstChannelVoxelType = Optional.empty();
+    
     /**
      * Creates a stack with a particular number of the channels of particular size.
      *
      * @param numberChannels how many channels in the stack?
      * @param extent the size of each channel.
-     * @param channelsVoxelType voxel data-type for all the created channels
+     * @param defaultChannelVoxelType voxel data-type for all created channels if not otherwise specified. Note that {@code firstChannelVoxelType} takes precedence for the first channel, if defined.
      * @return the newly created-stack with newly-created channels.
      */
-    public static Stack create(int numberChannels, Extent extent, VoxelDataType channelsVoxelType) {
+    public Stack create(int numberChannels, Extent extent, VoxelDataType defaultChannelVoxelType) {
         Stream<Channel> channels =
                 IntStream.range(0, numberChannels)
                         .mapToObj(
-                                index ->
-                                        ChannelFixture.createChannel(
-                                                extent,
-                                                multiplexIntensity(index),
-                                                channelsVoxelType));
+                                index -> createChannel(index, extent, defaultChannelVoxelType) );
         try {
             return new Stack(channels);
         } catch (IncorrectImageSizeException e) {
             throw new AnchorImpossibleSituationException();
         }
+    }
+    
+    private Channel createChannel(int index, Extent extent, VoxelDataType defaultChannelVoxelType) {
+        
+        VoxelDataType voxelType = (index==0 && firstChannelVoxelType.isPresent()) ? firstChannelVoxelType.get() : defaultChannelVoxelType;
+        
+        return ChannelFixture.createChannel(
+                extent,
+                multiplexIntensity(index),
+                voxelType
+        );
     }
 
     /**

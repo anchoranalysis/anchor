@@ -1,17 +1,12 @@
 package org.anchoranalysis.test.image.rasterwriter;
 
 import java.io.IOException;
-import java.nio.file.Path;
+import java.util.Optional;
 import lombok.AllArgsConstructor;
-import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.io.RasterIOException;
-import org.anchoranalysis.image.io.bean.rasterwriter.RasterWriter;
-import org.anchoranalysis.image.io.rasterwriter.RasterWriteOptions;
-import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
+import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
-import org.anchoranalysis.test.image.ChannelFixture;
-import org.anchoranalysis.test.image.StackFixture;
 
 /**
  * Helper methods to test a {@code RasterWriter} on stacks with between 1 and 4 channels.
@@ -23,27 +18,13 @@ import org.anchoranalysis.test.image.StackFixture;
 @AllArgsConstructor
 public class FourChannelStackTester {
 
-    private static final String EXTENT_IDENTIFIER = "small";
-
     private static final VoxelDataType[] DEFAULT_VOXEL_TYPE_AS_ARRAY = {
         UnsignedByteVoxelType.INSTANCE
     };
 
     // START REQUIRED ARGUMENTS
-    /**
-     * The writer to use for creating new raster-files that are tested for bytewise equality against
-     * saved rasters.
-     */
-    private final RasterWriter writer;
-
-    /** The directory to write new files to. */
-    private final Path directoryToWriteTo;
-
-    /** How to compare stacks by two different methods. */
-    private final DualStackComparer comparer;
-
-    /** If true, then 3D stacks are also tested and saved, not just 2D stacks. */
-    private final boolean include3D;
+    /** Creates a stack to fulfill certain requirements, and performs the test with it. */
+    private final StackTester tester;
     // END REQUIRED ARGUMENTS
 
     /**
@@ -78,7 +59,7 @@ public class FourChannelStackTester {
      */
     public void testSingleChannel(VoxelDataType[] channelVoxelTypes)
             throws RasterIOException, IOException {
-        performTest(channelVoxelTypes, 1, false);
+        tester.performTest(channelVoxelTypes, 1, false);
     }
 
     /**
@@ -89,7 +70,7 @@ public class FourChannelStackTester {
      * @throws IOException if an error occurs attempting a comparison
      */
     public void testSingleChannelRGB() throws RasterIOException, IOException {
-        performTest(UnsignedByteVoxelType.INSTANCE, 1, true);
+        tester.performTest(UnsignedByteVoxelType.INSTANCE, 1, true);
     }
 
     /**
@@ -111,7 +92,7 @@ public class FourChannelStackTester {
      */
     public void testTwoChannels(VoxelDataType[] channelVoxelTypes)
             throws RasterIOException, IOException {
-        performTest(channelVoxelTypes, 2, false);
+        tester.performTest(channelVoxelTypes, 2, false);
     }
 
     /**
@@ -135,7 +116,7 @@ public class FourChannelStackTester {
      */
     public void testThreeChannelsSeparate(VoxelDataType[] channelVoxelTypes)
             throws RasterIOException, IOException {
-        performTest(channelVoxelTypes, 3, false);
+        tester.performTest(channelVoxelTypes, 3, false);
     }
 
     /**
@@ -172,7 +153,19 @@ public class FourChannelStackTester {
      */
     public void testThreeChannelsRGB(VoxelDataType[] channelVoxelTypes)
             throws RasterIOException, IOException {
-        performTest(channelVoxelTypes, 3, true);
+        tester.performTest(channelVoxelTypes, 3, true);
+    }
+    
+    /**
+     * Tests the creation of a three-channel stack of heterogeneous channel types.
+     * 
+     * <p>The first channel type is {@link UnsignedShortVoxelType} the remaining two are {@link UnsignedByteVoxelType}. 
+     *
+     * @throws RasterIOException if an error occurs by the writer
+     * @throws IOException if an error occurs attempting a comparison
+     */
+    public void testThreeChannelsHeterogeneous() throws RasterIOException, IOException {
+        tester.performTest(UnsignedByteVoxelType.INSTANCE, 3, false, Optional.of(UnsignedShortVoxelType.INSTANCE) );
     }
 
     /**
@@ -194,43 +187,6 @@ public class FourChannelStackTester {
      */
     public void testFourChannels(VoxelDataType[] channelVoxelTypes)
             throws RasterIOException, IOException {
-        performTest(channelVoxelTypes, 4, false);
-    }
-
-    private void performTest(VoxelDataType[] channelVoxelTypes, int numberChannels, boolean makeRGB)
-            throws RasterIOException, IOException {
-        for (VoxelDataType voxelType : channelVoxelTypes) {
-            performTest(voxelType, numberChannels, makeRGB);
-        }
-    }
-
-    private void performTest(VoxelDataType channelVoxelType, int numberChannels, boolean makeRGB)
-            throws RasterIOException, IOException {
-        test(channelVoxelType, numberChannels, makeRGB, ChannelFixture.SMALL_2D, false);
-        if (include3D) {
-            test(channelVoxelType, numberChannels, makeRGB, ChannelFixture.SMALL_3D, true);
-        }
-    }
-
-    private void test(
-            VoxelDataType channelVoxelType,
-            int numberChannels,
-            boolean makeRGB,
-            Extent extent,
-            boolean do3D)
-            throws RasterIOException, IOException {
-
-        String filename =
-                IdentifierHelper.identiferFor(
-                        numberChannels, makeRGB, do3D, EXTENT_IDENTIFIER, channelVoxelType);
-
-        Stack stack = StackFixture.create(numberChannels, extent, channelVoxelType);
-        Path pathWritten =
-                writer.writeStackWithExtension(
-                        stack,
-                        directoryToWriteTo.resolve(filename),
-                        makeRGB,
-                        RasterWriteOptions.rgbMaybe3D());
-        comparer.assertComparisons(pathWritten, filename);
+        tester.performTest(channelVoxelTypes, 4, false);
     }
 }

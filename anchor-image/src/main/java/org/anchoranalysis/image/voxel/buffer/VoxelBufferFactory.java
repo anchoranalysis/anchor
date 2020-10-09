@@ -25,6 +25,7 @@
  */
 package org.anchoranalysis.image.voxel.buffer;
 
+import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -67,7 +68,7 @@ public class VoxelBufferFactory {
      * @return a new {@link VoxelBuffer} with newly allocated (non-direct) memory.
      */
     public static VoxelBuffer<UnsignedShortBuffer> allocateUnsignedShort(int capacity) {
-        return new VoxelBufferUnsignedShort(UnsignedShortBuffer.allocate(capacity));
+        return new VoxelBufferUnsignedShort(ByteBuffer.allocate(capacity*2));
     }
 
     /**
@@ -87,7 +88,7 @@ public class VoxelBufferFactory {
      * @return a new {@link VoxelBuffer} with newly allocated (non-direct) memory.
      */
     public static VoxelBufferUnsignedInt allocateUnsignedInt(int capacity) {
-        return new VoxelBufferUnsignedInt(UnsignedIntBuffer.allocate(capacity));
+        return new VoxelBufferUnsignedInt(ByteBuffer.allocate(capacity*4));
     }
 
     /**

@@ -30,7 +30,8 @@ public class IdentifierHelper {
             boolean makeRGB,
             boolean do3D,
             String extentIdentifier,
-            VoxelDataType channelVoxelType) {
+            VoxelDataType channelVoxelType,
+            boolean firstChannelForced) {
         StringBuilder builder = new StringBuilder();
         builder.append(channelVoxelType.toString());
         builder.append("_");
@@ -39,6 +40,9 @@ public class IdentifierHelper {
         builder.append(identifierForDimensions(do3D));
         builder.append("_");
         builder.append(extentIdentifier);
+        if (firstChannelForced) {
+            builder.append("_firstChannelDifferentType");
+        }
         return builder.toString();
     }
 

@@ -27,62 +27,41 @@
 package org.anchoranalysis.io.bioformats.copyconvert.tobyte;
 
 import java.nio.ByteBuffer;
-import loci.common.DataTools;
-import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.voxel.VoxelsWrapper;
+import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
+import org.anchoranalysis.image.voxel.buffer.VoxelBufferWrap;
+import org.anchoranalysis.io.bioformats.copyconvert.ConvertTo;
 
-@RequiredArgsConstructor
-public class ByteFrom16BitUnsigned extends ConvertToByte {
+public abstract class ToUnsignedByte extends ConvertTo<UnsignedByteBuffer> {
 
-    // START REQUIRED ARGUMENTS
-    private final boolean littleEndian;
-    private final int maxTotalBits;
-    // END REQUIRED ARGUMENTS
+    protected int sizeXY;
+    protected int bytesPerPixel;
+    protected int sizeBytes;
 
-    private ApplyScaling applyScaling;
+    public ToUnsignedByte() {
+        super(VoxelsWrapper::asByte);
+    }
 
     @Override
     protected void setupBefore(Dimensions dimensions, int numberChannelsPerArray) {
-        super.setupBefore(dimensions, numberChannelsPerArray);
-        // we assign a default that maps from 16-bit to 8-bit
-        applyScaling = new ApplyScaling(ConvertHelper.twoToPower(8 - maxTotalBits), 0);
+        sizeXY = dimensions.volumeXY();
+        bytesPerPixel = calculateBytesPerPixel(numberChannelsPerArray);
+        sizeBytes = sizeXY * bytesPerPixel;
     }
 
     @Override
-    protected UnsignedByteBuffer convert(ByteBuffer source, int channelIndexRelative) {
-
-        UnsignedByteBuffer destination = allocateBuffer();
-
-        byte[] sourceArray = source.array();
-
-        for (int indexIn = 0; indexIn < sizeBytes; indexIn += bytesPerPixel) {
-
-            int indexInPlus = indexIn + (channelIndexRelative * 2);
-
-            int value = (int) DataTools.bytesToShort(sourceArray, indexInPlus, 2, littleEndian);
-
-            // Make unsigned
-            if (value < 0) {
-                value += 65536;
-            }
-
-            value = applyScaling.apply(value);
-
-            if (value > 255) {
-                value = 255;
-            }
-            if (value < 0) {
-                value = 0;
-            }
-
-            destination.putUnsigned(value);
-        }
-        return destination;
+    protected VoxelBuffer<UnsignedByteBuffer> convertSliceOfSingleChannel(
+            ByteBuffer source, int channelIndexRelative) {
+        return VoxelBufferWrap.unsignedByteBuffer(convert(source, channelIndexRelative));
     }
 
-    @Override
-    protected int calculateBytesPerPixel(int numberChannelsPerArray) {
-        return 2 * numberChannelsPerArray;
+    protected UnsignedByteBuffer allocateBuffer() {
+        return UnsignedByteBuffer.allocate(sizeXY);
     }
+
+    protected abstract UnsignedByteBuffer convert(ByteBuffer source, int channelIndexRelative);
+
+    protected abstract int calculateBytesPerPixel(int numberChannelsPerArray);
 }

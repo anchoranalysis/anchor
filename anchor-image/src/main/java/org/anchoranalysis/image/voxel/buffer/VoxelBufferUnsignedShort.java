@@ -27,16 +27,35 @@
 package org.anchoranalysis.image.voxel.buffer;
 
 import java.nio.ByteBuffer;
-import lombok.AllArgsConstructor;
+import java.util.Optional;
 import org.anchoranalysis.image.convert.PrimitiveConverter;
 import org.anchoranalysis.image.convert.UnsignedShortBuffer;
 import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 
-@AllArgsConstructor
 final class VoxelBufferUnsignedShort extends VoxelBuffer<UnsignedShortBuffer> {
-
+    
     private final UnsignedShortBuffer delegate;
+
+    /**
+     * Create from a {@link UnsignedShortBuffer} without any underlying bytes.
+     * 
+     * @param buffer the buffer
+     */
+    public VoxelBufferUnsignedShort(UnsignedShortBuffer buffer) {
+        super( Optional.empty() );
+        this.delegate = buffer;
+    }
+    
+    /**
+     * Creates from underlying bytes, establishing a view over these bytes.
+     * 
+     * @param underlyingBytes the underlying byte representation of the buffer.
+     */
+    public VoxelBufferUnsignedShort(ByteBuffer underlyingBytes) {
+        super( Optional.of(underlyingBytes) );
+        this.delegate = UnsignedShortBuffer.wrapRaw(underlyingBytes.asShortBuffer());
+    }
 
     @Override
     public UnsignedShortBuffer buffer() {
@@ -45,7 +64,11 @@ final class VoxelBufferUnsignedShort extends VoxelBuffer<UnsignedShortBuffer> {
 
     @Override
     public VoxelBuffer<UnsignedShortBuffer> duplicate() {
-        return new VoxelBufferUnsignedShort(DuplicateBuffer.copy(delegate));
+        if (underlyingBytes.isPresent()) {
+            return new VoxelBufferUnsignedShort(DuplicateBuffer.copy(underlyingBytes.get()));
+        } else {
+            return new VoxelBufferUnsignedShort(DuplicateBuffer.copy(delegate));
+        }
     }
 
     @Override
@@ -96,9 +119,13 @@ final class VoxelBufferUnsignedShort extends VoxelBuffer<UnsignedShortBuffer> {
 
     @Override
     public byte[] underlyingBytes() {
-        short[] array = delegate.array();
-        ByteBuffer buffer = ByteBuffer.allocate(array.length * 2);
-        buffer.asShortBuffer().put(array);
-        return buffer.array();
+        if (underlyingBytes.isPresent()) {
+            return underlyingBytes.get().array();
+        } else {
+            short[] array = delegate.array();
+            ByteBuffer buffer = ByteBuffer.allocate(array.length * 2);
+            buffer.asShortBuffer().put(array);
+            return buffer.array();
+        }
     }
 }
