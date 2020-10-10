@@ -29,19 +29,22 @@ package org.anchoranalysis.mpp.segment.bean.define;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
-import org.anchoranalysis.image.histogram.Histogram;
+import org.anchoranalysis.image.bean.nonbean.init.CreateCombinedStack;
 import org.anchoranalysis.image.io.objects.ObjectCollectionWriter;
-import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.io.stack.StacksOutputter;
 import org.anchoranalysis.io.generator.Generator;
+import org.anchoranalysis.io.generator.collection.NamedProviderOutputter;
 import org.anchoranalysis.io.generator.histogram.HistogramCSVGenerator;
 import org.anchoranalysis.io.generator.serialized.XStreamGenerator;
+import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.mpp.mark.MarkCollection;
 import org.anchoranalysis.mpp.segment.define.OutputterDirectories;
 
 /**
- * This class will output for certain outputs with second-level optionally defined.
+ * This class will output entities associated with {@link MPPInitParams} in particular directories.
  *
  * <p>These outputs are:
  *
@@ -51,45 +54,84 @@ import org.anchoranalysis.mpp.segment.define.OutputterDirectories;
  *   <li>{@link OutputterDirectories#HISTOGRAMS}
  *   <li>{@link OutputterDirectories#OBJECTS}
  *
+ * <p>Second-level output rules determine whether particular elements in each directory 
+ * are written or not.
+ * 
  * @author Owen Feehan
  */
 @AllArgsConstructor
-class SubsetOutputterFactory {
+class ParamsOutputter {
 
-    private MPPInitParams soMPP;
-    private InputOutputContext context;
+    private MPPInitParams params;
     private boolean suppressSubfolders;
+    private InputOutputContext context;
 
-    public SubsetOutputter<MarkCollection> marks() {
-        return create(
-                soMPP.getMarksCollection(),
+    /**
+     * Adds all possible output-names to a {@link OutputEnabledMutable}.
+     *
+     * @param outputEnabled where to add all possible output-names
+     */
+    public static void addAllOutputNamesTo(OutputEnabledMutable outputEnabled) {
+        outputEnabled.addEnabledOutputFirst(
+                OutputterDirectories.STACKS,
+                OutputterDirectories.MARKS,
+                OutputterDirectories.HISTOGRAMS,
+                OutputterDirectories.OBJECTS);
+    }
+    
+    /**
+     * Writes (a selection of) entities from {@code params} to the filesystem in particular directories.
+     * 
+     * @throws OutputWriteFailedException
+     */
+    public void output()
+            throws OutputWriteFailedException {
+
+        if (!context.getOutputter().getSettings().hasBeenInit()) {
+            throw new OutputWriteFailedException(
+                    "The Outputter's settings have not yet been initialized");
+        }
+
+        stacks();
+        marks();
+        histograms();
+        objects();
+    }
+    
+    private void stacks() throws OutputWriteFailedException {
+        StacksOutputter.output(
+                CreateCombinedStack.apply(params.getImage()),
+                OutputterDirectories.STACKS,
+                suppressSubfolders,
+                context
+        );
+    }
+    
+    private void marks() throws OutputWriteFailedException {
+        output(
+                params.getMarksCollection(),
                 new XStreamGenerator<MarkCollection>(Optional.of("marks")),
                 OutputterDirectories.MARKS);
     }
 
-    public SubsetOutputter<Histogram> histograms() {
-        return create(
-                soMPP.getImage().histograms(),
+    private void histograms() throws OutputWriteFailedException {
+        output(
+                params.getImage().histograms(),
                 new HistogramCSVGenerator(),
                 OutputterDirectories.HISTOGRAMS);
     }
 
-    public SubsetOutputter<ObjectCollection> objects() {
-        return create(
-                soMPP.getImage().objects(),
+    private void objects() throws OutputWriteFailedException {
+        output(
+                params.getImage().objects(),
                 ObjectCollectionWriter.generator(),
                 OutputterDirectories.OBJECTS);
     }
 
-    private <T> SubsetOutputter<T> create(
-            NamedProviderStore<T> store, Generator<T> generator, String directoryName) {
-        return new SubsetOutputter<>(
-                store,
-                () -> context.getOutputter().outputsEnabled().second(directoryName),
-                generator,
-                context,
+    private <T> void output(
+            NamedProviderStore<T> store, Generator<T> generator, String directoryName) throws OutputWriteFailedException {
+        new NamedProviderOutputter<>(store, generator, context).output(
                 directoryName,
-                "",
                 suppressSubfolders);
     }
 }

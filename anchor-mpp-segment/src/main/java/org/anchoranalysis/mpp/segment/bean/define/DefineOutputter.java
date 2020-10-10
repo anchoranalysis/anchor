@@ -79,8 +79,8 @@ public abstract class DefineOutputter extends AnchorBean<DefineOutputter> {
      *
      * @param outputEnabled where to add all possible output-names
      */
-    public void addAllOutputs(OutputEnabledMutable outputEnabled) {
-        SharedObjectsOutputter.addAllOutputs(outputEnabled);
+    public void addAllOutputNamesTo(OutputEnabledMutable outputEnabled) {
+        ParamsOutputter.addAllOutputNamesTo(outputEnabled);
     }
 
     protected MPPInitParams createInitParams(InputForMPPBean input, InputOutputContext context)
@@ -106,7 +106,7 @@ public abstract class DefineOutputter extends AnchorBean<DefineOutputter> {
     protected void outputSharedObjects(MPPInitParams initParams, InputOutputContext context)
             throws OutputWriteFailedException {
 
-        SharedObjectsOutputter.output(
-                initParams, suppressSubfolders, context);
+        new ParamsOutputter(
+                initParams, suppressSubfolders, context).output();;
     }
 }

@@ -14,7 +14,7 @@ import lombok.Value;
  * @param <T> element-type for generator
  */
 @AllArgsConstructor @Value
-class BoundOutputter<T> {
+public class BoundOutputter<T> {
 
     /** The outputter to be used for the sequence. */
     private OutputterChecked outputter;

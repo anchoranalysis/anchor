@@ -26,14 +26,14 @@
 
 package org.anchoranalysis.io.generator.collection;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
+import java.util.Set;
+import java.util.TreeSet;
+import java.util.stream.Collectors;
 import org.anchoranalysis.core.error.combinable.AnchorCombinableException;
 import org.anchoranalysis.core.error.friendly.HasFriendlyErrorMessage;
-import org.anchoranalysis.core.name.provider.NameValueSet;
 import org.anchoranalysis.core.name.provider.NamedProvider;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
-import org.anchoranalysis.core.name.value.SimpleNameValue;
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.generator.sequence.OutputSequenceFactory;
 import org.anchoranalysis.io.generator.sequence.OutputSequenceIndexed;
@@ -42,77 +42,85 @@ import org.anchoranalysis.io.output.enabled.single.SingleLevelOutputEnabled;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class GeneratorOutputHelper {
+/**
+ * Outputs entities from a {@link NamedProvider} into a directory using the names of each entity for a corresponding generated file.
+ * 
+ * @author Owen Feehan
+ *
+ * @param <T> element-type in {@link Generator} and in {@link NamedProvider}.
+ */
+@AllArgsConstructor
+public class NamedProviderOutputter<T> {
 
-    public static <T> void output(
-            NamedProvider<T> providers,
-            Generator<T> generator,
-            String outputName,
-            String prefix,
-            boolean suppressSubdirectory,
-            InputOutputContext context)
+    /** The {@link NamedProvider} whose entities (or a subselection thereof) will be written to the file-system. */
+    private NamedProvider<T> provider;
+    
+    /** The generator to be repeatedly called for writing each element in the sequence. */
+    private Generator<T> generator;
+    
+    /** The root director where writing occurs to, and in which the sub-directorties are created, if enabled. */
+    private InputOutputContext context;
+    
+    /**
+     * Outputs the entities using a particular output-name.
+     *  
+     * @param outputName the output-name to use, which also determines the subdirectory name if it is not suppressed.
+     * @param suppressSubdirectory if true, a separate subdirectory is not created, and rather the outputs occur in the parent directory.
+     * @throws OutputWriteFailedException if any output cannot be written.
+     */
+    public void output(String outputName, boolean suppressSubdirectory)
             throws OutputWriteFailedException {
 
-        if (providers.isEmpty() || !context.getOutputter().outputsEnabled().isOutputEnabled(outputName)) {
+        if (provider.isEmpty() || !context.getOutputter().outputsEnabled().isOutputEnabled(outputName)) {
             return;
         }
 
-        OutputPatternStringSuffix sequenceDirectory = new OutputPatternStringSuffix(
-            outputName,
-            suppressSubdirectory,
-            prefix
-        ); 
+        Set<String> allowedKeys = subset(provider.keys(), context.getOutputter().outputsEnabled().second(outputName));
+        
+        // If no outputs are allowed, exit early
+        if (allowedKeys.isEmpty()) {
+            return;
+        }
+        
+        outputAllowed(allowedKeys,
+                new OutputPatternStringSuffix(outputName,suppressSubdirectory) );
+    }
+    
+    private void outputAllowed(Set<String> allowedKeys, OutputPatternStringSuffix sequenceDirectory) throws OutputWriteFailedException {
 
         OutputSequenceFactory<T> factory = new OutputSequenceFactory<>(generator, context);
 
         try (OutputSequenceIndexed<T,String> writer = factory.withoutOrder(sequenceDirectory)) {
-            for (String name : providers.keys()) {
-    
+            for (String key : allowedKeys) {
                 try {
-                    writer.add(providers.getException(name), name);
+                    writer.add(provider.getException(key), key);
                 } catch (NamedProviderGetException e) {
-                    throwExceptionInWriter(e, name);
+                    throwExceptionInWriter(e, key);
                 }
             }
-        }
+        }        
     }
-
-    public static <T> NamedProvider<T> subset(
-            NamedProvider<T> providers, SingleLevelOutputEnabled outputEnabled)
-            throws OutputWriteFailedException {
-
-        NameValueSet<T> out = new NameValueSet<>();
-
-        for (String name : providers.keys()) {
-
-            if (outputEnabled.isOutputEnabled(name)) {
-                try {
-                    out.add(new SimpleNameValue<>(name, providers.getException(name)));
-                } catch (NamedProviderGetException e) {
-                    throw new OutputWriteFailedException(e.summarize());
-                }
-            }
-        }
-
-        return out;
+    
+    private static Set<String> subset(
+            Set<String> keys, SingleLevelOutputEnabled outputEnabled) {
+        return keys.stream().filter(outputEnabled::isOutputEnabled).collect(Collectors.toCollection(TreeSet::new));
     }
         
     private static void throwExceptionInWriter(Exception e, String name)
             throws OutputWriteFailedException {
 
-        String errorMsg = String.format("An error occurred outputting %s", name);
+        String errorMessage = String.format("An error occurred outputting %s", name);
 
         if (e instanceof HasFriendlyErrorMessage) {
             HasFriendlyErrorMessage eCast = (HasFriendlyErrorMessage) e;
-            throw new OutputWriteFailedException(errorMsg, eCast);
+            throw new OutputWriteFailedException(errorMessage, eCast);
         }
 
         if (e instanceof AnchorCombinableException) {
             AnchorCombinableException eCast = (AnchorCombinableException) e;
-            throw new OutputWriteFailedException(errorMsg, eCast);
+            throw new OutputWriteFailedException(errorMessage, eCast);
         }
 
-        throw new OutputWriteFailedException(errorMsg + ":" + e);
+        throw new OutputWriteFailedException(errorMessage + ":" + e);
     }
 }

@@ -12,6 +12,10 @@ import org.anchoranalysis.io.namestyle.StringSuffixOutputNameStyle;
  */
 public class OutputPatternStringSuffix extends OutputPattern {
 
+    public OutputPatternStringSuffix(String outputName, boolean supressSubdirectory) {
+        this(outputName, supressSubdirectory, "");
+    }
+    
     public OutputPatternStringSuffix(String outputName, boolean supressSubdirectory, String prefix) {
         super(
            maybeSubdirectory(outputName, supressSubdirectory),

@@ -28,16 +28,8 @@ package org.anchoranalysis.image.io.stack;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import java.util.Optional;
-import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.name.provider.NamedProvider;
-import org.anchoranalysis.core.name.provider.NamedProviderGetException;
-import org.anchoranalysis.core.name.store.StoreSupplier;
-import org.anchoranalysis.image.io.generator.raster.StackGenerator;
-import org.anchoranalysis.image.stack.NamedStacks;
 import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.io.generator.collection.GeneratorOutputHelper;
-import org.anchoranalysis.io.output.enabled.single.SingleLevelOutputEnabled;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 
@@ -59,54 +51,19 @@ public class StacksOutputter {
      * 
      * @param stacks the stacks to output (or a subset thereof according to the second-level output manager)
      * @param outputName name to use for the directory, for checking if it is allowed, and for the second-level outputs
-     * @param suppressSubfolders if true, a separate subdirectory is not created, and rather the outputs occur in the parent directory.
+     * @param suppressSubdirectory if true, a separate subdirectory is not created, and rather the outputs occur in the parent directory.
      * @param context determines where and how the outputting occurs
      * @throws OutputWriteFailedException if the output cannot be written. 
      */
     public static void output(
-            NamedProvider<Stack> stacks, String outputName, boolean suppressSubfolders, InputOutputContext context)
+            NamedProvider<Stack> stacks, String outputName, boolean suppressSubdirectory, InputOutputContext context)
             throws OutputWriteFailedException {
 
-        if (context.getOutputter().outputsEnabled().isOutputEnabled(outputName)) {
-            GeneratorOutputHelper.output(
-                    subset(stacks, context.getOutputter().outputsEnabled().second(outputName)),
-                    createStackGenerator(),
-                    outputName,
-                    "",
-                    suppressSubfolders,
-                    context
-            );
-        }
-    }
-    
-    private static NamedStacks subset(
-            NamedProvider<Stack> stacks, SingleLevelOutputEnabled outputEnabled) {
-
-        NamedStacks out = new NamedStacks();
-
-        for (String name : stacks.keys()) {
-
-            if (outputEnabled.isOutputEnabled(name)) {
-                out.add(name, extractStackCached(stacks, name));
-            }
-        }
-
-        return out;
-    }
-    
-    private static StoreSupplier<Stack> extractStackCached(
-            NamedProvider<Stack> stacks, String name) {
-        return StoreSupplier.cache(
-                () -> {
-                    try {
-                        return stacks.getException(name);
-                    } catch (NamedProviderGetException e) {
-                        throw new OperationFailedException(e);
-                    }
-                });
-    }
-
-    private static StackGenerator createStackGenerator() {
-        return new StackGenerator(true, Optional.of(MANIFEST_FUNCTION), false);
+        OutputSequenceStackFactory.withManifestFunction(MANIFEST_FUNCTION).withoutOrderSubset(
+                stacks,
+                outputName,
+                suppressSubdirectory,
+                context
+        );
     }
 }

@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.io.generator.sequence;
+package org.anchoranalysis.io.generator.collection;
 
 import java.util.Collection;
 import java.util.Optional;
@@ -32,6 +32,8 @@ import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.io.generator.Generator;
+import org.anchoranalysis.io.generator.sequence.BoundOutputter;
+import org.anchoranalysis.io.generator.sequence.OutputSequenceIncrementing;
 import org.anchoranalysis.io.generator.sequence.pattern.OutputPattern;
 import org.anchoranalysis.io.manifest.file.FileType;
 import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
@@ -41,21 +43,19 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
 
 /**
- * Writes a collection of items via a generator into a subfolder.
+ * Writes a collection of items via a generator into a subdirectory.
  *
  * @author Owen Feehan
  * @param <T> element-type
  */
 @RequiredArgsConstructor
 @AllArgsConstructor
-public class CollectionGenerator<T> implements Generator<Collection<T>> {
+class CollectionGenerator<T> implements Generator<Collection<T>> {
 
     // START REQUIRED ARGUMENTS
-    private final String subfolderName;
+    private final OutputPattern pattern;
     private final Generator<T> generator;
     private final OutputterChecked outputter;
-    private final int numberDigits;
-    private final boolean selective;
     // END REQUIRED ARGUMENTS
 
     private Collection<T> collection;
@@ -63,8 +63,7 @@ public class CollectionGenerator<T> implements Generator<Collection<T>> {
     @Override
     public void write(OutputNameStyle outputNameStyle, OutputterChecked outputter)
             throws OutputWriteFailedException {
-
-        writeCollection(subfolderName, outputNameStyle.deriveIndexableStyle(numberDigits), 0);
+        writeCollection(0);
     }
 
     @Override
@@ -74,7 +73,7 @@ public class CollectionGenerator<T> implements Generator<Collection<T>> {
 
         // In this context, we take the index as an indication of the first id to use - and assume
         // the String index is a number
-        return writeCollection(subfolderName, outputNameStyle, Integer.parseInt(index));
+        return writeCollection(Integer.parseInt(index));
     }
 
     @Override
@@ -103,21 +102,11 @@ public class CollectionGenerator<T> implements Generator<Collection<T>> {
         generator.end();
     }
     
-    private int writeCollection(
-            String subfolderName, IndexableOutputNameStyle outputNameStyle, int startIndex)
-            throws OutputWriteFailedException {
-
-        OutputPattern sequenceDirectory = new OutputPattern(
-            Optional.of(subfolderName),
-            outputNameStyle,
-            selective,
-            Optional.empty()
-        );
-
+    private int writeCollection(int startIndex) throws OutputWriteFailedException {
 
         int numberWritten = 0;
         
-        BoundOutputter<T> boundOutputter = new BoundOutputter<>(outputter, sequenceDirectory, generator); 
+        BoundOutputter<T> boundOutputter = new BoundOutputter<>(outputter, pattern, generator); 
         
         // We start with id with 0
         try (OutputSequenceIncrementing<T> outputSequence =

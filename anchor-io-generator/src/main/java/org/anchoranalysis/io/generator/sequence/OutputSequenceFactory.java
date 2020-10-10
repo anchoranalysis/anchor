@@ -51,7 +51,7 @@ import org.anchoranalysis.io.output.outputter.InputOutputContext;
 @AllArgsConstructor
 public class OutputSequenceFactory<T> {
 
-    /** Te generator to be repeatedly called for writing each element in the sequence. */
+    /** The generator to be repeatedly called for writing each element in the sequence. */
     private Generator<T> generator;
 
     /** The root director where writing occurs to, often adding a sub-directory for the sequence. */
@@ -140,8 +140,7 @@ public class OutputSequenceFactory<T> {
             String outputName) throws OutputWriteFailedException {
         OutputPatternStringSuffix pattern = new OutputPatternStringSuffix(
             outputName,
-            true,
-            ""
+            true
         );
         return withoutOrder(pattern);
     }
@@ -155,7 +154,7 @@ public class OutputSequenceFactory<T> {
      * @param stream the items to generate separate files
      * @throws OutputWriteFailedException if any output fails to be written.
      */
-    public void incrementalStream(OutputPatternIntegerSuffix pattern, Stream<T> stream) throws OutputWriteFailedException {
+    public void incrementingByOneStream(OutputPatternIntegerSuffix pattern, Stream<T> stream) throws OutputWriteFailedException {
 
         try (OutputSequenceIncrementing<T> sequenceWriter = incrementingByOne(pattern)) {
             CheckedStream.forEach(stream, OutputWriteFailedException.class, sequenceWriter::add);

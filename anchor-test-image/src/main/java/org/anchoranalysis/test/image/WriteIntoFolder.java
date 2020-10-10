@@ -27,6 +27,7 @@ package org.anchoranalysis.test.image;
 
 import io.vavr.control.Either;
 import java.nio.file.Path;
+import java.util.Collection;
 import java.util.List;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -48,7 +49,8 @@ import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.voxel.Voxels;
-import org.anchoranalysis.io.generator.collection.GeneratorSubfolderWriter;
+import org.anchoranalysis.io.generator.collection.CollectionAsSubdirectoryGenerator;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.BindFailedException;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.test.image.io.OutputterFixture;
@@ -179,13 +181,14 @@ public class WriteIntoFolder implements TestRule {
      * @param stacks the list of display-stacks
      * @param always2D if true, the stacks are guaranteed to always to have only one z-slice (which
      *     can influence the output format).
+     * @throws OutputWriteFailedException 
      */
-    public void writeList(String outputName, List<DisplayStack> stacks, boolean always2D) {
+    public void writeList(String outputName, List<DisplayStack> stacks, boolean always2D) throws OutputWriteFailedException {
 
         setupOutputterIfNecessary();
 
-        GeneratorSubfolderWriter.writeSubfolder(
-                outputter, outputName, outputName, () -> generatorStack, stacks, true);
+        CollectionAsSubdirectoryGenerator<DisplayStack, Collection<DisplayStack>> generatorCollection = new CollectionAsSubdirectoryGenerator<>(generatorStack, outputName, stacks);
+        outputter.getChecked().getWriters().permissive().write(outputName, () -> generatorCollection);
     }
 
     private static DisplayStack displayStackFor(Channel channel) {

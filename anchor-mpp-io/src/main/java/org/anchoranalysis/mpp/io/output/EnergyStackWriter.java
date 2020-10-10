@@ -79,7 +79,7 @@ public class EnergyStackWriter {
             Optional.of(new ManifestDescription("raster", OUTPUT_ENERGY_STACK_DIRECTORY))
         );
         
-        createSequenceFactory().incrementalStream(
+        createSequenceFactory().incrementingByOneStream(
                 directory,
                 energyStack.withoutParams().asStack().asListChannels().stream()
         );

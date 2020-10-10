@@ -45,7 +45,7 @@ public class OutputSequenceIncrementing<T> implements OutputSequence {
     private int iteration = 0;
 
     // User-specified ManifestDescription for the folder
-    OutputSequenceIncrementing(
+    public OutputSequenceIncrementing(
             BoundOutputter<T> parameters,
             int startIndex
     ) throws OutputWriteFailedException {
