@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.image.experiment.bean.task;
 
+import org.anchoranalysis.core.functional.FunctionalIterate;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.bean.task.TaskWithoutSharedState;
 import org.anchoranalysis.experiment.task.InputBound;
@@ -36,8 +37,10 @@ import org.anchoranalysis.image.io.input.NamedChannelsInput;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 
 /**
- * An experiment that primarily takes a raster image as an input
+ * An experiment that takes (primarily) a series of raster images as an input.
  *
+ * <p>An operation is executed independently on each stack in the series.
+ * 
  * <p>No shared-state is allowed
  *
  * @author Owen Feehan
@@ -56,9 +59,9 @@ public abstract class RasterTask extends TaskWithoutSharedState<NamedChannelsInp
 
             startSeries(context);
 
-            for (int s = 0; s < numberSeries; s++) {
-                doStack(input, s, numberSeries, context);
-            }
+            FunctionalIterate.repeatWithIndex(numberSeries, seriesIndex ->
+                doStack(input, seriesIndex, numberSeries, context)
+            );
 
             endSeries(context);
 
@@ -67,11 +70,19 @@ public abstract class RasterTask extends TaskWithoutSharedState<NamedChannelsInp
         }
     }
 
+    /**
+     * Starts processing of a series.
+     * 
+     * <p>This should be called always <i>once</i> <b>before</b> all calls to {@link #doStack}.
+     * 
+     * @param context input-output context
+     * @throws JobExecutionException
+     */
     public abstract void startSeries(InputOutputContext context)
             throws JobExecutionException;
 
     /**
-     * Processes one stack from a series
+     * Processes one stack from a series.
      *
      * @param input the input-object corresponding to this stack (a set of named-channels)
      * @param seriesIndex the index that is being currently processed from the series
@@ -83,6 +94,14 @@ public abstract class RasterTask extends TaskWithoutSharedState<NamedChannelsInp
             NamedChannelsInput input, int seriesIndex, int numberSeries, InputOutputContext context)
             throws JobExecutionException;
 
+    /**
+     * Ends processing of a series.
+     * 
+     * <p>This should be called always <i>once</i> <b>after</b> all calls to {@link #doStack}.
+     * 
+     * @param context input-output context
+     * @throws JobExecutionException
+     */
     public abstract void endSeries(InputOutputContext context) throws JobExecutionException;
 
     @Override

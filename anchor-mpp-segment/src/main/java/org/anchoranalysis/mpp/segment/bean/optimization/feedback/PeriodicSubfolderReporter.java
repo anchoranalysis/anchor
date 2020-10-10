@@ -31,9 +31,9 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.generator.Generator;
-import org.anchoranalysis.io.generator.sequence.OutputSequence;
+import org.anchoranalysis.io.generator.sequence.OutputSequenceFactory;
 import org.anchoranalysis.io.generator.sequence.OutputSequenceDirectory;
-import org.anchoranalysis.io.generator.sequence.OutputSequenceNonIncrementalChecked;
+import org.anchoranalysis.io.generator.sequence.OutputSequenceNonIncremental;
 import org.anchoranalysis.io.manifest.sequencetype.IncrementalSequenceType;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
@@ -52,7 +52,7 @@ public abstract class PeriodicSubfolderReporter<T>
     @BeanField @Getter @Setter private String outputName;
     // END BEAN PROPER
 
-    private OutputSequenceNonIncrementalChecked<T> sequenceWriter;
+    private OutputSequenceNonIncremental<T> sequenceWriter;
 
     private InputOutputContext parentContext;
 
@@ -108,9 +108,7 @@ public abstract class PeriodicSubfolderReporter<T>
             Optional.empty()
         );
         
-        this.sequenceWriter = OutputSequence.createNonIncrementalChecked(sequenceDirectory, generator, getParentContext());
-        this.sequenceWriter.start(sequenceType);
-
+        this.sequenceWriter = new OutputSequenceFactory<>(generator, getParentContext()).nonIncremental(sequenceDirectory, sequenceType);
         return sequenceType;
     }
 

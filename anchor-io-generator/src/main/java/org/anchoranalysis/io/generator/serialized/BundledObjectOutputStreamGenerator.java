@@ -29,7 +29,7 @@ package org.anchoranalysis.io.generator.serialized;
 import java.io.Serializable;
 import java.util.Optional;
 import org.anchoranalysis.io.generator.Generator;
-import org.anchoranalysis.io.generator.sequence.OutputSequence;
+import org.anchoranalysis.io.generator.sequence.OutputSequenceFactory;
 import org.anchoranalysis.io.generator.sequence.OutputSequenceDirectory;
 import org.anchoranalysis.io.generator.sequence.OutputSequenceIncremental;
 import org.anchoranalysis.io.manifest.ManifestDescription;
@@ -54,14 +54,14 @@ public class BundledObjectOutputStreamGenerator<T extends Serializable> implemen
 
     private ObjectOutputStreamGenerator<Bundle<T>> outputGenerator;
 
-    private final OutputSequenceIncremental<Bundle<T>> generatorSequence;
+    private final OutputSequenceIncremental<Bundle<T>> outputSequence;
 
     public BundledObjectOutputStreamGenerator(
             BundleParameters bundleParameters,
             String outputName,
             int numberDigitsInOutput,
             InputOutputContext parentInputOutputContext,
-            String manifestDescriptionFunction) {
+            String manifestDescriptionFunction) throws OutputWriteFailedException {
         this.bundleParameters = bundleParameters;
         
         ManifestDescription manifestDescription =
@@ -71,13 +71,12 @@ public class BundledObjectOutputStreamGenerator<T extends Serializable> implemen
                 new ObjectOutputStreamGenerator<>(Optional.of(manifestDescriptionFunction));
 
         OutputSequenceDirectory directory = new OutputSequenceDirectory(outputName,numberDigitsInOutput,true,Optional.of(manifestDescription));
-        this.generatorSequence = OutputSequence.createIncremental(directory, outputGenerator, parentInputOutputContext);
+        this.outputSequence = new OutputSequenceFactory<>(outputGenerator, parentInputOutputContext).incremental(directory);
     }
 
     @Override
-    public void start() throws OutputWriteFailedException {
+    public void start() {
         bundle = new Bundle<>();
-        generatorSequence.start();
     }
 
     @Override
@@ -96,7 +95,7 @@ public class BundledObjectOutputStreamGenerator<T extends Serializable> implemen
         // If we have reached our full capacity, then we serialize the bundle, and clear it for the
         // next set of items
         if (bundle.size() == bundleParameters.getBundleSize()) {
-            generatorSequence.add(bundle);
+            outputSequence.add(bundle);
             this.bundle = new Bundle<>();
         }
         return 1;
@@ -104,16 +103,16 @@ public class BundledObjectOutputStreamGenerator<T extends Serializable> implemen
 
     @Override
     public void end() throws OutputWriteFailedException {
-        generatorSequence.add(bundle);
+        outputSequence.add(bundle);
 
-        if (generatorSequence.isOn()) {
+        if (outputSequence.isOn()) {
 
             Generator<?> bundleParametersGenerator =
                     new ObjectOutputStreamGenerator<>(
                             bundleParameters, Optional.of("bundleParameters"));
 
             RecordingWriters subfolderWriters =
-                    generatorSequence
+                    outputSequence
                             .writers()
                             .orElseThrow(
                                     () ->
@@ -125,7 +124,7 @@ public class BundledObjectOutputStreamGenerator<T extends Serializable> implemen
                     .write("bundleParameters", () -> bundleParametersGenerator);
         }
 
-        generatorSequence.end();
+        outputSequence.end();
     }
 
     @Override

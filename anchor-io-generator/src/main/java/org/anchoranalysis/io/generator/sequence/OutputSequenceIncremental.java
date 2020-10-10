@@ -26,58 +26,60 @@
 
 package org.anchoranalysis.io.generator.sequence;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import java.util.Optional;
-import org.anchoranalysis.core.error.reporter.ErrorReporter;
+import org.anchoranalysis.io.manifest.sequencetype.IncrementalSequenceType;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.recorded.RecordingWriters;
 
 /**
- * Like a {@link OutputSequenceIncrementalChecked} but logs exceptions rather than throwing them.
+ * A sequence of outputs that use the same generator, where each output increments an index by one in the filename.
  * 
  * @author Owen Feehan
  *
- * @param <T>
+ * @param <T> element-type in generator
  */
-@AllArgsConstructor(access=AccessLevel.PACKAGE)
-public class OutputSequenceIncremental<T> {
+public class OutputSequenceIncremental<T> implements OutputSequence {
 
-    private OutputSequenceIncrementalChecked<T> delegate;
-    private ErrorReporter errorReporter;
+    private OutputSequenceNonIncremental<T> delegate;
 
-    public void start() {
+    private int iteration = 0;
+    private int startIndex = 0;
+
+    // User-specified ManifestDescription for the folder
+    OutputSequenceIncremental(
+            BoundOutputter<T> parameters,
+            int startIndex
+    ) {
+        delegate = new OutputSequenceNonIncremental<>(parameters);
+        this.startIndex = startIndex;
+    }
+
+    public void start() throws OutputWriteFailedException {
+        delegate.start(new IncrementalSequenceType(startIndex));
+    }
+
+    public void add(T element) throws OutputWriteFailedException {
         try {
-            delegate.start();
-        } catch (OutputWriteFailedException e) {
-            recordException(e);
+            delegate.add(element, String.valueOf(iteration));
+        } finally {
+            // We always update the index, even if an exception occurred. This is because:
+            //  1. By design, it shouldn't change the intended indexing.
+            //  2. A downstream generator has already updated its sequence-type.
+            iteration++;
         }
     }
 
-    public void add(T element) {
-        try {
-            delegate.add(element);
-        } catch (OutputWriteFailedException e) {
-            recordException(e);
-        }
+    @Override
+    public void end() throws OutputWriteFailedException {
+        delegate.end();
     }
 
-    public void end() {
-        try {
-            delegate.end();
-        } catch (OutputWriteFailedException e) {
-            recordException(e);
-        }
-    }
-
-    private void recordException(Exception e) {
-        errorReporter.recordError(OutputSequenceIncremental.class, e);
-    }
-
+    @Override
     public boolean isOn() {
         return delegate.isOn();
     }
 
+    @Override
     public Optional<RecordingWriters> writers() {
         return delegate.writers();
     }

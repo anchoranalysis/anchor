@@ -28,7 +28,6 @@ package org.anchoranalysis.mpp.segment.bean.define;
 
 import java.util.function.Supplier;
 import lombok.AllArgsConstructor;
-import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.name.provider.NamedProvider;
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.generator.collection.GeneratorOutputHelper;
@@ -47,31 +46,14 @@ class SubsetOutputter<T> {
     private String suffix;
     private boolean suppressSubfoldersIn;
 
-    public void outputSubset(ErrorReporter errorReporter) {
+    public void outputSubset() throws OutputWriteFailedException {
 
         if (shouldExitEarly()) {
             return;
         }
 
         GeneratorOutputHelper.output(
-                GeneratorOutputHelper.subset(
-                        provider, outputEnabledSecondLevel.get(), errorReporter),
-                generator,
-                context,
-                outputName,
-                suffix,
-                errorReporter,
-                suppressSubfoldersIn);
-    }
-
-    public void outputSubsetChecked() throws OutputWriteFailedException {
-
-        if (shouldExitEarly()) {
-            return;
-        }
-
-        GeneratorOutputHelper.outputChecked(
-                GeneratorOutputHelper.subsetWithException(provider, outputEnabledSecondLevel.get()),
+                GeneratorOutputHelper.subset(provider, outputEnabledSecondLevel.get()),
                 generator,
                 context,
                 outputName,

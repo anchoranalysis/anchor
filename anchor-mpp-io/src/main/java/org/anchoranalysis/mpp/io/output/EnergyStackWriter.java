@@ -26,15 +26,16 @@
 
 package org.anchoranalysis.mpp.io.output;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 import java.util.Optional;
 import org.anchoranalysis.feature.energy.EnergyStack;
+import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.io.generator.raster.ChannelGenerator;
-import org.anchoranalysis.io.generator.sequence.OutputSequence;
+import org.anchoranalysis.io.generator.sequence.OutputSequenceFactory;
 import org.anchoranalysis.io.generator.sequence.OutputSequenceDirectory;
 import org.anchoranalysis.io.generator.serialized.KeyValueParamsGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 
 /**
@@ -55,7 +56,7 @@ import org.anchoranalysis.io.output.outputter.InputOutputContext;
  *
  * @author Owen Feehan
  */
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor
 public class EnergyStackWriter {
 
     private static final String OUTPUT_ENERGY_STACK_DIRECTORY = "energyStack";
@@ -64,7 +65,10 @@ public class EnergyStackWriter {
     private static final String MANIFEST_FUNCTION_CHANNEL = "energyStackChannel";
     private static final String MANIFEST_FUNCTION_PARAMS = "energyStackParams";
 
-    public static void writeEnergyStack(EnergyStack energyStack, InputOutputContext context) {
+    private final EnergyStack energyStack;
+    private final InputOutputContext context;
+    
+    public void writeEnergyStack() throws OutputWriteFailedException {
         
         OutputSequenceDirectory directory = new OutputSequenceDirectory(
             OUTPUT_ENERGY_STACK_DIRECTORY,
@@ -74,12 +78,10 @@ public class EnergyStackWriter {
             Optional.of(new ManifestDescription("raster", OUTPUT_ENERGY_STACK_DIRECTORY))
         );
         
-        // We write the energy-stack separately as individual channels
-        OutputSequence.writeStreamAsSubdirectory(
+        createSequenceFactory().incrementalStream(
                 directory,
-                energyStack.withoutParams().asStack().asListChannels().stream(),
-                new ChannelGenerator(MANIFEST_FUNCTION_CHANNEL, energyStack.hasOneSlice()),
-                context);
+                energyStack.withoutParams().asStack().asListChannels().stream()
+        );
 
         if (energyStack.getParams() != null) {
             context.getOutputter()
@@ -90,5 +92,12 @@ public class EnergyStackWriter {
                                     new KeyValueParamsGenerator(
                                             energyStack.getParams(), MANIFEST_FUNCTION_PARAMS));
         }
+    }
+    
+    private OutputSequenceFactory<Channel> createSequenceFactory() {
+        ChannelGenerator generator = new ChannelGenerator(MANIFEST_FUNCTION_CHANNEL, energyStack.hasOneSlice());
+        
+        // We write the energy-stack separately as individual channels
+        return new OutputSequenceFactory<>(generator, context);
     }
 }

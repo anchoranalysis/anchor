@@ -33,7 +33,9 @@ import java.util.Set;
 import java.util.function.UnaryOperator;
 import org.anchoranalysis.bean.StringSet;
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.functional.FunctionalIterate;
 import org.anchoranalysis.core.functional.OptionalUtilities;
+import org.anchoranalysis.core.functional.function.CheckedBiConsumer;
 import org.anchoranalysis.core.name.provider.NamedProvider;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
@@ -138,6 +140,17 @@ public class NamedStacks implements NamedProviderStore<Stack> {
         return out;
     }
 
+    /**
+     * Iterates over each entry in the map.
+     * 
+     * @param <E> an exception that may be called by {@code consumer}.
+     * @param consumer this consumer is called the name and stack-supplier for each entry in teh map. 
+     * @throws E if the consumer throws the exception.
+     */
+    public <E extends Exception> void forEach(CheckedBiConsumer<String, StoreSupplier<Stack>, E> consumer) throws E {
+        FunctionalIterate.iterateMap(map, consumer);
+    }
+    
     /**
      * Number of stacks
      *

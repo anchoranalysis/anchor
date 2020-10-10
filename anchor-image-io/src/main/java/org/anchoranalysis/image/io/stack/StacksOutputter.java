@@ -28,8 +28,8 @@ package org.anchoranalysis.image.io.stack;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import java.util.Optional;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.name.provider.NamedProvider;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.name.store.StoreSupplier;
@@ -52,35 +52,9 @@ import org.anchoranalysis.io.output.outputter.Outputter;
 public class StacksOutputter {
 
     private static final String MANIFEST_FUNCTION = "stackFromCollection";
-   
-    /**
-     * Outputs a set of named-stacks to a directory, and logs if anything goes
-     * wrong without throwing an exception.
-     * 
-     * <p>A second-level output manager filters which stacks are written.
-     * 
-     * @param stacks the stacks to output (or a subset thereof according to the second-level output manager)
-     * @param outputName name to use for the directory, for checking if it is enabled, and for the second-level outputs
-     * @param suppressSubfolders if true, a separate subdirectory is not created, and rather the outputs occur in the parent directory.
-     * @param context determines where and how the outputting occurs 
-     */
-    public static void output(
-            NamedProvider<Stack> stacks, String outputName, boolean suppressSubfolders, InputOutputContext context) {
-        Outputter outputter = context.getOutputter();
-
-        if (outputter.outputsEnabled().isOutputEnabled(outputName)) {
-            outputAfterSubsetting(
-                    stackSubset(stacks, outputName, outputter),
-                    context,
-                    outputName,
-                    context.getErrorReporter(),
-                    suppressSubfolders);
-        }
-    }
 
     /**
-     * Outputs a set of named-stacks to a directory, and throws an exception
-     * if anything goes wrong.
+     * Writes all or a subset from a set of named-stacks to a directory as a raster.
      * 
      * <p>A second-level output manager filters which stacks are written. 
      * 
@@ -90,12 +64,12 @@ public class StacksOutputter {
      * @param context determines where and how the outputting occurs
      * @throws OutputWriteFailedException if the output cannot be written. 
      */
-    public static void outputChecked(
+    public static void output(
             NamedProvider<Stack> stacks, String outputName, boolean suppressSubfolders, InputOutputContext context)
             throws OutputWriteFailedException {
 
         if (context.getOutputter().outputsEnabled().isOutputEnabled(outputName)) {
-            outputAfterSubsettingChecked(
+            outputAfterSubsetting(
                     stackSubset(stacks, outputName, context.getOutputter()),
                     context,
                     outputName,
@@ -104,30 +78,13 @@ public class StacksOutputter {
     }
 
     private static void outputAfterSubsetting(
-            NamedProvider<Stack> stacks,
-            InputOutputContext context,
-            String outputName,
-            ErrorReporter errorReporter,
-            boolean suppressSubfoldersIn) {
-        
-        GeneratorOutputHelper.output(
-                stacks,
-                createStackGenerator(),
-                context,
-                outputName,
-                "",
-                errorReporter,
-                suppressSubfoldersIn);
-    }
-
-    private static void outputAfterSubsettingChecked(
             NamedStacks stacks,
             InputOutputContext context,
             String outputName,
             boolean suppressSubfoldersIn)
             throws OutputWriteFailedException {
         
-        GeneratorOutputHelper.outputChecked(
+        GeneratorOutputHelper.output(
                 stacks, createStackGenerator(), context, outputName, "", suppressSubfoldersIn);
     }
 
@@ -160,7 +117,7 @@ public class StacksOutputter {
     }
 
     private static StackGenerator createStackGenerator() {
-        return new StackGenerator(true, MANIFEST_FUNCTION, false);
+        return new StackGenerator(true, Optional.of(MANIFEST_FUNCTION), false);
     }
 
     private static NamedStacks stackSubset(

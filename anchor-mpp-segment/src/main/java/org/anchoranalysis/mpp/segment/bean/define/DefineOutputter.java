@@ -72,8 +72,6 @@ public abstract class DefineOutputter extends AnchorBean<DefineOutputter> {
     @BeanField @OptionalBean @Getter @Setter private Define define = new Define();
 
     @BeanField @Getter @Setter private boolean suppressSubfolders = false;
-
-    @BeanField @Getter @Setter private boolean suppressOutputExceptions = false;
     // END BEAN PROPERTIES
 
     /**
@@ -108,11 +106,7 @@ public abstract class DefineOutputter extends AnchorBean<DefineOutputter> {
     protected void outputSharedObjects(MPPInitParams initParams, InputOutputContext context)
             throws OutputWriteFailedException {
 
-        if (suppressOutputExceptions) {
-            SharedObjectsOutputter.output(initParams, suppressSubfolders, context);
-        } else {
-            SharedObjectsOutputter.outputChecked(
-                    initParams, suppressSubfolders, context);
-        }
+        SharedObjectsOutputter.output(
+                initParams, suppressSubfolders, context);
     }
 }

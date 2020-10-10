@@ -39,7 +39,14 @@ import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.recorded.RecordingWriters;
 
-public class OutputSequenceNonIncrementalChecked<T> {
+/**
+ * A sequence of outputs that use the same generator with a flexible pattern in how file-names are outputted.
+ * 
+ * @author Owen Feehan
+ *
+ * @param <T> element-type in generator
+ */
+public class OutputSequenceNonIncremental<T> implements OutputSequence {
 
     private final Generator<T> generator;
     private final SequenceWriters sequenceWriter;
@@ -53,7 +60,7 @@ public class OutputSequenceNonIncrementalChecked<T> {
      * 
      * @param parameters parameters for the output-sequence
      */
-    OutputSequenceNonIncrementalChecked(OutputSequenceParameters<T> parameters) {
+    OutputSequenceNonIncremental(BoundOutputter<T> parameters) {
 
         if (!parameters.getOutputter().getSettings().hasBeenInit()) {
             throw new AnchorFriendlyRuntimeException("outputter has not yet been initialized");
@@ -68,6 +75,7 @@ public class OutputSequenceNonIncrementalChecked<T> {
         this.generator = parameters.getGenerator();
     }
 
+    @Override
     public boolean isOn() {
         return sequenceWriter.isOn();
     }
@@ -102,6 +110,7 @@ public class OutputSequenceNonIncrementalChecked<T> {
         this.sequenceType = sequenceType;
     }
 
+    @Override
     public void end() throws OutputWriteFailedException {
         generator.end();
     }
@@ -115,17 +124,20 @@ public class OutputSequenceNonIncrementalChecked<T> {
             // For now we only take the first FileType from the generator, we will have to modify
             // this
             // in future
-            FileType[] fileTypes =
-                    generator
-                            .getFileTypes(settings)
-                            .orElseThrow(
-                                    () ->
-                                            new InitException(
-                                                    "This operation requires file-types to be defined by the generator"));
-
-            this.sequenceWriter.init(fileTypes, this.sequenceType);
+            this.sequenceWriter.init(fileTypes(), this.sequenceType);
         } catch (OperationFailedException e) {
             throw new InitException(e);
         }
+    }
+    
+    private FileType[] fileTypes() throws OperationFailedException {
+        return generator
+            .getFileTypes(settings)
+            .orElseThrow(OutputSequenceNonIncremental::fileTypesException);
+    }
+    
+    private static OperationFailedException fileTypesException() {
+        return new OperationFailedException(
+                "This operation requires file-types to be defined by the generator");
     }
 }

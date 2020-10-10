@@ -27,22 +27,19 @@
 package org.anchoranalysis.io.generator.collection;
 
 import java.util.Optional;
-import java.util.Set;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.error.combinable.AnchorCombinableException;
 import org.anchoranalysis.core.error.friendly.HasFriendlyErrorMessage;
-import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.name.provider.NameValueSet;
 import org.anchoranalysis.core.name.provider.NamedProvider;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.name.value.SimpleNameValue;
 import org.anchoranalysis.io.generator.Generator;
-import org.anchoranalysis.io.generator.sequence.OutputSequence;
+import org.anchoranalysis.io.generator.sequence.OutputSequenceFactory;
 import org.anchoranalysis.io.generator.sequence.OutputSequenceDirectory;
-import org.anchoranalysis.io.generator.sequence.OutputSequenceNonIncrementalChecked;
-import org.anchoranalysis.io.generator.sequence.OutputSequenceNonIncrementalLogged;
+import org.anchoranalysis.io.generator.sequence.OutputSequenceNonIncremental;
 import org.anchoranalysis.io.manifest.sequencetype.SetSequenceType;
 import org.anchoranalysis.io.namestyle.StringSuffixOutputNameStyle;
 import org.anchoranalysis.io.output.enabled.single.SingleLevelOutputEnabled;
@@ -51,47 +48,8 @@ import org.anchoranalysis.io.output.outputter.InputOutputContext;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class GeneratorOutputHelper {
-    
+
     public static <T> void output(
-            NamedProvider<T> providers,
-            Generator<T> generator,
-            InputOutputContext context,
-            String outputName,
-            String prefix,
-            ErrorReporter errorReporter,
-            boolean suppressSubfoldersIn) {
-
-        if (!context.getOutputter().outputsEnabled().isOutputEnabled(outputName)) {
-            return;
-        }
-        
-        OutputSequenceDirectory sequenceDirectory = new OutputSequenceDirectory(
-            OptionalUtilities.createFromFlag(
-                    !suppressSubfoldersIn, outputName),
-            createOutputNameStyle(prefix, outputName),
-            true,
-            Optional.empty()
-        ); 
-
-        OutputSequenceNonIncrementalLogged<T> writer = OutputSequence.createNonIncrementalLogged(sequenceDirectory, generator, context);
-
-        Set<String> keys = providers.keys();
-
-        writer.start(new SetSequenceType());
-
-        for (String name : keys) {
-
-            try {
-                writer.add(providers.getException(name), name);
-            } catch (NamedProviderGetException e) {
-                errorReporter.recordError(GeneratorOutputHelper.class, e.summarize());
-            }
-        }
-
-        writer.end();
-    }
-
-    public static <T> void outputChecked(
             NamedProvider<T> providers,
             Generator<T> generator,
             InputOutputContext context,
@@ -112,43 +70,22 @@ public class GeneratorOutputHelper {
             Optional.empty()
         ); 
 
-        OutputSequenceNonIncrementalChecked<T> writer = OutputSequence.createNonIncrementalChecked(sequenceDirectory, generator, context);
-        writer.start(new SetSequenceType());
-
-        for (String name : providers.keys()) {
-
-            try {
-                writer.add(providers.getException(name), name);
-            } catch (NamedProviderGetException e) {
-                throwExceptionInWriter(e, name);
+        OutputSequenceNonIncremental<T> writer = new OutputSequenceFactory<>(generator, context).nonIncremental(sequenceDirectory, new SetSequenceType());
+        try {
+            for (String name : providers.keys()) {
+    
+                try {
+                    writer.add(providers.getException(name), name);
+                } catch (NamedProviderGetException e) {
+                    throwExceptionInWriter(e, name);
+                }
             }
+        } finally {
+            writer.end();
         }
-
-        writer.end();
     }
 
     public static <T> NamedProvider<T> subset(
-            NamedProvider<T> providers,
-            SingleLevelOutputEnabled outputEnabled,
-            ErrorReporter errorReporter) {
-
-        NameValueSet<T> out = new NameValueSet<>();
-
-        for (String name : providers.keys()) {
-
-            if (outputEnabled.isOutputEnabled(name)) {
-                try {
-                    out.add(new SimpleNameValue<>(name, providers.getException(name)));
-                } catch (NamedProviderGetException e) {
-                    errorReporter.recordError(GeneratorOutputHelper.class, e.summarize());
-                }
-            }
-        }
-
-        return out;
-    }
-
-    public static <T> NamedProvider<T> subsetWithException(
             NamedProvider<T> providers, SingleLevelOutputEnabled outputEnabled)
             throws OutputWriteFailedException {
 

@@ -114,9 +114,9 @@ public class CollectionGenerator<T> implements Generator<Collection<T>> {
         );
         
         // We start with id with 0
-        OutputSequenceIncrementalChecked<T> sequenceWriter =
-                new OutputSequenceIncrementalChecked<>(
-                        new OutputSequenceParameters<>(outputter, sequenceDirectory, generator), startIndex);
+        OutputSequenceIncremental<T> sequenceWriter =
+                new OutputSequenceIncremental<>(
+                        new BoundOutputter<>(outputter, sequenceDirectory, generator), startIndex);
 
         int numberWritten = 0;
 

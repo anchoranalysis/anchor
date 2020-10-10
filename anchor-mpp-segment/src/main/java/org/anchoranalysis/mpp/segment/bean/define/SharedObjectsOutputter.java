@@ -28,7 +28,6 @@ package org.anchoranalysis.mpp.segment.bean.define;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.image.bean.nonbean.init.CreateCombinedStack;
 import org.anchoranalysis.image.io.stack.StacksOutputter;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
@@ -41,20 +40,6 @@ import org.anchoranalysis.mpp.segment.define.OutputterDirectories;
 class SharedObjectsOutputter {
 
     public static void output(
-            MPPInitParams initParams, boolean suppressSubfolders, InputOutputContext context) {
-        ErrorReporter errorReporter = context.getErrorReporter();
-
-        StacksOutputter.output(
-                CreateCombinedStack.apply(initParams.getImage()), OutputterDirectories.STACKS, suppressSubfolders, context);
-        
-        SubsetOutputterFactory factory =
-                new SubsetOutputterFactory(initParams, context, suppressSubfolders);
-        factory.marks().outputSubset(errorReporter);
-        factory.histograms().outputSubset(errorReporter);
-        factory.objects().outputSubset(errorReporter);
-    }
-
-    public static void outputChecked(
             MPPInitParams soMPP, boolean suppressSubfolders, InputOutputContext context)
             throws OutputWriteFailedException {
 
@@ -63,15 +48,15 @@ class SharedObjectsOutputter {
                     "The Outputter's settings have not yet been initialized");
         }
 
-        StacksOutputter.outputChecked(
+        StacksOutputter.output(
                 CreateCombinedStack.apply(soMPP.getImage()), OutputterDirectories.STACKS,
                 suppressSubfolders, context);
         
         SubsetOutputterFactory factory =
                 new SubsetOutputterFactory(soMPP, context, suppressSubfolders);
-        factory.marks().outputSubsetChecked();
-        factory.histograms().outputSubsetChecked();
-        factory.objects().outputSubsetChecked();
+        factory.marks().outputSubset();
+        factory.histograms().outputSubset();
+        factory.objects().outputSubset();
     }
 
     /**

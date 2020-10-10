@@ -49,7 +49,7 @@ public class StackGenerator extends RasterGeneratorWithElement<Stack> {
     private boolean padIfNecessary;
 
     /** Function stored in manifest for this generator. */
-    private String manifestFunction;
+    private Optional<String> manifestFunction;
 
     /**
      * If true, a stack is guaranteed always to have only one z-slice. If false, it may be 2D or 3D.
@@ -64,6 +64,17 @@ public class StackGenerator extends RasterGeneratorWithElement<Stack> {
      *     If false, it may be 2D or 3D.
      */
     public StackGenerator(String manifestFunction, boolean always2D) {
+        this(Optional.of(manifestFunction), always2D);
+    }
+    
+    /**
+     * Creates a generator that performs no padding.
+     *
+     * @param manifestFunction manifestFunction function stored in manifest for this generator
+     * @param always2D if true, a stack is guaranteed always to be 2D (i.e. have only one z-slice).
+     *     If false, it may be 2D or 3D.
+     */
+    public StackGenerator(Optional<String> manifestFunction, boolean always2D) {
         this(false, manifestFunction, always2D);
     }
 
@@ -77,7 +88,7 @@ public class StackGenerator extends RasterGeneratorWithElement<Stack> {
      * @param stack the initial element
      */
     public StackGenerator(boolean padIfNecessary, String manifestFunction, Stack stack) {
-        this(padIfNecessary, manifestFunction, stack.extent().z() == 1);
+        this(padIfNecessary, Optional.of(manifestFunction), stack.extent().z() == 1);
         assignElement(stack);
     }
 
@@ -98,7 +109,7 @@ public class StackGenerator extends RasterGeneratorWithElement<Stack> {
 
     @Override
     public Optional<ManifestDescription> createManifestDescription() {
-        return Optional.of(new ManifestDescription("raster", manifestFunction));
+        return manifestFunction.map( function -> new ManifestDescription("raster", function));
     }
 
     @Override

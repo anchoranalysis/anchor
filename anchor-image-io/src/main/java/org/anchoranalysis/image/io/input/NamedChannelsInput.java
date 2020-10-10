@@ -36,8 +36,9 @@ import org.anchoranalysis.image.io.input.series.NamedChannelsForSeries;
 import org.anchoranalysis.image.stack.TimeSequence;
 
 /**
- * Provides a set of channels as an input, each of which has a name. Only a single time-point is
- * possible
+ * Provides a set of channels as an input, each of which has a name.
+ * 
+ * <p>Only the first time-point is considered from each series.
  *
  * @author Owen Feehan
  */
@@ -55,9 +56,8 @@ public abstract class NamedChannelsInput implements ProvidesStackInput {
     /** Bit-depth of image */
     public abstract int bitDepth() throws RasterIOException;
 
-    // Where most of our time is being taken up when opening a raster
     public abstract NamedChannelsForSeries createChannelsForSeries(
-            int seriesNum, ProgressReporter progressReporter) throws RasterIOException;
+            int seriesIndex, ProgressReporter progressReporter) throws RasterIOException;
 
     @Override
     public void addToStoreInferNames(
