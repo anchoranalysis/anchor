@@ -29,7 +29,8 @@ package org.anchoranalysis.io.generator.serialized;
 import java.io.Serializable;
 import java.util.Optional;
 import org.anchoranalysis.io.generator.Generator;
-import org.anchoranalysis.io.generator.sequence.GeneratorSequenceIncrementalWriter;
+import org.anchoranalysis.io.generator.sequence.OutputSequence;
+import org.anchoranalysis.io.generator.sequence.OutputSequenceIncremental;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.manifest.deserializer.bundle.Bundle;
 import org.anchoranalysis.io.manifest.deserializer.bundle.BundleParameters;
@@ -38,6 +39,7 @@ import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.namestyle.OutputNameStyle;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
 import org.anchoranalysis.io.output.recorded.RecordingWriters;
 
@@ -51,30 +53,22 @@ public class BundledObjectOutputStreamGenerator<T extends Serializable> implemen
 
     private ObjectOutputStreamGenerator<Bundle<T>> outputGenerator;
 
-    private GeneratorSequenceIncrementalWriter<Bundle<T>> generatorSequence;
+    private OutputSequenceIncremental<Bundle<T>> generatorSequence;
 
     public BundledObjectOutputStreamGenerator(
             BundleParameters bundleParameters,
-            IndexableOutputNameStyle indexableOutputNameStyle,
-            OutputterChecked parentOutputter,
+            OutputSequence sequence,
+            InputOutputContext parentInputOutputContext,
             String manifestDescriptionFunction) {
         this.bundleParameters = bundleParameters;
-
+        
         ManifestDescription manifestDescription =
                 new ManifestDescription("serializedBundle", manifestDescriptionFunction);
 
         outputGenerator =
                 new ObjectOutputStreamGenerator<>(Optional.of(manifestDescriptionFunction));
 
-        generatorSequence =
-                new GeneratorSequenceIncrementalWriter<>(
-                        parentOutputter,
-                        indexableOutputNameStyle.getOutputName(),
-                        indexableOutputNameStyle,
-                        outputGenerator,
-                        manifestDescription,
-                        0,
-                        true);
+        sequence.selective().addSubdirectoryManifestDescription(manifestDescription).createIncremental(outputGenerator, parentInputOutputContext);
     }
 
     @Override
@@ -117,7 +111,7 @@ public class BundledObjectOutputStreamGenerator<T extends Serializable> implemen
 
             RecordingWriters subfolderWriters =
                     generatorSequence
-                            .getWriters()
+                            .writers()
                             .orElseThrow(
                                     () ->
                                             new OutputWriteFailedException(

@@ -26,30 +26,39 @@
 
 package org.anchoranalysis.io.generator.sequence;
 
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import java.util.Optional;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
-import org.anchoranalysis.io.manifest.sequencetype.SequenceType;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import org.anchoranalysis.io.output.recorded.RecordingWriters;
 
-@AllArgsConstructor
-public class GeneratorSequenceNonIncrementalRerouterErrors<T> {
+/**
+ * Like a {@link OutputSequenceIncrementalChecked} but logs exceptions rather than throwing them.
+ * 
+ * @author Owen Feehan
+ *
+ * @param <T>
+ */
+@AllArgsConstructor(access=AccessLevel.PACKAGE)
+public class OutputSequenceIncremental<T> {
 
-    private GeneratorSequenceNonIncremental<T> delegate;
+    private OutputSequenceIncrementalChecked<T> delegate;
     private ErrorReporter errorReporter;
 
-    public void start(SequenceType sequenceType) {
+    public void start() {
         try {
-            delegate.start(sequenceType);
+            delegate.start();
         } catch (OutputWriteFailedException e) {
-            routeError(e);
+            recordException(e);
         }
     }
 
-    public void add(T element, String index) {
+    public void add(T element) {
         try {
-            delegate.add(element, index);
+            delegate.add(element);
         } catch (OutputWriteFailedException e) {
-            routeError(e);
+            recordException(e);
         }
     }
 
@@ -57,11 +66,19 @@ public class GeneratorSequenceNonIncrementalRerouterErrors<T> {
         try {
             delegate.end();
         } catch (OutputWriteFailedException e) {
-            routeError(e);
+            recordException(e);
         }
     }
 
-    private void routeError(Exception e) {
-        errorReporter.recordError(GeneratorSequenceIncrementalRerouteErrors.class, e);
+    private void recordException(Exception e) {
+        errorReporter.recordError(OutputSequenceIncremental.class, e);
+    }
+
+    public boolean isOn() {
+        return delegate.isOn();
+    }
+
+    public Optional<RecordingWriters> writers() {
+        return delegate.writers();
     }
 }

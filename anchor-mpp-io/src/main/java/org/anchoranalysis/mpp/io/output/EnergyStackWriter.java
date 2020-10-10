@@ -28,10 +28,12 @@ package org.anchoranalysis.mpp.io.output;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import java.util.Optional;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.image.io.generator.raster.ChannelGenerator;
-import org.anchoranalysis.io.generator.sequence.GeneratorSequenceUtilities;
+import org.anchoranalysis.io.generator.sequence.OutputSequence;
 import org.anchoranalysis.io.generator.serialized.KeyValueParamsGenerator;
+import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 
 /**
@@ -62,11 +64,18 @@ public class EnergyStackWriter {
     private static final String MANIFEST_FUNCTION_PARAMS = "energyStackParams";
 
     public static void writeEnergyStack(EnergyStack energyStack, InputOutputContext context) {
+        
+        OutputSequence outputSequence = new OutputSequence(
+            OUTPUT_ENERGY_STACK_DIRECTORY,
+            "",
+            2,
+            Optional.of(new ManifestDescription("raster", OUTPUT_ENERGY_STACK_DIRECTORY)),
+            true
+        );
+        
         // We write the energy-stack separately as individual channels
-        GeneratorSequenceUtilities.generateListAsSubfolder(
-                OUTPUT_ENERGY_STACK_DIRECTORY,
-                2,
-                energyStack.withoutParams().asStack().asListChannels(),
+        outputSequence.writeStreamAsSubdirectory(
+                energyStack.withoutParams().asStack().asListChannels().stream(),
                 new ChannelGenerator(MANIFEST_FUNCTION_CHANNEL, energyStack.hasOneSlice()),
                 context);
 

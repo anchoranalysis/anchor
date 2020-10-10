@@ -31,12 +31,12 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.generator.Generator;
-import org.anchoranalysis.io.generator.sequence.GeneratorSequenceNonIncremental;
+import org.anchoranalysis.io.generator.sequence.OutputSequence;
+import org.anchoranalysis.io.generator.sequence.OutputSequenceNonIncrementalChecked;
 import org.anchoranalysis.io.manifest.sequencetype.IncrementalSequenceType;
 import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
-import org.anchoranalysis.io.namestyle.IntegerSuffixOutputNameStyle;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
-import org.anchoranalysis.io.output.outputter.Outputter;
+import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
 import org.anchoranalysis.mpp.segment.optimization.feedback.FeedbackBeginParameters;
 import org.anchoranalysis.mpp.segment.optimization.feedback.FeedbackEndParameters;
@@ -52,9 +52,9 @@ public abstract class PeriodicSubfolderReporter<T>
     @BeanField @Getter @Setter private String outputName;
     // END BEAN PROPER
 
-    private GeneratorSequenceNonIncremental<T> sequenceWriter;
+    private OutputSequenceNonIncrementalChecked<T> sequenceWriter;
 
-    private Outputter parentOutputter;
+    private InputOutputContext parentContext;
 
     /** Handles period-receiver updates */
     private class AddToWriter implements PeriodReceiver<VoxelizedMarksWithEnergy> {
@@ -91,26 +91,26 @@ public abstract class PeriodicSubfolderReporter<T>
     }
 
     // We generate an OutputName class from the outputName string
-    protected IndexableOutputNameStyle generateOutputNameStyle() {
-        return new IntegerSuffixOutputNameStyle(outputName, 10);
+    protected OutputSequence outputSequence() {
+        return new OutputSequence(outputName, 10);
     }
 
     // We setup the manifest from a Generator
     protected IncrementalSequenceType init(Generator<T> generator)
             throws OutputWriteFailedException {
 
-        IncrementalSequenceType sequenceType = new IncrementalSequenceType();
-        sequenceType.setIncrementSize(getAggInterval());
-        sequenceType.setStart(0);
+        IncrementalSequenceType sequenceType = new IncrementalSequenceType(0, getAggInterval());
 
-        IndexableOutputNameStyle outputStyle = generateOutputNameStyle();
+        IndexableOutputNameStyle outputStyle = outputSequence().outputNameStyle();
+        
         this.sequenceWriter =
-                new GeneratorSequenceNonIncremental<>(
-                        getParentOutputter().getChecked(),
+                new OutputSequenceNonIncrementalChecked<>(
+                        getParentContext().getOutputter().getChecked(),
                         Optional.of(outputStyle.getOutputName()),
                         outputStyle,
                         generator,
-                        true);
+                        true,
+                        Optional.empty());
 
         this.sequenceWriter.start(sequenceType);
 
@@ -121,21 +121,12 @@ public abstract class PeriodicSubfolderReporter<T>
     public void reportBegin(FeedbackBeginParameters<VoxelizedMarksWithEnergy> optInit)
             throws ReporterException {
 
-        this.parentOutputter = optInit.getInitContext().getOutputter();
+        this.parentContext = optInit.getInitContext().getInputOutputContext();
 
         // Let's only do this if the output is allowed
-        if (!getParentOutputter().outputsEnabled().isOutputEnabled(outputName)) {
-            return;
+        if (parentContext.getOutputter().outputsEnabled().isOutputEnabled(outputName)) {
+            optInit.getPeriodTriggerBank().obtain(getAggInterval(), new AddToWriter());
         }
-
-        optInit.getPeriodTriggerBank().obtain(getAggInterval(), new AddToWriter());
-    }
-
-    protected abstract Optional<T> generateIterableElement(
-            Reporting<VoxelizedMarksWithEnergy> reporting) throws ReporterException;
-
-    protected Outputter getParentOutputter() {
-        return parentOutputter;
     }
 
     @Override
@@ -147,5 +138,12 @@ public abstract class PeriodicSubfolderReporter<T>
         } catch (OutputWriteFailedException e) {
             throw new ReporterException(e);
         }
+    }
+    
+    protected abstract Optional<T> generateIterableElement(
+            Reporting<VoxelizedMarksWithEnergy> reporting) throws ReporterException;
+
+    protected InputOutputContext getParentContext() {
+        return parentContext;
     }
 }

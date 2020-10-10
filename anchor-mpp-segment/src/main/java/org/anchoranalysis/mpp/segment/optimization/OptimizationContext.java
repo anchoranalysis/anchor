@@ -50,7 +50,7 @@ public class OptimizationContext {
 
     @Getter private final TriggerTerminationCondition triggerTerminationCondition;
 
-    private final InputOutputContext context;
+    @Getter private final InputOutputContext inputOutputContext;
 
     private final RandomNumberGenerator randomNumberGenerator;
 
@@ -70,14 +70,14 @@ public class OptimizationContext {
     }
 
     public Logger getLogger() {
-        return context.getLogger();
+        return inputOutputContext.getLogger();
     }
 
     public Outputter getOutputter() {
-        return context.getOutputter();
+        return inputOutputContext.getOutputter();
     }
 
     public boolean isDebugEnabled() {
-        return context.isDebugEnabled();
+        return inputOutputContext.isDebugEnabled();
     }
 }

@@ -42,7 +42,7 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
 import org.anchoranalysis.io.output.recorded.RecordingWriters;
 
-public class GeneratorSequenceNonIncremental<T> {
+public class OutputSequenceNonIncrementalChecked<T> {
 
     private final Generator<T> generator;
     private final SequenceWriters sequenceWriter;
@@ -50,25 +50,24 @@ public class GeneratorSequenceNonIncremental<T> {
 
     private SequenceType sequenceType;
     private boolean firstAdd = true;
-
-    // Automatically create a ManifestDescription for the folder from the Generator
-    public GeneratorSequenceNonIncremental(
-            OutputterChecked outputter,
-            Optional<String> subfolderName,
-            IndexableOutputNameStyle outputNameStyle,
-            Generator<T> generator,
-            boolean selective) {
-        this(outputter, subfolderName, outputNameStyle, generator, selective, null);
-    }
-
-    // User-specified ManifestDescription for the folder
-    public GeneratorSequenceNonIncremental(
+    
+    /**
+     * Creates a non-incremental sequence of outputs.
+     * 
+     * @param outputter
+     * @param subfolderName
+     * @param outputNameStyle
+     * @param generator
+     * @param selective
+     * @param folderManifestDescription a manifest for the folder, or if not defined, one will be automatically created.
+     */
+    public OutputSequenceNonIncrementalChecked(
             OutputterChecked outputter,
             Optional<String> subfolderName,
             IndexableOutputNameStyle outputNameStyle,
             Generator<T> generator,
             boolean selective,
-            ManifestDescription folderManifestDescription) {
+            Optional<ManifestDescription> folderManifestDescription) {
 
         if (!outputter.getSettings().hasBeenInit()) {
             throw new AnchorFriendlyRuntimeException("outputter has not yet been initialized");

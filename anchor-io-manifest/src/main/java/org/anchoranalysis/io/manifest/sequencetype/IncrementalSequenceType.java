@@ -46,8 +46,12 @@ public class IncrementalSequenceType extends SequenceType {
     }
 
     public IncrementalSequenceType(int start) {
-        super();
         this.start = start;
+    }
+    
+    public IncrementalSequenceType(int start, int incrementSize) {
+        this(start);
+        this.incrementSize = incrementSize;
     }
 
     @Override

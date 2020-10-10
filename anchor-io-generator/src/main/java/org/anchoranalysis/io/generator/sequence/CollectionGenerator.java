@@ -73,36 +73,7 @@ public class CollectionGenerator<T> implements Generator<Collection<T>> {
 
         // In this context, we take the index as an indication of the first id to use - and assume
         // the String index is a number
-        int indexInt = Integer.parseInt(index);
-        return writeCollection(subfolderName, outputNameStyle, indexInt);
-    }
-
-    private int writeCollection(
-            String subfolderName, IndexableOutputNameStyle outputNameStyle, int startIndex)
-            throws OutputWriteFailedException {
-
-        assert (collection != null);
-
-        // We start with id with 0
-        GeneratorSequenceIncrementalWriter<T> sequenceWriter =
-                new GeneratorSequenceIncrementalWriter<>(
-                        outputter,
-                        subfolderName,
-                        outputNameStyle,
-                        generator,
-                        startIndex,
-                        selective);
-
-        int numWritten = 0;
-
-        sequenceWriter.start();
-        for (T element : collection) {
-            sequenceWriter.add(element);
-            numWritten++;
-        }
-        sequenceWriter.end();
-
-        return numWritten;
+        return writeCollection(subfolderName, outputNameStyle, Integer.parseInt(index));
     }
 
     @Override
@@ -129,5 +100,32 @@ public class CollectionGenerator<T> implements Generator<Collection<T>> {
     @Override
     public void end() throws OutputWriteFailedException {
         generator.end();
+    }
+    
+    private int writeCollection(
+            String subfolderName, IndexableOutputNameStyle outputNameStyle, int startIndex)
+            throws OutputWriteFailedException {
+
+        // We start with id with 0
+        OutputSequenceIncrementalChecked<T> sequenceWriter =
+                new OutputSequenceIncrementalChecked<>(
+                        outputter,
+                        subfolderName,
+                        outputNameStyle,
+                        generator,
+                        startIndex,
+                        selective,
+                        Optional.empty());
+
+        int numberWritten = 0;
+
+        sequenceWriter.start();
+        for (T element : collection) {
+            sequenceWriter.add(element);
+            numberWritten++;
+        }
+        sequenceWriter.end();
+
+        return numberWritten;
     }
 }

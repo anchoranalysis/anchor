@@ -26,30 +26,49 @@
 
 package org.anchoranalysis.io.generator.sequence;
 
-import java.util.Collection;
 import lombok.AllArgsConstructor;
-import org.anchoranalysis.io.generator.SingleFileTypeGenerator;
+import org.anchoranalysis.core.error.reporter.ErrorReporter;
+import org.anchoranalysis.io.manifest.sequencetype.SequenceType;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
+/**
+ * Like a {@link OutputSequenceNonIncrementalChecked} but logs exceptions rather than throwing them.
+ * 
+ * @author Owen Feehan
+ *
+ * @param <T>
+ */
 @AllArgsConstructor
-public class GeneratorSequenceIncrementalCollection<T, C>
-        implements GeneratorSequenceIncremental<T> {
+public class OutputSequenceNonIncrementalLogged<T> {
 
-    private Collection<C> collection;
-    private SingleFileTypeGenerator<T, C> generator;
+    private OutputSequenceNonIncrementalChecked<T> delegate;
+    private ErrorReporter errorReporter;
 
-    @Override
-    public void add(T element) throws OutputWriteFailedException {
-        collection.add(generator.transform(element));
+    public void start(SequenceType sequenceType) {
+        try {
+            delegate.start(sequenceType);
+        } catch (OutputWriteFailedException e) {
+            recordException(e);
+        }
     }
 
-    @Override
-    public void start() throws OutputWriteFailedException {
-        generator.start();
+    public void add(T element, String index) {
+        try {
+            delegate.add(element, index);
+        } catch (OutputWriteFailedException e) {
+            recordException(e);
+        }
     }
 
-    @Override
-    public void end() throws OutputWriteFailedException {
-        generator.end();
+    public void end() {
+        try {
+            delegate.end();
+        } catch (OutputWriteFailedException e) {
+            recordException(e);
+        }
+    }
+
+    private void recordException(Exception e) {
+        errorReporter.recordError(OutputSequenceIncremental.class, e);
     }
 }

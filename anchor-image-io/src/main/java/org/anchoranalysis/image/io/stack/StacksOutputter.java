@@ -96,7 +96,7 @@ public class StacksOutputter {
             throws OutputWriteFailedException {
 
         if (outputter.outputsEnabled().isOutputEnabled(outputName)) {
-            outputWithException(
+            outputAfterSubsettingChecked(
                     stackSubset(stacks, outputName, outputter),
                     outputter.getChecked(),
                     outputName,
@@ -111,16 +111,27 @@ public class StacksOutputter {
             ErrorReporter errorReporter,
             boolean suppressSubfoldersIn) {
         
-        StackGenerator generator = createStackGenerator(stacks);
         GeneratorOutputHelper.output(
                 stacks,
-                generator,
+                createStackGenerator(),
                 outputter,
                 outputName,
                 "",
                 errorReporter,
                 suppressSubfoldersIn);
     }
+
+    private static void outputAfterSubsettingChecked(
+            NamedStacks stacks,
+            OutputterChecked outputter,
+            String outputName,
+            boolean suppressSubfoldersIn)
+            throws OutputWriteFailedException {
+        
+        GeneratorOutputHelper.outputChecked(
+                stacks, createStackGenerator(), outputter, outputName, "", suppressSubfoldersIn);
+    }
+
     
     private static NamedStacks subset(
             NamedProvider<Stack> stacks, SingleLevelOutputEnabled outputEnabled) {
@@ -136,18 +147,6 @@ public class StacksOutputter {
 
         return out;
     }
-
-    private static void outputWithException(
-            NamedStacks stacks,
-            OutputterChecked outputter,
-            String outputName,
-            boolean suppressSubfoldersIn)
-            throws OutputWriteFailedException {
-        
-        StackGenerator generator = createStackGenerator(stacks);
-        GeneratorOutputHelper.outputWithException(
-                stacks, generator, outputter, outputName, "", suppressSubfoldersIn);
-    }
     
     private static StoreSupplier<Stack> extractStackCached(
             NamedProvider<Stack> stacks, String name) {
@@ -161,7 +160,7 @@ public class StacksOutputter {
                 });
     }
 
-    private static StackGenerator createStackGenerator(NamedProvider<Stack> stacks) {
+    private static StackGenerator createStackGenerator() {
         return new StackGenerator(true, MANIFEST_FUNCTION, false);
     }
 

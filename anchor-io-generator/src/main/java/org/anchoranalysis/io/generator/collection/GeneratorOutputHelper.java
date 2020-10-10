@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.io.generator.collection;
 
+import java.util.Optional;
 import java.util.Set;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -38,8 +39,8 @@ import org.anchoranalysis.core.name.provider.NamedProvider;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.name.value.SimpleNameValue;
 import org.anchoranalysis.io.generator.Generator;
-import org.anchoranalysis.io.generator.sequence.GeneratorSequenceNonIncremental;
-import org.anchoranalysis.io.generator.sequence.GeneratorSequenceNonIncrementalRerouterErrors;
+import org.anchoranalysis.io.generator.sequence.OutputSequenceNonIncrementalChecked;
+import org.anchoranalysis.io.generator.sequence.OutputSequenceNonIncrementalLogged;
 import org.anchoranalysis.io.manifest.sequencetype.SetSequenceType;
 import org.anchoranalysis.io.namestyle.StringSuffixOutputNameStyle;
 import org.anchoranalysis.io.output.enabled.single.SingleLevelOutputEnabled;
@@ -48,8 +49,7 @@ import org.anchoranalysis.io.output.outputter.OutputterChecked;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class GeneratorOutputHelper {
-
-    // TODO remove padding for energyStack and switch to single channel outputs
+    
     public static <T> void output(
             NamedProvider<T> providers,
             Generator<T> generator,
@@ -63,19 +63,16 @@ public class GeneratorOutputHelper {
             return;
         }
 
-        StringSuffixOutputNameStyle outputNameStyle =
-                new StringSuffixOutputNameStyle(prefix, prefix + "%s");
-        outputNameStyle.setOutputName(outputName);
-
-        GeneratorSequenceNonIncrementalRerouterErrors<T> writer =
-                new GeneratorSequenceNonIncrementalRerouterErrors<>(
-                        new GeneratorSequenceNonIncremental<>(
+        OutputSequenceNonIncrementalLogged<T> writer =
+                new OutputSequenceNonIncrementalLogged<>(
+                        new OutputSequenceNonIncrementalChecked<>(
                                 outputter,
                                 OptionalUtilities.createFromFlag(
-                                        !suppressSubfoldersIn, outputNameStyle.getOutputName()),
-                                outputNameStyle,
+                                        !suppressSubfoldersIn, outputName),
+                                createOutputNameStyle(prefix, outputName),
                                 generator,
-                                true),
+                                true,
+                                Optional.empty()),
                         errorReporter);
 
         Set<String> keys = providers.keys();
@@ -94,7 +91,7 @@ public class GeneratorOutputHelper {
         writer.end();
     }
 
-    public static <T> void outputWithException(
+    public static <T> void outputChecked(
             NamedProvider<T> providers,
             Generator<T> generator,
             OutputterChecked outputter,
@@ -107,52 +104,28 @@ public class GeneratorOutputHelper {
             return;
         }
 
-        StringSuffixOutputNameStyle outputNameStyle =
-                new StringSuffixOutputNameStyle(suffix, suffix + "%s");
-        outputNameStyle.setOutputName(outputName);
-
-        GeneratorSequenceNonIncremental<T> writer =
-                new GeneratorSequenceNonIncremental<>(
+        OutputSequenceNonIncrementalChecked<T> writer =
+                new OutputSequenceNonIncrementalChecked<>(
                         outputter,
                         OptionalUtilities.createFromFlag(
-                                !suppressSubfoldersIn, outputNameStyle.getOutputName()),
-                        outputNameStyle,
+                                !suppressSubfoldersIn, outputName),
+                        createOutputNameStyle(suffix, outputName),
                         generator,
-                        true);
-
-        Set<String> keys = providers.keys();
-
+                        true,
+                        Optional.empty());
+        
         writer.start(new SetSequenceType());
 
-        for (String name : keys) {
+        for (String name : providers.keys()) {
 
             try {
-                T item = providers.getException(name);
-                writer.add(item, name);
-            } catch (Exception e) {
+                writer.add(providers.getException(name), name);
+            } catch (NamedProviderGetException e) {
                 throwExceptionInWriter(e, name);
             }
         }
 
         writer.end();
-    }
-
-    private static void throwExceptionInWriter(Exception e, String name)
-            throws OutputWriteFailedException {
-
-        String errorMsg = String.format("An error occurred outputting %s", name);
-
-        if (e instanceof HasFriendlyErrorMessage) {
-            HasFriendlyErrorMessage eCast = (HasFriendlyErrorMessage) e;
-            throw new OutputWriteFailedException(errorMsg, eCast);
-        }
-
-        if (e instanceof AnchorCombinableException) {
-            AnchorCombinableException eCast = (AnchorCombinableException) e;
-            throw new OutputWriteFailedException(errorMsg, eCast);
-        }
-
-        throw new OutputWriteFailedException(errorMsg + ":" + e);
     }
 
     public static <T> NamedProvider<T> subset(
@@ -194,5 +167,30 @@ public class GeneratorOutputHelper {
         }
 
         return out;
+    }
+
+    private static StringSuffixOutputNameStyle createOutputNameStyle(String prefix, String outputName) {
+        StringSuffixOutputNameStyle outputNameStyle =
+                new StringSuffixOutputNameStyle(prefix, prefix + "%s");
+        outputNameStyle.setOutputName(outputName);
+        return outputNameStyle;
+    }
+        
+    private static void throwExceptionInWriter(Exception e, String name)
+            throws OutputWriteFailedException {
+
+        String errorMsg = String.format("An error occurred outputting %s", name);
+
+        if (e instanceof HasFriendlyErrorMessage) {
+            HasFriendlyErrorMessage eCast = (HasFriendlyErrorMessage) e;
+            throw new OutputWriteFailedException(errorMsg, eCast);
+        }
+
+        if (e instanceof AnchorCombinableException) {
+            AnchorCombinableException eCast = (AnchorCombinableException) e;
+            throw new OutputWriteFailedException(errorMsg, eCast);
+        }
+
+        throw new OutputWriteFailedException(errorMsg + ":" + e);
     }
 }

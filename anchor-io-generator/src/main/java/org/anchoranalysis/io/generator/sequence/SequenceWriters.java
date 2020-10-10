@@ -53,7 +53,7 @@ class SequenceWriters {
     private final RecordingWriters parentWriters;
     private final Optional<String> subfolderName;
     private final IndexableOutputNameStyle outputNameStyle;
-    private final ManifestDescription folderManifestDescription;
+    private final Optional<ManifestDescription> folderManifestDescription;
     private final boolean selectSelective;
     // END: REQUIRED ARGUMENTS
 
@@ -105,11 +105,7 @@ class SequenceWriters {
 
     // Requires the generator to be in a valid state
     private ManifestDescription createFolderDescription(FileType[] fileTypes) {
-        if (folderManifestDescription != null) {
-            return folderManifestDescription;
-        } else {
-            return guessFolderDescriptionFromFiles(fileTypes);
-        }
+        return folderManifestDescription.orElseGet( () -> guessFolderDescriptionFromFiles(fileTypes) );
     }
 
     // Attempts to come up with a description of the folder from the underlying file template

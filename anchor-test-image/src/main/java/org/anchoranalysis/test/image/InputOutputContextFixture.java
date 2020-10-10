@@ -36,7 +36,7 @@ import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.test.LoggingFixture;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class BoundIOContextFixture {
+public class InputOutputContextFixture {
 
     public static InputOutputContext withSuppressedLogger(Path modelDir) {
         InputOutputContext out = withSuppressedLogger();

@@ -70,7 +70,7 @@ class SubsetOutputter<T> {
             return;
         }
 
-        GeneratorOutputHelper.outputWithException(
+        GeneratorOutputHelper.outputChecked(
                 GeneratorOutputHelper.subsetWithException(provider, outputEnabledSecondLevel.get()),
                 generator,
                 outputter,

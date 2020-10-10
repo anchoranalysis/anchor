@@ -23,4 +23,7 @@
  * THE SOFTWARE.
  * #L%
  */
+/**
+ * Non-bean classes related to writing rasters to the filesystem.
+ */
 package org.anchoranalysis.image.io.rasterwriter;

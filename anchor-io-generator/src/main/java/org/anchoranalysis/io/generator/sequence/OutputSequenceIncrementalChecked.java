@@ -35,43 +35,24 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
 import org.anchoranalysis.io.output.recorded.RecordingWriters;
 
-public class GeneratorSequenceIncrementalWriter<T> implements GeneratorSequenceIncremental<T> {
+class OutputSequenceIncrementalChecked<T> {
 
-    private GeneratorSequenceNonIncremental<T> delegate;
+    private OutputSequenceNonIncrementalChecked<T> delegate;
 
     private int iteration = 0;
     private int startIndex = 0;
 
-    // Automatically create a ManifestDescription for the folder from the Generator
-    public GeneratorSequenceIncrementalWriter(
-            OutputterChecked outputter,
-            String subfolderName,
-            IndexableOutputNameStyle outputNameStyle,
-            Generator<T> generator,
-            int startIndex,
-            boolean selective) {
-        delegate =
-                new GeneratorSequenceNonIncremental<>(
-                        outputter,
-                        Optional.of(subfolderName),
-                        outputNameStyle,
-                        generator,
-                        selective);
-        this.iteration = startIndex;
-        this.startIndex = startIndex;
-    }
-
     // User-specified ManifestDescription for the folder
-    public GeneratorSequenceIncrementalWriter(
+    public OutputSequenceIncrementalChecked(
             OutputterChecked outputter,
             String subfolderName,
             IndexableOutputNameStyle outputNameStyle,
             Generator<T> generator,
-            ManifestDescription folderManifestDescription,
             int startIndex,
-            boolean selective) {
+            boolean selective,
+            Optional<ManifestDescription> folderManifestDescription) {
         delegate =
-                new GeneratorSequenceNonIncremental<>(
+                new OutputSequenceNonIncrementalChecked<>(
                         outputter,
                         Optional.of(subfolderName),
                         outputNameStyle,
@@ -81,12 +62,10 @@ public class GeneratorSequenceIncrementalWriter<T> implements GeneratorSequenceI
         this.startIndex = startIndex;
     }
 
-    @Override
     public void start() throws OutputWriteFailedException {
         delegate.start(new IncrementalSequenceType(startIndex));
     }
 
-    @Override
     public void add(T element) throws OutputWriteFailedException {
         try {
             delegate.add(element, String.valueOf(iteration));
@@ -98,7 +77,6 @@ public class GeneratorSequenceIncrementalWriter<T> implements GeneratorSequenceI
         }
     }
 
-    @Override
     public void end() throws OutputWriteFailedException {
         delegate.end();
     }
@@ -107,7 +85,7 @@ public class GeneratorSequenceIncrementalWriter<T> implements GeneratorSequenceI
         return delegate.isOn();
     }
 
-    public Optional<RecordingWriters> getWriters() {
+    public Optional<RecordingWriters> writers() {
         return delegate.writers();
     }
 }
