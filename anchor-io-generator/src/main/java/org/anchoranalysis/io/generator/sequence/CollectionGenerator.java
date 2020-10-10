@@ -106,16 +106,17 @@ public class CollectionGenerator<T> implements Generator<Collection<T>> {
             String subfolderName, IndexableOutputNameStyle outputNameStyle, int startIndex)
             throws OutputWriteFailedException {
 
+        OutputSequenceDirectory sequenceDirectory = new OutputSequenceDirectory(
+            Optional.of(subfolderName),
+            outputNameStyle,
+            selective,
+            Optional.empty()
+        );
+        
         // We start with id with 0
         OutputSequenceIncrementalChecked<T> sequenceWriter =
                 new OutputSequenceIncrementalChecked<>(
-                        outputter,
-                        subfolderName,
-                        outputNameStyle,
-                        generator,
-                        startIndex,
-                        selective,
-                        Optional.empty());
+                        new OutputSequenceParameters<>(outputter, sequenceDirectory, generator), startIndex);
 
         int numberWritten = 0;
 

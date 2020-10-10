@@ -34,7 +34,6 @@ import org.anchoranalysis.image.io.stack.StacksOutputter;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
-import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.mpp.segment.define.OutputterDirectories;
 
@@ -44,33 +43,32 @@ class SharedObjectsOutputter {
     public static void output(
             MPPInitParams initParams, boolean suppressSubfolders, InputOutputContext context) {
         ErrorReporter errorReporter = context.getErrorReporter();
-        Outputter outputter = context.getOutputter();
 
         StacksOutputter.output(
                 CreateCombinedStack.apply(initParams.getImage()), OutputterDirectories.STACKS, suppressSubfolders, context);
         
         SubsetOutputterFactory factory =
-                new SubsetOutputterFactory(initParams, outputter, suppressSubfolders);
+                new SubsetOutputterFactory(initParams, context, suppressSubfolders);
         factory.marks().outputSubset(errorReporter);
         factory.histograms().outputSubset(errorReporter);
         factory.objects().outputSubset(errorReporter);
     }
 
     public static void outputChecked(
-            MPPInitParams soMPP, Outputter outputter, boolean suppressSubfolders)
+            MPPInitParams soMPP, boolean suppressSubfolders, InputOutputContext context)
             throws OutputWriteFailedException {
 
-        if (!outputter.getSettings().hasBeenInit()) {
+        if (!context.getOutputter().getSettings().hasBeenInit()) {
             throw new OutputWriteFailedException(
                     "The Outputter's settings have not yet been initialized");
         }
 
         StacksOutputter.outputChecked(
                 CreateCombinedStack.apply(soMPP.getImage()), OutputterDirectories.STACKS,
-                suppressSubfolders, outputter);
+                suppressSubfolders, context);
         
         SubsetOutputterFactory factory =
-                new SubsetOutputterFactory(soMPP, outputter, suppressSubfolders);
+                new SubsetOutputterFactory(soMPP, context, suppressSubfolders);
         factory.marks().outputSubsetChecked();
         factory.histograms().outputSubsetChecked();
         factory.objects().outputSubsetChecked();

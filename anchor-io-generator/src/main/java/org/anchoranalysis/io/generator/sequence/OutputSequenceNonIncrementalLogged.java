@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.io.generator.sequence;
 
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.io.manifest.sequencetype.SequenceType;
@@ -38,7 +39,7 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
  *
  * @param <T>
  */
-@AllArgsConstructor
+@AllArgsConstructor(access=AccessLevel.PACKAGE)
 public class OutputSequenceNonIncrementalLogged<T> {
 
     private OutputSequenceNonIncrementalChecked<T> delegate;

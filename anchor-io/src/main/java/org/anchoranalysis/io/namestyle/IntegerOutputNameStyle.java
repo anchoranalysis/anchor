@@ -31,7 +31,7 @@ public abstract class IntegerOutputNameStyle extends IndexableOutputNameStyle {
     /** */
     private static final long serialVersionUID = 1L;
 
-    private int numDigits;
+    private int numberDigits;
 
     protected IntegerOutputNameStyle() {
         // Needed for deserialization
@@ -43,7 +43,7 @@ public abstract class IntegerOutputNameStyle extends IndexableOutputNameStyle {
 
     protected IntegerOutputNameStyle(String outputName, int numDigits) {
         super(outputName);
-        this.numDigits = numDigits;
+        this.numberDigits = numDigits;
     }
 
     @Override
@@ -54,7 +54,7 @@ public abstract class IntegerOutputNameStyle extends IndexableOutputNameStyle {
 
     @Override
     protected String outputFormatString() {
-        return combineIntegerAndOutputName(getOutputName(), integerFormatSpecifier(numDigits));
+        return combineIntegerAndOutputName(getOutputName(), integerFormatSpecifier(numberDigits));
     }
 
     protected abstract String combineIntegerAndOutputName(

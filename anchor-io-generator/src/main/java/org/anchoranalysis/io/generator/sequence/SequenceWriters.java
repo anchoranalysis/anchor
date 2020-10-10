@@ -27,15 +27,15 @@
 package org.anchoranalysis.io.generator.sequence;
 
 import java.util.Optional;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.Accessors;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.io.generator.Generator;
-import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.manifest.ManifestFolderDescription;
 import org.anchoranalysis.io.manifest.file.FileType;
 import org.anchoranalysis.io.manifest.folder.FolderWriteIndexableOutputName;
 import org.anchoranalysis.io.manifest.sequencetype.SequenceType;
-import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
 import org.anchoranalysis.io.output.recorded.RecordingWriters;
@@ -46,18 +46,16 @@ import org.anchoranalysis.io.output.writer.GenerateWritableItem;
  *
  * @author Owen Feehan
  */
-@RequiredArgsConstructor
+@RequiredArgsConstructor @Accessors(fluent=true)
 class SequenceWriters {
 
     // START: REQUIRED ARGUMENTS
     private final RecordingWriters parentWriters;
-    private final Optional<String> subfolderName;
-    private final IndexableOutputNameStyle outputNameStyle;
-    private final Optional<ManifestDescription> folderManifestDescription;
-    private final boolean selectSelective;
+    
+    private final OutputSequenceDirectory directory;
     // END: REQUIRED ARGUMENTS
 
-    private Optional<RecordingWriters> writers = Optional.empty();
+    @Getter private Optional<RecordingWriters> writers = Optional.empty();
 
     public void init(FileType[] fileTypes, SequenceType sequenceType) throws InitException {
 
@@ -66,11 +64,11 @@ class SequenceWriters {
         }
 
         ManifestFolderDescription folderDescription =
-                new ManifestFolderDescription(createFolderDescription(fileTypes), sequenceType);
+                new ManifestFolderDescription(directory.createFolderDescription(fileTypes), sequenceType);
 
         // FolderWriteIndexableOutputName
         FolderWriteIndexableOutputName subFolderWrite =
-                new FolderWriteIndexableOutputName(outputNameStyle);
+                new FolderWriteIndexableOutputName(directory.getOutputNameStyle());
         for (FileType fileType : fileTypes) {
             subFolderWrite.addFileType(fileType);
         }
@@ -91,70 +89,23 @@ class SequenceWriters {
 
         this.writers // NOSONAR
                 .get()
-                .multiplex(selectSelective)
-                .write(outputNameStyle, generator, index);
-    }
-
-    public Optional<RecordingWriters> writers() {
-        return writers;
+                .multiplex(directory.isSelective())
+                .write(directory.getOutputNameStyle(), generator, index);
     }
 
     public boolean isOn() {
         return writers.isPresent();
     }
 
-    // Requires the generator to be in a valid state
-    private ManifestDescription createFolderDescription(FileType[] fileTypes) {
-        return folderManifestDescription.orElseGet( () -> guessFolderDescriptionFromFiles(fileTypes) );
-    }
-
-    // Attempts to come up with a description of the folder from the underlying file template
-    //  If there is only one filetype, we use it
-    //  If there is more than one, we look for bits which are the same
-    private static ManifestDescription guessFolderDescriptionFromFiles(FileType[] fileTypes) {
-
-        assert (fileTypes.length > 0);
-
-        if (fileTypes.length == 1) {
-            return fileTypes[0].getManifestDescription();
-        }
-
-        String function = "";
-        String type = "";
-        boolean first = true;
-        for (FileType fileType : fileTypes) {
-            String functionItr = fileType.getManifestDescription().getFunction();
-            String typeItr = fileType.getManifestDescription().getType();
-
-            if (first) {
-                // FIRST ITERATION
-                function = functionItr;
-                type = typeItr;
-                first = false;
-            } else {
-                // SUBSEQUENT ITERATIONS
-                if (!functionItr.equals(function)) {
-                    function = "combined";
-                }
-
-                if (!typeItr.equals(type)) {
-                    type = "combined";
-                }
-            }
-        }
-
-        return new ManifestDescription(type, function);
-    }
-
     private Optional<RecordingWriters> selectWritersMaybeCreateSubdirectory(
             ManifestFolderDescription folderDescription,
             FolderWriteIndexableOutputName subFolderWrite)
             throws OutputWriteFailedException {
-        if (subfolderName.isPresent()) {
+        if (directory.getSubdirectoryName().isPresent()) {
             return parentWriters
-                    .multiplex(selectSelective)
+                    .multiplex(directory.isSelective())
                     .createSubdirectory(
-                            subfolderName.get(),
+                            directory.getSubdirectoryName().get(),  // NOSONAR
                             folderDescription,
                             Optional.of(subFolderWrite),
                             false)

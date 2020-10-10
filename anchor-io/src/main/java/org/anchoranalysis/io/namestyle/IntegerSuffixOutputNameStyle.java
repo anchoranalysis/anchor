@@ -26,21 +26,40 @@
 
 package org.anchoranalysis.io.namestyle;
 
+/**
+ * Outputs a file-name involving an integer of length {@code numberDigits} with leading zeros.
+ * 
+ * <p>Optionally, a prefix will be placed before this number (with an underscore to separate).
+ * 
+ * <p>If no prefix is defined, no underscore will be present.
+ * 
+ * @author Owen Feehan
+ *
+ */
 public class IntegerSuffixOutputNameStyle extends IntegerOutputNameStyle {
 
     /** */
     private static final long serialVersionUID = -3128734431534880903L;
 
+    // A string placed before the numberic part of the naming-style
+    private String prefix;
+    
     public IntegerSuffixOutputNameStyle() {
         // Here as the empty constructor is needed for deserialization
     }
 
     private IntegerSuffixOutputNameStyle(IntegerSuffixOutputNameStyle src) {
         super(src);
+        this.prefix = src.prefix;
     }
 
-    public IntegerSuffixOutputNameStyle(String outputName, int numDigitsInteger) {
-        super(outputName, numDigitsInteger);
+    public IntegerSuffixOutputNameStyle(String outputName, int numberDigits) {
+        this(outputName, outputName, numberDigits);
+    }
+    
+    public IntegerSuffixOutputNameStyle(String outputName, String prefix, int numberDigits) {
+        super(outputName, numberDigits);
+        this.prefix = prefix;
     }
 
     @Override
@@ -55,6 +74,10 @@ public class IntegerSuffixOutputNameStyle extends IntegerOutputNameStyle {
 
     @Override
     protected String combineIntegerAndOutputName(String outputName, String integerFormatString) {
-        return outputName + "_" + integerFormatString;
+        if (!prefix.isEmpty()) {
+            return prefix + "_" + integerFormatString;    
+        } else {
+            return integerFormatString;
+        }
     }
 }

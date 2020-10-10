@@ -32,6 +32,7 @@ import java.util.Optional;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.image.io.generator.raster.ChannelGenerator;
 import org.anchoranalysis.io.generator.sequence.OutputSequence;
+import org.anchoranalysis.io.generator.sequence.OutputSequenceDirectory;
 import org.anchoranalysis.io.generator.serialized.KeyValueParamsGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
@@ -65,16 +66,17 @@ public class EnergyStackWriter {
 
     public static void writeEnergyStack(EnergyStack energyStack, InputOutputContext context) {
         
-        OutputSequence outputSequence = new OutputSequence(
+        OutputSequenceDirectory directory = new OutputSequenceDirectory(
             OUTPUT_ENERGY_STACK_DIRECTORY,
             "",
             2,
-            Optional.of(new ManifestDescription("raster", OUTPUT_ENERGY_STACK_DIRECTORY)),
-            true
+            true,
+            Optional.of(new ManifestDescription("raster", OUTPUT_ENERGY_STACK_DIRECTORY))
         );
         
         // We write the energy-stack separately as individual channels
-        outputSequence.writeStreamAsSubdirectory(
+        OutputSequence.writeStreamAsSubdirectory(
+                directory,
                 energyStack.withoutParams().asStack().asListChannels().stream(),
                 new ChannelGenerator(MANIFEST_FUNCTION_CHANNEL, energyStack.hasOneSlice()),
                 context);

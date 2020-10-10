@@ -32,14 +32,11 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.io.generator.Generator;
-import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.manifest.file.FileType;
 import org.anchoranalysis.io.manifest.sequencetype.SequenceType;
 import org.anchoranalysis.io.manifest.sequencetype.SequenceTypeException;
-import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
-import org.anchoranalysis.io.output.outputter.OutputterChecked;
 import org.anchoranalysis.io.output.recorded.RecordingWriters;
 
 public class OutputSequenceNonIncrementalChecked<T> {
@@ -54,34 +51,21 @@ public class OutputSequenceNonIncrementalChecked<T> {
     /**
      * Creates a non-incremental sequence of outputs.
      * 
-     * @param outputter
-     * @param subfolderName
-     * @param outputNameStyle
-     * @param generator
-     * @param selective
-     * @param folderManifestDescription a manifest for the folder, or if not defined, one will be automatically created.
+     * @param parameters parameters for the output-sequence
      */
-    public OutputSequenceNonIncrementalChecked(
-            OutputterChecked outputter,
-            Optional<String> subfolderName,
-            IndexableOutputNameStyle outputNameStyle,
-            Generator<T> generator,
-            boolean selective,
-            Optional<ManifestDescription> folderManifestDescription) {
+    OutputSequenceNonIncrementalChecked(OutputSequenceParameters<T> parameters) {
 
-        if (!outputter.getSettings().hasBeenInit()) {
+        if (!parameters.getOutputter().getSettings().hasBeenInit()) {
             throw new AnchorFriendlyRuntimeException("outputter has not yet been initialized");
         }
 
         this.sequenceWriter =
                 new SequenceWriters(
-                        outputter.getWriters(),
-                        subfolderName,
-                        outputNameStyle,
-                        folderManifestDescription,
-                        selective);
-        this.settings = outputter.getSettings();
-        this.generator = generator;
+                        parameters.getOutputter().getWriters(),
+                        parameters.getDirectory()
+                );
+        this.settings = parameters.getOutputter().getSettings();
+        this.generator = parameters.getGenerator();
     }
 
     public boolean isOn() {

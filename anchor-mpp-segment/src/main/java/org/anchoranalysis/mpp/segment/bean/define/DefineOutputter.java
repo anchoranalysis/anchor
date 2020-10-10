@@ -112,7 +112,7 @@ public abstract class DefineOutputter extends AnchorBean<DefineOutputter> {
             SharedObjectsOutputter.output(initParams, suppressSubfolders, context);
         } else {
             SharedObjectsOutputter.outputChecked(
-                    initParams, context.getOutputter(), suppressSubfolders);
+                    initParams, suppressSubfolders, context);
         }
     }
 }

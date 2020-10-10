@@ -25,12 +25,10 @@
  */
 package org.anchoranalysis.io.generator.sequence;
 
-import java.util.Optional;
 import java.util.stream.Stream;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.io.generator.Generator;
-import org.anchoranalysis.io.manifest.ManifestDescription;
-import org.anchoranalysis.io.namestyle.IntegerSuffixOutputNameStyle;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
 
@@ -42,79 +40,28 @@ import org.anchoranalysis.io.output.outputter.Outputter;
  * @author Owen Feehan
  *
  */
-@AllArgsConstructor
+@AllArgsConstructor(access=AccessLevel.PRIVATE)
 public class OutputSequence {
 
-    /** Name of sub-directory to place sequence in (which is also used as the outputName) */
-    private final String subdirectoryName;
-    
-    /**
-     * Prefix on each file-name.
-     *
-     * <p>The full-name has an increment number appended e.g. <code>$prefix_000000.tif</code> etc.
-     */
-    private final String prefix;
-    
-    /**
-     * The number of digits in the numeric part of the output-name.
-     */
-    private final int numberDigits;
-    
-    /**
-     * The description used for the sub-directory in the manifest, or one is automatically generated if not defined.
-     */
-    private final Optional<ManifestDescription> subdirectoryManifestDescription;
+    public static <T> OutputSequenceIncremental<T> createIncremental(
+            OutputSequenceDirectory directory, Generator<T> generator, InputOutputContext context) {
 
-    /** Check if individual sequence items should be allowed to be outputted or not. */
-    private final boolean checkIfAllowed;
-    
-    /**
-     * Create for a particular sub-directory and number of digits..
-     * 
-     * @param subdirectoryName name of sub-directory to place sequence in (which is also used as the outputName and prefix)
-     * @param numberDigits the number of digits in the numeric part of the output-name.
-     */
-    public OutputSequence(String subdirectoryName, int numberDigits) {
-        this.subdirectoryName = subdirectoryName;
-        this.prefix = subdirectoryName;
-        this.numberDigits = numberDigits;
-        this.subdirectoryManifestDescription = Optional.empty();
-        this.checkIfAllowed = false;
+        OutputSequenceParameters<T> parameters = createParameters(directory, generator,context.getOutputter());
+        
+        return new OutputSequenceIncremental<>(
+                new OutputSequenceIncrementalChecked<>(parameters, 0),
+                context.getErrorReporter());
     }
     
-    /**
-     * Create for a particular sub-directory and prefix.
-     * 
-     * @param subdirectoryName name of sub-directory to place sequence in (which is also used as the outputName)
-     * @param prefix prefix on each file-name
-     */
-    public OutputSequence(String subdirectoryName, String prefix) {
-        this.subdirectoryName = subdirectoryName;
-        this.prefix = prefix;
-        this.numberDigits = 6;
-        this.subdirectoryManifestDescription = Optional.empty();
-        this.checkIfAllowed = false;
+    public static <T> OutputSequenceNonIncrementalLogged<T> createNonIncrementalLogged(
+        OutputSequenceDirectory directory, Generator<T> generator, InputOutputContext context) {
+        OutputSequenceNonIncrementalChecked<T> checked = createNonIncrementalChecked(directory, generator, context);
+        return new OutputSequenceNonIncrementalLogged<>(checked, context.getErrorReporter());
     }
     
-    public OutputSequence addSubdirectoryManifestDescription( ManifestDescription manifestDescription ) {
-        return new OutputSequence(subdirectoryName, prefix, numberDigits, Optional.of(manifestDescription), checkIfAllowed );
-    }
-    
-    public OutputSequence selective() {
-        return new OutputSequence(subdirectoryName, prefix, numberDigits, subdirectoryManifestDescription, checkIfAllowed );
-    }
-    
-
-    public <T> OutputSequenceNonIncrementalChecked<T> createNonIncremental(
-            Generator<T> generator, Outputter outputter) {
-
-        return new OutputSequenceNonIncrementalChecked<>(
-                outputter.getChecked(),
-                Optional.of(subdirectoryName),
-                outputNameStyle(),
-                generator,
-                checkIfAllowed,
-                subdirectoryManifestDescription);
+    public static <T> OutputSequenceNonIncrementalChecked<T> createNonIncrementalChecked(
+            OutputSequenceDirectory directory, Generator<T> generator, InputOutputContext context) {
+        return new OutputSequenceNonIncrementalChecked<>( createParameters(directory, generator, context.getOutputter()) );
     }
     
     /**
@@ -125,12 +72,13 @@ public class OutputSequence {
      * @param generator the generator to use for creating each file
      * @param context where writing occurs to
      */
-    public <T> void writeStreamAsSubdirectory(
+    public static <T> void writeStreamAsSubdirectory(
+            OutputSequenceDirectory directory, 
             Stream<T> stream,
             Generator<T> generator,
             InputOutputContext context) {
 
-        OutputSequenceIncremental<T> sequenceWriter = createIncremental(generator,context);
+        OutputSequenceIncremental<T> sequenceWriter = createIncremental(directory, generator,context);
 
         sequenceWriter.start();
         try {
@@ -139,23 +87,8 @@ public class OutputSequence {
             sequenceWriter.end();
         }
     }
-
-    public <T> OutputSequenceIncremental<T> createIncremental(
-            Generator<T> generator, InputOutputContext context) {
-
-        return new OutputSequenceIncremental<>(
-                new OutputSequenceIncrementalChecked<>(
-                        context.getOutputter().getChecked(),
-                        subdirectoryName,
-                        outputNameStyle(),
-                        generator,
-                        0,
-                        checkIfAllowed,
-                        subdirectoryManifestDescription),
-                context.getErrorReporter());
-    }
     
-    public IntegerSuffixOutputNameStyle outputNameStyle() {
-        return new IntegerSuffixOutputNameStyle(prefix, numberDigits);
+    private static <T> OutputSequenceParameters<T> createParameters(OutputSequenceDirectory directory, Generator<T> generator, Outputter outputter) {
+        return new OutputSequenceParameters<>(outputter.getChecked(), directory, generator);
     }
 }

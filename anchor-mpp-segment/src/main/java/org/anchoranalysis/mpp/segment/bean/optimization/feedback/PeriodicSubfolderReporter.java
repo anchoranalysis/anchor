@@ -32,9 +32,9 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.generator.sequence.OutputSequence;
+import org.anchoranalysis.io.generator.sequence.OutputSequenceDirectory;
 import org.anchoranalysis.io.generator.sequence.OutputSequenceNonIncrementalChecked;
 import org.anchoranalysis.io.manifest.sequencetype.IncrementalSequenceType;
-import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
@@ -91,8 +91,8 @@ public abstract class PeriodicSubfolderReporter<T>
     }
 
     // We generate an OutputName class from the outputName string
-    protected OutputSequence outputSequence() {
-        return new OutputSequence(outputName, 10);
+    protected int numberDigitsInOutputName() {
+        return 10;
     }
 
     // We setup the manifest from a Generator
@@ -100,18 +100,15 @@ public abstract class PeriodicSubfolderReporter<T>
             throws OutputWriteFailedException {
 
         IncrementalSequenceType sequenceType = new IncrementalSequenceType(0, getAggInterval());
-
-        IndexableOutputNameStyle outputStyle = outputSequence().outputNameStyle();
         
-        this.sequenceWriter =
-                new OutputSequenceNonIncrementalChecked<>(
-                        getParentContext().getOutputter().getChecked(),
-                        Optional.of(outputStyle.getOutputName()),
-                        outputStyle,
-                        generator,
-                        true,
-                        Optional.empty());
-
+        OutputSequenceDirectory sequenceDirectory = new OutputSequenceDirectory(
+            outputName,
+            numberDigitsInOutputName(),
+            true,
+            Optional.empty()
+        );
+        
+        this.sequenceWriter = OutputSequence.createNonIncrementalChecked(sequenceDirectory, generator, getParentContext());
         this.sequenceWriter.start(sequenceType);
 
         return sequenceType;

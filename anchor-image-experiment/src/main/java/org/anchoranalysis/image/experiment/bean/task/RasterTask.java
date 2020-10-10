@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.image.experiment.bean.task;
 
-import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.bean.task.TaskWithoutSharedState;
 import org.anchoranalysis.experiment.task.InputBound;
@@ -35,7 +34,6 @@ import org.anchoranalysis.experiment.task.NoSharedState;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.input.NamedChannelsInput;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
-import org.anchoranalysis.io.output.outputter.Outputter;
 
 /**
  * An experiment that primarily takes a raster image as an input
@@ -51,25 +49,25 @@ public abstract class RasterTask extends TaskWithoutSharedState<NamedChannelsInp
             throws JobExecutionException {
 
         NamedChannelsInput input = params.getInput();
-        Outputter outputter = params.getOutputter();
+        InputOutputContext context = params.context();
 
         try {
             int numberSeries = input.numberSeries();
 
-            startSeries(outputter, params.getLogger().errorReporter());
+            startSeries(context);
 
             for (int s = 0; s < numberSeries; s++) {
-                doStack(input, s, numberSeries, params.context());
+                doStack(input, s, numberSeries, context);
             }
 
-            endSeries(outputter);
+            endSeries(context);
 
         } catch (RasterIOException e) {
             throw new JobExecutionException(e);
         }
     }
 
-    public abstract void startSeries(Outputter outputter, ErrorReporter errorReporter)
+    public abstract void startSeries(InputOutputContext context)
             throws JobExecutionException;
 
     /**
@@ -85,7 +83,7 @@ public abstract class RasterTask extends TaskWithoutSharedState<NamedChannelsInp
             NamedChannelsInput input, int seriesIndex, int numberSeries, InputOutputContext context)
             throws JobExecutionException;
 
-    public abstract void endSeries(Outputter outputter) throws JobExecutionException;
+    public abstract void endSeries(InputOutputContext context) throws JobExecutionException;
 
     @Override
     public InputTypesExpected inputTypesExpected() {

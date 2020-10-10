@@ -39,13 +39,15 @@ import org.anchoranalysis.core.name.provider.NamedProvider;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.name.value.SimpleNameValue;
 import org.anchoranalysis.io.generator.Generator;
+import org.anchoranalysis.io.generator.sequence.OutputSequence;
+import org.anchoranalysis.io.generator.sequence.OutputSequenceDirectory;
 import org.anchoranalysis.io.generator.sequence.OutputSequenceNonIncrementalChecked;
 import org.anchoranalysis.io.generator.sequence.OutputSequenceNonIncrementalLogged;
 import org.anchoranalysis.io.manifest.sequencetype.SetSequenceType;
 import org.anchoranalysis.io.namestyle.StringSuffixOutputNameStyle;
 import org.anchoranalysis.io.output.enabled.single.SingleLevelOutputEnabled;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
-import org.anchoranalysis.io.output.outputter.OutputterChecked;
+import org.anchoranalysis.io.output.outputter.InputOutputContext;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class GeneratorOutputHelper {
@@ -53,27 +55,25 @@ public class GeneratorOutputHelper {
     public static <T> void output(
             NamedProvider<T> providers,
             Generator<T> generator,
-            OutputterChecked outputter,
+            InputOutputContext context,
             String outputName,
             String prefix,
             ErrorReporter errorReporter,
             boolean suppressSubfoldersIn) {
 
-        if (!outputter.getOutputsEnabled().isOutputEnabled(outputName)) {
+        if (!context.getOutputter().outputsEnabled().isOutputEnabled(outputName)) {
             return;
         }
+        
+        OutputSequenceDirectory sequenceDirectory = new OutputSequenceDirectory(
+            OptionalUtilities.createFromFlag(
+                    !suppressSubfoldersIn, outputName),
+            createOutputNameStyle(prefix, outputName),
+            true,
+            Optional.empty()
+        ); 
 
-        OutputSequenceNonIncrementalLogged<T> writer =
-                new OutputSequenceNonIncrementalLogged<>(
-                        new OutputSequenceNonIncrementalChecked<>(
-                                outputter,
-                                OptionalUtilities.createFromFlag(
-                                        !suppressSubfoldersIn, outputName),
-                                createOutputNameStyle(prefix, outputName),
-                                generator,
-                                true,
-                                Optional.empty()),
-                        errorReporter);
+        OutputSequenceNonIncrementalLogged<T> writer = OutputSequence.createNonIncrementalLogged(sequenceDirectory, generator, context);
 
         Set<String> keys = providers.keys();
 
@@ -94,26 +94,25 @@ public class GeneratorOutputHelper {
     public static <T> void outputChecked(
             NamedProvider<T> providers,
             Generator<T> generator,
-            OutputterChecked outputter,
+            InputOutputContext context,
             String outputName,
             String suffix,
             boolean suppressSubfoldersIn)
             throws OutputWriteFailedException {
 
-        if (!outputter.getOutputsEnabled().isOutputEnabled(outputName)) {
+        if (!context.getOutputter().outputsEnabled().isOutputEnabled(outputName)) {
             return;
         }
 
-        OutputSequenceNonIncrementalChecked<T> writer =
-                new OutputSequenceNonIncrementalChecked<>(
-                        outputter,
-                        OptionalUtilities.createFromFlag(
-                                !suppressSubfoldersIn, outputName),
-                        createOutputNameStyle(suffix, outputName),
-                        generator,
-                        true,
-                        Optional.empty());
-        
+        OutputSequenceDirectory sequenceDirectory = new OutputSequenceDirectory(
+            OptionalUtilities.createFromFlag(
+                    !suppressSubfoldersIn, outputName),
+            createOutputNameStyle(suffix, outputName),
+            true,
+            Optional.empty()
+        ); 
+
+        OutputSequenceNonIncrementalChecked<T> writer = OutputSequence.createNonIncrementalChecked(sequenceDirectory, generator, context);
         writer.start(new SetSequenceType());
 
         for (String name : providers.keys()) {

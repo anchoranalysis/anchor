@@ -34,7 +34,7 @@ import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.generator.collection.GeneratorOutputHelper;
 import org.anchoranalysis.io.output.enabled.single.SingleLevelOutputEnabled;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
-import org.anchoranalysis.io.output.outputter.OutputterChecked;
+import org.anchoranalysis.io.output.outputter.InputOutputContext;
 
 @AllArgsConstructor
 class SubsetOutputter<T> {
@@ -42,7 +42,7 @@ class SubsetOutputter<T> {
     private NamedProvider<T> provider;
     private Supplier<SingleLevelOutputEnabled> outputEnabledSecondLevel;
     private Generator<T> generator;
-    private OutputterChecked outputter;
+    private InputOutputContext context;
     private String outputName;
     private String suffix;
     private boolean suppressSubfoldersIn;
@@ -57,7 +57,7 @@ class SubsetOutputter<T> {
                 GeneratorOutputHelper.subset(
                         provider, outputEnabledSecondLevel.get(), errorReporter),
                 generator,
-                outputter,
+                context,
                 outputName,
                 suffix,
                 errorReporter,
@@ -73,7 +73,7 @@ class SubsetOutputter<T> {
         GeneratorOutputHelper.outputChecked(
                 GeneratorOutputHelper.subsetWithException(provider, outputEnabledSecondLevel.get()),
                 generator,
-                outputter,
+                context,
                 outputName,
                 suffix,
                 suppressSubfoldersIn);
@@ -81,6 +81,6 @@ class SubsetOutputter<T> {
 
     /** Exit early if the output is disabled, or if there are no providers to output */
     private boolean shouldExitEarly() {
-        return provider.isEmpty() || !outputter.getOutputsEnabled().isOutputEnabled(outputName);
+        return provider.isEmpty() || !context.getOutputter().getChecked().getOutputsEnabled().isOutputEnabled(outputName);
     }
 }

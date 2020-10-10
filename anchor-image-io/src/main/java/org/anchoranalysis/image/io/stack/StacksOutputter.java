@@ -41,7 +41,6 @@ import org.anchoranalysis.io.output.enabled.single.SingleLevelOutputEnabled;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
-import org.anchoranalysis.io.output.outputter.OutputterChecked;
 
 /**
  * Outputs a named-set of stacks, performing appropriate checks on what is enabled or not.
@@ -72,7 +71,7 @@ public class StacksOutputter {
         if (outputter.outputsEnabled().isOutputEnabled(outputName)) {
             outputAfterSubsetting(
                     stackSubset(stacks, outputName, outputter),
-                    outputter.getChecked(),
+                    context,
                     outputName,
                     context.getErrorReporter(),
                     suppressSubfolders);
@@ -88,17 +87,17 @@ public class StacksOutputter {
      * @param stacks the stacks to output (or a subset thereof according to the second-level output manager)
      * @param outputName name to use for the directory, for checking if it is allowed, and for the second-level outputs
      * @param suppressSubfolders if true, a separate subdirectory is not created, and rather the outputs occur in the parent directory.
-     * @param outputter determines where and how the outputting occurs
+     * @param context determines where and how the outputting occurs
      * @throws OutputWriteFailedException if the output cannot be written. 
      */
     public static void outputChecked(
-            NamedProvider<Stack> stacks, String outputName, boolean suppressSubfolders, Outputter outputter)
+            NamedProvider<Stack> stacks, String outputName, boolean suppressSubfolders, InputOutputContext context)
             throws OutputWriteFailedException {
 
-        if (outputter.outputsEnabled().isOutputEnabled(outputName)) {
+        if (context.getOutputter().outputsEnabled().isOutputEnabled(outputName)) {
             outputAfterSubsettingChecked(
-                    stackSubset(stacks, outputName, outputter),
-                    outputter.getChecked(),
+                    stackSubset(stacks, outputName, context.getOutputter()),
+                    context,
                     outputName,
                     suppressSubfolders);
         }
@@ -106,7 +105,7 @@ public class StacksOutputter {
 
     private static void outputAfterSubsetting(
             NamedProvider<Stack> stacks,
-            OutputterChecked outputter,
+            InputOutputContext context,
             String outputName,
             ErrorReporter errorReporter,
             boolean suppressSubfoldersIn) {
@@ -114,7 +113,7 @@ public class StacksOutputter {
         GeneratorOutputHelper.output(
                 stacks,
                 createStackGenerator(),
-                outputter,
+                context,
                 outputName,
                 "",
                 errorReporter,
@@ -123,13 +122,13 @@ public class StacksOutputter {
 
     private static void outputAfterSubsettingChecked(
             NamedStacks stacks,
-            OutputterChecked outputter,
+            InputOutputContext context,
             String outputName,
             boolean suppressSubfoldersIn)
             throws OutputWriteFailedException {
         
         GeneratorOutputHelper.outputChecked(
-                stacks, createStackGenerator(), outputter, outputName, "", suppressSubfoldersIn);
+                stacks, createStackGenerator(), context, outputName, "", suppressSubfoldersIn);
     }
 
     

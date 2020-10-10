@@ -30,6 +30,7 @@ import java.io.Serializable;
 import java.util.Optional;
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.generator.sequence.OutputSequence;
+import org.anchoranalysis.io.generator.sequence.OutputSequenceDirectory;
 import org.anchoranalysis.io.generator.sequence.OutputSequenceIncremental;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.manifest.deserializer.bundle.Bundle;
@@ -53,11 +54,12 @@ public class BundledObjectOutputStreamGenerator<T extends Serializable> implemen
 
     private ObjectOutputStreamGenerator<Bundle<T>> outputGenerator;
 
-    private OutputSequenceIncremental<Bundle<T>> generatorSequence;
+    private final OutputSequenceIncremental<Bundle<T>> generatorSequence;
 
     public BundledObjectOutputStreamGenerator(
             BundleParameters bundleParameters,
-            OutputSequence sequence,
+            String outputName,
+            int numberDigitsInOutput,
             InputOutputContext parentInputOutputContext,
             String manifestDescriptionFunction) {
         this.bundleParameters = bundleParameters;
@@ -65,10 +67,11 @@ public class BundledObjectOutputStreamGenerator<T extends Serializable> implemen
         ManifestDescription manifestDescription =
                 new ManifestDescription("serializedBundle", manifestDescriptionFunction);
 
-        outputGenerator =
+        this.outputGenerator =
                 new ObjectOutputStreamGenerator<>(Optional.of(manifestDescriptionFunction));
 
-        sequence.selective().addSubdirectoryManifestDescription(manifestDescription).createIncremental(outputGenerator, parentInputOutputContext);
+        OutputSequenceDirectory directory = new OutputSequenceDirectory(outputName,numberDigitsInOutput,true,Optional.of(manifestDescription));
+        this.generatorSequence = OutputSequence.createIncremental(directory, outputGenerator, parentInputOutputContext);
     }
 
     @Override

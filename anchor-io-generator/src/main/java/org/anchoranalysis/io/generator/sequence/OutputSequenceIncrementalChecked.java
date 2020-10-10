@@ -27,12 +27,8 @@
 package org.anchoranalysis.io.generator.sequence;
 
 import java.util.Optional;
-import org.anchoranalysis.io.generator.Generator;
-import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.manifest.sequencetype.IncrementalSequenceType;
-import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
-import org.anchoranalysis.io.output.outputter.OutputterChecked;
 import org.anchoranalysis.io.output.recorded.RecordingWriters;
 
 class OutputSequenceIncrementalChecked<T> {
@@ -43,22 +39,11 @@ class OutputSequenceIncrementalChecked<T> {
     private int startIndex = 0;
 
     // User-specified ManifestDescription for the folder
-    public OutputSequenceIncrementalChecked(
-            OutputterChecked outputter,
-            String subfolderName,
-            IndexableOutputNameStyle outputNameStyle,
-            Generator<T> generator,
-            int startIndex,
-            boolean selective,
-            Optional<ManifestDescription> folderManifestDescription) {
-        delegate =
-                new OutputSequenceNonIncrementalChecked<>(
-                        outputter,
-                        Optional.of(subfolderName),
-                        outputNameStyle,
-                        generator,
-                        selective,
-                        folderManifestDescription);
+    OutputSequenceIncrementalChecked(
+            OutputSequenceParameters<T> parameters,
+            int startIndex
+    ) {
+        delegate = new OutputSequenceNonIncrementalChecked<>(parameters);
         this.startIndex = startIndex;
     }
 
