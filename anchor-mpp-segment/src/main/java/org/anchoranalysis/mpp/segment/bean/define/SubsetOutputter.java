@@ -44,9 +44,9 @@ class SubsetOutputter<T> {
     private InputOutputContext context;
     private String outputName;
     private String suffix;
-    private boolean suppressSubfoldersIn;
+    private boolean suppressSubfolders;
 
-    public void outputSubset() throws OutputWriteFailedException {
+    public void output() throws OutputWriteFailedException {
 
         if (shouldExitEarly()) {
             return;
@@ -55,10 +55,10 @@ class SubsetOutputter<T> {
         GeneratorOutputHelper.output(
                 GeneratorOutputHelper.subset(provider, outputEnabledSecondLevel.get()),
                 generator,
-                context,
                 outputName,
                 suffix,
-                suppressSubfoldersIn);
+                suppressSubfolders,
+                context);
     }
 
     /** Exit early if the output is disabled, or if there are no providers to output */

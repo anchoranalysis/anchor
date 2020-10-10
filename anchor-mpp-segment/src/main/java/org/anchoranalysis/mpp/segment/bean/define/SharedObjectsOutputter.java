@@ -54,9 +54,9 @@ class SharedObjectsOutputter {
         
         SubsetOutputterFactory factory =
                 new SubsetOutputterFactory(soMPP, context, suppressSubfolders);
-        factory.marks().outputSubset();
-        factory.histograms().outputSubset();
-        factory.objects().outputSubset();
+        factory.marks().output();
+        factory.histograms().output();
+        factory.objects().output();
     }
 
     /**

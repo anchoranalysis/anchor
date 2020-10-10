@@ -27,6 +27,7 @@
 package org.anchoranalysis.image.io.objects.deserialize;
 
 import java.nio.file.Path;
+import java.util.Optional;
 import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.index.GetOperationFailedException;
@@ -57,7 +58,7 @@ class ReadObjectsFromTIFFDirectory implements Deserializer<ObjectCollection> {
             DeserializeFromFolder<ObjectMask> deserializeFolder =
                     new DeserializeFromFolderSimple<>(
                             new ObjectDualDeserializer(rasterReader),
-                            new SerializedObjectSetFolderSource(folderPath, "*.ser"));
+                            new SerializedObjectSetFolderSource(folderPath, Optional.of("*.ser")));
 
             return createFromLoadContainer(deserializeFolder.create());
 

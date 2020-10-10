@@ -37,5 +37,5 @@ public class BundleParameters implements Serializable {
     private static final long serialVersionUID = 2877914366652685850L;
 
     private int bundleSize;
-    private SequenceType sequenceType;
+    private SequenceType<?> sequenceType;
 }

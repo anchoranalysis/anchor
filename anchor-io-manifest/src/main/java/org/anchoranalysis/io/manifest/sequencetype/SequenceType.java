@@ -27,22 +27,35 @@
 package org.anchoranalysis.io.manifest.sequencetype;
 
 import java.io.Serializable;
-import org.anchoranalysis.core.index.container.BoundedRangeIncomplete;
 import org.anchoranalysis.core.index.container.OrderProvider;
 
-public abstract class SequenceType implements BoundedRangeIncomplete, Serializable {
+/**
+ * A sequence of elements (of type {@code T}), which are mapped to a range of integer indices.
+ * 
+ * @author Owen Feehan
+ * @param <T> index-type
+ */
+public abstract class SequenceType<T> implements Serializable {
 
     /** */
     private static final long serialVersionUID = -4972832404633715034L;
 
     public abstract String getName();
 
-    public abstract void update(String index) throws SequenceTypeException;
+    public abstract void update(T element) throws SequenceTypeException;
 
-    public abstract int getNumElements();
-
-    // String for index
-    public abstract String indexStr(int index);
+    public abstract int getNumberElements();
 
     public abstract OrderProvider createOrderProvider();
+    
+    public abstract IncompleteElementRange elementRange();
+    
+    /**
+     * If the sequence-type supports a different maximum-index to that derived from the elements {@link #update}, this assigns it.
+     * 
+     * <p>Many types will ignore this operation, relying on calls to {@link #update} for the maximum index.
+     * 
+     * @param index the maximum-index
+     */
+    public abstract void assignMaximumIndex(int index);
 }

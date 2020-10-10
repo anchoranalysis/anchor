@@ -31,7 +31,6 @@ import org.anchoranalysis.core.index.GetterFromIndex;
 import org.anchoranalysis.core.index.container.BoundedIndexContainer;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
 import org.anchoranalysis.io.manifest.folder.SequencedFolder;
-import org.anchoranalysis.io.manifest.sequencetype.SequenceType;
 
 @AllArgsConstructor
 public abstract class DeserializeFromFolder<T> implements HistoryCreator<T> {
@@ -41,15 +40,12 @@ public abstract class DeserializeFromFolder<T> implements HistoryCreator<T> {
     @Override
     public LoadContainer<T> create() throws DeserializationFailedException {
 
-        SequenceType sequenceType = folder.getAssociatedSequence();
         GetterFromIndex<T> container = createContainer(folder);
-
-        assert (sequenceType != null);
 
         LoadContainer<T> history = new LoadContainer<>();
 
         BoundedIndexContainer<T> boundedContainer =
-                new BoundsFromSequenceType<>(container, sequenceType);
+                new BoundsFromRange<>(container, folder.getAssociatedElementRange());
 
         history.setContainer(boundedContainer);
         history.setExpensiveLoad(false);

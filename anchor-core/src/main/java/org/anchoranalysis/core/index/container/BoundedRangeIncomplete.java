@@ -26,6 +26,14 @@ package org.anchoranalysis.core.index.container;
  * #L%
  */
 
+/**
+ * A range of discrete integers that is not complete (missing many integers).
+ * 
+ * <p>It can be navigated to find where indexes are with {@link #nextIndex}, {@link #previousIndex} ec.
+ * 
+ * @author Owen Feehan
+ *
+ */
 public interface BoundedRangeIncomplete extends BoundedRange {
 
     // Return -1 if there is no next index

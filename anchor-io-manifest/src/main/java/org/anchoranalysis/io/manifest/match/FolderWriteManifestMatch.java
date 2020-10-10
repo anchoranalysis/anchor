@@ -34,7 +34,7 @@ import org.anchoranalysis.io.manifest.sequencetype.SequenceType;
 public class FolderWriteManifestMatch implements Match<FolderWrite> {
 
     private Match<ManifestDescription> manifestDescriptionMatch;
-    private Optional<Match<SequenceType>> sequenceTypeMatch;
+    private Optional<Match<SequenceType<?>>> sequenceTypeMatch;
 
     // If match is null, we match everything
     public FolderWriteManifestMatch(Match<ManifestDescription> manifestDescriptionMatch) {

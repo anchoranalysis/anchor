@@ -38,29 +38,36 @@ import org.anchoranalysis.io.manifest.sequencetype.SequenceTypeException;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.recorded.RecordingWriters;
+import lombok.Getter;
 
 /**
- * A sequence of outputs that use the same generator with a flexible pattern in how file-names are outputted.
+ * A sequence of outputs that use the same generator with non-incrementing indexes for each output.
+ * 
+ * <p>An {@code index} is associated with each output that must be unique, and must
+ * follow only the order expected by {@code sequenceType}.
  * 
  * @author Owen Feehan
  *
  * @param <T> element-type in generator
+ * @param <S> index-type in sequence
  */
-public class OutputSequenceNonIncremental<T> implements OutputSequence {
+public class OutputSequenceIndexed<T,S> implements OutputSequence {
 
     private final Generator<T> generator;
     private final SequenceWriters sequenceWriter;
     private final OutputWriteSettings settings;
 
-    private SequenceType sequenceType;
+    @Getter private SequenceType<S> sequenceType;
     private boolean firstAdd = true;
     
     /**
      * Creates a non-incremental sequence of outputs.
      * 
      * @param parameters parameters for the output-sequence
+     * @param sequenceType sequenceType the indexes are expected to follow
+     * @throws OutputWriteFailedException 
      */
-    OutputSequenceNonIncremental(BoundOutputter<T> parameters) {
+    OutputSequenceIndexed(BoundOutputter<T> parameters, SequenceType<S> sequenceType) throws OutputWriteFailedException {
 
         if (!parameters.getOutputter().getSettings().hasBeenInit()) {
             throw new AnchorFriendlyRuntimeException("outputter has not yet been initialized");
@@ -69,10 +76,13 @@ public class OutputSequenceNonIncremental<T> implements OutputSequence {
         this.sequenceWriter =
                 new SequenceWriters(
                         parameters.getOutputter().getWriters(),
-                        parameters.getDirectory()
+                        parameters.getOutputPattern()
                 );
         this.settings = parameters.getOutputter().getSettings();
         this.generator = parameters.getGenerator();
+        this.sequenceType = sequenceType;
+        generator.start();
+        
     }
 
     @Override
@@ -80,7 +90,7 @@ public class OutputSequenceNonIncremental<T> implements OutputSequence {
         return sequenceWriter.isOn();
     }
 
-    public void add(T element, String index) throws OutputWriteFailedException {
+    public void add(T element, S index) throws OutputWriteFailedException {
 
         try {
             generator.assignElement(element);
@@ -105,16 +115,12 @@ public class OutputSequenceNonIncremental<T> implements OutputSequence {
         }
     }
 
-    public void start(SequenceType sequenceType) throws OutputWriteFailedException {
-        generator.start();
-        this.sequenceType = sequenceType;
-    }
-
     @Override
-    public void end() throws OutputWriteFailedException {
+    public void close() throws OutputWriteFailedException {
         generator.end();
     }
 
+    @Override
     public Optional<RecordingWriters> writers() {
         return sequenceWriter.writers();
     }
@@ -133,7 +139,7 @@ public class OutputSequenceNonIncremental<T> implements OutputSequence {
     private FileType[] fileTypes() throws OperationFailedException {
         return generator
             .getFileTypes(settings)
-            .orElseThrow(OutputSequenceNonIncremental::fileTypesException);
+            .orElseThrow(OutputSequenceIndexed::fileTypesException);
     }
     
     private static OperationFailedException fileTypesException() {

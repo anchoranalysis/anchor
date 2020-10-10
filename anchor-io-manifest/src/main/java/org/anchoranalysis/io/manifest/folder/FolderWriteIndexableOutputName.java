@@ -33,7 +33,7 @@ import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.manifest.file.FileType;
 import org.anchoranalysis.io.manifest.file.FileWrite;
 import org.anchoranalysis.io.manifest.match.Match;
-import org.anchoranalysis.io.manifest.sequencetype.SequenceType;
+import org.anchoranalysis.io.manifest.sequencetype.IncompleteElementRange;
 import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
 
 public class FolderWriteIndexableOutputName extends FolderWriteWithPath {
@@ -76,19 +76,19 @@ public class FolderWriteIndexableOutputName extends FolderWriteWithPath {
      */
     @Override
     public void findFile(List<FileWrite> foundList, Match<FileWrite> match, boolean recursive) {
-        SequenceType sequenceType = getManifestFolderDescription().getSequenceType();
+        IncompleteElementRange elements = getManifestFolderDescription().getSequenceType().elementRange();
 
-        int i = sequenceType.getMinimumIndex();
+        int i = elements.getMinimumIndex();
         do {
             // We loop through each file type
             for (FileType fileType : template) {
-                FileWrite virtualFile = createFileWrite(sequenceType.indexStr(i), fileType);
+                FileWrite virtualFile = createFileWrite(elements.stringRepresentationForElement(i), fileType);
                 if (match.matches(virtualFile)) {
                     foundList.add(virtualFile);
                 }
             }
 
-            i = sequenceType.nextIndex(i);
+            i = elements.nextIndex(i);
 
         } while (i != -1);
     }

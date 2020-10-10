@@ -26,39 +26,53 @@
 
 package org.anchoranalysis.io.manifest.sequencetype;
 
-import static org.junit.Assert.*;
+import org.anchoranalysis.core.index.container.OrderProvider;
 
-import org.junit.Test;
+/**
+ * Indices must be integers that always increase as added.
+ * 
+ * <p>A sorted-set records all such indices.
+ * 
+ * @author Owen Feehan
+ *
+ */
+public class IncreasingIntegers extends SequenceType<Integer> {
 
-public class ChangeSequenceTypeTest {
+    /** */
+    private static final long serialVersionUID = -4134961949858208220L;
 
-    @Test
-    public void testNextIndex() throws SequenceTypeException {
-
-        ChangeSequenceType cst = new ChangeSequenceType();
-
-        cst.update("0");
-        cst.update("5");
-        cst.update("9");
-        cst.update("13");
-
-        assertTrue(cst.nextIndex(5) == 9);
-        assertTrue(cst.nextIndex(0) == 5);
-        assertTrue(cst.nextIndex(13) == -1);
+    private RangeFromIndexSet range = new RangeFromIndexSet();
+    
+    @Override
+    public String getName() {
+        return "change";
     }
 
-    @Test
-    public void testPreviousIndex() throws SequenceTypeException {
+    // Assumes updates are sequential
+    @Override
+    public void update(Integer element) throws SequenceTypeException {
+        range.update(element);
+    }
 
-        ChangeSequenceType cst = new ChangeSequenceType();
+    @Override
+    public OrderProvider createOrderProvider() {
+        OrderProviderHashMap map = new OrderProviderHashMap();
+        map.addIntegerSet( range.getSet() );
+        return map;
+    }
 
-        cst.update("0");
-        cst.update("5");
-        cst.update("9");
-        cst.update("13");
+    @Override
+    public int getNumberElements() {
+        return range.getNumberElements();
+    }
 
-        assertTrue(cst.previousIndex(5) == 0);
-        assertTrue(cst.previousIndex(0) == -1);
-        assertTrue(cst.previousIndex(13) == 9);
+    @Override
+    public void assignMaximumIndex(int index) {
+        range.assignMaximumIndex(index);
+    }
+
+    @Override
+    public IncompleteElementRange elementRange() {
+        return range;
     }
 }

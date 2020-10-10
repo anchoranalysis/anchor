@@ -32,7 +32,7 @@ import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.io.generator.raster.ChannelGenerator;
 import org.anchoranalysis.io.generator.sequence.OutputSequenceFactory;
-import org.anchoranalysis.io.generator.sequence.OutputSequenceDirectory;
+import org.anchoranalysis.io.generator.sequence.pattern.OutputPatternIntegerSuffix;
 import org.anchoranalysis.io.generator.serialized.KeyValueParamsGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
@@ -70,8 +70,9 @@ public class EnergyStackWriter {
     
     public void writeEnergyStack() throws OutputWriteFailedException {
         
-        OutputSequenceDirectory directory = new OutputSequenceDirectory(
+        OutputPatternIntegerSuffix directory = new OutputPatternIntegerSuffix(
             OUTPUT_ENERGY_STACK_DIRECTORY,
+            Optional.of(OUTPUT_ENERGY_STACK_DIRECTORY),
             "",
             2,
             true,

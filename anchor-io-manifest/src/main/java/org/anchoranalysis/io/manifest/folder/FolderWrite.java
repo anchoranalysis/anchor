@@ -38,7 +38,7 @@ import org.anchoranalysis.io.manifest.file.FileWrite;
 import org.anchoranalysis.io.manifest.match.FileWriteIndex;
 import org.anchoranalysis.io.manifest.match.Match;
 import org.anchoranalysis.io.manifest.operationrecorder.WriteOperationRecorder;
-import org.anchoranalysis.io.manifest.sequencetype.SequenceType;
+import org.anchoranalysis.io.manifest.sequencetype.IncompleteElementRange;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -134,7 +134,7 @@ public abstract class FolderWrite implements SequencedFolder, WriteOperationReco
     public abstract List<FileWrite> fileList();
 
     @Override
-    public SequenceType getAssociatedSequence() {
-        return getManifestFolderDescription().getSequenceType();
+    public IncompleteElementRange getAssociatedElementRange() {
+        return getManifestFolderDescription().getSequenceType().elementRange();
     }
 }

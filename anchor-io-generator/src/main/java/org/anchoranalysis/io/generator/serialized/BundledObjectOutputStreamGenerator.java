@@ -30,8 +30,8 @@ import java.io.Serializable;
 import java.util.Optional;
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.generator.sequence.OutputSequenceFactory;
-import org.anchoranalysis.io.generator.sequence.OutputSequenceDirectory;
-import org.anchoranalysis.io.generator.sequence.OutputSequenceIncremental;
+import org.anchoranalysis.io.generator.sequence.OutputSequenceIncrementing;
+import org.anchoranalysis.io.generator.sequence.pattern.OutputPatternIntegerSuffix;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.manifest.deserializer.bundle.Bundle;
 import org.anchoranalysis.io.manifest.deserializer.bundle.BundleParameters;
@@ -54,7 +54,7 @@ public class BundledObjectOutputStreamGenerator<T extends Serializable> implemen
 
     private ObjectOutputStreamGenerator<Bundle<T>> outputGenerator;
 
-    private final OutputSequenceIncremental<Bundle<T>> outputSequence;
+    private final OutputSequenceIncrementing<Bundle<T>> outputSequence;
 
     public BundledObjectOutputStreamGenerator(
             BundleParameters bundleParameters,
@@ -70,8 +70,8 @@ public class BundledObjectOutputStreamGenerator<T extends Serializable> implemen
         this.outputGenerator =
                 new ObjectOutputStreamGenerator<>(Optional.of(manifestDescriptionFunction));
 
-        OutputSequenceDirectory directory = new OutputSequenceDirectory(outputName,numberDigitsInOutput,true,Optional.of(manifestDescription));
-        this.outputSequence = new OutputSequenceFactory<>(outputGenerator, parentInputOutputContext).incremental(directory);
+        OutputPatternIntegerSuffix directory = new OutputPatternIntegerSuffix(outputName,numberDigitsInOutput,true,Optional.of(manifestDescription));
+        this.outputSequence = new OutputSequenceFactory<>(outputGenerator, parentInputOutputContext).incrementingByOne(directory);
     }
 
     @Override
@@ -124,7 +124,7 @@ public class BundledObjectOutputStreamGenerator<T extends Serializable> implemen
                     .write("bundleParameters", () -> bundleParametersGenerator);
         }
 
-        outputSequence.end();
+        outputSequence.close();
     }
 
     @Override

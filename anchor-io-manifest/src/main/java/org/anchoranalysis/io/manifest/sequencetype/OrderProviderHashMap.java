@@ -30,14 +30,10 @@ import java.util.HashMap;
 import java.util.Set;
 import org.anchoranalysis.core.index.container.OrderProvider;
 
-public class OrderProviderHashMap implements OrderProvider {
+class OrderProviderHashMap implements OrderProvider {
 
     // Maps each index to its bundle index
-    private HashMap<String, Integer> indexHash;
-
-    public OrderProviderHashMap() {
-        indexHash = new HashMap<>();
-    }
+    private HashMap<String, Integer> indexHash = new HashMap<>();
 
     public void addIntegerSet(Set<Integer> set) {
 

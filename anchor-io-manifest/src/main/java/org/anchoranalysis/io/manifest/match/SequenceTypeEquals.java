@@ -27,18 +27,15 @@
 package org.anchoranalysis.io.manifest.match;
 
 import org.anchoranalysis.io.manifest.sequencetype.SequenceType;
+import lombok.RequiredArgsConstructor;
 
-public class SequenceTypeEquals implements Match<SequenceType> {
+@RequiredArgsConstructor
+public class SequenceTypeEquals implements Match<SequenceType<?>> {
 
-    private String name;
-
-    public SequenceTypeEquals(String name) {
-        super();
-        this.name = name;
-    }
+    private final String name;
 
     @Override
-    public boolean matches(SequenceType obj) {
-        return obj.getName().equals(name);
+    public boolean matches(SequenceType<?> other) {
+        return other.getName().equals(name);
     }
 }

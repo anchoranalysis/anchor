@@ -38,13 +38,13 @@ import org.anchoranalysis.io.filepath.prefixer.PathDifference;
 import org.anchoranalysis.io.manifest.ManifestFolderDescription;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
 import org.anchoranalysis.io.manifest.folder.ExperimentFileFolder;
-import org.anchoranalysis.io.manifest.sequencetype.SetSequenceType;
+import org.anchoranalysis.io.manifest.sequencetype.StringsWithoutOrder;
 
 @RequiredArgsConstructor
 class PrefixForInput {
 
     private static final ManifestFolderDescription MANIFEST_FOLDER_ROOT =
-            new ManifestFolderDescription("root", "experiment", new SetSequenceType());
+            new ManifestFolderDescription("root", "experiment", new StringsWithoutOrder());
 
     private final FilePathPrefixer prefixer;
 

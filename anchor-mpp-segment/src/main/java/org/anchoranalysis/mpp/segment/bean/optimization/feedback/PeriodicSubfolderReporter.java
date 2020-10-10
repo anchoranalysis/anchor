@@ -32,9 +32,9 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.generator.sequence.OutputSequenceFactory;
-import org.anchoranalysis.io.generator.sequence.OutputSequenceDirectory;
-import org.anchoranalysis.io.generator.sequence.OutputSequenceNonIncremental;
-import org.anchoranalysis.io.manifest.sequencetype.IncrementalSequenceType;
+import org.anchoranalysis.io.generator.sequence.OutputSequenceIndexed;
+import org.anchoranalysis.io.generator.sequence.pattern.OutputPatternIntegerSuffix;
+import org.anchoranalysis.io.manifest.sequencetype.SequenceType;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
@@ -48,11 +48,13 @@ import org.anchoranalysis.mpp.segment.optimization.step.Reporting;
 public abstract class PeriodicSubfolderReporter<T>
         extends ReporterInterval<VoxelizedMarksWithEnergy> {
 
+    protected static final int NUMBER_DIGITS_IN_OUTPUT = 10;
+    
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private String outputName;
     // END BEAN PROPER
 
-    private OutputSequenceNonIncremental<T> sequenceWriter;
+    private OutputSequenceIndexed<T,Integer> sequenceWriter;
 
     private InputOutputContext parentContext;
 
@@ -77,7 +79,7 @@ public abstract class PeriodicSubfolderReporter<T>
                     }
                 }
 
-                sequenceWriter.add(runningElement.get(), String.valueOf(reporting.getIter()));
+                sequenceWriter.add(runningElement.get(), reporting.getIteration());
 
             } catch (OutputWriteFailedException | ReporterException e) {
                 throw new PeriodReceiverException(e);
@@ -89,27 +91,20 @@ public abstract class PeriodicSubfolderReporter<T>
             // NOTHING TO DO
         }
     }
-
-    // We generate an OutputName class from the outputName string
-    protected int numberDigitsInOutputName() {
-        return 10;
-    }
-
+    
     // We setup the manifest from a Generator
-    protected IncrementalSequenceType init(Generator<T> generator)
+    protected SequenceType<?> init(Generator<T> generator)
             throws OutputWriteFailedException {
-
-        IncrementalSequenceType sequenceType = new IncrementalSequenceType(0, getAggInterval());
         
-        OutputSequenceDirectory sequenceDirectory = new OutputSequenceDirectory(
+        OutputPatternIntegerSuffix pattern = new OutputPatternIntegerSuffix(
             outputName,
-            numberDigitsInOutputName(),
+            NUMBER_DIGITS_IN_OUTPUT,
             true,
             Optional.empty()
         );
         
-        this.sequenceWriter = new OutputSequenceFactory<>(generator, getParentContext()).nonIncremental(sequenceDirectory, sequenceType);
-        return sequenceType;
+        this.sequenceWriter = new OutputSequenceFactory<>(generator, getParentContext()).incrementingIntegers(pattern, 0, getAggInterval());
+        return sequenceWriter.getSequenceType();
     }
 
     @Override
@@ -129,7 +124,7 @@ public abstract class PeriodicSubfolderReporter<T>
             throws ReporterException {
 
         try {
-            this.sequenceWriter.end();
+            this.sequenceWriter.close();
         } catch (OutputWriteFailedException e) {
             throw new ReporterException(e);
         }

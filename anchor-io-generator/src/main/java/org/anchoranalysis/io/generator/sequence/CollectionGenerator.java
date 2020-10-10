@@ -32,6 +32,7 @@ import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.io.generator.Generator;
+import org.anchoranalysis.io.generator.sequence.pattern.OutputPattern;
 import org.anchoranalysis.io.manifest.file.FileType;
 import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.namestyle.OutputNameStyle;
@@ -106,26 +107,27 @@ public class CollectionGenerator<T> implements Generator<Collection<T>> {
             String subfolderName, IndexableOutputNameStyle outputNameStyle, int startIndex)
             throws OutputWriteFailedException {
 
-        OutputSequenceDirectory sequenceDirectory = new OutputSequenceDirectory(
+        OutputPattern sequenceDirectory = new OutputPattern(
             Optional.of(subfolderName),
             outputNameStyle,
             selective,
             Optional.empty()
         );
-        
-        // We start with id with 0
-        OutputSequenceIncremental<T> sequenceWriter =
-                new OutputSequenceIncremental<>(
-                        new BoundOutputter<>(outputter, sequenceDirectory, generator), startIndex);
+
 
         int numberWritten = 0;
-
-        sequenceWriter.start();
-        for (T element : collection) {
-            sequenceWriter.add(element);
-            numberWritten++;
+        
+        BoundOutputter<T> boundOutputter = new BoundOutputter<>(outputter, sequenceDirectory, generator); 
+        
+        // We start with id with 0
+        try (OutputSequenceIncrementing<T> outputSequence =
+                new OutputSequenceIncrementing<>(boundOutputter, startIndex)) {
+    
+            for (T element : collection) {
+                outputSequence.add(element);
+                numberWritten++;
+            }
         }
-        sequenceWriter.end();
 
         return numberWritten;
     }

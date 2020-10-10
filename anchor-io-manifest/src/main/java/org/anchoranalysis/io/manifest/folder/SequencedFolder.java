@@ -28,11 +28,12 @@ package org.anchoranalysis.io.manifest.folder;
 
 import java.util.List;
 import org.anchoranalysis.io.manifest.file.FileWrite;
-import org.anchoranalysis.io.manifest.sequencetype.SequenceType;
+import org.anchoranalysis.io.manifest.sequencetype.IncompleteElementRange;
 
 public interface SequencedFolder {
 
     void findFileFromIndex(List<FileWrite> foundList, String index, boolean recursive);
 
-    SequenceType getAssociatedSequence();
+    /** The associated element-range with ths folder. */
+    IncompleteElementRange getAssociatedElementRange();
 }

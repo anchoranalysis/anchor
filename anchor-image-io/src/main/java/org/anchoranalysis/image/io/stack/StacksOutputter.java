@@ -40,7 +40,6 @@ import org.anchoranalysis.io.generator.collection.GeneratorOutputHelper;
 import org.anchoranalysis.io.output.enabled.single.SingleLevelOutputEnabled;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
-import org.anchoranalysis.io.output.outputter.Outputter;
 
 /**
  * Outputs a named-set of stacks, performing appropriate checks on what is enabled or not.
@@ -69,25 +68,16 @@ public class StacksOutputter {
             throws OutputWriteFailedException {
 
         if (context.getOutputter().outputsEnabled().isOutputEnabled(outputName)) {
-            outputAfterSubsetting(
-                    stackSubset(stacks, outputName, context.getOutputter()),
-                    context,
+            GeneratorOutputHelper.output(
+                    subset(stacks, context.getOutputter().outputsEnabled().second(outputName)),
+                    createStackGenerator(),
                     outputName,
-                    suppressSubfolders);
+                    "",
+                    suppressSubfolders,
+                    context
+            );
         }
     }
-
-    private static void outputAfterSubsetting(
-            NamedStacks stacks,
-            InputOutputContext context,
-            String outputName,
-            boolean suppressSubfoldersIn)
-            throws OutputWriteFailedException {
-        
-        GeneratorOutputHelper.output(
-                stacks, createStackGenerator(), context, outputName, "", suppressSubfoldersIn);
-    }
-
     
     private static NamedStacks subset(
             NamedProvider<Stack> stacks, SingleLevelOutputEnabled outputEnabled) {
@@ -118,11 +108,5 @@ public class StacksOutputter {
 
     private static StackGenerator createStackGenerator() {
         return new StackGenerator(true, Optional.of(MANIFEST_FUNCTION), false);
-    }
-
-    private static NamedStacks stackSubset(
-            NamedProvider<Stack> stacks, String secondLevelOutputKey, Outputter outputter) {
-        return StacksOutputter.subset(
-                stacks, outputter.outputsEnabled().second(secondLevelOutputKey));
     }
 }

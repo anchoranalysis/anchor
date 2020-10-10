@@ -30,9 +30,13 @@ import java.util.stream.Stream;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.functional.CheckedStream;
 import org.anchoranalysis.io.generator.Generator;
+import org.anchoranalysis.io.generator.sequence.pattern.OutputPattern;
+import org.anchoranalysis.io.generator.sequence.pattern.OutputPatternIntegerSuffix;
+import org.anchoranalysis.io.generator.sequence.pattern.OutputPatternStringSuffix;
+import org.anchoranalysis.io.manifest.sequencetype.IncreasingIntegers;
+import org.anchoranalysis.io.manifest.sequencetype.IncrementingIntegers;
 import org.anchoranalysis.io.manifest.sequencetype.SequenceType;
-import org.anchoranalysis.io.manifest.sequencetype.SetSequenceType;
-import org.anchoranalysis.io.namestyle.StringSuffixOutputNameStyle;
+import org.anchoranalysis.io.manifest.sequencetype.StringsWithoutOrder;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 
@@ -52,72 +56,123 @@ public class OutputSequenceFactory<T> {
 
     /** The root director where writing occurs to, often adding a sub-directory for the sequence. */
     private InputOutputContext context;
-    
-    public OutputSequenceIncremental<T> incremental(
-            OutputSequenceDirectory directory) throws OutputWriteFailedException {
-        OutputSequenceIncremental<T> sequence = incrementalUnstarted(directory);
-        sequence.start();
-        return sequence;
-    }
-    
-    public OutputSequenceNonIncremental<T> nonIncremental(
-            OutputSequenceDirectory directory, SequenceType sequenceType) throws OutputWriteFailedException {
-        OutputSequenceNonIncremental<T> sequence = nonIncrementalUnstarted(directory);
-        sequence.start(sequenceType);
-        return sequence;
+
+    /**
+     * Writes elements to {@code directory}, with an incrementing integer in the filename.
+     * 
+     * <p>The integer in the filename starts at 0.
+     * 
+     * <p>The eventual filename written becomes {@code $prefix$index.$extension}.
+     * 
+     * @param pattern how the output of the sequence looks on the file-system and in the manifest.
+     * @return a newly created sequence (which must be closed with {@link OutputSequence#close()} after usage.
+     * @throws OutputWriteFailedException if any outputting cannot be successfully completed.
+     */
+    public OutputSequenceIncrementing<T> incrementingByOne(
+            OutputPatternIntegerSuffix pattern) throws OutputWriteFailedException {
+        return incrementingByOne(pattern, 0);
     }
     
     /**
+     * Writes elements to the current directory, with an incrementing integer in the filename.
      * 
-     * <p>The sequence is also <i>started</i> after being created.
+     * <p>The integer in the filename starts at 0.
      * 
-     * @param prefix
-     * @return
-     * @throws OutputWriteFailedException
+     * <p>The eventual filename written becomes {@code $prefix$index.$extension}.
+     * 
+     * @param outputName the associated output-name
+     * @param prefix a prefix to include before each filename that is outputted.
+     * @param numberDigits the number of digits (adding trailing zeros) for the integer part of the output-name.
+     * @return a newly created sequence (which must be closed with {@link OutputSequence#close()} after usage.
+     * @throws OutputWriteFailedException if any outputting cannot be successfully completed.
      */
-    public OutputSequenceNonIncremental<T> nonIncrementalCurrentDirectory(
-            String prefix) throws OutputWriteFailedException {
-        OutputSequenceDirectory sequenceDirectory = new OutputSequenceDirectory(
+    public OutputSequenceIncrementing<T> incrementingByOneCurrentDirectory(String outputName, String prefix, int numberDigits) throws OutputWriteFailedException {
+        OutputPatternIntegerSuffix pattern = new OutputPatternIntegerSuffix(
+            outputName,
             Optional.empty(),
-            new StringSuffixOutputNameStyle(prefix, "%s"),
+            prefix,
+            numberDigits,
             true,
             Optional.empty()
         );
+        return incrementingByOne(pattern, 0);
+    }
+    
+    public OutputSequenceIndexed<T,Integer> incrementingIntegers(
+            OutputPatternIntegerSuffix pattern, int startIndex, int incrementSize) throws OutputWriteFailedException {
+        return indexed(pattern, new IncrementingIntegers(startIndex, incrementSize) );
+    }
+    
+    public OutputSequenceIndexed<T,Integer> increasingIntegers(
+            OutputPatternIntegerSuffix pattern) throws OutputWriteFailedException {
+        return new OutputSequenceIndexed<>( bind(pattern), new IncreasingIntegers() );
+    }
 
-        // TODO it would be nicer to reflect the real sequence type, than just using a set of
-        // indexes
-        return nonIncremental(sequenceDirectory, new SetSequenceType());
+
+    /**
+     * Writes elements (indexed by strings) to {@code directory}, without any order in the sequence.
+     * 
+     * <p>Each index must be unique.
+     * 
+     * <p>The eventual filename written becomes {@code $prefix$index.$extension}.
+     *  
+     * @param pattern how the output of the sequence looks on the file-system and in the manifest.
+     * @return a newly created sequence (which must be closed with {@link OutputSequence#close()} after usage.
+     * @throws OutputWriteFailedException if any outputting cannot be successfully completed.
+     */
+    public OutputSequenceIndexed<T,String> withoutOrder(
+            OutputPatternStringSuffix pattern) throws OutputWriteFailedException {
+        return indexed(pattern, new StringsWithoutOrder() );
     }
     
     /**
-     * Generates a file for each element in a stream in a sub-directory with an increasing integer sequence in the file-name.
+     * Writes elements (indexed by strings) to the current directory, without any order in the sequence.
      * 
+     * <p>Each index must be unique.
+     * 
+     * <p>The eventual filename written becomes {@code $index.$extension} without any prefix or suffix.
+     * 
+     * @param outputName the output-name used in rules to determine if the output is enabled or not.
+     * @return a newly created sequence (which must be closed with {@link OutputSequence#close()} after usage.
+     * @throws OutputWriteFailedException if any outputting cannot be successfully completed.
+     */
+    public OutputSequenceIndexed<T,String> withoutOrderCurrentDirectory(
+            String outputName) throws OutputWriteFailedException {
+        OutputPatternStringSuffix pattern = new OutputPatternStringSuffix(
+            outputName,
+            true,
+            ""
+        );
+        return withoutOrder(pattern);
+    }
+    
+    /**
+     * Writes file for each element in a stream with an incrementing integer sequence in the outputted file-name.
+     * 
+     * <p>The integer in the filename starts at 0.
+     * 
+     * @param pattern how the output of the sequence looks on the file-system and in the manifest.
      * @param stream the items to generate separate files
      * @throws OutputWriteFailedException if any output fails to be written.
      */
-    public void incrementalStream(
-            OutputSequenceDirectory directory, 
-            Stream<T> stream) throws OutputWriteFailedException {
+    public void incrementalStream(OutputPatternIntegerSuffix pattern, Stream<T> stream) throws OutputWriteFailedException {
 
-        OutputSequenceIncremental<T> sequenceWriter = incremental(directory);
-        try {
+        try (OutputSequenceIncrementing<T> sequenceWriter = incrementingByOne(pattern)) {
             CheckedStream.forEach(stream, OutputWriteFailedException.class, sequenceWriter::add);
-        } finally {
-            sequenceWriter.end();
         }
     }
     
-    private OutputSequenceIncremental<T> incrementalUnstarted(
-            OutputSequenceDirectory directory) {
-        return new OutputSequenceIncremental<>( bind(directory), 0);
+    private <S> OutputSequenceIndexed<T,S> indexed(
+            OutputPattern pattern, SequenceType<S> sequenceType) throws OutputWriteFailedException {
+        return new OutputSequenceIndexed<>( bind(pattern), sequenceType );
     }
-  
-    private OutputSequenceNonIncremental<T> nonIncrementalUnstarted(
-          OutputSequenceDirectory directory) {
-      return new OutputSequenceNonIncremental<>( bind(directory) );
+    
+    private OutputSequenceIncrementing<T> incrementingByOne(
+            OutputPatternIntegerSuffix pattern, int startIndex) throws OutputWriteFailedException {
+        return new OutputSequenceIncrementing<>( bind(pattern), startIndex);
     }
-  
-    private BoundOutputter<T> bind(OutputSequenceDirectory directory) {
-        return new BoundOutputter<>(context.getOutputter().getChecked(), directory, generator);
+    
+    private BoundOutputter<T> bind(OutputPattern pattern) {
+        return new BoundOutputter<>(context.getOutputter().getChecked(), pattern, generator);
     }
 }

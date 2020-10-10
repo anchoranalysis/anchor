@@ -40,10 +40,10 @@ public class ManifestFolderDescription implements Serializable {
     // START REQUIRED ARGUMENTS
     @Getter private final ManifestDescription fileDescription;
 
-    @Getter private final SequenceType sequenceType;
+    @Getter private final SequenceType<?> sequenceType;
     // END REQUIRED ARGUMENTS
 
-    public ManifestFolderDescription(String type, String function, SequenceType sequenceType) {
+    public ManifestFolderDescription(String type, String function, SequenceType<?> sequenceType) {
         this.fileDescription = new ManifestDescription(type, function);
         this.sequenceType = sequenceType;
     }

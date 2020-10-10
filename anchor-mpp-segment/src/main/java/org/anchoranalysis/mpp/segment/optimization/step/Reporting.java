@@ -35,11 +35,15 @@ import org.anchoranalysis.mpp.segment.kernel.proposer.KernelWithIdentifier;
 import org.anchoranalysis.mpp.segment.optimization.DualState;
 import org.anchoranalysis.mpp.segment.optimization.feedback.ReporterException;
 
-/** Exposes data which is only needed by reporting tools */
+/** 
+ * Exposes data which is only needed by reporting tools
+ * 
+ * @param <S> state-type
+ */
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class Reporting<S> {
 
-    @Getter private int iter;
+    @Getter private int iteration;
     private final DualState<S> state;
     @Getter private Optional<S> proposal;
 
@@ -50,10 +54,6 @@ public class Reporting<S> {
 
     @Getter private boolean accepted;
     private boolean best;
-
-    public boolean isBest() {
-        return best;
-    }
 
     public double getTemperature() {
         return describeData.getTemperature();
@@ -72,7 +72,11 @@ public class Reporting<S> {
         return describeData.getKernelNoProposalDescription();
     }
 
-    public Optional<S> getBest() {
+    public boolean isBest() {
+        return best;
+    }
+    
+    public Optional<S> getBestState() {
         return state.getBest();
     }
 

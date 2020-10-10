@@ -24,29 +24,43 @@
  * #L%
  */
 
-package org.anchoranalysis.io.manifest.deserializer.folder.sequenced;
+package org.anchoranalysis.io.manifest.sequencetype;
 
-import java.nio.file.Path;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.io.bean.deserializer.Deserializer;
-import org.anchoranalysis.io.deserializer.DeserializationFailedException;
-import org.anchoranalysis.io.manifest.folder.SequencedFolder;
+import static org.junit.Assert.*;
 
-public class SequencedFolderDeserializer<T> extends SequencedFolderContainerCreator<T> {
+import org.junit.Test;
 
-    private Deserializer<T> deserializer;
+public class IncreasingIntegersTest {
 
-    public SequencedFolderDeserializer(SequencedFolder rootFolder, Deserializer<T> deserializer) {
-        super(rootFolder);
-        this.deserializer = deserializer;
+    @Test
+    public void testNextIndex() throws SequenceTypeException {
+
+        IncreasingIntegers sequence = new IncreasingIntegers();
+
+        sequence.update(0);
+        sequence.update(5);
+        sequence.update(9);
+        sequence.update(13);
+
+        IncompleteElementRange range = sequence.elementRange();
+        assertTrue(range.nextIndex(5) == 9);
+        assertTrue(range.nextIndex(0) == 5);
+        assertTrue(range.nextIndex(13) == -1);
     }
 
-    @Override
-    protected T createFromFilePath(Path path) throws CreateException {
-        try {
-            return deserializer.deserialize(path);
-        } catch (DeserializationFailedException e) {
-            throw new CreateException(e);
-        }
+    @Test
+    public void testPreviousIndex() throws SequenceTypeException {
+
+        IncreasingIntegers sequence = new IncreasingIntegers();
+
+        sequence.update(0);
+        sequence.update(5);
+        sequence.update(9);
+        sequence.update(13);
+
+        IncompleteElementRange range = sequence.elementRange();
+        assertTrue(range.previousIndex(5) == 0);
+        assertTrue(range.previousIndex(0) == -1);
+        assertTrue(range.previousIndex(13) == 9);
     }
 }

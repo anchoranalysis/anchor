@@ -27,7 +27,7 @@
 package org.anchoranalysis.io.generator.sequence;
 
 import java.util.Optional;
-import org.anchoranalysis.io.manifest.sequencetype.IncrementalSequenceType;
+import org.anchoranalysis.io.manifest.sequencetype.IncrementingIntegers;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.recorded.RecordingWriters;
 
@@ -38,29 +38,23 @@ import org.anchoranalysis.io.output.recorded.RecordingWriters;
  *
  * @param <T> element-type in generator
  */
-public class OutputSequenceIncremental<T> implements OutputSequence {
+public class OutputSequenceIncrementing<T> implements OutputSequence {
 
-    private OutputSequenceNonIncremental<T> delegate;
+    private OutputSequenceIndexed<T,Integer> delegate;
 
     private int iteration = 0;
-    private int startIndex = 0;
 
     // User-specified ManifestDescription for the folder
-    OutputSequenceIncremental(
+    OutputSequenceIncrementing(
             BoundOutputter<T> parameters,
             int startIndex
-    ) {
-        delegate = new OutputSequenceNonIncremental<>(parameters);
-        this.startIndex = startIndex;
-    }
-
-    public void start() throws OutputWriteFailedException {
-        delegate.start(new IncrementalSequenceType(startIndex));
+    ) throws OutputWriteFailedException {
+        delegate = new OutputSequenceIndexed<>(parameters, new IncrementingIntegers(startIndex));
     }
 
     public void add(T element) throws OutputWriteFailedException {
         try {
-            delegate.add(element, String.valueOf(iteration));
+            delegate.add(element, iteration);
         } finally {
             // We always update the index, even if an exception occurred. This is because:
             //  1. By design, it shouldn't change the intended indexing.
@@ -70,8 +64,8 @@ public class OutputSequenceIncremental<T> implements OutputSequence {
     }
 
     @Override
-    public void end() throws OutputWriteFailedException {
-        delegate.end();
+    public void close() throws OutputWriteFailedException {
+        delegate.close();
     }
 
     @Override

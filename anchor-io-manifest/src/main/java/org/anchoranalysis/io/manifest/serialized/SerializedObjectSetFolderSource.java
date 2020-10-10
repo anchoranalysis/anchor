@@ -40,7 +40,8 @@ import org.anchoranalysis.io.error.FileProviderException;
 import org.anchoranalysis.io.manifest.file.FileWrite;
 import org.anchoranalysis.io.manifest.folder.FolderWritePhysical;
 import org.anchoranalysis.io.manifest.folder.SequencedFolder;
-import org.anchoranalysis.io.manifest.sequencetype.IncrementalSequenceType;
+import org.anchoranalysis.io.manifest.sequencetype.IncompleteElementRange;
+import org.anchoranalysis.io.manifest.sequencetype.IncrementingIntegers;
 import org.anchoranalysis.io.manifest.sequencetype.SequenceType;
 import org.anchoranalysis.io.manifest.sequencetype.SequenceTypeException;
 import org.anchoranalysis.io.params.InputContextParams;
@@ -48,21 +49,21 @@ import org.anchoranalysis.io.params.InputContextParams;
 public class SerializedObjectSetFolderSource implements SequencedFolder {
 
     private HashMap<String, FileWrite> mapFileWrite = new HashMap<>();
-    private IncrementalSequenceType incrSequenceType;
+    private SequenceType<Integer> sequenceType;
 
     // Constructor
     public SerializedObjectSetFolderSource(Path folderPath) throws SequenceTypeException {
-        this(folderPath, null);
+        this(folderPath, Optional.empty());
     }
 
     // Constructor
-    public SerializedObjectSetFolderSource(Path folderPath, String acceptFilter)
+    public SerializedObjectSetFolderSource(Path folderPath, Optional<String> acceptFilter)
             throws SequenceTypeException {
         super();
 
         SearchDirectory fileSet = createFileSet(folderPath, acceptFilter);
 
-        incrSequenceType = new IncrementalSequenceType();
+        sequenceType = new IncrementingIntegers();
         int i = 0;
 
         FolderWritePhysical fwp = new FolderWritePhysical();
@@ -83,15 +84,15 @@ public class SerializedObjectSetFolderSource implements SequencedFolder {
 
                 String iStr = Integer.toString(i);
 
-                FileWrite fw = new FileWrite(fwp);
-                fw.setFileName(file.getName());
-                fw.setIndex(iStr);
-                fw.setOutputName("serializedObjectSetFolder");
-                fw.setManifestDescription(null);
+                FileWrite fileWrite = new FileWrite(fwp);
+                fileWrite.setFileName(file.getName());
+                fileWrite.setIndex(iStr);
+                fileWrite.setOutputName("serializedObjectSetFolder");
+                fileWrite.setManifestDescription(null);
 
-                mapFileWrite.put(iStr, fw);
+                mapFileWrite.put(iStr, fileWrite);
 
-                incrSequenceType.update(String.valueOf(i));
+                sequenceType.update(i);
 
                 i++;
             }
@@ -101,8 +102,8 @@ public class SerializedObjectSetFolderSource implements SequencedFolder {
     }
 
     @Override
-    public SequenceType getAssociatedSequence() {
-        return incrSequenceType;
+    public IncompleteElementRange getAssociatedElementRange() {
+        return sequenceType.elementRange();
     }
 
     @Override
@@ -116,16 +117,16 @@ public class SerializedObjectSetFolderSource implements SequencedFolder {
     }
 
     // AcceptFilter can be null in which case, it is ignored
-    private SearchDirectory createFileSet(Path folderPath, String acceptFilter) {
+    private static SearchDirectory createFileSet(Path folderPath, Optional<String> acceptFilter) {
 
         // We use fileSets so as to be expansible with the future
         SearchDirectory fileSet = new SearchDirectory();
         fileSet.setDirectory(folderPath.toString());
         fileSet.setIgnoreHidden(false);
 
-        if (acceptFilter != null) {
-            fileSet.setMatcher(new MatchGlob(acceptFilter));
-        }
+        acceptFilter.ifPresent( filter ->
+            fileSet.setMatcher(new MatchGlob(filter))
+        );
 
         return fileSet;
     }

@@ -26,56 +26,36 @@
 
 package org.anchoranalysis.io.manifest.sequencetype;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.util.HashSet;
-import java.util.Iterator;
 import org.anchoranalysis.core.index.container.OrderProvider;
 
-public class SetSequenceType extends SequenceType {
+/**
+ * A sequence of strings that has no order.
+ * 
+ * <p>The only requirement is that each index is unique.
+ * 
+ * @author Owen Feehan
+ *
+ */
+public class StringsWithoutOrder extends SequenceType<String> {
 
     /** */
     private static final long serialVersionUID = 8292809183713424555L;
 
     private HashSet<String> set;
+    
+    private transient CollectionAsRange range;
 
-    public SetSequenceType() {
+    public StringsWithoutOrder() {
         set = new HashSet<>();
+        range = new CollectionAsRange(set);
     }
-
+    
     @Override
-    public int nextIndex(int index) {
-        if (index < 0) {
-            return -1;
-        }
-        if (index >= (set.size() - 1)) {
-            return -1;
-        }
-        return index + 1;
-    }
-
-    @Override
-    public int previousIndex(int index) {
-        if (index <= 0) {
-            return -1;
-        }
-        if (index >= set.size()) {
-            return -1;
-        }
-        return index - 1;
-    }
-
-    @Override
-    public int previousEqualIndex(int index) {
-        return index;
-    }
-
-    @Override
-    public int getMinimumIndex() {
-        return 0;
-    }
-
-    @Override
-    public int getMaximumIndex() {
-        return set.size() - 1;
+    public void assignMaximumIndex(int index) {
+        // NOTHING TO DO, the maximum is not changed for this sequence-type
     }
 
     @Override
@@ -84,12 +64,12 @@ public class SetSequenceType extends SequenceType {
     }
 
     @Override
-    public void update(String index) throws SequenceTypeException {
-        set.add(index);
+    public void update(String element) throws SequenceTypeException {
+        set.add(element);
     }
 
     @Override
-    public int getNumElements() {
+    public int getNumberElements() {
         return set.size();
     }
 
@@ -102,17 +82,13 @@ public class SetSequenceType extends SequenceType {
     }
 
     @Override
-    public String indexStr(int index) {
-
-        assert (!set.isEmpty());
-
-        Iterator<String> itr = set.iterator();
-
-        String ret = "";
-        for (int i = 0; i <= index; i++) {
-            assert (itr.hasNext());
-            ret = itr.next();
-        }
-        return ret;
+    public IncompleteElementRange elementRange() {
+        return range;
+    }
+    
+    /** For restoring {@code range} after deserialization. */
+    private void readObject(ObjectInputStream stream) throws IOException, ClassNotFoundException {
+        stream.defaultReadObject();
+        this.range = new CollectionAsRange(set);
     }
 }

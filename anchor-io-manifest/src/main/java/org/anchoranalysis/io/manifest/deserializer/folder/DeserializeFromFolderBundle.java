@@ -53,9 +53,9 @@ public abstract class DeserializeFromFolderBundle<T, S extends Serializable>
                 new DeserializedObjectFromFolderBundle<>(folder, deserializers, CACHE_SIZE);
 
         BoundedIndexContainer<T> boundedContainer =
-                new BoundsFromSequenceType<>(
+                new BoundsFromRange<>(
                         createCntr(deserializeFromBundle),
-                        deserializeFromBundle.getBundleParameters().getSequenceType());
+                        deserializeFromBundle.getBundleParameters().getSequenceType().elementRange());
 
         LoadContainer<T> history = new LoadContainer<>();
         history.setContainer(boundedContainer);
@@ -69,7 +69,7 @@ public abstract class DeserializeFromFolderBundle<T, S extends Serializable>
 
     private boolean expensiveLoad() {
         int numberOfBundles =
-                folder.getManifestFolderDescription().getSequenceType().getNumElements();
+                folder.getManifestFolderDescription().getSequenceType().getNumberElements();
         // If we have more bundles than the size of the cache, then we leave adjusting mode off
         // If our cache is big enough for all our bundles then we go into adjusting mode
         return numberOfBundles > CACHE_SIZE;

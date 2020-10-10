@@ -24,47 +24,53 @@
  * #L%
  */
 
-package org.anchoranalysis.io.manifest.deserializer.folder.sequenced;
+package org.anchoranalysis.io.manifest.deserializer.folder;
 
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
-import org.anchoranalysis.core.error.CreateException;
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.index.GetterFromIndex;
-import org.anchoranalysis.io.manifest.file.FileWrite;
-import org.anchoranalysis.io.manifest.folder.SequencedFolder;
+import org.anchoranalysis.core.index.container.BoundChangeListener;
+import org.anchoranalysis.core.index.container.BoundedIndexContainer;
+import org.anchoranalysis.core.index.container.BoundedRangeIncomplete;
 
-public abstract class SequencedFolderCntrCreator<T> implements GetterFromIndex<T> {
+@AllArgsConstructor
+public class BoundsFromRange<T> implements GetterFromIndex<T>, BoundedIndexContainer<T> {
 
-    private SequencedFolder rootFolder;
-
-    public SequencedFolderCntrCreator(SequencedFolder rootFolder) {
-        super();
-        this.rootFolder = rootFolder;
-    }
-
-    protected abstract T createFromFilePath(Path path) throws CreateException;
+    private GetterFromIndex<T> typedIndexGetter;
+    private BoundedRangeIncomplete sequenceType;
 
     @Override
     public T get(int index) throws GetOperationFailedException {
+        return typedIndexGetter.get(index);
+    }
 
-        try {
-            List<FileWrite> foundList = new ArrayList<>();
+    @Override
+    public void addBoundChangeListener(BoundChangeListener cl) {
+        // ASSUME STATIC
+    }
 
-            String indexStr = rootFolder.getAssociatedSequence().indexStr(index);
+    @Override
+    public int nextIndex(int index) {
+        return sequenceType.nextIndex(index);
+    }
 
-            rootFolder.findFileFromIndex(foundList, indexStr, true);
+    @Override
+    public int previousIndex(int index) {
+        return sequenceType.previousIndex(index);
+    }
 
-            if (foundList.size() != 1) {
-                throw new IllegalArgumentException(String.format("Cannot find index %s", indexStr));
-            }
+    @Override
+    public int previousEqualIndex(int index) {
+        return sequenceType.previousEqualIndex(index);
+    }
 
-            Path path = foundList.get(0).calculatePath();
+    @Override
+    public int getMinimumIndex() {
+        return sequenceType.getMinimumIndex();
+    }
 
-            return createFromFilePath(path);
-        } catch (CreateException e) {
-            throw new GetOperationFailedException(index, e);
-        }
+    @Override
+    public int getMaximumIndex() {
+        return sequenceType.getMaximumIndex();
     }
 }

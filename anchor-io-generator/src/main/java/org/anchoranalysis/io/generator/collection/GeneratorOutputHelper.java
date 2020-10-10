@@ -26,22 +26,18 @@
 
 package org.anchoranalysis.io.generator.collection;
 
-import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.error.combinable.AnchorCombinableException;
 import org.anchoranalysis.core.error.friendly.HasFriendlyErrorMessage;
-import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.name.provider.NameValueSet;
 import org.anchoranalysis.core.name.provider.NamedProvider;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.name.value.SimpleNameValue;
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.generator.sequence.OutputSequenceFactory;
-import org.anchoranalysis.io.generator.sequence.OutputSequenceDirectory;
-import org.anchoranalysis.io.generator.sequence.OutputSequenceNonIncremental;
-import org.anchoranalysis.io.manifest.sequencetype.SetSequenceType;
-import org.anchoranalysis.io.namestyle.StringSuffixOutputNameStyle;
+import org.anchoranalysis.io.generator.sequence.OutputSequenceIndexed;
+import org.anchoranalysis.io.generator.sequence.pattern.OutputPatternStringSuffix;
 import org.anchoranalysis.io.output.enabled.single.SingleLevelOutputEnabled;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
@@ -52,26 +48,25 @@ public class GeneratorOutputHelper {
     public static <T> void output(
             NamedProvider<T> providers,
             Generator<T> generator,
-            InputOutputContext context,
             String outputName,
-            String suffix,
-            boolean suppressSubfoldersIn)
+            String prefix,
+            boolean suppressSubdirectory,
+            InputOutputContext context)
             throws OutputWriteFailedException {
 
-        if (!context.getOutputter().outputsEnabled().isOutputEnabled(outputName)) {
+        if (providers.isEmpty() || !context.getOutputter().outputsEnabled().isOutputEnabled(outputName)) {
             return;
         }
 
-        OutputSequenceDirectory sequenceDirectory = new OutputSequenceDirectory(
-            OptionalUtilities.createFromFlag(
-                    !suppressSubfoldersIn, outputName),
-            createOutputNameStyle(suffix, outputName),
-            true,
-            Optional.empty()
+        OutputPatternStringSuffix sequenceDirectory = new OutputPatternStringSuffix(
+            outputName,
+            suppressSubdirectory,
+            prefix
         ); 
 
-        OutputSequenceNonIncremental<T> writer = new OutputSequenceFactory<>(generator, context).nonIncremental(sequenceDirectory, new SetSequenceType());
-        try {
+        OutputSequenceFactory<T> factory = new OutputSequenceFactory<>(generator, context);
+
+        try (OutputSequenceIndexed<T,String> writer = factory.withoutOrder(sequenceDirectory)) {
             for (String name : providers.keys()) {
     
                 try {
@@ -80,8 +75,6 @@ public class GeneratorOutputHelper {
                     throwExceptionInWriter(e, name);
                 }
             }
-        } finally {
-            writer.end();
         }
     }
 
@@ -103,13 +96,6 @@ public class GeneratorOutputHelper {
         }
 
         return out;
-    }
-
-    private static StringSuffixOutputNameStyle createOutputNameStyle(String prefix, String outputName) {
-        StringSuffixOutputNameStyle outputNameStyle =
-                new StringSuffixOutputNameStyle(prefix, prefix + "%s");
-        outputNameStyle.setOutputName(outputName);
-        return outputNameStyle;
     }
         
     private static void throwExceptionInWriter(Exception e, String name)

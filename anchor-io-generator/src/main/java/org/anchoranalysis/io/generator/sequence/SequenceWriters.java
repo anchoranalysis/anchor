@@ -32,6 +32,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.io.generator.Generator;
+import org.anchoranalysis.io.generator.sequence.pattern.OutputPattern;
 import org.anchoranalysis.io.manifest.ManifestFolderDescription;
 import org.anchoranalysis.io.manifest.file.FileType;
 import org.anchoranalysis.io.manifest.folder.FolderWriteIndexableOutputName;
@@ -52,23 +53,23 @@ class SequenceWriters {
     // START: REQUIRED ARGUMENTS
     private final RecordingWriters parentWriters;
     
-    private final OutputSequenceDirectory directory;
+    private final OutputPattern pattern;
     // END: REQUIRED ARGUMENTS
 
     @Getter private Optional<RecordingWriters> writers = Optional.empty();
 
-    public void init(FileType[] fileTypes, SequenceType sequenceType) throws InitException {
+    public void init(FileType[] fileTypes, SequenceType<?> sequenceType) throws InitException {
 
         if (fileTypes.length == 0) {
             throw new InitException("The generator has no associated FileTypes");
         }
 
         ManifestFolderDescription folderDescription =
-                new ManifestFolderDescription(directory.createFolderDescription(fileTypes), sequenceType);
+                new ManifestFolderDescription(pattern.createFolderDescription(fileTypes), sequenceType);
 
         // FolderWriteIndexableOutputName
         FolderWriteIndexableOutputName subFolderWrite =
-                new FolderWriteIndexableOutputName(directory.getOutputNameStyle());
+                new FolderWriteIndexableOutputName(pattern.getOutputNameStyle());
         for (FileType fileType : fileTypes) {
             subFolderWrite.addFileType(fileType);
         }
@@ -89,8 +90,8 @@ class SequenceWriters {
 
         this.writers // NOSONAR
                 .get()
-                .multiplex(directory.isSelective())
-                .write(directory.getOutputNameStyle(), generator, index);
+                .multiplex(pattern.isSelective())
+                .write(pattern.getOutputNameStyle(), generator, index);
     }
 
     public boolean isOn() {
@@ -101,11 +102,11 @@ class SequenceWriters {
             ManifestFolderDescription folderDescription,
             FolderWriteIndexableOutputName subFolderWrite)
             throws OutputWriteFailedException {
-        if (directory.getSubdirectoryName().isPresent()) {
+        if (pattern.getSubdirectoryName().isPresent()) {
             return parentWriters
-                    .multiplex(directory.isSelective())
+                    .multiplex(pattern.isSelective())
                     .createSubdirectory(
-                            directory.getSubdirectoryName().get(),  // NOSONAR
+                            pattern.getSubdirectoryName().get(),  // NOSONAR
                             folderDescription,
                             Optional.of(subFolderWrite),
                             false)
