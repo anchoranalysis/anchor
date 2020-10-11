@@ -6,7 +6,7 @@ import java.util.Collection;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.exception.FilesProviderException;
-import org.anchoranalysis.io.params.InputContextParams;
+import org.anchoranalysis.io.input.InputContextParams;
 import lombok.Getter;
 import lombok.Setter;
 

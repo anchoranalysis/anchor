@@ -37,6 +37,7 @@ import org.anchoranalysis.io.bean.files.provider.SearchDirectory;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.bean.path.matcher.MatchGlob;
 import org.anchoranalysis.io.exception.FilesProviderException;
+import org.anchoranalysis.io.input.InputContextParams;
 import org.anchoranalysis.io.manifest.file.FileWrite;
 import org.anchoranalysis.io.manifest.folder.FolderWritePhysical;
 import org.anchoranalysis.io.manifest.folder.SequencedFolder;
@@ -44,7 +45,6 @@ import org.anchoranalysis.io.manifest.sequencetype.IncompleteElementRange;
 import org.anchoranalysis.io.manifest.sequencetype.IncrementingIntegers;
 import org.anchoranalysis.io.manifest.sequencetype.SequenceType;
 import org.anchoranalysis.io.manifest.sequencetype.SequenceTypeException;
-import org.anchoranalysis.io.params.InputContextParams;
 
 public class SerializedObjectSetFolderSource implements SequencedFolder {
 

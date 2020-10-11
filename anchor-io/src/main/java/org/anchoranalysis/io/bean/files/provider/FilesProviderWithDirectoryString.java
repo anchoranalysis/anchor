@@ -32,7 +32,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.io.params.InputContextParams;
+import org.anchoranalysis.io.input.InputContextParams;
 
 /**
  * A {@link FilesProviderWithDirectory} where the directory is optionally specified as a string

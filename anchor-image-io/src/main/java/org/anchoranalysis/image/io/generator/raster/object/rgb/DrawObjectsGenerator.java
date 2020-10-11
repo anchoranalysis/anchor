@@ -32,13 +32,13 @@ import org.anchoranalysis.core.color.ColorIndexModulo;
 import org.anchoranalysis.core.color.ColorList;
 import org.anchoranalysis.core.color.RGBColor;
 import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.io.bean.object.draw.Outline;
 import org.anchoranalysis.image.io.stack.ConvertDisplayStackToRGB;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.properties.ObjectCollectionWithProperties;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
-import org.anchoranalysis.io.bean.color.list.HSB;
-import org.anchoranalysis.io.bean.object.writer.Outline;
+import org.anchoranalysis.io.bean.color.scheme.HSB;
 import org.anchoranalysis.overlay.bean.DrawObject;
 import org.anchoranalysis.overlay.writer.ObjectDrawAttributes;
 

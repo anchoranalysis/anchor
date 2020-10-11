@@ -29,7 +29,7 @@ package org.anchoranalysis.image.io.generator.raster;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.io.rasterwriter.RasterWriteOptions;
+import org.anchoranalysis.image.io.stack.StackWriteOptions;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
@@ -81,7 +81,7 @@ public class ChannelGenerator extends RasterGeneratorWithElement<Channel> {
     }
 
     @Override
-    public RasterWriteOptions rasterWriteOptions() {
-        return RasterWriteOptions.singleChannelMaybe3D(always2D);
+    public StackWriteOptions writeOptions() {
+        return StackWriteOptions.singleChannelMaybe3D(always2D);
     }
 }

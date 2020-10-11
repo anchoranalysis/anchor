@@ -36,10 +36,10 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.OptionalFactory;
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
+import org.anchoranalysis.io.bean.input.DebugModeParams;
+import org.anchoranalysis.io.input.InputContextParams;
 import org.anchoranalysis.io.output.bean.OutputManager;
 import org.anchoranalysis.io.output.recorded.OutputEnabledDelta;
-import org.anchoranalysis.io.params.DebugModeParams;
-import org.anchoranalysis.io.params.InputContextParams;
 import org.anchoranalysis.io.path.DerivePathException;
 import org.anchoranalysis.io.path.prefixer.FilePathPrefixerContext;
 

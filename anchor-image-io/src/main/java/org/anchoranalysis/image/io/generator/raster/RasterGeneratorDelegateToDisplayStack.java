@@ -29,7 +29,7 @@ package org.anchoranalysis.image.io.generator.raster;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.index.SetOperationFailedException;
-import org.anchoranalysis.image.io.rasterwriter.RasterWriteOptions;
+import org.anchoranalysis.image.io.stack.StackWriteOptions;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.generator.SingleFileTypeGenerator;
@@ -86,7 +86,7 @@ public class RasterGeneratorDelegateToDisplayStack<T> extends RasterGenerator<T>
     }
 
     @Override
-    public RasterWriteOptions rasterWriteOptions() {
-        return RasterWriteOptions.maybeRGB(rgb);
+    public StackWriteOptions writeOptions() {
+        return StackWriteOptions.maybeRGB(rgb);
     }
 }

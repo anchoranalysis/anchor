@@ -34,7 +34,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.io.exception.AnchorIOException;
-import org.anchoranalysis.io.params.InputContextParams;
+import org.anchoranalysis.io.input.InputContextParams;
 import org.apache.commons.io.FilenameUtils;
 
 /**

@@ -37,7 +37,7 @@ import org.anchoranalysis.image.extent.box.BoundedList;
 import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.io.generator.raster.RasterGeneratorWithElement;
 import org.anchoranalysis.image.io.generator.raster.object.rgb.DrawObjectsGenerator;
-import org.anchoranalysis.image.io.rasterwriter.RasterWriteOptions;
+import org.anchoranalysis.image.io.stack.StackWriteOptions;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.properties.ObjectCollectionWithProperties;
 import org.anchoranalysis.image.object.properties.ObjectWithProperties;
@@ -208,8 +208,8 @@ public class DrawObjectOnStackGenerator
     }
 
     @Override
-    public RasterWriteOptions rasterWriteOptions() {
-        return RasterWriteOptions.maybeRGB(isRGB());
+    public StackWriteOptions writeOptions() {
+        return StackWriteOptions.maybeRGB(isRGB());
     }
 
     private ObjectMask prepareObjectForDrawing(ObjectMask object, BoundingBox containingBox) {

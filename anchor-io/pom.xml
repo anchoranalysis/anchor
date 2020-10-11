@@ -58,11 +58,6 @@
 		</dependency>
 	 	<dependency>
 			 <groupId>${project.groupId}</groupId>
-			 <artifactId>anchor-image</artifactId>
-			 <version>0.0.8-SNAPSHOT</version>
-		</dependency>
-	 	<dependency>
-			 <groupId>${project.groupId}</groupId>
 			 <artifactId>anchor-overlay</artifactId>
 			 <version>0.0.8-SNAPSHOT</version>
 		</dependency>

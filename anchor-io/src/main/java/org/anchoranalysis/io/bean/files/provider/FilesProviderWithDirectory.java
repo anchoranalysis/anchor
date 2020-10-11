@@ -31,7 +31,7 @@ import java.nio.file.Path;
 import java.util.Collection;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.exception.FilesProviderException;
-import org.anchoranalysis.io.params.InputContextParams;
+import org.anchoranalysis.io.input.InputContextParams;
 
 public abstract class FilesProviderWithDirectory extends FilesProvider {
 

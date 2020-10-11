@@ -34,8 +34,8 @@ import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.io.RasterIOException;
-import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
-import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
+import org.anchoranalysis.image.io.bean.stack.StackReader;
+import org.anchoranalysis.image.io.stack.OpenedRaster;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
@@ -59,7 +59,7 @@ class ObjectDualDeserializer implements Deserializer<ObjectMask> {
     private static final ObjectInputStreamDeserializer<BoundingBox> BOUNDING_BOX_DESERIALIZER =
             new ObjectInputStreamDeserializer<>();
 
-    private final RasterReader rasterReader;
+    private final StackReader stackReader;
 
     @Override
     public ObjectMask deserialize(Path filePath) throws DeserializationFailedException {
@@ -68,7 +68,7 @@ class ObjectDualDeserializer implements Deserializer<ObjectMask> {
 
         BoundingBox box = BOUNDING_BOX_DESERIALIZER.deserialize(filePath);
 
-        try (OpenedRaster or = rasterReader.openFile(tiffFilename)) {
+        try (OpenedRaster or = stackReader.openFile(tiffFilename)) {
             Stack stack =
                     or.openCheckType(0, ProgressReporterNull.get(), UnsignedByteVoxelType.INSTANCE)
                             .get(0);

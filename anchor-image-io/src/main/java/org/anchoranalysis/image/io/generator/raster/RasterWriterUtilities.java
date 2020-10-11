@@ -31,8 +31,8 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.io.RasterIOException;
-import org.anchoranalysis.image.io.bean.rasterwriter.RasterWriter;
-import org.anchoranalysis.image.io.rasterwriter.RasterWriteOptions;
+import org.anchoranalysis.image.io.bean.stack.StackWriter;
+import org.anchoranalysis.image.io.stack.StackWriteOptions;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
@@ -45,13 +45,13 @@ public class RasterWriterUtilities {
             OutputWriteSettings outputWriteSettings,
             Path filePath,
             boolean rgb,
-            RasterWriteOptions writeOptions)
+            StackWriteOptions writeOptions)
             throws OutputWriteFailedException {
 
         try {
-            RasterWriter rasterWriter =
+            StackWriter writer =
                     RasterWriterUtilities.getDefaultRasterWriter(outputWriteSettings);
-            rasterWriter.writeStack(stack, filePath, rgb, writeOptions);
+            writer.writeStack(stack, filePath, rgb, writeOptions);
         } catch (RasterIOException e) {
             throw new OutputWriteFailedException(e);
         }
@@ -64,18 +64,18 @@ public class RasterWriterUtilities {
      * @return a writer (always non-null)
      * @throws RasterIOException if a writer doesn't exist
      */
-    public static RasterWriter getDefaultRasterWriter(OutputWriteSettings outputWriteSettings)
+    public static StackWriter getDefaultRasterWriter(OutputWriteSettings outputWriteSettings)
             throws RasterIOException {
-        RasterWriter defaultWriter =
-                (RasterWriter) outputWriteSettings.getWriterInstance(RasterWriter.class);
+        StackWriter defaultWriter =
+                (StackWriter) outputWriteSettings.getWriterInstance(StackWriter.class);
         if (defaultWriter == null) {
-            throw new RasterIOException("No default rasterWriter has been set");
+            throw new RasterIOException("No default stackWriter has been set");
         }
         return defaultWriter;
     }
 
     public static String fileExtensionForDefaultRasterWriter(
-            OutputWriteSettings outputWriteSettings, RasterWriteOptions rasterOptions)
+            OutputWriteSettings outputWriteSettings, StackWriteOptions rasterOptions)
             throws OperationFailedException {
         try {
             return getDefaultRasterWriter(outputWriteSettings).fileExtension(rasterOptions);

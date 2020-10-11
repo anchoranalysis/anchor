@@ -38,9 +38,9 @@ import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.core.color.ColorIndex;
 import org.anchoranalysis.core.color.ColorIndexModulo;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.io.bean.color.list.ColorScheme;
-import org.anchoranalysis.io.bean.color.list.HSB;
-import org.anchoranalysis.io.bean.color.list.Shuffle;
+import org.anchoranalysis.io.bean.color.scheme.ColorScheme;
+import org.anchoranalysis.io.bean.color.scheme.HSB;
+import org.anchoranalysis.io.bean.color.scheme.Shuffle;
 
 /**
  * Settings for how to write output, including default writers.

@@ -28,7 +28,7 @@ package org.anchoranalysis.image.io.generator.raster;
 
 import java.util.Optional;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.io.rasterwriter.RasterWriteOptions;
+import org.anchoranalysis.image.io.stack.StackWriteOptions;
 import org.anchoranalysis.image.stack.Stack;
 
 /**
@@ -43,8 +43,8 @@ public class FlattenStackGenerator extends RasterGeneratorDelegateToRaster<Stack
     }
 
     @Override
-    public RasterWriteOptions rasterWriteOptions() {
-        return super.rasterWriteOptions().always2D();
+    public StackWriteOptions writeOptions() {
+        return super.writeOptions().always2D();
     }
 
     @Override

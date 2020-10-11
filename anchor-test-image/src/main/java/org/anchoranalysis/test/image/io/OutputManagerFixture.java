@@ -47,7 +47,7 @@ public class OutputManagerFixture {
 
     private static OutputWriteSettings settings() {
 
-        TestReaderWriterUtilities.ensureRasterWriter();
+        TestReaderWriterUtilities.ensureStackWriter();
 
         OutputWriteSettings settings = new OutputWriteSettings();
 

@@ -5,8 +5,8 @@ import java.nio.file.Path;
 import java.util.Optional;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.io.RasterIOException;
-import org.anchoranalysis.image.io.bean.rasterwriter.RasterWriter;
-import org.anchoranalysis.image.io.rasterwriter.RasterWriteOptions;
+import org.anchoranalysis.image.io.bean.stack.StackWriter;
+import org.anchoranalysis.image.io.stack.StackWriteOptions;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.test.image.ChannelFixture;
@@ -23,7 +23,7 @@ public class StackTester {
      * The writer to use for creating new raster-files that are tested for bytewise equality against
      * saved rasters.
      */
-    private final RasterWriter writer;
+    private final StackWriter writer;
 
     /** The directory to write new files to. */
     private final Path directoryToWriteTo;
@@ -79,7 +79,7 @@ public class StackTester {
                         stack,
                         directoryToWriteTo.resolve(filename),
                         makeRGB,
-                        RasterWriteOptions.rgbMaybe3D());
+                        StackWriteOptions.rgbMaybe3D());
         comparer.assertComparisons(pathWritten, filename);
     }
 }

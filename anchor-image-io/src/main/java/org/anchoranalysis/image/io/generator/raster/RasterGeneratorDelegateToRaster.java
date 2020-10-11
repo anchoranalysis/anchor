@@ -30,7 +30,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.index.SetOperationFailedException;
-import org.anchoranalysis.image.io.rasterwriter.RasterWriteOptions;
+import org.anchoranalysis.image.io.stack.StackWriteOptions;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
@@ -82,8 +82,8 @@ public abstract class RasterGeneratorDelegateToRaster<S, T> extends RasterGenera
     }
 
     @Override
-    public RasterWriteOptions rasterWriteOptions() {
-        return delegate.rasterWriteOptions();
+    public StackWriteOptions writeOptions() {
+        return delegate.writeOptions();
     }
 
     @Override

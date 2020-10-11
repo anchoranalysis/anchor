@@ -45,7 +45,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.spatial.SizeXY;
 import org.anchoranalysis.image.io.generator.raster.RasterGenerator;
 import org.anchoranalysis.image.io.generator.raster.RasterGeneratorWithElement;
-import org.anchoranalysis.image.io.rasterwriter.RasterWriteOptions;
+import org.anchoranalysis.image.io.stack.StackWriteOptions;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.bufferedimage.CreateStackFromBufferedImage;
 import org.anchoranalysis.io.bean.color.RGBColorBean;
@@ -129,8 +129,8 @@ public class StringRasterGenerator extends AnchorBean<StringRasterGenerator> {
         }
 
         @Override
-        public RasterWriteOptions rasterWriteOptions() {
-            return RasterWriteOptions.rgbMaybe3D();
+        public StackWriteOptions writeOptions() {
+            return StackWriteOptions.rgbMaybe3D();
         }
 
         private Graphics2D createGraphicsFromBufferedImage(BufferedImage bufferedImage) {

@@ -37,7 +37,7 @@ import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.io.generator.raster.RasterGeneratorWithElement;
-import org.anchoranalysis.image.io.rasterwriter.RasterWriteOptions;
+import org.anchoranalysis.image.io.stack.StackWriteOptions;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.voxel.Voxels;
@@ -83,8 +83,8 @@ public class ObjectAsMaskGenerator extends RasterGeneratorWithElement<ObjectMask
     }
 
     @Override
-    public RasterWriteOptions rasterWriteOptions() {
-        return RasterWriteOptions.binaryChannelMaybe3D();
+    public StackWriteOptions writeOptions() {
+        return StackWriteOptions.binaryChannelMaybe3D();
     }
 
     /**

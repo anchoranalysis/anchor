@@ -3,7 +3,7 @@ package org.anchoranalysis.test.image.rasterwriter;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.functional.OptionalUtilities;
-import org.anchoranalysis.image.io.bean.rasterwriter.RasterWriter;
+import org.anchoranalysis.image.io.bean.stack.StackWriter;
 import org.anchoranalysis.image.voxel.datatype.FloatVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedIntVoxelType;
@@ -16,10 +16,10 @@ import org.junit.Rule;
 import org.junit.rules.TemporaryFolder;
 
 /**
- * Base class for testing various implementations of {@link RasterWriter}.
+ * Base class for testing various implementations of {@link StackWriter}.
  *
  * <p>The extension passed as a parameter determines where the particular directory saved-rasters
- * are saved to test against: {@code src/test/resources/rasterWriter/formats/$EXTENSION}.
+ * are saved to test against: {@code src/test/resources/stackWriter/formats/$EXTENSION}.
  *
  * <p>Two types of comparison are optionally possible:
  *
@@ -72,8 +72,8 @@ public abstract class RasterWriterTestBase {
         );
     }
 
-    /** Creates the {@link RasterWriter} to be tested. */
-    protected abstract RasterWriter createWriter();
+    /** Creates the {@link StackWriter} to be tested. */
+    protected abstract StackWriter createWriter();
 
     private DualStackComparer createComparer() {
         return new DualStackComparer(
@@ -93,6 +93,6 @@ public abstract class RasterWriterTestBase {
 
     private DualComparer createComparer(String extensionForComparer) {
         return DualComparerFactory.compareTemporaryFolderToTest(
-                folder, Optional.empty(), "rasterWriter/formats/" + extensionForComparer);
+                folder, Optional.empty(), "stackWriter/formats/" + extensionForComparer);
     }
 }

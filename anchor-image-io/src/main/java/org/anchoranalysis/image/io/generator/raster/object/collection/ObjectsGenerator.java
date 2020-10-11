@@ -33,7 +33,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.io.generator.raster.RasterGeneratorWithElement;
-import org.anchoranalysis.image.io.rasterwriter.RasterWriteOptions;
+import org.anchoranalysis.image.io.stack.StackWriteOptions;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 
@@ -70,8 +70,8 @@ public abstract class ObjectsGenerator extends RasterGeneratorWithElement<Object
     }
 
     @Override
-    public RasterWriteOptions rasterWriteOptions() {
-        return RasterWriteOptions.singleChannelMaybe3D(dimensions.z() == 1);
+    public StackWriteOptions writeOptions() {
+        return StackWriteOptions.singleChannelMaybe3D(dimensions.z() == 1);
     }
 
     protected ObjectCollection getObjects() {

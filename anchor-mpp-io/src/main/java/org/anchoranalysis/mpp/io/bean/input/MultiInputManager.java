@@ -38,7 +38,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.functional.FunctionalList;
-import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
+import org.anchoranalysis.image.io.bean.stack.StackReader;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
@@ -56,7 +56,7 @@ public class MultiInputManager extends InputManager<MultiInput> {
     @BeanField @Getter @Setter private InputManager<? extends ProvidesStackInput> input;
 
     @BeanField @DefaultInstance @Getter @Setter
-    private RasterReader rasterReader; // For reading appended files
+    private StackReader stackReader; // For reading appended files
 
     @BeanField @OptionalBean @Getter @Setter
     private List<NamedBean<DerivePath>> appendStack = new ArrayList<>();
@@ -107,7 +107,7 @@ public class MultiInputManager extends InputManager<MultiInput> {
     }
 
     private void appendFromLists(MultiInput input, boolean doDebug) {
-        appendStack(appendStack, input, doDebug, rasterReader);
+        appendStack(appendStack, input, doDebug, stackReader);
         appendFromVariousMarksSources(input, doDebug);
         appendObjects(appendObjects, input, doDebug);
         appendKeyValueParams(listAppendKeyValueParams, input, doDebug);

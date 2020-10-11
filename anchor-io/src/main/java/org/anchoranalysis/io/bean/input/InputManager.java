@@ -32,7 +32,7 @@ import org.anchoranalysis.io.exception.AnchorIOException;
 import org.anchoranalysis.io.input.InputFromManager;
 
 /**
- * Base class for describing the inputs to an experiment.
+ * Base class for describing the inputs.
  *
  * <p>By inputs, this refers to files that form the necessary input to an experiment.
  *

@@ -40,7 +40,7 @@ import org.anchoranalysis.core.progress.ProgressReporterNull;
 import org.anchoranalysis.io.bean.files.provider.FilesProvider;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.exception.FilesProviderException;
-import org.anchoranalysis.io.params.InputContextParams;
+import org.anchoranalysis.io.input.InputContextParams;
 
 public class KeyValueParamsProviderFromFile extends KeyValueParamsProvider {
 

@@ -45,14 +45,14 @@ import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.io.RasterIOException;
-import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
-import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
+import org.anchoranalysis.image.io.bean.stack.StackReader;
+import org.anchoranalysis.image.io.stack.OpenedRaster;
 import org.anchoranalysis.io.bioformats.BioformatsOpenedRaster;
 import org.anchoranalysis.io.bioformats.bean.options.Default;
 import org.anchoranalysis.io.bioformats.bean.options.ReadOptions;
 
 @NoArgsConstructor
-public class BioformatsReader extends RasterReader {
+public class BioformatsReader extends StackReader {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private ReadOptions options = new Default();

@@ -58,8 +58,8 @@ import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.io.bean.color.list.ColorScheme;
-import org.anchoranalysis.io.bean.color.list.VeryBright;
+import org.anchoranalysis.io.bean.color.scheme.ColorScheme;
+import org.anchoranalysis.io.bean.color.scheme.VeryBright;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 /**

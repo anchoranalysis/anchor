@@ -33,7 +33,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
-import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
+import org.anchoranalysis.image.io.bean.stack.StackReader;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.io.exception.AnchorIOException;
 
@@ -42,7 +42,7 @@ public abstract class AnnotatorStrategy extends AnchorBean<AnnotatorStrategy> {
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private AnnotationBackground background;
 
-    @BeanField @DefaultInstance @Getter @Setter private RasterReader rasterReader;
+    @BeanField @DefaultInstance @Getter @Setter private StackReader stackReader;
     // END BEAN PROPERTIES
 
     public abstract Path annotationPathFor(ProvidesStackInput item) throws AnchorIOException;

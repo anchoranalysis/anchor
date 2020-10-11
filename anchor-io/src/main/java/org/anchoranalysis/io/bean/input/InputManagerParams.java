@@ -31,8 +31,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.progress.ProgressReporter;
-import org.anchoranalysis.io.params.DebugModeParams;
-import org.anchoranalysis.io.params.InputContextParams;
+import org.anchoranalysis.io.input.InputContextParams;
 
 /**
  * Parameters passed to an InputManager to generate input-objects

@@ -34,10 +34,10 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
 import org.anchoranalysis.image.io.RasterIOException;
-import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
+import org.anchoranalysis.image.io.bean.stack.StackReader;
 import org.anchoranalysis.image.io.histogram.HistogramCSVReader;
 import org.anchoranalysis.image.io.objects.ObjectCollectionReader;
-import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
+import org.anchoranalysis.image.io.stack.OpenedRaster;
 import org.anchoranalysis.image.stack.TimeSequence;
 import org.anchoranalysis.io.bean.path.derive.DerivePath;
 import org.anchoranalysis.io.input.OperationOutFilePath;
@@ -59,14 +59,14 @@ class AppendHelper {
             List<NamedBean<DerivePath>> listPaths,
             MultiInput input,
             boolean debugMode,
-            final RasterReader rasterReader) {
+            final StackReader stackReader) {
         append(
                 input,
                 listPaths,
                 MultiInput::stack,
                 outPath -> {
                     try {
-                        return openRaster(outPath, rasterReader);
+                        return openRaster(outPath, stackReader);
                     } catch (RasterIOException e) {
                         throw new OperationFailedException(e);
                     }
@@ -176,9 +176,9 @@ class AppendHelper {
         }
     }
 
-    private static TimeSequence openRaster(Path path, RasterReader rasterReader)
+    private static TimeSequence openRaster(Path path, StackReader stackReader)
             throws RasterIOException {
-        try (OpenedRaster openedRaster = rasterReader.openFile(path)) {
+        try (OpenedRaster openedRaster = stackReader.openFile(path)) {
             return openedRaster.open(0, ProgressReporterNull.get());
         }
     }

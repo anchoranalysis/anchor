@@ -28,7 +28,7 @@ package org.anchoranalysis.annotation.io.assignment.generator;
 
 import org.anchoranalysis.core.color.ColorList;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.io.bean.color.list.ColorScheme;
+import org.anchoranalysis.io.bean.color.scheme.ColorScheme;
 
 public class ColorPool {
 

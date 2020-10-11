@@ -29,7 +29,7 @@ package org.anchoranalysis.image.io.bean.channel.map;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.io.channel.NamedEntries;
-import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
+import org.anchoranalysis.image.io.stack.OpenedRaster;
 
 public abstract class ChannelMap extends AnchorBean<ChannelMap> {
 

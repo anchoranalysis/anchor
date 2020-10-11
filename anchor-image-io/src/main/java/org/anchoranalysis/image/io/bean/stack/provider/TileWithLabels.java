@@ -35,7 +35,6 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.image.bean.provider.stack.ArrangeRaster;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
-import org.anchoranalysis.image.io.bean.stack.StackProviderWithLabel;
 import org.anchoranalysis.image.io.stack.TileRasters;
 import org.anchoranalysis.image.stack.Stack;
 

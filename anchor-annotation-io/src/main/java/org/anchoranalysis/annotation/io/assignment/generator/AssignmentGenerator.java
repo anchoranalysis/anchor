@@ -36,11 +36,14 @@ import org.anchoranalysis.core.color.ColorList;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.stack.ArrangeRaster;
-import org.anchoranalysis.image.io.bean.stack.StackProviderWithLabel;
+import org.anchoranalysis.image.io.bean.object.draw.Filled;
+import org.anchoranalysis.image.io.bean.object.draw.IfElse;
+import org.anchoranalysis.image.io.bean.object.draw.Outline;
+import org.anchoranalysis.image.io.bean.stack.provider.StackProviderWithLabel;
 import org.anchoranalysis.image.io.generator.raster.RasterGeneratorWithElement;
 import org.anchoranalysis.image.io.generator.raster.StackGenerator;
 import org.anchoranalysis.image.io.generator.raster.object.rgb.DrawObjectsGenerator;
-import org.anchoranalysis.image.io.rasterwriter.RasterWriteOptions;
+import org.anchoranalysis.image.io.stack.StackWriteOptions;
 import org.anchoranalysis.image.io.stack.TileRasters;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
@@ -50,9 +53,6 @@ import org.anchoranalysis.image.object.properties.ObjectWithProperties;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
-import org.anchoranalysis.io.bean.object.writer.Filled;
-import org.anchoranalysis.io.bean.object.writer.IfElse;
-import org.anchoranalysis.io.bean.object.writer.Outline;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.overlay.bean.DrawObject;
@@ -133,8 +133,8 @@ public class AssignmentGenerator extends RasterGeneratorWithElement<Assignment> 
     }
 
     @Override
-    public RasterWriteOptions rasterWriteOptions() {
-        return RasterWriteOptions.rgbMaybe3D();
+    public StackWriteOptions writeOptions() {
+        return StackWriteOptions.rgbMaybe3D();
     }
 
     private static ArrangeRaster createTiledStackProvider(

@@ -31,27 +31,27 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.bean.xml.factory.AnchorDefaultBeanFactory;
-import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
-import org.anchoranalysis.image.io.bean.rasterwriter.RasterWriter;
+import org.anchoranalysis.image.io.bean.stack.StackReader;
+import org.anchoranalysis.image.io.bean.stack.StackWriter;
 import org.anchoranalysis.io.bioformats.ConfigureBioformatsLogging;
 import org.anchoranalysis.io.bioformats.bean.BioformatsReader;
 import org.anchoranalysis.io.bioformats.bean.options.ForceTimeSeriesToStack;
-import org.anchoranalysis.io.imagej.bean.raster.writer.Tiff;
+import org.anchoranalysis.io.imagej.bean.stack.writer.Tiff;
 import org.apache.commons.configuration.beanutils.BeanHelper;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class TestReaderWriterUtilities {
 
-    public static void ensureRasterReader() {
+    public static void ensureStackReader() {
         ConfigureBioformatsLogging.instance().makeSureConfigured();
-        addIfMissing(RasterReader.class, createReader());
+        addIfMissing(StackReader.class, createReader());
     }
 
-    public static void ensureRasterWriter() {
-        addIfMissing(RasterWriter.class, new Tiff());
+    public static void ensureStackWriter() {
+        addIfMissing(StackWriter.class, new Tiff());
     }
 
-    private static RasterReader createReader() {
+    private static StackReader createReader() {
         return new BioformatsReader(new ForceTimeSeriesToStack());
     }
 

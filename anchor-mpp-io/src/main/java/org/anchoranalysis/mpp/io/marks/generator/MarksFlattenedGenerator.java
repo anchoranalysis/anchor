@@ -28,8 +28,8 @@ package org.anchoranalysis.mpp.io.marks.generator;
 
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.idgetter.IDGetter;
+import org.anchoranalysis.image.io.bean.object.draw.Flatten;
 import org.anchoranalysis.image.stack.DisplayStack;
-import org.anchoranalysis.io.bean.object.writer.Flatten;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMapSingleton;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMembershipWithFlags;
 import org.anchoranalysis.mpp.io.marks.ColoredMarksWithDisplayStack;

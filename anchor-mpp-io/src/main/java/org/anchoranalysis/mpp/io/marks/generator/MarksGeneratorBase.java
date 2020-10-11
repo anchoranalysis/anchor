@@ -32,8 +32,8 @@ import lombok.Setter;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.idgetter.IDGetter;
 import org.anchoranalysis.image.io.generator.raster.RasterGeneratorWithElement;
-import org.anchoranalysis.image.io.rasterwriter.RasterWriteOptions;
 import org.anchoranalysis.image.io.stack.ConvertDisplayStackToRGB;
+import org.anchoranalysis.image.io.stack.StackWriteOptions;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
@@ -100,7 +100,7 @@ public abstract class MarksGeneratorBase
     }
 
     @Override
-    public RasterWriteOptions rasterWriteOptions() {
-        return RasterWriteOptions.rgbMaybe3D();
+    public StackWriteOptions writeOptions() {
+        return StackWriteOptions.rgbMaybe3D();
     }
 }

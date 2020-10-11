@@ -34,9 +34,9 @@ import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.io.RasterIOException;
-import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
+import org.anchoranalysis.image.io.bean.stack.StackReader;
 import org.anchoranalysis.image.io.objects.ObjectCollectionReader;
-import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
+import org.anchoranalysis.image.io.stack.OpenedRaster;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.bioformats.ConfigureBioformatsLogging;
@@ -51,13 +51,13 @@ public class TestLoaderImageIO {
     @Getter private TestLoader loader;
 
     /** Reads rasters from filesystem */
-    private RasterReader rasterReader;
+    private StackReader stackReader;
 
     public TestLoaderImageIO(TestLoader loader) {
         this.loader = loader;
 
-        TestReaderWriterUtilities.ensureRasterReader();
-        rasterReader = RegisterBeanFactories.getDefaultInstances().get(RasterReader.class);
+        TestReaderWriterUtilities.ensureStackReader();
+        stackReader = RegisterBeanFactories.getDefaultInstances().get(StackReader.class);
     }
 
     public Channel openChannelFromTestPath(String testPath) {
@@ -79,7 +79,7 @@ public class TestLoaderImageIO {
 
         ConfigureBioformatsLogging.instance().makeSureConfigured();
 
-        try (OpenedRaster openedRaster = rasterReader.openFile(filePath)) {
+        try (OpenedRaster openedRaster = stackReader.openFile(filePath)) {
             return openedRaster.open(0, ProgressReporterNull.get()).get(0);
         } catch (RasterIOException e) {
             throw new TestDataLoadException(e);
@@ -148,7 +148,7 @@ public class TestLoaderImageIO {
     public ObjectCollection openObjectsFromFilePath(Path folderPath) {
 
         ConfigureBioformatsLogging.instance().makeSureConfigured();
-        TestReaderWriterUtilities.ensureRasterReader();
+        TestReaderWriterUtilities.ensureStackReader();
 
         try {
             return ObjectCollectionReader.createFromPath(folderPath);
