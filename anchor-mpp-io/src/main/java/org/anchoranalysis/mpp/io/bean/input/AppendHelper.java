@@ -39,7 +39,7 @@ import org.anchoranalysis.image.io.histogram.HistogramCSVReader;
 import org.anchoranalysis.image.io.objects.ObjectCollectionReader;
 import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
 import org.anchoranalysis.image.stack.TimeSequence;
-import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
+import org.anchoranalysis.io.bean.path.derive.DerivePath;
 import org.anchoranalysis.io.input.OperationOutFilePath;
 import org.anchoranalysis.mpp.io.input.MultiInput;
 import org.anchoranalysis.mpp.io.input.MultiInputSubMap;
@@ -56,7 +56,7 @@ class AppendHelper {
 
     /** It is assumed the input files are single channel images. */
     public static void appendStack(
-            List<NamedBean<FilePathGenerator>> listPaths,
+            List<NamedBean<DerivePath>> listPaths,
             MultiInput input,
             boolean debugMode,
             final RasterReader rasterReader) {
@@ -75,7 +75,7 @@ class AppendHelper {
     }
 
     public static void appendHistogram(
-            List<NamedBean<FilePathGenerator>> listPaths, MultiInput input, boolean debugMode) {
+            List<NamedBean<DerivePath>> listPaths, MultiInput input, boolean debugMode) {
         append(
                 input,
                 listPaths,
@@ -85,12 +85,12 @@ class AppendHelper {
     }
 
     public static void appendFilePath(
-            List<NamedBean<FilePathGenerator>> listPaths, MultiInput input, boolean debugMode) {
+            List<NamedBean<DerivePath>> listPaths, MultiInput input, boolean debugMode) {
         append(input, listPaths, MultiInput::filePath, outPath -> outPath, debugMode);
     }
 
     public static void appendKeyValueParams(
-            List<NamedBean<FilePathGenerator>> listPaths, MultiInput input, boolean debugMode) {
+            List<NamedBean<DerivePath>> listPaths, MultiInput input, boolean debugMode) {
 
         // Delayed-calculation of the appending path as it can be a bit expensive when multiplied by
         // so many items
@@ -103,12 +103,12 @@ class AppendHelper {
     }
 
     public static void appendMarks(
-            List<NamedBean<FilePathGenerator>> listPaths, MultiInput input, boolean debugMode) {
+            List<NamedBean<DerivePath>> listPaths, MultiInput input, boolean debugMode) {
         append(input, listPaths, MultiInput::marks, DESERIALIZER::deserializeMarks, debugMode);
     }
 
     public static void appendMarksFromAnnotation(
-            List<NamedBean<FilePathGenerator>> listPaths,
+            List<NamedBean<DerivePath>> listPaths,
             MultiInput input,
             boolean includeAccepted,
             boolean includeRejected,
@@ -125,7 +125,7 @@ class AppendHelper {
     }
 
     public static void appendObjects(
-            List<NamedBean<FilePathGenerator>> listPaths, MultiInput input, boolean debugMode) {
+            List<NamedBean<DerivePath>> listPaths, MultiInput input, boolean debugMode) {
         append(
                 input,
                 listPaths,
@@ -146,12 +146,12 @@ class AppendHelper {
      */
     private static <T> void append(
             MultiInput input,
-            List<NamedBean<FilePathGenerator>> list,
+            List<NamedBean<DerivePath>> list,
             Function<MultiInput, MultiInputSubMap<T>> extractMap,
             ReadFromPath<T> reader,
             boolean debugMode) {
 
-        for (NamedBean<FilePathGenerator> namedBean : list) {
+        for (NamedBean<DerivePath> namedBean : list) {
 
             MultiInputSubMap<T> map = extractMap.apply(input);
 
@@ -164,7 +164,7 @@ class AppendHelper {
     private static <T> T readObjectForAppend(
             MultiInput input,
             ReadFromPath<T> reader,
-            NamedBean<FilePathGenerator> namedBean,
+            NamedBean<DerivePath> namedBean,
             boolean debugMode)
             throws OperationFailedException {
         try {

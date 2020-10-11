@@ -35,7 +35,7 @@ import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.generator.GeneratorBridge;
-import org.anchoranalysis.io.generator.collection.CollectionAsSubdirectoryGenerator;
+import org.anchoranalysis.io.generator.collection.CollectionGenerator;
 
 /**
  * Writes each object as a raster-image in a directory.
@@ -58,7 +58,7 @@ public class RasterDirectoryObjectsGenerator {
         // being iterated
         // We don't specify a sceneres as we don't know what images they belong to
         Generator<List<ObjectMask>> listGenerator =
-                new CollectionAsSubdirectoryGenerator<>(objectGenerator, "objs");
+                new CollectionGenerator<>(objectGenerator, "objs");
 
         // Finally we expose the list-generator as an ObjectCollection generator externally
         return GeneratorBridge.createOneToOne(listGenerator, ObjectCollection::asList);

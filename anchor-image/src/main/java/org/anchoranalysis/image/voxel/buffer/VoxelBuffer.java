@@ -27,8 +27,6 @@
 package org.anchoranalysis.image.voxel.buffer;
 
 import java.nio.Buffer;
-import java.nio.ByteBuffer;
-import java.util.Optional;
 import org.anchoranalysis.image.histogram.HistogramFactory;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
@@ -46,19 +44,6 @@ import lombok.AllArgsConstructor;
  */
 @AllArgsConstructor
 public abstract class VoxelBuffer<T> {
-    
-    
-    /** 
-     * A buffer of bytes on which other more type-specific views may be based on.
-     * 
-     * <p>This buffer may not exist, if a {@link VoxelBuffer} was initially made
-     * from an array of non-byte elements.
-     * 
-     * <p>It is useful to keep a reference to this buffer if it exists, so that
-     *  as when writing to the file-system the byte-view may be needed, and this
-     *  is the most efficient way of access it.
-     * */
-    protected final Optional<ByteBuffer> underlyingBytes;
     
     /**
      * Data-type of each voxel in the buffer.

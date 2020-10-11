@@ -42,6 +42,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.functional.function.CheckedBiFunction;
 import org.anchoranalysis.core.functional.function.CheckedFunction;
+import org.anchoranalysis.core.functional.function.CheckedPredicate;
 
 /** Utilities functions for manipulating or creating {@link java.util.List} in a functional way */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -239,6 +240,23 @@ public class FunctionalList {
      */
     public static <T> List<T> filterToList(Collection<T> collection, Predicate<T> predicate) {
         return collection.stream().filter(predicate).collect(Collectors.toList());
+    }
+    
+    /**
+     * Filters a collection and maps the result to a list
+     *
+     * <p>This function's purpose is mostly an convenience utility to make source-code easier to
+     * read, as the paradigm below (although idiomatic) occurs in multiple places.
+     *
+     * @param <T> list item-type
+     * @param <E> exception that may be thrown during evaluating the predicate
+     * @param predicate predicate to first filter the input collection before mapping
+     * @param collection the collection to be filtered
+     * @return a list with only the elements that pass the filter
+     * @throws E if an exception is thrown during evaluating the predicate
+     */
+    public static <T,E extends Exception> List<T> filterToList(Collection<T> collection, Class<? extends Exception> throwableClass, CheckedPredicate<T,E> predicate) throws E {
+        return CheckedStream.filter( collection.stream(), throwableClass, predicate).collect(Collectors.toList());
     }
 
     /**

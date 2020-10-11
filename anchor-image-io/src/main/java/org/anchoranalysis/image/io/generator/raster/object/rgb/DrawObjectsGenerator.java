@@ -28,6 +28,7 @@ package org.anchoranalysis.image.io.generator.raster.object.rgb;
 
 import io.vavr.control.Either;
 import org.anchoranalysis.core.color.ColorIndex;
+import org.anchoranalysis.core.color.ColorIndexModulo;
 import org.anchoranalysis.core.color.ColorList;
 import org.anchoranalysis.core.color.RGBColor;
 import org.anchoranalysis.image.extent.Dimensions;
@@ -38,7 +39,6 @@ import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
 import org.anchoranalysis.io.bean.color.list.HSB;
 import org.anchoranalysis.io.bean.object.writer.Outline;
-import org.anchoranalysis.io.color.ColorIndexModulo;
 import org.anchoranalysis.overlay.bean.DrawObject;
 import org.anchoranalysis.overlay.writer.ObjectDrawAttributes;
 
@@ -152,7 +152,7 @@ public class DrawObjectsGenerator extends ObjectsOnRGBGenerator {
     }
 
     private static ColorIndex defaultColorsFor(int size) {
-        return new HSB().create(size);
+        return new HSB().createList(size);
     }
 
     private static ColorIndex singleColorIndex(RGBColor color) {

@@ -54,12 +54,23 @@ public abstract class IndexableOutputNameStyle extends OutputNameStyle {
         this.outputName = src.outputName;
     }
 
-    public String getPhysicalName(int index) {
-        return getPhysicalName(Integer.toString(index));
+    /**
+     * Like {@link #getFilenameWithoutExtension()} but incorporates an <i>integer</i> index.
+     * 
+     * @param index the index
+     * @return @return the filename (without an extension, including without the period before the extension).
+     */
+    public String getFilenameWithoutExtension(int index) {
+        return getFilenameWithoutExtension(Integer.toString(index));
     }
 
-    /** The full physical name written to the file, including prefix, suffix, index etc. */
-    public String getPhysicalName(String index) {
+    /**
+     * Like {@link #getFilenameWithoutExtension()} but incorporates an <i>string</i> index.
+     * 
+     * @param index the index
+     * @return @return the filename (without an extension, including without the period before the extension).
+     */
+    public String getFilenameWithoutExtension(String index) {
         return nameFromOutputFormatString(outputFormatString(), index);
     }
 
@@ -77,12 +88,14 @@ public abstract class IndexableOutputNameStyle extends OutputNameStyle {
     }
 
     @Override
-    public String getPhysicalName() {
+    public String getFilenameWithoutExtension() {
         throw new UnsupportedOperationException(
                 "an index is required for getPhysicalName in this class");
     }
 
-    /** Constructs a full name from the output format string and an index */
+    /** 
+     * Constructs a full name from the output format string and an index
+     */
     protected abstract String nameFromOutputFormatString(String outputFormatString, String index);
 
     protected abstract String outputFormatString();

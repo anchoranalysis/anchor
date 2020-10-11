@@ -30,24 +30,18 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.color.ColorList;
-import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.functional.FunctionalIterate;
 
-public class Repeat extends ColorListFactory {
+public class Repeat extends ColorSchemeUnary {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private ColorListFactory colors;
-
     @BeanField @Getter @Setter private int times = 2;
     // END BEAN PROPERTIES
 
     @Override
-    public ColorList create(int size) throws OperationFailedException {
-
-        ColorList in = colors.create(size);
-
+    protected ColorList transform(ColorList source) {
         ColorList out = new ColorList();
-        FunctionalIterate.repeat(times, () -> out.addAll(in));
+        FunctionalIterate.repeat(times, () -> out.addAll(source));
         return out;
     }
 }

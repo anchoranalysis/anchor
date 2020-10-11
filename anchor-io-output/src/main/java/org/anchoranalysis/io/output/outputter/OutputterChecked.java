@@ -30,7 +30,6 @@ import java.nio.file.Path;
 import java.util.Optional;
 import lombok.Getter;
 import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
-import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.manifest.ManifestFolderDescription;
 import org.anchoranalysis.io.manifest.folder.FolderWriteWithPath;
@@ -44,6 +43,7 @@ import org.anchoranalysis.io.output.enabled.multi.MultiLevelOutputEnabled;
 import org.anchoranalysis.io.output.outputter.directory.OutputterTarget;
 import org.anchoranalysis.io.output.recorded.MultiLevelRecordedOutputs;
 import org.anchoranalysis.io.output.recorded.RecordingWriters;
+import org.anchoranalysis.io.path.prefixer.DirectoryWithPrefix;
 
 /**
  * A particular directory on the filesystem in which outputting can occur.
@@ -54,7 +54,7 @@ import org.anchoranalysis.io.output.recorded.RecordingWriters;
  * prefixes.
  *
  * <p>A prefix can be associated with the outputter, which prepends a path (containing possibly both
- * sub-directory and file-name parts) on all outputs.
+ * subdirectory and file-name parts) on all outputs.
  *
  * @author Owen Feehan
  */
@@ -90,7 +90,7 @@ public class OutputterChecked {
     public static OutputterChecked createForDirectoryPermissive(
             Path pathDirectory, boolean deleteExistingDirectory) throws BindFailedException {
         return createWithPrefix(
-                new FilePathPrefix(pathDirectory),
+                new DirectoryWithPrefix(pathDirectory),
                 Permissive.INSTANCE,
                 new OutputWriteSettings(),
                 new NullWriteOperationRecorder(),
@@ -111,7 +111,7 @@ public class OutputterChecked {
      * @throws BindFailedException if a directory cannot be created at the intended path.
      */
     public static OutputterChecked createWithPrefix(
-            FilePathPrefix prefix,
+            DirectoryWithPrefix prefix,
             MultiLevelOutputEnabled outputEnabled,
             OutputWriteSettings settings,
             WriteOperationRecorder writeOperationRecorder,
@@ -171,7 +171,7 @@ public class OutputterChecked {
      * @throws BindFailedException
      */
     public OutputterChecked changePrefix(
-            FilePathPrefix prefixToAssign, WriteOperationRecorder writeOperationRecorderToAssign)
+            DirectoryWithPrefix prefixToAssign, WriteOperationRecorder writeOperationRecorderToAssign)
             throws BindFailedException {
         return new OutputterChecked(
                 target.changePrefix(prefixToAssign),
@@ -199,17 +199,17 @@ public class OutputterChecked {
             Optional<FolderWriteWithPath> manifestFolder,
             boolean inheritOutputRulesAndRecording) {
 
-        // Construct a sub-directory for the desired outputName
-        Path pathSubdirectory = outFilePath(subdirectoryName);
+        // Construct a subdirectory for the desired outputName
+        Path pathSubdirectory = makeOutputPath(subdirectoryName);
 
         try {
             return new OutputterChecked(
-                    target.changePrefix(new FilePathPrefix(pathSubdirectory)),
+                    target.changePrefix(new DirectoryWithPrefix(pathSubdirectory)),
                     writeFolderToOperationRecorder(
                             pathSubdirectory, manifestDescription, manifestFolder),
                     inheritOutputRulesAndRecording
                             ? outputsEnabled
-                            : Permissive.INSTANCE, // Allow all outputs in the sub-directory
+                            : Permissive.INSTANCE, // Allow all outputs in the subdirectory
                     inheritOutputRulesAndRecording
                             ? recordedOutputs
                             : Optional.empty(), // Output-names are no longer recorded on
@@ -227,46 +227,62 @@ public class OutputterChecked {
      * Writes a file-entry to the operation recorder
      *
      * @param outputName output-name
-     * @param path path of the file
+     * @param pathSuffix the final part of the path of the file
      * @param manifestDescription the manifest description
      * @param index an index associated with this item (there may be other items with the same name,
      *     but not the same index)
      */
     public void writeFileToOperationRecorder(
-            String outputName, Path path, ManifestDescription manifestDescription, String index) {
+            String outputName, Path pathSuffix, ManifestDescription manifestDescription, String index) {
         writeOperationRecorder.write(
-                outputName, manifestDescription, target.relativePath(path), index);
+                outputName, manifestDescription, relativePath(pathSuffix), index);
     }
 
     public Path getOutputFolderPath() {
         return target.getFolderPath();
     }
 
-    public Path outFilePath(String filePathRelative) {
-        return target.outFilePath(filePathRelative);
+    /**
+     * Creates a full absolute path that completes the part of the path present in the outputter with an additional suffix.
+     * 
+     * @param suffix the suffix for the path
+     * @return a newly created absolute path, combining directory, prefix (if it exists) and suffix.
+     */
+    public Path makeOutputPath(String suffix) {
+        return target.pathCreator().makePathAbsolute(suffix);
+    }
+    
+    /**
+     * Like {@link #makeOutputPath(String)} but additionally adds an extension.
+     * 
+     * @param suffixWithoutExtension the suffix for the path (without any extension).
+     * @return a newly created absolute path, combining directory, prefix (if it exists), suffix and extension.
+     */
+    public Path makeOutputPath(String suffixWithoutExtension, String extension) {
+        return makeOutputPath(suffixWithoutExtension + "." + extension);
     }
 
-    public FilePathPrefix getPrefix() {
+    public DirectoryWithPrefix getPrefix() {
         return target.getPrefix();
     }
 
     /**
      * Writes a folder-entry to the operation-recorder (if it exists)
      *
-     * @param path path of the folder that is to be written
+     * @param pathSuffix the final part of the path of the file
      * @param manifestDescription the manifest-description
      * @param manifestFolder the associated folder in the manifest
      * @return a write recorder for the sub folder (if it exists) or otherwise the write recorder
      *     associated with the output manager
      */
     private WriteOperationRecorder writeFolderToOperationRecorder(
-            Path path,
+            Path pathSuffix,
             ManifestFolderDescription manifestDescription,
             Optional<FolderWriteWithPath> manifestFolder) {
         if (manifestFolder.isPresent()) {
             // Assume the folder are writing to has no path
             return writeOperationRecorder.writeFolder(
-                    target.relativePath(path), manifestDescription, manifestFolder.get());
+                    relativePath(pathSuffix), manifestDescription, manifestFolder.get());
         } else {
             return writeOperationRecorder;
         }
@@ -278,5 +294,9 @@ public class OutputterChecked {
         } else {
             return outputsEnabled;
         }
+    }
+        
+    private Path relativePath(Path pathSuffix) {
+        return target.pathCreator().makePathRelative(pathSuffix);
     }
 }

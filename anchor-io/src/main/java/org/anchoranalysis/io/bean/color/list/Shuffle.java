@@ -26,32 +26,24 @@
 
 package org.anchoranalysis.io.bean.color.list;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.color.ColorList;
-import org.anchoranalysis.core.error.OperationFailedException;
 
 /**
- * Creates a list and then randomizes the order of the colors.
+ * Randomizes the order of the colors from existing scheme.
  *
  * @author Owen Feehan
  */
-@AllArgsConstructor
 @NoArgsConstructor
-public class Shuffle extends ColorListFactory {
-
-    // START BEAN PROPERTIES
-    /** The delegate that creates the (unshuffled) list. */
-    @BeanField @Getter @Setter private ColorListFactory colors;
-    // END BEAN PROPERTIES
+public class Shuffle extends ColorSchemeUnary {
+    
+    public Shuffle(ColorScheme colors) {
+        super(colors);
+    }
 
     @Override
-    public ColorList create(int size) throws OperationFailedException {
-        ColorList list = colors.create(size);
-        list.shuffle();
-        return list;
+    protected ColorList transform(ColorList source) {
+        source.shuffle();
+        return source;
     }
 }

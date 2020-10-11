@@ -31,8 +31,9 @@ import static org.junit.Assert.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Optional;
-import org.anchoranalysis.io.error.AnchorIOException;
-import org.anchoranalysis.io.filepath.FilePathToUnixStyleConverter;
+import org.anchoranalysis.io.exception.AnchorIOException;
+import org.anchoranalysis.io.path.FilePathToUnixStyleConverter;
+import org.anchoranalysis.io.path.prefixer.PathDifference;
 import org.junit.Test;
 
 public class FilePathDifferenceFromFolderPathTest {

@@ -37,13 +37,8 @@ public class SimpleOutputNameStyle extends OutputNameStyle {
     private String outputName;
 
     @Override
-    public String getPhysicalName() {
+    public String getFilenameWithoutExtension() {
         return getOutputName();
-    }
-
-    @Override
-    public IndexableOutputNameStyle deriveIndexableStyle(int numDigits) {
-        return new IntegerSuffixOutputNameStyle(getOutputName(), numDigits);
     }
 
     @Override

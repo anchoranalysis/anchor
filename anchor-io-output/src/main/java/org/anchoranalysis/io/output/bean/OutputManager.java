@@ -32,16 +32,16 @@ import lombok.Setter;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
-import org.anchoranalysis.io.bean.filepath.prefixer.FilePathPrefixer;
-import org.anchoranalysis.io.error.FilePathPrefixerException;
-import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
-import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerContext;
+import org.anchoranalysis.io.bean.path.PathPrefixer;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
 import org.anchoranalysis.io.output.bean.rules.OutputEnabledRules;
 import org.anchoranalysis.io.output.outputter.BindFailedException;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
 import org.anchoranalysis.io.output.recorded.RecordedOutputsWithRules;
+import org.anchoranalysis.io.path.DerivePathException;
+import org.anchoranalysis.io.path.prefixer.DirectoryWithPrefix;
+import org.anchoranalysis.io.path.prefixer.FilePathPrefixerContext;
 
 /**
  * Responsible for making decisions on where output goes and what form it takes.
@@ -60,7 +60,7 @@ public class OutputManager extends AnchorBean<OutputManager> {
      * <p>This method is called with the {@link InputFromManager#pathForBinding} to determine a
      * output prefix for each input to an experiment.
      */
-    @BeanField @Getter @Setter private FilePathPrefixer filePathPrefixer;
+    @BeanField @Getter @Setter private PathPrefixer filePathPrefixer;
 
     /**
      * Whether to silently first delete any existing output at the intended path, or rather throw an
@@ -99,9 +99,9 @@ public class OutputManager extends AnchorBean<OutputManager> {
             throws BindFailedException {
 
         try {
-            FilePathPrefix prefix =
+            DirectoryWithPrefix prefix =
                     filePathPrefixer.rootFolderPrefix(experimentIdentifier, prefixerContext);
-            manifestRecorder.init(prefix.getFolderPath());
+            manifestRecorder.init(prefix.getDirectory());
 
             return OutputterChecked.createWithPrefix(
                     prefix,
@@ -111,7 +111,7 @@ public class OutputManager extends AnchorBean<OutputManager> {
                     recordedOutputs.getRecordedOutputs(),
                     silentlyDeleteExisting);
 
-        } catch (FilePathPrefixerException e) {
+        } catch (DerivePathException e) {
             throw new BindFailedException(e);
         }
     }

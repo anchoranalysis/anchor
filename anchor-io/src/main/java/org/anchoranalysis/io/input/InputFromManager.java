@@ -29,7 +29,7 @@ package org.anchoranalysis.io.input;
 import java.nio.file.Path;
 import java.util.Optional;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
-import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.exception.AnchorIOException;
 
 public interface InputFromManager {
 

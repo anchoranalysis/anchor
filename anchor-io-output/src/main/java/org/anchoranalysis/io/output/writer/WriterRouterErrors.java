@@ -62,10 +62,10 @@ public class WriterRouterErrors {
     private ErrorReporter errorReporter;
 
     /**
-     * Maybe creates a sub-directory for writing to.
+     * Maybe creates a subdirectory for writing to.
      *
-     * @param outputName the name of the sub-directory
-     * @param manifestDescription a manifest-description associated with the sub-directory as a
+     * @param outputName the name of the subdirectory
+     * @param manifestDescription a manifest-description associated with the subdirectory as a
      *     whole.
      * @param inheritOutputRulesAndRecording if true, the output rules and recording are inherited
      *     from the parent directory. if false, they are not, and all outputs are allowed and are
@@ -91,12 +91,12 @@ public class WriterRouterErrors {
     }
 
     /**
-     * Writes to a sub-directory using a generator, often producing many elements instead of one.
+     * Writes to a subdirectory using a generator, often producing many elements instead of one.
      *
-     * @param outputName the name of the sub-directory. This may determine if an output is allowed
+     * @param outputName the name of the subdirectory. This may determine if an output is allowed
      *     or not.
      * @param generator a generator that writes its current element(s) into the created
-     *     sub-directory using {@code outputName} and a suffix.
+     *     subdirectory using {@code outputName} and a suffix.
      */
     public void writeSubfolderWithGenerator(String outputName, GenerateWritableItem<?> generator) {
         try {
@@ -130,9 +130,9 @@ public class WriterRouterErrors {
     /**
      * Writes the current element(s) of the generator to the current directory.
      *
-     * @param outputName the name of the sub-directory. This may determine if an output is allowed
+     * @param outputName the name of the subdirectory. This may determine if an output is allowed
      *     or not.
-     * @param generator a generator that writes element(s) into the created sub-directory using
+     * @param generator a generator that writes element(s) into the created subdirectory using
      *     {@code outputName} and a suffix.
      */
     public void write(String outputName, GenerateWritableItem<?> generator) {

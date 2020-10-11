@@ -48,7 +48,7 @@ public interface WriteOperationRecorder {
             String index);
 
     /**
-     * Writes a new sub-directory to the manifest
+     * Writes a new subdirectory to the manifest
      *
      * @param relativeFolderPath the path of the directory relative to the parent
      * @param manifestDescription a description of the directory

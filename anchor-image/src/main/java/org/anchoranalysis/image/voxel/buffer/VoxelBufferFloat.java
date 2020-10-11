@@ -28,7 +28,6 @@ package org.anchoranalysis.image.voxel.buffer;
 
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
-import java.util.Optional;
 import org.anchoranalysis.image.convert.PrimitiveConverter;
 import org.anchoranalysis.image.voxel.datatype.FloatVoxelType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
@@ -43,20 +42,9 @@ final class VoxelBufferFloat extends VoxelBuffer<FloatBuffer> {
      * @param buffer the buffer
      */
     public VoxelBufferFloat(FloatBuffer buffer) {
-        super( Optional.empty() );
         this.delegate = buffer;
     }
-    
-    /**
-     * Creates from underlying bytes, establishing a view over these bytes.
-     * 
-     * @param underlyingBytes the underlying byte representation of the buffer.
-     */
-    public VoxelBufferFloat(ByteBuffer underlyingBytes) {
-        super( Optional.of(underlyingBytes) );
-        this.delegate = underlyingBytes.asFloatBuffer();
-    }
-    
+        
     @Override
     public FloatBuffer buffer() {
         return delegate;

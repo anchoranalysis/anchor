@@ -30,7 +30,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.nio.file.Path;
-import org.anchoranalysis.io.deserializer.DeserializationFailedException;
+import org.anchoranalysis.io.exception.DeserializationFailedException;
 
 public class ObjectInputStreamDeserializer<T> implements Deserializer<T> {
 

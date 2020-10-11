@@ -30,14 +30,14 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
-import org.anchoranalysis.io.bean.filepath.prefixer.NamedPath;
-import org.anchoranalysis.io.error.FilePathPrefixerException;
-import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
 import org.anchoranalysis.io.manifest.operationrecorder.NullWriteOperationRecorder;
 import org.anchoranalysis.io.manifest.operationrecorder.WriteOperationRecorder;
 import org.anchoranalysis.io.output.outputter.BindFailedException;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
+import org.anchoranalysis.io.path.DerivePathException;
+import org.anchoranalysis.io.path.NamedPath;
+import org.anchoranalysis.io.path.prefixer.DirectoryWithPrefix;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class BindingPathOutputterFactory {
@@ -46,7 +46,7 @@ class BindingPathOutputterFactory {
             NamedPath path, Optional<ManifestRecorder> manifestTask, ParametersExperiment params)
             throws BindFailedException, JobExecutionException {
         try {
-            FilePathPrefix prefixToAssign =
+            DirectoryWithPrefix prefixToAssign =
                     new PrefixForInput(
                                     params.getPrefixer(),
                                     params.getExperimentArguments().createPrefixerContext())
@@ -56,7 +56,7 @@ class BindingPathOutputterFactory {
                                     params.getExperimentalManifest());
 
             // Initializes the manifest to be written
-            manifestTask.ifPresent(recorder -> recorder.init(prefixToAssign.getFolderPath()));
+            manifestTask.ifPresent(recorder -> recorder.init(prefixToAssign.getDirectory()));
 
             OutputterChecked boundOutput =
                     params.getOutputter()
@@ -71,7 +71,7 @@ class BindingPathOutputterFactory {
             }
             return boundOutput;
 
-        } catch (FilePathPrefixerException e) {
+        } catch (DerivePathException e) {
             throw new BindFailedException(e);
         }
     }

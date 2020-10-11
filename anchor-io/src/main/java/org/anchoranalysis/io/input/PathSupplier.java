@@ -27,7 +27,7 @@ package org.anchoranalysis.io.input;
 
 import java.nio.file.Path;
 import org.anchoranalysis.core.cache.CachedSupplier;
-import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.exception.AnchorIOException;
 
 @FunctionalInterface
 public interface PathSupplier {

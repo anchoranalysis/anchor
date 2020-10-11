@@ -27,27 +27,52 @@
 package org.anchoranalysis.io.manifest;
 
 import java.io.Serializable;
+import lombok.AllArgsConstructor;
+import lombok.Value;
 
+/**
+ * A description of an entry in the manifest.
+ * 
+ * <p>This is an <i>immutable</i> type.
+ * 
+ * <p>{@code function} is intended to further specify {@code type} as there may
+ * be many entities of identical type.
+ * 
+ * <p>Together {@code type} and {@code function} should serve as a unique identifier
+ * (like a joint primary key).
+ * 
+ * @author Owen Feehan
+ *
+ */
+@AllArgsConstructor @Value
 public class ManifestDescription implements Serializable {
 
     /** */
     private static final long serialVersionUID = 1L;
 
+    /** Identifies the type of entity. */
     private final String type;
+    
+    /** Identifies the function the entity plays. */
     private final String function;
-
-    public ManifestDescription(String type, String function) {
-        super();
-        this.type = type;
-        this.function = function;
-        assert (!this.function.isEmpty());
+    
+    /**
+     * Assigns a new function.
+     * 
+     * @param functionToAssign the function to assign
+     * @return a newly copied object with a changed function and otherwise unchanged.
+     */
+    public ManifestDescription assignFunction(String functionToAssign) {
+        return new ManifestDescription(type, functionToAssign);
     }
 
-    public String getFunction() {
-        return function;
-    }
-
-    public String getType() {
-        return type;
+    /**
+     * Assigns a new type.
+     * 
+     * @param typeToAssign the type to assign
+     * @return a newly copied object with a changed type and otherwise unchanged.
+     */
+    public ManifestDescription assignType(String typeToAssign) {
+        return new ManifestDescription(typeToAssign, function);
     }
 }

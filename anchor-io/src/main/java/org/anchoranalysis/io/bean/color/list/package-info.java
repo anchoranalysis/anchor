@@ -23,5 +23,5 @@
  * THE SOFTWARE.
  * #L%
  */
-/** Beans that create lists of colors. */
+/** Beans that create lists or indices of colors according to particular schemes. */
 package org.anchoranalysis.io.bean.color.list;

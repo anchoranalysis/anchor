@@ -40,10 +40,10 @@ import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
-import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
 import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
-import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.bean.path.derive.DerivePath;
+import org.anchoranalysis.io.exception.AnchorIOException;
 import org.anchoranalysis.mpp.io.input.MultiInput;
 
 // An input stack
@@ -59,35 +59,35 @@ public class MultiInputManager extends InputManager<MultiInput> {
     private RasterReader rasterReader; // For reading appended files
 
     @BeanField @OptionalBean @Getter @Setter
-    private List<NamedBean<FilePathGenerator>> appendStack = new ArrayList<>();
+    private List<NamedBean<DerivePath>> appendStack = new ArrayList<>();
 
     @BeanField @OptionalBean @Getter @Setter
-    private List<NamedBean<FilePathGenerator>> listAppendMarks = new ArrayList<>();
+    private List<NamedBean<DerivePath>> listAppendMarks = new ArrayList<>();
 
     @BeanField @OptionalBean @Getter @Setter
-    private List<NamedBean<FilePathGenerator>> listAppendMarksFromAnnotation =
+    private List<NamedBean<DerivePath>> listAppendMarksFromAnnotation =
             new ArrayList<>(); // Uses both accepted and rejected
 
     @BeanField @OptionalBean @Getter @Setter
-    private List<NamedBean<FilePathGenerator>> listAppendMarksFromAnnotationAcceptedOnly =
+    private List<NamedBean<DerivePath>> listAppendMarksFromAnnotationAcceptedOnly =
             new ArrayList<>(); // Uses both accepted only
 
     @BeanField @OptionalBean @Getter @Setter
-    private List<NamedBean<FilePathGenerator>> listAppendMarksFromAnnotationRejectedOnly =
+    private List<NamedBean<DerivePath>> listAppendMarksFromAnnotationRejectedOnly =
             new ArrayList<>(); // Uses both accepted rejectedonly
 
     /** Appends object-collections to the multi-input */
     @BeanField @OptionalBean @Getter @Setter
-    private List<NamedBean<FilePathGenerator>> appendObjects = new ArrayList<>();
+    private List<NamedBean<DerivePath>> appendObjects = new ArrayList<>();
 
     @BeanField @OptionalBean @Getter @Setter
-    private List<NamedBean<FilePathGenerator>> listAppendKeyValueParams = new ArrayList<>();
+    private List<NamedBean<DerivePath>> listAppendKeyValueParams = new ArrayList<>();
 
     @BeanField @OptionalBean @Getter @Setter
-    private List<NamedBean<FilePathGenerator>> appendHistogram = new ArrayList<>();
+    private List<NamedBean<DerivePath>> appendHistogram = new ArrayList<>();
 
     @BeanField @OptionalBean @Getter @Setter
-    private List<NamedBean<FilePathGenerator>> listAppendFilePath = new ArrayList<>();
+    private List<NamedBean<DerivePath>> listAppendFilePath = new ArrayList<>();
     // END BEAN PROPERTIES
 
     public MultiInputManager(String inputName, InputManager<? extends ProvidesStackInput> input) {

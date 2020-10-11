@@ -31,10 +31,11 @@ import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.io.generator.Generator;
-import org.anchoranalysis.io.generator.sequence.BoundOutputter;
-import org.anchoranalysis.io.generator.sequence.OutputSequenceIncrementing;
-import org.anchoranalysis.io.generator.sequence.pattern.OutputPattern;
+import org.anchoranalysis.io.generator.sequence.OutputSequenceFactory;
+import org.anchoranalysis.io.generator.sequence.pattern.OutputPatternIntegerSuffix;
+import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.manifest.file.FileType;
 import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.namestyle.OutputNameStyle;
@@ -43,37 +44,39 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
 
 /**
- * Writes a collection of items via a generator into a subdirectory.
- *
+ * Writes a collection of elements as a subdirectory with each element as a single file in the subdirectory.
+ * 
  * @author Owen Feehan
- * @param <T> element-type
+ * @param <T> element-type in collection
+ * @param <S> collection-type
  */
-@RequiredArgsConstructor
-@AllArgsConstructor
-class CollectionGenerator<T> implements Generator<Collection<T>> {
+@RequiredArgsConstructor @AllArgsConstructor
+public class CollectionGenerator<T, S extends Collection<T>> implements Generator<S> {
 
     // START REQUIRED ARGUMENTS
-    private final OutputPattern pattern;
+    /** Generator to use for writing each element. */
     private final Generator<T> generator;
-    private final OutputterChecked outputter;
+    
+    /** Prefix in outputted name for each element. */
+    private final String prefix;
     // END REQUIRED ARGUMENTS
 
-    private Collection<T> collection;
+    private S element;
 
     @Override
     public void write(OutputNameStyle outputNameStyle, OutputterChecked outputter)
             throws OutputWriteFailedException {
-        writeCollection(0);
+
+        writeElementAsSubdirectory(
+                outputter, outputNameStyle.getFilenameWithoutExtension());
     }
 
     @Override
     public int write(
             IndexableOutputNameStyle outputNameStyle, String index, OutputterChecked outputter)
             throws OutputWriteFailedException {
-
-        // In this context, we take the index as an indication of the first id to use - and assume
-        // the String index is a number
-        return writeCollection(Integer.parseInt(index));
+        write(outputNameStyle, outputter);
+        return 1;
     }
 
     @Override
@@ -83,41 +86,34 @@ class CollectionGenerator<T> implements Generator<Collection<T>> {
     }
 
     @Override
-    public Collection<T> getElement() {
-        return collection;
+    public S getElement() {
+        return element;
     }
 
     @Override
-    public void assignElement(Collection<T> element) {
-        this.collection = element;
-    }
-
-    @Override
-    public void start() throws OutputWriteFailedException {
-        generator.start();
-    }
-
-    @Override
-    public void end() throws OutputWriteFailedException {
-        generator.end();
+    public void assignElement(S element) throws SetOperationFailedException {
+        this.element = element;
     }
     
-    private int writeCollection(int startIndex) throws OutputWriteFailedException {
-
-        int numberWritten = 0;
+    private void writeElementAsSubdirectory(
+            OutputterChecked outputter,
+            String outputNameFolder
+            )
+            throws OutputWriteFailedException {
         
-        BoundOutputter<T> boundOutputter = new BoundOutputter<>(outputter, pattern, generator); 
+        OutputSequenceFactory<T> factory = new OutputSequenceFactory<>(generator,outputter);
         
-        // We start with id with 0
-        try (OutputSequenceIncrementing<T> outputSequence =
-                new OutputSequenceIncrementing<>(boundOutputter, startIndex)) {
+        OutputPatternIntegerSuffix pattern = new OutputPatternIntegerSuffix(
+            outputNameFolder,
+            prefix,
+            3,
+            false,
+            Optional.empty()        
+        );
+        factory.incrementingByOneStream(pattern, element.stream());
+    }
     
-            for (T element : collection) {
-                outputSequence.add(element);
-                numberWritten++;
-            }
-        }
-
-        return numberWritten;
+    public static ManifestDescription createManifestDescription(String type) {
+        return new ManifestDescription("subfolder", type);
     }
 }

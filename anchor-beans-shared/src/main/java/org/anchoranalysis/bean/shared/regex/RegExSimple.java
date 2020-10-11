@@ -30,38 +30,50 @@ import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.functional.OptionalUtilities;
 
+@NoArgsConstructor
 public class RegExSimple extends RegEx {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private String matchString;
     // END BEAN PROPERTIES
 
+    /** Lazy creation of a pattern from the regular-expression string. */
+    private Pattern pattern = null;
+    
+    public RegExSimple(String matchString) {
+        this.matchString = matchString;
+    }
+    
     @Override
     public Optional<String[]> match(String str) {
-
-        Pattern p = Pattern.compile(matchString);
-
-        Matcher matcher = p.matcher(str);
-
-        if (!matcher.matches()) {
-            return Optional.empty();
-        }
-        return Optional.of(arrayFromMatcher(matcher));
-    }
-
-    private String[] arrayFromMatcher(Matcher matcher) {
-        String[] arr = new String[matcher.groupCount()];
-        for (int i = 0; i < arr.length; i++) {
-            arr[i] = matcher.group(i + 1);
-        }
-        return arr;
+        createPatternIfNeeded();
+        
+        Matcher matcher = pattern.matcher(str);
+        return OptionalUtilities.createFromFlag(matcher.matches(),
+                () -> arrayFromMatcher(matcher) );
     }
 
     @Override
     public String toString() {
         return String.format("regEx(%s)", matchString);
+    }
+    
+    private void createPatternIfNeeded() {
+        if (pattern==null) {
+            pattern = Pattern.compile(matchString);
+        }        
+    }
+
+    private String[] arrayFromMatcher(Matcher matcher) {
+        String[] out = new String[matcher.groupCount()];
+        for (int i = 0; i < out.length; i++) {
+            out[i] = matcher.group(i + 1);
+        }
+        return out;
     }
 }

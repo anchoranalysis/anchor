@@ -33,7 +33,7 @@ import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.io.manifest.ManifestFolderDescription;
 
 /**
- * Caches a {@link InputOutputContext} for each sub-directory as they are created.
+ * Caches a {@link InputOutputContext} for each subdirectory as they are created.
  *
  * <p>This allows reusage of an existing {@link InputOutputContext} in other outputters without
  * creating duplicate manifest entries.
@@ -60,9 +60,9 @@ public class InputOutputContextSubdirectoryCache {
     /**
      * Gets (from the cache if it's already there) a context for a subdirectory of given-name
      *
-     * @param subdirectoryName the sub-directory name. if not set, then the parentContext is
+     * @param subdirectoryName the subdirectory name. if not set, then the parentContext is
      *     returned instead.
-     * @return either an existing context for the sub-directory or a newly created one
+     * @return either an existing context for the subdirectory or a newly created one
      */
     public InputOutputContext get(Optional<String> subdirectoryName) {
         return mapContexts.computeIfAbsent(

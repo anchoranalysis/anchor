@@ -42,7 +42,7 @@ import org.anchoranalysis.io.bean.color.RGBColorBean;
  *
  * @author Owen Feehan
  */
-public class FromList extends ColorListFactory {
+public class FromList extends ColorScheme {
 
     // START BEAN PROPERTIES
     /** The list of colors to specify */
@@ -50,7 +50,7 @@ public class FromList extends ColorListFactory {
     // END BEAN PROPERTIES
 
     @Override
-    public ColorList create(int size) throws OperationFailedException {
+    public ColorList createList(int size) throws OperationFailedException {
 
         try {
             ColorList out = new ColorList();

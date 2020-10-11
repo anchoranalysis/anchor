@@ -28,7 +28,7 @@ package org.anchoranalysis.io.manifest.folder;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import org.anchoranalysis.io.filepath.FilePathToUnixStyleConverter;
+import org.anchoranalysis.io.path.FilePathToUnixStyleConverter;
 
 public abstract class FolderWriteWithPath extends FolderWrite {
 

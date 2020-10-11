@@ -38,7 +38,7 @@ import org.anchoranalysis.core.progress.ProgressReporterOneOfMany;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
-import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.exception.AnchorIOException;
 
 public class AnnotationInputManager<T extends ProvidesStackInput, S extends AnnotatorStrategy>
         extends InputManager<AnnotationWithStrategy<S>> {

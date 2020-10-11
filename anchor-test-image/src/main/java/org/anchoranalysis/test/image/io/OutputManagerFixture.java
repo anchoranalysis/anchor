@@ -41,7 +41,7 @@ public class OutputManagerFixture {
         OutputManager outputManager = new OutputManager();
         outputManager.setSilentlyDeleteExisting(true);
         outputManager.setOutputWriteSettings(settings());
-        outputManager.setFilePathPrefixer(new FilePathPrefixerConstantPath(pathForPrefixer));
+        outputManager.setFilePathPrefixer(new ConstantPathPrefixer(pathForPrefixer));
         return outputManager;
     }
 

@@ -34,9 +34,9 @@ import java.util.Map;
 import java.util.Optional;
 import lombok.Getter;
 import org.anchoranalysis.core.index.GetOperationFailedException;
-import org.anchoranalysis.io.error.AnchorIOException;
-import org.anchoranalysis.io.filepath.prefixer.PathDifference;
+import org.anchoranalysis.io.exception.AnchorIOException;
 import org.anchoranalysis.io.output.writer.WriterExecuteBeforeEveryOperation;
+import org.anchoranalysis.io.path.prefixer.PathDifference;
 
 /**
  * A pool that memoizes and stores an associated {@link LazyDirectoryCreator} for directories.

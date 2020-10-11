@@ -32,7 +32,7 @@ import java.util.Collection;
 import java.util.List;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.io.input.descriptivename.DescriptiveFile;
+import org.anchoranalysis.io.input.DescriptiveFile;
 
 /**
  * Calculates the descriptive-name independently for each file
@@ -42,7 +42,7 @@ import org.anchoranalysis.io.input.descriptivename.DescriptiveFile;
 public abstract class DescriptiveNameFromFileIndependent extends DescriptiveNameFromFile {
 
     @Override
-    public List<DescriptiveFile> descriptiveNamesFor(
+    public List<DescriptiveFile> describe(
             Collection<File> files, String elseName, Logger logger) {
 
         List<DescriptiveFile> out = new ArrayList<>();

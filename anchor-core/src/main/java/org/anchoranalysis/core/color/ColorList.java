@@ -54,7 +54,7 @@ public class ColorList implements ColorIndex, Iterable<RGBColor> {
     }
 
     @Override
-    public int numUniqueColors() {
+    public int numberUniqueColors() {
         return size();
     }
 

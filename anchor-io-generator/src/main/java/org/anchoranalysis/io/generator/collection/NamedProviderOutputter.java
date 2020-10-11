@@ -40,7 +40,7 @@ import org.anchoranalysis.io.generator.sequence.OutputSequenceIndexed;
 import org.anchoranalysis.io.generator.sequence.pattern.OutputPatternStringSuffix;
 import org.anchoranalysis.io.output.enabled.single.SingleLevelOutputEnabled;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
-import org.anchoranalysis.io.output.outputter.InputOutputContext;
+import org.anchoranalysis.io.output.outputter.OutputterChecked;
 
 /**
  * Outputs entities from a {@link NamedProvider} into a directory using the names of each entity for a corresponding generated file.
@@ -58,8 +58,8 @@ public class NamedProviderOutputter<T> {
     /** The generator to be repeatedly called for writing each element in the sequence. */
     private Generator<T> generator;
     
-    /** The root director where writing occurs to, and in which the sub-directorties are created, if enabled. */
-    private InputOutputContext context;
+    /** The root directory where writing occurs to, and in which the sub-directories are created, if enabled. */
+    private OutputterChecked outputter;
     
     /**
      * Outputs the entities using a particular output-name.
@@ -71,11 +71,11 @@ public class NamedProviderOutputter<T> {
     public void output(String outputName, boolean suppressSubdirectory)
             throws OutputWriteFailedException {
 
-        if (provider.isEmpty() || !context.getOutputter().outputsEnabled().isOutputEnabled(outputName)) {
+        if (provider.isEmpty() || !outputter.getOutputsEnabled().isOutputEnabled(outputName)) {
             return;
         }
 
-        Set<String> allowedKeys = subset(provider.keys(), context.getOutputter().outputsEnabled().second(outputName));
+        Set<String> allowedKeys = subset(provider.keys(), outputter.getOutputsEnabled().second(outputName));
         
         // If no outputs are allowed, exit early
         if (allowedKeys.isEmpty()) {
@@ -88,7 +88,7 @@ public class NamedProviderOutputter<T> {
     
     private void outputAllowed(Set<String> allowedKeys, OutputPatternStringSuffix sequenceDirectory) throws OutputWriteFailedException {
 
-        OutputSequenceFactory<T> factory = new OutputSequenceFactory<>(generator, context);
+        OutputSequenceFactory<T> factory = new OutputSequenceFactory<>(generator, outputter);
 
         try (OutputSequenceIndexed<T,String> writer = factory.withoutOrder(sequenceDirectory)) {
             for (String key : allowedKeys) {

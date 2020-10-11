@@ -28,17 +28,17 @@ package org.anchoranalysis.experiment.bean.task;
 import java.nio.file.Path;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import org.anchoranalysis.io.bean.filepath.prefixer.FilePathPrefixer;
-import org.anchoranalysis.io.bean.filepath.prefixer.NamedPath;
-import org.anchoranalysis.io.error.AnchorIOException;
-import org.anchoranalysis.io.error.FilePathPrefixerException;
-import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
-import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerContext;
-import org.anchoranalysis.io.filepath.prefixer.PathDifference;
+import org.anchoranalysis.io.bean.path.PathPrefixer;
+import org.anchoranalysis.io.exception.AnchorIOException;
 import org.anchoranalysis.io.manifest.ManifestFolderDescription;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
 import org.anchoranalysis.io.manifest.folder.ExperimentFileFolder;
 import org.anchoranalysis.io.manifest.sequencetype.StringsWithoutOrder;
+import org.anchoranalysis.io.path.DerivePathException;
+import org.anchoranalysis.io.path.NamedPath;
+import org.anchoranalysis.io.path.prefixer.DirectoryWithPrefix;
+import org.anchoranalysis.io.path.prefixer.FilePathPrefixerContext;
+import org.anchoranalysis.io.path.prefixer.PathDifference;
 
 @RequiredArgsConstructor
 class PrefixForInput {
@@ -46,7 +46,7 @@ class PrefixForInput {
     private static final ManifestFolderDescription MANIFEST_FOLDER_ROOT =
             new ManifestFolderDescription("root", "experiment", new StringsWithoutOrder());
 
-    private final FilePathPrefixer prefixer;
+    private final PathPrefixer prefixer;
 
     private final FilePathPrefixerContext context;
 
@@ -57,19 +57,19 @@ class PrefixForInput {
      * @param experimentIdentifier
      * @param experimentalManifest
      * @return
-     * @throws FilePathPrefixerException
+     * @throws DerivePathException
      */
-    public FilePathPrefix prefixForFile(
+    public DirectoryWithPrefix prefixForFile(
             NamedPath path,
             String experimentIdentifier,
             Optional<ManifestRecorder> experimentalManifest)
-            throws FilePathPrefixerException {
+            throws DerivePathException {
 
         // Calculate a prefix from the incoming file, and create a file path generator
-        FilePathPrefix prefix = prefixer.outFilePrefix(path, experimentIdentifier, context);
+        DirectoryWithPrefix prefix = prefixer.outFilePrefix(path, experimentIdentifier, context);
 
         PathDifference difference =
-                differenceFromPrefixer(experimentIdentifier, prefix.getCombinedPrefix());
+                differenceFromPrefixer(experimentIdentifier, prefix.getCombined());
 
         experimentalManifest.ifPresent(
                 recorder -> writeRootFolderInManifest(recorder, difference.combined()));
@@ -78,13 +78,13 @@ class PrefixForInput {
     }
 
     private PathDifference differenceFromPrefixer(String experimentIdentifier, Path combinedPrefix)
-            throws FilePathPrefixerException {
+            throws DerivePathException {
         try {
             return PathDifference.differenceFrom(
-                    prefixer.rootFolderPrefix(experimentIdentifier, context).getCombinedPrefix(),
+                    prefixer.rootFolderPrefix(experimentIdentifier, context).getCombined(),
                     combinedPrefix);
         } catch (AnchorIOException e) {
-            throw new FilePathPrefixerException(e);
+            throw new DerivePathException(e);
         }
     }
 

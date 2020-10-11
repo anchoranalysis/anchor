@@ -37,7 +37,7 @@ import org.anchoranalysis.core.color.RGBColor;
  *
  * @author Owen Feehan
  */
-public class VeryBright extends ColorListFactory {
+public class VeryBright extends ColorScheme {
 
     private static String[] hexCodes =
             new String[] {
@@ -61,7 +61,7 @@ public class VeryBright extends ColorListFactory {
             };
 
     @Override
-    public ColorList create(int size) {
+    public ColorList createList(int size) {
 
         int hexCodesSize = hexCodes.length;
 

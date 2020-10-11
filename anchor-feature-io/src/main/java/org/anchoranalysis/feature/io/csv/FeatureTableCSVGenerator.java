@@ -28,7 +28,7 @@ package org.anchoranalysis.feature.io.csv;
 
 import java.nio.file.Path;
 import java.util.List;
-import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.exception.AnchorIOException;
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.generator.tabular.CSVGenerator;
 import org.anchoranalysis.io.generator.tabular.CSVWriter;

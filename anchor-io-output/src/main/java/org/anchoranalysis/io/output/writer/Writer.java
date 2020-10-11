@@ -51,11 +51,11 @@ import org.anchoranalysis.io.output.outputter.OutputterChecked;
 public interface Writer {
 
     /**
-     * Maybe creates a sub-directory for writing to.
+     * Maybe creates a subdirectory for writing to.
      *
-     * @param outputName the name of the sub-directory. This may determine if an output is allowed
+     * @param outputName the name of the subdirectory. This may determine if an output is allowed
      *     or not.
-     * @param manifestDescription a manifest-description associated with the sub-directory as a
+     * @param manifestDescription a manifest-description associated with the subdirectory as a
      *     whole.
      * @param manifestFolder a manifest-folder if it exists
      * @param inheritOutputRulesAndRecording if true, the output rules and recording are inherited
@@ -73,11 +73,11 @@ public interface Writer {
             throws OutputWriteFailedException;
 
     /**
-     * Writes to a sub-directory using a generator, often producing many elements instead of one.
+     * Writes to a subdirectory using a generator, often producing many elements instead of one.
      *
-     * @param outputName the name of the sub-directory. This may determine if an output is allowed
+     * @param outputName the name of the subdirectory. This may determine if an output is allowed
      *     or not.
-     * @param generator a generator that writes element(s) into the created sub-directory using
+     * @param generator a generator that writes element(s) into the created subdirectory using
      *     {@code outputName} and a suffix.
      * @return true if the output was allowed, false otherwise
      * @throws OutputWriteFailedException
@@ -104,9 +104,9 @@ public interface Writer {
     /**
      * Writes the current element(s) of the generator to the current directory.
      *
-     * @param outputName the name of the sub-directory. This may determine if an output is allowed
+     * @param outputName the name of the subdirectory. This may determine if an output is allowed
      *     or not.
-     * @param generator a generator that writes element(s) into the created sub-directory using
+     * @param generator a generator that writes element(s) into the created subdirectory using
      *     {@code outputName} and a suffix.
      * @return true if the output was allowed, false otherwise
      * @throws OutputWriteFailedException

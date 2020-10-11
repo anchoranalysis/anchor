@@ -36,7 +36,7 @@ import org.anchoranalysis.io.generator.sequence.OutputSequenceIndexed;
 import org.anchoranalysis.io.generator.sequence.pattern.OutputPatternIntegerSuffix;
 import org.anchoranalysis.io.manifest.sequencetype.SequenceType;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
-import org.anchoranalysis.io.output.outputter.InputOutputContext;
+import org.anchoranalysis.io.output.outputter.OutputterChecked;
 import org.anchoranalysis.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
 import org.anchoranalysis.mpp.segment.optimization.feedback.FeedbackBeginParameters;
 import org.anchoranalysis.mpp.segment.optimization.feedback.FeedbackEndParameters;
@@ -56,7 +56,7 @@ public abstract class PeriodicSubfolderReporter<T>
 
     private OutputSequenceIndexed<T,Integer> sequenceWriter;
 
-    private InputOutputContext parentContext;
+    private OutputterChecked parentOutputter;
 
     /** Handles period-receiver updates */
     private class AddToWriter implements PeriodReceiver<VoxelizedMarksWithEnergy> {
@@ -93,7 +93,7 @@ public abstract class PeriodicSubfolderReporter<T>
     }
     
     // We setup the manifest from a Generator
-    protected SequenceType<?> init(Generator<T> generator)
+    protected SequenceType<?> init(Generator<T> generator)  // NOSONAR
             throws OutputWriteFailedException {
         
         OutputPatternIntegerSuffix pattern = new OutputPatternIntegerSuffix(
@@ -103,7 +103,7 @@ public abstract class PeriodicSubfolderReporter<T>
             Optional.empty()
         );
         
-        this.sequenceWriter = new OutputSequenceFactory<>(generator, getParentContext()).incrementingIntegers(pattern, 0, getAggInterval());
+        this.sequenceWriter = new OutputSequenceFactory<>(generator, getParentOutputter()).incrementingIntegers(pattern, 0, getAggInterval());
         return sequenceWriter.getSequenceType();
     }
 
@@ -111,10 +111,10 @@ public abstract class PeriodicSubfolderReporter<T>
     public void reportBegin(FeedbackBeginParameters<VoxelizedMarksWithEnergy> optInit)
             throws ReporterException {
 
-        this.parentContext = optInit.getInitContext().getInputOutputContext();
+        this.parentOutputter = optInit.getInitContext().getOutputter().getChecked();
 
         // Let's only do this if the output is allowed
-        if (parentContext.getOutputter().outputsEnabled().isOutputEnabled(outputName)) {
+        if (parentOutputter.getOutputsEnabled().isOutputEnabled(outputName)) {
             optInit.getPeriodTriggerBank().obtain(getAggInterval(), new AddToWriter());
         }
     }
@@ -133,7 +133,7 @@ public abstract class PeriodicSubfolderReporter<T>
     protected abstract Optional<T> generateIterableElement(
             Reporting<VoxelizedMarksWithEnergy> reporting) throws ReporterException;
 
-    protected InputOutputContext getParentContext() {
-        return parentContext;
+    protected OutputterChecked getParentOutputter() {
+        return parentOutputter;
     }
 }

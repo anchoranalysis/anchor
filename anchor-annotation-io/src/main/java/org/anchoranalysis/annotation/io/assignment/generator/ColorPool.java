@@ -28,19 +28,19 @@ package org.anchoranalysis.annotation.io.assignment.generator;
 
 import org.anchoranalysis.core.color.ColorList;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.io.bean.color.list.ColorListFactory;
+import org.anchoranalysis.io.bean.color.list.ColorScheme;
 
 public class ColorPool {
 
     private int numPaired;
-    private ColorListFactory colorSetGeneratorPaired;
-    private ColorListFactory colorSetGeneratorUnpaired;
+    private ColorScheme colorSetGeneratorPaired;
+    private ColorScheme colorSetGeneratorUnpaired;
     private boolean differentColorsForMatches;
 
     public ColorPool(
             int numPaired,
-            ColorListFactory colorSetGeneratorPaired,
-            ColorListFactory colorSetGeneratorUnpaired,
+            ColorScheme colorSetGeneratorPaired,
+            ColorScheme colorSetGeneratorUnpaired,
             boolean differentColorsForMatches) {
         this.numPaired = numPaired;
         this.colorSetGeneratorPaired = colorSetGeneratorPaired;
@@ -55,13 +55,13 @@ public class ColorPool {
         if (differentColorsForMatches) {
 
             // Matched
-            cols.addAllScaled(colorSetGeneratorPaired.create(numPaired), 0.5);
+            cols.addAllScaled(colorSetGeneratorPaired.createList(numPaired), 0.5);
 
             // Unmatched
-            cols.addAll(colorSetGeneratorUnpaired.create(numberOtherObjects));
+            cols.addAll(colorSetGeneratorUnpaired.createList(numberOtherObjects));
         } else {
             // Treat all as unmatched
-            cols.addAll(colorSetGeneratorUnpaired.create(numPaired + numberOtherObjects));
+            cols.addAll(colorSetGeneratorUnpaired.createList(numPaired + numberOtherObjects));
         }
 
         return cols;

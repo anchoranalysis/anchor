@@ -39,8 +39,7 @@ import org.anchoranalysis.experiment.bean.log.LoggingDestination;
 import org.anchoranalysis.experiment.bean.log.ToConsole;
 import org.anchoranalysis.experiment.log.StatefulMessageLogger;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
-import org.anchoranalysis.io.error.AnchorIOException;
-import org.anchoranalysis.io.error.FilePathPrefixerException;
+import org.anchoranalysis.io.exception.AnchorIOException;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
 import org.anchoranalysis.io.output.bean.OutputManager;
 import org.anchoranalysis.io.output.enabled.multi.MultiLevelOutputEnabled;
@@ -48,6 +47,7 @@ import org.anchoranalysis.io.output.outputter.BindFailedException;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
 import org.anchoranalysis.io.output.recorded.MultiLevelRecordedOutputs;
 import org.anchoranalysis.io.output.recorded.RecordedOutputsWithRules;
+import org.anchoranalysis.io.path.DerivePathException;
 import org.apache.commons.lang.time.StopWatch;
 
 /**
@@ -176,7 +176,7 @@ public abstract class OutputExperiment extends Experiment {
                     getOutput().getFilePathPrefixer(),
                     createLogger(rootOutputter, arguments),
                     useDetailedLogging());
-        } catch (FilePathPrefixerException e) {
+        } catch (DerivePathException e) {
             throw new AnchorIOException("Cannot create params-context", e);
         } catch (BindFailedException e) {
             throw new AnchorIOException("Bind failed", e);

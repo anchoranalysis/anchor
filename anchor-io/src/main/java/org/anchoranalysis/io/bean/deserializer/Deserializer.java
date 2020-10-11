@@ -27,7 +27,7 @@
 package org.anchoranalysis.io.bean.deserializer;
 
 import java.nio.file.Path;
-import org.anchoranalysis.io.deserializer.DeserializationFailedException;
+import org.anchoranalysis.io.exception.DeserializationFailedException;
 
 public interface Deserializer<T> {
 

@@ -41,7 +41,7 @@ import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.io.bean.deserializer.Deserializer;
 import org.anchoranalysis.io.bean.deserializer.ObjectInputStreamDeserializer;
-import org.anchoranalysis.io.deserializer.DeserializationFailedException;
+import org.anchoranalysis.io.exception.DeserializationFailedException;
 
 /**
  * Deserializes an {@link ObjectMask} stored in two parts (a raster-mask and a serialized bounding-box)

@@ -154,8 +154,6 @@ public class LabelObjects<T> {
             UnaryOperator<T> operationAfterMap)
             throws CreateException {
 
-        channel.assignValue(0).toAll();
-
         int index = 1;
         for (T element : elements) {
 

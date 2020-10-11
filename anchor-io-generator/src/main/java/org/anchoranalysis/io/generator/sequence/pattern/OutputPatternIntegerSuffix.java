@@ -15,11 +15,13 @@ public class OutputPatternIntegerSuffix extends OutputPattern {
     private static final int DEFAULT_NUMBER_DIGITS = 6;
     
     /**
-     * Create for a particular sub-directory and number of digits.
+     * Creates in a subdirectory, using the outputName as both the subdirectory name and the prefix.
      * 
      * <p>The {@code subdirectoryName} is also used as a prefix on outputted files.
      * 
-     * @param outputName name of sub-directory to place sequence in (which is also used as the outputName and prefix)
+     * <p>The full-name has an increment number appended e.g. <code>$outputName/$outputName_000000.tif</code> etc.
+     * 
+     * @param outputName name of subdirectory to place sequence in (which is also used as the outputName and prefix)
      * @param selective whether to check output-names against the rules or not. If not, all outputs will occur permissively.
      */
     public OutputPatternIntegerSuffix(String outputName, boolean selective) {
@@ -27,42 +29,57 @@ public class OutputPatternIntegerSuffix extends OutputPattern {
     }
     
     /**
-     * Create for a particular sub-directory and prefix.
+     * Creates in a subdirectory, using the output-name as the subdirectory name, and a specific prefix.
      * 
-     * <p>The {@code subdirectoryName} is also used as a prefix on outputted files.
+     * <p>The full-name has an increment number appended e.g. <code>$outputName/$prefix_000000.tif</code> etc.
      * 
-     * @param outputName name of sub-directory to place sequence in (which is also used as the outputName and prefix)
+     * @param outputName name of subdirectory to place sequence in (which is also used as the outputName and prefix)
+     * @param prefix a string that appears before the index in each outputted filename, with an underscore separating the prefix from the numeric index
      */
     public OutputPatternIntegerSuffix(String outputName, String prefix) {
-        this(outputName, Optional.of(outputName), prefix, DEFAULT_NUMBER_DIGITS, true, Optional.empty());
+        this(outputName, false, prefix, DEFAULT_NUMBER_DIGITS, true, Optional.empty());
     }
     
     /**
-     * Create for a particular sub-directory and number of digits and subdirectory manifest-description.
+     * Like {@link #OutputPatternIntegerSuffix(String, boolean)} but with additional options on the manifest-folder description and whether to check outputs against rules. 
      * 
-     * <p>The full-name has an increment number appended e.g. <code>$prefix_000000.tif</code> etc.
-     * 
-     * @param outputName name of sub-directory to place sequence in (which is also used as the outputName and prefix)
+     * @param outputName name of subdirectory to place sequence in (which is also used as the outputName and prefix)
      * @param numberDigits the number of digits in the numeric part of the output-name.
      * @param selective whether to check output-names against the rules or not. If not, all outputs will occur permissively.
-     * @param folderManifestDescription
+     * @param folderManifestDescription a description of the folder in the manifest
      */
     public OutputPatternIntegerSuffix(String outputName, int numberDigits, boolean selective, Optional<ManifestDescription> folderManifestDescription) {
-        this(outputName, Optional.of(outputName), outputName, numberDigits, selective, folderManifestDescription);
+        this(outputName, false, outputName, numberDigits, selective, folderManifestDescription);
     }
     
     /**
+     * Like {@link #OutputPatternIntegerSuffix(String, String)} but with additional options about the number of digits, the manifest-folder description and whether to check outputs against rules.
      * 
-     * <p>The full-name has an increment number appended e.g. <code>$prefix_000000.tif</code> etc.
-     * 
-     * @param subdirectoryName
-     * @param prefix prefix on each file-name.
+     * @param outputName name of subdirectory to place sequence in (which is also used as the outputName and prefix)
+     * @param prefix a string that appears before the index in each outputted filename, with an underscore separating the prefix from the numeric index
      * @param numberDigits the number of digits in the numeric part of the output-name.
-     * @param selective
-     * @param folderManifestDescription
+     * @param selective whether to check output-names against the rules or not. If not, all outputs will occur permissively.
+     * @param folderManifestDescription a description of the folder in the manifest
      */
-    public OutputPatternIntegerSuffix(String outputName, Optional<String> subdirectoryName, String prefix, int numberDigits, boolean selective, Optional<ManifestDescription> folderManifestDescription) {
-        super( subdirectoryName,
+    public OutputPatternIntegerSuffix(String outputName, String prefix, int numberDigits, boolean selective, Optional<ManifestDescription> folderManifestDescription) {
+        super( Optional.of(outputName),
+                new IntegerSuffixOutputNameStyle(outputName, prefix, numberDigits),
+                selective,
+                folderManifestDescription );
+    }
+    
+    /**
+     * Creates with a full set of flexibility about how the filename appears and whether a subdirectory is used.
+     * 
+     * @param outputName the output-name to use, which also determines the subdirectory name if it is not suppressed.
+     * @param suppressSubdirectory if true, a separate subdirectory is not created, and rather the outputs occur in the parent directory.
+     * @param prefix a string that appears before the index in each outputted filename, with an underscore separating the prefix from the numeric index
+     * @param numberDigits the number of digits in the numeric part of the output-name.
+     * @param selective whether to check output-names against the rules or not. If not, all outputs will occur permissively.
+     * @param folderManifestDescription a description of the folder in the manifest
+     */
+    public OutputPatternIntegerSuffix(String outputName, boolean suppressSubdirectory, String prefix, int numberDigits, boolean selective, Optional<ManifestDescription> folderManifestDescription) {
+        super( OutputPatternUtilities.maybeSubdirectory(outputName, suppressSubdirectory),
                 new IntegerSuffixOutputNameStyle(outputName, prefix, numberDigits),
                 selective,
                 folderManifestDescription );

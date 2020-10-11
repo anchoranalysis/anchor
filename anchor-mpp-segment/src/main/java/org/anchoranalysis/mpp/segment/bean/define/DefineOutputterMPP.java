@@ -50,7 +50,7 @@ public class DefineOutputterMPP extends DefineOutputter {
             channels.addAsSeparateChannels(
                     new WrapStackAsTimeSequenceStore(initParams.getImage().stacks()), 0);
 
-            super.outputSharedObjects(initParams, context);
+            super.outputSharedObjects(initParams, context.getOutputter().getChecked());
 
         } catch (CreateException | OutputWriteFailedException e) {
             throw new OperationFailedException(e);
@@ -67,7 +67,7 @@ public class DefineOutputterMPP extends DefineOutputter {
 
             operation.process(initParams.getImage());
 
-            super.outputSharedObjects(initParams, context);
+            super.outputSharedObjects(initParams, context.getOutputter().getChecked());
 
         } catch (CreateException | OutputWriteFailedException e) {
             throw new OperationFailedException(e);
@@ -84,7 +84,7 @@ public class DefineOutputterMPP extends DefineOutputter {
 
             operation.process(initParams);
 
-            super.outputSharedObjects(initParams, context);
+            super.outputSharedObjects(initParams, context.getOutputter().getChecked());
 
         } catch (CreateException | OutputWriteFailedException e) {
             throw new OperationFailedException(e);

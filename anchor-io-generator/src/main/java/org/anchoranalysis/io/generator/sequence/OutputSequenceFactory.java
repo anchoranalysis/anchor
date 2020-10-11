@@ -38,12 +38,12 @@ import org.anchoranalysis.io.manifest.sequencetype.IncrementingIntegers;
 import org.anchoranalysis.io.manifest.sequencetype.SequenceType;
 import org.anchoranalysis.io.manifest.sequencetype.StringsWithoutOrder;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
-import org.anchoranalysis.io.output.outputter.InputOutputContext;
+import org.anchoranalysis.io.output.outputter.OutputterChecked;
 
 /**
  * Creates and starts a {@link OutputSequence} with a particular generator and context.
  * 
- * <p>This usually occurs in a sub-directory (relative to {@link #context}, but not necessarily.
+ * <p>This usually occurs in a subdirectory (relative to {@link #outputter}, but not necessarily.
  * 
  * @author Owen Feehan
  *
@@ -54,9 +54,9 @@ public class OutputSequenceFactory<T> {
     /** The generator to be repeatedly called for writing each element in the sequence. */
     private Generator<T> generator;
 
-    /** The root director where writing occurs to, often adding a sub-directory for the sequence. */
-    private InputOutputContext context;
-
+    /** The root directory where writing occurs to, often adding a subdirectory for the sequence. */
+    private OutputterChecked outputter;
+    
     /**
      * Writes elements to {@code directory}, with an incrementing integer in the filename.
      * 
@@ -89,7 +89,7 @@ public class OutputSequenceFactory<T> {
     public OutputSequenceIncrementing<T> incrementingByOneCurrentDirectory(String outputName, String prefix, int numberDigits) throws OutputWriteFailedException {
         OutputPatternIntegerSuffix pattern = new OutputPatternIntegerSuffix(
             outputName,
-            Optional.empty(),
+            true,
             prefix,
             numberDigits,
             true,
@@ -172,6 +172,6 @@ public class OutputSequenceFactory<T> {
     }
     
     private BoundOutputter<T> bind(OutputPattern pattern) {
-        return new BoundOutputter<>(context.getOutputter().getChecked(), pattern, generator);
+        return new BoundOutputter<>(outputter, pattern, generator);
     }
 }

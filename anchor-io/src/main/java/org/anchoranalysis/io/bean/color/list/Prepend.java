@@ -31,24 +31,18 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.color.ColorList;
-import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.io.bean.color.RGBColorBean;
 
 @NoArgsConstructor
-public class Prepend extends ColorListFactory {
+public class Prepend extends ColorSchemeUnary {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private ColorListFactory colors;
-
     @BeanField @Getter @Setter private RGBColorBean prependColor;
     // END BEAN PROPERTIES
 
     @Override
-    public ColorList create(int size) throws OperationFailedException {
-        ColorList list = colors.create(size);
-
-        list.add(0, prependColor.rgbColor());
-
-        return list;
+    protected ColorList transform(ColorList source) {
+        source.add(0, prependColor.rgbColor());
+        return source;
     }
 }

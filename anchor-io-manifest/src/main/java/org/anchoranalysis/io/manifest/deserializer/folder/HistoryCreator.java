@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.io.manifest.deserializer.folder;
 
-import org.anchoranalysis.io.deserializer.DeserializationFailedException;
+import org.anchoranalysis.io.exception.DeserializationFailedException;
 
 public interface HistoryCreator<T> {
 

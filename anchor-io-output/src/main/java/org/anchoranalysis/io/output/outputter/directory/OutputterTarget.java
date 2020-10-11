@@ -31,9 +31,10 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Value;
-import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
 import org.anchoranalysis.io.output.outputter.BindFailedException;
 import org.anchoranalysis.io.output.writer.WriterExecuteBeforeEveryOperation;
+import org.anchoranalysis.io.path.prefixer.DirectoryWithPrefix;
+import org.anchoranalysis.io.path.prefixer.PathCreator;
 
 /**
  * The directory and prefix an outputter writes to.
@@ -49,26 +50,26 @@ public class OutputterTarget {
     /** The directory to which the output-manager is bound to. */
     private BoundDirectory directory;
 
-    @Getter private final FilePathPrefix prefix;
+    @Getter private final DirectoryWithPrefix prefix;
 
-    public OutputterTarget(FilePathPrefix prefix, boolean deleteExistingDirectory)
+    public OutputterTarget(DirectoryWithPrefix prefix, boolean deleteExistingDirectory)
             throws BindFailedException {
-        this(new BoundDirectory(prefix.getFolderPath(), deleteExistingDirectory), prefix);
+        this(new BoundDirectory(prefix.getDirectory(), deleteExistingDirectory), prefix);
     }
 
     /**
      * Creates a new {@link OutputterTarget} with a changed prefix.
      *
-     * <p>The directory-component of the prefix must be equal to or a sub-directory of the existing
+     * <p>The directory-component of the prefix must be equal to or a subdirectory of the existing
      * {@code directory}.
      *
      * @param prefixToAssign the prefix to assign
      * @return a new shallow-copied {@link OutputterTarget} but instead with {@code prefixToAssign}.
-     * @throws BindFailedException if the sub-directory cannot be outputted to
+     * @throws BindFailedException if the subdirectory cannot be outputted to
      */
-    public OutputterTarget changePrefix(FilePathPrefix prefixToAssign) throws BindFailedException {
+    public OutputterTarget changePrefix(DirectoryWithPrefix prefixToAssign) throws BindFailedException {
         return new OutputterTarget(
-                directory.bindToSubdirectory(prefixToAssign.getFolderPath()), prefixToAssign);
+                directory.bindToSubdirectory(prefixToAssign.getDirectory()), prefixToAssign);
     }
 
     public Optional<WriterExecuteBeforeEveryOperation> getParentDirectoryCreator() {
@@ -76,14 +77,10 @@ public class OutputterTarget {
     }
 
     public Path getFolderPath() {
-        return prefix.getFolderPath();
+        return prefix.getDirectory();
     }
-
-    public Path outFilePath(String filePathRelative) {
-        return prefix.outFilePath(filePathRelative);
-    }
-
-    public Path relativePath(Path fullPath) {
-        return prefix.relativePath(fullPath);
+    
+    public PathCreator pathCreator() {
+        return prefix;
     }
 }

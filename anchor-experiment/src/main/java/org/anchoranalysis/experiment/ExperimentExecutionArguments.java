@@ -36,12 +36,12 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.OptionalFactory;
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
-import org.anchoranalysis.io.error.FilePathPrefixerException;
-import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerContext;
 import org.anchoranalysis.io.output.bean.OutputManager;
 import org.anchoranalysis.io.output.recorded.OutputEnabledDelta;
 import org.anchoranalysis.io.params.DebugModeParams;
 import org.anchoranalysis.io.params.InputContextParams;
+import org.anchoranalysis.io.path.DerivePathException;
+import org.anchoranalysis.io.path.prefixer.FilePathPrefixerContext;
 
 @NoArgsConstructor
 public class ExperimentExecutionArguments {
@@ -103,7 +103,7 @@ public class ExperimentExecutionArguments {
         return out;
     }
 
-    public FilePathPrefixerContext createPrefixerContext() throws FilePathPrefixerException {
+    public FilePathPrefixerContext createPrefixerContext() throws DerivePathException {
         return new FilePathPrefixerContext(isDebugModeEnabled(), outputDirectory);
     }
 

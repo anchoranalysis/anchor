@@ -34,7 +34,7 @@ import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.experiment.ExperimentExecutionArguments;
 import org.anchoranalysis.experiment.bean.log.LoggingDestination;
 import org.anchoranalysis.experiment.log.StatefulMessageLogger;
-import org.anchoranalysis.io.bean.filepath.prefixer.FilePathPrefixer;
+import org.anchoranalysis.io.bean.path.PathPrefixer;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
 import org.anchoranalysis.io.output.bean.OutputManager;
 import org.anchoranalysis.io.output.outputter.Outputter;
@@ -61,7 +61,7 @@ public class ParametersExperiment {
     @Getter private final InputOutputContextStateful context;
 
     /** The {@link OutputManager} associated with the experiment which {@link Outputter} uses. */
-    @Getter private final FilePathPrefixer prefixer;
+    @Getter private final PathPrefixer prefixer;
 
     // This is a means to create new log-reporters for each task
     @Getter @Setter private LoggingDestination loggerTaskCreator;
@@ -71,7 +71,7 @@ public class ParametersExperiment {
             String experimentIdentifier,
             Optional<ManifestRecorder> experimentalManifest,
             OutputterChecked outputter,
-            FilePathPrefixer prefixer,
+            PathPrefixer prefixer,
             StatefulMessageLogger loggerExperiment,
             boolean detailedLogging) {
         this.context =

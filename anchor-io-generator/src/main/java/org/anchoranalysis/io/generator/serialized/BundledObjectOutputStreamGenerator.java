@@ -40,7 +40,6 @@ import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.namestyle.OutputNameStyle;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
-import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
 import org.anchoranalysis.io.output.recorded.RecordingWriters;
 
@@ -60,7 +59,7 @@ public class BundledObjectOutputStreamGenerator<T extends Serializable> implemen
             BundleParameters bundleParameters,
             String outputName,
             int numberDigitsInOutput,
-            InputOutputContext parentInputOutputContext,
+            OutputterChecked parentOutputter,
             String manifestDescriptionFunction) throws OutputWriteFailedException {
         this.bundleParameters = bundleParameters;
         
@@ -71,7 +70,7 @@ public class BundledObjectOutputStreamGenerator<T extends Serializable> implemen
                 new ObjectOutputStreamGenerator<>(Optional.of(manifestDescriptionFunction));
 
         OutputPatternIntegerSuffix directory = new OutputPatternIntegerSuffix(outputName,numberDigitsInOutput,true,Optional.of(manifestDescription));
-        this.outputSequence = new OutputSequenceFactory<>(outputGenerator, parentInputOutputContext).incrementingByOne(directory);
+        this.outputSequence = new OutputSequenceFactory<>(outputGenerator, parentOutputter).incrementingByOne(directory);
     }
 
     @Override

@@ -36,7 +36,7 @@ import org.anchoranalysis.io.generator.sequence.pattern.OutputPatternIntegerSuff
 import org.anchoranalysis.io.generator.serialized.KeyValueParamsGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
-import org.anchoranalysis.io.output.outputter.InputOutputContext;
+import org.anchoranalysis.io.output.outputter.Outputter;
 
 /**
  * Writes an energy-stack.
@@ -66,13 +66,12 @@ public class EnergyStackWriter {
     private static final String MANIFEST_FUNCTION_PARAMS = "energyStackParams";
 
     private final EnergyStack energyStack;
-    private final InputOutputContext context;
+    private final Outputter outputter;
     
     public void writeEnergyStack() throws OutputWriteFailedException {
         
         OutputPatternIntegerSuffix directory = new OutputPatternIntegerSuffix(
             OUTPUT_ENERGY_STACK_DIRECTORY,
-            Optional.of(OUTPUT_ENERGY_STACK_DIRECTORY),
             OUTPUT_ENERGY_STACK_DIRECTORY,
             2,
             true,
@@ -85,8 +84,7 @@ public class EnergyStackWriter {
         );
 
         if (energyStack.getParams() != null) {
-            context.getOutputter()
-                    .writerSelective()
+            outputter.writerSelective()
                     .write(
                             OUTPUT_PARAMS,
                             () ->
@@ -99,6 +97,6 @@ public class EnergyStackWriter {
         ChannelGenerator generator = new ChannelGenerator(MANIFEST_FUNCTION_CHANNEL, energyStack.hasOneSlice());
         
         // We write the energy-stack separately as individual channels
-        return new OutputSequenceFactory<>(generator, context);
+        return new OutputSequenceFactory<>(generator, outputter.getChecked());
     }
 }

@@ -29,7 +29,7 @@ package org.anchoranalysis.mpp.io.marks;
 import java.nio.file.Path;
 import org.anchoranalysis.io.bean.deserializer.Deserializer;
 import org.anchoranalysis.io.bean.deserializer.XStreamDeserializer;
-import org.anchoranalysis.io.deserializer.DeserializationFailedException;
+import org.anchoranalysis.io.exception.DeserializationFailedException;
 import org.anchoranalysis.mpp.mark.MarkCollection;
 
 public class MarkCollectionDeserializer implements Deserializer<MarkCollection> {

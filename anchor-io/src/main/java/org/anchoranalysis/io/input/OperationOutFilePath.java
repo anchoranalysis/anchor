@@ -31,26 +31,26 @@ import java.util.Optional;
 import java.util.function.Supplier;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
-import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.bean.path.derive.DerivePath;
+import org.anchoranalysis.io.exception.AnchorIOException;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class OperationOutFilePath {
 
     public static PathSupplier cachedOutPathFor(
-            FilePathGenerator outputPathGenerator,
+            DerivePath outputPathGenerator,
             Supplier<Optional<Path>> pathInput,
             boolean debugMode) {
         return PathSupplier.cache(() -> outPathFor(outputPathGenerator, pathInput, debugMode));
     }
 
     public static Path outPathFor(
-            FilePathGenerator outputPathGenerator,
+            DerivePath outputPathGenerator,
             Supplier<Optional<Path>> pathInput,
             boolean debugMode)
             throws AnchorIOException {
         return outputPathGenerator
-                .outFilePath(
+                .deriveFrom(
                         pathInput
                                 .get()
                                 .orElseThrow(OperationOutFilePath::bindingPathMissingException),

@@ -49,7 +49,7 @@ import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.voxel.Voxels;
-import org.anchoranalysis.io.generator.collection.CollectionAsSubdirectoryGenerator;
+import org.anchoranalysis.io.generator.collection.CollectionGenerator;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.BindFailedException;
 import org.anchoranalysis.io.output.outputter.Outputter;
@@ -187,7 +187,7 @@ public class WriteIntoFolder implements TestRule {
 
         setupOutputterIfNecessary();
 
-        CollectionAsSubdirectoryGenerator<DisplayStack, Collection<DisplayStack>> generatorCollection = new CollectionAsSubdirectoryGenerator<>(generatorStack, outputName, stacks);
+        CollectionGenerator<DisplayStack, Collection<DisplayStack>> generatorCollection = new CollectionGenerator<>(generatorStack, outputName, stacks);
         outputter.getChecked().getWriters().permissive().write(outputName, () -> generatorCollection);
     }
 

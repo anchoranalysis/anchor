@@ -33,10 +33,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
-import org.anchoranalysis.io.bean.file.matcher.MatchGlob;
+import org.anchoranalysis.io.bean.files.provider.SearchDirectory;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
-import org.anchoranalysis.io.bean.provider.file.SearchDirectory;
-import org.anchoranalysis.io.error.FileProviderException;
+import org.anchoranalysis.io.bean.path.matcher.MatchGlob;
+import org.anchoranalysis.io.exception.FilesProviderException;
 import org.anchoranalysis.io.manifest.file.FileWrite;
 import org.anchoranalysis.io.manifest.folder.FolderWritePhysical;
 import org.anchoranalysis.io.manifest.folder.SequencedFolder;
@@ -96,7 +96,7 @@ public class SerializedObjectSetFolderSource implements SequencedFolder {
 
                 i++;
             }
-        } catch (FileProviderException e) {
+        } catch (FilesProviderException e) {
             throw new SequenceTypeException(e);
         }
     }

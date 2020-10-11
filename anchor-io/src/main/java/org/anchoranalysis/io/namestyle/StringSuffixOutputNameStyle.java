@@ -26,6 +26,8 @@
 
 package org.anchoranalysis.io.namestyle;
 
+import java.util.Optional;
+
 public class StringSuffixOutputNameStyle extends IndexableOutputNameStyle {
 
     /** */
@@ -37,33 +39,31 @@ public class StringSuffixOutputNameStyle extends IndexableOutputNameStyle {
         // Here as the empty constructor is needed for deserialization
     }
 
-    public StringSuffixOutputNameStyle(String outputName, String outputFormatString) {
+    public StringSuffixOutputNameStyle(String outputName, Optional<String> prefix) {
         super(outputName);
-        this.outputFormatString = outputFormatString;
-    }
-
-    private StringSuffixOutputNameStyle(StringSuffixOutputNameStyle src) {
-        super(src);
-    }
-
-    @Override
-    protected String nameFromOutputFormatString(String outputFormatString, String index) {
-        return String.format(outputFormatString, index);
-    }
-
-    @Override
-    public IndexableOutputNameStyle deriveIndexableStyle(int numDigits) {
-        // Number-of-digits is ignored and not relevant
-        return duplicate();
+        if (prefix.isPresent()) {
+            this.outputFormatString = prefix.get() + "%s";
+        } else {
+            this.outputFormatString = "%s";
+        }
     }
 
     @Override
     public IndexableOutputNameStyle duplicate() {
         return new StringSuffixOutputNameStyle(this);
     }
+    
+    @Override
+    protected String nameFromOutputFormatString(String outputFormatString, String index) {
+        return String.format(outputFormatString, index);
+    }
 
     @Override
     protected String outputFormatString() {
         return outputFormatString;
+    }
+    
+    private StringSuffixOutputNameStyle(StringSuffixOutputNameStyle src) {
+        super(src);
     }
 }

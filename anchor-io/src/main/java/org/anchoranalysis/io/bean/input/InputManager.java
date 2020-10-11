@@ -28,7 +28,7 @@ package org.anchoranalysis.io.bean.input;
 
 import java.util.List;
 import org.anchoranalysis.bean.AnchorBean;
-import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.exception.AnchorIOException;
 import org.anchoranalysis.io.input.InputFromManager;
 
 /**

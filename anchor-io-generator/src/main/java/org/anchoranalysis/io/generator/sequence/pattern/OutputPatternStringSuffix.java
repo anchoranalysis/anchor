@@ -1,7 +1,6 @@
 package org.anchoranalysis.io.generator.sequence.pattern;
 
 import java.util.Optional;
-import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.io.namestyle.StringSuffixOutputNameStyle;
 
 /**
@@ -12,20 +11,33 @@ import org.anchoranalysis.io.namestyle.StringSuffixOutputNameStyle;
  */
 public class OutputPatternStringSuffix extends OutputPattern {
 
-    public OutputPatternStringSuffix(String outputName, boolean supressSubdirectory) {
-        this(outputName, supressSubdirectory, "");
+    /**
+     * Creates <i>without</i> a prefix.
+     * 
+     * @param outputName the output-name to use, which also determines the subdirectory name if it is not suppressed.
+     * @param suppressSubdirectory if true, a separate subdirectory is not created, and rather the outputs occur in the parent directory.
+     */
+    public OutputPatternStringSuffix(String outputName, boolean suppressSubdirectory) {
+        this(outputName, suppressSubdirectory, Optional.empty());
+    }
+
+    /**
+     * Creates <i>with</i> a prefix.
+     * 
+     * @param outputName the output-name to use, which also determines the subdirectory name if it is not suppressed.
+     * @param suppressSubdirectory if true, a separate subdirectory is not created, and rather the outputs occur in the parent directory.
+     * @param prefix a string that appears before the index in each outputted filename
+     */
+    public OutputPatternStringSuffix(String outputName, boolean suppressSubdirectory, String prefix) {
+        this(outputName, suppressSubdirectory, Optional.of(prefix));
     }
     
-    public OutputPatternStringSuffix(String outputName, boolean supressSubdirectory, String prefix) {
+    private OutputPatternStringSuffix(String outputName, boolean suppressSubdirectory, Optional<String> prefix) {
         super(
-           maybeSubdirectory(outputName, supressSubdirectory),
-           new StringSuffixOutputNameStyle(outputName, prefix + "%s"),
+           OutputPatternUtilities.maybeSubdirectory(outputName, suppressSubdirectory),
+           new StringSuffixOutputNameStyle(outputName, prefix),
            true,
            Optional.empty()
         );
-    }
-    
-    private static Optional<String> maybeSubdirectory(String outputName, boolean supressSubdirectory) {
-        return OptionalUtilities.createFromFlag(!supressSubdirectory, outputName);
     }
 }

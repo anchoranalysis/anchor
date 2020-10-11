@@ -38,7 +38,7 @@ import org.anchoranalysis.io.bean.color.RGBColorBean;
  *
  * @author Owen Feehan
  */
-public class FromSingle extends ColorListFactory {
+public class FromSingle extends ColorScheme {
 
     // START BEAN PROPERTIES
     /** The single color to repeat. */
@@ -46,7 +46,7 @@ public class FromSingle extends ColorListFactory {
     // END BEAN PROPERTIES
 
     @Override
-    public ColorList create(int size) throws OperationFailedException {
+    public ColorList createList(int size) throws OperationFailedException {
 
         ColorList out = new ColorList();
         for (int i = 0; i < size; i++) {

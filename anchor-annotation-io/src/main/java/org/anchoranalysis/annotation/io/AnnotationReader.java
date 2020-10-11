@@ -29,7 +29,7 @@ package org.anchoranalysis.annotation.io;
 import java.nio.file.Path;
 import java.util.Optional;
 import org.anchoranalysis.annotation.Annotation;
-import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.exception.AnchorIOException;
 
 public interface AnnotationReader<T extends Annotation> {
 

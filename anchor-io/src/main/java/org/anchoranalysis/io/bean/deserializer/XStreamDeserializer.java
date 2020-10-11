@@ -29,7 +29,7 @@ package org.anchoranalysis.io.bean.deserializer;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.Xpp3Driver;
 import java.nio.file.Path;
-import org.anchoranalysis.io.deserializer.DeserializationFailedException;
+import org.anchoranalysis.io.exception.DeserializationFailedException;
 
 public class XStreamDeserializer<T> implements Deserializer<T> {
 

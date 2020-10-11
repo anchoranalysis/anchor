@@ -28,6 +28,7 @@ package org.anchoranalysis.image.convert;
 import java.nio.ShortBuffer;
 import lombok.Getter;
 import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
+import com.google.common.base.Preconditions;
 
 /**
  * Wraps a {@code ShortBuffer} but automatically performs conversion to {@code int}.
@@ -262,12 +263,7 @@ public final class UnsignedShortBuffer extends UnsignedBufferAsInt {
      * @return the array
      */
     public final short[] array() {
-        if (delegate.hasArray()) {
-            return delegate.array();
-        } else {
-            short[] array = new short[delegate.capacity()];
-            delegate.get(array);
-            return array;
-        }
+        Preconditions.checkArgument(delegate.hasArray());
+        return delegate.array();
     }
 }

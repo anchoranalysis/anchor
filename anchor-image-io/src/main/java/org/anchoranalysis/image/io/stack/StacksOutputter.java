@@ -31,7 +31,7 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.name.provider.NamedProvider;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
-import org.anchoranalysis.io.output.outputter.InputOutputContext;
+import org.anchoranalysis.io.output.outputter.OutputterChecked;
 
 /**
  * Outputs a named-set of stacks, performing appropriate checks on what is enabled or not.
@@ -52,18 +52,18 @@ public class StacksOutputter {
      * @param stacks the stacks to output (or a subset thereof according to the second-level output manager)
      * @param outputName name to use for the directory, for checking if it is allowed, and for the second-level outputs
      * @param suppressSubdirectory if true, a separate subdirectory is not created, and rather the outputs occur in the parent directory.
-     * @param context determines where and how the outputting occurs
+     * @param outputter determines where and how the outputting occurs
      * @throws OutputWriteFailedException if the output cannot be written. 
      */
     public static void output(
-            NamedProvider<Stack> stacks, String outputName, boolean suppressSubdirectory, InputOutputContext context)
+            NamedProvider<Stack> stacks, String outputName, boolean suppressSubdirectory, OutputterChecked outputter)
             throws OutputWriteFailedException {
 
         OutputSequenceStackFactory.withManifestFunction(MANIFEST_FUNCTION).withoutOrderSubset(
                 stacks,
                 outputName,
                 suppressSubdirectory,
-                context
+                outputter
         );
     }
 }

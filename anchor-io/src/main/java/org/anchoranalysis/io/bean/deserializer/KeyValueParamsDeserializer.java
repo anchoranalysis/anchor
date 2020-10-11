@@ -29,7 +29,7 @@ package org.anchoranalysis.io.bean.deserializer;
 import java.io.IOException;
 import java.nio.file.Path;
 import org.anchoranalysis.core.params.KeyValueParams;
-import org.anchoranalysis.io.deserializer.DeserializationFailedException;
+import org.anchoranalysis.io.exception.DeserializationFailedException;
 
 /**
  * @author Owen Feehan

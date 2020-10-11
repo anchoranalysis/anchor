@@ -113,7 +113,7 @@ public class AlwaysAllowed implements Writer {
 
         maybeExecutePreop();
 
-        Path outPath = outputter.outFilePath(outputName + "." + extension);
+        Path outPath = outputter.makeOutputPath(outputName, extension);
 
         manifestDescription.ifPresent(
                 md -> outputter.writeFileToOperationRecorder(outputName, outPath, md, ""));

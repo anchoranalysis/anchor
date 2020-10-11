@@ -29,10 +29,10 @@ package org.anchoranalysis.io.bean.color.list;
 import org.anchoranalysis.core.color.ColorList;
 import org.anchoranalysis.core.color.RGBColor;
 
-public class HSB extends ColorListFactory {
+public class HSB extends ColorScheme {
 
     @Override
-    public ColorList create(int size) {
+    public ColorList createList(int size) {
 
         ColorList out = new ColorList();
 

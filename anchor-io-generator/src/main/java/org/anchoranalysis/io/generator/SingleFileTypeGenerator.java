@@ -85,7 +85,7 @@ public abstract class SingleFileTypeGenerator<T, S> implements Generator<T> {
     public void write(OutputNameStyle outputNameStyle, OutputterChecked outputter)
             throws OutputWriteFailedException {
         writeInternal(
-                outputNameStyle.getPhysicalName(), outputNameStyle.getOutputName(), "", outputter);
+                outputNameStyle.getFilenameWithoutExtension(), outputNameStyle.getOutputName(), "", outputter);
     }
 
     /** As only a single-file is involved, this methods delegates to a simpler virtual method. */
@@ -95,7 +95,7 @@ public abstract class SingleFileTypeGenerator<T, S> implements Generator<T> {
             throws OutputWriteFailedException {
 
         writeInternal(
-                outputNameStyle.getPhysicalName(index),
+                outputNameStyle.getFilenameWithoutExtension(index),
                 outputNameStyle.getOutputName(),
                 index,
                 outputter);
@@ -107,34 +107,35 @@ public abstract class SingleFileTypeGenerator<T, S> implements Generator<T> {
     @Override
     public Optional<FileType[]> getFileTypes(OutputWriteSettings outputWriteSettings)
             throws OperationFailedException {
-        Optional<ManifestDescription> manifestDescription = createManifestDescription();
         return OptionalUtilities.map(
-                manifestDescription,
-                md -> new FileType[] {new FileType(md, getFileExtension(outputWriteSettings))});
+                createManifestDescription(),
+                manifestDescription -> createFileTypeArray(manifestDescription, outputWriteSettings) );
+    }
+    
+    private FileType[] createFileTypeArray(ManifestDescription description, OutputWriteSettings outputWriteSettings) throws OperationFailedException {
+        return new FileType[] {new FileType(description, getFileExtension(outputWriteSettings))};
     }
 
     private void writeInternal(
-            String filePhysicalNameWithoutExtension,
+            String filenameWithoutExtension,
             String outputName,
             String index,
             OutputterChecked outputter)
             throws OutputWriteFailedException {
 
         try {
-            Path outFilePath =
-                    outputter.outFilePath(
-                            filePhysicalNameWithoutExtension
-                                    + "."
-                                    + getFileExtension(outputter.getSettings()));
+            Path pathToWriteTo =
+                    outputter.makeOutputPath(
+                            filenameWithoutExtension,
+                            getFileExtension(outputter.getSettings()));
 
             // First write to the file system, and then write to the operation-recorder. Thi
-            writeToFile(outputter.getSettings(), outFilePath);
+            writeToFile(outputter.getSettings(), pathToWriteTo);
 
-            Optional<ManifestDescription> manifestDescription = createManifestDescription();
-            manifestDescription.ifPresent(
-                    md ->
+            createManifestDescription().ifPresent(
+                    manifestDescription ->
                             outputter.writeFileToOperationRecorder(
-                                    outputName, outFilePath, md, index));
+                                    outputName, pathToWriteTo, manifestDescription, index));
         } catch (OperationFailedException e) {
             throw new OutputWriteFailedException(e);
         }

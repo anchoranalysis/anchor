@@ -42,6 +42,7 @@ import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
+import org.anchoranalysis.io.output.outputter.OutputterChecked;
 import org.anchoranalysis.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.mpp.io.input.InputForMPPBean;
 import org.anchoranalysis.mpp.io.input.MPPInitParamsFactory;
@@ -103,10 +104,9 @@ public abstract class DefineOutputter extends AnchorBean<DefineOutputter> {
                 context, Optional.ofNullable(define), stacks, objects, keyValueParams);
     }
 
-    protected void outputSharedObjects(MPPInitParams initParams, InputOutputContext context)
+    protected void outputSharedObjects(MPPInitParams initParams, OutputterChecked outputter)
             throws OutputWriteFailedException {
-
         new ParamsOutputter(
-                initParams, suppressSubfolders, context).output();;
+                initParams, suppressSubfolders, outputter).output();
     }
 }

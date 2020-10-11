@@ -96,7 +96,7 @@ public class FolderWriteIndexableOutputName extends FolderWriteWithPath {
     private FileWrite createFileWrite(String index, FileType fileType) {
 
         FileWrite write = new FileWrite();
-        write.setFileName(outputName.getPhysicalName(index) + "." + fileType.getFileExtension());
+        write.setFileName(outputName.getFilenameWithoutExtension(index) + "." + fileType.getFileExtension());
         write.setOutputName(outputName.getOutputName());
         write.setManifestDescription(fileType.getManifestDescription());
         write.setIndex(index);

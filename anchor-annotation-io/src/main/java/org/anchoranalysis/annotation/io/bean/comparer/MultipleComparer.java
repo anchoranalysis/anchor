@@ -58,7 +58,7 @@ import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.io.bean.color.list.ColorListFactory;
+import org.anchoranalysis.io.bean.color.list.ColorScheme;
 import org.anchoranalysis.io.bean.color.list.VeryBright;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
@@ -84,7 +84,7 @@ public class MultipleComparer extends AnchorBean<MultipleComparer> {
             AnnotationWithMarks annotation,
             DisplayStack background,
             Path annotationPath,
-            ColorListFactory colorSetGenerator,
+            ColorScheme colorSetGenerator,
             Path modelDirectory,
             Logger logger,
             boolean debugMode)
@@ -129,7 +129,7 @@ public class MultipleComparer extends AnchorBean<MultipleComparer> {
             ObjectCollection compareObjects,
             DisplayStack background,
             String rightName,
-            ColorListFactory colorSetGenerator)
+            ColorScheme colorSetGenerator)
             throws CreateException {
         // Don't know how it's possible for an object with 0 pixels to end up here, but it's somehow
         // happening, so we prevent it from interfereing

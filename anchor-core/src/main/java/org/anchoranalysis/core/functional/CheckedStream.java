@@ -35,6 +35,7 @@ import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.core.functional.function.CheckedConsumer;
 import org.anchoranalysis.core.functional.function.CheckedFunction;
 import org.anchoranalysis.core.functional.function.CheckedIntFunction;
+import org.anchoranalysis.core.functional.function.CheckedPredicate;
 import org.anchoranalysis.core.functional.function.CheckedToIntFunction;
 
 /** Map operations for streams that can throw checked-exceptions */
@@ -60,7 +61,7 @@ public class CheckedStream {
     }
 
     /**
-     * Performs a forEach on a stream, but accepts a consumer that can throw a checked-exception
+     * Performs a {@link Stream#forEach} but accepts a consumer that can throw a checked-exception
      *
      * <p>This uses some internal reflection trickery to suppress the checked exception, and then
      * rethrow it.
@@ -87,9 +88,38 @@ public class CheckedStream {
             throwException(e, throwableClass);
         }
     }
+    
+    /**
+     * Performs a {@link Stream#filter} but accepts a predicate that can throw a checked-exception
+     *
+     * <p>This uses some internal reflection trickery to suppress the checked exception, and then
+     * rethrow it.
+     *
+     * <p>As a side-effect, any runtime exceptions that are thrown during the function, will be
+     * rethrown wrapped inside a {@link ConvertedToRuntimeException}.
+     *
+     * @param  <T> type to consume
+     * @param  <E> exception that can be thrown by {code mapFunction}
+     * @param stream the stream to apply the map on
+     * @param throwableClass the class of {@code E}
+     * @param predicate the predicate to call for each object in the stream
+     * @throws E if the exception is thrown during filtering
+     */
+    public static <T, E extends Exception> Stream<T> filter(
+            Stream<T> stream,
+            Class<? extends Exception> throwableClass,
+            CheckedPredicate<T, E> predicate)
+            throws E {
+        try {
+            return stream.filter(item -> suppressCheckedException(item, predicate));
+
+        } catch (ConvertedToRuntimeException e) {
+            return throwException(e, throwableClass);
+        }
+    }
 
     /**
-     * Performs a map on a stream, but accepts a function that can throw a checked-exception
+     * Performs a {@link Stream#map} but accepts a function that can throw a checked-exception
      *
      * <p>This uses some internal reflection trickery to suppress the checked exception, and then
      * rethrow it.
@@ -120,7 +150,7 @@ public class CheckedStream {
     }
 
     /**
-     * Performs a {@code mapToInt} on a stream, but accepts a function that can throw a
+     * Performs a {@link Stream#mapToInt} but accepts a function that can throw a
      * checked-exception.
      *
      * <p>This uses some internal reflection trickery to suppress the checked exception, and then
@@ -177,7 +207,7 @@ public class CheckedStream {
     }
 
     /**
-     * Performs a {@code mapToObj} on an {@code IntStream} but accepts a function that can throw a
+     * Performs a {@link IntStream#mapToObj} but accepts a function that can throw a
      * checked-exception.
      *
      * <p>This uses some internal reflection trickery to suppress the checked exception, and then
@@ -208,7 +238,7 @@ public class CheckedStream {
     }
 
     /**
-     * Performs a flat-map on a stream, but accepts a function that can throw a checked-exception
+     * Performs a {@link Stream#flatMap} but accepts a function that can throw a checked-exception
      *
      * <p>This uses some internal reflection trickery to suppress the checked exception, and then
      * rethrow it.
@@ -316,6 +346,18 @@ public class CheckedStream {
             T param, CheckedConsumer<T, E> consumer) {
         try {
             consumer.accept(param);
+        } catch (Exception exc) {
+            throw new ConvertedToRuntimeException(exc);
+        }
+    }
+    
+    /**
+     * Like @link(#suppressCheckedException) but instead accepts {@link CheckedPredicate} functions
+     */
+    private static <T, E extends Exception> boolean suppressCheckedException(
+            T param, CheckedPredicate<T, E> predicate) {
+        try {
+            return predicate.test(param);
         } catch (Exception exc) {
             throw new ConvertedToRuntimeException(exc);
         }

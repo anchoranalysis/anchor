@@ -68,9 +68,9 @@ class BoundDirectory {
     }
 
     /**
-     * Creates a new {@link BoundDirectory} that is a sub-directory of the existing directory.
+     * Creates a new {@link BoundDirectory} that is a subdirectory of the existing directory.
      *
-     * @param subDirectoryPath sub-directory of existing {@link BoundDirectory} for which a new
+     * @param subDirectoryPath subdirectory of existing {@link BoundDirectory} for which a new
      *     {@link BoundDirectory} will be created.
      * @return a newly created {@link BoundDirectory} bound to {@code directoryPath}.
      * @throws BindFailedException

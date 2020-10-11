@@ -38,7 +38,7 @@ import org.anchoranalysis.io.generator.histogram.HistogramCSVGenerator;
 import org.anchoranalysis.io.generator.serialized.XStreamGenerator;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
-import org.anchoranalysis.io.output.outputter.InputOutputContext;
+import org.anchoranalysis.io.output.outputter.OutputterChecked;
 import org.anchoranalysis.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.mpp.mark.MarkCollection;
 import org.anchoranalysis.mpp.segment.define.OutputterDirectories;
@@ -64,7 +64,7 @@ class ParamsOutputter {
 
     private MPPInitParams params;
     private boolean suppressSubfolders;
-    private InputOutputContext context;
+    private OutputterChecked outputter;
 
     /**
      * Adds all possible output-names to a {@link OutputEnabledMutable}.
@@ -87,7 +87,7 @@ class ParamsOutputter {
     public void output()
             throws OutputWriteFailedException {
 
-        if (!context.getOutputter().getSettings().hasBeenInit()) {
+        if (!outputter.getSettings().hasBeenInit()) {
             throw new OutputWriteFailedException(
                     "The Outputter's settings have not yet been initialized");
         }
@@ -103,7 +103,7 @@ class ParamsOutputter {
                 CreateCombinedStack.apply(params.getImage()),
                 OutputterDirectories.STACKS,
                 suppressSubfolders,
-                context
+                outputter
         );
     }
     
@@ -130,7 +130,7 @@ class ParamsOutputter {
 
     private <T> void output(
             NamedProviderStore<T> store, Generator<T> generator, String directoryName) throws OutputWriteFailedException {
-        new NamedProviderOutputter<>(store, generator, context).output(
+        new NamedProviderOutputter<>(store, generator, outputter).output(
                 directoryName,
                 suppressSubfolders);
     }

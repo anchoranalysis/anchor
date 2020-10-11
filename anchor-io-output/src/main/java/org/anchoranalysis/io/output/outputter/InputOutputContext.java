@@ -97,7 +97,7 @@ public interface InputOutputContext {
     }
 
     /**
-     * Creates a new context that writes instead to a sub-directory.
+     * Creates a new context that writes instead to a subdirectory.
      *
      * @param subDirectoryName subdirectory name
      * @param inheritOutputRulesAndRecording if true, the output rules and recording are inherited
@@ -122,7 +122,7 @@ public interface InputOutputContext {
      * Optionally creates a new context like with {@link #subdirectory} but only if a directory-name
      * is defined
      *
-     * @param subdirectoryName if defined, a new context is created that writes into a sub-directory
+     * @param subdirectoryName if defined, a new context is created that writes into a subdirectory
      *     of this name
      * @param inheritOutputRulesAndRecording if true, the output rules and recording are inherited
      *     from the parent directory. if false, they are not, and all outputs are allowed and are

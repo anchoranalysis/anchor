@@ -35,54 +35,77 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.io.error.AnchorIOException;
-import org.anchoranalysis.io.input.descriptivename.DescriptiveFile;
+import org.anchoranalysis.io.exception.AnchorIOException;
+import org.anchoranalysis.io.input.DescriptiveFile;
 
+/**
+ * Associates a descriptive-name (a compact unique identifier) with a file.
+ * 
+ * <p>The operation can be procesed on a single file or a collection of files.
+ * 
+ * @author Owen Feehan
+ *
+ */
 public abstract class DescriptiveNameFromFile extends AnchorBean<DescriptiveNameFromFile> {
 
     private static final String DEFAULT_ELSE_NAME = "unknownName";
-
-    /** Like descriptiveNamesForCheckUniqueness but with a default for emptyName */
-    public List<DescriptiveFile> descriptiveNamesForCheckUniqueness(
-            Collection<File> files, Logger logger) throws AnchorIOException {
-        return descriptiveNamesForCheckUniqueness(files, DEFAULT_ELSE_NAME, logger);
-    }
-
-    /**
-     * Like descriptiveNames for but checks that the final list of descriptive-files all have unique
-     * descriptive-names
-     */
-    public List<DescriptiveFile> descriptiveNamesForCheckUniqueness(
-            Collection<File> files, String elseName, Logger logger) throws AnchorIOException {
-        List<DescriptiveFile> list = descriptiveNamesFor(files, elseName, logger);
-        checkUniqueness(list);
-        checkNoPredicate(list, DescriptiveNameFromFile::containsBackslash, "contain backslashes");
-        checkNoPredicate(list, DescriptiveNameFromFile::emptyString, "contain an empty string");
-        return list;
-    }
 
     /**
      * A descriptive-name for a file
      *
      * @param file the file to extract a descriptive-name for
      * @param elseName a fallback name to use if something goes wrong
-     * @return
+     * @return the file combined with an extracted descriptive-name
      */
-    public DescriptiveFile descriptiveNameFor(File file, String elseName, Logger logger) {
-        return descriptiveNamesFor(Arrays.asList(file), elseName, logger).get(0);
+    public DescriptiveFile describe(File file, String elseName, Logger logger) {
+        return describe(Arrays.asList(file), elseName, logger).get(0);
+    }
+    
+    
+    /** 
+     * Like {@link #describeCheckUnique(Collection, String, Logger)} but with a default for {@code elseName}.
+     *
+     * @param files the files to describe
+     * @param logger the logger
+     * @return a list of identical size and order to files, corresponding to the file the extracted descriptive-name
+     * @throws AnchorIOException if more than one {@link DescriptiveFile} have the same name
+     */
+    public List<DescriptiveFile> describeCheckUnique(
+            Collection<File> files, Logger logger) throws AnchorIOException {
+        return describeCheckUnique(files, DEFAULT_ELSE_NAME, logger);
     }
 
     /**
      * Extracts a list of descriptive-names (with associated) file for some files
      *
-     * @param files the files
-     * @param elseName a string to use if an error occurs extracting the descriptive-name (used as a
+     * @param files the files to describe
+     * @param elseName a string to use if an error occurs extracting a particular name descriptive-name (used as a
      *     prefix with an index)
      * @param logger the logger
-     * @return a list of identical size and order to files, corresponding to the extracted names
+     * @return a list of identical size and order to files, corresponding to the file the extracted descriptive-name
      */
-    public abstract List<DescriptiveFile> descriptiveNamesFor(
+    public abstract List<DescriptiveFile> describe(
             Collection<File> files, String elseName, Logger logger);
+    
+    /**
+     * Like {@link #describe(Collection, String, Logger)} but checks that the final list of descriptive-files all have unique
+     * descriptive-names
+     * 
+     * @param files the files to describe
+     * @param elseName a string to use if an error occurs extracting a particular descriptive-name (used as a
+     *     prefix with an index)
+     * @param logger the logger
+     * @return a list of identical size and order to files, corresponding to the file the extracted descriptive-name
+     * @throws AnchorIOException if more than one {@link DescriptiveFile} have the same name
+     */
+    public List<DescriptiveFile> describeCheckUnique(
+            Collection<File> files, String elseName, Logger logger) throws AnchorIOException {
+        List<DescriptiveFile> list = describe(files, elseName, logger);
+        checkUniqueness(list);
+        checkNoPredicate(list, DescriptiveNameFromFile::containsBackslash, "contain backslashes");
+        checkNoPredicate(list, DescriptiveNameFromFile::emptyString, "contain an empty string");
+        return list;
+    }
 
     private static void checkUniqueness(List<DescriptiveFile> list) throws AnchorIOException {
         Map<String, Long> countDescriptiveNames =
@@ -116,28 +139,28 @@ public abstract class DescriptiveNameFromFile extends AnchorBean<DescriptiveName
         }
     }
 
-    // For debugging if there is a non-uniqueness clash between two DescriptiveFiles
+    /** For debugging if there is a non-uniqueness clash between two {@link DescriptiveFile}s. */
     private static String keysWithDescriptiveName(
             String descriptiveName, List<DescriptiveFile> list) {
-        return keysWithDescriptiveNamePredicate(dn -> dn.equals(descriptiveName), list);
+        return keysWithDescriptiveNamePredicate(file -> file.equals(descriptiveName), list);
     }
 
     private static String keysWithDescriptiveNamePredicate(
-            Predicate<String> pred, List<DescriptiveFile> list) {
+            Predicate<String> predicate, List<DescriptiveFile> list) {
         List<String> matches =
                 list.stream()
-                        .filter(df -> pred.test(df.getDescriptiveName()))
-                        .map(df -> df.getPath().toString())
+                        .filter(file -> predicate.test(file.getDescriptiveName()))
+                        .map(file -> file.getPath().toString())
                         .collect(Collectors.toList());
 
         return String.join(System.lineSeparator(), matches);
     }
 
-    private static boolean containsBackslash(String str) {
-        return str.contains("\\");
+    private static boolean containsBackslash(String value) {
+        return value.contains("\\");
     }
 
-    private static boolean emptyString(String str) {
-        return str == null || str.isEmpty();
+    private static boolean emptyString(String value) {
+        return value == null || value.isEmpty();
     }
 }

@@ -36,7 +36,7 @@ import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.factory.ObjectCollectionFactory;
 import org.anchoranalysis.io.bean.deserializer.Deserializer;
-import org.anchoranalysis.io.deserializer.DeserializationFailedException;
+import org.anchoranalysis.io.exception.DeserializationFailedException;
 import org.anchoranalysis.io.manifest.deserializer.folder.DeserializeFromFolder;
 import org.anchoranalysis.io.manifest.deserializer.folder.DeserializeFromFolderSimple;
 import org.anchoranalysis.io.manifest.deserializer.folder.LoadContainer;

@@ -28,6 +28,7 @@ package org.anchoranalysis.image.convert;
 import java.nio.ByteBuffer;
 import lombok.Getter;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
+import com.google.common.base.Preconditions;
 
 /**
  * Wraps a {@code ByteBuffer} but automatically performs conversion to {@code int}.
@@ -257,12 +258,7 @@ public final class UnsignedByteBuffer extends UnsignedBufferAsInt {
      * @return the array
      */
     public final byte[] array() {
-        if (delegate.hasArray()) {
-            return delegate.array();
-        } else {
-            byte[] array = new byte[delegate.capacity()];
-            delegate.get(array);
-            return array;
-        }
+        Preconditions.checkArgument(delegate.hasArray());
+        return delegate.array();
     }
 }
