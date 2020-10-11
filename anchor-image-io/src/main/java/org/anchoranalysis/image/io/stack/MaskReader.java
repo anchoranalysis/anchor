@@ -36,7 +36,7 @@ import org.anchoranalysis.image.io.bean.stack.StackReader;
 import org.anchoranalysis.image.stack.Stack;
 
 /**
- * Utility functions for reading a {@Mask} from the file-system.
+ * Utility functions for reading a {@link Mask} from the file-system.
  * 
  * @author Owen Feehan
  *
