@@ -73,7 +73,7 @@ public class EnergyStackWriter {
         OutputPatternIntegerSuffix directory = new OutputPatternIntegerSuffix(
             OUTPUT_ENERGY_STACK_DIRECTORY,
             Optional.of(OUTPUT_ENERGY_STACK_DIRECTORY),
-            "",
+            OUTPUT_ENERGY_STACK_DIRECTORY,
             2,
             true,
             Optional.of(new ManifestDescription("raster", OUTPUT_ENERGY_STACK_DIRECTORY))

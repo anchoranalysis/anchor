@@ -37,6 +37,7 @@ import org.anchoranalysis.io.csv.comparer.CSVComparer;
 import org.anchoranalysis.io.csv.reader.CSVReaderException;
 import org.anchoranalysis.test.TestLoader;
 import org.anchoranalysis.test.image.io.TestLoaderImageIO;
+import org.apache.commons.io.FileUtils;
 
 /**
  * Allows for comparison of objects that exist on different test loaders
@@ -146,5 +147,17 @@ public class DualComparer {
         Path dir1 = loaderImage1.resolveTestPath(path);
         Path dir2 = loaderImage2.resolveTestPath(path);
         return DirectoriesComparer.areDirectoriesEqual(dir1, dir2);
+    }
+    
+    /**
+     * Copies a file from its path in the first loader, to its path in the second loder.
+     * 
+     * <p>Any existing file is replaced.
+     * 
+     * @param path relative-path (compared to root of both loaders) of files to copy
+     * @throws IOException if copyign fails
+     */
+    public void copyFromPath1ToPath2(String path) throws IOException {
+        FileUtils.copyFile(loaderImage1.resolveTestPath(path).toFile(), loaderImage2.resolveTestPath(path).toFile());
     }
 }
