@@ -27,6 +27,7 @@
 package org.anchoranalysis.image.io.generator.raster.object.rgb;
 
 import io.vavr.control.Either;
+import org.anchoranalysis.bean.shared.color.scheme.HSB;
 import org.anchoranalysis.core.color.ColorIndex;
 import org.anchoranalysis.core.color.ColorIndexModulo;
 import org.anchoranalysis.core.color.ColorList;
@@ -38,7 +39,6 @@ import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.properties.ObjectCollectionWithProperties;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
-import org.anchoranalysis.io.bean.color.scheme.HSB;
 import org.anchoranalysis.overlay.bean.DrawObject;
 import org.anchoranalysis.overlay.writer.ObjectDrawAttributes;
 

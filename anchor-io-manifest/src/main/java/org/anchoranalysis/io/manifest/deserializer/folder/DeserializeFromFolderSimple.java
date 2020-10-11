@@ -27,7 +27,7 @@
 package org.anchoranalysis.io.manifest.deserializer.folder;
 
 import org.anchoranalysis.core.index.GetterFromIndex;
-import org.anchoranalysis.io.bean.deserializer.Deserializer;
+import org.anchoranalysis.io.manifest.deserializer.Deserializer;
 import org.anchoranalysis.io.manifest.deserializer.folder.sequenced.SequencedFolderDeserializer;
 import org.anchoranalysis.io.manifest.folder.SequencedFolder;
 

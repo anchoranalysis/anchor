@@ -36,7 +36,7 @@ import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
 import org.anchoranalysis.io.output.outputter.BindFailedException;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
-import org.anchoranalysis.io.path.NamedPath;
+import org.anchoranalysis.io.output.path.NamedPath;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class TaskOutputterFactory {

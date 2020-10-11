@@ -32,16 +32,15 @@ import lombok.Setter;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
-import org.anchoranalysis.io.bean.path.PathPrefixer;
-import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
 import org.anchoranalysis.io.output.bean.rules.OutputEnabledRules;
 import org.anchoranalysis.io.output.outputter.BindFailedException;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
+import org.anchoranalysis.io.output.path.DerivePathException;
+import org.anchoranalysis.io.output.path.DirectoryWithPrefix;
+import org.anchoranalysis.io.output.path.FilePathPrefixerContext;
+import org.anchoranalysis.io.output.path.PathPrefixer;
 import org.anchoranalysis.io.output.recorded.RecordedOutputsWithRules;
-import org.anchoranalysis.io.path.DerivePathException;
-import org.anchoranalysis.io.path.prefixer.DirectoryWithPrefix;
-import org.anchoranalysis.io.path.prefixer.FilePathPrefixerContext;
 
 /**
  * Responsible for making decisions on where output goes and what form it takes.
@@ -57,7 +56,7 @@ public class OutputManager extends AnchorBean<OutputManager> {
     /**
      * Determines a prefix to use when outputting a file based upon an input-path.
      *
-     * <p>This method is called with the {@link InputFromManager#pathForBinding} to determine a
+     * <p>This method is called with a binding path from the input to determine a
      * output prefix for each input to an experiment.
      */
     @BeanField @Getter @Setter private PathPrefixer filePathPrefixer;

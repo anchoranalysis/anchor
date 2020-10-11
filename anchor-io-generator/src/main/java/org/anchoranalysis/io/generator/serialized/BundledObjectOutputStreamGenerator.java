@@ -36,10 +36,10 @@ import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.manifest.deserializer.bundle.Bundle;
 import org.anchoranalysis.io.manifest.deserializer.bundle.BundleParameters;
 import org.anchoranalysis.io.manifest.file.FileType;
-import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
-import org.anchoranalysis.io.namestyle.OutputNameStyle;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import org.anchoranalysis.io.output.namestyle.IndexableOutputNameStyle;
+import org.anchoranalysis.io.output.namestyle.OutputNameStyle;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
 import org.anchoranalysis.io.output.recorded.RecordingWriters;
 

@@ -32,9 +32,9 @@ import lombok.AllArgsConstructor;
 import org.anchoranalysis.annotation.io.AnnotationReader;
 import org.anchoranalysis.annotation.mark.DualMarksAnnotation;
 import org.anchoranalysis.core.functional.OptionalUtilities;
-import org.anchoranalysis.io.bean.deserializer.XStreamDeserializer;
 import org.anchoranalysis.io.exception.AnchorIOException;
-import org.anchoranalysis.io.exception.DeserializationFailedException;
+import org.anchoranalysis.io.manifest.deserializer.DeserializationFailedException;
+import org.anchoranalysis.io.manifest.deserializer.XStreamDeserializer;
 import org.anchoranalysis.mpp.io.marks.MarkCollectionDeserializer;
 import org.anchoranalysis.mpp.mark.MarkCollection;
 

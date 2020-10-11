@@ -31,7 +31,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.io.bean.color.RGBColorBean;
+import org.anchoranalysis.bean.shared.color.RGBColorBean;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.Axis;
 import org.jfree.chart.plot.CategoryPlot;

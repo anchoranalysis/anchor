@@ -8,11 +8,6 @@
   <artifactId>anchor-io-manifest</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <description>Manifests for recording outputs from an experiment.</description>
-  <build>
-
-				        
-  
-  </build>
 		
 	<dependencies>		    
 	  	<dependency>
@@ -26,13 +21,13 @@
 	  		<artifactId>anchor-bean</artifactId>
 	  		<version>0.0.8-SNAPSHOT</version>
 	  	</dependency>
-	  	
-	  	<dependency>
-	  		<groupId>${project.groupId}</groupId>
-	  		<artifactId>anchor-io</artifactId>
-	  		<version>0.0.8-SNAPSHOT</version>
-	  	</dependency>
-
+		
+		<dependency>
+		  <groupId>com.thoughtworks.xstream</groupId>
+		  <artifactId>xstream</artifactId>
+		  <version>1.4.11.1</version>
+		</dependency>
+		
 	</dependencies>		
 
 </project>

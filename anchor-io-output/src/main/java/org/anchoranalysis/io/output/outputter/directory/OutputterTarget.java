@@ -32,9 +32,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Value;
 import org.anchoranalysis.io.output.outputter.BindFailedException;
+import org.anchoranalysis.io.output.path.DirectoryWithPrefix;
+import org.anchoranalysis.io.output.path.PathCreator;
 import org.anchoranalysis.io.output.writer.WriterExecuteBeforeEveryOperation;
-import org.anchoranalysis.io.path.prefixer.DirectoryWithPrefix;
-import org.anchoranalysis.io.path.prefixer.PathCreator;
 
 /**
  * The directory and prefix an outputter writes to.

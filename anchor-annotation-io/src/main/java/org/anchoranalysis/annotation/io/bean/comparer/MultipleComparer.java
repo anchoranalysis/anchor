@@ -45,6 +45,8 @@ import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.NonEmpty;
+import org.anchoranalysis.bean.shared.color.scheme.ColorScheme;
+import org.anchoranalysis.bean.shared.color.scheme.VeryBright;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.log.Logger;
@@ -58,8 +60,6 @@ import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.io.bean.color.scheme.ColorScheme;
-import org.anchoranalysis.io.bean.color.scheme.VeryBright;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 /**

@@ -39,9 +39,9 @@ import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.io.bean.input.DebugModeParams;
 import org.anchoranalysis.io.input.InputContextParams;
 import org.anchoranalysis.io.output.bean.OutputManager;
+import org.anchoranalysis.io.output.path.DerivePathException;
+import org.anchoranalysis.io.output.path.FilePathPrefixerContext;
 import org.anchoranalysis.io.output.recorded.OutputEnabledDelta;
-import org.anchoranalysis.io.path.DerivePathException;
-import org.anchoranalysis.io.path.prefixer.FilePathPrefixerContext;
 
 @NoArgsConstructor
 public class ExperimentExecutionArguments {

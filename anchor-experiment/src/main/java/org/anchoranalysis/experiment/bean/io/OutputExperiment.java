@@ -45,9 +45,9 @@ import org.anchoranalysis.io.output.bean.OutputManager;
 import org.anchoranalysis.io.output.enabled.multi.MultiLevelOutputEnabled;
 import org.anchoranalysis.io.output.outputter.BindFailedException;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
+import org.anchoranalysis.io.output.path.DerivePathException;
 import org.anchoranalysis.io.output.recorded.MultiLevelRecordedOutputs;
 import org.anchoranalysis.io.output.recorded.RecordedOutputsWithRules;
-import org.anchoranalysis.io.path.DerivePathException;
 import org.apache.commons.lang.time.StopWatch;
 
 /**

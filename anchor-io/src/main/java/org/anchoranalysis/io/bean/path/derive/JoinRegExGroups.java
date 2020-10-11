@@ -33,8 +33,8 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.regex.RegEx;
+import org.anchoranalysis.core.path.FilePathToUnixStyleConverter;
 import org.anchoranalysis.io.exception.AnchorIOException;
-import org.anchoranalysis.io.path.FilePathToUnixStyleConverter;
 
 /**
  * Generates an outstring of the form

@@ -31,7 +31,7 @@ import java.util.Optional;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.bean.stack.StackWriter;
-import org.anchoranalysis.image.io.generator.raster.RasterWriterUtilities;
+import org.anchoranalysis.image.io.generator.raster.GeneratorOutputter;
 import org.anchoranalysis.image.io.stack.StackWriteOptions;
 import org.anchoranalysis.io.generator.OneStageGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
@@ -53,7 +53,7 @@ public class RGBTimeSeriesGenerator extends OneStageGenerator<StackSeries> {
 
         try {
             StackWriter writer =
-                    RasterWriterUtilities.getDefaultRasterWriter(outputWriteSettings);
+                    GeneratorOutputter.writer(outputWriteSettings);
             writer.writeStackSeries(getElement(), filePath, true, rasterOptions);
         } catch (RasterIOException e) {
             throw new OutputWriteFailedException(e);
@@ -63,7 +63,7 @@ public class RGBTimeSeriesGenerator extends OneStageGenerator<StackSeries> {
     @Override
     public String getFileExtension(OutputWriteSettings outputWriteSettings)
             throws OperationFailedException {
-        return RasterWriterUtilities.fileExtensionForDefaultRasterWriter(
+        return GeneratorOutputter.fileExtensionWriter(
                 outputWriteSettings, rasterOptions);
     }
 

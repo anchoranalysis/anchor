@@ -29,7 +29,7 @@ package org.anchoranalysis.io.manifest.deserializer.folder;
 import java.io.Serializable;
 import lombok.AllArgsConstructor;
 import lombok.Value;
-import org.anchoranalysis.io.bean.deserializer.Deserializer;
+import org.anchoranalysis.io.manifest.deserializer.Deserializer;
 import org.anchoranalysis.io.manifest.deserializer.bundle.Bundle;
 import org.anchoranalysis.io.manifest.deserializer.bundle.BundleParameters;
 

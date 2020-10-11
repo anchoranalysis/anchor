@@ -36,9 +36,9 @@ import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.bean.path.matcher.PathMatcher;
 import org.anchoranalysis.io.exception.AnchorIOException;
 import org.anchoranalysis.io.exception.FilesProviderException;
+import org.anchoranalysis.io.path.GlobExtractor;
+import org.anchoranalysis.io.path.GlobExtractor.GlobWithDirectory;
 import org.anchoranalysis.io.bean.path.matcher.MatchGlob;
-import org.anchoranalysis.io.path.glob.GlobExtractor;
-import org.anchoranalysis.io.path.glob.GlobExtractor.GlobWithDirectory;
 
 public class SearchDirectory extends FilesProviderWithDirectoryString {
 

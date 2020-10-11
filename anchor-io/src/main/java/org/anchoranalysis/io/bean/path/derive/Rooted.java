@@ -32,6 +32,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.xml.factory.BeanPathUtilities;
+import org.anchoranalysis.core.path.PathDifferenceException;
 import org.anchoranalysis.io.exception.AnchorIOException;
 import org.anchoranalysis.io.path.RootPathMap;
 import org.anchoranalysis.io.path.SplitPath;
@@ -59,14 +60,18 @@ public class Rooted extends DerivePath {
     @Override
     public Path deriveFrom(Path source, boolean debugMode) throws AnchorIOException {
 
-        SplitPath pathInWithoutRoot = RootPathMap.instance().split(source, rootName, debugMode);
-
-        Path pathOut = determinePathOut(pathInWithoutRoot, debugMode);
-        if (logPath) {
-            logger.info(() -> String.format("pathIn=%s", source));
-            logger.info(() -> String.format("pathOut=%s", pathOut));
+        try {
+            SplitPath pathInWithoutRoot = RootPathMap.instance().split(source, rootName, debugMode);
+    
+            Path pathOut = determinePathOut(pathInWithoutRoot, debugMode);
+            if (logPath) {
+                logger.info(() -> String.format("pathIn=%s", source));
+                logger.info(() -> String.format("pathOut=%s", pathOut));
+            }
+            return pathOut;
+        } catch (PathDifferenceException e) {
+            throw new AnchorIOException(e);
         }
-        return pathOut;
     }
 
     private Path determinePathOut(SplitPath pathInWithoutRoot, boolean debugMode)

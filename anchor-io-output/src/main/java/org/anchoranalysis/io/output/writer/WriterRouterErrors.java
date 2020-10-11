@@ -32,8 +32,8 @@ import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.manifest.ManifestFolderDescription;
-import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import org.anchoranalysis.io.output.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.output.outputter.Outputter;
 
 /**

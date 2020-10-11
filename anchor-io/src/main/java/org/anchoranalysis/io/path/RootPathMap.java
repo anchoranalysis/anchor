@@ -35,8 +35,8 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.bean.xml.BeanXmlLoader;
 import org.anchoranalysis.bean.xml.error.BeanXmlException;
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.path.PathDifferenceException;
 import org.anchoranalysis.io.bean.path.RootPath;
-import org.anchoranalysis.io.exception.AnchorIOException;
 import org.apache.commons.collections.MultiMap;
 import org.apache.commons.collections.map.MultiValueMap;
 
@@ -63,10 +63,10 @@ public class RootPathMap {
      * @param rootName identifier for a root to use
      * @param debugMode whether we are in debug mode or not
      * @return the split-path
-     * @throws AnchorIOException if the path cannot be matched against the root
+     * @throws PathDifferenceException if the path cannot be matched against the root
      */
     public SplitPath split(Path pathIn, String rootName, boolean debugMode)
-            throws AnchorIOException {
+            throws PathDifferenceException {
 
         SplitPath out;
 
@@ -132,16 +132,16 @@ public class RootPathMap {
      * @param name this name must match
      * @param debug if true, priority is given to root paths which also match debug.
      * @return the found root, or an exception if one cannot be found
-     * @throws AnchorIOException
+     * @throws PathDifferenceException
      */
     @SuppressWarnings("unchecked")
-    public RootPath findRoot(String name, boolean debug) throws AnchorIOException {
+    public RootPath findRoot(String name, boolean debug) throws PathDifferenceException {
 
         Collection<RootPath> exst = (Collection<RootPath>) map.get(name);
 
         // We check both, as the behaviour is implementation-dependent in the multimap
         if (exst == null || exst.isEmpty()) {
-            throw new AnchorIOException(String.format("Cannot find a root-path for '%s'", name));
+            throw new PathDifferenceException(String.format("Cannot find a root-path for '%s'", name));
         }
 
         // With the currently implementation there can be a maximum of two items with the same name

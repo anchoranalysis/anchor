@@ -28,8 +28,8 @@ package org.anchoranalysis.io.manifest.deserializer.folder.sequenced;
 
 import java.nio.file.Path;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.io.bean.deserializer.Deserializer;
-import org.anchoranalysis.io.exception.DeserializationFailedException;
+import org.anchoranalysis.io.manifest.deserializer.DeserializationFailedException;
+import org.anchoranalysis.io.manifest.deserializer.Deserializer;
 import org.anchoranalysis.io.manifest.folder.SequencedFolder;
 
 public class SequencedFolderDeserializer<T> extends SequencedFolderContainerCreator<T> {

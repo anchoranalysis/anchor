@@ -39,10 +39,10 @@ import org.anchoranalysis.core.name.value.NameValue;
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.generator.MultipleFileTypeGenerator;
 import org.anchoranalysis.io.manifest.file.FileType;
-import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
-import org.anchoranalysis.io.namestyle.OutputNameStyle;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import org.anchoranalysis.io.output.namestyle.IndexableOutputNameStyle;
+import org.anchoranalysis.io.output.namestyle.OutputNameStyle;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
 
 /**

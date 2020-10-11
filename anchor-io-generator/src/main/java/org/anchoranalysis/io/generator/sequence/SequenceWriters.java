@@ -35,7 +35,6 @@ import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.generator.sequence.pattern.OutputPattern;
 import org.anchoranalysis.io.manifest.ManifestFolderDescription;
 import org.anchoranalysis.io.manifest.file.FileType;
-import org.anchoranalysis.io.manifest.folder.FolderWriteIndexableOutputName;
 import org.anchoranalysis.io.manifest.sequencetype.SequenceType;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;

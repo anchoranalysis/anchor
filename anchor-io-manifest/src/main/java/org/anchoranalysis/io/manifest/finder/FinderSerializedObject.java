@@ -32,12 +32,12 @@ import java.util.Optional;
 import lombok.Getter;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.functional.OptionalUtilities;
-import org.anchoranalysis.io.bean.deserializer.Deserializer;
-import org.anchoranalysis.io.bean.deserializer.KeyValueParamsDeserializer;
-import org.anchoranalysis.io.bean.deserializer.ObjectInputStreamDeserializer;
-import org.anchoranalysis.io.bean.deserializer.XStreamDeserializer;
-import org.anchoranalysis.io.exception.DeserializationFailedException;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
+import org.anchoranalysis.io.manifest.deserializer.DeserializationFailedException;
+import org.anchoranalysis.io.manifest.deserializer.Deserializer;
+import org.anchoranalysis.io.manifest.deserializer.KeyValueParamsDeserializer;
+import org.anchoranalysis.io.manifest.deserializer.ObjectInputStreamDeserializer;
+import org.anchoranalysis.io.manifest.deserializer.XStreamDeserializer;
 import org.anchoranalysis.io.manifest.file.FileWrite;
 import org.anchoranalysis.io.manifest.match.helper.filewrite.FileWriteFileFunctionType;
 

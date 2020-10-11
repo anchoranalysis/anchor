@@ -41,9 +41,9 @@ import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.bean.rules.Permissive;
 import org.anchoranalysis.io.output.enabled.multi.MultiLevelOutputEnabled;
 import org.anchoranalysis.io.output.outputter.directory.OutputterTarget;
+import org.anchoranalysis.io.output.path.DirectoryWithPrefix;
 import org.anchoranalysis.io.output.recorded.MultiLevelRecordedOutputs;
 import org.anchoranalysis.io.output.recorded.RecordingWriters;
-import org.anchoranalysis.io.path.prefixer.DirectoryWithPrefix;
 
 /**
  * A particular directory on the filesystem in which outputting can occur.

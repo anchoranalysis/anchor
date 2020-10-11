@@ -40,6 +40,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
+import org.anchoranalysis.bean.shared.color.RGBColorBean;
 import org.anchoranalysis.core.color.RGBColor;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.spatial.SizeXY;
@@ -48,7 +49,6 @@ import org.anchoranalysis.image.io.generator.raster.RasterGeneratorWithElement;
 import org.anchoranalysis.image.io.stack.StackWriteOptions;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.bufferedimage.CreateStackFromBufferedImage;
-import org.anchoranalysis.io.bean.color.RGBColorBean;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 

@@ -36,6 +36,10 @@ public class AnchorIOException extends AnchorCheckedException {
     public AnchorIOException(String message) {
         super(message);
     }
+    
+    public AnchorIOException(Throwable cause) {
+        super(cause);
+    }
 
     public AnchorIOException(String message, Throwable cause) {
         super(message, cause);

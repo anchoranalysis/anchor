@@ -28,17 +28,17 @@ package org.anchoranalysis.experiment.bean.task;
 import java.nio.file.Path;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import org.anchoranalysis.io.bean.path.PathPrefixer;
-import org.anchoranalysis.io.exception.AnchorIOException;
+import org.anchoranalysis.core.path.PathDifference;
+import org.anchoranalysis.core.path.PathDifferenceException;
 import org.anchoranalysis.io.manifest.ManifestFolderDescription;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
 import org.anchoranalysis.io.manifest.folder.ExperimentFileFolder;
 import org.anchoranalysis.io.manifest.sequencetype.StringsWithoutOrder;
-import org.anchoranalysis.io.path.DerivePathException;
-import org.anchoranalysis.io.path.NamedPath;
-import org.anchoranalysis.io.path.prefixer.DirectoryWithPrefix;
-import org.anchoranalysis.io.path.prefixer.FilePathPrefixerContext;
-import org.anchoranalysis.io.path.prefixer.PathDifference;
+import org.anchoranalysis.io.output.path.DerivePathException;
+import org.anchoranalysis.io.output.path.DirectoryWithPrefix;
+import org.anchoranalysis.io.output.path.FilePathPrefixerContext;
+import org.anchoranalysis.io.output.path.NamedPath;
+import org.anchoranalysis.io.output.path.PathPrefixer;
 
 @RequiredArgsConstructor
 class PrefixForInput {
@@ -83,7 +83,7 @@ class PrefixForInput {
             return PathDifference.differenceFrom(
                     prefixer.rootFolderPrefix(experimentIdentifier, context).getCombined(),
                     combinedPrefix);
-        } catch (AnchorIOException e) {
+        } catch (PathDifferenceException e) {
             throw new DerivePathException(e);
         }
     }

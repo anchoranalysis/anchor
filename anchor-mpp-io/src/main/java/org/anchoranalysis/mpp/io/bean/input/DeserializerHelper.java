@@ -28,8 +28,8 @@ package org.anchoranalysis.mpp.io.bean.input;
 
 import java.nio.file.Path;
 import org.anchoranalysis.annotation.mark.DualMarksAnnotation;
-import org.anchoranalysis.io.bean.deserializer.XStreamDeserializer;
-import org.anchoranalysis.io.exception.DeserializationFailedException;
+import org.anchoranalysis.io.manifest.deserializer.DeserializationFailedException;
+import org.anchoranalysis.io.manifest.deserializer.XStreamDeserializer;
 import org.anchoranalysis.mpp.mark.MarkCollection;
 
 /**

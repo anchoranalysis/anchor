@@ -27,7 +27,7 @@
 package org.anchoranalysis.plot.bean.colorscheme;
 
 import java.awt.Color;
-import org.anchoranalysis.io.bean.color.RGBColorBean;
+import org.anchoranalysis.bean.shared.color.RGBColorBean;
 
 /**
  * A black background and white axes.

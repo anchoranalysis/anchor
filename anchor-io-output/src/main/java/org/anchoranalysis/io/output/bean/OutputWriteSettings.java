@@ -35,12 +35,12 @@ import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
+import org.anchoranalysis.bean.shared.color.scheme.ColorScheme;
+import org.anchoranalysis.bean.shared.color.scheme.HSB;
+import org.anchoranalysis.bean.shared.color.scheme.Shuffle;
 import org.anchoranalysis.core.color.ColorIndex;
 import org.anchoranalysis.core.color.ColorIndexModulo;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.io.bean.color.scheme.ColorScheme;
-import org.anchoranalysis.io.bean.color.scheme.HSB;
-import org.anchoranalysis.io.bean.color.scheme.Shuffle;
 
 /**
  * Settings for how to write output, including default writers.

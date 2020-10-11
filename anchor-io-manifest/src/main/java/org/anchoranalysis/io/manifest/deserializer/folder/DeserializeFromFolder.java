@@ -29,7 +29,7 @@ package org.anchoranalysis.io.manifest.deserializer.folder;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.index.GetterFromIndex;
 import org.anchoranalysis.core.index.container.BoundedIndexContainer;
-import org.anchoranalysis.io.exception.DeserializationFailedException;
+import org.anchoranalysis.io.manifest.deserializer.DeserializationFailedException;
 import org.anchoranalysis.io.manifest.folder.SequencedFolder;
 
 @AllArgsConstructor

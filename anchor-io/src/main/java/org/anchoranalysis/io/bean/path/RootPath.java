@@ -33,9 +33,9 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.io.exception.AnchorIOException;
+import org.anchoranalysis.core.path.PathDifference;
+import org.anchoranalysis.core.path.PathDifferenceException;
 import org.anchoranalysis.io.path.SplitPath;
-import org.anchoranalysis.io.path.prefixer.PathDifference;
 
 /**
  * Defines a *root path* i.e. a directory in which files are read/written during analysis
@@ -67,9 +67,9 @@ public class RootPath extends AnchorBean<RootPath> {
      *
      * @param path path to split
      * @return the split-path
-     * @throws AnchorIOException if the path cannot be matched against the root
+     * @throws PathDifferenceException if the path cannot be matched against the root
      */
-    public SplitPath split(Path path) throws AnchorIOException {
+    public SplitPath split(Path path) throws PathDifferenceException {
 
         Path rootPath = asPath();
 

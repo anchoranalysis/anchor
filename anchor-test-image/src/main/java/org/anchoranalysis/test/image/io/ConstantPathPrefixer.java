@@ -26,10 +26,10 @@
 package org.anchoranalysis.test.image.io;
 
 import java.nio.file.Path;
-import org.anchoranalysis.io.bean.path.PathPrefixer;
-import org.anchoranalysis.io.path.NamedPath;
-import org.anchoranalysis.io.path.prefixer.DirectoryWithPrefix;
-import org.anchoranalysis.io.path.prefixer.FilePathPrefixerContext;
+import org.anchoranalysis.io.output.path.DirectoryWithPrefix;
+import org.anchoranalysis.io.output.path.FilePathPrefixerContext;
+import org.anchoranalysis.io.output.path.NamedPath;
+import org.anchoranalysis.io.output.path.PathPrefixer;
 
 class ConstantPathPrefixer extends PathPrefixer {
 

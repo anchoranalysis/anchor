@@ -32,10 +32,10 @@ import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.manifest.ManifestFolderDescription;
 import org.anchoranalysis.io.manifest.folder.FolderWriteWithPath;
-import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
-import org.anchoranalysis.io.namestyle.IntegerSuffixOutputNameStyle;
-import org.anchoranalysis.io.namestyle.SimpleOutputNameStyle;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import org.anchoranalysis.io.output.namestyle.IndexableOutputNameStyle;
+import org.anchoranalysis.io.output.namestyle.IntegerSuffixOutputNameStyle;
+import org.anchoranalysis.io.output.namestyle.SimpleOutputNameStyle;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
 
 /**

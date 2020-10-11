@@ -31,7 +31,7 @@ import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
 import org.anchoranalysis.image.bean.nonbean.init.CreateCombinedStack;
 import org.anchoranalysis.image.io.objects.ObjectCollectionWriter;
-import org.anchoranalysis.image.io.stack.StacksOutputter;
+import org.anchoranalysis.image.io.stack.NamedStacksOutputter;
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.generator.collection.NamedProviderOutputter;
 import org.anchoranalysis.io.generator.histogram.HistogramCSVGenerator;
@@ -99,7 +99,7 @@ class ParamsOutputter {
     }
     
     private void stacks() throws OutputWriteFailedException {
-        StacksOutputter.output(
+        NamedStacksOutputter.output(
                 CreateCombinedStack.apply(params.getImage()),
                 OutputterDirectories.STACKS,
                 suppressSubfolders,

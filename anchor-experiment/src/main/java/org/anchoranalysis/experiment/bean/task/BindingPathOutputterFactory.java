@@ -35,9 +35,9 @@ import org.anchoranalysis.io.manifest.operationrecorder.NullWriteOperationRecord
 import org.anchoranalysis.io.manifest.operationrecorder.WriteOperationRecorder;
 import org.anchoranalysis.io.output.outputter.BindFailedException;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
-import org.anchoranalysis.io.path.DerivePathException;
-import org.anchoranalysis.io.path.NamedPath;
-import org.anchoranalysis.io.path.prefixer.DirectoryWithPrefix;
+import org.anchoranalysis.io.output.path.DerivePathException;
+import org.anchoranalysis.io.output.path.DirectoryWithPrefix;
+import org.anchoranalysis.io.output.path.NamedPath;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class BindingPathOutputterFactory {

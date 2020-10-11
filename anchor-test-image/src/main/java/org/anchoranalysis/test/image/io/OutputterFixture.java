@@ -36,9 +36,9 @@ import org.anchoranalysis.io.output.bean.OutputManager;
 import org.anchoranalysis.io.output.outputter.BindFailedException;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
+import org.anchoranalysis.io.output.path.DerivePathException;
+import org.anchoranalysis.io.output.path.FilePathPrefixerContext;
 import org.anchoranalysis.io.output.recorded.RecordedOutputsWithRules;
-import org.anchoranalysis.io.path.DerivePathException;
-import org.anchoranalysis.io.path.prefixer.FilePathPrefixerContext;
 import org.anchoranalysis.test.LoggingFixture;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)

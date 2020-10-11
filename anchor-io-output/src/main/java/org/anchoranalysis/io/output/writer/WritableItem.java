@@ -26,9 +26,9 @@
 
 package org.anchoranalysis.io.output.writer;
 
-import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
-import org.anchoranalysis.io.namestyle.OutputNameStyle;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import org.anchoranalysis.io.output.namestyle.IndexableOutputNameStyle;
+import org.anchoranalysis.io.output.namestyle.OutputNameStyle;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
 
 /**

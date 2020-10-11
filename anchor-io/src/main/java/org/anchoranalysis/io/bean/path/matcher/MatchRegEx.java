@@ -32,8 +32,8 @@ import java.util.regex.Pattern;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.path.FilePathToUnixStyleConverter;
 import org.anchoranalysis.io.input.InputContextParams;
-import org.anchoranalysis.io.path.FilePathToUnixStyleConverter;
 
 /**
  * Predicates that matches a file-path against a regular expression

@@ -35,8 +35,8 @@ import org.anchoranalysis.image.io.objects.HDF5ObjectsGenerator;
 import org.anchoranalysis.image.io.objects.HDF5PathHelper;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.factory.ObjectCollectionFactory;
-import org.anchoranalysis.io.bean.deserializer.Deserializer;
-import org.anchoranalysis.io.exception.DeserializationFailedException;
+import org.anchoranalysis.io.manifest.deserializer.DeserializationFailedException;
+import org.anchoranalysis.io.manifest.deserializer.Deserializer;
 
 class ReadObjectsFromHDF5 implements Deserializer<ObjectCollection> {
 
