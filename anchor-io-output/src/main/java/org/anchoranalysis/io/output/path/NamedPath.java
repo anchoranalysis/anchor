@@ -31,9 +31,9 @@ import lombok.AllArgsConstructor;
 import lombok.Value;
 
 /**
- * A path and associated descriptive name.
+ * A path and associated name.
  *
- * <p>The descriptive-name is guaranteed to be a unique identifier in the context of a given
+ * <p>The name is guaranteed to be a unique identifier in the context of a given
  * collection.
  *
  * @author Owen Feehan
@@ -42,9 +42,9 @@ import lombok.Value;
 @Value
 public class NamedPath {
 
+    /** A unique name associated with the path */
+    private String name;
+    
     /** The path */
     private Path path;
-
-    /** A descriptive-name associated with the path */
-    private String descriptiveName;
 }

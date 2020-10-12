@@ -27,24 +27,25 @@
 package org.anchoranalysis.image.bean.nonbean.segment;
 
 import java.util.Optional;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.anchoranalysis.image.bean.segment.binary.BinarySegmentation;
 import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.histogram.Histogram;
 
 /** Parameters that are optionally associated with a {@link BinarySegmentation} */
+@AllArgsConstructor
 public class BinarySegmentationParameters {
 
-    @Getter private Optional<Histogram> intensityHistogram;
-    @Getter private Optional<Resolution> resolution;
+    @Getter private final Optional<Histogram> intensityHistogram;
+    @Getter private final Optional<Resolution> resolution;
 
     public BinarySegmentationParameters() {
-        this.resolution = Optional.empty();
-        this.intensityHistogram = Optional.empty();
+        this( Optional.empty(), Optional.empty() );
     }
 
-    public BinarySegmentationParameters(Resolution resolution) {
-        this(resolution, Optional.empty());
+    public BinarySegmentationParameters(Optional<Resolution> resolution) {
+        this( Optional.empty(), resolution );
     }
 
     /**
@@ -55,7 +56,6 @@ public class BinarySegmentationParameters {
      */
     public BinarySegmentationParameters(
             Resolution resolution, Optional<Histogram> intensityHistogram) {
-        this.resolution = Optional.of(resolution);
-        this.intensityHistogram = intensityHistogram;
+        this(intensityHistogram, Optional.of(resolution) );
     }
 }

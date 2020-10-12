@@ -70,18 +70,6 @@ public abstract class RasterGeneratorDelegateToRaster<S, T> extends RasterGenera
     }
 
     @Override
-    public void start() throws OutputWriteFailedException {
-        super.start();
-        delegate.start();
-    }
-
-    @Override
-    public void end() throws OutputWriteFailedException {
-        delegate.end();
-        element = null;
-    }
-
-    @Override
     public StackWriteOptions writeOptions() {
         return delegate.writeOptions();
     }

@@ -28,6 +28,7 @@ package org.anchoranalysis.io.imagej.convert;
 import ij.ImagePlus;
 import ij.ImageStack;
 import ij.process.ImageProcessor;
+import java.util.Optional;
 import java.util.function.Function;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -59,7 +60,7 @@ public class ConvertFromImagePlus {
      * @param resolution image-resolution
      * @return a newly created channel containing a newly created buffer (copied from image-plus)
      */
-    public static Channel toChannel(ImagePlus imagePlus, Resolution resolution) {
+    public static Channel toChannel(ImagePlus imagePlus, Optional<Resolution> resolution) {
         return new Channel(toVoxels(imagePlus).any(), resolution);
     }
 

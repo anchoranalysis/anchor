@@ -33,7 +33,7 @@ import org.anchoranalysis.core.progress.ProgressReporterNull;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.extent.box.BoundingBox;
-import org.anchoranalysis.image.io.RasterIOException;
+import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.StackReader;
 import org.anchoranalysis.image.io.stack.OpenedRaster;
 import org.anchoranalysis.image.object.ObjectMask;
@@ -86,7 +86,7 @@ class ObjectDualDeserializer implements Deserializer<ObjectMask> {
 
             return new ObjectMask(box, channel.voxels().asByte());
 
-        } catch (RasterIOException e) {
+        } catch (ImageIOException e) {
             throw new DeserializationFailedException(e);
         }
     }

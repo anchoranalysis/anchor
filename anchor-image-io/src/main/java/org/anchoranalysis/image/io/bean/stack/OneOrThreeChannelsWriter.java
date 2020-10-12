@@ -29,7 +29,7 @@ import java.nio.file.Path;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.image.io.RasterIOException;
+import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.generator.raster.series.StackSeries;
 import org.anchoranalysis.image.io.stack.StackWriteOptions;
 import org.anchoranalysis.image.stack.Stack;
@@ -57,26 +57,26 @@ public abstract class OneOrThreeChannelsWriter extends StackWriter {
             Path filePath,
             boolean makeRGB,
             StackWriteOptions writeOptions)
-            throws RasterIOException {
-        throw new RasterIOException("Writing time-series is unsupported for this format");
+            throws ImageIOException {
+        throw new ImageIOException("Writing time-series is unsupported for this format");
     }
 
     @Override
     public void writeStack(
             Stack stack, Path filePath, boolean makeRGB, StackWriteOptions writeOptions)
-            throws RasterIOException {
+            throws ImageIOException {
 
         if (stack.getNumberChannels() == 1 && makeRGB) {
-            throw new RasterIOException("1-channel images cannot be created as RGB");
+            throw new ImageIOException("1-channel images cannot be created as RGB");
         }
 
         if (stack.getNumberChannels() == 3 && !makeRGB) {
-            throw new RasterIOException("3-channel images can only be created as RGB");
+            throw new ImageIOException("3-channel images can only be created as RGB");
         }
 
         writeStackAfterCheck(stack, filePath);
     }
 
     protected abstract void writeStackAfterCheck(Stack stack, Path filePath)
-            throws RasterIOException;
+            throws ImageIOException;
 }

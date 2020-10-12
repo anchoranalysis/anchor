@@ -32,8 +32,8 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.text.TypedValue;
 import org.anchoranalysis.feature.results.ResultsVector;
-import org.anchoranalysis.io.exception.AnchorIOException;
 import org.anchoranalysis.io.generator.tabular.CSVWriter;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.Outputter;
 
 /**
@@ -53,10 +53,10 @@ public class FeatureCSVWriter {
      * @param metadata metadata needed for writing the reeature-results
      * @param outputter determines if the output is allowed.
      * @return a write, if it is allowed.
-     * @throws AnchorIOException if I/O fails.
+     * @throws OutputWriteFailedException if outputting fails
      */
     public static Optional<FeatureCSVWriter> create(
-            FeatureCSVMetadata metadata, Outputter outputter) throws AnchorIOException {
+            FeatureCSVMetadata metadata, Outputter outputter) throws OutputWriteFailedException {
 
         if (!outputter.outputsEnabled().isOutputEnabled(metadata.getOutputName())) {
             return Optional.of(new FeatureCSVWriter(null));

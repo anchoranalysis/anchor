@@ -30,31 +30,32 @@ import com.google.common.base.Preconditions;
 import java.io.File;
 import java.nio.file.Path;
 import java.util.Optional;
-import lombok.Getter;
 
 public class FileInput implements InputFromManager {
 
-    @Getter private File file;
-    private String descriptiveName;
+    private NamedFile file;
 
-    public FileInput(DescriptiveFile file) {
-        Preconditions.checkArgument(!file.getDescriptiveName().isEmpty());
-        this.file = file.getFile();
-        this.descriptiveName = file.getDescriptiveName();
+    public FileInput(NamedFile file) {
+        Preconditions.checkArgument(!file.getName().isEmpty());
+        this.file = file;
     }
 
     @Override
-    public String descriptiveName() {
-        return descriptiveName;
+    public String name() {
+        return file.getName();
     }
 
     @Override
     public Optional<Path> pathForBinding() {
-        return Optional.of(file.toPath());
+        return Optional.of(file.getPath());
     }
 
     @Override
     public String toString() {
-        return descriptiveName();
+        return name();
+    }
+
+    public File getFile() {
+        return file.getFile();
     }
 }

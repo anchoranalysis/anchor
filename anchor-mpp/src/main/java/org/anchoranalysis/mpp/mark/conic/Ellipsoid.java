@@ -331,8 +331,8 @@ public class Ellipsoid extends ConicBase implements Serializable {
     }
 
     @Override
-    public double[] createRadiiArrayResolved(Resolution sr) {
-        return EllipsoidUtilities.normalisedRadii(this, sr);
+    public double[] createRadiiArrayResolved(Optional<Resolution> resolution) {
+        return EllipsoidUtilities.normalisedRadii(this, resolution);
     }
 
     // NB objects are scaled in pre-rotated position i.e. when aligned to axes
@@ -377,19 +377,18 @@ public class Ellipsoid extends ConicBase implements Serializable {
     }
 
     @Override
-    public OverlayProperties generateProperties(Resolution sr) {
-        OverlayProperties op = super.generateProperties(sr);
+    public OverlayProperties generateProperties(Optional<Resolution> resolution) {
+        OverlayProperties op = super.generateProperties(resolution);
 
         op.addDoubleAsString("Radius X (pixels)", radii.x());
         op.addDoubleAsString("Radius Y (pixels)", radii.y());
         op.addDoubleAsString("Radius Z (pixels)", radii.z());
 
-        if (sr != null) {
-            double[] arr = EllipsoidUtilities.normalisedRadii(this, sr);
-            op.addDoubleAsString("Normalized Radius 0 (pixels)", arr[0]);
-            op.addDoubleAsString("Normalized Radius 1 (pixels)", arr[1]);
-            op.addDoubleAsString("Normalized Radius 2 (pixels)", arr[2]);
-        }
+        double[] arr = EllipsoidUtilities.normalisedRadii(this, resolution);
+        op.addDoubleAsString("Normalized Radius 0 (pixels)", arr[0]);
+        op.addDoubleAsString("Normalized Radius 1 (pixels)", arr[1]);
+        op.addDoubleAsString("Normalized Radius 2 (pixels)", arr[2]);
+        
         orientation.addProperties(op.getNameValueSet());
         op.addDoubleAsString("Shell Radius Ratio", shellRad);
         op.addDoubleAsString("Inner Core Radius Ratio ", innerCoreDistance);

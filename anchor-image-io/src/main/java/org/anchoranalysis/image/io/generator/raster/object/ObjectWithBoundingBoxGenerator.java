@@ -42,7 +42,7 @@ import org.anchoranalysis.io.generator.serialized.ObjectOutputStreamGenerator;
  */
 public class ObjectWithBoundingBoxGenerator extends CombinedListGenerator<ObjectMask> {
 
-    public ObjectWithBoundingBoxGenerator(Resolution resolution) {
+    public ObjectWithBoundingBoxGenerator(Optional<Resolution> resolution) {
         this(new ObjectAsMaskGenerator(resolution));
     }
 

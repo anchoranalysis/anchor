@@ -44,7 +44,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.io.RasterIOException;
+import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.StackReader;
 import org.anchoranalysis.image.io.stack.OpenedRaster;
 import org.anchoranalysis.io.bioformats.BioformatsOpenedRaster;
@@ -66,7 +66,7 @@ public class BioformatsReader extends StackReader {
     }
 
     @Override
-    public OpenedRaster openFile(Path filePath) throws RasterIOException {
+    public OpenedRaster openFile(Path filePath) throws ImageIOException {
 
         try {
             IFormatReader r = selectAndInitReader();
@@ -77,7 +77,7 @@ public class BioformatsReader extends StackReader {
 
             return new BioformatsOpenedRaster(r, metadata, options);
         } catch (UnknownFormatException e) {
-            throw new RasterIOException("An unknown file format was used");
+            throw new ImageIOException("An unknown file format was used");
         } catch (FormatException
                 | IOException
                 | CreateException
@@ -88,7 +88,7 @@ public class BioformatsReader extends StackReader {
                 | IllegalArgumentException
                 | InvocationTargetException
                 | SecurityException e) {
-            throw new RasterIOException(e);
+            throw new ImageIOException(e);
         }
     }
 

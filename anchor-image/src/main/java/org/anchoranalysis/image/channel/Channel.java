@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.image.channel;
 
+import java.util.Optional;
 import java.util.function.Function;
 import lombok.Getter;
 import lombok.experimental.Accessors;
@@ -80,7 +81,7 @@ public class Channel {
      * @param voxels
      * @param resolution
      */
-    public Channel(Voxels<?> voxels, Resolution resolution) {
+    public Channel(Voxels<?> voxels, Optional<Resolution> resolution) {
         this.dimensions = new Dimensions(voxels.extent(), resolution);
         this.voxels = voxels;
     }
@@ -187,7 +188,7 @@ public class Channel {
         return voxels.extract().voxelsGreaterThan(threshold);
     }
 
-    public void updateResolution(Resolution resolution) {
+    public void updateResolution(Optional<Resolution> resolution) {
         dimensions = dimensions.duplicateChangeResolution(resolution);
     }
 
@@ -230,7 +231,7 @@ public class Channel {
         if (prevZSize > 1) {
             return FACTORY.create(
                     flattener.apply(voxels.extract()),
-                    dimensions.resolution().duplicateFlattenZ(prevZSize));
+                    dimensions.resolution().map( res->res.duplicateFlattenZ(prevZSize)) );
         } else {
             return this;
         }
@@ -252,7 +253,7 @@ public class Channel {
         return voxels.extent();
     }
 
-    public Resolution resolution() {
+    public Optional<Resolution> resolution() {
         return dimensions.resolution();
     }
 }

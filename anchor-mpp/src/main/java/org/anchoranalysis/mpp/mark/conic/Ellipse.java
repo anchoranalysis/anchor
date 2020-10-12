@@ -358,8 +358,8 @@ public class Ellipse extends ConicBase implements Serializable {
     }
 
     @Override
-    public OverlayProperties generateProperties(Resolution sr) {
-        OverlayProperties op = super.generateProperties(sr);
+    public OverlayProperties generateProperties(Optional<Resolution> resolution) {
+        OverlayProperties op = super.generateProperties(resolution);
 
         op.addDoubleAsString("Radius X (pixels)", radii.x());
         op.addDoubleAsString("Radius Y (pixels)", radii.y());
@@ -380,7 +380,7 @@ public class Ellipse extends ConicBase implements Serializable {
     }
 
     @Override
-    public double[] createRadiiArrayResolved(Resolution resolution) {
+    public double[] createRadiiArrayResolved(Optional<Resolution> resolution) {
         return twoElementArray(radii.x(), radii.y());
     }
 

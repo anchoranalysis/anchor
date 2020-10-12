@@ -28,7 +28,7 @@ package org.anchoranalysis.io.bean.path.derive;
 
 import java.nio.file.Path;
 import org.anchoranalysis.bean.AnchorBean;
-import org.anchoranalysis.io.exception.AnchorIOException;
+import org.anchoranalysis.io.exception.DerivePathException;
 
 /**
  * Derives a path from an existing path.
@@ -44,7 +44,7 @@ public abstract class DerivePath extends AnchorBean<DerivePath> {
      * @param source the path to derive from.
      * @param debugMode true if debug-mode is activated
      * @return the derived path.
-     * @throws AnchorIOException if anything goes wrong
+     * @throws DerivePathException if anything goes wrong
      */
-    public abstract Path deriveFrom(Path source, boolean debugMode) throws AnchorIOException;
+    public abstract Path deriveFrom(Path source, boolean debugMode) throws DerivePathException;
 }

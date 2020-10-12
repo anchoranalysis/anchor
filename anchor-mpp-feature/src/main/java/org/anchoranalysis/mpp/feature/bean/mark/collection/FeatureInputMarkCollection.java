@@ -42,7 +42,7 @@ public class FeatureInputMarkCollection implements FeatureInputWithResolution {
 
     @Override
     public Optional<Resolution> getResolutionOptional() {
-        return dimensions.map(Dimensions::resolution);
+        return dimensions.flatMap(Dimensions::resolution);
     }
 
     public Optional<Dimensions> dimensions() {

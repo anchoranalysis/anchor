@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.mpp.bean.bound;
 
+import java.util.Optional;
 import org.anchoranalysis.image.extent.Resolution;
 
 //
@@ -54,12 +55,12 @@ public class BoundUnitless extends BoundMinMax {
     }
 
     @Override
-    public double getMinResolved(Resolution resolution, boolean do3D) {
+    public double getMinResolved(Optional<Resolution> resolution, boolean do3D) {
         return getMin();
     }
 
     @Override
-    public double getMaxResolved(Resolution resolution, boolean do3D) {
+    public double getMaxResolved(Optional<Resolution> resolution, boolean do3D) {
         return getMax();
     }
 

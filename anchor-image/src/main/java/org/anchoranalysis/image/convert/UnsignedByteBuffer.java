@@ -48,7 +48,7 @@ public final class UnsignedByteBuffer extends UnsignedBufferAsInt {
     @Getter private final ByteBuffer delegate;
 
     /**
-     * Allocates a new (direct) buffer of unsigned-bytes.
+     * Allocates a new buffer of unsigned-bytes.
      *
      * @param capacity size of buffer.
      * @return newly created buffer (non-direct, i.e. backed by an array).
@@ -260,5 +260,12 @@ public final class UnsignedByteBuffer extends UnsignedBufferAsInt {
     public final byte[] array() {
         Preconditions.checkArgument(delegate.hasArray());
         return delegate.array();
+    }
+
+    /**
+     * Rewinds the buffer ala {@link ByteBuffer#rewind}.
+     */
+    public final void rewind() {
+        delegate.rewind();
     }
 }

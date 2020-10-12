@@ -75,13 +75,6 @@ public class CombinedListGenerator<T> implements MultipleFileTypeGenerator<T> {
     }
 
     @Override
-    public void start() throws OutputWriteFailedException {
-        for (Generator<T> generator : list) {
-            generator.start();
-        }
-    }
-
-    @Override
     public void write(OutputNameStyle outputNameStyle, OutputterChecked outputter)
             throws OutputWriteFailedException {
         delegate.write(outputNameStyle, outputter);
@@ -119,14 +112,7 @@ public class CombinedListGenerator<T> implements MultipleFileTypeGenerator<T> {
     public void add(String name, Generator<T> element) {
         add(element, Optional.of(name));
     }
-
-    @Override
-    public void end() throws OutputWriteFailedException {
-        for (Generator<T> generator : list) {
-            generator.end();
-        }
-    }
-
+    
     private void add(Generator<T> element, Optional<String> name) {
         list.add(element);
         delegate.add(element, name);

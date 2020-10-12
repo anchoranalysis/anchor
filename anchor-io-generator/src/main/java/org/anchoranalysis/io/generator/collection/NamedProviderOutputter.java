@@ -90,15 +90,14 @@ public class NamedProviderOutputter<T> {
 
         OutputSequenceFactory<T> factory = new OutputSequenceFactory<>(generator, outputter);
 
-        try (OutputSequenceIndexed<T,String> writer = factory.withoutOrder(sequenceDirectory)) {
-            for (String key : allowedKeys) {
-                try {
-                    writer.add(provider.getException(key), key);
-                } catch (NamedProviderGetException e) {
-                    throwExceptionInWriter(e, key);
-                }
+        OutputSequenceIndexed<T,String> writer = factory.withoutOrder(sequenceDirectory);
+        for (String key : allowedKeys) {
+            try {
+                writer.add(provider.getException(key), key);
+            } catch (NamedProviderGetException e) {
+                throwExceptionInWriter(e, key);
             }
-        }        
+        }
     }
     
     private static Set<String> subset(

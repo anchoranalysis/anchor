@@ -30,7 +30,7 @@ import ij.ImagePlus;
 import ij.io.FileSaver;
 import java.nio.file.Path;
 import org.anchoranalysis.image.extent.Dimensions;
-import org.anchoranalysis.image.io.RasterIOException;
+import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.StackWriter;
 import org.anchoranalysis.image.io.stack.StackWriteOptions;
 import org.anchoranalysis.image.stack.Stack;
@@ -50,17 +50,17 @@ public abstract class ImageJRasterWriter extends StackWriter {
     @Override
     public void writeStack(
             Stack stack, Path filePath, boolean makeRGB, StackWriteOptions writeOptions)
-            throws RasterIOException {
+            throws ImageIOException {
         if (!(stack.getNumberChannels() == 1 || stack.getNumberChannels() == 3)) {
-            throw new RasterIOException("Stack must have 1 or 3 channels");
+            throw new ImageIOException("Stack must have 1 or 3 channels");
         }
 
         if (!stack.allChannelsHaveIdenticalType()) {
-            throw new RasterIOException("Stack must have identically-typed channels");
+            throw new ImageIOException("Stack must have identically-typed channels");
         }
 
         if (makeRGB && (stack.getNumberChannels() != 3)) {
-            throw new RasterIOException(
+            throw new ImageIOException(
                     "To make an RGB image, the stack must have exactly 3 channels.");
         }
 
@@ -74,10 +74,10 @@ public abstract class ImageJRasterWriter extends StackWriter {
      * @param path where to write the annotation to
      * @param asStack whether the output will produce a stack (many images together) or not.
      * @return true if successfully written.
-     * @throws RasterIOException if anything goes wrong writing the input.
+     * @throws ImageIOException if anything goes wrong writing the input.
      */
     protected abstract boolean writeRaster(FileSaver fileSaver, String path, boolean asStack)
-            throws RasterIOException;
+            throws ImageIOException;
 
     /**
      * Writes a stack as a time-sequence (many images together in a single file.).
@@ -85,10 +85,10 @@ public abstract class ImageJRasterWriter extends StackWriter {
      * @param stack the stack to write
      * @param path where on the filesystem to write to
      * @param makeRGB if true, the image is saved as a RGB image rather than independent channels.
-     * @throws RasterIOException if anything goes wrong writing.
+     * @throws ImageIOException if anything goes wrong writing.
      */
     protected void writeStackTime(Stack stack, Path path, boolean makeRGB)
-            throws RasterIOException {
+            throws ImageIOException {
 
         log.debug(String.format("Writing image %s", path));
 
@@ -102,7 +102,7 @@ public abstract class ImageJRasterWriter extends StackWriter {
         }
 
         if (image.getNSlices() != dimensions.z()) {
-            throw new RasterIOException(
+            throw new ImageIOException(
                     String.format(
                             "The number of slices in the ImagePlus (%d) is not the same as the image dimensions (%d)",
                             image.getNSlices(), dimensions.z()));
@@ -112,11 +112,11 @@ public abstract class ImageJRasterWriter extends StackWriter {
     }
 
     private void writeImagePlus(ImagePlus image, Path filePath, boolean asStack)
-            throws RasterIOException {
+            throws ImageIOException {
 
         FileSaver fileSaver = new FileSaver(image);
         if (!writeRaster(fileSaver, filePath.toString(), asStack)) {
-            throw new RasterIOException(
+            throw new ImageIOException(
                     String.format("An error occured in IJ writing file '%s'", filePath));
         }
     }

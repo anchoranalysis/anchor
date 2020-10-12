@@ -29,6 +29,7 @@ package org.anchoranalysis.image.stack;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
@@ -204,7 +205,7 @@ public class Stack implements Iterable<Channel> {
         return delegate.getChannel(0).dimensions();
     }
 
-    public Resolution resolution() {
+    public Optional<Resolution> resolution() {
         return dimensions().resolution();
     }
 
@@ -367,7 +368,7 @@ public class Stack implements Iterable<Channel> {
 
     public void updateResolution(Resolution resolution) {
         for (Channel channel : this) {
-            channel.updateResolution(resolution);
+            channel.updateResolution(Optional.of(resolution));
         }
     }
 }

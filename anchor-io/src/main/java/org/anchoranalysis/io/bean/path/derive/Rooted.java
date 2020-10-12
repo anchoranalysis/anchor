@@ -33,7 +33,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.xml.factory.BeanPathUtilities;
 import org.anchoranalysis.core.path.PathDifferenceException;
-import org.anchoranalysis.io.exception.AnchorIOException;
+import org.anchoranalysis.io.exception.DerivePathException;
 import org.anchoranalysis.io.path.RootPathMap;
 import org.anchoranalysis.io.path.SplitPath;
 
@@ -58,7 +58,7 @@ public class Rooted extends DerivePath {
     private Logger logger = Logger.getLogger(Rooted.class.getName());
 
     @Override
-    public Path deriveFrom(Path source, boolean debugMode) throws AnchorIOException {
+    public Path deriveFrom(Path source, boolean debugMode) throws DerivePathException {
 
         try {
             SplitPath pathInWithoutRoot = RootPathMap.instance().split(source, rootName, debugMode);
@@ -70,12 +70,12 @@ public class Rooted extends DerivePath {
             }
             return pathOut;
         } catch (PathDifferenceException e) {
-            throw new AnchorIOException(e);
+            throw new DerivePathException(e);
         }
     }
 
     private Path determinePathOut(SplitPath pathInWithoutRoot, boolean debugMode)
-            throws AnchorIOException {
+            throws DerivePathException {
 
         Path pathOut = item.deriveFrom(pathInWithoutRoot.getRemainder(), debugMode);
 

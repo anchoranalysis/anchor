@@ -35,7 +35,7 @@ import org.anchoranalysis.io.manifest.operationrecorder.NullWriteOperationRecord
 import org.anchoranalysis.io.manifest.operationrecorder.WriteOperationRecorder;
 import org.anchoranalysis.io.output.outputter.BindFailedException;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
-import org.anchoranalysis.io.output.path.DerivePathException;
+import org.anchoranalysis.io.output.path.PathPrefixerException;
 import org.anchoranalysis.io.output.path.DirectoryWithPrefix;
 import org.anchoranalysis.io.output.path.NamedPath;
 
@@ -71,7 +71,7 @@ class BindingPathOutputterFactory {
             }
             return boundOutput;
 
-        } catch (DerivePathException e) {
+        } catch (PathPrefixerException e) {
             throw new BindFailedException(e);
         }
     }

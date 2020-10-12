@@ -40,7 +40,7 @@ import org.anchoranalysis.core.progress.ProgressReporterOneOfMany;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
-import org.anchoranalysis.image.io.RasterIOException;
+import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.channel.map.ChannelEntry;
 import org.anchoranalysis.image.io.channel.NamedEntries;
 import org.anchoranalysis.image.io.stack.OpenedRaster;
@@ -61,7 +61,7 @@ public class NamedChannelsForSeriesMap implements NamedChannelsForSeries {
     private TimeSequence ts = null;
 
     @Override
-    public Dimensions dimensions() throws RasterIOException {
+    public Dimensions dimensions() throws ImageIOException {
         return openedRaster.dimensionsForSeries(seriesNum);
     }
 
@@ -119,11 +119,11 @@ public class NamedChannelsForSeriesMap implements NamedChannelsForSeries {
     }
 
     @Override
-    public int sizeT(ProgressReporter progressReporter) throws RasterIOException {
+    public int sizeT(ProgressReporter progressReporter) throws ImageIOException {
         try {
             return createTimeSeries(progressReporter).size();
         } catch (OperationFailedException e) {
-            throw new RasterIOException(e);
+            throw new ImageIOException(e);
         }
     }
 
@@ -182,7 +182,7 @@ public class NamedChannelsForSeriesMap implements NamedChannelsForSeries {
         if (ts == null) {
             try {
                 ts = openedRaster.open(seriesNum, progressReporter);
-            } catch (RasterIOException e) {
+            } catch (ImageIOException e) {
                 throw new OperationFailedException(e);
             }
         }

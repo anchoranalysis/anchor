@@ -31,7 +31,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.values.BinaryValues;
-import org.anchoranalysis.image.io.RasterIOException;
+import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.StackReader;
 import org.anchoranalysis.image.stack.Stack;
 
@@ -52,15 +52,15 @@ public class MaskReader {
      * @param binaryValues what constitutes <i>on</i> and <i>off</i> voxels in the raster
      * @return a newly created {@link Mask} as read from the file-system
      * 
-     * @throws RasterIOException
+     * @throws ImageIOException
      */
     public static Mask openMask(StackReader stackReader, Path path, BinaryValues binaryValues)
-            throws RasterIOException {
+            throws ImageIOException {
 
         Stack stack = stackReader.readStack(path);
 
         if (stack.getNumberChannels() != 1) {
-            throw new RasterIOException(
+            throw new ImageIOException(
                     String.format(
                             "There must be exactly one channel, but there are %d",
                             stack.getNumberChannels()));

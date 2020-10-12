@@ -33,7 +33,7 @@ import lombok.Getter;
 import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.io.RasterIOException;
+import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.StackReader;
 import org.anchoranalysis.image.io.objects.ObjectCollectionReader;
 import org.anchoranalysis.image.io.stack.OpenedRaster;
@@ -81,7 +81,7 @@ public class TestLoaderImageIO {
 
         try (OpenedRaster openedRaster = stackReader.openFile(filePath)) {
             return openedRaster.open(0, ProgressReporterNull.get()).get(0);
-        } catch (RasterIOException e) {
+        } catch (ImageIOException e) {
             throw new TestDataLoadException(e);
         }
     }

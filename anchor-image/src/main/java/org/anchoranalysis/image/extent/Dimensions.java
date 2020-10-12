@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.image.extent;
 
-import java.io.Serializable;
+import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -46,10 +46,7 @@ import org.anchoranalysis.image.scale.ScaleFactorUtilities;
 @EqualsAndHashCode
 @Accessors(fluent = true)
 @AllArgsConstructor
-public final class Dimensions implements Serializable {
-
-    /** */
-    private static final long serialVersionUID = 1L;
+public final class Dimensions {
 
     /**
      * The width and height and depth of the image i.e. the size of each of the three possible
@@ -61,7 +58,7 @@ public final class Dimensions implements Serializable {
      * Resolution of voxels to physical measurements e.g. physical size of each voxel in a
      * particular dimension
      */
-    @Getter private final Resolution resolution;
+    @Getter private final Optional<Resolution> resolution;
 
     /** Construct with an explicit extent and default resolution (1.0 for each dimension) */
     public Dimensions(int x, int y, int z) {
@@ -75,17 +72,17 @@ public final class Dimensions implements Serializable {
 
     /** Construct with an explicit extent and default resolution (1.0 for each dimension) */
     public Dimensions(Extent extent) {
-        this(extent, new Resolution());
+        this(extent, Optional.empty());
     }
 
     public Dimensions scaleXYTo(int x, int y) {
         Extent extentScaled = new Extent(x, y, extent.z());
         ScaleFactor scaleFactor = ScaleFactorUtilities.relativeScale(extent, extentScaled);
-        return new Dimensions(extentScaled, resolution.scaleXY(scaleFactor));
+        return new Dimensions(extentScaled, scaledResolution(scaleFactor));
     }
 
     public Dimensions scaleXYBy(ScaleFactor scaleFactor) {
-        return new Dimensions(extent.scaleXYBy(scaleFactor), resolution.scaleXY(scaleFactor));
+        return new Dimensions(extent.scaleXYBy(scaleFactor), scaledResolution(scaleFactor));
     }
 
     public Dimensions duplicateChangeExtent(Extent extentToAssign) {
@@ -96,7 +93,7 @@ public final class Dimensions implements Serializable {
         return new Dimensions(extent.duplicateChangeZ(z), resolution);
     }
 
-    public Dimensions duplicateChangeResolution(Resolution resolutionToAssign) {
+    public Dimensions duplicateChangeResolution(Optional<Resolution> resolutionToAssign) {
         return new Dimensions(extent, resolutionToAssign);
     }
 
@@ -154,8 +151,8 @@ public final class Dimensions implements Serializable {
      *
      * @return a converter that will perform conversions using current resolution.
      */
-    public UnitConverter unitConvert() {
-        return resolution.unitConvert();
+    public Optional<UnitConverter> unitConvert() {
+        return resolution.map(Resolution::unitConvert);
     }
 
     /**
@@ -172,5 +169,9 @@ public final class Dimensions implements Serializable {
         } else {
             return extent.equals(other.extent);
         }
+    }
+        
+    private Optional<Resolution> scaledResolution(ScaleFactor scaleFactor) {
+        return resolution.map(res->res.scaleXY(scaleFactor));
     }
 }

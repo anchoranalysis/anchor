@@ -27,7 +27,7 @@
 package org.anchoranalysis.io.imagej.bean.stack.writer;
 
 import ij.io.FileSaver;
-import org.anchoranalysis.image.io.RasterIOException;
+import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.stack.StackWriteOptions;
 
 /**
@@ -41,10 +41,10 @@ public class PNG extends NoTimeSeries {
 
     @Override
     protected boolean writeRaster(FileSaver fileSaver, String path, boolean asStack)
-            throws RasterIOException {
+            throws ImageIOException {
 
         if (asStack) {
-            throw new RasterIOException("Writing as stack unsupported for this format");
+            throw new ImageIOException("Writing as stack unsupported for this format");
         } else {
             return fileSaver.saveAsPng(path);
         }

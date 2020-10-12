@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-io-manifest
+ * anchor-io-generator
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -24,55 +24,33 @@
  * #L%
  */
 
-package org.anchoranalysis.io.manifest.deserializer.bundle;
+package org.anchoranalysis.image.io.generator.histogram;
 
-import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.nio.file.Path;
+import lombok.Getter;
+import lombok.Setter;
+import org.anchoranalysis.image.histogram.Histogram;
+import org.anchoranalysis.io.generator.tabular.CSVGenerator;
+import org.anchoranalysis.io.output.bean.OutputWriteSettings;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
-public class Bundle<T extends Serializable> implements Serializable, Iterable<BundleItem<T>> {
+/**
+ * Writes a histogram to a CSV file.
+ *
+ * @author Owen Feehan
+ */
+public class HistogramCSVGenerator extends CSVGenerator<Histogram> {
 
-    /** */
-    private static final long serialVersionUID = 508875270985307740L;
-
-    private List<BundleItem<T>> list;
-
-    private int capacity;
-
-    public Bundle() {
-        super();
-        list = new LinkedList<>();
+    public HistogramCSVGenerator() {
+        super("histogram");
     }
 
-    public int getCapacity() {
-        return capacity;
-    }
-
-    public void setCapacity(int capacity) {
-        this.capacity = capacity;
-    }
-
-    public void add(String index, T object) {
-        this.list.add(new BundleItem<>(index, object));
-    }
-
-    public int size() {
-        return this.list.size();
-    }
+    /** Iff true bins in the histogram with a zero count are not written */
+    @Getter @Setter private boolean ignoreZeros = false;
 
     @Override
-    public Iterator<BundleItem<T>> iterator() {
-        return list.iterator();
-    }
-
-    public Map<Integer, T> createHashMap() {
-        HashMap<Integer, T> hashMap = new HashMap<>();
-        for (BundleItem<T> item : list) {
-            hashMap.put(Integer.parseInt(item.getIndex()), item.getObject());
-        }
-        return hashMap;
+    public void writeToFile(OutputWriteSettings outputWriteSettings, Path filePath)
+            throws OutputWriteFailedException {
+        HistogramCSVWriter.writeHistogramToFile(getElement(), filePath, ignoreZeros);
     }
 }

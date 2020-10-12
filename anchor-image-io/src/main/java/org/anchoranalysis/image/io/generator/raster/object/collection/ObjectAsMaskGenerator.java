@@ -54,12 +54,12 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 public class ObjectAsMaskGenerator extends RasterGeneratorWithElement<ObjectMask> {
 
     // START REQUIRED ARGUMENTS
-    private final Resolution resolution;
+    private final Optional<Resolution> resolution;
     // END REQUIRED ARGUMENTS
 
     /** Creates using a default image-resolution. */
     public ObjectAsMaskGenerator() {
-        this(new Resolution());
+        this(Optional.empty());
     }
 
     @Override
@@ -97,7 +97,7 @@ public class ObjectAsMaskGenerator extends RasterGeneratorWithElement<ObjectMask
      * @param resolution resolution to use for the channel
      * @return the newly created channel
      */
-    private static Channel createChannelFromMask(ObjectMask objectMask, Resolution resolution) {
+    private static Channel createChannelFromMask(ObjectMask objectMask, Optional<Resolution> resolution) {
 
         int outOnValue = BinaryValuesByte.getDefault().getOnByte();
 

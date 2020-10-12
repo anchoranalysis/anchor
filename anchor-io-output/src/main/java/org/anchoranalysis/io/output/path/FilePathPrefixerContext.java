@@ -38,16 +38,16 @@ public class FilePathPrefixerContext {
     @Getter private final Optional<Path> outputDirectory;
 
     public FilePathPrefixerContext(boolean debugMode, Optional<Path> outputDirectory)
-            throws DerivePathException {
+            throws PathPrefixerException {
         super();
         this.debugMode = debugMode;
         this.outputDirectory = outputDirectory;
         checkAbsolutePath();
     }
 
-    private void checkAbsolutePath() throws DerivePathException {
+    private void checkAbsolutePath() throws PathPrefixerException {
         if (outputDirectory.isPresent() && !outputDirectory.get().isAbsolute()) {
-            throw new DerivePathException(
+            throw new PathPrefixerException(
                     String.format(
                             "An non-absolute path was passed to FilePathPrefixerParams of %s",
                             outputDirectory.get()));

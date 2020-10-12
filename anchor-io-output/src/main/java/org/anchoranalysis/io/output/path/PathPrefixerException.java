@@ -24,24 +24,20 @@
  * #L%
  */
 
-package org.anchoranalysis.io.exception;
+package org.anchoranalysis.io.output.path;
 
-import org.anchoranalysis.core.error.AnchorCheckedException;
+import org.anchoranalysis.core.error.friendly.AnchorFriendlyCheckedException;
 
-public class AnchorIOException extends AnchorCheckedException {
+public class PathPrefixerException extends AnchorFriendlyCheckedException {
 
     /** */
     private static final long serialVersionUID = 1L;
 
-    public AnchorIOException(String message) {
+    public PathPrefixerException(String message) {
         super(message);
     }
-    
-    public AnchorIOException(Throwable cause) {
-        super(cause);
-    }
 
-    public AnchorIOException(String message, Throwable cause) {
-        super(message, cause);
+    public PathPrefixerException(Throwable cause) {
+        super(cause);
     }
 }

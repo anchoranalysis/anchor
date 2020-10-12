@@ -29,7 +29,7 @@ package org.anchoranalysis.io.generator.text;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import org.anchoranalysis.io.exception.AnchorIOException;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -48,11 +48,11 @@ public class TextFileOutput {
     // Files for writing out
     @Getter private PrintWriter writer;
 
-    public void start() throws AnchorIOException {
+    public void start() throws OutputWriteFailedException {
         try {
             this.writer = new PrintWriter(new FileWriter(filePath)); // NOSONAR
         } catch (IOException e) {
-            throw new AnchorIOException("Cannot create file-writer", e);
+            throw new OutputWriteFailedException(e);
         }
     }
 

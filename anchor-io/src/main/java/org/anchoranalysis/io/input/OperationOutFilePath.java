@@ -32,7 +32,7 @@ import java.util.function.Supplier;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.io.bean.path.derive.DerivePath;
-import org.anchoranalysis.io.exception.AnchorIOException;
+import org.anchoranalysis.io.exception.DerivePathException;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class OperationOutFilePath {
@@ -48,7 +48,7 @@ public class OperationOutFilePath {
             DerivePath outputPathGenerator,
             Supplier<Optional<Path>> pathInput,
             boolean debugMode)
-            throws AnchorIOException {
+            throws DerivePathException {
         return outputPathGenerator
                 .deriveFrom(
                         pathInput
@@ -59,8 +59,8 @@ public class OperationOutFilePath {
                 .normalize();
     }
 
-    private static AnchorIOException bindingPathMissingException() {
-        return new AnchorIOException(
+    private static DerivePathException bindingPathMissingException() {
+        return new DerivePathException(
                 "A binding-path must be associated with the input for this operation");
     }
 }

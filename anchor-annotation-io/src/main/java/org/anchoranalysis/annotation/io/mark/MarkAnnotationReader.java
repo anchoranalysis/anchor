@@ -32,7 +32,7 @@ import lombok.AllArgsConstructor;
 import org.anchoranalysis.annotation.io.AnnotationReader;
 import org.anchoranalysis.annotation.mark.DualMarksAnnotation;
 import org.anchoranalysis.core.functional.OptionalUtilities;
-import org.anchoranalysis.io.exception.AnchorIOException;
+import org.anchoranalysis.io.exception.InputReadFailedException;
 import org.anchoranalysis.io.manifest.deserializer.DeserializationFailedException;
 import org.anchoranalysis.io.manifest.deserializer.XStreamDeserializer;
 import org.anchoranalysis.mpp.io.marks.MarkCollectionDeserializer;
@@ -56,13 +56,13 @@ public class MarkAnnotationReader<T> implements AnnotationReader<DualMarksAnnota
     }
 
     @Override
-    public Optional<DualMarksAnnotation<T>> read(Path path) throws AnchorIOException {
+    public Optional<DualMarksAnnotation<T>> read(Path path) throws InputReadFailedException {
 
         Optional<Path> pathMaybeChanged = fileNameToRead(path);
         try {
             return OptionalUtilities.map(pathMaybeChanged, this::readAnnotationFromPath);
         } catch (DeserializationFailedException e) {
-            throw new AnchorIOException("Cannot deserialize annotation", e);
+            throw new InputReadFailedException("Cannot deserialize annotation", e);
         }
     }
 

@@ -38,7 +38,7 @@ public abstract class ObjectFilter extends ImageBean<ObjectFilter> {
      * Filters an object-collection to remove objects according to a criteria
      *
      * @param objectsToFilter the objects to filter
-     * @param dim image-dimensions
+     * @param dimensions image-dimensions
      * @param objectsRejected if set, any objects rejected by the filter can be added to this
      *     collection
      * @return a new object-collection containing only the objects that passed the filter
@@ -46,7 +46,7 @@ public abstract class ObjectFilter extends ImageBean<ObjectFilter> {
      */
     public abstract ObjectCollection filter(
             ObjectCollection objectsToFilter,
-            Optional<Dimensions> dim,
+            Optional<Dimensions> dimensions,
             Optional<ObjectCollection> objectsRejected)
             throws OperationFailedException;
 }

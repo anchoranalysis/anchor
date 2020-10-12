@@ -65,7 +65,7 @@ public class OutputSequenceFactory<T> {
      * <p>The eventual filename written becomes {@code $prefix$index.$extension}.
      * 
      * @param pattern how the output of the sequence looks on the file-system and in the manifest.
-     * @return a newly created sequence (which must be closed with {@link OutputSequence#close()} after usage.
+     * @return a newly created sequence
      * @throws OutputWriteFailedException if any outputting cannot be successfully completed.
      */
     public OutputSequenceIncrementing<T> incrementingByOne(
@@ -83,7 +83,7 @@ public class OutputSequenceFactory<T> {
      * @param outputName the associated output-name
      * @param prefix a prefix to include before each filename that is outputted.
      * @param numberDigits the number of digits (adding trailing zeros) for the integer part of the output-name.
-     * @return a newly created sequence (which must be closed with {@link OutputSequence#close()} after usage.
+     * @return a newly created sequence
      * @throws OutputWriteFailedException if any outputting cannot be successfully completed.
      */
     public OutputSequenceIncrementing<T> incrementingByOneCurrentDirectory(String outputName, String prefix, int numberDigits) throws OutputWriteFailedException {
@@ -117,7 +117,7 @@ public class OutputSequenceFactory<T> {
      * <p>The eventual filename written becomes {@code $prefix$index.$extension}.
      *  
      * @param pattern how the output of the sequence looks on the file-system and in the manifest.
-     * @return a newly created sequence (which must be closed with {@link OutputSequence#close()} after usage.
+     * @return a newly created sequence
      * @throws OutputWriteFailedException if any outputting cannot be successfully completed.
      */
     public OutputSequenceIndexed<T,String> withoutOrder(
@@ -133,7 +133,7 @@ public class OutputSequenceFactory<T> {
      * <p>The eventual filename written becomes {@code $index.$extension} without any prefix or suffix.
      * 
      * @param outputName the output-name used in rules to determine if the output is enabled or not.
-     * @return a newly created sequence (which must be closed with {@link OutputSequence#close()} after usage.
+     * @return a newly created sequence
      * @throws OutputWriteFailedException if any outputting cannot be successfully completed.
      */
     public OutputSequenceIndexed<T,String> withoutOrderCurrentDirectory(
@@ -155,10 +155,8 @@ public class OutputSequenceFactory<T> {
      * @throws OutputWriteFailedException if any output fails to be written.
      */
     public void incrementingByOneStream(OutputPatternIntegerSuffix pattern, Stream<T> stream) throws OutputWriteFailedException {
-
-        try (OutputSequenceIncrementing<T> sequenceWriter = incrementingByOne(pattern)) {
-            CheckedStream.forEach(stream, OutputWriteFailedException.class, sequenceWriter::add);
-        }
+        OutputSequenceIncrementing<T> sequenceWriter = incrementingByOne(pattern);
+        CheckedStream.forEach(stream, OutputWriteFailedException.class, sequenceWriter::add);
     }
     
     private <S> OutputSequenceIndexed<T,S> indexed(

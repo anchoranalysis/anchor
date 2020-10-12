@@ -28,6 +28,7 @@ package org.anchoranalysis.mpp.mark.conic;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import java.util.Optional;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.extent.Resolution;
@@ -42,15 +43,15 @@ import org.anchoranalysis.mpp.bean.bound.Bound;
 public class RadiiRandomizer {
 
     public static Point3d randomizeRadii(
-            Bound bound, RandomNumberGenerator randomNumberGenerator, Resolution sr, boolean do3D) {
+            Bound bound, RandomNumberGenerator randomNumberGenerator, Optional<Resolution> resolution, boolean do3D) {
         return new Point3d(
-                randomizeRadius(bound, randomNumberGenerator, sr),
-                randomizeRadius(bound, randomNumberGenerator, sr),
-                do3D ? randomizeRadius(bound, randomNumberGenerator, sr) : 0);
+                randomizeRadius(bound, randomNumberGenerator, resolution),
+                randomizeRadius(bound, randomNumberGenerator, resolution),
+                do3D ? randomizeRadius(bound, randomNumberGenerator, resolution) : 0);
     }
 
     private static double randomizeRadius(
-            Bound radiusBound, RandomNumberGenerator randomNumberGenerator, Resolution sr) {
-        return radiusBound.resolve(sr, true).randOpen(randomNumberGenerator);
+            Bound radiusBound, RandomNumberGenerator randomNumberGenerator, Optional<Resolution> resolution) {
+        return radiusBound.resolve(resolution, true).randOpen(randomNumberGenerator);
     }
 }

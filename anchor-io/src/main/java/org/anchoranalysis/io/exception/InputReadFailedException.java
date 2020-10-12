@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-io-manifest
+ * anchor-io
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -24,18 +24,24 @@
  * #L%
  */
 
-package org.anchoranalysis.io.manifest.deserializer.folder;
+package org.anchoranalysis.io.exception;
 
-import java.io.Serializable;
-import lombok.AllArgsConstructor;
-import lombok.Value;
-import org.anchoranalysis.io.manifest.deserializer.Deserializer;
-import org.anchoranalysis.io.manifest.deserializer.bundle.Bundle;
-import org.anchoranalysis.io.manifest.deserializer.bundle.BundleParameters;
+import org.anchoranalysis.core.error.AnchorCheckedException;
 
-@Value
-@AllArgsConstructor
-public class BundleDeserializers<T extends Serializable> {
-    private Deserializer<Bundle<T>> deserializerBundle;
-    private Deserializer<BundleParameters> deserializerBundleParameters;
+public class InputReadFailedException extends AnchorCheckedException {
+
+    /** */
+    private static final long serialVersionUID = 1L;
+
+    public InputReadFailedException(String message) {
+        super(message);
+    }
+    
+    public InputReadFailedException(Throwable cause) {
+        super(cause);
+    }
+
+    public InputReadFailedException(String message, Throwable cause) {
+        super(message, cause);
+    }
 }

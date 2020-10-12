@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.mpp.bean.bound;
 
+import java.util.Optional;
 import org.anchoranalysis.image.extent.Resolution;
 
 //
@@ -38,8 +39,8 @@ public abstract class Bound extends MarkBounds {
 
     public abstract Bound duplicate();
 
-    public ResolvedBound resolve(Resolution sr, boolean do3D) {
-        return new ResolvedBound(getMinResolved(sr, do3D), getMaxResolved(sr, do3D));
+    public ResolvedBound resolve(Optional<Resolution> resolution, boolean do3D) {
+        return new ResolvedBound(getMinResolved(resolution, do3D), getMaxResolved(resolution, do3D));
     }
 
     public abstract void scale(double multFactor);

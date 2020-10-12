@@ -50,18 +50,16 @@ public class StackGenerator extends RasterGeneratorWithElement<Stack> {
 
     /** Function stored in manifest for this generator. */
     private Optional<String> manifestFunction;
-
+    
     /**
-     * If true, a stack is guaranteed always to have only one z-slice. If false, it may be 2D or 3D.
+     * Properties of the stack that is being written used to guide the outputting.
      */
-    private boolean always2D;
+    private StackWriteOptions writeOptions;
 
     /**
      * Creates a generator that performs no padding.
      *
      * @param manifestFunction manifestFunction function stored in manifest for this generator
-     * @param always2D if true, a stack is guaranteed always to be 2D (i.e. have only one z-slice).
-     *     If false, it may be 2D or 3D.
      */
     public StackGenerator(String manifestFunction, boolean always2D) {
         this(Optional.of(manifestFunction), always2D);
@@ -71,13 +69,15 @@ public class StackGenerator extends RasterGeneratorWithElement<Stack> {
      * Creates a generator that performs no padding.
      *
      * @param manifestFunction manifestFunction function stored in manifest for this generator
-     * @param always2D if true, a stack is guaranteed always to be 2D (i.e. have only one z-slice).
-     *     If false, it may be 2D or 3D.
      */
     public StackGenerator(Optional<String> manifestFunction, boolean always2D) {
-        this(false, manifestFunction, always2D);
+        this(false, manifestFunction, StackWriteOptions.toReplace(always2D));
     }
 
+    public StackGenerator(boolean padIfNecessary, String manifestFunction, boolean always2D) {
+        this(padIfNecessary, Optional.of(manifestFunction), StackWriteOptions.toReplace(always2D));
+    }
+    
     /**
      * Creates the generator from a stack, inferring whether all stacks will be 2D from this stack's
      * dimensions.
@@ -88,12 +88,13 @@ public class StackGenerator extends RasterGeneratorWithElement<Stack> {
      * @param stack the initial element
      */
     public StackGenerator(boolean padIfNecessary, String manifestFunction, Stack stack) {
-        this(padIfNecessary, Optional.of(manifestFunction), stack.extent().z() == 1);
+        this(padIfNecessary, Optional.of(manifestFunction), StackWriteOptions.from(stack));
         assignElement(stack);
     }
 
     @Override
     public Stack transform() throws OutputWriteFailedException {
+        assert(getElement()!=null);
         Stack out = getElement().duplicateShallow();
 
         try {
@@ -114,12 +115,11 @@ public class StackGenerator extends RasterGeneratorWithElement<Stack> {
 
     @Override
     public boolean isRGB() {
-        int numberChannels = getElement().getNumberChannels();
-        return numberChannels == 3 || (numberChannels == 2 && padIfNecessary);
+        return writeOptions.isRgb();
     }
 
     @Override
     public StackWriteOptions writeOptions() {
-        return StackWriteOptions.maybeRGB(isRGB(), always2D);
+        return writeOptions;
     }
 }

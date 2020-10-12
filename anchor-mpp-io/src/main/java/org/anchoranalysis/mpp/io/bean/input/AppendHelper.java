@@ -33,7 +33,7 @@ import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
-import org.anchoranalysis.image.io.RasterIOException;
+import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.StackReader;
 import org.anchoranalysis.image.io.histogram.HistogramCSVReader;
 import org.anchoranalysis.image.io.objects.ObjectCollectionReader;
@@ -67,7 +67,7 @@ class AppendHelper {
                 outPath -> {
                     try {
                         return openRaster(outPath, stackReader);
-                    } catch (RasterIOException e) {
+                    } catch (ImageIOException e) {
                         throw new OperationFailedException(e);
                     }
                 },
@@ -177,7 +177,7 @@ class AppendHelper {
     }
 
     private static TimeSequence openRaster(Path path, StackReader stackReader)
-            throws RasterIOException {
+            throws ImageIOException {
         try (OpenedRaster openedRaster = stackReader.openFile(path)) {
             return openedRaster.open(0, ProgressReporterNull.get());
         }

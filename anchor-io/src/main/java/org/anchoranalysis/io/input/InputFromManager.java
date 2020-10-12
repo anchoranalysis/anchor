@@ -29,19 +29,20 @@ package org.anchoranalysis.io.input;
 import java.nio.file.Path;
 import java.util.Optional;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
-import org.anchoranalysis.io.exception.AnchorIOException;
+import org.anchoranalysis.io.exception.InputReadFailedException;
 
 public interface InputFromManager {
 
-    String descriptiveName();
+    /** A unique name associated with the input. */
+    String name();
 
     Optional<Path> pathForBinding();
 
-    default Path pathForBindingRequired() throws AnchorIOException {
+    default Path pathForBindingRequired() throws InputReadFailedException {
         return pathForBinding()
                 .orElseThrow(
                         () ->
-                                new AnchorIOException(
+                                new InputReadFailedException(
                                         "A binding path is required to be associated with each input for this algorithm, but is not"));
     }
 

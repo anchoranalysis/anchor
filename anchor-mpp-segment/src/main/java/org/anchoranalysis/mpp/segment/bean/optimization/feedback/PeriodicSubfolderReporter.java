@@ -34,7 +34,6 @@ import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.generator.sequence.OutputSequenceFactory;
 import org.anchoranalysis.io.generator.sequence.OutputSequenceIndexed;
 import org.anchoranalysis.io.generator.sequence.pattern.OutputPatternIntegerSuffix;
-import org.anchoranalysis.io.manifest.sequencetype.SequenceType;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
 import org.anchoranalysis.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
@@ -93,7 +92,7 @@ public abstract class PeriodicSubfolderReporter<T>
     }
     
     // We setup the manifest from a Generator
-    protected SequenceType<?> init(Generator<T> generator)  // NOSONAR
+    protected void init(Generator<T> generator)  // NOSONAR
             throws OutputWriteFailedException {
         
         OutputPatternIntegerSuffix pattern = new OutputPatternIntegerSuffix(
@@ -104,7 +103,6 @@ public abstract class PeriodicSubfolderReporter<T>
         );
         
         this.sequenceWriter = new OutputSequenceFactory<>(generator, getParentOutputter()).incrementingIntegers(pattern, 0, getAggInterval());
-        return sequenceWriter.getSequenceType();
     }
 
     @Override
@@ -123,11 +121,6 @@ public abstract class PeriodicSubfolderReporter<T>
     public void reportEnd(FeedbackEndParameters<VoxelizedMarksWithEnergy> params)
             throws ReporterException {
 
-        try {
-            this.sequenceWriter.close();
-        } catch (OutputWriteFailedException e) {
-            throw new ReporterException(e);
-        }
     }
     
     protected abstract Optional<T> generateIterableElement(

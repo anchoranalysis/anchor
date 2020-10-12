@@ -39,7 +39,7 @@ import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.io.bean.input.DebugModeParams;
 import org.anchoranalysis.io.input.InputContextParams;
 import org.anchoranalysis.io.output.bean.OutputManager;
-import org.anchoranalysis.io.output.path.DerivePathException;
+import org.anchoranalysis.io.output.path.PathPrefixerException;
 import org.anchoranalysis.io.output.path.FilePathPrefixerContext;
 import org.anchoranalysis.io.output.recorded.OutputEnabledDelta;
 
@@ -103,7 +103,7 @@ public class ExperimentExecutionArguments {
         return out;
     }
 
-    public FilePathPrefixerContext createPrefixerContext() throws DerivePathException {
+    public FilePathPrefixerContext createPrefixerContext() throws PathPrefixerException {
         return new FilePathPrefixerContext(isDebugModeEnabled(), outputDirectory);
     }
 
@@ -129,7 +129,7 @@ public class ExperimentExecutionArguments {
      */
     public void activateDebugMode(String debugContains) {
         Optional<String> debugContainsAsOptional =
-                OptionalFactory.create(debugContains.isEmpty(), () -> debugContains);
+                OptionalFactory.create(!debugContains.isEmpty(), () -> debugContains);
         debugModeParams = Optional.of(new DebugModeParams(debugContainsAsOptional));
     }
 

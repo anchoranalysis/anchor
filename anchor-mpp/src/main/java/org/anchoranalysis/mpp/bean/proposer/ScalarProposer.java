@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.mpp.bean.proposer;
 
+import java.util.Optional;
 import org.anchoranalysis.bean.NullParamsBean;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
@@ -34,6 +35,6 @@ import org.anchoranalysis.image.extent.Resolution;
 public abstract class ScalarProposer extends NullParamsBean<ScalarProposer> {
 
     public abstract double propose(
-            RandomNumberGenerator randomNumberGenerator, Resolution resolution)
+            RandomNumberGenerator randomNumberGenerator, Optional<Resolution> resolution)
             throws OperationFailedException;
 }

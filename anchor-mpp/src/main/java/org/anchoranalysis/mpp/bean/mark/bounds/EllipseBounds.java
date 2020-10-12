@@ -29,6 +29,7 @@ package org.anchoranalysis.mpp.bean.mark.bounds;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import java.util.Optional;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.extent.Resolution;
@@ -68,7 +69,7 @@ public class EllipseBounds extends EllipseBoundsWithoutRotation {
 
     @Override
     public Orientation randomOrientation(
-            RandomNumberGenerator randomNumberGenerator, Resolution resolution) {
+            RandomNumberGenerator randomNumberGenerator, Optional<Resolution> resolution) {
         return new Orientation2D(
                 getRotationAngle().resolve(resolution, false).randOpen(randomNumberGenerator));
     }

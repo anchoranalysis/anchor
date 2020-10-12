@@ -28,7 +28,6 @@ package org.anchoranalysis.io.generator;
 import java.nio.file.Path;
 import java.util.Optional;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.manifest.file.FileType;
@@ -47,6 +46,9 @@ import org.anchoranalysis.io.output.outputter.OutputterChecked;
  */
 public abstract class SingleFileTypeGenerator<T, S> implements Generator<T> {
 
+    /** The manifest-description to use if none other is defined. */
+    private static final ManifestDescription UNDEFINED_MANIFEST_DESCRIPTION = new ManifestDescription("undefined", "undefined");
+    
     /**
      * Assigns a new element, and then calls {@link #transform()}.
      *
@@ -107,13 +109,12 @@ public abstract class SingleFileTypeGenerator<T, S> implements Generator<T> {
     @Override
     public Optional<FileType[]> getFileTypes(OutputWriteSettings outputWriteSettings)
             throws OperationFailedException {
-        return OptionalUtilities.map(
-                createManifestDescription(),
-                manifestDescription -> createFileTypeArray(manifestDescription, outputWriteSettings) );
+        return Optional.of( createFileTypeArray(createManifestDescription(), outputWriteSettings) );
     }
     
-    private FileType[] createFileTypeArray(ManifestDescription description, OutputWriteSettings outputWriteSettings) throws OperationFailedException {
-        return new FileType[] {new FileType(description, getFileExtension(outputWriteSettings))};
+    private FileType[] createFileTypeArray(Optional<ManifestDescription> description, OutputWriteSettings outputWriteSettings) throws OperationFailedException {
+        ManifestDescription selectedDescription = description.orElse(UNDEFINED_MANIFEST_DESCRIPTION);
+        return new FileType[] {new FileType(selectedDescription, getFileExtension(outputWriteSettings))};
     }
 
     private void writeInternal(

@@ -27,6 +27,7 @@
 package org.anchoranalysis.mpp.bean.bound;
 
 import java.io.Serializable;
+import java.util.Optional;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.GroupingRoot;
 import org.anchoranalysis.image.extent.Resolution;
@@ -37,11 +38,11 @@ public abstract class MarkBounds extends AnchorBean<MarkBounds> implements Seria
     /** */
     private static final long serialVersionUID = 0;
 
-    public abstract double getMinResolved(Resolution sr, boolean do3D);
+    public abstract double getMinResolved(Optional<Resolution> resolution, boolean do3D);
 
-    public abstract double getMaxResolved(Resolution sr, boolean do3D);
+    public abstract double getMaxResolved(Optional<Resolution> resolution, boolean do3D);
 
-    public ResolvedBound calculateMinMax(Resolution sr, boolean do3D) {
-        return new ResolvedBound(getMinResolved(sr, do3D), getMaxResolved(sr, do3D));
+    public ResolvedBound calculateMinMax(Optional<Resolution> resolution, boolean do3D) {
+        return new ResolvedBound(getMinResolved(resolution, do3D), getMaxResolved(resolution, do3D));
     }
 }

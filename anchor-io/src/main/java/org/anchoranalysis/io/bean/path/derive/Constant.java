@@ -33,7 +33,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.io.exception.AnchorIOException;
 
 /** Always generates a constant path irrespective of the the input */
 @NoArgsConstructor
@@ -45,7 +44,7 @@ public class Constant extends DerivePath {
     // END BEAN PROPERTIES
 
     @Override
-    public Path deriveFrom(Path source, boolean debugMode) throws AnchorIOException {
+    public Path deriveFrom(Path source, boolean debugMode) {
         return Paths.get(value);
     }
 }

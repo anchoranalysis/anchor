@@ -34,7 +34,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.bean.path.matcher.PathMatcher;
-import org.anchoranalysis.io.exception.AnchorIOException;
+import org.anchoranalysis.io.exception.InputReadFailedException;
 import org.anchoranalysis.io.exception.FilesProviderException;
 import org.anchoranalysis.io.path.GlobExtractor;
 import org.anchoranalysis.io.path.GlobExtractor.GlobWithDirectory;
@@ -75,7 +75,7 @@ public class SearchDirectory extends FilesProviderWithDirectoryString {
         try {
             return matcher.matchingFiles(
                     directory, recursive, ignoreHidden, acceptDirectoryErrors, maxDirDepth, params);
-        } catch (AnchorIOException e) {
+        } catch (InputReadFailedException e) {
             throw new FilesProviderException(e);
         }
     }

@@ -31,7 +31,6 @@ import java.nio.file.Paths;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.io.exception.AnchorIOException;
 
 /**
  * Generates a file-path by replacing all occurrences of a string-pattern with another
@@ -49,7 +48,7 @@ public class Replace extends DerivePath {
     // END BEAN FIELDS
 
     @Override
-    public Path deriveFrom(Path source, boolean debugMode) throws AnchorIOException {
+    public Path deriveFrom(Path source, boolean debugMode) {
 
         String outStr = ConvertPathUtilities.convertBackslashes(source);
 

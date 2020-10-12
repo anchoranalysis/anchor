@@ -27,7 +27,7 @@
 package org.anchoranalysis.io.imagej.bean.stack.writer;
 
 import java.nio.file.Path;
-import org.anchoranalysis.image.io.RasterIOException;
+import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.generator.raster.series.StackSeries;
 import org.anchoranalysis.image.io.stack.StackWriteOptions;
 
@@ -45,7 +45,7 @@ public abstract class NoTimeSeries extends ImageJRasterWriter {
             Path filePath,
             boolean makeRGB,
             StackWriteOptions writeOptions)
-            throws RasterIOException {
-        throw new RasterIOException("Writing as a time-series is unsupported for this format");
+            throws ImageIOException {
+        throw new ImageIOException("Writing as a time-series is unsupported for this format");
     }
 }

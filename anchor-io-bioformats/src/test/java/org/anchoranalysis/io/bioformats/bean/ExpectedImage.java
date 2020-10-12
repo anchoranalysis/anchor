@@ -31,7 +31,7 @@ import java.io.File;
 import java.nio.file.Path;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
-import org.anchoranalysis.image.io.RasterIOException;
+import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.StackReader;
 import org.anchoranalysis.image.io.stack.OpenedRaster;
 import org.anchoranalysis.image.stack.Stack;
@@ -82,7 +82,7 @@ class ExpectedImage {
     private int intensityValueToCount;
 
     public void openAndAssert(StackReader stackReader, TestLoader loader)
-            throws RasterIOException {
+            throws ImageIOException {
         Stack stack = openStackFromReader(stackReader, loader);
         assertEqualsPrefix(
                 "voxel data type", expectedDataType, stack.getChannel(0).getVoxelDataType());
@@ -94,7 +94,7 @@ class ExpectedImage {
     }
 
     private Stack openStackFromReader(StackReader reader, TestLoader loader)
-            throws RasterIOException {
+            throws ImageIOException {
 
         Path path = loader.resolveTestPath(relativePath());
 

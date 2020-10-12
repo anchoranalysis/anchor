@@ -31,7 +31,7 @@ import org.anchoranalysis.core.name.store.NamedProviderStore;
 import org.anchoranalysis.core.name.store.StoreSupplier;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.image.extent.Dimensions;
-import org.anchoranalysis.image.io.RasterIOException;
+import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.input.series.NamedChannelsForSeries;
 import org.anchoranalysis.image.stack.TimeSequence;
 
@@ -45,19 +45,19 @@ import org.anchoranalysis.image.stack.TimeSequence;
 public abstract class NamedChannelsInput implements ProvidesStackInput {
 
     /** Number of series */
-    public abstract int numberSeries() throws RasterIOException;
+    public abstract int numberSeries() throws ImageIOException;
 
     /** Dimensions of a particular series */
-    public abstract Dimensions dimensions(int seriesIndex) throws RasterIOException;
+    public abstract Dimensions dimensions(int seriesIndex) throws ImageIOException;
 
     /** Number of channels */
-    public abstract int numberChannels() throws RasterIOException;
+    public abstract int numberChannels() throws ImageIOException;
 
     /** Bit-depth of image */
-    public abstract int bitDepth() throws RasterIOException;
+    public abstract int bitDepth() throws ImageIOException;
 
     public abstract NamedChannelsForSeries createChannelsForSeries(
-            int seriesIndex, ProgressReporter progressReporter) throws RasterIOException;
+            int seriesIndex, ProgressReporter progressReporter) throws ImageIOException;
 
     @Override
     public void addToStoreInferNames(
@@ -71,7 +71,7 @@ public abstract class NamedChannelsInput implements ProvidesStackInput {
             // Apply it only to first time-series frame
             ncc.addAsSeparateChannels(stackCollection, 0);
 
-        } catch (RasterIOException e) {
+        } catch (ImageIOException e) {
             throw new OperationFailedException(e);
         }
     }
@@ -103,7 +103,7 @@ public abstract class NamedChannelsInput implements ProvidesStackInput {
                     createChannelsForSeries(seriesNum, progressReporter);
             return new TimeSequence(namedChannels.allChannelsAsStack(0).get());
 
-        } catch (RasterIOException e) {
+        } catch (ImageIOException e) {
             throw new OperationFailedException(e);
         }
     }

@@ -112,16 +112,6 @@ public class GeneratorBridge<S, T> implements Generator<S> {
     }
 
     @Override
-    public void start() throws OutputWriteFailedException {
-        generator.start();
-    }
-
-    @Override
-    public void end() throws OutputWriteFailedException {
-        generator.end();
-    }
-
-    @Override
     public void write(OutputNameStyle outputNameStyle, OutputterChecked outputter)
             throws OutputWriteFailedException {
         generator.write(outputNameStyle, outputter);

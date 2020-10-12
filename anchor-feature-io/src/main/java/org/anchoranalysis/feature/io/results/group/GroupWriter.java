@@ -34,7 +34,7 @@ import org.anchoranalysis.feature.io.csv.RowLabels;
 import org.anchoranalysis.feature.io.results.ResultsWriterMetadata;
 import org.anchoranalysis.feature.list.NamedFeatureStore;
 import org.anchoranalysis.feature.results.ResultsVector;
-import org.anchoranalysis.io.exception.AnchorIOException;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.InputOutputContextSubdirectoryCache;
 
@@ -80,14 +80,14 @@ public class GroupWriter {
      * @param includeGroups whether to output "groups"
      * @param contextAggregated input-output context for the aggregage outputs
      * @param contextGroups input-output context for the group outputs
-     * @throws AnchorIOException if any input-output errors occur
+     * @throws OutputWriteFailedException if any Writing fails
      */
     public void writeGroupResults(
             Optional<NamedFeatureStore<FeatureInputResults>> featuresAggregate,
             boolean includeGroups,
             InputOutputContext contextAggregated,
             InputOutputContextSubdirectoryCache contextGroups)
-            throws AnchorIOException {
+            throws OutputWriteFailedException {
         if (includeGroups) {
             writeGroupXMLAndIntoCSV(contextGroups);
         }
@@ -116,7 +116,7 @@ public class GroupWriter {
             NamedFeatureStore<FeatureInputResults> featuresAggregate,
             InputOutputContext contextAggregated,
             InputOutputContextSubdirectoryCache contextGroups)
-            throws AnchorIOException {
+            throws OutputWriteFailedException {
 
         if (map.isEmpty()) {
             // NOTHING TO DO, exit early

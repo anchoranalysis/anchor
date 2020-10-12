@@ -29,7 +29,7 @@ package org.anchoranalysis.image.io.bean.stack;
 import java.nio.file.Path;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
-import org.anchoranalysis.image.io.RasterIOException;
+import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.stack.OpenedRaster;
 import org.anchoranalysis.image.stack.Stack;
 
@@ -40,15 +40,15 @@ public abstract class StackReader extends AnchorBean<StackReader> {
      * 
      * @param path the path of the reaster-file to open
      * @return the stack that has been read
-     * @throws RasterIOException if there is a series of stacks in the file, or if anything else goes wrong
+     * @throws ImageIOException if there is a series of stacks in the file, or if anything else goes wrong
      */
     public Stack readStack(Path path)
-            throws RasterIOException {
+            throws ImageIOException {
         OpenedRaster openedRaster = openFile(path);
 
         try {
             if (openedRaster.numberSeries() != 1) {
-                throw new RasterIOException("there must be exactly one series");
+                throw new ImageIOException("there must be exactly one series");
             }
 
             return openedRaster.open(0, ProgressReporterNull.get()).get(0);
@@ -57,5 +57,5 @@ public abstract class StackReader extends AnchorBean<StackReader> {
         }
     }
     
-    public abstract OpenedRaster openFile(Path path) throws RasterIOException;
+    public abstract OpenedRaster openFile(Path path) throws ImageIOException;
 }

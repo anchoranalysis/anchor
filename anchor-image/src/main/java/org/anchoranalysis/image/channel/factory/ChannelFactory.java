@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.image.channel.factory;
 
+import java.util.Optional;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.Dimensions;
@@ -75,10 +76,10 @@ public class ChannelFactory extends VoxelDataTypeFactoryMultiplexer<ChannelFacto
     }
 
     public Channel create(Voxels<?> voxels) {
-        return create(voxels, new Resolution());
+        return create(voxels, Optional.empty());
     }
 
-    public Channel create(Voxels<?> voxels, Resolution resolution) {
+    public Channel create(Voxels<?> voxels, Optional<Resolution> resolution) {
         return get(voxels.dataType()).create(voxels, resolution);
     }
 

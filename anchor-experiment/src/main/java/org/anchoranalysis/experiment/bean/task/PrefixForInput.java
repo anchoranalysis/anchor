@@ -34,7 +34,7 @@ import org.anchoranalysis.io.manifest.ManifestFolderDescription;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
 import org.anchoranalysis.io.manifest.folder.ExperimentFileFolder;
 import org.anchoranalysis.io.manifest.sequencetype.StringsWithoutOrder;
-import org.anchoranalysis.io.output.path.DerivePathException;
+import org.anchoranalysis.io.output.path.PathPrefixerException;
 import org.anchoranalysis.io.output.path.DirectoryWithPrefix;
 import org.anchoranalysis.io.output.path.FilePathPrefixerContext;
 import org.anchoranalysis.io.output.path.NamedPath;
@@ -57,13 +57,13 @@ class PrefixForInput {
      * @param experimentIdentifier
      * @param experimentalManifest
      * @return
-     * @throws DerivePathException
+     * @throws PathPrefixerException
      */
     public DirectoryWithPrefix prefixForFile(
             NamedPath path,
             String experimentIdentifier,
             Optional<ManifestRecorder> experimentalManifest)
-            throws DerivePathException {
+            throws PathPrefixerException {
 
         // Calculate a prefix from the incoming file, and create a file path generator
         DirectoryWithPrefix prefix = prefixer.outFilePrefix(path, experimentIdentifier, context);
@@ -78,13 +78,13 @@ class PrefixForInput {
     }
 
     private PathDifference differenceFromPrefixer(String experimentIdentifier, Path combinedPrefix)
-            throws DerivePathException {
+            throws PathPrefixerException {
         try {
             return PathDifference.differenceFrom(
                     prefixer.rootFolderPrefix(experimentIdentifier, context).getCombined(),
                     combinedPrefix);
         } catch (PathDifferenceException e) {
-            throw new DerivePathException(e);
+            throw new PathPrefixerException(e);
         }
     }
 

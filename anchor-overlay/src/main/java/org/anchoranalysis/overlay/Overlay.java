@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.overlay;
 
+import java.util.Optional;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
@@ -77,5 +78,5 @@ public abstract class Overlay implements Identifiable {
     @Override
     public abstract int hashCode();
 
-    public abstract OverlayProperties generateProperties(Resolution sr);
+    public abstract OverlayProperties generateProperties(Optional<Resolution> resolution);
 }

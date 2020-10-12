@@ -26,7 +26,7 @@
 package org.anchoranalysis.io.bioformats.bean;
 
 import lombok.RequiredArgsConstructor;
-import org.anchoranalysis.image.io.RasterIOException;
+import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
 import org.anchoranalysis.test.TestLoader;
@@ -59,19 +59,19 @@ class ExpectedImageTester {
 
     private BioformatsReader reader = new BioformatsReader();
 
-    public void assertRGBAndUnsigned8BitUncompressed(String extension) throws RasterIOException {
+    public void assertRGBAndUnsigned8BitUncompressed(String extension) throws ImageIOException {
         assertRGBAndUnsigned8Bit(
                 extension, COUNT_RGB_UNCOMPRESSED, COUNT_UNSIGNED_8_BIT_UNCOMPRESSED);
     }
 
     public void assertRGBAndUnsigned8Bit(
             String extension, int expectedCountRGB, int expectedCountUnsigned8Bit)
-            throws RasterIOException {
+            throws ImageIOException {
         assertRGB(extension, expectedCountRGB);
         assertUnsigned8Bit(extension, expectedCountUnsigned8Bit);
     }
 
-    public void assertUnsigned16Bit(String extension, int expectedCount) throws RasterIOException {
+    public void assertUnsigned16Bit(String extension, int expectedCount) throws ImageIOException {
         new ExpectedImage(
                         extension,
                         "unsigned_16bit",
@@ -83,7 +83,7 @@ class ExpectedImageTester {
     }
 
     public void assertUnsigned8BitThreeChannels(String extension, int expectedCount)
-            throws RasterIOException {
+            throws ImageIOException {
         new ExpectedImage(
                         extension,
                         "unsigned_8bit_three_channels",
@@ -95,7 +95,7 @@ class ExpectedImageTester {
     }
 
     public void assertUnsigned16BitThreeChannels(String extension, int expectedCount)
-            throws RasterIOException {
+            throws ImageIOException {
         new ExpectedImage(
                         extension,
                         "unsigned_16bit_three_channels",
@@ -106,7 +106,7 @@ class ExpectedImageTester {
                 .openAndAssert(reader, loader);
     }
 
-    private void assertRGB(String extension, int expectedCount) throws RasterIOException {
+    private void assertRGB(String extension, int expectedCount) throws ImageIOException {
         new ExpectedImage(
                         extension,
                         "rgb",
@@ -117,7 +117,7 @@ class ExpectedImageTester {
                 .openAndAssert(reader, loader);
     }
 
-    private void assertUnsigned8Bit(String extension, int expectedCount) throws RasterIOException {
+    private void assertUnsigned8Bit(String extension, int expectedCount) throws ImageIOException {
         new ExpectedImage(
                         extension,
                         "unsigned_8bit",

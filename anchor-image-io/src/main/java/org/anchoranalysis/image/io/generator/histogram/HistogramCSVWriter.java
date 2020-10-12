@@ -24,38 +24,41 @@
  * #L%
  */
 
-package org.anchoranalysis.io.generator.histogram;
+package org.anchoranalysis.image.io.generator.histogram;
 
 import java.nio.file.Path;
-import lombok.Getter;
-import lombok.Setter;
+import java.util.Arrays;
+import java.util.List;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+import org.anchoranalysis.core.text.TypedValue;
 import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.io.exception.AnchorIOException;
-import org.anchoranalysis.io.generator.tabular.CSVGenerator;
-import org.anchoranalysis.io.output.bean.OutputWriteSettings;
+import org.anchoranalysis.io.generator.tabular.CSVWriter;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
-/**
- * Writes a histogram to a CSV file.
- *
- * @author Owen Feehan
- */
-public class HistogramCSVGenerator extends CSVGenerator<Histogram> {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+class HistogramCSVWriter {
 
-    public HistogramCSVGenerator() {
-        super("histogram");
+    private static final List<String> HEADERS = Arrays.asList("intensity", "count");
+
+    public static void writeHistogramToFile(Histogram histogram, Path filePath, boolean ignoreZeros)
+            throws OutputWriteFailedException {
+
+        try (CSVWriter writer = CSVWriter.create(filePath)) {
+            writer.writeHeaders(HEADERS);
+
+            histogram.iterateBins(
+                    (bin, count) -> {
+
+                        // Skip any zeros if we are ignoring zeros
+                        if (!ignoreZeros || count != 0) {
+                            writer.writeRow(createTypedValues(bin, count));
+                        }
+                    });
+        }
     }
 
-    /** Iff true bins in the histogram with a zero count are not written */
-    @Getter @Setter private boolean ignoreZeros = false;
-
-    @Override
-    public void writeToFile(OutputWriteSettings outputWriteSettings, Path filePath)
-            throws OutputWriteFailedException {
-        try {
-            HistogramCSVWriter.writeHistogramToFile(getElement(), filePath, ignoreZeros);
-        } catch (AnchorIOException e) {
-            throw new OutputWriteFailedException(e);
-        }
+    private static List<TypedValue> createTypedValues(int bin, int count) {
+        return Arrays.asList(new TypedValue(bin, 0), new TypedValue(count, 0));
     }
 }

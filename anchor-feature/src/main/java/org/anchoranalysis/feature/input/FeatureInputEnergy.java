@@ -52,7 +52,7 @@ public abstract class FeatureInputEnergy implements FeatureInputParams {
 
     @Override
     public Optional<Resolution> getResolutionOptional() {
-        return energyStack.map(EnergyStack::dimensions).map(Dimensions::resolution);
+        return energyStack.map(EnergyStack::dimensions).flatMap(Dimensions::resolution);
     }
 
     @Override

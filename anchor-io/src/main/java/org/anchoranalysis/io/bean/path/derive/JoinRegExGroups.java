@@ -34,7 +34,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.regex.RegEx;
 import org.anchoranalysis.core.path.FilePathToUnixStyleConverter;
-import org.anchoranalysis.io.exception.AnchorIOException;
+import org.anchoranalysis.io.exception.DerivePathException;
 
 /**
  * Generates an outstring of the form
@@ -52,7 +52,7 @@ public class JoinRegExGroups extends DerivePath {
     // END BEAN PROPERTIES
 
     @Override
-    public Path deriveFrom(Path source, boolean debugMode) throws AnchorIOException {
+    public Path deriveFrom(Path source, boolean debugMode) throws DerivePathException {
 
         String pathInStr = FilePathToUnixStyleConverter.toStringUnixStyle(source);
 
@@ -60,7 +60,7 @@ public class JoinRegExGroups extends DerivePath {
                 regEx.match(pathInStr)
                         .orElseThrow(
                                 () ->
-                                        new AnchorIOException(
+                                        new DerivePathException(
                                                 String.format(
                                                         "RegEx string '%s' does not match '%s'",
                                                         regEx, pathInStr)));

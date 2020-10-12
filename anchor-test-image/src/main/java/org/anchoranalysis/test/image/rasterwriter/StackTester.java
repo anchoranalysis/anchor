@@ -29,7 +29,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Optional;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.io.RasterIOException;
+import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.StackWriter;
 import org.anchoranalysis.image.io.stack.StackWriteOptions;
 import org.anchoranalysis.image.stack.Stack;
@@ -60,24 +60,24 @@ public class StackTester {
     private final boolean include3D;
     // END REQUIRED ARGUMENTS
         
-    public void performTest(VoxelDataType[] channelVoxelTypes, int numberChannels, boolean makeRGB) throws RasterIOException, IOException {
+    public void performTest(VoxelDataType[] channelVoxelTypes, int numberChannels, boolean makeRGB) throws ImageIOException, IOException {
         performTest(channelVoxelTypes, numberChannels, makeRGB, Optional.empty());
     }
     
     public void performTest(VoxelDataType[] channelVoxelTypes, int numberChannels, boolean makeRGB, Optional<VoxelDataType> forceFirstChannel)
-            throws RasterIOException, IOException {
+            throws ImageIOException, IOException {
         for (VoxelDataType voxelType : channelVoxelTypes) {
             performTest(voxelType, numberChannels, makeRGB, forceFirstChannel);
         }
     }
 
     public void performTest(VoxelDataType channelVoxelType, int numberChannels, boolean makeRGB)
-            throws RasterIOException, IOException {
+            throws ImageIOException, IOException {
         performTest(channelVoxelType, numberChannels, makeRGB, Optional.empty());
     }
     
     public void performTest(VoxelDataType channelVoxelType, int numberChannels, boolean makeRGB, Optional<VoxelDataType> forceFirstChannel)
-            throws RasterIOException, IOException {
+            throws ImageIOException, IOException {
         test(channelVoxelType, numberChannels, makeRGB, ChannelFixture.SMALL_2D, false, forceFirstChannel);
         if (include3D) {
             test(channelVoxelType, numberChannels, makeRGB, ChannelFixture.SMALL_3D, true, forceFirstChannel);
@@ -92,7 +92,7 @@ public class StackTester {
             boolean do3D,
             Optional<VoxelDataType> forceFirstChannel
     )
-            throws RasterIOException, IOException {
+            throws ImageIOException, IOException {
 
         String filename =
                 IdentifierHelper.identiferFor(

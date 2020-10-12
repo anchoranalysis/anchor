@@ -41,11 +41,11 @@ public abstract class PathPrefixer extends AnchorBean<PathPrefixer> {
      * @param experimentIdentifier an identifier for the experiment
      * @param context
      * @return a prefixer
-     * @throws DerivePathException
+     * @throws PathPrefixerException
      */
     public abstract DirectoryWithPrefix outFilePrefix(
             NamedPath path, String experimentIdentifier, FilePathPrefixerContext context)
-            throws DerivePathException;
+            throws PathPrefixerException;
 
     /**
      * Provides a prefix that becomes the root-folder. The prefix should be an absolute path.
@@ -53,11 +53,11 @@ public abstract class PathPrefixer extends AnchorBean<PathPrefixer> {
      * @param experimentIdentifier an identifier for the experiment
      * @param context
      * @return a prefixer
-     * @throws DerivePathException
+     * @throws PathPrefixerException
      */
     public abstract DirectoryWithPrefix rootFolderPrefix(
             String experimentIdentifier, FilePathPrefixerContext context)
-            throws DerivePathException;
+            throws PathPrefixerException;
 
     /**
      * Converts a relative-path to an absolute-path (relative to the file-path associated with this

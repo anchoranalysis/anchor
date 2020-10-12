@@ -51,7 +51,7 @@ public class OutputSequenceStackFactory {
 
     /** A factory with no restrictions on what kind of stacks can be outputted. */
     public static final OutputSequenceStackFactory NO_RESTRICTIONS = new OutputSequenceStackFactory(
-       new StackGenerator(false, Optional.empty(), false)
+       new StackGenerator(Optional.empty(), false)
     );
     
     /**

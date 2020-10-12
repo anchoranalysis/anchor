@@ -28,6 +28,7 @@ package org.anchoranalysis.feature.energy;
 
 import lombok.Getter;
 import lombok.Setter;
+import java.util.Optional;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.image.channel.Channel;
@@ -106,7 +107,7 @@ public class EnergyStack {
      *
      * @return the image-resolution.
      */
-    public Resolution resolution() {
+    public Optional<Resolution> resolution() {
         return dimensions().resolution();
     }
 

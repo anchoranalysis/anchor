@@ -36,7 +36,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.regex.RegEx;
 import org.anchoranalysis.bean.shared.regex.RegExSimple;
-import org.anchoranalysis.io.exception.AnchorIOException;
+import org.anchoranalysis.io.exception.DerivePathException;
 
 /**
  * Generates an out string where $digit$ is replaced with the #digit group from a regex
@@ -60,7 +60,7 @@ public class InsertRegExGroups extends DerivePath {
     // END BEAN PROPERTIES
 
     @Override
-    public Path deriveFrom(Path source, boolean debugMode) throws AnchorIOException {
+    public Path deriveFrom(Path source, boolean debugMode) throws DerivePathException {
 
         String[] matches = match(source);
 
@@ -75,14 +75,14 @@ public class InsertRegExGroups extends DerivePath {
         return Paths.get(outStr);
     }
     
-    private String[] match(Path pathIn) throws AnchorIOException {
+    private String[] match(Path pathIn) throws DerivePathException {
 
         String pathInStr = ConvertPathUtilities.convertBackslashes(pathIn);
         
         Optional<String[]> matches = regEx.match(pathInStr);
 
         if (!matches.isPresent()) {
-            throw new AnchorIOException(
+            throw new DerivePathException(
                     String.format("RegEx string '%s' does not match '%s'", regEx, pathInStr));
         }
 

@@ -26,7 +26,6 @@
 package org.anchoranalysis.image.io.generator.raster;
 
 import org.anchoranalysis.core.index.SetOperationFailedException;
-import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 /**
  * Like a {@link RasterGeneratorWithElement} but {@link #assignElement(Object)} is not final and
@@ -47,11 +46,5 @@ public abstract class RasterGeneratorWithCheckedElement<T> extends RasterGenerat
     @Override
     public void assignElement(T element) throws SetOperationFailedException {
         this.element = element;
-    }
-
-    @Override
-    public void end() throws OutputWriteFailedException {
-        // Don't keep element in memory any longer that necessary
-        this.element = null;
     }
 }

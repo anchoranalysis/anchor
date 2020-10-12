@@ -36,7 +36,7 @@ import org.anchoranalysis.io.manifest.ManifestRecorder;
 import org.anchoranalysis.io.output.bean.rules.OutputEnabledRules;
 import org.anchoranalysis.io.output.outputter.BindFailedException;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
-import org.anchoranalysis.io.output.path.DerivePathException;
+import org.anchoranalysis.io.output.path.PathPrefixerException;
 import org.anchoranalysis.io.output.path.DirectoryWithPrefix;
 import org.anchoranalysis.io.output.path.FilePathPrefixerContext;
 import org.anchoranalysis.io.output.path.PathPrefixer;
@@ -110,7 +110,7 @@ public class OutputManager extends AnchorBean<OutputManager> {
                     recordedOutputs.getRecordedOutputs(),
                     silentlyDeleteExisting);
 
-        } catch (DerivePathException e) {
+        } catch (PathPrefixerException e) {
             throw new BindFailedException(e);
         }
     }

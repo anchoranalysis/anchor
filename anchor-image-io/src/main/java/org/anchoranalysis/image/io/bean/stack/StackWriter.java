@@ -28,7 +28,7 @@ package org.anchoranalysis.image.io.bean.stack;
 
 import java.nio.file.Path;
 import org.anchoranalysis.bean.AnchorBean;
-import org.anchoranalysis.image.io.RasterIOException;
+import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.generator.raster.series.StackSeries;
 import org.anchoranalysis.image.io.stack.StackWriteOptions;
 import org.anchoranalysis.image.stack.Stack;
@@ -49,11 +49,11 @@ public abstract class StackWriter extends AnchorBean<StackWriter> {
      *     channels.
      * @param writeOptions options which may influence how a raster is written.
      * @return the full path (including extension) used for writing.
-     * @throws RasterIOException if anything goes wrong whle writing.
+     * @throws ImageIOException if anything goes wrong whle writing.
      */
     public Path writeStackWithExtension(
             Stack stack, Path filePath, boolean makeRGB, StackWriteOptions writeOptions)
-            throws RasterIOException {
+            throws ImageIOException {
 
         String fileNameWithExtension = filePath.getFileName() + "." + fileExtension(writeOptions);
         Path filePathWithExtension = filePath.resolveSibling(fileNameWithExtension);
@@ -76,11 +76,11 @@ public abstract class StackWriter extends AnchorBean<StackWriter> {
      * @param makeRGB if TRUE, the image should be written as a RGB image, rather than as separate
      *     channels.
      * @param writeOptions options which may influence how a raster is written.
-     * @throws RasterIOException if anything goes wrong whle writing.
+     * @throws ImageIOException if anything goes wrong whle writing.
      */
     public abstract void writeStack(
             Stack stack, Path filePath, boolean makeRGB, StackWriteOptions writeOptions)
-            throws RasterIOException;
+            throws ImageIOException;
 
     /**
      * Writes a series of stacks to the filesystem at a particular path.
@@ -90,12 +90,12 @@ public abstract class StackWriter extends AnchorBean<StackWriter> {
      * @param makeRGB if TRUE, the image should be written as a RGB image, rather than as separate
      *     channels.
      * @param writeOptions options which may influence how a raster is written.
-     * @throws RasterIOException
+     * @throws ImageIOException
      */
     public abstract void writeStackSeries(
             StackSeries stackSeries,
             Path filePath,
             boolean makeRGB,
             StackWriteOptions writeOptions)
-            throws RasterIOException;
+            throws ImageIOException;
 }

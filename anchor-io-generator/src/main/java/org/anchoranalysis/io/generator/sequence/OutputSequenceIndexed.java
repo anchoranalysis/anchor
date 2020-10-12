@@ -58,7 +58,6 @@ public class OutputSequenceIndexed<T,S> implements OutputSequence {
     private final OutputWriteSettings settings;
 
     @Getter private SequenceType<S> sequenceType;
-    private boolean firstAdd = true;
     
     /**
      * Creates a non-incremental sequence of outputs.
@@ -81,8 +80,12 @@ public class OutputSequenceIndexed<T,S> implements OutputSequence {
         this.settings = parameters.getOutputter().getSettings();
         this.generator = parameters.getGenerator();
         this.sequenceType = sequenceType;
-        generator.start();
         
+        try {
+            this.sequenceWriter.init(fileTypes(), this.sequenceType);
+        } catch (OperationFailedException | InitException e) {
+            throw new OutputWriteFailedException(e);
+        }
     }
 
     @Override
@@ -90,52 +93,38 @@ public class OutputSequenceIndexed<T,S> implements OutputSequence {
         return sequenceWriter.isOn();
     }
 
+    /**
+     * Outputs an additional element in the sequence.
+     * 
+     * <p>This method is <i>thread-safe</i>.
+     * 
+     * @param element the element
+     * @param index index of the element to output
+     * @throws OutputWriteFailedException if the output cannot be successfully written.
+     */
     public void add(T element, S index) throws OutputWriteFailedException {
 
         try {
-            generator.assignElement(element);
-
-            // We delay the initialisation of subFolder until the first iteration and we have a
-            // valid generator
-            if (firstAdd) {
-
-                initOnFirstAdd();
-                firstAdd = false;
-            }
-
             // Then output isn't allowed and we should just exit
             if (!sequenceWriter.isOn()) {
                 return;
             }
-
-            sequenceType.update(index);
-            this.sequenceWriter.write(() -> generator, String.valueOf(index));
-        } catch (InitException | SequenceTypeException | SetOperationFailedException e) {
+            
+            synchronized(generator) {                
+                sequenceType.update(index);
+                generator.assignElement(element);
+                this.sequenceWriter.write(() -> generator, String.valueOf(index));
+            }
+        } catch (SequenceTypeException | SetOperationFailedException e) {
             throw new OutputWriteFailedException(e);
         }
-    }
-
-    @Override
-    public void close() throws OutputWriteFailedException {
-        generator.end();
     }
 
     @Override
     public Optional<RecordingWriters> writers() {
         return sequenceWriter.writers();
     }
-
-    private void initOnFirstAdd() throws InitException {
-        try {
-            // For now we only take the first FileType from the generator, we will have to modify
-            // this
-            // in future
-            this.sequenceWriter.init(fileTypes(), this.sequenceType);
-        } catch (OperationFailedException e) {
-            throw new InitException(e);
-        }
-    }
-    
+   
     private FileType[] fileTypes() throws OperationFailedException {
         return generator
             .getFileTypes(settings)

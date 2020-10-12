@@ -33,7 +33,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
-import org.anchoranalysis.io.exception.AnchorIOException;
+import org.anchoranalysis.io.exception.InputReadFailedException;
 import org.anchoranalysis.io.input.InputContextParams;
 import org.apache.commons.io.FilenameUtils;
 
@@ -61,7 +61,7 @@ public class MatchExtensions extends PathMatcher {
 
     @Override
     protected Predicate<Path> createMatcherFile(Path dir, InputContextParams inputContext)
-            throws AnchorIOException {
+            throws InputReadFailedException {
 
         Set<String> fileExtensions = fileExtensions(inputContext);
 

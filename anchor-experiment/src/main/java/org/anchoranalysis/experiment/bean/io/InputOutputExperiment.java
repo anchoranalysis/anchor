@@ -45,7 +45,7 @@ import org.anchoranalysis.experiment.io.ReplaceTask;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
-import org.anchoranalysis.io.exception.AnchorIOException;
+import org.anchoranalysis.io.exception.InputReadFailedException;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.output.bean.OutputManager;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
@@ -143,7 +143,7 @@ public class InputOutputExperiment<T extends InputFromManager, S> extends Output
 
             taskProcessor.executeLogStats(params.getOutputter(), inputs, params);
 
-        } catch (AnchorIOException | IOException e) {
+        } catch (InputReadFailedException | IOException e) {
             throw new ExperimentExecutionException(
                     "An error occured while searching for inputs", e);
         }

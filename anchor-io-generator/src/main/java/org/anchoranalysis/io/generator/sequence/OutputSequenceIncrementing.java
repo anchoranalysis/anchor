@@ -52,6 +52,14 @@ public class OutputSequenceIncrementing<T> implements OutputSequence {
         delegate = new OutputSequenceIndexed<>(parameters, new IncrementingIntegers(startIndex));
     }
 
+    /**
+     * Outputs an additional element in the sequence.
+     * 
+     * <p>This method is <i>thread-safe</i>.
+     * 
+     * @param element the element
+     * @throws OutputWriteFailedException if the output cannot be successfully written.
+     */
     public void add(T element) throws OutputWriteFailedException {
         try {
             delegate.add(element, iteration);
@@ -61,11 +69,6 @@ public class OutputSequenceIncrementing<T> implements OutputSequence {
             //  2. A downstream generator has already updated its sequence-type.
             iteration++;
         }
-    }
-
-    @Override
-    public void close() throws OutputWriteFailedException {
-        delegate.close();
     }
 
     @Override

@@ -27,6 +27,7 @@
 package org.anchoranalysis.mpp.mark;
 
 import java.io.Serializable;
+import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.core.geometry.Point3d;
@@ -108,8 +109,8 @@ public abstract class MarkWithPosition extends Mark implements Serializable {
     }
 
     @Override
-    public OverlayProperties generateProperties(Resolution sr) {
-        OverlayProperties op = super.generateProperties(sr);
+    public OverlayProperties generateProperties(Optional<Resolution> resolution) {
+        OverlayProperties op = super.generateProperties(resolution);
 
         int dimensions = numberDimensions();
 

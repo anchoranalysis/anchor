@@ -29,7 +29,7 @@ package org.anchoranalysis.image.io.generator.raster;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.io.RasterIOException;
+import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.StackWriter;
 import org.anchoranalysis.image.io.stack.StackWriteOptions;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
@@ -48,15 +48,16 @@ public class GeneratorOutputter {
      *
      * @param outputWriteSettings
      * @return a writer (always non-null)
-     * @throws RasterIOException if a writer doesn't exist
+     * @throws ImageIOException if a writer doesn't exist
      */
     public static StackWriter writer(OutputWriteSettings outputWriteSettings)
-            throws RasterIOException {
+            throws ImageIOException {
         StackWriter defaultWriter =
                 (StackWriter) outputWriteSettings.getWriterInstance(StackWriter.class);
         if (defaultWriter == null) {
-            throw new RasterIOException("No default stackWriter has been set");
+            throw new ImageIOException("No default stackWriter has been set");
         }
+        // We duplicate the writer to make it thread safe
         return defaultWriter;
     }
 
@@ -65,7 +66,7 @@ public class GeneratorOutputter {
             throws OperationFailedException {
         try {
             return writer(outputWriteSettings).fileExtension(writeOptions);
-        } catch (RasterIOException e) {
+        } catch (ImageIOException e) {
             throw new OperationFailedException(e);
         }
     }

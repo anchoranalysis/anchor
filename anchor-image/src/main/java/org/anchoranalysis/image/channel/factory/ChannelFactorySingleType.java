@@ -29,6 +29,7 @@ package org.anchoranalysis.image.channel.factory;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.experimental.Accessors;
+import java.util.Optional;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.extent.Resolution;
@@ -52,7 +53,7 @@ public abstract class ChannelFactorySingleType {
         return create(factory.createUninitialized(dimensions.extent()), dimensions.resolution());
     }
 
-    public Channel create(Voxels<?> bufferAccess, Resolution resolution) {
+    public Channel create(Voxels<?> bufferAccess, Optional<Resolution> resolution) {
         return new Channel(bufferAccess, resolution);
     }
 }

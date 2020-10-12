@@ -34,6 +34,7 @@ import ij.measure.Calibration;
 import ij.process.ImageProcessor;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import java.util.Optional;
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.convert.UnsignedByteBuffer;
@@ -65,7 +66,7 @@ public class ConvertToImagePlus {
      * @return a newly created image-plus, reusing the input voxel's buffer without copying.
      */
     public static ImagePlus from(VoxelsWrapper voxels) {
-        Dimensions dimensions = new Dimensions(voxels.any().extent(), new Resolution());
+        Dimensions dimensions = new Dimensions(voxels.any().extent(), Optional.empty());
         ImageStack stack = ImageStackFactory.createSingleChannel(voxels);
         return createImagePlus(stack, dimensions, 1, 1, false);
     }
@@ -129,7 +130,9 @@ public class ConvertToImagePlus {
 
         // If we're making an RGB then we need to convert our stack
         ImagePlus image = composite.create(numberChannels, makeComposite);
-        configureCalibration(image.getCalibration(), dimensions.resolution());
+        dimensions.resolution().ifPresent( resolution->
+            configureCalibration(image.getCalibration(), resolution)
+        );
 
         checkNumberSlices(image, dimensions);
 

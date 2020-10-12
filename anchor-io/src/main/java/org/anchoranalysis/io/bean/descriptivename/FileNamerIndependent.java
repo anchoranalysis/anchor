@@ -32,45 +32,45 @@ import java.util.Collection;
 import java.util.List;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.io.input.DescriptiveFile;
+import org.anchoranalysis.io.input.NamedFile;
 
 /**
- * Calculates the descriptive-name independently for each file
+ * Base class for methods that derive the name independently for each file.
  *
  * @author Owen Feehan
  */
-public abstract class DescriptiveNameFromFileIndependent extends DescriptiveNameFromFile {
+public abstract class FileNamerIndependent extends FileNamer {
 
     @Override
-    public List<DescriptiveFile> describe(
+    public List<NamedFile> deriveName(
             Collection<File> files, String elseName, Logger logger) {
 
-        List<DescriptiveFile> out = new ArrayList<>();
+        List<NamedFile> out = new ArrayList<>();
 
         int i = 0;
-        for (File f : files) {
-            String descriptiveName = createDescriptiveNameOrElse(f, i++, elseName, logger);
-            out.add(new DescriptiveFile(f, descriptiveName));
+        for (File file : files) {
+            String name = deriveNameOrElse(file, i++, elseName, logger);
+            out.add(new NamedFile(name, file));
         }
 
         return out;
     }
 
-    protected abstract String createDescriptiveName(File file, int index) throws CreateException;
+    protected abstract String deriveName(File file, int index) throws CreateException;
 
-    private String createDescriptiveNameOrElse(
+    private String deriveNameOrElse(
             File file, int index, String elseName, Logger logger) {
         try {
-            return createDescriptiveName(file, index);
+            return deriveName(file, index);
         } catch (CreateException e) {
 
             String elseNameWithIndex = String.format("%s04%d", elseName, index);
 
             logger.errorReporter()
                     .recordError(
-                            DescriptiveNameFromFileIndependent.class,
+                            FileNamerIndependent.class,
                             String.format(
-                                    "Cannot create a descriptive-name for file %s and index %d. Using '%s' instead.",
+                                    "Cannot create a name for file %s and index %d. Using '%s' instead.",
                                     file.getPath(), index, elseNameWithIndex));
             return elseNameWithIndex;
         }

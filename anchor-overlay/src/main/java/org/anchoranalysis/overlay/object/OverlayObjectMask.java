@@ -27,6 +27,7 @@
 package org.anchoranalysis.overlay.object;
 
 import lombok.Getter;
+import java.util.Optional;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
@@ -113,7 +114,7 @@ public class OverlayObjectMask extends Overlay {
     }
 
     @Override
-    public OverlayProperties generateProperties(Resolution sr) {
+    public OverlayProperties generateProperties(Optional<Resolution> resolution) {
         // TODO take the properties from the object-mask
         OverlayProperties out = new OverlayProperties();
         out.add("id", id);

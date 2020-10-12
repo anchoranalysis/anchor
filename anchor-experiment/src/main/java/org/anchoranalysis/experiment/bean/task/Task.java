@@ -226,7 +226,7 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
             if (params.isDetailedLogging()) {
 
                 loggerJob.logFormatted(
-                        "File processing started: %s", params.getInput().descriptiveName());
+                        "File processing started: %s", params.getInput().name());
             }
 
             executeJobAdditionalOutputs(params);
@@ -250,7 +250,7 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
             if (params.isDetailedLogging()) {
                 loggerJob.logFormatted(
                         "File processing ended:   %s (time taken = %ds)",
-                        params.getInput().descriptiveName(), stopWatchFile.getTime() / 1000);
+                        params.getInput().name(), stopWatchFile.getTime() / 1000);
                 MemoryUtilities.logMemoryUsage("End file processing", loggerJob);
             }
 

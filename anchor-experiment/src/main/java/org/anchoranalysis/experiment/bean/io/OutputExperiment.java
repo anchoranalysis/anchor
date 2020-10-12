@@ -31,6 +31,7 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.experiment.ExperimentExecutionArguments;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.bean.Experiment;
@@ -39,13 +40,12 @@ import org.anchoranalysis.experiment.bean.log.LoggingDestination;
 import org.anchoranalysis.experiment.bean.log.ToConsole;
 import org.anchoranalysis.experiment.log.StatefulMessageLogger;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
-import org.anchoranalysis.io.exception.AnchorIOException;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
 import org.anchoranalysis.io.output.bean.OutputManager;
 import org.anchoranalysis.io.output.enabled.multi.MultiLevelOutputEnabled;
 import org.anchoranalysis.io.output.outputter.BindFailedException;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
-import org.anchoranalysis.io.output.path.DerivePathException;
+import org.anchoranalysis.io.output.path.PathPrefixerException;
 import org.anchoranalysis.io.output.recorded.MultiLevelRecordedOutputs;
 import org.anchoranalysis.io.output.recorded.RecordedOutputsWithRules;
 import org.apache.commons.lang.time.StopWatch;
@@ -100,7 +100,7 @@ public abstract class OutputExperiment extends Experiment {
         try {
             doExperimentWithParams(createParams(arguments));
 
-        } catch (AnchorIOException e) {
+        } catch (CreateException e) {
             throw new ExperimentExecutionException(e);
         }
     }
@@ -144,7 +144,7 @@ public abstract class OutputExperiment extends Experiment {
     }
 
     private ParametersExperiment createParams(ExperimentExecutionArguments arguments)
-            throws AnchorIOException {
+            throws CreateException {
 
         ManifestRecorder experimentalManifest = new ManifestRecorder();
 
@@ -176,10 +176,10 @@ public abstract class OutputExperiment extends Experiment {
                     getOutput().getFilePathPrefixer(),
                     createLogger(rootOutputter, arguments),
                     useDetailedLogging());
-        } catch (DerivePathException e) {
-            throw new AnchorIOException("Cannot create params-context", e);
+        } catch (PathPrefixerException e) {
+            throw new CreateException("Cannot create params-context", e);
         } catch (BindFailedException e) {
-            throw new AnchorIOException("Bind failed", e);
+            throw new CreateException("Bind failed", e);
         }
     }
 

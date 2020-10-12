@@ -28,6 +28,7 @@ package org.anchoranalysis.mpp.overlay;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import java.util.Optional;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
@@ -112,7 +113,7 @@ public class OverlayMark extends Overlay {
     }
 
     @Override
-    public OverlayProperties generateProperties(Resolution sr) {
-        return mark.generateProperties(sr);
+    public OverlayProperties generateProperties(Optional<Resolution> resolution) {
+        return mark.generateProperties(resolution);
     }
 }

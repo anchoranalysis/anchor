@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-io-generator
+ * anchor-io
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -23,5 +23,43 @@
  * THE SOFTWARE.
  * #L%
  */
-/** Generators for writing histograms. */
-package org.anchoranalysis.io.generator.histogram;
+
+package org.anchoranalysis.io.input;
+
+import java.io.File;
+import java.nio.file.Path;
+import java.util.function.BiFunction;
+import lombok.AllArgsConstructor;
+import lombok.Value;
+
+/**
+ * A file with an associated unique name.
+ * 
+ * This is an <i>immutable</i> class.
+ * 
+ * <p>The name is intended to be a compact unique identifier for a file (in a particular context).
+ * 
+ * @author Owen Feehan
+ */
+@AllArgsConstructor @Value
+public class NamedFile {
+    
+    /** The name associated with the file. */
+    private String name;
+    
+    /** The file. */
+    private File file;
+
+    /**
+     * The path of {@link #getFile}.
+     * 
+     * @return the path
+     */
+    public Path getPath() {
+        return file.toPath();
+    }
+    
+    public NamedFile mapName(BiFunction<String,File,String> function) {
+        return new NamedFile(function.apply(name,file), file);
+    }
+}

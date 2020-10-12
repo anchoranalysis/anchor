@@ -226,16 +226,14 @@ public abstract class Mark implements Serializable, Identifiable {
         this.id = id;
     }
 
-    public OverlayProperties generateProperties(Resolution resolution) {
+    public OverlayProperties generateProperties(Optional<Resolution> resolution) {
 
         OverlayProperties nvc = new OverlayProperties();
         nvc.add("Type", getName());
         nvc.add("ID", Integer.toString(getId()));
-        if (resolution == null) {
-            return nvc;
+        if (resolution.isPresent()) {
+             addPropertiesForRegions(nvc, resolution.get().unitConvert() );
         }
-
-        addPropertiesForRegions(nvc, resolution.unitConvert());
         return nvc;
     }
 

@@ -27,12 +27,17 @@
 package org.anchoranalysis.image.extent;
 
 import java.io.Serializable;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import org.anchoranalysis.core.axis.AxisType;
+import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.Tuple3d;
 import org.anchoranalysis.image.scale.ScaleFactor;
+import com.google.common.base.Preconditions;
 
 /**
  * The resolution of an image.
@@ -43,7 +48,7 @@ import org.anchoranalysis.image.scale.ScaleFactor;
  *
  * @author Owen Feehan
  */
-@EqualsAndHashCode
+@EqualsAndHashCode @AllArgsConstructor(access=AccessLevel.PRIVATE)
 public final class Resolution implements Serializable {
 
     /** */
@@ -53,20 +58,38 @@ public final class Resolution implements Serializable {
     private final Point3d res;
 
     public Resolution() {
-        this(1.0, 1.0, 1.0);
+        this.res = new Point3d(1.0, 1.0, 1.0);
     }
 
-    public Resolution(double x, double y, double z) {
+    public Resolution(double x, double y, double z) throws CreateException {
         this(new Point3d(x, y, z));
     }
 
-    public Resolution(Tuple3d res) {
+    /**
+     * Constructs a resolution from a tuple.
+     * 
+     * <p>Note all dimensions must have positive (i.e. non-zero) resolution.
+     * 
+     * <p>X and Y are not allowed have NaN but this is acceptable for the Z-value.
+     * 
+     * @param tuple the resolution for X, Y and Z
+     * @throws CreateException 
+     */
+    public Resolution(Tuple3d tuple) throws CreateException {
+        checkPositive(tuple.x(), "x");
+        checkPositive(tuple.y(), "y");
+        checkPositive(tuple.z(), "z");
+        
+        checkNaN(tuple.x(), "x");
+        checkNaN(tuple.y(), "y");
+        
         // Copy to ensure it is independent of any changes outside
-        this.res = new Point3d(res);
+        this.res = new Point3d(tuple);
     }
 
     public Resolution duplicateFlattenZ(int prevZSize) {
-        return new Resolution(res.x(), res.y(), res.z() * prevZSize);
+        Preconditions.checkArgument(prevZSize > 0);
+        return new Resolution( new Point3d(res.x(), res.y(), res.z() * prevZSize) );
     }
 
     public double x() {
@@ -89,8 +112,12 @@ public final class Resolution implements Serializable {
         return x() * y();
     }
 
-    public Resolution scaleXY(ScaleFactor sf) {
-        return new Resolution(res.x() * sf.x(), res.y() * sf.y(), res.z());
+    public Resolution scaleXY(ScaleFactor scaleFactor) {
+        try {
+            return new Resolution(res.x() * scaleFactor.x(), res.y() * scaleFactor.y(), res.z());
+        } catch (CreateException e) {
+            throw new AnchorImpossibleSituationException();
+        }
     }
 
     private double max2D() {
@@ -116,6 +143,10 @@ public final class Resolution implements Serializable {
         } else {
             return min2D();
         }
+    }
+        
+    public boolean hasEqualXAndY() {
+        return res.x()==res.y();
     }
 
     /**
@@ -217,5 +248,19 @@ public final class Resolution implements Serializable {
     private double sumSquaresZRelative(double distanceX, double distanceY, double distanceZ) {
         distanceZ *= zRelative();
         return Math.pow(distanceX, 2) + Math.pow(distanceY, 2) + Math.pow(distanceZ, 2);
+    }
+        
+    private static void checkPositive(double value, String dimension) throws CreateException {
+        if (value <= 0) {
+            throw new CreateException(
+               String.format("Dimension %s has a non-positive value: %d", dimension, value));
+        }
+    }
+    
+    private static void checkNaN(double value, String dimension) throws CreateException {
+        if (Double.isNaN(value)) {
+            throw new CreateException(
+               String.format("Dimension %s has NaN which is not allowed.", dimension));
+        }
     }
 }

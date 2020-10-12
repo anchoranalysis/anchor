@@ -28,7 +28,6 @@ package org.anchoranalysis.feature.io.csv;
 
 import java.nio.file.Path;
 import java.util.List;
-import org.anchoranalysis.io.exception.AnchorIOException;
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.generator.tabular.CSVGenerator;
 import org.anchoranalysis.io.generator.tabular.CSVWriter;
@@ -62,7 +61,7 @@ public abstract class FeatureTableCSVGenerator<T> extends CSVGenerator<T> {
 
         try (CSVWriter writer = CSVWriter.create(filePath)) {
             writeFeaturesToCSV(writer, getElement(), headerNames);
-        } catch (AnchorIOException e) {
+        } catch (OutputWriteFailedException e) {
             throw new OutputWriteFailedException(e);
         }
     }

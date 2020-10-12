@@ -66,16 +66,6 @@ public class SingleFileTypeGeneratorBridge<S, T, V>
     }
 
     @Override
-    public void start() throws OutputWriteFailedException {
-        delegate.start();
-    }
-
-    @Override
-    public void end() throws OutputWriteFailedException {
-        delegate.end();
-    }
-
-    @Override
     public String getFileExtension(OutputWriteSettings outputWriteSettings)
             throws OperationFailedException {
         return delegate.getFileExtension(outputWriteSettings);

@@ -33,7 +33,7 @@ import java.util.function.Predicate;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
-import org.anchoranalysis.io.exception.AnchorIOException;
+import org.anchoranalysis.io.exception.InputReadFailedException;
 import org.anchoranalysis.io.input.InputContextParams;
 import org.anchoranalysis.io.path.findmatching.FindFilesException;
 import org.anchoranalysis.io.path.findmatching.FindMatchingFiles;
@@ -58,7 +58,7 @@ public abstract class PathMatcher extends AnchorBean<PathMatcher> {
      * @param acceptDirectoryErrors if true, continues when a directory-access-error occurs (logging
      *     it), otherwise throws an exception
      * @return a collection of files matching the conditions
-     * @throws AnchorIOException if an error occurrs reading/writing or interacting with the
+     * @throws InputReadFailedException if an error occurrs reading/writing or interacting with the
      *     filesystem
      */
     public Collection<File> matchingFiles(
@@ -68,15 +68,15 @@ public abstract class PathMatcher extends AnchorBean<PathMatcher> {
             boolean acceptDirectoryErrors,
             int maxDirDepth,
             InputManagerParams params)
-            throws AnchorIOException {
+            throws InputReadFailedException {
 
         if (dir.toString().isEmpty()) {
-            throw new AnchorIOException(
+            throw new InputReadFailedException(
                     "The directory is unspecified (an empty string) which is not allowed. Consider using '.' for the current working directory");
         }
 
         if (!dir.toFile().exists() || !dir.toFile().isDirectory()) {
-            throw new AnchorIOException(
+            throw new InputReadFailedException(
                     String.format(
                             "Directory '%s' does not exist", dir.toAbsolutePath().normalize()));
         }
@@ -97,7 +97,7 @@ public abstract class PathMatcher extends AnchorBean<PathMatcher> {
                             acceptDirectoryErrors,
                             params.getLogger());
         } catch (FindFilesException e) {
-            throw new AnchorIOException("Cannot find matching files", e);
+            throw new InputReadFailedException("Cannot find matching files", e);
         }
     }
 
@@ -110,7 +110,7 @@ public abstract class PathMatcher extends AnchorBean<PathMatcher> {
     }
 
     protected abstract Predicate<Path> createMatcherFile(Path dir, InputContextParams inputContext)
-            throws AnchorIOException;
+            throws InputReadFailedException;
 
     private FindMatchingFiles createMatchingFiles(
             ProgressReporter progressReporter, boolean recursive) {

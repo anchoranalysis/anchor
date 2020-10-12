@@ -25,9 +25,9 @@
  */
 package org.anchoranalysis.core.path;
 
-import org.anchoranalysis.core.error.AnchorCheckedException;
+import org.anchoranalysis.core.error.friendly.AnchorFriendlyCheckedException;
 
-public class PathDifferenceException extends AnchorCheckedException {
+public class PathDifferenceException extends AnchorFriendlyCheckedException {
 
     /**
      * 

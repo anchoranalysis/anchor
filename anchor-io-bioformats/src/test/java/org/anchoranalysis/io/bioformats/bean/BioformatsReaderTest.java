@@ -25,7 +25,7 @@
  */
 package org.anchoranalysis.io.bioformats.bean;
 
-import org.anchoranalysis.image.io.RasterIOException;
+import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.io.bioformats.ConfigureBioformatsLogging;
 import org.anchoranalysis.test.TestLoader;
 import org.junit.Before;
@@ -59,12 +59,12 @@ public class BioformatsReaderTest {
     }
 
     @Test
-    public void testJpeg() throws RasterIOException {
+    public void testJpeg() throws ImageIOException {
         tester.assertRGBAndUnsigned8Bit(EXTENSION_JPEG, 4351, 1048);
     }
 
     @Test
-    public void testTiff() throws RasterIOException {
+    public void testTiff() throws ImageIOException {
         tester.assertRGBAndUnsigned8BitUncompressed(EXTENSION_TIFF);
         tester.assertUnsigned16Bit(EXTENSION_TIFF, 16);
         tester.assertUnsigned8BitThreeChannels(
@@ -73,7 +73,7 @@ public class BioformatsReaderTest {
     }
 
     @Test
-    public void testPng() throws RasterIOException {
+    public void testPng() throws ImageIOException {
         tester.assertRGBAndUnsigned8BitUncompressed(EXTENSION_PNG);
     }
 }

@@ -30,7 +30,7 @@ import java.util.List;
 import java.util.Optional;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.image.extent.Dimensions;
-import org.anchoranalysis.image.io.RasterIOException;
+import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.TimeSequence;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
@@ -45,12 +45,12 @@ public interface OpenedRaster extends AutoCloseable {
     // Opens a time-series as a particular type. If it's not the correct type, an error is thrown
     default TimeSequence openCheckType(
             int seriesIndex, ProgressReporter progressReporter, VoxelDataType channelDataType)
-            throws RasterIOException {
+            throws ImageIOException {
 
         TimeSequence sequence = open(seriesIndex, progressReporter);
 
         if (!sequence.allChannelsHaveType(channelDataType)) {
-            throw new RasterIOException(
+            throw new ImageIOException(
                     String.format("File does not have dataType %s", channelDataType));
         }
 
@@ -58,22 +58,22 @@ public interface OpenedRaster extends AutoCloseable {
     }
 
     /** Open when we don't have a specific-type */
-    TimeSequence open(int seriesIndex, ProgressReporter progressReporter) throws RasterIOException;
+    TimeSequence open(int seriesIndex, ProgressReporter progressReporter) throws ImageIOException;
 
     int numberSeries();
 
     // Can be null if no channel names exist
     Optional<List<String>> channelNames();
 
-    int numberChannels() throws RasterIOException;
+    int numberChannels() throws ImageIOException;
 
-    int numberFrames() throws RasterIOException;
+    int numberFrames() throws ImageIOException;
 
-    int bitDepth() throws RasterIOException;
+    int bitDepth() throws ImageIOException;
 
-    boolean isRGB() throws RasterIOException;
+    boolean isRGB() throws ImageIOException;
 
-    void close() throws RasterIOException;
+    void close() throws ImageIOException;
 
-    Dimensions dimensionsForSeries(int seriesIndex) throws RasterIOException;
+    Dimensions dimensionsForSeries(int seriesIndex) throws ImageIOException;
 }

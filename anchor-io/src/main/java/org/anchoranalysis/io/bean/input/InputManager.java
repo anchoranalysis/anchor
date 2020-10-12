@@ -28,7 +28,7 @@ package org.anchoranalysis.io.bean.input;
 
 import java.util.List;
 import org.anchoranalysis.bean.AnchorBean;
-import org.anchoranalysis.io.exception.AnchorIOException;
+import org.anchoranalysis.io.exception.InputReadFailedException;
 import org.anchoranalysis.io.input.InputFromManager;
 
 /**
@@ -46,7 +46,7 @@ public abstract class InputManager<T extends InputFromManager> extends AnchorBea
      *
      * @param params
      * @return
-     * @throws AnchorIOException
+     * @throws InputReadFailedException
      */
-    public abstract List<T> inputs(InputManagerParams params) throws AnchorIOException;
+    public abstract List<T> inputs(InputManagerParams params) throws InputReadFailedException;
 }

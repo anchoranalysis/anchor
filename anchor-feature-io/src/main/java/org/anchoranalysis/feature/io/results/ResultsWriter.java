@@ -35,9 +35,9 @@ import org.anchoranalysis.feature.io.csv.RowLabels;
 import org.anchoranalysis.feature.io.results.group.GroupWriter;
 import org.anchoranalysis.feature.list.NamedFeatureStore;
 import org.anchoranalysis.feature.results.ResultsVector;
-import org.anchoranalysis.io.exception.AnchorIOException;
 import org.anchoranalysis.io.manifest.ManifestFolderDescription;
 import org.anchoranalysis.io.manifest.sequencetype.StringsWithoutOrder;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.InputOutputContextSubdirectoryCache;
 
@@ -77,10 +77,10 @@ public class ResultsWriter implements Closeable {
      *
      * @param outputMetadata metadata needed for determing output-names and CSV headers.
      * @param context defines the direction in which outputs occur.
-     * @throws AnchorIOException if I/O fails.
+     * @throws OutputWriteFailedException if writing fails
      */
     public ResultsWriter(ResultsWriterMetadata outputMetadata, InputOutputContext context)
-            throws AnchorIOException {
+            throws OutputWriteFailedException {
 
         // Where non-group results are outputted
         writer =
@@ -118,13 +118,13 @@ public class ResultsWriter implements Closeable {
      * @param includeGroups iff true a group-column is included in the CSV file and the group
      *     exports occur, otherwise not
      * @param context input-output context
-     * @throws AnchorIOException if any input-output errors occur
+     * @throws OutputWriteFailedException if writing fails
      */
     public void writeResultsForAllGroups(
             Optional<NamedFeatureStore<FeatureInputResults>> featuresAggregate,
             boolean includeGroups,
             InputOutputContext context)
-            throws AnchorIOException {
+            throws OutputWriteFailedException {
 
         InputOutputContextSubdirectoryCache contextGroups =
                 new InputOutputContextSubdirectoryCache(

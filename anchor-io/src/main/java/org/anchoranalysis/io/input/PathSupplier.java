@@ -27,12 +27,12 @@ package org.anchoranalysis.io.input;
 
 import java.nio.file.Path;
 import org.anchoranalysis.core.cache.CachedSupplier;
-import org.anchoranalysis.io.exception.AnchorIOException;
+import org.anchoranalysis.io.exception.DerivePathException;
 
 @FunctionalInterface
 public interface PathSupplier {
 
-    Path get() throws AnchorIOException;
+    Path get() throws DerivePathException;
 
     public static PathSupplier cache(PathSupplier supplier) {
         return CachedSupplier.cache(supplier::get)::get;

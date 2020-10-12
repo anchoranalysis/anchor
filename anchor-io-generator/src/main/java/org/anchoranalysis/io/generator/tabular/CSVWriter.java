@@ -32,9 +32,9 @@ import java.util.List;
 import java.util.Optional;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.text.TypedValue;
-import org.anchoranalysis.io.exception.AnchorIOException;
 import org.anchoranalysis.io.generator.text.TextFileOutput;
 import org.anchoranalysis.io.generator.text.TextFileOutputter;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
 
 // Can be called by different threads, so synchronization is important
@@ -54,10 +54,10 @@ public class CSVWriter implements AutoCloseable {
      * @param outputName output-name
      * @param outputter output-manager
      * @return the csv-writer if it's allowed, or empty if it's not.
-     * @throws AnchorIOException
+     * @throws OutputWriteFailedException if outputting fails
      */
     public static Optional<CSVWriter> createFromOutputter(
-            String outputName, OutputterChecked outputter) throws AnchorIOException {
+            String outputName, OutputterChecked outputter) throws OutputWriteFailedException {
 
         if (!outputter.getOutputsEnabled().isOutputEnabled(outputName)) {
             return Optional.empty();
@@ -75,9 +75,9 @@ public class CSVWriter implements AutoCloseable {
      *
      * @param path path to write the CSV to
      * @return the csv-writer
-     * @throws AnchorIOException
+     * @throws OutputWriteFailedException
      */
-    public static CSVWriter create(Path path) throws AnchorIOException {
+    public static CSVWriter create(Path path) throws OutputWriteFailedException {
         TextFileOutput output = new TextFileOutput(path.toString());
         output.start();
         return new CSVWriter(output);

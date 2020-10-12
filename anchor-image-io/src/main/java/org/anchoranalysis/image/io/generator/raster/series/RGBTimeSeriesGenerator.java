@@ -29,7 +29,7 @@ package org.anchoranalysis.image.io.generator.raster.series;
 import java.nio.file.Path;
 import java.util.Optional;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.io.RasterIOException;
+import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.StackWriter;
 import org.anchoranalysis.image.io.generator.raster.GeneratorOutputter;
 import org.anchoranalysis.image.io.stack.StackWriteOptions;
@@ -55,7 +55,7 @@ public class RGBTimeSeriesGenerator extends OneStageGenerator<StackSeries> {
             StackWriter writer =
                     GeneratorOutputter.writer(outputWriteSettings);
             writer.writeStackSeries(getElement(), filePath, true, rasterOptions);
-        } catch (RasterIOException e) {
+        } catch (ImageIOException e) {
             throw new OutputWriteFailedException(e);
         }
     }

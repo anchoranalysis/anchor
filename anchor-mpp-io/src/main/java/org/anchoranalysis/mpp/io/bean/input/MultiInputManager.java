@@ -43,7 +43,7 @@ import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.bean.path.derive.DerivePath;
-import org.anchoranalysis.io.exception.AnchorIOException;
+import org.anchoranalysis.io.exception.InputReadFailedException;
 import org.anchoranalysis.mpp.io.input.MultiInput;
 
 // An input stack
@@ -96,7 +96,7 @@ public class MultiInputManager extends InputManager<MultiInput> {
     }
 
     @Override
-    public List<MultiInput> inputs(InputManagerParams params) throws AnchorIOException {
+    public List<MultiInput> inputs(InputManagerParams params) throws InputReadFailedException {
         return FunctionalList.mapToList(
                 input.inputs(params),
                 mainStack -> {

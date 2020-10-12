@@ -38,7 +38,7 @@ import org.anchoranalysis.core.progress.ProgressReporterOneOfMany;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
-import org.anchoranalysis.io.exception.AnchorIOException;
+import org.anchoranalysis.io.exception.InputReadFailedException;
 
 public class AnnotationInputManager<T extends ProvidesStackInput, S extends AnnotatorStrategy>
         extends InputManager<AnnotationWithStrategy<S>> {
@@ -51,7 +51,7 @@ public class AnnotationInputManager<T extends ProvidesStackInput, S extends Anno
 
     @Override
     public List<AnnotationWithStrategy<S>> inputs(InputManagerParams params)
-            throws AnchorIOException {
+            throws InputReadFailedException {
 
         try (ProgressReporterMultiple progressMultiple =
                 new ProgressReporterMultiple(params.getProgressReporter(), 2)) {
@@ -69,7 +69,7 @@ public class AnnotationInputManager<T extends ProvidesStackInput, S extends Anno
     }
 
     private List<AnnotationWithStrategy<S>> createListInput(
-            List<T> listInputs, ProgressReporter progressReporter) throws AnchorIOException {
+            List<T> listInputs, ProgressReporter progressReporter) throws InputReadFailedException {
         return FunctionalProgress.mapList(
                 listInputs,
                 progressReporter,

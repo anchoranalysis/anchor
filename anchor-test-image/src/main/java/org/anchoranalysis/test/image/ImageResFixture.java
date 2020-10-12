@@ -28,6 +28,8 @@ package org.anchoranalysis.test.image;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.image.extent.Resolution;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -36,6 +38,10 @@ public class ImageResFixture {
     public static final Resolution INSTANCE = create();
 
     private static Resolution create() {
-        return new Resolution(0.01, 0.01, 0.025);
+        try {
+            return new Resolution(0.01, 0.01, 0.025);
+        } catch (CreateException e) {
+            throw new AnchorImpossibleSituationException();
+        }
     }
 }

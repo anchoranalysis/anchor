@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-io
+ * anchor-io-generator
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -23,21 +23,5 @@
  * THE SOFTWARE.
  * #L%
  */
-
-package org.anchoranalysis.io.output.path;
-
-import org.anchoranalysis.core.error.friendly.AnchorFriendlyCheckedException;
-
-public class DerivePathException extends AnchorFriendlyCheckedException {
-
-    /** */
-    private static final long serialVersionUID = 1L;
-
-    public DerivePathException(String message) {
-        super(message);
-    }
-
-    public DerivePathException(Throwable cause) {
-        super(cause);
-    }
-}
+/** Generators for writing histograms. */
+package org.anchoranalysis.image.io.generator.histogram;

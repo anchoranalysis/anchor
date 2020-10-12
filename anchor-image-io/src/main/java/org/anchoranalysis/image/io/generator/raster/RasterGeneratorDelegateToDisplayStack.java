@@ -51,16 +51,6 @@ public class RasterGeneratorDelegateToDisplayStack<T> extends RasterGenerator<T>
     // START END ARGUMENTS
 
     @Override
-    public void start() throws OutputWriteFailedException {
-        delegate.start();
-    }
-
-    @Override
-    public void end() throws OutputWriteFailedException {
-        delegate.end();
-    }
-
-    @Override
     public boolean isRGB() {
         return rgb;
     }

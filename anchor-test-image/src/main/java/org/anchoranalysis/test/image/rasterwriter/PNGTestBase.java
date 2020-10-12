@@ -27,7 +27,7 @@ package org.anchoranalysis.test.image.rasterwriter;
 
 import java.io.IOException;
 import java.util.Optional;
-import org.anchoranalysis.image.io.RasterIOException;
+import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.StackWriter;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedIntVoxelType;
@@ -61,37 +61,37 @@ public abstract class PNGTestBase extends RasterWriterTestBase {
     }
 
     @Test
-    public void testSingleChannel() throws RasterIOException, IOException {
+    public void testSingleChannel() throws ImageIOException, IOException {
         tester.testSingleChannel(ALL_SUPPORTED_VOXEL_TYPES);
     }
 
-    @Test(expected = RasterIOException.class)
-    public void testSingleChannelInt() throws RasterIOException, IOException {
+    @Test(expected = ImageIOException.class)
+    public void testSingleChannelInt() throws ImageIOException, IOException {
         tester.testSingleChannel(UnsignedIntVoxelType.INSTANCE);
     }
 
-    @Test(expected = RasterIOException.class)
-    public void testSingleChannelRGB() throws RasterIOException, IOException {
+    @Test(expected = ImageIOException.class)
+    public void testSingleChannelRGB() throws ImageIOException, IOException {
         tester.testSingleChannelRGB();
     }
 
-    @Test(expected = RasterIOException.class)
-    public void testTwoChannels() throws RasterIOException, IOException {
+    @Test(expected = ImageIOException.class)
+    public void testTwoChannels() throws ImageIOException, IOException {
         tester.testTwoChannels();
     }
 
-    @Test(expected = RasterIOException.class)
-    public void testThreeChannelsSeparate() throws RasterIOException, IOException {
+    @Test(expected = ImageIOException.class)
+    public void testThreeChannelsSeparate() throws ImageIOException, IOException {
         tester.testThreeChannelsSeparate();
     }
 
     @Test
-    public void testThreeChannelsRGBUnsignedByte() throws RasterIOException, IOException {
+    public void testThreeChannelsRGBUnsignedByte() throws ImageIOException, IOException {
         tester.testThreeChannelsRGB(UnsignedByteVoxelType.INSTANCE);
     }
 
-    @Test(expected = RasterIOException.class)
-    public void testFourChannels() throws RasterIOException, IOException {
+    @Test(expected = ImageIOException.class)
+    public void testFourChannels() throws ImageIOException, IOException {
         tester.testFourChannels();
     }
 }

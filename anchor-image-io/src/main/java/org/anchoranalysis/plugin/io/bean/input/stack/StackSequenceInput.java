@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.io.bean.input.stack;
 
-import org.anchoranalysis.image.io.RasterIOException;
+import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
 
 /**
@@ -37,5 +37,5 @@ import org.anchoranalysis.image.io.input.ProvidesStackInput;
 public interface StackSequenceInput extends ProvidesStackInput {
 
     /** Creates a TimeSequence of stacks for a particular series number */
-    TimeSequenceSupplier createStackSequenceForSeries(int seriesNum) throws RasterIOException;
+    TimeSequenceSupplier createStackSequenceForSeries(int seriesNum) throws ImageIOException;
 }

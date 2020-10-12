@@ -30,7 +30,7 @@ import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.log.MessageLogger;
-import org.anchoranalysis.io.exception.AnchorIOException;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
 
 /**
@@ -85,7 +85,7 @@ public class FailureOnlyMessageLogger implements StatefulMessageLogger {
                         output.end();
                     });
 
-        } catch (AnchorIOException e) {
+        } catch (OutputWriteFailedException e) {
             errorReporter.recordError(MessageLogger.class, e);
         }
     }

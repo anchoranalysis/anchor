@@ -32,7 +32,7 @@ import org.anchoranalysis.experiment.bean.task.TaskWithoutSharedState;
 import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.NoSharedState;
-import org.anchoranalysis.image.io.RasterIOException;
+import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.input.NamedChannelsInput;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 
@@ -65,7 +65,7 @@ public abstract class RasterTask extends TaskWithoutSharedState<NamedChannelsInp
 
             endSeries(context);
 
-        } catch (RasterIOException e) {
+        } catch (ImageIOException e) {
             throw new JobExecutionException(e);
         }
     }

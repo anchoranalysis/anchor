@@ -96,8 +96,8 @@ public class MultiInput implements ProvidesStackInput, InputForMPPBean {
     }
 
     @Override
-    public String descriptiveName() {
-        return stack.descriptiveName();
+    public String name() {
+        return stack.inputName();
     }
 
     @Override

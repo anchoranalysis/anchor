@@ -36,7 +36,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.io.bean.path.derive.DerivePath;
-import org.anchoranalysis.io.exception.AnchorIOException;
+import org.anchoranalysis.io.exception.DerivePathException;
 import org.anchoranalysis.io.exception.FilesProviderException;
 
 public class FilterForExistingFiles extends FilesProviderUnary {
@@ -64,7 +64,7 @@ public class FilterForExistingFiles extends FilesProviderUnary {
             }
             return true;
 
-        } catch (AnchorIOException e) {
+        } catch (DerivePathException e) {
             throw new FilesProviderException(e);
         }
     }

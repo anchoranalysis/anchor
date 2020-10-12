@@ -26,7 +26,6 @@
 package org.anchoranalysis.io.generator.sequence;
 
 import java.util.Optional;
-import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.recorded.RecordingWriters;
 
 /**
@@ -34,16 +33,9 @@ import org.anchoranalysis.io.output.recorded.RecordingWriters;
 
  * @author Owen Feehan
  */
-public interface OutputSequence extends AutoCloseable {
+public interface OutputSequence {
 
     boolean isOn();
     
     Optional<RecordingWriters> writers();
-    
-    /**
-     * This should be called once after <i>all</i> elements have been written.
-     * 
-     * @throws OutputWriteFailedException if anything goes wrong.
-     */
-    void close() throws OutputWriteFailedException;
 }

@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.mpp.bean.bound;
 
+import java.util.Optional;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.orientation.Orientation;
@@ -36,5 +37,5 @@ public abstract class OrientableBounds extends MarkBounds {
     private static final long serialVersionUID = -7378361406755456211L;
 
     public abstract Orientation randomOrientation(
-            RandomNumberGenerator randomNumberGenerator, Resolution resolution);
+            RandomNumberGenerator randomNumberGenerator, Optional<Resolution> resolution);
 }

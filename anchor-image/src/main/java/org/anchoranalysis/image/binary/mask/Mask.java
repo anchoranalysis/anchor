@@ -29,6 +29,7 @@ package org.anchoranalysis.image.binary.mask;
 import com.google.common.base.Preconditions;
 import lombok.Getter;
 import lombok.experimental.Accessors;
+import java.util.Optional;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
@@ -131,7 +132,7 @@ public class Mask {
      * @param voxels the binary-voxels to be reused as the internal buffer of the mask
      */
     public Mask(BinaryVoxels<UnsignedByteBuffer> voxels) {
-        this(voxels, new Resolution());
+        this(voxels, Optional.empty());
     }
 
     /**
@@ -140,7 +141,7 @@ public class Mask {
      * @param voxels the binary-voxels to be reused as the internal buffer of the mask
      * @param resolution the image-resolution to assign
      */
-    public Mask(BinaryVoxels<UnsignedByteBuffer> voxels, Resolution resolution) {
+    public Mask(BinaryVoxels<UnsignedByteBuffer> voxels, Optional<Resolution> resolution) {
         this.channel = FACTORY.create(voxels.voxels(), resolution);
         this.binaryValues = voxels.binaryValues();
         this.binaryValuesByte = binaryValues.createByte();
@@ -164,7 +165,7 @@ public class Mask {
         return channel.dimensions();
     }
 
-    public Resolution resolution() {
+    public Optional<Resolution> resolution() {
         return dimensions().resolution();
     }
 

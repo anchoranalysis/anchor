@@ -85,22 +85,6 @@ class CombineGenerator<T> extends RasterGenerator<T> {
     }
 
     @Override
-    public void start() throws OutputWriteFailedException {
-
-        for (RasterGenerator<T> generator : generators) {
-            generator.start();
-        }
-    }
-
-    @Override
-    public void end() throws OutputWriteFailedException {
-
-        for (RasterGenerator<T> generator : generators) {
-            generator.end();
-        }
-    }
-
-    @Override
     public T getElement() {
         return generators.get(0).getElement();
     }

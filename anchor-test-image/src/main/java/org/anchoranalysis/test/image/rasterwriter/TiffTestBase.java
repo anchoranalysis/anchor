@@ -27,7 +27,7 @@ package org.anchoranalysis.test.image.rasterwriter;
 
 import java.io.IOException;
 import java.util.Optional;
-import org.anchoranalysis.image.io.RasterIOException;
+import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.StackWriter;
 import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
@@ -48,37 +48,37 @@ public abstract class TiffTestBase extends RasterWriterTestBase {
     }
 
     @Test
-    public void testSingleChannel() throws RasterIOException, IOException {
+    public void testSingleChannel() throws ImageIOException, IOException {
         tester.testSingleChannel(SUPPORTED_VOXEL_TYPES);
     }
 
-    @Test(expected = RasterIOException.class)
-    public void testSingleChannelRGB() throws RasterIOException, IOException {
+    @Test(expected = ImageIOException.class)
+    public void testSingleChannelRGB() throws ImageIOException, IOException {
         tester.testSingleChannelRGB();
     }
 
-    @Test(expected = RasterIOException.class)
-    public void testTwoChannels() throws RasterIOException, IOException {
+    @Test(expected = ImageIOException.class)
+    public void testTwoChannels() throws ImageIOException, IOException {
         tester.testTwoChannels();
     }
 
     @Test
-    public void testThreeChannelsSeparate() throws RasterIOException, IOException {
+    public void testThreeChannelsSeparate() throws ImageIOException, IOException {
         tester.testThreeChannelsSeparate(SUPPORTED_VOXEL_TYPES);
     }
 
     @Test
-    public void testThreeChannelsRGB() throws RasterIOException, IOException {
+    public void testThreeChannelsRGB() throws ImageIOException, IOException {
         tester.testThreeChannelsRGB();
     }
 
     @Test
-    public void testThreeChannelsRGBUnsignedShort() throws RasterIOException, IOException {
+    public void testThreeChannelsRGBUnsignedShort() throws ImageIOException, IOException {
         tester.testThreeChannelsRGB(UnsignedShortVoxelType.INSTANCE);
     }
 
-    @Test(expected = RasterIOException.class)
-    public void testFourChannels() throws RasterIOException, IOException {
+    @Test(expected = ImageIOException.class)
+    public void testFourChannels() throws ImageIOException, IOException {
         tester.testFourChannels();
     }
 }

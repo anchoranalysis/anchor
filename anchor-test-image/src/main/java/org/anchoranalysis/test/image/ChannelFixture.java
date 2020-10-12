@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.test.image;
 
+import java.util.Optional;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
@@ -75,7 +76,7 @@ public class ChannelFixture {
     public static Channel createChannel(
             Extent extent, IntensityFunction createIntensity, VoxelDataType channelVoxelType) {
 
-        Dimensions dimensions = new Dimensions(extent, ImageResFixture.INSTANCE);
+        Dimensions dimensions = new Dimensions(extent, Optional.of(ImageResFixture.INSTANCE) );
 
         Channel channel =
                 ChannelFactory.instance().get(channelVoxelType).createEmptyInitialised(dimensions);

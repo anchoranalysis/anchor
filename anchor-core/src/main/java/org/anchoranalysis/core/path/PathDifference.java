@@ -73,7 +73,8 @@ public class PathDifference {
             // As we've converted to URIs the seperator is always a forward slash
             return calculateDifference(base, all);
         } catch (IOException e) {
-            throw new PathDifferenceException("Cannot find difference between paths", e);
+            throw new PathDifferenceException(
+                String.format("Cannot find difference between two paths:%n%s%n%s", baseDirectoryPath, filePath), e );
         }
     }
 

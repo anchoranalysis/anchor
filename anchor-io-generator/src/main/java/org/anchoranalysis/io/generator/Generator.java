@@ -31,7 +31,6 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.io.manifest.file.FileType;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
-import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.writer.WritableItem;
 
 /**
@@ -68,22 +67,4 @@ public interface Generator<T> extends WritableItem {
      * @throws SetOperationFailedException
      */
     void assignElement(T element) throws SetOperationFailedException;
-
-    /**
-     * This should always be called once before any write-operations.
-     *
-     * @throws OutputWriteFailedException
-     */
-    default void start() throws OutputWriteFailedException {
-        // NOTHING TO DO
-    }
-
-    /**
-     * This should always be called once after all write-operations are completed.
-     *
-     * @throws OutputWriteFailedException
-     */
-    default void end() throws OutputWriteFailedException {
-        // NOTHING TO DO
-    }
 }
