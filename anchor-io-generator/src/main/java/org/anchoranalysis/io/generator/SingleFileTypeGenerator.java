@@ -92,7 +92,7 @@ public abstract class SingleFileTypeGenerator<T, S> implements Generator<T> {
 
     /** As only a single-file is involved, this methods delegates to a simpler virtual method. */
     @Override
-    public int write(
+    public int writeWithIndex(
             IndexableOutputNameStyle outputNameStyle, String index, OutputterChecked outputter)
             throws OutputWriteFailedException {
 

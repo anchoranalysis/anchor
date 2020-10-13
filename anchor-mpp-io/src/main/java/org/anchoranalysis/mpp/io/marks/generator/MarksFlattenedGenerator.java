@@ -30,10 +30,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.idgetter.IDGetter;
 import org.anchoranalysis.image.io.bean.object.draw.Flatten;
 import org.anchoranalysis.image.stack.DisplayStack;
-import org.anchoranalysis.mpp.bean.regionmap.RegionMapSingleton;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMembershipWithFlags;
-import org.anchoranalysis.mpp.io.marks.ColoredMarksWithDisplayStack;
-import org.anchoranalysis.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.overlay.Overlay;
 import org.anchoranalysis.overlay.bean.DrawObject;
 import org.anchoranalysis.overlay.writer.DrawOverlay;
@@ -44,21 +41,11 @@ public class MarksFlattenedGenerator extends MarksGeneratorBase {
     private DisplayStack cachedBackground;
     private DisplayStack cachedBackgroundMIP;
 
-    public MarksFlattenedGenerator(DrawObject drawObject, IDGetter<Overlay> idGetter) {
-        this(
-                drawObject,
-                null,
-                idGetter,
-                RegionMapSingleton.instance()
-                        .membershipWithFlagsForIndex(GlobalRegionIdentifiers.SUBMARK_INSIDE));
-    }
-
     public MarksFlattenedGenerator(
             DrawObject drawObject,
-            ColoredMarksWithDisplayStack marks,
             IDGetter<Overlay> idGetter,
             RegionMembershipWithFlags regionMembership) {
-        super(createWriter(drawObject), marks, idGetter, regionMembership);
+        super(createWriter(drawObject), idGetter, regionMembership);
     }
 
     @Override

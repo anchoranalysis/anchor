@@ -32,7 +32,7 @@ import org.anchoranalysis.overlay.Overlay;
 public class IDGetterOverlayID implements IDGetter<Overlay> {
 
     @Override
-    public int getID(Overlay ol, int iter) {
+    public int getID(Overlay ol, int iteration) {
         return ol.getId();
     }
 }

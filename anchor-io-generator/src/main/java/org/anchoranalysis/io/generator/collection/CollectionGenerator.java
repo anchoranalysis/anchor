@@ -28,7 +28,6 @@ package org.anchoranalysis.io.generator.collection;
 
 import java.util.Collection;
 import java.util.Optional;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.index.SetOperationFailedException;
@@ -50,7 +49,7 @@ import org.anchoranalysis.io.output.outputter.OutputterChecked;
  * @param <T> element-type in collection
  * @param <S> collection-type
  */
-@RequiredArgsConstructor @AllArgsConstructor
+@RequiredArgsConstructor
 public class CollectionGenerator<T, S extends Collection<T>> implements Generator<S> {
 
     // START REQUIRED ARGUMENTS
@@ -67,14 +66,15 @@ public class CollectionGenerator<T, S extends Collection<T>> implements Generato
     public void write(OutputNameStyle outputNameStyle, OutputterChecked outputter)
             throws OutputWriteFailedException {
 
-        writeElementAsSubdirectory(
+        writeElementAsSubdirectory(element,
                 outputter, outputNameStyle.getFilenameWithoutExtension());
     }
 
     @Override
-    public int write(
+    public int writeWithIndex(
             IndexableOutputNameStyle outputNameStyle, String index, OutputterChecked outputter)
             throws OutputWriteFailedException {
+        // Ignore the index
         write(outputNameStyle, outputter);
         return 1;
     }
@@ -96,6 +96,7 @@ public class CollectionGenerator<T, S extends Collection<T>> implements Generato
     }
     
     private void writeElementAsSubdirectory(
+            S element,
             OutputterChecked outputter,
             String outputNameFolder
             )

@@ -58,6 +58,17 @@ public abstract class MarksGeneratorBase
 
     public MarksGeneratorBase(
             DrawOverlay writer,
+            IDGetter<Overlay> idGetter,
+            RegionMembershipWithFlags regionMembership) {
+        super();
+        this.writer = writer;
+        this.idGetter = idGetter;
+        this.regionMembership = regionMembership;
+        this.assignElement(marks);
+    }
+    
+    public MarksGeneratorBase(
+            DrawOverlay writer,
             ColoredMarksWithDisplayStack marks,
             IDGetter<Overlay> idGetter,
             RegionMembershipWithFlags regionMembership) {

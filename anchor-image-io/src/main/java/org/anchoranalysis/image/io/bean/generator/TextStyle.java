@@ -53,17 +53,14 @@ import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 /**
- * Generates an image with a text (string) drawn on it.
+ * The size and style of text as it should appear in an image.
  *
  * @author Owen Feehan
  */
 @NoArgsConstructor
-public class StringRasterGenerator extends AnchorBean<StringRasterGenerator> {
+public class TextStyle extends AnchorBean<TextStyle> {
 
     // START BEAN PROPERTIES
-    /** Text to draw on an image */
-    @BeanField @Getter @Setter private String text = "text";
-
     /** Explicit size of the image the string is draw on */
     @BeanField @OptionalBean @Getter @Setter private SizeXY size;
 
@@ -89,10 +86,6 @@ public class StringRasterGenerator extends AnchorBean<StringRasterGenerator> {
 
     // A generator associated with this bean
     private class Generator extends RasterGeneratorWithElement<String> {
-
-        public Generator(String text) {
-            assignElement(text);
-        }
 
         @Override
         public Stack transform() throws OutputWriteFailedException {
@@ -157,7 +150,7 @@ public class StringRasterGenerator extends AnchorBean<StringRasterGenerator> {
                     createGraphicsFromBufferedImage(
                             new BufferedImage(1000, 1000, BufferedImage.TYPE_INT_RGB));
             FontMetrics fm = graphics.getFontMetrics();
-            Rectangle2D defaultSize = fm.getStringBounds(text, graphics);
+            Rectangle2D defaultSize = fm.getStringBounds(getElement(), graphics);
             return new SizeXY(
                     addPadding(defaultSize.getWidth()), addPadding(defaultSize.getHeight()));
         }
@@ -167,22 +160,12 @@ public class StringRasterGenerator extends AnchorBean<StringRasterGenerator> {
         }
     }
 
-    public StringRasterGenerator(String text) {
-        this.text = text;
-    }
-
-    public StringRasterGenerator(String text, double padding) {
-        this.text = text;
+    public TextStyle(double padding) {
         this.padding = padding;
     }
 
-    /** Creates an iterable-generator, which produces a drawn string on an image when generated */
+    /** Creates a generator, which produces a drawn string on an image when generated */
     public RasterGenerator<String> createGenerator() {
-        return new Generator(text);
-    }
-
-    /** Creates a stack with the drawn string on an image */
-    public Stack generateStack() throws OutputWriteFailedException {
-        return new Generator(text).transform();
+        return new Generator();
     }
 }

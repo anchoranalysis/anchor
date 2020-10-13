@@ -34,7 +34,7 @@ import org.anchoranalysis.bean.provider.Provider;
 import org.anchoranalysis.image.bean.provider.stack.ArrangeRaster;
 import org.anchoranalysis.image.bean.spatial.arrange.Overlay;
 import org.anchoranalysis.image.bean.spatial.arrange.Tile;
-import org.anchoranalysis.image.io.bean.generator.StringRasterGenerator;
+import org.anchoranalysis.image.io.bean.generator.TextStyle;
 import org.anchoranalysis.image.io.bean.stack.provider.GenerateString;
 import org.anchoranalysis.image.io.bean.stack.provider.StackProviderWithLabel;
 import org.anchoranalysis.image.stack.Stack;
@@ -82,8 +82,8 @@ public class TileRasters {
             boolean scaleLabel,
             boolean expandLabelZ) {
 
-        GenerateString out = new GenerateString();
-        out.setStringRasterGenerator(new StringRasterGenerator(providerWithLabel.getLabel(), 3));
+        GenerateString out = new GenerateString(providerWithLabel.getLabel());
+        out.setStringRasterGenerator(new TextStyle(3));
         out.setCreateShort(createShort);
         if (scaleLabel) {
             out.setIntensityProvider(providerWithLabel.getStack());

@@ -35,7 +35,8 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
 import org.anchoranalysis.io.output.writer.CheckIfAllowed;
-import org.anchoranalysis.io.output.writer.GenerateWritableItem;
+import org.anchoranalysis.io.output.writer.ElementSupplier;
+import org.anchoranalysis.io.output.writer.ElementWriterSupplier;
 import org.anchoranalysis.io.output.writer.Writer;
 
 /**
@@ -78,23 +79,23 @@ class RecordOutputNamesForWriter implements Writer {
         recordedOutputs.add(outputName, outputter.isPresent());
         return outputter;
     }
-
+    
     @Override
-    public boolean writeSubdirectoryWithGenerator(
-            String outputName, GenerateWritableItem<?> collectionGenerator)
+    public <T> boolean write(String outputName, ElementWriterSupplier<T> elementWriter, ElementSupplier<T> element)
             throws OutputWriteFailedException {
-        boolean allowed = writer.writeSubdirectoryWithGenerator(outputName, collectionGenerator);
+        boolean allowed = writer.write(outputName, elementWriter, element);
         recordedOutputs.add(outputName, allowed);
         return allowed;
     }
-
+    
     @Override
-    public int write(
+    public <T> int writeWithIndex(
             IndexableOutputNameStyle outputNameStyle,
-            GenerateWritableItem<?> generator,
+            ElementWriterSupplier<T> elementWriter,
+            ElementSupplier<T> element,
             String index)
             throws OutputWriteFailedException {
-        int numberElements = writer.write(outputNameStyle, generator, index);
+        int numberElements = writer.writeWithIndex(outputNameStyle, elementWriter, element, index);
         if (includeIndexableOutputs) {
             recordedOutputs.add(
                     outputNameStyle.getOutputName(),
@@ -104,20 +105,12 @@ class RecordOutputNamesForWriter implements Writer {
     }
 
     @Override
-    public boolean write(String outputName, GenerateWritableItem<?> generator)
-            throws OutputWriteFailedException {
-        boolean allowed = writer.write(outputName, generator);
-        recordedOutputs.add(outputName, allowed);
-        return allowed;
-    }
-
-    @Override
-    public Optional<Path> writeGenerateFilename(
+    public Optional<Path> createFilenameForWriting(
             String outputName,
             String extension,
             Optional<ManifestDescription> manifestDescription) {
         Optional<Path> filename =
-                writer.writeGenerateFilename(outputName, extension, manifestDescription);
+                writer.createFilenameForWriting(outputName, extension, manifestDescription);
         recordedOutputs.add(outputName, filename.isPresent());
         return filename;
     }

@@ -26,12 +26,12 @@
 
 package org.anchoranalysis.io.generator.sequence;
 
+import java.util.Arrays;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.generator.sequence.pattern.OutputPattern;
 import org.anchoranalysis.io.manifest.ManifestFolderDescription;
 import org.anchoranalysis.io.manifest.file.FileType;
@@ -39,7 +39,8 @@ import org.anchoranalysis.io.manifest.sequencetype.SequenceType;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
 import org.anchoranalysis.io.output.recorded.RecordingWriters;
-import org.anchoranalysis.io.output.writer.GenerateWritableItem;
+import org.anchoranalysis.io.output.writer.ElementSupplier;
+import org.anchoranalysis.io.output.writer.ElementWriterSupplier;
 
 /**
  * Like {@link RecordingWriters} but for a sequence of items, maybe in a subfolder.
@@ -69,9 +70,7 @@ class SequenceWriters {
         // FolderWriteIndexableOutputName
         FolderWriteIndexableOutputName subFolderWrite =
                 new FolderWriteIndexableOutputName(pattern.getOutputNameStyle());
-        for (FileType fileType : fileTypes) {
-            subFolderWrite.addFileType(fileType);
-        }
+        Arrays.stream(fileTypes).forEach(subFolderWrite::addFileType);
 
         try {
             this.writers = selectWritersMaybeCreateSubdirectory(folderDescription, subFolderWrite);
@@ -79,8 +78,8 @@ class SequenceWriters {
             throw new InitException(e);
         }
     }
-
-    public void write(GenerateWritableItem<Generator<?>> generator, String index)
+  
+    public <T> void write(ElementWriterSupplier<T> generator, ElementSupplier<T> element, String index)
             throws OutputWriteFailedException {
 
         if (!isOn()) {
@@ -90,7 +89,7 @@ class SequenceWriters {
         this.writers // NOSONAR
                 .get()
                 .multiplex(pattern.isSelective())
-                .write(pattern.getOutputNameStyle(), generator, index);
+                .writeWithIndex(pattern.getOutputNameStyle(), generator, element, index);
     }
 
     public boolean isOn() {

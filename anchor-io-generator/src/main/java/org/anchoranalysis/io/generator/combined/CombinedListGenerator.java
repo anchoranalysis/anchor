@@ -55,7 +55,7 @@ import org.anchoranalysis.io.output.outputter.OutputterChecked;
  */
 public class CombinedListGenerator<T> implements MultipleFileTypeGenerator<T> {
 
-    private final CombinedList delegate = new CombinedList();
+    private final CombinedList<T> delegate = new CombinedList<>();
 
     private final List<Generator<T>> list = new ArrayList<>();
 
@@ -77,11 +77,11 @@ public class CombinedListGenerator<T> implements MultipleFileTypeGenerator<T> {
     @Override
     public void write(OutputNameStyle outputNameStyle, OutputterChecked outputter)
             throws OutputWriteFailedException {
-        delegate.write(outputNameStyle, outputter);
+        delegate.write(this::getElement, outputNameStyle, outputter);
     }
 
     @Override
-    public int write(
+    public int writeWithIndex(
             IndexableOutputNameStyle outputNameStyle, String index, OutputterChecked outputter)
             throws OutputWriteFailedException {
         return delegate.write(outputNameStyle, index, outputter);

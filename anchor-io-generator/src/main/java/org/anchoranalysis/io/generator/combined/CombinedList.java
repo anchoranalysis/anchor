@@ -36,17 +36,26 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.output.namestyle.OutputNameStyle;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
+import org.anchoranalysis.io.output.writer.ElementSupplier;
+import org.anchoranalysis.io.output.writer.ElementWriter;
 
-class CombinedList {
+/**
+ * A helper list of {@link ElementWriter}s used in {@link CombinedListGenerator}.
+ * 
+ * @author Owen Feehan
+ *
+ * @param <T> element-type
+ */
+class CombinedList<T> {
 
-    private ArrayList<OptionalNameValue<Generator<?>>> list = new ArrayList<>();
+    private ArrayList<OptionalNameValue<Generator<T>>> list = new ArrayList<>();
 
     public Optional<FileType[]> getFileTypes(OutputWriteSettings outputWriteSettings)
             throws OperationFailedException {
 
         ArrayList<FileType> all = new ArrayList<>();
 
-        for (OptionalNameValue<Generator<?>> namedGenerator : list) {
+        for (OptionalNameValue<Generator<T>> namedGenerator : list) {
             Optional<FileType[]> fileTypeArray =
                     namedGenerator.getValue().getFileTypes(outputWriteSettings);
             fileTypeArray.ifPresent(
@@ -64,12 +73,12 @@ class CombinedList {
         }
     }
 
-    public void write(OutputNameStyle outputNameStyle, OutputterChecked outputter)
+    public void write(ElementSupplier<T> element, OutputNameStyle outputNameStyle, OutputterChecked outputter)
             throws OutputWriteFailedException {
 
-        for (OptionalNameValue<Generator<?>> namedGenerator : list) {
+        for (OptionalNameValue<Generator<T>> namedGenerator : list) {
             namedGenerator.getName().ifPresent(outputNameStyle::setOutputName);
-            namedGenerator.getValue().write(outputNameStyle, outputter);
+            namedGenerator.getValue().write(element, outputNameStyle, outputter);
         }
     }
 
@@ -78,14 +87,14 @@ class CombinedList {
             throws OutputWriteFailedException {
 
         int maxWritten = -1;
-        for (OptionalNameValue<Generator<?>> namedGenerator : list) {
+        for (OptionalNameValue<Generator<T>> namedGenerator : list) {
 
             if (namedGenerator.getName().isPresent()) {
                 outputNameStyle = outputNameStyle.duplicate();
                 outputNameStyle.setOutputName(namedGenerator.getName().get()); // NOSONAR
             }
 
-            int numWritten = namedGenerator.getValue().write(outputNameStyle, index, outputter);
+            int numWritten = namedGenerator.getValue().writeWithIndex(outputNameStyle, index, outputter);
             maxWritten = Math.max(maxWritten, numWritten);
         }
 
@@ -101,7 +110,7 @@ class CombinedList {
      * @param generator the generator to add
      * @param name optional-name, which if included, is set as the output-name for the generator
      */
-    public void add(Generator<?> generator, Optional<String> name) {
+    public void add(Generator<T> generator, Optional<String> name) {
         list.add(new OptionalNameValue<>(name, generator));
     }
 }

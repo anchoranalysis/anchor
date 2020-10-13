@@ -28,5 +28,5 @@ package org.anchoranalysis.core.idgetter;
 
 public interface IDGetter<T> {
 
-    int getID(T m, int iter);
+    int getID(T element, int iteration);
 }

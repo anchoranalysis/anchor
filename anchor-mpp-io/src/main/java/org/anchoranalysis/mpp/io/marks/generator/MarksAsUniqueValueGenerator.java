@@ -49,14 +49,6 @@ public class MarksAsUniqueValueGenerator extends RasterGeneratorWithElement<Mark
         this.regionMembership = regionMembership;
     }
 
-    public MarksAsUniqueValueGenerator(
-            Dimensions dimensions,
-            RegionMembershipWithFlags regionMembership,
-            MarkCollection marks) {
-        this(dimensions, regionMembership);
-        assignElement(marks);
-    }
-
     @Override
     public boolean isRGB() {
         return delegate.isRGB();

@@ -75,10 +75,9 @@ public class CheckIfAllowed implements Writer {
         return writer.createSubdirectory(
                 outputName, manifestDescription, manifestFolder, inheritOutputRulesAndRecording);
     }
-
+    
     @Override
-    public boolean writeSubdirectoryWithGenerator(
-            String outputName, GenerateWritableItem<?> collectionGenerator)
+    public <T> boolean write(String outputName, ElementWriterSupplier<T> elementWriter, ElementSupplier<T> element)
             throws OutputWriteFailedException {
 
         if (!outputEnabled.isOutputEnabled(outputName)) {
@@ -87,15 +86,16 @@ public class CheckIfAllowed implements Writer {
 
         maybeExecutePreop();
 
-        writer.writeSubdirectoryWithGenerator(outputName, collectionGenerator);
+        writer.write(outputName, elementWriter, element);
 
         return true;
     }
-
+    
     @Override
-    public int write(
+    public <T> int writeWithIndex(
             IndexableOutputNameStyle outputNameStyle,
-            GenerateWritableItem<?> generator,
+            ElementWriterSupplier<T> elementWriter,
+            ElementSupplier<T> element,
             String index)
             throws OutputWriteFailedException {
 
@@ -105,26 +105,11 @@ public class CheckIfAllowed implements Writer {
 
         maybeExecutePreop();
 
-        return writer.write(outputNameStyle, generator, index);
+        return writer.writeWithIndex(outputNameStyle, elementWriter, element, index);
     }
 
     @Override
-    public boolean write(String outputName, GenerateWritableItem<?> generator)
-            throws OutputWriteFailedException {
-
-        if (!outputEnabled.isOutputEnabled(outputName)) {
-            return false;
-        }
-
-        maybeExecutePreop();
-
-        writer.write(outputName, generator);
-
-        return true;
-    }
-
-    @Override
-    public Optional<Path> writeGenerateFilename(
+    public Optional<Path> createFilenameForWriting(
             String outputName,
             String extension,
             Optional<ManifestDescription> manifestDescription) {
@@ -135,7 +120,7 @@ public class CheckIfAllowed implements Writer {
 
         maybeExecutePreop();
 
-        return writer.writeGenerateFilename(outputName, extension, manifestDescription);
+        return writer.createFilenameForWriting(outputName, extension, manifestDescription);
     }
 
     private void maybeExecutePreop() {

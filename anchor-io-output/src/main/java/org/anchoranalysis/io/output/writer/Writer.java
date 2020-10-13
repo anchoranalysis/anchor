@@ -36,15 +36,17 @@ import org.anchoranalysis.io.output.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
 
 /**
- * Write data via generators to the file system, or creates new sub-directories for writing data to.
+ * Write data via {@link ElementWriter}s to the file system, or creates new sub-directories for writing data to.
  *
  * <p>This class is similar to {@link WriterRouterErrors} but exceptions are thrown rather than
  * reporting errors.
  *
  * <p>These operations occur in association with the currently bound output manager.
  *
- * <p>The {@link GenerateWritableItem} interface is used so as to avoid object-creation if an
+ * <p>The {@link ElementWriterSupplier} interface is used so as to avoid object-creation if an
  * operation isn't actually written.
+ * 
+ * <p>Note that a {@link ElementWriter} may write more than one file for a given element.
  *
  * @author Owen Feehan
  */
@@ -71,54 +73,41 @@ public interface Writer {
             Optional<FolderWriteWithPath> manifestFolder,
             boolean inheritOutputRulesAndRecording)
             throws OutputWriteFailedException;
-
+    
     /**
-     * Writes to a subdirectory using a generator, often producing many elements instead of one.
+     * Writes an element using an {@link ElementWriter} to the current directory.
      *
      * @param outputName the name of the subdirectory. This may determine if an output is allowed
      *     or not.
-     * @param generator a generator that writes element(s) into the created subdirectory using
-     *     {@code outputName} and a suffix.
+     * @param elementWriter writes the element to the filesystem
+     * @param element the element to write
      * @return true if the output was allowed, false otherwise
      * @throws OutputWriteFailedException
      */
-    boolean writeSubdirectoryWithGenerator(String outputName, GenerateWritableItem<?> generator)
-            throws OutputWriteFailedException;
-
+    <T> boolean write(String outputName, ElementWriterSupplier<T> elementWriter, ElementSupplier<T> element) throws OutputWriteFailedException;
+    
     /**
-     * Writes the current element(s) of the generator to the current directory.
+     * Writes an indexed-element using an {@link ElementWriter} in the current directory.
      *
      * @param outputNameStyle how to combine a particular output-name with an index
-     * @param generator the generator
+     * @param elementWriter writes the element to the filesystem
+     * @param element the element to write
      * @param index the index
-     * @return the number of elements written by the generator, including 0 elements, or -2 if the
+     * @return the number of elements written by the {@link ElementWriter}, including 0 elements, or -2 if the
      *     output is not allowed.
      * @throws OutputWriteFailedException
      */
-    int write(
+    <T> int writeWithIndex(
             IndexableOutputNameStyle outputNameStyle,
-            GenerateWritableItem<?> generator,
+            ElementWriterSupplier<T> elementWriter,
+            ElementSupplier<T> element,
             String index)
-            throws OutputWriteFailedException;
-
-    /**
-     * Writes the current element(s) of the generator to the current directory.
-     *
-     * @param outputName the name of the subdirectory. This may determine if an output is allowed
-     *     or not.
-     * @param generator a generator that writes element(s) into the created subdirectory using
-     *     {@code outputName} and a suffix.
-     * @return true if the output was allowed, false otherwise
-     * @throws OutputWriteFailedException
-     */
-    boolean write(String outputName, GenerateWritableItem<?> generator)
             throws OutputWriteFailedException;
 
     /**
      * The path to write a particular output to.
      *
-     * <p>This is an alternative means to using a generator (i.e. {@link GenerateWritableItem}) to
-     * output data.
+     * <p>This is an alternative method to write to the file system rather than using an {@link ElementWriter} and {@link #write(String, ElementWriterSupplier, ElementSupplier)} and {@link #writeWithIndex(IndexableOutputNameStyle, ElementWriterSupplier, ElementSupplier, String)}.
      *
      * @param outputName the output-name. This is the filename without an extension, and may
      *     determine if an output is allowed or not.
@@ -126,6 +115,6 @@ public interface Writer {
      * @param manifestDescription manifest-description associated with the file if it exists.
      * @return the path to write to, if it is allowed, otherwise {@link Optional#empty}.
      */
-    Optional<Path> writeGenerateFilename(
+    Optional<Path> createFilenameForWriting(
             String outputName, String extension, Optional<ManifestDescription> manifestDescription);
 }

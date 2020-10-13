@@ -275,20 +275,17 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
             params.getInput().close(params.getLogger().errorReporter());
         }
 
+        // Note that neither of the following generators place entries in the manifest
         WriterRouterErrors writeIfAllowed = params.getOutputter().writerSelective();
         writeIfAllowed.write(
-                OUTPUT_NAME_MANIFEST,
-                () ->
-                        new XStreamGenerator<Object>(
-                                params.getManifest(),
-                                Optional.empty()) // Don't put into the manifest
-                );
+            OUTPUT_NAME_MANIFEST,
+            XStreamGenerator::new,
+            params::getManifest
+        );
         writeIfAllowed.write(
-                OUTPUT_NAME_MANIFEST,
-                () ->
-                        new ObjectOutputStreamGenerator<>(
-                                params.getManifest(),
-                                Optional.empty() // Don't put into the manifest
-                                ));
+            OUTPUT_NAME_MANIFEST,
+            ObjectOutputStreamGenerator::new,
+            params::getManifest
+        );
     }
 }

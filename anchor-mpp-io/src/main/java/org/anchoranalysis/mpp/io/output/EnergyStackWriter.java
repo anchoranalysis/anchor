@@ -87,14 +87,12 @@ public class EnergyStackWriter {
             outputter.writerSelective()
                     .write(
                             OUTPUT_PARAMS,
-                            () ->
-                                    new KeyValueParamsGenerator(
-                                            energyStack.getParams(), MANIFEST_FUNCTION_PARAMS));
+                            () -> new KeyValueParamsGenerator(MANIFEST_FUNCTION_PARAMS), energyStack::getParams);
         }
     }
     
     private OutputSequenceFactory<Channel> createSequenceFactory() {
-        ChannelGenerator generator = new ChannelGenerator(MANIFEST_FUNCTION_CHANNEL, energyStack.hasOneSlice());
+        ChannelGenerator generator = new ChannelGenerator(MANIFEST_FUNCTION_CHANNEL);
         
         // We write the energy-stack separately as individual channels
         return new OutputSequenceFactory<>(generator, outputter.getChecked());

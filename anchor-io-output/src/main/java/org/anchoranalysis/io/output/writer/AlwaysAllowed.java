@@ -34,7 +34,6 @@ import org.anchoranalysis.io.manifest.ManifestFolderDescription;
 import org.anchoranalysis.io.manifest.folder.FolderWriteWithPath;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.namestyle.IndexableOutputNameStyle;
-import org.anchoranalysis.io.output.namestyle.IntegerSuffixOutputNameStyle;
 import org.anchoranalysis.io.output.namestyle.SimpleOutputNameStyle;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
 
@@ -70,43 +69,32 @@ public class AlwaysAllowed implements Writer {
                         manifestFolder,
                         inheritOutputRulesAndRecording));
     }
-
+    
+    // Write a file without checking if the outputName is allowed
     @Override
-    public boolean writeSubdirectoryWithGenerator(
-            String outputName, GenerateWritableItem<?> collectionGenerator)
+    public <T> boolean write(String outputName, ElementWriterSupplier<T> elementWriter, ElementSupplier<T> element)
             throws OutputWriteFailedException {
-
         maybeExecutePreop();
-
-        collectionGenerator.get().write(new IntegerSuffixOutputNameStyle(outputName, 3), outputter);
-
+        elementWriter.get().write(element, new SimpleOutputNameStyle(outputName), outputter);
         return true;
     }
-
+    
     @Override
-    public int write(
+    public <T> int writeWithIndex(
             IndexableOutputNameStyle outputNameStyle,
-            GenerateWritableItem<?> generator,
+            ElementWriterSupplier<T> elementWriter,
+            ElementSupplier<T> element,
             String index)
             throws OutputWriteFailedException {
 
         maybeExecutePreop();
-        return generator.get().write(outputNameStyle, index, outputter);
-    }
-
-    // Write a file without checking if the outputName is allowed
-    @Override
-    public boolean write(String outputName, GenerateWritableItem<?> generator)
-            throws OutputWriteFailedException {
-        maybeExecutePreop();
-        generator.get().write(new SimpleOutputNameStyle(outputName), outputter);
-        return true;
+        return elementWriter.get().write(element, outputNameStyle, index, outputter);
     }
 
     // A non-generator way of creating outputs, that are still included in the manifest
     // Returns null if output is not allowed
     @Override
-    public Optional<Path> writeGenerateFilename(
+    public Optional<Path> createFilenameForWriting(
             String outputName,
             String extension,
             Optional<ManifestDescription> manifestDescription) {

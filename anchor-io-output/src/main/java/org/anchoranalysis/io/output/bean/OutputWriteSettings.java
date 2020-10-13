@@ -54,8 +54,9 @@ import org.anchoranalysis.core.error.OperationFailedException;
 public class OutputWriteSettings extends AnchorBean<OutputWriteSettings> {
 
     // START BEAN PROPERTIES
+    /** The default color-scheme used for outputs, if no other scheme is specified. */
     @BeanField @Getter @Setter
-    private ColorScheme defaultColorSetGenerator = new Shuffle(new HSB());
+    private ColorScheme defaultColors = new Shuffle(new HSB());
 
     /**
      * Specifies a writer bean instance for a particular type of writer (identified by the writer
@@ -121,7 +122,7 @@ public class OutputWriteSettings extends AnchorBean<OutputWriteSettings> {
     }
 
     public ColorIndex defaultColorIndexFor(int numberColors) throws OperationFailedException {
-        return new ColorIndexModulo(getDefaultColorSetGenerator().createList(numberColors));
+        return new ColorIndexModulo(getDefaultColors().createList(numberColors));
     }
 
     public String getExtensionHTML() {

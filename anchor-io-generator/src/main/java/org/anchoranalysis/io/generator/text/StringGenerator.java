@@ -33,7 +33,9 @@ import org.anchoranalysis.io.generator.OneStageGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
 public class StringGenerator extends OneStageGenerator<String> {
 
     public StringGenerator(String element) {

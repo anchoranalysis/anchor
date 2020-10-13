@@ -78,7 +78,11 @@ public class SingleFileTypeGeneratorBridge<S, T, V>
 
     @Override
     public S transform() throws OutputWriteFailedException {
-        return delegate.transform();
+        try {
+            return delegate.transform( elementBridge.apply(getElement()) );
+        } catch (Exception e) {
+           throw new OutputWriteFailedException(e);
+        }
     }
 
     @Override

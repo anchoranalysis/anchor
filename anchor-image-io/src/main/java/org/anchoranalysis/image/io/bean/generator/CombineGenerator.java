@@ -105,7 +105,7 @@ class CombineGenerator<T> extends RasterGenerator<T> {
         return FunctionalList.mapToList(
                 generators,
                 OutputWriteFailedException.class,
-                generator -> new RGBStack(generator.transform()));
+                generator -> new RGBStack(generator.transform(getElement())));
     }
 
     @Override

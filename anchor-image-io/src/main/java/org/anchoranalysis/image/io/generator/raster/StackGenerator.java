@@ -78,6 +78,10 @@ public class StackGenerator extends RasterGeneratorWithElement<Stack> {
         this(padIfNecessary, Optional.of(manifestFunction), StackWriteOptions.toReplace(always2D));
     }
     
+    public StackGenerator(boolean padIfNecessary, String manifestFunction) {
+        this(padIfNecessary, Optional.of(manifestFunction), StackWriteOptions.toReplace(false));
+    }
+    
     /**
      * Creates the generator from a stack, inferring whether all stacks will be 2D from this stack's
      * dimensions.

@@ -26,17 +26,18 @@
 
 package org.anchoranalysis.io.output.writer;
 
+import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.output.namestyle.OutputNameStyle;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
 
 /**
- * An item that can be outputted via a write() method
+ * Writes an element (with or without an index) to the file system.
  *
  * @author Owen Feehan
  */
-public interface WritableItem {
+public interface ElementWriter<T> {
 
     /**
      * Writes a non-indexable output (an output that isn't part of a collection of other similar
@@ -58,7 +59,46 @@ public interface WritableItem {
      * @return
      * @throws OutputWriteFailedException
      */
-    public abstract int write(
+    public abstract int writeWithIndex(
             IndexableOutputNameStyle outputNameStyle, String index, OutputterChecked outputter)
             throws OutputWriteFailedException;
+    
+    /**
+     * Gets the current element.
+     *
+     * @return the element that will be written at next write-operation.
+     */
+    T getElement();
+
+    /**
+     * Assigns the current element to be written at next write-operation.
+     *
+     * @param element the element
+     * @throws SetOperationFailedException
+     */
+    void assignElement(T element) throws SetOperationFailedException;
+
+    default void write(ElementSupplier<T> element, OutputNameStyle outputNameStyle, OutputterChecked outputter)
+            throws OutputWriteFailedException {
+        synchronized(this) {
+            try {
+                assignElement(element.get());
+            } catch (SetOperationFailedException e) {
+                throw new OutputWriteFailedException(e);
+            }
+            write(outputNameStyle, outputter);
+        }
+    }
+
+    default int write(ElementSupplier<T> element, IndexableOutputNameStyle outputNameStyle, String index,
+            OutputterChecked outputter) throws OutputWriteFailedException {
+        synchronized(this) {
+            try {
+                assignElement(element.get());
+            } catch (SetOperationFailedException e) {
+                throw new OutputWriteFailedException(e);
+            }
+            return writeWithIndex(outputNameStyle, index, outputter);
+        }
+    }
 }

@@ -92,7 +92,12 @@ public abstract class RasterGeneratorDelegateToRaster<S, T> extends RasterGenera
 
     @Override
     public Stack transform() throws OutputWriteFailedException {
-        return convertBeforeTransform(getDelegate().transform());
+        try {
+            Stack stack = getDelegate().transform( convertBeforeAssign(getElement()) );
+            return convertBeforeTransform(stack);
+        } catch (OperationFailedException e) {
+            throw new OutputWriteFailedException(e);
+        }
     }
 
     /**

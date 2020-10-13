@@ -118,10 +118,10 @@ public class GeneratorBridge<S, T> implements Generator<S> {
     }
 
     @Override
-    public int write(
+    public int writeWithIndex(
             IndexableOutputNameStyle outputNameStyle, String index, OutputterChecked outputter)
             throws OutputWriteFailedException {
-        return generator.write(outputNameStyle, index, outputter);
+        return generator.writeWithIndex(outputNameStyle, index, outputter);
     }
 
     @Override

@@ -30,7 +30,6 @@ import java.util.Optional;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
-import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.manifest.file.FileType;
 import org.anchoranalysis.io.manifest.sequencetype.SequenceType;
@@ -92,7 +91,7 @@ public class OutputSequenceIndexed<T,S> implements OutputSequence {
     public boolean isOn() {
         return sequenceWriter.isOn();
     }
-
+    
     /**
      * Outputs an additional element in the sequence.
      * 
@@ -110,12 +109,12 @@ public class OutputSequenceIndexed<T,S> implements OutputSequence {
                 return;
             }
             
-            synchronized(generator) {                
+            synchronized(this) {          
+                final T elementCopy = element;
                 sequenceType.update(index);
-                generator.assignElement(element);
-                this.sequenceWriter.write(() -> generator, String.valueOf(index));
+                this.sequenceWriter.write(() -> generator, () -> elementCopy, String.valueOf(index));
             }
-        } catch (SequenceTypeException | SetOperationFailedException e) {
+        } catch (SequenceTypeException e) {
             throw new OutputWriteFailedException(e);
         }
     }

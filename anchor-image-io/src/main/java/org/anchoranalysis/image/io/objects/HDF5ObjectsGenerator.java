@@ -54,11 +54,8 @@ public class HDF5ObjectsGenerator extends OneStageGenerator<ObjectCollection> {
 
     /**
      * Creates with an element (and compressed set to true)
-     *
-     * @param objects the initial element for the generator
      */
-    public HDF5ObjectsGenerator(ObjectCollection objects) {
-        super(objects);
+    public HDF5ObjectsGenerator() {
         this.compressed = true;
     }
 

@@ -35,7 +35,7 @@ public class IDGetterObjectWithProperties implements IDGetter<ObjectWithProperti
     private final String propertyName;
 
     @Override
-    public int getID(ObjectWithProperties m, int iter) {
-        return (Integer) m.getProperty(propertyName);
+    public int getID(ObjectWithProperties element, int iteration) {
+        return (Integer) element.getProperty(propertyName);
     }
 }

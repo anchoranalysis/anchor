@@ -73,6 +73,6 @@ public class ObjectsAsUniqueValueGenerator extends ObjectsGenerator {
             out.assignValue(value++).toObject(object);
         }
 
-        return new ChannelGenerator("maskCollection", out).transform();
+        return new ChannelGenerator("maskCollection").transform(out);
     }
 }

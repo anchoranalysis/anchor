@@ -34,7 +34,9 @@ import org.anchoranalysis.io.generator.OneStageGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import lombok.AllArgsConstructor;
 
+@AllArgsConstructor
 public class KeyValueParamsGenerator extends OneStageGenerator<KeyValueParams> {
 
     private final String manifestFunction;

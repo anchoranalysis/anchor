@@ -40,7 +40,7 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
  * Delegates a {@link RasterGenerator} to a {@code SingleFileTypeGenerator<T, DisplayStack>}.
  *
  * @author Owen Feehan
- * @param <T> iteration-type
+ * @param <T> element-type
  */
 @RequiredArgsConstructor
 public class RasterGeneratorDelegateToDisplayStack<T> extends RasterGenerator<T> {
@@ -62,7 +62,7 @@ public class RasterGeneratorDelegateToDisplayStack<T> extends RasterGenerator<T>
 
     @Override
     public Stack transform() throws OutputWriteFailedException {
-        return delegate.transform().deriveStack(false);
+        return delegate.transform( getElement() ).deriveStack(false);
     }
 
     @Override

@@ -63,6 +63,6 @@ class WriteCSVForGroup {
                         outputName,
                         () ->
                                 new FeatureListCSVGeneratorHorizontal(
-                                        MANIFEST_FUNCTION_FEATURES_GROUP, featureNames, results));
+                                        MANIFEST_FUNCTION_FEATURES_GROUP, featureNames), () -> results);
     }
 }

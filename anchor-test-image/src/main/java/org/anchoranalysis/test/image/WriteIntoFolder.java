@@ -27,13 +27,11 @@ package org.anchoranalysis.test.image;
 
 import io.vavr.control.Either;
 import java.nio.file.Path;
-import java.util.Collection;
 import java.util.List;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
-import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
@@ -46,6 +44,7 @@ import org.anchoranalysis.image.io.generator.raster.object.collection.ObjectAsMa
 import org.anchoranalysis.image.io.generator.raster.object.rgb.DrawObjectsGenerator;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.object.properties.ObjectCollectionWithProperties;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.voxel.Voxels;
@@ -113,26 +112,14 @@ public class WriteIntoFolder implements TestRule {
     }
 
     public void writeStack(String outputName, DisplayStack stack) {
-
         setupOutputterIfNecessary();
-
-        try {
-            generatorStack.assignElement(stack);
-        } catch (SetOperationFailedException e) {
-            throw new AnchorImpossibleSituationException();
-        }
-
-        outputter.writerPermissive().write(outputName, () -> generatorStack);
+        outputter.writerPermissive().write(outputName, () -> generatorStack, () -> stack);
     }
 
     public void writeObject(String outputName, ObjectMask object)
             throws SetOperationFailedException {
-
         setupOutputterIfNecessary();
-
-        generatorSingleObject.assignElement(object);
-
-        outputter.writerPermissive().write(outputName, () -> generatorSingleObject);
+        outputter.writerPermissive().write(outputName, () -> generatorSingleObject, () -> object);
     }
 
     /**
@@ -186,9 +173,7 @@ public class WriteIntoFolder implements TestRule {
     public void writeList(String outputName, List<DisplayStack> stacks, boolean always2D) throws OutputWriteFailedException {
 
         setupOutputterIfNecessary();
-
-        CollectionGenerator<DisplayStack, Collection<DisplayStack>> generatorCollection = new CollectionGenerator<>(generatorStack, outputName, stacks);
-        outputter.getChecked().getWriters().permissive().write(outputName, () -> generatorCollection);
+        outputter.getChecked().getWriters().permissive().write(outputName, () -> new CollectionGenerator<>(generatorStack, outputName), () -> stacks);
     }
 
     private static DisplayStack displayStackFor(Channel channel) {
@@ -233,9 +218,8 @@ public class WriteIntoFolder implements TestRule {
         setupOutputterIfNecessary();
 
         DrawObjectsGenerator generatorObjects =
-                DrawObjectsGenerator.outlineVariedColors(objects, 1, background);
-
-        outputter.writerPermissive().write(outputName, () -> generatorObjects);
+                DrawObjectsGenerator.outlineVariedColors(objects.size(), 1, background);
+        outputter.writerPermissive().write(outputName, () -> generatorObjects, () -> new ObjectCollectionWithProperties(objects));
     }
 
     /** Finds dimensions that place the objects in the center */

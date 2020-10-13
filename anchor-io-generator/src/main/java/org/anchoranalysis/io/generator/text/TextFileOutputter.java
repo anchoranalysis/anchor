@@ -60,7 +60,7 @@ public class TextFileOutputter {
                 outputter
                         .getWriters()
                         .selective()
-                        .writeGenerateFilename(outputName, extension, manifestDescription);
+                        .createFilenameForWriting(outputName, extension, manifestDescription);
         return fileOutputPath.map(path -> new TextFileOutput(path.toString()));
     }
 }

@@ -38,11 +38,11 @@ import org.anchoranalysis.overlay.writer.PrecalculationOverlay;
 
 /**
  * Draws a filled-in shape for each object.
- *
+ * 
  * @author Owen Feehan
  */
 public class Filled extends DrawObject {
-
+    
     @Override
     public PrecalculationOverlay precalculate(ObjectWithProperties object, Dimensions dim)
             throws CreateException {

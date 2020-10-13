@@ -37,6 +37,10 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 public class XStreamGenerator<T> extends SerializedGenerator<T> {
 
+    public XStreamGenerator() {
+        this(Optional.empty());
+    }
+    
     public XStreamGenerator(Optional<String> manifestFunction) {
         super(manifestFunction);
     }

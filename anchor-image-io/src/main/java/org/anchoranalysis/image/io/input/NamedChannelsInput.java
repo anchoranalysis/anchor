@@ -44,7 +44,7 @@ import org.anchoranalysis.image.stack.TimeSequence;
  */
 public abstract class NamedChannelsInput implements ProvidesStackInput {
 
-    /** Number of series */
+    /** Number of series that exist. */
     public abstract int numberSeries() throws ImageIOException;
 
     /** Dimensions of a particular series */

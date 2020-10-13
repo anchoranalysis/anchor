@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.image.io.bean.feature;
 
-import java.io.IOException;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -75,37 +74,35 @@ public class OutputFeatureTable extends ImageBean<OutputFeatureTable> {
      * Outputs the feature-table.
      *
      * @param context the input-output context.
-     * @throws IOException if anything goes wrong when outputting.
      */
-    public void output(InputOutputContext context) throws IOException {
+    public void output(InputOutputContext context) {
 
         // Early exit if we're not allowed output anything anyway
         if (!context.getOutputter().outputsEnabled().isOutputEnabled(OUTPUT_FEATURE_TABLE)) {
             return;
         }
 
+        context.getOutputter()
+                .writerSelective()
+                .write(
+                        OUTPUT_FEATURE_TABLE,
+                        () -> createGenerator(context.getLogger()),
+                        this::createObjectsWrapException);
+    }
+    
+    private ObjectCollection createObjectsWrapException() throws OutputWriteFailedException {
         try {
-            ObjectCollection objectCollection = objects.create();
-
-            context.getOutputter()
-                    .writerSelective()
-                    .write(
-                            OUTPUT_FEATURE_TABLE,
-                            () -> createGenerator(objectCollection, context.getLogger()));
-
+            return objects.create();
         } catch (CreateException e) {
-            throw new IOException(e);
+            throw new OutputWriteFailedException(e);
         }
     }
 
-    private ObjectFeatureListCSVGenerator createGenerator(ObjectCollection objects, Logger logger)
+    private ObjectFeatureListCSVGenerator createGenerator(Logger logger)
             throws OutputWriteFailedException {
         try {
-            ObjectFeatureListCSVGenerator generator =
-                    new ObjectFeatureListCSVGenerator(
+            return new ObjectFeatureListCSVGenerator(
                             feature, getInitializationParameters().getSharedObjects(), logger);
-            generator.assignElement(objects);
-            return generator;
         } catch (CreateException e) {
             throw new OutputWriteFailedException(e);
         }

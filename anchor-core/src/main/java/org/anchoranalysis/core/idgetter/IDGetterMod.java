@@ -38,7 +38,7 @@ public class IDGetterMod<T> implements IDGetter<T> {
     private int mod;
 
     @Override
-    public int getID(T m, int iter) {
-        return idGetter.getID(m, iter) % mod;
+    public int getID(T element, int iteration) {
+        return idGetter.getID(element, iteration) % mod;
     }
 }

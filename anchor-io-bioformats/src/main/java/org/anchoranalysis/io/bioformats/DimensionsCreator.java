@@ -88,18 +88,17 @@ public class DimensionsCreator {
      * @return true if the dimension was assigned, otherwise false.
      */
     private boolean maybeUpdateDimension(Function<IMetadata, Length> dimensionFromMetadata, DoubleConsumer assigner) {
-        Length len = dimensionFromMetadata.apply(lociMetadata);
-        if (len != null) {
-            Number converted = len.value(UNITS.METER);
+        Length length = dimensionFromMetadata.apply(lociMetadata);
+        if (length != null) {
+            Number converted = length.value(UNITS.METER);
 
             // A null implies that len can not be converted to meters as units, so we abandon
             if (converted != null) {
-                Double dbl = converted.doubleValue();
-                assigner.accept(dbl);
+                assigner.accept(converted.doubleValue());
+                return true;
             }
-            return true;
-        } else {
-            return false;
+            
         }
+        return false;
     }
 }

@@ -28,19 +28,22 @@ package org.anchoranalysis.io.output.writer;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 /**
- * Creates a generator to output files.
+ * Creates or gets a element-writer to output files.
+ * 
+ * <p>This exists primarily facilitate lazy creation of an element-writer
+ * (only if an output is enabled by the rules).
  *
  * @author Owen Feehan
- * @param <T> generator-type
+ * @param <T> the type of element to be written
  */
 @FunctionalInterface
-public interface GenerateWritableItem<T extends WritableItem> {
+public interface ElementWriterSupplier<T> {
 
     /**
-     * Gets/creates the generator.
+     * Gets/creates the {@link ElementWriter} to be used for an output.
      *
-     * @return the generator
+     * @return the element writer
      * @throws OutputWriteFailedException
      */
-    T get() throws OutputWriteFailedException;
+    ElementWriter<T> get() throws OutputWriteFailedException;
 }

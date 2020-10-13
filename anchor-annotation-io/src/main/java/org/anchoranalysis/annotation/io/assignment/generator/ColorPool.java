@@ -29,45 +29,33 @@ package org.anchoranalysis.annotation.io.assignment.generator;
 import org.anchoranalysis.bean.shared.color.scheme.ColorScheme;
 import org.anchoranalysis.core.color.ColorList;
 import org.anchoranalysis.core.error.OperationFailedException;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
+@AllArgsConstructor
 public class ColorPool {
 
-    private int numPaired;
-    private ColorScheme colorSetGeneratorPaired;
-    private ColorScheme colorSetGeneratorUnpaired;
-    private boolean differentColorsForMatches;
-
-    public ColorPool(
-            int numPaired,
-            ColorScheme colorSetGeneratorPaired,
-            ColorScheme colorSetGeneratorUnpaired,
-            boolean differentColorsForMatches) {
-        this.numPaired = numPaired;
-        this.colorSetGeneratorPaired = colorSetGeneratorPaired;
-        this.colorSetGeneratorUnpaired = colorSetGeneratorUnpaired;
-        this.differentColorsForMatches = differentColorsForMatches;
-    }
+    private int numberPaired;
+    private ColorScheme colorSchemePaired;
+    private ColorScheme colorSchemeUnpaired;
+    @Getter private boolean differentColorsForMatches;
 
     public ColorList createColors(int numberOtherObjects) throws OperationFailedException {
 
-        ColorList cols = new ColorList();
+        ColorList colors = new ColorList();
 
         if (differentColorsForMatches) {
 
             // Matched
-            cols.addAllScaled(colorSetGeneratorPaired.createList(numPaired), 0.5);
+            colors.addAllScaled(colorSchemePaired.createList(numberPaired), 0.5);
 
             // Unmatched
-            cols.addAll(colorSetGeneratorUnpaired.createList(numberOtherObjects));
+            colors.addAll(colorSchemeUnpaired.createList(numberOtherObjects));
         } else {
             // Treat all as unmatched
-            cols.addAll(colorSetGeneratorUnpaired.createList(numPaired + numberOtherObjects));
+            colors.addAll(colorSchemeUnpaired.createList(numberPaired + numberOtherObjects));
         }
 
-        return cols;
-    }
-
-    public boolean isDifferentColorsForMatches() {
-        return differentColorsForMatches;
+        return colors;
     }
 }

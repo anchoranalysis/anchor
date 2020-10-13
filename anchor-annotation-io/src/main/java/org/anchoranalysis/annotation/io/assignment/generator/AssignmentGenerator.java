@@ -29,8 +29,8 @@ package org.anchoranalysis.annotation.io.assignment.generator;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import lombok.Getter;
-import lombok.Setter;
+import java.util.function.IntFunction;
+import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.annotation.io.assignment.Assignment;
 import org.anchoranalysis.core.color.ColorList;
 import org.anchoranalysis.core.error.CreateException;
@@ -56,6 +56,7 @@ import org.anchoranalysis.image.stack.rgb.RGBStack;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.overlay.bean.DrawObject;
+import io.vavr.Tuple2;
 
 /**
  * Outputs a raster showing an {@link Assignment} on a background.
@@ -65,42 +66,27 @@ import org.anchoranalysis.overlay.bean.DrawObject;
  *
  * @author Owen Feehan
  */
+@RequiredArgsConstructor
 public class AssignmentGenerator extends RasterGeneratorWithElement<Assignment> {
 
-    private DisplayStack background;
-    private StackGenerator delegate;
-    private boolean flatten;
+    // START REQUIRED ARGUMENTS
+    /** The background, which will feature in both left and right panes. */
+    private final DisplayStack background;
 
-    private ColorPool colorPool;
+    private final IntFunction<ColorPool> colorPoolCreator;
+        
+    /** Whether to flatten (maximum intensity projection) in the z-dimension. */
+    private final boolean flatten;
+    
+    private final Tuple2<String, String> names;
 
+    private final boolean appendNumberBrackets;
+    
     /** How many pixels should the outline be around objects */
-    @Getter @Setter private int outlineWidth = 1;
+    private final int outlineWidth;
+    // END REQUIRED ARGUMENTS
 
-    /** Name printed in left-panel. */
-    @Getter @Setter private String leftName = "annotation";
-
-    /** Name printed in right-panel. */
-    @Getter @Setter private String rightName = "result";
-
-    /**
-     * Create with a background and assignment
-     *
-     * @param background the background, which will feature in both left and right panes
-     * @param assignment the assignment
-     * @param colorPool
-     * @param flatten whether to flatten (maximum intensity projection) in the z-dimension
-     */
-    AssignmentGenerator(
-            DisplayStack background, Assignment assignment, ColorPool colorPool, boolean flatten) {
-        super();
-        this.background = background;
-        this.flatten = flatten;
-        this.colorPool = colorPool;
-
-        assignElement(assignment);
-
-        delegate = new StackGenerator(true, "assignmentComparison", false);
-    }
+    private StackGenerator delegate = new StackGenerator(true, "assignmentComparison", false);
 
     @Override
     public boolean isRGB() {
@@ -112,13 +98,14 @@ public class AssignmentGenerator extends RasterGeneratorWithElement<Assignment> 
 
         Assignment assignment = getElement();
 
+        ColorPool colorPool = colorPoolCreator.apply(assignment.numberPaired());
+        
         ArrangeRaster stackProvider =
                 createTiledStackProvider(
-                        createRGBOutlineStack(true, assignment),
-                        createRGBOutlineStack(false, assignment),
-                        leftName,
-                        rightName);
-
+                        createRGBOutlineStack(true, assignment, colorPool),
+                        createRGBOutlineStack(false, assignment, colorPool),
+                        createLabel(assignment,true),
+                        createLabel(assignment,false));
         try {
             return delegate.transform(stackProvider.create());
 
@@ -146,7 +133,7 @@ public class AssignmentGenerator extends RasterGeneratorWithElement<Assignment> 
         return TileRasters.createStackProvider(listProvider, 2, false, false, true);
     }
 
-    private Stack createRGBOutlineStack(boolean left, Assignment assignment)
+    private Stack createRGBOutlineStack(boolean left, Assignment assignment, ColorPool colorPool)
             throws OutputWriteFailedException {
         try {
             return createRGBOutlineStack(
@@ -161,30 +148,31 @@ public class AssignmentGenerator extends RasterGeneratorWithElement<Assignment> 
             ColorPool colorPool,
             final List<ObjectMask> otherObjects)
             throws OutputWriteFailedException, OperationFailedException {
-        return createGenerator(
-                        otherObjects,
-                        colorPool.createColors(otherObjects.size()),
-                        ObjectCollectionFactory.of(matchedObjects, otherObjects))
-                .transform();
+        ObjectCollection objects = ObjectCollectionFactory.of(matchedObjects, otherObjects);
+        DrawObjectsGenerator generator = createGenerator(
+                    otherObjects,
+                    colorPool.createColors(otherObjects.size()),
+                    colorPool.isDifferentColorsForMatches());
+        return generator.transform(new ObjectCollectionWithProperties(objects));
     }
 
     private DrawObjectsGenerator createGenerator(
-            List<ObjectMask> otherObjects, ColorList cols, ObjectCollection objects) {
+            List<ObjectMask> otherObjects, ColorList colors, boolean differentColorsForMatches) {
 
         DrawObject outlineWriter = createOutlineWriter();
 
-        if (colorPool.isDifferentColorsForMatches()) {
+        if (differentColorsForMatches) {
             DrawObject conditionalWriter = createConditionalWriter(otherObjects, outlineWriter);
-            return createGenerator(conditionalWriter, cols, objects);
+            return createGenerator(conditionalWriter, colors);
         } else {
-            return createGenerator(outlineWriter, cols, objects);
+            return createGenerator(outlineWriter, colors);
         }
     }
 
     private DrawObjectsGenerator createGenerator(
-            DrawObject drawObject, ColorList colors, ObjectCollection objects) {
+            DrawObject drawObject, ColorList colors) {
         return DrawObjectsGenerator.withBackgroundAndColors(
-                drawObject, new ObjectCollectionWithProperties(objects), background, colors);
+                drawObject, background, colors);
     }
 
     private DrawObject createConditionalWriter(List<ObjectMask> otherObjects, DrawObject writer) {
@@ -192,10 +180,24 @@ public class AssignmentGenerator extends RasterGeneratorWithElement<Assignment> 
                 (ObjectWithProperties object, RGBStack stack, int id) ->
                         otherObjects.contains(object.withoutProperties()),
                 writer,
-                new Filled());
+                new Filled() );
     }
 
     private DrawObject createOutlineWriter() {
         return new Outline(outlineWidth, !flatten);
+    }
+    
+    private String createLabel(Assignment assignment, boolean left) {
+        String name = left ? names._1() : names._2();
+        return maybeAppendNumber(appendNumberBrackets, name, assignment, true);
+    }
+
+    private static String maybeAppendNumber(
+            boolean doAppend, String mainString, Assignment assignment, boolean left) {
+        if (doAppend) {
+            return String.format("%s (%d)", mainString, assignment.numberUnassigned(left));
+        } else {
+            return mainString;
+        }
     }
 }
