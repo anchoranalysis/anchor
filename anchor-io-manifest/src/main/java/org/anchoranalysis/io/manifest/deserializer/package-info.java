@@ -24,6 +24,6 @@
  * #L%
  */
 /**
- * Beans to deserialize particular types of objects from the file-system.
+ * Classes to deserialize particular types of objects from the file-system.
  */
 package org.anchoranalysis.io.manifest.deserializer;

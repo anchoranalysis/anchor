@@ -33,8 +33,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
-import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.core.name.value.NameValue;
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.generator.MultipleFileTypeGenerator;
@@ -75,38 +73,24 @@ public class CombinedListGenerator<T> implements MultipleFileTypeGenerator<T> {
     }
 
     @Override
-    public void write(OutputNameStyle outputNameStyle, OutputterChecked outputter)
+    public void write(T element, OutputNameStyle outputNameStyle, OutputterChecked outputter)
             throws OutputWriteFailedException {
-        delegate.write(this::getElement, outputNameStyle, outputter);
+        delegate.write(element, outputNameStyle, outputter);
     }
 
     @Override
     public int writeWithIndex(
-            IndexableOutputNameStyle outputNameStyle, String index, OutputterChecked outputter)
+            T element,
+            String index, 
+            IndexableOutputNameStyle outputNameStyle, OutputterChecked outputter)
             throws OutputWriteFailedException {
-        return delegate.write(outputNameStyle, index, outputter);
+        return delegate.writeWithIndex(element, index, outputNameStyle, outputter);
     }
 
     @Override
     public Optional<FileType[]> getFileTypes(OutputWriteSettings outputWriteSettings)
             throws OperationFailedException {
         return delegate.getFileTypes(outputWriteSettings);
-    }
-
-    @Override
-    public T getElement() {
-        if (list.isEmpty()) {
-            throw new AnchorFriendlyRuntimeException("List of generators is empty");
-        }
-        return list.get(0).getElement();
-    }
-
-    @Override
-    public void assignElement(T element) throws SetOperationFailedException {
-
-        for (Generator<T> generator : list) {
-            generator.assignElement(element);
-        }
     }
 
     public void add(String name, Generator<T> element) {

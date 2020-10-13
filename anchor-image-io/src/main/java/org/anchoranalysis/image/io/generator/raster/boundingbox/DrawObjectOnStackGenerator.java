@@ -35,7 +35,7 @@ import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.extent.box.BoundedList;
 import org.anchoranalysis.image.extent.box.BoundingBox;
-import org.anchoranalysis.image.io.generator.raster.RasterGeneratorWithElement;
+import org.anchoranalysis.image.io.generator.raster.RasterGenerator;
 import org.anchoranalysis.image.io.generator.raster.object.rgb.DrawObjectsGenerator;
 import org.anchoranalysis.image.io.stack.StackWriteOptions;
 import org.anchoranalysis.image.object.ObjectMask;
@@ -57,7 +57,7 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
  * @author Owen Feehan
  */
 public class DrawObjectOnStackGenerator
-        extends RasterGeneratorWithElement<BoundedList<ObjectMask>> {
+        extends RasterGenerator<BoundedList<ObjectMask>> {
 
     private static final ManifestDescription MANIFEST_DESCRIPTION =
             new ManifestDescription("raster", "extractedObjectOutline");
@@ -151,33 +151,25 @@ public class DrawObjectOnStackGenerator
     }
 
     @Override
-    public Stack transform() throws OutputWriteFailedException {
-
-        if (getElement() == null) {
-            throw new OutputWriteFailedException("no mutable element set");
-        }
+    public Stack transform(BoundedList<ObjectMask> element) throws OutputWriteFailedException {
 
         // Apply the generator
-        drawObjectsGenerator.setBackground(createBackground());
-
-        BoundedList<ObjectMask> objects = this.getElement();
+        drawObjectsGenerator.setBackground(createBackground(element));
 
         Stream<ObjectWithProperties> objectsForDrawing =
-                objects.stream()
+                element.stream()
                         .map(
                                 object ->
                                         new ObjectWithProperties(
                                                 prepareObjectForDrawing(
-                                                        object, objects.boundingBox())));
+                                                        object, element.boundingBox())));
 
         // An object-mask that is relative to the extracted section
         return drawObjectsGenerator.transform(
                 new ObjectCollectionWithProperties(objectsForDrawing));
     }
 
-    private Either<Dimensions, DisplayStack> createBackground() throws OutputWriteFailedException {
-
-        BoundedList<ObjectMask> element = getElement();
+    private Either<Dimensions, DisplayStack> createBackground(BoundedList<ObjectMask> element) throws OutputWriteFailedException {
 
         if (!backgroundGenerator.isPresent()) {
             // Exit early if there's no background to be extracted

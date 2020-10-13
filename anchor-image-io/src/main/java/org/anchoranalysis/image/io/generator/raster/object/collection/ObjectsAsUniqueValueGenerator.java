@@ -51,25 +51,21 @@ public class ObjectsAsUniqueValueGenerator extends ObjectsGenerator {
         super(dimensions);
     }
 
-    public ObjectsAsUniqueValueGenerator(Dimensions dimensions, ObjectCollection objects) {
-        super(dimensions, objects);
-    }
-
     @Override
-    public Stack transform() throws OutputWriteFailedException {
+    public Stack transform(ObjectCollection element) throws OutputWriteFailedException {
 
         Channel out = factory.createEmptyInitialised(dimensions());
 
-        if (getObjects().size() > 254) {
+        if (element.size() > 254) {
             throw new OutputWriteFailedException(
                     String.format(
                             "Collection has %d objects. A max of 254 is allowed",
-                            getObjects().size()));
+                            element.size()));
         }
 
         int value = 1;
 
-        for (ObjectMask object : getObjects()) {
+        for (ObjectMask object : element) {
             out.assignValue(value++).toObject(object);
         }
 

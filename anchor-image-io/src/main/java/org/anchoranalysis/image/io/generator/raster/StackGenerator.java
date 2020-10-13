@@ -40,7 +40,7 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
  * @author Owen Feehan
  */
 @AllArgsConstructor
-public class StackGenerator extends RasterGeneratorWithElement<Stack> {
+public class StackGenerator extends RasterGenerator<Stack> {
 
     /**
      * Iff true, in the specific case of a 2-channel stack, an additional blank channel is added to
@@ -73,10 +73,6 @@ public class StackGenerator extends RasterGeneratorWithElement<Stack> {
     public StackGenerator(Optional<String> manifestFunction, boolean always2D) {
         this(false, manifestFunction, StackWriteOptions.toReplace(always2D));
     }
-
-    public StackGenerator(boolean padIfNecessary, String manifestFunction, boolean always2D) {
-        this(padIfNecessary, Optional.of(manifestFunction), StackWriteOptions.toReplace(always2D));
-    }
     
     public StackGenerator(boolean padIfNecessary, String manifestFunction) {
         this(padIfNecessary, Optional.of(manifestFunction), StackWriteOptions.toReplace(false));
@@ -89,17 +85,14 @@ public class StackGenerator extends RasterGeneratorWithElement<Stack> {
      * @param padIfNecessary iff true, in the specific case of a 2-channel stack, an additional
      *     blank channel is added to make it 3-channels.
      * @param manifestFunction function stored in manifest for this generator.
-     * @param stack the initial element
      */
-    public StackGenerator(boolean padIfNecessary, String manifestFunction, Stack stack) {
-        this(padIfNecessary, Optional.of(manifestFunction), StackWriteOptions.from(stack));
-        assignElement(stack);
+    public StackGenerator(boolean padIfNecessary, String manifestFunction, boolean always2D) {
+        this(padIfNecessary, Optional.of(manifestFunction), StackWriteOptions.toReplace(always2D));
     }
 
     @Override
-    public Stack transform() throws OutputWriteFailedException {
-        assert(getElement()!=null);
-        Stack out = getElement().duplicateShallow();
+    public Stack transform(Stack element) throws OutputWriteFailedException {
+        Stack out = element.duplicateShallow();
 
         try {
             if (padIfNecessary && out.getNumberChannels() == 2) {

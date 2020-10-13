@@ -42,12 +42,12 @@ public abstract class RasterGenerator<T> extends SingleFileTypeGenerator<T, Stac
     public abstract boolean isRGB();
 
     @Override
-    public void writeToFile(OutputWriteSettings outputWriteSettings, Path filePath)
+    public void writeToFile(T element, OutputWriteSettings outputWriteSettings, Path filePath)
             throws OutputWriteFailedException {
         try {
             StackWriter writer = GeneratorOutputter.writer(outputWriteSettings);
             writer.writeStack(
-                        transform( getElement() ), filePath, isRGB(), writeOptions());
+                        transform(element), filePath, isRGB(), writeOptions());
         } catch (ImageIOException e) {
             throw new OutputWriteFailedException(e);
         }

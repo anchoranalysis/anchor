@@ -88,20 +88,19 @@ class ObjectFeatureListCSVGenerator extends CSVGenerator<ObjectCollection> {
     }
 
     @Override
-    public void writeToFile(OutputWriteSettings outputWriteSettings, Path filePath)
+    public void writeToFile(ObjectCollection element, OutputWriteSettings outputWriteSettings, Path filePath)
             throws OutputWriteFailedException {
 
         // We calculate a results vector for each object, across all features in memory. This is
         // more efficient
         ResultsVectorList results = new ResultsVectorList();
-        for (ObjectMask objectMask : getElement()) {
+        for (ObjectMask objectMask : element) {
             results.add(
                     featureCalculator.calculateSuppressErrors(
                             new FeatureInputSingleObject(objectMask), logger.errorReporter()));
         }
 
-        delegate.assignElement(results);
-        delegate.writeToFile(outputWriteSettings, filePath);
+        delegate.writeToFile(results, outputWriteSettings, filePath);
     }
 
     // Puts in some extra descriptive features at the start

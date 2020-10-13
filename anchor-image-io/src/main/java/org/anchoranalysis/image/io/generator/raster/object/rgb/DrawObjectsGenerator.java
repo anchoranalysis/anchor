@@ -131,14 +131,14 @@ public class DrawObjectsGenerator extends ObjectsOnRGBGenerator {
     }
 
     @Override
-    protected RGBStack generateBackground(Either<Dimensions, DisplayStack> background) {
+    protected RGBStack generateBackground(ObjectCollectionWithProperties element, Either<Dimensions, DisplayStack> background) {
         return background.fold(
                 DrawObjectsGenerator::createEmptyStackFor, ConvertDisplayStackToRGB::convert);
     }
 
     @Override
-    protected ObjectCollectionWithProperties generateMasks() {
-        return getElement();
+    protected ObjectCollectionWithProperties generateMasks(ObjectCollectionWithProperties element) {
+        return element;
     }
 
     private static ColorIndex defaultColorsFor(int size) {

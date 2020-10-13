@@ -45,7 +45,6 @@ import org.anchoranalysis.core.color.RGBColor;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.spatial.SizeXY;
 import org.anchoranalysis.image.io.generator.raster.RasterGenerator;
-import org.anchoranalysis.image.io.generator.raster.RasterGeneratorWithElement;
 import org.anchoranalysis.image.io.stack.StackWriteOptions;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.bufferedimage.CreateStackFromBufferedImage;
@@ -84,14 +83,28 @@ public class TextStyle extends AnchorBean<TextStyle> {
     @BeanField @Getter @Setter private double padding = 0;
     // END BEAN PROPERTIES
 
-    // A generator associated with this bean
-    private class Generator extends RasterGeneratorWithElement<String> {
+    public TextStyle(double padding) {
+        this.padding = padding;
+    }
+
+    /** Creates a generator, which produces a drawn string on an image when generated */
+    public RasterGenerator<String> createGenerator() {
+        return new RasterizedTextGenerator();
+    }
+        
+    /**
+     * Creates an image with text matching the style/size specified in this bean.
+     * 
+     * @author Owen Feehan
+     *
+     */
+    private class RasterizedTextGenerator extends RasterGenerator<String> {
 
         @Override
-        public Stack transform() throws OutputWriteFailedException {
+        public Stack transform(String element) throws OutputWriteFailedException {
 
             SizeXY resolvedSize =
-                    Optional.ofNullable(size).orElseGet(this::alternativeSizeFromDefault);
+                    Optional.ofNullable(size).orElseGet( () -> alternativeSizeFromDefault(element) );
 
             assert (resolvedSize.asExtent().volumeXY() > 0);
 
@@ -102,7 +115,7 @@ public class TextStyle extends AnchorBean<TextStyle> {
                             BufferedImage.TYPE_INT_RGB);
             Graphics2D graphics = createGraphicsFromBufferedImage(bufferedImage);
 
-            drawCenteredString(getElement(), resolvedSize, graphics);
+            drawCenteredString(element, resolvedSize, graphics);
 
             try {
                 return CreateStackFromBufferedImage.create(bufferedImage);
@@ -144,13 +157,13 @@ public class TextStyle extends AnchorBean<TextStyle> {
             g.drawString(stringToDraw, x, y);
         }
 
-        private SizeXY alternativeSizeFromDefault() {
+        private SizeXY alternativeSizeFromDefault(String element) {
 
             Graphics2D graphics =
                     createGraphicsFromBufferedImage(
                             new BufferedImage(1000, 1000, BufferedImage.TYPE_INT_RGB));
             FontMetrics fm = graphics.getFontMetrics();
-            Rectangle2D defaultSize = fm.getStringBounds(getElement(), graphics);
+            Rectangle2D defaultSize = fm.getStringBounds(element, graphics);
             return new SizeXY(
                     addPadding(defaultSize.getWidth()), addPadding(defaultSize.getHeight()));
         }
@@ -158,14 +171,5 @@ public class TextStyle extends AnchorBean<TextStyle> {
         private int addPadding(double value) {
             return (int) Math.ceil(value + (padding * 2));
         }
-    }
-
-    public TextStyle(double padding) {
-        this.padding = padding;
-    }
-
-    /** Creates a generator, which produces a drawn string on an image when generated */
-    public RasterGenerator<String> createGenerator() {
-        return new Generator();
     }
 }

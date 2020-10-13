@@ -40,7 +40,7 @@ import org.anchoranalysis.image.io.bean.object.draw.Filled;
 import org.anchoranalysis.image.io.bean.object.draw.IfElse;
 import org.anchoranalysis.image.io.bean.object.draw.Outline;
 import org.anchoranalysis.image.io.bean.stack.provider.StackProviderWithLabel;
-import org.anchoranalysis.image.io.generator.raster.RasterGeneratorWithElement;
+import org.anchoranalysis.image.io.generator.raster.RasterGenerator;
 import org.anchoranalysis.image.io.generator.raster.StackGenerator;
 import org.anchoranalysis.image.io.generator.raster.object.rgb.DrawObjectsGenerator;
 import org.anchoranalysis.image.io.stack.StackWriteOptions;
@@ -67,7 +67,7 @@ import io.vavr.Tuple2;
  * @author Owen Feehan
  */
 @RequiredArgsConstructor
-public class AssignmentGenerator extends RasterGeneratorWithElement<Assignment> {
+public class AssignmentGenerator extends RasterGenerator<Assignment> {
 
     // START REQUIRED ARGUMENTS
     /** The background, which will feature in both left and right panes. */
@@ -94,18 +94,16 @@ public class AssignmentGenerator extends RasterGeneratorWithElement<Assignment> 
     }
 
     @Override
-    public Stack transform() throws OutputWriteFailedException {
+    public Stack transform(Assignment element) throws OutputWriteFailedException {
 
-        Assignment assignment = getElement();
-
-        ColorPool colorPool = colorPoolCreator.apply(assignment.numberPaired());
+        ColorPool colorPool = colorPoolCreator.apply(element.numberPaired());
         
         ArrangeRaster stackProvider =
                 createTiledStackProvider(
-                        createRGBOutlineStack(true, assignment, colorPool),
-                        createRGBOutlineStack(false, assignment, colorPool),
-                        createLabel(assignment,true),
-                        createLabel(assignment,false));
+                        createRGBOutlineStack(true, element, colorPool),
+                        createRGBOutlineStack(false, element, colorPool),
+                        createLabel(element,true),
+                        createLabel(element,false));
         try {
             return delegate.transform(stackProvider.create());
 

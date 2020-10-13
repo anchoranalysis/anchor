@@ -28,7 +28,7 @@ package org.anchoranalysis.mpp.io.marks.generator;
 
 import java.util.Optional;
 import org.anchoranalysis.image.extent.Dimensions;
-import org.anchoranalysis.image.io.generator.raster.RasterGeneratorWithElement;
+import org.anchoranalysis.image.io.generator.raster.RasterGenerator;
 import org.anchoranalysis.image.io.generator.raster.object.collection.ObjectsAsUniqueValueGenerator;
 import org.anchoranalysis.image.io.stack.StackWriteOptions;
 import org.anchoranalysis.image.object.properties.ObjectCollectionWithProperties;
@@ -38,7 +38,7 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMembershipWithFlags;
 import org.anchoranalysis.mpp.mark.MarkCollection;
 
-public class MarksAsUniqueValueGenerator extends RasterGeneratorWithElement<MarkCollection> {
+public class MarksAsUniqueValueGenerator extends RasterGenerator<MarkCollection> {
 
     private ObjectsAsUniqueValueGenerator delegate;
     private RegionMembershipWithFlags regionMembership;
@@ -55,10 +55,10 @@ public class MarksAsUniqueValueGenerator extends RasterGeneratorWithElement<Mark
     }
 
     @Override
-    public Stack transform() throws OutputWriteFailedException {
+    public Stack transform(MarkCollection element) throws OutputWriteFailedException {
 
         ObjectCollectionWithProperties objects =
-                getElement().deriveObjects(delegate.dimensions(), this.regionMembership);
+                element.deriveObjects(delegate.dimensions(), this.regionMembership);
         return delegate.transform(objects.withoutProperties());
     }
 

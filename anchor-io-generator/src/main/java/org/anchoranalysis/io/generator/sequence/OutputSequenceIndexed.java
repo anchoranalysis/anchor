@@ -109,11 +109,10 @@ public class OutputSequenceIndexed<T,S> implements OutputSequence {
                 return;
             }
             
-            synchronized(this) {          
-                final T elementCopy = element;
+            synchronized(sequenceType) {          
                 sequenceType.update(index);
-                this.sequenceWriter.write(() -> generator, () -> elementCopy, String.valueOf(index));
             }
+            this.sequenceWriter.write(() -> generator, () -> element, String.valueOf(index));
         } catch (SequenceTypeException e) {
             throw new OutputWriteFailedException(e);
         }

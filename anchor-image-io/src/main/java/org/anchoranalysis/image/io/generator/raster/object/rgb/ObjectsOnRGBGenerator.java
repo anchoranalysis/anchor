@@ -37,7 +37,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.channel.factory.ChannelFactoryByte;
 import org.anchoranalysis.image.channel.factory.ChannelFactorySingleType;
 import org.anchoranalysis.image.extent.Dimensions;
-import org.anchoranalysis.image.io.generator.raster.RasterGeneratorWithElement;
+import org.anchoranalysis.image.io.generator.raster.RasterGenerator;
 import org.anchoranalysis.image.io.stack.StackWriteOptions;
 import org.anchoranalysis.image.object.properties.ObjectCollectionWithProperties;
 import org.anchoranalysis.image.stack.DisplayStack;
@@ -55,7 +55,7 @@ import org.anchoranalysis.overlay.writer.ObjectDrawAttributes;
  */
 @AllArgsConstructor
 public abstract class ObjectsOnRGBGenerator
-        extends RasterGeneratorWithElement<ObjectCollectionWithProperties> {
+        extends RasterGenerator<ObjectCollectionWithProperties> {
 
     private static final ChannelFactorySingleType CHANNEL_FACTORY = new ChannelFactoryByte();
 
@@ -74,15 +74,15 @@ public abstract class ObjectsOnRGBGenerator
     // END REQUIRED ARGUMENTS
 
     @Override
-    public Stack transform() throws OutputWriteFailedException {
+    public Stack transform(ObjectCollectionWithProperties element) throws OutputWriteFailedException {
         try {
             if (background == null) {
                 throw new OutputWriteFailedException(
                         "No background has been set, as is needed by this generator");
             }
 
-            RGBStack backgroundRGB = generateBackground(background);
-            drawObject.write(generateMasks(), backgroundRGB, attributes);
+            RGBStack backgroundRGB = generateBackground(element, background);
+            drawObject.write(generateMasks(element), backgroundRGB, attributes);
             return backgroundRGB.asStack();
         } catch (OperationFailedException | CreateException e) {
             throw new OutputWriteFailedException(e);
@@ -104,10 +104,10 @@ public abstract class ObjectsOnRGBGenerator
         return StackWriteOptions.rgb(isAlways2D());
     }
 
-    protected abstract RGBStack generateBackground(Either<Dimensions, DisplayStack> background)
+    protected abstract RGBStack generateBackground(ObjectCollectionWithProperties element, Either<Dimensions, DisplayStack> background)
             throws CreateException;
 
-    protected abstract ObjectCollectionWithProperties generateMasks() throws CreateException;
+    protected abstract ObjectCollectionWithProperties generateMasks( ObjectCollectionWithProperties element ) throws CreateException;
 
     protected static RGBStack createEmptyStackFor(Dimensions dimensions) {
         return new RGBStack(dimensions, CHANNEL_FACTORY);

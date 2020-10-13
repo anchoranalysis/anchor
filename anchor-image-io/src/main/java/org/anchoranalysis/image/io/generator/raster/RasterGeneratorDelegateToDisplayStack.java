@@ -28,7 +28,6 @@ package org.anchoranalysis.image.io.generator.raster;
 
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.image.io.stack.StackWriteOptions;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
@@ -61,18 +60,8 @@ public class RasterGeneratorDelegateToDisplayStack<T> extends RasterGenerator<T>
     }
 
     @Override
-    public Stack transform() throws OutputWriteFailedException {
-        return delegate.transform( getElement() ).deriveStack(false);
-    }
-
-    @Override
-    public T getElement() {
-        return delegate.getElement();
-    }
-
-    @Override
-    public void assignElement(T element) throws SetOperationFailedException {
-        delegate.assignElement(element);
+    public Stack transform(T element) throws OutputWriteFailedException {
+        return delegate.transform(element).deriveStack(false);
     }
 
     @Override

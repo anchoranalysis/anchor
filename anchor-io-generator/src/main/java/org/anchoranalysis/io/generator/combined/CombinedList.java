@@ -27,6 +27,7 @@
 package org.anchoranalysis.io.generator.combined;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.io.generator.Generator;
@@ -36,7 +37,6 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.output.namestyle.OutputNameStyle;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
-import org.anchoranalysis.io.output.writer.ElementSupplier;
 import org.anchoranalysis.io.output.writer.ElementWriter;
 
 /**
@@ -48,12 +48,12 @@ import org.anchoranalysis.io.output.writer.ElementWriter;
  */
 class CombinedList<T> {
 
-    private ArrayList<OptionalNameValue<Generator<T>>> list = new ArrayList<>();
+    private List<OptionalNameValue<Generator<T>>> list = new ArrayList<>();
 
     public Optional<FileType[]> getFileTypes(OutputWriteSettings outputWriteSettings)
             throws OperationFailedException {
 
-        ArrayList<FileType> all = new ArrayList<>();
+        List<FileType> all = new ArrayList<>();
 
         for (OptionalNameValue<Generator<T>> namedGenerator : list) {
             Optional<FileType[]> fileTypeArray =
@@ -73,7 +73,7 @@ class CombinedList<T> {
         }
     }
 
-    public void write(ElementSupplier<T> element, OutputNameStyle outputNameStyle, OutputterChecked outputter)
+    public void write(T element, OutputNameStyle outputNameStyle, OutputterChecked outputter)
             throws OutputWriteFailedException {
 
         for (OptionalNameValue<Generator<T>> namedGenerator : list) {
@@ -82,8 +82,10 @@ class CombinedList<T> {
         }
     }
 
-    public int write(
-            IndexableOutputNameStyle outputNameStyle, String index, OutputterChecked outputter)
+    public int writeWithIndex(
+            T element,
+            String index, 
+            IndexableOutputNameStyle outputNameStyle, OutputterChecked outputter)
             throws OutputWriteFailedException {
 
         int maxWritten = -1;
@@ -94,8 +96,8 @@ class CombinedList<T> {
                 outputNameStyle.setOutputName(namedGenerator.getName().get()); // NOSONAR
             }
 
-            int numWritten = namedGenerator.getValue().writeWithIndex(outputNameStyle, index, outputter);
-            maxWritten = Math.max(maxWritten, numWritten);
+            int numberWritten = namedGenerator.getValue().writeWithIndex(element, index, outputNameStyle, outputter);
+            maxWritten = Math.max(maxWritten, numberWritten);
         }
 
         return maxWritten;

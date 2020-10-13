@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.image.io.objects;
 
-import java.util.List;
 import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -57,7 +56,7 @@ public class RasterDirectoryObjectsGenerator {
         // We must use a list as it is required to be of type Collection<T> where T is the type
         // being iterated
         // We don't specify a sceneres as we don't know what images they belong to
-        Generator<List<ObjectMask>> listGenerator =
+        CollectionGenerator<ObjectMask> listGenerator =
                 new CollectionGenerator<>(objectGenerator, "objs");
 
         // Finally we expose the list-generator as an ObjectCollection generator externally

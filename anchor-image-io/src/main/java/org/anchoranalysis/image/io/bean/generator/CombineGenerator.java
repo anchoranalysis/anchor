@@ -32,7 +32,6 @@ import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.functional.FunctionalList;
-import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.image.bean.nonbean.spatial.arrange.RasterArranger;
 import org.anchoranalysis.image.bean.spatial.arrange.ArrangeStackBean;
 import org.anchoranalysis.image.channel.factory.ChannelFactoryByte;
@@ -40,7 +39,6 @@ import org.anchoranalysis.image.io.generator.raster.RasterGenerator;
 import org.anchoranalysis.image.io.stack.StackWriteOptions;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
-import org.anchoranalysis.io.generator.SingleFileTypeGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
@@ -52,9 +50,9 @@ class CombineGenerator<T> extends RasterGenerator<T> {
     private final List<RasterGenerator<T>> generators;
 
     @Override
-    public Stack transform() throws OutputWriteFailedException {
+    public Stack transform(T element) throws OutputWriteFailedException {
 
-        List<RGBStack> generated = generateAll();
+        List<RGBStack> generated = generateAll(element);
 
         RasterArranger rasterArranger = new RasterArranger();
 
@@ -85,27 +83,15 @@ class CombineGenerator<T> extends RasterGenerator<T> {
     }
 
     @Override
-    public T getElement() {
-        return generators.get(0).getElement();
-    }
-
-    @Override
-    public void assignElement(T element) throws SetOperationFailedException {
-        for (SingleFileTypeGenerator<T, Stack> generator : generators) {
-            generator.assignElement(element);
-        }
-    }
-
-    @Override
     public boolean isRGB() {
         return generators.stream().allMatch(RasterGenerator::isRGB);
     }
 
-    private List<RGBStack> generateAll() throws OutputWriteFailedException {
+    private List<RGBStack> generateAll(T element) throws OutputWriteFailedException {
         return FunctionalList.mapToList(
                 generators,
                 OutputWriteFailedException.class,
-                generator -> new RGBStack(generator.transform(getElement())));
+                generator -> new RGBStack(generator.transform(element)));
     }
 
     @Override

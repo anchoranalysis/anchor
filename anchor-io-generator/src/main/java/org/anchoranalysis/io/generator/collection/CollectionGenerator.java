@@ -30,7 +30,6 @@ import java.util.Collection;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.generator.sequence.OutputSequenceFactory;
 import org.anchoranalysis.io.generator.sequence.pattern.OutputPatternIntegerSuffix;
@@ -47,10 +46,9 @@ import org.anchoranalysis.io.output.outputter.OutputterChecked;
  * 
  * @author Owen Feehan
  * @param <T> element-type in collection
- * @param <S> collection-type
  */
 @RequiredArgsConstructor
-public class CollectionGenerator<T, S extends Collection<T>> implements Generator<S> {
+public class CollectionGenerator<T> implements Generator<Collection<T>> {
 
     // START REQUIRED ARGUMENTS
     /** Generator to use for writing each element. */
@@ -60,10 +58,8 @@ public class CollectionGenerator<T, S extends Collection<T>> implements Generato
     private final String prefix;
     // END REQUIRED ARGUMENTS
 
-    private S element;
-
     @Override
-    public void write(OutputNameStyle outputNameStyle, OutputterChecked outputter)
+    public void write(Collection<T> element, OutputNameStyle outputNameStyle, OutputterChecked outputter)
             throws OutputWriteFailedException {
 
         writeElementAsSubdirectory(element,
@@ -72,10 +68,10 @@ public class CollectionGenerator<T, S extends Collection<T>> implements Generato
 
     @Override
     public int writeWithIndex(
-            IndexableOutputNameStyle outputNameStyle, String index, OutputterChecked outputter)
+            Collection<T> element, String index, IndexableOutputNameStyle outputNameStyle, OutputterChecked outputter)
             throws OutputWriteFailedException {
         // Ignore the index
-        write(outputNameStyle, outputter);
+        write(element, outputNameStyle, outputter);
         return 1;
     }
 
@@ -84,19 +80,9 @@ public class CollectionGenerator<T, S extends Collection<T>> implements Generato
             throws OperationFailedException {
         return generator.getFileTypes(outputWriteSettings);
     }
-
-    @Override
-    public S getElement() {
-        return element;
-    }
-
-    @Override
-    public void assignElement(S element) throws SetOperationFailedException {
-        this.element = element;
-    }
     
     private void writeElementAsSubdirectory(
-            S element,
+            Collection<T> element,
             OutputterChecked outputter,
             String outputNameFolder
             )

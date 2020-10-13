@@ -37,24 +37,21 @@ import org.anchoranalysis.io.generator.OneStageGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import lombok.AllArgsConstructor;
 
+@AllArgsConstructor
 public class RGBTimeSeriesGenerator extends OneStageGenerator<StackSeries> {
 
     private final StackWriteOptions rasterOptions;
 
-    public RGBTimeSeriesGenerator(StackSeries stackSeries, StackWriteOptions rasterOptions) {
-        this.rasterOptions = rasterOptions;
-        assignElement(stackSeries);
-    }
-
     @Override
-    public void writeToFile(OutputWriteSettings outputWriteSettings, Path filePath)
+    public void writeToFile(StackSeries element, OutputWriteSettings outputWriteSettings, Path filePath)
             throws OutputWriteFailedException {
 
         try {
             StackWriter writer =
                     GeneratorOutputter.writer(outputWriteSettings);
-            writer.writeStackSeries(getElement(), filePath, true, rasterOptions);
+            writer.writeStackSeries(element, filePath, true, rasterOptions);
         } catch (ImageIOException e) {
             throw new OutputWriteFailedException(e);
         }

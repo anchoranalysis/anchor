@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.io.output.writer;
 
-import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.output.namestyle.OutputNameStyle;
@@ -43,62 +42,27 @@ public interface ElementWriter<T> {
      * Writes a non-indexable output (an output that isn't part of a collection of other similar
      * items)
      *
+     * @param element the element to write
      * @param outputNameStyle
      * @param outputter
      * @throws OutputWriteFailedException
      */
-    public abstract void write(OutputNameStyle outputNameStyle, OutputterChecked outputter)
+    public abstract void write(T element, OutputNameStyle outputNameStyle, OutputterChecked outputter)
             throws OutputWriteFailedException;
 
     /**
      * Writes an indexable output (many outputs of the same type, uniquely identified by an index)
      *
-     * @param outputNameStyle
+     * @param element the element to write
      * @param index
+     * @param outputNameStyle
      * @param outputter
      * @return
      * @throws OutputWriteFailedException
      */
     public abstract int writeWithIndex(
-            IndexableOutputNameStyle outputNameStyle, String index, OutputterChecked outputter)
+            T element,
+            String index,
+            IndexableOutputNameStyle outputNameStyle, OutputterChecked outputter)
             throws OutputWriteFailedException;
-    
-    /**
-     * Gets the current element.
-     *
-     * @return the element that will be written at next write-operation.
-     */
-    T getElement();
-
-    /**
-     * Assigns the current element to be written at next write-operation.
-     *
-     * @param element the element
-     * @throws SetOperationFailedException
-     */
-    void assignElement(T element) throws SetOperationFailedException;
-
-    default void write(ElementSupplier<T> element, OutputNameStyle outputNameStyle, OutputterChecked outputter)
-            throws OutputWriteFailedException {
-        synchronized(this) {
-            try {
-                assignElement(element.get());
-            } catch (SetOperationFailedException e) {
-                throw new OutputWriteFailedException(e);
-            }
-            write(outputNameStyle, outputter);
-        }
-    }
-
-    default int write(ElementSupplier<T> element, IndexableOutputNameStyle outputNameStyle, String index,
-            OutputterChecked outputter) throws OutputWriteFailedException {
-        synchronized(this) {
-            try {
-                assignElement(element.get());
-            } catch (SetOperationFailedException e) {
-                throw new OutputWriteFailedException(e);
-            }
-            return writeWithIndex(outputNameStyle, index, outputter);
-        }
-    }
 }

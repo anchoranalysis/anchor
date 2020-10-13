@@ -75,7 +75,7 @@ public class AlwaysAllowed implements Writer {
     public <T> boolean write(String outputName, ElementWriterSupplier<T> elementWriter, ElementSupplier<T> element)
             throws OutputWriteFailedException {
         maybeExecutePreop();
-        elementWriter.get().write(element, new SimpleOutputNameStyle(outputName), outputter);
+        elementWriter.get().write(element.get(), new SimpleOutputNameStyle(outputName), outputter);
         return true;
     }
     
@@ -88,7 +88,7 @@ public class AlwaysAllowed implements Writer {
             throws OutputWriteFailedException {
 
         maybeExecutePreop();
-        return elementWriter.get().write(element, outputNameStyle, index, outputter);
+        return elementWriter.get().writeWithIndex(element.get(), index, outputNameStyle, outputter);
     }
 
     // A non-generator way of creating outputs, that are still included in the manifest

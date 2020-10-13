@@ -40,24 +40,14 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
  * @author Owen Feehan
  */
 @AllArgsConstructor
-public class ChannelGenerator extends RasterGeneratorWithElement<Channel> {
+public class ChannelGenerator extends RasterGenerator<Channel> {
 
     /** Function that is associated in the manifest with this output. */
     private final String manifestFunction;
-
-    public ChannelGenerator(String manifestFunction, Channel channel) {
-        this.manifestFunction = manifestFunction;
-        assignElement(channel);
-    }
     
     @Override
-    public Stack transform() throws OutputWriteFailedException {
-
-        if (getElement() == null) {
-            throw new OutputWriteFailedException("no mutable element set");
-        }
-
-        return new Stack(getElement());
+    public Stack transform(Channel element) throws OutputWriteFailedException {
+        return new Stack(element);
     }
 
     @Override

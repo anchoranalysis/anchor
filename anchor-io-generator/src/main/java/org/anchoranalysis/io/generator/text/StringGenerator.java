@@ -38,16 +38,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class StringGenerator extends OneStageGenerator<String> {
 
-    public StringGenerator(String element) {
-        super(element);
-    }
-
     @Override
-    public void writeToFile(OutputWriteSettings outputWriteSettings, Path filePath)
+    public void writeToFile(String element, OutputWriteSettings outputWriteSettings, Path filePath)
             throws OutputWriteFailedException {
 
         try {
-            WriteStringToFile.apply(getElement(), filePath);
+            WriteStringToFile.apply(element, filePath);
         } catch (IOException e) {
             throw new OutputWriteFailedException(e);
         }

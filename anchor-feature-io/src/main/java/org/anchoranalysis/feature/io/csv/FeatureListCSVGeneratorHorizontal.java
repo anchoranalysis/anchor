@@ -56,19 +56,6 @@ public class FeatureListCSVGeneratorHorizontal extends FeatureTableCSVGenerator<
         super(manifestFunction, featureNames.asList());
     }
 
-    /**
-     * Creates without setting any <i>results</i> (i.e. row-data).
-     *
-     * @param manifestFunction identifier of function for the manifest file.
-     * @param featureNames names-of-features in {@code results}.
-     * @param results the results (i.e. row data) to set as current element for the generator.
-     */
-    public FeatureListCSVGeneratorHorizontal(
-            String manifestFunction, FeatureNameList featureNames, ResultsVectorList results) {
-        this(manifestFunction, featureNames);
-        assignElement(results);
-    }
-
     @Override
     protected void writeFeaturesToCSV(
             CSVWriter writer, ResultsVectorList allFeatureResults, List<String> headerNames)

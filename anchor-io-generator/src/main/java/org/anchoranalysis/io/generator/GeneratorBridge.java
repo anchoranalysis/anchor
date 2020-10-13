@@ -32,8 +32,9 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.functional.CheckedStream;
+import org.anchoranalysis.core.functional.function.CheckedConsumer;
 import org.anchoranalysis.core.functional.function.CheckedFunction;
-import org.anchoranalysis.core.index.SetOperationFailedException;
+import org.anchoranalysis.core.functional.function.CheckedToIntFunction;
 import org.anchoranalysis.io.manifest.file.FileType;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
@@ -42,16 +43,14 @@ import org.anchoranalysis.io.output.namestyle.OutputNameStyle;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
 
 /**
- * Exposes a {@code Generator<S>} as if it was an {@code Generator<T>}.
+ * Exposes a {@code Generator<T>} as if it was an {@code Generator<S>}.
  *
  * @author Owen Feehan
- * @param <S> source-type
- * @param <T> destination-type
+ * @param <S> exposed-type
+ * @param <T> internal-type
  */
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class GeneratorBridge<S, T> implements Generator<S> {
-
-    private S element;
 
     // START REQUIRED ARGUMENTS
     /** The generator that accepts the destination type */
@@ -94,39 +93,49 @@ public class GeneratorBridge<S, T> implements Generator<S> {
     }
 
     @Override
-    public S getElement() {
-        return this.element;
-    }
-
-    @Override
-    public void assignElement(S element) throws SetOperationFailedException {
-        this.element = element;
-        try {
-            CheckedStream.forEach(
-                    bridge.apply(element),
-                    SetOperationFailedException.class,
-                    generator::assignElement);
-        } catch (Exception e) {
-            throw new SetOperationFailedException(e);
-        }
-    }
-
-    @Override
-    public void write(OutputNameStyle outputNameStyle, OutputterChecked outputter)
+    public void write(S element, OutputNameStyle outputNameStyle, OutputterChecked outputter)
             throws OutputWriteFailedException {
-        generator.write(outputNameStyle, outputter);
+       convertAndExecute(element, convertedElement ->
+           generator.write(convertedElement, outputNameStyle, outputter));
     }
 
     @Override
     public int writeWithIndex(
-            IndexableOutputNameStyle outputNameStyle, String index, OutputterChecked outputter)
+            S element,
+            String index, 
+            IndexableOutputNameStyle outputNameStyle, OutputterChecked outputter)
             throws OutputWriteFailedException {
-        return generator.writeWithIndex(outputNameStyle, index, outputter);
+        return convertAndSum(element, convertedElement ->
+            generator.writeWithIndex(convertedElement, index, outputNameStyle, outputter));
     }
 
     @Override
     public Optional<FileType[]> getFileTypes(OutputWriteSettings outputWriteSettings)
             throws OperationFailedException {
         return generator.getFileTypes(outputWriteSettings);
+    }
+
+    /** Converts an element to <b>one or more target elements</b>, and runs a consumer on each. */
+    private void convertAndExecute(S element, CheckedConsumer<T, OutputWriteFailedException> consumer) throws OutputWriteFailedException {
+        try {
+            CheckedStream.forEach(
+                    bridge.apply(element),
+                    OutputWriteFailedException.class,
+                    consumer);
+        } catch (Exception e) {
+            throw new OutputWriteFailedException(e);
+        }
+    }
+    
+    /** Converts an element to <b>one or more target elements</b>, and sums the results of applying a {@link CheckedToIntFunction}. */
+    private int convertAndSum(S element, CheckedToIntFunction<T, OutputWriteFailedException> consumer) throws OutputWriteFailedException {
+        try {
+            return CheckedStream.mapToInt(
+                    bridge.apply(element),
+                    OutputWriteFailedException.class,
+                    consumer).sum();
+        } catch (Exception e) {
+            throw new OutputWriteFailedException(e);
+        }
     }
 }

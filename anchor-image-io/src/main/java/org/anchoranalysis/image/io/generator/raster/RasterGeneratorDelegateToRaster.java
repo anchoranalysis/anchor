@@ -29,21 +29,13 @@ import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.image.io.stack.StackWriteOptions;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 /**
- * Uses a delegate raster-generator and optionally applies a conversions before certain operations.
- *
- * <p>Specifically, a conversion may occur before:
- *
- * <ul>
- *   <li>Calling {@link #assignElement(Object)}.
- *   <li>Calling {@link #transform()}.
- * </ul>
+ * Uses a delegate raster-generator and optionally applies a conversions before calling {@link #transform}.
  *
  * @author Owen Feehan
  * @param <S> delegate iteration-type
@@ -56,8 +48,6 @@ public abstract class RasterGeneratorDelegateToRaster<S, T> extends RasterGenera
     /** The delegate. */
     private final RasterGenerator<S> delegate;
     // END REQUIRED ARGUMENTS
-
-    private T element;
 
     @Override
     public boolean isRGB() {
@@ -75,25 +65,9 @@ public abstract class RasterGeneratorDelegateToRaster<S, T> extends RasterGenera
     }
 
     @Override
-    public void assignElement(T element) throws SetOperationFailedException {
-        this.element = element;
-
+    public Stack transform(T element) throws OutputWriteFailedException {
         try {
-            getDelegate().assignElement(convertBeforeAssign(element));
-        } catch (OperationFailedException e) {
-            throw new SetOperationFailedException(e);
-        }
-    }
-
-    @Override
-    public final T getElement() {
-        return element;
-    }
-
-    @Override
-    public Stack transform() throws OutputWriteFailedException {
-        try {
-            Stack stack = getDelegate().transform( convertBeforeAssign(getElement()) );
+            Stack stack = getDelegate().transform( convertBeforeAssign(element) );
             return convertBeforeTransform(stack);
         } catch (OperationFailedException e) {
             throw new OutputWriteFailedException(e);
@@ -110,7 +84,7 @@ public abstract class RasterGeneratorDelegateToRaster<S, T> extends RasterGenera
     protected abstract S convertBeforeAssign(T element) throws OperationFailedException;
 
     /**
-     * Converts an element before calling {@link #transform()} on the {@code delegate}.
+     * Converts an element before calling {@link #transform} on the {@code delegate}.
      *
      * @param stack stack to convert
      * @return converted element

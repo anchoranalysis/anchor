@@ -26,38 +26,16 @@
 
 package org.anchoranalysis.io.generator.serialized;
 
-import java.nio.file.Path;
 import java.util.Optional;
 import org.anchoranalysis.io.generator.OneStageGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
-import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import lombok.AllArgsConstructor;
 
+@AllArgsConstructor
 public abstract class SerializedGenerator<T> extends OneStageGenerator<T> {
 
     private Optional<String> manifestFunction;
-
-    public SerializedGenerator(Optional<String> manifestFunction) {
-        super();
-        this.manifestFunction = manifestFunction;
-    }
-
-    public SerializedGenerator(T element, Optional<String> manifestFunction) {
-        super();
-        assignElement(element);
-        this.manifestFunction = manifestFunction;
-    }
-
-    @Override
-    public void writeToFile(OutputWriteSettings outputWriteSettings, Path filePath)
-            throws OutputWriteFailedException {
-
-        if (getElement() == null) {
-            throw new OutputWriteFailedException("no mutable element set");
-        }
-
-        writeToFile(outputWriteSettings, filePath, getElement());
-    }
 
     @Override
     public String getFileExtension(OutputWriteSettings outputWriteSettings) {
@@ -68,11 +46,6 @@ public abstract class SerializedGenerator<T> extends OneStageGenerator<T> {
     public Optional<ManifestDescription> createManifestDescription() {
         return manifestFunction.map(mf -> new ManifestDescription("serialized", mf));
     }
-
-    /** Writes a particular element to a file */
-    protected abstract void writeToFile(
-            OutputWriteSettings outputWriteSettings, Path filePath, T element)
-            throws OutputWriteFailedException;
 
     /** Appended to the standard "serialized" extension, to form the complete extension */
     protected abstract String extensionSuffix(OutputWriteSettings outputWriteSettings);

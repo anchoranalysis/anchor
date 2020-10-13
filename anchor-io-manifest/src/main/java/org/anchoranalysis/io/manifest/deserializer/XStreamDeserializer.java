@@ -29,7 +29,16 @@ package org.anchoranalysis.io.manifest.deserializer;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.Xpp3Driver;
 import java.nio.file.Path;
+import org.anchoranalysis.io.manifest.serializer.XStreamSerializer;
 
+/**
+ * Deserializes an object using the <a href="https://x-stream.github.io/">XStream library</a>.
+ * 
+ * @see XStreamSerializer for the counterpart.
+ * 
+ * @author Owen Feehan
+ * @param <T> type of object to deserialize
+ */
 public class XStreamDeserializer<T> implements Deserializer<T> {
 
     private static final String[] ALLOWED_NAMESPACES =

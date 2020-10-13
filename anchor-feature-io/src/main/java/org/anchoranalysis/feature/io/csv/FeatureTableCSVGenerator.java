@@ -56,11 +56,11 @@ public abstract class FeatureTableCSVGenerator<T> extends CSVGenerator<T> {
     }
 
     @Override
-    public void writeToFile(OutputWriteSettings outputWriteSettings, Path filePath)
+    public void writeToFile(T element, OutputWriteSettings outputWriteSettings, Path filePath)
             throws OutputWriteFailedException {
 
         try (CSVWriter writer = CSVWriter.create(filePath)) {
-            writeFeaturesToCSV(writer, getElement(), headerNames);
+            writeFeaturesToCSV(writer, element, headerNames);
         } catch (OutputWriteFailedException e) {
             throw new OutputWriteFailedException(e);
         }

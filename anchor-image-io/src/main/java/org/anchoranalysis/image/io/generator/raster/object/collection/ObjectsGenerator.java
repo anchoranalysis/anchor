@@ -32,7 +32,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 import org.anchoranalysis.image.extent.Dimensions;
-import org.anchoranalysis.image.io.generator.raster.RasterGeneratorWithElement;
+import org.anchoranalysis.image.io.generator.raster.RasterGenerator;
 import org.anchoranalysis.image.io.stack.StackWriteOptions;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.io.manifest.ManifestDescription;
@@ -44,7 +44,7 @@ import org.anchoranalysis.io.manifest.ManifestDescription;
  */
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 @Accessors(fluent = true)
-public abstract class ObjectsGenerator extends RasterGeneratorWithElement<ObjectCollection> {
+public abstract class ObjectsGenerator extends RasterGenerator<ObjectCollection> {
 
     // START REQUIRED ARGUMENTS
     /**
@@ -53,11 +53,6 @@ public abstract class ObjectsGenerator extends RasterGeneratorWithElement<Object
      */
     @Getter private final Dimensions dimensions;
     // END REQUIRED ARGUMENTS
-
-    protected ObjectsGenerator(Dimensions dimensions, ObjectCollection objects) {
-        this.dimensions = dimensions;
-        assignElement(objects);
-    }
 
     @Override
     public Optional<ManifestDescription> createManifestDescription() {
@@ -72,9 +67,5 @@ public abstract class ObjectsGenerator extends RasterGeneratorWithElement<Object
     @Override
     public StackWriteOptions writeOptions() {
         return StackWriteOptions.singleChannelMaybe3D(dimensions.z() == 1);
-    }
-
-    protected ObjectCollection getObjects() {
-        return getElement();
     }
 }

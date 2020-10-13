@@ -30,7 +30,7 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.extent.box.BoundingBox;
-import org.anchoranalysis.image.io.generator.raster.RasterGeneratorWithElement;
+import org.anchoranalysis.image.io.generator.raster.RasterGenerator;
 import org.anchoranalysis.image.io.stack.StackWriteOptions;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.manifest.ManifestDescription;
@@ -43,7 +43,7 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
  */
 @RequiredArgsConstructor
 public class ExtractBoundingBoxAreaFromStackGenerator
-        extends RasterGeneratorWithElement<BoundingBox> {
+        extends RasterGenerator<BoundingBox> {
 
     private static final String MANIFEST_FUNCTION = "boundingBoxExtract";
 
@@ -52,15 +52,9 @@ public class ExtractBoundingBoxAreaFromStackGenerator
     // END REQUIRED ARGUMENTS
 
     @Override
-    public Stack transform() throws OutputWriteFailedException {
-
-        if (getElement() == null) {
-            throw new OutputWriteFailedException("no mutable element set");
-        }
-
+    public Stack transform(BoundingBox element) throws OutputWriteFailedException {
         try {
-            return background.extractRegionFromStack(getElement());
-
+            return background.extractRegionFromStack(element);
         } catch (CreateException e) {
             throw new OutputWriteFailedException(e);
         }

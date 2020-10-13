@@ -60,9 +60,9 @@ public class HDF5ObjectsGenerator extends OneStageGenerator<ObjectCollection> {
     }
 
     @Override
-    public void writeToFile(OutputWriteSettings outputWriteSettings, Path filePath) {
+    public void writeToFile(ObjectCollection element, OutputWriteSettings outputWriteSettings, Path filePath) {
         // Write a HDF file
-        writeObjects(getElement(), filePath);
+        writeObjects(element, filePath);
     }
 
     @Override

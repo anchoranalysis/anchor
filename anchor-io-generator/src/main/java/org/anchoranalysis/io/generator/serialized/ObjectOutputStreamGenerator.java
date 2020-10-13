@@ -45,12 +45,8 @@ public class ObjectOutputStreamGenerator<T extends Serializable> extends Seriali
         super(manifestFunction);
     }
 
-    public ObjectOutputStreamGenerator(T rootObject, Optional<String> manifestFunction) {
-        super(rootObject, manifestFunction);
-    }
-
     @Override
-    protected void writeToFile(OutputWriteSettings outputWriteSettings, Path filePath, T element)
+    public void writeToFile(T element, OutputWriteSettings outputWriteSettings, Path filePath)
             throws OutputWriteFailedException {
 
         try (FileOutputStream fos = new FileOutputStream(filePath.toFile())) {
