@@ -31,12 +31,12 @@ import ch.systemsx.cisd.hdf5.IHDF5Reader;
 import ch.systemsx.cisd.hdf5.exceptions.HDF5FileNotFoundException;
 import java.nio.file.Path;
 import java.util.List;
+import org.anchoranalysis.core.serialize.DeserializationFailedException;
+import org.anchoranalysis.core.serialize.Deserializer;
 import org.anchoranalysis.image.io.objects.HDF5ObjectsGenerator;
 import org.anchoranalysis.image.io.objects.HDF5PathHelper;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.factory.ObjectCollectionFactory;
-import org.anchoranalysis.io.manifest.deserializer.DeserializationFailedException;
-import org.anchoranalysis.io.manifest.deserializer.Deserializer;
 
 class ReadObjectsFromHDF5 implements Deserializer<ObjectCollection> {
 

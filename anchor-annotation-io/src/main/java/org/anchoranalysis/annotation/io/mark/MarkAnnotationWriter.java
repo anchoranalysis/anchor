@@ -35,7 +35,7 @@ import org.anchoranalysis.annotation.Annotation;
 import org.anchoranalysis.annotation.io.AnnotationWriter;
 import org.anchoranalysis.annotation.io.WriterUtilities;
 import org.anchoranalysis.annotation.mark.DualMarksAnnotation;
-import org.anchoranalysis.io.manifest.serializer.XStreamSerializer;
+import org.anchoranalysis.core.serialize.XStreamSerializer;
 
 /**
  * @author Owen Feehan

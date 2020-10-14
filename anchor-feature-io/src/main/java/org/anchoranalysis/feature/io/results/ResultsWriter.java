@@ -35,7 +35,7 @@ import org.anchoranalysis.feature.io.csv.RowLabels;
 import org.anchoranalysis.feature.io.results.group.GroupWriter;
 import org.anchoranalysis.feature.list.NamedFeatureStore;
 import org.anchoranalysis.feature.results.ResultsVector;
-import org.anchoranalysis.io.manifest.ManifestFolderDescription;
+import org.anchoranalysis.io.manifest.ManifestDirectoryDescription;
 import org.anchoranalysis.io.manifest.sequencetype.StringsWithoutOrder;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
@@ -61,13 +61,13 @@ import org.anchoranalysis.io.output.outputter.InputOutputContextSubdirectoryCach
 public class ResultsWriter implements Closeable {
 
     /** The highest-level group directory */
-    private static final ManifestFolderDescription MANIFEST_GROUP_ROOT =
-            new ManifestFolderDescription(
+    private static final ManifestDirectoryDescription MANIFEST_GROUP_ROOT =
+            new ManifestDirectoryDescription(
                     "groupedResultsRoot", "featureCsv", new StringsWithoutOrder());
 
     /** The second highest-level group directory */
-    private static final ManifestFolderDescription MANIFEST_GROUP_SUBROOT =
-            new ManifestFolderDescription("groupedResults", "featureCsv", new StringsWithoutOrder());
+    private static final ManifestDirectoryDescription MANIFEST_GROUP_SUBROOT =
+            new ManifestDirectoryDescription("groupedResults", "featureCsv", new StringsWithoutOrder());
 
     private Optional<FeatureCSVWriter> writer;
     private GroupWriter groupWriter;

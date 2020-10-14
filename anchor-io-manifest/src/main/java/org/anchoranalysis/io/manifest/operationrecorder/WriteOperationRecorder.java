@@ -28,8 +28,8 @@ package org.anchoranalysis.io.manifest.operationrecorder;
 
 import java.nio.file.Path;
 import org.anchoranalysis.io.manifest.ManifestDescription;
-import org.anchoranalysis.io.manifest.ManifestFolderDescription;
-import org.anchoranalysis.io.manifest.folder.FolderWriteWithPath;
+import org.anchoranalysis.io.manifest.ManifestDirectoryDescription;
+import org.anchoranalysis.io.manifest.directory.Subdirectory;
 
 public interface WriteOperationRecorder {
 
@@ -55,8 +55,8 @@ public interface WriteOperationRecorder {
      * @param folderWrite the folder object to write
      * @return
      */
-    WriteOperationRecorder writeFolder(
+    WriteOperationRecorder writeSubdirectory(
             Path relativeFolderPath,
-            ManifestFolderDescription manifestDescription,
-            FolderWriteWithPath folderWrite);
+            ManifestDirectoryDescription manifestDescription,
+            Subdirectory folderWrite);
 }

@@ -31,7 +31,7 @@ import lombok.AllArgsConstructor;
 import lombok.Value;
 
 /**
- * A description of an entry in the manifest.
+ * A description of an entry (e.g. a file or directory) in the manifest.
  * 
  * <p>This is an <i>immutable</i> type.
  * 

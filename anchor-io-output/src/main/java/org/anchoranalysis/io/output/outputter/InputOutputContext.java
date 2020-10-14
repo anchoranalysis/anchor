@@ -32,7 +32,7 @@ import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.log.CommonContext;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.log.MessageLogger;
-import org.anchoranalysis.io.manifest.ManifestFolderDescription;
+import org.anchoranalysis.io.manifest.ManifestDirectoryDescription;
 
 /**
  * A context for performing input generally and outputting to a particular output-directory.
@@ -107,7 +107,7 @@ public interface InputOutputContext {
      */
     default InputOutputContext subdirectory(
             String subDirectoryName,
-            ManifestFolderDescription manifestFolderDescription,
+            ManifestDirectoryDescription manifestFolderDescription,
             boolean inheritOutputRulesAndRecording) {
         return new ChangeOutputter(
                 this,
@@ -131,7 +131,7 @@ public interface InputOutputContext {
      */
     default InputOutputContext maybeSubdirectory(
             Optional<String> subdirectoryName,
-            ManifestFolderDescription manifestFolderDescription,
+            ManifestDirectoryDescription manifestFolderDescription,
             boolean inheritOutputRulesAndRecording) {
         return subdirectoryName
                 .map(

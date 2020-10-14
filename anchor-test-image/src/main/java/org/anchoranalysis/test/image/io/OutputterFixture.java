@@ -31,7 +31,7 @@ import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
-import org.anchoranalysis.io.manifest.ManifestRecorder;
+import org.anchoranalysis.io.manifest.Manifest;
 import org.anchoranalysis.io.output.bean.OutputManager;
 import org.anchoranalysis.io.output.outputter.BindFailedException;
 import org.anchoranalysis.io.output.outputter.Outputter;
@@ -62,7 +62,7 @@ public class OutputterFixture {
         try {
             return outputManager.createExperimentOutputter(
                     "debug",
-                    new ManifestRecorder(),
+                    new Manifest(),
                     new RecordedOutputsWithRules(),
                     new FilePathPrefixerContext(false, Optional.empty()));
         } catch (PathPrefixerException e) {

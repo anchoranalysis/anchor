@@ -30,7 +30,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
-import org.anchoranalysis.io.manifest.ManifestRecorder;
+import org.anchoranalysis.io.manifest.Manifest;
 import org.anchoranalysis.io.manifest.operationrecorder.NullWriteOperationRecorder;
 import org.anchoranalysis.io.manifest.operationrecorder.WriteOperationRecorder;
 import org.anchoranalysis.io.output.outputter.BindFailedException;
@@ -43,7 +43,7 @@ import org.anchoranalysis.io.output.path.NamedPath;
 class BindingPathOutputterFactory {
 
     public static OutputterChecked createWithBindingPath(
-            NamedPath path, Optional<ManifestRecorder> manifestTask, ParametersExperiment params)
+            NamedPath path, Optional<Manifest> manifestTask, ParametersExperiment params)
             throws BindFailedException, JobExecutionException {
         try {
             DirectoryWithPrefix prefixToAssign =
@@ -77,9 +77,9 @@ class BindingPathOutputterFactory {
     }
 
     private static WriteOperationRecorder writeRecorder(
-            Optional<ManifestRecorder> manifestRecorder) {
+            Optional<Manifest> manifestRecorder) {
         Optional<WriteOperationRecorder> opt =
-                manifestRecorder.map(ManifestRecorder::getRootFolder);
+                manifestRecorder.map(Manifest::getRootFolder);
         return opt.orElse(new NullWriteOperationRecorder());
     }
 }

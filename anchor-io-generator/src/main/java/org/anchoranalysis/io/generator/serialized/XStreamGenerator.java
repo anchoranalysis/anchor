@@ -29,7 +29,7 @@ package org.anchoranalysis.io.generator.serialized;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Optional;
-import org.anchoranalysis.io.manifest.serializer.XStreamSerializer;
+import org.anchoranalysis.core.serialize.XStreamSerializer;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 

@@ -86,7 +86,7 @@ public class AssignmentGenerator extends RasterGenerator<Assignment> {
     private final int outlineWidth;
     // END REQUIRED ARGUMENTS
 
-    private StackGenerator delegate = new StackGenerator(true, "assignmentComparison", false);
+    private StackGenerator delegate = new StackGenerator(true, Optional.of("assignmentComparison"), false);
 
     @Override
     public boolean isRGB() {

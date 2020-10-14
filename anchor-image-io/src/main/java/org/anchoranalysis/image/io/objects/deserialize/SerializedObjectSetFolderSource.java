@@ -39,32 +39,30 @@ import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.bean.path.matcher.MatchGlob;
 import org.anchoranalysis.io.exception.FilesProviderException;
 import org.anchoranalysis.io.input.InputContextParams;
+import org.anchoranalysis.io.manifest.directory.DirectoryWritePhysical;
+import org.anchoranalysis.io.manifest.directory.sequenced.SequencedDirectory;
 import org.anchoranalysis.io.manifest.file.FileWrite;
-import org.anchoranalysis.io.manifest.folder.FolderWritePhysical;
-import org.anchoranalysis.io.manifest.folder.SequencedFolder;
 import org.anchoranalysis.io.manifest.sequencetype.IncompleteElementRange;
 import org.anchoranalysis.io.manifest.sequencetype.IncrementingIntegers;
 import org.anchoranalysis.io.manifest.sequencetype.SequenceType;
 import org.anchoranalysis.io.manifest.sequencetype.SequenceTypeException;
 
-class SerializedObjectSetFolderSource implements SequencedFolder {
+class SerializedObjectSetFolderSource implements SequencedDirectory {
 
     private Map<String, FileWrite> mapFileWrite = new HashMap<>();
     private SequenceType<Integer> sequenceType;
 
     // Constructor
-    public SerializedObjectSetFolderSource(Path folderPath, Optional<String> acceptFilter)
+    public SerializedObjectSetFolderSource(Path directory, Optional<String> acceptFilter)
             throws SequenceTypeException {
         super();
 
-        SearchDirectory fileSet = createFileSet(folderPath, acceptFilter);
+        SearchDirectory fileSet = createFileSet(directory, acceptFilter);
 
         sequenceType = new IncrementingIntegers();
         int i = 0;
 
-        FolderWritePhysical fwp = new FolderWritePhysical();
-        fwp.setPath(folderPath);
-        fwp.setParentFolder(Optional.empty());
+        DirectoryWritePhysical fwp = new DirectoryWritePhysical(directory);
 
         try {
             Collection<File> files =

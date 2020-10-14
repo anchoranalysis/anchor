@@ -44,7 +44,7 @@ import org.anchoranalysis.io.output.namestyle.OutputNameStyle;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
 
 /**
- * Several generators combined together with a common iteration-type.
+ * Several generators combined together with a common element-type.
  *
  * <p>One generator must always exist. Zero generators is never allowed.
  *

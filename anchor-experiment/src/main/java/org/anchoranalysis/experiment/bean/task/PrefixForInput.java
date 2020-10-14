@@ -30,9 +30,9 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.path.PathDifference;
 import org.anchoranalysis.core.path.PathDifferenceException;
-import org.anchoranalysis.io.manifest.ManifestFolderDescription;
-import org.anchoranalysis.io.manifest.ManifestRecorder;
-import org.anchoranalysis.io.manifest.folder.ExperimentFileFolder;
+import org.anchoranalysis.io.manifest.ManifestDirectoryDescription;
+import org.anchoranalysis.io.manifest.Manifest;
+import org.anchoranalysis.io.manifest.directory.ExperimentRootDirectory;
 import org.anchoranalysis.io.manifest.sequencetype.StringsWithoutOrder;
 import org.anchoranalysis.io.output.path.PathPrefixerException;
 import org.anchoranalysis.io.output.path.DirectoryWithPrefix;
@@ -43,8 +43,8 @@ import org.anchoranalysis.io.output.path.PathPrefixer;
 @RequiredArgsConstructor
 class PrefixForInput {
 
-    private static final ManifestFolderDescription MANIFEST_FOLDER_ROOT =
-            new ManifestFolderDescription("root", "experiment", new StringsWithoutOrder());
+    private static final ManifestDirectoryDescription MANIFEST_DIRECTORY_ROOT =
+            new ManifestDirectoryDescription("root", "experiment", new StringsWithoutOrder());
 
     private final PathPrefixer prefixer;
 
@@ -62,7 +62,7 @@ class PrefixForInput {
     public DirectoryWithPrefix prefixForFile(
             NamedPath path,
             String experimentIdentifier,
-            Optional<ManifestRecorder> experimentalManifest)
+            Optional<Manifest> experimentalManifest)
             throws PathPrefixerException {
 
         // Calculate a prefix from the incoming file, and create a file path generator
@@ -89,9 +89,9 @@ class PrefixForInput {
     }
 
     private static void writeRootFolderInManifest(
-            ManifestRecorder manifestRecorder, Path rootPath) {
+            Manifest manifestRecorder, Path rootPath) {
         manifestRecorder
                 .getRootFolder()
-                .writeFolder(rootPath, MANIFEST_FOLDER_ROOT, new ExperimentFileFolder());
+                .writeSubdirectory(rootPath, MANIFEST_DIRECTORY_ROOT, new ExperimentRootDirectory());
     }
 }

@@ -32,10 +32,9 @@ import java.util.Optional;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.params.KeyValueParams;
-import org.anchoranalysis.io.manifest.ManifestRecorder;
+import org.anchoranalysis.io.manifest.Manifest;
 import org.anchoranalysis.io.manifest.file.FileWrite;
-import org.anchoranalysis.io.manifest.match.FileWriteManifestMatch;
-import org.anchoranalysis.io.manifest.match.ManifestDescriptionFunctionMatch;
+import org.anchoranalysis.io.manifest.finder.match.FileMatch;
 
 public class FinderKeyValueParams extends FinderSingleFile {
 
@@ -57,13 +56,13 @@ public class FinderKeyValueParams extends FinderSingleFile {
     }
 
     @Override
-    protected Optional<FileWrite> findFile(ManifestRecorder manifestRecorder)
-            throws MultipleFilesException {
+    protected Optional<FileWrite> findFile(Manifest manifestRecorder)
+            throws FindFailedException {
         List<FileWrite> files =
                 FinderUtilities.findListFile(
                         manifestRecorder,
-                        new FileWriteManifestMatch(
-                                new ManifestDescriptionFunctionMatch(manifestFunction)));
+                        FileMatch.description(manifestFunction)
+                );
 
         if (files.isEmpty()) {
             return Optional.empty();

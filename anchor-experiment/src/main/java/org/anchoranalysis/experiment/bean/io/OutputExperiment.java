@@ -40,7 +40,8 @@ import org.anchoranalysis.experiment.bean.log.LoggingDestination;
 import org.anchoranalysis.experiment.bean.log.ToConsole;
 import org.anchoranalysis.experiment.log.StatefulMessageLogger;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
-import org.anchoranalysis.io.manifest.ManifestRecorder;
+import org.anchoranalysis.io.generator.combined.ManifestGenerator;
+import org.anchoranalysis.io.manifest.Manifest;
 import org.anchoranalysis.io.output.bean.OutputManager;
 import org.anchoranalysis.io.output.enabled.multi.MultiLevelOutputEnabled;
 import org.anchoranalysis.io.output.outputter.BindFailedException;
@@ -57,6 +58,8 @@ import org.apache.commons.lang.time.StopWatch;
  */
 public abstract class OutputExperiment extends Experiment {
 
+    public static final String OUTPUT_NAME_MANIFEST = "experiment_manifest";
+    
     // START BEAN PROPERTIES
     /** The output-manager that specifies how/where/which elements occur duing outputting. */
     @BeanField @Getter @Setter private OutputManager output;
@@ -146,7 +149,7 @@ public abstract class OutputExperiment extends Experiment {
     private ParametersExperiment createParams(ExperimentExecutionArguments arguments)
             throws CreateException {
 
-        ManifestRecorder experimentalManifest = new ManifestRecorder();
+        Manifest experimentalManifest = new Manifest();
 
         String experimentId = experimentIdentifier.identifier(arguments.getTaskName());
 
@@ -200,8 +203,11 @@ public abstract class OutputExperiment extends Experiment {
     }
 
     private void tidyUpAfterExecution(ParametersExperiment params, StopWatch stopWatchExperiment) {
-
-        // Outputs after processing
+        
+        params.getExperimentalManifest().ifPresent( manifest ->
+            params.getOutputter().writerSelective().write(OUTPUT_NAME_MANIFEST, ManifestGenerator::new, () -> manifest)
+        );
+        
         stopWatchExperiment.stop();
 
         OutputExperimentLogHelper.maybeLogCompleted(recordedOutputs, params, stopWatchExperiment);

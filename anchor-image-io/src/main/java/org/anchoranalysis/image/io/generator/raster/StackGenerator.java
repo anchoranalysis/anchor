@@ -62,20 +62,7 @@ public class StackGenerator extends RasterGenerator<Stack> {
      * @param manifestFunction manifestFunction function stored in manifest for this generator
      */
     public StackGenerator(String manifestFunction, boolean always2D) {
-        this(Optional.of(manifestFunction), always2D);
-    }
-    
-    /**
-     * Creates a generator that performs no padding.
-     *
-     * @param manifestFunction manifestFunction function stored in manifest for this generator
-     */
-    public StackGenerator(Optional<String> manifestFunction, boolean always2D) {
-        this(false, manifestFunction, StackWriteOptions.toReplace(always2D));
-    }
-    
-    public StackGenerator(boolean padIfNecessary, String manifestFunction) {
-        this(padIfNecessary, Optional.of(manifestFunction), StackWriteOptions.toReplace(false));
+        this(false, Optional.of(manifestFunction), always2D);
     }
     
     /**
@@ -86,8 +73,8 @@ public class StackGenerator extends RasterGenerator<Stack> {
      *     blank channel is added to make it 3-channels.
      * @param manifestFunction function stored in manifest for this generator.
      */
-    public StackGenerator(boolean padIfNecessary, String manifestFunction, boolean always2D) {
-        this(padIfNecessary, Optional.of(manifestFunction), StackWriteOptions.toReplace(always2D));
+    public StackGenerator(boolean padIfNecessary, Optional<String> manifestFunction, boolean always2D) {
+        this(padIfNecessary, manifestFunction, StackWriteOptions.toReplace(always2D));
     }
 
     @Override

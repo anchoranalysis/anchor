@@ -28,7 +28,7 @@ package org.anchoranalysis.experiment.bean.task;
 import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.io.manifest.ManifestRecorder;
+import org.anchoranalysis.io.manifest.Manifest;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
 
@@ -36,7 +36,7 @@ import org.anchoranalysis.io.output.outputter.OutputterChecked;
 class WithoutBindingPathOutputterFactory {
 
     public static OutputterChecked createWithoutBindingPath(
-            Optional<ManifestRecorder> manifestTask, Outputter outputter) {
+            Optional<Manifest> manifestTask, Outputter outputter) {
         manifestTask.ifPresent(
                 manifest -> {
                     manifest.init(outputter.getOutputFolderPath());

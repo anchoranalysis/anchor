@@ -30,7 +30,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.experiment.log.StatefulMessageLogger;
-import org.anchoranalysis.io.manifest.ManifestRecorder;
+import org.anchoranalysis.io.manifest.Manifest;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
 
@@ -48,7 +48,7 @@ public class InputBound<T, S> {
 
     @Getter private final S sharedState;
 
-    @Getter private final ManifestRecorder manifest;
+    @Getter private final Manifest manifest;
 
     @Getter private final boolean detailedLogging;
 

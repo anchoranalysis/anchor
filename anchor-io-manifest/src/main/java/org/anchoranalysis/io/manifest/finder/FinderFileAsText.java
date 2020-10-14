@@ -35,9 +35,9 @@ import java.util.List;
 import java.util.Optional;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
-import org.anchoranalysis.io.manifest.ManifestRecorder;
+import org.anchoranalysis.io.manifest.Manifest;
 import org.anchoranalysis.io.manifest.file.FileWrite;
-import org.anchoranalysis.io.manifest.match.FileWriteOutputName;
+import org.anchoranalysis.io.manifest.finder.match.FileMatch;
 
 public class FinderFileAsText extends FinderSingleFile {
 
@@ -88,10 +88,10 @@ public class FinderFileAsText extends FinderSingleFile {
     }
 
     @Override
-    protected Optional<FileWrite> findFile(ManifestRecorder manifestRecorder)
-            throws MultipleFilesException {
+    protected Optional<FileWrite> findFile(Manifest manifestRecorder)
+            throws FindFailedException {
         List<FileWrite> files =
-                FinderUtilities.findListFile(manifestRecorder, new FileWriteOutputName(outputName));
+                FinderUtilities.findListFile(manifestRecorder, FileMatch.outputName(outputName));
 
         if (files.isEmpty()) {
             return Optional.empty();

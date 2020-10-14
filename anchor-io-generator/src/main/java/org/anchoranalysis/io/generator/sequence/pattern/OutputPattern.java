@@ -74,8 +74,8 @@ public abstract class OutputPattern {
      * @param fileTypes
      * @return
      */
-    public ManifestDescription createFolderDescription(FileType[] fileTypes) {
-        return folderManifestDescription.orElseGet( () -> guessFolderDescriptionFromFiles(fileTypes) );
+    public ManifestDescription createDirectoryDescription(FileType[] fileTypes) {
+        return folderManifestDescription.orElseGet( () -> guessDirectoryDescriptionFromFiles(fileTypes) );
     }
     
     /**
@@ -88,7 +88,7 @@ public abstract class OutputPattern {
      * @param fileTypes
      * @return
      */
-    private static ManifestDescription guessFolderDescriptionFromFiles(FileType[] fileTypes) {
+    private static ManifestDescription guessDirectoryDescriptionFromFiles(FileType[] fileTypes) {
         Preconditions.checkArgument(fileTypes.length > 0);
 
         if (fileTypes.length == 1) {

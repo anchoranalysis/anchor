@@ -28,8 +28,8 @@ package org.anchoranalysis.io.manifest.operationrecorder;
 
 import java.nio.file.Path;
 import org.anchoranalysis.io.manifest.ManifestDescription;
-import org.anchoranalysis.io.manifest.ManifestFolderDescription;
-import org.anchoranalysis.io.manifest.folder.FolderWriteWithPath;
+import org.anchoranalysis.io.manifest.ManifestDirectoryDescription;
+import org.anchoranalysis.io.manifest.directory.Subdirectory;
 
 /**
  * Allows two IWriteOperationRecorder function together as if they are one
@@ -61,14 +61,14 @@ public class DualWriterOperationRecorder implements WriteOperationRecorder {
     }
 
     @Override
-    public WriteOperationRecorder writeFolder(
+    public WriteOperationRecorder writeSubdirectory(
             Path relativeFolderPath,
-            ManifestFolderDescription manifestDescription,
-            FolderWriteWithPath folderWrite) {
+            ManifestDirectoryDescription manifestDescription,
+            Subdirectory folderWrite) {
         WriteOperationRecorder folder1 =
-                recorder1.writeFolder(relativeFolderPath, manifestDescription, folderWrite);
+                recorder1.writeSubdirectory(relativeFolderPath, manifestDescription, folderWrite);
         WriteOperationRecorder folder2 =
-                recorder2.writeFolder(relativeFolderPath, manifestDescription, folderWrite);
+                recorder2.writeSubdirectory(relativeFolderPath, manifestDescription, folderWrite);
         return new DualWriterOperationRecorder(folder1, folder2);
     }
 }

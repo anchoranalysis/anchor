@@ -34,7 +34,7 @@ import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.experiment.ExperimentExecutionArguments;
 import org.anchoranalysis.experiment.bean.log.LoggingDestination;
 import org.anchoranalysis.experiment.log.StatefulMessageLogger;
-import org.anchoranalysis.io.manifest.ManifestRecorder;
+import org.anchoranalysis.io.manifest.Manifest;
 import org.anchoranalysis.io.output.bean.OutputManager;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
@@ -48,7 +48,7 @@ import org.anchoranalysis.io.output.path.PathPrefixer;
 public class ParametersExperiment {
 
     // Parameters for all tasks in general (the experiment)
-    @Getter private final Optional<ManifestRecorder> experimentalManifest;
+    @Getter private final Optional<Manifest> experimentalManifest;
 
     @Getter private final String experimentIdentifier;
 
@@ -69,7 +69,7 @@ public class ParametersExperiment {
     public ParametersExperiment(
             ExperimentExecutionArguments experimentArguments,
             String experimentIdentifier,
-            Optional<ManifestRecorder> experimentalManifest,
+            Optional<Manifest> experimentalManifest,
             OutputterChecked outputter,
             PathPrefixer prefixer,
             StatefulMessageLogger loggerExperiment,

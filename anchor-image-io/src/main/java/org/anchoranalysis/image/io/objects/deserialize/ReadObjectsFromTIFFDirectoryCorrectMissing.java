@@ -27,10 +27,10 @@
 package org.anchoranalysis.image.io.objects.deserialize;
 
 import java.nio.file.Path;
+import org.anchoranalysis.core.serialize.DeserializationFailedException;
+import org.anchoranalysis.core.serialize.Deserializer;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.factory.ObjectCollectionFactory;
-import org.anchoranalysis.io.manifest.deserializer.DeserializationFailedException;
-import org.anchoranalysis.io.manifest.deserializer.Deserializer;
 
 class ReadObjectsFromTIFFDirectoryCorrectMissing implements Deserializer<ObjectCollection> {
 

@@ -32,14 +32,14 @@ import java.util.Optional;
 import lombok.Getter;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.functional.OptionalUtilities;
-import org.anchoranalysis.io.manifest.ManifestRecorder;
-import org.anchoranalysis.io.manifest.deserializer.DeserializationFailedException;
-import org.anchoranalysis.io.manifest.deserializer.Deserializer;
-import org.anchoranalysis.io.manifest.deserializer.KeyValueParamsDeserializer;
-import org.anchoranalysis.io.manifest.deserializer.ObjectInputStreamDeserializer;
-import org.anchoranalysis.io.manifest.deserializer.XStreamDeserializer;
+import org.anchoranalysis.core.serialize.DeserializationFailedException;
+import org.anchoranalysis.core.serialize.Deserializer;
+import org.anchoranalysis.core.serialize.KeyValueParamsDeserializer;
+import org.anchoranalysis.core.serialize.ObjectInputStreamDeserializer;
+import org.anchoranalysis.core.serialize.XStreamDeserializer;
+import org.anchoranalysis.io.manifest.Manifest;
 import org.anchoranalysis.io.manifest.file.FileWrite;
-import org.anchoranalysis.io.manifest.match.helper.filewrite.FileWriteFileFunctionType;
+import org.anchoranalysis.io.manifest.finder.match.FileMatch;
 
 /**
  * @author Owen Feehan
@@ -79,11 +79,11 @@ public class FinderSerializedObject<T> extends FinderSingleFile {
     }
 
     @Override
-    protected Optional<FileWrite> findFile(ManifestRecorder manifestRecorder)
-            throws MultipleFilesException {
+    protected Optional<FileWrite> findFile(Manifest manifestRecorder)
+            throws FindFailedException {
         List<FileWrite> files =
                 FinderUtilities.findListFile(
-                        manifestRecorder, new FileWriteFileFunctionType(function, "serialized"));
+                        manifestRecorder, FileMatch.description(function, "serialized"));
 
         if (files.isEmpty()) {
             return Optional.empty();

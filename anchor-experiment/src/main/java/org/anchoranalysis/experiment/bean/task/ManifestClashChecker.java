@@ -30,7 +30,7 @@ import java.nio.file.Path;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.experiment.JobExecutionException;
-import org.anchoranalysis.io.manifest.ManifestRecorder;
+import org.anchoranalysis.io.manifest.Manifest;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
 import org.anchoranalysis.io.output.path.DirectoryWithPrefix;
 
@@ -38,13 +38,13 @@ import org.anchoranalysis.io.output.path.DirectoryWithPrefix;
 class ManifestClashChecker {
 
     public static void throwExceptionIfClashes(
-            ManifestRecorder manifestExperiment, OutputterChecked boundOutput, Path pathForBinding)
+            Manifest manifestExperiment, OutputterChecked boundOutput, Path pathForBinding)
             throws JobExecutionException {
         // Now we do a check, to ensure that our experimentalManifest and manifest are going to
         // write files
         //  to the same folder (without at least having some kind of prefix, to prevent files
         // overwriting each other)
-        Path experimentalRoot = manifestExperiment.getRootFolder().getRelativePath();
+        Path experimentalRoot = manifestExperiment.getRootFolder().relativePath();
         if (wouldClashWithExperimentRoot(experimentalRoot, boundOutput.getPrefix())) {
             throw new JobExecutionException(
                     String.format(

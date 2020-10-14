@@ -32,7 +32,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
-import org.anchoranalysis.io.manifest.ManifestRecorder;
+import org.anchoranalysis.io.manifest.Manifest;
 import org.anchoranalysis.io.output.bean.rules.OutputEnabledRules;
 import org.anchoranalysis.io.output.outputter.BindFailedException;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
@@ -84,7 +84,7 @@ public class OutputManager extends AnchorBean<OutputManager> {
      * <p>i.e. this is not an outputter for a specific job.
      *
      * @param experimentIdentifier an identifier for the experiment
-     * @param manifestRecorder where manifest operations are recorded
+     * @param manifest where output files are store
      * @param recordedOutputs where output-names are recorded as used/tested
      * @param prefixerContext parameters for the file-path prefixer
      * @return a newly created outputter
@@ -92,7 +92,7 @@ public class OutputManager extends AnchorBean<OutputManager> {
      */
     public OutputterChecked createExperimentOutputter(
             String experimentIdentifier,
-            ManifestRecorder manifestRecorder,
+            Manifest manifest,
             RecordedOutputsWithRules recordedOutputs,
             FilePathPrefixerContext prefixerContext)
             throws BindFailedException {
@@ -100,13 +100,13 @@ public class OutputManager extends AnchorBean<OutputManager> {
         try {
             DirectoryWithPrefix prefix =
                     filePathPrefixer.rootFolderPrefix(experimentIdentifier, prefixerContext);
-            manifestRecorder.init(prefix.getDirectory());
+            manifest.init(prefix.getDirectory());
 
             return OutputterChecked.createWithPrefix(
                     prefix,
                     recordedOutputs.selectOutputEnabled(Optional.ofNullable(outputsEnabled)),
                     getOutputWriteSettings(),
-                    manifestRecorder.getRootFolder(),
+                    manifest.getRootFolder(),
                     recordedOutputs.getRecordedOutputs(),
                     silentlyDeleteExisting);
 

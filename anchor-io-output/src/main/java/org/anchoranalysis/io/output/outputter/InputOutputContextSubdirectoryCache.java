@@ -30,7 +30,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import org.anchoranalysis.io.manifest.ManifestFolderDescription;
+import org.anchoranalysis.io.manifest.ManifestDirectoryDescription;
 
 /**
  * Caches a {@link InputOutputContext} for each subdirectory as they are created.
@@ -47,7 +47,7 @@ public class InputOutputContextSubdirectoryCache {
     private final InputOutputContext parentContext;
 
     /** A description to use for every created folder */
-    private final ManifestFolderDescription manifestFolderDescription;
+    private final ManifestDirectoryDescription manifestFolderDescription;
 
     /**
      * If true, the output rules and recording are inherited from the parent directory. if false,

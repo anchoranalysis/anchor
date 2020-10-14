@@ -42,16 +42,14 @@ import org.anchoranalysis.experiment.task.InputOutputContextStateful;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.experiment.task.ParametersUnbound;
-import org.anchoranalysis.io.generator.serialized.ObjectOutputStreamGenerator;
-import org.anchoranalysis.io.generator.serialized.XStreamGenerator;
+import org.anchoranalysis.io.generator.combined.ManifestGenerator;
 import org.anchoranalysis.io.input.InputFromManager;
-import org.anchoranalysis.io.manifest.ManifestRecorder;
+import org.anchoranalysis.io.manifest.Manifest;
 import org.anchoranalysis.io.output.bean.enabled.IgnoreUnderscorePrefix;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
-import org.anchoranalysis.io.output.writer.WriterRouterErrors;
 import org.apache.commons.lang.time.StopWatch;
 
 /**
@@ -83,7 +81,7 @@ import org.apache.commons.lang.time.StopWatch;
  */
 public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Task<T, S>> {
 
-    private static final String OUTPUT_NAME_MANIFEST = "manifest";
+    public static final String OUTPUT_NAME_MANIFEST = "job_manifest";
 
     /** Is the execution-time of the task per-input expected to be very quick to execute? */
     public abstract boolean hasVeryQuickPerInputExecution();
@@ -111,7 +109,7 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
      */
     public boolean executeJob(ParametersUnbound<T, S> paramsUnbound) throws JobExecutionException {
 
-        ManifestRecorder manifestTask = new ManifestRecorder();
+        Manifest manifestTask = new Manifest();
 
         // Bind an outputter for the task
         OutputterChecked outputterTask =
@@ -177,7 +175,7 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
     private InputBound<T, S> bindOtherParams(
             ParametersUnbound<T, S> paramsUnbound,
             OutputterChecked outputterTaskChecked,
-            ManifestRecorder manifestTask) {
+            Manifest manifestTask) {
 
         // We create a new log reporter for this job only
         StatefulMessageLogger loggerJob =
@@ -275,17 +273,6 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
             params.getInput().close(params.getLogger().errorReporter());
         }
 
-        // Note that neither of the following generators place entries in the manifest
-        WriterRouterErrors writeIfAllowed = params.getOutputter().writerSelective();
-        writeIfAllowed.write(
-            OUTPUT_NAME_MANIFEST,
-            XStreamGenerator::new,
-            params::getManifest
-        );
-        writeIfAllowed.write(
-            OUTPUT_NAME_MANIFEST,
-            ObjectOutputStreamGenerator::new,
-            params::getManifest
-        );
+        params.getOutputter().writerSelective().write(OUTPUT_NAME_MANIFEST, ManifestGenerator::new, params::getManifest);
     }
 }

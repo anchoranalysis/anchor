@@ -26,12 +26,12 @@
 
 package org.anchoranalysis.io.manifest.finder;
 
-import org.anchoranalysis.io.manifest.ManifestRecorder;
+import org.anchoranalysis.io.manifest.Manifest;
 
 public interface Finder {
 
     // true, if there was a successful match, false otherwise
-    boolean doFind(ManifestRecorder manifestRecorder);
+    boolean doFind(Manifest manifestRecorder) throws FindFailedException;
 
     // doFind must be called first
     // Does the object exist?

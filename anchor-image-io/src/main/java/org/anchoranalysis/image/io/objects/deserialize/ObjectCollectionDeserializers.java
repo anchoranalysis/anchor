@@ -28,8 +28,8 @@ package org.anchoranalysis.image.io.objects.deserialize;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.core.serialize.Deserializer;
 import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.io.manifest.deserializer.Deserializer;
 
 /** Entry point to deserializers */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)

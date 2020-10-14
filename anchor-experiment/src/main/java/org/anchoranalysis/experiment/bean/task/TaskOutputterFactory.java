@@ -33,7 +33,7 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.io.input.InputFromManager;
-import org.anchoranalysis.io.manifest.ManifestRecorder;
+import org.anchoranalysis.io.manifest.Manifest;
 import org.anchoranalysis.io.output.outputter.BindFailedException;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
 import org.anchoranalysis.io.output.path.NamedPath;
@@ -44,7 +44,7 @@ class TaskOutputterFactory {
     // If pathForBinding is null, we bind to the root folder instead
     public static OutputterChecked createOutputterForTask(
             InputFromManager input,
-            Optional<ManifestRecorder> manifestTask,
+            Optional<Manifest> manifestTask,
             ParametersExperiment params)
             throws JobExecutionException {
         try {

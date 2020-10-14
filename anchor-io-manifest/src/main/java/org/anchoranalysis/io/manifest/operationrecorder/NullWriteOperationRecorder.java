@@ -28,8 +28,8 @@ package org.anchoranalysis.io.manifest.operationrecorder;
 
 import java.nio.file.Path;
 import org.anchoranalysis.io.manifest.ManifestDescription;
-import org.anchoranalysis.io.manifest.ManifestFolderDescription;
-import org.anchoranalysis.io.manifest.folder.FolderWriteWithPath;
+import org.anchoranalysis.io.manifest.ManifestDirectoryDescription;
+import org.anchoranalysis.io.manifest.directory.Subdirectory;
 
 public class NullWriteOperationRecorder implements WriteOperationRecorder {
 
@@ -43,10 +43,10 @@ public class NullWriteOperationRecorder implements WriteOperationRecorder {
     }
 
     @Override
-    public WriteOperationRecorder writeFolder(
+    public WriteOperationRecorder writeSubdirectory(
             Path relativeFolderPath,
-            ManifestFolderDescription manifestDescription,
-            FolderWriteWithPath folderWrite) {
+            ManifestDirectoryDescription manifestDescription,
+            Subdirectory folderWrite) {
         return this;
     }
 }

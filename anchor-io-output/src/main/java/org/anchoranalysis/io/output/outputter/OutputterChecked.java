@@ -31,8 +31,8 @@ import java.util.Optional;
 import lombok.Getter;
 import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.io.manifest.ManifestDescription;
-import org.anchoranalysis.io.manifest.ManifestFolderDescription;
-import org.anchoranalysis.io.manifest.folder.FolderWriteWithPath;
+import org.anchoranalysis.io.manifest.ManifestDirectoryDescription;
+import org.anchoranalysis.io.manifest.directory.Subdirectory;
 import org.anchoranalysis.io.manifest.operationrecorder.DualWriterOperationRecorder;
 import org.anchoranalysis.io.manifest.operationrecorder.NullWriteOperationRecorder;
 import org.anchoranalysis.io.manifest.operationrecorder.WriteOperationRecorder;
@@ -195,8 +195,8 @@ public class OutputterChecked {
      */
     public OutputterChecked deriveSubdirectory(
             String subdirectoryName,
-            ManifestFolderDescription manifestDescription,
-            Optional<FolderWriteWithPath> manifestFolder,
+            ManifestDirectoryDescription manifestDescription,
+            Optional<Subdirectory> manifestFolder,
             boolean inheritOutputRulesAndRecording) {
 
         // Construct a subdirectory for the desired outputName
@@ -277,11 +277,11 @@ public class OutputterChecked {
      */
     private WriteOperationRecorder writeFolderToOperationRecorder(
             Path pathSuffix,
-            ManifestFolderDescription manifestDescription,
-            Optional<FolderWriteWithPath> manifestFolder) {
+            ManifestDirectoryDescription manifestDescription,
+            Optional<Subdirectory> manifestFolder) {
         if (manifestFolder.isPresent()) {
             // Assume the folder are writing to has no path
-            return writeOperationRecorder.writeFolder(
+            return writeOperationRecorder.writeSubdirectory(
                     relativePath(pathSuffix), manifestDescription, manifestFolder.get());
         } else {
             return writeOperationRecorder;

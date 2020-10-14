@@ -29,8 +29,8 @@ import java.nio.file.Path;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.io.manifest.ManifestDescription;
-import org.anchoranalysis.io.manifest.ManifestFolderDescription;
-import org.anchoranalysis.io.manifest.folder.FolderWriteWithPath;
+import org.anchoranalysis.io.manifest.ManifestDirectoryDescription;
+import org.anchoranalysis.io.manifest.directory.Subdirectory;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
@@ -66,8 +66,8 @@ class RecordOutputNamesForWriter implements Writer {
     @Override
     public Optional<OutputterChecked> createSubdirectory(
             String outputName,
-            ManifestFolderDescription manifestDescription,
-            Optional<FolderWriteWithPath> manifestFolder,
+            ManifestDirectoryDescription manifestDescription,
+            Optional<Subdirectory> manifestFolder,
             boolean inheritOutputRulesAndRecording)
             throws OutputWriteFailedException {
         Optional<OutputterChecked> outputter =
