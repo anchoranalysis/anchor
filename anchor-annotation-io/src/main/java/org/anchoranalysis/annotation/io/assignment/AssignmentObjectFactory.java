@@ -49,7 +49,7 @@ public class AssignmentObjectFactory {
     // END REQUIRED ARGUMENTS
 
     // Remember the cost matrix, in case we need it later
-    @Getter private ObjectCollectionDistanceMatrix cost;
+    @Getter private CostMatrix<ObjectMask> costs;
 
     public AssignmentOverlapFromPairs createAssignment(
             ObjectCollection left, ObjectCollection right, double maxAcceptedCost, Dimensions dim)
@@ -71,15 +71,15 @@ public class AssignmentObjectFactory {
             return out;
         }
 
-        cost = createCostMatrix(maybeProject(left), maybeProject(right), dim);
+        costs = createCostMatrix(maybeProject(left), maybeProject(right), dim);
 
         // Non empty both
 
-        HungarianAlgorithm ha = new HungarianAlgorithm(cost.getDistanceMatrix());
+        HungarianAlgorithm ha = new HungarianAlgorithm(costs.getMatrix());
         int[] assign = ha.execute();
 
         AssignmentOverlapFromPairs assignment =
-                new CreateAssignmentFromDistanceMatrix(cost, assign, maxAcceptedCost)
+                new CreateAssignmentFromDistanceMatrix(costs, assign, maxAcceptedCost)
                         .createAssignment();
         if (assignment.rightSize() != right.size()) {
             throw new FeatureCalculationException(
@@ -96,40 +96,24 @@ public class AssignmentObjectFactory {
         }
     }
 
-    private ObjectCollectionDistanceMatrix createCostMatrix(
-            ObjectCollection annotation, ObjectCollection result, Dimensions dim)
+    private CostMatrix<ObjectMask> createCostMatrix(
+            ObjectCollection annotation, ObjectCollection result, Dimensions dimensions)
             throws FeatureCalculationException {
 
-        FeatureCalculatorSingle<FeatureInputPairObjects> session;
         try {
-            session = featureEvaluator.createFeatureSession();
-        } catch (OperationFailedException e) {
-            throw new FeatureCalculationException(e);
-        }
-
-        EnergyStack energyStack = new EnergyStack(dim);
-
-        double[][] outArr = new double[annotation.size()][result.size()];
-
-        for (int i = 0; i < annotation.size(); i++) {
-            ObjectMask objA = annotation.get(i);
-            for (int j = 0; j < result.size(); j++) {
-
-                ObjectMask objR = result.get(j);
-
-                double costObjects =
-                        session.calculate(new FeatureInputPairObjects(objA, objR, energyStack));
-                outArr[i][j] = costObjects;
-
-                if (Double.isNaN(costObjects)) {
-                    throw new FeatureCalculationException("Cost is NaN");
+            FeatureCalculatorSingle<FeatureInputPairObjects> calculator = featureEvaluator.createFeatureSession();
+            
+            EnergyStack energyStack = new EnergyStack(dimensions);
+            
+            return CostMatrix.create(annotation.asList(), result.asList(), false, (first, second) -> {
+                try {
+                    FeatureInputPairObjects input = new FeatureInputPairObjects(first, second, energyStack);
+                    return calculator.calculate(input);
+                } catch (FeatureCalculationException e) {
+                    throw new CreateException(e);
                 }
-            }
-        }
-
-        try {
-            return new ObjectCollectionDistanceMatrix(annotation, result, outArr);
-        } catch (CreateException e) {
+            });
+        } catch (CreateException | OperationFailedException e) {
             throw new FeatureCalculationException(e);
         }
     }
