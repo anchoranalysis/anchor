@@ -32,8 +32,8 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Optional;
 import java.util.TreeSet;
-import org.anchoranalysis.io.csv.reader.CSVReader.OpenedCSVFile;
-import org.anchoranalysis.io.csv.reader.CSVReaderException;
+import org.anchoranalysis.io.input.csv.CSVReaderException;
+import org.anchoranalysis.io.input.csv.CSVReader.OpenedCSVFile;
 
 /**
  * Compares csv files after sorting their rows in a deterministic order

@@ -36,8 +36,8 @@ import org.anchoranalysis.annotation.io.bean.AnnotatorStrategy;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.image.stack.NamedStacksSupplier;
-import org.anchoranalysis.io.exception.InputReadFailedException;
 import org.anchoranalysis.io.input.InputFromManager;
+import org.anchoranalysis.io.input.InputReadFailedException;
 
 /**
  * An annotation that has been combined with it's strategy

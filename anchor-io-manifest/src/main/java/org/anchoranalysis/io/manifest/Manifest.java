@@ -28,11 +28,15 @@ package org.anchoranalysis.io.manifest;
 
 import java.io.Serializable;
 import java.nio.file.Path;
-import org.anchoranalysis.io.manifest.directory.DirectoryWrite;
+import org.anchoranalysis.io.manifest.directory.MutableDirectory;
 import org.anchoranalysis.io.manifest.directory.RootDirectory;
 
 /**
- * A manifest for a particular job (experiment recording where the outputs of particular jobs are stored on the filesystem.
+ * A manifest for a particular experiment, that may refer to the
+ * outputs from particular jobs, each with their own manifest.
+ * 
+ * <p>A manifest records outputs that occur on the filesystem (like a log, 
+ * but in a structured way, that can be opened and processed at a later point).
  * 
  * @author Owen Feehan
  *
@@ -53,7 +57,7 @@ public class Manifest implements Serializable {
         rootFolder = new RootDirectory(rootFolderPath);
     }
 
-    public DirectoryWrite getRootFolder() {
+    public MutableDirectory getRootFolder() {
         return rootFolder;
     }
 }

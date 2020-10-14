@@ -106,7 +106,7 @@ public class OutputManager extends AnchorBean<OutputManager> {
                     prefix,
                     recordedOutputs.selectOutputEnabled(Optional.ofNullable(outputsEnabled)),
                     getOutputWriteSettings(),
-                    manifest.getRootFolder(),
+                    Optional.of(manifest.getRootFolder()),
                     recordedOutputs.getRecordedOutputs(),
                     silentlyDeleteExisting);
 

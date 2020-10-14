@@ -33,7 +33,7 @@ import java.io.PrintStream;
 import java.nio.file.Path;
 import lombok.Getter;
 import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.io.csv.reader.CSVReaderException;
+import org.anchoranalysis.io.input.csv.CSVReaderException;
 import org.anchoranalysis.test.TestLoader;
 import org.anchoranalysis.test.image.csv.CSVComparer;
 import org.anchoranalysis.test.image.io.TestLoaderImageIO;

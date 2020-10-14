@@ -32,7 +32,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.io.manifest.ManifestDescription;
-import org.anchoranalysis.io.manifest.directory.DirectoryWrite;
+import org.anchoranalysis.io.manifest.directory.MutableDirectory;
 
 @NoArgsConstructor
 public class FileWrite implements Serializable {
@@ -40,14 +40,14 @@ public class FileWrite implements Serializable {
     /** */
     private static final long serialVersionUID = 5796355859093885433L;
 
-    @Getter @Setter private DirectoryWrite parentFolder;
+    @Getter @Setter private MutableDirectory parentFolder;
 
     @Getter @Setter private String fileName;
     @Getter @Setter private String outputName;
     @Getter @Setter private ManifestDescription manifestDescription;
     @Getter private String index;
 
-    public FileWrite(DirectoryWrite parentFolder) {
+    public FileWrite(MutableDirectory parentFolder) {
         this.parentFolder = parentFolder;
     }
 

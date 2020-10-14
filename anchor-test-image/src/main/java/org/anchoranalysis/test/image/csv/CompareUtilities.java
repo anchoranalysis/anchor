@@ -30,7 +30,7 @@ import java.io.PrintStream;
 import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.io.csv.reader.CSVReaderException;
+import org.anchoranalysis.io.input.csv.CSVReaderException;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 

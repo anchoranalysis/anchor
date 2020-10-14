@@ -28,19 +28,19 @@ package org.anchoranalysis.io.manifest.finder;
 
 import java.util.List;
 import org.anchoranalysis.io.manifest.Manifest;
-import org.anchoranalysis.io.manifest.directory.DirectoryWrite;
+import org.anchoranalysis.io.manifest.directory.MutableDirectory;
 import org.anchoranalysis.io.manifest.finder.match.DirectoryMatch;
 
 // Finders
 public class FinderExperimentFileDirectories implements Finder {
 
-    private List<DirectoryWrite> list = null;
+    private List<MutableDirectory> list = null;
 
     @Override
     public boolean doFind(Manifest manifestRecorder) {
         list =
                 FinderUtilities.findListFolder(
-                        manifestRecorder, DirectoryMatch.experimentFileFolder());
+                        manifestRecorder, DirectoryMatch.jobDirectory());
         return !list.isEmpty();
     }
 
@@ -49,7 +49,7 @@ public class FinderExperimentFileDirectories implements Finder {
         return list != null && !list.isEmpty();
     }
 
-    public List<DirectoryWrite> getList() {
+    public List<MutableDirectory> getList() {
         return list;
     }
 }

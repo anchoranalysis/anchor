@@ -34,12 +34,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
-import org.anchoranalysis.io.bean.files.provider.SearchDirectory;
-import org.anchoranalysis.io.bean.input.InputManagerParams;
-import org.anchoranalysis.io.bean.path.matcher.MatchGlob;
-import org.anchoranalysis.io.exception.FilesProviderException;
 import org.anchoranalysis.io.input.InputContextParams;
-import org.anchoranalysis.io.manifest.directory.DirectoryWritePhysical;
+import org.anchoranalysis.io.input.bean.InputManagerParams;
+import org.anchoranalysis.io.input.bean.files.SearchDirectory;
+import org.anchoranalysis.io.input.bean.path.matcher.MatchGlob;
+import org.anchoranalysis.io.input.files.FilesProviderException;
+import org.anchoranalysis.io.manifest.directory.Subdirectory;
 import org.anchoranalysis.io.manifest.directory.sequenced.SequencedDirectory;
 import org.anchoranalysis.io.manifest.file.FileWrite;
 import org.anchoranalysis.io.manifest.sequencetype.IncompleteElementRange;
@@ -62,7 +62,7 @@ class SerializedObjectSetFolderSource implements SequencedDirectory {
         sequenceType = new IncrementingIntegers();
         int i = 0;
 
-        DirectoryWritePhysical fwp = new DirectoryWritePhysical(directory);
+        Subdirectory fwp = new Subdirectory(directory);
 
         try {
             Collection<File> files =

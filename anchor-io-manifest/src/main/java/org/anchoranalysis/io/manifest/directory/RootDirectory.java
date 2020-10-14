@@ -34,7 +34,7 @@ import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.manifest.file.FileWrite;
 import org.anchoranalysis.io.manifest.finder.FindFailedException;
 
-public class RootDirectory extends DirectoryWrite implements Serializable {
+public class RootDirectory extends MutableDirectory implements Serializable {
 
     /** */
     private static final long serialVersionUID = -939826653076766321L;
@@ -46,13 +46,12 @@ public class RootDirectory extends DirectoryWrite implements Serializable {
     private final transient Path rootPath;
 
     public RootDirectory(Path rootPath) {
-        super();
         this.rootPath = rootPath;
         delegate = new FileList(this);
     }
 
     @Override
-    public void write(
+    public void recordWrittenFile(
             String outputName,
             ManifestDescription manifestDescription,
             Path outFilePath,
@@ -70,16 +69,11 @@ public class RootDirectory extends DirectoryWrite implements Serializable {
         delegate.findFile(foundList, predicate, recursive);
     }
 
-    @Override
-    public List<FileWrite> fileList() {
-        return delegate.getFileList();
-    }
-
     public void add(FileWrite file) {
         delegate.add(file);
     }
 
-    public void add(DirectoryWrite folder) {
+    public void add(MutableDirectory folder) {
         subdirectories().add(folder);
     }
 }

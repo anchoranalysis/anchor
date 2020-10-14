@@ -32,7 +32,7 @@ import org.anchoranalysis.core.path.PathDifference;
 import org.anchoranalysis.core.path.PathDifferenceException;
 import org.anchoranalysis.io.manifest.ManifestDirectoryDescription;
 import org.anchoranalysis.io.manifest.Manifest;
-import org.anchoranalysis.io.manifest.directory.ExperimentRootDirectory;
+import org.anchoranalysis.io.manifest.directory.JobRootDirectory;
 import org.anchoranalysis.io.manifest.sequencetype.StringsWithoutOrder;
 import org.anchoranalysis.io.output.path.PathPrefixerException;
 import org.anchoranalysis.io.output.path.DirectoryWithPrefix;
@@ -92,6 +92,6 @@ class PrefixForInput {
             Manifest manifestRecorder, Path rootPath) {
         manifestRecorder
                 .getRootFolder()
-                .writeSubdirectory(rootPath, MANIFEST_DIRECTORY_ROOT, new ExperimentRootDirectory());
+                .recordSubdirectoryCreated(rootPath, MANIFEST_DIRECTORY_ROOT, new JobRootDirectory());
     }
 }

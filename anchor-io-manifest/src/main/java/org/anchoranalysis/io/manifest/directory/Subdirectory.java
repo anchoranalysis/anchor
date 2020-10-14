@@ -27,29 +27,51 @@
 package org.anchoranalysis.io.manifest.directory;
 
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import org.anchoranalysis.core.path.FilePathToUnixStyleConverter;
+import java.util.List;
+import java.util.function.Predicate;
+import org.anchoranalysis.io.manifest.ManifestDescription;
+import org.anchoranalysis.io.manifest.file.FileWrite;
+import org.anchoranalysis.io.manifest.finder.FindFailedException;
 import lombok.NoArgsConstructor;
 
+/**
+ * A {@link SubdirectoryBase} entry in the manifest for a subdirectory.
+ * 
+ * <p>This is intended when outputs in the directory do not form
+ * a predictable pattern, and can be simply be added adhoc as they
+ * occur.
+ * 
+ * @author Owen Feehan
+ *
+ */
 @NoArgsConstructor
-public abstract class Subdirectory extends DirectoryWrite {
+public class Subdirectory extends SubdirectoryBase {
 
     /** */
-    private static final long serialVersionUID = 8319222670306262133L;
+    private static final long serialVersionUID = 8992970758732036941L;
 
-    // Relative path to parent. As this becomes serialized, we store is a string
-    private String path;
+    public Subdirectory(Path directory) {
+        super(directory);
+    }
     
-    public Subdirectory(Path path) {
-        this.path = FilePathToUnixStyleConverter.toStringUnixStyle(path);
+    private FileList delegate = new FileList(this);
+
+    // Finds a folder a comparator matches
+    @Override
+    public void findFile(List<FileWrite> foundList, Predicate<FileWrite> predicate, boolean recursive) throws FindFailedException {
+        delegate.findFile(foundList, predicate, recursive);
+    }
+
+    public void add(FileWrite fw) {
+        delegate.add(fw);
     }
 
     @Override
-    public Path relativePath() {
-        return Paths.get(path);
-    }
-
-    protected void assignPath(Path path) {
-        this.path = FilePathToUnixStyleConverter.toStringUnixStyle(path);
+    public void recordWrittenFile(
+            String outputName,
+            ManifestDescription manifestDescription,
+            Path outFilePath,
+            String index) {
+        delegate.write(outputName, manifestDescription, outFilePath, index);
     }
 }

@@ -47,7 +47,7 @@ public interface ElementWriter<T> {
      * @param outputter
      * @throws OutputWriteFailedException
      */
-    public abstract void write(T element, OutputNameStyle outputNameStyle, OutputterChecked outputter)
+    void write(T element, OutputNameStyle outputNameStyle, OutputterChecked outputter)
             throws OutputWriteFailedException;
 
     /**
@@ -60,7 +60,7 @@ public interface ElementWriter<T> {
      * @return
      * @throws OutputWriteFailedException
      */
-    public abstract int writeWithIndex(
+    int writeWithIndex(
             T element,
             String index,
             IndexableOutputNameStyle outputNameStyle, OutputterChecked outputter)

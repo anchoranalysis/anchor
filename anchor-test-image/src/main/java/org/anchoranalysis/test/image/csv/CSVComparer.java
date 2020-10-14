@@ -29,9 +29,9 @@ package org.anchoranalysis.test.image.csv;
 import java.io.PrintStream;
 import java.nio.file.Path;
 import lombok.AllArgsConstructor;
-import org.anchoranalysis.io.csv.reader.CSVReader;
-import org.anchoranalysis.io.csv.reader.CSVReader.OpenedCSVFile;
-import org.anchoranalysis.io.csv.reader.CSVReaderException;
+import org.anchoranalysis.io.input.csv.CSVReader;
+import org.anchoranalysis.io.input.csv.CSVReaderException;
+import org.anchoranalysis.io.input.csv.CSVReader.OpenedCSVFile;
 import org.apache.commons.lang.ArrayUtils;
 
 @AllArgsConstructor

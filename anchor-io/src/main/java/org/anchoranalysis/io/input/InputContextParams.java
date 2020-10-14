@@ -36,7 +36,7 @@ import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.core.functional.OptionalUtilities;
-import org.anchoranalysis.io.bean.input.DebugModeParams;
+import org.anchoranalysis.io.input.bean.DebugModeParams;
 
 /**
  * Additional paramaters that provide context for many beans that provide input-functions

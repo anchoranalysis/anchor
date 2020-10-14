@@ -39,8 +39,7 @@ import org.anchoranalysis.image.io.histogram.HistogramCSVReader;
 import org.anchoranalysis.image.io.objects.ObjectCollectionReader;
 import org.anchoranalysis.image.io.stack.OpenedRaster;
 import org.anchoranalysis.image.stack.TimeSequence;
-import org.anchoranalysis.io.bean.path.derive.DerivePath;
-import org.anchoranalysis.io.input.OperationOutFilePath;
+import org.anchoranalysis.io.input.bean.path.DerivePath;
 import org.anchoranalysis.mpp.io.input.MultiInput;
 import org.anchoranalysis.mpp.io.input.MultiInputSubMap;
 
@@ -169,8 +168,8 @@ class AppendHelper {
             throws OperationFailedException {
         try {
             return reader.apply(
-                    OperationOutFilePath.outPathFor(
-                            namedBean.getValue(), input::pathForBinding, debugMode));
+                    namedBean.getValue().deriveFrom(
+                            input::pathForBinding, debugMode));
         } catch (Exception e) {
             throw new OperationFailedException("An error occured appending to the multi-input", e);
         }

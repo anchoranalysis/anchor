@@ -32,9 +32,8 @@ import lombok.Getter;
 import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.manifest.ManifestDirectoryDescription;
-import org.anchoranalysis.io.manifest.directory.Subdirectory;
+import org.anchoranalysis.io.manifest.directory.SubdirectoryBase;
 import org.anchoranalysis.io.manifest.operationrecorder.DualWriterOperationRecorder;
-import org.anchoranalysis.io.manifest.operationrecorder.NullWriteOperationRecorder;
 import org.anchoranalysis.io.manifest.operationrecorder.WriteOperationRecorder;
 import org.anchoranalysis.io.output.bean.OutputManager;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
@@ -63,7 +62,8 @@ public class OutputterChecked {
     /** The directory and prefix the output writes to */
     private final OutputterTarget target;
 
-    private WriteOperationRecorder writeOperationRecorder;
+    /** Records a log of outputs written to the filesystem. */
+    private Optional<WriteOperationRecorder> writeOperationRecorder;
 
     /** The writers associated with this output-manager. */
     @Getter private RecordingWriters writers;
@@ -93,7 +93,7 @@ public class OutputterChecked {
                 new DirectoryWithPrefix(pathDirectory),
                 Permissive.INSTANCE,
                 new OutputWriteSettings(),
-                new NullWriteOperationRecorder(),
+                Optional.empty(),
                 Optional.empty(),
                 deleteExistingDirectory);
     }
@@ -114,7 +114,7 @@ public class OutputterChecked {
             DirectoryWithPrefix prefix,
             MultiLevelOutputEnabled outputEnabled,
             OutputWriteSettings settings,
-            WriteOperationRecorder writeOperationRecorder,
+            Optional<WriteOperationRecorder> writeOperationRecorder,
             Optional<MultiLevelRecordedOutputs> recordedOutputs,
             boolean deleteExistingDirectory)
             throws BindFailedException {
@@ -136,7 +136,7 @@ public class OutputterChecked {
      */
     private OutputterChecked(
             OutputterTarget target,
-            WriteOperationRecorder writeOperationRecorder,
+            Optional<WriteOperationRecorder> writeOperationRecorder,
             MultiLevelOutputEnabled outputsEnabled,
             Optional<MultiLevelRecordedOutputs> recordedOutputs,
             OutputWriteSettings settings) {
@@ -153,8 +153,12 @@ public class OutputterChecked {
 
     /** Adds an additional operation recorder alongside any existing recorders. */
     public void addOperationRecorder(WriteOperationRecorder toAdd) {
-        this.writeOperationRecorder =
-                new DualWriterOperationRecorder(writeOperationRecorder, toAdd);
+        if (writeOperationRecorder.isPresent()) {
+            this.writeOperationRecorder = Optional.of(
+                    new DualWriterOperationRecorder(writeOperationRecorder.get(), toAdd));
+        } else {
+            this.writeOperationRecorder = Optional.of(toAdd);
+        }
     }
 
     /**
@@ -171,7 +175,7 @@ public class OutputterChecked {
      * @throws BindFailedException
      */
     public OutputterChecked changePrefix(
-            DirectoryWithPrefix prefixToAssign, WriteOperationRecorder writeOperationRecorderToAssign)
+            DirectoryWithPrefix prefixToAssign, Optional<WriteOperationRecorder> writeOperationRecorderToAssign)
             throws BindFailedException {
         return new OutputterChecked(
                 target.changePrefix(prefixToAssign),
@@ -196,7 +200,7 @@ public class OutputterChecked {
     public OutputterChecked deriveSubdirectory(
             String subdirectoryName,
             ManifestDirectoryDescription manifestDescription,
-            Optional<Subdirectory> manifestFolder,
+            Optional<SubdirectoryBase> manifestFolder,
             boolean inheritOutputRulesAndRecording) {
 
         // Construct a subdirectory for the desired outputName
@@ -234,8 +238,8 @@ public class OutputterChecked {
      */
     public void writeFileToOperationRecorder(
             String outputName, Path pathSuffix, ManifestDescription manifestDescription, String index) {
-        writeOperationRecorder.write(
-                outputName, manifestDescription, relativePath(pathSuffix), index);
+        writeOperationRecorder.ifPresent( writer -> writer.recordWrittenFile(
+                outputName, manifestDescription, relativePath(pathSuffix), index));
     }
 
     public Path getOutputFolderPath() {
@@ -275,14 +279,14 @@ public class OutputterChecked {
      * @return a write recorder for the sub folder (if it exists) or otherwise the write recorder
      *     associated with the output manager
      */
-    private WriteOperationRecorder writeFolderToOperationRecorder(
+    private Optional<WriteOperationRecorder> writeFolderToOperationRecorder(
             Path pathSuffix,
             ManifestDirectoryDescription manifestDescription,
-            Optional<Subdirectory> manifestFolder) {
-        if (manifestFolder.isPresent()) {
+            Optional<SubdirectoryBase> manifestFolder) {
+        if (manifestFolder.isPresent() && writeOperationRecorder.isPresent()) {
             // Assume the folder are writing to has no path
-            return writeOperationRecorder.writeSubdirectory(
-                    relativePath(pathSuffix), manifestDescription, manifestFolder.get());
+            return Optional.of( writeOperationRecorder.get().recordSubdirectoryCreated(
+                    relativePath(pathSuffix), manifestDescription, manifestFolder.get()) );
         } else {
             return writeOperationRecorder;
         }

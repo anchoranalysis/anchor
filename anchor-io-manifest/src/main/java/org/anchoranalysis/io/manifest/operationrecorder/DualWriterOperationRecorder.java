@@ -29,10 +29,10 @@ package org.anchoranalysis.io.manifest.operationrecorder;
 import java.nio.file.Path;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.manifest.ManifestDirectoryDescription;
-import org.anchoranalysis.io.manifest.directory.Subdirectory;
+import org.anchoranalysis.io.manifest.directory.SubdirectoryBase;
 
 /**
- * Allows two IWriteOperationRecorder function together as if they are one
+ * Allows two {@link WriteOperationRecorder} function together as if they are one
  *
  * <p>Every operation is applied to both.
  *
@@ -51,24 +51,24 @@ public class DualWriterOperationRecorder implements WriteOperationRecorder {
     }
 
     @Override
-    public void write(
+    public void recordWrittenFile(
             String outputName,
             ManifestDescription manifestDescription,
             Path outFilePath,
             String index) {
-        recorder1.write(outputName, manifestDescription, outFilePath, index);
-        recorder2.write(outputName, manifestDescription, outFilePath, index);
+        recorder1.recordWrittenFile(outputName, manifestDescription, outFilePath, index);
+        recorder2.recordWrittenFile(outputName, manifestDescription, outFilePath, index);
     }
 
     @Override
-    public WriteOperationRecorder writeSubdirectory(
+    public WriteOperationRecorder recordSubdirectoryCreated(
             Path relativeFolderPath,
             ManifestDirectoryDescription manifestDescription,
-            Subdirectory folderWrite) {
+            SubdirectoryBase folderWrite) {
         WriteOperationRecorder folder1 =
-                recorder1.writeSubdirectory(relativeFolderPath, manifestDescription, folderWrite);
+                recorder1.recordSubdirectoryCreated(relativeFolderPath, manifestDescription, folderWrite);
         WriteOperationRecorder folder2 =
-                recorder2.writeSubdirectory(relativeFolderPath, manifestDescription, folderWrite);
+                recorder2.recordSubdirectoryCreated(relativeFolderPath, manifestDescription, folderWrite);
         return new DualWriterOperationRecorder(folder1, folder2);
     }
 }

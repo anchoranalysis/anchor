@@ -43,7 +43,7 @@ class FileList implements Serializable {
     private static final long serialVersionUID = 5858857164978822313L;
 
     // START REQUIRED ARGUMENTS
-    private final DirectoryWrite directory;
+    private final MutableDirectory directory;
     // END REQUIRED ARGUMENTS
     
     private List<FileWrite> files = new ArrayList<>();
@@ -57,7 +57,7 @@ class FileList implements Serializable {
             return;
         }
 
-        for (DirectoryWrite subdirectory : this.directory.subdirectories()) {
+        for (MutableDirectory subdirectory : this.directory.subdirectories()) {
             subdirectory.findFile(foundList, predicate, recursive);
         }
     }

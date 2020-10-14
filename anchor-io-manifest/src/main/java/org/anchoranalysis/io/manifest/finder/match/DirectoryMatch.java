@@ -32,25 +32,25 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.manifest.ManifestDirectoryDescription;
-import org.anchoranalysis.io.manifest.directory.DirectoryWrite;
-import org.anchoranalysis.io.manifest.directory.ExperimentRootDirectory;
+import org.anchoranalysis.io.manifest.directory.MutableDirectory;
+import org.anchoranalysis.io.manifest.directory.JobRootDirectory;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class DirectoryMatch {
 
-    public static Predicate<DirectoryWrite> experimentFileFolder() {
-        return directory -> directory instanceof ExperimentRootDirectory;
+    public static Predicate<MutableDirectory> jobDirectory() {
+        return directory -> directory instanceof JobRootDirectory;
     }
 
-    public static Predicate<DirectoryWrite> path(String path) {
+    public static Predicate<MutableDirectory> path(String path) {
         Path pathAsPath = Paths.get(path); 
         return directory -> directory.relativePath().equals(pathAsPath);
     }
     
     // If match is null, we match everything
-    public static Predicate<DirectoryWrite> description(String function, String type) {
+    public static Predicate<MutableDirectory> description(String function, String type) {
         return directory -> DirectoryMatch.presentAnd(directory.description(), DescriptionMatch.functionAndType(function, type));
     }
     

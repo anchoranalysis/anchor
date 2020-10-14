@@ -33,7 +33,7 @@ import java.util.function.Predicate;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.io.manifest.Manifest;
-import org.anchoranalysis.io.manifest.directory.DirectoryWrite;
+import org.anchoranalysis.io.manifest.directory.MutableDirectory;
 import org.anchoranalysis.io.manifest.file.FileWrite;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -47,10 +47,10 @@ public class FinderUtilities {
         return foundList;
     }
 
-    public static List<DirectoryWrite> findListFolder(
-            Manifest manifestRecorder, Predicate<DirectoryWrite> predicate) {
+    public static List<MutableDirectory> findListFolder(
+            Manifest manifestRecorder, Predicate<MutableDirectory> predicate) {
 
-        ArrayList<DirectoryWrite> foundList = new ArrayList<>();
+        ArrayList<MutableDirectory> foundList = new ArrayList<>();
         manifestRecorder.getRootFolder().findDirectory(foundList, predicate);
         return foundList;
     }

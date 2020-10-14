@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.function.Predicate;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.manifest.directory.Subdirectory;
+import org.anchoranalysis.io.manifest.directory.SubdirectoryBase;
 import org.anchoranalysis.io.manifest.file.FileType;
 import org.anchoranalysis.io.manifest.file.FileWrite;
 import org.anchoranalysis.io.manifest.finder.FindFailedException;
@@ -39,15 +40,18 @@ import org.anchoranalysis.io.manifest.sequencetype.IncompleteElementRange;
 import org.anchoranalysis.io.output.namestyle.IndexableOutputNameStyle;
 
 /**
- * A {@link Subdirectory} entry in the manifest that is indexable.
+ * A {@link SubdirectoryBase} entry in the manifest that is indexable.
  * 
  * <p>This means it follows a predictable pattern, and entries can be
  * predicated from the manifest.
  * 
+ * <p>See {@link Subdirectory} for subdirectories that
+ * have no indexable pattern.
+ * 
  * @author Owen Feehan
  *
  */
-class IndexableSubdirectory extends Subdirectory {
+class IndexableSubdirectory extends SubdirectoryBase {
 
     /** */
     private static final long serialVersionUID = -8404795823155555672L;
@@ -71,7 +75,7 @@ class IndexableSubdirectory extends Subdirectory {
     //   and manifestDescription and path matches one of our templates, otherwise
     //   we throw an Exception as something is wrong
     @Override
-    public void write(
+    public void recordWrittenFile(
             String outputName,
             ManifestDescription manifestDescription,
             Path outFilePath,
@@ -118,10 +122,5 @@ class IndexableSubdirectory extends Subdirectory {
         write.setIndex(index);
         write.setParentFolder(this);
         return write;
-    }
-
-    @Override
-    public List<FileWrite> fileList() {
-        throw new UnsupportedOperationException();
     }
 }

@@ -32,7 +32,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.io.manifest.ManifestDirectoryDescription;
-import org.anchoranalysis.io.manifest.directory.DirectoryWritePhysical;
+import org.anchoranalysis.io.manifest.directory.Subdirectory;
 import org.anchoranalysis.io.manifest.operationrecorder.WriteOperationRecorder;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.enabled.multi.MultiLevelOutputEnabled;
@@ -70,7 +70,7 @@ public class Outputter {
                 delegate.deriveSubdirectory(
                         subdirectoryName,
                         manifestDescription,
-                        Optional.of(new DirectoryWritePhysical()),
+                        Optional.of(new Subdirectory()),
                         inheritOutputRulesAndRecording),
                 errorReporter);
     }

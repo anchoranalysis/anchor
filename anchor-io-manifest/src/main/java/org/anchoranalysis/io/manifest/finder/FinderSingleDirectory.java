@@ -31,11 +31,11 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.io.manifest.Manifest;
-import org.anchoranalysis.io.manifest.directory.DirectoryWrite;
+import org.anchoranalysis.io.manifest.directory.MutableDirectory;
 
 public abstract class FinderSingleDirectory implements Finder {
 
-    private Optional<DirectoryWrite> foundDirectory = Optional.empty();
+    private Optional<MutableDirectory> foundDirectory = Optional.empty();
 
     @Override
     public final boolean doFind(Manifest manifestRecorder) {
@@ -50,14 +50,14 @@ public abstract class FinderSingleDirectory implements Finder {
         return foundDirectory.isPresent();
     }
     
-    protected abstract Predicate<DirectoryWrite> matchDirectories();
+    protected abstract Predicate<MutableDirectory> matchDirectories();
 
-    protected DirectoryWrite getFoundDirectory() {
+    protected MutableDirectory getFoundDirectory() {
         return foundDirectory.get();    // NOSONAR
     }
         
-    private final Optional<DirectoryWrite> findDirectory(Manifest manifestRecorder) {
-        List<DirectoryWrite> list = FinderUtilities.findListFolder(manifestRecorder, matchDirectories() );
+    private final Optional<MutableDirectory> findDirectory(Manifest manifestRecorder) {
+        List<MutableDirectory> list = FinderUtilities.findListFolder(manifestRecorder, matchDirectories() );
         return OptionalUtilities.createFromFlag(!list.isEmpty(), () -> list.get(0));
     }
 }

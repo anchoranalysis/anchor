@@ -37,9 +37,9 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
-import org.anchoranalysis.io.csv.reader.CSVReaderByLine;
-import org.anchoranalysis.io.csv.reader.CSVReaderByLine.ReadByLine;
-import org.anchoranalysis.io.csv.reader.CSVReaderException;
+import org.anchoranalysis.io.input.csv.CSVReaderByLine;
+import org.anchoranalysis.io.input.csv.CSVReaderException;
+import org.anchoranalysis.io.input.csv.ReadByLine;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class HistogramCSVReader {

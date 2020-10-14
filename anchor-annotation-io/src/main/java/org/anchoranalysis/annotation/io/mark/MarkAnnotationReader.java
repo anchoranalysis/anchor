@@ -34,7 +34,7 @@ import org.anchoranalysis.annotation.mark.DualMarksAnnotation;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.serialize.DeserializationFailedException;
 import org.anchoranalysis.core.serialize.XStreamDeserializer;
-import org.anchoranalysis.io.exception.InputReadFailedException;
+import org.anchoranalysis.io.input.InputReadFailedException;
 import org.anchoranalysis.mpp.io.marks.MarkCollectionDeserializer;
 import org.anchoranalysis.mpp.mark.MarkCollection;
 

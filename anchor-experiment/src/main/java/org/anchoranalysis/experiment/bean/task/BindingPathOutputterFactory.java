@@ -31,7 +31,6 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.io.manifest.Manifest;
-import org.anchoranalysis.io.manifest.operationrecorder.NullWriteOperationRecorder;
 import org.anchoranalysis.io.manifest.operationrecorder.WriteOperationRecorder;
 import org.anchoranalysis.io.output.outputter.BindFailedException;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
@@ -76,10 +75,7 @@ class BindingPathOutputterFactory {
         }
     }
 
-    private static WriteOperationRecorder writeRecorder(
-            Optional<Manifest> manifestRecorder) {
-        Optional<WriteOperationRecorder> opt =
-                manifestRecorder.map(Manifest::getRootFolder);
-        return opt.orElse(new NullWriteOperationRecorder());
+    private static Optional<WriteOperationRecorder> writeRecorder(Optional<Manifest> manifest) {
+        return manifest.map(Manifest::getRootFolder);
     }
 }

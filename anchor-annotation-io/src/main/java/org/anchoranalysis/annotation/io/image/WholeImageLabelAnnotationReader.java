@@ -33,7 +33,7 @@ import java.nio.file.Path;
 import java.util.Optional;
 import org.anchoranalysis.annotation.image.ImageLabelAnnotation;
 import org.anchoranalysis.annotation.io.AnnotationReader;
-import org.anchoranalysis.io.exception.InputReadFailedException;
+import org.anchoranalysis.io.input.InputReadFailedException;
 
 public class WholeImageLabelAnnotationReader implements AnnotationReader<ImageLabelAnnotation> {
 
