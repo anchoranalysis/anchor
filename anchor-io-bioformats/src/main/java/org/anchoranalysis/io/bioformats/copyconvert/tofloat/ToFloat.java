@@ -30,7 +30,7 @@ import com.google.common.base.Preconditions;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
-import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.dimensions.Dimensions;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferWrap;

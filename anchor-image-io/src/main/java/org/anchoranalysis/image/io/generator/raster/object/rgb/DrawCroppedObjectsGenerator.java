@@ -33,7 +33,7 @@ import lombok.Setter;
 import org.anchoranalysis.core.color.ColorIndex;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.spatial.Padding;
-import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.dimensions.Dimensions;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.io.stack.ConvertDisplayStackToRGB;

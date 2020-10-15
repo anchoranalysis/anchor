@@ -29,7 +29,7 @@ package org.anchoranalysis.image.bean.object;
 import java.util.Optional;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.ImageBean;
-import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.dimensions.Dimensions;
 import org.anchoranalysis.image.object.ObjectCollection;
 
 public abstract class ObjectFilter extends ImageBean<ObjectFilter> {

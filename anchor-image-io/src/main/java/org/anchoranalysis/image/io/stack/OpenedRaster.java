@@ -29,7 +29,7 @@ package org.anchoranalysis.image.io.stack;
 import java.util.List;
 import java.util.Optional;
 import org.anchoranalysis.core.progress.ProgressReporter;
-import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.dimensions.Dimensions;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.TimeSequence;

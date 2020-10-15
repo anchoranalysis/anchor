@@ -31,7 +31,7 @@ import static org.junit.Assert.*;
 import java.nio.FloatBuffer;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
-import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.dimensions.Dimensions;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferWrap;
 import org.anchoranalysis.image.voxel.datatype.FloatVoxelType;

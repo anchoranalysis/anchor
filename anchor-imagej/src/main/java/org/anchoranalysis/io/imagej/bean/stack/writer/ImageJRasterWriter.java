@@ -29,7 +29,7 @@ package org.anchoranalysis.io.imagej.bean.stack.writer;
 import ij.ImagePlus;
 import ij.io.FileSaver;
 import java.nio.file.Path;
-import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.dimensions.Dimensions;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.StackWriter;
 import org.anchoranalysis.image.io.stack.StackWriteOptions;

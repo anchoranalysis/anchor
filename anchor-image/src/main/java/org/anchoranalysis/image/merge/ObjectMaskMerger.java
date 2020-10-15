@@ -36,6 +36,7 @@ import org.anchoranalysis.image.binary.mask.MaskInverter;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.box.BoundingBox;
+import org.anchoranalysis.image.extent.box.BoundingBoxMerger;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;

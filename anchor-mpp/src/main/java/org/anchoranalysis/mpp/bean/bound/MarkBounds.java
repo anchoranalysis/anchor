@@ -30,7 +30,7 @@ import java.io.Serializable;
 import java.util.Optional;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.GroupingRoot;
-import org.anchoranalysis.image.extent.Resolution;
+import org.anchoranalysis.image.dimensions.Resolution;
 
 @GroupingRoot
 public abstract class MarkBounds extends AnchorBean<MarkBounds> implements Serializable {

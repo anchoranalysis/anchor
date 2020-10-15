@@ -32,7 +32,7 @@ import org.anchoranalysis.core.color.ColorIndex;
 import org.anchoranalysis.core.color.ColorIndexModulo;
 import org.anchoranalysis.core.color.ColorList;
 import org.anchoranalysis.core.color.RGBColor;
-import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.dimensions.Dimensions;
 import org.anchoranalysis.image.io.bean.object.draw.Outline;
 import org.anchoranalysis.image.io.stack.ConvertDisplayStackToRGB;
 import org.anchoranalysis.image.object.properties.ObjectCollectionWithProperties;

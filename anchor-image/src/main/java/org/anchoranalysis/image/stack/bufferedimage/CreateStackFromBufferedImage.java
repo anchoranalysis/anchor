@@ -36,8 +36,8 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactoryByte;
 import org.anchoranalysis.image.channel.factory.ChannelFactorySingleType;
-import org.anchoranalysis.image.extent.Dimensions;
-import org.anchoranalysis.image.extent.IncorrectImageSizeException;
+import org.anchoranalysis.image.dimensions.Dimensions;
+import org.anchoranalysis.image.dimensions.IncorrectImageSizeException;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferWrap;
 

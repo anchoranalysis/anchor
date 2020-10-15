@@ -32,9 +32,9 @@ import java.util.Optional;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.dimensions.Dimensions;
+import org.anchoranalysis.image.dimensions.Resolution;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.stack.Stack;
 
 /**

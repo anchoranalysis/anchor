@@ -33,7 +33,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.bean.nonbean.spatial.arrange.ArrangeStackException;
 import org.anchoranalysis.image.bean.nonbean.spatial.arrange.BoundingBoxesOnPlane;
-import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.dimensions.Dimensions;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.stack.rgb.RGBStack;

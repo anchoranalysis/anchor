@@ -30,7 +30,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import java.util.Optional;
 import org.anchoranalysis.core.geometry.Point3d;
-import org.anchoranalysis.image.extent.Resolution;
+import org.anchoranalysis.image.dimensions.Resolution;
 import org.anchoranalysis.math.rotation.RotationMatrix;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)

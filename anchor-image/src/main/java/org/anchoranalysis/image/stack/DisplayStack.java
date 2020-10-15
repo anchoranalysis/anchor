@@ -44,9 +44,9 @@ import org.anchoranalysis.image.channel.convert.attached.ChannelConverterAttache
 import org.anchoranalysis.image.channel.convert.attached.channel.UpperLowerQuantileIntensity;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.convert.UnsignedByteBuffer;
-import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.dimensions.Dimensions;
+import org.anchoranalysis.image.dimensions.IncorrectImageSizeException;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.stack.bufferedimage.BufferedImageFactory;
 import org.anchoranalysis.image.stack.rgb.RGBStack;

@@ -33,8 +33,8 @@ import lombok.Getter;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInputParams;
-import org.anchoranalysis.image.extent.Dimensions;
-import org.anchoranalysis.image.extent.Resolution;
+import org.anchoranalysis.image.dimensions.Dimensions;
+import org.anchoranalysis.image.dimensions.Resolution;
 import org.anchoranalysis.mpp.mark.Mark;
 
 @AllArgsConstructor

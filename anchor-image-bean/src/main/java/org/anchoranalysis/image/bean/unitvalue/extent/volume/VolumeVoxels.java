@@ -32,7 +32,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.image.extent.UnitConverter;
+import org.anchoranalysis.image.dimensions.UnitConverter;
 
 @NoArgsConstructor
 @AllArgsConstructor

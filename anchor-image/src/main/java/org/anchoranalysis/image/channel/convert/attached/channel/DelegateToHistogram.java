@@ -33,7 +33,7 @@ import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.convert.ConversionPolicy;
 import org.anchoranalysis.image.channel.convert.attached.ChannelConverterAttached;
 import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.image.histogram.HistogramFactory;
+import org.anchoranalysis.image.histogram.HistogramFromObjectsFactory;
 import org.anchoranalysis.image.voxel.convert.VoxelsConverter;
 
 @RequiredArgsConstructor
@@ -45,7 +45,7 @@ class DelegateToHistogram<T> implements ChannelConverterAttached<Channel, T> {
     public void attachObject(Channel object) throws OperationFailedException {
 
         try {
-            delegate.attachObject(HistogramFactory.create(object));
+            delegate.attachObject(HistogramFromObjectsFactory.create(object));
 
         } catch (CreateException e) {
             throw new OperationFailedException(e);

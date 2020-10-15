@@ -30,7 +30,7 @@ import java.util.List;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.idgetter.IDGetter;
-import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.dimensions.Dimensions;
 import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
 import org.anchoranalysis.overlay.Overlay;

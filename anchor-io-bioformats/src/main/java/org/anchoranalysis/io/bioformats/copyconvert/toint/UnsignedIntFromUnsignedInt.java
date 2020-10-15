@@ -31,7 +31,7 @@ import java.nio.ByteBuffer;
 import loci.common.DataTools;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.image.convert.UnsignedIntBuffer;
-import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.dimensions.Dimensions;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferFactory;
 

@@ -28,7 +28,7 @@ package org.anchoranalysis.io.bioformats.copyconvert.tobyte;
 
 import java.nio.ByteBuffer;
 import org.anchoranalysis.image.convert.UnsignedByteBuffer;
-import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.dimensions.Dimensions;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferWrap;

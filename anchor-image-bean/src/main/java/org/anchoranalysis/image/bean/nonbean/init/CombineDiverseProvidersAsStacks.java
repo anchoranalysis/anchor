@@ -39,7 +39,7 @@ import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactoryByte;
 import org.anchoranalysis.image.channel.factory.ChannelFactorySingleType;
 import org.anchoranalysis.image.convert.UnsignedByteBuffer;
-import org.anchoranalysis.image.extent.IncorrectImageSizeException;
+import org.anchoranalysis.image.dimensions.IncorrectImageSizeException;
 import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.stack.Stack;

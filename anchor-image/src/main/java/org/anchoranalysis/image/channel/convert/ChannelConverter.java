@@ -32,7 +32,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
-import org.anchoranalysis.image.extent.IncorrectImageSizeException;
+import org.anchoranalysis.image.dimensions.IncorrectImageSizeException;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.convert.VoxelsConverter;

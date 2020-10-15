@@ -32,7 +32,7 @@ import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.mask.MaskFactory;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.convert.UnsignedByteBuffer;
-import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.dimensions.Dimensions;
 import org.anchoranalysis.image.voxel.Voxels;
 
 /**

@@ -29,7 +29,7 @@ package org.anchoranalysis.mpp.bean.mark.bounds;
 import java.util.Optional;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
-import org.anchoranalysis.image.extent.Resolution;
+import org.anchoranalysis.image.dimensions.Resolution;
 import org.anchoranalysis.image.orientation.Orientation;
 
 public abstract class RotationBounds extends AnchorBean<RotationBounds> {

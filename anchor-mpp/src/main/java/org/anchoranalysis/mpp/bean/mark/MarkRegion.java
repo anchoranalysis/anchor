@@ -29,7 +29,7 @@ package org.anchoranalysis.mpp.bean.mark;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.GenerateUniqueParameterization;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.dimensions.Dimensions;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 

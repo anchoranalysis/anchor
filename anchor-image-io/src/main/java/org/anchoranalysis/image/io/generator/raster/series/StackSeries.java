@@ -30,7 +30,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
-import org.anchoranalysis.image.extent.IncorrectImageSizeException;
+import org.anchoranalysis.image.dimensions.IncorrectImageSizeException;
 import org.anchoranalysis.image.stack.Stack;
 
 public class StackSeries implements Iterable<Stack> {

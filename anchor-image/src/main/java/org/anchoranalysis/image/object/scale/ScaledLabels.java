@@ -37,13 +37,13 @@ import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.box.BoundedList;
+import org.anchoranalysis.image.extent.scale.ScaleFactor;
 import org.anchoranalysis.image.interpolator.Interpolator;
 import org.anchoranalysis.image.interpolator.InterpolatorImgLib2NearestNeighbor;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.label.DecodeLabels;
 import org.anchoranalysis.image.object.label.LabelObjects;
 import org.anchoranalysis.image.object.label.OverlappingObject;
-import org.anchoranalysis.image.scale.ScaleFactor;
 
 /**
  * Elements labelled and scaled in a raster.

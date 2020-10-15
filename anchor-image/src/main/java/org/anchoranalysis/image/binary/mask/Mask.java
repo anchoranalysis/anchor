@@ -39,20 +39,20 @@ import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.channel.factory.ChannelFactorySingleType;
 import org.anchoranalysis.image.convert.UnsignedByteBuffer;
-import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.dimensions.Dimensions;
+import org.anchoranalysis.image.dimensions.IncorrectImageSizeException;
+import org.anchoranalysis.image.dimensions.Resolution;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.extent.IncorrectImageSizeException;
-import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.extent.box.BoundingBox;
+import org.anchoranalysis.image.extent.scale.ScaleFactor;
 import org.anchoranalysis.image.interpolator.Interpolator;
 import org.anchoranalysis.image.interpolator.InterpolatorFactory;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.scale.ScaleFactor;
 import org.anchoranalysis.image.voxel.Voxels;
-import org.anchoranalysis.image.voxel.VoxelsPredicate;
 import org.anchoranalysis.image.voxel.assigner.VoxelsAssigner;
 import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelTypeException;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
+import org.anchoranalysis.image.voxel.extracter.predicate.VoxelsPredicate;
 import org.anchoranalysis.image.voxel.thresholder.VoxelsThresholder;
 
 /**

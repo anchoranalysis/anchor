@@ -40,7 +40,7 @@ import org.anchoranalysis.core.name.provider.NamedProvider;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
 import org.anchoranalysis.core.name.store.StoreSupplier;
-import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.dimensions.Dimensions;
 
 /**
  * A set of image-stacks each with a name

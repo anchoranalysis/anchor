@@ -39,7 +39,7 @@ import org.anchoranalysis.image.bean.spatial.arrange.ArrangeStackBean;
 import org.anchoranalysis.image.channel.factory.ChannelFactoryByte;
 import org.anchoranalysis.image.channel.factory.ChannelFactoryShort;
 import org.anchoranalysis.image.channel.factory.ChannelFactorySingleType;
-import org.anchoranalysis.image.extent.IncorrectImageSizeException;
+import org.anchoranalysis.image.dimensions.IncorrectImageSizeException;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
 

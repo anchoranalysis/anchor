@@ -27,7 +27,7 @@
 package org.anchoranalysis.mpp.io.marks.generator;
 
 import java.util.Optional;
-import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.dimensions.Dimensions;
 import org.anchoranalysis.image.io.generator.raster.RasterGenerator;
 import org.anchoranalysis.image.io.generator.raster.object.collection.ObjectsAsUniqueValueGenerator;
 import org.anchoranalysis.image.io.stack.StackWriteOptions;

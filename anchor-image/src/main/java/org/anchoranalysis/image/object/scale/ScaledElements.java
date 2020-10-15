@@ -35,7 +35,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.image.extent.box.BoundedList;
-import org.anchoranalysis.image.scale.ScaleFactor;
+import org.anchoranalysis.image.extent.scale.ScaleFactor;
 
 /**
  * A list of elements with an object-mask representation that have been scaled.

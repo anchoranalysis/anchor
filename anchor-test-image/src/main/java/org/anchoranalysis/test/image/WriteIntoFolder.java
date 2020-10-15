@@ -36,7 +36,7 @@ import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.convert.UnsignedByteBuffer;
-import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.dimensions.Dimensions;
 import org.anchoranalysis.image.extent.box.BoundedList;
 import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.io.generator.raster.DisplayStackGenerator;

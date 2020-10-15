@@ -33,7 +33,7 @@ import org.anchoranalysis.core.axis.AxisType;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.extent.UnitConverter;
+import org.anchoranalysis.image.dimensions.UnitConverter;
 import org.anchoranalysis.image.orientation.DirectionVector;
 
 public abstract class UnitValueDistance extends AnchorBean<UnitValueDistance>

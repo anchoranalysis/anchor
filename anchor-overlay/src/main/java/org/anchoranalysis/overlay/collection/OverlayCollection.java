@@ -34,7 +34,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.anchoranalysis.core.index.IndicesSelection;
-import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.dimensions.Dimensions;
 import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.overlay.Overlay;
 import org.anchoranalysis.overlay.writer.DrawOverlay;

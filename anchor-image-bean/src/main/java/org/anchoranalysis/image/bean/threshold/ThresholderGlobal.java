@@ -37,7 +37,7 @@ import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.image.histogram.HistogramFactory;
+import org.anchoranalysis.image.histogram.HistogramFromObjectsFactory;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
 import org.anchoranalysis.image.voxel.thresholder.VoxelsThresholder;
@@ -93,6 +93,6 @@ public class ThresholderGlobal extends Thresholder {
             VoxelsWrapper inputBuffer,
             Optional<Histogram> histogram,
             Optional<ObjectMask> objectMask) {
-        return histogram.orElseGet(() -> HistogramFactory.create(inputBuffer, objectMask));
+        return histogram.orElseGet(() -> HistogramFromObjectsFactory.create(inputBuffer, objectMask));
     }
 }

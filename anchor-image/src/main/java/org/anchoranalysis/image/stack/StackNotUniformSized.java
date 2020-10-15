@@ -32,7 +32,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.dimensions.Dimensions;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 
 public class StackNotUniformSized implements Iterable<Channel> {

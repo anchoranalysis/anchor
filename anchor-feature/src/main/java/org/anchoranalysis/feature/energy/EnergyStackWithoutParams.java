@@ -31,7 +31,7 @@ import io.vavr.control.Either;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.OperationFailedRuntimeException;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.dimensions.Dimensions;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.stack.Stack;
 

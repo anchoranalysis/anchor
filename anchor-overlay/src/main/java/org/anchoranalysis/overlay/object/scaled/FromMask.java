@@ -29,10 +29,10 @@ package org.anchoranalysis.overlay.object.scaled;
 import java.util.Optional;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
-import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.dimensions.Dimensions;
+import org.anchoranalysis.image.extent.scale.ScaleFactor;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.properties.ObjectWithProperties;
-import org.anchoranalysis.image.scale.ScaleFactor;
 import org.anchoranalysis.overlay.writer.DrawOverlay;
 
 public class FromMask implements ScaledMaskCreator {

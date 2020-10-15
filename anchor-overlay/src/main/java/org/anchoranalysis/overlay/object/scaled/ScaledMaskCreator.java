@@ -28,7 +28,7 @@ package org.anchoranalysis.overlay.object.scaled;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
-import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.dimensions.Dimensions;
 import org.anchoranalysis.image.object.properties.ObjectWithProperties;
 import org.anchoranalysis.overlay.writer.DrawOverlay;
 

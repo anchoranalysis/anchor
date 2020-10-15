@@ -32,7 +32,7 @@ import lombok.Setter;
 import java.util.Optional;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
-import org.anchoranalysis.image.extent.Resolution;
+import org.anchoranalysis.image.dimensions.Resolution;
 import org.anchoranalysis.image.orientation.Orientation;
 import org.anchoranalysis.image.orientation.Orientation2D;
 import org.anchoranalysis.mpp.bean.bound.Bound;

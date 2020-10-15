@@ -30,8 +30,8 @@ import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.extent.Extent;
+import org.anchoranalysis.image.extent.scale.ScaleFactor;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.scale.ScaleFactor;
 
 @AllArgsConstructor
 public class SeedObjectMask implements Seed {

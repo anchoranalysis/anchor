@@ -27,7 +27,7 @@
 package org.anchoranalysis.image.stack;
 
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.dimensions.Dimensions;
 
 /**
  * Like a @{link {@link NamedStacks} but enforces a condition that all stacks must have the same

@@ -32,8 +32,8 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.extent.SpatialUnits;
-import org.anchoranalysis.image.extent.UnitConverter;
+import org.anchoranalysis.image.dimensions.SpatialUnits;
+import org.anchoranalysis.image.dimensions.UnitConverter;
 import org.anchoranalysis.image.orientation.DirectionVector;
 
 // Measures either area or volume (depending if the do3D flag is employed)

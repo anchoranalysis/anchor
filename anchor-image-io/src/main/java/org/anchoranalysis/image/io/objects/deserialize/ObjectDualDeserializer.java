@@ -34,7 +34,7 @@ import org.anchoranalysis.core.serialize.DeserializationFailedException;
 import org.anchoranalysis.core.serialize.Deserializer;
 import org.anchoranalysis.core.serialize.ObjectInputStreamDeserializer;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.dimensions.Dimensions;
 import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.StackReader;

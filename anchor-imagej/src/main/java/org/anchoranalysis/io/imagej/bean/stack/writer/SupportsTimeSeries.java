@@ -27,7 +27,7 @@
 package org.anchoranalysis.io.imagej.bean.stack.writer;
 
 import java.nio.file.Path;
-import org.anchoranalysis.image.extent.IncorrectImageSizeException;
+import org.anchoranalysis.image.dimensions.IncorrectImageSizeException;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.generator.raster.series.StackSeries;
 import org.anchoranalysis.image.io.stack.StackWriteOptions;

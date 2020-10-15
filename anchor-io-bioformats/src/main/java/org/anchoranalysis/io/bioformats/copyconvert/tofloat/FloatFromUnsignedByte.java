@@ -28,7 +28,7 @@ package org.anchoranalysis.io.bioformats.copyconvert.tofloat;
 
 import java.nio.ByteBuffer;
 import org.anchoranalysis.image.convert.PrimitiveConverter;
-import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.dimensions.Dimensions;
 
 public class FloatFromUnsignedByte extends ToFloat {
 

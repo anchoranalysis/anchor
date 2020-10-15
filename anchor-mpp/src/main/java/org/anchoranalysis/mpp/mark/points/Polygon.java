@@ -32,7 +32,7 @@ import ij.gui.Roi;
 import java.util.List;
 import org.anchoranalysis.core.error.OptionalOperationUnsupportedException;
 import org.anchoranalysis.core.geometry.Point3d;
-import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.dimensions.Dimensions;
 import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMembershipUtilities;
 import org.anchoranalysis.mpp.mark.GlobalRegionIdentifiers;

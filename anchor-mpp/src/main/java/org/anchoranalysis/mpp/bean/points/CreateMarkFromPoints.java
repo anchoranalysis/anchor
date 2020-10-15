@@ -38,7 +38,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3f;
 import org.anchoranalysis.core.geometry.PointConverter;
-import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.dimensions.Dimensions;
 import org.anchoranalysis.mpp.bean.points.fitter.InsufficientPointsException;
 import org.anchoranalysis.mpp.bean.points.fitter.PointsFitter;
 import org.anchoranalysis.mpp.bean.points.fitter.PointsFitterException;

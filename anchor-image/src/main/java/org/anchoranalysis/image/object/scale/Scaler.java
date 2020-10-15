@@ -33,9 +33,9 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.extent.Extent;
+import org.anchoranalysis.image.extent.scale.ScaleFactor;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.scale.ScaleFactor;
 
 /**
  * Scales object-masks (or other more generic elements) collectively to avoid undesired overlap.
@@ -52,8 +52,30 @@ public class Scaler {
     private static final AccessObjectMask<ObjectMask> ACCESS_OBJECTS = new AccessSimple();
 
     /**
+     * Scales every object-mask in a collection
+     *
+     * <p>It is desirable scale objects together, as interpolation can be done so that adjacent
+     * boundaries pre-scaling remain adjacent after scaling (only if there's no overlap among them).
+     *
+     * <p>This is an <b>immutable</b> operation.
+     *
+     * @param objects objects to scale
+     * @param factor scaling-factor
+     * @return a new collection with scaled object-masks (existing object-masks are unaltered)
+     * @throws OperationFailedException
+     */
+    public static ScaledElements<ObjectMask> scaleObjects(ObjectCollection objects, ScaleFactor factor) throws OperationFailedException {
+        return scaleObjects(objects, factor, Optional.empty(), Optional.empty());
+    }
+    
+    /**
      * Scales every object-mask in a collection, ensuring the results remain inside a particular
      * region.
+     * 
+     * <p>This is an <b>immutable</b> operation.
+     * 
+     * <p>Like {@link #scaleObjects(ObjectCollection,ScaleFactor)} but ensured the scaled-results will always be inside a
+     * particular extent (clipping if necessary)
      *
      * @param objects objects to scale
      * @param factor scaling-factor
@@ -75,7 +97,7 @@ public class Scaler {
             throw new OperationFailedException(e);
         }
     }
-
+    
     /**
      * Scales every object-mask in a collection, allowing for additional manipulation before and
      * after scaling.
@@ -84,7 +106,7 @@ public class Scaler {
      * @param factor scaling-factor
      * @param preOperation applied to each-object before it is scaled (e.g. flattening)
      * @param postOperation applied to each-object after it is scaled (e.g. clipping to an extent)
-     * @return a new collection with scaled object-masks
+     * @return a new collection with scaled object-masks (existing object-masks are unaltered)
      * @throws OperationFailedException
      */
     public static ScaledElements<ObjectMask> scaleObjects(

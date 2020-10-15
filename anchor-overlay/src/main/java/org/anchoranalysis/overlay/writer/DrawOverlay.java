@@ -36,7 +36,7 @@ import org.anchoranalysis.core.idgetter.IDGetter;
 import org.anchoranalysis.core.idgetter.IDGetterIter;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
-import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.dimensions.Dimensions;
 import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.object.properties.IDGetterObjectWithProperties;
 import org.anchoranalysis.image.object.properties.ObjectWithProperties;
@@ -66,7 +66,7 @@ public abstract class DrawOverlay {
             ColoredOverlayCollection overlays, RGBStack stack, IDGetter<Overlay> idGetter)
             throws OperationFailedException {
         writeOverlays(
-                overlays, stack.dimensions(), stack, idGetter, new BoundingBox(stack.dimensions()));
+                overlays, stack.dimensions(), stack, idGetter, new BoundingBox(stack.extent()));
     }
 
     //

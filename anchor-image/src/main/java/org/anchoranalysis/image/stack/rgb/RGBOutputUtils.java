@@ -31,7 +31,7 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.color.RGBColor;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.convert.UnsignedByteBuffer;
-import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.dimensions.Dimensions;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class RGBOutputUtils {

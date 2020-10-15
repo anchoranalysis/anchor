@@ -31,7 +31,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.image.bean.nonbean.error.UnitValueException;
-import org.anchoranalysis.image.extent.UnitConverter;
+import org.anchoranalysis.image.dimensions.UnitConverter;
 
 /**
  * Area expressed in physical coordinates

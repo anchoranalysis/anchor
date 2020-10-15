@@ -32,25 +32,25 @@ import lombok.Getter;
 import lombok.experimental.Accessors;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
-import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.dimensions.Dimensions;
+import org.anchoranalysis.image.dimensions.IncorrectImageSizeException;
+import org.anchoranalysis.image.dimensions.Resolution;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.extent.IncorrectImageSizeException;
-import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.extent.box.BoundingBox;
-import org.anchoranalysis.image.histogram.HistogramFactory;
+import org.anchoranalysis.image.extent.scale.ScaleFactor;
+import org.anchoranalysis.image.extent.scale.ScaleFactorUtilities;
+import org.anchoranalysis.image.histogram.HistogramFromObjectsFactory;
 import org.anchoranalysis.image.interpolator.Interpolator;
 import org.anchoranalysis.image.interpolator.InterpolatorImgLib2Lanczos;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.scale.ScaleFactor;
-import org.anchoranalysis.image.scale.ScaleFactorUtilities;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.voxel.Voxels;
-import org.anchoranalysis.image.voxel.VoxelsPredicate;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
 import org.anchoranalysis.image.voxel.arithmetic.VoxelsArithmetic;
 import org.anchoranalysis.image.voxel.assigner.VoxelsAssigner;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.image.voxel.extracter.VoxelsExtracter;
+import org.anchoranalysis.image.voxel.extracter.predicate.VoxelsPredicate;
 
 /**
  * A channel from an image.
@@ -200,7 +200,7 @@ public class Channel {
     @Override
     public String toString() {
         try {
-            return HistogramFactory.create(this).toString();
+            return HistogramFromObjectsFactory.create(this).toString();
         } catch (CreateException e) {
             return String.format("Error: %s", e);
         }

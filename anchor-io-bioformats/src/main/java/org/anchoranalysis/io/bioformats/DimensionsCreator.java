@@ -35,9 +35,9 @@ import ome.units.UNITS;
 import ome.units.quantity.Length;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point3d;
-import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.dimensions.Dimensions;
+import org.anchoranalysis.image.dimensions.Resolution;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.io.bioformats.bean.options.ReadOptions;
 import com.google.common.base.Preconditions;
 

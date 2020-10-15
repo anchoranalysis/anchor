@@ -32,7 +32,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import java.util.Optional;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.image.extent.Resolution;
+import org.anchoranalysis.image.dimensions.Resolution;
 import org.anchoranalysis.mpp.bean.bound.Bound;
 import org.anchoranalysis.mpp.bean.bound.OrientableBounds;
 

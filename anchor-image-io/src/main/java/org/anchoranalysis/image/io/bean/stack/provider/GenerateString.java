@@ -39,8 +39,8 @@ import org.anchoranalysis.image.channel.convert.ConversionPolicy;
 import org.anchoranalysis.image.channel.convert.ToUnsignedShort;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.convert.UnsignedShortBuffer;
-import org.anchoranalysis.image.extent.Dimensions;
-import org.anchoranalysis.image.extent.IncorrectImageSizeException;
+import org.anchoranalysis.image.dimensions.Dimensions;
+import org.anchoranalysis.image.dimensions.IncorrectImageSizeException;
 import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.io.bean.generator.TextStyle;
 import org.anchoranalysis.image.stack.Stack;
@@ -142,7 +142,7 @@ public class GenerateString extends StackProvider {
     private Channel createExpandedChannel(Channel channel, int zHeight) {
         assert (channel.dimensions().z() == 1);
 
-        BoundingBox boxSrc = new BoundingBox(channel.dimensions());
+        BoundingBox boxSrc = new BoundingBox(channel.extent());
         BoundingBox boxDest = boxSrc;
 
         Channel channelNew = emptyChannelWithChangedZ(channel, zHeight);

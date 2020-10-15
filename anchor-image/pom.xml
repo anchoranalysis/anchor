@@ -51,11 +51,6 @@
 		<artifactId>java-image-scaling</artifactId>
 		<version>0.8.6</version>
 	</dependency>
-	<dependency>
-	  <groupId>org.jgrapht</groupId>
-	  <artifactId>jgrapht-core</artifactId>
-	  <version>0.9.1</version>
-	</dependency>
 	
 	 <dependency>
       <groupId>org.mockito</groupId>
@@ -69,11 +64,6 @@
 	    <artifactId>imglib2</artifactId>
 	    <version>${imglib2.version}</version>
 	</dependency>
-	
-	<dependency>
-	  <groupId>newbrightidea-util</groupId>
-	  <artifactId>newbrightidea-util</artifactId>
-	  <version>1.0.0</version>
-	</dependency>		
+		
   </dependencies>
 </project>

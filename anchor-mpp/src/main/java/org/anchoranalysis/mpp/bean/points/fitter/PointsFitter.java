@@ -29,7 +29,7 @@ package org.anchoranalysis.mpp.bean.points.fitter;
 import java.util.List;
 import org.anchoranalysis.bean.annotation.GroupingRoot;
 import org.anchoranalysis.core.geometry.Point3f;
-import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.dimensions.Dimensions;
 import org.anchoranalysis.mpp.bean.points.PointsBean;
 import org.anchoranalysis.mpp.mark.CompatibleWithMark;
 import org.anchoranalysis.mpp.mark.Mark;

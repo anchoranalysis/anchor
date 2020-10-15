@@ -39,10 +39,10 @@ import org.anchoranalysis.core.functional.function.CheckedUnaryOperator;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.channel.factory.ChannelFactorySingleType;
-import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.dimensions.Dimensions;
+import org.anchoranalysis.image.dimensions.IncorrectImageSizeException;
+import org.anchoranalysis.image.dimensions.Resolution;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.extent.IncorrectImageSizeException;
-import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 

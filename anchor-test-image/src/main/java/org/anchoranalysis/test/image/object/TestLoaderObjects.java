@@ -61,7 +61,7 @@ public class TestLoaderObjects {
      */
     private static ObjectMask largestObjectFromStack(Stack stack) throws CreateException {
         Mask mask = new Mask(stack.getChannel(0));
-        return findLargestObject(FACTORY.createConnectedComponents(mask));
+        return findLargestObject(FACTORY.createConnectedComponents(mask.binaryVoxels()));
     }
 
     private static ObjectMask findLargestObject(ObjectCollection objects) {

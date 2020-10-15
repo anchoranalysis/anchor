@@ -28,7 +28,7 @@ package org.anchoranalysis.image.feature.bean.physical.convert;
 
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInputWithResolution;
-import org.anchoranalysis.image.extent.UnitConverter;
+import org.anchoranalysis.image.dimensions.UnitConverter;
 
 /** converts a feature to a physical distance in a XY place that is isometric */
 public class ConvertToPhysicalVolume<T extends FeatureInputWithResolution>

@@ -32,7 +32,7 @@ import java.util.stream.Stream;
 import org.anchoranalysis.core.color.ColorIndex;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.dimensions.Dimensions;
 import org.anchoranalysis.image.extent.box.BoundedList;
 import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.io.generator.raster.RasterGenerator;

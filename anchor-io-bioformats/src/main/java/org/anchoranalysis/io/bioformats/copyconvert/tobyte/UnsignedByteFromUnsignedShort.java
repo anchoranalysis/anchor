@@ -30,7 +30,7 @@ import java.nio.ByteBuffer;
 import loci.common.DataTools;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.image.convert.UnsignedByteBuffer;
-import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.dimensions.Dimensions;
 
 @RequiredArgsConstructor
 public class UnsignedByteFromUnsignedShort extends ToUnsignedByte {

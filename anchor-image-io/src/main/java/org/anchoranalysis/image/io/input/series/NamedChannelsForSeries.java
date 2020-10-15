@@ -34,7 +34,7 @@ import org.anchoranalysis.core.name.store.NamedProviderStore;
 import org.anchoranalysis.core.name.store.StoreSupplier;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.dimensions.Dimensions;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.channel.ChannelGetter;
 import org.anchoranalysis.image.stack.NamedStacks;

@@ -34,7 +34,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.geometry.Point3d;
-import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.dimensions.Dimensions;
 import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.mpp.bean.bound.Bound;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMembershipUtilities;

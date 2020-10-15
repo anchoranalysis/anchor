@@ -34,7 +34,7 @@ import lombok.Getter;
 import org.anchoranalysis.core.color.ColorList;
 import org.anchoranalysis.core.color.RGBColor;
 import org.anchoranalysis.core.index.IndicesSelection;
-import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.dimensions.Dimensions;
 import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.overlay.Overlay;
 import org.anchoranalysis.overlay.writer.DrawOverlay;
