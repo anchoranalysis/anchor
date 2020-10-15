@@ -62,7 +62,7 @@ public interface PredicateTwoBytes {
      *
      * @return the derived processor.
      */
-    default ProcessBufferBinary<UnsignedByteBuffer> deriveUnsignedByteProcessor() {
+    default ProcessBufferBinary<UnsignedByteBuffer,UnsignedByteBuffer> deriveUnsignedByteProcessor() {
         return (point, buffer1, buffer2, offset1, offset2) ->
                 test(buffer1.getRaw(offset1), buffer2.getRaw(offset2));
     }

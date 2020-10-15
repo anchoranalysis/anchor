@@ -28,11 +28,12 @@ package org.anchoranalysis.image.voxel.iterator.process.buffer;
 
 import java.nio.Buffer;
 import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.iterator.process.ProcessPoint;
 
 /**
- * Processes a 3D point like {@link ProcessPoint} but also retrieves <b>two</b> {@link Buffer} for
- * the current z-slice.
+ * Processes a 3D point like {@link ProcessPoint} but also retrieves both <b>one</b> {@link VoxelBuffer} for
+ * the current z-slice and <b>one</b> {@link Buffer} for the current z-slice.
  *
  * <p>It is very similar to {@link ProcessBufferUnary} but uses two {@link Buffer} of the same type
  * instead of a single one.
@@ -42,7 +43,7 @@ import org.anchoranalysis.image.voxel.iterator.process.ProcessPoint;
  * @author Owen Feehan
  */
 @FunctionalInterface
-public interface ProcessBufferBinary<S,T> {
+public interface ProcessBufferBinaryMixed<S,T> {
 
     /** Notifies the processor that there has been a change in slice (z global coordinate) */
     default void notifyChangeSlice(int z) {}
@@ -60,5 +61,5 @@ public interface ProcessBufferBinary<S,T> {
      * @param offset2 an offset value for the current slice for <b>buffer2</b> (i.e. indexing XY
      *     only, but not Z)
      */
-    void process(Point3i point, S buffer1, T buffer2, int offset1, int offset2);
+    void process(Point3i point, VoxelBuffer<S> buffer1, T buffer2, int offset1, int offset2);
 }

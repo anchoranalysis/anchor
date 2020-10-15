@@ -168,7 +168,7 @@ public class IterateVoxelsObjectMask {
             ObjectMask object,
             Voxels<T> voxels1,
             Voxels<T> voxels2,
-            ProcessBufferBinary<T> process) {
+            ProcessBufferBinary<T,T> process) {
         Preconditions.checkArgument(voxels1.extent().equals(voxels2.extent()));
         IterateVoxelsObjectMask.withPoint(
                 object, new RetrieveBuffersForTwoSlices<>(voxels1, voxels2, process));

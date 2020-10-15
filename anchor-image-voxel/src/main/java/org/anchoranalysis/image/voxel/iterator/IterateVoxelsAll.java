@@ -28,6 +28,7 @@ package org.anchoranalysis.image.voxel.iterator;
 import com.google.common.base.Preconditions;
 import java.util.function.IntPredicate;
 import java.util.function.IntUnaryOperator;
+import java.util.function.Predicate;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.functional.function.IntBinaryOperation;
@@ -93,7 +94,7 @@ public class IterateVoxelsAll {
      * @param <T> buffer-type for voxels
      */
     public static <T> void withTwoBuffersAndPoint(
-            Voxels<T> voxels1, Voxels<T> voxels2, ProcessBufferBinary<T> process) {
+            Voxels<T> voxels1, Voxels<T> voxels2, ProcessBufferBinary<T,T> process) {
         Preconditions.checkArgument(voxels1.extent().equals(voxels2.extent()));
         withPoint(voxels1.extent(), new RetrieveBuffersForTwoSlices<>(voxels1, voxels2, process));
     }
@@ -213,6 +214,37 @@ public class IterateVoxelsAll {
                                 process.process(buffer1, buffer2, offset);
                             }
                         });
+    }
+    
+    
+
+
+    /**
+     * Tries to apply a predicate to all the remaining buffer locations, returning true if the predicate matches.
+     * 
+     * <p>The predicate should test only the <i>current element</i> of the buffer, although the whole buffer (of type {@code T}
+     * is passed as an argument. It should also advance the position in the buffer (as automatically occurs if {@code get()} is called.
+     * 
+     * @param <T> buffer-type
+     * @param voxels the voxels to iterate through
+     * @param predicate the predicate on the current element of the buffer
+     * @return true if the predicate matches any voxel, false otherwise
+     */
+    public static <T> boolean anyPredicateMatch(Voxels<T> voxels, Predicate<T> predicate) {
+
+        int zMax = voxels.extent().z();
+
+        for (int z = 0; z < zMax; z++) {
+
+            VoxelBuffer<T> buffer = voxels.slice(z);
+            while (buffer.hasRemaining()) {
+
+                if (predicate.test(buffer.buffer())) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     /**

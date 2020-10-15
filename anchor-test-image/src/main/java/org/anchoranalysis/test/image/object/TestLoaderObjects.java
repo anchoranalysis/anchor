@@ -39,7 +39,7 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class TestLoaderObjects {
 
-    private static ObjectsFromConnectedComponentsFactory FACTORY =
+    private static final ObjectsFromConnectedComponentsFactory FACTORY =
             new ObjectsFromConnectedComponentsFactory();
 
     private final TestLoaderImage loader;

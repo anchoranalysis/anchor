@@ -50,10 +50,7 @@ public class FromByte implements SliceBufferIndex<UnsignedByteBuffer> {
     // END FACTORY METHODS
 
     private FromByte(Extent extent) {
-        assert (extent.z() > 0);
-
         this.extent = extent;
-
         buffer = VoxelBufferFactory.allocateUnsignedByteArray(extent.z());
     }
 

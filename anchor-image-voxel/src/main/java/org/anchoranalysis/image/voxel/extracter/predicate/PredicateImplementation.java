@@ -25,16 +25,19 @@
  */
 package org.anchoranalysis.image.voxel.extracter.predicate;
 
+import java.util.function.BiConsumer;
 import java.util.function.Predicate;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.arithmetic.Counter;
+import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.Voxels;
-import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
+import org.anchoranalysis.image.voxel.iterator.IterateVoxelsAll;
+import org.anchoranalysis.image.voxel.iterator.IterateVoxelsBoundingBox;
 import org.anchoranalysis.image.voxel.iterator.IterateVoxelsObjectMask;
+import org.anchoranalysis.image.voxel.iterator.process.voxelbuffer.ProcessVoxelBufferUnary;
 
 /**
  * Implementation of {@link VoxelsPredicate} for a particular {@link Voxels}.
@@ -50,11 +53,6 @@ public class PredicateImplementation<T> implements VoxelsPredicate {
     private final Voxels<T> voxels;
     // END REQUIRED ARGUMENTS
 
-    /** Are there voxels remaining in the buffer? */
-    public static interface SetBufferPosition<T> {
-        void position(T buffer, int offset);
-    }
-
     // START REQUIRED ARGUMENTS
     /** Checks if the current value of a buffer matches a predicate */
     private final Predicate<T> predicate;
@@ -62,46 +60,72 @@ public class PredicateImplementation<T> implements VoxelsPredicate {
 
     @Override
     public boolean anyExists() {
-
-        int zMax = voxels.extent().z();
-
-        for (int z = 0; z < zMax; z++) {
-
-            VoxelBuffer<T> buffer = voxels.slice(z);
-            while (buffer.hasRemaining()) {
-
-                if (predicate.test(buffer.buffer())) {
-                    return true;
-                }
-            }
-        }
-        return false;
+        return IterateVoxelsAll.anyPredicateMatch(voxels, predicate);
     }
 
     @Override
     public int count() {
-
-        int count = 0;
-        int zMax = voxels.extent().z();
-
-        for (int z = 0; z < zMax; z++) {
-            VoxelBuffer<T> buffer = voxels.slice(z);
-
-            while (buffer.hasRemaining()) {
-                if (predicate.test(buffer.buffer())) {
-                    count++;
-                }
-            }
-        }
-        return count;
+        return countPredicate(IterateVoxelsAll::withVoxelBuffer);
     }
 
     @Override
     public int countForObject(ObjectMask object) {
+        return countPredicate( (voxelsToProcess,processor) ->
+            IterateVoxelsObjectMask.withVoxelBuffer(object,voxelsToProcess,processor) );
+    }
 
+    @Override
+    public boolean higherCountExistsThan(int threshold) {
+        return predicateMatchWithCounter(threshold+1);
+    }
+
+    @Override
+    public boolean lowerCountExistsThan(int threshold) {
+        // The return value is the complement of whether we exited early or not
+        return !predicateMatchWithCounter(threshold);
+    }
+
+    @Override
+    public ObjectMask deriveObject(BoundingBox box) {
+        
+        ObjectMask object = new ObjectMask(box);
+
+        byte outOn = object.binaryValuesByte().getOnByte();
+
+        ReadableTuple3i shiftForMask = Point3i.immutableScale(object.boundingBox().cornerMin(), -1);
+        IterateVoxelsBoundingBox.withTwoMixedBuffers(box, shiftForMask, voxels, object.voxels(), (point, buffer1, buffer2, offset1, offset2) -> {
+            buffer1.position(offset1);
+
+            if (predicate.test(buffer1.buffer())) {
+                buffer2.putRaw(offset2, outOn);
+            }
+        });
+        
+        return object;
+    }
+
+    
+    private boolean predicateMatchWithCounter(int threshold) {
+        
         Counter counter = new Counter();
+        
+        return IterateVoxelsAll.anyPredicateMatch(voxels, buffer -> {
+            if (predicate.test(buffer)) {
+                counter.increment();
+                // We've reached the threshold, positive outcome
+                return counter.getCount()==threshold;
+            } else {
+                return false;
+            }
+        });
+    }
+    
+    private int countPredicate(BiConsumer<Voxels<T>, ProcessVoxelBufferUnary<T>> consumer) {
 
-        IterateVoxelsObjectMask.withVoxelBuffer(object, voxels, (buffer, offset) -> {
+        // We use an object on the heap, as the lambda cannot reference a variable on the stack.
+        Counter counter = new Counter();
+        
+        consumer.accept(voxels, (buffer, offset) -> {
             buffer.position(offset);
             if (predicate.test(buffer.buffer())) {
                 counter.increment();
@@ -109,83 +133,5 @@ public class PredicateImplementation<T> implements VoxelsPredicate {
         });
         
         return counter.getCount();
-    }
-
-    @Override
-    public boolean higherCountExistsThan(int threshold) {
-        int count = 0;
-        int zMax = voxels.extent().z();
-
-        for (int z = 0; z < zMax; z++) {
-            VoxelBuffer<T> buffer = voxels.slice(z);
-
-            while (buffer.hasRemaining()) {
-                if (predicate.test(buffer.buffer())) {
-                    if (count == threshold) {
-                        // We've reached the threshold, positive outcome
-                        return true;
-                    } else {
-                        count++;
-                    }
-                }
-            }
-        }
-        // We've never reached the threshold, negative outcome
-        return false;
-    }
-
-    @Override
-    public boolean lowerCountExistsThan(int threshold) {
-        int count = 0;
-        int zMax = voxels.extent().z();
-
-        for (int z = 0; z < zMax; z++) {
-            VoxelBuffer<T> buffer = voxels.slice(z);
-
-            while (buffer.hasRemaining()) {
-                if (predicate.test(buffer.buffer())) {
-                    count++;
-                    if (count == threshold) {
-                        // We've reached the threshold, negative outcome
-                        return false;
-                    }
-                }
-            }
-        }
-        // We've never reached the threshold, positive outcome
-        return true;
-    }
-
-    @Override
-    public ObjectMask deriveObject(BoundingBox box) {
-
-        ObjectMask object = new ObjectMask(box);
-
-        ReadableTuple3i pointMax = box.calculateCornerMax();
-
-        byte outOn = object.binaryValuesByte().getOnByte();
-
-        for (int z = box.cornerMin().z(); z <= pointMax.z(); z++) {
-
-            VoxelBuffer<T> pixelIn = voxels.slice(z);
-            UnsignedByteBuffer pixelOut = object.sliceBufferGlobal(z);
-
-            int indexMask = 0;
-            for (int y = box.cornerMin().y(); y <= pointMax.y(); y++) {
-                for (int x = box.cornerMin().x(); x <= pointMax.x(); x++) {
-
-                    int index = voxels.extent().offset(x, y);
-                    pixelIn.position(index);
-
-                    if (predicate.test(pixelIn.buffer())) {
-                        pixelOut.putRaw(indexMask, outOn);
-                    }
-
-                    indexMask++;
-                }
-            }
-        }
-
-        return object;
     }
 }

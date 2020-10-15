@@ -40,7 +40,7 @@ import org.anchoranalysis.image.voxel.iterator.process.buffer.ProcessBufferBinar
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class IterateVoxelsRemaining {
-
+    
     /**
      * Iterate over remaining voxels each voxel - with <b>two</b> associated <b>buffers</b> for each
      * slice.
@@ -69,4 +69,5 @@ public class IterateVoxelsRemaining {
 
         Preconditions.checkArgument(!voxelBuffer2.hasRemaining());
     }
+
 }

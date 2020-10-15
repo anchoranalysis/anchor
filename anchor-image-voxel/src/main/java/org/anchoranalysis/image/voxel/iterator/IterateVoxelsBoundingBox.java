@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.image.voxel.iterator;
 
+import java.nio.Buffer;
 import java.util.Optional;
 import java.util.function.Predicate;
 import lombok.AccessLevel;
@@ -34,9 +35,11 @@ import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.voxel.Voxels;
+import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.iterator.predicate.buffer.PredicateBufferBinary;
 import org.anchoranalysis.image.voxel.iterator.process.ProcessPoint;
 import org.anchoranalysis.image.voxel.iterator.process.buffer.ProcessBufferBinary;
+import org.anchoranalysis.image.voxel.iterator.process.buffer.ProcessBufferBinaryMixed;
 import org.anchoranalysis.image.voxel.iterator.process.buffer.ProcessBufferTernary;
 import org.anchoranalysis.image.voxel.iterator.process.buffer.ProcessBufferUnary;
 
@@ -128,10 +131,10 @@ public class IterateVoxelsBoundingBox {
             BoundingBox box, Voxels<T> voxels, ProcessBufferUnary<T> process) {
         withPoint(box, new RetrieveBufferForSlice<>(voxels, process));
     }
-
+    
     /**
      * Iterate over each voxel in a bounding-box - with <b>two</b> associated buffers for each
-     * slice.
+     * slice, one {@link VoxelBuffer} and one {@link Buffer}
      *
      * @param box the box that is used as a condition on what voxels to iterate i.e. only voxels
      *     within these bounds
@@ -149,7 +152,7 @@ public class IterateVoxelsBoundingBox {
             ReadableTuple3i shiftForSecond,
             Voxels<T> voxels1,
             Voxels<T> voxels2,
-            ProcessBufferBinary<T> process) {
+            ProcessBufferBinary<T,T> process) {
         ReadableTuple3i max = box.calculateCornerMaxExclusive();
 
         Point3i point = new Point3i();
@@ -175,6 +178,53 @@ public class IterateVoxelsBoundingBox {
         }
     }
 
+    /**
+     * Iterate over each voxel in a bounding-box - with <b>two</b> associated buffers for each
+     * slice.
+     *
+     * @param box the box that is used as a condition on what voxels to iterate i.e. only voxels
+     *     within these bounds
+     * @param shiftForSecond added to the current point in {@code voxels1} to give a corresponding
+     *     point in {@code voxels2}.
+     * @param voxels1 voxels in which which {@code box} refers to a subregion.
+     * @param voxels2 voxels in which which {@code box + shiftForSecond} refers to a subregion.
+     * @param process is called for each voxel within the bounding-box where the point uses
+     *     <i>global</i> coordinates without the shift. A new {@link Point3i} is <b>not</b> created
+     *     on each iteration.
+     * @param <S> buffer-type for the <i>voxel-buffer</i> for {@code voxels1}).
+     * @param <T> buffer-type for the <i>buffer</i> (for {@code voxels2}).
+     */
+    public static <S,T> void withTwoMixedBuffers(
+            BoundingBox box,
+            ReadableTuple3i shiftForSecond,
+            Voxels<S> voxels1,
+            Voxels<T> voxels2,
+            ProcessBufferBinaryMixed<S,T> process) {
+        ReadableTuple3i max = box.calculateCornerMaxExclusive();
+
+        Point3i point = new Point3i();
+        for (point.setZ(box.cornerMin().z()); point.z() < max.z(); point.incrementZ()) {
+
+            process.notifyChangeSlice(point.z());
+
+            VoxelBuffer<S> buffer1 = voxels1.slice(point.z());
+            T buffer2 = voxels2.sliceBuffer(point.z() + shiftForSecond.z());
+
+            for (point.setY(box.cornerMin().y()); point.y() < max.y(); point.incrementY()) {
+                int yOther = point.y() + shiftForSecond.y();
+
+                for (point.setX(box.cornerMin().x()); point.x() < max.x(); point.incrementX()) {
+                    int xOther = point.x() + shiftForSecond.x();
+
+                    int offset1 = voxels1.extent().offsetSlice(point);
+                    int offset2 = voxels2.extent().offset(xOther, yOther);
+
+                    process.process(point, buffer1, buffer2, offset1, offset2);
+                }
+            }
+        }
+    }
+    
     /**
      * Iterate over each voxel in a bounding-box - with <b>two</b> associated buffers for each slice
      * - until a predicate evaluates to true.

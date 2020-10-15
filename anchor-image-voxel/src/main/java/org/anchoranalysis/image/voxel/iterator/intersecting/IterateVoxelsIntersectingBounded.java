@@ -56,7 +56,7 @@ public class IterateVoxelsIntersectingBounded {
      *     and offsets for {@code first} and {@code second}.
      */
     public static <T> void withTwoBuffers(
-            BoundedVoxels<T> voxels1, BoundedVoxels<T> voxels2, ProcessBufferBinary<T> process) {
+            BoundedVoxels<T> voxels1, BoundedVoxels<T> voxels2, ProcessBufferBinary<T,T> process) {
         // Find the common bounding box
         Optional<Intersection> intersection = findIntersection(voxels1, voxels2);
 
@@ -88,7 +88,7 @@ public class IterateVoxelsIntersectingBounded {
             byte onMaskGlobal,
             BoundedVoxels<UnsignedByteBuffer> voxels1,
             BoundedVoxels<UnsignedByteBuffer> voxels2,
-            ProcessBufferBinary<UnsignedByteBuffer> process) {
+            ProcessBufferBinary<UnsignedByteBuffer,UnsignedByteBuffer> process) {
         // Find the common bounding box
         Optional<Intersection> intersection = findIntersection(voxels1, voxels2);
 

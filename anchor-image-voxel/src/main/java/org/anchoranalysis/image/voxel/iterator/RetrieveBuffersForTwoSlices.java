@@ -54,7 +54,7 @@ final class RetrieveBuffersForTwoSlices<T> implements ProcessPoint {
     private final Voxels<T> voxels2;
 
     /** Processor */
-    private final ProcessBufferBinary<T> processor;
+    private final ProcessBufferBinary<T,T> processor;
     // END REQUIRED ARGUMENTS
 
     private T bufferSlice1;

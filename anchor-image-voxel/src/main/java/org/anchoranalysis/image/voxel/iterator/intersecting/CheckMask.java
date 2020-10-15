@@ -40,7 +40,7 @@ import org.anchoranalysis.image.voxel.iterator.process.buffer.ProcessBufferTerna
 @AllArgsConstructor
 class CheckMask implements ProcessBufferTernary<UnsignedByteBuffer> {
 
-    private final ProcessBufferBinary<UnsignedByteBuffer> process;
+    private final ProcessBufferBinary<UnsignedByteBuffer,UnsignedByteBuffer> process;
     private final byte onMaskGlobal;
 
     @Override
