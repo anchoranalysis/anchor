@@ -27,13 +27,13 @@
 package org.anchoranalysis.io.manifest.directory.sequenced;
 
 import java.util.List;
-import org.anchoranalysis.io.manifest.file.FileWrite;
+import org.anchoranalysis.io.manifest.file.OutputtedFile;
 import org.anchoranalysis.io.manifest.finder.FindFailedException;
 import org.anchoranalysis.io.manifest.sequencetype.IncompleteElementRange;
 
 public interface SequencedDirectory {
 
-    void findFileFromIndex(List<FileWrite> foundList, String index, boolean recursive) throws FindFailedException;
+    void findFileFromIndex(List<OutputtedFile> foundList, String index, boolean recursive) throws FindFailedException;
 
     /** The associated element-range with ths folder. */
     IncompleteElementRange getAssociatedElementRange();

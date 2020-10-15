@@ -34,7 +34,9 @@ import java.util.stream.IntStream;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.image.object.ObjectMask;
 
-/** Creates overlap assignment from a distance matrix */
+/** 
+ * Creates overlap assignment from a distance matrix
+ */
 @AllArgsConstructor
 class CreateAssignmentFromDistanceMatrix {
 

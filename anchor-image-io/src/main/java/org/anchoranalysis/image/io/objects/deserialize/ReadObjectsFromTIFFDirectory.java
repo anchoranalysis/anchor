@@ -57,7 +57,7 @@ class ReadObjectsFromTIFFDirectory implements Deserializer<ObjectCollection> {
 
         try {
             BoundedIndexContainer<ObjectMask> container = deserializeFromDirectory(
-                    new SerializedObjectSetFolderSource(folderPath, Optional.of("*.ser")),
+                    new SerializedObjectsFromDirectory(folderPath, Optional.of("*.ser")),
                     new ObjectDualDeserializer(stackReader)
             ); 
             return createFromContainer(container);

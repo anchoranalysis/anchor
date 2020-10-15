@@ -28,38 +28,60 @@ package org.anchoranalysis.io.manifest.file;
 
 import java.io.Serializable;
 import java.nio.file.Path;
+import java.util.Optional;
+import javax.annotation.Nullable;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.RequiredArgsConstructor;
+import org.anchoranalysis.io.manifest.Manifest;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.manifest.directory.MutableDirectory;
 
-@NoArgsConstructor
-public class FileWrite implements Serializable {
+/**
+ * An entry in a {@link Manifest} for an outputted file from an experiment.
+ * 
+ * @author Owen Feehan
+ *
+ */
+@RequiredArgsConstructor
+public class OutputtedFile implements Serializable {
+
 
     /** */
     private static final long serialVersionUID = 5796355859093885433L;
 
-    @Getter @Setter private MutableDirectory parentFolder;
-
-    @Getter @Setter private String fileName;
-    @Getter @Setter private String outputName;
-    @Getter @Setter private ManifestDescription manifestDescription;
-    @Getter private String index;
-
-    public FileWrite(MutableDirectory parentFolder) {
+    // START REQUIRED ARGUMENTS
+    @Getter private final MutableDirectory parentFolder;
+    
+    @Getter private final String fileName;
+    
+    @Getter private final String outputName;
+    
+    @Getter private final String index;
+    
+    /**
+     * A description associated with the file.
+     * 
+     * <p>Note that this can be null, but we avoid {@link Optional} as
+     * cannot be serialized.
+     */
+    @Nullable private final ManifestDescription description;
+    // END REQUIRED ARGUMENTS
+    
+    public OutputtedFile(MutableDirectory parentFolder, String fileName, String outputName,
+            String index, Optional<ManifestDescription> description) {
+        super();
         this.parentFolder = parentFolder;
+        this.fileName = fileName;
+        this.outputName = outputName;
+        this.index = index;
+        this.description = description.orElse(null);
     }
 
     public Path calculatePath() {
         return parentFolder.calculatePath().resolve(fileName);
     }
 
-    public void setIndex(String index) {
-        this.index = index;
-    }
-
-    public void setIndex(int index) {
-        this.index = Integer.toString(index);
+    public Optional<ManifestDescription> getDescription() {
+        return Optional.ofNullable(description);
     }
 }

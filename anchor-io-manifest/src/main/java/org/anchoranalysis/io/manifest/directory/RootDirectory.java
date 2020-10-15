@@ -31,7 +31,7 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.function.Predicate;
 import org.anchoranalysis.io.manifest.ManifestDescription;
-import org.anchoranalysis.io.manifest.file.FileWrite;
+import org.anchoranalysis.io.manifest.file.OutputtedFile;
 import org.anchoranalysis.io.manifest.finder.FindFailedException;
 
 public class RootDirectory extends MutableDirectory implements Serializable {
@@ -65,11 +65,11 @@ public class RootDirectory extends MutableDirectory implements Serializable {
     }
 
     @Override
-    public void findFile(List<FileWrite> foundList, Predicate<FileWrite> predicate, boolean recursive) throws FindFailedException {
+    public void findFile(List<OutputtedFile> foundList, Predicate<OutputtedFile> predicate, boolean recursive) throws FindFailedException {
         delegate.findFile(foundList, predicate, recursive);
     }
 
-    public void add(FileWrite file) {
+    public void add(OutputtedFile file) {
         delegate.add(file);
     }
 

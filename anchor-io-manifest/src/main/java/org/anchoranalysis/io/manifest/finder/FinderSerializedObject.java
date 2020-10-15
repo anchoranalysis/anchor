@@ -38,7 +38,7 @@ import org.anchoranalysis.core.serialize.KeyValueParamsDeserializer;
 import org.anchoranalysis.core.serialize.ObjectInputStreamDeserializer;
 import org.anchoranalysis.core.serialize.XStreamDeserializer;
 import org.anchoranalysis.io.manifest.Manifest;
-import org.anchoranalysis.io.manifest.file.FileWrite;
+import org.anchoranalysis.io.manifest.file.OutputtedFile;
 import org.anchoranalysis.io.manifest.finder.match.FileMatch;
 
 /**
@@ -79,9 +79,9 @@ public class FinderSerializedObject<T> extends FinderSingleFile {
     }
 
     @Override
-    protected Optional<FileWrite> findFile(Manifest manifestRecorder)
+    protected Optional<OutputtedFile> findFile(Manifest manifestRecorder)
             throws FindFailedException {
-        List<FileWrite> files =
+        List<OutputtedFile> files =
                 FinderUtilities.findListFile(
                         manifestRecorder, FileMatch.description(function, "serialized"));
 
@@ -90,7 +90,7 @@ public class FinderSerializedObject<T> extends FinderSingleFile {
         }
 
         // We prioritise .ser ahead of anything else
-        for (FileWrite f : files) {
+        for (OutputtedFile f : files) {
             if (f.getFileName().endsWith(".ser")) {
                 return Optional.of(f);
             }
@@ -99,7 +99,7 @@ public class FinderSerializedObject<T> extends FinderSingleFile {
         return Optional.of(files.get(0));
     }
 
-    private T deserialize(FileWrite fileWrite) throws DeserializationFailedException {
+    private T deserialize(OutputtedFile fileWrite) throws DeserializationFailedException {
 
         Deserializer<T> deserializer;
         if (fileWrite.getFileName().toLowerCase().endsWith(".properties.xml")) {

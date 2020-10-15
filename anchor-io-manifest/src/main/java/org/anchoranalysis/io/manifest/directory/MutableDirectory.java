@@ -34,7 +34,7 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import org.anchoranalysis.io.manifest.ManifestDirectoryDescription;
 import org.anchoranalysis.io.manifest.directory.sequenced.SequencedDirectory;
-import org.anchoranalysis.io.manifest.file.FileWrite;
+import org.anchoranalysis.io.manifest.file.OutputtedFile;
 import org.anchoranalysis.io.manifest.finder.FindFailedException;
 import org.anchoranalysis.io.manifest.operationrecorder.WriteOperationRecorder;
 import org.anchoranalysis.io.manifest.sequencetype.IncompleteElementRange;
@@ -102,13 +102,13 @@ public abstract class MutableDirectory implements SequencedDirectory, WriteOpera
     }
 
     @Override
-    public void findFileFromIndex(List<FileWrite> foundList, String index, boolean recursive) throws FindFailedException {
+    public void findFileFromIndex(List<OutputtedFile> foundList, String index, boolean recursive) throws FindFailedException {
         findFile(foundList, file -> file !=null && file.getIndex().equals(index), true);
     }
 
     // Finds a directory a comparator matches
     public abstract void findFile(
-            List<FileWrite> foundList, Predicate<FileWrite> predicate, boolean recursive) throws FindFailedException;
+            List<OutputtedFile> foundList, Predicate<OutputtedFile> predicate, boolean recursive) throws FindFailedException;
 
     // Finds a folder a comparator matches
     public synchronized void findDirectory(List<MutableDirectory> foundList, Predicate<MutableDirectory> predicate) {

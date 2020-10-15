@@ -41,28 +41,26 @@ import org.anchoranalysis.io.input.bean.path.matcher.MatchGlob;
 import org.anchoranalysis.io.input.files.FilesProviderException;
 import org.anchoranalysis.io.manifest.directory.Subdirectory;
 import org.anchoranalysis.io.manifest.directory.sequenced.SequencedDirectory;
-import org.anchoranalysis.io.manifest.file.FileWrite;
+import org.anchoranalysis.io.manifest.file.OutputtedFile;
 import org.anchoranalysis.io.manifest.sequencetype.IncompleteElementRange;
 import org.anchoranalysis.io.manifest.sequencetype.IncrementingIntegers;
 import org.anchoranalysis.io.manifest.sequencetype.SequenceType;
 import org.anchoranalysis.io.manifest.sequencetype.SequenceTypeException;
 
-class SerializedObjectSetFolderSource implements SequencedDirectory {
+class SerializedObjectsFromDirectory implements SequencedDirectory {
 
-    private Map<String, FileWrite> mapFileWrite = new HashMap<>();
+    private Map<String, OutputtedFile> mapFileWrite = new HashMap<>();
     private SequenceType<Integer> sequenceType;
 
     // Constructor
-    public SerializedObjectSetFolderSource(Path directory, Optional<String> acceptFilter)
+    public SerializedObjectsFromDirectory(Path directoryPath, Optional<String> acceptFilter)
             throws SequenceTypeException {
-        super();
 
-        SearchDirectory fileSet = createFileSet(directory, acceptFilter);
+        SearchDirectory fileSet = createFileSet(directoryPath, acceptFilter);
 
         sequenceType = new IncrementingIntegers();
-        int i = 0;
 
-        Subdirectory fwp = new Subdirectory(directory);
+        Subdirectory directoryInManifest = new Subdirectory(directoryPath);
 
         try {
             Collection<File> files =
@@ -73,26 +71,30 @@ class SerializedObjectSetFolderSource implements SequencedDirectory {
                                     null // HACK: Can be safely set to null as
                                     // fileSet.setIgnoreHidden(false);	// NOSONAR
                                     ));
-
+            
+            int index = 0;
             for (File file : files) {
-
-                String iStr = Integer.toString(i);
-
-                FileWrite fileWrite = new FileWrite(fwp);
-                fileWrite.setFileName(file.getName());
-                fileWrite.setIndex(iStr);
-                fileWrite.setOutputName("serializedObjectSetFolder");
-                fileWrite.setManifestDescription(null);
-
-                mapFileWrite.put(iStr, fileWrite);
-
-                sequenceType.update(i);
-
-                i++;
+                processFile(file, index, directoryInManifest);
+                index++;
             }
         } catch (FilesProviderException e) {
             throw new SequenceTypeException(e);
         }
+    }
+    
+    private void processFile(File file, int index, Subdirectory directoryInManifest) throws SequenceTypeException {
+        String indexAsString = Integer.toString(index);
+
+        OutputtedFile fileWrite = new OutputtedFile(directoryInManifest,
+                file.getName(),
+                "serializedObjectSetFolder",
+                indexAsString,
+                Optional.empty()
+        );
+
+        mapFileWrite.put(indexAsString, fileWrite);
+
+        sequenceType.update(index);
     }
 
     @Override
@@ -101,12 +103,12 @@ class SerializedObjectSetFolderSource implements SequencedDirectory {
     }
 
     @Override
-    public void findFileFromIndex(List<FileWrite> foundList, String index, boolean recursive) {
+    public void findFileFromIndex(List<OutputtedFile> foundList, String index, boolean recursive) {
 
-        FileWrite fw = mapFileWrite.get(index);
+        OutputtedFile outputtedFile = mapFileWrite.get(index);
 
-        if (fw != null) {
-            foundList.add(fw);
+        if (outputtedFile != null) {
+            foundList.add(outputtedFile);
         }
     }
 

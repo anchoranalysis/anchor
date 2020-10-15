@@ -32,7 +32,7 @@ import java.util.List;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.index.GetterFromIndex;
-import org.anchoranalysis.io.manifest.file.FileWrite;
+import org.anchoranalysis.io.manifest.file.OutputtedFile;
 import org.anchoranalysis.io.manifest.finder.FindFailedException;
 import lombok.AllArgsConstructor;
 
@@ -53,7 +53,7 @@ public abstract class DeriveElementsFromSequencedDirectory<T> implements GetterF
     public T get(int index) throws GetOperationFailedException {
 
         try {
-            List<FileWrite> foundList = new ArrayList<>();
+            List<OutputtedFile> foundList = new ArrayList<>();
 
             String indexForElement = directory.getAssociatedElementRange().stringRepresentationForElement(index);
 

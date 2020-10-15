@@ -29,12 +29,13 @@ package org.anchoranalysis.io.generator.sequence;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Predicate;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.manifest.directory.Subdirectory;
 import org.anchoranalysis.io.manifest.directory.SubdirectoryBase;
 import org.anchoranalysis.io.manifest.file.FileType;
-import org.anchoranalysis.io.manifest.file.FileWrite;
+import org.anchoranalysis.io.manifest.file.OutputtedFile;
 import org.anchoranalysis.io.manifest.finder.FindFailedException;
 import org.anchoranalysis.io.manifest.sequencetype.IncompleteElementRange;
 import org.anchoranalysis.io.output.namestyle.IndexableOutputNameStyle;
@@ -90,7 +91,7 @@ class IndexableSubdirectory extends SubdirectoryBase {
      * then something is wrong and we throw an exception.
      */
     @Override
-    public void findFile(List<FileWrite> foundList, Predicate<FileWrite> predicate, boolean recursive) throws FindFailedException {
+    public void findFile(List<OutputtedFile> foundList, Predicate<OutputtedFile> predicate, boolean recursive) throws FindFailedException {
         
         if(!description().isPresent()) {
             throw new FindFailedException("No description has been assigned, which is a prerequisite for this operation");
@@ -102,7 +103,7 @@ class IndexableSubdirectory extends SubdirectoryBase {
         do {
             // We loop through each file type
             for (FileType fileType : template) {
-                FileWrite virtualFile = createFileWrite(elements.stringRepresentationForElement(i), fileType);
+                OutputtedFile virtualFile = createOutputtedFile(elements.stringRepresentationForElement(i), fileType);
                 if (predicate.test(virtualFile)) {
                     foundList.add(virtualFile);
                 }
@@ -113,14 +114,12 @@ class IndexableSubdirectory extends SubdirectoryBase {
         } while (i != -1);
     }
 
-    private FileWrite createFileWrite(String index, FileType fileType) {
-
-        FileWrite write = new FileWrite();
-        write.setFileName(outputName.getFilenameWithoutExtension(index) + "." + fileType.getFileExtension());
-        write.setOutputName(outputName.getOutputName());
-        write.setManifestDescription(fileType.getManifestDescription());
-        write.setIndex(index);
-        write.setParentFolder(this);
-        return write;
+    private OutputtedFile createOutputtedFile(String index, FileType fileType) {
+        return new OutputtedFile(
+                this,
+                outputName.getFilenameWithoutExtension(index) + "." + fileType.getFileExtension(),
+                outputName.getOutputName(),
+                index,
+                Optional.of(fileType.getManifestDescription()));
     }
 }

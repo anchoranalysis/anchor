@@ -34,15 +34,15 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.io.manifest.Manifest;
 import org.anchoranalysis.io.manifest.directory.MutableDirectory;
-import org.anchoranalysis.io.manifest.file.FileWrite;
+import org.anchoranalysis.io.manifest.file.OutputtedFile;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class FinderUtilities {
 
-    public static List<FileWrite> findListFile(
-            Manifest manifestRecorder, Predicate<FileWrite> predicate) throws FindFailedException {
+    public static List<OutputtedFile> findListFile(
+            Manifest manifestRecorder, Predicate<OutputtedFile> predicate) throws FindFailedException {
 
-        ArrayList<FileWrite> foundList = new ArrayList<>();
+        ArrayList<OutputtedFile> foundList = new ArrayList<>();
         manifestRecorder.getRootFolder().findFile(foundList, predicate, false);
         return foundList;
     }
@@ -55,11 +55,11 @@ public class FinderUtilities {
         return foundList;
     }
 
-    public static Optional<FileWrite> findSingleItem(
-            Manifest manifestRecorder, Predicate<FileWrite> predicate)
+    public static Optional<OutputtedFile> findSingleItem(
+            Manifest manifestRecorder, Predicate<OutputtedFile> predicate)
             throws FindFailedException {
 
-        List<FileWrite> files = findListFile(manifestRecorder, predicate);
+        List<OutputtedFile> files = findListFile(manifestRecorder, predicate);
         if (files.isEmpty()) {
             return Optional.empty();
         }

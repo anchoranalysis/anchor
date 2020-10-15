@@ -29,17 +29,17 @@ package org.anchoranalysis.io.manifest.finder;
 import java.util.Optional;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.io.manifest.Manifest;
-import org.anchoranalysis.io.manifest.file.FileWrite;
+import org.anchoranalysis.io.manifest.file.OutputtedFile;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 public abstract class FinderSingleFile implements Finder {
 
-    private Optional<FileWrite> foundFile = Optional.empty();
-
-    private ErrorReporter errorReporter;
-
-    public FinderSingleFile(ErrorReporter errorReporter) {
-        this.errorReporter = errorReporter;
-    }
+    // START REQUIRED ARGUMENTS
+    private final ErrorReporter errorReporter;
+    // END REQUIRED ARGUMENTS
+    
+    private Optional<OutputtedFile> foundFile = Optional.empty();
 
     @Override
     public final boolean doFind(Manifest manifestRecorder) {
@@ -65,10 +65,10 @@ public abstract class FinderSingleFile implements Finder {
     }
 
     // A simple method to override in each finder that is based upon finding a single file
-    protected abstract Optional<FileWrite> findFile(Manifest manifestRecorder)
+    protected abstract Optional<OutputtedFile> findFile(Manifest manifestRecorder)
             throws FindFailedException;
     
-    protected FileWrite getFoundFile() {
+    protected OutputtedFile getFoundFile() {
         return foundFile.get();
     }
 }

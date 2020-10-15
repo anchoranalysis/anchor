@@ -26,9 +26,10 @@
 
 package org.anchoranalysis.io.manifest.finder.match;
 
+import java.util.Optional;
 import java.util.function.Predicate;
 import org.anchoranalysis.io.manifest.ManifestDescription;
-import org.anchoranalysis.io.manifest.file.FileWrite;
+import org.anchoranalysis.io.manifest.file.OutputtedFile;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -44,7 +45,7 @@ public class FileMatch {
      * @param outputName the output-name
      * @return a predicate that matches files that fulfills the condition.
      */
-    public static Predicate<FileWrite> descriptionAndOutputName(String function1, String function2, String type, String outputName) {
+    public static Predicate<OutputtedFile> descriptionAndOutputName(String function1, String function2, String type, String outputName) {
         return description(function1, function2, type).and( outputName(outputName) );
     }
     
@@ -54,7 +55,7 @@ public class FileMatch {
      * @param outputName the output-name
      * @return a predicate that matches files that fulfills the condition.
      */
-    public static Predicate<FileWrite> outputName(String outputName) {
+    public static Predicate<OutputtedFile> outputName(String outputName) {
         return directory -> directory.getOutputName().equals(outputName);
     }
     
@@ -65,7 +66,7 @@ public class FileMatch {
      * @param type the matching type-value
      * @return a predicate that matches files that fulfills the condition.
      */
-    public static Predicate<FileWrite> description(String function, String type) {
+    public static Predicate<OutputtedFile> description(String function, String type) {
         return description(DescriptionMatch.functionAndType(function, type));
     }
     
@@ -75,7 +76,7 @@ public class FileMatch {
      * @param function the matching function-value
      * @return a predicate that matches files that fulfills the condition.
      */
-    public static Predicate<FileWrite> description(String function) {
+    public static Predicate<OutputtedFile> description(String function) {
         return description(DescriptionMatch.function(function));
     }
     
@@ -87,16 +88,16 @@ public class FileMatch {
      * @param type the matching type-value
      * @return a predicate that matches files that fulfills the condition.
      */
-    public static Predicate<FileWrite> description(String function1, String function2, String type) {
+    public static Predicate<OutputtedFile> description(String function1, String function2, String type) {
         return description(DescriptionMatch.eitherFunctionAndType(function1, function2, type));
     }
     
-    private static Predicate<FileWrite> description(Predicate<ManifestDescription> manifestDescription) {
+    private static Predicate<OutputtedFile> description(Predicate<ManifestDescription> manifestDescription) {
         return file -> nonNullAnd(file, manifestDescription);
     }
 
-    private static boolean nonNullAnd(FileWrite file, Predicate<ManifestDescription> predicateManifestDescription) {
-        ManifestDescription description = file.getManifestDescription();
-        return description != null && predicateManifestDescription.test(description);
+    private static boolean nonNullAnd(OutputtedFile file, Predicate<ManifestDescription> predicateManifestDescription) {
+        Optional<ManifestDescription> description = file.getDescription();
+        return description.isPresent() && predicateManifestDescription.test(description.get());
     }
 }

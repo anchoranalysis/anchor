@@ -30,10 +30,12 @@ import java.io.Serializable;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Predicate;
 import org.anchoranalysis.io.manifest.ManifestDescription;
-import org.anchoranalysis.io.manifest.file.FileWrite;
+import org.anchoranalysis.io.manifest.file.OutputtedFile;
 import org.anchoranalysis.io.manifest.finder.FindFailedException;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -46,24 +48,23 @@ class FileList implements Serializable {
     private final MutableDirectory directory;
     // END REQUIRED ARGUMENTS
     
-    private List<FileWrite> files = new ArrayList<>();
+    @Getter private List<OutputtedFile> files = new ArrayList<>();
 
     // Finds a folder a comparator matches
-    public void findFile(List<FileWrite> foundList, Predicate<FileWrite> predicate, boolean recursive) throws FindFailedException {
+    public void findFile(List<OutputtedFile> foundList, Predicate<OutputtedFile> predicate, boolean recursive) throws FindFailedException {
 
-        files.stream().filter(predicate).forEach(foundList::add);
+        // Adds files that match the predicate to the foundList
+        addToFoundList(foundList, predicate);
 
-        if (!recursive) {
-            return;
-        }
-
-        for (MutableDirectory subdirectory : this.directory.subdirectories()) {
-            subdirectory.findFile(foundList, predicate, recursive);
+        if (recursive) {
+            for (MutableDirectory subdirectory : directory.subdirectories()) {
+                subdirectory.findFile(foundList, predicate, recursive);
+            }
         }
     }
 
-    public void add(FileWrite fw) {
-        this.files.add(fw);
+    public void add(OutputtedFile outputtedFile) {
+        this.files.add(outputtedFile);
     }
 
     public void write(
@@ -71,16 +72,11 @@ class FileList implements Serializable {
             ManifestDescription manifestDescription,
             Path outfilePath,
             String index) {
-
-        FileWrite fileWrite = new FileWrite(directory);
-        fileWrite.setOutputName(outputName);
-        fileWrite.setFileName(outfilePath.toString());
-        fileWrite.setManifestDescription(manifestDescription);
-        fileWrite.setIndex(index);
-        add(fileWrite);
+        add(new OutputtedFile(directory, outfilePath.toString(),
+                outputName, index, Optional.of(manifestDescription)));
     }
-
-    public List<FileWrite> getFileList() {
-        return files;
+    
+    private void addToFoundList(List<OutputtedFile> foundList, Predicate<OutputtedFile> predicate) {
+        files.stream().filter(predicate).forEach(foundList::add);
     }
 }

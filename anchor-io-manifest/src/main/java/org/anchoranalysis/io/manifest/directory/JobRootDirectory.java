@@ -30,7 +30,7 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.function.Predicate;
 import org.anchoranalysis.io.manifest.ManifestDescription;
-import org.anchoranalysis.io.manifest.file.FileWrite;
+import org.anchoranalysis.io.manifest.file.OutputtedFile;
 
 /**
  * The root directory for where outputs for a particular experiment occur.
@@ -55,7 +55,7 @@ public class JobRootDirectory extends SubdirectoryBase {
     }
 
     @Override
-    public void findFile(List<FileWrite> foundList, Predicate<FileWrite> predicate, boolean recursive) {
+    public void findFile(List<OutputtedFile> foundList, Predicate<OutputtedFile> predicate, boolean recursive) {
         // NOTHING TO DO
     }
 }
