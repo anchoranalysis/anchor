@@ -165,7 +165,7 @@ public abstract class OutputExperiment extends Experiment {
                                             arguments.getOutputEnabledDelta()),
                                     arguments.createPrefixerContext());
 
-            Preconditions.checkArgument(rootOutputter.getSettings().hasBeenInit());
+            Preconditions.checkArgument(rootOutputter.getSettings().hasBeenInitialized());
 
             // Important we bind to a root folder before any log messages go out, as
             // certain log appenders require the OutputManager to be set before outputting
@@ -197,7 +197,7 @@ public abstract class OutputExperiment extends Experiment {
         params.getLoggerExperiment().start();
         OutputExperimentLogHelper.maybeLogStart(params);
 
-        if (!params.getOutputter().getChecked().getSettings().hasBeenInit()) {
+        if (!params.getOutputter().getChecked().getSettings().hasBeenInitialized()) {
             throw new ExperimentExecutionException("Experiment has not been initialized");
         }
     }

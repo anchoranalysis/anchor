@@ -33,7 +33,7 @@
 		</dependency>
 		<dependency>
 		  <groupId>${project.groupId}</groupId>
-		  <artifactId>anchor-io</artifactId>
+		  <artifactId>anchor-io-input</artifactId>
 		  <version>0.0.8-SNAPSHOT</version>
 		</dependency>
 		<dependency>

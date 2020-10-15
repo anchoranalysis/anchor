@@ -61,23 +61,23 @@ public class OutputSequenceIndexed<T,S> implements OutputSequence {
     /**
      * Creates a non-incremental sequence of outputs.
      * 
-     * @param parameters parameters for the output-sequence
+     * @param outputter parameters for the output-sequence
      * @param sequenceType sequenceType the indexes are expected to follow
      * @throws OutputWriteFailedException 
      */
-    OutputSequenceIndexed(BoundOutputter<T> parameters, SequenceType<S> sequenceType) throws OutputWriteFailedException {
+    OutputSequenceIndexed(BoundOutputter<T> outputter, SequenceType<S> sequenceType) throws OutputWriteFailedException {
 
-        if (!parameters.getOutputter().getSettings().hasBeenInit()) {
+        if (!outputter.getOutputter().getSettings().hasBeenInitialized()) {
             throw new AnchorFriendlyRuntimeException("outputter has not yet been initialized");
         }
 
         this.sequenceWriter =
                 new SequenceWriters(
-                        parameters.getOutputter().getWriters(),
-                        parameters.getOutputPattern()
+                        outputter.getOutputter().getWriters(),
+                        outputter.getOutputPattern()
                 );
-        this.settings = parameters.getOutputter().getSettings();
-        this.generator = parameters.getGenerator();
+        this.settings = outputter.getOutputter().getSettings();
+        this.generator = outputter.getGenerator();
         this.sequenceType = sequenceType;
         
         try {

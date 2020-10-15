@@ -31,7 +31,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.outline.traverser.path.ContiguousVoxelPath;
-import org.anchoranalysis.image.outline.traverser.path.PointsListNeighborUtilities;
+import org.anchoranalysis.image.points.PointsNeighborChecker;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CombineToOnePath {
@@ -65,6 +65,6 @@ public class CombineToOnePath {
     }
 
     private static boolean areHeadTailConnected(ContiguousVoxelPath path) {
-        return PointsListNeighborUtilities.arePointsNeighbors(path.head(), path.tail());
+        return PointsNeighborChecker.arePointsNeighbors(path.head(), path.tail());
     }
 }

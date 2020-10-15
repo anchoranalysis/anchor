@@ -87,7 +87,7 @@ class ParamsOutputter {
     public void output()
             throws OutputWriteFailedException {
 
-        if (!outputter.getSettings().hasBeenInit()) {
+        if (!outputter.getSettings().hasBeenInitialized()) {
             throw new OutputWriteFailedException(
                     "The Outputter's settings have not yet been initialized");
         }

@@ -117,7 +117,7 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
                         paramsUnbound.getInput(),
                         Optional.of(manifestTask),
                         paramsUnbound.getParametersExperiment());
-        Preconditions.checkArgument(outputterTask.getSettings().hasBeenInit());
+        Preconditions.checkArgument(outputterTask.getSettings().hasBeenInitialized());
 
         // Create bound parameters
         InputBound<T, S> paramsBound = bindOtherParams(paramsUnbound, outputterTask, manifestTask);

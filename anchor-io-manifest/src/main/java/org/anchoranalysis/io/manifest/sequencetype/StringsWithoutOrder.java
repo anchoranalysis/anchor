@@ -44,7 +44,7 @@ public class StringsWithoutOrder extends SequenceType<String> {
     /** */
     private static final long serialVersionUID = 8292809183713424555L;
 
-    private HashSet<String> set;
+    private final HashSet<String> set;
     
     private transient CollectionAsRange range;
 
@@ -75,7 +75,6 @@ public class StringsWithoutOrder extends SequenceType<String> {
 
     @Override
     public OrderProvider createOrderProvider() {
-
         OrderProviderHashMap map = new OrderProviderHashMap();
         map.addStringSet(set);
         return map;

@@ -36,7 +36,7 @@ import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.io.input.csv.CSVReaderException;
 import org.anchoranalysis.test.TestLoader;
 import org.anchoranalysis.test.image.csv.CSVComparer;
-import org.anchoranalysis.test.image.io.TestLoaderImageIO;
+import org.anchoranalysis.test.image.io.TestLoaderImage;
 import org.apache.commons.io.FileUtils;
 
 /**
@@ -50,15 +50,15 @@ public class DualComparer {
 
     @Getter private final TestLoader loader2;
 
-    private final TestLoaderImageIO loaderImage1;
-    private final TestLoaderImageIO loaderImage2;
+    private final TestLoaderImage loaderImage1;
+    private final TestLoaderImage loaderImage2;
 
     public DualComparer(TestLoader loader1, TestLoader loader2) {
         super();
         this.loader1 = loader1;
         this.loader2 = loader2;
-        this.loaderImage1 = new TestLoaderImageIO(loader1);
-        this.loaderImage2 = new TestLoaderImageIO(loader2);
+        this.loaderImage1 = new TestLoaderImage(loader1);
+        this.loaderImage2 = new TestLoaderImage(loader2);
     }
 
     /**
@@ -69,7 +69,7 @@ public class DualComparer {
      * @throws FileNotFoundException if one or both of the files cannot be found
      */
     public boolean compareTwoImages(String path) throws FileNotFoundException {
-        return TestLoaderImageIO.compareTwoImages(loaderImage1, path, loaderImage2, path, false);
+        return TestLoaderImage.compareTwoImages(loaderImage1, path, loaderImage2, path, false);
     }
 
     /**
@@ -84,7 +84,7 @@ public class DualComparer {
      */
     public boolean compareTwoImages(String path1, String path2, boolean ignoreResolutionDifferences)
             throws FileNotFoundException {
-        return TestLoaderImageIO.compareTwoImages(
+        return TestLoaderImage.compareTwoImages(
                 loaderImage1, path1, loaderImage2, path2, ignoreResolutionDifferences);
     }
 

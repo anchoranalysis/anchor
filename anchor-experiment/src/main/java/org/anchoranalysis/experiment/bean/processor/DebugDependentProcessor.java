@@ -68,7 +68,7 @@ public class DebugDependentProcessor<T extends InputFromManager, S> extends JobP
             Outputter rootOutputter, List<T> inputs, ParametersExperiment paramsExperiment)
             throws ExperimentExecutionException {
 
-        Preconditions.checkArgument(rootOutputter.getChecked().getSettings().hasBeenInit());
+        Preconditions.checkArgument(rootOutputter.getChecked().getSettings().hasBeenInitialized());
 
         JobProcessor<T, S> processor =
                 createProcessor(paramsExperiment.getExperimentArguments().isDebugModeEnabled());

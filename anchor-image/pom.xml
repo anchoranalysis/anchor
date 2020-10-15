@@ -25,6 +25,11 @@
 	  <artifactId>anchor-beans-shared</artifactId>
   	  <version>0.0.8-SNAPSHOT</version>
   	</dependency>
+	<dependency>
+	  <groupId>${project.groupId}</groupId>	
+	  <artifactId>anchor-image-voxel</artifactId>
+  	  <version>0.0.1-SNAPSHOT</version>
+  	</dependency>	
   	
     <dependency>
 	  <groupId>colt</groupId>

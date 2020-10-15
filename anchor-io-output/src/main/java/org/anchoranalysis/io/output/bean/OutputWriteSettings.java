@@ -98,7 +98,7 @@ public class OutputWriteSettings extends AnchorBean<OutputWriteSettings> {
         }
     }
 
-    public boolean hasBeenInit() {
+    public boolean hasBeenInitialized() {
         return (writerInstances != null);
     }
 
@@ -115,8 +115,6 @@ public class OutputWriteSettings extends AnchorBean<OutputWriteSettings> {
      * @return a matching writer, or null.
      */
     public Object getWriterInstance(Class<?> writerParentClass) {
-        assert (writerInstances != null);
-
         // We look for the default instance, corresponding to the particular class
         return writerInstances.get(writerParentClass);
     }

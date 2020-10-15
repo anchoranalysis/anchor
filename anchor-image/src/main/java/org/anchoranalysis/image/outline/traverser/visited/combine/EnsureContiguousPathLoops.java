@@ -35,7 +35,7 @@ import lombok.experimental.Accessors;
 import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.outline.traverser.path.ContiguousVoxelPath;
-import org.anchoranalysis.image.outline.traverser.path.PointsListNeighborUtilities;
+import org.anchoranalysis.image.points.PointsNeighborChecker;
 
 /** Makes sure the head() and tail() of a ContiguousPath are neighbors */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -143,7 +143,7 @@ class EnsureContiguousPathLoops {
 
         private void maybeUpdate(int i, int j, Point3i pointLeft, Point3i pointRight) {
 
-            if (PointsListNeighborUtilities.arePointsNeighbors(pointLeft, pointRight)) {
+            if (PointsNeighborChecker.arePointsNeighbors(pointLeft, pointRight)) {
 
                 // Then it's possible we make these two points the head and tail of
                 //   the list. This would cost us a certain number of pixels, that
