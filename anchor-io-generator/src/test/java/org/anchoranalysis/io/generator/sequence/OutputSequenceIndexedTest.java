@@ -39,9 +39,9 @@ public class OutputSequenceIndexedTest {
          
         SequenceType<String> sequenceType = new StringsWithoutOrder();
         
-        OutputSequenceIndexed<Integer, String> sequence = new OutputSequenceIndexed<>(
+        /*OutputSequenceIndexed<Integer, String> sequence = new OutputSequenceIndexed<>(
                 createOutputter(), sequenceType
-        );
+        );*/
     }
     
     private static BoundOutputter<Integer> createOutputter() {

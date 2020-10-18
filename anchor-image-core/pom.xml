@@ -31,7 +31,7 @@
   	  <version>0.0.1-SNAPSHOT</version>
   	</dependency>
   	<dependency>
-	  <groupId>org.anchoranalysis.anchor</groupId>
+	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-spatial</artifactId>
 	  <version>0.0.1-SNAPSHOT</version>
 	</dependency>
