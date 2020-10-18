@@ -29,7 +29,9 @@ import static org.junit.Assert.assertEquals;
 
 import com.google.common.base.Functions;
 import java.util.Set;
-import org.anchoranalysis.image.extent.box.BoundingBox;
+import org.anchoranalysis.spatial.extent.box.BoundingBox;
+import org.anchoranalysis.spatial.extent.rtree.RTree;
+import org.anchoranalysis.spatial.extent.rtree.SpatiallySeparate;
 import org.junit.Test;
 
 public class SpatiallySeparateTest {

@@ -27,8 +27,8 @@
 package org.anchoranalysis.annotation.mark;
 
 import org.anchoranalysis.annotation.Annotation;
-import org.anchoranalysis.image.dimensions.Dimensions;
-import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMembershipWithFlags;
 import org.anchoranalysis.mpp.mark.MarkCollection;
 

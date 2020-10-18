@@ -28,9 +28,9 @@ package org.anchoranalysis.image.voxel.iterator.intersecting;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.arithmetic.Counter;
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.BoundedVoxels;
 import org.anchoranalysis.image.voxel.Voxels;
+import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.iterator.IterateVoxelsBoundingBox;
 import org.anchoranalysis.image.voxel.iterator.predicate.PredicateTwoBytes;
 

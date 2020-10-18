@@ -27,9 +27,9 @@
 package org.anchoranalysis.image.voxel;
 
 import lombok.AllArgsConstructor;
-import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
-import org.anchoranalysis.image.voxel.sliceindex.SliceBufferIndex;
+import org.anchoranalysis.image.voxel.factory.sliceindex.SliceBufferIndex;
+import org.anchoranalysis.spatial.extent.Extent;
 
 /**
  * Exposes a subset of z-slices as if they were independently an image.

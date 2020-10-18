@@ -28,11 +28,11 @@ package org.anchoranalysis.image.voxel.extracter;
 import java.nio.FloatBuffer;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.geometry.ReadableTuple3i;
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
-import org.anchoranalysis.image.convert.UnsignedIntBuffer;
-import org.anchoranalysis.image.convert.UnsignedShortBuffer;
 import org.anchoranalysis.image.voxel.Voxels;
+import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
+import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedIntBuffer;
+import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedShortBuffer;
+import org.anchoranalysis.spatial.point.ReadableTuple3i;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class VoxelsExtracterFactory {

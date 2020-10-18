@@ -31,9 +31,6 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.core.geometry.ReadableTuple3i;
-import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.iterator.predicate.buffer.PredicateBufferBinary;
@@ -42,6 +39,9 @@ import org.anchoranalysis.image.voxel.iterator.process.buffer.ProcessBufferBinar
 import org.anchoranalysis.image.voxel.iterator.process.buffer.ProcessBufferBinaryMixed;
 import org.anchoranalysis.image.voxel.iterator.process.buffer.ProcessBufferTernary;
 import org.anchoranalysis.image.voxel.iterator.process.buffer.ProcessBufferUnary;
+import org.anchoranalysis.spatial.extent.box.BoundingBox;
+import org.anchoranalysis.spatial.point.Point3i;
+import org.anchoranalysis.spatial.point.ReadableTuple3i;
 
 /**
  * Utilities for iterating over the subset of image voxels within a bounding-box.

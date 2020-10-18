@@ -27,9 +27,9 @@
 package org.anchoranalysis.image.voxel.buffer;
 
 import java.nio.Buffer;
-import org.anchoranalysis.image.histogram.HistogramFactory;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
+import org.anchoranalysis.image.voxel.statistics.HistogramFactory;
 import lombok.AllArgsConstructor;
 
 /**

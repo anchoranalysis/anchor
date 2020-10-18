@@ -33,9 +33,9 @@ import java.util.List;
 import java.util.stream.DoubleStream;
 import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.core.text.TypedValue;
-import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.voxel.object.ObjectCollection;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
+import org.anchoranalysis.spatial.extent.Extent;
 
 /**
  * Pairs objects in left with objects in right

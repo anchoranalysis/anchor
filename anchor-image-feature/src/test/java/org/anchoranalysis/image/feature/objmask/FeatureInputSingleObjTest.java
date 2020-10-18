@@ -30,7 +30,7 @@ import static org.junit.Assert.*;
 
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
-import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;

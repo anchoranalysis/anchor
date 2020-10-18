@@ -30,8 +30,8 @@ import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.anchoranalysis.image.bean.segment.binary.BinarySegmentation;
-import org.anchoranalysis.image.dimensions.Resolution;
-import org.anchoranalysis.image.histogram.Histogram;
+import org.anchoranalysis.image.core.dimensions.Resolution;
+import org.anchoranalysis.math.histogram.Histogram;
 
 /** Parameters that are optionally associated with a {@link BinarySegmentation} */
 @AllArgsConstructor

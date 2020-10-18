@@ -26,8 +26,8 @@
 
 package org.anchoranalysis.image.voxel.iterator.predicate.buffer;
 
-import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.voxel.iterator.process.buffer.ProcessBufferBinary;
+import org.anchoranalysis.spatial.point.Point3i;
 
 /**
  * Like {@link ProcessBufferBinary} but returns a boolean.

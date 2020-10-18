@@ -27,11 +27,11 @@
 package org.anchoranalysis.image.voxel.factory;
 
 import com.google.common.base.Preconditions;
-import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
-import org.anchoranalysis.image.voxel.sliceindex.SliceBufferIndex;
+import org.anchoranalysis.image.voxel.factory.sliceindex.SliceBufferIndex;
+import org.anchoranalysis.spatial.extent.Extent;
 
 /**
  * A factory for creating voxels with a particular buffer-type

@@ -28,7 +28,7 @@ package org.anchoranalysis.image.io.objects;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.io.generator.Generator;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)

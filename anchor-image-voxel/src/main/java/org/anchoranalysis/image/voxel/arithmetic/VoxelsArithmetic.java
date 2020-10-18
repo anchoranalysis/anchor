@@ -25,7 +25,7 @@
  */
 package org.anchoranalysis.image.voxel.arithmetic;
 
-import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
 
 public interface VoxelsArithmetic {
 

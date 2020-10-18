@@ -28,10 +28,10 @@ package org.anchoranalysis.image.io.generator.raster;
 
 import java.nio.file.Path;
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.StackWriter;
 import org.anchoranalysis.image.io.stack.StackWriteOptions;
-import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.generator.SingleFileTypeGenerator;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;

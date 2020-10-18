@@ -28,7 +28,7 @@ package org.anchoranalysis.mpp.bean.bound;
 
 import lombok.NoArgsConstructor;
 import java.util.Optional;
-import org.anchoranalysis.image.dimensions.Resolution;
+import org.anchoranalysis.image.core.dimensions.Resolution;
 
 //
 //  An upper and lower bound in degrees which is converted

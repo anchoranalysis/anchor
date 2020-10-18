@@ -30,7 +30,8 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.Arrays;
 import java.util.List;
-import org.anchoranalysis.image.extent.box.BoundingBox;
+import org.anchoranalysis.spatial.extent.box.BoundingBox;
+import org.anchoranalysis.spatial.extent.rtree.RTree;
 import org.junit.Before;
 import org.junit.Test;
 

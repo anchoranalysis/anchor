@@ -28,9 +28,9 @@ package org.anchoranalysis.mpp.points;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.geometry.Point3d;
-import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.dimensions.Dimensions;
+import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.spatial.point.Point3d;
+import org.anchoranalysis.spatial.point.Point3i;
 
 /** Ensures a point has values contained inside image-dimensions */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)

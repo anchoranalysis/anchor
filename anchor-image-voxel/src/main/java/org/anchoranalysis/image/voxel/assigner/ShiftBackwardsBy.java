@@ -27,9 +27,9 @@ package org.anchoranalysis.image.voxel.assigner;
 
 import java.util.function.IntPredicate;
 import lombok.AllArgsConstructor;
-import org.anchoranalysis.core.geometry.ReadableTuple3i;
-import org.anchoranalysis.image.extent.box.BoundingBox;
-import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
+import org.anchoranalysis.spatial.extent.box.BoundingBox;
+import org.anchoranalysis.spatial.point.ReadableTuple3i;
 
 /**
  * Shifts all coordinates BACKWARDS before passing to another {@link VoxelsAssigner}

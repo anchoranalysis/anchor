@@ -33,10 +33,10 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInputWithResolution;
-import org.anchoranalysis.image.dimensions.Resolution;
-import org.anchoranalysis.image.dimensions.SpatialUnits;
-import org.anchoranalysis.image.dimensions.UnitConverter;
-import org.anchoranalysis.image.dimensions.SpatialUnits.UnitSuffix;
+import org.anchoranalysis.image.core.dimensions.Resolution;
+import org.anchoranalysis.image.core.dimensions.SpatialUnits;
+import org.anchoranalysis.image.core.dimensions.UnitConverter;
+import org.anchoranalysis.image.core.dimensions.SpatialUnits.UnitSuffix;
 import org.anchoranalysis.image.feature.bean.physical.WithResolutionBase;
 
 @NoArgsConstructor

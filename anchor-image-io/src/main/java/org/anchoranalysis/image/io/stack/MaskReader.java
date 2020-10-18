@@ -29,11 +29,11 @@ package org.anchoranalysis.image.io.stack;
 import java.nio.file.Path;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.image.binary.mask.Mask;
-import org.anchoranalysis.image.binary.values.BinaryValues;
+import org.anchoranalysis.image.core.mask.Mask;
+import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.StackReader;
-import org.anchoranalysis.image.stack.Stack;
+import org.anchoranalysis.image.voxel.binary.values.BinaryValues;
 
 /**
  * Utility functions for reading a {@link Mask} from the file-system.

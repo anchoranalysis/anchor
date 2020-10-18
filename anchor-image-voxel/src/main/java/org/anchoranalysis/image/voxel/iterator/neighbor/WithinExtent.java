@@ -26,8 +26,8 @@
 
 package org.anchoranalysis.image.voxel.iterator.neighbor;
 
-import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.extent.Extent;
+import org.anchoranalysis.spatial.extent.Extent;
+import org.anchoranalysis.spatial.point.Point3i;
 
 /**
  * Only processes points within a certain extent.

@@ -40,21 +40,21 @@ import java.util.Optional;
 import java.util.function.DoubleBinaryOperator;
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.core.geometry.Point2d;
-import org.anchoranalysis.core.geometry.Point3d;
-import org.anchoranalysis.image.binary.values.BinaryValuesByte;
-import org.anchoranalysis.image.dimensions.Dimensions;
-import org.anchoranalysis.image.dimensions.Resolution;
-import org.anchoranalysis.image.extent.box.BoundingBox;
-import org.anchoranalysis.image.object.properties.ObjectWithProperties;
-import org.anchoranalysis.image.orientation.Orientation;
-import org.anchoranalysis.image.orientation.Orientation2D;
-import org.anchoranalysis.math.rotation.RotationMatrix;
+import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.image.core.dimensions.Resolution;
+import org.anchoranalysis.image.core.object.properties.ObjectWithProperties;
+import org.anchoranalysis.image.core.orientation.Orientation;
+import org.anchoranalysis.image.core.orientation.Orientation2D;
+import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMembershipWithFlags;
 import org.anchoranalysis.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.mark.QuickOverlapCalculation;
 import org.anchoranalysis.overlay.OverlayProperties;
+import org.anchoranalysis.spatial.extent.box.BoundingBox;
+import org.anchoranalysis.spatial.point.Point2d;
+import org.anchoranalysis.spatial.point.Point3d;
+import org.anchoranalysis.spatial.rotation.RotationMatrix;
 
 public class Ellipse extends ConicBase implements Serializable {
 

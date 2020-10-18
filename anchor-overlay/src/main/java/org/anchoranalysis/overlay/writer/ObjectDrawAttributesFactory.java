@@ -29,7 +29,7 @@ package org.anchoranalysis.overlay.writer;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.idgetter.IDGetter;
-import org.anchoranalysis.image.object.properties.ObjectWithProperties;
+import org.anchoranalysis.image.core.object.properties.ObjectWithProperties;
 import org.anchoranalysis.overlay.Overlay;
 import org.anchoranalysis.overlay.collection.ColoredOverlayCollection;
 import org.anchoranalysis.overlay.id.IDGetterMaskFromOverlay;

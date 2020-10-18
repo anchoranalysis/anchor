@@ -34,7 +34,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Positive;
-import org.anchoranalysis.image.extent.Extent;
+import org.anchoranalysis.spatial.extent.Extent;
 
 @NoArgsConstructor
 @AllArgsConstructor

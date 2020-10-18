@@ -27,11 +27,11 @@
 package org.anchoranalysis.test.image.object;
 
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.binary.mask.Mask;
-import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.object.factory.ObjectsFromConnectedComponentsFactory;
-import org.anchoranalysis.image.stack.Stack;
+import org.anchoranalysis.image.core.mask.Mask;
+import org.anchoranalysis.image.core.stack.Stack;
+import org.anchoranalysis.image.voxel.object.ObjectCollection;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
+import org.anchoranalysis.image.voxel.object.factory.ObjectsFromConnectedComponentsFactory;
 import org.anchoranalysis.test.TestLoader;
 import org.anchoranalysis.test.image.io.TestLoaderImage;
 import lombok.AllArgsConstructor;

@@ -29,12 +29,12 @@ package org.anchoranalysis.mpp.mark.points;
 import com.google.common.base.Preconditions;
 import java.util.List;
 import java.util.function.Function;
+import org.anchoranalysis.spatial.point.Point3d;
+import org.anchoranalysis.spatial.point.Point3f;
+import org.anchoranalysis.spatial.point.Point3i;
+import org.anchoranalysis.spatial.point.PointConverter;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.geometry.Point3d;
-import org.anchoranalysis.core.geometry.Point3f;
-import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.core.geometry.PointConverter;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class PointListFactory {

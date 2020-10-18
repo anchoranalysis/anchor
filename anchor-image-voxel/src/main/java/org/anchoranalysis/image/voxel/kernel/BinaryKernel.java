@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.image.voxel.kernel;
 
-import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.spatial.point.Point3i;
 
 public abstract class BinaryKernel extends Kernel {
 

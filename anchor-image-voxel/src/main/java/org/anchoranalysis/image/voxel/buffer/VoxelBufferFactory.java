@@ -26,11 +26,11 @@
 package org.anchoranalysis.image.voxel.buffer;
 
 import java.nio.FloatBuffer;
+import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
+import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedIntBuffer;
+import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedShortBuffer;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
-import org.anchoranalysis.image.convert.UnsignedIntBuffer;
-import org.anchoranalysis.image.convert.UnsignedShortBuffer;
 
 /**
  * Creating voxel-buffers and arrays of voxel-buffers of various types.

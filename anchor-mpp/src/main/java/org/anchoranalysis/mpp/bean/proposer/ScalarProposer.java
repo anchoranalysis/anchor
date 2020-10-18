@@ -30,7 +30,7 @@ import java.util.Optional;
 import org.anchoranalysis.bean.NullParamsBean;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
-import org.anchoranalysis.image.dimensions.Resolution;
+import org.anchoranalysis.image.core.dimensions.Resolution;
 
 public abstract class ScalarProposer extends NullParamsBean<ScalarProposer> {
 

@@ -28,9 +28,9 @@ package org.anchoranalysis.mpp.overlay;
 
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.binary.values.BinaryValuesByte;
-import org.anchoranalysis.image.dimensions.Dimensions;
-import org.anchoranalysis.image.object.properties.ObjectWithProperties;
+import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.image.core.object.properties.ObjectWithProperties;
+import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMembershipWithFlags;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.overlay.object.scaled.ScaledMaskCreator;

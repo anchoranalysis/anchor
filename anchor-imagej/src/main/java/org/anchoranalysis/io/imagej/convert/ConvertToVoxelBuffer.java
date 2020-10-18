@@ -28,10 +28,10 @@ package org.anchoranalysis.io.imagej.convert;
 import ij.process.ImageProcessor;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
-import org.anchoranalysis.image.convert.UnsignedShortBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferWrap;
+import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
+import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedShortBuffer;
 
 /**
  * Converts a {@link ImageProcessor} to a voxel-buffer of particular data-type.

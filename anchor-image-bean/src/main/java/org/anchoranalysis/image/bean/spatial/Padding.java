@@ -30,7 +30,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.NonNegative;
-import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.spatial.point.Point3i;
 
 /**
  * Padding (whitespace of certain extent) placed around an object in XY direction and in Z

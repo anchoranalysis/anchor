@@ -27,7 +27,7 @@
 package org.anchoranalysis.image.bean.nonbean.spatial.arrange;
 
 import java.util.Iterator;
-import org.anchoranalysis.image.stack.rgb.RGBStack;
+import org.anchoranalysis.image.core.stack.rgb.RGBStack;
 
 public interface ArrangeStack {
 

@@ -32,9 +32,9 @@ import java.util.List;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.text.TypedValue;
-import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.io.generator.tabular.CSVWriter;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import org.anchoranalysis.math.histogram.Histogram;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class HistogramCSVWriter {

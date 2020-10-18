@@ -31,8 +31,8 @@ import java.util.Set;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
 import lombok.AllArgsConstructor;
-import org.anchoranalysis.image.object.ObjectMask;
 
 /** 
  * Creates overlap assignment from a distance matrix

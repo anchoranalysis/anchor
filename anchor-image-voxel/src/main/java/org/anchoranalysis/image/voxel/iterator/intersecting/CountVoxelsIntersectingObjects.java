@@ -28,9 +28,9 @@ package org.anchoranalysis.image.voxel.iterator.intersecting;
 import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.iterator.predicate.PredicateTwoBytes;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
+import org.anchoranalysis.spatial.point.Point3i;
 
 /**
  * Like {@link CountVoxelsIntersectingBounded} but specifically counts areas of intersection between

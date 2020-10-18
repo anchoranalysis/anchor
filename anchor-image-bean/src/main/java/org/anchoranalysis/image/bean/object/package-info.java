@@ -23,5 +23,5 @@
  * THE SOFTWARE.
  * #L%
  */
-/** Beans pertaining to {@link org.anchoranalysis.image.object.ObjectMask} and their collections. */
+/** Beans pertaining to {@link org.anchoranalysis.image.voxel.object.ObjectMask} and their collections. */
 package org.anchoranalysis.image.bean.object;

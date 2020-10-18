@@ -27,8 +27,8 @@
 package org.anchoranalysis.image.voxel.iterator.process.buffer;
 
 import java.nio.Buffer;
-import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.voxel.iterator.process.ProcessPoint;
+import org.anchoranalysis.spatial.point.Point3i;
 
 /**
  * Processes a 3D point like {@link ProcessPoint} but also retrieves <b>two</b> {@link Buffer} for

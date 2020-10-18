@@ -34,10 +34,10 @@ import org.anchoranalysis.bean.provider.Provider;
 import org.anchoranalysis.image.bean.provider.stack.ArrangeRaster;
 import org.anchoranalysis.image.bean.spatial.arrange.Overlay;
 import org.anchoranalysis.image.bean.spatial.arrange.Tile;
+import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.bean.generator.TextStyle;
 import org.anchoranalysis.image.io.bean.stack.provider.GenerateString;
 import org.anchoranalysis.image.io.bean.stack.provider.StackProviderWithLabel;
-import org.anchoranalysis.image.stack.Stack;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class TileRasters {

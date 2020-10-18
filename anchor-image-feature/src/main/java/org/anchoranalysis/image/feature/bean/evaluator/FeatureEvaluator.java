@@ -43,7 +43,7 @@ import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingleChangeInput;
-import org.anchoranalysis.image.stack.Stack;
+import org.anchoranalysis.image.core.stack.Stack;
 
 /**
  * Defines a feature and provides a means to calculate inputs for it, a session.

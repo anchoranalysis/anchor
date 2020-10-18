@@ -26,8 +26,8 @@
 
 package org.anchoranalysis.image.bean.interpolator;
 
-import org.anchoranalysis.image.interpolator.Interpolator;
-import org.anchoranalysis.image.interpolator.InterpolatorImgLib2Linear;
+import org.anchoranalysis.image.voxel.interpolator.Interpolator;
+import org.anchoranalysis.image.voxel.interpolator.InterpolatorImgLib2Linear;
 
 public class ImgLib2Linear extends InterpolatorBean {
 

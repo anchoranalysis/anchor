@@ -31,10 +31,10 @@ import static org.junit.Assert.*;
 
 import java.util.Optional;
 import java.util.function.Consumer;
-import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.extent.box.BoundingBox;
-import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.ObjectMaskFixture;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
+import org.anchoranalysis.spatial.extent.box.BoundingBox;
+import org.anchoranalysis.spatial.point.Point3i;
 import org.junit.Test;
 
 public class IterateVoxelsTest {

@@ -31,8 +31,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.image.dimensions.UnitConverter;
-import org.anchoranalysis.image.orientation.DirectionVector;
+import org.anchoranalysis.image.core.dimensions.UnitConverter;
+import org.anchoranalysis.image.core.orientation.DirectionVector;
 
 @NoArgsConstructor
 public class DistanceVoxels extends UnitValueDistance {

@@ -29,10 +29,10 @@ package org.anchoranalysis.mpp.mark.conic;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import java.util.Optional;
-import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
-import org.anchoranalysis.image.dimensions.Resolution;
+import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.mpp.bean.bound.Bound;
+import org.anchoranalysis.spatial.point.Point3d;
 
 /**
  * Utility functions for generating random radii for {@link ConicBase}

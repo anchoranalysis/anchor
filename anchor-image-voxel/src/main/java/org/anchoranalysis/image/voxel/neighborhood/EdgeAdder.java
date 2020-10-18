@@ -31,10 +31,10 @@ import java.util.Optional;
 import java.util.function.Function;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.extent.rtree.ObjectCollectionRTree;
-import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.object.morphological.MorphologicalDilation;
+import org.anchoranalysis.image.voxel.object.ObjectCollectionRTree;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
+import org.anchoranalysis.image.voxel.object.morphological.MorphologicalDilation;
+import org.anchoranalysis.spatial.extent.Extent;
 
 /**
  * Adds edges if objects neighbor each other

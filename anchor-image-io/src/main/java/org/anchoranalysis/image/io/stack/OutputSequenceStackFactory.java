@@ -27,8 +27,8 @@ package org.anchoranalysis.image.io.stack;
 
 import java.util.Optional;
 import org.anchoranalysis.core.name.provider.NamedProvider;
+import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.generator.raster.StackGenerator;
-import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.generator.collection.NamedProviderOutputter;
 import org.anchoranalysis.io.generator.sequence.OutputSequence;
 import org.anchoranalysis.io.generator.sequence.OutputSequenceFactory;

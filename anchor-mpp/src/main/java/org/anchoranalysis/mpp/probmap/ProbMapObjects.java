@@ -28,15 +28,15 @@ package org.anchoranalysis.mpp.probmap;
 
 import java.util.Optional;
 import org.anchoranalysis.core.error.OptionalOperationUnsupportedException;
-import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
-import org.anchoranalysis.image.binary.mask.Mask;
-import org.anchoranalysis.image.binary.values.BinaryValues;
-import org.anchoranalysis.image.dimensions.Dimensions;
-import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.object.MaskFromObjects;
-import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.image.core.mask.Mask;
+import org.anchoranalysis.image.core.mask.MaskFromObjects;
+import org.anchoranalysis.image.voxel.binary.values.BinaryValues;
+import org.anchoranalysis.image.voxel.object.ObjectCollection;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
+import org.anchoranalysis.spatial.extent.Extent;
+import org.anchoranalysis.spatial.point.Point3d;
 
 /**
  * TODO this doesn't seem currently used. Do we still ened it?

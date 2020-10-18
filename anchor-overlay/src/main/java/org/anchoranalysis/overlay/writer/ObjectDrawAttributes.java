@@ -32,7 +32,7 @@ import org.anchoranalysis.core.color.ColorIndex;
 import org.anchoranalysis.core.color.RGBColor;
 import org.anchoranalysis.core.idgetter.IDGetter;
 import org.anchoranalysis.core.idgetter.IDGetterIter;
-import org.anchoranalysis.image.object.properties.ObjectWithProperties;
+import org.anchoranalysis.image.core.object.properties.ObjectWithProperties;
 
 /**
  * A means of extracting attributes associated with a particular object (e.g. color, ID) when

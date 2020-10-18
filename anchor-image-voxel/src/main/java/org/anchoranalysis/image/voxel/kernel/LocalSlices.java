@@ -26,8 +26,8 @@
 
 package org.anchoranalysis.image.voxel.kernel;
 
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.Voxels;
+import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 
 // Caches a small number of slices around which we wish to work, so the memory
 //  we are interested in is nearby

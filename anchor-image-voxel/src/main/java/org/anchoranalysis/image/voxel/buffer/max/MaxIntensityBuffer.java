@@ -26,10 +26,10 @@
 
 package org.anchoranalysis.image.voxel.buffer.max;
 
-import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactoryTypeBound;
+import org.anchoranalysis.spatial.extent.Extent;
 
 /**
  * The buffer used when making a maximum-intensity projection

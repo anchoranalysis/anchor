@@ -35,7 +35,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporterIncrement;
-import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.io.bioformats.DestinationChannelForIndex;
 import org.anchoranalysis.io.bioformats.bean.options.ReadOptions;
 

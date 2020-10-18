@@ -28,12 +28,12 @@ package org.anchoranalysis.image.voxel.iterator;
 import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.SlidingBuffer;
 import org.anchoranalysis.image.voxel.iterator.process.ProcessPoint;
 import org.anchoranalysis.image.voxel.iterator.process.buffer.ProcessBufferUnary;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
+import org.anchoranalysis.spatial.extent.Extent;
 
 /**
  * Utilities for iterating over the subset of voxels corresponding to an <i>on</i> state in an

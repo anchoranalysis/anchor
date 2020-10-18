@@ -33,12 +33,6 @@ import lombok.experimental.Accessors;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.OperationFailedRuntimeException;
-import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.core.geometry.ReadableTuple3i;
-import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.extent.box.BoundingBox;
-import org.anchoranalysis.image.extent.scale.ScaleFactor;
-import org.anchoranalysis.image.interpolator.Interpolator;
 import org.anchoranalysis.image.voxel.arithmetic.VoxelsArithmetic;
 import org.anchoranalysis.image.voxel.assigner.VoxelsAssigner;
 import org.anchoranalysis.image.voxel.assigner.VoxelsAssignerFactory;
@@ -46,6 +40,12 @@ import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.extracter.VoxelsExtracter;
 import org.anchoranalysis.image.voxel.extracter.VoxelsExtracterFactory;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactoryTypeBound;
+import org.anchoranalysis.image.voxel.interpolator.Interpolator;
+import org.anchoranalysis.spatial.extent.Extent;
+import org.anchoranalysis.spatial.extent.box.BoundingBox;
+import org.anchoranalysis.spatial.extent.scale.ScaleFactor;
+import org.anchoranalysis.spatial.point.Point3i;
+import org.anchoranalysis.spatial.point.ReadableTuple3i;
 
 /**
  * Voxel-data that is bounded to exist in a particular bounding-box in an image.

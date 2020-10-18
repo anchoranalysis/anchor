@@ -26,10 +26,10 @@
 
 package org.anchoranalysis.image.voxel.iterator.process.buffer;
 
-import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.iterator.process.ProcessPoint;
 import org.anchoranalysis.image.voxel.iterator.process.voxelbuffer.ProcessVoxelBufferUnary;
+import org.anchoranalysis.spatial.point.Point3i;
 
 /**
  * Processes a 3D point like {@link ProcessPoint} but also retrieves a buffer for the current

@@ -29,9 +29,9 @@ import static org.junit.Assert.*;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.graph.GraphWithPayload;
-import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectCollectionFixture;
-import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.voxel.object.ObjectCollection;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.junit.Test;
 
 public class NeighborGraphTest {

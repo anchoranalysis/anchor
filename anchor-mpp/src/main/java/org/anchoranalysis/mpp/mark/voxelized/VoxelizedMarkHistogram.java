@@ -30,24 +30,24 @@ import java.util.List;
 import lombok.Getter;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
-import org.anchoranalysis.core.geometry.Point3d;
-import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
-import org.anchoranalysis.image.dimensions.Dimensions;
-import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.extent.box.BoundingBox;
-import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.voxel.BoundedVoxels;
+import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatisticsFromHistogram;
+import org.anchoranalysis.math.histogram.Histogram;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMap;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMembershipWithFlags;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.voxel.partition.IndexByChannel;
 import org.anchoranalysis.mpp.voxel.partition.factory.VoxelPartitionFactory;
 import org.anchoranalysis.mpp.voxel.partition.factory.VoxelPartitonFactoryHistogram;
+import org.anchoranalysis.spatial.extent.Extent;
+import org.anchoranalysis.spatial.extent.box.BoundingBox;
+import org.anchoranalysis.spatial.point.Point3d;
+import org.anchoranalysis.spatial.point.ReadableTuple3i;
 
 class VoxelizedMarkHistogram implements VoxelizedMark {
 

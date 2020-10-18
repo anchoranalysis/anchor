@@ -27,10 +27,10 @@
 package org.anchoranalysis.image.voxel.buffer.mean;
 
 import java.nio.FloatBuffer;
-import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactoryTypeBound;
+import org.anchoranalysis.spatial.extent.Extent;
 
 public abstract class MeanIntensityBuffer<T> {
 

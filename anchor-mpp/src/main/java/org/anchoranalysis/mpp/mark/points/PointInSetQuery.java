@@ -28,9 +28,9 @@ package org.anchoranalysis.mpp.mark.points;
 
 import java.util.Set;
 import java.util.function.DoubleUnaryOperator;
+import org.anchoranalysis.spatial.point.Point3d;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.geometry.Point3d;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class PointInSetQuery {

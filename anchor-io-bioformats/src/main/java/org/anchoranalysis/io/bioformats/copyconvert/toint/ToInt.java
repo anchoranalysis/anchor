@@ -26,8 +26,8 @@
 
 package org.anchoranalysis.io.bioformats.copyconvert.toint;
 
-import org.anchoranalysis.image.convert.UnsignedIntBuffer;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
+import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedIntBuffer;
 import org.anchoranalysis.io.bioformats.copyconvert.ConvertTo;
 
 public abstract class ToInt extends ConvertTo<UnsignedIntBuffer> {

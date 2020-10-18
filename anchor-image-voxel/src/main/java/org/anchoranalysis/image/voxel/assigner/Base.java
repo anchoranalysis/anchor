@@ -28,13 +28,13 @@ package org.anchoranalysis.image.voxel.assigner;
 import java.util.Optional;
 import java.util.function.IntPredicate;
 import lombok.RequiredArgsConstructor;
-import org.anchoranalysis.core.geometry.ReadableTuple3i;
-import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.extent.box.BoundingBox;
-import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.iterator.IterateVoxelsObjectMask;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
+import org.anchoranalysis.spatial.extent.Extent;
+import org.anchoranalysis.spatial.extent.box.BoundingBox;
+import org.anchoranalysis.spatial.point.ReadableTuple3i;
 
 @RequiredArgsConstructor
 abstract class Base<T> implements VoxelsAssigner {

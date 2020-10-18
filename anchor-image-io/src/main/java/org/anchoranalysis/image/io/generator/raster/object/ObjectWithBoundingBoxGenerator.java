@@ -27,9 +27,9 @@
 package org.anchoranalysis.image.io.generator.raster.object;
 
 import java.util.Optional;
-import org.anchoranalysis.image.dimensions.Resolution;
+import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.image.io.generator.raster.object.collection.ObjectAsMaskGenerator;
-import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.generator.GeneratorBridge;
 import org.anchoranalysis.io.generator.combined.CombinedListGenerator;

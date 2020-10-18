@@ -36,8 +36,7 @@ public class OutputSequenceIndexedTest {
 
     @Test
     public void testA() throws OutputWriteFailedException {
- 
-        
+         
         SequenceType<String> sequenceType = new StringsWithoutOrder();
         
         OutputSequenceIndexed<Integer, String> sequence = new OutputSequenceIndexed<>(

@@ -35,8 +35,8 @@ import org.anchoranalysis.core.serialize.DeserializationFailedException;
 import org.anchoranalysis.core.serialize.Deserializer;
 import org.anchoranalysis.image.io.objects.HDF5ObjectsGenerator;
 import org.anchoranalysis.image.io.objects.HDF5PathHelper;
-import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.object.factory.ObjectCollectionFactory;
+import org.anchoranalysis.image.voxel.object.ObjectCollection;
+import org.anchoranalysis.image.voxel.object.factory.ObjectCollectionFactory;
 
 class ReadObjectsFromHDF5 implements Deserializer<ObjectCollection> {
 

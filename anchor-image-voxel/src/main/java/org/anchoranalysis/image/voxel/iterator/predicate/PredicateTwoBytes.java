@@ -26,7 +26,7 @@
 package org.anchoranalysis.image.voxel.iterator.predicate;
 
 import java.util.function.Predicate;
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
+import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.iterator.predicate.buffer.PredicateBufferBinary;
 import org.anchoranalysis.image.voxel.iterator.process.buffer.ProcessBufferBinary;
 

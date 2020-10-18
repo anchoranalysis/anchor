@@ -30,10 +30,10 @@ import com.google.common.base.Functions;
 import io.vavr.control.Either;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.OperationFailedRuntimeException;
-import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.dimensions.Dimensions;
-import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.stack.Stack;
+import org.anchoranalysis.image.core.channel.Channel;
+import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.image.core.stack.Stack;
+import org.anchoranalysis.spatial.extent.Extent;
 
 /**
  * A stack of channels used as context to calculate features (or calculating <i>energy</i> more

@@ -29,13 +29,13 @@ package org.anchoranalysis.mpp.mark.conic;
 import com.google.common.base.Preconditions;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.geometry.Point2d;
-import org.anchoranalysis.core.geometry.Point3d;
-import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.core.geometry.PointConverter;
-import org.anchoranalysis.image.orientation.Orientation2D;
-import org.anchoranalysis.image.orientation.Orientation3DEulerAngles;
+import org.anchoranalysis.image.core.orientation.Orientation2D;
+import org.anchoranalysis.image.core.orientation.Orientation3DEulerAngles;
 import org.anchoranalysis.mpp.mark.Mark;
+import org.anchoranalysis.spatial.point.Point2d;
+import org.anchoranalysis.spatial.point.Point3d;
+import org.anchoranalysis.spatial.point.Point3i;
+import org.anchoranalysis.spatial.point.PointConverter;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class MarkConicFactory {

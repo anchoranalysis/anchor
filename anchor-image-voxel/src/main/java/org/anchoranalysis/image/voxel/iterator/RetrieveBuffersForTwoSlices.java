@@ -27,11 +27,11 @@
 package org.anchoranalysis.image.voxel.iterator;
 
 import lombok.RequiredArgsConstructor;
-import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.iterator.process.ProcessPoint;
 import org.anchoranalysis.image.voxel.iterator.process.buffer.ProcessBufferBinary;
 import org.anchoranalysis.image.voxel.iterator.process.buffer.ProcessBufferUnary;
+import org.anchoranalysis.spatial.point.Point3i;
 
 /**
  * Exposes a {@link ProcessPoint} as a {@link ProcessBufferUnary} by retrieving <b>two</b> buffers

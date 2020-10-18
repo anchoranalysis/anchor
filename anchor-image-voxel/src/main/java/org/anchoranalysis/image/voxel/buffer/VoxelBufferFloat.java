@@ -28,7 +28,7 @@ package org.anchoranalysis.image.voxel.buffer;
 
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
-import org.anchoranalysis.image.convert.PrimitiveConverter;
+import org.anchoranalysis.image.voxel.buffer.primitive.PrimitiveConverter;
 import org.anchoranalysis.image.voxel.datatype.FloatVoxelType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 

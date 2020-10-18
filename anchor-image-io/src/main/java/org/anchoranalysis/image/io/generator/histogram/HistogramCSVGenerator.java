@@ -29,10 +29,10 @@ package org.anchoranalysis.image.io.generator.histogram;
 import java.nio.file.Path;
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.io.generator.tabular.CSVGenerator;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import org.anchoranalysis.math.histogram.Histogram;
 
 /**
  * Writes a histogram to a CSV file.

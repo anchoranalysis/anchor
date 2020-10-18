@@ -27,7 +27,7 @@
 package org.anchoranalysis.image.binary.values;
 
 import static org.junit.Assert.*;
-
+import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.junit.Test;
 
 public class BinaryValuesBytesTest {

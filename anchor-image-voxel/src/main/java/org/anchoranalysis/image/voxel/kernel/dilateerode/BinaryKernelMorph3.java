@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.image.voxel.kernel.dilateerode;
 
-import org.anchoranalysis.image.binary.values.BinaryValuesByte;
+import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.voxel.kernel.BinaryKernel;
 import org.anchoranalysis.image.voxel.kernel.LocalSlices;
 

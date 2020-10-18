@@ -33,7 +33,7 @@
  * function called for each voxel:
  *
  * <ul>
- *   <li>withPoint for when only a {@link org.anchoranalysis.core.geometry.Point3i} is provided.
+ *   <li>withPoint for when only a {@link org.anchoranalysis.spatial.point.Point3i} is provided.
  *   <li>withVoxelBuffer for when additionally a {@link
  *       org.anchoranalysis.image.voxel.buffer.VoxelBuffer} for the respective-slice is provided.
  *   <li>withBuffer for when additionally a buffer (as used within @link

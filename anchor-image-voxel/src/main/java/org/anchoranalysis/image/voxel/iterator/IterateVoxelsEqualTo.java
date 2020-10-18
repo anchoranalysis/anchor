@@ -29,13 +29,13 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.core.geometry.ReadableTuple3i;
-import org.anchoranalysis.core.geometry.consumer.ScalarThreeDimensionalConsumer;
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
-import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.BoundedVoxels;
 import org.anchoranalysis.image.voxel.Voxels;
+import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
+import org.anchoranalysis.spatial.extent.Extent;
+import org.anchoranalysis.spatial.point.Point3i;
+import org.anchoranalysis.spatial.point.ReadableTuple3i;
+import org.anchoranalysis.spatial.point.consumer.ScalarThreeDimensionalConsumer;
 
 /**
  * Like {@link IterateVoxelsAll} but specifically for equal-to operations on {@link Voxels} of type

@@ -30,8 +30,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import org.anchoranalysis.core.functional.FunctionalList;
-import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
+import org.anchoranalysis.spatial.extent.Extent;
 
 public class VoxelsWrapperList implements Iterable<VoxelsWrapper> {
 

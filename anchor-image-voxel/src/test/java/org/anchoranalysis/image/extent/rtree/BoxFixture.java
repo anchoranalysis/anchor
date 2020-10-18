@@ -31,7 +31,8 @@ import java.util.Set;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.image.extent.BoundingBoxFixture;
-import org.anchoranalysis.image.extent.box.BoundingBox;
+import org.anchoranalysis.spatial.extent.box.BoundingBox;
+import org.anchoranalysis.spatial.extent.rtree.RTree;
 
 /**
  * Six bounding-boxes distributed over three spatially-overlapping clusters.

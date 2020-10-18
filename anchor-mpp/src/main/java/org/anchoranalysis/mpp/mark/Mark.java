@@ -31,22 +31,22 @@ import java.util.Optional;
 import java.util.function.DoubleUnaryOperator;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.error.OptionalOperationUnsupportedException;
-import org.anchoranalysis.core.geometry.Point3d;
-import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.core.geometry.PointConverter;
-import org.anchoranalysis.core.geometry.ReadableTuple3i;
-import org.anchoranalysis.image.binary.values.BinaryValuesByte;
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
-import org.anchoranalysis.image.dimensions.Dimensions;
-import org.anchoranalysis.image.dimensions.Resolution;
-import org.anchoranalysis.image.dimensions.UnitConverter;
-import org.anchoranalysis.image.dimensions.SpatialUnits.UnitSuffix;
-import org.anchoranalysis.image.extent.box.BoundingBox;
-import org.anchoranalysis.image.extent.scale.ScaleFactor;
-import org.anchoranalysis.image.object.properties.ObjectWithProperties;
+import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.image.core.dimensions.Resolution;
+import org.anchoranalysis.image.core.dimensions.UnitConverter;
+import org.anchoranalysis.image.core.dimensions.SpatialUnits.UnitSuffix;
+import org.anchoranalysis.image.core.object.properties.ObjectWithProperties;
+import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
+import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMembershipWithFlags;
 import org.anchoranalysis.overlay.OverlayProperties;
 import org.anchoranalysis.overlay.id.Identifiable;
+import org.anchoranalysis.spatial.extent.box.BoundingBox;
+import org.anchoranalysis.spatial.extent.scale.ScaleFactor;
+import org.anchoranalysis.spatial.point.Point3d;
+import org.anchoranalysis.spatial.point.Point3i;
+import org.anchoranalysis.spatial.point.PointConverter;
+import org.anchoranalysis.spatial.point.ReadableTuple3i;
 
 @NoArgsConstructor
 public abstract class Mark implements Serializable, Identifiable {

@@ -26,8 +26,8 @@
 
 package org.anchoranalysis.image.voxel.iterator.process.voxelbuffer;
 
-import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
+import org.anchoranalysis.spatial.point.Point3i;
 
 /**
  * Processes a 3D point like {@link ProcessVoxelBufferUnary} but also exposes a {@link Point3i}.

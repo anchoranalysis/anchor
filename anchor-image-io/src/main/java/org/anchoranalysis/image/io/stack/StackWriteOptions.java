@@ -25,7 +25,7 @@
  */
 package org.anchoranalysis.image.io.stack;
 
-import org.anchoranalysis.image.stack.Stack;
+import org.anchoranalysis.image.core.stack.Stack;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Value;

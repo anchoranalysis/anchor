@@ -28,9 +28,9 @@ package org.anchoranalysis.image.io.generator.raster;
 
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.anchoranalysis.image.core.stack.DisplayStack;
+import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.stack.StackWriteOptions;
-import org.anchoranalysis.image.stack.DisplayStack;
-import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.generator.SingleFileTypeGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;

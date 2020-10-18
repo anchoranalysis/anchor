@@ -25,8 +25,8 @@
  */
 package org.anchoranalysis.image.voxel.assigner;
 
-import org.anchoranalysis.image.convert.UnsignedShortBuffer;
 import org.anchoranalysis.image.voxel.Voxels;
+import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedShortBuffer;
 
 class ShortImplementation extends Base<UnsignedShortBuffer> {
 

@@ -28,10 +28,10 @@ package org.anchoranalysis.image.io.bean.stack;
 
 import java.nio.file.Path;
 import org.anchoranalysis.bean.AnchorBean;
+import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.generator.raster.series.StackSeries;
 import org.anchoranalysis.image.io.stack.StackWriteOptions;
-import org.anchoranalysis.image.stack.Stack;
 
 /**
  * Writes a stack (i.e. raster) to the filesystem.

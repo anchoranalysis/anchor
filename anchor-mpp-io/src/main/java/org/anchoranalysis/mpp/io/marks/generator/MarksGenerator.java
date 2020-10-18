@@ -27,7 +27,7 @@
 package org.anchoranalysis.mpp.io.marks.generator;
 
 import org.anchoranalysis.core.idgetter.IDGetter;
-import org.anchoranalysis.image.stack.DisplayStack;
+import org.anchoranalysis.image.core.stack.DisplayStack;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMapSingleton;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMembershipWithFlags;
 import org.anchoranalysis.mpp.mark.GlobalRegionIdentifiers;

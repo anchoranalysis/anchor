@@ -31,7 +31,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.feature.input.FeatureInputEnergy;
-import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
 
 /**
  * An input representing a single object-mask (with maybe an energy-stack associated)

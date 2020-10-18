@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.image.voxel.iterator.neighbor;
 
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
+import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 
 /**
  * Processes a point which has been translated (changed) relative to another point - and includes

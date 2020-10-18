@@ -28,8 +28,8 @@ package org.anchoranalysis.image.io.generator.raster;
 
 import java.util.Optional;
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.stack.StackWriteOptions;
-import org.anchoranalysis.image.stack.Stack;
 
 /**
  * Like a {@link StackGenerator} but first applies a maximum-intensity-projection.

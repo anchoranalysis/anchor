@@ -29,7 +29,7 @@ package org.anchoranalysis.image.bean.unitvalue.extent;
 import java.util.Optional;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.image.bean.nonbean.error.UnitValueException;
-import org.anchoranalysis.image.dimensions.UnitConverter;
+import org.anchoranalysis.image.core.dimensions.UnitConverter;
 
 public abstract class UnitValueAreaOrVolume extends AnchorBean<UnitValueAreaOrVolume> {
 

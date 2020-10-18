@@ -34,7 +34,7 @@ import org.anchoranalysis.image.voxel.assigner.VoxelsAssignerFactory;
 import org.anchoranalysis.image.voxel.extracter.VoxelsExtracter;
 import org.anchoranalysis.image.voxel.extracter.VoxelsExtracterFactory;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
-import org.anchoranalysis.image.voxel.sliceindex.SliceBufferIndex;
+import org.anchoranalysis.image.voxel.factory.sliceindex.SliceBufferIndex;
 
 public final class VoxelsAsFloat extends Voxels<FloatBuffer> {
 

@@ -30,8 +30,8 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Value;
 import lombok.experimental.Accessors;
-import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.extent.box.BoundingBox;
+import org.anchoranalysis.spatial.extent.box.BoundingBox;
+import org.anchoranalysis.spatial.point.Point3i;
 
 /**
  * A bounding box where intersection occurs of two boxes, together with relative position of the

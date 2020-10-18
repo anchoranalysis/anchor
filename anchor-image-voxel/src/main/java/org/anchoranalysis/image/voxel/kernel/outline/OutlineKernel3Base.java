@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.image.voxel.kernel.outline;
 
-import org.anchoranalysis.image.binary.values.BinaryValuesByte;
+import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.voxel.kernel.dilateerode.BinaryKernelMorph3Extent;
 
 public abstract class OutlineKernel3Base extends BinaryKernelMorph3Extent {

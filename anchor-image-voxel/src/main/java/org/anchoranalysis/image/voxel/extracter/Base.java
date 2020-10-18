@@ -26,20 +26,20 @@
 package org.anchoranalysis.image.voxel.extracter;
 
 import lombok.AllArgsConstructor;
-import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.core.geometry.ReadableTuple3i;
-import org.anchoranalysis.image.binary.values.BinaryValuesByte;
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
-import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.extent.box.BoundingBox;
-import org.anchoranalysis.image.interpolator.InterpolateUtilities;
-import org.anchoranalysis.image.interpolator.Interpolator;
-import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.ExtentMatchHelper;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
+import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
+import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.extracter.predicate.PredicateImplementation;
 import org.anchoranalysis.image.voxel.extracter.predicate.VoxelsPredicate;
+import org.anchoranalysis.image.voxel.interpolator.InterpolateUtilities;
+import org.anchoranalysis.image.voxel.interpolator.Interpolator;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
+import org.anchoranalysis.spatial.extent.Extent;
+import org.anchoranalysis.spatial.extent.box.BoundingBox;
+import org.anchoranalysis.spatial.point.Point3i;
+import org.anchoranalysis.spatial.point.ReadableTuple3i;
 
 @AllArgsConstructor
 public abstract class Base<T> implements VoxelsExtracter<T> {

@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.image.voxel.iterator.process;
 
-import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.spatial.point.Point3i;
 
 /**
  * Processes a 3D point.

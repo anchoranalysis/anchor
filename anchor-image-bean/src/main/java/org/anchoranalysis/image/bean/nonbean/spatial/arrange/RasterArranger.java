@@ -29,14 +29,14 @@ package org.anchoranalysis.image.bean.nonbean.spatial.arrange;
 import java.util.Iterator;
 import java.util.List;
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.geometry.ReadableTuple3i;
-import org.anchoranalysis.image.channel.factory.ChannelFactorySingleType;
-import org.anchoranalysis.image.dimensions.Dimensions;
-import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.extent.box.BoundingBox;
-import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.image.stack.rgb.RGBStack;
+import org.anchoranalysis.image.core.channel.factory.ChannelFactorySingleType;
+import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.image.core.stack.Stack;
+import org.anchoranalysis.image.core.stack.rgb.RGBStack;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
+import org.anchoranalysis.spatial.extent.Extent;
+import org.anchoranalysis.spatial.extent.box.BoundingBox;
+import org.anchoranalysis.spatial.point.ReadableTuple3i;
 
 public class RasterArranger {
 

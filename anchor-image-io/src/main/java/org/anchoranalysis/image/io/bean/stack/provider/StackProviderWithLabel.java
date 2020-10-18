@@ -33,7 +33,7 @@ import org.anchoranalysis.bean.NullParamsBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.provider.Provider;
 import org.anchoranalysis.bean.provider.ProviderHolder;
-import org.anchoranalysis.image.stack.Stack;
+import org.anchoranalysis.image.core.stack.Stack;
 
 @NoArgsConstructor
 public class StackProviderWithLabel extends NullParamsBean<StackProviderWithLabel> {

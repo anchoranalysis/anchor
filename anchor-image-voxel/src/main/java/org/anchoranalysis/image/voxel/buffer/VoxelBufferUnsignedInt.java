@@ -27,8 +27,8 @@
 package org.anchoranalysis.image.voxel.buffer;
 
 import java.nio.ByteBuffer;
-import org.anchoranalysis.image.convert.PrimitiveConverter;
-import org.anchoranalysis.image.convert.UnsignedIntBuffer;
+import org.anchoranalysis.image.voxel.buffer.primitive.PrimitiveConverter;
+import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedIntBuffer;
 import org.anchoranalysis.image.voxel.datatype.UnsignedIntVoxelType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import com.google.common.base.Preconditions;

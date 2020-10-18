@@ -28,11 +28,11 @@ package org.anchoranalysis.io.bioformats.copyconvert.toshort;
 
 import java.nio.ByteBuffer;
 import loci.common.DataTools;
-import org.anchoranalysis.image.convert.UnsignedShortBuffer;
-import org.anchoranalysis.image.dimensions.Dimensions;
+import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferFactory;
+import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedShortBuffer;
 import org.anchoranalysis.io.bioformats.copyconvert.ConvertTo;
 
 public abstract class ToUnsignedShort extends ConvertTo<UnsignedShortBuffer> {

@@ -31,7 +31,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.axis.AxisTypeConverter;
 import org.anchoranalysis.core.axis.AxisTypeException;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.orientation.DirectionVector;
+import org.anchoranalysis.image.core.orientation.DirectionVector;
 
 public class AxisAlignedUnitVector extends DirectionVectorBean {
 

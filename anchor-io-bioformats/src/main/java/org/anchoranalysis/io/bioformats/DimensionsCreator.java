@@ -34,11 +34,11 @@ import loci.formats.meta.IMetadata;
 import ome.units.UNITS;
 import ome.units.quantity.Length;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.geometry.Point3d;
-import org.anchoranalysis.image.dimensions.Dimensions;
-import org.anchoranalysis.image.dimensions.Resolution;
-import org.anchoranalysis.image.extent.Extent;
+import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.io.bioformats.bean.options.ReadOptions;
+import org.anchoranalysis.spatial.extent.Extent;
+import org.anchoranalysis.spatial.point.Point3d;
 import com.google.common.base.Preconditions;
 
 public class DimensionsCreator {

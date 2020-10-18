@@ -30,10 +30,10 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
-import org.anchoranalysis.image.stack.NamedStacks;
-import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.image.stack.TimeSequence;
-import org.anchoranalysis.image.stack.wrap.WrapStackAsTimeSequenceStore;
+import org.anchoranalysis.image.core.stack.NamedStacks;
+import org.anchoranalysis.image.core.stack.Stack;
+import org.anchoranalysis.image.core.stack.TimeSequence;
+import org.anchoranalysis.image.core.stack.wrap.WrapStackAsTimeSequenceStore;
 import org.anchoranalysis.io.input.InputFromManager;
 
 /**

@@ -30,15 +30,15 @@ import java.util.List;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.idgetter.IDGetter;
-import org.anchoranalysis.image.dimensions.Dimensions;
-import org.anchoranalysis.image.extent.box.BoundingBox;
-import org.anchoranalysis.image.stack.rgb.RGBStack;
+import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.image.core.stack.rgb.RGBStack;
 import org.anchoranalysis.overlay.Overlay;
 import org.anchoranalysis.overlay.bean.DrawObject;
 import org.anchoranalysis.overlay.collection.ColoredOverlayCollection;
 import org.anchoranalysis.overlay.writer.DrawOverlay;
 import org.anchoranalysis.overlay.writer.ObjectDrawAttributes;
 import org.anchoranalysis.overlay.writer.PrecalculationOverlay;
+import org.anchoranalysis.spatial.extent.box.BoundingBox;
 
 /**
  * Converts a configuration to a set of object-masks, using a simple {@link DrawObject} for all

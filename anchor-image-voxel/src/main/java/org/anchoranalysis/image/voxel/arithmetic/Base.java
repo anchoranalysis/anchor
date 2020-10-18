@@ -28,11 +28,11 @@ package org.anchoranalysis.image.voxel.arithmetic;
 import java.util.function.IntFunction;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
-import org.anchoranalysis.core.geometry.ReadableTuple3i;
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
-import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.extent.box.BoundingBox;
-import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
+import org.anchoranalysis.spatial.extent.Extent;
+import org.anchoranalysis.spatial.extent.box.BoundingBox;
+import org.anchoranalysis.spatial.point.ReadableTuple3i;
 
 /**
  * Base class for implementing voxel-arithmetic with a buffer of a particular type

@@ -37,16 +37,16 @@ import java.io.Serializable;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.core.geometry.Point3d;
-import org.anchoranalysis.image.dimensions.Dimensions;
-import org.anchoranalysis.image.dimensions.Resolution;
-import org.anchoranalysis.image.extent.box.BoundingBox;
-import org.anchoranalysis.image.orientation.Orientation;
-import org.anchoranalysis.image.orientation.Orientation3DEulerAngles;
+import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.image.core.dimensions.Resolution;
+import org.anchoranalysis.image.core.orientation.Orientation;
+import org.anchoranalysis.image.core.orientation.Orientation3DEulerAngles;
 import org.anchoranalysis.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.mark.QuickOverlapCalculation;
 import org.anchoranalysis.overlay.OverlayProperties;
+import org.anchoranalysis.spatial.extent.box.BoundingBox;
+import org.anchoranalysis.spatial.point.Point3d;
 
 //
 //  3 sub-marks

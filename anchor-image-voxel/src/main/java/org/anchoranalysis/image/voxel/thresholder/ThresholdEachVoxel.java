@@ -26,11 +26,11 @@
 
 package org.anchoranalysis.image.voxel.thresholder;
 
-import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.binary.values.BinaryValuesByte;
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.Voxels;
+import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
+import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.iterator.process.buffer.ProcessBufferUnary;
+import org.anchoranalysis.spatial.point.Point3i;
 
 /**
  * Puts an <i>on</i> voxel in the output-buffer if {@code voxel-value >= level} or <i>off</i>

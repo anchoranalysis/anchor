@@ -30,14 +30,10 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import java.util.Optional;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.geometry.Point3d;
-import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.core.geometry.PointConverter;
-import org.anchoranalysis.image.binary.values.BinaryValuesByte;
-import org.anchoranalysis.image.dimensions.Dimensions;
-import org.anchoranalysis.image.dimensions.Resolution;
-import org.anchoranalysis.image.extent.box.BoundingBox;
-import org.anchoranalysis.image.object.properties.ObjectWithProperties;
+import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.image.core.dimensions.Resolution;
+import org.anchoranalysis.image.core.object.properties.ObjectWithProperties;
+import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMembershipWithFlags;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.overlay.Overlay;
@@ -45,6 +41,10 @@ import org.anchoranalysis.overlay.OverlayProperties;
 import org.anchoranalysis.overlay.object.scaled.FromMask;
 import org.anchoranalysis.overlay.object.scaled.ScaledMaskCreator;
 import org.anchoranalysis.overlay.writer.DrawOverlay;
+import org.anchoranalysis.spatial.extent.box.BoundingBox;
+import org.anchoranalysis.spatial.point.Point3d;
+import org.anchoranalysis.spatial.point.Point3i;
+import org.anchoranalysis.spatial.point.PointConverter;
 
 @EqualsAndHashCode(callSuper = false)
 public class OverlayMark extends Overlay {

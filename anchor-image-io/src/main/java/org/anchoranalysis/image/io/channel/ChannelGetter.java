@@ -28,7 +28,7 @@ package org.anchoranalysis.image.io.channel;
 
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.progress.ProgressReporter;
-import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.core.channel.Channel;
 
 public interface ChannelGetter {
 

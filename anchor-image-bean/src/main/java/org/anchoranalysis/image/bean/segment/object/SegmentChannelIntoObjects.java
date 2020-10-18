@@ -29,10 +29,10 @@ package org.anchoranalysis.image.bean.segment.object;
 import java.util.Optional;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.bean.segment.SegmentationBean;
-import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.seed.SeedCollection;
+import org.anchoranalysis.image.core.channel.Channel;
+import org.anchoranalysis.image.core.object.seed.SeedCollection;
+import org.anchoranalysis.image.voxel.object.ObjectCollection;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
 
 /**
  * A base class for algorithms to segment a channel into one or more objects.

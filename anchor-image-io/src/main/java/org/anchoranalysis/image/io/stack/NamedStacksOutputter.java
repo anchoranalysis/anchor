@@ -29,7 +29,7 @@ package org.anchoranalysis.image.io.stack;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.name.provider.NamedProvider;
-import org.anchoranalysis.image.stack.Stack;
+import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
 

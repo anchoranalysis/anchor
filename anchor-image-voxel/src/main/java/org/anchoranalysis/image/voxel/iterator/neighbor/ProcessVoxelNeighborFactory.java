@@ -29,8 +29,8 @@ package org.anchoranalysis.image.voxel.iterator.neighbor;
 import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
+import org.anchoranalysis.spatial.extent.Extent;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ProcessVoxelNeighborFactory {

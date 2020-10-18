@@ -27,9 +27,9 @@
 package org.anchoranalysis.image.voxel.buffer.mean;
 
 import java.nio.FloatBuffer;
-import org.anchoranalysis.image.convert.UnsignedShortBuffer;
-import org.anchoranalysis.image.extent.Extent;
+import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedShortBuffer;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
+import org.anchoranalysis.spatial.extent.Extent;
 
 public class MeanIntensityShortBuffer extends MeanIntensityBuffer<UnsignedShortBuffer> {
 

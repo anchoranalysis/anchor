@@ -27,8 +27,8 @@ package org.anchoranalysis.image.voxel.iterator.neighbor;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.voxel.neighborhood.Neighborhood;
+import org.anchoranalysis.spatial.point.Point3i;
 
 /**
  * Utilities for iterating over the neighboring voxels to a given point.

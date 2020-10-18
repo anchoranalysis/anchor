@@ -26,8 +26,8 @@
 package org.anchoranalysis.image.voxel.arithmetic;
 
 import java.util.function.IntFunction;
-import org.anchoranalysis.image.convert.UnsignedIntBuffer;
-import org.anchoranalysis.image.extent.Extent;
+import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedIntBuffer;
+import org.anchoranalysis.spatial.extent.Extent;
 
 class IntImplementation extends Base<UnsignedIntBuffer> {
 

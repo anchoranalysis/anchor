@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.io.bioformats.copyconvert;
 
-import org.anchoranalysis.image.dimensions.Dimensions;
+import org.anchoranalysis.image.core.dimensions.Dimensions;
 import lombok.Value;
 
 /** How to shape the image (across various dimensions) after the copying */

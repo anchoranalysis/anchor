@@ -29,7 +29,7 @@ package org.anchoranalysis.image.bean.provider.stack;
 import org.anchoranalysis.bean.annotation.GroupingRoot;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.BeanProviderAsStackBase;
-import org.anchoranalysis.image.stack.Stack;
+import org.anchoranalysis.image.core.stack.Stack;
 
 @GroupingRoot
 public abstract class StackProvider extends BeanProviderAsStackBase<StackProvider, Stack> {

@@ -36,12 +36,12 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.image.bean.nonbean.spatial.arrange.RasterArranger;
 import org.anchoranalysis.image.bean.spatial.arrange.ArrangeStackBean;
-import org.anchoranalysis.image.channel.factory.ChannelFactoryByte;
-import org.anchoranalysis.image.channel.factory.ChannelFactoryShort;
-import org.anchoranalysis.image.channel.factory.ChannelFactorySingleType;
-import org.anchoranalysis.image.dimensions.IncorrectImageSizeException;
-import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.image.stack.rgb.RGBStack;
+import org.anchoranalysis.image.core.channel.factory.ChannelFactoryByte;
+import org.anchoranalysis.image.core.channel.factory.ChannelFactoryShort;
+import org.anchoranalysis.image.core.channel.factory.ChannelFactorySingleType;
+import org.anchoranalysis.image.core.dimensions.IncorrectImageSizeException;
+import org.anchoranalysis.image.core.stack.Stack;
+import org.anchoranalysis.image.core.stack.rgb.RGBStack;
 
 /**
  * Creates a stack that tiles (or otherwise combines) other providers

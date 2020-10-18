@@ -29,12 +29,12 @@ package org.anchoranalysis.mpp.bean.proposer;
 import java.util.List;
 import java.util.Optional;
 import org.anchoranalysis.bean.annotation.GroupingRoot;
-import org.anchoranalysis.core.geometry.Point3f;
 import org.anchoranalysis.mpp.mark.CompatibleWithMark;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.mpp.proposer.ProposerContext;
+import org.anchoranalysis.spatial.point.Point3f;
 
 @GroupingRoot
 public abstract class MarkMergeProposer extends ProposerBean<MarkMergeProposer>

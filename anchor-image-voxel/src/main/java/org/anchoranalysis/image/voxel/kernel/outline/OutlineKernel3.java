@@ -26,9 +26,9 @@
 
 package org.anchoranalysis.image.voxel.kernel.outline;
 
-import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.binary.values.BinaryValuesByte;
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
+import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
+import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
+import org.anchoranalysis.spatial.point.Point3i;
 
 // Keeps any on pixel that touches an off pixel, off otherwise
 public class OutlineKernel3 extends OutlineKernel3Base {

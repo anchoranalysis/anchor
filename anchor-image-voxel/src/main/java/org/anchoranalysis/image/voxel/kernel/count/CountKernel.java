@@ -26,8 +26,8 @@
 
 package org.anchoranalysis.image.voxel.kernel.count;
 
-import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.voxel.kernel.Kernel;
+import org.anchoranalysis.spatial.point.Point3i;
 
 public abstract class CountKernel extends Kernel {
 

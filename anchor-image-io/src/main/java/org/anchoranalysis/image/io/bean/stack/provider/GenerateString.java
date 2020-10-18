@@ -33,21 +33,21 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.provider.Provider;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
-import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.channel.convert.ChannelConverter;
-import org.anchoranalysis.image.channel.convert.ConversionPolicy;
-import org.anchoranalysis.image.channel.convert.ToUnsignedShort;
-import org.anchoranalysis.image.channel.factory.ChannelFactory;
-import org.anchoranalysis.image.convert.UnsignedShortBuffer;
-import org.anchoranalysis.image.dimensions.Dimensions;
-import org.anchoranalysis.image.dimensions.IncorrectImageSizeException;
-import org.anchoranalysis.image.extent.box.BoundingBox;
+import org.anchoranalysis.image.core.channel.Channel;
+import org.anchoranalysis.image.core.channel.convert.ChannelConverter;
+import org.anchoranalysis.image.core.channel.convert.ConversionPolicy;
+import org.anchoranalysis.image.core.channel.convert.ToUnsignedShort;
+import org.anchoranalysis.image.core.channel.factory.ChannelFactory;
+import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.image.core.dimensions.IncorrectImageSizeException;
+import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.bean.generator.TextStyle;
-import org.anchoranalysis.image.stack.Stack;
+import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedShortBuffer;
 import org.anchoranalysis.image.voxel.convert.ToShortScaleByType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import org.anchoranalysis.spatial.extent.box.BoundingBox;
 
 @NoArgsConstructor
 public class GenerateString extends StackProvider {

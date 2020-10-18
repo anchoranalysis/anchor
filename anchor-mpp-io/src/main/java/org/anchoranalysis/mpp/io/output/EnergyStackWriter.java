@@ -29,7 +29,7 @@ package org.anchoranalysis.mpp.io.output;
 import lombok.AllArgsConstructor;
 import java.util.Optional;
 import org.anchoranalysis.feature.energy.EnergyStack;
-import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.io.generator.raster.ChannelGenerator;
 import org.anchoranalysis.io.generator.sequence.OutputSequenceFactory;
 import org.anchoranalysis.io.generator.sequence.pattern.OutputPatternIntegerSuffix;

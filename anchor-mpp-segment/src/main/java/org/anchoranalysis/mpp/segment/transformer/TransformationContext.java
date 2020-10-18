@@ -29,7 +29,7 @@ package org.anchoranalysis.mpp.segment.transformer;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.image.dimensions.Dimensions;
+import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.mpp.proposer.error.ErrorNode;
 import org.anchoranalysis.mpp.segment.kernel.KernelCalculationContext;
 

@@ -26,9 +26,9 @@
 
 package org.anchoranalysis.image.voxel.buffer.max;
 
-import org.anchoranalysis.image.convert.UnsignedIntBuffer;
-import org.anchoranalysis.image.extent.Extent;
+import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedIntBuffer;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
+import org.anchoranalysis.spatial.extent.Extent;
 
 public class MaxIntensityBufferInt extends MaxIntensityBuffer<UnsignedIntBuffer> {
 

@@ -28,7 +28,7 @@ package org.anchoranalysis.image.io.generator.raster;
 
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.functional.function.CheckedFunction;
-import org.anchoranalysis.image.stack.Stack;
+import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 /**

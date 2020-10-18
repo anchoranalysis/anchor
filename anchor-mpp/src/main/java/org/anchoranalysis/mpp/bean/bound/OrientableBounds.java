@@ -28,8 +28,8 @@ package org.anchoranalysis.mpp.bean.bound;
 
 import java.util.Optional;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
-import org.anchoranalysis.image.dimensions.Resolution;
-import org.anchoranalysis.image.orientation.Orientation;
+import org.anchoranalysis.image.core.dimensions.Resolution;
+import org.anchoranalysis.image.core.orientation.Orientation;
 
 public abstract class OrientableBounds extends MarkBounds {
 

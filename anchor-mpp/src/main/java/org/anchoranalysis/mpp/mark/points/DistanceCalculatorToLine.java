@@ -27,9 +27,9 @@
 package org.anchoranalysis.mpp.mark.points;
 
 import java.io.Serializable;
+import org.anchoranalysis.spatial.point.Point3d;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.geometry.Point3d;
 
 @NoArgsConstructor
 class DistanceCalculatorToLine implements Serializable {

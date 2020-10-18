@@ -38,10 +38,10 @@ import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.provider.ChannelProvider;
-import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.core.channel.Channel;
+import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.channel.ChannelGetter;
 import org.anchoranalysis.image.io.input.ImageInitParamsFactory;
-import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 
 /**

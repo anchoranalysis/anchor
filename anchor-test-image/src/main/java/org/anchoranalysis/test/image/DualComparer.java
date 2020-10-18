@@ -32,7 +32,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.nio.file.Path;
 import lombok.Getter;
-import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.io.input.csv.CSVReaderException;
 import org.anchoranalysis.test.TestLoader;
 import org.anchoranalysis.test.image.csv.CSVComparer;

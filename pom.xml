@@ -23,9 +23,10 @@
         <module>anchor-core</module>
         <module>anchor-bean</module>
         <module>anchor-beans-shared</module>
+		<module>anchor-spatial</module>
         <module>anchor-annotation</module>
 	   <module>anchor-image-voxel</module>
-        <module>anchor-image</module>
+        <module>anchor-image-core</module>
         <module>anchor-math</module>
         <module>anchor-overlay</module>
         <module>anchor-io-input</module>

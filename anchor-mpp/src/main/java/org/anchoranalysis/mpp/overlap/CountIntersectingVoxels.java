@@ -27,9 +27,9 @@
 package org.anchoranalysis.mpp.overlap;
 
 import lombok.AllArgsConstructor;
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.BoundedVoxels;
 import org.anchoranalysis.image.voxel.Voxels;
+import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.iterator.intersecting.CountVoxelsIntersectingBounded;
 
 /**

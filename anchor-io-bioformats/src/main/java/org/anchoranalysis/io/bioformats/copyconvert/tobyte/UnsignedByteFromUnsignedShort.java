@@ -29,8 +29,8 @@ package org.anchoranalysis.io.bioformats.copyconvert.tobyte;
 import java.nio.ByteBuffer;
 import loci.common.DataTools;
 import lombok.RequiredArgsConstructor;
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
-import org.anchoranalysis.image.dimensions.Dimensions;
+import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 
 @RequiredArgsConstructor
 public class UnsignedByteFromUnsignedShort extends ToUnsignedByte {

@@ -26,12 +26,12 @@
 
 package org.anchoranalysis.image.voxel.kernel.density;
 
-import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.binary.values.BinaryValuesByte;
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.Voxels;
+import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
+import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.kernel.BinaryKernel;
 import org.anchoranalysis.image.voxel.kernel.LocalSlices;
+import org.anchoranalysis.spatial.point.Point3i;
 
 public class DensityKernel extends BinaryKernel {
 

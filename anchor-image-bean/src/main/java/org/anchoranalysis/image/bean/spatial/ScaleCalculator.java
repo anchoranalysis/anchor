@@ -29,8 +29,8 @@ package org.anchoranalysis.image.bean.spatial;
 import java.util.Optional;
 import org.anchoranalysis.bean.NullParamsBean;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.dimensions.Dimensions;
-import org.anchoranalysis.image.extent.scale.ScaleFactor;
+import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.spatial.extent.scale.ScaleFactor;
 
 public abstract class ScaleCalculator extends NullParamsBean<ScaleCalculator> {
 

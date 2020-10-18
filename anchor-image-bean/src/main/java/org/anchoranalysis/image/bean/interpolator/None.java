@@ -26,8 +26,8 @@
 
 package org.anchoranalysis.image.bean.interpolator;
 
-import org.anchoranalysis.image.interpolator.Interpolator;
-import org.anchoranalysis.image.interpolator.InterpolatorNone;
+import org.anchoranalysis.image.voxel.interpolator.Interpolator;
+import org.anchoranalysis.image.voxel.interpolator.InterpolatorNone;
 
 public class None extends InterpolatorBean {
 

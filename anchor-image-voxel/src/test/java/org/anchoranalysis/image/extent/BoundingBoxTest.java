@@ -28,8 +28,7 @@ package org.anchoranalysis.image.extent;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-
-import org.anchoranalysis.image.extent.box.BoundingBox;
+import org.anchoranalysis.spatial.extent.box.BoundingBox;
 import org.junit.Test;
 
 public class BoundingBoxTest {

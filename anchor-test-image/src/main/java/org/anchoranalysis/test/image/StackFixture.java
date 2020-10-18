@@ -31,11 +31,11 @@ import java.util.stream.Stream;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
-import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.dimensions.IncorrectImageSizeException;
-import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.stack.Stack;
+import org.anchoranalysis.image.core.channel.Channel;
+import org.anchoranalysis.image.core.dimensions.IncorrectImageSizeException;
+import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
+import org.anchoranalysis.spatial.extent.Extent;
 import org.anchoranalysis.test.image.ChannelFixture.IntensityFunction;
 
 /**

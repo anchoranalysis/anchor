@@ -26,10 +26,10 @@
 package org.anchoranalysis.image.voxel.iterator.intersecting;
 
 import lombok.AllArgsConstructor;
-import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
+import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.iterator.process.buffer.ProcessBufferBinary;
 import org.anchoranalysis.image.voxel.iterator.process.buffer.ProcessBufferTernary;
+import org.anchoranalysis.spatial.point.Point3i;
 
 /**
  * Processes voxels checking that they lie on a mask, converting a {@link ProcessBufferTernary} to a

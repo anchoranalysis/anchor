@@ -29,15 +29,15 @@ import java.util.function.BiConsumer;
 import java.util.function.Predicate;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.arithmetic.Counter;
-import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.core.geometry.ReadableTuple3i;
-import org.anchoranalysis.image.extent.box.BoundingBox;
-import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.iterator.IterateVoxelsAll;
 import org.anchoranalysis.image.voxel.iterator.IterateVoxelsBoundingBox;
 import org.anchoranalysis.image.voxel.iterator.IterateVoxelsObjectMask;
 import org.anchoranalysis.image.voxel.iterator.process.voxelbuffer.ProcessVoxelBufferUnary;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
+import org.anchoranalysis.spatial.extent.box.BoundingBox;
+import org.anchoranalysis.spatial.point.Point3i;
+import org.anchoranalysis.spatial.point.ReadableTuple3i;
 
 /**
  * Implementation of {@link VoxelsPredicate} for a particular {@link Voxels}.
@@ -103,7 +103,6 @@ public class PredicateImplementation<T> implements VoxelsPredicate {
         
         return object;
     }
-
     
     private boolean predicateMatchWithCounter(int threshold) {
         

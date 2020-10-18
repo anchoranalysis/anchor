@@ -35,11 +35,11 @@ import org.anchoranalysis.core.name.store.NamedProviderStore;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
-import org.anchoranalysis.image.histogram.Histogram;
+import org.anchoranalysis.image.core.stack.TimeSequence;
+import org.anchoranalysis.image.core.stack.wrap.WrapStackAsTimeSequenceStore;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
-import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.stack.TimeSequence;
-import org.anchoranalysis.image.stack.wrap.WrapStackAsTimeSequenceStore;
+import org.anchoranalysis.image.voxel.object.ObjectCollection;
+import org.anchoranalysis.math.histogram.Histogram;
 import org.anchoranalysis.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.mpp.mark.MarkCollection;
 

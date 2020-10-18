@@ -26,14 +26,14 @@
 package org.anchoranalysis.image.voxel.extracter;
 
 import lombok.AllArgsConstructor;
-import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.core.geometry.ReadableTuple3i;
-import org.anchoranalysis.image.extent.box.BoundingBox;
-import org.anchoranalysis.image.interpolator.Interpolator;
-import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.extracter.predicate.PredicateAtCorner;
 import org.anchoranalysis.image.voxel.extracter.predicate.VoxelsPredicate;
+import org.anchoranalysis.image.voxel.interpolator.Interpolator;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
+import org.anchoranalysis.spatial.extent.box.BoundingBox;
+import org.anchoranalysis.spatial.point.Point3i;
+import org.anchoranalysis.spatial.point.ReadableTuple3i;
 
 /**
  * Projects a {@link VoxelsExtracter} to a corner in a larger global space

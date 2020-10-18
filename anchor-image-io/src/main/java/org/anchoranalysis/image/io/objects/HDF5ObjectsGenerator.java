@@ -31,7 +31,7 @@ import ch.systemsx.cisd.hdf5.IHDF5Writer;
 import java.nio.file.Path;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
-import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.io.generator.OneStageGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;

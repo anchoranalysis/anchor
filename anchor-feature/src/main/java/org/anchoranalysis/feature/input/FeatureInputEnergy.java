@@ -32,9 +32,9 @@ import lombok.EqualsAndHashCode;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.energy.EnergyStack;
-import org.anchoranalysis.image.dimensions.Dimensions;
-import org.anchoranalysis.image.dimensions.Resolution;
-import org.anchoranalysis.image.dimensions.UnitConverter;
+import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.image.core.dimensions.Resolution;
+import org.anchoranalysis.image.core.dimensions.UnitConverter;
 
 @AllArgsConstructor
 @EqualsAndHashCode

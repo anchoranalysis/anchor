@@ -30,21 +30,21 @@ import java.util.ArrayList;
 import java.util.List;
 import org.anchoranalysis.bean.shared.relation.threshold.RelationToThreshold;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.histogram.Histogram;
+import org.anchoranalysis.math.histogram.Histogram;
 
 public class VoxelStatisticsCombined implements VoxelStatistics {
 
     private List<VoxelStatistics> list = new ArrayList<>();
 
-    public void add(VoxelStatistics ps) {
-        list.add(ps);
+    public void add(VoxelStatistics stats) {
+        list.add(stats);
     }
 
     @Override
     public long size() {
         int size = 0;
-        for (VoxelStatistics ps : list) {
-            size += ps.size();
+        for (VoxelStatistics stats : list) {
+            size += stats.size();
         }
         return size;
     }
@@ -52,38 +52,38 @@ public class VoxelStatisticsCombined implements VoxelStatistics {
     @Override
     public long sum() {
         int sum = 0;
-        for (VoxelStatistics ps : list) {
-            sum += ps.sum();
+        for (VoxelStatistics stats : list) {
+            sum += stats.sum();
         }
         return sum;
     }
 
     @Override
     public long sumOfSquares() {
-        long cnt = 0;
-        for (VoxelStatistics ps : list) {
-            cnt += ps.sumOfSquares();
+        long count = 0;
+        for (VoxelStatistics stats : list) {
+            count += stats.sumOfSquares();
         }
-        return cnt;
+        return count;
     }
 
     @Override
     public VoxelStatistics threshold(RelationToThreshold relationToThreshold) {
 
         VoxelStatisticsCombined out = new VoxelStatisticsCombined();
-        for (VoxelStatistics ps : list) {
-            out.add(ps.threshold(relationToThreshold));
+        for (VoxelStatistics stats : list) {
+            out.add(stats.threshold(relationToThreshold));
         }
         return out;
     }
 
     @Override
     public long countThreshold(RelationToThreshold relationToThreshold) {
-        long cnt = 0;
-        for (VoxelStatistics ps : list) {
-            cnt += ps.countThreshold(relationToThreshold);
+        long count = 0;
+        for (VoxelStatistics stats : list) {
+            count += stats.countThreshold(relationToThreshold);
         }
-        return cnt;
+        return count;
     }
 
     @Override
@@ -95,8 +95,8 @@ public class VoxelStatisticsCombined implements VoxelStatistics {
     public Histogram histogram() throws OperationFailedException {
 
         Histogram out = new Histogram(255);
-        for (VoxelStatistics ps : list) {
-            out.addHistogram(ps.histogram());
+        for (VoxelStatistics stats : list) {
+            out.addHistogram(stats.histogram());
         }
         return out;
     }

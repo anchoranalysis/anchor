@@ -27,8 +27,8 @@
 package org.anchoranalysis.image.io.generator.raster;
 
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.stack.DisplayStack;
-import org.anchoranalysis.image.stack.Stack;
+import org.anchoranalysis.image.core.stack.DisplayStack;
+import org.anchoranalysis.image.core.stack.Stack;
 
 /**
  * Writes a display-stack to the filesystem.

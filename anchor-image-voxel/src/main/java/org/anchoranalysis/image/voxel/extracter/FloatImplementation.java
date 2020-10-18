@@ -26,9 +26,9 @@
 package org.anchoranalysis.image.voxel.extracter;
 
 import java.nio.FloatBuffer;
-import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.max.MaxIntensityBufferFloat;
+import org.anchoranalysis.spatial.extent.Extent;
 
 class FloatImplementation extends Base<FloatBuffer> {
 

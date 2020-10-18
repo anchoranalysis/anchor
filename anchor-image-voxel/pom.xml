@@ -25,6 +25,11 @@
 	  <artifactId>anchor-beans-shared</artifactId>
   	  <version>0.0.8-SNAPSHOT</version>
   	</dependency>
+  	<dependency>
+	  <groupId>${project.groupId}</groupId>	
+	  <artifactId>anchor-spatial</artifactId>
+  	  <version>0.0.1-SNAPSHOT</version>
+  	</dependency>
   	
     <dependency>
 	  <groupId>colt</groupId>
@@ -47,13 +52,6 @@
 	  <groupId>org.jgrapht</groupId>
 	  <artifactId>jgrapht-core</artifactId>
 	  <version>0.9.1</version>
-	</dependency>
-	
-	<!-- For the R-Tree implementation -->	
-	<dependency>
-	  <groupId>newbrightidea-util</groupId>
-	  <artifactId>newbrightidea-util</artifactId>
-	  <version>1.0.0</version>
 	</dependency>
 	
 	 <dependency>

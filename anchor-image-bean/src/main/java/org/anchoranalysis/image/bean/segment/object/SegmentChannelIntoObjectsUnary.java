@@ -31,10 +31,10 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
-import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.seed.SeedCollection;
+import org.anchoranalysis.image.core.channel.Channel;
+import org.anchoranalysis.image.core.object.seed.SeedCollection;
+import org.anchoranalysis.image.voxel.object.ObjectCollection;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
 
 /**
  * A base-class for segmentations that takes another object-segmentation algorithm as a parameter.

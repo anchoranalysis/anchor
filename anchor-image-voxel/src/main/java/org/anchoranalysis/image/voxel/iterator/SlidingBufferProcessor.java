@@ -27,9 +27,9 @@
 package org.anchoranalysis.image.voxel.iterator;
 
 import lombok.AllArgsConstructor;
-import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.voxel.buffer.SlidingBuffer;
 import org.anchoranalysis.image.voxel.iterator.process.ProcessPoint;
+import org.anchoranalysis.spatial.point.Point3i;
 
 /**
  * Slides along a {@link SlidingBuffer} as points are being processed.

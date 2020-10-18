@@ -28,7 +28,7 @@ package org.anchoranalysis.image.bean.threshold;
 
 import org.anchoranalysis.bean.NullParamsBean;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.histogram.Histogram;
+import org.anchoranalysis.math.histogram.Histogram;
 
 /**
  * Calculates a threshold-level from a histogram.

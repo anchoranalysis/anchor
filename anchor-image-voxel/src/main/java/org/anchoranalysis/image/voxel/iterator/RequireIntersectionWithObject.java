@@ -26,10 +26,10 @@
 
 package org.anchoranalysis.image.voxel.iterator;
 
-import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
-import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.iterator.process.ProcessPoint;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
+import org.anchoranalysis.spatial.point.Point3i;
 
 /**
  * Only processes a point if it lines on the region of an object-mask

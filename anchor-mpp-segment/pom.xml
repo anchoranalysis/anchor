@@ -41,7 +41,7 @@
 	</dependency>
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
-	  <artifactId>anchor-image</artifactId>
+	  <artifactId>anchor-image-core</artifactId>
 	  <version>0.0.8-SNAPSHOT</version>
 	</dependency>
 	 <dependency>

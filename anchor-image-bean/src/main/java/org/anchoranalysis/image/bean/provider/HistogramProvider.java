@@ -30,7 +30,7 @@ import org.anchoranalysis.bean.annotation.GroupingRoot;
 import org.anchoranalysis.bean.provider.Provider;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.ImageBean;
-import org.anchoranalysis.image.histogram.Histogram;
+import org.anchoranalysis.math.histogram.Histogram;
 
 @GroupingRoot
 public abstract class HistogramProvider extends ImageBean<HistogramProvider>
