@@ -33,27 +33,27 @@ import lombok.Setter;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
-import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
+import org.anchoranalysis.image.io.bean.stack.StackReader;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
-import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.input.InputReadFailedException;
 
 public abstract class AnnotatorStrategy extends AnchorBean<AnnotatorStrategy> {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private AnnotationBackground background;
 
-    @BeanField @DefaultInstance @Getter @Setter private RasterReader rasterReader;
+    @BeanField @DefaultInstance @Getter @Setter private StackReader stackReader;
     // END BEAN PROPERTIES
 
-    public abstract Path annotationPathFor(ProvidesStackInput item) throws AnchorIOException;
+    public abstract Path annotationPathFor(ProvidesStackInput item) throws InputReadFailedException;
 
     /**
      * Returns a label describing the annotation, or empty() if this makes no sense
      *
-     * @throws AnchorIOException
+     * @throws InputReadFailedException
      */
     public abstract Optional<String> annotationLabelFor(ProvidesStackInput item)
-            throws AnchorIOException;
+            throws InputReadFailedException;
 
     public abstract int weightWidthDescription();
 }

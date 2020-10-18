@@ -36,12 +36,13 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
-import org.anchoranalysis.experiment.io.IReplaceTask;
+import org.anchoranalysis.experiment.bean.task.Task;
+import org.anchoranalysis.experiment.io.ReplaceTask;
+import org.anchoranalysis.experiment.log.Divider;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
-import org.anchoranalysis.experiment.task.Task;
 import org.anchoranalysis.experiment.task.TaskStatistics;
 import org.anchoranalysis.io.input.InputFromManager;
-import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.io.output.outputter.Outputter;
 
 /**
  * Processes a job
@@ -51,7 +52,9 @@ import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
  * @param <S> shared-state type
  */
 public abstract class JobProcessor<T extends InputFromManager, S>
-        extends AnchorBean<JobProcessor<T, S>> implements IReplaceTask<T, S> {
+        extends AnchorBean<JobProcessor<T, S>> implements ReplaceTask<T, S> {
+
+    private static final Divider DIVIDER = new Divider();
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private Task<T, S> task;
@@ -62,17 +65,20 @@ public abstract class JobProcessor<T extends InputFromManager, S>
     /**
      * Executes the tasks, gathers statistics, and logs them
      *
-     * @param rootOutputManager
-     * @param inputObjects
+     * @param rootOutputter
+     * @param inputs
      * @param paramsExperiment
      * @throws ExperimentExecutionException
      */
     public void executeLogStats(
-            BoundOutputManagerRouteErrors rootOutputManager,
-            List<T> inputObjects,
-            ParametersExperiment paramsExperiment)
+            Outputter rootOutputter, List<T> inputs, ParametersExperiment paramsExperiment)
             throws ExperimentExecutionException {
-        TaskStatistics stats = execute(rootOutputManager, inputObjects, paramsExperiment);
+
+        if (paramsExperiment.isDetailedLogging()) {
+            paramsExperiment.getLoggerExperiment().log(DIVIDER.withLabel("Processing"));
+        }
+
+        TaskStatistics stats = execute(rootOutputter, inputs, paramsExperiment);
 
         if (paramsExperiment.isDetailedLogging()) {
             logStats(stats, paramsExperiment);
@@ -87,8 +93,8 @@ public abstract class JobProcessor<T extends InputFromManager, S>
         // directly
         //  replacing the task, we call this method. In effect, this allows skipping of the task
         // that is replaced.
-        if (IReplaceTask.class.isAssignableFrom(this.task.getClass())) {
-            ((IReplaceTask<T, S>) this.task).replaceTask(taskToReplace);
+        if (ReplaceTask.class.isAssignableFrom(this.task.getClass())) {
+            ((ReplaceTask<T, S>) this.task).replaceTask(taskToReplace);
         } else {
             // If not, then we replace the task directly
             this.task = taskToReplace;
@@ -96,8 +102,8 @@ public abstract class JobProcessor<T extends InputFromManager, S>
     }
 
     /** Is an input-object compatible with this particular task? */
-    public boolean isInputObjectCompatibleWith(Class<? extends InputFromManager> inputObjectClass) {
-        return task.isInputObjectCompatibleWith(inputObjectClass);
+    public boolean isInputCompatibleWith(Class<? extends InputFromManager> inputClass) {
+        return task.isInputCompatibleWith(inputClass);
     }
 
     /** Is the execution-time of the task per-input expected to be very quick to execute? */
@@ -106,20 +112,18 @@ public abstract class JobProcessor<T extends InputFromManager, S>
     }
 
     /**
-     * The job processor is expected to remove items from the inputObjects List as they are consumed
-     * so as to allow garbage-collection of these items before all jobs are processed (as the list
-     * might be quite large).
+     * The job processor is expected to remove items from the inputs-list as they are consumed so as
+     * to allow garbage-collection of these items before all jobs are processed (as the list might
+     * be quite large).
      *
-     * @param rootOutputManager
-     * @param inputObjects
+     * @param rootOutputter
+     * @param inputs
      * @param paramsExperiment
      * @return
      * @throws ExperimentExecutionException
      */
     protected abstract TaskStatistics execute(
-            BoundOutputManagerRouteErrors rootOutputManager,
-            List<T> inputObjects,
-            ParametersExperiment paramsExperiment)
+            Outputter rootOutputter, List<T> inputs, ParametersExperiment paramsExperiment)
             throws ExperimentExecutionException;
 
     protected Optional<MessageLogger> loggerForMonitor(ParametersExperiment paramsExperiment) {

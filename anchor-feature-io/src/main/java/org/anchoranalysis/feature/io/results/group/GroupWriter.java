@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -27,16 +27,16 @@ package org.anchoranalysis.feature.io.results.group;
 
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import org.anchoranalysis.feature.calculate.results.ResultsVector;
 import org.anchoranalysis.feature.input.FeatureInputResults;
 import org.anchoranalysis.feature.io.csv.FeatureCSVMetadata;
 import org.anchoranalysis.feature.io.csv.FeatureCSVWriter;
 import org.anchoranalysis.feature.io.csv.RowLabels;
 import org.anchoranalysis.feature.io.results.ResultsWriterMetadata;
 import org.anchoranalysis.feature.list.NamedFeatureStore;
-import org.anchoranalysis.io.error.AnchorIOException;
-import org.anchoranalysis.io.output.bound.BoundIOContext;
-import org.anchoranalysis.io.output.bound.CacheSubdirectoryContext;
+import org.anchoranalysis.feature.results.ResultsVector;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import org.anchoranalysis.io.output.outputter.InputOutputContext;
+import org.anchoranalysis.io.output.outputter.InputOutputContextSubdirectoryCache;
 
 /**
  * Writes outputs pertaining to groups to the filesystem.
@@ -80,14 +80,14 @@ public class GroupWriter {
      * @param includeGroups whether to output "groups"
      * @param contextAggregated input-output context for the aggregage outputs
      * @param contextGroups input-output context for the group outputs
-     * @throws AnchorIOException if any input-output errors occur
+     * @throws OutputWriteFailedException if any Writing fails
      */
     public void writeGroupResults(
             Optional<NamedFeatureStore<FeatureInputResults>> featuresAggregate,
             boolean includeGroups,
-            BoundIOContext contextAggregated,
-            CacheSubdirectoryContext contextGroups)
-            throws AnchorIOException {
+            InputOutputContext contextAggregated,
+            InputOutputContextSubdirectoryCache contextGroups)
+            throws OutputWriteFailedException {
         if (includeGroups) {
             writeGroupXMLAndIntoCSV(contextGroups);
         }
@@ -97,7 +97,7 @@ public class GroupWriter {
         }
     }
 
-    private void writeGroupXMLAndIntoCSV(CacheSubdirectoryContext contextGroups) {
+    private void writeGroupXMLAndIntoCSV(InputOutputContextSubdirectoryCache contextGroups) {
         outputMetadata
                 .outputNames()
                 .getCsvFeaturesGroup()
@@ -114,9 +114,9 @@ public class GroupWriter {
 
     private void writeAggregated(
             NamedFeatureStore<FeatureInputResults> featuresAggregate,
-            BoundIOContext contextAggregated,
-            CacheSubdirectoryContext contextGroups)
-            throws AnchorIOException {
+            InputOutputContext contextAggregated,
+            InputOutputContextSubdirectoryCache contextGroups)
+            throws OutputWriteFailedException {
 
         if (map.isEmpty()) {
             // NOTHING TO DO, exit early
@@ -132,12 +132,12 @@ public class GroupWriter {
         }
 
         Optional<FeatureCSVWriter> csvWriter =
-                FeatureCSVWriter.create(csvMetadata.get(), contextAggregated.getOutputManager());
+                FeatureCSVWriter.create(csvMetadata.get(), contextAggregated.getOutputter());
 
         try {
             map.iterateResults(
                     (groupName, results) -> {
-                        if (results.size() != 0) {
+                        if (!results.isEmpty()) {
                             new WriteXMLForGroup(featuresAggregate, results)
                                     .maybeWrite(
                                             groupName, outputMetadata, csvWriter, contextGroups);

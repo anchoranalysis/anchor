@@ -29,42 +29,42 @@ package org.anchoranalysis.io.manifest.finder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.io.manifest.ManifestRecorder;
-import org.anchoranalysis.io.manifest.file.FileWrite;
-import org.anchoranalysis.io.manifest.folder.FolderWrite;
-import org.anchoranalysis.io.manifest.match.Match;
+import org.anchoranalysis.io.manifest.Manifest;
+import org.anchoranalysis.io.manifest.directory.MutableDirectory;
+import org.anchoranalysis.io.manifest.file.OutputtedFile;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class FinderUtilities {
 
-    public static List<FileWrite> findListFile(
-            ManifestRecorder manifestRecorder, Match<FileWrite> match) {
+    public static List<OutputtedFile> findListFile(
+            Manifest manifestRecorder, Predicate<OutputtedFile> predicate) throws FindFailedException {
 
-        ArrayList<FileWrite> foundList = new ArrayList<>();
-        manifestRecorder.getRootFolder().findFile(foundList, match, false);
+        ArrayList<OutputtedFile> foundList = new ArrayList<>();
+        manifestRecorder.getRootFolder().findFile(foundList, predicate, false);
         return foundList;
     }
 
-    public static List<FolderWrite> findListFolder(
-            ManifestRecorder manifestRecorder, Match<FolderWrite> match) {
+    public static List<MutableDirectory> findListFolder(
+            Manifest manifestRecorder, Predicate<MutableDirectory> predicate) {
 
-        ArrayList<FolderWrite> foundList = new ArrayList<>();
-        manifestRecorder.getRootFolder().findFolder(foundList, match);
+        ArrayList<MutableDirectory> foundList = new ArrayList<>();
+        manifestRecorder.getRootFolder().findDirectory(foundList, predicate);
         return foundList;
     }
 
-    public static Optional<FileWrite> findSingleItem(
-            ManifestRecorder manifestRecorder, Match<FileWrite> match)
-            throws MultipleFilesException {
+    public static Optional<OutputtedFile> findSingleItem(
+            Manifest manifestRecorder, Predicate<OutputtedFile> predicate)
+            throws FindFailedException {
 
-        List<FileWrite> files = findListFile(manifestRecorder, match);
+        List<OutputtedFile> files = findListFile(manifestRecorder, predicate);
         if (files.isEmpty()) {
             return Optional.empty();
         }
         if (files.size() > 1) {
-            throw new MultipleFilesException(
+            throw new FindFailedException(
                     "More than one matching object was found in the manifest");
         }
 

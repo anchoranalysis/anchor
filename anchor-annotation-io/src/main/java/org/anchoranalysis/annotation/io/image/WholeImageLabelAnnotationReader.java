@@ -33,34 +33,34 @@ import java.nio.file.Path;
 import java.util.Optional;
 import org.anchoranalysis.annotation.image.ImageLabelAnnotation;
 import org.anchoranalysis.annotation.io.AnnotationReader;
-import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.input.InputReadFailedException;
 
 public class WholeImageLabelAnnotationReader implements AnnotationReader<ImageLabelAnnotation> {
 
     @Override
-    public Optional<ImageLabelAnnotation> read(Path path) throws AnchorIOException {
+    public Optional<ImageLabelAnnotation> read(Path path) throws InputReadFailedException {
 
         try (FileReader fileReader = new FileReader(path.toFile())) {
             return Optional.of(readFromFile(fileReader));
         } catch (IOException e) {
-            throw new AnchorIOException("A failure opening the annotation file for reading");
+            throw new InputReadFailedException("A failure opening the annotation file for reading");
         }
     }
 
     private static ImageLabelAnnotation readFromFile(FileReader fileReader)
-            throws AnchorIOException {
+            throws InputReadFailedException {
         try (BufferedReader bufferedReader = new BufferedReader(fileReader)) {
             String label = bufferedReader.readLine();
 
             if (hasAnotherLine(bufferedReader)) {
                 // Something went wrong as we are not at the End Of File
-                throw new AnchorIOException(
+                throw new InputReadFailedException(
                         "We expect the a whole-image label to be in a text file with a single line only");
             }
 
             return new ImageLabelAnnotation(label);
         } catch (IOException e) {
-            throw new AnchorIOException(
+            throw new InputReadFailedException(
                     "A failure occurred reading a line from the annotation file");
         }
     }

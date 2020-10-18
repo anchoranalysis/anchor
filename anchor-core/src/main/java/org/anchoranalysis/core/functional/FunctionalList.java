@@ -1,7 +1,5 @@
 package org.anchoranalysis.core.functional;
 
-import java.util.ArrayList;
-
 /*-
  * #%L
  * anchor-core
@@ -28,12 +26,14 @@ import java.util.ArrayList;
  * #L%
  */
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.function.IntFunction;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -42,6 +42,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.functional.function.CheckedBiFunction;
 import org.anchoranalysis.core.functional.function.CheckedFunction;
+import org.anchoranalysis.core.functional.function.CheckedPredicate;
 
 /** Utilities functions for manipulating or creating {@link java.util.List} in a functional way */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -211,6 +212,22 @@ public class FunctionalList {
     }
 
     /**
+     * Creates a list of elements, where each element corresponds to an index in a range.
+     *
+     * @param <T> elment-type in the list
+     * @param startInclusive minimum-element in range (inclusive)
+     * @param endExclusive maximum-element in range (exclusive)
+     * @param mapFunction function to do the mapping
+     * @return a list with an element for every item in the range
+     */
+    public static <T> List<T> mapRangeToList(
+            int startInclusive, int endExclusive, IntFunction<T> mapFunction) {
+        return IntStream.range(startInclusive, endExclusive)
+                .mapToObj(mapFunction)
+                .collect(Collectors.toList());
+    }
+
+    /**
      * Filters a collection and maps the result to a list
      *
      * <p>This function's purpose is mostly an convenience utility to make source-code easier to
@@ -226,6 +243,23 @@ public class FunctionalList {
     }
     
     /**
+     * Filters a collection and maps the result to a list
+     *
+     * <p>This function's purpose is mostly an convenience utility to make source-code easier to
+     * read, as the paradigm below (although idiomatic) occurs in multiple places.
+     *
+     * @param <T> list item-type
+     * @param <E> exception that may be thrown during evaluating the predicate
+     * @param predicate predicate to first filter the input collection before mapping
+     * @param collection the collection to be filtered
+     * @return a list with only the elements that pass the filter
+     * @throws E if an exception is thrown during evaluating the predicate
+     */
+    public static <T,E extends Exception> List<T> filterToList(Collection<T> collection, Class<? extends Exception> throwableClass, CheckedPredicate<T,E> predicate) throws E {
+        return CheckedStream.filter( collection.stream(), throwableClass, predicate).collect(Collectors.toList());
+    }
+
+    /**
      * Creates a new collection by filtering a list and then mapping to a list of another type.
      *
      * @param <S> type that will be mapped from
@@ -237,11 +271,8 @@ public class FunctionalList {
      * @throws E if an exception is thrown during mapping
      */
     public static <S, T, E extends Exception> List<T> filterAndMapToList(
-            List<S> list,
-            Predicate<S> predicate,
-            CheckedFunction<S, T, E> mapFunction)
-            throws E {
-        
+            List<S> list, Predicate<S> predicate, CheckedFunction<S, T, E> mapFunction) throws E {
+
         List<T> out = new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {
 
@@ -253,9 +284,10 @@ public class FunctionalList {
         }
         return out;
     }
-    
+
     /**
-     * Creates a new collection by filtering a list and then mapping (with an index) to a list of another type.
+     * Creates a new collection by filtering a list and then mapping (with an index) to a list of
+     * another type.
      *
      * @param <S> type that will be mapped from
      * @param <T> type that will be mapped to

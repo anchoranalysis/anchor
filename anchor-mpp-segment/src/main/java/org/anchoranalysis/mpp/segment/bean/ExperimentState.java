@@ -26,13 +26,13 @@
 
 package org.anchoranalysis.mpp.segment.bean;
 
-import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.io.output.outputter.Outputter;
 
 // State that only needs to be initialized once can be shared across many calls to the algoritm
 public interface ExperimentState {
 
-    void outputBeforeAnyTasksAreExecuted(BoundOutputManagerRouteErrors outputManager);
+    void outputBeforeAnyTasksAreExecuted(Outputter outputter);
 
     // We just need any single kernel proposer to write out
-    void outputAfterAllTasksAreExecuted(BoundOutputManagerRouteErrors outputManager);
+    void outputAfterAllTasksAreExecuted(Outputter outputter);
 }

@@ -29,8 +29,8 @@ package org.anchoranalysis.image.bean.object;
 import java.util.List;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.ImageBean;
-import org.anchoranalysis.image.object.MatchedObject;
-import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.core.object.MatchedObject;
+import org.anchoranalysis.image.voxel.object.ObjectCollection;
 
 /**
  * Matches an object with other objects.

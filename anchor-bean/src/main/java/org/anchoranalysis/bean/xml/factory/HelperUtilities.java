@@ -62,7 +62,7 @@ class HelperUtilities {
      * Populates a string-collection from an XML bean from two sources: a "items" attribute an any
      * "item" element
      *
-     * <p>The items attribute can be a comma seperated string.
+     * <p>The items attribute can be a comma separated string.
      *
      * @param collectionToPopulate the collection to populate
      * @param declaration the top-most XML bean declaration
@@ -94,7 +94,7 @@ class HelperUtilities {
      * Populates a string-collection from an XML bean that has a "items" attribute that can be split
      * by commas
      *
-     * <p>e.g. value could be a comma seperated list of strings
+     * <p>e.g. value could be a comma separated list of strings
      *
      * @param collectionToPopulate the collection to populate
      * @param declaration the top-most XML bean declaration

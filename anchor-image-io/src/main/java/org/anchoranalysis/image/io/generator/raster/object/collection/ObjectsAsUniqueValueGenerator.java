@@ -26,13 +26,13 @@
 
 package org.anchoranalysis.image.io.generator.raster.object.collection;
 
-import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.channel.factory.ChannelFactoryByte;
-import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.core.channel.Channel;
+import org.anchoranalysis.image.core.channel.factory.ChannelFactoryByte;
+import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.generator.raster.ChannelGenerator;
-import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.stack.Stack;
+import org.anchoranalysis.image.voxel.object.ObjectCollection;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 /**
@@ -51,28 +51,24 @@ public class ObjectsAsUniqueValueGenerator extends ObjectsGenerator {
         super(dimensions);
     }
 
-    public ObjectsAsUniqueValueGenerator(Dimensions dimensions, ObjectCollection objects) {
-        super(dimensions, objects);
-    }
-
     @Override
-    public Stack generate() throws OutputWriteFailedException {
+    public Stack transform(ObjectCollection element) throws OutputWriteFailedException {
 
         Channel out = factory.createEmptyInitialised(dimensions());
 
-        if (getObjects().size() > 254) {
+        if (element.size() > 254) {
             throw new OutputWriteFailedException(
                     String.format(
                             "Collection has %d objects. A max of 254 is allowed",
-                            getObjects().size()));
+                            element.size()));
         }
 
-        int val = 1;
+        int value = 1;
 
-        for (ObjectMask object : getObjects()) {
-            out.assignValue(val++).toObject(object);
+        for (ObjectMask object : element) {
+            out.assignValue(value++).toObject(object);
         }
 
-        return new ChannelGenerator(out, "maskCollection").generate();
+        return new ChannelGenerator("maskCollection").transform(out);
     }
 }

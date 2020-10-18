@@ -27,7 +27,7 @@
 package org.anchoranalysis.mpp.proposer;
 
 import java.util.Optional;
-import org.anchoranalysis.core.geometry.Point3d;
+import org.anchoranalysis.spatial.point.Point3d;
 
 // Proposes a position
 public interface OptionalPointProposer {

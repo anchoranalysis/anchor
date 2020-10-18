@@ -28,8 +28,8 @@ package org.anchoranalysis.image.feature.bean.object.pair;
 
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.cache.SessionInput;
 import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 

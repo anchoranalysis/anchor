@@ -39,13 +39,13 @@ import org.anchoranalysis.core.name.store.StoreSupplier;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporterMultiple;
 import org.anchoranalysis.core.progress.ProgressReporterOneOfMany;
-import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.extent.Dimensions;
-import org.anchoranalysis.image.extent.IncorrectImageSizeException;
-import org.anchoranalysis.image.io.RasterIOException;
-import org.anchoranalysis.image.stack.NamedStacks;
-import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.image.stack.TimeSequence;
+import org.anchoranalysis.image.core.channel.Channel;
+import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.image.core.dimensions.IncorrectImageSizeException;
+import org.anchoranalysis.image.core.stack.NamedStacks;
+import org.anchoranalysis.image.core.stack.Stack;
+import org.anchoranalysis.image.core.stack.TimeSequence;
+import org.anchoranalysis.image.io.ImageIOException;
 
 public class NamedChannelsForSeriesConcatenate implements NamedChannelsForSeries {
 
@@ -116,7 +116,7 @@ public class NamedChannelsForSeriesConcatenate implements NamedChannelsForSeries
         return set;
     }
 
-    public int sizeT(ProgressReporter progressReporter) throws RasterIOException {
+    public int sizeT(ProgressReporter progressReporter) throws ImageIOException {
 
         int series = 0;
         boolean first = true;
@@ -142,7 +142,7 @@ public class NamedChannelsForSeriesConcatenate implements NamedChannelsForSeries
         return false;
     }
 
-    public Dimensions dimensions() throws RasterIOException {
+    public Dimensions dimensions() throws ImageIOException {
         // Assumes dimensions are the same for every item in the list
         return list.get(0).dimensions();
     }

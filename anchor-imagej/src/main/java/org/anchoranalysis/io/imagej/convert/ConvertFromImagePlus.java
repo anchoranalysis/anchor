@@ -28,18 +28,19 @@ package org.anchoranalysis.io.imagej.convert;
 import ij.ImagePlus;
 import ij.ImageStack;
 import ij.process.ImageProcessor;
+import java.util.Optional;
 import java.util.function.Function;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.extent.Resolution;
+import org.anchoranalysis.image.core.channel.Channel;
+import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelTypeException;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactoryTypeBound;
+import org.anchoranalysis.spatial.extent.Extent;
 
 /**
  * Converts an {@link ImagePlus} into a channel or voxels.
@@ -59,7 +60,7 @@ public class ConvertFromImagePlus {
      * @param resolution image-resolution
      * @return a newly created channel containing a newly created buffer (copied from image-plus)
      */
-    public static Channel toChannel(ImagePlus imagePlus, Resolution resolution) {
+    public static Channel toChannel(ImagePlus imagePlus, Optional<Resolution> resolution) {
         return new Channel(toVoxels(imagePlus).any(), resolution);
     }
 
@@ -72,10 +73,11 @@ public class ConvertFromImagePlus {
     public static VoxelsWrapper toVoxels(ImagePlus image) {
 
         if (image.getType() == ImagePlus.GRAY8) {
-            return deriveCopiedVoxels(image, VoxelsFactory.getByte(), ConvertToVoxelBuffer::asByte);
+            return deriveCopiedVoxels(
+                    image, VoxelsFactory.getUnsignedByte(), ConvertToVoxelBuffer::asByte);
         } else if (image.getType() == ImagePlus.GRAY16) {
             return deriveCopiedVoxels(
-                    image, VoxelsFactory.getShort(), ConvertToVoxelBuffer::asShort);
+                    image, VoxelsFactory.getUnsignedShort(), ConvertToVoxelBuffer::asShort);
         } else {
             throw new IncorrectVoxelTypeException("Only unsigned-8 and unsigned 16bit supported");
         }

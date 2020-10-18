@@ -37,16 +37,16 @@ import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporterMultiple;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
 import org.anchoranalysis.core.progress.ProgressReporterOneOfMany;
-import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.extent.Dimensions;
-import org.anchoranalysis.image.extent.IncorrectImageSizeException;
-import org.anchoranalysis.image.io.RasterIOException;
+import org.anchoranalysis.image.core.channel.Channel;
+import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.image.core.dimensions.IncorrectImageSizeException;
+import org.anchoranalysis.image.core.stack.NamedStacks;
+import org.anchoranalysis.image.core.stack.Stack;
+import org.anchoranalysis.image.core.stack.TimeSequence;
+import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.channel.map.ChannelEntry;
 import org.anchoranalysis.image.io.channel.NamedEntries;
-import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
-import org.anchoranalysis.image.stack.NamedStacks;
-import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.image.stack.TimeSequence;
+import org.anchoranalysis.image.io.stack.OpenedRaster;
 
 @RequiredArgsConstructor
 public class NamedChannelsForSeriesMap implements NamedChannelsForSeries {
@@ -61,11 +61,11 @@ public class NamedChannelsForSeriesMap implements NamedChannelsForSeries {
     private TimeSequence ts = null;
 
     @Override
-    public Dimensions dimensions() throws RasterIOException {
+    public Dimensions dimensions() throws ImageIOException {
         return openedRaster.dimensionsForSeries(seriesNum);
     }
 
-    // The outputManager is in case we want to do any debugging
+    // The outputter is in case we want to do any debugging
     @Override
     public Channel getChannel(String channelName, int timeIndex, ProgressReporter progressReporter)
             throws GetOperationFailedException {
@@ -94,7 +94,7 @@ public class NamedChannelsForSeriesMap implements NamedChannelsForSeries {
         }
     }
 
-    // The outputManager is in case we want to do any debugging
+    // The outputter is in case we want to do any debugging
     @Override
     public Optional<Channel> getChannelOptional(
             String channelName, int t, ProgressReporter progressReporter)
@@ -119,11 +119,11 @@ public class NamedChannelsForSeriesMap implements NamedChannelsForSeries {
     }
 
     @Override
-    public int sizeT(ProgressReporter progressReporter) throws RasterIOException {
+    public int sizeT(ProgressReporter progressReporter) throws ImageIOException {
         try {
             return createTimeSeries(progressReporter).size();
         } catch (OperationFailedException e) {
-            throw new RasterIOException(e);
+            throw new ImageIOException(e);
         }
     }
 
@@ -182,7 +182,7 @@ public class NamedChannelsForSeriesMap implements NamedChannelsForSeries {
         if (ts == null) {
             try {
                 ts = openedRaster.open(seriesNum, progressReporter);
-            } catch (RasterIOException e) {
+            } catch (ImageIOException e) {
                 throw new OperationFailedException(e);
             }
         }

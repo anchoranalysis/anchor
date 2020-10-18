@@ -27,13 +27,13 @@
 package org.anchoranalysis.mpp.bean.proposer.radii;
 
 import java.util.Optional;
-import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
-import org.anchoranalysis.image.extent.Dimensions;
-import org.anchoranalysis.image.orientation.Orientation;
+import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.image.core.orientation.Orientation;
 import org.anchoranalysis.mpp.bean.MPPBean;
 import org.anchoranalysis.mpp.mark.CompatibleWithMark;
 import org.anchoranalysis.mpp.proposer.ProposalAbnormalFailureException;
+import org.anchoranalysis.spatial.point.Point3d;
 
 public abstract class RadiiProposer extends MPPBean<RadiiProposer> implements CompatibleWithMark {
 

@@ -25,6 +25,7 @@
  */
 package org.anchoranalysis.io.imagej.convert;
 
+import com.google.common.base.Preconditions;
 import ij.ImageStack;
 import ij.process.ColorProcessor;
 import ij.process.ImageProcessor;
@@ -33,12 +34,13 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
-import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.image.stack.rgb.RGBStack;
+import org.anchoranalysis.image.core.stack.Stack;
+import org.anchoranalysis.image.core.stack.rgb.RGBStack;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
+import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
+import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
+import org.anchoranalysis.spatial.extent.Extent;
 
 /**
  * Routines for creating a {@link ImageStack}.
@@ -71,7 +73,7 @@ class ImageStackFactory {
      * @return a newly created {@link ImageStack}
      */
     public static ImageStack createRGB(RGBStack stack) {
-
+        Preconditions.checkArgument(stack.allChannelsHaveType(UnsignedByteVoxelType.INSTANCE));
         Extent extent = stack.channelAt(0).extent();
 
         int channelIndex = 0;

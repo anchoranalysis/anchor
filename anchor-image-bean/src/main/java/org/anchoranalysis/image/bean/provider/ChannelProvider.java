@@ -28,8 +28,8 @@ package org.anchoranalysis.image.bean.provider;
 
 import org.anchoranalysis.bean.annotation.GroupingRoot;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.stack.Stack;
+import org.anchoranalysis.image.core.channel.Channel;
+import org.anchoranalysis.image.core.stack.Stack;
 
 @GroupingRoot
 public abstract class ChannelProvider extends BeanProviderAsStackBase<ChannelProvider, Channel> {

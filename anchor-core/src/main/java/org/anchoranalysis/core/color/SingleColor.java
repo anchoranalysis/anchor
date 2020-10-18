@@ -48,7 +48,7 @@ public class SingleColor implements ColorIndex {
     }
 
     @Override
-    public int numUniqueColors() {
+    public int numberUniqueColors() {
         return 1;
     }
 

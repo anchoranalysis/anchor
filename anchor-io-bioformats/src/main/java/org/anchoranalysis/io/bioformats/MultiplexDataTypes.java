@@ -29,12 +29,12 @@ package org.anchoranalysis.io.bioformats;
 import loci.formats.FormatTools;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.image.channel.factory.ChannelFactoryByte;
-import org.anchoranalysis.image.channel.factory.ChannelFactoryFloat;
-import org.anchoranalysis.image.channel.factory.ChannelFactoryInt;
-import org.anchoranalysis.image.channel.factory.ChannelFactoryShort;
-import org.anchoranalysis.image.channel.factory.ChannelFactorySingleType;
-import org.anchoranalysis.image.io.RasterIOException;
+import org.anchoranalysis.image.core.channel.factory.ChannelFactoryByte;
+import org.anchoranalysis.image.core.channel.factory.ChannelFactoryFloat;
+import org.anchoranalysis.image.core.channel.factory.ChannelFactoryInt;
+import org.anchoranalysis.image.core.channel.factory.ChannelFactoryShort;
+import org.anchoranalysis.image.core.channel.factory.ChannelFactorySingleType;
+import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.voxel.datatype.FloatVoxelType;
 import org.anchoranalysis.image.voxel.datatype.SignedShortVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
@@ -45,18 +45,20 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class MultiplexDataTypes {
 
-    public static VoxelDataType multiplexFormat(int pixelType) throws RasterIOException {
+    public static VoxelDataType multiplexFormat(int pixelType) throws ImageIOException {
         switch (pixelType) {
             case FormatTools.UINT8:
                 return UnsignedByteVoxelType.INSTANCE;
             case FormatTools.UINT16:
                 return UnsignedShortVoxelType.INSTANCE;
+            case FormatTools.UINT32:
+                return UnsignedIntVoxelType.INSTANCE;
             case FormatTools.INT16:
-                return SignedShortVoxelType.instance;
+                return SignedShortVoxelType.INSTANCE;
             case FormatTools.FLOAT:
                 return FloatVoxelType.INSTANCE;
             default:
-                throw new RasterIOException(
+                throw new ImageIOException(
                         String.format(
                                 "File has unknown type %s",
                                 FormatTools.getPixelTypeString(pixelType)));
@@ -68,7 +70,7 @@ class MultiplexDataTypes {
             return new ChannelFactoryByte();
         } else if (voxelDataType.equals(UnsignedShortVoxelType.INSTANCE)) {
             return new ChannelFactoryShort();
-        } else if (voxelDataType.equals(SignedShortVoxelType.instance)) {
+        } else if (voxelDataType.equals(SignedShortVoxelType.INSTANCE)) {
             return new ChannelFactoryShort();
         } else if (voxelDataType.equals(FloatVoxelType.INSTANCE)) {
             return new ChannelFactoryFloat();

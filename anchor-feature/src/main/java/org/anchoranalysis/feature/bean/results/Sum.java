@@ -29,7 +29,12 @@ package org.anchoranalysis.feature.bean.results;
 import cern.colt.list.DoubleArrayList;
 import cern.jet.stat.Descriptive;
 
-public class Sum extends FeatureResultsFromIndex {
+/**
+ * The sum of the results from a particular feature.
+ *
+ * @author Owen Feehan
+ */
+public class Sum extends StatisticForFeature {
 
     @Override
     protected double statisticFromFeatureValue(DoubleArrayList featureVals) {

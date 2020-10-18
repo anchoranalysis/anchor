@@ -30,8 +30,8 @@ import java.nio.file.Path;
 import org.anchoranalysis.annotation.io.image.findable.Findable;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.extent.Dimensions;
-import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.image.voxel.object.ObjectCollection;
 
 public abstract class Comparer extends AnchorBean<Comparer> {
 

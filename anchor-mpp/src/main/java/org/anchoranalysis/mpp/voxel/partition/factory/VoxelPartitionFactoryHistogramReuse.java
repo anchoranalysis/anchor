@@ -28,7 +28,7 @@ package org.anchoranalysis.mpp.voxel.partition.factory;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.anchoranalysis.image.histogram.Histogram;
+import org.anchoranalysis.math.histogram.Histogram;
 import org.anchoranalysis.mpp.voxel.partition.VoxelPartition;
 import org.anchoranalysis.mpp.voxel.partition.VoxelPartitionHistogram;
 

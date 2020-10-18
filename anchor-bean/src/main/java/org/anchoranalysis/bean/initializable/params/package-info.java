@@ -1,3 +1,5 @@
+/** Some kinds of parameters used when initializing beans. */
+package org.anchoranalysis.bean.initializable.params;
 /*-
  * #%L
  * anchor-bean
@@ -23,4 +25,3 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.bean.initializable.params;

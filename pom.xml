@@ -23,11 +23,13 @@
         <module>anchor-core</module>
         <module>anchor-bean</module>
         <module>anchor-beans-shared</module>
+		<module>anchor-spatial</module>
         <module>anchor-annotation</module>
-        <module>anchor-image</module>
+	   <module>anchor-image-voxel</module>
+        <module>anchor-image-core</module>
         <module>anchor-math</module>
         <module>anchor-overlay</module>
-        <module>anchor-io</module>
+        <module>anchor-io-input</module>
 	<module>anchor-io-manifest</module>
 	<module>anchor-io-output</module>
 	<module>anchor-io-generator</module>
@@ -52,6 +54,7 @@
 	   
 	   <!-- Test modules -->
 		<module>anchor-test</module>
+		<module>anchor-test-io-output</module>
 		<module>anchor-test-feature</module>
 		<module>anchor-test-image</module>
     </modules>

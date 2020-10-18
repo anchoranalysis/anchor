@@ -28,11 +28,12 @@ package org.anchoranalysis.mpp.bean.mark.bounds;
 
 import lombok.Getter;
 import lombok.Setter;
+import java.util.Optional;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
-import org.anchoranalysis.image.extent.Resolution;
-import org.anchoranalysis.image.orientation.Orientation;
-import org.anchoranalysis.image.orientation.Orientation3DEulerAngles;
+import org.anchoranalysis.image.core.dimensions.Resolution;
+import org.anchoranalysis.image.core.orientation.Orientation;
+import org.anchoranalysis.image.core.orientation.Orientation3DEulerAngles;
 import org.anchoranalysis.mpp.bean.bound.Bound;
 import org.anchoranalysis.mpp.bean.bound.BoundUnitless;
 
@@ -55,7 +56,7 @@ public class RotationBounds3D extends RotationBounds {
 
     @Override
     public Orientation randomOrientation(
-            RandomNumberGenerator randomNumberGenerator, Resolution resolution) {
+            RandomNumberGenerator randomNumberGenerator, Optional<Resolution> resolution) {
         return new Orientation3DEulerAngles(
                 randomizeRotation(rotationX, randomNumberGenerator, resolution),
                 randomizeRotation(rotationY, randomNumberGenerator, resolution),
@@ -70,7 +71,7 @@ public class RotationBounds3D extends RotationBounds {
     }
 
     private static double randomizeRotation(
-            Bound bound, RandomNumberGenerator randomNumberGenerator, Resolution resolution) {
+            Bound bound, RandomNumberGenerator randomNumberGenerator, Optional<Resolution> resolution) {
         return bound.resolve(resolution, true).randOpen(randomNumberGenerator);
     }
 }

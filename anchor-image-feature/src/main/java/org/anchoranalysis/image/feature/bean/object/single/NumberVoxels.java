@@ -29,8 +29,8 @@ package org.anchoranalysis.image.feature.bean.object.single;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.cache.SessionInput;
 import org.anchoranalysis.image.feature.object.calculation.CalculateNumVoxels;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 

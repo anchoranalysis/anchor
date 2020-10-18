@@ -28,25 +28,21 @@ package org.anchoranalysis.io.manifest.finder;
 
 import java.util.Optional;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
-import org.anchoranalysis.io.manifest.ManifestRecorder;
-import org.anchoranalysis.io.manifest.file.FileWrite;
+import org.anchoranalysis.io.manifest.Manifest;
+import org.anchoranalysis.io.manifest.file.OutputtedFile;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 public abstract class FinderSingleFile implements Finder {
 
-    private Optional<FileWrite> foundFile = Optional.empty();
-
-    private ErrorReporter errorReporter;
-
-    // A simple method to override in each finder that is based upon finding a single file
-    protected abstract Optional<FileWrite> findFile(ManifestRecorder manifestRecorder)
-            throws MultipleFilesException;
-
-    public FinderSingleFile(ErrorReporter errorReporter) {
-        this.errorReporter = errorReporter;
-    }
+    // START REQUIRED ARGUMENTS
+    private final ErrorReporter errorReporter;
+    // END REQUIRED ARGUMENTS
+    
+    private Optional<OutputtedFile> foundFile = Optional.empty();
 
     @Override
-    public final boolean doFind(ManifestRecorder manifestRecorder) {
+    public final boolean doFind(Manifest manifestRecorder) {
 
         if (manifestRecorder == null) {
             return false;
@@ -55,7 +51,7 @@ public abstract class FinderSingleFile implements Finder {
         try {
             foundFile = findFile(manifestRecorder);
             return exists();
-        } catch (MultipleFilesException e) {
+        } catch (FindFailedException e) {
             if (errorReporter != null) {
                 errorReporter.recordError(FinderSingleFile.class, e);
             }
@@ -68,7 +64,11 @@ public abstract class FinderSingleFile implements Finder {
         return foundFile.isPresent();
     }
 
-    protected FileWrite getFoundFile() {
+    // A simple method to override in each finder that is based upon finding a single file
+    protected abstract Optional<OutputtedFile> findFile(Manifest manifestRecorder)
+            throws FindFailedException;
+    
+    protected OutputtedFile getFoundFile() {
         return foundFile.get();
     }
 }

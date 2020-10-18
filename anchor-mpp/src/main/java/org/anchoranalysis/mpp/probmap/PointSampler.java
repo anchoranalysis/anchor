@@ -27,9 +27,9 @@
 package org.anchoranalysis.mpp.probmap;
 
 import java.util.Optional;
-import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
-import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.spatial.point.Point3d;
 
 public interface PointSampler {
 

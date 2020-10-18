@@ -27,56 +27,62 @@
 package org.anchoranalysis.image.io.objects.deserialize;
 
 import java.nio.file.Path;
+import java.util.Optional;
 import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.index.GetOperationFailedException;
-import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
-import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.object.factory.ObjectCollectionFactory;
-import org.anchoranalysis.io.bean.deserializer.Deserializer;
-import org.anchoranalysis.io.deserializer.DeserializationFailedException;
-import org.anchoranalysis.io.manifest.deserializer.folder.DeserializeFromFolder;
-import org.anchoranalysis.io.manifest.deserializer.folder.DeserializeFromFolderSimple;
-import org.anchoranalysis.io.manifest.deserializer.folder.LoadContainer;
+import org.anchoranalysis.core.index.GetterFromIndex;
+import org.anchoranalysis.core.index.container.BoundedIndexContainer;
+import org.anchoranalysis.core.index.container.BoundsFromRange;
+import org.anchoranalysis.core.serialize.DeserializationFailedException;
+import org.anchoranalysis.core.serialize.Deserializer;
+import org.anchoranalysis.image.io.bean.stack.StackReader;
+import org.anchoranalysis.image.voxel.object.ObjectCollection;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
+import org.anchoranalysis.image.voxel.object.factory.ObjectCollectionFactory;
+import org.anchoranalysis.io.manifest.directory.sequenced.SequencedDirectory;
+import org.anchoranalysis.io.manifest.directory.sequenced.SequencedDirectoryDeserializer;
 import org.anchoranalysis.io.manifest.sequencetype.SequenceTypeException;
-import org.anchoranalysis.io.manifest.serialized.SerializedObjectSetFolderSource;
 
 class ReadObjectsFromTIFFDirectory implements Deserializer<ObjectCollection> {
 
     @Override
     public ObjectCollection deserialize(Path folderPath) throws DeserializationFailedException {
-        return readWithRaster(
-                folderPath, RegisterBeanFactories.getDefaultInstances().get(RasterReader.class));
+        return readObjects(
+                folderPath, RegisterBeanFactories.getDefaultInstances().get(StackReader.class));
     }
 
-    private ObjectCollection readWithRaster(Path folderPath, RasterReader rasterReader)
+    private ObjectCollection readObjects(Path folderPath, StackReader stackReader)
             throws DeserializationFailedException {
 
         try {
-            DeserializeFromFolder<ObjectMask> deserializeFolder =
-                    new DeserializeFromFolderSimple<>(
-                            new ObjectDualDeserializer(rasterReader),
-                            new SerializedObjectSetFolderSource(folderPath, "*.ser"));
-
-            return createFromLoadContainer(deserializeFolder.create());
+            BoundedIndexContainer<ObjectMask> container = deserializeFromDirectory(
+                    new SerializedObjectsFromDirectory(folderPath, Optional.of("*.ser")),
+                    new ObjectDualDeserializer(stackReader)
+            ); 
+            return createFromContainer(container);
 
         } catch (SequenceTypeException | CreateException e) {
             throw new DeserializationFailedException(e);
         }
     }
 
-    private static ObjectCollection createFromLoadContainer(LoadContainer<ObjectMask> lc)
+    private static ObjectCollection createFromContainer(BoundedIndexContainer<ObjectMask> container)
             throws CreateException {
         try {
             return ObjectCollectionFactory.mapFromRange(
-                    lc.getContainer().getMinimumIndex(),
-                    lc.getContainer().getMaximumIndex() + 1,
+                    container.getMinimumIndex(),
+                    container.getMaximumIndex() + 1,
                     GetOperationFailedException.class,
-                    index -> lc.getContainer().get(index));
+                    container::get);
 
         } catch (GetOperationFailedException e) {
             throw new CreateException(e);
         }
+    }
+    
+    private static <T> BoundedIndexContainer<T> deserializeFromDirectory(SequencedDirectory directory, Deserializer<T> deserializer) {
+        GetterFromIndex<T> container = new SequencedDirectoryDeserializer<>(directory, deserializer);
+        return new BoundsFromRange<>(container, directory.getAssociatedElementRange());
     }
 }

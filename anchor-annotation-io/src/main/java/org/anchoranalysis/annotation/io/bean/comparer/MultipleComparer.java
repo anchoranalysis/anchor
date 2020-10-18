@@ -37,7 +37,6 @@ import lombok.Setter;
 import org.anchoranalysis.annotation.io.assignment.AssignmentObjectFactory;
 import org.anchoranalysis.annotation.io.assignment.AssignmentOverlapFromPairs;
 import org.anchoranalysis.annotation.io.assignment.generator.AssignmentGenerator;
-import org.anchoranalysis.annotation.io.assignment.generator.AssignmentGeneratorFactory;
 import org.anchoranalysis.annotation.io.assignment.generator.ColorPool;
 import org.anchoranalysis.annotation.io.image.findable.Findable;
 import org.anchoranalysis.annotation.mark.AnnotationWithMarks;
@@ -45,6 +44,8 @@ import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.NonEmpty;
+import org.anchoranalysis.bean.shared.color.scheme.ColorScheme;
+import org.anchoranalysis.bean.shared.color.scheme.VeryBright;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.log.Logger;
@@ -52,14 +53,12 @@ import org.anchoranalysis.core.name.value.NameValue;
 import org.anchoranalysis.core.name.value.SimpleNameValue;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
+import org.anchoranalysis.image.core.stack.DisplayStack;
+import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
 import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
-import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.stack.DisplayStack;
-import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.io.bean.color.list.ColorListFactory;
-import org.anchoranalysis.io.bean.color.list.VeryBright;
+import org.anchoranalysis.image.voxel.object.ObjectCollection;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 /**
@@ -84,7 +83,7 @@ public class MultipleComparer extends AnchorBean<MultipleComparer> {
             AnnotationWithMarks annotation,
             DisplayStack background,
             Path annotationPath,
-            ColorListFactory colorSetGenerator,
+            ColorScheme colorScheme,
             Path modelDirectory,
             Logger logger,
             boolean debugMode)
@@ -117,7 +116,7 @@ public class MultipleComparer extends AnchorBean<MultipleComparer> {
                                 foundObjects.get(),
                                 background,
                                 ni.getName(),
-                                colorSetGenerator));
+                                colorScheme));
             }
         }
 
@@ -129,7 +128,7 @@ public class MultipleComparer extends AnchorBean<MultipleComparer> {
             ObjectCollection compareObjects,
             DisplayStack background,
             String rightName,
-            ColorListFactory colorSetGenerator)
+            ColorScheme colorScheme)
             throws CreateException {
         // Don't know how it's possible for an object with 0 pixels to end up here, but it's somehow
         // happening, so we prevent it from interfereing
@@ -147,25 +146,24 @@ public class MultipleComparer extends AnchorBean<MultipleComparer> {
                                     maxCost,
                                     background.dimensions());
 
-            ColorPool colorPool =
-                    new ColorPool(
-                            assignment.numberPaired(), colorSetGenerator, new VeryBright(), true);
-
             AssignmentGenerator generator =
-                    AssignmentGeneratorFactory.createAssignmentGenerator(
+                    new AssignmentGenerator(
                             background,
-                            assignment,
-                            colorPool,
+                            numberPaired -> createColorPool(numberPaired, colorScheme),
                             useMIP,
                             Tuple.of("annotator", rightName),
-                            3,
-                            true);
-
-            return new SimpleNameValue<>(rightName, generator.generate());
+                            true,
+                            3);
+            return new SimpleNameValue<>(rightName, generator.transform(assignment));
 
         } catch (FeatureCalculationException | OutputWriteFailedException e1) {
             throw new CreateException(e1);
         }
+    }
+    
+    private ColorPool createColorPool(int numberPaired, ColorScheme colorScheme) {
+        return new ColorPool(
+                numberPaired, colorScheme, new VeryBright(), true);
     }
 
     private static void removeObjectsWithNoPixels(ObjectCollection objects) {

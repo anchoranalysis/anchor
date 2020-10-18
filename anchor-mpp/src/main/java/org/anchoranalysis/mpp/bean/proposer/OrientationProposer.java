@@ -28,8 +28,8 @@ package org.anchoranalysis.mpp.bean.proposer;
 
 import java.util.Optional;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
-import org.anchoranalysis.image.extent.Dimensions;
-import org.anchoranalysis.image.orientation.Orientation;
+import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.image.core.orientation.Orientation;
 import org.anchoranalysis.mpp.bean.MPPBean;
 import org.anchoranalysis.mpp.mark.CompatibleWithMark;
 import org.anchoranalysis.mpp.mark.Mark;

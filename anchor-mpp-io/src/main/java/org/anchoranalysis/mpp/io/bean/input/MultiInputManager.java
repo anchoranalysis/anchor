@@ -29,7 +29,6 @@ package org.anchoranalysis.mpp.io.bean.input;
 import static org.anchoranalysis.mpp.io.bean.input.AppendHelper.*;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -38,17 +37,18 @@ import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.bean.annotation.OptionalBean;
-import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
+import org.anchoranalysis.core.functional.FunctionalList;
+import org.anchoranalysis.image.io.bean.stack.StackReader;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
-import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
-import org.anchoranalysis.io.bean.input.InputManager;
-import org.anchoranalysis.io.bean.input.InputManagerParams;
-import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.input.InputReadFailedException;
+import org.anchoranalysis.io.input.bean.InputManager;
+import org.anchoranalysis.io.input.bean.InputManagerParams;
+import org.anchoranalysis.io.input.bean.path.DerivePath;
 import org.anchoranalysis.mpp.io.input.MultiInput;
 
 // An input stack
 @NoArgsConstructor
-public class MultiInputManager extends MultiInputManagerBase {
+public class MultiInputManager extends InputManager<MultiInput> {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private String inputName = MultiInput.DEFAULT_IMAGE_INPUT_NAME;
@@ -56,38 +56,38 @@ public class MultiInputManager extends MultiInputManagerBase {
     @BeanField @Getter @Setter private InputManager<? extends ProvidesStackInput> input;
 
     @BeanField @DefaultInstance @Getter @Setter
-    private RasterReader rasterReader; // For reading appended files
+    private StackReader stackReader; // For reading appended files
 
     @BeanField @OptionalBean @Getter @Setter
-    private List<NamedBean<FilePathGenerator>> appendStack = new ArrayList<>();
+    private List<NamedBean<DerivePath>> appendStack = new ArrayList<>();
 
     @BeanField @OptionalBean @Getter @Setter
-    private List<NamedBean<FilePathGenerator>> listAppendMarks = new ArrayList<>();
+    private List<NamedBean<DerivePath>> listAppendMarks = new ArrayList<>();
 
     @BeanField @OptionalBean @Getter @Setter
-    private List<NamedBean<FilePathGenerator>> listAppendMarksFromAnnotation =
+    private List<NamedBean<DerivePath>> listAppendMarksFromAnnotation =
             new ArrayList<>(); // Uses both accepted and rejected
 
     @BeanField @OptionalBean @Getter @Setter
-    private List<NamedBean<FilePathGenerator>> listAppendMarksFromAnnotationAcceptedOnly =
+    private List<NamedBean<DerivePath>> listAppendMarksFromAnnotationAcceptedOnly =
             new ArrayList<>(); // Uses both accepted only
 
     @BeanField @OptionalBean @Getter @Setter
-    private List<NamedBean<FilePathGenerator>> listAppendMarksFromAnnotationRejectedOnly =
+    private List<NamedBean<DerivePath>> listAppendMarksFromAnnotationRejectedOnly =
             new ArrayList<>(); // Uses both accepted rejectedonly
 
     /** Appends object-collections to the multi-input */
     @BeanField @OptionalBean @Getter @Setter
-    private List<NamedBean<FilePathGenerator>> appendObjects = new ArrayList<>();
+    private List<NamedBean<DerivePath>> appendObjects = new ArrayList<>();
 
     @BeanField @OptionalBean @Getter @Setter
-    private List<NamedBean<FilePathGenerator>> listAppendKeyValueParams = new ArrayList<>();
+    private List<NamedBean<DerivePath>> listAppendKeyValueParams = new ArrayList<>();
 
     @BeanField @OptionalBean @Getter @Setter
-    private List<NamedBean<FilePathGenerator>> appendHistogram = new ArrayList<>();
+    private List<NamedBean<DerivePath>> appendHistogram = new ArrayList<>();
 
     @BeanField @OptionalBean @Getter @Setter
-    private List<NamedBean<FilePathGenerator>> listAppendFilePath = new ArrayList<>();
+    private List<NamedBean<DerivePath>> listAppendFilePath = new ArrayList<>();
     // END BEAN PROPERTIES
 
     public MultiInputManager(String inputName, InputManager<? extends ProvidesStackInput> input) {
@@ -96,39 +96,31 @@ public class MultiInputManager extends MultiInputManagerBase {
     }
 
     @Override
-    public List<MultiInput> inputObjects(InputManagerParams params) throws AnchorIOException {
-
-        List<MultiInput> outList = new ArrayList<>();
-
-        Iterator<? extends ProvidesStackInput> itr = input.inputObjects(params).iterator();
-
-        while (itr.hasNext()) {
-            ProvidesStackInput mainStack = itr.next();
-
-            MultiInput inputObject = new MultiInput(inputName, mainStack);
-            appendFromLists(inputObject, params.isDebugModeActivated());
-
-            outList.add(inputObject);
-        }
-
-        return outList;
+    public List<MultiInput> inputs(InputManagerParams params) throws InputReadFailedException {
+        return FunctionalList.mapToList(
+                input.inputs(params),
+                mainStack -> {
+                    MultiInput inputToAdd = new MultiInput(inputName, mainStack);
+                    appendFromLists(inputToAdd, params.isDebugModeActivated());
+                    return inputToAdd;
+                });
     }
 
-    private void appendFromLists(MultiInput inputObject, boolean doDebug) {
-        appendStack(appendStack, inputObject, doDebug, rasterReader);
-        appendFromVariousMarksSources(inputObject, doDebug);
-        appendObjects(appendObjects, inputObject, doDebug);
-        appendKeyValueParams(listAppendKeyValueParams, inputObject, doDebug);
-        appendHistogram(appendHistogram, inputObject, doDebug);
-        appendFilePath(listAppendFilePath, inputObject, doDebug);
+    private void appendFromLists(MultiInput input, boolean doDebug) {
+        appendStack(appendStack, input, doDebug, stackReader);
+        appendFromVariousMarksSources(input, doDebug);
+        appendObjects(appendObjects, input, doDebug);
+        appendKeyValueParams(listAppendKeyValueParams, input, doDebug);
+        appendHistogram(appendHistogram, input, doDebug);
+        appendFilePath(listAppendFilePath, input, doDebug);
     }
 
-    private void appendFromVariousMarksSources(MultiInput inputObject, boolean doDebug) {
-        appendMarks(listAppendMarks, inputObject, doDebug);
-        appendMarksFromAnnotation(listAppendMarksFromAnnotation, inputObject, true, true, doDebug);
+    private void appendFromVariousMarksSources(MultiInput input, boolean doDebug) {
+        appendMarks(listAppendMarks, input, doDebug);
+        appendMarksFromAnnotation(listAppendMarksFromAnnotation, input, true, true, doDebug);
         appendMarksFromAnnotation(
-                listAppendMarksFromAnnotationAcceptedOnly, inputObject, true, false, doDebug);
+                listAppendMarksFromAnnotationAcceptedOnly, input, true, false, doDebug);
         appendMarksFromAnnotation(
-                listAppendMarksFromAnnotationRejectedOnly, inputObject, false, true, doDebug);
+                listAppendMarksFromAnnotationRejectedOnly, input, false, true, doDebug);
     }
 }

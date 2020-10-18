@@ -30,7 +30,7 @@ import org.anchoranalysis.bean.annotation.GroupingRoot;
 import org.anchoranalysis.bean.provider.Provider;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.ImageBean;
-import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.voxel.object.ObjectCollection;
 
 @GroupingRoot
 public abstract class ObjectCollectionProvider extends ImageBean<ObjectCollectionProvider>

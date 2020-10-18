@@ -29,18 +29,18 @@ package org.anchoranalysis.test.image.object;
 import static org.junit.Assert.assertTrue;
 
 import lombok.AllArgsConstructor;
-import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.binary.values.BinaryValues;
-import org.anchoranalysis.image.binary.values.BinaryValuesByte;
-import org.anchoranalysis.image.binary.voxel.BinaryVoxelsFactory;
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
-import org.anchoranalysis.image.extent.Dimensions;
-import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.extent.box.BoundingBox;
-import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.voxel.Voxels;
+import org.anchoranalysis.image.voxel.binary.BinaryVoxelsFactory;
+import org.anchoranalysis.image.voxel.binary.values.BinaryValues;
+import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
+import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
+import org.anchoranalysis.spatial.extent.Extent;
+import org.anchoranalysis.spatial.extent.box.BoundingBox;
+import org.anchoranalysis.spatial.point.Point3i;
 
 @AllArgsConstructor
 public class ObjectMaskFixture {
@@ -70,7 +70,8 @@ public class ObjectMaskFixture {
 
         assertTrue(dimensions.contains(box));
 
-        Voxels<UnsignedByteBuffer> voxels = VoxelsFactory.getByte().createInitialized(extent);
+        Voxels<UnsignedByteBuffer> voxels =
+                VoxelsFactory.getUnsignedByte().createInitialized(extent);
         BinaryValues bv = BinaryValues.getDefault();
         BinaryValuesByte bvb = bv.createByte();
 

@@ -27,35 +27,26 @@
 package org.anchoranalysis.mpp.io.marks.generator;
 
 import java.util.Optional;
-import org.anchoranalysis.core.index.SetOperationFailedException;
-import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.image.core.object.properties.ObjectCollectionWithProperties;
+import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.generator.raster.RasterGenerator;
 import org.anchoranalysis.image.io.generator.raster.object.collection.ObjectsAsUniqueValueGenerator;
-import org.anchoranalysis.image.object.properties.ObjectCollectionWithProperties;
-import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.io.generator.Generator;
-import org.anchoranalysis.io.generator.IterableGenerator;
+import org.anchoranalysis.image.io.stack.StackWriteOptions;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMembershipWithFlags;
 import org.anchoranalysis.mpp.mark.MarkCollection;
 
-public class MarksAsUniqueValueGenerator extends RasterGenerator
-        implements IterableGenerator<MarkCollection> {
+public class MarksAsUniqueValueGenerator extends RasterGenerator<MarkCollection> {
 
     private ObjectsAsUniqueValueGenerator delegate;
-    private MarkCollection marks;
-    private RegionMembershipWithFlags rm;
-
-    public MarksAsUniqueValueGenerator(Dimensions dimensions, RegionMembershipWithFlags rm) {
-        delegate = new ObjectsAsUniqueValueGenerator(dimensions);
-        this.rm = rm;
-    }
+    private RegionMembershipWithFlags regionMembership;
 
     public MarksAsUniqueValueGenerator(
-            Dimensions dimensions, RegionMembershipWithFlags rm, MarkCollection marks) {
-        this(dimensions, rm);
-        this.marks = marks;
+            Dimensions dimensions, RegionMembershipWithFlags regionMembership) {
+        delegate = new ObjectsAsUniqueValueGenerator(dimensions);
+        this.regionMembership = regionMembership;
     }
 
     @Override
@@ -64,16 +55,11 @@ public class MarksAsUniqueValueGenerator extends RasterGenerator
     }
 
     @Override
-    public Stack generate() throws OutputWriteFailedException {
+    public Stack transform(MarkCollection element) throws OutputWriteFailedException {
 
         ObjectCollectionWithProperties objects =
-                marks.deriveObjects(delegate.dimensions(), this.rm);
-        try {
-            delegate.setIterableElement(objects.withoutProperties());
-        } catch (SetOperationFailedException e) {
-            throw new OutputWriteFailedException(e);
-        }
-        return delegate.generate();
+                element.deriveObjects(delegate.dimensions(), this.regionMembership);
+        return delegate.transform(objects.withoutProperties());
     }
 
     @Override
@@ -82,27 +68,7 @@ public class MarksAsUniqueValueGenerator extends RasterGenerator
     }
 
     @Override
-    public MarkCollection getIterableElement() {
-        return marks;
-    }
-
-    @Override
-    public void setIterableElement(MarkCollection element) throws SetOperationFailedException {
-        this.marks = element;
-    }
-
-    @Override
-    public void start() throws OutputWriteFailedException {
-        delegate.start();
-    }
-
-    @Override
-    public void end() throws OutputWriteFailedException {
-        delegate.end();
-    }
-
-    @Override
-    public Generator getGenerator() {
-        return this;
+    public StackWriteOptions writeOptions() {
+        return delegate.writeOptions();
     }
 }

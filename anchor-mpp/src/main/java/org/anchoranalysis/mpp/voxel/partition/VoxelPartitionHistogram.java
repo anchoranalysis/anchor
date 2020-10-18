@@ -28,8 +28,8 @@ package org.anchoranalysis.mpp.voxel.partition;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.image.histogram.HistogramCreator;
+import java.util.function.Supplier;
+import org.anchoranalysis.math.histogram.Histogram;
 import org.anchoranalysis.mpp.voxel.partition.factory.VoxelPartitionFactory;
 
 public class VoxelPartitionHistogram implements VoxelPartition<Histogram> {
@@ -37,13 +37,13 @@ public class VoxelPartitionHistogram implements VoxelPartition<Histogram> {
     private Histogram combined;
     private List<Histogram> list;
 
-    public VoxelPartitionHistogram(int numSlices, HistogramCreator histogramFactory) {
+    public VoxelPartitionHistogram(int numSlices, Supplier<Histogram> histogramFactory) {
 
-        combined = histogramFactory.create();
+        combined = histogramFactory.get();
 
         list = new ArrayList<>();
         for (int i = 0; i < numSlices; i++) {
-            list.add(histogramFactory.create());
+            list.add(histogramFactory.get());
         }
     }
 

@@ -31,7 +31,7 @@ public interface ColorIndex {
 
     public RGBColor get(int index);
 
-    public int numUniqueColors();
+    public int numberUniqueColors();
 
     public boolean has(int index);
 }

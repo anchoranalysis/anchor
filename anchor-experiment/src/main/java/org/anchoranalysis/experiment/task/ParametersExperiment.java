@@ -33,10 +33,12 @@ import org.anchoranalysis.core.error.reporter.ErrorReporterIntoLog;
 import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.experiment.ExperimentExecutionArguments;
 import org.anchoranalysis.experiment.bean.log.LoggingDestination;
-import org.anchoranalysis.experiment.log.reporter.StatefulMessageLogger;
-import org.anchoranalysis.io.manifest.ManifestRecorder;
-import org.anchoranalysis.io.output.bound.BoundOutputManager;
-import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.experiment.log.StatefulMessageLogger;
+import org.anchoranalysis.io.manifest.Manifest;
+import org.anchoranalysis.io.output.bean.OutputManager;
+import org.anchoranalysis.io.output.outputter.Outputter;
+import org.anchoranalysis.io.output.outputter.OutputterChecked;
+import org.anchoranalysis.io.output.path.PathPrefixer;
 
 /**
  * Parameters for executing a task, when the manifest, log etc. are still bound to the experiment
@@ -46,56 +48,60 @@ import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 public class ParametersExperiment {
 
     // Parameters for all tasks in general (the experiment)
-    @Getter private Optional<ManifestRecorder> experimentalManifest;
+    @Getter private final Optional<Manifest> experimentalManifest;
 
-    @Getter private String experimentIdentifier;
-
-    // This is a means to create new log-reporters for each task
-    @Getter @Setter private LoggingDestination loggerTaskCreator;
+    @Getter private final String experimentIdentifier;
 
     /**
      * Iff true, additional log messages are written to describe each job in terms of its unique
      * name, output folder, average execution time etc.
      */
-    @Getter private boolean detailedLogging;
+    @Getter private final boolean detailedLogging;
 
-    @Getter private BoundContextSpecify context;
+    @Getter private final InputOutputContextStateful context;
+
+    /** The {@link OutputManager} associated with the experiment which {@link Outputter} uses. */
+    @Getter private final PathPrefixer prefixer;
+
+    // This is a means to create new log-reporters for each task
+    @Getter @Setter private LoggingDestination loggerTaskCreator;
 
     public ParametersExperiment(
             ExperimentExecutionArguments experimentArguments,
             String experimentIdentifier,
-            Optional<ManifestRecorder> experimentalManifest,
-            BoundOutputManager outputManager,
+            Optional<Manifest> experimentalManifest,
+            OutputterChecked outputter,
+            PathPrefixer prefixer,
             StatefulMessageLogger loggerExperiment,
             boolean detailedLogging) {
         this.context =
-                new BoundContextSpecify(
+                new InputOutputContextStateful(
                         experimentArguments,
-                        wrapErrors(outputManager, loggerExperiment),
+                        wrapExceptions(outputter, loggerExperiment),
                         loggerExperiment,
                         new ErrorReporterForTask(loggerExperiment));
 
         this.experimentIdentifier = experimentIdentifier;
         this.experimentalManifest = experimentalManifest;
         this.detailedLogging = detailedLogging;
+        this.prefixer = prefixer;
     }
 
-    public BoundOutputManagerRouteErrors getOutputManager() {
-        return context.getOutputManager();
+    public Outputter getOutputter() {
+        return context.getOutputter();
     }
 
     public StatefulMessageLogger getLoggerExperiment() {
-        return context.getStatefulLogReporter();
+        return context.getMessageLogger();
     }
 
     public ExperimentExecutionArguments getExperimentArguments() {
         return context.getExperimentArguments();
     }
 
-    /** Redirects any output-errors into the log */
-    private static BoundOutputManagerRouteErrors wrapErrors(
-            BoundOutputManager rootOutputManagerNoErrors, MessageLogger logger) {
-        return new BoundOutputManagerRouteErrors(
-                rootOutputManagerNoErrors, new ErrorReporterIntoLog(logger));
+    /** Redirects any output-exceptions into the log */
+    private static Outputter wrapExceptions(
+            OutputterChecked outputterChecked, MessageLogger logger) {
+        return new Outputter(outputterChecked, new ErrorReporterIntoLog(logger));
     }
 }

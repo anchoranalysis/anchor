@@ -26,13 +26,13 @@
 
 package org.anchoranalysis.mpp.overlap;
 
-import org.anchoranalysis.image.binary.values.BinaryValues;
-import org.anchoranalysis.image.binary.values.BinaryValuesByte;
-import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
-import org.anchoranalysis.image.binary.voxel.BinaryVoxelsFactory;
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.BoundedVoxels;
 import org.anchoranalysis.image.voxel.Voxels;
+import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
+import org.anchoranalysis.image.voxel.binary.BinaryVoxelsFactory;
+import org.anchoranalysis.image.voxel.binary.values.BinaryValues;
+import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
+import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMembershipWithFlags;
 
@@ -40,6 +40,13 @@ public class MaxIntensityProjectionPair {
 
     private final BoundedVoxels<UnsignedByteBuffer> voxelsProjected1;
     private final BoundedVoxels<UnsignedByteBuffer> voxelsProjected2;
+
+    /**
+     * Counts intersecting (i.e. voxels that are part of the same region) voxels.
+     *
+     * <p>Relies on the binary voxel buffer ON being 255.
+     */
+    private final CountIntersectingVoxels counter = new CountIntersectingVoxels((byte) 1);
 
     public MaxIntensityProjectionPair(
             BoundedVoxels<UnsignedByteBuffer> voxels1,
@@ -51,30 +58,28 @@ public class MaxIntensityProjectionPair {
     }
 
     public int countIntersectingVoxels() {
-        // Relies on the binary voxel buffer ON being 255
-        return new CountIntersectingVoxelsRegionMembership((byte) 1)
-                .countIntersectingVoxels(voxelsProjected1, voxelsProjected2);
+        return counter.count(voxelsProjected1, voxelsProjected2);
     }
 
     public int minArea() {
-        int cnt1 =
+        int count1 =
                 voxelsProjected1
                         .extract()
                         .voxelsEqualTo(BinaryValues.getDefault().getOnInt())
                         .count();
-        int cnt2 =
+        int count2 =
                 voxelsProjected2
                         .extract()
                         .voxelsEqualTo(BinaryValues.getDefault().getOnInt())
                         .count();
-        return Math.min(cnt1, cnt2);
+        return Math.min(count1, count2);
     }
 
     private static BinaryVoxels<UnsignedByteBuffer> createBinaryVoxelsForFlag(
             Voxels<UnsignedByteBuffer> voxels, RegionMembershipWithFlags rmFlags) {
 
         Voxels<UnsignedByteBuffer> voxelsOut =
-                VoxelsFactory.getByte().createInitialized(voxels.extent());
+                VoxelsFactory.getUnsignedByte().createInitialized(voxels.extent());
 
         BinaryValuesByte bvb = BinaryValuesByte.getDefault();
 

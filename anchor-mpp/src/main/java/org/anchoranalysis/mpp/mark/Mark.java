@@ -31,22 +31,22 @@ import java.util.Optional;
 import java.util.function.DoubleUnaryOperator;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.error.OptionalOperationUnsupportedException;
-import org.anchoranalysis.core.geometry.Point3d;
-import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.core.geometry.PointConverter;
-import org.anchoranalysis.core.geometry.ReadableTuple3i;
-import org.anchoranalysis.image.binary.values.BinaryValuesByte;
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
-import org.anchoranalysis.image.extent.Dimensions;
-import org.anchoranalysis.image.extent.Resolution;
-import org.anchoranalysis.image.extent.SpatialUnits.UnitSuffix;
-import org.anchoranalysis.image.extent.UnitConverter;
-import org.anchoranalysis.image.extent.box.BoundingBox;
-import org.anchoranalysis.image.object.properties.ObjectWithProperties;
-import org.anchoranalysis.image.scale.ScaleFactor;
+import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.image.core.dimensions.Resolution;
+import org.anchoranalysis.image.core.dimensions.UnitConverter;
+import org.anchoranalysis.image.core.dimensions.SpatialUnits.UnitSuffix;
+import org.anchoranalysis.image.core.object.properties.ObjectWithProperties;
+import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
+import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMembershipWithFlags;
 import org.anchoranalysis.overlay.OverlayProperties;
 import org.anchoranalysis.overlay.id.Identifiable;
+import org.anchoranalysis.spatial.extent.box.BoundingBox;
+import org.anchoranalysis.spatial.extent.scale.ScaleFactor;
+import org.anchoranalysis.spatial.point.Point3d;
+import org.anchoranalysis.spatial.point.Point3i;
+import org.anchoranalysis.spatial.point.PointConverter;
+import org.anchoranalysis.spatial.point.ReadableTuple3i;
 
 @NoArgsConstructor
 public abstract class Mark implements Serializable, Identifiable {
@@ -226,16 +226,14 @@ public abstract class Mark implements Serializable, Identifiable {
         this.id = id;
     }
 
-    public OverlayProperties generateProperties(Resolution resolution) {
+    public OverlayProperties generateProperties(Optional<Resolution> resolution) {
 
         OverlayProperties nvc = new OverlayProperties();
         nvc.add("Type", getName());
         nvc.add("ID", Integer.toString(getId()));
-        if (resolution == null) {
-            return nvc;
+        if (resolution.isPresent()) {
+             addPropertiesForRegions(nvc, resolution.get().unitConvert() );
         }
-
-        addPropertiesForRegions(nvc, resolution.unitConvert());
         return nvc;
     }
 

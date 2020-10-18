@@ -33,14 +33,14 @@ import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
-import org.anchoranalysis.experiment.log.reporter.StatefulMessageLogger;
+import org.anchoranalysis.experiment.log.StatefulMessageLogger;
 import org.anchoranalysis.experiment.task.ErrorReporterForTask;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.experiment.task.ParametersUnbound;
 import org.anchoranalysis.experiment.task.TaskStatistics;
 import org.anchoranalysis.experiment.task.processor.MonitoredSequentialExecutor;
 import org.anchoranalysis.io.input.InputFromManager;
-import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.io.output.outputter.Outputter;
 
 /**
  * Executes jobs sequentially
@@ -53,24 +53,17 @@ public class SequentialProcessor<T extends InputFromManager, S> extends JobProce
 
     @Override
     protected TaskStatistics execute(
-            BoundOutputManagerRouteErrors rootOutputManager,
-            List<T> inputObjects,
-            ParametersExperiment paramsExperiment)
+            Outputter rootOutputter, List<T> inputs, ParametersExperiment paramsExperiment)
             throws ExperimentExecutionException {
 
         ConcurrencyPlan concurrencyPlan = ConcurrencyPlan.singleProcessor(1);
 
         S sharedState =
-                getTask()
-                        .beforeAnyJobIsExecuted(
-                                rootOutputManager, concurrencyPlan, paramsExperiment);
+                getTask().beforeAnyJobIsExecuted(rootOutputter, concurrencyPlan, paramsExperiment);
 
         TaskStatistics stats =
                 executeAllJobs(
-                        inputObjects,
-                        sharedState,
-                        paramsExperiment,
-                        loggerForMonitor(paramsExperiment));
+                        inputs, sharedState, paramsExperiment, loggerForMonitor(paramsExperiment));
 
         getTask().afterAllJobsAreExecuted(sharedState, paramsExperiment.getContext());
 
@@ -78,7 +71,7 @@ public class SequentialProcessor<T extends InputFromManager, S> extends JobProce
     }
 
     private TaskStatistics executeAllJobs(
-            List<T> inputObjects,
+            List<T> inputs,
             S sharedState,
             ParametersExperiment paramsExperiment,
             Optional<MessageLogger> loggerMonitor) {
@@ -86,15 +79,15 @@ public class SequentialProcessor<T extends InputFromManager, S> extends JobProce
         MonitoredSequentialExecutor<T> seqExecutor =
                 new MonitoredSequentialExecutor<>(
                         object -> executeJobAndLog(object, sharedState, paramsExperiment),
-                        T::descriptiveName,
+                        T::name,
                         loggerMonitor,
                         false);
 
-        return seqExecutor.executeEachWithMonitor("Job: ", inputObjects);
+        return seqExecutor.executeEachWithMonitor("Job: ", inputs);
     }
 
     private boolean executeJobAndLog(
-            T inputObject, S sharedState, ParametersExperiment paramsExperiment) {
+            T input, S sharedState, ParametersExperiment paramsExperiment) {
 
         StatefulMessageLogger logger = paramsExperiment.getLoggerExperiment();
         ErrorReporter errorReporter = new ErrorReporterForTask(logger);
@@ -102,7 +95,7 @@ public class SequentialProcessor<T extends InputFromManager, S> extends JobProce
         try {
             ParametersUnbound<T, S> paramsUnbound =
                     new ParametersUnbound<>(
-                            paramsExperiment, inputObject, sharedState, isSuppressExceptions());
+                            paramsExperiment, input, sharedState, isSuppressExceptions());
             return getTask().executeJob(paramsUnbound);
 
         } catch (JobExecutionException e) {

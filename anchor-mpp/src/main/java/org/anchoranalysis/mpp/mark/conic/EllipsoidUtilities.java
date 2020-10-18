@@ -28,14 +28,15 @@ package org.anchoranalysis.mpp.mark.conic;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.geometry.Point3d;
-import org.anchoranalysis.image.extent.Resolution;
-import org.anchoranalysis.math.rotation.RotationMatrix;
+import java.util.Optional;
+import org.anchoranalysis.image.core.dimensions.Resolution;
+import org.anchoranalysis.spatial.point.Point3d;
+import org.anchoranalysis.spatial.rotation.RotationMatrix;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class EllipsoidUtilities {
 
-    public static double[] normalisedRadii(Ellipsoid mark, Resolution resolution) {
+    public static double[] normalisedRadii(Ellipsoid mark, Optional<Resolution> resolution) {
         // We re-calculate all the bounds to take account of the different z-resolution
 
         // We get the rotated points of (1,0,0)*getRadii().x() and (0,1,0)*getRadii().y() and
@@ -46,11 +47,7 @@ public class EllipsoidUtilities {
         Point3d yRot = rotMatrix.rotatedPoint(new Point3d(0, mark.getRadii().y(), 0));
         Point3d zRot = rotMatrix.rotatedPoint(new Point3d(0, 0, mark.getRadii().z()));
 
-        double zRel = resolution.zRelative();
-        // We adjust each point for the z contribution
-        xRot.setZ(xRot.z() * zRel);
-        yRot.setZ(yRot.z() * zRel);
-        zRot.setZ(zRot.z() * zRel);
+        adjustForZ(xRot, yRot, zRot, resolution);
 
         Point3d zero = new Point3d(0, 0, 0);
 
@@ -59,5 +56,15 @@ public class EllipsoidUtilities {
         double zNorm = zRot.distance(zero);
 
         return new double[] {xNorm, yNorm, zNorm};
+    }
+    
+    private static void adjustForZ(Point3d xRot, Point3d yRot, Point3d zRot, Optional<Resolution> resolution) {
+        // We adjust each point for the z contribution
+        if (resolution.isPresent()) {
+            double zRel = resolution.get().zRelative();
+            xRot.setZ(xRot.z() * zRel);
+            yRot.setZ(yRot.z() * zRel);
+            zRot.setZ(zRot.z() * zRel);
+        }
     }
 }

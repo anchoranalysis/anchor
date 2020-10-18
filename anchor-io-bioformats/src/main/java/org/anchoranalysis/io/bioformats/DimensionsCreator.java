@@ -26,17 +26,20 @@
 
 package org.anchoranalysis.io.bioformats;
 
+import java.util.Optional;
 import java.util.function.DoubleConsumer;
 import java.util.function.Function;
 import loci.formats.IFormatReader;
 import loci.formats.meta.IMetadata;
 import ome.units.UNITS;
 import ome.units.quantity.Length;
-import org.anchoranalysis.core.geometry.Point3d;
-import org.anchoranalysis.image.extent.Dimensions;
-import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.extent.Resolution;
+import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.io.bioformats.bean.options.ReadOptions;
+import org.anchoranalysis.spatial.extent.Extent;
+import org.anchoranalysis.spatial.point.Point3d;
+import com.google.common.base.Preconditions;
 
 public class DimensionsCreator {
 
@@ -47,33 +50,55 @@ public class DimensionsCreator {
         this.lociMetadata = lociMetadata;
     }
 
-    public Dimensions apply(IFormatReader reader, ReadOptions readOptions, int seriesIndex) {
+    public Dimensions apply(IFormatReader reader, ReadOptions readOptions, int seriesIndex) throws CreateException {
+        Preconditions.checkArgument(lociMetadata != null);
 
-        assert (lociMetadata != null);
-
-        Point3d res = new Point3d();
-
-        metadataDim(metadata -> metadata.getPixelsPhysicalSizeX(seriesIndex), res::setX);
-
-        metadataDim(metadata -> metadata.getPixelsPhysicalSizeY(seriesIndex), res::setY);
-
-        metadataDim(metadata -> metadata.getPixelsPhysicalSizeZ(seriesIndex), res::setZ);
-
+        Extent extent = new Extent(reader.getSizeX(), reader.getSizeY(), readOptions.sizeZ(reader));
+        
         return new Dimensions(
-                new Extent(reader.getSizeX(), reader.getSizeY(), readOptions.sizeZ(reader)),
-                new Resolution(res));
+                extent,
+                maybeConstructResolution(reader, seriesIndex) );
+    }
+    
+    /** Reads a resolution of the metadata but only if at least X and Y dimensions are defined. If z is undefined its Double.NaN. 
+     * @throws CreateException */
+    private Optional<Resolution> maybeConstructResolution(IFormatReader reader, int seriesIndex) throws CreateException {
+
+        // By default the resolution is 1 in all dimensions
+        Point3d res = new Point3d(Double.NaN, Double.NaN, Double.NaN);
+
+        boolean xUpdated = maybeUpdateDimension(metadata -> metadata.getPixelsPhysicalSizeX(seriesIndex), res::setX);
+
+        boolean yUpdated = maybeUpdateDimension(metadata -> metadata.getPixelsPhysicalSizeY(seriesIndex), res::setY);
+
+        maybeUpdateDimension(metadata -> metadata.getPixelsPhysicalSizeZ(seriesIndex), res::setZ);
+
+        if (xUpdated && yUpdated) {
+            return Optional.of( new Resolution(res) );
+        } else {
+            return Optional.empty();
+        }
     }
 
-    private void metadataDim(Function<IMetadata, Length> funcDimRes, DoubleConsumer setter) {
-        Length len = funcDimRes.apply(lociMetadata);
-        if (len != null) {
-            Number converted = len.value(UNITS.METER);
+    /**
+     * Maybe update a particular dimension with resolution-information from metadata
+     * 
+     * @param dimensionFromMetadata gets metadata for a particular dimension
+     * @param assigner assigns this dimension's metadata to the {@link Point3d}.
+     * @return true if the dimension was assigned, otherwise false.
+     */
+    private boolean maybeUpdateDimension(Function<IMetadata, Length> dimensionFromMetadata, DoubleConsumer assigner) {
+        Length length = dimensionFromMetadata.apply(lociMetadata);
+        if (length != null) {
+            Number converted = length.value(UNITS.METER);
 
             // A null implies that len can not be converted to meters as units, so we abandon
             if (converted != null) {
-                Double dbl = converted.doubleValue();
-                setter.accept(dbl);
+                assigner.accept(converted.doubleValue());
+                return true;
             }
+            
         }
+        return false;
     }
 }

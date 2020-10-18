@@ -39,14 +39,14 @@ import lombok.Getter;
 import lombok.experimental.Accessors;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.progress.ProgressReporter;
-import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.channel.factory.ChannelFactorySingleType;
-import org.anchoranalysis.image.extent.Dimensions;
-import org.anchoranalysis.image.extent.IncorrectImageSizeException;
-import org.anchoranalysis.image.io.RasterIOException;
-import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
-import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.image.stack.TimeSequence;
+import org.anchoranalysis.image.core.channel.Channel;
+import org.anchoranalysis.image.core.channel.factory.ChannelFactorySingleType;
+import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.image.core.dimensions.IncorrectImageSizeException;
+import org.anchoranalysis.image.core.stack.Stack;
+import org.anchoranalysis.image.core.stack.TimeSequence;
+import org.anchoranalysis.image.io.ImageIOException;
+import org.anchoranalysis.image.io.stack.OpenedRaster;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.io.bioformats.bean.options.ReadOptions;
 import org.anchoranalysis.io.bioformats.copyconvert.ConvertTo;
@@ -97,7 +97,7 @@ public class BioformatsOpenedRaster implements OpenedRaster {
 
     @Override
     public TimeSequence open(int seriesIndex, ProgressReporter progressReporter)
-            throws RasterIOException {
+            throws ImageIOException {
 
         int pixelType = reader.getPixelType();
 
@@ -117,33 +117,37 @@ public class BioformatsOpenedRaster implements OpenedRaster {
     }
 
     @Override
-    public int bitDepth() throws RasterIOException {
+    public int bitDepth() throws ImageIOException {
         return bitsPerPixel;
     }
 
     @Override
-    public boolean isRGB() throws RasterIOException {
+    public boolean isRGB() throws ImageIOException {
         return rgb;
     }
 
     @Override
-    public void close() throws RasterIOException {
+    public void close() throws ImageIOException {
         try {
             reader.close();
         } catch (IOException e) {
-            throw new RasterIOException(e);
+            throw new ImageIOException(e);
         }
     }
 
     @Override
-    public Dimensions dimensionsForSeries(int seriesIndex) {
-        return new DimensionsCreator(lociMetadata).apply(reader, readOptions, seriesIndex);
+    public Dimensions dimensionsForSeries(int seriesIndex) throws ImageIOException {
+        try {
+            return new DimensionsCreator(lociMetadata).apply(reader, readOptions, seriesIndex);
+        } catch (CreateException e) {
+            throw new ImageIOException(e);
+        }
     }
 
     /** Opens as a specific data-type */
     private TimeSequence openAsType(
             int seriesIndex, ProgressReporter progressReporter, VoxelDataType dataType)
-            throws RasterIOException {
+            throws ImageIOException {
 
         try {
             LOG.debug(String.format("Opening series %d as %s", seriesIndex, dataType));
@@ -171,7 +175,7 @@ public class BioformatsOpenedRaster implements OpenedRaster {
             return ts;
 
         } catch (FormatException | IOException | IncorrectImageSizeException | CreateException e) {
-            throw new RasterIOException(e);
+            throw new ImageIOException(e);
         }
     }
 

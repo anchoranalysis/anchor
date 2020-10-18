@@ -2,7 +2,7 @@
  * Defining, loading, initializing <a
  * href="https://www.anchoranalysis.org/developer_guide_anchor_beans.html">Anchor Beans</a>.
  *
- * <p>In contrary to <a
+ * <p>In contrast to <a
  * href="https://www.anchoranalysis.org/developer_guide_anchor_beans.html#package-namespaces-in-jars">convention</a>,
  * unlike other packages whose namespace includes <var>.bean.</var>, not <i>all</i> public-classes
  * in this package are anchor-beans.

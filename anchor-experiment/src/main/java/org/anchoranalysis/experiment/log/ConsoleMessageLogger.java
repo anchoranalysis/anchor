@@ -26,8 +26,6 @@
 
 package org.anchoranalysis.experiment.log;
 
-import org.anchoranalysis.experiment.log.reporter.StatefulMessageLogger;
-
 public class ConsoleMessageLogger implements StatefulMessageLogger {
 
     @Override

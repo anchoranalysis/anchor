@@ -37,7 +37,7 @@ public abstract class Experiment extends AnchorBean<Experiment> implements Assoc
     // Allows to reference the xml configuration from where the experiment was defined
     private XMLConfiguration xmlConfiguration = null;
 
-    public abstract void doExperiment(ExperimentExecutionArguments arguments)
+    public abstract void executeExperiment(ExperimentExecutionArguments arguments)
             throws ExperimentExecutionException;
 
     public XMLConfiguration getXMLConfiguration() {

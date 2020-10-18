@@ -28,39 +28,40 @@ package org.anchoranalysis.image.io.generator.raster.series;
 
 import java.nio.file.Path;
 import java.util.Optional;
-import org.anchoranalysis.image.io.RasterIOException;
-import org.anchoranalysis.image.io.bean.rasterwriter.RasterWriter;
-import org.anchoranalysis.image.io.generator.raster.RasterWriterUtilities;
-import org.anchoranalysis.io.generator.SingleFileTypeGenerator;
+import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.image.io.ImageIOException;
+import org.anchoranalysis.image.io.bean.stack.StackWriter;
+import org.anchoranalysis.image.io.generator.raster.GeneratorOutputter;
+import org.anchoranalysis.image.io.stack.StackWriteOptions;
+import org.anchoranalysis.io.generator.OneStageGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import lombok.AllArgsConstructor;
 
-public class RGBTimeSeriesGenerator extends SingleFileTypeGenerator {
+@AllArgsConstructor
+public class RGBTimeSeriesGenerator extends OneStageGenerator<StackSeries> {
 
-    private StackSeries stackSeries;
-
-    public RGBTimeSeriesGenerator(StackSeries stackSeries) {
-        super();
-        this.stackSeries = stackSeries;
-    }
+    private final StackWriteOptions rasterOptions;
 
     @Override
-    public void writeToFile(OutputWriteSettings outputWriteSettings, Path filePath)
+    public void writeToFile(StackSeries element, OutputWriteSettings outputWriteSettings, Path filePath)
             throws OutputWriteFailedException {
 
         try {
-            RasterWriter rasterWriter =
-                    RasterWriterUtilities.getDefaultRasterWriter(outputWriteSettings);
-            rasterWriter.writeTimeSeriesStackByte(stackSeries, filePath, true);
-        } catch (RasterIOException e) {
+            StackWriter writer =
+                    GeneratorOutputter.writer(outputWriteSettings);
+            writer.writeStackSeries(element, filePath, true, rasterOptions);
+        } catch (ImageIOException e) {
             throw new OutputWriteFailedException(e);
         }
     }
 
     @Override
-    public String getFileExtension(OutputWriteSettings outputWriteSettings) {
-        return RasterWriterUtilities.getDefaultRasterFileExtension(outputWriteSettings);
+    public String getFileExtension(OutputWriteSettings outputWriteSettings)
+            throws OperationFailedException {
+        return GeneratorOutputter.fileExtensionWriter(
+                outputWriteSettings, rasterOptions);
     }
 
     @Override

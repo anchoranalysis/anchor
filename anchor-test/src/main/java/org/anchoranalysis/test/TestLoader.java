@@ -44,7 +44,7 @@ import org.xmlunit.builder.Input;
 import org.xmlunit.diff.Diff;
 
 /**
- * Loads test data, which is found at some location on the file-system
+ * Loads test data, which is found at some location on the filesystem
  *
  * @author Owen Feehan
  */

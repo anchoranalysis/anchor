@@ -30,109 +30,100 @@ import java.nio.file.Path;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.io.manifest.ManifestDescription;
-import org.anchoranalysis.io.manifest.ManifestFolderDescription;
-import org.anchoranalysis.io.manifest.folder.FolderWriteWithPath;
-import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
-import org.anchoranalysis.io.namestyle.OutputNameStyle;
-import org.anchoranalysis.io.output.bean.OutputWriteSettings;
-import org.anchoranalysis.io.output.bound.BoundOutputManager;
+import org.anchoranalysis.io.manifest.ManifestDirectoryDescription;
+import org.anchoranalysis.io.manifest.directory.SubdirectoryBase;
+import org.anchoranalysis.io.output.enabled.single.SingleLevelOutputEnabled;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import org.anchoranalysis.io.output.namestyle.IndexableOutputNameStyle;
+import org.anchoranalysis.io.output.outputter.OutputterChecked;
 
+/**
+ * Only allows outputs, if the output-name is allowed in the {@link OutputterChecked}.
+ *
+ * @author Owen Feehan
+ */
 @RequiredArgsConstructor
 public class CheckIfAllowed implements Writer {
 
+    public static final int NUMBER_ELEMENTS_WRITTEN_NOT_ALLOWED = -2;
+
     // START REQUIRED ARGUMENTS
-    /** The associated output-manager */
-    private final BoundOutputManager outputManager;
+    /** Whether a particular output is enabled or not? */
+    private final SingleLevelOutputEnabled outputEnabled;
 
-    /** Execute before every operation */
-    private final WriterExecuteBeforeEveryOperation preop;
+    /** If defined, execute before every operation */
+    private final Optional<WriterExecuteBeforeEveryOperation> preop;
 
+    /** The writer. */
     private final Writer writer;
     // END REQUIRED ARGUMENTS
 
     @Override
-    public Optional<BoundOutputManager> bindAsSubdirectory(
+    public Optional<OutputterChecked> createSubdirectory(
             String outputName,
-            ManifestFolderDescription manifestDescription,
-            Optional<FolderWriteWithPath> folder)
+            ManifestDirectoryDescription manifestDescription,
+            Optional<SubdirectoryBase> manifestFolder,
+            boolean inheritOutputRulesAndRecording)
             throws OutputWriteFailedException {
 
-        if (!outputManager.isOutputAllowed(outputName)) {
+        if (!outputEnabled.isOutputEnabled(outputName)) {
             return Optional.empty();
         }
 
-        preop.execute();
+        maybeExecutePreop();
 
-        return writer.bindAsSubdirectory(outputName, manifestDescription, folder);
+        return writer.createSubdirectory(
+                outputName, manifestDescription, manifestFolder, inheritOutputRulesAndRecording);
     }
-
+    
     @Override
-    public void writeSubfolder(String outputName, GenerateWritableItem<?> collectionGenerator)
+    public <T> boolean write(String outputName, ElementWriterSupplier<T> elementWriter, ElementSupplier<T> element)
             throws OutputWriteFailedException {
 
-        if (!outputManager.isOutputAllowed(outputName)) {
-            return;
+        if (!outputEnabled.isOutputEnabled(outputName)) {
+            return false;
         }
 
-        preop.execute();
+        maybeExecutePreop();
 
-        writer.writeSubfolder(outputName, collectionGenerator);
+        writer.write(outputName, elementWriter, element);
+
+        return true;
     }
-
+    
     @Override
-    public int write(
+    public <T> int writeWithIndex(
             IndexableOutputNameStyle outputNameStyle,
-            GenerateWritableItem<?> generator,
+            ElementWriterSupplier<T> elementWriter,
+            ElementSupplier<T> element,
             String index)
             throws OutputWriteFailedException {
 
-        if (!outputManager.isOutputAllowed(outputNameStyle.getOutputName())) {
-            return -1;
+        if (!outputEnabled.isOutputEnabled(outputNameStyle.getOutputName())) {
+            return NUMBER_ELEMENTS_WRITTEN_NOT_ALLOWED;
         }
 
-        preop.execute();
+        maybeExecutePreop();
 
-        return writer.write(outputNameStyle, generator, index);
+        return writer.writeWithIndex(outputNameStyle, elementWriter, element, index);
     }
 
     @Override
-    public void write(OutputNameStyle outputNameStyle, GenerateWritableItem<?> generator)
-            throws OutputWriteFailedException {
-
-        if (!outputManager.isOutputAllowed(outputNameStyle.getOutputName())) return;
-
-        preop.execute();
-
-        writer.write(outputNameStyle, generator);
-    }
-
-    @Override
-    public Optional<Path> writeGenerateFilename(
+    public Optional<Path> createFilenameForWriting(
             String outputName,
             String extension,
-            Optional<ManifestDescription> manifestDescription,
-            String outputNamePrefix,
-            String outputNameSuffix,
-            String index) {
+            Optional<ManifestDescription> manifestDescription) {
 
-        if (!outputManager.isOutputAllowed(outputName)) {
+        if (!outputEnabled.isOutputEnabled(outputName)) {
             return Optional.empty();
         }
 
-        preop.execute();
+        maybeExecutePreop();
 
-        return writer.writeGenerateFilename(
-                outputName,
-                extension,
-                manifestDescription,
-                outputNamePrefix,
-                outputNameSuffix,
-                index);
+        return writer.createFilenameForWriting(outputName, extension, manifestDescription);
     }
 
-    @Override
-    public OutputWriteSettings getOutputWriteSettings() {
-        return outputManager.getOutputWriteSettings();
+    private void maybeExecutePreop() {
+        preop.ifPresent(WriterExecuteBeforeEveryOperation::execute);
     }
 }

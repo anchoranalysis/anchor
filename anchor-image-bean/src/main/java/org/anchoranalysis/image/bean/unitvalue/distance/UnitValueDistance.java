@@ -31,10 +31,10 @@ import java.util.Optional;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.core.axis.AxisType;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.geometry.Point3d;
-import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.extent.UnitConverter;
-import org.anchoranalysis.image.orientation.DirectionVector;
+import org.anchoranalysis.image.core.dimensions.UnitConverter;
+import org.anchoranalysis.image.core.orientation.DirectionVector;
+import org.anchoranalysis.spatial.point.Point3d;
+import org.anchoranalysis.spatial.point.Point3i;
 
 public abstract class UnitValueDistance extends AnchorBean<UnitValueDistance>
         implements Serializable {

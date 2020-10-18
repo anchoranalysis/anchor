@@ -34,11 +34,14 @@ import java.util.Set;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.anchoranalysis.bean.OptionalFactory;
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
-import org.anchoranalysis.io.error.FilePathPrefixerException;
-import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerParams;
-import org.anchoranalysis.io.params.DebugModeParams;
-import org.anchoranalysis.io.params.InputContextParams;
+import org.anchoranalysis.io.input.InputContextParams;
+import org.anchoranalysis.io.input.bean.DebugModeParams;
+import org.anchoranalysis.io.output.bean.OutputManager;
+import org.anchoranalysis.io.output.path.PathPrefixerException;
+import org.anchoranalysis.io.output.path.FilePathPrefixerContext;
+import org.anchoranalysis.io.output.recorded.OutputEnabledDelta;
 
 @NoArgsConstructor
 public class ExperimentExecutionArguments {
@@ -50,7 +53,7 @@ public class ExperimentExecutionArguments {
     private Optional<List<Path>> inputPaths = Optional.empty();
 
     /** A directory indicating where inputs can be located */
-    private Optional<Path> inputDirectory = Optional.empty();
+    @Getter private Optional<Path> inputDirectory = Optional.empty();
 
     /** A directory indicating where inputs can be located */
     @Getter @Setter private Optional<Path> outputDirectory = Optional.empty();
@@ -60,6 +63,14 @@ public class ExperimentExecutionArguments {
 
     /** If non-null, a glob that is applied on inputDirectory */
     @Setter private Optional<String> inputFilterGlob = Optional.empty();
+
+    /**
+     * Additions/subtractions of outputs for the experiment supplied by the user.
+     *
+     * <p>These are applied to an existing source of output-enabled rules (e.g. defaults from a
+     * task, or rules defined in the experiment's {@link OutputManager}.
+     */
+    @Getter private OutputEnabledDelta outputEnabledDelta = new OutputEnabledDelta();
 
     /**
      * If defined, a set of extension filters that can be applied on inputDirectory
@@ -85,19 +96,15 @@ public class ExperimentExecutionArguments {
     public InputContextParams createInputContext() throws IOException {
         InputContextParams out = new InputContextParams();
         out.setDebugModeParams(debugModeParams);
-        out.setInputDir(inputDirectory);
+        out.setInputDirectory(inputDirectory);
         out.setInputPaths(inputPaths);
         inputFilterGlob.ifPresent(out::setInputFilterGlob);
         inputFilterExtensions.ifPresent(out::setInputFilterExtensions);
         return out;
     }
 
-    public FilePathPrefixerParams createParamsContext() throws FilePathPrefixerException {
-        return new FilePathPrefixerParams(isDebugModeEnabled(), outputDirectory);
-    }
-
-    public Optional<Path> getInputDirectory() {
-        return inputDirectory;
+    public FilePathPrefixerContext createPrefixerContext() throws PathPrefixerException {
+        return new FilePathPrefixerContext(isDebugModeEnabled(), outputDirectory);
     }
 
     // The path will be converted to an absolute path, if it hasn't been already, based upon the
@@ -105,11 +112,11 @@ public class ExperimentExecutionArguments {
     public void setInputDirectory(Optional<Path> inputDirectory) {
         this.inputDirectory =
                 inputDirectory.map(
-                        dir -> {
-                            if (!dir.isAbsolute()) {
-                                return dir.toAbsolutePath().normalize();
+                        directory -> {
+                            if (!directory.isAbsolute()) {
+                                return directory.toAbsolutePath().normalize();
                             } else {
-                                return dir.normalize();
+                                return directory.normalize();
                             }
                         });
     }
@@ -117,11 +124,13 @@ public class ExperimentExecutionArguments {
     /**
      * Activates debug-mode
      *
-     * @param debugContains either null (no debugContains specified) or a string used for filtering
-     *     items during debug
+     * @param debugContains maybe a string used for filtering inputs during debugging, or an
+     *     empty-string if this isn't enabled
      */
     public void activateDebugMode(String debugContains) {
-        debugModeParams = Optional.of(new DebugModeParams(debugContains));
+        Optional<String> debugContainsAsOptional =
+                OptionalFactory.create(!debugContains.isEmpty(), () -> debugContains);
+        debugModeParams = Optional.of(new DebugModeParams(debugContainsAsOptional));
     }
 
     public boolean isDebugModeEnabled() {

@@ -28,7 +28,9 @@ package org.anchoranalysis.experiment.bean.io;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.experiment.log.Divider;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
+import org.anchoranalysis.io.output.recorded.MultiLevelRecordedOutputs;
 import org.apache.commons.lang.time.StopWatch;
 
 /**
@@ -38,25 +40,33 @@ import org.apache.commons.lang.time.StopWatch;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class OutputExperimentLogHelper {
 
+    private static final Divider DIVIDER = new Divider();
+
     public static void maybeLogStart(ParametersExperiment params) {
         if (params.isDetailedLogging()) {
             params.getLoggerExperiment()
                     .logFormatted(
                             "Experiment %s started writing to %s",
                             params.getExperimentIdentifier(),
-                            params.getOutputManager().getOutputFolderPath());
+                            params.getOutputter().getOutputFolderPath());
         }
     }
 
     public static void maybeLogCompleted(
-            ParametersExperiment params, StopWatch stopWatchExperiment) {
+            MultiLevelRecordedOutputs recordedOutputs,
+            ParametersExperiment params,
+            StopWatch stopWatchExperiment) {
         if (params.isDetailedLogging()) {
+
             params.getLoggerExperiment()
                     .logFormatted(
-                            "Experiment %s completed (%ds) writing to %s",
+                            "%s%n%s%n%s%nExperiment %s completed (%ds) writing to %s",
+                            DIVIDER.withLabel("Outputs"),
+                            new SummarizeRecordedOutputs(recordedOutputs).summarize(),
+                            DIVIDER.withoutLabel(),
                             params.getExperimentIdentifier(),
                             stopWatchExperiment.getTime() / 1000,
-                            params.getOutputManager().getOutputFolderPath());
+                            params.getOutputter().getOutputFolderPath());
         }
     }
 }

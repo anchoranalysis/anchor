@@ -28,15 +28,20 @@ package org.anchoranalysis.feature.energy;
 
 import lombok.Getter;
 import lombok.Setter;
+import java.util.Optional;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.params.KeyValueParams;
-import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.extent.Dimensions;
-import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.extent.Resolution;
-import org.anchoranalysis.image.stack.Stack;
+import org.anchoranalysis.image.core.channel.Channel;
+import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.image.core.dimensions.Resolution;
+import org.anchoranalysis.image.core.stack.Stack;
+import org.anchoranalysis.spatial.extent.Extent;
 
-// An energy-stack with associated parameters
+/**
+ * An energy-stack with associated {@link KeyValueParams}.
+ *
+ * @author Owen Feehan
+ */
 public class EnergyStack {
 
     private final EnergyStackWithoutParams delegate;
@@ -79,11 +84,30 @@ public class EnergyStack {
         return new EnergyStack(delegate.extractSlice(z), params);
     }
 
+    /**
+     * Does exactly one z-slice exist in the energy stack?
+     *
+     * @return true iff the number of z-slices is 1
+     */
+    public boolean hasOneSlice() {
+        return dimensions().extent().z() == 1;
+    }
+
+    /**
+     * The image-dimensions associated with the energy-stack.
+     *
+     * @return the image-dimensions.
+     */
     public Dimensions dimensions() {
         return delegate.dimensions();
     }
 
-    public Resolution resolution() {
+    /**
+     * The image-resolution asssociated with the energy-stack.
+     *
+     * @return the image-resolution.
+     */
+    public Optional<Resolution> resolution() {
         return dimensions().resolution();
     }
 

@@ -31,23 +31,21 @@ import java.util.Optional;
 import java.util.stream.Stream;
 import org.anchoranalysis.core.color.ColorIndex;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.core.index.SetOperationFailedException;
-import org.anchoranalysis.image.extent.Dimensions;
-import org.anchoranalysis.image.extent.box.BoundedList;
-import org.anchoranalysis.image.extent.box.BoundingBox;
+import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.image.core.object.properties.ObjectCollectionWithProperties;
+import org.anchoranalysis.image.core.object.properties.ObjectWithProperties;
+import org.anchoranalysis.image.core.stack.DisplayStack;
+import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.generator.raster.RasterGenerator;
 import org.anchoranalysis.image.io.generator.raster.object.rgb.DrawObjectsGenerator;
-import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.object.properties.ObjectCollectionWithProperties;
-import org.anchoranalysis.image.object.properties.ObjectWithProperties;
-import org.anchoranalysis.image.stack.DisplayStack;
-import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.io.bean.object.writer.Outline;
-import org.anchoranalysis.io.generator.IterableObjectGenerator;
-import org.anchoranalysis.io.generator.ObjectGenerator;
+import org.anchoranalysis.image.io.stack.StackWriteOptions;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
+import org.anchoranalysis.io.generator.SingleFileTypeGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import org.anchoranalysis.spatial.extent.box.BoundedList;
+import org.anchoranalysis.spatial.extent.box.BoundingBox;
+import org.anchoranalysis.spatial.point.Point3i;
 
 /**
  * Creates images of object(s) drawn on a background only in a local region around their bounding
@@ -58,19 +56,17 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
  *
  * @author Owen Feehan
  */
-public class DrawObjectOnStackGenerator extends RasterGenerator
-        implements IterableObjectGenerator<BoundedList<ObjectMask>, Stack> {
+public class DrawObjectOnStackGenerator
+        extends RasterGenerator<BoundedList<ObjectMask>> {
 
     private static final ManifestDescription MANIFEST_DESCRIPTION =
             new ManifestDescription("raster", "extractedObjectOutline");
 
     // START REQUIRED ARGUMENTS
     private final DrawObjectsGenerator drawObjectsGenerator;
-    private final Optional<IterableObjectGenerator<BoundingBox, Stack>> backgroundGenerator;
+    private final Optional<SingleFileTypeGenerator<BoundingBox, Stack>> backgroundGenerator;
     private final boolean flatten;
     // END REQUIRED ARGUMENTS
-
-    private BoundedList<ObjectMask> element;
 
     /**
      * Creates the generator with a stack as the background - and with default color green and
@@ -91,7 +87,7 @@ public class DrawObjectOnStackGenerator extends RasterGenerator
      * in Z
      *
      * @param outlineWidth width of the outline around an object
-     * @param colors colors to use for outling of objects
+     * @param colors colors to use for outlining of objects
      * @return
      */
     public static DrawObjectOnStackGenerator createWithEmptyBackground(
@@ -123,10 +119,10 @@ public class DrawObjectOnStackGenerator extends RasterGenerator
      *
      * @param backgroundGenerator generates a background for a bounding-box
      * @param outlineWidth width of the outline around an object
-     * @param colors colors to use for outling of objects
+     * @param colors colors to use for outlining of objects
      */
     public static DrawObjectOnStackGenerator createFromGenerator(
-            IterableObjectGenerator<BoundingBox, Stack> backgroundGenerator,
+            SingleFileTypeGenerator<BoundingBox, Stack> backgroundGenerator,
             int outlineWidth,
             ColorIndex colors) {
         return new DrawObjectOnStackGenerator(
@@ -144,53 +140,43 @@ public class DrawObjectOnStackGenerator extends RasterGenerator
      *     and bounding-box)
      */
     private DrawObjectOnStackGenerator(
-            Optional<IterableObjectGenerator<BoundingBox, Stack>> backgroundGenerator,
+            Optional<SingleFileTypeGenerator<BoundingBox, Stack>> backgroundGenerator,
             int outlineWidth,
             ColorIndex colorIndex,
             boolean flatten) {
-        this.drawObjectsGenerator = new DrawObjectsGenerator(new Outline(outlineWidth), colorIndex);
+        this.drawObjectsGenerator =
+                DrawObjectsGenerator.outlineWithColorIndex(outlineWidth, colorIndex);
         this.backgroundGenerator = backgroundGenerator;
         this.flatten = flatten;
     }
 
     @Override
-    public Stack generate() throws OutputWriteFailedException {
-
-        if (getIterableElement() == null) {
-            throw new OutputWriteFailedException("no mutable element set");
-        }
+    public Stack transform(BoundedList<ObjectMask> element) throws OutputWriteFailedException {
 
         // Apply the generator
-        drawObjectsGenerator.setBackground(createBackground());
+        drawObjectsGenerator.setBackground(createBackground(element));
 
-        BoundedList<ObjectMask> objects = this.getIterableElement();
+        Stream<ObjectWithProperties> objectsForDrawing =
+                element.stream()
+                        .map(
+                                object ->
+                                        new ObjectWithProperties(
+                                                prepareObjectForDrawing(
+                                                        object, element.boundingBox())));
 
-        Stream<ObjectWithProperties> objectsForDrawing = 
-                objects.stream().map( object -> new ObjectWithProperties(
-                        prepareObjectForDrawing(object, objects.boundingBox()) ) 
-                );
-        
         // An object-mask that is relative to the extracted section
-        drawObjectsGenerator.setIterableElement(
+        return drawObjectsGenerator.transform(
                 new ObjectCollectionWithProperties(objectsForDrawing));
-
-        return drawObjectsGenerator.generate();
     }
 
-    private Either<Dimensions, DisplayStack> createBackground() throws OutputWriteFailedException {
+    private Either<Dimensions, DisplayStack> createBackground(BoundedList<ObjectMask> element) throws OutputWriteFailedException {
 
         if (!backgroundGenerator.isPresent()) {
             // Exit early if there's no background to be extracted
             return Either.left(new Dimensions(element.boundingBox().extent()));
         }
 
-        try {
-            backgroundGenerator.get().setIterableElement(element.boundingBox());
-        } catch (SetOperationFailedException e) {
-            throw new OutputWriteFailedException(e);
-        }
-
-        Stack channelExtracted = backgroundGenerator.get().getGenerator().generate();
+        Stack channelExtracted = backgroundGenerator.get().transform(element.boundingBox());
 
         if (flatten) {
             channelExtracted = channelExtracted.maximumIntensityProjection();
@@ -204,21 +190,6 @@ public class DrawObjectOnStackGenerator extends RasterGenerator
     }
 
     @Override
-    public BoundedList<ObjectMask> getIterableElement() {
-        return element;
-    }
-
-    @Override
-    public void setIterableElement(BoundedList<ObjectMask> element) {
-        this.element = element;
-    }
-
-    @Override
-    public ObjectGenerator<Stack> getGenerator() {
-        return this;
-    }
-
-    @Override
     public Optional<ManifestDescription> createManifestDescription() {
         return Optional.of(MANIFEST_DESCRIPTION);
     }
@@ -226,6 +197,11 @@ public class DrawObjectOnStackGenerator extends RasterGenerator
     @Override
     public boolean isRGB() {
         return drawObjectsGenerator.isRGB();
+    }
+
+    @Override
+    public StackWriteOptions writeOptions() {
+        return StackWriteOptions.maybeRGB(isRGB());
     }
 
     private ObjectMask prepareObjectForDrawing(ObjectMask object, BoundingBox containingBox) {

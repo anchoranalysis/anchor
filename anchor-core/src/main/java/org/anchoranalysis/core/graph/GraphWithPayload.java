@@ -35,7 +35,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 
 /**
  * A graph, either directed or undirected, with edges containing a payload of type {@code E}.
- * 
+ *
  * @author Owen Feehan
  * @param <V> vertex-type
  * @param <P> edge payload-type
@@ -44,8 +44,11 @@ public class GraphWithPayload<V, P> {
 
     /** The vertices in the graph. */
     private HashSet<V> vertices;
-    
-    /** A table for storing the edges in a given direction. Rows index outgoing edges. Columns index incoming edges. */
+
+    /**
+     * A table for storing the edges in a given direction. Rows index outgoing edges. Columns index
+     * incoming edges.
+     */
     private HashBasedTable<V, V, TypedEdge<V, P>> edges;
 
     /** If true, it's an undirected graph, otherwise directed graph. */
@@ -53,8 +56,10 @@ public class GraphWithPayload<V, P> {
 
     /**
      * Creates the graph.
-     * 
-     * @param undirected true if it should be an undirected graph (an edge applies in both directions), false if it should be a directed graph (an edge applies in one direction only).
+     *
+     * @param undirected true if it should be an undirected graph (an edge applies in both
+     *     directions), false if it should be a directed graph (an edge applies in one direction
+     *     only).
      */
     public GraphWithPayload(boolean undirected) {
         this.edges = HashBasedTable.create();
@@ -63,9 +68,11 @@ public class GraphWithPayload<V, P> {
     }
 
     /**
-     * Creates a new graph with identical elements and structure, reusing the existing vertice and edge data objects.
-     * 
-     * @return a newly created graph, with newly created vertices and edges, but reusing the data-objects of tyoe {@code V} and {@code E}. 
+     * Creates a new graph with identical elements and structure, reusing the existing vertice and
+     * edge data objects.
+     *
+     * @return a newly created graph, with newly created vertices and edges, but reusing the
+     *     data-objects of tyoe {@code V} and {@code E}.
      */
     @SuppressWarnings("unchecked")
     public GraphWithPayload<V, P> shallowCopy() {
@@ -74,19 +81,19 @@ public class GraphWithPayload<V, P> {
         out.edges = HashBasedTable.create(edges);
         return out;
     }
-    
+
     /**
      * The set of all vertices in the graph.
-     * 
+     *
      * @return the set (as is used internally within the class, without any duplication).
      */
     public Set<V> vertices() {
         return vertices;
     }
-    
+
     /**
      * The number of vertices in the graph.
-     * 
+     *
      * @return the number of vertices
      */
     public int numberVertices() {
@@ -94,8 +101,17 @@ public class GraphWithPayload<V, P> {
     }
 
     /**
+     * The number of edges in the graph.
+     *
+     * @return the number of edges
+     */
+    public int numberEdges() {
+        return edgesUnique().size();
+    }
+
+    /**
      * Does the graph contain a particular vertex?
-     * 
+     *
      * @param vertex the vertex to check if it is contained
      * @return true iff the graph contains the vertex
      */
@@ -105,7 +121,7 @@ public class GraphWithPayload<V, P> {
 
     /**
      * Adds a vertex.
-     * 
+     *
      * @param vertex the vertex to add
      */
     public void addVertex(V vertex) {
@@ -114,15 +130,17 @@ public class GraphWithPayload<V, P> {
 
     /**
      * Removes a vertex and any edges connected to it.
-     * 
+     *
      * @param vertex the vertex to remove
      * @throws OperationFailedException if the vertex doesn't exist in the graph.
      */
     public void removeVertex(V vertex) throws OperationFailedException {
-        
+
         if (!vertices.remove(vertex)) {
             throw new OperationFailedException(
-              String.format("A vertex cannot be removed, because it does not exist in the graph: %s", vertex) );
+                    String.format(
+                            "A vertex cannot be removed, because it does not exist in the graph: %s",
+                            vertex));
         }
 
         edges.row(vertex).clear();
@@ -131,29 +149,28 @@ public class GraphWithPayload<V, P> {
 
     /**
      * Add an edge between two vertices.
-     * 
-     * <p>For an undirected graph, the directionality is irrelevant, and will
-     * achieve the same effect, whatever the order of {@code from} and {@code to}.
-     * 
+     *
+     * <p>For an undirected graph, the directionality is irrelevant, and will achieve the same
+     * effect, whatever the order of {@code from} and {@code to}.
+     *
      * @param from the vertex the edge joins <i>from</i>.
      * @param to the vertex the edge joins <i>to</i>.
      * @param edgePayload the payload for the edge.
      */
     public void addEdge(V from, V to, P edgePayload) {
-        TypedEdge<V, P> edgeWithVertices =
-                new TypedEdge<>(edgePayload, from, to);
+        TypedEdge<V, P> edgeWithVertices = new TypedEdge<>(edgePayload, from, to);
         edges.put(from, to, edgeWithVertices);
         if (undirected) {
             edges.put(to, from, edgeWithVertices);
         }
     }
-    
+
     /**
      * Remove an edge between two vertices.
-     * 
-     * <p>For an undirected graph, the directionality is irrelevant, and will
-     * achieve the same effect, whatever the order of {@code from} and {@code to}.
-     * 
+     *
+     * <p>For an undirected graph, the directionality is irrelevant, and will achieve the same
+     * effect, whatever the order of {@code from} and {@code to}.
+     *
      * @param from the vertex the edge joins <i>from</i>.
      * @param to the vertex the edge joins <i>to</i>.
      */
@@ -166,23 +183,23 @@ public class GraphWithPayload<V, P> {
 
     /**
      * The edges in the graph, all of them, without any duplicates.
-     * 
-     * <p>This operation is more expensive than {@link #edgesMaybeDuplicates()} but
-     * guarantees that no edge is repeated.
-     *  
+     *
+     * <p>This operation is more expensive than {@link #edgesMaybeDuplicates()} but guarantees that
+     * no edge is repeated.
+     *
      * @return a newly created set containing the edges of the graph.
      */
     public Set<TypedEdge<V, P>> edgesUnique() {
         return edgesMaybeDuplicates().stream().collect(Collectors.toSet());
     }
-    
+
     /**
      * The edges in the graph, all of them, but with some edges possibly duplicated.
-     * 
-     * <p>This operation is more cheaper than {@link #edgesUnique()} but
-     * edges may exist twice.
-     *  
-     * @return the collection (as exists internally) of edges in the graph, with some edges may exist twice.
+     *
+     * <p>This operation is more cheaper than {@link #edgesUnique()} but edges may exist twice.
+     *
+     * @return the collection (as exists internally) of edges in the graph, with some edges may
+     *     exist twice.
      */
     public Collection<TypedEdge<V, P>> edgesMaybeDuplicates() {
         return edges.values();
@@ -190,20 +207,23 @@ public class GraphWithPayload<V, P> {
 
     /**
      * The vertices that are connected to a particular vertex by an outgoing edge
-     * 
+     *
      * @param vertex the vertex to find adjacent vertices for
      * @return all vertices to which an outgoing edge exists from {@code vertex}
      */
     public Collection<V> adjacentVerticesOutgoing(V vertex) {
         Collection<TypedEdge<V, P>> edgesForVertex = outgoingEdgesFor(vertex);
-        return edgesForVertex.stream().map( edge->edge.otherVertex(vertex) ).collect( Collectors.toList() );
+        return edgesForVertex.stream()
+                .map(edge -> edge.otherVertex(vertex))
+                .collect(Collectors.toList());
     }
 
     /**
      * All outgoing edges for a given vertex.
-     * 
+     *
      * @param vertex the vertex
-     * @return a collection (based on an internal data structure, unduplicated) of outgoing edges for the vertex.
+     * @return a collection (based on an internal data structure, unduplicated) of outgoing edges
+     *     for the vertex.
      */
     public Collection<TypedEdge<V, P>> outgoingEdgesFor(V vertex) {
         return edges.row(vertex).values();
@@ -213,12 +233,11 @@ public class GraphWithPayload<V, P> {
     public String toString() {
         return describe(true);
     }
-    
+
     /**
      * Describes the graph in a multi-line string.
-     * 
+     *
      * @param includeEdgePayload whether to show the payload of each edge
-     * 
      * @return a multi-line string describing the graph
      */
     public String describe(boolean includeEdgePayload) {
@@ -241,7 +260,7 @@ public class GraphWithPayload<V, P> {
         builder.append("</graph>");
         builder.append(System.lineSeparator());
 
-        return builder.toString();        
+        return builder.toString();
     }
 
     /** Appends a description of the edges of a vertex to a string-builder. */
@@ -255,7 +274,7 @@ public class GraphWithPayload<V, P> {
                 builder.append(", ");
             }
 
-            builder.append( edgeWith.describeTo(includePayload) );
+            builder.append(edgeWith.describeTo(includePayload));
         }
     }
 }

@@ -27,45 +27,35 @@
 package org.anchoranalysis.mpp.feature.bean.mark;
 
 import java.util.Optional;
+import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInputParams;
-import org.anchoranalysis.image.extent.Dimensions;
-import org.anchoranalysis.image.extent.Resolution;
+import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.mpp.mark.Mark;
 
+@AllArgsConstructor
 @EqualsAndHashCode
 public class FeatureInputMark implements FeatureInputParams {
 
-    private final Mark mark;
+    @Getter private final Mark mark;
     private final Optional<Dimensions> dimensions;
     private final Optional<KeyValueParams> params;
 
     public FeatureInputMark(Mark mark, Optional<Dimensions> dimensions) {
-        this.mark = mark;
-        this.dimensions = dimensions;
-        this.params = Optional.empty();
+        this(mark, dimensions, Optional.empty() );
     }
 
     public FeatureInputMark(Mark mark, Dimensions dimensions, KeyValueParams params) {
         this(mark, Optional.of(dimensions), Optional.of(params));
     }
 
-    public FeatureInputMark(Mark mark, Optional<Dimensions> dim, Optional<KeyValueParams> params) {
-        super();
-        this.mark = mark;
-        this.dimensions = dim;
-        this.params = params;
-    }
-
-    public Mark getMark() {
-        return mark;
-    }
-
     @Override
     public Optional<Resolution> getResolutionOptional() {
-        return dimensions.map(Dimensions::resolution);
+        return dimensions.flatMap(Dimensions::resolution);
     }
 
     @Override

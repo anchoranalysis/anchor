@@ -34,8 +34,8 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.cache.CachedSupplier;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.functional.function.CheckedSupplier;
-import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.io.deserializer.DeserializationFailedException;
+import org.anchoranalysis.core.serialize.DeserializationFailedException;
+import org.anchoranalysis.image.voxel.object.ObjectCollection;
 
 /**
  * Reads an {@link ObjectCollection} from the filesystem

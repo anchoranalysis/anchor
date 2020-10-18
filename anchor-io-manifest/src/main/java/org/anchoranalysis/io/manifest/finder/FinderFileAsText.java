@@ -26,18 +26,16 @@
 
 package org.anchoranalysis.io.manifest.finder;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
-import org.anchoranalysis.io.manifest.ManifestRecorder;
-import org.anchoranalysis.io.manifest.file.FileWrite;
-import org.anchoranalysis.io.manifest.match.FileWriteOutputName;
+import org.anchoranalysis.io.manifest.Manifest;
+import org.anchoranalysis.io.manifest.file.OutputtedFile;
+import org.anchoranalysis.io.manifest.file.TextFileReader;
+import org.anchoranalysis.io.manifest.finder.match.FileMatch;
 
 public class FinderFileAsText extends FinderSingleFile {
 
@@ -49,37 +47,12 @@ public class FinderFileAsText extends FinderSingleFile {
         this.outputName = outputName;
     }
 
-    public static String readFile(Path path) throws IOException {
-
-        StringBuilder stringBuilder = new StringBuilder();
-
-        try (BufferedReader reader = createReader(path)) {
-            String line = null;
-
-            String ls = System.getProperty("line.separator");
-
-            while ((line = reader.readLine()) != null) {
-                stringBuilder.append(line);
-                stringBuilder.append(ls);
-            }
-        }
-
-        return stringBuilder.toString();
-    }
-
-    private static BufferedReader createReader(Path path) throws FileNotFoundException {
-        return new BufferedReader(new FileReader(path.toFile()));
-    }
-
-    private String readFileFromFileWrite(FileWrite fileWrite) throws IOException {
-        return readFile(fileWrite.calculatePath());
-    }
-
     public String get() throws OperationFailedException {
         assert (exists());
         if (!text.isPresent()) {
             try {
-                text = Optional.of(readFileFromFileWrite(getFoundFile()));
+                Path path = getFoundFile().calculatePath();
+                text = Optional.of(TextFileReader.readFile(path));
             } catch (IOException e) {
                 throw new OperationFailedException(e);
             }
@@ -88,10 +61,10 @@ public class FinderFileAsText extends FinderSingleFile {
     }
 
     @Override
-    protected Optional<FileWrite> findFile(ManifestRecorder manifestRecorder)
-            throws MultipleFilesException {
-        List<FileWrite> files =
-                FinderUtilities.findListFile(manifestRecorder, new FileWriteOutputName(outputName));
+    protected Optional<OutputtedFile> findFile(Manifest manifestRecorder)
+            throws FindFailedException {
+        List<OutputtedFile> files =
+                FinderUtilities.findListFile(manifestRecorder, FileMatch.outputName(outputName));
 
         if (files.isEmpty()) {
             return Optional.empty();

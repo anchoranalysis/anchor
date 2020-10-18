@@ -28,35 +28,41 @@ package org.anchoranalysis.io.manifest.operationrecorder;
 
 import java.nio.file.Path;
 import org.anchoranalysis.io.manifest.ManifestDescription;
-import org.anchoranalysis.io.manifest.ManifestFolderDescription;
-import org.anchoranalysis.io.manifest.folder.FolderWriteWithPath;
+import org.anchoranalysis.io.manifest.ManifestDirectoryDescription;
+import org.anchoranalysis.io.manifest.directory.SubdirectoryBase;
 
+/**
+ * Makes a record of an output written to the filesystem.
+ * 
+ * @author Owen Feehan
+ *
+ */
 public interface WriteOperationRecorder {
 
     /**
-     * Writes a new file to the manifest
+     * Records a file written.
      *
      * @param outputName the "output name" used to generate the file
      * @param manifestDescription a description of the directory
      * @param outFilePath the path it's wrriten to relative to the folder
      * @param index an index, if it's part of a set of files
      */
-    void write(
+    void recordWrittenFile(
             String outputName,
             ManifestDescription manifestDescription,
             Path outFilePath,
             String index);
 
     /**
-     * Writes a new sub-directory to the manifest
+     * Records a subdirectory that has been recated.
      *
-     * @param relativeFolderPath the path of the directory relative to the parent
+     * @param relativeFolderPath the path of the subdirectory relative to the parent
      * @param manifestDescription a description of the directory
      * @param folderWrite the folder object to write
      * @return
      */
-    WriteOperationRecorder writeFolder(
+    WriteOperationRecorder recordSubdirectoryCreated(
             Path relativeFolderPath,
-            ManifestFolderDescription manifestDescription,
-            FolderWriteWithPath folderWrite);
+            ManifestDirectoryDescription manifestDescription,
+            SubdirectoryBase folderWrite);
 }

@@ -27,18 +27,21 @@
 package org.anchoranalysis.io.manifest.deserializer;
 
 import java.io.File;
-import org.anchoranalysis.io.bean.deserializer.ObjectInputStreamDeserializer;
-import org.anchoranalysis.io.deserializer.DeserializationFailedException;
-import org.anchoranalysis.io.manifest.ManifestRecorder;
+import org.anchoranalysis.core.serialize.DeserializationFailedException;
+import org.anchoranalysis.core.serialize.ObjectInputStreamDeserializer;
+import org.anchoranalysis.io.manifest.Manifest;
 
 public class SimpleManifestDeserializer implements ManifestDeserializer {
 
     @Override
-    public ManifestRecorder deserializeManifest(File file) throws DeserializationFailedException {
-
-        ManifestRecorder manifest =
-                new ObjectInputStreamDeserializer<ManifestRecorder>().deserialize(file.toPath());
-        manifest.init(file.toPath().getParent());
-        return manifest;
+    public Manifest deserializeManifest(File file) throws DeserializationFailedException {
+        try {
+            Manifest manifest =
+                    new ObjectInputStreamDeserializer<Manifest>().deserialize(file.toPath());
+            manifest.init(file.toPath().getParent());
+            return manifest;
+        } catch (DeserializationFailedException e) {
+            throw new DeserializationFailedException(e);
+        }
     }
 }

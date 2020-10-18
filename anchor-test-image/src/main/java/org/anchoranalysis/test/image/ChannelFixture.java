@@ -26,18 +26,26 @@
 
 package org.anchoranalysis.test.image;
 
-import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.channel.factory.ChannelFactoryByte;
-import org.anchoranalysis.image.extent.Dimensions;
-import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
+import java.util.Optional;
+import org.anchoranalysis.image.core.channel.Channel;
+import org.anchoranalysis.image.core.channel.factory.ChannelFactory;
+import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
+import org.anchoranalysis.image.voxel.iterator.IterateVoxelsAll;
+import org.anchoranalysis.spatial.extent.Extent;
+import org.anchoranalysis.spatial.point.Point3i;
 
 public class ChannelFixture {
 
     // Creates an intensity value for a given location
     @FunctionalInterface
     public interface IntensityFunction {
+
+        default int valueFor(Point3i point) {
+            return valueFor(point.x(), point.y(), point.z());
+        }
+
         int valueFor(int x, int y, int z);
     }
 
@@ -65,24 +73,17 @@ public class ChannelFixture {
     public static final Extent LARGE_2D = LARGE_3D.flattenZ();
     // END: image size examples
 
-    public static Channel createChannel(Extent e, IntensityFunction createIntensity) {
+    public static Channel createChannel(
+            Extent extent, IntensityFunction createIntensity, VoxelDataType channelVoxelType) {
 
-        Dimensions dimensions = new Dimensions(e, ImageResFixture.INSTANCE);
+        Dimensions dimensions = new Dimensions(extent, Optional.of(ImageResFixture.INSTANCE) );
 
-        Channel channel = new ChannelFactoryByte().createEmptyInitialised(dimensions);
+        Channel channel =
+                ChannelFactory.instance().get(channelVoxelType).createEmptyInitialised(dimensions);
 
-        // Populate the channel with values
-        for (int z = 0; z < e.z(); z++) {
-
-            VoxelBuffer<?> slice = channel.voxels().slice(z);
-
-            for (int x = 0; x < e.x(); x++) {
-                for (int y = 0; y < e.y(); y++) {
-                    int intens = createIntensity.valueFor(x, y, z);
-                    slice.putInt(e.offset(x, y), intens);
-                }
-            }
-        }
+        IterateVoxelsAll.withVoxelBuffer(
+                channel.voxels().any(),
+                (point, buffer, offset) -> buffer.putInt(offset, createIntensity.valueFor(point)));
 
         return channel;
     }

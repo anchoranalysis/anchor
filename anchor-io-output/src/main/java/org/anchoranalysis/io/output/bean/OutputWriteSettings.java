@@ -35,25 +35,28 @@ import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
+import org.anchoranalysis.bean.shared.color.scheme.ColorScheme;
+import org.anchoranalysis.bean.shared.color.scheme.HSB;
+import org.anchoranalysis.bean.shared.color.scheme.Shuffle;
 import org.anchoranalysis.core.color.ColorIndex;
+import org.anchoranalysis.core.color.ColorIndexModulo;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.io.bean.color.list.ColorListFactory;
-import org.anchoranalysis.io.bean.color.list.HSB;
-import org.anchoranalysis.io.bean.color.list.Shuffle;
-import org.anchoranalysis.io.color.ColorIndexModulo;
 
-/*
+/**
+ * Settings for how to write output, including default writers.
  *
- * It is very important that init() is run before using the bean. This normally occurs from checkMisconfigured() that
- *   is called automatically from the bean-loading framework
+ * <p>It is very important that {@link #init} is run before using the bean. This normally occurs
+ * from checkMisconfigured() that is called automatically from the bean-loading framework
  *
- *   But if the bean is not loaded through this mechanism, please call init explicitly before usage
+ * <p>However, if the bean is not loaded through this mechanism, please call {@link #init}
+ * explicitly before usage
  */
 public class OutputWriteSettings extends AnchorBean<OutputWriteSettings> {
 
     // START BEAN PROPERTIES
+    /** The default color-scheme used for outputs, if no other scheme is specified. */
     @BeanField @Getter @Setter
-    private ColorListFactory defaultColorSetGenerator = new Shuffle(new HSB());
+    private ColorScheme defaultColors = new Shuffle(new HSB());
 
     /**
      * Specifies a writer bean instance for a particular type of writer (identified by the writer
@@ -95,12 +98,12 @@ public class OutputWriteSettings extends AnchorBean<OutputWriteSettings> {
         }
     }
 
-    public boolean hasBeenInit() {
+    public boolean hasBeenInitialized() {
         return (writerInstances != null);
     }
 
     /**
-     * Gets a writer-instance for type c
+     * Gets a writer-instance for a particular {@code writerParentClass}.
      *
      * <p>1. First, it looks for a match among the bean-field 'writers' 2. If no match is found,
      * then it looks among the general default-instances 3. If no match is found, then it returns
@@ -108,18 +111,16 @@ public class OutputWriteSettings extends AnchorBean<OutputWriteSettings> {
      *
      * <p>When a writer is returned, it will always inherits from type c.
      *
-     * @param c the class identifying which type of writer is sought
+     * @param writerParentClass the class identifying which type of writer is sought
      * @return a matching writer, or null.
      */
-    public Object getWriterInstance(Class<?> c) {
-        assert (writerInstances != null);
-
+    public Object getWriterInstance(Class<?> writerParentClass) {
         // We look for the default instance, corresponding to the particular class
-        return writerInstances.get(c);
+        return writerInstances.get(writerParentClass);
     }
 
     public ColorIndex defaultColorIndexFor(int numberColors) throws OperationFailedException {
-        return new ColorIndexModulo(getDefaultColorSetGenerator().create(numberColors));
+        return new ColorIndexModulo(getDefaultColors().createList(numberColors));
     }
 
     public String getExtensionHTML() {

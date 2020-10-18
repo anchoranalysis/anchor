@@ -34,7 +34,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Positive;
-import org.anchoranalysis.image.extent.Extent;
+import org.anchoranalysis.spatial.extent.Extent;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -75,5 +75,10 @@ public class SizeXY extends AnchorBean<SizeXY> {
      */
     public Extent asExtent(int depth) {
         return new Extent(width, height, depth);
+    }
+
+    @Override
+    public String toString() {
+        return String.format("[%d,%d]", width, height);
     }
 }

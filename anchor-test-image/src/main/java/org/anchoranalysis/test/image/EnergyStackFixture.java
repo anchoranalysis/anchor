@@ -31,9 +31,10 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
-import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.extent.IncorrectImageSizeException;
-import org.anchoranalysis.image.stack.Stack;
+import org.anchoranalysis.image.core.dimensions.IncorrectImageSizeException;
+import org.anchoranalysis.image.core.stack.Stack;
+import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
+import org.anchoranalysis.spatial.extent.Extent;
 import org.anchoranalysis.test.image.ChannelFixture.IntensityFunction;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -67,6 +68,8 @@ public class EnergyStackFixture {
 
     private static void addChannel(Stack stack, Extent size, IntensityFunction intensityFunction)
             throws IncorrectImageSizeException {
-        stack.addChannel(ChannelFixture.createChannel(size, intensityFunction));
+        stack.addChannel(
+                ChannelFixture.createChannel(
+                        size, intensityFunction, UnsignedByteVoxelType.INSTANCE));
     }
 }

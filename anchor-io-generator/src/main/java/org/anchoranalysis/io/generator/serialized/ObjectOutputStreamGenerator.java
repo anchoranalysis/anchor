@@ -35,19 +35,18 @@ import java.util.Optional;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
-public class ObjectOutputStreamGenerator<T extends Serializable>
-        extends SerializedIterableGenerator<T> {
+public class ObjectOutputStreamGenerator<T extends Serializable> extends SerializedGenerator<T> {
 
+    public ObjectOutputStreamGenerator() {
+        this(Optional.empty());
+    }
+    
     public ObjectOutputStreamGenerator(Optional<String> manifestFunction) {
         super(manifestFunction);
     }
 
-    public ObjectOutputStreamGenerator(T rootObject, Optional<String> manifestFunction) {
-        super(rootObject, manifestFunction);
-    }
-
     @Override
-    protected void writeToFile(OutputWriteSettings outputWriteSettings, Path filePath, T element)
+    public void writeToFile(T element, OutputWriteSettings outputWriteSettings, Path filePath)
             throws OutputWriteFailedException {
 
         try (FileOutputStream fos = new FileOutputStream(filePath.toFile())) {

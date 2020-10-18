@@ -26,18 +26,19 @@ package org.anchoranalysis.core.error.reporter;
  * #L%
  */
 
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.error.friendly.HasFriendlyErrorMessage;
 import org.anchoranalysis.core.log.MessageLogger;
 import org.apache.commons.lang.exception.ExceptionUtils;
-import lombok.AllArgsConstructor;
 
 /**
  * Records errors, by writing them into a logger.
- * 
- * <p>Error is meant in the broad sense of any problem that occurred, not specifically Java's {@link Error}
- * class and sub-classes. This includes any {@link Exception} and its sub-classes.
  *
- * <p>Some formatting occurs (and sometimes adds a stacktrace) depending on context and exception-type.
+ * <p>Error is meant in the broad sense of any problem that occurred, not specifically Java's {@link
+ * Error} class and sub-classes. This includes any {@link Exception} and its sub-classes.
+ *
+ * <p>Some formatting occurs (and sometimes adds a stacktrace) depending on context and
+ * exception-type.
  *
  * @author Owen Feehan
  */
@@ -48,7 +49,7 @@ public class ErrorReporterIntoLog implements ErrorReporter {
             "------------ BEGIN ERROR ------------" + System.lineSeparator();
     private static final String END_BANNER =
             System.lineSeparator() + "------------ END ERROR ------------";
-    
+
     private final MessageLogger logger;
 
     @Override

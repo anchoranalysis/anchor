@@ -31,30 +31,31 @@ import lombok.Value;
 
 /**
  * An edge that exists in a graph, together with the two vertices that it conntects.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  * @param <V> vertex-type
  * @param <P> edge payload-type
  */
-@Value @AllArgsConstructor
+@Value
+@AllArgsConstructor
 public final class TypedEdge<V, P> {
 
     /** The edge. */
     private P payload;
-    
+
     /** The vertex the edge joins <i>from</i>. */
     private V from;
-    
+
     /** The vertex the edge joins <i>to</i>. */
     private V to;
-    
+
     /**
      * The other vertex on the edge
-     * 
+     *
      * <p>i.e. the one that isn't {@code vertex}.
-     * 
-     * @param vertex a vertex that should be one of the two vertices in the edge (but this is not checked).
+     *
+     * @param vertex a vertex that should be one of the two vertices in the edge (but this is not
+     *     checked).
      * @return the other vertex in the edge that isn't {@code vertex}.
      */
     public V otherVertex(V vertex) {
@@ -64,10 +65,10 @@ public final class TypedEdge<V, P> {
             return from;
         }
     }
-    
+
     /**
      * Describes the edge by showing the <i>to</i> vertex, and optionally the payload.
-     * 
+     *
      * @param includePayload iff true, the payload is included in the description
      * @return a string describing the edge
      */

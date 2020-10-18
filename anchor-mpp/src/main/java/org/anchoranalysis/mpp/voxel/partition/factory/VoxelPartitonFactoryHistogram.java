@@ -26,19 +26,15 @@
 
 package org.anchoranalysis.mpp.voxel.partition.factory;
 
-import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.image.histogram.HistogramCreator;
-import org.anchoranalysis.image.histogram.HistogramCreatorSimple;
+import org.anchoranalysis.math.histogram.Histogram;
 import org.anchoranalysis.mpp.voxel.partition.VoxelPartition;
 import org.anchoranalysis.mpp.voxel.partition.VoxelPartitionHistogram;
 
 public class VoxelPartitonFactoryHistogram implements VoxelPartitionFactory<Histogram> {
 
-    private HistogramCreator factorySimple = new HistogramCreatorSimple();
-
     @Override
     public VoxelPartition<Histogram> create(int numSlices) {
-        return new VoxelPartitionHistogram(numSlices, factorySimple);
+        return new VoxelPartitionHistogram(numSlices, () -> new Histogram(255) );
     }
 
     @Override

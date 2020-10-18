@@ -27,7 +27,8 @@
 package org.anchoranalysis.mpp.bean.bound;
 
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.image.extent.Resolution;
+import java.util.Optional;
+import org.anchoranalysis.image.core.dimensions.Resolution;
 
 //
 //  An upper and lower bound in degrees which is converted
@@ -48,17 +49,25 @@ public class BoundPhysicalExtent extends BoundMinMax {
     }
 
     @Override
-    public double getMinResolved(Resolution resolution, boolean do3D) {
-        return getMin() / resolution.min(do3D);
+    public double getMinResolved(Optional<Resolution> resolution, boolean do3D) {
+        return maybeDivideBy(getMin(), resolution, do3D);
     }
 
     @Override
-    public double getMaxResolved(Resolution resolution, boolean do3D) {
-        return getMax() / resolution.min(do3D);
+    public double getMaxResolved(Optional<Resolution> resolution, boolean do3D) {
+        return maybeDivideBy(getMax(), resolution, do3D);
     }
 
     @Override
     public Bound duplicate() {
         return new BoundPhysicalExtent(this);
+    }
+    
+    private static double maybeDivideBy(double value, Optional<Resolution> resolution, boolean do3D) {
+        if (resolution.isPresent()) {
+            return value / resolution.get().min(do3D);
+        } else {
+            return value;
+        }
     }
 }

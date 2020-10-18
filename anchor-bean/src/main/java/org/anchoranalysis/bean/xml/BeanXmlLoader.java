@@ -143,15 +143,16 @@ public class BeanXmlLoader {
     }
 
     /**
-     * Creates a bean by loading an XML description from the filesystem
+     * Creates a bean by loading an XML description from the filesystem.
      *
-     * <p>Does not create summarized and user-friendly exception, but throws lots of
-     * LocalisedBeanException exceptions.
+     * <p>Does not create summarized and user-friendly exception, but throws lots of {@link
+     * LocalisedBeanException} exceptions.
      *
-     * <p>This does function simply does the hard work for loadBeanAssociatedXml()
+     * <p>This does function simply does the hard work for {@link #loadBeanAssociatedXml(Path,
+     * String)}
      *
-     * <p>We keep the functions seperated, so as to mirror the division between loadBean() and
-     * loadBeanLocalized()
+     * <p>We keep the functions separated, so as to mirror the division between {@link
+     * #loadBean(Path)} and {@link #loadBeanLocalized(Path, String)}.
      *
      * @param path file-path to the file containing the XML
      * @param xmlPath xml-path to where the bean is located within the XML
@@ -187,7 +188,7 @@ public class BeanXmlLoader {
     }
 
     /**
-     * Creates the bean from some XML
+     * Creates the bean from some XML.
      *
      * @param config the config to create from
      * @param xmlPath the path of the bean in the XML file
@@ -233,7 +234,7 @@ public class BeanXmlLoader {
     }
 
     /**
-     * Creates a bean from a {@link HierarchicalConfiguration} describing it
+     * Creates a bean from a {@link HierarchicalConfiguration} describing it.
      *
      * @param <T> type of bean
      * @param config the configuration

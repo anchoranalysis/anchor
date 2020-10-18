@@ -29,74 +29,92 @@ package org.anchoranalysis.io.output.writer;
 import java.nio.file.Path;
 import java.util.Optional;
 import org.anchoranalysis.io.manifest.ManifestDescription;
-import org.anchoranalysis.io.manifest.ManifestFolderDescription;
-import org.anchoranalysis.io.manifest.folder.FolderWriteWithPath;
-import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
-import org.anchoranalysis.io.namestyle.OutputNameStyle;
-import org.anchoranalysis.io.namestyle.SimpleOutputNameStyle;
-import org.anchoranalysis.io.output.bean.OutputWriteSettings;
-import org.anchoranalysis.io.output.bound.BoundOutputManager;
+import org.anchoranalysis.io.manifest.ManifestDirectoryDescription;
+import org.anchoranalysis.io.manifest.directory.SubdirectoryBase;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import org.anchoranalysis.io.output.namestyle.IndexableOutputNameStyle;
+import org.anchoranalysis.io.output.outputter.OutputterChecked;
 
 /**
- * Allows users to write various things to the file system based upon // the properties of the
- * current bound output manager
+ * Write data via {@link ElementWriter}s to the file system, or creates new sub-directories for writing data to.
  *
- * <p>We use Operations so that the generator is only calculated, if the operation is actually
- * written
+ * <p>This class is similar to {@link WriterRouterErrors} but exceptions are thrown rather than
+ * reporting errors.
+ *
+ * <p>These operations occur in association with the currently bound output manager.
+ *
+ * <p>The {@link ElementWriterSupplier} interface is used so as to avoid object-creation if an
+ * operation isn't actually written.
+ * 
+ * <p>Note that a {@link ElementWriter} may write more than one file for a given element.
  *
  * @author Owen Feehan
  */
 public interface Writer {
 
-    Optional<BoundOutputManager> bindAsSubdirectory(
+    /**
+     * Maybe creates a subdirectory for writing to.
+     *
+     * @param outputName the name of the subdirectory. This may determine if an output is allowed
+     *     or not.
+     * @param manifestDescription a manifest-description associated with the subdirectory as a
+     *     whole.
+     * @param manifestFolder a manifest-folder if it exists
+     * @param inheritOutputRulesAndRecording if true, the output rules and recording are inherited
+     *     from the parent directory. if false, they are not, and all outputs are allowed and are
+     *     unrecorded.
+     * @return an output-manager for the directory if it is allowed, otherwise {@link
+     *     Optional#empty}.
+     * @throws OutputWriteFailedException
+     */
+    Optional<OutputterChecked> createSubdirectory(
             String outputName,
-            ManifestFolderDescription manifestDescription,
-            Optional<FolderWriteWithPath> folder)
+            ManifestDirectoryDescription manifestDescription,
+            Optional<SubdirectoryBase> manifestFolder,
+            boolean inheritOutputRulesAndRecording)
             throws OutputWriteFailedException;
-
-    void writeSubfolder(String outputName, GenerateWritableItem<?> collectionGenerator)
-            throws OutputWriteFailedException;
-
-    int write(
+    
+    /**
+     * Writes an element using an {@link ElementWriter} to the current directory.
+     *
+     * @param outputName the name of the subdirectory. This may determine if an output is allowed
+     *     or not.
+     * @param elementWriter writes the element to the filesystem
+     * @param element the element to write
+     * @return true if the output was allowed, false otherwise
+     * @throws OutputWriteFailedException
+     */
+    <T> boolean write(String outputName, ElementWriterSupplier<T> elementWriter, ElementSupplier<T> element) throws OutputWriteFailedException;
+    
+    /**
+     * Writes an indexed-element using an {@link ElementWriter} in the current directory.
+     *
+     * @param outputNameStyle how to combine a particular output-name with an index
+     * @param elementWriter writes the element to the filesystem
+     * @param element the element to write
+     * @param index the index
+     * @return the number of elements written by the {@link ElementWriter}, including 0 elements, or -2 if the
+     *     output is not allowed.
+     * @throws OutputWriteFailedException
+     */
+    <T> int writeWithIndex(
             IndexableOutputNameStyle outputNameStyle,
-            GenerateWritableItem<?> generator,
+            ElementWriterSupplier<T> elementWriter,
+            ElementSupplier<T> element,
             String index)
             throws OutputWriteFailedException;
 
-    void write(OutputNameStyle outputNameStyle, GenerateWritableItem<?> generator)
-            throws OutputWriteFailedException;
-
-    default void write(String outputName, GenerateWritableItem<?> generator)
-            throws OutputWriteFailedException {
-        write(new SimpleOutputNameStyle(outputName), generator);
-    }
-
-    // Write a file with an index represented by an int, returns the number of files created
-    default int write(
-            IndexableOutputNameStyle outputNameStyle, GenerateWritableItem<?> generator, int index)
-            throws OutputWriteFailedException {
-        return write(outputNameStyle, generator, Integer.toString(index));
-    }
-
     /**
-     * The path to write a particular output to
+     * The path to write a particular output to.
      *
-     * @param outputName
-     * @param extension
-     * @param manifestDescription
-     * @param outputNamePrefix
-     * @param outputNameSuffix
-     * @param index
-     * @return the path to write to or null if the output is not allowed
+     * <p>This is an alternative method to write to the file system rather than using an {@link ElementWriter} and {@link #write(String, ElementWriterSupplier, ElementSupplier)} and {@link #writeWithIndex(IndexableOutputNameStyle, ElementWriterSupplier, ElementSupplier, String)}.
+     *
+     * @param outputName the output-name. This is the filename without an extension, and may
+     *     determine if an output is allowed or not.
+     * @param extension the extension
+     * @param manifestDescription manifest-description associated with the file if it exists.
+     * @return the path to write to, if it is allowed, otherwise {@link Optional#empty}.
      */
-    Optional<Path> writeGenerateFilename(
-            String outputName,
-            String extension,
-            Optional<ManifestDescription> manifestDescription,
-            String outputNamePrefix,
-            String outputNameSuffix,
-            String index);
-
-    OutputWriteSettings getOutputWriteSettings();
+    Optional<Path> createFilenameForWriting(
+            String outputName, String extension, Optional<ManifestDescription> manifestDescription);
 }

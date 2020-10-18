@@ -30,9 +30,9 @@ import java.util.Optional;
 import java.util.Set;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.feature.cache.ChildCacheName;
-import org.anchoranalysis.feature.cache.calculate.CacheCreator;
-import org.anchoranalysis.feature.cache.calculate.FeatureSessionCache;
+import org.anchoranalysis.feature.calculate.cache.CacheCreator;
+import org.anchoranalysis.feature.calculate.cache.ChildCacheName;
+import org.anchoranalysis.feature.calculate.cache.FeatureSessionCache;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**

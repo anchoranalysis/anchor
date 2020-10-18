@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -27,12 +27,12 @@ package org.anchoranalysis.feature.io.results.group;
 
 import java.util.Optional;
 import lombok.AllArgsConstructor;
-import org.anchoranalysis.feature.calculate.results.ResultsVectorCollection;
 import org.anchoranalysis.feature.io.csv.FeatureListCSVGeneratorHorizontal;
 import org.anchoranalysis.feature.io.name.MultiName;
 import org.anchoranalysis.feature.name.FeatureNameList;
-import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
-import org.anchoranalysis.io.output.bound.CacheSubdirectoryContext;
+import org.anchoranalysis.feature.results.ResultsVectorList;
+import org.anchoranalysis.io.output.outputter.InputOutputContextSubdirectoryCache;
+import org.anchoranalysis.io.output.outputter.Outputter;
 
 /**
  * Writes the aggregated results for a single group as CSV to the filesystem.
@@ -46,24 +46,23 @@ class WriteCSVForGroup {
 
     private String outputName;
     private FeatureNameList featureNames;
-    private CacheSubdirectoryContext context;
+    private InputOutputContextSubdirectoryCache context;
 
-    public void write(Optional<MultiName> groupName, ResultsVectorCollection results) {
+    public void write(Optional<MultiName> groupName, ResultsVectorList results) {
         if (groupName.isPresent()) {
             writeGroupFeatures(
-                    context.get(groupName.map(MultiName::toString)).getOutputManager(), results);
+                    context.get(groupName.map(MultiName::toString)).getOutputter(), results);
         }
     }
 
     /** Writes a table of features in CSV for a particular group */
-    private void writeGroupFeatures(
-            BoundOutputManagerRouteErrors outputManager, ResultsVectorCollection results) {
-        outputManager
-                .getWriterCheckIfAllowed()
+    private void writeGroupFeatures(Outputter outputter, ResultsVectorList results) {
+        outputter
+                .writerSelective()
                 .write(
                         outputName,
                         () ->
                                 new FeatureListCSVGeneratorHorizontal(
-                                        MANIFEST_FUNCTION_FEATURES_GROUP, featureNames, results));
+                                        MANIFEST_FUNCTION_FEATURES_GROUP, featureNames), () -> results);
     }
 }

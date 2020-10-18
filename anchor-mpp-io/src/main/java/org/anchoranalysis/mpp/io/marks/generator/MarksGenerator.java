@@ -27,10 +27,9 @@
 package org.anchoranalysis.mpp.io.marks.generator;
 
 import org.anchoranalysis.core.idgetter.IDGetter;
-import org.anchoranalysis.image.stack.DisplayStack;
+import org.anchoranalysis.image.core.stack.DisplayStack;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMapSingleton;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMembershipWithFlags;
-import org.anchoranalysis.mpp.io.marks.ColoredMarksWithDisplayStack;
 import org.anchoranalysis.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.overlay.Overlay;
 import org.anchoranalysis.overlay.bean.DrawObject;
@@ -38,25 +37,12 @@ import org.anchoranalysis.overlay.bean.DrawObject;
 public class MarksGenerator extends MarksGeneratorBase {
 
     public MarksGenerator(DrawObject drawObject, IDGetter<Overlay> idGetter) {
-        this(drawObject, null, idGetter);
+        this(drawObject, idGetter, RegionMapSingleton.instance()
+                .membershipWithFlagsForIndex(GlobalRegionIdentifiers.SUBMARK_INSIDE));
     }
-
-    public MarksGenerator(
-            DrawObject drawObject, ColoredMarksWithDisplayStack cws, IDGetter<Overlay> idGetter) {
-        this(
-                drawObject,
-                cws,
-                idGetter,
-                RegionMapSingleton.instance()
-                        .membershipWithFlagsForIndex(GlobalRegionIdentifiers.SUBMARK_INSIDE));
-    }
-
-    public MarksGenerator(
-            DrawObject drawObject,
-            ColoredMarksWithDisplayStack cws,
-            IDGetter<Overlay> idGetter,
-            RegionMembershipWithFlags regionMembership) {
-        super(new SimpleOverlayWriter(drawObject), cws, idGetter, regionMembership);
+    
+    public MarksGenerator(DrawObject drawObject, IDGetter<Overlay> idGetter, RegionMembershipWithFlags regionMembership) {
+        super(new SimpleOverlayWriter(drawObject), idGetter, regionMembership);
     }
 
     @Override

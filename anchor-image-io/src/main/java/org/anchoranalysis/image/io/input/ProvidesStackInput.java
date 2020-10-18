@@ -30,10 +30,10 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
-import org.anchoranalysis.image.stack.NamedStacks;
-import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.image.stack.TimeSequence;
-import org.anchoranalysis.image.stack.wrap.WrapStackAsTimeSequenceStore;
+import org.anchoranalysis.image.core.stack.NamedStacks;
+import org.anchoranalysis.image.core.stack.Stack;
+import org.anchoranalysis.image.core.stack.TimeSequence;
+import org.anchoranalysis.image.core.stack.wrap.WrapStackAsTimeSequenceStore;
 import org.anchoranalysis.io.input.InputFromManager;
 
 /**
@@ -74,20 +74,20 @@ public interface ProvidesStackInput extends InputFromManager {
      * Adds the current object to a named-store of stacks
      *
      * @param stacks
-     * @param seriesNum
+     * @param seriesIndex
      * @param progressReporter
      * @throws OperationFailedException
      */
     void addToStoreInferNames(
             NamedProviderStore<TimeSequence> stacks,
-            int seriesNum,
+            int seriesIndex,
             ProgressReporter progressReporter)
             throws OperationFailedException;
 
     void addToStoreWithName(
             String name,
-            NamedProviderStore<TimeSequence> stackCollection,
-            int seriesNum,
+            NamedProviderStore<TimeSequence> stacks,
+            int seriesIndex,
             ProgressReporter progressReporter)
             throws OperationFailedException;
 

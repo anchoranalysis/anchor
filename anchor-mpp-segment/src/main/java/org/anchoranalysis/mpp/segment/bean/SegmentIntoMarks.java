@@ -34,10 +34,12 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.name.provider.NamedProvider;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
+import org.anchoranalysis.image.core.stack.NamedStacks;
 import org.anchoranalysis.image.experiment.identifiers.StackIdentifiers;
-import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.stack.NamedStacks;
-import org.anchoranalysis.io.output.bound.BoundIOContext;
+import org.anchoranalysis.image.voxel.object.ObjectCollection;
+import org.anchoranalysis.io.output.bean.enabled.IgnoreUnderscorePrefix;
+import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
+import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.mpp.mark.MarkCollection;
 
 public abstract class SegmentIntoMarks extends AnchorBean<SegmentIntoMarks> {
@@ -53,6 +55,15 @@ public abstract class SegmentIntoMarks extends AnchorBean<SegmentIntoMarks> {
             NamedStacks stacks,
             NamedProvider<ObjectCollection> objects,
             Optional<KeyValueParams> keyValueParams,
-            BoundIOContext context)
+            InputOutputContext context)
             throws SegmentationFailedException;
+    
+    /**
+     * If specified, default rules for determine which outputs are enabled or not.
+     *
+     * @return the default rules if they exist.
+     */
+    public OutputEnabledMutable defaultOutputs() {
+        return new OutputEnabledMutable(IgnoreUnderscorePrefix.INSTANCE);
+    }    
 }

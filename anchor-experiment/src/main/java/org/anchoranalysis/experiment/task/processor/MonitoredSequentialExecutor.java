@@ -75,7 +75,7 @@ public class MonitoredSequentialExecutor<T> {
 
         // So we can report on where a job in its total context
         JobStartStopLogger jobLogger =
-                new JobStartStopLogger(logPrefix, logger, monitor, showHashSeperators, 0);
+                new JobStartStopLogger(logPrefix, monitor, showHashSeperators, 0, logger);
 
         List<InputAfterSubmission> submittedInputs = mapToSubmitted(inputs, monitor);
 

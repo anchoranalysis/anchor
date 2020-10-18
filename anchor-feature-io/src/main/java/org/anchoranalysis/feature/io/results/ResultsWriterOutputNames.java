@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -39,6 +39,9 @@ import org.anchoranalysis.core.functional.OptionalUtilities;
  */
 public class ResultsWriterOutputNames {
 
+    /** If not otherwise specified, the output name for a non-aggregated CSV of the results. */
+    public static final String OUTPUT_DEFAULT_NON_AGGREGATED = "features";
+
     /** The CSV of non-aggregated feature-results */
     @Getter private String csvFeaturesNonAggregated;
 
@@ -57,7 +60,7 @@ public class ResultsWriterOutputNames {
      * <p>All outputs are enabled.
      */
     public ResultsWriterOutputNames() {
-        this("features", true, true);
+        this(OUTPUT_DEFAULT_NON_AGGREGATED, true, true);
     }
 
     /**

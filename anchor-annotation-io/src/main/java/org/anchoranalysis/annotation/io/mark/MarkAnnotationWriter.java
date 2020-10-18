@@ -35,7 +35,7 @@ import org.anchoranalysis.annotation.Annotation;
 import org.anchoranalysis.annotation.io.AnnotationWriter;
 import org.anchoranalysis.annotation.io.WriterUtilities;
 import org.anchoranalysis.annotation.mark.DualMarksAnnotation;
-import org.anchoranalysis.io.generator.serialized.XStreamGenerator;
+import org.anchoranalysis.core.serialize.XStreamSerializer;
 
 /**
  * @author Owen Feehan
@@ -79,7 +79,7 @@ public class MarkAnnotationWriter<T> implements AnnotationWriter<DualMarksAnnota
         // Create whatever directories we need
         WriterUtilities.createNecessaryDirectories(annotationPath);
 
-        XStreamGenerator.writeObjectToFile(annotation, annotationPath);
+        XStreamSerializer.serializeObjectToFile(annotation, annotationPath);
 
         if (annotationPathForDeletion != null
                 && !annotationPathForDeletion.equals(annotationPath)) {

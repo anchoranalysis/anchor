@@ -29,17 +29,17 @@ package org.anchoranalysis.feature.io.results;
 import java.io.Closeable;
 import java.io.IOException;
 import java.util.Optional;
-import org.anchoranalysis.feature.calculate.results.ResultsVector;
 import org.anchoranalysis.feature.input.FeatureInputResults;
 import org.anchoranalysis.feature.io.csv.FeatureCSVWriter;
 import org.anchoranalysis.feature.io.csv.RowLabels;
 import org.anchoranalysis.feature.io.results.group.GroupWriter;
 import org.anchoranalysis.feature.list.NamedFeatureStore;
-import org.anchoranalysis.io.error.AnchorIOException;
-import org.anchoranalysis.io.manifest.ManifestFolderDescription;
-import org.anchoranalysis.io.manifest.sequencetype.SetSequenceType;
-import org.anchoranalysis.io.output.bound.BoundIOContext;
-import org.anchoranalysis.io.output.bound.CacheSubdirectoryContext;
+import org.anchoranalysis.feature.results.ResultsVector;
+import org.anchoranalysis.io.manifest.ManifestDirectoryDescription;
+import org.anchoranalysis.io.manifest.sequencetype.StringsWithoutOrder;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import org.anchoranalysis.io.output.outputter.InputOutputContext;
+import org.anchoranalysis.io.output.outputter.InputOutputContextSubdirectoryCache;
 
 /**
  * Feature calculation results that can be outputted in different ways.
@@ -61,13 +61,13 @@ import org.anchoranalysis.io.output.bound.CacheSubdirectoryContext;
 public class ResultsWriter implements Closeable {
 
     /** The highest-level group directory */
-    private static final ManifestFolderDescription MANIFEST_GROUP_ROOT =
-            new ManifestFolderDescription(
-                    "groupedResultsRoot", "featureCsv", new SetSequenceType());
+    private static final ManifestDirectoryDescription MANIFEST_GROUP_ROOT =
+            new ManifestDirectoryDescription(
+                    "groupedResultsRoot", "featureCsv", new StringsWithoutOrder());
 
     /** The second highest-level group directory */
-    private static final ManifestFolderDescription MANIFEST_GROUP_SUBROOT =
-            new ManifestFolderDescription("groupedResults", "featureCsv", new SetSequenceType());
+    private static final ManifestDirectoryDescription MANIFEST_GROUP_SUBROOT =
+            new ManifestDirectoryDescription("groupedResults", "featureCsv", new StringsWithoutOrder());
 
     private Optional<FeatureCSVWriter> writer;
     private GroupWriter groupWriter;
@@ -77,15 +77,15 @@ public class ResultsWriter implements Closeable {
      *
      * @param outputMetadata metadata needed for determing output-names and CSV headers.
      * @param context defines the direction in which outputs occur.
-     * @throws AnchorIOException if I/O fails.
+     * @throws OutputWriteFailedException if writing fails
      */
-    public ResultsWriter(ResultsWriterMetadata outputMetadata, BoundIOContext context)
-            throws AnchorIOException {
+    public ResultsWriter(ResultsWriterMetadata outputMetadata, InputOutputContext context)
+            throws OutputWriteFailedException {
 
         // Where non-group results are outputted
         writer =
                 FeatureCSVWriter.create(
-                        outputMetadata.metadataNonAggregated(), context.getOutputManager());
+                        outputMetadata.metadataNonAggregated(), context.getOutputter());
 
         // Where group results are outputted
         groupWriter = new GroupWriter(outputMetadata);
@@ -118,18 +118,19 @@ public class ResultsWriter implements Closeable {
      * @param includeGroups iff true a group-column is included in the CSV file and the group
      *     exports occur, otherwise not
      * @param context input-output context
-     * @throws AnchorIOException if any input-output errors occur
+     * @throws OutputWriteFailedException if writing fails
      */
     public void writeResultsForAllGroups(
             Optional<NamedFeatureStore<FeatureInputResults>> featuresAggregate,
             boolean includeGroups,
-            BoundIOContext context)
-            throws AnchorIOException {
+            InputOutputContext context)
+            throws OutputWriteFailedException {
 
-        CacheSubdirectoryContext contextGroups =
-                new CacheSubdirectoryContext(
-                        context.subdirectory("grouped", MANIFEST_GROUP_ROOT),
-                        MANIFEST_GROUP_SUBROOT);
+        InputOutputContextSubdirectoryCache contextGroups =
+                new InputOutputContextSubdirectoryCache(
+                        context.subdirectory("grouped", MANIFEST_GROUP_ROOT, true),
+                        MANIFEST_GROUP_SUBROOT,
+                        true);
 
         groupWriter.writeGroupResults(featuresAggregate, includeGroups, context, contextGroups);
     }

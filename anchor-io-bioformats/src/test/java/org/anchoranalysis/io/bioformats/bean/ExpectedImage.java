@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -31,11 +31,11 @@ import java.io.File;
 import java.nio.file.Path;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
-import org.anchoranalysis.image.io.RasterIOException;
-import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
-import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
-import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.image.stack.TimeSequence;
+import org.anchoranalysis.image.core.stack.Stack;
+import org.anchoranalysis.image.core.stack.TimeSequence;
+import org.anchoranalysis.image.io.ImageIOException;
+import org.anchoranalysis.image.io.bean.stack.StackReader;
+import org.anchoranalysis.image.io.stack.OpenedRaster;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.test.TestLoader;
 
@@ -81,9 +81,9 @@ class ExpectedImage {
     /** Which intensity value to count */
     private int intensityValueToCount;
 
-    public void openAndAssert(RasterReader rasterReader, TestLoader loader)
-            throws RasterIOException {
-        Stack stack = openStackFromReader(rasterReader, loader);
+    public void openAndAssert(StackReader stackReader, TestLoader loader)
+            throws ImageIOException {
+        Stack stack = openStackFromReader(stackReader, loader);
         assertEqualsPrefix(
                 "voxel data type", expectedDataType, stack.getChannel(0).getVoxelDataType());
         assertEqualsPrefix("number channels", expectedNumberChannels, stack.getNumberChannels());
@@ -93,8 +93,8 @@ class ExpectedImage {
                 stack.getChannel(0).voxelsEqualTo(intensityValueToCount).count());
     }
 
-    private Stack openStackFromReader(RasterReader reader, TestLoader loader)
-            throws RasterIOException {
+    private Stack openStackFromReader(StackReader reader, TestLoader loader)
+            throws ImageIOException {
 
         Path path = loader.resolveTestPath(relativePath());
 

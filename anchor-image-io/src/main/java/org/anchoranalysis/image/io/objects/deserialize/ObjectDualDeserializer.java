@@ -30,18 +30,18 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
-import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.extent.Dimensions;
-import org.anchoranalysis.image.extent.box.BoundingBox;
-import org.anchoranalysis.image.io.RasterIOException;
-import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
-import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
-import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.stack.Stack;
+import org.anchoranalysis.core.serialize.DeserializationFailedException;
+import org.anchoranalysis.core.serialize.Deserializer;
+import org.anchoranalysis.core.serialize.ObjectInputStreamDeserializer;
+import org.anchoranalysis.image.core.channel.Channel;
+import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.image.core.stack.Stack;
+import org.anchoranalysis.image.io.ImageIOException;
+import org.anchoranalysis.image.io.bean.stack.StackReader;
+import org.anchoranalysis.image.io.stack.OpenedRaster;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
-import org.anchoranalysis.io.bean.deserializer.Deserializer;
-import org.anchoranalysis.io.bean.deserializer.ObjectInputStreamDeserializer;
-import org.anchoranalysis.io.deserializer.DeserializationFailedException;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
+import org.anchoranalysis.spatial.extent.box.BoundingBox;
 
 /**
  * Deserializes an {@link ObjectMask} stored in two parts (a raster-mask and a serialized bounding-box)
@@ -59,7 +59,7 @@ class ObjectDualDeserializer implements Deserializer<ObjectMask> {
     private static final ObjectInputStreamDeserializer<BoundingBox> BOUNDING_BOX_DESERIALIZER =
             new ObjectInputStreamDeserializer<>();
 
-    private final RasterReader rasterReader;
+    private final StackReader stackReader;
 
     @Override
     public ObjectMask deserialize(Path filePath) throws DeserializationFailedException {
@@ -68,7 +68,7 @@ class ObjectDualDeserializer implements Deserializer<ObjectMask> {
 
         BoundingBox box = BOUNDING_BOX_DESERIALIZER.deserialize(filePath);
 
-        try (OpenedRaster or = rasterReader.openFile(tiffFilename)) {
+        try (OpenedRaster or = stackReader.openFile(tiffFilename)) {
             Stack stack =
                     or.openCheckType(0, ProgressReporterNull.get(), UnsignedByteVoxelType.INSTANCE)
                             .get(0);
@@ -86,7 +86,7 @@ class ObjectDualDeserializer implements Deserializer<ObjectMask> {
 
             return new ObjectMask(box, channel.voxels().asByte());
 
-        } catch (RasterIOException e) {
+        } catch (ImageIOException e) {
             throw new DeserializationFailedException(e);
         }
     }

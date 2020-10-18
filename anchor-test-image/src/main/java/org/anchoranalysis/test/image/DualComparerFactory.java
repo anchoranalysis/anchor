@@ -27,6 +27,7 @@ package org.anchoranalysis.test.image;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.test.TestLoader;
@@ -44,11 +45,23 @@ public class DualComparerFactory {
         return new DualComparer(loaderTemporary, loaderTest);
     }
 
+    /**
+     * Compares a directory in a temporary-folder to a directory in Maven's {@code test/resources}.
+     *
+     * @param folder the temporary folder
+     * @param relativeTemporaryFolder optionally an additional subdirectory to use relative to the
+     *     root of {@code folder}.
+     * @param relativeResourcesRoot a subdirectory to use in Maven's test/resources relative to the
+     *     root of the resources
+     * @return a comparer between the two directories.
+     */
     public static DualComparer compareTemporaryFolderToTest(
-            TemporaryFolder folder, String relativeTemporaryFolder, String pathRelativeTestDir) {
+            TemporaryFolder folder,
+            Optional<String> relativeTemporaryFolder,
+            String relativeResourcesRoot) {
 
         TestLoader loaderTemporary = loaderTemporaryFolder(folder, relativeTemporaryFolder);
-        TestLoader loaderTest = TestLoader.createFromMavenWorkingDirectory(pathRelativeTestDir);
+        TestLoader loaderTest = TestLoader.createFromMavenWorkingDirectory(relativeResourcesRoot);
 
         return new DualComparer(loaderTemporary, loaderTest);
     }
@@ -68,8 +81,15 @@ public class DualComparerFactory {
     }
 
     private static TestLoader loaderTemporaryFolder(
-            TemporaryFolder folder, String relativeTemporaryFolder) {
-        Path pathTemporary = Paths.get(folder.getRoot().getAbsolutePath(), relativeTemporaryFolder);
+            TemporaryFolder folder, Optional<String> additionalRelative) {
+
+        Path pathTemporary =
+                additionalRelative
+                        .map(
+                                additional ->
+                                        Paths.get(folder.getRoot().getAbsolutePath(), additional))
+                        .orElseGet(() -> Paths.get(folder.getRoot().getAbsolutePath()));
+
         return TestLoader.createFromExplicitDirectory(pathTemporary);
     }
 }

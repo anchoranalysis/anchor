@@ -31,97 +31,121 @@ import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.io.manifest.ManifestDescription;
-import org.anchoranalysis.io.manifest.ManifestFolderDescription;
-import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
-import org.anchoranalysis.io.namestyle.OutputNameStyle;
-import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.io.manifest.ManifestDirectoryDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import org.anchoranalysis.io.output.namestyle.IndexableOutputNameStyle;
+import org.anchoranalysis.io.output.outputter.Outputter;
 
+/**
+ * Write data via {@link ElementWriter}s to the file system, or creates new sub-directories for writng data to.
+ *
+ * <p>This class is similar to {@link Writer} but:
+ *
+ * <ul>
+ *   <li>exceptions are suppressed and errors are instead reported.
+ *   <li>differences exist around writing sub-folders and manifests
+ * </ul>
+ *
+ * <p>These operations occur in association with the currently bound output manager.
+ *
+ * <p>The {@link ElementWriterSupplier} interface is used so as to avoid object-creation if an
+ * operation isn't actually written.
+ * 
+ * <p>Note that a {@link ElementWriter} may write more than one file for a given element.
+ *
+ * @author Owen Feehan
+ */
 @AllArgsConstructor
 public class WriterRouterErrors {
+
+    public static final int NUMBER_ELEMENTS_WRITTEN_ERRORED = -1;
 
     private Writer delegate;
     private ErrorReporter errorReporter;
 
-    public Optional<BoundOutputManagerRouteErrors> bindAsSubdirectory(
-            String outputName, ManifestFolderDescription manifestDescription) {
+    /**
+     * Maybe creates a subdirectory for writing to.
+     *
+     * @param outputName the name of the subdirectory
+     * @param manifestDescription a manifest-description associated with the subdirectory as a
+     *     whole.
+     * @param inheritOutputRulesAndRecording if true, the output rules and recording are inherited
+     *     from the parent directory. if false, they are not, and all outputs are allowed and are
+     *     unrecorded.
+     * @return an output-manager for the directory if it is allowed, otherwise {@link
+     *     Optional#empty}.
+     */
+    public Optional<Outputter> createSubdirectory(
+            String outputName,
+            ManifestDirectoryDescription manifestDescription,
+            boolean inheritOutputRulesAndRecording) {
         try {
-            return delegate.bindAsSubdirectory(outputName, manifestDescription, Optional.empty())
-                    .map(output -> new BoundOutputManagerRouteErrors(output, errorReporter));
+            return delegate.createSubdirectory(
+                            outputName,
+                            manifestDescription,
+                            Optional.empty(),
+                            inheritOutputRulesAndRecording)
+                    .map(output -> new Outputter(output, errorReporter));
         } catch (OutputWriteFailedException e) {
-            errorReporter.recordError(BoundOutputManagerRouteErrors.class, e);
+            errorReporter.recordError(Outputter.class, e);
             return Optional.empty();
         }
     }
-
-    public void writeSubfolder(String outputName, GenerateWritableItem<?> collectionGenerator) {
+    
+    /**
+     * Writes an element using an {@link ElementWriter} to the current directory.
+     *
+     * @param outputName the name of the subdirectory. This may determine if an output is allowed
+     *     or not.
+     * @param elementWriter writes the element to the filesystem
+     * @param element the element to write
+     */
+    public <T> void write(String outputName, ElementWriterSupplier<T> elementWriter, ElementSupplier<T> element) {
         try {
-            delegate.writeSubfolder(outputName, collectionGenerator);
+            delegate.write(outputName, elementWriter, element);
         } catch (OutputWriteFailedException e) {
-            errorReporter.recordError(BoundOutputManagerRouteErrors.class, e);
+            errorReporter.recordError(Outputter.class, e);
         }
     }
 
-    public int write(
+    /**
+     * Writes an indexed-element using an {@link ElementWriter} in the current directory.
+     *
+     * @param outputNameStyle how to combine a particular output-name with an index
+     * @param elementWriter writes the element to the filesystem
+     * @param element the element to write
+     * @param index the index
+     * @return the number of elements written by the {@link ElementWriter}, including 0 elements, or -2 if the
+     *     output is not allowed.
+     */
+    public <T> int writeWithIndex(
             IndexableOutputNameStyle outputNameStyle,
-            GenerateWritableItem<?> generator,
+            ElementWriterSupplier<T> elementWriter,
+            ElementSupplier<T> element,
             String index) {
         try {
-            return delegate.write(outputNameStyle, generator, index);
+            return delegate.writeWithIndex(outputNameStyle, elementWriter, element, index);
         } catch (OutputWriteFailedException e) {
-            errorReporter.recordError(BoundOutputManagerRouteErrors.class, e);
-            return -1;
+            errorReporter.recordError(Outputter.class, e);
+            return NUMBER_ELEMENTS_WRITTEN_ERRORED;
         }
     }
-
-    public int write(
-            IndexableOutputNameStyle outputNameStyle,
-            GenerateWritableItem<?> generator,
-            int index) {
-        try {
-            return delegate.write(outputNameStyle, generator, index);
-        } catch (OutputWriteFailedException e) {
-            errorReporter.recordError(BoundOutputManagerRouteErrors.class, e);
-            return -1;
-        }
-    }
-
-    public void write(OutputNameStyle outputNameStyle, GenerateWritableItem<?> generator) {
-        try {
-            delegate.write(outputNameStyle, generator);
-        } catch (OutputWriteFailedException e) {
-            errorReporter.recordError(BoundOutputManagerRouteErrors.class, e);
-        }
-    }
-
-    public void write(String outputName, GenerateWritableItem<?> generator) {
-        try {
-            delegate.write(outputName, generator);
-        } catch (OutputWriteFailedException e) {
-            errorReporter.recordError(BoundOutputManagerRouteErrors.class, e);
-        }
-    }
-
-    public Optional<Path> writeGenerateFilename(
+    
+    /**
+     * The path to write a particular output to.
+     *
+     * <p>This is an alternative method to write to the file system rather than using an {@link ElementWriter} and {@link #write(String, ElementWriterSupplier, ElementSupplier)} and {@link #writeWithIndex(IndexableOutputNameStyle, ElementWriterSupplier, ElementSupplier, String)}.
+     *
+     * @param outputName the output-name. This is the filename without an extension, and may
+     *     determine if an output is allowed or not.
+     * @param extension the extension
+     * @param manifestDescription manifest-description associated with the file if it exists.
+     * @return the path to write to, if it is allowed, otherwise {@link Optional#empty}.
+     */
+    public Optional<Path> createFilenameForWriting(
             String outputName,
             String extension,
             Optional<ManifestDescription> manifestDescription) {
-        return writeGenerateFilename(outputName, extension, manifestDescription, "", "", "");
-    }
-
-    public Optional<Path> writeGenerateFilename(
-            String outputName,
-            String extension,
-            Optional<ManifestDescription> manifestDescription,
-            String outputNamePrefix,
-            String outputNameSuffix,
-            String index) {
-        return delegate.writeGenerateFilename(
-                outputName,
-                extension,
-                manifestDescription,
-                outputNamePrefix,
-                outputNameSuffix,
-                index);
+        return delegate.createFilenameForWriting(outputName, extension, manifestDescription);
     }
 }

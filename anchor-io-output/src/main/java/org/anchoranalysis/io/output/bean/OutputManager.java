@@ -27,37 +27,91 @@
 package org.anchoranalysis.io.output.bean;
 
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.AnchorBean;
-import org.anchoranalysis.io.bean.filepath.prefixer.PathWithDescription;
-import org.anchoranalysis.io.error.FilePathPrefixerException;
-import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
-import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerParams;
-import org.anchoranalysis.io.manifest.ManifestRecorder;
-import org.anchoranalysis.io.output.bean.allowed.OutputAllowed;
-import org.anchoranalysis.io.output.bound.BindFailedException;
-import org.anchoranalysis.io.output.bound.BoundOutputManager;
+import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.bean.annotation.OptionalBean;
+import org.anchoranalysis.io.manifest.Manifest;
+import org.anchoranalysis.io.output.bean.rules.OutputEnabledRules;
+import org.anchoranalysis.io.output.outputter.BindFailedException;
+import org.anchoranalysis.io.output.outputter.OutputterChecked;
+import org.anchoranalysis.io.output.path.PathPrefixerException;
+import org.anchoranalysis.io.output.path.DirectoryWithPrefix;
+import org.anchoranalysis.io.output.path.FilePathPrefixerContext;
+import org.anchoranalysis.io.output.path.PathPrefixer;
+import org.anchoranalysis.io.output.recorded.RecordedOutputsWithRules;
 
-/** Responsible for making decisions on where output goes and what form it takes */
-public abstract class OutputManager extends AnchorBean<OutputManager> {
+/**
+ * Responsible for making decisions on where output goes and what form it takes.
+ *
+ * <p>An output prefix (with directory and/or file-path components) is calculated for each input.
+ *
+ * <p>Rules can be specified in {@code outputsEnabled} as to which outputs occur or do not occur
+ * (from the available outputs in an experiment) when an experiment is run.
+ */
+public class OutputManager extends AnchorBean<OutputManager> {
 
-    public abstract boolean isOutputAllowed(String outputName);
+    // BEAN PROPERTIES
+    /**
+     * Determines a prefix to use when outputting a file based upon an input-path.
+     *
+     * <p>This method is called with a binding path from the input to determine a
+     * output prefix for each input to an experiment.
+     */
+    @BeanField @Getter @Setter private PathPrefixer filePathPrefixer;
 
     /**
-     * A second-level of OutputAllowed for a particular key, or null if none is defined for this key
+     * Whether to silently first delete any existing output at the intended path, or rather throw an
+     * error.
+     *
+     * <p>If true, if an existing output folder (at intended path) is deleted If false, an error is
+     * thrown if the folder already exists
      */
-    public abstract OutputAllowed outputAllowedSecondLevel(String key);
+    @BeanField @Getter @Setter private boolean silentlyDeleteExisting = false;
 
-    public abstract BoundOutputManager bindRootFolder(
-            String expIdentifier,
-            ManifestRecorder writeOperationRecorder,
-            FilePathPrefixerParams context)
-            throws BindFailedException;
+    /** General settings (default file extensions, colors etc.) for outtping files. */
+    @BeanField @Getter @Setter
+    private OutputWriteSettings outputWriteSettings = new OutputWriteSettings();
 
-    public abstract FilePathPrefix prefixForFile(
-            PathWithDescription input,
-            String expIdentifier,
-            Optional<ManifestRecorder> manifestRecorder,
-            Optional<ManifestRecorder> experimentalManifestRecorder,
-            FilePathPrefixerParams context)
-            throws FilePathPrefixerException;
+    /** Which outputs are enabled or not enabled. If null, default rules are used instead. */
+    @BeanField @OptionalBean @Getter @Setter private OutputEnabledRules outputsEnabled;
+    // END BEAN PROPERTIES
+
+    /**
+     * Creates an outputter for the experiment in general.
+     *
+     * <p>i.e. this is not an outputter for a specific job.
+     *
+     * @param experimentIdentifier an identifier for the experiment
+     * @param manifest where output files are store
+     * @param recordedOutputs where output-names are recorded as used/tested
+     * @param prefixerContext parameters for the file-path prefixer
+     * @return a newly created outputter
+     * @throws BindFailedException
+     */
+    public OutputterChecked createExperimentOutputter(
+            String experimentIdentifier,
+            Manifest manifest,
+            RecordedOutputsWithRules recordedOutputs,
+            FilePathPrefixerContext prefixerContext)
+            throws BindFailedException {
+
+        try {
+            DirectoryWithPrefix prefix =
+                    filePathPrefixer.rootFolderPrefix(experimentIdentifier, prefixerContext);
+            manifest.init(prefix.getDirectory());
+
+            return OutputterChecked.createWithPrefix(
+                    prefix,
+                    recordedOutputs.selectOutputEnabled(Optional.ofNullable(outputsEnabled)),
+                    getOutputWriteSettings(),
+                    Optional.of(manifest.getRootFolder()),
+                    recordedOutputs.getRecordedOutputs(),
+                    silentlyDeleteExisting);
+
+        } catch (PathPrefixerException e) {
+            throw new BindFailedException(e);
+        }
+    }
 }

@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.experiment.bean.processor;
 
+import com.google.common.base.Preconditions;
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
@@ -34,7 +35,7 @@ import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.experiment.task.TaskStatistics;
 import org.anchoranalysis.io.input.InputFromManager;
-import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.io.output.outputter.Outputter;
 
 /**
  * Executes different processors depending on whether we are in debug mode or not
@@ -46,7 +47,11 @@ import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 public class DebugDependentProcessor<T extends InputFromManager, S> extends JobProcessor<T, S> {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private int maxNumProcessors;
+    /**
+     * An upper limit on the number of the processors that can be simultaneously used in parallel,
+     * if they are available.
+     */
+    @BeanField @Getter @Setter private int maxNumberProcessors;
 
     /**
      * How many processors to avoid using for the tasks.
@@ -60,31 +65,37 @@ public class DebugDependentProcessor<T extends InputFromManager, S> extends JobP
 
     @Override
     protected TaskStatistics execute(
-            BoundOutputManagerRouteErrors rootOutputManager,
-            List<T> inputObjects,
-            ParametersExperiment paramsExperiment)
+            Outputter rootOutputter, List<T> inputs, ParametersExperiment paramsExperiment)
             throws ExperimentExecutionException {
 
-        assert (rootOutputManager.getDelegate().getOutputWriteSettings().hasBeenInit());
+        Preconditions.checkArgument(rootOutputter.getChecked().getSettings().hasBeenInitialized());
 
         JobProcessor<T, S> processor =
                 createProcessor(paramsExperiment.getExperimentArguments().isDebugModeEnabled());
-        return processor.execute(rootOutputManager, inputObjects, paramsExperiment);
+        return processor.execute(rootOutputter, inputs, paramsExperiment);
     }
 
     private JobProcessor<T, S> createProcessor(boolean debugMode) {
         if (debugMode) {
-            SequentialProcessor<T, S> sp = new SequentialProcessor<>();
-            sp.setTask(getTask());
-            sp.setSuppressExceptions(isSuppressExceptions());
-            return sp;
+            return createSequentialProcessor();
         } else {
-            ParallelProcessor<T, S> pp = new ParallelProcessor<>();
-            pp.setMaxNumberProcessors(maxNumProcessors);
-            pp.setTask(getTask());
-            pp.setSuppressExceptions(isSuppressExceptions());
-            pp.setKeepProcessorsFree(keepProcessorsFree);
-            return pp;
+            return creareParallelProcessor();
         }
+    }
+
+    private SequentialProcessor<T, S> createSequentialProcessor() {
+        SequentialProcessor<T, S> processor = new SequentialProcessor<>();
+        processor.setTask(getTask());
+        processor.setSuppressExceptions(isSuppressExceptions());
+        return processor;
+    }
+
+    private ParallelProcessor<T, S> creareParallelProcessor() {
+        ParallelProcessor<T, S> processor = new ParallelProcessor<>();
+        processor.setMaxNumberProcessors(maxNumberProcessors);
+        processor.setTask(getTask());
+        processor.setSuppressExceptions(isSuppressExceptions());
+        processor.setKeepProcessorsFree(keepProcessorsFree);
+        return processor;
     }
 }

@@ -30,7 +30,7 @@ import lombok.AllArgsConstructor;
 import lombok.Value;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.energy.EnergyStack;
-import org.anchoranalysis.image.stack.DisplayStack;
+import org.anchoranalysis.image.core.stack.DisplayStack;
 
 /** Stores an {@link EnergyStack} together with a background stack. */
 @Value

@@ -30,7 +30,7 @@ import java.io.File;
 import java.nio.file.Path;
 import java.util.List;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.io.RasterIOException;
+import org.anchoranalysis.image.io.ImageIOException;
 
 /**
  * One part of a NamedChannelsInput that can be combined with others
@@ -39,7 +39,7 @@ import org.anchoranalysis.image.io.RasterIOException;
  */
 public abstract class NamedChannelsInputPart extends NamedChannelsInput {
 
-    public abstract boolean hasChannel(String channelName) throws RasterIOException;
+    public abstract boolean hasChannel(String channelName) throws ImageIOException;
 
     public abstract List<Path> pathForBindingForAllChannels() throws OperationFailedException;
 

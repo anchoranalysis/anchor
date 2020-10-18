@@ -26,68 +26,105 @@
 
 package org.anchoranalysis.image.experiment.bean.task;
 
-import org.anchoranalysis.core.error.reporter.ErrorReporter;
+import org.anchoranalysis.core.functional.FunctionalIterate;
 import org.anchoranalysis.experiment.JobExecutionException;
-import org.anchoranalysis.experiment.bean.task.TaskWithoutSharedState;
+import org.anchoranalysis.experiment.bean.task.Task;
 import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
-import org.anchoranalysis.experiment.task.NoSharedState;
-import org.anchoranalysis.image.io.RasterIOException;
+import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.input.NamedChannelsInput;
-import org.anchoranalysis.io.output.bound.BoundIOContext;
-import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.io.output.outputter.InputOutputContext;
 
 /**
- * An experiment that primarily takes a raster image as an input
+ * An experiment that takes (primarily) a series of raster images as an input.
  *
- * <p>No shared-state is allowed
+ * <p>An operation is executed independently on each stack in the series.
  *
+ * @param <S> shared-state type for entire task
+ * @param <U> shared-state type for current series i.e. for all stacks in one particular job
  * @author Owen Feehan
  */
-public abstract class RasterTask extends TaskWithoutSharedState<NamedChannelsInput> {
+public abstract class RasterTask<S,U> extends Task<NamedChannelsInput,S> {
 
     @Override
-    public void doJobOnInputObject(InputBound<NamedChannelsInput, NoSharedState> params)
+    public void doJobOnInput(InputBound<NamedChannelsInput, S> input)
             throws JobExecutionException {
 
-        NamedChannelsInput inputObject = params.getInputObject();
-        BoundOutputManagerRouteErrors outputManager = params.getOutputManager();
+        InputOutputContext context = input.context();
 
         try {
-            int numSeries = inputObject.numberSeries();
+            int numberSeries = input.getInput().numberSeries();
 
-            startSeries(outputManager, params.getLogger().errorReporter());
+            U sharedStateJob = createSharedStateJob(context);
+            
+            startSeries(input.getSharedState(), sharedStateJob, context);
 
-            for (int s = 0; s < numSeries; s++) {
-                doStack(inputObject, s, numSeries, params.context());
-            }
+            FunctionalIterate.repeatWithIndex(numberSeries, seriesIndex ->
+                doStack(input, sharedStateJob, seriesIndex, numberSeries, context)
+            );
 
-            endSeries(outputManager);
+            endSeries(input.getSharedState(), sharedStateJob, context);
 
-        } catch (RasterIOException e) {
+        } catch (ImageIOException e) {
             throw new JobExecutionException(e);
         }
     }
+    
+    /**
+     * Creates a shared-state for the duration of a particular input-job
+     * 
+     * <p>This will exist across all stacks from the same series.
+     * 
+     * @param context the input-output cotnext associated with a particular job
+     * @return a newly created shared-state
+     * @throws JobExecutionException
+     */
+    protected abstract U createSharedStateJob(InputOutputContext context) throws JobExecutionException;
 
-    public abstract void startSeries(
-            BoundOutputManagerRouteErrors outputManager, ErrorReporter errorReporter)
+    /**
+     * Starts processing of a series.
+     * 
+     * <p>This corresponds to the start of an input job, <b>before</b> any stacks in the series are processed.
+     * 
+     * <p>This should be called always <i>once</i> <b>before</b> all calls to {@link #doStack}.
+     * @param sharedStateTask shared-state across all jobs in task
+     * @param sharedStateJob shared-state across all stacks in a job (i.e. in all series.)
+     * @param context input-output context
+     * @throws JobExecutionException
+     */
+    public abstract void startSeries(S sharedStateTask, U sharedStateJob, InputOutputContext context)
             throws JobExecutionException;
 
     /**
-     * Processes one stack from a series
+     * Processes one stack from a series.
+     * 
+     * <p>This can be called many times in a job, once for each stack in the series.
+     * 
+     * <p>It is assumed each job may have only one series.
      *
-     * @param inputObject the input-object corresponding to this stack (a set of named-channels)
-     * @param seriesIndex the index that is being currently processed from the series
-     * @param numSeries the total number of images in the series (constant for a given task)
+     * @param input the input-object corresponding to this stack (a set of named-channels)
+     * @param sharedStateJob shared-state across all stacks in a job (i.e. in all series.)
+     * @param seriesIndex the index of the input that is being currently processed from the series.
+     * @param numberSeries the total number of images in the series (constant for a given task)
      * @param context IO context
      * @throws JobExecutionException
      */
     public abstract void doStack(
-            NamedChannelsInput inputObject, int seriesIndex, int numSeries, BoundIOContext context)
+            InputBound<NamedChannelsInput, S> input, U sharedStateJob, int seriesIndex, int numberSeries, InputOutputContext context)
             throws JobExecutionException;
 
-    public abstract void endSeries(BoundOutputManagerRouteErrors outputManager)
-            throws JobExecutionException;
+    /**
+     * Ends processing of a series.
+     * 
+     * <p>This corresponds to the end of an input job, <b>after</b> any stacks in the series are processed.
+     * 
+     * <p>This should be called always <i>once</i> <b>after</b> all calls to {@link #doStack}.
+     * @param sharedStateTask shared-state across all jobs in task
+     * @param sharedStateJob shared-state across all stacks in a job (i.e. in all series.)
+     * @param context input-output context
+     * @throws JobExecutionException
+     */
+    public abstract void endSeries(S sharedStateTask, U sharedStateJob, InputOutputContext context) throws JobExecutionException;
 
     @Override
     public InputTypesExpected inputTypesExpected() {

@@ -31,6 +31,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
+import org.anchoranalysis.bean.annotation.SkipInit;
 import org.anchoranalysis.bean.provider.Provider;
 import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsProvider;
 import org.anchoranalysis.core.error.InitException;
@@ -42,7 +43,7 @@ import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingleChangeInput;
-import org.anchoranalysis.image.stack.Stack;
+import org.anchoranalysis.image.core.stack.Stack;
 
 /**
  * Defines a feature and provides a means to calculate inputs for it, a session.
@@ -57,7 +58,7 @@ public class FeatureEvaluator<T extends FeatureInput>
 
     // START BEAN PROPERTIES
     /** The single feature that will be calculated (possibly repeatedly) in the session */
-    @BeanField @Getter @Setter private Feature<T> feature;
+    @BeanField @Getter @Setter @SkipInit private Feature<T> feature;
 
     /** Optionally specifies an energy-stack to be associated with every calculation input. */
     @BeanField @OptionalBean @Getter @Setter private Provider<Stack> stackEnergy;

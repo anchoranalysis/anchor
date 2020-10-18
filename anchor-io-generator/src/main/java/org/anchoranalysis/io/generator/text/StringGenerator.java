@@ -29,23 +29,17 @@ package org.anchoranalysis.io.generator.text;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Optional;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.anchoranalysis.io.generator.SingleFileTypeGenerator;
+import org.anchoranalysis.io.generator.OneStageGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
-@AllArgsConstructor
-public class StringGenerator extends SingleFileTypeGenerator {
-
-    @Getter @Setter private String element;
+public class StringGenerator extends OneStageGenerator<String> {
 
     @Override
-    public void writeToFile(OutputWriteSettings outputWriteSettings, Path filePath)
+    public void writeToFile(String element, OutputWriteSettings outputWriteSettings, Path filePath)
             throws OutputWriteFailedException {
 
         try {

@@ -28,7 +28,7 @@ package org.anchoranalysis.image.bean.provider;
 
 import org.anchoranalysis.bean.provider.Provider;
 import org.anchoranalysis.image.bean.ImageBean;
-import org.anchoranalysis.image.provider.ProviderAsStack;
+import org.anchoranalysis.image.core.stack.ProviderAsStack;
 
 /**
  * A provider base-class that as well as providing type S, also provide a stack

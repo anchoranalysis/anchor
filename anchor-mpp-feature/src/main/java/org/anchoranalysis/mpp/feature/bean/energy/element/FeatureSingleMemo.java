@@ -27,8 +27,8 @@
 package org.anchoranalysis.mpp.feature.bean.energy.element;
 
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.cache.SessionInput;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.mpp.feature.input.memo.FeatureInputSingleMemo;
 

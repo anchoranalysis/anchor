@@ -36,8 +36,6 @@ import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.calculate.results.ResultsVector;
-import org.anchoranalysis.feature.calculate.results.ResultsVectorCollection;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.input.FeatureInputResults;
 import org.anchoranalysis.feature.io.csv.FeatureCSVWriter;
@@ -47,12 +45,14 @@ import org.anchoranalysis.feature.io.results.ResultsWriter;
 import org.anchoranalysis.feature.io.results.ResultsWriterMetadata;
 import org.anchoranalysis.feature.list.NamedFeatureStore;
 import org.anchoranalysis.feature.name.FeatureNameList;
+import org.anchoranalysis.feature.results.ResultsVector;
+import org.anchoranalysis.feature.results.ResultsVectorList;
 import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
-import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.manifest.ManifestDescription;
-import org.anchoranalysis.io.output.bound.BoundIOContext;
-import org.anchoranalysis.io.output.bound.CacheSubdirectoryContext;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import org.anchoranalysis.io.output.outputter.InputOutputContext;
+import org.anchoranalysis.io.output.outputter.InputOutputContextSubdirectoryCache;
 
 /**
  * Writes the aggregated results for a single group as XML to the filesystem.
@@ -68,7 +68,7 @@ class WriteXMLForGroup {
             new ManifestDescription("paramsXML", "aggregateObjects");
 
     private NamedFeatureStore<FeatureInputResults> featuresAggregate;
-    private ResultsVectorCollection results;
+    private ResultsVectorList results;
 
     /**
      * Write the aggregated groups to the filesystem as XML, if enabled.
@@ -77,14 +77,14 @@ class WriteXMLForGroup {
      * @param metadata metadata for writing results to the filesystem.
      * @param csvWriter a CSV-writer, if it's enabled.
      * @param context a cached set of input-output contexts for directories for each group.
-     * @throws AnchorIOException if an input-output problem occurs.
+     * @throws OutputWriteFailedException if any writing fails
      */
     public void maybeWrite(
             Optional<MultiName> groupName,
             ResultsWriterMetadata metadata,
             Optional<FeatureCSVWriter> csvWriter,
-            CacheSubdirectoryContext context)
-            throws AnchorIOException {
+            InputOutputContextSubdirectoryCache context)
+            throws OutputWriteFailedException {
         OptionalUtilities.ifPresent(
                 metadata.outputNames().getXmlAggregatedGroup(),
                 outputName ->
@@ -101,8 +101,8 @@ class WriteXMLForGroup {
             Optional<MultiName> groupName,
             FeatureNameList featureNames,
             Optional<FeatureCSVWriter> csvWriterAggregate,
-            BoundIOContext contextGroup)
-            throws AnchorIOException {
+            InputOutputContext contextGroup)
+            throws OutputWriteFailedException {
         if (csvWriterAggregate.isPresent() || groupName.isPresent()) {
             ResultsVector aggregated = aggregateResults(featureNames, contextGroup.getLogger());
 
@@ -120,7 +120,7 @@ class WriteXMLForGroup {
 
     /** Calculates an aggregate results vector */
     private ResultsVector aggregateResults(FeatureNameList featureNames, Logger logger)
-            throws AnchorIOException {
+            throws OutputWriteFailedException {
 
         FeatureCalculatorMulti<FeatureInputResults> calculator;
 
@@ -129,7 +129,7 @@ class WriteXMLForGroup {
 
         } catch (InitException e1) {
             logger.errorReporter().recordError(ResultsWriter.class, e1);
-            throw new AnchorIOException("Cannot start feature-session", e1);
+            throw new OutputWriteFailedException("Cannot start feature-session", e1);
         }
 
         FeatureInputResults input =
@@ -142,7 +142,7 @@ class WriteXMLForGroup {
             String outputName,
             NamedFeatureStore<T> featuresAggregate,
             ResultsVector results,
-            BoundIOContext context) {
+            InputOutputContext context) {
 
         KeyValueParams paramsOut = new KeyValueParams();
 
@@ -156,9 +156,9 @@ class WriteXMLForGroup {
 
         try {
             Optional<Path> fileOutPath =
-                    context.getOutputManager()
-                            .getWriterCheckIfAllowed()
-                            .writeGenerateFilename(
+                    context.getOutputter()
+                            .writerSelective()
+                            .createFilenameForWriting(
                                     outputName, "xml", Optional.of(MANIFEST_DESCRIPTION));
             if (fileOutPath.isPresent()) {
                 paramsOut.writeToFile(fileOutPath.get());

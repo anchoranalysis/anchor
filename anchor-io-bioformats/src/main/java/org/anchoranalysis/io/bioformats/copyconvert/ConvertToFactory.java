@@ -37,20 +37,20 @@ import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedIntVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
-import org.anchoranalysis.io.bioformats.copyconvert.tobyte.ByteFrom16BitUnsigned;
-import org.anchoranalysis.io.bioformats.copyconvert.tobyte.ByteFrom32BitFloat;
-import org.anchoranalysis.io.bioformats.copyconvert.tobyte.ByteFrom32BitUnsignedInt;
-import org.anchoranalysis.io.bioformats.copyconvert.tobyte.ByteFrom8BitUnsignedInterleaving;
-import org.anchoranalysis.io.bioformats.copyconvert.tobyte.ByteFrom8BitUnsignedNoInterleaving;
-import org.anchoranalysis.io.bioformats.copyconvert.tobyte.ConvertToByte;
-import org.anchoranalysis.io.bioformats.copyconvert.tofloat.ConvertToFloat;
-import org.anchoranalysis.io.bioformats.copyconvert.tofloat.FloatFrom32Bit;
-import org.anchoranalysis.io.bioformats.copyconvert.tofloat.FloatFrom8Bit;
-import org.anchoranalysis.io.bioformats.copyconvert.toint.ConvertToInt;
-import org.anchoranalysis.io.bioformats.copyconvert.toint.IntFromUnsigned32BitInt;
-import org.anchoranalysis.io.bioformats.copyconvert.toshort.ConvertToShort;
-import org.anchoranalysis.io.bioformats.copyconvert.toshort.ShortFromSignedShort;
-import org.anchoranalysis.io.bioformats.copyconvert.toshort.ShortFromUnsignedShort;
+import org.anchoranalysis.io.bioformats.copyconvert.tobyte.UnsignedByteFromUnsignedShort;
+import org.anchoranalysis.io.bioformats.copyconvert.tobyte.UnsignedByteFromFloat;
+import org.anchoranalysis.io.bioformats.copyconvert.tobyte.UnsignedByteFromUnsignedInt;
+import org.anchoranalysis.io.bioformats.copyconvert.tobyte.UnsignedByteFromUnsignedByteInterleaving;
+import org.anchoranalysis.io.bioformats.copyconvert.tobyte.UnsignedByteFromUnsignedByteNoInterleaving;
+import org.anchoranalysis.io.bioformats.copyconvert.tobyte.ToUnsignedByte;
+import org.anchoranalysis.io.bioformats.copyconvert.tofloat.ToFloat;
+import org.anchoranalysis.io.bioformats.copyconvert.tofloat.FloatFromUnsignedInt;
+import org.anchoranalysis.io.bioformats.copyconvert.tofloat.FloatFromUnsignedByte;
+import org.anchoranalysis.io.bioformats.copyconvert.toint.ToInt;
+import org.anchoranalysis.io.bioformats.copyconvert.toint.UnsignedIntFromUnsignedInt;
+import org.anchoranalysis.io.bioformats.copyconvert.toshort.ToUnsignedShort;
+import org.anchoranalysis.io.bioformats.copyconvert.toshort.UnsignedShortFromSignedShort;
+import org.anchoranalysis.io.bioformats.copyconvert.toshort.UnsignedShortFromUnsignedShort;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ConvertToFactory {
@@ -74,9 +74,11 @@ public class ConvertToFactory {
     private static ConvertTo<?> createFromInterleaved(
             VoxelDataType targetDataType, int bitsPerPixel) throws CreateException {
         if (targetDataType.equals(UnsignedByteVoxelType.INSTANCE) && bitsPerPixel == 8) {
-            return new ByteFrom8BitUnsignedInterleaving();
+            return new UnsignedByteFromUnsignedByteInterleaving();
+        } else if (targetDataType.equals(UnsignedShortVoxelType.INSTANCE) && bitsPerPixel == 16) {
+            return new UnsignedShortFromUnsignedShort(false);
         } else {
-            throw new CreateException("For interleaved formats only 8-bits are supported");
+            throw new CreateException("For interleaved formats only 8 and 16-bits are supported");
         }
     }
 
@@ -94,7 +96,7 @@ public class ConvertToFactory {
         if (targetDataType.equals(UnsignedByteVoxelType.INSTANCE)) {
             return toByte(bitsPerPixel, effectiveBitsPerPixel, littleEndian, floatingPoint, signed);
         } else if (targetDataType.equals(UnsignedShortVoxelType.INSTANCE)
-                || targetDataType.equals(SignedShortVoxelType.instance)) {
+                || targetDataType.equals(SignedShortVoxelType.INSTANCE)) {
             return toShort(bitsPerPixel, littleEndian, signed);
         } else if (targetDataType.equals(FloatVoxelType.INSTANCE)) {
             return toFloat(bitsPerPixel, littleEndian, signed);
@@ -105,7 +107,7 @@ public class ConvertToFactory {
         }
     }
 
-    private static ConvertToByte toByte(
+    private static ToUnsignedByte toByte(
             int bitsPerPixel,
             int effectiveBitsPerPixel,
             boolean littleEndian,
@@ -115,17 +117,17 @@ public class ConvertToFactory {
 
         if (bitsPerPixel == 8 && !signed) {
             assert (effectiveBitsPerPixel == 8);
-            return new ByteFrom8BitUnsignedNoInterleaving();
+            return new UnsignedByteFromUnsignedByteNoInterleaving();
 
         } else if (bitsPerPixel == 16 && !signed) {
-            return new ByteFrom16BitUnsigned(littleEndian, effectiveBitsPerPixel);
+            return new UnsignedByteFromUnsignedShort(littleEndian, effectiveBitsPerPixel);
 
         } else if (bitsPerPixel == 32 && !signed) {
 
             if (floatingPoint) {
-                return new ByteFrom32BitFloat(littleEndian);
+                return new UnsignedByteFromFloat(littleEndian);
             } else {
-                return new ByteFrom32BitUnsignedInt(effectiveBitsPerPixel, littleEndian);
+                return new UnsignedByteFromUnsignedInt(effectiveBitsPerPixel, littleEndian);
             }
 
         } else {
@@ -134,21 +136,21 @@ public class ConvertToFactory {
         }
     }
 
-    private static ConvertToShort toShort(int bitsPerPixel, boolean littleEndian, boolean signed)
+    private static ToUnsignedShort toShort(int bitsPerPixel, boolean littleEndian, boolean signed)
             throws CreateException {
 
         if (bitsPerPixel == 16) {
             if (signed) {
-                return new ShortFromSignedShort(littleEndian);
+                return new UnsignedShortFromSignedShort(littleEndian);
             } else {
-                return new ShortFromUnsignedShort(littleEndian);
+                return new UnsignedShortFromUnsignedShort(littleEndian);
             }
         } else {
             return throwBitsPerPixelException("float", "16 bits", bitsPerPixel);
         }
     }
 
-    private static ConvertToInt toInt(
+    private static ToInt toInt(
             int bitsPerPixel, boolean littleEndian, boolean floatingPoint, boolean signed)
             throws CreateException {
 
@@ -158,7 +160,7 @@ public class ConvertToFactory {
                 throw new CreateException(
                         "Conversion from floating-point to int not yet supported");
             } else {
-                return new IntFromUnsigned32BitInt(littleEndian);
+                return new UnsignedIntFromUnsignedInt(littleEndian);
             }
 
         } else {
@@ -166,17 +168,17 @@ public class ConvertToFactory {
         }
     }
 
-    private static ConvertToFloat toFloat(int bitsPerPixel, boolean littleEndian, boolean signed)
+    private static ToFloat toFloat(int bitsPerPixel, boolean littleEndian, boolean signed)
             throws CreateException {
         assert (bitsPerPixel == 8 || bitsPerPixel == 32);
 
         if (bitsPerPixel == 8 && !signed) {
-            return new FloatFrom8Bit();
-        } else if (bitsPerPixel == 32 && !signed) {
-            return new FloatFrom32Bit(littleEndian);
+            return new FloatFromUnsignedByte();
+        } else if (bitsPerPixel == 32 && signed) {
+            return new FloatFromUnsignedInt(littleEndian);
         } else {
             return throwBitsPerPixelException(
-                    "float", "either unsigned 8 bits or 32 bits", bitsPerPixel);
+                    "float", "either unsigned 8 bits or signed 32 bits", bitsPerPixel);
         }
     }
 

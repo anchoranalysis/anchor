@@ -27,12 +27,12 @@
 package org.anchoranalysis.image.io.generator.raster.object;
 
 import java.util.Optional;
-import org.anchoranalysis.image.extent.Resolution;
+import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.image.io.generator.raster.object.collection.ObjectAsMaskGenerator;
-import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.io.generator.IterableGenerator;
-import org.anchoranalysis.io.generator.IterableGeneratorBridge;
-import org.anchoranalysis.io.generator.combined.IterableCombinedListGenerator;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
+import org.anchoranalysis.io.generator.Generator;
+import org.anchoranalysis.io.generator.GeneratorBridge;
+import org.anchoranalysis.io.generator.combined.CombinedListGenerator;
 import org.anchoranalysis.io.generator.serialized.ObjectOutputStreamGenerator;
 
 /**
@@ -40,17 +40,17 @@ import org.anchoranalysis.io.generator.serialized.ObjectOutputStreamGenerator;
  *
  * @author Owen Feehan
  */
-public class ObjectWithBoundingBoxGenerator extends IterableCombinedListGenerator<ObjectMask> {
+public class ObjectWithBoundingBoxGenerator extends CombinedListGenerator<ObjectMask> {
 
-    public ObjectWithBoundingBoxGenerator(Resolution resolution) {
+    public ObjectWithBoundingBoxGenerator(Optional<Resolution> resolution) {
         this(new ObjectAsMaskGenerator(resolution));
     }
 
-    private ObjectWithBoundingBoxGenerator(IterableGenerator<ObjectMask> generator) {
+    private ObjectWithBoundingBoxGenerator(Generator<ObjectMask> generator) {
         super(
                 generator,
                 // We create an iterable bridge from object-mask to BoundingBox
-                IterableGeneratorBridge.createOneToOne(
+                GeneratorBridge.createOneToOne(
                         new ObjectOutputStreamGenerator<>(Optional.of("BoundingBox")),
                         ObjectMask::boundingBox));
     }

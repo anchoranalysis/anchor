@@ -32,16 +32,16 @@ import ij.process.ShortProcessor;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
-import org.anchoranalysis.image.convert.UnsignedShortBuffer;
-import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
+import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
+import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedShortBuffer;
 import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelTypeException;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
-import org.anchoranalysis.image.voxel.sliceindex.SliceBufferIndex;
+import org.anchoranalysis.image.voxel.factory.sliceindex.SliceBufferIndex;
+import org.anchoranalysis.spatial.extent.Extent;
 
 /**
  * Converts other voxel data-structures (as used by Anchor) to an ImageJ {@link ImageProcessor}.
@@ -80,8 +80,8 @@ public class ConvertToImageProcessor {
     }
 
     /**
-     * Creates a {@link ImageProcessor} by extracting a slice from a {@link SliceBufferIndex} of type
-     * {@link UnsignedByteBuffer}.
+     * Creates a {@link ImageProcessor} by extracting a slice from a {@link SliceBufferIndex} of
+     * type {@link UnsignedByteBuffer}.
      *
      * @param pixelsForSlice the pixels to extract a slice from.
      * @param z slice-index
@@ -93,8 +93,8 @@ public class ConvertToImageProcessor {
     }
 
     /**
-     * Creates a {@link ImageProcessor} by extracting a slice from a {@link SliceBufferIndex} of type
-     * {@link UnsignedShortBuffer}.
+     * Creates a {@link ImageProcessor} by extracting a slice from a {@link SliceBufferIndex} of
+     * type {@link UnsignedShortBuffer}.
      *
      * @param pixelsForSlice the pixels to extract a slice from.
      * @param z slice-index

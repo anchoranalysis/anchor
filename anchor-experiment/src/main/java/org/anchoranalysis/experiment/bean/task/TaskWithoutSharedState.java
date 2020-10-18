@@ -30,10 +30,9 @@ import org.anchoranalysis.core.concurrency.ConcurrencyPlan;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.task.NoSharedState;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
-import org.anchoranalysis.experiment.task.Task;
 import org.anchoranalysis.io.input.InputFromManager;
-import org.anchoranalysis.io.output.bound.BoundIOContext;
-import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.io.output.outputter.InputOutputContext;
+import org.anchoranalysis.io.output.outputter.Outputter;
 
 /**
  * A particular type of task that doesn't share-state between running jobs
@@ -55,16 +54,14 @@ public abstract class TaskWithoutSharedState<T extends InputFromManager>
 
     @Override
     public final NoSharedState beforeAnyJobIsExecuted(
-            BoundOutputManagerRouteErrors outputManager,
-            ConcurrencyPlan concurrencyPlan,
-            ParametersExperiment params)
+            Outputter outputter, ConcurrencyPlan concurrencyPlan, ParametersExperiment params)
             throws ExperimentExecutionException {
         // No shared-state by default, so we use a placeholder shared-state type
         return NoSharedState.INSTANCE;
     }
 
     @Override
-    public final void afterAllJobsAreExecuted(NoSharedState sharedState, BoundIOContext context)
+    public final void afterAllJobsAreExecuted(NoSharedState sharedState, InputOutputContext context)
             throws ExperimentExecutionException {
         // NOTHING TO DO BY DEFAULT. This method exists so it can be overridden with
         // custom-behaviour.

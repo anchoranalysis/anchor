@@ -30,89 +30,85 @@ import java.nio.file.Path;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.io.manifest.ManifestDescription;
-import org.anchoranalysis.io.manifest.ManifestFolderDescription;
-import org.anchoranalysis.io.manifest.folder.FolderWriteWithPath;
-import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
-import org.anchoranalysis.io.namestyle.IntegerSuffixOutputNameStyle;
-import org.anchoranalysis.io.namestyle.OutputNameStyle;
-import org.anchoranalysis.io.output.bean.OutputWriteSettings;
-import org.anchoranalysis.io.output.bound.BoundOutputManager;
+import org.anchoranalysis.io.manifest.ManifestDirectoryDescription;
+import org.anchoranalysis.io.manifest.directory.SubdirectoryBase;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import org.anchoranalysis.io.output.namestyle.IndexableOutputNameStyle;
+import org.anchoranalysis.io.output.namestyle.SimpleOutputNameStyle;
+import org.anchoranalysis.io.output.outputter.OutputterChecked;
 
+/**
+ * Allows every output, irrespective of whether the {@link OutputterChecked} allows the output-name.
+ *
+ * @author Owen Feehan
+ */
 @RequiredArgsConstructor
 public class AlwaysAllowed implements Writer {
 
     // START REQUIRED ARGUMENTS
     /** Bound output manager */
-    private final BoundOutputManager bom;
+    private final OutputterChecked outputter;
 
-    /** Execute before every operation */
-    private final WriterExecuteBeforeEveryOperation preop;
+    /** Execute before every operation if defined. */
+    private final Optional<WriterExecuteBeforeEveryOperation> preop;
     // END REQUIRED ARGUMENTS
 
     @Override
-    public Optional<BoundOutputManager> bindAsSubdirectory(
+    public Optional<OutputterChecked> createSubdirectory(
             String outputName,
-            ManifestFolderDescription manifestDescription,
-            Optional<FolderWriteWithPath> folder)
+            ManifestDirectoryDescription manifestDescription,
+            Optional<SubdirectoryBase> manifestFolder,
+            boolean inheritOutputRulesAndRecording)
             throws OutputWriteFailedException {
 
-        preop.execute();
-        return Optional.of(bom.deriveSubdirectory(outputName, manifestDescription, folder));
+        maybeExecutePreop();
+        return Optional.of(
+                outputter.deriveSubdirectory(
+                        outputName,
+                        manifestDescription,
+                        manifestFolder,
+                        inheritOutputRulesAndRecording));
     }
-
+    
+    // Write a file without checking if the outputName is allowed
     @Override
-    public void writeSubfolder(String outputName, GenerateWritableItem<?> collectionGenerator)
+    public <T> boolean write(String outputName, ElementWriterSupplier<T> elementWriter, ElementSupplier<T> element)
             throws OutputWriteFailedException {
-
-        preop.execute();
-
-        collectionGenerator.generate().write(new IntegerSuffixOutputNameStyle(outputName, 3), bom);
+        maybeExecutePreop();
+        elementWriter.get().write(element.get(), new SimpleOutputNameStyle(outputName), outputter);
+        return true;
     }
-
+    
     @Override
-    public int write(
+    public <T> int writeWithIndex(
             IndexableOutputNameStyle outputNameStyle,
-            GenerateWritableItem<?> generator,
+            ElementWriterSupplier<T> elementWriter,
+            ElementSupplier<T> element,
             String index)
             throws OutputWriteFailedException {
 
-        preop.execute();
-        return generator.generate().write(outputNameStyle, index, bom);
-    }
-
-    // Write a file without checking if the outputName is allowed
-    @Override
-    public void write(OutputNameStyle outputNameStyle, GenerateWritableItem<?> generator)
-            throws OutputWriteFailedException {
-
-        preop.execute();
-        generator.generate().write(outputNameStyle, bom);
+        maybeExecutePreop();
+        return elementWriter.get().writeWithIndex(element.get(), index, outputNameStyle, outputter);
     }
 
     // A non-generator way of creating outputs, that are still included in the manifest
     // Returns null if output is not allowed
     @Override
-    public Optional<Path> writeGenerateFilename(
+    public Optional<Path> createFilenameForWriting(
             String outputName,
             String extension,
-            Optional<ManifestDescription> manifestDescription,
-            String outputNamePrefix,
-            String outputNameSuffix,
-            String index) {
+            Optional<ManifestDescription> manifestDescription) {
 
-        preop.execute();
+        maybeExecutePreop();
 
-        Path outPath =
-                bom.outFilePath(outputNamePrefix + outputName + outputNameSuffix + "." + extension);
+        Path outPath = outputter.makeOutputPath(outputName, extension);
 
         manifestDescription.ifPresent(
-                md -> bom.writeFileToOperationRecorder(outputName, outPath, md, index));
+                md -> outputter.writeFileToOperationRecorder(outputName, outPath, md, ""));
         return Optional.of(outPath);
     }
 
-    @Override
-    public OutputWriteSettings getOutputWriteSettings() {
-        return bom.getOutputWriteSettings();
+    private void maybeExecutePreop() {
+        preop.ifPresent(WriterExecuteBeforeEveryOperation::execute);
     }
 }

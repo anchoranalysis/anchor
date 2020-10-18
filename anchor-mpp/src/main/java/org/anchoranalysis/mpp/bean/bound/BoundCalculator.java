@@ -27,10 +27,10 @@
 package org.anchoranalysis.mpp.bean.bound;
 
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.geometry.Point3d;
-import org.anchoranalysis.math.rotation.RotationMatrix;
 import org.anchoranalysis.mpp.bean.MPPBean;
 import org.anchoranalysis.mpp.bound.BidirectionalBound;
+import org.anchoranalysis.spatial.point.Point3d;
+import org.anchoranalysis.spatial.rotation.RotationMatrix;
 
 public abstract class BoundCalculator extends MPPBean<BoundCalculator> {
 

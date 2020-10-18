@@ -31,13 +31,13 @@ import java.util.List;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.bean.provider.Provider;
-import org.anchoranalysis.image.bean.arrangeraster.ArrangeRasterOverlay;
-import org.anchoranalysis.image.bean.arrangeraster.ArrangeRasterTile;
 import org.anchoranalysis.image.bean.provider.stack.ArrangeRaster;
-import org.anchoranalysis.image.io.bean.stack.StackProviderWithLabel;
+import org.anchoranalysis.image.bean.spatial.arrange.Overlay;
+import org.anchoranalysis.image.bean.spatial.arrange.Tile;
+import org.anchoranalysis.image.core.stack.Stack;
+import org.anchoranalysis.image.io.bean.generator.TextStyle;
 import org.anchoranalysis.image.io.bean.stack.provider.GenerateString;
-import org.anchoranalysis.image.io.generator.raster.StringRasterGenerator;
-import org.anchoranalysis.image.stack.Stack;
+import org.anchoranalysis.image.io.bean.stack.provider.StackProviderWithLabel;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class TileRasters {
@@ -60,11 +60,11 @@ public class TileRasters {
             spar.getList().add(addGenerateString(provider, createShort, scaleLabel, expandLabelZ));
         }
 
-        ArrangeRasterTile art = new ArrangeRasterTile();
+        Tile art = new Tile();
         art.setNumCols(numCols);
         art.setNumRows((int) Math.ceil(((double) list.size()) / numCols));
 
-        ArrangeRasterOverlay arOverlay = new ArrangeRasterOverlay();
+        Overlay arOverlay = new Overlay();
         arOverlay.setHorizontalAlign("left");
         arOverlay.setVerticalAlign("top");
         arOverlay.setZAlign("repeat");
@@ -82,8 +82,8 @@ public class TileRasters {
             boolean scaleLabel,
             boolean expandLabelZ) {
 
-        GenerateString out = new GenerateString();
-        out.setStringRasterGenerator(new StringRasterGenerator(providerWithLabel.getLabel(), 3));
+        GenerateString out = new GenerateString(providerWithLabel.getLabel());
+        out.setStringRasterGenerator(new TextStyle(3));
         out.setCreateShort(createShort);
         if (scaleLabel) {
             out.setIntensityProvider(providerWithLabel.getStack());

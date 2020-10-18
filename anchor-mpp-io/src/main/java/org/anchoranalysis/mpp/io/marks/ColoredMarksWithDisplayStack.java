@@ -30,7 +30,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.anchoranalysis.core.color.ColorIndex;
 import org.anchoranalysis.core.idgetter.IDGetter;
-import org.anchoranalysis.image.stack.DisplayStack;
+import org.anchoranalysis.image.core.stack.DisplayStack;
 import org.anchoranalysis.mpp.mark.ColoredMarks;
 import org.anchoranalysis.mpp.mark.Mark;
 

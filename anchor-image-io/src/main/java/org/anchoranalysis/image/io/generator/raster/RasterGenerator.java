@@ -27,40 +27,38 @@
 package org.anchoranalysis.image.io.generator.raster;
 
 import java.nio.file.Path;
-import org.anchoranalysis.image.io.RasterIOException;
-import org.anchoranalysis.image.io.bean.rasterwriter.RasterWriter;
-import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.io.generator.ObjectGenerator;
+import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.image.core.stack.Stack;
+import org.anchoranalysis.image.io.ImageIOException;
+import org.anchoranalysis.image.io.bean.stack.StackWriter;
+import org.anchoranalysis.image.io.stack.StackWriteOptions;
+import org.anchoranalysis.io.generator.SingleFileTypeGenerator;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
-public abstract class RasterGenerator extends ObjectGenerator<Stack> {
+/** @author Owen Feehan */
+public abstract class RasterGenerator<T> extends SingleFileTypeGenerator<T, Stack> {
 
-    public abstract boolean isRGB() throws OutputWriteFailedException;
+    public abstract boolean isRGB();
 
     @Override
-    public void writeToFile(OutputWriteSettings outputWriteSettings, Path filePath)
+    public void writeToFile(T element, OutputWriteSettings outputWriteSettings, Path filePath)
             throws OutputWriteFailedException {
-
-        Stack stack = generate();
-        writeToFile(stack, outputWriteSettings, filePath, isRGB());
-    }
-
-    public static void writeToFile(
-            Stack stack, OutputWriteSettings outputWriteSettings, Path filePath, boolean rgb)
-            throws OutputWriteFailedException {
-
         try {
-            RasterWriter rasterWriter =
-                    RasterWriterUtilities.getDefaultRasterWriter(outputWriteSettings);
-            rasterWriter.writeStack(stack, filePath, rgb);
-        } catch (RasterIOException e) {
+            StackWriter writer = GeneratorOutputter.writer(outputWriteSettings);
+            writer.writeStack(
+                        transform(element), filePath, isRGB(), writeOptions());
+        } catch (ImageIOException e) {
             throw new OutputWriteFailedException(e);
         }
     }
 
     @Override
-    public String getFileExtension(OutputWriteSettings outputWriteSettings) {
-        return RasterWriterUtilities.getDefaultRasterFileExtension(outputWriteSettings);
+    public String getFileExtension(OutputWriteSettings outputWriteSettings)
+            throws OperationFailedException {
+        return GeneratorOutputter.fileExtensionWriter(
+                outputWriteSettings, writeOptions());
     }
+
+    public abstract StackWriteOptions writeOptions();
 }

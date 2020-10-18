@@ -31,7 +31,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.io.bean.report.feature.ReportFeature;
+import org.anchoranalysis.io.output.bean.ReportFeature;
 import org.anchoranalysis.mpp.bean.init.MPPInitParams;
 
 public class ReportFeatureWrapError extends ReportFeatureForSharedObjects {

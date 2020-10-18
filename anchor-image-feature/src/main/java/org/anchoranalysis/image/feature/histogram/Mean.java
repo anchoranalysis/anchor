@@ -28,7 +28,7 @@ package org.anchoranalysis.image.feature.histogram;
 
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.image.histogram.Histogram;
+import org.anchoranalysis.math.histogram.Histogram;
 
 public class Mean extends FeatureHistogramStatistic {
 

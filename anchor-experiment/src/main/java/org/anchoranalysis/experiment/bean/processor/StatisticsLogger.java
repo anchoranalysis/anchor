@@ -27,20 +27,17 @@
 package org.anchoranalysis.experiment.bean.processor;
 
 import java.util.function.DoubleSupplier;
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.core.text.LanguageUtilities;
 import org.anchoranalysis.experiment.task.TaskStatistics;
 
+@AllArgsConstructor
 class StatisticsLogger {
 
     private static final String JOB_WORD = "job";
 
     private MessageLogger logger;
-
-    public StatisticsLogger(MessageLogger logger) {
-        super();
-        this.logger = logger;
-    }
 
     /**
      * Logs a textual message describing the statistics

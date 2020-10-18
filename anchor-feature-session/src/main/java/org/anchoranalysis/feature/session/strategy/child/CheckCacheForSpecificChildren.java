@@ -31,11 +31,11 @@ import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.feature.cache.ChildCacheName;
-import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.cache.calculate.CacheCreator;
-import org.anchoranalysis.feature.cache.calculate.FeatureSessionCache;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.cache.CacheCreator;
+import org.anchoranalysis.feature.calculate.cache.ChildCacheName;
+import org.anchoranalysis.feature.calculate.cache.FeatureSessionCache;
+import org.anchoranalysis.feature.calculate.cache.SessionInput;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.session.strategy.replace.CacheAndReuseStrategy;
 

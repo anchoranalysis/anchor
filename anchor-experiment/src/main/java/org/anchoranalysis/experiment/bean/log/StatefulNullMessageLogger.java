@@ -27,7 +27,7 @@
 package org.anchoranalysis.experiment.bean.log;
 
 import org.anchoranalysis.core.log.MessageLogger;
-import org.anchoranalysis.experiment.log.reporter.StatefulMessageLogger;
+import org.anchoranalysis.experiment.log.StatefulMessageLogger;
 
 /**
  * Does nothing (i.e. simply ignores) with any messages logged.

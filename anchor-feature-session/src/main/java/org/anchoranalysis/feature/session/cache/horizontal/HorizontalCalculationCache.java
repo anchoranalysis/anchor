@@ -31,11 +31,11 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.feature.cache.ChildCacheName;
-import org.anchoranalysis.feature.cache.calculate.CacheCreator;
-import org.anchoranalysis.feature.cache.calculate.FeatureSessionCache;
-import org.anchoranalysis.feature.cache.calculate.FeatureSessionCacheCalculator;
 import org.anchoranalysis.feature.calculate.FeatureInitParams;
+import org.anchoranalysis.feature.calculate.cache.CacheCreator;
+import org.anchoranalysis.feature.calculate.cache.ChildCacheName;
+import org.anchoranalysis.feature.calculate.cache.FeatureSessionCache;
+import org.anchoranalysis.feature.calculate.cache.FeatureSessionCalculator;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 
@@ -50,7 +50,7 @@ import org.anchoranalysis.feature.shared.SharedFeatureSet;
  */
 public class HorizontalCalculationCache<T extends FeatureInput> implements FeatureSessionCache<T> {
 
-    private ResettableCachedCalculator<T> calculator;
+    private ResettableCalculator<T> calculator;
 
     @SuppressWarnings("unused")
     private SharedFeatureSet<T> sharedFeatures;
@@ -61,7 +61,7 @@ public class HorizontalCalculationCache<T extends FeatureInput> implements Featu
     HorizontalCalculationCache(SharedFeatureSet<T> sharedFeatures) {
         super();
         this.sharedFeatures = sharedFeatures;
-        this.calculator = new ResettableCachedCalculator<>(sharedFeatures);
+        this.calculator = new ResettableCalculator<>(sharedFeatures);
     }
 
     // Set up the cache
@@ -94,7 +94,7 @@ public class HorizontalCalculationCache<T extends FeatureInput> implements Featu
     }
 
     @Override
-    public FeatureSessionCacheCalculator<T> calculator() {
+    public FeatureSessionCalculator<T> calculator() {
         return calculator;
     }
 

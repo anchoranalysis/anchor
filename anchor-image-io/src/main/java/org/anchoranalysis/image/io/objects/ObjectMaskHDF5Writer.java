@@ -31,11 +31,11 @@ import ch.systemsx.cisd.hdf5.HDF5IntStorageFeatures;
 import ch.systemsx.cisd.hdf5.IHDF5Writer;
 import java.util.function.ToIntFunction;
 import lombok.AllArgsConstructor;
-import org.anchoranalysis.core.geometry.ReadableTuple3i;
-import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
-import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
+import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
+import org.anchoranalysis.image.voxel.iterator.IterateVoxelsAll;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
+import org.anchoranalysis.spatial.point.ReadableTuple3i;
 
 /**
  * Writes an object-mask to a path within a HDF5 file
@@ -82,32 +82,21 @@ class ObjectMaskHDF5Writer {
         addAttribute(HDF5PathHelper.EXTENT_Z, ReadableTuple3i::z);
     }
 
-    private void addAttribute(String attrName, ToIntFunction<ReadableTuple3i> extrVal) {
+    private void addAttribute(String attrName, ToIntFunction<ReadableTuple3i> extraValue) {
 
-        Integer crnrVal = extrVal.applyAsInt(object.boundingBox().cornerMin());
-        writer.uint32().setAttr(pathHDF5, attrName, crnrVal.intValue());
+        Integer cornerValue = extraValue.applyAsInt(object.boundingBox().cornerMin());
+        writer.uint32().setAttr(pathHDF5, attrName, cornerValue.intValue());
     }
 
-    private static MDByteArray byteArray(BinaryVoxels<UnsignedByteBuffer> bvb) {
+    private static MDByteArray byteArray(BinaryVoxels<UnsignedByteBuffer> voxels) {
 
-        Extent extent = bvb.extent();
+        MDByteArray array = new MDByteArray(voxels.extent().deriveArray());
 
-        MDByteArray md = new MDByteArray(dimensionsFromExtent(extent));
+        IterateVoxelsAll.withBuffer(
+                voxels.voxels(),
+                (point, buffer, offset) ->
+                        array.set(buffer.getRaw(offset), point.x(), point.y(), point.z()));
 
-        for (int z = 0; z < extent.z(); z++) {
-
-            UnsignedByteBuffer buffer = bvb.sliceBuffer(z);
-
-            for (int y = 0; y < extent.y(); y++) {
-                for (int x = 0; x < extent.x(); x++) {
-                    md.set(buffer.getRaw(extent.offset(x, y)), x, y, z);
-                }
-            }
-        }
-        return md;
-    }
-
-    private static int[] dimensionsFromExtent(Extent extent) {
-        return new int[] {extent.x(), extent.y(), extent.z()};
+        return array;
     }
 }

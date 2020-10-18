@@ -29,13 +29,12 @@ package org.anchoranalysis.image.io.generator.raster.boundingbox;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.extent.box.BoundingBox;
+import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.generator.raster.RasterGenerator;
-import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.io.generator.IterableObjectGenerator;
-import org.anchoranalysis.io.generator.ObjectGenerator;
+import org.anchoranalysis.image.io.stack.StackWriteOptions;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import org.anchoranalysis.spatial.extent.box.BoundingBox;
 
 /**
  * An iterable-generator that outputs the portion of a stack corresponding to a bounding-box
@@ -43,8 +42,8 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
  * @author Owen Feehan
  */
 @RequiredArgsConstructor
-public class ExtractBoundingBoxAreaFromStackGenerator extends RasterGenerator
-        implements IterableObjectGenerator<BoundingBox, Stack> {
+public class ExtractBoundingBoxAreaFromStackGenerator
+        extends RasterGenerator<BoundingBox> {
 
     private static final String MANIFEST_FUNCTION = "boundingBoxExtract";
 
@@ -52,36 +51,13 @@ public class ExtractBoundingBoxAreaFromStackGenerator extends RasterGenerator
     private final ScaleableBackground background;
     // END REQUIRED ARGUMENTS
 
-    private BoundingBox element;
-
     @Override
-    public Stack generate() throws OutputWriteFailedException {
-
-        if (getIterableElement() == null) {
-            throw new OutputWriteFailedException("no mutable element set");
-        }
-
+    public Stack transform(BoundingBox element) throws OutputWriteFailedException {
         try {
             return background.extractRegionFromStack(element);
-
         } catch (CreateException e) {
             throw new OutputWriteFailedException(e);
         }
-    }
-
-    @Override
-    public BoundingBox getIterableElement() {
-        return element;
-    }
-
-    @Override
-    public void setIterableElement(BoundingBox element) {
-        this.element = element;
-    }
-
-    @Override
-    public ObjectGenerator<Stack> getGenerator() {
-        return this;
     }
 
     @Override
@@ -92,5 +68,10 @@ public class ExtractBoundingBoxAreaFromStackGenerator extends RasterGenerator
     @Override
     public boolean isRGB() {
         return background.getNumberChannels() == 3;
+    }
+
+    @Override
+    public StackWriteOptions writeOptions() {
+        return StackWriteOptions.maybeRGB(isRGB());
     }
 }

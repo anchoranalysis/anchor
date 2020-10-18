@@ -30,8 +30,8 @@ import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.anchoranalysis.feature.input.FeatureInputWithResolution;
-import org.anchoranalysis.image.extent.Resolution;
-import org.anchoranalysis.image.histogram.Histogram;
+import org.anchoranalysis.image.core.dimensions.Resolution;
+import org.anchoranalysis.math.histogram.Histogram;
 
 @AllArgsConstructor
 public class FeatureInputHistogram implements FeatureInputWithResolution {

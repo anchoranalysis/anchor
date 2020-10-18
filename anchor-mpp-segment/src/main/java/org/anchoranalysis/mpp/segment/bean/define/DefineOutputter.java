@@ -36,37 +36,66 @@ import org.anchoranalysis.bean.define.Define;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.name.provider.NamedProvider;
 import org.anchoranalysis.core.params.KeyValueParams;
-import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
-import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.io.output.bound.BoundIOContext;
+import org.anchoranalysis.image.core.stack.Stack;
+import org.anchoranalysis.image.voxel.object.ObjectCollection;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
+import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import org.anchoranalysis.io.output.outputter.InputOutputContext;
+import org.anchoranalysis.io.output.outputter.OutputterChecked;
 import org.anchoranalysis.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.mpp.io.input.InputForMPPBean;
 import org.anchoranalysis.mpp.io.input.MPPInitParamsFactory;
+import org.anchoranalysis.mpp.mark.Mark;
 
+/**
+ * After using applying a {@link Define} on inputs, output produced entities (images, histograms,
+ * objects etc.)
+ *
+ * <p>The following outputs are produced:
+ *
+ * <table>
+ * <caption></caption>
+ * <thead>
+ * <tr><th>Output Name</th><th>Default?</th><th>Description</th></tr>
+ * </thead>
+ * <tbody>
+ * <tr><td>stacks</td><td>yes</td><td>Image-stacks that are produced.</td></tr>
+ * <tr><td>objects</td><td>yes</td><td>Collections of {@link ObjectMask}s that are produced as HDF5</td></tr>
+ * <tr><td>histograms</td><td>yes</td><td>Histograms that are produced as CSV.</td></tr>
+ * <tr><td>marks</td><td>yes</td><td>Collections of {@link Mark}s that are produced as serialized XML.</td></tr>
+ * </tbody>
+ * </table>
+ */
 public abstract class DefineOutputter extends AnchorBean<DefineOutputter> {
 
     // START BEAN PROPERTIES
     @BeanField @OptionalBean @Getter @Setter private Define define = new Define();
 
     @BeanField @Getter @Setter private boolean suppressSubfolders = false;
-
-    @BeanField @Getter @Setter private boolean suppressOutputExceptions = false;
     // END BEAN PROPERTIES
 
-    protected MPPInitParams createInitParams(InputForMPPBean input, BoundIOContext context)
+    /**
+     * Adds all possible output-names to a {@link OutputEnabledMutable}.
+     *
+     * @param outputEnabled where to add all possible output-names
+     */
+    public void addAllOutputNamesTo(OutputEnabledMutable outputEnabled) {
+        ParamsOutputter.addAllOutputNamesTo(outputEnabled);
+    }
+
+    protected MPPInitParams createInitParams(InputForMPPBean input, InputOutputContext context)
             throws CreateException {
         return MPPInitParamsFactory.create(
                 context, Optional.ofNullable(define), Optional.of(input));
     }
 
-    protected MPPInitParams createInitParams(BoundIOContext context) throws CreateException {
+    protected MPPInitParams createInitParams(InputOutputContext context) throws CreateException {
         return MPPInitParamsFactory.create(context, Optional.ofNullable(define), Optional.empty());
     }
 
     protected MPPInitParams createInitParams(
-            BoundIOContext context,
+            InputOutputContext context,
             Optional<NamedProvider<Stack>> stacks,
             Optional<NamedProvider<ObjectCollection>> objects,
             Optional<KeyValueParams> keyValueParams)
@@ -75,26 +104,9 @@ public abstract class DefineOutputter extends AnchorBean<DefineOutputter> {
                 context, Optional.ofNullable(define), stacks, objects, keyValueParams);
     }
 
-    // General objects can be outputted
-    protected void outputSharedObjects(ImageInitParams initParams, BoundIOContext context)
+    protected void outputSharedObjects(MPPInitParams initParams, OutputterChecked outputter)
             throws OutputWriteFailedException {
-        if (suppressOutputExceptions) {
-            SharedObjectsOutputter.output(initParams, suppressSubfolders, context);
-        } else {
-            SharedObjectsOutputter.outputWithException(initParams, suppressSubfolders, context);
-        }
-    }
-
-    protected void outputSharedObjects(MPPInitParams initParams, BoundIOContext context)
-            throws OutputWriteFailedException {
-
-        outputSharedObjects(initParams.getImage(), context);
-
-        if (suppressOutputExceptions) {
-            SharedObjectsOutputter.output(initParams, suppressSubfolders, context);
-        } else {
-            SharedObjectsOutputter.outputWithException(
-                    initParams, context.getOutputManager(), suppressSubfolders);
-        }
+        new ParamsOutputter(
+                initParams, suppressSubfolders, outputter).output();
     }
 }

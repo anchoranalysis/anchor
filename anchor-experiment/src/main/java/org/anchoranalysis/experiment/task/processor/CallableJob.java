@@ -32,9 +32,9 @@ import java.util.concurrent.Callable;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.experiment.JobExecutionException;
+import org.anchoranalysis.experiment.bean.task.Task;
 import org.anchoranalysis.experiment.task.ErrorReporterForTask;
 import org.anchoranalysis.experiment.task.ParametersUnbound;
-import org.anchoranalysis.experiment.task.Task;
 import org.anchoranalysis.io.input.InputFromManager;
 
 /**
@@ -78,7 +78,7 @@ public class CallableJob<T extends InputFromManager, S>
         this.jobDescription = jobDescription;
         this.logger =
                 new JobStartStopLogger(
-                        "Job", loggerMonitor, monitor, false, showOngoingJobsLessThan);
+                        "Job", monitor, false, showOngoingJobsLessThan, loggerMonitor);
     }
 
     @Override
@@ -92,24 +92,26 @@ public class CallableJob<T extends InputFromManager, S>
             logger.logStart(jobDescription);
 
             boolean success = taskDup.executeJob(paramsUnbound);
-            
+
             closeJobStateAndLog(success);
-            
+
             return Optional.empty();
 
         } catch (Throwable e) { // NOSONAR
             // Note that throwable is needed here instead of Exception, so that Errors don't
             // cause errors in our job monitoring.
 
-            // If executeTask is called with supressException==true then exceptions shouldn't occur
+            // If executeTask is called with suppressException==true then exceptions shouldn't occur
             // here as a rule from specific-tasks,
             //   as they should be logged internally to task-log. So if any error is actually thrown
             // here, let's consider it suspciously
             //
-            // If executeTask is called with supressException==false then we arrive here fairly
+            // If executeTask is called with suppressException==false then we arrive here fairly
             // easily, and record the error in the experiment-log just
             //  in case, even though it's probably already in the task log.
-            ErrorReporter errorReporter = new ErrorReporterForTask(paramsUnbound.getParametersExperiment().getLoggerExperiment());
+            ErrorReporter errorReporter =
+                    new ErrorReporterForTask(
+                            paramsUnbound.getParametersExperiment().getLoggerExperiment());
             errorReporter.recordError(CallableJob.class, e);
 
             closeJobStateAndLog(false);
@@ -119,8 +121,8 @@ public class CallableJob<T extends InputFromManager, S>
             Preconditions.checkArgument(!jobState.isExecuting());
         }
     }
-    
-    private void closeJobStateAndLog( boolean success ) {
+
+    private void closeJobStateAndLog(boolean success) {
         jobState.markAsCompleted(success);
         logger.logEnd(jobDescription, jobState, success);
     }

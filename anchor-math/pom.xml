@@ -35,6 +35,13 @@
    	    <artifactId>anchor-core</artifactId>
 		<version>0.0.8-SNAPSHOT</version>
 	</dependency>
+
+    <dependency>
+	 	<groupId>${project.groupId}</groupId>	
+	  	<artifactId>anchor-beans-shared</artifactId>
+  		<version>0.0.8-SNAPSHOT</version>
+  	</dependency>
+	
   </dependencies>
   
   

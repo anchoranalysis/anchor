@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -45,27 +45,14 @@ import org.anchoranalysis.feature.name.FeatureNameList;
 @Accessors(fluent = true)
 public class ResultsWriterMetadata {
 
-    /** Names for any outputs produced by {@link ResultsWriter}. */
-    @Getter private final ResultsWriterOutputNames outputNames;
-
     /** Headers for the CSV File */
     private final LabelHeaders labelHeaders;
 
     /** Names of each feature in the feature columns. */
     @Getter private final FeatureNameList featureNamesNonAggregate;
 
-    /**
-     * Creates with default output-names.
-     *
-     * @param labelHeaders headers for the CSV File
-     * @param featureNamesNonAggregate names of each feature in the feature columns.
-     */
-    public ResultsWriterMetadata(
-            LabelHeaders labelHeaders, FeatureNameList featureNamesNonAggregate) {
-        this.outputNames = new ResultsWriterOutputNames();
-        this.labelHeaders = labelHeaders;
-        this.featureNamesNonAggregate = featureNamesNonAggregate;
-    }
+    /** Names for any outputs produced by {@link ResultsWriter}. */
+    @Getter private final ResultsWriterOutputNames outputNames;
 
     /**
      * Derives metadata for the non-aggregated CSV output.

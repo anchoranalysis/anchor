@@ -37,7 +37,7 @@ import org.anchoranalysis.core.log.MessageLogger;
 public abstract class TerminationCondition extends AnchorBean<TerminationCondition> {
 
     public abstract boolean continueIterations(
-            int crntIter, double score, int size, MessageLogger logger);
+            int currentIteration, double score, int size, MessageLogger logger);
 
     public void init() {}
 }

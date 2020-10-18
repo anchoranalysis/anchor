@@ -27,19 +27,20 @@
 package org.anchoranalysis.overlay.object;
 
 import lombok.Getter;
+import java.util.Optional;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.binary.values.BinaryValuesByte;
-import org.anchoranalysis.image.extent.Dimensions;
-import org.anchoranalysis.image.extent.Resolution;
-import org.anchoranalysis.image.extent.box.BoundingBox;
-import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.object.properties.ObjectWithProperties;
+import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.image.core.dimensions.Resolution;
+import org.anchoranalysis.image.core.object.properties.ObjectWithProperties;
+import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.overlay.Overlay;
 import org.anchoranalysis.overlay.OverlayProperties;
 import org.anchoranalysis.overlay.object.scaled.FromMask;
 import org.anchoranalysis.overlay.object.scaled.ScaledMaskCreator;
 import org.anchoranalysis.overlay.writer.DrawOverlay;
+import org.anchoranalysis.spatial.extent.box.BoundingBox;
+import org.anchoranalysis.spatial.point.Point3i;
 
 public class OverlayObjectMask extends Overlay {
 
@@ -113,7 +114,7 @@ public class OverlayObjectMask extends Overlay {
     }
 
     @Override
-    public OverlayProperties generateProperties(Resolution sr) {
+    public OverlayProperties generateProperties(Optional<Resolution> resolution) {
         // TODO take the properties from the object-mask
         OverlayProperties out = new OverlayProperties();
         out.add("id", id);

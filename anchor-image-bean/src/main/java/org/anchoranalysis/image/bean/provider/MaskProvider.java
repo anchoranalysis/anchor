@@ -28,8 +28,8 @@ package org.anchoranalysis.image.bean.provider;
 
 import org.anchoranalysis.bean.annotation.GroupingRoot;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.binary.mask.Mask;
-import org.anchoranalysis.image.stack.Stack;
+import org.anchoranalysis.image.core.mask.Mask;
+import org.anchoranalysis.image.core.stack.Stack;
 
 @GroupingRoot
 public abstract class MaskProvider extends BeanProviderAsStackBase<MaskProvider, Mask> {

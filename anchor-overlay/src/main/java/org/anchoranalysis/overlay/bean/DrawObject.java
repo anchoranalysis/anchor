@@ -29,13 +29,13 @@ package org.anchoranalysis.overlay.bean;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.extent.Dimensions;
-import org.anchoranalysis.image.extent.box.BoundingBox;
-import org.anchoranalysis.image.object.properties.ObjectCollectionWithProperties;
-import org.anchoranalysis.image.object.properties.ObjectWithProperties;
-import org.anchoranalysis.image.stack.rgb.RGBStack;
+import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.image.core.object.properties.ObjectCollectionWithProperties;
+import org.anchoranalysis.image.core.object.properties.ObjectWithProperties;
+import org.anchoranalysis.image.core.stack.rgb.RGBStack;
 import org.anchoranalysis.overlay.writer.ObjectDrawAttributes;
 import org.anchoranalysis.overlay.writer.PrecalculationOverlay;
+import org.anchoranalysis.spatial.extent.box.BoundingBox;
 
 /**
  * Draws an object-mask on a RGB-stack
@@ -81,7 +81,7 @@ public abstract class DrawObject extends AnchorBean<DrawObject> {
             RGBStack background,
             ObjectDrawAttributes attributes)
             throws OperationFailedException {
-        write(objects, background, attributes, new BoundingBox(background.dimensions()));
+        write(objects, background, attributes, new BoundingBox(background.extent()));
     }
 
     /**

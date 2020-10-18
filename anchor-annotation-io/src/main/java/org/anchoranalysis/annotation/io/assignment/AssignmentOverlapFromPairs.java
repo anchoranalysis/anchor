@@ -33,9 +33,9 @@ import java.util.List;
 import java.util.stream.DoubleStream;
 import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.core.text.TypedValue;
-import org.anchoranalysis.image.extent.Dimensions;
-import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.voxel.object.ObjectCollection;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
+import org.anchoranalysis.spatial.extent.Extent;
 
 /**
  * Pairs objects in left with objects in right
@@ -81,10 +81,10 @@ public class AssignmentOverlapFromPairs implements Assignment {
         return elements.asList();
     }
 
-    public void removeTouchingBorderXY(Dimensions dimensions) {
-        removeTouchingBorderXYObjects(dimensions, listUnassignedLeft);
-        removeTouchingBorderXYObjects(dimensions, listUnassignedRight);
-        removeTouchingBorderXYPairObjects(dimensions, listPairs);
+    public void removeTouchingBorderXY(Extent extent) {
+        removeTouchingBorderXYObjects(extent, listUnassignedLeft);
+        removeTouchingBorderXYObjects(extent, listUnassignedRight);
+        removeTouchingBorderXYPairObjects(extent, listPairs);
     }
 
     @Override
@@ -200,20 +200,20 @@ public class AssignmentOverlapFromPairs implements Assignment {
     }
 
     private static void removeTouchingBorderXYObjects(
-            Dimensions dimensions, List<ObjectMask> list) {
+            Extent extent, List<ObjectMask> list) {
         Iterator<ObjectMask> itr = list.iterator();
         while (itr.hasNext()) {
-            if (itr.next().boundingBox().atBorderXY(dimensions)) {
+            if (itr.next().boundingBox().atBorderXY(extent)) {
                 itr.remove();
             }
         }
     }
 
     private static void removeTouchingBorderXYPairObjects(
-            Dimensions dimensions, List<ObjectMaskPair> list) {
+            Extent extent, List<ObjectMaskPair> list) {
         Iterator<ObjectMaskPair> itr = list.iterator();
         while (itr.hasNext()) {
-            if (itr.next().atBorderXY(dimensions)) {
+            if (itr.next().atBorderXY(extent)) {
                 itr.remove();
             }
         }

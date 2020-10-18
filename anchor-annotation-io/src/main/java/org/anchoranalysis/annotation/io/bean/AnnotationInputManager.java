@@ -36,9 +36,9 @@ import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporterMultiple;
 import org.anchoranalysis.core.progress.ProgressReporterOneOfMany;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
-import org.anchoranalysis.io.bean.input.InputManager;
-import org.anchoranalysis.io.bean.input.InputManagerParams;
-import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.input.InputReadFailedException;
+import org.anchoranalysis.io.input.bean.InputManager;
+import org.anchoranalysis.io.input.bean.InputManagerParams;
 
 public class AnnotationInputManager<T extends ProvidesStackInput, S extends AnnotatorStrategy>
         extends InputManager<AnnotationWithStrategy<S>> {
@@ -50,29 +50,29 @@ public class AnnotationInputManager<T extends ProvidesStackInput, S extends Anno
     // END BEAN PROPERTIES
 
     @Override
-    public List<AnnotationWithStrategy<S>> inputObjects(InputManagerParams params)
-            throws AnchorIOException {
+    public List<AnnotationWithStrategy<S>> inputs(InputManagerParams params)
+            throws InputReadFailedException {
 
-        try (ProgressReporterMultiple prm =
+        try (ProgressReporterMultiple progressMultiple =
                 new ProgressReporterMultiple(params.getProgressReporter(), 2)) {
 
-            List<T> inputs = input.inputObjects(params);
+            List<T> inputs = input.inputs(params);
 
-            prm.incrWorker();
+            progressMultiple.incrWorker();
 
             List<AnnotationWithStrategy<S>> outList =
-                    createListInput(inputs, new ProgressReporterOneOfMany(prm));
-            prm.incrWorker();
+                    createListInput(inputs, new ProgressReporterOneOfMany(progressMultiple));
+            progressMultiple.incrWorker();
 
             return outList;
         }
     }
 
     private List<AnnotationWithStrategy<S>> createListInput(
-            List<T> listInputObjects, ProgressReporter progressReporter) throws AnchorIOException {
+            List<T> listInputs, ProgressReporter progressReporter) throws InputReadFailedException {
         return FunctionalProgress.mapList(
-                listInputObjects,
+                listInputs,
                 progressReporter,
-                inputObject -> new AnnotationWithStrategy<S>(inputObject, annotatorStrategy));
+                annotationInput -> new AnnotationWithStrategy<S>(annotationInput, annotatorStrategy));
     }
 }

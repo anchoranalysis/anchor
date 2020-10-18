@@ -30,7 +30,7 @@ import static org.mockito.Mockito.*;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
-import org.anchoranalysis.image.stack.Stack;
+import org.anchoranalysis.image.core.stack.Stack;
 
 public class DummyStackProvider extends StackProvider {
 

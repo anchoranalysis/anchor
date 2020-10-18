@@ -27,41 +27,50 @@
 package org.anchoranalysis.image.io.bean.stack.provider;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.provider.Provider;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
-import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.channel.convert.ChannelConverter;
-import org.anchoranalysis.image.channel.convert.ConversionPolicy;
-import org.anchoranalysis.image.channel.convert.ToUnsignedShort;
-import org.anchoranalysis.image.channel.factory.ChannelFactory;
-import org.anchoranalysis.image.convert.UnsignedShortBuffer;
-import org.anchoranalysis.image.extent.Dimensions;
-import org.anchoranalysis.image.extent.IncorrectImageSizeException;
-import org.anchoranalysis.image.extent.box.BoundingBox;
-import org.anchoranalysis.image.io.generator.raster.StringRasterGenerator;
-import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.image.voxel.convert.ConvertToShortScaleByType;
+import org.anchoranalysis.image.core.channel.Channel;
+import org.anchoranalysis.image.core.channel.convert.ChannelConverter;
+import org.anchoranalysis.image.core.channel.convert.ConversionPolicy;
+import org.anchoranalysis.image.core.channel.convert.ToUnsignedShort;
+import org.anchoranalysis.image.core.channel.factory.ChannelFactory;
+import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.image.core.dimensions.IncorrectImageSizeException;
+import org.anchoranalysis.image.core.stack.Stack;
+import org.anchoranalysis.image.io.bean.generator.TextStyle;
+import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedShortBuffer;
+import org.anchoranalysis.image.voxel.convert.ToShortScaleByType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import org.anchoranalysis.spatial.extent.box.BoundingBox;
 
+@NoArgsConstructor
 public class GenerateString extends StackProvider {
 
-    // START BEANS
-    @BeanField @Getter @Setter private StringRasterGenerator stringRasterGenerator;
+    // START BEAN PROPERTIES
+    /** Text to draw on an image */
+    @BeanField @Getter @Setter private String text = "text";
+    
+    @BeanField @Getter @Setter private TextStyle stringRasterGenerator;
 
     @BeanField @Getter @Setter private boolean createShort;
 
-    /* The string is the maximum-value of the image */
+    /* The string is printed using the maximum-value intensity-value of the image */
     @BeanField @Getter @Setter private Provider<Stack> intensityProvider;
 
     /** Repeats the generated (2D) string in z, so it's the same z-extent as repeatZProvider */
     @BeanField @Getter @Setter private Provider<Stack> repeatZProvider;
-    // END BEANS
+    // END BEAN PROPERITES
 
+    public GenerateString(String text) {
+        this.text = text;
+    }
+    
     @Override
     public Stack create() throws CreateException {
 
@@ -100,11 +109,11 @@ public class GenerateString extends StackProvider {
 
     private Stack create2D() throws CreateException {
         try {
-            Stack stack = stringRasterGenerator.generateStack();
+            Stack stack = stringRasterGenerator.createGenerator().transform(text);
 
             if (createShort) {
                 ChannelConverter<UnsignedShortBuffer> conveter =
-                        new ToUnsignedShort(new ConvertToShortScaleByType());
+                        new ToUnsignedShort(new ToShortScaleByType());
 
                 stack = conveter.convert(stack, ConversionPolicy.CHANGE_EXISTING_CHANNEL);
             }
@@ -133,7 +142,7 @@ public class GenerateString extends StackProvider {
     private Channel createExpandedChannel(Channel channel, int zHeight) {
         assert (channel.dimensions().z() == 1);
 
-        BoundingBox boxSrc = new BoundingBox(channel.dimensions());
+        BoundingBox boxSrc = new BoundingBox(channel.extent());
         BoundingBox boxDest = boxSrc;
 
         Channel channelNew = emptyChannelWithChangedZ(channel, zHeight);

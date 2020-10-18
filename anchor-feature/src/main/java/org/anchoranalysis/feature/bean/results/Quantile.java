@@ -32,9 +32,15 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 
-public class Quantile extends FeatureResultsFromIndex {
+/**
+ * The quantile of the results from a particular feature.
+ *
+ * @author Owen Feehan
+ */
+public class Quantile extends StatisticForFeature {
 
     // START BEAN PROPERTIES
+    /** The quantile. */
     @BeanField @Getter @Setter private double quantile = 0; // NOSONAR
 
     /** If true, the quantile is interpreted as a percentage rather than a decimal */

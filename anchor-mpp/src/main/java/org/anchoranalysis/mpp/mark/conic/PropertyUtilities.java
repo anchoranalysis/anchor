@@ -28,8 +28,8 @@ package org.anchoranalysis.mpp.mark.conic;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.geometry.Point3d;
-import org.anchoranalysis.image.object.properties.ObjectWithProperties;
+import org.anchoranalysis.image.core.object.properties.ObjectWithProperties;
+import org.anchoranalysis.spatial.point.Point3d;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class PropertyUtilities {

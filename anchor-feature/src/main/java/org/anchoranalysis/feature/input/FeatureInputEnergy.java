@@ -32,9 +32,9 @@ import lombok.EqualsAndHashCode;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.energy.EnergyStack;
-import org.anchoranalysis.image.extent.Dimensions;
-import org.anchoranalysis.image.extent.Resolution;
-import org.anchoranalysis.image.extent.UnitConverter;
+import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.image.core.dimensions.Resolution;
+import org.anchoranalysis.image.core.dimensions.UnitConverter;
 
 @AllArgsConstructor
 @EqualsAndHashCode
@@ -52,7 +52,7 @@ public abstract class FeatureInputEnergy implements FeatureInputParams {
 
     @Override
     public Optional<Resolution> getResolutionOptional() {
-        return energyStack.map(EnergyStack::dimensions).map(Dimensions::resolution);
+        return energyStack.map(EnergyStack::dimensions).flatMap(Dimensions::resolution);
     }
 
     @Override

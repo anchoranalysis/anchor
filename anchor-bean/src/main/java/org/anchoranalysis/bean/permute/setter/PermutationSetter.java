@@ -29,12 +29,14 @@ package org.anchoranalysis.bean.permute.setter;
 import org.anchoranalysis.bean.AnchorBean;
 
 /**
- * Imposes a permutation on some property of a bean. This can be an immediate property of a bean, or
- * property of some nested-bean. e.g.
+ * Imposes a permutation on some property of a bean.
  *
- * <p>Bean.x (immediate property) Bean.child1.child2.child3.x (nested)
+ * <p>This can be an immediate property of a bean, or property of some nested-bean. e.g.
  *
- * <p>All intermediate children must be beans.
+ * <ul>
+ *   <li>{@code Bean.x} (immediate property) {@code Bean.child1.child2.child3.x} (nested).
+ *   <li>All intermediate children must be beans.
+ * </ul>
  *
  * @author Owen Feehan
  */

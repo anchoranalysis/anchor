@@ -33,18 +33,18 @@ import lombok.Setter;
 import org.anchoranalysis.core.color.ColorIndex;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.spatial.Padding;
-import org.anchoranalysis.image.extent.Dimensions;
-import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.extent.box.BoundingBox;
+import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.image.core.merge.ObjectMaskMerger;
+import org.anchoranalysis.image.core.object.properties.ObjectCollectionWithProperties;
+import org.anchoranalysis.image.core.stack.DisplayStack;
+import org.anchoranalysis.image.core.stack.rgb.RGBStack;
 import org.anchoranalysis.image.io.stack.ConvertDisplayStackToRGB;
-import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.object.combine.ObjectMaskMerger;
-import org.anchoranalysis.image.object.properties.ObjectCollectionWithProperties;
-import org.anchoranalysis.image.stack.DisplayStack;
-import org.anchoranalysis.image.stack.rgb.RGBStack;
+import org.anchoranalysis.image.voxel.object.ObjectCollection;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.overlay.bean.DrawObject;
 import org.anchoranalysis.overlay.writer.ObjectDrawAttributes;
+import org.anchoranalysis.spatial.extent.Extent;
+import org.anchoranalysis.spatial.extent.box.BoundingBox;
 
 /**
  * Similar to {@link DrawObjectsGenerator}
@@ -65,11 +65,11 @@ public class DrawCroppedObjectsGenerator extends ObjectsOnRGBGenerator {
     }
 
     @Override
-    protected RGBStack generateBackground(Either<Dimensions, DisplayStack> background)
+    protected RGBStack generateBackground(ObjectCollectionWithProperties element, Either<Dimensions, DisplayStack> background)
             throws CreateException {
         Extent extent = background.fold(Functions.identity(), DisplayStack::dimensions).extent();
 
-        ObjectCollection objects = getIterableElement().withoutProperties();
+        ObjectCollection objects = element.withoutProperties();
 
         if (objects.isEmpty()) {
             throw new CreateException("This generator expects at least one object to be present");
@@ -87,9 +87,9 @@ public class DrawCroppedObjectsGenerator extends ObjectsOnRGBGenerator {
     }
 
     @Override
-    protected ObjectCollectionWithProperties generateMasks() throws CreateException {
+    protected ObjectCollectionWithProperties generateMasks(ObjectCollectionWithProperties element) throws CreateException {
         // Create a new set of object-masks, relative to the box position
-        return relativeTo(getIterableElement().withoutProperties(), box);
+        return relativeTo(element.withoutProperties(), box);
     }
 
     private BoundingBox growBBBox(BoundingBox box, Extent containingExtent) {

@@ -28,9 +28,9 @@ package org.anchoranalysis.test.image.io;
 
 import java.io.IOException;
 import java.util.Optional;
+import org.anchoranalysis.io.input.csv.CSVReader.OpenedCSVFile;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.io.csv.reader.CSVReader.OpenedCSVFile;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class TestCsvUtilities {

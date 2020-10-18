@@ -35,9 +35,8 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.image.bean.provider.stack.ArrangeRaster;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
-import org.anchoranalysis.image.io.bean.stack.StackProviderWithLabel;
+import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.stack.TileRasters;
-import org.anchoranalysis.image.stack.Stack;
 
 // A short-cut provider for tiling a number of stack providers with labels
 public class TileWithLabels extends StackProvider {

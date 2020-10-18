@@ -28,23 +28,22 @@ package org.anchoranalysis.image.io.generator.raster.object.collection;
 
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.binary.values.BinaryValuesByte;
-import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.channel.factory.ChannelFactory;
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
-import org.anchoranalysis.image.extent.Dimensions;
-import org.anchoranalysis.image.extent.Resolution;
-import org.anchoranalysis.image.extent.box.BoundingBox;
+import org.anchoranalysis.image.core.channel.Channel;
+import org.anchoranalysis.image.core.channel.factory.ChannelFactory;
+import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.image.core.dimensions.Resolution;
+import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.generator.raster.RasterGenerator;
-import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.stack.Stack;
+import org.anchoranalysis.image.io.stack.StackWriteOptions;
 import org.anchoranalysis.image.voxel.Voxels;
+import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
+import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
-import org.anchoranalysis.io.generator.Generator;
-import org.anchoranalysis.io.generator.IterableGenerator;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import org.anchoranalysis.spatial.extent.box.BoundingBox;
+import org.anchoranalysis.spatial.point.Point3i;
 
 /**
  * Writes an object-mask as a mask (i.e. as a raster image)
@@ -52,43 +51,20 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
  * @author Owen Feehan
  */
 @RequiredArgsConstructor
-public class ObjectAsMaskGenerator extends RasterGenerator
-        implements IterableGenerator<ObjectMask> {
+public class ObjectAsMaskGenerator extends RasterGenerator<ObjectMask> {
 
     // START REQUIRED ARGUMENTS
-    private final Resolution resolution;
+    private final Optional<Resolution> resolution;
     // END REQUIRED ARGUMENTS
-
-    private ObjectMask element;
 
     /** Creates using a default image-resolution. */
     public ObjectAsMaskGenerator() {
-        this(new Resolution());
+        this(Optional.empty());
     }
 
     @Override
-    public Stack generate() throws OutputWriteFailedException {
-
-        if (getIterableElement() == null) {
-            throw new OutputWriteFailedException("no mutable element set");
-        }
-
-        return new Stack(createChannelFromMask(getIterableElement(), resolution));
-    }
-
-    @Override
-    public ObjectMask getIterableElement() {
-        return this.element;
-    }
-
-    @Override
-    public void setIterableElement(ObjectMask element) {
-        this.element = element;
-    }
-
-    @Override
-    public Generator getGenerator() {
-        return this;
+    public Stack transform(ObjectMask element) throws OutputWriteFailedException {
+        return new Stack(createChannelFromMask(element, resolution));
     }
 
     @Override
@@ -101,6 +77,11 @@ public class ObjectAsMaskGenerator extends RasterGenerator
         return false;
     }
 
+    @Override
+    public StackWriteOptions writeOptions() {
+        return StackWriteOptions.binaryChannelMaybe3D();
+    }
+
     /**
      * Creates a channel for an object-mask
      *
@@ -111,7 +92,7 @@ public class ObjectAsMaskGenerator extends RasterGenerator
      * @param resolution resolution to use for the channel
      * @return the newly created channel
      */
-    private static Channel createChannelFromMask(ObjectMask objectMask, Resolution resolution) {
+    private static Channel createChannelFromMask(ObjectMask objectMask, Optional<Resolution> resolution) {
 
         int outOnValue = BinaryValuesByte.getDefault().getOnByte();
 

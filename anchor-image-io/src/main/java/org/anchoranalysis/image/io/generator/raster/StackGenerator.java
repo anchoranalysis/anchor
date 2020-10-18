@@ -27,96 +27,83 @@
 package org.anchoranalysis.image.io.generator.raster;
 
 import java.util.Optional;
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.extent.IncorrectImageSizeException;
-import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.io.generator.IterableObjectGenerator;
-import org.anchoranalysis.io.generator.ObjectGenerator;
+import org.anchoranalysis.image.core.stack.Stack;
+import org.anchoranalysis.image.io.stack.StackWriteOptions;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
-public class StackGenerator extends RasterGenerator
-        implements IterableObjectGenerator<Stack, Stack> {
+/**
+ * Writes a stack to the filesystem.
+ *
+ * @author Owen Feehan
+ */
+@AllArgsConstructor
+public class StackGenerator extends RasterGenerator<Stack> {
 
-    private Stack stackIn;
-    private boolean padIfNec;
-    private String manifestFunction;
+    /**
+     * Iff true, in the specific case of a 2-channel stack, an additional blank channel is added to
+     * make it 3-channels.
+     */
+    private boolean padIfNecessary;
 
-    // Won't do any padding
-    public StackGenerator(String manifestFunction) {
-        this(false, manifestFunction);
+    /** Function stored in manifest for this generator. */
+    private Optional<String> manifestFunction;
+    
+    /**
+     * Properties of the stack that is being written used to guide the outputting.
+     */
+    private StackWriteOptions writeOptions;
+
+    /**
+     * Creates a generator that performs no padding.
+     *
+     * @param manifestFunction manifestFunction function stored in manifest for this generator
+     */
+    public StackGenerator(String manifestFunction, boolean always2D) {
+        this(false, Optional.of(manifestFunction), always2D);
+    }
+    
+    /**
+     * Creates the generator from a stack, inferring whether all stacks will be 2D from this stack's
+     * dimensions.
+     *
+     * @param padIfNecessary iff true, in the specific case of a 2-channel stack, an additional
+     *     blank channel is added to make it 3-channels.
+     * @param manifestFunction function stored in manifest for this generator.
+     */
+    public StackGenerator(boolean padIfNecessary, Optional<String> manifestFunction, boolean always2D) {
+        this(padIfNecessary, manifestFunction, StackWriteOptions.toReplace(always2D));
     }
 
-    public StackGenerator(boolean padIfNec, String manifestFunction) {
-        super();
-        this.padIfNec = padIfNec;
-        this.manifestFunction = manifestFunction;
-    }
-
-    // Notes pads the passed channel, would be better if it makes a new stack first
-    public StackGenerator(Stack stack, boolean padIfNec, String manifestFunction) {
-        super();
-        this.stackIn = stack;
-        this.padIfNec = padIfNec;
-        this.manifestFunction = manifestFunction;
-    }
-
-    public static Stack generateStack(Stack stackIn, boolean padIfNec)
-            throws OutputWriteFailedException {
-        Stack stackOut = new Stack();
+    @Override
+    public Stack transform(Stack element) throws OutputWriteFailedException {
+        Stack out = element.duplicateShallow();
 
         try {
-            for (int c = 0; c < stackIn.getNumberChannels(); c++) {
-                stackOut.addChannel(stackIn.getChannel(c));
-            }
-        } catch (IncorrectImageSizeException e) {
-            throw new OutputWriteFailedException(e);
-        }
-
-        try {
-            if (padIfNec && stackOut.getNumberChannels() == 2) {
-                stackOut.addBlankChannel();
+            if (padIfNecessary && out.getNumberChannels() == 2) {
+                out.addBlankChannel();
             }
         } catch (OperationFailedException e) {
             throw new OutputWriteFailedException(e);
         }
 
-        return stackOut;
-    }
-
-    @Override
-    public Stack generate() throws OutputWriteFailedException {
-        assert (stackIn != null);
-        return generateStack(stackIn, padIfNec);
+        return out;
     }
 
     @Override
     public Optional<ManifestDescription> createManifestDescription() {
-        return Optional.of(new ManifestDescription("raster", manifestFunction));
-    }
-
-    @Override
-    public ObjectGenerator<Stack> getGenerator() {
-        return this;
-    }
-
-    @Override
-    public Stack getIterableElement() {
-        return stackIn;
-    }
-
-    @Override
-    public void setIterableElement(Stack element) {
-        this.stackIn = element;
-    }
-
-    @Override
-    public void end() throws OutputWriteFailedException {
-        this.stackIn = null;
+        return manifestFunction.map( function -> new ManifestDescription("raster", function));
     }
 
     @Override
     public boolean isRGB() {
-        return stackIn.getNumberChannels() == 3 || (stackIn.getNumberChannels() == 2 && padIfNec);
+        return writeOptions.isRgb();
+    }
+
+    @Override
+    public StackWriteOptions writeOptions() {
+        return writeOptions;
     }
 }

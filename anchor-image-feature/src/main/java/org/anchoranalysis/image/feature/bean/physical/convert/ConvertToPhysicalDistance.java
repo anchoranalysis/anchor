@@ -36,11 +36,11 @@ import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.FeatureInitParams;
 import org.anchoranalysis.feature.input.FeatureInputWithResolution;
-import org.anchoranalysis.image.bean.orientation.DirectionVectorBean;
-import org.anchoranalysis.image.bean.orientation.VectorInDirection;
-import org.anchoranalysis.image.extent.SpatialUnits.UnitSuffix;
-import org.anchoranalysis.image.extent.UnitConverter;
-import org.anchoranalysis.image.orientation.DirectionVector;
+import org.anchoranalysis.image.bean.spatial.direction.DirectionVectorBean;
+import org.anchoranalysis.image.bean.spatial.direction.VectorInDirection;
+import org.anchoranalysis.image.core.dimensions.UnitConverter;
+import org.anchoranalysis.image.core.dimensions.SpatialUnits.UnitSuffix;
+import org.anchoranalysis.image.core.orientation.DirectionVector;
 
 //
 @NoArgsConstructor

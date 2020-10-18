@@ -35,7 +35,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.concurrency.ConcurrencyPlan;
-import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.core.text.LanguageUtilities;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
@@ -47,7 +46,7 @@ import org.anchoranalysis.experiment.task.processor.JobDescription;
 import org.anchoranalysis.experiment.task.processor.JobState;
 import org.anchoranalysis.experiment.task.processor.SubmittedJob;
 import org.anchoranalysis.io.input.InputFromManager;
-import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.io.output.outputter.Outputter;
 
 /**
  * Executes jobs in parallel
@@ -88,33 +87,24 @@ public class ParallelProcessor<T extends InputFromManager, S> extends JobProcess
 
     @Override
     protected TaskStatistics execute(
-            BoundOutputManagerRouteErrors rootOutputManager,
-            List<T> inputObjects,
-            ParametersExperiment paramsExperiment)
+            Outputter rootOutputter, List<T> inputs, ParametersExperiment paramsExperiment)
             throws ExperimentExecutionException {
 
-        int initialNumberJobs = inputObjects.size();
+        int initialNumberJobs = inputs.size();
 
-        int numberProcessors =
-                selectNumProcessors(
-                        paramsExperiment.getLoggerExperiment(),
-                        paramsExperiment.isDetailedLogging());
-
-        ConcurrencyPlan concurrencyPlan =
-                ConcurrencyPlan.multipleProcessors(numberProcessors, numberGPUProcessors);
+        ConcurrencyPlan concurrencyPlan = createConcurrencyPlan(paramsExperiment);
 
         S sharedState =
-                getTask()
-                        .beforeAnyJobIsExecuted(
-                                rootOutputManager, concurrencyPlan, paramsExperiment);
+                getTask().beforeAnyJobIsExecuted(rootOutputter, concurrencyPlan, paramsExperiment);
 
-        ExecutorService executorService = Executors.newFixedThreadPool(numberProcessors);
+        ExecutorService executorService =
+                Executors.newFixedThreadPool(concurrencyPlan.totalNumber());
 
         int count = 1;
 
-        ConcurrentJobMonitor monitor = new ConcurrentJobMonitor(inputObjects.size());
+        ConcurrentJobMonitor monitor = new ConcurrentJobMonitor(inputs.size());
 
-        ListIterator<T> iterator = inputObjects.listIterator();
+        ListIterator<T> iterator = inputs.listIterator();
         while (iterator.hasNext()) {
             T input = iterator.next();
             try {
@@ -141,26 +131,6 @@ public class ParallelProcessor<T extends InputFromManager, S> extends JobProcess
         return monitor.createStatistics();
     }
 
-    private int selectNumProcessors(MessageLogger logger, boolean detailedLogging) {
-
-        int availableProcessors = Runtime.getRuntime().availableProcessors();
-
-        int numberOfProcessors = availableProcessors - keepProcessorsFree;
-
-        if (maxNumberProcessors > 0) {
-            numberOfProcessors = Math.min(numberOfProcessors, maxNumberProcessors);
-        }
-
-        if (detailedLogging) {
-            logger.logFormatted(
-                    "Using %s from: %d",
-                    LanguageUtilities.prefixPluralizeMaybe(numberOfProcessors, "processor"),
-                    availableProcessors);
-        }
-
-        return numberOfProcessors;
-    }
-
     private void submitJob(
             ExecutorService executorService,
             T input,
@@ -169,7 +139,7 @@ public class ParallelProcessor<T extends InputFromManager, S> extends JobProcess
             ParametersExperiment paramsExperiment,
             ConcurrentJobMonitor monitor) {
 
-        JobDescription description = new JobDescription(input.descriptiveName(), index);
+        JobDescription description = new JobDescription(input.name(), index);
 
         ParametersUnbound<T, S> paramsUnbound =
                 new ParametersUnbound<>(
@@ -188,5 +158,35 @@ public class ParallelProcessor<T extends InputFromManager, S> extends JobProcess
                         showOngoingJobsLessThan));
 
         monitor.add(new SubmittedJob(description, state));
+    }
+
+    private ConcurrencyPlan createConcurrencyPlan(ParametersExperiment paramsExperiment) {
+
+        int availableProcessors = Runtime.getRuntime().availableProcessors();
+
+        int numberCPUs = selectNumberCPUs(availableProcessors);
+
+        if (paramsExperiment.isDetailedLogging()) {
+            paramsExperiment
+                    .getLoggerExperiment()
+                    .logFormatted(
+                            "Preparing jobs to run with common initialization.%nUsing %s CPUs from %d, and if needed and if possible, up to %d simultaneous jobs using a GPU.",
+                            LanguageUtilities.prefixPluralizeMaybe(numberCPUs, "processor"),
+                            availableProcessors,
+                            numberGPUProcessors);
+        }
+
+        return ConcurrencyPlan.multipleProcessors(numberCPUs, numberGPUProcessors);
+    }
+
+    private int selectNumberCPUs(int availableProcessors) {
+
+        int numberOfProcessors = availableProcessors - keepProcessorsFree;
+
+        if (maxNumberProcessors > 0) {
+            numberOfProcessors = Math.min(numberOfProcessors, maxNumberProcessors);
+        }
+
+        return numberOfProcessors;
     }
 }

@@ -29,15 +29,15 @@ package org.anchoranalysis.mpp.bean.proposer;
 import java.util.List;
 import java.util.Optional;
 import org.anchoranalysis.bean.NullParamsBean;
-import org.anchoranalysis.core.geometry.Point3d;
-import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
-import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.mpp.mark.CompatibleWithMark;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.mpp.proposer.error.ErrorNode;
 import org.anchoranalysis.mpp.proposer.visualization.CreateProposalVisualization;
+import org.anchoranalysis.spatial.point.Point3d;
+import org.anchoranalysis.spatial.point.Point3i;
 
 public abstract class PointsProposer extends NullParamsBean<PointsProposer>
         implements CompatibleWithMark {

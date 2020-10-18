@@ -34,17 +34,17 @@ import java.util.List;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.core.functional.FunctionalList;
-import org.anchoranalysis.core.geometry.Point2d;
-import org.anchoranalysis.core.geometry.Point3d;
-import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.core.geometry.PointConverter;
-import org.anchoranalysis.image.extent.Dimensions;
-import org.anchoranalysis.image.extent.box.BoundingBox;
-import org.anchoranalysis.image.orientation.Orientation2D;
-import org.anchoranalysis.image.points.BoundingBoxFromPoints;
-import org.anchoranalysis.math.rotation.RotationMatrix;
+import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.image.core.orientation.Orientation2D;
+import org.anchoranalysis.image.core.points.BoundingBoxFromPoints;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.mark.MarkWithPosition;
+import org.anchoranalysis.spatial.extent.box.BoundingBox;
+import org.anchoranalysis.spatial.point.Point2d;
+import org.anchoranalysis.spatial.point.Point3d;
+import org.anchoranalysis.spatial.point.Point3i;
+import org.anchoranalysis.spatial.point.PointConverter;
+import org.anchoranalysis.spatial.rotation.RotationMatrix;
 
 /**
  * A two-dimensional bounding-box rotated at arbitrary angle in XY plane around a point.

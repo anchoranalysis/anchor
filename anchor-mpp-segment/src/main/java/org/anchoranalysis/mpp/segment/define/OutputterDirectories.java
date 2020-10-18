@@ -38,11 +38,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class OutputterDirectories {
 
+    /** Where stacks are typically placed in a define-experiment output */
+    public static final String STACKS = "stacks";
+
     /** Where collections of objects are typically placed in a define-experiment output */
-    public static final String OBJECT = "objects";
+    public static final String OBJECTS = "objects";
 
     /** Where collections of histograms are typically placed in a define-experiment output */
-    public static final String HISTOGRAM = "histogram";
+    public static final String HISTOGRAMS = "histograms";
 
     /** Where collections of marks are typically placed in a define-experiment output */
     public static final String MARKS = "marks";

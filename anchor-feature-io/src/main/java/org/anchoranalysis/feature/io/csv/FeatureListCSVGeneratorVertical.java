@@ -29,10 +29,10 @@ package org.anchoranalysis.feature.io.csv;
 import java.util.ArrayList;
 import java.util.List;
 import org.anchoranalysis.core.text.TypedValue;
-import org.anchoranalysis.feature.calculate.results.ResultsVector;
-import org.anchoranalysis.feature.calculate.results.ResultsVectorCollection;
 import org.anchoranalysis.feature.name.FeatureNameList;
-import org.anchoranalysis.io.output.csv.CSVWriter;
+import org.anchoranalysis.feature.results.ResultsVector;
+import org.anchoranalysis.feature.results.ResultsVectorList;
+import org.anchoranalysis.io.generator.tabular.CSVWriter;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 /**
@@ -43,8 +43,7 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
  *
  * @author Owen Feehan
  */
-public class FeatureListCSVGeneratorVertical
-        extends FeatureTableCSVGenerator<ResultsVectorCollection> {
+public class FeatureListCSVGeneratorVertical extends FeatureTableCSVGenerator<ResultsVectorList> {
 
     /**
      * Creates without setting any <i>results</i> (i.e. column-data).
@@ -58,7 +57,7 @@ public class FeatureListCSVGeneratorVertical
 
     @Override
     protected void writeFeaturesToCSV(
-            CSVWriter writer, ResultsVectorCollection allFeatureResults, List<String> headerNames)
+            CSVWriter writer, ResultsVectorList allFeatureResults, List<String> headerNames)
             throws OutputWriteFailedException {
 
         int size = headerNames.size();
@@ -71,10 +70,7 @@ public class FeatureListCSVGeneratorVertical
     }
 
     private static List<TypedValue> generateRow(
-            String featureName,
-            ResultsVectorCollection allFeatureResults,
-            int featureIndex,
-            int size)
+            String featureName, ResultsVectorList allFeatureResults, int featureIndex, int size)
             throws OutputWriteFailedException {
 
         List<TypedValue> csvRow = new ArrayList<>();

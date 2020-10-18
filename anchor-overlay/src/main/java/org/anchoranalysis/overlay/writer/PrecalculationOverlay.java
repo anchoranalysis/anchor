@@ -29,9 +29,9 @@ package org.anchoranalysis.overlay.writer;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.extent.box.BoundingBox;
-import org.anchoranalysis.image.object.properties.ObjectWithProperties;
-import org.anchoranalysis.image.stack.rgb.RGBStack;
+import org.anchoranalysis.image.core.object.properties.ObjectWithProperties;
+import org.anchoranalysis.image.core.stack.rgb.RGBStack;
+import org.anchoranalysis.spatial.extent.box.BoundingBox;
 
 /**
  * Overlays with additional pre-calculations that make them quicker to draw onto a RGBStack

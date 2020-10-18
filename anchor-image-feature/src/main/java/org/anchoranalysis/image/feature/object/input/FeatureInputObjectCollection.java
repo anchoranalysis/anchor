@@ -31,7 +31,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.feature.input.FeatureInputEnergy;
-import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.voxel.object.ObjectCollection;
 
 @EqualsAndHashCode(callSuper = true)
 public class FeatureInputObjectCollection extends FeatureInputEnergy {

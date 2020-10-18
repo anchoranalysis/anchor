@@ -28,7 +28,7 @@ package org.anchoranalysis.mpp.bean.points.updatable;
 
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.image.binary.mask.Mask;
+import org.anchoranalysis.image.core.mask.Mask;
 import org.anchoranalysis.mpp.mark.set.UpdatableMarkSet;
 import org.anchoranalysis.mpp.probmap.PointSampler;
 

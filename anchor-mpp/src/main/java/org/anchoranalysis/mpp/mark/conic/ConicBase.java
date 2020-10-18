@@ -27,10 +27,11 @@
 package org.anchoranalysis.mpp.mark.conic;
 
 import java.util.Arrays;
-import org.anchoranalysis.core.geometry.Point3d;
-import org.anchoranalysis.image.extent.Resolution;
-import org.anchoranalysis.image.orientation.Orientation;
+import java.util.Optional;
+import org.anchoranalysis.image.core.dimensions.Resolution;
+import org.anchoranalysis.image.core.orientation.Orientation;
 import org.anchoranalysis.mpp.mark.MarkWithPosition;
+import org.anchoranalysis.spatial.point.Point3d;
 
 public abstract class ConicBase extends MarkWithPosition {
 
@@ -45,7 +46,7 @@ public abstract class ConicBase extends MarkWithPosition {
         super(src);
     }
 
-    public abstract double[] createRadiiArrayResolved(Resolution sr);
+    public abstract double[] createRadiiArrayResolved(Optional<Resolution> resolution);
 
     public abstract double[] createRadiiArray();
 
@@ -55,8 +56,8 @@ public abstract class ConicBase extends MarkWithPosition {
 
     public abstract void setMarksExplicit(Point3d pos);
 
-    public double[] radiiOrderedResolved(Resolution sr) {
-        double[] radii = createRadiiArrayResolved(sr);
+    public double[] radiiOrderedResolved(Optional<Resolution> resolution) {
+        double[] radii = createRadiiArrayResolved(resolution);
         Arrays.sort(radii);
         return radii;
     }

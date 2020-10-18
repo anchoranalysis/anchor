@@ -34,16 +34,16 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.functional.CheckedStream;
 import org.anchoranalysis.core.idgetter.IDGetter;
 import org.anchoranalysis.core.idgetter.IDGetterIter;
-import org.anchoranalysis.image.binary.values.BinaryValues;
-import org.anchoranalysis.image.binary.values.BinaryValuesByte;
-import org.anchoranalysis.image.extent.Dimensions;
-import org.anchoranalysis.image.extent.box.BoundingBox;
-import org.anchoranalysis.image.object.properties.IDGetterObjectWithProperties;
-import org.anchoranalysis.image.object.properties.ObjectWithProperties;
-import org.anchoranalysis.image.stack.rgb.RGBStack;
+import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.image.core.object.properties.IDGetterObjectWithProperties;
+import org.anchoranalysis.image.core.object.properties.ObjectWithProperties;
+import org.anchoranalysis.image.core.stack.rgb.RGBStack;
+import org.anchoranalysis.image.voxel.binary.values.BinaryValues;
+import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.overlay.Overlay;
 import org.anchoranalysis.overlay.bean.DrawObject;
 import org.anchoranalysis.overlay.collection.ColoredOverlayCollection;
+import org.anchoranalysis.spatial.extent.box.BoundingBox;
 
 /**
  * Draws an overlay onto a RGB-stack, including precalculated overlays.
@@ -66,7 +66,7 @@ public abstract class DrawOverlay {
             ColoredOverlayCollection overlays, RGBStack stack, IDGetter<Overlay> idGetter)
             throws OperationFailedException {
         writeOverlays(
-                overlays, stack.dimensions(), stack, idGetter, new BoundingBox(stack.dimensions()));
+                overlays, stack.dimensions(), stack, idGetter, new BoundingBox(stack.extent()));
     }
 
     //

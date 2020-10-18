@@ -29,7 +29,7 @@ package org.anchoranalysis.image.bean.provider;
 import org.anchoranalysis.bean.provider.Provider;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.ImageBean;
-import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.core.dimensions.Dimensions;
 
 public abstract class DimensionsProvider extends ImageBean<DimensionsProvider>
         implements Provider<Dimensions> {

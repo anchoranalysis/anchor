@@ -32,14 +32,14 @@ import java.util.Optional;
 import lombok.Getter;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.functional.OptionalUtilities;
-import org.anchoranalysis.io.bean.deserializer.Deserializer;
-import org.anchoranalysis.io.bean.deserializer.KeyValueParamsDeserializer;
-import org.anchoranalysis.io.bean.deserializer.ObjectInputStreamDeserializer;
-import org.anchoranalysis.io.bean.deserializer.XStreamDeserializer;
-import org.anchoranalysis.io.deserializer.DeserializationFailedException;
-import org.anchoranalysis.io.manifest.ManifestRecorder;
-import org.anchoranalysis.io.manifest.file.FileWrite;
-import org.anchoranalysis.io.manifest.match.helper.filewrite.FileWriteFileFunctionType;
+import org.anchoranalysis.core.serialize.DeserializationFailedException;
+import org.anchoranalysis.core.serialize.Deserializer;
+import org.anchoranalysis.core.serialize.KeyValueParamsDeserializer;
+import org.anchoranalysis.core.serialize.ObjectInputStreamDeserializer;
+import org.anchoranalysis.core.serialize.XStreamDeserializer;
+import org.anchoranalysis.io.manifest.Manifest;
+import org.anchoranalysis.io.manifest.file.OutputtedFile;
+import org.anchoranalysis.io.manifest.finder.match.FileMatch;
 
 /**
  * @author Owen Feehan
@@ -47,8 +47,9 @@ import org.anchoranalysis.io.manifest.match.helper.filewrite.FileWriteFileFuncti
  */
 public class FinderSerializedObject<T> extends FinderSingleFile {
 
+    private final String function;
+    
     private Optional<T> deserializedObject = Optional.empty();
-    private String function;
 
     /** Provides a memoized (cached) means of access the results of the finder */
     @Getter
@@ -78,18 +79,18 @@ public class FinderSerializedObject<T> extends FinderSingleFile {
     }
 
     @Override
-    protected Optional<FileWrite> findFile(ManifestRecorder manifestRecorder)
-            throws MultipleFilesException {
-        List<FileWrite> files =
+    protected Optional<OutputtedFile> findFile(Manifest manifestRecorder)
+            throws FindFailedException {
+        List<OutputtedFile> files =
                 FinderUtilities.findListFile(
-                        manifestRecorder, new FileWriteFileFunctionType(function, "serialized"));
+                        manifestRecorder, FileMatch.description(function, "serialized"));
 
         if (files.isEmpty()) {
             return Optional.empty();
         }
 
         // We prioritise .ser ahead of anything else
-        for (FileWrite f : files) {
+        for (OutputtedFile f : files) {
             if (f.getFileName().endsWith(".ser")) {
                 return Optional.of(f);
             }
@@ -98,7 +99,7 @@ public class FinderSerializedObject<T> extends FinderSingleFile {
         return Optional.of(files.get(0));
     }
 
-    private T deserialize(FileWrite fileWrite) throws DeserializationFailedException {
+    private T deserialize(OutputtedFile fileWrite) throws DeserializationFailedException {
 
         Deserializer<T> deserializer;
         if (fileWrite.getFileName().toLowerCase().endsWith(".properties.xml")) {

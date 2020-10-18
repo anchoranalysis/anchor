@@ -26,70 +26,35 @@
 
 package org.anchoranalysis.image.io.generator.raster;
 
-import java.nio.file.Path;
-import java.util.Optional;
-import org.anchoranalysis.image.stack.DisplayStack;
-import org.anchoranalysis.io.generator.IterableObjectGenerator;
-import org.anchoranalysis.io.generator.ObjectGenerator;
-import org.anchoranalysis.io.manifest.ManifestDescription;
-import org.anchoranalysis.io.output.bean.OutputWriteSettings;
-import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.image.core.stack.DisplayStack;
+import org.anchoranalysis.image.core.stack.Stack;
 
-public class DisplayStackGenerator extends ObjectGenerator<DisplayStack>
-        implements IterableObjectGenerator<DisplayStack, DisplayStack> {
+/**
+ * Writes a display-stack to the filesystem.
+ *
+ * @author Owen Feehan
+ */
+public class DisplayStackGenerator extends RasterGeneratorDelegateToRaster<Stack, DisplayStack> {
 
-    private StackGenerator delegate;
-    private DisplayStack item;
-
-    public DisplayStackGenerator(String manifestFunction) {
-        delegate = new StackGenerator(manifestFunction);
+    /**
+     * Creates the generator.
+     *
+     * @param manifestFunction function-stored in manifest for this generator
+     * @param always2D if true, a stack is guaranteed always to be 2D (i.e. have only one z-slice).
+     *     If false, it may be 2D or 3D.
+     */
+    public DisplayStackGenerator(String manifestFunction, boolean always2D) {
+        super(new StackGenerator(manifestFunction, always2D));
     }
 
     @Override
-    public void start() throws OutputWriteFailedException {
-        delegate.start();
+    protected Stack convertBeforeAssign(DisplayStack element) throws OperationFailedException {
+        return element.deriveStack(false);
     }
 
     @Override
-    public void end() throws OutputWriteFailedException {
-        delegate.end();
-    }
-
-    @Override
-    public DisplayStack getIterableElement() {
-        return item;
-    }
-
-    @Override
-    public void setIterableElement(DisplayStack element) {
-        this.item = element;
-
-        delegate.setIterableElement(element.deriveStack(false));
-    }
-
-    @Override
-    public ObjectGenerator<DisplayStack> getGenerator() {
-        return this;
-    }
-
-    @Override
-    public DisplayStack generate() throws OutputWriteFailedException {
-        return item;
-    }
-
-    @Override
-    public void writeToFile(OutputWriteSettings outputWriteSettings, Path filePath)
-            throws OutputWriteFailedException {
-        delegate.writeToFile(outputWriteSettings, filePath);
-    }
-
-    @Override
-    public String getFileExtension(OutputWriteSettings outputWriteSettings) {
-        return delegate.getFileExtension(outputWriteSettings);
-    }
-
-    @Override
-    public Optional<ManifestDescription> createManifestDescription() {
-        return delegate.createManifestDescription();
+    protected Stack convertBeforeTransform(Stack stack) {
+        return stack;
     }
 }

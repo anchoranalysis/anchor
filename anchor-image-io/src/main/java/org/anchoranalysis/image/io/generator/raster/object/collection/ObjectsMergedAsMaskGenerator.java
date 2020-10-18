@@ -26,17 +26,17 @@
 
 package org.anchoranalysis.image.io.generator.raster.object.collection;
 
-import org.anchoranalysis.image.binary.mask.Mask;
-import org.anchoranalysis.image.binary.values.BinaryValues;
-import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.image.core.mask.Mask;
+import org.anchoranalysis.image.core.mask.MaskFromObjects;
+import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.generator.raster.ChannelGenerator;
-import org.anchoranalysis.image.object.MaskFromObjects;
-import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.stack.Stack;
+import org.anchoranalysis.image.voxel.binary.values.BinaryValues;
+import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 /**
- * Writes objects merged together as a mask
+ * Writes objects merged together as a mask.
  *
  * @author Owen Feehan
  */
@@ -46,15 +46,11 @@ public class ObjectsMergedAsMaskGenerator extends ObjectsGenerator {
         super(dimensions);
     }
 
-    public ObjectsMergedAsMaskGenerator(Dimensions dimensions, ObjectCollection objects) {
-        super(dimensions, objects);
-    }
-
     @Override
-    public Stack generate() throws OutputWriteFailedException {
+    public Stack transform(ObjectCollection element) throws OutputWriteFailedException {
         Mask mask =
                 MaskFromObjects.createFromObjects(
-                        getObjects(), dimensions(), BinaryValues.getDefault());
-        return new ChannelGenerator(mask.channel(), "maskCollection").generate();
+                        element, dimensions(), BinaryValues.getDefault());
+        return new ChannelGenerator("maskCollection").transform(mask.channel());
     }
 }

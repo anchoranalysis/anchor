@@ -30,12 +30,12 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.name.store.SharedObjects;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
-import org.anchoranalysis.io.output.bound.BoundIOContext;
+import org.anchoranalysis.io.output.outputter.InputOutputContext;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ImageInitParamsFactory {
 
-    public static ImageInitParams create(BoundIOContext context) {
+    public static ImageInitParams create(InputOutputContext context) {
         SharedObjects so = new SharedObjects(context.common());
         return new ImageInitParams(so);
     }

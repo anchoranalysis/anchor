@@ -27,7 +27,7 @@
 package org.anchoranalysis.overlay.id;
 
 import org.anchoranalysis.core.idgetter.IDGetter;
-import org.anchoranalysis.image.object.properties.ObjectWithProperties;
+import org.anchoranalysis.image.core.object.properties.ObjectWithProperties;
 import org.anchoranalysis.overlay.Overlay;
 import org.anchoranalysis.overlay.collection.ColoredOverlayCollection;
 
@@ -58,15 +58,15 @@ public class IDGetterMaskFromOverlay implements IDGetter<ObjectWithProperties> {
     }
 
     @Override
-    public int getID(ObjectWithProperties m, int iter) {
+    public int getID(ObjectWithProperties element, int iteration) {
 
         if (modIter) {
-            iter = iter % oc.size();
+            iteration = iteration % oc.size();
         }
 
         // We get a mark from the configuration based upon the iter
-        Overlay overlay = oc.get(iter);
+        Overlay overlay = oc.get(iteration);
 
-        return delegate.getID(overlay, iter);
+        return delegate.getID(overlay, iteration);
     }
 }

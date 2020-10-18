@@ -26,21 +26,16 @@
 
 package org.anchoranalysis.mpp.segment.bean.define;
 
-import org.anchoranalysis.bean.define.Define;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
+import org.anchoranalysis.image.core.stack.wrap.WrapStackAsTimeSequenceStore;
 import org.anchoranalysis.image.io.input.series.NamedChannelsForSeries;
-import org.anchoranalysis.image.stack.wrap.WrapStackAsTimeSequenceStore;
-import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.mpp.io.input.MultiInput;
 
-/**
- * Helper for tasks that uses a {@link Define} in association with an input to execute some tasks,
- * and then outputs results *
- */
 public class DefineOutputterMPP extends DefineOutputter {
 
     @FunctionalInterface
@@ -48,14 +43,14 @@ public class DefineOutputterMPP extends DefineOutputter {
         void process(T initParams) throws OperationFailedException;
     }
 
-    public void processInput(NamedChannelsForSeries ncc, BoundIOContext context)
+    public void processInput(NamedChannelsForSeries channels, InputOutputContext context)
             throws OperationFailedException {
         try {
             MPPInitParams initParams = super.createInitParams(context);
-            ncc.addAsSeparateChannels(
+            channels.addAsSeparateChannels(
                     new WrapStackAsTimeSequenceStore(initParams.getImage().stacks()), 0);
 
-            super.outputSharedObjects(initParams, context);
+            super.outputSharedObjects(initParams, context.getOutputter().getChecked());
 
         } catch (CreateException | OutputWriteFailedException e) {
             throw new OperationFailedException(e);
@@ -64,7 +59,7 @@ public class DefineOutputterMPP extends DefineOutputter {
 
     public void processInputImage(
             MultiInput input,
-            BoundIOContext context,
+            InputOutputContext context,
             OperationWithInitParams<ImageInitParams> operation)
             throws OperationFailedException {
         try {
@@ -72,7 +67,7 @@ public class DefineOutputterMPP extends DefineOutputter {
 
             operation.process(initParams.getImage());
 
-            super.outputSharedObjects(initParams, context);
+            super.outputSharedObjects(initParams, context.getOutputter().getChecked());
 
         } catch (CreateException | OutputWriteFailedException e) {
             throw new OperationFailedException(e);
@@ -81,7 +76,7 @@ public class DefineOutputterMPP extends DefineOutputter {
 
     public void processInputMPP(
             MultiInput input,
-            BoundIOContext context,
+            InputOutputContext context,
             OperationWithInitParams<MPPInitParams> operation)
             throws OperationFailedException {
         try {
@@ -89,7 +84,7 @@ public class DefineOutputterMPP extends DefineOutputter {
 
             operation.process(initParams);
 
-            super.outputSharedObjects(initParams, context);
+            super.outputSharedObjects(initParams, context.getOutputter().getChecked());
 
         } catch (CreateException | OutputWriteFailedException e) {
             throw new OperationFailedException(e);

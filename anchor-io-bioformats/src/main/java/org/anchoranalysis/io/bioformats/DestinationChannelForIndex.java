@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.io.bioformats;
 
-import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.core.channel.Channel;
 
 /**
  * Selects a destination-channel for the byte-copier, given an index

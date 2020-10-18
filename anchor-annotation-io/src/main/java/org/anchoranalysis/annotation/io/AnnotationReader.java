@@ -29,7 +29,7 @@ package org.anchoranalysis.annotation.io;
 import java.nio.file.Path;
 import java.util.Optional;
 import org.anchoranalysis.annotation.Annotation;
-import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.input.InputReadFailedException;
 
 public interface AnnotationReader<T extends Annotation> {
 
@@ -38,7 +38,7 @@ public interface AnnotationReader<T extends Annotation> {
      *
      * @param path a path representing the annotation (or we derive another path from this path)
      * @return the annotation or null if it doesn't exist in a suitable state
-     * @throws AnchorIOException
+     * @throws InputReadFailedException
      */
-    Optional<T> read(Path path) throws AnchorIOException;
+    Optional<T> read(Path path) throws InputReadFailedException;
 }

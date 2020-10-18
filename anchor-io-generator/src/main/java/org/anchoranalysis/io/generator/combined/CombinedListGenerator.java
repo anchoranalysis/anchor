@@ -26,86 +26,83 @@
 
 package org.anchoranalysis.io.generator.combined;
 
+import com.google.common.base.Preconditions;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
+import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.name.value.NameValue;
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.generator.MultipleFileTypeGenerator;
 import org.anchoranalysis.io.manifest.file.FileType;
-import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
-import org.anchoranalysis.io.namestyle.OutputNameStyle;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
-import org.anchoranalysis.io.output.bound.BoundOutputManager;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import org.anchoranalysis.io.output.namestyle.IndexableOutputNameStyle;
+import org.anchoranalysis.io.output.namestyle.OutputNameStyle;
+import org.anchoranalysis.io.output.outputter.OutputterChecked;
 
-// currently untested
-public class CombinedListGenerator implements MultipleFileTypeGenerator {
+/**
+ * Several generators combined together with a common element-type.
+ *
+ * <p>One generator must always exist. Zero generators is never allowed.
+ *
+ * @author Owen Feehan
+ * @param <T> element-type
+ */
+public class CombinedListGenerator<T> implements MultipleFileTypeGenerator<T> {
 
-    private ArrayList<OptionalNameValue<Generator>> list = new ArrayList<>();
+    private final CombinedList<T> delegate = new CombinedList<>();
 
-    @Override
-    public Optional<FileType[]> getFileTypes(OutputWriteSettings outputWriteSettings) {
+    private final List<Generator<T>> list = new ArrayList<>();
 
-        ArrayList<FileType> all = new ArrayList<>();
+    public CombinedListGenerator(NameValue<Generator<T>> namedGenerator) {
+        add(namedGenerator.getValue(), Optional.of(namedGenerator.getName()));
+    }
 
-        for (OptionalNameValue<Generator> ni : list) {
-            Optional<FileType[]> arr = ni.getValue().getFileTypes(outputWriteSettings);
-            arr.ifPresent(
-                    a -> {
-                        for (int i = 0; i < a.length; i++) {
-                            all.add(a[i]);
-                        }
-                    });
-        }
+    public CombinedListGenerator(Stream<NameValue<Generator<T>>> namedGenerators) {
+        namedGenerators.forEach(item -> add(item.getValue(), Optional.of(item.getName())));
+        checkNonEmptyList();
+    }
 
-        if (!all.isEmpty()) {
-            return Optional.of(all.toArray(new FileType[] {}));
-        } else {
-            return Optional.empty();
-        }
+    @SafeVarargs
+    public CombinedListGenerator(Generator<T>... generator) {
+        Arrays.stream(generator).forEach(gen -> add(gen, Optional.empty()));
+        checkNonEmptyList();
     }
 
     @Override
-    public void write(OutputNameStyle outputNameStyle, BoundOutputManager outputManager)
+    public void write(T element, OutputNameStyle outputNameStyle, OutputterChecked outputter)
             throws OutputWriteFailedException {
-
-        for (OptionalNameValue<Generator> ni : list) {
-            ni.getName().ifPresent(outputNameStyle::setOutputName);
-            ni.getValue().write(outputNameStyle, outputManager);
-        }
+        delegate.write(element, outputNameStyle, outputter);
     }
 
     @Override
-    public int write(
-            IndexableOutputNameStyle outputNameStyle,
-            String index,
-            BoundOutputManager outputManager)
+    public int writeWithIndex(
+            T element,
+            String index, 
+            IndexableOutputNameStyle outputNameStyle, OutputterChecked outputter)
             throws OutputWriteFailedException {
-
-        int maxWritten = -1;
-        for (OptionalNameValue<Generator> ni : list) {
-
-            if (ni.getName().isPresent()) {
-                outputNameStyle = outputNameStyle.duplicate();
-                outputNameStyle.setOutputName(ni.getName().get());
-            }
-
-            int numWritten = ni.getValue().write(outputNameStyle, index, outputManager);
-            maxWritten = Math.max(maxWritten, numWritten);
-        }
-
-        return maxWritten;
+        return delegate.writeWithIndex(element, index, outputNameStyle, outputter);
     }
 
-    /**
-     * Adds a generator with an optional-name.
-     *
-     * <p>Note that everything should have a name, or nothing should. Please don't mix. This is not
-     * currently checked.
-     *
-     * @param generator the generator to add
-     * @param name optional-name, which if included, is set as the output-name for the generator
-     */
-    public void add(Generator generator, Optional<String> name) {
-        list.add(new OptionalNameValue<>(name, generator));
+    @Override
+    public Optional<FileType[]> getFileTypes(OutputWriteSettings outputWriteSettings)
+            throws OperationFailedException {
+        return delegate.getFileTypes(outputWriteSettings);
+    }
+
+    public void add(String name, Generator<T> element) {
+        add(element, Optional.of(name));
+    }
+    
+    private void add(Generator<T> element, Optional<String> name) {
+        list.add(element);
+        delegate.add(element, name);
+    }
+
+    private void checkNonEmptyList() {
+        Preconditions.checkArgument(!list.isEmpty());
     }
 }

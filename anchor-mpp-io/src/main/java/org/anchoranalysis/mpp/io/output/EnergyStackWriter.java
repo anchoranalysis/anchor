@@ -26,40 +26,75 @@
 
 package org.anchoranalysis.mpp.io.output;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
+import java.util.Optional;
 import org.anchoranalysis.feature.energy.EnergyStack;
+import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.io.generator.raster.ChannelGenerator;
-import org.anchoranalysis.io.generator.sequence.GeneratorSequenceUtilities;
+import org.anchoranalysis.io.generator.sequence.OutputSequenceFactory;
+import org.anchoranalysis.io.generator.sequence.pattern.OutputPatternIntegerSuffix;
 import org.anchoranalysis.io.generator.serialized.KeyValueParamsGenerator;
-import org.anchoranalysis.io.output.bound.BoundIOContext;
+import org.anchoranalysis.io.manifest.ManifestDescription;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import org.anchoranalysis.io.output.outputter.Outputter;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+/**
+ * Writes an energy-stack.
+ *
+ * <p>The following outputs are produced:
+ *
+ * <table>
+ * <caption></caption>
+ * <thead>
+ * <tr><th>Output Name</th><th>Default?</th><th>Description</th></tr>
+ * </thead>
+ * <tbody>
+ * <tr><td>energyStack</td><td>no</td><td>Each channel of the energy-stack as a seperate image.</td></tr>
+ * <tr><td>energyStackParams</td><td>no</td><td>XML serialization of the key-value parameters associated with the energy stack.</td></tr>
+ * </tbody>
+ * </table>
+ *
+ * @author Owen Feehan
+ */
+@AllArgsConstructor
 public class EnergyStackWriter {
 
-    private static final String FOLDER_CHANNEL = "energyStack";
+    private static final String OUTPUT_ENERGY_STACK_DIRECTORY = "energyStack";
     private static final String OUTPUT_PARAMS = "energyStackParams";
 
     private static final String MANIFEST_FUNCTION_CHANNEL = "energyStackChannel";
     private static final String MANIFEST_FUNCTION_PARAMS = "energyStackParams";
 
-    public static void writeEnergyStack(EnergyStack energyStack, BoundIOContext context) {
-        // We write the energy-stack separately as individual channels
-        GeneratorSequenceUtilities.generateListAsSubfolder(
-                FOLDER_CHANNEL,
-                2,
-                energyStack.withoutParams().asStack().asListChannels(),
-                new ChannelGenerator(MANIFEST_FUNCTION_CHANNEL),
-                context);
+    private final EnergyStack energyStack;
+    private final Outputter outputter;
+    
+    public void writeEnergyStack() throws OutputWriteFailedException {
+        
+        OutputPatternIntegerSuffix directory = new OutputPatternIntegerSuffix(
+            OUTPUT_ENERGY_STACK_DIRECTORY,
+            OUTPUT_ENERGY_STACK_DIRECTORY,
+            2,
+            true,
+            Optional.of(new ManifestDescription("raster", OUTPUT_ENERGY_STACK_DIRECTORY))
+        );
+        
+        createSequenceFactory().incrementingByOneStream(
+                directory,
+                energyStack.withoutParams().asStack().asListChannels().stream()
+        );
 
         if (energyStack.getParams() != null) {
-            context.getOutputManager()
-                    .getWriterCheckIfAllowed()
+            outputter.writerSelective()
                     .write(
                             OUTPUT_PARAMS,
-                            () ->
-                                    new KeyValueParamsGenerator(
-                                            energyStack.getParams(), MANIFEST_FUNCTION_PARAMS));
+                            () -> new KeyValueParamsGenerator(MANIFEST_FUNCTION_PARAMS), energyStack::getParams);
         }
+    }
+    
+    private OutputSequenceFactory<Channel> createSequenceFactory() {
+        ChannelGenerator generator = new ChannelGenerator(MANIFEST_FUNCTION_CHANNEL);
+        
+        // We write the energy-stack separately as individual channels
+        return new OutputSequenceFactory<>(generator, outputter.getChecked());
     }
 }

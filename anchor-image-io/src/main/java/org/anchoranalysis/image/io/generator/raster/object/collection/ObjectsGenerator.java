@@ -27,31 +27,32 @@
 package org.anchoranalysis.image.io.generator.raster.object.collection;
 
 import java.util.Optional;
-import lombok.AllArgsConstructor;
+import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.anchoranalysis.core.index.SetOperationFailedException;
-import org.anchoranalysis.image.extent.Dimensions;
+import lombok.experimental.Accessors;
+import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.io.generator.raster.RasterGenerator;
-import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.io.generator.Generator;
-import org.anchoranalysis.io.generator.IterableGenerator;
+import org.anchoranalysis.image.io.stack.StackWriteOptions;
+import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 
 /**
- * Base class for generators that accept a set of objects as input
+ * Base class for generators that accept a set of objects as input.
  *
  * @author Owen Feehan
  */
-@AllArgsConstructor
-@RequiredArgsConstructor
-public abstract class ObjectsGenerator extends RasterGenerator
-        implements IterableGenerator<ObjectCollection> {
+@RequiredArgsConstructor(access = AccessLevel.PROTECTED)
+@Accessors(fluent = true)
+public abstract class ObjectsGenerator extends RasterGenerator<ObjectCollection> {
 
     // START REQUIRED ARGUMENTS
-    private final Dimensions dimensions;
+    /**
+     * The dimensions associated with the objects (assumed to be constant across any change in
+     * element).
+     */
+    @Getter private final Dimensions dimensions;
     // END REQUIRED ARGUMENTS
-
-    private ObjectCollection objects;
 
     @Override
     public Optional<ManifestDescription> createManifestDescription() {
@@ -64,25 +65,7 @@ public abstract class ObjectsGenerator extends RasterGenerator
     }
 
     @Override
-    public ObjectCollection getIterableElement() {
-        return objects;
-    }
-
-    @Override
-    public void setIterableElement(ObjectCollection element) throws SetOperationFailedException {
-        this.objects = element;
-    }
-
-    @Override
-    public Generator getGenerator() {
-        return this;
-    }
-
-    protected ObjectCollection getObjects() {
-        return objects;
-    }
-
-    public Dimensions dimensions() {
-        return dimensions;
+    public StackWriteOptions writeOptions() {
+        return StackWriteOptions.singleChannelMaybe3D(dimensions.z() == 1);
     }
 }

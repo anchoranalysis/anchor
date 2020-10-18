@@ -29,7 +29,7 @@ package org.anchoranalysis.core.idgetter;
 public class IDGetterIter<T> implements IDGetter<T> {
 
     @Override
-    public int getID(T m, int iter) {
-        return iter;
+    public int getID(T element, int iteration) {
+        return iteration;
     }
 }

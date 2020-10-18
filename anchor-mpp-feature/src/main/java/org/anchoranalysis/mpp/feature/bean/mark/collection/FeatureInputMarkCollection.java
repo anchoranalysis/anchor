@@ -30,8 +30,8 @@ import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.anchoranalysis.feature.input.FeatureInputWithResolution;
-import org.anchoranalysis.image.extent.Dimensions;
-import org.anchoranalysis.image.extent.Resolution;
+import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.mpp.mark.MarkCollection;
 
 @AllArgsConstructor
@@ -42,7 +42,7 @@ public class FeatureInputMarkCollection implements FeatureInputWithResolution {
 
     @Override
     public Optional<Resolution> getResolutionOptional() {
-        return dimensions.map(Dimensions::resolution);
+        return dimensions.flatMap(Dimensions::resolution);
     }
 
     public Optional<Dimensions> dimensions() {

@@ -28,7 +28,7 @@ package org.anchoranalysis.mpp.mark.voxelized;
 
 import java.util.ArrayList;
 import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
+import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 
 class BufferArrayList {
 

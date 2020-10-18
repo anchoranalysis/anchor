@@ -38,8 +38,8 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.core.functional.OptionalUtilities;
-import org.anchoranalysis.core.graph.TypedEdge;
 import org.anchoranalysis.core.graph.GraphWithPayload;
+import org.anchoranalysis.core.graph.TypedEdge;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.feature.bean.list.FeatureList;
@@ -328,7 +328,7 @@ public class RandomCollectionWithAddCriteria<T> extends RandomCollection<T> {
     private Collection<TypedEdge<Mark, T>> pairsMaybeDuplicates() {
         return graph.edgesMaybeDuplicates();
     }
-    
+
     private void checkInit() throws UpdateMarkSetException {
         if (!hasInit) {
             throw new UpdateMarkSetException("object has not been initialized");

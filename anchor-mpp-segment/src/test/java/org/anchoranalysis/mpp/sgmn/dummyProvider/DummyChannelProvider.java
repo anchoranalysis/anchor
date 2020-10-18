@@ -30,7 +30,7 @@ import static org.mockito.Mockito.*;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ChannelProvider;
-import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.core.channel.Channel;
 
 /** For referencing in BeanXML */
 public class DummyChannelProvider extends ChannelProvider {

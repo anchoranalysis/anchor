@@ -35,11 +35,11 @@ import org.anchoranalysis.core.name.store.NamedProviderStore;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
-import org.anchoranalysis.image.histogram.Histogram;
+import org.anchoranalysis.image.core.stack.TimeSequence;
+import org.anchoranalysis.image.core.stack.wrap.WrapStackAsTimeSequenceStore;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
-import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.stack.TimeSequence;
-import org.anchoranalysis.image.stack.wrap.WrapStackAsTimeSequenceStore;
+import org.anchoranalysis.image.voxel.object.ObjectCollection;
+import org.anchoranalysis.math.histogram.Histogram;
 import org.anchoranalysis.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.mpp.mark.MarkCollection;
 
@@ -66,18 +66,18 @@ public class MultiInput implements ProvidesStackInput, InputForMPPBean {
 
     @Override
     public void addToStoreInferNames(
-            NamedProviderStore<TimeSequence> stackCollection,
-            int seriesNum,
+            NamedProviderStore<TimeSequence> stacks,
+            int seriesIndex,
             ProgressReporter progressReporter)
             throws OperationFailedException {
-        stack.addToStore(stackCollection, seriesNum, progressReporter);
+        stack.addToStore(stacks, seriesIndex, progressReporter);
     }
 
     @Override
     public void addToStoreWithName(
             String name,
-            NamedProviderStore<TimeSequence> stackCollection,
-            int seriesNum,
+            NamedProviderStore<TimeSequence> stacks,
+            int seriesIndex,
             ProgressReporter progressReporter)
             throws OperationFailedException {
         throw new OperationFailedException("Not supported");
@@ -96,8 +96,8 @@ public class MultiInput implements ProvidesStackInput, InputForMPPBean {
     }
 
     @Override
-    public String descriptiveName() {
-        return stack.descriptiveName();
+    public String name() {
+        return stack.inputName();
     }
 
     @Override

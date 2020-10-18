@@ -50,11 +50,11 @@ import org.anchoranalysis.image.bean.provider.MaskProvider;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.bean.segment.binary.BinarySegmentation;
-import org.anchoranalysis.image.binary.mask.Mask;
-import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.stack.Stack;
+import org.anchoranalysis.image.core.channel.Channel;
+import org.anchoranalysis.image.core.mask.Mask;
+import org.anchoranalysis.image.core.stack.Stack;
+import org.anchoranalysis.image.voxel.object.ObjectCollection;
+import org.anchoranalysis.math.histogram.Histogram;
 
 // A wrapper around SharedObjects which types certain Image entities
 public class ImageInitParams implements BeanInitParams {

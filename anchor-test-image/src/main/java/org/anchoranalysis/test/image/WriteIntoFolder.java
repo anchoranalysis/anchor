@@ -32,24 +32,27 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
-import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.channel.factory.ChannelFactory;
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
-import org.anchoranalysis.image.extent.Dimensions;
-import org.anchoranalysis.image.extent.box.BoundedList;
-import org.anchoranalysis.image.extent.box.BoundingBox;
+import org.anchoranalysis.core.index.SetOperationFailedException;
+import org.anchoranalysis.image.core.channel.Channel;
+import org.anchoranalysis.image.core.channel.factory.ChannelFactory;
+import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.image.core.object.properties.ObjectCollectionWithProperties;
+import org.anchoranalysis.image.core.stack.DisplayStack;
+import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.generator.raster.DisplayStackGenerator;
 import org.anchoranalysis.image.io.generator.raster.object.collection.ObjectAsMaskGenerator;
 import org.anchoranalysis.image.io.generator.raster.object.rgb.DrawObjectsGenerator;
-import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.stack.DisplayStack;
-import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.voxel.Voxels;
-import org.anchoranalysis.io.generator.collection.IterableGeneratorWriter;
-import org.anchoranalysis.io.output.bound.BindFailedException;
-import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
-import org.anchoranalysis.test.image.io.OutputManagerFixture;
+import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
+import org.anchoranalysis.image.voxel.object.ObjectCollection;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
+import org.anchoranalysis.io.generator.collection.CollectionGenerator;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import org.anchoranalysis.io.output.outputter.BindFailedException;
+import org.anchoranalysis.io.output.outputter.Outputter;
+import org.anchoranalysis.spatial.extent.box.BoundedList;
+import org.anchoranalysis.spatial.extent.box.BoundingBox;
+import org.anchoranalysis.test.image.io.OutputterFixture;
 import org.junit.rules.TemporaryFolder;
 import org.junit.rules.TestRule;
 import org.junit.runner.Description;
@@ -86,9 +89,9 @@ public class WriteIntoFolder implements TestRule {
         this.printDirectoryToConsole = true;
     }
 
-    private BoundOutputManagerRouteErrors outputManager;
+    private Outputter outputter;
 
-    private DisplayStackGenerator generatorStack = new DisplayStackGenerator("irrelevant");
+    private DisplayStackGenerator generatorStack = new DisplayStackGenerator("irrelevant", false);
 
     private ObjectAsMaskGenerator generatorSingleObject = new ObjectAsMaskGenerator();
 
@@ -109,21 +112,14 @@ public class WriteIntoFolder implements TestRule {
     }
 
     public void writeStack(String outputName, DisplayStack stack) {
-
-        setupOutputManagerIfNecessary();
-
-        generatorStack.setIterableElement(stack);
-
-        outputManager.getWriterAlwaysAllowed().write(outputName, () -> generatorStack);
+        setupOutputterIfNecessary();
+        outputter.writerPermissive().write(outputName, () -> generatorStack, () -> stack);
     }
 
-    public void writeObject(String outputName, ObjectMask object) {
-
-        setupOutputManagerIfNecessary();
-
-        generatorSingleObject.setIterableElement(object);
-
-        outputManager.getWriterAlwaysAllowed().write(outputName, () -> generatorSingleObject);
+    public void writeObject(String outputName, ObjectMask object)
+            throws SetOperationFailedException {
+        setupOutputterIfNecessary();
+        outputter.writerPermissive().write(outputName, () -> generatorSingleObject, () -> object);
     }
 
     /**
@@ -160,17 +156,24 @@ public class WriteIntoFolder implements TestRule {
 
     public void writeChannel(String outputName, Channel channel) {
 
-        setupOutputManagerIfNecessary();
+        setupOutputterIfNecessary();
 
         writeStack(outputName, displayStackFor(channel));
     }
 
-    public void writeList(String outputName, List<DisplayStack> stacks) {
+    /**
+     * Writes a list of display-stacks
+     *
+     * @param outputName the output-name
+     * @param stacks the list of display-stacks
+     * @param always2D if true, the stacks are guaranteed to always to have only one z-slice (which
+     *     can influence the output format).
+     * @throws OutputWriteFailedException 
+     */
+    public void writeList(String outputName, List<DisplayStack> stacks, boolean always2D) throws OutputWriteFailedException {
 
-        setupOutputManagerIfNecessary();
-
-        IterableGeneratorWriter.writeSubfolder(
-                outputManager, outputName, outputName, () -> generatorStack, stacks, true);
+        setupOutputterIfNecessary();
+        outputter.getChecked().getWriters().permissive().write(outputName, () -> new CollectionGenerator<>(generatorStack, outputName), () -> stacks);
     }
 
     private static DisplayStack displayStackFor(Channel channel) {
@@ -189,13 +192,13 @@ public class WriteIntoFolder implements TestRule {
         }
     }
 
-    private void setupOutputManagerIfNecessary() {
+    private void setupOutputterIfNecessary() {
         try {
-            if (outputManager == null) {
+            if (outputter == null) {
 
                 Path path = folder.getRoot().toPath();
 
-                outputManager = OutputManagerFixture.outputManagerForRouterErrors(path);
+                outputter = OutputterFixture.outputter(path);
 
                 if (printDirectoryToConsole) {
                     System.out.println("Outputs written in test to: " + path); // NOSONAR
@@ -212,12 +215,11 @@ public class WriteIntoFolder implements TestRule {
             ObjectCollection objects,
             Either<Dimensions, DisplayStack> background) {
 
-        setupOutputManagerIfNecessary();
+        setupOutputterIfNecessary();
 
         DrawObjectsGenerator generatorObjects =
-                DrawObjectsGenerator.outlineVariedColors(objects, 1, background);
-
-        outputManager.getWriterAlwaysAllowed().write(outputName, () -> generatorObjects);
+                DrawObjectsGenerator.outlineVariedColors(objects.size(), 1, background);
+        outputter.writerPermissive().write(outputName, () -> generatorObjects, () -> new ObjectCollectionWithProperties(objects));
     }
 
     /** Finds dimensions that place the objects in the center */
@@ -234,8 +236,8 @@ public class WriteIntoFolder implements TestRule {
 
         return new Dimensions(boxCentered.calculateCornerMaxExclusive());
     }
-    
+
     private static BoundingBox boundingBoxThatSpans(ObjectCollection objects) {
-        return new BoundedList<>(objects.asList(), ObjectMask::boundingBox).boundingBox();
+        return BoundedList.createFromList(objects.asList(), ObjectMask::boundingBox).boundingBox();
     }
 }

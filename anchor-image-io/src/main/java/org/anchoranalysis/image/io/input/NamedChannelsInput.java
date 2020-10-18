@@ -30,48 +30,48 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
 import org.anchoranalysis.core.name.store.StoreSupplier;
 import org.anchoranalysis.core.progress.ProgressReporter;
-import org.anchoranalysis.image.extent.Dimensions;
-import org.anchoranalysis.image.io.RasterIOException;
+import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.image.core.stack.TimeSequence;
+import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.input.series.NamedChannelsForSeries;
-import org.anchoranalysis.image.stack.TimeSequence;
 
 /**
- * Provides a set of channels as an input, each of which has a name. Only a single time-point is
- * possible
+ * Provides a set of channels as an input, each of which has a name.
+ * 
+ * <p>Only the first time-point is considered from each series.
  *
  * @author Owen Feehan
  */
 public abstract class NamedChannelsInput implements ProvidesStackInput {
 
-    /** Number of series */
-    public abstract int numberSeries() throws RasterIOException;
+    /** Number of series that exist. */
+    public abstract int numberSeries() throws ImageIOException;
 
     /** Dimensions of a particular series */
-    public abstract Dimensions dimensions(int seriesIndex) throws RasterIOException;
+    public abstract Dimensions dimensions(int seriesIndex) throws ImageIOException;
 
     /** Number of channels */
-    public abstract int numberChannels() throws RasterIOException;
+    public abstract int numberChannels() throws ImageIOException;
 
     /** Bit-depth of image */
-    public abstract int bitDepth() throws RasterIOException;
+    public abstract int bitDepth() throws ImageIOException;
 
-    // Where most of our time is being taken up when opening a raster
     public abstract NamedChannelsForSeries createChannelsForSeries(
-            int seriesNum, ProgressReporter progressReporter) throws RasterIOException;
+            int seriesIndex, ProgressReporter progressReporter) throws ImageIOException;
 
     @Override
     public void addToStoreInferNames(
             NamedProviderStore<TimeSequence> stackCollection,
-            int seriesNum,
+            int seriesIndex,
             ProgressReporter progressReporter)
             throws OperationFailedException {
         // Adds each channel as a separate stack
         try {
-            NamedChannelsForSeries ncc = createChannelsForSeries(seriesNum, progressReporter);
+            NamedChannelsForSeries ncc = createChannelsForSeries(seriesIndex, progressReporter);
             // Apply it only to first time-series frame
             ncc.addAsSeparateChannels(stackCollection, 0);
 
-        } catch (RasterIOException e) {
+        } catch (ImageIOException e) {
             throw new OperationFailedException(e);
         }
     }
@@ -79,15 +79,15 @@ public abstract class NamedChannelsInput implements ProvidesStackInput {
     @Override
     public void addToStoreWithName(
             String name,
-            NamedProviderStore<TimeSequence> stackCollection,
-            int seriesNum,
+            NamedProviderStore<TimeSequence> stacks,
+            int seriesIndex,
             ProgressReporter progressReporter)
             throws OperationFailedException {
 
         // Adds this stack (cached) under the given name
-        stackCollection.add(
+        stacks.add(
                 name,
-                StoreSupplier.cache(() -> channelsAsTimeSequence(seriesNum, progressReporter)));
+                StoreSupplier.cache(() -> channelsAsTimeSequence(seriesIndex, progressReporter)));
     }
 
     @Override
@@ -103,7 +103,7 @@ public abstract class NamedChannelsInput implements ProvidesStackInput {
                     createChannelsForSeries(seriesNum, progressReporter);
             return new TimeSequence(namedChannels.allChannelsAsStack(0).get());
 
-        } catch (RasterIOException e) {
+        } catch (ImageIOException e) {
             throw new OperationFailedException(e);
         }
     }

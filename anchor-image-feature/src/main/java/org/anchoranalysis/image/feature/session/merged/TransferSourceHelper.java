@@ -31,7 +31,7 @@ import java.util.HashSet;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.feature.cache.ChildCacheName;
+import org.anchoranalysis.feature.calculate.cache.ChildCacheName;
 import org.anchoranalysis.feature.session.strategy.child.CacheTransferSource;
 import org.anchoranalysis.feature.session.strategy.child.CacheTransferSourceCollection;
 import org.anchoranalysis.feature.session.strategy.replace.CacheAndReuseStrategy;

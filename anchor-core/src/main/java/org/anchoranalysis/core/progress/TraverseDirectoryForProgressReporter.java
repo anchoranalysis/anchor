@@ -183,9 +183,9 @@ public class TraverseDirectoryForProgressReporter {
             }
 
             if (!subDirectoriesFor(p, Optional.of(out), filesOut, matcherDir)) {
-                // If we fail to find any sub-folders, then we have a definite leaf, which we treat
-                // seperately
-                //   so as to include it in our final list, but not to recurse further on it
+                // If we fail to find any sub-folders, then we have a definite leaf,
+                // which we treat separately so as to include it in our final list,
+                // but not to recurse further on it.
                 definiteLeafs.add(p);
             }
         }
