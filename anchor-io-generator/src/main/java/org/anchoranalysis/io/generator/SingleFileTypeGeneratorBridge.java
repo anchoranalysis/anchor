@@ -45,8 +45,7 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
  * @param <V> hidden-iterator-type
  */
 @RequiredArgsConstructor
-public class SingleFileTypeGeneratorBridge<S, T, V>
-        extends SingleFileTypeGenerator<T, S> {
+public class SingleFileTypeGeneratorBridge<S, T, V> extends SingleFileTypeGenerator<T, S> {
 
     // START REQUIRED ARGUMENTS
     private final SingleFileTypeGenerator<V, S> delegate;
@@ -66,13 +65,13 @@ public class SingleFileTypeGeneratorBridge<S, T, V>
 
     @Override
     public S transform(T element) throws OutputWriteFailedException {
-        return delegate.transform( applyBridge(element) );
+        return delegate.transform(applyBridge(element));
     }
 
     @Override
     public void writeToFile(T element, OutputWriteSettings outputWriteSettings, Path filePath)
             throws OutputWriteFailedException {
-        delegate.writeToFile( applyBridge(element), outputWriteSettings, filePath);
+        delegate.writeToFile(applyBridge(element), outputWriteSettings, filePath);
     }
 
     private V applyBridge(T element) throws OutputWriteFailedException {

@@ -92,7 +92,8 @@ public class ObjectAsMaskGenerator extends RasterGenerator<ObjectMask> {
      * @param resolution resolution to use for the channel
      * @return the newly created channel
      */
-    private static Channel createChannelFromMask(ObjectMask objectMask, Optional<Resolution> resolution) {
+    private static Channel createChannelFromMask(
+            ObjectMask objectMask, Optional<Resolution> resolution) {
 
         int outOnValue = BinaryValuesByte.getDefault().getOnByte();
 

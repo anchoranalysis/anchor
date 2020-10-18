@@ -32,9 +32,8 @@ import java.nio.file.Path;
 
 /**
  * Deserializes an object using the <a href="https://x-stream.github.io/">XStream library</a>.
- * 
+ *
  * @see XStreamSerializer for the counterpart.
- * 
  * @author Owen Feehan
  * @param <T> type of object to deserialize
  */

@@ -38,9 +38,7 @@ public class FinderExperimentFileDirectories implements Finder {
 
     @Override
     public boolean doFind(Manifest manifestRecorder) {
-        list =
-                FinderUtilities.findListFolder(
-                        manifestRecorder, DirectoryMatch.jobDirectory());
+        list = FinderUtilities.findListFolder(manifestRecorder, DirectoryMatch.jobDirectory());
         return !list.isEmpty();
     }
 

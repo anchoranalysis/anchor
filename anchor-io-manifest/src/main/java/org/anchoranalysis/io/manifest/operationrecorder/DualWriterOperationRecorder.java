@@ -66,9 +66,11 @@ public class DualWriterOperationRecorder implements WriteOperationRecorder {
             ManifestDirectoryDescription manifestDescription,
             SubdirectoryBase folderWrite) {
         WriteOperationRecorder folder1 =
-                recorder1.recordSubdirectoryCreated(relativeFolderPath, manifestDescription, folderWrite);
+                recorder1.recordSubdirectoryCreated(
+                        relativeFolderPath, manifestDescription, folderWrite);
         WriteOperationRecorder folder2 =
-                recorder2.recordSubdirectoryCreated(relativeFolderPath, manifestDescription, folderWrite);
+                recorder2.recordSubdirectoryCreated(
+                        relativeFolderPath, manifestDescription, folderWrite);
         return new DualWriterOperationRecorder(folder1, folder2);
     }
 }

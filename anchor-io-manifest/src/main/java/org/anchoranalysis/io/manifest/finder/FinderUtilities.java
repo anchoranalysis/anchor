@@ -40,7 +40,8 @@ import org.anchoranalysis.io.manifest.file.OutputtedFile;
 public class FinderUtilities {
 
     public static List<OutputtedFile> findListFile(
-            Manifest manifestRecorder, Predicate<OutputtedFile> predicate) throws FindFailedException {
+            Manifest manifestRecorder, Predicate<OutputtedFile> predicate)
+            throws FindFailedException {
 
         ArrayList<OutputtedFile> foundList = new ArrayList<>();
         manifestRecorder.getRootFolder().findFile(foundList, predicate, false);

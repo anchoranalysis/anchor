@@ -46,8 +46,7 @@ public abstract class RasterGenerator<T> extends SingleFileTypeGenerator<T, Stac
             throws OutputWriteFailedException {
         try {
             StackWriter writer = GeneratorOutputter.writer(outputWriteSettings);
-            writer.writeStack(
-                        transform(element), filePath, isRGB(), writeOptions());
+            writer.writeStack(transform(element), filePath, isRGB(), writeOptions());
         } catch (ImageIOException e) {
             throw new OutputWriteFailedException(e);
         }
@@ -56,8 +55,7 @@ public abstract class RasterGenerator<T> extends SingleFileTypeGenerator<T, Stac
     @Override
     public String getFileExtension(OutputWriteSettings outputWriteSettings)
             throws OperationFailedException {
-        return GeneratorOutputter.fileExtensionWriter(
-                outputWriteSettings, writeOptions());
+        return GeneratorOutputter.fileExtensionWriter(outputWriteSettings, writeOptions());
     }
 
     public abstract StackWriteOptions writeOptions();

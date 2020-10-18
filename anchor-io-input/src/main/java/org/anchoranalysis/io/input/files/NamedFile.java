@@ -34,32 +34,33 @@ import lombok.Value;
 
 /**
  * A file with an associated unique name.
- * 
- * This is an <i>immutable</i> class.
- * 
+ *
+ * <p>This is an <i>immutable</i> class.
+ *
  * <p>The name is intended to be a compact unique identifier for a file (in a particular context).
- * 
+ *
  * @author Owen Feehan
  */
-@AllArgsConstructor @Value
+@AllArgsConstructor
+@Value
 public class NamedFile {
-    
+
     /** The name associated with the file. */
     private String name;
-    
+
     /** The file. */
     private File file;
 
     /**
      * The path of {@link #getFile}.
-     * 
+     *
      * @return the path
      */
     public Path getPath() {
         return file.toPath();
     }
-    
-    public NamedFile mapName(BiFunction<String,File,String> function) {
-        return new NamedFile(function.apply(name,file), file);
+
+    public NamedFile mapName(BiFunction<String, File, String> function) {
+        return new NamedFile(function.apply(name, file), file);
     }
 }

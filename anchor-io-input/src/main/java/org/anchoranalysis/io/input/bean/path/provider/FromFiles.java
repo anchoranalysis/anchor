@@ -41,18 +41,15 @@ import org.anchoranalysis.io.input.files.FilesProviderException;
 
 /**
  * Extracts a path from a {@link FilesProvider}.
- * 
- * <p>The {@link FilesProvider} must return exactly one file, otherwise an exception is thrown.
- * 
- * @author Owen Feehan
  *
+ * <p>The {@link FilesProvider} must return exactly one file, otherwise an exception is thrown.
+ *
+ * @author Owen Feehan
  */
 public class FromFiles extends FilePathProvider {
 
     // START BEAN PROPERTIES
-    /**
-     * A provider that should return exactly one {@link File} whose path is employed.
-     */
+    /** A provider that should return exactly one {@link File} whose path is employed. */
     @BeanField @Getter @Setter private FilesProvider filesProvider;
     // END BEAN PROPERTIES
 

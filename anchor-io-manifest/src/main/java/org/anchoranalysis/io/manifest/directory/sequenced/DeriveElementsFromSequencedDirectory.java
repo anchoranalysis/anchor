@@ -29,18 +29,17 @@ package org.anchoranalysis.io.manifest.directory.sequenced;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.index.GetterFromIndex;
 import org.anchoranalysis.io.manifest.file.OutputtedFile;
 import org.anchoranalysis.io.manifest.finder.FindFailedException;
-import lombok.AllArgsConstructor;
 
 /**
  * Derives elements of type {@code T} from a directory containing a sequence of files.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  * @param <T> the element-type in the collection
  */
 @AllArgsConstructor
@@ -55,25 +54,27 @@ public abstract class DeriveElementsFromSequencedDirectory<T> implements GetterF
         try {
             List<OutputtedFile> foundList = new ArrayList<>();
 
-            String indexForElement = directory.getAssociatedElementRange().stringRepresentationForElement(index);
+            String indexForElement =
+                    directory.getAssociatedElementRange().stringRepresentationForElement(index);
 
             directory.findFileFromIndex(foundList, indexForElement, true);
 
             if (foundList.size() != 1) {
-                throw new IllegalArgumentException(String.format("Cannot find index %s", indexForElement));
+                throw new IllegalArgumentException(
+                        String.format("Cannot find index %s", indexForElement));
             }
 
             Path path = foundList.get(0).calculatePath();
             return createFromFile(path);
-            
+
         } catch (CreateException | FindFailedException e) {
             throw new GetOperationFailedException(index, e);
         }
     }
-    
+
     /**
      * Creates an element of type {@code T} from a one particular file in the sequence.
-     * 
+     *
      * @param path path to the file
      * @return a newly created element corresponding to the file
      * @throws CreateException if anything goes wrong

@@ -121,7 +121,7 @@ public class OrientationAxisAngle extends Orientation {
     }
 
     @Override
-    public int getNumDims() {
+    public int numberDimensions() {
         return 3;
     }
 }

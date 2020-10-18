@@ -171,8 +171,8 @@ public final class Dimensions {
             return extent.equals(other.extent);
         }
     }
-        
+
     private Optional<Resolution> scaledResolution(ScaleFactor scaleFactor) {
-        return resolution.map(res->res.scaleXY(scaleFactor));
+        return resolution.map(res -> res.scaleXY(scaleFactor));
     }
 }

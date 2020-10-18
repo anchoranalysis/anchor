@@ -48,7 +48,7 @@ public class DirectoryWithPrefix implements PathCreator {
 
     /**
      * A path that combines the {@code directory} and {@code fileNamePrefix}.
-     * 
+     *
      * @return the combined path
      */
     public Path getCombined() {

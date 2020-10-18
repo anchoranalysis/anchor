@@ -31,11 +31,10 @@ import org.anchoranalysis.bean.AnchorBean;
 
 /**
  * The regular-expression to use for matching groups.
- * 
- * <p>It should always define at least one group (i.e. using parentheses).
- * 
- * @author Owen Feehan
  *
+ * <p>It should always define at least one group (i.e. using parentheses).
+ *
+ * @author Owen Feehan
  */
 public abstract class RegEx extends AnchorBean<RegEx> {
 

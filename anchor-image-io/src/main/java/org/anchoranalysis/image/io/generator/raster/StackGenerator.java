@@ -50,10 +50,8 @@ public class StackGenerator extends RasterGenerator<Stack> {
 
     /** Function stored in manifest for this generator. */
     private Optional<String> manifestFunction;
-    
-    /**
-     * Properties of the stack that is being written used to guide the outputting.
-     */
+
+    /** Properties of the stack that is being written used to guide the outputting. */
     private StackWriteOptions writeOptions;
 
     /**
@@ -64,7 +62,7 @@ public class StackGenerator extends RasterGenerator<Stack> {
     public StackGenerator(String manifestFunction, boolean always2D) {
         this(false, Optional.of(manifestFunction), always2D);
     }
-    
+
     /**
      * Creates the generator from a stack, inferring whether all stacks will be 2D from this stack's
      * dimensions.
@@ -73,7 +71,8 @@ public class StackGenerator extends RasterGenerator<Stack> {
      *     blank channel is added to make it 3-channels.
      * @param manifestFunction function stored in manifest for this generator.
      */
-    public StackGenerator(boolean padIfNecessary, Optional<String> manifestFunction, boolean always2D) {
+    public StackGenerator(
+            boolean padIfNecessary, Optional<String> manifestFunction, boolean always2D) {
         this(padIfNecessary, manifestFunction, StackWriteOptions.toReplace(always2D));
     }
 
@@ -94,7 +93,7 @@ public class StackGenerator extends RasterGenerator<Stack> {
 
     @Override
     public Optional<ManifestDescription> createManifestDescription() {
-        return manifestFunction.map( function -> new ManifestDescription("raster", function));
+        return manifestFunction.map(function -> new ManifestDescription("raster", function));
     }
 
     @Override

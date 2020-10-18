@@ -168,12 +168,20 @@ public class WriteIntoFolder implements TestRule {
      * @param stacks the list of display-stacks
      * @param always2D if true, the stacks are guaranteed to always to have only one z-slice (which
      *     can influence the output format).
-     * @throws OutputWriteFailedException 
+     * @throws OutputWriteFailedException
      */
-    public void writeList(String outputName, List<DisplayStack> stacks, boolean always2D) throws OutputWriteFailedException {
+    public void writeList(String outputName, List<DisplayStack> stacks, boolean always2D)
+            throws OutputWriteFailedException {
 
         setupOutputterIfNecessary();
-        outputter.getChecked().getWriters().permissive().write(outputName, () -> new CollectionGenerator<>(generatorStack, outputName), () -> stacks);
+        outputter
+                .getChecked()
+                .getWriters()
+                .permissive()
+                .write(
+                        outputName,
+                        () -> new CollectionGenerator<>(generatorStack, outputName),
+                        () -> stacks);
     }
 
     private static DisplayStack displayStackFor(Channel channel) {
@@ -219,7 +227,12 @@ public class WriteIntoFolder implements TestRule {
 
         DrawObjectsGenerator generatorObjects =
                 DrawObjectsGenerator.outlineVariedColors(objects.size(), 1, background);
-        outputter.writerPermissive().write(outputName, () -> generatorObjects, () -> new ObjectCollectionWithProperties(objects));
+        outputter
+                .writerPermissive()
+                .write(
+                        outputName,
+                        () -> generatorObjects,
+                        () -> new ObjectCollectionWithProperties(objects));
     }
 
     /** Finds dimensions that place the objects in the center */

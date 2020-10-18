@@ -81,8 +81,7 @@ class ExpectedImage {
     /** Which intensity value to count */
     private int intensityValueToCount;
 
-    public void openAndAssert(StackReader stackReader, TestLoader loader)
-            throws ImageIOException {
+    public void openAndAssert(StackReader stackReader, TestLoader loader) throws ImageIOException {
         Stack stack = openStackFromReader(stackReader, loader);
         assertEqualsPrefix(
                 "voxel data type", expectedDataType, stack.getChannel(0).getVoxelDataType());

@@ -106,7 +106,6 @@ public abstract class DefineOutputter extends AnchorBean<DefineOutputter> {
 
     protected void outputSharedObjects(MPPInitParams initParams, OutputterChecked outputter)
             throws OutputWriteFailedException {
-        new ParamsOutputter(
-                initParams, suppressSubfolders, outputter).output();
+        new ParamsOutputter(initParams, suppressSubfolders, outputter).output();
     }
 }

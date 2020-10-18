@@ -26,9 +26,10 @@
 
 package org.anchoranalysis.feature.energy;
 
+import java.util.Optional;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import java.util.Optional;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.image.core.channel.Channel;
@@ -42,42 +43,30 @@ import org.anchoranalysis.spatial.extent.Extent;
  *
  * @author Owen Feehan
  */
+@AllArgsConstructor
 public class EnergyStack {
 
     private final EnergyStackWithoutParams delegate;
     @Getter @Setter private KeyValueParams params;
 
     public EnergyStack(Channel channel) {
-        super();
-        this.delegate = new EnergyStackWithoutParams(channel);
-        this.params = new KeyValueParams();
+        this( new EnergyStackWithoutParams(channel) );
     }
 
     public EnergyStack(EnergyStackWithoutParams energyStack) {
-        super();
-        this.delegate = energyStack;
-        this.params = new KeyValueParams();
-    }
-
-    public EnergyStack(EnergyStackWithoutParams energyStack, KeyValueParams params) {
-        super();
-        this.delegate = energyStack;
-        this.params = params;
+        this(energyStack, new KeyValueParams());
     }
 
     public EnergyStack(Stack stackIn, KeyValueParams params) {
-        this.delegate = new EnergyStackWithoutParams(stackIn);
-        this.params = params;
+        this( new EnergyStackWithoutParams(stackIn), params );
     }
 
     public EnergyStack(Stack stackIn) {
-        this.delegate = new EnergyStackWithoutParams(stackIn);
-        this.params = new KeyValueParams();
+        this( new EnergyStackWithoutParams(stackIn) );
     }
 
     public EnergyStack(Dimensions dimensions) {
-        this.delegate = new EnergyStackWithoutParams(dimensions);
-        this.params = new KeyValueParams();
+        this( new EnergyStackWithoutParams(dimensions) );
     }
 
     public EnergyStack extractSlice(int z) throws OperationFailedException {

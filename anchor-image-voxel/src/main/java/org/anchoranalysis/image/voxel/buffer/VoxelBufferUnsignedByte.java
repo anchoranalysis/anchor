@@ -37,14 +37,14 @@ final class VoxelBufferUnsignedByte extends VoxelBuffer<UnsignedByteBuffer> {
 
     /**
      * Create from a {@link VoxelBufferUnsignedByte} without any underlying bytes.
-     * 
+     *
      * @param buffer the buffer
      */
     public VoxelBufferUnsignedByte(UnsignedByteBuffer buffer) {
         Preconditions.checkArgument(buffer.hasArray());
         this.delegate = buffer;
     }
-    
+
     @Override
     public UnsignedByteBuffer buffer() {
         return delegate;

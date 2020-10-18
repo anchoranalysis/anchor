@@ -48,7 +48,7 @@ public interface VoxelsPredicate {
      * @return the total count
      */
     int count();
-    
+
     /**
      * Counts the number of values satisfying the predicate - but restricted to voxels corresponding
      * to <i>on</i> in an object-mask.

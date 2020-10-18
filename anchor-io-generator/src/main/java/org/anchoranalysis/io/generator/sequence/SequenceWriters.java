@@ -47,19 +47,20 @@ import org.anchoranalysis.io.output.writer.ElementWriterSupplier;
  *
  * @author Owen Feehan
  */
-@RequiredArgsConstructor @Accessors(fluent=true)
+@RequiredArgsConstructor
+@Accessors(fluent = true)
 class SequenceWriters {
 
     // START: REQUIRED ARGUMENTS
     private final RecordingWriters parentWriters;
-    
+
     private final OutputPattern pattern;
     // END: REQUIRED ARGUMENTS
 
     @Getter private Optional<RecordingWriters> writers = Optional.empty();
 
     private IndexableSubdirectory directoryManifest;
-    
+
     public void init(FileType[] fileTypes, SequenceType<?> sequenceType) throws InitException {
 
         if (fileTypes.length == 0) {
@@ -67,20 +68,20 @@ class SequenceWriters {
         }
 
         this.directoryManifest = new IndexableSubdirectory(pattern.getOutputNameStyle());
-        
+
         Arrays.stream(fileTypes).forEach(directoryManifest::addFileType);
 
         try {
-            this.writers = selectWritersMaybeCreateSubdirectory(
-                createDirectoryDescription(fileTypes, sequenceType),
-                directoryManifest
-            );
+            this.writers =
+                    selectWritersMaybeCreateSubdirectory(
+                            createDirectoryDescription(fileTypes, sequenceType), directoryManifest);
         } catch (OutputWriteFailedException e) {
             throw new InitException(e);
         }
     }
-  
-    public <T> void write(ElementWriterSupplier<T> generator, ElementSupplier<T> element, String index)
+
+    public <T> void write(
+            ElementWriterSupplier<T> generator, ElementSupplier<T> element, String index)
             throws OutputWriteFailedException {
 
         if (!isOn()) {
@@ -98,14 +99,13 @@ class SequenceWriters {
     }
 
     private Optional<RecordingWriters> selectWritersMaybeCreateSubdirectory(
-            ManifestDirectoryDescription folderDescription,
-            IndexableSubdirectory subFolderWrite)
+            ManifestDirectoryDescription folderDescription, IndexableSubdirectory subFolderWrite)
             throws OutputWriteFailedException {
         if (pattern.getSubdirectoryName().isPresent()) {
             return parentWriters
                     .multiplex(pattern.isSelective())
                     .createSubdirectory(
-                            pattern.getSubdirectoryName().get(),  // NOSONAR
+                            pattern.getSubdirectoryName().get(), // NOSONAR
                             folderDescription,
                             Optional.of(subFolderWrite),
                             false)
@@ -114,8 +114,10 @@ class SequenceWriters {
             return Optional.of(parentWriters);
         }
     }
-        
-    private ManifestDirectoryDescription createDirectoryDescription(FileType[] fileTypes, SequenceType<?> sequenceType) {
-        return new ManifestDirectoryDescription(pattern.createDirectoryDescription(fileTypes), sequenceType);
+
+    private ManifestDirectoryDescription createDirectoryDescription(
+            FileType[] fileTypes, SequenceType<?> sequenceType) {
+        return new ManifestDirectoryDescription(
+                pattern.createDirectoryDescription(fileTypes), sequenceType);
     }
 }

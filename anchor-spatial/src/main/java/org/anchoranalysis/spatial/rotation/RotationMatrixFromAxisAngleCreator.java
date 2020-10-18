@@ -26,8 +26,8 @@
 
 package org.anchoranalysis.spatial.rotation;
 
-import org.anchoranalysis.spatial.point.Vector3d;
 import cern.colt.matrix.DoubleMatrix2D;
+import org.anchoranalysis.spatial.point.Vector3d;
 
 public class RotationMatrixFromAxisAngleCreator extends RotationMatrixCreator {
 

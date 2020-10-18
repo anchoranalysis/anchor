@@ -26,9 +26,9 @@
 
 package org.anchoranalysis.spatial.extent.box;
 
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.spatial.point.Point3i;
 import org.anchoranalysis.spatial.point.ReadableTuple3i;
-import lombok.AllArgsConstructor;
 
 /**
  * Performs union of a bounding-box with other entities

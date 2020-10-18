@@ -101,18 +101,24 @@ public class AssignmentObjectFactory {
             throws FeatureCalculationException {
 
         try {
-            FeatureCalculatorSingle<FeatureInputPairObjects> calculator = featureEvaluator.createFeatureSession();
-            
+            FeatureCalculatorSingle<FeatureInputPairObjects> calculator =
+                    featureEvaluator.createFeatureSession();
+
             EnergyStack energyStack = new EnergyStack(dimensions);
-            
-            return CostMatrix.create(annotation.asList(), result.asList(), false, (first, second) -> {
-                try {
-                    FeatureInputPairObjects input = new FeatureInputPairObjects(first, second, energyStack);
-                    return calculator.calculate(input);
-                } catch (FeatureCalculationException e) {
-                    throw new CreateException(e);
-                }
-            });
+
+            return CostMatrix.create(
+                    annotation.asList(),
+                    result.asList(),
+                    false,
+                    (first, second) -> {
+                        try {
+                            FeatureInputPairObjects input =
+                                    new FeatureInputPairObjects(first, second, energyStack);
+                            return calculator.calculate(input);
+                        } catch (FeatureCalculationException e) {
+                            throw new CreateException(e);
+                        }
+                    });
         } catch (CreateException | OperationFailedException e) {
             throw new FeatureCalculationException(e);
         }

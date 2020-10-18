@@ -53,10 +53,9 @@ import org.anchoranalysis.mpp.segment.define.OutputterDirectories;
  *   <li>{@link OutputterDirectories#MARKS}
  *   <li>{@link OutputterDirectories#HISTOGRAMS}
  *   <li>{@link OutputterDirectories#OBJECTS}
+ *       <p>Second-level output rules determine whether particular elements in each directory are
+ *       written or not.
  *
- * <p>Second-level output rules determine whether particular elements in each directory 
- * are written or not.
- * 
  * @author Owen Feehan
  */
 @AllArgsConstructor
@@ -78,14 +77,14 @@ class ParamsOutputter {
                 OutputterDirectories.HISTOGRAMS,
                 OutputterDirectories.OBJECTS);
     }
-    
+
     /**
-     * Writes (a selection of) entities from {@code params} to the filesystem in particular directories.
-     * 
+     * Writes (a selection of) entities from {@code params} to the filesystem in particular
+     * directories.
+     *
      * @throws OutputWriteFailedException
      */
-    public void output()
-            throws OutputWriteFailedException {
+    public void output() throws OutputWriteFailedException {
 
         if (!outputter.getSettings().hasBeenInitialized()) {
             throw new OutputWriteFailedException(
@@ -97,16 +96,15 @@ class ParamsOutputter {
         histograms();
         objects();
     }
-    
+
     private void stacks() throws OutputWriteFailedException {
         NamedStacksOutputter.output(
                 CreateCombinedStack.apply(params.getImage()),
                 OutputterDirectories.STACKS,
                 suppressSubfolders,
-                outputter
-        );
+                outputter);
     }
-    
+
     private void marks() throws OutputWriteFailedException {
         output(
                 params.getMarksCollection(),
@@ -129,9 +127,9 @@ class ParamsOutputter {
     }
 
     private <T> void output(
-            NamedProviderStore<T> store, Generator<T> generator, String directoryName) throws OutputWriteFailedException {
-        new NamedProviderOutputter<>(store, generator, outputter).output(
-                directoryName,
-                suppressSubfolders);
+            NamedProviderStore<T> store, Generator<T> generator, String directoryName)
+            throws OutputWriteFailedException {
+        new NamedProviderOutputter<>(store, generator, outputter)
+                .output(directoryName, suppressSubfolders);
     }
 }

@@ -52,15 +52,14 @@ public class HDF5ObjectsGenerator extends OneStageGenerator<ObjectCollection> {
     private final boolean compressed;
     // END REQUIRED ARGUMENTS
 
-    /**
-     * Creates with an element (and compressed set to true)
-     */
+    /** Creates with an element (and compressed set to true) */
     public HDF5ObjectsGenerator() {
         this.compressed = true;
     }
 
     @Override
-    public void writeToFile(ObjectCollection element, OutputWriteSettings outputWriteSettings, Path filePath) {
+    public void writeToFile(
+            ObjectCollection element, OutputWriteSettings outputWriteSettings, Path filePath) {
         // Write a HDF file
         writeObjects(element, filePath);
     }

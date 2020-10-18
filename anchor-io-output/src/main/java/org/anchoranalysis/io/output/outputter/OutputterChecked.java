@@ -154,8 +154,9 @@ public class OutputterChecked {
     /** Adds an additional operation recorder alongside any existing recorders. */
     public void addOperationRecorder(WriteOperationRecorder toAdd) {
         if (writeOperationRecorder.isPresent()) {
-            this.writeOperationRecorder = Optional.of(
-                    new DualWriterOperationRecorder(writeOperationRecorder.get(), toAdd));
+            this.writeOperationRecorder =
+                    Optional.of(
+                            new DualWriterOperationRecorder(writeOperationRecorder.get(), toAdd));
         } else {
             this.writeOperationRecorder = Optional.of(toAdd);
         }
@@ -175,7 +176,8 @@ public class OutputterChecked {
      * @throws BindFailedException
      */
     public OutputterChecked changePrefix(
-            DirectoryWithPrefix prefixToAssign, Optional<WriteOperationRecorder> writeOperationRecorderToAssign)
+            DirectoryWithPrefix prefixToAssign,
+            Optional<WriteOperationRecorder> writeOperationRecorderToAssign)
             throws BindFailedException {
         return new OutputterChecked(
                 target.changePrefix(prefixToAssign),
@@ -237,9 +239,14 @@ public class OutputterChecked {
      *     but not the same index)
      */
     public void writeFileToOperationRecorder(
-            String outputName, Path pathSuffix, ManifestDescription manifestDescription, String index) {
-        writeOperationRecorder.ifPresent( writer -> writer.recordWrittenFile(
-                outputName, manifestDescription, relativePath(pathSuffix), index));
+            String outputName,
+            Path pathSuffix,
+            ManifestDescription manifestDescription,
+            String index) {
+        writeOperationRecorder.ifPresent(
+                writer ->
+                        writer.recordWrittenFile(
+                                outputName, manifestDescription, relativePath(pathSuffix), index));
     }
 
     public Path getOutputFolderPath() {
@@ -247,20 +254,22 @@ public class OutputterChecked {
     }
 
     /**
-     * Creates a full absolute path that completes the part of the path present in the outputter with an additional suffix.
-     * 
+     * Creates a full absolute path that completes the part of the path present in the outputter
+     * with an additional suffix.
+     *
      * @param suffix the suffix for the path
      * @return a newly created absolute path, combining directory, prefix (if it exists) and suffix.
      */
     public Path makeOutputPath(String suffix) {
         return target.pathCreator().makePathAbsolute(suffix);
     }
-    
+
     /**
      * Like {@link #makeOutputPath(String)} but additionally adds an extension.
-     * 
+     *
      * @param suffixWithoutExtension the suffix for the path (without any extension).
-     * @return a newly created absolute path, combining directory, prefix (if it exists), suffix and extension.
+     * @return a newly created absolute path, combining directory, prefix (if it exists), suffix and
+     *     extension.
      */
     public Path makeOutputPath(String suffixWithoutExtension, String extension) {
         return makeOutputPath(suffixWithoutExtension + "." + extension);
@@ -285,8 +294,13 @@ public class OutputterChecked {
             Optional<SubdirectoryBase> manifestFolder) {
         if (manifestFolder.isPresent() && writeOperationRecorder.isPresent()) {
             // Assume the folder are writing to has no path
-            return Optional.of( writeOperationRecorder.get().recordSubdirectoryCreated(
-                    relativePath(pathSuffix), manifestDescription, manifestFolder.get()) );
+            return Optional.of(
+                    writeOperationRecorder
+                            .get()
+                            .recordSubdirectoryCreated(
+                                    relativePath(pathSuffix),
+                                    manifestDescription,
+                                    manifestFolder.get()));
         } else {
             return writeOperationRecorder;
         }
@@ -299,7 +313,7 @@ public class OutputterChecked {
             return outputsEnabled;
         }
     }
-        
+
     private Path relativePath(Path pathSuffix) {
         return target.pathCreator().makePathRelative(pathSuffix);
     }

@@ -35,7 +35,8 @@ import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 /**
- * Uses a delegate raster-generator and optionally applies a conversions before calling {@link #transform}.
+ * Uses a delegate raster-generator and optionally applies a conversions before calling {@link
+ * #transform}.
  *
  * @author Owen Feehan
  * @param <S> delegate iteration-type
@@ -67,7 +68,7 @@ public abstract class RasterGeneratorDelegateToRaster<S, T> extends RasterGenera
     @Override
     public Stack transform(T element) throws OutputWriteFailedException {
         try {
-            Stack stack = getDelegate().transform( convertBeforeAssign(element) );
+            Stack stack = getDelegate().transform(convertBeforeAssign(element));
             return convertBeforeTransform(stack);
         } catch (OperationFailedException e) {
             throw new OutputWriteFailedException(e);

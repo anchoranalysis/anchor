@@ -27,6 +27,7 @@
 package org.anchoranalysis.spatial.rotation;
 
 import static org.junit.Assert.assertEquals;
+
 import org.anchoranalysis.spatial.point.Vector3d;
 import org.junit.Test;
 

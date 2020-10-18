@@ -53,10 +53,7 @@ public abstract class OneOrThreeChannelsWriter extends StackWriter {
 
     @Override
     public void writeStackSeries(
-            StackSeries stackSeries,
-            Path filePath,
-            boolean makeRGB,
-            StackWriteOptions writeOptions)
+            StackSeries stackSeries, Path filePath, boolean makeRGB, StackWriteOptions writeOptions)
             throws ImageIOException {
         throw new ImageIOException("Writing time-series is unsupported for this format");
     }

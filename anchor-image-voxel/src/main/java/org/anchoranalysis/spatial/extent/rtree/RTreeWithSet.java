@@ -27,8 +27,8 @@ package org.anchoranalysis.spatial.extent.rtree;
 
 import java.util.List;
 import java.util.Set;
-import org.anchoranalysis.spatial.extent.box.BoundingBox;
 import lombok.AllArgsConstructor;
+import org.anchoranalysis.spatial.extent.box.BoundingBox;
 
 @AllArgsConstructor
 /**

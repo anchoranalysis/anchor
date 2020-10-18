@@ -64,9 +64,7 @@ public class DrawObjectsGenerator extends ObjectsOnRGBGenerator {
      * @return the generator
      */
     public static DrawObjectsGenerator withBackgroundAndColors(
-            DrawObject drawObject,
-            DisplayStack background,
-            ColorIndex colorIndex) {
+            DrawObject drawObject, DisplayStack background, ColorIndex colorIndex) {
         return new DrawObjectsGenerator(drawObject, Either.right(background), colorIndex);
     }
 
@@ -104,13 +102,9 @@ public class DrawObjectsGenerator extends ObjectsOnRGBGenerator {
      * @return the generator
      */
     public static DrawObjectsGenerator outlineVariedColors(
-            int numberColors,
-            int outlineWidth,
-            Either<Dimensions, DisplayStack> background) {
+            int numberColors, int outlineWidth, Either<Dimensions, DisplayStack> background) {
         return new DrawObjectsGenerator(
-                new Outline(outlineWidth),
-                background,
-                defaultColorsFor(numberColors));
+                new Outline(outlineWidth), background, defaultColorsFor(numberColors));
     }
 
     /**
@@ -125,13 +119,12 @@ public class DrawObjectsGenerator extends ObjectsOnRGBGenerator {
     public static DrawObjectsGenerator outlineSingleColor(
             int outlineWidth, DisplayStack background, RGBColor color) {
         return new DrawObjectsGenerator(
-                new Outline(outlineWidth),
-                Either.right(background),
-                singleColorIndex(color));
+                new Outline(outlineWidth), Either.right(background), singleColorIndex(color));
     }
 
     @Override
-    protected RGBStack generateBackground(ObjectCollectionWithProperties element, Either<Dimensions, DisplayStack> background) {
+    protected RGBStack generateBackground(
+            ObjectCollectionWithProperties element, Either<Dimensions, DisplayStack> background) {
         return background.fold(
                 DrawObjectsGenerator::createEmptyStackFor, ConvertDisplayStackToRGB::convert);
     }

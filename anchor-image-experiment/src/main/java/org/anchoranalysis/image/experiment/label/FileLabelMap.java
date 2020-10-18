@@ -31,10 +31,10 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import org.anchoranalysis.io.input.csv.CSVReaderByLine;
 import org.anchoranalysis.io.input.csv.CSVReaderException;
 import org.anchoranalysis.io.input.csv.ReadByLine;
-import java.util.Set;
 
 /**
  * @author feehano

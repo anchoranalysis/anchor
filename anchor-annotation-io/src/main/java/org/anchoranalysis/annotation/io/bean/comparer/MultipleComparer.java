@@ -160,10 +160,9 @@ public class MultipleComparer extends AnchorBean<MultipleComparer> {
             throw new CreateException(e1);
         }
     }
-    
+
     private ColorPool createColorPool(int numberPaired, ColorScheme colorScheme) {
-        return new ColorPool(
-                numberPaired, colorScheme, new VeryBright(), true);
+        return new ColorPool(numberPaired, colorScheme, new VeryBright(), true);
     }
 
     private static void removeObjectsWithNoPixels(ObjectCollection objects) {

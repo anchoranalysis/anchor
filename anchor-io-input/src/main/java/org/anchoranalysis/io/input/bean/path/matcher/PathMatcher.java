@@ -78,10 +78,12 @@ public abstract class PathMatcher extends AnchorBean<PathMatcher> {
         if (!directory.toFile().exists() || !directory.toFile().isDirectory()) {
             throw new InputReadFailedException(
                     String.format(
-                            "Directory '%s' does not exist", directory.toAbsolutePath().normalize()));
+                            "Directory '%s' does not exist",
+                            directory.toAbsolutePath().normalize()));
         }
 
-        DualPathPredicates predicates = createPredicates(directory, ignoreHidden, params.getInputContext());
+        DualPathPredicates predicates =
+                createPredicates(directory, ignoreHidden, params.getInputContext());
         try {
             return createMatchingFiles(params.getProgressReporter(), recursive)
                     .findMatchingFiles(
@@ -94,22 +96,23 @@ public abstract class PathMatcher extends AnchorBean<PathMatcher> {
         }
     }
 
-    protected abstract Predicate<Path> createMatcherFile(Path directory, InputContextParams inputContext)
-            throws InputReadFailedException;
-    
-    private DualPathPredicates createPredicates(Path directory, boolean ignoreHidden, InputContextParams params) throws InputReadFailedException {
+    protected abstract Predicate<Path> createMatcherFile(
+            Path directory, InputContextParams inputContext) throws InputReadFailedException;
+
+    private DualPathPredicates createPredicates(
+            Path directory, boolean ignoreHidden, InputContextParams params)
+            throws InputReadFailedException {
 
         // Many checks are possible on a file, including whether it is hidden or not
         Predicate<Path> fileMatcher =
-                maybeAddIgnoreHidden(
-                        ignoreHidden, createMatcherFile(directory, params));
+                maybeAddIgnoreHidden(ignoreHidden, createMatcherFile(directory, params));
 
         // The only check on a directory is (maybe) whether it is hidden or not
         Predicate<Path> directoryMatcher = maybeAddIgnoreHidden(ignoreHidden, p -> true);
-        
+
         return new DualPathPredicates(fileMatcher, directoryMatcher);
     }
-    
+
     private Predicate<Path> maybeAddIgnoreHidden(boolean ignoreHidden, Predicate<Path> pred) {
         if (ignoreHidden) {
             return p -> pred.test(p) && HiddenPathChecker.includePath(p);

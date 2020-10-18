@@ -26,9 +26,9 @@
 
 package org.anchoranalysis.image.core.object;
 
+import lombok.Value;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
-import lombok.Value;
 
 /**
  * An object with associated matches.

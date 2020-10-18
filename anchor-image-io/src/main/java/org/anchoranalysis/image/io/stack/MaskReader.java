@@ -37,21 +37,19 @@ import org.anchoranalysis.image.voxel.binary.values.BinaryValues;
 
 /**
  * Utility functions for reading a {@link Mask} from the file-system.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class MaskReader {
-    
+
     /**
      * Utility functions for opening a single-channeled stack as a {@link Mask}.
-     *  
+     *
      * @param stackReader the raster-reader for reading the stack
      * @param path the path the raster is located at
      * @param binaryValues what constitutes <i>on</i> and <i>off</i> voxels in the raster
      * @return a newly created {@link Mask} as read from the file-system
-     * 
      * @throws ImageIOException
      */
     public static Mask openMask(StackReader stackReader, Path path, BinaryValues binaryValues)

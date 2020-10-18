@@ -56,9 +56,10 @@ public abstract class IndexableOutputNameStyle extends OutputNameStyle {
 
     /**
      * Like {@link #getFilenameWithoutExtension()} but incorporates an <i>integer</i> index.
-     * 
+     *
      * @param index the index
-     * @return @return the filename (without an extension, including without the period before the extension).
+     * @return @return the filename (without an extension, including without the period before the
+     *     extension).
      */
     public String getFilenameWithoutExtension(int index) {
         return getFilenameWithoutExtension(Integer.toString(index));
@@ -66,9 +67,10 @@ public abstract class IndexableOutputNameStyle extends OutputNameStyle {
 
     /**
      * Like {@link #getFilenameWithoutExtension()} but incorporates an <i>string</i> index.
-     * 
+     *
      * @param index the index
-     * @return @return the filename (without an extension, including without the period before the extension).
+     * @return @return the filename (without an extension, including without the period before the
+     *     extension).
      */
     public String getFilenameWithoutExtension(String index) {
         return nameFromOutputFormatString(outputFormatString(), index);
@@ -93,9 +95,7 @@ public abstract class IndexableOutputNameStyle extends OutputNameStyle {
                 "an index is required for getPhysicalName in this class");
     }
 
-    /** 
-     * Constructs a full name from the output format string and an index
-     */
+    /** Constructs a full name from the output format string and an index */
     protected abstract String nameFromOutputFormatString(String outputFormatString, String index);
 
     protected abstract String outputFormatString();

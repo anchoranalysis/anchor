@@ -27,10 +27,11 @@
 package org.anchoranalysis.mpp.mark.conic;
 
 import static org.anchoranalysis.mpp.mark.conic.TensorUtilities.*;
-import org.anchoranalysis.image.core.dimensions.Dimensions;
+
 import cern.colt.matrix.DoubleMatrix1D;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.mpp.points.PointClipper;
 import org.anchoranalysis.spatial.extent.box.BoundingBox;
 import org.anchoranalysis.spatial.point.Point3d;

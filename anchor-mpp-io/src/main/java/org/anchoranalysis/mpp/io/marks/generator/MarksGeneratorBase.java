@@ -46,8 +46,7 @@ import org.anchoranalysis.overlay.Overlay;
 import org.anchoranalysis.overlay.collection.ColoredOverlayCollection;
 import org.anchoranalysis.overlay.writer.DrawOverlay;
 
-public abstract class MarksGeneratorBase
-        extends RasterGenerator<ColoredMarksWithDisplayStack> {
+public abstract class MarksGeneratorBase extends RasterGenerator<ColoredMarksWithDisplayStack> {
 
     @Getter @Setter private String manifestDescriptionFunction = "marks";
 

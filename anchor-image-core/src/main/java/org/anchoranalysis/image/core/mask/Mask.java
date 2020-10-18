@@ -27,9 +27,9 @@
 package org.anchoranalysis.image.core.mask;
 
 import com.google.common.base.Preconditions;
+import java.util.Optional;
 import lombok.Getter;
 import lombok.experimental.Accessors;
-import java.util.Optional;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.core.channel.factory.ChannelFactorySingleType;
@@ -252,17 +252,6 @@ public class Mask {
         return channel.voxels().asByte().sliceBuffer(z);
     }
 
-    private void applyThreshold(Mask mask) {
-        int thresholdVal = (binaryValues.getOnInt() + binaryValues.getOffInt()) / 2;
-
-        VoxelsThresholder.thresholdForLevel(
-                mask.voxels(), thresholdVal, mask.binaryValues().createByte());
-    }
-
-    private Interpolator createInterpolator(BinaryValues binaryValues) {
-        return InterpolatorFactory.getInstance().binaryResizing(binaryValues.getOffInt());
-    }
-
     public int getOffInt() {
         return binaryValues.getOffInt();
     }
@@ -301,5 +290,16 @@ public class Mask {
 
     public Extent extent() {
         return channel.extent();
+    }
+
+    private void applyThreshold(Mask mask) {
+        int thresholdVal = (binaryValues.getOnInt() + binaryValues.getOffInt()) / 2;
+
+        VoxelsThresholder.thresholdForLevel(
+                mask.voxels(), thresholdVal, mask.binaryValues().createByte());
+    }
+
+    private Interpolator createInterpolator(BinaryValues binaryValues) {
+        return InterpolatorFactory.getInstance().binaryResizing(binaryValues.getOffInt());
     }
 }

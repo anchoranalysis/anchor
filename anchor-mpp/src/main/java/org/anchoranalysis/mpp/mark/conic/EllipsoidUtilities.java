@@ -26,9 +26,9 @@
 
 package org.anchoranalysis.mpp.mark.conic;
 
+import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import java.util.Optional;
 import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.spatial.point.Point3d;
 import org.anchoranalysis.spatial.rotation.RotationMatrix;
@@ -57,8 +57,9 @@ public class EllipsoidUtilities {
 
         return new double[] {xNorm, yNorm, zNorm};
     }
-    
-    private static void adjustForZ(Point3d xRot, Point3d yRot, Point3d zRot, Optional<Resolution> resolution) {
+
+    private static void adjustForZ(
+            Point3d xRot, Point3d yRot, Point3d zRot, Optional<Resolution> resolution) {
         // We adjust each point for the z contribution
         if (resolution.isPresent()) {
             double zRel = resolution.get().zRelative();

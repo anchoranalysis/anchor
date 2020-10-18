@@ -223,8 +223,7 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
 
             if (params.isDetailedLogging()) {
 
-                loggerJob.logFormatted(
-                        "File processing started: %s", params.getInput().name());
+                loggerJob.logFormatted("File processing started: %s", params.getInput().name());
             }
 
             executeJobAdditionalOutputs(params);
@@ -273,6 +272,8 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
             params.getInput().close(params.getLogger().errorReporter());
         }
 
-        params.getOutputter().writerSelective().write(OUTPUT_NAME_MANIFEST, ManifestGenerator::new, params::getManifest);
+        params.getOutputter()
+                .writerSelective()
+                .write(OUTPUT_NAME_MANIFEST, ManifestGenerator::new, params::getManifest);
     }
 }

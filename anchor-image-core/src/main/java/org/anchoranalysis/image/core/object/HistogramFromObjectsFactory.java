@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,6 +26,8 @@
 package org.anchoranalysis.image.core.object;
 
 import java.util.Optional;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.core.channel.Channel;
@@ -45,10 +47,8 @@ import org.anchoranalysis.image.voxel.statistics.HistogramFactory;
 import org.anchoranalysis.math.histogram.Histogram;
 import org.anchoranalysis.spatial.extent.Extent;
 import org.anchoranalysis.spatial.point.ReadableTuple3i;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class HistogramFromObjectsFactory {
 
     public static Histogram create(VoxelsWrapper inputBuffer, Optional<ObjectMask> object) {
@@ -64,7 +64,7 @@ public class HistogramFromObjectsFactory {
             return HistogramFactory.create(inputBuffer);
         }
     }
-    
+
     public static Histogram createHistogramIgnoreZero(
             Channel channel, ObjectMask object, boolean ignoreZero) {
         Histogram histogram = create(channel, object);
@@ -73,7 +73,7 @@ public class HistogramFromObjectsFactory {
         }
         return histogram;
     }
-    
+
     public static Histogram create(Channel channel) throws CreateException {
 
         try {
@@ -109,7 +109,7 @@ public class HistogramFromObjectsFactory {
     public static Histogram create(Channel channel, ObjectCollection objects) {
         return createWithMasks(channel.voxels(), objects);
     }
-    
+
     private static Histogram createWithMask(Voxels<?> inputBuffer, ObjectMask object) {
 
         Histogram histogram = new Histogram((int) inputBuffer.dataType().maxValue());
@@ -160,7 +160,7 @@ public class HistogramFromObjectsFactory {
 
         return total;
     }
-    
+
     private static boolean isDataTypeSupported(VoxelDataType dataType) {
         return dataType.equals(UnsignedByteVoxelType.INSTANCE)
                 || dataType.equals(UnsignedShortVoxelType.INSTANCE);

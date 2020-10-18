@@ -79,15 +79,16 @@ class RecordOutputNamesForWriter implements Writer {
         recordedOutputs.add(outputName, outputter.isPresent());
         return outputter;
     }
-    
+
     @Override
-    public <T> boolean write(String outputName, ElementWriterSupplier<T> elementWriter, ElementSupplier<T> element)
+    public <T> boolean write(
+            String outputName, ElementWriterSupplier<T> elementWriter, ElementSupplier<T> element)
             throws OutputWriteFailedException {
         boolean allowed = writer.write(outputName, elementWriter, element);
         recordedOutputs.add(outputName, allowed);
         return allowed;
     }
-    
+
     @Override
     public <T> int writeWithIndex(
             IndexableOutputNameStyle outputNameStyle,

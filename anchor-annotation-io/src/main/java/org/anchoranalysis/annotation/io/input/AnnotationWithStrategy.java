@@ -52,7 +52,8 @@ public class AnnotationWithStrategy<T extends AnnotatorStrategy> implements Inpu
     /** Path to annotation */
     @Getter private Path path;
 
-    public AnnotationWithStrategy(ProvidesStackInput input, T strategy) throws InputReadFailedException {
+    public AnnotationWithStrategy(ProvidesStackInput input, T strategy)
+            throws InputReadFailedException {
         this.input = input;
         this.strategy = strategy;
         this.path = strategy.annotationPathFor(input);

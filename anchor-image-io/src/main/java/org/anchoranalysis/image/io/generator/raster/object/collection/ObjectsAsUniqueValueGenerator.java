@@ -59,8 +59,7 @@ public class ObjectsAsUniqueValueGenerator extends ObjectsGenerator {
         if (element.size() > 254) {
             throw new OutputWriteFailedException(
                     String.format(
-                            "Collection has %d objects. A max of 254 is allowed",
-                            element.size()));
+                            "Collection has %d objects. A max of 254 is allowed", element.size()));
         }
 
         int value = 1;

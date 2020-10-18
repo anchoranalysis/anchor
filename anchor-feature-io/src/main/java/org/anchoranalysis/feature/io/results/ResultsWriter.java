@@ -67,7 +67,8 @@ public class ResultsWriter implements Closeable {
 
     /** The second highest-level group directory */
     private static final ManifestDirectoryDescription MANIFEST_GROUP_SUBROOT =
-            new ManifestDirectoryDescription("groupedResults", "featureCsv", new StringsWithoutOrder());
+            new ManifestDirectoryDescription(
+                    "groupedResults", "featureCsv", new StringsWithoutOrder());
 
     private Optional<FeatureCSVWriter> writer;
     private GroupWriter groupWriter;

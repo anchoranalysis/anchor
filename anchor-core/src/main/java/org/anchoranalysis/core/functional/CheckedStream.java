@@ -88,7 +88,7 @@ public class CheckedStream {
             throwException(e, throwableClass);
         }
     }
-    
+
     /**
      * Performs a {@link Stream#filter} but accepts a predicate that can throw a checked-exception
      *
@@ -150,8 +150,7 @@ public class CheckedStream {
     }
 
     /**
-     * Performs a {@link Stream#mapToInt} but accepts a function that can throw a
-     * checked-exception.
+     * Performs a {@link Stream#mapToInt} but accepts a function that can throw a checked-exception.
      *
      * <p>This uses some internal reflection trickery to suppress the checked exception, and then
      * rethrow it.
@@ -350,7 +349,7 @@ public class CheckedStream {
             throw new ConvertedToRuntimeException(exc);
         }
     }
-    
+
     /**
      * Like @link(#suppressCheckedException) but instead accepts {@link CheckedPredicate} functions
      */

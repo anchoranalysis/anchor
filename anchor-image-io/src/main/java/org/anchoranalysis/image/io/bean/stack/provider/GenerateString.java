@@ -55,7 +55,7 @@ public class GenerateString extends StackProvider {
     // START BEAN PROPERTIES
     /** Text to draw on an image */
     @BeanField @Getter @Setter private String text = "text";
-    
+
     @BeanField @Getter @Setter private TextStyle stringRasterGenerator;
 
     @BeanField @Getter @Setter private boolean createShort;
@@ -70,7 +70,7 @@ public class GenerateString extends StackProvider {
     public GenerateString(String text) {
         this.text = text;
     }
-    
+
     @Override
     public Stack create() throws CreateException {
 

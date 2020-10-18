@@ -32,11 +32,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.manifest.file.OutputtedFile;
 import org.anchoranalysis.io.manifest.finder.FindFailedException;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 class FileList implements Serializable {
@@ -47,11 +47,13 @@ class FileList implements Serializable {
     // START REQUIRED ARGUMENTS
     private final MutableDirectory directory;
     // END REQUIRED ARGUMENTS
-    
+
     @Getter private List<OutputtedFile> files = new ArrayList<>();
 
     // Finds a folder a comparator matches
-    public void findFile(List<OutputtedFile> foundList, Predicate<OutputtedFile> predicate, boolean recursive) throws FindFailedException {
+    public void findFile(
+            List<OutputtedFile> foundList, Predicate<OutputtedFile> predicate, boolean recursive)
+            throws FindFailedException {
 
         // Adds files that match the predicate to the foundList
         addToFoundList(foundList, predicate);
@@ -72,10 +74,15 @@ class FileList implements Serializable {
             ManifestDescription manifestDescription,
             Path outfilePath,
             String index) {
-        add(new OutputtedFile(directory, outfilePath.toString(),
-                outputName, index, Optional.of(manifestDescription)));
+        add(
+                new OutputtedFile(
+                        directory,
+                        outfilePath.toString(),
+                        outputName,
+                        index,
+                        Optional.of(manifestDescription)));
     }
-    
+
     private void addToFoundList(List<OutputtedFile> foundList, Predicate<OutputtedFile> predicate) {
         files.stream().filter(predicate).forEach(foundList::add);
     }

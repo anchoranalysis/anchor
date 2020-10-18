@@ -93,8 +93,8 @@ public class MorphologicalDilation {
                 backgroundVb,
                 minIntensityValue,
                 Optional.empty(),
-                new DilationKernelFactory(SelectDimensionsFactory.of(do3D),false,bigNeighborhood)
-                );
+                new DilationKernelFactory(
+                        SelectDimensionsFactory.of(do3D), false, bigNeighborhood));
     }
 
     /**
@@ -121,20 +121,20 @@ public class MorphologicalDilation {
 
         BinaryKernel kernelDilation =
                 dilationKernelFactory.createDilationKernel(
-                        voxelsBinary.binaryValues().createByte(),
-                        background,
-                        minIntensityValue
-                        );
+                        voxelsBinary.binaryValues().createByte(), background, minIntensityValue);
 
         Voxels<UnsignedByteBuffer> voxels = voxelsBinary.voxels();
-        
+
         for (int i = 0; i < iterations; i++) {
             Voxels<UnsignedByteBuffer> next =
-                    ApplyKernel.apply(kernelDilation, voxels, voxelsBinary.binaryValues().createByte());
+                    ApplyKernel.apply(
+                            kernelDilation, voxels, voxelsBinary.binaryValues().createByte());
 
             try {
                 if (acceptConditions.isPresent()
-                        && !acceptConditions.get().acceptIteration(next, voxelsBinary.binaryValues())) {
+                        && !acceptConditions
+                                .get()
+                                .acceptIteration(next, voxelsBinary.binaryValues())) {
                     break;
                 }
             } catch (OperationFailedException e) {

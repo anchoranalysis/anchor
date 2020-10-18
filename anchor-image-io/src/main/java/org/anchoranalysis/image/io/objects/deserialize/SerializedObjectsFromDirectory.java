@@ -71,7 +71,7 @@ class SerializedObjectsFromDirectory implements SequencedDirectory {
                                     null // HACK: Can be safely set to null as
                                     // fileSet.setIgnoreHidden(false);	// NOSONAR
                                     ));
-            
+
             int index = 0;
             for (File file : files) {
                 processFile(file, index, directoryInManifest);
@@ -81,16 +81,18 @@ class SerializedObjectsFromDirectory implements SequencedDirectory {
             throw new SequenceTypeException(e);
         }
     }
-    
-    private void processFile(File file, int index, Subdirectory directoryInManifest) throws SequenceTypeException {
+
+    private void processFile(File file, int index, Subdirectory directoryInManifest)
+            throws SequenceTypeException {
         String indexAsString = Integer.toString(index);
 
-        OutputtedFile fileWrite = new OutputtedFile(directoryInManifest,
-                file.getName(),
-                "serializedObjectSetFolder",
-                indexAsString,
-                Optional.empty()
-        );
+        OutputtedFile fileWrite =
+                new OutputtedFile(
+                        directoryInManifest,
+                        file.getName(),
+                        "serializedObjectSetFolder",
+                        indexAsString,
+                        Optional.empty());
 
         mapFileWrite.put(indexAsString, fileWrite);
 
@@ -120,9 +122,7 @@ class SerializedObjectsFromDirectory implements SequencedDirectory {
         fileSet.setDirectory(folderPath.toString());
         fileSet.setIgnoreHidden(false);
 
-        acceptFilter.ifPresent( filter ->
-            fileSet.setMatcher(new MatchGlob(filter))
-        );
+        acceptFilter.ifPresent(filter -> fileSet.setMatcher(new MatchGlob(filter)));
 
         return fileSet;
     }

@@ -29,11 +29,11 @@ package org.anchoranalysis.io.generator.text;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Optional;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.io.generator.OneStageGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
-import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 public class StringGenerator extends OneStageGenerator<String> {

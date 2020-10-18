@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.test.image.object;
 
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.core.mask.Mask;
 import org.anchoranalysis.image.core.stack.Stack;
@@ -34,7 +35,6 @@ import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.image.voxel.object.factory.ObjectsFromConnectedComponentsFactory;
 import org.anchoranalysis.test.TestLoader;
 import org.anchoranalysis.test.image.io.TestLoaderImage;
-import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public class TestLoaderObjects {
@@ -43,31 +43,26 @@ public class TestLoaderObjects {
             new ObjectsFromConnectedComponentsFactory();
 
     private final TestLoaderImage loader;
-    
+
     public TestLoaderObjects(TestLoader loader) {
         this.loader = new TestLoaderImage(loader);
     }
-    
-    public ObjectMask openLargestObjectFrom(String suffix)
-            throws CreateException {
+
+    public ObjectMask openLargestObjectFrom(String suffix) throws CreateException {
         Stack stack = loader.openStackFromTestPath(path(suffix));
         return largestObjectFromStack(stack);
     }
 
-    /**
-     * Gets largest connected component from treating a stack as a single-channeled binary-mask.
-     *
-     * @throws CreateException
-     */
-    private static ObjectMask largestObjectFromStack(Stack stack) throws CreateException {
+    /** Gets largest connected component from treating a stack as a single-channeled binary-mask. */
+    private static ObjectMask largestObjectFromStack(Stack stack) {
         Mask mask = new Mask(stack.getChannel(0));
         return findLargestObject(FACTORY.createConnectedComponents(mask.binaryVoxels()));
     }
 
     private static ObjectMask findLargestObject(ObjectCollection objects) {
         return objects.streamStandardJava()
-                .max(TestLoaderObjects::compareObjectsByNumberVoxelsOn)
-                .get(); // NOSONAR
+                .max(TestLoaderObjects::compareObjectsByNumberVoxelsOn) // NOSONAR
+                .get();
     }
 
     private static int compareObjectsByNumberVoxelsOn(ObjectMask object1, ObjectMask object2) {

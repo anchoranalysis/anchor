@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -43,41 +43,45 @@ import org.anchoranalysis.test.image.ChannelFixture.IntensityFunction;
  *
  * @author Owen Feehan
  */
-@NoArgsConstructor @AllArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 public class StackFixture {
-    
-    /** If defines, specifies the voxel-data type of the first channel, taking precedence over the {@code channelsVoxelType} argument. */
+
+    /**
+     * If defines, specifies the voxel-data type of the first channel, taking precedence over the
+     * {@code channelsVoxelType} argument.
+     */
     private Optional<VoxelDataType> firstChannelVoxelType = Optional.empty();
-    
+
     /**
      * Creates a stack with a particular number of the channels of particular size.
      *
      * @param numberChannels how many channels in the stack?
      * @param extent the size of each channel.
-     * @param defaultChannelVoxelType voxel data-type for all created channels if not otherwise specified. Note that {@code firstChannelVoxelType} takes precedence for the first channel, if defined.
+     * @param defaultChannelVoxelType voxel data-type for all created channels if not otherwise
+     *     specified. Note that {@code firstChannelVoxelType} takes precedence for the first
+     *     channel, if defined.
      * @return the newly created-stack with newly-created channels.
      */
     public Stack create(int numberChannels, Extent extent, VoxelDataType defaultChannelVoxelType) {
         Stream<Channel> channels =
                 IntStream.range(0, numberChannels)
-                        .mapToObj(
-                                index -> createChannel(index, extent, defaultChannelVoxelType) );
+                        .mapToObj(index -> createChannel(index, extent, defaultChannelVoxelType));
         try {
             return new Stack(channels);
         } catch (IncorrectImageSizeException e) {
             throw new AnchorImpossibleSituationException();
         }
     }
-    
+
     private Channel createChannel(int index, Extent extent, VoxelDataType defaultChannelVoxelType) {
-        
-        VoxelDataType voxelType = (index==0 && firstChannelVoxelType.isPresent()) ? firstChannelVoxelType.get() : defaultChannelVoxelType;
-        
-        return ChannelFixture.createChannel(
-                extent,
-                multiplexIntensity(index),
-                voxelType
-        );
+
+        VoxelDataType voxelType =
+                (index == 0 && firstChannelVoxelType.isPresent())
+                        ? firstChannelVoxelType.get()
+                        : defaultChannelVoxelType;
+
+        return ChannelFixture.createChannel(extent, multiplexIntensity(index), voxelType);
     }
 
     /**

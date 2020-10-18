@@ -42,15 +42,12 @@ import org.anchoranalysis.io.output.namestyle.IndexableOutputNameStyle;
 
 /**
  * A {@link SubdirectoryBase} entry in the manifest that is indexable.
- * 
- * <p>This means it follows a predictable pattern, and entries can be
- * predicated from the manifest.
- * 
- * <p>See {@link Subdirectory} for subdirectories that
- * have no indexable pattern.
- * 
- * @author Owen Feehan
  *
+ * <p>This means it follows a predictable pattern, and entries can be predicated from the manifest.
+ *
+ * <p>See {@link Subdirectory} for subdirectories that have no indexable pattern.
+ *
+ * @author Owen Feehan
  */
 class IndexableSubdirectory extends SubdirectoryBase {
 
@@ -91,19 +88,24 @@ class IndexableSubdirectory extends SubdirectoryBase {
      * then something is wrong and we throw an exception.
      */
     @Override
-    public void findFile(List<OutputtedFile> foundList, Predicate<OutputtedFile> predicate, boolean recursive) throws FindFailedException {
-        
-        if(!description().isPresent()) {
-            throw new FindFailedException("No description has been assigned, which is a prerequisite for this operation");
+    public void findFile(
+            List<OutputtedFile> foundList, Predicate<OutputtedFile> predicate, boolean recursive)
+            throws FindFailedException {
+
+        if (!description().isPresent()) {
+            throw new FindFailedException(
+                    "No description has been assigned, which is a prerequisite for this operation");
         }
-        
-        IncompleteElementRange elements = description().get().getSequenceType().elementRange(); // NOSONAR
+
+        IncompleteElementRange elements =
+                description().get().getSequenceType().elementRange(); // NOSONAR
 
         int i = elements.getMinimumIndex();
         do {
             // We loop through each file type
             for (FileType fileType : template) {
-                OutputtedFile virtualFile = createOutputtedFile(elements.stringRepresentationForElement(i), fileType);
+                OutputtedFile virtualFile =
+                        createOutputtedFile(elements.stringRepresentationForElement(i), fileType);
                 if (predicate.test(virtualFile)) {
                     foundList.add(virtualFile);
                 }

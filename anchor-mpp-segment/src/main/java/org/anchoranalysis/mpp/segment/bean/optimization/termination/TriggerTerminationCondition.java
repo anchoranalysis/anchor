@@ -35,7 +35,8 @@ public class TriggerTerminationCondition extends TerminationCondition {
     // We don't bother with synchronize
 
     @Override
-    public boolean continueIterations(int currentIteration, double score, int size, MessageLogger logger) {
+    public boolean continueIterations(
+            int currentIteration, double score, int size, MessageLogger logger) {
         return !triggered;
     }
 

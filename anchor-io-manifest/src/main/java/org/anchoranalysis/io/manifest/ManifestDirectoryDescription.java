@@ -33,14 +33,13 @@ import org.anchoranalysis.io.manifest.sequencetype.SequenceType;
 
 /**
  * A description of an directory in the manifest.
- * 
- * <p>This is an <i>immutable</i> type.
- * 
- * <p>It combines a {@link ManifestDescription} as used for a file, together
- * with a {@link SequenceType} to describe any sequence that might exist.
- * 
- * @author Owen Feehan
  *
+ * <p>This is an <i>immutable</i> type.
+ *
+ * <p>It combines a {@link ManifestDescription} as used for a file, together with a {@link
+ * SequenceType} to describe any sequence that might exist.
+ *
+ * @author Owen Feehan
  */
 @RequiredArgsConstructor
 public class ManifestDirectoryDescription implements Serializable {
@@ -56,7 +55,8 @@ public class ManifestDirectoryDescription implements Serializable {
     @Getter private final SequenceType<?> sequenceType;
     // END REQUIRED ARGUMENTS
 
-    public ManifestDirectoryDescription(String type, String function, SequenceType<?> sequenceType) {
+    public ManifestDirectoryDescription(
+            String type, String function, SequenceType<?> sequenceType) {
         this.description = new ManifestDescription(type, function);
         this.sequenceType = sequenceType;
     }

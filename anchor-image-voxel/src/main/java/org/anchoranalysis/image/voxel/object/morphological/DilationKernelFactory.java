@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,6 +26,7 @@
 package org.anchoranalysis.image.voxel.object.morphological;
 
 import java.util.Optional;
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
@@ -34,17 +35,16 @@ import org.anchoranalysis.image.voxel.kernel.BinaryKernel;
 import org.anchoranalysis.image.voxel.kernel.ConditionalKernel;
 import org.anchoranalysis.image.voxel.kernel.dilateerode.DilationKernel3;
 import org.anchoranalysis.image.voxel.kernel.dilateerode.DilationKernel3ZOnly;
-import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public class DilationKernelFactory {
 
     /** selects which dimensions dilation is applied on. */
     private final SelectDimensions dimensions;
-    
+
     /** If true, pixels outside the buffer are treated as ON, otherwise as OFF. */
     private final boolean outsideAtThreshold;
-    
+
     private final boolean bigNeighborhood;
 
     public BinaryKernel createDilationKernel(
@@ -61,7 +61,7 @@ public class DilationKernelFactory {
             return kernelDilation;
         }
     }
-    
+
     private BinaryKernel createDilationKernel(BinaryValuesByte binaryValues)
             throws CreateException {
         if (dimensions == SelectDimensions.Z_ONLY) {

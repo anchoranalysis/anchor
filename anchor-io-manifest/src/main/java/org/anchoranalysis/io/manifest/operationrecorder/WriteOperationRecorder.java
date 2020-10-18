@@ -33,9 +33,8 @@ import org.anchoranalysis.io.manifest.directory.SubdirectoryBase;
 
 /**
  * Makes a record of an output written to the filesystem.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public interface WriteOperationRecorder {
 

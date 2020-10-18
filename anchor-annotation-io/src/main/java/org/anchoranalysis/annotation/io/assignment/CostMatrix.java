@@ -26,24 +26,25 @@
 
 package org.anchoranalysis.annotation.io.assignment;
 
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Value;
-import java.util.List;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.functional.function.CheckedToDoubleBiFunction;
 
 /**
  * Stores costs between all possible pairings between elements from two lists.
- * 
+ *
  * <p>Note that costs are often distances (symmetric) but not necessarily.
- * 
+ *
  * <p>Internally, a matrix-like structure is used.
- * 
+ *
  * @author Owen Feehan
  * @param <T> element-type in lists
  */
-@Value @AllArgsConstructor(access=AccessLevel.PRIVATE)
+@Value
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class CostMatrix<T> {
 
     private List<T> first;
@@ -52,24 +53,30 @@ public class CostMatrix<T> {
 
     /** A two-dimensional array mapping the costs from {@code first} to {@code second} */
     private double[][] matrix;
-    
+
     /**
      * Creates by calculating the cost between elements.
-     * 
-     * <p>All possible pairings are calculated involving an element from the first list and an element from the second list.
-     * 
+     *
+     * <p>All possible pairings are calculated involving an element from the first list and an
+     * element from the second list.
+     *
      * @param <T> element-type in lists
-     * @param first the collection of elements that forms the left-side of the cost calculation, indexed by {@code index1} in the matrix.
-     * @param second the collection of elements that forms the right-side of the cost calculation, indexed by {@code index2} in the matrix.
+     * @param first the collection of elements that forms the left-side of the cost calculation,
+     *     indexed by {@code index1} in the matrix.
+     * @param second the collection of elements that forms the right-side of the cost calculation,
+     *     indexed by {@code index2} in the matrix.
      * @param symmetric if cost(a,b) = cost(b,a), then set this true, for quicker calculations.
-     * @param costCalculator calculates cost(a,b) 
+     * @param costCalculator calculates cost(a,b)
      * @return a newly created matrix
      * @throws CreateException
      */
     public static <T> CostMatrix<T> create(
-            List<T> first, List<T> second, boolean symmetric, CheckedToDoubleBiFunction<T,T,CreateException> costCalculator)
+            List<T> first,
+            List<T> second,
+            boolean symmetric,
+            CheckedToDoubleBiFunction<T, T, CreateException> costCalculator)
             throws CreateException {
-        
+
         if (first.isEmpty()) {
             throw new CreateException("first must be non-empty");
         }
@@ -77,12 +84,12 @@ public class CostMatrix<T> {
         if (second.isEmpty()) {
             throw new CreateException("second must be non-empty");
         }
-        
+
         double[][] costs = new double[first.size()][second.size()];
 
         for (int i = 0; i < first.size(); i++) {
             T firstElement = first.get(i);
-            for (int j = 0; j < selectInnerUpperBound(i,second.size(), symmetric); j++) {
+            for (int j = 0; j < selectInnerUpperBound(i, second.size(), symmetric); j++) {
 
                 T secondElement = second.get(j);
 
@@ -94,13 +101,13 @@ public class CostMatrix<T> {
                 }
             }
         }
-        
+
         return new CostMatrix<>(first, second, costs);
     }
 
     /**
      * Gets the cost from an element from the first-list to an element from the second-list.
-     * 
+     *
      * @param index1 index of element in first list
      * @param index2 index of element in second list
      * @return the cost.
@@ -111,7 +118,7 @@ public class CostMatrix<T> {
 
     /**
      * The number of elements in the first list.
-     * 
+     *
      * @return number of elements
      */
     public int sizeFirst() {
@@ -120,22 +127,24 @@ public class CostMatrix<T> {
 
     /**
      * The number of elements in the second list.
-     * 
+     *
      * @return number of elements
      */
     public int sizeSecond() {
         return second.size();
     }
-    
-    private static void putCostInMatrix(double[][] costs, int index1, int index2, double cost, boolean symmetric) {
+
+    private static void putCostInMatrix(
+            double[][] costs, int index1, int index2, double cost, boolean symmetric) {
         costs[index1][index2] = cost;
-        
+
         if (symmetric) {
             costs[index2][index1] = cost;
         }
     }
-    
-    private static int selectInnerUpperBound(int iterationFirst, int sizeSecond, boolean symmetric) {
+
+    private static int selectInnerUpperBound(
+            int iterationFirst, int sizeSecond, boolean symmetric) {
         if (symmetric) {
             return iterationFirst;
         } else {

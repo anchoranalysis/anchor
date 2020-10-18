@@ -91,8 +91,7 @@ public interface VoxelsExtracter<T> {
      * @param destinationBox box to copy into (relative to {@code voxelsDestination})
      */
     void boxCopyTo(BoundingBox from, Voxels<T> voxelsDestination, BoundingBox destinationBox);
-    
-    
+
     /**
      * Copies an area corresponding to an object-mask to another {@link Voxels}
      *

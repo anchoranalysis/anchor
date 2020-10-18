@@ -54,7 +54,7 @@ public class RasterGeneratorBridge<T, V> extends RasterGeneratorDelegateToRaster
     @Override
     public Stack transform(T element) throws OutputWriteFailedException {
         try {
-            return getDelegate().transform( convertBeforeAssign(element) );
+            return getDelegate().transform(convertBeforeAssign(element));
         } catch (OperationFailedException e) {
             throw new OutputWriteFailedException(e);
         }

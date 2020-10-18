@@ -46,20 +46,19 @@ public class XMLWriter {
 
     /**
      * Writes a XML-document to the file-system.
-     * 
+     *
      * @param document the XML-document
      * @param path the path to write to on the file-system
      * @throws IOException
      */
-    public static void writeXmlToFile(Document document, Path path)
-            throws IOException {
+    public static void writeXmlToFile(Document document, Path path) throws IOException {
         try {
             Transformer transformer = createTransformer();
-    
+
             FileWriter writer = new FileWriter(path.toFile());
             StreamResult result = new StreamResult(writer);
             DOMSource source = new DOMSource(document);
-        
+
             transformer.transform(source, result);
         } catch (TransformerException e) {
             throw new IOException(e);

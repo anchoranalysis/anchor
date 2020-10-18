@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -28,16 +28,16 @@ package org.anchoranalysis.io.manifest.sequencetype;
 import org.anchoranalysis.core.index.container.BoundedRangeIncomplete;
 
 /**
- * An incomplete range of discrete integers (like {@link BoundedRangeIncomplete} but with a string-representation for each index.
- * 
- * @author Owen Feehan
+ * An incomplete range of discrete integers (like {@link BoundedRangeIncomplete} but with a
+ * string-representation for each index.
  *
+ * @author Owen Feehan
  */
 public interface IncompleteElementRange extends BoundedRangeIncomplete {
-    
+
     /**
      * Returns the typed-index corresponding to the integer-index.
-     * 
+     *
      * @param elementIndex which element (beginning at 0) to find an index for.
      * @return the index
      */

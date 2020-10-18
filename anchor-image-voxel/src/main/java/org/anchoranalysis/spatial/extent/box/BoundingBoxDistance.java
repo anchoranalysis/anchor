@@ -26,9 +26,9 @@
 
 package org.anchoranalysis.spatial.extent.box;
 
-import org.anchoranalysis.spatial.point.ReadableTuple3i;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.spatial.point.ReadableTuple3i;
 
 /** Calculates distance between two bounding boxes */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)

@@ -74,7 +74,8 @@ public abstract class ObjectsOnRGBGenerator
     // END REQUIRED ARGUMENTS
 
     @Override
-    public Stack transform(ObjectCollectionWithProperties element) throws OutputWriteFailedException {
+    public Stack transform(ObjectCollectionWithProperties element)
+            throws OutputWriteFailedException {
         try {
             if (background == null) {
                 throw new OutputWriteFailedException(
@@ -104,10 +105,12 @@ public abstract class ObjectsOnRGBGenerator
         return StackWriteOptions.rgb(isAlways2D());
     }
 
-    protected abstract RGBStack generateBackground(ObjectCollectionWithProperties element, Either<Dimensions, DisplayStack> background)
+    protected abstract RGBStack generateBackground(
+            ObjectCollectionWithProperties element, Either<Dimensions, DisplayStack> background)
             throws CreateException;
 
-    protected abstract ObjectCollectionWithProperties generateMasks( ObjectCollectionWithProperties element ) throws CreateException;
+    protected abstract ObjectCollectionWithProperties generateMasks(
+            ObjectCollectionWithProperties element) throws CreateException;
 
     protected static RGBStack createEmptyStackFor(Dimensions dimensions) {
         return new RGBStack(dimensions, CHANNEL_FACTORY);

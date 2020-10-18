@@ -388,7 +388,7 @@ public class Ellipsoid extends ConicBase implements Serializable {
         op.addDoubleAsString("Normalized Radius 0 (pixels)", arr[0]);
         op.addDoubleAsString("Normalized Radius 1 (pixels)", arr[1]);
         op.addDoubleAsString("Normalized Radius 2 (pixels)", arr[2]);
-        
+
         orientation.addProperties(op.getNameValueSet());
         op.addDoubleAsString("Shell Radius Ratio", shellRad);
         op.addDoubleAsString("Inner Core Radius Ratio ", innerCoreDistance);

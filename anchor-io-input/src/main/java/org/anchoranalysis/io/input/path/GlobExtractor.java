@@ -27,11 +27,11 @@
 package org.anchoranalysis.io.input.path;
 
 import java.util.Optional;
-import org.anchoranalysis.io.input.bean.files.SingleFile;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.Value;
+import org.anchoranalysis.io.input.bean.files.SingleFile;
 
 /**
  * Extracts a glob from a string describing it, and a direcory which gives it context.

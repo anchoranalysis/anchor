@@ -29,9 +29,9 @@ package org.anchoranalysis.io.generator.text;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 /**
  * Utility for writing to a text-file at a particular path, but only if it is enabled.

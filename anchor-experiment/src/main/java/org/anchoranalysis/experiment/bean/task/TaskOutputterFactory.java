@@ -43,9 +43,7 @@ class TaskOutputterFactory {
 
     // If pathForBinding is null, we bind to the root folder instead
     public static OutputterChecked createOutputterForTask(
-            InputFromManager input,
-            Optional<Manifest> manifestTask,
-            ParametersExperiment params)
+            InputFromManager input, Optional<Manifest> manifestTask, ParametersExperiment params)
             throws JobExecutionException {
         try {
             Optional<Path> pathForBinding = input.pathForBinding();

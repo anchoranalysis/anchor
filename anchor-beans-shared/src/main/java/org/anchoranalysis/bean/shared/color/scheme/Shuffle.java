@@ -36,7 +36,7 @@ import org.anchoranalysis.core.color.ColorList;
  */
 @NoArgsConstructor
 public class Shuffle extends ColorSchemeUnary {
-    
+
     public Shuffle(ColorScheme colors) {
         super(colors);
     }

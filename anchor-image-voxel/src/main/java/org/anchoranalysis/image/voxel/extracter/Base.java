@@ -133,7 +133,7 @@ public abstract class Base<T> implements VoxelsExtracter<T> {
         return new PredicateImplementation<>(
                 voxels, buffer -> bufferValueGreaterThan(buffer, threshold));
     }
-   
+
     @Override
     public void objectCopyTo(
             ObjectMask object, Voxels<T> voxelsDestination, BoundingBox destinationBox) {
@@ -172,11 +172,10 @@ public abstract class Base<T> implements VoxelsExtracter<T> {
             }
         }
     }
-    
+
     protected abstract void copyBufferIndexTo(
             T sourceBuffer, int sourceIndex, T destinationBuffer, int destinationIndex);
 
-    
     protected abstract int voxelAtBufferIndex(T buffer, int index);
 
     /**
@@ -200,7 +199,7 @@ public abstract class Base<T> implements VoxelsExtracter<T> {
      * @return true iff the current value from the buffer is equal to the constant
      */
     protected abstract boolean bufferValueEqualTo(T buffer, int value);
-    
+
     private Voxels<T> regionAvoidNewIfPossible(BoundingBox box) {
 
         if (box.equals(new BoundingBox(voxels.extent()))

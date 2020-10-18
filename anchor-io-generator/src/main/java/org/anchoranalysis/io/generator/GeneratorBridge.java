@@ -95,18 +95,23 @@ public class GeneratorBridge<S, T> implements Generator<S> {
     @Override
     public void write(S element, OutputNameStyle outputNameStyle, OutputterChecked outputter)
             throws OutputWriteFailedException {
-       convertAndExecute(element, convertedElement ->
-           generator.write(convertedElement, outputNameStyle, outputter));
+        convertAndExecute(
+                element,
+                convertedElement -> generator.write(convertedElement, outputNameStyle, outputter));
     }
 
     @Override
     public int writeWithIndex(
             S element,
-            String index, 
-            IndexableOutputNameStyle outputNameStyle, OutputterChecked outputter)
+            String index,
+            IndexableOutputNameStyle outputNameStyle,
+            OutputterChecked outputter)
             throws OutputWriteFailedException {
-        return convertAndSum(element, convertedElement ->
-            generator.writeWithIndex(convertedElement, index, outputNameStyle, outputter));
+        return convertAndSum(
+                element,
+                convertedElement ->
+                        generator.writeWithIndex(
+                                convertedElement, index, outputNameStyle, outputter));
     }
 
     @Override
@@ -116,24 +121,28 @@ public class GeneratorBridge<S, T> implements Generator<S> {
     }
 
     /** Converts an element to <b>one or more target elements</b>, and runs a consumer on each. */
-    private void convertAndExecute(S element, CheckedConsumer<T, OutputWriteFailedException> consumer) throws OutputWriteFailedException {
+    private void convertAndExecute(
+            S element, CheckedConsumer<T, OutputWriteFailedException> consumer)
+            throws OutputWriteFailedException {
         try {
             CheckedStream.forEach(
-                    bridge.apply(element),
-                    OutputWriteFailedException.class,
-                    consumer);
+                    bridge.apply(element), OutputWriteFailedException.class, consumer);
         } catch (Exception e) {
             throw new OutputWriteFailedException(e);
         }
     }
-    
-    /** Converts an element to <b>one or more target elements</b>, and sums the results of applying a {@link CheckedToIntFunction}. */
-    private int convertAndSum(S element, CheckedToIntFunction<T, OutputWriteFailedException> consumer) throws OutputWriteFailedException {
+
+    /**
+     * Converts an element to <b>one or more target elements</b>, and sums the results of applying a
+     * {@link CheckedToIntFunction}.
+     */
+    private int convertAndSum(
+            S element, CheckedToIntFunction<T, OutputWriteFailedException> consumer)
+            throws OutputWriteFailedException {
         try {
             return CheckedStream.mapToInt(
-                    bridge.apply(element),
-                    OutputWriteFailedException.class,
-                    consumer).sum();
+                            bridge.apply(element), OutputWriteFailedException.class, consumer)
+                    .sum();
         } catch (Exception e) {
             throw new OutputWriteFailedException(e);
         }

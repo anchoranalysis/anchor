@@ -42,19 +42,21 @@ public interface PathCreator {
      * fullPath.
      *
      * @param suffix the final part of the path, to be added to the prefix
-     * @return a complete absolute path with all components (prefix, suffix) etc., including the leading directory.
+     * @return a complete absolute path with all components (prefix, suffix) etc., including the
+     *     leading directory.
      */
     Path makePathAbsolute(String suffix);
 
     /**
      * Extracts a relative-file path, given the final part (suffix) of a path.
-     * 
+     *
      * <p>The path will be relative to the underlying root {@code directory}.
      *
      * <p>This relative-path includes any filename-prefix added by the {@link DirectoryWithPrefix}.
      *
      * @param suffix the final part of the path, to be added to the prefix
-     * @return a complete relative path with all components (prefix, suffix) etc., but no leading directory.
+     * @return a complete relative path with all components (prefix, suffix) etc., but no leading
+     *     directory.
      */
     Path makePathRelative(Path suffix);
 }

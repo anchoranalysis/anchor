@@ -26,9 +26,9 @@
 
 package org.anchoranalysis.image.core.outline.traverser.path;
 
-import org.anchoranalysis.spatial.point.Point3i;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.spatial.point.Point3i;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class DistanceToContiguousPath {

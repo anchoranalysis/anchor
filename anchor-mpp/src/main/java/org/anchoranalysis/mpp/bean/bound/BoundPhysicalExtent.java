@@ -26,8 +26,8 @@
 
 package org.anchoranalysis.mpp.bean.bound;
 
-import lombok.NoArgsConstructor;
 import java.util.Optional;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.image.core.dimensions.Resolution;
 
 //
@@ -62,8 +62,9 @@ public class BoundPhysicalExtent extends BoundMinMax {
     public Bound duplicate() {
         return new BoundPhysicalExtent(this);
     }
-    
-    private static double maybeDivideBy(double value, Optional<Resolution> resolution, boolean do3D) {
+
+    private static double maybeDivideBy(
+            double value, Optional<Resolution> resolution, boolean do3D) {
         if (resolution.isPresent()) {
             return value / resolution.get().min(do3D);
         } else {

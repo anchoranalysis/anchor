@@ -33,30 +33,32 @@ public abstract class OutputNameStyle implements Serializable {
     /** */
     private static final long serialVersionUID = 7757474603700575166L;
 
-    /** 
-     * The filename to be written, including prefix, suffix, etc. but <b>excluding</b> extension (and any period before the extension).
-     * 
-     * @return the filename (without an extension, including without the period before the extension). 
+    /**
+     * The filename to be written, including prefix, suffix, etc. but <b>excluding</b> extension
+     * (and any period before the extension).
+     *
+     * @return the filename (without an extension, including without the period before the
+     *     extension).
      */
     public abstract String getFilenameWithoutExtension();
 
     /**
      * An identifier used in rules to determine if an output is enabled or not.
-     * 
+     *
      * @return the identifier
      */
     public abstract String getOutputName();
 
     /**
      * An identifier used in rules to determine if an output is enabled or not.
-     * 
+     *
      * @param outputName the identifier
      */
     public abstract void setOutputName(String outputName);
 
     /**
      * Deep copy the current object.
-     * 
+     *
      * @return a newly created copy
      */
     public abstract OutputNameStyle duplicate();

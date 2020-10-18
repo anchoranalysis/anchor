@@ -29,20 +29,18 @@ package org.anchoranalysis.io.manifest.directory;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.function.Predicate;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.manifest.file.OutputtedFile;
 import org.anchoranalysis.io.manifest.finder.FindFailedException;
-import lombok.NoArgsConstructor;
 
 /**
  * A {@link SubdirectoryBase} entry in the manifest for a subdirectory.
- * 
- * <p>This is intended when outputs in the directory do not form
- * a predictable pattern, and can be simply be added adhoc as they
- * occur.
- * 
- * @author Owen Feehan
  *
+ * <p>This is intended when outputs in the directory do not form a predictable pattern, and can be
+ * simply be added adhoc as they occur.
+ *
+ * @author Owen Feehan
  */
 @NoArgsConstructor
 public class Subdirectory extends SubdirectoryBase {
@@ -53,12 +51,14 @@ public class Subdirectory extends SubdirectoryBase {
     public Subdirectory(Path directory) {
         super(directory);
     }
-    
+
     private FileList delegate = new FileList(this);
 
     // Finds a folder a comparator matches
     @Override
-    public void findFile(List<OutputtedFile> foundList, Predicate<OutputtedFile> predicate, boolean recursive) throws FindFailedException {
+    public void findFile(
+            List<OutputtedFile> foundList, Predicate<OutputtedFile> predicate, boolean recursive)
+            throws FindFailedException {
         delegate.findFile(foundList, predicate, recursive);
     }
 

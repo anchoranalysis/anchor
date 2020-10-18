@@ -34,7 +34,7 @@ public class VoxelPartitonFactoryHistogram implements VoxelPartitionFactory<Hist
 
     @Override
     public VoxelPartition<Histogram> create(int numSlices) {
-        return new VoxelPartitionHistogram(numSlices, () -> new Histogram(255) );
+        return new VoxelPartitionHistogram(numSlices, () -> new Histogram(255));
     }
 
     @Override

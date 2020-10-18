@@ -103,13 +103,13 @@ class AtCorner<T> implements VoxelsExtracter<T> {
     public long voxelWithMaxIntensity() {
         return delegate.voxelWithMaxIntensity();
     }
-    
+
     @Override
     public void objectCopyTo(
             ObjectMask from, Voxels<T> voxelsDestination, BoundingBox destinationBox) {
         delegate.objectCopyTo(shiftBack(from), voxelsDestination, destinationBox);
     }
-    
+
     private ReadableTuple3i shiftBack(ReadableTuple3i point) {
         return Point3i.immutableSubtract(point, corner);
     }
@@ -117,7 +117,7 @@ class AtCorner<T> implements VoxelsExtracter<T> {
     private BoundingBox shiftBack(BoundingBox box) {
         return box.shiftBackBy(corner);
     }
-    
+
     private ObjectMask shiftBack(ObjectMask object) {
         return object.shiftBackBy(corner);
     }

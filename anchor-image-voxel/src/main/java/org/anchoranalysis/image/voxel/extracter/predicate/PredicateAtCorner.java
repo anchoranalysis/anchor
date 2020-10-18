@@ -66,12 +66,12 @@ public class PredicateAtCorner implements VoxelsPredicate {
     public boolean lowerCountExistsThan(int threshold) {
         return delegate.lowerCountExistsThan(threshold);
     }
-    
+
     @Override
     public int countForObject(ObjectMask object) {
         return delegate.countForObject(object);
     }
-    
+
     @Override
     public ObjectMask deriveObject(BoundingBox box) {
         return delegate.deriveObject(box.shiftBackBy(corner)).shiftBy(corner);

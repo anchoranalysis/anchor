@@ -26,8 +26,8 @@
 
 package org.anchoranalysis.overlay.object;
 
-import lombok.Getter;
 import java.util.Optional;
+import lombok.Getter;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.dimensions.Resolution;

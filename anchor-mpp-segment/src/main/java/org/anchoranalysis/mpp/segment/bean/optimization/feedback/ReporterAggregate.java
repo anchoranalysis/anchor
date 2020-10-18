@@ -26,12 +26,12 @@
 
 package org.anchoranalysis.mpp.segment.bean.optimization.feedback;
 
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.mpp.segment.optimization.feedback.FeedbackBeginParameters;
 import org.anchoranalysis.mpp.segment.optimization.feedback.FeedbackEndParameters;
 import org.anchoranalysis.mpp.segment.optimization.feedback.ReporterException;
 import org.anchoranalysis.mpp.segment.optimization.feedback.aggregate.AggregateReceiver;
-import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 public abstract class ReporterAggregate<T> extends ReporterInterval<T> {

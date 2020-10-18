@@ -55,8 +55,7 @@ public class OutputWriteSettings extends AnchorBean<OutputWriteSettings> {
 
     // START BEAN PROPERTIES
     /** The default color-scheme used for outputs, if no other scheme is specified. */
-    @BeanField @Getter @Setter
-    private ColorScheme defaultColors = new Shuffle(new HSB());
+    @BeanField @Getter @Setter private ColorScheme defaultColors = new Shuffle(new HSB());
 
     /**
      * Specifies a writer bean instance for a particular type of writer (identified by the writer

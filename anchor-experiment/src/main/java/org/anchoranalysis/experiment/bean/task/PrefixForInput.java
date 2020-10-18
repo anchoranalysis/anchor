@@ -30,15 +30,15 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.path.PathDifference;
 import org.anchoranalysis.core.path.PathDifferenceException;
-import org.anchoranalysis.io.manifest.ManifestDirectoryDescription;
 import org.anchoranalysis.io.manifest.Manifest;
+import org.anchoranalysis.io.manifest.ManifestDirectoryDescription;
 import org.anchoranalysis.io.manifest.directory.JobRootDirectory;
 import org.anchoranalysis.io.manifest.sequencetype.StringsWithoutOrder;
-import org.anchoranalysis.io.output.path.PathPrefixerException;
 import org.anchoranalysis.io.output.path.DirectoryWithPrefix;
 import org.anchoranalysis.io.output.path.FilePathPrefixerContext;
 import org.anchoranalysis.io.output.path.NamedPath;
 import org.anchoranalysis.io.output.path.PathPrefixer;
+import org.anchoranalysis.io.output.path.PathPrefixerException;
 
 @RequiredArgsConstructor
 class PrefixForInput {
@@ -60,9 +60,7 @@ class PrefixForInput {
      * @throws PathPrefixerException
      */
     public DirectoryWithPrefix prefixForFile(
-            NamedPath path,
-            String experimentIdentifier,
-            Optional<Manifest> experimentalManifest)
+            NamedPath path, String experimentIdentifier, Optional<Manifest> experimentalManifest)
             throws PathPrefixerException {
 
         // Calculate a prefix from the incoming file, and create a file path generator
@@ -88,10 +86,10 @@ class PrefixForInput {
         }
     }
 
-    private static void writeRootFolderInManifest(
-            Manifest manifestRecorder, Path rootPath) {
+    private static void writeRootFolderInManifest(Manifest manifestRecorder, Path rootPath) {
         manifestRecorder
                 .getRootFolder()
-                .recordSubdirectoryCreated(rootPath, MANIFEST_DIRECTORY_ROOT, new JobRootDirectory());
+                .recordSubdirectoryCreated(
+                        rootPath, MANIFEST_DIRECTORY_ROOT, new JobRootDirectory());
     }
 }

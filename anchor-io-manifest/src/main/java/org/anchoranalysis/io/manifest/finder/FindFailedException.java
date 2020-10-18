@@ -40,5 +40,5 @@ public class FindFailedException extends AnchorCheckedException {
     public FindFailedException(Throwable cause) {
         super(cause);
         // TODO Auto-generated constructor stub
-    }    
+    }
 }

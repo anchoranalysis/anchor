@@ -44,11 +44,10 @@ import org.anchoranalysis.io.output.outputter.InputOutputContext;
  * @param <U> shared-state type for current series i.e. for all stacks in one particular job
  * @author Owen Feehan
  */
-public abstract class RasterTask<S,U> extends Task<NamedChannelsInput,S> {
+public abstract class RasterTask<S, U> extends Task<NamedChannelsInput, S> {
 
     @Override
-    public void doJobOnInput(InputBound<NamedChannelsInput, S> input)
-            throws JobExecutionException {
+    public void doJobOnInput(InputBound<NamedChannelsInput, S> input) throws JobExecutionException {
 
         InputOutputContext context = input.context();
 
@@ -56,12 +55,13 @@ public abstract class RasterTask<S,U> extends Task<NamedChannelsInput,S> {
             int numberSeries = input.getInput().numberSeries();
 
             U sharedStateJob = createSharedStateJob(context);
-            
+
             startSeries(input.getSharedState(), sharedStateJob, context);
 
-            FunctionalIterate.repeatWithIndex(numberSeries, seriesIndex ->
-                doStack(input, sharedStateJob, seriesIndex, numberSeries, context)
-            );
+            FunctionalIterate.repeatWithIndex(
+                    numberSeries,
+                    seriesIndex ->
+                            doStack(input, sharedStateJob, seriesIndex, numberSeries, context));
 
             endSeries(input.getSharedState(), sharedStateJob, context);
 
@@ -69,37 +69,41 @@ public abstract class RasterTask<S,U> extends Task<NamedChannelsInput,S> {
             throw new JobExecutionException(e);
         }
     }
-    
+
     /**
      * Creates a shared-state for the duration of a particular input-job
-     * 
+     *
      * <p>This will exist across all stacks from the same series.
-     * 
+     *
      * @param context the input-output cotnext associated with a particular job
      * @return a newly created shared-state
      * @throws JobExecutionException
      */
-    protected abstract U createSharedStateJob(InputOutputContext context) throws JobExecutionException;
+    protected abstract U createSharedStateJob(InputOutputContext context)
+            throws JobExecutionException;
 
     /**
      * Starts processing of a series.
-     * 
-     * <p>This corresponds to the start of an input job, <b>before</b> any stacks in the series are processed.
-     * 
+     *
+     * <p>This corresponds to the start of an input job, <b>before</b> any stacks in the series are
+     * processed.
+     *
      * <p>This should be called always <i>once</i> <b>before</b> all calls to {@link #doStack}.
+     *
      * @param sharedStateTask shared-state across all jobs in task
      * @param sharedStateJob shared-state across all stacks in a job (i.e. in all series.)
      * @param context input-output context
      * @throws JobExecutionException
      */
-    public abstract void startSeries(S sharedStateTask, U sharedStateJob, InputOutputContext context)
+    public abstract void startSeries(
+            S sharedStateTask, U sharedStateJob, InputOutputContext context)
             throws JobExecutionException;
 
     /**
      * Processes one stack from a series.
-     * 
+     *
      * <p>This can be called many times in a job, once for each stack in the series.
-     * 
+     *
      * <p>It is assumed each job may have only one series.
      *
      * @param input the input-object corresponding to this stack (a set of named-channels)
@@ -110,21 +114,28 @@ public abstract class RasterTask<S,U> extends Task<NamedChannelsInput,S> {
      * @throws JobExecutionException
      */
     public abstract void doStack(
-            InputBound<NamedChannelsInput, S> input, U sharedStateJob, int seriesIndex, int numberSeries, InputOutputContext context)
+            InputBound<NamedChannelsInput, S> input,
+            U sharedStateJob,
+            int seriesIndex,
+            int numberSeries,
+            InputOutputContext context)
             throws JobExecutionException;
 
     /**
      * Ends processing of a series.
-     * 
-     * <p>This corresponds to the end of an input job, <b>after</b> any stacks in the series are processed.
-     * 
+     *
+     * <p>This corresponds to the end of an input job, <b>after</b> any stacks in the series are
+     * processed.
+     *
      * <p>This should be called always <i>once</i> <b>after</b> all calls to {@link #doStack}.
+     *
      * @param sharedStateTask shared-state across all jobs in task
      * @param sharedStateJob shared-state across all stacks in a job (i.e. in all series.)
      * @param context input-output context
      * @throws JobExecutionException
      */
-    public abstract void endSeries(S sharedStateTask, U sharedStateJob, InputOutputContext context) throws JobExecutionException;
+    public abstract void endSeries(S sharedStateTask, U sharedStateJob, InputOutputContext context)
+            throws JobExecutionException;
 
     @Override
     public InputTypesExpected inputTypesExpected() {

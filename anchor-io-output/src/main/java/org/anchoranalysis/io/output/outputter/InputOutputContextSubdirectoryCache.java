@@ -60,8 +60,8 @@ public class InputOutputContextSubdirectoryCache {
     /**
      * Gets (from the cache if it's already there) a context for a subdirectory of given-name
      *
-     * @param subdirectoryName the subdirectory name. if not set, then the parentContext is
-     *     returned instead.
+     * @param subdirectoryName the subdirectory name. if not set, then the parentContext is returned
+     *     instead.
      * @return either an existing context for the subdirectory or a newly created one
      */
     public InputOutputContext get(Optional<String> subdirectoryName) {

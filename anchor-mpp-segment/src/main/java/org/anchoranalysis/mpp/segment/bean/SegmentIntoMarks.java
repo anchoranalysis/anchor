@@ -57,7 +57,7 @@ public abstract class SegmentIntoMarks extends AnchorBean<SegmentIntoMarks> {
             Optional<KeyValueParams> keyValueParams,
             InputOutputContext context)
             throws SegmentationFailedException;
-    
+
     /**
      * If specified, default rules for determine which outputs are enabled or not.
      *
@@ -65,5 +65,5 @@ public abstract class SegmentIntoMarks extends AnchorBean<SegmentIntoMarks> {
      */
     public OutputEnabledMutable defaultOutputs() {
         return new OutputEnabledMutable(IgnoreUnderscorePrefix.INSTANCE);
-    }    
+    }
 }

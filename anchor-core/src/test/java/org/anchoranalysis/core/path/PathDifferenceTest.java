@@ -99,7 +99,8 @@ public class PathDifferenceTest {
         assertTrue(fdd.getFilename().equals(expectedFilename));
     }
 
-    private PathDifference test(String baseFolderPath, String filePath) throws PathDifferenceException {
+    private PathDifference test(String baseFolderPath, String filePath)
+            throws PathDifferenceException {
         return PathDifference.differenceFrom(resolve(baseFolderPath), resolve(filePath));
     }
 

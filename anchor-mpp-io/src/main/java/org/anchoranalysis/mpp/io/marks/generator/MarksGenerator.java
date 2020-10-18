@@ -37,11 +37,17 @@ import org.anchoranalysis.overlay.bean.DrawObject;
 public class MarksGenerator extends MarksGeneratorBase {
 
     public MarksGenerator(DrawObject drawObject, IDGetter<Overlay> idGetter) {
-        this(drawObject, idGetter, RegionMapSingleton.instance()
-                .membershipWithFlagsForIndex(GlobalRegionIdentifiers.SUBMARK_INSIDE));
+        this(
+                drawObject,
+                idGetter,
+                RegionMapSingleton.instance()
+                        .membershipWithFlagsForIndex(GlobalRegionIdentifiers.SUBMARK_INSIDE));
     }
-    
-    public MarksGenerator(DrawObject drawObject, IDGetter<Overlay> idGetter, RegionMembershipWithFlags regionMembership) {
+
+    public MarksGenerator(
+            DrawObject drawObject,
+            IDGetter<Overlay> idGetter,
+            RegionMembershipWithFlags regionMembership) {
         super(new SimpleOverlayWriter(drawObject), idGetter, regionMembership);
     }
 

@@ -59,7 +59,7 @@ import org.apache.commons.lang.time.StopWatch;
 public abstract class OutputExperiment extends Experiment {
 
     public static final String OUTPUT_NAME_MANIFEST = "experiment_manifest";
-    
+
     // START BEAN PROPERTIES
     /** The output-manager that specifies how/where/which elements occur duing outputting. */
     @BeanField @Getter @Setter private OutputManager output;
@@ -203,11 +203,17 @@ public abstract class OutputExperiment extends Experiment {
     }
 
     private void tidyUpAfterExecution(ParametersExperiment params, StopWatch stopWatchExperiment) {
-        
-        params.getExperimentalManifest().ifPresent( manifest ->
-            params.getOutputter().writerSelective().write(OUTPUT_NAME_MANIFEST, ManifestGenerator::new, () -> manifest)
-        );
-        
+
+        params.getExperimentalManifest()
+                .ifPresent(
+                        manifest ->
+                                params.getOutputter()
+                                        .writerSelective()
+                                        .write(
+                                                OUTPUT_NAME_MANIFEST,
+                                                ManifestGenerator::new,
+                                                () -> manifest));
+
         stopWatchExperiment.stop();
 
         OutputExperimentLogHelper.maybeLogCompleted(recordedOutputs, params, stopWatchExperiment);

@@ -78,10 +78,10 @@ public class Orientation3DEulerAngles extends Orientation {
     }
 
     @Override
-    public void addProperties(NameValueSet<String> nvc) {
-        addProperty(nvc, "X", rotationX);
-        addProperty(nvc, "Y", rotationY);
-        addProperty(nvc, "Z", rotationZ);
+    public void addProperties(NameValueSet<String> namedValues) {
+        addProperty(namedValues, "X", rotationX);
+        addProperty(namedValues, "Y", rotationY);
+        addProperty(namedValues, "Z", rotationZ);
     }
 
     private void addProperty(NameValueSet<String> nvc, String dimension, double radians) {
@@ -97,7 +97,7 @@ public class Orientation3DEulerAngles extends Orientation {
     }
 
     @Override
-    public int getNumDims() {
+    public int numberDimensions() {
         return 3;
     }
 }

@@ -91,12 +91,11 @@ public class TextStyle extends AnchorBean<TextStyle> {
     public RasterGenerator<String> createGenerator() {
         return new RasterizedTextGenerator();
     }
-        
+
     /**
      * Creates an image with text matching the style/size specified in this bean.
-     * 
-     * @author Owen Feehan
      *
+     * @author Owen Feehan
      */
     private class RasterizedTextGenerator extends RasterGenerator<String> {
 
@@ -104,7 +103,7 @@ public class TextStyle extends AnchorBean<TextStyle> {
         public Stack transform(String element) throws OutputWriteFailedException {
 
             SizeXY resolvedSize =
-                    Optional.ofNullable(size).orElseGet( () -> alternativeSizeFromDefault(element) );
+                    Optional.ofNullable(size).orElseGet(() -> alternativeSizeFromDefault(element));
 
             assert (resolvedSize.asExtent().volumeXY() > 0);
 

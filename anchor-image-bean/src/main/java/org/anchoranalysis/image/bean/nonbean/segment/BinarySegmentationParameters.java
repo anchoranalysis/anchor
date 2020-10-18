@@ -41,11 +41,11 @@ public class BinarySegmentationParameters {
     @Getter private final Optional<Resolution> resolution;
 
     public BinarySegmentationParameters() {
-        this( Optional.empty(), Optional.empty() );
+        this(Optional.empty(), Optional.empty());
     }
 
     public BinarySegmentationParameters(Optional<Resolution> resolution) {
-        this( Optional.empty(), resolution );
+        this(Optional.empty(), resolution);
     }
 
     /**
@@ -56,6 +56,6 @@ public class BinarySegmentationParameters {
      */
     public BinarySegmentationParameters(
             Resolution resolution, Optional<Histogram> intensityHistogram) {
-        this(intensityHistogram, Optional.of(resolution) );
+        this(intensityHistogram, Optional.of(resolution));
     }
 }

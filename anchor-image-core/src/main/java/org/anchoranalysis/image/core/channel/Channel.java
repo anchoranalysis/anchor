@@ -231,7 +231,7 @@ public class Channel {
         if (prevZSize > 1) {
             return FACTORY.create(
                     flattener.apply(voxels.extract()),
-                    dimensions.resolution().map( res->res.duplicateFlattenZ(prevZSize)) );
+                    dimensions.resolution().map(res -> res.duplicateFlattenZ(prevZSize)));
         } else {
             return this;
         }

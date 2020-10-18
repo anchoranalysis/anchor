@@ -34,12 +34,11 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.functional.function.CheckedFunction;
 import org.anchoranalysis.core.progress.ProgressReporter;
 
-/** 
+/**
  * Utilities for updating a {@link ProgressReporter} in a functional way
- * 
+ *
  * @author Owen Feehan
- * 
- **/
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class FunctionalProgress {
 

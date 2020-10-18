@@ -30,11 +30,10 @@ import org.anchoranalysis.core.index.container.OrderProvider;
 
 /**
  * Indices must be integers that always increase as added.
- * 
- * <p>A sorted-set records all such indices.
- * 
- * @author Owen Feehan
  *
+ * <p>A sorted-set records all such indices.
+ *
+ * @author Owen Feehan
  */
 public class IncreasingIntegers extends SequenceType<Integer> {
 
@@ -42,7 +41,7 @@ public class IncreasingIntegers extends SequenceType<Integer> {
     private static final long serialVersionUID = -4134961949858208220L;
 
     private RangeFromIndexSet range = new RangeFromIndexSet();
-    
+
     @Override
     public String getName() {
         return "change";
@@ -57,7 +56,7 @@ public class IncreasingIntegers extends SequenceType<Integer> {
     @Override
     public OrderProvider createOrderProvider() {
         OrderProviderHashMap map = new OrderProviderHashMap();
-        map.addIntegerSet( range.getSet() );
+        map.addIntegerSet(range.getSet());
         return map;
     }
 

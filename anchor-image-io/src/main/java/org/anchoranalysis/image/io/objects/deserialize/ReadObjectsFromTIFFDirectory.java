@@ -56,10 +56,10 @@ class ReadObjectsFromTIFFDirectory implements Deserializer<ObjectCollection> {
             throws DeserializationFailedException {
 
         try {
-            BoundedIndexContainer<ObjectMask> container = deserializeFromDirectory(
-                    new SerializedObjectsFromDirectory(folderPath, Optional.of("*.ser")),
-                    new ObjectDualDeserializer(stackReader)
-            ); 
+            BoundedIndexContainer<ObjectMask> container =
+                    deserializeFromDirectory(
+                            new SerializedObjectsFromDirectory(folderPath, Optional.of("*.ser")),
+                            new ObjectDualDeserializer(stackReader));
             return createFromContainer(container);
 
         } catch (SequenceTypeException | CreateException e) {
@@ -80,9 +80,11 @@ class ReadObjectsFromTIFFDirectory implements Deserializer<ObjectCollection> {
             throw new CreateException(e);
         }
     }
-    
-    private static <T> BoundedIndexContainer<T> deserializeFromDirectory(SequencedDirectory directory, Deserializer<T> deserializer) {
-        GetterFromIndex<T> container = new SequencedDirectoryDeserializer<>(directory, deserializer);
+
+    private static <T> BoundedIndexContainer<T> deserializeFromDirectory(
+            SequencedDirectory directory, Deserializer<T> deserializer) {
+        GetterFromIndex<T> container =
+                new SequencedDirectoryDeserializer<>(directory, deserializer);
         return new BoundsFromRange<>(container, directory.getAssociatedElementRange());
     }
 }

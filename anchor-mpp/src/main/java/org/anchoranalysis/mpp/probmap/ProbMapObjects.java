@@ -40,9 +40,8 @@ import org.anchoranalysis.spatial.point.Point3d;
 
 /**
  * TODO this doesn't seem currently used. Do we still ened it?
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class ProbMapObjects implements ProbMap {
 

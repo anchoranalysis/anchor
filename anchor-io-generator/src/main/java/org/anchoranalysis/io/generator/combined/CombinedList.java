@@ -41,9 +41,8 @@ import org.anchoranalysis.io.output.writer.ElementWriter;
 
 /**
  * A helper list of {@link ElementWriter}s used in {@link CombinedListGenerator}.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  * @param <T> element-type
  */
 class CombinedList<T> {
@@ -84,8 +83,9 @@ class CombinedList<T> {
 
     public int writeWithIndex(
             T element,
-            String index, 
-            IndexableOutputNameStyle outputNameStyle, OutputterChecked outputter)
+            String index,
+            IndexableOutputNameStyle outputNameStyle,
+            OutputterChecked outputter)
             throws OutputWriteFailedException {
 
         int maxWritten = -1;
@@ -96,7 +96,10 @@ class CombinedList<T> {
                 outputNameStyle.setOutputName(namedGenerator.getName().get()); // NOSONAR
             }
 
-            int numberWritten = namedGenerator.getValue().writeWithIndex(element, index, outputNameStyle, outputter);
+            int numberWritten =
+                    namedGenerator
+                            .getValue()
+                            .writeWithIndex(element, index, outputNameStyle, outputter);
             maxWritten = Math.max(maxWritten, numberWritten);
         }
 

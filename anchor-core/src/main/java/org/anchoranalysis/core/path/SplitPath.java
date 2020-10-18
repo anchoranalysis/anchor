@@ -32,13 +32,13 @@ import lombok.Value;
 
 /**
  * A path that has been split into two components: a root and a remainder.
- * 
- * <p>This is an <i>immutable</i> class.
- * 
- * @author Owen Feehan
  *
+ * <p>This is an <i>immutable</i> class.
+ *
+ * @author Owen Feehan
  */
-@AllArgsConstructor @Value
+@AllArgsConstructor
+@Value
 public class SplitPath {
 
     private Path root;

@@ -81,8 +81,9 @@ public class CombinedListGenerator<T> implements MultipleFileTypeGenerator<T> {
     @Override
     public int writeWithIndex(
             T element,
-            String index, 
-            IndexableOutputNameStyle outputNameStyle, OutputterChecked outputter)
+            String index,
+            IndexableOutputNameStyle outputNameStyle,
+            OutputterChecked outputter)
             throws OutputWriteFailedException {
         return delegate.writeWithIndex(element, index, outputNameStyle, outputter);
     }
@@ -96,7 +97,7 @@ public class CombinedListGenerator<T> implements MultipleFileTypeGenerator<T> {
     public void add(String name, Generator<T> element) {
         add(element, Optional.of(name));
     }
-    
+
     private void add(Generator<T> element, Optional<String> name) {
         list.add(element);
         delegate.add(element, name);

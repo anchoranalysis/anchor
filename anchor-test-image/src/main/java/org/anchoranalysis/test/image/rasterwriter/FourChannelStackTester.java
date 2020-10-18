@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -180,17 +180,22 @@ public class FourChannelStackTester {
             throws ImageIOException, IOException {
         tester.performTest(channelVoxelTypes, 3, true);
     }
-    
+
     /**
      * Tests the creation of a three-channel stack of heterogeneous channel types.
-     * 
-     * <p>The first channel type is {@link UnsignedShortVoxelType} the remaining two are {@link UnsignedByteVoxelType}. 
+     *
+     * <p>The first channel type is {@link UnsignedShortVoxelType} the remaining two are {@link
+     * UnsignedByteVoxelType}.
      *
      * @throws ImageIOException if an error occurs by the writer
      * @throws IOException if an error occurs attempting a comparison
      */
     public void testThreeChannelsHeterogeneous() throws ImageIOException, IOException {
-        tester.performTest(UnsignedByteVoxelType.INSTANCE, 3, false, Optional.of(UnsignedShortVoxelType.INSTANCE) );
+        tester.performTest(
+                UnsignedByteVoxelType.INSTANCE,
+                3,
+                false,
+                Optional.of(UnsignedShortVoxelType.INSTANCE));
     }
 
     /**

@@ -27,6 +27,7 @@
 package org.anchoranalysis.spatial.point;
 
 import static org.junit.Assert.*;
+
 import org.junit.Test;
 
 public class PointTest {

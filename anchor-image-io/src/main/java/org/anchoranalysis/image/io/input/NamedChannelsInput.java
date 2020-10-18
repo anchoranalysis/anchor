@@ -37,7 +37,7 @@ import org.anchoranalysis.image.io.input.series.NamedChannelsForSeries;
 
 /**
  * Provides a set of channels as an input, each of which has a name.
- * 
+ *
  * <p>Only the first time-point is considered from each series.
  *
  * @author Owen Feehan

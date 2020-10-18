@@ -32,19 +32,19 @@ import lombok.Value;
 
 /**
  * A description of an entry (e.g. a file or directory) in the manifest.
- * 
- * <p>This is an <i>immutable</i> type.
- * 
- * <p>{@code function} is intended to further specify {@code type} as there may
- * be many entities of identical type.
- * 
- * <p>Together {@code type} and {@code function} should serve as a unique identifier
- * (like a joint primary key).
- * 
- * @author Owen Feehan
  *
+ * <p>This is an <i>immutable</i> type.
+ *
+ * <p>{@code function} is intended to further specify {@code type} as there may be many entities of
+ * identical type.
+ *
+ * <p>Together {@code type} and {@code function} should serve as a unique identifier (like a joint
+ * primary key).
+ *
+ * @author Owen Feehan
  */
-@AllArgsConstructor @Value
+@AllArgsConstructor
+@Value
 public class ManifestDescription implements Serializable {
 
     /** */
@@ -52,13 +52,13 @@ public class ManifestDescription implements Serializable {
 
     /** Identifies the type of entity. */
     private final String type;
-    
+
     /** Identifies the function the entity plays. */
     private final String function;
-    
+
     /**
      * Assigns a new function.
-     * 
+     *
      * @param functionToAssign the function to assign
      * @return a newly copied object with a changed function and otherwise unchanged.
      */
@@ -68,7 +68,7 @@ public class ManifestDescription implements Serializable {
 
     /**
      * Assigns a new type.
-     * 
+     *
      * @param typeToAssign the type to assign
      * @return a newly copied object with a changed type and otherwise unchanged.
      */

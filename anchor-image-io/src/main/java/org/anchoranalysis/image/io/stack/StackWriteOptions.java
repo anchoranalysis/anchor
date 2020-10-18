@@ -25,10 +25,10 @@
  */
 package org.anchoranalysis.image.io.stack;
 
-import org.anchoranalysis.image.core.stack.Stack;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Value;
+import org.anchoranalysis.image.core.stack.Stack;
 
 /**
  * Options describing stack which may determine which writer is used.
@@ -41,11 +41,9 @@ import lombok.Value;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class StackWriteOptions {
 
-    private static final StackWriteOptions RGB_ALWAYS_2D =
-            new StackWriteOptions(true, true, true);
+    private static final StackWriteOptions RGB_ALWAYS_2D = new StackWriteOptions(true, true, true);
 
-    private static final StackWriteOptions RGB_MAYBE_3D =
-            new StackWriteOptions(false, true, true);
+    private static final StackWriteOptions RGB_MAYBE_3D = new StackWriteOptions(false, true, true);
 
     private static final StackWriteOptions ONE_OR_THREE_CHANNELS_ALWAYS_2D =
             new StackWriteOptions(true, true, false);
@@ -134,12 +132,12 @@ public class StackWriteOptions {
             return RGB_MAYBE_3D;
         }
     }
-    
+
     /**
      * The options that narrowly describe a stack as possible.
-     * 
+     *
      * <p>Note that a stack with three channels is assumed to be RGB.
-     * 
+     *
      * @param stack the stack to derive options from
      * @return options that narrowly describe {@code stack}.
      */
@@ -148,13 +146,13 @@ public class StackWriteOptions {
         boolean singleSlice = !stack.hasMoreThanOneSlice();
         if (numberChannels == 3) {
             return rgb(singleSlice);
-        } else if (numberChannels==1) {
+        } else if (numberChannels == 1) {
             return alwaysOneOrThreeChannels(singleSlice);
         } else {
             return new StackWriteOptions(singleSlice, false, false);
         }
     }
-    
+
     public static StackWriteOptions toReplace(boolean always2D) {
         return new StackWriteOptions(always2D, false, false);
     }

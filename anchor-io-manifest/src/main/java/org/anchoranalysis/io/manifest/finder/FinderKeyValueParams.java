@@ -59,9 +59,7 @@ public class FinderKeyValueParams extends FinderSingleFile {
             throws FindFailedException {
         List<OutputtedFile> files =
                 FinderUtilities.findListFile(
-                        manifestRecorder,
-                        FileMatch.description(manifestFunction)
-                );
+                        manifestRecorder, FileMatch.description(manifestFunction));
 
         if (files.isEmpty()) {
             return Optional.empty();

@@ -142,15 +142,17 @@ public class NamedStacks implements NamedProviderStore<Stack> {
 
     /**
      * Iterates over each entry in the map.
-     * 
+     *
      * @param <E> an exception that may be called by {@code consumer}.
-     * @param consumer this consumer is called the name and stack-supplier for each entry in teh map. 
+     * @param consumer this consumer is called the name and stack-supplier for each entry in teh
+     *     map.
      * @throws E if the consumer throws the exception.
      */
-    public <E extends Exception> void forEach(CheckedBiConsumer<String, StoreSupplier<Stack>, E> consumer) throws E {
+    public <E extends Exception> void forEach(
+            CheckedBiConsumer<String, StoreSupplier<Stack>, E> consumer) throws E {
         FunctionalIterate.iterateMap(map, consumer);
     }
-    
+
     /**
      * Number of stacks
      *

@@ -36,7 +36,8 @@ import org.anchoranalysis.io.output.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
 
 /**
- * Write data via {@link ElementWriter}s to the file system, or creates new sub-directories for writing data to.
+ * Write data via {@link ElementWriter}s to the file system, or creates new sub-directories for
+ * writing data to.
  *
  * <p>This class is similar to {@link WriterRouterErrors} but exceptions are thrown rather than
  * reporting errors.
@@ -45,7 +46,7 @@ import org.anchoranalysis.io.output.outputter.OutputterChecked;
  *
  * <p>The {@link ElementWriterSupplier} interface is used so as to avoid object-creation if an
  * operation isn't actually written.
- * 
+ *
  * <p>Note that a {@link ElementWriter} may write more than one file for a given element.
  *
  * @author Owen Feehan
@@ -55,8 +56,8 @@ public interface Writer {
     /**
      * Maybe creates a subdirectory for writing to.
      *
-     * @param outputName the name of the subdirectory. This may determine if an output is allowed
-     *     or not.
+     * @param outputName the name of the subdirectory. This may determine if an output is allowed or
+     *     not.
      * @param manifestDescription a manifest-description associated with the subdirectory as a
      *     whole.
      * @param manifestFolder a manifest-folder if it exists
@@ -73,19 +74,21 @@ public interface Writer {
             Optional<SubdirectoryBase> manifestFolder,
             boolean inheritOutputRulesAndRecording)
             throws OutputWriteFailedException;
-    
+
     /**
      * Writes an element using an {@link ElementWriter} to the current directory.
      *
-     * @param outputName the name of the subdirectory. This may determine if an output is allowed
-     *     or not.
+     * @param outputName the name of the subdirectory. This may determine if an output is allowed or
+     *     not.
      * @param elementWriter writes the element to the filesystem
      * @param element the element to write
      * @return true if the output was allowed, false otherwise
      * @throws OutputWriteFailedException
      */
-    <T> boolean write(String outputName, ElementWriterSupplier<T> elementWriter, ElementSupplier<T> element) throws OutputWriteFailedException;
-    
+    <T> boolean write(
+            String outputName, ElementWriterSupplier<T> elementWriter, ElementSupplier<T> element)
+            throws OutputWriteFailedException;
+
     /**
      * Writes an indexed-element using an {@link ElementWriter} in the current directory.
      *
@@ -93,8 +96,8 @@ public interface Writer {
      * @param elementWriter writes the element to the filesystem
      * @param element the element to write
      * @param index the index
-     * @return the number of elements written by the {@link ElementWriter}, including 0 elements, or -2 if the
-     *     output is not allowed.
+     * @return the number of elements written by the {@link ElementWriter}, including 0 elements, or
+     *     -2 if the output is not allowed.
      * @throws OutputWriteFailedException
      */
     <T> int writeWithIndex(
@@ -107,7 +110,9 @@ public interface Writer {
     /**
      * The path to write a particular output to.
      *
-     * <p>This is an alternative method to write to the file system rather than using an {@link ElementWriter} and {@link #write(String, ElementWriterSupplier, ElementSupplier)} and {@link #writeWithIndex(IndexableOutputNameStyle, ElementWriterSupplier, ElementSupplier, String)}.
+     * <p>This is an alternative method to write to the file system rather than using an {@link
+     * ElementWriter} and {@link #write(String, ElementWriterSupplier, ElementSupplier)} and {@link
+     * #writeWithIndex(IndexableOutputNameStyle, ElementWriterSupplier, ElementSupplier, String)}.
      *
      * @param outputName the output-name. This is the filename without an extension, and may
      *     determine if an output is allowed or not.

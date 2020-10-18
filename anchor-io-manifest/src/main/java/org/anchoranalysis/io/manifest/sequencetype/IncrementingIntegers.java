@@ -34,7 +34,7 @@ public class IncrementingIntegers extends SequenceType<Integer> {
     private static final long serialVersionUID = -3896806957547954271L;
 
     private IncrementingIntegersRange range;
-    
+
     public IncrementingIntegers() {
         this(0);
     }
@@ -42,7 +42,7 @@ public class IncrementingIntegers extends SequenceType<Integer> {
     public IncrementingIntegers(int start) {
         this(start, 1);
     }
-    
+
     public IncrementingIntegers(int start, int incrementSize) {
         this.range = new IncrementingIntegersRange(start, incrementSize);
     }
@@ -76,7 +76,7 @@ public class IncrementingIntegers extends SequenceType<Integer> {
     public int getNumberElements() {
         return range.getNumberElements();
     }
-    
+
     @Override
     public void assignMaximumIndex(int index) {
         // NOTHING TO DO, the maximum is not changed for this sequence-type

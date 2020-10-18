@@ -33,8 +33,8 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.error.OptionalOperationUnsupportedException;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.dimensions.Resolution;
-import org.anchoranalysis.image.core.dimensions.UnitConverter;
 import org.anchoranalysis.image.core.dimensions.SpatialUnits.UnitSuffix;
+import org.anchoranalysis.image.core.dimensions.UnitConverter;
 import org.anchoranalysis.image.core.object.properties.ObjectWithProperties;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
@@ -232,7 +232,7 @@ public abstract class Mark implements Serializable, Identifiable {
         nvc.add("Type", getName());
         nvc.add("ID", Integer.toString(getId()));
         if (resolution.isPresent()) {
-             addPropertiesForRegions(nvc, resolution.get().unitConvert() );
+            addPropertiesForRegions(nvc, resolution.get().unitConvert());
         }
         return nvc;
     }

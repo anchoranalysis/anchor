@@ -46,7 +46,8 @@ import org.anchoranalysis.io.output.outputter.OutputterChecked;
 public abstract class SingleFileTypeGenerator<T, S> implements Generator<T> {
 
     /** The manifest-description to use if none other is defined. */
-    private static final ManifestDescription UNDEFINED_MANIFEST_DESCRIPTION = new ManifestDescription("undefined", "undefined");
+    private static final ManifestDescription UNDEFINED_MANIFEST_DESCRIPTION =
+            new ManifestDescription("undefined", "undefined");
 
     /**
      * Applies any necessary preprocessing to create an element suitable for writing to the
@@ -58,7 +59,8 @@ public abstract class SingleFileTypeGenerator<T, S> implements Generator<T> {
      */
     public abstract S transform(T element) throws OutputWriteFailedException;
 
-    public abstract void writeToFile(T element, OutputWriteSettings outputWriteSettings, Path filePath)
+    public abstract void writeToFile(
+            T element, OutputWriteSettings outputWriteSettings, Path filePath)
             throws OutputWriteFailedException;
 
     public abstract String getFileExtension(OutputWriteSettings outputWriteSettings)
@@ -72,7 +74,10 @@ public abstract class SingleFileTypeGenerator<T, S> implements Generator<T> {
             throws OutputWriteFailedException {
         writeInternal(
                 element,
-                outputNameStyle.getFilenameWithoutExtension(), outputNameStyle.getOutputName(), "", outputter);
+                outputNameStyle.getFilenameWithoutExtension(),
+                outputNameStyle.getOutputName(),
+                "",
+                outputter);
     }
 
     /** As only a single-file is involved, this methods delegates to a simpler virtual method. */
@@ -80,7 +85,8 @@ public abstract class SingleFileTypeGenerator<T, S> implements Generator<T> {
     public int writeWithIndex(
             T element,
             String index,
-            IndexableOutputNameStyle outputNameStyle, OutputterChecked outputter)
+            IndexableOutputNameStyle outputNameStyle,
+            OutputterChecked outputter)
             throws OutputWriteFailedException {
 
         writeInternal(
@@ -97,12 +103,17 @@ public abstract class SingleFileTypeGenerator<T, S> implements Generator<T> {
     @Override
     public Optional<FileType[]> getFileTypes(OutputWriteSettings outputWriteSettings)
             throws OperationFailedException {
-        return Optional.of( createFileTypeArray(createManifestDescription(), outputWriteSettings) );
+        return Optional.of(createFileTypeArray(createManifestDescription(), outputWriteSettings));
     }
-    
-    private FileType[] createFileTypeArray(Optional<ManifestDescription> description, OutputWriteSettings outputWriteSettings) throws OperationFailedException {
-        ManifestDescription selectedDescription = description.orElse(UNDEFINED_MANIFEST_DESCRIPTION);
-        return new FileType[] {new FileType(selectedDescription, getFileExtension(outputWriteSettings))};
+
+    private FileType[] createFileTypeArray(
+            Optional<ManifestDescription> description, OutputWriteSettings outputWriteSettings)
+            throws OperationFailedException {
+        ManifestDescription selectedDescription =
+                description.orElse(UNDEFINED_MANIFEST_DESCRIPTION);
+        return new FileType[] {
+            new FileType(selectedDescription, getFileExtension(outputWriteSettings))
+        };
     }
 
     private void writeInternal(
@@ -116,16 +127,16 @@ public abstract class SingleFileTypeGenerator<T, S> implements Generator<T> {
         try {
             Path pathToWriteTo =
                     outputter.makeOutputPath(
-                            filenameWithoutExtension,
-                            getFileExtension(outputter.getSettings()));
+                            filenameWithoutExtension, getFileExtension(outputter.getSettings()));
 
             // First write to the file system, and then write to the operation-recorder. Thi
             writeToFile(element, outputter.getSettings(), pathToWriteTo);
 
-            createManifestDescription().ifPresent(
-                    manifestDescription ->
-                            outputter.writeFileToOperationRecorder(
-                                    outputName, pathToWriteTo, manifestDescription, index));
+            createManifestDescription()
+                    .ifPresent(
+                            manifestDescription ->
+                                    outputter.writeFileToOperationRecorder(
+                                            outputName, pathToWriteTo, manifestDescription, index));
         } catch (OperationFailedException e) {
             throw new OutputWriteFailedException(e);
         }

@@ -131,7 +131,7 @@ public class IterateVoxelsBoundingBox {
             BoundingBox box, Voxels<T> voxels, ProcessBufferUnary<T> process) {
         withPoint(box, new RetrieveBufferForSlice<>(voxels, process));
     }
-    
+
     /**
      * Iterate over each voxel in a bounding-box - with <b>two</b> associated buffers for each
      * slice, one {@link VoxelBuffer} and one {@link Buffer}
@@ -152,7 +152,7 @@ public class IterateVoxelsBoundingBox {
             ReadableTuple3i shiftForSecond,
             Voxels<T> voxels1,
             Voxels<T> voxels2,
-            ProcessBufferBinary<T,T> process) {
+            ProcessBufferBinary<T, T> process) {
         ReadableTuple3i max = box.calculateCornerMaxExclusive();
 
         Point3i point = new Point3i();
@@ -194,12 +194,12 @@ public class IterateVoxelsBoundingBox {
      * @param <S> buffer-type for the <i>voxel-buffer</i> for {@code voxels1}).
      * @param <T> buffer-type for the <i>buffer</i> (for {@code voxels2}).
      */
-    public static <S,T> void withTwoMixedBuffers(
+    public static <S, T> void withTwoMixedBuffers(
             BoundingBox box,
             ReadableTuple3i shiftForSecond,
             Voxels<S> voxels1,
             Voxels<T> voxels2,
-            ProcessBufferBinaryMixed<S,T> process) {
+            ProcessBufferBinaryMixed<S, T> process) {
         ReadableTuple3i max = box.calculateCornerMaxExclusive();
 
         Point3i point = new Point3i();
@@ -224,7 +224,7 @@ public class IterateVoxelsBoundingBox {
             }
         }
     }
-    
+
     /**
      * Iterate over each voxel in a bounding-box - with <b>two</b> associated buffers for each slice
      * - until a predicate evaluates to true.

@@ -63,6 +63,7 @@ public interface ElementWriter<T> {
     int writeWithIndex(
             T element,
             String index,
-            IndexableOutputNameStyle outputNameStyle, OutputterChecked outputter)
+            IndexableOutputNameStyle outputNameStyle,
+            OutputterChecked outputter)
             throws OutputWriteFailedException;
 }

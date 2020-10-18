@@ -76,7 +76,7 @@ public class ChannelFixture {
     public static Channel createChannel(
             Extent extent, IntensityFunction createIntensity, VoxelDataType channelVoxelType) {
 
-        Dimensions dimensions = new Dimensions(extent, Optional.of(ImageResFixture.INSTANCE) );
+        Dimensions dimensions = new Dimensions(extent, Optional.of(ImageResFixture.INSTANCE));
 
         Channel channel =
                 ChannelFactory.instance().get(channelVoxelType).createEmptyInitialised(dimensions);

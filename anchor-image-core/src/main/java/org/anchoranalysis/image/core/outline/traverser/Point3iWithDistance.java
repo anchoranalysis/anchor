@@ -26,9 +26,9 @@
 
 package org.anchoranalysis.image.core.outline.traverser;
 
-import org.anchoranalysis.spatial.point.Point3i;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.anchoranalysis.spatial.point.Point3i;
 
 @RequiredArgsConstructor
 class Point3iWithDistance {

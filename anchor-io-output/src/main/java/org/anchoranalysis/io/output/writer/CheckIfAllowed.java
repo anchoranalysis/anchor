@@ -75,9 +75,10 @@ public class CheckIfAllowed implements Writer {
         return writer.createSubdirectory(
                 outputName, manifestDescription, manifestFolder, inheritOutputRulesAndRecording);
     }
-    
+
     @Override
-    public <T> boolean write(String outputName, ElementWriterSupplier<T> elementWriter, ElementSupplier<T> element)
+    public <T> boolean write(
+            String outputName, ElementWriterSupplier<T> elementWriter, ElementSupplier<T> element)
             throws OutputWriteFailedException {
 
         if (!outputEnabled.isOutputEnabled(outputName)) {
@@ -90,7 +91,7 @@ public class CheckIfAllowed implements Writer {
 
         return true;
     }
-    
+
     @Override
     public <T> int writeWithIndex(
             IndexableOutputNameStyle outputNameStyle,

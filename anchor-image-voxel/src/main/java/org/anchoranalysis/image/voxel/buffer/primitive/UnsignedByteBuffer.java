@@ -25,10 +25,10 @@
  */
 package org.anchoranalysis.image.voxel.buffer.primitive;
 
+import com.google.common.base.Preconditions;
 import java.nio.ByteBuffer;
 import lombok.Getter;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
-import com.google.common.base.Preconditions;
 
 /**
  * Wraps a {@code ByteBuffer} but automatically performs conversion to {@code int}.
@@ -252,9 +252,9 @@ public final class UnsignedByteBuffer extends UnsignedBufferAsInt {
     /**
      * The array of the buffer ala {@link ByteBuffer#array}.
      *
-     * <p>Unlike {@link ByteBuffer#array} an array will always be returned,
-     * copying it into a newly created array, if it cannot be directly accessed.
-     * 
+     * <p>Unlike {@link ByteBuffer#array} an array will always be returned, copying it into a newly
+     * created array, if it cannot be directly accessed.
+     *
      * @return the array
      */
     public final byte[] array() {
@@ -262,9 +262,7 @@ public final class UnsignedByteBuffer extends UnsignedBufferAsInt {
         return delegate.array();
     }
 
-    /**
-     * Rewinds the buffer ala {@link ByteBuffer#rewind}.
-     */
+    /** Rewinds the buffer ala {@link ByteBuffer#rewind}. */
     public final void rewind() {
         delegate.rewind();
     }

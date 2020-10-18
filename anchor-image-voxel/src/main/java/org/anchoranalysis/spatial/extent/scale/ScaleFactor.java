@@ -47,10 +47,10 @@ public final class ScaleFactor {
     public ScaleFactor(double factor) {
         this(factor, factor);
     }
-    
+
     public ScaleFactor(double x, double y) {
-        Preconditions.checkArgument(x>0);
-        Preconditions.checkArgument(y>0);
+        Preconditions.checkArgument(x > 0);
+        Preconditions.checkArgument(y > 0);
         this.x = x;
         this.y = y;
     }

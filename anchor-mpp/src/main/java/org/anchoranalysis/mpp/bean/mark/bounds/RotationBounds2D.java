@@ -26,9 +26,9 @@
 
 package org.anchoranalysis.mpp.bean.mark.bounds;
 
+import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
-import java.util.Optional;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.core.dimensions.Resolution;

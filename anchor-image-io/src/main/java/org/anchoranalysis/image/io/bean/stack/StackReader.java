@@ -37,13 +37,13 @@ public abstract class StackReader extends AnchorBean<StackReader> {
 
     /**
      * Opens a file at {@code path} that should contain only a single-stack.
-     * 
+     *
      * @param path the path of the reaster-file to open
      * @return the stack that has been read
-     * @throws ImageIOException if there is a series of stacks in the file, or if anything else goes wrong
+     * @throws ImageIOException if there is a series of stacks in the file, or if anything else goes
+     *     wrong
      */
-    public Stack readStack(Path path)
-            throws ImageIOException {
+    public Stack readStack(Path path) throws ImageIOException {
         OpenedRaster openedRaster = openFile(path);
 
         try {
@@ -56,6 +56,6 @@ public abstract class StackReader extends AnchorBean<StackReader> {
             openedRaster.close();
         }
     }
-    
+
     public abstract OpenedRaster openFile(Path path) throws ImageIOException;
 }

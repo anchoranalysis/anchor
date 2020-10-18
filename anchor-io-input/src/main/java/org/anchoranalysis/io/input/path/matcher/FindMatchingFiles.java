@@ -62,7 +62,10 @@ public class FindMatchingFiles {
             if (recursive) {
                 traversal =
                         TraverseDirectoryForProgressReporter.traverseRecursive(
-                                directory, 20, constraints.getPredicates().getDirectory(), constraints.getMaxDirectoryDepth());
+                                directory,
+                                20,
+                                constraints.getPredicates().getDirectory(),
+                                constraints.getMaxDirectoryDepth());
             } else {
                 traversal =
                         TraverseDirectoryForProgressReporter.traverseNotRecursive(
@@ -85,7 +88,8 @@ public class FindMatchingFiles {
         List<File> listOut = new ArrayList<>();
 
         List<Path> leafDirectories =
-                filterLeafDirectories(traversal.getLeafDirectories(), constraints.getPredicates().getDirectory());
+                filterLeafDirectories(
+                        traversal.getLeafDirectories(), constraints.getPredicates().getDirectory());
 
         ProgressReporterIncrement pri = new ProgressReporterIncrement(progressReporter);
         pri.open();
@@ -141,8 +145,7 @@ public class FindMatchingFiles {
                 WalkSingleDirectory.apply(dirProgress, pathMatchConstraints, listOut);
             } catch (FindFilesException e) {
                 if (acceptDirectoryErrors) {
-                    logger.errorReporter()
-                            .recordError(FindMatchingFiles.class, e);
+                    logger.errorReporter().recordError(FindMatchingFiles.class, e);
                 } else {
                     // Rethrow the exception
                     throw e;

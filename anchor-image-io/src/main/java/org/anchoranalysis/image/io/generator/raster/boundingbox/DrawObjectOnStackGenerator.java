@@ -56,8 +56,7 @@ import org.anchoranalysis.spatial.point.Point3i;
  *
  * @author Owen Feehan
  */
-public class DrawObjectOnStackGenerator
-        extends RasterGenerator<BoundedList<ObjectMask>> {
+public class DrawObjectOnStackGenerator extends RasterGenerator<BoundedList<ObjectMask>> {
 
     private static final ManifestDescription MANIFEST_DESCRIPTION =
             new ManifestDescription("raster", "extractedObjectOutline");
@@ -169,7 +168,8 @@ public class DrawObjectOnStackGenerator
                 new ObjectCollectionWithProperties(objectsForDrawing));
     }
 
-    private Either<Dimensions, DisplayStack> createBackground(BoundedList<ObjectMask> element) throws OutputWriteFailedException {
+    private Either<Dimensions, DisplayStack> createBackground(BoundedList<ObjectMask> element)
+            throws OutputWriteFailedException {
 
         if (!backgroundGenerator.isPresent()) {
             // Exit early if there's no background to be extracted

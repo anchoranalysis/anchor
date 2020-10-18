@@ -36,10 +36,10 @@ import org.anchoranalysis.io.manifest.Manifest;
 import org.anchoranalysis.io.output.bean.rules.OutputEnabledRules;
 import org.anchoranalysis.io.output.outputter.BindFailedException;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
-import org.anchoranalysis.io.output.path.PathPrefixerException;
 import org.anchoranalysis.io.output.path.DirectoryWithPrefix;
 import org.anchoranalysis.io.output.path.FilePathPrefixerContext;
 import org.anchoranalysis.io.output.path.PathPrefixer;
+import org.anchoranalysis.io.output.path.PathPrefixerException;
 import org.anchoranalysis.io.output.recorded.RecordedOutputsWithRules;
 
 /**
@@ -56,8 +56,8 @@ public class OutputManager extends AnchorBean<OutputManager> {
     /**
      * Determines a prefix to use when outputting a file based upon an input-path.
      *
-     * <p>This method is called with a binding path from the input to determine a
-     * output prefix for each input to an experiment.
+     * <p>This method is called with a binding path from the input to determine a output prefix for
+     * each input to an experiment.
      */
     @BeanField @Getter @Setter private PathPrefixer filePathPrefixer;
 

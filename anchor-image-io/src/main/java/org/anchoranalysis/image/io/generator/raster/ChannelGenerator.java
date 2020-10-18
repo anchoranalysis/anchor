@@ -44,7 +44,7 @@ public class ChannelGenerator extends RasterGenerator<Channel> {
 
     /** Function that is associated in the manifest with this output. */
     private final String manifestFunction;
-    
+
     @Override
     public Stack transform(Channel element) throws OutputWriteFailedException {
         return new Stack(element);

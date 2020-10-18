@@ -42,10 +42,7 @@ public abstract class SupportsTimeSeries extends ImageJRasterWriter {
 
     @Override
     public void writeStackSeries(
-            StackSeries stackSeries,
-            Path filePath,
-            boolean makeRGB,
-            StackWriteOptions writeOptions)
+            StackSeries stackSeries, Path filePath, boolean makeRGB, StackWriteOptions writeOptions)
             throws ImageIOException {
 
         try {

@@ -26,11 +26,11 @@
 
 package org.anchoranalysis.mpp.bean.mark.bounds;
 
+import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import java.util.Optional;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.mpp.bean.bound.Bound;

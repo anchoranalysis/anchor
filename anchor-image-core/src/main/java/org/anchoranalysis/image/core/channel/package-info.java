@@ -24,7 +24,7 @@
  * #L%
  */
 /**
- * The {@link org.anchoranalysis.image.core.channel.Channel} core data-class and related operations and
- * converters.
+ * The {@link org.anchoranalysis.image.core.channel.Channel} core data-class and related operations
+ * and converters.
  */
 package org.anchoranalysis.image.core.channel;

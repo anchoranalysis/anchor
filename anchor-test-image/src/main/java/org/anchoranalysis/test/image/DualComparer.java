@@ -148,16 +148,18 @@ public class DualComparer {
         Path dir2 = loaderImage2.resolveTestPath(path);
         return DirectoriesComparer.areDirectoriesEqual(dir1, dir2);
     }
-    
+
     /**
      * Copies a file from its path in the first loader, to its path in the second loder.
-     * 
+     *
      * <p>Any existing file is replaced.
-     * 
+     *
      * @param path relative-path (compared to root of both loaders) of files to copy
      * @throws IOException if copyign fails
      */
     public void copyFromPath1ToPath2(String path) throws IOException {
-        FileUtils.copyFile(loaderImage1.resolveTestPath(path).toFile(), loaderImage2.resolveTestPath(path).toFile());
+        FileUtils.copyFile(
+                loaderImage1.resolveTestPath(path).toFile(),
+                loaderImage2.resolveTestPath(path).toFile());
     }
 }

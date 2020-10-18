@@ -48,12 +48,12 @@ public abstract class PeriodicSubdirectoryReporter<T>
         extends ReporterInterval<VoxelizedMarksWithEnergy> {
 
     protected static final int NUMBER_DIGITS_IN_OUTPUT = 10;
-    
+
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private String outputName;
     // END BEAN PROPER
 
-    private OutputSequenceIndexed<T,Integer> sequenceWriter;
+    private OutputSequenceIndexed<T, Integer> sequenceWriter;
 
     private OutputterChecked parentOutputter;
 
@@ -90,19 +90,18 @@ public abstract class PeriodicSubdirectoryReporter<T>
             // NOTHING TO DO
         }
     }
-    
+
     // We setup the manifest from a Generator
-    protected void init(Generator<T> generator)  // NOSONAR
+    protected void init(Generator<T> generator) // NOSONAR
             throws OutputWriteFailedException {
-        
-        OutputPatternIntegerSuffix pattern = new OutputPatternIntegerSuffix(
-            outputName,
-            NUMBER_DIGITS_IN_OUTPUT,
-            true,
-            Optional.empty()
-        );
-        
-        this.sequenceWriter = new OutputSequenceFactory<>(generator, getParentOutputter()).incrementingIntegers(pattern, 0, getAggInterval());
+
+        OutputPatternIntegerSuffix pattern =
+                new OutputPatternIntegerSuffix(
+                        outputName, NUMBER_DIGITS_IN_OUTPUT, true, Optional.empty());
+
+        this.sequenceWriter =
+                new OutputSequenceFactory<>(generator, getParentOutputter())
+                        .incrementingIntegers(pattern, 0, getAggInterval());
     }
 
     @Override
@@ -119,10 +118,8 @@ public abstract class PeriodicSubdirectoryReporter<T>
 
     @Override
     public void reportEnd(FeedbackEndParameters<VoxelizedMarksWithEnergy> params)
-            throws ReporterException {
+            throws ReporterException {}
 
-    }
-    
     protected abstract Optional<T> generateIterableElement(
             Reporting<VoxelizedMarksWithEnergy> reporting) throws ReporterException;
 

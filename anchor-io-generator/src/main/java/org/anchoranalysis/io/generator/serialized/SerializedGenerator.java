@@ -27,10 +27,10 @@
 package org.anchoranalysis.io.generator.serialized;
 
 import java.util.Optional;
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.io.generator.OneStageGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
-import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public abstract class SerializedGenerator<T> extends OneStageGenerator<T> {

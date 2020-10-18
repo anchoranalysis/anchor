@@ -65,7 +65,9 @@ public class RootDirectory extends MutableDirectory implements Serializable {
     }
 
     @Override
-    public void findFile(List<OutputtedFile> foundList, Predicate<OutputtedFile> predicate, boolean recursive) throws FindFailedException {
+    public void findFile(
+            List<OutputtedFile> foundList, Predicate<OutputtedFile> predicate, boolean recursive)
+            throws FindFailedException {
         delegate.findFile(foundList, predicate, recursive);
     }
 

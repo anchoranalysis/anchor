@@ -87,8 +87,7 @@ public abstract class ImageJRasterWriter extends StackWriter {
      * @param makeRGB if true, the image is saved as a RGB image rather than independent channels.
      * @throws ImageIOException if anything goes wrong writing.
      */
-    protected void writeStackTime(Stack stack, Path path, boolean makeRGB)
-            throws ImageIOException {
+    protected void writeStackTime(Stack stack, Path path, boolean makeRGB) throws ImageIOException {
 
         log.debug(String.format("Writing image %s", path));
 

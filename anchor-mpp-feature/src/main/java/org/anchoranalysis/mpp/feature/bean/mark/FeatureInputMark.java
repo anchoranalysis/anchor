@@ -46,7 +46,7 @@ public class FeatureInputMark implements FeatureInputParams {
     private final Optional<KeyValueParams> params;
 
     public FeatureInputMark(Mark mark, Optional<Dimensions> dimensions) {
-        this(mark, dimensions, Optional.empty() );
+        this(mark, dimensions, Optional.empty());
     }
 
     public FeatureInputMark(Mark mark, Dimensions dimensions, KeyValueParams params) {

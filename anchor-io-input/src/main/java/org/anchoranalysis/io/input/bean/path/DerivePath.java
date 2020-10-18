@@ -34,45 +34,40 @@ import org.anchoranalysis.io.input.path.DerivePathException;
 
 /**
  * Derives a path from an existing path.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public abstract class DerivePath extends AnchorBean<DerivePath> {
-    
+
     /**
      * Derives a new path from an existing path.
-     * 
+     *
      * @param source the path to derive from.
      * @param debugMode true if debug-mode is activated
      * @return the derived path.
-     * @throws DerivePathException if {@code source} supplies a {@link Optional#empty} or anything else goes wrong.
+     * @throws DerivePathException if {@code source} supplies a {@link Optional#empty} or anything
+     *     else goes wrong.
      */
-    public Path deriveFrom(
-            Supplier<Optional<Path>> source,
-            boolean debugMode)
+    public Path deriveFrom(Supplier<Optional<Path>> source, boolean debugMode)
             throws DerivePathException {
         return deriveFrom(
-                        source
-                                .get()
-                                .orElseThrow(DerivePath::bindingPathMissingException),
+                        source.get().orElseThrow(DerivePath::bindingPathMissingException),
                         debugMode)
                 .toAbsolutePath()
                 .normalize();
     }
-    
+
     /**
      * Derives a new path from an existing path.
-     * 
+     *
      * @param source the path to derive from.
      * @param debugMode true if debug-mode is activated
      * @return the derived path.
      * @throws DerivePathException if anything goes wrong
      */
     public abstract Path deriveFrom(Path source, boolean debugMode) throws DerivePathException;
-    
+
     private static DerivePathException bindingPathMissingException() {
-        return new DerivePathException(
-                "An input-path must exist for this operation");
+        return new DerivePathException("An input-path must exist for this operation");
     }
 }

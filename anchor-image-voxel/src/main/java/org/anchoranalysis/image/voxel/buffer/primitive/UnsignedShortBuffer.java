@@ -25,10 +25,10 @@
  */
 package org.anchoranalysis.image.voxel.buffer.primitive;
 
+import com.google.common.base.Preconditions;
 import java.nio.ShortBuffer;
 import lombok.Getter;
 import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
-import com.google.common.base.Preconditions;
 
 /**
  * Wraps a {@code ShortBuffer} but automatically performs conversion to {@code int}.
@@ -257,8 +257,8 @@ public final class UnsignedShortBuffer extends UnsignedBufferAsInt {
     /**
      * The array of the buffer ala {@link ShortBuffer#array}.
      *
-     * <p>Unlike {@link ShortBuffer#array} an array will always be returned,
-     * copying it into a newly created array, if it cannot be directly accessed.
+     * <p>Unlike {@link ShortBuffer#array} an array will always be returned, copying it into a newly
+     * created array, if it cannot be directly accessed.
      *
      * @return the array
      */

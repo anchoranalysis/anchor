@@ -89,7 +89,7 @@ public class OutputFeatureTable extends ImageBean<OutputFeatureTable> {
                         () -> createGenerator(context.getLogger()),
                         this::createObjectsWrapException);
     }
-    
+
     private ObjectCollection createObjectsWrapException() throws OutputWriteFailedException {
         try {
             return objects.create();
@@ -102,7 +102,7 @@ public class OutputFeatureTable extends ImageBean<OutputFeatureTable> {
             throws OutputWriteFailedException {
         try {
             return new ObjectFeatureListCSVGenerator(
-                            feature, getInitializationParameters().getSharedObjects(), logger);
+                    feature, getInitializationParameters().getSharedObjects(), logger);
         } catch (CreateException e) {
             throw new OutputWriteFailedException(e);
         }

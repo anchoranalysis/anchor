@@ -74,7 +74,10 @@ public class PathDifference {
             return calculateDifference(base, all);
         } catch (IOException e) {
             throw new PathDifferenceException(
-                String.format("Cannot find difference between two paths:%n%s%n%s", baseDirectoryPath, filePath), e );
+                    String.format(
+                            "Cannot find difference between two paths:%n%s%n%s",
+                            baseDirectoryPath, filePath),
+                    e);
         }
     }
 

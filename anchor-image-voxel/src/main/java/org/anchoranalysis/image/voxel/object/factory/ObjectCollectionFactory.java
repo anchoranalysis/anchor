@@ -174,8 +174,8 @@ public class ObjectCollectionFactory {
     }
 
     /**
-     * Creates a new collection with elements from the parameter-list of {@link BinaryVoxels} converting
-     * the voxels in their entireity to an object-mask at the origin.
+     * Creates a new collection with elements from the parameter-list of {@link BinaryVoxels}
+     * converting the voxels in their entireity to an object-mask at the origin.
      *
      * @param masks object-mask to add to collection
      */

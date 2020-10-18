@@ -69,16 +69,17 @@ public class AlwaysAllowed implements Writer {
                         manifestFolder,
                         inheritOutputRulesAndRecording));
     }
-    
+
     // Write a file without checking if the outputName is allowed
     @Override
-    public <T> boolean write(String outputName, ElementWriterSupplier<T> elementWriter, ElementSupplier<T> element)
+    public <T> boolean write(
+            String outputName, ElementWriterSupplier<T> elementWriter, ElementSupplier<T> element)
             throws OutputWriteFailedException {
         maybeExecutePreop();
         elementWriter.get().write(element.get(), new SimpleOutputNameStyle(outputName), outputter);
         return true;
     }
-    
+
     @Override
     public <T> int writeWithIndex(
             IndexableOutputNameStyle outputNameStyle,

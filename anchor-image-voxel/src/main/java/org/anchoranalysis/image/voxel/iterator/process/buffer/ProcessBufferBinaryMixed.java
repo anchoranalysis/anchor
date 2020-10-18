@@ -32,8 +32,8 @@ import org.anchoranalysis.image.voxel.iterator.process.ProcessPoint;
 import org.anchoranalysis.spatial.point.Point3i;
 
 /**
- * Processes a 3D point like {@link ProcessPoint} but also retrieves both <b>one</b> {@link VoxelBuffer} for
- * the current z-slice and <b>one</b> {@link Buffer} for the current z-slice.
+ * Processes a 3D point like {@link ProcessPoint} but also retrieves both <b>one</b> {@link
+ * VoxelBuffer} for the current z-slice and <b>one</b> {@link Buffer} for the current z-slice.
  *
  * <p>It is very similar to {@link ProcessBufferUnary} but uses two {@link Buffer} of the same type
  * instead of a single one.
@@ -43,7 +43,7 @@ import org.anchoranalysis.spatial.point.Point3i;
  * @author Owen Feehan
  */
 @FunctionalInterface
-public interface ProcessBufferBinaryMixed<S,T> {
+public interface ProcessBufferBinaryMixed<S, T> {
 
     /** Notifies the processor that there has been a change in slice (z global coordinate) */
     default void notifyChangeSlice(int z) {}

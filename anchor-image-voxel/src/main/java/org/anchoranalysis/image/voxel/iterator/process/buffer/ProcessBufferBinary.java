@@ -42,7 +42,7 @@ import org.anchoranalysis.spatial.point.Point3i;
  * @author Owen Feehan
  */
 @FunctionalInterface
-public interface ProcessBufferBinary<S,T> {
+public interface ProcessBufferBinary<S, T> {
 
     /** Notifies the processor that there has been a change in slice (z global coordinate) */
     default void notifyChangeSlice(int z) {}

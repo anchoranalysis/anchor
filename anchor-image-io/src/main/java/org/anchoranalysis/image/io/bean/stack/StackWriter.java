@@ -93,9 +93,6 @@ public abstract class StackWriter extends AnchorBean<StackWriter> {
      * @throws ImageIOException
      */
     public abstract void writeStackSeries(
-            StackSeries stackSeries,
-            Path filePath,
-            boolean makeRGB,
-            StackWriteOptions writeOptions)
+            StackSeries stackSeries, Path filePath, boolean makeRGB, StackWriteOptions writeOptions)
             throws ImageIOException;
 }

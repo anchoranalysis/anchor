@@ -33,9 +33,8 @@ import org.anchoranalysis.core.serialize.Deserializer;
 
 /**
  * Applies a deserializer to each file in a directory with a sequence of files.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  * @param <T> type to deserialize a particular file to
  */
 public class SequencedDirectoryDeserializer<T> extends DeriveElementsFromSequencedDirectory<T> {
@@ -44,11 +43,13 @@ public class SequencedDirectoryDeserializer<T> extends DeriveElementsFromSequenc
 
     /**
      * Creates from a manifest-directory entry.
-     * 
-     * @param directory the manifest entry for directory in which a sequence of serialized files exists.
+     *
+     * @param directory the manifest entry for directory in which a sequence of serialized files
+     *     exists.
      * @param deserializer the deserializer to use on each file in the sequence
      */
-    public SequencedDirectoryDeserializer(SequencedDirectory directory, Deserializer<T> deserializer) {
+    public SequencedDirectoryDeserializer(
+            SequencedDirectory directory, Deserializer<T> deserializer) {
         super(directory);
         this.deserializer = deserializer;
     }

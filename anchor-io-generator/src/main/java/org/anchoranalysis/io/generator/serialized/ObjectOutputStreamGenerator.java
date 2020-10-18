@@ -40,7 +40,7 @@ public class ObjectOutputStreamGenerator<T extends Serializable> extends Seriali
     public ObjectOutputStreamGenerator() {
         this(Optional.empty());
     }
-    
+
     public ObjectOutputStreamGenerator(Optional<String> manifestFunction) {
         super(manifestFunction);
     }

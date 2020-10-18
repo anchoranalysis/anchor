@@ -36,7 +36,7 @@ public class InputReadFailedException extends AnchorCheckedException {
     public InputReadFailedException(String message) {
         super(message);
     }
-    
+
     public InputReadFailedException(Throwable cause) {
         super(cause);
     }

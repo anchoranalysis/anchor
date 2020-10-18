@@ -64,18 +64,19 @@ public class Scaler {
      * @return a new collection with scaled object-masks (existing object-masks are unaltered)
      * @throws OperationFailedException
      */
-    public static ScaledElements<ObjectMask> scaleObjects(ObjectCollection objects, ScaleFactor factor) throws OperationFailedException {
+    public static ScaledElements<ObjectMask> scaleObjects(
+            ObjectCollection objects, ScaleFactor factor) throws OperationFailedException {
         return scaleObjects(objects, factor, Optional.empty(), Optional.empty());
     }
-    
+
     /**
      * Scales every object-mask in a collection, ensuring the results remain inside a particular
      * region.
-     * 
+     *
      * <p>This is an <b>immutable</b> operation.
-     * 
-     * <p>Like {@link #scaleObjects(ObjectCollection,ScaleFactor)} but ensured the scaled-results will always be inside a
-     * particular extent (clipping if necessary)
+     *
+     * <p>Like {@link #scaleObjects(ObjectCollection,ScaleFactor)} but ensured the scaled-results
+     * will always be inside a particular extent (clipping if necessary)
      *
      * @param objects objects to scale
      * @param factor scaling-factor
@@ -97,7 +98,7 @@ public class Scaler {
             throw new OperationFailedException(e);
         }
     }
-    
+
     /**
      * Scales every object-mask in a collection, allowing for additional manipulation before and
      * after scaling.

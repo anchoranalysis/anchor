@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-io-input
+ * anchor-test-io-output
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -23,25 +23,6 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.io.input.path.matcher;
+package org.anchoranalysis.test.io.output;
 
-import java.nio.file.Path;
-import java.util.function.Predicate;
-import lombok.AllArgsConstructor;
-import lombok.Value;
-
-/**
- * A {@code Predicate<Path} for both a file and a directory.
- *
- * @author Owen Feehan
- */
-@AllArgsConstructor
-@Value
-public class DualPathPredicates {
-
-    /** Only accepts files where the predicate returns true */
-    private Predicate<Path> file;
-
-    /** Only accepts any containing directories where the predicate returns true */
-    private Predicate<Path> directory;
-}
+public class PlaceholderClass {}

@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.annotation.io.assignment.generator;
 
+import io.vavr.Tuple2;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -56,7 +57,6 @@ import org.anchoranalysis.image.voxel.object.factory.ObjectCollectionFactory;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.overlay.bean.DrawObject;
-import io.vavr.Tuple2;
 
 /**
  * Outputs a raster showing an {@link Assignment} on a background.
@@ -74,19 +74,20 @@ public class AssignmentGenerator extends RasterGenerator<Assignment> {
     private final DisplayStack background;
 
     private final IntFunction<ColorPool> colorPoolCreator;
-        
+
     /** Whether to flatten (maximum intensity projection) in the z-dimension. */
     private final boolean flatten;
-    
+
     private final Tuple2<String, String> names;
 
     private final boolean appendNumberBrackets;
-    
+
     /** How many pixels should the outline be around objects */
     private final int outlineWidth;
     // END REQUIRED ARGUMENTS
 
-    private StackGenerator delegate = new StackGenerator(true, Optional.of("assignmentComparison"), false);
+    private StackGenerator delegate =
+            new StackGenerator(true, Optional.of("assignmentComparison"), false);
 
     @Override
     public boolean isRGB() {
@@ -97,13 +98,13 @@ public class AssignmentGenerator extends RasterGenerator<Assignment> {
     public Stack transform(Assignment element) throws OutputWriteFailedException {
 
         ColorPool colorPool = colorPoolCreator.apply(element.numberPaired());
-        
+
         ArrangeRaster stackProvider =
                 createTiledStackProvider(
                         createRGBOutlineStack(true, element, colorPool),
                         createRGBOutlineStack(false, element, colorPool),
-                        createLabel(element,true),
-                        createLabel(element,false));
+                        createLabel(element, true),
+                        createLabel(element, false));
         try {
             return delegate.transform(stackProvider.create());
 
@@ -147,10 +148,11 @@ public class AssignmentGenerator extends RasterGenerator<Assignment> {
             final List<ObjectMask> otherObjects)
             throws OutputWriteFailedException, OperationFailedException {
         ObjectCollection objects = ObjectCollectionFactory.of(matchedObjects, otherObjects);
-        DrawObjectsGenerator generator = createGenerator(
-                    otherObjects,
-                    colorPool.createColors(otherObjects.size()),
-                    colorPool.isDifferentColorsForMatches());
+        DrawObjectsGenerator generator =
+                createGenerator(
+                        otherObjects,
+                        colorPool.createColors(otherObjects.size()),
+                        colorPool.isDifferentColorsForMatches());
         return generator.transform(new ObjectCollectionWithProperties(objects));
     }
 
@@ -167,10 +169,8 @@ public class AssignmentGenerator extends RasterGenerator<Assignment> {
         }
     }
 
-    private DrawObjectsGenerator createGenerator(
-            DrawObject drawObject, ColorList colors) {
-        return DrawObjectsGenerator.withBackgroundAndColors(
-                drawObject, background, colors);
+    private DrawObjectsGenerator createGenerator(DrawObject drawObject, ColorList colors) {
+        return DrawObjectsGenerator.withBackgroundAndColors(drawObject, background, colors);
     }
 
     private DrawObject createConditionalWriter(List<ObjectMask> otherObjects, DrawObject writer) {
@@ -178,13 +178,13 @@ public class AssignmentGenerator extends RasterGenerator<Assignment> {
                 (ObjectWithProperties object, RGBStack stack, int id) ->
                         otherObjects.contains(object.withoutProperties()),
                 writer,
-                new Filled() );
+                new Filled());
     }
 
     private DrawObject createOutlineWriter() {
         return new Outline(outlineWidth, !flatten);
     }
-    
+
     private String createLabel(Assignment assignment, boolean left) {
         String name = left ? names._1() : names._2();
         return maybeAppendNumber(appendNumberBrackets, name, assignment, true);

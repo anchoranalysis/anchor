@@ -36,9 +36,8 @@ import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 
 /**
  * Settings and methods for writing to the filesystem from a generator.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class GeneratorOutputter {

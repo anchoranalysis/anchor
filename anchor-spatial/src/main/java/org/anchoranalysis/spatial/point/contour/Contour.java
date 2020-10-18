@@ -28,10 +28,10 @@ package org.anchoranalysis.spatial.point.contour;
 
 import java.util.ArrayList;
 import java.util.List;
+import lombok.Getter;
 import org.anchoranalysis.spatial.point.Point3f;
 import org.anchoranalysis.spatial.point.Point3i;
 import org.anchoranalysis.spatial.point.PointConverter;
-import lombok.Getter;
 
 /**
  * A path of successively-neighbored points.

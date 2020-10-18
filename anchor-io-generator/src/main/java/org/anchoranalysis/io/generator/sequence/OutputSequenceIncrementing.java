@@ -32,31 +32,29 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.recorded.RecordingWriters;
 
 /**
- * A sequence of outputs that use the same generator, where each output increments an index by one in the filename.
- * 
- * @author Owen Feehan
+ * A sequence of outputs that use the same generator, where each output increments an index by one
+ * in the filename.
  *
+ * @author Owen Feehan
  * @param <T> element-type in generator
  */
 public class OutputSequenceIncrementing<T> implements OutputSequence {
 
-    private OutputSequenceIndexed<T,Integer> delegate;
+    private OutputSequenceIndexed<T, Integer> delegate;
 
     private int iteration = 0;
 
     // User-specified ManifestDescription for the folder
-    public OutputSequenceIncrementing(
-            BoundOutputter<T> parameters,
-            int startIndex
-    ) throws OutputWriteFailedException {
+    public OutputSequenceIncrementing(BoundOutputter<T> parameters, int startIndex)
+            throws OutputWriteFailedException {
         delegate = new OutputSequenceIndexed<>(parameters, new IncrementingIntegers(startIndex));
     }
 
     /**
      * Outputs an additional element in the sequence.
-     * 
+     *
      * <p>This method is <i>thread-safe</i>.
-     * 
+     *
      * @param element the element
      * @throws OutputWriteFailedException if the output cannot be successfully written.
      */

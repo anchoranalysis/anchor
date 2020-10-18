@@ -93,6 +93,7 @@ public class ThresholderGlobal extends Thresholder {
             VoxelsWrapper inputBuffer,
             Optional<Histogram> histogram,
             Optional<ObjectMask> objectMask) {
-        return histogram.orElseGet(() -> HistogramFromObjectsFactory.create(inputBuffer, objectMask));
+        return histogram.orElseGet(
+                () -> HistogramFromObjectsFactory.create(inputBuffer, objectMask));
     }
 }
