@@ -62,7 +62,7 @@ import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 /**
- * Allows comparison of an annotation with multiple other entities
+ * Allows comparison of an annotation with multiple other entities.
  *
  * @author Owen Feehan
  */

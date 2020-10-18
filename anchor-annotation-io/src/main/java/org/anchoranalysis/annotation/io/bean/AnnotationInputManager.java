@@ -29,7 +29,7 @@ package org.anchoranalysis.annotation.io.bean;
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.annotation.io.input.AnnotationWithStrategy;
+import org.anchoranalysis.annotation.io.AnnotationWithStrategy;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.functional.FunctionalProgress;
 import org.anchoranalysis.core.progress.ProgressReporter;

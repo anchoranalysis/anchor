@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.annotation.io.input;
+package org.anchoranalysis.annotation.io;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -40,7 +40,7 @@ import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.input.InputReadFailedException;
 
 /**
- * An annotation that has been combined with it's strategy
+ * An annotation that has been combined with its strategy.
  *
  * @author Owen Feehan
  */
