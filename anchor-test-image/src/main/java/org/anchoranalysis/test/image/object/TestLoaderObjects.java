@@ -48,7 +48,7 @@ public class TestLoaderObjects {
         this.loader = new TestLoaderImage(loader);
     }
 
-    public ObjectMask openLargestObjectFrom(String suffix) throws CreateException {
+    public ObjectMask openLargestObjectFrom(String suffix) {
         Stack stack = loader.openStackFromTestPath(path(suffix));
         return largestObjectFromStack(stack);
     }
@@ -60,9 +60,9 @@ public class TestLoaderObjects {
     }
 
     private static ObjectMask findLargestObject(ObjectCollection objects) {
-        return objects.streamStandardJava()
-                .max(TestLoaderObjects::compareObjectsByNumberVoxelsOn) // NOSONAR
-                .get();
+        return objects.streamStandardJava()     // NOSONAR
+                .max(TestLoaderObjects::compareObjectsByNumberVoxelsOn) 
+                .get();     
     }
 
     private static int compareObjectsByNumberVoxelsOn(ObjectMask object1, ObjectMask object2) {

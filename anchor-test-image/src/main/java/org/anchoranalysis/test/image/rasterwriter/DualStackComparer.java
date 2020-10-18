@@ -135,9 +135,9 @@ public class DualStackComparer {
                 Path copyTo = Paths.get(PATH_COPY_TO.get()).resolve(addSelectedExtension(filename));
                 Files.copy(path, copyTo);
             } else {
-                System.err.printf(
+                System.err.printf(  // NOSONAR
                         "The test wrote a file to temporary-folder directory at:%n%s%n",
-                        path); // NOSONAR
+                        path);
                 throw new IOException(
                         String.format(
                                 "The comparer threw an IOException, which likely means it cannot find an appropriate raster to compare against for %s.",

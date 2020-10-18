@@ -77,10 +77,10 @@ public class IntegerSuffixOutputNameStyle extends IndexableOutputNameStyle {
 
     @Override
     protected String outputFormatString() {
-        return combineIntegerAndOutputName(getOutputName(), integerFormatSpecifier(numberDigits));
+        return combineIntegerAndOutputName(integerFormatSpecifier(numberDigits));
     }
 
-    private String combineIntegerAndOutputName(String outputName, String integerFormatString) {
+    private String combineIntegerAndOutputName(String integerFormatString) {
         if (!prefix.isEmpty()) {
             return prefix + "_" + integerFormatString;
         } else {

@@ -32,6 +32,7 @@ import java.util.function.DoubleConsumer;
 import java.util.function.Function;
 import loci.formats.IFormatReader;
 import loci.formats.meta.IMetadata;
+import lombok.AllArgsConstructor;
 import ome.units.UNITS;
 import ome.units.quantity.Length;
 import org.anchoranalysis.core.error.CreateException;
@@ -41,14 +42,10 @@ import org.anchoranalysis.io.bioformats.bean.options.ReadOptions;
 import org.anchoranalysis.spatial.extent.Extent;
 import org.anchoranalysis.spatial.point.Point3d;
 
+@AllArgsConstructor
 public class DimensionsCreator {
 
-    private IMetadata lociMetadata;
-
-    public DimensionsCreator(IMetadata lociMetadata) {
-        super();
-        this.lociMetadata = lociMetadata;
-    }
+    private final IMetadata lociMetadata;
 
     public Dimensions apply(IFormatReader reader, ReadOptions readOptions, int seriesIndex)
             throws CreateException {
@@ -56,7 +53,7 @@ public class DimensionsCreator {
 
         Extent extent = new Extent(reader.getSizeX(), reader.getSizeY(), readOptions.sizeZ(reader));
 
-        return new Dimensions(extent, maybeConstructResolution(reader, seriesIndex));
+        return new Dimensions(extent, maybeConstructResolution(seriesIndex));
     }
 
     /**
@@ -65,7 +62,7 @@ public class DimensionsCreator {
      *
      * @throws CreateException
      */
-    private Optional<Resolution> maybeConstructResolution(IFormatReader reader, int seriesIndex)
+    private Optional<Resolution> maybeConstructResolution(int seriesIndex)
             throws CreateException {
 
         // By default the resolution is 1 in all dimensions
