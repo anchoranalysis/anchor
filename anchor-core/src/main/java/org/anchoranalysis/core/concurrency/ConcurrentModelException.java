@@ -25,7 +25,7 @@
  */
 package org.anchoranalysis.core.concurrency;
 
-import org.anchoranalysis.core.error.AnchorCheckedException;
+import org.anchoranalysis.core.exception.AnchorCheckedException;
 
 /**
  * This exception indicates that an error occurred when performing inference from a model

@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.io.manifest.sequencetype;
 
-import org.anchoranalysis.core.index.container.OrderProvider;
+import org.anchoranalysis.core.index.bounded.OrderProvider;
 
 public class IncrementingIntegers extends SequenceType<Integer> {
 

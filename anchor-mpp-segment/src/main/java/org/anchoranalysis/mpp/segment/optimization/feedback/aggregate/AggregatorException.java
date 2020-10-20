@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.mpp.segment.optimization.feedback.aggregate;
 
-import org.anchoranalysis.core.error.AnchorCheckedException;
+import org.anchoranalysis.core.exception.AnchorCheckedException;
 
 public class AggregatorException extends AnchorCheckedException {
 

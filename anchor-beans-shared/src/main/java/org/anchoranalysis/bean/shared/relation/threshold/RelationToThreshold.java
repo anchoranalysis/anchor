@@ -28,7 +28,7 @@ package org.anchoranalysis.bean.shared.relation.threshold;
 
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.GenerateUniqueParameterization;
-import org.anchoranalysis.core.relation.RelationToValue;
+import org.anchoranalysis.math.relation.RelationToValue;
 
 /**
  * A threshold and a relation to it, allowing for tests of a value in relation to a threshold.

@@ -28,9 +28,9 @@ package org.anchoranalysis.io.generator.sequence;
 
 import java.util.Optional;
 import lombok.Getter;
-import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
+import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.exception.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.manifest.file.FileType;
 import org.anchoranalysis.io.manifest.sequencetype.SequenceType;

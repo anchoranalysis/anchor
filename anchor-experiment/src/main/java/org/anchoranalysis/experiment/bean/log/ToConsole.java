@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.experiment.bean.log;
 
-import org.anchoranalysis.core.error.reporter.ErrorReporter;
+import org.anchoranalysis.core.log.error.ErrorReporter;
 import org.anchoranalysis.experiment.ExperimentExecutionArguments;
 import org.anchoranalysis.experiment.log.ConsoleMessageLogger;
 import org.anchoranalysis.experiment.log.StatefulMessageLogger;

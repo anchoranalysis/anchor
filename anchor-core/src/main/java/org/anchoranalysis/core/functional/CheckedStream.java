@@ -31,12 +31,12 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
-import org.anchoranalysis.core.functional.function.CheckedConsumer;
-import org.anchoranalysis.core.functional.function.CheckedFunction;
-import org.anchoranalysis.core.functional.function.CheckedIntFunction;
-import org.anchoranalysis.core.functional.function.CheckedPredicate;
-import org.anchoranalysis.core.functional.function.CheckedToIntFunction;
+import org.anchoranalysis.core.exception.friendly.AnchorFriendlyRuntimeException;
+import org.anchoranalysis.core.functional.checked.CheckedConsumer;
+import org.anchoranalysis.core.functional.checked.CheckedFunction;
+import org.anchoranalysis.core.functional.checked.CheckedIntFunction;
+import org.anchoranalysis.core.functional.checked.CheckedPredicate;
+import org.anchoranalysis.core.functional.checked.CheckedToIntFunction;
 
 /** Map operations for streams that can throw checked-exceptions */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)

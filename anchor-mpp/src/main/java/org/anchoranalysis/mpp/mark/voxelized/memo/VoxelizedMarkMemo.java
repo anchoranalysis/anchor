@@ -28,7 +28,7 @@ package org.anchoranalysis.mpp.mark.voxelized.memo;
 
 import lombok.Getter;
 import org.anchoranalysis.core.cache.CachedSupplier;
-import org.anchoranalysis.core.error.AnchorNeverOccursException;
+import org.anchoranalysis.core.exception.AnchorNeverOccursException;
 import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMap;
 import org.anchoranalysis.mpp.mark.Mark;

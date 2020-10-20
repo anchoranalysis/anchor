@@ -29,7 +29,7 @@ package org.anchoranalysis.image.voxel.factory.sliceindex;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferFactory;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedShortBuffer;
-import org.anchoranalysis.spatial.extent.Extent;
+import org.anchoranalysis.spatial.Extent;
 
 public class FromShort implements SliceBufferIndex<UnsignedShortBuffer> {
 

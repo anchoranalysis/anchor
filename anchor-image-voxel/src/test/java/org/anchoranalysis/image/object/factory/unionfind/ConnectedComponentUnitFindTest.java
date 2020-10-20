@@ -27,9 +27,8 @@
 package org.anchoranalysis.image.object.factory.unionfind;
 
 import static org.junit.Assert.*;
-
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.object.ObjectCollectionFixture;
 import org.anchoranalysis.image.object.ObjectMaskFixture;
 import org.anchoranalysis.image.voxel.assigner.VoxelsAssigner;
@@ -41,7 +40,7 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.image.voxel.object.factory.unionfind.ConnectedComponentUnionFind;
-import org.anchoranalysis.spatial.extent.Extent;
+import org.anchoranalysis.spatial.Extent;
 import org.junit.Before;
 import org.junit.Test;
 

@@ -29,9 +29,9 @@ package org.anchoranalysis.mpp.io.input;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.name.store.NamedProviderStore;
-import org.anchoranalysis.core.name.store.StoreSupplier;
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.identifier.provider.store.NamedProviderStore;
+import org.anchoranalysis.core.identifier.provider.store.StoreSupplier;
 
 /**
  * Stores objects as operations

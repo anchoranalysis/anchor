@@ -26,7 +26,7 @@
 package org.anchoranalysis.image.bean.spatial.direction;
 
 import org.anchoranalysis.bean.AnchorBean;
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.core.orientation.DirectionVector;
 
 /**

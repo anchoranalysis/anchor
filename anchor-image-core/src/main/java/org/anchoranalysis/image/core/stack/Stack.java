@@ -31,11 +31,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
-import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.core.functional.FunctionalIterate;
-import org.anchoranalysis.core.functional.function.CheckedBiFunction;
-import org.anchoranalysis.core.functional.function.CheckedUnaryOperator;
+import org.anchoranalysis.core.functional.checked.CheckedBiFunction;
+import org.anchoranalysis.core.functional.checked.CheckedUnaryOperator;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.core.channel.factory.ChannelFactorySingleType;
@@ -43,7 +43,7 @@ import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.dimensions.IncorrectImageSizeException;
 import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
-import org.anchoranalysis.spatial.extent.Extent;
+import org.anchoranalysis.spatial.Extent;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
 /**

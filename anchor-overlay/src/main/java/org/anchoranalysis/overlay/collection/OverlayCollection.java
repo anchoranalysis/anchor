@@ -31,13 +31,13 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.function.IntPredicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import org.anchoranalysis.core.index.IndicesSelection;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.overlay.Overlay;
 import org.anchoranalysis.overlay.writer.DrawOverlay;
-import org.anchoranalysis.spatial.extent.box.BoundingBox;
+import org.anchoranalysis.spatial.box.BoundingBox;
 
 public class OverlayCollection implements Iterable<Overlay> {
 
@@ -79,7 +79,7 @@ public class OverlayCollection implements Iterable<Overlay> {
     public Set<Integer> integerSet() {
         HashSet<Integer> set = new HashSet<>();
         for (Overlay ol : delegate) {
-            set.add(ol.getId());
+            set.add(ol.getIdentifier());
         }
         return set;
     }
@@ -135,14 +135,14 @@ public class OverlayCollection implements Iterable<Overlay> {
         return mergedNew;
     }
 
-    public OverlayCollection createSubset(IndicesSelection indices) {
+    public OverlayCollection createSubset(IntPredicate predicateOnIndex) {
 
         OverlayCollection out = new OverlayCollection();
 
         // This our current
-        for (Overlay ol : this) {
-            if (indices.contains(ol.getId())) {
-                out.add(ol);
+        for (Overlay overlay : this) {
+            if (predicateOnIndex.test(overlay.getIdentifier())) {
+                out.add(overlay);
             }
         }
 

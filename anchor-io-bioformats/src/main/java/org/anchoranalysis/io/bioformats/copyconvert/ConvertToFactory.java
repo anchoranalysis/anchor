@@ -30,7 +30,7 @@ import loci.formats.FormatTools;
 import loci.formats.IFormatReader;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.voxel.datatype.FloatVoxelType;
 import org.anchoranalysis.image.voxel.datatype.SignedShortVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;

@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.experiment.io;
 
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.io.input.bean.InputManager;
 
 /**

@@ -27,7 +27,7 @@
 package org.anchoranalysis.image.feature.session.merged;
 
 import lombok.Getter;
-import org.anchoranalysis.core.error.InitException;
+import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListFactory;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;

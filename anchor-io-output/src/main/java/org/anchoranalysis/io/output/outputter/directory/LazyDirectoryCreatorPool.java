@@ -34,8 +34,8 @@ import java.util.Map;
 import java.util.Optional;
 import lombok.Getter;
 import org.anchoranalysis.core.index.GetOperationFailedException;
-import org.anchoranalysis.core.path.PathDifference;
-import org.anchoranalysis.core.path.PathDifferenceException;
+import org.anchoranalysis.core.system.path.PathDifference;
+import org.anchoranalysis.core.system.path.PathDifferenceException;
 import org.anchoranalysis.io.output.writer.WriterExecuteBeforeEveryOperation;
 
 /**

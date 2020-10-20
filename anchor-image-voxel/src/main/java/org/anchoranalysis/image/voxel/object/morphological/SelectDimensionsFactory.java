@@ -25,9 +25,9 @@
  */
 package org.anchoranalysis.image.voxel.object.morphological;
 
+import org.anchoranalysis.core.exception.OperationFailedException;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.error.OperationFailedException;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class SelectDimensionsFactory {

@@ -25,7 +25,7 @@
  */
 package org.anchoranalysis.image.core.stack;
 
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.exception.CreateException;
 
 /** Provides a stack */
 public interface ProviderAsStack {

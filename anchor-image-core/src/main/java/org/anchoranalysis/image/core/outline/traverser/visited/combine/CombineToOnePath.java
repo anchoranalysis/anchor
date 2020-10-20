@@ -29,7 +29,7 @@ package org.anchoranalysis.image.core.outline.traverser.visited.combine;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.core.outline.traverser.path.ContiguousVoxelPath;
 import org.anchoranalysis.image.core.points.PointsNeighborChecker;
 

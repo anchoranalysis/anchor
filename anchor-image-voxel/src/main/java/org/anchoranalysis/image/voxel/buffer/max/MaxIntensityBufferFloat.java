@@ -28,7 +28,7 @@ package org.anchoranalysis.image.voxel.buffer.max;
 
 import java.nio.FloatBuffer;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
-import org.anchoranalysis.spatial.extent.Extent;
+import org.anchoranalysis.spatial.Extent;
 
 public class MaxIntensityBufferFloat extends MaxIntensityBuffer<FloatBuffer> {
 

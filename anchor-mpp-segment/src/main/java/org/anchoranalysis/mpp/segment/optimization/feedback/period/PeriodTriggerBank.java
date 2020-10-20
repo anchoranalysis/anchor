@@ -28,7 +28,7 @@ package org.anchoranalysis.mpp.segment.optimization.feedback.period;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.mpp.segment.optimization.step.Reporting;
 
 public class PeriodTriggerBank<S> {

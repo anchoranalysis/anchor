@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.mpp.bean.provider;
 
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.mpp.bean.bound.MarkBounds;
 
 public abstract class MarkBoundsProvider extends MPPProvider<MarkBoundsProvider, MarkBounds> {

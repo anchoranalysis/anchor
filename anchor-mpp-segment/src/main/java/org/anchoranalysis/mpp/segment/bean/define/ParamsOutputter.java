@@ -28,7 +28,7 @@ package org.anchoranalysis.mpp.segment.bean.define;
 
 import java.util.Optional;
 import lombok.AllArgsConstructor;
-import org.anchoranalysis.core.name.store.NamedProviderStore;
+import org.anchoranalysis.core.identifier.provider.store.NamedProviderStore;
 import org.anchoranalysis.image.bean.nonbean.init.CreateCombinedStack;
 import org.anchoranalysis.image.io.generator.histogram.HistogramCSVGenerator;
 import org.anchoranalysis.image.io.objects.ObjectCollectionWriter;

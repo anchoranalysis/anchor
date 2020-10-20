@@ -30,8 +30,8 @@ import java.util.List;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Value;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.functional.function.CheckedToDoubleBiFunction;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.functional.checked.CheckedToDoubleBiFunction;
 
 /**
  * Stores costs between all possible pairings between elements from two lists.

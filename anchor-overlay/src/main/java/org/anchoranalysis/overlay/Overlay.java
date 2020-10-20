@@ -27,14 +27,14 @@
 package org.anchoranalysis.overlay;
 
 import java.util.Optional;
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.image.core.object.properties.ObjectWithProperties;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
-import org.anchoranalysis.overlay.id.Identifiable;
+import org.anchoranalysis.overlay.identifier.Identifiable;
 import org.anchoranalysis.overlay.writer.DrawOverlay;
-import org.anchoranalysis.spatial.extent.box.BoundingBox;
+import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.point.Point3i;
 
 // What can be projected on top of a raster through the GUI

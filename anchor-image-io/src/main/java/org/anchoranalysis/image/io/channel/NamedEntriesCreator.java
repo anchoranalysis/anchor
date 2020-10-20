@@ -27,8 +27,8 @@
 package org.anchoranalysis.image.io.channel;
 
 import java.util.List;
-import org.anchoranalysis.core.error.AnchorNeverOccursException;
-import org.anchoranalysis.core.functional.function.CheckedFunction;
+import org.anchoranalysis.core.exception.AnchorNeverOccursException;
+import org.anchoranalysis.core.functional.checked.CheckedFunction;
 import org.anchoranalysis.image.io.bean.channel.map.ChannelEntry;
 
 public class NamedEntriesCreator

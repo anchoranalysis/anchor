@@ -25,7 +25,7 @@
  */
 package org.anchoranalysis.io.manifest.sequencetype;
 
-import org.anchoranalysis.core.index.container.BoundedRangeIncomplete;
+import org.anchoranalysis.core.index.bounded.BoundedRangeIncomplete;
 
 /**
  * An incomplete range of discrete integers (like {@link BoundedRangeIncomplete} but with a

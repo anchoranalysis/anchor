@@ -33,7 +33,7 @@ import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.image.voxel.factory.sliceindex.FromByte;
 import org.anchoranalysis.image.voxel.factory.sliceindex.SliceBufferIndex;
-import org.anchoranalysis.spatial.extent.Extent;
+import org.anchoranalysis.spatial.Extent;
 
 final class FactoryUnsignedByte implements VoxelsFactoryTypeBound<UnsignedByteBuffer> {
 

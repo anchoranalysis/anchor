@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.io.manifest.finder;
 
-import org.anchoranalysis.core.error.AnchorCheckedException;
+import org.anchoranalysis.core.exception.AnchorCheckedException;
 
 public class FindFailedException extends AnchorCheckedException {
 

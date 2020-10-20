@@ -35,10 +35,10 @@ import org.anchoranalysis.bean.initializable.params.BeanInitParams;
 import org.anchoranalysis.bean.initializable.property.PropertyInitializer;
 import org.anchoranalysis.bean.provider.Provider;
 import org.anchoranalysis.bean.store.BeanStoreAdder;
-import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.functional.function.CheckedFunction;
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.functional.checked.CheckedFunction;
+import org.anchoranalysis.core.identifier.provider.store.NamedProviderStore;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.core.name.store.NamedProviderStore;
 
 /**
  * Helps populates a {@link NamedProviderStore} from the contents of a {@link Define}.

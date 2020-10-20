@@ -29,12 +29,12 @@ package org.anchoranalysis.mpp.mark.points;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Stream;
-import org.anchoranalysis.core.error.OptionalOperationUnsupportedException;
+import org.anchoranalysis.core.exception.OptionalOperationUnsupportedException;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMembershipUtilities;
 import org.anchoranalysis.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.mpp.mark.Mark;
-import org.anchoranalysis.spatial.extent.box.BoundingBox;
+import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.point.Point3d;
 
 public class PointList extends PointListBase {

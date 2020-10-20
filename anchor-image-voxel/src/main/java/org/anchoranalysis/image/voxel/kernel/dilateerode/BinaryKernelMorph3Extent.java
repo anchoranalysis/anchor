@@ -29,7 +29,7 @@ package org.anchoranalysis.image.voxel.kernel.dilateerode;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
-import org.anchoranalysis.spatial.extent.Extent;
+import org.anchoranalysis.spatial.Extent;
 
 public abstract class BinaryKernelMorph3Extent extends BinaryKernelMorph3 {
 

@@ -31,11 +31,11 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.anchoranalysis.core.name.provider.NameValueSet;
-import org.anchoranalysis.core.name.value.SimpleNameValue;
+import org.anchoranalysis.core.identifier.name.SimpleNameValue;
+import org.anchoranalysis.core.identifier.provider.NameValueSet;
 import org.anchoranalysis.image.core.object.properties.ObjectWithProperties;
 import org.anchoranalysis.spatial.rotation.RotationMatrix;
-import org.anchoranalysis.spatial.rotation.RotationMatrix2DFromRadianCreator;
+import org.anchoranalysis.spatial.rotation.factory.RotateAngle2D;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -67,7 +67,7 @@ public class Orientation2D extends Orientation {
 
     @Override
     public RotationMatrix createRotationMatrix() {
-        return new RotationMatrix2DFromRadianCreator(angleRadians).createRotationMatrix();
+        return new RotateAngle2D(angleRadians).create();
     }
 
     @Override

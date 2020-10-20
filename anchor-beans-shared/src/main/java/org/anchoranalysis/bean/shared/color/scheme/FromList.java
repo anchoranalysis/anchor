@@ -33,7 +33,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.error.BeanDuplicateException;
 import org.anchoranalysis.bean.shared.color.RGBColorBean;
 import org.anchoranalysis.core.color.ColorList;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 
 /**
  * Specifies a list of colors by a list.

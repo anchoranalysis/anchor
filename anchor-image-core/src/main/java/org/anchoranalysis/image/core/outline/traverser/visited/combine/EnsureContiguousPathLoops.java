@@ -32,7 +32,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
-import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
+import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.image.core.outline.traverser.path.ContiguousVoxelPath;
 import org.anchoranalysis.image.core.points.PointsNeighborChecker;
 import org.anchoranalysis.spatial.point.Point3i;

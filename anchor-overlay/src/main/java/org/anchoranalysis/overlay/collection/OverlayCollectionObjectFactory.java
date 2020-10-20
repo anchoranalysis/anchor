@@ -29,7 +29,7 @@ package org.anchoranalysis.overlay.collection;
 import java.util.stream.IntStream;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.idgetter.IDGetter;
+import org.anchoranalysis.core.identifier.getter.IdentifierGetter;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.image.voxel.object.factory.ObjectCollectionFactory;
@@ -47,14 +47,14 @@ import org.anchoranalysis.overlay.object.OverlayObjectMask;
 public class OverlayCollectionObjectFactory {
 
     public static OverlayCollection createWithoutColor(
-            ObjectCollection objects, IDGetter<ObjectMask> idGetter) {
+            ObjectCollection objects, IdentifierGetter<ObjectMask> idGetter) {
         return new OverlayCollection(
                 IntStream.range(0, objects.size())
                         .mapToObj(
                                 i -> {
                                     ObjectMask objectMask = objects.get(i);
                                     return new OverlayObjectMask(
-                                            objectMask, idGetter.getID(objectMask, i));
+                                            objectMask, idGetter.getIdentifier(objectMask, i));
                                 }));
     }
 

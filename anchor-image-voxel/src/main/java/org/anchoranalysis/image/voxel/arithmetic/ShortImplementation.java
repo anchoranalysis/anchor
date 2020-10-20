@@ -27,7 +27,7 @@ package org.anchoranalysis.image.voxel.arithmetic;
 
 import java.util.function.IntFunction;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedShortBuffer;
-import org.anchoranalysis.spatial.extent.Extent;
+import org.anchoranalysis.spatial.Extent;
 
 /**
  * TODO what to do when values are too small or too large?

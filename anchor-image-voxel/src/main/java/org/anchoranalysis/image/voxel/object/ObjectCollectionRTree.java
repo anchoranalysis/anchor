@@ -33,9 +33,9 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import lombok.Getter;
 import lombok.experimental.Accessors;
-import org.anchoranalysis.spatial.extent.box.BoundingBox;
-import org.anchoranalysis.spatial.extent.rtree.RTree;
+import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.point.Point3i;
+import org.anchoranalysis.spatial.rtree.RTree;
 
 /**
  * An R-Tree of object-masks (indexed via a derived bounding-box).

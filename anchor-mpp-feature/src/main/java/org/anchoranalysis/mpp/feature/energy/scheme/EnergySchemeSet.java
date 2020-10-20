@@ -30,7 +30,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.anchoranalysis.core.name.value.SimpleNameValue;
+import org.anchoranalysis.core.identifier.name.SimpleNameValue;
 import org.anchoranalysis.feature.shared.SharedFeatureMulti;
 
 /**

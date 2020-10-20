@@ -28,7 +28,7 @@ package org.anchoranalysis.image.voxel.statistics;
 
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.bean.shared.relation.threshold.RelationToThreshold;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.math.histogram.Histogram;
 
 @AllArgsConstructor
@@ -59,7 +59,7 @@ public class VoxelStatisticsFromHistogram implements VoxelStatistics {
 
     @Override
     public long countThreshold(RelationToThreshold relationToThreshold) {
-        return histogram.countThreshold(relationToThreshold);
+        return histogram.countThreshold(relationToThreshold.relation(), relationToThreshold.threshold());
     }
 
     @Override

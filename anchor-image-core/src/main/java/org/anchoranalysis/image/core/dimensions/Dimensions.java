@@ -31,13 +31,13 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.experimental.Accessors;
-import org.anchoranalysis.spatial.extent.Extent;
-import org.anchoranalysis.spatial.extent.box.BoundingBox;
-import org.anchoranalysis.spatial.extent.scale.ScaleFactor;
-import org.anchoranalysis.spatial.extent.scale.ScaleFactorUtilities;
+import org.anchoranalysis.spatial.Extent;
+import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.point.Point3d;
 import org.anchoranalysis.spatial.point.Point3i;
 import org.anchoranalysis.spatial.point.ReadableTuple3i;
+import org.anchoranalysis.spatial.scale.ScaleFactor;
+import org.anchoranalysis.spatial.scale.ScaleFactorUtilities;
 
 /**
  * The dimensions of an image (in voxels), together with the image resolution.

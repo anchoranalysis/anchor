@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.feature.calculate;
 
-import org.anchoranalysis.core.error.AnchorCheckedException;
+import org.anchoranalysis.core.exception.AnchorCheckedException;
 
 public class FeatureCalculationException extends AnchorCheckedException {
 

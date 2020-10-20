@@ -35,11 +35,11 @@ import loci.formats.meta.IMetadata;
 import lombok.AllArgsConstructor;
 import ome.units.UNITS;
 import ome.units.quantity.Length;
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.io.bioformats.bean.options.ReadOptions;
-import org.anchoranalysis.spatial.extent.Extent;
+import org.anchoranalysis.spatial.Extent;
 import org.anchoranalysis.spatial.point.Point3d;
 
 @AllArgsConstructor

@@ -35,7 +35,7 @@ import org.anchoranalysis.bean.error.BeanStrangeException;
 import org.anchoranalysis.bean.xml.error.BeanXmlException;
 import org.anchoranalysis.bean.xml.error.HelperFriendlyExceptions;
 import org.anchoranalysis.bean.xml.error.LocalisedBeanException;
-import org.anchoranalysis.core.error.combinable.AnchorCombinableException;
+import org.anchoranalysis.core.exception.combinable.AnchorCombinableException;
 import org.apache.commons.configuration.ConfigurationRuntimeException;
 import org.apache.commons.configuration.HierarchicalConfiguration;
 import org.apache.commons.configuration.XMLConfiguration;

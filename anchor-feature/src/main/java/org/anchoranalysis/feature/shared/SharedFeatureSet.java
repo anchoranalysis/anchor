@@ -26,11 +26,11 @@
 
 package org.anchoranalysis.feature.shared;
 
-import org.anchoranalysis.core.error.InitException;
+import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.identifier.name.NameValue;
+import org.anchoranalysis.core.identifier.provider.NameValueSet;
+import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.core.name.provider.NameValueSet;
-import org.anchoranalysis.core.name.provider.NamedProviderGetException;
-import org.anchoranalysis.core.name.value.NameValue;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calculate.FeatureInitParams;
 import org.anchoranalysis.feature.input.FeatureInput;

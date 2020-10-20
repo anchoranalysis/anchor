@@ -31,7 +31,7 @@ import java.util.Arrays;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.text.TypedValue;
+import org.anchoranalysis.core.value.TypedValue;
 import org.anchoranalysis.io.generator.tabular.CSVWriter;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.math.histogram.Histogram;

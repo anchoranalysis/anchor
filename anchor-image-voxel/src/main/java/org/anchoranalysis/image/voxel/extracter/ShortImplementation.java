@@ -30,7 +30,7 @@ import org.anchoranalysis.image.voxel.buffer.max.MaxIntensityBufferShort;
 import org.anchoranalysis.image.voxel.buffer.mean.MeanIntensityShortBuffer;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedShortBuffer;
 import org.anchoranalysis.image.voxel.iterator.IterateVoxelsAll;
-import org.anchoranalysis.spatial.extent.Extent;
+import org.anchoranalysis.spatial.Extent;
 
 class ShortImplementation extends Base<UnsignedShortBuffer> {
 

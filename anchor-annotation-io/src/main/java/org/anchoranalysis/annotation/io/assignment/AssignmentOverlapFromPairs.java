@@ -32,10 +32,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.stream.DoubleStream;
 import org.anchoranalysis.core.functional.FunctionalList;
-import org.anchoranalysis.core.text.TypedValue;
+import org.anchoranalysis.core.value.TypedValue;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
-import org.anchoranalysis.spatial.extent.Extent;
+import org.anchoranalysis.spatial.Extent;
 
 /**
  * Pairs objects in left with objects in right

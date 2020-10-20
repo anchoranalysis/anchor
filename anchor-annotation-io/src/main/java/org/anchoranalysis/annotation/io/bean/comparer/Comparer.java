@@ -29,7 +29,7 @@ package org.anchoranalysis.annotation.io.bean.comparer;
 import java.nio.file.Path;
 import org.anchoranalysis.annotation.io.image.findable.Findable;
 import org.anchoranalysis.bean.AnchorBean;
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 

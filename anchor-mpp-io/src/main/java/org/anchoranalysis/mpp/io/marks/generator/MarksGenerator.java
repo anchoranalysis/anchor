@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.mpp.io.marks.generator;
 
-import org.anchoranalysis.core.idgetter.IDGetter;
+import org.anchoranalysis.core.identifier.getter.IdentifierGetter;
 import org.anchoranalysis.image.core.stack.DisplayStack;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMapSingleton;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMembershipWithFlags;
@@ -36,7 +36,7 @@ import org.anchoranalysis.overlay.bean.DrawObject;
 
 public class MarksGenerator extends MarksGeneratorBase {
 
-    public MarksGenerator(DrawObject drawObject, IDGetter<Overlay> idGetter) {
+    public MarksGenerator(DrawObject drawObject, IdentifierGetter<Overlay> idGetter) {
         this(
                 drawObject,
                 idGetter,
@@ -46,7 +46,7 @@ public class MarksGenerator extends MarksGeneratorBase {
 
     public MarksGenerator(
             DrawObject drawObject,
-            IDGetter<Overlay> idGetter,
+            IdentifierGetter<Overlay> idGetter,
             RegionMembershipWithFlags regionMembership) {
         super(new SimpleOverlayWriter(drawObject), idGetter, regionMembership);
     }

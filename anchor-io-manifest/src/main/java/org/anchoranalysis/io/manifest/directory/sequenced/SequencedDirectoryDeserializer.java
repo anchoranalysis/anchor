@@ -27,7 +27,7 @@
 package org.anchoranalysis.io.manifest.directory.sequenced;
 
 import java.nio.file.Path;
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.serialize.DeserializationFailedException;
 import org.anchoranalysis.core.serialize.Deserializer;
 

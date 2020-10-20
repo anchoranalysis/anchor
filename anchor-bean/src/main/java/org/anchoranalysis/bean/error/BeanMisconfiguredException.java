@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.bean.error;
 
-import org.anchoranalysis.core.error.friendly.AnchorFriendlyCheckedException;
+import org.anchoranalysis.core.exception.friendly.AnchorFriendlyCheckedException;
 
 /**
  * If a Bean is misconfigured

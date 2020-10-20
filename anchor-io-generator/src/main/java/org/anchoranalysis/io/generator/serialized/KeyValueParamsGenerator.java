@@ -30,7 +30,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
-import org.anchoranalysis.core.params.KeyValueParams;
+import org.anchoranalysis.core.value.KeyValueParams;
 import org.anchoranalysis.io.generator.OneStageGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;

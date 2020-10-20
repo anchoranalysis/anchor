@@ -26,8 +26,8 @@
 
 package org.anchoranalysis.mpp.segment.bean.define;
 
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.core.stack.wrap.WrapStackAsTimeSequenceStore;
 import org.anchoranalysis.image.io.input.series.NamedChannelsForSeries;

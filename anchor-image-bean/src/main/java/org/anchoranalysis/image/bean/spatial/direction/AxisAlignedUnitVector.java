@@ -28,10 +28,10 @@ package org.anchoranalysis.image.bean.spatial.direction;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.axis.AxisTypeConverter;
-import org.anchoranalysis.core.axis.AxisTypeException;
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.core.orientation.DirectionVector;
+import org.anchoranalysis.spatial.axis.AxisTypeConverter;
+import org.anchoranalysis.spatial.axis.AxisTypeException;
 
 public class AxisAlignedUnitVector extends DirectionVectorBean {
 

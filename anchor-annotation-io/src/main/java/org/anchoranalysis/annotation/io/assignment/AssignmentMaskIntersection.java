@@ -29,7 +29,7 @@ package org.anchoranalysis.annotation.io.assignment;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import org.anchoranalysis.core.text.TypedValue;
+import org.anchoranalysis.core.value.TypedValue;
 import org.anchoranalysis.image.core.merge.ObjectMaskMerger;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 

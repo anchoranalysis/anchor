@@ -25,8 +25,8 @@
  */
 package org.anchoranalysis.image.core.stack;
 
-import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.name.provider.NamedProvider;
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.identifier.provider.NamedProvider;
 import org.anchoranalysis.core.progress.CachedProgressingSupplier;
 import org.anchoranalysis.core.progress.ProgressReporter;
 

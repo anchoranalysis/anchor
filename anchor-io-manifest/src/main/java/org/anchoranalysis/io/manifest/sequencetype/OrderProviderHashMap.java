@@ -28,7 +28,7 @@ package org.anchoranalysis.io.manifest.sequencetype;
 
 import java.util.HashMap;
 import java.util.Set;
-import org.anchoranalysis.core.index.container.OrderProvider;
+import org.anchoranalysis.core.index.bounded.OrderProvider;
 
 class OrderProviderHashMap implements OrderProvider {
 

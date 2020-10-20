@@ -28,7 +28,7 @@ package org.anchoranalysis.image.voxel.buffer;
 
 import lombok.Getter;
 import org.anchoranalysis.image.voxel.Voxels;
-import org.anchoranalysis.spatial.extent.Extent;
+import org.anchoranalysis.spatial.Extent;
 
 /**
  * Contains the buffer for the current slice, the current slice minus 1, and the current slice plus

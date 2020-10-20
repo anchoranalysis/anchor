@@ -27,8 +27,8 @@
 package org.anchoranalysis.image.feature.session.merged;
 
 import java.util.Optional;
-import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.error.reporter.ErrorReporter;
+import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.log.error.ErrorReporter;
 import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
 import org.anchoranalysis.feature.results.ResultsVector;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;

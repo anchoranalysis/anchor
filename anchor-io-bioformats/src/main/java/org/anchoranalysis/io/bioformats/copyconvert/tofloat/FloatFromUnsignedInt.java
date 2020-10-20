@@ -33,7 +33,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
-import org.anchoranalysis.spatial.extent.Extent;
+import org.anchoranalysis.spatial.Extent;
 
 @RequiredArgsConstructor
 public class FloatFromUnsignedInt extends ToFloat {

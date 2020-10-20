@@ -30,9 +30,9 @@ import java.io.Serializable;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.experimental.Accessors;
-import org.anchoranalysis.core.axis.AxisType;
-import org.anchoranalysis.core.axis.AxisTypeConverter;
-import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
+import org.anchoranalysis.core.exception.friendly.AnchorFriendlyRuntimeException;
+import org.anchoranalysis.spatial.axis.AxisType;
+import org.anchoranalysis.spatial.axis.AxisTypeConverter;
 
 @EqualsAndHashCode
 @Accessors(fluent = true)

@@ -36,7 +36,7 @@ public class PairPxlMarkMemo {
     public PairPxlMarkMemo(VoxelizedMarkMemo source, VoxelizedMarkMemo destination) {
         super();
 
-        if (source.getMark().getId() < destination.getMark().getId()) {
+        if (source.getMark().getIdentifier() < destination.getMark().getIdentifier()) {
             this.source = source;
             this.destination = destination;
         } else {
@@ -64,7 +64,7 @@ public class PairPxlMarkMemo {
 
     @Override
     public int hashCode() {
-        return (source.getMark().getId() * 3) + destination.getMark().getId();
+        return (source.getMark().getIdentifier() * 3) + destination.getMark().getIdentifier();
     }
 
     public VoxelizedMarkMemo getSource() {
@@ -77,6 +77,6 @@ public class PairPxlMarkMemo {
 
     @Override
     public String toString() {
-        return String.format("%d--%d", source.getMark().getId(), destination.getMark().getId());
+        return String.format("%d--%d", source.getMark().getIdentifier(), destination.getMark().getIdentifier());
     }
 }

@@ -31,7 +31,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import org.anchoranalysis.bean.error.BeanStrangeException;
-import org.anchoranalysis.core.error.combinable.AnchorCombinableException;
+import org.anchoranalysis.core.exception.combinable.AnchorCombinableException;
 
 /**
  * Combines many exceptions into a single exception, searching for a Cause and creating message

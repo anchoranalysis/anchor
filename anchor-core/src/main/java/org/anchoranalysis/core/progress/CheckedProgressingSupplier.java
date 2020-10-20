@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.core.progress;
 
-import org.anchoranalysis.core.functional.function.CheckedSupplier;
+import org.anchoranalysis.core.functional.checked.CheckedSupplier;
 
 /**
  * Like {@link CheckedSupplier} but can update a progress-reporter as the operation progresses.

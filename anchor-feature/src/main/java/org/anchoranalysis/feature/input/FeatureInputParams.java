@@ -27,7 +27,7 @@
 package org.anchoranalysis.feature.input;
 
 import java.util.Optional;
-import org.anchoranalysis.core.params.KeyValueParams;
+import org.anchoranalysis.core.value.KeyValueParams;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 
 /**

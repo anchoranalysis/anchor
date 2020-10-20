@@ -29,11 +29,10 @@ package org.anchoranalysis.image.io.bean.feature;
 import java.nio.file.Path;
 import java.util.stream.Stream;
 import one.util.streamex.StreamEx;
-import org.anchoranalysis.core.axis.AxisType;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.identifier.provider.store.SharedObjects;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.core.name.store.SharedObjects;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListFactory;
@@ -55,6 +54,7 @@ import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.io.generator.tabular.CSVGenerator;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import org.anchoranalysis.spatial.axis.AxisType;
 
 /** @author Owen Feehan */
 class ObjectFeatureListCSVGenerator extends CSVGenerator<ObjectCollection> {

@@ -28,8 +28,8 @@ package org.anchoranalysis.io.manifest.directory;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import org.anchoranalysis.core.system.path.FilePathToUnixStyleConverter;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.path.FilePathToUnixStyleConverter;
 
 @NoArgsConstructor
 public abstract class SubdirectoryBase extends MutableDirectory {

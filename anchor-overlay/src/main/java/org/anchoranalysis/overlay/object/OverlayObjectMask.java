@@ -28,7 +28,7 @@ package org.anchoranalysis.overlay.object;
 
 import java.util.Optional;
 import lombok.Getter;
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.image.core.object.properties.ObjectWithProperties;
@@ -39,7 +39,7 @@ import org.anchoranalysis.overlay.OverlayProperties;
 import org.anchoranalysis.overlay.object.scaled.FromMask;
 import org.anchoranalysis.overlay.object.scaled.ScaledMaskCreator;
 import org.anchoranalysis.overlay.writer.DrawOverlay;
-import org.anchoranalysis.spatial.extent.box.BoundingBox;
+import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.point.Point3i;
 
 public class OverlayObjectMask extends Overlay {
@@ -88,7 +88,7 @@ public class OverlayObjectMask extends Overlay {
     }
 
     @Override
-    public int getId() {
+    public int getIdentifier() {
         return id;
     }
 

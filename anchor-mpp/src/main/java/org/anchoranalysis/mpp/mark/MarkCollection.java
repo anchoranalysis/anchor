@@ -38,7 +38,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.anchoranalysis.core.error.OptionalOperationUnsupportedException;
+import org.anchoranalysis.core.exception.OptionalOperationUnsupportedException;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.object.properties.ObjectCollectionWithProperties;
@@ -47,7 +47,7 @@ import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMap;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMembership;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMembershipWithFlags;
-import org.anchoranalysis.spatial.extent.box.BoundingBox;
+import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.point.Point3d;
 
 /**
@@ -233,7 +233,7 @@ public final class MarkCollection implements Iterable<Mark>, Serializable {
         HashMap<Integer, Mark> hashMap = new HashMap<>();
 
         for (Mark mark : this) {
-            hashMap.put(mark.getId(), mark);
+            hashMap.put(mark.getIdentifier(), mark);
         }
 
         return hashMap;
@@ -245,7 +245,7 @@ public final class MarkCollection implements Iterable<Mark>, Serializable {
 
         int i = 0;
         for (Mark mark : this) {
-            idArr[i++] = mark.getId();
+            idArr[i++] = mark.getIdentifier();
         }
 
         return idArr;

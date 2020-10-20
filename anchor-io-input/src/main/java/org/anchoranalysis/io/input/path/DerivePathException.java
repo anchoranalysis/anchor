@@ -25,7 +25,7 @@
  */
 package org.anchoranalysis.io.input.path;
 
-import org.anchoranalysis.core.error.friendly.AnchorFriendlyCheckedException;
+import org.anchoranalysis.core.exception.friendly.AnchorFriendlyCheckedException;
 
 public class DerivePathException extends AnchorFriendlyCheckedException {
 

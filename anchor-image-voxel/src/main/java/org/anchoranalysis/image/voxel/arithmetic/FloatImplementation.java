@@ -27,7 +27,7 @@ package org.anchoranalysis.image.voxel.arithmetic;
 
 import java.nio.FloatBuffer;
 import java.util.function.IntFunction;
-import org.anchoranalysis.spatial.extent.Extent;
+import org.anchoranalysis.spatial.Extent;
 
 class FloatImplementation extends Base<FloatBuffer> {
 

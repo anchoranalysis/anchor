@@ -28,12 +28,12 @@ package org.anchoranalysis.core.functional;
 
 import java.util.Optional;
 import java.util.function.Supplier;
+import org.anchoranalysis.core.functional.checked.CheckedBiFunction;
+import org.anchoranalysis.core.functional.checked.CheckedConsumer;
+import org.anchoranalysis.core.functional.checked.CheckedFunction;
+import org.anchoranalysis.core.functional.checked.CheckedSupplier;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.functional.function.CheckedBiFunction;
-import org.anchoranalysis.core.functional.function.CheckedConsumer;
-import org.anchoranalysis.core.functional.function.CheckedFunction;
-import org.anchoranalysis.core.functional.function.CheckedSupplier;
 
 /**
  * Additional utility functions for {@link Optional} and exceptions.

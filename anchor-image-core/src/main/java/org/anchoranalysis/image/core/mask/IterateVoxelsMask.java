@@ -28,12 +28,12 @@ package org.anchoranalysis.image.core.mask;
 import com.google.common.base.Preconditions;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.arithmetic.RunningSum;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.iterator.IterateVoxelsObjectMask;
 import org.anchoranalysis.image.voxel.iterator.process.buffer.ProcessBufferUnary;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
+import org.anchoranalysis.math.arithmetic.RunningSum;
 
 /**
  * Utilities for iterating over the subset of voxels corresponding to an <i>on</i> state in a {@link

@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.mpp.feature.bean.mark;
 
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.mpp.bean.MPPBean;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMap;

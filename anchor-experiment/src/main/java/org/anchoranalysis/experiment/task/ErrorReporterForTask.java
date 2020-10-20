@@ -25,9 +25,9 @@
  */
 package org.anchoranalysis.experiment.task;
 
-import org.anchoranalysis.core.error.reporter.ErrorReporter;
-import org.anchoranalysis.core.error.reporter.ErrorReporterIntoLog;
 import org.anchoranalysis.core.log.MessageLogger;
+import org.anchoranalysis.core.log.error.ErrorReporter;
+import org.anchoranalysis.core.log.error.ErrorReporterIntoLog;
 
 /**
  * An error-reporter that replaces particular errors/exceptions with user-friendly messages.

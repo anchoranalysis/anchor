@@ -26,9 +26,9 @@
 
 package org.anchoranalysis.io.output.error;
 
-import org.anchoranalysis.core.error.combinable.AnchorCombinableException;
-import org.anchoranalysis.core.error.friendly.AnchorFriendlyCheckedException;
-import org.anchoranalysis.core.error.friendly.HasFriendlyErrorMessage;
+import org.anchoranalysis.core.exception.combinable.AnchorCombinableException;
+import org.anchoranalysis.core.exception.friendly.AnchorFriendlyCheckedException;
+import org.anchoranalysis.core.exception.friendly.HasFriendlyErrorMessage;
 
 public class OutputWriteFailedException extends AnchorFriendlyCheckedException {
 

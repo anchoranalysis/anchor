@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.io.output.error;
 
-import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
+import org.anchoranalysis.core.exception.friendly.AnchorFriendlyRuntimeException;
 
 /**
  * When an output-directory already exists.

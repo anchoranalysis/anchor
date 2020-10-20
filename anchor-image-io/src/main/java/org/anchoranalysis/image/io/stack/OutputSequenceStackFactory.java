@@ -28,7 +28,7 @@ package org.anchoranalysis.image.io.stack;
 import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import org.anchoranalysis.core.name.provider.NamedProvider;
+import org.anchoranalysis.core.identifier.provider.NamedProvider;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.generator.raster.StackGenerator;
 import org.anchoranalysis.io.generator.collection.NamedProviderOutputter;

@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.image.experiment.seed;
 
-import org.anchoranalysis.core.error.AnchorCheckedException;
+import org.anchoranalysis.core.exception.AnchorCheckedException;
 
 public class SeedFinderException extends AnchorCheckedException {
 

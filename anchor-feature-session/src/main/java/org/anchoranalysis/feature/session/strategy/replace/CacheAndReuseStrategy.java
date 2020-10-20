@@ -28,7 +28,7 @@ package org.anchoranalysis.feature.session.strategy.replace;
 
 import lombok.Getter;
 import org.anchoranalysis.core.cache.LRUCache;
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.feature.calculate.cache.CacheCreator;
 import org.anchoranalysis.feature.calculate.cache.SessionInput;

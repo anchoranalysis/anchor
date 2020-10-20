@@ -27,7 +27,7 @@
 package org.anchoranalysis.image.core.orientation;
 
 import java.io.Serializable;
-import org.anchoranalysis.core.name.provider.NameValueSet;
+import org.anchoranalysis.core.identifier.provider.NameValueSet;
 import org.anchoranalysis.image.core.object.properties.ObjectWithProperties;
 import org.anchoranalysis.spatial.rotation.RotationMatrix;
 

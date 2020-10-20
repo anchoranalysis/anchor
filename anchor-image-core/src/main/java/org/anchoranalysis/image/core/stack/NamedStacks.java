@@ -32,14 +32,14 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.UnaryOperator;
 import org.anchoranalysis.bean.StringSet;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.FunctionalIterate;
 import org.anchoranalysis.core.functional.OptionalUtilities;
-import org.anchoranalysis.core.functional.function.CheckedBiConsumer;
-import org.anchoranalysis.core.name.provider.NamedProvider;
-import org.anchoranalysis.core.name.provider.NamedProviderGetException;
-import org.anchoranalysis.core.name.store.NamedProviderStore;
-import org.anchoranalysis.core.name.store.StoreSupplier;
+import org.anchoranalysis.core.functional.checked.CheckedBiConsumer;
+import org.anchoranalysis.core.identifier.provider.NamedProvider;
+import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
+import org.anchoranalysis.core.identifier.provider.store.NamedProviderStore;
+import org.anchoranalysis.core.identifier.provider.store.StoreSupplier;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 
 /**

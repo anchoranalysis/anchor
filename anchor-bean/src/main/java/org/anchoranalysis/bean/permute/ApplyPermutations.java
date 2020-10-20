@@ -35,8 +35,8 @@ import org.anchoranalysis.bean.error.BeanDuplicateException;
 import org.anchoranalysis.bean.permute.property.PermuteProperty;
 import org.anchoranalysis.bean.permute.setter.PermutationSetter;
 import org.anchoranalysis.bean.permute.setter.PermutationSetterException;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 
 /**
  * Applies a {@link PermuteProperty} to a bean to create new duplicated beans each with a

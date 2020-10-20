@@ -28,8 +28,8 @@ package org.anchoranalysis.image.feature.bean.score;
 
 import java.util.List;
 import java.util.Optional;
-import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.params.KeyValueParams;
+import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.value.KeyValueParams;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.bean.ImageBean;
 import org.anchoranalysis.math.histogram.Histogram;

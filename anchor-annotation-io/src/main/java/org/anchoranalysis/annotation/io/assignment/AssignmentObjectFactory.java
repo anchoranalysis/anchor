@@ -28,8 +28,8 @@ package org.anchoranalysis.annotation.io.assignment;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;

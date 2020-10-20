@@ -29,6 +29,7 @@ package org.anchoranalysis.spatial.rotation;
 import static org.junit.Assert.assertEquals;
 
 import org.anchoranalysis.spatial.point.Vector3d;
+import org.anchoranalysis.spatial.rotation.factory.RotateAxisAngle;
 import org.junit.Test;
 
 public class SecondMomentMatrixTest {
@@ -36,9 +37,9 @@ public class SecondMomentMatrixTest {
     @Test
     public void test() {
 
-        RotationMatrixFromAxisAngleCreator angleCreator =
-                new RotationMatrixFromAxisAngleCreator(new Vector3d(-0.866, -0.5, 2.31e-014), 3);
-        RotationMatrix rotationMatrix = angleCreator.createRotationMatrix();
+        RotateAxisAngle angleCreator =
+                new RotateAxisAngle(new Vector3d(-0.866, -0.5, 2.31e-014), 3);
+        RotationMatrix rotationMatrix = angleCreator.create();
 
         double delta = 1e-3;
 

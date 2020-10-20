@@ -27,7 +27,7 @@
 package org.anchoranalysis.image.io.bean.channel.map;
 
 import org.anchoranalysis.bean.AnchorBean;
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.io.channel.NamedEntries;
 import org.anchoranalysis.image.io.stack.OpenedRaster;
 

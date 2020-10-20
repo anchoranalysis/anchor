@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.bean.error;
 
-import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
+import org.anchoranalysis.core.exception.friendly.AnchorFriendlyRuntimeException;
 
 /**
  * An exception occurs when the duplication of a bean fails

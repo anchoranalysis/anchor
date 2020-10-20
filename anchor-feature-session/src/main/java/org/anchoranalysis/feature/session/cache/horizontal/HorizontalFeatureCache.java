@@ -28,8 +28,8 @@ package org.anchoranalysis.feature.session.cache.horizontal;
 
 import java.util.Collection;
 import java.util.Set;
+import org.anchoranalysis.core.identifier.name.NameValue;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.core.name.value.NameValue;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.calculate.FeatureInitParams;
 import org.anchoranalysis.feature.calculate.cache.CacheCreator;

@@ -27,7 +27,7 @@
 package org.anchoranalysis.io.manifest.sequencetype;
 
 import java.io.Serializable;
-import org.anchoranalysis.core.index.container.OrderProvider;
+import org.anchoranalysis.core.index.bounded.OrderProvider;
 
 /**
  * A sequence of elements (of type {@code T}), which are mapped to a range of integer indices.

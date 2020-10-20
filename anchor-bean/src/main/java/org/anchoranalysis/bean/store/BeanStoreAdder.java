@@ -31,9 +31,9 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.NamedBean;
-import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.functional.function.CheckedFunction;
-import org.anchoranalysis.core.name.store.NamedProviderStore;
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.functional.checked.CheckedFunction;
+import org.anchoranalysis.core.identifier.provider.store.NamedProviderStore;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class BeanStoreAdder {

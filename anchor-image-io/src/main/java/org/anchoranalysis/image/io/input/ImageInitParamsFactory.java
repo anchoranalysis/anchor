@@ -28,7 +28,7 @@ package org.anchoranalysis.image.io.input;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.name.store.SharedObjects;
+import org.anchoranalysis.core.identifier.provider.store.SharedObjects;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 

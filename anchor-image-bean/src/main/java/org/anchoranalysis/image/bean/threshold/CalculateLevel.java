@@ -27,7 +27,7 @@
 package org.anchoranalysis.image.bean.threshold;
 
 import org.anchoranalysis.bean.NullParamsBean;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.math.histogram.Histogram;
 
 /**

@@ -29,7 +29,7 @@ package org.anchoranalysis.bean.shared.color.scheme;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.core.color.ColorIndex;
 import org.anchoranalysis.core.color.ColorList;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 
 /**
  * Creates a set of related colors.

@@ -28,10 +28,10 @@ package org.anchoranalysis.image.voxel.object;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.axis.AxisType;
-import org.anchoranalysis.core.axis.AxisTypeConverter;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
-import org.anchoranalysis.spatial.extent.Extent;
+import org.anchoranalysis.spatial.Extent;
+import org.anchoranalysis.spatial.axis.AxisType;
+import org.anchoranalysis.spatial.axis.AxisTypeConverter;
 import org.anchoranalysis.spatial.point.Point3d;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)

@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.image.voxel.datatype;
 
-import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
+import org.anchoranalysis.core.exception.friendly.AnchorFriendlyRuntimeException;
 
 public class IncorrectVoxelTypeException extends AnchorFriendlyRuntimeException {
 

@@ -31,7 +31,7 @@ import java.util.List;
 import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.functional.function.CheckedFunction;
+import org.anchoranalysis.core.functional.checked.CheckedFunction;
 import org.anchoranalysis.core.progress.ProgressReporter;
 
 /**

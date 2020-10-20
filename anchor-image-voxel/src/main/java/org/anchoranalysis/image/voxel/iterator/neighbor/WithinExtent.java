@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.image.voxel.iterator.neighbor;
 
-import org.anchoranalysis.spatial.extent.Extent;
+import org.anchoranalysis.spatial.Extent;
 import org.anchoranalysis.spatial.point.Point3i;
 
 /**

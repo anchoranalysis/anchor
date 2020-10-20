@@ -28,25 +28,25 @@ package org.anchoranalysis.overlay.writer;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.idgetter.IDGetter;
+import org.anchoranalysis.core.identifier.getter.IdentifierGetter;
 import org.anchoranalysis.image.core.object.properties.ObjectWithProperties;
 import org.anchoranalysis.overlay.Overlay;
 import org.anchoranalysis.overlay.collection.ColoredOverlayCollection;
-import org.anchoranalysis.overlay.id.IDGetterMaskFromOverlay;
+import org.anchoranalysis.overlay.identifier.IdentifyDelegateToOverlays;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ObjectDrawAttributesFactory {
 
     public static ObjectDrawAttributes createFromOverlays(
             ColoredOverlayCollection overlays,
-            IDGetter<Overlay> idGetter,
-            IDGetter<ObjectWithProperties> idGetterColor) {
+            IdentifierGetter<Overlay> idGetter,
+            IdentifierGetter<ObjectWithProperties> idGetterColor) {
         return new ObjectDrawAttributes(
                 overlays.getColorList(), createMaskIDGetter(overlays, idGetter), idGetterColor);
     }
 
-    private static IDGetter<ObjectWithProperties> createMaskIDGetter(
-            ColoredOverlayCollection oc, IDGetter<Overlay> idGetter) {
-        return new IDGetterMaskFromOverlay(idGetter, oc, true);
+    private static IdentifierGetter<ObjectWithProperties> createMaskIDGetter(
+            ColoredOverlayCollection oc, IdentifierGetter<Overlay> idGetter) {
+        return new IdentifyDelegateToOverlays(idGetter, oc, true);
     }
 }

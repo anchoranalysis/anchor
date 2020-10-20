@@ -32,9 +32,15 @@ import cern.colt.matrix.DoubleMatrix2D;
 import cern.jet.math.Functions;
 import com.google.common.base.Preconditions;
 import java.io.Serializable;
-import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
+import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.spatial.point.Point3d;
 
+/**
+ * A <a href="https://en.wikipedia.org/wiki/Rotation_matrix">matrix</a> that performs a rotation in Euclidean space.
+ * 
+ * @author Owen Feehan
+ *
+ */
 public class RotationMatrix implements Serializable {
     /** */
     private static final long serialVersionUID = 1L;

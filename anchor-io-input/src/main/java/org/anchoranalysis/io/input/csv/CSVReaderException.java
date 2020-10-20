@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.io.input.csv;
 
-import org.anchoranalysis.core.error.friendly.AnchorFriendlyCheckedException;
+import org.anchoranalysis.core.exception.friendly.AnchorFriendlyCheckedException;
 
 public class CSVReaderException extends AnchorFriendlyCheckedException {
 

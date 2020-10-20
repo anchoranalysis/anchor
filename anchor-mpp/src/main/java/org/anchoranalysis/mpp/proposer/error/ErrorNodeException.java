@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.mpp.proposer.error;
 
-import org.anchoranalysis.core.error.AnchorCheckedException;
+import org.anchoranalysis.core.exception.AnchorCheckedException;
 
 // An exception that adds a string to the current error node
 public class ErrorNodeException extends AnchorCheckedException {

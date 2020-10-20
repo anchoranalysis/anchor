@@ -28,7 +28,7 @@ package org.anchoranalysis.image.core.outline.traverser.visited;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.core.outline.traverser.path.ContiguousVoxelPath;
 import org.anchoranalysis.image.core.outline.traverser.visited.combine.CombineToOnePath;
 import org.anchoranalysis.image.core.outline.traverser.visited.combine.FindMinimumDistance;

@@ -36,7 +36,7 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.image.voxel.extracter.VoxelsExtracter;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactoryTypeBound;
 import org.anchoranalysis.image.voxel.factory.sliceindex.SliceBufferIndex;
-import org.anchoranalysis.spatial.extent.Extent;
+import org.anchoranalysis.spatial.Extent;
 
 /**
  * A box (3-dimensions) with voxel-data.

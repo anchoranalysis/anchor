@@ -29,7 +29,7 @@ package org.anchoranalysis.image.voxel.statistics;
 import java.util.ArrayList;
 import java.util.List;
 import org.anchoranalysis.bean.shared.relation.threshold.RelationToThreshold;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.math.histogram.Histogram;
 
 public class VoxelStatisticsCombined implements VoxelStatistics {

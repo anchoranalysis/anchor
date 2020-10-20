@@ -29,8 +29,8 @@ package org.anchoranalysis.image.core.stack.wrap;
 import java.util.Optional;
 import java.util.Set;
 import lombok.AllArgsConstructor;
-import org.anchoranalysis.core.name.provider.NamedProvider;
-import org.anchoranalysis.core.name.provider.NamedProviderGetException;
+import org.anchoranalysis.core.identifier.provider.NamedProvider;
+import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.core.stack.TimeSequence;
 

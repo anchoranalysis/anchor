@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.image.core.channel.convert.attached;
 
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.channel.convert.ConversionPolicy;
 import org.anchoranalysis.image.voxel.convert.VoxelsConverter;

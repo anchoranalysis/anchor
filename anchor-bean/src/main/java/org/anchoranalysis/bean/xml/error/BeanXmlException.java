@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.bean.xml.error;
 
-import org.anchoranalysis.core.error.friendly.AnchorFriendlyCheckedException;
+import org.anchoranalysis.core.exception.friendly.AnchorFriendlyCheckedException;
 
 /**
  * An exception that occurs when one cannot process BeanXML for some reason

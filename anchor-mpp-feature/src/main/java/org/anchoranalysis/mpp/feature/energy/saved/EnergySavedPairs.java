@@ -28,7 +28,7 @@ package org.anchoranalysis.mpp.feature.energy.saved;
 
 import java.util.Set;
 import lombok.Getter;
-import org.anchoranalysis.core.error.InitException;
+import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.graph.TypedEdge;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.energy.EnergyStack;
@@ -157,8 +157,8 @@ public class EnergySavedPairs implements UpdatableMarkSet {
             s.append(
                     String.format(
                             "%2d--%2d\tenergy=%e%n",
-                            di.getPair().getSource().getId(),
-                            di.getPair().getDestination().getId(),
+                            di.getPair().getSource().getIdentifier(),
+                            di.getPair().getDestination().getIdentifier(),
                             di.getEnergyTotal().getTotal()));
         }
 

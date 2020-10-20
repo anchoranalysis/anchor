@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.io.manifest.sequencetype;
 
-import org.anchoranalysis.core.error.AnchorCheckedException;
+import org.anchoranalysis.core.exception.AnchorCheckedException;
 
 public class SequenceTypeException extends AnchorCheckedException {
 

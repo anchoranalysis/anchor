@@ -29,7 +29,7 @@ package org.anchoranalysis.image.bean.provider;
 import org.anchoranalysis.bean.NullParamsBean;
 import org.anchoranalysis.bean.provider.Provider;
 import org.anchoranalysis.core.color.ColorList;
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.exception.CreateException;
 
 /**
  * Provides a list of one or more colors

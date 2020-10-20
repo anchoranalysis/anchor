@@ -29,7 +29,7 @@ package org.anchoranalysis.mpp.io.marks;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.anchoranalysis.core.color.ColorIndex;
-import org.anchoranalysis.core.idgetter.IDGetter;
+import org.anchoranalysis.core.identifier.getter.IdentifierGetter;
 import org.anchoranalysis.image.core.stack.DisplayStack;
 import org.anchoranalysis.mpp.mark.ColoredMarks;
 import org.anchoranalysis.mpp.mark.Mark;
@@ -42,7 +42,7 @@ public class ColoredMarksWithDisplayStack {
     private DisplayStack stack;
 
     public ColoredMarksWithDisplayStack(
-            MarksWithDisplayStack marks, ColorIndex colorIndex, IDGetter<Mark> idGetter) {
+            MarksWithDisplayStack marks, ColorIndex colorIndex, IdentifierGetter<Mark> idGetter) {
         this.marksColored = new ColoredMarks(marks.getMarks(), colorIndex, idGetter);
         this.stack = marks.getStack();
     }

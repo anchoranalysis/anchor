@@ -31,7 +31,7 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
 import org.anchoranalysis.core.functional.OptionalUtilities;
-import org.anchoranalysis.core.text.TypedValue;
+import org.anchoranalysis.core.value.TypedValue;
 import org.anchoranalysis.io.generator.text.TextFileOutput;
 import org.anchoranalysis.io.generator.text.TextFileOutputter;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;

@@ -28,7 +28,7 @@ package org.anchoranalysis.image.voxel.object.morphological.accept;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValues;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;

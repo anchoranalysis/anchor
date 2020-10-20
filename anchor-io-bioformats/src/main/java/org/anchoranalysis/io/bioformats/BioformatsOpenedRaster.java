@@ -37,7 +37,7 @@ import loci.formats.IFormatReader;
 import loci.formats.meta.IMetadata;
 import lombok.Getter;
 import lombok.experimental.Accessors;
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.channel.factory.ChannelFactorySingleType;

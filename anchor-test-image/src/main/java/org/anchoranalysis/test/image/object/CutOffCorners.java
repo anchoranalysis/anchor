@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.test.image.object;
 
-import org.anchoranalysis.spatial.extent.Extent;
+import org.anchoranalysis.spatial.Extent;
 
 /** The bounding box is filled apart from cuboids cut out of the corners */
 public class CutOffCorners implements VoxelPattern {

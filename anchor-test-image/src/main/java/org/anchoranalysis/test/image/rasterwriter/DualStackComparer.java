@@ -33,7 +33,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
-import org.anchoranalysis.core.functional.function.CheckedPredicate;
+import org.anchoranalysis.core.functional.checked.CheckedPredicate;
 import org.anchoranalysis.test.image.DualComparer;
 
 /**

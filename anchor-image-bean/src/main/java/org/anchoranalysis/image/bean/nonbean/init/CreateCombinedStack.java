@@ -28,7 +28,7 @@ package org.anchoranalysis.image.bean.nonbean.init;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.name.provider.NamedProvider;
+import org.anchoranalysis.core.identifier.provider.NamedProvider;
 import org.anchoranalysis.image.core.stack.Stack;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)

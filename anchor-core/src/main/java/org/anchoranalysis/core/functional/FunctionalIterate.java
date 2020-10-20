@@ -27,13 +27,13 @@ package org.anchoranalysis.core.functional;
 
 import java.util.Map;
 import java.util.Map.Entry;
+import org.anchoranalysis.core.functional.checked.CheckedBiConsumer;
+import org.anchoranalysis.core.functional.checked.CheckedBooleanSupplier;
+import org.anchoranalysis.core.functional.checked.CheckedConsumer;
+import org.anchoranalysis.core.functional.checked.CheckedIntConsumer;
+import org.anchoranalysis.core.functional.checked.CheckedRunnable;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.functional.function.CheckedBiConsumer;
-import org.anchoranalysis.core.functional.function.CheckedBooleanSupplier;
-import org.anchoranalysis.core.functional.function.CheckedConsumer;
-import org.anchoranalysis.core.functional.function.CheckedIntConsumer;
-import org.anchoranalysis.core.functional.function.CheckedRunnable;
 
 /**
  * Utilities for repeating operations a certain number of times.

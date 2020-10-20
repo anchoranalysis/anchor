@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.image.core.dimensions;
 
-import org.anchoranalysis.core.error.AnchorCheckedException;
+import org.anchoranalysis.core.exception.AnchorCheckedException;
 
 public class IncorrectImageSizeException extends AnchorCheckedException {
 

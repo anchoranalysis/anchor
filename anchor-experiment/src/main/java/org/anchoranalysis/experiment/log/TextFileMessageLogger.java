@@ -29,9 +29,9 @@ package org.anchoranalysis.experiment.log;
 import java.io.PrintWriter;
 import java.util.Optional;
 import java.util.function.Supplier;
-import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.log.MessageLogger;
+import org.anchoranalysis.core.log.error.ErrorReporter;
 import org.anchoranalysis.io.generator.text.TextFileOutput;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
 

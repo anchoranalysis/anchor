@@ -25,8 +25,8 @@
  */
 package org.anchoranalysis.spatial.point;
 
-import org.anchoranalysis.core.arithmetic.RunningSum;
-import org.anchoranalysis.core.arithmetic.RunningSumCollection;
+import org.anchoranalysis.math.arithmetic.RunningSum;
+import org.anchoranalysis.math.arithmetic.RunningSumCollection;
 
 /**
  * A running sum for tracking points in each dimension

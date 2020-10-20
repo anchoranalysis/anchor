@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.bean.error;
 
-import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
+import org.anchoranalysis.core.exception.friendly.AnchorFriendlyRuntimeException;
 
 /**
  * When something quite strange happens that we don't usually want to catch.

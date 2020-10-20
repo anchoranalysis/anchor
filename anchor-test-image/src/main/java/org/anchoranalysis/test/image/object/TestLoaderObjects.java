@@ -27,7 +27,6 @@
 package org.anchoranalysis.test.image.object;
 
 import lombok.AllArgsConstructor;
-import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.core.mask.Mask;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;

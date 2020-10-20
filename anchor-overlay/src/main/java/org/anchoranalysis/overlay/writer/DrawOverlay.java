@@ -29,13 +29,13 @@ package org.anchoranalysis.overlay.writer;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.CheckedStream;
-import org.anchoranalysis.core.idgetter.IDGetter;
-import org.anchoranalysis.core.idgetter.IDGetterIter;
+import org.anchoranalysis.core.identifier.getter.IdentifierGetter;
+import org.anchoranalysis.core.identifier.getter.IdentifyByIteration;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
-import org.anchoranalysis.image.core.object.properties.IDGetterObjectWithProperties;
+import org.anchoranalysis.image.core.object.properties.IdentifierByProperty;
 import org.anchoranalysis.image.core.object.properties.ObjectWithProperties;
 import org.anchoranalysis.image.core.stack.rgb.RGBStack;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValues;
@@ -43,7 +43,7 @@ import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.overlay.Overlay;
 import org.anchoranalysis.overlay.bean.DrawObject;
 import org.anchoranalysis.overlay.collection.ColoredOverlayCollection;
-import org.anchoranalysis.spatial.extent.box.BoundingBox;
+import org.anchoranalysis.spatial.box.BoundingBox;
 
 /**
  * Draws an overlay onto a RGB-stack, including precalculated overlays.
@@ -63,7 +63,7 @@ public abstract class DrawOverlay {
      * @throws OperationFailedException
      */
     public void writeOverlays(
-            ColoredOverlayCollection overlays, RGBStack stack, IDGetter<Overlay> idGetter)
+            ColoredOverlayCollection overlays, RGBStack stack, IdentifierGetter<Overlay> idGetter)
             throws OperationFailedException {
         writeOverlays(
                 overlays, stack.dimensions(), stack, idGetter, new BoundingBox(stack.extent()));
@@ -80,7 +80,7 @@ public abstract class DrawOverlay {
             ColoredOverlayCollection overlays,
             Dimensions dimensions,
             RGBStack background,
-            IDGetter<Overlay> idGetter,
+            IdentifierGetter<Overlay> idGetter,
             BoundingBox boxContainer)
             throws OperationFailedException {
 
@@ -95,7 +95,7 @@ public abstract class DrawOverlay {
                     dimensions,
                     background,
                     ObjectDrawAttributesFactory.createFromOverlays(
-                            overlays, idGetter, new IDGetterObjectWithProperties("colorID")),
+                            overlays, idGetter, new IdentifierByProperty("colorID")),
                     boxContainer);
         } catch (CreateException e) {
             throw new OperationFailedException(e);
@@ -114,7 +114,7 @@ public abstract class DrawOverlay {
     public abstract void writeOverlaysIfIntersects(
             ColoredOverlayCollection overlays,
             RGBStack stack,
-            IDGetter<Overlay> idGetter,
+            IdentifierGetter<Overlay> idGetter,
             List<BoundingBox> intersectList)
             throws OperationFailedException;
 
@@ -129,7 +129,7 @@ public abstract class DrawOverlay {
             BinaryValuesByte bvOut)
             throws CreateException {
 
-        IDGetterIter<Overlay> colorIDGetter = new IDGetterIter<>();
+        IdentifyByIteration<Overlay> colorIDGetter = new IdentifyByIteration<>();
 
         return CheckedStream.mapToObj(
                         IntStream.range(0, coc.size()),
@@ -139,7 +139,7 @@ public abstract class DrawOverlay {
 
                             ObjectWithProperties object =
                                     overlay.createObject(drawOverlay, dimensions, bvOut);
-                            object.setProperty("colorID", colorIDGetter.getID(overlay, index));
+                            object.setProperty("colorID", colorIDGetter.getIdentifier(overlay, index));
 
                             return createPrecalc(drawOverlay, object, dimensions);
                         })

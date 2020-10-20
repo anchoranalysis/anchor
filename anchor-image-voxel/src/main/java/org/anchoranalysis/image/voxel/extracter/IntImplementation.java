@@ -28,7 +28,7 @@ package org.anchoranalysis.image.voxel.extracter;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.max.MaxIntensityBufferInt;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedIntBuffer;
-import org.anchoranalysis.spatial.extent.Extent;
+import org.anchoranalysis.spatial.Extent;
 
 class IntImplementation extends Base<UnsignedIntBuffer> {
 

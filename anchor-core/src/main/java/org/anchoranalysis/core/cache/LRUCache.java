@@ -32,8 +32,8 @@ import com.google.common.cache.LoadingCache;
 import com.google.common.util.concurrent.UncheckedExecutionException;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
-import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
-import org.anchoranalysis.core.functional.function.CheckedFunction;
+import org.anchoranalysis.core.exception.friendly.AnchorFriendlyRuntimeException;
+import org.anchoranalysis.core.functional.checked.CheckedFunction;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 
 /**

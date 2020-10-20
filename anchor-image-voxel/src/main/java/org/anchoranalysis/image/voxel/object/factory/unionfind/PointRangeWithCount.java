@@ -26,9 +26,9 @@
 
 package org.anchoranalysis.image.voxel.object.factory.unionfind;
 
-import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.spatial.extent.box.BoundingBox;
-import org.anchoranalysis.spatial.extent.box.PointRange;
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.spatial.box.BoundingBox;
+import org.anchoranalysis.spatial.box.PointRange;
 import org.anchoranalysis.spatial.point.Point3i;
 
 class PointRangeWithCount {

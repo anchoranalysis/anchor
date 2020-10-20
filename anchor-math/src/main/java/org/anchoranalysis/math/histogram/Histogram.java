@@ -32,10 +32,9 @@ import java.util.Arrays;
 import java.util.function.IntFunction;
 import java.util.function.LongUnaryOperator;
 import lombok.Getter;
-import org.anchoranalysis.bean.shared.relation.threshold.RelationToThreshold;
-import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
-import org.anchoranalysis.core.relation.RelationToValue;
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
+import org.anchoranalysis.math.relation.RelationToValue;
 import org.anchoranalysis.math.statistics.VarianceCalculator;
 import org.apache.commons.lang.ArrayUtils;
 
@@ -373,10 +372,7 @@ public final class Histogram {
                 .variance();
     }
 
-    public long countThreshold(RelationToThreshold relationToThreshold) {
-
-        RelationToValue relation = relationToThreshold.relation();
-        double threshold = relationToThreshold.threshold();
+    public long countThreshold(RelationToValue relation, double threshold) {
 
         long sum = 0;
 
@@ -391,11 +387,7 @@ public final class Histogram {
     }
 
     // Thresholds (generates a new histogram, existing object is unchanged)
-
-    public Histogram threshold(RelationToThreshold relationToThreshold) {
-
-        RelationToValue relation = relationToThreshold.relation();
-        double threshold = relationToThreshold.threshold();
+    public Histogram threshold(RelationToValue relation, double threshold) {
 
         Histogram out = new Histogram(maxBin);
         out.sumCount = 0;

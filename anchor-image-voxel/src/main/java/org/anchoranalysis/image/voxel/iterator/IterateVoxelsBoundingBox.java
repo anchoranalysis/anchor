@@ -39,7 +39,7 @@ import org.anchoranalysis.image.voxel.iterator.process.buffer.ProcessBufferBinar
 import org.anchoranalysis.image.voxel.iterator.process.buffer.ProcessBufferBinaryMixed;
 import org.anchoranalysis.image.voxel.iterator.process.buffer.ProcessBufferTernary;
 import org.anchoranalysis.image.voxel.iterator.process.buffer.ProcessBufferUnary;
-import org.anchoranalysis.spatial.extent.box.BoundingBox;
+import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.point.Point3i;
 import org.anchoranalysis.spatial.point.ReadableTuple3i;
 

@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.image.feature.histogram;
 
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.math.histogram.Histogram;
 

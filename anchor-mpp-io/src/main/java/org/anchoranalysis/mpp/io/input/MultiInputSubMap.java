@@ -26,9 +26,9 @@
 
 package org.anchoranalysis.mpp.io.input;
 
-import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.name.store.NamedProviderStore;
-import org.anchoranalysis.core.name.store.StoreSupplier;
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.identifier.provider.store.NamedProviderStore;
+import org.anchoranalysis.core.identifier.provider.store.StoreSupplier;
 
 /**
  * a sub-item of multi-input which: 1. involves a map of objects of type T 2. can have its contents

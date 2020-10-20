@@ -28,9 +28,9 @@ package org.anchoranalysis.bean.shared.params.keyvalue;
 
 import java.nio.file.Path;
 import org.anchoranalysis.bean.initializable.params.BeanInitParams;
-import org.anchoranalysis.core.name.store.NamedProviderStore;
-import org.anchoranalysis.core.name.store.SharedObjects;
-import org.anchoranalysis.core.params.KeyValueParams;
+import org.anchoranalysis.core.identifier.provider.store.NamedProviderStore;
+import org.anchoranalysis.core.identifier.provider.store.SharedObjects;
+import org.anchoranalysis.core.value.KeyValueParams;
 
 public class KeyValueParamsInitParams implements BeanInitParams {
 

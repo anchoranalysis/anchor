@@ -29,7 +29,7 @@ package org.anchoranalysis.mpp.mark.voxelized;
 import org.anchoranalysis.image.voxel.BoundedVoxels;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
-import org.anchoranalysis.spatial.extent.box.BoundingBox;
+import org.anchoranalysis.spatial.box.BoundingBox;
 
 /**
  * A voxelized representation of a Mark i.e. a mark turned into voxels.

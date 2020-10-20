@@ -29,7 +29,7 @@ package org.anchoranalysis.image.voxel.factory.sliceindex;
 import java.nio.FloatBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferFactory;
-import org.anchoranalysis.spatial.extent.Extent;
+import org.anchoranalysis.spatial.Extent;
 
 public class FromFloat implements SliceBufferIndex<FloatBuffer> {
 

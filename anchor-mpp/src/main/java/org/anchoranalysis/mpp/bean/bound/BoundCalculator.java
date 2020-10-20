@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.mpp.bean.bound;
 
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.mpp.bean.MPPBean;
 import org.anchoranalysis.mpp.bound.BidirectionalBound;
 import org.anchoranalysis.spatial.point.Point3d;

@@ -26,7 +26,7 @@
 package org.anchoranalysis.io.generator.combined;
 
 import java.util.Optional;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.io.generator.MultipleFileTypeGenerator;
 import org.anchoranalysis.io.generator.serialized.ObjectOutputStreamGenerator;
 import org.anchoranalysis.io.generator.serialized.XStreamGenerator;

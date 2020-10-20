@@ -27,7 +27,7 @@ package org.anchoranalysis.core.graph;
 
 import java.util.Collection;
 import javax.lang.model.type.NullType;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 
 /**
  * A graph, either directed or undirected, where edges contain no payload.

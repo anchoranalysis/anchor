@@ -29,8 +29,8 @@ package org.anchoranalysis.mpp.io.marks.generator;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.idgetter.IDGetter;
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.identifier.getter.IdentifierGetter;
 import org.anchoranalysis.image.core.stack.DisplayStack;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.core.stack.rgb.RGBStack;
@@ -51,12 +51,12 @@ public abstract class MarksGeneratorBase extends RasterGenerator<ColoredMarksWit
     @Getter @Setter private String manifestDescriptionFunction = "marks";
 
     private DrawOverlay writer;
-    private IDGetter<Overlay> idGetter;
+    private IdentifierGetter<Overlay> idGetter;
     private RegionMembershipWithFlags regionMembership;
 
     public MarksGeneratorBase(
             DrawOverlay writer,
-            IDGetter<Overlay> idGetter,
+            IdentifierGetter<Overlay> idGetter,
             RegionMembershipWithFlags regionMembership) {
         super();
         this.writer = writer;
