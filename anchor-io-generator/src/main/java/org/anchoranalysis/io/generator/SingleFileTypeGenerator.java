@@ -43,21 +43,11 @@ import org.anchoranalysis.io.output.outputter.OutputterChecked;
  * @param <T> iteration-type
  * @param <S> type after any necessary preprocessing
  */
-public abstract class SingleFileTypeGenerator<T, S> implements Generator<T> {
+public abstract class SingleFileTypeGenerator<T, S> implements TransformingGenerator<T,S> {
 
     /** The manifest-description to use if none other is defined. */
     private static final ManifestDescription UNDEFINED_MANIFEST_DESCRIPTION =
             new ManifestDescription("undefined", "undefined");
-
-    /**
-     * Applies any necessary preprocessing to create an element suitable for writing to the
-     * filesystem.
-     *
-     * @param element element to be assigned and then transformed
-     * @return the transformed element after necessary preprocessing.
-     * @throws OutputWriteFailedException if anything goes wrong
-     */
-    public abstract S transform(T element) throws OutputWriteFailedException;
 
     public abstract void writeToFile(
             T element, OutputWriteSettings outputWriteSettings, Path filePath)
@@ -106,16 +96,6 @@ public abstract class SingleFileTypeGenerator<T, S> implements Generator<T> {
         return Optional.of(createFileTypeArray(createManifestDescription(), outputWriteSettings));
     }
 
-    private FileType[] createFileTypeArray(
-            Optional<ManifestDescription> description, OutputWriteSettings outputWriteSettings)
-            throws OperationFailedException {
-        ManifestDescription selectedDescription =
-                description.orElse(UNDEFINED_MANIFEST_DESCRIPTION);
-        return new FileType[] {
-            new FileType(selectedDescription, getFileExtension(outputWriteSettings))
-        };
-    }
-
     private void writeInternal(
             T element,
             String filenameWithoutExtension,
@@ -125,9 +105,11 @@ public abstract class SingleFileTypeGenerator<T, S> implements Generator<T> {
             throws OutputWriteFailedException {
 
         try {
+            String fileExtension = getFileExtension(outputter.getSettings());
+            
             Path pathToWriteTo =
                     outputter.makeOutputPath(
-                            filenameWithoutExtension, getFileExtension(outputter.getSettings()));
+                            filenameWithoutExtension, fileExtension);
 
             // First write to the file system, and then write to the operation-recorder. Thi
             writeToFile(element, outputter.getSettings(), pathToWriteTo);
@@ -140,5 +122,15 @@ public abstract class SingleFileTypeGenerator<T, S> implements Generator<T> {
         } catch (OperationFailedException e) {
             throw new OutputWriteFailedException(e);
         }
+    }
+    
+    private FileType[] createFileTypeArray(
+            Optional<ManifestDescription> description, OutputWriteSettings outputWriteSettings)
+            throws OperationFailedException {
+        ManifestDescription selectedDescription =
+                description.orElse(UNDEFINED_MANIFEST_DESCRIPTION);
+        return new FileType[] {
+            new FileType(selectedDescription, getFileExtension(outputWriteSettings))
+        };
     }
 }

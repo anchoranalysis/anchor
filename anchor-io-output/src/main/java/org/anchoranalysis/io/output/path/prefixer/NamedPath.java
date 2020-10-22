@@ -24,44 +24,26 @@
  * #L%
  */
 
-package org.anchoranalysis.io.output.path;
+package org.anchoranalysis.io.output.path.prefixer;
 
 import java.nio.file.Path;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Value;
 
+/**
+ * A path and associated name.
+ *
+ * <p>The name is guaranteed to be a unique identifier in the context of a given collection.
+ *
+ * @author Owen Feehan
+ */
 @AllArgsConstructor
-public class DirectoryWithPrefix implements PathCreator {
+@Value
+public class NamedPath {
 
-    @Getter private Path directory;
+    /** A unique name associated with the path */
+    private String name;
 
-    @Getter @Setter private String filenamePrefix = "";
-
-    public DirectoryWithPrefix(Path folderPath) {
-        setDirectory(folderPath.normalize());
-    }
-
-    public void setDirectory(Path folderPath) {
-        this.directory = folderPath.normalize();
-    }
-
-    /**
-     * A path that combines the {@code directory} and {@code fileNamePrefix}.
-     *
-     * @return the combined path
-     */
-    public Path getCombined() {
-        return getDirectory().resolve(getFilenamePrefix());
-    }
-
-    @Override
-    public Path makePathAbsolute(String filePathRelative) {
-        return directory.resolve(filenamePrefix + filePathRelative);
-    }
-
-    @Override
-    public Path makePathRelative(Path fullPath) {
-        return directory.relativize(fullPath);
-    }
+    /** The path */
+    private Path path;
 }

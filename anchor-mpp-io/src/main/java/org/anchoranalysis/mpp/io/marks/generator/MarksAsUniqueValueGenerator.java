@@ -30,7 +30,7 @@ import java.util.Optional;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.object.properties.ObjectCollectionWithProperties;
 import org.anchoranalysis.image.core.stack.Stack;
-import org.anchoranalysis.image.io.generator.raster.RasterGenerator;
+import org.anchoranalysis.image.io.generator.raster.RasterGeneratorSelectFormat;
 import org.anchoranalysis.image.io.generator.raster.object.collection.ObjectsAsUniqueValueGenerator;
 import org.anchoranalysis.image.io.stack.StackWriteOptions;
 import org.anchoranalysis.io.manifest.ManifestDescription;
@@ -38,7 +38,7 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMembershipWithFlags;
 import org.anchoranalysis.mpp.mark.MarkCollection;
 
-public class MarksAsUniqueValueGenerator extends RasterGenerator<MarkCollection> {
+public class MarksAsUniqueValueGenerator extends RasterGeneratorSelectFormat<MarkCollection> {
 
     private ObjectsAsUniqueValueGenerator delegate;
     private RegionMembershipWithFlags regionMembership;

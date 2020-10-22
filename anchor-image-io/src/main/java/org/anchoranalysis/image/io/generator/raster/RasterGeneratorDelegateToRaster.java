@@ -43,7 +43,7 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
  * @param <T> generator iteration-type (the iteration-type that is publicly exposed)
  */
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
-public abstract class RasterGeneratorDelegateToRaster<S, T> extends RasterGenerator<T> {
+public abstract class RasterGeneratorDelegateToRaster<S, T> extends RasterGeneratorSelectFormat<T> {
 
     // START REQUIRED ARGUMENTS
     /** The delegate. */

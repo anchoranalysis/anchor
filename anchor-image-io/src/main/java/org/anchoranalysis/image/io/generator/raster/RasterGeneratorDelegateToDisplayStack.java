@@ -36,13 +36,13 @@ import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 /**
- * Delegates a {@link RasterGenerator} to a {@code SingleFileTypeGenerator<T, DisplayStack>}.
+ * Delegates a {@link RasterGeneratorSelectFormat} to a {@code SingleFileTypeGenerator<T, DisplayStack>}.
  *
  * @author Owen Feehan
  * @param <T> element-type
  */
 @RequiredArgsConstructor
-public class RasterGeneratorDelegateToDisplayStack<T> extends RasterGenerator<T> {
+public class RasterGeneratorDelegateToDisplayStack<T> extends RasterGeneratorSelectFormat<T> {
 
     // START REQUIRED ARGUMENTS
     private final SingleFileTypeGenerator<T, DisplayStack> delegate;

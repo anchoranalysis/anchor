@@ -41,7 +41,7 @@ import org.anchoranalysis.image.core.object.properties.ObjectCollectionWithPrope
 import org.anchoranalysis.image.core.stack.DisplayStack;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.core.stack.rgb.RGBStack;
-import org.anchoranalysis.image.io.generator.raster.RasterGenerator;
+import org.anchoranalysis.image.io.generator.raster.RasterGeneratorSelectFormat;
 import org.anchoranalysis.image.io.stack.StackWriteOptions;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
@@ -55,7 +55,7 @@ import org.anchoranalysis.overlay.writer.ObjectDrawAttributes;
  */
 @AllArgsConstructor
 public abstract class ObjectsOnRGBGenerator
-        extends RasterGenerator<ObjectCollectionWithProperties> {
+        extends RasterGeneratorSelectFormat<ObjectCollectionWithProperties> {
 
     private static final ChannelFactorySingleType CHANNEL_FACTORY = new ChannelFactoryByte();
 

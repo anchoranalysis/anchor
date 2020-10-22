@@ -40,7 +40,7 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
  * @author Owen Feehan
  */
 @AllArgsConstructor
-public class StackGenerator extends RasterGenerator<Stack> {
+public class StackGenerator extends RasterGeneratorSelectFormat<Stack> {
 
     /**
      * Iff true, in the specific case of a 2-channel stack, an additional blank channel is added to

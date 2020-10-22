@@ -23,9 +23,10 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.test.image.io;
+package org.anchoranalysis.test.io.output;
 
 import java.nio.file.Path;
+import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
@@ -33,22 +34,29 @@ import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.core.exception.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.io.output.bean.OutputManager;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
+import org.anchoranalysis.io.output.bean.path.prefixer.FilePathCounter;
+import org.anchoranalysis.io.output.bean.path.prefixer.PathPrefixer;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class OutputManagerFixture {
-
-    public static OutputManager createOutputManager(Path pathForPrefixer) {
+    
+    public static OutputManager createOutputManager(Optional<Path> pathForPrefixer) {
         OutputManager outputManager = new OutputManager();
         outputManager.setSilentlyDeleteExisting(true);
         outputManager.setOutputWriteSettings(settings());
-        outputManager.setFilePathPrefixer(new ConstantPathPrefixer(pathForPrefixer));
+        outputManager.setFilePathPrefixer( prefixer(pathForPrefixer) );
         return outputManager;
+    }
+    
+    private static PathPrefixer prefixer(Optional<Path> pathForPrefixer) {
+        Optional<PathPrefixer> pathPrefixer = pathForPrefixer.map(ConstantPathPrefixer::new);
+        return pathPrefixer.orElseGet(FilePathCounter::new);
     }
 
     private static OutputWriteSettings settings() {
 
-        TestReaderWriterUtilities.ensureStackWriter();
-
+        RegisterBeanFactories.registerAllPackageBeanFactories();
+        
         OutputWriteSettings settings = new OutputWriteSettings();
 
         // We populate any defaults in OutputWriteSettings from our default bean factory

@@ -33,7 +33,7 @@ import org.anchoranalysis.image.core.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.image.core.stack.Stack;
-import org.anchoranalysis.image.io.generator.raster.RasterGenerator;
+import org.anchoranalysis.image.io.generator.raster.RasterGeneratorSelectFormat;
 import org.anchoranalysis.image.io.stack.StackWriteOptions;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
@@ -51,7 +51,7 @@ import org.anchoranalysis.spatial.point.Point3i;
  * @author Owen Feehan
  */
 @RequiredArgsConstructor
-public class ObjectAsMaskGenerator extends RasterGenerator<ObjectMask> {
+public class ObjectAsMaskGenerator extends RasterGeneratorSelectFormat<ObjectMask> {
 
     // START REQUIRED ARGUMENTS
     private final Optional<Resolution> resolution;

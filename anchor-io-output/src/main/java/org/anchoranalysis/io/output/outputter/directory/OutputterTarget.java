@@ -32,8 +32,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Value;
 import org.anchoranalysis.io.output.outputter.BindFailedException;
-import org.anchoranalysis.io.output.path.DirectoryWithPrefix;
-import org.anchoranalysis.io.output.path.PathCreator;
+import org.anchoranalysis.io.output.path.prefixer.DirectoryWithPrefix;
+import org.anchoranalysis.io.output.path.prefixer.PathCreator;
 import org.anchoranalysis.io.output.writer.WriterExecuteBeforeEveryOperation;
 
 /**

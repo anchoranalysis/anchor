@@ -34,11 +34,11 @@ import org.anchoranalysis.io.manifest.Manifest;
 import org.anchoranalysis.io.manifest.ManifestDirectoryDescription;
 import org.anchoranalysis.io.manifest.directory.JobRootDirectory;
 import org.anchoranalysis.io.manifest.sequencetype.StringsWithoutOrder;
-import org.anchoranalysis.io.output.path.DirectoryWithPrefix;
-import org.anchoranalysis.io.output.path.FilePathPrefixerContext;
-import org.anchoranalysis.io.output.path.NamedPath;
-import org.anchoranalysis.io.output.path.PathPrefixer;
-import org.anchoranalysis.io.output.path.PathPrefixerException;
+import org.anchoranalysis.io.output.bean.path.prefixer.PathPrefixer;
+import org.anchoranalysis.io.output.path.prefixer.DirectoryWithPrefix;
+import org.anchoranalysis.io.output.path.prefixer.FilePathPrefixerContext;
+import org.anchoranalysis.io.output.path.prefixer.NamedPath;
+import org.anchoranalysis.io.output.path.prefixer.PathPrefixerException;
 
 @RequiredArgsConstructor
 class PrefixForInput {

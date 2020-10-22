@@ -46,7 +46,7 @@ import org.anchoranalysis.image.io.bean.object.draw.Filled;
 import org.anchoranalysis.image.io.bean.object.draw.IfElse;
 import org.anchoranalysis.image.io.bean.object.draw.Outline;
 import org.anchoranalysis.image.io.bean.stack.provider.StackProviderWithLabel;
-import org.anchoranalysis.image.io.generator.raster.RasterGenerator;
+import org.anchoranalysis.image.io.generator.raster.RasterGeneratorSelectFormat;
 import org.anchoranalysis.image.io.generator.raster.StackGenerator;
 import org.anchoranalysis.image.io.generator.raster.object.rgb.DrawObjectsGenerator;
 import org.anchoranalysis.image.io.stack.StackWriteOptions;
@@ -67,7 +67,7 @@ import org.anchoranalysis.overlay.bean.DrawObject;
  * @author Owen Feehan
  */
 @RequiredArgsConstructor
-public class AssignmentGenerator extends RasterGenerator<Assignment> {
+public class AssignmentGenerator extends RasterGeneratorSelectFormat<Assignment> {
 
     // START REQUIRED ARGUMENTS
     /** The background, which will feature in both left and right panes. */

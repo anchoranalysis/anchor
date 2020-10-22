@@ -32,7 +32,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
-import org.anchoranalysis.image.io.generator.raster.RasterGenerator;
+import org.anchoranalysis.image.io.generator.raster.RasterGeneratorSelectFormat;
 import org.anchoranalysis.image.io.stack.StackWriteOptions;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.io.manifest.ManifestDescription;
@@ -44,7 +44,7 @@ import org.anchoranalysis.io.manifest.ManifestDescription;
  */
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 @Accessors(fluent = true)
-public abstract class ObjectsGenerator extends RasterGenerator<ObjectCollection> {
+public abstract class ObjectsGenerator extends RasterGeneratorSelectFormat<ObjectCollection> {
 
     // START REQUIRED ARGUMENTS
     /**

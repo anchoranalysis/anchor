@@ -61,37 +61,33 @@ class SequenceWriters {
 
     private IndexableSubdirectory directoryManifest;
 
-    public void init(FileType[] fileTypes, SequenceType<?> sequenceType) throws InitException {
-
-        if (fileTypes.length == 0) {
-            throw new InitException("The generator has no associated FileTypes");
-        }
+    public void init(SequenceType<?> sequenceType) throws InitException {
 
         this.directoryManifest = new IndexableSubdirectory(pattern.getOutputNameStyle());
-
-        Arrays.stream(fileTypes).forEach(directoryManifest::addFileType);
 
         try {
             this.writers =
                     selectWritersMaybeCreateSubdirectory(
-                            createDirectoryDescription(fileTypes, sequenceType), directoryManifest);
+                            createDirectoryDescription(sequenceType), directoryManifest);
         } catch (OutputWriteFailedException e) {
             throw new InitException(e);
         }
+    }
+    
+    public void addFileTypes(FileType[] fileTypes) {
+        Arrays.stream(fileTypes).forEach(directoryManifest::addFileType);
     }
 
     public <T> void write(
             ElementWriterSupplier<T> generator, ElementSupplier<T> element, String index)
             throws OutputWriteFailedException {
-
-        if (!isOn()) {
-            return;
+        
+        if (isOn()) {
+            this.writers // NOSONAR
+            .get()
+            .multiplex(pattern.isSelective())
+            .writeWithIndex(pattern.getOutputNameStyle(), generator, element, index);
         }
-
-        this.writers // NOSONAR
-                .get()
-                .multiplex(pattern.isSelective())
-                .writeWithIndex(pattern.getOutputNameStyle(), generator, element, index);
     }
 
     public boolean isOn() {
@@ -99,14 +95,14 @@ class SequenceWriters {
     }
 
     private Optional<RecordingWriters> selectWritersMaybeCreateSubdirectory(
-            ManifestDirectoryDescription folderDescription, IndexableSubdirectory subFolderWrite)
+            ManifestDirectoryDescription directoryDescription, IndexableSubdirectory subFolderWrite)
             throws OutputWriteFailedException {
         if (pattern.getSubdirectoryName().isPresent()) {
             return parentWriters
                     .multiplex(pattern.isSelective())
                     .createSubdirectory(
                             pattern.getSubdirectoryName().get(), // NOSONAR
-                            folderDescription,
+                            directoryDescription,
                             Optional.of(subFolderWrite),
                             false)
                     .map(OutputterChecked::getWriters);
@@ -116,8 +112,10 @@ class SequenceWriters {
     }
 
     private ManifestDirectoryDescription createDirectoryDescription(
-            FileType[] fileTypes, SequenceType<?> sequenceType) {
+            SequenceType<?> sequenceType) {
         return new ManifestDirectoryDescription(
-                pattern.createDirectoryDescription(fileTypes), sequenceType);
+                pattern.getManifestDescription(),
+                sequenceType
+        );
     }
 }

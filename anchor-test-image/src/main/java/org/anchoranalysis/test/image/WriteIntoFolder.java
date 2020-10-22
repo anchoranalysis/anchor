@@ -28,6 +28,7 @@ package org.anchoranalysis.test.image;
 import io.vavr.control.Either;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Optional;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.exception.CreateException;
@@ -206,7 +207,7 @@ public class WriteIntoFolder implements TestRule {
 
                 Path path = folder.getRoot().toPath();
 
-                outputter = OutputterFixture.outputter(path);
+                outputter = OutputterFixture.outputter( Optional.of(path) );
 
                 if (printDirectoryToConsole) {
                     System.out.println("Outputs written in test to: " + path); // NOSONAR

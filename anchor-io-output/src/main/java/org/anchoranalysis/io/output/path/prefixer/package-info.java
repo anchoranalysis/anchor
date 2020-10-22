@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-io
+ * anchor-io-output
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -23,27 +23,5 @@
  * THE SOFTWARE.
  * #L%
  */
-
-package org.anchoranalysis.io.output.path;
-
-import java.nio.file.Path;
-import lombok.AllArgsConstructor;
-import lombok.Value;
-
-/**
- * A path and associated name.
- *
- * <p>The name is guaranteed to be a unique identifier in the context of a given collection.
- *
- * @author Owen Feehan
- */
-@AllArgsConstructor
-@Value
-public class NamedPath {
-
-    /** A unique name associated with the path */
-    private String name;
-
-    /** The path */
-    private Path path;
-}
+/** Non-beans for generating paths for outputting files by adding a prefix, suffix etc. */
+package org.anchoranalysis.io.output.path.prefixer;

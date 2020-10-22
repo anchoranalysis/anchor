@@ -36,11 +36,11 @@ import org.anchoranalysis.image.core.object.properties.ObjectCollectionWithPrope
 import org.anchoranalysis.image.core.object.properties.ObjectWithProperties;
 import org.anchoranalysis.image.core.stack.DisplayStack;
 import org.anchoranalysis.image.core.stack.Stack;
-import org.anchoranalysis.image.io.generator.raster.RasterGenerator;
+import org.anchoranalysis.image.io.generator.raster.RasterGeneratorSelectFormat;
 import org.anchoranalysis.image.io.generator.raster.object.rgb.DrawObjectsGenerator;
 import org.anchoranalysis.image.io.stack.StackWriteOptions;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
-import org.anchoranalysis.io.generator.SingleFileTypeGenerator;
+import org.anchoranalysis.io.generator.TransformingGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.spatial.box.BoundedList;
@@ -56,14 +56,14 @@ import org.anchoranalysis.spatial.point.Point3i;
  *
  * @author Owen Feehan
  */
-public class DrawObjectOnStackGenerator extends RasterGenerator<BoundedList<ObjectMask>> {
+public class DrawObjectOnStackGenerator extends RasterGeneratorSelectFormat<BoundedList<ObjectMask>> {
 
     private static final ManifestDescription MANIFEST_DESCRIPTION =
             new ManifestDescription("raster", "extractedObjectOutline");
 
     // START REQUIRED ARGUMENTS
     private final DrawObjectsGenerator drawObjectsGenerator;
-    private final Optional<SingleFileTypeGenerator<BoundingBox, Stack>> backgroundGenerator;
+    private final Optional<TransformingGenerator<BoundingBox, Stack>> backgroundGenerator;
     private final boolean flatten;
     // END REQUIRED ARGUMENTS
 
@@ -114,39 +114,18 @@ public class DrawObjectOnStackGenerator extends RasterGenerator<BoundedList<Obje
 
     /**
      * Creates an extracted-object generator that draws an outline - with default color green and
-     * flattened in Z
+     * flattened in Z.
      *
      * @param backgroundGenerator generates a background for a bounding-box
      * @param outlineWidth width of the outline around an object
      * @param colors colors to use for outlining of objects
      */
     public static DrawObjectOnStackGenerator createFromGenerator(
-            SingleFileTypeGenerator<BoundingBox, Stack> backgroundGenerator,
+            TransformingGenerator<BoundingBox, Stack> backgroundGenerator,
             int outlineWidth,
             ColorIndex colors) {
         return new DrawObjectOnStackGenerator(
                 Optional.of(backgroundGenerator), outlineWidth, colors, true);
-    }
-
-    /**
-     * Creates an extracted-object generator that draws an outline
-     *
-     * @param backgroundGenerator generates a background for a bounding-box, otherwise the
-     *     background is set to all zeros
-     * @param outlineWidth width of the outline around an object
-     * @param colorIndex the colors used by successive objects in rotation
-     * @param flatten whether to flatten in the z-dimension (maximum-intensity projection of stack
-     *     and bounding-box)
-     */
-    private DrawObjectOnStackGenerator(
-            Optional<SingleFileTypeGenerator<BoundingBox, Stack>> backgroundGenerator,
-            int outlineWidth,
-            ColorIndex colorIndex,
-            boolean flatten) {
-        this.drawObjectsGenerator =
-                DrawObjectsGenerator.outlineWithColorIndex(outlineWidth, colorIndex);
-        this.backgroundGenerator = backgroundGenerator;
-        this.flatten = flatten;
     }
 
     @Override
@@ -166,6 +145,21 @@ public class DrawObjectOnStackGenerator extends RasterGenerator<BoundedList<Obje
         // An object-mask that is relative to the extracted section
         return drawObjectsGenerator.transform(
                 new ObjectCollectionWithProperties(objectsForDrawing));
+    }
+
+    @Override
+    public Optional<ManifestDescription> createManifestDescription() {
+        return Optional.of(MANIFEST_DESCRIPTION);
+    }
+
+    @Override
+    public boolean isRGB() {
+        return drawObjectsGenerator.isRGB();
+    }
+
+    @Override
+    public StackWriteOptions writeOptions() {
+        return StackWriteOptions.maybeRGB(isRGB());
     }
 
     private Either<Dimensions, DisplayStack> createBackground(BoundedList<ObjectMask> element)
@@ -189,21 +183,27 @@ public class DrawObjectOnStackGenerator extends RasterGenerator<BoundedList<Obje
         }
     }
 
-    @Override
-    public Optional<ManifestDescription> createManifestDescription() {
-        return Optional.of(MANIFEST_DESCRIPTION);
+    /**
+     * Creates an extracted-object generator that draws an outline
+     *
+     * @param backgroundGenerator generates a background for a bounding-box, otherwise the
+     *     background is set to all zeros
+     * @param outlineWidth width of the outline around an object
+     * @param colorIndex the colors used by successive objects in rotation
+     * @param flatten whether to flatten in the z-dimension (maximum-intensity projection of stack
+     *     and bounding-box)
+     */
+    private DrawObjectOnStackGenerator(
+            Optional<TransformingGenerator<BoundingBox, Stack>> backgroundGenerator,
+            int outlineWidth,
+            ColorIndex colorIndex,
+            boolean flatten) {
+        this.drawObjectsGenerator =
+                DrawObjectsGenerator.outlineWithColorIndex(outlineWidth, colorIndex);
+        this.backgroundGenerator = backgroundGenerator;
+        this.flatten = flatten;
     }
-
-    @Override
-    public boolean isRGB() {
-        return drawObjectsGenerator.isRGB();
-    }
-
-    @Override
-    public StackWriteOptions writeOptions() {
-        return StackWriteOptions.maybeRGB(isRGB());
-    }
-
+    
     private ObjectMask prepareObjectForDrawing(ObjectMask object, BoundingBox containingBox) {
         if (flatten) {
             return relativeBoundingBoxToScene(object.flattenZ(), containingBox);

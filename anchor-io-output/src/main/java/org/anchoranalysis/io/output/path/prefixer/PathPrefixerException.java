@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-io-output
+ * anchor-io
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -23,5 +23,21 @@
  * THE SOFTWARE.
  * #L%
  */
-/** Generating paths for outputting files by adding a prefix, suffix etc. */
-package org.anchoranalysis.io.output.path;
+
+package org.anchoranalysis.io.output.path.prefixer;
+
+import org.anchoranalysis.core.exception.friendly.AnchorFriendlyCheckedException;
+
+public class PathPrefixerException extends AnchorFriendlyCheckedException {
+
+    /** */
+    private static final long serialVersionUID = 1L;
+
+    public PathPrefixerException(String message) {
+        super(message);
+    }
+
+    public PathPrefixerException(Throwable cause) {
+        super(cause);
+    }
+}

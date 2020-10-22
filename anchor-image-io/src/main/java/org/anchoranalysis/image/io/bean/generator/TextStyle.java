@@ -46,7 +46,7 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.bean.spatial.SizeXY;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.core.stack.bufferedimage.CreateStackFromBufferedImage;
-import org.anchoranalysis.image.io.generator.raster.RasterGenerator;
+import org.anchoranalysis.image.io.generator.raster.RasterGeneratorSelectFormat;
 import org.anchoranalysis.image.io.stack.StackWriteOptions;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
@@ -88,7 +88,7 @@ public class TextStyle extends AnchorBean<TextStyle> {
     }
 
     /** Creates a generator, which produces a drawn string on an image when generated */
-    public RasterGenerator<String> createGenerator() {
+    public RasterGeneratorSelectFormat<String> createGenerator() {
         return new RasterizedTextGenerator();
     }
 
@@ -97,7 +97,7 @@ public class TextStyle extends AnchorBean<TextStyle> {
      *
      * @author Owen Feehan
      */
-    private class RasterizedTextGenerator extends RasterGenerator<String> {
+    private class RasterizedTextGenerator extends RasterGeneratorSelectFormat<String> {
 
         @Override
         public Stack transform(String element) throws OutputWriteFailedException {

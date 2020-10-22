@@ -28,6 +28,7 @@ package org.anchoranalysis.io.manifest;
 
 import java.io.Serializable;
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Value;
 
 /**
@@ -45,6 +46,7 @@ import lombok.Value;
  */
 @AllArgsConstructor
 @Value
+@EqualsAndHashCode
 public class ManifestDescription implements Serializable {
 
     /** */

@@ -87,11 +87,9 @@ public class NamedProviderOutputter<T> {
                 subset(provider.keys(), outputter.getOutputsEnabled().second(outputName));
 
         // If no outputs are allowed, exit early
-        if (allowedKeys.isEmpty()) {
-            return;
+        if (!allowedKeys.isEmpty()) {
+            outputAllowed(allowedKeys, new OutputPatternStringSuffix(outputName, suppressSubdirectory));
         }
-
-        outputAllowed(allowedKeys, new OutputPatternStringSuffix(outputName, suppressSubdirectory));
     }
 
     private void outputAllowed(Set<String> allowedKeys, OutputPatternStringSuffix sequenceDirectory)
@@ -102,7 +100,10 @@ public class NamedProviderOutputter<T> {
         OutputSequenceIndexed<T, String> writer = factory.withoutOrder(sequenceDirectory);
         for (String key : allowedKeys) {
             try {
-                writer.add(provider.getException(key), key);
+                // Determine what file extension will be used for the particular file
+                String extension = ".tif";
+                
+                writer.add(provider.getException(key), key + extension);
             } catch (NamedProviderGetException e) {
                 throwExceptionInWriter(e, key);
             }

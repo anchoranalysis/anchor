@@ -34,7 +34,7 @@ import org.anchoranalysis.core.identifier.getter.IdentifierGetter;
 import org.anchoranalysis.image.core.stack.DisplayStack;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.core.stack.rgb.RGBStack;
-import org.anchoranalysis.image.io.generator.raster.RasterGenerator;
+import org.anchoranalysis.image.io.generator.raster.RasterGeneratorSelectFormat;
 import org.anchoranalysis.image.io.stack.ConvertDisplayStackToRGB;
 import org.anchoranalysis.image.io.stack.StackWriteOptions;
 import org.anchoranalysis.io.manifest.ManifestDescription;
@@ -46,7 +46,7 @@ import org.anchoranalysis.overlay.Overlay;
 import org.anchoranalysis.overlay.collection.ColoredOverlayCollection;
 import org.anchoranalysis.overlay.writer.DrawOverlay;
 
-public abstract class MarksGeneratorBase extends RasterGenerator<ColoredMarksWithDisplayStack> {
+public abstract class MarksGeneratorBase extends RasterGeneratorSelectFormat<ColoredMarksWithDisplayStack> {
 
     @Getter @Setter private String manifestDescriptionFunction = "marks";
 

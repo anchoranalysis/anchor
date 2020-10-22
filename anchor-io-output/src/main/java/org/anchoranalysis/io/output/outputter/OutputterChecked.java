@@ -40,7 +40,7 @@ import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.bean.rules.Permissive;
 import org.anchoranalysis.io.output.enabled.multi.MultiLevelOutputEnabled;
 import org.anchoranalysis.io.output.outputter.directory.OutputterTarget;
-import org.anchoranalysis.io.output.path.DirectoryWithPrefix;
+import org.anchoranalysis.io.output.path.prefixer.DirectoryWithPrefix;
 import org.anchoranalysis.io.output.recorded.MultiLevelRecordedOutputs;
 import org.anchoranalysis.io.output.recorded.RecordingWriters;
 
@@ -192,7 +192,7 @@ public class OutputterChecked {
      * manager
      *
      * @param subdirectoryName the subdirectory-name
-     * @param manifestDescription manifest-description
+     * @param manifestDescription manifest-description for the directory if it exists
      * @param manifestFolder manifest-folder
      * @param inheritOutputRulesAndRecording if true, the output rules and recording are inherited
      *     from the parent directory. if false, they are not, and all outputs are allowed and are

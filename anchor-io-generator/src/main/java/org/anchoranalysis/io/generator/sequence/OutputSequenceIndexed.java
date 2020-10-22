@@ -79,7 +79,8 @@ public class OutputSequenceIndexed<T, S> implements OutputSequence {
         this.sequenceType = sequenceType;
 
         try {
-            this.sequenceWriter.init(fileTypes(), this.sequenceType);
+            this.sequenceWriter.init(this.sequenceType);
+            fileTypesFromGenerator().ifPresent(sequenceWriter::addFileTypes);
         } catch (OperationFailedException | InitException e) {
             throw new OutputWriteFailedException(e);
         }
@@ -100,7 +101,7 @@ public class OutputSequenceIndexed<T, S> implements OutputSequence {
      * @throws OutputWriteFailedException if the output cannot be successfully written.
      */
     public void add(T element, S index) throws OutputWriteFailedException {
-
+        
         try {
             // Then output isn't allowed and we should just exit
             if (!sequenceWriter.isOn()) {
@@ -121,14 +122,8 @@ public class OutputSequenceIndexed<T, S> implements OutputSequence {
         return sequenceWriter.writers();
     }
 
-    private FileType[] fileTypes() throws OperationFailedException {
+    private Optional<FileType[]> fileTypesFromGenerator() throws OperationFailedException {
         return generator
-                .getFileTypes(settings)
-                .orElseThrow(OutputSequenceIndexed::fileTypesException);
-    }
-
-    private static OperationFailedException fileTypesException() {
-        return new OperationFailedException(
-                "This operation requires file-types to be defined by the generator");
+                .getFileTypes(settings);
     }
 }

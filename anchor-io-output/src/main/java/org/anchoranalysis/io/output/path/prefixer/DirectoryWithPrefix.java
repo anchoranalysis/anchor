@@ -24,33 +24,44 @@
  * #L%
  */
 
-package org.anchoranalysis.io.output.path;
+package org.anchoranalysis.io.output.path.prefixer;
 
 import java.nio.file.Path;
-import java.util.Optional;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 
-public class FilePathPrefixerContext {
+@AllArgsConstructor
+public class DirectoryWithPrefix implements PathCreator {
 
-    @Getter private boolean debugMode;
+    @Getter private Path directory;
 
-    /** A directory indicating where inputs can be located */
-    @Getter private final Optional<Path> outputDirectory;
+    @Getter @Setter private String filenamePrefix = "";
 
-    public FilePathPrefixerContext(boolean debugMode, Optional<Path> outputDirectory)
-            throws PathPrefixerException {
-        super();
-        this.debugMode = debugMode;
-        this.outputDirectory = outputDirectory;
-        checkAbsolutePath();
+    public DirectoryWithPrefix(Path folderPath) {
+        setDirectory(folderPath.normalize());
     }
 
-    private void checkAbsolutePath() throws PathPrefixerException {
-        if (outputDirectory.isPresent() && !outputDirectory.get().isAbsolute()) {
-            throw new PathPrefixerException(
-                    String.format(
-                            "An non-absolute path was passed to FilePathPrefixerParams of %s",
-                            outputDirectory.get()));
-        }
+    public void setDirectory(Path folderPath) {
+        this.directory = folderPath.normalize();
+    }
+
+    /**
+     * A path that combines the {@code directory} and {@code fileNamePrefix}.
+     *
+     * @return the combined path
+     */
+    public Path getCombined() {
+        return getDirectory().resolve(getFilenamePrefix());
+    }
+
+    @Override
+    public Path makePathAbsolute(String filePathRelative) {
+        return directory.resolve(filenamePrefix + filePathRelative);
+    }
+
+    @Override
+    public Path makePathRelative(Path fullPath) {
+        return directory.relativize(fullPath);
     }
 }

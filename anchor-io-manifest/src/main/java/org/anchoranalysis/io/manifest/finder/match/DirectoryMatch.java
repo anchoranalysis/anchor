@@ -28,7 +28,6 @@ package org.anchoranalysis.io.manifest.finder.match;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Optional;
 import java.util.function.Predicate;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -57,8 +56,8 @@ public class DirectoryMatch {
     }
 
     private static boolean presentAnd(
-            Optional<ManifestDirectoryDescription> optional,
+            ManifestDirectoryDescription descriptionToTest,
             Predicate<ManifestDescription> descriptionMatch) {
-        return optional.isPresent() && descriptionMatch.test(optional.get().getDescription());
+        return descriptionToTest.getDescription().isPresent() && descriptionMatch.test(descriptionToTest.getDescription().get());
     }
 }

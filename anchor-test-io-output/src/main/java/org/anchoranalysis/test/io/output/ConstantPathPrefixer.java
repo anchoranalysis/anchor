@@ -23,13 +23,13 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.test.image.io;
+package org.anchoranalysis.test.io.output;
 
 import java.nio.file.Path;
-import org.anchoranalysis.io.output.path.DirectoryWithPrefix;
-import org.anchoranalysis.io.output.path.FilePathPrefixerContext;
-import org.anchoranalysis.io.output.path.NamedPath;
-import org.anchoranalysis.io.output.path.PathPrefixer;
+import org.anchoranalysis.io.output.bean.path.prefixer.PathPrefixer;
+import org.anchoranalysis.io.output.path.prefixer.DirectoryWithPrefix;
+import org.anchoranalysis.io.output.path.prefixer.FilePathPrefixerContext;
+import org.anchoranalysis.io.output.path.prefixer.NamedPath;
 
 class ConstantPathPrefixer extends PathPrefixer {
 

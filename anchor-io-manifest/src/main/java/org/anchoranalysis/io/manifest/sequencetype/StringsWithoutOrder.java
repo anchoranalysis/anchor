@@ -26,8 +26,6 @@
 
 package org.anchoranalysis.io.manifest.sequencetype;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.util.HashSet;
 import org.anchoranalysis.core.index.bounded.OrderProvider;
 
@@ -49,7 +47,6 @@ public class StringsWithoutOrder extends SequenceType<String> {
 
     public StringsWithoutOrder() {
         set = new HashSet<>();
-        range = new CollectionAsRange(set);
     }
 
     @Override
@@ -81,12 +78,11 @@ public class StringsWithoutOrder extends SequenceType<String> {
 
     @Override
     public IncompleteElementRange elementRange() {
+        if (range==null) {
+            // Lazy creation due to serialization
+            range = new CollectionAsRange(set);
+        }
         return range;
     }
 
-    /** For restoring {@code range} after deserialization. */
-    private void readObject(ObjectInputStream stream) throws IOException, ClassNotFoundException {
-        stream.defaultReadObject();
-        this.range = new CollectionAsRange(set);
-    }
 }

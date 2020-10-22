@@ -27,36 +27,95 @@
 package org.anchoranalysis.image.io.generator.raster;
 
 import java.nio.file.Path;
+import java.util.Optional;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.core.stack.Stack;
-import org.anchoranalysis.image.io.ImageIOException;
-import org.anchoranalysis.image.io.bean.stack.StackWriter;
 import org.anchoranalysis.image.io.stack.StackWriteOptions;
-import org.anchoranalysis.io.generator.SingleFileTypeGenerator;
+import org.anchoranalysis.io.generator.TransformingGenerator;
+import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import org.anchoranalysis.io.output.namestyle.IndexableOutputNameStyle;
+import org.anchoranalysis.io.output.namestyle.OutputNameStyle;
+import org.anchoranalysis.io.output.outputter.OutputterChecked;
 
-/** @author Owen Feehan */
-public abstract class RasterGenerator<T> extends SingleFileTypeGenerator<T, Stack> {
-
-    public abstract boolean isRGB();
+/** 
+ * Transfroms an entity to a {@link Stack} and writes it to the file-system.
+ * 
+ * @author Owen Feehan
+ */
+public abstract class RasterGenerator<T> implements TransformingGenerator<T,Stack> {
 
     @Override
-    public void writeToFile(T element, OutputWriteSettings outputWriteSettings, Path filePath)
+    public void write(T element, OutputNameStyle outputNameStyle, OutputterChecked outputter)
             throws OutputWriteFailedException {
+        writeInternal(
+                element,
+                outputNameStyle.getFilenameWithoutExtension(),
+                outputNameStyle.getOutputName(),
+                "",
+                outputter);
+    }
+
+    /** As only a single-file is involved, this methods delegates to a simpler virtual method. */
+    @Override
+    public int writeWithIndex(
+            T element,
+            String index,
+            IndexableOutputNameStyle outputNameStyle,
+            OutputterChecked outputter)
+            throws OutputWriteFailedException {
+
+        writeInternal(
+                element,
+                outputNameStyle.getFilenameWithoutExtension(index),
+                outputNameStyle.getOutputName(),
+                index,
+                outputter);
+
+        return 1;
+    }
+   
+    /**
+     * Is the image being created RGB?
+     * 
+     * @return
+     */
+    public abstract boolean isRGB();
+        
+    public abstract StackWriteOptions writeOptions();
+    
+    public abstract Optional<ManifestDescription> createManifestDescription();
+    
+    protected abstract void writeToFile(
+            T element, OutputWriteSettings outputWriteSettings, Path filePath)
+            throws OutputWriteFailedException;
+
+    protected abstract String selectFileExtension(OutputWriteSettings outputWriteSettings) throws OperationFailedException;
+    
+    private void writeInternal(
+            T element,
+            String filenameWithoutExtension,
+            String outputName,
+            String index,
+            OutputterChecked outputter)
+            throws OutputWriteFailedException {
+
         try {
-            StackWriter writer = GeneratorOutputter.writer(outputWriteSettings);
-            writer.writeStack(transform(element), filePath, isRGB(), writeOptions());
-        } catch (ImageIOException e) {
+            Path pathToWriteTo =
+                    outputter.makeOutputPath(
+                            filenameWithoutExtension, selectFileExtension(outputter.getSettings()));
+
+            // First write to the file system, and then write to the operation-recorder. Thi
+            writeToFile(element, outputter.getSettings(), pathToWriteTo);
+
+            createManifestDescription()
+                    .ifPresent(
+                            manifestDescription ->
+                                    outputter.writeFileToOperationRecorder(
+                                            outputName, pathToWriteTo, manifestDescription, index));
+        } catch (OperationFailedException e) {
             throw new OutputWriteFailedException(e);
         }
     }
-
-    @Override
-    public String getFileExtension(OutputWriteSettings outputWriteSettings)
-            throws OperationFailedException {
-        return GeneratorOutputter.fileExtensionWriter(outputWriteSettings, writeOptions());
-    }
-
-    public abstract StackWriteOptions writeOptions();
 }

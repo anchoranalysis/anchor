@@ -32,7 +32,7 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.io.manifest.Manifest;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
-import org.anchoranalysis.io.output.path.DirectoryWithPrefix;
+import org.anchoranalysis.io.output.path.prefixer.DirectoryWithPrefix;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class ManifestClashChecker {

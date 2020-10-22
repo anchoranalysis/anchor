@@ -36,9 +36,9 @@ import org.anchoranalysis.experiment.bean.log.LoggingDestination;
 import org.anchoranalysis.experiment.log.StatefulMessageLogger;
 import org.anchoranalysis.io.manifest.Manifest;
 import org.anchoranalysis.io.output.bean.OutputManager;
+import org.anchoranalysis.io.output.bean.path.prefixer.PathPrefixer;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
-import org.anchoranalysis.io.output.path.PathPrefixer;
 
 /**
  * Parameters for executing a task, when the manifest, log etc. are still bound to the experiment

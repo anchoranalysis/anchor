@@ -24,20 +24,33 @@
  * #L%
  */
 
-package org.anchoranalysis.io.output.path;
+package org.anchoranalysis.io.output.path.prefixer;
 
-import org.anchoranalysis.core.exception.friendly.AnchorFriendlyCheckedException;
+import java.nio.file.Path;
+import java.util.Optional;
+import lombok.Getter;
 
-public class PathPrefixerException extends AnchorFriendlyCheckedException {
+public class FilePathPrefixerContext {
 
-    /** */
-    private static final long serialVersionUID = 1L;
+    @Getter private boolean debugMode;
 
-    public PathPrefixerException(String message) {
-        super(message);
+    /** A directory indicating where inputs can be located */
+    @Getter private final Optional<Path> outputDirectory;
+
+    public FilePathPrefixerContext(boolean debugMode, Optional<Path> outputDirectory)
+            throws PathPrefixerException {
+        super();
+        this.debugMode = debugMode;
+        this.outputDirectory = outputDirectory;
+        checkAbsolutePath();
     }
 
-    public PathPrefixerException(Throwable cause) {
-        super(cause);
+    private void checkAbsolutePath() throws PathPrefixerException {
+        if (outputDirectory.isPresent() && !outputDirectory.get().isAbsolute()) {
+            throw new PathPrefixerException(
+                    String.format(
+                            "An non-absolute path was passed to FilePathPrefixerParams of %s",
+                            outputDirectory.get()));
+        }
     }
 }

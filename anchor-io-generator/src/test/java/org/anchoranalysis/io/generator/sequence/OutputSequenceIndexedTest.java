@@ -25,32 +25,77 @@
  */
 package org.anchoranalysis.io.generator.sequence;
 
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.io.generator.sequence.pattern.OutputPattern;
+import org.anchoranalysis.io.generator.sequence.pattern.OutputPatternStringSuffix;
+import org.anchoranalysis.io.manifest.Manifest;
 import org.anchoranalysis.io.manifest.sequencetype.SequenceType;
 import org.anchoranalysis.io.manifest.sequencetype.StringsWithoutOrder;
-import org.anchoranalysis.io.output.bean.OutputManager;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import org.anchoranalysis.io.output.outputter.BindFailedException;
+import org.anchoranalysis.io.output.outputter.OutputterChecked;
+import org.anchoranalysis.test.io.output.OutputterCheckedFixture;
 import org.junit.Test;
-import org.mockito.Mockito;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class OutputSequenceIndexedTest {
-
+    
+    private static final String OUTPUT_NAME = "out";
+    
     @Test
-    public void testA() throws OutputWriteFailedException {
-
+    public void testUniformFileTypes() throws OutputWriteFailedException, OperationFailedException {
+        test(true);
+    }
+    
+    @Test
+    public void testNonUniformFileTypes() throws OutputWriteFailedException, OperationFailedException {
+        test(false);
+    }
+    
+    /**
+     * Outputs a sequence with the generator configured with different types of file-types.
+     * 
+     * @param withUniformFileTypes if true, the generator provides certain file-types common to all.
+     * 
+     * @throws OutputWriteFailedException
+     * @throws OperationFailedException
+     */
+    private static void test(boolean withUniformFileTypes) throws OutputWriteFailedException, OperationFailedException {
+        Manifest manifest = new Manifest();
+        
         SequenceType<String> sequenceType = new StringsWithoutOrder();
 
-        /*OutputSequenceIndexed<Integer, String> sequence = new OutputSequenceIndexed<>(
-                createOutputter(), sequenceType
-        );*/
+        BoundOutputter<Integer> outputter = createOutputter( new OutputPatternStringSuffix(OUTPUT_NAME, false), manifest, withUniformFileTypes);
+        
+        OutputSequenceIndexed<Integer, String> sequence = new OutputSequenceIndexed<>(
+                outputter, sequenceType
+        );
+        
+        sequence.add(4, "4");
+        sequence.add(5, "6");
+        sequence.add(9, "9");
+        
+        assertEquals(3, sequenceType.getNumberElements());
+        assertEquals(1, manifest.getRootFolder().subdirectories().size());
+        assertTrue(manifest.getRootFolder().subdirectories().get(0) instanceof IndexableSubdirectory);
+        checkIndexableSubdirectory( (IndexableSubdirectory) manifest.getRootFolder().subdirectories().get(0));        
+    }
+    
+    private static void checkIndexableSubdirectory(IndexableSubdirectory subdirectory) {
+        assertTrue( subdirectory.getFileTypes().size()==1 );
+        assertTrue( subdirectory.getFileTypes().iterator().next().getManifestDescription().equals(GeneratorFixture.MANIFEST_DESCRIPTION) );
+        assertTrue( subdirectory.getOutputName().getOutputName().equals(OUTPUT_NAME) );
     }
 
-    private static BoundOutputter<Integer> createOutputter() {
+    private static BoundOutputter<Integer> createOutputter(OutputPattern pattern, Manifest manifest, boolean includeFileTypes) throws OperationFailedException {
 
-        @SuppressWarnings("unchecked")
-        OutputManager outputManager = Mockito.mock(OutputManager.class);
-
-        // return OutputterFixture.
-        // return outputter;
-        return null;
+        try {
+            OutputterChecked outputter = OutputterCheckedFixture.create(manifest);
+            return new BoundOutputter<Integer>(outputter, pattern, GeneratorFixture.create(includeFileTypes) );
+            
+        } catch (BindFailedException e) {
+            throw new OperationFailedException(e);
+        }
     }
 }

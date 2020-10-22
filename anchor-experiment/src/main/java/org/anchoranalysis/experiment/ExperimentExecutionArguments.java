@@ -39,8 +39,8 @@ import org.anchoranalysis.core.exception.friendly.AnchorFriendlyRuntimeException
 import org.anchoranalysis.io.input.InputContextParams;
 import org.anchoranalysis.io.input.bean.DebugModeParams;
 import org.anchoranalysis.io.output.bean.OutputManager;
-import org.anchoranalysis.io.output.path.FilePathPrefixerContext;
-import org.anchoranalysis.io.output.path.PathPrefixerException;
+import org.anchoranalysis.io.output.path.prefixer.FilePathPrefixerContext;
+import org.anchoranalysis.io.output.path.prefixer.PathPrefixerException;
 import org.anchoranalysis.io.output.recorded.OutputEnabledDelta;
 
 @NoArgsConstructor

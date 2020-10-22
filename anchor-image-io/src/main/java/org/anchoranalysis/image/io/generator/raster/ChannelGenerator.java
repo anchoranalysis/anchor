@@ -40,7 +40,7 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
  * @author Owen Feehan
  */
 @AllArgsConstructor
-public class ChannelGenerator extends RasterGenerator<Channel> {
+public class ChannelGenerator extends RasterGeneratorSelectFormat<Channel> {
 
     /** Function that is associated in the manifest with this output. */
     private final String manifestFunction;

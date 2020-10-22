@@ -30,6 +30,7 @@ import java.nio.file.Path;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.manifest.ManifestDirectoryDescription;
 import org.anchoranalysis.io.manifest.directory.SubdirectoryBase;
+import lombok.AllArgsConstructor;
 
 /**
  * Allows two {@link WriteOperationRecorder} function together as if they are one
@@ -38,17 +39,11 @@ import org.anchoranalysis.io.manifest.directory.SubdirectoryBase;
  *
  * @author Owen Feehan
  */
+@AllArgsConstructor
 public class DualWriterOperationRecorder implements WriteOperationRecorder {
 
     private WriteOperationRecorder recorder1;
     private WriteOperationRecorder recorder2;
-
-    public DualWriterOperationRecorder(
-            WriteOperationRecorder recorder1, WriteOperationRecorder recorder2) {
-        super();
-        this.recorder1 = recorder1;
-        this.recorder2 = recorder2;
-    }
 
     @Override
     public void recordWrittenFile(

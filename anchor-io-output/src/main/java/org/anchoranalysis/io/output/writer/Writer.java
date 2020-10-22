@@ -59,7 +59,7 @@ public interface Writer {
      * @param outputName the name of the subdirectory. This may determine if an output is allowed or
      *     not.
      * @param manifestDescription a manifest-description associated with the subdirectory as a
-     *     whole.
+     *     whole, if it exists.
      * @param manifestFolder a manifest-folder if it exists
      * @param inheritOutputRulesAndRecording if true, the output rules and recording are inherited
      *     from the parent directory. if false, they are not, and all outputs are allowed and are

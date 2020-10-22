@@ -30,7 +30,7 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.core.stack.Stack;
-import org.anchoranalysis.image.io.generator.raster.RasterGenerator;
+import org.anchoranalysis.image.io.generator.raster.RasterGeneratorSelectFormat;
 import org.anchoranalysis.image.io.stack.StackWriteOptions;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
@@ -42,7 +42,7 @@ import org.anchoranalysis.spatial.box.BoundingBox;
  * @author Owen Feehan
  */
 @RequiredArgsConstructor
-public class ExtractBoundingBoxAreaFromStackGenerator extends RasterGenerator<BoundingBox> {
+public class ExtractBoundingBoxAreaFromStackGenerator extends RasterGeneratorSelectFormat<BoundingBox> {
 
     private static final String MANIFEST_FUNCTION = "boundingBoxExtract";
 

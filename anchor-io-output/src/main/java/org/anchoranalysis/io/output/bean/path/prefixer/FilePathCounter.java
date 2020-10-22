@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-io
+ * anchor-plugin-io
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -24,39 +24,38 @@
  * #L%
  */
 
-package org.anchoranalysis.io.output.path;
+package org.anchoranalysis.io.output.bean.path.prefixer;
 
 import java.nio.file.Path;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.io.output.path.prefixer.DirectoryWithPrefix;
+import org.anchoranalysis.io.output.path.prefixer.NamedPath;
 
-/**
- * Converts file-paths between relative and absolute.
- *
- * @author Owen Feehan
- */
-public interface PathCreator {
+@NoArgsConstructor
+public class FilePathCounter extends PathPrefixerAvoidResolve {
 
-    /**
-     * Generates a full path, given the final part (suffix) of a path.
-     *
-     * <p>All sub-directories are created if needed to ensure it's possible to write to the
-     * fullPath.
-     *
-     * @param suffix the final part of the path, to be added to the prefix
-     * @return a complete absolute path with all components (prefix, suffix) etc., including the
-     *     leading directory.
-     */
-    Path makePathAbsolute(String suffix);
+    // TODO this counter should be initialized in a proper way, and not using a bean-wide variable
+    private int count = 0;
 
-    /**
-     * Extracts a relative-file path, given the final part (suffix) of a path.
-     *
-     * <p>The path will be relative to the underlying root {@code directory}.
-     *
-     * <p>This relative-path includes any filename-prefix added by the {@link DirectoryWithPrefix}.
-     *
-     * @param suffix the final part of the path, to be added to the prefix
-     * @return a complete relative path with all components (prefix, suffix) etc., but no leading
-     *     directory.
-     */
-    Path makePathRelative(Path suffix);
+    // START BEAN PROPERTIES
+    @BeanField @Getter @Setter private int numLeadingZeros = 4;
+    // END BEAN PROPERTIES
+
+    public FilePathCounter(String outPathPrefix) {
+        super(outPathPrefix);
+    }
+
+    @Override
+    public DirectoryWithPrefix outFilePrefixFromPath(NamedPath path, Path root) {
+        Path combinedDir = root.resolve(identifier(count++));
+        return new DirectoryWithPrefix(combinedDir);
+    }
+
+    private String identifier(int index) {
+        String formatSpecifier = "%0" + numLeadingZeros + "d";
+        return String.format(formatSpecifier, index);
+    }
 }

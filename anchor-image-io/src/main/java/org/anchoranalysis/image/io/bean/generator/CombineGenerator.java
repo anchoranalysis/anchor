@@ -37,14 +37,16 @@ import org.anchoranalysis.image.bean.spatial.arrange.ArrangeStackBean;
 import org.anchoranalysis.image.core.channel.factory.ChannelFactoryByte;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.core.stack.rgb.RGBStack;
+import org.anchoranalysis.image.io.generator.raster.RasterGeneratorSelectFormat;
 import org.anchoranalysis.image.io.generator.raster.RasterGenerator;
 import org.anchoranalysis.image.io.stack.StackWriteOptions;
 import org.anchoranalysis.io.manifest.ManifestDescription;
+import org.anchoranalysis.io.manifest.file.FileType;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 @AllArgsConstructor
-class CombineGenerator<T> extends RasterGenerator<T> {
+class CombineGenerator<T> extends RasterGeneratorSelectFormat<T> {
 
     private final ArrangeStackBean arrangeRaster;
     private final List<RasterGenerator<T>> generators;
@@ -72,12 +74,6 @@ class CombineGenerator<T> extends RasterGenerator<T> {
     }
 
     @Override
-    public String getFileExtension(OutputWriteSettings outputWriteSettings)
-            throws OperationFailedException {
-        return generators.get(0).getFileExtension(outputWriteSettings);
-    }
-
-    @Override
     public Optional<ManifestDescription> createManifestDescription() {
         return Optional.of(new ManifestDescription("raster", "combinedEnergy"));
     }
@@ -96,9 +92,14 @@ class CombineGenerator<T> extends RasterGenerator<T> {
 
     @Override
     public StackWriteOptions writeOptions() {
-        return generators.stream() // NOSONAR
-                .map(RasterGenerator::writeOptions)
-                .reduce((first, second) -> first.and(second))
-                .get();
+        // TODO change to soemthing more defined
+        return StackWriteOptions.maybeRGB(false);
+    }
+
+    @Override
+    public Optional<FileType[]> getFileTypes(OutputWriteSettings outputWriteSettings)
+            throws OperationFailedException {
+        // Ignore file-types returned by individual generators
+        return Optional.empty();
     }
 }

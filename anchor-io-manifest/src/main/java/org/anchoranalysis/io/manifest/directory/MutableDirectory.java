@@ -26,7 +26,8 @@
 
 package org.anchoranalysis.io.manifest.directory;
 
-import com.google.common.base.Preconditions;
+import lombok.Getter;
+import lombok.experimental.Accessors;
 import java.io.Serializable;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -53,6 +54,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
  *
  * @author Owen Feehan
  */
+@Accessors(fluent=true)
 public abstract class MutableDirectory
         implements SequencedDirectory, WriteOperationRecorder, Serializable {
 
@@ -67,16 +69,14 @@ public abstract class MutableDirectory
     @Nullable private MutableDirectory parent;
 
     /** The {@link MutableDirectory} in the manifest for any subdirectories. */
-    private ArrayList<MutableDirectory> subdirectories = new ArrayList<>();
+    @Getter private ArrayList<MutableDirectory> subdirectories = new ArrayList<>();
 
     private static Log log = LogFactory.getLog(MutableDirectory.class);
 
     /**
      * A description of this directory for the manifest.
-     *
-     * <p>Note that is not {@link Optional} as {@link Optional} cannot be serialized.
      */
-    @Nullable private ManifestDirectoryDescription description;
+    @Getter private ManifestDirectoryDescription description;
 
     public MutableDirectory() {
         log.debug("New Directory Write: empty");
@@ -147,10 +147,6 @@ public abstract class MutableDirectory
         this.parent = parentFolder.orElse(null);
     }
 
-    protected List<MutableDirectory> subdirectories() {
-        return subdirectories;
-    }
-
     @Override
     public IncompleteElementRange getAssociatedElementRange() {
         return description.getSequenceType().elementRange();
@@ -162,12 +158,6 @@ public abstract class MutableDirectory
      * @param description
      */
     public void assignDescription(ManifestDirectoryDescription description) {
-        Preconditions.checkArgument(description != null);
-        Preconditions.checkArgument(this.description == null);
         this.description = description;
-    }
-
-    public Optional<ManifestDirectoryDescription> description() {
-        return Optional.ofNullable(description);
     }
 }

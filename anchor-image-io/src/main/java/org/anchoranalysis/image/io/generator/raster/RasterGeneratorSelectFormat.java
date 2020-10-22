@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-io-generator
+ * anchor-image-io
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -24,44 +24,42 @@
  * #L%
  */
 
-package org.anchoranalysis.io.generator.serialized;
+package org.anchoranalysis.image.io.generator.raster;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
 import java.nio.file.Path;
 import java.util.Optional;
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.image.io.ImageIOException;
+import org.anchoranalysis.image.io.bean.stack.StackWriter;
+import org.anchoranalysis.io.manifest.file.FileType;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
-public class ObjectOutputStreamGenerator<T extends Serializable> extends SerializedGenerator<T> {
-
-    public ObjectOutputStreamGenerator() {
-        this(Optional.empty());
-    }
-
-    public ObjectOutputStreamGenerator(Optional<String> manifestFunction) {
-        super(manifestFunction);
-    }
+/** 
+ * A {@link RasterGenerator} that selects an appropriate output-format based upon each generated image.
+ *  
+ * @author Owen Feehan
+ */
+public abstract class RasterGeneratorSelectFormat<T> extends RasterGenerator<T> {
 
     @Override
-    public void writeToFile(T element, OutputWriteSettings outputWriteSettings, Path filePath)
-            throws OutputWriteFailedException {
-
-        try (FileOutputStream fileOutput = new FileOutputStream(filePath.toFile())) {
-
-            ObjectOutputStream objectOutput = new ObjectOutputStream(fileOutput);
-            objectOutput.writeObject(element);
-            objectOutput.close();
-
-        } catch (IOException e) {
+    public Optional<FileType[]> getFileTypes(OutputWriteSettings outputWriteSettings)
+            throws OperationFailedException {
+        return Optional.empty();
+    }
+    
+    @Override
+    protected String selectFileExtension(OutputWriteSettings outputWriteSettings) throws OperationFailedException {
+        return GeneratorOutputter.fileExtensionWriter(outputWriteSettings, writeOptions());
+    }
+    
+    @Override
+    protected void writeToFile(T element, OutputWriteSettings outputWriteSettings, Path filePath) throws OutputWriteFailedException {
+        try {
+            StackWriter writer = GeneratorOutputter.writer(outputWriteSettings);
+            writer.writeStack(transform(element), filePath, isRGB(), writeOptions());
+        } catch (ImageIOException e) {
             throw new OutputWriteFailedException(e);
         }
-    }
-
-    @Override
-    protected String extensionSuffix(OutputWriteSettings outputWriteSettings) {
-        return "";
     }
 }

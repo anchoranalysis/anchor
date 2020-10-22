@@ -48,10 +48,10 @@ public abstract class IndexableOutputNameStyle extends OutputNameStyle {
     /**
      * Copy constructor
      *
-     * @param src source
+     * @param source source
      */
-    protected IndexableOutputNameStyle(IndexableOutputNameStyle src) {
-        this.outputName = src.outputName;
+    protected IndexableOutputNameStyle(IndexableOutputNameStyle source) {
+        this.outputName = source.outputName;
     }
 
     /**
