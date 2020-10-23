@@ -51,18 +51,13 @@ public abstract class RasterGeneratorDelegateToRaster<S, T> extends RasterGenera
     // END REQUIRED ARGUMENTS
 
     @Override
-    public boolean isRGB() {
-        return delegate.isRGB();
-    }
-
-    @Override
     public Optional<ManifestDescription> createManifestDescription() {
         return delegate.createManifestDescription();
     }
 
     @Override
-    public StackWriteOptions writeOptions() {
-        return delegate.writeOptions();
+    public StackWriteOptions guaranteedImageAttributes() {
+        return delegate.guaranteedImageAttributes();
     }
 
     @Override

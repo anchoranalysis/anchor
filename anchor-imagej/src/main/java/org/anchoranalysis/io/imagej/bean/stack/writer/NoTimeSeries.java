@@ -41,7 +41,7 @@ public abstract class NoTimeSeries extends ImageJRasterWriter {
 
     @Override
     public void writeStackSeries(
-            StackSeries stackSeries, Path filePath, boolean makeRGB, StackWriteOptions writeOptions)
+            StackSeries stackSeries, Path filePath, boolean makeRGB, StackWriteOptions options)
             throws ImageIOException {
         throw new ImageIOException("Writing as a time-series is unsupported for this format");
     }

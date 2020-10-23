@@ -44,16 +44,15 @@ public abstract class RasterGeneratorSelectFormat<T> extends RasterGenerator<T> 
 
     /**  Combines stack-write-options derived for a particular stack with the general write-options associated with the {@link RasterGenerator}. */
     @Override
-    protected String selectFileExtension(Stack stack, OutputWriteSettings settings) throws OperationFailedException {
-        StackWriteOptions writeOptions = StackWriteOptions.from(stack).or( writeOptions() );
-        return GeneratorOutputter.fileExtensionWriter(settings, writeOptions);
+    protected String selectFileExtension(Stack stack, StackWriteOptions options, OutputWriteSettings settings) throws OperationFailedException {
+        return GeneratorOutputter.fileExtensionWriter(settings, options);
     }
     
     @Override
-    protected void writeToFile(T element, Stack transformedElement, OutputWriteSettings settings, Path filePath) throws OutputWriteFailedException {
+    protected void writeToFile(T element, Stack transformedElement, StackWriteOptions options, OutputWriteSettings settings, Path filePath) throws OutputWriteFailedException {
         try {
             StackWriter writer = GeneratorOutputter.writer(settings);
-            writer.writeStack(transformedElement, filePath, isRGB(), writeOptions());
+            writer.writeStack(transformedElement, filePath, options);
         } catch (ImageIOException e) {
             throw new OutputWriteFailedException(e);
         }

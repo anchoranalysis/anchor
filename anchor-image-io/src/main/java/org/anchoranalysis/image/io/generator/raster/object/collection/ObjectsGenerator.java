@@ -34,6 +34,7 @@ import lombok.experimental.Accessors;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.io.generator.raster.RasterGeneratorSelectFormat;
 import org.anchoranalysis.image.io.stack.StackWriteOptions;
+import org.anchoranalysis.image.io.stack.StackWriteOptionsFactory;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 
@@ -60,12 +61,7 @@ public abstract class ObjectsGenerator extends RasterGeneratorSelectFormat<Objec
     }
 
     @Override
-    public boolean isRGB() {
-        return false;
-    }
-
-    @Override
-    public StackWriteOptions writeOptions() {
-        return StackWriteOptions.singleChannelMaybe3D(dimensions.z() == 1);
+    public StackWriteOptions guaranteedImageAttributes() {
+        return StackWriteOptionsFactory.singleChannelMaybe3D(dimensions.z() == 1);
     }
 }

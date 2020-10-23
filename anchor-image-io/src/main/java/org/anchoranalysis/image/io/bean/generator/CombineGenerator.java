@@ -75,11 +75,6 @@ class CombineGenerator<T> extends RasterGeneratorSelectFormat<T> {
         return Optional.of(new ManifestDescription("raster", "combinedEnergy"));
     }
 
-    @Override
-    public boolean isRGB() {
-        return generators.stream().allMatch(RasterGenerator::isRGB);
-    }
-
     private List<RGBStack> generateAll(T element) throws OutputWriteFailedException {
         return FunctionalList.mapToList(
                 generators,
@@ -88,8 +83,11 @@ class CombineGenerator<T> extends RasterGeneratorSelectFormat<T> {
     }
 
     @Override
-    public StackWriteOptions writeOptions() {
-        // TODO change to soemthing more defined
-        return StackWriteOptions.maybeRGB(false);
+    public StackWriteOptions guaranteedImageAttributes() {
+        return generators   // NOSONAR
+                .stream()
+                .map(RasterGenerator::guaranteedImageAttributes)
+                .reduce(StackWriteOptions::and)
+                .get();
     }
 }

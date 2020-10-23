@@ -31,6 +31,7 @@ import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.stack.StackWriteOptions;
+import org.anchoranalysis.image.io.stack.StackWriteOptionsFactory;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
@@ -73,7 +74,7 @@ public class StackGenerator extends RasterGeneratorSelectFormat<Stack> {
      */
     public StackGenerator(
             boolean padIfNecessary, Optional<String> manifestFunction, boolean always2D) {
-        this(padIfNecessary, manifestFunction, StackWriteOptions.toReplace(always2D));
+        this(padIfNecessary, manifestFunction, StackWriteOptionsFactory.maybeAlways2D(always2D));
     }
 
     @Override
@@ -97,12 +98,7 @@ public class StackGenerator extends RasterGeneratorSelectFormat<Stack> {
     }
 
     @Override
-    public boolean isRGB() {
-        return writeOptions.isRgb();
-    }
-
-    @Override
-    public StackWriteOptions writeOptions() {
+    public StackWriteOptions guaranteedImageAttributes() {
         return writeOptions;
     }
 }

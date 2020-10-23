@@ -45,7 +45,7 @@ public class TypedValue {
     }
 
     public TypedValue(double value, int numberDecimalPlaces) {
-        this( decimalValueOrNaN(value, numberDecimalPlaces) );
+        this( decimalValueOrNaN(value, numberDecimalPlaces), true );
     }
     
     private static String decimalValueOrNaN(double value, int numberDecimalPlaces) {

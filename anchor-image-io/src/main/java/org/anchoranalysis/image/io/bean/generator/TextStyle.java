@@ -48,6 +48,7 @@ import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.core.stack.bufferedimage.CreateStackFromBufferedImage;
 import org.anchoranalysis.image.io.generator.raster.RasterGeneratorSelectFormat;
 import org.anchoranalysis.image.io.stack.StackWriteOptions;
+import org.anchoranalysis.image.io.stack.StackWriteOptionsFactory;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
@@ -124,18 +125,13 @@ public class TextStyle extends AnchorBean<TextStyle> {
         }
 
         @Override
-        public boolean isRGB() {
-            return true;
-        }
-
-        @Override
         public Optional<ManifestDescription> createManifestDescription() {
             return Optional.of(new ManifestDescription("raster", "text"));
         }
 
         @Override
-        public StackWriteOptions writeOptions() {
-            return StackWriteOptions.rgbMaybe3D();
+        public StackWriteOptions guaranteedImageAttributes() {
+            return StackWriteOptionsFactory.rgbMaybe3D();
         }
 
         private Graphics2D createGraphicsFromBufferedImage(BufferedImage bufferedImage) {

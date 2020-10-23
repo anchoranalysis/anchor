@@ -50,6 +50,7 @@ import org.anchoranalysis.image.io.generator.raster.RasterGeneratorSelectFormat;
 import org.anchoranalysis.image.io.generator.raster.StackGenerator;
 import org.anchoranalysis.image.io.generator.raster.object.rgb.DrawObjectsGenerator;
 import org.anchoranalysis.image.io.stack.StackWriteOptions;
+import org.anchoranalysis.image.io.stack.StackWriteOptionsFactory;
 import org.anchoranalysis.image.io.stack.TileRasters;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
@@ -90,11 +91,6 @@ public class AssignmentGenerator extends RasterGeneratorSelectFormat<Assignment>
             new StackGenerator(true, Optional.of("assignmentComparison"), false);
 
     @Override
-    public boolean isRGB() {
-        return true;
-    }
-
-    @Override
     public Stack transform(Assignment element) throws OutputWriteFailedException {
 
         ColorPool colorPool = colorPoolCreator.apply(element.numberPaired());
@@ -119,8 +115,8 @@ public class AssignmentGenerator extends RasterGeneratorSelectFormat<Assignment>
     }
 
     @Override
-    public StackWriteOptions writeOptions() {
-        return StackWriteOptions.rgbMaybe3D();
+    public StackWriteOptions guaranteedImageAttributes() {
+        return StackWriteOptionsFactory.rgbMaybe3D();
     }
 
     private static ArrangeRaster createTiledStackProvider(

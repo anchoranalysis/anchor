@@ -53,21 +53,21 @@ public abstract class OneOrThreeChannelsWriter extends StackWriter {
 
     @Override
     public void writeStackSeries(
-            StackSeries stackSeries, Path filePath, boolean makeRGB, StackWriteOptions writeOptions)
+            StackSeries stackSeries, Path filePath, boolean makeRGB, StackWriteOptions options)
             throws ImageIOException {
         throw new ImageIOException("Writing time-series is unsupported for this format");
     }
 
     @Override
     public void writeStack(
-            Stack stack, Path filePath, boolean makeRGB, StackWriteOptions writeOptions)
+            Stack stack, Path filePath, StackWriteOptions options)
             throws ImageIOException {
 
-        if (stack.getNumberChannels() == 1 && makeRGB) {
+        if (stack.getNumberChannels() == 1 && options.isRgb()) {
             throw new ImageIOException("1-channel images cannot be created as RGB");
         }
 
-        if (stack.getNumberChannels() == 3 && !makeRGB) {
+        if (stack.getNumberChannels() == 3 && !options.isRgb()) {
             throw new ImageIOException("3-channel images can only be created as RGB");
         }
 

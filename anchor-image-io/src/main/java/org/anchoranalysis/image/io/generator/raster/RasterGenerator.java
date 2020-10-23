@@ -31,6 +31,7 @@ import java.util.Optional;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.stack.StackWriteOptions;
+import org.anchoranalysis.image.io.stack.StackWriteOptionsFactory;
 import org.anchoranalysis.io.generator.TransformingGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.manifest.file.FileType;
@@ -77,15 +78,13 @@ public abstract class RasterGenerator<T> implements TransformingGenerator<T,Stac
                 index,
                 outputter);
     }
-   
+    
     /**
-     * Is the image being created RGB?
+     * Guarantees on the attributes of all images created by the generator.
      * 
-     * @return
+     * @return options that are guaranteed to be true of all images by the generator.
      */
-    public abstract boolean isRGB();
-        
-    public abstract StackWriteOptions writeOptions();
+    public abstract StackWriteOptions guaranteedImageAttributes();
     
     public abstract Optional<ManifestDescription> createManifestDescription();
 
@@ -93,23 +92,25 @@ public abstract class RasterGenerator<T> implements TransformingGenerator<T,Stac
      * Selects the file-extension to use for a particular stack.
      * 
      * @param stack the stack to select a file-extension for
+     * @param options options that describe how {@code stack} should be written
      * @param settings general settings for writing output
      * @return the file extension without any leading period
      * @throws OperationFailedException
      */
-    protected abstract String selectFileExtension(Stack stack, OutputWriteSettings settings) throws OperationFailedException;
+    protected abstract String selectFileExtension(Stack stack, StackWriteOptions options, OutputWriteSettings settings) throws OperationFailedException;
     
     /**
      * Writes a raster to the file-system.
      * 
      * @param untransformedElement the element for the generator <i>before</i> transforming to a {@link Stack}
      * @param transformedElement the {@link Stack} that {@code element} was transformed into
+     * @param options options that describe how {@code stack} should be written
      * @param settings general settings for writing output.
      * @param filePath the file-path to write too including the extension.
      * @throws OutputWriteFailedException
      */
     protected abstract void writeToFile(
-            T untransformedElement, Stack transformedElement, OutputWriteSettings settings, Path filePath)
+            T untransformedElement, Stack transformedElement, StackWriteOptions options, OutputWriteSettings settings, Path filePath)
             throws OutputWriteFailedException;
     
     private FileType[] writeInternal(
@@ -123,20 +124,33 @@ public abstract class RasterGenerator<T> implements TransformingGenerator<T,Stac
         try {
             Stack transformedElement = transform(elementUntransformed);
             
-            String extension = selectFileExtension(transformedElement, outputter.getSettings());
+            StackWriteOptions options = writeOptions(transformedElement);
+            
+            String extension = selectFileExtension(transformedElement, options, outputter.getSettings());
             
             Path pathToWriteTo =
                     outputter.makeOutputPath(
                             filenameWithoutExtension, extension);
 
             // First write to the file system, and then write to the operation-recorder.
-            writeToFile(elementUntransformed, transformedElement, outputter.getSettings(), pathToWriteTo);
+            writeToFile(elementUntransformed, transformedElement, options, outputter.getSettings(), pathToWriteTo);
 
             return writeToManifest(outputName, index, outputter, pathToWriteTo, extension);
             
         } catch (OperationFailedException e) {
             throw new OutputWriteFailedException(e);
         }
+    }
+    
+    /** 
+     * Forms write-options to use for this particular stack by combining the general guarantees for the generator
+     *  with the specific image-attributes of this particular stack. 
+     *  
+     * @param stack the stack to determine {@link StackWriteOptions} for.
+     * @return specific options for {@code stack}.
+     */
+    private StackWriteOptions writeOptions(Stack stack) {
+        return StackWriteOptionsFactory.from(stack).or( guaranteedImageAttributes() );
     }
     
     /** Writes to the manifest, and creates an array of the file-types written. */

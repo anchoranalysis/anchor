@@ -153,13 +153,8 @@ public class DrawObjectOnStackGenerator extends RasterGeneratorSelectFormat<Boun
     }
 
     @Override
-    public boolean isRGB() {
-        return drawObjectsGenerator.isRGB();
-    }
-
-    @Override
-    public StackWriteOptions writeOptions() {
-        return StackWriteOptions.maybeRGB(isRGB());
+    public StackWriteOptions guaranteedImageAttributes() {
+        return drawObjectsGenerator.guaranteedImageAttributes();
     }
 
     private Either<Dimensions, DisplayStack> createBackground(BoundedList<ObjectMask> element)

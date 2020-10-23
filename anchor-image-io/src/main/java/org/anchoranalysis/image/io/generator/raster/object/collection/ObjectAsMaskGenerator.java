@@ -35,6 +35,7 @@ import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.generator.raster.RasterGeneratorSelectFormat;
 import org.anchoranalysis.image.io.stack.StackWriteOptions;
+import org.anchoranalysis.image.io.stack.StackWriteOptionsFactory;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
@@ -73,13 +74,8 @@ public class ObjectAsMaskGenerator extends RasterGeneratorSelectFormat<ObjectMas
     }
 
     @Override
-    public boolean isRGB() {
-        return false;
-    }
-
-    @Override
-    public StackWriteOptions writeOptions() {
-        return StackWriteOptions.binaryChannelMaybe3D();
+    public StackWriteOptions guaranteedImageAttributes() {
+        return StackWriteOptionsFactory.binaryChannelMaybe3D();
     }
 
     /**

@@ -43,6 +43,7 @@ import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.core.stack.rgb.RGBStack;
 import org.anchoranalysis.image.io.generator.raster.RasterGeneratorSelectFormat;
 import org.anchoranalysis.image.io.stack.StackWriteOptions;
+import org.anchoranalysis.image.io.stack.StackWriteOptionsFactory;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.overlay.bean.DrawObject;
@@ -91,18 +92,13 @@ public abstract class ObjectsOnRGBGenerator
     }
 
     @Override
-    public boolean isRGB() {
-        return true;
-    }
-
-    @Override
     public Optional<ManifestDescription> createManifestDescription() {
         return Optional.of(MANIFEST_DESCRIPTION);
     }
 
     @Override
-    public StackWriteOptions writeOptions() {
-        return StackWriteOptions.rgb(isAlways2D());
+    public StackWriteOptions guaranteedImageAttributes() {
+        return StackWriteOptionsFactory.rgb(isAlways2D());
     }
 
     protected abstract RGBStack generateBackground(

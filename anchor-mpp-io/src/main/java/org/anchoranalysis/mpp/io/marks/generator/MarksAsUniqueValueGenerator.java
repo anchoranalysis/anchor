@@ -50,11 +50,6 @@ public class MarksAsUniqueValueGenerator extends RasterGeneratorSelectFormat<Mar
     }
 
     @Override
-    public boolean isRGB() {
-        return delegate.isRGB();
-    }
-
-    @Override
     public Stack transform(MarkCollection element) throws OutputWriteFailedException {
 
         ObjectCollectionWithProperties objects =
@@ -68,7 +63,7 @@ public class MarksAsUniqueValueGenerator extends RasterGeneratorSelectFormat<Mar
     }
 
     @Override
-    public StackWriteOptions writeOptions() {
-        return delegate.writeOptions();
+    public StackWriteOptions guaranteedImageAttributes() {
+        return delegate.guaranteedImageAttributes();
     }
 }

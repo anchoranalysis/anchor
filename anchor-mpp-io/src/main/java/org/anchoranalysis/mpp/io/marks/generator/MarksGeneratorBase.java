@@ -37,6 +37,7 @@ import org.anchoranalysis.image.core.stack.rgb.RGBStack;
 import org.anchoranalysis.image.io.generator.raster.RasterGeneratorSelectFormat;
 import org.anchoranalysis.image.io.stack.ConvertDisplayStackToRGB;
 import org.anchoranalysis.image.io.stack.StackWriteOptions;
+import org.anchoranalysis.image.io.stack.StackWriteOptionsFactory;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMembershipWithFlags;
@@ -82,20 +83,16 @@ public abstract class MarksGeneratorBase extends RasterGeneratorSelectFormat<Col
         }
     }
 
-    protected abstract DisplayStack background(DisplayStack stack) throws OperationFailedException;
-
-    @Override
-    public boolean isRGB() {
-        return true;
-    }
-
     @Override
     public Optional<ManifestDescription> createManifestDescription() {
         return Optional.of(new ManifestDescription("raster", manifestDescriptionFunction));
     }
 
     @Override
-    public StackWriteOptions writeOptions() {
-        return StackWriteOptions.rgbMaybe3D();
+    public StackWriteOptions guaranteedImageAttributes() {
+        return StackWriteOptionsFactory.rgbMaybe3D();
     }
+
+    protected abstract DisplayStack background(DisplayStack stack) throws OperationFailedException;
+
 }

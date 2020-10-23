@@ -43,8 +43,8 @@ public class FlattenStackGenerator extends RasterGeneratorDelegateToRaster<Stack
     }
 
     @Override
-    public StackWriteOptions writeOptions() {
-        return super.writeOptions().always2D();
+    public StackWriteOptions guaranteedImageAttributes() {
+        return super.guaranteedImageAttributes().always2D();
     }
 
     @Override

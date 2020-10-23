@@ -32,6 +32,7 @@ import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.generator.raster.RasterGeneratorSelectFormat;
 import org.anchoranalysis.image.io.stack.StackWriteOptions;
+import org.anchoranalysis.image.io.stack.StackWriteOptionsFactory;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.spatial.box.BoundingBox;
@@ -65,12 +66,8 @@ public class ExtractBoundingBoxAreaFromStackGenerator extends RasterGeneratorSel
     }
 
     @Override
-    public boolean isRGB() {
-        return background.getNumberChannels() == 3;
-    }
-
-    @Override
-    public StackWriteOptions writeOptions() {
-        return StackWriteOptions.maybeRGB(isRGB());
+    public StackWriteOptions guaranteedImageAttributes() {
+        // TODO change to detect RGB more reliably
+        return StackWriteOptionsFactory.maybeRGB(background.getNumberChannels() == 3);
     }
 }

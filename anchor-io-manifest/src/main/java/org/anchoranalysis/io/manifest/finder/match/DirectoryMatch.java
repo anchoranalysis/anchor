@@ -58,6 +58,6 @@ public class DirectoryMatch {
     private static boolean presentAnd(
             ManifestDirectoryDescription descriptionToTest,
             Predicate<ManifestDescription> descriptionMatch) {
-        return descriptionToTest.getDescription().isPresent() && descriptionMatch.test(descriptionToTest.getDescription().get());
+        return descriptionToTest.getDescription().isPresent() && descriptionMatch.test(descriptionToTest.getDescription().get());   // NOSONAR
     }
 }

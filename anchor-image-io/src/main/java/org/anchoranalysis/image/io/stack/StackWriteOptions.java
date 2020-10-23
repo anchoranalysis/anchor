@@ -28,7 +28,6 @@ package org.anchoranalysis.image.io.stack;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Value;
-import org.anchoranalysis.image.core.stack.Stack;
 
 /**
  * Options describing stack which may determine which writer is used.
@@ -38,18 +37,8 @@ import org.anchoranalysis.image.core.stack.Stack;
  * @author Owen Feehan
  */
 @Value
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class StackWriteOptions {
-
-    private static final StackWriteOptions RGB_ALWAYS_2D = new StackWriteOptions(true, true, true);
-
-    private static final StackWriteOptions RGB_MAYBE_3D = new StackWriteOptions(false, true, true);
-
-    private static final StackWriteOptions ONE_OR_THREE_CHANNELS_ALWAYS_2D =
-            new StackWriteOptions(true, true, false);
-
-    private static final StackWriteOptions ONE_OR_THREE_CHANNELS_MAYBE_3D =
-            new StackWriteOptions(false, true, false);
 
     /** True the output is guaranteed to only ever 2D i.e. maximally one z-slice? */
     private boolean always2D;
@@ -60,6 +49,15 @@ public class StackWriteOptions {
     /*** Whether it's an RGB image (exactly three channels visualized jointly, rather than independently) */
     private boolean rgb;
 
+    /**
+     * Derives a {@link StackWriteOptions} that will always be 2D, but is otherwise unchanged.
+     *
+     * @return a newly created {@link StackWriteOptions} derived from the existing object.
+     */
+    public StackWriteOptions always2D() {
+        return new StackWriteOptions(true, alwaysOneOrThreeChannels, rgb);
+    }
+    
     /**
      * Combines with another {@link StackWriteOptions} by performing a logical <i>and</i> on each
      * field.
@@ -88,87 +86,5 @@ public class StackWriteOptions {
                 always2D || other.always2D,
                 alwaysOneOrThreeChannels || other.alwaysOneOrThreeChannels,
                 rgb || other.rgb);
-    }
-
-    /**
-     * Creates a copy of the {@link StackWriteOptions} which will always be 2D.
-     *
-     * @return a newly created {@link StackWriteOptions} with identical fields, except {@code
-     *     always2D} is true.
-     */
-    public StackWriteOptions always2D() {
-        return new StackWriteOptions(true, alwaysOneOrThreeChannels, rgb);
-    }
-
-    public static StackWriteOptions rgbAlways2D() {
-        return RGB_ALWAYS_2D;
-    }
-
-    public static StackWriteOptions rgbMaybe3D() {
-        return RGB_MAYBE_3D;
-    }
-
-    public static StackWriteOptions binaryChannelMaybe3D() {
-        return singleChannelMaybe3D(false);
-    }
-
-    public static StackWriteOptions singleChannelMaybe3D(boolean always2D) {
-        if (always2D) {
-            return ONE_OR_THREE_CHANNELS_ALWAYS_2D;
-        } else {
-            return ONE_OR_THREE_CHANNELS_MAYBE_3D;
-        }
-    }
-
-    public static StackWriteOptions alwaysOneOrThreeChannels(boolean always2D) {
-        return singleChannelMaybe3D(always2D);
-    }
-
-    public static StackWriteOptions maybeRGB(boolean rgb, boolean always2D) {
-        if (always2D) {
-            return new StackWriteOptions(true, rgb, rgb);
-        } else {
-            return maybeRGB(rgb);
-        }
-    }
-
-    public static StackWriteOptions maybeRGB(boolean rgb) {
-        if (rgb) {
-            return RGB_MAYBE_3D;
-        } else {
-            return new StackWriteOptions(false, false, false);
-        }
-    }
-
-    public static StackWriteOptions rgb(boolean always2D) {
-        if (always2D) {
-            return RGB_ALWAYS_2D;
-        } else {
-            return RGB_MAYBE_3D;
-        }
-    }
-
-    /**
-     * The options that narrowly describe a stack as possible.
-     *
-     * <p>Note that a stack with three channels is assumed to be RGB.
-     *
-     * @param stack the stack to derive options from
-     * @return options that narrowly describe {@code stack}.
-     */
-    public static StackWriteOptions from(Stack stack) {
-        int numberChannels = stack.getNumberChannels();
-        boolean singleSlice = !stack.hasMoreThanOneSlice();
-        if (numberChannels == 3) {
-            return rgb(singleSlice);
-        } else if (numberChannels == 1) {
-            return alwaysOneOrThreeChannels(singleSlice);
-        } else {
-            return new StackWriteOptions(singleSlice, false, false);
-        }
-    }
-
-    public static StackWriteOptions toReplace(boolean always2D) {
-        return new StackWriteOptions(always2D, false, false);
     }
 }

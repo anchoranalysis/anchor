@@ -31,6 +31,7 @@ import lombok.AllArgsConstructor;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.stack.StackWriteOptions;
+import org.anchoranalysis.image.io.stack.StackWriteOptionsFactory;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
@@ -56,12 +57,7 @@ public class ChannelGenerator extends RasterGeneratorSelectFormat<Channel> {
     }
 
     @Override
-    public boolean isRGB() {
-        return false;
-    }
-
-    @Override
-    public StackWriteOptions writeOptions() {
-        return StackWriteOptions.singleChannelMaybe3D(false);
+    public StackWriteOptions guaranteedImageAttributes() {
+        return StackWriteOptionsFactory.singleChannelMaybe3D(false);
     }
 }
