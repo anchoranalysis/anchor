@@ -47,8 +47,11 @@ import org.anchoranalysis.io.output.outputter.OutputterChecked;
  */
 public abstract class RasterGenerator<T> implements TransformingGenerator<T,Stack> {
 
+    // A fallback manifest-description if none is supplied by the generator
+    private static final ManifestDescription MANIFEST_DESCRIPTION_FALLBACK = new ManifestDescription("raster", "unknown");
+    
     @Override
-    public Optional<FileType[]> write(T element, OutputNameStyle outputNameStyle, OutputterChecked outputter)
+    public FileType[] write(T element, OutputNameStyle outputNameStyle, OutputterChecked outputter)
             throws OutputWriteFailedException {
         return writeInternal(
                 element,
@@ -60,7 +63,7 @@ public abstract class RasterGenerator<T> implements TransformingGenerator<T,Stac
 
     /** As only a single-file is involved, this methods delegates to a simpler virtual method. */
     @Override
-    public Optional<FileType[]> writeWithIndex(
+    public FileType[] writeWithIndex(
             T element,
             String index,
             IndexableOutputNameStyle outputNameStyle,
@@ -92,7 +95,7 @@ public abstract class RasterGenerator<T> implements TransformingGenerator<T,Stac
 
     protected abstract String selectFileExtension(OutputWriteSettings outputWriteSettings) throws OperationFailedException;
     
-    private Optional<FileType[]> writeInternal(
+    private FileType[] writeInternal(
             T element,
             String filenameWithoutExtension,
             String outputName,
@@ -107,21 +110,29 @@ public abstract class RasterGenerator<T> implements TransformingGenerator<T,Stac
                     outputter.makeOutputPath(
                             filenameWithoutExtension, extension);
 
-            // First write to the file system, and then write to the operation-recorder. Thi
+            // First write to the file system, and then write to the operation-recorder.
             writeToFile(element, outputter.getSettings(), pathToWriteTo);
 
-            Optional<ManifestDescription> manifestDescription = createManifestDescription(); 
-            
-            manifestDescription.ifPresent(
-                            description ->
-                                    outputter.writeFileToOperationRecorder(
-                                            outputName, pathToWriteTo, description, index));
-            
-            return manifestDescription.map( description -> createFileTypeArray(description, extension) );
+            return writeToManifest(outputName, index, outputter, pathToWriteTo, extension);
             
         } catch (OperationFailedException e) {
             throw new OutputWriteFailedException(e);
         }
+    }
+    
+    /** Writes to the manifest, and creates an array of the file-types written. */
+    private FileType[] writeToManifest(String outputName,
+            String index,
+            OutputterChecked outputter, Path pathToWriteTo, String extension) {
+        Optional<ManifestDescription> manifestDescription = createManifestDescription(); 
+        
+        manifestDescription.ifPresent(
+                        description ->
+                                outputter.writeFileToOperationRecorder(
+                                        outputName, pathToWriteTo, description, index));
+        
+        return createFileTypeArray(manifestDescription.orElse(MANIFEST_DESCRIPTION_FALLBACK), extension);
+        
     }
     
     /**

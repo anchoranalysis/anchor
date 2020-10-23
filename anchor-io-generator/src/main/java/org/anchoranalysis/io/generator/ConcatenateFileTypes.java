@@ -3,8 +3,6 @@ package org.anchoranalysis.io.generator;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
-import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.io.manifest.file.FileType;
 import io.vavr.control.Either;
 
@@ -18,7 +16,7 @@ public class ConcatenateFileTypes {
     
     // Tracks the file-types added with a list, but only if there's more than one generator
     // Otherwise it remembers the last added result.
-    private Either<List<FileType>,Optional<FileType[]>> tracking;
+    private Either<List<FileType>,FileType[]> tracking;
     
     /**
      * Creates to always use a list for tracking.
@@ -34,26 +32,24 @@ public class ConcatenateFileTypes {
      */
     public ConcatenateFileTypes(boolean supportMultipleCallsToAdd) {
         // Only create if the list has more than one item, otherwise leave as bull
-        tracking = supportMultipleCallsToAdd ? Either.left(new ArrayList<>()) : Either.right( Optional.empty() );
+        tracking = supportMultipleCallsToAdd ? Either.left(new ArrayList<>()) : Either.right(null);
     }
     
-    public void add(Optional<FileType[]> fileTypes) {
+    public void add(FileType[] fileTypes) {
         if (tracking.isLeft()) {
             // If we're using the list, then add any file-types to it
-            if (fileTypes.isPresent()) {
-                Arrays.stream(fileTypes.get()).forEach(tracking.getLeft()::add);
-            }
+            Arrays.stream(fileTypes).forEach(tracking.getLeft()::add);
         } else {
             // If we're not using the list, just remember the last array added
             tracking = Either.right(fileTypes);
         }
     }
     
-    public Optional<FileType[]> allFileTypes() {
+    public FileType[] allFileTypes() {
         if (tracking.isLeft()) {
             // Convert to an array if the list exists and there's more than 1 item
             // If it exists with 0 items, then Optional.empty() is returned
-            return OptionalUtilities.createFromFlag( !tracking.getLeft().isEmpty(), () -> tracking.getLeft().toArray( new FileType[0] ) );
+            return tracking.getLeft().toArray( new FileType[0] );
         } else {
             return tracking.get();
         }

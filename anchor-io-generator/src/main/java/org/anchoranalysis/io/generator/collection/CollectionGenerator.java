@@ -58,7 +58,7 @@ public class CollectionGenerator<T> implements Generator<Collection<T>> {
     // END REQUIRED ARGUMENTS
 
     @Override
-    public Optional<FileType[]> write(
+    public FileType[] write(
             Collection<T> element, OutputNameStyle outputNameStyle, OutputterChecked outputter)
             throws OutputWriteFailedException {
         return writeElementAsSubdirectory(
@@ -66,7 +66,7 @@ public class CollectionGenerator<T> implements Generator<Collection<T>> {
     }
 
     @Override
-    public Optional<FileType[]> writeWithIndex(
+    public FileType[] writeWithIndex(
             Collection<T> element,
             String index,
             IndexableOutputNameStyle outputNameStyle,
@@ -75,7 +75,7 @@ public class CollectionGenerator<T> implements Generator<Collection<T>> {
         return write(element, outputNameStyle, outputter);
     }
 
-    private Optional<FileType[]> writeElementAsSubdirectory(
+    private FileType[] writeElementAsSubdirectory(
             Collection<T> element, OutputterChecked outputter, String outputNameFolder)
             throws OutputWriteFailedException {
 
@@ -86,8 +86,8 @@ public class CollectionGenerator<T> implements Generator<Collection<T>> {
                         outputNameFolder, prefix, 3, false, Optional.empty());
         factory.incrementingByOneStream(pattern, element.stream());
         
-        // Do not report any file-types for the collection written
-        return Optional.of( new FileType[]{} );
+        // Do not report any file-types for the collection written. TODO is this okay?
+        return new FileType[]{};
     }
 
     public static ManifestDescription createManifestDescription(String type) {

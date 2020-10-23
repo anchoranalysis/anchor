@@ -25,7 +25,6 @@
  */
 package org.anchoranalysis.io.generator.combined;
 
-import java.util.Optional;
 import org.anchoranalysis.io.generator.MultipleFileTypeGenerator;
 import org.anchoranalysis.io.generator.serialized.ObjectOutputStreamGenerator;
 import org.anchoranalysis.io.generator.serialized.XStreamGenerator;
@@ -47,13 +46,13 @@ public class ManifestGenerator implements MultipleFileTypeGenerator<Manifest> {
     }
 
     @Override
-    public Optional<FileType[]> write(Manifest element, OutputNameStyle outputNameStyle, OutputterChecked outputter)
+    public FileType[] write(Manifest element, OutputNameStyle outputNameStyle, OutputterChecked outputter)
             throws OutputWriteFailedException {
         return delegate.write(element, outputNameStyle, outputter);
     }
 
     @Override
-    public Optional<FileType[]> writeWithIndex(
+    public FileType[] writeWithIndex(
             Manifest element,
             String index,
             IndexableOutputNameStyle outputNameStyle,

@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.io.generator;
 
-import java.util.Optional;
 import java.util.stream.Stream;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -89,7 +88,7 @@ public class GeneratorBridge<S, T> implements Generator<S> {
     }
 
     @Override
-    public Optional<FileType[]> write(S element, OutputNameStyle outputNameStyle, OutputterChecked outputter)
+    public FileType[] write(S element, OutputNameStyle outputNameStyle, OutputterChecked outputter)
             throws OutputWriteFailedException {
         return convertAndExecute(
                 element,
@@ -97,7 +96,7 @@ public class GeneratorBridge<S, T> implements Generator<S> {
     }
 
     @Override
-    public Optional<FileType[]> writeWithIndex(
+    public FileType[] writeWithIndex(
             S element,
             String index,
             IndexableOutputNameStyle outputNameStyle,
@@ -111,8 +110,8 @@ public class GeneratorBridge<S, T> implements Generator<S> {
     }
 
     /** Converts an element to <b>one or more target elements</b>, and runs a consumer on each. */
-    private Optional<FileType[]> convertAndExecute(
-            S element, CheckedFunction<T, Optional<FileType[]>, OutputWriteFailedException> function)
+    private FileType[] convertAndExecute(
+            S element, CheckedFunction<T, FileType[], OutputWriteFailedException> function)
             throws OutputWriteFailedException {
         try {
             Stream<T> bridgedElement = bridge.apply(element);

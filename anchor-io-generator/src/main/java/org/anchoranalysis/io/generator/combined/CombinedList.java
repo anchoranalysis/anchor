@@ -48,7 +48,7 @@ class CombinedList<T> {
 
     private List<OptionalNameValue<Generator<T>>> list = new ArrayList<>();
 
-    public Optional<FileType[]> write(T element, OutputNameStyle outputNameStyle, OutputterChecked outputter)
+    public FileType[] write(T element, OutputNameStyle outputNameStyle, OutputterChecked outputter)
             throws OutputWriteFailedException {
 
         ConcatenateFileTypes collect = new ConcatenateFileTypes(list.size() > 1);
@@ -61,7 +61,7 @@ class CombinedList<T> {
         return collect.allFileTypes();
     }
 
-    public Optional<FileType[]> writeWithIndex(
+    public FileType[] writeWithIndex(
             T element,
             String index,
             IndexableOutputNameStyle outputNameStyle,

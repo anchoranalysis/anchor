@@ -90,7 +90,7 @@ public class AlwaysAllowed implements Writer {
             throws OutputWriteFailedException {
 
         maybeExecutePreop();
-        return elementWriter.get().writeWithIndex(element.get(), index, outputNameStyle, outputter);
+        return Optional.of(elementWriter.get().writeWithIndex(element.get(), index, outputNameStyle, outputter));
     }
 
     // A non-generator way of creating outputs, that are still included in the manifest

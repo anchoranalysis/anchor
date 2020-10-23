@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.io.generator;
 
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.functional.checked.CheckedFunction;
 import org.anchoranalysis.io.manifest.file.FileType;
@@ -58,13 +57,13 @@ public class TransformingGeneratorBridge<S, T, V> implements TransformingGenerat
     }
 
     @Override
-    public Optional<FileType[]> write(T element, OutputNameStyle outputNameStyle, OutputterChecked outputter)
+    public FileType[] write(T element, OutputNameStyle outputNameStyle, OutputterChecked outputter)
             throws OutputWriteFailedException {
         return delegate.write( applyBridge(element), outputNameStyle, outputter);
     }
 
     @Override
-    public Optional<FileType[]> writeWithIndex(T element, String index, IndexableOutputNameStyle outputNameStyle,
+    public FileType[] writeWithIndex(T element, String index, IndexableOutputNameStyle outputNameStyle,
             OutputterChecked outputter) throws OutputWriteFailedException {
         return delegate.writeWithIndex( applyBridge(element), index, outputNameStyle, outputter);
     }

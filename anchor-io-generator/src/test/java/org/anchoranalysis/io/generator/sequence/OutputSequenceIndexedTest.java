@@ -26,6 +26,7 @@
 package org.anchoranalysis.io.generator.sequence;
 
 import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.generator.sequence.pattern.OutputPattern;
 import org.anchoranalysis.io.generator.sequence.pattern.OutputPatternStringSuffix;
 import org.anchoranalysis.io.manifest.Manifest;
@@ -44,55 +45,83 @@ public class OutputSequenceIndexedTest {
     private static final String OUTPUT_NAME = "out";
     
     @Test
-    public void testOneFileType() throws OutputWriteFailedException, OperationFailedException {
-        test(1);
+    public void testOneConstantFileType() throws OutputWriteFailedException, OperationFailedException {
+        test(1,false);
     }
     
     @Test
-    public void testTwoFileTypes() throws OutputWriteFailedException, OperationFailedException {
-        test(2);
+    public void testTwoConstantFileTypes() throws OutputWriteFailedException, OperationFailedException {
+        test(2,false);
+    }
+    
+    @Test
+    public void testTwoAlternatingFileTypes() throws OutputWriteFailedException, OperationFailedException {
+        test(2,true);
     }
     
     /**
      * Outputs a sequence with the generator configured with different types of file-types.
      * 
      * @param numberFileTypes the number of file-types that each call to write should return.
+     * @param mixedFileTypes if TRUE, file-types with different extensions are returned for alternating calls to the generator. if FALSE, extensions are constant.
      * 
-     * @throws OutputWriteFailedException
      * @throws OperationFailedException
      */
-    private static void test(int numberFileTypes) throws OutputWriteFailedException, OperationFailedException {
+    private static void test(int numberFileTypes, boolean mixedFileTypes) throws OperationFailedException {
         Manifest manifest = new Manifest();
         
         SequenceType<String> sequenceType = new StringsWithoutOrder();
-
-        BoundOutputter<Integer> outputter = createOutputter( new OutputPatternStringSuffix(OUTPUT_NAME, false), manifest, numberFileTypes);
         
-        OutputSequenceIndexed<Integer, String> sequence = new OutputSequenceIndexed<>(
-                outputter, sequenceType
-        );
-        
-        sequence.add(4, "4");
-        sequence.add(5, "6");
-        sequence.add(9, "9");
+        createSequence(createGenerator(numberFileTypes, mixedFileTypes), sequenceType, manifest);
         
         assertEquals(3, sequenceType.getNumberElements());
         assertEquals(1, manifest.getRootFolder().subdirectories().size());
         assertTrue(manifest.getRootFolder().subdirectories().get(0) instanceof IndexableSubdirectory);
-        checkIndexableSubdirectory( (IndexableSubdirectory) manifest.getRootFolder().subdirectories().get(0), numberFileTypes);        
+        
+        IndexableSubdirectory firstSubdirectory = (IndexableSubdirectory) manifest.getRootFolder().subdirectories().get(0);
+        checkIndexableSubdirectory(firstSubdirectory, numberFileTypes, mixedFileTypes);        
     }
     
-    private static void checkIndexableSubdirectory(IndexableSubdirectory subdirectory, int numberFileTypes) {
-        assertTrue( subdirectory.getFileTypes().size()==numberFileTypes );
+    private static void createSequence(Generator<Integer> generator, SequenceType<String> sequenceType, Manifest manifest) throws OperationFailedException {
+        BoundOutputter<Integer> outputter = createOutputter(
+                new OutputPatternStringSuffix(OUTPUT_NAME, false), manifest, generator);
+        
+        try {
+            OutputSequenceIndexed<Integer, String> sequence = new OutputSequenceIndexed<>(
+                    outputter, sequenceType
+            );
+            
+            sequence.add(4, "4");
+            sequence.add(5, "6");
+            sequence.add(9, "9");
+
+        } catch (OutputWriteFailedException e) {
+            throw new OperationFailedException(e);
+        }
+    }
+    
+    private static void checkIndexableSubdirectory(IndexableSubdirectory subdirectory, int numberFileTypes, boolean mixedFileTypes) {
+        
+        int numberExpectedFileTypes = (mixedFileTypes ? 2 : 1) * numberFileTypes;
+        
+        assertEquals( numberExpectedFileTypes, subdirectory.getFileTypes().size() );
         assertTrue( subdirectory.getFileTypes().iterator().next().getManifestDescription().equals(GeneratorFixture.MANIFEST_DESCRIPTION) );
         assertTrue( subdirectory.getOutputName().getOutputName().equals(OUTPUT_NAME) );
     }
+    
+    private static Generator<Integer> createGenerator(int numberFileTypes, boolean mixedFileTypes) throws OperationFailedException {
+        if (mixedFileTypes) {
+            return GeneratorFixture.createAlternatingFileTypes(numberFileTypes);
+        } else {
+            return GeneratorFixture.create(numberFileTypes);
+        }
+    }
 
-    private static BoundOutputter<Integer> createOutputter(OutputPattern pattern, Manifest manifest, int numberFileTypes) throws OperationFailedException {
+    private static BoundOutputter<Integer> createOutputter(OutputPattern pattern, Manifest manifest, Generator<Integer> generator) throws OperationFailedException {
 
         try {
             OutputterChecked outputter = OutputterCheckedFixture.create(manifest);
-            return new BoundOutputter<Integer>(outputter, pattern, GeneratorFixture.create(numberFileTypes) );
+            return new BoundOutputter<Integer>(outputter, pattern, generator);
             
         } catch (BindFailedException e) {
             throw new OperationFailedException(e);
