@@ -29,11 +29,9 @@ package org.anchoranalysis.io.generator.combined;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.io.generator.ConcatenateFileTypes;
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.manifest.file.FileType;
-import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.output.namestyle.OutputNameStyle;
@@ -49,29 +47,6 @@ import org.anchoranalysis.io.output.writer.ElementWriter;
 class CombinedList<T> {
 
     private List<OptionalNameValue<Generator<T>>> list = new ArrayList<>();
-
-    public Optional<FileType[]> getFileTypes(OutputWriteSettings outputWriteSettings)
-            throws OperationFailedException {
-
-        List<FileType> all = new ArrayList<>();
-
-        for (OptionalNameValue<Generator<T>> namedGenerator : list) {
-            Optional<FileType[]> fileTypeArray =
-                    namedGenerator.getValue().getFileTypes(outputWriteSettings);
-            fileTypeArray.ifPresent(
-                    fileTypes -> {
-                        for (int i = 0; i < fileTypes.length; i++) {
-                            all.add(fileTypes[i]);
-                        }
-                    });
-        }
-
-        if (!all.isEmpty()) {
-            return Optional.of(all.toArray(new FileType[] {}));
-        } else {
-            return Optional.empty();
-        }
-    }
 
     public Optional<FileType[]> write(T element, OutputNameStyle outputNameStyle, OutputterChecked outputter)
             throws OutputWriteFailedException {

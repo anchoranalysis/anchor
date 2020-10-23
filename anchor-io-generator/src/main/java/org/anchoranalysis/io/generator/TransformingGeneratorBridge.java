@@ -28,10 +28,8 @@ package org.anchoranalysis.io.generator;
 
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.checked.CheckedFunction;
 import org.anchoranalysis.io.manifest.file.FileType;
-import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.output.namestyle.OutputNameStyle;
@@ -57,12 +55,6 @@ public class TransformingGeneratorBridge<S, T, V> implements TransformingGenerat
     @Override
     public S transform(T element) throws OutputWriteFailedException {
         return delegate.transform(applyBridge(element));
-    }
-    
-    @Override
-    public Optional<FileType[]> getFileTypes(OutputWriteSettings outputWriteSettings)
-            throws OperationFailedException {
-        return delegate.getFileTypes(outputWriteSettings);
     }
 
     @Override

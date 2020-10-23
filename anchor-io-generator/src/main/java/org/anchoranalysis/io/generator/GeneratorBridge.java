@@ -30,11 +30,9 @@ import java.util.Optional;
 import java.util.stream.Stream;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
-import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.CheckedStream;
 import org.anchoranalysis.core.functional.checked.CheckedFunction;
 import org.anchoranalysis.io.manifest.file.FileType;
-import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.output.namestyle.OutputNameStyle;
@@ -110,12 +108,6 @@ public class GeneratorBridge<S, T> implements Generator<S> {
                 convertedElement ->
                         generator.writeWithIndex(
                                 convertedElement, index, outputNameStyle, outputter));
-    }
-
-    @Override
-    public Optional<FileType[]> getFileTypes(OutputWriteSettings outputWriteSettings)
-            throws OperationFailedException {
-        return generator.getFileTypes(outputWriteSettings);
     }
 
     /** Converts an element to <b>one or more target elements</b>, and runs a consumer on each. */

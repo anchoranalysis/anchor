@@ -27,11 +27,9 @@
 package org.anchoranalysis.image.io.generator.raster;
 
 import java.nio.file.Path;
-import java.util.Optional;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.StackWriter;
-import org.anchoranalysis.io.manifest.file.FileType;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
@@ -41,12 +39,6 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
  * @author Owen Feehan
  */
 public abstract class RasterGeneratorSelectFormat<T> extends RasterGenerator<T> {
-
-    @Override
-    public Optional<FileType[]> getFileTypes(OutputWriteSettings outputWriteSettings)
-            throws OperationFailedException {
-        return Optional.empty();
-    }
     
     @Override
     protected String selectFileExtension(OutputWriteSettings outputWriteSettings) throws OperationFailedException {

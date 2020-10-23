@@ -30,13 +30,11 @@ import java.util.Optional;
 import java.util.function.BiFunction;
 import lombok.Getter;
 import org.anchoranalysis.core.exception.InitException;
-import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.exception.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.manifest.file.FileType;
 import org.anchoranalysis.io.manifest.sequencetype.SequenceType;
 import org.anchoranalysis.io.manifest.sequencetype.SequenceTypeException;
-import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.recorded.RecordingWriters;
 
@@ -54,7 +52,6 @@ public class OutputSequenceIndexed<T, S> implements OutputSequence {
 
     private final Generator<T> generator;
     private final SequenceWriters sequenceWriter;
-    private final OutputWriteSettings settings;
     private final BiFunction<S,String,S> combineIndexWithExtension;
     
     @Getter private SequenceType<S> sequenceType;
@@ -89,15 +86,13 @@ public class OutputSequenceIndexed<T, S> implements OutputSequence {
         this.sequenceWriter =
                 new SequenceWriters(
                         outputter.getOutputter().getWriters(), outputter.getOutputPattern());
-        this.settings = outputter.getOutputter().getSettings();
         this.generator = outputter.getGenerator();
         this.sequenceType = sequenceType;
         this.combineIndexWithExtension = combineIndexWithExtension;
 
         try {
             this.sequenceWriter.init(this.sequenceType);
-            fileTypesFromGenerator().ifPresent(sequenceWriter::addFileTypes);
-        } catch (OperationFailedException | InitException e) {
+        } catch (InitException e) {
             throw new OutputWriteFailedException(e);
         }
     }
@@ -146,10 +141,5 @@ public class OutputSequenceIndexed<T, S> implements OutputSequence {
     @Override
     public Optional<RecordingWriters> writers() {
         return sequenceWriter.writers();
-    }
-
-    private Optional<FileType[]> fileTypesFromGenerator() throws OperationFailedException {
-        return generator
-                .getFileTypes(settings);
     }
 }

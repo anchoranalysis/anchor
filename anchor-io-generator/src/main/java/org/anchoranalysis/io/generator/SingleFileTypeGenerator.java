@@ -58,6 +58,9 @@ public abstract class SingleFileTypeGenerator<T, S> implements TransformingGener
 
     public abstract Optional<ManifestDescription> createManifestDescription();
 
+    /** Lazy creation of the array of file-types created. This is cached here so it can be reused. */
+    private FileType[] fileTypes;
+    
     // We delegate to a much simpler method, for single file generators
     @Override
     public Optional<FileType[]> write(T element, OutputNameStyle outputNameStyle, OutputterChecked outputter)
@@ -87,13 +90,6 @@ public abstract class SingleFileTypeGenerator<T, S> implements TransformingGener
                 outputter);
     }
 
-    // We create a single file type
-    @Override
-    public Optional<FileType[]> getFileTypes(OutputWriteSettings outputWriteSettings)
-            throws OperationFailedException {
-        return Optional.of(createFileTypeArray(createManifestDescription(), outputWriteSettings));
-    }
-
     private Optional<FileType[]> writeInternal(
             T element,
             String filenameWithoutExtension,
@@ -118,18 +114,26 @@ public abstract class SingleFileTypeGenerator<T, S> implements TransformingGener
                                     outputter.writeFileToOperationRecorder(
                                             outputName, pathToWriteTo, manifestDescription, index));
             
-            // TODO change to be more efficient, as there is a single-type that is always returned
-            return getFileTypes(outputter.getSettings());
+            if (fileTypes==null) {
+                fileTypes = buildFileTypeArray(outputter.getSettings());
+            }
+            return Optional.of(fileTypes);
+            
         } catch (OperationFailedException e) {
             throw new OutputWriteFailedException(e);
         }
     }
     
-    private FileType[] createFileTypeArray(
-            Optional<ManifestDescription> description, OutputWriteSettings outputWriteSettings)
-            throws OperationFailedException {
+    /**
+     * The types of files the generator writes to the filesystem.
+     *
+     * @param outputWriteSettings general settings for outputting
+     * @return an array of all file-types written, if any exist
+     * @throws OperationFailedException if anything goes wrong
+     */
+    private FileType[] buildFileTypeArray(OutputWriteSettings outputWriteSettings) throws OperationFailedException {
         ManifestDescription selectedDescription =
-                description.orElse(UNDEFINED_MANIFEST_DESCRIPTION);
+                createManifestDescription().orElse(UNDEFINED_MANIFEST_DESCRIPTION);
         return new FileType[] {
             new FileType(selectedDescription, getFileExtension(outputWriteSettings))
         };

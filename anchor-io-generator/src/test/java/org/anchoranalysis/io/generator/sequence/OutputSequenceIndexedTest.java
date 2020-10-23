@@ -44,29 +44,29 @@ public class OutputSequenceIndexedTest {
     private static final String OUTPUT_NAME = "out";
     
     @Test
-    public void testUniformFileTypes() throws OutputWriteFailedException, OperationFailedException {
-        test(true);
+    public void testOneFileType() throws OutputWriteFailedException, OperationFailedException {
+        test(1);
     }
     
     @Test
-    public void testNonUniformFileTypes() throws OutputWriteFailedException, OperationFailedException {
-        test(false);
+    public void testTwoFileTypes() throws OutputWriteFailedException, OperationFailedException {
+        test(2);
     }
     
     /**
      * Outputs a sequence with the generator configured with different types of file-types.
      * 
-     * @param withUniformFileTypes if true, the generator provides certain file-types common to all.
+     * @param numberFileTypes the number of file-types that each call to write should return.
      * 
      * @throws OutputWriteFailedException
      * @throws OperationFailedException
      */
-    private static void test(boolean withUniformFileTypes) throws OutputWriteFailedException, OperationFailedException {
+    private static void test(int numberFileTypes) throws OutputWriteFailedException, OperationFailedException {
         Manifest manifest = new Manifest();
         
         SequenceType<String> sequenceType = new StringsWithoutOrder();
 
-        BoundOutputter<Integer> outputter = createOutputter( new OutputPatternStringSuffix(OUTPUT_NAME, false), manifest, withUniformFileTypes);
+        BoundOutputter<Integer> outputter = createOutputter( new OutputPatternStringSuffix(OUTPUT_NAME, false), manifest, numberFileTypes);
         
         OutputSequenceIndexed<Integer, String> sequence = new OutputSequenceIndexed<>(
                 outputter, sequenceType
@@ -79,20 +79,20 @@ public class OutputSequenceIndexedTest {
         assertEquals(3, sequenceType.getNumberElements());
         assertEquals(1, manifest.getRootFolder().subdirectories().size());
         assertTrue(manifest.getRootFolder().subdirectories().get(0) instanceof IndexableSubdirectory);
-        checkIndexableSubdirectory( (IndexableSubdirectory) manifest.getRootFolder().subdirectories().get(0));        
+        checkIndexableSubdirectory( (IndexableSubdirectory) manifest.getRootFolder().subdirectories().get(0), numberFileTypes);        
     }
     
-    private static void checkIndexableSubdirectory(IndexableSubdirectory subdirectory) {
-        assertTrue( subdirectory.getFileTypes().size()==1 );
+    private static void checkIndexableSubdirectory(IndexableSubdirectory subdirectory, int numberFileTypes) {
+        assertTrue( subdirectory.getFileTypes().size()==numberFileTypes );
         assertTrue( subdirectory.getFileTypes().iterator().next().getManifestDescription().equals(GeneratorFixture.MANIFEST_DESCRIPTION) );
         assertTrue( subdirectory.getOutputName().getOutputName().equals(OUTPUT_NAME) );
     }
 
-    private static BoundOutputter<Integer> createOutputter(OutputPattern pattern, Manifest manifest, boolean includeFileTypes) throws OperationFailedException {
+    private static BoundOutputter<Integer> createOutputter(OutputPattern pattern, Manifest manifest, int numberFileTypes) throws OperationFailedException {
 
         try {
             OutputterChecked outputter = OutputterCheckedFixture.create(manifest);
-            return new BoundOutputter<Integer>(outputter, pattern, GeneratorFixture.create(includeFileTypes) );
+            return new BoundOutputter<Integer>(outputter, pattern, GeneratorFixture.create(numberFileTypes) );
             
         } catch (BindFailedException e) {
             throw new OperationFailedException(e);

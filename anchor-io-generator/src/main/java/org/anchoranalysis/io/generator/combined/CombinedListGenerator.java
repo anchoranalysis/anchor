@@ -32,12 +32,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
-import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.identifier.name.NameValue;
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.generator.MultipleFileTypeGenerator;
 import org.anchoranalysis.io.manifest.file.FileType;
-import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.output.namestyle.OutputNameStyle;
@@ -86,12 +84,6 @@ public class CombinedListGenerator<T> implements MultipleFileTypeGenerator<T> {
             OutputterChecked outputter)
             throws OutputWriteFailedException {
         return delegate.writeWithIndex(element, index, outputNameStyle, outputter);
-    }
-
-    @Override
-    public Optional<FileType[]> getFileTypes(OutputWriteSettings outputWriteSettings)
-            throws OperationFailedException {
-        return delegate.getFileTypes(outputWriteSettings);
     }
 
     public void add(String name, Generator<T> element) {
