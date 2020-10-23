@@ -78,15 +78,17 @@ class SequenceWriters {
         Arrays.stream(fileTypes).forEach(directoryManifest::addFileType);
     }
 
-    public <T> void write(
+    public <T> Optional<FileType[]> write(
             ElementWriterSupplier<T> generator, ElementSupplier<T> element, String index)
             throws OutputWriteFailedException {
         
         if (isOn()) {
-            this.writers // NOSONAR
+            return this.writers // NOSONAR
             .get()
             .multiplex(pattern.isSelective())
             .writeWithIndex(pattern.getOutputNameStyle(), generator, element, index);
+        } else {
+            return Optional.empty();
         }
     }
 

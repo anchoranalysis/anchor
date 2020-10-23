@@ -32,9 +32,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.CheckedStream;
-import org.anchoranalysis.core.functional.checked.CheckedConsumer;
 import org.anchoranalysis.core.functional.checked.CheckedFunction;
-import org.anchoranalysis.core.functional.checked.CheckedToIntFunction;
 import org.anchoranalysis.io.manifest.file.FileType;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
@@ -93,21 +91,21 @@ public class GeneratorBridge<S, T> implements Generator<S> {
     }
 
     @Override
-    public void write(S element, OutputNameStyle outputNameStyle, OutputterChecked outputter)
+    public Optional<FileType[]> write(S element, OutputNameStyle outputNameStyle, OutputterChecked outputter)
             throws OutputWriteFailedException {
-        convertAndExecute(
+        return convertAndExecute(
                 element,
                 convertedElement -> generator.write(convertedElement, outputNameStyle, outputter));
     }
 
     @Override
-    public int writeWithIndex(
+    public Optional<FileType[]> writeWithIndex(
             S element,
             String index,
             IndexableOutputNameStyle outputNameStyle,
             OutputterChecked outputter)
             throws OutputWriteFailedException {
-        return convertAndSum(
+        return convertAndExecute(
                 element,
                 convertedElement ->
                         generator.writeWithIndex(
@@ -121,28 +119,20 @@ public class GeneratorBridge<S, T> implements Generator<S> {
     }
 
     /** Converts an element to <b>one or more target elements</b>, and runs a consumer on each. */
-    private void convertAndExecute(
-            S element, CheckedConsumer<T, OutputWriteFailedException> consumer)
+    private Optional<FileType[]> convertAndExecute(
+            S element, CheckedFunction<T, Optional<FileType[]>, OutputWriteFailedException> function)
             throws OutputWriteFailedException {
         try {
+            Stream<T> bridgedElement = bridge.apply(element);
+            
+            ConcatenateFileTypes concatenate = new ConcatenateFileTypes();
+            
             CheckedStream.forEach(
-                    bridge.apply(element), OutputWriteFailedException.class, consumer);
-        } catch (Exception e) {
-            throw new OutputWriteFailedException(e);
-        }
-    }
-
-    /**
-     * Converts an element to <b>one or more target elements</b>, and sums the results of applying a
-     * {@link CheckedToIntFunction}.
-     */
-    private int convertAndSum(
-            S element, CheckedToIntFunction<T, OutputWriteFailedException> consumer)
-            throws OutputWriteFailedException {
-        try {
-            return CheckedStream.mapToInt(
-                            bridge.apply(element), OutputWriteFailedException.class, consumer)
-                    .sum();
+                    bridgedElement, OutputWriteFailedException.class, item ->
+                        concatenate.add( function.apply(item) )
+                    );
+            
+            return concatenate.allFileTypes();
         } catch (Exception e) {
             throw new OutputWriteFailedException(e);
         }

@@ -100,10 +100,7 @@ public class NamedProviderOutputter<T> {
         OutputSequenceIndexed<T, String> writer = factory.withoutOrder(sequenceDirectory);
         for (String key : allowedKeys) {
             try {
-                // Determine what file extension will be used for the particular file
-                String extension = ".tif";
-                
-                writer.add(provider.getException(key), key + extension);
+                writer.add(provider.getException(key), key);
             } catch (NamedProviderGetException e) {
                 throwExceptionInWriter(e, key);
             }

@@ -97,7 +97,7 @@ public class OutputSequenceFactory<T> {
     public OutputSequenceIndexed<T, Integer> incrementingIntegers(
             OutputPatternIntegerSuffix pattern, int startIndex, int incrementSize)
             throws OutputWriteFailedException {
-        return indexed(pattern, new IncrementingIntegers(startIndex, incrementSize));
+        return new OutputSequenceIndexed<>(bind(pattern), new IncrementingIntegers(startIndex, incrementSize));
     }
 
     public OutputSequenceIndexed<T, Integer> increasingIntegers(OutputPatternIntegerSuffix pattern)
@@ -156,9 +156,9 @@ public class OutputSequenceFactory<T> {
         CheckedStream.forEach(stream, OutputWriteFailedException.class, sequenceWriter::add);
     }
 
-    private <S> OutputSequenceIndexed<T, S> indexed(
-            OutputPattern pattern, SequenceType<S> sequenceType) throws OutputWriteFailedException {
-        return new OutputSequenceIndexed<>(bind(pattern), sequenceType);
+    private OutputSequenceIndexed<T, String> indexed(
+            OutputPattern pattern, SequenceType<String> sequenceType) throws OutputWriteFailedException {
+        return new OutputSequenceIndexed<>(bind(pattern), sequenceType, (index,extension) -> index + "." + extension);
     }
 
     private OutputSequenceIncrementing<T> incrementingByOne(

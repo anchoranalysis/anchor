@@ -60,24 +60,21 @@ public class CollectionGenerator<T> implements Generator<Collection<T>> {
     // END REQUIRED ARGUMENTS
 
     @Override
-    public void write(
+    public Optional<FileType[]> write(
             Collection<T> element, OutputNameStyle outputNameStyle, OutputterChecked outputter)
             throws OutputWriteFailedException {
-
-        writeElementAsSubdirectory(
+        return writeElementAsSubdirectory(
                 element, outputter, outputNameStyle.getFilenameWithoutExtension());
     }
 
     @Override
-    public int writeWithIndex(
+    public Optional<FileType[]> writeWithIndex(
             Collection<T> element,
             String index,
             IndexableOutputNameStyle outputNameStyle,
             OutputterChecked outputter)
             throws OutputWriteFailedException {
-        // Ignore the index
-        write(element, outputNameStyle, outputter);
-        return 1;
+        return write(element, outputNameStyle, outputter);
     }
 
     @Override
@@ -86,7 +83,7 @@ public class CollectionGenerator<T> implements Generator<Collection<T>> {
         return generator.getFileTypes(outputWriteSettings);
     }
 
-    private void writeElementAsSubdirectory(
+    private Optional<FileType[]> writeElementAsSubdirectory(
             Collection<T> element, OutputterChecked outputter, String outputNameFolder)
             throws OutputWriteFailedException {
 
@@ -96,6 +93,9 @@ public class CollectionGenerator<T> implements Generator<Collection<T>> {
                 new OutputPatternIntegerSuffix(
                         outputNameFolder, prefix, 3, false, Optional.empty());
         factory.incrementingByOneStream(pattern, element.stream());
+        
+        // Do not report any file-types for the collection written
+        return Optional.of( new FileType[]{} );
     }
 
     public static ManifestDescription createManifestDescription(String type) {

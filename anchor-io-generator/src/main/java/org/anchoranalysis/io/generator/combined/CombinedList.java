@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.io.generator.ConcatenateFileTypes;
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.manifest.file.FileType;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
@@ -72,23 +73,28 @@ class CombinedList<T> {
         }
     }
 
-    public void write(T element, OutputNameStyle outputNameStyle, OutputterChecked outputter)
+    public Optional<FileType[]> write(T element, OutputNameStyle outputNameStyle, OutputterChecked outputter)
             throws OutputWriteFailedException {
 
+        ConcatenateFileTypes collect = new ConcatenateFileTypes(list.size() > 1);
+        
         for (OptionalNameValue<Generator<T>> namedGenerator : list) {
             namedGenerator.getName().ifPresent(outputNameStyle::setOutputName);
-            namedGenerator.getValue().write(element, outputNameStyle, outputter);
+            collect.add( namedGenerator.getValue().write(element, outputNameStyle, outputter) );
         }
+        
+        return collect.allFileTypes();
     }
 
-    public int writeWithIndex(
+    public Optional<FileType[]> writeWithIndex(
             T element,
             String index,
             IndexableOutputNameStyle outputNameStyle,
             OutputterChecked outputter)
             throws OutputWriteFailedException {
 
-        int maxWritten = -1;
+        ConcatenateFileTypes collect = new ConcatenateFileTypes(list.size() > 1);
+        
         for (OptionalNameValue<Generator<T>> namedGenerator : list) {
 
             if (namedGenerator.getName().isPresent()) {
@@ -96,14 +102,14 @@ class CombinedList<T> {
                 outputNameStyle.setOutputName(namedGenerator.getName().get()); // NOSONAR
             }
 
-            int numberWritten =
-                    namedGenerator
-                            .getValue()
-                            .writeWithIndex(element, index, outputNameStyle, outputter);
-            maxWritten = Math.max(maxWritten, numberWritten);
+            collect.add(
+                namedGenerator
+                        .getValue()
+                        .writeWithIndex(element, index, outputNameStyle, outputter)
+            );
         }
 
-        return maxWritten;
+        return collect.allFileTypes();
     }
 
     /**

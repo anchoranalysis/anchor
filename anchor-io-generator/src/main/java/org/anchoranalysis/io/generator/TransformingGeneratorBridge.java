@@ -66,13 +66,13 @@ public class TransformingGeneratorBridge<S, T, V> implements TransformingGenerat
     }
 
     @Override
-    public void write(T element, OutputNameStyle outputNameStyle, OutputterChecked outputter)
+    public Optional<FileType[]> write(T element, OutputNameStyle outputNameStyle, OutputterChecked outputter)
             throws OutputWriteFailedException {
-        delegate.write( applyBridge(element), outputNameStyle, outputter);
+        return delegate.write( applyBridge(element), outputNameStyle, outputter);
     }
 
     @Override
-    public int writeWithIndex(T element, String index, IndexableOutputNameStyle outputNameStyle,
+    public Optional<FileType[]> writeWithIndex(T element, String index, IndexableOutputNameStyle outputNameStyle,
             OutputterChecked outputter) throws OutputWriteFailedException {
         return delegate.writeWithIndex( applyBridge(element), index, outputNameStyle, outputter);
     }

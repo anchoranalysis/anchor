@@ -117,19 +117,16 @@ public class WriterRouterErrors {
      * @param elementWriter writes the element to the filesystem
      * @param element the element to write
      * @param index the index
-     * @return the number of elements written by the {@link ElementWriter}, including 0 elements, or
-     *     -2 if the output is not allowed.
      */
-    public <T> int writeWithIndex(
+    public <T> void writeWithIndex(
             IndexableOutputNameStyle outputNameStyle,
             ElementWriterSupplier<T> elementWriter,
             ElementSupplier<T> element,
             String index) {
         try {
-            return delegate.writeWithIndex(outputNameStyle, elementWriter, element, index);
+            delegate.writeWithIndex(outputNameStyle, elementWriter, element, index);
         } catch (OutputWriteFailedException e) {
             errorReporter.recordError(Outputter.class, e);
-            return NUMBER_ELEMENTS_WRITTEN_ERRORED;
         }
     }
 

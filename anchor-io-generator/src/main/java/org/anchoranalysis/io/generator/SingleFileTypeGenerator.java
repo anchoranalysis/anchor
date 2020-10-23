@@ -60,9 +60,9 @@ public abstract class SingleFileTypeGenerator<T, S> implements TransformingGener
 
     // We delegate to a much simpler method, for single file generators
     @Override
-    public void write(T element, OutputNameStyle outputNameStyle, OutputterChecked outputter)
+    public Optional<FileType[]> write(T element, OutputNameStyle outputNameStyle, OutputterChecked outputter)
             throws OutputWriteFailedException {
-        writeInternal(
+        return writeInternal(
                 element,
                 outputNameStyle.getFilenameWithoutExtension(),
                 outputNameStyle.getOutputName(),
@@ -72,21 +72,19 @@ public abstract class SingleFileTypeGenerator<T, S> implements TransformingGener
 
     /** As only a single-file is involved, this methods delegates to a simpler virtual method. */
     @Override
-    public int writeWithIndex(
+    public Optional<FileType[]> writeWithIndex(
             T element,
             String index,
             IndexableOutputNameStyle outputNameStyle,
             OutputterChecked outputter)
             throws OutputWriteFailedException {
 
-        writeInternal(
+        return writeInternal(
                 element,
                 outputNameStyle.getFilenameWithoutExtension(index),
                 outputNameStyle.getOutputName(),
                 index,
                 outputter);
-
-        return 1;
     }
 
     // We create a single file type
@@ -96,7 +94,7 @@ public abstract class SingleFileTypeGenerator<T, S> implements TransformingGener
         return Optional.of(createFileTypeArray(createManifestDescription(), outputWriteSettings));
     }
 
-    private void writeInternal(
+    private Optional<FileType[]> writeInternal(
             T element,
             String filenameWithoutExtension,
             String outputName,
@@ -111,7 +109,7 @@ public abstract class SingleFileTypeGenerator<T, S> implements TransformingGener
                     outputter.makeOutputPath(
                             filenameWithoutExtension, fileExtension);
 
-            // First write to the file system, and then write to the operation-recorder. Thi
+            // First write to the file system, and then write to the operation-recorder.
             writeToFile(element, outputter.getSettings(), pathToWriteTo);
 
             createManifestDescription()
@@ -119,6 +117,9 @@ public abstract class SingleFileTypeGenerator<T, S> implements TransformingGener
                             manifestDescription ->
                                     outputter.writeFileToOperationRecorder(
                                             outputName, pathToWriteTo, manifestDescription, index));
+            
+            // TODO change to be more efficient, as there is a single-type that is always returned
+            return getFileTypes(outputter.getSettings());
         } catch (OperationFailedException e) {
             throw new OutputWriteFailedException(e);
         }

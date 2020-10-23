@@ -31,6 +31,7 @@ import java.util.Optional;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.manifest.ManifestDirectoryDescription;
 import org.anchoranalysis.io.manifest.directory.SubdirectoryBase;
+import org.anchoranalysis.io.manifest.file.FileType;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
@@ -96,11 +97,10 @@ public interface Writer {
      * @param elementWriter writes the element to the filesystem
      * @param element the element to write
      * @param index the index
-     * @return the number of elements written by the {@link ElementWriter}, including 0 elements, or
-     *     -2 if the output is not allowed.
+     * @return any file-types written if the output was allowed, otherwise {@link Optional#empty}.
      * @throws OutputWriteFailedException
      */
-    <T> int writeWithIndex(
+    <T> Optional<FileType[]> writeWithIndex(
             IndexableOutputNameStyle outputNameStyle,
             ElementWriterSupplier<T> elementWriter,
             ElementSupplier<T> element,

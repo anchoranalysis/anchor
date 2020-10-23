@@ -31,10 +31,10 @@ import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.manifest.ManifestDirectoryDescription;
 import org.anchoranalysis.io.manifest.directory.SubdirectoryBase;
+import org.anchoranalysis.io.manifest.file.FileType;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
-import org.anchoranalysis.io.output.writer.CheckIfAllowed;
 import org.anchoranalysis.io.output.writer.ElementSupplier;
 import org.anchoranalysis.io.output.writer.ElementWriterSupplier;
 import org.anchoranalysis.io.output.writer.Writer;
@@ -90,19 +90,20 @@ class RecordOutputNamesForWriter implements Writer {
     }
 
     @Override
-    public <T> int writeWithIndex(
+    public <T> Optional<FileType[]> writeWithIndex(
             IndexableOutputNameStyle outputNameStyle,
             ElementWriterSupplier<T> elementWriter,
             ElementSupplier<T> element,
             String index)
             throws OutputWriteFailedException {
-        int numberElements = writer.writeWithIndex(outputNameStyle, elementWriter, element, index);
+        
+        Optional<FileType[]> fileTypesWritten = writer.writeWithIndex(outputNameStyle, elementWriter, element, index);
+        
         if (includeIndexableOutputs) {
-            recordedOutputs.add(
-                    outputNameStyle.getOutputName(),
-                    numberElements != CheckIfAllowed.NUMBER_ELEMENTS_WRITTEN_NOT_ALLOWED);
+            recordedOutputs.add(outputNameStyle.getOutputName(), fileTypesWritten.isPresent());
         }
-        return numberElements;
+        
+        return fileTypesWritten;
     }
 
     @Override

@@ -73,13 +73,13 @@ public class CombinedListGenerator<T> implements MultipleFileTypeGenerator<T> {
     }
 
     @Override
-    public void write(T element, OutputNameStyle outputNameStyle, OutputterChecked outputter)
+    public Optional<FileType[]> write(T element, OutputNameStyle outputNameStyle, OutputterChecked outputter)
             throws OutputWriteFailedException {
-        delegate.write(element, outputNameStyle, outputter);
+        return delegate.write(element, outputNameStyle, outputter);
     }
 
     @Override
-    public int writeWithIndex(
+    public Optional<FileType[]> writeWithIndex(
             T element,
             String index,
             IndexableOutputNameStyle outputNameStyle,

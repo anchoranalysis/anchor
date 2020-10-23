@@ -54,10 +54,10 @@ public class RecordedOutputs {
      * Adds a new output-name to the set of recorded names.
      *
      * @param outputName the output-name
-     * @param enabled where the output was allowed or not
+     * @param allowed where the output was allowed or not
      */
-    public void add(String outputName, boolean enabled) {
-        if (enabled) {
+    public void add(String outputName, boolean allowed) {
+        if (allowed) {
             namesEnabled.add(outputName);
         } else {
             namesDisabled.add(outputName);
