@@ -32,7 +32,7 @@ import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 public abstract class XMLGenerator<T> extends OneStageGenerator<T> {
 
     @Override
-    public String getFileExtension(OutputWriteSettings outputWriteSettings) {
+    public String selectFileExtension(OutputWriteSettings outputWriteSettings) {
         return outputWriteSettings.getExtensionXML();
     }
 }

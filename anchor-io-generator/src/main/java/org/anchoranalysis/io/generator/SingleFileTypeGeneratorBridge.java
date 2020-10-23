@@ -53,9 +53,9 @@ public class SingleFileTypeGeneratorBridge<S, T, V> extends SingleFileTypeGenera
     // END REQUIRED ARGUMENTS
 
     @Override
-    public String getFileExtension(OutputWriteSettings outputWriteSettings)
+    public String selectFileExtension(OutputWriteSettings outputWriteSettings)
             throws OperationFailedException {
-        return delegate.getFileExtension(outputWriteSettings);
+        return delegate.selectFileExtension(outputWriteSettings);
     }
 
     @Override

@@ -39,7 +39,7 @@ public abstract class CSVGenerator<T> extends OneStageGenerator<T> {
     private final String manifestFunction;
 
     @Override
-    public String getFileExtension(OutputWriteSettings outputWriteSettings) {
+    public String selectFileExtension(OutputWriteSettings outputWriteSettings) {
         return "csv";
     }
 

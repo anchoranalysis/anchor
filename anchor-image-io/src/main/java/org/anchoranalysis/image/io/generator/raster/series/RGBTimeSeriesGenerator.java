@@ -58,7 +58,7 @@ public class RGBTimeSeriesGenerator extends OneStageGenerator<StackSeries> {
     }
 
     @Override
-    public String getFileExtension(OutputWriteSettings outputWriteSettings)
+    public String selectFileExtension(OutputWriteSettings outputWriteSettings)
             throws OperationFailedException {
         return GeneratorOutputter.fileExtensionWriter(outputWriteSettings, rasterOptions);
     }

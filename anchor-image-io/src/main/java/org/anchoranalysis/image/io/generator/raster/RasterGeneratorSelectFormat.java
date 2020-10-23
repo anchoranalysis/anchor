@@ -28,8 +28,10 @@ package org.anchoranalysis.image.io.generator.raster;
 
 import java.nio.file.Path;
 import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.StackWriter;
+import org.anchoranalysis.image.io.stack.StackWriteOptions;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
@@ -39,17 +41,19 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
  * @author Owen Feehan
  */
 public abstract class RasterGeneratorSelectFormat<T> extends RasterGenerator<T> {
-    
+
+    /**  Combines stack-write-options derived for a particular stack with the general write-options associated with the {@link RasterGenerator}. */
     @Override
-    protected String selectFileExtension(OutputWriteSettings outputWriteSettings) throws OperationFailedException {
-        return GeneratorOutputter.fileExtensionWriter(outputWriteSettings, writeOptions());
+    protected String selectFileExtension(Stack stack, OutputWriteSettings settings) throws OperationFailedException {
+        StackWriteOptions writeOptions = StackWriteOptions.from(stack).or( writeOptions() );
+        return GeneratorOutputter.fileExtensionWriter(settings, writeOptions);
     }
     
     @Override
-    protected void writeToFile(T element, OutputWriteSettings outputWriteSettings, Path filePath) throws OutputWriteFailedException {
+    protected void writeToFile(T element, Stack transformedElement, OutputWriteSettings settings, Path filePath) throws OutputWriteFailedException {
         try {
-            StackWriter writer = GeneratorOutputter.writer(outputWriteSettings);
-            writer.writeStack(transform(element), filePath, isRGB(), writeOptions());
+            StackWriter writer = GeneratorOutputter.writer(settings);
+            writer.writeStack(transformedElement, filePath, isRGB(), writeOptions());
         } catch (ImageIOException e) {
             throw new OutputWriteFailedException(e);
         }

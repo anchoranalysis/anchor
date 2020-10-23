@@ -65,7 +65,7 @@ public class StackWriteOptions {
      * field.
      *
      * @param other the other {@link StackWriteOptions} to combine with.
-     * @return a newly created {@link StackWriteOptions} where each field is the logical and of the
+     * @return a newly created {@link StackWriteOptions} where each field is the logical <i>and</i> of the
      *     two inputs
      */
     public StackWriteOptions and(StackWriteOptions other) {
@@ -73,6 +73,21 @@ public class StackWriteOptions {
                 always2D && other.always2D,
                 alwaysOneOrThreeChannels && other.alwaysOneOrThreeChannels,
                 rgb && other.rgb);
+    }
+    
+    /**
+     * Combines with another {@link StackWriteOptions} by performing a logical <i>or</i> on each
+     * field.
+     *
+     * @param other the other {@link StackWriteOptions} to combine with.
+     * @return a newly created {@link StackWriteOptions} where each field is the logical <i>or</i> of the
+     *     two inputs
+     */
+    public StackWriteOptions or(StackWriteOptions other) {
+        return new StackWriteOptions(
+                always2D || other.always2D,
+                alwaysOneOrThreeChannels || other.alwaysOneOrThreeChannels,
+                rgb || other.rgb);
     }
 
     /**

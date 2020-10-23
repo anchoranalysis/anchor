@@ -53,7 +53,7 @@ public abstract class SingleFileTypeGenerator<T, S> implements TransformingGener
             T element, OutputWriteSettings outputWriteSettings, Path filePath)
             throws OutputWriteFailedException;
 
-    public abstract String getFileExtension(OutputWriteSettings outputWriteSettings)
+    public abstract String selectFileExtension(OutputWriteSettings outputWriteSettings)
             throws OperationFailedException;
 
     public abstract Optional<ManifestDescription> createManifestDescription();
@@ -61,7 +61,6 @@ public abstract class SingleFileTypeGenerator<T, S> implements TransformingGener
     /** Lazy creation of the array of file-types created. This is cached here so it can be reused. */
     private FileType[] fileTypes;
     
-    // We delegate to a much simpler method, for single file generators
     @Override
     public FileType[] write(T element, OutputNameStyle outputNameStyle, OutputterChecked outputter)
             throws OutputWriteFailedException {
@@ -73,7 +72,6 @@ public abstract class SingleFileTypeGenerator<T, S> implements TransformingGener
                 outputter);
     }
 
-    /** As only a single-file is involved, this methods delegates to a simpler virtual method. */
     @Override
     public FileType[] writeWithIndex(
             T element,
@@ -99,7 +97,7 @@ public abstract class SingleFileTypeGenerator<T, S> implements TransformingGener
             throws OutputWriteFailedException {
 
         try {
-            String fileExtension = getFileExtension(outputter.getSettings());
+            String fileExtension = selectFileExtension(outputter.getSettings());
             
             Path pathToWriteTo =
                     outputter.makeOutputPath(
@@ -145,7 +143,7 @@ public abstract class SingleFileTypeGenerator<T, S> implements TransformingGener
         ManifestDescription selectedDescription =
                 manifestDescription.orElse(UNDEFINED_MANIFEST_DESCRIPTION);
         return new FileType[] {
-            new FileType(selectedDescription, getFileExtension(outputWriteSettings))
+            new FileType(selectedDescription, selectFileExtension(outputWriteSettings))
         };
     }
 }

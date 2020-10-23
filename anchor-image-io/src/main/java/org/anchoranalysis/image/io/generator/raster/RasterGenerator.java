@@ -88,15 +88,32 @@ public abstract class RasterGenerator<T> implements TransformingGenerator<T,Stac
     public abstract StackWriteOptions writeOptions();
     
     public abstract Optional<ManifestDescription> createManifestDescription();
-    
-    protected abstract void writeToFile(
-            T element, OutputWriteSettings outputWriteSettings, Path filePath)
-            throws OutputWriteFailedException;
 
-    protected abstract String selectFileExtension(OutputWriteSettings outputWriteSettings) throws OperationFailedException;
+    /** 
+     * Selects the file-extension to use for a particular stack.
+     * 
+     * @param stack the stack to select a file-extension for
+     * @param settings general settings for writing output
+     * @return the file extension without any leading period
+     * @throws OperationFailedException
+     */
+    protected abstract String selectFileExtension(Stack stack, OutputWriteSettings settings) throws OperationFailedException;
+    
+    /**
+     * Writes a raster to the file-system.
+     * 
+     * @param untransformedElement the element for the generator <i>before</i> transforming to a {@link Stack}
+     * @param transformedElement the {@link Stack} that {@code element} was transformed into
+     * @param settings general settings for writing output.
+     * @param filePath the file-path to write too including the extension.
+     * @throws OutputWriteFailedException
+     */
+    protected abstract void writeToFile(
+            T untransformedElement, Stack transformedElement, OutputWriteSettings settings, Path filePath)
+            throws OutputWriteFailedException;
     
     private FileType[] writeInternal(
-            T element,
+            T elementUntransformed,
             String filenameWithoutExtension,
             String outputName,
             String index,
@@ -104,14 +121,16 @@ public abstract class RasterGenerator<T> implements TransformingGenerator<T,Stac
             throws OutputWriteFailedException {
 
         try {
-            String extension = selectFileExtension(outputter.getSettings());
+            Stack transformedElement = transform(elementUntransformed);
+            
+            String extension = selectFileExtension(transformedElement, outputter.getSettings());
             
             Path pathToWriteTo =
                     outputter.makeOutputPath(
                             filenameWithoutExtension, extension);
 
             // First write to the file system, and then write to the operation-recorder.
-            writeToFile(element, outputter.getSettings(), pathToWriteTo);
+            writeToFile(elementUntransformed, transformedElement, outputter.getSettings(), pathToWriteTo);
 
             return writeToManifest(outputName, index, outputter, pathToWriteTo, extension);
             

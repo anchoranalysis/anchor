@@ -50,7 +50,7 @@ public class StringGenerator extends OneStageGenerator<String> {
     }
 
     @Override
-    public String getFileExtension(OutputWriteSettings outputWriteSettings) {
+    public String selectFileExtension(OutputWriteSettings outputWriteSettings) {
         return outputWriteSettings.getExtensionText();
     }
 

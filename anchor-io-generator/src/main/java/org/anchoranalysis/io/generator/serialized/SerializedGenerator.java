@@ -38,7 +38,7 @@ public abstract class SerializedGenerator<T> extends OneStageGenerator<T> {
     private Optional<String> manifestFunction;
 
     @Override
-    public String getFileExtension(OutputWriteSettings outputWriteSettings) {
+    public String selectFileExtension(OutputWriteSettings outputWriteSettings) {
         return outputWriteSettings.getExtensionSerialized() + extensionSuffix(outputWriteSettings);
     }
 

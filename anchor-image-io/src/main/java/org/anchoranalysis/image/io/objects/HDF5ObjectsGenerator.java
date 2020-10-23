@@ -65,7 +65,7 @@ public class HDF5ObjectsGenerator extends OneStageGenerator<ObjectCollection> {
     }
 
     @Override
-    public String getFileExtension(OutputWriteSettings outputWriteSettings) {
+    public String selectFileExtension(OutputWriteSettings outputWriteSettings) {
         return "h5";
     }
 

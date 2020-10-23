@@ -53,7 +53,7 @@ public class KeyValueParamsGenerator extends OneStageGenerator<KeyValueParams> {
     }
 
     @Override
-    public String getFileExtension(OutputWriteSettings outputWriteSettings) {
+    public String selectFileExtension(OutputWriteSettings outputWriteSettings) {
         return "xml";
     }
 
