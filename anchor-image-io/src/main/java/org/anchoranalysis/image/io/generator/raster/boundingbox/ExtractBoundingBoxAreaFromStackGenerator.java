@@ -67,7 +67,6 @@ public class ExtractBoundingBoxAreaFromStackGenerator extends RasterGeneratorSel
 
     @Override
     public StackWriteOptions guaranteedImageAttributes() {
-        // TODO change to detect RGB more reliably
-        return StackWriteOptionsFactory.maybeRGB(background.getNumberChannels() == 3);
+        return StackWriteOptionsFactory.maybeRGB(background.isRGB());
     }
 }

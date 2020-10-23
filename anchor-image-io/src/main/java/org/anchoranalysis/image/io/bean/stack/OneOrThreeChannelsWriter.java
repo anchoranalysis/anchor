@@ -63,10 +63,6 @@ public abstract class OneOrThreeChannelsWriter extends StackWriter {
             Stack stack, Path filePath, StackWriteOptions options)
             throws ImageIOException {
 
-        if (stack.getNumberChannels() == 1 && options.isRgb()) {
-            throw new ImageIOException("1-channel images cannot be created as RGB");
-        }
-
         if (stack.getNumberChannels() == 3 && !options.isRgb()) {
             throw new ImageIOException("3-channel images can only be created as RGB");
         }

@@ -168,7 +168,7 @@ public class DrawObjectOnStackGenerator extends RasterGeneratorSelectFormat<Boun
         Stack channelExtracted = backgroundGenerator.get().transform(element.boundingBox());
 
         if (flatten) {
-            channelExtracted = channelExtracted.maximumIntensityProjection();
+            channelExtracted = channelExtracted.projectMax();
         }
 
         try {

@@ -29,6 +29,7 @@ package org.anchoranalysis.image.io.generator.raster;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.core.stack.DisplayStack;
 import org.anchoranalysis.image.core.stack.Stack;
+import org.anchoranalysis.image.io.stack.StackWriteOptions;
 
 /**
  * Writes a display-stack to the filesystem.
@@ -57,4 +58,11 @@ public class DisplayStackGenerator extends RasterGeneratorDelegateToRaster<Stack
     protected Stack convertBeforeTransform(Stack stack) {
         return stack;
     }
+
+    @Override
+    public StackWriteOptions guaranteedImageAttributes() {
+        return super.guaranteedImageAttributes().rgb();
+    }
+    
+    
 }

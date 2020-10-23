@@ -149,9 +149,14 @@ public class Stack implements Iterable<Channel> {
         return new Stack(delegate.extractSlice(z));
     }
 
-    public Stack maximumIntensityProjection() {
+    /**
+     * Maximum intensity projection.
+     * 
+     * @return
+     */
+    public Stack projectMax() {
         // We know the sizes will be correct
-        return new Stack(delegate.maximumIntensityProjection());
+        return new Stack(delegate.projectMax());
     }
 
     public void addBlankChannel() throws OperationFailedException {

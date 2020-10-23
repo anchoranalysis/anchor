@@ -54,6 +54,6 @@ public class FlattenStackGenerator extends RasterGeneratorDelegateToRaster<Stack
 
     @Override
     protected Stack convertBeforeTransform(Stack stack) {
-        return stack.maximumIntensityProjection();
+        return stack.projectMax();
     }
 }

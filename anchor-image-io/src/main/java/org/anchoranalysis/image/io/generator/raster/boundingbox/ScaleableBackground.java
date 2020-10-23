@@ -29,9 +29,9 @@ import java.util.Optional;
 import javax.annotation.Nullable;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.channel.factory.ChannelFactory;
+import org.anchoranalysis.image.core.stack.DisplayStack;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.interpolator.Interpolator;
@@ -40,7 +40,7 @@ import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
 
 /**
- * A stack that can be used as a background (and maybe scaled)
+ * A stack that can be used as a background (and maybe scaled).
  *
  * <p>In situations, where only particular regions of a large stack (or large after upscaling) are
  * desired, this provides a more efficient lazy interpolation strategy (just for the needed regions)
@@ -54,7 +54,7 @@ public class ScaleableBackground {
 
     // START REQUIRED ARGUMENTS
     /** Stack to extract bounding-box regions form */
-    private final Stack stack;
+    private final DisplayStack stack;
 
     /**
      * If defined, the stack is scaled (and interpolated) by this factor before a bounding box is
@@ -67,12 +67,12 @@ public class ScaleableBackground {
     // END REQUIRED ARGUMENTS
 
     /**
-     * Creates a background from a stack without any scaling
+     * Creates a background from a stack without any scaling.
      *
      * @param stack the stack
      * @return a newly created class
      */
-    public static ScaleableBackground noScaling(Stack stack) {
+    public static ScaleableBackground noScaling(DisplayStack stack) {
         // The interpolator is never used, so we can safely pass a null
         return new ScaleableBackground(stack, Optional.empty(), null);
     }
@@ -86,13 +86,8 @@ public class ScaleableBackground {
      * @param interpolator interpolator to use for scaling stacks
      */
     private ScaleableBackground(
-            Stack stack, Optional<ScaleFactor> scaleFactor, Interpolator interpolator) {
-        try {
-            this.stack = stack.mapChannel(Channel::projectMax);
-        } catch (OperationFailedException e) {
-            // Channels will always be the same size
-            throw new AnchorImpossibleSituationException();
-        }
+            DisplayStack stack, Optional<ScaleFactor> scaleFactor, Interpolator interpolator) {
+        this.stack = stack.projectMax();
         this.scaleFactor = scaleFactor;
         this.interpolator = interpolator;
     }
@@ -106,7 +101,7 @@ public class ScaleableBackground {
      * @return a newly created class
      */
     public static ScaleableBackground scaleBy(
-            Stack stack, ScaleFactor scaleFactor, Interpolator interpolator) {
+            DisplayStack stack, ScaleFactor scaleFactor, Interpolator interpolator) {
         // The interpolator is never used, so we can safely pass a null
         return new ScaleableBackground(stack, Optional.of(scaleFactor), interpolator);
     }
@@ -149,7 +144,7 @@ public class ScaleableBackground {
     }
 
     private Stack extractStackUnscaled(BoundingBox box) throws OperationFailedException {
-        return stack.mapChannel(channel -> extractChannelUnscaled(channel, box));
+        return stack.getStack().mapChannel(channel -> extractChannelUnscaled(channel, box));
     }
 
     private Stack extractStackScaled(BoundingBox box, ScaleFactor scaleFactor)
@@ -157,7 +152,7 @@ public class ScaleableBackground {
         // What would the bounding box look like in the unscaled window?
         BoundingBox boxUnscaled = box.scaleClipTo(scaleFactor.invert(), stack.extent());
 
-        return stack.mapChannel(channel -> extractChannelScaled(channel, boxUnscaled, box));
+        return stack.getStack().mapChannel(channel -> extractChannelScaled(channel, boxUnscaled, box));
     }
 
     private Channel extractChannelUnscaled(Channel channel, BoundingBox box) {
@@ -185,5 +180,9 @@ public class ScaleableBackground {
 
     private Channel channelFor(Voxels<?> voxels) {
         return ChannelFactory.instance().create(voxels, stack.resolution());
+    }
+
+    public boolean isRGB() {
+        return stack.isRGB();
     }
 }

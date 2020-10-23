@@ -44,6 +44,7 @@ import org.anchoranalysis.image.core.channel.convert.attached.channel.UpperLower
 import org.anchoranalysis.image.core.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.dimensions.IncorrectImageSizeException;
+import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.image.core.stack.bufferedimage.BufferedImageFactory;
 import org.anchoranalysis.image.core.stack.rgb.RGBStack;
 import org.anchoranalysis.image.voxel.Voxels;
@@ -143,6 +144,10 @@ public class DisplayStack {
 
     public long numberNonNullConverters() {
         return converters.stream().filter(Optional::isPresent).count();
+    }
+    
+    public boolean isRGB() {
+        return stack.getNumberChannels() == 3;
     }
 
     public Dimensions dimensions() {
@@ -256,9 +261,14 @@ public class DisplayStack {
         return stack.getChannel(channelIndex).extract().voxel(point);
     }
 
-    public DisplayStack maximumIntensityProjection() {
+    /**
+     * Maximum-intensity projection.
+     * 
+     * @return
+     */
+    public DisplayStack projectMax() {
         try {
-            return new DisplayStack(stack.maximumIntensityProjection(), converters);
+            return new DisplayStack(stack.projectMax(), converters);
         } catch (CreateException e) {
             throw new AnchorImpossibleSituationException();
         }
@@ -383,5 +393,9 @@ public class DisplayStack {
 
     private ChannelMapper createChannelMapper() {
         return new ChannelMapper(stack::getChannel, converters::get);
+    }
+
+    public Optional<Resolution> resolution() {
+        return stack.resolution();
     }
 }

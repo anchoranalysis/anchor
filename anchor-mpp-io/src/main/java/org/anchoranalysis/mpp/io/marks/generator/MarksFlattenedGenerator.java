@@ -53,7 +53,7 @@ public class MarksFlattenedGenerator extends MarksGeneratorBase {
         // We avoid repeating the same calculation using a cache
         if (stack != cachedBackground) {
             cachedBackground = stack;
-            cachedBackgroundMIP = stack.maximumIntensityProjection();
+            cachedBackgroundMIP = stack.projectMax();
         }
 
         return cachedBackgroundMIP;

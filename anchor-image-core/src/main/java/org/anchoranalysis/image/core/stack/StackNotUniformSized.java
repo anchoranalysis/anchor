@@ -65,7 +65,12 @@ public class StackNotUniformSized implements Iterable<Channel> {
         return stackOut;
     }
 
-    public StackNotUniformSized maximumIntensityProjection() {
+    /**
+     * Maximum intensity projection.
+     * 
+     * @return
+     */
+    public StackNotUniformSized projectMax() {
 
         StackNotUniformSized stackOut = new StackNotUniformSized();
         for (int c = 0; c < channels.size(); c++) {
