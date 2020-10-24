@@ -98,14 +98,6 @@ public class RTree<T> {
         return tree.search(coords, dimensions);
     }
 
-    private static float[] minPoint(BoundingBox box) {
-        return new float[] {box.cornerMin().x(), box.cornerMin().y(), box.cornerMin().z()};
-    }
-
-    private static float[] extent(BoundingBox box) {
-        return new float[] {box.extent().x() - 1, box.extent().y() - 1, box.extent().z() - 1};
-    }
-
     public boolean delete(BoundingBox box, T payload) {
         float[] coords = minPoint(box);
         return tree.delete(coords, payload);
@@ -113,5 +105,13 @@ public class RTree<T> {
 
     public int size() {
         return tree.size();
+    }
+    
+    private static float[] minPoint(BoundingBox box) {
+        return new float[] {box.cornerMin().x(), box.cornerMin().y(), box.cornerMin().z()};
+    }
+
+    private static float[] extent(BoundingBox box) {
+        return new float[] {box.extent().x() - 1, box.extent().y() - 1, box.extent().z() - 1};
     }
 }

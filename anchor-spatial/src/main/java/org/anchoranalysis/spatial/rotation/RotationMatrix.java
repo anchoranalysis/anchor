@@ -42,105 +42,95 @@ import org.anchoranalysis.spatial.point.Point3d;
  * @author Owen Feehan
  */
 public class RotationMatrix implements Serializable {
+    
     /** */
     private static final long serialVersionUID = 1L;
 
     /**
-     * The underlying matrix implementing the rotation. This name is deliberately kept as 'delegate'
-     * to avoid breaking serialized objects.
+     * The underlying matrix implementing the rotation.
+     * 
+     * <p>This name is deliberately kept as 'delegate' to avoid breaking serialized objects.
      */
     private DoubleMatrix2D delegate;
 
-    public RotationMatrix(int numDim) {
-        delegate = DoubleFactory2D.dense.make(numDim, numDim);
+    public RotationMatrix(int numberDimensions) {
+        delegate = DoubleFactory2D.dense.make(numberDimensions, numberDimensions);
     }
 
     public RotationMatrix(DoubleMatrix2D matrix) {
         this.delegate = matrix;
     }
 
-    public Point3d rotatedPoint(Point3d pointIn) {
+    public Point3d rotatedPoint(Point3d point) {
 
         if (delegate.rows() == 3) {
-            double[] dIn = new double[3];
-            dIn[0] = pointIn.x();
-            dIn[1] = pointIn.y();
-            dIn[2] = pointIn.z();
-
-            double[] rot = rotatedPoint(dIn);
-            return new Point3d(rot[0], rot[1], rot[2]);
+            double[] rotatedPoint = rotatePoint(point.toArray());
+            return new Point3d(rotatedPoint[0], rotatedPoint[1], rotatedPoint[2]);
         } else if (delegate.rows() == 2) {
-            double[] dIn = new double[2];
-            dIn[0] = pointIn.x();
-            dIn[1] = pointIn.y();
-
-            double[] rot = rotatedPoint(dIn);
-            return new Point3d(rot[0], rot[1], 0);
+            double[] rotatedPoint = rotatePoint(point.toArray());
+            return new Point3d(rotatedPoint[0], rotatedPoint[1], 0);
         } else {
             throw new AnchorImpossibleSituationException();
         }
     }
 
-    public double[] rotatedPoint(double[] pointIn) {
-        Preconditions.checkArgument(pointIn.length == delegate.rows());
+    public double[] rotatePoint(double[] point) {
+        Preconditions.checkArgument(point.length == delegate.rows());
 
-        int numDim = pointIn.length;
+        int numberDimensions = point.length;
 
         DoubleFactory2D factory = DoubleFactory2D.dense;
-        DoubleMatrix2D matIn = factory.make(numDim, 1);
+        DoubleMatrix2D matrixIn = factory.make(numberDimensions, 1);
 
-        for (int i = 0; i < numDim; i++) {
-            matIn.set(i, 0, pointIn[i]);
+        for (int i = 0; i < numberDimensions; i++) {
+            matrixIn.set(i, 0, point[i]);
         }
 
-        DoubleMatrix2D matOut = delegate.zMult(matIn, null);
+        DoubleMatrix2D matrixOut = delegate.zMult(matrixIn, null);
 
-        double[] pointOut = new double[numDim];
-        for (int i = 0; i < numDim; i++) {
-            pointOut[i] = matOut.get(i, 0);
+        double[] pointOut = new double[numberDimensions];
+        for (int i = 0; i < numberDimensions; i++) {
+            pointOut[i] = matrixOut.get(i, 0);
         }
         return pointOut;
     }
 
-    public static RotationMatrix createFrom3Vecs(
-            DoubleMatrix1D vec1, DoubleMatrix1D vec2, DoubleMatrix1D vec3) {
+    public static RotationMatrix createFromThreeVectors(
+            DoubleMatrix1D vector1, DoubleMatrix1D vector2, DoubleMatrix1D vector3) {
 
         DoubleFactory2D factory = DoubleFactory2D.dense;
-        DoubleMatrix2D mat = factory.make(3, 3);
+        DoubleMatrix2D matrix = factory.make(3, 3);
 
-        mat.set(0, 0, vec1.get(0));
-        mat.set(1, 0, vec1.get(1));
-        mat.set(2, 0, vec1.get(2));
+        assignMatrixColumnFromVector(matrix, 0, vector1);
+        assignMatrixColumnFromVector(matrix, 1, vector2);
+        assignMatrixColumnFromVector(matrix, 2, vector3);
 
-        mat.set(0, 1, vec2.get(0));
-        mat.set(1, 1, vec2.get(1));
-        mat.set(2, 1, vec2.get(2));
-
-        mat.set(0, 2, vec3.get(0));
-        mat.set(1, 2, vec3.get(1));
-        mat.set(2, 2, vec3.get(2));
-
-        return new RotationMatrix(mat);
+        return new RotationMatrix(matrix);
     }
 
-    public RotationMatrix mult(RotationMatrix other) {
+    public RotationMatrix multiply(RotationMatrix other) {
         return new RotationMatrix(delegate.zMult(other.delegate, null));
     }
 
-    public Point3d column(int colNum) {
-        DoubleMatrix1D vector = delegate.viewColumn(colNum);
+    public Point3d column(int columnIndex) {
+        DoubleMatrix1D vector = delegate.viewColumn(columnIndex);
         return new Point3d(vector.get(0), vector.get(1), vector.get(2));
     }
 
-    public int getNumDim() {
+    public int getNumberDimensions() {
         return delegate.columns();
     }
 
+    /**
+     * The underlying matrix used internally in the rotation-matrix.
+     * 
+     * @return the internal matrix structure used within the {@link RotationMatrix}.
+     */
     public DoubleMatrix2D getMatrix() {
         return delegate;
     }
 
-    public void multConstant(double value) {
+    public void multiplyByConstant(double value) {
         delegate.assign(Functions.mult(value));
     }
 
@@ -148,6 +138,11 @@ public class RotationMatrix implements Serializable {
         return new RotationMatrix(delegate.viewDice().copy());
     }
 
+    /**
+     * Deep-copy of the current rotation-matrix.
+     * 
+     * @return a newly created deep copy of the current object.
+     */
     public RotationMatrix duplicate() {
         return new RotationMatrix(delegate.copy());
     }
@@ -155,5 +150,12 @@ public class RotationMatrix implements Serializable {
     @Override
     public String toString() {
         return delegate.toString();
+    }
+        
+    /** Copies a vector into a particular column in the matrix. */
+    private static void assignMatrixColumnFromVector(DoubleMatrix2D matrix, int columnIndex, DoubleMatrix1D vector) {
+        for( int i=0; i<3; i++ ) {
+            matrix.set(i, columnIndex, vector.get(i));
+        }
     }
 }

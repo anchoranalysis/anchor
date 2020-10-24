@@ -403,8 +403,8 @@ public class Ellipse extends ConicBase implements Serializable {
         double radiusProjectedX = radii.x() * radiiFactor;
 
         RotationMatrix rotMat = orientation.createRotationMatrix();
-        double[] endPoint1 = rotMat.rotatedPoint(twoElementArray(-1 * radiusProjectedX));
-        double[] endPoint2 = rotMat.rotatedPoint(twoElementArray(radiusProjectedX));
+        double[] endPoint1 = rotMat.rotatePoint(twoElementArray(-1 * radiusProjectedX));
+        double[] endPoint2 = rotMat.rotatePoint(twoElementArray(radiusProjectedX));
 
         double[] xMinMax = minMaxEndPoint(endPoint1, endPoint2, 0, getPos().x());
         double[] yMinMax = minMaxEndPoint(endPoint1, endPoint2, 1, getPos().y());
