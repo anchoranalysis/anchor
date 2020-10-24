@@ -27,9 +27,9 @@ package org.anchoranalysis.image.voxel.datatype;
 
 import java.util.Optional;
 import java.util.stream.Stream;
-import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
 
 /**
  * Finds a common voxel-data type to represent two types.

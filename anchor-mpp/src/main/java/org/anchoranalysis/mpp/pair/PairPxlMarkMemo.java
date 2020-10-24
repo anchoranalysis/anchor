@@ -77,6 +77,7 @@ public class PairPxlMarkMemo {
 
     @Override
     public String toString() {
-        return String.format("%d--%d", source.getMark().getIdentifier(), destination.getMark().getIdentifier());
+        return String.format(
+                "%d--%d", source.getMark().getIdentifier(), destination.getMark().getIdentifier());
     }
 }

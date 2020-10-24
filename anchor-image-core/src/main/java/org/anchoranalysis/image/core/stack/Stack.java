@@ -151,7 +151,7 @@ public class Stack implements Iterable<Channel> {
 
     /**
      * Maximum intensity projection.
-     * 
+     *
      * @return
      */
     public Stack projectMax() {

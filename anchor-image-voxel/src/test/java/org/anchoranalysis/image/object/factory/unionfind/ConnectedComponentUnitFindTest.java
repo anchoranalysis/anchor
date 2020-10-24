@@ -27,6 +27,7 @@
 package org.anchoranalysis.image.object.factory.unionfind;
 
 import static org.junit.Assert.*;
+
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.object.ObjectCollectionFixture;

@@ -59,7 +59,8 @@ public class VoxelStatisticsFromHistogram implements VoxelStatistics {
 
     @Override
     public long countThreshold(RelationToThreshold relationToThreshold) {
-        return histogram.countThreshold(relationToThreshold.relation(), relationToThreshold.threshold());
+        return histogram.countThreshold(
+                relationToThreshold.relation(), relationToThreshold.threshold());
     }
 
     @Override

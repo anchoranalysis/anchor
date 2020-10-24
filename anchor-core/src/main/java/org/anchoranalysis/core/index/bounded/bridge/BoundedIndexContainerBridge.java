@@ -33,8 +33,7 @@ import org.anchoranalysis.core.index.bounded.BoundedIndexContainer;
 /**
  * Bridges calls from hidden-type to external-type.
  *
- * <p>See {@link
- * org.anchoranalysis.core.index.bounded.bridge.BoundedIndexContainerBridgeWithIndex}
+ * <p>See {@link org.anchoranalysis.core.index.bounded.bridge.BoundedIndexContainerBridgeWithIndex}
  *
  * @author Owen Feehan
  * @param <H> hidden-type (type passed to the delegate)

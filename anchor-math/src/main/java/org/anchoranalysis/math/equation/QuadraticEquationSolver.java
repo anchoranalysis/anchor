@@ -26,9 +26,9 @@
 
 package org.anchoranalysis.math.equation;
 
-import org.anchoranalysis.core.exception.OperationFailedException;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.core.exception.OperationFailedException;
 
 /** Solves a Quadratic Equation by finding non-complex roots */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)

@@ -34,7 +34,7 @@ import org.anchoranalysis.spatial.rotation.RotationMatrix;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper=false)
+@EqualsAndHashCode(callSuper = false)
 public class OrientationRotationMatrix extends Orientation {
 
     /** */

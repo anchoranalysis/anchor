@@ -65,8 +65,6 @@ public abstract class OutputPattern {
     /** Whether the output should be checked to see if it is allowed or not. */
     @Getter private final boolean selective;
 
-    /**
-     * A manifest-description for the directory, if defined.
-     */
+    /** A manifest-description for the directory, if defined. */
     @Getter private final Optional<ManifestDescription> manifestDescription;
 }

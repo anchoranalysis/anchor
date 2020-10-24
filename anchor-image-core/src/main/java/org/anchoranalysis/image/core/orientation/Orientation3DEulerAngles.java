@@ -67,8 +67,7 @@ public class Orientation3DEulerAngles extends Orientation {
 
     @Override
     public RotationMatrix createRotationMatrix() {
-        return new RotateAngle3D(rotationX, rotationY, rotationZ)
-                .create();
+        return new RotateAngle3D(rotationX, rotationY, rotationZ).create();
     }
 
     @Override

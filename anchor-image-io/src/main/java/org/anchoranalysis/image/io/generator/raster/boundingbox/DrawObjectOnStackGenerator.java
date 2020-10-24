@@ -56,7 +56,8 @@ import org.anchoranalysis.spatial.point.Point3i;
  *
  * @author Owen Feehan
  */
-public class DrawObjectOnStackGenerator extends RasterGeneratorSelectFormat<BoundedList<ObjectMask>> {
+public class DrawObjectOnStackGenerator
+        extends RasterGeneratorSelectFormat<BoundedList<ObjectMask>> {
 
     private static final ManifestDescription MANIFEST_DESCRIPTION =
             new ManifestDescription("raster", "extractedObjectOutline");
@@ -198,7 +199,7 @@ public class DrawObjectOnStackGenerator extends RasterGeneratorSelectFormat<Boun
         this.backgroundGenerator = backgroundGenerator;
         this.flatten = flatten;
     }
-    
+
     private ObjectMask prepareObjectForDrawing(ObjectMask object, BoundingBox containingBox) {
         if (flatten) {
             return relativeBoundingBoxToScene(object.flattenZ(), containingBox);

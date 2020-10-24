@@ -35,7 +35,7 @@ import lombok.NoArgsConstructor;
 public class IdentifierModulo<T> implements IdentifierGetter<T> {
 
     private IdentifierGetter<T> idGetter;
-    
+
     /** What the identifier is divided by to find the modulo. */
     private int divisor;
 

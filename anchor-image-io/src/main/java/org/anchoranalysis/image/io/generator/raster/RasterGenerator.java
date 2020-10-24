@@ -41,16 +41,17 @@ import org.anchoranalysis.io.output.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.output.namestyle.OutputNameStyle;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
 
-/** 
+/**
  * Transfroms an entity to a {@link Stack} and writes it to the file-system.
- * 
+ *
  * @author Owen Feehan
  */
-public abstract class RasterGenerator<T> implements TransformingGenerator<T,Stack> {
+public abstract class RasterGenerator<T> implements TransformingGenerator<T, Stack> {
 
     // A fallback manifest-description if none is supplied by the generator
-    private static final ManifestDescription MANIFEST_DESCRIPTION_FALLBACK = new ManifestDescription("raster", "unknown");
-    
+    private static final ManifestDescription MANIFEST_DESCRIPTION_FALLBACK =
+            new ManifestDescription("raster", "unknown");
+
     @Override
     public FileType[] write(T element, OutputNameStyle outputNameStyle, OutputterChecked outputter)
             throws OutputWriteFailedException {
@@ -78,31 +79,34 @@ public abstract class RasterGenerator<T> implements TransformingGenerator<T,Stac
                 index,
                 outputter);
     }
-    
+
     /**
      * Guarantees on the attributes of all images created by the generator.
-     * 
+     *
      * @return options that are guaranteed to be true of all images by the generator.
      */
     public abstract StackWriteOptions guaranteedImageAttributes();
-    
+
     public abstract Optional<ManifestDescription> createManifestDescription();
 
-    /** 
+    /**
      * Selects the file-extension to use for a particular stack.
-     * 
+     *
      * @param stack the stack to select a file-extension for
      * @param options options that describe how {@code stack} should be written
      * @param settings general settings for writing output
      * @return the file extension without any leading period
      * @throws OperationFailedException
      */
-    protected abstract String selectFileExtension(Stack stack, StackWriteOptions options, OutputWriteSettings settings) throws OperationFailedException;
-    
+    protected abstract String selectFileExtension(
+            Stack stack, StackWriteOptions options, OutputWriteSettings settings)
+            throws OperationFailedException;
+
     /**
      * Writes a raster to the file-system.
-     * 
-     * @param untransformedElement the element for the generator <i>before</i> transforming to a {@link Stack}
+     *
+     * @param untransformedElement the element for the generator <i>before</i> transforming to a
+     *     {@link Stack}
      * @param transformedElement the {@link Stack} that {@code element} was transformed into
      * @param options options that describe how {@code stack} should be written
      * @param settings general settings for writing output.
@@ -110,9 +114,13 @@ public abstract class RasterGenerator<T> implements TransformingGenerator<T,Stac
      * @throws OutputWriteFailedException
      */
     protected abstract void writeToFile(
-            T untransformedElement, Stack transformedElement, StackWriteOptions options, OutputWriteSettings settings, Path filePath)
+            T untransformedElement,
+            Stack transformedElement,
+            StackWriteOptions options,
+            OutputWriteSettings settings,
+            Path filePath)
             throws OutputWriteFailedException;
-    
+
     private FileType[] writeInternal(
             T elementUntransformed,
             String filenameWithoutExtension,
@@ -123,55 +131,61 @@ public abstract class RasterGenerator<T> implements TransformingGenerator<T,Stac
 
         try {
             Stack transformedElement = transform(elementUntransformed);
-            
+
             StackWriteOptions options = writeOptions(transformedElement);
-            
-            String extension = selectFileExtension(transformedElement, options, outputter.getSettings());
-            
-            Path pathToWriteTo =
-                    outputter.makeOutputPath(
-                            filenameWithoutExtension, extension);
+
+            String extension =
+                    selectFileExtension(transformedElement, options, outputter.getSettings());
+
+            Path pathToWriteTo = outputter.makeOutputPath(filenameWithoutExtension, extension);
 
             // First write to the file system, and then write to the operation-recorder.
-            writeToFile(elementUntransformed, transformedElement, options, outputter.getSettings(), pathToWriteTo);
+            writeToFile(
+                    elementUntransformed,
+                    transformedElement,
+                    options,
+                    outputter.getSettings(),
+                    pathToWriteTo);
 
             return writeToManifest(outputName, index, outputter, pathToWriteTo, extension);
-            
+
         } catch (OperationFailedException e) {
             throw new OutputWriteFailedException(e);
         }
     }
-    
-    /** 
-     * Forms write-options to use for this particular stack by combining the general guarantees for the generator
-     *  with the specific image-attributes of this particular stack. 
-     *  
+
+    /**
+     * Forms write-options to use for this particular stack by combining the general guarantees for
+     * the generator with the specific image-attributes of this particular stack.
+     *
      * @param stack the stack to determine {@link StackWriteOptions} for.
      * @return specific options for {@code stack}.
      */
     private StackWriteOptions writeOptions(Stack stack) {
-        return StackWriteOptionsFactory.from(stack).or( guaranteedImageAttributes() );
+        return StackWriteOptionsFactory.from(stack).or(guaranteedImageAttributes());
     }
-    
+
     /** Writes to the manifest, and creates an array of the file-types written. */
-    private FileType[] writeToManifest(String outputName,
+    private FileType[] writeToManifest(
+            String outputName,
             String index,
-            OutputterChecked outputter, Path pathToWriteTo, String extension) {
-        Optional<ManifestDescription> manifestDescription = createManifestDescription(); 
-        
+            OutputterChecked outputter,
+            Path pathToWriteTo,
+            String extension) {
+        Optional<ManifestDescription> manifestDescription = createManifestDescription();
+
         manifestDescription.ifPresent(
-                        description ->
-                                outputter.writeFileToOperationRecorder(
-                                        outputName, pathToWriteTo, description, index));
-        
-        return createFileTypeArray(manifestDescription.orElse(MANIFEST_DESCRIPTION_FALLBACK), extension);
-        
+                description ->
+                        outputter.writeFileToOperationRecorder(
+                                outputName, pathToWriteTo, description, index));
+
+        return createFileTypeArray(
+                manifestDescription.orElse(MANIFEST_DESCRIPTION_FALLBACK), extension);
     }
-    
-    /**
-     * Creates a new {@link FileType} wrapped in a single-item array.
-     */
-    private static FileType[] createFileTypeArray(ManifestDescription description, String extension) {
-        return new FileType[] { new FileType(description, extension) };
+
+    /** Creates a new {@link FileType} wrapped in a single-item array. */
+    private static FileType[] createFileTypeArray(
+            ManifestDescription description, String extension) {
+        return new FileType[] {new FileType(description, extension)};
     }
 }

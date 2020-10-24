@@ -1,5 +1,6 @@
 package org.anchoranalysis.core.index;
 
+import lombok.Getter;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.exception.friendly.AnchorFriendlyCheckedException;
 
@@ -28,8 +29,6 @@ import org.anchoranalysis.core.exception.friendly.AnchorFriendlyCheckedException
  * THE SOFTWARE.
  * #L%
  */
-
-import lombok.Getter;
 
 /**
  * When a get operation fails for a particular key

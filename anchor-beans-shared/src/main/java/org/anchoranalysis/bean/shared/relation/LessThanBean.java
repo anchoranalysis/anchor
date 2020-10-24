@@ -26,9 +26,9 @@
 
 package org.anchoranalysis.bean.shared.relation;
 
+import lombok.EqualsAndHashCode;
 import org.anchoranalysis.math.relation.LessThan;
 import org.anchoranalysis.math.relation.RelationToValue;
-import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode(callSuper = true)
 public class LessThanBean extends RelationBean {

@@ -31,8 +31,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
-import org.anchoranalysis.spatial.box.BoundingBox;
 import lombok.AllArgsConstructor;
+import org.anchoranalysis.spatial.box.BoundingBox;
 
 @AllArgsConstructor
 public class SpatiallySeparate<T> {

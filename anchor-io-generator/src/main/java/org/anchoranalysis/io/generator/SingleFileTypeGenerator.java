@@ -43,7 +43,7 @@ import org.anchoranalysis.io.output.outputter.OutputterChecked;
  * @param <T> iteration-type
  * @param <S> type after any necessary preprocessing
  */
-public abstract class SingleFileTypeGenerator<T, S> implements TransformingGenerator<T,S> {
+public abstract class SingleFileTypeGenerator<T, S> implements TransformingGenerator<T, S> {
 
     /** The manifest-description to use if none other is defined. */
     private static final ManifestDescription UNDEFINED_MANIFEST_DESCRIPTION =
@@ -58,9 +58,11 @@ public abstract class SingleFileTypeGenerator<T, S> implements TransformingGener
 
     public abstract Optional<ManifestDescription> createManifestDescription();
 
-    /** Lazy creation of the array of file-types created. This is cached here so it can be reused. */
+    /**
+     * Lazy creation of the array of file-types created. This is cached here so it can be reused.
+     */
     private FileType[] fileTypes;
-    
+
     @Override
     public FileType[] write(T element, OutputNameStyle outputNameStyle, OutputterChecked outputter)
             throws OutputWriteFailedException {
@@ -98,40 +100,41 @@ public abstract class SingleFileTypeGenerator<T, S> implements TransformingGener
 
         try {
             String fileExtension = selectFileExtension(outputter.getSettings());
-            
-            Path pathToWriteTo =
-                    outputter.makeOutputPath(
-                            filenameWithoutExtension, fileExtension);
+
+            Path pathToWriteTo = outputter.makeOutputPath(filenameWithoutExtension, fileExtension);
 
             // First write to the file system, and then write to the operation-recorder.
             writeToFile(element, outputter.getSettings(), pathToWriteTo);
 
             return writeToManifest(outputName, index, outputter, pathToWriteTo);
-            
+
         } catch (OperationFailedException e) {
             throw new OutputWriteFailedException(e);
         }
     }
 
-    /** Writes to the manifest, and creates an array of the file-types written. 
-     * @throws OperationFailedException */
-    private FileType[] writeToManifest(String outputName,
-            String index,
-            OutputterChecked outputter, Path pathToWriteTo) throws OperationFailedException {
-        
+    /**
+     * Writes to the manifest, and creates an array of the file-types written.
+     *
+     * @throws OperationFailedException
+     */
+    private FileType[] writeToManifest(
+            String outputName, String index, OutputterChecked outputter, Path pathToWriteTo)
+            throws OperationFailedException {
+
         Optional<ManifestDescription> manifestDescription = createManifestDescription();
-        
+
         manifestDescription.ifPresent(
                 description ->
                         outputter.writeFileToOperationRecorder(
                                 outputName, pathToWriteTo, description, index));
 
-        if (fileTypes==null) {
+        if (fileTypes == null) {
             fileTypes = buildFileTypeArray(manifestDescription, outputter.getSettings());
         }
         return fileTypes;
     }
-    
+
     /**
      * The types of files the generator writes to the filesystem.
      *
@@ -139,7 +142,10 @@ public abstract class SingleFileTypeGenerator<T, S> implements TransformingGener
      * @return an array of all file-types written, if any exist
      * @throws OperationFailedException if anything goes wrong
      */
-    private FileType[] buildFileTypeArray(Optional<ManifestDescription> manifestDescription, OutputWriteSettings outputWriteSettings) throws OperationFailedException {
+    private FileType[] buildFileTypeArray(
+            Optional<ManifestDescription> manifestDescription,
+            OutputWriteSettings outputWriteSettings)
+            throws OperationFailedException {
         ManifestDescription selectedDescription =
                 manifestDescription.orElse(UNDEFINED_MANIFEST_DESCRIPTION);
         return new FileType[] {

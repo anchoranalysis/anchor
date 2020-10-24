@@ -26,11 +26,11 @@
 
 package org.anchoranalysis.overlay.identifier;
 
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.identifier.getter.IdentifierGetter;
 import org.anchoranalysis.image.core.object.properties.ObjectWithProperties;
 import org.anchoranalysis.overlay.Overlay;
 import org.anchoranalysis.overlay.collection.ColoredOverlayCollection;
-import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public class IdentifyDelegateToOverlays implements IdentifierGetter<ObjectWithProperties> {
@@ -40,14 +40,16 @@ public class IdentifyDelegateToOverlays implements IdentifierGetter<ObjectWithPr
     private final ColoredOverlayCollection overlays;
 
     /**
-     * If true, a modulus of the iteration with the marks size occurs to determine which mark to reference.
-     * 
-     * <p>This is, for example, useful when object-masks are doubled to include both inside and shell areas, as we can
-     * still reference the underlying marks.
+     * If true, a modulus of the iteration with the marks size occurs to determine which mark to
+     * reference.
+     *
+     * <p>This is, for example, useful when object-masks are doubled to include both inside and
+     * shell areas, as we can still reference the underlying marks.
      */
     private boolean moduloIteration;
 
-    public IdentifyDelegateToOverlays(IdentifierGetter<Overlay> delegate, ColoredOverlayCollection overlays) {
+    public IdentifyDelegateToOverlays(
+            IdentifierGetter<Overlay> delegate, ColoredOverlayCollection overlays) {
         this(delegate, overlays, false);
     }
 
@@ -57,14 +59,14 @@ public class IdentifyDelegateToOverlays implements IdentifierGetter<ObjectWithPr
         if (moduloIteration) {
             return identifierViaOverlay(iteration % overlays.size());
         } else {
-            return identifierViaOverlay(iteration);    
+            return identifierViaOverlay(iteration);
         }
     }
-    
+
     private int identifierViaOverlay(int iteration) {
         // We get a mark from the configuration based upon the iter
         Overlay overlay = overlays.get(iteration);
 
-        return delegate.getIdentifier(overlay, iteration);        
+        return delegate.getIdentifier(overlay, iteration);
     }
 }

@@ -51,7 +51,8 @@ public class OutputterFixture {
 
     public static OutputterChecked outputterChecked(Optional<Path> pathTempFolder)
             throws BindFailedException {
-        return OutputterCheckedFixture.createFrom(OutputManagerForImagesFixture.createOutputManager(pathTempFolder));
+        return OutputterCheckedFixture.createFrom(
+                OutputManagerForImagesFixture.createOutputManager(pathTempFolder));
     }
 
     private static Outputter outputter(OutputterChecked outputter) {

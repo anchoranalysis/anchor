@@ -38,11 +38,11 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.functional.checked.CheckedBiFunction;
 import org.anchoranalysis.core.functional.checked.CheckedFunction;
 import org.anchoranalysis.core.functional.checked.CheckedPredicate;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 
 /** Utilities functions for manipulating or creating {@link java.util.List} in a functional way */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)

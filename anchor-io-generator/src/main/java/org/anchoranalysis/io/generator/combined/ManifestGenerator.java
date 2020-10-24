@@ -46,7 +46,8 @@ public class ManifestGenerator implements MultipleFileTypeGenerator<Manifest> {
     }
 
     @Override
-    public FileType[] write(Manifest element, OutputNameStyle outputNameStyle, OutputterChecked outputter)
+    public FileType[] write(
+            Manifest element, OutputNameStyle outputNameStyle, OutputterChecked outputter)
             throws OutputWriteFailedException {
         return delegate.write(element, outputNameStyle, outputter);
     }

@@ -48,18 +48,20 @@ public class ManifestDirectoryDescription implements Serializable {
     private static final long serialVersionUID = -9161070529853431830L;
 
     // START REQUIRED ARGUMENTS
-    /** 
+    /**
      * The description of the contents of the directory.
      *
-     * <p>This is stored as a {@link Nullable} rather than a {@link Optional} to allow serialization.
-     **/
+     * <p>This is stored as a {@link Nullable} rather than a {@link Optional} to allow
+     * serialization.
+     */
     @Nullable private final ManifestDescription description;
 
     /** A sequence-type to describe the different filenames outputted in the directory. */
     @Getter private final SequenceType<?> sequenceType;
     // END REQUIRED ARGUMENTS
-    
-    public ManifestDirectoryDescription(Optional<ManifestDescription> description, SequenceType<?> sequenceType) {
+
+    public ManifestDirectoryDescription(
+            Optional<ManifestDescription> description, SequenceType<?> sequenceType) {
         this.description = description.orElse(null);
         this.sequenceType = sequenceType;
     }

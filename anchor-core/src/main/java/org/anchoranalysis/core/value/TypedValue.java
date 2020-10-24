@@ -30,24 +30,25 @@ import java.text.DecimalFormat;
 import lombok.AllArgsConstructor;
 import lombok.Value;
 
-@AllArgsConstructor @Value
+@AllArgsConstructor
+@Value
 public class TypedValue {
 
     private final String value;
     private final boolean isNumeric;
 
     public TypedValue(String value) {
-        this( value, false );
+        this(value, false);
     }
 
     public TypedValue(int value) {
-        this( Integer.toString(value), true );
+        this(Integer.toString(value), true);
     }
 
     public TypedValue(double value, int numberDecimalPlaces) {
-        this( decimalValueOrNaN(value, numberDecimalPlaces), true );
+        this(decimalValueOrNaN(value, numberDecimalPlaces), true);
     }
-    
+
     private static String decimalValueOrNaN(double value, int numberDecimalPlaces) {
         if (Double.isNaN(value)) {
             return "NaN";
@@ -55,7 +56,7 @@ public class TypedValue {
             return createDecimalFormat(numberDecimalPlaces).format(value);
         }
     }
-    
+
     private static DecimalFormat createDecimalFormat(int numberDecimalPlaces) {
         DecimalFormat decimalFormat = new DecimalFormat();
         decimalFormat.setMinimumFractionDigits(numberDecimalPlaces);

@@ -73,7 +73,7 @@ class SequenceWriters {
             throw new InitException(e);
         }
     }
-    
+
     public void addFileTypes(FileType[] fileTypes) {
         Arrays.stream(fileTypes).forEach(directoryManifest::addFileType);
     }
@@ -81,12 +81,12 @@ class SequenceWriters {
     public <T> Optional<FileType[]> write(
             ElementWriterSupplier<T> generator, ElementSupplier<T> element, String index)
             throws OutputWriteFailedException {
-        
+
         if (isOn()) {
             return this.writers // NOSONAR
-            .get()
-            .multiplex(pattern.isSelective())
-            .writeWithIndex(pattern.getOutputNameStyle(), generator, element, index);
+                    .get()
+                    .multiplex(pattern.isSelective())
+                    .writeWithIndex(pattern.getOutputNameStyle(), generator, element, index);
         } else {
             return Optional.empty();
         }
@@ -113,11 +113,7 @@ class SequenceWriters {
         }
     }
 
-    private ManifestDirectoryDescription createDirectoryDescription(
-            SequenceType<?> sequenceType) {
-        return new ManifestDirectoryDescription(
-                pattern.getManifestDescription(),
-                sequenceType
-        );
+    private ManifestDirectoryDescription createDirectoryDescription(SequenceType<?> sequenceType) {
+        return new ManifestDirectoryDescription(pattern.getManifestDescription(), sequenceType);
     }
 }

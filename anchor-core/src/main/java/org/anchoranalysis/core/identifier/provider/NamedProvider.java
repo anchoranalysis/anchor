@@ -32,16 +32,16 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 
 /**
  * A collection of named-elements that provides an element for a given name.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  * @param <T> element-type
  */
 public interface NamedProvider<T> {
 
     /** Retrieves the item if it exists, or throws an exception if it doesn't exist. */
     default T getException(String identifier) throws NamedProviderGetException {
-        return getOptional(identifier).orElseThrow(() -> NamedProviderGetException.nonExistingItem(identifier));
+        return getOptional(identifier)
+                .orElseThrow(() -> NamedProviderGetException.nonExistingItem(identifier));
     }
 
     /**

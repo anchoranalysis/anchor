@@ -53,8 +53,7 @@ public class RotationMatrixFromAxisAngleCreatorTest {
     @Test
     public void test() {
 
-        RotateAxisAngle rmc =
-                new RotateAxisAngle(new Vector3d(-0.866, -0.5, 2.31e-014), 3);
+        RotateAxisAngle rmc = new RotateAxisAngle(new Vector3d(-0.866, -0.5, 2.31e-014), 3);
         RotationMatrix rm = rmc.create();
 
         double delta = 1e-3;

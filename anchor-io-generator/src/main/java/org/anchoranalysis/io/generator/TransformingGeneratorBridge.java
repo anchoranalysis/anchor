@@ -59,15 +59,19 @@ public class TransformingGeneratorBridge<S, T, V> implements TransformingGenerat
     @Override
     public FileType[] write(T element, OutputNameStyle outputNameStyle, OutputterChecked outputter)
             throws OutputWriteFailedException {
-        return delegate.write( applyBridge(element), outputNameStyle, outputter);
+        return delegate.write(applyBridge(element), outputNameStyle, outputter);
     }
 
     @Override
-    public FileType[] writeWithIndex(T element, String index, IndexableOutputNameStyle outputNameStyle,
-            OutputterChecked outputter) throws OutputWriteFailedException {
-        return delegate.writeWithIndex( applyBridge(element), index, outputNameStyle, outputter);
+    public FileType[] writeWithIndex(
+            T element,
+            String index,
+            IndexableOutputNameStyle outputNameStyle,
+            OutputterChecked outputter)
+            throws OutputWriteFailedException {
+        return delegate.writeWithIndex(applyBridge(element), index, outputNameStyle, outputter);
     }
-    
+
     private V applyBridge(T element) throws OutputWriteFailedException {
         try {
             return elementBridge.apply(element);

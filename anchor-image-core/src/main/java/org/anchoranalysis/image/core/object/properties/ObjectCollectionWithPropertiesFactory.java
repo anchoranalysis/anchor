@@ -26,9 +26,9 @@
 package org.anchoranalysis.image.core.object.properties;
 
 import java.util.function.Predicate;
-import org.anchoranalysis.core.functional.checked.CheckedFunction;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.core.functional.checked.CheckedFunction;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ObjectCollectionWithPropertiesFactory {

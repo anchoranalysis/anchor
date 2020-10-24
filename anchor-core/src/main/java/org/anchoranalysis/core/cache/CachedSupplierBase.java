@@ -25,8 +25,8 @@
  */
 package org.anchoranalysis.core.cache;
 
-import org.anchoranalysis.core.functional.checked.CheckedSupplier;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.core.functional.checked.CheckedSupplier;
 
 /**
  * Base class for functions that memoize (cache) a call to an interface

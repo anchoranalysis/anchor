@@ -50,7 +50,8 @@ public class ColoredMarks implements Iterable<Mark> {
     }
 
     // NB, this changes the IDs of the marks
-    public ColoredMarks(MarkCollection marks, ColorIndex colorIndex, IdentifierGetter<Mark> colorIDGetter) {
+    public ColoredMarks(
+            MarkCollection marks, ColorIndex colorIndex, IdentifierGetter<Mark> colorIDGetter) {
         super();
         this.marks = marks;
 

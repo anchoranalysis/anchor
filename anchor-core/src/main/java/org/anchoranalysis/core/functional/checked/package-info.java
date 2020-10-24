@@ -24,6 +24,7 @@
  * #L%
  */
 /**
- * Versions of many functional-interfaces in {@code java.util.function} that throw checked-exceptions.
+ * Versions of many functional-interfaces in {@code java.util.function} that throw
+ * checked-exceptions.
  */
 package org.anchoranalysis.core.functional.checked;

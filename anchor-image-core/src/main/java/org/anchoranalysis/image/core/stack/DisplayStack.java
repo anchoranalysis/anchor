@@ -145,7 +145,7 @@ public class DisplayStack {
     public long numberNonNullConverters() {
         return converters.stream().filter(Optional::isPresent).count();
     }
-    
+
     public boolean isRGB() {
         return stack.getNumberChannels() == 3;
     }
@@ -263,7 +263,7 @@ public class DisplayStack {
 
     /**
      * Maximum-intensity projection.
-     * 
+     *
      * @return
      */
     public DisplayStack projectMax() {

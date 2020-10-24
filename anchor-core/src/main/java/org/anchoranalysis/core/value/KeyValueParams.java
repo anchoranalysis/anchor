@@ -32,9 +32,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Map.Entry;
-import org.anchoranalysis.core.exception.OperationFailedException;
 import java.util.Properties;
 import java.util.Set;
+import org.anchoranalysis.core.exception.OperationFailedException;
 
 /** Parameters represented by key/value strings */
 public class KeyValueParams {

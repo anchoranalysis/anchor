@@ -88,7 +88,8 @@ public class NamedProviderOutputter<T> {
 
         // If no outputs are allowed, exit early
         if (!allowedKeys.isEmpty()) {
-            outputAllowed(allowedKeys, new OutputPatternStringSuffix(outputName, suppressSubdirectory));
+            outputAllowed(
+                    allowedKeys, new OutputPatternStringSuffix(outputName, suppressSubdirectory));
         }
     }
 

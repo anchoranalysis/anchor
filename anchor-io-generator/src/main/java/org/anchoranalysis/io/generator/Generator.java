@@ -36,6 +36,4 @@ import org.anchoranalysis.io.output.writer.ElementWriter;
  * @author Owen Feehan
  * @param <T> input-type for generator (that can also be iterated over)
  */
-public interface Generator<T> extends ElementWriter<T> {
-
-}
+public interface Generator<T> extends ElementWriter<T> {}

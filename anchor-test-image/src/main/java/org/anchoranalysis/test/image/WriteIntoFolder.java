@@ -207,7 +207,7 @@ public class WriteIntoFolder implements TestRule {
 
                 Path path = folder.getRoot().toPath();
 
-                outputter = OutputterFixture.outputter( Optional.of(path) );
+                outputter = OutputterFixture.outputter(Optional.of(path));
 
                 if (printDirectoryToConsole) {
                     System.out.println("Outputs written in test to: " + path); // NOSONAR

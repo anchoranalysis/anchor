@@ -27,10 +27,10 @@
 package org.anchoranalysis.io.manifest.operationrecorder;
 
 import java.nio.file.Path;
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.manifest.ManifestDirectoryDescription;
 import org.anchoranalysis.io.manifest.directory.SubdirectoryBase;
-import lombok.AllArgsConstructor;
 
 /**
  * Allows two {@link WriteOperationRecorder} function together as if they are one

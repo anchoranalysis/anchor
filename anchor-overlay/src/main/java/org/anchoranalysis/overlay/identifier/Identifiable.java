@@ -28,6 +28,6 @@ package org.anchoranalysis.overlay.identifier;
 
 @FunctionalInterface
 public interface Identifiable {
-    
+
     int getIdentifier();
 }

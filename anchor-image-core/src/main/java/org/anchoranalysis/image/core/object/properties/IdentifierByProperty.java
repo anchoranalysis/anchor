@@ -26,8 +26,8 @@
 
 package org.anchoranalysis.image.core.object.properties;
 
-import org.anchoranalysis.core.identifier.getter.IdentifierGetter;
 import lombok.AllArgsConstructor;
+import org.anchoranalysis.core.identifier.getter.IdentifierGetter;
 
 @AllArgsConstructor
 public class IdentifierByProperty implements IdentifierGetter<ObjectWithProperties> {

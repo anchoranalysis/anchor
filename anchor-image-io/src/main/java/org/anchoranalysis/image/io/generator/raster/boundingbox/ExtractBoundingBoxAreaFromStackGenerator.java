@@ -43,7 +43,8 @@ import org.anchoranalysis.spatial.box.BoundingBox;
  * @author Owen Feehan
  */
 @RequiredArgsConstructor
-public class ExtractBoundingBoxAreaFromStackGenerator extends RasterGeneratorSelectFormat<BoundingBox> {
+public class ExtractBoundingBoxAreaFromStackGenerator
+        extends RasterGeneratorSelectFormat<BoundingBox> {
 
     private static final String MANIFEST_FUNCTION = "boundingBoxExtract";
 

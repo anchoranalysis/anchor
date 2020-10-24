@@ -115,14 +115,14 @@ public class GeneratorBridge<S, T> implements Generator<S> {
             throws OutputWriteFailedException {
         try {
             Stream<T> bridgedElement = bridge.apply(element);
-            
+
             ConcatenateFileTypes concatenate = new ConcatenateFileTypes();
-            
+
             CheckedStream.forEach(
-                    bridgedElement, OutputWriteFailedException.class, item ->
-                        concatenate.add( function.apply(item) )
-                    );
-            
+                    bridgedElement,
+                    OutputWriteFailedException.class,
+                    item -> concatenate.add(function.apply(item)));
+
             return concatenate.allFileTypes();
         } catch (Exception e) {
             throw new OutputWriteFailedException(e);

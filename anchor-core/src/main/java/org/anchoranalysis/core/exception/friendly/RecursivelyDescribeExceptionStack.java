@@ -28,9 +28,9 @@ package org.anchoranalysis.core.exception.friendly;
 
 import java.io.IOException;
 import java.io.Writer;
-import org.anchoranalysis.core.exception.combinable.AnchorCombinableException;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.core.exception.combinable.AnchorCombinableException;
 
 /**
  * Generates a nice string representation of an Exception and its causes according to certain rules.

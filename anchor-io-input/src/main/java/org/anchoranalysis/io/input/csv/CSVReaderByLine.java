@@ -27,9 +27,9 @@
 package org.anchoranalysis.io.input.csv;
 
 import java.nio.file.Path;
-import org.anchoranalysis.core.exception.OperationFailedException;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.core.exception.OperationFailedException;
 
 /**
  * Reads a CSV file line-by-line

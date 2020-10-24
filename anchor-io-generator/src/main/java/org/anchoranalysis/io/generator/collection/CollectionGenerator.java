@@ -85,9 +85,9 @@ public class CollectionGenerator<T> implements Generator<Collection<T>> {
                 new OutputPatternIntegerSuffix(
                         outputNameFolder, prefix, 3, false, Optional.empty());
         factory.incrementingByOneStream(pattern, element.stream());
-        
+
         // Do not report any file-types for the collection written. TODO is this okay?
-        return new FileType[]{};
+        return new FileType[] {};
     }
 
     public static ManifestDescription createManifestDescription(String type) {

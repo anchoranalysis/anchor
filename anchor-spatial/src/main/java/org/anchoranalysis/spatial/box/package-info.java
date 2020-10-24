@@ -23,7 +23,5 @@
  * THE SOFTWARE.
  * #L%
  */
-/** 
- * Axis-aligned bounding-boxes and related operations.
- */
+/** Axis-aligned bounding-boxes and related operations. */
 package org.anchoranalysis.spatial.box;

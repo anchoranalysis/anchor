@@ -47,7 +47,8 @@ import org.anchoranalysis.overlay.Overlay;
 import org.anchoranalysis.overlay.collection.ColoredOverlayCollection;
 import org.anchoranalysis.overlay.writer.DrawOverlay;
 
-public abstract class MarksGeneratorBase extends RasterGeneratorSelectFormat<ColoredMarksWithDisplayStack> {
+public abstract class MarksGeneratorBase
+        extends RasterGeneratorSelectFormat<ColoredMarksWithDisplayStack> {
 
     @Getter @Setter private String manifestDescriptionFunction = "marks";
 
@@ -94,5 +95,4 @@ public abstract class MarksGeneratorBase extends RasterGeneratorSelectFormat<Col
     }
 
     protected abstract DisplayStack background(DisplayStack stack) throws OperationFailedException;
-
 }

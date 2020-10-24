@@ -52,15 +52,13 @@ public abstract class OneOrThreeChannelsWriter extends StackWriter {
     }
 
     @Override
-    public void writeStackSeries(
-            StackSeries stackSeries, Path filePath, StackWriteOptions options)
+    public void writeStackSeries(StackSeries stackSeries, Path filePath, StackWriteOptions options)
             throws ImageIOException {
         throw new ImageIOException("Writing time-series is unsupported for this format");
     }
 
     @Override
-    public void writeStack(
-            Stack stack, Path filePath, StackWriteOptions options)
+    public void writeStack(Stack stack, Path filePath, StackWriteOptions options)
             throws ImageIOException {
 
         if (stack.getNumberChannels() == 3 && !options.isRgb()) {

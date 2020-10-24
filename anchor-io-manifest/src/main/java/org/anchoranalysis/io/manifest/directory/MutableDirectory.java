@@ -26,14 +26,14 @@
 
 package org.anchoranalysis.io.manifest.directory;
 
-import lombok.Getter;
-import lombok.experimental.Accessors;
 import java.io.Serializable;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
+import lombok.Getter;
+import lombok.experimental.Accessors;
 import org.anchoranalysis.io.manifest.ManifestDirectoryDescription;
 import org.anchoranalysis.io.manifest.directory.sequenced.SequencedDirectory;
 import org.anchoranalysis.io.manifest.file.OutputtedFile;
@@ -54,7 +54,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
  *
  * @author Owen Feehan
  */
-@Accessors(fluent=true)
+@Accessors(fluent = true)
 public abstract class MutableDirectory
         implements SequencedDirectory, WriteOperationRecorder, Serializable {
 
@@ -73,9 +73,7 @@ public abstract class MutableDirectory
 
     private static Log log = LogFactory.getLog(MutableDirectory.class);
 
-    /**
-     * A description of this directory for the manifest.
-     */
+    /** A description of this directory for the manifest. */
     @Getter private ManifestDirectoryDescription description;
 
     public MutableDirectory() {

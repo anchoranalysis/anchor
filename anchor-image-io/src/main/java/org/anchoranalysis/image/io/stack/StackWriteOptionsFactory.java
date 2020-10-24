@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -25,17 +25,16 @@
  */
 package org.anchoranalysis.image.io.stack;
 
-import org.anchoranalysis.image.core.stack.Stack;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.image.core.stack.Stack;
 
 /**
  * Creates {@link StackWriteOptions} to describe certain attributes.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class StackWriteOptionsFactory {
 
     private static final StackWriteOptions RGB_ALWAYS_2D = new StackWriteOptions(true, true, true);
@@ -50,9 +49,8 @@ public class StackWriteOptionsFactory {
 
     /**
      * Creates a {@link StackWriteOptions} which depending on a flag will always be 2D.
-     * 
+     *
      * @param always2D if the stack is guaranteed to be always 2D.
-     * 
      * @return a newly created {@link StackWriteOptions}
      */
     public static StackWriteOptions maybeAlways2D(boolean always2D) {
@@ -66,7 +64,6 @@ public class StackWriteOptionsFactory {
     public static StackWriteOptions rgbMaybe3D() {
         return RGB_MAYBE_3D;
     }
-    
 
     public static StackWriteOptions binaryChannelMaybe3D() {
         return singleChannelMaybe3D(false);
@@ -119,7 +116,7 @@ public class StackWriteOptionsFactory {
     public static StackWriteOptions from(Stack stack) {
         int numberChannels = stack.getNumberChannels();
         boolean singleSlice = !stack.hasMoreThanOneSlice();
-        if (numberChannels == 1 || numberChannels==3) {
+        if (numberChannels == 1 || numberChannels == 3) {
             return alwaysOneOrThreeChannels(singleSlice);
         } else {
             return new StackWriteOptions(singleSlice, false, false);

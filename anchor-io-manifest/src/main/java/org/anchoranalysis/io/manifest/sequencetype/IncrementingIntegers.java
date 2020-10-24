@@ -54,21 +54,22 @@ public class IncrementingIntegers extends SequenceType<Integer> {
 
     @Override
     public void update(Integer element) throws SequenceTypeException {
-        
-        // if the element exists at the end of the current range, we assume its a repeat of the existing 
+
+        // if the element exists at the end of the current range, we assume its a repeat of the
+        // existing
         // index and no update occurs.
         if (element == range.getEnd()) {
             return;
         }
-        
-        if (element==(range.getEnd()+1)) {
+
+        if (element == (range.getEnd() + 1)) {
             // Otherwise if the element is one more than the end of the range, we update the range
-            range.increment();                
+            range.increment();
         } else {
             // If it's anything more than one an error must have occurred
             throw new SequenceTypeException("Incorrectly ordered index in update");
         }
-     }
+    }
 
     @Override
     public OrderProvider createOrderProvider() {

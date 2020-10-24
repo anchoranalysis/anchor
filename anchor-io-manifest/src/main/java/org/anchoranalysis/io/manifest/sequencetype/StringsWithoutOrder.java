@@ -78,11 +78,10 @@ public class StringsWithoutOrder extends SequenceType<String> {
 
     @Override
     public IncompleteElementRange elementRange() {
-        if (range==null) {
+        if (range == null) {
             // Lazy creation due to serialization
             range = new CollectionAsRange(set);
         }
         return range;
     }
-
 }

@@ -127,14 +127,12 @@ public class StackTester {
         Stack stack =
                 new StackFixture(forceFirstChannel)
                         .create(numberChannels, extent, channelVoxelType);
-        
-        StackWriteOptions options = StackWriteOptionsFactory.maybeRGB(makeRGB); 
-        
+
+        StackWriteOptions options = StackWriteOptionsFactory.maybeRGB(makeRGB);
+
         Path pathWritten =
                 writer.writeStackWithExtension(
-                        stack,
-                        directoryToWriteTo.resolve(filename),
-                        options);
+                        stack, directoryToWriteTo.resolve(filename), options);
         comparer.assertComparisons(pathWritten, filename);
     }
 }

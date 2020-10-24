@@ -1,6 +1,4 @@
-/**
- * Performing primitive type conversion, counting and summing.
- */
+/** Performing primitive type conversion, counting and summing. */
 package org.anchoranalysis.math.arithmetic;
 /*-
  * #%L

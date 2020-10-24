@@ -52,12 +52,12 @@ class CombinedList<T> {
             throws OutputWriteFailedException {
 
         ConcatenateFileTypes collect = new ConcatenateFileTypes(list.size() > 1);
-        
+
         for (OptionalNameValue<Generator<T>> namedGenerator : list) {
             namedGenerator.getName().ifPresent(outputNameStyle::setOutputName);
-            collect.add( namedGenerator.getValue().write(element, outputNameStyle, outputter) );
+            collect.add(namedGenerator.getValue().write(element, outputNameStyle, outputter));
         }
-        
+
         return collect.allFileTypes();
     }
 
@@ -69,7 +69,7 @@ class CombinedList<T> {
             throws OutputWriteFailedException {
 
         ConcatenateFileTypes collect = new ConcatenateFileTypes(list.size() > 1);
-        
+
         for (OptionalNameValue<Generator<T>> namedGenerator : list) {
 
             if (namedGenerator.getName().isPresent()) {
@@ -78,10 +78,9 @@ class CombinedList<T> {
             }
 
             collect.add(
-                namedGenerator
-                        .getValue()
-                        .writeWithIndex(element, index, outputNameStyle, outputter)
-            );
+                    namedGenerator
+                            .getValue()
+                            .writeWithIndex(element, index, outputNameStyle, outputter));
         }
 
         return collect.allFileTypes();

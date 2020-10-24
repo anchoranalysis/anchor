@@ -41,8 +41,7 @@ import org.anchoranalysis.image.io.stack.StackWriteOptions;
 public abstract class SupportsTimeSeries extends ImageJRasterWriter {
 
     @Override
-    public void writeStackSeries(
-            StackSeries stackSeries, Path filePath, StackWriteOptions options)
+    public void writeStackSeries(StackSeries stackSeries, Path filePath, StackWriteOptions options)
             throws ImageIOException {
 
         try {

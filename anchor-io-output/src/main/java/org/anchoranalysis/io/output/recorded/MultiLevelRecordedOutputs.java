@@ -27,10 +27,10 @@ package org.anchoranalysis.io.output.recorded;
 
 import java.util.HashMap;
 import java.util.Map.Entry;
-import org.anchoranalysis.core.exception.friendly.AnchorFriendlyRuntimeException;
 import java.util.Set;
 import lombok.Getter;
 import lombok.experimental.Accessors;
+import org.anchoranalysis.core.exception.friendly.AnchorFriendlyRuntimeException;
 
 /**
  * Like {@link RecordedOutputs} but accepts two levels, first and second, like in a {@link

@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -28,14 +28,15 @@ package org.anchoranalysis.io.generator;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 /**
- * Performs preprocessing to transform the element into another type before being written to the filesystem.
- * @author Owen Feehan
+ * Performs preprocessing to transform the element into another type before being written to the
+ * filesystem.
  *
+ * @author Owen Feehan
  * @param <T> iteration-type
  * @param <S> type after any necessary preprocessing
  */
-public interface TransformingGenerator<T,S> extends Generator<T> {
-    
+public interface TransformingGenerator<T, S> extends Generator<T> {
+
     /**
      * Applies any necessary preprocessing to create an element suitable for writing to the
      * filesystem.

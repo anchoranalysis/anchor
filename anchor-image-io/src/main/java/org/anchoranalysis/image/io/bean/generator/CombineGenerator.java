@@ -36,8 +36,8 @@ import org.anchoranalysis.image.bean.spatial.arrange.ArrangeStackBean;
 import org.anchoranalysis.image.core.channel.factory.ChannelFactoryByte;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.core.stack.rgb.RGBStack;
-import org.anchoranalysis.image.io.generator.raster.RasterGeneratorSelectFormat;
 import org.anchoranalysis.image.io.generator.raster.RasterGenerator;
+import org.anchoranalysis.image.io.generator.raster.RasterGeneratorSelectFormat;
 import org.anchoranalysis.image.io.stack.StackWriteOptions;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
@@ -84,7 +84,7 @@ class CombineGenerator<T> extends RasterGeneratorSelectFormat<T> {
 
     @Override
     public StackWriteOptions guaranteedImageAttributes() {
-        return generators   // NOSONAR
+        return generators // NOSONAR
                 .stream()
                 .map(RasterGenerator::guaranteedImageAttributes)
                 .reduce(StackWriteOptions::and)

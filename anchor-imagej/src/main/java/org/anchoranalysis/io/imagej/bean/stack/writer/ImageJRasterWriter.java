@@ -48,8 +48,7 @@ public abstract class ImageJRasterWriter extends StackWriter {
     private static Log log = LogFactory.getLog(ImageJRasterWriter.class);
 
     @Override
-    public void writeStack(
-            Stack stack, Path filePath, StackWriteOptions options)
+    public void writeStack(Stack stack, Path filePath, StackWriteOptions options)
             throws ImageIOException {
         if (!(stack.getNumberChannels() == 1 || stack.getNumberChannels() == 3)) {
             throw new ImageIOException("Stack must have 1 or 3 channels");

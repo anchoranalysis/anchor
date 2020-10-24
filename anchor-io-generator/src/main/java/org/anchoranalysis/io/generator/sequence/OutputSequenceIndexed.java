@@ -52,12 +52,13 @@ public class OutputSequenceIndexed<T, S> implements OutputSequence {
 
     private final Generator<T> generator;
     private final SequenceWriters sequenceWriter;
-    private final BiFunction<S,String,S> combineIndexWithExtension;
-    
+    private final BiFunction<S, String, S> combineIndexWithExtension;
+
     @Getter private SequenceType<S> sequenceType;
-    
+
     /**
-     * Creates a non-incremental sequence of outputs, passing the index to the {@code sequenceType} without combination with the file extension.
+     * Creates a non-incremental sequence of outputs, passing the index to the {@code sequenceType}
+     * without combination with the file extension.
      *
      * @param outputter parameters for the output-sequence
      * @param sequenceType sequenceType the indexes are expected to follow
@@ -65,18 +66,23 @@ public class OutputSequenceIndexed<T, S> implements OutputSequence {
      */
     OutputSequenceIndexed(BoundOutputter<T> outputter, SequenceType<S> sequenceType)
             throws OutputWriteFailedException {
-        this(outputter, sequenceType, (index,extension) -> index );
+        this(outputter, sequenceType, (index, extension) -> index);
     }
-    
+
     /**
-     * Creates a non-incremental sequence of outputs, combining the index with the {@code sequenceType} through a parameterized function.
+     * Creates a non-incremental sequence of outputs, combining the index with the {@code
+     * sequenceType} through a parameterized function.
      *
      * @param outputter parameters for the output-sequence
      * @param sequenceType sequenceType the indexes are expected to follow
-     * @param combineIndexWithExtension combines both an index of type {@code S} with the file-extension to produce the index passed to the {@link SequenceType}. 
+     * @param combineIndexWithExtension combines both an index of type {@code S} with the
+     *     file-extension to produce the index passed to the {@link SequenceType}.
      * @throws OutputWriteFailedException
      */
-    OutputSequenceIndexed(BoundOutputter<T> outputter, SequenceType<S> sequenceType, BiFunction<S,String,S> combineIndexWithExtension )
+    OutputSequenceIndexed(
+            BoundOutputter<T> outputter,
+            SequenceType<S> sequenceType,
+            BiFunction<S, String, S> combineIndexWithExtension)
             throws OutputWriteFailedException {
 
         if (!outputter.getOutputter().getSettings().hasBeenInitialized()) {
@@ -112,30 +118,33 @@ public class OutputSequenceIndexed<T, S> implements OutputSequence {
      * @throws OutputWriteFailedException if the output cannot be successfully written.
      */
     public void add(T element, S index) throws OutputWriteFailedException {
-        
+
         try {
             // Then output isn't allowed and we should just exit
             if (!sequenceWriter.isOn()) {
                 return;
             }
 
-            Optional<FileType[]> fileTypes = this.sequenceWriter.write(() -> generator, () -> element, String.valueOf(index));
+            Optional<FileType[]> fileTypes =
+                    this.sequenceWriter.write(
+                            () -> generator, () -> element, String.valueOf(index));
             if (fileTypes.isPresent()) {
                 updateSequence(fileTypes.get(), index);
             }
-            
+
         } catch (SequenceTypeException e) {
             throw new OutputWriteFailedException(e);
         }
     }
-    
+
     private void updateSequence(FileType[] fileTypes, S index) throws SequenceTypeException {
         synchronized (sequenceType) {
-            for( FileType type : fileTypes) {
-                sequenceType.update( combineIndexWithExtension.apply(index, type.getFileExtension()) );
+            for (FileType type : fileTypes) {
+                sequenceType.update(
+                        combineIndexWithExtension.apply(index, type.getFileExtension()));
             }
         }
-        sequenceWriter.addFileTypes(fileTypes);        
+        sequenceWriter.addFileTypes(fileTypes);
     }
 
     @Override

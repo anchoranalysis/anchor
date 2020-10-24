@@ -139,7 +139,8 @@ public abstract class DrawOverlay {
 
                             ObjectWithProperties object =
                                     overlay.createObject(drawOverlay, dimensions, bvOut);
-                            object.setProperty("colorID", colorIDGetter.getIdentifier(overlay, index));
+                            object.setProperty(
+                                    "colorID", colorIDGetter.getIdentifier(overlay, index));
 
                             return createPrecalc(drawOverlay, object, dimensions);
                         })

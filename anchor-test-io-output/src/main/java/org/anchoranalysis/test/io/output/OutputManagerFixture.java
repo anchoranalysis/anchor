@@ -39,15 +39,15 @@ import org.anchoranalysis.io.output.bean.path.prefixer.PathPrefixer;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class OutputManagerFixture {
-    
+
     public static OutputManager createOutputManager(Optional<Path> pathForPrefixer) {
         OutputManager outputManager = new OutputManager();
         outputManager.setSilentlyDeleteExisting(true);
         outputManager.setOutputWriteSettings(settings());
-        outputManager.setFilePathPrefixer( prefixer(pathForPrefixer) );
+        outputManager.setFilePathPrefixer(prefixer(pathForPrefixer));
         return outputManager;
     }
-    
+
     private static PathPrefixer prefixer(Optional<Path> pathForPrefixer) {
         Optional<PathPrefixer> pathPrefixer = pathForPrefixer.map(ConstantPathPrefixer::new);
         return pathPrefixer.orElseGet(FilePathCounter::new);
@@ -56,7 +56,7 @@ public class OutputManagerFixture {
     private static OutputWriteSettings settings() {
 
         RegisterBeanFactories.registerAllPackageBeanFactories();
-        
+
         OutputWriteSettings settings = new OutputWriteSettings();
 
         // We populate any defaults in OutputWriteSettings from our default bean factory

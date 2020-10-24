@@ -46,11 +46,11 @@ public class StackWriteOptions {
     /** The number of channels is guaranteed to be 1 or 3 in the output. */
     private boolean alwaysOneOrThreeChannels;
 
-    /*** 
+    /***
      * Whether it's an RGB image when it has three channels (the three channels visualized jointly, rather than independently)
      *
      * <p>This flag should only be set when {@code alwaysOneOrThreChannels} is true.
-     * 
+     *
      * <p>This flag is ignored, when the number of channels is not three.
      */
     private boolean rgb;
@@ -63,7 +63,7 @@ public class StackWriteOptions {
     public StackWriteOptions always2D() {
         return new StackWriteOptions(true, alwaysOneOrThreeChannels, rgb);
     }
-    
+
     /**
      * Derives a {@link StackWriteOptions} that will be RGB, but is otherwise unchanged.
      *
@@ -72,14 +72,14 @@ public class StackWriteOptions {
     public StackWriteOptions rgb() {
         return new StackWriteOptions(always2D, true, true);
     }
-    
+
     /**
      * Combines with another {@link StackWriteOptions} by performing a logical <i>and</i> on each
      * field.
      *
      * @param other the other {@link StackWriteOptions} to combine with.
-     * @return a newly created {@link StackWriteOptions} where each field is the logical <i>and</i> of the
-     *     two inputs
+     * @return a newly created {@link StackWriteOptions} where each field is the logical <i>and</i>
+     *     of the two inputs
      */
     public StackWriteOptions and(StackWriteOptions other) {
         return new StackWriteOptions(
@@ -87,14 +87,14 @@ public class StackWriteOptions {
                 alwaysOneOrThreeChannels && other.alwaysOneOrThreeChannels,
                 rgb && other.rgb);
     }
-    
+
     /**
      * Combines with another {@link StackWriteOptions} by performing a logical <i>or</i> on each
      * field.
      *
      * @param other the other {@link StackWriteOptions} to combine with.
-     * @return a newly created {@link StackWriteOptions} where each field is the logical <i>or</i> of the
-     *     two inputs
+     * @return a newly created {@link StackWriteOptions} where each field is the logical <i>or</i>
+     *     of the two inputs
      */
     public StackWriteOptions or(StackWriteOptions other) {
         return new StackWriteOptions(
@@ -102,10 +102,10 @@ public class StackWriteOptions {
                 alwaysOneOrThreeChannels || other.alwaysOneOrThreeChannels,
                 rgb || other.rgb);
     }
-    
+
     /**
      * Whether to write a stack in RGB mode?
-     * 
+     *
      * @param numberChannels the number of channels in a stack.
      * @return true if the stack should be written as RGB, false otherwise.
      */

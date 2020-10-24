@@ -50,7 +50,7 @@ public class EnergyStack {
     @Getter @Setter private KeyValueParams params;
 
     public EnergyStack(Channel channel) {
-        this( new EnergyStackWithoutParams(channel) );
+        this(new EnergyStackWithoutParams(channel));
     }
 
     public EnergyStack(EnergyStackWithoutParams energyStack) {
@@ -58,15 +58,15 @@ public class EnergyStack {
     }
 
     public EnergyStack(Stack stackIn, KeyValueParams params) {
-        this( new EnergyStackWithoutParams(stackIn), params );
+        this(new EnergyStackWithoutParams(stackIn), params);
     }
 
     public EnergyStack(Stack stackIn) {
-        this( new EnergyStackWithoutParams(stackIn) );
+        this(new EnergyStackWithoutParams(stackIn));
     }
 
     public EnergyStack(Dimensions dimensions) {
-        this( new EnergyStackWithoutParams(dimensions) );
+        this(new EnergyStackWithoutParams(dimensions));
     }
 
     public EnergyStack extractSlice(int z) throws OperationFailedException {

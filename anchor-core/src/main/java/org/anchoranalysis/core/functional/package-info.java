@@ -1,6 +1,4 @@
-/**
- * Utilities and interfaces for applying functional-programming.
- */
+/** Utilities and interfaces for applying functional-programming. */
 package org.anchoranalysis.core.functional;
 /*-
  * #%L

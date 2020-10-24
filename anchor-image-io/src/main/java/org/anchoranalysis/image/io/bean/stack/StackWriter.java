@@ -49,8 +49,7 @@ public abstract class StackWriter extends AnchorBean<StackWriter> {
      * @return the full path (including extension) used for writing.
      * @throws ImageIOException if anything goes wrong while writing.
      */
-    public Path writeStackWithExtension(
-            Stack stack, Path filePath, StackWriteOptions options)
+    public Path writeStackWithExtension(Stack stack, Path filePath, StackWriteOptions options)
             throws ImageIOException {
 
         String fileNameWithExtension = filePath.getFileName() + "." + fileExtension(options);
@@ -74,8 +73,7 @@ public abstract class StackWriter extends AnchorBean<StackWriter> {
      * @param options options which may influence how a raster is written.
      * @throws ImageIOException if anything goes wrong whle writing.
      */
-    public abstract void writeStack(
-            Stack stack, Path filePath, StackWriteOptions options)
+    public abstract void writeStack(Stack stack, Path filePath, StackWriteOptions options)
             throws ImageIOException;
 
     /**

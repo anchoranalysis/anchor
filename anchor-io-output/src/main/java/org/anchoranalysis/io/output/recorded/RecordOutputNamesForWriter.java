@@ -96,13 +96,14 @@ class RecordOutputNamesForWriter implements Writer {
             ElementSupplier<T> element,
             String index)
             throws OutputWriteFailedException {
-        
-        Optional<FileType[]> fileTypesWritten = writer.writeWithIndex(outputNameStyle, elementWriter, element, index);
-        
+
+        Optional<FileType[]> fileTypesWritten =
+                writer.writeWithIndex(outputNameStyle, elementWriter, element, index);
+
         if (includeIndexableOutputs) {
             recordedOutputs.add(outputNameStyle.getOutputName(), fileTypesWritten.isPresent());
         }
-        
+
         return fileTypesWritten;
     }
 

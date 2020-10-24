@@ -35,21 +35,33 @@ import org.anchoranalysis.image.io.stack.StackWriteOptions;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
-/** 
- * A {@link RasterGenerator} that selects an appropriate output-format based upon each generated image.
- *  
+/**
+ * A {@link RasterGenerator} that selects an appropriate output-format based upon each generated
+ * image.
+ *
  * @author Owen Feehan
  */
 public abstract class RasterGeneratorSelectFormat<T> extends RasterGenerator<T> {
 
-    /**  Combines stack-write-options derived for a particular stack with the general write-options associated with the {@link RasterGenerator}. */
+    /**
+     * Combines stack-write-options derived for a particular stack with the general write-options
+     * associated with the {@link RasterGenerator}.
+     */
     @Override
-    protected String selectFileExtension(Stack stack, StackWriteOptions options, OutputWriteSettings settings) throws OperationFailedException {
+    protected String selectFileExtension(
+            Stack stack, StackWriteOptions options, OutputWriteSettings settings)
+            throws OperationFailedException {
         return GeneratorOutputter.fileExtensionWriter(settings, options);
     }
-    
+
     @Override
-    protected void writeToFile(T element, Stack transformedElement, StackWriteOptions options, OutputWriteSettings settings, Path filePath) throws OutputWriteFailedException {
+    protected void writeToFile(
+            T element,
+            Stack transformedElement,
+            StackWriteOptions options,
+            OutputWriteSettings settings,
+            Path filePath)
+            throws OutputWriteFailedException {
         try {
             StackWriter writer = GeneratorOutputter.writer(settings);
             writer.writeStack(transformedElement, filePath, options);

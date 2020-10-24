@@ -1,8 +1,8 @@
 package org.anchoranalysis.spatial.axis;
 
-import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
 
 /*
  * #%L

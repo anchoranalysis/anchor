@@ -36,10 +36,10 @@ import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationExcep
 import org.anchoranalysis.spatial.point.Point3d;
 
 /**
- * A <a href="https://en.wikipedia.org/wiki/Rotation_matrix">matrix</a> that performs a rotation in Euclidean space.
- * 
- * @author Owen Feehan
+ * A <a href="https://en.wikipedia.org/wiki/Rotation_matrix">matrix</a> that performs a rotation in
+ * Euclidean space.
  *
+ * @author Owen Feehan
  */
 public class RotationMatrix implements Serializable {
     /** */

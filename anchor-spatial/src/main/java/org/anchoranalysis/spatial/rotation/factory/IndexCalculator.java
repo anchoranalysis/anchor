@@ -29,23 +29,17 @@ package org.anchoranalysis.spatial.rotation.factory;
 import lombok.AllArgsConstructor;
 
 /**
- * Assigns values for a rotation about a particular axis (in radians).
- * axisShift= 
- * 
- * @author Owen Feehan
+ * Assigns values for a rotation about a particular axis (in radians). axisShift=
  *
+ * @author Owen Feehan
  */
 @AllArgsConstructor
 class IndexCalculator {
 
-    /**
-     * 0 for x-axis, 1 for y-axis, 2 for z-axis
-     */
+    /** 0 for x-axis, 1 for y-axis, 2 for z-axis */
     private int shift;
-    
-    /**
-     * Number of dimensions in matrix.
-     */
+
+    /** Number of dimensions in matrix. */
     private int numberDimensions;
 
     public int calculate(int orig) {

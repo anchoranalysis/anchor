@@ -30,15 +30,14 @@ import org.anchoranalysis.spatial.rotation.RotationMatrix;
 
 /**
  * Base for classes that create a {@link RotationMatrix} in different ways.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public abstract class RotationMatrixFactory { // NOSONAR
 
     /**
      * Creates a {@link RotationMatrix}.
-     * 
+     *
      * @return a newly created matrix
      */
     public RotationMatrix create() {
@@ -49,14 +48,14 @@ public abstract class RotationMatrixFactory { // NOSONAR
 
     /**
      * The dimensionality of the rotation-matrix.
-     * 
+     *
      * @return 2 or 3
      */
     public abstract int numberDimensions();
 
     /**
      * Populates a newly created matrix.
-     * 
+     *
      * @param matrix a matrix where all values are 0.
      */
     protected abstract void populate(RotationMatrix matrix);

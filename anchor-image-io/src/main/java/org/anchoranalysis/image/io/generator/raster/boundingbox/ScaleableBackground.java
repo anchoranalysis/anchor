@@ -152,7 +152,8 @@ public class ScaleableBackground {
         // What would the bounding box look like in the unscaled window?
         BoundingBox boxUnscaled = box.scaleClipTo(scaleFactor.invert(), stack.extent());
 
-        return stack.getStack().mapChannel(channel -> extractChannelScaled(channel, boxUnscaled, box));
+        return stack.getStack()
+                .mapChannel(channel -> extractChannelScaled(channel, boxUnscaled, box));
     }
 
     private Channel extractChannelUnscaled(Channel channel, BoundingBox box) {

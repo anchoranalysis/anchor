@@ -26,9 +26,9 @@
 
 package org.anchoranalysis.spatial.rotation.factory;
 
-import org.anchoranalysis.spatial.rotation.RotationMatrix;
 import cern.colt.matrix.DoubleMatrix2D;
 import lombok.AllArgsConstructor;
+import org.anchoranalysis.spatial.rotation.RotationMatrix;
 
 @AllArgsConstructor
 public class RotateAngle2D extends RotationMatrixFactory {

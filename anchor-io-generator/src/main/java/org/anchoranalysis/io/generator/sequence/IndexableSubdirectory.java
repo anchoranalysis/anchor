@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
+import lombok.Getter;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.manifest.directory.Subdirectory;
 import org.anchoranalysis.io.manifest.directory.SubdirectoryBase;
@@ -40,7 +41,6 @@ import org.anchoranalysis.io.manifest.file.OutputtedFile;
 import org.anchoranalysis.io.manifest.finder.FindFailedException;
 import org.anchoranalysis.io.manifest.sequencetype.IncompleteElementRange;
 import org.anchoranalysis.io.output.namestyle.IndexableOutputNameStyle;
-import lombok.Getter;
 
 /**
  * A {@link SubdirectoryBase} entry in the manifest that is indexable.
@@ -94,8 +94,7 @@ class IndexableSubdirectory extends SubdirectoryBase {
             List<OutputtedFile> foundList, Predicate<OutputtedFile> predicate, boolean recursive)
             throws FindFailedException {
 
-        IncompleteElementRange elements =
-                description().getSequenceType().elementRange(); // NOSONAR
+        IncompleteElementRange elements = description().getSequenceType().elementRange(); // NOSONAR
 
         int i = elements.getMinimumIndex();
         do {

@@ -67,7 +67,7 @@ public class StackNotUniformSized implements Iterable<Channel> {
 
     /**
      * Maximum intensity projection.
-     * 
+     *
      * @return
      */
     public StackNotUniformSized projectMax() {

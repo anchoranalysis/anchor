@@ -62,8 +62,7 @@ public class DimensionsCreator {
      *
      * @throws CreateException
      */
-    private Optional<Resolution> maybeConstructResolution(int seriesIndex)
-            throws CreateException {
+    private Optional<Resolution> maybeConstructResolution(int seriesIndex) throws CreateException {
 
         // By default the resolution is 1 in all dimensions
         Point3d res = new Point3d(Double.NaN, Double.NaN, Double.NaN);

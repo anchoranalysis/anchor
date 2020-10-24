@@ -26,27 +26,21 @@
 
 package org.anchoranalysis.spatial.rotation.factory;
 
-import org.anchoranalysis.spatial.rotation.RotationMatrix;
 import cern.colt.matrix.DoubleFactory2D;
 import cern.colt.matrix.DoubleMatrix2D;
 import lombok.AllArgsConstructor;
+import org.anchoranalysis.spatial.rotation.RotationMatrix;
 
 @AllArgsConstructor
 public class RotateAngle3D extends RotationMatrixFactory {
 
-    /**
-    * Rotation about X-axis (in radians).
-    */
+    /** Rotation about X-axis (in radians). */
     private double angleX;
-    
-    /**
-    * Rotation about Y-axis (in radians).
-    */
+
+    /** Rotation about Y-axis (in radians). */
     private double angleY;
-    
-    /**
-    * Rotation about Z-axis (in radians).
-    */
+
+    /** Rotation about Z-axis (in radians). */
     private double angleZ;
 
     @Override
@@ -78,12 +72,13 @@ public class RotateAngle3D extends RotationMatrixFactory {
 
     /**
      * Assigns values for a rotation about a particular axis (in radians)
-     * 
+     *
      * @param matrix
      * @param angleRadians
      * @param axisShift 0 for x-axis, 1 for y-axis, 2 for z-axis
      */
-    private static void assgnRotationMatrix(DoubleMatrix2D matrix, double angleRadians, int axisShift) {
+    private static void assgnRotationMatrix(
+            DoubleMatrix2D matrix, double angleRadians, int axisShift) {
 
         IndexCalculator index = new IndexCalculator(axisShift, 3);
 
@@ -94,5 +89,4 @@ public class RotateAngle3D extends RotationMatrixFactory {
         matrix.set(index.calculate(2), index.calculate(2), Math.cos(angleRadians));
         matrix.set(index.calculate(0), index.calculate(0), 1);
     }
-
 }
