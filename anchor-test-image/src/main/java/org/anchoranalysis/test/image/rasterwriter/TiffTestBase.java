@@ -52,7 +52,6 @@ public abstract class TiffTestBase extends RasterWriterTestBase {
         tester.testSingleChannel(SUPPORTED_VOXEL_TYPES);
     }
 
-    @Test(expected = ImageIOException.class)
     public void testSingleChannelRGB() throws ImageIOException, IOException {
         tester.testSingleChannelRGB();
     }

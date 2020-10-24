@@ -45,14 +45,12 @@ public abstract class StackWriter extends AnchorBean<StackWriter> {
      *
      * @param stack the stack to write
      * @param filePath the path to write the file to, apart from an extension.
-     * @param makeRGB if TRUE, the image should be written as a RGB image, rather than as separate
-     *     channels.
      * @param options options which may influence how a raster is written.
      * @return the full path (including extension) used for writing.
      * @throws ImageIOException if anything goes wrong while writing.
      */
     public Path writeStackWithExtension(
-            Stack stack, Path filePath, boolean makeRGB, StackWriteOptions options)
+            Stack stack, Path filePath, StackWriteOptions options)
             throws ImageIOException {
 
         String fileNameWithExtension = filePath.getFileName() + "." + fileExtension(options);
@@ -85,12 +83,10 @@ public abstract class StackWriter extends AnchorBean<StackWriter> {
      *
      * @param stackSeries the series of stacks
      * @param filePath the path to write the file to
-     * @param makeRGB if TRUE, the image should be written as a RGB image, rather than as separate
-     *     channels.
      * @param options options which may influence how a raster is written.
      * @throws ImageIOException
      */
     public abstract void writeStackSeries(
-            StackSeries stackSeries, Path filePath, boolean makeRGB, StackWriteOptions options)
+            StackSeries stackSeries, Path filePath, StackWriteOptions options)
             throws ImageIOException;
 }

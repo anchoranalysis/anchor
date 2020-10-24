@@ -51,7 +51,7 @@ public class RGBTimeSeriesGenerator extends OneStageGenerator<StackSeries> {
 
         try {
             StackWriter writer = GeneratorOutputter.writer(outputWriteSettings);
-            writer.writeStackSeries(element, filePath, true, rasterOptions);
+            writer.writeStackSeries(element, filePath, rasterOptions);
         } catch (ImageIOException e) {
             throw new OutputWriteFailedException(e);
         }

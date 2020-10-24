@@ -42,11 +42,11 @@ public abstract class SupportsTimeSeries extends ImageJRasterWriter {
 
     @Override
     public void writeStackSeries(
-            StackSeries stackSeries, Path filePath, boolean makeRGB, StackWriteOptions options)
+            StackSeries stackSeries, Path filePath, StackWriteOptions options)
             throws ImageIOException {
 
         try {
-            writeStackTime(stackSeries.createSingleStack(), filePath, makeRGB);
+            writeStackTime(stackSeries.createSingleStack(), filePath, options.isRgb());
         } catch (IncorrectImageSizeException e) {
             throw new ImageIOException(e);
         }

@@ -32,6 +32,7 @@ import lombok.AllArgsConstructor;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.StackWriter;
+import org.anchoranalysis.image.io.stack.StackWriteOptions;
 import org.anchoranalysis.image.io.stack.StackWriteOptionsFactory;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.spatial.Extent;
@@ -126,12 +127,14 @@ public class StackTester {
         Stack stack =
                 new StackFixture(forceFirstChannel)
                         .create(numberChannels, extent, channelVoxelType);
+        
+        StackWriteOptions options = StackWriteOptionsFactory.maybeRGB(makeRGB); 
+        
         Path pathWritten =
                 writer.writeStackWithExtension(
                         stack,
                         directoryToWriteTo.resolve(filename),
-                        makeRGB,
-                        StackWriteOptionsFactory.rgbMaybe3D());
+                        options);
         comparer.assertComparisons(pathWritten, filename);
     }
 }
