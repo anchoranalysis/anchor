@@ -30,7 +30,7 @@ import lombok.AllArgsConstructor;
 import lombok.Value;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.name.FeatureNameList;
-import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
+import org.anchoranalysis.feature.session.calculator.multi.FeatureCalculatorMulti;
 
 /**
  * A {@link FeatureCalculatorMulti} with associated feature-names

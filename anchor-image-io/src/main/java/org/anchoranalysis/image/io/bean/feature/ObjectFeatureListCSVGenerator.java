@@ -40,7 +40,7 @@ import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.io.csv.FeatureListCSVGeneratorVertical;
 import org.anchoranalysis.feature.io.csv.FeatureTableCSVGenerator;
 import org.anchoranalysis.feature.results.ResultsVectorList;
-import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
+import org.anchoranalysis.feature.session.calculator.multi.FeatureCalculatorMulti;
 import org.anchoranalysis.image.core.dimensions.SpatialUnits.UnitSuffix;
 import org.anchoranalysis.image.core.orientation.DirectionVector;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureListEvaluator;

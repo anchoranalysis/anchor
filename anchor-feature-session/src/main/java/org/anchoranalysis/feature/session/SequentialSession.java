@@ -41,10 +41,10 @@ import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
 import org.anchoranalysis.feature.calculate.cache.SessionInput;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.results.ResultsVector;
-import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
-import org.anchoranalysis.feature.session.strategy.replace.ReplaceStrategy;
-import org.anchoranalysis.feature.session.strategy.replace.ReuseSingletonStrategy;
-import org.anchoranalysis.feature.session.strategy.replace.bind.BoundReplaceStrategy;
+import org.anchoranalysis.feature.session.calculator.multi.FeatureCalculatorMulti;
+import org.anchoranalysis.feature.session.replace.BoundReplaceStrategy;
+import org.anchoranalysis.feature.session.replace.ReplaceStrategy;
+import org.anchoranalysis.feature.session.replace.ReuseSingletonStrategy;
 import org.anchoranalysis.feature.shared.SharedFeatureMulti;
 
 /**

@@ -32,10 +32,10 @@ import java.util.List;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.feature.calculate.cache.ChildCacheName;
-import org.anchoranalysis.feature.session.strategy.child.CacheTransferSource;
-import org.anchoranalysis.feature.session.strategy.child.CacheTransferSourceCollection;
-import org.anchoranalysis.feature.session.strategy.replace.CacheAndReuseStrategy;
-import org.anchoranalysis.feature.session.strategy.replace.bind.BoundReplaceStrategy;
+import org.anchoranalysis.feature.session.cache.finder.CacheTransferSource;
+import org.anchoranalysis.feature.session.cache.finder.CacheTransferSourceCollection;
+import org.anchoranalysis.feature.session.replace.BoundReplaceStrategy;
+import org.anchoranalysis.feature.session.replace.CacheAndReuseStrategy;
 import org.anchoranalysis.image.feature.bean.object.pair.FeatureDeriveFromPair;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 
