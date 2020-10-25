@@ -36,7 +36,7 @@ import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.core.value.KeyValueParams;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.core.stack.TimeSequence;
-import org.anchoranalysis.image.core.stack.wrap.WrapStackAsTimeSequenceStore;
+import org.anchoranalysis.image.core.stack.time.WrapStackAsTimeSequenceStore;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.math.histogram.Histogram;

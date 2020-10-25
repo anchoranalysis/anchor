@@ -47,7 +47,7 @@ import org.anchoranalysis.spatial.Extent;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
 /**
- * One ore more single-channel images that all have the same dimensions.
+ * One or more single-channel images that all have the same dimensions.
  *
  * <p>This is one of the fundamental image data structures in Anchor.
  *
