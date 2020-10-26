@@ -436,8 +436,8 @@ public final class Extent implements Serializable {
         int maxY = size.y() + shift.y();
 
         Point2i point = new Point2i();
-        for (point.setY(shift.y()); point.y() < maxX; point.incrementY()) {
-            for (point.setX(shift.x()); point.x() < maxY; point.incrementX()) {
+        for (point.setY(shift.y()); point.y() < maxY; point.incrementY()) {
+            for (point.setX(shift.x()); point.x() < maxX; point.incrementX()) {
                 pointConsumer.accept(point);
             }
         }
