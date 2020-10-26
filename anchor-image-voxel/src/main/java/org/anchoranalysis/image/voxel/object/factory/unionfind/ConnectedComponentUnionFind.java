@@ -67,9 +67,7 @@ public class ConnectedComponentUnionFind {
      * @return the connected-components derived from the voxels
      */
     public ObjectCollection deriveConnectedByte(BinaryVoxels<UnsignedByteBuffer> voxels) {
-        ObjectCollection objects = new ObjectCollection();
-        visitRegion(voxels, objects, minNumberVoxels, new ReadWriteByte());
-        return objects;
+        return deriveConnected(voxels, new ReadWriteByte());
     }
 
     /**
@@ -80,8 +78,20 @@ public class ConnectedComponentUnionFind {
      * @return the connected-components derived from the voxels
      */
     public ObjectCollection deriveConnectedInt(BinaryVoxels<UnsignedIntBuffer> voxels) {
+        return deriveConnected(voxels, new ReadWriteInt());
+    }
+    
+    /**
+     * Converts binary-voxels into connected components.
+     *
+     * @param voxels binary voxels to be searched for connected components. It is consumed
+     *     (modified) during processing.
+     * @param bufferReaderWriter reads and writes to the voxel-buffer
+     * @return the connected-components derived from the voxels
+     */
+    private <T> ObjectCollection deriveConnected(BinaryVoxels<T> voxels, BufferReadWrite<T> bufferReaderWriter) {
         ObjectCollection objects = ObjectCollectionFactory.empty();
-        visitRegion(voxels, objects, minNumberVoxels, new ReadWriteInt());
+        visitRegion(voxels, objects, minNumberVoxels, bufferReaderWriter);
         return objects;
     }
 
@@ -91,7 +101,7 @@ public class ConnectedComponentUnionFind {
             int minNumberVoxels,
             BufferReadWrite<T> bufferReaderWriter) {
 
-        UnionFind<Integer> unionIndex = new UnionFind<>(new HashSet<Integer>());
+        UnionFind<Integer> unionIndex = new UnionFind<>(new HashSet<>());
         Voxels<UnsignedIntBuffer> indexBuffer =
                 VoxelsFactory.getUnsignedInt().createInitialized(visited.extent());
 
@@ -132,23 +142,23 @@ public class ConnectedComponentUnionFind {
     private static Map<Integer, Integer> mapValuesToContiguousSet(Set<Integer> setIDs) {
         // We create a map between big ID and small ID
         Map<Integer, Integer> mapIDOrdered = new TreeMap<>();
-        int cnt = 1;
+        int count = 1;
         for (Integer id : setIDs) {
-            mapIDOrdered.put(id, cnt);
-            cnt++;
+            mapIDOrdered.put(id, count);
+            count++;
         }
         return mapIDOrdered;
     }
 
     private static PointRangeWithCount[] createBBoxArray(int size) {
-        PointRangeWithCount[] boxArr = new PointRangeWithCount[size];
-        for (int i = 0; i < boxArr.length; i++) {
-            boxArr[i] = new PointRangeWithCount();
+        PointRangeWithCount[] boxArray = new PointRangeWithCount[size];
+        for (int i = 0; i < boxArray.length; i++) {
+            boxArray[i] = new PointRangeWithCount();
         }
-        return boxArr;
+        return boxArray;
     }
 
-    private static void addPointsAndAssignNewIDs(
+    private static void addPointsAndAssignNewIdentifiers(
             Voxels<UnsignedIntBuffer> indexBuffer,
             UnionFind<Integer> unionIndex,
             Map<Integer, Integer> mapIDOrdered,
@@ -220,7 +230,7 @@ public class ConnectedComponentUnionFind {
 
         PointRangeWithCount[] boxArr = createBBoxArray(mapIDOrdered.size());
 
-        addPointsAndAssignNewIDs(indexBuffer, unionIndex, mapIDOrdered, boxArr);
+        addPointsAndAssignNewIdentifiers(indexBuffer, unionIndex, mapIDOrdered, boxArr);
 
         extractMasksInto(boxArr, mapIDOrdered, indexBuffer, minNumberVoxels, objects);
     }

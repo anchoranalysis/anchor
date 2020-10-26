@@ -47,9 +47,6 @@ import org.anchoranalysis.spatial.point.ReadableTuple3i;
 /**
  * A stack with exactly three channels, respectively for Red, Green and Blue colors.
  *
- * <p>TODO create three explicit channels for red, green, blue only if needed, otherwise keep as
- * grayscale.
- *
  * @author Owen Feehan
  */
 public class RGBStack {

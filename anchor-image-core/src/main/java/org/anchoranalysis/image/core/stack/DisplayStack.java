@@ -27,7 +27,6 @@
 package org.anchoranalysis.image.core.stack;
 
 import com.google.common.base.Functions;
-import com.google.common.base.Preconditions;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
@@ -56,7 +55,6 @@ import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 import org.anchoranalysis.spatial.Extent;
 import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.point.Point3i;
-import org.checkerframework.framework.qual.PreconditionAnnotation;
 
 /**
  * Stack that contains 1 or 3 channels so that we and display it as either or RGB unsigned 8-bit
