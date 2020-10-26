@@ -45,6 +45,9 @@ import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.spatial.Extent;
 import org.apache.commons.lang.builder.HashCodeBuilder;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 /**
  * One or more single-channel images that all have the same dimensions.
@@ -53,46 +56,62 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  *
  * @author Owen Feehan
  */
+@AllArgsConstructor(access=AccessLevel.PRIVATE)
 public class Stack implements Iterable<Channel> {
-
+    
+    /** 
+     * If true, and the stack has exactly three channels, this stack can be interpreted as a RGB image.
+     *
+     * <p>This is an important flag for determining how a stack is displayed visually, determining
+     * whether a stack is portrayed as a color image or composite grayscale channels.
+     */
+    @Getter private final boolean rgb;
+    
+    /**
+     * An internal data-structure where the stacks are stored. 
+     */
     private final StackNotUniformSized delegate;
 
+    public Stack(boolean rgb) {
+        this.delegate = new StackNotUniformSized();
+        this.rgb = rgb;
+    }
+    
     public Stack() {
-        delegate = new StackNotUniformSized();
+        this(false);
     }
 
     public Stack(Channel channel) {
-        delegate = new StackNotUniformSized(channel);
+        this.delegate = new StackNotUniformSized(channel);
+        this.rgb = false;
     }
 
-    public Stack(Dimensions dimensions, ChannelFactorySingleType factory, int numberChannels) {
-        this();
+    public Stack(Dimensions dimensions, ChannelFactorySingleType factory, int numberChannels, boolean rgb) {
+        this(rgb);
         FunctionalIterate.repeat(
                 numberChannels,
                 () -> delegate.addChannel(factory.createEmptyInitialised(dimensions)));
     }
-
-    public Stack(Channel... channels) throws IncorrectImageSizeException {
-        this();
+    
+    public Stack(boolean rgb, Channel... channels) throws IncorrectImageSizeException {
+        this(rgb);
         for (Channel channel : channels) {
             addChannel(channel);
         }
     }
 
     public Stack(Stream<Channel> channelStream) throws IncorrectImageSizeException {
-        delegate = new StackNotUniformSized(channelStream);
+        this.delegate = new StackNotUniformSized(channelStream);
+        this.rgb = false;
         if (!delegate.isUniformlySized()) {
             throw new IncorrectImageSizeException("Channels in streams are not uniformly sized");
         }
     }
 
-    private Stack(StackNotUniformSized stack) {
-        delegate = stack;
-    }
-
     /** Copy constructor (deep-copies channels) */
     private Stack(Stack src) {
-        delegate = src.delegate.duplicate();
+        this.delegate = src.delegate.duplicate();
+        this.rgb = src.rgb;
     }
 
     /**
@@ -107,7 +126,7 @@ public class Stack implements Iterable<Channel> {
      */
     public Stack mapChannel(CheckedUnaryOperator<Channel, OperationFailedException> mapping)
             throws OperationFailedException {
-        Stack out = new Stack();
+        Stack out = new Stack(rgb);
         for (Channel channel : this) {
             try {
                 out.addChannel(mapping.apply(channel));
@@ -132,7 +151,7 @@ public class Stack implements Iterable<Channel> {
     public Stack mapChannelWithIndex(
             CheckedBiFunction<Channel, Integer, Channel, OperationFailedException> mapping)
             throws OperationFailedException {
-        Stack out = new Stack();
+        Stack out = new Stack(rgb);
         for (int index = 0; index < getNumberChannels(); index++) {
             Channel channel = getChannel(index);
             try {
@@ -146,7 +165,7 @@ public class Stack implements Iterable<Channel> {
 
     public Stack extractSlice(int z) {
         // We know the sizes will be correct
-        return new Stack(delegate.extractSlice(z));
+        return new Stack(rgb, delegate.extractSlice(z));
     }
 
     /**
@@ -156,7 +175,7 @@ public class Stack implements Iterable<Channel> {
      */
     public Stack projectMax() {
         // We know the sizes will be correct
-        return new Stack(delegate.projectMax());
+        return new Stack(rgb, delegate.projectMax());
     }
 
     public void addBlankChannel() throws OperationFailedException {
@@ -233,7 +252,7 @@ public class Stack implements Iterable<Channel> {
      * @return a new stack with reused channels.
      */
     public Stack duplicateShallow() {
-        Stack out = new Stack();
+        Stack out = new Stack(rgb);
 
         try {
             for (int index = 0; index < getNumberChannels(); index++) {
@@ -247,7 +266,7 @@ public class Stack implements Iterable<Channel> {
     }
 
     public Stack extractUpToThreeChannels() {
-        Stack out = new Stack();
+        Stack out = new Stack(rgb);
         int maxNum = Math.min(3, delegate.getNumberChannels());
         for (int i = 0; i < maxNum; i++) {
             try {

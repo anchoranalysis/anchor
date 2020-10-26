@@ -58,9 +58,9 @@ public class OrientationRotationMatrix extends Orientation {
     public Orientation negative() {
         // The inverse of a rotation matrix is equal to it's transpose because it's an orthogonal
         // matrix
-        RotationMatrix mat = rotationMatrix.duplicate();
-        mat.multiplyByConstant(-1);
-        return new OrientationRotationMatrix(mat);
+        RotationMatrix matrix = rotationMatrix.duplicate();
+        matrix.multiplyByConstant(-1);
+        return new OrientationRotationMatrix(matrix);
     }
 
     @Override

@@ -65,39 +65,53 @@ public abstract class ChannelConverter<T> {
         }
         return stackOut;
     }
-
-    // If changeExisting is true, the contents of the existing channel will be changed
-    // If changeExisting is false, a new channel will be created
-    @SuppressWarnings("unchecked")
-    public Channel convert(Channel channelIn, ConversionPolicy changeExisting) {
+    
+    /**
+     * Converts {@code channelIn} to have voxels with data-type {@code T}.
+     * 
+     * <p>This can occur by either replacing the existing voxels in the channel, or creating a new channel entirely.
+     * 
+     * @param channel channel whose voxels will be converted.
+     * @param changeExisting if true, the contents of the existing channel will be changed with the new type, if false, rather a new channel will be created.
+     * @return
+     */
+    public Channel convert(Channel channel, ConversionPolicy changeExisting) {
 
         // Nothing to do
-        if (channelIn.getVoxelDataType().equals(dataTypeTarget)
+        if (channel.getVoxelDataType().equals(dataTypeTarget)
                 && changeExisting != ConversionPolicy.ALWAYS_NEW) {
-            return channelIn;
+            return channel;
         }
 
-        Channel channelOut;
-        Voxels<T> voxelsOut;
-
+        if (changeExisting == ConversionPolicy.CHANGE_EXISTING_CHANNEL) {
+            return convertExisting(channel);
+        } else {
+            return convertCreateNew(channel);
+        }
+    }
+    
+    private Channel convertExisting(Channel channel) {
         try {
-            if (changeExisting == ConversionPolicy.CHANGE_EXISTING_CHANNEL) {
-                channelOut = channelIn;
-                // We need to create a new voxel buffer
-                voxelsOut = voxelsFactory.createInitialized(channelIn.dimensions().extent());
-                channelOut.replaceVoxels(voxelsOut);
-            } else {
-                channelOut =
-                        ChannelFactory.instance().create(channelIn.dimensions(), dataTypeTarget);
-                voxelsOut = (Voxels<T>) channelOut.voxels().match(dataTypeTarget);
-            }
-
-            voxelsConverter.copyFrom(channelIn.voxels(), voxelsOut);
-
-        } catch (OperationFailedException | IncorrectImageSizeException e1) {
+            // We need to create a new voxel buffer
+            Voxels<T> voxels = voxelsFactory.createInitialized(channel.dimensions().extent());
+            voxelsConverter.copyFrom(channel.voxels(), voxels);
+            channel.replaceVoxels(voxels);
+        } catch (IncorrectImageSizeException | OperationFailedException e) {
             throw new AnchorImpossibleSituationException();
         }
-
-        return channelOut;
+        return channel;
+    }
+    
+    private Channel convertCreateNew(Channel channel) {
+        Channel out =
+                ChannelFactory.instance().create(channel.dimensions(), dataTypeTarget);
+        @SuppressWarnings("unchecked")
+        Voxels<T> voxels = (Voxels<T>) out.voxels().match(dataTypeTarget);
+        try {
+            voxelsConverter.copyFrom(channel.voxels(), voxels);
+        } catch (OperationFailedException e) {
+            throw new AnchorImpossibleSituationException();
+        }
+        return out;
     }
 }

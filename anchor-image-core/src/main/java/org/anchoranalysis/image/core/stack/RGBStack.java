@@ -27,8 +27,6 @@
 package org.anchoranalysis.image.core.stack;
 
 import com.google.common.base.Preconditions;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.color.RGBColor;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.friendly.AnchorFriendlyRuntimeException;
@@ -54,10 +52,9 @@ import org.anchoranalysis.spatial.point.ReadableTuple3i;
  *
  * @author Owen Feehan
  */
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class RGBStack {
 
-    private Stack stack;
+    private final Stack stack;
 
     /**
      * Creates a particularly-sized stack with all channels initialized to 0.
@@ -66,7 +63,7 @@ public class RGBStack {
      * @param factory factory to create the channel
      */
     public RGBStack(Dimensions dimensions, ChannelFactorySingleType factory) {
-        stack = new Stack(dimensions, factory, 3);
+        stack = new Stack(dimensions, factory, 3, true);
     }
 
     /**
@@ -103,10 +100,7 @@ public class RGBStack {
     }
 
     public RGBStack(Channel red, Channel green, Channel blue) throws IncorrectImageSizeException {
-        stack = new Stack();
-        stack.addChannel(red);
-        stack.addChannel(green);
-        stack.addChannel(blue);
+        stack = new Stack(true, red, green, blue);
     }
 
     public Channel red() {
@@ -130,9 +124,7 @@ public class RGBStack {
     }
 
     public RGBStack extractSlice(int z) {
-        RGBStack out = new RGBStack();
-        out.stack = stack.extractSlice(z);
-        return out;
+        return new RGBStack( stack.extractSlice(z) );
     }
 
     public Stack asStack() {

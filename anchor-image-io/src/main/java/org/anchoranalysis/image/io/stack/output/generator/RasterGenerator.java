@@ -71,7 +71,6 @@ public abstract class RasterGenerator<T> implements TransformingGenerator<T, Sta
             IndexableOutputNameStyle outputNameStyle,
             OutputterChecked outputter)
             throws OutputWriteFailedException {
-
         return writeInternal(
                 element,
                 outputNameStyle.getFilenameWithoutExtension(index),

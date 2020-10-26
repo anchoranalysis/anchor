@@ -25,6 +25,7 @@
  */
 package org.anchoranalysis.image.io.stack.output;
 
+import org.anchoranalysis.image.core.stack.Stack;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Value;
@@ -106,10 +107,10 @@ public class StackWriteOptions {
     /**
      * Whether to write a stack in RGB mode?
      *
-     * @param numberChannels the number of channels in a stack.
+     * @param stack the stack to query whether it should be written in RGB mode.
      * @return true if the stack should be written as RGB, false otherwise.
      */
-    public boolean writeAsRGB(int numberChannels) {
-        return rgb && numberChannels == 3;
+    public boolean writeAsRGB(Stack stack) {
+        return rgb && stack.getNumberChannels() == 3 && stack.isRgb();
     }
 }

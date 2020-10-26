@@ -49,8 +49,10 @@ public class HistogramFactory {
 
     private static Histogram create(Voxels<?> inputBox) {
 
-        Histogram histogram = new Histogram((int) inputBox.dataType().maxValue());
-
+        int maxValue = (int) inputBox.dataType().maxValue();
+                    
+        Histogram histogram = new Histogram(maxValue);
+        
         int volumeXY = inputBox.extent().volumeXY();
 
         inputBox.extent()

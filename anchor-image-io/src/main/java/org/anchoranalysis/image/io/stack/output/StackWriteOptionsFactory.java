@@ -108,15 +108,19 @@ public class StackWriteOptionsFactory {
     /**
      * The options that narrowly describe a stack as possible.
      *
-     * <p>Note that a stack with three channels is assumed to be RGB.
-     *
      * @param stack the stack to derive options from
      * @return options that narrowly describe {@code stack}.
      */
     public static StackWriteOptions from(Stack stack) {
         int numberChannels = stack.getNumberChannels();
         boolean singleSlice = !stack.hasMoreThanOneSlice();
-        if (numberChannels == 1 || numberChannels == 3) {
+        if (numberChannels==3) {
+            if (stack.isRgb()) {
+                return rgb(singleSlice);
+            } else {
+                return alwaysOneOrThreeChannels(singleSlice);
+            }
+        } else if (numberChannels == 1) {
             return alwaysOneOrThreeChannels(singleSlice);
         } else {
             return new StackWriteOptions(singleSlice, false, false);

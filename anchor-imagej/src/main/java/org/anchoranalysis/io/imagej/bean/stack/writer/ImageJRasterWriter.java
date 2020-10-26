@@ -58,7 +58,7 @@ public abstract class ImageJRasterWriter extends StackWriter {
             throw new ImageIOException("Stack must have identically-typed channels");
         }
 
-        writeStackTime(stack, filePath, options.writeAsRGB(stack.getNumberChannels()));
+        writeStackTime(stack, filePath, options.writeAsRGB(stack));
     }
 
     /**

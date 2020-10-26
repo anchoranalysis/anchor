@@ -46,18 +46,18 @@ import org.anchoranalysis.spatial.Extent;
 class EdgeAdder<V> {
 
     // START REQUIRED ARGUMENTS
-    /** a list of vertices */
+    /** A list of vertices */
     private final List<V> verticesAsList;
 
-    /** how to convert a individual vertex to an object-mask */
+    /** How to convert a individual vertex to an object-mask */
     private final Function<V, ObjectMask> vertexToObject;
 
-    /** the rTree underpinning the vertices (or rather their derived object-masks) */
+    /** The rTree underpinning the vertices (or rather their derived object-masks) */
     private final ObjectCollectionRTree rTree;
 
     private final AddEdge<V> addEdge;
 
-    /** avoids any edge if any two objects have a common pixel */
+    /** Avoids any edge if any two objects have a common pixel */
     private final EdgeAdderParameters params;
     // END REQUIRED ARGUMENTS
 
@@ -121,13 +121,6 @@ class EdgeAdder<V> {
         if (params.isPreventObjectIntersection() && object.hasIntersectingVoxels(other)) {
             return;
         }
-
-        System.out.printf(
-                "Comparing objectDilated=%s with other=%s  bboxOverlap=%s  intersection=%s%n",
-                dilated,
-                other,
-                dilated.boundingBox().intersection().existsWith(other.boundingBox()) ? "yes" : "no",
-                dilated.hasIntersectingVoxels(other) ? "yes" : "no");
 
         // How many border pixels shared between the two?
         int numberSharedVoxels = numberBorderVoxels(dilated, other);

@@ -37,6 +37,8 @@ import java.util.TreeSet;
  *   <li>outputs that are written as they were enabled.
  *   <li>outputs that not written as they are <b>not</b> enabled.
  * </ul>
+ * 
+ * <p>Adding outputs to this class is a <i>thread-safe</i> operation.
  *
  * @author Owen Feehan
  */
@@ -56,7 +58,7 @@ public class RecordedOutputs {
      * @param outputName the output-name
      * @param allowed where the output was allowed or not
      */
-    public void add(String outputName, boolean allowed) {
+    public synchronized void add(String outputName, boolean allowed) {
         if (allowed) {
             namesEnabled.add(outputName);
         } else {

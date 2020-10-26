@@ -101,6 +101,25 @@ public class OptionalUtilities {
             return supplier.get();
         }
     }
+    
+    /**
+     * Like {@link #orElseGet} but returns a {@link Optional}.
+     *
+     * @param <T> optional-type
+     * @param <E> exception that may be thrown during mapping
+     * @param optional incoming optional
+     * @param supplier supplies a {@link Optional} value if the optional is empty
+     * @return the outgoing optional
+     * @throws E an exception if the supplier throws it
+     */
+    public static <T, E extends Exception> Optional<T> orElseGetFlat(
+            Optional<T> optional, CheckedSupplier<Optional<T>, E> supplier) throws E {
+        if (optional.isPresent()) {
+            return optional;
+        } else {
+            return supplier.get();
+        }
+    }
 
     /**
      * Like {@link Optional#flatMap} but tolerates an exception in the mapping function, which is
