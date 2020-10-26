@@ -32,11 +32,10 @@ import org.anchoranalysis.io.manifest.directory.MutableDirectory;
 import org.anchoranalysis.io.manifest.directory.RootDirectory;
 
 /**
- * A manifest for a particular experiment, that may refer to the outputs from particular jobs, each
- * with their own manifest.
+ * A manifest that records what outputs occur and where they occur.
  *
- * <p>A manifest records outputs that occur on the filesystem (like a log, but in a structured way,
- * that can be opened and processed at a later point).
+ * <p>This is stored on the file-system like a log, but in a structured way, so that
+ * it can be opened and processed at a later point).
  *
  * @author Owen Feehan
  */
