@@ -28,7 +28,7 @@ package org.anchoranalysis.io.imagej.bean.stack.writer;
 
 import ij.io.FileSaver;
 import org.anchoranalysis.image.io.ImageIOException;
-import org.anchoranalysis.image.io.stack.StackWriteOptions;
+import org.anchoranalysis.image.io.stack.output.StackWriteOptions;
 
 /**
  * Writes a PNG image using ImageJ.

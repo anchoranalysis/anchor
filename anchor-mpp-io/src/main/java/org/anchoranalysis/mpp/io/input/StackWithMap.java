@@ -36,7 +36,7 @@ import org.anchoranalysis.core.log.error.ErrorReporter;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
 import org.anchoranalysis.image.core.stack.TimeSequence;
-import org.anchoranalysis.image.io.input.ProvidesStackInput;
+import org.anchoranalysis.image.io.stack.input.ProvidesStackInput;
 
 /** Combines a Stack with a map of other stacks */
 @RequiredArgsConstructor

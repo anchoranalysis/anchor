@@ -29,8 +29,8 @@ package org.anchoranalysis.io.imagej.bean.stack.writer;
 import java.nio.file.Path;
 import org.anchoranalysis.image.core.dimensions.IncorrectImageSizeException;
 import org.anchoranalysis.image.io.ImageIOException;
-import org.anchoranalysis.image.io.generator.raster.series.StackSeries;
-import org.anchoranalysis.image.io.stack.StackWriteOptions;
+import org.anchoranalysis.image.io.stack.StackSeries;
+import org.anchoranalysis.image.io.stack.output.StackWriteOptions;
 
 /**
  * Base class for {@link ImageJRasterWriter} that <b>does</b> support writing time-series as a

@@ -30,7 +30,7 @@ import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.image.core.channel.Channel;
-import org.anchoranalysis.image.io.generator.raster.ChannelGenerator;
+import org.anchoranalysis.image.io.channel.output.ChannelGenerator;
 import org.anchoranalysis.io.generator.sequence.OutputSequenceFactory;
 import org.anchoranalysis.io.generator.sequence.pattern.OutputPatternIntegerSuffix;
 import org.anchoranalysis.io.generator.serialized.KeyValueParamsGenerator;

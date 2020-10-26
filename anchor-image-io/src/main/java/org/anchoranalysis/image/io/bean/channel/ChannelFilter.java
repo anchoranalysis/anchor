@@ -40,8 +40,8 @@ import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.stack.Stack;
-import org.anchoranalysis.image.io.channel.ChannelGetter;
-import org.anchoranalysis.image.io.input.ImageInitParamsFactory;
+import org.anchoranalysis.image.io.ImageInitParamsFactory;
+import org.anchoranalysis.image.io.channel.input.ChannelGetter;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 
 /**

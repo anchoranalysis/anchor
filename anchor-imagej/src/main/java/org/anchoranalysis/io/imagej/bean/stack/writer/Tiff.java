@@ -26,8 +26,8 @@
 
 package org.anchoranalysis.io.imagej.bean.stack.writer;
 
+import org.anchoranalysis.image.io.stack.output.StackWriteOptions;
 import ij.io.FileSaver;
-import org.anchoranalysis.image.io.stack.StackWriteOptions;
 
 /**
  * Writes a TIFF image using ImageJ.

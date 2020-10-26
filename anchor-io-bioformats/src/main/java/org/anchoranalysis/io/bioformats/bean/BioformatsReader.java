@@ -46,7 +46,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.StackReader;
-import org.anchoranalysis.image.io.stack.OpenedRaster;
+import org.anchoranalysis.image.io.stack.input.OpenedRaster;
 import org.anchoranalysis.io.bioformats.BioformatsOpenedRaster;
 import org.anchoranalysis.io.bioformats.bean.options.Default;
 import org.anchoranalysis.io.bioformats.bean.options.ReadOptions;

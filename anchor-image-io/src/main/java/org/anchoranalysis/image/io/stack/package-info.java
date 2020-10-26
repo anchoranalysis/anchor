@@ -23,5 +23,7 @@
  * THE SOFTWARE.
  * #L%
  */
-/** Non-bean classes related to reading and writing rasters to/from the filesystem. */
+/**
+ * Non-bean classes for reading / writing a {@link org.anchoranalysis.image.core.stack.Stack} from and to the filesystem.
+ */
 package org.anchoranalysis.image.io.stack;
