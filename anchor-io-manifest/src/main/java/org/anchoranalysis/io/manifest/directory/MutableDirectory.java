@@ -69,7 +69,7 @@ public abstract class MutableDirectory
     @Nullable private MutableDirectory parent;
 
     /** The {@link MutableDirectory} in the manifest for any subdirectories. */
-    @Getter private ArrayList<MutableDirectory> subdirectories = new ArrayList<>();
+    @Getter private List<MutableDirectory> subdirectories;
 
     private static Log log = LogFactory.getLog(MutableDirectory.class);
 
@@ -78,7 +78,8 @@ public abstract class MutableDirectory
 
     public MutableDirectory() {
         log.debug("New Directory Write: empty");
-        parent = null;
+        this.parent = null;
+        this.subdirectories = new ArrayList<>();
     }
 
     // Parent folder
@@ -86,6 +87,7 @@ public abstract class MutableDirectory
         super();
         log.debug("New Directory Write: " + parent.relativePath());
         this.parent = parent;
+        this.subdirectories = new ArrayList<>();
     }
 
     public abstract Path relativePath();

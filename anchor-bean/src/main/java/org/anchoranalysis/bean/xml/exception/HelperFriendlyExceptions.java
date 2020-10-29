@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.bean.xml.error;
+package org.anchoranalysis.bean.xml.exception;
 
 import java.nio.file.NoSuchFileException;
 import lombok.AccessLevel;

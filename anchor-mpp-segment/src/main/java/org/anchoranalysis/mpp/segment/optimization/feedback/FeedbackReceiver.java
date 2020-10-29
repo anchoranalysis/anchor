@@ -27,7 +27,7 @@
 package org.anchoranalysis.mpp.segment.optimization.feedback;
 
 import org.anchoranalysis.bean.BeanInstanceMap;
-import org.anchoranalysis.bean.error.BeanMisconfiguredException;
+import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
 import org.anchoranalysis.mpp.segment.optimization.step.Reporting;
 
 public interface FeedbackReceiver<T> {

@@ -27,6 +27,7 @@
 package org.anchoranalysis.io.generator.combined;
 
 import com.google.common.base.Preconditions;
+import lombok.NoArgsConstructor;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -49,12 +50,13 @@ import org.anchoranalysis.io.output.outputter.OutputterChecked;
  * @author Owen Feehan
  * @param <T> element-type
  */
+@NoArgsConstructor
 public class CombinedListGenerator<T> implements MultipleFileTypeGenerator<T> {
 
     private final CombinedList<T> delegate = new CombinedList<>();
 
     private final List<Generator<T>> list = new ArrayList<>();
-
+    
     public CombinedListGenerator(NameValue<Generator<T>> namedGenerator) {
         add(namedGenerator.getValue(), Optional.of(namedGenerator.getName()));
     }

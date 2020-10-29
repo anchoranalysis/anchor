@@ -35,8 +35,8 @@ import java.util.stream.Stream;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.bean.annotation.OptionalBean;
-import org.anchoranalysis.bean.error.BeanDuplicateException;
-import org.anchoranalysis.bean.error.BeanMisconfiguredException;
+import org.anchoranalysis.bean.exception.BeanDuplicateException;
+import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
 import org.apache.commons.lang3.ClassUtils;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)

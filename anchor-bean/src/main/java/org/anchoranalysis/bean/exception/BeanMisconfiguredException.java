@@ -24,29 +24,30 @@
  * #L%
  */
 
-package org.anchoranalysis.bean.xml.error;
+package org.anchoranalysis.bean.exception;
 
 import org.anchoranalysis.core.exception.friendly.AnchorFriendlyCheckedException;
 
 /**
- * An exception that occurs when one cannot process BeanXML for some reason
+ * If a Bean is misconfigured
+ *
+ * <p>e.g. missing a value that is required or with a value that violates the constraints of the
+ * bean-field
+ *
+ * <p>There should always be a sensible message, even if we nest another exception.
  *
  * @author Owen Feehan
  */
-public class BeanXmlException extends AnchorFriendlyCheckedException {
+public class BeanMisconfiguredException extends AnchorFriendlyCheckedException {
 
-    /** Default serialization */
-    private static final long serialVersionUID = 1L;
+    /** */
+    private static final long serialVersionUID = -6966810405755062033L;
 
-    public BeanXmlException(String message, Throwable cause) {
-        super(message, cause);
+    public BeanMisconfiguredException(String string) {
+        super(string);
     }
 
-    public BeanXmlException(Throwable cause) {
-        super(cause);
-    }
-
-    public BeanXmlException(String message) {
-        super(message);
+    public BeanMisconfiguredException(String arg0, Throwable arg1) {
+        super(arg0, arg1);
     }
 }

@@ -1,8 +1,13 @@
+/**
+ * Exceptions that can occur executing generic operations on <a
+ * href="https://www.anchoranalysis.org/developer_guide_anchor_beans.html">Anchor Beans</a>.
+ */
+package org.anchoranalysis.bean.exception;
 /*-
  * #%L
  * anchor-bean
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,38 +28,3 @@
  * THE SOFTWARE.
  * #L%
  */
-
-package org.anchoranalysis.bean.error;
-
-import org.anchoranalysis.core.exception.friendly.AnchorFriendlyRuntimeException;
-
-/**
- * An exception occurs when the duplication of a bean fails
- *
- * <p>We keep this unchecked, as if a bean is properly configured it should not be thrown.
- *
- * <p>As we already do checks to see if a bean is properly configured it should never (or almost
- * never) occur.
- *
- * <p>We don't want to make needlessly dirty code, as bean duplication occurs, so we keep it as a
- * runtime exception.
- *
- * @author Owen Feehan
- */
-public class BeanDuplicateException extends AnchorFriendlyRuntimeException {
-
-    /** */
-    private static final long serialVersionUID = 1842384434578361294L;
-
-    public BeanDuplicateException(String string) {
-        super(string);
-    }
-
-    public BeanDuplicateException(Exception exc) {
-        super(exc);
-    }
-
-    public BeanDuplicateException(String message, Throwable cause) {
-        super(message, cause);
-    }
-}

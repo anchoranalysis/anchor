@@ -29,7 +29,7 @@ package org.anchoranalysis.io.output.bean.path.prefixer;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import org.anchoranalysis.bean.AnchorBean;
-import org.anchoranalysis.bean.error.BeanStrangeException;
+import org.anchoranalysis.bean.exception.BeanStrangeException;
 import org.anchoranalysis.io.output.path.prefixer.DirectoryWithPrefix;
 import org.anchoranalysis.io.output.path.prefixer.FilePathPrefixerContext;
 import org.anchoranalysis.io.output.path.prefixer.NamedPath;

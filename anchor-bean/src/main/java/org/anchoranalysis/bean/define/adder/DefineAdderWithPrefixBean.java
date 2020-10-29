@@ -33,7 +33,7 @@ import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.define.Define;
-import org.anchoranalysis.bean.xml.error.BeanXmlException;
+import org.anchoranalysis.bean.xml.exception.BeanXmlException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 
 /**

@@ -34,8 +34,8 @@ import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.define.Define;
 import org.anchoranalysis.bean.xml.BeanXmlLoader;
-import org.anchoranalysis.bean.xml.error.BeanXmlException;
-import org.anchoranalysis.bean.xml.error.LocalisedBeanException;
+import org.anchoranalysis.bean.xml.exception.BeanXmlException;
+import org.anchoranalysis.bean.xml.exception.LocalisedBeanException;
 import org.anchoranalysis.bean.xml.factory.BeanPathUtilities;
 
 /**

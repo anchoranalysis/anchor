@@ -33,6 +33,7 @@ import java.util.function.Predicate;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.manifest.file.OutputtedFile;
 import org.anchoranalysis.io.manifest.finder.FindFailedException;
+import lombok.Setter;
 
 public class RootDirectory extends MutableDirectory implements Serializable {
 
@@ -43,13 +44,17 @@ public class RootDirectory extends MutableDirectory implements Serializable {
 
     // We don't want to serialize this, as its temporary state (and an error will be thrown as
     // WindowsPath is not serializable)
-    private final transient Path rootPath;
+    @Setter private transient Path rootPath;
 
-    public RootDirectory(Path rootPath) {
-        this.rootPath = rootPath;
+    public RootDirectory() {
         delegate = new FileList(this);
     }
-
+    
+    public RootDirectory(Path rootPath) {
+        this();
+        this.rootPath = rootPath;
+    }
+    
     @Override
     public void recordWrittenFile(
             String outputName,

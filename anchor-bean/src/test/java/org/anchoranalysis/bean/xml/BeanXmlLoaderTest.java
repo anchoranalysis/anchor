@@ -29,7 +29,7 @@ package org.anchoranalysis.bean.xml;
 import static org.junit.Assert.*;
 
 import java.nio.file.Path;
-import org.anchoranalysis.bean.xml.error.BeanXmlException;
+import org.anchoranalysis.bean.xml.exception.BeanXmlException;
 import org.anchoranalysis.bean.xml.mock.MockBeanNested;
 import org.anchoranalysis.test.TestLoader;
 import org.junit.Test;

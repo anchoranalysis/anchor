@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.bean.xml.error;
+package org.anchoranalysis.bean.xml.exception;
 
 import org.anchoranalysis.core.exception.combinable.AnchorCombinableException;
 import org.apache.commons.configuration.ConfigurationRuntimeException;

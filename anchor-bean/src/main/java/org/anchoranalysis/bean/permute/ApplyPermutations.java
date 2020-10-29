@@ -31,7 +31,7 @@ import java.util.Iterator;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.bean.AnchorBean;
-import org.anchoranalysis.bean.error.BeanDuplicateException;
+import org.anchoranalysis.bean.exception.BeanDuplicateException;
 import org.anchoranalysis.bean.permute.property.PermuteProperty;
 import org.anchoranalysis.bean.permute.setter.PermutationSetter;
 import org.anchoranalysis.bean.permute.setter.PermutationSetterException;

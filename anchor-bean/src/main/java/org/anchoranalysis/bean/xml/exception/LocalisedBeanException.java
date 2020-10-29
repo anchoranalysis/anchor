@@ -24,13 +24,13 @@
  * #L%
  */
 
-package org.anchoranalysis.bean.xml.error;
+package org.anchoranalysis.bean.xml.exception;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import org.anchoranalysis.bean.error.BeanStrangeException;
+import org.anchoranalysis.bean.exception.BeanStrangeException;
 import org.anchoranalysis.core.exception.combinable.AnchorCombinableException;
 
 /**

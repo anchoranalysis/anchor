@@ -49,13 +49,13 @@ public class Manifest implements Serializable {
      *
      * <p>All paths that occur in other elements are relative to this directory.
      */
-    private RootDirectory rootFolder;
+    private RootDirectory rootDirectory = new RootDirectory();
 
-    public void init(Path rootFolderPath) {
-        rootFolder = new RootDirectory(rootFolderPath);
+    public void init(Path rootPath) {
+        rootDirectory.setRootPath(rootPath);
     }
 
     public MutableDirectory getRootFolder() {
-        return rootFolder;
+        return rootDirectory;
     }
 }

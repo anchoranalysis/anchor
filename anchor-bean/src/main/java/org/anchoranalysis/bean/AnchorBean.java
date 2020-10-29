@@ -33,8 +33,8 @@ import javax.annotation.Nullable;
 import lombok.Getter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
-import org.anchoranalysis.bean.error.BeanDuplicateException;
-import org.anchoranalysis.bean.error.BeanMisconfiguredException;
+import org.anchoranalysis.bean.exception.BeanDuplicateException;
+import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
 
 /**
  * The base class of all beans used in <a href="http://www.anchoranalysis.org">Anchor</a>.

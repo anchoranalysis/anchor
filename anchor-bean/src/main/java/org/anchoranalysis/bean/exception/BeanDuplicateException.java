@@ -24,28 +24,37 @@
  * #L%
  */
 
-package org.anchoranalysis.bean.error;
+package org.anchoranalysis.bean.exception;
 
 import org.anchoranalysis.core.exception.friendly.AnchorFriendlyRuntimeException;
 
 /**
- * When something quite strange happens that we don't usually want to catch.
+ * An exception occurs when the duplication of a bean fails
  *
- * <p>This type of "black swan" exception is for errors where we aren't going to invest much effort
- * in handling, unless it starts becoming thrown regularly.
+ * <p>We keep this unchecked, as if a bean is properly configured it should not be thrown.
+ *
+ * <p>As we already do checks to see if a bean is properly configured it should never (or almost
+ * never) occur.
+ *
+ * <p>We don't want to make needlessly dirty code, as bean duplication occurs, so we keep it as a
+ * runtime exception.
  *
  * @author Owen Feehan
  */
-public class BeanStrangeException extends AnchorFriendlyRuntimeException {
+public class BeanDuplicateException extends AnchorFriendlyRuntimeException {
 
     /** */
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1842384434578361294L;
 
-    public BeanStrangeException(String message) {
-        super(message);
+    public BeanDuplicateException(String string) {
+        super(string);
     }
 
-    public BeanStrangeException(String message, Throwable cause) {
+    public BeanDuplicateException(Exception exc) {
+        super(exc);
+    }
+
+    public BeanDuplicateException(String message, Throwable cause) {
         super(message, cause);
     }
 }

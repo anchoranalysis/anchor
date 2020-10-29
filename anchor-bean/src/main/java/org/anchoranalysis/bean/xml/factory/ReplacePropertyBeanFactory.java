@@ -29,7 +29,7 @@ package org.anchoranalysis.bean.xml.factory;
 import java.lang.reflect.InvocationTargetException;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.BeanInstanceMap;
-import org.anchoranalysis.bean.xml.error.BeanXmlException;
+import org.anchoranalysis.bean.xml.exception.BeanXmlException;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.configuration.beanutils.BeanDeclaration;
 import org.apache.commons.configuration.beanutils.XMLBeanDeclaration;

@@ -1,10 +1,8 @@
-/** Exceptions that can thrown when loading beans from XML. */
-package org.anchoranalysis.bean.xml.error;
 /*-
  * #%L
  * anchor-bean
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,3 +23,29 @@ package org.anchoranalysis.bean.xml.error;
  * THE SOFTWARE.
  * #L%
  */
+
+package org.anchoranalysis.bean.exception;
+
+import org.anchoranalysis.core.exception.friendly.AnchorFriendlyRuntimeException;
+
+/**
+ * When something quite strange happens that we don't usually want to catch.
+ *
+ * <p>This type of "black swan" exception is for errors where we aren't going to invest much effort
+ * in handling, unless it starts becoming thrown regularly.
+ *
+ * @author Owen Feehan
+ */
+public class BeanStrangeException extends AnchorFriendlyRuntimeException {
+
+    /** */
+    private static final long serialVersionUID = 1L;
+
+    public BeanStrangeException(String message) {
+        super(message);
+    }
+
+    public BeanStrangeException(String message, Throwable cause) {
+        super(message, cause);
+    }
+}

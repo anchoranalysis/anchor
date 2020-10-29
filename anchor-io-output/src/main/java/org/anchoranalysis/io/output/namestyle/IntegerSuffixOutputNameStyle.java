@@ -26,6 +26,8 @@
 
 package org.anchoranalysis.io.output.namestyle;
 
+import com.google.common.base.Preconditions;
+
 /**
  * Outputs a file-name involving an integer of length {@code numberDigits} with leading zeros.
  *
@@ -51,6 +53,7 @@ public class IntegerSuffixOutputNameStyle extends IndexableOutputNameStyle {
 
     public IntegerSuffixOutputNameStyle(String outputName, int numberDigits) {
         super(outputName);
+        Preconditions.checkArgument(numberDigits>1);
         this.numberDigits = numberDigits;
     }
 
@@ -62,6 +65,7 @@ public class IntegerSuffixOutputNameStyle extends IndexableOutputNameStyle {
     private IntegerSuffixOutputNameStyle(IntegerSuffixOutputNameStyle src) {
         super(src);
         this.prefix = src.prefix;
+        this.numberDigits = src.numberDigits;
     }
 
     @Override

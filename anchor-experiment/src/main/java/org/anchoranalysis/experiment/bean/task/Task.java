@@ -30,6 +30,7 @@ import com.google.common.base.Preconditions;
 import java.util.Optional;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.core.concurrency.ConcurrencyPlan;
+import org.anchoranalysis.core.exception.friendly.AnchorFriendlyCheckedException;
 import org.anchoranalysis.core.log.error.ErrorReporter;
 import org.anchoranalysis.core.system.MemoryUtilities;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
@@ -229,17 +230,14 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
             executeJobAdditionalOutputs(params);
 
             successfullyFinished = true;
-
+        } catch (AnchorFriendlyCheckedException e) {
+            params.getLogger().errorReporter().recordError(Task.class, e.friendlyMessageHierarchy());
+            processExceptionAfterRecordingError(loggerJob, suppressExceptions, e);            
         } catch (Throwable e) { // NOSONAR
             // We need to catch both exceptions and errors in order to recover from failure in
             // the specific task. Other tasks will continue executing.
             params.getLogger().errorReporter().recordError(Task.class, e);
-            loggerJob.log(
-                    "This error was fatal. The specific job will end early, but the experiment will otherwise continue.");
-            if (!suppressExceptions) {
-                throw new JobExecutionException("Job encountered a fatal error", e);
-            }
-
+            processExceptionAfterRecordingError(loggerJob, suppressExceptions, e);
         } finally {
 
             stopWatchFile.stop();
@@ -254,6 +252,14 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
             loggerJob.close(successfullyFinished);
         }
         return successfullyFinished;
+    }
+    
+    private static void processExceptionAfterRecordingError(StatefulMessageLogger loggerJob, boolean suppressExceptions, Throwable e) throws JobExecutionException {
+        loggerJob.log(
+                "This error was fatal. The specific job will end early, but the experiment will otherwise continue.");
+        if (!suppressExceptions) {
+            throw new JobExecutionException("Job encountered a fatal error", e);
+        }
     }
 
     private void executeJobAdditionalOutputs(InputBound<T, S> params) throws JobExecutionException {

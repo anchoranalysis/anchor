@@ -30,7 +30,7 @@ import java.util.List;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.bean.NamedBean;
-import org.anchoranalysis.bean.error.BeanDuplicateException;
+import org.anchoranalysis.bean.exception.BeanDuplicateException;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;

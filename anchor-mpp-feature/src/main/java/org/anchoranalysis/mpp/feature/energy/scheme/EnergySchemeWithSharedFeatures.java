@@ -27,7 +27,7 @@
 package org.anchoranalysis.mpp.feature.energy.scheme;
 
 import lombok.Getter;
-import org.anchoranalysis.bean.error.BeanDuplicateException;
+import org.anchoranalysis.bean.exception.BeanDuplicateException;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.exception.OperationFailedException;

@@ -33,8 +33,8 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
-import org.anchoranalysis.bean.error.BeanMisconfiguredException;
-import org.anchoranalysis.bean.error.BeanStrangeException;
+import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
+import org.anchoranalysis.bean.exception.BeanStrangeException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
