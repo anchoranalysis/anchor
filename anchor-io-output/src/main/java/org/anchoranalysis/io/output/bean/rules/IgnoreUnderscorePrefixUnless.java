@@ -38,7 +38,7 @@ import org.anchoranalysis.io.output.enabled.single.SingleLevelOutputEnabled;
 /**
  * Like {@link IgnoreUnderscorePrefix} for all first and level-outputs unless a particular outputs are explicitly specified.
  *
- * <p>If first-level are specified, this takes precidence, and only these outputs are allowed.
+ * <p>If first-level are specified, this takes precedence, and only these outputs are allowed.
  * 
  * <p>Similarly if any particular second-level outputs are specified, these replace {@link IgnoreUnderscorePrefix}.
  * 
