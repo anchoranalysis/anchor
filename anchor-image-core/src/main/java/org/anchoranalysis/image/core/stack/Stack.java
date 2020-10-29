@@ -203,7 +203,7 @@ public class Stack implements Iterable<Channel> {
 
         // We ensure that this channel has the same size as the first
         if (delegate.getNumberChannels() >= 1
-                && !channel.dimensions().equals(delegate.getChannel(0).dimensions())) {
+                && !channel.dimensions().extent().equals(delegate.getChannel(0).dimensions().extent())) {
             throw new IncorrectImageSizeException(
                     "Dimensions of channel do not match existing channel");
         }

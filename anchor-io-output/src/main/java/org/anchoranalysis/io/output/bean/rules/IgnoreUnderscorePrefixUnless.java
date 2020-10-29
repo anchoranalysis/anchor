@@ -23,52 +23,67 @@
  * THE SOFTWARE.
  * #L%
  */
+
 package org.anchoranalysis.io.output.bean.rules;
 
 import java.util.Optional;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.bean.StringSet;
-import org.anchoranalysis.io.output.bean.enabled.None;
+import org.anchoranalysis.io.output.bean.enabled.IgnoreUnderscorePrefix;
+import org.anchoranalysis.io.output.bean.enabled.OutputEnabled;
 import org.anchoranalysis.io.output.bean.enabled.SpecificEnabled;
-import org.anchoranalysis.io.output.enabled.multi.MultiLevelOr;
 import org.anchoranalysis.io.output.enabled.multi.MultiLevelOutputEnabled;
 import org.anchoranalysis.io.output.enabled.single.SingleLevelOutputEnabled;
 
 /**
- * Adds additional outputs-names to be enabled to the defaults.
+ * Like {@link IgnoreUnderscorePrefix} for all first and level-outputs unless a particular outputs are explicitly specified.
  *
+ * <p>If first-level are specified, this takes precidence, and only these outputs are allowed.
+ * 
+ * <p>Similarly if any particular second-level outputs are specified, these replace {@link IgnoreUnderscorePrefix}.
+ * 
+ * <p>Otherwise {@link IgnoreUnderscorePrefix} is used.
+ * 
  * @author Owen Feehan
  */
-public class AddToDefaults extends OutputEnableRulesSpecify {
+@NoArgsConstructor
+public class IgnoreUnderscorePrefixUnless extends OutputEnableRulesSpecify {
 
-    private class AddImplementation implements MultiLevelOutputEnabled {
+    private static final OutputEnabled OTHER = IgnoreUnderscorePrefix.INSTANCE;
+    
+    private class IgnoreUnderscorePrefixPlusImplementation implements MultiLevelOutputEnabled {
 
         @Override
         public boolean isOutputEnabled(String outputName) {
-            return firstLevelContains(outputName);
+            if (isFirstDefined()) {
+                return firstLevelContains(outputName); 
+            } else {
+                return OTHER.isOutputEnabled(outputName);
+            }
         }
 
         @Override
         public SingleLevelOutputEnabled second(String outputName) {
-            return secondLevelOutputs(outputName, None.INSTANCE);
+            return secondLevelOutputs(outputName, OTHER);
         }
+    }
+
+    /**
+     * Create with first-level output names
+     *
+     * @param first first-level output-names
+     */
+    public IgnoreUnderscorePrefixUnless(StringSet first) {
+        super(first);
     }
 
     @Override
     public MultiLevelOutputEnabled create(Optional<MultiLevelOutputEnabled> defaultRules) {
-        return maybeWrap(new AddImplementation(), defaultRules);
+        return new IgnoreUnderscorePrefixPlusImplementation();
     }
 
     @Override
     protected SingleLevelOutputEnabled createSecondLevelFromSet(StringSet outputNames) {
         return new SpecificEnabled(outputNames);
-    }
-    
-    private static MultiLevelOutputEnabled maybeWrap(
-            MultiLevelOutputEnabled source, Optional<MultiLevelOutputEnabled> other) {
-        if (other.isPresent()) {
-            return new MultiLevelOr(source, other.get());
-        } else {
-            return source;
-        }
     }
 }
