@@ -67,7 +67,7 @@ public class RotationMatrix implements Serializable {
             double[] rotatedPoint = rotatePoint(point.toArray());
             return new Point3d(rotatedPoint[0], rotatedPoint[1], rotatedPoint[2]);
         } else if (delegate.rows() == 2) {
-            double[] rotatedPoint = rotatePoint(point.toArray());
+            double[] rotatedPoint = rotatePoint(point.toArrayXY());
             return new Point3d(rotatedPoint[0], rotatedPoint[1], 0);
         } else {
             throw new AnchorImpossibleSituationException();

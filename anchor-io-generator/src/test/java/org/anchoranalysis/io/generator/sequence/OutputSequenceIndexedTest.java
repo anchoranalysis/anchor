@@ -80,12 +80,12 @@ public class OutputSequenceIndexedTest {
         createSequence(createGenerator(numberFileTypes, mixedFileTypes), sequenceType, manifest);
 
         assertEquals(3, sequenceType.getNumberElements());
-        assertEquals(1, manifest.getRootFolder().subdirectories().size());
+        assertEquals(1, manifest.getRootDirectory().subdirectories().size());
         assertTrue(
-                manifest.getRootFolder().subdirectories().get(0) instanceof IndexableSubdirectory);
+                manifest.getRootDirectory().subdirectories().get(0) instanceof IndexableSubdirectory);
 
         IndexableSubdirectory firstSubdirectory =
-                (IndexableSubdirectory) manifest.getRootFolder().subdirectories().get(0);
+                (IndexableSubdirectory) manifest.getRootDirectory().subdirectories().get(0);
         checkIndexableSubdirectory(firstSubdirectory, numberFileTypes, mixedFileTypes);
     }
 

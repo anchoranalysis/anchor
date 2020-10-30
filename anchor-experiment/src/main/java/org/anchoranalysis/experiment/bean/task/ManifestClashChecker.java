@@ -44,7 +44,7 @@ class ManifestClashChecker {
         // write files
         //  to the same folder (without at least having some kind of prefix, to prevent files
         // overwriting each other)
-        Path experimentalRoot = manifestExperiment.getRootFolder().relativePath();
+        Path experimentalRoot = manifestExperiment.getRootDirectory().relativePath();
         if (wouldClashWithExperimentRoot(experimentalRoot, boundOutput.getPrefix())) {
             throw new JobExecutionException(
                     String.format(

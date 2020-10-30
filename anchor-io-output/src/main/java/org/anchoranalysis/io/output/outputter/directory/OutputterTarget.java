@@ -77,7 +77,7 @@ public class OutputterTarget {
         return directory.getParentDirectoryCreator();
     }
 
-    public Path getFolderPath() {
+    public Path getDirectory() {
         return prefix.getDirectory();
     }
 

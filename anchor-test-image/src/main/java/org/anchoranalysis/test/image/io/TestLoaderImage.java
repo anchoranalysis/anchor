@@ -133,8 +133,8 @@ public class TestLoaderImage {
         return stackWritten.equalsDeep(stackSaved, !ignoreResolutionDifferences);
     }
 
-    public ObjectCollection openObjectsFromTestPath(String testFolderPath) {
-        Path filePath = loader.resolveTestPath(testFolderPath);
+    public ObjectCollection openObjectsFromTestPath(String testDirectoryPath) {
+        Path filePath = loader.resolveTestPath(testDirectoryPath);
         return openObjectsFromFilePath(filePath);
     }
 

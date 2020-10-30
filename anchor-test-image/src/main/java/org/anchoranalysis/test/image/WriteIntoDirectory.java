@@ -69,7 +69,7 @@ import org.junit.runners.model.Statement;
  * @author Owen Feehan
  */
 @RequiredArgsConstructor
-public class WriteIntoFolder implements TestRule {
+public class WriteIntoDirectory implements TestRule {
 
     /**
      * If there are no objects or specified dimensions, this size is used for an output image as a
@@ -83,10 +83,10 @@ public class WriteIntoFolder implements TestRule {
     // END REQUIRED ARGUMENTS
 
     /** The folder in which stacks are written */
-    @Getter private TemporaryFolder folder = new TemporaryFolder();
+    @Getter private TemporaryFolder directory = new TemporaryFolder();
 
     /** Creates to print directory to the console. */
-    public WriteIntoFolder() {
+    public WriteIntoDirectory() {
         this.printDirectoryToConsole = true;
     }
 
@@ -98,7 +98,7 @@ public class WriteIntoFolder implements TestRule {
 
     @Override
     public Statement apply(Statement base, Description description) {
-        return folder.apply(base, description);
+        return directory.apply(base, description);
     }
 
     /**
@@ -205,7 +205,7 @@ public class WriteIntoFolder implements TestRule {
         try {
             if (outputter == null) {
 
-                Path path = folder.getRoot().toPath();
+                Path path = directory.getRoot().toPath();
 
                 outputter = OutputterFixture.outputter(Optional.of(path));
 

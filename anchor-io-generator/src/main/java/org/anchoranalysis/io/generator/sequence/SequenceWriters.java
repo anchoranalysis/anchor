@@ -97,7 +97,7 @@ class SequenceWriters {
     }
 
     private Optional<RecordingWriters> selectWritersMaybeCreateSubdirectory(
-            ManifestDirectoryDescription directoryDescription, IndexableSubdirectory subFolderWrite)
+            ManifestDirectoryDescription directoryDescription, IndexableSubdirectory subdirectory)
             throws OutputWriteFailedException {
         if (pattern.getSubdirectoryName().isPresent()) {
             return parentWriters
@@ -105,7 +105,7 @@ class SequenceWriters {
                     .createSubdirectory(
                             pattern.getSubdirectoryName().get(), // NOSONAR
                             directoryDescription,
-                            Optional.of(subFolderWrite),
+                            Optional.of(subdirectory),
                             false)
                     .map(OutputterChecked::getWriters);
         } else {

@@ -38,16 +38,16 @@ public class TimeSequence implements Iterable<Stack> {
 
     private final List<Stack> list = new ArrayList<>();
 
-    public TimeSequence(Stack s) {
-        add(s);
+    public TimeSequence(Stack stack) {
+        add(stack);
     }
 
-    public boolean add(Stack arg0) {
-        return list.add(arg0);
+    public boolean add(Stack stack) {
+        return list.add(stack);
     }
 
-    public Stack get(int arg0) {
-        return list.get(arg0);
+    public Stack get(int index) {
+        return list.get(index);
     }
 
     public boolean isEmpty() {

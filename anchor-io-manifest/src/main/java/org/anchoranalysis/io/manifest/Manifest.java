@@ -55,7 +55,7 @@ public class Manifest implements Serializable {
         rootDirectory.setRootPath(rootPath);
     }
 
-    public MutableDirectory getRootFolder() {
+    public MutableDirectory getRootDirectory() {
         return rootDirectory;
     }
 }

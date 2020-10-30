@@ -48,7 +48,7 @@ public class OutputtedFile implements Serializable {
     private static final long serialVersionUID = 5796355859093885433L;
 
     // START REQUIRED ARGUMENTS
-    @Getter private final MutableDirectory parentFolder;
+    @Getter private final MutableDirectory parentDirectory;
 
     @Getter private final String fileName;
 
@@ -65,13 +65,13 @@ public class OutputtedFile implements Serializable {
     // END REQUIRED ARGUMENTS
 
     public OutputtedFile(
-            MutableDirectory parentFolder,
+            MutableDirectory parentDirectory,
             String fileName,
             String outputName,
             String index,
             Optional<ManifestDescription> description) {
         super();
-        this.parentFolder = parentFolder;
+        this.parentDirectory = parentDirectory;
         this.fileName = fileName;
         this.outputName = outputName;
         this.index = index;
@@ -79,7 +79,7 @@ public class OutputtedFile implements Serializable {
     }
 
     public Path calculatePath() {
-        return parentFolder.calculatePath().resolve(fileName);
+        return parentDirectory.calculatePath().resolve(fileName);
     }
 
     public Optional<ManifestDescription> getDescription() {

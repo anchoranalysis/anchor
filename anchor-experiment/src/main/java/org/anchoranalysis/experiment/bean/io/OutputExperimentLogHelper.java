@@ -48,7 +48,7 @@ class OutputExperimentLogHelper {
                     .logFormatted(
                             "Experiment %s started writing to %s",
                             params.getExperimentIdentifier(),
-                            params.getOutputter().getOutputFolderPath());
+                            params.getOutputter().getOutputDirectory());
         }
     }
 
@@ -66,7 +66,7 @@ class OutputExperimentLogHelper {
                             DIVIDER.withoutLabel(),
                             params.getExperimentIdentifier(),
                             stopWatchExperiment.getTime() / 1000,
-                            params.getOutputter().getOutputFolderPath());
+                            params.getOutputter().getOutputDirectory());
         }
     }
 }

@@ -36,7 +36,7 @@ import org.junit.Test;
 public class PathDifferenceTest {
 
     @Test
-    public void testFolderAbsoluteWindowsFolder() throws PathDifferenceException {
+    public void testDirectoryAbsoluteWindowsDirectory() throws PathDifferenceException {
         test(
                 "c:\\somebase\\",
                 "c:\\somebase\\someDir1\\someDir2\\someFile1.txt",
@@ -45,12 +45,12 @@ public class PathDifferenceTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testFolderAbsoluteWindowsNonFolderBase() throws PathDifferenceException {
+    public void testDirectoryAbsoluteWindowsNonDirectoryBase() throws PathDifferenceException {
         test("c:\\somebase\\base_", "c:\\somebase\\base_someDir1\\someDir2\\someFile1.txt");
     }
 
     @Test
-    public void testFolderAbsoluteUnixFolder() throws PathDifferenceException {
+    public void testDirectoryAbsoluteUnixDirectory() throws PathDifferenceException {
         test(
                 "/somebase/",
                 "/somebase/someDir1/someDir2/someFile1.txt",
@@ -59,12 +59,12 @@ public class PathDifferenceTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testFolderAbsoluteUnixNonFolderBase() throws PathDifferenceException {
+    public void testDirectoryAbsoluteUnixNonDirectoryBas() throws PathDifferenceException {
         test("/somebase/extra_", "/somebase/someDir1/someDir2/someFile1.txt");
     }
 
     @Test
-    public void testFolderRelativeWindowsFolder() throws PathDifferenceException {
+    public void testDirectoryRelativeWindowsDirectory() throws PathDifferenceException {
         test(
                 "..\\somebase\\",
                 "..\\somebase\\someDir1\\someDir2\\someFile1.txt",
@@ -73,12 +73,12 @@ public class PathDifferenceTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testFolderRelativeWindowsNonFolderBase() throws PathDifferenceException {
+    public void testDirectoryRelativeWindowsNonDirectoryBase() throws PathDifferenceException {
         test("..\\somebase\\base_", "..\\somebase\\base_someDir1\\someDir2\\someFile1.txt");
     }
 
     @Test
-    public void testFolderRelativeUnixFolder() throws PathDifferenceException {
+    public void testDirectoryRelativeUnixDirectory() throws PathDifferenceException {
         test(
                 "../somebase/",
                 "../somebase/someDir1/someDir2/someFile1.txt",
@@ -87,21 +87,21 @@ public class PathDifferenceTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testFolderRelativeUnixNonFolderBase() throws PathDifferenceException {
+    public void testDirectoryRelativeUnixNonDirectoryBase() throws PathDifferenceException {
         test("../somebase/extra_", "../somebase/someDir1/someDir2/someFile1.txt");
     }
 
     private void test(
-            String baseFolderPath, String filePath, String expectedFolder, String expectedFilename)
+            String baseDirectoryPath, String filePath, String expectedDirectory, String expectedFilename)
             throws PathDifferenceException {
-        PathDifference fdd = test(baseFolderPath, filePath);
-        assertTrue(fdd.getDirectory().equals(Optional.of(resolve(expectedFolder))));
+        PathDifference fdd = test(baseDirectoryPath, filePath);
+        assertTrue(fdd.getDirectory().equals(Optional.of(resolve(expectedDirectory))));
         assertTrue(fdd.getFilename().equals(expectedFilename));
     }
 
-    private PathDifference test(String baseFolderPath, String filePath)
+    private PathDifference test(String baseDirectoryPath, String filePath)
             throws PathDifferenceException {
-        return PathDifference.differenceFrom(resolve(baseFolderPath), resolve(filePath));
+        return PathDifference.differenceFrom(resolve(baseDirectoryPath), resolve(filePath));
     }
 
     private Path resolve(String path) {

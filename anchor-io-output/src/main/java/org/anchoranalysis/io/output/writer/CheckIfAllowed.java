@@ -63,7 +63,7 @@ public class CheckIfAllowed implements Writer {
     public Optional<OutputterChecked> createSubdirectory(
             String outputName,
             ManifestDirectoryDescription manifestDescription,
-            Optional<SubdirectoryBase> manifestFolder,
+            Optional<SubdirectoryBase> manifestDirectory,
             boolean inheritOutputRulesAndRecording)
             throws OutputWriteFailedException {
 
@@ -74,7 +74,7 @@ public class CheckIfAllowed implements Writer {
         maybeExecutePreop();
 
         return writer.createSubdirectory(
-                outputName, manifestDescription, manifestFolder, inheritOutputRulesAndRecording);
+                outputName, manifestDescription, manifestDirectory, inheritOutputRulesAndRecording);
     }
 
     @Override

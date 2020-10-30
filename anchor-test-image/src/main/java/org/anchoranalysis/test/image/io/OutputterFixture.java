@@ -41,18 +41,18 @@ import org.anchoranalysis.test.io.output.OutputterCheckedFixture;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class OutputterFixture {
 
-    public static Outputter outputter(Optional<Path> pathTempFolder) throws BindFailedException {
-        return outputter(outputterChecked(pathTempFolder));
+    public static Outputter outputter(Optional<Path> pathTempDirectory) throws BindFailedException {
+        return outputter(outputterChecked(pathTempDirectory));
     }
 
     public static Outputter outputter(OutputManager outputManager) throws BindFailedException {
         return outputter(OutputterCheckedFixture.createFrom(outputManager));
     }
 
-    public static OutputterChecked outputterChecked(Optional<Path> pathTempFolder)
+    public static OutputterChecked outputterChecked(Optional<Path> pathTempDirectory)
             throws BindFailedException {
         return OutputterCheckedFixture.createFrom(
-                OutputManagerForImagesFixture.createOutputManager(pathTempFolder));
+                OutputManagerForImagesFixture.createOutputManager(pathTempDirectory));
     }
 
     private static Outputter outputter(OutputterChecked outputter) {

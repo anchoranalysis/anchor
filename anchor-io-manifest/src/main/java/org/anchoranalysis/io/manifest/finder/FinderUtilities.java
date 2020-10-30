@@ -44,15 +44,15 @@ public class FinderUtilities {
             throws FindFailedException {
 
         ArrayList<OutputtedFile> foundList = new ArrayList<>();
-        manifestRecorder.getRootFolder().findFile(foundList, predicate, false);
+        manifestRecorder.getRootDirectory().findFile(foundList, predicate, false);
         return foundList;
     }
 
-    public static List<MutableDirectory> findListFolder(
+    public static List<MutableDirectory> findListDirectory(
             Manifest manifestRecorder, Predicate<MutableDirectory> predicate) {
 
         ArrayList<MutableDirectory> foundList = new ArrayList<>();
-        manifestRecorder.getRootFolder().findDirectory(foundList, predicate);
+        manifestRecorder.getRootDirectory().findDirectory(foundList, predicate);
         return foundList;
     }
 

@@ -67,14 +67,14 @@ class RecordOutputNamesForWriter implements Writer {
     public Optional<OutputterChecked> createSubdirectory(
             String outputName,
             ManifestDirectoryDescription manifestDescription,
-            Optional<SubdirectoryBase> manifestFolder,
+            Optional<SubdirectoryBase> manifestDirectory,
             boolean inheritOutputRulesAndRecording)
             throws OutputWriteFailedException {
         Optional<OutputterChecked> outputter =
                 writer.createSubdirectory(
                         outputName,
                         manifestDescription,
-                        manifestFolder,
+                        manifestDirectory,
                         inheritOutputRulesAndRecording);
         recordedOutputs.add(outputName, outputter.isPresent());
         return outputter;

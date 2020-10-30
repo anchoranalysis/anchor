@@ -61,7 +61,7 @@ public interface Writer {
      *     not.
      * @param manifestDescription a manifest-description associated with the subdirectory as a
      *     whole, if it exists.
-     * @param manifestFolder a manifest-folder if it exists
+     * @param manifestDirectory a manifest-folder if it exists
      * @param inheritOutputRulesAndRecording if true, the output rules and recording are inherited
      *     from the parent directory. if false, they are not, and all outputs are allowed and are
      *     unrecorded.
@@ -72,7 +72,7 @@ public interface Writer {
     Optional<OutputterChecked> createSubdirectory(
             String outputName,
             ManifestDirectoryDescription manifestDescription,
-            Optional<SubdirectoryBase> manifestFolder,
+            Optional<SubdirectoryBase> manifestDirectory,
             boolean inheritOutputRulesAndRecording)
             throws OutputWriteFailedException;
 

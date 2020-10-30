@@ -76,6 +76,6 @@ class BindingPathOutputterFactory {
     }
 
     private static Optional<WriteOperationRecorder> writeRecorder(Optional<Manifest> manifest) {
-        return manifest.map(Manifest::getRootFolder);
+        return manifest.map(Manifest::getRootDirectory);
     }
 }

@@ -97,7 +97,7 @@ public class FindMatchingFiles {
         pri.setMax(leafDirectories.size() + 1);
 
         // We first check the files that we remembered from our folder search
-        filesFromFolderSearch(traversal.getFiles(), constraints.getPredicates().getFile(), listOut);
+        filesFromDirectorySearch(traversal.getFiles(), constraints.getPredicates().getFile(), listOut);
 
         pri.update();
 
@@ -121,7 +121,7 @@ public class FindMatchingFiles {
         return FunctionalList.filterToList(leafDirectories, dirMatcher);
     }
 
-    private static void filesFromFolderSearch(
+    private static void filesFromDirectorySearch(
             List<Path> filesOut, Predicate<Path> matcher, List<File> listOut) {
         for (Path p : filesOut) {
             if (matcher.test(p)) {
@@ -132,14 +132,14 @@ public class FindMatchingFiles {
 
     private void otherFiles(
             ProgressReporterIncrement pri,
-            List<Path> progressFolders,
+            List<Path> progressDirectories,
             PathMatchConstraints pathMatchConstraints,
             List<File> listOut,
             boolean acceptDirectoryErrors,
             Logger logger)
             throws FindFilesException {
         // Then every other folder is treated as a bucket
-        for (Path dirProgress : progressFolders) {
+        for (Path dirProgress : progressDirectories) {
 
             try {
                 WalkSingleDirectory.apply(dirProgress, pathMatchConstraints, listOut);

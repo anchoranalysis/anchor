@@ -193,7 +193,7 @@ public class OutputterChecked {
      *
      * @param subdirectoryName the subdirectory-name
      * @param manifestDescription manifest-description for the directory if it exists
-     * @param manifestFolder manifest-folder
+     * @param manifestDirectory manifest-folder
      * @param inheritOutputRulesAndRecording if true, the output rules and recording are inherited
      *     from the parent directory. if false, they are not, and all outputs are allowed and are
      *     unrecorded.
@@ -202,7 +202,7 @@ public class OutputterChecked {
     public OutputterChecked deriveSubdirectory(
             String subdirectoryName,
             ManifestDirectoryDescription manifestDescription,
-            Optional<SubdirectoryBase> manifestFolder,
+            Optional<SubdirectoryBase> manifestDirectory,
             boolean inheritOutputRulesAndRecording) {
 
         // Construct a subdirectory for the desired outputName
@@ -211,8 +211,8 @@ public class OutputterChecked {
         try {
             return new OutputterChecked(
                     target.changePrefix(new DirectoryWithPrefix(pathSubdirectory)),
-                    writeFolderToOperationRecorder(
-                            pathSubdirectory, manifestDescription, manifestFolder),
+                    writeDirectoryToOperationRecorder(
+                            pathSubdirectory, manifestDescription, manifestDirectory),
                     inheritOutputRulesAndRecording
                             ? outputsEnabled
                             : Permissive.INSTANCE, // Allow all outputs in the subdirectory
@@ -249,8 +249,8 @@ public class OutputterChecked {
                                 outputName, manifestDescription, relativePath(pathSuffix), index));
     }
 
-    public Path getOutputFolderPath() {
-        return target.getFolderPath();
+    public Path getOutputDirectory() {
+        return target.getDirectory();
     }
 
     /**
@@ -284,23 +284,23 @@ public class OutputterChecked {
      *
      * @param pathSuffix the final part of the path of the file
      * @param manifestDescription the manifest-description
-     * @param manifestFolder the associated folder in the manifest
+     * @param manifestDirectory the associated folder in the manifest
      * @return a write recorder for the sub folder (if it exists) or otherwise the write recorder
      *     associated with the output manager
      */
-    private Optional<WriteOperationRecorder> writeFolderToOperationRecorder(
+    private Optional<WriteOperationRecorder> writeDirectoryToOperationRecorder(
             Path pathSuffix,
             ManifestDirectoryDescription manifestDescription,
-            Optional<SubdirectoryBase> manifestFolder) {
-        if (manifestFolder.isPresent() && writeOperationRecorder.isPresent()) {
-            // Assume the folder are writing to has no path
+            Optional<SubdirectoryBase> manifestDirectory) {
+        if (manifestDirectory.isPresent() && writeOperationRecorder.isPresent()) {
+            // Assume the directory we are writing to has no path
             return Optional.of(
                     writeOperationRecorder
                             .get()
                             .recordSubdirectoryCreated(
                                     relativePath(pathSuffix),
                                     manifestDescription,
-                                    manifestFolder.get()));
+                                    manifestDirectory.get()));
         } else {
             return writeOperationRecorder;
         }

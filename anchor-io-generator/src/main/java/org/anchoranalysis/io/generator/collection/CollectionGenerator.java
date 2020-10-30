@@ -76,14 +76,14 @@ public class CollectionGenerator<T> implements Generator<Collection<T>> {
     }
 
     private FileType[] writeElementAsSubdirectory(
-            Collection<T> element, OutputterChecked outputter, String outputNameFolder)
+            Collection<T> element, OutputterChecked outputter, String outputNameDirectory)
             throws OutputWriteFailedException {
 
         OutputSequenceFactory<T> factory = new OutputSequenceFactory<>(generator, outputter);
 
         OutputPatternIntegerSuffix pattern =
                 new OutputPatternIntegerSuffix(
-                        outputNameFolder, prefix, 3, false, Optional.empty());
+                        outputNameDirectory, prefix, 3, false, Optional.empty());
         factory.incrementingByOneStream(pattern, element.stream());
 
         // Do not report any file-types for the collection written. TODO is this okay?

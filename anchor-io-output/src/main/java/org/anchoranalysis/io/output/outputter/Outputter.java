@@ -137,8 +137,8 @@ public class Outputter {
         return delegate.getSettings();
     }
 
-    public Path getOutputFolderPath() {
-        return delegate.getOutputFolderPath();
+    public Path getOutputDirectory() {
+        return delegate.getOutputDirectory();
     }
 
     public String toString() {

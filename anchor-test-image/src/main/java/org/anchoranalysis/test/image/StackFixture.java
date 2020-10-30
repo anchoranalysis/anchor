@@ -61,14 +61,15 @@ public class StackFixture {
      * @param defaultChannelVoxelType voxel data-type for all created channels if not otherwise
      *     specified. Note that {@code firstChannelVoxelType} takes precedence for the first
      *     channel, if defined.
+     * @param makeRGB if true, the the RGB-flag is set on the created stack, if false it is not.
      * @return the newly created-stack with newly-created channels.
      */
-    public Stack create(int numberChannels, Extent extent, VoxelDataType defaultChannelVoxelType) {
+    public Stack create(int numberChannels, Extent extent, VoxelDataType defaultChannelVoxelType, boolean makeRGB) {
         Stream<Channel> channels =
                 IntStream.range(0, numberChannels)
                         .mapToObj(index -> createChannel(index, extent, defaultChannelVoxelType));
         try {
-            return new Stack(channels);
+            return new Stack(makeRGB, channels);
         } catch (IncorrectImageSizeException e) {
             throw new AnchorImpossibleSituationException();
         }

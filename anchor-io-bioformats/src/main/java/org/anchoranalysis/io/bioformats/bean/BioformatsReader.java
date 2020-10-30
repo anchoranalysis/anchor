@@ -69,13 +69,13 @@ public class BioformatsReader extends StackReader {
     public OpenedRaster openFile(Path filePath) throws ImageIOException {
 
         try {
-            IFormatReader r = selectAndInitReader();
+            IFormatReader reader = selectAndInitReader();
 
             OMEXMLMetadata metadata = createMetadata();
-            r.setMetadataStore(metadata);
-            r.setId(filePath.toString());
+            reader.setMetadataStore(metadata);
+            reader.setId(filePath.toString());
 
-            return new BioformatsOpenedRaster(r, metadata, options);
+            return new BioformatsOpenedRaster(reader, metadata, options);
         } catch (UnknownFormatException e) {
             throw new ImageIOException("An unknown file format was used");
         } catch (FormatException
@@ -105,9 +105,9 @@ public class BioformatsReader extends StackReader {
 
     /* The standard multiplexing image-reader for bioformats */
     private static IFormatReader imageReader() {
-        ImageReader r = new ImageReader();
-        r.setGroupFiles(false);
-        return r;
+        ImageReader reader = new ImageReader();
+        reader.setGroupFiles(false);
+        return reader;
     }
 
     private static OMEXMLMetadata createMetadata() throws CreateException {

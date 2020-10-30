@@ -77,7 +77,7 @@ class LazyDirectoryCreator implements WriterExecuteBeforeEveryOperation {
                     FileUtils.deleteQuietly(outputDirectory.toFile());
                 } else {
                     String line1 = "Output directory already exists.";
-                    String line3 = "Consider enabling delExistingFolder=\"true\" in experiment.xml";
+                    String line3 = "Consider enabling deleteExisting=\"true\" in experiment.xml";
                     // Check if it exists already, and refuse to overwrite
                     throw new OutputDirectoryAlreadyExistsException(
                             String.format(

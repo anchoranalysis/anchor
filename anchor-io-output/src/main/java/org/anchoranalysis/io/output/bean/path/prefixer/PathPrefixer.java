@@ -59,7 +59,7 @@ public abstract class PathPrefixer extends AnchorBean<PathPrefixer> {
      * @return a prefixer
      * @throws PathPrefixerException
      */
-    public abstract DirectoryWithPrefix rootFolderPrefix(
+    public abstract DirectoryWithPrefix rootDirectoryPrefix(
             String experimentIdentifier, FilePathPrefixerContext context)
             throws PathPrefixerException;
 

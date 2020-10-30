@@ -58,7 +58,7 @@ public class AlwaysAllowed implements Writer {
     public Optional<OutputterChecked> createSubdirectory(
             String outputName,
             ManifestDirectoryDescription manifestDescription,
-            Optional<SubdirectoryBase> manifestFolder,
+            Optional<SubdirectoryBase> manifestDirectory,
             boolean inheritOutputRulesAndRecording)
             throws OutputWriteFailedException {
 
@@ -67,7 +67,7 @@ public class AlwaysAllowed implements Writer {
                 outputter.deriveSubdirectory(
                         outputName,
                         manifestDescription,
-                        manifestFolder,
+                        manifestDirectory,
                         inheritOutputRulesAndRecording));
     }
 

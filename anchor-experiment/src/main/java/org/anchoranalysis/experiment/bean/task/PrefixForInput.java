@@ -70,7 +70,7 @@ class PrefixForInput {
                 differenceFromPrefixer(experimentIdentifier, prefix.getCombined());
 
         experimentalManifest.ifPresent(
-                recorder -> writeRootFolderInManifest(recorder, difference.combined()));
+                recorder -> writeRootDirectoryInManifest(recorder, difference.combined()));
 
         return prefix;
     }
@@ -79,16 +79,16 @@ class PrefixForInput {
             throws PathPrefixerException {
         try {
             return PathDifference.differenceFrom(
-                    prefixer.rootFolderPrefix(experimentIdentifier, context).getCombined(),
+                    prefixer.rootDirectoryPrefix(experimentIdentifier, context).getCombined(),
                     combinedPrefix);
         } catch (PathDifferenceException e) {
             throw new PathPrefixerException(e);
         }
     }
 
-    private static void writeRootFolderInManifest(Manifest manifestRecorder, Path rootPath) {
+    private static void writeRootDirectoryInManifest(Manifest manifestRecorder, Path rootPath) {
         manifestRecorder
-                .getRootFolder()
+                .getRootDirectory()
                 .recordSubdirectoryCreated(
                         rootPath, MANIFEST_DIRECTORY_ROOT, new JobRootDirectory());
     }

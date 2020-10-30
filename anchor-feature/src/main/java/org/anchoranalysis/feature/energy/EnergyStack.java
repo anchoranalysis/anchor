@@ -39,7 +39,7 @@ import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.spatial.Extent;
 
 /**
- * An energy-stack with associated {@link KeyValueParams}.
+ * A {@link EnergyStackWithoutParams} with associated {@link KeyValueParams}.
  *
  * @author Owen Feehan
  */

@@ -117,12 +117,12 @@ public class BioformatsOpenedRaster implements OpenedRaster {
     }
 
     @Override
-    public int bitDepth() throws ImageIOException {
+    public int bitDepth() {
         return bitsPerPixel;
     }
 
     @Override
-    public boolean isRGB() throws ImageIOException {
+    public boolean isRGB() {
         return rgb;
     }
 
@@ -156,13 +156,13 @@ public class BioformatsOpenedRaster implements OpenedRaster {
 
             reader.setSeries(seriesIndex);
 
-            TimeSequence ts = new TimeSequence();
+            TimeSequence timeSequence = new TimeSequence();
 
             Dimensions dimensions = dimensionsForSeries(seriesIndex);
 
             // Assumes order of time first, and then channels
             List<Channel> listAllChannels =
-                    createUninitialisedChannels(dimensions, ts, multiplexVoxelDataType(dataType));
+                    createUninitialisedChannels(dimensions, timeSequence, multiplexVoxelDataType(dataType));
 
             copyBytesIntoChannels(
                     listAllChannels, dimensions, progressReporter, dataType, readOptions);
@@ -172,7 +172,7 @@ public class BioformatsOpenedRaster implements OpenedRaster {
                             "Finished opening series %d as %s with z=%d, t=%d",
                             seriesIndex, dataType, reader.getSizeZ(), reader.getSizeT()));
 
-            return ts;
+            return timeSequence;
 
         } catch (FormatException | IOException | IncorrectImageSizeException | CreateException e) {
             throw new ImageIOException(e);
@@ -187,7 +187,7 @@ public class BioformatsOpenedRaster implements OpenedRaster {
         List<Channel> listAllChannels = new ArrayList<>();
 
         for (int t = 0; t < sizeT; t++) {
-            Stack stack = new Stack();
+            Stack stack = new Stack( isRGB() );
             for (int c = 0; c < numberChannels; c++) {
 
                 Channel channel = factory.createEmptyUninitialised(dimensions);

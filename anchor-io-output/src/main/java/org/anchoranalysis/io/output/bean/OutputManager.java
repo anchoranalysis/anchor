@@ -99,14 +99,14 @@ public class OutputManager extends AnchorBean<OutputManager> {
 
         try {
             DirectoryWithPrefix prefix =
-                    filePathPrefixer.rootFolderPrefix(experimentIdentifier, prefixerContext);
+                    filePathPrefixer.rootDirectoryPrefix(experimentIdentifier, prefixerContext);
             manifest.init(prefix.getDirectory());
 
             return OutputterChecked.createWithPrefix(
                     prefix,
                     recordedOutputs.selectOutputEnabled(Optional.ofNullable(outputsEnabled)),
                     getOutputWriteSettings(),
-                    Optional.of(manifest.getRootFolder()),
+                    Optional.of(manifest.getRootDirectory()),
                     recordedOutputs.getRecordedOutputs(),
                     silentlyDeleteExisting);
 

@@ -36,7 +36,7 @@ import org.junit.rules.TemporaryFolder;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class DualComparerFactory {
 
-    public static DualComparer compareExplicitFolderToTest(
+    public static DualComparer compareExplicitDirectoryToTest(
             Path pathExplicit, String pathRelativeTestDir) {
 
         TestLoader loaderTemporary = TestLoader.createFromExplicitDirectory(pathExplicit);
@@ -48,19 +48,19 @@ public class DualComparerFactory {
     /**
      * Compares a directory in a temporary-folder to a directory in Maven's {@code test/resources}.
      *
-     * @param folder the temporary folder
-     * @param relativeTemporaryFolder optionally an additional subdirectory to use relative to the
+     * @param directory the temporary folder
+     * @param relativeTemporaryDirectory optionally an additional subdirectory to use relative to the
      *     root of {@code folder}.
      * @param relativeResourcesRoot a subdirectory to use in Maven's test/resources relative to the
      *     root of the resources
      * @return a comparer between the two directories.
      */
-    public static DualComparer compareTemporaryFolderToTest(
-            TemporaryFolder folder,
-            Optional<String> relativeTemporaryFolder,
+    public static DualComparer compareTemporaryDirectoryToTest(
+            TemporaryFolder directory,
+            Optional<String> relativeTemporaryDirectory,
             String relativeResourcesRoot) {
 
-        TestLoader loaderTemporary = loaderTemporaryFolder(folder, relativeTemporaryFolder);
+        TestLoader loaderTemporary = loaderTemporaryDirectory(directory, relativeTemporaryDirectory);
         TestLoader loaderTest = TestLoader.createFromMavenWorkingDirectory(relativeResourcesRoot);
 
         return new DualComparer(loaderTemporary, loaderTest);
@@ -80,15 +80,15 @@ public class DualComparerFactory {
                 loader2.createForSubdirectory(subdirectory2));
     }
 
-    private static TestLoader loaderTemporaryFolder(
-            TemporaryFolder folder, Optional<String> additionalRelative) {
+    private static TestLoader loaderTemporaryDirectory(
+            TemporaryFolder directory, Optional<String> additionalRelative) {
 
         Path pathTemporary =
                 additionalRelative
                         .map(
                                 additional ->
-                                        Paths.get(folder.getRoot().getAbsolutePath(), additional))
-                        .orElseGet(() -> Paths.get(folder.getRoot().getAbsolutePath()));
+                                        Paths.get(directory.getRoot().getAbsolutePath(), additional))
+                        .orElseGet(() -> Paths.get(directory.getRoot().getAbsolutePath()));
 
         return TestLoader.createFromExplicitDirectory(pathTemporary);
     }

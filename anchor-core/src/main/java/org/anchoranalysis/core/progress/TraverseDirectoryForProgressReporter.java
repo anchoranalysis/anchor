@@ -81,17 +81,17 @@ public class TraverseDirectoryForProgressReporter {
         }
     }
 
-    // Does a breadth first traversal of the sub-folders until we get at least minNumFolders on
+    // Does a breadth first traversal of the sub-folders until we get at least minNumberDirectories on
     //  a given level.  These are then used as our progress markers.
     //
-    // if we can't get minNumFolders, it returns an empty array
+    // if we can't get minNumberDirectories, it returns an empty array
     public static TraversalResult traverseRecursive(
-            Path parent, int minNumDirectories, Predicate<Path> matcherDir, int maxDirDepth)
+            Path parent, int minNumberDirectories, Predicate<Path> matcherDir, int maxDirDepth)
             throws IOException {
 
         List<Path> filesOut = new ArrayList<>();
-        List<Path> currentFolders = new ArrayList<>();
-        currentFolders.add(parent);
+        List<Path> currentDirectories = new ArrayList<>();
+        currentDirectories.add(parent);
 
         int depth = 1;
         while (true) {
@@ -99,7 +99,7 @@ public class TraverseDirectoryForProgressReporter {
             List<Path> definiteLeafsCurrent = new ArrayList<>();
             List<Path> subDirectories =
                     TraverseDirectoryForProgressReporter.subDirectoriesFor(
-                            currentFolders,
+                            currentDirectories,
                             definiteLeafsCurrent,
                             Optional.of(filesOutCurrent),
                             matcherDir);
@@ -108,11 +108,11 @@ public class TraverseDirectoryForProgressReporter {
 
             if (subDirectories.isEmpty()) {
                 return new TraversalResult(new ArrayList<>(), filesOut, depth);
-            } else if (subDirectories.size() > minNumDirectories || depth == maxDirDepth) {
+            } else if (subDirectories.size() > minNumberDirectories || depth == maxDirDepth) {
                 return new TraversalResult(subDirectories, filesOut, depth);
             }
 
-            currentFolders = subDirectories;
+            currentDirectories = subDirectories;
 
             depth++;
         }

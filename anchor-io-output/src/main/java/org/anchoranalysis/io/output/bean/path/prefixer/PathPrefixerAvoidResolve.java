@@ -69,7 +69,7 @@ public abstract class PathPrefixerAvoidResolve extends PathPrefixer {
     }
 
     @Override
-    public DirectoryWithPrefix rootFolderPrefix(String expName, FilePathPrefixerContext context)
+    public DirectoryWithPrefix rootDirectoryPrefix(String expName, FilePathPrefixerContext context)
             throws PathPrefixerException {
         return new DirectoryWithPrefix(resolveExperimentAbsoluteRootOut(expName, context));
     }
@@ -86,13 +86,13 @@ public abstract class PathPrefixerAvoidResolve extends PathPrefixer {
     /**
      * Provides a prefix that becomes the root-folder. It avoids resolving relative-paths.
      *
-     * <p>This is an alternative method to rootFolderPrefix that avoids resolving the out-path
+     * <p>This is an alternative method to rootDirectoryPrefix that avoids resolving the out-path
      * prefix against the file system
      *
      * @param experimentIdentifier an identifier for the experiment
      * @return a prefixer
      */
-    public DirectoryWithPrefix rootFolderPrefixAvoidResolve(String experimentIdentifier) {
+    public DirectoryWithPrefix rootDirectoryPrefixAvoidResolve(String experimentIdentifier) {
         String folder = getOutPathPrefix() + File.separator + experimentIdentifier + File.separator;
         return new DirectoryWithPrefix(Paths.get(folder));
     }
@@ -109,7 +109,7 @@ public abstract class PathPrefixerAvoidResolve extends PathPrefixer {
     public DirectoryWithPrefix outFilePrefixAvoidResolve(
             NamedPath path, String experimentIdentifier) throws PathPrefixerException {
         return outFilePrefixFromPath(
-                path, rootFolderPrefixAvoidResolve(experimentIdentifier).getDirectory());
+                path, rootDirectoryPrefixAvoidResolve(experimentIdentifier).getDirectory());
     }
 
     /**

@@ -167,10 +167,6 @@ public abstract class OutputExperiment extends Experiment {
 
             Preconditions.checkArgument(rootOutputter.getSettings().hasBeenInitialized());
 
-            // Important we bind to a root folder before any log messages go out, as
-            // certain log appenders require the OutputManager to be set before outputting
-            // to the correct location and this only occurs after the call to
-            // bindRootFolder()
             return new ParametersExperiment(
                     arguments,
                     experimentId,

@@ -101,8 +101,12 @@ public class Stack implements Iterable<Channel> {
     }
 
     public Stack(Stream<Channel> channelStream) throws IncorrectImageSizeException {
+        this(false, channelStream);
+    }
+    
+    public Stack(boolean rgb, Stream<Channel> channelStream) throws IncorrectImageSizeException {
         this.delegate = new StackNotUniformSized(channelStream);
-        this.rgb = false;
+        this.rgb = rgb;
         if (!delegate.isUniformlySized()) {
             throw new IncorrectImageSizeException("Channels in streams are not uniformly sized");
         }

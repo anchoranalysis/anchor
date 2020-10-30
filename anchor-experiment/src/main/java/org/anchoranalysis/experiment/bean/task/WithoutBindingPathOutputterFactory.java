@@ -39,8 +39,8 @@ class WithoutBindingPathOutputterFactory {
             Optional<Manifest> manifestTask, Outputter outputter) {
         manifestTask.ifPresent(
                 manifest -> {
-                    manifest.init(outputter.getOutputFolderPath());
-                    outputter.addOperationRecorder(manifest.getRootFolder());
+                    manifest.init(outputter.getOutputDirectory());
+                    outputter.addOperationRecorder(manifest.getRootDirectory());
                 });
         return outputter.getChecked();
     }

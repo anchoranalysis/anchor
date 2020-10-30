@@ -148,6 +148,18 @@ public final class Point3d extends Tuple3d {
         out[2] = z;
         return out;
     }
+    
+    /**
+     * Converts the X and Y dimensions of the point to an array.
+     * 
+     * @return a newly created array with ywo elements, respectively for x and y components.
+     */
+    public double[] toArrayXY() {
+        double[] out = new double[2];
+        out[0] = x;
+        out[1] = y;
+        return out;
+    }
 
     /**
      * Element-wise maximum between this point and another

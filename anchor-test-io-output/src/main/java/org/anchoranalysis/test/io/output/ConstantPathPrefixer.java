@@ -46,7 +46,7 @@ class ConstantPathPrefixer extends PathPrefixer {
     }
 
     @Override
-    public DirectoryWithPrefix rootFolderPrefix(
+    public DirectoryWithPrefix rootDirectoryPrefix(
             String experimentIdentifier, FilePathPrefixerContext context) {
         return prefix;
     }

@@ -58,7 +58,7 @@ public abstract class FinderSingleDirectory implements Finder {
 
     private final Optional<MutableDirectory> findDirectory(Manifest manifestRecorder) {
         List<MutableDirectory> list =
-                FinderUtilities.findListFolder(manifestRecorder, matchDirectories());
+                FinderUtilities.findListDirectory(manifestRecorder, matchDirectories());
         return OptionalUtilities.createFromFlag(!list.isEmpty(), () -> list.get(0));
     }
 }

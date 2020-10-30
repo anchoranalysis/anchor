@@ -126,7 +126,7 @@ public class StackTester {
 
         Stack stack =
                 new StackFixture(forceFirstChannel)
-                        .create(numberChannels, extent, channelVoxelType);
+                        .create(numberChannels, extent, channelVoxelType, makeRGB);
 
         StackWriteOptions options = StackWriteOptionsFactory.maybeRGB(makeRGB);
 

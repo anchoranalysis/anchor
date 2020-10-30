@@ -132,19 +132,19 @@ public abstract class MutableDirectory
             Path relativeDirectoryPath,
             ManifestDirectoryDescription directoryDescription,
             SubdirectoryBase subdirectory) {
-        subdirectory.assignParentFolder(Optional.of(this));
+        subdirectory.assignParentDirectory(Optional.of(this));
         subdirectory.assignPath(relativeDirectoryPath);
         subdirectory.assignDescription(directoryDescription);
         subdirectories.add(subdirectory);
         return subdirectory;
     }
 
-    protected Optional<MutableDirectory> getParentFolder() {
+    protected Optional<MutableDirectory> getParentDirectory() {
         return Optional.ofNullable(parent);
     }
 
-    public void assignParentFolder(Optional<MutableDirectory> parentFolder) {
-        this.parent = parentFolder.orElse(null);
+    public void assignParentDirectory(Optional<MutableDirectory> parentDirectory) {
+        this.parent = parentDirectory.orElse(null);
     }
 
     @Override

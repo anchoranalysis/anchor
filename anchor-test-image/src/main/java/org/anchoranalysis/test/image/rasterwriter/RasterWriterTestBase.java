@@ -68,7 +68,7 @@ public abstract class RasterWriterTestBase {
         FloatVoxelType.INSTANCE
     };
 
-    @Rule public TemporaryFolder folder = new TemporaryFolder();
+    @Rule public TemporaryFolder directory = new TemporaryFolder();
 
     // START REQUIRED ARGUMENTS
     /** the extension (without a preceding period) to be tested and written. */
@@ -96,7 +96,7 @@ public abstract class RasterWriterTestBase {
                 new FourChannelStackTester(
                         new StackTester(
                                 createWriter(),
-                                folder.getRoot().toPath(),
+                                directory.getRoot().toPath(),
                                 createComparer(),
                                 include3D));
     }
@@ -121,7 +121,7 @@ public abstract class RasterWriterTestBase {
     }
 
     private DualComparer createComparer(String extensionForComparer) {
-        return DualComparerFactory.compareTemporaryFolderToTest(
-                folder, Optional.empty(), "stackWriter/formats/" + extensionForComparer);
+        return DualComparerFactory.compareTemporaryDirectoryToTest(
+                directory, Optional.empty(), "stackWriter/formats/" + extensionForComparer);
     }
 }
