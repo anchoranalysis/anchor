@@ -37,7 +37,7 @@ import org.anchoranalysis.core.value.KeyValueParams;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.input.FeatureInput;
-import org.anchoranalysis.image.feature.stack.FeatureInputStack;
+import org.anchoranalysis.image.feature.input.FeatureInputStack;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMap;
 import org.anchoranalysis.mpp.feature.addcriteria.AddCriteriaPair;
 import org.anchoranalysis.mpp.feature.input.memo.FeatureInputAllMemo;

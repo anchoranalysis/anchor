@@ -24,7 +24,7 @@
  * #L%
  */
 /**
- * Features that operation on varying combinations of {@link
+ * Features that operate on varying combinations of {@link
  * org.anchoranalysis.image.voxel.object.ObjectMask}.
  */
 package org.anchoranalysis.image.feature.bean.object;

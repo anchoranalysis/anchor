@@ -31,8 +31,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 import org.anchoranalysis.feature.input.FeatureInputResults;
 import org.anchoranalysis.feature.io.csv.FeatureCSVMetadata;
-import org.anchoranalysis.feature.list.NamedFeatureStore;
 import org.anchoranalysis.feature.name.FeatureNameList;
+import org.anchoranalysis.feature.store.NamedFeatureStore;
 
 /**
  * Additional information needed for the outputs in {@link ResultsWriter}.

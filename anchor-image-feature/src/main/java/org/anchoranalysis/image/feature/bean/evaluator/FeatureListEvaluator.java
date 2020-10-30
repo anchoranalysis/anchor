@@ -44,7 +44,7 @@ import org.anchoranalysis.feature.calculate.FeatureInitParams;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.session.calculator.multi.FeatureCalculatorMulti;
-import org.anchoranalysis.image.feature.evaluator.NamedFeatureCalculatorMulti;
+import org.anchoranalysis.image.feature.calculator.NamedFeatureCalculatorMulti;
 
 /**
  * Defines a list of features and provides a means to calculate inputs for it, a session.

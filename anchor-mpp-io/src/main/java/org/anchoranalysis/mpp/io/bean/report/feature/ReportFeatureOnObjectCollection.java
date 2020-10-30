@@ -28,7 +28,7 @@ package org.anchoranalysis.mpp.io.bean.report.feature;
 
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.session.calculator.single.FeatureCalculatorSingle;
-import org.anchoranalysis.image.feature.object.input.FeatureInputObjectCollection;
+import org.anchoranalysis.image.feature.input.FeatureInputObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 
 public class ReportFeatureOnObjectCollection

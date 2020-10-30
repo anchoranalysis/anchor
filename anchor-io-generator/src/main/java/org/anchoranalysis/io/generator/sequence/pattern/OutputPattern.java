@@ -32,7 +32,7 @@ import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.namestyle.IndexableOutputNameStyle;
 
 /**
- * How the output of the sequence looks on the filesystem and in the manifest.
+ * A particular naming pattern files follow when outputted.
  *
  * <p>This involves several aspects:
  *
