@@ -29,7 +29,6 @@ package org.anchoranalysis.image.voxel.box;
 import java.util.Optional;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.voxel.BoundedVoxels;
-import org.anchoranalysis.image.voxel.BoundedVoxelsFactory;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 import org.anchoranalysis.spatial.Extent;
@@ -51,7 +50,7 @@ public class BoundedVoxelsTest {
         Extent extent = extent(20);
 
         BoundedVoxels<UnsignedByteBuffer> box =
-                BoundedVoxelsFactory.createByte(new BoundingBox(point(10), extent(15)));
+                VoxelsFactory.getUnsignedByte().createBounded(new BoundingBox(point(10), extent(15)));
 
         Point3i grow = point(1);
         box.growBuffer(grow, grow, Optional.of(extent), VoxelsFactory.getUnsignedByte());

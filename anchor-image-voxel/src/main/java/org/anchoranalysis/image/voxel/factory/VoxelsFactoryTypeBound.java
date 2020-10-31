@@ -27,11 +27,13 @@
 package org.anchoranalysis.image.voxel.factory;
 
 import com.google.common.base.Preconditions;
+import org.anchoranalysis.image.voxel.BoundedVoxels;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.slice.SliceBufferIndex;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.spatial.Extent;
+import org.anchoranalysis.spatial.box.BoundingBox;
 
 /**
  * A factory for creating voxels with a particular buffer-type
@@ -57,5 +59,16 @@ public interface VoxelsFactoryTypeBound<T> {
         Voxels<T> out = createUninitialized(extent);
         out.replaceSlice(0, buffer);
         return out;
+    }
+    
+    /**
+     * Creates and initializes voxels that correspond to a particular bounding-box region.
+     * 
+     * @param box the bounding-box region
+     * @return newly created voxels of the same extent as {@box} and retaining an association with {@code box}.
+     */
+    default BoundedVoxels<T> createBounded(BoundingBox box) {
+        return new BoundedVoxels<>(
+                box, createInitialized(box.extent()));
     }
 }
