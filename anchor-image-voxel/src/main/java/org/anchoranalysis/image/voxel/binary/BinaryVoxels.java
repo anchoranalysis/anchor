@@ -34,8 +34,8 @@ import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.assigner.VoxelsAssigner;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValues;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
+import org.anchoranalysis.image.voxel.buffer.slice.SliceBufferIndex;
 import org.anchoranalysis.image.voxel.extracter.VoxelsExtracter;
-import org.anchoranalysis.image.voxel.factory.sliceindex.SliceBufferIndex;
 import org.anchoranalysis.spatial.Extent;
 
 /**

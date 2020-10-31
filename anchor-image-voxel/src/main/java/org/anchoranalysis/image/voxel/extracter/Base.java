@@ -30,6 +30,7 @@ import org.anchoranalysis.image.voxel.ExtentMatchHelper;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
+import org.anchoranalysis.image.voxel.buffer.ProjectableBuffer;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.extracter.predicate.PredicateImplementation;
 import org.anchoranalysis.image.voxel.extracter.predicate.VoxelsPredicate;
@@ -121,6 +122,16 @@ public abstract class Base<T> implements VoxelsExtracter<T> {
         assert (bufferTarget.slice(0).capacity() == extentResized.volumeXY());
         return bufferTarget;
     }
+    
+    @Override
+    public final Voxels<T> projectMax() {
+        return project(createMaxIntensityBuffer(voxels.extent()));
+    }
+    
+    @Override
+    public final Voxels<T> projectMean() {
+        return project(createMeanIntensityBuffer(voxels.extent()));
+    }
 
     @Override
     public VoxelsPredicate voxelsEqualTo(int equalToValue) {
@@ -173,6 +184,10 @@ public abstract class Base<T> implements VoxelsExtracter<T> {
         }
     }
 
+    protected abstract ProjectableBuffer<T> createMaxIntensityBuffer(Extent extent);
+    
+    protected abstract ProjectableBuffer<T> createMeanIntensityBuffer(Extent extent);
+    
     protected abstract void copyBufferIndexTo(
             T sourceBuffer, int sourceIndex, T destinationBuffer, int destinationIndex);
 
@@ -217,5 +232,12 @@ public abstract class Base<T> implements VoxelsExtracter<T> {
         Voxels<T> voxelsOut = voxels.factory().createInitialized(box.extent());
         boxCopyTo(box, voxelsOut, box.shiftToOrigin());
         return voxelsOut;
+    }
+    
+    private Voxels<T> project(ProjectableBuffer<T> projection) {
+        voxels.extent().iterateOverZ( z ->
+            projection.addSlice(voxels.slice(z))
+        );
+        return projection.completeProjection();
     }
 }

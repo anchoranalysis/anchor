@@ -26,13 +26,13 @@
 
 package org.anchoranalysis.image.voxel.iterator;
 
-import static org.anchoranalysis.image.object.ObjectMaskFixture.*;
+import static org.anchoranalysis.image.voxel.object.ObjectMaskFixture.*;
 import static org.junit.Assert.*;
 
 import java.util.Optional;
 import java.util.function.Consumer;
-import org.anchoranalysis.image.object.ObjectMaskFixture;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
+import org.anchoranalysis.image.voxel.object.ObjectMaskFixture;
 import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.point.Point3i;
 import org.junit.Test;

@@ -43,9 +43,9 @@ public class VoxelsExtracterFactory {
      * @param voxels the voxels to extract from
      * @return a newly created extracter
      */
-    public static VoxelsExtracter<UnsignedByteBuffer> createByte(
+    public static VoxelsExtracter<UnsignedByteBuffer> createUnsignedByte(
             Voxels<UnsignedByteBuffer> voxels) {
-        return new ByteImplementation(voxels);
+        return new UnsignedByteImplementation(voxels);
     }
 
     /**
@@ -54,19 +54,9 @@ public class VoxelsExtracterFactory {
      * @param voxels the voxels to extract from
      * @return a newly created extracter
      */
-    public static VoxelsExtracter<UnsignedShortBuffer> createShort(
+    public static VoxelsExtracter<UnsignedShortBuffer> createUnsignedShort(
             Voxels<UnsignedShortBuffer> voxels) {
-        return new ShortImplementation(voxels);
-    }
-
-    /**
-     * Create voxels-extracter for {@link FloatBuffer}
-     *
-     * @param voxels the voxels to extract from
-     * @return a newly created extracter
-     */
-    public static VoxelsExtracter<FloatBuffer> createFloat(Voxels<FloatBuffer> voxels) {
-        return new FloatImplementation(voxels);
+        return new UnsignedShortImplementation(voxels);
     }
 
     /**
@@ -75,8 +65,18 @@ public class VoxelsExtracterFactory {
      * @param voxels the voxels to extract from
      * @return a newly created extracter
      */
-    public static VoxelsExtracter<UnsignedIntBuffer> createInt(Voxels<UnsignedIntBuffer> voxels) {
-        return new IntImplementation(voxels);
+    public static VoxelsExtracter<UnsignedIntBuffer> createUnsignedInt(Voxels<UnsignedIntBuffer> voxels) {
+        return new UnsignedIntImplementation(voxels);
+    }
+    
+    /**
+     * Create voxels-extracter for {@link FloatBuffer}
+     *
+     * @param voxels the voxels to extract from
+     * @return a newly created extracter
+     */
+    public static VoxelsExtracter<FloatBuffer> createFloat(Voxels<FloatBuffer> voxels) {
+        return new FloatImplementation(voxels);
     }
 
     /**

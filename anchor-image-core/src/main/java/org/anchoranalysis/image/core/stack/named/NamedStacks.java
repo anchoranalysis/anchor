@@ -44,7 +44,7 @@ import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.stack.Stack;
 
 /**
- * A set of image-stacks each with a name
+ * A set of image-stacks each with a name.
  *
  * @author Owen Feehan
  */

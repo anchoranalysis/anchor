@@ -30,7 +30,7 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
 /**
- * Helper class for calculating variance from running variables
+ * Helper class for calculating variance from running variables.
  *
  * <p>It bundles a sum, sumSquares and count class together
  *

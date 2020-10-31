@@ -30,33 +30,33 @@ import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedIntBuffer;
 import org.anchoranalysis.spatial.Extent;
 
 class IntImplementation extends Base<UnsignedIntBuffer> {
-
+    
     public IntImplementation(Extent extent, IntFunction<UnsignedIntBuffer> bufferForSlice) {
         super(extent, bufferForSlice);
     }
 
     @Override
     protected void multiplyBuffer(UnsignedIntBuffer buffer, double factor) {
-        while (buffer.hasRemaining()) {
-            buffer.putDouble(buffer.position() - 1, buffer.getUnsigned() * factor);
-        }
+        UnsignedIntHelper.calculateForEveryVoxel(buffer, value -> BinaryOperationHelper.multiplyByLong(value, factor) );
     }
 
     @Override
     protected void subtractFromBuffer(UnsignedIntBuffer buffer, int valueToSubtractFrom) {
-        while (buffer.hasRemaining()) {
-            buffer.putUnsigned(buffer.position() - 1, valueToSubtractFrom - buffer.getUnsigned());
-        }
+        UnsignedIntHelper.calculateForEveryVoxel(buffer, value -> valueToSubtractFrom - value );
     }
 
-    // TODO when values are too small or too large
     @Override
     protected void addToBufferIndex(UnsignedIntBuffer buffer, int index, int valueToBeAdded) {
-        buffer.putUnsigned(index, buffer.getUnsigned(index) + valueToBeAdded);
+        UnsignedIntHelper.calculateForEveryVoxel(buffer, value -> value + valueToBeAdded);
     }
 
     @Override
     protected void multiplyByBufferIndex(UnsignedIntBuffer buffer, int index, double factor) {
-        throw new IllegalArgumentException("Currently unsupported method");
+        UnsignedIntHelper.calculateForIndex(buffer, index, value -> BinaryOperationHelper.multiplyByLong(value, factor));
+    }
+
+    @Override
+    protected void divideByBuffer(UnsignedIntBuffer buffer, int divisor) {
+        UnsignedIntHelper.calculateForEveryVoxel(buffer, value -> value / divisor);
     }
 }

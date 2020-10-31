@@ -27,6 +27,8 @@
 package org.anchoranalysis.math.equation;
 
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.exception.OperationFailedException;
 
@@ -35,31 +37,10 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 public class QuadraticEquationSolver {
 
     /** Roots (solution) of a quadratic equation */
+    @AllArgsConstructor @Data
     public static class QuadraticRoots {
         private double root1;
         private double root2;
-
-        public QuadraticRoots(double root1, double root2) {
-            super();
-            this.root1 = root1;
-            this.root2 = root2;
-        }
-
-        public double getRoot1() {
-            return root1;
-        }
-
-        public void setRoot1(double root1) {
-            this.root1 = root1;
-        }
-
-        public double getRoot2() {
-            return root2;
-        }
-
-        public void setRoot2(double root2) {
-            this.root2 = root2;
-        }
     }
 
     /**
@@ -88,11 +69,11 @@ public class QuadraticEquationSolver {
                     String.format("Complex roots returned: common=%f", common));
         }
 
-        double commonSqrt = Math.sqrt(common);
+        double commonSquareRoot = Math.sqrt(common);
         double div = 2 * a;
 
-        double root1 = (-b + commonSqrt) / div;
-        double root2 = (-b - commonSqrt) / div;
+        double root1 = (-b + commonSquareRoot) / div;
+        double root2 = (-b - commonSquareRoot) / div;
 
         return new QuadraticRoots(root1, root2);
     }

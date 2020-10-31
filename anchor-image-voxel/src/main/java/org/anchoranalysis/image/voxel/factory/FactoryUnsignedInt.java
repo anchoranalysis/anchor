@@ -29,10 +29,10 @@ package org.anchoranalysis.image.voxel.factory;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.VoxelsAsInt;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedIntBuffer;
+import org.anchoranalysis.image.voxel.buffer.slice.FromInt;
+import org.anchoranalysis.image.voxel.buffer.slice.SliceBufferIndex;
 import org.anchoranalysis.image.voxel.datatype.UnsignedIntVoxelType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
-import org.anchoranalysis.image.voxel.factory.sliceindex.FromInt;
-import org.anchoranalysis.image.voxel.factory.sliceindex.SliceBufferIndex;
 import org.anchoranalysis.spatial.Extent;
 
 final class FactoryUnsignedInt implements VoxelsFactoryTypeBound<UnsignedIntBuffer> {

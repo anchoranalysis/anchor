@@ -32,9 +32,9 @@ import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.graph.GraphWithPayload;
 import org.anchoranalysis.image.voxel.neighborhood.EdgeAdder.AddEdge;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
+import org.anchoranalysis.image.voxel.object.ObjectCollectionFactory;
 import org.anchoranalysis.image.voxel.object.ObjectCollectionRTree;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
-import org.anchoranalysis.image.voxel.object.factory.ObjectCollectionFactory;
 import org.anchoranalysis.spatial.Extent;
 
 /**

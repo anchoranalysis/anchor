@@ -47,7 +47,7 @@ public class VoxelsArithmeticFactory {
      */
     public static VoxelsArithmetic createByte(
             Extent extent, IntFunction<UnsignedByteBuffer> bufferForSlice) {
-        return new ByteImplementation(extent, bufferForSlice);
+        return new UnsignedByteImplementation(extent, bufferForSlice);
     }
 
     /**
@@ -60,7 +60,7 @@ public class VoxelsArithmeticFactory {
      */
     public static VoxelsArithmetic createShort(
             Extent extent, IntFunction<UnsignedShortBuffer> bufferForSlice) {
-        return new ShortImplementation(extent, bufferForSlice);
+        return new UnsignedShortImplementation(extent, bufferForSlice);
     }
 
     /**

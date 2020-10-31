@@ -40,8 +40,8 @@ import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.kernel.ApplyKernel;
 import org.anchoranalysis.image.voxel.kernel.BinaryKernel;
-import org.anchoranalysis.image.voxel.kernel.dilateerode.ErosionKernel3;
-import org.anchoranalysis.image.voxel.kernel.outline.OutlineKernel3;
+import org.anchoranalysis.image.voxel.kernel.morphological.ErosionKernel;
+import org.anchoranalysis.image.voxel.kernel.outline.OutlineKernel;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.spatial.Extent;
 
@@ -175,7 +175,7 @@ public class FindOutline {
 
         BinaryValuesByte bvb = voxels.binaryValues().createByte();
 
-        BinaryKernel kernel = new OutlineKernel3(bvb, !outlineAtBoundary, do3D);
+        BinaryKernel kernel = new OutlineKernel(bvb, !outlineAtBoundary, do3D);
 
         Voxels<UnsignedByteBuffer> out = ApplyKernel.apply(kernel, voxels.voxels(), bvb);
         return BinaryVoxelsFactory.reuseByte(out, voxels.binaryValues());
@@ -209,7 +209,7 @@ public class FindOutline {
             boolean do3D) {
 
         BinaryValuesByte bvb = voxels.binaryValues().createByte();
-        BinaryKernel kernelErosion = new ErosionKernel3(bvb, erodeAtBoundary, do3D);
+        BinaryKernel kernelErosion = new ErosionKernel(bvb, erodeAtBoundary, do3D);
 
         Voxels<UnsignedByteBuffer> eroded = ApplyKernel.apply(kernelErosion, voxels.voxels(), bvb);
         for (int i = 1; i < numberErosions; i++) {

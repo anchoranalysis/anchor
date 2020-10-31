@@ -31,7 +31,7 @@ import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.point.Point3i;
 
 /**
- * Assigns values to some or all voxels
+ * Assigns values to some or all voxels.
  *
  * <p>The co-ordinates of the bounding-box, object-mask etc. are always <i>relative</i> to a
  * particular coordinate frame.

@@ -36,7 +36,7 @@ import org.anchoranalysis.core.serialize.Deserializer;
 import org.anchoranalysis.image.io.object.HDF5PathHelper;
 import org.anchoranalysis.image.io.object.output.hdf5.HDF5ObjectsGenerator;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
-import org.anchoranalysis.image.voxel.object.factory.ObjectCollectionFactory;
+import org.anchoranalysis.image.voxel.object.ObjectCollectionFactory;
 
 class ReadObjectsFromHDF5 implements Deserializer<ObjectCollection> {
 

@@ -33,7 +33,7 @@ import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.point.ReadableTuple3i;
 
 /**
- * Provides method to read/copy/duplicate portions of voxels
+ * Provides method to read/copy/duplicate portions of voxels.
  *
  * @author Owen Feehan
  * @param <T> buffer-type

@@ -30,7 +30,7 @@ import java.nio.file.Path;
 import org.anchoranalysis.core.serialize.DeserializationFailedException;
 import org.anchoranalysis.core.serialize.Deserializer;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
-import org.anchoranalysis.image.voxel.object.factory.ObjectCollectionFactory;
+import org.anchoranalysis.image.voxel.object.ObjectCollectionFactory;
 
 class ReadObjectsFromTIFFDirectoryCorrectMissing implements Deserializer<ObjectCollection> {
 

@@ -38,7 +38,7 @@ import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.kernel.ApplyKernel;
 import org.anchoranalysis.image.voxel.kernel.BinaryKernel;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
-import org.anchoranalysis.image.voxel.object.morphological.accept.AcceptIterationConditon;
+import org.anchoranalysis.image.voxel.object.morphological.predicate.AcceptIterationPredicate;
 import org.anchoranalysis.spatial.Extent;
 import org.anchoranalysis.spatial.point.Point3i;
 
@@ -115,7 +115,7 @@ public class MorphologicalDilation {
             int iterations,
             Optional<Voxels<UnsignedByteBuffer>> background,
             int minIntensityValue,
-            Optional<AcceptIterationConditon> acceptConditions,
+            Optional<AcceptIterationPredicate> acceptConditions,
             DilationKernelFactory dilationKernelFactory)
             throws CreateException {
 

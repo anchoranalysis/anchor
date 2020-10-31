@@ -32,16 +32,16 @@ import lombok.experimental.Accessors;
 import org.anchoranalysis.image.voxel.arithmetic.VoxelsArithmetic;
 import org.anchoranalysis.image.voxel.assigner.VoxelsAssigner;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
+import org.anchoranalysis.image.voxel.buffer.slice.SliceBufferIndex;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.image.voxel.extracter.VoxelsExtracter;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactoryTypeBound;
-import org.anchoranalysis.image.voxel.factory.sliceindex.SliceBufferIndex;
 import org.anchoranalysis.spatial.Extent;
 
 /**
  * A box (3-dimensions) with voxel-data.
  *
- * <p>This class is almost <i>immutable</i> the exception being the buffers containing intensity
+ * <p>This class is almost <i>immutable</i>, with the exception of the buffers containing intensity
  * values which can be modified.
  *
  * <p>All operations that can modify the state (i.e. <i>mutable</i> operations) are provided via the
@@ -58,14 +58,14 @@ public abstract class Voxels<T> {
     @Getter private final SliceBufferIndex<T> slices;
     @Getter private final VoxelsFactoryTypeBound<T> factory;
 
-    /** Methods to manipulate the voxel-values via arithmetic */
+    /** Methods to manipulate the voxel-values via arithmetic. */
     @Getter private final VoxelsArithmetic arithmetic;
 
-    /** Methods to read/copy/duplicate the voxel-values */
+    /** Methods to read/copy/duplicate the voxel-values. */
     public abstract VoxelsExtracter<T> extract();
 
     /**
-     * Provides a means to assign a constant-value to some or all of the voxels
+     * Provides a means to assign a constant-value to some or all of the voxels.
      *
      * @param valueToAssign
      * @return a newly instantiated object to perform assignments to this voxels object
@@ -124,7 +124,7 @@ public abstract class Voxels<T> {
     }
 
     /**
-     * Assigns a new buffer for a slice
+     * Assigns a new buffer for a slice.
      *
      * <p>This is a <b>mutable</b> operation.
      *

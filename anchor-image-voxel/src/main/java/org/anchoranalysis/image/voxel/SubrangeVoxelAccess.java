@@ -28,7 +28,7 @@ package org.anchoranalysis.image.voxel;
 
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
-import org.anchoranalysis.image.voxel.factory.sliceindex.SliceBufferIndex;
+import org.anchoranalysis.image.voxel.buffer.slice.SliceBufferIndex;
 import org.anchoranalysis.spatial.Extent;
 
 /**

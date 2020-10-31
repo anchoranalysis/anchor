@@ -26,10 +26,9 @@
 package org.anchoranalysis.image.voxel.iterator;
 
 import static org.junit.Assert.*;
-
-import org.anchoranalysis.image.object.ObjectMaskFixture;
 import org.anchoranalysis.image.voxel.iterator.intersecting.CountVoxelsIntersectingObjects;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
+import org.anchoranalysis.image.voxel.object.ObjectMaskFixture;
 import org.anchoranalysis.spatial.point.Point2i;
 import org.junit.Test;
 

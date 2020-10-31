@@ -40,23 +40,20 @@ public class ObjectCollectionWithPropertiesFactory {
      * @param <T> type that will be mapped to {@link ObjectWithProperties}
      * @param <E> exception-type that may be thrown during mapping
      * @param iterable incoming collection to be mapped
-     * @param mapFunc function for mapping
+     * @param mappingFunction function for mapping
      * @return a newly created {@link ObjectCollectionWithProperties}
-     * @throws E if thrown by <code>mapFunc</code>
+     * @throws E if thrown by <code>mappingFunction</code>
      */
     public static <T, E extends Exception> ObjectCollectionWithProperties filterAndMapFrom(
             Iterable<T> iterable,
             Predicate<T> predicate,
-            CheckedFunction<T, ObjectWithProperties, E> mapFunc)
+            CheckedFunction<T, ObjectWithProperties, E> mappingFunction)
             throws E {
         ObjectCollectionWithProperties out = new ObjectCollectionWithProperties();
         for (T item : iterable) {
-
-            if (!predicate.test(item)) {
-                continue;
+            if (predicate.test(item)) {
+                out.add(mappingFunction.apply(item));
             }
-
-            out.add(mapFunc.apply(item));
         }
         return out;
     }

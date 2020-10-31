@@ -34,7 +34,7 @@ import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
-import org.anchoranalysis.image.voxel.object.morphological.accept.AcceptIterationConditon;
+import org.anchoranalysis.image.voxel.object.morphological.predicate.AcceptIterationPredicate;
 import org.anchoranalysis.spatial.Extent;
 import org.anchoranalysis.spatial.box.BoundingBox;
 
@@ -47,7 +47,7 @@ public class MorphologicalErosion {
             boolean do3D,
             int iterations,
             boolean outsideAtThreshold,
-            Optional<AcceptIterationConditon>
+            Optional<AcceptIterationPredicate>
                     acceptConditionsDilation // NB applied on an inverted-version of the binary
             // buffer!!!
             ) throws CreateException {
@@ -101,7 +101,7 @@ public class MorphologicalErosion {
             Optional<Voxels<UnsignedByteBuffer>> backgroundVb,
             int minIntensityValue,
             boolean outsideAtThreshold,
-            Optional<AcceptIterationConditon>
+            Optional<AcceptIterationPredicate>
                     acceptConditionsDilation // NB applied on an inverted-version of the binary
             // buffer!!!
             ) throws CreateException {

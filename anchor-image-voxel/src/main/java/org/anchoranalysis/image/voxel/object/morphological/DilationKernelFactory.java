@@ -33,8 +33,8 @@ import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.kernel.BinaryKernel;
 import org.anchoranalysis.image.voxel.kernel.ConditionalKernel;
-import org.anchoranalysis.image.voxel.kernel.dilateerode.DilationKernel3;
-import org.anchoranalysis.image.voxel.kernel.dilateerode.DilationKernel3ZOnly;
+import org.anchoranalysis.image.voxel.kernel.morphological.DilationKernel;
+import org.anchoranalysis.image.voxel.kernel.morphological.DilationKernelZOnly;
 
 @AllArgsConstructor
 public class DilationKernelFactory {
@@ -69,9 +69,9 @@ public class DilationKernelFactory {
                 throw new CreateException("Big-neighborhood not supported for zOnly");
             }
 
-            return new DilationKernel3ZOnly(binaryValues, outsideAtThreshold);
+            return new DilationKernelZOnly(binaryValues, outsideAtThreshold);
         } else {
-            return new DilationKernel3(
+            return new DilationKernel(
                     binaryValues,
                     outsideAtThreshold,
                     dimensions == SelectDimensions.ALL_DIMENSIONS,

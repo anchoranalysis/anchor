@@ -28,61 +28,48 @@ package org.anchoranalysis.image.voxel.buffer.mean;
 
 import java.nio.FloatBuffer;
 import org.anchoranalysis.image.voxel.Voxels;
+import org.anchoranalysis.image.voxel.buffer.ProjectableBuffer;
+import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactoryTypeBound;
 import org.anchoranalysis.spatial.Extent;
 
-public abstract class MeanIntensityBuffer<T> {
-
-    private Voxels<T> projectedVoxels;
+/**
+ * The buffer used when making a <i>mean-intensity projection</i>.
+ *
+ * @author Owen Feehan
+ * @param <T> type of buffer used, both as input and result, of the maximum intensity projection
+ */
+class MeanIntensityBuffer<T> implements ProjectableBuffer<T> {
+    
+    private Voxels<T> projection;
     private Voxels<FloatBuffer> voxelsSum;
     private int countSlices = 0;
 
     /** Simple constructor since no preprocessing is necessary. */
     public MeanIntensityBuffer(VoxelsFactoryTypeBound<T> flatType, Extent extent) {
         Extent extentForProjection = extent.flattenZ();
-        projectedVoxels = flatType.createInitialized(extentForProjection);
+        projection = flatType.createInitialized(extentForProjection);
         voxelsSum = VoxelsFactory.getFloat().createInitialized(extentForProjection);
     }
 
-    public void projectSlice(T pixels) {
-
-        int maxIndex = volumeXY();
-        for (int i = 0; i < maxIndex; i++) {
-            processPixel(pixels, i);
-        }
-        finalizeBuffer();
+    @Override
+    public void addSlice(VoxelBuffer<T> voxels) {
+        projection.extent().iterateOverXYOffset( offset ->
+            incrementSumBuffer(offset, voxels.getInt(offset))
+        );
         countSlices++;
     }
-
-    protected abstract void processPixel(T pixels, int index);
-
-    protected abstract void finalizeBuffer();
+    
+    @Override
+    public Voxels<T> completeProjection() {
+        projection.arithmetic().divideBy(countSlices);
+        return projection;
+    }
 
     /** Increments a particular offset in the sum bufffer by a certain amount */
-    protected void incrementSumBuffer(int index, int toAdd) {
-        FloatBuffer sumBuffer = sumBuffer();
+    private void incrementSumBuffer(int index, int toAdd) {
+        FloatBuffer sumBuffer = voxelsSum.sliceBuffer(0);
         sumBuffer.put(index, sumBuffer.get(index) + toAdd);
-    }
-
-    protected FloatBuffer sumBuffer() {
-        return voxelsSum.sliceBuffer(0);
-    }
-
-    protected T flatBuffer() {
-        return projectedVoxels.sliceBuffer(0);
-    }
-
-    protected int numberSlicesProcessed() {
-        return countSlices;
-    }
-
-    /** How many pixels in an XY slice */
-    protected int volumeXY() {
-        return projectedVoxels.extent().volumeXY();
-    }
-
-    public Voxels<T> getFlatBuffer() {
-        return projectedVoxels;
     }
 }
