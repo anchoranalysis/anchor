@@ -25,7 +25,9 @@
  */
 package org.anchoranalysis.test.image.rasterwriter;
 
+import static org.junit.Assert.assertTrue;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
@@ -38,11 +40,15 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.spatial.Extent;
 import org.anchoranalysis.test.image.ChannelFixture;
 import org.anchoranalysis.test.image.StackFixture;
+import org.anchoranalysis.test.image.rasterwriter.comparison.ImageComparer;
 
 @AllArgsConstructor
 public class StackTester {
 
-    private static final String EXTENT_IDENTIFIER = "small";
+    public static final String EXTENT_IDENTIFIER = "small";
+    
+    /** A minimum file-size for all written rasters, below which we assume an error has occurred. */
+    private static final int MINIMUM_FILE_SIZE = 20;
 
     // START REQUIRED ARGUMENTS
     /**
@@ -54,85 +60,88 @@ public class StackTester {
     /** The directory to write new files to. */
     private final Path directoryToWriteTo;
 
-    /** How to compare stacks by two different methods. */
-    private final DualStackComparer comparer;
+    /** The file-extension to use for writing and testing files (case-sensitive, and without a leading period). */
+    private final String extension;
 
     /** If true, then 3D stacks are also tested and saved, not just 2D stacks. */
     private final boolean include3D;
     // END REQUIRED ARGUMENTS
 
-    public void performTest(VoxelDataType[] channelVoxelTypes, int numberChannels, boolean makeRGB)
+    public void performTest(VoxelDataType[] channelVoxelTypes, int numberChannels, boolean makeRGB, Optional<ImageComparer> comparer)
             throws ImageIOException, IOException {
-        performTest(channelVoxelTypes, numberChannels, makeRGB, Optional.empty());
+        performTest(channelVoxelTypes, numberChannels, makeRGB, Optional.empty(), comparer);
     }
 
     public void performTest(
             VoxelDataType[] channelVoxelTypes,
             int numberChannels,
             boolean makeRGB,
-            Optional<VoxelDataType> forceFirstChannel)
+            Optional<VoxelDataType> forceFirstChannel, Optional<ImageComparer> comparer)
             throws ImageIOException, IOException {
         for (VoxelDataType voxelType : channelVoxelTypes) {
-            performTest(voxelType, numberChannels, makeRGB, forceFirstChannel);
+            performTest( new ChannelSpecification(voxelType, numberChannels, makeRGB), forceFirstChannel, comparer);
         }
     }
 
-    public void performTest(VoxelDataType channelVoxelType, int numberChannels, boolean makeRGB)
+    public void performTest(ChannelSpecification channels, Optional<ImageComparer> comparer)
             throws ImageIOException, IOException {
-        performTest(channelVoxelType, numberChannels, makeRGB, Optional.empty());
+        performTest(channels, Optional.empty(), comparer);
     }
 
     public void performTest(
-            VoxelDataType channelVoxelType,
-            int numberChannels,
-            boolean makeRGB,
-            Optional<VoxelDataType> forceFirstChannel)
+            ChannelSpecification channels,
+            Optional<VoxelDataType> forceFirstChannel,
+            Optional<ImageComparer> comparer)
             throws ImageIOException, IOException {
         test(
-                channelVoxelType,
-                numberChannels,
-                makeRGB,
+                channels,
                 ChannelFixture.SMALL_2D,
                 false,
-                forceFirstChannel);
+                forceFirstChannel,
+                comparer);
         if (include3D) {
             test(
-                    channelVoxelType,
-                    numberChannels,
-                    makeRGB,
+                    channels,
                     ChannelFixture.SMALL_3D,
                     true,
-                    forceFirstChannel);
+                    forceFirstChannel,
+                    comparer);
         }
     }
 
     private void test(
-            VoxelDataType channelVoxelType,
-            int numberChannels,
-            boolean makeRGB,
+            ChannelSpecification channels,
             Extent extent,
             boolean do3D,
-            Optional<VoxelDataType> forceFirstChannel)
+            Optional<VoxelDataType> forceFirstChannel,
+            Optional<ImageComparer> comparer)
             throws ImageIOException, IOException {
 
         String filename =
                 IdentifierHelper.identiferFor(
-                        numberChannels,
-                        makeRGB,
+                        channels,
                         do3D,
                         EXTENT_IDENTIFIER,
-                        channelVoxelType,
                         forceFirstChannel.isPresent());
 
-        Stack stack =
-                new StackFixture(forceFirstChannel)
-                        .create(numberChannels, extent, channelVoxelType, makeRGB);
+        Stack stack = new StackFixture(forceFirstChannel).create(channels, extent);
 
-        StackWriteOptions options = StackWriteOptionsFactory.maybeRGB(makeRGB);
+        StackWriteOptions options = StackWriteOptionsFactory.maybeRGB(channels.isMakeRGB());
 
         Path pathWritten =
                 writer.writeStackWithExtension(
                         stack, directoryToWriteTo.resolve(filename), options);
-        comparer.assertComparisons(pathWritten, filename);
+        
+        assertMinimumSize(pathWritten, filename);
+        
+        if (comparer.isPresent()) {
+            comparer.get().assertIdentical(filename, ExtensionAdder.addExtension(filename, extension), pathWritten);
+        }
+    }
+    
+    private void assertMinimumSize(Path path, String filenameWithoutExtension) throws IOException {
+        assertTrue(
+                filenameWithoutExtension + "_minimumFileSize",
+                Files.size(path) > MINIMUM_FILE_SIZE);        
     }
 }

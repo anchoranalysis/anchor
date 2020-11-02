@@ -27,7 +27,6 @@ package org.anchoranalysis.test.image.rasterwriter;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 
 /**
  * Builds an identifier (a filename without extension) for a saved-raster corresponding to certain
@@ -43,24 +42,20 @@ public class IdentifierHelper {
     /**
      * Builds an identifier for particular properties.
      *
-     * @param numberChannels the number of channels
-     * @param makeRGB whether a RGB image or not
+     * @param channels the number and type of of channels
      * @param do3D whether a 3D stack or not
      * @param extentIdentifier an identifier referring to the size of hte image
-     * @param channelVoxelType the data-type of voxel in the channel(s)
      * @return a string providing an identifier for the particular combination of attributes.
      */
     public static String identiferFor(
-            int numberChannels,
-            boolean makeRGB,
+            ChannelSpecification channels,
             boolean do3D,
             String extentIdentifier,
-            VoxelDataType channelVoxelType,
             boolean firstChannelForced) {
         StringBuilder builder = new StringBuilder();
-        builder.append(channelVoxelType.toString());
+        builder.append(channels.getChannelVoxelType().toString());
         builder.append("_");
-        builder.append(identifierForNumberChannels(numberChannels, makeRGB));
+        builder.append(identifierForNumberChannels(channels.getNumberChannels(), channels.isMakeRGB()));
         builder.append("_");
         builder.append(identifierForDimensions(do3D));
         builder.append("_");

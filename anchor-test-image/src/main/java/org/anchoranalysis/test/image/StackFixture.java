@@ -37,6 +37,7 @@ import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.spatial.Extent;
 import org.anchoranalysis.test.image.ChannelFixture.IntensityFunction;
+import org.anchoranalysis.test.image.rasterwriter.ChannelSpecification;
 
 /**
  * Creates stacks of 1 or more channels using {@link ChannelFixture}.
@@ -56,20 +57,17 @@ public class StackFixture {
     /**
      * Creates a stack with a particular number of the channels of particular size.
      *
-     * @param numberChannels how many channels in the stack?
+     * <p>Note that if defined, {@code firstChannelVoxelType} takes precedence for the first
+     *     channel's data type over that supplied by {@link ChannelSpecification}.
      * @param extent the size of each channel.
-     * @param defaultChannelVoxelType voxel data-type for all created channels if not otherwise
-     *     specified. Note that {@code firstChannelVoxelType} takes precedence for the first
-     *     channel, if defined.
-     * @param makeRGB if true, the the RGB-flag is set on the created stack, if false it is not.
      * @return the newly created-stack with newly-created channels.
      */
-    public Stack create(int numberChannels, Extent extent, VoxelDataType defaultChannelVoxelType, boolean makeRGB) {
+    public Stack create(ChannelSpecification channelSpecification, Extent extent) {
         Stream<Channel> channels =
-                IntStream.range(0, numberChannels)
-                        .mapToObj(index -> createChannel(index, extent, defaultChannelVoxelType));
+                IntStream.range(0, channelSpecification.getNumberChannels())
+                        .mapToObj(index -> createChannel(index, extent, channelSpecification.getChannelVoxelType()));
         try {
-            return new Stack(makeRGB, channels);
+            return new Stack(channelSpecification.isMakeRGB(), channels);
         } catch (IncorrectImageSizeException e) {
             throw new AnchorImpossibleSituationException();
         }

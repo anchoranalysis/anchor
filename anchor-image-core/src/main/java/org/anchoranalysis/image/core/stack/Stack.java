@@ -373,6 +373,10 @@ public class Stack implements Iterable<Channel> {
         if (getNumberChannels() != other.getNumberChannels()) {
             return false;
         }
+        
+        if (rgb != other.rgb) {
+            return false;
+        }
 
         for (int i = 0; i < getNumberChannels(); i++) {
             if (!getChannel(i).equalsDeep(other.getChannel(i), compareResolution)) {

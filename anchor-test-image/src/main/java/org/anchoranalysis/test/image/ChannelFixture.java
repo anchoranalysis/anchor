@@ -59,8 +59,7 @@ public class ChannelFixture {
     }
 
     public static int multMod(int x, int y, int z) {
-        int xy = mod(x * y);
-        return mod(xy * z);
+        return mod(x * y * z);
     }
     // END: IntensityFunction examples
 
@@ -88,8 +87,21 @@ public class ChannelFixture {
         return channel;
     }
 
-    // Finds modulus of a number with the maximum byte value (+1)
-    private static int mod(int num) {
-        return Math.floorMod(num, UnsignedByteVoxelType.MAX_VALUE_INT + 1);
+    // 
+    
+    /**
+     * Finds modulus of a number with the maximum byte value (+1)
+     * 
+     * <p>Any negative numbers are treated as zeros.
+     * 
+     * @param number
+     * @return
+     */
+    private static int mod(int number) {
+        if (number>=0) {
+            return Math.floorMod(number, UnsignedByteVoxelType.MAX_VALUE_INT + 1); 
+        } else {
+            return 0;
+        }
     }
 }

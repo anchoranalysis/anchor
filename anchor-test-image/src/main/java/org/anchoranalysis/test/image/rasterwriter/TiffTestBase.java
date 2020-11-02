@@ -31,20 +31,25 @@ import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.StackWriter;
 import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
+import org.anchoranalysis.test.image.rasterwriter.comparison.ComparisonPlan;
 import org.junit.Test;
 
 /**
  * For testing all {@link StackWriter}s that create TIFFs.
  *
+ * <p>Note that {@link ComparisonPlan#ComparisonPlan(boolean, Optional, boolean, String)} can be used to quickly created the saved copies in the resources.
+ *
  * @author Owen Feehan
  */
 public abstract class TiffTestBase extends RasterWriterTestBase {
 
+    private static final ComparisonPlan COMPARISON_PLAN = new ComparisonPlan(true, Optional.of("ome.tif"), false);
+    
     private static final VoxelDataType[] SUPPORTED_VOXEL_TYPES =
             RasterWriterTestBase.ALL_SUPPORTED_VOXEL_TYPES;
 
     public TiffTestBase() {
-        super("tif", true, true, Optional.of("ome.xml"));
+        super("tif", true, COMPARISON_PLAN);
     }
 
     @Test

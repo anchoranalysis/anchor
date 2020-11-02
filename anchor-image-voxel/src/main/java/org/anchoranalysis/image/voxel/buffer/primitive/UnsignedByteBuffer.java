@@ -27,6 +27,7 @@ package org.anchoranalysis.image.voxel.buffer.primitive;
 
 import com.google.common.base.Preconditions;
 import java.nio.ByteBuffer;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 
@@ -42,10 +43,11 @@ import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
  *
  * @author Owen Feehan
  */
+@EqualsAndHashCode(callSuper = true)
 public final class UnsignedByteBuffer extends UnsignedBufferAsInt {
 
     /** The underlying storage buffer, to which calls are delegated with our without conversion. */
-    @Getter private final ByteBuffer delegate;
+    @Getter @EqualsAndHashCode.Exclude private final ByteBuffer delegate;
 
     /**
      * Allocates a new buffer of unsigned-bytes.

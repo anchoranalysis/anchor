@@ -27,6 +27,7 @@ package org.anchoranalysis.image.voxel.buffer.primitive;
 
 import com.google.common.base.Preconditions;
 import java.nio.ShortBuffer;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
 
@@ -42,10 +43,11 @@ import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
  *
  * @author Owen Feehan
  */
+@EqualsAndHashCode(callSuper = true)
 public final class UnsignedShortBuffer extends UnsignedBufferAsInt {
 
     /** The underlying storage buffer, to which calls are delegated with our without conversion. */
-    @Getter private final ShortBuffer delegate;
+    @Getter @EqualsAndHashCode.Exclude private final ShortBuffer delegate;
 
     /**
      * Allocates a new (direct) buffer of unsigned-shorts.

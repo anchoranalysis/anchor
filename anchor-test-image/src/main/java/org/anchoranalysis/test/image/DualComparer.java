@@ -150,7 +150,7 @@ public class DualComparer {
     }
 
     /**
-     * Copies a file from its path in the first loader, to its path in the second loder.
+     * Copies a file from its path in the first loader, to its path in the second loader.
      *
      * <p>Any existing file is replaced.
      *

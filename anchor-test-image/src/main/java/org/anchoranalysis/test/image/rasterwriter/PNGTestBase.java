@@ -33,6 +33,7 @@ import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedIntVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
+import org.anchoranalysis.test.image.rasterwriter.comparison.ComparisonPlan;
 import org.junit.Test;
 
 /**
@@ -46,18 +47,22 @@ import org.junit.Test;
  * </ul>
  *
  * And no other formats are supported.
- *
+ * 
+ * <p>Note that {@link ComparisonPlan#ComparisonPlan(boolean, Optional, boolean, String)} can be used to quickly created the saved copies in the resources.
+ * 
  * @author Owen Feehan
  */
 public abstract class PNGTestBase extends RasterWriterTestBase {
 
+    private static final ComparisonPlan COMPARISON_PLAN = new ComparisonPlan(true, Optional.of("ome.tif"), false);
+    
     /** All possible voxel types that can be supported. */
     protected static final VoxelDataType[] ALL_SUPPORTED_VOXEL_TYPES = {
         UnsignedByteVoxelType.INSTANCE, UnsignedShortVoxelType.INSTANCE
     };
 
     public PNGTestBase() {
-        super("png", false, true, Optional.of("ome.xml"));
+        super("png", false, COMPARISON_PLAN);
     }
 
     @Test
@@ -92,5 +97,10 @@ public abstract class PNGTestBase extends RasterWriterTestBase {
     @Test(expected = ImageIOException.class)
     public void testFourChannels() throws ImageIOException, IOException {
         tester.testFourChannels();
+    }
+    
+    @Test(expected = ImageIOException.class)
+    public void testThreeChannelsRGBUnsignedShort() throws ImageIOException, IOException {
+        tester.testThreeChannelsRGB(UnsignedShortVoxelType.INSTANCE);
     }
 }

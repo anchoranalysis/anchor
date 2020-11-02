@@ -97,7 +97,7 @@ public abstract class OutputExperiment extends Experiment {
      *
      * @param arguments additional run-time configuration/parameters that influences the experiment.
      */
-    public void executeExperiment(ExperimentExecutionArguments arguments)
+    public final void executeExperiment(ExperimentExecutionArguments arguments)
             throws ExperimentExecutionException {
 
         try {

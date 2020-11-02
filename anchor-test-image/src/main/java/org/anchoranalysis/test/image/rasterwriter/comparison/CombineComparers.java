@@ -23,16 +23,37 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.test.image.rasterwriter;
+package org.anchoranalysis.test.image.rasterwriter.comparison;
 
-import lombok.AllArgsConstructor;
-import lombok.Value;
-import org.anchoranalysis.test.image.DualComparer;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
-@AllArgsConstructor
-@Value
-public class DualComparerWithExtension {
+/**
+ * Combines multiple (optional) {@link ImageComparer}s.
+ *
+ * @author Owen Feehan
+ */
+class CombineComparers implements ImageComparer {
+    
+    private final List<ImageComparer> list;
+    
+    @SafeVarargs
+    public CombineComparers(Optional<ImageComparer> ...comparer) {
+        list = Arrays.stream(comparer).filter(Optional::isPresent).map(Optional::get).collect(Collectors.toList());
+    }
 
-    private DualComparer comparer;
-    private String extension;
+    @Override
+    public void assertIdentical(String filenameWithoutExtension, String filenameWithExtension, Path path) throws IOException {
+        for( ImageComparer comparer : list ) {
+            comparer.assertIdentical(
+                    filenameWithoutExtension,
+                    filenameWithExtension,
+                    path
+            );
+        }
+    }
 }

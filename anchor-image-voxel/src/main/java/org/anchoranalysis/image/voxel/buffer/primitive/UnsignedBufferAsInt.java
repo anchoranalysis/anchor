@@ -26,6 +26,7 @@
 package org.anchoranalysis.image.voxel.buffer.primitive;
 
 import java.nio.Buffer;
+import lombok.EqualsAndHashCode;
 
 /**
  * A {@link UnsignedBuffer} that exposes its internal types as {@code int}.
@@ -35,6 +36,7 @@ import java.nio.Buffer;
  *
  * @author Owen Feehan
  */
+@EqualsAndHashCode(callSuper = true)
 public abstract class UnsignedBufferAsInt extends UnsignedBuffer {
 
     public UnsignedBufferAsInt(Buffer delegate) {
