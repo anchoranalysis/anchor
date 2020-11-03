@@ -52,8 +52,8 @@ public interface VoxelsFactoryTypeBound<T> {
     Voxels<T> createUninitialized(Extent extent);
 
     VoxelDataType dataType();
-
-    default Voxels<T> createForBuffer(VoxelBuffer<T> buffer, Extent extent) {
+    
+    default Voxels<T> createForVoxelBuffer(VoxelBuffer<T> buffer, Extent extent) {
         Preconditions.checkArgument(extent.volumeXY() == buffer.capacity());
 
         Voxels<T> out = createUninitialized(extent);
