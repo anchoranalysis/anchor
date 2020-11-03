@@ -65,7 +65,7 @@ public interface VoxelsFactoryTypeBound<T> {
      * Creates and initializes voxels that correspond to a particular bounding-box region.
      * 
      * @param box the bounding-box region
-     * @return newly created voxels of the same extent as {@box} and retaining an association with {@code box}.
+     * @return newly created voxels of the same extent as {@code box} and retaining an association with {@code box}.
      */
     default BoundedVoxels<T> createBounded(BoundingBox box) {
         return new BoundedVoxels<>(
