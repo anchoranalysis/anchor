@@ -33,6 +33,7 @@ import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
+import org.anchoranalysis.image.voxel.kernel.morphological.DilationKernelFactory;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.image.voxel.object.morphological.predicate.AcceptIterationPredicate;
 import org.anchoranalysis.spatial.Extent;

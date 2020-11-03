@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.image.voxel.kernel.outline;
 
+import java.util.Optional;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
@@ -79,13 +80,13 @@ public class OutlineKernelNeighborMatchValue extends OutlineKernelBase {
     @Override
     public boolean acceptPoint(int ind, Point3i point) {
 
-        UnsignedByteBuffer inArrZ = inSlices.getLocal(0);
-        UnsignedByteBuffer inArrZLess1 = inSlices.getLocal(-1);
-        UnsignedByteBuffer inArrZPlus1 = inSlices.getLocal(+1);
+        UnsignedByteBuffer inArrZ = inSlices.getLocal(0).get();   // NOSONAR
+        Optional<UnsignedByteBuffer> inArrZLess1 = inSlices.getLocal(-1);
+        Optional<UnsignedByteBuffer> inArrZPlus1 = inSlices.getLocal(+1);
 
-        UnsignedByteBuffer inArrR = localSlicesRequireHigh.getLocal(0);
-        UnsignedByteBuffer inArrRLess1 = localSlicesRequireHigh.getLocal(-1);
-        UnsignedByteBuffer inArrRPlus1 = localSlicesRequireHigh.getLocal(+1);
+        UnsignedByteBuffer inArrR = localSlicesRequireHigh.getLocal(0).get();   // NOSONAR
+        Optional<UnsignedByteBuffer> inArrRLess1 = localSlicesRequireHigh.getLocal(-1);
+        Optional<UnsignedByteBuffer> inArrRPlus1 = localSlicesRequireHigh.getLocal(+1);
 
         int xLength = extent.x();
 
@@ -150,23 +151,23 @@ public class OutlineKernelNeighborMatchValue extends OutlineKernelBase {
 
         if (useZ) {
 
-            if (inArrZLess1 != null) {
-                if (binaryValues.isOff(inArrZLess1.getRaw(ind))) {
-                    return checkIfRequireHighIsTrue(inArrRLess1, point, 0, 0);
+            if (inArrZLess1.isPresent()) {
+                if (binaryValues.isOff(inArrZLess1.get().getRaw(ind))) {
+                    return checkIfRequireHighIsTrue(inArrRLess1.get(), point, 0, 0);
                 }
             } else {
                 if (!ignoreAtThreshold && !outsideAtThreshold) {
-                    return checkIfRequireHighIsTrue(inArrRLess1, point, 0, 0);
+                    return checkIfRequireHighIsTrue(inArrRLess1.get(), point, 0, 0);
                 }
             }
 
-            if (inArrZPlus1 != null) {
-                if (binaryValues.isOff(inArrZPlus1.getRaw(ind))) {
-                    return checkIfRequireHighIsTrue(inArrRPlus1, point, 0, 0);
+            if (inArrZPlus1.isPresent()) {
+                if (binaryValues.isOff(inArrZPlus1.get().getRaw(ind))) {
+                    return checkIfRequireHighIsTrue(inArrRPlus1.get(), point, 0, 0);
                 }
             } else {
                 if (!ignoreAtThreshold && !outsideAtThreshold) {
-                    return checkIfRequireHighIsTrue(inArrRPlus1, point, 0, 0);
+                    return checkIfRequireHighIsTrue(inArrRPlus1.get(), point, 0, 0);
                 }
             }
         }

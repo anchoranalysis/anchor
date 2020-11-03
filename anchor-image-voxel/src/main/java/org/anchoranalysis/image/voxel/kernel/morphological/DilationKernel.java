@@ -26,13 +26,14 @@
 
 package org.anchoranalysis.image.voxel.kernel.morphological;
 
+import java.util.Optional;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.spatial.point.Point3i;
 
 // Erosion with a 3x3 or 3x3x3 kernel
-public final class DilationKernel extends BinaryKernelMorphologicalExtent {
+final class DilationKernel extends BinaryKernelMorphologicalExtent {
 
     private boolean bigNeighborhood;
 
@@ -59,16 +60,16 @@ public final class DilationKernel extends BinaryKernelMorphologicalExtent {
     @Override
     public boolean acceptPoint(int ind, Point3i point) {
 
-        UnsignedByteBuffer inArrZ = inSlices.getLocal(0);
-        UnsignedByteBuffer inArrZLess1 = inSlices.getLocal(-1);
-        UnsignedByteBuffer inArrZPlus1 = inSlices.getLocal(+1);
+        UnsignedByteBuffer buffer = inSlices.getLocal(0).get(); // NOSONAR
+        Optional<UnsignedByteBuffer> bufferZLess1 = inSlices.getLocal(-1);
+        Optional<UnsignedByteBuffer> bufferZPlus1 = inSlices.getLocal(+1);
 
         int xLength = extent.x();
 
         int x = point.x();
         int y = point.y();
 
-        if (binaryValues.isOn(inArrZ.getRaw(ind))) {
+        if (binaryValues.isOn(buffer.getRaw(ind))) {
             return true;
         }
 
@@ -76,7 +77,7 @@ public final class DilationKernel extends BinaryKernelMorphologicalExtent {
         x--;
         ind--;
         if (x >= 0) {
-            if (binaryValues.isOn(inArrZ.getRaw(ind))) {
+            if (binaryValues.isOn(buffer.getRaw(ind))) {
                 return true;
             }
         } else {
@@ -88,7 +89,7 @@ public final class DilationKernel extends BinaryKernelMorphologicalExtent {
         x += 2;
         ind += 2;
         if (x < extent.x()) {
-            if (binaryValues.isOn(inArrZ.getRaw(ind))) {
+            if (binaryValues.isOn(buffer.getRaw(ind))) {
                 return true;
             }
         } else {
@@ -103,7 +104,7 @@ public final class DilationKernel extends BinaryKernelMorphologicalExtent {
         y--;
         ind -= xLength;
         if (y >= 0) {
-            if (binaryValues.isOn(inArrZ.getRaw(ind))) {
+            if (binaryValues.isOn(buffer.getRaw(ind))) {
                 return true;
             }
         } else {
@@ -115,7 +116,7 @@ public final class DilationKernel extends BinaryKernelMorphologicalExtent {
         y += 2;
         ind += (2 * xLength);
         if (y < (extent.y())) {
-            if (binaryValues.isOn(inArrZ.getRaw(ind))) {
+            if (binaryValues.isOn(buffer.getRaw(ind))) {
                 return true;
             }
         } else {
@@ -137,7 +138,7 @@ public final class DilationKernel extends BinaryKernelMorphologicalExtent {
             ind -= xLength;
 
             if (x >= 0 && y >= 0) {
-                if (binaryValues.isOn(inArrZ.getRaw(ind))) {
+                if (binaryValues.isOn(buffer.getRaw(ind))) {
                     return true;
                 }
             } else {
@@ -151,7 +152,7 @@ public final class DilationKernel extends BinaryKernelMorphologicalExtent {
             y += 2;
             ind += (2 * xLength);
             if (x >= 0 && y < (extent.y())) {
-                if (binaryValues.isOn(inArrZ.getRaw(ind))) {
+                if (binaryValues.isOn(buffer.getRaw(ind))) {
                     return true;
                 }
             } else {
@@ -171,7 +172,7 @@ public final class DilationKernel extends BinaryKernelMorphologicalExtent {
             // x +1, y-1
 
             if (x < extent.x() && y >= 0) {
-                if (binaryValues.isOn(inArrZ.getRaw(ind))) {
+                if (binaryValues.isOn(buffer.getRaw(ind))) {
                     return true;
                 }
             } else {
@@ -185,7 +186,7 @@ public final class DilationKernel extends BinaryKernelMorphologicalExtent {
             y += 2;
             ind += (2 * xLength);
             if (x < extent.x() && y < (extent.y())) {
-                if (binaryValues.isOn(inArrZ.getRaw(ind))) {
+                if (binaryValues.isOn(buffer.getRaw(ind))) {
                     return true;
                 }
             } else {
@@ -200,8 +201,8 @@ public final class DilationKernel extends BinaryKernelMorphologicalExtent {
 
         if (useZ) {
 
-            if (inArrZLess1 != null) {
-                if (binaryValues.isOn(inArrZLess1.getRaw(ind))) {
+            if (bufferZLess1.isPresent()) {
+                if (binaryValues.isOn(bufferZLess1.get().getRaw(ind))) {
                     return true;
                 }
             } else {
@@ -210,8 +211,8 @@ public final class DilationKernel extends BinaryKernelMorphologicalExtent {
                 }
             }
 
-            if (inArrZPlus1 != null) {
-                if (binaryValues.isOn(inArrZPlus1.getRaw(ind))) {
+            if (bufferZPlus1.isPresent()) {
+                if (binaryValues.isOn(bufferZPlus1.get().getRaw(ind))) {
                     return true;
                 }
             } else {

@@ -37,6 +37,7 @@ import org.anchoranalysis.image.voxel.binary.BinaryVoxelsFactory;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.kernel.ApplyKernel;
 import org.anchoranalysis.image.voxel.kernel.BinaryKernel;
+import org.anchoranalysis.image.voxel.kernel.morphological.DilationKernelFactory;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.image.voxel.object.morphological.predicate.AcceptIterationPredicate;
 import org.anchoranalysis.spatial.Extent;

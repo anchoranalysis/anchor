@@ -23,7 +23,7 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.image.voxel.object.morphological;
+package org.anchoranalysis.image.voxel.kernel.morphological;
 
 import java.util.Optional;
 import lombok.AllArgsConstructor;
@@ -33,8 +33,7 @@ import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.kernel.BinaryKernel;
 import org.anchoranalysis.image.voxel.kernel.ConditionalKernel;
-import org.anchoranalysis.image.voxel.kernel.morphological.DilationKernel;
-import org.anchoranalysis.image.voxel.kernel.morphological.DilationKernelZOnly;
+import org.anchoranalysis.image.voxel.object.morphological.SelectDimensions;
 
 @AllArgsConstructor
 public class DilationKernelFactory {

@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.image.voxel.kernel.count;
 
+import java.util.Optional;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
@@ -76,9 +77,9 @@ public class CountKernelNeighborhoodMask extends CountKernelNeighborhoodBase {
     protected boolean isNeighborVoxelAccepted(
             Point3i point, int xShift, int yShift, int zShift, Extent extent) {
 
-        UnsignedByteBuffer inArr = localSlicesRequireHigh.getLocal(zShift);
+        Optional<UnsignedByteBuffer> inArr = localSlicesRequireHigh.getLocal(zShift);
 
-        if (inArr == null) {
+        if (!inArr.isPresent()) {
             return false;
         }
 
@@ -95,6 +96,6 @@ public class CountKernelNeighborhoodMask extends CountKernelNeighborhoodBase {
         }
 
         int indexGlobal = voxelsRequireHigh.extent().offset(x1, y1);
-        return bvRequireHigh.isOn(inArr.getRaw(indexGlobal));
+        return bvRequireHigh.isOn(inArr.get().getRaw(indexGlobal));
     }
 }

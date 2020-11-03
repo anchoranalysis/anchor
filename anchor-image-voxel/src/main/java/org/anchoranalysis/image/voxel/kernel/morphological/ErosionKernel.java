@@ -26,6 +26,8 @@
 
 package org.anchoranalysis.image.voxel.kernel.morphological;
 
+import java.util.Optional;
+import java.util.function.Supplier;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.spatial.point.Point3i;
@@ -38,8 +40,8 @@ import org.anchoranalysis.spatial.point.Point3i;
 public final class ErosionKernel extends BinaryKernelMorphologicalExtent {
 
     // Constructor
-    public ErosionKernel(BinaryValuesByte bv, boolean outsideAtThreshold, boolean useZ) {
-        super(bv, outsideAtThreshold, useZ);
+    public ErosionKernel(BinaryValuesByte binaryValues, boolean outsideAtThreshold, boolean useZ) {
+        super(binaryValues, outsideAtThreshold, useZ);
     }
 
     /**
@@ -50,26 +52,24 @@ public final class ErosionKernel extends BinaryKernelMorphologicalExtent {
      * <p>Apologies that it is difficult to read with high cognitive-complexity.
      */
     @Override
-    public boolean acceptPoint(int ind, Point3i point) {
+    public boolean acceptPoint(int index, Point3i point) {
 
-        UnsignedByteBuffer inArrZ = inSlices.getLocal(0);
-        UnsignedByteBuffer inArrZLess1 = inSlices.getLocal(-1);
-        UnsignedByteBuffer inArrZPlus1 = inSlices.getLocal(+1);
+        UnsignedByteBuffer buffer = inSlices.getLocal(0).get(); // NOSONAR
 
         int xLength = extent.x();
 
         int x = point.x();
         int y = point.y();
 
-        if (binaryValues.isOff(inArrZ.getRaw(ind))) {
+        if (binaryValues.isOff(buffer.getRaw(index))) {
             return false;
         }
 
         // We walk up and down in x
         x--;
-        ind--;
+        index--;
         if (x >= 0) {
-            if (binaryValues.isOff(inArrZ.getRaw(ind))) {
+            if (binaryValues.isOff(buffer.getRaw(index))) {
                 return false;
             }
         } else {
@@ -79,9 +79,9 @@ public final class ErosionKernel extends BinaryKernelMorphologicalExtent {
         }
 
         x += 2;
-        ind += 2;
+        index += 2;
         if (x < extent.x()) {
-            if (binaryValues.isOff(inArrZ.getRaw(ind))) {
+            if (binaryValues.isOff(buffer.getRaw(index))) {
                 return false;
             }
         } else {
@@ -89,13 +89,13 @@ public final class ErosionKernel extends BinaryKernelMorphologicalExtent {
                 return false;
             }
         }
-        ind--;
+        index--;
 
         // We walk up and down in y
         y--;
-        ind -= xLength;
+        index -= xLength;
         if (y >= 0) {
-            if (binaryValues.isOff(inArrZ.getRaw(ind))) {
+            if (binaryValues.isOff(buffer.getRaw(index))) {
                 return false;
             }
         } else {
@@ -105,9 +105,9 @@ public final class ErosionKernel extends BinaryKernelMorphologicalExtent {
         }
 
         y += 2;
-        ind += (2 * xLength);
+        index += (2 * xLength);
         if (y < (extent.y())) {
-            if (binaryValues.isOff(inArrZ.getRaw(ind))) {
+            if (binaryValues.isOff(buffer.getRaw(index))) {
                 return false;
             }
         } else {
@@ -115,31 +115,20 @@ public final class ErosionKernel extends BinaryKernelMorphologicalExtent {
                 return false;
             }
         }
-        ind -= xLength;
+        index -= xLength;
 
-        if (useZ) {
-
-            if (inArrZLess1 != null) {
-                if (binaryValues.isOff(inArrZLess1.getRaw(ind))) {
-                    return false;
-                }
-            } else {
-                if (outsideAtThreshold) {
-                    return false;
-                }
-            }
-
-            if (inArrZPlus1 != null) {
-                if (binaryValues.isOff(inArrZPlus1.getRaw(ind))) {
-                    return false;
-                }
-            } else {
-                if (outsideAtThreshold) {
-                    return false;
-                }
-            }
+        return maybeCheckZ(() -> inSlices.getLocal(-1), () -> inSlices.getLocal(+1), index);
+    }
+    
+    private boolean maybeCheckZ(Supplier<Optional<UnsignedByteBuffer>> bufferZLess1, Supplier<Optional<UnsignedByteBuffer>> bufferZPlus1, int index) {
+        return useZ && checkZBuffer(bufferZLess1.get(), index) && checkZBuffer(bufferZPlus1.get(), index);
+    }
+    
+    private boolean checkZBuffer(Optional<UnsignedByteBuffer> buffer, int index) {
+        if (buffer.isPresent()) {
+            return !binaryValues.isOff(buffer.get().getRaw(index));
+        } else {
+            return !outsideAtThreshold;
         }
-
-        return true;
     }
 }

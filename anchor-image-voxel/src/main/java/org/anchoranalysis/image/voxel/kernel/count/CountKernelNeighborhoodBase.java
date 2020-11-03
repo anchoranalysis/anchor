@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.image.voxel.kernel.count;
 
+import java.util.Optional;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
@@ -90,18 +91,18 @@ public abstract class CountKernelNeighborhoodBase extends CountKernel {
      * <p>Apologies that it is difficult to read with high cognitive-complexity.
      */
     @Override
-    public int countAtPosition(int ind, Point3i point) {
+    public int countAtPosition(int index, Point3i point) {
 
-        UnsignedByteBuffer inArrZ = inSlices.getLocal(0);
-        UnsignedByteBuffer inArrZLess1 = inSlices.getLocal(-1);
-        UnsignedByteBuffer inArrZPlus1 = inSlices.getLocal(+1);
+        UnsignedByteBuffer buffer = inSlices.getLocal(0).get(); // NOSONAR
+        Optional<UnsignedByteBuffer> bufferZLess1 = inSlices.getLocal(-1);
+        Optional<UnsignedByteBuffer> bufferZPlus1 = inSlices.getLocal(+1);
 
         int xLength = extent.x();
 
         int x = point.x();
         int y = point.y();
 
-        if (bv.isOff(inArrZ.getRaw(ind))) {
+        if (bv.isOff(buffer.getRaw(index))) {
             return 0;
         }
 
@@ -109,9 +110,9 @@ public abstract class CountKernelNeighborhoodBase extends CountKernel {
 
         // We walk up and down in x
         x--;
-        ind--;
+        index--;
         if (x >= 0) {
-            if (bv.isOff(inArrZ.getRaw(ind)) && isNeighborVoxelAccepted(point, -1, 0, 0, extent)) {
+            if (bv.isOff(buffer.getRaw(index)) && isNeighborVoxelAccepted(point, -1, 0, 0, extent)) {
                 if (!multipleMatchesPerVoxel) {
                     return 1;
                 }
@@ -129,9 +130,9 @@ public abstract class CountKernelNeighborhoodBase extends CountKernel {
         }
 
         x += 2;
-        ind += 2;
+        index += 2;
         if (x < extent.x()) {
-            if (bv.isOff(inArrZ.getRaw(ind)) && isNeighborVoxelAccepted(point, +1, 0, 0, extent)) {
+            if (bv.isOff(buffer.getRaw(index)) && isNeighborVoxelAccepted(point, +1, 0, 0, extent)) {
                 if (!multipleMatchesPerVoxel) {
                     return 1;
                 }
@@ -147,13 +148,13 @@ public abstract class CountKernelNeighborhoodBase extends CountKernel {
                 count++;
             }
         }
-        ind--;
+        index--;
 
         // We walk up and down in y
         y--;
-        ind -= xLength;
+        index -= xLength;
         if (y >= 0) {
-            if (bv.isOff(inArrZ.getRaw(ind)) && isNeighborVoxelAccepted(point, 0, -1, 0, extent)) {
+            if (bv.isOff(buffer.getRaw(index)) && isNeighborVoxelAccepted(point, 0, -1, 0, extent)) {
                 if (!multipleMatchesPerVoxel) {
                     return 1;
                 }
@@ -171,9 +172,9 @@ public abstract class CountKernelNeighborhoodBase extends CountKernel {
         }
 
         y += 2;
-        ind += (2 * xLength);
+        index += (2 * xLength);
         if (y < (extent.y())) {
-            if (bv.isOff(inArrZ.getRaw(ind)) && isNeighborVoxelAccepted(point, 0, +1, 0, extent)) {
+            if (bv.isOff(buffer.getRaw(index)) && isNeighborVoxelAccepted(point, 0, +1, 0, extent)) {
                 if (!multipleMatchesPerVoxel) {
                     return 1;
                 }
@@ -189,11 +190,11 @@ public abstract class CountKernelNeighborhoodBase extends CountKernel {
                 count++;
             }
         }
-        ind -= xLength;
+        index -= xLength;
 
         if (useZ) {
-            if (inArrZLess1 != null) {
-                if (bv.isOff(inArrZLess1.getRaw(ind))
+            if (bufferZLess1.isPresent()) {
+                if (bv.isOff(bufferZLess1.get().getRaw(index))
                         && isNeighborVoxelAccepted(point, 0, 0, -1, extent)) {
                     if (!multipleMatchesPerVoxel) {
                         return 1;
@@ -211,8 +212,8 @@ public abstract class CountKernelNeighborhoodBase extends CountKernel {
                 }
             }
 
-            if (inArrZPlus1 != null) {
-                if (bv.isOff(inArrZPlus1.getRaw(ind))
+            if (bufferZPlus1.isPresent()) {
+                if (bv.isOff(bufferZPlus1.get().getRaw(index))
                         && isNeighborVoxelAccepted(point, 0, 0, +1, extent)) {
                     if (!multipleMatchesPerVoxel) {
                         return 1;

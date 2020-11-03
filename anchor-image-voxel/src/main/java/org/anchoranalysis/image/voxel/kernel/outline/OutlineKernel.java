@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.image.voxel.kernel.outline;
 
+import java.util.Optional;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.spatial.point.Point3i;
@@ -51,16 +52,16 @@ public class OutlineKernel extends OutlineKernelBase {
     @Override
     public boolean acceptPoint(int ind, Point3i point) {
 
-        UnsignedByteBuffer inArrZ = inSlices.getLocal(0);
-        UnsignedByteBuffer inArrZLess1 = inSlices.getLocal(-1);
-        UnsignedByteBuffer inArrZPlus1 = inSlices.getLocal(+1);
+        UnsignedByteBuffer buffer = inSlices.getLocal(0).get();     // NOSONAR
+        Optional<UnsignedByteBuffer> bufferZLess1 = inSlices.getLocal(-1);
+        Optional<UnsignedByteBuffer> bufferZPlus1 = inSlices.getLocal(+1);
 
         int xLength = extent.x();
 
         int x = point.x();
         int y = point.y();
 
-        if (binaryValues.isOff(inArrZ.getRaw(ind))) {
+        if (binaryValues.isOff(buffer.getRaw(ind))) {
             return false;
         }
 
@@ -68,7 +69,7 @@ public class OutlineKernel extends OutlineKernelBase {
         x--;
         ind--;
         if (x >= 0) {
-            if (binaryValues.isOff(inArrZ.getRaw(ind))) {
+            if (binaryValues.isOff(buffer.getRaw(ind))) {
                 return true;
             }
         } else {
@@ -80,7 +81,7 @@ public class OutlineKernel extends OutlineKernelBase {
         x += 2;
         ind += 2;
         if (x < extent.x()) {
-            if (binaryValues.isOff(inArrZ.getRaw(ind))) {
+            if (binaryValues.isOff(buffer.getRaw(ind))) {
                 return true;
             }
         } else {
@@ -94,7 +95,7 @@ public class OutlineKernel extends OutlineKernelBase {
         y--;
         ind -= xLength;
         if (y >= 0) {
-            if (binaryValues.isOff(inArrZ.getRaw(ind))) {
+            if (binaryValues.isOff(buffer.getRaw(ind))) {
                 return true;
             }
         } else {
@@ -106,7 +107,7 @@ public class OutlineKernel extends OutlineKernelBase {
         y += 2;
         ind += (2 * xLength);
         if (y < (extent.y())) {
-            if (binaryValues.isOff(inArrZ.getRaw(ind))) {
+            if (binaryValues.isOff(buffer.getRaw(ind))) {
                 return true;
             }
         } else {
@@ -118,8 +119,8 @@ public class OutlineKernel extends OutlineKernelBase {
 
         if (useZ) {
 
-            if (inArrZLess1 != null) {
-                if (binaryValues.isOff(inArrZLess1.getRaw(ind))) {
+            if (bufferZLess1.isPresent()) {
+                if (binaryValues.isOff(bufferZLess1.get().getRaw(ind))) {
                     return true;
                 }
             } else {
@@ -128,8 +129,8 @@ public class OutlineKernel extends OutlineKernelBase {
                 }
             }
 
-            if (inArrZPlus1 != null) {
-                if (binaryValues.isOff(inArrZPlus1.getRaw(ind))) {
+            if (bufferZPlus1.isPresent()) {
+                if (binaryValues.isOff(bufferZPlus1.get().getRaw(ind))) {
                     return true;
                 }
             } else {
