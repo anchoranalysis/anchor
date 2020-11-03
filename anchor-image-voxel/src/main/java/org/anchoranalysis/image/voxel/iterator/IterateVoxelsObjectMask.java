@@ -38,6 +38,7 @@ import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.iterator.process.ProcessPoint;
 import org.anchoranalysis.image.voxel.iterator.process.buffer.ProcessBufferBinary;
 import org.anchoranalysis.image.voxel.iterator.process.buffer.ProcessBufferUnary;
+import org.anchoranalysis.image.voxel.iterator.process.voxelbuffer.ProcessVoxelBufferBinaryMixed;
 import org.anchoranalysis.image.voxel.iterator.process.voxelbuffer.ProcessVoxelBufferUnary;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.spatial.Extent;
@@ -228,6 +229,49 @@ public class IterateVoxelsObjectMask {
                         .orElseGet(boxVoxels::shiftToOrigin);
 
         callEachPoint(object, voxels, boxVoxels, iterateBox, process);
+    }
+    
+    
+    /**
+     * Iterate over each voxel in an object-mask - with <b>one associated voxel-buffer</b>
+     * and <b>one associated buffer</b> for each slice.
+     *
+     * <p>The extent's of both {@code voxels1} and {@code voxels2} must be equal.
+     * 
+     * <p>Note that a new {@link Point3i} is created for each call to {@code process}.
+     *
+     * @param voxels1 voxels that provide the <b>first</b> element, the voxel-buffer.
+     * @param voxels2 voxels that provide the <b>second</b> element, the buffer.
+     * @param process is called for each voxel using <i>global</i> coordinates.
+     * @param <T> buffer-type for voxels
+     */
+    public static <S, T> void withTwoMixedBuffers(
+            ObjectMask object, Voxels<S> voxels1, Voxels<T> voxels2, ProcessVoxelBufferBinaryMixed<S, T> process) {
+        Preconditions.checkArgument(voxels1.extent().equals(voxels2.extent()));
+
+        ReadableTuple3i cornerMin = object.boundingBox().cornerMin();
+        ReadableTuple3i cornerMax = object.boundingBox().calculateCornerMax();
+
+        byte maskOn = object.binaryValuesByte().getOnByte();
+
+        Extent e = voxels1.extent();
+        for (int z = cornerMin.z(); z <= cornerMax.z(); z++) {
+
+            VoxelBuffer<S> buffer = voxels1.slice(z);
+            T bufferFinalized = voxels2.sliceBuffer(z);
+            UnsignedByteBuffer bufferMask = object.sliceBufferGlobal(z);
+
+            int offset = 0;
+            for (int y = cornerMin.y(); y <= cornerMax.y(); y++) {
+                for (int x = cornerMin.x(); x <= cornerMax.x(); x++) {
+                    if (bufferMask.getRaw(offset) == maskOn) {
+                        process.process(new Point3i(x,y,z), buffer, bufferFinalized, e.offset(x, y));
+                    }
+
+                    offset++;
+                }
+            }
+        }
     }
 
     /**

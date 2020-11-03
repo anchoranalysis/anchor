@@ -41,6 +41,7 @@ import org.anchoranalysis.image.voxel.iterator.process.buffer.ProcessBufferBinar
 import org.anchoranalysis.image.voxel.iterator.process.buffer.ProcessBufferTernary;
 import org.anchoranalysis.image.voxel.iterator.process.buffer.ProcessBufferUnary;
 import org.anchoranalysis.image.voxel.iterator.process.voxelbuffer.ProcessVoxelBufferBinary;
+import org.anchoranalysis.image.voxel.iterator.process.voxelbuffer.ProcessVoxelBufferBinaryMixed;
 import org.anchoranalysis.image.voxel.iterator.process.voxelbuffer.ProcessVoxelBufferUnary;
 import org.anchoranalysis.image.voxel.iterator.process.voxelbuffer.ProcessVoxelBufferUnaryWithPoint;
 import org.anchoranalysis.spatial.Extent;
@@ -85,12 +86,10 @@ public class IterateVoxelsAll {
      *
      * <p>The extent's of both {@code voxels1} and {@code voxels2} must be equal.
      *
-     * @param voxels1 voxels in which which {@link BoundingBox} refers to a subregion, and which
+     * @param voxels1 first voxels
      *     provides the <b>first</b> buffer
-     * @param voxels2 voxels in which which {@link BoundingBox} refers to a subregion, and which
-     *     provides the <b>second</b> buffer
-     * @param process is called for each voxel within the bounding-box using <i>global</i>
-     *     coordinates.
+     * @param voxels2 second voxels
+     * @param process is called for each voxel using <i>global</i> coordinates.
      * @param <T> buffer-type for voxels
      */
     public static <T> void withTwoBuffersAndPoint(
@@ -190,12 +189,10 @@ public class IterateVoxelsAll {
      *
      * <p>The extent's of both {@code voxels1} and {@code voxels2} must be equal.
      *
-     * @param voxels1 voxels in which which {@link BoundingBox} refers to a subregion, and which
-     *     provides the <b>first</b> buffer
-     * @param voxels2 voxels in which which {@link BoundingBox} refers to a subregion, and which
-     *     provides the <b>second</b> buffer
-     * @param process is called for each voxel within the bounding-box using <i>global</i>
-     *     coordinates.
+     * @param voxels1 voxels that provide the <b>first</b> voxel-buffer
+     *     
+     * @param voxels2 voxels that provide the <b>first</b> buffer
+     * @param process is called for each voxel using <i>global</i> coordinates.
      * @param <T> buffer-type for voxels
      */
     public static <S, T> void withTwoVoxelBuffers(
@@ -212,6 +209,42 @@ public class IterateVoxelsAll {
 
                             for (int offset = 0; offset < volumeXY; offset++) {
                                 process.process(buffer1, buffer2, offset);
+                            }
+                        });
+    }
+    
+    
+    /**
+     * Iterate over each voxel in a bounding-box - with <b>one associated voxel-buffer</b>
+     * and <b>one associated buffer</b> for each slice.
+     *
+     * <p>The extent's of both {@code voxels1} and {@code voxels2} must be equal.
+     * 
+     * <p>Note that a new {@link Point3i} is created for each call to {@code process}.
+     *
+     * @param voxels1 voxels that provide the <b>first</b> element, the voxel-buffer.
+     * @param voxels2 voxels that provide the <b>second</b> element, the buffer.
+     * @param process is called for each voxel using <i>global</i> coordinates.
+     * @param <T> buffer-type for voxels
+     */
+    public static <S, T> void withTwoMixedBuffers(
+            Voxels<S> voxels1, Voxels<T> voxels2, ProcessVoxelBufferBinaryMixed<S, T> process) {
+        Preconditions.checkArgument(voxels1.extent().equals(voxels2.extent()));
+
+        int sizeX = voxels1.extent().x();
+        int sizeY = voxels1.extent().y();
+
+        voxels1.extent()
+                .iterateOverZ(
+                        z -> {
+                            VoxelBuffer<S> buffer1 = voxels1.slice(z);
+                            T buffer2 = voxels2.slice(z).buffer();
+
+                            int offset = 0;
+                            for( int y=0; y<sizeY; y++) {
+                                for( int x=0; x<sizeX; x++) {
+                                  process.process(new Point3i(x,y,z), buffer1, buffer2, offset++);
+                                }
                             }
                         });
     }

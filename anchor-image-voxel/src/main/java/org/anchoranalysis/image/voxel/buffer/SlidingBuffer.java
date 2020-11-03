@@ -32,23 +32,28 @@ import org.anchoranalysis.spatial.Extent;
 
 /**
  * Contains the buffer for the current slice, the current slice minus 1, and the current slice plus
- * 1
+ * 1.
  *
- * <p>Can then be shifted (incremented) across all z-slices
+ * <p>Can then be shifted (incremented) across all z-slices.
  *
  * @param <T> buffer-type
  */
 public final class SlidingBuffer<T> {
 
+    /** The voxels from which buffers corresponding to slices are extracted. */
     @Getter private final Voxels<T> voxels;
 
+    /** The buffer for the currently selected slice. */
     @Getter private VoxelBuffer<T> center;
 
+    /** The voxel-buffer for the slice with the currently selected slice's index {@code +1} or null if it's the final slice. */
     @Getter private VoxelBuffer<T> plusOne;
 
+    /** The voxel-buffer for the slice with the currently selected slice's index {@code -1} or null if it's the first slice. */
     @Getter private VoxelBuffer<T> minusOne;
 
-    private int sliceNumber = -1;
+    /** The index of the currently selected slice. */
+    private int sliceIndex = -1;
 
     public SlidingBuffer(Voxels<T> voxels) {
         super();
@@ -59,20 +64,20 @@ public final class SlidingBuffer<T> {
     /** Seeks a particular slice */
     public void seek(int sliceIndexToSeek) {
 
-        if (sliceIndexToSeek == sliceNumber) {
+        if (sliceIndexToSeek == sliceIndex) {
             return;
         }
 
-        sliceNumber = sliceIndexToSeek;
+        sliceIndex = sliceIndexToSeek;
         minusOne = null;
-        center = voxels.slice(sliceNumber);
+        center = voxels.slice(sliceIndex);
 
-        if ((sliceNumber - 1) >= 0) {
-            minusOne = voxels.slice(sliceNumber - 1);
+        if ((sliceIndex - 1) >= 0) {
+            minusOne = voxels.slice(sliceIndex - 1);
         }
 
-        if ((sliceNumber + 1) < voxels.extent().z()) {
-            plusOne = voxels.slice(sliceNumber + 1);
+        if ((sliceIndex + 1) < voxels.extent().z()) {
+            plusOne = voxels.slice(sliceIndex + 1);
         }
     }
 
@@ -81,17 +86,17 @@ public final class SlidingBuffer<T> {
         minusOne = center;
         center = plusOne;
 
-        sliceNumber++;
+        sliceIndex++;
 
-        if ((sliceNumber + 1) < voxels.extent().z()) {
-            plusOne = voxels.slice(sliceNumber + 1);
+        if ((sliceIndex + 1) < voxels.extent().z()) {
+            plusOne = voxels.slice(sliceIndex + 1);
         } else {
             plusOne = null;
         }
     }
 
-    public VoxelBuffer<T> bufferRel(int rel) {
-        switch (rel) {
+    public VoxelBuffer<T> bufferRelative(int relativeIndex) {
+        switch (relativeIndex) {
             case 1:
                 return plusOne;
             case 0:
@@ -99,7 +104,7 @@ public final class SlidingBuffer<T> {
             case -1:
                 return minusOne;
             default:
-                return voxels.slice(sliceNumber + rel);
+                return voxels.slice(sliceIndex + relativeIndex);
         }
     }
 
