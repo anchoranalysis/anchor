@@ -41,7 +41,7 @@ import org.anchoranalysis.spatial.Extent;
  * @param <T> type of buffer used, both as input and result, of the maximum intensity projection
  */
 class MeanIntensityBuffer<T> implements ProjectableBuffer<T> {
-    
+
     private Voxels<T> projection;
     private Voxels<FloatBuffer> voxelsSum;
     private int countSlices = 0;
@@ -55,12 +55,12 @@ class MeanIntensityBuffer<T> implements ProjectableBuffer<T> {
 
     @Override
     public void addSlice(VoxelBuffer<T> voxels) {
-        projection.extent().iterateOverXYOffset( offset ->
-            incrementSumBuffer(offset, voxels.getInt(offset))
-        );
+        projection
+                .extent()
+                .iterateOverXYOffset(offset -> incrementSumBuffer(offset, voxels.getInt(offset)));
         countSlices++;
     }
-    
+
     @Override
     public Voxels<T> completeProjection() {
         projection.arithmetic().divideBy(countSlices);

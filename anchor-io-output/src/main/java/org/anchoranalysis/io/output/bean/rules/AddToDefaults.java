@@ -62,7 +62,7 @@ public class AddToDefaults extends OutputEnableRulesSpecify {
     protected SingleLevelOutputEnabled createSecondLevelFromSet(StringSet outputNames) {
         return new SpecificEnabled(outputNames);
     }
-    
+
     private static MultiLevelOutputEnabled maybeWrap(
             MultiLevelOutputEnabled source, Optional<MultiLevelOutputEnabled> other) {
         if (other.isPresent()) {

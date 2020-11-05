@@ -45,7 +45,8 @@ import org.anchoranalysis.io.manifest.ManifestDescription;
  */
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 @Accessors(fluent = true)
-public abstract class ObjectsAsGrayscaleGenerator extends RasterGeneratorSelectFormat<ObjectCollection> {
+public abstract class ObjectsAsGrayscaleGenerator
+        extends RasterGeneratorSelectFormat<ObjectCollection> {
 
     // START REQUIRED ARGUMENTS
     /**

@@ -135,10 +135,10 @@ public final class Point3d extends Tuple3d {
     public Point3d max(double val) {
         return new Point3d(Math.max(x, val), Math.max(y, val), Math.max(z, val));
     }
-    
+
     /**
      * Converts the point to an array.
-     * 
+     *
      * @return a newly created array with three elements, respectively for x, y and z components.
      */
     public double[] toArray() {
@@ -148,10 +148,10 @@ public final class Point3d extends Tuple3d {
         out[2] = z;
         return out;
     }
-    
+
     /**
      * Converts the X and Y dimensions of the point to an array.
-     * 
+     *
      * @return a newly created array with ywo elements, respectively for x and y components.
      */
     public double[] toArrayXY() {

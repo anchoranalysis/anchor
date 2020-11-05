@@ -31,10 +31,11 @@ import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 
 /**
- * Caches a small number of slices around which we wish to work, so the memory is efficiently accessed.
- * 
+ * Caches a small number of slices around which we wish to work, so the memory is efficiently
+ * accessed.
+ *
  * @author Owen Feehan
-  */
+ */
 public class LocalSlices {
 
     private final byte[][] array;
@@ -54,12 +55,12 @@ public class LocalSlices {
             }
         }
     }
-    
+
     /**
      * All local access is indexed relative (e.g. -1, -2, +1, +2 etc.)
-     * 
+     *
      * <p>If an invalid index is requested, then {@link Optional#empty} is returned.
-     * 
+     *
      * @param relativeZIndex the shift in the z index relative to the current z-slice's index
      * @return the buffer corresponding to the z-index, if it exists.
      */

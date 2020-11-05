@@ -81,7 +81,8 @@ public class TraverseDirectoryForProgressReporter {
         }
     }
 
-    // Does a breadth first traversal of the sub-folders until we get at least minNumberDirectories on
+    // Does a breadth first traversal of the sub-folders until we get at least minNumberDirectories
+    // on
     //  a given level.  These are then used as our progress markers.
     //
     // if we can't get minNumberDirectories, it returns an empty array

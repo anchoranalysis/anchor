@@ -33,33 +33,42 @@ import org.anchoranalysis.spatial.Extent;
 class UnsignedByteImplementation extends Base<UnsignedByteBuffer> {
 
     private static final int MAXIMUM_VALUE = UnsignedByteVoxelType.MAX_VALUE_INT;
-    
-    public UnsignedByteImplementation(Extent extent, IntFunction<UnsignedByteBuffer> bufferForSlice) {
+
+    public UnsignedByteImplementation(
+            Extent extent, IntFunction<UnsignedByteBuffer> bufferForSlice) {
         super(extent, bufferForSlice);
     }
 
     @Override
     protected void multiplyBuffer(UnsignedByteBuffer buffer, double factor) {
-        UnsignedBufferAsIntHelper.calculateForEveryVoxel(buffer, MAXIMUM_VALUE, value -> BinaryOperationHelper.multiplyByInt(value,factor));
+        UnsignedBufferAsIntHelper.calculateForEveryVoxel(
+                buffer, MAXIMUM_VALUE, value -> BinaryOperationHelper.multiplyByInt(value, factor));
     }
 
     @Override
     protected void divideByBuffer(UnsignedByteBuffer buffer, int divisor) {
-        UnsignedBufferAsIntHelper.calculateForEveryVoxel(buffer, MAXIMUM_VALUE, value -> value / divisor );
+        UnsignedBufferAsIntHelper.calculateForEveryVoxel(
+                buffer, MAXIMUM_VALUE, value -> value / divisor);
     }
-    
+
     @Override
     protected void subtractFromBuffer(UnsignedByteBuffer buffer, int valueToSubtractFrom) {
-        UnsignedBufferAsIntHelper.calculateForEveryVoxel(buffer, MAXIMUM_VALUE, value -> valueToSubtractFrom - value );
+        UnsignedBufferAsIntHelper.calculateForEveryVoxel(
+                buffer, MAXIMUM_VALUE, value -> valueToSubtractFrom - value);
     }
 
     @Override
     protected void multiplyByBufferIndex(UnsignedByteBuffer buffer, int index, double factor) {
-        UnsignedBufferAsIntHelper.calculateForIndex(buffer, index, MAXIMUM_VALUE, value -> BinaryOperationHelper.multiplyByInt(value,factor) );
+        UnsignedBufferAsIntHelper.calculateForIndex(
+                buffer,
+                index,
+                MAXIMUM_VALUE,
+                value -> BinaryOperationHelper.multiplyByInt(value, factor));
     }
 
     @Override
     protected void addToBufferIndex(UnsignedByteBuffer buffer, int index, int valueToBeAdded) {
-        UnsignedBufferAsIntHelper.calculateForIndex(buffer, index, MAXIMUM_VALUE, value -> value + valueToBeAdded);
+        UnsignedBufferAsIntHelper.calculateForIndex(
+                buffer, index, MAXIMUM_VALUE, value -> value + valueToBeAdded);
     }
 }

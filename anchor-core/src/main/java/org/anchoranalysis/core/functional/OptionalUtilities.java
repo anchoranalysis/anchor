@@ -101,7 +101,7 @@ public class OptionalUtilities {
             return supplier.get();
         }
     }
-    
+
     /**
      * Like {@link #orElseGet} but returns a {@link Optional}.
      *

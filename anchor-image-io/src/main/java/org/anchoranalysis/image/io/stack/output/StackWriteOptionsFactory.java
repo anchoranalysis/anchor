@@ -114,7 +114,7 @@ public class StackWriteOptionsFactory {
     public static StackWriteOptions from(Stack stack) {
         int numberChannels = stack.getNumberChannels();
         boolean singleSlice = !stack.hasMoreThanOneSlice();
-        if (numberChannels==3) {
+        if (numberChannels == 3) {
             if (stack.isRgb()) {
                 return rgb(singleSlice);
             } else {

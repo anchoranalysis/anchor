@@ -119,11 +119,16 @@ public final class ErosionKernel extends BinaryKernelMorphologicalExtent {
 
         return maybeCheckZ(() -> inSlices.getLocal(-1), () -> inSlices.getLocal(+1), index);
     }
-    
-    private boolean maybeCheckZ(Supplier<Optional<UnsignedByteBuffer>> bufferZLess1, Supplier<Optional<UnsignedByteBuffer>> bufferZPlus1, int index) {
-        return useZ && checkZBuffer(bufferZLess1.get(), index) && checkZBuffer(bufferZPlus1.get(), index);
+
+    private boolean maybeCheckZ(
+            Supplier<Optional<UnsignedByteBuffer>> bufferZLess1,
+            Supplier<Optional<UnsignedByteBuffer>> bufferZPlus1,
+            int index) {
+        return !useZ || (
+                checkZBuffer(bufferZLess1.get(), index)
+                && checkZBuffer(bufferZPlus1.get(), index));
     }
-    
+
     private boolean checkZBuffer(Optional<UnsignedByteBuffer> buffer, int index) {
         if (buffer.isPresent()) {
             return !binaryValues.isOff(buffer.get().getRaw(index));

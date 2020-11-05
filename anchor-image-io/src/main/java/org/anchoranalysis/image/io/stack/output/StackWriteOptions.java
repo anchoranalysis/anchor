@@ -25,10 +25,10 @@
  */
 package org.anchoranalysis.image.io.stack.output;
 
-import org.anchoranalysis.image.core.stack.Stack;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Value;
+import org.anchoranalysis.image.core.stack.Stack;
 
 /**
  * Options describing stack which may determine which writer is used.

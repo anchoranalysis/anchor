@@ -33,7 +33,8 @@ import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.image.feature.input.FeatureInputObjectCollection;
 
 /**
- * A base class for a feature that accepts a {@link org.anchoranalysis.image.voxel.object.ObjectCollection} as input.
+ * A base class for a feature that accepts a {@link
+ * org.anchoranalysis.image.voxel.object.ObjectCollection} as input.
  */
 public abstract class FeatureObjectCollection extends Feature<FeatureInputObjectCollection> {
 

@@ -31,8 +31,7 @@ import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.stack.Stack;
 
 /**
- * Like {@link NamedStacks} but enforces a condition that all stacks must have the same
- * dimensions.
+ * Like {@link NamedStacks} but enforces a condition that all stacks must have the same dimensions.
  *
  * @author Owen Feehan
  */

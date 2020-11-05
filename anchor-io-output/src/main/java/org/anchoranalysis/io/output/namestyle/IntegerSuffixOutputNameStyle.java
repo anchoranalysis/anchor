@@ -53,7 +53,7 @@ public class IntegerSuffixOutputNameStyle extends IndexableOutputNameStyle {
 
     public IntegerSuffixOutputNameStyle(String outputName, int numberDigits) {
         super(outputName);
-        Preconditions.checkArgument(numberDigits>1);
+        Preconditions.checkArgument(numberDigits > 1);
         this.numberDigits = numberDigits;
     }
 

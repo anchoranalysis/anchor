@@ -29,18 +29,16 @@ package org.anchoranalysis.image.core.outline.traverser.distance;
 import lombok.AllArgsConstructor;
 import lombok.Value;
 
-/** 
- * A distance, and the two indices the point came from
- * 
- */
-@AllArgsConstructor @Value
+/** A distance, and the two indices the point came from */
+@AllArgsConstructor
+@Value
 public class DistanceIndexTwice {
 
     private int distance;
-    
+
     /** Highest-level index. */
     private int indexHighest;
-    
+
     /** Lowest-level index. */
-    private int indexLowest; 
+    private int indexLowest;
 }

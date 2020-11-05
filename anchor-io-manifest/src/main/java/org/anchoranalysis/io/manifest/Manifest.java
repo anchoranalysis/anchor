@@ -34,8 +34,8 @@ import org.anchoranalysis.io.manifest.directory.RootDirectory;
 /**
  * A manifest that records what outputs occur and where they occur.
  *
- * <p>This is stored on the file-system like a log, but in a structured way, so that
- * it can be opened and processed at a later point).
+ * <p>This is stored on the file-system like a log, but in a structured way, so that it can be
+ * opened and processed at a later point).
  *
  * @author Owen Feehan
  */

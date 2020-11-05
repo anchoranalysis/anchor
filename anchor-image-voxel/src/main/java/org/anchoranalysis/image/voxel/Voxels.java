@@ -113,9 +113,7 @@ public abstract class Voxels<T> {
             return false;
         }
 
-        return extent().iterateOverZUntil( z ->
-            sliceBuffer(z).equals( (T) other.sliceBuffer(z) )
-        );
+        return extent().iterateOverZUntil(z -> sliceBuffer(z).equals((T) other.sliceBuffer(z)));
     }
 
     /**

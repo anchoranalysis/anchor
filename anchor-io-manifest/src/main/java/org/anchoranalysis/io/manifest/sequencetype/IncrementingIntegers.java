@@ -61,8 +61,8 @@ public class IncrementingIntegers extends SequenceType<Integer> {
         if (element == range.getEnd()) {
             return;
         }
-        
-        if (range.getEnd()==-1 || (element == (range.getEnd() + range.getIncrementSize()))) {
+
+        if (range.getEnd() == -1 || (element == (range.getEnd() + range.getIncrementSize()))) {
             // Otherwise if the element is one more than the end of the range, we update the range
             range.increment();
         } else {

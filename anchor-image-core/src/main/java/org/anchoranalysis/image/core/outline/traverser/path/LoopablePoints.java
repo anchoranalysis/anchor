@@ -29,10 +29,10 @@ package org.anchoranalysis.image.core.outline.traverser.path;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import org.anchoranalysis.spatial.point.Point3i;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.experimental.Accessors;
+import org.anchoranalysis.spatial.point.Point3i;
 
 /**
  * A set of points that can be looped, so as to form a path that ends with the same point that it
@@ -40,7 +40,8 @@ import lombok.experimental.Accessors;
  *
  * @author feehano
  */
-@AllArgsConstructor @Accessors(fluent=true)
+@AllArgsConstructor
+@Accessors(fluent = true)
 public class LoopablePoints {
 
     // This is a point that previously connected with the loop, but which we repeat
@@ -88,7 +89,7 @@ public class LoopablePoints {
     public String toString() {
         return points.toString();
     }
-    
+
     private static List<Point3i> reversedList(List<Point3i> list) {
         List<Point3i> copy = new ArrayList<>(list);
         Collections.reverse(copy);

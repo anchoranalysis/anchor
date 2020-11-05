@@ -97,7 +97,8 @@ public class FindMatchingFiles {
         pri.setMax(leafDirectories.size() + 1);
 
         // We first check the files that we remembered from our folder search
-        filesFromDirectorySearch(traversal.getFiles(), constraints.getPredicates().getFile(), listOut);
+        filesFromDirectorySearch(
+                traversal.getFiles(), constraints.getPredicates().getFile(), listOut);
 
         pri.update();
 

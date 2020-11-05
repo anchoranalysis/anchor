@@ -59,13 +59,13 @@ public class GetOperationFailedException extends AnchorFriendlyCheckedException 
     }
 
     public GetOperationFailedException(String key, String message) {
-        super( messageFor(key, message) );
+        super(messageFor(key, message));
         this.key = key;
         this.message = message;
     }
 
     public GetOperationFailedException(String key, Throwable exc) {
-        super( messageFor(key, exc.toString()), exc );
+        super(messageFor(key, exc.toString()), exc);
         this.key = key;
         this.message = exc.toString();
     }
@@ -73,7 +73,7 @@ public class GetOperationFailedException extends AnchorFriendlyCheckedException 
     public OperationFailedException asOperationFailedException() {
         return new OperationFailedException(getMessage());
     }
-    
+
     private static String messageFor(String key, String message) {
         return String.format("An exception occurred getting '%s':%n%s", key, message);
     }

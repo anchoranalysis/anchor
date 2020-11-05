@@ -46,10 +46,16 @@ public final class SlidingBuffer<T> {
     /** The buffer for the currently selected slice. */
     @Getter private VoxelBuffer<T> center;
 
-    /** The voxel-buffer for the slice with the currently selected slice's index {@code +1} or null if it's the final slice. */
+    /**
+     * The voxel-buffer for the slice with the currently selected slice's index {@code +1} or null
+     * if it's the final slice.
+     */
     @Getter private VoxelBuffer<T> plusOne;
 
-    /** The voxel-buffer for the slice with the currently selected slice's index {@code -1} or null if it's the first slice. */
+    /**
+     * The voxel-buffer for the slice with the currently selected slice's index {@code -1} or null
+     * if it's the first slice.
+     */
     @Getter private VoxelBuffer<T> minusOne;
 
     /** The index of the currently selected slice. */

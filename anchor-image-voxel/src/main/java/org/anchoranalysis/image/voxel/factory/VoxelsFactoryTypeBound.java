@@ -52,7 +52,7 @@ public interface VoxelsFactoryTypeBound<T> {
     Voxels<T> createUninitialized(Extent extent);
 
     VoxelDataType dataType();
-    
+
     default Voxels<T> createForVoxelBuffer(VoxelBuffer<T> buffer, Extent extent) {
         Preconditions.checkArgument(extent.volumeXY() == buffer.capacity());
 
@@ -60,15 +60,15 @@ public interface VoxelsFactoryTypeBound<T> {
         out.replaceSlice(0, buffer);
         return out;
     }
-    
+
     /**
      * Creates and initializes voxels that correspond to a particular bounding-box region.
-     * 
+     *
      * @param box the bounding-box region
-     * @return newly created voxels of the same extent as {@code box} and retaining an association with {@code box}.
+     * @return newly created voxels of the same extent as {@code box} and retaining an association
+     *     with {@code box}.
      */
     default BoundedVoxels<T> createBounded(BoundingBox box) {
-        return new BoundedVoxels<>(
-                box, createInitialized(box.extent()));
+        return new BoundedVoxels<>(box, createInitialized(box.extent()));
     }
 }

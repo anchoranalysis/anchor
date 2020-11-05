@@ -30,19 +30,20 @@ import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedIntBuffer;
 import org.anchoranalysis.spatial.Extent;
 
 class IntImplementation extends Base<UnsignedIntBuffer> {
-    
+
     public IntImplementation(Extent extent, IntFunction<UnsignedIntBuffer> bufferForSlice) {
         super(extent, bufferForSlice);
     }
 
     @Override
     protected void multiplyBuffer(UnsignedIntBuffer buffer, double factor) {
-        UnsignedIntHelper.calculateForEveryVoxel(buffer, value -> BinaryOperationHelper.multiplyByLong(value, factor) );
+        UnsignedIntHelper.calculateForEveryVoxel(
+                buffer, value -> BinaryOperationHelper.multiplyByLong(value, factor));
     }
 
     @Override
     protected void subtractFromBuffer(UnsignedIntBuffer buffer, int valueToSubtractFrom) {
-        UnsignedIntHelper.calculateForEveryVoxel(buffer, value -> valueToSubtractFrom - value );
+        UnsignedIntHelper.calculateForEveryVoxel(buffer, value -> valueToSubtractFrom - value);
     }
 
     @Override
@@ -52,7 +53,8 @@ class IntImplementation extends Base<UnsignedIntBuffer> {
 
     @Override
     protected void multiplyByBufferIndex(UnsignedIntBuffer buffer, int index, double factor) {
-        UnsignedIntHelper.calculateForIndex(buffer, index, value -> BinaryOperationHelper.multiplyByLong(value, factor));
+        UnsignedIntHelper.calculateForIndex(
+                buffer, index, value -> BinaryOperationHelper.multiplyByLong(value, factor));
     }
 
     @Override

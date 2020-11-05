@@ -80,11 +80,11 @@ public class OutlineKernelNeighborMatchValue extends OutlineKernelBase {
     @Override
     public boolean acceptPoint(int ind, Point3i point) {
 
-        UnsignedByteBuffer inArrZ = inSlices.getLocal(0).get();   // NOSONAR
+        UnsignedByteBuffer inArrZ = inSlices.getLocal(0).get(); // NOSONAR
         Optional<UnsignedByteBuffer> inArrZLess1 = inSlices.getLocal(-1);
         Optional<UnsignedByteBuffer> inArrZPlus1 = inSlices.getLocal(+1);
 
-        UnsignedByteBuffer inArrR = localSlicesRequireHigh.getLocal(0).get();   // NOSONAR
+        UnsignedByteBuffer inArrR = localSlicesRequireHigh.getLocal(0).get(); // NOSONAR
         Optional<UnsignedByteBuffer> inArrRLess1 = localSlicesRequireHigh.getLocal(-1);
         Optional<UnsignedByteBuffer> inArrRPlus1 = localSlicesRequireHigh.getLocal(+1);
 

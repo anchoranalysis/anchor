@@ -25,12 +25,12 @@
  */
 package org.anchoranalysis.image.voxel.object;
 
-import lombok.Getter;
-import lombok.Setter;
 import static org.anchoranalysis.image.voxel.object.ObjectMaskFixture.DEPTH;
 import static org.anchoranalysis.image.voxel.object.ObjectMaskFixture.HEIGHT;
 import static org.anchoranalysis.image.voxel.object.ObjectMaskFixture.WIDTH;
-import org.anchoranalysis.image.voxel.object.ObjectCollection;
+
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.spatial.Extent;
 import org.anchoranalysis.spatial.point.Point3i;
 

@@ -23,7 +23,5 @@
  * THE SOFTWARE.
  * #L%
  */
-/**
- * The {@link org.anchoranalysis.math.histogram.Histogram} data class and related operations.
- */
+/** The {@link org.anchoranalysis.math.histogram.Histogram} data class and related operations. */
 package org.anchoranalysis.math.histogram;

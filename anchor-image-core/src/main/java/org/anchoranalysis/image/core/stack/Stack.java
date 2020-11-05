@@ -31,6 +31,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.core.functional.FunctionalIterate;
@@ -45,9 +48,6 @@ import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.spatial.Extent;
 import org.apache.commons.lang.builder.HashCodeBuilder;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 
 /**
  * One or more single-channel images that all have the same dimensions.
@@ -56,27 +56,26 @@ import lombok.Getter;
  *
  * @author Owen Feehan
  */
-@AllArgsConstructor(access=AccessLevel.PRIVATE)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class Stack implements Iterable<Channel> {
-    
-    /** 
-     * If true, and the stack has exactly three channels, this stack can be interpreted as a RGB image.
+
+    /**
+     * If true, and the stack has exactly three channels, this stack can be interpreted as a RGB
+     * image.
      *
      * <p>This is an important flag for determining how a stack is displayed visually, determining
      * whether a stack is portrayed as a color image or composite grayscale channels.
      */
     @Getter private final boolean rgb;
-    
-    /**
-     * An internal data-structure where the stacks are stored. 
-     */
+
+    /** An internal data-structure where the stacks are stored. */
     private final StackNotUniformSized delegate;
 
     public Stack(boolean rgb) {
         this.delegate = new StackNotUniformSized();
         this.rgb = rgb;
     }
-    
+
     public Stack() {
         this(false);
     }
@@ -86,13 +85,17 @@ public class Stack implements Iterable<Channel> {
         this.rgb = false;
     }
 
-    public Stack(Dimensions dimensions, ChannelFactorySingleType factory, int numberChannels, boolean rgb) {
+    public Stack(
+            Dimensions dimensions,
+            ChannelFactorySingleType factory,
+            int numberChannels,
+            boolean rgb) {
         this(rgb);
         FunctionalIterate.repeat(
                 numberChannels,
                 () -> delegate.addChannel(factory.createEmptyInitialised(dimensions)));
     }
-    
+
     public Stack(boolean rgb, Channel... channels) throws IncorrectImageSizeException {
         this(rgb);
         for (Channel channel : channels) {
@@ -103,7 +106,7 @@ public class Stack implements Iterable<Channel> {
     public Stack(Stream<Channel> channelStream) throws IncorrectImageSizeException {
         this(false, channelStream);
     }
-    
+
     public Stack(boolean rgb, Stream<Channel> channelStream) throws IncorrectImageSizeException {
         this.delegate = new StackNotUniformSized(channelStream);
         this.rgb = rgb;
@@ -207,7 +210,9 @@ public class Stack implements Iterable<Channel> {
 
         // We ensure that this channel has the same size as the first
         if (delegate.getNumberChannels() >= 1
-                && !channel.dimensions().extent().equals(delegate.getChannel(0).dimensions().extent())) {
+                && !channel.dimensions()
+                        .extent()
+                        .equals(delegate.getChannel(0).dimensions().extent())) {
             throw new IncorrectImageSizeException(
                     "Dimensions of channel do not match existing channel");
         }
@@ -373,7 +378,7 @@ public class Stack implements Iterable<Channel> {
         if (getNumberChannels() != other.getNumberChannels()) {
             return false;
         }
-        
+
         if (rgb != other.rgb) {
             return false;
         }

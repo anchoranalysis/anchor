@@ -42,13 +42,13 @@ import org.anchoranalysis.spatial.point.Point3d;
  * @author Owen Feehan
  */
 public class RotationMatrix implements Serializable {
-    
+
     /** */
     private static final long serialVersionUID = 1L;
 
     /**
      * The underlying matrix implementing the rotation.
-     * 
+     *
      * <p>This name is deliberately kept as 'delegate' to avoid breaking serialized objects.
      */
     private DoubleMatrix2D delegate;
@@ -123,7 +123,7 @@ public class RotationMatrix implements Serializable {
 
     /**
      * The underlying matrix used internally in the rotation-matrix.
-     * 
+     *
      * @return the internal matrix structure used within the {@link RotationMatrix}.
      */
     public DoubleMatrix2D getMatrix() {
@@ -140,7 +140,7 @@ public class RotationMatrix implements Serializable {
 
     /**
      * Deep-copy of the current rotation-matrix.
-     * 
+     *
      * @return a newly created deep copy of the current object.
      */
     public RotationMatrix duplicate() {
@@ -151,10 +151,11 @@ public class RotationMatrix implements Serializable {
     public String toString() {
         return delegate.toString();
     }
-        
+
     /** Copies a vector into a particular column in the matrix. */
-    private static void assignMatrixColumnFromVector(DoubleMatrix2D matrix, int columnIndex, DoubleMatrix1D vector) {
-        for( int i=0; i<3; i++ ) {
+    private static void assignMatrixColumnFromVector(
+            DoubleMatrix2D matrix, int columnIndex, DoubleMatrix1D vector) {
+        for (int i = 0; i < 3; i++) {
             matrix.set(i, columnIndex, vector.get(i));
         }
     }

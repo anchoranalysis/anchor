@@ -110,10 +110,8 @@ public class SharedFeatureMulti
         }
         return out;
     }
-    
 
-    public void addFromProviders(
-            NamedProvider<FeatureList<FeatureInput>> featureListProvider) {
+    public void addFromProviders(NamedProvider<FeatureList<FeatureInput>> featureListProvider) {
         for (String key : featureListProvider.keys()) {
             try {
                 addNoDuplicate(featureListProvider.getException(key));
@@ -122,7 +120,7 @@ public class SharedFeatureMulti
             }
         }
     }
-    
+
     public void addNoDuplicate(FeatureList<FeatureInput> features) {
 
         // We loop over all features in the ni, and call them all the same thing with a number
@@ -159,7 +157,7 @@ public class SharedFeatureMulti
         mapByDescriptor.put(namedFeature.getValue().inputType(), namedFeature);
         setFeatures.add(namedFeature.getValue());
     }
-    
+
     /** Transfers from a collection of name-values into a {@link NameValueSet} */
     private static <S extends FeatureInput> void transferToSet(
             Collection<NameValue<Feature<S>>> in, NameValueSet<Feature<S>> out) {

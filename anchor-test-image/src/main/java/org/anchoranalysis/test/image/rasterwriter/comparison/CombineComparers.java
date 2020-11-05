@@ -38,22 +38,24 @@ import java.util.stream.Collectors;
  * @author Owen Feehan
  */
 class CombineComparers implements ImageComparer {
-    
+
     private final List<ImageComparer> list;
-    
+
     @SafeVarargs
-    public CombineComparers(Optional<ImageComparer> ...comparer) {
-        list = Arrays.stream(comparer).filter(Optional::isPresent).map(Optional::get).collect(Collectors.toList());
+    public CombineComparers(Optional<ImageComparer>... comparer) {
+        list =
+                Arrays.stream(comparer)
+                        .filter(Optional::isPresent)
+                        .map(Optional::get)
+                        .collect(Collectors.toList());
     }
 
     @Override
-    public void assertIdentical(String filenameWithoutExtension, String filenameWithExtension, Path path) throws IOException {
-        for( ImageComparer comparer : list ) {
-            comparer.assertIdentical(
-                    filenameWithoutExtension,
-                    filenameWithExtension,
-                    path
-            );
+    public void assertIdentical(
+            String filenameWithoutExtension, String filenameWithExtension, Path path)
+            throws IOException {
+        for (ImageComparer comparer : list) {
+            comparer.assertIdentical(filenameWithoutExtension, filenameWithExtension, path);
         }
     }
 }

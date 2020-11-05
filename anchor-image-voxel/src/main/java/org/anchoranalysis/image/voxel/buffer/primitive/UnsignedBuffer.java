@@ -37,13 +37,14 @@ import lombok.EqualsAndHashCode;
  * is necessary to explicitly convert an unsigned primitive type to a larger primitive type for
  * arithmetic operations (e.g. unsigned bytes need to be converted to short or higher, unsigned
  * shorts to int or higher, unsigned int to long or higher).
- * 
- * <p>Subclasses must define a sensible {@link Object#equals} and {@link Object#hashCode} that
- * takes account the delegate buffer.
+ *
+ * <p>Subclasses must define a sensible {@link Object#equals} and {@link Object#hashCode} that takes
+ * account the delegate buffer.
  *
  * @author Owen Feehan
  */
-@AllArgsConstructor @EqualsAndHashCode
+@AllArgsConstructor
+@EqualsAndHashCode
 public abstract class UnsignedBuffer {
 
     /** The delegate buffer */

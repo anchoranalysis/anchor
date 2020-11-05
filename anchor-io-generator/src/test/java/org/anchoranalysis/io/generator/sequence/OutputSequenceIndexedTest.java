@@ -82,7 +82,8 @@ public class OutputSequenceIndexedTest {
         assertEquals(3, sequenceType.getNumberElements());
         assertEquals(1, manifest.getRootDirectory().subdirectories().size());
         assertTrue(
-                manifest.getRootDirectory().subdirectories().get(0) instanceof IndexableSubdirectory);
+                manifest.getRootDirectory().subdirectories().get(0)
+                        instanceof IndexableSubdirectory);
 
         IndexableSubdirectory firstSubdirectory =
                 (IndexableSubdirectory) manifest.getRootDirectory().subdirectories().get(0);

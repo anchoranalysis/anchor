@@ -56,7 +56,7 @@ import org.junit.rules.TemporaryFolder;
  */
 @RequiredArgsConstructor
 public abstract class RasterWriterTestBase {
-    
+
     /** All possible voxel types that can be supported. */
     protected static final VoxelDataType[] ALL_SUPPORTED_VOXEL_TYPES = {
         UnsignedByteVoxelType.INSTANCE,
@@ -86,13 +86,9 @@ public abstract class RasterWriterTestBase {
         tester =
                 new FourChannelStackTester(
                         new StackTester(
-                                createWriter(),
-                                directory.getRoot().toPath(),
-                                extension,
-                                include3D),
+                                createWriter(), directory.getRoot().toPath(), extension, include3D),
                         comparisonPlan.createComparer(directory, extension),
-                        comparisonPlan.isSkipComparisonForRGB()
-                        );
+                        comparisonPlan.isSkipComparisonForRGB());
     }
 
     /** Creates the {@link StackWriter} to be tested. */

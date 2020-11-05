@@ -48,7 +48,7 @@ final class DilationKernelZOnly extends BinaryKernelMorphological {
     @Override
     public boolean acceptPoint(int index, Point3i point) {
 
-        UnsignedByteBuffer buffer = inSlices.getLocal(0).get();     // NOSONAR
+        UnsignedByteBuffer buffer = inSlices.getLocal(0).get(); // NOSONAR
         Optional<UnsignedByteBuffer> bufferZLess1 = inSlices.getLocal(-1);
         Optional<UnsignedByteBuffer> bufferZPlus1 = inSlices.getLocal(+1);
 

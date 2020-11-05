@@ -42,7 +42,7 @@ public class CalculateNumberVoxels extends FeatureCalculation<Double, FeatureInp
     public Double execute(FeatureInputSingleObject input) {
         return (double) maybeFlatten(input.getObject()).numberVoxelsOn();
     }
-    
+
     private ObjectMask maybeFlatten(ObjectMask object) {
         if (flattenZ) {
             return object.flattenZ();

@@ -35,6 +35,7 @@ import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.iterator.predicate.PredicateBufferBinary;
 import org.anchoranalysis.image.voxel.iterator.process.ProcessPoint;
+import org.anchoranalysis.image.voxel.iterator.process.ProcessPointAndIndex;
 import org.anchoranalysis.image.voxel.iterator.process.buffer.ProcessBufferBinary;
 import org.anchoranalysis.image.voxel.iterator.process.buffer.ProcessBufferBinaryMixed;
 import org.anchoranalysis.image.voxel.iterator.process.buffer.ProcessBufferTernary;
@@ -79,6 +80,38 @@ public class IterateVoxelsBoundingBox {
 
                 for (point.setX(cornerMin.x()); point.x() <= cornerMax.x(); point.incrementX()) {
                     process.process(point);
+                }
+            }
+        }
+    }
+    
+    /**
+     * Iterate over each voxel in a bounding-box
+     *
+     * @param box the box that is used as a condition on what voxels to iterate i.e. only voxels
+     *     within these bounds
+     * @param process is called for each voxel within the bounding-box using <i>global</i>
+     *     coordinates.
+     */
+    public static void withPointAndIndex(BoundingBox box, ProcessPointAndIndex process) {
+
+        ReadableTuple3i cornerMin = box.cornerMin();
+        ReadableTuple3i cornerMax = box.calculateCornerMax();
+
+        Point3i point = new Point3i();
+
+        for (point.setZ(cornerMin.z()); point.z() <= cornerMax.z(); point.incrementZ()) {
+
+            process.notifyChangeSlice(point.z());
+
+            int index = 0;
+            
+            for (point.setY(cornerMin.y()); point.y() <= cornerMax.y(); point.incrementY()) {
+
+                process.notifyChangeY(point.y());
+
+                for (point.setX(cornerMin.x()); point.x() <= cornerMax.x(); point.incrementX()) {
+                    process.process(point, index++);
                 }
             }
         }

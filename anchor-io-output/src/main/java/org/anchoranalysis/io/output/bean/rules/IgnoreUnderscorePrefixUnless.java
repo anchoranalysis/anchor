@@ -36,27 +36,29 @@ import org.anchoranalysis.io.output.enabled.multi.MultiLevelOutputEnabled;
 import org.anchoranalysis.io.output.enabled.single.SingleLevelOutputEnabled;
 
 /**
- * Like {@link IgnoreUnderscorePrefix} for all first and level-outputs unless a particular outputs are explicitly specified.
+ * Like {@link IgnoreUnderscorePrefix} for all first and level-outputs unless a particular outputs
+ * are explicitly specified.
  *
  * <p>If first-level are specified, this takes precedence, and only these outputs are allowed.
- * 
- * <p>Similarly if any particular second-level outputs are specified, these replace {@link IgnoreUnderscorePrefix}.
- * 
+ *
+ * <p>Similarly if any particular second-level outputs are specified, these replace {@link
+ * IgnoreUnderscorePrefix}.
+ *
  * <p>Otherwise {@link IgnoreUnderscorePrefix} is used.
- * 
+ *
  * @author Owen Feehan
  */
 @NoArgsConstructor
 public class IgnoreUnderscorePrefixUnless extends OutputEnableRulesSpecify {
 
     private static final OutputEnabled OTHER = IgnoreUnderscorePrefix.INSTANCE;
-    
+
     private class IgnoreUnderscorePrefixPlusImplementation implements MultiLevelOutputEnabled {
 
         @Override
         public boolean isOutputEnabled(String outputName) {
             if (isFirstDefined()) {
-                return firstLevelContains(outputName); 
+                return firstLevelContains(outputName);
             } else {
                 return OTHER.isOutputEnabled(outputName);
             }

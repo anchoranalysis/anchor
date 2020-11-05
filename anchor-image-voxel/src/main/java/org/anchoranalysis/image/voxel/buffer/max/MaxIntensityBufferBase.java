@@ -33,7 +33,9 @@ import org.anchoranalysis.image.voxel.factory.VoxelsFactoryTypeBound;
 import org.anchoranalysis.spatial.Extent;
 
 /**
- * The buffer used when making a <a href="https://en.wikipedia.org/wiki/Maximum_intensity_projection">Maximum Intensity Projection</a>.
+ * The buffer used when making a <a
+ * href="https://en.wikipedia.org/wiki/Maximum_intensity_projection">Maximum Intensity
+ * Projection</a>.
  *
  * @author Owen Feehan
  * @param <T> type of buffer used, both as input and result, of the maximum intesnity projection
@@ -53,7 +55,7 @@ abstract class MaxIntensityBufferBase<T> implements ProjectableBuffer<T> {
         VoxelBuffer<T> voxelBuffer = projection.slice(0);
 
         T buffer = voxels.buffer();
-        
+
         while (voxelBuffer.hasRemaining()) {
             maybeReplaceCurrentBufferPosition(buffer, voxelBuffer.buffer());
         }
@@ -63,11 +65,11 @@ abstract class MaxIntensityBufferBase<T> implements ProjectableBuffer<T> {
     public Voxels<T> completeProjection() {
         return projection;
     }
-    
+
     /**
-     * Maybe perform a replacement on the current buffer position of {@code projection}
-     * with the current buffer positio nof {@code sliceToBeAdded}.
-     * 
+     * Maybe perform a replacement on the current buffer position of {@code projection} with the
+     * current buffer positio nof {@code sliceToBeAdded}.
+     *
      * @param sliceToBeAdded the buffer being iterated over for the slice that is being added
      * @param projection the buffer being iterated over for the projection voxels.
      */

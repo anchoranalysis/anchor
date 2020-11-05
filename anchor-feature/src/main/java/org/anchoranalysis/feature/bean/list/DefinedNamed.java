@@ -27,6 +27,8 @@
 package org.anchoranalysis.feature.bean.list;
 
 import java.util.List;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.SkipInit;
@@ -34,8 +36,6 @@ import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.store.NamedFeatureStoreFactory;
-import lombok.Getter;
-import lombok.Setter;
 
 public class DefinedNamed<T extends FeatureInput> extends ReferencedFeatures<T> {
 

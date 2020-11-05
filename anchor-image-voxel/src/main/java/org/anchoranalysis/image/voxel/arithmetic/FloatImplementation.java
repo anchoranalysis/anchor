@@ -37,7 +37,8 @@ class FloatImplementation extends Base<FloatBuffer> {
 
     @Override
     protected void multiplyBuffer(FloatBuffer buffer, double factor) {
-        FloatHelper.calculateForEveryVoxel(buffer, value -> BinaryOperationHelper.multiplyByFloat(value, factor));
+        FloatHelper.calculateForEveryVoxel(
+                buffer, value -> BinaryOperationHelper.multiplyByFloat(value, factor));
     }
 
     @Override
@@ -52,7 +53,8 @@ class FloatImplementation extends Base<FloatBuffer> {
 
     @Override
     protected void multiplyByBufferIndex(FloatBuffer buffer, int index, double factor) {
-        FloatHelper.calculateForIndex(buffer, index, value -> BinaryOperationHelper.multiplyByFloat(value, factor));
+        FloatHelper.calculateForIndex(
+                buffer, index, value -> BinaryOperationHelper.multiplyByFloat(value, factor));
     }
 
     @Override

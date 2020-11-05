@@ -52,7 +52,7 @@ public class OutlineKernel extends OutlineKernelBase {
     @Override
     public boolean acceptPoint(int ind, Point3i point) {
 
-        UnsignedByteBuffer buffer = inSlices.getLocal(0).get();     // NOSONAR
+        UnsignedByteBuffer buffer = inSlices.getLocal(0).get(); // NOSONAR
         Optional<UnsignedByteBuffer> bufferZLess1 = inSlices.getLocal(-1);
         Optional<UnsignedByteBuffer> bufferZPlus1 = inSlices.getLocal(+1);
 

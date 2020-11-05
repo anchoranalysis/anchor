@@ -106,7 +106,7 @@ public class RTree<T> {
     public int size() {
         return tree.size();
     }
-    
+
     private static float[] minPoint(BoundingBox box) {
         return new float[] {box.cornerMin().x(), box.cornerMin().y(), box.cornerMin().z()};
     }

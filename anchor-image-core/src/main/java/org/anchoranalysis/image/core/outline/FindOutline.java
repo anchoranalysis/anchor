@@ -196,9 +196,8 @@ public class FindOutline {
                 multipleErode(voxels, numberErosions, outlineAtBoundary, do3D);
 
         // Binary and between the original version and the eroded version
-        assert (eroded != null);
-        BinaryValuesByte bvb = voxels.binaryValues().createByte();
-        MaskXor.apply(voxels.voxels(), eroded, bvb, bvb);
+        BinaryValuesByte binaryValues = voxels.binaryValues().createByte();
+        MaskXor.apply(voxels.voxels(), eroded, binaryValues, binaryValues);
         return voxels;
     }
 
@@ -208,12 +207,12 @@ public class FindOutline {
             boolean erodeAtBoundary,
             boolean do3D) {
 
-        BinaryValuesByte bvb = voxels.binaryValues().createByte();
-        BinaryKernel kernelErosion = new ErosionKernel(bvb, erodeAtBoundary, do3D);
+        BinaryValuesByte binaryValues = voxels.binaryValues().createByte();
+        BinaryKernel kernelErosion = new ErosionKernel(binaryValues, erodeAtBoundary, do3D);
 
-        Voxels<UnsignedByteBuffer> eroded = ApplyKernel.apply(kernelErosion, voxels.voxels(), bvb);
+        Voxels<UnsignedByteBuffer> eroded = ApplyKernel.apply(kernelErosion, voxels.voxels(), binaryValues);
         for (int i = 1; i < numberErosions; i++) {
-            eroded = ApplyKernel.apply(kernelErosion, eroded, bvb);
+            eroded = ApplyKernel.apply(kernelErosion, eroded, binaryValues);
         }
         return eroded;
     }

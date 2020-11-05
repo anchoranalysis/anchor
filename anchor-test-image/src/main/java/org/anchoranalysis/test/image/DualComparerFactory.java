@@ -49,8 +49,8 @@ public class DualComparerFactory {
      * Compares a directory in a temporary-folder to a directory in Maven's {@code test/resources}.
      *
      * @param directory the temporary folder
-     * @param relativeTemporaryDirectory optionally an additional subdirectory to use relative to the
-     *     root of {@code folder}.
+     * @param relativeTemporaryDirectory optionally an additional subdirectory to use relative to
+     *     the root of {@code folder}.
      * @param relativeResourcesRoot a subdirectory to use in Maven's test/resources relative to the
      *     root of the resources
      * @return a comparer between the two directories.
@@ -60,7 +60,8 @@ public class DualComparerFactory {
             Optional<String> relativeTemporaryDirectory,
             String relativeResourcesRoot) {
 
-        TestLoader loaderTemporary = loaderTemporaryDirectory(directory, relativeTemporaryDirectory);
+        TestLoader loaderTemporary =
+                loaderTemporaryDirectory(directory, relativeTemporaryDirectory);
         TestLoader loaderTest = TestLoader.createFromMavenWorkingDirectory(relativeResourcesRoot);
 
         return new DualComparer(loaderTemporary, loaderTest);
@@ -87,7 +88,8 @@ public class DualComparerFactory {
                 additionalRelative
                         .map(
                                 additional ->
-                                        Paths.get(directory.getRoot().getAbsolutePath(), additional))
+                                        Paths.get(
+                                                directory.getRoot().getAbsolutePath(), additional))
                         .orElseGet(() -> Paths.get(directory.getRoot().getAbsolutePath()));
 
         return TestLoader.createFromExplicitDirectory(pathTemporary);

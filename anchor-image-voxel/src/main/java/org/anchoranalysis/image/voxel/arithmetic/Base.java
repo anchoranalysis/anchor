@@ -54,21 +54,17 @@ abstract class Base<T> implements VoxelsArithmetic {
     @Override
     public void multiplyBy(double factor) {
         if (factor != 1) {
-            extent.iterateOverZ( z->
-                multiplyBuffer(bufferForSlice.apply(z), factor)
-            );
+            extent.iterateOverZ(z -> multiplyBuffer(bufferForSlice.apply(z), factor));
         }
     }
 
     @Override
     public void divideBy(int divisor) {
         if (divisor != 1) {
-            extent.iterateOverZ( z->
-                divideByBuffer(bufferForSlice.apply(z), divisor)
-            );
+            extent.iterateOverZ(z -> divideByBuffer(bufferForSlice.apply(z), divisor));
         }
     }
-    
+
     @Override
     public void subtractFrom(int valueToSubtractFrom) {
 
@@ -147,9 +143,10 @@ abstract class Base<T> implements VoxelsArithmetic {
      * @param factor what to multiply the voxel by
      */
     protected abstract void multiplyBuffer(T buffer, double factor);
-    
+
     /**
-     * Divides the voxel at the current position in a buffer (i.e. by calling {@code get()}) by a scalar constant.
+     * Divides the voxel at the current position in a buffer (i.e. by calling {@code get()}) by a
+     * scalar constant.
      *
      * <p>Note the buffer's position will be advanced by one after this call.
      *

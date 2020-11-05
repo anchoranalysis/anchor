@@ -23,7 +23,5 @@
  * THE SOFTWARE.
  * #L%
  */
-/**
- * A particular naming pattern files follow when outputted. 
- */
+/** A particular naming pattern files follow when outputted. */
 package org.anchoranalysis.io.generator.sequence.pattern;

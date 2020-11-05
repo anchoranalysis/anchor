@@ -231,8 +231,10 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
 
             successfullyFinished = true;
         } catch (AnchorFriendlyCheckedException e) {
-            params.getLogger().errorReporter().recordError(Task.class, e.friendlyMessageHierarchy());
-            processExceptionAfterRecordingError(loggerJob, suppressExceptions, e);            
+            params.getLogger()
+                    .errorReporter()
+                    .recordError(Task.class, e.friendlyMessageHierarchy());
+            processExceptionAfterRecordingError(loggerJob, suppressExceptions, e);
         } catch (Throwable e) { // NOSONAR
             // We need to catch both exceptions and errors in order to recover from failure in
             // the specific task. Other tasks will continue executing.
@@ -253,8 +255,10 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
         }
         return successfullyFinished;
     }
-    
-    private static void processExceptionAfterRecordingError(StatefulMessageLogger loggerJob, boolean suppressExceptions, Throwable e) throws JobExecutionException {
+
+    private static void processExceptionAfterRecordingError(
+            StatefulMessageLogger loggerJob, boolean suppressExceptions, Throwable e)
+            throws JobExecutionException {
         loggerJob.log(
                 "This error was fatal. The specific job will end early, but the experiment will otherwise continue.");
         if (!suppressExceptions) {

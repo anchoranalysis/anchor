@@ -34,7 +34,6 @@ import org.anchoranalysis.core.exception.friendly.AnchorFriendlyRuntimeException
 import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.results.ResultsVector;
-import org.anchoranalysis.feature.session.calculator.multi.FeatureCalculatorMulti;
 
 class FeatureCalculatorMultiFixture {
 

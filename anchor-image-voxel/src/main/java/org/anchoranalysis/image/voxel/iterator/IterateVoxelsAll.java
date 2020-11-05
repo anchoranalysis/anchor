@@ -37,6 +37,7 @@ import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedBufferAsInt;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.iterator.process.ProcessPoint;
+import org.anchoranalysis.image.voxel.iterator.process.ProcessPointAndIndex;
 import org.anchoranalysis.image.voxel.iterator.process.buffer.ProcessBufferBinary;
 import org.anchoranalysis.image.voxel.iterator.process.buffer.ProcessBufferTernary;
 import org.anchoranalysis.image.voxel.iterator.process.buffer.ProcessBufferUnary;
@@ -68,6 +69,17 @@ public class IterateVoxelsAll {
     public static void withPoint(Extent extent, ProcessPoint process) {
         IterateVoxelsBoundingBox.withPoint(new BoundingBox(extent), process);
     }
+    
+    /**
+     * Iterate over each voxel in an {@link Extent}
+     *
+     * @param extent the extent to be iterated over
+     * @param process process is called for each voxel inside the extent using the same coordinates
+     *     as the extent.
+     */
+    public static void withPointAndIndex(Extent extent, ProcessPointAndIndex process) {
+        IterateVoxelsBoundingBox.withPointAndIndex(new BoundingBox(extent), process);
+    }
 
     /**
      * Iterate over each voxel - with <b>one</b> associated <b>buffer</b> for each slice.
@@ -86,8 +98,7 @@ public class IterateVoxelsAll {
      *
      * <p>The extent's of both {@code voxels1} and {@code voxels2} must be equal.
      *
-     * @param voxels1 first voxels
-     *     provides the <b>first</b> buffer
+     * @param voxels1 first voxels provides the <b>first</b> buffer
      * @param voxels2 second voxels
      * @param process is called for each voxel using <i>global</i> coordinates.
      * @param <T> buffer-type for voxels
@@ -190,7 +201,6 @@ public class IterateVoxelsAll {
      * <p>The extent's of both {@code voxels1} and {@code voxels2} must be equal.
      *
      * @param voxels1 voxels that provide the <b>first</b> voxel-buffer
-     *     
      * @param voxels2 voxels that provide the <b>first</b> buffer
      * @param process is called for each voxel using <i>global</i> coordinates.
      * @param <T> buffer-type for voxels
@@ -212,14 +222,13 @@ public class IterateVoxelsAll {
                             }
                         });
     }
-    
-    
+
     /**
-     * Iterate over each voxel in a bounding-box - with <b>one associated voxel-buffer</b>
-     * and <b>one associated buffer</b> for each slice.
+     * Iterate over each voxel in a bounding-box - with <b>one associated voxel-buffer</b> and
+     * <b>one associated buffer</b> for each slice.
      *
      * <p>The extent's of both {@code voxels1} and {@code voxels2} must be equal.
-     * 
+     *
      * <p>Note that a new {@link Point3i} is created for each call to {@code process}.
      *
      * @param voxels1 voxels that provide the <b>first</b> element, the voxel-buffer.
@@ -241,9 +250,10 @@ public class IterateVoxelsAll {
                             T buffer2 = voxels2.slice(z).buffer();
 
                             int offset = 0;
-                            for( int y=0; y<sizeY; y++) {
-                                for( int x=0; x<sizeX; x++) {
-                                  process.process(new Point3i(x,y,z), buffer1, buffer2, offset++);
+                            for (int y = 0; y < sizeY; y++) {
+                                for (int x = 0; x < sizeX; x++) {
+                                    process.process(
+                                            new Point3i(x, y, z), buffer1, buffer2, offset++);
                                 }
                             }
                         });

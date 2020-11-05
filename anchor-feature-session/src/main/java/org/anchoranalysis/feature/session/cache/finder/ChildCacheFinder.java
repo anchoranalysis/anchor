@@ -35,7 +35,8 @@ import org.anchoranalysis.feature.calculate.cache.FeatureSessionCache;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
- * Strategy to determine which child-cache (among hierarchy) to employ for a particular feature calculation.
+ * Strategy to determine which child-cache (among hierarchy) to employ for a particular feature
+ * calculation.
  */
 public interface ChildCacheFinder {
 

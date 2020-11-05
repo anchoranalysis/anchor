@@ -25,9 +25,9 @@
  */
 package org.anchoranalysis.bean.initializable;
 
-import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
 
 /**
  * Routines for checking that particular patterns exist with bean-properties

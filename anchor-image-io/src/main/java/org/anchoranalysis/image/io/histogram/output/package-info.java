@@ -24,6 +24,7 @@
  * #L%
  */
 /**
- * Non-bean classes for writing a {@link org.anchoranalysis.math.histogram.Histogram} to the filesystem.
+ * Non-bean classes for writing a {@link org.anchoranalysis.math.histogram.Histogram} to the
+ * filesystem.
  */
 package org.anchoranalysis.image.io.histogram.output;

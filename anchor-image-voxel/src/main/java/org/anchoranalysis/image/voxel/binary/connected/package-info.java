@@ -23,5 +23,9 @@
  * THE SOFTWARE.
  * #L%
  */
-/** Creating an {@link org.anchoranalysis.image.voxel.object.ObjectCollection} that is a <a href="https://en.wikipedia.org/wiki/Connected-component_labeling">connected component labelling</a> of a {@link org.anchoranalysis.image.voxel.binary.BinaryVoxels}. */
+/**
+ * Creating an {@link org.anchoranalysis.image.voxel.object.ObjectCollection} that is a <a
+ * href="https://en.wikipedia.org/wiki/Connected-component_labeling">connected component
+ * labelling</a> of a {@link org.anchoranalysis.image.voxel.binary.BinaryVoxels}.
+ */
 package org.anchoranalysis.image.voxel.binary.connected;

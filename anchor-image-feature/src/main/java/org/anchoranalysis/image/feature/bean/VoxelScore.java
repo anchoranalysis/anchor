@@ -34,9 +34,7 @@ import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.bean.ImageBean;
 import org.anchoranalysis.math.histogram.Histogram;
 
-/** 
- * Calculates a per-voxel score.
- */
+/** Calculates a per-voxel score. */
 public abstract class VoxelScore extends ImageBean<VoxelScore> {
 
     /**

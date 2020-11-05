@@ -49,26 +49,28 @@ public class FourChannelStackTester {
 
     /** The tester to use for all tests. */
     private final StackTester tester;
-    
-    /** Comparer to use on non-RGB tests.  */
+
+    /** Comparer to use on non-RGB tests. */
     private final Optional<ImageComparer> comparer;
-    
+
     /** Comparer to use on RGB tests. */
     private final Optional<ImageComparer> comparerRGB;
 
     /**
      * Creates for a tester and comparer.
-     * 
+     *
      * @param tester creates a stack to fulfill certain requirements, and performs the test with it.
-     * @param comparer a comparer used on the image-created when tested to check if it is identical to other(s).
+     * @param comparer a comparer used on the image-created when tested to check if it is identical
+     *     to other(s).
      * @param skipComparisonForRGB Iff true, comparisons are not applied to RGB images.
      */
-    public FourChannelStackTester(StackTester tester, ImageComparer comparer, boolean skipComparisonForRGB) {
+    public FourChannelStackTester(
+            StackTester tester, ImageComparer comparer, boolean skipComparisonForRGB) {
         this.tester = tester;
         this.comparer = Optional.of(comparer);
-        this.comparerRGB = OptionalUtilities.createFromFlag(!skipComparisonForRGB, () -> comparer); 
+        this.comparerRGB = OptionalUtilities.createFromFlag(!skipComparisonForRGB, () -> comparer);
     }
-    
+
     /**
      * Tests the creation of a single-channel stack of unsigned 8-bit data type with the RGB flag
      * off.
@@ -112,7 +114,8 @@ public class FourChannelStackTester {
      * @throws IOException if an error occurs attempting a comparison
      */
     public void testSingleChannelRGB() throws ImageIOException, IOException {
-        tester.performTest( new ChannelSpecification(UnsignedByteVoxelType.INSTANCE, 1, true), comparerRGB);
+        tester.performTest(
+                new ChannelSpecification(UnsignedByteVoxelType.INSTANCE, 1, true), comparerRGB);
     }
 
     /**
@@ -210,7 +213,8 @@ public class FourChannelStackTester {
     public void testThreeChannelsHeterogeneous() throws ImageIOException, IOException {
         tester.performTest(
                 new ChannelSpecification(UnsignedByteVoxelType.INSTANCE, 3, false),
-                Optional.of(UnsignedShortVoxelType.INSTANCE), comparer);
+                Optional.of(UnsignedShortVoxelType.INSTANCE),
+                comparer);
     }
 
     /**

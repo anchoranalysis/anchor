@@ -162,7 +162,8 @@ public class BioformatsOpenedRaster implements OpenedRaster {
 
             // Assumes order of time first, and then channels
             List<Channel> listAllChannels =
-                    createUninitialisedChannels(dimensions, timeSequence, multiplexVoxelDataType(dataType));
+                    createUninitialisedChannels(
+                            dimensions, timeSequence, multiplexVoxelDataType(dataType));
 
             copyBytesIntoChannels(
                     listAllChannels, dimensions, progressReporter, dataType, readOptions);
@@ -187,7 +188,7 @@ public class BioformatsOpenedRaster implements OpenedRaster {
         List<Channel> listAllChannels = new ArrayList<>();
 
         for (int t = 0; t < sizeT; t++) {
-            Stack stack = new Stack( isRGB() );
+            Stack stack = new Stack(isRGB());
             for (int c = 0; c < numberChannels; c++) {
 
                 Channel channel = factory.createEmptyUninitialised(dimensions);

@@ -58,7 +58,7 @@ public interface VoxelsArithmetic {
      * @param divisor what to divide-by
      */
     void divideBy(int divisor);
-    
+
     /**
      * Subtracts all current voxel-values from a constant-value
      *

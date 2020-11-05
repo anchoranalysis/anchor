@@ -23,7 +23,5 @@
  * THE SOFTWARE.
  * #L%
  */
-/**
- * A container with voxel-buffers for each z-slice.
- */
+/** A container with voxel-buffers for each z-slice. */
 package org.anchoranalysis.image.voxel.buffer.slice;

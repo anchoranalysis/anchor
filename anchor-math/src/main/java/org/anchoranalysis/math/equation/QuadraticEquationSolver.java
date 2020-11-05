@@ -37,7 +37,8 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 public class QuadraticEquationSolver {
 
     /** Roots (solution) of a quadratic equation */
-    @AllArgsConstructor @Data
+    @AllArgsConstructor
+    @Data
     public static class QuadraticRoots {
         private double root1;
         private double root2;

@@ -58,14 +58,20 @@ public class StackFixture {
      * Creates a stack with a particular number of the channels of particular size.
      *
      * <p>Note that if defined, {@code firstChannelVoxelType} takes precedence for the first
-     *     channel's data type over that supplied by {@link ChannelSpecification}.
+     * channel's data type over that supplied by {@link ChannelSpecification}.
+     *
      * @param extent the size of each channel.
      * @return the newly created-stack with newly-created channels.
      */
     public Stack create(ChannelSpecification channelSpecification, Extent extent) {
         Stream<Channel> channels =
                 IntStream.range(0, channelSpecification.getNumberChannels())
-                        .mapToObj(index -> createChannel(index, extent, channelSpecification.getChannelVoxelType()));
+                        .mapToObj(
+                                index ->
+                                        createChannel(
+                                                index,
+                                                extent,
+                                                channelSpecification.getChannelVoxelType()));
         try {
             return new Stack(channelSpecification.isMakeRGB(), channels);
         } catch (IncorrectImageSizeException e) {

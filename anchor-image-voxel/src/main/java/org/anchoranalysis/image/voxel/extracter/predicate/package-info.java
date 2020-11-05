@@ -23,7 +23,5 @@
  * THE SOFTWARE.
  * #L%
  */
-/**
- * Methods to find or count voxels that satisfy a predicate.
- */
+/** Methods to find or count voxels that satisfy a predicate. */
 package org.anchoranalysis.image.voxel.extracter.predicate;

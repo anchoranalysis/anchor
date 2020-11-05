@@ -112,7 +112,8 @@ public abstract class CountKernelNeighborhoodBase extends CountKernel {
         x--;
         index--;
         if (x >= 0) {
-            if (bv.isOff(buffer.getRaw(index)) && isNeighborVoxelAccepted(point, -1, 0, 0, extent)) {
+            if (bv.isOff(buffer.getRaw(index))
+                    && isNeighborVoxelAccepted(point, -1, 0, 0, extent)) {
                 if (!multipleMatchesPerVoxel) {
                     return 1;
                 }
@@ -132,7 +133,8 @@ public abstract class CountKernelNeighborhoodBase extends CountKernel {
         x += 2;
         index += 2;
         if (x < extent.x()) {
-            if (bv.isOff(buffer.getRaw(index)) && isNeighborVoxelAccepted(point, +1, 0, 0, extent)) {
+            if (bv.isOff(buffer.getRaw(index))
+                    && isNeighborVoxelAccepted(point, +1, 0, 0, extent)) {
                 if (!multipleMatchesPerVoxel) {
                     return 1;
                 }
@@ -154,7 +156,8 @@ public abstract class CountKernelNeighborhoodBase extends CountKernel {
         y--;
         index -= xLength;
         if (y >= 0) {
-            if (bv.isOff(buffer.getRaw(index)) && isNeighborVoxelAccepted(point, 0, -1, 0, extent)) {
+            if (bv.isOff(buffer.getRaw(index))
+                    && isNeighborVoxelAccepted(point, 0, -1, 0, extent)) {
                 if (!multipleMatchesPerVoxel) {
                     return 1;
                 }
@@ -174,7 +177,8 @@ public abstract class CountKernelNeighborhoodBase extends CountKernel {
         y += 2;
         index += (2 * xLength);
         if (y < (extent.y())) {
-            if (bv.isOff(buffer.getRaw(index)) && isNeighborVoxelAccepted(point, 0, +1, 0, extent)) {
+            if (bv.isOff(buffer.getRaw(index))
+                    && isNeighborVoxelAccepted(point, 0, +1, 0, extent)) {
                 if (!multipleMatchesPerVoxel) {
                     return 1;
                 }

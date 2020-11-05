@@ -27,20 +27,19 @@
 package org.anchoranalysis.image.core.outline.traverser.path.merge.strategy;
 
 import java.util.Optional;
-import org.anchoranalysis.image.core.outline.traverser.path.ContiguousVoxelPath;
-import org.anchoranalysis.image.core.outline.traverser.path.LoopablePoints;
-import org.anchoranalysis.spatial.point.Point3i;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.anchoranalysis.image.core.outline.traverser.path.ContiguousVoxelPath;
+import org.anchoranalysis.image.core.outline.traverser.path.LoopablePoints;
+import org.anchoranalysis.spatial.point.Point3i;
 
 /**
  * Maintains two paths, and their closest point
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
-@AllArgsConstructor(access=AccessLevel.PRIVATE)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class MergeCandidate {
 
     @Getter private final PathWithClosest keep;

@@ -30,10 +30,10 @@ import java.io.Serializable;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.function.Predicate;
+import lombok.Setter;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.manifest.file.OutputtedFile;
 import org.anchoranalysis.io.manifest.finder.FindFailedException;
-import lombok.Setter;
 
 public class RootDirectory extends MutableDirectory implements Serializable {
 
@@ -49,12 +49,12 @@ public class RootDirectory extends MutableDirectory implements Serializable {
     public RootDirectory() {
         delegate = new FileList(this);
     }
-    
+
     public RootDirectory(Path rootPath) {
         this();
         this.rootPath = rootPath;
     }
-    
+
     @Override
     public void recordWrittenFile(
             String outputName,

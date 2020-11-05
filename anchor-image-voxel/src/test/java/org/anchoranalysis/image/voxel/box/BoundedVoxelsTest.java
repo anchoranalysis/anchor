@@ -50,7 +50,8 @@ public class BoundedVoxelsTest {
         Extent extent = extent(20);
 
         BoundedVoxels<UnsignedByteBuffer> box =
-                VoxelsFactory.getUnsignedByte().createBounded(new BoundingBox(point(10), extent(15)));
+                VoxelsFactory.getUnsignedByte()
+                        .createBounded(new BoundingBox(point(10), extent(15)));
 
         Point3i grow = point(1);
         box.growBuffer(grow, grow, Optional.of(extent), VoxelsFactory.getUnsignedByte());

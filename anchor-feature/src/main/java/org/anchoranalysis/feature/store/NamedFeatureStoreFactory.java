@@ -62,8 +62,7 @@ public class NamedFeatureStoreFactory {
      * @throws CreateException
      */
     public <T extends FeatureInput> NamedFeatureStore<T> createNamedFeatureList(
-            List<NamedBean<FeatureListProvider<T>>> namedFeatures)
-            throws CreateException {
+            List<NamedBean<FeatureListProvider<T>>> namedFeatures) throws CreateException {
 
         NamedFeatureStore<T> out = new NamedFeatureStore<>();
         for (NamedBean<FeatureListProvider<T>> namedProvider : namedFeatures) {

@@ -23,7 +23,5 @@
  * THE SOFTWARE.
  * #L%
  */
-/** 
- * A manifest that records what outputs occur and where they occur. 
- */
+/** A manifest that records what outputs occur and where they occur. */
 package org.anchoranalysis.io.manifest;

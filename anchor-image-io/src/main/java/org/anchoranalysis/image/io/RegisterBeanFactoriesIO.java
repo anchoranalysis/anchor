@@ -36,9 +36,9 @@ import org.anchoranalysis.image.io.channel.input.NamedEntriesCreator;
 
 /**
  * Registers custom-bean factories related to image input and output.
- * 
+ *
  * @author Owen Feehan
-  */
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class RegisterBeanFactoriesIO {
 

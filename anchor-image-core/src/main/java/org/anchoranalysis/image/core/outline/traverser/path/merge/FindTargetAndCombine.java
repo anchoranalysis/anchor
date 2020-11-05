@@ -27,10 +27,10 @@
 package org.anchoranalysis.image.core.outline.traverser.path.merge;
 
 import java.util.List;
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.image.core.outline.traverser.distance.DistanceIndexTwice;
 import org.anchoranalysis.image.core.outline.traverser.distance.FindMinimumDistance;
 import org.anchoranalysis.image.core.outline.traverser.path.ContiguousVoxelPath;
-import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 class FindTargetAndCombine {

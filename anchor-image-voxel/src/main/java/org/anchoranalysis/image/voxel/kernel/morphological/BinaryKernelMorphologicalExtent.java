@@ -36,7 +36,8 @@ public abstract class BinaryKernelMorphologicalExtent extends BinaryKernelMorpho
     protected final boolean useZ;
     protected Extent extent;
 
-    public BinaryKernelMorphologicalExtent(BinaryValuesByte bv, boolean outsideAtThreshold, boolean useZ) {
+    public BinaryKernelMorphologicalExtent(
+            BinaryValuesByte bv, boolean outsideAtThreshold, boolean useZ) {
         super(bv, outsideAtThreshold);
         this.useZ = useZ;
     }

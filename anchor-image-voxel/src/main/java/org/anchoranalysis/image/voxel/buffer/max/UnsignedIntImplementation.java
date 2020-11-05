@@ -38,7 +38,8 @@ class UnsignedIntImplementation extends MaxIntensityBufferBase<UnsignedIntBuffer
     }
 
     @Override
-    protected void maybeReplaceCurrentBufferPosition(UnsignedIntBuffer sliceToBeAdded, UnsignedIntBuffer projection) {
+    protected void maybeReplaceCurrentBufferPosition(
+            UnsignedIntBuffer sliceToBeAdded, UnsignedIntBuffer projection) {
         int inPixel = sliceToBeAdded.getRaw();
         if (PrimitiveConverter.unsignedIntToLong(inPixel) > projection.getUnsigned()) {
             projection.putRaw(projection.position() - 1, inPixel);

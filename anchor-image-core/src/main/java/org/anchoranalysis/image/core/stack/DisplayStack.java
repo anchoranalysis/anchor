@@ -328,7 +328,7 @@ public class DisplayStack {
     }
 
     private Stack deriveStack(IntFunction<Channel> indexToChannel) {
-        Stack out = new Stack(stack.getNumberChannels()==3);
+        Stack out = new Stack(stack.getNumberChannels() == 3);
         for (int index = 0; index < stack.getNumberChannels(); index++) {
             try {
                 out.addChannel(indexToChannel.apply(index));

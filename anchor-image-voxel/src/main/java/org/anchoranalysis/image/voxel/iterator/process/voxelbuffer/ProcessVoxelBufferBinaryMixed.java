@@ -30,7 +30,8 @@ import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.spatial.point.Point3i;
 
 /**
- * Processes a 3D point like {@link ProcessVoxelBufferBinary} but rather has one {@link VoxelBuffer} and one buffer, and also exposes a {@link Point3i}.
+ * Processes a 3D point like {@link ProcessVoxelBufferBinary} but rather has one {@link VoxelBuffer}
+ * and one buffer, and also exposes a {@link Point3i}.
  *
  * @author Owen Feehan
  * @param <S> first buffer-type
@@ -43,8 +44,8 @@ public interface ProcessVoxelBufferBinaryMixed<S, T> {
      * Processes a voxel location in a buffer
      *
      * @param point a point with global coordinates
-     * @param buffer1 first {@link VoxelBuffer} for the current slice for which {@code offset} refers to a
-     *     particular location
+     * @param buffer1 first {@link VoxelBuffer} for the current slice for which {@code offset}
+     *     refers to a particular location
      * @param buffer2 second buffer for the current slice for which {@code offset} refers to a
      *     particular location
      * @param offset an offset value for the current slice (i.e. indexing XY only, but not Z)

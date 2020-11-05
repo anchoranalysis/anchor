@@ -27,6 +27,7 @@
 package org.anchoranalysis.feature.session.cache;
 
 import java.util.Collection;
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calculate.FeatureCalculation;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
@@ -36,7 +37,6 @@ import org.anchoranalysis.feature.calculate.cache.ResolvedCalculation;
 import org.anchoranalysis.feature.calculate.cache.ResolvedCalculationMap;
 import org.anchoranalysis.feature.calculate.cache.SessionInput;
 import org.anchoranalysis.feature.input.FeatureInput;
-import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 class HorizontalFeatureCalculator<T extends FeatureInput> implements FeatureSessionCalculator<T> {

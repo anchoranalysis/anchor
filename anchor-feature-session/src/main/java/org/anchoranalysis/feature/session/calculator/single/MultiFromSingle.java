@@ -36,8 +36,7 @@ import org.anchoranalysis.feature.results.ResultsVector;
 import org.anchoranalysis.feature.session.calculator.multi.FeatureCalculatorMulti;
 
 @AllArgsConstructor
-class MultiFromSingle<T extends FeatureInput>
-        implements FeatureCalculatorMulti<T> {
+class MultiFromSingle<T extends FeatureInput> implements FeatureCalculatorMulti<T> {
 
     private final FeatureCalculatorSingle<T> delegate;
 

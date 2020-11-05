@@ -37,7 +37,7 @@ import org.anchoranalysis.spatial.box.BoundingBox;
  */
 public class ObjectFixture {
 
-    public static ObjectMask createSmallCornerObj() {
+    public static ObjectMask createSmallCornerObject() {
         return new ObjectMask(new BoundingBox(new Extent(2, 3, 1)));
     }
 }

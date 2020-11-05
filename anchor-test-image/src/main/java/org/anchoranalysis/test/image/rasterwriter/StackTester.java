@@ -26,6 +26,7 @@
 package org.anchoranalysis.test.image.rasterwriter;
 
 import static org.junit.Assert.assertTrue;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -46,7 +47,7 @@ import org.anchoranalysis.test.image.rasterwriter.comparison.ImageComparer;
 public class StackTester {
 
     public static final String EXTENT_IDENTIFIER = "small";
-    
+
     /** A minimum file-size for all written rasters, below which we assume an error has occurred. */
     private static final int MINIMUM_FILE_SIZE = 20;
 
@@ -60,14 +61,21 @@ public class StackTester {
     /** The directory to write new files to. */
     private final Path directoryToWriteTo;
 
-    /** The file-extension to use for writing and testing files (case-sensitive, and without a leading period). */
+    /**
+     * The file-extension to use for writing and testing files (case-sensitive, and without a
+     * leading period).
+     */
     private final String extension;
 
     /** If true, then 3D stacks are also tested and saved, not just 2D stacks. */
     private final boolean include3D;
     // END REQUIRED ARGUMENTS
 
-    public void performTest(VoxelDataType[] channelVoxelTypes, int numberChannels, boolean makeRGB, Optional<ImageComparer> comparer)
+    public void performTest(
+            VoxelDataType[] channelVoxelTypes,
+            int numberChannels,
+            boolean makeRGB,
+            Optional<ImageComparer> comparer)
             throws ImageIOException, IOException {
         performTest(channelVoxelTypes, numberChannels, makeRGB, Optional.empty(), comparer);
     }
@@ -76,10 +84,14 @@ public class StackTester {
             VoxelDataType[] channelVoxelTypes,
             int numberChannels,
             boolean makeRGB,
-            Optional<VoxelDataType> forceFirstChannel, Optional<ImageComparer> comparer)
+            Optional<VoxelDataType> forceFirstChannel,
+            Optional<ImageComparer> comparer)
             throws ImageIOException, IOException {
         for (VoxelDataType voxelType : channelVoxelTypes) {
-            performTest( new ChannelSpecification(voxelType, numberChannels, makeRGB), forceFirstChannel, comparer);
+            performTest(
+                    new ChannelSpecification(voxelType, numberChannels, makeRGB),
+                    forceFirstChannel,
+                    comparer);
         }
     }
 
@@ -93,19 +105,9 @@ public class StackTester {
             Optional<VoxelDataType> forceFirstChannel,
             Optional<ImageComparer> comparer)
             throws ImageIOException, IOException {
-        test(
-                channels,
-                ChannelFixture.SMALL_2D,
-                false,
-                forceFirstChannel,
-                comparer);
+        test(channels, ChannelFixture.SMALL_2D, false, forceFirstChannel, comparer);
         if (include3D) {
-            test(
-                    channels,
-                    ChannelFixture.SMALL_3D,
-                    true,
-                    forceFirstChannel,
-                    comparer);
+            test(channels, ChannelFixture.SMALL_3D, true, forceFirstChannel, comparer);
         }
     }
 
@@ -119,10 +121,7 @@ public class StackTester {
 
         String filename =
                 IdentifierHelper.identiferFor(
-                        channels,
-                        do3D,
-                        EXTENT_IDENTIFIER,
-                        forceFirstChannel.isPresent());
+                        channels, do3D, EXTENT_IDENTIFIER, forceFirstChannel.isPresent());
 
         Stack stack = new StackFixture(forceFirstChannel).create(channels, extent);
 
@@ -131,17 +130,21 @@ public class StackTester {
         Path pathWritten =
                 writer.writeStackWithExtension(
                         stack, directoryToWriteTo.resolve(filename), options);
-        
+
         assertMinimumSize(pathWritten, filename);
-        
+
         if (comparer.isPresent()) {
-            comparer.get().assertIdentical(filename, ExtensionAdder.addExtension(filename, extension), pathWritten);
+            comparer.get()
+                    .assertIdentical(
+                            filename,
+                            ExtensionAdder.addExtension(filename, extension),
+                            pathWritten);
         }
     }
-    
+
     private void assertMinimumSize(Path path, String filenameWithoutExtension) throws IOException {
         assertTrue(
                 filenameWithoutExtension + "_minimumFileSize",
-                Files.size(path) > MINIMUM_FILE_SIZE);        
+                Files.size(path) > MINIMUM_FILE_SIZE);
     }
 }

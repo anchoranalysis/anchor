@@ -37,14 +37,16 @@ import org.junit.Test;
 /**
  * For testing all {@link StackWriter}s that create TIFFs.
  *
- * <p>Note that {@link ComparisonPlan#ComparisonPlan(boolean, Optional, boolean, String)} can be used to quickly created the saved copies in the resources.
+ * <p>Note that {@link ComparisonPlan#ComparisonPlan(boolean, Optional, boolean, String)} can be
+ * used to quickly created the saved copies in the resources.
  *
  * @author Owen Feehan
  */
 public abstract class TiffTestBase extends RasterWriterTestBase {
 
-    private static final ComparisonPlan COMPARISON_PLAN = new ComparisonPlan(true, Optional.of("ome.tif"), false);
-    
+    private static final ComparisonPlan COMPARISON_PLAN =
+            new ComparisonPlan(true, Optional.of("ome.tif"), false);
+
     private static final VoxelDataType[] SUPPORTED_VOXEL_TYPES =
             RasterWriterTestBase.ALL_SUPPORTED_VOXEL_TYPES;
 

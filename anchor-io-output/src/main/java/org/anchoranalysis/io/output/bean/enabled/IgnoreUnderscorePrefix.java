@@ -33,7 +33,7 @@ import lombok.NoArgsConstructor;
  *
  * <p>Additionally, when a underscore occurs in any location, preceded by a period i.e. {@code ._}
  * this output is also allowed. This is intended for cases of namespace-like hierarchy of outputs.
- * 
+ *
  * <p>This is intended as a filter to allow declaration of certain <i>private</i> entities that are
  * not typically outputted, unless explicitly specified.
  *
@@ -51,9 +51,10 @@ public class IgnoreUnderscorePrefix extends OutputEnabled {
 
     @Override
     public boolean isOutputEnabled(String outputName) {
-        return outputName.isEmpty() || (outputName.charAt(0) != '_' && !containsPeriodUnderscore(outputName));
+        return outputName.isEmpty()
+                || (outputName.charAt(0) != '_' && !containsPeriodUnderscore(outputName));
     }
-    
+
     private static boolean containsPeriodUnderscore(String outputName) {
         return outputName.contains("._");
     }

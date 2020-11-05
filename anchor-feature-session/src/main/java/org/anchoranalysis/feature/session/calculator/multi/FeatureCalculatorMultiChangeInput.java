@@ -27,13 +27,13 @@
 package org.anchoranalysis.feature.session.calculator.multi;
 
 import java.util.function.Consumer;
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.log.error.ErrorReporter;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.results.ResultsVector;
 import org.anchoranalysis.feature.session.SequentialSession;
-import lombok.AllArgsConstructor;
 
 /**
  * Likes a {@link SequentialSession} but automatically changes parameters before calculation
@@ -47,7 +47,7 @@ public class FeatureCalculatorMultiChangeInput<T extends FeatureInput>
 
     /** Delegate that is called after an input is changed. */
     private FeatureCalculatorMulti<T> calculator;
-    
+
     /** A function that is applied to change the input before being passed to the delegate. */
     private Consumer<T> change;
 

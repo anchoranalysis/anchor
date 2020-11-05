@@ -65,10 +65,11 @@ public class VoxelsExtracterFactory {
      * @param voxels the voxels to extract from
      * @return a newly created extracter
      */
-    public static VoxelsExtracter<UnsignedIntBuffer> createUnsignedInt(Voxels<UnsignedIntBuffer> voxels) {
+    public static VoxelsExtracter<UnsignedIntBuffer> createUnsignedInt(
+            Voxels<UnsignedIntBuffer> voxels) {
         return new UnsignedIntImplementation(voxels);
     }
-    
+
     /**
      * Create voxels-extracter for {@link FloatBuffer}
      *

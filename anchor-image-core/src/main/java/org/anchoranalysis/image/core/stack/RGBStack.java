@@ -121,7 +121,7 @@ public class RGBStack {
     }
 
     public RGBStack extractSlice(int z) {
-        return new RGBStack( stack.extractSlice(z) );
+        return new RGBStack(stack.extractSlice(z));
     }
 
     public Stack asStack() {
@@ -214,7 +214,7 @@ public class RGBStack {
     public Extent extent() {
         return stack.extent();
     }
-    
+
     private static void writeRGBColorToByteArray(
             RGBColor color,
             Point3i point,

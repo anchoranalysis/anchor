@@ -33,9 +33,8 @@ import lombok.Getter;
 import org.anchoranalysis.spatial.point.Point3i;
 import org.anchoranalysis.spatial.point.ReadableTuple3i;
 
-/** 
+/**
  * A list of visited pixels which forms one contiguous path where each voxel neighbors each other.
- * 
  */
 public class ContiguousVoxelPath {
 

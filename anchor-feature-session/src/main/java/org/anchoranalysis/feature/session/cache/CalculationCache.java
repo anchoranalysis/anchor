@@ -40,8 +40,7 @@ import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 
 /**
- * Caches calculations that occur repeatedly across many features, and store similar child
- * caches.
+ * Caches calculations that occur repeatedly across many features, and store similar child caches.
  *
  * <p>The caches are reset every time {@link #invalidate} is called.
  *

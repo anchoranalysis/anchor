@@ -33,33 +33,42 @@ import org.anchoranalysis.spatial.Extent;
 class UnsignedShortImplementation extends Base<UnsignedShortBuffer> {
 
     private static final int MAXIMUM_VALUE = UnsignedShortVoxelType.MAX_VALUE_INT;
-    
-    public UnsignedShortImplementation(Extent extent, IntFunction<UnsignedShortBuffer> bufferForSlice) {
+
+    public UnsignedShortImplementation(
+            Extent extent, IntFunction<UnsignedShortBuffer> bufferForSlice) {
         super(extent, bufferForSlice);
     }
 
     @Override
     protected void multiplyBuffer(UnsignedShortBuffer buffer, double factor) {
-        UnsignedBufferAsIntHelper.calculateForEveryVoxel(buffer, MAXIMUM_VALUE, value -> BinaryOperationHelper.multiplyByInt(value, factor) );
+        UnsignedBufferAsIntHelper.calculateForEveryVoxel(
+                buffer, MAXIMUM_VALUE, value -> BinaryOperationHelper.multiplyByInt(value, factor));
     }
 
     @Override
     protected void divideByBuffer(UnsignedShortBuffer buffer, int divisor) {
-        UnsignedBufferAsIntHelper.calculateForEveryVoxel(buffer, MAXIMUM_VALUE, value -> value / divisor);
+        UnsignedBufferAsIntHelper.calculateForEveryVoxel(
+                buffer, MAXIMUM_VALUE, value -> value / divisor);
     }
 
     @Override
     protected void multiplyByBufferIndex(UnsignedShortBuffer buffer, int index, double factor) {
-        UnsignedBufferAsIntHelper.calculateForIndex(buffer, MAXIMUM_VALUE, index, value -> BinaryOperationHelper.multiplyByInt(value, factor));
+        UnsignedBufferAsIntHelper.calculateForIndex(
+                buffer,
+                MAXIMUM_VALUE,
+                index,
+                value -> BinaryOperationHelper.multiplyByInt(value, factor));
     }
 
     @Override
     protected void subtractFromBuffer(UnsignedShortBuffer buffer, int valueToSubtractFrom) {
-        UnsignedBufferAsIntHelper.calculateForEveryVoxel(buffer, MAXIMUM_VALUE, value -> valueToSubtractFrom - value);
+        UnsignedBufferAsIntHelper.calculateForEveryVoxel(
+                buffer, MAXIMUM_VALUE, value -> valueToSubtractFrom - value);
     }
 
     @Override
     protected void addToBufferIndex(UnsignedShortBuffer buffer, int index, int valueToBeAdded) {
-        UnsignedBufferAsIntHelper.calculateForIndex(buffer, MAXIMUM_VALUE, index, value -> value + valueToBeAdded);
+        UnsignedBufferAsIntHelper.calculateForIndex(
+                buffer, MAXIMUM_VALUE, index, value -> value + valueToBeAdded);
     }
 }

@@ -65,14 +65,16 @@ public abstract class ChannelConverter<T> {
         }
         return stackOut;
     }
-    
+
     /**
      * Converts {@code channelIn} to have voxels with data-type {@code T}.
-     * 
-     * <p>This can occur by either replacing the existing voxels in the channel, or creating a new channel entirely.
-     * 
+     *
+     * <p>This can occur by either replacing the existing voxels in the channel, or creating a new
+     * channel entirely.
+     *
      * @param channel channel whose voxels will be converted.
-     * @param changeExisting if true, the contents of the existing channel will be changed with the new type, if false, rather a new channel will be created.
+     * @param changeExisting if true, the contents of the existing channel will be changed with the
+     *     new type, if false, rather a new channel will be created.
      * @return
      */
     public Channel convert(Channel channel, ConversionPolicy changeExisting) {
@@ -89,7 +91,7 @@ public abstract class ChannelConverter<T> {
             return convertCreateNew(channel);
         }
     }
-    
+
     private Channel convertExisting(Channel channel) {
         try {
             // We need to create a new voxel buffer
@@ -101,10 +103,9 @@ public abstract class ChannelConverter<T> {
         }
         return channel;
     }
-    
+
     private Channel convertCreateNew(Channel channel) {
-        Channel out =
-                ChannelFactory.instance().create(channel.dimensions(), dataTypeTarget);
+        Channel out = ChannelFactory.instance().create(channel.dimensions(), dataTypeTarget);
         @SuppressWarnings("unchecked")
         Voxels<T> voxels = (Voxels<T>) out.voxels().match(dataTypeTarget);
         try {

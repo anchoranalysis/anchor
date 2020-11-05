@@ -49,8 +49,7 @@ public class FeatureCalculatorCachedSingle<T extends FeatureInput>
      * @param source the underlying feature-calculator to use for calculating unknown results
      */
     public FeatureCalculatorCachedSingle(FeatureCalculatorSingle<T> source) {
-        delegate =
-                new FeatureCalculatorCachedMulti<>(new MultiFromSingle<>(source));
+        delegate = new FeatureCalculatorCachedMulti<>(new MultiFromSingle<>(source));
     }
 
     /**
@@ -60,9 +59,7 @@ public class FeatureCalculatorCachedSingle<T extends FeatureInput>
      * @param cacheSize size of cache
      */
     public FeatureCalculatorCachedSingle(FeatureCalculatorSingle<T> source, int cacheSize) {
-        delegate =
-                new FeatureCalculatorCachedMulti<>(
-                        new MultiFromSingle<>(source), cacheSize);
+        delegate = new FeatureCalculatorCachedMulti<>(new MultiFromSingle<>(source), cacheSize);
     }
 
     @Override

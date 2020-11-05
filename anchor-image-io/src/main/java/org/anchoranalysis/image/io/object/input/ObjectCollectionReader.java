@@ -47,7 +47,7 @@ public class ObjectCollectionReader {
     private static final Deserializer<ObjectCollection> TIFF_CORRECT_MISSING =
             new ReadObjectsFromTIFFDirectoryCorrectMissing();
     private static final Deserializer<ObjectCollection> HDF5 = new ReadObjectsFromHDF5();
-    
+
     private static final String HDF5_EXTENSION = ".h5";
 
     /**

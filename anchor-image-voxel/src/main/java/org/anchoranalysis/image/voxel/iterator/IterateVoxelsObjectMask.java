@@ -230,14 +230,13 @@ public class IterateVoxelsObjectMask {
 
         callEachPoint(object, voxels, boxVoxels, iterateBox, process);
     }
-    
-    
+
     /**
-     * Iterate over each voxel in an object-mask - with <b>one associated voxel-buffer</b>
-     * and <b>one associated buffer</b> for each slice.
+     * Iterate over each voxel in an object-mask - with <b>one associated voxel-buffer</b> and
+     * <b>one associated buffer</b> for each slice.
      *
      * <p>The extent's of both {@code voxels1} and {@code voxels2} must be equal.
-     * 
+     *
      * <p>Note that a new {@link Point3i} is created for each call to {@code process}.
      *
      * @param voxels1 voxels that provide the <b>first</b> element, the voxel-buffer.
@@ -246,7 +245,10 @@ public class IterateVoxelsObjectMask {
      * @param <T> buffer-type for voxels
      */
     public static <S, T> void withTwoMixedBuffers(
-            ObjectMask object, Voxels<S> voxels1, Voxels<T> voxels2, ProcessVoxelBufferBinaryMixed<S, T> process) {
+            ObjectMask object,
+            Voxels<S> voxels1,
+            Voxels<T> voxels2,
+            ProcessVoxelBufferBinaryMixed<S, T> process) {
         Preconditions.checkArgument(voxels1.extent().equals(voxels2.extent()));
 
         ReadableTuple3i cornerMin = object.boundingBox().cornerMin();
@@ -265,7 +267,8 @@ public class IterateVoxelsObjectMask {
             for (int y = cornerMin.y(); y <= cornerMax.y(); y++) {
                 for (int x = cornerMin.x(); x <= cornerMax.x(); x++) {
                     if (bufferMask.getRaw(offset) == maskOn) {
-                        process.process(new Point3i(x,y,z), buffer, bufferFinalized, e.offset(x, y));
+                        process.process(
+                                new Point3i(x, y, z), buffer, bufferFinalized, e.offset(x, y));
                     }
 
                     offset++;

@@ -80,7 +80,7 @@ class ConnectedComponentUnionFind {
     public ObjectCollection deriveConnectedInt(BinaryVoxels<UnsignedIntBuffer> voxels) {
         return deriveConnected(voxels, new ReadWriteInt());
     }
-    
+
     /**
      * Converts binary-voxels into connected components.
      *
@@ -89,7 +89,8 @@ class ConnectedComponentUnionFind {
      * @param bufferReaderWriter reads and writes to the voxel-buffer
      * @return the connected-components derived from the voxels
      */
-    private <T> ObjectCollection deriveConnected(BinaryVoxels<T> voxels, BufferReadWrite<T> bufferReaderWriter) {
+    private <T> ObjectCollection deriveConnected(
+            BinaryVoxels<T> voxels, BufferReadWrite<T> bufferReaderWriter) {
         ObjectCollection objects = ObjectCollectionFactory.empty();
         visitRegion(voxels, objects, minNumberVoxels, bufferReaderWriter);
         return objects;

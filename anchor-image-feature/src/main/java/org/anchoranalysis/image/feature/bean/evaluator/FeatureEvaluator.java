@@ -62,16 +62,16 @@ public class FeatureEvaluator<T extends FeatureInput>
         extends FeatureRelatedBean<FeatureEvaluator<T>> {
 
     // START BEAN PROPERTIES
-    /** 
+    /**
      * The single feature that will be calculated (possibly repeatedly) in the session.
      *
      * <p>Either this field must be set or {@code featureProvider}, but not both.
      */
     @BeanField @OptionalBean @Getter @Setter @SkipInit private Feature<T> feature;
-    
-    /** 
+
+    /**
      * The single feature that will be calculated (possibly repeatedly) in the session
-     * 
+     *
      * <p>Either this field must be set or {@code feature}, but not both.
      */
     @BeanField @OptionalBean @Getter @Setter private FeatureProvider<T> featureProvider;
@@ -90,9 +90,10 @@ public class FeatureEvaluator<T extends FeatureInput>
     public void checkMisconfigured(BeanInstanceMap defaultInstances)
             throws BeanMisconfiguredException {
         super.checkMisconfigured(defaultInstances);
-        CheckMisconfigured.oneOnly("feature", "featureProvider", feature!=null, featureProvider!=null);
+        CheckMisconfigured.oneOnly(
+                "feature", "featureProvider", feature != null, featureProvider != null);
     }
-    
+
     /**
      * Creates session for evaluating {@code feature} optionally adding an energy-stack.
      *
@@ -117,15 +118,17 @@ public class FeatureEvaluator<T extends FeatureInput>
 
         try {
             return FeatureSession.with(
-                    determineFeature(), getInitializationParameters().getSharedFeatureSet(), getLogger());
+                    determineFeature(),
+                    getInitializationParameters().getSharedFeatureSet(),
+                    getLogger());
 
         } catch (InitException | CreateException e) {
             throw new OperationFailedException(e);
         }
     }
-    
+
     private Feature<T> determineFeature() throws CreateException {
-        if (featureProvider!=null) {
+        if (featureProvider != null) {
             return featureProvider.create();
         } else {
             return feature;

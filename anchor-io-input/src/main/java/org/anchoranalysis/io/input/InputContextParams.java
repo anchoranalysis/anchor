@@ -46,8 +46,9 @@ import org.anchoranalysis.io.input.bean.DebugModeParams;
 public class InputContextParams {
 
     /** If no more specific file extensions to filter are provided, these are used as a default. */
-    private static final List<String> DEFAULT_EXTENSIONS = Arrays.asList("jpg", "png", "tif", "tiff", "gif", "bmp");
-            
+    private static final List<String> DEFAULT_EXTENSIONS =
+            Arrays.asList("jpg", "png", "tif", "tiff", "gif", "bmp");
+
     /** A list of paths referring to specific inputs */
     @Getter @Setter private Optional<List<Path>> inputPaths;
 
@@ -62,12 +63,12 @@ public class InputContextParams {
 
     /** Parameters for debug-mode (only defined if we are in debug mode) */
     @Getter @Setter private Optional<DebugModeParams> debugModeParams = Optional.empty();
-    
+
     /**
      * If defined, a directory which can be used by beans to find input.
-     * 
+     *
      * <p>This should always be an absolute path, never a relative one.
-     * 
+     *
      * @param inputDirectory the absolute path of the input-directory.
      * @throws IOException
      */
@@ -85,7 +86,10 @@ public class InputContextParams {
         }
     }
 
-    /** If no filter extensions are provided from anywhere else, this is a convenient set of defaults. */
+    /**
+     * If no filter extensions are provided from anywhere else, this is a convenient set of
+     * defaults.
+     */
     private Set<String> fallBackFilterExtensions() {
         return new HashSet<>(DEFAULT_EXTENSIONS);
     }

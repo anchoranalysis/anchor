@@ -38,7 +38,8 @@ class UnsignedShortImplementation extends MaxIntensityBufferBase<UnsignedShortBu
     }
 
     @Override
-    protected void maybeReplaceCurrentBufferPosition(UnsignedShortBuffer sliceToBeAdded, UnsignedShortBuffer projection) {
+    protected void maybeReplaceCurrentBufferPosition(
+            UnsignedShortBuffer sliceToBeAdded, UnsignedShortBuffer projection) {
         short inPixel = sliceToBeAdded.getRaw();
         if (PrimitiveConverter.unsignedShortToInt(inPixel) > projection.getUnsigned()) {
             projection.putRaw(projection.position() - 1, inPixel);

@@ -37,7 +37,8 @@ class FloatImplementation extends MaxIntensityBufferBase<FloatBuffer> {
     }
 
     @Override
-    protected void maybeReplaceCurrentBufferPosition(FloatBuffer sliceToBeAdded, FloatBuffer projection) {
+    protected void maybeReplaceCurrentBufferPosition(
+            FloatBuffer sliceToBeAdded, FloatBuffer projection) {
         float inPixel = sliceToBeAdded.get();
         if (inPixel > projection.get()) {
             projection.put(projection.position() - 1, inPixel);

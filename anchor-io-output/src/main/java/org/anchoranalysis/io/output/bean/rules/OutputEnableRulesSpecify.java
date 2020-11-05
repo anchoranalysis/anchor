@@ -70,7 +70,7 @@ public abstract class OutputEnableRulesSpecify extends OutputEnabledRules {
     }
 
     protected boolean firstLevelContains(String outputName) {
-        return first!=null && first.contains(outputName);
+        return first != null && first.contains(outputName);
     }
 
     /**
@@ -88,9 +88,9 @@ public abstract class OutputEnableRulesSpecify extends OutputEnabledRules {
         createSecondLevelMapIfNecessary();
         return mapSecondLevel.getOrDefault(outputName, defaultValue);
     }
-    
+
     protected boolean isFirstDefined() {
-        return first!=null;
+        return first != null;
     }
 
     private void createSecondLevelMapIfNecessary() {

@@ -47,7 +47,7 @@ class UnsignedByteImplementation extends Base<UnsignedByteBuffer> {
             int destinationIndex) {
         destinationBuffer.putRaw(destinationIndex, sourceBuffer.getRaw(sourceIndex));
     }
-   
+
     @Override
     public long voxelWithMaxIntensity() {
         return IterateVoxelsAll.intensityMax(voxels);

@@ -55,7 +55,8 @@ public class IdentifierHelper {
         StringBuilder builder = new StringBuilder();
         builder.append(channels.getChannelVoxelType().toString());
         builder.append("_");
-        builder.append(identifierForNumberChannels(channels.getNumberChannels(), channels.isMakeRGB()));
+        builder.append(
+                identifierForNumberChannels(channels.getNumberChannels(), channels.isMakeRGB()));
         builder.append("_");
         builder.append(identifierForDimensions(do3D));
         builder.append("_");
