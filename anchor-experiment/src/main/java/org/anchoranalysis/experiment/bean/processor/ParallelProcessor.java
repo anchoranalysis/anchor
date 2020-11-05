@@ -82,7 +82,7 @@ public class ParallelProcessor<T extends InputFromManager, S> extends JobProcess
     @BeanField @Getter @Setter private int keepProcessorsFree = 1;
 
     /** How many GPU processors to use when this is possible as a substitute for a CPU processor */
-    @BeanField @Getter @Setter private int numberGPUProcessors = 1;
+    @BeanField @Getter @Setter private int numberGPUProcessors = ConcurrencyPlan.DEFAULT_NUMBER_GPUS;
     // END BEAN PROPERTIES
 
     @Override

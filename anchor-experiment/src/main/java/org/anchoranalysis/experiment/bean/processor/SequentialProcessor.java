@@ -56,7 +56,7 @@ public class SequentialProcessor<T extends InputFromManager, S> extends JobProce
             Outputter rootOutputter, List<T> inputs, ParametersExperiment paramsExperiment)
             throws ExperimentExecutionException {
 
-        ConcurrencyPlan concurrencyPlan = ConcurrencyPlan.singleProcessor(1);
+        ConcurrencyPlan concurrencyPlan = ConcurrencyPlan.singleProcessor();
 
         S sharedState =
                 getTask().beforeAnyJobIsExecuted(rootOutputter, concurrencyPlan, paramsExperiment);
