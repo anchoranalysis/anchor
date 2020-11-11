@@ -26,37 +26,15 @@
 
 package org.anchoranalysis.io.input.files;
 
-import com.google.common.base.Preconditions;
-import java.io.File;
-import java.nio.file.Path;
-import java.util.Optional;
-import org.anchoranalysis.io.input.InputFromManager;
-
-public class FileInput implements InputFromManager {
-
-    private NamedFile file;
+/**
+ * An input pertaining to a single file on the file-system.
+ * 
+ * @author Owen Feehan
+ *
+ */
+public class FileInput extends SingleFileInputBase {
 
     public FileInput(NamedFile file) {
-        Preconditions.checkArgument(!file.getName().isEmpty());
-        this.file = file;
-    }
-
-    @Override
-    public String name() {
-        return file.getName();
-    }
-
-    @Override
-    public Optional<Path> pathForBinding() {
-        return Optional.of(file.getPath());
-    }
-
-    @Override
-    public String toString() {
-        return name();
-    }
-
-    public File getFile() {
-        return file.getFile();
+        super(file);
     }
 }

@@ -31,7 +31,7 @@ import org.anchoranalysis.experiment.bean.task.Task;
 import org.anchoranalysis.io.input.InputFromManager;
 
 /**
- * /** Indicates and provides a mechanism that the {@link Task} can be replaced.
+ * Indicates and provides a mechanism that the {@link Task} can be replaced.
  *
  * @param <T> input-object type
  * @param <S> shared-state for job

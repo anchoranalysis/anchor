@@ -42,10 +42,10 @@ import org.anchoranalysis.io.input.InputReadFailedException;
 public abstract class InputManager<T extends InputFromManager> extends AnchorBean<InputManager<T>> {
 
     /**
-     * The
-     *
-     * @param params
-     * @return
+     * Creates a list of inputs given particular parameters.
+     * 
+     * @param params the parameters
+     * @return the list of inputs
      * @throws InputReadFailedException
      */
     public abstract List<T> inputs(InputManagerParams params) throws InputReadFailedException;

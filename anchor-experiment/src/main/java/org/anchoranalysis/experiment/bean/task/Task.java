@@ -27,6 +27,7 @@
 package org.anchoranalysis.experiment.bean.task;
 
 import com.google.common.base.Preconditions;
+import java.util.List;
 import java.util.Optional;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.core.concurrency.ConcurrencyPlan;
@@ -82,7 +83,7 @@ import org.apache.commons.lang.time.StopWatch;
  */
 public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Task<T, S>> {
 
-    public static final String OUTPUT_NAME_MANIFEST = "job_manifest";
+    public static final String OUTPUT_MANIFEST = "job_manifest";
 
     /** Is the execution-time of the task per-input expected to be very quick to execute? */
     public abstract boolean hasVeryQuickPerInputExecution();
@@ -92,13 +93,14 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
      *
      * @param outputter the output-manager for the experiment (not for an individual job)
      * @param concurrencyPlan available numbers of processors that can call {@link #executeJob}
+     * @param inputs a list of inputs, each will result in at least one call to {@link #executeJob(ParametersUnbound)}. 
      * @param params the experiment-parameters
      * @return the shared-state that is passed to each call to {@link #executeJob} and to {@link
      *     #afterAllJobsAreExecuted}.
      * @throws ExperimentExecutionException
      */
     public abstract S beforeAnyJobIsExecuted(
-            Outputter outputter, ConcurrencyPlan concurrencyPlan, ParametersExperiment params)
+            Outputter outputter, ConcurrencyPlan concurrencyPlan, List<T> inputs, ParametersExperiment params)
             throws ExperimentExecutionException;
 
     /**
@@ -193,6 +195,7 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
                 paramsUnbound.getSharedState(),
                 manifestTask,
                 paramsUnbound.getParametersExperiment().isDetailedLogging(),
+                paramsUnbound.getParametersExperiment().getContext(),
                 new InputOutputContextStateful(
                         paramsUnbound.getParametersExperiment().getExperimentArguments(),
                         outputterTask,
@@ -284,6 +287,6 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
 
         params.getOutputter()
                 .writerSelective()
-                .write(OUTPUT_NAME_MANIFEST, ManifestGenerator::new, params::getManifest);
+                .write(OUTPUT_MANIFEST, ManifestGenerator::new, params::getManifest);
     }
 }

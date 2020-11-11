@@ -37,11 +37,11 @@ import org.anchoranalysis.io.output.outputter.OutputterChecked;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class TextFileLogHelper {
 
-    public static Optional<TextFileOutput> createOutput(OutputterChecked bom, String outputName) {
+    public static Optional<TextFileOutput> createOutput(OutputterChecked outputter, String outputName) {
         return TextFileOutputter.create(
                 "txt",
                 Optional.of(new ManifestDescription("textlog", "messageLog")),
-                bom,
+                outputter,
                 outputName);
     }
 }

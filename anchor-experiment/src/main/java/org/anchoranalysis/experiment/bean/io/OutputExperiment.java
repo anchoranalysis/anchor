@@ -58,7 +58,7 @@ import org.apache.commons.lang.time.StopWatch;
  */
 public abstract class OutputExperiment extends Experiment {
 
-    public static final String OUTPUT_NAME_MANIFEST = "experiment_manifest";
+    public static final String OUTPUT_MANIFEST = "experiment_manifest";
 
     // START BEAN PROPERTIES
     /** The output-manager that specifies how/where/which elements occur duing outputting. */
@@ -206,7 +206,7 @@ public abstract class OutputExperiment extends Experiment {
                                 params.getOutputter()
                                         .writerSelective()
                                         .write(
-                                                OUTPUT_NAME_MANIFEST,
+                                                OUTPUT_MANIFEST,
                                                 ManifestGenerator::new,
                                                 () -> manifest));
 

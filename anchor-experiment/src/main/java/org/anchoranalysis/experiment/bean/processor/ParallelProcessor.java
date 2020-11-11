@@ -90,12 +90,12 @@ public class ParallelProcessor<T extends InputFromManager, S> extends JobProcess
             Outputter rootOutputter, List<T> inputs, ParametersExperiment paramsExperiment)
             throws ExperimentExecutionException {
 
-        int initialNumberJobs = inputs.size();
+        int numberInputs = inputs.size();
 
         ConcurrencyPlan concurrencyPlan = createConcurrencyPlan(paramsExperiment);
 
         S sharedState =
-                getTask().beforeAnyJobIsExecuted(rootOutputter, concurrencyPlan, paramsExperiment);
+                getTask().beforeAnyJobIsExecuted(rootOutputter, concurrencyPlan, inputs, paramsExperiment);
 
         ExecutorService executorService =
                 Executors.newFixedThreadPool(concurrencyPlan.totalNumber());
@@ -125,7 +125,7 @@ public class ParallelProcessor<T extends InputFromManager, S> extends JobProcess
 
         Preconditions.checkArgument(monitor.numberExecutingJobs() == 0);
         Preconditions.checkArgument(monitor.numberOngoingJobs() == 0);
-        Preconditions.checkArgument(monitor.numberCompletedJobs() == initialNumberJobs);
+        Preconditions.checkArgument(monitor.numberCompletedJobs() == numberInputs);
 
         getTask().afterAllJobsAreExecuted(sharedState, paramsExperiment.getContext());
         return monitor.createStatistics();
