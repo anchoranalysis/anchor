@@ -52,7 +52,7 @@ import org.anchoranalysis.io.bioformats.bean.options.Default;
 import org.anchoranalysis.io.bioformats.bean.options.ReadOptions;
 
 /**
- * Reads a stack using the a <href="https://www.openmicroscopy.org/bio-formats/">Bioformats</a> library.
+ * Reads a stack using the <a href="https://www.openmicroscopy.org/bio-formats/">Bioformats</a> library.
  * 
  * <p>Note that EXIF orientation information is not processed when reading JPEGs or PNGs.
  * 

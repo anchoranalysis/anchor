@@ -54,13 +54,13 @@ public class ReportFeatureOnMarks extends ReportFeatureForMPP<FeatureInputMarkCo
     }
 
     @Override
-    public String featureDescription(MPPInitParams so, Logger logger)
+    public String featureDescription(MPPInitParams param, Logger logger)
             throws OperationFailedException {
 
         // Maybe we should duplicate the providers?
         try {
-            init(so, logger);
-            marks.initRecursive(so, logger);
+            init(param, logger);
+            marks.initRecursive(param, logger);
         } catch (InitException e) {
             throw new OperationFailedException(e);
         }

@@ -48,15 +48,15 @@ public class ReportFeatureWrapError extends ReportFeatureForSharedObjects {
     }
 
     @Override
-    public String title() throws OperationFailedException {
+    public String title() {
         return item.title();
     }
 
     @Override
-    public String featureDescription(MPPInitParams object, Logger logger)
+    public String featureDescription(MPPInitParams param, Logger logger)
             throws OperationFailedException {
         try {
-            return item.featureDescription(object, logger);
+            return item.featureDescription(param, logger);
         } catch (OperationFailedException e) {
             return message;
         }
