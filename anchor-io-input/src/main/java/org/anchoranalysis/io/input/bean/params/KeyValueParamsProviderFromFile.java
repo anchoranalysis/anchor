@@ -35,7 +35,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsProvider;
 import org.anchoranalysis.core.exception.CreateException;
-import org.anchoranalysis.core.progress.ProgressReporterNull;
+import org.anchoranalysis.core.progress.ProgressIgnore;
 import org.anchoranalysis.core.value.KeyValueParams;
 import org.anchoranalysis.io.input.InputContextParams;
 import org.anchoranalysis.io.input.bean.InputManagerParams;
@@ -55,7 +55,7 @@ public class KeyValueParamsProviderFromFile extends KeyValueParamsProvider {
                     filesProvider.create(
                             new InputManagerParams(
                                     new InputContextParams(),
-                                    ProgressReporterNull.get(),
+                                    ProgressIgnore.get(),
                                     getLogger()));
 
             if (files.isEmpty()) {

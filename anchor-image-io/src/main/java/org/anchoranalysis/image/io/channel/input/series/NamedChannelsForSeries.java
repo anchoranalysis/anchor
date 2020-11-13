@@ -32,7 +32,7 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.identifier.provider.store.NamedProviderStore;
 import org.anchoranalysis.core.identifier.provider.store.StoreSupplier;
 import org.anchoranalysis.core.index.GetOperationFailedException;
-import org.anchoranalysis.core.progress.ProgressReporter;
+import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.stack.Stack;
@@ -48,13 +48,13 @@ public interface NamedChannelsForSeries extends ChannelGetter {
      *
      * @param channelName name of channel
      * @param timeIndex timepoint
-     * @param progressReporter
+     * @param progress
      * @return the channel if it exists, or empty otherwise
      * @throws GetOperationFailedException if something goes wrong getting an existing channel (but
      *     never if a channel doesn't exist)
      */
     Optional<Channel> getChannelOptional(
-            String channelName, int timeIndex, ProgressReporter progressReporter)
+            String channelName, int timeIndex, Progress progress)
             throws GetOperationFailedException;
 
     /**
@@ -66,11 +66,11 @@ public interface NamedChannelsForSeries extends ChannelGetter {
     
     Set<String> channelNames();
 
-    int sizeT(ProgressReporter progressReporter) throws ImageIOException;
+    int sizeT(Progress progress) throws ImageIOException;
 
     Dimensions dimensions() throws ImageIOException;
 
-    void addAsSeparateChannels(NamedStacks stacks, int timeIndex, ProgressReporter progressReporter)
+    void addAsSeparateChannels(NamedStacks stacks, int timeIndex, Progress progress)
             throws OperationFailedException;
 
     void addAsSeparateChannels(NamedProviderStore<TimeSequence> stacks, int timeIndex)

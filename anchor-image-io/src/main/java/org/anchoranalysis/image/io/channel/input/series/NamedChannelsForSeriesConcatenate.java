@@ -36,9 +36,9 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.identifier.provider.store.NamedProviderStore;
 import org.anchoranalysis.core.identifier.provider.store.StoreSupplier;
 import org.anchoranalysis.core.index.GetOperationFailedException;
-import org.anchoranalysis.core.progress.ProgressReporter;
-import org.anchoranalysis.core.progress.ProgressReporterMultiple;
-import org.anchoranalysis.core.progress.ProgressReporterOneOfMany;
+import org.anchoranalysis.core.progress.Progress;
+import org.anchoranalysis.core.progress.ProgressMultiple;
+import org.anchoranalysis.core.progress.ProgressOneOfMany;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.dimensions.IncorrectImageSizeException;
@@ -52,12 +52,12 @@ public class NamedChannelsForSeriesConcatenate implements NamedChannelsForSeries
     private List<NamedChannelsForSeries> list = new ArrayList<>();
 
     @Override
-    public Channel getChannel(String channelName, int timeIndex, ProgressReporter progressReporter)
+    public Channel getChannel(String channelName, int timeIndex, Progress progress)
             throws GetOperationFailedException {
 
         for (NamedChannelsForSeries item : list) {
 
-            Optional<Channel> channel = item.getChannelOptional(channelName, timeIndex, progressReporter);
+            Optional<Channel> channel = item.getChannelOptional(channelName, timeIndex, progress);
             if (channel.isPresent()) {
                 return channel.get();
             }
@@ -69,12 +69,12 @@ public class NamedChannelsForSeriesConcatenate implements NamedChannelsForSeries
 
     @Override
     public Optional<Channel> getChannelOptional(
-            String channelName, int timeIndex, ProgressReporter progressReporter)
+            String channelName, int timeIndex, Progress progress)
             throws GetOperationFailedException {
 
         for (NamedChannelsForSeries item : list) {
 
-            Optional<Channel> channel = item.getChannelOptional(channelName, timeIndex, progressReporter);
+            Optional<Channel> channel = item.getChannelOptional(channelName, timeIndex, progress);
             if (channel.isPresent()) {
                 return channel;
             }
@@ -84,15 +84,15 @@ public class NamedChannelsForSeriesConcatenate implements NamedChannelsForSeries
     }
 
     public void addAsSeparateChannels(
-            NamedStacks stackCollection, int t, ProgressReporter progressReporter)
+            NamedStacks stackCollection, int t, Progress progress)
             throws OperationFailedException {
 
-        try (ProgressReporterMultiple prm =
-                new ProgressReporterMultiple(progressReporter, list.size())) {
+        try (ProgressMultiple progressMultiple =
+                new ProgressMultiple(progress, list.size())) {
 
             for (NamedChannelsForSeries item : list) {
-                item.addAsSeparateChannels(stackCollection, t, new ProgressReporterOneOfMany(prm));
-                prm.incrementWorker();
+                item.addAsSeparateChannels(stackCollection, t, new ProgressOneOfMany(progressMultiple));
+                progressMultiple.incrementWorker();
             }
         }
     }
@@ -122,17 +122,17 @@ public class NamedChannelsForSeriesConcatenate implements NamedChannelsForSeries
         return set;
     }
 
-    public int sizeT(ProgressReporter progressReporter) throws ImageIOException {
+    public int sizeT(Progress progress) throws ImageIOException {
 
         int series = 0;
         boolean first = true;
 
         for (NamedChannelsForSeries item : list) {
             if (first) {
-                series = item.sizeT(progressReporter);
+                series = item.sizeT(progress);
                 first = false;
             } else {
-                series = Math.min(series, item.sizeT(progressReporter));
+                series = Math.min(series, item.sizeT(progress));
             }
         }
         return series;

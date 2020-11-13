@@ -33,7 +33,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import org.anchoranalysis.core.progress.ProgressReporterNull;
+import org.anchoranalysis.core.progress.ProgressIgnore;
 import org.anchoranalysis.io.input.InputContextParams;
 import org.anchoranalysis.io.input.bean.InputManagerParams;
 import org.anchoranalysis.io.input.bean.files.SearchDirectory;
@@ -67,7 +67,7 @@ class SerializedObjectsFromDirectory implements SequencedDirectory {
                     fileSet.create(
                             new InputManagerParams(
                                     new InputContextParams(),
-                                    ProgressReporterNull.get(),
+                                    ProgressIgnore.get(),
                                     null // HACK: Can be safely set to null as
                                     // fileSet.setIgnoreHidden(false);	// NOSONAR
                                     ));

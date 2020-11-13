@@ -31,7 +31,7 @@ import java.nio.file.Path;
 import java.util.Collection;
 import java.util.function.Predicate;
 import org.anchoranalysis.bean.AnchorBean;
-import org.anchoranalysis.core.progress.ProgressReporter;
+import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.io.input.InputContextParams;
 import org.anchoranalysis.io.input.InputReadFailedException;
 import org.anchoranalysis.io.input.bean.InputManagerParams;
@@ -85,7 +85,7 @@ public abstract class PathMatcher extends AnchorBean<PathMatcher> {
         DualPathPredicates predicates =
                 createPredicates(directory, ignoreHidden, params.getInputContext());
         try {
-            return createMatchingFiles(params.getProgressReporter(), recursive)
+            return createMatchingFiles(params.getProgress(), recursive)
                     .findMatchingFiles(
                             directory,
                             new PathMatchConstraints(predicates, maxDirectoryDepth),
@@ -122,7 +122,7 @@ public abstract class PathMatcher extends AnchorBean<PathMatcher> {
     }
 
     private FindMatchingFiles createMatchingFiles(
-            ProgressReporter progressReporter, boolean recursive) {
-        return new FindMatchingFiles(recursive, progressReporter);
+            Progress progress, boolean recursive) {
+        return new FindMatchingFiles(recursive, progress);
     }
 }

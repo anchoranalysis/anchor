@@ -29,7 +29,7 @@ package org.anchoranalysis.image.io.channel.input;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.identifier.provider.store.NamedProviderStore;
 import org.anchoranalysis.core.identifier.provider.store.StoreSupplier;
-import org.anchoranalysis.core.progress.ProgressReporter;
+import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.stack.TimeSequence;
 import org.anchoranalysis.image.io.ImageIOException;
@@ -58,13 +58,13 @@ public abstract class NamedChannelsInput implements ProvidesStackInput {
     public abstract int bitDepth() throws ImageIOException;
 
     public abstract NamedChannelsForSeries createChannelsForSeries(
-            int seriesIndex, ProgressReporter progressReporter) throws ImageIOException;
+            int seriesIndex, Progress progress) throws ImageIOException;
 
     @Override
     public void addToStoreInferNames(
             NamedProviderStore<TimeSequence> stackCollection,
             int seriesIndex,
-            ProgressReporter progress)
+            Progress progress)
             throws OperationFailedException {
         // Adds each channel as a separate stack
         try {
@@ -82,7 +82,7 @@ public abstract class NamedChannelsInput implements ProvidesStackInput {
             String name,
             NamedProviderStore<TimeSequence> stacks,
             int seriesIndex,
-            ProgressReporter progress)
+            Progress progress)
             throws OperationFailedException {
 
         // Adds this stack (cached) under the given name
@@ -96,12 +96,12 @@ public abstract class NamedChannelsInput implements ProvidesStackInput {
         return 1;
     }
 
-    private TimeSequence channelsAsTimeSequence(int seriesNum, ProgressReporter progressReporter)
+    private TimeSequence channelsAsTimeSequence(int seriesNum, Progress progress)
             throws OperationFailedException {
         // Apply it only to first time-series frame
         try {
             NamedChannelsForSeries namedChannels =
-                    createChannelsForSeries(seriesNum, progressReporter);
+                    createChannelsForSeries(seriesNum, progress);
             return new TimeSequence(namedChannels.allChannelsAsStack(0).get());
 
         } catch (ImageIOException e) {

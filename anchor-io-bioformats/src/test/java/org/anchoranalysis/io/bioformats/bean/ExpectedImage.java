@@ -30,7 +30,7 @@ import static org.junit.Assert.assertEquals;
 import java.io.File;
 import java.nio.file.Path;
 import lombok.AllArgsConstructor;
-import org.anchoranalysis.core.progress.ProgressReporterNull;
+import org.anchoranalysis.core.progress.ProgressIgnore;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.core.stack.TimeSequence;
 import org.anchoranalysis.image.io.ImageIOException;
@@ -98,7 +98,7 @@ class ExpectedImage {
         Path path = loader.resolveTestPath(relativePath());
 
         OpenedRaster openedRaster = reader.openFile(path);
-        TimeSequence timeSequence = openedRaster.open(0, ProgressReporterNull.get());
+        TimeSequence timeSequence = openedRaster.open(0, ProgressIgnore.get());
         return timeSequence.get(0);
     }
 

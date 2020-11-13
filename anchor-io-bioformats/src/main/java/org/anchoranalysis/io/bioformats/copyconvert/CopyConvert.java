@@ -33,8 +33,8 @@ import loci.formats.FormatException;
 import loci.formats.IFormatReader;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.progress.ProgressReporter;
-import org.anchoranalysis.core.progress.ProgressReporterIncrement;
+import org.anchoranalysis.core.progress.Progress;
+import org.anchoranalysis.core.progress.ProgressIncrement;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.io.bioformats.DestinationChannelForIndex;
 import org.anchoranalysis.io.bioformats.bean.options.ReadOptions;
@@ -52,15 +52,15 @@ public class CopyConvert {
      * converting them if necessary along the way
      *
      * @param reader the source of the copy
-     * @param dest the destination of the copy
-     * @param progressReporter
+     * @param destination the destination of the copy
+     * @param progress
      * @throws FormatException
      * @throws IOException
      */
     public static void copyAllFrames(
             IFormatReader reader,
-            List<Channel> dest,
-            ProgressReporter progressReporter,
+            List<Channel> destination,
+            Progress progress,
             ImageFileShape targetShape,
             ConvertTo<?> convertTo,
             ReadOptions readOptions)
@@ -71,10 +71,10 @@ public class CopyConvert {
                 calculateByteArraysPerIteration(
                         targetShape.getNumberChannels(), numberChannelsPerByteArray);
 
-        try (ProgressReporterIncrement pri = new ProgressReporterIncrement(progressReporter)) {
+        try (ProgressIncrement progressIncrement = new ProgressIncrement(progress)) {
 
-            pri.setMax(targetShape.totalNumberSlices());
-            pri.open();
+            progressIncrement.setMax(targetShape.totalNumberSlices());
+            progressIncrement.open();
 
             IterateOverSlices.iterateDimensionsOrder(
                     reader.getDimensionOrder(),
@@ -85,8 +85,8 @@ public class CopyConvert {
                         /** Selects a destination channel for a particular relative channel */
                         DestinationChannelForIndex destinationChannel =
                                 channelIndexRelative ->
-                                        dest.get(
-                                                destIndex(
+                                        destination.get(
+                                                destinationIndex(
                                                         c + channelIndexRelative,
                                                         t,
                                                         targetShape.getNumberChannels()));
@@ -100,25 +100,25 @@ public class CopyConvert {
                                 z,
                                 numberChannelsPerByteArray);
 
-                        pri.update();
+                        progressIncrement.update();
                     });
         }
     }
 
-    private static int calculateByteArraysPerIteration(int numChannel, int numChannelsPerByteArray)
+    private static int calculateByteArraysPerIteration(int numberChannels, int numberChannelsPerByteArray)
             throws FormatException {
 
-        if ((numChannel % numChannelsPerByteArray) != 0) {
+        if ((numberChannels % numberChannelsPerByteArray) != 0) {
             throw new FormatException(
                     String.format(
                             "numChannels(%d) mod numChannelsPerByteArray(%d) != 0",
-                            numChannel, numChannelsPerByteArray));
+                            numberChannels, numberChannelsPerByteArray));
         }
 
-        return numChannel / numChannelsPerByteArray;
+        return numberChannels / numberChannelsPerByteArray;
     }
 
-    private static int destIndex(int c, int t, int numChannelsPerFrame) {
-        return (t * numChannelsPerFrame) + c;
+    private static int destinationIndex(int channelIndex, int timeIndex, int numberChannelsPerFrame) {
+        return (timeIndex * numberChannelsPerFrame) + channelIndex;
     }
 }

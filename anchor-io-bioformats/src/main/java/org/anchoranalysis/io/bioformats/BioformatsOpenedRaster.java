@@ -38,7 +38,7 @@ import loci.formats.meta.IMetadata;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import org.anchoranalysis.core.exception.CreateException;
-import org.anchoranalysis.core.progress.ProgressReporter;
+import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.channel.factory.ChannelFactorySingleType;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
@@ -96,14 +96,14 @@ public class BioformatsOpenedRaster implements OpenedRaster {
     }
 
     @Override
-    public TimeSequence open(int seriesIndex, ProgressReporter progressReporter)
+    public TimeSequence open(int seriesIndex, Progress progress)
             throws ImageIOException {
 
         int pixelType = reader.getPixelType();
 
         VoxelDataType dataType = multiplexFormat(pixelType);
 
-        return openAsType(seriesIndex, progressReporter, dataType);
+        return openAsType(seriesIndex, progress, dataType);
     }
 
     @Override
@@ -146,7 +146,7 @@ public class BioformatsOpenedRaster implements OpenedRaster {
 
     /** Opens as a specific data-type */
     private TimeSequence openAsType(
-            int seriesIndex, ProgressReporter progressReporter, VoxelDataType dataType)
+            int seriesIndex, Progress progress, VoxelDataType dataType)
             throws ImageIOException {
 
         try {
@@ -166,7 +166,7 @@ public class BioformatsOpenedRaster implements OpenedRaster {
                             dimensions, timeSequence, multiplexVoxelDataType(dataType));
 
             copyBytesIntoChannels(
-                    listAllChannels, dimensions, progressReporter, dataType, readOptions);
+                    listAllChannels, dimensions, progress, dataType, readOptions);
 
             LOG.debug(
                     String.format(
@@ -205,7 +205,7 @@ public class BioformatsOpenedRaster implements OpenedRaster {
     private void copyBytesIntoChannels(
             List<Channel> listChannels,
             Dimensions dimensions,
-            ProgressReporter progressReporter,
+            Progress progress,
             VoxelDataType dataType,
             ReadOptions readOptions)
             throws FormatException, IOException, CreateException {
@@ -218,7 +218,7 @@ public class BioformatsOpenedRaster implements OpenedRaster {
         CopyConvert.copyAllFrames(
                 reader,
                 listChannels,
-                progressReporter,
+                progress,
                 new ImageFileShape(dimensions, numberChannels, sizeT),
                 convertTo,
                 readOptions);

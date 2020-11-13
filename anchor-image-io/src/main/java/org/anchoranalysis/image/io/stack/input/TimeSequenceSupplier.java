@@ -26,11 +26,11 @@
 package org.anchoranalysis.image.io.stack.input;
 
 import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.core.progress.ProgressReporter;
+import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.image.core.stack.TimeSequence;
 
 @FunctionalInterface
 public interface TimeSequenceSupplier {
 
-    TimeSequence get(ProgressReporter progressReporter) throws OperationFailedException;
+    TimeSequence get(Progress progress) throws OperationFailedException;
 }

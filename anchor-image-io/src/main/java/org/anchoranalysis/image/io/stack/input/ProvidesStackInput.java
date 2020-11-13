@@ -28,8 +28,8 @@ package org.anchoranalysis.image.io.stack.input;
 
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.identifier.provider.store.NamedProviderStore;
-import org.anchoranalysis.core.progress.ProgressReporter;
-import org.anchoranalysis.core.progress.ProgressReporterNull;
+import org.anchoranalysis.core.progress.Progress;
+import org.anchoranalysis.core.progress.ProgressIgnore;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.core.stack.TimeSequence;
 import org.anchoranalysis.image.core.stack.named.NamedStacks;
@@ -50,7 +50,7 @@ public interface ProvidesStackInput extends InputFromManager {
      * @return a set of named-stacks
      * @throws OperationFailedException
      */
-    default NamedStacks asSet(ProgressReporter progress) throws OperationFailedException {
+    default NamedStacks asSet(Progress progress) throws OperationFailedException {
         NamedStacks set = new NamedStacks();
         addToStoreInferNames(new WrapStackAsTimeSequenceStore(set, 0), 0, progress);
         return set;
@@ -67,7 +67,7 @@ public interface ProvidesStackInput extends InputFromManager {
         addToStoreInferNames(
                 new WrapStackAsTimeSequenceStore(store),
                 0, // default series-number
-                ProgressReporterNull.get());
+                ProgressIgnore.get());
     }
 
     /**
@@ -81,14 +81,14 @@ public interface ProvidesStackInput extends InputFromManager {
     void addToStoreInferNames(
             NamedProviderStore<TimeSequence> stacks,
             int seriesIndex,
-            ProgressReporter progress)
+            Progress progress)
             throws OperationFailedException;
 
     void addToStoreWithName(
             String name,
             NamedProviderStore<TimeSequence> stacks,
             int seriesIndex,
-            ProgressReporter progress)
+            Progress progress)
             throws OperationFailedException;
 
     int numberFrames() throws OperationFailedException;

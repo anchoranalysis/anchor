@@ -26,20 +26,44 @@
 
 package org.anchoranalysis.core.progress;
 
-public interface ProgressReporter extends AutoCloseable {
+import lombok.RequiredArgsConstructor;
 
-    void open();
+@RequiredArgsConstructor
+public class ProgressIncrement implements AutoCloseable {
+
+    // START REQUIRED ARGUMENTS
+    private final Progress progress;
+    // END REQUIRED ARGUMENTS
+    
+    private int count = 0;
+
+    public void open() {
+        count = progress.getMin();
+        progress.open();
+    }
 
     @Override
-    void close();
+    public void close() {
+        progress.close();
+    }
 
-    int getMax();
+    public void update() {
+        progress.update(++count);
+    }
 
-    int getMin();
+    public int getMin() {
+        return progress.getMin();
+    }
 
-    void update(int val);
+    public void setMin(int min) {
+        progress.setMin(min);
+    }
 
-    void setMin(int min);
+    public int getMax() {
+        return progress.getMax();
+    }
 
-    void setMax(int max);
+    public void setMax(int max) {
+        progress.setMax(max);
+    }
 }

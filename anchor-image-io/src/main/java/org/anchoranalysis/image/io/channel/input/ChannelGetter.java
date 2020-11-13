@@ -27,13 +27,13 @@
 package org.anchoranalysis.image.io.channel.input;
 
 import org.anchoranalysis.core.index.GetOperationFailedException;
-import org.anchoranalysis.core.progress.ProgressReporter;
+import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.image.core.channel.Channel;
 
 public interface ChannelGetter {
 
     boolean hasChannel(String channelName);
 
-    Channel getChannel(String channelName, int timeIndex, ProgressReporter progressReporter)
+    Channel getChannel(String channelName, int timeIndex, Progress progress)
             throws GetOperationFailedException;
 }

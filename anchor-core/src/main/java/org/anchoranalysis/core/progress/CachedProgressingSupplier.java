@@ -60,7 +60,7 @@ public class CachedProgressingSupplier<T, E extends Exception> extends CachedSup
     }
 
     @Override
-    public T get(ProgressReporter progressReporter) throws E {
-        return super.call(() -> supplier.get(progressReporter));
+    public T get(Progress progress) throws E {
+        return super.call(() -> supplier.get(progress));
     }
 }

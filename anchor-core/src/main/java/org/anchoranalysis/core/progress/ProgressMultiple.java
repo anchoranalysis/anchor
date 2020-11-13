@@ -26,68 +26,39 @@
 
 package org.anchoranalysis.core.progress;
 
-public class ProgressReporterOneOfMany implements ProgressReporter {
+/**
+ * Combines a number of sub progress reporters.
+ * 
+ * @author Owen Feehan
+ *
+ */
+public class ProgressMultiple implements AutoCloseable {
 
-    private int min;
-    private int max;
-    private final ProgressReporterMultiple parent;
+    private Progress parent;
+    private double part = 0.0;
+    private double cumulativePart = 0.0;
+    private int index = 0;
 
-    private int range;
-
-    public ProgressReporterOneOfMany(ProgressReporterMultiple parent) {
-        this(parent, 0, 1);
-    }
-
-    public ProgressReporterOneOfMany(
-            ProgressReporterMultiple parent, int min, int max) {
-        super();
+    public ProgressMultiple(Progress parent, int numberChildren) {
         this.parent = parent;
-        this.min = min;
-        this.max = max;
-        updateRange();
+        this.part = 100.0 / numberChildren;
+        parent.setMin(0);
+        parent.setMax(100);
     }
 
-    private void updateRange() {
-        this.range = max - min;
+    public void incrementWorker() {
+        index++;
+        this.cumulativePart = part * index;
+        parent.update((int) Math.floor(cumulativePart));
     }
 
-    @Override
-    public void open() {
-        // NOTHING TO DO
-    }
-
-    @Override
-    public void update(int val) {
-
-        int valRec = val - min;
-        double progress = (((double) valRec) / range) * 100;
-        parent.update(progress);
+    // Progress for the current worker
+    public void update(double progress) {
+        parent.update((int) Math.floor(cumulativePart + (progress * part / 100)));
     }
 
     @Override
     public void close() {
-        parent.update(100.0);
-    }
-
-    @Override
-    public int getMin() {
-        return min;
-    }
-
-    @Override
-    public void setMin(int min) {
-        this.min = min;
-        updateRange();
-    }
-
-    @Override
-    public int getMax() {
-        return max;
-    }
-
-    @Override
-    public void setMax(int max) {
-        this.max = max;
-        updateRange();
+        parent.update(100);
     }
 }

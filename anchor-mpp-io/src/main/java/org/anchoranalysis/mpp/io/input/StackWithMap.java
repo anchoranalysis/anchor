@@ -33,8 +33,8 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.identifier.provider.store.NamedProviderStore;
 import org.anchoranalysis.core.identifier.provider.store.StoreSupplier;
 import org.anchoranalysis.core.log.error.ErrorReporter;
-import org.anchoranalysis.core.progress.ProgressReporter;
-import org.anchoranalysis.core.progress.ProgressReporterNull;
+import org.anchoranalysis.core.progress.Progress;
+import org.anchoranalysis.core.progress.ProgressIgnore;
 import org.anchoranalysis.image.core.stack.TimeSequence;
 import org.anchoranalysis.image.io.stack.input.ProvidesStackInput;
 
@@ -55,18 +55,18 @@ public class StackWithMap implements MultiInputSubMap<TimeSequence> {
     @Override
     public void addToStore(NamedProviderStore<TimeSequence> stackCollection)
             throws OperationFailedException {
-        addToStore(stackCollection, 0, ProgressReporterNull.get());
+        addToStore(stackCollection, 0, ProgressIgnore.get());
     }
 
     public void addToStore(
             NamedProviderStore<TimeSequence> stackCollection,
             int seriesNum,
-            ProgressReporter progressReporter)
+            Progress progress)
             throws OperationFailedException {
 
         // We add the main object
         mainInputObject.addToStoreWithName(
-                mainObjectName, stackCollection, seriesNum, progressReporter);
+                mainObjectName, stackCollection, seriesNum, progress);
 
         // We add the other objects
         map.addToStore(stackCollection);

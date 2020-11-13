@@ -28,7 +28,7 @@ package org.anchoranalysis.image.io.stack.input;
 
 import java.util.List;
 import java.util.Optional;
-import org.anchoranalysis.core.progress.ProgressReporter;
+import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.core.stack.TimeSequence;
@@ -45,10 +45,10 @@ public interface OpenedRaster extends AutoCloseable {
 
     // Opens a time-series as a particular type. If it's not the correct type, an error is thrown
     default TimeSequence openCheckType(
-            int seriesIndex, ProgressReporter progressReporter, VoxelDataType channelDataType)
+            int seriesIndex, Progress progress, VoxelDataType channelDataType)
             throws ImageIOException {
 
-        TimeSequence sequence = open(seriesIndex, progressReporter);
+        TimeSequence sequence = open(seriesIndex, progress);
 
         if (!sequence.allChannelsHaveType(channelDataType)) {
             throw new ImageIOException(
@@ -59,7 +59,7 @@ public interface OpenedRaster extends AutoCloseable {
     }
 
     /** Open when we don't have a specific-type */
-    TimeSequence open(int seriesIndex, ProgressReporter progressReporter) throws ImageIOException;
+    TimeSequence open(int seriesIndex, Progress progress) throws ImageIOException;
 
     int numberSeries();
 

@@ -33,7 +33,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.core.progress.ProgressReporterNull;
+import org.anchoranalysis.core.progress.ProgressIgnore;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.bean.log.LoggingDestination;
 import org.anchoranalysis.experiment.bean.log.ToConsole;
@@ -133,7 +133,7 @@ public class InputOutputExperiment<T extends InputFromManager, S> extends Output
             InputManagerParams paramsInput =
                     new InputManagerParams(
                             params.getExperimentArguments().createInputContext(),
-                            ProgressReporterNull.get(),
+                            ProgressIgnore.get(),
                             new Logger(params.getLoggerExperiment()));
 
             List<T> inputs = getInput().inputs(paramsInput);

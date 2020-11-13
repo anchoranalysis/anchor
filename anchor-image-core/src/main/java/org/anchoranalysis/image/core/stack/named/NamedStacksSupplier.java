@@ -28,13 +28,13 @@ package org.anchoranalysis.image.core.stack.named;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.identifier.provider.NamedProvider;
 import org.anchoranalysis.core.progress.CachedProgressingSupplier;
-import org.anchoranalysis.core.progress.ProgressReporter;
+import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.image.core.stack.Stack;
 
 @FunctionalInterface
 public interface NamedStacksSupplier {
 
-    NamedProvider<Stack> get(ProgressReporter progressReporter) throws OperationFailedException;
+    NamedProvider<Stack> get(Progress progress) throws OperationFailedException;
 
     public static NamedStacksSupplier cache(NamedStacksSupplier supplier) {
         return CachedProgressingSupplier.cache(supplier::get)::get;

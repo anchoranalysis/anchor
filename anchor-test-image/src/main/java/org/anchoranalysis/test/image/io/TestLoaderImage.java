@@ -31,7 +31,7 @@ import java.nio.file.Path;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.anchoranalysis.bean.xml.RegisterBeanFactories;
-import org.anchoranalysis.core.progress.ProgressReporterNull;
+import org.anchoranalysis.core.progress.ProgressIgnore;
 import org.anchoranalysis.core.serialize.DeserializationFailedException;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.stack.Stack;
@@ -80,7 +80,7 @@ public class TestLoaderImage {
         ConfigureBioformatsLogging.instance().makeSureConfigured();
 
         try (OpenedRaster openedRaster = stackReader.openFile(filePath)) {
-            return openedRaster.open(0, ProgressReporterNull.get()).get(0);
+            return openedRaster.open(0, ProgressIgnore.get()).get(0);
         } catch (ImageIOException e) {
             throw new TestDataLoadException(e);
         }

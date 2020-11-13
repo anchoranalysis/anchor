@@ -38,56 +38,21 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class TraverseDirectoryForProgressReporter {
+public class TraverseDirectoryForProgress {
 
-    public static class TraversalResult {
-
-        /**
-         * All the directories in the bottom-most depth that was traversed. These directories were
-         * not traversed
-         */
-        private List<Path> leafDirectories;
-
-        /**
-         * All files in any directories that have been traversed.
-         *
-         * <p>Note:No files from leafDirectories are present as it was not yet traversed
-         */
-        private List<Path> files;
-
-        /**
-         * The depth of directories processed, where 1 = root directory traversed, 2 = root
-         * directory + one further level etc.
-         */
-        private int depth;
-
-        public TraversalResult(List<Path> leafDirectories, List<Path> files, int depth) {
-            super();
-            this.leafDirectories = leafDirectories;
-            this.files = files;
-            this.depth = depth;
-        }
-
-        public List<Path> getFiles() {
-            return files;
-        }
-
-        public List<Path> getLeafDirectories() {
-            return leafDirectories;
-        }
-
-        public int getDepth() {
-            return depth;
-        }
-    }
-
-    // Does a breadth first traversal of the sub-folders until we get at least minNumberDirectories
-    // on
-    //  a given level.  These are then used as our progress markers.
-    //
-    // if we can't get minNumberDirectories, it returns an empty array
+    /**
+     * Performs a breadth-first traversal of the sub-folders until we get at least {@code minNumberDirectories}.
+     * on a given level.  These are then used as our progress markers.
+     *  
+     * @param parent
+     * @param minNumberDirectories
+     * @param matcherDirectory
+     * @param maxDirectoryDepth
+     * @return
+     * @throws IOException
+     */
     public static TraversalResult traverseRecursive(
-            Path parent, int minNumberDirectories, Predicate<Path> matcherDir, int maxDirDepth)
+            Path parent, int minNumberDirectories, Predicate<Path> matcherDirectory, int maxDirectoryDepth)
             throws IOException {
 
         List<Path> filesOut = new ArrayList<>();
@@ -99,17 +64,17 @@ public class TraverseDirectoryForProgressReporter {
             List<Path> filesOutCurrent = new ArrayList<>();
             List<Path> definiteLeafsCurrent = new ArrayList<>();
             List<Path> subDirectories =
-                    TraverseDirectoryForProgressReporter.subDirectoriesFor(
+                    TraverseDirectoryForProgress.subDirectoriesFor(
                             currentDirectories,
                             definiteLeafsCurrent,
                             Optional.of(filesOutCurrent),
-                            matcherDir);
+                            matcherDirectory);
 
             filesOut.addAll(filesOutCurrent);
 
             if (subDirectories.isEmpty()) {
                 return new TraversalResult(new ArrayList<>(), filesOut, depth);
-            } else if (subDirectories.size() > minNumberDirectories || depth == maxDirDepth) {
+            } else if (subDirectories.size() > minNumberDirectories || depth == maxDirectoryDepth) {
                 return new TraversalResult(subDirectories, filesOut, depth);
             }
 
@@ -138,11 +103,7 @@ public class TraverseDirectoryForProgressReporter {
         try (DirectoryStream<Path> stream = Files.newDirectoryStream(parent)) {
             for (Path file : stream) {
 
-                if (!matcherDir.test(file)) {
-                    continue;
-                }
-
-                if (addFileOrDirectory(file, directoriesOut, filesOut)) {
+                if (matcherDir.test(file) && addFileOrDirectory(file, directoriesOut, filesOut)) {
                     addedDirectory = true;
                 }
             }
@@ -174,20 +135,16 @@ public class TraverseDirectoryForProgressReporter {
             List<Path> parents,
             List<Path> definiteLeafs,
             Optional<List<Path>> filesOut,
-            Predicate<Path> matcherDir)
+            Predicate<Path> matcherDirectory)
             throws IOException {
         List<Path> out = new ArrayList<>();
-        for (Path p : parents) {
+        for (Path path : parents) {
 
-            if (!matcherDir.test(p)) {
-                continue;
-            }
-
-            if (!subDirectoriesFor(p, Optional.of(out), filesOut, matcherDir)) {
+            if (matcherDirectory.test(path) && !subDirectoriesFor(path, Optional.of(out), filesOut, matcherDirectory)) {
                 // If we fail to find any sub-folders, then we have a definite leaf,
                 // which we treat separately so as to include it in our final list,
                 // but not to recurse further on it.
-                definiteLeafs.add(p);
+                definiteLeafs.add(path);
             }
         }
         return out;

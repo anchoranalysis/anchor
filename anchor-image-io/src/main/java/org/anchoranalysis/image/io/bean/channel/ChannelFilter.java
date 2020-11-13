@@ -35,7 +35,7 @@ import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.index.GetOperationFailedException;
-import org.anchoranalysis.core.progress.ProgressReporter;
+import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.core.channel.Channel;
@@ -69,17 +69,17 @@ public class ChannelFilter extends AnchorBean<ChannelFilter> implements ChannelG
     }
 
     @Override
-    public Channel getChannel(String name, int timeIndex, ProgressReporter progressReporter)
+    public Channel getChannel(String name, int timeIndex, Progress progress)
             throws GetOperationFailedException {
 
         try {
             if (!name.equals(channelName)) {
-                return channels.getChannel(name, timeIndex, progressReporter);
+                return channels.getChannel(name, timeIndex, progress);
             }
 
             ChannelProvider providerDuplicated = channel.duplicateBean();
 
-            Channel channelSelected = channels.getChannel(name, timeIndex, progressReporter);
+            Channel channelSelected = channels.getChannel(name, timeIndex, progress);
             initProvider(providerDuplicated, channelSelected);
 
             return providerDuplicated.create();

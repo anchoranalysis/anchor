@@ -26,43 +26,26 @@
 
 package org.anchoranalysis.core.progress;
 
-public class ProgressReporterIncrement implements AutoCloseable {
+/**
+ * Tracks the completion of an operation, as divided into sub-units of progress.
+ * 
+ * @author Owen Feehan
+ *
+ */
+public interface Progress extends AutoCloseable {
 
-    private ProgressReporter progressReporter;
-    private int cnt = 0;
-
-    public ProgressReporterIncrement(ProgressReporter progressReporter) {
-        super();
-        this.progressReporter = progressReporter;
-    }
-
-    public void open() {
-        cnt = progressReporter.getMin();
-        progressReporter.open();
-    }
+    void open();
 
     @Override
-    public void close() {
-        progressReporter.close();
-    }
+    void close();
 
-    public void update() {
-        progressReporter.update(++cnt);
-    }
+    int getMax();
 
-    public int getMin() {
-        return progressReporter.getMin();
-    }
+    int getMin();
 
-    public void setMin(int min) {
-        progressReporter.setMin(min);
-    }
+    void update(int value);
 
-    public int getMax() {
-        return progressReporter.getMax();
-    }
+    void setMin(int min);
 
-    public void setMax(int max) {
-        progressReporter.setMax(max);
-    }
+    void setMax(int max);
 }

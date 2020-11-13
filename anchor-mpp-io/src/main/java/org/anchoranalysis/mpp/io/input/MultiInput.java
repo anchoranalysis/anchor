@@ -32,7 +32,7 @@ import lombok.experimental.Accessors;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.identifier.provider.store.NamedProviderStore;
 import org.anchoranalysis.core.log.error.ErrorReporter;
-import org.anchoranalysis.core.progress.ProgressReporter;
+import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.core.value.KeyValueParams;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.core.stack.TimeSequence;
@@ -68,7 +68,7 @@ public class MultiInput implements ProvidesStackInput, InputForMPPBean {
     public void addToStoreInferNames(
             NamedProviderStore<TimeSequence> stacks,
             int seriesIndex,
-            ProgressReporter progress)
+            Progress progress)
             throws OperationFailedException {
         stack.addToStore(stacks, seriesIndex, progress);
     }
@@ -78,7 +78,7 @@ public class MultiInput implements ProvidesStackInput, InputForMPPBean {
             String name,
             NamedProviderStore<TimeSequence> stacks,
             int seriesIndex,
-            ProgressReporter progress)
+            Progress progress)
             throws OperationFailedException {
         throw new OperationFailedException("Not supported");
     }

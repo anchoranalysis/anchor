@@ -29,7 +29,7 @@ package org.anchoranalysis.image.io.object.input;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import lombok.AllArgsConstructor;
-import org.anchoranalysis.core.progress.ProgressReporterNull;
+import org.anchoranalysis.core.progress.ProgressIgnore;
 import org.anchoranalysis.core.serialize.DeserializationFailedException;
 import org.anchoranalysis.core.serialize.Deserializer;
 import org.anchoranalysis.core.serialize.ObjectInputStreamDeserializer;
@@ -68,9 +68,9 @@ class ObjectDualDeserializer implements Deserializer<ObjectMask> {
 
         BoundingBox box = BOUNDING_BOX_DESERIALIZER.deserialize(filePath);
 
-        try (OpenedRaster or = stackReader.openFile(tiffFilename)) {
+        try (OpenedRaster openedRaster = stackReader.openFile(tiffFilename)) {
             Stack stack =
-                    or.openCheckType(0, ProgressReporterNull.get(), UnsignedByteVoxelType.INSTANCE)
+                    openedRaster.openCheckType(0, ProgressIgnore.get(), UnsignedByteVoxelType.INSTANCE)
                             .get(0);
 
             if (stack.getNumberChannels() != 1) {

@@ -32,9 +32,9 @@ import lombok.Setter;
 import org.anchoranalysis.annotation.io.AnnotationWithStrategy;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.functional.FunctionalProgress;
-import org.anchoranalysis.core.progress.ProgressReporter;
-import org.anchoranalysis.core.progress.ProgressReporterMultiple;
-import org.anchoranalysis.core.progress.ProgressReporterOneOfMany;
+import org.anchoranalysis.core.progress.Progress;
+import org.anchoranalysis.core.progress.ProgressMultiple;
+import org.anchoranalysis.core.progress.ProgressOneOfMany;
 import org.anchoranalysis.image.io.stack.input.ProvidesStackInput;
 import org.anchoranalysis.io.input.InputReadFailedException;
 import org.anchoranalysis.io.input.bean.InputManager;
@@ -53,15 +53,15 @@ public class AnnotationInputManager<T extends ProvidesStackInput, S extends Anno
     public List<AnnotationWithStrategy<S>> inputs(InputManagerParams params)
             throws InputReadFailedException {
 
-        try (ProgressReporterMultiple progressMultiple =
-                new ProgressReporterMultiple(params.getProgressReporter(), 2)) {
+        try (ProgressMultiple progressMultiple =
+                new ProgressMultiple(params.getProgress(), 2)) {
 
             List<T> inputs = input.inputs(params);
 
             progressMultiple.incrementWorker();
 
             List<AnnotationWithStrategy<S>> outList =
-                    createListInput(inputs, new ProgressReporterOneOfMany(progressMultiple));
+                    createListInput(inputs, new ProgressOneOfMany(progressMultiple));
             progressMultiple.incrementWorker();
 
             return outList;
@@ -69,10 +69,10 @@ public class AnnotationInputManager<T extends ProvidesStackInput, S extends Anno
     }
 
     private List<AnnotationWithStrategy<S>> createListInput(
-            List<T> listInputs, ProgressReporter progressReporter) throws InputReadFailedException {
+            List<T> listInputs, Progress progress) throws InputReadFailedException {
         return FunctionalProgress.mapList(
                 listInputs,
-                progressReporter,
+                progress,
                 annotationInput ->
                         new AnnotationWithStrategy<S>(annotationInput, annotatorStrategy));
     }

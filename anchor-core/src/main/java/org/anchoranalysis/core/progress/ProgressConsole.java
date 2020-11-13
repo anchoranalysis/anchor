@@ -26,63 +26,76 @@
 
 package org.anchoranalysis.core.progress;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 /**
- * Placeholder that doesn't measure any progress
- *
- * <p>Implemented as a singleton, to avoid repeated instances of creating a new Autocloseable class,
- * which confuses lint tools like SonarQube
- *
+ * Displays the current progress to the console.
+ * 
+ * <p>Percentages are incrementlly reported to the console as an operation progresses.
+ * 
  * @author Owen Feehan
+ *
  */
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class ProgressReporterNull implements ProgressReporter {
+@RequiredArgsConstructor
+public class ProgressConsole implements Progress {
 
-    private static ProgressReporterNull instance = null;
+    // START REQUIRED ARGUMENTS
+    private final int incrementSize;
+    // END REQUIRED ARGUMENTS
+    
+    private int max;
+    private int min;
 
-    public static ProgressReporterNull get() {
-        if (instance == null) {
-            instance = new ProgressReporterNull();
-        }
-        return instance;
+    private int nextPercentageToReport = 0;
+
+    private double percentCompleted(int val) {
+        return ((double) (val - min)) / (max - min) * 100;
     }
 
     @Override
     public void open() {
-        // DOES NOTHING
+        System.out.printf("[ "); // NOSONAR
+    }
+
+    private void reportPercentage(int percent) {
+        System.out.printf("%d%s ", percent, "%"); // NOSONAR
+        nextPercentageToReport += incrementSize;
     }
 
     @Override
     public void close() {
-        // DOES NOTHING
+        if (nextPercentageToReport >= 100) {
+            reportPercentage(100);
+        }
+        System.out.printf("]%n"); // NOSONAR
     }
 
     @Override
     public int getMax() {
-        // Arbitrary value
-        return 0;
+        return max;
     }
 
     @Override
     public int getMin() {
-        // Arbitrary value
-        return 0;
+        return min;
     }
 
     @Override
-    public void update(int val) {
-        // DOES NOTHING
+    public void update(int value) {
+
+        double percent = percentCompleted(value);
+        while (percent > nextPercentageToReport) {
+            reportPercentage(nextPercentageToReport);
+        }
     }
 
     @Override
     public void setMin(int min) {
-        // DOES NOTHING
+        this.min = min;
     }
 
     @Override
     public void setMax(int max) {
-        // DOES NOTHING
+        this.max = max;
     }
 }

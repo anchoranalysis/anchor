@@ -38,9 +38,9 @@ import org.anchoranalysis.core.functional.checked.CheckedSupplier;
 @FunctionalInterface
 public interface CheckedProgressingSupplier<R, E extends Exception> {
 
-    R get(ProgressReporter progressReporter) throws E;
+    R get(Progress progress) throws E;
 
     default CheckedSupplier<R, E> withoutProgressReporter() {
-        return () -> this.get(ProgressReporterNull.get());
+        return () -> this.get(ProgressIgnore.get());
     }
 }

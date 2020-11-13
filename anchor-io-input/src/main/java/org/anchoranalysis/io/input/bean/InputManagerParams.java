@@ -30,7 +30,7 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.core.progress.ProgressReporter;
+import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.io.input.InputContextParams;
 
 /**
@@ -43,12 +43,12 @@ public class InputManagerParams {
 
     @Getter private final InputContextParams inputContext;
 
-    @Getter private final ProgressReporter progressReporter;
+    @Getter private final Progress progress;
 
     @Getter private final Logger logger;
 
-    public InputManagerParams withProgressReporter(ProgressReporter progressReporterToAssign) {
-        return new InputManagerParams(inputContext, progressReporterToAssign, logger);
+    public InputManagerParams withProgressReporter(Progress progressToAssign) {
+        return new InputManagerParams(inputContext, progressToAssign, logger);
     }
 
     public boolean isDebugModeActivated() {
