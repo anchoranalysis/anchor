@@ -192,8 +192,8 @@ public final class BoundingBox implements Serializable {
         // Add double-padding in each dimension to the extent
         Extent extentGrown = extent.growBy(multiplyByTwo(toAdd));
 
-        // Clip to make sure we remain within bounds
-        return new BoundingBox(cornerMinShifted, extentGrown).clipTo(containingExtent);
+        // Clamp to make sure we remain within bounds
+        return new BoundingBox(cornerMinShifted, extentGrown).clampTo(containingExtent);
     }
 
     /**
@@ -228,14 +228,14 @@ public final class BoundingBox implements Serializable {
         return out;
     }
 
-    public BoundingBox clipTo(Extent extent) {
+    public BoundingBox clampTo(Extent extent) {
 
         if (cornerMin.x() >= extent.x()
                 || cornerMin.y() >= extent.y()
                 || cornerMin.z() >= extent.z()) {
             throw new AnchorFriendlyRuntimeException(
                     String.format(
-                            "Corner-min (%s) is outside the clipping region (%s)",
+                            "Corner-min (%s) is outside the clamping region (%s)",
                             cornerMin, extent));
         }
 
@@ -401,18 +401,18 @@ public final class BoundingBox implements Serializable {
 
     /**
      * Scales the bounding-box, both the corner-point and the extent - ensuring it remains inside a
-     * containing-extent
+     * containing-extent.
      *
      * @param scaleFactor scaling-factor
-     * @param clipTo clips scaled-object's bounding-box to ensure it always fit inside (to catch any
+     * @param clampTo clamps scaled-object's bounding-box to ensure it always fit inside (to catch any
      *     rounding errors that push the bounding box outside the scene-boundary)
      * @return a new bounding-box with scaled corner-point and extent
      */
-    public BoundingBox scaleClipTo(ScaleFactor scaleFactor, Extent clipTo) {
+    public BoundingBox scaleClampTo(ScaleFactor scaleFactor, Extent clampTo) {
         Point3i cornerScaled = scaledCorner(scaleFactor);
         Extent extentScaled = scaledExtent(scaleFactor);
         BoundingBox boxScaled = new BoundingBox(cornerScaled, extentScaled);
-        return boxScaled.clipTo(clipTo);
+        return boxScaled.clampTo(clampTo);
     }
 
     /**

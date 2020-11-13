@@ -317,7 +317,7 @@ public class ObjectMask {
             // nothing to do
             return this;
         } else {
-            BoundingBox clippedBox = boundingBox().clipTo(extent);
+            BoundingBox clippedBox = boundingBox().clampTo(extent);
             return mapBoundingBoxChangeExtent(clippedBox);
         }
     }

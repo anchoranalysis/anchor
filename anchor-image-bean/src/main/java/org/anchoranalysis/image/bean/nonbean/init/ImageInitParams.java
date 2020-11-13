@@ -140,22 +140,22 @@ public class ImageInitParams implements BeanInitParams {
         stackProviderBridge = populate.copyProvider(StackProvider.class, stacks());
     }
 
-    public void addToStackCollection(String identifier, Stack inputImage)
+    public void addToStacks(String identifier, Stack inputImage)
             throws OperationFailedException {
         stacks().add(identifier, () -> inputImage);
     }
 
-    public void addToStackCollection(String identifier, StackProvider stack)
+    public void addToStacks(String identifier, StackProvider stack)
             throws OperationFailedException {
         BeanStoreAdder.add(identifier, stack, storeStack, stackProviderBridge);
     }
 
-    public void copyStackCollectionFrom(NamedProvider<Stack> source)
+    public void copyStacksFrom(NamedProvider<Stack> source)
             throws OperationFailedException {
 
         try {
             for (String id : source.keys()) {
-                addToStackCollection(id, source.getException(id));
+                addToStacks(id, source.getException(id));
             }
         } catch (NamedProviderGetException e) {
             throw new OperationFailedException(e.summarize());

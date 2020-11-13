@@ -36,6 +36,7 @@ import org.anchoranalysis.io.manifest.file.FileType;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.output.namestyle.SimpleOutputNameStyle;
+import org.anchoranalysis.io.output.namestyle.WithoutOutputNameStyle;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
 
 /**
@@ -96,6 +97,17 @@ public class AlwaysAllowed implements Writer {
                         .writeWithIndex(element.get(), index, outputNameStyle, outputter));
     }
 
+
+    @Override
+    public <T> boolean writeWithoutName(String outputName, ElementWriterSupplier<T> elementWriter,
+            ElementSupplier<T> element) throws OutputWriteFailedException {
+        maybeExecutePreop();
+        elementWriter
+                        .get()
+                        .write(element.get(), new WithoutOutputNameStyle(outputName), outputter);
+        return true;
+    }
+    
     // A non-generator way of creating outputs, that are still included in the manifest
     // Returns null if output is not allowed
     @Override
@@ -106,7 +118,7 @@ public class AlwaysAllowed implements Writer {
 
         maybeExecutePreop();
 
-        Path outPath = outputter.makeOutputPath(outputName, extension);
+        Path outPath = outputter.makeOutputPath( Optional.of(outputName), extension);
 
         manifestDescription.ifPresent(
                 md -> outputter.writeFileToOperationRecorder(outputName, outPath, md, ""));

@@ -34,33 +34,33 @@ import org.anchoranalysis.spatial.point.Point3i;
 
 /** Ensures a point has values contained inside image-dimensions */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class PointClipper {
+public class PointClamper {
 
-    public static Point3i clip(Point3i point, Dimensions dimensions) {
-        point = clipLow(point);
-        point = clipHigh(point, dimensions);
+    public static Point3i clamp(Point3i point, Dimensions dimensions) {
+        point = clampLow(point);
+        point = clampHigh(point, dimensions);
         return point;
     }
 
-    public static Point3d clip(Point3d point, Dimensions dimensions) {
-        point = clipLow(point);
-        point = clipHigh(point, dimensions);
+    public static Point3d clamp(Point3d point, Dimensions dimensions) {
+        point = clampLow(point);
+        point = clampHigh(point, dimensions);
         return point;
     }
 
-    private static Point3i clipLow(Point3i point) {
+    private static Point3i clampLow(Point3i point) {
         return point.max(0);
     }
 
-    private static Point3d clipLow(Point3d point) {
+    private static Point3d clampLow(Point3d point) {
         return point.max(0);
     }
 
-    private static Point3i clipHigh(Point3i point, Dimensions dimensions) {
+    private static Point3i clampHigh(Point3i point, Dimensions dimensions) {
         return point.min(dimensions.extent().createMinusOne());
     }
 
-    private static Point3d clipHigh(Point3d point, Dimensions dimensions) {
+    private static Point3d clampHigh(Point3d point, Dimensions dimensions) {
         return point.min(dimensions.extent().createMinusOne());
     }
 }

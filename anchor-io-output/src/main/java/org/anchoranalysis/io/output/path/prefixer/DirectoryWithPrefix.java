@@ -27,6 +27,7 @@
 package org.anchoranalysis.io.output.path.prefixer;
 
 import java.nio.file.Path;
+import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -36,7 +37,11 @@ public class DirectoryWithPrefix implements PathCreator {
 
     @Getter private Path directory;
 
-    @Getter @Setter private String filenamePrefix = "";
+    /** Always prepended to outputted filenames. */
+    @Setter private String prefix = "";
+    
+    /** Added between {@code prefix} and the filename, if the filename is defined. */
+    @Setter private String delimiter = "";
 
     public DirectoryWithPrefix(Path folderPath) {
         setDirectory(folderPath.normalize());
@@ -47,21 +52,39 @@ public class DirectoryWithPrefix implements PathCreator {
     }
 
     /**
-     * A path that combines the {@code directory} and {@code fileNamePrefix}.
+     * A path that combines the {@code directory} and {@code fileNamePrefix} and {@code delimiter}.
      *
      * @return the combined path
      */
     public Path getCombined() {
-        return getDirectory().resolve(getFilenamePrefix());
+        return getDirectory().resolve(prefixWithDelimeter());
+    }
+    
+    public String prefixWithDelimeter() {
+        return prefix + delimiter;
     }
 
     @Override
-    public Path makePathAbsolute(String filePathRelative) {
-        return directory.resolve(filenamePrefix + filePathRelative);
+    public Path makePathAbsolute(Optional<String> suffix, Optional<String> extension) {
+        return directory.resolve( prefix + concatenate(suffix, extension).orElse("") );
     }
 
     @Override
     public Path makePathRelative(Path fullPath) {
         return directory.relativize(fullPath);
+    }
+    
+    private Optional<String> concatenate(Optional<String> suffix, Optional<String> extension) {
+        if (suffix.isPresent() || extension.isPresent()) {
+            String contributionFromSuffix = contributionFrom(suffix, delimiter);
+            String contributionFromExtension = contributionFrom(extension, ".");
+            return Optional.of(contributionFromSuffix + contributionFromExtension);            
+        } else {
+            return Optional.empty();
+        }
+    }
+    
+    private static String contributionFrom(Optional<String> string, String prefix) {
+        return string.map( value -> prefix + value).orElse("");
     }
 }

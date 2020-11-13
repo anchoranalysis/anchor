@@ -54,7 +54,7 @@ public class StringSuffixOutputNameStyle extends IndexableOutputNameStyle {
     }
 
     @Override
-    protected String nameFromOutputFormatString(String outputFormatString, String index) {
+    protected String filenameFromOutputFormatString(String outputFormatString, String index) {
         return String.format(outputFormatString, index);
     }
 

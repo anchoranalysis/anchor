@@ -133,7 +133,7 @@ public class RotatableBoundingBox extends MarkWithPosition {
 
         try {
             BoundingBox box = BoundingBoxFromPoints.forList(rotateAddPos(points));
-            return box.clipTo(dimensions.extent());
+            return box.clampTo(dimensions.extent());
         } catch (OperationFailedException e) {
             throw new AnchorImpossibleSituationException();
         }

@@ -68,9 +68,9 @@ public class MultiInput implements ProvidesStackInput, InputForMPPBean {
     public void addToStoreInferNames(
             NamedProviderStore<TimeSequence> stacks,
             int seriesIndex,
-            ProgressReporter progressReporter)
+            ProgressReporter progress)
             throws OperationFailedException {
-        stack.addToStore(stacks, seriesIndex, progressReporter);
+        stack.addToStore(stacks, seriesIndex, progress);
     }
 
     @Override
@@ -78,7 +78,7 @@ public class MultiInput implements ProvidesStackInput, InputForMPPBean {
             String name,
             NamedProviderStore<TimeSequence> stacks,
             int seriesIndex,
-            ProgressReporter progressReporter)
+            ProgressReporter progress)
             throws OperationFailedException {
         throw new OperationFailedException("Not supported");
     }

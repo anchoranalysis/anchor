@@ -26,16 +26,17 @@
 
 package org.anchoranalysis.image.voxel.interpolator;
 
-import net.imglib2.interpolation.randomaccess.NLinearInterpolatorFactory;
-import net.imglib2.type.numeric.integer.UnsignedByteType;
-import net.imglib2.type.numeric.integer.UnsignedShortType;
+import net.imglib2.interpolation.randomaccess.ClampingNLinearInterpolatorFactory;
 
 public class InterpolatorImgLib2Linear extends InterpolatorImgLib2 {
 
     public InterpolatorImgLib2Linear() {
+        // Using a clamping interpolator as otherwise weird values can occur at 255
+        // This idea from the following post:
+        // https://github.com/imglib/imglib2/issues/166
         super(
-                new NLinearInterpolatorFactory<UnsignedByteType>(),
-                new NLinearInterpolatorFactory<UnsignedShortType>());
+                new ClampingNLinearInterpolatorFactory<>(),
+                new ClampingNLinearInterpolatorFactory<>());
     }
 
     @Override

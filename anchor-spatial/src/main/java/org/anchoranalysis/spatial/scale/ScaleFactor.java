@@ -41,13 +41,27 @@ import lombok.experimental.Accessors;
 @Accessors(fluent = true)
 public final class ScaleFactor {
 
+    /** How much to multiply the existing x-dimension by to create a scaled x-dimension. */
     private final double x;
+    
+    /** How much to multiply the existing y-dimension by to create a scaled y-dimension. */
     private final double y;
 
+    /**
+     * Create with an identical scaling-factor for all dimensions.
+     * 
+     * @param factor how much to multiply <i>all</i> existing dimensions by to create a scaled dimensions.
+     */
     public ScaleFactor(double factor) {
         this(factor, factor);
     }
 
+    /**
+     * Create with specific scaling-factors for each dimension.
+     * 
+     * @param x how much to multiply the existing x-dimension by to create a scaled x-dimension.
+     * @param y how much to multiply the existing x-dimension by to create a scaled x-dimension.
+     */
     public ScaleFactor(double x, double y) {
         Preconditions.checkArgument(x > 0);
         Preconditions.checkArgument(y > 0);
@@ -55,17 +69,42 @@ public final class ScaleFactor {
         this.y = y;
     }
 
+    /**
+     * Build a new scale factor where each dimension is set to the reciprocal of its current value.
+     * 
+     * <p>This is an <b>immutable</b> operation.
+     * 
+     * @return a newly created {@link ScaleFactor} where each component is set to its reciprocal.
+     */
     public ScaleFactor invert() {
         return new ScaleFactor(1 / x, 1 / y);
     }
 
+    /**
+     * Is the scale-factor identical in x and y dimensions?
+     * 
+     * @return true if the scale-factor and y are identical within {@code 1e-3} precision.
+     */
     public boolean hasIdenticalXY() {
         return Math.abs(x - y) < 1e-3;
     }
 
-    /** If the scale-factor involves no scaling at all */
+    /** 
+     * Does the scale-factor involve no scaling at all?
+     *
+     * @return true if the scale-factor is 1 in all dimensions, false otherwise.
+     */
     public boolean isNoScale() {
         return x == 1.0 && y == 1.0;
+    }
+    
+    /**
+     * Which is the minimum scaling-factor among all dimensions?
+     * 
+     * @return the minimum scaling-factor
+     */
+    public double minimumDimension() {
+        return Double.min(x, y);
     }
 
     @Override

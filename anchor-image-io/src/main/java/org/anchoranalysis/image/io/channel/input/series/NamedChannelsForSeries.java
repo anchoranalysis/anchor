@@ -57,6 +57,13 @@ public interface NamedChannelsForSeries extends ChannelGetter {
             String channelName, int timeIndex, ProgressReporter progressReporter)
             throws GetOperationFailedException;
 
+    /**
+     * The number of channels that exist for the series.
+     * 
+     * @return the number of channels.
+     */
+    int numberChannels();
+    
     Set<String> channelNames();
 
     int sizeT(ProgressReporter progressReporter) throws ImageIOException;
@@ -70,4 +77,14 @@ public interface NamedChannelsForSeries extends ChannelGetter {
             throws OperationFailedException;
 
     StoreSupplier<Stack> allChannelsAsStack(int timeIndex);
+    
+    /**
+     * Whether the channels describe an RGB image.
+     * 
+     * <p>In this case, there should be exactly three channels, named "red", "green" and "blue".
+     *  
+     * @return true if the channels describe an RGB image
+     * @throws ImageIOException
+     */
+    boolean isRGB() throws ImageIOException;
 }

@@ -35,7 +35,7 @@ class UnsignedBufferAsIntHelper {
 
     public static void calculateForIndex(
             UnsignedBufferAsInt buffer, int maximumValue, int index, IntUnaryOperator operator) {
-        putClippedAtIndex(
+        putClampedAtIndex(
                 buffer, maximumValue, operator.applyAsInt(buffer.getUnsigned(index)), index);
     }
 
@@ -43,23 +43,23 @@ class UnsignedBufferAsIntHelper {
             UnsignedBufferAsInt buffer, int maximumValue, IntUnaryOperator operator) {
         while (buffer.hasRemaining()) {
             int valueToAssign = operator.applyAsInt(buffer.getUnsigned());
-            putClipped(buffer, maximumValue, valueToAssign);
+            putClamped(buffer, maximumValue, valueToAssign);
         }
     }
 
-    /** Put a (clipped) int-value at previous buffer position. */
-    private static void putClipped(
+    /** Put a (clamped) int-value at previous buffer position. */
+    private static void putClamped(
             UnsignedBufferAsInt buffer, int maximumValue, int valueToAssign) {
-        putClippedAtIndex(buffer, maximumValue, valueToAssign, buffer.position() - 1);
+        putClampedAtIndex(buffer, maximumValue, valueToAssign, buffer.position() - 1);
     }
 
-    /** Put a (clipped) int-value at a particular index. */
-    private static void putClippedAtIndex(
+    /** Put a (clamped) int-value at a particular index. */
+    private static void putClampedAtIndex(
             UnsignedBufferAsInt buffer, int maximumValue, int valueToAssign, int index) {
-        buffer.putUnsigned(index, clip(valueToAssign, maximumValue));
+        buffer.putUnsigned(index, clamp(valueToAssign, maximumValue));
     }
 
-    private static int clip(int value, int maximumValue) {
+    private static int clamp(int value, int maximumValue) {
         if (value < 0) {
             return 0;
         }

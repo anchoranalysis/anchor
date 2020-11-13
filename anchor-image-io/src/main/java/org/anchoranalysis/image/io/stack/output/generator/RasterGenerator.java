@@ -57,7 +57,7 @@ public abstract class RasterGenerator<T> implements TransformingGenerator<T, Sta
             throws OutputWriteFailedException {
         return writeInternal(
                 element,
-                outputNameStyle.getFilenameWithoutExtension(),
+                outputNameStyle.filenameWithoutExtension(),
                 outputNameStyle.getOutputName(),
                 "",
                 outputter);
@@ -73,7 +73,7 @@ public abstract class RasterGenerator<T> implements TransformingGenerator<T, Sta
             throws OutputWriteFailedException {
         return writeInternal(
                 element,
-                outputNameStyle.getFilenameWithoutExtension(index),
+                Optional.of(outputNameStyle.filenameWithoutExtension(index)),
                 outputNameStyle.getOutputName(),
                 index,
                 outputter);
@@ -122,7 +122,7 @@ public abstract class RasterGenerator<T> implements TransformingGenerator<T, Sta
 
     private FileType[] writeInternal(
             T elementUntransformed,
-            String filenameWithoutExtension,
+            Optional<String> filenameWithoutExtension,
             String outputName,
             String index,
             OutputterChecked outputter)

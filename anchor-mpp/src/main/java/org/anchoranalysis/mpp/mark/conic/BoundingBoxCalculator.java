@@ -32,7 +32,7 @@ import cern.colt.matrix.DoubleMatrix1D;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
-import org.anchoranalysis.mpp.points.PointClipper;
+import org.anchoranalysis.mpp.points.PointClamper;
 import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.point.Point3d;
 import org.anchoranalysis.spatial.point.Point3i;
@@ -68,8 +68,8 @@ public class BoundingBoxCalculator {
      */
     public static BoundingBox boxFromBounds(
             Point3d center, DoubleMatrix1D radiiMatrix, boolean do3D, Dimensions dimensions) {
-        Point3i minPt = subTwoPointsClip(center, radiiMatrix, do3D, dimensions);
-        Point3i maxPt = addTwoPointsClip(center, radiiMatrix, do3D, dimensions);
+        Point3i minPt = subTwoPointsClamp(center, radiiMatrix, do3D, dimensions);
+        Point3i maxPt = addTwoPointsClamp(center, radiiMatrix, do3D, dimensions);
 
         assert maxPt.x() >= minPt.x();
         assert maxPt.y() >= minPt.y();
@@ -78,16 +78,16 @@ public class BoundingBoxCalculator {
         return new BoundingBox(minPt, maxPt);
     }
 
-    private static Point3i subTwoPointsClip(
+    private static Point3i subTwoPointsClamp(
             Point3d point1, DoubleMatrix1D point2, boolean do3D, Dimensions dimensions) {
         Point3i point = subTwoPoints(point1, point2, do3D);
-        return PointClipper.clip(point, dimensions);
+        return PointClamper.clamp(point, dimensions);
     }
 
-    private static Point3i addTwoPointsClip(
+    private static Point3i addTwoPointsClamp(
             Point3d point1, DoubleMatrix1D point2, boolean do3D, Dimensions dimensions) {
         Point3i point = addTwoPoints(point1, point2, do3D);
-        return PointClipper.clip(point, dimensions);
+        return PointClamper.clamp(point, dimensions);
     }
 
     /**

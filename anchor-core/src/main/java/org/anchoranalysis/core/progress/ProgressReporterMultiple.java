@@ -26,12 +26,17 @@
 
 package org.anchoranalysis.core.progress;
 
-// Combines a number of sub progress reporters
+/**
+ * Combines a number of sub progress reporters.
+ * 
+ * @author Owen Feehan
+ *
+ */
 public class ProgressReporterMultiple implements AutoCloseable {
 
     private ProgressReporter progressReporterParent;
     private double part = 0.0;
-    private double cumPart = 0.0;
+    private double cumulativePart = 0.0;
     private int index = 0;
 
     public ProgressReporterMultiple(ProgressReporter progressReporterParent, int numChildren) {
@@ -41,15 +46,15 @@ public class ProgressReporterMultiple implements AutoCloseable {
         progressReporterParent.setMax(100);
     }
 
-    public void incrWorker() {
+    public void incrementWorker() {
         index++;
-        this.cumPart = part * index;
-        progressReporterParent.update((int) Math.floor(cumPart));
+        this.cumulativePart = part * index;
+        progressReporterParent.update((int) Math.floor(cumulativePart));
     }
 
     // Progress for the current worker
     public void update(double progress) {
-        progressReporterParent.update((int) Math.floor(cumPart + (progress * part / 100)));
+        progressReporterParent.update((int) Math.floor(cumulativePart + (progress * part / 100)));
     }
 
     @Override

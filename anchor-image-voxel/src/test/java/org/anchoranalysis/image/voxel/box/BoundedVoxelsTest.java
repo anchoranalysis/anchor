@@ -44,7 +44,7 @@ public class BoundedVoxelsTest {
      * @throws OperationFailedException
      */
     @Test(expected = OperationFailedException.class)
-    public void testGrowObjectOutsideClipRegion() throws OperationFailedException {
+    public void testGrowObjectOutsideClampRegion() throws OperationFailedException {
 
         // A bounding box that overlaps with the extent
         Extent extent = extent(20);

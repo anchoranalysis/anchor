@@ -156,12 +156,12 @@ public final class UnsignedShortBuffer extends UnsignedBufferAsInt {
     }
 
     /**
-     * Puts a long at the current buffer position, clipping to ensure the value is within the range
+     * Puts a long at the current buffer position, clamping to ensure the value is within the range
      * {@code (0,255)}.
      *
      * @param value the float
      */
-    public void putUnsignedClipped(int value) {
+    public void putUnsignedClamped(int value) {
         if (value > UnsignedShortVoxelType.MAX_VALUE_INT) {
             putUnsigned(UnsignedShortVoxelType.MAX_VALUE_INT);
         } else if (value < 0) {
@@ -182,12 +182,12 @@ public final class UnsignedShortBuffer extends UnsignedBufferAsInt {
     }
 
     /**
-     * Puts a long at the current buffer position, clipping to ensure the value is within the range
+     * Puts a long at the current buffer position, clamping to ensure the value is within the range
      * {@code (0,255)}.
      *
      * @param value the float
      */
-    public void putLongClipped(long value) {
+    public void putLongClamped(long value) {
         if (value > UnsignedShortVoxelType.MAX_VALUE_INT) {
             putUnsigned(UnsignedShortVoxelType.MAX_VALUE_INT);
         } else if (value < 0) {
@@ -203,12 +203,12 @@ public final class UnsignedShortBuffer extends UnsignedBufferAsInt {
     }
 
     /**
-     * Puts a float at the current buffer position, clipping to ensure the value is within the range
+     * Puts a float at the current buffer position, clamping to ensure the value is within the range
      * {@code (0,255)}.
      *
      * @param value the float
      */
-    public void putFloatClipped(float value) {
+    public void putFloatClamped(float value) {
         if (value > UnsignedShortVoxelType.MAX_VALUE_INT) {
             putUnsigned(UnsignedShortVoxelType.MAX_VALUE_INT);
         } else if (value < 0) {

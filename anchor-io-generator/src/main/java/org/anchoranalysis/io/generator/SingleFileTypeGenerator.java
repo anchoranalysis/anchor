@@ -68,7 +68,7 @@ public abstract class SingleFileTypeGenerator<T, S> implements TransformingGener
             throws OutputWriteFailedException {
         return writeInternal(
                 element,
-                outputNameStyle.getFilenameWithoutExtension(),
+                outputNameStyle.filenameWithoutExtension(),
                 outputNameStyle.getOutputName(),
                 "",
                 outputter);
@@ -81,10 +81,9 @@ public abstract class SingleFileTypeGenerator<T, S> implements TransformingGener
             IndexableOutputNameStyle outputNameStyle,
             OutputterChecked outputter)
             throws OutputWriteFailedException {
-
         return writeInternal(
                 element,
-                outputNameStyle.getFilenameWithoutExtension(index),
+                Optional.of(outputNameStyle.filenameWithoutExtension(index)),
                 outputNameStyle.getOutputName(),
                 index,
                 outputter);
@@ -92,7 +91,7 @@ public abstract class SingleFileTypeGenerator<T, S> implements TransformingGener
 
     private FileType[] writeInternal(
             T element,
-            String filenameWithoutExtension,
+            Optional<String> filenameWithoutExtension,
             String outputName,
             String index,
             OutputterChecked outputter)

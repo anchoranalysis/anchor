@@ -58,11 +58,11 @@ public class AnnotationInputManager<T extends ProvidesStackInput, S extends Anno
 
             List<T> inputs = input.inputs(params);
 
-            progressMultiple.incrWorker();
+            progressMultiple.incrementWorker();
 
             List<AnnotationWithStrategy<S>> outList =
                     createListInput(inputs, new ProgressReporterOneOfMany(progressMultiple));
-            progressMultiple.incrWorker();
+            progressMultiple.incrementWorker();
 
             return outList;
         }

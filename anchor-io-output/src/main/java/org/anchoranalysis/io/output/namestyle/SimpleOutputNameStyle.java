@@ -26,33 +26,23 @@
 
 package org.anchoranalysis.io.output.namestyle;
 
-import lombok.AllArgsConstructor;
+import java.util.Optional;
 
-@AllArgsConstructor
 public class SimpleOutputNameStyle extends OutputNameStyle {
+    
+    private static final long serialVersionUID = 1L;
 
-    /** */
-    private static final long serialVersionUID = 7800246042849181557L;
-
-    private String outputName;
-
-    @Override
-    public String getFilenameWithoutExtension() {
-        return getOutputName();
+    public SimpleOutputNameStyle(String outputName) {
+        super(outputName);
     }
-
+    
     @Override
-    public String getOutputName() {
-        return outputName;
-    }
-
-    @Override
-    public void setOutputName(String outputName) {
-        this.outputName = outputName;
+    public Optional<String> filenameWithoutExtension() {
+        return Optional.of(getOutputName());
     }
 
     @Override
     public OutputNameStyle duplicate() {
-        return new SimpleOutputNameStyle(outputName);
+        return new SimpleOutputNameStyle(getOutputName());
     }
 }

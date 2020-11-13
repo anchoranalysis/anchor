@@ -207,7 +207,7 @@ public class IterateVoxelsObjectMask {
             Optional<BoundingBox> restrictTo,
             ProcessVoxelBufferUnary<T> process) {
         BoundingBox boxVoxels =
-                restrictTo.orElseGet(() -> object.boundingBox().clipTo(voxels.extent()));
+                restrictTo.orElseGet(() -> object.boundingBox().clampTo(voxels.extent()));
 
         Preconditions.checkArgument(voxels.extent().contains(boxVoxels));
 

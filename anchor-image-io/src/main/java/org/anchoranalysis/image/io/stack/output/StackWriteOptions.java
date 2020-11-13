@@ -44,8 +44,11 @@ public class StackWriteOptions {
     /** True the output is guaranteed to only ever 2D i.e. maximally one z-slice? */
     private boolean always2D;
 
-    /** The number of channels is guaranteed to be 1 or 3 in the output. */
-    private boolean alwaysOneOrThreeChannels;
+    /** The number of channels is guaranteed to be 1 in the output. */
+    private boolean singleChannel;
+    
+    /** The number of channels is guaranteed to be 3 in the output. */
+    private boolean threeChannels;
 
     /***
      * Whether it's an RGB image when it has three channels (the three channels visualized jointly, rather than independently)
@@ -62,7 +65,7 @@ public class StackWriteOptions {
      * @return a newly created {@link StackWriteOptions} derived from the existing object.
      */
     public StackWriteOptions always2D() {
-        return new StackWriteOptions(true, alwaysOneOrThreeChannels, rgb);
+        return new StackWriteOptions(true, singleChannel, threeChannels, rgb);
     }
 
     /**
@@ -71,7 +74,7 @@ public class StackWriteOptions {
      * @return a newly created {@link StackWriteOptions} derived from the existing object.
      */
     public StackWriteOptions rgb() {
-        return new StackWriteOptions(always2D, true, true);
+        return new StackWriteOptions(always2D, false, true, true);
     }
 
     /**
@@ -85,7 +88,8 @@ public class StackWriteOptions {
     public StackWriteOptions and(StackWriteOptions other) {
         return new StackWriteOptions(
                 always2D && other.always2D,
-                alwaysOneOrThreeChannels && other.alwaysOneOrThreeChannels,
+                singleChannel && other.singleChannel,
+                threeChannels && other.threeChannels,                
                 rgb && other.rgb);
     }
 
@@ -100,7 +104,8 @@ public class StackWriteOptions {
     public StackWriteOptions or(StackWriteOptions other) {
         return new StackWriteOptions(
                 always2D || other.always2D,
-                alwaysOneOrThreeChannels || other.alwaysOneOrThreeChannels,
+                singleChannel || other.singleChannel,
+                threeChannels || other.threeChannels,
                 rgb || other.rgb);
     }
 

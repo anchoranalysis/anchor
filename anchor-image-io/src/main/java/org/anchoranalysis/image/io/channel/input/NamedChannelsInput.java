@@ -64,11 +64,11 @@ public abstract class NamedChannelsInput implements ProvidesStackInput {
     public void addToStoreInferNames(
             NamedProviderStore<TimeSequence> stackCollection,
             int seriesIndex,
-            ProgressReporter progressReporter)
+            ProgressReporter progress)
             throws OperationFailedException {
         // Adds each channel as a separate stack
         try {
-            NamedChannelsForSeries ncc = createChannelsForSeries(seriesIndex, progressReporter);
+            NamedChannelsForSeries ncc = createChannelsForSeries(seriesIndex, progress);
             // Apply it only to first time-series frame
             ncc.addAsSeparateChannels(stackCollection, 0);
 
@@ -82,13 +82,13 @@ public abstract class NamedChannelsInput implements ProvidesStackInput {
             String name,
             NamedProviderStore<TimeSequence> stacks,
             int seriesIndex,
-            ProgressReporter progressReporter)
+            ProgressReporter progress)
             throws OperationFailedException {
 
         // Adds this stack (cached) under the given name
         stacks.add(
                 name,
-                StoreSupplier.cache(() -> channelsAsTimeSequence(seriesIndex, progressReporter)));
+                StoreSupplier.cache(() -> channelsAsTimeSequence(seriesIndex, progress)));
     }
 
     @Override

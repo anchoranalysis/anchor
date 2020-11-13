@@ -67,7 +67,7 @@ class ManifestClashChecker {
      */
     private static boolean wouldClashWithExperimentRoot(
             Path experimentalDirectory, DirectoryWithPrefix prefix) {
-        if (!prefix.getFilenamePrefix().isEmpty()) {
+        if (!prefix.prefixWithDelimeter().isEmpty()) {
             // We're safe if there's a non-empty filename prefix
             return false;
         }

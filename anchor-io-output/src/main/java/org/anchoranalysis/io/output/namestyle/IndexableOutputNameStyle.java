@@ -26,8 +26,7 @@
 
 package org.anchoranalysis.io.output.namestyle;
 
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
+import java.util.Optional;
 
 /**
  * An output-name with an index somehow appended or prepended in a particular style.
@@ -36,67 +35,60 @@ import lombok.NoArgsConstructor;
  *
  * @author Owen Feehan
  */
-@NoArgsConstructor
-@AllArgsConstructor
 public abstract class IndexableOutputNameStyle extends OutputNameStyle {
 
     private static final long serialVersionUID = -2393013576294162543L;
 
-    /** The output-name (without any index). */
-    private String outputName;
-
+    public IndexableOutputNameStyle() {
+        // Here as the empty constructor is needed for deserialization
+    }
+    
+    public IndexableOutputNameStyle(String outputName) {
+        super(outputName);
+    }
+    
     /**
      * Copy constructor
      *
      * @param source source
      */
     protected IndexableOutputNameStyle(IndexableOutputNameStyle source) {
-        this.outputName = source.outputName;
+        super(source.getOutputName());
     }
 
     /**
-     * Like {@link #getFilenameWithoutExtension()} but incorporates an <i>integer</i> index.
+     * Like {@link #filenameWithoutExtension()} but incorporates an <i>integer</i> index.
      *
      * @param index the index
      * @return @return the filename (without an extension, including without the period before the
      *     extension).
      */
-    public String getFilenameWithoutExtension(int index) {
-        return getFilenameWithoutExtension(Integer.toString(index));
+    public String filenameWithoutExtension(int index) {
+        return filenameWithoutExtension(Integer.toString(index));
     }
 
     /**
-     * Like {@link #getFilenameWithoutExtension()} but incorporates an <i>string</i> index.
+     * Like {@link #filenameWithoutExtension()} but incorporates an <i>string</i> index.
      *
      * @param index the index
      * @return @return the filename (without an extension, including without the period before the
      *     extension).
      */
-    public String getFilenameWithoutExtension(String index) {
-        return nameFromOutputFormatString(outputFormatString(), index);
+    public String filenameWithoutExtension(String index) {
+        return filenameFromOutputFormatString(outputFormatString(), index);
     }
 
     @Override
     public abstract IndexableOutputNameStyle duplicate();
 
     @Override
-    public String getOutputName() {
-        return outputName;
-    }
-
-    @Override
-    public void setOutputName(String outputName) {
-        this.outputName = outputName;
-    }
-
-    @Override
-    public String getFilenameWithoutExtension() {
+    public Optional<String> filenameWithoutExtension() {
         throw new UnsupportedOperationException(
-                "an index is required for getPhysicalName in this class");
+                "an index is required to determine a filename");
     }
 
     /** Constructs a full name from the output format string and an index */
-    protected abstract String nameFromOutputFormatString(String outputFormatString, String index);
+    protected abstract String filenameFromOutputFormatString(String outputFormatString, String index);
 
     protected abstract String outputFormatString();
 }

@@ -115,7 +115,7 @@ class IndexableSubdirectory extends SubdirectoryBase {
     private OutputtedFile createOutputtedFile(String index, FileType fileType) {
         return new OutputtedFile(
                 this,
-                outputName.getFilenameWithoutExtension(index) + "." + fileType.getFileExtension(),
+                outputName.filenameWithoutExtension(index) + "." + fileType.getFileExtension(),
                 outputName.getOutputName(),
                 index,
                 Optional.of(fileType.getManifestDescription()));

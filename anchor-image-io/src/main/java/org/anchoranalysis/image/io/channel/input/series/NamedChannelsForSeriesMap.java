@@ -55,17 +55,16 @@ public class NamedChannelsForSeriesMap implements NamedChannelsForSeries {
     // Null until the first time we request a channel
     private final OpenedRaster openedRaster;
     private final NamedEntries channelMap;
-    private final int seriesNum;
+    private final int seriesIndex;
     // END REQUIRED ARGUMENTS
 
-    private TimeSequence ts = null;
+    private TimeSequence sequence;
 
     @Override
     public Dimensions dimensions() throws ImageIOException {
-        return openedRaster.dimensionsForSeries(seriesNum);
+        return openedRaster.dimensionsForSeries(seriesIndex);
     }
 
-    // The outputter is in case we want to do any debugging
     @Override
     public Channel getChannel(String channelName, int timeIndex, ProgressReporter progressReporter)
             throws GetOperationFailedException {
@@ -94,10 +93,9 @@ public class NamedChannelsForSeriesMap implements NamedChannelsForSeries {
         }
     }
 
-    // The outputter is in case we want to do any debugging
     @Override
     public Optional<Channel> getChannelOptional(
-            String channelName, int t, ProgressReporter progressReporter)
+            String channelName, int timeIndex, ProgressReporter progressReporter)
             throws GetOperationFailedException {
 
         int index = channelMap.get(channelName);
@@ -106,7 +104,7 @@ public class NamedChannelsForSeriesMap implements NamedChannelsForSeries {
         }
 
         try {
-            Stack stack = createTimeSeries(progressReporter).get(t);
+            Stack stack = createTimeSeries(progressReporter).get(timeIndex);
 
             if (index >= stack.getNumberChannels()) {
                 return Optional.empty();
@@ -133,13 +131,18 @@ public class NamedChannelsForSeriesMap implements NamedChannelsForSeries {
     }
 
     @Override
+    public int numberChannels() {
+        return channelMap.keySet().size();
+    }
+
+    @Override
     public boolean hasChannel(String channelName) {
         return channelMap.keySet().contains(channelName);
     }
 
     @Override
     public void addAsSeparateChannels(
-            NamedStacks stackCollection, int t, ProgressReporter progressReporter)
+            NamedStacks stackCollection, int timeIndex, ProgressReporter progressReporter)
             throws OperationFailedException {
 
         try {
@@ -148,9 +151,9 @@ public class NamedChannelsForSeriesMap implements NamedChannelsForSeries {
 
                 // Populate our stack from all the channels
                 for (String channelName : channelMap.keySet()) {
-                    Channel image = getChannel(channelName, t, new ProgressReporterOneOfMany(prm));
+                    Channel image = getChannel(channelName, timeIndex, new ProgressReporterOneOfMany(prm));
                     stackCollection.add(channelName, new Stack(image));
-                    prm.incrWorker();
+                    prm.incrementWorker();
                 }
             } catch (GetOperationFailedException e) {
                 throw new OperationFailedException(e);
@@ -162,14 +165,19 @@ public class NamedChannelsForSeriesMap implements NamedChannelsForSeries {
     }
 
     @Override
-    public void addAsSeparateChannels(NamedProviderStore<TimeSequence> stackCollection, final int t)
+    public void addAsSeparateChannels(NamedProviderStore<TimeSequence> stackCollection, int timeIndex)
             throws OperationFailedException {
         // Populate our stack from all the channels
-        for (final String channelName : channelMap.keySet()) {
+        for (String channelName : channelMap.keySet()) {
             stackCollection.add(
                     channelName,
-                    StoreSupplier.cache(() -> extractChannelAsTimeSequence(channelName, t)));
+                    StoreSupplier.cache(() -> extractChannelAsTimeSequence(channelName, timeIndex)));
         }
+    }
+    
+    @Override
+    public boolean isRGB() throws ImageIOException {
+        return openedRaster.isRGB();
     }
 
     @Override
@@ -179,22 +187,22 @@ public class NamedChannelsForSeriesMap implements NamedChannelsForSeries {
 
     private TimeSequence createTimeSeries(ProgressReporter progressReporter)
             throws OperationFailedException {
-        if (ts == null) {
+        if (sequence == null) {
             try {
-                ts = openedRaster.open(seriesNum, progressReporter);
+                sequence = openedRaster.open(seriesIndex, progressReporter);
             } catch (ImageIOException e) {
                 throw new OperationFailedException(e);
             }
         }
-        return ts;
+        return sequence;
     }
 
-    private Stack stackForAllChannels(int t) throws OperationFailedException {
+    private Stack stackForAllChannels(int timeIndex) throws OperationFailedException {
         Stack out = new Stack();
 
         for (ChannelEntry entry : channelMap.entryCollection()) {
             try {
-                out.addChannel(getChannel(entry.getName(), t, ProgressReporterNull.get()));
+                out.addChannel(getChannel(entry.getName(), timeIndex, ProgressReporterNull.get()));
             } catch (IncorrectImageSizeException | GetOperationFailedException e) {
                 throw new OperationFailedException(e);
             }
@@ -203,10 +211,10 @@ public class NamedChannelsForSeriesMap implements NamedChannelsForSeries {
         return out;
     }
 
-    private TimeSequence extractChannelAsTimeSequence(String channelName, int t)
+    private TimeSequence extractChannelAsTimeSequence(String channelName, int timeIndex)
             throws OperationFailedException {
         try {
-            Channel image = getChannel(channelName, t, ProgressReporterNull.get());
+            Channel image = getChannel(channelName, timeIndex, ProgressReporterNull.get());
             return new TimeSequence(new Stack(image));
         } catch (GetOperationFailedException e) {
             throw new OperationFailedException(e);

@@ -187,12 +187,12 @@ public final class UnsignedByteBuffer extends UnsignedBufferAsInt {
     }
 
     /**
-     * Puts a float at the current buffer position, clipping to ensure the value is within the range
+     * Puts a float at the current buffer position, clamping to ensure the value is within the range
      * {@code (0,255)}.
      *
      * @param value the float
      */
-    public void putFloatClipped(float value) {
+    public void putFloatClamped(float value) {
         if (value > UnsignedByteVoxelType.MAX_VALUE_INT) {
             value = UnsignedByteVoxelType.MAX_VALUE_INT;
         }
@@ -208,12 +208,12 @@ public final class UnsignedByteBuffer extends UnsignedBufferAsInt {
     }
 
     /**
-     * Puts a double at the current buffer position, clipping to ensure the value is within the
+     * Puts a double at the current buffer position, clamping to ensure the value is within the
      * range {@code (0,255)}.
      *
      * @param value the double
      */
-    public void putDoubleClipped(double value) {
+    public void putDoubleClamped(double value) {
         if (value > 255) {
             value = 255;
         }

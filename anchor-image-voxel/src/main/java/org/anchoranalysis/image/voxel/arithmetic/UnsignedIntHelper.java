@@ -39,26 +39,26 @@ class UnsignedIntHelper {
     public static void calculateForEveryVoxel(
             UnsignedIntBuffer buffer, LongUnaryOperator operator) {
         while (buffer.hasRemaining()) {
-            putClipped(buffer, operator.applyAsLong(buffer.getUnsigned()));
+            putClamped(buffer, operator.applyAsLong(buffer.getUnsigned()));
         }
     }
 
     public static void calculateForIndex(
             UnsignedIntBuffer buffer, int index, LongUnaryOperator operator) {
-        putClippedAtIndex(buffer, operator.applyAsLong(buffer.getUnsigned(index)), index);
+        putClampedAtIndex(buffer, operator.applyAsLong(buffer.getUnsigned(index)), index);
     }
 
-    /** Put a (clipped via a long) double-value at previous buffer position. */
-    private static void putClipped(UnsignedIntBuffer buffer, long valueToAssign) {
-        putClippedAtIndex(buffer, valueToAssign, buffer.position() - 1);
+    /** Put a (clamped via a long) double-value at previous buffer position. */
+    private static void putClamped(UnsignedIntBuffer buffer, long valueToAssign) {
+        putClampedAtIndex(buffer, valueToAssign, buffer.position() - 1);
     }
 
-    /** Put a (clipped) double-value at previous buffer position */
-    private static void putClippedAtIndex(UnsignedIntBuffer buffer, long valueToAssign, int index) {
-        buffer.putUnsigned(index, clip(valueToAssign));
+    /** Put a (clamped) double-value at previous buffer position */
+    private static void putClampedAtIndex(UnsignedIntBuffer buffer, long valueToAssign, int index) {
+        buffer.putUnsigned(index, clamp(valueToAssign));
     }
 
-    private static long clip(long value) {
+    private static long clamp(long value) {
         if (value < 0) {
             return 0;
         }

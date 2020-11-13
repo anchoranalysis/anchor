@@ -96,7 +96,7 @@ public class MPPInitParamsFactory {
             ImageInitParams soImage = soMPP.getImage();
 
             if (stacks.isPresent()) {
-                soImage.copyStackCollectionFrom(stacks.get());
+                soImage.copyStacksFrom(stacks.get());
             }
 
             if (objects.isPresent()) {

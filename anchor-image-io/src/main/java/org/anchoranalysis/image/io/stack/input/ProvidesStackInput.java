@@ -44,15 +44,15 @@ import org.anchoranalysis.io.input.InputFromManager;
 public interface ProvidesStackInput extends InputFromManager {
 
     /**
-     * Exposes the input as a set of named stacks (infering the names)
+     * Exposes the input as a set of named stacks (inferring the names)
      *
-     * @param progressReporter a progress-reporter
+     * @param progress a progress-reporter
      * @return a set of named-stacks
      * @throws OperationFailedException
      */
-    default NamedStacks asSet(ProgressReporter progressReporter) throws OperationFailedException {
+    default NamedStacks asSet(ProgressReporter progress) throws OperationFailedException {
         NamedStacks set = new NamedStacks();
-        addToStoreInferNames(new WrapStackAsTimeSequenceStore(set, 0), 0, progressReporter);
+        addToStoreInferNames(new WrapStackAsTimeSequenceStore(set, 0), 0, progress);
         return set;
     }
 
@@ -75,20 +75,20 @@ public interface ProvidesStackInput extends InputFromManager {
      *
      * @param stacks
      * @param seriesIndex
-     * @param progressReporter
+     * @param progress
      * @throws OperationFailedException
      */
     void addToStoreInferNames(
             NamedProviderStore<TimeSequence> stacks,
             int seriesIndex,
-            ProgressReporter progressReporter)
+            ProgressReporter progress)
             throws OperationFailedException;
 
     void addToStoreWithName(
             String name,
             NamedProviderStore<TimeSequence> stacks,
             int seriesIndex,
-            ProgressReporter progressReporter)
+            ProgressReporter progress)
             throws OperationFailedException;
 
     int numberFrames() throws OperationFailedException;

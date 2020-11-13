@@ -261,7 +261,7 @@ public class OutputterChecked {
      * @return a newly created absolute path, combining directory, prefix (if it exists) and suffix.
      */
     public Path makeOutputPath(String suffix) {
-        return target.pathCreator().makePathAbsolute(suffix);
+        return target.pathCreator().makePathAbsolute( Optional.of(suffix), Optional.empty() );
     }
 
     /**
@@ -271,8 +271,8 @@ public class OutputterChecked {
      * @return a newly created absolute path, combining directory, prefix (if it exists), suffix and
      *     extension.
      */
-    public Path makeOutputPath(String suffixWithoutExtension, String extension) {
-        return makeOutputPath(suffixWithoutExtension + "." + extension);
+    public Path makeOutputPath(Optional<String> suffixWithoutExtension, String extension) {
+        return target.pathCreator().makePathAbsolute( suffixWithoutExtension, Optional.of(extension) );
     }
 
     public DirectoryWithPrefix getPrefix() {

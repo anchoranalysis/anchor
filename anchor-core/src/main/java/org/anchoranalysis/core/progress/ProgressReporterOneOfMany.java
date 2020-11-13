@@ -30,18 +30,18 @@ public class ProgressReporterOneOfMany implements ProgressReporter {
 
     private int min;
     private int max;
-    private ProgressReporterMultiple progressReporterParent;
+    private final ProgressReporterMultiple parent;
 
     private int range;
 
-    public ProgressReporterOneOfMany(ProgressReporterMultiple progressReporterParent) {
-        this(progressReporterParent, 0, 1);
+    public ProgressReporterOneOfMany(ProgressReporterMultiple parent) {
+        this(parent, 0, 1);
     }
 
     public ProgressReporterOneOfMany(
-            ProgressReporterMultiple progressReporterParent, int min, int max) {
+            ProgressReporterMultiple parent, int min, int max) {
         super();
-        this.progressReporterParent = progressReporterParent;
+        this.parent = parent;
         this.min = min;
         this.max = max;
         updateRange();
@@ -61,12 +61,12 @@ public class ProgressReporterOneOfMany implements ProgressReporter {
 
         int valRec = val - min;
         double progress = (((double) valRec) / range) * 100;
-        progressReporterParent.update(progress);
+        parent.update(progress);
     }
 
     @Override
     public void close() {
-        progressReporterParent.update(100.0);
+        parent.update(100.0);
     }
 
     @Override

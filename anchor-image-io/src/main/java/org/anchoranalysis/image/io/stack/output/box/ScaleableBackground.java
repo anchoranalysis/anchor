@@ -150,7 +150,7 @@ public class ScaleableBackground {
     private Stack extractStackScaled(BoundingBox box, ScaleFactor scaleFactor)
             throws OperationFailedException {
         // What would the bounding box look like in the unscaled window?
-        BoundingBox boxUnscaled = box.scaleClipTo(scaleFactor.invert(), stack.extent());
+        BoundingBox boxUnscaled = box.scaleClampTo(scaleFactor.invert(), stack.extent());
 
         return stack.getStack()
                 .mapChannel(channel -> extractChannelScaled(channel, boxUnscaled, box));

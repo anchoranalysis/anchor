@@ -37,15 +37,21 @@ import org.anchoranalysis.image.core.stack.Stack;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class StackWriteOptionsFactory {
 
-    private static final StackWriteOptions RGB_ALWAYS_2D = new StackWriteOptions(true, true, true);
+    private static final StackWriteOptions RGB_ALWAYS_2D = new StackWriteOptions(true, false, true, true);
 
-    private static final StackWriteOptions RGB_MAYBE_3D = new StackWriteOptions(false, true, true);
+    private static final StackWriteOptions RGB_MAYBE_3D = new StackWriteOptions(false, false, true, true);
 
-    private static final StackWriteOptions ONE_OR_THREE_CHANNELS_ALWAYS_2D =
-            new StackWriteOptions(true, true, false);
+    private static final StackWriteOptions THREE_CHANNELS_ALWAYS_2D =
+            new StackWriteOptions(true, false, true, false);
 
-    private static final StackWriteOptions ONE_OR_THREE_CHANNELS_MAYBE_3D =
-            new StackWriteOptions(false, true, false);
+    private static final StackWriteOptions THREE_CHANNELS_MAYBE_3D =
+            new StackWriteOptions(false, false, true, false);
+    
+    private static final StackWriteOptions SINGLE_CHANNEL_ALWAYS_2D =
+            new StackWriteOptions(true, true, false, false);
+
+    private static final StackWriteOptions SINGLE_CHANNEL_MAYBE_3D =
+            new StackWriteOptions(false, true, false, false);
 
     /**
      * Creates a {@link StackWriteOptions} which depending on a flag will always be 2D.
@@ -54,7 +60,7 @@ public class StackWriteOptionsFactory {
      * @return a newly created {@link StackWriteOptions}
      */
     public static StackWriteOptions maybeAlways2D(boolean always2D) {
-        return new StackWriteOptions(always2D, false, false);
+        return new StackWriteOptions(always2D, false, false, false);
     }
 
     public static StackWriteOptions rgbAlways2D() {
@@ -71,19 +77,15 @@ public class StackWriteOptionsFactory {
 
     public static StackWriteOptions singleChannelMaybe3D(boolean always2D) {
         if (always2D) {
-            return ONE_OR_THREE_CHANNELS_ALWAYS_2D;
+            return SINGLE_CHANNEL_ALWAYS_2D;
         } else {
-            return ONE_OR_THREE_CHANNELS_MAYBE_3D;
+            return SINGLE_CHANNEL_MAYBE_3D;
         }
-    }
-
-    public static StackWriteOptions alwaysOneOrThreeChannels(boolean always2D) {
-        return singleChannelMaybe3D(always2D);
     }
 
     public static StackWriteOptions maybeRGB(boolean rgb, boolean always2D) {
         if (always2D) {
-            return new StackWriteOptions(true, rgb, rgb);
+            return new StackWriteOptions(true, false, rgb, rgb);
         } else {
             return maybeRGB(rgb);
         }
@@ -93,7 +95,7 @@ public class StackWriteOptionsFactory {
         if (rgb) {
             return RGB_MAYBE_3D;
         } else {
-            return new StackWriteOptions(false, false, false);
+            return new StackWriteOptions(false, false, false, false);
         }
     }
 
@@ -118,12 +120,16 @@ public class StackWriteOptionsFactory {
             if (stack.isRgb()) {
                 return rgb(singleSlice);
             } else {
-                return alwaysOneOrThreeChannels(singleSlice);
+                return threeChannels(singleSlice);
             }
         } else if (numberChannels == 1) {
-            return alwaysOneOrThreeChannels(singleSlice);
+            return singleChannelMaybe3D(singleSlice);
         } else {
-            return new StackWriteOptions(singleSlice, false, false);
+            return new StackWriteOptions(singleSlice, false, false, false);
         }
+    }
+
+    private static StackWriteOptions threeChannels(boolean always2D) {
+        return always2D ? THREE_CHANNELS_ALWAYS_2D : THREE_CHANNELS_MAYBE_3D;
     }
 }

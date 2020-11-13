@@ -57,9 +57,9 @@ public class NamedChannelsForSeriesConcatenate implements NamedChannelsForSeries
 
         for (NamedChannelsForSeries item : list) {
 
-            Optional<Channel> c = item.getChannelOptional(channelName, timeIndex, progressReporter);
-            if (c.isPresent()) {
-                return c.get();
+            Optional<Channel> channel = item.getChannelOptional(channelName, timeIndex, progressReporter);
+            if (channel.isPresent()) {
+                return channel.get();
             }
         }
 
@@ -69,14 +69,14 @@ public class NamedChannelsForSeriesConcatenate implements NamedChannelsForSeries
 
     @Override
     public Optional<Channel> getChannelOptional(
-            String channelName, int t, ProgressReporter progressReporter)
+            String channelName, int timeIndex, ProgressReporter progressReporter)
             throws GetOperationFailedException {
 
         for (NamedChannelsForSeries item : list) {
 
-            Optional<Channel> c = item.getChannelOptional(channelName, t, progressReporter);
-            if (c.isPresent()) {
-                return c;
+            Optional<Channel> channel = item.getChannelOptional(channelName, timeIndex, progressReporter);
+            if (channel.isPresent()) {
+                return channel;
             }
         }
 
@@ -92,15 +92,15 @@ public class NamedChannelsForSeriesConcatenate implements NamedChannelsForSeries
 
             for (NamedChannelsForSeries item : list) {
                 item.addAsSeparateChannels(stackCollection, t, new ProgressReporterOneOfMany(prm));
-                prm.incrWorker();
+                prm.incrementWorker();
             }
         }
     }
 
-    public void addAsSeparateChannels(NamedProviderStore<TimeSequence> stackCollection, int t)
+    public void addAsSeparateChannels(NamedProviderStore<TimeSequence> stackCollection, int timeIndex)
             throws OperationFailedException {
         for (NamedChannelsForSeries item : list) {
-            item.addAsSeparateChannels(stackCollection, t);
+            item.addAsSeparateChannels(stackCollection, timeIndex);
         }
     }
 
@@ -108,6 +108,12 @@ public class NamedChannelsForSeriesConcatenate implements NamedChannelsForSeries
         return list.add(e);
     }
 
+
+    @Override
+    public int numberChannels() {
+        return list.stream().mapToInt(NamedChannelsForSeries::numberChannels).sum();
+    }
+    
     public Set<String> channelNames() {
         HashSet<String> set = new HashSet<>();
         for (NamedChannelsForSeries item : list) {
@@ -156,11 +162,17 @@ public class NamedChannelsForSeriesConcatenate implements NamedChannelsForSeries
         return StoreSupplier.cache(() -> stackAllChannels(t));
     }
 
+    @Override
+    public boolean isRGB() throws ImageIOException {
+        // Assume once a concatenation happens, it is no longer a RGB file.
+        return false;
+    }
+    
     private Stack stackAllChannels(int timeIndex) throws OperationFailedException {
         Stack out = new Stack();
-        for (NamedChannelsForSeries ncc : list) {
+        for (NamedChannelsForSeries namedChannels : list) {
             try {
-                addAllChannelsFrom(ncc.allChannelsAsStack(timeIndex).get(), out);
+                addAllChannelsFrom(namedChannels.allChannelsAsStack(timeIndex).get(), out);
             } catch (IncorrectImageSizeException e) {
                 throw new OperationFailedException(e);
             }

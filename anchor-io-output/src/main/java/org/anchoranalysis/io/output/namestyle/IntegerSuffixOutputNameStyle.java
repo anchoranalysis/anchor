@@ -74,7 +74,7 @@ public class IntegerSuffixOutputNameStyle extends IndexableOutputNameStyle {
     }
 
     @Override
-    protected String nameFromOutputFormatString(String outputFormatString, String index) {
+    protected String filenameFromOutputFormatString(String outputFormatString, String index) {
         int indexInt = Integer.parseInt(index);
         return String.format(outputFormatString, indexInt);
     }
