@@ -30,7 +30,7 @@ import java.nio.file.Path;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.ImageIOException;
-import org.anchoranalysis.image.io.bean.stack.StackWriter;
+import org.anchoranalysis.image.io.bean.stack.writer.StackWriter;
 import org.anchoranalysis.image.io.stack.output.StackWriteOptions;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;

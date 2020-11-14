@@ -62,8 +62,8 @@ public class OutputManagerFixture {
         // We populate any defaults in OutputWriteSettings from our default bean factory
         try {
             settings.checkMisconfigured(RegisterBeanFactories.getDefaultInstances());
-        } catch (BeanMisconfiguredException e1) {
-            throw new AnchorFriendlyRuntimeException(e1);
+        } catch (BeanMisconfiguredException e) {
+            throw new AnchorFriendlyRuntimeException(e);
         }
 
         return settings;

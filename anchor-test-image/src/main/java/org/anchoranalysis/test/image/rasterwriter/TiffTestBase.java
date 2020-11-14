@@ -28,7 +28,7 @@ package org.anchoranalysis.test.image.rasterwriter;
 import java.io.IOException;
 import java.util.Optional;
 import org.anchoranalysis.image.io.ImageIOException;
-import org.anchoranalysis.image.io.bean.stack.StackWriter;
+import org.anchoranalysis.image.io.bean.stack.writer.StackWriter;
 import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.test.image.rasterwriter.comparison.ComparisonPlan;

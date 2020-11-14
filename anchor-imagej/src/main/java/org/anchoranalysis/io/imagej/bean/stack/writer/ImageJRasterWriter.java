@@ -32,7 +32,7 @@ import java.nio.file.Path;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.ImageIOException;
-import org.anchoranalysis.image.io.bean.stack.StackWriter;
+import org.anchoranalysis.image.io.bean.stack.writer.StackWriter;
 import org.anchoranalysis.image.io.stack.output.StackWriteOptions;
 import org.anchoranalysis.io.imagej.convert.ConvertToImagePlus;
 import org.apache.commons.logging.Log;

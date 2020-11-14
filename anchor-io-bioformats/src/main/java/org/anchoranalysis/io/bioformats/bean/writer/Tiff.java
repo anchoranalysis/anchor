@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-image-io
+ * anchor-plugin-io
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -24,49 +24,60 @@
  * #L%
  */
 
-package org.anchoranalysis.image.io.stack.output.generator;
+package org.anchoranalysis.io.bioformats.bean.writer;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.exception.OperationFailedException;
+import java.nio.file.Path;
+import loci.formats.FormatException;
+import loci.formats.IFormatWriter;
+import loci.formats.out.TiffWriter;
+import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.ImageIOException;
-import org.anchoranalysis.image.io.bean.stack.writer.StackWriter;
 import org.anchoranalysis.image.io.stack.output.StackWriteOptions;
-import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 
 /**
- * Settings and methods for writing to the filesystem from a generator.
+ * Writes a stack to the filesystem as a TIFF using the <a
+ * href="https://www.openmicroscopy.org/bio-formats/">Bioformats</a> library.
  *
  * @author Owen Feehan
  */
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class GeneratorOutputter {
+public class Tiff extends BioformatsWriter {
 
     /**
-     * Gets the default {@link StackWriter}.
-     *
-     * @param outputWriteSettings
-     * @return a writer (always non-null)
-     * @throws ImageIOException if a writer doesn't exist
+     * Default constructor.
      */
-    public static StackWriter writer(OutputWriteSettings outputWriteSettings)
-            throws ImageIOException {
-        StackWriter defaultWriter =
-                (StackWriter) outputWriteSettings.getWriterInstance(StackWriter.class);
-        if (defaultWriter == null) {
-            throw new ImageIOException("No default stackWriter has been set");
-        }
-        // We duplicate the writer to make it thread safe
-        return defaultWriter;
+    public Tiff() {
+        super(true);
     }
 
-    public static String fileExtensionWriter(
-            OutputWriteSettings outputWriteSettings, StackWriteOptions writeOptions)
-            throws OperationFailedException {
+    @Override
+    public void writeStack(Stack stack, Path filePath, StackWriteOptions options)
+            throws ImageIOException {
+
+        if (!(stack.getNumberChannels() == 1 || stack.getNumberChannels() == 3)) {
+            throw new ImageIOException("Stack must have 1 or 3 channels");
+        }
+
+        super.writeStack(stack, filePath, options);
+    }
+
+    // A default extension
+    @Override
+    public String fileExtension(StackWriteOptions writeOptions) {
+        return "tif";
+    }
+
+    @Override
+    protected IFormatWriter createWriter() throws ImageIOException {
         try {
-            return writer(outputWriteSettings).fileExtension(writeOptions);
-        } catch (ImageIOException e) {
-            throw new OperationFailedException(e);
+            TiffWriter writer = new TiffWriter(); // NOSONAR
+            // COMPRESSION CURRENTLY DISABLED
+            writer.setCompression("LZW");
+            writer.setBigTiff(false);
+            writer.setValidBitsPerPixel(8);
+            writer.setWriteSequentially(true);
+            return writer;
+        } catch (FormatException e) {
+            throw new ImageIOException(e);
         }
     }
 }

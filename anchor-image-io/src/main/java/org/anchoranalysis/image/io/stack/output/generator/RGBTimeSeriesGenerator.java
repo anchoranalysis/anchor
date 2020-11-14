@@ -31,7 +31,7 @@ import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.io.ImageIOException;
-import org.anchoranalysis.image.io.bean.stack.StackWriter;
+import org.anchoranalysis.image.io.bean.stack.writer.StackWriter;
 import org.anchoranalysis.image.io.stack.StackSeries;
 import org.anchoranalysis.image.io.stack.output.StackWriteOptions;
 import org.anchoranalysis.io.generator.OneStageGenerator;

@@ -26,7 +26,7 @@
 package org.anchoranalysis.test.image.rasterwriter;
 
 import lombok.RequiredArgsConstructor;
-import org.anchoranalysis.image.io.bean.stack.StackWriter;
+import org.anchoranalysis.image.io.bean.stack.writer.StackWriter;
 import org.anchoranalysis.image.voxel.datatype.FloatVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedIntVoxelType;

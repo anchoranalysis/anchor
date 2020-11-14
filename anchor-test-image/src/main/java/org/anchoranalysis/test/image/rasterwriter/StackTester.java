@@ -34,7 +34,7 @@ import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.ImageIOException;
-import org.anchoranalysis.image.io.bean.stack.StackWriter;
+import org.anchoranalysis.image.io.bean.stack.writer.StackWriter;
 import org.anchoranalysis.image.io.stack.output.StackWriteOptions;
 import org.anchoranalysis.image.io.stack.output.StackWriteOptionsFactory;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;

@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-image-io
+ * anchor-plugin-io
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -23,51 +23,44 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.image.io.bean.stack;
+package org.anchoranalysis.image.io.bean.stack.writer;
 
 import java.nio.file.Path;
-import lombok.Getter;
-import lombok.Setter;
-import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.stack.StackSeries;
 import org.anchoranalysis.image.io.stack.output.StackWriteOptions;
 
 /**
- * A base-class for a raster-writer that writes only one or three channeled images, and a flexible
- * extension.
+ * A base class for a {@link StackWriter} delegates to another {@link StackWriter} based on values
+ * of a {@link StackWriteOptions}.
  *
  * @author Owen Feehan
  */
-public abstract class OneOrThreeChannelsWriter extends StackWriter {
-
-    // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private String extension = "png";
-    // END BEAN PROPERTIES
+public abstract class StackWriterDelegateBase extends StackWriter {
 
     @Override
     public String fileExtension(StackWriteOptions writeOptions) {
-        return extension;
-    }
-
-    @Override
-    public void writeStackSeries(StackSeries stackSeries, Path filePath, StackWriteOptions options)
-            throws ImageIOException {
-        throw new ImageIOException("Writing time-series is unsupported for this format");
+        return selectDelegate(writeOptions).fileExtension(writeOptions);
     }
 
     @Override
     public void writeStack(Stack stack, Path filePath, StackWriteOptions options)
             throws ImageIOException {
-
-        if (stack.getNumberChannels() == 3 && !options.isRgb()) {
-            throw new ImageIOException("3-channel images can only be created as RGB");
-        }
-
-        writeStackAfterCheck(stack, filePath);
+        selectDelegate(options).writeStack(stack, filePath, options);
     }
 
-    protected abstract void writeStackAfterCheck(Stack stack, Path filePath)
-            throws ImageIOException;
+    @Override
+    public void writeStackSeries(StackSeries stackSeries, Path filePath, StackWriteOptions options)
+            throws ImageIOException {
+        selectDelegate(options).writeStackSeries(stackSeries, filePath, options);
+    }
+
+    /**
+     * Selects a {@link StackWriter} to use as a delegate.
+     *
+     * @param writeOptions options that specify what kind of rasters will be written.
+     * @return the selected {@link StackWriter}
+     */
+    protected abstract StackWriter selectDelegate(StackWriteOptions writeOptions);
 }
