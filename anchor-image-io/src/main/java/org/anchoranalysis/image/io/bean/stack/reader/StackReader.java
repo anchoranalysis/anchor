@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.image.io.bean.stack;
+package org.anchoranalysis.image.io.bean.stack.reader;
 
 import java.nio.file.Path;
 import org.anchoranalysis.bean.AnchorBean;

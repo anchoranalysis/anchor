@@ -35,10 +35,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.functional.FunctionalList;
-import org.anchoranalysis.image.io.bean.stack.StackReader;
+import org.anchoranalysis.image.io.bean.stack.reader.InputManagerWithStackReader;
 import org.anchoranalysis.image.io.stack.input.ProvidesStackInput;
 import org.anchoranalysis.io.input.InputReadFailedException;
 import org.anchoranalysis.io.input.bean.InputManager;
@@ -48,15 +47,12 @@ import org.anchoranalysis.mpp.io.input.MultiInput;
 
 // An input stack
 @NoArgsConstructor
-public class MultiInputManager extends InputManager<MultiInput> {
+public class MultiInputManager extends InputManagerWithStackReader<MultiInput> {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private String inputName = MultiInput.DEFAULT_IMAGE_INPUT_NAME;
 
     @BeanField @Getter @Setter private InputManager<? extends ProvidesStackInput> input;
-
-    @BeanField @DefaultInstance @Getter @Setter
-    private StackReader stackReader; // For reading appended files
 
     @BeanField @OptionalBean @Getter @Setter
     private List<NamedBean<DerivePath>> appendStack = new ArrayList<>();
@@ -107,7 +103,7 @@ public class MultiInputManager extends InputManager<MultiInput> {
     }
 
     private void appendFromLists(MultiInput input, boolean doDebug) {
-        appendStack(appendStack, input, doDebug, stackReader);
+        appendStack(appendStack, input, doDebug, getStackReader());
         appendFromVariousMarksSources(input, doDebug);
         appendObjects(appendObjects, input, doDebug);
         appendKeyValueParams(listAppendKeyValueParams, input, doDebug);

@@ -23,4 +23,5 @@
  * THE SOFTWARE.
  * #L%
  */
+/** Bean classes for writing raster-files to the filesystem. */
 package org.anchoranalysis.image.io.bean.stack.writer;
