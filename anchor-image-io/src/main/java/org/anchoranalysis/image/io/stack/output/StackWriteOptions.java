@@ -116,6 +116,6 @@ public class StackWriteOptions {
      * @return true if the stack should be written as RGB, false otherwise.
      */
     public boolean writeAsRGB(Stack stack) {
-        return rgb && stack.getNumberChannels() == 3 && stack.isRgb();
+        return rgb && stack.getNumberChannels() == 3 && stack.isRGB();
     }
 }

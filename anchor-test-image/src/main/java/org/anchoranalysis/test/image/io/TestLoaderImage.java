@@ -48,16 +48,15 @@ import org.anchoranalysis.test.TestLoader;
 public class TestLoaderImage {
 
     /** Delegate loader (for non image-related loading) */
-    @Getter private TestLoader loader;
+    @Getter private final TestLoader loader;
 
     /** Reads rasters from filesystem */
-    private StackReader stackReader;
+    private final StackReader stackReader;
 
     public TestLoaderImage(TestLoader loader) {
-        this.loader = loader;
-
         TestReaderWriterUtilities.ensureStackReader();
-        stackReader = RegisterBeanFactories.getDefaultInstances().get(StackReader.class);
+        this.loader = loader;
+        this.stackReader = RegisterBeanFactories.getDefaultInstances().get(StackReader.class);
     }
 
     public Channel openChannelFromTestPath(String testPath) {

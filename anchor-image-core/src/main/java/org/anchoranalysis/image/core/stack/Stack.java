@@ -33,7 +33,6 @@ import java.util.Optional;
 import java.util.stream.Stream;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.core.functional.FunctionalIterate;
@@ -66,7 +65,7 @@ public class Stack implements Iterable<Channel> {
      * <p>This is an important flag for determining how a stack is displayed visually, determining
      * whether a stack is portrayed as a color image or composite grayscale channels.
      */
-    @Getter private final boolean rgb;
+    private final boolean rgb;
 
     /** An internal data-structure where the stacks are stored. */
     private final StackNotUniformSized delegate;
@@ -407,5 +406,16 @@ public class Stack implements Iterable<Channel> {
         for (Channel channel : this) {
             channel.updateResolution(Optional.of(resolution));
         }
+    }
+
+    /**
+     * If true, and the stack has exactly three channels, this stack can be interpreted as a RGB
+     * image.
+     *
+     * <p>This is an important flag for determining how a stack is displayed visually, determining
+     * whether a stack is portrayed as a color image or composite grayscale channels.
+     */
+    public boolean isRGB() {
+        return rgb;
     }
 }

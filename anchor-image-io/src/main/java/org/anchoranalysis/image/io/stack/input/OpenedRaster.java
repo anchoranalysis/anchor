@@ -63,8 +63,7 @@ public interface OpenedRaster extends AutoCloseable {
 
     int numberSeries();
 
-    // Can be null if no channel names exist
-    Optional<List<String>> channelNames();
+    Optional<List<String>> channelNames() throws ImageIOException;
 
     int numberChannels() throws ImageIOException;
 

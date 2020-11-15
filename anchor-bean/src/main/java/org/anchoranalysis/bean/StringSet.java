@@ -30,6 +30,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.stream.Stream;
 import lombok.NoArgsConstructor;
 
 /**
@@ -82,6 +83,10 @@ public class StringSet extends AnchorBean<StringSet> implements StringBeanCollec
         return set.isEmpty();
     }
 
+    public Stream<String> stream() {
+        return set.stream();
+    }
+    
     /**
      * Duplicate the bean
      *

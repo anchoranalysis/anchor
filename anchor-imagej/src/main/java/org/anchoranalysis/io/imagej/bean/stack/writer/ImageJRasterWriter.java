@@ -58,7 +58,7 @@ public abstract class ImageJRasterWriter extends StackWriter {
             throw new ImageIOException("Stack must have identically-typed channels");
         }
         
-        if (stack.getNumberChannels() == 3 && !stack.isRgb()) {
+        if (stack.getNumberChannels() == 3 && !stack.isRGB()) {
             throw new ImageIOException("A three-channeled stack must have the RGB flag set to true.");
         }
 
