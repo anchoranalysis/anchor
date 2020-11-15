@@ -45,28 +45,28 @@ import org.anchoranalysis.io.input.files.FilesProviderException;
 public class KeyValueParamsProviderFromFile extends KeyValueParamsProvider {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private FilesProvider filesProvider;
+    @BeanField @Getter @Setter private FilesProvider files;
     // END BEAN PROPERTIES
 
     @Override
     public KeyValueParams create() throws CreateException {
         try {
-            Collection<File> files =
-                    filesProvider.create(
+            Collection<File> providedFiles =
+                    files.create(
                             new InputManagerParams(
                                     new InputContextParams(),
                                     ProgressIgnore.get(),
                                     getLogger()));
 
-            if (files.isEmpty()) {
+            if (providedFiles.isEmpty()) {
                 throw new CreateException("No files are provided");
             }
 
-            if (files.size() > 1) {
+            if (providedFiles.size() > 1) {
                 throw new CreateException("More than one file is provided");
             }
 
-            Path filePath = files.iterator().next().toPath();
+            Path filePath = providedFiles.iterator().next().toPath();
             return KeyValueParams.readFromFile(filePath);
 
         } catch (IOException e) {

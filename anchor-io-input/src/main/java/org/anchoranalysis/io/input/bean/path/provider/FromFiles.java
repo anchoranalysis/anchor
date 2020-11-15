@@ -50,16 +50,16 @@ public class FromFiles extends FilePathProvider {
 
     // START BEAN PROPERTIES
     /** A provider that should return exactly one {@link File} whose path is employed. */
-    @BeanField @Getter @Setter private FilesProvider filesProvider;
+    @BeanField @Getter @Setter private FilesProvider files;
     // END BEAN PROPERTIES
 
     @Override
     public Path create() throws CreateException {
 
-        Collection<File> files;
+        Collection<File> filesCreated;
         try {
-            files =
-                    filesProvider.create(
+            filesCreated =
+                    files.create(
                             new InputManagerParams(
                                     new InputContextParams(),
                                     ProgressIgnore.get(),
@@ -68,13 +68,13 @@ public class FromFiles extends FilePathProvider {
             throw new CreateException("Cannot find files", e);
         }
 
-        if (files.size() != 1) {
+        if (filesCreated.size() != 1) {
             throw new CreateException(
                     String.format(
-                            "filesProvider must return one file. Instead, it returned %d files.",
-                            files.size()));
+                            "files must return one file. Instead, it returned %d files.",
+                            filesCreated.size()));
         }
 
-        return files.iterator().next().toPath();
+        return filesCreated.iterator().next().toPath();
     }
 }

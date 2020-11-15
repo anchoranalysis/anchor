@@ -46,18 +46,18 @@ import org.anchoranalysis.io.input.files.FilesProviderException;
 public abstract class FilesProviderWithDirectoryUnary extends FilesProviderWithDirectory {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private FilesProviderWithDirectory filesProvider;
+    @BeanField @Getter @Setter private FilesProviderWithDirectory files;
     // END BEAN PROPERTIES
 
     @Override
     public Collection<File> matchingFilesForDirectory(Path directory, InputManagerParams params)
             throws FilesProviderException {
-        return transform(filesProvider.matchingFilesForDirectory(directory, params));
+        return transform(files.matchingFilesForDirectory(directory, params));
     }
 
     @Override
     public Path getDirectoryAsPath(InputContextParams inputContext) {
-        return filesProvider.getDirectoryAsPath(inputContext);
+        return files.getDirectoryAsPath(inputContext);
     }
 
     /**

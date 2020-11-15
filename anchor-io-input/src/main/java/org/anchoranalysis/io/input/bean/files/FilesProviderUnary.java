@@ -42,12 +42,12 @@ import org.anchoranalysis.io.input.files.FilesProviderException;
 public abstract class FilesProviderUnary extends FilesProvider {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private FilesProvider filesProvider;
+    @BeanField @Getter @Setter private FilesProvider files;
     // END BEAN PROPERTIES
 
     @Override
     public Collection<File> create(InputManagerParams params) throws FilesProviderException {
-        return transform(filesProvider.create(params), params.isDebugModeActivated());
+        return transform(files.create(params), params.isDebugModeActivated());
     }
 
     /**
