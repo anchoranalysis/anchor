@@ -31,6 +31,7 @@ import java.util.function.Function;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.image.core.stack.RGBChannelNames;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
@@ -107,9 +108,9 @@ public class BufferedImageFactory {
         byte[] combined =
                 createCombinedByteArray(
                         e,
-                        firstBuffer(red, e, "red"),
-                        firstBuffer(green, e, "green"),
-                        firstBuffer(blue, e, "blue"));
+                        firstBuffer(red, e, RGBChannelNames.RED),
+                        firstBuffer(green, e, RGBChannelNames.GREEN),
+                        firstBuffer(blue, e, RGBChannelNames.BLUE));
         image.getWritableTile(0, 0).setDataElements(0, 0, e.x(), e.y(), combined);
 
         return image;
