@@ -30,7 +30,7 @@ import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.core.log.error.ErrorReporter;
 import org.anchoranalysis.core.log.error.ErrorReporterIntoLog;
-import org.anchoranalysis.experiment.ExperimentExecutionArguments;
+import org.anchoranalysis.experiment.arguments.ExecutionArguments;
 import org.anchoranalysis.experiment.log.ConsoleMessageLogger;
 import org.anchoranalysis.experiment.log.StatefulMessageLogger;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
@@ -57,7 +57,7 @@ public abstract class LoggingDestination extends AnchorBean<LoggingDestination> 
      */
     public StatefulMessageLogger createWithConsoleFallback(
             OutputterChecked outputter,
-            ExperimentExecutionArguments arguments,
+            ExecutionArguments arguments,
             boolean detailedLogging) {
         return createWithLogFallback(
                 outputter, new ConsoleMessageLogger(), arguments, detailedLogging);
@@ -77,7 +77,7 @@ public abstract class LoggingDestination extends AnchorBean<LoggingDestination> 
     public StatefulMessageLogger createWithLogFallback(
             OutputterChecked outputter,
             MessageLogger fallbackErrorReporter,
-            ExperimentExecutionArguments arguments,
+            ExecutionArguments arguments,
             boolean detailedLogging) {
         return create(
                 outputter,
@@ -99,6 +99,6 @@ public abstract class LoggingDestination extends AnchorBean<LoggingDestination> 
     public abstract StatefulMessageLogger create(
             OutputterChecked outputter,
             ErrorReporter fallbackErrorReporter,
-            ExperimentExecutionArguments arguments,
+            ExecutionArguments arguments,
             boolean detailedLogging);
 }

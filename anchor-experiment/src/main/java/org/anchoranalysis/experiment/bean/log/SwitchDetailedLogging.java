@@ -30,7 +30,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.log.error.ErrorReporter;
-import org.anchoranalysis.experiment.ExperimentExecutionArguments;
+import org.anchoranalysis.experiment.arguments.ExecutionArguments;
 import org.anchoranalysis.experiment.log.StatefulMessageLogger;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
 
@@ -53,7 +53,7 @@ public class SwitchDetailedLogging extends LoggingDestination {
     public StatefulMessageLogger create(
             OutputterChecked bom,
             ErrorReporter errorReporter,
-            ExperimentExecutionArguments arguments,
+            ExecutionArguments arguments,
             boolean detailedLogging) {
         if (detailedLogging) {
             return whenDetailed.create(bom, errorReporter, arguments, detailedLogging);

@@ -30,7 +30,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.log.error.ErrorReporter;
-import org.anchoranalysis.experiment.ExperimentExecutionArguments;
+import org.anchoranalysis.experiment.arguments.ExecutionArguments;
 import org.anchoranalysis.experiment.bean.require.RequireArguments;
 import org.anchoranalysis.experiment.log.StatefulMessageLogger;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
@@ -54,7 +54,7 @@ public class OnlyIf extends LoggingDestination {
     public StatefulMessageLogger create(
             OutputterChecked outputter,
             ErrorReporter errorReporter,
-            ExperimentExecutionArguments arguments,
+            ExecutionArguments arguments,
             boolean detailedLogging) {
         if (requireArguments.hasAllRequiredArguments(arguments.isDebugModeEnabled())) {
             return log.create(outputter, errorReporter, arguments, detailedLogging);

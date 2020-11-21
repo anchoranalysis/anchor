@@ -31,7 +31,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.core.log.error.ErrorReporterIntoLog;
-import org.anchoranalysis.experiment.ExperimentExecutionArguments;
+import org.anchoranalysis.experiment.arguments.ExecutionArguments;
 import org.anchoranalysis.experiment.bean.log.LoggingDestination;
 import org.anchoranalysis.experiment.log.StatefulMessageLogger;
 import org.anchoranalysis.io.manifest.Manifest;
@@ -67,7 +67,7 @@ public class ParametersExperiment {
     @Getter @Setter private LoggingDestination loggerTaskCreator;
 
     public ParametersExperiment(
-            ExperimentExecutionArguments experimentArguments,
+            ExecutionArguments experimentArguments,
             String experimentIdentifier,
             Optional<Manifest> experimentalManifest,
             OutputterChecked outputter,
@@ -95,7 +95,7 @@ public class ParametersExperiment {
         return context.getMessageLogger();
     }
 
-    public ExperimentExecutionArguments getExperimentArguments() {
+    public ExecutionArguments getExperimentArguments() {
         return context.getExperimentArguments();
     }
 

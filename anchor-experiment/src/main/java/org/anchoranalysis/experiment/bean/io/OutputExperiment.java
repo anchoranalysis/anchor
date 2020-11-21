@@ -32,8 +32,8 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.CreateException;
-import org.anchoranalysis.experiment.ExperimentExecutionArguments;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
+import org.anchoranalysis.experiment.arguments.ExecutionArguments;
 import org.anchoranalysis.experiment.bean.Experiment;
 import org.anchoranalysis.experiment.bean.identifier.ExperimentIdentifier;
 import org.anchoranalysis.experiment.bean.log.LoggingDestination;
@@ -97,7 +97,7 @@ public abstract class OutputExperiment extends Experiment {
      *
      * @param arguments additional run-time configuration/parameters that influences the experiment.
      */
-    public final void executeExperiment(ExperimentExecutionArguments arguments)
+    public final void executeExperiment(ExecutionArguments arguments)
             throws ExperimentExecutionException {
 
         try {
@@ -146,12 +146,12 @@ public abstract class OutputExperiment extends Experiment {
         }
     }
 
-    private ParametersExperiment createParams(ExperimentExecutionArguments arguments)
+    private ParametersExperiment createParams(ExecutionArguments arguments)
             throws CreateException {
 
         Manifest experimentalManifest = new Manifest();
 
-        String experimentId = experimentIdentifier.identifier(arguments.getTaskName());
+        String experimentId = experimentIdentifier.identifier(arguments.taskName());
 
         try {
             OutputterChecked rootOutputter =
@@ -162,7 +162,7 @@ public abstract class OutputExperiment extends Experiment {
                                     new RecordedOutputsWithRules(
                                             recordedOutputs,
                                             defaultOutputs(),
-                                            arguments.getOutputEnabledDelta()),
+                                            arguments.output().getOutputEnabledDelta()),
                                     arguments.createPrefixerContext());
 
             Preconditions.checkArgument(rootOutputter.getSettings().hasBeenInitialized());
@@ -183,7 +183,7 @@ public abstract class OutputExperiment extends Experiment {
     }
 
     private StatefulMessageLogger createLogger(
-            OutputterChecked rootOutputter, ExperimentExecutionArguments expArgs) {
+            OutputterChecked rootOutputter, ExecutionArguments expArgs) {
         return logExperiment.createWithConsoleFallback(
                 rootOutputter, expArgs, useDetailedLogging());
     }

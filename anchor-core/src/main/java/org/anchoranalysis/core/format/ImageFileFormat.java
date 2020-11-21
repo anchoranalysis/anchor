@@ -6,6 +6,10 @@ import java.util.stream.Stream;
 /**
  * A type of image format that are read/written to the filesystem, together with the extensions it may use.
  * 
+ * <p>Note this is not a complete list of the types of images that Anchor can read or write,
+ * rather just those that are explicitly mentioned in the code-based, for operations relating
+ * to their extensions.
+ * 
  * @author Owen Feehan
  *
  */

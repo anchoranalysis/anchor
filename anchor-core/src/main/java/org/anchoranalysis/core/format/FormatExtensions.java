@@ -3,6 +3,8 @@ package org.anchoranalysis.core.format;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.Set;
+import java.util.stream.Collectors;
 import org.anchoranalysis.core.serialize.DeserializationFailedException;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -63,14 +65,26 @@ public class FormatExtensions {
         return Paths.get(changeExtension(path.toString(), formatToChangeFrom.extensionWithoutPeriod(), formatToAssign.getDefaultExtension()));
     }
 
-    private static String changeExtension(String path, String extensionToChange, String extensionToAssign) {
-        path = path.substring(0, path.length() - extensionToChange.length());
-        path = path.concat(extensionToAssign);
-        return path;
+    /**
+     * Creates a set of extensions with the leading period.
+     * 
+     * @param extensionsWithPeriod an array with extensions that each have a leading period
+     * @return a set with each element in the array but with the leading period removed.
+     */
+    public static Set<String> removeLeadingPeriod(String[] extensionsWithPeriod) {
+        return Arrays.stream(extensionsWithPeriod)
+                .map(extension -> extension.substring(1))
+                .collect(Collectors.toSet());
     }
     
     static String normalizeToLowerCase(String input) {
         return input.toLowerCase();
+    }
+    
+    private static String changeExtension(String path, String extensionToChange, String extensionToAssign) {
+        path = path.substring(0, path.length() - extensionToChange.length());
+        path = path.concat(extensionToAssign);
+        return path;
     }
     
     private static String[] createExtensionsArray(ImageFileFormat[] formats) {
