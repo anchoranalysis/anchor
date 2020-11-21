@@ -75,7 +75,7 @@ public class ObjectAsMaskGenerator extends RasterGeneratorSelectFormat<ObjectMas
 
     @Override
     public StackWriteOptions guaranteedImageAttributes() {
-        return StackWriteOptionsFactory.binaryChannelMaybe3D();
+        return StackWriteOptionsFactory.binaryChannel(false);
     }
 
     /**

@@ -58,14 +58,22 @@ public class StackWriteOptions {
      * <p>This flag is ignored, when the number of channels is not three.
      */
     private boolean rgb;
+    
+    /**
+     * Whether all channels represent a binary image.
+     * 
+     * <p>This implies each channel has only two allowed states: the max intensity value and the minimum intensity value.
+     */
+    private boolean binary;
 
     /**
      * Derives a {@link StackWriteOptions} that will always be 2D, but is otherwise unchanged.
      *
+     * @param binary whether all channels are binary (only two allowed states: the max intensity value and the minimum intensity value.)
      * @return a newly created {@link StackWriteOptions} derived from the existing object.
      */
-    public StackWriteOptions always2D() {
-        return new StackWriteOptions(true, singleChannel, threeChannels, rgb);
+    public StackWriteOptions always2D(boolean binary) {
+        return new StackWriteOptions(true, singleChannel, threeChannels, rgb, binary);
     }
 
     /**
@@ -74,7 +82,7 @@ public class StackWriteOptions {
      * @return a newly created {@link StackWriteOptions} derived from the existing object.
      */
     public StackWriteOptions rgb() {
-        return new StackWriteOptions(always2D, false, true, true);
+        return new StackWriteOptions(always2D, false, true, true, false);
     }
 
     /**
@@ -90,7 +98,8 @@ public class StackWriteOptions {
                 always2D && other.always2D,
                 singleChannel && other.singleChannel,
                 threeChannels && other.threeChannels,                
-                rgb && other.rgb);
+                rgb && other.rgb,
+                binary && other.binary);
     }
 
     /**
@@ -106,7 +115,8 @@ public class StackWriteOptions {
                 always2D || other.always2D,
                 singleChannel || other.singleChannel,
                 threeChannels || other.threeChannels,
-                rgb || other.rgb);
+                rgb || other.rgb,
+                binary || other.binary);
     }
 
     /**

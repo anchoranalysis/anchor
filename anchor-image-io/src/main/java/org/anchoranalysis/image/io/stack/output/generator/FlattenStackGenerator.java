@@ -38,13 +38,13 @@ import org.anchoranalysis.image.io.stack.output.StackWriteOptions;
  */
 public class FlattenStackGenerator extends RasterGeneratorDelegateToRaster<Stack, Stack> {
 
-    public FlattenStackGenerator(boolean padIfNec, String manifestFunction) {
-        super(new StackGenerator(padIfNec, Optional.of(manifestFunction), true));
+    public FlattenStackGenerator(boolean padIfNecessary, String manifestFunction) {
+        super(new StackGenerator(padIfNecessary, Optional.of(manifestFunction), true));
     }
 
     @Override
     public StackWriteOptions guaranteedImageAttributes() {
-        return super.guaranteedImageAttributes().always2D();
+        return super.guaranteedImageAttributes().always2D(false);
     }
 
     @Override
