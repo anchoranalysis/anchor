@@ -27,6 +27,7 @@
 package org.anchoranalysis.io.imagej.bean.stack.writer;
 
 import ij.io.FileSaver;
+import org.anchoranalysis.core.format.ImageFileFormat;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.stack.output.StackWriteOptions;
 
@@ -52,6 +53,6 @@ public class PNG extends NoTimeSeries {
 
     @Override
     public String fileExtension(StackWriteOptions writeOptions) {
-        return "png";
+        return ImageFileFormat.PNG.getDefaultExtension();
     }
 }

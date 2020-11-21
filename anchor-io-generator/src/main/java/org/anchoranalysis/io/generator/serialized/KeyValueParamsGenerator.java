@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
+import org.anchoranalysis.core.format.NonImageFileFormat;
 import org.anchoranalysis.core.value.KeyValueParams;
 import org.anchoranalysis.io.generator.OneStageGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
@@ -54,7 +55,7 @@ public class KeyValueParamsGenerator extends OneStageGenerator<KeyValueParams> {
 
     @Override
     public String selectFileExtension(OutputWriteSettings outputWriteSettings) {
-        return "xml";
+        return NonImageFileFormat.XML.extensionWithoutPeriod();
     }
 
     @Override

@@ -27,8 +27,10 @@
 package org.anchoranalysis.image.io.object.input;
 
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import lombok.AllArgsConstructor;
+import org.anchoranalysis.core.format.FormatExtensions;
+import org.anchoranalysis.core.format.ImageFileFormat;
+import org.anchoranalysis.core.format.NonImageFileFormat;
 import org.anchoranalysis.core.progress.ProgressIgnore;
 import org.anchoranalysis.core.serialize.DeserializationFailedException;
 import org.anchoranalysis.core.serialize.Deserializer;
@@ -64,7 +66,7 @@ class ObjectDualDeserializer implements Deserializer<ObjectMask> {
     @Override
     public ObjectMask deserialize(Path filePath) throws DeserializationFailedException {
 
-        Path tiffFilename = changeExtension(filePath.toAbsolutePath(), "ser", "tif");
+        Path tiffFilename = FormatExtensions.changeExtension(filePath.toAbsolutePath(), NonImageFileFormat.SERIALIZED_BINARY, ImageFileFormat.TIFF);
 
         BoundingBox box = BOUNDING_BOX_DESERIALIZER.deserialize(filePath);
 
@@ -96,26 +98,5 @@ class ObjectDualDeserializer implements Deserializer<ObjectMask> {
         return String.format(
                 "Dimensions of bounding box (%s) and raster (%s) do not match for file %s",
                 box.extent(), dimensions.extent(), filePath);
-    }
-
-    private static Path changeExtension(Path path, String oldExtension, String newExtension)
-            throws DeserializationFailedException {
-
-        String oldExtensionUpperCase = oldExtension.toUpperCase();
-
-        if (!path.toString().endsWith("." + oldExtension)
-                && !path.toString().endsWith("." + oldExtensionUpperCase)) {
-            throw new DeserializationFailedException(
-                    "Files must have ." + oldExtension + " extension");
-        }
-
-        // Change old extension into new extension
-        return Paths.get(changeExtension(path.toString(), oldExtension, newExtension));
-    }
-
-    private static String changeExtension(String path, String oldExtension, String newExtension) {
-        path = path.substring(0, path.length() - oldExtension.length());
-        path = path.concat(newExtension);
-        return path;
     }
 }

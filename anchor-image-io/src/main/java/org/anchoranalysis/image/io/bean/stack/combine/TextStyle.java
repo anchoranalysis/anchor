@@ -46,8 +46,8 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.bean.spatial.SizeXY;
 import org.anchoranalysis.image.core.bufferedimage.CreateStackFromBufferedImage;
 import org.anchoranalysis.image.core.stack.Stack;
-import org.anchoranalysis.image.io.stack.output.StackWriteOptions;
-import org.anchoranalysis.image.io.stack.output.StackWriteOptionsFactory;
+import org.anchoranalysis.image.io.stack.output.StackWriteAttributes;
+import org.anchoranalysis.image.io.stack.output.StackWriteAttributesFactory;
 import org.anchoranalysis.image.io.stack.output.generator.RasterGeneratorSelectFormat;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
@@ -130,8 +130,8 @@ public class TextStyle extends AnchorBean<TextStyle> {
         }
 
         @Override
-        public StackWriteOptions guaranteedImageAttributes() {
-            return StackWriteOptionsFactory.rgbMaybe3D();
+        public StackWriteAttributes guaranteedImageAttributes() {
+            return StackWriteAttributesFactory.rgbMaybe3D();
         }
 
         private Graphics2D createGraphicsFromBufferedImage(BufferedImage bufferedImage) {

@@ -37,7 +37,7 @@ import org.anchoranalysis.image.core.object.properties.ObjectWithProperties;
 import org.anchoranalysis.image.core.stack.DisplayStack;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.object.output.rgb.DrawObjectsGenerator;
-import org.anchoranalysis.image.io.stack.output.StackWriteOptions;
+import org.anchoranalysis.image.io.stack.output.StackWriteAttributes;
 import org.anchoranalysis.image.io.stack.output.generator.RasterGeneratorSelectFormat;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.io.generator.TransformingGenerator;
@@ -154,7 +154,7 @@ public class DrawObjectOnStackGenerator
     }
 
     @Override
-    public StackWriteOptions guaranteedImageAttributes() {
+    public StackWriteAttributes guaranteedImageAttributes() {
         return drawObjectsGenerator.guaranteedImageAttributes();
     }
 

@@ -30,8 +30,9 @@ import java.nio.file.Path;
 import java.util.Optional;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.core.stack.Stack;
+import org.anchoranalysis.image.io.stack.output.StackWriteAttributes;
+import org.anchoranalysis.image.io.stack.output.StackWriteAttributesFactory;
 import org.anchoranalysis.image.io.stack.output.StackWriteOptions;
-import org.anchoranalysis.image.io.stack.output.StackWriteOptionsFactory;
 import org.anchoranalysis.io.generator.TransformingGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.manifest.file.FileType;
@@ -84,7 +85,7 @@ public abstract class RasterGenerator<T> implements TransformingGenerator<T, Sta
      *
      * @return options that are guaranteed to be true of all images by the generator.
      */
-    public abstract StackWriteOptions guaranteedImageAttributes();
+    public abstract StackWriteAttributes guaranteedImageAttributes();
 
     public abstract Optional<ManifestDescription> createManifestDescription();
 
@@ -131,7 +132,7 @@ public abstract class RasterGenerator<T> implements TransformingGenerator<T, Sta
         try {
             Stack transformedElement = transform(elementUntransformed);
 
-            StackWriteOptions options = writeOptions(transformedElement);
+            StackWriteOptions options = new StackWriteOptions(writeAttributes(transformedElement));
 
             String extension =
                     selectFileExtension(transformedElement, options, outputter.getSettings());
@@ -157,11 +158,11 @@ public abstract class RasterGenerator<T> implements TransformingGenerator<T, Sta
      * Forms write-options to use for this particular stack by combining the general guarantees for
      * the generator with the specific image-attributes of this particular stack.
      *
-     * @param stack the stack to determine {@link StackWriteOptions} for.
+     * @param stack the stack to determine {@link StackWriteAttributes} for.
      * @return specific options for {@code stack}.
      */
-    private StackWriteOptions writeOptions(Stack stack) {
-        return StackWriteOptionsFactory.from(stack).or(guaranteedImageAttributes());
+    private StackWriteAttributes writeAttributes(Stack stack) {
+        return StackWriteAttributesFactory.from(stack).or(guaranteedImageAttributes());
     }
 
     /** Writes to the manifest, and creates an array of the file-types written. */

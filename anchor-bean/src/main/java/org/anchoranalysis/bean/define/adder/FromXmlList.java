@@ -37,6 +37,7 @@ import org.anchoranalysis.bean.xml.BeanXmlLoader;
 import org.anchoranalysis.bean.xml.exception.BeanXmlException;
 import org.anchoranalysis.bean.xml.exception.LocalisedBeanException;
 import org.anchoranalysis.bean.xml.factory.BeanPathUtilities;
+import org.anchoranalysis.core.format.NonImageFileFormat;
 
 /**
  * Adds a list of Named-Items define in a XML file in the current directory
@@ -87,6 +88,6 @@ public class FromXmlList extends DefineAdderBean {
     }
 
     private String nameWithExtension() {
-        return name + ".xml";
+        return NonImageFileFormat.XML.buildPath(name);
     }
 }

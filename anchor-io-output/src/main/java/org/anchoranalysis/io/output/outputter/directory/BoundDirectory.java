@@ -70,22 +70,22 @@ class BoundDirectory {
     /**
      * Creates a new {@link BoundDirectory} that is a subdirectory of the existing directory.
      *
-     * @param subDirectoryPath subdirectory of existing {@link BoundDirectory} for which a new
+     * @param subdirectoryPath subdirectory of existing {@link BoundDirectory} for which a new
      *     {@link BoundDirectory} will be created.
      * @return a newly created {@link BoundDirectory} bound to {@code directoryPath}.
      * @throws BindFailedException
      */
-    public BoundDirectory bindToSubdirectory(Path subDirectoryPath) throws BindFailedException {
-        Preconditions.checkArgument(rootDirectoryContains(subDirectoryPath));
+    public BoundDirectory bindToSubdirectory(Path subdirectoryPath) throws BindFailedException {
+        Preconditions.checkArgument(rootDirectoryContains(subdirectoryPath));
         return new BoundDirectory(
-                directoryCreator, creatorForDirectory(subDirectoryPath, parentDirectoryCreator));
+                directoryCreator, creatorForDirectory(subdirectoryPath, parentDirectoryCreator));
     }
 
     private Optional<WriterExecuteBeforeEveryOperation> creatorForDirectory(
-            Path subDirectoryPath, Optional<WriterExecuteBeforeEveryOperation> opBefore)
+            Path subdirectoryPath, Optional<WriterExecuteBeforeEveryOperation> opBefore)
             throws BindFailedException {
         try {
-            return Optional.of(directoryCreator.getOrCreate(subDirectoryPath, opBefore));
+            return Optional.of(directoryCreator.getOrCreate(subdirectoryPath, opBefore));
         } catch (GetOperationFailedException e) {
             throw new BindFailedException(e);
         }

@@ -30,6 +30,7 @@ import java.nio.file.Path;
 import java.util.Optional;
 import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.format.NonImageFileFormat;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.index.GetterFromIndex;
 import org.anchoranalysis.core.index.bounded.BoundedIndexContainer;
@@ -58,7 +59,7 @@ class ReadObjectsFromTIFFDirectory implements Deserializer<ObjectCollection> {
         try {
             BoundedIndexContainer<ObjectMask> container =
                     deserializeFromDirectory(
-                            new SerializedObjectsFromDirectory(folderPath, Optional.of("*.ser")),
+                            new SerializedObjectsFromDirectory(folderPath, Optional.of("*" + NonImageFileFormat.SERIALIZED_BINARY.extensionWithPeriod())),
                             new ObjectDualDeserializer(stackReader));
             return createFromContainer(container);
 

@@ -31,6 +31,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.cache.CachedSupplier;
 import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.format.NonImageFileFormat;
 import org.anchoranalysis.core.functional.checked.CheckedSupplier;
 import org.anchoranalysis.core.serialize.DeserializationFailedException;
 import org.anchoranalysis.core.serialize.Deserializer;
@@ -47,8 +48,6 @@ public class ObjectCollectionReader {
     private static final Deserializer<ObjectCollection> TIFF_CORRECT_MISSING =
             new ReadObjectsFromTIFFDirectoryCorrectMissing();
     private static final Deserializer<ObjectCollection> HDF5 = new ReadObjectsFromHDF5();
-
-    private static final String HDF5_EXTENSION = ".h5";
 
     /**
      * Reads an object-collection from a path (or path prefix) trying different methods to read the
@@ -118,10 +117,10 @@ public class ObjectCollectionReader {
     }
 
     public static boolean hasHdf5Extension(Path path) {
-        return path.toString().toLowerCase().endsWith(HDF5_EXTENSION);
+        return NonImageFileFormat.HDF5.matches(path);
     }
 
     private static Path addHdf5Extension(Path path) {
-        return path.resolveSibling(path.getFileName() + HDF5_EXTENSION);
+        return path.resolveSibling(path.getFileName() + NonImageFileFormat.HDF5.extensionWithPeriod());
     }
 }

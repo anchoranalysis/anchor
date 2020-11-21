@@ -48,8 +48,8 @@ import org.anchoranalysis.image.io.bean.object.draw.Outline;
 import org.anchoranalysis.image.io.bean.stack.combine.StackProviderWithLabel;
 import org.anchoranalysis.image.io.object.output.rgb.DrawObjectsGenerator;
 import org.anchoranalysis.image.io.stack.input.TileRasters;
-import org.anchoranalysis.image.io.stack.output.StackWriteOptions;
-import org.anchoranalysis.image.io.stack.output.StackWriteOptionsFactory;
+import org.anchoranalysis.image.io.stack.output.StackWriteAttributes;
+import org.anchoranalysis.image.io.stack.output.StackWriteAttributesFactory;
 import org.anchoranalysis.image.io.stack.output.generator.RasterGeneratorSelectFormat;
 import org.anchoranalysis.image.io.stack.output.generator.StackGenerator;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
@@ -115,8 +115,8 @@ public class AssignmentGenerator extends RasterGeneratorSelectFormat<Assignment>
     }
 
     @Override
-    public StackWriteOptions guaranteedImageAttributes() {
-        return StackWriteOptionsFactory.rgbMaybe3D();
+    public StackWriteAttributes guaranteedImageAttributes() {
+        return StackWriteAttributesFactory.rgbMaybe3D();
     }
 
     private static ArrangeRaster createTiledStackProvider(

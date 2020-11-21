@@ -62,7 +62,7 @@ public abstract class ImageJRasterWriter extends StackWriter {
             throw new ImageIOException("A three-channeled stack must have the RGB flag set to true.");
         }
 
-        writeStackTime(stack, filePath, options.writeAsRGB(stack));
+        writeStackTime(stack, filePath, options.getAttributes().writeAsRGB(stack));
     }
 
     /**

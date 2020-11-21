@@ -29,12 +29,13 @@ package org.anchoranalysis.io.input;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 import lombok.Getter;
 import lombok.Setter;
+import org.anchoranalysis.core.format.FormatExtensions;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.io.input.bean.DebugModeParams;
 
@@ -44,10 +45,6 @@ import org.anchoranalysis.io.input.bean.DebugModeParams;
  * @author Owen Feehan
  */
 public class InputContextParams {
-
-    /** If no more specific file extensions to filter are provided, these are used as a default. */
-    private static final List<String> DEFAULT_EXTENSIONS =
-            Arrays.asList("jpg", "png", "tif", "tiff", "gif", "bmp");
 
     /** A list of paths referring to specific inputs */
     @Getter @Setter private Optional<List<Path>> inputPaths;
@@ -91,6 +88,6 @@ public class InputContextParams {
      * defaults.
      */
     private Set<String> fallBackFilterExtensions() {
-        return new HashSet<>(DEFAULT_EXTENSIONS);
+        return Arrays.stream(FormatExtensions.allImageExtensions()).collect(Collectors.toSet());
     }
 }

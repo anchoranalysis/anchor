@@ -32,8 +32,8 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
-import org.anchoranalysis.image.io.stack.output.StackWriteOptions;
-import org.anchoranalysis.image.io.stack.output.StackWriteOptionsFactory;
+import org.anchoranalysis.image.io.stack.output.StackWriteAttributes;
+import org.anchoranalysis.image.io.stack.output.StackWriteAttributesFactory;
 import org.anchoranalysis.image.io.stack.output.generator.RasterGeneratorSelectFormat;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.io.manifest.ManifestDescription;
@@ -62,7 +62,7 @@ public abstract class ObjectsAsGrayscaleGenerator
     }
 
     @Override
-    public StackWriteOptions guaranteedImageAttributes() {
-        return StackWriteOptionsFactory.singleChannelMaybe3D(dimensions.z() == 1);
+    public StackWriteAttributes guaranteedImageAttributes() {
+        return StackWriteAttributesFactory.singleChannelMaybe3D(dimensions.z() == 1);
     }
 }

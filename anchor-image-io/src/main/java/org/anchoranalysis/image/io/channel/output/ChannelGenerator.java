@@ -30,8 +30,8 @@ import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.stack.Stack;
-import org.anchoranalysis.image.io.stack.output.StackWriteOptions;
-import org.anchoranalysis.image.io.stack.output.StackWriteOptionsFactory;
+import org.anchoranalysis.image.io.stack.output.StackWriteAttributes;
+import org.anchoranalysis.image.io.stack.output.StackWriteAttributesFactory;
 import org.anchoranalysis.image.io.stack.output.generator.RasterGeneratorSelectFormat;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
@@ -58,7 +58,7 @@ public class ChannelGenerator extends RasterGeneratorSelectFormat<Channel> {
     }
 
     @Override
-    public StackWriteOptions guaranteedImageAttributes() {
-        return StackWriteOptionsFactory.singleChannelMaybe3D(false);
+    public StackWriteAttributes guaranteedImageAttributes() {
+        return StackWriteAttributesFactory.singleChannelMaybe3D(false);
     }
 }

@@ -27,6 +27,7 @@ package org.anchoranalysis.test.image.rasterwriter;
 
 import java.io.IOException;
 import java.util.Optional;
+import org.anchoranalysis.core.format.ImageFileFormat;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.writer.StackWriter;
 import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
@@ -45,13 +46,13 @@ import org.junit.Test;
 public abstract class TiffTestBase extends RasterWriterTestBase {
 
     private static final ComparisonPlan COMPARISON_PLAN =
-            new ComparisonPlan(true, Optional.of("ome.tif"), false);
+            new ComparisonPlan(true, Optional.of(ImageFileFormat.OME_TIFF), false);
 
     private static final VoxelDataType[] SUPPORTED_VOXEL_TYPES =
             RasterWriterTestBase.ALL_SUPPORTED_VOXEL_TYPES;
 
     public TiffTestBase() {
-        super("tif", true, COMPARISON_PLAN);
+        super(ImageFileFormat.TIFF, true, COMPARISON_PLAN);
     }
 
     @Test

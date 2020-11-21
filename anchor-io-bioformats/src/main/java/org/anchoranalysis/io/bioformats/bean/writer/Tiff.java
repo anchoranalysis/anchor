@@ -30,6 +30,7 @@ import java.nio.file.Path;
 import loci.formats.FormatException;
 import loci.formats.IFormatWriter;
 import loci.formats.out.TiffWriter;
+import org.anchoranalysis.core.format.ImageFileFormat;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.stack.output.StackWriteOptions;
@@ -63,7 +64,7 @@ public class Tiff extends BioformatsWriter {
     // A default extension
     @Override
     public String fileExtension(StackWriteOptions writeOptions) {
-        return "tif";
+        return ImageFileFormat.TIFF.getDefaultExtension();
     }
 
     @Override

@@ -30,6 +30,7 @@ import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Value;
+import org.anchoranalysis.core.format.ImageFileFormat;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.test.image.DualComparer;
 import org.anchoranalysis.test.image.rasterwriter.SavedFiles;
@@ -48,7 +49,8 @@ public class ComparisonPlan {
     /** */
     private final boolean bytewiseCompare;
 
-    private final Optional<String> extensionVoxelwiseCompare;
+    /** The file-format to use for the voxel-wise comparison (if it's activated). */
+    private final Optional<ImageFileFormat> formatVoxelwiseCompare;
 
     private final boolean skipComparisonForRGB; // NOSONAR
 
@@ -60,15 +62,15 @@ public class ComparisonPlan {
      *
      * @param bytewiseCompare iff true, a bytewise comparison occurs between the saved-file and the
      *     newly created file.
-     * @param extensionVoxelwiseCompare iff defined, a voxel-wise comparison occurs with the
-     *     saved-rasters from a different extension.
+     * @param formatVoxelwiseCompare iff defined, a voxel-wise comparison occurs with the
+     *     saved-rasters from a different format.
      * @param skipComparisonForRGB if true, comparisons are not applied to RGB images.
      */
     public ComparisonPlan(
             boolean bytewiseCompare,
-            Optional<String> extensionVoxelwiseCompare,
+            Optional<ImageFileFormat> formatVoxelwiseCompare,
             boolean skipComparisonForRGB) {
-        this(bytewiseCompare, extensionVoxelwiseCompare, skipComparisonForRGB, Optional.empty());
+        this(bytewiseCompare, formatVoxelwiseCompare, skipComparisonForRGB, Optional.empty());
     }
 
     /**
@@ -79,20 +81,20 @@ public class ComparisonPlan {
      *
      * @param bytewiseCompare iff true, a bytewise comparison occurs between the saved-file and the
      *     newly created file.
-     * @param extensionVoxelwiseCompare iff defined, a voxel-wise comparison occurs with the
-     *     saved-rasters from a different extension.
+     * @param formatVoxelwiseCompare iff defined, a voxel-wise comparison occurs with the
+     *     saved-rasters from a different file-format.
      * @param skipComparisonForRGB if true, comparisons are not applied to RGB images.
      * @param directoryPathToCopyMissingImagesTo a path to a directory to copy images to if a test
      *     fails (which we assume is evidence the image is missing).
      */
     public ComparisonPlan(
             boolean bytewiseCompare,
-            Optional<String> extensionVoxelwiseCompare,
+            Optional<ImageFileFormat> formatVoxelwiseCompare,
             boolean skipComparisonForRGB,
             String directoryPathToCopyMissingImagesTo) {
         this(
                 bytewiseCompare,
-                extensionVoxelwiseCompare,
+                formatVoxelwiseCompare,
                 skipComparisonForRGB,
                 Optional.of(directoryPathToCopyMissingImagesTo));
     }
@@ -128,11 +130,11 @@ public class ComparisonPlan {
     }
 
     private Optional<ImageComparer> maybeCreateVoxelwiseComparer(TemporaryFolder directory) {
-        return extensionVoxelwiseCompare.map(
-                extensionForComparer ->
+        return formatVoxelwiseCompare.map(ImageFileFormat::getDefaultExtension).map(
+                extension ->
                         new CompareVoxels(
-                                createComparer(extensionForComparer, directory),
-                                extensionForComparer));
+                                createComparer(extension, directory),
+                                extension));
     }
 
     private DualComparer createComparer(String extensionForComparer, TemporaryFolder directory) {

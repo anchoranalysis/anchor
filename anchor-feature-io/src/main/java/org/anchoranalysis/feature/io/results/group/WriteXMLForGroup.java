@@ -32,6 +32,7 @@ import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.format.NonImageFileFormat;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.value.KeyValueParams;
@@ -159,7 +160,7 @@ class WriteXMLForGroup {
                     context.getOutputter()
                             .writerSelective()
                             .createFilenameForWriting(
-                                    outputName, "xml", Optional.of(MANIFEST_DESCRIPTION));
+                                    outputName, NonImageFileFormat.XML.extensionWithoutPeriod(), Optional.of(MANIFEST_DESCRIPTION));
             if (fileOutPath.isPresent()) {
                 paramsOut.writeToFile(fileOutPath.get());
             }

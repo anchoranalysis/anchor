@@ -31,6 +31,7 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
+import org.anchoranalysis.core.format.NonImageFileFormat;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.log.error.ErrorReporter;
 import org.anchoranalysis.core.value.TypedValue;
@@ -88,7 +89,7 @@ public class CSVWriter implements AutoCloseable {
         }
 
         Optional<TextFileOutput> output =
-                TextFileOutputter.create("csv", Optional.empty(), outputter, outputName);
+                TextFileOutputter.create(NonImageFileFormat.CSV.extensionWithoutPeriod(), Optional.empty(), outputter, outputName);
 
         OptionalUtilities.ifPresent(output, TextFileOutput::start);
         return output.map(CSVWriter::new);

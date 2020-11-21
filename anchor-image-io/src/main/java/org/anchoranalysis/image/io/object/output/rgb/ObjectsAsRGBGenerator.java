@@ -41,8 +41,8 @@ import org.anchoranalysis.image.core.object.properties.ObjectCollectionWithPrope
 import org.anchoranalysis.image.core.stack.DisplayStack;
 import org.anchoranalysis.image.core.stack.RGBStack;
 import org.anchoranalysis.image.core.stack.Stack;
-import org.anchoranalysis.image.io.stack.output.StackWriteOptions;
-import org.anchoranalysis.image.io.stack.output.StackWriteOptionsFactory;
+import org.anchoranalysis.image.io.stack.output.StackWriteAttributes;
+import org.anchoranalysis.image.io.stack.output.StackWriteAttributesFactory;
 import org.anchoranalysis.image.io.stack.output.generator.RasterGeneratorSelectFormat;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
@@ -97,8 +97,8 @@ public abstract class ObjectsAsRGBGenerator
     }
 
     @Override
-    public StackWriteOptions guaranteedImageAttributes() {
-        return StackWriteOptionsFactory.rgb(isAlways2D());
+    public StackWriteAttributes guaranteedImageAttributes() {
+        return StackWriteAttributesFactory.rgb(isAlways2D());
     }
 
     protected abstract RGBStack generateBackground(

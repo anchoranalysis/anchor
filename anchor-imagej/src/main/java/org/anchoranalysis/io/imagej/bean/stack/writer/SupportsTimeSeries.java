@@ -45,7 +45,7 @@ public abstract class SupportsTimeSeries extends ImageJRasterWriter {
             throws ImageIOException {
 
         try {
-            writeStackTime(stackSeries.createSingleStack(), filePath, options.isRgb());
+            writeStackTime(stackSeries.createSingleStack(), filePath, options.getAttributes().isRgb());
         } catch (IncorrectImageSizeException e) {
             throw new ImageIOException(e);
         }

@@ -36,6 +36,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.OptionalFactory;
 import org.anchoranalysis.core.exception.friendly.AnchorFriendlyRuntimeException;
+import org.anchoranalysis.core.format.ImageFileFormat;
 import org.anchoranalysis.io.input.InputContextParams;
 import org.anchoranalysis.io.input.bean.DebugModeParams;
 import org.anchoranalysis.io.output.bean.OutputManager;
@@ -73,6 +74,11 @@ public class ExperimentExecutionArguments {
     @Getter private OutputEnabledDelta outputEnabledDelta = new OutputEnabledDelta();
 
     /**
+     * A file format suggested for writing images to the file system.
+     */
+    @Getter private Optional<ImageFileFormat> suggestedImageOutputFormat;
+    
+    /**
      * If defined, a set of extension filters that can be applied on inputDirectory
      *
      * <p>A defined but empty set implies no check is applied
@@ -107,8 +113,14 @@ public class ExperimentExecutionArguments {
         return new FilePathPrefixerContext(isDebugModeEnabled(), outputDirectory);
     }
 
-    // The path will be converted to an absolute path, if it hasn't been already, based upon the
-    // current working directory
+    /**
+     * Sets an input-directory.
+     * 
+     * <p>If defined, The path will be converted to an absolute path, if it hasn't been already, based upon the
+     * current working directory. 
+     * 
+     * @param inputDirectory the input-directory to an assign
+     */
     public void setInputDirectory(Optional<Path> inputDirectory) {
         this.inputDirectory =
                 inputDirectory.map(

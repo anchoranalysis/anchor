@@ -25,6 +25,7 @@
  */
 package org.anchoranalysis.io.bioformats.bean;
 
+import org.anchoranalysis.core.format.ImageFileFormat;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.io.bioformats.ConfigureBioformatsLogging;
 import org.anchoranalysis.test.TestLoader;
@@ -49,9 +50,9 @@ public class BioformatsReaderTest {
 
     private ExpectedImageTester tester;
 
-    private static final String EXTENSION_JPEG = "jpg";
-    private static final String EXTENSION_TIFF = "tif";
-    private static final String EXTENSION_PNG = "png";
+    private static final String EXTENSION_JPEG = ImageFileFormat.JPEG.getDefaultExtension();
+    private static final String EXTENSION_TIFF = ImageFileFormat.TIFF.getDefaultExtension();
+    private static final String EXTENSION_PNG = ImageFileFormat.PNG.getDefaultExtension();
 
     @Before
     public void setUp() {

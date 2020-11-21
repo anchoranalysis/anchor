@@ -29,6 +29,7 @@ package org.anchoranalysis.io.generator.serialized;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Optional;
+import org.anchoranalysis.core.format.NonImageFileFormat;
 import org.anchoranalysis.core.serialize.XStreamSerializer;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
@@ -55,6 +56,6 @@ public class XStreamGenerator<T> extends SerializedGenerator<T> {
 
     @Override
     protected String extensionSuffix(OutputWriteSettings outputWriteSettings) {
-        return "." + outputWriteSettings.getExtensionXML();
+        return NonImageFileFormat.XML.extensionWithPeriod();
     }
 }

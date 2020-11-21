@@ -30,8 +30,8 @@ import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.core.stack.Stack;
-import org.anchoranalysis.image.io.stack.output.StackWriteOptions;
-import org.anchoranalysis.image.io.stack.output.StackWriteOptionsFactory;
+import org.anchoranalysis.image.io.stack.output.StackWriteAttributes;
+import org.anchoranalysis.image.io.stack.output.StackWriteAttributesFactory;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
@@ -53,7 +53,7 @@ public class StackGenerator extends RasterGeneratorSelectFormat<Stack> {
     private Optional<String> manifestFunction;
 
     /** Properties of the stack that is being written used to guide the outputting. */
-    private StackWriteOptions writeOptions;
+    private StackWriteAttributes writeOptions;
 
     /**
      * Creates a generator that performs no padding.
@@ -74,7 +74,7 @@ public class StackGenerator extends RasterGeneratorSelectFormat<Stack> {
      */
     public StackGenerator(
             boolean padIfNecessary, Optional<String> manifestFunction, boolean always2D) {
-        this(padIfNecessary, manifestFunction, StackWriteOptionsFactory.maybeAlways2D(always2D));
+        this(padIfNecessary, manifestFunction, StackWriteAttributesFactory.maybeAlways2D(always2D));
     }
 
     @Override
@@ -98,7 +98,7 @@ public class StackGenerator extends RasterGeneratorSelectFormat<Stack> {
     }
 
     @Override
-    public StackWriteOptions guaranteedImageAttributes() {
+    public StackWriteAttributes guaranteedImageAttributes() {
         return writeOptions;
     }
 }

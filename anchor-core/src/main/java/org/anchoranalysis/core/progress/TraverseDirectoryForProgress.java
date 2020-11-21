@@ -63,8 +63,8 @@ public class TraverseDirectoryForProgress {
         while (true) {
             List<Path> filesOutCurrent = new ArrayList<>();
             List<Path> definiteLeafsCurrent = new ArrayList<>();
-            List<Path> subDirectories =
-                    TraverseDirectoryForProgress.subDirectoriesFor(
+            List<Path> subdirectories =
+                    TraverseDirectoryForProgress.subdirectoriesFor(
                             currentDirectories,
                             definiteLeafsCurrent,
                             Optional.of(filesOutCurrent),
@@ -72,13 +72,13 @@ public class TraverseDirectoryForProgress {
 
             filesOut.addAll(filesOutCurrent);
 
-            if (subDirectories.isEmpty()) {
+            if (subdirectories.isEmpty()) {
                 return new TraversalResult(new ArrayList<>(), filesOut, depth);
-            } else if (subDirectories.size() > minNumberDirectories || depth == maxDirectoryDepth) {
-                return new TraversalResult(subDirectories, filesOut, depth);
+            } else if (subdirectories.size() > minNumberDirectories || depth == maxDirectoryDepth) {
+                return new TraversalResult(subdirectories, filesOut, depth);
             }
 
-            currentDirectories = subDirectories;
+            currentDirectories = subdirectories;
 
             depth++;
         }
@@ -87,11 +87,11 @@ public class TraverseDirectoryForProgress {
     public static TraversalResult traverseNotRecursive(Path parent, Predicate<Path> matcherDir)
             throws IOException {
         List<Path> filesOut = new ArrayList<>();
-        subDirectoriesFor(parent, Optional.empty(), Optional.of(filesOut), matcherDir);
+        subdirectoriesFor(parent, Optional.empty(), Optional.of(filesOut), matcherDir);
         return new TraversalResult(new ArrayList<>(), filesOut, 1);
     }
 
-    private static boolean subDirectoriesFor(
+    private static boolean subdirectoriesFor(
             Path parent,
             Optional<List<Path>> directoriesOut,
             Optional<List<Path>> filesOut,
@@ -131,7 +131,7 @@ public class TraverseDirectoryForProgress {
         }
     }
 
-    private static List<Path> subDirectoriesFor(
+    private static List<Path> subdirectoriesFor(
             List<Path> parents,
             List<Path> definiteLeafs,
             Optional<List<Path>> filesOut,
@@ -140,7 +140,7 @@ public class TraverseDirectoryForProgress {
         List<Path> out = new ArrayList<>();
         for (Path path : parents) {
 
-            if (matcherDirectory.test(path) && !subDirectoriesFor(path, Optional.of(out), filesOut, matcherDirectory)) {
+            if (matcherDirectory.test(path) && !subdirectoriesFor(path, Optional.of(out), filesOut, matcherDirectory)) {
                 // If we fail to find any sub-folders, then we have a definite leaf,
                 // which we treat separately so as to include it in our final list,
                 // but not to recurse further on it.

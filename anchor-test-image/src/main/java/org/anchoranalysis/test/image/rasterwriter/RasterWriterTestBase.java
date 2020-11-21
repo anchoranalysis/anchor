@@ -26,6 +26,7 @@
 package org.anchoranalysis.test.image.rasterwriter;
 
 import lombok.RequiredArgsConstructor;
+import org.anchoranalysis.core.format.ImageFileFormat;
 import org.anchoranalysis.image.io.bean.stack.writer.StackWriter;
 import org.anchoranalysis.image.voxel.datatype.FloatVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
@@ -68,8 +69,8 @@ public abstract class RasterWriterTestBase {
     @Rule public TemporaryFolder directory = new TemporaryFolder();
 
     // START REQUIRED ARGUMENTS
-    /** the extension (without a preceding period) to be tested and written. */
-    private final String extension;
+    /** The format to be tested and written. */
+    private final ImageFileFormat format;
 
     /** If true, then 3D stacks are also tested and saved, not just 2D stacks. */
     private final boolean include3D;
@@ -83,6 +84,7 @@ public abstract class RasterWriterTestBase {
 
     @Before
     public void setup() {
+        String extension = format.getDefaultExtension();
         tester =
                 new FourChannelStackTester(
                         new StackTester(

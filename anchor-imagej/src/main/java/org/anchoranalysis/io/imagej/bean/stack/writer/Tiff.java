@@ -27,6 +27,7 @@
 package org.anchoranalysis.io.imagej.bean.stack.writer;
 
 import ij.io.FileSaver;
+import org.anchoranalysis.core.format.ImageFileFormat;
 import org.anchoranalysis.image.io.stack.output.StackWriteOptions;
 
 /**
@@ -49,6 +50,6 @@ public class Tiff extends SupportsTimeSeries {
 
     @Override
     public String fileExtension(StackWriteOptions writeOptions) {
-        return "tif";
+        return ImageFileFormat.TIFF.getDefaultExtension();
     }
 }

@@ -30,8 +30,8 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.core.stack.Stack;
-import org.anchoranalysis.image.io.stack.output.StackWriteOptions;
-import org.anchoranalysis.image.io.stack.output.StackWriteOptionsFactory;
+import org.anchoranalysis.image.io.stack.output.StackWriteAttributes;
+import org.anchoranalysis.image.io.stack.output.StackWriteAttributesFactory;
 import org.anchoranalysis.image.io.stack.output.generator.RasterGeneratorSelectFormat;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
@@ -67,7 +67,7 @@ public class ExtractBoundingBoxAreaFromStackGenerator
     }
 
     @Override
-    public StackWriteOptions guaranteedImageAttributes() {
-        return StackWriteOptionsFactory.maybeRGB(background.isRGB());
+    public StackWriteAttributes guaranteedImageAttributes() {
+        return StackWriteAttributesFactory.maybeRGB(background.isRGB());
     }
 }

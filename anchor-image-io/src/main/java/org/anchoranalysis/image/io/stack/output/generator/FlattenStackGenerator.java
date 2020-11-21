@@ -29,7 +29,7 @@ package org.anchoranalysis.image.io.stack.output.generator;
 import java.util.Optional;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.core.stack.Stack;
-import org.anchoranalysis.image.io.stack.output.StackWriteOptions;
+import org.anchoranalysis.image.io.stack.output.StackWriteAttributes;
 
 /**
  * Like a {@link StackGenerator} but first applies a maximum-intensity-projection.
@@ -43,7 +43,7 @@ public class FlattenStackGenerator extends RasterGeneratorDelegateToRaster<Stack
     }
 
     @Override
-    public StackWriteOptions guaranteedImageAttributes() {
+    public StackWriteAttributes guaranteedImageAttributes() {
         return super.guaranteedImageAttributes().always2D(false);
     }
 

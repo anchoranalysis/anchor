@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Optional;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.core.format.NonImageFileFormat;
 import org.anchoranalysis.io.generator.OneStageGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
@@ -51,7 +52,7 @@ public class StringGenerator extends OneStageGenerator<String> {
 
     @Override
     public String selectFileExtension(OutputWriteSettings outputWriteSettings) {
-        return outputWriteSettings.getExtensionText();
+        return NonImageFileFormat.TEXT.extensionWithoutPeriod();
     }
 
     @Override

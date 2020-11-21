@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.io.generator.xml;
 
+import org.anchoranalysis.core.format.NonImageFileFormat;
 import org.anchoranalysis.io.generator.OneStageGenerator;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 
@@ -33,6 +34,6 @@ public abstract class XMLGenerator<T> extends OneStageGenerator<T> {
 
     @Override
     public String selectFileExtension(OutputWriteSettings outputWriteSettings) {
-        return outputWriteSettings.getExtensionXML();
+        return NonImageFileFormat.XML.extensionWithoutPeriod();
     }
 }

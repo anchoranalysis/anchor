@@ -64,11 +64,6 @@ public class OutputWriteSettings extends AnchorBean<OutputWriteSettings> {
     @BeanField @OptionalBean @Getter @Setter private List<NamedBean<?>> writers;
     // END BEAN PROPERTIES
 
-    private static final String HTML_EXTENSION = "html";
-    private static final String XML_EXTENSION = "xml";
-    private static final String TEXT_EXTENSION = "txt";
-    private static final String SERIALIZED_EXTENSION = "ser";
-
     // Contains instances for each writer
     private BeanInstanceMap writerInstances;
 
@@ -120,21 +115,5 @@ public class OutputWriteSettings extends AnchorBean<OutputWriteSettings> {
 
     public ColorIndex defaultColorIndexFor(int numberColors) throws OperationFailedException {
         return new ColorIndexModulo(getDefaultColors().createList(numberColors));
-    }
-
-    public String getExtensionHTML() {
-        return HTML_EXTENSION;
-    }
-
-    public String getExtensionSerialized() {
-        return SERIALIZED_EXTENSION;
-    }
-
-    public String getExtensionXML() {
-        return XML_EXTENSION;
-    }
-
-    public String getExtensionText() {
-        return TEXT_EXTENSION;
     }
 }

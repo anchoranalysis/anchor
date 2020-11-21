@@ -27,6 +27,7 @@ package org.anchoranalysis.io.bioformats.bean.writer;
 
 import loci.formats.IFormatWriter;
 import loci.formats.out.OMEXMLWriter;
+import org.anchoranalysis.core.format.ImageFileFormat;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.stack.output.StackWriteOptions;
 
@@ -53,7 +54,7 @@ public class OMEXML extends BioformatsWriter {
     
     @Override
     public String fileExtension(StackWriteOptions writeOptions) {
-        return "ome.xml";
+        return ImageFileFormat.OME_TIFF.getDefaultExtension();
     }
 
     @Override

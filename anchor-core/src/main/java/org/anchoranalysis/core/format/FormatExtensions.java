@@ -1,0 +1,79 @@
+package org.anchoranalysis.core.format;
+
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Arrays;
+import org.anchoranalysis.core.serialize.DeserializationFailedException;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+/**
+ * File extensions for various formats.
+ * 
+ * @author Owen Feehan
+ *
+ */
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
+public class FormatExtensions {
+    
+    /** The extensions of all image file formats as enumerated in {@link ImageFileFormat}. */
+    private static final String[] ALL_IMAGE_EXTENSIONS = createExtensionsArray( ImageFileFormat.values() );
+    
+    /**
+     * The extensions of all image file formats as enumerated in {@link ImageFileFormat}.
+     *
+     * <p>Note that some formats may have more than one extension e.g. {@code tif} and {@code tiff}.
+     * 
+     * @return an array of extensions for all the image file formats.
+     */
+    public static String[] allImageExtensions() {
+        return ALL_IMAGE_EXTENSIONS;
+    }
+    
+    /**
+     * Does a filePath match an extension?
+     * 
+     * @param filePath file-path to match, case irrelevant
+     * @param extensionWithoutLeadingPeriod the extension to match (in lower-case, without a leading period)
+     * @return true if the filePath ends with the expected extension
+     */
+    public static boolean matches(String filePath, String extensionWithoutLeadingPeriod) {
+        return normalizeToLowerCase(filePath).endsWith( "." + extensionWithoutLeadingPeriod );
+    }
+    
+
+    /**
+     * Change the extension in a path.
+     * 
+     * @param path the path to change if the extension matches
+     * @param formatToChangeFrom the format to change from (a match occurs against the associated extension)
+     * @param formatToAssign the format to assign (the default extension is assigned)
+     * @return a path with the extension changed
+     * @throws DeserializationFailedException if the unchanged path does not match {@code formatToChangeFrom}.
+     */
+    public static Path changeExtension(Path path, NonImageFileFormat formatToChangeFrom, FileFormat formatToAssign)
+            throws DeserializationFailedException {
+
+        if (!formatToChangeFrom.matches(path)) {
+            throw new DeserializationFailedException(
+                    "Files must have have an extension associated with the format: " + formatToChangeFrom.descriptiveIdentifier());
+        }
+
+        // Change old extension into new extension
+        return Paths.get(changeExtension(path.toString(), formatToChangeFrom.extensionWithoutPeriod(), formatToAssign.getDefaultExtension()));
+    }
+
+    private static String changeExtension(String path, String extensionToChange, String extensionToAssign) {
+        path = path.substring(0, path.length() - extensionToChange.length());
+        path = path.concat(extensionToAssign);
+        return path;
+    }
+    
+    static String normalizeToLowerCase(String input) {
+        return input.toLowerCase();
+    }
+    
+    private static String[] createExtensionsArray(ImageFileFormat[] formats) {
+        return Arrays.stream(formats).flatMap(ImageFileFormat::allExtensions).toArray(String[]::new);
+    }
+}
