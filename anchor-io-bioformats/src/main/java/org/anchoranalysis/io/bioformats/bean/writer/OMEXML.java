@@ -53,7 +53,7 @@ public class OMEXML extends BioformatsWriter {
 
     @Override
     public ImageFileFormat fileFormat(StackWriteOptions writeOptions) {
-        return ImageFileFormat.OME_TIFF;
+        return ImageFileFormat.OME_XML;
     }
 
     @Override
