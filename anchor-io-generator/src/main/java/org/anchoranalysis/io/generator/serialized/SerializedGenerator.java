@@ -40,7 +40,7 @@ public abstract class SerializedGenerator<T> extends OneStageGenerator<T> {
 
     @Override
     public String selectFileExtension(OutputWriteSettings outputWriteSettings) {
-        return NonImageFileFormat.SERIALIZED_BINARY + extensionSuffix(outputWriteSettings);
+        return NonImageFileFormat.SERIALIZED_BINARY.getDefaultExtension() + extensionSuffix(outputWriteSettings);
     }
 
     @Override
