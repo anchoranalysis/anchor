@@ -139,9 +139,10 @@ public class InputOutputExperiment<T extends InputFromManager, S> extends Output
             List<T> inputs = getInput().inputs(paramsInput);
             checkCompabilityInputs(inputs);
 
-            params.setLoggerTaskCreator(logTask);
-
-            taskProcessor.executeLogStats(params.getOutputter(), inputs, params);
+            if (!inputs.isEmpty()) {
+                params.setLoggerTaskCreator(logTask);
+                taskProcessor.executeLogStats(params.getOutputter(), inputs, params);
+            }
 
         } catch (InputReadFailedException | IOException e) {
             throw new ExperimentExecutionException(

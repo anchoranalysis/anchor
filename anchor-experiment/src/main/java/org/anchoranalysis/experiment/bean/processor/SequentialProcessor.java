@@ -56,6 +56,8 @@ public class SequentialProcessor<T extends InputFromManager, S> extends JobProce
             Outputter rootOutputter, List<T> inputs, ParametersExperiment paramsExperiment)
             throws ExperimentExecutionException {
 
+        ProcessorChecker.checkAtLeastOneInput(inputs);
+        
         ConcurrencyPlan concurrencyPlan = ConcurrencyPlan.singleProcessor();
 
         S sharedState =
