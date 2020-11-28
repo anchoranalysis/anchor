@@ -18,8 +18,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class FormatExtensions {
     
-    /** The extensions of all image file formats as enumerated in {@link ImageFileFormat}. */
-    private static final String[] ALL_IMAGE_EXTENSIONS = createExtensionsArray( ImageFileFormat.values() );
+    /** The extensions of all image file formats as enumerated in {@link ImageFileFormat}, lazily-created as needed. */
+    private static String[] ALL_IMAGE_EXTENSIONS; 
     
     /**
      * The extensions of all image file formats as enumerated in {@link ImageFileFormat}.
@@ -29,6 +29,9 @@ public class FormatExtensions {
      * @return an array of extensions for all the image file formats.
      */
     public static String[] allImageExtensions() {
+        if (ALL_IMAGE_EXTENSIONS==null) {
+            ALL_IMAGE_EXTENSIONS = createExtensionsArray( ImageFileFormat.values() );
+        }
         return ALL_IMAGE_EXTENSIONS;
     }
     
