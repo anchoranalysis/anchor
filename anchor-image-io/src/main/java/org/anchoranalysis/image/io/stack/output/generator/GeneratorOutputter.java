@@ -64,7 +64,7 @@ public class GeneratorOutputter {
             OutputWriteSettings outputWriteSettings, StackWriteOptions writeOptions)
             throws OperationFailedException {
         try {
-            return writer(outputWriteSettings).fileExtension(writeOptions);
+            return writer(outputWriteSettings).fileFormat(writeOptions).getDefaultExtension();
         } catch (ImageIOException e) {
             throw new OperationFailedException(e);
         }

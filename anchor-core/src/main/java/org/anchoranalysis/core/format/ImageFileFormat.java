@@ -23,16 +23,35 @@ public enum ImageFileFormat implements FileFormat {
     OME_TIFF("ome.tif", "ome.tiff"),
     OME_XML("ome.xml");
     
-    /** The default extension associated with a particular format. */
+    /** 
+     * The default extension associated with a particular format.
+     *
+     * <p>This should be unique across all formats enumerated in {@link ImageFileFormat}.
+     */
     private final String defaultExtension;
     
-    /** An alternative extension associated with a particular format. */
+    /** 
+     * An alternative extension associated with a particular format.
+     *
+     * <p>This should not otherwise appear in either {@code defaultExtension} or {@code alternativeExtension} for any other enumerated format.
+     */
     private final Optional<String> alternativeExtension;
     
+    /**
+     * Creates only with a default-extension.
+     *  
+     * @param defaultExtension the default extension associated with the created format (which should be unique across all enumerated formats), without any leading period.
+     */
     ImageFileFormat(String defaultExtension) {
         this(defaultExtension, Optional.empty());
     }
     
+    /**
+     * Creates with a default extension and an alternative extension.
+     * 
+     * @param defaultExtension the default extension associated with the created format (which should be unique across all enumerated formats), without any leading period.
+     * @param alternativeExtension an alternative extension associated with the created format (which should not otherwise be used in another format), without any leading period.
+     */
     ImageFileFormat(String defaultExtension, String alternativeExtension) {
         this(defaultExtension, Optional.of(alternativeExtension));
     }
@@ -56,7 +75,7 @@ public enum ImageFileFormat implements FileFormat {
     }
 
     @Override
-    public boolean matches(String filePath) {
+    public boolean matchesEnd(String filePath) {
         if (FormatExtensions.matches(filePath, defaultExtension)) {
             return true;
         }
@@ -71,5 +90,14 @@ public enum ImageFileFormat implements FileFormat {
     @Override
     public String getDefaultExtension() {
         return defaultExtension;
+    }
+
+    @Override
+    public boolean matchesIdentifier(String identifier) {
+        String identifierNormalized = FormatExtensions.removeAnyLeadingPeriod(identifier);
+        if (identifierNormalized.equalsIgnoreCase(defaultExtension)) {
+            return true;
+        }
+        return alternativeExtension.isPresent() && identifierNormalized.equalsIgnoreCase(alternativeExtension.get());
     }
 }

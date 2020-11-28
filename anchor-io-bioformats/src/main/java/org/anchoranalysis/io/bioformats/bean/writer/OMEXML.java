@@ -53,8 +53,8 @@ public class OMEXML extends BioformatsWriter {
     }
     
     @Override
-    public String fileExtension(StackWriteOptions writeOptions) {
-        return ImageFileFormat.OME_TIFF.getDefaultExtension();
+    public ImageFileFormat fileFormat(StackWriteOptions writeOptions) {
+        return ImageFileFormat.OME_TIFF;
     }
 
     @Override

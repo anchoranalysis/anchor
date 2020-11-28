@@ -20,18 +20,28 @@ public interface FileFormat {
      * @return true if the path ends with any of the expected extensions for this format.
      */
     default boolean matches(Path filePath) {
-        return matches(filePath.toString());
+        return matchesEnd(filePath.toString());
     }
     
     /**
-     * Does a filePath (or fileName) have an extension expected by this format?
+     * Does a file-path (or file-name) <b>end</b> with an extension expected by this format?
      * 
      * <p>The case of the extension is irrelevant i.e. a case insensitive match occurs.
+     * 
+     * <p>A leading period is also expected before the extension.
      * 
      * @param filePath the path
      * @return true if the path ends with any of the expected extensions for this format.
      */
-    boolean matches(String filePath);
+    boolean matchesEnd(String filePath);
+    
+    /**
+     * Does an identifier <b>equal</b> the extension expected by this format?
+     * 
+     * @param identifier an identifier that should be equal (ignoring case, and with or without a leading period) to any extension associated with the format
+     * @return true if {@code identifier} is equal to an extension associated with this format
+     */
+    boolean matchesIdentifier(String identifier);
     
     /**
      * An identifier that describes the format, that is meaningful to the end-user.

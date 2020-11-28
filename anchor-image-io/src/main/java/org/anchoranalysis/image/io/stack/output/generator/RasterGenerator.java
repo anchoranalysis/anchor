@@ -41,18 +41,20 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.output.namestyle.OutputNameStyle;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
+import lombok.AllArgsConstructor;
 
 /**
  * Transfroms an entity to a {@link Stack} and writes it to the file-system.
  *
  * @author Owen Feehan
  */
+@AllArgsConstructor
 public abstract class RasterGenerator<T> implements TransformingGenerator<T, Stack> {
 
-    // A fallback manifest-description if none is supplied by the generator
+    /** A fallback manifest-description if none is supplied by the generator. */
     private static final ManifestDescription MANIFEST_DESCRIPTION_FALLBACK =
             new ManifestDescription("raster", "unknown");
-
+    
     @Override
     public FileType[] write(T element, OutputNameStyle outputNameStyle, OutputterChecked outputter)
             throws OutputWriteFailedException {
@@ -89,6 +91,40 @@ public abstract class RasterGenerator<T> implements TransformingGenerator<T, Sta
 
     public abstract Optional<ManifestDescription> createManifestDescription();
 
+    private FileType[] writeInternal(
+            T elementUntransformed,
+            Optional<String> filenameWithoutExtension,
+            String outputName,
+            String index,
+            OutputterChecked outputter)
+            throws OutputWriteFailedException {
+
+        try {
+            Stack transformedElement = transform(elementUntransformed);
+
+            StackWriteOptions options = new StackWriteOptions(writeAttributes(transformedElement), outputter.getContext().getSuggestedFormatToWrite());
+
+            String extension =
+                    selectFileExtension(transformedElement, options, outputter.getSettings());
+
+            Path pathToWriteTo = outputter.makeOutputPath(filenameWithoutExtension, extension);
+
+            // First write to the file system, and then write to the operation-recorder.
+            writeToFile(
+                    elementUntransformed,
+                    transformedElement,
+                    options,
+                    outputter.getSettings(),
+                    pathToWriteTo);
+
+            return writeToManifest(outputName, index, outputter, pathToWriteTo, extension);
+
+        } catch (OperationFailedException e) {
+            throw new OutputWriteFailedException(e);
+        }
+    }
+    
+    
     /**
      * Selects the file-extension to use for a particular stack.
      *
@@ -120,39 +156,6 @@ public abstract class RasterGenerator<T> implements TransformingGenerator<T, Sta
             OutputWriteSettings settings,
             Path filePath)
             throws OutputWriteFailedException;
-
-    private FileType[] writeInternal(
-            T elementUntransformed,
-            Optional<String> filenameWithoutExtension,
-            String outputName,
-            String index,
-            OutputterChecked outputter)
-            throws OutputWriteFailedException {
-
-        try {
-            Stack transformedElement = transform(elementUntransformed);
-
-            StackWriteOptions options = new StackWriteOptions(writeAttributes(transformedElement));
-
-            String extension =
-                    selectFileExtension(transformedElement, options, outputter.getSettings());
-
-            Path pathToWriteTo = outputter.makeOutputPath(filenameWithoutExtension, extension);
-
-            // First write to the file system, and then write to the operation-recorder.
-            writeToFile(
-                    elementUntransformed,
-                    transformedElement,
-                    options,
-                    outputter.getSettings(),
-                    pathToWriteTo);
-
-            return writeToManifest(outputName, index, outputter, pathToWriteTo, extension);
-
-        } catch (OperationFailedException e) {
-            throw new OutputWriteFailedException(e);
-        }
-    }
 
     /**
      * Forms write-options to use for this particular stack by combining the general guarantees for

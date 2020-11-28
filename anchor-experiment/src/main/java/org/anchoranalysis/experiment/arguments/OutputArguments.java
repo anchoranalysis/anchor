@@ -35,4 +35,8 @@ public class OutputArguments {
     public void assignOutputDirectory(Path outputDirectory) {
         this.outputDirectory = Optional.of(outputDirectory);
     }
+    
+    public void assignSuggestedImageOutputFormat(ImageFileFormat format) {
+        this.suggestedImageOutputFormat = Optional.of(format);
+    }
 }

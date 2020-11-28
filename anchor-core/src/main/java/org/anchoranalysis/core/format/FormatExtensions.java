@@ -5,7 +5,7 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Set;
 import java.util.stream.Collectors;
-import org.anchoranalysis.core.serialize.DeserializationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -51,13 +51,13 @@ public class FormatExtensions {
      * @param formatToChangeFrom the format to change from (a match occurs against the associated extension)
      * @param formatToAssign the format to assign (the default extension is assigned)
      * @return a path with the extension changed
-     * @throws DeserializationFailedException if the unchanged path does not match {@code formatToChangeFrom}.
+     * @throws OperationFailedException if the unchanged path does not match {@code formatToChangeFrom}.
      */
     public static Path changeExtension(Path path, NonImageFileFormat formatToChangeFrom, FileFormat formatToAssign)
-            throws DeserializationFailedException {
+            throws OperationFailedException {
 
         if (!formatToChangeFrom.matches(path)) {
-            throw new DeserializationFailedException(
+            throw new OperationFailedException(
                     "Files must have have an extension associated with the format: " + formatToChangeFrom.descriptiveIdentifier());
         }
 
@@ -75,6 +75,14 @@ public class FormatExtensions {
         return Arrays.stream(extensionsWithPeriod)
                 .map(extension -> extension.substring(1))
                 .collect(Collectors.toSet());
+    }
+    
+    static String removeAnyLeadingPeriod(String identifier) {
+        if (!identifier.isEmpty() && identifier.charAt(0)=='.') {
+            return identifier.substring(1);
+        } else {
+            return identifier;
+        }
     }
     
     static String normalizeToLowerCase(String input) {

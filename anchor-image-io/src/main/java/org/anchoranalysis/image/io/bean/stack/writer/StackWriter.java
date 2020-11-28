@@ -28,6 +28,7 @@ package org.anchoranalysis.image.io.bean.stack.writer;
 
 import java.nio.file.Path;
 import org.anchoranalysis.bean.AnchorBean;
+import org.anchoranalysis.core.format.ImageFileFormat;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.stack.StackSeries;
@@ -52,18 +53,18 @@ public abstract class StackWriter extends AnchorBean<StackWriter> {
     public Path writeStackWithExtension(Stack stack, Path filePath, StackWriteOptions options)
             throws ImageIOException {
 
-        String fileNameWithExtension = filePath.getFileName() + "." + fileExtension(options);
+        String fileNameWithExtension = filePath.getFileName() + "." + fileFormat(options);
         Path filePathWithExtension = filePath.resolveSibling(fileNameWithExtension);
         writeStack(stack, filePathWithExtension, options);
         return filePathWithExtension;
     }
 
     /**
-     * File-extensions for files written by this writer.
+     * The file format that will be written by the generator.
      *
      * @param writeOptions options which may influence how a raster is written.
      */
-    public abstract String fileExtension(StackWriteOptions writeOptions);
+    public abstract ImageFileFormat fileFormat(StackWriteOptions writeOptions) throws ImageIOException;
 
     /**
      * Writes a stack to the filesystem at a particular path.

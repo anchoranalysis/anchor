@@ -28,6 +28,7 @@ package org.anchoranalysis.image.io.object.input;
 
 import java.nio.file.Path;
 import lombok.AllArgsConstructor;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.format.FormatExtensions;
 import org.anchoranalysis.core.format.ImageFileFormat;
 import org.anchoranalysis.core.format.NonImageFileFormat;
@@ -65,12 +66,18 @@ class ObjectDualDeserializer implements Deserializer<ObjectMask> {
 
     @Override
     public ObjectMask deserialize(Path filePath) throws DeserializationFailedException {
+        try {
+            Path tiffFilename = FormatExtensions.changeExtension(filePath.toAbsolutePath(), NonImageFileFormat.SERIALIZED_BINARY, ImageFileFormat.TIFF);
+            return createFromPaths(filePath, tiffFilename);
+        } catch (OperationFailedException e) {
+            throw new DeserializationFailedException(e);
+        }
+    }
+    
+    private ObjectMask createFromPaths(Path pathSerializedBox, Path pathTiff) throws DeserializationFailedException {
+        BoundingBox box = BOUNDING_BOX_DESERIALIZER.deserialize(pathSerializedBox);
 
-        Path tiffFilename = FormatExtensions.changeExtension(filePath.toAbsolutePath(), NonImageFileFormat.SERIALIZED_BINARY, ImageFileFormat.TIFF);
-
-        BoundingBox box = BOUNDING_BOX_DESERIALIZER.deserialize(filePath);
-
-        try (OpenedRaster openedRaster = stackReader.openFile(tiffFilename)) {
+        try (OpenedRaster openedRaster = stackReader.openFile(pathTiff)) {
             Stack stack =
                     openedRaster.openCheckType(0, ProgressIgnore.get(), UnsignedByteVoxelType.INSTANCE)
                             .get(0);
@@ -83,7 +90,7 @@ class ObjectDualDeserializer implements Deserializer<ObjectMask> {
 
             if (!channel.extent().equals(box.extent())) {
                 throw new DeserializationFailedException(
-                        errorMessageMismatchingDims(box, channel.dimensions(), filePath));
+                        errorMessageMismatchingDims(box, channel.dimensions(), pathSerializedBox));
             }
 
             return new ObjectMask(box, channel.voxels().asByte());

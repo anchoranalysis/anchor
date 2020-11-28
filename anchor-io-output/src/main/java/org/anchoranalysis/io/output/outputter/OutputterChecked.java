@@ -75,7 +75,7 @@ public class OutputterChecked {
     private Optional<MultiLevelRecordedOutputs> recordedOutputs;
 
     /** General settings for writing outputs. */
-    @Getter private OutputWriteSettings settings;
+    @Getter private OutputWriteContext context;
 
     /**
      * Creates, defaulting to a permissive output-manager in a a particular directory.
@@ -92,7 +92,7 @@ public class OutputterChecked {
         return createWithPrefix(
                 new DirectoryWithPrefix(pathDirectory),
                 Permissive.INSTANCE,
-                new OutputWriteSettings(),
+                new OutputWriteContext(),
                 Optional.empty(),
                 Optional.empty(),
                 deleteExistingDirectory);
@@ -103,7 +103,7 @@ public class OutputterChecked {
      *
      * @param outputEnabled which outputs are enabled or not
      * @param prefix the prefix
-     * @param settings associated settings
+     * @param context associated output context
      * @param deleteExistingDirectory if true this directory if it already exists is deleted before
      *     executing the experiment, otherwise an exception is thrown if it exists.
      * @param recordedOutputs if defined, records output-names that are written / not-written in
@@ -113,7 +113,7 @@ public class OutputterChecked {
     public static OutputterChecked createWithPrefix(
             DirectoryWithPrefix prefix,
             MultiLevelOutputEnabled outputEnabled,
-            OutputWriteSettings settings,
+            OutputWriteContext context,
             Optional<WriteOperationRecorder> writeOperationRecorder,
             Optional<MultiLevelRecordedOutputs> recordedOutputs,
             boolean deleteExistingDirectory)
@@ -123,7 +123,7 @@ public class OutputterChecked {
                 writeOperationRecorder,
                 outputEnabled,
                 recordedOutputs,
-                settings);
+                context);
     }
 
     /**
@@ -132,17 +132,17 @@ public class OutputterChecked {
      * @param target the target-directory and prefix this outputter writes to
      * @param writeOperationRecorder an entry for every outputted filr is written here
      * @param recordedOutputs records the names of all outputs written to, if defined.
-     * @param settings general settings for writing outputs.
+     * @param context settings and user-supplied parameters for writing outputs.
      */
     private OutputterChecked(
             OutputterTarget target,
             Optional<WriteOperationRecorder> writeOperationRecorder,
             MultiLevelOutputEnabled outputsEnabled,
             Optional<MultiLevelRecordedOutputs> recordedOutputs,
-            OutputWriteSettings settings) {
+            OutputWriteContext context) {
         this.target = target;
         this.writeOperationRecorder = writeOperationRecorder;
-        this.settings = settings;
+        this.context = context;
         this.recordedOutputs = recordedOutputs;
         this.outputsEnabled = maybeRecordOutputNames(outputsEnabled);
 
@@ -184,7 +184,7 @@ public class OutputterChecked {
                 writeOperationRecorderToAssign,
                 outputsEnabled,
                 recordedOutputs,
-                settings);
+                context);
     }
 
     /**
@@ -220,7 +220,7 @@ public class OutputterChecked {
                             ? recordedOutputs
                             : Optional.empty(), // Output-names are no longer recorded on
                     // sub-directories
-                    settings);
+                    context);
         } catch (BindFailedException e) {
             // This exception can only be thrown if the prefix-path doesn't reside within the
             // rootDirectory
@@ -247,6 +247,10 @@ public class OutputterChecked {
                 writer ->
                         writer.recordWrittenFile(
                                 outputName, manifestDescription, relativePath(pathSuffix), index));
+    }
+        
+    public OutputWriteSettings getSettings() {
+        return context.getSettings();
     }
 
     public Path getOutputDirectory() {

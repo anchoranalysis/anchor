@@ -52,7 +52,7 @@ public class PNG extends NoTimeSeries {
     }
 
     @Override
-    public String fileExtension(StackWriteOptions writeOptions) {
-        return ImageFileFormat.PNG.getDefaultExtension();
+    public ImageFileFormat fileFormat(StackWriteOptions writeOptions) {
+        return ImageFileFormat.PNG;
     }
 }

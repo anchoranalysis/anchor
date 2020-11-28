@@ -49,7 +49,7 @@ public class Tiff extends SupportsTimeSeries {
     }
 
     @Override
-    public String fileExtension(StackWriteOptions writeOptions) {
-        return ImageFileFormat.TIFF.getDefaultExtension();
+    public ImageFileFormat fileFormat(StackWriteOptions writeOptions) {
+        return ImageFileFormat.TIFF;
     }
 }

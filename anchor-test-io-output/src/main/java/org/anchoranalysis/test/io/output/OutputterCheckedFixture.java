@@ -55,6 +55,7 @@ public class OutputterCheckedFixture {
                     "debug",
                     manifest,
                     new RecordedOutputsWithRules(),
+                    Optional.empty(),
                     new FilePathPrefixerContext(false, Optional.empty()));
         } catch (PathPrefixerException e) {
             throw new BindFailedException(e);

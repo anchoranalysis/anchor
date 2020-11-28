@@ -63,8 +63,8 @@ public class Tiff extends BioformatsWriter {
 
     // A default extension
     @Override
-    public String fileExtension(StackWriteOptions writeOptions) {
-        return ImageFileFormat.TIFF.getDefaultExtension();
+    public ImageFileFormat fileFormat(StackWriteOptions writeOptions) {
+        return ImageFileFormat.TIFF;
     }
 
     @Override

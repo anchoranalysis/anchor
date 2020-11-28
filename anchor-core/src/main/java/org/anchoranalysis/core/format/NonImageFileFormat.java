@@ -29,7 +29,7 @@ public enum NonImageFileFormat implements FileFormat {
     }
   
     @Override
-    public boolean matches(String filePath) {
+    public boolean matchesEnd(String filePath) {
         return FormatExtensions.matches(filePath, extension);
     }
     
@@ -59,15 +59,18 @@ public enum NonImageFileFormat implements FileFormat {
         return "." + extension;
     }
 
-
     @Override
     public String descriptiveIdentifier() {
         return extensionWithoutPeriod();
     }
 
-
     @Override
     public String getDefaultExtension() {
         return extensionWithoutPeriod();
+    }
+
+    @Override
+    public boolean matchesIdentifier(String identifier) {
+        return FormatExtensions.removeAnyLeadingPeriod(identifier).equalsIgnoreCase(extension);
     }
 }

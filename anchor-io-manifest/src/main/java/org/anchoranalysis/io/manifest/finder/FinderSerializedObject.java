@@ -92,7 +92,7 @@ public class FinderSerializedObject<T> extends FinderSingleFile {
 
         // We prioritise .ser ahead of anything else
         for (OutputtedFile fileToOutput : files) {
-            if (NonImageFileFormat.SERIALIZED_BINARY.matches(fileToOutput.getFileName())) {
+            if (NonImageFileFormat.SERIALIZED_BINARY.matchesEnd(fileToOutput.getFileName())) {
                 return Optional.of(fileToOutput);
             }
         }
@@ -105,9 +105,9 @@ public class FinderSerializedObject<T> extends FinderSingleFile {
     }
     
     private Deserializer<T> createDeserializer(OutputtedFile fileWrite) {
-        if (NonImageFileFormat.PROPERTIES_XML.matches(fileWrite.getFileName())) {
+        if (NonImageFileFormat.PROPERTIES_XML.matchesEnd(fileWrite.getFileName())) {
             return new KeyValueParamsDeserializer<>();
-        } else if (NonImageFileFormat.XML.matches(fileWrite.getFileName())) {
+        } else if (NonImageFileFormat.XML.matchesEnd(fileWrite.getFileName())) {
             return new XStreamDeserializer<>();
         } else {
             return new ObjectInputStreamDeserializer<>();

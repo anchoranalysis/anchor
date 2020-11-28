@@ -1,5 +1,7 @@
 package org.anchoranalysis.image.io.stack.output;
 
+import java.util.Optional;
+import org.anchoranalysis.core.format.ImageFileFormat;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -13,4 +15,7 @@ public class StackWriteOptions {
 
     /** The attributes of the particular stack to write. */
     @Getter private StackWriteAttributes attributes;
+    
+    /** A suggestion on what file-format to write. */
+    @Getter private Optional<ImageFileFormat> suggestedFormatToWrite;
 }

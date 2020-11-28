@@ -29,6 +29,8 @@ import java.nio.file.Path;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.format.FileFormatFactory;
+import org.anchoranalysis.core.format.ImageFileFormat;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.stack.StackSeries;
@@ -47,8 +49,10 @@ public abstract class OneOrThreeChannelsWriter extends StackWriter {
     // END BEAN PROPERTIES
 
     @Override
-    public String fileExtension(StackWriteOptions writeOptions) {
-        return extension;
+    public ImageFileFormat fileFormat(StackWriteOptions writeOptions) throws ImageIOException {
+        return FileFormatFactory.createImageFormat(extension).orElseThrow( () ->
+                new ImageIOException(
+                     String.format("The extension %s is not associated with a recognised format",extension)));
     }
 
     @Override

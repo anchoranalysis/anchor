@@ -32,10 +32,12 @@ import lombok.Setter;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
+import org.anchoranalysis.core.format.ImageFileFormat;
 import org.anchoranalysis.io.manifest.Manifest;
 import org.anchoranalysis.io.output.bean.path.prefixer.PathPrefixer;
 import org.anchoranalysis.io.output.bean.rules.OutputEnabledRules;
 import org.anchoranalysis.io.output.outputter.BindFailedException;
+import org.anchoranalysis.io.output.outputter.OutputWriteContext;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
 import org.anchoranalysis.io.output.path.prefixer.DirectoryWithPrefix;
 import org.anchoranalysis.io.output.path.prefixer.FilePathPrefixerContext;
@@ -86,6 +88,7 @@ public class OutputManager extends AnchorBean<OutputManager> {
      * @param experimentIdentifier an identifier for the experiment
      * @param manifest where output files are store
      * @param recordedOutputs where output-names are recorded as used/tested
+     * @param suggestedFormatToWrite a suggestion on what file-format to write
      * @param prefixerContext parameters for the file-path prefixer
      * @return a newly created outputter
      * @throws BindFailedException
@@ -94,6 +97,7 @@ public class OutputManager extends AnchorBean<OutputManager> {
             String experimentIdentifier,
             Manifest manifest,
             RecordedOutputsWithRules recordedOutputs,
+            Optional<ImageFileFormat> suggestedFormatToWrite,
             FilePathPrefixerContext prefixerContext)
             throws BindFailedException {
 
@@ -105,7 +109,7 @@ public class OutputManager extends AnchorBean<OutputManager> {
             return OutputterChecked.createWithPrefix(
                     prefix,
                     recordedOutputs.selectOutputEnabled(Optional.ofNullable(outputsEnabled)),
-                    getOutputWriteSettings(),
+                    new OutputWriteContext( getOutputWriteSettings(), suggestedFormatToWrite),
                     Optional.of(manifest.getRootDirectory()),
                     recordedOutputs.getRecordedOutputs(),
                     silentlyDeleteExisting);
