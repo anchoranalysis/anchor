@@ -42,7 +42,7 @@ class ProcessorChecker {
      * @throws ExperimentExecutionException if {@code inputs} has no items
      */
     public static <T> void checkAtLeastOneInput(List<T> inputs) throws ExperimentExecutionException {
-        if (!inputs.isEmpty()) {
+        if (inputs.isEmpty()) {
             throw new ExperimentExecutionException("This task has no inputs. Nothing to do.");
         }
     }
