@@ -21,7 +21,7 @@ public class FormatExtensions {
      * The extensions of all image file formats as enumerated in {@link ImageFileFormat},
      * lazily-created as needed.
      */
-    private static String[] ALL_IMAGE_EXTENSIONS;
+    private static String[] allImageExtensions;
 
     /**
      * The extensions of all image file formats as enumerated in {@link ImageFileFormat}.
@@ -31,10 +31,10 @@ public class FormatExtensions {
      * @return an array of extensions for all the image file formats.
      */
     public static String[] allImageExtensions() {
-        if (ALL_IMAGE_EXTENSIONS == null) {
-            ALL_IMAGE_EXTENSIONS = createExtensionsArray(ImageFileFormat.values());
+        if (allImageExtensions == null) {
+            allImageExtensions = createExtensionsArray(ImageFileFormat.values());
         }
-        return ALL_IMAGE_EXTENSIONS;
+        return allImageExtensions;
     }
 
     /**
