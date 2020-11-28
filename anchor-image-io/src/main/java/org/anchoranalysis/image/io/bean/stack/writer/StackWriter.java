@@ -53,7 +53,7 @@ public abstract class StackWriter extends AnchorBean<StackWriter> {
     public Path writeStackWithExtension(Stack stack, Path filePath, StackWriteOptions options)
             throws ImageIOException {
 
-        String fileNameWithExtension = filePath.getFileName() + "." + fileFormat(options);
+        String fileNameWithExtension = filePath.getFileName() + "." + fileFormat(options).getDefaultExtension();
         Path filePathWithExtension = filePath.resolveSibling(fileNameWithExtension);
         writeStack(stack, filePathWithExtension, options);
         return filePathWithExtension;
