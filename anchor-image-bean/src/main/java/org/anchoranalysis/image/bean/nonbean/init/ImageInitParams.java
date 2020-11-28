@@ -140,8 +140,7 @@ public class ImageInitParams implements BeanInitParams {
         stackProviderBridge = populate.copyProvider(StackProvider.class, stacks());
     }
 
-    public void addToStacks(String identifier, Stack inputImage)
-            throws OperationFailedException {
+    public void addToStacks(String identifier, Stack inputImage) throws OperationFailedException {
         stacks().add(identifier, () -> inputImage);
     }
 
@@ -150,8 +149,7 @@ public class ImageInitParams implements BeanInitParams {
         BeanStoreAdder.add(identifier, stack, storeStack, stackProviderBridge);
     }
 
-    public void copyStacksFrom(NamedProvider<Stack> source)
-            throws OperationFailedException {
+    public void copyStacksFrom(NamedProvider<Stack> source) throws OperationFailedException {
 
         try {
             for (String id : source.keys()) {

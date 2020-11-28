@@ -55,8 +55,7 @@ public class FunctionalProgress {
      * @throws E if the exception is thrown during mapping
      */
     public static <S, T, E extends Exception> List<T> mapList(
-            List<S> list, Progress progress, CheckedFunction<S, T, E> mapFunction)
-            throws E {
+            List<S> list, Progress progress, CheckedFunction<S, T, E> mapFunction) throws E {
         List<T> listOut = new ArrayList<>();
 
         progress.setMin(0);
@@ -96,9 +95,7 @@ public class FunctionalProgress {
      * @throws E if the exception is thrown during mapping
      */
     public static <S, T, E extends Exception> List<T> mapListOptional(
-            List<S> list,
-            Progress progress,
-            CheckedFunction<S, Optional<T>, E> mapFunction)
+            List<S> list, Progress progress, CheckedFunction<S, Optional<T>, E> mapFunction)
             throws E {
         List<T> listOut = new ArrayList<>();
 

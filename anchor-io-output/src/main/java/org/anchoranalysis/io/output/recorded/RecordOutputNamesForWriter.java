@@ -107,15 +107,15 @@ class RecordOutputNamesForWriter implements Writer {
         return fileTypesWritten;
     }
 
-
     @Override
-    public <T> boolean writeWithoutName(String outputName, ElementWriterSupplier<T> elementWriter,
-            ElementSupplier<T> element) throws OutputWriteFailedException {
+    public <T> boolean writeWithoutName(
+            String outputName, ElementWriterSupplier<T> elementWriter, ElementSupplier<T> element)
+            throws OutputWriteFailedException {
         boolean allowed = writer.writeWithoutName(outputName, elementWriter, element);
         recordedOutputs.add(outputName, allowed);
         return allowed;
     }
-    
+
     @Override
     public Optional<Path> createFilenameForWriting(
             String outputName,

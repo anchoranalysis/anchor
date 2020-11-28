@@ -28,9 +28,8 @@ package org.anchoranalysis.core.progress;
 
 /**
  * Combines a number of sub progress reporters.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class ProgressMultiple implements AutoCloseable {
 

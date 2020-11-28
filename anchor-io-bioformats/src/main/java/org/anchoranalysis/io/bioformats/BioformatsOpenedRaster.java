@@ -96,8 +96,7 @@ public class BioformatsOpenedRaster implements OpenedRaster {
     }
 
     @Override
-    public TimeSequence open(int seriesIndex, Progress progress)
-            throws ImageIOException {
+    public TimeSequence open(int seriesIndex, Progress progress) throws ImageIOException {
 
         int pixelType = reader.getPixelType();
 
@@ -145,8 +144,7 @@ public class BioformatsOpenedRaster implements OpenedRaster {
     }
 
     /** Opens as a specific data-type */
-    private TimeSequence openAsType(
-            int seriesIndex, Progress progress, VoxelDataType dataType)
+    private TimeSequence openAsType(int seriesIndex, Progress progress, VoxelDataType dataType)
             throws ImageIOException {
 
         try {
@@ -165,8 +163,7 @@ public class BioformatsOpenedRaster implements OpenedRaster {
                     createUninitialisedChannels(
                             dimensions, timeSequence, multiplexVoxelDataType(dataType));
 
-            copyBytesIntoChannels(
-                    listAllChannels, dimensions, progress, dataType, readOptions);
+            copyBytesIntoChannels(listAllChannels, dimensions, progress, dataType, readOptions);
 
             LOG.debug(
                     String.format(

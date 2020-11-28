@@ -83,21 +83,21 @@ public class NamedChannelsForSeriesConcatenate implements NamedChannelsForSeries
         return Optional.empty();
     }
 
-    public void addAsSeparateChannels(
-            NamedStacks stackCollection, int t, Progress progress)
+    public void addAsSeparateChannels(NamedStacks stackCollection, int t, Progress progress)
             throws OperationFailedException {
 
-        try (ProgressMultiple progressMultiple =
-                new ProgressMultiple(progress, list.size())) {
+        try (ProgressMultiple progressMultiple = new ProgressMultiple(progress, list.size())) {
 
             for (NamedChannelsForSeries item : list) {
-                item.addAsSeparateChannels(stackCollection, t, new ProgressOneOfMany(progressMultiple));
+                item.addAsSeparateChannels(
+                        stackCollection, t, new ProgressOneOfMany(progressMultiple));
                 progressMultiple.incrementWorker();
             }
         }
     }
 
-    public void addAsSeparateChannels(NamedProviderStore<TimeSequence> stackCollection, int timeIndex)
+    public void addAsSeparateChannels(
+            NamedProviderStore<TimeSequence> stackCollection, int timeIndex)
             throws OperationFailedException {
         for (NamedChannelsForSeries item : list) {
             item.addAsSeparateChannels(stackCollection, timeIndex);
@@ -108,12 +108,11 @@ public class NamedChannelsForSeriesConcatenate implements NamedChannelsForSeries
         return list.add(e);
     }
 
-
     @Override
     public int numberChannels() {
         return list.stream().mapToInt(NamedChannelsForSeries::numberChannels).sum();
     }
-    
+
     public Set<String> channelNames() {
         HashSet<String> set = new HashSet<>();
         for (NamedChannelsForSeries item : list) {
@@ -167,7 +166,7 @@ public class NamedChannelsForSeriesConcatenate implements NamedChannelsForSeries
         // Assume once a concatenation happens, it is no longer a RGB file.
         return false;
     }
-    
+
     private Stack stackAllChannels(int timeIndex) throws OperationFailedException {
         Stack out = new Stack();
         for (NamedChannelsForSeries namedChannels : list) {

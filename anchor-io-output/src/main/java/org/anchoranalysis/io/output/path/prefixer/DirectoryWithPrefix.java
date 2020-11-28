@@ -39,7 +39,7 @@ public class DirectoryWithPrefix implements PathCreator {
 
     /** Always prepended to outputted filenames. */
     @Setter private String prefix = "";
-    
+
     /** Added between {@code prefix} and the filename, if the filename is defined. */
     @Setter private String delimiter = "";
 
@@ -59,32 +59,32 @@ public class DirectoryWithPrefix implements PathCreator {
     public Path getCombined() {
         return getDirectory().resolve(prefixWithDelimeter());
     }
-    
+
     public String prefixWithDelimeter() {
         return prefix + delimiter;
     }
 
     @Override
     public Path makePathAbsolute(Optional<String> suffix, Optional<String> extension) {
-        return directory.resolve( prefix + concatenate(suffix, extension).orElse("") );
+        return directory.resolve(prefix + concatenate(suffix, extension).orElse(""));
     }
 
     @Override
     public Path makePathRelative(Path fullPath) {
         return directory.relativize(fullPath);
     }
-    
+
     private Optional<String> concatenate(Optional<String> suffix, Optional<String> extension) {
         if (suffix.isPresent() || extension.isPresent()) {
             String contributionFromSuffix = contributionFrom(suffix, delimiter);
             String contributionFromExtension = contributionFrom(extension, ".");
-            return Optional.of(contributionFromSuffix + contributionFromExtension);            
+            return Optional.of(contributionFromSuffix + contributionFromExtension);
         } else {
             return Optional.empty();
         }
     }
-    
+
     private static String contributionFrom(Optional<String> string, String prefix) {
-        return string.map( value -> prefix + value).orElse("");
+        return string.map(value -> prefix + value).orElse("");
     }
 }

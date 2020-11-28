@@ -31,9 +31,7 @@ import net.imglib2.interpolation.randomaccess.LanczosInterpolatorFactory;
 public class InterpolatorImgLib2Lanczos extends InterpolatorImgLib2 {
 
     public InterpolatorImgLib2Lanczos() {
-        super(
-                new LanczosInterpolatorFactory<>(),
-                new LanczosInterpolatorFactory<>());
+        super(new LanczosInterpolatorFactory<>(), new LanczosInterpolatorFactory<>());
     }
 
     @Override

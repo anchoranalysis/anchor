@@ -482,13 +482,14 @@ public class BoundedVoxels<T> {
                         clampPositive(boxMax.z(), pos.z(), maxPossible.z()) + negClamped.z());
         return new BoundingBox(negClamped, this.voxels.extent().growBy(growBy));
     }
-    
+
     /**
      * Considers growing in the negative direction from corner by negative increments.
-     * 
+     *
      * @param corner
      * @param negative
-     * @return the maximum number of increments that are allowed without leading to a bounding box that is {@code <0}.
+     * @return the maximum number of increments that are allowed without leading to a bounding box
+     *     that is {@code <0}.
      */
     private static int clampNegative(int corner, int negative) {
         int diff = corner - negative;
@@ -498,14 +499,15 @@ public class BoundedVoxels<T> {
             return negative + diff;
         }
     }
-    
+
     /**
      * Considers growing in the positive direction from corner by negative increments.
-     * 
+     *
      * @param corner
      * @param positive
      * @param max
-     * @return the maximum number of increments that are allowed without leading to a bounding box that is {@code >= max}.
+     * @return the maximum number of increments that are allowed without leading to a bounding box
+     *     that is {@code >= max}.
      */
     private static int clampPositive(int corner, int positive, int max) {
         int sum = corner + positive;

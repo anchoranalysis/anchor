@@ -27,7 +27,6 @@
 package org.anchoranalysis.experiment.arguments;
 
 import java.io.IOException;
-
 import java.nio.file.Path;
 import java.util.Optional;
 import lombok.Getter;
@@ -40,28 +39,30 @@ import org.anchoranalysis.io.output.path.prefixer.FilePathPrefixerContext;
 import org.anchoranalysis.io.output.path.prefixer.PathPrefixerException;
 
 /**
- * Arguments that can further specify an experiment's <b>execution</b> (in its entirety) in addition to its bean specification.
- * 
- * <p>This is often used to insert further parameters from the command-line into bean
- * plugins, that have otherwise been loaded from BeanXML.
- * 
+ * Arguments that can further specify an experiment's <b>execution</b> (in its entirety) in addition
+ * to its bean specification.
+ *
+ * <p>This is often used to insert further parameters from the command-line into bean plugins, that
+ * have otherwise been loaded from BeanXML.
+ *
  * @author Owen Feehan
-  */
-@NoArgsConstructor @Accessors(fluent=true)
+ */
+@NoArgsConstructor
+@Accessors(fluent = true)
 public class ExecutionArguments {
 
     /** Arguments to help determine the input to the experiment. */
     @Getter private final InputArguments input = new InputArguments();
-    
+
     /** Arguments to help specify the outputs from the experiment. */
     @Getter private final OutputArguments output = new OutputArguments();
-    
+
     /** If defined, parameters for debug-mode. */
     private Optional<DebugModeParams> debugModeParams = Optional.empty();
 
     /** A name to describe the ongoing task */
     @Getter private Optional<String> taskName = Optional.empty();
-    
+
     public ExecutionArguments(Path modelDirectory) {
         input.assignModelDirectory(modelDirectory);
     }

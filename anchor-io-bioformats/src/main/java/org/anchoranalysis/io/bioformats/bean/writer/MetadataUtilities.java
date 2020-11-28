@@ -68,10 +68,10 @@ class MetadataUtilities {
         meta.setPixelsBinDataBigEndian(Boolean.TRUE, seriesIndex, 0);
         meta.setPixelsDimensionOrder(DimensionOrder.XYCZT, seriesIndex);
         meta.setPixelsType(pixelType, seriesIndex);
-        
+
         int effectiveNumberChannels = calculateNumberChannels(makeRGB, numberChannels);
         int effectiveSamplePerPixels = calculateSamplesPerPixel(makeRGB, numberChannels);
-        
+
         meta.setPixelsSizeC(new PositiveInteger(numberChannels), seriesIndex);
 
         meta.setPixelsSizeX(new PositiveInteger(dimensions.x()), seriesIndex);
@@ -91,12 +91,8 @@ class MetadataUtilities {
             assignResolution(meta, dimensions.resolution().get(), dimensions.extent()); // NOSONAR
         }
 
-        addChannels(
-                meta,
-                effectiveNumberChannels,
-                effectiveSamplePerPixels,
-                seriesIndex);
-        
+        addChannels(meta, effectiveNumberChannels, effectiveSamplePerPixels, seriesIndex);
+
         return meta;
     }
 

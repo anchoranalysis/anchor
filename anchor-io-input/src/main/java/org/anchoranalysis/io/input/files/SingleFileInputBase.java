@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -25,17 +25,16 @@
  */
 package org.anchoranalysis.io.input.files;
 
+import com.google.common.base.Preconditions;
 import java.io.File;
 import java.nio.file.Path;
 import java.util.Optional;
 import org.anchoranalysis.io.input.InputFromManager;
-import com.google.common.base.Preconditions;
 
 /**
  * A base class for inputs that refer to a single file.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public abstract class SingleFileInputBase implements InputFromManager {
 
@@ -45,7 +44,7 @@ public abstract class SingleFileInputBase implements InputFromManager {
         this.file = file;
         Preconditions.checkArgument(!file.getName().isEmpty());
     }
-    
+
     @Override
     public String name() {
         return file.getName();

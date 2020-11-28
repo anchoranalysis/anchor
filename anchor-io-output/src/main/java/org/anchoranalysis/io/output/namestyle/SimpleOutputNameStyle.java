@@ -29,13 +29,13 @@ package org.anchoranalysis.io.output.namestyle;
 import java.util.Optional;
 
 public class SimpleOutputNameStyle extends OutputNameStyle {
-    
+
     private static final long serialVersionUID = 1L;
 
     public SimpleOutputNameStyle(String outputName) {
         super(outputName);
     }
-    
+
     @Override
     public Optional<String> filenameWithoutExtension() {
         return Optional.of(getOutputName());

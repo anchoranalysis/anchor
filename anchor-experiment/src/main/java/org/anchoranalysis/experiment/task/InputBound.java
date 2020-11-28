@@ -53,18 +53,31 @@ public class InputBound<T, S> {
 
     /** The input-output context associated with the current experiment. */
     @Getter private final InputOutputContextStateful contextExperiment;
-    
+
     /** The input-output context associated with the current job. */
     @Getter private final InputOutputContextStateful contextJob;
 
     /** Immutably changes the input-object */
     public <U> InputBound<U, S> changeInput(U inputToAssign) {
-        return new InputBound<>(inputToAssign, sharedState, manifest, detailedLogging, contextExperiment, contextJob);
+        return new InputBound<>(
+                inputToAssign,
+                sharedState,
+                manifest,
+                detailedLogging,
+                contextExperiment,
+                contextJob);
     }
-    
+
     /** Immutably changes the input-object and shared-state */
-    public <U,V> InputBound<U, V> changeInputAndSharedState(U inputToAssign, V sharedStateToAssign) {
-        return new InputBound<>(inputToAssign, sharedStateToAssign, manifest, detailedLogging, contextExperiment, contextJob);
+    public <U, V> InputBound<U, V> changeInputAndSharedState(
+            U inputToAssign, V sharedStateToAssign) {
+        return new InputBound<>(
+                inputToAssign,
+                sharedStateToAssign,
+                manifest,
+                detailedLogging,
+                contextExperiment,
+                contextJob);
     }
 
     public Outputter getOutputter() {

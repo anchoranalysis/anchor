@@ -121,8 +121,7 @@ public abstract class PathMatcher extends AnchorBean<PathMatcher> {
         }
     }
 
-    private FindMatchingFiles createMatchingFiles(
-            Progress progress, boolean recursive) {
+    private FindMatchingFiles createMatchingFiles(Progress progress, boolean recursive) {
         return new FindMatchingFiles(recursive, progress);
     }
 }

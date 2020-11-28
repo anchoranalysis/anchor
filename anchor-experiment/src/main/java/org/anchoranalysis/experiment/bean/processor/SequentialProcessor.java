@@ -59,7 +59,9 @@ public class SequentialProcessor<T extends InputFromManager, S> extends JobProce
         ConcurrencyPlan concurrencyPlan = ConcurrencyPlan.singleProcessor();
 
         S sharedState =
-                getTask().beforeAnyJobIsExecuted(rootOutputter, concurrencyPlan, inputs, paramsExperiment);
+                getTask()
+                        .beforeAnyJobIsExecuted(
+                                rootOutputter, concurrencyPlan, inputs, paramsExperiment);
 
         TaskStatistics stats =
                 executeAllJobs(

@@ -28,9 +28,8 @@ package org.anchoranalysis.io.input.files;
 
 /**
  * An input pertaining to a single file on the file-system.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class FileInput extends SingleFileInputBase {
 

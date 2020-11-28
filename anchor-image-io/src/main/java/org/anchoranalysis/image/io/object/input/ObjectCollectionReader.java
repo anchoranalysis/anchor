@@ -121,6 +121,7 @@ public class ObjectCollectionReader {
     }
 
     private static Path addHdf5Extension(Path path) {
-        return path.resolveSibling(path.getFileName() + NonImageFileFormat.HDF5.extensionWithPeriod());
+        return path.resolveSibling(
+                path.getFileName() + NonImageFileFormat.HDF5.extensionWithPeriod());
     }
 }

@@ -67,19 +67,25 @@ class ObjectDualDeserializer implements Deserializer<ObjectMask> {
     @Override
     public ObjectMask deserialize(Path filePath) throws DeserializationFailedException {
         try {
-            Path tiffFilename = FormatExtensions.changeExtension(filePath.toAbsolutePath(), NonImageFileFormat.SERIALIZED_BINARY, ImageFileFormat.TIFF);
+            Path tiffFilename =
+                    FormatExtensions.changeExtension(
+                            filePath.toAbsolutePath(),
+                            NonImageFileFormat.SERIALIZED_BINARY,
+                            ImageFileFormat.TIFF);
             return createFromPaths(filePath, tiffFilename);
         } catch (OperationFailedException e) {
             throw new DeserializationFailedException(e);
         }
     }
-    
-    private ObjectMask createFromPaths(Path pathSerializedBox, Path pathTiff) throws DeserializationFailedException {
+
+    private ObjectMask createFromPaths(Path pathSerializedBox, Path pathTiff)
+            throws DeserializationFailedException {
         BoundingBox box = BOUNDING_BOX_DESERIALIZER.deserialize(pathSerializedBox);
 
         try (OpenedRaster openedRaster = stackReader.openFile(pathTiff)) {
             Stack stack =
-                    openedRaster.openCheckType(0, ProgressIgnore.get(), UnsignedByteVoxelType.INSTANCE)
+                    openedRaster
+                            .openCheckType(0, ProgressIgnore.get(), UnsignedByteVoxelType.INSTANCE)
                             .get(0);
 
             if (stack.getNumberChannels() != 1) {

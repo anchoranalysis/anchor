@@ -43,9 +43,7 @@ import org.anchoranalysis.image.io.stack.output.StackWriteOptions;
  */
 public class Tiff extends BioformatsWriter {
 
-    /**
-     * Default constructor.
-     */
+    /** Default constructor. */
     public Tiff() {
         super(true);
     }

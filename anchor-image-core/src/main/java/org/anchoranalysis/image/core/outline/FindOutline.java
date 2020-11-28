@@ -210,7 +210,8 @@ public class FindOutline {
         BinaryValuesByte binaryValues = voxels.binaryValues().createByte();
         BinaryKernel kernelErosion = new ErosionKernel(binaryValues, erodeAtBoundary, do3D);
 
-        Voxels<UnsignedByteBuffer> eroded = ApplyKernel.apply(kernelErosion, voxels.voxels(), binaryValues);
+        Voxels<UnsignedByteBuffer> eroded =
+                ApplyKernel.apply(kernelErosion, voxels.voxels(), binaryValues);
         for (int i = 1; i < numberErosions; i++) {
             eroded = ApplyKernel.apply(kernelErosion, eroded, binaryValues);
         }

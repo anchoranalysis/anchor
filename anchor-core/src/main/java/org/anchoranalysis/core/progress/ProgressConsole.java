@@ -30,11 +30,10 @@ import lombok.RequiredArgsConstructor;
 
 /**
  * Displays the current progress to the console.
- * 
- * <p>Percentages are incrementlly reported to the console as an operation progresses.
- * 
- * @author Owen Feehan
  *
+ * <p>Percentages are incrementlly reported to the console as an operation progresses.
+ *
+ * @author Owen Feehan
  */
 @RequiredArgsConstructor
 public class ProgressConsole implements Progress {
@@ -42,7 +41,7 @@ public class ProgressConsole implements Progress {
     // START REQUIRED ARGUMENTS
     private final int incrementSize;
     // END REQUIRED ARGUMENTS
-    
+
     private int max;
     private int min;
 

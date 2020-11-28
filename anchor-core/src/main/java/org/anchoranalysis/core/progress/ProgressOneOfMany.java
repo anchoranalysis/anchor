@@ -38,8 +38,7 @@ public class ProgressOneOfMany implements Progress {
         this(parent, 0, 1);
     }
 
-    public ProgressOneOfMany(
-            ProgressMultiple parent, int min, int max) {
+    public ProgressOneOfMany(ProgressMultiple parent, int min, int max) {
         this.parent = parent;
         this.min = min;
         this.max = max;

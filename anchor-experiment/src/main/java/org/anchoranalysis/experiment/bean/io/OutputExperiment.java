@@ -146,8 +146,7 @@ public abstract class OutputExperiment extends Experiment {
         }
     }
 
-    private ParametersExperiment createParams(ExecutionArguments arguments)
-            throws CreateException {
+    private ParametersExperiment createParams(ExecutionArguments arguments) throws CreateException {
 
         Manifest experimentalManifest = new Manifest();
 
@@ -164,8 +163,7 @@ public abstract class OutputExperiment extends Experiment {
                                             defaultOutputs(),
                                             arguments.output().getOutputEnabledDelta()),
                                     arguments.output().getSuggestedImageOutputFormat(),
-                                    arguments.createPrefixerContext()
-                                    );
+                                    arguments.createPrefixerContext());
 
             Preconditions.checkArgument(rootOutputter.getSettings().hasBeenInitialized());
 

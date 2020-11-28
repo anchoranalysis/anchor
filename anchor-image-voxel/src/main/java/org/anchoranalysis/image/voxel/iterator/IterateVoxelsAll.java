@@ -69,7 +69,7 @@ public class IterateVoxelsAll {
     public static void withPoint(Extent extent, ProcessPoint process) {
         IterateVoxelsBoundingBox.withPoint(new BoundingBox(extent), process);
     }
-    
+
     /**
      * Iterate over each voxel in an {@link Extent}
      *

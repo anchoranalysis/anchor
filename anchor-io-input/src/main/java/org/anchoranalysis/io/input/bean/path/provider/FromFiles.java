@@ -61,9 +61,7 @@ public class FromFiles extends FilePathProvider {
             filesCreated =
                     files.create(
                             new InputManagerParams(
-                                    new InputContextParams(),
-                                    ProgressIgnore.get(),
-                                    getLogger()));
+                                    new InputContextParams(), ProgressIgnore.get(), getLogger()));
         } catch (FilesProviderException e) {
             throw new CreateException("Cannot find files", e);
         }

@@ -60,8 +60,8 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
  *   <li>float
  * </ul>
  *
- * <p>Note that not all implementations support writing as RGB. When they do, it insists on three channels, and only supported unsigned 8-bit
- * or unsigned-16 bit as channel types.
+ * <p>Note that not all implementations support writing as RGB. When they do, it insists on three
+ * channels, and only supported unsigned 8-bit or unsigned-16 bit as channel types.
  *
  * <p>If a stack has heterogeneous channel types (i.e. not all channels have the same type) then it
  * writes <i>all</i> channels with the most generic type (e.g. most bits).
@@ -73,7 +73,7 @@ public abstract class BioformatsWriter extends StackWriter {
 
     /** Whether the writer supports writing RGB images or not. */
     private final boolean supportsRGB;
-    
+
     @Override
     public void writeStackSeries(StackSeries stackSeries, Path filePath, StackWriteOptions options)
             throws ImageIOException {
@@ -92,9 +92,10 @@ public abstract class BioformatsWriter extends StackWriter {
         boolean rgb = options.getAttributes().writeAsRGB(stack);
 
         if (rgb && !supportsRGB) {
-            throw new ImageIOException("Trying to write a RGB file but this writer does not support it.");
+            throw new ImageIOException(
+                    "Trying to write a RGB file but this writer does not support it.");
         }
-        
+
         if (stack.allChannelsHaveIdenticalType()) {
             writeHomogeneousChannels(stack, filePath, rgb);
         } else {

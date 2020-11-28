@@ -111,8 +111,9 @@ public class CheckIfAllowed implements Writer {
     }
 
     @Override
-    public <T> boolean writeWithoutName(String outputName, ElementWriterSupplier<T> elementWriter,
-            ElementSupplier<T> element) throws OutputWriteFailedException {
+    public <T> boolean writeWithoutName(
+            String outputName, ElementWriterSupplier<T> elementWriter, ElementSupplier<T> element)
+            throws OutputWriteFailedException {
 
         if (!outputEnabled.isOutputEnabled(outputName)) {
             return false;
@@ -122,7 +123,7 @@ public class CheckIfAllowed implements Writer {
 
         return writer.writeWithoutName(outputName, elementWriter, element);
     }
-    
+
     @Override
     public Optional<Path> createFilenameForWriting(
             String outputName,

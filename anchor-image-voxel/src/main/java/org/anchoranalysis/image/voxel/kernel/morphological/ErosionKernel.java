@@ -124,9 +124,9 @@ public final class ErosionKernel extends BinaryKernelMorphologicalExtent {
             Supplier<Optional<UnsignedByteBuffer>> bufferZLess1,
             Supplier<Optional<UnsignedByteBuffer>> bufferZPlus1,
             int index) {
-        return !useZ || (
-                checkZBuffer(bufferZLess1.get(), index)
-                && checkZBuffer(bufferZPlus1.get(), index));
+        return !useZ
+                || (checkZBuffer(bufferZLess1.get(), index)
+                        && checkZBuffer(bufferZPlus1.get(), index));
     }
 
     private boolean checkZBuffer(Optional<UnsignedByteBuffer> buffer, int index) {

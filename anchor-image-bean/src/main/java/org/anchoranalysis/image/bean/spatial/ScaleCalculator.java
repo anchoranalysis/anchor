@@ -34,16 +34,16 @@ import org.anchoranalysis.spatial.scale.ScaleFactor;
 
 /**
  * Calculating a scaling-factor from dimensions.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public abstract class ScaleCalculator extends ImageBean<ScaleCalculator> {
 
     /**
-     * Calculates a scaling-factor for a source image/entity of particular dimensions. 
-     * 
-     * @param dimensionsToBeScaled dimensions of the source image/entity that will be scaled, if they are known.
+     * Calculates a scaling-factor for a source image/entity of particular dimensions.
+     *
+     * @param dimensionsToBeScaled dimensions of the source image/entity that will be scaled, if
+     *     they are known.
      * @return the scaling-factor to use
      * @throws OperationFailedException
      */

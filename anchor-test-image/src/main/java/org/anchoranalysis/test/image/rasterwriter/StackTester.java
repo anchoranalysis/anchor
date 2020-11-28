@@ -125,8 +125,10 @@ public class StackTester {
 
         Stack stack = new StackFixture(forceFirstChannel).create(channels, extent);
 
-        StackWriteOptions options = new StackWriteOptions(
-                StackWriteAttributesFactory.maybeRGB(channels.isMakeRGB()), Optional.empty());
+        StackWriteOptions options =
+                new StackWriteOptions(
+                        StackWriteAttributesFactory.maybeRGB(channels.isMakeRGB()),
+                        Optional.empty());
 
         Path pathWritten =
                 writer.writeStackWithExtension(

@@ -59,14 +59,11 @@ public class StackWithMap implements MultiInputSubMap<TimeSequence> {
     }
 
     public void addToStore(
-            NamedProviderStore<TimeSequence> stackCollection,
-            int seriesNum,
-            Progress progress)
+            NamedProviderStore<TimeSequence> stackCollection, int seriesNum, Progress progress)
             throws OperationFailedException {
 
         // We add the main object
-        mainInputObject.addToStoreWithName(
-                mainObjectName, stackCollection, seriesNum, progress);
+        mainInputObject.addToStoreWithName(mainObjectName, stackCollection, seriesNum, progress);
 
         // We add the other objects
         map.addToStore(stackCollection);

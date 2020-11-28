@@ -41,9 +41,9 @@ import lombok.NoArgsConstructor;
 public class TraverseDirectoryForProgress {
 
     /**
-     * Performs a breadth-first traversal of the sub-folders until we get at least {@code minNumberDirectories}.
-     * on a given level.  These are then used as our progress markers.
-     *  
+     * Performs a breadth-first traversal of the sub-folders until we get at least {@code
+     * minNumberDirectories}. on a given level. These are then used as our progress markers.
+     *
      * @param parent
      * @param minNumberDirectories
      * @param matcherDirectory
@@ -52,7 +52,10 @@ public class TraverseDirectoryForProgress {
      * @throws IOException
      */
     public static TraversalResult traverseRecursive(
-            Path parent, int minNumberDirectories, Predicate<Path> matcherDirectory, int maxDirectoryDepth)
+            Path parent,
+            int minNumberDirectories,
+            Predicate<Path> matcherDirectory,
+            int maxDirectoryDepth)
             throws IOException {
 
         List<Path> filesOut = new ArrayList<>();
@@ -140,7 +143,8 @@ public class TraverseDirectoryForProgress {
         List<Path> out = new ArrayList<>();
         for (Path path : parents) {
 
-            if (matcherDirectory.test(path) && !subdirectoriesFor(path, Optional.of(out), filesOut, matcherDirectory)) {
+            if (matcherDirectory.test(path)
+                    && !subdirectoriesFor(path, Optional.of(out), filesOut, matcherDirectory)) {
                 // If we fail to find any sub-folders, then we have a definite leaf,
                 // which we treat separately so as to include it in our final list,
                 // but not to recurse further on it.

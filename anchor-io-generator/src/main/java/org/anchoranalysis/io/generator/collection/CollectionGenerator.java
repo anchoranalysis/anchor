@@ -61,9 +61,13 @@ public class CollectionGenerator<T> implements Generator<Collection<T>> {
     public FileType[] write(
             Collection<T> element, OutputNameStyle outputNameStyle, OutputterChecked outputter)
             throws OutputWriteFailedException {
-        String subdirectoryName = outputNameStyle.filenameWithoutExtension().orElseThrow( () ->
-            new OutputWriteFailedException("No name is assigned in the output, so cannot create subdirectory")
-        );
+        String subdirectoryName =
+                outputNameStyle
+                        .filenameWithoutExtension()
+                        .orElseThrow(
+                                () ->
+                                        new OutputWriteFailedException(
+                                                "No name is assigned in the output, so cannot create subdirectory"));
         return writeElementAsSubdirectory(element, outputter, subdirectoryName);
     }
 

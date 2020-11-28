@@ -84,7 +84,7 @@ public class IterateVoxelsBoundingBox {
             }
         }
     }
-    
+
     /**
      * Iterate over each voxel in a bounding-box
      *
@@ -105,7 +105,7 @@ public class IterateVoxelsBoundingBox {
             process.notifyChangeSlice(point.z());
 
             int index = 0;
-            
+
             for (point.setY(cornerMin.y()); point.y() <= cornerMax.y(); point.incrementY()) {
 
                 process.notifyChangeY(point.y());

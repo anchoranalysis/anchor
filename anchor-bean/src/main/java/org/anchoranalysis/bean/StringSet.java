@@ -86,7 +86,7 @@ public class StringSet extends AnchorBean<StringSet> implements StringBeanCollec
     public Stream<String> stream() {
         return set.stream();
     }
-    
+
     /**
      * Duplicate the bean
      *

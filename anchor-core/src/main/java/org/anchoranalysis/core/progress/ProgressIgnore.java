@@ -32,8 +32,8 @@ import lombok.NoArgsConstructor;
 /**
  * Placeholder that doesn't measure any progress.
  *
- * <p>Implemented as a singleton, to avoid repeated instances of creating a new {@link AutoCloseable} class,
- * which confuses lint tools like SonarQube.
+ * <p>Implemented as a singleton, to avoid repeated instances of creating a new {@link
+ * AutoCloseable} class, which confuses lint tools like SonarQube.
  *
  * @author Owen Feehan
  */

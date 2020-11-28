@@ -52,7 +52,7 @@ import org.anchoranalysis.spatial.point.ReadableTuple3i;
 public class ApplyKernel {
 
     private static final int LOCAL_SLICES_SIZE = 3;
-    
+
     private static final VoxelsFactoryTypeBound<UnsignedByteBuffer> FACTORY =
             VoxelsFactory.getUnsignedByte();
 
@@ -70,25 +70,29 @@ public class ApplyKernel {
         Extent extent = in.extent();
 
         kernel.init(in);
-        
-        ProcessPointAndIndex process = new ProcessPointAndIndex() {
-            
-            UnsignedByteBuffer outArr;
-            
-            @Override
-            public void notifyChangeSlice(int z) {
-                LocalSlices localSlices = new LocalSlices(z, LOCAL_SLICES_SIZE, in);
-                outArr = out.sliceBuffer(z);
-                kernel.notifyZChange(localSlices, z);
-            }
-            
-            @Override
-            public void process(Point3i point, int index) {
-                byte outValue = kernel.acceptPoint(index, point) ? outBinary.getOnByte() : outBinary.getOffByte();
-                outArr.putRaw(index, outValue);
-            }
-        };
-        
+
+        ProcessPointAndIndex process =
+                new ProcessPointAndIndex() {
+
+                    UnsignedByteBuffer outArr;
+
+                    @Override
+                    public void notifyChangeSlice(int z) {
+                        LocalSlices localSlices = new LocalSlices(z, LOCAL_SLICES_SIZE, in);
+                        outArr = out.sliceBuffer(z);
+                        kernel.notifyZChange(localSlices, z);
+                    }
+
+                    @Override
+                    public void process(Point3i point, int index) {
+                        byte outValue =
+                                kernel.acceptPoint(index, point)
+                                        ? outBinary.getOnByte()
+                                        : outBinary.getOffByte();
+                        outArr.putRaw(index, outValue);
+                    }
+                };
+
         IterateVoxelsAll.withPointAndIndex(extent, process);
 
         return out;

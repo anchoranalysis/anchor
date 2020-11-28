@@ -105,8 +105,8 @@ public class CopyConvert {
         }
     }
 
-    private static int calculateByteArraysPerIteration(int numberChannels, int numberChannelsPerByteArray)
-            throws FormatException {
+    private static int calculateByteArraysPerIteration(
+            int numberChannels, int numberChannelsPerByteArray) throws FormatException {
 
         if ((numberChannels % numberChannelsPerByteArray) != 0) {
             throw new FormatException(
@@ -118,7 +118,8 @@ public class CopyConvert {
         return numberChannels / numberChannelsPerByteArray;
     }
 
-    private static int destinationIndex(int channelIndex, int timeIndex, int numberChannelsPerFrame) {
+    private static int destinationIndex(
+            int channelIndex, int timeIndex, int numberChannelsPerFrame) {
         return (timeIndex * numberChannelsPerFrame) + channelIndex;
     }
 }

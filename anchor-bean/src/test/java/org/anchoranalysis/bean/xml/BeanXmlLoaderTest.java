@@ -94,7 +94,9 @@ public class BeanXmlLoaderTest {
     private <T> T registerLoad(String fileId) throws BeanXmlException {
         RegisterBeanFactories.registerAllPackageBeanFactories();
 
-        Path path = NonImageFileFormat.XML.buildPath( loader.resolveTestPath("org.anchoranalysis.bean.xml"), fileId);
+        Path path =
+                NonImageFileFormat.XML.buildPath(
+                        loader.resolveTestPath("org.anchoranalysis.bean.xml"), fileId);
         T bean = BeanXmlLoader.loadBean(path);
         return bean;
     }

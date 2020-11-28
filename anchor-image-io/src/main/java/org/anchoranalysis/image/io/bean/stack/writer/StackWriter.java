@@ -64,7 +64,8 @@ public abstract class StackWriter extends AnchorBean<StackWriter> {
      *
      * @param writeOptions options which may influence how a raster is written.
      */
-    public abstract ImageFileFormat fileFormat(StackWriteOptions writeOptions) throws ImageIOException;
+    public abstract ImageFileFormat fileFormat(StackWriteOptions writeOptions)
+            throws ImageIOException;
 
     /**
      * Writes a stack to the filesystem at a particular path.

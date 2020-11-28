@@ -1,4 +1,2 @@
-/**
- * File formats and associated extensions.
- */
+/** File formats and associated extensions. */
 package org.anchoranalysis.core.format;

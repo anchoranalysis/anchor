@@ -248,7 +248,7 @@ public class OutputterChecked {
                         writer.recordWrittenFile(
                                 outputName, manifestDescription, relativePath(pathSuffix), index));
     }
-        
+
     public OutputWriteSettings getSettings() {
         return context.getSettings();
     }
@@ -265,7 +265,7 @@ public class OutputterChecked {
      * @return a newly created absolute path, combining directory, prefix (if it exists) and suffix.
      */
     public Path makeOutputPath(String suffix) {
-        return target.pathCreator().makePathAbsolute( Optional.of(suffix), Optional.empty() );
+        return target.pathCreator().makePathAbsolute(Optional.of(suffix), Optional.empty());
     }
 
     /**
@@ -276,7 +276,8 @@ public class OutputterChecked {
      *     extension.
      */
     public Path makeOutputPath(Optional<String> suffixWithoutExtension, String extension) {
-        return target.pathCreator().makePathAbsolute( suffixWithoutExtension, Optional.of(extension) );
+        return target.pathCreator()
+                .makePathAbsolute(suffixWithoutExtension, Optional.of(extension));
     }
 
     public DirectoryWithPrefix getPrefix() {

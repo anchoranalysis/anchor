@@ -43,7 +43,7 @@ public abstract class InputManager<T extends InputFromManager> extends AnchorBea
 
     /**
      * Creates a list of inputs given particular parameters.
-     * 
+     *
      * @param params the parameters
      * @return the list of inputs
      * @throws InputReadFailedException

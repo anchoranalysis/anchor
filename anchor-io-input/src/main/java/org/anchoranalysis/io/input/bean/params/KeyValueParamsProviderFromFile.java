@@ -54,9 +54,7 @@ public class KeyValueParamsProviderFromFile extends KeyValueParamsProvider {
             Collection<File> providedFiles =
                     files.create(
                             new InputManagerParams(
-                                    new InputContextParams(),
-                                    ProgressIgnore.get(),
-                                    getLogger()));
+                                    new InputContextParams(), ProgressIgnore.get(), getLogger()));
 
             if (providedFiles.isEmpty()) {
                 throw new CreateException("No files are provided");

@@ -103,7 +103,7 @@ public class FinderSerializedObject<T> extends FinderSingleFile {
     private T deserialize(OutputtedFile fileWrite) throws DeserializationFailedException {
         return createDeserializer(fileWrite).deserialize(fileWrite.calculatePath());
     }
-    
+
     private Deserializer<T> createDeserializer(OutputtedFile fileWrite) {
         if (NonImageFileFormat.PROPERTIES_XML.matchesEnd(fileWrite.getFileName())) {
             return new KeyValueParamsDeserializer<>();

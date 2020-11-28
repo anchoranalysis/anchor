@@ -45,14 +45,14 @@ public class TestReaderWriterUtilities {
     static {
         ConfigureBioformatsLogging.instance().makeSureConfigured();
     }
-    
+
     public static void ensureStackReader() {
         ConfigureBioformatsLogging.instance().makeSureConfigured();
         addIfMissing(StackReader.class, createReader());
     }
 
     public static void ensureStackWriter() {
-        addIfMissing(StackWriter.class, defaultStackWriterForTests() );
+        addIfMissing(StackWriter.class, defaultStackWriterForTests());
     }
 
     private static StackReader createReader() {
@@ -80,7 +80,7 @@ public class TestReaderWriterUtilities {
 
         defaultFactory.getDefaultInstances().addFrom(instanceMap);
     }
-    
+
     /** This is the default stack-writer used in tests. */
     private static StackWriter defaultStackWriterForTests() {
         return new Tiff();

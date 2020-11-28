@@ -28,6 +28,7 @@ package org.anchoranalysis.image.io.stack.output.generator;
 
 import java.nio.file.Path;
 import java.util.Optional;
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.stack.output.StackWriteAttributes;
@@ -41,7 +42,6 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.output.namestyle.OutputNameStyle;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
-import lombok.AllArgsConstructor;
 
 /**
  * Transfroms an entity to a {@link Stack} and writes it to the file-system.
@@ -54,7 +54,7 @@ public abstract class RasterGenerator<T> implements TransformingGenerator<T, Sta
     /** A fallback manifest-description if none is supplied by the generator. */
     private static final ManifestDescription MANIFEST_DESCRIPTION_FALLBACK =
             new ManifestDescription("raster", "unknown");
-    
+
     @Override
     public FileType[] write(T element, OutputNameStyle outputNameStyle, OutputterChecked outputter)
             throws OutputWriteFailedException {
@@ -102,7 +102,10 @@ public abstract class RasterGenerator<T> implements TransformingGenerator<T, Sta
         try {
             Stack transformedElement = transform(elementUntransformed);
 
-            StackWriteOptions options = new StackWriteOptions(writeAttributes(transformedElement), outputter.getContext().getSuggestedFormatToWrite());
+            StackWriteOptions options =
+                    new StackWriteOptions(
+                            writeAttributes(transformedElement),
+                            outputter.getContext().getSuggestedFormatToWrite());
 
             String extension =
                     selectFileExtension(transformedElement, options, outputter.getSettings());
@@ -123,8 +126,7 @@ public abstract class RasterGenerator<T> implements TransformingGenerator<T, Sta
             throw new OutputWriteFailedException(e);
         }
     }
-    
-    
+
     /**
      * Selects the file-extension to use for a particular stack.
      *

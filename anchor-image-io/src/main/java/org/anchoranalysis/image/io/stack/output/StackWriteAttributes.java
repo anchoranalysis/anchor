@@ -46,7 +46,7 @@ public class StackWriteAttributes {
 
     /** The number of channels is guaranteed to be 1 in the output. */
     private boolean singleChannel;
-    
+
     /** The number of channels is guaranteed to be 3 in the output. */
     private boolean threeChannels;
 
@@ -58,18 +58,20 @@ public class StackWriteAttributes {
      * <p>This flag is ignored, when the number of channels is not three.
      */
     private boolean rgb;
-    
+
     /**
      * Whether all channels represent a binary image.
-     * 
-     * <p>This implies each channel has only two allowed states: the max intensity value and the minimum intensity value.
+     *
+     * <p>This implies each channel has only two allowed states: the max intensity value and the
+     * minimum intensity value.
      */
     private boolean binary;
 
     /**
      * Derives a {@link StackWriteAttributes} that will always be 2D, but is otherwise unchanged.
      *
-     * @param binary whether all channels are binary (only two allowed states: the max intensity value and the minimum intensity value.)
+     * @param binary whether all channels are binary (only two allowed states: the max intensity
+     *     value and the minimum intensity value.)
      * @return a newly created {@link StackWriteAttributes} derived from the existing object.
      */
     public StackWriteAttributes always2D(boolean binary) {
@@ -90,14 +92,14 @@ public class StackWriteAttributes {
      * field.
      *
      * @param other the other {@link StackWriteAttributes} to combine with.
-     * @return a newly created {@link StackWriteAttributes} where each field is the logical <i>and</i>
-     *     of the two inputs
+     * @return a newly created {@link StackWriteAttributes} where each field is the logical
+     *     <i>and</i> of the two inputs
      */
     public StackWriteAttributes and(StackWriteAttributes other) {
         return new StackWriteAttributes(
                 always2D && other.always2D,
                 singleChannel && other.singleChannel,
-                threeChannels && other.threeChannels,                
+                threeChannels && other.threeChannels,
                 rgb && other.rgb,
                 binary && other.binary);
     }
@@ -107,8 +109,8 @@ public class StackWriteAttributes {
      * field.
      *
      * @param other the other {@link StackWriteAttributes} to combine with.
-     * @return a newly created {@link StackWriteAttributes} where each field is the logical <i>or</i>
-     *     of the two inputs
+     * @return a newly created {@link StackWriteAttributes} where each field is the logical
+     *     <i>or</i> of the two inputs
      */
     public StackWriteAttributes or(StackWriteAttributes other) {
         return new StackWriteAttributes(

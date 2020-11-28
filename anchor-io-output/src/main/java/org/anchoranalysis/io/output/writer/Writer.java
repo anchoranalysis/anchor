@@ -106,9 +106,10 @@ public interface Writer {
             ElementSupplier<T> element,
             String index)
             throws OutputWriteFailedException;
-    
+
     /**
-     * Writes an element using an {@link ElementWriter} to the current directory, <b>without including an output name</b> in the path.
+     * Writes an element using an {@link ElementWriter} to the current directory, <b>without
+     * including an output name</b> in the path.
      *
      * @param outputName the name of the subdirectory. This may determine if an output is allowed or
      *     not, but will not be included in the outputted filename.
@@ -119,7 +120,7 @@ public interface Writer {
      */
     <T> boolean writeWithoutName(
             String outputName, ElementWriterSupplier<T> elementWriter, ElementSupplier<T> element)
-            throws OutputWriteFailedException;    
+            throws OutputWriteFailedException;
 
     /**
      * The path to write a particular output to.

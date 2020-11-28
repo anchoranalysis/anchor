@@ -56,9 +56,7 @@ public abstract class LoggingDestination extends AnchorBean<LoggingDestination> 
      * @return a newly created log-reporter
      */
     public StatefulMessageLogger createWithConsoleFallback(
-            OutputterChecked outputter,
-            ExecutionArguments arguments,
-            boolean detailedLogging) {
+            OutputterChecked outputter, ExecutionArguments arguments, boolean detailedLogging) {
         return createWithLogFallback(
                 outputter, new ConsoleMessageLogger(), arguments, detailedLogging);
     }

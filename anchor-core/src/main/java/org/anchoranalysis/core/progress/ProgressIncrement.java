@@ -34,7 +34,7 @@ public class ProgressIncrement implements AutoCloseable {
     // START REQUIRED ARGUMENTS
     private final Progress progress;
     // END REQUIRED ARGUMENTS
-    
+
     private int count = 0;
 
     public void open() {

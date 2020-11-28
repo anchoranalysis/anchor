@@ -28,9 +28,8 @@ package org.anchoranalysis.core.progress;
 
 /**
  * Tracks the completion of an operation, as divided into sub-units of progress.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public interface Progress extends AutoCloseable {
 

@@ -42,11 +42,11 @@ public abstract class IndexableOutputNameStyle extends OutputNameStyle {
     public IndexableOutputNameStyle() {
         // Here as the empty constructor is needed for deserialization
     }
-    
+
     public IndexableOutputNameStyle(String outputName) {
         super(outputName);
     }
-    
+
     /**
      * Copy constructor
      *
@@ -83,12 +83,12 @@ public abstract class IndexableOutputNameStyle extends OutputNameStyle {
 
     @Override
     public Optional<String> filenameWithoutExtension() {
-        throw new UnsupportedOperationException(
-                "an index is required to determine a filename");
+        throw new UnsupportedOperationException("an index is required to determine a filename");
     }
 
     /** Constructs a full name from the output format string and an index */
-    protected abstract String filenameFromOutputFormatString(String outputFormatString, String index);
+    protected abstract String filenameFromOutputFormatString(
+            String outputFormatString, String index);
 
     protected abstract String outputFormatString();
 }

@@ -160,7 +160,9 @@ class WriteXMLForGroup {
                     context.getOutputter()
                             .writerSelective()
                             .createFilenameForWriting(
-                                    outputName, NonImageFileFormat.XML.extensionWithoutPeriod(), Optional.of(MANIFEST_DESCRIPTION));
+                                    outputName,
+                                    NonImageFileFormat.XML.extensionWithoutPeriod(),
+                                    Optional.of(MANIFEST_DESCRIPTION));
             if (fileOutPath.isPresent()) {
                 paramsOut.writeToFile(fileOutPath.get());
             }

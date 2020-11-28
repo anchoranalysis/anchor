@@ -404,8 +404,8 @@ public final class BoundingBox implements Serializable {
      * containing-extent.
      *
      * @param scaleFactor scaling-factor
-     * @param clampTo clamps scaled-object's bounding-box to ensure it always fit inside (to catch any
-     *     rounding errors that push the bounding box outside the scene-boundary)
+     * @param clampTo clamps scaled-object's bounding-box to ensure it always fit inside (to catch
+     *     any rounding errors that push the bounding box outside the scene-boundary)
      * @return a new bounding-box with scaled corner-point and extent
      */
     public BoundingBox scaleClampTo(ScaleFactor scaleFactor, Extent clampTo) {

@@ -35,10 +35,11 @@ import org.anchoranalysis.spatial.point.Point3i;
 public class ScaleFactorUtilities {
 
     /**
-     * Calculates a scaling factor so as to maximally scale {@code source} to {@code target} - <b>while preserving the aspect ratio</b>.
-     * 
-     * <p>Either the X or Y dimension is guaranteed to have a scale-factor {@code target / source}, and the other
-     * will scale so as not to exceed the size of {@code target}.
+     * Calculates a scaling factor so as to maximally scale {@code source} to {@code target} -
+     * <b>while preserving the aspect ratio</b>.
+     *
+     * <p>Either the X or Y dimension is guaranteed to have a scale-factor {@code target / source},
+     * and the other will scale so as not to exceed the size of {@code target}.
      *
      * @param source source extent (only X and Y dimensions are considered)
      * @param target target extent (only X and Y dimensions are considered)
@@ -49,7 +50,7 @@ public class ScaleFactorUtilities {
         double minDimension = withoutPreserving.minimumDimension();
         return new ScaleFactor(minDimension, minDimension);
     }
-    
+
     /**
      * Calculates a scaling factor so as to scale {@code source} to {@code target}.
      *

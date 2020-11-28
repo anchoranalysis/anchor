@@ -37,27 +37,29 @@ import org.anchoranalysis.image.core.stack.Stack;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class StackWriteAttributesFactory {
 
-    private static final StackWriteAttributes RGB_ALWAYS_2D = new StackWriteAttributes(true, false, true, true, false);
+    private static final StackWriteAttributes RGB_ALWAYS_2D =
+            new StackWriteAttributes(true, false, true, true, false);
 
-    private static final StackWriteAttributes RGB_MAYBE_3D = new StackWriteAttributes(false, false, true, true, false);
+    private static final StackWriteAttributes RGB_MAYBE_3D =
+            new StackWriteAttributes(false, false, true, true, false);
 
     private static final StackWriteAttributes THREE_CHANNELS_ALWAYS_2D =
             new StackWriteAttributes(true, false, true, false, false);
 
     private static final StackWriteAttributes THREE_CHANNELS_MAYBE_3D =
             new StackWriteAttributes(false, false, true, false, false);
-    
+
     private static final StackWriteAttributes SINGLE_CHANNEL_ALWAYS_2D =
             new StackWriteAttributes(true, true, false, false, false);
 
     private static final StackWriteAttributes SINGLE_CHANNEL_MAYBE_3D =
             new StackWriteAttributes(false, true, false, false, false);
-    
+
     private static final StackWriteAttributes BINARY_CHANNEL_MAYBE_3D =
             new StackWriteAttributes(false, true, false, false, true);
-    
+
     private static final StackWriteAttributes BINARY_CHANNEL_ALWAYS_2D =
-            new StackWriteAttributes(true, true, false, false, true);      
+            new StackWriteAttributes(true, true, false, false, true);
 
     /**
      * Creates a {@link StackWriteAttributes} which depending on a flag will always be 2D.
@@ -84,7 +86,7 @@ public class StackWriteAttributesFactory {
             return BINARY_CHANNEL_MAYBE_3D;
         }
     }
-    
+
     public static StackWriteAttributes singleChannelMaybe3D(boolean always2D) {
         if (always2D) {
             return SINGLE_CHANNEL_ALWAYS_2D;

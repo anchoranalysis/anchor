@@ -79,9 +79,7 @@ public interface ProvidesStackInput extends InputFromManager {
      * @throws OperationFailedException
      */
     void addToStoreInferNames(
-            NamedProviderStore<TimeSequence> stacks,
-            int seriesIndex,
-            Progress progress)
+            NamedProviderStore<TimeSequence> stacks, int seriesIndex, Progress progress)
             throws OperationFailedException;
 
     void addToStoreWithName(

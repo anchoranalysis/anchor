@@ -97,17 +97,15 @@ public class AlwaysAllowed implements Writer {
                         .writeWithIndex(element.get(), index, outputNameStyle, outputter));
     }
 
-
     @Override
-    public <T> boolean writeWithoutName(String outputName, ElementWriterSupplier<T> elementWriter,
-            ElementSupplier<T> element) throws OutputWriteFailedException {
+    public <T> boolean writeWithoutName(
+            String outputName, ElementWriterSupplier<T> elementWriter, ElementSupplier<T> element)
+            throws OutputWriteFailedException {
         maybeExecutePreop();
-        elementWriter
-                        .get()
-                        .write(element.get(), new WithoutOutputNameStyle(outputName), outputter);
+        elementWriter.get().write(element.get(), new WithoutOutputNameStyle(outputName), outputter);
         return true;
     }
-    
+
     // A non-generator way of creating outputs, that are still included in the manifest
     // Returns null if output is not allowed
     @Override
@@ -118,7 +116,7 @@ public class AlwaysAllowed implements Writer {
 
         maybeExecutePreop();
 
-        Path outPath = outputter.makeOutputPath( Optional.of(outputName), extension);
+        Path outPath = outputter.makeOutputPath(Optional.of(outputName), extension);
 
         manifestDescription.ifPresent(
                 md -> outputter.writeFileToOperationRecorder(outputName, outPath, md, ""));

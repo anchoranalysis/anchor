@@ -53,8 +53,7 @@ public class AnnotationInputManager<T extends ProvidesStackInput, S extends Anno
     public List<AnnotationWithStrategy<S>> inputs(InputManagerParams params)
             throws InputReadFailedException {
 
-        try (ProgressMultiple progressMultiple =
-                new ProgressMultiple(params.getProgress(), 2)) {
+        try (ProgressMultiple progressMultiple = new ProgressMultiple(params.getProgress(), 2)) {
 
             List<T> inputs = input.inputs(params);
 
@@ -68,8 +67,8 @@ public class AnnotationInputManager<T extends ProvidesStackInput, S extends Anno
         }
     }
 
-    private List<AnnotationWithStrategy<S>> createListInput(
-            List<T> listInputs, Progress progress) throws InputReadFailedException {
+    private List<AnnotationWithStrategy<S>> createListInput(List<T> listInputs, Progress progress)
+            throws InputReadFailedException {
         return FunctionalProgress.mapList(
                 listInputs,
                 progress,

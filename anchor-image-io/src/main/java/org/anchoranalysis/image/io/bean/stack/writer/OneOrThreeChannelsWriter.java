@@ -50,9 +50,13 @@ public abstract class OneOrThreeChannelsWriter extends StackWriter {
 
     @Override
     public ImageFileFormat fileFormat(StackWriteOptions writeOptions) throws ImageIOException {
-        return FileFormatFactory.createImageFormat(extension).orElseThrow( () ->
-                new ImageIOException(
-                     String.format("The extension %s is not associated with a recognised format",extension)));
+        return FileFormatFactory.createImageFormat(extension)
+                .orElseThrow(
+                        () ->
+                                new ImageIOException(
+                                        String.format(
+                                                "The extension %s is not associated with a recognised format",
+                                                extension)));
     }
 
     @Override

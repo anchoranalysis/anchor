@@ -34,8 +34,8 @@ import org.anchoranalysis.core.identifier.provider.store.NamedProviderStore;
 import org.anchoranalysis.core.identifier.provider.store.StoreSupplier;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.progress.Progress;
-import org.anchoranalysis.core.progress.ProgressMultiple;
 import org.anchoranalysis.core.progress.ProgressIgnore;
+import org.anchoranalysis.core.progress.ProgressMultiple;
 import org.anchoranalysis.core.progress.ProgressOneOfMany;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
@@ -141,8 +141,7 @@ public class NamedChannelsForSeriesMap implements NamedChannelsForSeries {
     }
 
     @Override
-    public void addAsSeparateChannels(
-            NamedStacks stackCollection, int timeIndex, Progress progress)
+    public void addAsSeparateChannels(NamedStacks stackCollection, int timeIndex, Progress progress)
             throws OperationFailedException {
 
         try {
@@ -151,7 +150,11 @@ public class NamedChannelsForSeriesMap implements NamedChannelsForSeries {
 
                 // Populate our stack from all the channels
                 for (String channelName : channelMap.keySet()) {
-                    Channel image = getChannel(channelName, timeIndex, new ProgressOneOfMany(progressMultiple));
+                    Channel image =
+                            getChannel(
+                                    channelName,
+                                    timeIndex,
+                                    new ProgressOneOfMany(progressMultiple));
                     stackCollection.add(channelName, new Stack(image));
                     progressMultiple.incrementWorker();
                 }
@@ -165,16 +168,18 @@ public class NamedChannelsForSeriesMap implements NamedChannelsForSeries {
     }
 
     @Override
-    public void addAsSeparateChannels(NamedProviderStore<TimeSequence> stackCollection, int timeIndex)
+    public void addAsSeparateChannels(
+            NamedProviderStore<TimeSequence> stackCollection, int timeIndex)
             throws OperationFailedException {
         // Populate our stack from all the channels
         for (String channelName : channelMap.keySet()) {
             stackCollection.add(
                     channelName,
-                    StoreSupplier.cache(() -> extractChannelAsTimeSequence(channelName, timeIndex)));
+                    StoreSupplier.cache(
+                            () -> extractChannelAsTimeSequence(channelName, timeIndex)));
         }
     }
-    
+
     @Override
     public boolean isRGB() throws ImageIOException {
         return openedRaster.isRGB();
@@ -185,8 +190,7 @@ public class NamedChannelsForSeriesMap implements NamedChannelsForSeries {
         return StoreSupplier.cache(() -> stackForAllChannels(t));
     }
 
-    private TimeSequence createTimeSeries(Progress progress)
-            throws OperationFailedException {
+    private TimeSequence createTimeSeries(Progress progress) throws OperationFailedException {
         if (sequence == null) {
             try {
                 sequence = openedRaster.open(seriesIndex, progress);
