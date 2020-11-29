@@ -148,8 +148,8 @@ public class InputOutputExperiment<T extends InputFromManager, S> extends Output
                 params.setLoggerTaskCreator(logTask);
                 taskProcessor.executeLogStats(params.getOutputter(), inputs, params);
             } else {
-                params.getLoggerExperiment().log("");
                 params.getLoggerExperiment().log(messageNoInputs);
+                params.getLoggerExperiment().log("");
             }
 
         } catch (InputReadFailedException | IOException e) {
