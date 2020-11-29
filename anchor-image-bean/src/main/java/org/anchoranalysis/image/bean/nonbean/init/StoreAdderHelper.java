@@ -49,18 +49,18 @@ class StoreAdderHelper {
      * Adds a single item to a {@link NamedProviderStore} (using a bridge) and explicitly specifying a new name.
      *
      * @param <S> item-type as input
-     * @param <D> item-type in the store
+     * @param <T> item-type in the store
      * @param name how the item will be named in the store
      * @param item item to be added
      * @param store container the item is added to (destination)
      * @param bridge bridge applied to item so it matches the type of store
      * @throws OperationFailedException if the operation cannot be completed
      */
-    public static <S extends AnchorBean<?>, D> void add(
+    public static <S extends AnchorBean<?>, T> void add(
             String name,
             S item,
-            NamedProviderStore<D> store,
-            CheckedFunction<S, D, OperationFailedException> bridge)
+            NamedProviderStore<T> store,
+            CheckedFunction<S, T, OperationFailedException> bridge)
             throws OperationFailedException {
         store.add(name, () -> bridge.apply(item));
     }
@@ -73,18 +73,18 @@ class StoreAdderHelper {
      * <p>Only the item is added to the store (not the named-item).
      *
      * @param <S> item-type as input
-     * @param <D> item-type in the store
+     * @param <T> item-type in the store
      * @param define source of many beans indexed by class
      * @param defineClass specifies which named-items form {@code define} to use as a source.
      * @param store container the item is added to (destination)
      * @param bridge bridge applied to item so it matches the type of store
      * @throws OperationFailedException if the operation cannot be completed
      */
-    public static <S extends AnchorBean<?>, D> void addPreserveName(
+    public static <S extends AnchorBean<?>, T> void addPreserveName(
             Define define,
             Class<?> defineClass,
-            NamedProviderStore<D> store,
-            CheckedFunction<S, D, OperationFailedException> bridge)
+            NamedProviderStore<T> store,
+            CheckedFunction<S, T, OperationFailedException> bridge)
             throws OperationFailedException {
         addFromListPreserveName(define.getList(defineClass), store, bridge);
     }
@@ -92,10 +92,10 @@ class StoreAdderHelper {
     /**
      * Like {@link #addPreserveName(Define, Class, NamedProviderStore, CheckedFunction)} but uses a {@link List} as the source of beans.
      */
-    private static <S extends AnchorBean<?>, D> void addFromListPreserveName(
+    private static <S extends AnchorBean<?>, T> void addFromListPreserveName(
             List<NamedBean<S>> beans,
-            NamedProviderStore<D> store,
-            CheckedFunction<S, D, OperationFailedException> bridge)
+            NamedProviderStore<T> store,
+            CheckedFunction<S, T, OperationFailedException> bridge)
             throws OperationFailedException {
 
         for (NamedBean<S> namedBean : beans) {
