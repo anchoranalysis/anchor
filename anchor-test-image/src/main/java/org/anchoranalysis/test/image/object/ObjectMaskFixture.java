@@ -72,8 +72,8 @@ public class ObjectMaskFixture {
 
         Voxels<UnsignedByteBuffer> voxels =
                 VoxelsFactory.getUnsignedByte().createInitialized(extent);
-        BinaryValues bv = BinaryValues.getDefault();
-        BinaryValuesByte bvb = bv.createByte();
+        BinaryValues binaryValues = BinaryValues.getDefault();
+        BinaryValuesByte binaryValuesByte = binaryValues.createByte();
 
         boolean atLeastOneHigh = false;
 
@@ -84,10 +84,10 @@ public class ObjectMaskFixture {
                 for (int x = 0; x < extent.x(); x++) {
                     byte toPut;
                     if (pattern.isPixelOn(x, y, z)) {
-                        toPut = bvb.getOnByte();
+                        toPut = binaryValuesByte.getOnByte();
                         atLeastOneHigh = true;
                     } else {
-                        toPut = bvb.getOffByte();
+                        toPut = binaryValuesByte.getOffByte();
                     }
                     slice.putByte(extent.offset(x, y), toPut);
                 }
@@ -96,6 +96,6 @@ public class ObjectMaskFixture {
 
         assertTrue(atLeastOneHigh);
 
-        return new ObjectMask(box, BinaryVoxelsFactory.reuseByte(voxels, bv));
+        return new ObjectMask(box, BinaryVoxelsFactory.reuseByte(voxels, binaryValues));
     }
 }

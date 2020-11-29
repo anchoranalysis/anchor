@@ -101,16 +101,16 @@ public class ObjectMaskMerger {
                 new ObjectMask(
                         box, VoxelsFactory.getUnsignedByte().createInitialized(box.extent()));
 
-        BinaryValues bv = null;
+        BinaryValues binaryValues = null;
         for (ObjectMask objectMask : objects) {
 
-            if (bv != null) {
-                if (!objectMask.binaryValues().equals(bv)) {
+            if (binaryValues != null) {
+                if (!objectMask.binaryValues().equals(binaryValues)) {
                     throw new OperationFailedException(
                             "Cannot merge. Incompatible binary values among object-collection");
                 }
             } else {
-                bv = objectMask.binaryValues();
+                binaryValues = objectMask.binaryValues();
             }
 
             copyPixelsCheckMask(objectMask, objectOut, box);

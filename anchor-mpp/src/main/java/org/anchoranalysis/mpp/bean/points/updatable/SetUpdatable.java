@@ -79,8 +79,8 @@ public class SetUpdatable extends UpdatablePointsContainer {
 
         setPoints = new RandomSet<>();
 
-        BinaryValuesByte bvb = mask.binaryValues().createByte();
-        addEntireScene(bvb);
+        BinaryValuesByte binaryValues = mask.binaryValues().createByte();
+        addEntireScene(binaryValues);
     }
 
     // Randomise location
@@ -116,7 +116,7 @@ public class SetUpdatable extends UpdatablePointsContainer {
         // NOTHING TO DO
     }
 
-    private void addEntireScene(BinaryValuesByte bvb) {
+    private void addEntireScene(BinaryValuesByte binaryValues) {
 
         Extent extent = maskChannel.extent();
 
@@ -132,7 +132,7 @@ public class SetUpdatable extends UpdatablePointsContainer {
             for (position.setY(0); position.y() < dimensions.y(); position.incrementY()) {
                 for (position.setX(0); position.x() < dimensions.x(); position.incrementX()) {
 
-                    if (bufferMask.getRaw(extent.offsetSlice(position)) == bvb.getOnByte()) {
+                    if (bufferMask.getRaw(extent.offsetSlice(position)) == binaryValues.getOnByte()) {
                         setPoints.add(PointConverter.doubleFromInt(position));
                     }
                 }
@@ -223,7 +223,7 @@ public class SetUpdatable extends UpdatablePointsContainer {
         BoundedVoxels<UnsignedByteBuffer> voxels = pxlMark.voxels();
         Extent e = voxels.extent();
 
-        BinaryValuesByte bvb = mask.binaryValues().createByte();
+        BinaryValuesByte binaryValues = mask.binaryValues().createByte();
 
         Voxels<UnsignedByteBuffer> voxelsBinary = maskChannel.voxels().asByte();
 
@@ -238,7 +238,7 @@ public class SetUpdatable extends UpdatablePointsContainer {
                     e,
                     voxels.sliceBufferLocal(point.z()),
                     voxelsBinary.sliceBuffer(zGlobal),
-                    bvb,
+                    binaryValues,
                     zGlobal,
                     rm,
                     neighbors);
@@ -251,7 +251,7 @@ public class SetUpdatable extends UpdatablePointsContainer {
             Extent extent,
             UnsignedByteBuffer buffer,
             UnsignedByteBuffer bufferMask,
-            BinaryValuesByte bvb,
+            BinaryValuesByte binaryValues,
             int zGlobal,
             RegionMembership rm,
             List<VoxelizedMarkMemo> neighbors) {
@@ -272,7 +272,7 @@ public class SetUpdatable extends UpdatablePointsContainer {
                 byte posCheck =
                         buffer.getRaw(extent.offset(cornerExtentPoint.x(), cornerExtentPoint.y()));
                 if (rm.isMemberFlag(posCheck, flags)
-                        && bufferMask.getRaw(globOffset) == bvb.getOnByte()) {
+                        && bufferMask.getRaw(globOffset) == binaryValues.getOnByte()) {
 
                     Point3d pointGlobal = new Point3d(xGlobal, yGlobal, zGlobal);
 

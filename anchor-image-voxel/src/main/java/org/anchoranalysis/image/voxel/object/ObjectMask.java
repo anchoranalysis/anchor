@@ -385,20 +385,20 @@ public class ObjectMask {
 
         // We calculate a bounding box, which we write into in the omDest
 
-        BinaryValues bvOut = BinaryValues.getDefault();
+        BinaryValues binaryValuesOut = BinaryValues.getDefault();
 
         // We initially set all pixels to ON
         BoundedVoxels<UnsignedByteBuffer> voxelsMaskOut =
                 VoxelsFactory.getUnsignedByte().createBounded(boxIntersect.get());
-        voxelsMaskOut.assignValue(bvOut.getOnInt()).toAll();
+        voxelsMaskOut.assignValue(binaryValuesOut.getOnInt()).toAll();
 
         // Then we set any pixels NOT on either object to OFF..... leaving only the intersecting
         // pixels as ON in the output buffer
         voxelsMaskOut
-                .assignValue(bvOut.getOffInt())
+                .assignValue(binaryValuesOut.getOffInt())
                 .toEitherTwoObjects(invert(), other.invert(), boxIntersect.get());
 
-        ObjectMask object = new ObjectMask(voxelsMaskOut, bvOut);
+        ObjectMask object = new ObjectMask(voxelsMaskOut, binaryValuesOut);
 
         // If there no pixels left that haven't been set, then the intersection object-mask is zero
         return OptionalUtilities.createFromFlag(object.voxelsOn().anyExists(), object);

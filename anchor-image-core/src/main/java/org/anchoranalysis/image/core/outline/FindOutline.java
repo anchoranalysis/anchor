@@ -173,11 +173,11 @@ public class FindOutline {
             return voxels.duplicate();
         }
 
-        BinaryValuesByte bvb = voxels.binaryValues().createByte();
+        BinaryValuesByte binaryValues = voxels.binaryValues().createByte();
 
-        BinaryKernel kernel = new OutlineKernel(bvb, !outlineAtBoundary, do3D);
+        BinaryKernel kernel = new OutlineKernel(binaryValues, !outlineAtBoundary, do3D);
 
-        Voxels<UnsignedByteBuffer> out = ApplyKernel.apply(kernel, voxels.voxels(), bvb);
+        Voxels<UnsignedByteBuffer> out = ApplyKernel.apply(kernel, voxels.voxels(), binaryValues);
         return BinaryVoxelsFactory.reuseByte(out, voxels.binaryValues());
     }
 

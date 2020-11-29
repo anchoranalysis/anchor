@@ -57,7 +57,7 @@ class ConsumePointsFromMaskSliced {
     private final ReadableTuple3i cornerMin;
     private final ReadableTuple3i cornerMax;
     private final Voxels<UnsignedByteBuffer> voxels;
-    private final BinaryValuesByte bvb;
+    private final BinaryValuesByte binaryValues;
     private final int startZ;
     private final Consumer<Point3i> consumer;
     private Extent extent;
@@ -77,7 +77,7 @@ class ConsumePointsFromMaskSliced {
         this.cornerMin = box.cornerMin();
         this.cornerMax = box.calculateCornerMax();
         this.voxels = mask.channel().voxels().asByte();
-        this.bvb = mask.binaryValues().createByte();
+        this.binaryValues = mask.binaryValues().createByte();
         this.startZ = startZ;
         this.consumer = consumer;
         this.extent = voxels.extent();
@@ -126,7 +126,7 @@ class ConsumePointsFromMaskSliced {
             for (int x = cornerMin.x(); x <= cornerMax.x(); x++) {
 
                 int offset = extent.offset(x, y);
-                if (buffer.getRaw(offset) == bvb.getOnByte()) {
+                if (buffer.getRaw(offset) == binaryValues.getOnByte()) {
                     addedToSlice = true;
                     consumer.accept(new Point3i(x, y, z));
                 }

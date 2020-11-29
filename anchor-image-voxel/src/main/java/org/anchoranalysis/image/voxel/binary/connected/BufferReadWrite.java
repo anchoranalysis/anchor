@@ -32,7 +32,7 @@ import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 abstract class BufferReadWrite<T> {
 
     protected abstract boolean isBufferOn(
-            T buffer, int offset, BinaryValues bv, BinaryValuesByte bvb);
+            T buffer, int offset, BinaryValues binaryValues, BinaryValuesByte binaryValuesMask);
 
     protected abstract void putBufferCount(T buffer, int offset, int count);
 }

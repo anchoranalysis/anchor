@@ -261,7 +261,7 @@ public class ApplyKernel {
 
         kernel.init(in);
 
-        BinaryValuesByte bvb = object.binaryValues().createByte();
+        BinaryValuesByte binaryValues = object.binaryValues().createByte();
 
         Point3i point = new Point3i();
         for (point.setZ(cornerMin.z()); point.z() <= cornerMax.z(); point.incrementZ()) {
@@ -278,7 +278,7 @@ public class ApplyKernel {
 
                     int indKernel = extent.offsetSlice(point);
 
-                    if (bufMask.getRaw(ind) == bvb.getOnByte()
+                    if (bufMask.getRaw(ind) == binaryValues.getOnByte()
                             && kernel.acceptPoint(indKernel, point)) {
                         count++;
                     }

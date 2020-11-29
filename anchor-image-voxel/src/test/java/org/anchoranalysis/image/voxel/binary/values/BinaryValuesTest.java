@@ -34,15 +34,15 @@ public class BinaryValuesTest {
 
     @Test
     public void testEquals() {
-        BinaryValues bv1 = new BinaryValues(0, 255);
-        BinaryValues bv2 = new BinaryValues(0, 255);
-        assertTrue(bv1.equals(bv2));
+        BinaryValues binaryValues1 = new BinaryValues(0, 255);
+        BinaryValues binaryValues2 = new BinaryValues(0, 255);
+        assertTrue(binaryValues1.equals(binaryValues2));
     }
 
     @Test
     public void testInvert() {
-        BinaryValues bv1 = new BinaryValues(0, 255);
-        BinaryValues bv2 = new BinaryValues(255, 0);
-        assertTrue(bv1.createInverted().equals(bv2));
+        BinaryValues binaryValues1 = new BinaryValues(0, 255);
+        BinaryValues binaryValues2 = new BinaryValues(255, 0);
+        assertTrue(binaryValues1.createInverted().equals(binaryValues2));
     }
 }

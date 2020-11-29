@@ -32,8 +32,8 @@ import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedIntBuffer;
 
 class BinaryVoxelsInt extends BinaryVoxels<UnsignedIntBuffer> {
 
-    public BinaryVoxelsInt(Voxels<UnsignedIntBuffer> voxels, BinaryValues bv) {
-        super(voxels, bv);
+    public BinaryVoxelsInt(Voxels<UnsignedIntBuffer> voxels, BinaryValues binaryValues) {
+        super(voxels, binaryValues);
     }
 
     @Override

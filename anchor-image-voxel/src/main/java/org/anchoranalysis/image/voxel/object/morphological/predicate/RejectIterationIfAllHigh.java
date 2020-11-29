@@ -34,8 +34,8 @@ import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 public class RejectIterationIfAllHigh implements AcceptIterationPredicate {
 
     @Override
-    public boolean acceptIteration(Voxels<UnsignedByteBuffer> voxels, BinaryValues bvb) {
+    public boolean acceptIteration(Voxels<UnsignedByteBuffer> voxels, BinaryValues binaryValyesByte) {
         // We exit early if there's no off-pixel
-        return BinaryVoxelsFactory.reuseByte(voxels, bvb).hasOffVoxel();
+        return BinaryVoxelsFactory.reuseByte(voxels, binaryValyesByte).hasOffVoxel();
     }
 }

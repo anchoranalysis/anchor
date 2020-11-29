@@ -38,8 +38,8 @@ class PopulateIndexProcessor<T> implements ProcessBufferUnary<T> {
 
     private Voxels<UnsignedIntBuffer> indexBuffer;
     private MergeWithNeighbors mergeWithNeighbors;
-    private BinaryValues bv;
-    private BinaryValuesByte bvb;
+    private BinaryValues binaryValues;
+    private BinaryValuesByte binaryValyesByte;
     private final BufferReadWrite<T> bufferReaderWriter;
 
     private UnsignedIntBuffer bufferIndex;
@@ -54,8 +54,8 @@ class PopulateIndexProcessor<T> implements ProcessBufferUnary<T> {
         this.mergeWithNeighbors = mergeWithNeighbors;
         this.bufferReaderWriter = bufferReaderWriter;
 
-        bv = visited.binaryValues();
-        bvb = bv.createByte();
+        binaryValues = visited.binaryValues();
+        binaryValyesByte = binaryValues.createByte();
     }
 
     @Override
@@ -68,7 +68,7 @@ class PopulateIndexProcessor<T> implements ProcessBufferUnary<T> {
 
     @Override
     public void process(Point3i point, T buffer, int offsetSlice) {
-        if (bufferReaderWriter.isBufferOn(buffer, offsetSlice, bv, bvb)
+        if (bufferReaderWriter.isBufferOn(buffer, offsetSlice, binaryValues, binaryValyesByte)
                 && bufferIndex.getRaw(offsetSlice) == 0) {
 
             int neighborLabel = mergeWithNeighbors.minNeighborLabel(point, 0, offsetSlice);

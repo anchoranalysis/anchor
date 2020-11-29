@@ -37,10 +37,10 @@ public class AcceptIterationList implements AcceptIterationPredicate {
     private List<AcceptIterationPredicate> list = new ArrayList<>();
 
     @Override
-    public boolean acceptIteration(Voxels<UnsignedByteBuffer> voxels, BinaryValues bvb)
+    public boolean acceptIteration(Voxels<UnsignedByteBuffer> voxels, BinaryValues binaryValuesByte)
             throws OperationFailedException {
         for (AcceptIterationPredicate ai : list) {
-            if (!ai.acceptIteration(voxels, bvb)) {
+            if (!ai.acceptIteration(voxels, binaryValuesByte)) {
                 return false;
             }
         }

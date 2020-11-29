@@ -84,7 +84,7 @@ public class MorphologicalErosion {
     /**
      * Performs a morphological erosion by dilating an inverted version of the object
      *
-     * @param bvb
+     * @param binaryValues
      * @param do3D
      * @param iterations
      * @param backgroundVb
@@ -96,7 +96,7 @@ public class MorphologicalErosion {
      * @throws CreateException
      */
     public static BinaryVoxels<UnsignedByteBuffer> erode(
-            BinaryVoxels<UnsignedByteBuffer> bvb,
+            BinaryVoxels<UnsignedByteBuffer> binaryValues,
             boolean do3D,
             int iterations,
             Optional<Voxels<UnsignedByteBuffer>> backgroundVb,
@@ -107,10 +107,10 @@ public class MorphologicalErosion {
             // buffer!!!
             ) throws CreateException {
 
-        bvb.invert();
+        binaryValues.invert();
         BinaryVoxels<UnsignedByteBuffer> dilated =
                 MorphologicalDilation.dilate(
-                        bvb,
+                        binaryValues,
                         iterations,
                         backgroundVb,
                         minIntensityValue,

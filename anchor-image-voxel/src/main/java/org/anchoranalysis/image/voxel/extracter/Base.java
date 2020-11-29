@@ -156,7 +156,7 @@ public abstract class Base<T> implements VoxelsExtracter<T> {
 
         Point3i relativePosition = destinationBox.relativePositionTo(object.boundingBox());
 
-        BinaryValuesByte bvb = object.binaryValuesByte();
+        BinaryValuesByte binaryValues = object.binaryValuesByte();
 
         Extent extent = voxels.extent();
 
@@ -176,7 +176,7 @@ public abstract class Base<T> implements VoxelsExtracter<T> {
                                     .extent()
                                     .offset(x + relativePosition.x(), y + relativePosition.y());
 
-                    if (maskBuffer.getRaw() == bvb.getOnByte()) {
+                    if (maskBuffer.getRaw() == binaryValues.getOnByte()) {
                         copyBufferIndexTo(srcArr, srcIndex, destArr, destIndex);
                     }
                 }

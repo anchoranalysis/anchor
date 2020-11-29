@@ -85,17 +85,17 @@ public class ObjectMaskFixture {
 
     private void removeEachCorner(ObjectMask object) {
 
-        BinaryVoxels<UnsignedByteBuffer> bvb = object.binaryVoxels();
+        BinaryVoxels<UnsignedByteBuffer> binaryValues = object.binaryVoxels();
 
         Extent e = object.boundingBox().extent();
         int widthMinusOne = e.x() - 1;
         int heightMinusOne = e.y() - 1;
 
         for (int z = 0; z < e.z(); z++) {
-            bvb.setOff(0, 0, z);
-            bvb.setOff(widthMinusOne, 0, z);
-            bvb.setOff(0, heightMinusOne, z);
-            bvb.setOff(widthMinusOne, heightMinusOne, z);
+            binaryValues.setOff(0, 0, z);
+            binaryValues.setOff(widthMinusOne, 0, z);
+            binaryValues.setOff(0, heightMinusOne, z);
+            binaryValues.setOff(widthMinusOne, heightMinusOne, z);
         }
     }
 }

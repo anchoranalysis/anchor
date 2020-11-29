@@ -37,10 +37,10 @@ import org.anchoranalysis.image.voxel.object.ObjectMask;
 public class RejectIterationIfLowDisconnected implements AcceptIterationPredicate {
 
     @Override
-    public boolean acceptIteration(Voxels<UnsignedByteBuffer> voxels, BinaryValues bvb)
+    public boolean acceptIteration(Voxels<UnsignedByteBuffer> voxels, BinaryValues binaryValyesByte)
             throws OperationFailedException {
         BinaryVoxels<UnsignedByteBuffer> nextBinary =
-                BinaryVoxelsFactory.reuseByte(voxels, bvb.createInverted());
+                BinaryVoxelsFactory.reuseByte(voxels, binaryValyesByte.createInverted());
         return new ObjectMask(nextBinary).checkIfConnected();
     }
 }
