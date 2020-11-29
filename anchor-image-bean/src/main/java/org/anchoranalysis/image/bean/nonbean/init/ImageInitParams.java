@@ -32,7 +32,6 @@ import org.anchoranalysis.bean.define.Define;
 import org.anchoranalysis.bean.initializable.params.BeanInitParams;
 import org.anchoranalysis.bean.initializable.property.PropertyInitializer;
 import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsInitParams;
-import org.anchoranalysis.bean.store.BeanStoreAdder;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.checked.CheckedFunction;
 import org.anchoranalysis.core.identifier.provider.NamedProvider;
@@ -146,7 +145,7 @@ public class ImageInitParams implements BeanInitParams {
 
     public void addToStacks(String identifier, StackProvider stack)
             throws OperationFailedException {
-        BeanStoreAdder.add(identifier, stack, storeStack, stackProviderBridge);
+        StoreAdderHelper.add(identifier, stack, storeStack, stackProviderBridge);
     }
 
     public void copyStacksFrom(NamedProvider<Stack> source) throws OperationFailedException {

@@ -84,7 +84,11 @@ public abstract class AnchorBean<F> {
         return getBeanName();
     }
 
-    /** By default, we use {@link #describeBean} as the string representation of the bean. */
+    /** 
+     * By default, we use {@link #describeBean} as the string representation of the bean.
+     * 
+     * @return the string representation
+     */
     @Override
     public String toString() {
         return describeBean();
@@ -99,7 +103,6 @@ public abstract class AnchorBean<F> {
      *     indicating no localization)
      * @throws BeanMisconfiguredException if a relative-path is passed
      */
-    //
     public void localise(Path path) throws BeanMisconfiguredException {
 
         if (path != null && !path.isAbsolute()) {

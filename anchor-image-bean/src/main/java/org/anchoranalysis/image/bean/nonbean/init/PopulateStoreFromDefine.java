@@ -26,19 +26,17 @@
 
 package org.anchoranalysis.image.bean.nonbean.init;
 
-import java.util.List;
 import org.anchoranalysis.bean.AnchorBean;
-import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.define.Define;
 import org.anchoranalysis.bean.initializable.InitializableBean;
 import org.anchoranalysis.bean.initializable.params.BeanInitParams;
 import org.anchoranalysis.bean.initializable.property.PropertyInitializer;
 import org.anchoranalysis.bean.provider.Provider;
-import org.anchoranalysis.bean.store.BeanStoreAdder;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.checked.CheckedFunction;
 import org.anchoranalysis.core.identifier.provider.store.NamedProviderStore;
 import org.anchoranalysis.core.log.Logger;
+import lombok.AllArgsConstructor;
 
 /**
  * Helps populates a {@link NamedProviderStore} from the contents of a {@link Define}.
@@ -48,63 +46,50 @@ import org.anchoranalysis.core.log.Logger;
  * @author Owen Feehan
  * @param <V> initialization-parameters for provider
  */
+@AllArgsConstructor
 public class PopulateStoreFromDefine<V extends BeanInitParams> {
-
-    private PropertyInitializer<?> pi;
+    
+    /** Define source for objects. */
     private Define define;
+    
+    /** Used to intitialize the properties of objects added with initialization. */
+    private PropertyInitializer<?> propertyInitializer;
+    
+    /** Passed to objects added with initialization. */
     private Logger logger;
-
-    /***
-     * Constructor
-     *
-     * @param define source for objects
-     * @param pi used to intitialize the properties of objects added with initialization
-     * @param logger passed to objects added with initialization
-     */
-    public PopulateStoreFromDefine(Define define, PropertyInitializer<?> pi, Logger logger) {
-        super();
-        this.pi = pi;
-        this.define = define;
-        this.logger = logger;
-    }
 
     /**
      * Copies objects of a particular class from the define WITHOUT doing any initialization
      *
      * @param <S> type of objects
-     * @param defineClss class to identify objects in Define
+     * @param defineClass class to identify objects in Define
      * @param destination where to copy to
      * @throws OperationFailedException
      */
     public <S extends AnchorBean<S>> void copyWithoutInit(
-            Class<?> defineClss, NamedProviderStore<S> destination)
+            Class<?> defineClass, NamedProviderStore<S> destination)
             throws OperationFailedException {
-
-        List<NamedBean<S>> listItem = define.getList(defineClss);
-        BeanStoreAdder.addPreserveName(
-                listItem, destination, name -> name // Named unchanged
-                );
+        StoreAdderHelper.addPreserveName(define, defineClass, destination, nameUnchangedBridge());
     }
 
     /**
      * Copies objects of a particular class from the define AND initializes
      *
      * @param <S> type of objects
-     * @param defineClss class to identify objects in Define
+     * @param defineClass class to identify objects in Define
      * @param destination where to copy to
      * @throws OperationFailedException
      */
     public <S extends InitializableBean<S, V>> void copyInit(
-            Class<?> defineClss, NamedProviderStore<S> destination)
+            Class<?> defineClass, NamedProviderStore<S> destination)
             throws OperationFailedException {
 
-        List<NamedBean<S>> listItem = define.getList(defineClss);
-        BeanStoreAdder.addPreserveName(
-                listItem,
-                destination,
-                new InitBridge<>(
-                        pi, logger, s -> s // Initializes and returns the input
-                        ));
+        // Initializes and returns the input
+        CheckedFunction<S, S, OperationFailedException> bridge = new InitBridge<>(
+            propertyInitializer, logger, nameUnchangedBridge()
+        );
+        
+        StoreAdderHelper.addPreserveName(define, defineClass, destination, bridge);
     }
 
     /**
@@ -115,27 +100,29 @@ public class PopulateStoreFromDefine<V extends BeanInitParams> {
      *
      * @param <S> type of provider-objects
      * @param <T> type of objects created by the provider
-     * @param defineClss class to identify objects in Define
+     * @param defineClass class to identify objects in Define
      * @param destination where to copy to
      * @return the provider-bridge created for the initialization
      * @throws OperationFailedException
      */
     public <S extends InitializableBean<?, V> & Provider<T>, T>
             CheckedFunction<S, T, OperationFailedException> copyProvider(
-                    Class<?> defineClss, NamedProviderStore<T> destination)
+                    Class<?> defineClass, NamedProviderStore<T> destination)
                     throws OperationFailedException {
-
-        List<NamedBean<S>> listItem = define.getList(defineClss);
 
         InitBridge<S, T, V> bridge =
                 new InitBridge<>(
-                        pi,
+                        propertyInitializer,
                         logger,
-                        s -> s.create() // NOSONAR Initializes and then gets whats provided
+                        s -> s.create() // NOSONAR Initializes and then gets what's provided
                         );
 
-        BeanStoreAdder.addPreserveName(listItem, destination, bridge);
+        StoreAdderHelper.addPreserveName(define, defineClass, destination, bridge);
 
         return bridge;
+    }
+           
+    private static <S, E extends Exception> CheckedFunction<S, S, E> nameUnchangedBridge() {
+        return name -> name;
     }
 }

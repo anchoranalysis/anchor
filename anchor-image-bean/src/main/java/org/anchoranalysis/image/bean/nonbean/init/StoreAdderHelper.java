@@ -24,29 +24,36 @@
  * #L%
  */
 
-package org.anchoranalysis.bean.store;
+package org.anchoranalysis.image.bean.nonbean.init;
 
-import java.util.List;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import java.util.List;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.NamedBean;
+import org.anchoranalysis.bean.define.Define;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.checked.CheckedFunction;
 import org.anchoranalysis.core.identifier.provider.store.NamedProviderStore;
 
+/**
+ * Routines to add beans to a {@link NamedProviderStore}.
+ * 
+ * @author Owen Feehan
+ *
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class BeanStoreAdder {
+class StoreAdderHelper {
 
     /**
-     * Adds an item a container (using a bridge) and explicitly specifying a new name
+     * Adds a single item to a {@link NamedProviderStore} (using a bridge) and explicitly specifying a new name.
      *
      * @param <S> item-type as input
-     * @param <D> item-type in the container
-     * @param name how the item will be named in the container
+     * @param <D> item-type in the store
+     * @param name how the item will be named in the store
      * @param item item to be added
      * @param store container the item is added to (destination)
-     * @param bridge bridge applied to item so it matches the type of cntr
+     * @param bridge bridge applied to item so it matches the type of store
      * @throws OperationFailedException if the operation cannot be completed
      */
     public static <S extends AnchorBean<?>, D> void add(
@@ -57,53 +64,42 @@ public class BeanStoreAdder {
             throws OperationFailedException {
         store.add(name, () -> bridge.apply(item));
     }
-
+    
     /**
-     * Adds a list of named-items a container (using a bridge) using the same names in the
-     * destination container
+     * Adds named-items to a {@link NamedProviderStore} (using a bridge) using identical names in the store.
      *
-     * <p>N.B. Only the Item is added to the container (not the named-item)
+     * <p>Note that the item is duplicated before being added.
+     * 
+     * <p>Only the item is added to the store (not the named-item).
      *
      * @param <S> item-type as input
-     * @param <D> item-type in the container
-     * @param beans list of named-items (source)
+     * @param <D> item-type in the store
+     * @param define source of many beans indexed by class
+     * @param defineClass specifies which named-items form {@code define} to use as a source.
      * @param store container the item is added to (destination)
-     * @param bridge bridge applied to item so it matches the type of cntr
+     * @param bridge bridge applied to item so it matches the type of store
      * @throws OperationFailedException if the operation cannot be completed
      */
     public static <S extends AnchorBean<?>, D> void addPreserveName(
+            Define define,
+            Class<?> defineClass,
+            NamedProviderStore<D> store,
+            CheckedFunction<S, D, OperationFailedException> bridge)
+            throws OperationFailedException {
+        addFromListPreserveName(define.getList(defineClass), store, bridge);
+    }
+    
+    /**
+     * Like {@link #addPreserveName(Define, Class, NamedProviderStore, CheckedFunction)} but uses a {@link List} as the source of beans.
+     */
+    private static <S extends AnchorBean<?>, D> void addFromListPreserveName(
             List<NamedBean<S>> beans,
             NamedProviderStore<D> store,
             CheckedFunction<S, D, OperationFailedException> bridge)
             throws OperationFailedException {
 
         for (NamedBean<S> namedBean : beans) {
-            add(namedBean.getName(), namedBean.duplicateBean().getValue(), store, bridge);
-        }
-    }
-
-    /**
-     * Adds a list of named-items to a container (using a bridge) using the same names in the
-     * destination container
-     *
-     * <p>N.B. The entire NamedItem object is added to the container, and thus the name is also
-     * "embedded" into the object itself inside the container
-     *
-     * @param <S> item-type as input
-     * @param <D> item-type in the container
-     * @param beans list of named-items (source)
-     * @param store container the item is added to (destination)
-     * @param bridge bridge applied to item so it matches the type of cntr
-     * @throws OperationFailedException if the operation cannot be completed
-     */
-    public static <S extends AnchorBean<?>, D> void addPreserveNameEmbedded(
-            List<NamedBean<S>> beans,
-            NamedProviderStore<D> store,
-            CheckedFunction<NamedBean<S>, D, OperationFailedException> bridge)
-            throws OperationFailedException {
-
-        for (NamedBean<S> namedBean : beans) {
-            add(namedBean.getName(), namedBean.duplicateBean(), store, bridge);
+            StoreAdderHelper.add(namedBean.getName(), namedBean.duplicateBean().getValue(), store, bridge);
         }
     }
 }
