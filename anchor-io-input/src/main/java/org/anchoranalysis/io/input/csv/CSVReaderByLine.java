@@ -32,10 +32,10 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.exception.OperationFailedException;
 
 /**
- * Reads a CSV file line-by-line
+ * Reads a CSV file line-by-line.
  *
  * <p>This is a helpful class that quickly processes a CSV file without having to directly interact
- * with CSVReader
+ * with {@link CSVReader}.
  *
  * @author Owen Feehan
  */
